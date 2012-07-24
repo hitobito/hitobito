@@ -4,4 +4,8 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+
+# custom requires
+require 'ci/reporter/rake/rspec' unless Rails.env == 'production'
+
 Jubla::Application.load_tasks

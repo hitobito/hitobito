@@ -12,10 +12,7 @@
     <![endif]-->
 
     = stylesheet_link_tag 'application', :media => 'all'
-    %style{:type => "text/css"}
-      body { padding-top: 70px; }
-      h1 { margin-bottom: 10px; }
-  
+
     %link{:href => "images/favicon.ico", :rel => "shortcut icon"}
     %link{:href => "images/apple-touch-icon.png", :rel => "apple-touch-icon"}
     %link{:href => "images/apple-touch-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}
@@ -27,7 +24,7 @@
 
     .navbar.navbar-fixed-top
       .navbar-inner
-        .container= 
+        .container= render 'layouts/nav'
 
     .container
 

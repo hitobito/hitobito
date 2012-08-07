@@ -12,7 +12,7 @@
  *= require_tree .
  */
 
-@import "bootstrap";
+
 
 body { padding-top: 70px; }
 h1 { margin-bottom: 10px; }

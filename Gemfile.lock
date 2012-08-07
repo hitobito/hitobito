@@ -253,6 +253,7 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    sqlite3 (1.3.6)
     terminal-table (1.4.5)
     therubyracer (0.10.1)
       libv8 (~> 3.3.10)
@@ -312,6 +313,7 @@ DEPENDENCIES
   seed-fu
   simple_form
   spork
+  sqlite3
   therubyracer
   uglifier (>= 1.0.3)
   wirble

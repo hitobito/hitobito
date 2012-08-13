@@ -12,5 +12,49 @@
  *= require_tree .
  */
 
-body { padding-top: 70px; }
-h1 { margin-bottom: 10px; }
+/* Imports Compass */
+@import "compass/typography/lists/horizontal-list";
+
+// Grays
+// -------------------------
+$grayDark:      #5E6066 !default;
+
+
+
+
+/* Layout */
+body { }
+h1 {  }
+
+header {
+  @include clearfix;
+  background: white;
+  height: 40px;
+  padding: 10px 20px;
+
+  .brand {
+    float: left;
+    font-size: 2.462em; // 32px
+    line-height: 1.250em; // 40px
+  }
+
+  .options {
+    float: right;
+    ul.nav {
+      @include horizontal-list(10px);
+    }
+  }
+}
+
+
+body > nav {
+  padding: 10px 20px;
+  ul.nav {
+    @include horizontal-list(15px);
+    li a { 
+      font-size: 1.077em;
+      text-transform: uppercase;
+      color: $grayDark;
+    }
+  }
+}

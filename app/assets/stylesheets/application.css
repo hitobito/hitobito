@@ -11,12 +11,96 @@
  *= require_self
  *= require_tree .
  */
-/* line 15, ../sass/application.scss */
-body {
-  padding-top: 70px;
+/* Imports Compass */
+/* Layout */
+/* line 29, ../sass/application.scss */
+header {
+  overflow: hidden;
+  *zoom: 1;
+  background: white;
+  height: 40px;
+  padding: 10px 20px;
+}
+/* line 35, ../sass/application.scss */
+header .brand {
+  float: left;
+  font-size: 2.462em;
+  line-height: 1.250em;
+}
+/* line 41, ../sass/application.scss */
+header .options {
+  float: right;
+}
+/* line 43, ../sass/application.scss */
+header .options ul.nav {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 60, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+header .options ul.nav li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  display: inline;
+  float: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/* line 48, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+header .options ul.nav li:first-child, header .options ul.nav li.first {
+  padding-left: 0;
+}
+/* line 49, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+header .options ul.nav li:last-child {
+  padding-right: 0;
+}
+/* line 50, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+header .options ul.nav li.last {
+  padding-right: 0;
 }
 
-/* line 16, ../sass/application.scss */
-h1 {
-  margin-bottom: 10px;
+/* line 50, ../sass/application.scss */
+body > nav {
+  padding: 10px 20px;
+}
+/* line 52, ../sass/application.scss */
+body > nav ul.nav {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 60, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+body > nav ul.nav li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  display: inline;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+/* line 48, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+body > nav ul.nav li:first-child, body > nav ul.nav li.first {
+  padding-left: 0;
+}
+/* line 49, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+body > nav ul.nav li:last-child {
+  padding-right: 0;
+}
+/* line 50, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_0.13/compass-0.13.alpha.0/frameworks/compass/stylesheets/compass/typography/lists/_horizontal-list.scss */
+body > nav ul.nav li.last {
+  padding-right: 0;
+}
+/* line 54, ../sass/application.scss */
+body > nav ul.nav li a {
+  font-size: 1.077em;
+  text-transform: uppercase;
+  color: #5e6066;
 }

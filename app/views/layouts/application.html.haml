@@ -22,11 +22,17 @@
 
   %body
 
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container= render 'layouts/nav'
+    %header
+      .container-fluid
+        = link_to 'MyApp', root_path, :class => 'brand'
+        .options
+          = render 'layouts/options'
 
-    .container
+    %nav
+      .container-fluid
+        = render 'layouts/nav'
+
+    .container-fluid
 
       %h1= @title
 

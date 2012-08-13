@@ -11,12 +11,8 @@
  *= require_self
  *= require_tree .
  */
-/* line 15, ../sass/application.scss */
-body {
-  padding-top: 70px;
-}
 
-/* line 16, ../sass/application.scss */
-h1 {
-  margin-bottom: 10px;
-}
+
+
+body { padding-top: 70px; }
+h1 { margin-bottom: 10px; }

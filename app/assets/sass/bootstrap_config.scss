@@ -1,0 +1,58 @@
+/* Imports Compass */
+
+@import "compass/css3/font-face";
+@include font-face("Century Gothic", font-files("fonts/century-gothic.ttf", "fonts/century-gothic.eot"));
+
+
+/* Bootstrap variable definition here */
+
+// GLOBAL VALUES
+// --------------------------------------------------
+
+// Grays
+// -------------------------
+$black:                 #000 !default;
+$grayDarker:            #34363C !default;
+$grayDark:              #5E6066 !default;
+$gray:                  #92959C !default;
+$grayLight:             #D1D3D9 !default;
+$grayLighter:           #F1F2F5 !default;
+$white:                 #fff !default;
+
+
+// Accent colors
+// ----------------------------
+$blue:                  #013888 !default;
+$blueDark:              #00173C !default;
+$green:                 #026829 !default;
+
+// Scaffolding
+// -------------------------
+$bodyBackground:        $grayLighter !default;
+$textColor:             $grayDarker !default;
+
+// Links
+// -------------------------
+$linkColor:             $blue !default;
+$linkColorHover:        $blueDark !default;
+
+// Typography
+// -------------------------
+$sansFontFamily:        "Century Gothic", Helvetica, Arial, sans-serif !default;
+$baseFontFamily:        $sansFontFamily !default;
+$headingsFontWeight:    normal !default;    // instead of browser default, bold
+
+// Navbar
+// -------------------------
+$navbarHeight:                    60px !default;
+$navbarBackground:                $white !default;
+$navbarBackgroundHighlight:       $white !default;
+
+$navbarText:                      $grayDarker !default;
+$navbarLinkColor:                 $blue !default;
+$navbarLinkColorHover:            $blueDark !default;
+
+
+/* Now import the css files */
+@import "bootstrap";
+@import "bootstrap-responsive";

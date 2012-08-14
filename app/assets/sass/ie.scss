@@ -1,0 +1,9 @@
+@import "variables";
+
+/* Imports Compass */
+@import "compass/support";
+$legacy-support-for-ie: true;
+
+#page .sheet.parent, #page #content { 
+  border: 1px solid $grayLight;
+}

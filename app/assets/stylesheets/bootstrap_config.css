@@ -1,11 +1,11 @@
 /* Imports Compass */
 @font-face {
   font-family: "Century Gothic";
-  src: url('/stylesheets/fonts/fonts/century-gothic.ttf') format('truetype'), url('/stylesheets/fonts/fonts/century-gothic.eot') format('embedded-opentype');
+  src: url('fonts/fonts/century-gothic.ttf') format('truetype'), url('fonts/fonts/century-gothic.eot') format('embedded-opentype');
 }
 
-/* Bootstrap variable definition here */
 /* Now import the css files */
+/* Bootstrap variable definition here */
 /* line 23, ../../../../../../../Applications/Fire.app/Contents/Resources/ruby/compass_extensions/thomas-mcdonald-bootstrap-sass-831f25b/vendor/assets/stylesheets/bootstrap/_mixins.scss */
 .clearfix {
   *zoom: 1;

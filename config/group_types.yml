@@ -1,0 +1,128 @@
+# All possible role types.
+# As these are only names, they are mainly used for documentation purposes here.
+role_types:
+  - leader           # Leitung
+  - treasurer        # Finanzen
+  - member           # Mitglied
+  - supervisor       # Stellenbegleitung
+  - camp_leader      # Lagerleiter
+  - president        # Präses
+  - coach            # Coach
+  - advisor          # Scharbetreuer
+  - guide            # Leitende
+  - group_admin      # Gruppenverwalter
+  - contact          # Kontaktperson
+  - child            # Kind
+  
+# All possible permissions.
+# As these are only names, they are mainly used for documentation purposes here.
+permissions:
+  - layer_full
+  - layer_read
+  - group_full
+  - contact_data
+  - login
+  
+# The roles and permissions added to every group type.
+common_roles:
+  group_admin: group_full
+  contact: contact_data
+  
+# The child group types that exist for every group type.
+common_children:
+  - simple_group
+  
+# The group types. The following attributes are possible:
+# * _layer_: Whether this group type builds a layer or is a regular group. Layers influence some permissions.
+# * _children_: Child group types that may be created for this group type.
+# * _default_children_: Child groups that are automatically created with a group of this type.
+# * _roles_: Name of the role types and their permissions that are available for this group type.
+group_types:
+  # Einfache Gruppe
+  simple_group:
+    roles:
+      leader: group_full
+      member: 
+      treasurer: 
+    
+  # Fachgruppe
+  professional_group:
+    roles:
+      leader: group_full, contact_data
+      member: contact_data
+  
+  # Arbeitsgruppe
+  work_group:
+    roles:
+      leader: group_full, contact_data
+      member: login
+  
+  # Bund
+  federation: 
+    children: federal_board, organization_board, state, professional_group, work_group
+    layer: true
+    default_children: federal_board, organization_board
+
+  # Bundesleitung
+  federal_board:
+    roles:
+      member: layer_full, contact_data
+  
+  # Verbandsleitung
+  organization_board:
+    roles:
+      leader:    group_full, contact_data
+      treasurer: contact_data
+      member:    contact_data
+  
+  # Kanton
+  state:
+    children: state_agency, state_board, region, flock, professional_group, work_group
+    layer: true
+    default_children: state_agency, state_board
+  
+  # Arbeitsstelle AST
+  state_agency:
+    roles:
+      leader: layer_full, contact_data
+  
+  # Kantonsvorstand
+  state_board:
+    roles:
+      leader:     group_full, layer_read, contact_data
+      member:     contact_data
+      supervisor: layer_read
+  
+  # Region
+  region:
+    children: regional_board, flock, professional_group, work_group
+    layer: true
+    default_children: regional_board
+  
+  # Regionalleitung
+  regional_board:
+    roles:
+      leader: group_full, layer_read, contact_data
+      member: layer_read
+  
+  # Schar
+  flock:
+    children: child_group
+    layer: true
+    roles:
+      leader:      layer_full, contact_data
+      camp_leader: layer_full, contact_data
+      president:   layer_read, contact_data
+      guide:       layer_read
+      treasurer:   layer_read, contact_data
+      coach:       layer_read, contact_data
+      advisor:     contact_data
+    
+  # Kindergruppe
+  child_group:
+    roles:
+      leader: group_full
+      child: 
+        
+
+  

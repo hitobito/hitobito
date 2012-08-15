@@ -1,0 +1,18 @@
+@import "variables";
+
+/* Imports Compass */
+@import "compass/support";
+$legacy-support-for-ie7 : true;
+
+#page .sheet {
+  zoom:1;
+}
+body #page .sheet.current { 
+  background: white;
+  border: 1px solid $grayLight;
+  z-index:1000;
+  margin-bottom: -20px !important;
+  padding-bottom: 0 !important;
+  .container-shadow { background: none; padding:0; margin:0; }
+  #content { background:none; border:none; }
+}

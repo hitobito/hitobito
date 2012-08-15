@@ -12,6 +12,10 @@
     = stylesheet_link_tag 'ie.css', :media => 'all'
     <![endif]-->
 
+    <!--[if IE 7]>
+    = stylesheet_link_tag 'ie7.css', :media => 'all'
+    <![endif]-->
+
     = stylesheet_link_tag 'application.css', :media => 'all'
 
     %link{:href => "images/favicon.ico", :rel => "shortcut icon"}
@@ -50,8 +54,12 @@
 
     %footer
       .container-fluid
-        %p
-          &copy; Puzzle ITC #{Time.zone.now.year}
+        .row
+          .span3
+            %img{'src' => 'assets/logo_jubla.png'}
+          .footer_content.span9
+            %p
+              &copy; Puzzle ITC #{Time.zone.now.year}
 
   = javascript_include_tag 'application'
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)

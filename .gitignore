@@ -14,6 +14,8 @@
 /log/*.log
 /tmp
 
+app/assets/.sass-cache
+
 public/assets
 
 config/settings.local.yml

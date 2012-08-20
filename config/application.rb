@@ -62,6 +62,9 @@ module Jubla
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
+    # Do not load environment when precompile assets (must be false to precompile without database access)
+    config.assets.initialize_on_precompile = false
+    
     
     config.generators do |g|
       g.test_framework      :rspec, :fixture => true

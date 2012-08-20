@@ -1,0 +1,27 @@
+/* line 12, ../sass/iefix.scss */
+.sheet.parent {
+  border: 1px solid #92959c;
+}
+/* line 14, ../sass/iefix.scss */
+.sheet.parent .sheet {
+  margin: 0 -10px -30px 10px;
+}
+/* line 16, ../sass/iefix.scss */
+.sheet.parent .sheet .breadcrump {
+  color: #92959c;
+}
+/* line 18, ../sass/iefix.scss */
+.sheet.parent .breadcrump {
+  color: #d1d3d9;
+}
+/* line 20, ../sass/iefix.scss */
+.sheet.current {
+  padding-bottom: 28px;
+  margin-bottom: -58px !important;
+}
+/* line 23, ../sass/iefix.scss */
+.sheet.current .container-shadow {
+  background: url("shadow_right.png") transparent no-repeat bottom right;
+  padding-bottom: 28px;
+  margin-bottom: -28px;
+}

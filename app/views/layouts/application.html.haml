@@ -9,9 +9,14 @@
     <!-- HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    = stylesheet_link_tag 'ie.css', :media => 'all'
     <![endif]-->
 
-    = stylesheet_link_tag 'application', :media => 'all'
+    <!--[if IE 7]>
+    = stylesheet_link_tag 'ie7.css', :media => 'all'
+    <![endif]-->
+
+    = stylesheet_link_tag 'application.css', :media => 'all'
 
     %link{:href => "images/favicon.ico", :rel => "shortcut icon"}
     %link{:href => "images/apple-touch-icon.png", :rel => "apple-touch-icon"}
@@ -22,25 +27,39 @@
 
   %body
 
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container= render 'layouts/nav'
+    %header
+      .container-fluid
+        = link_to 'Jubla', root_path, :class => 'brand'
+        .options
+          = render 'layouts/options'
 
-    .container
+    %nav
+      .container-fluid
+        = render 'layouts/nav'
 
-      %h1= @title
+    #page
+      .container-fluid
+        .sheet.parent
+          = link_to 'Kanton Luzern', root_path, :class => 'breadcrump'
+          .sheet.parent
+            = link_to 'Kanton Luzern', root_path, :class => 'breadcrump'
+            .sheet.current
+              .container-shadow
+                #content
+                  .actions.btn-toolbar
+                    .pull-right= yield :actions
+                    .pull-left= yield :tools
+                  = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+                  = yield
 
-      = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
-
-      .actions.btn-toolbar
-        .pull-right= yield :actions
-        .pull-left= yield :tools
-
-      #content= yield
-
-      %footer
-        %p
-          &copy; Puzzle ITC #{Time.zone.now.year}
+    %footer
+      .container-fluid
+        .row
+          .span3
+            %img{'src' => 'assets/logo_jubla.png'}
+          .footer_content.span9
+            %p
+              &copy; Puzzle ITC #{Time.zone.now.year}
 
   = javascript_include_tag 'application'
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)

@@ -1,0 +1,21 @@
+@import "variables";
+
+/* Imports Compass */
+@import "compass/support";
+$legacy-support-for-ie8 : true;
+
+
+body #page {
+  margin-left: 0;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+body header {
+  padding-left:0;
+  padding-right:0;
+}
+
+#page .sheet.parent, #page #content { 
+  border: 1px solid $grayLight;
+}

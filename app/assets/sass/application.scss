@@ -1,0 +1,164 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *= require 'bootstrap_config'
+ *= require_self
+ *
+ */
+
+/* Imports Compass */
+@import "variables";
+@import "compass/typography/lists/horizontal-list";
+@import "compass/css3/text-shadow";
+@import "compass/css3/box-shadow";
+@import "compass/css3/border-radius";
+
+/* Typo */
+// -------------------------
+
+h1 { 
+  font-size: 1.846em !important;
+  border-bottom: 1px solid $grayLighter;
+  padding-bottom: 10px;
+  margin-bottom: 20px !important;
+}
+h2 { 
+  font-size: 1.385em !important;
+}
+
+/* Layout */
+// -------------------------
+
+/* Header */
+header {
+  @include clearfix;
+  background: white;
+  height: 40px;
+  padding: 10px 20px;
+
+  .brand {
+    font-weight: bold;
+    float: left;
+    font-size: 2.462em; // 32px
+    line-height: 1.250em; // 40px
+  }
+
+  .options {
+    float: right;
+    margin-top: 10px;
+    ul {
+      @include horizontal-list(10px);
+    }
+  }
+}
+
+.options a, a.link {
+  text-decoration: underline;
+  &:hover { background: none; }
+}
+
+body > nav {
+  margin: 20px 0;
+  @media (min-width: 480px) { 
+    padding: 0 16px;
+  }
+  ul.nav {
+    @include horizontal-list(15px);
+    li {
+      @media (max-width: 480px) { 
+        float: none;
+        display:block;
+        padding:0; margin:0;
+      }
+      &.active a { background-color: white; }
+      a { 
+        @include single-text-shadow(white, 0, 1px, 0);
+        @include border-radius(4px);
+        font-size: 1.077em;
+        text-transform: uppercase;
+        color: $grayDark;
+        padding: 2px 5px;
+
+        &:hover { 
+          @include single-text-shadow($blueDark, 0, -1px, 0);
+          background-color: $blue; 
+          color: white;
+        }        
+      }
+    }
+  }
+}
+
+
+/* Content */
+#page {
+  margin: 0 40px 60px 20px;
+  padding-bottom: 30px;
+  & > .sheet { margin: 0 20px;}
+  @media (max-width: 480px) { 
+    margin: 0 20px 20px 0;
+  }
+}
+
+.sheet {
+  &.parent { 
+    padding-bottom: 1px; 
+    background: lighten($grayLighter, 3%);
+    @include single-box-shadow($grayLight, 0, 2px, 8px);
+    .sheet {
+      margin:0 -10px -30px 10px;
+      .breadcrump { color: $gray; }
+    }
+    .breadcrump { color: $grayLight; }
+  }
+  &.current {
+    background: url("shadow_left.png") transparent no-repeat bottom left;
+    padding-bottom: 28px;
+    margin-bottom:-58px !important;
+    .container-shadow {
+      background: url("shadow_right.png") transparent no-repeat bottom right;
+      padding-bottom: 28px;
+      margin-bottom:-28px;
+    }
+  }
+}
+
+#content {
+  @include single-box-shadow($grayLight, 0, 2px, 8px); 
+  background: white;
+  padding: 20px;
+}
+
+.breadcrump { 
+  display: block;
+  padding: 5px 10px;
+  font-size: 1.385em;
+  line-height: 1.538em;
+}
+
+/* Footer */
+footer { 
+  padding-top: 60px;
+  clear: both;
+
+  color: $white;
+
+  .footer_content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    @media (max-width:767px) { 
+      padding: 20px;
+    }
+  }
+
+  & > .container-fluid {
+    @include single-box-shadow($grayDarker, 0, 2px, 8px, 0, true);
+    background: $grayDark;
+  }
+}

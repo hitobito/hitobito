@@ -17,6 +17,7 @@ gem 'pg'
 gem 'protective'
 gem 'rails_config'
 gem 'rails-i18n'
+gem 'schema_validations'
 gem 'seed-fu'
 gem 'simple_form'
 gem 'debugger'
@@ -48,7 +49,7 @@ group :development do
   gem 'hirb'
   gem 'quiet_assets'
   gem 'rails-erd'
-  gem 'wirble' 
+  gem 'wirble'
 end
 
 group :test do
@@ -66,6 +67,7 @@ group :development, :test do
   gem 'brakeman'
   gem 'ci_reporter'
   gem 'faker'
+  gem 'metrical' 
   gem 'rails_code_qa'
   gem 'rails_best_practices'
 	gem 'rspec-rails'

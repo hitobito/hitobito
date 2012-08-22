@@ -13,6 +13,7 @@ role_types:
   - group_admin      # Gruppenverwalter
   - contact          # Kontaktperson
   - child            # Kind
+  - external         # Externe Personen
   
 # All possible permissions.
 # As these are only names, they are mainly used for documentation purposes here.
@@ -25,8 +26,13 @@ permissions:
   
 # The roles and permissions added to every group type.
 common_roles:
-  group_admin: group_full
-  contact: contact_data
+  group_admin: 
+    permissions: group_full
+  contact: 
+    permissions: contact_data
+  external:
+    visible_from_above: false
+    external: true
   
 # The child group types that exist for every group type.
 common_children:
@@ -41,21 +47,25 @@ group_types:
   # Einfache Gruppe
   simple_group:
     roles:
-      leader: group_full
+      leader: 
+        permissions: group_full
       member: 
-      treasurer: 
     
   # Fachgruppe
   professional_group:
     roles:
-      leader: group_full, contact_data
-      member: contact_data
+      leader: 
+        permissions: group_full, contact_data
+      member: 
+        permissions: contact_data
   
   # Arbeitsgruppe
   work_group:
     roles:
-      leader: group_full, contact_data
-      member: login
+      leader: 
+        permissions: group_full, contact_data
+      member: 
+        permissions: login
   
   # Bund
   federation: 
@@ -66,14 +76,18 @@ group_types:
   # Bundesleitung
   federal_board:
     roles:
-      member: layer_full, contact_data
+      member: 
+        permissions: layer_full, contact_data
   
   # Verbandsleitung
   organization_board:
     roles:
-      leader:    group_full, contact_data
-      treasurer: contact_data
-      member:    contact_data
+      leader:    
+        permissions: group_full, contact_data
+      treasurer: 
+        permissions: contact_data
+      member:    
+        permissions: contact_data
   
   # Kanton
   state:
@@ -84,14 +98,18 @@ group_types:
   # Arbeitsstelle AST
   state_agency:
     roles:
-      leader: layer_full, contact_data
+      leader: 
+        permissions: layer_full, contact_data
   
   # Kantonsvorstand
   state_board:
     roles:
-      leader:     group_full, layer_read, contact_data
-      member:     contact_data
-      supervisor: layer_read
+      leader:     
+        permissions: group_full, layer_read, contact_data
+      member:     
+        permissions: contact_data
+      supervisor: 
+        permissions: layer_read
   
   # Region
   region:
@@ -102,27 +120,34 @@ group_types:
   # Regionalleitung
   regional_board:
     roles:
-      leader: group_full, layer_read, contact_data
-      member: layer_read
+      leader: 
+        permissions: group_full, layer_read, contact_data
+      member: 
+        permissions: layer_read
   
   # Schar
   flock:
     children: child_group
     layer: true
     roles:
-      leader:      layer_full, contact_data
-      camp_leader: layer_full, contact_data
-      president:   layer_read, contact_data
-      guide:       layer_read
-      treasurer:   layer_read, contact_data
-      coach:       layer_read, contact_data
-      advisor:     contact_data
+      leader:      
+        permissions: layer_full, contact_data
+      camp_leader: 
+        permissions: layer_full, contact_data
+      president:   
+        permissions: layer_read, contact_data
+      guide:       
+        permissions: layer_read
+      treasurer:   
+        permissions: layer_read, contact_data
     
   # Kindergruppe
   child_group:
     roles:
-      leader: group_full
+      leader: 
+        permissions: group_full
       child: 
+        visible_from_above: false
         
 
   

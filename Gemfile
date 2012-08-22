@@ -89,3 +89,11 @@ end
 
 # To use debugger
 # gem 'debugger'
+
+
+# Load all wagons found in vendor/wagons/*
+group :development, :production do
+    Dir[File.expand_path('../vendor/wagons/**/*.gemspec', __FILE__)].each do |spec|
+        gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
+    end
+end

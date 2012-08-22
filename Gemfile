@@ -9,6 +9,7 @@ gem 'rails', '3.2.8'
 gem 'awesome_nested_set'
 gem 'cancan'
 #gem 'delayed_job_active_record'
+gem 'debugger'
 gem 'devise'
 gem 'haml'
 gem 'hoptoad_notifier'
@@ -20,7 +21,7 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'simple_form'
-gem 'debugger'
+gem 'wagons'
 
 
 # Gems used only for assets and not required

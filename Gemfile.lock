@@ -186,6 +186,8 @@ GEM
     multi_json (1.0.4)
     nokogiri (1.5.5)
     orm_adapter (0.4.0)
+    paranoia (1.1.0)
+      activerecord (>= 3.0.0)
     pg (0.14.0)
     polyglot (0.3.3)
     progressbar (0.11.0)
@@ -364,6 +366,7 @@ DEPENDENCIES
   kaminari
   launchy
   metrical
+  paranoia
   pg
   protective
   quiet_assets

@@ -10,6 +10,9 @@ module JublaJubla
 
     config.to_prepare do
       # extend application classes here
+      Person.send :include, Jubla::Person
+      Group.send  :include, Jubla::Group
+      Role.send   :include, Jubla::Role
     end 
 
   end

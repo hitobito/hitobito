@@ -32,18 +32,34 @@
 
 class Group < ActiveRecord::Base
   
+  
   acts_as_nested_set
   acts_as_paranoid
   
-  attr_accessible :parent_id, :name, :short_name, :email, :contact_id
+  attr_accessible :name, :short_name, :email, :contact_id
 
+  # Root group may not be destroyed
+  protect_if :root?
   
   include Contactable
+  
+  
+  ### ASSOCIATIONS
   
   has_many :roles
   has_many :people, through: :roles
   
   belongs_to :contact, class_name: 'Person'
+  
+  
+  ### VALIDATIONS
+  
+  validate :assert_type_is_allowed_for_parent, on: :create
+  
+  
+  ### CALLBACKS
+  
+  after_create :create_default_children
   
   
   # The hierarchy from top to bottom of and including this group.
@@ -62,10 +78,28 @@ class Group < ActiveRecord::Base
   end
   
   
+  private
+  
+  def assert_type_is_allowed_for_parent
+    errors.add(:type, :type_not_allowed) unless parent.possible_children.collect(&:to_s).include?(type)
+  end
+  
+  def create_default_children
+    default_children.each do |group_type|
+      child = group_type.new(name: group_type.model_name.human)
+      child.parent = self
+      child.save!
+    end
+  end
+  
+  
   module Types
     extend ActiveSupport::Concern
     
     included do
+      cattr_reader :roots
+      @@roots = []
+      
       class_attribute :layer, :role_types, :possible_children, :default_children
       
       # Whether this group type builds a layer or is a regular group. Layers influence some permissions.
@@ -86,6 +120,24 @@ class Group < ActiveRecord::Base
       def roles(*types)
         self.role_types = types + self.role_types
       end
+      
+      def all_types
+        @all_types ||= collect_types([], roots)
+      end
+      
+      private
+      
+      def collect_types(all, types)
+        types.each do |type|
+          unless all.include?(type)
+            puts type
+            all << type
+            collect_types(all, type.possible_children)
+          end
+        end
+        all
+      end
+      
     end
   end
   

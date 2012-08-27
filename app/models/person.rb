@@ -34,6 +34,7 @@
 class Person < ActiveRecord::Base
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, 
+                  :email, :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information
   
   include Contactable
@@ -41,8 +42,7 @@ class Person < ActiveRecord::Base
   has_many :roles
   has_many :groups, through: :roles
   
+  scope :public_data, select([:first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country])
   
-  def bar
-    'bar'
-  end
+  
 end

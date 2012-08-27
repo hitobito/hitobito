@@ -7,7 +7,7 @@ describe Group do
     
     it { should have(6).possible_children }
     it { should have(2).default_children }
-    it { should have(3).role_types }
+    it { should have(2).role_types }
     it { should be_layer }
     
     its(:possible_children) { should include(Group::SimpleGroup) }
@@ -18,7 +18,7 @@ describe Group do
 
     it { should have(2).possible_children }
     it { should have(0).default_children }
-    it { should have(8).role_types }
+    it { should have(7).role_types }
     it { should be_layer }
     
     describe Group::Flock::Leader do
@@ -43,7 +43,7 @@ describe Group do
     
     it { should have(1).possible_children }
     it { should have(0).default_children }
-    it { should have(5).role_types }
+    it { should have(4).role_types }
     it { should_not be_layer }
     its(:possible_children) { should include(Group::SimpleGroup) }
     
@@ -64,6 +64,33 @@ describe Group do
       
       it "is not visible from above" do
         external.visible_from_above.should be_false
+      end
+    end
+  end
+  
+  
+  def self.each_child(group)
+    @processed ||= []
+    @processed << group
+    group.possible_children.each do |child|
+      yield child unless @processed.include?(child)
+    end
+  end
+
+  each_child(Group::Federation) do |group|
+    context group do
+      
+      it "default_children must be part of possible_children" do
+        group.default_children.should include(*group.default_children)
+      end
+    
+      group.roles.each do |role|
+        context role do
+          it "must have valid permissions" do
+            # although it looks like, this example is about role.permissions and not about Jubla::Role::Permissions
+            Jubla::Role::Permissions.should include(*role.permissions)
+          end
+        end
       end
     end
   end

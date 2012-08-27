@@ -1,16 +1,13 @@
 module Jubla::Role
   extend ActiveSupport::Concern
   
+  Permissions = [:layer_full, :layer_read, :group_full, :contact_data, :login] 
   
   
   # Common roles not attached to a specific group
   
   class GroupAdmin < ::Role
     self.permissions = [:group_full]
-  end
-  
-  class Contact < ::Role
-    self.permissions = [:contact_data]
   end
   
   class External < ::Role

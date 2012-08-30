@@ -9,11 +9,10 @@ gem 'rails', '3.2.8'
 gem 'awesome_nested_set'
 gem 'cancan'
 #gem 'delayed_job_active_record'
-gem 'debugger'
 gem 'devise'
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'kaminari'
+#gem 'kaminari'
 gem 'paranoia'
 gem 'pg'
 gem 'protective'
@@ -28,18 +27,14 @@ gem 'wagons'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-
+  gem 'bootstrap-sass'
+  gem 'coffee-rails', '~> 3.2.1'
   gem 'compass', '>= 0.13.alpha.0'
   gem 'compass-rails', '~> 1.0.2'
-  
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
   gem 'jquery-rails'
-  gem 'bootstrap-sass'
-
+  gem 'sass-rails',   '~> 3.2.3'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
-
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -68,6 +63,7 @@ end
 group :development, :test do
   gem 'brakeman'
   gem 'ci_reporter'
+  gem 'debugger'
   gem 'faker'
   gem 'metrical' 
   gem 'rails_code_qa'

@@ -2,3 +2,6 @@
 log/*.log
 pkg/
 doc/rdoc
+
+# ignore Gemfile.lock for wagons
+Gemfile.lock

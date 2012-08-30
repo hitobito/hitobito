@@ -16,4 +16,8 @@ class PhoneNumber < ActiveRecord::Base
   
   belongs_to :contactable, polymorphic: true
   
+  
+  def to_s
+    "#{number} (#{label})"
+  end
 end

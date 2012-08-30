@@ -149,10 +149,6 @@ GEM
       thor (~> 0.14)
     json (1.7.4)
     json_pure (1.7.4)
-    kaminari (0.13.0)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      railties (>= 3.0.0)
     launchy (2.1.2)
       addressable (~> 2.3)
     libv8 (3.3.10.4)
@@ -363,7 +359,6 @@ DEPENDENCIES
   hoptoad_notifier
   jquery-rails
   jubla_jubla!
-  kaminari
   launchy
   metrical
   paranoia

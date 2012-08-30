@@ -20,22 +20,6 @@ describe Group do
     it { should have(0).default_children }
     it { should have(7).role_types }
     it { should be_layer }
-    
-    describe Group::Flock::Leader do
-      let(:leader) { Group::Flock::Leader }
-      
-      it "has correct permissions" do
-        leader.permissions.should == [:layer_full, :contact_data, :login]
-      end
-      
-      it "is not external" do
-        leader.external.should be_false
-      end
-      
-      it "is visible from above" do
-        leader.visible_from_above.should be_true
-      end
-    end
   end
   
   describe Group::SimpleGroup do
@@ -53,18 +37,6 @@ describe Group do
     
     it "includes the external role" do
       subject.role_types.should include(Jubla::Role::External)
-    end
-    
-    describe Jubla::Role::External do
-      let(:external) { Jubla::Role::External }
-    
-      it "is external" do
-        external.external.should be_true
-      end
-      
-      it "is not visible from above" do
-        external.visible_from_above.should be_false
-      end
     end
   end
   

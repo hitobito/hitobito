@@ -17,4 +17,7 @@ class SocialAccount < ActiveRecord::Base
   belongs_to :contactable, polymorphic: true
   
   
+  def to_s
+    "#{name} (#{label})"
+  end
 end

@@ -25,11 +25,17 @@ class Role < ActiveRecord::Base
   
   validate :assert_type_is_allowed_for_group, on: :create
   
+  def to_s
+    label.presence || self.class.model_name.human
+  end
+  
   
   private
   
   def assert_type_is_allowed_for_group
-    errors.add(:type, :type_not_allowed) unless group.role_types.collect(&:to_s).include?(type)
+    if type && group && !group.role_types.collect(&:to_s).include?(type)
+      errors.add(:type, :type_not_allowed)
+    end 
   end
   
   module Types

@@ -9,7 +9,7 @@ module Jubla::Group
     # define global children
     children Group::SimpleGroup
     
-    roots << Group::Federation
+    root_types << Group::Federation
     
     attr_accessible :bank_account
   end

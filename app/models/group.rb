@@ -77,11 +77,16 @@ class Group < ActiveRecord::Base
     hierarchy.select { |g| g.layer }
   end
   
+  def to_s
+    name
+  end
   
   private
   
   def assert_type_is_allowed_for_parent
-    errors.add(:type, :type_not_allowed) unless parent.possible_children.collect(&:to_s).include?(type)
+    if type && parent && !parent.possible_children.collect(&:to_s).include?(type)
+      errors.add(:type, :type_not_allowed) 
+    end 
   end
   
   def create_default_children
@@ -97,8 +102,8 @@ class Group < ActiveRecord::Base
     extend ActiveSupport::Concern
     
     included do
-      cattr_reader :roots
-      @@roots = []
+      cattr_reader :root_types
+      @@root_types = []
       
       class_attribute :layer, :role_types, :possible_children, :default_children
       
@@ -122,7 +127,7 @@ class Group < ActiveRecord::Base
       end
       
       def all_types
-        @all_types ||= collect_types([], roots)
+        @all_types ||= collect_types([], root_types)
       end
       
       private
@@ -130,7 +135,6 @@ class Group < ActiveRecord::Base
       def collect_types(all, types)
         types.each do |type|
           unless all.include?(type)
-            puts type
             all << type
             collect_types(all, type.possible_children)
           end

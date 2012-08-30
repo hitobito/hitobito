@@ -44,5 +44,14 @@ class Person < ActiveRecord::Base
   
   scope :public_data, select([:first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country])
   
+  def to_s
+    if company_name?
+      company_name
+    else
+      name = "#{first_name} #{last_name}".strip
+      name << " / #{nickname}" if nickname?
+      name
+    end
+  end
   
 end

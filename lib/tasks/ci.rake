@@ -2,17 +2,18 @@ desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
              'db:migrate',
              'ci:setup:rspec',
-             'spec']
+             'spec'
+             'wagon:test']
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"
   task :nightly => ['log:clear', 
                     'db:migrate', 
-                    'diagram:models:complete:png', 
-                    'diagram:controllers:complete:png', 
+                    'erd',
                     'ci:setup:rspec',
                     'spec:rcov',
-                    'spec:integration']
+                    #'spec:integration'
+                    ]
 end
 
 desc "Add column annotations to active records"

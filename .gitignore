@@ -13,6 +13,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+brakeman-output.tabs
 
 app/assets/.sass-cache
 app/assets/stylesheets_generated

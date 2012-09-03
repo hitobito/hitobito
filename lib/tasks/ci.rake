@@ -10,6 +10,7 @@ namespace :ci do
   task :nightly => ['log:clear', 
                     'db:migrate', 
                     #'erd',
+                    'brakeman',
                     'ci:setup:rspec',
                     'spec:rcov',
                     #'spec:integration'
@@ -19,6 +20,11 @@ end
 desc "Add column annotations to active records"
 task :annotate do
   sh 'annotate -p before'
+end
+
+desc "Run brakeman"
+task :brakeman do
+  sh 'brakeman -o brakeman-output.tabs'
 end
 
 desc "Run quality analysis"

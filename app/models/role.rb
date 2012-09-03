@@ -20,6 +20,9 @@ class Role < ActiveRecord::Base
   
   attr_accessible :label
   
+  # If these attributes should change, create a new role instance instead.
+  attr_readonly :person_id, :group_id, :type
+  
   belongs_to :person
   belongs_to :group
   

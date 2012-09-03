@@ -5,6 +5,7 @@ class SetupModels < ActiveRecord::Migration
       t.string :last_name
       t.string :company_name
       t.string :nickname
+      t.boolean :company, null: false, default: false
       
       t.string :email
       t.string :password

@@ -7,6 +7,7 @@
 #  last_name              :string(255)
 #  company_name           :string(255)
 #  nickname               :string(255)
+#  company                :boolean          default(FALSE), not null
 #  email                  :string(255)
 #  password               :string(255)
 #  address                :string(1024)
@@ -33,6 +34,9 @@
 
 class Person < ActiveRecord::Base
   
+  PUBLIC_ATTRS = [:first_name, :last_name, :nickname, :company_name, :company, 
+                  :email, :address, :zip_code, :town, :country]
+  
   attr_accessible :first_name, :last_name, :company_name, :nickname, 
                   :email, :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information
@@ -42,10 +46,8 @@ class Person < ActiveRecord::Base
   has_many :roles
   has_many :groups, through: :roles
   
-  scope :public_data, select([:first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country])
-  
   def to_s
-    if company_name?
+    if company?
       company_name
     else
       name = "#{first_name} #{last_name}".strip

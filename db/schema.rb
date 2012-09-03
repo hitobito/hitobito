@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20120822130340) do
     t.string   "last_name"
     t.string   "company_name"
     t.string   "nickname"
+    t.boolean  "company",                                :default => false, :null => false
     t.string   "email"
     t.string   "password"
     t.string   "address",                :limit => 1024

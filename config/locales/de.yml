@@ -1,0 +1,67 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+de:
+  activerecord:
+    errors: 
+      messages: 
+        type_not_allowed: kann hier nicht erstellt werden.
+        
+    models:
+      person:
+        one: Person
+        other: Personen
+      group:
+        one: Gruppe
+        other: Gruppen
+      role:
+        one: Rolle
+        other: Rollen
+      phone_number:
+        one: Telefonnummer
+        other: Telefonnummern
+      social_account:
+        one: Social Media Adresse
+        other: Social Media Adressen
+      
+    attributes:
+      person:
+        first_name: Vorname
+        last_name: Nachname
+        company_name: Firmenname
+        nickname: Übername
+        email: Email
+        password: Password
+        address: Adresse
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        birthday: Geburtstag
+        additional_information: Zusätzliche Angaben
+        
+      group:
+        name: Name
+        short_name: Kurzname
+        email: Email
+        password: Password
+        address: Adresse
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        contact_id: Kontaktperson
+        contact: Kontaktperson
+        
+      role:
+        label: Bezeichnung
+        
+      phone_number:
+        number: Nummer
+        label: Label
+        public: Öffentlich
+        
+      social_account:
+        name: Name
+        label: Label
+        public: Öffentlich
+      

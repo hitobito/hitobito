@@ -1,0 +1,42 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+de:
+  activerecord:
+    errors: 
+      messages:
+    
+    models:
+
+    attributes:
+      person:
+        name_mother: Name Mutter
+        name_father: Name Vater 
+        nationality: Nationalität
+        profession: Beruf
+        bank_account: Bankverbindung
+        ahv_number: AHV Nummer
+        ahv_number_old: AHV Nummer alt
+        j_s_number: J+S Nummer
+        insurance_company: Versicherung
+        insurance_number: Versicherungsnummer
+        
+      group:
+        bank_account: Bankverbindung
+        jubla_insurance: Jubla Versicherung
+        jubla_full_coverage: Jubla Vollkasko
+        parish: Pfarrei
+        kind: Art
+        unsexed: Gemischt
+        clairongarde: Clairongarde
+        founding_year: Gründungsjar
+        coach: Coach
+        coach_id: Coach
+        advisor: Scharbegleitung
+        adviser_id: Scharbegleitung
+        
+      role:
+        employment_percent: Stellenprozente
+        honorary: Ehrenamt
+
+      

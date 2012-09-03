@@ -14,7 +14,7 @@
 #  zip_code            :integer
 #  town                :string(255)
 #  country             :string(255)
-#  contact_id_id       :integer
+#  contact_id          :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  deleted_at          :datetime
@@ -26,17 +26,18 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach_id            :belongs_to
-#  advisor_id          :belongs_to
+#  coach               :belongs_to
+#  advisor             :belongs_to
 #
 
 class Group < ActiveRecord::Base
-  
   
   acts_as_nested_set
   acts_as_paranoid
   
   attr_accessible :name, :short_name, :email, :contact_id
+
+  attr_readonly :type
 
   # Root group may not be destroyed
   protect_if :root?

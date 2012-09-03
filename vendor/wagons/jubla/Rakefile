@@ -13,4 +13,4 @@ load 'wagons/wagon_tasks.rake'
 
 load 'rspec/rails/tasks/rspec.rake'
 
-load 'ci/reporter/rake/rspec' unless Rails.env == 'production'
+require 'ci/reporter/rake/rspec' unless Rails.env == 'production'

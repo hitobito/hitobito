@@ -2,7 +2,7 @@ desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
              'db:migrate',
              'ci:setup:rspec',
-             'spec'
+             'spec',
              'wagon:test']
 
 namespace :ci do

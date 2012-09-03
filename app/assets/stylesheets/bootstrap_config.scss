@@ -1,6 +1,6 @@
 /* Imports Compass */
 @import "compass/css3/font-face";
-@include font-face("Century Gothic", font-files("fonts/century-gothic.ttf", "fonts/century-gothic.eot"));
+@include font-face("Century Gothic", font-files(asset-path("century-gothic.ttf", font), asset-path("century-gothic.eot", font)));
 
 /* Now import the css files */
 @import "variables"; // Self-defined variables

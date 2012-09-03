@@ -15,6 +15,7 @@
 /tmp
 
 app/assets/.sass-cache
+app/assets/stylesheets_generated
 
 public/assets
 

@@ -12,3 +12,5 @@ ENV['APP_ROOT'] ||= File.expand_path(__FILE__).split("vendor#{File::SEPARATOR}wa
 load 'wagons/wagon_tasks.rake'
 
 load 'rspec/rails/tasks/rspec.rake'
+
+load 'ci/reporter/rake/rspec' unless Rails.env == 'production'

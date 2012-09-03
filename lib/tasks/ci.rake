@@ -9,7 +9,7 @@ namespace :ci do
   desc "Runs the tasks for a nightly build"
   task :nightly => ['log:clear', 
                     'db:migrate', 
-                    'erd',
+                    #'erd',
                     'ci:setup:rspec',
                     'spec:rcov',
                     #'spec:integration'

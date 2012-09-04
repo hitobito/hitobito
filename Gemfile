@@ -66,7 +66,7 @@ group :test do
   gem 'launchy'
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'simplecov'
+  gem 'simplecov-rcov'
   gem 'spork'
 end
 

@@ -35,7 +35,7 @@ require 'spec_helper'
 describe Group do
     
   it "should load fixtures" do
-    puts groups(:g)
+    groups(:g).should be_present
   end
   
   

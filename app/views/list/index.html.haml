@@ -1,0 +1,7 @@
+- @title ||= ti(:title, :models => models_label)
+
+- content_for(:tools, render('search')) if search_support?
+
+- content_for(:actions, render('actions_index'))
+
+= render 'list'

@@ -1,0 +1,75 @@
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.labeled {
+  vertical-align: top;
+  padding: 2px 0 2px;
+  clear: both;
+}
+
+.labeled label {
+  width: 120px;
+  padding-right: 5px;
+  float: left;
+}
+
+.labeled .value {
+  margin-left: 130px;
+}
+
+.labeled .value p {
+  margin: 0;
+}
+
+#content {
+  clear: both;
+  padding-top: 5px;
+  width: 100%;
+}
+
+table.table td.action {
+  width: 20px;
+  text-align: center;
+}
+
+.control-group {
+  clear: both;
+  padding: 2px 0 2px;
+}
+
+.control-group label {
+  float: left;
+  width: 120px;
+  padding-right: 5px;
+}
+
+.controls {
+  margin-left: 130px;
+}
+
+.cancel {
+  font-size: 80%;
+  margin-left: 7px;
+}
+
+.required {
+  font-size: 80%;
+  vertical-align: top;
+  margin-left: 2px;
+}
+
+#error_explanation h2 {
+  font-size: 100%;
+  margin-top: 0px;
+}
+
+#error_explanation ul {
+  margin-bottom: 5px;
+}
+

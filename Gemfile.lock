@@ -341,6 +341,7 @@ DEPENDENCIES
   annotate
   awesome_nested_set
   awesome_print
+  bcrypt-ruby
   bootstrap-sass
   brakeman
   bullet
@@ -381,6 +382,7 @@ DEPENDENCIES
   schema_validations
   seed-fu
   simple_form
+  simplecov
   spork
   sqlite3
   therubyracer

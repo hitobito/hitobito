@@ -1,4 +1,4 @@
-require 'support/crud_controller_test_helper'
+#require 'support/crud_controller_test_helper'
 
 RSpec.configure do |c|
   c.before :failing => true do

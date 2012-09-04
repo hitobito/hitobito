@@ -13,15 +13,19 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# ignore static analysis artifacts
+coverage
 brakeman-output.tabs
+doc/models.png
 
 app/assets/.sass-cache
 app/assets/stylesheets_generated
 
+# precompiled assets
 public/assets
 
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
 
-doc/models.png

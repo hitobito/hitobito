@@ -30,6 +30,51 @@
 #  advisor             :belongs_to
 #
 
-g:
-  name: group
-  type: Group
+top_layer:
+  name: Top
+  type: Group::TopLayer
+  lft: 1
+  rgt: 14
+
+top_group:
+  name: TopGroup
+  type: Group::TopGroup
+  parent: top_layer
+  lft: 2
+  rgt: 3
+  
+bottom_layer_one:
+  name: Bottom One
+  type: Group::BottomLayer
+  parent: top_layer
+  lft: 4
+  rgt: 9
+  
+bottom_group_one_one:
+  name: Group 11
+  type: Group::BottomGroup
+  parent: bottom_layer_one
+  lft: 5
+  rgt: 6
+  
+bottom_group_one_two:
+  name: Group 12
+  type: Group::BottomGroup
+  parent: bottom_layer_one
+  lft: 7
+  rgt: 8
+  
+bottom_layer_two:
+  name: Bottom Two
+  type: Group::BottomLayer
+  parent: top_layer
+  lft: 10
+  rgt: 13
+  
+bottom_group_two_one:
+  name: Group 21
+  type: Group::BottomGroup
+  parent: bottom_layer_two
+  lft: 11
+  rgt: 12
+ 

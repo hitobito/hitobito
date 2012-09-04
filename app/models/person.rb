@@ -56,4 +56,26 @@ class Person < ActiveRecord::Base
     end
   end
   
+  # All layers this person belongs to
+  def layer_groups
+    groups.collect(&:layer_group).uniq
+  end
+  
+  # All groups where this person has the given permission(s)
+  def groups_with_permission(*permissions)
+    role_types = Role.types_with_permission(*permissions)
+    roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+  end
+  
+  # All groups where this person has a role that is visible from above 
+  def groups_where_visible_from_above
+    role_types = Role.visible_types
+    roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+  end
+  
+  # All above groups where this person is visible from
+  def above_groups_visible_from
+    groups_where_visible_from_above.collect(&:hierarchy).flatten.uniq
+  end
+  
 end

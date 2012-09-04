@@ -2,116 +2,169 @@ ch:
   name: Jubla Schweiz
   short_name: Schweiz
   type: Group::Federation
+  lft: 1
+  rgt: 48
   
 federal_board:
   name: Bulei
   type: Group::FederalBoard
   parent: ch
+  lft: 2
+  rgt: 3
   
 organization_board:
   name: Verbandsleitung
   type: Group::OrganizationBoard
   parent: ch
+  lft: 4
+  rgt: 5
  
 be:
   name: Kanton Bern
   short_name: BE
   parent: ch
   type: Group::State
+  lft: 6
+  rgt: 37
   
 be_board:
   name: Kalei
   parent: be
   type: Group::StateBoard
+  lft: 7
+  rgt: 8
   
 be_agency:
   name: AST
   parent: be
   type: Group::StateAgency
+  lft: 9
+  rgt: 10
   
 be_security:
   name: FG Sicherheit
   parent: be
   type: Group::ProfessionalGroup
+  lft: 11
+  rgt: 12
   
 be_state_camp:
   name: AG Kantonslager
   parent: be
   type: Group::WorkGroup
+  lft: 13
+  rgt: 14
 
-no:
+"no":
   name: Nordostschweiz
   short_name: NO
   parent: ch
   type: Group::State
+  lft: 38
+  rgt: 47
   
 no_board:
   name: Kalei
-  parent: no
+  parent: "no"
   type: Group::StateBoard
+  lft: 39
+  rgt: 40
   
 no_agency:
   name: AST
-  parent: no
+  parent: "no"
   type: Group::StateAgency
+  lft: 41
+  rgt: 42
 
 city:
   name: Stadt
   parent: be
   type: Group::Region
+  lft: 15
+  rgt: 28
   
 city_board:
   name: Relei
   parent: city
   type: Group::RegionalBoard
+  lft: 16
+  rgt: 17
   
 oberland:
   name: Oberland
   parent: be
   type: Group::Region
+  lft: 29
+  rgt: 36
   
 oberland_board:
   name: Relei
   parent: oberland
   type: Group::RegionalBoard
+  lft: 30
+  rgt: 31
   
 bern:
   name: Bern
   parent: city
   type: Group::Flock
+  lft: 18
+  rgt: 25
   
 asterix:
   name: Asterix
   parent: bern
   type: Group::ChildGroup
+  lft: 19
+  rgt: 20
   
 obelix:
   name: Obelix
   parent: bern
   type: Group::ChildGroup
+  lft: 21
+  rgt: 22
   
 fussball:
   name: Fussballgruppe
   parent: bern
   type: Group::SimpleGroup
+  lft: 23
+  rgt: 24
   
 muri:
   name: Muri
   parent: city
   type: Group::Flock
+  lft: 26
+  rgt: 27
   
 thun:
   name: Thun
   parent: oberland
   type: Group::Flock
-  
+  lft: 32
+  rgt: 35
+    
+mickey:
+  name: Mickey
+  parent: thun
+  type: Group::ChildGroup
+  lft: 33
+  rgt: 34
+    
 innerroden:
   name: Innerroden
-  parent: no
+  parent: "no"
   type: Group::Flock
+  lft: 43
+  rgt: 44
   
 ausserroden:
   name: Ausserroden
-  parent: no
+  parent: "no"
   type: Group::Flock
+  lft: 45
+  rgt: 46
   

@@ -59,6 +59,10 @@ class Role < ActiveRecord::Base
       def visible_types
         all_types.select(&:visible_from_above)
       end
+      
+      def types_with_permission(*permissions)
+        all_types.select {|r| (permissions - r.permissions).blank? }
+      end
     end
   end
   

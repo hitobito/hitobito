@@ -12,7 +12,8 @@ namespace :ci do
                     #'erd',
                     'brakeman',
                     'ci:setup:rspec',
-                    'spec:rcov',
+                    'spec',
+                    'wagon:test',
                     #'spec:integration'
                     ]
 end

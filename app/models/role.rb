@@ -18,6 +18,8 @@ class Role < ActiveRecord::Base
   
   acts_as_paranoid
   
+  include Role::Types
+  
   attr_accessible :label
   
   # If these attributes should change, create a new role instance instead.
@@ -43,32 +45,5 @@ class Role < ActiveRecord::Base
       errors.add(:type, :type_not_allowed)
     end 
   end
-  
-  module Types
-    extend ActiveSupport::Concern
-    
-    included do
-      class_attribute :permissions, :visible_from_above, :external
-      self.permissions = []
-      self.visible_from_above = true
-      self.external = false
-    end
-    
-    module ClassMethods
-      def all_types
-        @all_types ||= Group.all_types.collect(&:role_types).flatten.uniq
-      end
-      
-      def visible_types
-        all_types.select(&:visible_from_above)
-      end
-      
-      def types_with_permission(*permissions)
-        all_types.select {|r| (permissions - r.permissions).blank? }
-      end
-    end
-  end
-  
-  include Types
   
 end

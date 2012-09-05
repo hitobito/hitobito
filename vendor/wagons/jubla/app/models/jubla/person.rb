@@ -7,6 +7,8 @@ module Jubla::Person
   end
   
   module ClassMethods
+
+    
   end
   
 end

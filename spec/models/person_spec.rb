@@ -35,6 +35,29 @@ describe Person do
     it "only layer role is visible from above" do
       person.groups_where_visible_from_above.should == [groups(:bottom_layer_one)]
     end
+    
+    it "is not visible from above for bottom group" do
+      g = groups(:bottom_group_one_one)
+      g.people.visible_from_above(g).should_not include(person)
+    end
+    
+    it "is visible from above for bottom layer" do
+      g = groups(:bottom_layer_one)
+      g.people.visible_from_above(g).should include(person)
+    end
+    
+    it "preloads groups with the given scope" do
+      p = Person.preload_groups.find(person.id)
+      p.groups.to_set.should == [groups(:bottom_group_one_one), groups(:bottom_layer_one)].to_set
+    end
+    
+    it "in_layer returns person for this layer" do
+      Person.in_layer(groups(:bottom_group_one_one)).should == [person]
+    end
+    
+    it "in_or_below returns person for above layer" do
+      Person.in_or_below(groups(:top_layer)).should == [person]
+    end
   end
   
   context "with multiple roles in different layers" do
@@ -57,13 +80,34 @@ describe Person do
     it "whole hierarchy may view this person" do
       person.above_groups_visible_from.to_set.should == [groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)].to_set
     end
+    
+    it "in_layer returns person for this layer" do
+      Person.in_layer(groups(:bottom_group_one_one)).should == [person]
+    end
+    
+    it "in_or_below returns person for any layer" do
+      Person.in_or_below(groups(:top_layer)).should == [person]
+    end
   end
   
   context "with invisible role" do
-    let(:role) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)) }
+    let(:group) { groups(:bottom_group_one_one) }
+    let(:role) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group) }
     
-    it "is not visible from above" do
+    it "has not role that is visible from above" do
       person.groups_where_visible_from_above.should be_empty
+    end
+    
+    it "is not visible from above without arguments" do
+      group.people.visible_from_above.should_not include(person)
+    end
+    
+    it "is not visible from above without arguments" do
+      group.people.visible_from_above(group).should_not include(person)
+    end
+    
+    it "is not visible from above in combination with other scopes" do
+      Person.in_or_below(groups(:top_layer)).visible_from_above.should_not include(person)
     end
   end
 end

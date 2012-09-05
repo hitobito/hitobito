@@ -36,7 +36,7 @@ def seed_accounts(person, several = false)
     { contactable_id:   person.id,
       contactable_type: person.class.name,
       number:           Faker::PhoneNumber.phone_number,
-      label:            PhoneNumber::PREDEFINED_LABELS.first,
+      label:            Settings.phone_number.predefined_labels.first,
       public:           true }
   )
   if several
@@ -44,14 +44,14 @@ def seed_accounts(person, several = false)
       { contactable_id:   person.id,
         contactable_type: person.class.name,
         number:           Faker::PhoneNumber.phone_number,
-        label:            PhoneNumber::PREDEFINED_LABELS.shuffle.first,
+        label:            Settings.phone_number.predefined_labels.shuffle.first,
         public:           [true, false].shuffle.first }
     )
     SocialAccount.seed(:contactable_id, :contactable_type, :label,
       { contactable_id:   person.id,
         contactable_type: person.class.name,
         name:             Faker::Internet.user_name,
-        label:            SocialAccount::PREDEFINED_LABELS.shuffle.first,
+        label:            Settings.social_account.predefined_labels.first,
         public:           [true, false].shuffle.first }
     )
   end

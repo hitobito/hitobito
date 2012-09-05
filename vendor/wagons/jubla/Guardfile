@@ -14,8 +14,6 @@ wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
 notification :off
 
 guard 'rspec', :version => 2 do
-  watch(%r{^(.+)$}) { |m| `notify-send #{m[1]} modified` }
-
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^#{wagon}/spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})              { |m| "spec/lib/#{m[1]}_spec.rb" }
@@ -25,6 +23,7 @@ guard 'rspec', :version => 2 do
   # Rails example
   watch(%r{^app/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^#{wagon}/app/(.+)\.rb$})                  { |m| "spec/#{m[1]}_spec.rb" }
+  watch(%r{^#{wagon}/app/models/jubla/(.+)\.rb$})     { |m| "spec/models/#{m[1]}_spec.rb" }
   watch(%r{^#{wagon}/app/models/group/(.+)\.rb$})     { |m| "spec/models/group_spec.rb" }
   watch(%r{^app/(.*)(\.erb|\.haml)$})                 { |m| "spec/#{m[1]}#{m[2]}_spec.rb" }
   watch(%r{^#{wagon}/app/(.*)(\.erb|\.haml)$})        { |m| "spec/#{m[1]}_spec.rb" }

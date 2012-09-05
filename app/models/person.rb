@@ -47,6 +47,42 @@ class Person < ActiveRecord::Base
   has_many :groups, through: :roles
   
   validates :gender, inclusion: %w(m w), allow_nil: true
+ 
+
+  scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
+  scope :contact_data_visible, where(:contact_data_visible => true)
+  scope :preload_groups, scoped.extending(Person::PreloadGroups)
+  
+  
+  class << self
+    # scope listing only people that have roles that are visible from above.
+    # if group is given, only visible roles from this group are considered.
+    def visible_from_above(group = nil)
+      role_types = group ? group.role_types.select(&:visible_from_above) : Role.visible_types
+      where(roles: {type: role_types.collect(&:sti_name)})
+    end
+    
+    # scope listing all people with a role in the given layer.
+    def in_layer(group)
+      layer_group = group.layer_group
+      conditions = ["(groups.id = ?)", layer_group.id]
+      group_types = layer_group.possible_children.reject(&:layer).collect(&:sti_name)
+      layer_children = layer_group.children.select([:lft, :rgt]).where(type: group_types)
+      layer_children.each do |g|
+        conditions.first << " OR (groups.lft >= ? AND groups.rgt <= ?)"
+        conditions << g.lft
+        conditions << g.rgt
+      end
+      joins(roles: :group).where(conditions).uniq
+    end
+    
+    # scope listing all people with a role in or below the given group.
+    def in_or_below(group)
+      joins(roles: :group).
+      where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
+    end
+  end
+  
   
   def to_s
     if company?

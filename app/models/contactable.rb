@@ -6,8 +6,8 @@ module Contactable
     
     attr_accessible :email, :address, :zip_code, :town, :country
     
-    has_many :phone_numbers, as: :contactable
-    has_many :social_accounts, as: :contactable
+    has_many :phone_numbers, as: :contactable, dependent: :destroy
+    has_many :social_accounts, as: :contactable, dependent: :destroy
     
     scope :public_accounts, select(%w(phone_numbers.number 
                                       phone_numbers.label 

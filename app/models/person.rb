@@ -34,7 +34,7 @@
 
 class Person < ActiveRecord::Base
   
-  PUBLIC_ATTRS = [:first_name, :last_name, :nickname, :company_name, :company, 
+  PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
                   :email, :address, :zip_code, :town, :country]
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, 
@@ -43,8 +43,10 @@ class Person < ActiveRecord::Base
   
   include Contactable
   
-  has_many :roles
+  has_many :roles, dependent: :destroy
   has_many :groups, through: :roles
+  
+  validates :gender, inclusion: %w(m w), allow_nil: true
   
   def to_s
     if company?
@@ -65,6 +67,11 @@ class Person < ActiveRecord::Base
   def groups_with_permission(*permissions)
     role_types = Role.types_with_permission(*permissions)
     roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+  end
+  
+  # Does this person have the given permission(s) in any group
+  def permission?(*permissions)
+    groups_with_permission(*permissions).present?
   end
   
   # All groups where this person has a role that is visible from above 

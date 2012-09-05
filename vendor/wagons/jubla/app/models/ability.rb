@@ -5,23 +5,28 @@ class Ability
     @groups_group_full = user.groups_with_permission(:group_full)
     @groups_layer_full = user.groups_with_permission(:layer_full)
     @groups_layer_read = user.groups_with_permission(:layer_read)
+    layers_read = layers(@groups_layer_full, @groups_layer_read)
+    
+       
+    # List / view contact data
+    can :index, Person
+    
+    can :read, Group
     
     
     if show_person_permissions?
-      layers_read = layers(@groups_layer_full, @groups_layer_read)
-      
       # View all person details
       can :show, Person do |person|
         # user has group_full, person in same group
-        (person.groups & @groups_group_full).present? ||
+        contains_any?(person.groups, @groups_group_full) ||
         
-        (layers_read.present? &&
+        (layers_read.present? && (
           # user has layer_full or layer_read, person in same layer
-          ((layers_read & person.layer_groups).present? ||
+          contains_any?(layers_read, person.layer_groups) ||
   
           # user has layer_full or layer_read, person below layer and visible_from_above
-          (layers_read & person.above_groups_visible_from).present?
-          ))
+          contains_any?(layers_read, person.above_groups_visible_from)
+        ))
       end
     end
       
@@ -30,25 +35,29 @@ class Ability
       
       can :manage, Person do |person|
         # user has group_full, person in same group
-        (person.groups & @groups_group_full).present? ||
+        contains_any?(person.groups, @groups_group_full) ||
         
-        (layers_full.present? &&
+        (layers_full.present? && (
           # user has layer_full, person in same layer
-          ((layers_full & person.layer_groups).present? ||
+          contains_any?(layers_full, person.layer_groups) ||
           
           # user has layer_full, person below layer and visible_from_above
-          (layers_full & person.above_groups_visible_from).present?
-          ))
+          contains_any?(layers_full, person.above_groups_visible_from)
+        ))
+      end
+      
+      can :manage, Group do |group|
+        # user has group_full for this group
+        @groups_group_full.include?(group) ||
+        
+        (layers_full.present? && 
+         # user has layer_full, group in same layer
+         contains_any?(layers_full, group.layer_groups)
+        )
       end
       
     end
-    
-    # List / view contact data
-    can :index, Person do |person|
-      # can show person
-      # user has contact_data, person has contact_data
-      # person in same group
-    end
+ 
     
     
     # Define abilities for the passed in user here. For example:
@@ -87,5 +96,10 @@ class Ability
   
   def layers(*groups)
     groups.flatten.collect(&:layer_group).uniq
+  end
+  
+  # Are any items of the existing list present in the list of required items? 
+  def contains_any?(required, existing)
+    (required & existing).present?
   end
 end

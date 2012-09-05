@@ -28,6 +28,9 @@ class Role < ActiveRecord::Base
   
   validate :assert_type_is_allowed_for_group, on: :create
   
+  # TODO set contact_data_visible in person on create / destroy
+  # TODO create person login if this role type has login permission; validate email presence first
+  
   def to_s
     label.presence || self.class.model_name.human
   end

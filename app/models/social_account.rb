@@ -12,6 +12,8 @@
 
 class SocialAccount < ActiveRecord::Base
   
+  PREDEFINED_LABELS = %w(Skype MSN Website)
+  
   attr_accessible :name, :label, :public
   
   belongs_to :contactable, polymorphic: true

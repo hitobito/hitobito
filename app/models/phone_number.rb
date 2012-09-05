@@ -12,6 +12,8 @@
 
 class PhoneNumber < ActiveRecord::Base
   
+  PREDEFINED_LABELS = %w(private mobile work father mother fax other)
+  
   attr_accessible :number, :label, :public
   
   belongs_to :contactable, polymorphic: true

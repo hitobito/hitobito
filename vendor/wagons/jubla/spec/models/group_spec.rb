@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Group do
+    
+  it "is a valid nested set" do
+    Group.should be_valid
+  end
   
   describe Group::Federation do
     subject { Group::Federation }

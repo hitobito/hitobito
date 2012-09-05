@@ -65,16 +65,16 @@ class Group < ActiveRecord::Base
   
   # The hierarchy from top to bottom of and including this group.
   def hierarchy
-    @hierarchy ||= ancestors.order(:lft).to_a + [self]
+    @hierarchy ||= self_and_ancestors
   end
   
   # The layer of this group.
-  def layer
-    layers.last
+  def layer_group
+    layer_groups.last
   end
   
   # The layer hierarchy from top to bottom of this group.
-  def layers
+  def layer_groups
     hierarchy.select { |g| g.layer }
   end
   

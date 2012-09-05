@@ -62,3 +62,5 @@ flocks = Group::Flock.seed(:name, :parent_id,
   {name: 'Ausserroden',
    parent_id: states[2].id },
 )
+
+Group.rebuild!

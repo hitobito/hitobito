@@ -11,12 +11,12 @@ describe Role do
     its(:permissions) { should ==  [:layer_full, :contact_data, :login] }
     
     it "may be created for flock" do
-      role = Fabricate.build(subject.name.to_sym, :group => groups(:bern))
+      role = Fabricate.build(subject.name.to_sym, group: groups(:bern))
       role.should be_valid
     end
     
     it "may not be created for region" do
-      role = Fabricate.build(subject.name.to_sym, :group => groups(:city))
+      role = Fabricate.build(subject.name.to_sym, group: groups(:city))
       role.should_not be_valid
       role.should have(1).error_on(:type)
     end
@@ -31,7 +31,7 @@ describe Role do
     its(:permissions) { should ==  [] }
     
     it "may be created for region" do
-      role = Fabricate.build(subject.name.to_sym, :group => groups(:city))
+      role = Fabricate.build(subject.name.to_sym, group: groups(:city))
       role.should be_valid
     end
   end

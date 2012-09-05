@@ -1,14 +1,58 @@
-%h1 Jungschar Bern
+%header.content-header
+  %h1 Jungschar Bern
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Email
-  %tbody
-    %tr
-      %td Peter Meier
-      %td peter@meier.ch
-    %tr
-      %td Franz Mueller
-      %td franz@gmx.ch
+  %ul.nav.nav-sub
+    %li.active
+      %a{:href => "#"} Home
+    %li
+      %a{:href => "#"} Personen
+    %li
+      %a{:href => "#"} Gruppen
+
+.btn-toolbar
+  .btn-group
+    %a.btn{:href => "#"}
+      %i.icon.icon-plus
+      Person hinzufügen
+  .btn-group
+    %a.btn{:href => "#"}
+      %i.icon.icon-download
+      Liste importieren
+    %a.btn{:href => "#"}
+      %i.icon.icon-upload
+      Export
+  .btn-group
+    %a.btn{:href => "#"}
+      %i.icon.icon-print
+      Drucken
+  .btn-group
+    %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}
+      Alle anzeigen
+      %span.caret
+    %ul.dropdown-menu
+      %li
+        %a{:href => "#"} Action
+      %li
+        %a{:href => "#"} Another action
+      %li
+        %a{:href => "#"} Something else here
+      %li.divider
+      %li
+        %a{:href => "#"} Separated link
+
+#main
+
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Name
+        %th Email
+    %tbody
+      %tr
+        %td Peter Meier
+        %td peter@meier.ch
+      %tr
+        %td Franz Mueller
+        %td franz@gmx.ch
+
+  %p.muted Text with less importance

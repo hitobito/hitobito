@@ -1,8 +1,107 @@
-%h1 Peter Meier
+%h1 Roland Studer
 
-%h2 Kontaktangaben
+.btn-toolbar
+  .btn-group
+    %a.btn{:href => "#"}
+      %i.icon.icon-edit
+      Editieren
+  .btn-group
+    %a.btn{:href => "http://www.cornify.com", :onclick => "cornify_add();return false;"}
+      %script{:src => "http://www.cornify.com/js/cornify.js", :type => "text/javascript"}
+      %i.icon.icon-trash
+      Kontakt löschen
 
-%p 
-  Eigerplatz 4
-  %br/
-  3007 Bern
+#main.row-fluid
+
+  %article.span7
+    %section#person_infos
+      %address
+        %strong
+          Roland Studer
+        %p
+          Eigerplatz 4
+          %br
+          3007 Bern
+        %p
+          +41 79 746 48 59
+          %span.muted
+            Mobile
+        %p
+          %a{:href => "#"}
+            roland@wearecube.ch
+          %span.muted
+            Arbeit
+          %br
+          %a{:href => "#"}
+            roland.studer@gmail.com
+          %span.muted
+            Privat
+      %p
+        %a{:href => "#"}
+          twitter.com/rolandstuder
+        %span.muted
+          Twitter
+    %section#person_remarks
+      %h4
+        Bemerkungen
+      %p 
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lorem augue, interdum ut tristique vitae, malesuada sit amet lectus. Aenean quis massa purus. Suspendisse mollis, leo in ultricies viverra, lacus justo lacinia ligula, sed commodo orci ante et lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean pellentesque, ipsum vel viverra venenatis, ipsum eros vulputate felis, eget porta quam erat a mi. Integer at semper eros. 
+      %p
+        In eu mollis nisi. In ullamcorper est sed erat sodales eu pharetra lorem lobortis. Aliquam mollis pharetra nisl, eget volutpat lacus hendrerit ut. Aenean feugiat eleifend lectus, id euismod ligula bibendum eu. Sed id nibh at massa luctus feugiat sed eu orci.
+      %dl.dl-horizontal
+        %dt.muted Geburtstag
+        %dd 5.6.1981
+        %dt.muted Nationalität
+        %dd CH
+        %dt.muted Geschlecht
+        %dd männlich
+        %dt.muted IBAN
+        %dd CH10013458978425315 123
+        %dt.muted J+S Nummer
+        %dd 456781
+
+  %aside.span5
+    %section#person_functions
+      %h2 
+        Funktionen
+        .btn-group.pull-right
+          %a.btn{:href => "#"}
+            %i.icon.icon-plus
+            hinzufügen
+      %ul.unstyled
+        %li
+          %strong 
+            Scharleiter
+            %a{:href => "#"} Jubla Buchs
+        %li
+          %strong 
+            Mitglied
+            %a{:href => "#"} AG Prävention
+    %section#person_registrations
+      %h2 
+        Anmeldungen
+        .btn-group.pull-right
+          %a.btn{:href => "#"}
+            %i.icon.icon-plus
+            hinzufügen
+      %ul.unstyled
+        %li
+          %strong 
+            %a{:href => "#"} Weiterbildungskurs
+            %span.muted Kanton Bern
+    %section#person_qualifications
+      %h2 
+        Qualifikation
+        .btn-group.pull-right
+          %a.btn{:href => "#"}
+            %i.icon.icon-plus
+            hinzufügen
+      %ul.unstyled
+        %li
+          %strong 
+            %a{:href => "#"} J+S Leiterkurs
+            %span.muted bis Juli 2013
+        %li
+          %strong 
+            %a{:href => "#"} J+S Leiterkurs
+            %span.muted bis Juli 2013

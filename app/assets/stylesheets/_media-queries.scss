@@ -1,0 +1,54 @@
+// Media Queries
+// media queries syntax
+// pros @Aris_FM
+// =================================================================================
+
+@mixin responsive($media, $max: '') {
+  @if $max != '' {
+    @if $media == mediaLarge {
+      @media screen and (min-width:$mediaLarge) and (max-width:$max - 1px) { @content; }
+    }
+    @else if $media == mediaDesktop {
+      @media screen and (min-width:$mediaDesktop) and (max-width:$max - 1px) { @content; }
+    }
+    @else if $media == mediaTablet {
+      @media screen and (min-width:$mediaTablet) and (max-width:$max - 1px) { @content; }
+    }
+    @else if $media == mediaPhone {
+      @media screen and (min-width:$mediaPhone) and (max-width:$max - 1px) { @content; }
+    }
+    @else if $media == phone {
+      @media screen and (min-width:0) and (max-width:$max - 1px) { @content; }
+    }
+  } @else {
+    @if $media == mediaLarge {
+      @media screen and (min-width:$mediaLarge) { @content; }
+    }
+    @else if $media == mediaDesktop {
+      @media screen and (min-width:$mediaDesktop) { @content; }
+    }
+    @else if $media == mediaTablet {
+      @media screen and (min-width:$mediaTablet) { @content; }
+    }
+    @else if $media == mediaPhone {
+      @media screen and (min-width:$mediaPhone) { @content; }
+    }
+  }
+}
+
+//  How To Use It:
+//  .foo {
+//    float: left;
+//    width: 1000px;
+//  
+//    @include responsive(tablet) {
+//      float: none;
+//      width: 600px;
+//    }
+//    @include responsive(tablet) {
+//      width: 480px;
+//    }
+//    @include responsive(smartphone, $tablet) {
+//      width: 280px;
+//    }
+//  }

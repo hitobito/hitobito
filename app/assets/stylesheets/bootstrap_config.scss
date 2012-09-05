@@ -5,7 +5,7 @@
 /* Now import the css files */
 @import "variables"; // Self-defined variables
 
-// @import "bootstrap";
+@import "bootstrap";
 
 // Core variables and mixins
 @import "bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
@@ -26,38 +26,38 @@
 @import "bootstrap/tables";
 
 // Components: common
-// @import "bootstrap/sprites";
-// @import "bootstrap/dropdowns";
-// @import "bootstrap/wells";
-// @import "bootstrap/component-animations";
-// @import "bootstrap/close";
+@import "bootstrap/sprites";
+@import "bootstrap/dropdowns";
+@import "bootstrap/wells";
+@import "bootstrap/component-animations";
+@import "bootstrap/close";
 
 // Components: Buttons & Alerts
-// @import "bootstrap/buttons";
-// @import "bootstrap/button-groups";
-// @import "bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+@import "bootstrap/buttons";
+@import "bootstrap/button-groups";
+@import "bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
 // Components: Nav
 @import "bootstrap/navs";
 @import "bootstrap/navbar";
-// @import "bootstrap/breadcrumbs";
-// @import "bootstrap/pagination";
-// @import "bootstrap/pager";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
 
 // Components: Popovers
-// @import "bootstrap/modals";
-// @import "bootstrap/tooltip";
-// @import "bootstrap/popovers";
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
 
 // Components: Misc
-// @import "bootstrap/thumbnails";
-// @import "bootstrap/labels-badges";
-// @import "bootstrap/progress-bars";
-// @import "bootstrap/accordion";
-// @import "bootstrap/carousel";
-// @import "bootstrap/hero-unit";
+@import "bootstrap/thumbnails";
+@import "bootstrap/labels-badges";
+@import "bootstrap/progress-bars";
+@import "bootstrap/accordion";
+@import "bootstrap/carousel";
+@import "bootstrap/hero-unit";
 
 // Utility classes
-// @import "bootstrap/utilities"; // Has to be last to override when necessary
+@import "bootstrap/utilities"; // Has to be last to override when necessary
 
 @import "bootstrap-responsive";

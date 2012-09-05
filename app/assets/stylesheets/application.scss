@@ -14,29 +14,101 @@
 
 /* Imports Compass */
 @import "variables";
+@import "media-queries";
 @import "compass/typography/lists/horizontal-list";
 @import "compass/css3/text-shadow";
 @import "compass/css3/box-shadow";
 @import "compass/css3/border-radius";
+@import "compass/css3/transition";
 
 /* Typo */
 // -------------------------
 
 h1 { 
-  font-size: 1.846em !important;
+  font-size: 2.333em !important;
   border-bottom: 1px solid $grayLighter;
   padding-bottom: 10px;
-  margin-bottom: 20px !important;
+  margin-bottom: $vSpace;
 }
 h2 { 
-  font-size: 1.385em !important;
+  font-size: 1.667em !important;
 }
+
+.content-header {
+  margin-bottom: $vSpace;
+  h1 { margin-bottom: 0px; }
+}
+
+.muted { color: $gray; }
+
+
+/* Nav */
+// -------------------------
+.nav-sub {
+  @include clearfix;
+  margin-bottom: 0px;
+  border-bottom: 1px solid $grayLighter;
+  & > li {
+    float: left;
+     a {
+      @include single-transition(border-color, 300ms);
+      padding: 10px 0;
+      margin-right: 30px;
+      line-height: 14px;
+      border-bottom: 2px solid $white;
+      &:hover { background: none; border-color: $grayLight; }
+    }
+  }
+  & > .active > a, & > .active > a:hover {
+    border-color: $blue;
+  }
+}
+
+.level { 
+  display: block;
+  padding: 5px 10px;
+  font-size: 1.385em;
+  line-height: 1.538em;
+}
+
+.sheet > .breadcrumb {
+  padding: 6px 10px 0;
+  margin: 0;
+  list-style: none;
+  background: none;
+  border: none;
+  a { color: $gray; }
+  ul { margin: 0;}
+  & + .level { padding-top:0; }
+}
+
+
+/* Forms & Buttons */
+// -------------------------
+.btn-toolbar {
+  margin-bottom: $vSpace;
+}
+.btn { 
+  color: $green;
+  &:hover {
+    color: darken($green, 10%); 
+    .icon { background-image: url("glyphicons-halflings-green.png"); }
+  } 
+  .icon { background-image: url("glyphicons-halflings-green-hover.png"); }
+  .caret {
+    border-top-color: $green;
+  }
+  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
+    color: $white;
+  }
+}
+
 
 /* Layout */
 // -------------------------
 
 /* Header */
-header {
+body > header {
   @include clearfix;
   background: white;
   height: 40px;
@@ -65,13 +137,13 @@ header {
 
 body > nav {
   margin: 20px 0;
-  @media (min-width: 480px) { 
+  @include responsive(mediaTablet) {
     padding: 0 16px;
   }
   ul.nav {
     @include horizontal-list(15px);
     li {
-      @media (max-width: 480px) { 
+      @include responsive(phone, $mediaTablet) {
         float: none;
         display:block;
         padding:0; margin:0;
@@ -101,7 +173,7 @@ body > nav {
   margin: 0 40px 60px 20px;
   padding-bottom: 30px;
   & > .sheet { margin: 0 20px;}
-  @media (max-width: 480px) { 
+  @include responsive(phone, $mediaTablet) { 
     margin: 0 20px 20px 0;
   }
 }
@@ -113,9 +185,9 @@ body > nav {
     @include single-box-shadow($grayLight, 0, 2px, 8px);
     .sheet {
       margin:0 -10px -30px 10px;
-      .breadcrump { color: $gray; }
+      .level { color: $gray; }
     }
-    .breadcrump { color: $grayLight; }
+    .level { color: $grayLight; }
   }
   &.current {
     background: url("shadow_left.png") transparent no-repeat bottom left;
@@ -132,19 +204,32 @@ body > nav {
 #content {
   @include single-box-shadow($grayLight, 0, 2px, 8px); 
   background: white;
-  padding: 20px;
+  padding: 16px 20px 20px;
+
+  aside {
+    @include responsive(phone, $mediaDesktop) { 
+      margin-top: $vSpace;
+    }
+   
+    h2 {
+      border-bottom: 1px solid $grayLighter;
+      padding-bottom: 10px;
+      margin-bottom: $vSpace*0.5;
+    }
+  }
+
+  section { 
+    @include clearfix; 
+    margin-top: $vSpace;
+    &:first-child { margin-top:0; } 
+  }
 }
 
-.breadcrump { 
-  display: block;
-  padding: 5px 10px;
-  font-size: 1.385em;
-  line-height: 1.538em;
-}
+
 
 /* Footer */
-footer { 
-  padding-top: 60px;
+body > footer { 
+  padding-top: $vSpace*2;
   clear: both;
 
   color: $white;
@@ -152,7 +237,7 @@ footer {
   .footer_content {
     padding-top: 20px;
     padding-bottom: 20px;
-    @media (max-width:767px) { 
+    @include responsive(phone, $mediaTablet) {
       padding: 20px;
     }
   }

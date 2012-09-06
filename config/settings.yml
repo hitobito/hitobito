@@ -1,0 +1,17 @@
+
+
+phone_number:
+  predefined_labels: 
+    - Privat
+    - Mobil
+    - Arbeit
+    - Vater
+    - Mutter
+    - Fax
+    - Andere
+    
+social_account:
+  predefined_labels:
+    - Skype
+    - Webseite
+    - MSN

@@ -7,7 +7,19 @@ class Group::TopLayer < Group
   self.layer = true
 
   children Group::TopGroup, Group::BottomLayer
-
+  
+  class External < ::Role
+    self.visible_from_above = false
+    self.external = true
+  end
+  
+  roles External
+  
 end
 
-Group.root_types << Group::TopLayer
+# no wagons loaded
+unless ENV['APP_ROOT']
+  Group.reset_types!
+  Group.root_types Group::TopLayer
+end
+

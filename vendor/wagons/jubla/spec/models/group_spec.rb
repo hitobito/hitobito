@@ -59,6 +59,12 @@ describe Group do
       it "default_children must be part of possible_children" do
         group.default_children.should include(*group.default_children)
       end
+      
+      unless group.layer?
+        it "only layer groups may contain layer children" do
+          group.possible_children.select(&:layer).should be_empty
+        end
+      end
     
       group.roles.each do |role|
         context role do

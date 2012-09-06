@@ -14,6 +14,12 @@ class Group::BottomLayer < Group
     self.permissions = [:layer_read, :login]
   end
   
+  class External < ::Role
+    self.visible_from_above = false
+    self.external = true
+  end
+  
   roles Leader, Member
   
 end
+

@@ -6,8 +6,9 @@ module Jubla::Person
                     :ahv_number, :ahv_number_old, :j_s_number, :insurance_company, :insurance_number
   end
   
-  def foo
-    'foo'
+  module ClassMethods
+
+    
   end
   
 end

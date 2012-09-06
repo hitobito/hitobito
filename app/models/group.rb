@@ -35,19 +35,28 @@ class Group < ActiveRecord::Base
   acts_as_nested_set
   acts_as_paranoid
   
+  include Group::Types
+  include Contactable
+  
+  
+  ### ATTRIBUTES
+  
   attr_accessible :name, :short_name, :email, :contact_id
 
   attr_readonly :type
 
+
+  ### CALLBACKS
+  
+  after_create :create_default_children
+  
   # Root group may not be destroyed
   protect_if :root?
-  
-  include Contactable
   
   
   ### ASSOCIATIONS
   
-  has_many :roles
+  has_many :roles, dependent: :destroy
   has_many :people, through: :roles
   
   belongs_to :contact, class_name: 'Person'
@@ -58,9 +67,7 @@ class Group < ActiveRecord::Base
   validate :assert_type_is_allowed_for_parent, on: :create
   
   
-  ### CALLBACKS
-  
-  after_create :create_default_children
+  ### INSTANCE METHODS
   
   
   # The hierarchy from top to bottom of and including this group.
@@ -70,7 +77,7 @@ class Group < ActiveRecord::Base
   
   # The layer of this group.
   def layer_group
-    layer_groups.last
+    layer ? self : layer_groups.last
   end
   
   # The layer hierarchy from top to bottom of this group.
@@ -98,54 +105,5 @@ class Group < ActiveRecord::Base
     end
   end
   
-  
-  module Types
-    extend ActiveSupport::Concern
-    
-    included do
-      cattr_reader :root_types
-      @@root_types = []
-      
-      class_attribute :layer, :role_types, :possible_children, :default_children
-      
-      # Whether this group type builds a layer or is a regular group. Layers influence some permissions.
-      self.layer = false
-      # List of the role types that are available for this group type.
-      self.role_types = []
-      # Child group types that may be created for this group type.
-      self.possible_children = []
-      # Child groups that are automatically created with a group of this type.
-      self.default_children = []
-    end
-    
-    module ClassMethods
-      def children(*group_types)
-        self.possible_children = group_types + self.possible_children
-      end
-      
-      def roles(*types)
-        self.role_types = types + self.role_types
-      end
-      
-      def all_types
-        @all_types ||= collect_types([], root_types)
-      end
-      
-      private
-      
-      def collect_types(all, types)
-        types.each do |type|
-          unless all.include?(type)
-            all << type
-            collect_types(all, type.possible_children)
-          end
-        end
-        all
-      end
-      
-    end
-  end
-  
-  include Types
   
 end

@@ -1,0 +1,63 @@
+%h1 Roland Studer
+
+.btn-toolbar
+  .btn-group
+    %a.btn.btn-primary{:href => "#"}
+      Speichern
+  .btn-group
+    %a.btn{:href => "#"}
+      abbrechen
+
+#main
+
+  %form.form-horizontal
+    %section#contact
+
+      %h2 Kontaktdaten
+
+      .control-group
+        %label.control-label{:for => "name"} Vorname/Nachname
+        .controls.controls-row
+          %input#name.span3{:placeholder => "Vorname", :type => "text"}
+          %input.span3{:placeholder => "Nachname", :type => "text"}
+      
+        %label.control-label{:for => "nick"} Nickname
+        .controls
+          %input#nick.span6{:placeholder => "Nickname", :type => "text"}
+      
+      .control-group
+        %label.control-label{:for => "address"} Adresse
+        .controls
+          %textarea#address.span6{:placeholder => "Adresse", :rows => "3"}
+
+        %label.control-label{:for => "plz"} PLZ/Ort
+        .controls.controls-row
+          %input#plz.span2{:placeholder => "PLZ", :type => "text"}
+          %input.span4{:placeholder => "Ort", :type => "text"}
+      
+        %label.control-label{:for => "country"} Land
+        .controls
+          %select#country.span6
+            %option Lorem
+            %option Ipsum
+            %option Dolor
+            %option Sit
+            %option Amet
+      
+      .control-group
+        %label.control-label{:for => "tel"} Telefon
+        .controls.controls-row
+          %input#tel.span4{:placeholder => "Telefon", :type => "text"}
+          %select.span2
+            %option Lorem
+            %option Ipsum
+            %option Dolor
+            %option Sit
+            %option Amet
+          %label.checkbox.span3
+            %input{:type => "checkbox"}
+              Privat
+        .controls
+          %a{:href => "#"} weitere Telefonnummer
+          
+

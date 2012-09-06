@@ -103,6 +103,62 @@ h2 {
   }
 }
 
+// from bootstrap 2.1.1 << to remove after bootstrap-sass update
+.controls-row [class*="span"] + [class*="span"] {
+  @include responsive(mediaTablet) {
+    margin-left: 20px;
+  }
+}
+.controls-row {
+  @include clearfix;
+  *zoom: 1;
+  label.checkbox {
+    padding-top: 6px;
+  }
+}
+.controls-row [class*="span"] {
+  float: left;
+}
+select,
+textarea,
+label.checkbox,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  display: inline-block;
+  height: 20px;
+  padding: 4px 6px;
+  margin-bottom: 9px !important;
+  font-size: 14px;
+  line-height: 20px;
+  color: $gray;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+textarea {
+  height: auto;
+}
+select[class*="span"] {
+  min-height: 30px;
+  height: 30px;
+  *margin-top: 4px;
+  line-height: 30px;
+}
+// 
+
 
 /* Layout */
 // -------------------------

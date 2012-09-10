@@ -1,15 +1,14 @@
-%header.content-header
-  %h1 Jungschar Bern
+-title 'Jungschar Bern'
 
-  %ul.nav.nav-sub
-    %li.active
-      %a{:href => "#"} Home
-    %li
-      %a{:href => "#"} Personen
-    %li
-      %a{:href => "#"} Gruppen
+- content_for :tabs do
+  %li.active
+    %a{:href => "#"} Home
+  %li
+    %a{:href => "#"} Personen
+  %li
+    %a{:href => "#"} Gruppen
 
-.btn-toolbar
+- content_for :toolbar do
   .btn-group
     %a.btn{:href => "#"}
       %i.icon.icon-plus

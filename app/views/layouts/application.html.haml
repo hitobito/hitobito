@@ -34,24 +34,15 @@
 
     #page
       .container-fluid
-        .sheet.parent
-          .breadcrumb 
-            %ul
-              %li
-                = link_to 'Bund', root_path
-                %span.divider /
-              %li
-                = link_to 'Kanton Bern', root_path
-                %span.divider /
-          = link_to 'AG Alkoholprävention', root_path, :class => 'level active'
-          .sheet.current
-            .container-shadow
-              #content
-                / .actions.btn-toolbar
-                /   .pull-right= yield :actions
-                /   .pull-left= yield :tools
-                = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
-                = yield
+        = render_sheets do
+          %h1= title
+          - if content_for?(:tabs)
+            %ul.nav.nav-sub
+              = yield :tabs
+          .btn-toolbar
+            = yield :toolbar
+          = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+          = content_for?(:content) ? yield(:content) : yield
 
     %footer
       .container-fluid

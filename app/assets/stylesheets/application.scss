@@ -71,7 +71,7 @@ h2 {
   line-height: 1.538em;
 }
 
-.sheet > .breadcrumb {
+.sheet .breadcrumb {
   padding: 6px 10px 0;
   margin: 0;
   list-style: none;
@@ -80,6 +80,10 @@ h2 {
   a { color: $gray; }
   ul { margin: 0;}
   & + .level { padding-top:0; }
+}
+
+#content .breadcrumb {
+  padding: 6px 0 0;
 }
 
 
@@ -258,7 +262,7 @@ body > nav {
 }
 
 #content {
-  @include single-box-shadow($grayLight, 0, 2px, 8px); 
+  @include single-box-shadow($grayLight, 0, 2px, 8px);
   background: white;
   padding: 16px 20px 20px;
 

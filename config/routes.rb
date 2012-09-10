@@ -6,6 +6,8 @@ Jubla::Application.routes.draw do
     resources :people
     resources :roles
   end
+  devise_for :people
+
 
   get 'static/:action', :controller => 'static'
 

@@ -11,6 +11,6 @@ class Group::Region < Group
            Group::WorkGroup, 
            Group::Flock
            
-  attr_accessible :jubla_insurance, :jubla_full_coverage, :as => :superior
+  attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage]), :as => :superior
 
 end

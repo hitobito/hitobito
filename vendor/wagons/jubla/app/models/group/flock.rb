@@ -5,8 +5,8 @@ class Group::Flock < Group
   
   children Group::ChildGroup
   
-  attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year, :coach_id, :advisor_id
-  attr_accessible :jubla_insurance, :jubla_full_coverage, :as => :superior
+  attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
+  attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), :as => :superior
   
   
   class Leader < Jubla::Role::Leader

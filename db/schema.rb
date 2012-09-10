@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120822130340) do
+ActiveRecord::Schema.define(:version => 20120910104636) do
 
   create_table "groups", :force => true do |t|
     t.integer  "parent_id"
@@ -39,8 +39,7 @@ ActiveRecord::Schema.define(:version => 20120822130340) do
     t.string   "company_name"
     t.string   "nickname"
     t.boolean  "company",                                :default => false, :null => false
-    t.string   "email"
-    t.string   "password"
+    t.string   "email",                                  :default => "",    :null => false
     t.string   "address",                :limit => 1024
     t.integer  "zip_code"
     t.string   "town"
@@ -51,6 +50,17 @@ ActiveRecord::Schema.define(:version => 20120822130340) do
     t.boolean  "contact_data_visible",                   :default => false, :null => false
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
+    t.string   "encrypted_password",                     :default => "",    :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
+    t.index ["email"], :name => "index_people_on_email", :unique => true
   end
 
   create_table "phone_numbers", :force => true do |t|

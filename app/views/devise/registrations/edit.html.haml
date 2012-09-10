@@ -1,0 +1,6 @@
+%h2 Passwort ändern  
+= form_for(resource, {url: registration_path(resource_name), builder: StandardFormBuilder,  method: :put}) do |f|
+  = f.labeled(:current_password, 'Altes Passwort') { f.input_field(:current_password) } 
+  = f.labeled(:password, 'Neues Passwort') { f.input_field(:password) } 
+  = f.labeled(:password_confirmation, 'Neues Passwort bestätigen') { f.input_field(:password_confirmation) } 
+  = f.submit 'Passwort ändern'

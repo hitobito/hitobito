@@ -65,7 +65,7 @@ class ListController < ApplicationController
     elsif value.respond_to?(:each) # Array
       value.first.klass.name.pluralize
     else
-      value.class.name
+      value.class.base_class.name
     end
     instance_variable_set(:"@#{name.underscore}", value)
   end

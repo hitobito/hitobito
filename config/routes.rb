@@ -1,6 +1,11 @@
 Jubla::Application.routes.draw do
 
-  root :to => 'static#list'
+  root :to => 'groups#index'
+
+  resources :groups do
+    resources :people
+    resources :roles
+  end
 
   get 'static/:action', :controller => 'static'
 

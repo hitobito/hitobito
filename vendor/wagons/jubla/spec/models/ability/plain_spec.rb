@@ -1,9 +1,13 @@
 require 'spec_helper'
 
-describe Ability do
+
+# Specs for managing and viewing people
+
+
+describe Ability::Plain do
   
   subject { ability }
-  let(:ability) { Ability.new(role.person) }
+  let(:ability) { Ability::Plain.new(role.person) }
 
 
   describe Group::FederalBoard::Member do

@@ -8,12 +8,14 @@ ignores << /^(?:\.rbx|\.bundle|\.git|\.svn|log|tmp)\//
 
 # the directory of the current wagon
 wagons_dir = "vendor#{File::SEPARATOR}wagons#{File::SEPARATOR}"
-wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
+puts wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
 
 
 notification :off
 
 guard 'rspec', :version => 2 do
+  watch(%r{^.*\.rb$}) {|m| puts m }
+
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^#{wagon}/spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})              { |m| "spec/lib/#{m[1]}_spec.rb" }

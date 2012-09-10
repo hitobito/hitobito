@@ -56,6 +56,12 @@ group :development do
   gem 'quiet_assets'
   gem 'rails-erd'
   gem 'wirble'
+  gem 'pry-rails'
+  gem "pry", require: false
+  gem 'pry-doc', require: false
+  gem "pry-nav", require:false
+  gem "pry-stack_explorer"
+
 end
 
 group :test do

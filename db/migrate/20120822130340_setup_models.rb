@@ -7,8 +7,7 @@ class SetupModels < ActiveRecord::Migration
       t.string :nickname
       t.boolean :company, null: false, default: false
       
-      t.string :email
-      t.string :password
+      t.string :email, null: false, default: ""
       
       t.string :address, limit: 1024
       t.integer :zip_code

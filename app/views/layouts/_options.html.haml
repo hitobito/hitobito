@@ -1,3 +1,8 @@
 %ul
-    %li= link_to "Alfred Pennyworth", "/path1"
-    %li= link_to "Ausloggen", "/path2"
+    - if person_signed_in?
+        %li= link_to current_person, "#"
+        %li= link_to "Passwort ändern", :edit_person_registration
+        %li= link_to "Ausloggen", :destroy_person_session, method: "delete"
+    - else
+        %li= link_to "Anmelden", :new_person_session
+        %li= link_to "Passwort vergessen?", :new_person_password

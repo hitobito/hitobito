@@ -1,0 +1,6 @@
+%h2 Passwort ändern
+= form_for(resource, {url: password_path(resource_name), builder: StandardFormBuilder, html: { method: :put }}) do |f|
+  = f.hidden_field :reset_password_token
+  = f.labeled(:password, 'Passwort') { f.input_field(:password) } 
+  = f.labeled(:password_confirmation, 'Passwort bestätigen') { f.input_field(:password_confirmation) } 
+  = f.submit 'Passwort ändern'

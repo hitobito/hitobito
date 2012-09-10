@@ -1,0 +1,4 @@
+%h2 Passwort vergessen?
+= form_for(resource, {url: password_path(resource_name), builder: StandardFormBuilder}) do |f|
+  = f.labeled(:email) { f.input_field(:email) } 
+  = f.submit 'Passwort zurücksetzen'

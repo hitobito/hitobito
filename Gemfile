@@ -19,7 +19,6 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'simple_form'
-gem 'rack-mini-profiler'
 
 
 # Gems used only for assets and not required
@@ -63,7 +62,7 @@ group :development do
   gem 'pry-stack_explorer'
   gem 'wagons'
   gem 'sextant'
-
+  gem 'rack-mini-profiler'
 end
 
 group :test do

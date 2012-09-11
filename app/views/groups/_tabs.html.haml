@@ -1,0 +1,5 @@
+-content_for(:tabs) do
+  %li.active
+    = link_to "Info", group_path(@group)
+  %li
+    = link_to "Gruppenmitglieder", group_people_path(@group)

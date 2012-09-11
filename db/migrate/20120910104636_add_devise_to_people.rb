@@ -2,7 +2,7 @@ class AddDeviseToPeople < ActiveRecord::Migration
   def self.up
     change_table(:people) do |t|
       ## Database authenticatable
-      t.string :encrypted_password, :null => false, :default => ""
+      t.string :encrypted_password
 
       ## Recoverable
       t.string   :reset_password_token

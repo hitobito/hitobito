@@ -6,11 +6,13 @@ Jubla::Application.routes.draw do
     resources :people
     resources :roles
   end
+  
   devise_for :people, :skip => [:registrations]
-    as :person do
-      get 'persons/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
-      put 'persons' => 'devise/registrations#update', :as => 'person_registration'
-    end
+  
+  as :person do
+    get 'persons/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
+    put 'persons' => 'devise/registrations#update', :as => 'person_registration'
+  end
 
 
   get 'static/:action', :controller => 'static'

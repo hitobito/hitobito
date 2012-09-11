@@ -25,13 +25,35 @@ class Role < ActiveRecord::Base
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
   
+  ### ASSOCIATIONS
+  
   belongs_to :person
   belongs_to :group
+  
+  
+  ### VALIDATIONS
   
   validate :assert_type_is_allowed_for_group, on: :create
   
   # TODO set contact_data_visible in person on create / destroy
   # TODO create person login if this role type has login permission; validate email presence first
+  
+    
+  
+  ### CLASS METHODS
+  
+  class << self
+    
+    # Is the given attribute used in the current STI class
+    def attr_used?(attr)
+      [:default, :superior].any? do |role|
+        accessible_attributes(role).include?(attr)
+      end
+    end
+  end
+  
+  
+  ### INSTANCE METHODS
   
   def to_s
     label.presence || self.class.model_name.human

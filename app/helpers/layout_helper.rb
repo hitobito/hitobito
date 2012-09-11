@@ -1,6 +1,5 @@
 module LayoutHelper
   
-
   # Renders all partials with names that match "_#{key}_*.html.haml"
   # in alphabetical order.
   def render_extensions(key, options = {})
@@ -28,6 +27,5 @@ module LayoutHelper
       [controller.controller_path]
   end
     
-
 
 end

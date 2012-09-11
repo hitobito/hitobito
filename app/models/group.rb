@@ -67,6 +67,19 @@ class Group < ActiveRecord::Base
   validate :assert_type_is_allowed_for_parent, on: :create
   
   
+  ### CLASS METHODS
+  
+  class << self
+    
+    # Is the given attribute used in the current STI class
+    def attr_used?(attr)
+      [:default, :superior].any? do |role|
+        accessible_attributes(role).include?(attr)
+      end
+    end
+  end
+  
+  
   ### INSTANCE METHODS
   
   

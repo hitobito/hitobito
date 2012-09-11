@@ -13,7 +13,6 @@
 #  employment_percent :integer
 #  honorary           :boolean
 #
-
 class Role < ActiveRecord::Base
   
   acts_as_paranoid
@@ -33,9 +32,15 @@ class Role < ActiveRecord::Base
   
   ### VALIDATIONS
   
+  validates :type, presence: true
   validate :assert_type_is_allowed_for_group, on: :create
   
-  # TODO set contact_data_visible in person on create / destroy
+  
+  ### CALLBACKS
+  
+  after_create :set_contact_data_visible
+  after_destroy :reset_contact_data_visible
+
   # TODO create person login if this role type has login permission; validate email presence first
   
     
@@ -61,6 +66,21 @@ class Role < ActiveRecord::Base
   
   
   private
+  
+  # If this role has contact_data permissions, set the flag on the person
+  def set_contact_data_visible
+    if becomes(type.constantize).permissions.include?(:contact_data)
+      person.update_attribute :contact_data_visible, true
+    end
+  end
+  
+  # If this role was the last one with contact_data permission, remove the flag from the person
+  def reset_contact_data_visible
+    if permissions.include?(:contact_data) && 
+       !person.roles.collect(&:permissions).flatten.include?(:contact_data)
+      person.update_attribute :contact_data_visible, false
+    end
+  end
   
   def assert_type_is_allowed_for_group
     if type && group && !group.role_types.collect(&:to_s).include?(type)

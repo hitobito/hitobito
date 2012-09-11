@@ -50,11 +50,19 @@ class Person < ActiveRecord::Base
   
   include Contactable
   
+  
+  ### ASSOCIATIONS
+  
   has_many :roles, dependent: :destroy
   has_many :groups, through: :roles
   
+  
+  ### VALIDATIONS
+  
   validates :gender, inclusion: %w(m w), allow_nil: true
  
+ 
+  ### SCOPES
 
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(:contact_data_visible => true)
@@ -107,14 +115,17 @@ class Person < ActiveRecord::Base
   end
   
   # All groups where this person has the given permission(s)
-  def groups_with_permission(*permissions)
-    role_types = Role.types_with_permission(*permissions)
-    roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+  def groups_with_permission(permission)
+    @groups_with_permission ||= {}
+    @groups_with_permission[permission] ||= begin
+      role_types = Role.types_with_permission(permission)
+      roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+    end
   end
   
   # Does this person have the given permission(s) in any group
-  def permission?(*permissions)
-    groups_with_permission(*permissions).present?
+  def permission?(permissions)
+    groups_with_permission(permissions).present?
   end
   
   # All groups where this person has a role that is visible from above 

@@ -10,6 +10,8 @@ class Ability::Base
 
   def initialize(user)
     init_groups(user)
+    
+    alias_action :create, :update, :destroy, :to => :modify
   end
   
   private
@@ -27,7 +29,7 @@ class Ability::Base
     @groups_group_full.present? || @groups_layer_full.present? || @groups_layer_read.present?
   end
   
-  def manage_person_permissions?
+  def modify_person_permissions?
     @groups_group_full.present? || @groups_layer_full.present?
   end
   

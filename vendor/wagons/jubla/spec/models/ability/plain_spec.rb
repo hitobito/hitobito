@@ -13,14 +13,14 @@ describe Ability::Plain do
   describe Group::FederalBoard::Member do
     let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
 
-    it "may manage any public role in lower layers" do
+    it "may modify any public role in lower layers" do
       other = Fabricate(Group::Flock::CampLeader.name.to_sym, group: groups(:bern))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
-    it "may manage externals in the same layer" do
+    it "may modify externals in the same layer" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:ch))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
     it "may not view any children in lower layers" do
@@ -38,9 +38,9 @@ describe Ability::Plain do
   describe Group::Flock::Leader do
     let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
 
-    it "may manage any public role in same layer" do
+    it "may modify any public role in same layer" do
       other = Fabricate(Group::Flock::CampLeader.name.to_sym, group: groups(:bern))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
     it "may not view any public role in upper layers" do
@@ -53,14 +53,14 @@ describe Ability::Plain do
       should_not be_able_to(:show, other.person)
     end
     
-    it "may manage externals in his flock" do
+    it "may modify externals in his flock" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
-    it "may manage children in his flock" do
+    it "may modify children in his flock" do
       other = Fabricate(Group::ChildGroup::Child.name.to_sym, group: groups(:asterix))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
     it "may not view any externals in upper layers" do
@@ -82,9 +82,9 @@ describe Ability::Plain do
       should be_able_to(:show, other.person)
     end
     
-    it "may not manage any role in same layer" do
+    it "may not modify any role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should_not be_able_to(:manage, other.person)
+      should_not be_able_to(:modify, other.person)
     end
     
     it "may view any externals in same layer" do
@@ -92,9 +92,9 @@ describe Ability::Plain do
       should be_able_to(:show, other.person)
     end
     
-    it "may manage any role in same group" do
+    it "may modify any role in same group" do
       other = Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board))
-      should be_able_to(:manage, other.person)
+      should be_able_to(:modify, other.person)
     end
     
     it "may not view any public role in upper layers" do
@@ -107,9 +107,9 @@ describe Ability::Plain do
       should be_able_to(:show, other.person)
     end
     
-    it "may not manage any public role in groups below" do
+    it "may not modify any public role in groups below" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should_not be_able_to(:manage, other.person)
+      should_not be_able_to(:modify, other.person)
     end
     
     it "may not view any externals in groups below" do

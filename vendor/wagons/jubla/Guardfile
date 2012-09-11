@@ -8,16 +8,15 @@ ignores << /^(?:\.rbx|\.bundle|\.git|\.svn|log|tmp)\//
 
 # the directory of the current wagon
 wagons_dir = "vendor#{File::SEPARATOR}wagons#{File::SEPARATOR}"
-puts wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
+wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
 
 
 notification :off
 
 guard 'rspec', :version => 2 do
-  watch(%r{^.*\.rb$}) {|m| puts m }
+  #watch(%r{^.*\.rb$}) {|m| puts m }
 
-  watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^#{wagon}/spec/.+_spec\.rb$})
+  watch(%r{^#{wagon}/(spec/.+_spec\.rb)$}) { |m| m[1] }
   watch(%r{^lib/(.+)\.rb$})              { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')           { "spec" }
   watch('#{wagon}/spec/spec_helper.rb')  { "spec" }
@@ -43,5 +42,6 @@ guard 'rspec', :version => 2 do
   # Turnip features and steps
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
+  
 end
 

@@ -1,10 +1,30 @@
 # An ability that takes the current group as an additional argument.
+# This class is only used for generating lists of group associations.
 class Ability::WithGroup < Ability::Base
   
   def initialize(user, group)
     super(user)
+      
+    ### GROUPS
     
-      # list people belonging to to the given group
+    can :read, Group
+    
+    if modify_permissions?
+      if can_create_or_destroy_group?(group)
+        can [:create, :destroy], Group do |g|
+          group == g
+        end 
+      end
+      
+      can :update, Group do |g|
+        group == g &&
+        can_update_group?(g)
+      end
+    end
+    
+    ### PEOPLE  
+      
+    # list people belonging to to the given group
     if user.groups.include?(group)
       # user has any role in this group
       can :index, Person, group.people.only_public_data
@@ -37,5 +57,19 @@ class Ability::WithGroup < Ability::Base
       can :layer_search, Person, Person.only_public_data.in_layer(group.layer_group).where('roles.group_id' => user.groups)
       can :deep_search, Person, Person.only_public_data.visible_from_above.in_or_below(group.layer_group).where('roles.group_id' => user.groups)
     end
+  end
+  
+  private
+    
+  def can_update_group?(group)
+    # user has group_full for this group
+    groups_group_full.include?(group) ||
+    can_create_or_destroy_group?(group)
+  end
+    
+  def can_create_or_destroy_group?(group)
+    layers_full.present? && 
+     # user has layer_full, group in same layer
+     contains_any?(layers_full, group.layer_groups)
   end
 end

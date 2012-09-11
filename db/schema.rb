@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20120910104636) do
     t.string   "company_name"
     t.string   "nickname"
     t.boolean  "company",                                :default => false, :null => false
-    t.string   "email",                                  :default => "",    :null => false
+    t.string   "email"
     t.string   "address",                :limit => 1024
     t.integer  "zip_code"
     t.string   "town"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20120910104636) do
     t.boolean  "contact_data_visible",                   :default => false, :null => false
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
-    t.string   "encrypted_password",                     :default => "",    :null => false
+    t.string   "encrypted_password"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

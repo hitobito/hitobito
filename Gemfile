@@ -59,7 +59,8 @@ group :development do
   gem 'pry', require: false
   gem 'pry-doc', require: false
   gem 'pry-nav', require:false
-  gem 'pry-stack_explorer'
+  gem 'pry-stack_explorer', require: false
+  gem 'mailcatcher', require: false
   gem 'wagons'
   gem 'sextant'
   gem 'rack-mini-profiler'

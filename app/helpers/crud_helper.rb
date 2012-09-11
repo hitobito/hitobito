@@ -3,13 +3,37 @@
 # is included in CrudController.
 module CrudHelper
 
+  # Render a generic form for the current entry
+  def entry_form(*attrs, &block)
+    options = attrs.extract_options!
+    attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
+    crud_form(path_args(entry), *attrs, options, &block)
+  end
+
   # Renders a generic form for the current entry with :default_attrs or the
   # given attribute array, using the StandardFormBuilder. An options hash
   # may be given as the last argument.
   # If a block is given, a custom form may be rendered and attrs is ignored.
-  def crud_form(*attrs, &block)
-    attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
-    standard_form(path_args(entry), *attrs, &block)
+  def crud_form(entry, *attrs, &block)
+    options = attrs.extract_options!
+
+    standard_form(entry, options) do |form|
+      record = entry.is_a?(Array) ? entry.last : entry
+      content = render('shared/error_messages', :errors => record.errors, :object => record)
+
+      content << if block_given?
+        capture(form, &block)
+      else
+        form.labeled_input_fields(*attrs)
+      end
+
+      content << content_tag(:div, :class => 'form-actions') do
+        form.button(ti(:"button.save"), :class => 'btn btn-primary') +
+        ' ' +
+        cancel_link(entry)
+      end
+      content.html_safe
+    end
   end
 
   # Create a table of the entries with the default or

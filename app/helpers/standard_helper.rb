@@ -90,34 +90,13 @@ module StandardHelper
     end
   end
 
-  # Renders a generic form for all given attributes using StandardFormBuilder.
-  # Before the input fields, the error messages are rendered, if present.
-  # The form is rendered with a basic save button.
-  # If a block is given, custom input fields may be rendered and attrs is ignored.
-  # An options hash may be given as the last argument.
-  def standard_form(object, *attrs, &block)
-    options = attrs.extract_options!
+  # Renders a generic form for the given object using StandardFormBuilder.
+  def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
     add_css_class options[:html], 'form-horizontal'
-
-    form_for(object, options) do |form|
-      record = object.is_a?(Array) ? object.last : object
-      content = render('shared/error_messages', :errors => record.errors, :object => record)
-
-      content << if block_given?
-        capture(form, &block)
-      else
-        form.labeled_input_fields(*attrs)
-      end
-
-      content << content_tag(:div, :class => 'form-actions') do
-        form.button(ti(:"button.save"), :class => 'btn btn-primary') +
-        ' ' +
-        cancel_link(object)
-      end
-      content.html_safe
-    end
+    
+    form_for(object, options, &block)
   end
 
   def cancel_link(object)

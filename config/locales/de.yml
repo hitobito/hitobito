@@ -31,7 +31,7 @@ de:
         company_name: Firmenname
         nickname: Übername
         email: Email
-        password: Password
+        password: Passwort
         address: Adresse
         zip_code: PLZ
         town: Ort
@@ -39,6 +39,7 @@ de:
         gender: Geschlecht
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
+        remember_me: Angemeldet bleiben
         
       group:
         name: Name

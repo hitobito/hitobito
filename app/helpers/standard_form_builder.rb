@@ -147,6 +147,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:div, content, :class => 'controls')
     end
   end
+  
+  def indented(content = nil, &block)
+    content = capture(&block) if block_given?
+    content_tag(:div, :class => "control-group") do
+      content_tag(:label, '', :class => 'control-label') +
+      content_tag(:div, content, :class => 'controls')
+    end
+  end
 
   # Depending if the given attribute must be present, return
   # only an initial selection prompt or a blank option, respectively.

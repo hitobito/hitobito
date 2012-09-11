@@ -123,6 +123,15 @@ h2 {
 .controls-row [class*="span"] {
   float: left;
 }
+
+.form-horizontal .control-group {
+  margin-bottom: 0;
+}
+
+fieldset {
+  margin-bottom: 18px;
+}
+
 select,
 textarea,
 label.checkbox,

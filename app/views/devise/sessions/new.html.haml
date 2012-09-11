@@ -1,6 +1,7 @@
-%h2 Anmelden
-= form_for(resource, {url: session_path(resource_name), builder: StandardFormBuilder}) do |f|
-  = f.labeled(:email) { f.input_field(:email) } 
-  = f.labeled(:password, 'Passwort') { f.input_field(:password) } 
-  = f.labeled(:remember_me, 'Angemeldet bleiben') { f.boolean_field(:remember_me) } 
-  = f.submit 'Anmelden'
+-title 'Anmelden'
+
+= standard_form(resource, {url: session_path(resource_name)}) do |f|
+  = f.labeled_input_field(:email)
+  = f.labeled_input_field(:password)
+  = f.labeled_boolean_field(:remember_me)
+  = f.indented(f.submit('Anmelden'))

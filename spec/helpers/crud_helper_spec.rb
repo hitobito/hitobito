@@ -94,10 +94,11 @@ describe CrudHelper do
     end
   end
   
-  describe "#crud_form" do
+  describe "#entry_form" do
     let(:entry) { CrudTestModel.first }
+    
     subject do
-      with_test_routing { crud_form }
+      with_test_routing { entry_form }
     end
     
     it "should contain form tag" do
@@ -138,6 +139,55 @@ describe CrudHelper do
     
     it "should contain input for remarks" do
       should match /textarea .*?name="crud_test_model\[remarks\]"/
+    end
+   
+  end
+    
+  describe "#crud_form" do
+    subject do
+      with_test_routing do
+        capture { crud_form(entry, :name, :children, :birthdate, :human, :html => {:class => 'special'}) }
+      end
+    end
+    
+    context "for existing entry" do
+      let(:entry) { crud_test_models(:AAAAA) }
+      
+      it { should match(/form .*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" .*?method="post"/) }
+      it { should match(/input .*?name="_method" .*?type="hidden" .*?value="put"/) }
+      it { should match(/input .*?name="crud_test_model\[name\]" .*?type="text" .*?value="AAAAA"/) }
+      it { should match(/select .*?name="crud_test_model\[birthdate\(1i\)\]"/) }
+      it { should match(/option selected="selected" value="1910">1910<\/option>/) }
+      it { should match(/option selected="selected" value="1">Januar<\/option>/) }
+      it { should match(/option selected="selected" value="1">1<\/option>/) }
+      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="number" .*?value=\"9\"/) }
+      it { should match(/input .*?name="crud_test_model\[human\]" .*?type="checkbox"/) }
+      it { should match(/button .*?type="submit">Speichern<\/button>/) }
+    end
+   
+    context "for new entry" do
+      let(:entry) { CrudTestModel.new }
+      
+      it { should match(/form .*?action="\/crud_test_models" .?class="special form-horizontal" .*?method="post"/) }
+      it { should match(/input .*?name="crud_test_model\[name\]" .*?type="text"/) }
+      it { should_not match(/input .*?name="crud_test_model\[name\]" .*?type="text" .*?value=/) }
+      it { should match(/select .*?name="crud_test_model\[birthdate\(1i\)\]"/) }
+      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="number"/) }
+      it { should_not match(/input .*?name="crud_test_model\[children\]" .*?type="number" .*?value=/) }
+      it { should match(/button .*?type="submit">Speichern<\/button>/) }
+    end
+    
+    context "for invalid entry" do
+      let(:entry) do
+        e = crud_test_models(:AAAAA)
+        e.name = nil
+        e.valid?
+        e 
+      end
+      
+      it { should match(/div[^>]* id='error_explanation'/) }
+      it { should match(/div class="control-group error"\>.*?\<input .*?name="crud_test_model\[name\]" .*?type="text"/) }
+      it { should match(/input .*?name="_method" .*?type="hidden" .*?value="put"/) }
     end
   end
   

@@ -18,8 +18,31 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
-gem 'simple_form'
 gem 'wagons'
+
+group :console do
+  gem 'hirb'
+  gem 'wirble'
+  gem 'pry-rails'
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'pry-nav'
+  gem 'pry-stack_explorer'
+  gem 'mailcatcher'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  gem 'spork'
+end
+
+group :metrics do
+  gem 'annotate'
+  gem 'metrical' 
+  gem 'brakeman'
+  gem 'ci_reporter'
+  gem 'rails_code_qa'
+  gem 'rails_best_practices'
+  gem 'simplecov-rcov'
+end
 
 
 # Gems used only for assets and not required
@@ -37,31 +60,17 @@ group :assets do
 end
 
 group :development, :test do
-  gem 'brakeman'
-  gem 'ci_reporter'
   gem 'debugger'
   gem 'faker'
-  gem 'metrical' 
-  gem 'rails_code_qa'
-  gem 'rails_best_practices'
   gem 'rspec-rails'
   gem 'sqlite3'
 end
 
 group :development do
-  gem 'annotate'
   gem 'awesome_print'
   gem 'bullet'
-  gem 'hirb'
   gem 'quiet_assets'
   gem 'rails-erd'
-  gem 'wirble'
-  gem 'pry-rails'
-  gem 'pry', require: false
-  gem 'pry-doc', require: false
-  gem 'pry-nav', require:false
-  gem 'pry-stack_explorer', require: false
-  gem 'mailcatcher', require: false
   gem 'sextant'
   gem 'rack-mini-profiler'
 end
@@ -72,10 +81,6 @@ group :test do
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
-  gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'simplecov-rcov'
-  gem 'spork'
 end
 
 # Load all wagons found in vendor/wagons/*

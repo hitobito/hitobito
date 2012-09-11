@@ -19,6 +19,7 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'simple_form'
+gem 'wagons'
 
 
 # Gems used only for assets and not required
@@ -61,7 +62,6 @@ group :development do
   gem 'pry-nav', require:false
   gem 'pry-stack_explorer', require: false
   gem 'mailcatcher', require: false
-  gem 'wagons'
   gem 'sextant'
   gem 'rack-mini-profiler'
 end

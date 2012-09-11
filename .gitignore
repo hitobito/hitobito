@@ -18,6 +18,7 @@
 coverage
 brakeman-output.tabs
 doc/models.png
+spec/reports
 
 app/assets/.sass-cache
 app/assets/stylesheets_generated

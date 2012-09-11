@@ -20,31 +20,6 @@ gem 'schema_validations'
 gem 'seed-fu'
 gem 'wagons'
 
-group :console do
-  gem 'hirb'
-  gem 'wirble'
-  gem 'pry-rails'
-  gem 'pry'
-  gem 'pry-doc'
-  gem 'pry-nav'
-  gem 'pry-stack_explorer'
-  gem 'mailcatcher'
-  gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'spork'
-end
-
-group :metrics do
-  gem 'annotate'
-  gem 'metrical' 
-  gem 'brakeman'
-  gem 'ci_reporter'
-  gem 'rails_code_qa'
-  gem 'rails_best_practices'
-  gem 'simplecov-rcov'
-end
-
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -67,10 +42,8 @@ group :development, :test do
 end
 
 group :development do
-  gem 'awesome_print'
   gem 'bullet'
   gem 'quiet_assets'
-  gem 'rails-erd'
   gem 'sextant'
   gem 'rack-mini-profiler'
 end
@@ -81,6 +54,35 @@ group :test do
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
+end
+
+group :console do
+  gem 'awesome_print'
+  gem 'hirb'
+  gem 'wirble'
+  gem 'pry-rails'
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'pry-nav'
+  gem 'pry-stack_explorer'
+  gem 'mailcatcher'
+end
+
+group :guard do
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  gem 'spork'
+end
+
+group :metrics do
+  gem 'annotate'
+  gem 'metrical' 
+  gem 'brakeman'
+  gem 'ci_reporter'
+  gem 'rails_code_qa'
+  gem 'rails_best_practices'
+  gem 'rails-erd'
+  gem 'simplecov-rcov'
 end
 
 # Load all wagons found in vendor/wagons/*

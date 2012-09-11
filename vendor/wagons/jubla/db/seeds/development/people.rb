@@ -78,3 +78,17 @@ Group.root.self_and_descendants.each do |group|
     end
   end
 end
+
+
+devs = ['Pascal Zumkehr', 'Pascal Simon', 'Andreas Maierhofer']
+bula = Group.find_by_name('Jubla Schweiz')
+role_type = bula.role_types.first
+encrypted_password = BCrypt::Password.create("password", cost: 1)
+devs.each do |dev| 
+  first, last = dev.split
+  attrs = { email: "#{last.downcase}@puzzle.ch", first_name: first, last_name: last,
+            encrypted_password: encrypted_password } 
+  person = Person.seed_once(*attrs.keys, attrs).first
+  role_attrs = { person_id: person.id, group_id: bula.id, type: role_type.name } 
+  Role.seed_once(*role_attrs.keys, role_attrs)
+end

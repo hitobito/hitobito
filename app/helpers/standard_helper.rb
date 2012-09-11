@@ -64,9 +64,10 @@ module StandardHelper
   end
 
   # Renders a list of attributes with label and value for a given object.
-  # Optionally surrounded with a div.
   def render_attrs(obj, *attrs)
-    safe_join(attrs) { |a| labeled_attr(obj, a) }
+    content_tag(:dl, class: "dl-horizontal") do 
+      safe_join(attrs) { |a| labeled_attr(obj, a) }
+    end
   end
 
   # Renders the formatted content of the given attribute with a label.

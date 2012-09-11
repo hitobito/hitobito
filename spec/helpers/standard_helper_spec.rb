@@ -26,21 +26,22 @@ describe StandardHelper do
       subject { labeled('label') { 'value' } }
       
       it { should be_html_safe }
-      its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
+      #its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
+      its(:squish) { should == '<dt class="muted">label</dt> <dd>value</dd>'.gsub('"', "'") }
     end
     
     context "with empty value" do
       subject { labeled('label') { '' } }
       
       it { should be_html_safe }
-      its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">'.gsub('"', "'")+StandardHelper::EMPTY_STRING+'</div> </div>' }
+      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'")+StandardHelper::EMPTY_STRING+'</dd>' }
     end
    
     context "with unsafe value" do
       subject { labeled('label') { 'value <unsafe>' } }
       
       it { should be_html_safe }
-      its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value &lt;unsafe&gt;</div> </div>'.gsub('"', "'") }
+      its(:squish) { should == '<dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
     end
   end
   
@@ -48,7 +49,7 @@ describe StandardHelper do
     subject { labeled_attr('foo', :size) }
     
     it { should be_html_safe }
-    its(:squish) {  should == '<div class="labeled"> <label>Size</label> <div class="value">3 chars</div> </div>'.gsub('"', "'") }
+    its(:squish) {  should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
   end
   
   describe "#f" do

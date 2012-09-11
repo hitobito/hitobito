@@ -7,11 +7,10 @@ Jubla::Application.routes.draw do
     resources :roles
   end
   
-  devise_for :people, :skip => [:registrations]
-  
+  devise_for :people, :skip => [:registrations], :path => "users"
   as :person do
-    get 'persons/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
-    put 'persons' => 'devise/registrations#update', :as => 'person_registration'
+    get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
+    put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
 
 

@@ -1,2 +1,11 @@
 = entry_form do |f|
-  = f.labeled_collection_select :type, entry.possible_types, :to_s, :human, {}, entry.attrs_for_remote
+  = f.hidden_field :parent_id
+  = entry.type_selection(f)
+  = f.labeled_string_field :email
+  = f.labeled_string_field :name
+  = f.labeled_string_field :short_name
+  = f.labeled_string_field :address
+  = f.labeled_string_field :town
+  = f.labeled_integer_field :zip_code
+  = f.labeled_string_field :country
+  = entry.custom_fields(f)

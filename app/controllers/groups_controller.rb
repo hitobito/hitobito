@@ -6,7 +6,16 @@ class GroupsController < CrudController
   self.ability_types = {with_group: :all}
   
   include DisplayCase::ExhibitsHelper
- 
+  include ActionView::Helpers::TagHelper
+
+
+  def new
+    if model_params && model_params.has_key?(:parent_id)
+      super
+    else
+      redirect_to new_group_path(group: { parent_id: 1 })
+    end
+  end
 
 
   def index
@@ -31,7 +40,7 @@ class GroupsController < CrudController
   private 
   def assign_attributes 
     if model_params && entry.new_record? 
-      model_params.delete(:type)
+      entry.type = model_params.delete(:type)
       entry.parent_id = model_params.delete(:parent_id) 
     end
     super

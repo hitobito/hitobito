@@ -3,6 +3,7 @@
 class Ability::WithGroup < Ability::Base
   
   def initialize(user, group)
+    raise "Group cannot be nil" if group.nil?
     super(user)
       
     ### GROUPS
@@ -11,7 +12,7 @@ class Ability::WithGroup < Ability::Base
     
     if modify_permissions?
       if can_create_or_destroy_group?(group)
-        can [:create, :destroy], Group do |g|
+        can [:create,:destroy], Group do |g|
           group == g
         end 
       end

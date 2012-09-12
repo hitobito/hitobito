@@ -1,0 +1,4 @@
+top_leader:
+  person: top_leader
+  group: top_group
+  type: Group::TopGroup::Leader

@@ -240,7 +240,7 @@ class ListController < ApplicationController
       controller.class_attribute :remember_params
       controller.remember_params = [:q, :sort, :sort_dir, :page]
 
-      controller.before_filter :handle_remember_params, :only => [:index]
+      controller.prepend_before_filter :handle_remember_params, :only => [:index]
     end
 
     private

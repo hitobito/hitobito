@@ -62,8 +62,8 @@ describe CrudTestModelsController do
     end
   end
   
-  describe_action :get, :index do
-    context '.html', :format => :html do
+  describe_action(:get, :index) do
+    context('.html', :format => :html) do
       context 'plain' do
         it "should contain all entries" do
           entries.size.should == 6
@@ -409,5 +409,6 @@ describe CrudTestModelsController do
     end
     
   end
+  
   
 end

@@ -5,6 +5,9 @@ RSpec.configure do |c|
     model_class.any_instance.stub(:save).and_return(false)
     model_class.any_instance.stub(:destroy).and_return(false)
   end
+  
+  # currently, no json for jubla
+  c.filter_run_excluding :format => :json
 end
 
 # A set of examples to include into the tests for your crud controller subclasses.
@@ -21,7 +24,7 @@ shared_examples "crud controller" do |options|
 
   subject { response }
   
-  let(:person) { Person.first }
+  let(:person) { people(:top_leader) }
   let(:model_class)      { controller.send(:model_class) }
   let(:model_identifier) { controller.model_identifier }
   let(:test_params)      { scope_params }
@@ -35,8 +38,8 @@ shared_examples "crud controller" do |options|
   end
 
   before do
-    m = example.metadata
     sign_in person
+    m = example.metadata
     perform_request if m[:perform_request] != false && m[:action] && m[:method]
   end
 
@@ -117,7 +120,7 @@ shared_examples "crud controller" do |options|
   end
   
   describe_action :get, :new, :unless => skip?(options, %w(new)) do
-    context "plain", :unless => skip?(options, %w(index plain)) do
+    context "plain", :unless => skip?(options, %w(new plain)) do
       it_should_respond
       it_should_render
       it_should_persist_entry(false)
@@ -239,6 +242,5 @@ shared_examples "crud controller" do |options|
       end
     end
   end
-  
 end
 

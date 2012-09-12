@@ -99,7 +99,7 @@ describe Person do
     end
     
     it "in_or_below returns person for above layer" do
-      Person.in_or_below(groups(:top_layer)).should == [person]
+      Person.in_or_below(groups(:top_layer)).should == [people(:top_leader), person]
     end
   end
   
@@ -129,7 +129,7 @@ describe Person do
     end
     
     it "in_or_below returns person for any layer" do
-      Person.in_or_below(groups(:top_layer)).should == [person]
+      Person.in_or_below(groups(:top_layer)).should == [people(:top_leader), person]
     end
   end
   

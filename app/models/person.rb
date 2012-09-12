@@ -68,6 +68,7 @@ class Person < ActiveRecord::Base
   
   ### VALIDATIONS
   
+  validates :email, uniqueness: true, allow_nil: true
   validates :gender, inclusion: %w(m w), allow_nil: true
  
  
@@ -104,6 +105,15 @@ class Person < ActiveRecord::Base
     def in_or_below(group)
       joins(roles: :group).
       where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
+    end
+    
+    def external(ext = true)
+      external_types = Role.all_types.select(&:external).collect(&:sti_name)
+      if ext
+        where(roles: {type: external_types})
+      else
+        where("roles.type NOT IN (?)", external_types)
+      end
     end
   end
   

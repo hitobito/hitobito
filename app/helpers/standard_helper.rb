@@ -124,22 +124,6 @@ module StandardHelper
     super(block_given? ? array.collect(&block) : array, sep)
   end
 
-  ######## ACTION LINKS ###################################################### :nodoc:
-
-  # A generic helper method to create action links.
-  # These link could be styled to look like buttons, for example.
-  def link_action(label, icon = nil, url = {}, html_options = {})
-    add_css_class html_options, 'action btn'
-    link_to(icon ? action_icon(icon, label) : label,
-            url, html_options)
-  end
-
-  # Outputs an icon for an action with an optional label.
-  def action_icon(icon, label = nil)
-    html = content_tag(:i, "", :class => "icon-#{icon}")
-    html << ' ' << label if label
-    html
-  end
 
   # Translates the passed key by looking it up over the controller hierarchy.
   # The key is searched in the following order:

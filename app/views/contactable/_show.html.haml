@@ -12,8 +12,7 @@
         %phone_numbers
           %p
             =n.number 
-            %span.muted
-              =n.label
+            = muted n.label
       - entry.social_accounts.each do |s|
         %social_accounts
           %p
@@ -21,5 +20,4 @@
             =mail_to s.name
           - else
             =s.name
-          %span.muted
-            =s.label
+          = muted s.label

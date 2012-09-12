@@ -1,11 +1,8 @@
--title 'Jungschar Bern'
-
--tab 'Home', '#'
--tab 'Personen', '#'
--tab 'Gruppen', '#'
+- @sheets = GroupSheet.new(self, @group)
+= render 'groups/tabs'
 
 - content_for :toolbar do
-  = action_button 'Person hinzufügen', '#', :plus
+  = action_button 'Person hinzufügen', new_group_person_path(@group), :plus
 
   = button_group do
     = action_button 'List importieren', '#', :download
@@ -28,19 +25,9 @@
       %li
         %a{:href => "#"} Separated link
 
-#main
-
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Name
-        %th Email
-    %tbody
-      %tr
-        %td Peter Meier
-        %td peter@meier.ch
-      %tr
-        %td Franz Mueller
-        %td franz@gmx.ch
-
-  %p.muted Text with less importance
+= crud_table do |t|
+  - t.col('Name')    {|p| link_to_if(true || can?(:show,p), p.to_s, group_person_path(@group, p)) }
+  - t.col('Rolle')   {|p| render_roles(p) }
+  - t.attr :email
+  - t.col('Telefon') {|p| render_phone_numbers(p) }
+  - t.col('Adresse') {|p| render_address(p) }

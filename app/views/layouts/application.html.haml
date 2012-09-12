@@ -36,9 +36,7 @@
       .container-fluid
         = render_sheets do
           %h1= title
-          - if content_for?(:tabs)
-            %ul.nav.nav-sub
-              = yield :tabs
+          = render_tabs
           .btn-toolbar
             = yield :toolbar
           = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level

@@ -3,7 +3,11 @@ Jubla::Application.routes.draw do
   root :to => 'groups#index'
 
   resources :groups do
-    resources :people
+    resources :people do
+      collection do
+        get :external
+      end
+    end
     resources :roles
   end
   

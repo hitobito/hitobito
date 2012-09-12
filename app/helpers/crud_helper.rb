@@ -68,7 +68,7 @@ module CrudHelper
   def action_col_edit(table, &block)
     action_col(table) do |e|
       path = action_path(e, &block)
-      link_table_action('pencil', path.is_a?(String) ? path : edit_polymorphic_path(path))
+      link_table_action('edit', path.is_a?(String) ? path : edit_polymorphic_path(path))
     end
   end
 
@@ -76,7 +76,7 @@ module CrudHelper
   # A block may be given to define the link path for the row entry.
   def action_col_destroy(table, &block)
     action_col(table) do |e|
-      link_table_action('remove', action_path(e, &block),
+      link_table_action('trash', action_path(e, &block),
                         :data => { :confirm => ti(:confirm_delete),
                                    :method => :delete })
     end
@@ -99,21 +99,21 @@ module CrudHelper
   # Uses the current record if none is given.
   def link_action_show(path = nil)
     path ||= path_args(entry)
-    link_action ti(:"link.show"), 'zoom-in', path
+    action_button ti(:"link.show"), path, 'zoom-in'
   end
 
   # Standard link action to the edit page of a given record.
   # Uses the current record if none is given.
   def link_action_edit(path = nil)
     path ||= path_args(entry)
-    link_action ti(:"link.edit"), 'pencil', path.is_a?(String) ? path : edit_polymorphic_path(path)
+    action_button ti(:"link.edit"), path.is_a?(String) ? path : edit_polymorphic_path(path), 'edit'
   end
 
   # Standard link action to the destroy action of a given record.
   # Uses the current record if none is given.
   def link_action_destroy(path = nil)
     path ||= path_args(entry)
-    link_action ti(:"link.delete"), 'remove', path,
+    action_button ti(:"link.delete"), path, 'trash',
                 :data => { :confirm => ti(:confirm_delete),
                            :method => :delete }
   end
@@ -122,14 +122,14 @@ module CrudHelper
   # Links to the current model_class if no path is given.
   def link_action_index(path = nil, url_options = {:returning => true})
     path ||= path_args(model_class)
-    link_action ti(:"link.list"), 'list', path.is_a?(String) ? path : polymorphic_path(path, url_options)
+    action_button ti(:"link.list"), path.is_a?(String) ? path : polymorphic_path(path, url_options), 'list'
   end
 
   # Standard link action to the new page.
   # Links to the current model_class if no path is given.
   def link_action_add(path = nil, url_options = {})
     path ||= path_args(model_class)
-    link_action ti(:"link.add"), 'plus', path.is_a?(String) ? path : new_polymorphic_path(path, url_options)
+    action_button ti(:"link.add"), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus'
   end
 
   private

@@ -28,10 +28,12 @@ class Ability::WithGroup < Ability::Base
     if user.groups.include?(group)
       # user has any role in this group
       can :index, Person, group.people.only_public_data
+      can :external, Person
     elsif layers_read.present?
       if layers_read.include?(group.layer_group)
         # user has layer read of the same layer as the group
         can :index, Person, group.people.only_public_data
+        can :external, Person
       elsif contains_any?(layers_read, group.layer_groups)
         # user has layer read in a above layer of the group
         can :index, Person, group.people.only_public_data.visible_from_above(group)
@@ -57,6 +59,7 @@ class Ability::WithGroup < Ability::Base
       can :layer_search, Person, Person.only_public_data.in_layer(group.layer_group).where('roles.group_id' => user.groups)
       can :deep_search, Person, Person.only_public_data.visible_from_above.in_or_below(group.layer_group).where('roles.group_id' => user.groups)
     end
+    
   end
   
   private

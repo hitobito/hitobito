@@ -1,4 +1,6 @@
 
+@encrypted_password = BCrypt::Password.create("password", cost: 1)
+
 def amount(role_type)
   case role_type.name.demodulize
     when 'Member', 'External' then 5
@@ -16,9 +18,10 @@ def person_attributes(role_type)
     last_name: last_name,
     email: "#{Faker::Internet.user_name("#{first_name} #{last_name}")}@jubla.example.com",
     address: Faker::Address.street_address,
-    zip_code: Faker::Address.zip_code,
+    zip_code:  Faker::Address.zip_code,
     town: Faker::Address.city,
-    gender: %w(m w).shuffle.first
+    gender: %w(m w).shuffle.first,
+    encrypted_password: @encrypted_password
     }
     
   if role_type == Role::External
@@ -67,7 +70,7 @@ Group.root.self_and_descendants.each do |group|
     
     count = amount(role_type)
     count.times do
-      p = Person.seed(:first_name, :last_name, person_attributes(role_type)).first
+      p = Person.seed(:email, person_attributes(role_type)).first
       seed_accounts(p, count == 1)
       Role.seed_once(:person_id, :group_id, :type, 
        { person_id: p.id,
@@ -81,14 +84,14 @@ end
 
 
 devs = ['Pascal Zumkehr', 'Pascal Simon', 'Andreas Maierhofer']
-bula = Group.find_by_name('Jubla Schweiz')
-role_type = bula.role_types.first
-encrypted_password = BCrypt::Password.create("password", cost: 1)
+bula = Group.root.children.first
 devs.each do |dev| 
   first, last = dev.split
-  attrs = { email: "#{last.downcase}@puzzle.ch", first_name: first, last_name: last,
-            encrypted_password: encrypted_password } 
-  person = Person.seed_once(*attrs.keys, attrs).first
-  role_attrs = { person_id: person.id, group_id: bula.id, type: role_type.name } 
+  attrs = { email: "#{last.downcase}@puzzle.ch", 
+            first_name: first,
+            last_name: last,
+            encrypted_password: @encrypted_password } 
+  person = Person.seed_once(:email, attrs).first
+  role_attrs = { person_id: person.id, group_id: bula.id, type: Group::FederalBoard::Member.name } 
   Role.seed_once(*role_attrs.keys, role_attrs)
 end

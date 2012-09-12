@@ -12,8 +12,8 @@ class ListController < ApplicationController
 
   hide_action :model_class, :models_label, :inheritable_root_controller
 
-  respond_to :html, :json
-
+  respond_to :html
+  
   ##############  ACTIONS  ############################################
 
   # List all entries of this model.

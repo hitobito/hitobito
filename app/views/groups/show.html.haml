@@ -1,4 +1,7 @@
+- @sheets = GroupSheet.new(self, @group)
+
 =render 'groups/tabs'
+
 #main
   =render 'contactable/show'
   =render_attrs(@group, :name, :zip_code)

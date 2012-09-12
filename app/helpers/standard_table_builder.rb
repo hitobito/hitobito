@@ -55,7 +55,7 @@ class StandardTableBuilder
 
   # Renders the table as HTML.
   def to_html
-    add_css_class options, 'table'
+    add_css_class options, 'table table-striped'
     content_tag :table, options do
       content_tag(:thead, html_header) +
       content_tag_nested(:tbody, entries) { |e| html_row(e) }

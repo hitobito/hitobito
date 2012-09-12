@@ -1,6 +1,6 @@
-- @title ||= ti(:title, :model => full_entry_label).html_safe
+- title entry.to_s
 
-- content_for(:actions, render('actions_show'))
+- content_for(:toolbar, render('actions_show'))
 
 = render 'attrs'
 

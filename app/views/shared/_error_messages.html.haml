@@ -1,6 +1,6 @@
 - if errors.any?
   #error_explanation.alert.alert-error
-    %h2= ti(:"errors.header", :count => errors.count, :model => object.to_s)
+    -#%h2= ti(:"errors.header", :count => errors.count, :model => object.to_s)
     %ul
       - errors.full_messages.each do |msg|
         %li= msg

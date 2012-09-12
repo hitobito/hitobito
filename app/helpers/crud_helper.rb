@@ -18,10 +18,7 @@ module CrudHelper
     options = attrs.extract_options!
 
     standard_form(entry, options) do |form|
-      record = entry.is_a?(Array) ? entry.last : entry
-      content = render('shared/error_messages', :errors => record.errors, :object => record)
-
-      content << if block_given?
+      content = if block_given?
         capture(form, &block)
       else
         form.labeled_input_fields(*attrs)

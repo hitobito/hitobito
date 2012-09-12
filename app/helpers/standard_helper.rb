@@ -96,7 +96,11 @@ module StandardHelper
     options[:html] ||= {}
     add_css_class options[:html], 'form-horizontal'
     
-    form_for(object, options, &block)
+    form_for(object, options) do |form|
+      record = object.is_a?(Array) ? object.last : object
+      content = render('shared/error_messages', :errors => record.errors, :object => record)
+      content << capture(form, &block)
+    end
   end
 
   def cancel_link(object)

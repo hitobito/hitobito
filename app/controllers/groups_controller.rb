@@ -6,10 +6,8 @@ class GroupsController < CrudController
   self.ability_types = {with_group: :all}
   
   include DisplayCase::ExhibitsHelper
+ 
 
-  def set_model_ivar(value)
-    super(exhibit(value))
-  end
 
   def index
     flash.keep
@@ -24,6 +22,23 @@ class GroupsController < CrudController
     authorize! :new, Group
     super
   end
-  
-  
+
+  def fields
+    assign_attributes
+    render layout: nil, entry: entry
+  end
+
+  private 
+  def assign_attributes 
+    if model_params && entry.new_record? 
+      model_params.delete(:type)
+      entry.parent_id = model_params.delete(:parent_id) 
+    end
+    super
+  end
+
+  def set_model_ivar(value)
+    super(exhibit(value))
+  end
+
 end

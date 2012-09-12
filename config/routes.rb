@@ -3,6 +3,7 @@ Jubla::Application.routes.draw do
   root :to => 'groups#index'
 
   resources :groups do
+    get :fields, on: :collection
     resources :people do
       collection do
         get :external

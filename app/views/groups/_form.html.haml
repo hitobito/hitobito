@@ -1,0 +1,2 @@
+= entry_form do |f|
+  = f.labeled_collection_select :type, entry.possible_types, :to_s, :human, {}, entry.attrs_for_remote

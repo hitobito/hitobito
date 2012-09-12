@@ -7,6 +7,8 @@ de:
       messages:
     
     models:
+      group/federation: Bund
+      group/state: Kanton
 
     attributes:
       person:

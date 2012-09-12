@@ -6,6 +6,9 @@
 # the user the same list as he left it.
 class ListController < ApplicationController
 
+  before_filter :entries, only: :index
+  authorize_resource
+
   helper_method :model_class, :models_label, :entries, :path_args
 
   delegate :model_class, :models_label, :to => 'self.class'

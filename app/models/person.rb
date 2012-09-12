@@ -42,12 +42,7 @@
 #
 
 class Person < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable,
-         :recoverable, :rememberable, :trackable, :validatable
-
+  
   # Setup accessible (or protected) attributes for your model
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
                   :email, :address, :zip_code, :town, :country]
@@ -59,6 +54,8 @@ class Person < ActiveRecord::Base
   
   include Contactable
   
+  devise :database_authenticatable,
+         :recoverable, :rememberable, :trackable, :validatable
   
   ### ASSOCIATIONS
   

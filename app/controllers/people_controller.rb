@@ -1,6 +1,9 @@
 class PeopleController < CrudController
   
   self.nesting = Group
+  self.ability_types = {with_group: [:index, :external]}
+
+  prepend_before_filter :parent
   
   def index
     @people = list_entries.external(false)
@@ -16,8 +19,6 @@ class PeopleController < CrudController
   private
   
   def list_entries
-    #@current_ability = Ability::WithGroup(current_user, @group)
-    #Person.accessible_by(@current_ability)
-    super
+    Person.accessible_by(current_ability)
   end
 end

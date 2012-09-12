@@ -48,7 +48,9 @@ module CrudControllerTestHelper
       skips = Array(options[:skip])
       skips = [skips] if skips.blank? || !skips.first.is_a?(Array)
       
-      skips.include?(contexts)
+      skip = skips.include?(contexts)
+      puts "skipping #{contexts.inspect}" if skip
+      skip
     end
     
     # Test the response status, default 200.

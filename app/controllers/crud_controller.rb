@@ -6,6 +6,8 @@
 # overriding the entire method.
 class CrudController < ListController
 
+  prepend_before_filter :entry, except: :index
+
   delegate :model_identifier, :to => 'self.class'
 
   # Defines before and after callback hooks for create, update, save and destroy actions.

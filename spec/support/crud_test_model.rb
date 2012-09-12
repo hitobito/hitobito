@@ -52,6 +52,9 @@ class CrudTestModelsController < CrudController #:nodoc:
   self.search_columns = [:name, :whatever, :remarks]
   self.sort_mappings = {:chatty => 'length(remarks)'}
 
+  skip_authorize_resource
+  skip_authorization_check
+
   before_create :possibly_redirect
   before_create :handle_name
   before_destroy :handle_name

@@ -1,3 +1,6 @@
 - parent_sheet(GroupSheet.new(self, @group))
 
+- content_for(:toolbar) do
+  = action_button 'Passwort ändern', edit_person_registration_path if @person == current_user
+
 = render_attrs entry, *default_attrs

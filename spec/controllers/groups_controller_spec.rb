@@ -3,7 +3,7 @@ describe GroupsController do
 
   let(:group) { Group.first }
   let(:person) { Person.first }
-
+  
   it "redirects to login" do
     get :show, id: group.id 
     should redirect_to "/users/sign_in"

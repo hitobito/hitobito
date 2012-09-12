@@ -153,4 +153,9 @@ describe Person do
       Person.in_or_below(groups(:top_layer)).visible_from_above.should_not include(person)
     end
   end
+
+  it "preloads groups when authenticating" do
+    Person.should_receive(:preload_groups)
+    Person.find_first_by_auth_condition
+  end
 end

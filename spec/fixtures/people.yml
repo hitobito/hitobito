@@ -1,0 +1,5 @@
+test_user:
+  first_name: Foo
+  last_name: Bar
+  email: foobar@puzzle.ch
+  encrypted_password: $2a$04$jLzXBDwUuKP7EGzSLLFw7..ioMfWiDfT9lDpZ4BjRz/dM6fSu/CDW #foobar

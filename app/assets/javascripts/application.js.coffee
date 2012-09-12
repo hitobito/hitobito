@@ -22,5 +22,5 @@ $ ->
 
   setDataType = (xhr) ->
     $(this).data('type', 'html')
-  $('[data-replace]').on('ajax:success',replaceContent)
-  $('[data-replace]').on('ajax:before',setDataType)
+  $('body').on('ajax:success','[data-replace]', replaceContent)
+  $('body').on('ajax:before','[data-replace]', setDataType)

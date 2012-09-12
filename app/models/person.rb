@@ -105,6 +105,11 @@ class Person < ActiveRecord::Base
       joins(roles: :group).
       where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
     end
+
+    # devise api used when authenticating user
+    def find_first_by_auth_conditions(conditions)
+      self.preload_groups.where(email: conditions[:email]).first
+    end
   end
   
   
@@ -117,6 +122,7 @@ class Person < ActiveRecord::Base
       name
     end
   end
+
   
   # All layers this person belongs to
   def layer_groups

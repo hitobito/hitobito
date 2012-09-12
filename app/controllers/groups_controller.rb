@@ -5,6 +5,12 @@ class GroupsController < CrudController
   
   self.ability_types = {with_group: :all}
   
+  include DisplayCase::ExhibitsHelper
+
+  def set_model_ivar(value)
+    super(exhibit(value))
+  end
+
   def index
     flash.keep
     redirect_to Group.root

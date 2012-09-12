@@ -19,6 +19,7 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'wagons'
+gem 'display_case'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -107,6 +107,7 @@ class Person < ActiveRecord::Base
       where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
     end
     
+    # load people with/out external roles
     def external(ext = true)
       external_types = Role.all_types.select(&:external).collect(&:sti_name)
       if ext
@@ -114,6 +115,18 @@ class Person < ActiveRecord::Base
       else
         where("roles.type NOT IN (?)", external_types)
       end
+    end
+
+    # devise api used when authenticating user
+    def find_first_by_auth_conditions(conditions)
+      select([:id, :first_name, :last_name, :nickname, :email, 
+              :encrypted_password, :remember_created_at, :sign_in_count, 
+              :current_sign_in_at, :current_sign_in_ip, 
+              :last_sign_in_at, :last_sign_in_ip,
+              :reset_password_token, :reset_password_sent_at]).
+      where(email: conditions[:email]).
+      preload_groups.
+      first
     end
   end
   
@@ -127,6 +140,7 @@ class Person < ActiveRecord::Base
       name
     end
   end
+
   
   # All layers this person belongs to
   def layer_groups

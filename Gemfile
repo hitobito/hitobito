@@ -71,7 +71,7 @@ end
 group :guard do
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'spork'
+  gem 'spork', '1.0.0rc3'
 end
 
 group :metrics do

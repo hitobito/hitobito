@@ -21,6 +21,7 @@ shared_examples "crud controller" do |options|
 
   subject { response }
   
+  let(:person) { Person.first }
   let(:model_class)      { controller.send(:model_class) }
   let(:model_identifier) { controller.model_identifier }
   let(:test_params)      { scope_params }
@@ -35,6 +36,7 @@ shared_examples "crud controller" do |options|
 
   before do
     m = example.metadata
+    sign_in person
     perform_request if m[:perform_request] != false && m[:action] && m[:method]
   end
 

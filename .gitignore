@@ -30,3 +30,8 @@ config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
 
+# ama custom project setup
+TAGS
+/.vimrc
+vendor/wagons/jubla/TAGS
+/todo.tasks

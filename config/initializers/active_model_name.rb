@@ -7,8 +7,10 @@ module ActiveModel
       initialize_without_sti(*args)
       
       if @klass != @klass.base_class
+        @param_key = @klass.base_class.model_name.param_key
         @route_key = @klass.base_class.model_name.route_key
         @singular_route_key = ActiveSupport::Inflector.singularize(@route_key).freeze
+
       end
     end
     

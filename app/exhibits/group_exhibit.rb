@@ -5,7 +5,7 @@ class GroupExhibit < DisplayCase::Exhibit
 
 
   def self.applicable_to?(object)
-    object.class.name == 'Group'
+    object.class.name == 'Group' || object.class.base_class.name == 'Group'
   end
 
   def self.custom_fields

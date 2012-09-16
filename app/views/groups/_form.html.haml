@@ -1,12 +1,6 @@
-%h2= entry.type
+%h2= entry.type_name
 = entry_form do |f|
   = f.hidden_field :parent_id
   = f.hidden_field :type
-  = f.labeled_string_field :email
-  = f.labeled_string_field :name
-  = f.labeled_string_field :short_name
-  = f.labeled_string_field :address
-  = f.labeled_string_field :town
-  = f.labeled_integer_field :zip_code
-  = f.labeled_string_field :country
-  = entry.custom_fields(f)
+  - entry.attributes.each do |attr|
+    = f.labeled_string_field attr

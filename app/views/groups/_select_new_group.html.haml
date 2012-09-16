@@ -1,4 +1,4 @@
-= form_tag(:new_group, method: 'get') do
-  = hidden_field_tag(:parent_id, entry.id)
-  = select_tag :type, entry.possible_children_options
+= form_for(entry.children.build, url: :new_group, method: 'get') do
+  = hidden_field :group, :parent_id, value: entry.id
+  = select :group, :type, entry.possible_children_options
   = submit_tag 'Neue Gruppe erstellen'

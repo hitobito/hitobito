@@ -55,7 +55,11 @@ describe Group do
 
   each_child(Group::Federation) do |group|
     context group do
-      
+
+      # TODO - pz should this not read 
+      # group.possible_children.should include(*group.default_children)
+      # instead?
+      #
       it "default_children must be part of possible_children" do
         group.default_children.should include(*group.default_children)
       end

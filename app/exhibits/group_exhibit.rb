@@ -24,6 +24,11 @@ class GroupExhibit < DisplayCase::Exhibit
     __getobj__.class.possible_children.collect(&:model_name)
   end
 
+  def type_name
+    "#{type}, #{type.class}"
+  end
+
+
   def possible_children_options
     context.options_from_collection_for_select(possible_types, :to_s, :human)
   end

@@ -1,22 +1,30 @@
 class GroupsController < CrudController
   
-  skip_authorize_resource only: [:index, :new]
-  skip_authorization_check only: :index
+  skip_authorize_resource only: [:index, :new, :show]
+  skip_authorization_check only: [:index, :show]
   
   self.ability_types = {with_group: :all}
   
   include DisplayCase::ExhibitsHelper
+  include ActionView::Helpers::FormOptionsHelper
  
 
 
   def index
     flash.keep
   end
+
+  def show
+    @current_ability = Ability::WithGroup.new(current_user, entry)
+    super
+  end
+
   
   def new
     # set parent group for authorization
     entry
-    entry.parent_id = params[:group].delete(:parent_id) if params[:group]
+    entry.parent_id = params.delete(:parent_id)
+    entry.type = params.delete(:type)
     @current_ability = Ability::WithGroup.new(current_user, entry.parent) if entry.parent
     authorize! :new, Group
     super

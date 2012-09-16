@@ -1,6 +1,7 @@
+%h2= entry.type
 = entry_form do |f|
   = f.hidden_field :parent_id
-  = entry.type_selection(f)
+  = f.hidden_field :type
   = f.labeled_string_field :email
   = f.labeled_string_field :name
   = f.labeled_string_field :short_name

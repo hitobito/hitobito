@@ -21,12 +21,15 @@ class GroupExhibit < DisplayCase::Exhibit
   end
 
   def possible_types
-    spacer = OpenStruct.new(human: "")
-    [spacer] + parent.class.possible_children.collect(&:model_name)
+    __getobj__.class.possible_children.collect(&:model_name)
+  end
+
+  def possible_children_options
+    context.options_from_collection_for_select(possible_types, :to_s, :human)
   end
 
   def type_selection(f)
-    f.labeled_collection_select :type, possible_types, :to_s, :human, {}, attrs_for_remote
+    f.labeled_collection_select :type, possible_types, :to_s, :human
   end
 
   def attrs_for_remote

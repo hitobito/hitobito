@@ -4,5 +4,5 @@
     = f.string_field(:zip_code, class: 'span2', placeholder: 'PLZ')
     = f.string_field(:town, class: 'span4', placeholder: 'Ort')
   = f.labeled_input_field(:country)
-  = f.inline_fields_for :social_accounts, 'weiteren Account hinzufügen', 'contactable/social_account_fields'
-  = f.inline_fields_for :phone_numbers, 'weitere Telefonnummer hinzufügen', 'contactable/phone_number_fields'
+  = f.inline_fields_for :social_accounts, 'contactable/social_account_fields'
+  = f.inline_fields_for :phone_numbers, 'contactable/phone_number_fields'

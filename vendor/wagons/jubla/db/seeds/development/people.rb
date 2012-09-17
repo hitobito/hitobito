@@ -83,7 +83,7 @@ Group.root.self_and_descendants.each do |group|
 end
 
 
-devs = ['Pascal Zumkehr', 'Pascal Simon', 'Andreas Maierhofer']
+devs = ['Pascal Zumkehr', 'Pascal Simon', 'Pierre Fritsch', 'Andreas Maierhofer']
 bula = Group.root.children.first
 devs.each do |dev| 
   first, last = dev.split

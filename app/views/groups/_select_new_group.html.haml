@@ -1,6 +1,8 @@
 .dropdown
-  %a.dropdown-toggle{'data-toggle' => 'dropdown', href: '#', class: 'btn' } Neue Gruppe erstellen
+  %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'} 
+    Neue Gruppe erstellen
+    %b{class: 'caret'}
   %ul.dropdown-menu{role: "menu"}
     - entry.possible_children.each do |child|
       %li
-        %a{tabindex: "-1", href: "#{child.target}"}= child.name
+        %a{href: "#{child.target}"}= child.name

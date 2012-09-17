@@ -1,3 +1,4 @@
+# encoding: utf-8
 # A form builder that automatically selects the corresponding input field
 # for ActiveRecord column types. Convenience methods for each column type allow
 # one to customize the different fields.
@@ -141,7 +142,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
 
-  def inline_fields_for(assoc,add_label,partial_name=nil, &block) 
+  def inline_fields_for(assoc,partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
       content_tag(:div, id: "#{assoc}_fields") do
@@ -151,7 +152,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         end 
       end + 
       content_tag(:div, class: 'controls') do
-        link_to_add add_label, assoc
+        link_to_add 'Eintrag hinzufügen', assoc
       end
     end
   end

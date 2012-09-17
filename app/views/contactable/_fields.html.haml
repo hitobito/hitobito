@@ -1,0 +1,4 @@
+= f.labeled_text_area(:address, rows: 2)
+= f.labeled(:zip_code, 'PLZ/Ort', nil, class: 'controls-row') do
+  = f.string_field(:zip_code, class: 'span2', placeholder: 'PLZ')
+  = f.string_field(:town, class: 'span4', placeholder: 'Ort')

@@ -7,7 +7,8 @@ class GroupsController < CrudController
   
   include DisplayCase::ExhibitsHelper
   include ActionView::Helpers::FormOptionsHelper
- 
+
+  before_render_form :load_contacts
 
 
   def index
@@ -55,6 +56,10 @@ class GroupsController < CrudController
 
   def set_model_ivar(value)
     super(exhibit(value))
+  end
+
+  def load_contacts
+    @contacts = entry.people.external(false)
   end
 
 end

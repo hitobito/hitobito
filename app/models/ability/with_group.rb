@@ -12,9 +12,8 @@ class Ability::WithGroup < Ability::Base
     
     if modify_permissions?
       if can_create_or_destroy_group?(group)
-        can [:create, :destroy], Group do |g|
-          group == g
-        end 
+        can :create, Group, parent_id: group.id
+        can :destroy, Group, id: group.id
       end
       
       can :update, Group do |g|

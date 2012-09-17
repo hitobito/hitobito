@@ -41,6 +41,8 @@ de:
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
+        social_accounts: Social Accounts
+        phone_numbers: Telefonnummern
         
       group:
         name: Name
@@ -53,6 +55,8 @@ de:
         country: Land
         contact_id: Kontaktperson
         contact: Kontaktperson
+        social_accounts: Social Accounts
+        phone_numbers: Telefonnummern
         
       role:
         label: Bezeichnung

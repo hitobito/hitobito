@@ -3,6 +3,7 @@ require 'spec_helper'
 describe StandardHelper do
   
   include CrudTestHelper
+  include NestedForm::ViewHelper
 
   before do 
     reset_db

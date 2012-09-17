@@ -110,7 +110,7 @@ class CrudController < ListController
 
   # Assigns the attributes from the params to the model entry.
   def assign_attributes
-    entry.attributes = params[model_identifier]
+    entry.attributes = model_params 
   end
 
   # A label for the current entry, including the model name.
@@ -121,6 +121,11 @@ class CrudController < ListController
   # Url of the index page to return to
   def index_url
     polymorphic_url(path_args(model_class), :returning => true)
+  end
+
+  # Access params for model
+  def model_params
+    params[model_identifier]
   end
 
   private

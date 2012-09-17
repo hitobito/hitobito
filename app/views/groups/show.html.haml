@@ -1,7 +1,7 @@
 - @sheets = GroupSheet.new(self, @group)
-
+- content_for(:toolbar) do
+  = render 'actions_show'
 =render 'groups/tabs'
-
 #main
   =render 'contactable/show'
   =render_attrs(@group, :name, :zip_code)

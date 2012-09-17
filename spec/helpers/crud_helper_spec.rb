@@ -6,6 +6,7 @@ describe CrudHelper do
   include StandardHelper
   include ListHelper
   include CrudTestHelper
+  include NestedForm::ViewHelper
   
     
   before do 

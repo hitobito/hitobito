@@ -4,13 +4,15 @@
 # All field methods may be prefixed with 'labeled_' in order to render
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
+  include NestedForm::BuilderMixin
 
   REQUIRED_MARK = '<span class="required">*</span>'.html_safe
 
   attr_reader :template
 
-  delegate :association, :column_type, :column_property, :captionize, :ta,
+  delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
+           :render, 
            :to => :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -136,6 +138,22 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
+  end
+
+
+  def inline_fields_for(assoc,add_label,partial_name=nil, &block) 
+    content_tag(:div, class: 'control-group') do
+      label(assoc, class: 'control-label') +
+      content_tag(:div, id: "#{assoc}_fields") do
+        fields_for(assoc) do |fields|
+          content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+          content_tag(:div, content, class: 'controls controls-row') 
+        end 
+      end + 
+      content_tag(:div, class: 'controls') do
+        link_to_add add_label, assoc
+      end
+    end
   end
 
   # Renders a marker if the given attr has to be present.

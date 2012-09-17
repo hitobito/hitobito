@@ -12,7 +12,9 @@
 #= require jquery
 #= require jquery_ujs
 #= require bootstrap
+#= require jquery_nested_form
 #= require_tree .
+#
 $ ->
   replaceContent = (e, data, status, xhr) ->
     replace = $(this).data('replace')
@@ -24,3 +26,6 @@ $ ->
     $(this).data('type', 'html')
   $('body').on('ajax:success','[data-replace]', replaceContent)
   $('body').on('ajax:before','[data-replace]', setDataType)
+
+  window.nestedFormEvents.insertFields = (content, assoc, link) ->
+    $(link).closest('form').find("##{assoc}_fields").append($(content))

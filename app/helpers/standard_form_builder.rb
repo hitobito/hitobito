@@ -148,6 +148,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
           content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+          content << fields.link_to_remove('Entfernen')
           content_tag(:div, content, class: 'controls controls-row') 
         end 
       end + 

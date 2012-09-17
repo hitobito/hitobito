@@ -7,6 +7,17 @@ de:
       messages:
     
     models:
+      group/federation: Bund
+      group/federal_board: Bundesleitung
+      group/organization_board: Verbandsleitung
+      group/professional_group: Fachgruppe
+      group/state: Kanton
+      group/region: Region
+      group/regionalboard: Regionalleitung
+      group/flock: Schar
+      group/child_group: Kindergruppe
+      group/work_group: Arbeitsgruppe
+      group/simple_group: Gruppe
 
     attributes:
       person:

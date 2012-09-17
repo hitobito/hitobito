@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  
-  alias_method :current_user, :current_person
   helper_method :current_user
   
   before_filter :authenticate_person!
@@ -12,8 +10,13 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => "Sie sind nicht berechtigt, diese Seite anzuzeigen"
   end
+
+
   
   private
+  def current_user
+    current_person
+  end
   
   def current_ability
     @current_ability ||= create_ability

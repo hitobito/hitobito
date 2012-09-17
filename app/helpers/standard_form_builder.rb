@@ -1,16 +1,19 @@
+# encoding: utf-8
 # A form builder that automatically selects the corresponding input field
 # for ActiveRecord column types. Convenience methods for each column type allow
 # one to customize the different fields.
 # All field methods may be prefixed with 'labeled_' in order to render
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
+  include NestedForm::BuilderMixin
 
   REQUIRED_MARK = '<span class="required">*</span>'.html_safe
 
   attr_reader :template
 
-  delegate :association, :column_type, :column_property, :captionize, :ta,
+  delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
+           :render, 
            :to => :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -42,28 +45,39 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+
+  # Render a text_area.
+  def text_area(attr, html_options = {})
+    html_options[:class] ||= 'span6'
+    html_options[:rows] ||= 5
+    super(attr, html_options)
+  end
+
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
+    html_options[:class] ||= 'span6'
     super(attr, html_options)
   end
 
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
-    html_options[:size] ||= 30
+    html_options[:class] ||= 'span6'
     text_field(attr, html_options)
   end
 
   # Render an integer field.
   def integer_field(attr, html_options = {})
     html_options[:step] ||= 1
+    html_options[:class] ||= 'span6'
     number_field(attr, html_options)
   end
 
   # Render a float field.
   def float_field(attr, html_options = {})
     html_options[:step] ||= 'any'
+    html_options[:class] ||= 'span6'
     number_field(attr, html_options)
   end
 
@@ -80,16 +94,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
+    html_options[:class] ||= 'span6'
     date_select(attr, {}, html_options)
   end
 
   # Render a field to enter a time. You might want to customize this.
   def time_field(attr, html_options = {})
+    html_options[:class] ||= 'span6'
     time_select(attr, {}, html_options)
   end
 
   # Render a field to enter a date and time. You might want to customize this.
   def datetime_field(attr, html_options = {})
+    html_options[:class] ||= 'span6'
     datetime_select(attr, {}, html_options)
   end
 
@@ -98,6 +115,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
+    html_options[:class] ||= 'span6'
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr,
@@ -118,8 +136,25 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def has_many_field(attr, html_options = {})
     html_options[:multiple] = true
+    html_options[:class] ||= 'span6'
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
+  end
+
+
+  def inline_fields_for(assoc,partial_name=nil, &block) 
+    content_tag(:div, class: 'control-group') do
+      label(assoc, class: 'control-label') +
+      content_tag(:div, id: "#{assoc}_fields") do
+        fields_for(assoc) do |fields|
+          content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+          content_tag(:div, content, class: 'controls controls-row') 
+        end 
+      end + 
+      content_tag(:div, class: 'controls') do
+        link_to_add 'Eintrag hinzufügen', assoc
+      end
+    end
   end
 
   # Renders a marker if the given attr has to be present.
@@ -133,7 +168,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, &block)
+  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, &block)
     if block_given?
       content = capture(&block)
     elsif content.nil?
@@ -141,10 +176,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       caption_or_content = nil
     end
     caption_or_content ||= captionize(attr, @object.class)
+    add_css_class(html_options, 'controls')
 
     content_tag(:div, :class => "control-group#{' error' if @object.errors.has_key?(attr)}") do
       label(attr, caption_or_content, :class => 'control-label') +
-      content_tag(:div, content, :class => 'controls')
+      content_tag(:div, content, html_options)
     end
   end
   

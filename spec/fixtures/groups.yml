@@ -29,6 +29,13 @@
 #  coach               :belongs_to
 #  advisor             :belongs_to
 #
+# top_layer
+#   top_group
+#   bottom_layer_one
+#     bottom_group_one_one
+#     bottom_group_one_two
+#   bottom_layer_two
+#     bottom_group_two_one 
 
 top_layer:
   name: Top

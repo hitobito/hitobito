@@ -100,7 +100,8 @@ module StandardHelper
       record = object.is_a?(Array) ? object.last : object
       content = render('shared/error_messages', :errors => record.errors, :object => record)
       content << capture(form, &block)
-    end
+    end + send(:after_nested_form_callbacks)
+
   end
 
   def cancel_link(object)

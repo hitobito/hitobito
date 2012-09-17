@@ -12,7 +12,7 @@
 
 class PhoneNumber < ActiveRecord::Base
   
-  attr_accessible :number, :label, :public
+  attr_accessible :number, :label, :public, as: [:default, :superior]
   
   belongs_to :contactable, polymorphic: true
   

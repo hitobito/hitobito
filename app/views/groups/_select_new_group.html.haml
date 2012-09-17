@@ -1,6 +1,7 @@
 - if can? :new, Group
   .btn-group
     %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'} 
+      = icon(:plus)
       Neue Gruppe erstellen
       %b.caret
     %ul.dropdown-menu{role: "menu"}

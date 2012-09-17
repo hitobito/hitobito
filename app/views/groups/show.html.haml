@@ -1,9 +1,7 @@
 - @sheets = GroupSheet.new(self, @group)
-
-=render 'groups/tabs'
 - content_for(:toolbar) do
-  = render 'groups/select_new_group'
-
+  = render 'actions_show'
+=render 'groups/tabs'
 #main
   =render 'contactable/show'
   =render_attrs(@group, :name, :zip_code)

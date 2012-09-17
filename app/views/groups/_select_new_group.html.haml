@@ -1,8 +1,8 @@
-.dropdown
+.btn-group
   %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'} 
     Neue Gruppe erstellen
-    %b{class: 'caret'}
+    %b.caret
   %ul.dropdown-menu{role: "menu"}
     - entry.possible_children.each do |child|
       %li
-        %a{href: "#{child.target}"}= child.name
+        = link_to child.name, child.target

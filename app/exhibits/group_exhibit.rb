@@ -23,6 +23,10 @@ class GroupExhibit < DisplayCase::Exhibit
     group_specific_attributes.select { |name| self.class.attr_used?(name) }
   end
 
+  def kind_of?(klass)
+    klass >= self.class ? true : super
+  end
+
   private
   def attrs_for_remote
     url = context.fields_groups_path(group: { parent_id: parent.id })

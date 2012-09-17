@@ -1,4 +1,6 @@
-= form_for(entry.children.build, url: :new_group, method: 'get') do
-  = hidden_field :group, :parent_id, value: entry.id
-  = select :group, :type, entry.possible_children_options
-  = submit_tag 'Neue Gruppe erstellen'
+.dropdown
+  %a.dropdown-toggle{'data-toggle' => 'dropdown', href: '#', class: 'btn' } Neue Gruppe erstellen
+  %ul.dropdown-menu{role: "menu"}
+    - entry.possible_children.each do |child|
+      %li
+        %a{tabindex: "-1", href: "#{child.target}"}= child.name

@@ -1,8 +1,10 @@
-.btn-group
-  %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'} 
-    Neue Gruppe erstellen
-    %b.caret
-  %ul.dropdown-menu{role: "menu"}
-    - entry.possible_children.each do |child|
-      %li
-        = link_to child.name, child.target
+- if can? :new, Group
+  .btn-group
+    %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'} 
+      Neue Gruppe erstellen
+      %b.caret
+    %ul.dropdown-menu{role: "menu"}
+      - entry.possible_children.each do |child|
+        %li
+          = link_to child.name, child.target
+          %a{href: "#{child.target}"}= child.name

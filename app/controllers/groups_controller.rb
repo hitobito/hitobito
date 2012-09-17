@@ -25,6 +25,11 @@ class GroupsController < CrudController
     group
   end
 
+  def assign_attributes 
+    role = can?(:modify_superior, entry) ? :superior : :default
+    entry.assign_attributes(model_params, as: role)
+  end
+
   def set_model_ivar(value)
     super(exhibit(value))
   end

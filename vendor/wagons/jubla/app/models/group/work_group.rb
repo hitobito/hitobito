@@ -5,7 +5,7 @@ class Group::WorkGroup < Group
     self.permissions = [:group_full, :contact_data, :login]
   end
   
-  class Member < ::Role
+  class Member < Jubla::Role::Member
     self.permissions = [:login]
   end
   

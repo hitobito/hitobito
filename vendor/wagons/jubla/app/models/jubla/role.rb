@@ -22,7 +22,14 @@ module Jubla::Role
   end
   
   # Common superclass for all leader roles
+  # Primarly used for common naming
   class Leader < ::Role
+    
+  end
+  
+  # Common superclass for all member roles
+  # Primarly used for common naming
+  class Member < ::Role
     
   end
   

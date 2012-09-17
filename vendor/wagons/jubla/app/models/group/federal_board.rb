@@ -2,7 +2,7 @@
 class Group::FederalBoard < Group
   
   
-  class Member < ::Role
+  class Member < Jubla::Role::Member
     self.permissions = [:layer_full, :contact_data, :login]
     
     attr_accessible :employment_percent

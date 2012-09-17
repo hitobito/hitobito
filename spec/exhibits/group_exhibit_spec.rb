@@ -8,10 +8,6 @@ describe GroupExhibit do
   let(:context) { double("context")}
   let(:subject) { GroupExhibit.new(model, context) }
 
-  describe "#attributes" do
-    let(:model) { double("model", class: stub(attr_used?: true, attribute_names: %w[foo bar])) }
-    its(:attributes) { should eq  %w[foo bar]}
-  end
 
   describe "#attributes" do
     def model_stub(name)

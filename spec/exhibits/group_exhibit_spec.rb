@@ -4,28 +4,23 @@ require_relative '../../app/exhibits/group_exhibit.rb'
 
 describe GroupExhibit do
 
-  describe "custom_fields" do
-    subject { GroupExhibit.custom_fields } 
-    its([:federalboard]) { should eq [:bank_account] }
+
+  let(:context) { double("context")}
+  let(:subject) { GroupExhibit.new(model, context) }
+
+  describe "#attributes" do
+    let(:model) { double("model", class: stub(attr_used?: true, attribute_names: %w[foo bar])) }
+    its(:attributes) { should eq  %w[foo bar]}
   end
 
-  describe "instance" do
-
-    before do
-      @model = double("model", type: "Group::FederalBoard")
-      @context = double("context")
-      @form = double("form builder")
-      @obj = GroupExhibit.new(@model, @context)
+  describe "#attributes" do
+    def model_stub(name)
+      stub("model_#{name}", model_name: name)
     end
-
-    let(:subject) { @obj } 
-    its(:type_as_sym) { should eq :federalboard } 
-
-    it "#custom_fields adds custom_fields for foo and bar" do
-      @form.should_receive(:labeled_input_field).with(:bank_account).and_return { "" }
-      @obj.custom_fields(@form)
+    let(:model) { double("model", class: stub(possible_children: [model_stub(:foo), model_stub(:bar)])) }
+    it "calls options_from_collection_for_select" do
+      context.should_receive(:options_from_collection_for_select).with([:foo, :bar], :to_s, :human)
+      subject.possible_children_options
     end
-
   end
-
 end

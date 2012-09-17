@@ -20,6 +20,13 @@ class Ability::WithGroup < Ability::Base
         group == g &&
         can_update_group?(g)
       end
+
+      if layers_full.present?
+        can :modify_superior, Group do |g|
+          group == g &&
+          contains_any?(layers_full, g.layer_groups - [g.layer_group])
+        end
+      end
     end
     
     ### PEOPLE  

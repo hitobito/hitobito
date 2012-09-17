@@ -10,7 +10,6 @@ class GroupsController < CrudController
 
   before_render_form :load_contacts
 
-
   def index
     flash.keep
     redirect_to Group.root
@@ -36,5 +35,6 @@ class GroupsController < CrudController
   def load_contacts
     @contacts = entry.people.external(false)
   end
+
 
 end

@@ -1,4 +1,5 @@
 = f.input_field(:name, class: 'span4')
+= f.input_field(:label, class: 'span2', data: {provide: :typeahead, source: SocialAccount.available_labels})
 = f.label(:public, class: 'checkbox span3') do
   = f.input_field(:public)
   = t(:"activerecord.attributes.social_account.public")

@@ -15,8 +15,14 @@ class SocialAccount < ActiveRecord::Base
   attr_accessible :name, :label, :public
   
   belongs_to :contactable, polymorphic: true
-  
-  
+
+  class << self
+    def available_labels
+      Settings.social_account.predefined_labels |
+      order(:label).uniq.pluck(:label)
+    end
+  end 
+
   def to_s
     "#{name} (#{label})"
   end

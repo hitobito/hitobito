@@ -1,0 +1,3 @@
+- group_specific_attributes = %w[bank_account jubla_insurance jubla_full_coverage parish kind unsexed clairongarde founding_year coach_id advisor_id]
+- entry.used_attributes(group_specific_attributes).each do |attr|
+  = f.labeled_input_field attr

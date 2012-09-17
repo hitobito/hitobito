@@ -9,20 +9,19 @@ class GroupExhibit < DisplayCase::Exhibit
     object.class.name == 'Group' || object.class.base_class.name == 'Group'
   end
 
+
   def type_name
-    "#{type}, #{type.class}"
+    "#{type}, #{type.class}, #{klass}"
   end
 
   def possible_children_options
-    types = __getobj__.class.possible_children.collect(&:model_name)
+    types = self.class.possible_children.collect(&:model_name)
     context.options_from_collection_for_select(types, :to_s, :human)
   end
 
-  def attributes
-    cls = __getobj__.class
-    cls.attribute_names.select { |name| cls.attr_used?(name) }
+  def used_attributes(group_specific_attributes)
+    group_specific_attributes.select { |name| self.class.attr_used?(name) }
   end
-
 
   private
   def attrs_for_remote

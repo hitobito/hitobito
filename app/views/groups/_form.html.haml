@@ -1,6 +1,4 @@
-%h2= entry.type_name
 = entry_form do |f|
   = f.hidden_field :parent_id
   = f.hidden_field :type
-  - entry.attributes.each do |attr|
-    = f.labeled_string_field attr
+  = render_extensions :fields, locals: { f: f }

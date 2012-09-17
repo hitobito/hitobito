@@ -1,6 +1,6 @@
 Jubla::Application.routes.draw do
 
-  root :to => 'groups#index'
+  root :to => 'dashboard#index'
 
   resources :groups do
     resources :people do

@@ -12,7 +12,7 @@ class Ability::WithGroup < Ability::Base
     
     if modify_permissions?
       if can_create_or_destroy_group?(group)
-        can [:create,:destroy], Group do |g|
+        can [:create, :destroy], Group do |g|
           group == g
         end 
       end
@@ -61,6 +61,13 @@ class Ability::WithGroup < Ability::Base
       can :deep_search, Person, Person.only_public_data.visible_from_above.in_or_below(group.layer_group).where('roles.group_id' => user.groups) do |p| true end
     end
     
+    if modify_permissions? && can_update_group?(group)
+      can :create, Role do |role|
+        role.group == group
+      end 
+    end
+    
+    
   end
   
   private
@@ -73,7 +80,7 @@ class Ability::WithGroup < Ability::Base
     
   def can_create_or_destroy_group?(group)
     layers_full.present? && 
-     # user has layer_full, group in same layer
+     # user has layer_full, group in same layer or below
      contains_any?(layers_full, group.layer_groups)
   end
 end

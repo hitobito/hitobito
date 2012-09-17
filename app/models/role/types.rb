@@ -10,7 +10,8 @@ module Role::Types
   
   module ClassMethods
     def all_types
-      @@all_types ||= Group.all_types.collect(&:role_types).flatten.uniq
+      # do a double reverse to get roles appearing more than once at the end (uniq keeps the first..)
+      @@all_types ||= Group.all_types.collect(&:role_types).flatten.reverse.uniq.reverse
     end
     
     def visible_types

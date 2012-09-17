@@ -125,6 +125,15 @@ class Person < ActiveRecord::Base
       preload_groups.
       first
     end
+    
+    def order_by_role
+      statement = "CASE roles.type "
+      Role.all_types.each_with_index do |t, i|
+        statement << "WHEN '#{t}' THEN #{i} "
+      end
+      statement << "END"
+      joins(:roles).order(statement)
+    end
   end
   
   

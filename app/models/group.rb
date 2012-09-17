@@ -77,6 +77,15 @@ class Group < ActiveRecord::Base
         accessible_attributes(role).include?(attr)
       end
     end
+    
+    def order_by_type
+      statement = "CASE groups.type "
+      Group.all_types.each_with_index do |t, i|
+        statement << "WHEN '#{t}' THEN #{i} "
+      end
+      statement << "END"
+      order(statement)
+    end
   end
   
   

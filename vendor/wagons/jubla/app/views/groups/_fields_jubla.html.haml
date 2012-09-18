@@ -1,6 +1,17 @@
-- group_specific_attributes = %w[coach_id advisor_id]
-- group_specific_attributes += %w[bank_account parish kind unsexed jubla_insurance jubla_full_coverage]
+= field_set_tag do
+  - entry.used_attributes(%w[coach_id advisor_id]).each do |attr|
+    = f.labeled_input_field attr
 
 = field_set_tag do
-  - entry.used_attributes(group_specific_attributes).each do |attr|
+  - entry.used_attributes(%w[kind]).each do |attr|
+    = f.labeled(attr, nil, nil, class: 'controls-row') do
+      - entry.class::AVAILABLE_KINDS.each do |kind|
+        = f.label(:"kind_#{kind.downcase}", class: 'radio inline') do
+          = f.radio_button(:kind, kind) 
+          = kind
+
+  - entry.used_attributes(%w[unsexed]).each do |attr|
+    = f.labeled_input_field attr
+
+  - entry.used_attributes(%w[parish bank_account jubla_insurance jubla_full_coverage]).each do |attr|
     = f.labeled_input_field attr

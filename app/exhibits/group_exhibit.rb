@@ -14,11 +14,6 @@ class GroupExhibit < BaseExhibit
     end
   end
 
-  def possible_children_options
-    types = self.class.possible_children.collect(&:model_name)
-    context.options_from_collection_for_select(types, :to_s, :human)
-  end
-
   def used_attributes(*attributes)
     attributes.select { |name| self.class.attr_used?(name) }
   end
@@ -28,5 +23,4 @@ class GroupExhibit < BaseExhibit
     attributes -= self.class.superior_attributes unless can?(:modify_superior, self)
     attributes
   end
-
 end

@@ -8,7 +8,6 @@ class GroupsController < CrudController
   self.ability_types = {with_group: :all}
   
   include DisplayCase::ExhibitsHelper
-  include ActionView::Helpers::FormOptionsHelper
 
   before_render_form :load_contacts
 

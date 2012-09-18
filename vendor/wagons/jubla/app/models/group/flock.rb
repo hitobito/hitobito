@@ -5,8 +5,12 @@ class Group::Flock < Group
   
   children Group::ChildGroup
   
+  AVAILABLE_KINDS = %w(Jungwacht Blauring Jubla)
+  
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
   attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), :as => :superior
+  
+  validates :kind, inclusion: AVAILABLE_KINDS
   
   
   class Leader < Jubla::Role::Leader

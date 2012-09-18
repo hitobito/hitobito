@@ -17,11 +17,11 @@ class Ability::Plain < Ability::Base
     
     if detail_person_permissions?
       # View all person details
-      can :detail, Person do |person| 
+      can :show_details, Person do |person| 
         can_detail_person?(person)
       end
     end
-    can :detail, Person do |person|
+    can :show_details, Person do |person|
       person == user
     end
     

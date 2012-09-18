@@ -25,12 +25,12 @@ describe Ability::Plain do
     
     it "may not view any children in lower layers" do
       other = Fabricate(Group::ChildGroup::Child.name.to_sym, group: groups(:asterix))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may not view any externals in lower layers" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
   end
   
@@ -49,12 +49,12 @@ describe Ability::Plain do
     
     it "may not view any public role in upper layers" do
       other = Fabricate(Group::StateBoard::Leader.name.to_sym, group: groups(:be_board))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may not view any public role in other flocks" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may modify externals in his flock" do
@@ -69,7 +69,7 @@ describe Ability::Plain do
     
     it "may not view any externals in upper layers" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
   end
   
@@ -82,7 +82,7 @@ describe Ability::Plain do
     end
     
     it "may view details of himself" do
-      should be_able_to(:detail, role.person)
+      should be_able_to(:show_details, role.person)
     end
     
     it "may modify himself" do
@@ -95,7 +95,7 @@ describe Ability::Plain do
     
     it "may view any public role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should be_able_to(:detail, other.person)
+      should be_able_to(:show_details, other.person)
     end
     
     it "may not modify any role in same layer" do
@@ -105,7 +105,7 @@ describe Ability::Plain do
     
     it "may view any externals in same layer" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_security))
-      should be_able_to(:detail, other.person)
+      should be_able_to(:show_details, other.person)
     end
     
     it "may modify any role in same group" do
@@ -115,12 +115,12 @@ describe Ability::Plain do
     
     it "may not view details of any public role in upper layers" do
       other = Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may view any public role in groups below" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should be_able_to(:detail, other.person)
+      should be_able_to(:show_details, other.person)
     end
     
     it "may not modify any public role in groups below" do
@@ -138,7 +138,7 @@ describe Ability::Plain do
     let(:role) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
     
     it "may view details of himself" do
-      should be_able_to(:detail, role.person)
+      should be_able_to(:show_details, role.person)
     end
     
     it "may modify himself" do
@@ -156,7 +156,7 @@ describe Ability::Plain do
         
     it "may not view details of others in same group" do
       other = Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may not modify others in same group" do
@@ -171,7 +171,7 @@ describe Ability::Plain do
     
     it "may not view details of public role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may not modify any role in same layer" do
@@ -191,7 +191,7 @@ describe Ability::Plain do
     
     it "may not view details of any public role in upper layers" do
       other = Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
     
     it "may view any public role in groups below" do
@@ -214,7 +214,7 @@ describe Ability::Plain do
     let(:role) { Fabricate(Group::WorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
         
     it "may view details of himself" do
-      should be_able_to(:detail, role.person)
+      should be_able_to(:show_details, role.person)
     end
     
     it "may modify himself" do
@@ -232,7 +232,7 @@ describe Ability::Plain do
     
     it "may not view details of others in same group" do
       other = Fabricate(Group::WorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
-      should_not be_able_to(:detail, other.person)
+      should_not be_able_to(:show_details, other.person)
     end
         
     it "may not view public role in same layer" do

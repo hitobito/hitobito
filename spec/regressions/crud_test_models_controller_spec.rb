@@ -163,7 +163,7 @@ describe CrudTestModelsController, type: :controller do
         context "entries" do
           subject { entries }
           it { should have(2).items }
-          it { entries.collect(&:id).should == entries.sort_by(&:children).reverse.collect(&:id) }
+          it { entries.collect(&:id).should == entries.sort_by(&:children).collect(&:id).reverse }
         end
       end
       

@@ -1,4 +1,3 @@
-require 'ostruct'
 class GroupExhibit < BaseExhibit
   #def_delegators :context, :new_group_path
 

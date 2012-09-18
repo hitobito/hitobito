@@ -1,6 +1,7 @@
 class PeopleController < CrudController
   
   self.nesting = Group
+  self.nesting_optional = true
   self.ability_types = {with_group: [:index, :external]}
 
   # load group before authorization
@@ -15,6 +16,14 @@ class PeopleController < CrudController
   def external
     @people = exhibit(list_entries.external(true).order_by_company)
     respond_with(@people)
+  end
+  
+  def query
+    @people = []
+    if params.has_key?(:q) && params[:q].size >= 3
+      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname)).only_public_data.order_by_name
+    end
+    render json: @people.collect {|p| {id: p.id, name: p.to_s} }
   end
   
   private

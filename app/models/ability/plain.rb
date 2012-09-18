@@ -11,6 +11,8 @@ class Ability::Plain < Ability::Base
     
     ### PEOPLE
     
+    can :query, Person
+    
     can :show, Person do |person|
       can_show_person?(person)
     end

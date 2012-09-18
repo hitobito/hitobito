@@ -2,11 +2,11 @@
 class Group::SimpleGroup < Group
   
   
-  class Leader < ::Role
+  class Leader < Jubla::Role::Leader
     self.permissions = [:group_full]
   end
   
-  class Member < ::Role
+  class Member < Jubla::Role::Member
   end
   
   roles Leader, Member

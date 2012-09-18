@@ -6,8 +6,8 @@ class Group::Federation < Group
   
   children Group::FederalBoard,
            Group::OrganizationBoard,
-           Group::State,
            Group::ProfessionalGroup,
-           Group::WorkGroup
+           Group::WorkGroup,
+           Group::State
   
 end

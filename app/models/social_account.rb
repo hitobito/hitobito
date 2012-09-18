@@ -16,14 +16,32 @@ class SocialAccount < ActiveRecord::Base
   
   belongs_to :contactable, polymorphic: true
 
+  before_save :normalize_labels
+
   class << self
     def available_labels
-      Settings.social_account.predefined_labels |
+      @available_labels ||= Settings.social_account.predefined_labels |
       order(:label).uniq.pluck(:label)
+    end
+    
+    def sweep_available_labels
+      @available_labels = nil
     end
   end 
 
   def to_s
     "#{name} (#{label})"
+  end
+  
+  private
+  
+  # If a case-insensitive same label already exists, use this one
+  def normalize_labels
+    fresh = self.class.available_labels.none? do |l|
+      equal = l.casecmp(label) == 0
+      self.label = l if equal
+      equal
+    end
+    self.class.sweep_available_labels if fresh
   end
 end

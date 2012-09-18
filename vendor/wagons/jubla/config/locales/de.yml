@@ -7,17 +7,32 @@ de:
       messages:
     
     models:
-      group/federation: Bund
+      group/child_group: Kindergruppe
       group/federal_board: Bundesleitung
+      group/federation: Bund
+      group/flock: Schar
       group/organization_board: Verbandsleitung
       group/professional_group: Fachgruppe
-      group/state: Kanton
       group/region: Region
       group/regionalboard: Regionalleitung
-      group/flock: Schar
-      group/child_group: Kindergruppe
+      group/simple_group: Einfache Gruppe
+      group/state_agency: Arbeitsstelle
+      group/state_board: Kantonsleitung
+      group/state: Kanton
       group/work_group: Arbeitsgruppe
-      group/simple_group: Gruppe
+      
+      jubla/role/external: Extern
+      jubla/role/coach: Coach
+      jubla/role/group_admin: Gruppenverwaltung
+      jubla/role/leader: Leitung
+      jubla/role/member: Mitglied
+      jubla/role/treasurer: Finanzchef
+      group/state_board/supervisor: Stellenbegleitung
+      group/child_group/child: Kind
+      group/flock/leader: Scharleitung
+      group/flock/camp_leader: Lagerleitung
+      group/flock/president: Präses
+      group/flock/guide: Leiter
 
     attributes:
       person:

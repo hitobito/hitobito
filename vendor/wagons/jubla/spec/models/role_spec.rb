@@ -36,4 +36,16 @@ describe Role do
     end
   end
   
+  describe "#all_types" do
+    subject { Role.all_types}
+    
+    it "must have master role as the first item" do
+      subject.first.should == Group::FederalBoard::Member
+    end
+    
+    it "must have external role as last item" do
+      subject.last.should == Jubla::Role::External
+    end
+  end
+  
 end

@@ -8,6 +8,14 @@ module ContactableHelper
     end
   end
   
+  def render_social_accounts(contactable)
+    safe_join(contactable.social_accounts) do |account|
+      content_tag(:p) do
+        safe_join([account.name, content_tag(:span, account.label, class: 'muted')], ' ')
+      end
+    end
+  end
+  
   def render_address(contactable)
     html = ''.html_safe
     

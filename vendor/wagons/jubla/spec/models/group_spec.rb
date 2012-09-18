@@ -44,6 +44,18 @@ describe Group do
     end
   end
   
+  describe "#all_types" do
+    subject { Group.all_types}
+    
+    it "must have root as the first item" do
+      subject.first.should == Group::Federation
+    end
+    
+    it "must have simple group as last item" do
+      subject.last.should == Group::SimpleGroup
+    end
+  end
+  
   
   def self.each_child(group)
     @processed ||= []

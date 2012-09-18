@@ -10,7 +10,7 @@ class Group::OrganizationBoard < Group
     self.permissions = [:contact_data, :login]
   end
   
-  class Member < ::Role
+  class Member < Jubla::Role::Member
     self.permissions = [:contact_data, :login]
   end
   

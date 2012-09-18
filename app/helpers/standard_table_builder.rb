@@ -65,7 +65,7 @@ class StandardTableBuilder
   # Returns css classes used for alignment of the cell data.
   # Based on the column type of the attribute.
   def align_class(attr)
-    entry = entries.first
+    entry = entry_class.new
     case column_type(entry, attr)
       when :integer, :float, :decimal
         'right' unless association(entry, attr, :belongs_to)
@@ -91,7 +91,11 @@ class StandardTableBuilder
   end
 
   def entry_class
-    entries.first.class
+    if entries.respond_to?(:klass)
+      entries.klass
+    else 
+      entries.first.class
+    end
   end
 
   # Helper class to store column information.

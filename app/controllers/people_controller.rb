@@ -6,13 +6,13 @@ class PeopleController < CrudController
   prepend_before_filter :parent
   
   def index
-    @people = list_entries.external(false).order('people.last_name, people.first_name')
+    @people = list_entries.external(false).order_by_name
     respond_with(@people)
   end
   
   # list external people
   def external
-    @people = list_entries.external(true).order('people.company_name, people.last_name')
+    @people = list_entries.external(true).order_by_company
     respond_with(@people)
   end
   

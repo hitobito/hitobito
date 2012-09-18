@@ -74,6 +74,7 @@ class Person < ActiveRecord::Base
   scope :contact_data_visible, where(:contact_data_visible => true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
   scope :order_by_name, order('people.last_name, people.first_name')
+  scope :order_by_company, order('people.company_name, people.last_name, people.first_name')
   
   
   class << self

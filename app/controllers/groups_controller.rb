@@ -19,6 +19,7 @@ class GroupsController < CrudController
   
 
   private 
+  
   def build_entry 
     group = model_params.delete(:type).constantize.new
     group.parent_id = model_params.delete(:parent_id)
@@ -35,7 +36,7 @@ class GroupsController < CrudController
   end
 
   def load_contacts
-    @contacts = entry.people.external(false)
+    @contacts = entry.people.external(false).only_public_data.order_by_name
   end
 
   def ability_for_create

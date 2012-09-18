@@ -19,13 +19,13 @@ class Group::Flock < Group
 
 
   def available_coaches 
-    Person.in_layer(*layer_groups).where(roles: { type: "Jubla::Role::Coach" })
+    Person.in_layer(*layer_groups).where(roles: { type: Jubla::Role::Coach.sti_name })
   end
 
   def available_advisors
     Person.in_layer(*layer_groups).
-      where(groups: { type: [Group::StateBoard, Group::RegionalBoard].collect(&:name) }).
-      where('roles.type NOT IN (?)', Role.external_types.collect(&:name))
+      where(groups: { type: [Group::StateBoard, Group::RegionalBoard].collect(&:sti_name) }).
+      where('roles.type NOT IN (?)', Role.external_types.collect(&:sti_name))
   end
   
   def to_s

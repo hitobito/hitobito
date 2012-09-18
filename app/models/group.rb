@@ -87,7 +87,7 @@ class Group < ActiveRecord::Base
     def order_by_type
       statement = "CASE groups.type "
       Group.all_types.each_with_index do |t, i|
-        statement << "WHEN '#{t}' THEN #{i} "
+        statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << "END"
       order(statement)

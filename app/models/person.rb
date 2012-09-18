@@ -98,7 +98,7 @@ class Person < ActiveRecord::Base
     
     # load people with/out external roles
     def external(ext = true)
-      external_types = Role.all_types.select(&:external).collect(&:sti_name)
+      external_types = Role.external_types.collect(&:sti_name)
       if ext
         where(roles: {type: external_types})
       else
@@ -121,7 +121,7 @@ class Person < ActiveRecord::Base
     def order_by_role
       statement = "CASE roles.type "
       Role.all_types.each_with_index do |t, i|
-        statement << "WHEN '#{t}' THEN #{i} "
+        statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << "END"
       joins(:roles).order(statement)

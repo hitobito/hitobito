@@ -83,7 +83,7 @@ class Role < ActiveRecord::Base
   end
   
   def assert_type_is_allowed_for_group
-    if type && group && !group.role_types.collect(&:to_s).include?(type)
+    if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
     end 
   end

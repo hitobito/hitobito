@@ -17,32 +17,22 @@ ActiveRecord::Schema.define(:version => 20120917150619) do
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
-    t.string   "name",                                                   :null => false
-    t.string   "short_name",          :limit => 31
-    t.string   "type",                                                   :null => false
+    t.string   "name",                           :null => false
+    t.string   "short_name",     :limit => 31
+    t.string   "type",                           :null => false
     t.string   "email"
-    t.string   "address",             :limit => 1024
+    t.string   "address",        :limit => 1024
     t.integer  "zip_code"
     t.string   "town"
     t.string   "country"
     t.integer  "contact_id"
-    t.datetime "created_at",                                             :null => false
-    t.datetime "updated_at",                                             :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.datetime "deleted_at"
     t.integer  "layer_group_id"
-    t.string   "bank_account"
-    t.boolean  "jubla_insurance",                     :default => false, :null => false
-    t.boolean  "jubla_full_coverage",                 :default => false, :null => false
-    t.string   "parish"
-    t.string   "kind"
-    t.boolean  "unsexed",                             :default => false, :null => false
-    t.boolean  "clairongarde",                        :default => false, :null => false
-    t.integer  "founding_year"
-    t.integer  "coach_id"
-    t.integer  "advisor_id"
-    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
-    t.index ["parent_id"], :name => "index_groups_on_parent_id"
     t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
+    t.index ["parent_id"], :name => "index_groups_on_parent_id"
+    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
   end
 
   create_table "people", :force => true do |t|
@@ -71,18 +61,8 @@ ActiveRecord::Schema.define(:version => 20120917150619) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "name_mother"
-    t.string   "name_father"
-    t.string   "nationality"
-    t.string   "profession"
-    t.string   "bank_account"
-    t.string   "ahv_number"
-    t.string   "ahv_number_old"
-    t.string   "j_s_number"
-    t.string   "insurance_company"
-    t.string   "insurance_number"
-    t.index ["email"], :name => "index_people_on_email", :unique => true
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
+    t.index ["email"], :name => "index_people_on_email", :unique => true
   end
 
   create_table "phone_numbers", :force => true do |t|
@@ -95,15 +75,13 @@ ActiveRecord::Schema.define(:version => 20120917150619) do
   end
 
   create_table "roles", :force => true do |t|
-    t.integer  "person_id",          :null => false
-    t.integer  "group_id",           :null => false
-    t.string   "type",               :null => false
+    t.integer  "person_id",  :null => false
+    t.integer  "group_id",   :null => false
+    t.string   "type",       :null => false
     t.string   "label"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
-    t.integer  "employment_percent"
-    t.boolean  "honorary"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
   end
 

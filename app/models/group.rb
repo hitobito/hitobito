@@ -18,6 +18,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  deleted_at          :datetime
+#  layer_group_id      :integer
 #  bank_account        :string(255)
 #  jubla_insurance     :boolean          default(FALSE), not null
 #  jubla_full_coverage :boolean          default(FALSE), not null
@@ -26,8 +27,8 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach               :belongs_to
-#  advisor             :belongs_to
+#  coach_id            :integer
+#  advisor_id          :integer
 #
 
 class Group < ActiveRecord::Base
@@ -48,6 +49,7 @@ class Group < ActiveRecord::Base
 
   ### CALLBACKS
   
+  after_create :set_layer_group_id
   after_create :create_default_children
   
   # Root group may not be destroyed
@@ -77,6 +79,11 @@ class Group < ActiveRecord::Base
         accessible_attributes(role).include?(attr)
       end
     end
+
+    def superior_attributes
+      accessible_attributes(:superior).to_a - accessible_attributes(:default).to_a
+    end
+
   end
   
   
@@ -95,7 +102,7 @@ class Group < ActiveRecord::Base
   
   # The layer hierarchy from top to bottom of this group.
   def layer_groups
-    hierarchy.select { |g| g.layer }
+    hierarchy.select { |g| g.class.layer }
   end
   
   def to_s
@@ -108,6 +115,11 @@ class Group < ActiveRecord::Base
     if type && parent && !parent.possible_children.collect(&:to_s).include?(type)
       errors.add(:type, :type_not_allowed) 
     end 
+  end
+
+  def set_layer_group_id
+    layer_group_id = self.class.layer ? id : parent.layer_group_id
+    update_column(:layer_group_id, layer_group_id)
   end
   
   def create_default_children

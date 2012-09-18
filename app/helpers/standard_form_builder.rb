@@ -127,7 +127,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                         html_options[:multiple] ? {} : select_options(attr),
                         html_options)
     else
-      ta(:none_available, association(@object, attr))
+      help_inline(ta(:none_available, association(@object, attr)))
     end
   end
 
@@ -150,12 +150,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
           content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
-          content << fields.link_to_remove('Entfernen')
+          content << help_inline(fields.link_to_remove('Entfernen'))
           content_tag(:div, content, class: 'controls controls-row') 
         end 
       end + 
       content_tag(:div, class: 'controls') do
-        link_to_add 'Eintrag hinzufügen', assoc
+        help_inline(link_to_add 'Eintrag hinzufügen', assoc)
       end
     end
   end
@@ -224,6 +224,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     labeled_field_method?(name).present? || super(name)
   end
 
+  # Generates a help inline for fields
+  def help_inline(text)
+    content_tag(:span, text, :class => 'help-inline')
+  end
+  
   # Generates a help block for fields
   def help_block(text)
     content_tag(:p, text, :class => 'help-block')

@@ -41,8 +41,6 @@ de:
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
-        social_accounts: Social Accounts
-        phone_numbers: Telefonnummern
         
       group:
         name: Name
@@ -55,19 +53,27 @@ de:
         country: Land
         contact_id: Kontaktperson
         contact: Kontaktperson
-        social_accounts: Social Accounts
-        phone_numbers: Telefonnummern
         
       role:
         label: Bezeichnung
         
       phone_number:
         number: Nummer
-        label: Label
+        label: Typ
+        public: Öffentlich
+                
+      phone_numbers:
+        number: Telefonnummer
+        label: Telefonnummer Typ
         public: Öffentlich
         
       social_account:
         name: Name
-        label: Label
+        label: Typ
+        public: Öffentlich
+        
+      social_accounts:
+        name: Social Account Name
+        label: Social Account Typ
         public: Öffentlich
       

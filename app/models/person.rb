@@ -84,17 +84,8 @@ class Person < ActiveRecord::Base
     end
     
     # scope listing all people with a role in the given layer.
-    def in_layer(group)
-      layer_group = group.layer_group
-      conditions = ["(groups.id = ?)", layer_group.id]
-      group_types = layer_group.possible_children.reject(&:layer).collect(&:sti_name)
-      layer_children = layer_group.children.select([:lft, :rgt]).where(type: group_types)
-      layer_children.each do |g|
-        conditions.first << " OR (groups.lft >= ? AND groups.rgt <= ?)"
-        conditions << g.lft
-        conditions << g.rgt
-      end
-      joins(roles: :group).where(conditions).uniq
+    def in_layer(*groups)
+      joins(roles: :group).where(groups: {layer_group_id: groups.collect(&:layer_group_id) }).uniq
     end
     
     # scope listing all people with a role in or below the given group.

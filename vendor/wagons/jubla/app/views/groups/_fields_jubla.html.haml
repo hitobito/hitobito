@@ -1,8 +1,4 @@
 = field_set_tag do
-  - entry.used_attributes(%w[coach_id advisor_id]).each do |attr|
-    = f.labeled_input_field attr
-
-= field_set_tag do
   - entry.used_attributes(%w[kind]).each do |attr|
     = f.labeled(attr) do
       - entry.class::AVAILABLE_KINDS.each do |kind|
@@ -21,4 +17,8 @@
         = 'Geschlechtergetrennt'
 
   - entry.used_attributes(%w[parish bank_account jubla_insurance jubla_full_coverage]).each do |attr|
+    = f.labeled_input_field attr
+
+= field_set_tag do
+  - entry.used_attributes(%w[coach_id advisor_id]).each do |attr|
     = f.labeled_input_field attr

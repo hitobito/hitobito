@@ -62,6 +62,7 @@ de:
         label: Typ
         public: Öffentlich
                 
+      # used for nested phone_numbers
       phone_numbers:
         number: Telefonnummer
         label: Telefonnummer Typ
@@ -72,6 +73,7 @@ de:
         label: Typ
         public: Öffentlich
         
+      # used for nested social accounts
       social_accounts:
         name: Social Account Name
         label: Social Account Typ

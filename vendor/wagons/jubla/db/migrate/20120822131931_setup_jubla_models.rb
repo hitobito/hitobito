@@ -24,8 +24,8 @@ class SetupJublaModels < ActiveRecord::Migration
     add_column :groups, :clairongarde, :boolean, null: false, default: false
     add_column :groups, :founding_year, :integer
     
-    add_column :groups, :coach, :belongs_to
-    add_column :groups, :advisor, :belongs_to
+    add_column :groups, :coach_id, :integer
+    add_column :groups, :advisor_id, :integer
     
     
     add_column :roles, :employment_percent, :integer

@@ -8,11 +8,31 @@ class Group::Flock < Group
   AVAILABLE_KINDS = %w(Jungwacht Blauring Jubla)
   
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
-  attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), :as => :superior
-  
+  attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), as: :superior
+
+
+  belongs_to :advisor, class_name: "Person"
+  belongs_to :coach, class_name: "Person"
+
+
   validates :kind, inclusion: AVAILABLE_KINDS
+
+
+  def available_coaches 
+    Person.in_layer(*layer_groups).where(roles: { type: "Jubla::Role::Coach" })
+  end
+
+  def available_advisors
+    Person.in_layer(*layer_groups).
+      where(groups: { type: [Group::StateBoard, Group::RegionalBoard].collect(&:name) }).
+      where('roles.type NOT IN (?)', Role.external_types.collect(&:name))
+  end
   
-  
+  def to_s
+    [kind, super].join(" ")
+  end
+
+
   class Leader < Jubla::Role::Leader
     self.permissions = [:layer_full, :contact_data, :login]
   end

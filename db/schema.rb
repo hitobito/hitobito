@@ -11,24 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910104636) do
+ActiveRecord::Schema.define(:version => 20120917150619) do
 
   create_table "groups", :force => true do |t|
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
-    t.string   "name",                       :null => false
-    t.string   "short_name", :limit => 31
-    t.string   "type",                       :null => false
+    t.string   "name",                           :null => false
+    t.string   "short_name",     :limit => 31
+    t.string   "type",                           :null => false
     t.string   "email"
-    t.string   "address",    :limit => 1024
+    t.string   "address",        :limit => 1024
     t.integer  "zip_code"
     t.string   "town"
     t.string   "country"
     t.integer  "contact_id"
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.datetime "deleted_at"
+    t.integer  "layer_group_id"
+    t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
     t.index ["parent_id"], :name => "index_groups_on_parent_id"
     t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
   end

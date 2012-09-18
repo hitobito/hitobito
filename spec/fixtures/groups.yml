@@ -18,6 +18,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  deleted_at          :datetime
+#  layer_group_id      :integer
 #  bank_account        :string(255)
 #  jubla_insurance     :boolean          default(FALSE), not null
 #  jubla_full_coverage :boolean          default(FALSE), not null
@@ -26,20 +27,14 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach               :belongs_to
-#  advisor             :belongs_to
+#  coach_id            :integer
+#  advisor_id          :integer
 #
-# top_layer
-#   top_group
-#   bottom_layer_one
-#     bottom_group_one_one
-#     bottom_group_one_two
-#   bottom_layer_two
-#     bottom_group_two_one 
 
 top_layer:
   name: Top
   type: Group::TopLayer
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:top_layer) %>
   lft: 1
   rgt: 14
 
@@ -47,6 +42,7 @@ top_group:
   name: TopGroup
   type: Group::TopGroup
   parent: top_layer
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:top_layer) %>
   lft: 2
   rgt: 3
   
@@ -54,6 +50,7 @@ bottom_layer_one:
   name: Bottom One
   type: Group::BottomLayer
   parent: top_layer
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 4
   rgt: 9
   
@@ -61,6 +58,7 @@ bottom_group_one_one:
   name: Group 11
   type: Group::BottomGroup
   parent: bottom_layer_one
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 5
   rgt: 6
   
@@ -68,6 +66,7 @@ bottom_group_one_two:
   name: Group 12
   type: Group::BottomGroup
   parent: bottom_layer_one
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 7
   rgt: 8
   
@@ -75,6 +74,7 @@ bottom_layer_two:
   name: Bottom Two
   type: Group::BottomLayer
   parent: top_layer
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_two) %>
   lft: 10
   rgt: 13
   
@@ -82,6 +82,7 @@ bottom_group_two_one:
   name: Group 21
   type: Group::BottomGroup
   parent: bottom_layer_two
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_two) %>
   lft: 11
   rgt: 12
  

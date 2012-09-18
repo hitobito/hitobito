@@ -9,7 +9,6 @@
 #  nickname               :string(255)
 #  company                :boolean          default(FALSE), not null
 #  email                  :string(255)
-#  password               :string(255)
 #  address                :string(1024)
 #  zip_code               :integer
 #  town                   :string(255)
@@ -20,6 +19,15 @@
 #  contact_data_visible   :boolean          default(FALSE), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  encrypted_password     :string(255)
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
 #  name_mother            :string(255)
 #  name_father            :string(255)
 #  nationality            :string(255)
@@ -30,15 +38,6 @@
 #  j_s_number             :string(255)
 #  insurance_company      :string(255)
 #  insurance_number       :string(255)
-#  encrypted_password     :string(255)      default(""), not null
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
 #
 
 class Person < ActiveRecord::Base
@@ -74,6 +73,7 @@ class Person < ActiveRecord::Base
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(:contact_data_visible => true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
+  scope :order_by_name, order('people.last_name, people.first_name')
   
   
   class << self
@@ -85,17 +85,8 @@ class Person < ActiveRecord::Base
     end
     
     # scope listing all people with a role in the given layer.
-    def in_layer(group)
-      layer_group = group.layer_group
-      conditions = ["(groups.id = ?)", layer_group.id]
-      group_types = layer_group.possible_children.reject(&:layer).collect(&:sti_name)
-      layer_children = layer_group.children.select([:lft, :rgt]).where(type: group_types)
-      layer_children.each do |g|
-        conditions.first << " OR (groups.lft >= ? AND groups.rgt <= ?)"
-        conditions << g.lft
-        conditions << g.rgt
-      end
-      joins(roles: :group).where(conditions).uniq
+    def in_layer(*groups)
+      joins(roles: :group).where(groups: {layer_group_id: groups.collect(&:layer_group_id) }).uniq
     end
     
     # scope listing all people with a role in or below the given group.

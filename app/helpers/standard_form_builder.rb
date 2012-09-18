@@ -45,6 +45,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # Render a password field
+  def password_field(attr, html_options = {})
+    html_options[:class] ||= 'span6' 
+    super(attr, html_options)
+  end
 
   # Render a text_area.
   def text_area(attr, html_options = {})

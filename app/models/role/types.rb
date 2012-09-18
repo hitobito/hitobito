@@ -22,6 +22,10 @@ module Role::Types
       all_types.select {|r| (permissions - r.permissions).blank? }
     end
     
+    def external_types
+      all_types.select(&:external)
+    end
+    
     def reset_types!
       @@all_types = nil
     end

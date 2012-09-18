@@ -61,6 +61,7 @@ def seed_accounts(person, several = false)
 end
 
 Group.root.self_and_descendants.each do |group|
+  group.role_types.each do |role_type|
     # set random seed to get the same names over various runs
     # the .hash method does not work as it does not return the same value over various runs.
     srand(role_type.name.bytes.inject(group.id*31 + 11) {|code, b| code ^= b*97 + 5 })
@@ -78,7 +79,6 @@ Group.root.self_and_descendants.each do |group|
     end
   end
 end
-
 
 devs = ['Pascal Zumkehr', 'Pascal Simon', 'Pierre Fritsch', 'Andreas Maierhofer']
 bula = Group.root.children.first

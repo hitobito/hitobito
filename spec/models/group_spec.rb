@@ -18,6 +18,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  deleted_at          :datetime
+#  layer_group_id      :integer
 #  bank_account        :string(255)
 #  jubla_insurance     :boolean          default(FALSE), not null
 #  jubla_full_coverage :boolean          default(FALSE), not null
@@ -26,8 +27,8 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach               :belongs_to
-#  advisor             :belongs_to
+#  coach_id            :integer
+#  advisor_id          :integer
 #
 
 require 'spec_helper'
@@ -79,6 +80,25 @@ describe Group do
   context ".all_types" do
     it "lists all types" do
       Set.new(Group.all_types).should == Set.new([Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup])
+    end
+  end
+
+
+  context "#set_layer_group_id" do
+    it "sets layer_group_id on group" do
+      top_layer = groups(:top_layer) 
+      group = Group::TopGroup.new(name: 'foobar')
+      group.parent_id = top_layer.id
+      group.save!
+      group.layer_group_id.should eq top_layer.id
+    end
+
+    it "sets layer_group_id on group with default children" do
+      group = Group::TopLayer.new(name: 'foobar')
+      group.save!
+      group.layer_group_id.should eq group.id
+      group.children.should be_present
+      group.children.first.layer_group_id.should eq group.id
     end
   end
 end

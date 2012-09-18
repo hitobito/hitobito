@@ -1,7 +1,7 @@
 require 'ostruct'
 class GroupExhibit < DisplayCase::Exhibit
   extend Forwardable
-  def_delegators :context, :content_tag
+  def_delegators :context, :content_tag, :can?
 
   def self.applicable_to?(object)
     return false if object.class.name == 'ActiveRecord::Relation'
@@ -20,11 +20,16 @@ class GroupExhibit < DisplayCase::Exhibit
   end
 
   def used_attributes(group_specific_attributes)
+    group_specific_attributes -= self.class.superior_attributes unless can? :modify_superior, self
     group_specific_attributes.select { |name| self.class.attr_used?(name) }
   end
 
   def kind_of?(klass)
     klass >= self.class ? true : super
+  end
+
+  def inspect
+    "Exhibit[#{__getobj__.inspect}]"
   end
 
   private

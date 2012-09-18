@@ -72,6 +72,9 @@ module Jubla
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
+    config.assets.precompile += %w(ie.css ie7.css)
+
+    
     config.generators do |g|
       g.test_framework      :rspec, :fixture => true
 	    #g.fixture_replacement :fabrication

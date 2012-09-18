@@ -1,4 +1,6 @@
-- group_specific_attributes = %w[bank_account jubla_insurance jubla_full_coverage parish kind unsexed clairongarde founding_year coach_id advisor_id]
+- group_specific_attributes = %w[coach_id advisor_id]
+- group_specific_attributes += %w[bank_account parish kind unsexed jubla_insurance jubla_full_coverage]
+
 = field_set_tag do
   - entry.used_attributes(group_specific_attributes).each do |attr|
     = f.labeled_input_field attr

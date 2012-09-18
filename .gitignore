@@ -35,3 +35,4 @@ TAGS
 /.vimrc
 vendor/wagons/jubla/TAGS
 /todo.tasks
+vendor/wagons/jubla/config/environment.rb

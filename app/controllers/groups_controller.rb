@@ -6,8 +6,6 @@ class GroupsController < CrudController
   prepend_before_filter :ability_for_create, only: [:new, :create]
   
   self.ability_types = {with_group: :all}
-  
-  include DisplayCase::ExhibitsHelper
 
   before_render_form :load_contacts
 
@@ -30,9 +28,6 @@ class GroupsController < CrudController
     entry.assign_attributes(model_params, as: role)
   end
 
-  def set_model_ivar(value)
-    super(exhibit(value))
-  end
 
   def load_contacts
     @contacts = entry.people.external(false).only_public_data.order_by_name

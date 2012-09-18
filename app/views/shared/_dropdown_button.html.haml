@@ -1,0 +1,9 @@
+.btn-group
+  %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'}
+    = icon(icon_name) if defined?(icon_name) 
+    = label
+    %b.caret
+  %ul.dropdown-menu{role: "menu"}
+    - links.each do |link|
+      %li
+        = link_to *link

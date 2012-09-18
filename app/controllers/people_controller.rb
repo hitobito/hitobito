@@ -3,16 +3,17 @@ class PeopleController < CrudController
   self.nesting = Group
   self.ability_types = {with_group: [:index, :external]}
 
+  # load group before authorization
   prepend_before_filter :parent
   
   def index
-    @people = list_entries.external(false).order_by_name
+    @people = exhibit(list_entries.external(false).order_by_name)
     respond_with(@people)
   end
   
   # list external people
   def external
-    @people = list_entries.external(true).order_by_company
+    @people = exhibit(list_entries.external(true).order_by_company)
     respond_with(@people)
   end
   

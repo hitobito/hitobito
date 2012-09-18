@@ -69,7 +69,8 @@ class ListController < ApplicationController
     else
       value.class.base_class.name
     end
-    instance_variable_set(:"@#{name.underscore}", value)
+
+    instance_variable_set(:"@#{name.underscore}", exhibit(value))
   end
 
   class << self
@@ -308,7 +309,7 @@ class ListController < ApplicationController
 
     # Returns the direct parent ActiveRecord of the current request, if any.
     def parent
-      parents.select {|p| p.is_a?(ActiveRecord::Base) }.last
+      parents.select {|p| p.kind_of?(ActiveRecord::Base) }.last
     end
 
     # Returns the parent entries of the current request, if any.

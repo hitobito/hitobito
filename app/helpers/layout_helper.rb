@@ -16,6 +16,10 @@ module LayoutHelper
     html
   end
   
+  def dropdown_button(label, links, icon_name = nil)
+    render('shared/dropdown_button', label: label, links: links, icon_name: icon_name)
+  end
+  
   def icon(name)
     content_tag(:i, '', class: "icon icon-#{name}")
   end

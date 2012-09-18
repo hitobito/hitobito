@@ -1,3 +1,4 @@
+# encoding: UTF-8
 ch = Group.roots.first
 
 states = Group::State.seed(:name, :parent_id,
@@ -14,7 +15,7 @@ states = Group::State.seed(:name, :parent_id,
    parent_id: ch.id },
 )
 
-Group::ProfessionalGroup::seed(:name, :parent_id,
+Group::ProfessionalGroup.seed(:name, :parent_id,
   {name: 'FG Sicherheit',
    parent_id: states[0].id },
    
@@ -22,7 +23,7 @@ Group::ProfessionalGroup::seed(:name, :parent_id,
    parent_id: states[2].id },
 )
 
-Group::WorkGroup::seed(:name, :parent_id,
+Group::WorkGroup.seed(:name, :parent_id,
   {name: 'AG Bundeslager',
    parent_id: ch.id },
    

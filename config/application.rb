@@ -7,7 +7,14 @@ if defined?(Bundler)
   # see also scripts/commands.rb
   # http://yehudakatz.com/2010/05/09/the-how-and-why-of-bundler-groups/
   # http://iain.nl/getting-the-most-out-of-bundler-groups
-  puts "require gems:   #{Benchmark.measure { Bundler.require(:default, Rails.env) }}"
+  b = -> { Bundler.require(*Rails.groups) }
+  puts "require gems:   #{Benchmark.measure(&b)}"
+  
+  # If you precompile assets before deploying to production, use this line
+  # Bundler.require(*Rails.groups(:assets => %w(development test)))
+  
+  # If you want your assets lazily compiled in production, use this line
+  # Bundler.require(:default, :assets, Rails.env)
 end
 
 module Jubla

@@ -73,6 +73,7 @@ class Person < ActiveRecord::Base
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(:contact_data_visible => true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
+  scope :order_by_name, order('people.last_name, people.first_name')
   
   
   class << self

@@ -115,15 +115,15 @@ describe CrudHelper do
     end
     
     it "should contain input for children" do
-      should match /input .*?name="crud_test_model\[children\]" .*?type="number"/
+      should match /input .*?name="crud_test_model\[children\]" .*?type="text"/
     end
     
     it "should contain input for rating" do
-      should match /input .*?name="crud_test_model\[rating\]" .*?type="number"/
+      should match /input .*?name="crud_test_model\[rating\]" .*?type="text"/
     end
     
     it "should contain input for income" do
-      should match /input .*?name="crud_test_model\[income\]" .*?type="number"/
+      should match /input .*?name="crud_test_model\[income\]" .*?type="text"/
     end
     
     it "should contain input for birthdate" do
@@ -161,7 +161,7 @@ describe CrudHelper do
       it { should match(/option selected="selected" value="1910">1910<\/option>/) }
       it { should match(/option selected="selected" value="1">Januar<\/option>/) }
       it { should match(/option selected="selected" value="1">1<\/option>/) }
-      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="number" .*?value=\"9\"/) }
+      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="text" .*?value=\"9\"/) }
       it { should match(/input .*?name="crud_test_model\[human\]" .*?type="checkbox"/) }
       it { should match(/button .*?type="submit">Speichern<\/button>/) }
     end
@@ -173,8 +173,8 @@ describe CrudHelper do
       it { should match(/input .*?name="crud_test_model\[name\]" .*?type="text"/) }
       it { should_not match(/input .*?name="crud_test_model\[name\]" .*?type="text" .*?value=/) }
       it { should match(/select .*?name="crud_test_model\[birthdate\(1i\)\]"/) }
-      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="number"/) }
-      it { should_not match(/input .*?name="crud_test_model\[children\]" .*?type="number" .*?value=/) }
+      it { should match(/input .*?name="crud_test_model\[children\]" .*?type="text"/) }
+      it { should_not match(/input .*?name="crud_test_model\[children\]" .*?type="text" .*?value=/) }
       it { should match(/button .*?type="submit">Speichern<\/button>/) }
     end
     

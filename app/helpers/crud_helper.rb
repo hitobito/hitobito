@@ -14,22 +14,32 @@ module CrudHelper
   # given attribute array, using the StandardFormBuilder. An options hash
   # may be given as the last argument.
   # If a block is given, a custom form may be rendered and attrs is ignored.
-  def crud_form(entry, *attrs, &block)
+  def crud_form(object, *attrs, &block)
     options = attrs.extract_options!
 
-    standard_form(entry, options) do |form|
-      content = if block_given?
+    standard_form(object, options) do |form|
+      content = save_form_buttons(form, object)
+      
+      content << form.error_messages
+      
+      content << if block_given?
         capture(form, &block)
       else
         form.labeled_input_fields(*attrs)
       end
-
-      content << content_tag(:div, :class => 'form-actions') do
-        form.button(ti(:"button.save"), :class => 'btn btn-primary') +
-        ' ' +
-        cancel_link(entry)
-      end
+      
       content.html_safe
+    end
+  end
+  
+  def save_form_buttons(form, object)
+   content_tag(:div, class: 'btn-toolbar') do
+      content_tag(:div, class: 'btn-group') do
+        form.button(ti(:"button.save"), :class => 'btn btn-primary')
+      end + 
+      content_tag(:div, class: 'btn-group') do
+        link_to(ti(:"button.cancel"), polymorphic_path(object, :returning => true), :class => 'btn')
+      end
     end
   end
 

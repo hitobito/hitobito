@@ -2,6 +2,7 @@
 
 = standard_form(resource, {url: password_path(resource_name), method: :put}) do |f|
   = f.hidden_field :reset_password_token
+  = f.error_messages
   = f.labeled(:password, 'Altes Passwort') { f.input_field(:password) } 
   = f.labeled(:password_confirmation, 'Passwort bestätigen') { f.input_field(:password_confirmation) } 
   = f.indented f.submit('Passwort ändern')

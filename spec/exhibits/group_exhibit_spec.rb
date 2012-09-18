@@ -1,5 +1,6 @@
 require 'display_case'
 require 'forwardable'
+require_relative '../../app/exhibits/base_exhibit.rb'
 require_relative '../../app/exhibits/group_exhibit.rb'
 
 describe GroupExhibit do

@@ -1,4 +1,5 @@
 - parent_sheet(GroupSheet.new(self, @group))
+- title entry.to_s
 
 - content_for(:toolbar) do
   = action_button 'Passwort ändern', edit_person_registration_path if @person == current_user

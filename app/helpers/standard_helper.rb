@@ -96,17 +96,14 @@ module StandardHelper
     options[:html] ||= {}
     add_css_class options[:html], 'form-horizontal'
     
-    form_for(object, options) do |form|
-      record = object.is_a?(Array) ? object.last : object
-      content = render('shared/error_messages', :errors => record.errors, :object => record)
-      content << capture(form, &block)
-    end + send(:after_nested_form_callbacks)
-
+    form_for(object, options, &block) + send(:after_nested_form_callbacks)
+  end
+  
+  def form_error_messages(object, form)
+    record = object.is_a?(Array) ? object.last : object
+    content = render('shared/error_messages', errors: record.errors, object: record)
   end
 
-  def cancel_link(object)
-    link_to(ti(:"button.cancel"), polymorphic_path(object, :returning => true), :class => 'cancel')
-  end
 
   # Renders a simple unordered list, which will
   # simply render all passed items or yield them

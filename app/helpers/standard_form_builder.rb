@@ -74,22 +74,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an integer field.
   def integer_field(attr, html_options = {})
-    html_options[:step] ||= 1
     html_options[:class] ||= 'span6'
-    number_field(attr, html_options)
+    text_field(attr, html_options)
   end
 
   # Render a float field.
   def float_field(attr, html_options = {})
-    html_options[:step] ||= 'any'
     html_options[:class] ||= 'span6'
-    number_field(attr, html_options)
+    text_field(attr, html_options)
   end
 
   # Render a decimal field.
   def decimal_field(attr, html_options = {})
-    html_options[:step] ||= 'any'
-    number_field(attr, html_options)
+    text_field(attr, html_options)
   end
 
   # Render a boolean field.
@@ -161,6 +158,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         link_to_add 'Eintrag hinzufügen', assoc
       end
     end
+  end
+  
+  def error_messages
+    template.render('shared/error_messages', errors: @object.errors, object: @object)
   end
 
   # Renders a marker if the given attr has to be present.

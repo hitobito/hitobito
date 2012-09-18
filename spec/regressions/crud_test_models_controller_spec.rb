@@ -4,7 +4,7 @@ require 'spec_helper'
 # (CrudTestModel). This is useful to test the general behavior
 # of CrudController.
 
-describe CrudTestModelsController do
+describe CrudTestModelsController, type: :controller do
 
   include CrudTestHelper
 

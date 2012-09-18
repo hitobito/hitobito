@@ -11,8 +11,6 @@
       
   = action_button('Drucken', '#', :print)
 
-- Rails.logger.info('before table')
-
 = crud_table do |t|
   -# Any person listed can be shown
   - t.col('Name')    {|p| link_to(p.to_s, group_person_path(@group, p)) }

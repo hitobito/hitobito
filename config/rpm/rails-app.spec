@@ -1,0 +1,239 @@
+### application settings
+# add your specific settings here
+
+%define app_name     jubla
+%define app_version  1.0
+%define ruby_version 1.9.3
+
+### optional libs
+# set things you need to 1
+# if you need additional things
+# please add conditionals like these
+
+%define use_delayed_job 0
+%define use_memcached   0
+%define use_sphinx      0
+
+%define bundle_without_groups 'development test metrics guard console'
+%define exclude_dirs 'spec test vendor/cache log tmp db/production.sqlite3'
+
+# those are set automatically by the ENV variable used
+# to generate the database yml
+%if "%{?RAILS_DB_ADAPTER}" == "mysql"
+%define use_mysql       1
+%else
+%define use_mysql       0
+%endif
+%if "%{?RAILS_DB_ADAPTER}" == "postgresql"
+%define use_pgsql       1
+%else
+%define use_pgsql       0
+%endif
+# TMP:
+%define use_mysql       1
+
+### end of application settings
+### settings that should not be changed
+
+%define wwwdir      /var/www/vhosts
+%define ruby_bindir /opt/ruby-%{ruby_version}/bin
+%define bundle_cmd  RAILS_ENV=production %{ruby_bindir}/bundle
+%define build_number BUILD_NUMBER
+
+##### start of the specfile
+Name:		%{app_name}
+Version:	%{app_version}.%{build_number}
+Release:	1%{?dist}
+Summary:	This is a rails application
+
+Group:		Applications/Web
+License:	NonPublic
+URL:		https://www.puzzle.ch
+Source0:	%{name}-%{version}.tar.gz
+
+BuildRequires:  opt-ruby-%{ruby_version}-rubygem-bundler
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  sqlite-devel
+%if %{use_mysql}
+BuildRequires:	mysql-devel
+%endif
+%if %{use_pgsql}
+BuildRequires:	postgresql-devel
+%endif
+Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
+Requires:	logrotate
+Requires:	opt-ruby-%{ruby_version}
+Requires:	opt-ruby-%{ruby_version}-rubygem-bundler
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(id -un)
+
+%description
+
+This is a rails application
+
+%pre
+# Run before the package is installed.
+# Creates the user and group which will be used to run the
+# application.
+getent group %{name} > /dev/null || groupadd -r %{name}
+getent passwd %{name} > /dev/null || \
+  useradd -r -g %{name} -d %{wwwdir}/%{name} -s /sbin/nologin \
+  -c "Rails Application %{name}" %{name}
+exit 0
+
+
+%prep
+# prepare the source to install it during the package building
+# process.
+%setup -q -n %{name}-%{version}
+
+%build
+# build/compile any code
+# this can be left empty as for most rails applications we won't build
+# any code.
+
+%install
+# Install the application code into the build root directory. This directory
+# structure will be packaged into the package.
+rm -rf $RPM_BUILD_ROOT
+
+#### set env vars for database.yml
+%if "%{?RAILS_DB_NAME}" != ""
+  export RAILS_DB_NAME=%RAILS_DB_NAME
+%endif
+%if "%{?RAILS_DB_USERNAME}" != ""
+  export RAILS_DB_USERNAME=%RAILS_DB_USERNAME
+%endif
+%if "%{?RAILS_DB_PASSWORD}" != ""
+  export RAILS_DB_PASSWORD=%RAILS_DB_PASSWORD
+%endif
+%if "%{?RAILS_DB_HOSTNAME}" != ""
+  export RAILS_DB_HOSTNAME=%RAILS_DB_HOSTNAME
+%endif
+%if "%{?RAILS_DB_PORT}" != ""
+  export RAILS_DB_PORT
+%endif
+%if "%{?RAILS_DB_ADAPTER}" != ""
+  export RAILS_DB_ADAPTER=%RAILS_DB_ADAPTER
+%endif
+### end setting vars
+
+%if %{use_delayed_job}
+install -Dp -m0755 config/rpm/workers.init $RPM_BUILD_ROOT/%{initrddir}/%{name}-workers
+sed -i s/APP_NAME/%{name}/g $RPM_BUILD_ROOT/%{initrddir}/%{name}-workers
+%endif
+
+# this has to be deployed manually.
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig
+echo -e "#Ruby version to use\nRUBY_VERSION=%{ruby_version}" > $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/%{name}
+
+mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
+echo "# Rotate rails logs for %{name}
+%{wwwdir}/%{name}/www/log/*.log
+  daily
+  missingok
+  rotate 7
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+" > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
+
+export PATH=%{ruby_bindir}:$PATH
+([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
+%{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
+%{bundle_cmd} exec rake assets:precompile
+
+install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www
+install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/log
+install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/tmp
+%if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
+install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/db
+%endif
+%if "%{?RAILS_DB_ADAPTER}" == ""
+install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/db
+%endif
+# remove unnecessary files
+for dir in %{exclude_dirs}; do
+  [ -e $dir ] && rm -rf $dir
+done
+cp -p -r * $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
+cp -p -r .bundle $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
+
+
+# fix shebangs
+grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vendor/bundle -r | awk -F: '{ print $1 }' | uniq | while read line; do sed -i 's@^#\!/usr/\(local/\)\?bin/ruby@#\!/bin/env ruby@' $line; done
+
+%post
+# Runs after the package got installed.
+# Configure here any services etc.
+
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate" || exit 1
+
+%if %{use_sphinx}
+su %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1
+ln -s %{wwwdir}/%{name}/config/production.sphinx.conf /etc/sphinx/%{name}.conf
+/sbin/chkconfig --add searchd || :
+/sbin/service searchd condrestart >/dev/null 2>&1 || :
+%endif
+
+%if %{use_memcached}
+/sbin/chkconfig --add memcached || :
+(/sbin/service memcached status >/dev/null 2>&1 || \
+  /sbin/service memcached start >/dev/null 2>&1) && /sbin/service memcached condrestart
+%endif
+
+%if %{use_delayed_job}
+/sbin/chkconfig --add %{name}-workers || :
+/sbin/service %{name}-workers restart >/dev/null 2>&1
+%endif
+
+touch %{wwwdir}/%{name}/www/tmp/restart.txt
+
+%preun
+# Run before uninstallation
+# $1 will be 1 if the package is upgraded
+# and 0 if the package is deinstalled.
+
+%if %{use_delayed_job}
+if [ "$1" = 0 ] ; then
+  /sbin/service %{name}-workers stop > /dev/null 2>&1
+  /sbin/chkconfig --del %{name}-workers || :
+fi
+%endif
+
+%postun
+# Run after uninstallation
+# $1 will be 1 if the package is upgraded
+# and 0 if the package is deinstalled.
+
+
+%files
+# describe all the files that should be included in the package
+%defattr(-,root,root,)
+%{_sysconfdir}/sysconfig/%{name}
+%{_sysconfdir}/logrotate.d/%{name}
+
+# run application as dedicated user
+%attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
+# allow write access to special directories
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
+%attr(-,root,%{name}) %{wwwdir}/%{name}/*
+%if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
+%endif
+%if "%{?RAILS_DB_ADAPTER}" == ""
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
+%endif
+
+%if %{use_delayed_job}
+%{initrddir}/%{name}-workers
+%endif
+
+
+%changelog
+# write a changelog!
+

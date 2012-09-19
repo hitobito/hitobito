@@ -44,7 +44,7 @@ class Person < ActiveRecord::Base
   
   # Setup accessible (or protected) attributes for your model
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
-                  :email, :address, :zip_code, :town, :country]
+                  :email, :address, :zip_code, :town, :country, :birthday]
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, 
                   :email, :address, :zip_code, :town, :country,

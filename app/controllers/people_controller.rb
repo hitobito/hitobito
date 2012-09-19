@@ -23,12 +23,13 @@ class PeopleController < CrudController
     if params.has_key?(:q) && params[:q].size >= 3
       @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname)).only_public_data.order_by_name
     end
-    render json: @people.collect {|p| {id: p.id, name: p.to_s} }
+    
+    render json: @people.collect{|p| exhibit(p).as_typeahead }
   end
   
   private
   
   def list_entries
-    Person.accessible_by(current_ability).order_by_role.preload_public_accounts.preload_groups
+    Person.accessible_by(current_ability).order_by_role.preload_public_accounts.preload_groups.uniq
   end
 end

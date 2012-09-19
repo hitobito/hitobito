@@ -3,6 +3,8 @@ class RolesController < CrudController
   self.nesting = Group
   self.ability_types = {with_group: [:new, :create]}
   
+  decorates :role, :group
+  
   skip_authorize_resource only: [:index, :show]
   skip_authorization_check only: [:index, :show]
   

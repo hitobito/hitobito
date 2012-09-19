@@ -32,4 +32,17 @@ class PeopleController < CrudController
   def list_entries
     Person.accessible_by(current_ability).order_by_role.preload_public_accounts.preload_groups.uniq
   end
+  
+  def build_entry
+    person = super
+    
+    role = params[:role][:type].constantize.new
+    role.group_id = params[:role][:group_id]
+    authorize! :create, role
+    
+    person.roles << role
+    
+    person
+  end
+  
 end

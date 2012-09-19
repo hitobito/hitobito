@@ -13,7 +13,7 @@ class Ability::Plain < Ability::Base
     
     
     if modify_permissions?
-      can :update, Role do |role|
+      can :manage, Role do |role|
         can_modify_role?(role)
       end
     end

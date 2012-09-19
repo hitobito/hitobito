@@ -58,7 +58,7 @@ class Group < ActiveRecord::Base
   
   ### ASSOCIATIONS
   
-  has_many :roles, dependent: :destroy
+  has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
   
   belongs_to :contact, class_name: 'Person'

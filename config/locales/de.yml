@@ -29,6 +29,7 @@ de:
         first_name: Vorname
         last_name: Nachname
         company_name: Firmenname
+        company: Firma
         nickname: Übername
         email: Email
         password: Passwort
@@ -41,6 +42,8 @@ de:
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
+        phone_numbers: Telefonnummern
+        social_accounts: Social Media
         
       group:
         name: Name
@@ -53,6 +56,8 @@ de:
         country: Land
         contact_id: Kontaktperson
         contact: Kontaktperson
+        phone_numbers: Telefonnummern
+        social_accounts: Social Media
         
       role:
         label: Bezeichnung
@@ -75,7 +80,7 @@ de:
         
       # used for nested social accounts
       social_accounts:
-        name: Social Account Name
-        label: Social Account Typ
+        name: Social Media Name
+        label: Social Media Typ
         public: Öffentlich
       

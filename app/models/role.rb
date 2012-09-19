@@ -29,7 +29,6 @@ class Role < ActiveRecord::Base
   belongs_to :person
   belongs_to :group
   
-  
   ### VALIDATIONS
   
   validates :type, presence: true
@@ -41,7 +40,7 @@ class Role < ActiveRecord::Base
   after_create :set_contact_data_visible
   after_destroy :reset_contact_data_visible
 
-  # TODO create person login if this role type has login permission; validate email presence first
+  # TODO create person login if this role type has login permission
   
     
   

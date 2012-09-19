@@ -44,8 +44,51 @@ require 'spec_helper'
 
 describe Person do
     
-  let(:person) { role.person }
+  let(:person) { role.person.reload }
   subject { person }
+  
+  it "is not valid without any names" do
+    Person.new.should have(1).errors_on(:base)
+  end
+  
+  it "company only with nickname is not valid" do
+    Person.new(company: true, nickname: 'foo').should have(1).errors_on(:base)
+  end
+  
+  it "company only with company name is valid" do
+    p = Person.new(company: true, company_name: 'foo').should be_valid
+  end
+  
+  it "real only with nickname is valid" do
+    Person.new(company: false, nickname: 'foo').should be_valid
+  end
+  
+  it "real only with company_name is not valid" do
+    Person.new(company: false, company_name: 'foo').should have(1).errors_on(:base)
+  end
+  
+  it "with login role requires email" do
+    group = groups(:top_group)
+    person = Person.new(last_name: 'Foo')
+    
+    person.should be_valid
+    
+    role = Group::TopGroup::Member.new
+    role.group_id = group.id
+    person.roles << role
+    
+    person.should have(1).error_on(:email)
+  end
+  
+  it "can create person with role" do
+    group = groups(:top_group)
+    person = Person.new(last_name: 'Foo', email: 'foo@example.com')
+    role = group.class.roles.first.new
+    role.group_id = group.id
+    person.roles << role
+    
+    person.save.should be_true
+  end
   
   context "with one role" do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }

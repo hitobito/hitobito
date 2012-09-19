@@ -7,7 +7,7 @@ require 'spec_helper'
 describe Ability::Plain do
   
   subject { ability }
-  let(:ability) { Ability::Plain.new(role.person) }
+  let(:ability) { Ability::Plain.new(role.person.reload) }
 
 
   describe :layer_full do
@@ -15,7 +15,7 @@ describe Ability::Plain do
 
     it "may modify any public role in lower layers" do
       other = Fabricate(Group::Flock::CampLeader.name.to_sym, group: groups(:bern))
-      should be_able_to(:modify, other.person)
+      should be_able_to(:modify, other.person.reload)
       should be_able_to(:update, other)
     end
     
@@ -137,7 +137,7 @@ describe Ability::Plain do
     
     it "may view any public role in groups below" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should be_able_to(:show_details, other.person)
+      should be_able_to(:show_details, other.person.reload)
     end
     
     it "may not modify any public role in groups below" do

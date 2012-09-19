@@ -115,15 +115,6 @@ td p {
   }
 }
 
-
-.controls * {
-  padding-top: 5px;
-}
-
-.controls input {
-  padding-top: 0;
-}
-
 // from bootstrap 2.1.1 << to remove after bootstrap-sass update
 .controls-row [class*="span"] + [class*="span"] {
   @include responsive(mediaTablet) {

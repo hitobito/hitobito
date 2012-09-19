@@ -11,20 +11,18 @@ module Person::Roles
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
-      role_types = Role.types_with_permission(permission)
-      roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+      roles.select {|r| r.class.permissions.include?(permission) }.collect(&:group).uniq
     end
   end
   
-  # Does this person have the given permission(s) in any group
-  def permission?(permissions)
-    groups_with_permission(permissions).present?
+  # Does this person have the given permission in any group
+  def permission?(permission)
+    roles.any? {|r| r.class.permissions.include?(permission) }
   end
   
   # All groups where this person has a role that is visible from above 
   def groups_where_visible_from_above
-    role_types = Role.visible_types
-    roles.select {|r| role_types.include?(r.class) }.collect(&:group).uniq
+    roles.select {|r| r.class.visible_from_above }.collect(&:group).uniq
   end
   
   # All above groups where this person is visible from

@@ -1,3 +1,4 @@
+# encoding: utf-8
 # == Schema Information
 #
 # Table name: people
@@ -46,7 +47,7 @@ class Person < ActiveRecord::Base
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
                   :email, :address, :zip_code, :town, :country, :birthday]
   
-  attr_accessible :first_name, :last_name, :company_name, :nickname, 
+  attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
                   :email, :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information,
                   :password, :password_confirmation, :remember_me
@@ -59,7 +60,7 @@ class Person < ActiveRecord::Base
   
   ### ASSOCIATIONS
   
-  has_many :roles, dependent: :destroy
+  has_many :roles, dependent: :destroy, inverse_of: :person
   has_many :groups, through: :roles
   
   
@@ -67,6 +68,7 @@ class Person < ActiveRecord::Base
   
   validates :email, uniqueness: true, allow_nil: true
   validates :gender, inclusion: %w(m w), allow_nil: true
+  validate :should_have_any_name
  
  
   ### SCOPES
@@ -109,5 +111,20 @@ class Person < ActiveRecord::Base
     end
   end
 
+  private
+  
+  def email_required?
+    permission?(:login)
+  end
+  
+  def password_required?
+    email_required? && password.present? && password_confirmation.present?
+  end
+  
+  def should_have_any_name
+    if first_name.blank? && last_name.blank? && ((company? && company_name.blank?) || (!company? && nickname.blank?))
+      errors.add(:base, "Bitte geben Sie einen Namen für diese Person ein")
+    end
+  end
   
 end

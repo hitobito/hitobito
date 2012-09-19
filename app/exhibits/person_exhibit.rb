@@ -12,9 +12,9 @@ class PersonExhibit < BaseExhibit
     label = to_s
     if company?
       name = "#{first_name} #{last_name}".strip
-      label << "(#{name})" if name.present?
+      label << " (#{name})" if name.present?
     else
-      label << "(#{birthday.year})" if birthday
+      label << " (#{birthday.year})" if birthday
     end
     label
   end

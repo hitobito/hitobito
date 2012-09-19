@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe Ability::WithGroup do
   
-  let(:ability) { Ability::WithGroup.new(role.person, group) }
+  let(:ability) { Ability::WithGroup.new(role.person.reload, group) }
   
   context "create Group" do
     subject { ability }

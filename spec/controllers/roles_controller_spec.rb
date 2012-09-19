@@ -6,8 +6,15 @@ describe RolesController do
   
   let(:group)  { groups(:top_group) }
   let(:person) { Fabricate(:person)}
+    
+  it "GET new sets a role of the correct type" do
+    get :new, {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+    
+    assigns(:role).should be_kind_of(Group::TopGroup::Member)
+    assigns(:role).group_id.should == group.id
+  end
   
-  it "redirects to people after create" do
+  it "POST create redirects to people after create" do
     post :create, group_id: group.id, role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name}
     
     should redirect_to(group_people_path(group))
@@ -17,12 +24,11 @@ describe RolesController do
     role.should be_kind_of(Group::TopGroup::Member)
   end
   
-  it "redirects to person after update" do
+  it "PUT update redirects to person after update" do
     role = Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group)
     put :update, {group_id: group.id, id: role.id, role: {label: 'bla'}}
     
     should redirect_to(group_person_path(group, person))
-    role.reload.label.should == 'bla'
   end
-  
+
 end

@@ -81,24 +81,7 @@ class Person < ActiveRecord::Base
   
   
   ### CLASS METHODS
-  
-  class << self
- 
-    # devise api used when authenticating user
-    def find_first_by_auth_conditions(conditions)
-      select([:id, :first_name, :last_name, :nickname, :email, 
-              :encrypted_password, :remember_created_at, :sign_in_count, 
-              :current_sign_in_at, :current_sign_in_ip, 
-              :last_sign_in_at, :last_sign_in_ip,
-              :reset_password_token, :reset_password_sent_at]).
-      where(email: conditions[:email]).
-      preload_groups.
-      first
-    end
 
-  end
-  
-  
   ### INSTANCE METHODS
   
   def to_s

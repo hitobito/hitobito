@@ -4,6 +4,7 @@ class GroupsController < CrudController
   skip_authorization_check only: :index
 
   decorates :group, :groups
+  
   prepend_before_filter :ability_for_create, only: [:new, :create]
   
   self.ability_types = {with_group: :all}

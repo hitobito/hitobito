@@ -48,8 +48,8 @@ de:
       failure: 'Du konntest nicht Deinem %{kind}-Account angemeldet werden, weil "%{reason}".'
     mailer:
       confirmation_instructions:
-        subject: 'Anleitung zur Bestätigung Deines Accounts'
+        subject: 'Jubla: Anleitung zur Bestätigung Deines Accounts'
       reset_password_instructions:
-        subject: 'Anleitung um Dein Passwort zurückzusetzen'
+        subject: 'Jubla: Passwort ändern'
       unlock_instructions:
         subject: 'Anleitung um Deinen Account freizuschalten'

@@ -7,7 +7,7 @@ module Jubla::Role
   # Common roles not attached to a specific group
   
   class GroupAdmin < ::Role
-    self.permissions = [:group_full]
+    self.permissions = [:group_full, :login]
   end
   
   class External < ::Role
@@ -18,7 +18,7 @@ module Jubla::Role
   
   # J+S Coach
   class Coach < ::Role
-    
+    self.permissions = [:contact_data, :login]
   end
   
   # Common superclass for all leader roles

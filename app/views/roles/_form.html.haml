@@ -6,7 +6,7 @@
     = f.labeled(:person) do
       = f.string_field :person, data: {provide: 'person', id_field: 'role_person_id'}
       = f.help_inline(link_to 'Neue Person erfassen', new_group_person_path(@group, role: {type: entry.type, group_id: entry.group_id}))
-    
-  = f.labeled_input_fields(:label)
+   
+  = f.labeled_input_field(:label, data: {provide: :typeahead, source: entry.klass.available_labels})
 
   = render_extensions :fields, locals: { f: f }

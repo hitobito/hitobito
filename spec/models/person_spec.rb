@@ -196,9 +196,4 @@ describe Person do
     end
   end
 
-  it ".find_first_by_auth_conditions preloads groups" do
-    relation = double("AR relation").as_null_object
-    Person.should_receive(:preload_groups).and_return(relation)
-    Person.find_first_by_auth_conditions({})
-  end
 end

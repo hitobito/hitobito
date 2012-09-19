@@ -29,7 +29,7 @@ class Group::Flock < Group
   end
   
   def to_s
-    [kind, super].join(" ")
+    [kind, super].compact.join(" ")
   end
 
 

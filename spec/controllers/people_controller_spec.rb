@@ -6,6 +6,16 @@ describe PeopleController do
   
   let(:group) { groups(:top_group) }
   
+  it "queries all people" do
+    Fabricate(:person, first_name: 'Pascal')
+    Fabricate(:person, last_name: 'Opassum')
+    Fabricate(:person, last_name: 'Anything')
+    get :query, q: 'pas'
+    
+    response.body.should =~ /Pascal/
+    response.body.should =~ /Opassum/
+  end
+  
   it "creates new person with role" do
     post :create, group_id: group.id, 
                   role: {type: 'Group::TopGroup::Member', group_id: group.id},

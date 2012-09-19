@@ -62,7 +62,7 @@ class ListController < ApplicationController
   # Sets an instance variable with the underscored class name if the given value.
   # If the value is a collection, sets the plural name.
   def set_model_ivar(value)
-    name = if value.respond_to?(:klass) # ActiveRecord::Relation
+    name = if value.is_a?(ActiveRecord::Relation)
       value.klass.name.pluralize
     elsif value.respond_to?(:each) # Array
       value.first.klass.name.pluralize

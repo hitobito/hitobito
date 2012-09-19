@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   
-  include DisplayCase::ExhibitsHelper
+  include DecoratesBeforeRendering
+  alias_method :decorate, :__decorator_for__
 
   class_attribute :ability_types
   
@@ -15,10 +16,17 @@ class ApplicationController < ActionController::Base
   check_authorization :unless => :devise_controller?
   
   
+  
   private
   
   def current_user
     current_person
+  end
+  
+  def current_person
+    @current_person ||= super.tap do |user|
+      Person::PreloadGroups.for(user)
+    end
   end
   
   def current_ability

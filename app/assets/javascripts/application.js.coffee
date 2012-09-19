@@ -27,8 +27,9 @@ setDataType = (xhr) ->
   $(this).data('type', 'html')
   
 findPeople = (query, process) ->
+  return [] if query.length < 3
   typeahead = this
-  return $.get('/people', { q: query }, (data) ->
+  $.get('/people', { q: query }, (data) ->
     typeahead.selection = data
     names = $.map(data, (person) -> person.name)
     return process(names)
@@ -42,8 +43,8 @@ setPersonId = (item) ->
   item
 
 setupPersonTypeahead = (input) ->
-  $(this).attr('autocomplete', "off")
   $(this).typeahead(source: findPeople, updater: setPersonId)
+
 
 $ ->
   $('body').on('ajax:success','[data-replace]', replaceContent)
@@ -51,6 +52,8 @@ $ ->
   $('body').on('ajax:before','[data-replace]', setDataType)
   
   $('[data-provide=person]').each(setupPersonTypeahead)
+  
+  $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
   
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))

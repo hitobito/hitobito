@@ -34,7 +34,7 @@ class Ability::Plain < Ability::Base
       end
     end
     can :show_details, Person do |person|
-      person == user
+      person.id == user.id
     end
     
     if modify_permissions?
@@ -44,7 +44,7 @@ class Ability::Plain < Ability::Base
       end
     end
     can :modify, Person do |person|
-      person == user
+      person.id == user.id
     end
      
   end

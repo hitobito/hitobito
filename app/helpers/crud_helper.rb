@@ -16,9 +16,11 @@ module CrudHelper
   # If a block is given, a custom form may be rendered and attrs is ignored.
   def crud_form(object, *attrs, &block)
     options = attrs.extract_options!
+    cancel_url = options.delete(Array(object).last.new_record? ? :cancel_url_new : :cancel_url_edit)
+    cancel_url ||= polymorphic_path(object, :returning => true)
 
     standard_form(object, options) do |form|
-      content = save_form_buttons(form, object)
+      content = save_form_buttons(form, cancel_url)
       
       content << form.error_messages
       
@@ -32,13 +34,13 @@ module CrudHelper
     end
   end
   
-  def save_form_buttons(form, object)
+  def save_form_buttons(form, cancel_url)
    content_tag(:div, class: 'btn-toolbar') do
       content_tag(:div, class: 'btn-group') do
         form.button(ti(:"button.save"), :class => 'btn btn-primary')
       end + 
       content_tag(:div, class: 'btn-group') do
-        link_to(ti(:"button.cancel"), polymorphic_path(object, :returning => true), :class => 'btn')
+        link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
       end
     end
   end

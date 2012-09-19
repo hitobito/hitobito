@@ -17,13 +17,13 @@ class Ability::WithGroup < Ability::Base
       end
       
       can :update, Group do |g|
-        group == g &&
+        group.id == g.id &&
         can_update_group?(g)
       end
 
       if layers_full.present?
         can :modify_superior, Group do |g|
-          group == g &&
+          group.id == g.id &&
           contains_any?(layers_full, g.layer_groups - [g.layer_group])
         end
       end

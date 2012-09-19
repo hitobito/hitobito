@@ -112,18 +112,16 @@ class GroupSheet < Sheet
   
   attr_reader :group
   
-  def initialize(view, group)
+  def initialize(view, group, url_method = nil)
     super(view)
     @group = group
-  end
-  
-  def title
-    group.to_s
+    @url_method = url_method
+    self.title = group.to_s
   end
   
   def breadcrumbs
-    group.ancestors.collect do |g|
-      link_to g, g
+    group.parent.hierarchy.collect do |g|
+      link_to g, link_url(g)
     end
   end
   
@@ -132,6 +130,14 @@ class GroupSheet < Sheet
   end
       
   def render_title
-    link_to(group.to_s, group, class: 'level active')
+    link_to(group.to_s, link_url(group), class: 'level active')
+  end
+  
+  def link_url(group)
+    if @url_method
+      view.send(@url_method, group)
+    else
+      group
+    end
   end
 end

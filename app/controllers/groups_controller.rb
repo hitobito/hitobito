@@ -30,7 +30,6 @@ class GroupsController < CrudController
     entry.assign_attributes(model_params, as: role)
   end
 
-
   def load_contacts
     @contacts = entry.people.external(false).only_public_data.order_by_name
   end

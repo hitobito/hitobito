@@ -8,8 +8,8 @@ class GroupDecorator < BaseDecorator
     end
   end
 
-  def possible_role_links
-    model.class.roles.map do |type|
+  def possible_role_links(external = false)
+    model.class.roles.select {|r| r.external == external}. map do |type|
       link = h.new_group_role_path(self, role: { type: type.sti_name})
       [type.model_name.human, link]
     end

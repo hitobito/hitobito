@@ -1,3 +1,5 @@
+# encoding:  utf-8
+
 require 'spec_helper'
 
 describe GroupsController, type: :controller do
@@ -22,6 +24,14 @@ describe GroupsController, type: :controller do
     it "#index" do
       get :index
       should redirect_to Group.root
+    end
+    
+    it "#show" do
+      get :show, id: group.id
+      
+      response.body.should =~ /Bearbeiten/
+      response.body.should =~ /Löschen/
+      response.body.should =~ /Gruppe erstellen/
     end
 
     it "#new" do

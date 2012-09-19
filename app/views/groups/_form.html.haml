@@ -1,4 +1,4 @@
-= entry_form do |f|
+= entry_form(cancel_url_new: (entry.parent_id? ? group_path(entry.parent_id) : nil)) do |f|
   - if entry.new_record?
     = f.hidden_field :parent_id
     = f.hidden_field :type

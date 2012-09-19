@@ -3,6 +3,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
   attr_protected nil
 
+
   belongs_to :companion, :class_name => 'CrudTestModel'
   has_and_belongs_to_many :others, :class_name => 'OtherCrudTestModel'
   has_many :mores, :class_name => 'OtherCrudTestModel', :foreign_key => :more_id
@@ -33,6 +34,10 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
 end
 
+class CrudTestModelDecorator < Draper::Base
+  decorates :crud_test_model
+end
+
 class OtherCrudTestModel < ActiveRecord::Base #:nodoc:
 
   attr_protected nil
@@ -54,6 +59,8 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   skip_authorize_resource
   skip_authorization_check
+
+  decorates :crud_test_model, :crud_test_models
 
   before_create :possibly_redirect
   before_create :handle_name

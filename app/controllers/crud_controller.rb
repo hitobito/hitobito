@@ -5,11 +5,11 @@
 # With the help of additional callbacks, it is possible to hook into the action procedures without
 # overriding the entire method.
 class CrudController < ListController
-
+  include DecoratesBeforeRendering
   prepend_before_filter :entry, except: :index
 
   delegate :model_identifier, :to => 'self.class'
-
+  
   # Defines before and after callback hooks for create, update, save and destroy actions.
   define_model_callbacks :create, :update, :save, :destroy
 

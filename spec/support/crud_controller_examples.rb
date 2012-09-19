@@ -79,8 +79,8 @@ shared_examples "crud controller" do |options|
       
           it_should_respond
           it "should have sorted entries" do
-            sorted = entries.sort_by(&(sort_column.to_sym)).collect(&:id)
-            entries.collect(&:id).should == sorted.reverse
+            sorted = entries.sort_by(&(sort_column.to_sym))
+            entries.to_a.should == sorted.reverse
           end
         end
       end

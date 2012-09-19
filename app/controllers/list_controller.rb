@@ -70,7 +70,7 @@ class ListController < ApplicationController
       value.class.base_class.name
     end
 
-    instance_variable_set(:"@#{name.underscore}", exhibit(value))
+    instance_variable_set(:"@#{name.underscore}", value)
   end
 
   class << self

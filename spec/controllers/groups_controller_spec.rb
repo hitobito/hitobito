@@ -42,7 +42,7 @@ describe GroupsController do
       Ability::WithGroup.should_receive(:new).with(person, group) { ability }
       get :new, group: attrs
       assigns(:group).type.should eq 'Group::TopGroup'
-      assigns(:group).class.should eq Group::TopGroup
+      assigns(:group).model.class.should eq Group::TopGroup
       assigns(:group).parent_id.should eq group.id
       assigns(:current_ability).should eq ability
     end

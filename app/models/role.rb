@@ -37,13 +37,11 @@ class Role < ActiveRecord::Base
   
   ### CALLBACKS
   
+  before_save :normalize_label
   after_create :set_contact_data_visible
   after_create :send_password_if_first_login_role
   after_destroy :reset_contact_data_visible
 
-  # TODO create person login if this role type has login permission
-  
-    
   
   ### CLASS METHODS
   
@@ -54,6 +52,14 @@ class Role < ActiveRecord::Base
       [:default, :superior].any? do |role|
         accessible_attributes(role).include?(attr)
       end
+    end
+    
+    def available_labels
+      @available_labels ||= order(:label).uniq.pluck(:label)
+    end
+    
+    def sweep_available_labels
+      @available_labels = nil
     end
   end
   
@@ -66,6 +72,17 @@ class Role < ActiveRecord::Base
   
   
   private
+  
+  # If a case-insensitive same label already exists, use this one
+  def normalize_label
+    return if label.blank?
+    fresh = self.class.available_labels.none? do |l|
+      equal = l.casecmp(label) == 0
+      self.label = l if equal
+      equal
+    end
+    self.class.sweep_available_labels if fresh
+  end
   
   # If this role has contact_data permissions, set the flag on the person
   def set_contact_data_visible

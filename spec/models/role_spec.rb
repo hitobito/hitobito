@@ -66,6 +66,22 @@ describe Role do
       end
     end
     
+    context "send notifications on first login role" do
+      it "should send instructions to person" do
+        subject.person.should_receive(:send_reset_password_instructions)
+        subject.type = "Group::BottomLayer::Leader"
+        subject.save.should be_true
+      end
+      
+      it "should not send instructions to person with login" do
+        Fabricate(Group::BottomLayer::Member.name.to_s, person: subject.person, group: subject.group)
+        subject.person.update_attribute(:encrypted_password, 'asdfasd')
+        subject.person.should_receive(:send_reset_password_instructions).never
+        subject.type = "Group::BottomLayer::Leader"
+        subject.save.should be_true
+      end
+    end
+    
     context "contact data callback" do
       
       it "sets contact data flag on person" do
@@ -102,6 +118,30 @@ describe Role do
         
         person.reload.should be_contact_data_visible
       end
+    end
+  end
+  
+  describe ".normalize_label" do
+    it "reuses existing label" do
+      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO', group: groups(:bottom_layer_one))
+      a2.label.should == 'Foo'
+    end
+  end
+  
+  describe "#available_labels" do
+    subject { Group::BottomLayer::Leader.available_labels }
+    
+    it "includes labels from database" do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'FOo', group: groups(:bottom_layer_one))
+      should == ['Foo']
+    end
+        
+    it "includes labels from this type only" do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', group: groups(:bottom_layer_one))
+      should == ['Foo']
     end
   end
 end

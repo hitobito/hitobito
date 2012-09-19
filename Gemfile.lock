@@ -107,6 +107,8 @@ GEM
     debugger-linecache (1.1.2)
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.1.3)
+    decorates_before_rendering (0.0.1.patched)
+      activesupport (>= 3.2.6)
     devise (2.1.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -114,6 +116,9 @@ GEM
       warden (~> 1.2.1)
     diff-lcs (1.1.3)
     display_case (0.0.4)
+    draper (0.17.0)
+      actionpack (~> 3.2)
+      activesupport (~> 3.2)
     erubis (2.7.0)
     eventmachine (1.0.0)
     execjs (1.4.0)
@@ -396,8 +401,10 @@ DEPENDENCIES
   compass-rails (~> 1.0.2)
   database_cleaner
   debugger
+  decorates_before_rendering (= 0.0.1.patched)
   devise
   display_case
+  draper
   fabrication
   faker
   guard-rspec

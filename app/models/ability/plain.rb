@@ -9,6 +9,16 @@ class Ability::Plain < Ability::Base
     # Creating and modifiying groups is only handled in Ability::WithGroup
     
     
+    ### ROLES
+    
+    
+    if modify_permissions?
+      can :update, Role do |role|
+        can_modify_role?(role)
+      end
+    end
+    
+    
     ### PEOPLE
     
     can :query, Person
@@ -79,6 +89,20 @@ class Ability::Plain < Ability::Base
       
       # user has layer_full, person below layer and visible_from_above
       contains_any?(layers_full, person.above_groups_visible_from)
+    ))
+  end
+  
+  def can_modify_role?(role)
+    # user has group_full, role in same group
+    groups_group_full.include?(role.group) ||
+    
+    (layers_full.present? && (
+      # user has layer_full, role in same layer
+      layers_full.include?(role.group.layer_group) ||
+      
+      # user has layer_full, role below layer and visible_from_above
+      (role.class.visible_from_above && 
+       contains_any?(layers_full, role.group.hierarchy))
     ))
   end
   

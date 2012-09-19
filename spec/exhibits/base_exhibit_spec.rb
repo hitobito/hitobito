@@ -1,3 +1,5 @@
+require 'display_case'
+require 'forwardable'
 require_relative '../../app/exhibits/base_exhibit.rb'
 
 describe BaseExhibit do
@@ -11,10 +13,6 @@ describe BaseExhibit do
     subject.content_tag
   end
 
-  describe "#inspect calls inspect on model" do
-    let(:model) { stub(inspect: 'foo') }
-    its(:inspect) { should eq "Exhibit[foo]"}
-  end
 
   describe "#kind_of?" do
     class Animal;  end

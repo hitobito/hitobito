@@ -68,9 +68,7 @@ class Ability::WithGroup < Ability::Base
     end
     
     if modify_permissions? && can_update_group?(group)
-      can :create, Role do |role|
-        role.group == group
-      end 
+      can :create, Role, group_id: group.id
     end
     
     

@@ -1,2 +1,2 @@
 = render 'crud/actions_show'
-= render 'groups/select_new_group'
+= dropdown_button('Neue Gruppe erstellen', entry.possible_children_links, :plus) if can?(:new, Group)

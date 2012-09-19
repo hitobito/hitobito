@@ -69,7 +69,8 @@ class ListController < ApplicationController
     else
       value.class.base_class.name
     end
-    instance_variable_set(:"@#{name.underscore}", value)
+
+    instance_variable_set(:"@#{name.underscore}", exhibit(value))
   end
 
   class << self
@@ -151,20 +152,20 @@ class ListController < ApplicationController
 
     # Enhance the list entries with an optional search criteria
     def list_entries_with_search
-      list_entries_without_search.where(search_condition)
+      list_entries_without_search.where(search_condition(*search_columns))
     end
 
     # Compose the search condition with a basic SQL OR query.
-    def search_condition
-      if search_support? && params[:q].present?
+    def search_condition(*columns)
+      if columns.present? && params[:q].present?
         terms = params[:q].split(/\s+/).collect { |t| "%#{t}%" }
-        clause = search_columns.collect do |f|
+        clause = columns.collect do |f|
           col = f.to_s.include?('.') ? f : "#{model_class.table_name}.#{f}"
           "#{col} LIKE ?"
         end.join(" OR ")
         clause = terms.collect {|t| "(#{clause})" }.join(" AND ")
 
-         ["(#{clause})"] + terms.collect {|t| [t] * search_columns.size }.flatten
+         ["(#{clause})"] + terms.collect {|t| [t] * columns.size }.flatten
       end
     end
 
@@ -297,6 +298,7 @@ class ListController < ApplicationController
     # to the including controller.
     def self.included(controller)
       controller.class_attribute :nesting
+      controller.class_attribute :nesting_optional
 
       controller.helper_method :parent, :parents
 
@@ -308,14 +310,15 @@ class ListController < ApplicationController
 
     # Returns the direct parent ActiveRecord of the current request, if any.
     def parent
-      parents.select {|p| p.is_a?(ActiveRecord::Base) }.last
+      parents.select {|p| p.kind_of?(ActiveRecord::Base) }.last
     end
 
     # Returns the parent entries of the current request, if any.
     # These are ActiveRecords or namespace symbols, corresponding
     # to the defined nesting attribute.
     def parents
-      @parents ||= Array(nesting).collect do |p|
+      nests = Array(nesting)
+      @parents ||= nests.collect do |p|
         if p.is_a?(Class) && p < ActiveRecord::Base
           parent_entry(p)
         else
@@ -327,7 +330,12 @@ class ListController < ApplicationController
     # Loads the parent entry for the given ActiveRecord class.
     # By default, performs a find with the class_name_id param.
     def parent_entry(clazz)
-      set_model_ivar(clazz.find(params["#{clazz.name.underscore}_id"]))
+      id = params["#{clazz.name.underscore}_id"]
+      if nesting_optional && id.blank?
+        nil
+      else
+        set_model_ivar(clazz.find(id))
+      end
     end
 
     # An array of objects used in url_for and related functions.

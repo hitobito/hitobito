@@ -17,6 +17,8 @@ Jubla::Application.routes.draw do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
+  
+  get '/people' => 'people#query'
 
 
   get 'static/:action', :controller => 'static'

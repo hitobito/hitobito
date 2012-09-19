@@ -15,17 +15,42 @@
 #= require jquery_nested_form
 #= require_tree .
 #
+
+
+replaceContent = (e, data, status, xhr) ->
+  replace = $(this).data('replace')
+  el = if replace is true then $(this).closest('form') else $("##{replace}")
+  console.warn "found no element to replace" if el.size() is 0
+  el.html(data)
+
+setDataType = (xhr) ->
+  $(this).data('type', 'html')
+  
+findPeople = (query, process) ->
+  typeahead = this
+  return $.get('/people', { q: query }, (data) ->
+    typeahead.selection = data
+    names = $.map(data, (person) -> person.name)
+    return process(names)
+  )
+
+setPersonId = (item) ->
+  typeahead = this
+  person = $.grep(typeahead.selection, (person) -> person.name == item)[0]
+  id_input = $('#' + typeahead.$element.data('id-field'))
+  id_input.val(person.id)
+  item
+
+setupPersonTypeahead = (input) ->
+  $(this).attr('autocomplete', "off")
+  $(this).typeahead(source: findPeople, updater: setPersonId)
+
 $ ->
-  replaceContent = (e, data, status, xhr) ->
-    replace = $(this).data('replace')
-    el = if replace is true then $(this).closest('form') else $("##{replace}")
-    console.warn "found no element to replace" if el.size() is 0
-    el.html(data)
-
-  setDataType = (xhr) ->
-    $(this).data('type', 'html')
   $('body').on('ajax:success','[data-replace]', replaceContent)
+  
   $('body').on('ajax:before','[data-replace]', setDataType)
-
+  
+  $('[data-provide=person]').each(setupPersonTypeahead)
+  
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))

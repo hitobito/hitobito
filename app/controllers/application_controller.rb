@@ -1,19 +1,22 @@
 class ApplicationController < ActionController::Base
+  
+  include DisplayCase::ExhibitsHelper
+
+  class_attribute :ability_types
+  
   protect_from_forgery
   helper_method :current_user
+  
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => "Sie sind nicht berechtigt, diese Seite anzuzeigen"
+  end
   
   before_filter :authenticate_person!
   check_authorization :unless => :devise_controller?
   
-  class_attribute :ability_types
-
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => "Sie sind nicht berechtigt, diese Seite anzuzeigen"
-  end
-
-
   
   private
+  
   def current_user
     current_person
   end

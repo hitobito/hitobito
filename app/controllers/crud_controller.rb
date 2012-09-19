@@ -35,6 +35,7 @@ class CrudController < ListController
   #   GET /entries/1
   #   GET /entries/1.json
   def show(&block)
+    require_dependency "decorates_before_rendering"
     respond_with(entry, &block)
   end
 

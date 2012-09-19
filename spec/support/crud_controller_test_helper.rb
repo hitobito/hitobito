@@ -47,8 +47,8 @@ module CrudControllerTestHelper
       contexts = Array(contexts).flatten
       skips = Array(options[:skip])
       skips = [skips] if skips.blank? || !skips.first.is_a?(Array)
-      
-      skips.include?(contexts)
+      # puts "#{skips}, #{contexts} == #{skips.include?(contexts)} "
+      skips.any? { |skip| skip == contexts.take(skip.size) }
     end
     
     # Test the response status, default 200.
@@ -87,10 +87,12 @@ module CrudControllerTestHelper
     def it_should_set_attrs
       it "should set params as entry attributes" do
         actual = {}
-        test_entry_attrs.keys.each do |key|
+        action_specific_attr_name = "#{example.metadata[:action]}_entry_attrs".to_sym
+        attrs = respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
+        attrs.keys.each do |key|
           actual[key] = entry.attributes[key.to_s]
         end
-        actual.should == test_entry_attrs
+        actual.should == attrs
       end
     end
     

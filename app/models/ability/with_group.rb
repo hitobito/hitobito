@@ -71,7 +71,6 @@ class Ability::WithGroup < Ability::Base
       can :create, Role, group_id: group.id
     end
     
-    
   end
   
   private

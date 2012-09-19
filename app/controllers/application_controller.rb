@@ -23,6 +23,12 @@ class ApplicationController < ActionController::Base
     current_person
   end
   
+  def current_person
+    @current_person ||= super.tap do |user|
+      Person::PreloadGroups.for(user)
+    end
+  end
+  
   def current_ability
     @current_ability ||= create_ability
   end

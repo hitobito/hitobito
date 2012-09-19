@@ -11,7 +11,7 @@ module Person::Roles
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
-      roles.select {|r| r.class.permissions.include?(permission) }.collect(&:group).uniq
+      roles.to_a.select {|r| r.class.permissions.include?(permission) }.collect(&:group).uniq
     end
   end
   

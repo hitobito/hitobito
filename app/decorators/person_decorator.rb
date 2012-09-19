@@ -7,11 +7,12 @@ class PersonDecorator < BaseDecorator
   
   def full_label
     label = to_s
+    label << ", #{town}" if town?
     if company?
       name = "#{first_name} #{last_name}".strip
-      label << "(#{name})" if name.present?
+      label << " (#{name})" if name.present?
     else
-      label << "(#{birthday.year})" if birthday
+      label << " (#{birthday.year})" if birthday
     end
     label
   end

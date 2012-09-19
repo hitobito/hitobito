@@ -1,5 +1,4 @@
 class GroupExhibit < BaseExhibit
-  #def_delegators :context, :new_group_path
 
   def self.applicable_to?(object)
     klass = object.class

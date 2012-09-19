@@ -8,8 +8,8 @@ describe GroupsController do
     render_views
     it "renders ok" do
       sign_in(leader)
-      get :show, id: flock.id
-      puts response.body
+      get :edit, id: flock.id
+      response.body.should =~ /Jubla Versicherung/m
     end
     
   end

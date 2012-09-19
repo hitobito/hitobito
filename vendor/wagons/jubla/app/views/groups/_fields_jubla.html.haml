@@ -1,7 +1,7 @@
 = field_set_tag do
   - entry.modifiable_attributes(:kind).each do |attr|
     = f.labeled(attr) do
-      - entry.class::AVAILABLE_KINDS.each do |kind|
+      - entry.klass::AVAILABLE_KINDS.each do |kind|
         = f.label(:"kind_#{kind.downcase}", class: 'radio inline') do
           = f.radio_button(:kind, kind) 
           = kind

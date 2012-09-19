@@ -22,6 +22,10 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   def chatty
     remarks.size
   end
+  
+  def klass
+    self.class
+  end
 
   private
 

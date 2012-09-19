@@ -11,7 +11,6 @@ describe GroupsController, type: :controller do
   let(:person) { Fabricate(Group::TopLayer::Member.name.to_sym, person: person, group: group).person } 
 
   let(:test_entry) { group } 
-  let(:test_entry_attrs) { create_entry_attrs }
   let(:create_entry_attrs) { {name: 'foo', type: 'Group::TopGroup', parent_id: group.id } }
   let(:update_entry_attrs) { {name: 'bar'} }
 

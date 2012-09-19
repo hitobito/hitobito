@@ -25,12 +25,13 @@ shared_examples "crud controller" do |options|
   subject { response }
   
   let(:person) { people(:top_leader) }
-  let(:model_class)      { controller.send(:model_class) }
-  let(:model_identifier) { controller.model_identifier }
-  let(:test_params)      { scope_params }
-  let(:entry)            { assigns(model_identifier) }
-  let(:entries)          { assigns(model_identifier.to_s.pluralize.to_sym) }
-  let(:sort_column)      { model_class.column_names.first }
+  let(:model_class)        { controller.send(:model_class) }
+  let(:model_identifier)   { controller.model_identifier }
+  let(:test_params)        { scope_params }
+  let(:entry)              { assigns(model_identifier) }
+  let(:entries)            { assigns(model_identifier.to_s.pluralize.to_sym) }
+  let(:sort_column)        { model_class.column_names.first }
+  
   let(:search_value) do
     field = controller.search_columns.first
     val = test_entry[field].to_s
@@ -127,13 +128,13 @@ shared_examples "crud controller" do |options|
     end
     
     context "with params", :unless => skip?(options, 'new', 'with params') do
-      let(:params) { { model_identifier => test_entry_attrs } }
+      let(:params) { { model_identifier => test_attrs } }
       it_should_set_attrs
     end
   end
   
   describe_action :post, :create, :unless => skip?(options, %w(create)) do
-    let(:params) { { model_identifier => create_entry_attrs || test_entry_attrs } }
+    let(:params) { { model_identifier => test_attrs } }
     
     it "should add entry to database", :perform_request => false do
       expect { perform_request }.to change { model_class.count }.by(1)
@@ -179,7 +180,7 @@ shared_examples "crud controller" do |options|
   end
   
   describe_action :put, :update, :id => true, :unless => skip?(options, %w(update)) do
-    let(:params) { {model_identifier => update_entry_attrs || test_entry_attrs} }
+    let(:params) { {model_identifier => test_attrs} }
     
     it "should update entry in database", :perform_request => false do
       expect { perform_request }.to change { model_class.count }.by(0)

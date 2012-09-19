@@ -133,7 +133,7 @@ shared_examples "crud controller" do |options|
   end
   
   describe_action :post, :create, :unless => skip?(options, %w(create)) do
-    let(:params) { { model_identifier => test_entry_attrs } }
+    let(:params) { { model_identifier => create_entry_attrs || test_entry_attrs } }
     
     it "should add entry to database", :perform_request => false do
       expect { perform_request }.to change { model_class.count }.by(1)
@@ -179,7 +179,7 @@ shared_examples "crud controller" do |options|
   end
   
   describe_action :put, :update, :id => true, :unless => skip?(options, %w(update)) do
-    let(:params) { {model_identifier => test_entry_attrs} }
+    let(:params) { {model_identifier => update_entry_attrs || test_entry_attrs} }
     
     it "should update entry in database", :perform_request => false do
       expect { perform_request }.to change { model_class.count }.by(0)

@@ -5,4 +5,4 @@
   = f.labeled(:current_password, 'Altes Passwort') { f.input_field(:current_password) } 
   = f.labeled(:password, 'Neues Passwort') { f.input_field(:password) } 
   = f.labeled(:password_confirmation, 'Neues Passwort bestätigen') { f.input_field(:password_confirmation) } 
-  = f.indented f.submit('Passwort ändern')
+  = f.indented submit_button(f, 'Passwort ändern')

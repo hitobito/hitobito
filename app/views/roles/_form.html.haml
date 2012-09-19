@@ -1,6 +1,6 @@
 - parent_sheet(GroupSheet.new(self, @group, :group_people_path))
 
-= entry_form do |f|
+= entry_form(buttons_bottom: false) do |f|
   - if entry.new_record?
     = f.hidden_field :group_id
     = f.hidden_field :type

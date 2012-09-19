@@ -6,6 +6,7 @@ module CrudHelper
   # Render a generic form for the current entry
   def entry_form(*attrs, &block)
     options = attrs.extract_options!
+    options[:buttons_bottom] = true unless options.has_key?(:buttons_bottom)
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     crud_form(path_args(entry), *attrs, options, &block)
   end
@@ -16,6 +17,8 @@ module CrudHelper
   # If a block is given, a custom form may be rendered and attrs is ignored.
   def crud_form(object, *attrs, &block)
     options = attrs.extract_options!
+    
+    buttons_bottom = options.delete(:buttons_bottom)
     cancel_url = options.delete(Array(object).last.new_record? ? :cancel_url_new : :cancel_url_edit)
     cancel_url ||= polymorphic_path(object, :returning => true)
 
@@ -30,18 +33,24 @@ module CrudHelper
         form.labeled_input_fields(*attrs)
       end
       
+      content <<  save_form_buttons(form, cancel_url) if buttons_bottom
+      
       content.html_safe
     end
   end
   
   def save_form_buttons(form, cancel_url)
    content_tag(:div, class: 'btn-toolbar') do
-      content_tag(:div, class: 'btn-group') do
-        form.button(ti(:"button.save"), :class => 'btn btn-primary')
-      end + 
+      submit_button(form, ti(:"button.save")) +
       content_tag(:div, class: 'btn-group') do
         link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
       end
+    end
+  end
+  
+  def submit_button(form, label)
+    content_tag(:div, class: 'btn-group') do
+      form.button(label, :class => 'btn btn-primary')
     end
   end
 

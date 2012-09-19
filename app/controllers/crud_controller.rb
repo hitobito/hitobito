@@ -5,8 +5,8 @@
 # With the help of additional callbacks, it is possible to hook into the action procedures without
 # overriding the entire method.
 class CrudController < ListController
-  include DecoratesBeforeRendering
-  prepend_before_filter :entry, except: :index
+
+  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy]
 
   delegate :model_identifier, :to => 'self.class'
   

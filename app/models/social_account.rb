@@ -21,7 +21,7 @@ class SocialAccount < ActiveRecord::Base
   class << self
     def available_labels
       @available_labels ||= Settings.social_account.predefined_labels |
-      order(:label).uniq.pluck(:label)
+      order(:label).uniq.pluck(:label).compact
     end
     
     def sweep_available_labels
@@ -37,6 +37,8 @@ class SocialAccount < ActiveRecord::Base
   
   # If a case-insensitive same label already exists, use this one
   def normalize_labels
+    return if label.blank?
+    
     fresh = self.class.available_labels.none? do |l|
       equal = l.casecmp(label) == 0
       self.label = l if equal

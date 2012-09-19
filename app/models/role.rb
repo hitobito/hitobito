@@ -55,7 +55,7 @@ class Role < ActiveRecord::Base
     end
     
     def available_labels
-      @available_labels ||= order(:label).uniq.pluck(:label)
+      @available_labels ||= order(:label).uniq.pluck(:label).compact
     end
     
     def sweep_available_labels

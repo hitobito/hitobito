@@ -2,11 +2,11 @@
   = f.labeled_input_field attr
   
 - entry.used_attributes(:honorary).each do |attr|
-    = f.labeled(attr, "&nbsp;".html_safe) do
-      = f.label(:honorary_true, class: 'radio inline') do
-        = f.radio_button(:honorary, true) 
-        = 'Ehrenamt'
+  = f.labeled(attr, "&nbsp;".html_safe) do
+    = f.label(:honorary_true, class: 'radio inline') do
+      = f.radio_button(:honorary, true) 
+      = 'Ehrenamt'
 
-      = f.label(:honorary_false, class: 'radio inline') do
-        = f.radio_button(:honorary, false) 
-        = 'Vollamt'
+    = f.label(:honorary_false, class: 'radio inline') do
+      = f.radio_button(:honorary, false) 
+      = 'Vollamt'

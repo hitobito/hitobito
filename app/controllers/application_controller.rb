@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   
-  include DisplayCase::ExhibitsHelper
+  include DecoratesBeforeRendering
+  alias_method :decorate, :__decorator_for__
 
   class_attribute :ability_types
   
@@ -13,6 +14,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :authenticate_person!
   check_authorization :unless => :devise_controller?
+  
   
   
   private

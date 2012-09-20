@@ -1,23 +1,7 @@
 #main.row-fluid
   %article.span7
-    %section#entry_contactable
-      - if entry.email.present?
-        %email
-          %p
-            =mail_to entry.email
-      - if entry.address.present? || entry.zip_code.present? || entry.town.present? || entry.country.present?
-        %address
-          =simple_format "#{entry.address}<br/>#{entry.zip_code} #{entry.town}<br/>#{entry.country}"
-      - entry.phone_numbers.each do |n|
-        %phone_numbers
-          %p
-            =n.number 
-            = muted n.label
-      - entry.social_accounts.each do |s|
-        %social_accounts
-          %p
-          - if s.label == 'E-Mail'
-            =mail_to s.name
-          - else
-            =s.name
-          = muted s.label
+    %section#contactable
+      =entry.prim_email
+      =entry.complete_address
+      =entry.all_phone_numbers
+      =entry.all_social_accounts

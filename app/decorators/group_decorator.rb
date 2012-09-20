@@ -1,6 +1,8 @@
 class GroupDecorator < BaseDecorator
   decorates :group
 
+  include ContactableDecorator
+
   def possible_children_links
     model.class.possible_children.map do |type|
       link = h.new_group_path(group: { parent_id: self.id, type: type.sti_name})

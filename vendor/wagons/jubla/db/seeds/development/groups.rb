@@ -4,16 +4,49 @@ ch = Group.roots.first
 states = Group::State.seed(:name, :parent_id,
   {name: 'Kanton Bern',
    short_name: 'BE',
-   parent_id: ch.id },
+   address: "Klostergasse 3",
+   zip_code: "3333",
+   town: "Bern",
+   country: "Svizzera",
+   email: "bern@be.ch",
+   parent_id: ch.id},
 
   {name: 'Kanton Zürich',
    short_name: 'ZH',
+   address: "Tellgasse 3",
+   zip_code: "8888",
+   town: "Zürich",
+   country: "Svizzera",
+   email: "zuerich@zh.ch",
    parent_id: ch.id },
    
   {name: 'Kanton Nordost',
    short_name: 'NO',
+   address: "Nordostgasse 3",
+   zip_code: "9000",
+   town: "Nordosthausen",
+   country: "Svizzera",
+   email: "nordost@nordost.ch",
    parent_id: ch.id },
 )
+
+states.each do |s|
+  SocialAccount.seed(:contactable_id, :contactable_type, :label,
+    { contactable_id:   s.id,
+      contactable_type: 'Group',
+      name:             'info@group.ch',
+      label:            'E-Mail',
+      public:           true }
+  )
+
+  PhoneNumber.seed(:contactable_id, :contactable_type, :label,
+    { contactable_id:   s.id,
+      contactable_type: 'Group',
+      number:           Faker::PhoneNumber.phone_number,
+      label:            "Auskunft",
+      public:           true },
+  )
+end
 
 Group::ProfessionalGroup.seed(:name, :parent_id,
   {name: 'FG Sicherheit',
@@ -79,6 +112,24 @@ flocks = Group::Flock.seed(:name, :parent_id,
   {name: 'Ausserroden',
    parent_id: states[2].id },
 )
+
+flocks.each do |s|
+  SocialAccount.seed(:contactable_id, :contactable_type, :label,
+    { contactable_id:   s.id,
+      contactable_type: 'Group',
+      name:             'info@flocks.ch',
+      label:            'E-Mail',
+      public:           true }
+  )
+
+  PhoneNumber.seed(:contactable_id, :contactable_type, :label,
+    { contactable_id:   s.id,
+      contactable_type: 'Group',
+      number:           Faker::PhoneNumber.phone_number,
+      label:            "Auskunft",
+      public:           true },
+  )
+end
 
 Group::ChildGroup.seed(:name, :parent_id,
   {name: 'Asterix',

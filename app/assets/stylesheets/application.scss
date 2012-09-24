@@ -144,7 +144,6 @@ fieldset {
 
 select,
 textarea,
-label.checkbox,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -171,9 +170,26 @@ input[type="color"],
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+
+
+label.checkbox,
+label.radio {
+  display: inline-block;
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: $gray;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
 textarea {
   height: auto;
 }
+
+
 select[class*="span"] {
   min-height: 30px;
   height: 30px;

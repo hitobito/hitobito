@@ -2,7 +2,10 @@
   - if entry.new_record?
     = f.hidden_field :parent_id
     = f.hidden_field :type
+    
   = field_set_tag do
     = f.labeled_input_fields(:name, :short_name, :contact_id)
+    
   = render 'contactable/fields', f: f 
+  
   = render_extensions :fields, locals: { f: f }

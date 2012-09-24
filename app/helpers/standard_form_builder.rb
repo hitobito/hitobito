@@ -112,6 +112,24 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     datetime_select(attr, {}, html_options)
   end
 
+  def inline_radio_button(attr, value, caption, html_options = {})
+    label("#{attr}_#{value.to_s.downcase}", class: 'radio inline') do
+      radio_button(attr, value, html_options) + ' ' + 
+      caption
+    end
+  end
+
+  def inline_check_box(attr, value, caption, html_options = {})
+    name = "#{@object.class.model_name.param_key}[#{attr}][]"
+    id = "#{@object.class.model_name.param_key}_#{attr}_#{value.to_s.downcase}"
+    html_options[:id] = id
+    label(id, class: 'checkbox inline') do
+      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) + 
+      ' ' + 
+      caption
+    end
+  end
+  
   # Render a select element for a :belongs_to association defined by attr.
   # Use additional html_options for the select element.
   # To pass a custom element list, specify the list with the :list key or

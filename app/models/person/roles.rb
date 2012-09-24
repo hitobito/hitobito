@@ -36,7 +36,8 @@ module Person::Roles
     # if group is given, only visible roles from this group are considered.
     def visible_from_above(group = nil)
       role_types = group ? group.role_types.select(&:visible_from_above) : Role.visible_types
-      where(roles: {type: role_types.collect(&:sti_name)})
+      # use string query to only get these roles (hash query would be merged).
+      where("roles.type IN (?)", role_types.collect(&:sti_name))
     end
     
     # scope listing all people with a role in the given layer.

@@ -19,11 +19,12 @@ module CrudHelper
     options = attrs.extract_options!
     
     buttons_bottom = options.delete(:buttons_bottom)
+    submit_label = options.delete(:submit_label) || ti(:"button.save")
     cancel_url = options.delete(Array(object).last.new_record? ? :cancel_url_new : :cancel_url_edit)
     cancel_url ||= polymorphic_path(object, :returning => true)
 
     standard_form(object, options) do |form|
-      content = save_form_buttons(form, cancel_url)
+      content = save_form_buttons(form, submit_label, cancel_url)
       
       content << form.error_messages
       
@@ -33,15 +34,15 @@ module CrudHelper
         form.labeled_input_fields(*attrs)
       end
       
-      content <<  save_form_buttons(form, cancel_url) if buttons_bottom
+      content <<  save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
       
       content.html_safe
     end
   end
   
-  def save_form_buttons(form, cancel_url)
+  def save_form_buttons(form, submit_label, cancel_url)
    content_tag(:div, class: 'btn-toolbar') do
-      submit_button(form, ti(:"button.save")) +
+      submit_button(form, submit_label) +
       content_tag(:div, class: 'btn-group') do
         link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
       end

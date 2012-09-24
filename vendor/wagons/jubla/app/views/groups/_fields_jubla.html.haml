@@ -2,19 +2,12 @@
   - entry.modifiable_attributes(:kind).each do |attr|
     = f.labeled(attr) do
       - entry.klass::AVAILABLE_KINDS.each do |kind|
-        = f.label(:"kind_#{kind.downcase}", class: 'radio inline') do
-          = f.radio_button(:kind, kind) 
-          = kind
+        = f.inline_radio_button(:kind, kind, kind)
 
   - entry.modifiable_attributes(:unsexed).each do |attr|
     = f.labeled(attr, "&nbsp;".html_safe) do
-      = f.label(:unsexed_true, class: 'radio inline') do
-        = f.radio_button(:unsexed, true) 
-        = 'Gemischt'
-
-      = f.label(:unsexed_false, class: 'radio inline') do
-        = f.radio_button(:unsexed, false) 
-        = 'Geschlechtergetrennt'
+      = f.inline_radio_button(:unsexed, true, 'Gemischt')
+      = f.inline_radio_button(:unsexed, false, 'Geschlechtergetrennt')
 
   - entry.modifiable_attributes(:parish, :founding_year, :bank_account, :jubla_insurance, :jubla_full_coverage, :clairongard).each do |attr|
     = f.labeled_input_field attr

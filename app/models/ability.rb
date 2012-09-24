@@ -40,7 +40,6 @@ class Ability
        layers_read.include?(group.layer_group))
     end
     
-    
     ### ROLES
     
     if modify_permissions?
@@ -87,6 +86,10 @@ class Ability
       person.id == user.id
     end
      
+     
+    ### PEOPLE_FILTERS
+    
+    can :manage, PeopleFilter
   end
   
   private
@@ -104,12 +107,12 @@ class Ability
   end
   
   def can_index_people?(group)
+    user.contact_data_visible? ||
     user.groups.include?(group) ||
     layers_read.present? && (
       layers_read.include?(group.layer_group) ||
       contains_any?(layers_read, group.layer_groups)
-    ) ||
-    user.contact_data_visible?
+    )
   end
   
   def can_show_person?(person)

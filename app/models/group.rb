@@ -61,6 +61,8 @@ class Group < ActiveRecord::Base
   has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
   
+  has_many :people_filters, dependent: :destroy
+  
   belongs_to :contact, class_name: 'Person'
   
   
@@ -111,6 +113,10 @@ class Group < ActiveRecord::Base
   # The layer hierarchy from top to bottom of this group.
   def layer_groups
     hierarchy.select { |g| g.class.layer }
+  end
+  
+  def all_people_filters
+    PeopleFilter.where("group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)", id, type)
   end
   
   def to_s

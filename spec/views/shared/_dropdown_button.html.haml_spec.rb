@@ -13,7 +13,9 @@ describe "shared/_dropdown_button.html.haml" do
   it "renders dropdown" do
     render partial: 'shared/dropdown_button', 
            locals: {label: 'Neue Gruppe erstellen', 
-                    links: [['Group::TopGroup', '#'], ['Group::BottomLayer', '#']]}
+                    links: [['Group::TopGroup', '#'], ['Group::BottomLayer', '#']],
+                    icon_name: nil,
+                    main_link: nil}
                     
     should have_content "Neue Gruppe erstellen"
     should have_selector 'ul.dropdown-menu'

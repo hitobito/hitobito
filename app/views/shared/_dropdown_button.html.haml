@@ -1,9 +1,16 @@
 .btn-group
+  - if main_link
+    = action_button(label, main_link, defined?(icon_name) ? icon_name : nil, in_button_group: true)
+    
   %a.dropdown-toggle.btn{'data-toggle' => 'dropdown', href: '#'}
-    = icon(icon_name) if defined?(icon_name) 
-    = label
+    - unless main_link
+      = icon(icon_name) if icon_name
+      = label
     %b.caret
+      
   %ul.dropdown-menu{role: "menu"}
     - links.each do |link|
-      %li
-        = link_to *link
+      - if link.present?
+        %li= link_to *link
+      - else
+        %li.divider

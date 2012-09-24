@@ -3,16 +3,18 @@ Jubla::Application.routes.draw do
   root :to => 'dashboard#index'
 
   resources :groups do
-    get :fields, on: :collection
     resources :people do
       collection do
         get :external
       end
     end
+    
     resources :roles
+    
+    resources :people_filters, only: [:new, :create, :destroy]
   end
   
-  devise_for :people, :skip => [:registrations], :path => "users"
+  devise_for :people, skip: [:registrations], path: "users"
   as :person do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
@@ -21,7 +23,7 @@ Jubla::Application.routes.draw do
   get '/people' => 'people#query'
 
 
-  get 'static/:action', :controller => 'static'
+  get 'static/:action', controller: 'static'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

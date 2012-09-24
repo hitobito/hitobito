@@ -2,7 +2,7 @@ module LayoutHelper
   
   # render a single button
   def action_button(label, url, icon = nil, options = {})
-    if @in_button_group
+    if @in_button_group || options[:in_button_group]
       button(label, url, icon, options)
     else
       button_group { button(label, url, icon, options) }
@@ -16,13 +16,13 @@ module LayoutHelper
     html
   end
   
-  def dropdown_button(label, links, icon_name = nil)
-    if links.size == 1
+  def dropdown_button(label, links, icon_name = nil, main_link = nil)
+    if main_link.nil? && links.size == 1
       url = links.first[1]
       options = links.first[2..-1].presence || {}
       action_button(label, url, icon_name, options)
     else
-      render('shared/dropdown_button', label: label, links: links, icon_name: icon_name)
+      render('shared/dropdown_button', label: label, links: links, icon_name: icon_name, main_link: main_link)
     end
   end
   
@@ -84,7 +84,7 @@ module LayoutHelper
     link_to(url, options) do
       html = [label]
       html.unshift icon(icon_name) if icon_name
-      safe_join html, ' '
+      safe_join(html, ' ')
     end
   end
 

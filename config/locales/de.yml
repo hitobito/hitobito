@@ -8,18 +8,21 @@ de:
         type_not_allowed: kann hier nicht erstellt werden.
         
     models:
-      person:
-        one: Person
-        other: Personen
       group:
         one: Gruppe
         other: Gruppen
-      role:
-        one: Rolle
-        other: Rollen
+      person:
+        one: Person
+        other: Personen
+      people_filter:
+        one: Filter
+        other: Filter
       phone_number:
         one: Telefonnummer
         other: Telefonnummern
+      role:
+        one: Rolle
+        other: Rollen
       social_account:
         one: Social Media Adresse
         other: Social Media Adressen
@@ -88,3 +91,6 @@ de:
         label: Social Media Typ
         public: Öffentlich
       
+  people_filters:
+    new:
+      title: Personen filtern

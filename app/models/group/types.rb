@@ -15,10 +15,12 @@ module Group::Types
   end
   
   module ClassMethods
+    # DSL method to define children
     def children(*group_types)
       self.possible_children = group_types + self.possible_children
     end
     
+    # DSL method to define roles
     def roles(*types)
       self.role_types = types + self.role_types
     end
@@ -41,6 +43,10 @@ module Group::Types
       @@root_types = []
       @@all_types = nil
       Role.reset_types!
+    end
+    
+    def child_types
+      collect_types([], [self])
     end
     
     private

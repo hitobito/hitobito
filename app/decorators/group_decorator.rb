@@ -11,10 +11,19 @@ class GroupDecorator < BaseDecorator
   end
 
   def possible_role_links(external = false)
-    model.class.roles.select {|r| r.external == external}. map do |type|
+    model.class.roles.select {|r| r.external == external}.map do |type|
       link = h.new_group_role_path(self, role: { type: type.sti_name})
       [type.model_name.human, link]
     end
+  end
+  
+  def people_filter_links
+    model.all_people_filters.collect do |filter|
+      link = h.group_people_path(kind: filter.kind, role_types: filter.role_types.collect(&:to_s))
+      [filter.name, link]
+    end << 
+    nil << 
+    ['Neuer Filter...', h.new_group_people_filter_path(id, people_filter: h.params.slice(:kind, :role_types))]
   end
   
   def used_attributes(*attributes)

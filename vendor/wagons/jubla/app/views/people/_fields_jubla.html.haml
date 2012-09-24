@@ -4,9 +4,7 @@
 = field_set_tag do
   = f.labeled(:gender) do
     - [:m, :w, ''].each do |key|
-      = f.label "gender_#{key}", class: 'inline checkbox' do
-        = f.radio_button(:gender, key)
-        = gender_label(key)
+      = f.inline_radio_button(:gender, key, gender_label(key))
 
   = f.labeled_input_field(:birthday, value: f(entry.birthday))
 

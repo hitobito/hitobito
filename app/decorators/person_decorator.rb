@@ -1,10 +1,10 @@
 # encoding: utf-8
-require 'ostruct'
 class PersonDecorator < BaseDecorator
   decorates :person
 
   def self.gender_collection
-    [OpenStruct.new(value: 'männlich', key: 'm'), 
+    [OpenStruct.new(value: 'unbekannt', key: ''), 
+     OpenStruct.new(value: 'männlich', key: 'm'), 
      OpenStruct.new(value: 'weiblich', key: 'w')]
   end
 

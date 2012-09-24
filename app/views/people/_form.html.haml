@@ -9,4 +9,4 @@
     = f.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company
   
   = render 'contactable/fields', f: f
-
+  = render_extensions :fields, locals: { f: f }

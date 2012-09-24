@@ -4,7 +4,8 @@ module ContactableDecorator
     html = ''.html_safe
 
     if address?
-      html << h.simple_format(address)
+      html << address
+      html << h.tag(:br)
     end
     
     if zip_code?
@@ -37,10 +38,10 @@ module ContactableDecorator
   def all_phone_numbers
     html = ''.html_safe 
     phone_numbers.each do |n|
-      num = ''.html_safe
-      num << n.number
-      num << h.muted(n.label)
-      html << h.simple_format(num)
+      html << n.number
+      html << '&nbsp;'.html_safe
+      html << h.muted(n.label)
+      html << h.tag(:br)
     end
     attr_tag(:phone_numbers, html) 
   end
@@ -48,14 +49,14 @@ module ContactableDecorator
   def all_social_accounts
     html = ''.html_safe
     social_accounts.each do |s|
-      sa = ''.html_safe
-      if s.label == 'E-Mail'
-        sa << h.mail_to(s.name)
+      if isEmail(s.name)
+        html << h.mail_to(s.name)
       else
-        sa << s.name
+        html << s.name
       end
-      sa << h.muted(s.label)
-      html << h.simple_format(sa)
+        html << '&nbsp;'.html_safe
+        html << h.muted(s.label)
+        html << h.tag(:br)
     end
     attr_tag(:social_accounts, html) 
   end
@@ -63,11 +64,13 @@ module ContactableDecorator
   private
   # pack content into a special tag with attribute name if content not empty ... <foo_attr> content </foo_attr>
   def attr_tag(tag, html)
-    if html.empty?
-      html
-    else
+    if html.present?
       h.content_tag(tag, html)
     end
+  end
+
+  def isEmail(str)
+    /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
   end
 
 end

@@ -2,6 +2,8 @@
 class PersonDecorator < BaseDecorator
   decorates :person
 
+  include ContactableDecorator
+
   def as_typeahead
     {id: id, name: full_label}
   end

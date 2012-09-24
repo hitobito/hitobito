@@ -1,1 +1,5 @@
+#!/bin/bash
+
+export RAILS_TEST_DB_NAME="`pwd`/db/test.sqlite3"
+rake db:test:prepare
 bundle exec guard -w ../../..

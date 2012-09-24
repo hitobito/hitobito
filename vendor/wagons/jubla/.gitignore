@@ -2,6 +2,7 @@
 log/*.log
 pkg/
 doc/rdoc
+db/*.sqlite3
 
 # ignore Gemfile.lock for wagons
 Gemfile.lock

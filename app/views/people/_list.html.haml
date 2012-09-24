@@ -1,9 +1,9 @@
-- @sheets = GroupSheet.new(self, @group, :group_people_path)
+- @sheets = GroupSheet.new(self, @group, :group_people_path, :index_people)
 
 = render 'groups/tabs'
 
 - content_for :toolbar do
-  = dropdown_button('Person hinzfügen', @group.possible_role_links(@external), :plus) if can?(:new, Role)
+  = dropdown_button('Person hinzfügen', @group.possible_role_links(@external), :plus) if can?(:new, @group.roles.new)
 
   = button_group do
     = action_button('List importieren', '#', :download)

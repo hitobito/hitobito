@@ -1,4 +1,4 @@
 - tab "Info", group_path(@group)
-- tab "Mitglieder", group_people_path(@group) if can?(:index, Person)
-- tab "Externe", external_group_people_path(@group) if can?(:external, Person)
+- tab "Mitglieder", group_people_path(@group) if can?(:index_people, @group)
+- tab "Externe", external_group_people_path(@group) if can?(:external_people, @group)
 

@@ -1,4 +1,4 @@
-- parent_sheet(GroupSheet.new(self, @group, :group_people_path))
+- parent_sheet(GroupSheet.new(self, @group, :group_people_path, :index_people))
 
 = entry_form do |f|
   - if entry.new_record?
@@ -9,4 +9,5 @@
     = f.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company
   
   = render 'contactable/fields', f: f
-
+  
+  = render_extensions :fields, locals: { f: f }

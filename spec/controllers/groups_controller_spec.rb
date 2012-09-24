@@ -38,19 +38,17 @@ describe GroupsController do
     let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } } 
 
     it "new" do
-      ability = Ability::WithGroup.new(person, group)
-      Ability::WithGroup.should_receive(:new).with(person, group) { ability }
       get :new, group: attrs
+      response.status.should == 200
       assigns(:group).type.should eq 'Group::TopGroup'
       assigns(:group).model.class.should eq Group::TopGroup
       assigns(:group).parent_id.should eq group.id
-      assigns(:current_ability).should eq ability
     end
 
     it "create" do
       post :create, group: attrs.merge(name: 'foobar')
       group = assigns(:group)
-      should redirect_to "/groups/#{group.id}"
+      should redirect_to group_path(group)
     end
 
     it "edit form" do

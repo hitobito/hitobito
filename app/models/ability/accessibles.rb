@@ -1,27 +1,11 @@
-# An ability that takes the current group as an additional argument.
-# This class is only used for generating lists of group associations.
-class Ability::WithGroup < Ability::Base
+# This class is only used for fetching lists based on a group association.
+class Ability::Accessibles
+  include Ability::Common
   
   def initialize(user, group)
+    raise "Group cannot be nil" if group.nil?
     super(user)
-      
-    ### GROUPS
-    
-    can :read, Group
-    
-    if modify_permissions?
-      if can_create_or_destroy_group?(group)
-        can [:create, :destroy], Group do |g|
-          group == g
-        end 
-      end
-      
-      can :update, Group do |g|
-        group == g &&
-        can_update_group?(g)
-      end
-    end
-    
+
     ### PEOPLE  
       
     # list people belonging to to the given group
@@ -61,18 +45,5 @@ class Ability::WithGroup < Ability::Base
     end
     
   end
-  
-  private
-    
-  def can_update_group?(group)
-    # user has group_full for this group
-    groups_group_full.include?(group) ||
-    can_create_or_destroy_group?(group)
-  end
-    
-  def can_create_or_destroy_group?(group)
-    layers_full.present? && 
-     # user has layer_full, group in same layer
-     contains_any?(layers_full, group.layer_groups)
-  end
+
 end

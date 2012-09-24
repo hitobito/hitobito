@@ -2,7 +2,6 @@ class PeopleController < CrudController
   
   self.nesting = Group
   self.nesting_optional = true
-  self.ability_types = {with_group: [:index, :external]}
 
   decorates :group, :person, :people
 
@@ -25,7 +24,10 @@ class PeopleController < CrudController
   def query
     @people = []
     if params.has_key?(:q) && params[:q].size >= 3
-      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname)).only_public_data.order_by_name
+      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname)).
+                       only_public_data.
+                       order_by_name.
+                       limit(10)
     end
     
     render json: decorate(@people).collect(&:as_typeahead)
@@ -34,7 +36,13 @@ class PeopleController < CrudController
   private
   
   def list_entries
-    Person.accessible_by(current_ability).external(@external).order_by_role.preload_public_accounts.preload_groups.uniq
+    accessibles = Ability::Accessibles.new(current_user, @group)
+    Person.accessible_by(accessibles).
+           external(@external).
+           order_by_role.
+           preload_public_accounts.
+           preload_groups.
+           uniq
   end
   
   def build_entry

@@ -4,63 +4,9 @@ require 'spec_helper'
 # Specs for listing and searching people
 
 
-describe Ability::WithGroup do
+describe Ability::Accessibles do
   
-  let(:ability) { Ability::WithGroup.new(role.person.reload, group) }
-  
-  context "create Group" do
-    subject { ability }
-    context "layer full" do
-      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
-      
-      context "in own group" do
-        let(:group) { role.group }
-        it "may create subgroup" do
-          should be_able_to(:create, Group)
-        end
-      end
-      
-      context "in group from lower layer" do
-        let(:group) { groups(:bern) }
-        it "may create subgroup" do
-          should be_able_to(:create, Group)
-        end
-      end
-    end
-    
-    context "group full" do
-      let(:role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_security)) }
-      
-      context "in own group" do
-        let(:group) { role.group }
-        it "may create subgroup" do
-          should_not be_able_to(:create, Group)
-        end
-      end
-      
-      context "in other group from same layer" do
-        let(:group) { groups(:be_board) }
-        it "may not create subgroup" do
-          should_not be_able_to(:create, Group)
-        end
-      end
-      
-      context "in group from lower layer" do
-        let(:group) { groups(:bern) }
-        it "may not create subgroup" do
-          should_not be_able_to(:create, Group)
-        end
-      end
-      
-      context "in group from other layer" do
-        let(:group) { groups(:no_board) }
-        it "may not create subgroup" do
-          should_not be_able_to(:create, Group)
-        end
-      end
-    end
-
-  end
+  let(:ability) { Ability::Accessibles.new(role.person.reload, group) }
   
   [:index, :layer_search, :deep_search].each do |action|
     context action do

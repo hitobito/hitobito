@@ -39,6 +39,10 @@ de:
         town: Ort
         country: Land
         gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          default: unbekannt
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben

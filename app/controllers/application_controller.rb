@@ -2,8 +2,6 @@ class ApplicationController < ActionController::Base
   
   include DecoratesBeforeRendering
   alias_method :decorate, :__decorator_for__
-
-  class_attribute :ability_types
   
   protect_from_forgery
   helper_method :current_user
@@ -29,26 +27,4 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def current_ability
-    @current_ability ||= create_ability
-  end
-  
-  def create_ability
-    type = :plain
-    if ability_types
-      type_list = ability_types.detect do |t, actions|
-        actions == :all || actions.include?(action_name.to_sym)
-      end
-      type = type_list.first if type_list
-    end
-    send(:"ability_#{type}")
-  end
-  
-  def ability_with_group
-    Ability::WithGroup.new(current_user, @group)
-  end
-  
-  def ability_plain
-    Ability::Plain.new(current_user)
-  end
 end

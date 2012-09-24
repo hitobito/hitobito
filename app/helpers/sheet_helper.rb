@@ -27,7 +27,7 @@ class Sheet
   attr_accessor :title, :child
   attr_reader :view, :breadcrumbs
   
-  delegate :content_tag, :link_to, :safe_join, :capture, to: :view
+  delegate :content_tag, :link_to, :safe_join, :capture, :can?, to: :view
   
   def initialize(view)
     @view = view
@@ -112,16 +112,17 @@ class GroupSheet < Sheet
   
   attr_reader :group
   
-  def initialize(view, group, url_method = nil)
+  def initialize(view, group, url_method = nil, can_action = :show)
     super(view)
     @group = group
     @url_method = url_method
+    @can_action = can_action
     self.title = group.to_s
   end
   
   def breadcrumbs
     group.parent.hierarchy.collect do |g|
-      link_to g, link_url(g)
+      link_to(g.to_s, link_url(g))
     end
   end
   
@@ -134,7 +135,7 @@ class GroupSheet < Sheet
   end
   
   def link_url(group)
-    if @url_method
+    if @url_method && can?(@can_action, group)
       view.send(@url_method, group)
     else
       group

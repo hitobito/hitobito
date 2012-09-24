@@ -34,7 +34,7 @@ describe GroupDecorator do
     end
 
     it "#complete_address" do
-      @group.complete_address.should eq '<address><p>foostreet 3</p>4242 footown</address>'
+      @group.complete_address.should eq '<address>foostreet 3<br />4242 footown</address>'
     end
     
     it "#prim_email" do
@@ -47,7 +47,7 @@ describe GroupDecorator do
     #end
 
     it "#attr_tag should return an empty string if there is no content given" do
-      @group.instance_eval{attr_tag(:foo, '')}.should eq ''
+      @group.instance_eval{attr_tag(:foo, '')}.should eq nil
     end
 
   end

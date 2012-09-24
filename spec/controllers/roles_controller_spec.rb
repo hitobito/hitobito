@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe RolesController do
@@ -21,6 +22,7 @@ describe RolesController do
     
     role = person.reload.roles.first
     role.group_id.should == group.id
+    flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
     role.should be_kind_of(Group::TopGroup::Member)
   end
   
@@ -28,6 +30,7 @@ describe RolesController do
     role = Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group)
     put :update, {group_id: group.id, id: role.id, role: {label: 'bla'}}
     
+    flash[:notice].should == "Rolle <i>bla (Rolle)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
     should redirect_to(group_person_path(group, person))
   end
 

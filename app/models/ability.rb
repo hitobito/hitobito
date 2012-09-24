@@ -7,10 +7,10 @@ class Ability
     ### GROUPS
     
     can :read, Group
-    
+        
     if modify_permissions?
       can :create, Group do |group|
-        # BEWARE! Always pass a Group instance to create for correct abilities
+        # BEWARE! Always pass a Role instance to create for correct abilities
         group.parent.present? &&
         can_create_or_destroy_group?(group.parent)
       end
@@ -28,6 +28,16 @@ class Ability
           contains_any?(layers_full, group.layer_groups - [group.layer_group])
         end
       end
+    end
+    
+    can :index_people, Group do |group|
+      can_index_people?(group)
+    end
+    
+    can :external_people, Group do |group|
+      user.groups.include?(group) ||
+      (layers_read.present? && 
+       layers_read.include?(group.layer_group))
     end
     
     
@@ -48,10 +58,10 @@ class Ability
     ### PEOPLE
     
     can :query, Person
-    
-    can :index, Person do |group|
-      can_index_people?(group)
-    end
+
+    # Everybody may theoretically access the index page, but only the accessible people will be displayed.
+    # Check links to :index with can?(:index_people, @group) or can?(:external_people, @group)
+    can [:index, :external], Person
     
     can :show, Person do |person|
       can_show_person?(person)

@@ -36,7 +36,16 @@ describe Ability do
       should_not be_able_to(:show_details, other.person)
       should_not be_able_to(:update, other)
     end
+        
+    it "may index groups in lower layer" do
+      should be_able_to(:index_people, groups(:bern))
+      should_not be_able_to(:index_external, groups(:bern))
+    end
     
+    it "may index groups in same layer" do
+      should be_able_to(:index_people, groups(:ch))
+      should be_able_to(:external_people, groups(:ch))
+    end
   end
   
   
@@ -81,6 +90,16 @@ describe Ability do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
       should_not be_able_to(:show_details, other.person)
       should_not be_able_to(:update, other)
+    end
+    
+    it "may index groups in upper layer" do
+      should be_able_to(:index_people, groups(:ch))
+      should_not be_able_to(:index_external, groups(:ch))
+    end
+    
+    it "may index groups in same layer" do
+      should be_able_to(:index_people, groups(:bern))
+      should be_able_to(:external_people, groups(:bern))
     end
   end
   
@@ -149,6 +168,16 @@ describe Ability do
     it "may not view any externals in groups below" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:thun))
       should_not be_able_to(:show, other.person)
+    end
+    
+    it "may index groups in lower layer" do
+      should be_able_to(:index_people, groups(:bern))
+      should_not be_able_to(:index_external, groups(:bern))
+    end
+    
+    it "may index groups in same layer" do
+      should be_able_to(:index_people, groups(:be))
+      should be_able_to(:external_people, groups(:be))
     end
   end
   
@@ -233,6 +262,12 @@ describe Ability do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:thun))
       should_not be_able_to(:show, other.person)
     end
+    
+    it "may index groups anywhere" do
+      should be_able_to(:index_people, groups(:no_board))
+      should_not be_able_to(:index_external, groups(:no_board))
+    end
+    
   end
   
   describe :login do
@@ -267,6 +302,16 @@ describe Ability do
     it "may not view public role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
       should_not be_able_to(:show, other.person)
+    end
+    
+    it "may not index same group" do
+      should be_able_to(:index_people, groups(:be_state_camp))
+      should_not be_able_to(:index_external, groups(:be_state_camp))
+    end
+    
+    it "may not index groups in same layer" do
+      should_not be_able_to(:index_people, groups(:be_board))
+      should_not be_able_to(:index_external, groups(:be_board))
     end
   end
   

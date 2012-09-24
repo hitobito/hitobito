@@ -48,7 +48,7 @@ setupPersonTypeahead = (input) ->
 
 
 $ ->
-  $(':input.date').datepicker()
+  $(':input.date').datepicker(dateFormat: 'dd.mm.yy')
   $('body').on('ajax:success','[data-replace]', replaceContent)
   
   $('body').on('ajax:before','[data-replace]', setDataType)

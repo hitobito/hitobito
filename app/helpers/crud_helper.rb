@@ -59,10 +59,10 @@ module CrudHelper
   # as the last argument.
   def crud_table(*attrs, &block)
     if block_given?
-      list_table(*attrs, &block)
+      list_table(*attrs,class: 'table table-striped', &block)
     else
       attrs = attrs_or_default(attrs) { default_attrs }
-      list_table(*attrs) do |t|
+      list_table(*attrs, class: 'table table-striped') do |t|
          add_table_actions(t)
       end
     end

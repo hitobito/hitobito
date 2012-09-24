@@ -40,4 +40,8 @@ class RolesController < CrudController
     role
   end
 
+  # A label for the current entry, including the model name, used for flash
+  def full_entry_label
+    "#{models_label(false)} #{ERB::Util.h(RoleDecorator.decorate(entry).flash_info)}".html_safe
+  end
 end

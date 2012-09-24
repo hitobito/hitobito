@@ -35,7 +35,7 @@ class GroupDecorator < BaseDecorator
       charr.each do |c|
         if (c.type != gt)
           gt = c.type
-          ch2arr.push('')
+          ch2arr.push(nil)
         end
         ch2arr.push(c)
       end

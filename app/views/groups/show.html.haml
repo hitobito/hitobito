@@ -6,8 +6,11 @@
 =render 'groups/tabs'
 #main.row-fluid
   #article.span7
-    =render 'contactable/show'
-    =render 'groups/attrs_jubla'
+
+    = render 'contactable/show'
+
+    = render_extensions :attrs
+
   #aside.span5
     %section.group_children
       %h2 

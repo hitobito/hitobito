@@ -4,6 +4,17 @@
   = render 'actions_show'
   
 =render 'groups/tabs'
-#main
-  =render 'contactable/show'
-  =render_attrs(@group, :name, :zip_code)
+#main.row-fluid
+  #article.span7
+    =render 'contactable/show'
+    =render 'groups/attrs_jubla'
+  #aside.span5
+    %section.group_children
+      %h2 
+        Untergruppen
+      = table(entry.children_order_by_type) do |t|
+        - t.col('') do |c| 
+          - html = muted(c.class.model_name.human)
+          - html << ' '.html_safe
+          - html << link_to(c.name, group_path(c.id))
+          - html

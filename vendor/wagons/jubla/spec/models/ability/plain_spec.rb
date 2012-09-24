@@ -4,10 +4,10 @@ require 'spec_helper'
 # Specs for managing and viewing people
 
 
-describe Ability::Plain do
+describe Ability do
   
   subject { ability }
-  let(:ability) { Ability::Plain.new(role.person.reload) }
+  let(:ability) { Ability.new(role.person.reload) }
 
 
   describe :layer_full do
@@ -268,5 +268,71 @@ describe Ability::Plain do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
       should_not be_able_to(:show, other.person)
     end
+  end
+  
+  context "create Group" do
+    subject { ability }
+    context "layer full" do
+      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
+      
+      context "without specific group" do
+        it "may not create subgroup" do
+          should_not be_able_to(:create, Group.new)
+        end
+      end
+      
+      context "in own group" do
+        let(:group) { role.group }
+        it "may create subgroup" do
+          should be_able_to(:create, group.children.new)
+        end
+      end
+      
+      context "in group from lower layer" do
+        let(:group) { groups(:bern) }
+        it "may create subgroup" do
+          should be_able_to(:create, group.children.new)
+        end
+      end
+    end
+    
+    context "group full" do
+      let(:role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_security)) }
+      
+      context "in own group" do
+        let(:group) { role.group }
+        it "may not create subgroup" do
+          should_not be_able_to(:create, group.children.new)
+        end
+      end
+      
+      context "without specific group" do
+        it "may not create subgroup" do
+          should_not be_able_to(:create, Group.new)
+        end
+      end
+      
+      context "in other group from same layer" do
+        let(:group) { groups(:be_board) }
+        it "may not create subgroup" do
+          should_not be_able_to(:create, group.children.new)
+        end
+      end
+      
+      context "in group from lower layer" do
+        let(:group) { groups(:bern) }
+        it "may not create subgroup" do
+          should_not be_able_to(:create, group.children.new)
+        end
+      end
+      
+      context "in group from other layer" do
+        let(:group) { groups(:no_board) }
+        it "may not create subgroup" do
+          should_not be_able_to(:create, group.children.new)
+        end
+      end
+    end
+
   end
 end

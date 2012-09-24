@@ -1,12 +1,17 @@
-class Ability::Base
+module Ability::Common
+  extend ActiveSupport::Concern
+  
   include CanCan::Ability
   
-  attr_reader :user,
-              :groups_group_full, 
-              :groups_layer_full, 
-              :groups_layer_read,
-              :layers_read,
-              :layers_full
+  included do
+    
+    attr_reader :user,
+                :groups_group_full, 
+                :groups_layer_full, 
+                :groups_layer_read,
+                :layers_read,
+                :layers_full
+   end
               
 
   def initialize(user)

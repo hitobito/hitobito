@@ -1,7 +1,6 @@
 class RolesController < CrudController
   
   self.nesting = Group
-  self.ability_types = {with_group: [:new, :create]}
   
   decorates :role, :group
   

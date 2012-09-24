@@ -5,10 +5,6 @@ class GroupsController < CrudController
 
   decorates :group, :groups
   
-  prepend_before_filter :ability_for_create, only: [:new, :create]
-  
-  self.ability_types = {with_group: :all}
-
   before_render_form :load_contacts
 
   def index
@@ -34,7 +30,4 @@ class GroupsController < CrudController
     @contacts = entry.people.external(false).only_public_data.order_by_name
   end
 
-  def ability_for_create
-    @current_ability = Ability::WithGroup.new(current_user, entry.parent)
-  end
 end

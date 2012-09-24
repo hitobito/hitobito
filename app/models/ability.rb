@@ -1,18 +1,44 @@
-class Ability::Plain < Ability::Base
+class Ability
+  include Ability::Common
+  
   def initialize(user)
     super(user)
     
     ### GROUPS
     
     can :read, Group
-
-    # Creating and modifiying groups is only handled in Ability::WithGroup
+    
+    if modify_permissions?
+      can :create, Group do |group|
+        # BEWARE! Always pass a Group instance to create for correct abilities
+        group.parent.present? &&
+        can_create_or_destroy_group?(group.parent)
+      end
+      
+      can :destroy, Group do |group|
+        can_create_or_destroy_group?(group)
+      end
+      
+      can :update, Group do |group|
+        can_update_group?(group)
+      end
+      
+      if layers_full.present?
+        can :modify_superior, Group do |group|
+          contains_any?(layers_full, group.layer_groups - [group.layer_group])
+        end
+      end
+    end
     
     
     ### ROLES
     
-    
     if modify_permissions?
+      can :create, Role do |role|
+        # BEWARE! Always pass a Role instance to create for correct abilities
+        can_update_group?(role.group)
+      end
+    
       can :manage, Role do |role|
         can_modify_role?(role)
       end
@@ -22,6 +48,10 @@ class Ability::Plain < Ability::Base
     ### PEOPLE
     
     can :query, Person
+    
+    can :index, Person do |group|
+      can_index_people?(group)
+    end
     
     can :show, Person do |person|
       can_show_person?(person)
@@ -50,6 +80,27 @@ class Ability::Plain < Ability::Base
   end
   
   private
+      
+  def can_update_group?(group)
+    # user has group_full for this group
+    groups_group_full.include?(group) ||
+    can_create_or_destroy_group?(group)
+  end
+    
+  def can_create_or_destroy_group?(group)
+    layers_full.present? && 
+     # user has layer_full, group in same layer or below
+     contains_any?(layers_full, group.layer_groups)
+  end
+  
+  def can_index_people?(group)
+    user.groups.include?(group) ||
+    layers_read.present? && (
+      layers_read.include?(group.layer_group) ||
+      contains_any?(layers_read, group.layer_groups)
+    ) ||
+    user.contact_data_visible?
+  end
   
   def can_show_person?(person)
     # both have contact data visible

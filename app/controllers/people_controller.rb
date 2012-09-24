@@ -2,7 +2,6 @@ class PeopleController < CrudController
   
   self.nesting = Group
   self.nesting_optional = true
-  self.ability_types = {with_group: [:index, :external]}
 
   decorates :group, :person, :people
 
@@ -34,7 +33,8 @@ class PeopleController < CrudController
   private
   
   def list_entries
-    Person.accessible_by(current_ability).external(@external).order_by_role.preload_public_accounts.preload_groups.uniq
+    accessibles = Ability::Accessibles.new(current_user, @group)
+    Person.accessible_by(accessibles).external(@external).order_by_role.preload_public_accounts.preload_groups.uniq
   end
   
   def build_entry

@@ -11,6 +11,7 @@
 #
 #= require jquery
 #= require jquery_ujs
+#= require jquery-ui
 #= require bootstrap
 #= require jquery_nested_form
 #= require_tree .
@@ -47,6 +48,7 @@ setupPersonTypeahead = (input) ->
 
 
 $ ->
+  $(':input.date').datepicker(dateFormat: 'dd.mm.yy')
   $('body').on('ajax:success','[data-replace]', replaceContent)
   
   $('body').on('ajax:before','[data-replace]', setDataType)

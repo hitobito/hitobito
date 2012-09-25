@@ -11,6 +11,10 @@ class GroupsController < CrudController
     flash.keep
     redirect_to Group.root
   end
+
+  def destroy
+    super(location: entry.parent)
+  end
   
 
   private 

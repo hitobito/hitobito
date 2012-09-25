@@ -24,15 +24,22 @@ describe GroupsController, type: :controller do
       get :index
       should redirect_to Group.root
     end
-    
-    it "#show" do
-      get :show, id: group.id
-      
-      response.body.should =~ /Bearbeiten/
-      response.body.should =~ /Löschen/
-      response.body.should =~ /Gruppe erstellen/
-    end
 
+    describe "#show" do
+
+      it "has a set of links"  do
+        get :show, id: groups(:bottom_layer_one).id
+        response.body.should =~ /Bearbeiten/
+        response.body.should =~ /Löschen/
+        response.body.should =~ /Gruppe erstellen/
+      end
+
+      it "has no remove link for current layer group" do
+        get :show, id: groups(:top_layer).id
+        response.body.should_not =~ /Löschen/
+      end
+    end
+    
     it "#new" do
       templates = ["shared/_error_messages",
        "contactable/_fields",
@@ -47,6 +54,5 @@ describe GroupsController, type: :controller do
       get :new, group: { parent_id: group.id, type: 'Group::TopGroup' }
       templates.each { |template| should render_template(template) } 
     end
-    pending "#destroy"
   end
 end

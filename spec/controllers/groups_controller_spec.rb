@@ -6,9 +6,6 @@ describe GroupsController do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader)  }
 
-  #it_should_behave_like 'crud controller'
-  #include_examples 'crud controller', skip: [%w()]
-  
   describe "authentication" do
     it "redirects to login" do
       get :show, id: group.id 
@@ -49,26 +46,15 @@ describe GroupsController do
   end
 
   describe "#destroy" do
-    let(:top_group) { groups(:top_group) }
-    let(:bottom_layer) { groups(:bottom_layer_one) }
-    let(:top_group_leader) { Fabricate(Group::TopGroup::Leader.name.to_s, group: group ).person } 
-    let(:top_group_member) { Fabricate(Group::TopGroup::Member.name.to_s, group: group ).person } 
+    before { sign_in(person) }
 
-
-    it "member cannot destroy group" do
-      sign_in(top_group_member) 
-      expect { post :destroy, id: top_group.id }.not_to change { Group.count }
+    it "leader cannot destroy his group" do
+      expect { post :destroy, id: group.id }.not_to change { Group.count }
     end
 
     it "leader can destroy group" do
-      sign_in(top_group_leader) 
-      expect { post :destroy, id: top_group.id }.to change(Group,:count).by(-1)
-    end
-
-    it "destroy also destroys all children" do
-      sign_in(top_group_leader) 
-      bottom_layer.children.size.should eq 2
-      expect { post :destroy, id: bottom_layer.id }.to change(Group,:count).by(-3)
+      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change(Group,:count).by(-3)
+      should redirect_to groups(:top_layer)
     end
   end
 end

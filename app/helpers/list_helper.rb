@@ -8,6 +8,7 @@ module ListHelper
   # as the last argument.
   def list_table(*attrs, &block)
     options = attrs.extract_options!
+    add_css_class(options, 'table table-striped')
     # only use default attrs if no attrs and no block are given
     attributes = (block_given? || attrs.present?) ? attrs : default_attrs
     table(entries, options) do |t|

@@ -17,6 +17,7 @@ Jubla::Application.routes.draw do
       member do
         get :history
       end
+    end
     
     resources :roles
     

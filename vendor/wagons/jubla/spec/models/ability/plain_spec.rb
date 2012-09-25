@@ -119,8 +119,8 @@ describe Ability do
       should be_able_to(:modify, role.person)
     end
     
-    it "may modify its role" do
-      should be_able_to(:update, role)
+    it "may not modify its role" do
+      should_not be_able_to(:update, role)
     end
         
     it "may create other users as group admin" do

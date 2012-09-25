@@ -32,6 +32,8 @@ class PeopleController < CrudController
     @people = @people.order_by_name
     respond_with(@people)
   end
+
+  def history; end
   
   # GET ajax, without @group
   def query

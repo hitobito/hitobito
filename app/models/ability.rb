@@ -50,7 +50,7 @@ class Ability
       end
     
       can :manage, Role do |role|
-        can_modify_role?(role)
+        role.person != user && can_modify_role?(role)
       end
     end
     
@@ -69,11 +69,11 @@ class Ability
     
     if detail_person_permissions?
       # View all person details
-      can :show_details, Person do |person| 
+      can [:show_details, :history], Person do |person| 
         can_detail_person?(person)
       end
     end
-    can :show_details, Person do |person|
+    can [:show_details, :history], Person do |person|
       person.id == user.id
     end
     

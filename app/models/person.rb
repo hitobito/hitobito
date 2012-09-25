@@ -94,6 +94,10 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def all_roles
+    Role.unscoped.where(person_id: id).order('deleted_at')
+  end
+
   private
   
   def email_required?

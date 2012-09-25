@@ -128,18 +128,6 @@ describe Role do
       a2.label.should == 'Foo'
     end
   end
-
-  context ".all_roles_for" do
-
-    it "returns active and destroyed role" do
-      person = Fabricate(Group::BottomLayer::Member.name.to_s, group: groups(:bottom_layer_one)).person
-      Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), person: person).destroy
-      all_roles = Role.all_roles_for(person)
-      all_roles.size.should eq 2
-      all_roles.first.deleted_at.should be_blank
-      all_roles.last.deleted_at.should be_present
-    end
-  end
   
   describe "#available_labels" do
     subject { Group::BottomLayer::Leader.available_labels }

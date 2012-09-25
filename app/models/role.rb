@@ -61,10 +61,6 @@ class Role < ActiveRecord::Base
     def sweep_available_labels
       @available_labels = nil
     end
-
-    def all_roles_for(person)
-      unscoped.where(person_id: person.id).order('deleted_at')
-    end
   end
   
   

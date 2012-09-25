@@ -33,7 +33,9 @@ class PeopleController < CrudController
     respond_with(@people)
   end
 
-  def history; end
+  def history
+    @roles = entry.all_roles
+  end
   
   # GET ajax, without @group
   def query

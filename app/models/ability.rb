@@ -37,7 +37,7 @@ class Ability
     can :external_people, Group do |group|
       user_groups.include?(group.id) ||
       (layers_read.present? && 
-       layers_read.include?(group.layer_group))
+       layers_read.include?(group.layer_group.id))
     end
     
     

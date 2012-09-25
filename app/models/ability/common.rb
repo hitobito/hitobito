@@ -30,10 +30,10 @@ module Ability::Common
   private
   
   def init_groups(user)
-    @user_groups = user.groups
-    @groups_group_full = user.groups_with_permission(:group_full)
-    @groups_layer_full = user.groups_with_permission(:layer_full)
-    @groups_layer_read = user.groups_with_permission(:layer_read)
+    @user_groups = user.groups.to_a
+    @groups_group_full = user.groups_with_permission(:group_full).to_a
+    @groups_layer_full = user.groups_with_permission(:layer_full).to_a
+    @groups_layer_read = user.groups_with_permission(:layer_read).to_a
 
     @layers_read = layers(groups_layer_full, groups_layer_read).collect(&:id)
     @layers_full = layers(groups_layer_full).collect(&:id)

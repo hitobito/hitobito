@@ -21,4 +21,9 @@ module PeopleHelper
   def gender_label(gender)
     t("activerecord.attributes.person.genders.#{gender.presence || 'default'}")
   end
+
+  def role_group_info(role)
+    group_link = link_to(role.group, role.group)
+    "#{role.class.model_name.human} in #{group_link}".html_safe
+  end
 end

@@ -1,0 +1,10 @@
+- title('Rollen')
+= table(entry.roles) do |t|
+  - t.col('Gruppe') do |c| 
+    - c.group 
+  - t.col('Rolle') do |c| 
+    - c.class.model_name.human 
+  - t.col('Von') do |c| 
+    - l(c.created_at, format: :short)
+  - t.col('Bis') do |c| 
+    - l(c.deleted_at, format: :short) if c.deleted?

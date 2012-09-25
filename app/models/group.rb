@@ -121,6 +121,22 @@ class Group < ActiveRecord::Base
     PeopleFilter.where("group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)", id, type)
   end
   
+  def upper_layer_groups
+    if new_record?
+      if parent
+        if layer?
+          parent.layer_groups
+        else
+          parent.layer_groups - [parent.layer_group]
+        end
+      else
+        []
+      end
+    else
+      layer_groups - [layer_group]
+    end
+  end
+  
   def to_s
     name
   end

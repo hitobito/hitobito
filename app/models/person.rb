@@ -67,7 +67,7 @@ class Person < ActiveRecord::Base
   ### VALIDATIONS
   
   validates :email, uniqueness: true, allow_nil: true
-  validates :gender, inclusion: %w(m w), allow_nil: true
+  validates :gender, inclusion: %w(m w), allow_blank: true
   validate :should_have_any_name
  
  
@@ -95,7 +95,7 @@ class Person < ActiveRecord::Base
   end
 
   def all_roles
-    Role.unscoped.where(person_id: id).order('deleted_at')
+    records = Role.unscoped.where(person_id: id).order('deleted_at')
   end
 
   private

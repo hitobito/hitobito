@@ -103,7 +103,7 @@ class StandardTableBuilder
     delegate :content_tag, :to => :template
 
     def content(entry)
-      entry.nil? ? '' : block.call(entry)
+      entry.nil? ? '' : template.capture(entry, &block)
     end
 
     def html_header

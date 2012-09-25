@@ -1,14 +1,14 @@
 - parent_sheet(GroupSheet.new(self, @group, :group_people_path, :index_people))
-- title(entry)
+- title(entry.to_s)
 
-=render 'tabs'
+= render 'tabs'
 
-= table(@roles) do |t|
-  - t.col('Gruppe') do |c| 
-    - c.group 
-  - t.col('Rolle') do |c| 
-    - c.class.model_name.human 
-  - t.col('Von') do |c| 
-    - f(c.created_at.to_date)
-  - t.col('Bis') do |c| 
-    - f(c.deleted_at.to_date) if c.deleted?
+
+%h2 Rollen
+
+= table(@roles, class: 'table table-striped') do |t|
+  - t.attr(:group_id, 'Gruppe')
+  - t.col('Rolle') do |r| 
+    = r.to_s
+  - t.attr(:created_at, 'Von')
+  - t.attr(:deleted_at, 'Bis')

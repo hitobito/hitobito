@@ -28,7 +28,8 @@ module StandardHelper
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
   def format_attr(obj, attr)
-    format_type_attr_method = obj.class.respond_to?(:model_name) ? :"format_#{obj.class.model_name.underscore}_#{attr.to_s}" : :"format_#{obj.class.name.underscore}_#{attr.to_s}"
+    format_type_attr_method = obj.class.respond_to?(:model_name) ? :"format_#{obj.class.base_class.model_name.underscore}_#{attr.to_s}" : :"format_#{obj.class.name.underscore}_#{attr.to_s}"
+    
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)
@@ -89,7 +90,7 @@ module StandardHelper
       content_tag(:div, ti(:no_list_entries), :class => 'table')
     end
   end
-
+  
   # Renders a generic form for the given object using StandardFormBuilder.
   def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
@@ -259,7 +260,7 @@ module StandardHelper
 
   # Returns true if no link should be created when formatting the given association.
   def no_assoc_link?(assoc, val)
-    !respond_to?("#{val.class.model_name.underscore}_path".to_sym)
+    !respond_to?("#{val.class.base_class.model_name.underscore}_path".to_sym)
   end
 
   # Returns the association proxy for the given attribute. The attr parameter

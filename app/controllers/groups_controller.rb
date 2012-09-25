@@ -27,7 +27,7 @@ class GroupsController < CrudController
   end
 
   def assign_attributes 
-    role = can?(:modify_superior, entry) ? :superior : :default
+    role = entry.class.superior_attributes.present? && can?(:modify_superior, entry) ? :superior : :default
     entry.assign_attributes(model_params, as: role)
   end
   

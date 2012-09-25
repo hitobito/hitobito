@@ -126,7 +126,7 @@ td p, td address {
 .controls-row {
   @include clearfix;
   *zoom: 1;
-  label.checkbox {
+  label.checkbox, label.radio {
     padding-top: 6px;
   }
 }
@@ -178,10 +178,11 @@ label.radio {
   font-size: 14px;
   line-height: 20px;
   color: $gray;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
   margin-right: 10px;
+}
+
+.controls div {
+  padding-top: 5px;
 }
 
 textarea {
@@ -350,6 +351,13 @@ body > footer {
   min-width: 0;
 }
 
-tbody td {
-  height: 8px;
+table {
+  th, td {
+    padding: 0 5px;
+  }
+  
+  td {
+    height: 8px;
+  }
 }
+

@@ -20,8 +20,7 @@ module CrudHelper
     
     buttons_bottom = options.delete(:buttons_bottom)
     submit_label = options.delete(:submit_label) || ti(:"button.save")
-    cancel_url = options.delete(Array(object).last.new_record? ? :cancel_url_new : :cancel_url_edit)
-    cancel_url ||= polymorphic_path(object, :returning => true)
+    cancel_url = get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
       content = save_form_buttons(form, submit_label, cancel_url)
@@ -183,5 +182,17 @@ module CrudHelper
     attrs = yield if attrs.blank?
     attrs << options
   end
-
+  
+  # Get the cancel url for the given object considering options:
+  # 1. Use :cancel_url_new or :cancel_url_edit option, if present
+  # 2. Use :cancel_url option, if present
+  # 3. Use polymorphic_path(object)
+  def get_cancel_url(object, options)
+    record = Array(object).last
+    cancel_url = options.delete(:cancel_url)
+    cancel_url_new = options.delete(:cancel_url_new)
+    cancel_url_edit = options.delete(:cancel_url_edit)
+    url = record.new_record? ? cancel_url_new : cancel_url_edit
+    url || cancel_url || polymorphic_path(object, :returning => true)
+  end
 end

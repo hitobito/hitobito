@@ -9,17 +9,13 @@ Jubla::Application.routes.draw do
   end
 
   resources :groups do
-    get :fields, on: :collection
     resources :people do
-      collection do
-        get :external
-      end
       member do
         get :history
       end
     end
     
-    resources :roles
+    resources :roles, except: [:index, :show]
     
     resources :people_filters, only: [:new, :create, :destroy]
   end

@@ -29,7 +29,7 @@ class Ability
       
       if layers_full.present?
         can :modify_superior, Group do |group|
-          contains_any?(layers_full, collect_ids(group.layer_groups - [group.layer_group]))
+          contains_any?(layers_full, collect_ids(group.upper_layer_groups))
         end
       end
     end
@@ -112,7 +112,7 @@ class Ability
       
   def can_update_group?(group)
     # user has group_full for this group
-    groups_group_full.include?(group) ||
+    groups_group_full.include?(group.id) ||
     can_create_group?(group)
   end
     

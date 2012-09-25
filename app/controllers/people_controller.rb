@@ -52,6 +52,7 @@ class PeopleController < CrudController
   
   def show
     if parent.nil?
+      flash.keep
       redirect_to group_person_path(entry.groups.select('groups.id').first, entry)
     else
       super

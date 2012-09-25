@@ -77,6 +77,42 @@ describe Group do
     end
   end
   
+  context "#upper_layer_groups" do
+    context "for existing group" do
+      it "contains only upper for layer" do
+        groups(:bottom_layer_one).upper_layer_groups.should == [groups(:top_layer)]
+      end
+      
+      it "contains only upper for group" do
+        groups(:bottom_group_one_one).upper_layer_groups.should == [groups(:top_layer)]
+      end
+      
+      it "is empty for top layer" do
+        groups(:top_group).upper_layer_groups.should be_empty
+      end
+    end
+    
+    context "for new group" do
+      it "contains only upper for layer" do
+        group = Group::BottomLayer.new
+        group.parent = groups(:top_layer)
+        group.upper_layer_groups.should == [groups(:top_layer)]
+      end
+      
+      it "contains only upper for group" do
+        group = Group::BottomGroup.new
+        group.parent = groups(:bottom_layer_one)
+        group.upper_layer_groups.should == [groups(:top_layer)]
+      end
+      
+      it "is empty for top layer" do
+        group = Group::TopGroup.new
+        group.parent = groups(:top_layer)
+        group.upper_layer_groups.should be_empty
+      end
+    end
+  end
+  
   context ".all_types" do
     it "lists all types" do
       Set.new(Group.all_types).should == Set.new([Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup])

@@ -315,7 +315,8 @@ describe Ability do
     end
   end
   
-  context "create Group" do
+  
+  describe Group do
     
     context "layer full" do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
@@ -331,12 +332,48 @@ describe Ability do
         it "may create subgroup" do
           should be_able_to(:create, group.children.new)
         end
+        
+        it "may edit group" do
+          should be_able_to(:update, group)
+        end
+        
+        it "may not modify superior" do
+          should_not be_able_to(:modify_superior, group)
+        end
       end
       
       context "in group from lower layer" do
         let(:group) { groups(:bern) }
         it "may create subgroup" do
           should be_able_to(:create, group.children.new)
+        end
+        
+        it "may edit group" do
+          should be_able_to(:update, group)
+        end
+        
+        it "may modify superior" do
+          should be_able_to(:modify_superior, group)
+        end
+        
+        it "may modify superior in new group" do
+          should be_able_to(:modify_superior, group.parent.children.new)
+        end
+      end
+    end
+        
+    context "layer full in flock" do
+      let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
+
+      context "in own group" do
+        let(:group) { role.group }
+        
+        it "may edit group" do
+          should be_able_to(:update, group)
+        end
+        
+        it "may not modify superior" do
+          should_not be_able_to(:modify_superior, group)
         end
       end
     end
@@ -348,6 +385,14 @@ describe Ability do
         let(:group) { role.group }
         it "may not create subgroup" do
           should_not be_able_to(:create, group.children.new)
+        end
+        
+        it "may edit group" do
+          should be_able_to(:update, group)
+        end
+        
+        it "may not modify superior" do
+          should_not be_able_to(:modify_superior, group)
         end
       end
       
@@ -380,6 +425,7 @@ describe Ability do
     end
 
   end
+  
   
   describe "people filter" do
     

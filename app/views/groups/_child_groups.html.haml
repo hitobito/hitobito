@@ -1,0 +1,7 @@
+%aside.span5
+  %section.group_children
+    %h2 Untergruppen
+    = table(entry.children_order_by_type) do |t|
+      - t.col('') do |c| 
+        = muted(c.class.model_name.human)
+        = link_to(c.name, group_path(c.id))

@@ -10,15 +10,8 @@ class RolesController < CrudController
   # load group before authorization
   prepend_before_filter :parent
   
+  hide_action :index, :show
   
-  def index
-    redirect_to group_people_path(@group)
-  end
-  
-  def show
-    redirect_to group_person_path(entry.group_id, entry.person_id)
-  end
-    
   def create
     super(location: group_people_path(entry.group_id))
   end
@@ -28,7 +21,7 @@ class RolesController < CrudController
   end
   
   def destroy
-    super(location: group_people_path(entry.group_id))
+    super(location: person_path(entry.person_id))
   end
   
   private 

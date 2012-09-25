@@ -5,24 +5,18 @@
   = action_button 'Passwort ändern', edit_person_registration_path if @person == current_user
 
 =render 'tabs'
+
 #main.row-fluid
   %article.span7
-    = render 'contactable/show'
+    = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, entry)
+    
     - if entry.additional_information.present?
-      %h2 Bemerkungen
+      %h4 Bemerkungen
       %p= entry.additional_information
 
     = render_attrs(entry, :birthday, :gender)
+    
     = render_extensions :attrs
 
-  %aside.span5
-    %section.group_children
-      %h2 
-        Aktive Rollen
-      = table(entry.roles) do |t|
-        - t.col('') do |role|
-          - role_group_info(role) 
-
-        - t.col('') do |role|
-          - link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
+  = render 'roles'
 

@@ -1,0 +1,15 @@
+%aside.span5
+  %section.group_children
+    %h2 Aktive Rollen
+    
+    = table(entry.roles) do |t|
+      - t.col('') do |role|
+        %strong
+          = role.to_s
+          = link_to(role.group, role.group)
+
+      - t.col('') do |role|
+        = link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
+        
+      - t.col('') do |role|
+        = link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)

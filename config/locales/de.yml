@@ -68,6 +68,8 @@ de:
         
       role:
         label: Bezeichnung
+        group_id: Gruppe
+        person_id: Person
         
       phone_number:
         number: Nummer

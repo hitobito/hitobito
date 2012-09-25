@@ -62,7 +62,7 @@ class GroupDecorator < BaseDecorator
 
   def modifiable_attributes(*attributes)
     attributes = used_attributes(*attributes)
-    attributes -= model.class.superior_attributes unless h.can?(:modify_superior, self)
+    attributes -= model.class.superior_attributes unless can?(:modify_superior, model)
     attributes
   end
 

@@ -39,7 +39,7 @@ describe RolesController do
     post :destroy, {group_id: group.id, id: role.id }
     
     flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
-    should redirect_to(group_path(group))
+    should redirect_to(group_people_path(group))
   end
 
 end

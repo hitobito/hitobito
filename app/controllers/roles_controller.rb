@@ -28,7 +28,7 @@ class RolesController < CrudController
   end
   
   def destroy
-    super(location: group_path(entry.group_id))
+    super(location: group_people_path(entry.group_id))
   end
   
   private 

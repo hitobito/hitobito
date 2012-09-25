@@ -19,22 +19,8 @@
         Aktive Rollen
       = table(entry.roles) do |t|
         - t.col('') do |c|
-          - html = c.group.to_s.html_safe
-          - html << ' '
-          - html << muted(c.class.model_name.human)
-          - html << ' '.html_safe
-          - html << person_remove_link(c)
-          - html
+          - role_group_info(c)
 
-  #aside.span5
-    %section.group_children
-      %h2 
-        Gelöschte Rollen
-      = table(entry.roles.only_deleted) do |t|
         - t.col('') do |c|
-          - html = c.group.to_s.html_safe
-          - html << ' '
-          - html << muted(c.class.model_name.human)
-          - html << ' '.html_safe
-          - html << "von #{l(c.created_at, format: :short)} bis #{l(c.deleted_at, format: :short)}"
-          - html
+          - link_action_destroy(group_role_path(c.group, c))
+

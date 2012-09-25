@@ -19,22 +19,9 @@
       %h2 
         Aktive Rollen
       = table(entry.roles) do |t|
-        - t.col('') do |c|
-<<<<<<< Updated upstream
-          - role_group_info(c)
+        - t.col('') do |role|
+          - role_group_info(role) 
 
-=======
-          - group_role_info(c)
-
-        - t.col('') do |c|
-          - person_remove_link(c) if can?(:destroy, c)
-
-  #aside.span5
-    %section.group_children
-      %h2 
-        Gelöschte Rollen
-      = table(entry.roles.with_deleted) do |t|
->>>>>>> Stashed changes
-        - t.col('') do |c|
-          - link_action_destroy(group_role_path(c.group, c))
+        - t.col('') do |role|
+          - link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
 

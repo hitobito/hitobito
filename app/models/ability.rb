@@ -50,7 +50,7 @@ class Ability
       end
     
       can :manage, Role do |role|
-        can_modify_role?(role)
+        role.person != user && can_modify_role?(role)
       end
     end
     

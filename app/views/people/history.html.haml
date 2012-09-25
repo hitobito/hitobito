@@ -1,10 +1,14 @@
-- title('Rollen')
-= table(entry.roles) do |t|
+- parent_sheet(GroupSheet.new(self, @group, :group_people_path, :index_people))
+- title(entry)
+
+=render 'tabs'
+
+= table(@roles) do |t|
   - t.col('Gruppe') do |c| 
     - c.group 
   - t.col('Rolle') do |c| 
     - c.class.model_name.human 
   - t.col('Von') do |c| 
-    - l(c.created_at, format: :short)
+    - f(c.created_at.to_date)
   - t.col('Bis') do |c| 
-    - l(c.deleted_at, format: :short) if c.deleted?
+    - f(c.deleted_at.to_date) if c.deleted?

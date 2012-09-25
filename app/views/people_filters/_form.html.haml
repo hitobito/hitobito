@@ -1,12 +1,19 @@
 - parent_sheet(GroupSheet.new(self, @group, :group_people_path, :index_people))
 
 
-= entry_form(submit_label: 'Suchen', cancel_url_new: group_people_path(@group)) do |f|
-  = field_set_tag('In welchem Bereich soll gesucht werden?') do
-    = f.labeled :kind, '&nbsp;'.html_safe do
-      = f.inline_radio_button(:kind, :group, 'Gruppe')
-      = f.inline_radio_button(:kind, :layer, 'Ebene')
-      = f.inline_radio_button(:kind, :deep, 'Untergruppen')
+= standard_form(path_args(entry)) do |f|
+
+  .btn-toolbar
+    .btn-group
+      = f.button('Suchen', class: 'btn btn-primary', value: 'search')
+    - if can?(:create, entry)
+      .btn-group
+        = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
+    .btn-group
+      = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'btn')
+      
+      
+  = f.error_messages
   
   = field_set_tag('Welche Rollen sollen angezeigt werden?') do
     %p Je nach Suchbereich wird nur nach gewissen Rollen gesucht.
@@ -24,7 +31,21 @@
                              role_type.model_name.human, 
                              checked: entry.role_types.include?(role_type.sti_name))
 
+  = field_set_tag('In welchem Bereich soll gesucht werden?') do
+    = f.labeled :kind, '&nbsp;'.html_safe do
+      = f.inline_radio_button(:kind, :deep, "Überall - Auf der Ebene #{@group.layer_group.to_s} und allen darunter liegenden Ebenen suchen", false)
+      = f.inline_radio_button(:kind, :layer, "Ebene - Nur auf der Ebene #{@group.layer_group.to_s} suchen", false)
+  
   - if can?(:create, entry)
     = field_set_tag('Filtern speichern') do
-      = f.labeled_input_field :name, placeholder: 'Geben Sie optional einen Namen an, um diesen Filter zu speichern'
+      = f.labeled_input_field :name, placeholder: 'Geben Sie einen Namen an, um diesen Filter zu speichern'
     
+  .btn-toolbar
+    .btn-group
+      = f.button('Suchen', class: 'btn btn-primary', value: 'search')
+    - if can?(:create, entry)
+      .btn-group
+        = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
+    .btn-group
+      = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'btn')
+      

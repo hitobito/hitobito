@@ -41,7 +41,7 @@ module CrudHelper
   end
   
   def save_form_buttons(form, submit_label, cancel_url)
-   content_tag(:div, class: 'btn-toolbar') do
+    content_tag(:div, class: 'btn-toolbar') do
       submit_button(form, submit_label) +
       content_tag(:div, class: 'btn-group') do
         link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
@@ -114,43 +114,61 @@ module CrudHelper
 
   ######## ACTION LINKS ###################################################### :nodoc:
 
-  # Standard link action to the show page of a given record.
+  # Standard button action to the show page of a given record.
   # Uses the current record if none is given.
-  def link_action_show(path = nil)
+  def button_action_show(path = nil)
     path ||= path_args(entry)
     action_button ti(:"link.show"), path, 'zoom-in'
   end
 
-  # Standard link action to the edit page of a given record.
+  # Standard button action to the edit page of a given record.
   # Uses the current record if none is given.
-  def link_action_edit(path = nil)
+  def button_action_edit(path = nil)
     path ||= path_args(entry)
     action_button ti(:"link.edit"), path.is_a?(String) ? path : edit_polymorphic_path(path), 'edit'
   end
 
-  # Standard link action to the destroy action of a given record.
+  # Standard button action to the destroy action of a given record.
   # Uses the current record if none is given.
-  def link_action_destroy(path = nil)
+  def button_action_destroy(path = nil)
     path ||= path_args(entry)
     action_button ti(:"link.delete"), path, 'trash',
                 :data => { :confirm => ti(:confirm_delete),
                            :method => :delete }
   end
 
-  # Standard link action to the list page.
+  # Standard button action to the list page.
   # Links to the current model_class if no path is given.
-  def link_action_index(path = nil, url_options = {:returning => true})
+  def button_action_index(path = nil, url_options = {:returning => true})
     path ||= path_args(model_class)
     action_button ti(:"link.list"), path.is_a?(String) ? path : polymorphic_path(path, url_options), 'list'
   end
 
-  # Standard link action to the new page.
+  # Standard button action to the new page.
   # Links to the current model_class if no path is given.
-  def link_action_add(path = nil, url_options = {})
+  def button_action_add(path = nil, url_options = {})
     path ||= path_args(model_class)
     action_button ti(:"link.add"), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus'
   end
-
+  
+  # Standard link action to the edit page of a given record.
+  # Uses the current record if none is given.
+  def link_action_edit(path = nil)
+    path ||= path_args(entry)
+    link_to icon(:edit), path.is_a?(String) ? path : edit_polymorphic_path(path)
+  end
+  
+  # Standard link action to the destroy action of a given record.
+  # Uses the current record if none is given.
+  def link_action_destroy(path = nil, label = icon(:trash))
+    path ||= path_args(entry)
+    link_to label, 
+            path, 
+            :class => 'action',
+            :data => { :confirm => ti(:confirm_delete),
+                       :method => :delete }
+  end
+  
   private
 
   # If a block is given, call it to get the path for the current row entry.

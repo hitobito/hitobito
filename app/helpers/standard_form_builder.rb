@@ -112,8 +112,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     datetime_select(attr, {}, html_options)
   end
 
-  def inline_radio_button(attr, value, caption, html_options = {})
-    label("#{attr}_#{value.to_s.downcase}", class: 'radio inline') do
+  def inline_radio_button(attr, value, caption, inline = true, html_options = {})
+    label("#{attr}_#{value.to_s.downcase}", class: "radio#{' inline' if inline}") do
       radio_button(attr, value, html_options) + ' ' + 
       caption
     end

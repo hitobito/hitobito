@@ -34,7 +34,8 @@ class Ability
       can_index_people?(group)
     end
     
-    can :external_people, Group do |group|
+    # can index people that are not visible from above
+    can :index_local_people, Group do |group|
       user.groups.include?(group) ||
       (layers_read.present? && 
        layers_read.include?(group.layer_group))
@@ -59,8 +60,8 @@ class Ability
     can :query, Person
 
     # Everybody may theoretically access the index page, but only the accessible people will be displayed.
-    # Check links to :index with can?(:index_people, @group) or can?(:external_people, @group)
-    can [:index, :external], Person
+    # Check links to :index with can?(:index_people, @group)
+    can :index, Person
     
     can :show, Person do |person|
       can_show_person?(person)

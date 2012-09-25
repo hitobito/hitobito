@@ -174,7 +174,6 @@ input[type="color"],
 
 label.checkbox,
 label.radio {
-  display: inline-block;
   height: 20px;
   font-size: 14px;
   line-height: 20px;
@@ -341,3 +340,13 @@ body > footer {
     background: $grayDark;
   }
 }
+
+.pull-right > .btn-group > .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-menu .dropdown-menu {
+  min-width: 0;
+}
+

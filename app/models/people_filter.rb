@@ -24,7 +24,7 @@ class PeopleFilter < ActiveRecord::Base
   end
   
   def kind
-    super || 'group'
+    super || 'deep'
   end
   
   def to_s

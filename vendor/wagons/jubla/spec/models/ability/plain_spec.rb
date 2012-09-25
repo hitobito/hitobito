@@ -44,7 +44,7 @@ describe Ability do
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:ch))
-      should be_able_to(:external_people, groups(:ch))
+      should be_able_to(:index_local_people, groups(:ch))
     end
   end
   
@@ -99,7 +99,7 @@ describe Ability do
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:bern))
-      should be_able_to(:external_people, groups(:bern))
+      should be_able_to(:index_local_people, groups(:bern))
     end
   end
   
@@ -177,7 +177,7 @@ describe Ability do
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:be))
-      should be_able_to(:external_people, groups(:be))
+      should be_able_to(:index_local_people, groups(:be))
     end
   end
   

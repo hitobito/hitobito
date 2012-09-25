@@ -12,13 +12,17 @@ class PeopleFiltersController < CrudController
   prepend_before_filter :parent
 
   def create
-    if model_params[:name].blank?
-      authorize!(:new, entry)
-      redirect_to group_people_path(parent, model_params.slice(:kind, :role_types))
-    else
+    if params[:button] == 'save'
       authorize!(:create, entry)
       super(location: group_people_path(parent, model_params))
+    else
+      authorize!(:new, entry)
+      redirect_to group_people_path(parent, model_params.slice(:kind, :role_types))
     end
+  end
+  
+  def destroy
+    super(location: group_people_path(parent))
   end
 
   private

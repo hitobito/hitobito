@@ -16,7 +16,7 @@ describe PeopleFilter do
   end
   
   it "has group as default kind" do
-    PeopleFilter.new.kind.should == 'group'
+    PeopleFilter.new.kind.should == 'deep'
   end
   
   

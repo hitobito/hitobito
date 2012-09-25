@@ -18,17 +18,17 @@ describe PeopleFiltersController do
   end
   
   context "POST create" do
-    it "redirects to show without name" do
+    it "redirects to show for search" do
       expect {
-        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}
+        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}, button: 'search'
       }.not_to change { PeopleFilter.count } 
       
       should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer'))
     end
     
-    it "saves filter and redirects to show with name" do
+    it "saves filter and redirects to show with save" do
       expect {
-        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}
+        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}, button: 'save'
         should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer', name: 'Test Filter'))
       }.to change { PeopleFilter.count }.by(1)
     end
@@ -42,17 +42,17 @@ describe PeopleFiltersController do
         
       let(:group) { @role.group }
       
-      it "redirects to show without name" do
+      it "redirects to show with search" do
         expect {
-          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}
+          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}, button: 'search'
         }.not_to change { PeopleFilter.count } 
         
         should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer'))
       end
       
-      it "is not authorized with name" do
+      it "is not authorized with save" do
         expect {
-          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}
+          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}, button: 'save'
         }.not_to change { PeopleFilter.count }
         
         should redirect_to(root_path)

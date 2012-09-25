@@ -23,4 +23,8 @@ class PersonDecorator < BaseDecorator
     end
     label
   end
+
+  def render_attrs(*attrs)
+    h.render_attrs(model,*attrs.select { |attr| model.send(attr).present? })
+  end
 end

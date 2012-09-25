@@ -7,6 +7,10 @@
   #article.span7
     %b= entry.full_name
     = render 'contactable/show'
+    - if entry.additional_information.present?
+      %h2 Bemerkungen
+      %p= entry.additional_information
+
     = render_extensions :attrs
 
   #aside.span5

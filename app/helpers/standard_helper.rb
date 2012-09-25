@@ -268,9 +268,10 @@ module StandardHelper
   # is returned. Returns nil if no association (or not of the given macro) was
   # found.
   def association(obj, attr, *macros)
-    if obj.class.respond_to?(:reflect_on_association)
+    klass = obj.respond_to?(:klass) ? obj.klass : obj.class
+    if klass.respond_to?(:reflect_on_association)
       name = assoc_and_id_attr(attr).first.to_sym
-      assoc = obj.class.reflect_on_association(name)
+      assoc = klass.reflect_on_association(name)
       assoc if assoc && (macros.blank? || macros.include?(assoc.macro))
     end
   end

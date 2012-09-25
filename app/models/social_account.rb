@@ -33,6 +33,10 @@ class SocialAccount < ActiveRecord::Base
     "#{name} (#{label})"
   end
   
+  def value
+    name
+  end
+  
   private
   
   # If a case-insensitive same label already exists, use this one

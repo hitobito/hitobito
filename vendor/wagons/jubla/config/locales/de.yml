@@ -59,7 +59,7 @@ de:
         coach: Coach
         coach_id: Coach
         advisor: Scharbegleitung
-        adviser_id: Scharbegleitung
+        advisor_id: Scharbegleitung
         
       role:
         employment_percent: Stellenprozente

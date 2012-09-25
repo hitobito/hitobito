@@ -31,15 +31,15 @@ states = Group::State.seed(:name, :parent_id,
 )
 
 states.each do |s|
-  SocialAccount.seed(:contactable_id, :contactable_type, :label,
+  SocialAccount.seed(:contactable_id, :contactable_type, :name,
     { contactable_id:   s.id,
       contactable_type: 'Group',
       name:             'info@group.ch',
-      label:            'E-Mail',
+      label:            'Email',
       public:           true }
   )
 
-  PhoneNumber.seed(:contactable_id, :contactable_type, :label,
+  PhoneNumber.seed(:contactable_id, :contactable_type, :name,
     { contactable_id:   s.id,
       contactable_type: 'Group',
       number:           Faker::PhoneNumber.phone_number,

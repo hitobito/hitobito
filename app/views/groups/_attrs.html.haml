@@ -1,20 +1,22 @@
 - @sheets = GroupSheet.new(self, @group)
 
-- content_for(:toolbar) do
-  = render 'actions_show'
-  
 =render 'groups/tabs'
-#main.row-fluid
-  #article.span7
 
-    = render 'contactable/show'
+#main.row-fluid
+  %article.span7
+
+    = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
+
+    - if @contact
+      %h4 Kontaktperson
+      = render 'contactable/show', contactable: @contact, only_public: true, with_name: true
+      
 
     = render_extensions :attrs
 
-  #aside.span5
+  %aside.span5
     %section.group_children
-      %h2 
-        Untergruppen
+      %h2 Untergruppen
       = table(entry.children_order_by_type) do |t|
         - t.col('') do |c| 
           - html = muted(c.class.model_name.human)

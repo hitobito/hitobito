@@ -15,7 +15,7 @@ describe GroupsController do
     it "renders template when signed in" do
       sign_in(person)
       get :show, id: group.id
-      should render_template('groups/show')
+      should render_template('groups/_attr')
     end
   end
 

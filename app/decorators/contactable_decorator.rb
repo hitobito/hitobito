@@ -24,52 +24,45 @@ module ContactableDecorator
     if country?
       html << country
     end
-    attr_tag(:address, html) 
+    
+    content_tag(:p, html)
   end
 
-  def prim_email
-    html = ''.html_safe
+  def primary_email
     if email.present?
-      html << h.mail_to(email)
+      content_tag(:p, h.value_with_muted(h.mail_to(email), 'Email'))
     end
-    attr_tag(:email, html) 
   end
 
-  def all_phone_numbers
-    html = ''.html_safe 
-    phone_numbers.each do |n|
-      html << n.number
-      html << '&nbsp;'.html_safe
-      html << h.muted(n.label)
-      html << h.tag(:br)
-    end
-    attr_tag(:phone_numbers, html) 
+  def all_phone_numbers(only_public = true)
+    nested_values(phone_numbers, only_public)
   end
 
-  def all_social_accounts
-    html = ''.html_safe
-    social_accounts.each do |s|
-      if isEmail(s.name)
-        html << h.mail_to(s.name)
+  def all_social_accounts(only_public = true)
+    nested_values(social_accounts, only_public) do |name|
+      if email?(name)
+        h.mail_to(name)
       else
-        html << s.name
+        name
       end
-        html << '&nbsp;'.html_safe
-        html << h.muted(s.label)
-        html << h.tag(:br)
     end
-    attr_tag(:social_accounts, html) 
+  end
+  
+  def nested_values(values, only_public)
+    html = values.collect do |v|
+      if !only_public || v.public? 
+        val = block_given? ? yield(v.value) : v.value
+        h.value_with_muted(val, v.label)
+      end
+    end.compact
+    
+    html = h.safe_join(html, h.tag(:br))
+    content_tag(:p, html) if html.present?
   end
 
   private
-  # pack content into a special tag with attribute name if content not empty ... <foo_attr> content </foo_attr>
-  def attr_tag(tag, html)
-    if html.present?
-      h.content_tag(tag, html)
-    end
-  end
-
-  def isEmail(str)
+  
+  def email?(str)
     /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
   end
 

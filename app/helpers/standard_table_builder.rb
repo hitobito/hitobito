@@ -103,7 +103,7 @@ class StandardTableBuilder
     delegate :content_tag, :to => :template
 
     def content(entry)
-      entry.nil? ? '&nbsp;'.html_safe : block.call(entry)
+      entry.nil? ? '' : block.call(entry)
     end
 
     def html_header

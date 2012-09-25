@@ -3,8 +3,9 @@ class GroupsController < CrudController
   skip_authorize_resource only: :index
   skip_authorization_check only: :index
 
-  decorates :group, :groups
+  decorates :group, :groups, :contact
   
+  before_render_show :load_contact
   before_render_form :load_contacts
 
   def index
@@ -28,6 +29,10 @@ class GroupsController < CrudController
   def assign_attributes 
     role = can?(:modify_superior, entry) ? :superior : :default
     entry.assign_attributes(model_params, as: role)
+  end
+  
+  def load_contact
+    @contact = entry.contact
   end
 
   def load_contacts

@@ -1,7 +1,8 @@
-#main.row-fluid
-  %article.span7
-    %section#contactable
-      =entry.prim_email
-      =entry.complete_address
-      =entry.all_phone_numbers
-      =entry.all_social_accounts
+%section.contactable
+  %address
+    %strong=contactable.to_s if defined?(with_name)
+    =contactable.complete_address
+    =contactable.primary_email
+    =contactable.all_phone_numbers(only_public)
+  
+  =contactable.all_social_accounts(only_public)

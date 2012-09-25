@@ -27,29 +27,4 @@ describe GroupDecorator do
     end
   end
 
-  describe "ContactableDecorator" do
-    before do
-      group = Group.new({ id: 1, name: 'foo', address: 'foostreet 3', zip_code: '4242', town: 'footown', email: 'foo@foobar.com' })
-      @group = GroupDecorator.decorate(group)
-    end
-
-    it "#complete_address" do
-      @group.complete_address.should eq '<address>foostreet 3<br />4242 footown</address>'
-    end
-    
-    it "#prim_email" do
-      @group.prim_email.should eq '<email><a href="mailto:foo@foobar.com">foo@foobar.com</a></email>'
-    end
-
-    # TODO write tests for all_phone_numbers, all_social_accounts
-    #it "#all_phone_numbers" do
-    #  @group.all_phone_numbers.should eq '...'
-    #end
-
-    it "#attr_tag should return an empty string if there is no content given" do
-      @group.instance_eval{attr_tag(:foo, '')}.should eq nil
-    end
-
-  end
-
 end

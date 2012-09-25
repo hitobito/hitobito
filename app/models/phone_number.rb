@@ -20,4 +20,8 @@ class PhoneNumber < ActiveRecord::Base
   def to_s
     "#{number} (#{label})"
   end
+  
+  def value
+    number
+  end
 end

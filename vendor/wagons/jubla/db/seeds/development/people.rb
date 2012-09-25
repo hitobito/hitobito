@@ -88,7 +88,8 @@ devs.each do |dev|
             first_name: first,
             last_name: last,
             encrypted_password: @encrypted_password } 
-  person = Person.seed_once(:email, attrs).first
+  Person.seed_once(:email, attrs)
+  person = Person.find_by_email(attrs[:email])
   role_attrs = { person_id: person.id, group_id: bula.id, type: Group::FederalBoard::Member.name } 
   Role.seed_once(*role_attrs.keys, role_attrs)
 end

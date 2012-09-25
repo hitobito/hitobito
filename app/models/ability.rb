@@ -7,6 +7,10 @@ class Ability
     ### GROUPS
     
     can :read, Group
+    
+    can :show_details, Group do |group|
+      can_detail_group?(group)
+    end
         
     if modify_permissions?
       can :create, Group do |group|
@@ -119,7 +123,13 @@ class Ability
   end
   
   def can_destroy_group?(group)
-    can_create_group?(group) && !(groups_layer_full.include?(group.id) || layers_full.include?(group.id))
+    can_create_group?(group) && 
+    !(groups_layer_full.include?(group.id) || layers_full.include?(group.id))
+  end
+  
+  def can_detail_group?(group)
+    user_groups.include?(group.id) ||
+    (layers_read.present? && contains_any?(layers_read, collect_ids(group.layer_groups))) 
   end
   
   def can_index_people?(group)

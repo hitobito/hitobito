@@ -44,6 +44,10 @@ module LayoutHelper
     content_tag(:span, text, class: 'muted')
   end
   
+  def value_with_muted(value, mute)
+    safe_join([f(value), muted(mute)], ' ')
+  end
+  
   # Renders all partials with names that match "_#{key}_*.html.haml"
   # in alphabetical order.
   def render_extensions(key, options = {})

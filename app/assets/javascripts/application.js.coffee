@@ -30,7 +30,7 @@ setDataType = (xhr) ->
 findPeople = (query, process) ->
   return [] if query.length < 3
   typeahead = this
-  $.get('/people', { q: query }, (data) ->
+  $.get('/people/query', { q: query }, (data) ->
     typeahead.selection = data
     names = $.map(data, (person) -> person.name)
     return process(names)

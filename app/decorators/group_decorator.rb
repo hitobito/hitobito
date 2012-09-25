@@ -67,19 +67,17 @@ class GroupDecorator < BaseDecorator
   end
 
   def children_order_by_type
-    if children.present?
-      charr = children.order_by_type
-      ch2arr = []
-      gt = ''
-      charr.each do |c|
-        if (c.type != gt)
-          gt = c.type
-          ch2arr.push(nil)
-        end
-        ch2arr.push(c)
+    groups = children.order_by_type.to_a
+    result = []
+    type = groups.first.type if groups.present?
+    groups.each do |c|
+      if c.type != type
+        type = c.type
+        result.push(nil)
       end
-      ch2arr
+      result.push(c)
     end
+    result
   end
 
 end

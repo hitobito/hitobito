@@ -39,7 +39,7 @@ states.each do |s|
       public:           true }
   )
 
-  PhoneNumber.seed(:contactable_id, :contactable_type, :name,
+  PhoneNumber.seed(:contactable_id, :contactable_type, :number,
     { contactable_id:   s.id,
       contactable_type: 'Group',
       number:           Faker::PhoneNumber.phone_number,

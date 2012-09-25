@@ -18,5 +18,5 @@
     
     = render_extensions :attrs
 
-  = render 'roles'
+  = render 'roles' if can?(:show_details, entry)
 

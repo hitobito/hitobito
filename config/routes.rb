@@ -9,7 +9,14 @@ Jubla::Application.routes.draw do
   end
 
   resources :groups do
-    resources :people
+    get :fields, on: :collection
+    resources :people do
+      collection do
+        get :external
+      end
+      member do
+        get :history
+      end
     
     resources :roles
     

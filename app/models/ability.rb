@@ -16,7 +16,7 @@ class Ability
       end
       
       can :destroy, Group do |group|
-        can_create_or_destroy_group?(group)
+        can_destroy_group?(group)
       end
       
       can :update, Group do |group|
@@ -101,6 +101,16 @@ class Ability
     layers_full.present? && 
      # user has layer_full, group in same layer or below
      contains_any?(layers_full, group.layer_groups)
+  end
+
+  def can_create_group?(group)
+    layers_full.present? && 
+     # user has layer_full, group in same layer or below
+     contains_any?(layers_full, group.layer_groups)
+  end
+  
+  def can_destroy_group?(group)
+    can_create_group?(group) && !(groups_layer_full.include?(group) || layers_full.include?(group))
   end
   
   def can_index_people?(group)

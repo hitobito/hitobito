@@ -2,8 +2,18 @@ require 'spec_helper'
 
 describe Group do
     
-  it "is a valid nested set" do
-    Group.should be_valid
+  describe 'fixtures' do
+    it "is a valid nested set" do
+      Group.should be_valid
+    end
+    
+    it "has all layer_group_ids set correctly" do
+      Group.all.each do |group|
+        msg = "#{group.to_s}: expected <#{group.layer_group.id}> (#{group.layer_group.to_s}), "
+        msg << "got <#{group.layer_group_id}> (#{Group.find(group.layer_group_id).to_s})"
+        group.layer_group_id.should(eq(group.layer_group.id), msg)
+      end
+    end
   end
   
   describe Group::Federation do

@@ -23,7 +23,7 @@ describe Group::Flock do
 
     its(:available_coaches) { should include(state_coach.person) } 
     its(:available_coaches) { should include(region_coach.person) } 
-    its(:available_coaches) { should include(other_state_coach.person) } 
+    its(:available_coaches) { should_not include(other_state_coach.person) } 
     its(:available_coaches) { should_not include(state_board_member.person) } 
   end
 end

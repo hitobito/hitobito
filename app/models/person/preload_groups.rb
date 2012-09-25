@@ -1,7 +1,5 @@
 module Person::PreloadGroups
   
-  GROUP_SELECT_ATTRS = %w(id name type parent_id lft rgt).collect {|a| "groups.#{a}"}
-  
   def self.extended(base)
     base.do_preload_groups
   end
@@ -18,13 +16,13 @@ module Person::PreloadGroups
     ActiveRecord::Associations::Preloader.new(
       records.collect { |record| record.roles }.flatten, 
       :group, 
-      :select => GROUP_SELECT_ATTRS).run
+      :select => Group::MINIMAL_SELECT).run
       
     # preload groups
     ActiveRecord::Associations::Preloader.new(
       records, 
       :groups, 
-      :select => GROUP_SELECT_ATTRS).run
+      :select => Group::MINIMAL_SELECT).run
       
     # TODO probably preload group ancestors
     

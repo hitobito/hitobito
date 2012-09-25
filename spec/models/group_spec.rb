@@ -101,4 +101,24 @@ describe Group do
       group.children.first.layer_group_id.should eq group.id
     end
   end
+
+  context "#destroy" do
+    let(:bottom_layer_one) { groups(:bottom_layer_one) }
+
+    it "flags group as destroyed" do
+      bottom_layer_one.destroy
+      Group.only_deleted.find(bottom_layer_one.id).should be_present
+    end
+
+    it "destroys all children" do
+      bottom_layer_one.children.to_a.size.should eq 2
+      expect { bottom_layer_one.destroy }.to change(Group,:count).by(-3)
+    end
+
+    it "terminates assigned roles" do
+      role = Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer_one )
+      expect { bottom_layer_one.destroy }.to change(Role,:count).by(-1)
+    end
+  end
+
 end

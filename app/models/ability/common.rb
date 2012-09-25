@@ -6,6 +6,7 @@ module Ability::Common
   included do
     
     attr_reader :user,
+                :user_groups, 
                 :groups_group_full, 
                 :groups_layer_full, 
                 :groups_layer_read,
@@ -24,22 +25,32 @@ module Ability::Common
   private
   
   def init_groups(user)
-    @groups_group_full = user.groups_with_permission(:group_full)
-    @groups_layer_full = user.groups_with_permission(:layer_full)
-    @groups_layer_read = user.groups_with_permission(:layer_read)
-    @layers_read = layers(groups_layer_full, groups_layer_read)
-    @layers_full = layers(groups_layer_full)
+    @user_groups = user.groups.to_a
+    @groups_group_full = user.groups_with_permission(:group_full).to_a
+    @groups_layer_full = user.groups_with_permission(:layer_full).to_a
+    @groups_layer_read = user.groups_with_permission(:layer_read).to_a
+
+    @layers_read = layers(groups_layer_full, groups_layer_read).collect(&:id)
+    @layers_full = layers(groups_layer_full).collect(&:id)
+    @groups_group_full.collect!(&:id)
+    @groups_layer_full.collect!(&:id)
+    @groups_layer_read.collect!(&:id)
+    @user_groups.collect!(&:id)
   end
   
   def layers(*groups)
     groups.flatten.collect(&:layer_group).uniq
   end
   
+  def collect_ids(collection)
+    collection.collect(&:id)
+  end
+  
   # Are any items of the existing list present in the list of required items? 
   def contains_any?(required, existing)
     (required & existing).present?
   end
-  
+
   def modify_permissions?
     @groups_group_full.present? || @groups_layer_full.present?
   end

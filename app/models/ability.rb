@@ -12,11 +12,11 @@ class Ability
       can :create, Group do |group|
         # BEWARE! Always pass a Role instance to create for correct abilities
         group.parent.present? &&
-        can_create_or_destroy_group?(group.parent)
+        can_create_group?(group.parent)
       end
       
       can :destroy, Group do |group|
-        can_create_or_destroy_group?(group)
+        can_destroy_group?(group)
       end
       
       can :update, Group do |group|
@@ -25,7 +25,7 @@ class Ability
       
       if layers_full.present?
         can :modify_superior, Group do |group|
-          contains_any?(layers_full, group.layer_groups - [group.layer_group])
+          contains_any?(layers_full, collect_ids(group.layer_groups - [group.layer_group]))
         end
       end
     end
@@ -36,9 +36,9 @@ class Ability
     
     # can index people that are not visible from above
     can :index_local_people, Group do |group|
-      user.groups.include?(group) ||
+      user.groups.include?(group.id) ||
       (layers_read.present? && 
-       layers_read.include?(group.layer_group))
+       layers_read.include?(group.layer_group.id))
     end
     
     ### ROLES
@@ -95,12 +95,12 @@ class Ability
     end
     
     can :create, PeopleFilter do |filter|
-      layers_full.present? && layers_full.include?(filter.group.layer_group)
+      layers_full.present? && layers_full.include?(filter.group.layer_group_id)
     end
     
     can :destroy, PeopleFilter do |filter|
       filter.group_id? &&
-      layers_full.present? && layers_full.include?(filter.group.layer_group)
+      layers_full.present? && layers_full.include?(filter.group.layer_group_id)
     end
   end
   
@@ -109,21 +109,25 @@ class Ability
   def can_update_group?(group)
     # user has group_full for this group
     groups_group_full.include?(group) ||
-    can_create_or_destroy_group?(group)
+    can_create_group?(group)
   end
     
-  def can_create_or_destroy_group?(group)
+  def can_create_group?(group)
     layers_full.present? && 
      # user has layer_full, group in same layer or below
-     contains_any?(layers_full, group.layer_groups)
+     contains_any?(layers_full, collect_ids(group.layer_groups))
+  end
+  
+  def can_destroy_group?(group)
+    can_create_group?(group) && !(groups_layer_full.include?(group.id) || layers_full.include?(group.id))
   end
   
   def can_index_people?(group)
     user.contact_data_visible? ||
-    user.groups.include?(group) ||
+    user_groups.include?(group.id) ||
     layers_read.present? && (
-      layers_read.include?(group.layer_group) ||
-      contains_any?(layers_read, group.layer_groups)
+      layers_read.include?(group.layer_group.id) ||
+      contains_any?(layers_read, collect_ids(group.layer_groups))
     )
   end
   
@@ -131,54 +135,54 @@ class Ability
     # both have contact data visible
     (person.contact_data_visible? && user.contact_data_visible?) ||
     # person in same group
-    contains_any?(person.groups, user.groups) ||
+    contains_any?(collect_ids(person.groups), user_groups) ||
     
     (layers_read.present? && (
       # user has layer_full or layer_read, person in same layer
-      contains_any?(layers_read, person.layer_groups) ||
+      contains_any?(layers_read, collect_ids(person.layer_groups)) ||
 
       # user has layer_full or layer_read, person below layer and visible_from_above
-      contains_any?(layers_read, person.above_groups_visible_from)
+      contains_any?(layers_read, collect_ids(person.above_groups_visible_from))
     ))
   end
   
   def can_detail_person?(person)
     # user has group_full, person in same group
-    contains_any?(person.groups, groups_group_full) ||
+    contains_any?(groups_group_full, collect_ids(person.groups)) ||
     
     (layers_read.present? && (
       # user has layer_full or layer_read, person in same layer
-      contains_any?(layers_read, person.layer_groups) ||
+      contains_any?(layers_read, collect_ids(person.layer_groups)) ||
 
       # user has layer_full or layer_read, person below layer and visible_from_above
-      contains_any?(layers_read, person.above_groups_visible_from)
+      contains_any?(layers_read, collect_ids(person.above_groups_visible_from))
     ))
   end
   
   def can_modify_person?(person)
     # user has group_full, person in same group
-    contains_any?(person.groups, groups_group_full) ||
+    contains_any?(groups_group_full, collect_ids(person.groups)) ||
     
     (layers_full.present? && (
       # user has layer_full, person in same layer
-      contains_any?(layers_full, person.layer_groups) ||
+      contains_any?(layers_full, collect_ids(person.layer_groups)) ||
       
       # user has layer_full, person below layer and visible_from_above
-      contains_any?(layers_full, person.above_groups_visible_from)
+      contains_any?(layers_full, collect_ids(person.above_groups_visible_from))
     ))
   end
   
   def can_modify_role?(role)
     # user has group_full, role in same group
-    groups_group_full.include?(role.group) ||
+    groups_group_full.include?(role.group.id) ||
     
     (layers_full.present? && (
       # user has layer_full, role in same layer
-      layers_full.include?(role.group.layer_group) ||
+      layers_full.include?(role.group.layer_group.id) ||
       
       # user has layer_full, role below layer and visible_from_above
       (role.class.visible_from_above && 
-       contains_any?(layers_full, role.group.hierarchy))
+       contains_any?(layers_full, collect_ids(role.group.hierarchy)))
     ))
   end
   

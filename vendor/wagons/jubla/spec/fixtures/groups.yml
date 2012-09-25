@@ -2,6 +2,7 @@ ch:
   name: Jubla Schweiz
   short_name: Schweiz
   type: Group::Federation
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:ch) %>
   lft: 1
   rgt: 48
   
@@ -9,6 +10,7 @@ federal_board:
   name: Bulei
   type: Group::FederalBoard
   parent: ch
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:ch) %>
   lft: 2
   rgt: 3
   
@@ -16,6 +18,7 @@ organization_board:
   name: Verbandsleitung
   type: Group::OrganizationBoard
   parent: ch
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:ch) %>
   lft: 4
   rgt: 5
  
@@ -24,6 +27,7 @@ be:
   short_name: BE
   parent: ch
   type: Group::State
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 6
   rgt: 37
   
@@ -31,6 +35,7 @@ be_board:
   name: Kalei
   parent: be
   type: Group::StateBoard
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 7
   rgt: 8
   
@@ -38,6 +43,7 @@ be_agency:
   name: AST
   parent: be
   type: Group::StateAgency
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 9
   rgt: 10
   
@@ -45,6 +51,7 @@ be_security:
   name: FG Sicherheit
   parent: be
   type: Group::ProfessionalGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 11
   rgt: 12
   
@@ -52,6 +59,7 @@ be_state_camp:
   name: AG Kantonslager
   parent: be
   type: Group::WorkGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 13
   rgt: 14
 
@@ -60,6 +68,7 @@ be_state_camp:
   short_name: NO
   parent: ch
   type: Group::State
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:no) %>
   lft: 38
   rgt: 47
   
@@ -67,6 +76,7 @@ no_board:
   name: Kalei
   parent: "no"
   type: Group::StateBoard
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:no) %>
   lft: 39
   rgt: 40
   
@@ -74,6 +84,7 @@ no_agency:
   name: AST
   parent: "no"
   type: Group::StateAgency
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:no) %>
   lft: 41
   rgt: 42
 
@@ -81,6 +92,7 @@ city:
   name: Stadt
   parent: be
   type: Group::Region
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:city) %>
   lft: 15
   rgt: 28
   
@@ -88,6 +100,7 @@ city_board:
   name: Relei
   parent: city
   type: Group::RegionalBoard
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:city) %>
   lft: 16
   rgt: 17
   
@@ -95,6 +108,7 @@ oberland:
   name: Oberland
   parent: be
   type: Group::Region
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:oberland) %>
   lft: 29
   rgt: 36
   
@@ -102,6 +116,7 @@ oberland_board:
   name: Relei
   parent: oberland
   type: Group::RegionalBoard
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:oberland) %>
   lft: 30
   rgt: 31
   
@@ -109,6 +124,7 @@ bern:
   name: Bern
   parent: city
   type: Group::Flock
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bern) %>
   lft: 18
   rgt: 25
   
@@ -116,6 +132,7 @@ asterix:
   name: Asterix
   parent: bern
   type: Group::ChildGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bern) %>
   lft: 19
   rgt: 20
   
@@ -123,6 +140,7 @@ obelix:
   name: Obelix
   parent: bern
   type: Group::ChildGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bern) %>
   lft: 21
   rgt: 22
   
@@ -130,6 +148,7 @@ fussball:
   name: Fussballgruppe
   parent: bern
   type: Group::SimpleGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:bern) %>
   lft: 23
   rgt: 24
   
@@ -137,6 +156,7 @@ muri:
   name: Muri
   parent: city
   type: Group::Flock
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:muri) %>
   lft: 26
   rgt: 27
   
@@ -144,6 +164,7 @@ thun:
   name: Thun
   parent: oberland
   type: Group::Flock
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:thun) %>
   lft: 32
   rgt: 35
     
@@ -151,6 +172,7 @@ mickey:
   name: Mickey
   parent: thun
   type: Group::ChildGroup
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:thun) %>
   lft: 33
   rgt: 34
     
@@ -158,6 +180,7 @@ innerroden:
   name: Innerroden
   parent: "no"
   type: Group::Flock
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:innerroden) %>
   lft: 43
   rgt: 44
   
@@ -165,6 +188,7 @@ ausserroden:
   name: Ausserroden
   parent: "no"
   type: Group::Flock
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:ausserroden) %>
   lft: 45
   rgt: 46
   

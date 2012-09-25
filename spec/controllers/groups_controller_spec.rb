@@ -3,20 +3,10 @@ require 'spec_helper'
 describe GroupsController do
   render_views
 
-  let(:group) { Group.first }
-  let(:person) { Person.first }
-  let(:test_entry) { groups(:top_group) } 
+  let(:group) { groups(:top_group) }
+  let(:person) { people(:top_leader)  }
 
-  #it_should_behave_like 'crud controller'
-  #include_examples 'crud controller', skip: [%w()]
-  
   describe "authentication" do
-    let(:test_entry_attrs) do
-      {:name => 'foo',
-       :short_name => 'f',
-       :parent_id => groups(:top_layer).id}
-    end
-    
     it "redirects to login" do
       get :show, id: group.id 
       should redirect_to "/users/sign_in"
@@ -28,8 +18,6 @@ describe GroupsController do
       should render_template('groups/show')
     end
   end
-
-  
 
 
   describe "show, new then create" do
@@ -57,4 +45,16 @@ describe GroupsController do
     end
   end
 
+  describe "#destroy" do
+    before { sign_in(person) }
+
+    it "leader cannot destroy his group" do
+      expect { post :destroy, id: group.id }.not_to change { Group.count }
+    end
+
+    it "leader can destroy group" do
+      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change(Group,:count).by(-3)
+      should redirect_to groups(:top_layer)
+    end
+  end
 end

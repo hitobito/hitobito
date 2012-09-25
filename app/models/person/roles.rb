@@ -13,6 +13,7 @@ module Person::Roles
     @groups_with_permission[permission] ||= begin
       roles.to_a.select {|r| r.class.permissions.include?(permission) }.collect(&:group).uniq
     end
+    @groups_with_permission[permission].dup
   end
   
   # Does this person have the given permission in any group

@@ -33,6 +33,8 @@
 
 class Group < ActiveRecord::Base
   
+  MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect {|a| "groups.#{a}"}
+  
   acts_as_nested_set
   acts_as_paranoid
   
@@ -102,7 +104,7 @@ class Group < ActiveRecord::Base
   
   # The hierarchy from top to bottom of and including this group.
   def hierarchy
-    @hierarchy ||= self_and_ancestors
+    @hierarchy ||= self_and_ancestors.select(MINIMAL_SELECT)
   end
   
   # The layer of this group.

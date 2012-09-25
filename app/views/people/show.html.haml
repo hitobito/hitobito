@@ -1,0 +1,23 @@
+- title(entry)
+
+- content_for(:toolbar) do
+  = render 'actions_show'
+
+#main.row-fluid
+  #article.span7
+    %b= entry.full_name
+    = render 'contactable/show'
+    = render_extensions :attrs
+
+  #aside.span5
+    %section.group_children
+      %h2 
+        Rollen
+      = table(entry.roles) do |t|
+        - t.col('') do |c|
+          - html = c.group.to_s.html_safe
+          - html << ' '
+          - html << muted(c.class.model_name.human)
+          - html << ' '.html_safe
+          - html << person_remove_link(c)
+          - html

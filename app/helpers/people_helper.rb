@@ -21,4 +21,9 @@ module PeopleHelper
   def gender_label(gender)
     t("activerecord.attributes.person.genders.#{gender.presence || 'default'}")
   end
+
+  def person_remove_link(person)
+    path = group_role_path(person.group.id, person.id)
+    link_to ti(:"link.delete"), path, data: { confirm: ti(:confirm_delete), method: :delete } 
+  end
 end

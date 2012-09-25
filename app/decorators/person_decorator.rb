@@ -7,6 +7,10 @@ class PersonDecorator < BaseDecorator
   def as_typeahead
     {id: id, name: full_label}
   end
+
+  def full_name
+    model.to_s.split('/').first
+  end
   
   def full_label
     label = to_s

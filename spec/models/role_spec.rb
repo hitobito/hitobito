@@ -144,4 +144,12 @@ describe Role do
       should == ['Foo']
     end
   end
+
+  context "#destroy" do
+    it "flags role as destroyed" do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a.destroy
+      Role.only_deleted.find(a.id).should be_present
+    end
+  end
 end

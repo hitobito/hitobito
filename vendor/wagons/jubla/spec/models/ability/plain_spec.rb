@@ -316,7 +316,7 @@ describe Ability do
   end
   
   context "create Group" do
-    subject { ability }
+    
     context "layer full" do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
       
@@ -379,5 +379,84 @@ describe Ability do
       end
     end
 
+  end
+  
+  describe "people filter" do
+    
+    context "root layer full" do
+      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
+      
+      context "in group from same layer" do
+        let(:group) { groups(:federal_board) }
+        
+        it "may create people filters" do
+          should be_able_to(:create, group.people_filters.new)
+        end
+      end
+      
+      context "in group from lower layer" do
+        let(:group) { groups(:bern) }
+        
+        it "may not create people filters" do
+          should_not be_able_to(:create, group.people_filters.new)
+        end
+        
+        it "may define new people filters" do
+          should be_able_to(:new, group.people_filters.new)
+        end
+      end
+    end
+    
+    context "bottom layer full" do
+      let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
+      
+      context "in group from same layer" do
+        let(:group) { groups(:bern) }
+        
+        it "may create people filters" do
+          should be_able_to(:create, group.people_filters.new)
+        end
+      end
+      
+      context "in group from upper layer" do
+        let(:group) { groups(:be) }
+        
+        it "may not create people filters" do
+          should_not be_able_to(:create, group.people_filters.new)
+        end
+        
+        it "may define new people filters" do
+          should be_able_to(:new, group.people_filters.new)
+        end
+      end
+    end
+    
+    context "layer read" do
+      let(:role) { Fabricate(Group::StateBoard::Supervisor.name.to_sym, group: groups(:be_board)) }
+      
+      context "in group from same layer" do
+        let(:group) { groups(:be_board) }
+        
+        it "may not create people filters" do
+          should_not be_able_to(:create, group.people_filters.new)
+        end
+        
+        it "may define new people filters" do
+          should be_able_to(:new, group.people_filters.new)
+        end
+      end
+      
+      context "in group from lower layer" do
+        let(:group) { groups(:bern) }
+        
+        it "may not create people filters" do
+          should_not be_able_to(:create, group.people_filters.new)
+        end
+        
+        it "may define new people filters" do
+          should be_able_to(:new, group.people_filters.new)
+        end
+      end
+    end
   end
 end

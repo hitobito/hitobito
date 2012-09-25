@@ -34,10 +34,9 @@ class PeopleFilter < ActiveRecord::Base
   class RoleType < ActiveRecord::Base
     belongs_to :people_filter
     
-    attr_accessible :role_type, :group_type
+    attr_accessible :role_type
     
-    validates :role_type, inclusion: Role.all_types.collect(&:sti_name)
-    validates :group_type, inclusion: Group.all_types.collect(&:sti_name), allow_nil: true
+    validates :role_type, inclusion: {in: lambda { |i| Role.all_types.collect(&:sti_name) } }
     
     def to_s
       role_type

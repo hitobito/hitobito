@@ -89,7 +89,18 @@ class Ability
      
     ### PEOPLE_FILTERS
     
-    can :manage, PeopleFilter
+    can :new, PeopleFilter do |filter|
+      can_index_people?(filter.group)
+    end
+    
+    can :create, PeopleFilter do |filter|
+      layers_full.present? && layers_full.include?(filter.group.layer_group)
+    end
+    
+    can :destroy, PeopleFilter do |filter|
+      filter.group_id? &&
+      layers_full.present? && layers_full.include?(filter.group.layer_group)
+    end
   end
   
   private

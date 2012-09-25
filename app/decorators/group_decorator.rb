@@ -18,12 +18,29 @@ class GroupDecorator < BaseDecorator
   end
   
   def people_filter_links
-    model.all_people_filters.collect do |filter|
-      link = h.group_people_path(kind: filter.kind, role_types: filter.role_types.collect(&:to_s))
-      [filter.name, link]
-    end << 
-    nil << 
-    ['Neuer Filter...', h.new_group_people_filter_path(id, people_filter: h.params.slice(:kind, :role_types))]
+    links = []
+    links << ['Mitglieder', h.group_people_path(model)]
+    links << ['Externe', h.group_people_path(model, role_types: Role.external_types.collect(&:sti_name), name: 'Externe')] if can?(:external_people, model)
+    
+    filters = model.all_people_filters
+    if filters.present?
+      links << nil
+      filters.collect do |filter|
+        link = h.group_people_path(kind: filter.kind, role_types: filter.role_types.collect(&:to_s), name: filter.name)
+        links << [filter.name, link]
+      end
+    end
+    
+    if can?(:new, model.people_filters.new)
+      links << nil
+      links << ['Neuer Filter...', h.new_group_people_filter_path(id, people_filter: h.params.slice(:kind, :role_types))]
+    end
+    
+    links
+  end
+  
+  def filter_name
+    h.params[:name] || (h.params[:role_types] ? 'Eigener Filter' : 'Mitglieder')
   end
   
   def used_attributes(*attributes)

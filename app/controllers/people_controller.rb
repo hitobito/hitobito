@@ -14,21 +14,22 @@ class PeopleController < CrudController
   def index
     @external = false
     action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
+    
     @people = list_entries(action)
-    if action != :index
+    
+    if params[:role_types]
       @people = @people.where(roles: {type: params[:role_types]})
-      @all_roles = true
     else
-      @people = @people.external(false).order_by_role
+      @people = @people.external(false)
+    end 
+    
+    if action != :index
+      @multiple_groups = true
+    else
+      @people = @people.order_by_role
     end
+    
     @people = @people.order_by_name
-    respond_with(@people)
-  end
-  
-  # list external people
-  def external
-    @external = true
-    @people = list_entries.external(true).order_by_role.order_by_company
     respond_with(@people)
   end
   
@@ -45,8 +46,12 @@ class PeopleController < CrudController
     render json: decorate(@people).collect(&:as_typeahead)
   end
   
-  def filter
-    
+  def show
+    if parent.nil?
+      redirect_to group_person_path(entry.groups.select('groups.id').first, entry)
+    else
+      super
+    end
   end
 
   private

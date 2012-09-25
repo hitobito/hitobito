@@ -2,13 +2,14 @@
 
 
 = entry_form(submit_label: 'Suchen', cancel_url_new: group_people_path(@group)) do |f|
-  = field_set_tag('Wo wird gesucht?') do
+  = field_set_tag('In welchem Bereich soll gesucht werden?') do
     = f.labeled :kind, '&nbsp;'.html_safe do
       = f.inline_radio_button(:kind, :group, 'Gruppe')
       = f.inline_radio_button(:kind, :layer, 'Ebene')
       = f.inline_radio_button(:kind, :deep, 'Untergruppen')
   
   = field_set_tag('Welche Rollen sollen angezeigt werden?') do
+    %p Je nach Suchbereich wird nur nach gewissen Rollen gesucht.
     - entry.searchable_group_types.each do |group_type, role_types|
       = f.labeled nil, group_type.model_name.human do 
         - role_types.each do |role_type|
@@ -23,6 +24,7 @@
                              role_type.model_name.human, 
                              checked: entry.role_types.include?(role_type.sti_name))
 
-  = field_set_tag('Filtern speichern') do
-    = f.labeled_input_field :name, placeholder: 'Geben Sie optional einen Namen an, um diesen Filter zu speichern'
+  - if can?(:create, entry)
+    = field_set_tag('Filtern speichern') do
+      = f.labeled_input_field :name, placeholder: 'Geben Sie optional einen Namen an, um diesen Filter zu speichern'
     

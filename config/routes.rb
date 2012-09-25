@@ -2,12 +2,14 @@ Jubla::Application.routes.draw do
 
   root :to => 'dashboard#index'
 
-  resources :groups do
-    resources :people do
-      collection do
-        get :external
-      end
+  resources :people, only: :show do
+    collection do
+      get :query
     end
+  end
+
+  resources :groups do
+    resources :people
     
     resources :roles
     
@@ -20,8 +22,6 @@ Jubla::Application.routes.draw do
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
   
-  get '/people' => 'people#query'
-
 
   get 'static/:action', controller: 'static'
 

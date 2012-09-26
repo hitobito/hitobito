@@ -41,15 +41,9 @@ describe GroupsController, type: :controller do
     end
     
     it "#new" do
-      templates = ["shared/_error_messages",
-       "contactable/_fields",
-       "contactable/_phone_number_fields",
-       "contactable/_social_account_fields",
-       "groups/_form",
-       "crud/new",
-       "layouts/_options",
-       "layouts/_flash",
-       "layouts/application"]
+      templates = ["shared/_error_messages", "contactable/_fields", "contactable/_phone_number_fields",
+       "contactable/_social_account_fields", "groups/_form", "crud/new", "layouts/_options",
+       "layouts/_flash", "layouts/application"]
 
       get :new, group: { parent_id: group.id, type: 'Group::TopGroup' }
       templates.each { |template| should render_template(template) } 

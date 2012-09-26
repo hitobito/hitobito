@@ -7,7 +7,7 @@ describe "shared/_dropdown_button.html.haml" do
   let(:group) { groups(:top_layer) }
   let(:subject) { Capybara::Node::Simple.new(@rendered) }
 
-  before { view.stub(entry: GroupExhibit.new(group, view), can?: false) }
+  before { view.stub(entry: GroupDecorator.new(group), can?: false) }
 
 
   it "renders dropdown" do

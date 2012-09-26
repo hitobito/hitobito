@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module RolesHelper
   
   def format_role_created_at(role)
@@ -9,10 +11,12 @@ module RolesHelper
   end
   
   def format_role_group_id(role)
-    group = role.group
-    # if group was destroyed, we have to get it with #unscoped
-    group = Group.unscoped.where(id: role.group_id).first if group.nil?
-    # TODO: should we display destroyed groups?
-    link_to(group, group) if group
+    if group = role.group
+      link_to(group, group)
+    else
+       # if group was destroyed, we have to get it with #unscoped
+      group = Group.unscoped.where(id: role.group_id).first
+      group.to_s + " (Gelöscht)"
+    end
   end
 end

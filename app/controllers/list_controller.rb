@@ -69,7 +69,7 @@ class ListController < ApplicationController
     else
       value.class.base_class.name
     end
-
+    
     instance_variable_set(:"@#{name.underscore}", value)
   end
 

@@ -255,12 +255,12 @@ module StandardHelper
 
   # Renders a link to the given association entry.
   def assoc_link(assoc, val)
-    link_to_unless(no_assoc_link?(assoc, val), val.to_s, val)
+    link_to_if(assoc_link?(assoc, val), val.to_s, val)
   end
 
   # Returns true if no link should be created when formatting the given association.
-  def no_assoc_link?(assoc, val)
-    !respond_to?("#{val.class.base_class.model_name.underscore}_path".to_sym)
+  def assoc_link?(assoc, val)
+    respond_to?("#{val.class.base_class.model_name.underscore}_path".to_sym) && can?(:show, val)
   end
 
   # Returns the association proxy for the given attribute. The attr parameter

@@ -53,7 +53,6 @@ class Group < ActiveRecord::Base
   
   after_create :set_layer_group_id
   after_create :create_default_children
-  after_destroy :destroy_roles
   
   # Root group may not be destroyed
   protect_if :root?
@@ -163,8 +162,4 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def destroy_roles
-    roles && roles.destroy_all
-  end
-  
 end

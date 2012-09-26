@@ -88,13 +88,19 @@ class Group < ActiveRecord::Base
       accessible_attributes(:superior).to_a - accessible_attributes(:default).to_a
     end
 
-    def order_by_type
-      statement = "CASE groups.type "
-      Group.all_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i} "
+    # order groups by type. If a parent group is given, order the types
+    # as they appear in possible_children, otherwise order them 
+    # hierarchically over all group types.
+    def order_by_type(parent_group = nil)
+      types = parent_group ? parent_group.possible_children : Group.all_types
+      if types.present?
+        statement = "CASE groups.type "
+        types.each_with_index do |t, i|
+          statement << "WHEN '#{t.sti_name}' THEN #{i} "
+        end
+        statement << "END, "
       end
-      statement << "END"
-      reorder("#{statement}, lft") # acts_as_nested_set default to new order
+      reorder("#{statement} name") # acts_as_nested_set default to new order
     end
   end
   

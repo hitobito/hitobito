@@ -67,7 +67,7 @@ class GroupDecorator < BaseDecorator
   end
 
   def children_order_by_type
-    groups = children.order_by_type.to_a
+    groups = children.order_by_type(model).to_a
     result = []
     type = groups.first.type if groups.present?
     groups.each do |c|

@@ -118,6 +118,31 @@ describe Group do
       Set.new(Group.all_types).should == Set.new([Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup])
     end
   end
+  
+  context ".order_by_type" do
+    it "has correct ordering without group" do
+      Group.order_by_type.should == [groups(:top_layer), 
+                                     groups(:top_group), 
+                                     groups(:bottom_layer_one), 
+                                     groups(:bottom_layer_two), 
+                                     groups(:bottom_group_one_one), 
+                                     groups(:bottom_group_one_two), 
+                                     groups(:bottom_group_two_one)]
+    end
+    
+    it "has correct ordering with parent group" do
+      parent = groups(:top_layer)
+      parent.children.order_by_type(parent).should == 
+          [groups(:top_group), 
+           groups(:bottom_layer_one), 
+           groups(:bottom_layer_two)]
+    end
+    
+    it "works without possible groups" do
+      parent = groups(:bottom_group_one_one)
+      parent.children.order_by_type(parent).should be_empty
+    end
+  end
 
 
   context "#set_layer_group_id" do

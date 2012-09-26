@@ -35,7 +35,7 @@ class Group < ActiveRecord::Base
   
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect {|a| "groups.#{a}"}
   
-  acts_as_nested_set
+  acts_as_nested_set dependent: :destroy
   acts_as_paranoid
   
   include Group::Types
@@ -94,7 +94,7 @@ class Group < ActiveRecord::Base
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << "END"
-      order(statement)
+      reorder("#{statement}, lft") # acts_as_nested_set default to new order
     end
   end
   
@@ -161,6 +161,5 @@ class Group < ActiveRecord::Base
       child.save!
     end
   end
-  
-  
+
 end

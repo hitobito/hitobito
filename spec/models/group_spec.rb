@@ -139,22 +139,42 @@ describe Group do
   end
 
   context "#destroy" do
-    let(:bottom_layer_one) { groups(:bottom_layer_one) }
+    let(:top_leader) { roles(:top_leader) }
+    let(:top_layer) { groups(:top_layer) }
+    let(:bottom_layer) { groups(:bottom_layer_one) }
+    let(:bottom_group) { groups(:bottom_group_one_one) }
 
-    it "flags group as destroyed" do
-      bottom_layer_one.destroy
-      Group.only_deleted.find(bottom_layer_one.id).should be_present
+    context "children" do
+      it "destroys self and children" do
+        deleted_ids = bottom_layer.self_and_descendants.collect(&:id)
+        expect { bottom_layer.destroy }.to change(Group,:count).by(-3)
+        Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
+      end
+
+      it "destroys children's children" do
+        deleted_ids = top_layer.self_and_descendants.collect(&:id)
+        deleted_ids -= [top_layer.id] # top layer cannot be deleted
+        expect { top_layer.destroy }.to change(Group,:count).by(-6)
+        Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
+      end
     end
 
-    it "destroys all children" do
-      bottom_layer_one.children.to_a.size.should eq 2
-      expect { bottom_layer_one.destroy }.to change(Group,:count).by(-3)
-    end
+    context "role assignments"  do
+      it "terminates own roles and children's roles" do
+        id = Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer ).id
+        expect { bottom_layer.destroy }.to change(Role,:count).by(-1)
+        Role.only_deleted.find(:all).collect(&:id).should =~ [id]
+      end
 
-    it "terminates assigned roles" do
-      role = Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer_one )
-      expect { bottom_layer_one.destroy }.to change(Role,:count).by(-1)
+      it "terminates children's children's role assigments" do
+        Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer)
+        Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
+        deleted_ids = top_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
+        expect { top_layer.destroy }.to change(Role,:count).by(-3)
+        Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
+      end
     end
   end
+
 
 end

@@ -35,7 +35,7 @@ class Group < ActiveRecord::Base
   
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect {|a| "groups.#{a}"}
   
-  acts_as_nested_set
+  acts_as_nested_set dependent: :destroy
   acts_as_paranoid
   
   include Group::Types
@@ -53,6 +53,7 @@ class Group < ActiveRecord::Base
   
   after_create :set_layer_group_id
   after_create :create_default_children
+  after_destroy :destroy_roles
   
   # Root group may not be destroyed
   protect_if :root?
@@ -161,6 +162,9 @@ class Group < ActiveRecord::Base
       child.save!
     end
   end
-  
+
+  def destroy_roles
+    roles && roles.destroy_all
+  end
   
 end

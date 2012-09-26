@@ -94,7 +94,7 @@ class Group < ActiveRecord::Base
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << "END"
-      order(statement)
+      reorder("#{statement}, lft") # acts_as_nested_set default to new order
     end
   end
   

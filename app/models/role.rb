@@ -13,6 +13,7 @@
 #  employment_percent :integer
 #  honorary           :boolean
 #
+
 class Role < ActiveRecord::Base
   
   acts_as_paranoid

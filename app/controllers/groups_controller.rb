@@ -36,7 +36,7 @@ class GroupsController < CrudController
   end
 
   def load_contacts
-    @contacts = entry.people.external(false).only_public_data.order_by_name
+    @contacts = entry.people.affiliate(false).only_public_data.order_by_name
   end
 
 end

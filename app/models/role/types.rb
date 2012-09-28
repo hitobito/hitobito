@@ -1,11 +1,19 @@
 module Role::Types
   extend ActiveSupport::Concern
   
+  Permissions = [:layer_full, :layer_read, :group_full, :contact_data, :login] 
+  
+  
   included do
-    class_attribute :permissions, :visible_from_above, :external
+    class_attribute :permissions, :visible_from_above, :affiliate, :restricted
+    # All permission a person with this role has on the corresponding group.
     self.permissions = []
+    # Whether a person with this role is visible for somebody with layer_read permission above the current layer.
     self.visible_from_above = true
-    self.external = false
+    # Whether this role is an active member or an affiliate person of the corresponding group.
+    self.affiliate = false
+    # Whether this kind of role is specially managed or open for general modifications.
+    self.restricted = false
   end
   
   module ClassMethods
@@ -22,8 +30,8 @@ module Role::Types
       all_types.select {|r| (permissions - r.permissions).blank? }
     end
     
-    def external_types
-      all_types.select(&:external)
+    def affiliate_types
+      all_types.select(&:affiliate)
     end
     
     def reset_types!

@@ -63,6 +63,9 @@ class Person < ActiveRecord::Base
   has_many :roles, dependent: :destroy, inverse_of: :person
   has_many :groups, through: :roles
   
+  has_many :event_participations, class_name: 'Event::Participation', dependent: :destroy, inverse_of: :person
+  has_many :event_applications, class_name: 'Event::Application', through: :event_participations
+  
   
   ### VALIDATIONS
   
@@ -97,11 +100,15 @@ class Person < ActiveRecord::Base
   def all_roles
     records = Role.unscoped.where(person_id: id).order('deleted_at').includes(:group)
   end
+  
+  def login?
+    permission?(:login)
+  end
 
   private
   
   def email_required?
-    permission?(:login)
+    login?
   end
   
   def password_required?

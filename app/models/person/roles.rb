@@ -52,13 +52,13 @@ module Person::Roles
       where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
     end
     
-    # load people with/out external roles
-    def external(ext = true)
-      external_types = Role.external_types.collect(&:sti_name)
+    # load people with/out affiliate roles
+    def affiliate(ext = true)
+      affiliate_types = Role.affiliate_types.collect(&:sti_name)
       if ext
-        where(roles: {type: external_types})
+        where(roles: {type: affiliate_types})
       else
-        where("roles.type NOT IN (?)", external_types)
+        where("roles.type NOT IN (?)", affiliate_types)
       end
     end
     

@@ -4,6 +4,15 @@ class Ability
   def initialize(user)
     super(user)
     
+    # generall, a user without login permission cannot do anything
+    unless user.login?
+      can [:show, :modify], Person do |person|
+        person.id == user.id
+      end
+      return
+    end
+
+    
     ### GROUPS
     
     can :read, Group
@@ -38,7 +47,7 @@ class Ability
       can_index_people?(group)
     end
     
-    # can index people that are not visible from above
+    # can index people that are not visible from above. eg. children, affiliates, ...
     can :index_local_people, Group do |group|
       user.groups.include?(group.id) ||
       (layers_read.present? && 

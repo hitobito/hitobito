@@ -7,7 +7,7 @@ class PeopleFilterDecorator < BaseDecorator
   end
   
   def local_role_types(group)
-    group.roles.select {|r| r.name.start_with?(group.name) }
+    group.role_types.select {|r| r.name.start_with?(group.name) }
   end
   
   def global_role_types

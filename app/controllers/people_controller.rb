@@ -12,7 +12,6 @@ class PeopleController < CrudController
   prepend_before_filter :parent
   
   def index
-    @external = false
     action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
     
     @people = list_entries(action)
@@ -20,7 +19,7 @@ class PeopleController < CrudController
     if params[:role_types]
       @people = @people.where(roles: {type: params[:role_types]})
     else
-      @people = @people.external(false)
+      @people = @people.affiliate(false)
     end 
     
     if action != :index

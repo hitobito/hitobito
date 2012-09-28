@@ -26,6 +26,19 @@ de:
       social_account:
         one: Social Media Adresse
         other: Social Media Adressen
+      event:
+        one: Event
+        other: Events
+      event/course:
+        one: Kurs
+        other: Kurse
+      event_participation:
+        one: Teilnahme
+        other: Teilnahmen
+      event_application:
+        one: Anmeldung
+        other: Anmeldungen
+      
       
     attributes:
       person:
@@ -65,6 +78,52 @@ de:
         contact: Kontaktperson
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+      
+      event:
+        group_id: Gruppe
+        name: Name
+        motto: Motto
+        cost: Kosten
+        maximum_participants: Maximale Teilnehmerzahl
+        contact_id: Kontaktperson
+        description: Beschreibung
+        location: Ort / Adresse
+        application_opening_at: Anmeldebeginn
+        application_closing_at: Anmeldeschluss
+        application_conditions: Anmeldebedingungen
+        event_dates: Daten
+        event_questions: Fragen
+      
+      event/course:
+        number: Kursnummer
+        event_kind_id: Kursart
+        state: Status
+        priorization: Priorisierung erforderlich
+        requires_approval: Freigabe erforderlich
+
+      event_participation:
+        label: Bezeichnung
+        person_id: Person
+        event_id: Event
+        additional_information: Bemerkungen / Medizinisches
+        answers: Fragen
+        
+      event_application:
+        priority_1_id: "1. Priorität"
+        priority_2_id: "2. Priorität"
+        priority_3_id: "3. Priorität"
+  
+      event_dates:
+        label: Beschreibung/Ort
+        start_at: Von
+        finish_at: Bis
+        
+      event_questions:
+        question: Frage
+        choices: Mögliche Antworten
+        
+      event_answers:
+        answer: Antwort
         
       role:
         label: Bezeichnung
@@ -92,7 +151,10 @@ de:
         name: Social Media Name
         label: Social Media Typ
         public: Öffentlich
-      
+  
+  
+  # view keys
+  
   people_filters:
     new:
       title: Personen filtern

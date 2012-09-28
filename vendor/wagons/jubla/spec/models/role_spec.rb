@@ -5,7 +5,7 @@ describe Role do
   describe Group::Flock::Leader do
     subject { Group::Flock::Leader }
     
-    it { should_not be_external }
+    it { should_not be_affiliate }
     it { should be_visible_from_above }
     
     its(:permissions) { should ==  [:layer_full, :contact_data, :login] }
@@ -25,7 +25,7 @@ describe Role do
   describe Jubla::Role::External do
     subject { Jubla::Role::External }
   
-    it { should be_external }
+    it { should be_affiliate }
     it { should_not be_visible_from_above }
     
     its(:permissions) { should ==  [] }

@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: people_filters
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)      not null
+#  group_id   :integer
+#  group_type :string(255)
+#  kind       :string(255)      not null
+#
+
 class PeopleFilter < ActiveRecord::Base
   
   attr_accessible :name, :kind, :role_types

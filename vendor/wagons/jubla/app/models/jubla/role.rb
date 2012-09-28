@@ -1,9 +1,6 @@
 module Jubla::Role
   extend ActiveSupport::Concern
   
-  Permissions = [:layer_full, :layer_read, :group_full, :contact_data, :login] 
-  
-  
   # Common roles not attached to a specific group
   
   class GroupAdmin < ::Role
@@ -13,7 +10,7 @@ module Jubla::Role
   class External < ::Role
     self.permissions = []
     self.visible_from_above = false
-    self.external = true
+    self.affiliate = true
   end
   
   # J+S Coach

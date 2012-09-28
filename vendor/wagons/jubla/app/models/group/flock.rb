@@ -25,7 +25,7 @@ class Group::Flock < Group
   def available_advisors
     Person.in_layer(*layer_groups).
       where(groups: { type: [Group::StateBoard, Group::RegionalBoard].collect(&:sti_name) }).
-      where('roles.type NOT IN (?)', Role.external_types.collect(&:sti_name))
+      where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
   end
   
   def to_s

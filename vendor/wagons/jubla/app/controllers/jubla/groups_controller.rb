@@ -2,9 +2,7 @@ module Jubla::GroupsController
   extend ActiveSupport::Concern
 
   included do 
-
     before_render_form :load_advisors
-
   end
 
   def load_advisors

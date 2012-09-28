@@ -33,12 +33,12 @@ describe Ability::Accessibles do
           end
           
           if action == :deep_search
-            it "may not get external people in his group" do
+            it "may not get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:federal_board))
               should_not include(other.person)
             end
           else
-            it "may get external people in his group" do
+            it "may get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:federal_board))
               should include(other.person)
             end
@@ -53,7 +53,7 @@ describe Ability::Accessibles do
             should include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
             should_not include(other.person)
           end
@@ -81,12 +81,12 @@ describe Ability::Accessibles do
           end
           
           if action == :deep_search
-            it "may not get external people in his group" do
+            it "may not get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should_not include(other.person)
             end
           else
-            it "may get external people in his group" do
+            it "may get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should include(other.person)
             end
@@ -102,12 +102,12 @@ describe Ability::Accessibles do
           end
           
           if action == :deep_search
-            it "may not get external people" do
+            it "may not get affiliate people" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_agency))
               should_not include(other.person)
             end
           else
-            it "may get external people" do
+            it "may get affiliate people" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_agency))
               should include(other.person)
             end
@@ -122,7 +122,7 @@ describe Ability::Accessibles do
             should include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end
@@ -159,12 +159,12 @@ describe Ability::Accessibles do
           end
           
           if action == :deep_search
-            it "may not get external people in his group" do
+            it "may not get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should_not include(other.person)
             end
           else
-            it "may get external people in his group" do
+            it "may get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should include(other.person)
             end
@@ -179,7 +179,7 @@ describe Ability::Accessibles do
             should_not include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_agency))
             should_not include(other.person)
           end
@@ -216,12 +216,12 @@ describe Ability::Accessibles do
           end
           
           if action == :index
-            it "may get external people in his group" do
+            it "may get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should include(other.person)
             end
           else
-            it "may not get external people in his group" do
+            it "may not get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
               should_not include(other.person)
             end
@@ -241,7 +241,7 @@ describe Ability::Accessibles do
             should_not include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
             should_not include(other.person)
           end
@@ -260,7 +260,7 @@ describe Ability::Accessibles do
             should_not include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end
@@ -289,12 +289,12 @@ describe Ability::Accessibles do
           end
           
           if action == :deep_search
-            it "may not get external people in his group" do
+            it "may not get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
               should_not include(other.person)
             end
           else
-            it "may get external people in his group" do
+            it "may get affiliate people in his group" do
               other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
               should include(other.person)
             end
@@ -309,7 +309,7 @@ describe Ability::Accessibles do
             should_not include(other.person)
           end
   
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
             should_not include(other.person)
           end
@@ -323,7 +323,7 @@ describe Ability::Accessibles do
             should_not include(other.person)
           end
           
-          it "may not get external people" do
+          it "may not get affiliate people" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end

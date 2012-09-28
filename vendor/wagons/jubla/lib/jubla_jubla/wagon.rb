@@ -13,6 +13,8 @@ module JublaJubla
       Person.send :include, Jubla::Person
       Group.send  :include, Jubla::Group
       Role.send   :include, Jubla::Role
+      Event::Course.send :include, Jubla::Event::Course
+      
       GroupsController.send :include, Jubla::GroupsController
     end 
 

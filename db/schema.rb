@@ -11,7 +11,76 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120924131947) do
+ActiveRecord::Schema.define(:version => 20120928101758) do
+
+  create_table "event_answers", :force => true do |t|
+    t.integer "participation_id", :null => false
+    t.integer "question_id",      :null => false
+    t.string  "answer"
+  end
+
+  create_table "event_applications", :force => true do |t|
+    t.integer "participation_id",                    :null => false
+    t.integer "priority_1_id",                       :null => false
+    t.integer "priority_2_id"
+    t.integer "priority_3_id"
+    t.boolean "approved",         :default => false, :null => false
+    t.boolean "rejected",         :default => false, :null => false
+    t.boolean "waiting_list",     :default => false, :null => false
+  end
+
+  create_table "event_dates", :force => true do |t|
+    t.integer  "event_id",  :null => false
+    t.string   "label"
+    t.datetime "start_at"
+    t.datetime "finish_at"
+  end
+
+  create_table "event_kinds", :force => true do |t|
+    t.string   "label",      :null => false
+    t.string   "short_name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.datetime "deleted_at"
+  end
+
+  create_table "event_participations", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "person_id",              :null => false
+    t.string   "type",                   :null => false
+    t.string   "label"
+    t.text     "additional_information"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  create_table "event_questions", :force => true do |t|
+    t.integer "event_id"
+    t.string  "question"
+    t.string  "choices"
+  end
+
+  create_table "events", :force => true do |t|
+    t.integer  "group_id",                                                :null => false
+    t.string   "type",                                                    :null => false
+    t.string   "name",                                                    :null => false
+    t.string   "number"
+    t.string   "motto"
+    t.string   "cost"
+    t.integer  "maximum_participants"
+    t.integer  "contact_id"
+    t.text     "description"
+    t.text     "location"
+    t.date     "application_opening_at"
+    t.date     "application_closing_at"
+    t.text     "application_conditions"
+    t.integer  "kind_id"
+    t.string   "state",                  :limit => 60
+    t.boolean  "priorization",                         :default => false, :null => false
+    t.boolean  "requires_approval",                    :default => false, :null => false
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
+  end
 
   create_table "groups", :force => true do |t|
     t.integer  "parent_id"
@@ -30,9 +99,9 @@ ActiveRecord::Schema.define(:version => 20120924131947) do
     t.datetime "updated_at",                     :null => false
     t.datetime "deleted_at"
     t.integer  "layer_group_id"
-    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
-    t.index ["parent_id"], :name => "index_groups_on_parent_id"
     t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
+    t.index ["parent_id"], :name => "index_groups_on_parent_id"
+    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
   end
 
   create_table "people", :force => true do |t|
@@ -61,8 +130,8 @@ ActiveRecord::Schema.define(:version => 20120924131947) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.index ["email"], :name => "index_people_on_email", :unique => true
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
+    t.index ["email"], :name => "index_people_on_email", :unique => true
   end
 
   create_table "people_filter_role_types", :force => true do |t|

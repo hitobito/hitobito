@@ -1,6 +1,7 @@
 module Group::Types
   extend ActiveSupport::Concern
   
+  
   included do
     class_attribute :layer, :role_types, :possible_children, :default_children
     

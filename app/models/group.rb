@@ -60,13 +60,14 @@ class Group < ActiveRecord::Base
   
   ### ASSOCIATIONS
   
+  belongs_to :contact, class_name: 'Person'
+  
   has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
   
   has_many :people_filters, dependent: :destroy
   
-  belongs_to :contact, class_name: 'Person'
-  
+  has_many :events
   
   ### VALIDATIONS
   

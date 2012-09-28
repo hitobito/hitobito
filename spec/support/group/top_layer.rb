@@ -10,7 +10,7 @@ class Group::TopLayer < Group
   
   class External < ::Role
     self.visible_from_above = false
-    self.external = true
+    self.affiliate = true
   end
   
   roles External

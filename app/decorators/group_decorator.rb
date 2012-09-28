@@ -13,7 +13,7 @@ class GroupDecorator < BaseDecorator
   end
 
   def possible_role_links
-    model.class.roles.map do |type|
+    model.class.role_types.map do |type|
       if type.visible_from_above? || can?(:index_local_people, model)
         link = h.new_group_role_path(self, role: { type: type.sti_name})
         h.link_to(type.model_name.human, link)
@@ -24,7 +24,9 @@ class GroupDecorator < BaseDecorator
   def people_filter_links
     links = []
     links << h.link_to('Mitglieder', h.group_people_path(model))
-    links << h.link_to('Externe', h.group_people_path(model, role_types: Role.external_types.collect(&:sti_name), name: 'Externe')) if can?(:index_local_people, model)
+    if can?(:index_local_people, model)
+      links << h.link_to('Externe', h.group_people_path(model, role_types: Role.affiliate_types.collect(&:sti_name), name: 'Externe'))
+    end
     
     if layer?
       filters = all_people_filters

@@ -16,7 +16,7 @@ class Group::BottomLayer < Group
   
   class External < ::Role
     self.visible_from_above = false
-    self.external = true
+    self.affiliate = true
   end
   
   roles Leader, Member

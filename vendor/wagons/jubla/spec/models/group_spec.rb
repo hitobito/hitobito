@@ -92,11 +92,11 @@ describe Group do
         end
       end
     
-      group.roles.each do |role|
+      group.role_types.each do |role|
         context role do
           it "must have valid permissions" do
-            # although it looks like, this example is about role.permissions and not about Jubla::Role::Permissions
-            Jubla::Role::Permissions.should include(*role.permissions)
+            # although it looks like, this example is about role.permissions and not about Role::Permissions
+            Role::Permissions.should include(*role.permissions)
           end
         end
       end

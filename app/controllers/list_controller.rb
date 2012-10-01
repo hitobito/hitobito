@@ -67,7 +67,7 @@ class ListController < ApplicationController
     name = if value.is_a?(ActiveRecord::Relation)
       ivar_name(value.klass).pluralize
     elsif value.respond_to?(:each) # Array
-      ivar_name(value.first.klass).pluralize
+      ivar_name(value.first.class).pluralize
     else
       ivar_name(value.class)
     end

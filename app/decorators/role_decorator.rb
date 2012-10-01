@@ -1,5 +1,5 @@
 # encoding: UTF-8
-class RoleDecorator < BaseDecorator
+class RoleDecorator < ApplicationDecorator
   decorates :role
 
   def used_attributes(*attributes)

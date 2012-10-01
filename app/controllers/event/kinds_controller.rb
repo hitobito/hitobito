@@ -1,6 +1,4 @@
 class Event::KindsController < CrudController
-    
-  decorates :kind
   
   def create
     super(location: event_kinds_path)

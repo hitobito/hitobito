@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class GroupDecorator < BaseDecorator
+class GroupDecorator < ApplicationDecorator
   decorates :group
 
   include ContactableDecorator

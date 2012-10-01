@@ -197,6 +197,11 @@ module StandardHelper
       options[:class] = classes
     end
   end
+  
+  def model_class_label(entry)
+    klass = entry.respond_to?(:klass) ? entry.klass : entry.class
+    klass.model_name.human
+  end
 
   private
 

@@ -1,5 +1,6 @@
-class PeopleFilterDecorator < BaseDecorator
-    
+class PeopleFilterDecorator < ApplicationDecorator
+  decorates :people_filter
+  
   def searchable_group_types
     group.layer_group.class.child_types.
       collect {|group_type| [group_type, local_role_types(group_type) ]}.

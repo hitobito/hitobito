@@ -1,4 +1,4 @@
-class BaseDecorator < Draper::Base
+class ApplicationDecorator < Draper::Base
   delegate :to_s, to: :model
   delegate :can?, :content_tag, to: :h
 

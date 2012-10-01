@@ -3,8 +3,6 @@
 require 'spec_helper'
 
 describe PeopleController, type: :controller do
-  include CrudTestHelper
-
 
   let(:top_leader) { people(:top_leader) }
   let(:top_group) { groups(:top_group) }

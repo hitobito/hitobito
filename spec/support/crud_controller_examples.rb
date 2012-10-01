@@ -24,12 +24,12 @@ shared_examples "crud controller" do |options|
 
   subject { response }
   
-  let(:person) { people(:top_leader) }
+  let(:user)               { people(:top_leader) }
   let(:model_class)        { controller.send(:model_class) }
   let(:model_identifier)   { controller.model_identifier }
   let(:test_params)        { scope_params }
-  let(:entry)              { assigns(model_identifier) }
-  let(:entries)            { assigns(model_identifier.to_s.pluralize.to_sym) }
+  let(:entry)              { assigns(controller.send(:ivar_name, model_class)) }
+  let(:entries)            { assigns(controller.send(:ivar_name, model_class).pluralize) }
   let(:sort_column)        { model_class.column_names.first }
   
   let(:search_value) do
@@ -39,7 +39,7 @@ shared_examples "crud controller" do |options|
   end
 
   before do
-    sign_in person
+    sign_in(user)
     m = example.metadata
     perform_request if m[:perform_request] != false && m[:action] && m[:method]
   end

@@ -19,5 +19,17 @@ class Event::Kind < ActiveRecord::Base
   
   has_many :events
   
+  def to_s
+    label
+  end
+  
+  # Soft destroy if events exist, otherwise hard destroy
+  def destroy
+    if events.exists?
+      super
+    else
+      destroy!
+    end
+  end
   
 end

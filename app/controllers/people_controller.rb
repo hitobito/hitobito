@@ -5,9 +5,6 @@ class PeopleController < CrudController
 
   decorates :group, :person, :people
 
-
-  skip_authorize_resource only: :list
-
   # load group before authorization
   prepend_before_filter :parent
   

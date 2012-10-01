@@ -32,12 +32,15 @@ de:
       event/course:
         one: Kurs
         other: Kurse
-      event_participation:
+      event/participation:
         one: Teilnahme
         other: Teilnahmen
-      event_application:
+      event/application:
         one: Anmeldung
         other: Anmeldungen
+      event/kind:
+        one: Kursart
+        other: Kursarten
       
       
     attributes:
@@ -101,29 +104,36 @@ de:
         priorization: Priorisierung erforderlich
         requires_approval: Freigabe erforderlich
 
-      event_participation:
+      event/participation:
         label: Bezeichnung
         person_id: Person
         event_id: Event
         additional_information: Bemerkungen / Medizinisches
         answers: Fragen
         
-      event_application:
+      event/application:
         priority_1_id: "1. Priorität"
         priority_2_id: "2. Priorität"
         priority_3_id: "3. Priorität"
   
-      event_dates:
+      event/dates:
         label: Beschreibung/Ort
         start_at: Von
         finish_at: Bis
         
-      event_questions:
+      event/questions:
         question: Frage
         choices: Mögliche Antworten
         
-      event_answers:
+      event/answers:
         answer: Antwort
+        
+      event/kind:
+        label: Bezeichnung
+        short_name: Kursname
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
         
       role:
         label: Bezeichnung

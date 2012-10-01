@@ -1,0 +1,12 @@
+slk:
+  label: Scharleiterkurs
+  short_name: SLK
+ 
+glk:
+  label: Gruppenleiterkurs
+  short_name: GLK
+  
+old:
+  label: Alte Kursart
+  short_name: AK
+  deleted_at: 2010-06-01

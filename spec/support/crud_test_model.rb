@@ -154,6 +154,10 @@ class CrudTestModelsController < CrudController #:nodoc:
     @called_callbacks ||= []
     @called_callbacks << callback
   end
+  
+  def authorize_class
+    #nada
+  end
 
 end
   

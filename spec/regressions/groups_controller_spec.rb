@@ -3,17 +3,17 @@
 require 'spec_helper'
 
 describe GroupsController, type: :controller do
-  include CrudTestHelper
-
-  before { sign_in(person) } 
 
   let(:group) { groups(:top_layer) }
-  let(:person) { Fabricate(Group::TopLayer::Member.name.to_sym, person: person, group: group).person } 
+  let(:user) { Fabricate(Group::TopLayer::Member.name.to_sym, group: group).person } 
 
   let(:test_entry) { group } 
   let(:create_entry_attrs) { {name: 'foo', type: 'Group::TopGroup', parent_id: group.id } }
   let(:update_entry_attrs) { {name: 'bar'} }
 
+  before { sign_in(user) }
+  
+   
   include_examples 'crud controller', skip: [%w(index), %w(new), %w(destroy)]
 
 

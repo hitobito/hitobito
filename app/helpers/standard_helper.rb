@@ -96,7 +96,7 @@ module StandardHelper
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
     add_css_class options[:html], 'form-horizontal'
-    
+
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end
   

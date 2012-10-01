@@ -14,7 +14,7 @@ wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
 notification :off
 
 guard 'rspec', :version => 2 do
-  #watch(%r{^.*\.rb$}) {|m| puts m }
+  watch(%r{^.*\.rb$}) {|m| puts m }
 
   watch(%r{^#{wagon}/(spec/.+_spec\.rb)$}) { |m| m[1] }
   watch(%r{^lib/(.+)\.rb$})              { |m| "spec/lib/#{m[1]}_spec.rb" }

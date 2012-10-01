@@ -115,7 +115,13 @@ class Ability
       filter.group_id? &&
       layers_full.present? && layers_full.include?(filter.group.layer_group_id)
     end
+
+    ### EVENTS
+
+    can :new, Event
+
   end
+
   
   private
       

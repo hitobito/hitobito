@@ -18,6 +18,7 @@ Jubla::Application.routes.draw do
     resources :roles, except: [:index, :show]
     
     resources :people_filters, only: [:new, :create, :destroy]
+    resources :events
   end
   
   devise_for :people, skip: [:registrations], path: "users"

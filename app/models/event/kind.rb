@@ -18,6 +18,11 @@ class Event::Kind < ActiveRecord::Base
   attr_accessible :label, :short_name
   
   has_many :events
+
+  ### INSTANCE METHODS
+  def to_s
+    "#{short_name} ( #{label} )"
+  end
   
   
 end

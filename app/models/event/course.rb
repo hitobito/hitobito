@@ -26,6 +26,9 @@
 
 class Event::Course < Event
   
+  # This statement is required because this class would not be loaded otherwise.
+  require_relative 'course/participation/participant'
+
   # states are used for workflow
   # translations in config/locales
   self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
@@ -36,6 +39,7 @@ class Event::Course < Event
                               Event::Participation::Treasurer,
                               Event::Participation::Speaker,
                               Event::Course::Participation::Participant]
+  self.participant_type = Event::Course::Participation::Participant
   
   attr_accessible :kind_id, :state, :priorization, :requires_approval
   

@@ -2,6 +2,7 @@
 class Group::Flock < Group
   
   self.layer = true
+  self.event_types = [Event, Event::Camp]
   
   children Group::ChildGroup
   

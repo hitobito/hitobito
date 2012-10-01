@@ -3,6 +3,8 @@ class Group::State < Group
   
   self.layer = true
   self.default_children = [Group::StateAgency, Group::StateBoard]
+  self.contact_group_type = Group::StateAgency
+  self.event_types = [Event, Event::Course]
   
   roles Jubla::Role::Coach
   

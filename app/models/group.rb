@@ -44,6 +44,10 @@ class Group < ActiveRecord::Base
   
   ### ATTRIBUTES
   
+  class_attribute :event_types
+  # All possible Event types that may be created for this group
+  self.event_types = [Event]
+  
   attr_accessible :name, :short_name, :email, :contact_id
 
   attr_readonly :type
@@ -151,7 +155,7 @@ class Group < ActiveRecord::Base
   private
   
   def assert_type_is_allowed_for_parent
-    if type && parent && !parent.possible_children.collect(&:to_s).include?(type)
+    if type && parent && !parent.possible_children.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed) 
     end 
   end

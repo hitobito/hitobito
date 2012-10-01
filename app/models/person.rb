@@ -71,7 +71,7 @@ class Person < ActiveRecord::Base
   
   validates :email, uniqueness: true, allow_nil: true
   validates :gender, inclusion: %w(m w), allow_blank: true
-  validate :should_have_any_name
+  validate :assert_has_any_name
  
  
   ### SCOPES
@@ -115,7 +115,7 @@ class Person < ActiveRecord::Base
     email_required? && password.present? && password_confirmation.present?
   end
   
-  def should_have_any_name
+  def assert_has_any_name
     if first_name.blank? && last_name.blank? && ((company? && company_name.blank?) || (!company? && nickname.blank?))
       errors.add(:base, "Bitte geben Sie einen Namen für diese Person ein")
     end

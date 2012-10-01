@@ -10,7 +10,7 @@ namespace :ci do
   task :nightly => ['log:clear', 
                     'db:migrate', 
                     #'erd',
-                    'brakeman',
+                    #'brakeman',
                     'ci:setup:rspec',
                     'spec',
                     'wagon:test',
@@ -36,11 +36,11 @@ end
 namespace :erd do
   task :options => :customize
   task :customize do
-    ENV['attributes'] = 'content,inheritance,foreign_keys,timestamps'
-    ENV['indirect'] = 'false'
-    ENV['orientation'] = 'vertical'
-    ENV['notation'] = 'uml'
-    ENV['filename'] = 'doc/models'
-    ENV['filetype'] = 'png'
+    ENV['attributes']  ||= 'content,inheritance,foreign_keys,timestamps'
+    ENV['indirect']    ||= 'false'
+    ENV['orientation'] ||= 'vertical'
+    ENV['notation']    ||= 'uml'
+    ENV['filename']    ||= 'doc/models'
+    ENV['filetype']    ||= 'png'
   end
 end

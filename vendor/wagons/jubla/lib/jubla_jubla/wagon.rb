@@ -14,6 +14,7 @@ module JublaJubla
       Group.send  :include, Jubla::Group
       Role.send   :include, Jubla::Role
       Event::Course.send :include, Jubla::Event::Course
+      Event::Application.send :include, Jubla::Event::Application
       
       GroupsController.send :include, Jubla::GroupsController
     end 

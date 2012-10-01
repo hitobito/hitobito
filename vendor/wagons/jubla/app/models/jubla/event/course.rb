@@ -7,6 +7,7 @@ module Jubla::Event::Course
   end
   
   
+  
   module Participation
     class Advisor < ::Event::Participation
      

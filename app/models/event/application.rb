@@ -24,4 +24,10 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_2, class_name: 'Event' #::Course
   belongs_to :priority_3, class_name: 'Event' #::Course
   
+  
+  
+  
+  def contact
+    priority_1.contact
+  end
 end

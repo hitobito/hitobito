@@ -196,4 +196,13 @@ describe Person do
     end
   end
 
+  context "devise recoverable" do
+    let(:group) { groups(:bottom_group_one_one) }
+    let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person.reload }
+
+    it "cannot reset password if we have no login permission" do
+      person.send_reset_password_instructions.should be_false
+    end
+  end
+
 end

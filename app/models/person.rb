@@ -105,8 +105,12 @@ class Person < ActiveRecord::Base
     permission?(:login)
   end
 
-  private
   
+  def send_reset_password_instructions # from lib/devise/models/recoverable.rb
+    login? && super
+  end
+
+  private
   def email_required?
     login?
   end

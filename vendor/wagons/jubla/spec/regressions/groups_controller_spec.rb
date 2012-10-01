@@ -60,9 +60,15 @@ describe GroupsController, type: :controller  do
           end
         end
       end
-      def attrs_for(group)
-        group == flock ? attrs.merge(kind: 'Jungwacht') : attrs
-      end
+    end
+
+    it "leader can update flock default attributes" do
+      put :update, id: flock.id, group: {name: 'dummy', kind: 'Jungwacht'}
+      assigns(:group).name.should eq 'dummy'
+    end
+
+    def attrs_for(group)
+      group == flock ? attrs.merge(kind: 'Jungwacht') : attrs
     end
   end
 

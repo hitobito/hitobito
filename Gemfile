@@ -76,6 +76,7 @@ group :guard do
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'spork', '1.0.0rc3'
+  gem 'rb-inotify'
 end
 
 group :metrics do

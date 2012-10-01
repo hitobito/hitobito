@@ -35,7 +35,7 @@ module CrudHelper
         form.labeled_input_fields(*attrs)
       end
       
-      content <<  save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
+      content << save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
       
       content.html_safe
     end
@@ -44,15 +44,19 @@ module CrudHelper
   def save_form_buttons(form, submit_label, cancel_url)
     content_tag(:div, class: 'btn-toolbar') do
       submit_button(form, submit_label) +
-      content_tag(:div, class: 'btn-group') do
-        link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
-      end
+      cancel_link(cancel_url)
     end
   end
   
   def submit_button(form, label)
     content_tag(:div, class: 'btn-group') do
       form.button(label, :class => 'btn btn-primary')
+    end
+  end
+  
+  def cancel_link(url)
+    content_tag(:div, class: 'btn-group') do
+      link_to(ti(:"button.cancel"), url, :class => 'btn')
     end
   end
 

@@ -5,4 +5,5 @@
   = f.error_messages
   = f.labeled(:password, 'Neues Passwort') { f.input_field(:password) } 
   = f.labeled(:password_confirmation, 'Passwort bestätigen') { f.input_field(:password_confirmation) } 
-  = f.indented submit_button(f, 'Passwort ändern')
+  = f.indented do
+    = submit_button(f, 'Passwort ändern')

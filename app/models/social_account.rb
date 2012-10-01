@@ -12,20 +12,15 @@
 
 class SocialAccount < ActiveRecord::Base
   
+  include NormalizedLabels
+  
   attr_accessible :name, :label, :public, as: [:default, :superior]
   
   belongs_to :contactable, polymorphic: true
 
-  before_save :normalize_labels
-
   class << self
-    def available_labels
-      @available_labels ||= Settings.social_account.predefined_labels |
-      order(:label).uniq.pluck(:label).compact
-    end
-    
-    def sweep_available_labels
-      @available_labels = nil
+    def load_available_labels
+      Settings.social_account.predefined_labels | super
     end
   end 
 
@@ -37,17 +32,4 @@ class SocialAccount < ActiveRecord::Base
     name
   end
   
-  private
-  
-  # If a case-insensitive same label already exists, use this one
-  def normalize_labels
-    return if label.blank?
-    
-    fresh = self.class.available_labels.none? do |l|
-      equal = l.casecmp(label) == 0
-      self.label = l if equal
-      equal
-    end
-    self.class.sweep_available_labels if fresh
-  end
 end

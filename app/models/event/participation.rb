@@ -15,7 +15,12 @@
 class Event::Participation < ActiveRecord::Base
   
   Permissions = [:full, :contact_data]
+
+  include NormalizedLabels
+
   
+  ### ATTRIBUTES
+
   class_attribute :permissions, :affiliate, :restricted
   self.permissions = []
   # Whether this participation is an active member or an affiliate person of the corresponding event.

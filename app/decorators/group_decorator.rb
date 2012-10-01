@@ -59,7 +59,7 @@ class GroupDecorator < BaseDecorator
   end
   
   def used_attributes(*attributes)
-    attributes.select { |name| model.class.attr_used?(name) }
+    attributes.select { |name| model.class.attr_used?(name) }.map(&:to_s)
   end
 
   def modifiable_attributes(*attributes)

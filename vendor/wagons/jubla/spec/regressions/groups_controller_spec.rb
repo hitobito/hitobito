@@ -9,10 +9,15 @@ describe GroupsController, type: :controller  do
   let(:region) { groups(:city) }
   let(:state) { groups(:be) }
 
+
   let(:leader) { Fabricate(Group::Flock::Leader.name.to_sym, group: flock).person }
   let(:agent) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)).person }
+  let(:bulei) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)).person }
 
   let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+  let(:default_attrs) { { name: 'dummy' } }
+  let(:mass_assignment_error) { ActiveModel::MassAssignmentSecurity::Error }
 
   describe_action :get, :edit, id: true do 
     expected = [
@@ -35,40 +40,6 @@ describe GroupsController, type: :controller  do
 
     def matcher_for(super_attr_present)
       super_attr_present ? :should : :should_not
-    end
-  end
-
-  describe_action :put, :update, id: true do
-    expected = [
-      [:leader, :flock, false],
-      [:agent, :flock, true],
-      [:agent, :region, true], 
-      [:agent, :state, false]
-    ]
-
-    expected.each do |user, group, super_attr_update| 
-      let(:attrs) { { jubla_insurance: '1', name: 'dummy' } }
-      let(:error_type) { ActiveModel::MassAssignmentSecurity::Error }
-      context "#{user} on #{group}" do
-        before { sign_in(send(user)) }
-        it "#{super_attr_update ? "can" : "cannot"} update superior_attributes" do
-          if super_attr_update
-            put :update, id: send(group).id, group: attrs_for(send(group))
-            assigns(:group).name.should eq 'dummy'
-          else
-            expect { put :update, id: send(group).id, group: attrs }.to raise_error(error_type)
-          end
-        end
-      end
-    end
-
-    it "leader can update flock default attributes" do
-      put :update, id: flock.id, group: {name: 'dummy', kind: 'Jungwacht'}
-      assigns(:group).name.should eq 'dummy'
-    end
-
-    def attrs_for(group)
-      group == flock ? attrs.merge(kind: 'Jungwacht') : attrs
     end
   end
 
@@ -96,27 +67,60 @@ describe GroupsController, type: :controller  do
     end
   end
 
+  describe_action :put, :update, id: true do
+    expected = [
+      [:leader, :flock, true],
+      [:leader, :flock, false, { jubla_insurance: '1' }],
+      [:agent, :flock, true, { jubla_insurance: '1' }],
+      [:agent, :region, true, { jubla_insurance: '1' } ], 
+      [:agent, :state, true],
+      [:agent, :state, false, {jubla_insurance: '1'}],
+      [:bulei, :state, true, {jubla_insurance: '1'}],
+    ]
+
+    expected.each do |user, group, super_attr_update, extra_attrs={} | 
+      context "#{user} on #{group}" do
+        before { sign_in(send(user)) }
+        it "#{super_attr_update ? "can" : "cannot"} update with #{extra_attrs}" do
+          attrs = default_attrs.merge(extra_attrs)
+          if super_attr_update
+            put :update, id: send(group).id, group: attrs
+            assigns(:group).name.should eq 'dummy'
+          else
+            expect { put :update, id: send(group).id, group: attrs }.to raise_error(mass_assignment_error)
+          end
+        end
+      end
+    end
+  end
+
 
   describe_action :post, :create do 
     expected = [
       [:leader, :asterix, true],
+      [:leader, :asterix, false, { jubla_insurance: '1'} ],
       [:leader, :flock, false],
       [:agent, :flock, false],
       [:agent, :region, true], 
       [:agent, :state, false]
     ]
 
-    expected.each do |user, group, can_create_group| 
+    expected.each do |user, group, can_create_group, extra_attrs={}| 
       context "#{user} create #{group}"  do
         before { sign_in(send(user)) }
 
         it "#{can_create_group ? "can" : "cannot"} create group" do
-          attrs = { type: send(group).type, parent_id: send(group).parent.id, name: 'dummy', jubla_insurance: '1' }
+          attrs = default_attrs.merge(type: send(group).type, parent_id: send(group).parent.id)
+          attrs = attrs.merge(extra_attrs)
           if can_create_group
             expect { post :create, group: attrs }.to change(Group,:count).by(change_count(group))
             should redirect_to group_path(assigns(:group))
           else
-            expect { post :create, group: attrs }.not_to change(Group,:count)
+            if extra_attrs.empty?
+              expect { post :create, group: attrs }.not_to change(Group,:count) 
+            else
+              expect { post :create, group: attrs }.to raise_error(mass_assignment_error)
+            end
           end
         end
       end

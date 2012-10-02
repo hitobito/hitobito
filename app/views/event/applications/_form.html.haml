@@ -1,0 +1,20 @@
+- title "Anmeldung für #{entry.priority_1}"
+
+= entry_form(url: event_applications_path(@event),
+             stacked: true, 
+             submit_label: 'Anmelden', 
+             cancel_url_new: event_path(@event)) do |f|
+             
+  = f.fields_for(:participation) do |fp|
+    = fp.fields_for(:answers) do |fa|
+      = render 'event/answers/fields', f: fa
+      
+    = fp.labeled_text_area(:additional_information)
+    
+  = field_set_tag 'Ausweichdaten' do
+    %p Bitte gib weitere Kurse an, welche dir gehen würden.
+    = f.labeled_belongs_to_field(:priority_2_id)
+    = f.labeled_belongs_to_field(:priority_3_id)
+    
+    %b Informationen zu den Ausweichkursen
+    -# TODO re-use display stuff from main page

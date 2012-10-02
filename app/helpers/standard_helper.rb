@@ -95,7 +95,7 @@ module StandardHelper
   def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
-    add_css_class options[:html], 'form-horizontal'
+    add_css_class options[:html], 'form-horizontal' unless options.delete(:stacked)
 
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end

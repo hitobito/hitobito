@@ -36,6 +36,24 @@ module Ability::Events
       can_update_event?(participation.event)
     end
     
+    ### APPLICATIONS
+    
+    can :show, Event::Application do |application|
+      application.participation.person_id == user.id ||
+      can_update_event?(application.priority_1)
+    end
+    
+    can :create, Event::Application do |application|
+      (application.participation.person_id == user.id &&
+       user_hierarchy.include?(application.priority_1.group_id)) ||
+       
+      can_create_event?(application.priority_1)
+    end
+    
+    can :update, Event::Application do |application|
+      application.participation.person_id == user.id ||
+      can_create_event?(application.priority_1)
+    end
     
     ### EVENT KINDS
     if admin
@@ -62,5 +80,8 @@ module Ability::Events
       user.event_participations.to_a.select {|p| p.class.permissions.include?(permission) }.collect(&:event_id).uniq
   end
   
+  def user_hierarchy
+    @user_hierarchy ||= user.groups.collect(&:hierarchy).flatten.collect(&:id).uniq
+  end
   
 end

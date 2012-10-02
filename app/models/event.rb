@@ -26,6 +26,9 @@
 
 class Event < ActiveRecord::Base
 
+  # This statement is required because this class would not be loaded otherwise.
+  require_relative 'event/date'
+  
   ### ATTRIBUTES
 
   class_attribute :participation_types, :participant_type, :possible_states 
@@ -62,6 +65,7 @@ class Event < ActiveRecord::Base
   ### VALIDATIONS
   
   validate :assert_type_is_allowed_for_group
+  # TODO validate application_closing_at is after opening_at if both are present
   
   
   ### CALLBACKS
@@ -71,9 +75,20 @@ class Event < ActiveRecord::Base
 
   # TODO: copy all event_questions without event_id into a newly created event (probably in controller, not here)
 
+  # May participants apply now?
+  def application_possible?
+    (!application_opening_at? || application_opening_at <= ::Date.today) &&
+    (!application_closing_at? || application_closing_at >= ::Date.today) &&
+    (maximum_participants.to_i == 0 || participant_count < maximum_participants)
+  end
+
   def refresh_participant_count!
     count = people.where(event_participations: {type: participant_type.sti_name}).count(distinct: true)
     update_column(:participant_count, count)
+  end
+  
+  def to_s
+    name
   end
   
   private

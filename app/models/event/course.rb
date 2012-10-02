@@ -28,10 +28,6 @@ class Event::Course < Event
   
   # This statement is required because this class would not be loaded otherwise.
   require_relative 'course/participation/participant'
-
-  # states are used for workflow
-  # translations in config/locales
-  self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
   
   self.participation_types = [Event::Participation::Leader,
                               Event::Participation::AssistantLeader,
@@ -42,14 +38,5 @@ class Event::Course < Event
   self.participant_type = Event::Course::Participation::Participant
   
   attr_accessible :kind_id, :state, :priorization, :requires_approval
-  
-  
-  # Define methods to query if a course is in the given state.
-  # eg course.canceled?
-  possible_states.each do |state|
-    define_method "#{state}?" do
-      self.state == state
-    end
-  end
-  
+
 end

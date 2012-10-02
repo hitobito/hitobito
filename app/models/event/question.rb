@@ -19,6 +19,8 @@ class Event::Question < ActiveRecord::Base
   has_many :answers, dependent: :destroy
   
   
+  scope :global, where(event_id: nil)
+  
   # TODO: validate zero or more than one choices
   
   def choice_items

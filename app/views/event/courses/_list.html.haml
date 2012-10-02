@@ -1,1 +1,9 @@
-= crud_table :group, :name
+- courses_by_kinds.each_entry do |kind, events| 
+  %h2= kind
+  %table.table
+    - events.each do |event| 
+      %tr
+        %td= event.label
+        %td= event.kind
+        %td= event.dates
+      

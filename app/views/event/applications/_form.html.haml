@@ -1,9 +1,9 @@
 - title "Anmeldung für #{entry.priority_1}"
 
-= entry_form(stacked: true) do |f|
+= entry_form(stacked: true, submit_label: 'Anmelden') do |f|
   = f.fields_for(:participation) do |fp|
     = fp.fields_for(:answers) do |fa|
-      = render 'answers/fields', locals: {f: fa}
+      = render 'event/answers/fields', f: fa
       
     = fp.labeled_text_area(:additional_information)
     
@@ -13,4 +13,4 @@
     = f.labeled_belongs_to_field(:priority_3_id)
     
     %b Informationen zu den Ausweichkursen
-    
+    -# TODO re-use display stuff from main page

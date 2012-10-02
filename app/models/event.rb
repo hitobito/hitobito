@@ -26,6 +26,9 @@
 
 class Event < ActiveRecord::Base
 
+  # This statement is required because this class would not be loaded otherwise.
+  require_relative 'event/date'
+  
   ### ATTRIBUTES
 
   class_attribute :participation_types, :participant_type, :possible_states 

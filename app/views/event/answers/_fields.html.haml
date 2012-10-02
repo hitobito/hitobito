@@ -1,5 +1,5 @@
 - question = f.object.question
-= f.labeled(question.question) do
+= f.labeled(:answer, question.question) do
   - if question.choices?
     - question.choice_items.each do |q|
       = f.inline_radio_button(:answer, q, q, false)

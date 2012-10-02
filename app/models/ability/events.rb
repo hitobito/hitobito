@@ -2,6 +2,10 @@
 module Ability::Events
   
   def define_events_abilities
+
+    # TODO: remove temp permissions
+    # temp permissions
+    can :new, Event
     
     # TODO: implement wicked event visibility
     can :read, Event

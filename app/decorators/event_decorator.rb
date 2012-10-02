@@ -13,7 +13,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def booking_info
-
+    "#{participant_count} von #{maximum_participants}"
   end
 
   private

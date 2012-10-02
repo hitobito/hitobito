@@ -11,6 +11,7 @@ def seed_course(group_id, kind)
       name: "#{kind.short_name} #{number}",
       kind_id: kind.id,
       number: number,
+      maximum_participants: rand(30) + 10,
       application_opening_at: date,
       application_closing_at: date + 60}
   ).first

@@ -147,7 +147,7 @@ export PATH=%{ruby_bindir}:$PATH
 
 # cleanup log and tmp and db we don't want them in
 # the rpm
-rm -rf log tmp db
+rm -rf log tmp
 chmod -R o-rwx .
 
 install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www
@@ -227,12 +227,7 @@ fi
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
-%endif
-%if "%{?RAILS_DB_ADAPTER}" == ""
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
-%endif
 
 %if %{use_delayed_job}
 %{initrddir}/%{name}-workers

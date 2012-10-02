@@ -5,6 +5,7 @@ class Group::TopLayer < Group
 
   self.default_children = [Group::TopGroup]
   self.layer = true
+  self.event_types = [Event, Event::Course]
 
   children Group::TopGroup, Group::BottomLayer
   

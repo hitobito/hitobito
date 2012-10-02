@@ -2,22 +2,25 @@
 
 %h2 Kursinfos
 = entry_form do |f|
-  - if entry.new_record?
-    //= hidden_field_tag('kind[kind_id]', params[:kind][:kind_id])
 
   = field_set_tag do
     = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :contact_id, :location)
     = f.labeled_input_field(:kind_id, class: 'span2')
 
-  = render('events/dates', f: f)
+  %h2 Kursdaten
+  = field_set_tag do
+    = f.inline_fields_for :dates, 'event/dates/fields'
 
   %h2 Anmeldung
   = field_set_tag do
-    = f.labeled_input_fields(:application_opening_at, :application_closing_at)
+    = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
     = f.labeled(:requires_approval, 'Freigabe') do
       %label.checkbox
         = f.boolean_field(:requires_approval)
         Scharleiter wird informiert und muss die Anmeldung bestätigen
+    = f.labeled_input_field(:maximum_participants, class: 'span1')
     
-
-  = render('events/questions', f: f)
+  %h2 Angaben für Anmeldung
+  %p Du kannst weiter Angaben für die Anmeldung verlangen 
+  = field_set_tag do
+    = f.inline_fields_for :questions, 'event/questions/fields'

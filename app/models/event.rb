@@ -67,7 +67,7 @@ class Event < ActiveRecord::Base
   ### CALLBACKS
   
   
-  accepts_nested_attributes_for :dates, allow_destroy: true
+  accepts_nested_attributes_for :dates, :questions , allow_destroy: true
 
   # TODO: copy all event_questions without event_id into a newly created event (probably in controller, not here)
 

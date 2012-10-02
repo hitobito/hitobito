@@ -25,6 +25,10 @@ Jubla::Application.routes.draw do
   resources :event_kinds, module: 'event', controller: 'kinds'
   resources :event_courses, module: 'event', controller: 'courses'
   
+  resources :events do
+    resources :applications, module: 'event'
+  end
+  
   
   devise_for :people, skip: [:registrations], path: "users"
   as :person do

@@ -10,7 +10,7 @@
 
 class Event::Answer < ActiveRecord::Base
   
-  attr_accessible :answer, :event_question_id
+  attr_accessible :answer
   
   belongs_to :participation
   belongs_to :question

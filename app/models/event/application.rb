@@ -14,7 +14,8 @@
 
 class Event::Application < ActiveRecord::Base
   
-  attr_accessible :priority_1_id, :priority_2_id, :priority_3_id
+  attr_accessible :priority_2_id, :priority_3_id,
+                  :participation_attributes
   
   ### ASSOCIATION
   
@@ -25,7 +26,17 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_3, class_name: 'Event' #::Course
   
   
+  accepts_nested_attributes_for :participation
   
+
+  def priority_1=(event)
+    super
+    self.participation = event.participant_type.new
+    event.questions.each do |q|
+      self.participation.answers << q.answers.new
+    end
+    event
+  end
   
   def contact
     priority_1.contact

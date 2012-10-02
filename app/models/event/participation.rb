@@ -44,6 +44,6 @@ class Event::Participation < ActiveRecord::Base
   has_one :event_application, class_name: 'Event::Application', dependent: :destroy
   
   
-  accepts_nested_attributes_for :answers, allow_destroy: true
+  accepts_nested_attributes_for :answers
   
 end

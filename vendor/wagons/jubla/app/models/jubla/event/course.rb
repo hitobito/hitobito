@@ -19,7 +19,6 @@ module Jubla::Event::Course
         self.state == state
       end
     end
-  
   end
     
   # may participants apply now?

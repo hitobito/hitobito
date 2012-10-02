@@ -1,4 +1,4 @@
 %ul.nav
   = nav "Gruppen", groups_path, %w(groups people)
-  = nav "Kurse/Events", "/path3", %w(events)
+  = nav "Kurse/Events", event_courses_path, %w(events)
   = nav "Admin", event_kinds_path, %w(event_kinds) if can?(:manage, Event::Kind)

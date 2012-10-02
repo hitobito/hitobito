@@ -20,8 +20,10 @@ Jubla::Application.routes.draw do
     resources :people_filters, only: [:new, :create, :destroy]
     resources :events
   end
-  
+
+  resources :events  
   resources :event_kinds, module: 'event', controller: 'kinds'
+  resources :event_courses, module: 'event', controller: 'courses'
   
   
   devise_for :people, skip: [:registrations], path: "users"

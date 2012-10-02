@@ -8,15 +8,17 @@ course_data = group_ids.map do |group_id|
     kind_id: coach_course.id }
 end
 course_data = course_data.map do |course| 
-  past = rand(50).days.ago
-  present = rand(10).day.ago
-  future = rand(50).days.from_now
-  labels = %w(past present future)
-  [past, present, future].each_with_index.map do |date,index| 
-    closing = date + (rand(30) + 10).days
-    name = "#{coach_course.label} #{labels[index]}"
-    course.merge(application_opening_at: date, application_closing_at: closing, name: name)
-  end
+  past = 10.times.map {
+    opening = rand(5.years).ago
+    closing = opening + rand(30).days
+    course.merge(application_opening_at: opening, application_closing_at: closing)
+  }
+  future = 10.times.map { 
+    opening = rand(5.years).from_now
+    closing = opening + rand(30).days
+    course.merge(application_opening_at: opening, application_closing_at: closing)
+  }
+  [past, future]
 end
 
 Event::Course.seed(:application_opening_at, course_data.flatten)

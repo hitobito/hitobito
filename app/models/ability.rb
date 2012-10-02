@@ -18,6 +18,7 @@ class Ability
         person.id == user.id
       end
     end
+
   end
   
 end

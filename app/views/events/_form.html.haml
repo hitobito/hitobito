@@ -1,0 +1,23 @@
+- parent_sheet(GroupSheet.new(self, @group, :group_event_path, :index_event))
+
+%h2 Kursinfos
+= entry_form do |f|
+  - if entry.new_record?
+    //= hidden_field_tag('kind[kind_id]', params[:kind][:kind_id])
+
+  = field_set_tag do
+    = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :contact_id, :location)
+    = f.labeled_input_field(:kind_id, class: 'span2')
+
+  = render('events/dates', f: f)
+
+  %h2 Anmeldung
+  = field_set_tag do
+    = f.labeled_input_fields(:application_opening_at, :application_closing_at)
+    = f.labeled(:requires_approval, 'Freigabe') do
+      %label.checkbox
+        = f.boolean_field(:requires_approval)
+        Scharleiter wird informiert und muss die Anmeldung bestätigen
+    
+
+  = render('events/questions', f: f)

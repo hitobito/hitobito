@@ -73,6 +73,18 @@ class Event < ActiveRecord::Base
   
   accepts_nested_attributes_for :dates, allow_destroy: true
 
+
+  ### CLASS METHODS
+  
+  class << self
+    def in_year(year)
+      raise ArgumentError, "Invalid year: #{year}" if year.to_i <= 0
+      start_at = DateTime.parse "#{year}-01-01"
+      finish_at = DateTime.parse "#{year}-12-31"
+      scoped.joins(:dates).where(event_dates: { start_at: [start_at...finish_at] } )
+    end
+  end
+
   # TODO: copy all event_questions without event_id into a newly created event (probably in controller, not here)
 
   # May participants apply now?
@@ -86,7 +98,7 @@ class Event < ActiveRecord::Base
     count = people.where(event_participations: {type: participant_type.sti_name}).count(distinct: true)
     update_column(:participant_count, count)
   end
-  
+
   def to_s
     name
   end

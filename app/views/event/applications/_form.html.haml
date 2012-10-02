@@ -1,6 +1,10 @@
 - title "Anmeldung für #{entry.priority_1}"
 
-= entry_form(stacked: true, submit_label: 'Anmelden') do |f|
+= entry_form(url: event_applications_path(@event),
+             stacked: true, 
+             submit_label: 'Anmelden', 
+             cancel_url_new: event_path(@event)) do |f|
+             
   = f.fields_for(:participation) do |fp|
     = fp.fields_for(:answers) do |fa|
       = render 'event/answers/fields', f: fa

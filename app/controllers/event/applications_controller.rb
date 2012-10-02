@@ -1,5 +1,5 @@
 class Event::ApplicationsController < CrudController
-  
+  self.nesting = Event
   
   private
   

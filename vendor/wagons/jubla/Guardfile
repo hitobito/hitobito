@@ -13,7 +13,24 @@ wagon = wagons_dir + File.dirname(__FILE__).split(wagons_dir).last
 
 notification :off
 
-guard 'rspec', :version => 2 do
+guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
+  watch('config/application.rb')
+  watch('config/environment.rb')
+  watch(%r{^config/environments/.+\.rb$})
+  watch(%r{^config/initializers/.+\.rb$})
+  watch('Gemfile')
+  watch('Gemfile.lock')
+  watch('spec/spec_helper.rb')
+  watch('#{wagon}/spec/spec_helper.rb')
+  watch(%r{^spec/support/.+\.rb$})
+  watch(%r{^#{wagon}/spec/support/.+\.rb$})
+  watch(%r{^app/models/.+\.rb$})
+  watch(%r{^#{wagon}/app/models/.+\.rb$})
+  watch(%r{^app/controllers/.+\.rb$})
+  watch(%r{^#{wagon}/app/controllers/.+\.rb$})
+end
+
+guard 'rspec', :version => 2, :cli => '--drb' do
   watch(%r{^.*\.rb$}) {|m| puts m }
 
   watch(%r{^#{wagon}/(spec/.+_spec\.rb)$}) { |m| m[1] }

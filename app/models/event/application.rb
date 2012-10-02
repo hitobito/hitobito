@@ -29,7 +29,7 @@ class Event::Application < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :participation
-  
+
 
 
   def priority_1=(event)

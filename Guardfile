@@ -3,7 +3,20 @@
 
 notification :off
 
-guard 'rspec', :version => 2 do
+guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
+  watch('config/application.rb')
+  watch('config/environment.rb')
+  watch(%r{^config/environments/.+\.rb$})
+  watch(%r{^config/initializers/.+\.rb$})
+  watch('Gemfile')
+  watch('Gemfile.lock')
+  watch('spec/spec_helper.rb')
+  watch(%r{^spec/support/.+\.rb$})
+  watch(%r{^app/models/.+\.rb$})
+  watch(%r{^app/controllers/.+\.rb$})
+end
+
+guard 'rspec', :version => 2, :cli => '--drb' do
   # debugging:
   #watch(%r{^.*\.rb$}) {|m| puts "#{m} changed" }
 

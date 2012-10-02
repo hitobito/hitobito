@@ -17,5 +17,4 @@ describe Event::KindsController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(show)]
 
-  it { respond_to?(:setup_db).should == false }
 end

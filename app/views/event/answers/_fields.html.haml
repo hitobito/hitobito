@@ -1,4 +1,5 @@
 - question = f.object.question
+= f.hidden_field(:question_id)
 = f.labeled(:answer, question.question) do
   - if question.choices?
     - question.choice_items.each do |q|

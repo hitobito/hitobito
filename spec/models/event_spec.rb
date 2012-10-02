@@ -162,15 +162,16 @@ describe Event do
   end
   
   context ".in_year" do
-    let(:group) { groups(:top_layer) }
-    let(:event) { Fabricate(:event, group: group) }
-    before { add_date "2000-01-01" }
+    let(:top_layer) { groups(:top_layer) }
+    let(:slk) { event_kinds(:slk)}
+    let(:event) { Fabricate(:event, group: top_layer, kind: slk) }
+    before { add_date "2000-01-02" }
 
     it "uses dates create_at to determine if event matches" do
+      Event.in_year(2000).size.should eq 1
       Event.in_year(2001).should_not be_present
       Event.in_year(2000).first.should eq event 
       Event.in_year("2000").first.should eq event
-      Event.in_year(2000).size.should eq 1
     end
 
     it "raises argument error"do
@@ -180,7 +181,7 @@ describe Event do
     end
 
     def add_date(start_at)
-      start_at = DateTime.parse(start_at)
+      start_at = Time.zone.parse(start_at)
       event.dates.build({start_at: start_at})
       event.save
     end

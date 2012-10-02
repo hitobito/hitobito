@@ -224,10 +224,10 @@ fi
 # run application as dedicated user
 %attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
 # allow write access to special directories
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/log
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/public
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/db
 
 %if %{use_delayed_job}
 %{initrddir}/%{name}-workers

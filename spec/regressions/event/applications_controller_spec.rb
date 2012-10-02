@@ -33,6 +33,6 @@ describe Event::ApplicationsController, type: :controller do
   
   let(:scope_params) { {event_id: test_entry.priority_1_id} }
 
-  include_examples 'crud controller', skip: [%w(show), %w(index), %w(update), %(edit), %w(destroy)]
+  include_examples 'crud controller', skip: [%w(index), %w(destroy)]
 
 end

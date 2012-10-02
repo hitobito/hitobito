@@ -115,7 +115,7 @@ de:
         priority_1_id: "Kurs"
         priority_2_id: "1. Ausweichkurs"
         priority_3_id: "2. Ausweichkurs"
-  
+        
       event/date:
         label: Beschreibung/Ort
         start_at: Von
@@ -126,6 +126,9 @@ de:
         choices: Mögliche Antworten
         
       event/answer:
+        answer: Antwort
+        
+      participation/answers:
         answer: Antwort
         
       event/kind:

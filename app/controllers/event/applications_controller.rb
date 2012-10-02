@@ -1,12 +1,22 @@
 class Event::ApplicationsController < CrudController
   self.nesting = Event
   
-  private
+  before_render_form :load_priorities
+  
   
   class << self
     def model_class
       Event::Application
     end
+  end
+  
+  
+  private
+  
+  def load_priorities
+    event = entry.priority_1
+    # TODO: restrict to visible courses
+    @priority_2s = @priority_3s = Event::Course.where(kind_id: event.kind_id)
   end
   
   def build_entry
@@ -18,6 +28,7 @@ class Event::ApplicationsController < CrudController
   
   def assign_attributes
     super
+    # Set these attrs again as a new instance they might have been created by the mass assignment.
     entry.participation.person ||= current_user
     entry.participation.type ||= entry.priority_1.participant_type.sti_name
   end

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Extension of StandardHelper functionality to provide a set of default
 # attributes for the current model to be used in tables and forms. This helper
 # is included in CrudController.
@@ -33,7 +35,7 @@ module CrudHelper
         form.labeled_input_fields(*attrs)
       end
       
-      content <<  save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
+      content << save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
       
       content.html_safe
     end
@@ -42,15 +44,19 @@ module CrudHelper
   def save_form_buttons(form, submit_label, cancel_url)
     content_tag(:div, class: 'btn-toolbar') do
       submit_button(form, submit_label) +
-      content_tag(:div, class: 'btn-group') do
-        link_to(ti(:"button.cancel"), cancel_url, :class => 'btn')
-      end
+      cancel_link(cancel_url)
     end
   end
   
   def submit_button(form, label)
     content_tag(:div, class: 'btn-group') do
       form.button(label, :class => 'btn btn-primary')
+    end
+  end
+  
+  def cancel_link(url)
+    content_tag(:div, class: 'btn-group') do
+      link_to(ti(:"button.cancel"), url, :class => 'btn')
     end
   end
 
@@ -70,23 +76,15 @@ module CrudHelper
 
   # Adds a set of standard action link column (show, edit, destroy) to the given table.
   def add_table_actions(table)
-    action_col_show(table)
     action_col_edit(table)
     action_col_destroy(table)
-  end
-
-  # Action link to show the row entry inside a table.
-  # A block may be given to define the link path for the row entry.
-  def action_col_show(table, &block)
-    action_col(table) { |e| link_table_action('zoom-in', action_path(e, &block)) }
   end
 
   # Action link to edit inside a table.
   # A block may be given to define the link path for the row entry.
   def action_col_edit(table, &block)
     action_col(table) do |e|
-      path = action_path(e, &block)
-      link_table_action('edit', path.is_a?(String) ? path : edit_polymorphic_path(path))
+      link_action_edit(action_path(e, &block))
     end
   end
 
@@ -94,16 +92,8 @@ module CrudHelper
   # A block may be given to define the link path for the row entry.
   def action_col_destroy(table, &block)
     action_col(table) do |e|
-      link_table_action('trash', action_path(e, &block),
-                        :data => { :confirm => ti(:confirm_delete),
-                                   :method => :delete })
+      link_action_destroy(action_path(e, &block))
     end
-  end
-
-  # Generic action link inside a table.
-  def link_table_action(icon, url, html_options = {})
-    add_css_class html_options, "icon-#{icon}"
-    link_to('', url, html_options)
   end
 
   # Defines a column with an action link.
@@ -154,7 +144,7 @@ module CrudHelper
   # Uses the current record if none is given.
   def link_action_edit(path = nil)
     path ||= path_args(entry)
-    link_to icon(:edit), path.is_a?(String) ? path : edit_polymorphic_path(path)
+    link_to(icon(:edit), path.is_a?(String) ? path : edit_polymorphic_path(path), title: 'Bearbeiten', alt: 'Bearbeiten')
   end
   
   # Standard link action to the destroy action of a given record.
@@ -164,6 +154,8 @@ module CrudHelper
     link_to label, 
             path, 
             :class => 'action',
+            :title => 'Löschen',
+            :alt => 'Löschen',
             :data => { :confirm => ti(:confirm_delete),
                        :method => :delete }
   end

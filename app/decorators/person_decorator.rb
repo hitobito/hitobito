@@ -1,5 +1,5 @@
 # encoding: utf-8
-class PersonDecorator < BaseDecorator
+class PersonDecorator < ApplicationDecorator
   decorates :person
 
   include ContactableDecorator

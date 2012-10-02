@@ -3,6 +3,7 @@ require 'spec_helper'
   
 describe CrudHelper do
   
+  include LayoutHelper
   include StandardHelper
   include ListHelper
   include CrudTestHelper
@@ -34,8 +35,8 @@ describe CrudHelper do
         subject.scan(REGEXP_SORT_HEADERS).size.should == 13
       end
       
-      it "should have 18 action cells" do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 18
+      it "should have 12 action cells" do
+        subject.scan(REGEXP_ACTION_CELL).size.should == 12
       end
     end
     

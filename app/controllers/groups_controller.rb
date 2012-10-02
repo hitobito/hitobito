@@ -1,8 +1,5 @@
 class GroupsController < CrudController
   
-  skip_authorize_resource only: :index
-  skip_authorization_check only: :index
-
   decorates :group, :groups, :contact
   
   before_render_show :load_contact

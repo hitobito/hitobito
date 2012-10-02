@@ -18,7 +18,7 @@ describe CrudTestModelsController, type: :controller do
   after { reset_db }
 
   #it_should_behave_like 'crud controller'
-  include_examples 'crud controller', {}
+  include_examples 'crud controller'
   
   let(:test_entry) { crud_test_models(:AAAAA) } 
   let(:test_entry_attrs) do

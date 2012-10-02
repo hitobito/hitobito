@@ -2,7 +2,7 @@ class Group::TopGroup < Group
 
 
   class Leader < ::Role
-    self.permissions = [:layer_full, :contact_data, :login]
+    self.permissions = [:admin, :layer_full, :contact_data, :login]
   end
   
   class Member < ::Role

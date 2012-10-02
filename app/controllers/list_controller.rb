@@ -6,8 +6,10 @@
 # the user the same list as he left it.
 class ListController < ApplicationController
 
-  authorize_resource
-
+  authorize_resource except: :index
+  # customized cancan code to authorize with #model_class
+  before_filter :authorize_class, only: :index
+  
   helper_method :model_class, :models_label, :entries, :path_args
 
   delegate :model_class, :models_label, :to => 'self.class'
@@ -54,7 +56,7 @@ class ListController < ApplicationController
   # Get the instance variable named after the model_class.
   # If the collection variable is required, pass true as the second argument.
   def get_model_ivar(plural = false)
-    name = model_class.name.underscore
+    name = ivar_name(model_class)
     name = name.pluralize if plural
     instance_variable_get(:"@#{name}")
   end
@@ -63,15 +65,24 @@ class ListController < ApplicationController
   # If the value is a collection, sets the plural name.
   def set_model_ivar(value)
     name = if value.is_a?(ActiveRecord::Relation)
-      value.klass.name.pluralize
+      ivar_name(value.klass).pluralize
     elsif value.respond_to?(:each) # Array
-      value.first.klass.name.pluralize
+      ivar_name(value.first.class).pluralize
     else
-      value.class.base_class.name
+      ivar_name(value.class)
     end
     
-    instance_variable_set(:"@#{name.underscore}", value)
+    instance_variable_set(:"@#{name}", value)
   end
+  
+  def ivar_name(klass)
+    klass.base_class.name.demodulize.underscore
+  end
+  
+  def authorize_class
+    authorize!(action_name.to_sym, model_class)
+  end
+
 
   class << self
     # The ActiveRecord class of the model.
@@ -105,7 +116,6 @@ class ListController < ApplicationController
     # If a callback renders or redirects, the action is not rendered.
     def render_with_callbacks(*args, &block)
       options = _normalize_render(*args, &block)
-      p options if options[:location] == :back
       callback = "render_#{options[:template]}"
       run_callbacks(callback) if respond_to?(:"_run_#{callback}_callbacks", true)
 

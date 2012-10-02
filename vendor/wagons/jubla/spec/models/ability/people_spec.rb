@@ -16,6 +16,14 @@ describe Ability::People do
       should be_able_to(:update, other)
     end
     
+    it "may modify its role" do
+      should be_able_to(:update, role)
+    end
+    
+    it "may not destroy its role" do
+      should_not be_able_to(:destroy, role)
+    end
+    
     it "may modify affiliates in the same layer" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:ch))
       should be_able_to(:modify, other.person)
@@ -53,6 +61,14 @@ describe Ability::People do
       should be_able_to(:create, Person)
     end
 
+    it "may modify its role" do
+      should be_able_to(:update, role)
+    end
+    
+    it "may not destroy its role" do
+      should_not be_able_to(:destroy, role)
+    end
+    
     it "may modify any public role in same layer" do
       other = Fabricate(Group::Flock::CampLeader.name.to_sym, group: groups(:bern))
       should be_able_to(:modify, other.person)
@@ -102,11 +118,9 @@ describe Ability::People do
   
     
   describe :layer_read do
-    let(:role) do
-      # member with additional group_admin role
-      role1 = Fabricate(Group::StateBoard::Supervisor.name.to_sym, group: groups(:be_board))
-      Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_board), person: role1.person)
-    end
+    # member with additional group_admin role
+    let(:group_role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_board)) }
+    let(:role)       { Fabricate(Group::StateBoard::Supervisor.name.to_sym, group: groups(:be_board), person: group_role.person) }
     
     it "may view details of himself" do
       should be_able_to(:show_details, role.person)
@@ -116,10 +130,22 @@ describe Ability::People do
       should be_able_to(:modify, role.person)
     end
     
-    it "may not modify its role" do
-      should_not be_able_to(:update, role)
+    it "may modify its read role" do
+      should be_able_to(:update, role)
     end
         
+    it "may destroy its read role" do
+      should be_able_to(:destroy, role)
+    end
+    
+    it "may modify its group_full role" do
+      should be_able_to(:update, group_role)
+    end
+    
+    it "may not destroy its group_full role" do
+      should_not be_able_to(:destroy, group_role)
+    end
+    
     it "may create other users as group admin" do
       should be_able_to(:create, Person)
     end

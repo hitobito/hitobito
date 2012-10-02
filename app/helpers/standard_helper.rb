@@ -96,7 +96,7 @@ module StandardHelper
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
     add_css_class options[:html], 'form-horizontal'
-    
+
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end
   
@@ -196,6 +196,11 @@ module StandardHelper
     else
       options[:class] = classes
     end
+  end
+  
+  def model_class_label(entry)
+    klass = entry.respond_to?(:klass) ? entry.klass : entry.class
+    klass.model_name.human
   end
 
   private

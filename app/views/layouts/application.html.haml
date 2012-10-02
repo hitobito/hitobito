@@ -25,12 +25,11 @@
     %header
       .container-fluid
         = link_to 'Jubla', root_path, :class => 'brand'
-        .options
-          = render 'layouts/options'
-
+        .options= render 'layouts/options'
+        
     %nav
-      -#.container-fluid
-        -#= render 'layouts/nav'
+      - if current_user
+        .container-fluid= render 'layouts/nav'
 
     #page
       .container-fluid

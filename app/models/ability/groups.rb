@@ -48,8 +48,14 @@ module Ability::Groups
         can_update_group?(role.group)
       end
     
-      can :manage, Role do |role|
-        role.person != user && can_modify_role?(role)
+      can :update, Role do |role|
+        can_modify_role?(role)
+      end
+      
+      can :destroy, Role do |role|
+        can_modify_role?(role) &&
+        # user may not destroy his roles that give him the destroy permissions
+        (role.person_id != user.id || !contains_any?([:layer_full, :group_full], role.permissions))
       end
     end
     

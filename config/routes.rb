@@ -21,6 +21,9 @@ Jubla::Application.routes.draw do
     resources :events
   end
   
+  resources :event_kinds, module: 'event', controller: 'kinds'
+  
+  
   devise_for :people, skip: [:registrations], path: "users"
   as :person do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'

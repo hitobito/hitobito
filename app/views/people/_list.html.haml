@@ -2,24 +2,12 @@
 
 = render 'groups/tabs'
 
-- content_for :toolbar do
-  = dropdown_button('Person hinzfügen', @group.possible_role_links, :plus) if can?(:new, @group.roles.new)
-
-  = button_group do
-    = action_button('List importieren', '#', :download)
-    = action_button('Export', '#', :upload)
-      
-  = action_button('Drucken', '#', :print)
-  
-  .pull-right
-    = dropdown_button(@group.filter_name, @group.people_filter_links)
-
 = crud_table do |t|
   - t.col('Name')    do |p| 
     -# Any person listed can be shown
     = link_to(p.to_s, @multiple_groups ? group_person_path(p.roles.first.group_id, p) : group_person_path(@group, p))
   - t.col('Rolle')   {|p| render_roles(p, @multiple_groups ? nil : @group) }
-  - t.col('Email')   {|p| p.primary_email }
+  - t.col('Email')   {|p| p.email }
   - t.col('Telefon') {|p| p.all_phone_numbers(true) }
   - t.col('Adresse') {|p| p.complete_address }
   - t.col('Social')  {|p| p.all_social_accounts(true) }

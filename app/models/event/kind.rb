@@ -24,5 +24,17 @@ class Event::Kind < ActiveRecord::Base
     "#{short_name} ( #{label} )"
   end
   
+  def to_s
+    label
+  end
+  
+  # Soft destroy if events exist, otherwise hard destroy
+  def destroy
+    if events.exists?
+      super
+    else
+      destroy!
+    end
+  end
   
 end

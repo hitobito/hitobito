@@ -6,10 +6,18 @@
     //= hidden_field_tag('kind[kind_id]', params[:kind][:kind_id])
 
   = field_set_tag do
-    = f.labeled_input_fields :name, :number, :kind_id, :description, :motto, :cost, :contact_id, :location
+    = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :contact_id, :location)
+    = f.labeled_input_field(:kind_id, class: 'span2')
 
-  = render 'events/dates', f: f
+  = render('events/dates', f: f)
 
   %h2 Anmeldung
+  = field_set_tag do
+    = f.labeled_input_fields(:application_opening_at, :application_closing_at)
+    = f.labeled(:requires_approval, 'Freigabe') do
+      %label.checkbox
+        = f.boolean_field(:requires_approval)
+        Scharleiter wird informiert und muss die Anmeldung bestätigen
+    
 
-  = render 'events/questions', f: f
+  = render('events/questions', f: f)

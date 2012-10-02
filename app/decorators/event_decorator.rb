@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class EventDecorator < BaseDecorator
+class EventDecorator < ApplicationDecorator
   decorates :event
 
 end

@@ -107,8 +107,8 @@ rm -rf $RPM_BUILD_ROOT
 %if "%{?RAILS_DB_PASSWORD}" != ""
   export RAILS_DB_PASSWORD=%RAILS_DB_PASSWORD
 %endif
-%if "%{?RAILS_DB_HOSTNAME}" != ""
-  export RAILS_DB_HOSTNAME=%RAILS_DB_HOSTNAME
+%if "%{?RAILS_DB_HOST}" != ""
+  export RAILS_DB_HOST=%RAILS_DB_HOST
 %endif
 %if "%{?RAILS_DB_PORT}" != ""
   export RAILS_DB_PORT

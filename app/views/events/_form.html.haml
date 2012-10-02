@@ -21,6 +21,6 @@
     = f.labeled_input_field(:maximum_participants, class: 'span1')
     
   %h2 Angaben für Anmeldung
-  %p Du kannst weiter Angaben für die Anmeldung verlangen 
+  %p Du kannst weitere Angaben für die Anmeldung verlangen 
   = field_set_tag do
     = f.inline_fields_for :questions, 'event/questions/fields'

@@ -1,7 +1,6 @@
 - title "Anmeldung für #{entry.priority_1}"
 
-= entry_form(url: event_applications_path(@event),
-             stacked: true, 
+= entry_form(stacked: true, 
              submit_label: 'Anmelden', 
              cancel_url_new: event_path(@event)) do |f|
              

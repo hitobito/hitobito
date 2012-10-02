@@ -14,6 +14,8 @@
 
 class Event::Application < ActiveRecord::Base
   
+  self.demodulized_route_keys = true
+  
   attr_accessible :priority_2_id, :priority_3_id,
                   :participation_attributes
   
@@ -27,7 +29,8 @@ class Event::Application < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :participation
-  
+
+
 
   def priority_1=(event)
     super

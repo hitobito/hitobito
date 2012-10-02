@@ -94,8 +94,8 @@ de:
         application_opening_at: Anmeldebeginn
         application_closing_at: Anmeldeschluss
         application_conditions: Anmeldebedingungen
-        event_dates: Daten
-        event_questions: Fragen
+        dates: Daten
+        questions: Fragen
       
       event/course:
         number: Kursnummer
@@ -116,16 +116,16 @@ de:
         priority_2_id: "1. Ausweichkurs"
         priority_3_id: "2. Ausweichkurs"
   
-      event/dates:
+      event/date:
         label: Beschreibung/Ort
         start_at: Von
         finish_at: Bis
         
-      event/questions:
+      event/question:
         question: Frage
         choices: Mögliche Antworten
         
-      event/answers:
+      event/answer:
         answer: Antwort
         
       event/kind:

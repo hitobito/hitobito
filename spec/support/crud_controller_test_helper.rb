@@ -34,6 +34,24 @@ module CrudControllerTestHelper
     respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
   end
   
+      
+  def deep_attributes(attrs, entry)
+    actual = {}
+    attrs.keys.each do |key|
+      if key.to_s.ends_with?('_attributes')
+        assoc = entry.send(key.to_s[/(.+)_attributes/, 1])
+        actual[key] = if assoc.respond_to?(:each)
+          assoc.collect { |a| deep_attributes(attrs[key].first, a) }
+        else
+          deep_attributes(attrs[key], assoc)
+        end
+      else
+        actual[key] = entry.attributes[key.to_s]
+      end
+    end
+    actual
+  end
+    
   module ClassMethods
     
     # Describe a certain action and provide some usefull metadata.
@@ -92,12 +110,8 @@ module CrudControllerTestHelper
     # Test that test_entry_attrs are set on entry.
     def it_should_set_attrs
       it "should set params as entry attributes" do
-        actual = {}
         attrs = test_attrs
-        attrs.keys.each do |key|
-          actual[key] = entry.attributes[key.to_s]
-        end
-        actual.should == attrs
+        deep_attributes(attrs, entry).should == attrs
       end
     end
     

@@ -24,7 +24,7 @@ class Event::Question < ActiveRecord::Base
   # TODO: validate zero or more than one choices
   
   def choice_items
-    choices.split(',').collect(&:strip)
+    choices.to_s.split(',').collect(&:strip)
   end
   
 end

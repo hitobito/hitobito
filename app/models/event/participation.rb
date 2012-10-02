@@ -46,4 +46,15 @@ class Event::Participation < ActiveRecord::Base
   
   accepts_nested_attributes_for :answers
   
+  
+  before_validation :set_self_in_nested
+  
+  
+  private
+  
+  def set_self_in_nested
+    # don't try to set self in frozen nested attributes (-> marked for destroy)
+    answers.each {|e| e.participation = self unless e.frozen? }
+  end
+
 end

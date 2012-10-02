@@ -4,7 +4,7 @@ base: &generic
   adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
   pool: 5
   timeout: 5000
-  encoding: utf-8
+  encoding: utf8
 <% %w(host port username password).each do |option| %>
   <% value = ENV["RAILS_DB_#{option.upcase}"] %>
   <%= "#{option}: #{value}" if value.present? %>

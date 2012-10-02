@@ -1,16 +1,16 @@
 - title "Anmeldung für #{entry.priority_1}"
 
 = entry_form(stacked: true) do |f|
-  - f.fields_for(:participation) do |fp|
-    - fp.fields_for(:answers) do |fa|
+  = f.fields_for(:participation) do |fp|
+    = fp.fields_for(:answers) do |fa|
       = render 'answers/fields', locals: {f: fa}
       
     = fp.labeled_text_area(:additional_information)
     
   = field_set_tag 'Ausweichdaten' do
     %p Bitte gib weitere Kurse an, welche dir gehen würden.
-    = f.labeled_belongs_to_field(:priority_2)
-    = f.labeled_belongs_to_field(:priority_3)
+    = f.labeled_belongs_to_field(:priority_2_id)
+    = f.labeled_belongs_to_field(:priority_3_id)
     
     %b Informationen zu den Ausweichkursen
     

@@ -84,6 +84,10 @@ class Event < ActiveRecord::Base
     update_column(:participant_count, count)
   end
   
+  def to_s
+    name
+  end
+  
   private
   
   def assert_type_is_allowed_for_group

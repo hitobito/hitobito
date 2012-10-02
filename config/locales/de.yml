@@ -108,13 +108,13 @@ de:
         label: Bezeichnung
         person_id: Person
         event_id: Event
-        additional_information: Bemerkungen / Medizinisches
+        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
         
       event/application:
-        priority_1_id: "1. Priorität"
-        priority_2_id: "2. Priorität"
-        priority_3_id: "3. Priorität"
+        priority_1_id: "Kurs"
+        priority_2_id: "1. Ausweichkurs"
+        priority_3_id: "2. Ausweichkurs"
   
       event/dates:
         label: Beschreibung/Ort

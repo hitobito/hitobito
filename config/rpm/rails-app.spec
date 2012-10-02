@@ -145,6 +145,11 @@ export PATH=%{ruby_bindir}:$PATH
 %{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
 %{bundle_cmd} exec rake assets:precompile
 
+# cleanup log and tmp and db we don't want them in
+# the rpm
+rm -rf log tmp db
+chmod -R o-rwx .
+
 install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www
 install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/log
 install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/tmp
@@ -215,13 +220,13 @@ fi
 %{_sysconfdir}/sysconfig/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
 
+%attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user
 %attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
 # allow write access to special directories
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%attr(-,root,%{name}) %{wwwdir}/%{name}/*
 %if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
 %attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
 %endif

@@ -8,14 +8,15 @@ describe CrudTestModelsController, type: :controller do
 
   include CrudTestHelper
 
-  before do 
+  before(:all) do 
     reset_db
     setup_db
     create_test_data
-    special_routing
   end
   
-  after { reset_db }
+  after(:all) { reset_db }
+
+  before { special_routing }
 
   #it_should_behave_like 'crud controller'
   include_examples 'crud controller'
@@ -64,7 +65,7 @@ describe CrudTestModelsController, type: :controller do
   
   describe_action(:get, :index) do
     context('.html', format: :html) do
-      context 'plain' do
+      context 'plain', :combine => 'ihpc' do
         it "should contain all entries" do
           entries.size.should == 6
         end
@@ -90,7 +91,7 @@ describe CrudTestModelsController, type: :controller do
           session[:list_params]['/crud_test_models.html'].should == {q: 'AAAA'}
         end
         
-        context "with custom options" do
+        context "with custom options", :combine => 'ihsc' do
           let(:params) { {q: 'DDD', filter: true} }
           
           it_should_respond
@@ -106,7 +107,7 @@ describe CrudTestModelsController, type: :controller do
       end
       
       context "sort" do
-        context "for given column" do
+        context "for given column", :combine => 'ihsoc' do
           let(:params) { {sort: 'children', sort_dir: 'asc'} }
           
           it_should_respond
@@ -120,7 +121,7 @@ describe CrudTestModelsController, type: :controller do
           end
         end
         
-        context "for virtual column" do
+        context "for virtual column", :combine => 'ihsov' do
           let(:params) { {sort: 'chatty', sort_dir: 'desc'} }
           
           it_should_respond
@@ -140,7 +141,7 @@ describe CrudTestModelsController, type: :controller do
           end
         end
         
-        context "with search" do
+        context "with search", :combine => 'ihsose' do
           let(:params) { {q: 'DDD', sort: 'chatty', sort_dir: 'asc'} }
         
           it_should_respond
@@ -155,7 +156,7 @@ describe CrudTestModelsController, type: :controller do
         end
       end
             
-      context "with custom options" do
+      context "with custom options", :combine => 'ihsoco' do
         let(:params) { {filter: true} }
         
         it_should_respond
@@ -171,6 +172,7 @@ describe CrudTestModelsController, type: :controller do
         before do
           session[:list_params] = {}
           session[:list_params]['/crud_test_models'] = {q: 'DDD', sort: 'chatty', sort_dir: 'desc'}
+          sign_in(user)
           get :index, returning: true
         end
         
@@ -188,7 +190,7 @@ describe CrudTestModelsController, type: :controller do
       end
     end
     
-    context ".js", format: :js do
+    context ".js", format: :js, :combine => 'ijs' do
       it_should_respond
       it_should_assign_entries
       its(:body) { should == 'index js' }
@@ -207,7 +209,7 @@ describe CrudTestModelsController, type: :controller do
     context "with before_render callback redirect", perform_request: false do
       before do
         controller.should_redirect = true
-        get :new
+        perform_request
       end
       
       it { should redirect_to(crud_test_models_path) }
@@ -231,21 +233,23 @@ describe CrudTestModelsController, type: :controller do
         expect { perform_request }.to change { CrudTestModel.count }.by(0)
       end
       
-      it_should_respond
-      it_should_render('new')
-      it_should_persist_entry(false)
-      it_should_have_flash(:alert)
-      
-      it "should set entry name" do
-        entry.name.should == 'illegal'
-      end
-      
-      it "should assign companions" do
-        assigns(:companions).should be_present
-      end
-      
-      it "should have called the correct callbacks" do
-        controller.called_callbacks.should == [:before_render_new, :before_render_form]
+      context "regular", :combine => 'chreg' do
+        it_should_respond
+        it_should_render('new')
+        it_should_persist_entry(false)
+        it_should_have_flash(:alert)
+        
+        it "should set entry name" do
+          entry.name.should == 'illegal'
+        end
+        
+        it "should assign companions" do
+          assigns(:companions).should be_present
+        end
+        
+        it "should have called the correct callbacks" do
+          controller.called_callbacks.should == [:before_render_new, :before_render_form]
+        end
       end
       
       context "redirect", perform_request: false do
@@ -272,18 +276,20 @@ describe CrudTestModelsController, type: :controller do
           expect { perform_request }.to change { CrudTestModel.count }.by(0)
         end
         
-        it_should_respond
-        it_should_render('new')
-        it_should_persist_entry(false)
-        it_should_not_have_flash(:notice)
-        it_should_not_have_flash(:alert)
-              
-        it "should assign companions" do
-          assigns(:companions).should be_present
-        end
-        
-        it "should have called the correct callbacks" do
-          controller.called_callbacks.should == [:before_create, :before_save, :before_render_new, :before_render_form]
+        context "regular", :combine => 'chivreg' do
+          it_should_respond
+          it_should_render('new')
+          it_should_persist_entry(false)
+          it_should_not_have_flash(:notice)
+          it_should_not_have_flash(:alert)
+                
+          it "should assign companions" do
+            assigns(:companions).should be_present
+          end
+          
+          it "should have called the correct callbacks" do
+            controller.called_callbacks.should == [:before_create, :before_save, :before_render_new, :before_render_form]
+          end
         end
       end
       
@@ -292,20 +298,22 @@ describe CrudTestModelsController, type: :controller do
           expect { perform_request }.to change { CrudTestModel.count }.by(0)
         end
         
-        it_should_respond(422)
-        it_should_persist_entry(false)
-        it_should_not_have_flash(:notice)
-        it_should_not_have_flash(:alert)
-              
-        it "should not assign companions" do
-          assigns(:companions).should be_nil
+        context "regular", :combine => 'cjreg' do
+          it_should_respond(422)
+          it_should_persist_entry(false)
+          it_should_not_have_flash(:notice)
+          it_should_not_have_flash(:alert)
+                
+          it "should not assign companions" do
+            assigns(:companions).should be_nil
+          end
+          
+          it "should have called the correct callbacks" do
+            controller.called_callbacks.should == [:before_create, :before_save]
+          end
+          
+          its(:body) { should match(/errors/) }
         end
-        
-        it "should have called the correct callbacks" do
-          controller.called_callbacks.should == [:before_create, :before_save]
-        end
-        
-        its(:body) { should match(/errors/) }
       end
     end
     
@@ -327,7 +335,7 @@ describe CrudTestModelsController, type: :controller do
     context "with invalid params" do
       let(:params) { {crud_test_model: {rating: 20}} }
       
-      context ".html" do
+      context ".html", :combine => 'uherg' do
         it_should_respond
         it_should_render('edit')
         it_should_not_have_flash(:notice)
@@ -345,7 +353,7 @@ describe CrudTestModelsController, type: :controller do
         end
       end
       
-      context ".json", format: :json do
+      context ".json", format: :json, :combine => 'ujreg' do
         it_should_respond(422)
         it_should_not_have_flash(:notice)
         
@@ -381,7 +389,7 @@ describe CrudTestModelsController, type: :controller do
         it_should_not_have_flash(:notice)
       end
       
-      context ".json", format: :json do
+      context ".json", format: :json, :combine => 'djreg' do
         it_should_respond(422)
         it_should_not_have_flash(:notice)
         its(:body) { should match(/errors/) }

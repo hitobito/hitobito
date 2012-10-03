@@ -6,13 +6,13 @@ describe ListHelper do
   include StandardHelper
   include CrudTestHelper
   
-  before do 
+  before(:all) do 
     reset_db
     setup_db
     create_test_data
   end
   
-  after { reset_db }
+  after(:all) { reset_db }
   
   describe "#list_table" do
     let(:entries) { CrudTestModel.all }

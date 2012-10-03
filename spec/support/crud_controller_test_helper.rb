@@ -10,9 +10,32 @@ module CrudControllerTestHelper
     params = scope_params.merge(:format => m[:format])
     params.merge!(:id => test_entry.id) if m[:id]
     params.merge!(example_params)
+    
+    sign_in(user)
     send(m[:method], m[:action], params)
   end
-
+  
+  def perform_combined_request
+    if stack = example.metadata[:combine]
+      @@current_stack ||= nil
+      if stack == @@current_stack
+        @response = @@current_response
+        @templates = @@current_templates
+        @controller = @@current_controller
+        @request = @@current_request
+        return
+      end
+      @@current_stack = stack
+    end
+    
+    perform_request
+    
+    @@current_response = @response
+    @@current_request = @request
+    @@current_controller = @controller
+    @@current_templates = @templates
+  end
+  
   # The params defining the nesting of the test entry.
   def scope_params
     params = {}

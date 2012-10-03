@@ -107,8 +107,8 @@ rm -rf $RPM_BUILD_ROOT
 %if "%{?RAILS_DB_PASSWORD}" != ""
   export RAILS_DB_PASSWORD=%RAILS_DB_PASSWORD
 %endif
-%if "%{?RAILS_DB_HOSTNAME}" != ""
-  export RAILS_DB_HOSTNAME=%RAILS_DB_HOSTNAME
+%if "%{?RAILS_DB_HOST}" != ""
+  export RAILS_DB_HOST=%RAILS_DB_HOST
 %endif
 %if "%{?RAILS_DB_PORT}" != ""
   export RAILS_DB_PORT
@@ -144,6 +144,11 @@ export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
 %{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
 %{bundle_cmd} exec rake assets:precompile
+
+# cleanup log and tmp and db we don't want them in
+# the rpm
+rm -rf log tmp
+chmod -R o-rwx .
 
 install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www
 install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/log
@@ -215,19 +220,14 @@ fi
 %{_sysconfdir}/sysconfig/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
 
+%attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user
 %attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
 # allow write access to special directories
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%attr(-,root,%{name}) %{wwwdir}/%{name}/*
-%if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
-%endif
-%if "%{?RAILS_DB_ADAPTER}" == ""
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
-%endif
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/log
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/public
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
+%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/db
 
 %if %{use_delayed_job}
 %{initrddir}/%{name}-workers

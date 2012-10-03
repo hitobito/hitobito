@@ -25,15 +25,17 @@ module CrudControllerTestHelper
         @request = @@current_request
         return
       end
+      
+      perform_request
+    
       @@current_stack = stack
+      @@current_response = @response
+      @@current_request = @request
+      @@current_controller = @controller
+      @@current_templates = @templates
+    else
+      perform_request
     end
-    
-    perform_request
-    
-    @@current_response = @response
-    @@current_request = @request
-    @@current_controller = @controller
-    @@current_templates = @templates
   end
   
   # The params defining the nesting of the test entry.

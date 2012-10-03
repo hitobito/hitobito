@@ -11,9 +11,7 @@ describe Event::ApplicationsController, type: :controller do
     course
   end
   
-  let(:test_entry) do
-    Fabricate(:event_application, priority_1: course)
-  end
+  let(:test_entry) { Fabricate(:event_application, priority_1: course) }
   
   let(:test_entry_attrs) do
     { 

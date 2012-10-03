@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 
 if [ -z $BUILD_NUMBER ]; then
   echo "Usage: BUILD_NUMBER=123 build_rpm.sh"
@@ -28,7 +28,7 @@ if [ -z $BUILD_PLATFORMS ]; then
   BUILD_PLATFORMS='epel-6-x86_64'
 fi
 for plat in $BUILD_PLATFORMS; do
-  eval "mock -r $plat --rebuild $build_flags $SRPM"
+  eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
   if [ $? -gt 0 ]; then
     echo "Failed building RPM for $plat - See above for issues."
     exit 1

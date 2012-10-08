@@ -202,7 +202,10 @@ select[class*="span"] {
   line-height: 30px;
 }
 
-
+.dl-horizontal {
+  dt { width: 190px; }
+  dd { margin-left: 200px; }
+}
 
 // 
 

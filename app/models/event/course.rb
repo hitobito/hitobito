@@ -39,4 +39,11 @@ class Event::Course < Event
   
   attr_accessible :kind_id, :state, :priorization, :requires_approval
 
+
+  def build_application_for(user)
+    appl = Application.new
+    appl.priority_1 = self
+    appl.participation.person = user
+    appl
+  end
 end

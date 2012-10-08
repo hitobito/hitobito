@@ -2,10 +2,6 @@
 module Ability::Events
   
   def define_events_abilities
-
-    # TODO: remove temp permissions
-    # temp permissions
-    can :new, Event
     
     # TODO: implement wicked event visibility
     can :read, Event
@@ -19,6 +15,11 @@ module Ability::Events
       can [:create, :destroy], Event do |event|
         can_create_event?(event)
       end
+    end
+    
+    can :index_people, Event do |event|
+      can_update_event?(event) ||
+      events_with_permission(:contact_data).include?(event.id)
     end
     
     

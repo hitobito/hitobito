@@ -11,6 +11,7 @@ gem 'decorates_before_rendering', '0.0.3'
 gem 'devise'
 gem 'display_case'
 gem 'draper'
+gem 'faker'
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'kaminari'
@@ -42,7 +43,6 @@ end
 
 group :development, :test do
   gem 'debugger'
-  gem 'faker'
   gem 'rspec-rails'
   gem 'sqlite3'
 end

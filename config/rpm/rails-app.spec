@@ -175,6 +175,7 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Configure here any services etc.
 
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate" || exit 1
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake wagon:setup" || exit 1
 
 %if %{use_sphinx}
 su %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1

@@ -11,18 +11,21 @@ gem 'decorates_before_rendering', '0.0.3'
 gem 'devise'
 gem 'display_case'
 gem 'draper'
+gem 'faker'
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'kaminari'
 gem 'nested_form'
 gem 'paranoia'
-gem 'mysql'
+gem 'mysql2'
 gem 'protective'
 gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'wagons'
+# Remove once errbit is running again
+gem 'exception_notification'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -40,7 +43,6 @@ end
 
 group :development, :test do
   gem 'debugger'
-  gem 'faker'
   gem 'rspec-rails'
   gem 'sqlite3'
 end
@@ -70,6 +72,7 @@ group :console do
   gem 'pry-nav'
   gem 'pry-stack_explorer'
   gem 'mailcatcher'
+  gem 'rdoc-tags'
 end
 
 group :guard do

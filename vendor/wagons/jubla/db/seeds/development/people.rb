@@ -1,5 +1,5 @@
 
-@encrypted_password = BCrypt::Password.create("password", cost: 1)
+@encrypted_password = BCrypt::Password.create("jub42la", cost: 1)
 
 def amount(role_type)
   case role_type.name.demodulize
@@ -80,11 +80,23 @@ Group.root.self_and_descendants.each do |group|
   end
 end
 
-devs = ['Pascal Zumkehr', 'Pascal Simon', 'Pierre Fritsch', 'Andreas Maierhofer']
+
+puzzlers = ['Pascal Zumkehr', 
+            'Pascal Simon', 
+            'Pierre Fritsch', 
+            'Andreas Maierhofer', 
+            'Roland Studer']
+devs = {'Martin Zust' => 'animation@jublaluzern.ch'}
+
+puzzlers.each do |puz|
+  devs[puz] = "#{puz.split.last.downcase}@puzzle.ch"
+end
+
+
 bula = Group.root.children.first
-devs.each do |dev| 
-  first, last = dev.split
-  attrs = { email: "#{last.downcase}@puzzle.ch", 
+devs.each do |name, email| 
+  first, last = name.split
+  attrs = { email: email, 
             first_name: first,
             last_name: last,
             encrypted_password: @encrypted_password } 

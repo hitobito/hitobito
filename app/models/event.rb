@@ -88,6 +88,10 @@ class Event < ActiveRecord::Base
       .where(event_dates: { start_at: [start_at...finish_at] } )
       .order('event_kinds.id, groups.name')
     end
+
+    def for_group(group_id)
+      where(group_id: group_id)
+    end
   end
 
   # TODO: copy all event_questions without event_id into a newly created event (probably in controller, not here)

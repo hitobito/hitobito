@@ -1,6 +1,9 @@
 class Event::CoursesController < EventsController
   self.nesting_optional = true
-  helper_method :courses_by_kinds
+  helper_method :courses_by_kinds, :can_offer_courses, :group_id,
+    :current_year, :group_name, :year
+  attr_reader :year
+
   decorates :events
 
   class << self
@@ -11,13 +14,29 @@ class Event::CoursesController < EventsController
 
   private
   def list_entries
-    @year = params[:year].to_i > 0 ? params[:year].to_i : Date.today.year
+    @year = params[:year].to_i > 0 ? params[:year].to_i : current_year 
     @years = (@year-3...@year+3)
-    super.in_year(@year)
+    group_id > 0 ? super.in_year(@year).for_group(group_id) : super.in_year(@year)
   end
 
   def courses_by_kinds
     entries.group_by { |entry| entry.kind.label }
+  end
+
+  def can_offer_courses
+    Group.can_offer_courses
+  end
+
+  def group_id
+    params[:group].to_i
+  end
+
+  def group_name
+    Group.find(group_id).name
+  end
+
+  def current_year
+    Date.today.year
   end
 
 end

@@ -18,7 +18,7 @@ module CrudControllerTestHelper
   def perform_combined_request
     if stack = example.metadata[:combine]
       @@current_stack ||= nil
-      if stack == @@current_stack
+      if stack == @@current_stack && described_class == @@current_controller.class
         @response = @@current_response
         @templates = @@current_templates
         @controller = @@current_controller

@@ -1,3 +1,6 @@
+- title(page_title)
+
+= render 'event/courses/tabs' # wieso muss ich die explicit referenieren (actions findet er)
 - courses_by_kinds.each_entry do |kind, events| 
   %h2= kind
   %table.table

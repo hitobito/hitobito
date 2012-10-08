@@ -282,6 +282,8 @@ GEM
     rcov (0.9.11)
     rdoc (3.12)
       json (~> 1.4)
+    rdoc-tags (1.2)
+      rdoc (~> 3.4)
     reek (1.2.12)
       ripper_ruby_parser (~> 0.0.7)
       ruby2ruby (~> 1.2.5)
@@ -442,6 +444,7 @@ DEPENDENCIES
   rails_code_qa
   rails_config
   rb-inotify
+  rdoc-tags
   rspec-rails
   sass-rails (~> 3.2.3)
   schema_validations

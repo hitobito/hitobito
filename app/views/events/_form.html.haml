@@ -1,11 +1,13 @@
 - parent_sheet(GroupSheet.new(self, @group, :group_event_path, :index_event))
 
-%h2 Kursinfos
+%h2 Infos
 = entry_form do |f|
 
   = field_set_tag do
-    = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :contact_id, :location)
-    = f.labeled_input_field(:kind_id, class: 'span2')
+    = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :location)
+    = f.labeled(:contact_id) do
+      = f.string_field :contact_id, data: {provide: 'person', id_field: 'role_person_id'}
+    = f.labeled_collection_select(:kind_id, f.association_entries(:kind_id), :id, :to_s, {}, class: 'span2')
 
   %h2 Kursdaten
   = field_set_tag do
@@ -13,7 +15,9 @@
 
   %h2 Anmeldung
   = field_set_tag do
-    = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
+    = f.labeled_input_field(:application_opening_at, class: 'span1 date')
+    = f.labeled_input_field(:application_closing_at, class: 'span1 date')
+    = f.labeled_input_field(:application_conditions)
     = f.labeled(:requires_approval, 'Freigabe') do
       %label.checkbox
         = f.boolean_field(:requires_approval)

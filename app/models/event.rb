@@ -72,6 +72,7 @@ class Event < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :dates, allow_destroy: true
+  accepts_nested_attributes_for :questions, allow_destroy: true
 
 
   ### CLASS METHODS

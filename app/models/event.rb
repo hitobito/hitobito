@@ -80,11 +80,9 @@ class Event < ActiveRecord::Base
   class << self
     def in_year(year)
       raise ArgumentError, "Invalid year: #{year}" if year.to_i <= 0
-      start_at = DateTime.parse "#{year}-01-01"
-      finish_at = DateTime.parse "#{year}-12-31"
-      scoped
-      .includes(:group, :kind, :dates)
-      .joins(:group,:kind,:dates)
+      start_at = Time.zone.parse "#{year}-01-01"
+      finish_at = start_at + 1.year
+      joins(:group,:kind,:dates)
       .where(event_dates: { start_at: [start_at...finish_at] } )
       .order('event_kinds.id, groups.name')
     end

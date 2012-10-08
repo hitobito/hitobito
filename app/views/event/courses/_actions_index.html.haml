@@ -1,3 +1,2 @@
-%ul
-  - @years.each do |year|
-    %li= link_to_year(year)
+.pull-right
+  = dropdown_button(group_title, group_link_list(can_offer_courses))

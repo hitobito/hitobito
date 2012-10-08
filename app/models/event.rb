@@ -91,6 +91,10 @@ class Event < ActiveRecord::Base
     def for_group(group_id)
       where(group_id: group_id)
     end
+
+    def upcoming
+      joins(:dates).where("event_dates.start_at > ?", ::Date.today)
+    end
   end
 
   

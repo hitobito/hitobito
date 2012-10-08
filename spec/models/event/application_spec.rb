@@ -54,7 +54,6 @@ describe Event::Application do
         should == [application]
       end
     end
-
   end
 end
 

@@ -42,7 +42,7 @@ class Event::Participation < ActiveRecord::Base
   ### CALLBACKS
   
   before_validation :set_self_in_nested
-    
+
 
   def init_answers
     if answers.blank?
@@ -51,6 +51,9 @@ class Event::Participation < ActiveRecord::Base
       end
     end
   end
+  
+  ### INSTANCE METHODS
+    
   
   private
   

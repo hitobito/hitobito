@@ -1,0 +1,8 @@
+%aside.span5{data: {role: 'upcoming'}}
+  %section.group_children
+    %h2 Events
+    = table(entry.upcoming_events) do |t|
+      - t.col('') do |event|
+        = event.label
+      - t.col('') do |event|
+        = event.dates_info

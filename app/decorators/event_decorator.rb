@@ -8,7 +8,7 @@ class EventDecorator < ApplicationDecorator
     "#{kind.label}<br/>#{h.muted(group.name)}".html_safe
   end
 
-  def dates
+  def dates_info
     model.dates.map { |date| format_event_date(date) }.join('<br/>').html_safe
   end
 

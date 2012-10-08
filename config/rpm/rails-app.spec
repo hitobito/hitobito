@@ -19,7 +19,7 @@
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
-%if "%{?RAILS_DB_ADAPTER}" == "mysql"
+%if "%{?RAILS_DB_ADAPTER}" == "mysql2"
 %define use_mysql       1
 %else
 %define use_mysql       0

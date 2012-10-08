@@ -21,14 +21,12 @@ class Event::ApplicationsController < CrudController
   
   def build_entry
     course = Event::Course.find(params[:event_id])
-    appl = Event::Application.new
-    appl.priority_1 = course
-    appl
+    course.build_application_for(current_user)
   end
   
   def assign_attributes
     super
-    # Set these attrs again as a new instance they might have been created by the mass assignment.
+    # Set these attrs again as a new participation instance might have been created by the mass assignment.
     entry.participation.person ||= current_user
     entry.participation.type ||= entry.priority_1.participant_type.sti_name
   end

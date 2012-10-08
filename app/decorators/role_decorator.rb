@@ -7,6 +7,6 @@ class RoleDecorator < ApplicationDecorator
   end
 
   def flash_info
-    "<i>#{model}</i> für <i>#{person}</i> in <i>#{group}</i>".html_safe
+    "<i>#{h.h(model)}</i> für <i>#{h.h(person)}</i> in <i>#{h.h(group)}</i>".html_safe
   end
 end

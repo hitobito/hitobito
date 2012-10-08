@@ -28,8 +28,9 @@ class Event::Participation < ActiveRecord::Base
   # Whether this kind of participation is specially managed or open for general modifications.
   self.restricted = false
   
+  self.demodulized_route_keys = true
   
-  attr_accessible :additional_information, :answers_attributes
+  attr_accessible :label, :additional_information, :answers_attributes
   
   
   ### ASSOCIATIONS
@@ -47,7 +48,17 @@ class Event::Participation < ActiveRecord::Base
   accepts_nested_attributes_for :answers
   
   
+  ### CALLBACKS
+  
   before_validation :set_self_in_nested
+    
+  
+  ### INSTANCE METHODS
+    
+  def to_s
+    model_name = self.class.model_name.human
+    string = label? ? "#{label} (#{model_name})" : model_name
+  end
   
   
   private

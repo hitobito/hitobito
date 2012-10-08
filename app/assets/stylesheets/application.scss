@@ -196,6 +196,12 @@ select[class*="span"] {
   *margin-top: 4px;
   line-height: 30px;
 }
+
+.dl-horizontal {
+  dt { width: 190px; }
+  dd { margin-left: 200px; }
+}
+
 // 
 
 

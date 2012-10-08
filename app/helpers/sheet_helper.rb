@@ -29,8 +29,9 @@ class Sheet
   
   delegate :content_tag, :link_to, :safe_join, :capture, :can?, to: :view
   
-  def initialize(view)
+  def initialize(view, title = nil)
     @view = view
+    @title = title
     @breadcrumbs = []
   end
   
@@ -108,37 +109,39 @@ class Sheet
   
 end
 
-class GroupSheet < Sheet
+class EntrySheet < Sheet
+  attr_reader :entry
   
-  attr_reader :group
-  
-  def initialize(view, group, url_method = nil, can_action = :show)
-    super(view)
-    @group = group
-    @url_method = url_method
+  def initialize(view, entry, url_method = nil, can_action = :show)
+    super(view, entry.to_s)
+    @entry = entry
+    @url_method = Array(url_method)
     @can_action = can_action
-    self.title = group.to_s
+  end
+    
+  def render_title
+    link_to(entry.to_s, link_url(entry), class: 'level active')
   end
   
+  def link_url(entry)
+    if @url_method.present? && can?(@can_action, entry)
+      view.send(*@url_method, entry)
+    else
+      entry
+    end
+  end
+end
+
+class GroupSheet < EntrySheet
+
   def breadcrumbs
-    group.parent.hierarchy.collect do |g|
+    entry.parent.hierarchy.collect do |g|
       link_to(g.to_s, link_url(g))
     end
   end
   
   def breadcrumbs?
-    group.parent_id?
+    entry.parent_id?
   end
-      
-  def render_title
-    link_to(group.to_s, link_url(group), class: 'level active')
-  end
-  
-  def link_url(group)
-    if @url_method && can?(@can_action, group)
-      view.send(@url_method, group)
-    else
-      group
-    end
-  end
+
 end

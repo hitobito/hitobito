@@ -30,7 +30,8 @@ class Event::Application < ActiveRecord::Base
   
   accepts_nested_attributes_for :participation
 
-
+  ## CLASS METHODS
+  scope :pending, joins(:participation).where(event_participations: {event_id: nil}, rejected: false) 
 
   def priority_1=(event)
     super

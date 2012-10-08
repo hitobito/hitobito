@@ -11,6 +11,10 @@ class PersonDecorator < ApplicationDecorator
   def full_name
     model.to_s.split('/').first
   end
+
+  def applications
+    Event::ApplicationDecorator.decorate(event_applications.pending)
+  end
   
   def full_label
     label = to_s
@@ -46,7 +50,7 @@ class PersonDecorator < ApplicationDecorator
   
   def function_short(function, scope_method, scope = nil)
     html = [function.to_s]
-    html << h.muted(function.send(:scope_method).to_s) if scope.nil?
+    html << h.muted(function.send(scope_method).to_s) if scope.nil?
     h.safe_join(html, ' ')
   end
   

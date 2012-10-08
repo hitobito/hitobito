@@ -16,7 +16,9 @@ class Event::CoursesController < EventsController
   def list_entries
     @year = params[:year].to_i > 0 ? params[:year].to_i : current_year 
     @years = (@year-3...@year+3)
-    group_id > 0 ? super.in_year(@year).for_group(group_id) : super.in_year(@year)
+    scoped = super.includes(:group, :kind, :dates)
+    scoped = scoped.in_year(@year)
+    group_id > 0 ? scoped.for_group(group_id) : scoped.in_year(@year)
   end
 
   def courses_by_kinds

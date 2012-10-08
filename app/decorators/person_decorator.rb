@@ -1,4 +1,5 @@
 # encoding: utf-8
+require_relative 'event/application_decorator.rb'
 class PersonDecorator < ApplicationDecorator
   decorates :person
 
@@ -12,10 +13,6 @@ class PersonDecorator < ApplicationDecorator
     model.to_s.split('/').first
   end
 
-  def applications
-    Event::ApplicationDecorator.decorate(event_applications.pending)
-  end
-  
   def full_label
     label = to_s
     label << ", #{town}" if town?
@@ -37,6 +34,10 @@ class PersonDecorator < ApplicationDecorator
   # render a list of all participations
   def participations_short(event)
     functions_short(event_participations.to_a, :event, event)
+  end
+
+  def pending_applications
+    Event::ApplicationDecorator.decorate(event_applications.pending.to_a)
   end
   
   private

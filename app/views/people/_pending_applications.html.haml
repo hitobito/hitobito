@@ -1,7 +1,7 @@
 %aside.span5
   %section.group_children
     %h2 Anmeldungen
-    = table(entry.applications) do |t|
+    = table(entry.pending_applications) do |t|
       - t.col('') do |application|
         = application.link
       - t.col('') do |application|

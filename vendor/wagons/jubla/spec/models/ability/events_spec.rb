@@ -24,10 +24,20 @@ describe Ability::Events do
         should be_able_to(:update, event)
       end
       
+      it "may index people for event in his layer" do
+        should be_able_to(:index_people, event)
+      end
+      
       it "may not update event in other layer" do
         other = Fabricate(:event, group: groups(:bern))
         should_not be_able_to(:update, other)
       end
+      
+      it "may not index people for event in his layer" do
+        other = Fabricate(:event, group: groups(:bern))
+        should_not be_able_to(:index_people, other)
+      end
+      
     end
     
     
@@ -94,9 +104,18 @@ describe Ability::Events do
         should be_able_to(:destroy, event)
       end
       
+      it "may index people for event in his layer" do
+        should be_able_to(:index_people, event)
+      end
+      
       it "may not update event in other group" do
         other = Fabricate(:event, group: groups(:be_agency))
         should_not be_able_to(:update, other)
+      end
+      
+      it "may not index people for event in other group" do
+        other = Fabricate(:event, group: groups(:be_agency))
+        should_not be_able_to(:index_people, other)
       end
     end
     
@@ -166,10 +185,20 @@ describe Ability::Events do
         should_not be_able_to(:destroy, event)
       end
       
+      it "may index people his event" do
+        should be_able_to(:index_people, event)
+      end
+      
       it "may not update other event" do
         other = Fabricate(:event, group: group)
         should_not be_able_to(:update, other)
       end
+      
+      it "may not index people for other event" do
+        other = Fabricate(:event, group: group)
+        should_not be_able_to(:index_people, other)
+      end
+      
     end
     
     context Event::Participation do
@@ -247,6 +276,10 @@ describe Ability::Events do
         should_not be_able_to(:destroy, event)
       end
       
+      it "may index people for his event" do
+        should be_able_to(:index_people, event)
+      end
+      
       it "may show other event" do
         other = Fabricate(:event, group: groups(:be))
         should be_able_to(:show, other)
@@ -256,6 +289,12 @@ describe Ability::Events do
         other = Fabricate(:event, group: groups(:be))
         should_not be_able_to(:update, other)
       end
+      
+      it "may not index people for other event" do
+        other = Fabricate(:event, group: groups(:be))
+        should_not be_able_to(:index_people, other)
+      end
+      
     end
     
     context Event::Participation do

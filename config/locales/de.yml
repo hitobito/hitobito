@@ -42,7 +42,6 @@ de:
         one: Kursart
         other: Kursarten
       
-      
     attributes:
       person:
         first_name: Vorname
@@ -96,6 +95,7 @@ de:
         application_conditions: Anmeldebedingungen
         dates: Daten
         questions: Fragen
+        kind_id: Kursart
       
       event/course:
         number: Kursnummer

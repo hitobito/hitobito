@@ -51,7 +51,13 @@ Jubla::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   # TODO: change host once it is known
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'jubla.puzzle.ch' }
+
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[JUB] ",
+    :sender_address => %{"Jubla Web App" <jubla@puzzle.ch>},
+    :exception_recipients => %w{jubla@puzzle.ch}
+  
 
   # Enable threaded mode
   # config.threadsafe!

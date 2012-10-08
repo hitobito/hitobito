@@ -23,6 +23,8 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'wagons'
+# Remove once errbit is running again
+gem 'exception_notification'
 
 # Gems used only for assets and not required
 # in production environments by default.

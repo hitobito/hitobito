@@ -1,0 +1,20 @@
+-parent_sheet GroupSheet.new(self, @group)
+-title @event.name
+
+=render 'events/tabs'
+
+%p
+  = entry.kind
+  = entry.number
+
+%p= entry.state
+
+%p= entry.motto
+
+%p= entry.dates
+
+%p= entry.location
+
+%p= entry.description
+
+= render_attrs entry, :cost, :application_opening_at, :application_closing_at, :maximum_participants, :contact_id

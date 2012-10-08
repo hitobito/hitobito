@@ -27,6 +27,7 @@ Jubla::Application.routes.draw do
   
   resources :events do
     resources :applications, module: 'event'
+    resources :people, module: 'event', only: [:index, :show]
   end
   
   

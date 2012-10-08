@@ -7,7 +7,7 @@ class Event::ApplicationDecorator < ApplicationDecorator
   end
 
   def dates
-    event.dates
+    event.dates_info
   end
 
   private

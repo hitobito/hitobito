@@ -19,5 +19,5 @@
     = render_extensions :attrs
 
   = render 'roles' if can?(:show_details, entry)
-  = render 'event_applications' if entry.event_applications.present?
+  = render 'pending_applications' if entry.pending_applications.present?
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Event::ApplicationsController do
+describe Event::ParticipationsController do
   
   let(:course) do
     course = Fabricate(:course, group: groups(:top_layer))
@@ -17,10 +17,10 @@ describe Event::ApplicationsController do
     before { get :new, event_id: course.id }
     
     it "builds application with answers" do
-      appl = assigns(:application)
-      appl.participation.should be_present
-      appl.participation.answers.should have(2).items
-      appl.participation.person.should == user
+      participation = assigns(:participation)
+      participation.application.should be_present
+      participation.answers.should have(2).items
+      participation.person.should == user
     end
   end
   

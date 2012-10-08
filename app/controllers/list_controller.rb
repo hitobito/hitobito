@@ -364,7 +364,7 @@ class ListController < ApplicationController
 
     # The model scope for the current parent resource.
     def parent_scope
-      parent.send(model_class.name.underscore.pluralize)
+      parent.send(model_class.name.underscore.pluralize.split('/').last)
     end
   end
 

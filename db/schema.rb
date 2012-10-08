@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001085319) do
+ActiveRecord::Schema.define(:version => 20121008152520) do
 
   create_table "event_answers", :force => true do |t|
     t.integer "participation_id", :null => false
@@ -20,13 +20,12 @@ ActiveRecord::Schema.define(:version => 20121001085319) do
   end
 
   create_table "event_applications", :force => true do |t|
-    t.integer "participation_id",                    :null => false
-    t.integer "priority_1_id",                       :null => false
+    t.integer "priority_1_id",                    :null => false
     t.integer "priority_2_id"
     t.integer "priority_3_id"
-    t.boolean "approved",         :default => false, :null => false
-    t.boolean "rejected",         :default => false, :null => false
-    t.boolean "waiting_list",     :default => false, :null => false
+    t.boolean "approved",      :default => false, :null => false
+    t.boolean "rejected",      :default => false, :null => false
+    t.boolean "waiting_list",  :default => false, :null => false
   end
 
   create_table "event_dates", :force => true do |t|
@@ -45,19 +44,26 @@ ActiveRecord::Schema.define(:version => 20121001085319) do
   end
 
   create_table "event_participations", :force => true do |t|
-    t.integer  "event_id"
-    t.integer  "person_id",              :null => false
-    t.string   "type",                   :null => false
-    t.string   "label"
+    t.integer  "event_id",                                  :null => false
+    t.integer  "person_id",                                 :null => false
     t.text     "additional_information"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.boolean  "active",                 :default => false, :null => false
+    t.integer  "application_id"
+    t.index ["event_id", "person_id"], :name => "index_event_participations_on_event_id_and_person_id", :unique => true
   end
 
   create_table "event_questions", :force => true do |t|
     t.integer "event_id"
     t.string  "question"
     t.string  "choices"
+  end
+
+  create_table "event_roles", :force => true do |t|
+    t.string  "type",             :null => false
+    t.integer "participation_id", :null => false
+    t.string  "label"
   end
 
   create_table "events", :force => true do |t|

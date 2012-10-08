@@ -1,0 +1,16 @@
+- parent_sheet(EntrySheet.new(self, @event, :event_people_path))
+- parent_sheet(GroupSheet.new(self, @event.group))
+
+= entry_form(buttons_bottom: false,
+             cancel_url: (entry.new_record? ? event_participations_path(entry.participation.event_id) : event_participation_path(entry.participation.event_id, entry.participation_id))) do |f|
+  - if entry.new_record?
+    = f.hidden_field :event_id
+    = f.hidden_field :type
+    = f.hidden_field :person_id
+    = f.labeled(:person) do
+      = f.string_field :person, data: {provide: 'person', id_field: 'event_role_person_id'}
+  - else
+    = f.labeled(:event_id, content_tag(:div, entry.event.to_s))
+    = f.labeled(:person_id, content_tag(:div, entry.person.to_s))
+    
+  = f.labeled_input_field(:label, data: {provide: :typeahead, source: entry.class.available_labels})

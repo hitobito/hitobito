@@ -176,7 +176,7 @@ module CrudControllerTestHelper
     
         if bool
           it { should be_persisted }
-          it { should be_valid }
+          it { should be_valid, entry.errors.full_messages.join("\n") }
         else
           it { should_not be_persisted }
         end

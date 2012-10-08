@@ -18,6 +18,8 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :question
 
 
+  validates :question_id, uniqueness: {scope: :participation_id}
+
   validate :assert_answer_is_in_choice_items
   
   private

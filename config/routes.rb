@@ -26,9 +26,8 @@ Jubla::Application.routes.draw do
   resources :event_courses, module: 'event', controller: 'courses'
   
   resources :events do
-    resources :applications, module: 'event'
     resources :participations, module: 'event'
-    resources :people, module: 'event', only: [:index, :show]
+    resources :roles, module: 'event'
   end
   
   

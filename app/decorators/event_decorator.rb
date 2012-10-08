@@ -16,10 +16,10 @@ class EventDecorator < ApplicationDecorator
     "#{participant_count} von #{maximum_participants}"
   end
   
-  def possible_participation_links
-    model.class.participation_types.map do |type|
+  def possible_role_links
+    model.class.role_types.map do |type|
       unless type.restricted
-        link = h.new_event_participation_path(self, event_participation: { type: type.sti_name})
+        link = h.new_event_role_path(self, event_participation: { type: type.sti_name})
         h.link_to(type.model_name.human, link)
       end
     end.compact

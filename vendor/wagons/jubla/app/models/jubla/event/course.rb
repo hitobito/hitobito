@@ -3,7 +3,7 @@ module Jubla::Event::Course
 
   
   included do
-    self.participation_types += [Participation::Advisor]
+    self.role_types += [Role::Advisor]
     
     # states are used for workflow
     # translations in config/locales
@@ -32,8 +32,8 @@ module Jubla::Event::Course
   end
   
   
-  module Participation
-    class Advisor < ::Event::Participation
+  module Role
+    class Advisor < ::Event::Role
      
       self.permissions = [:contact_data]
       self.restricted = true

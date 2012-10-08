@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Ability::Events do
   
-  let(:person)  { role.person }
+  let(:user)    { role.person }
   let(:group)   { role.group }
   let(:event)   { Fabricate(:event, group: group) }
   
-  subject { Ability.new(person.reload) }
+  subject { Ability.new(user.reload) }
 
   context :layer_full do
     let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
@@ -25,7 +25,7 @@ describe Ability::Events do
       end
       
       it "may index people for event in his layer" do
-        should be_able_to(:index_people, event)
+        should be_able_to(:index_participations, event)
       end
       
       it "may not update event in other layer" do
@@ -35,14 +35,15 @@ describe Ability::Events do
       
       it "may not index people for event in his layer" do
         other = Fabricate(:event, group: groups(:bern))
-        should_not be_able_to(:index_people, other)
+        should_not be_able_to(:index_participations, other)
       end
       
     end
     
     
     context Event::Participation do
-      let(:participation) { Fabricate(Event::Participation::Participant.name.to_sym, event: event) }
+      let(:participation) { Fabricate(:event_participation, event: event) }
+      before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
       
       it "may show participation" do
         should be_able_to(:show, participation)
@@ -61,28 +62,25 @@ describe Ability::Events do
       end
       
       it "may not show participation in event from other layer" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: Fabricate(:event, group: groups(:bern)))
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:bern)))
         should_not be_able_to(:show, other)
       end
     end
     
     context Event::Application do 
-      let(:application) { Fabricate(:event_application, priority_1: event) }
+      let(:participation) { Fabricate(:event_participation, event: event) }
+      let(:application) { Fabricate(:event_application, participation: participation) }
       
       it "may create new application for anybody" do
         should be_able_to(:create, application)
       end
-      
-      it "may show application" do
-        should be_able_to(:show, application)
-      end
-      
+
       it "may update application" do
         should be_able_to(:update, application)
       end
       
       it "may not update applications of other groups" do
-        other = Fabricate(:event_application, priority_1: Fabricate(:course, group: groups(:no)))
+        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: groups(:no))))
         should_not be_able_to(:update, other)
       end
     end
@@ -105,7 +103,7 @@ describe Ability::Events do
       end
       
       it "may index people for event in his layer" do
-        should be_able_to(:index_people, event)
+        should be_able_to(:index_participations, event)
       end
       
       it "may not update event in other group" do
@@ -115,12 +113,13 @@ describe Ability::Events do
       
       it "may not index people for event in other group" do
         other = Fabricate(:event, group: groups(:be_agency))
-        should_not be_able_to(:index_people, other)
+        should_not be_able_to(:index_participations, other)
       end
     end
     
     context Event::Participation do
-      let(:participation) { Fabricate(Event::Participation::Participant.name.to_sym, event: event) }
+      let(:participation) { Fabricate(:event_participation, event: event) }
+      before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
       
       it "may show participation" do
         should be_able_to(:show, participation)
@@ -139,13 +138,14 @@ describe Ability::Events do
       end
       
       it "may not show participation in event from other group" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: Fabricate(:event, group: groups(:be_agency)))
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:be_agency)))
         should_not be_able_to(:show, other)
       end
     end
     
     context Event::Application do 
-      let(:application) { Fabricate(:event_application, priority_1: event) }
+      let(:participation) { Fabricate(:event_participation, event: event) }
+      let(:application) { Fabricate(:event_application, participation: participation) }
       
       it "may create new application for anybody" do
         should be_able_to(:create, application)
@@ -160,7 +160,7 @@ describe Ability::Events do
       end
       
       it "may not update applications of other groups" do
-        other = Fabricate(:event_application, priority_1: Fabricate(:course, group: groups(:no)))
+        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: groups(:no))))
         should_not be_able_to(:update, other)
       end
     end
@@ -169,8 +169,9 @@ describe Ability::Events do
   context :event_full do
     let(:group)  { groups(:be) }
     let(:role)   { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
-    let(:participation) { Fabricate(Event::Participation::Leader.name.to_sym, event: event, person: role.person)}
-    let(:person) { participation.person }
+    let(:participation) { Fabricate(:event_participation, event: event, person: user)}
+    
+    before { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) } 
     
     context Event do
       it "may not create events" do
@@ -186,7 +187,7 @@ describe Ability::Events do
       end
       
       it "may index people his event" do
-        should be_able_to(:index_people, event)
+        should be_able_to(:index_participations, event)
       end
       
       it "may not update other event" do
@@ -196,13 +197,14 @@ describe Ability::Events do
       
       it "may not index people for other event" do
         other = Fabricate(:event, group: group)
-        should_not be_able_to(:index_people, other)
+        should_not be_able_to(:index_participations, other)
       end
       
     end
     
     context Event::Participation do
-      let(:other) { Fabricate(Event::Participation::Participant.name.to_sym, event: event) }
+      let(:other) { Fabricate(:event_participation, event: event) }
+      before { Fabricate(Event::Role::Participant.name.to_sym, participation: other) }
       
       it "may show participation" do
         should be_able_to(:show, other)
@@ -221,25 +223,25 @@ describe Ability::Events do
       end
       
       it "may not show participation in other event" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
         should_not be_able_to(:show, other)
       end
       
       it "may not update participation in other event" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
         should_not be_able_to(:update, other)
       end
     end
     
     context Event::Application do 
-      let(:application) { Fabricate(:event_application, priority_1: event) }
+      let(:application) { Fabricate(:event_application, participation: Fabricate(:event_participation, event: event)) }
       
       it "may not create new application for anybody" do
         should_not be_able_to(:create, application)
       end
       
-      it "may show application" do
-        should be_able_to(:show, application)
+      it "may not show application" do
+        should_not be_able_to(:show, application)
       end
       
       it "may not update application" do
@@ -247,7 +249,7 @@ describe Ability::Events do
       end
       
       it "may not show applications of other events" do
-        other = Fabricate(:event_application, priority_1: Fabricate(:course, group: group))
+        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: group)))
         should_not be_able_to(:show, other)
       end
     end
@@ -256,8 +258,9 @@ describe Ability::Events do
   context :event_contact_data do 
     let(:role)   { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
     let(:event)  { Fabricate(:event, group: groups(:be)) }
-    let(:participation) { Fabricate(Event::Participation::Cook.name.to_sym, event: event, person: role.person) }
-    let(:person) { participation.person }
+    let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+    
+    before { Fabricate(Event::Role::Cook.name.to_sym, participation: participation) } 
           
     context Event do
       it "may show his event" do
@@ -277,7 +280,7 @@ describe Ability::Events do
       end
       
       it "may index people for his event" do
-        should be_able_to(:index_people, event)
+        should be_able_to(:index_participations, event)
       end
       
       it "may show other event" do
@@ -292,7 +295,7 @@ describe Ability::Events do
       
       it "may not index people for other event" do
         other = Fabricate(:event, group: groups(:be))
-        should_not be_able_to(:index_people, other)
+        should_not be_able_to(:index_participations, other)
       end
       
     end
@@ -302,13 +305,15 @@ describe Ability::Events do
         should be_able_to(:show, participation)
       end
       
-      it "may show other participation" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: event)
-        should be_able_to(:show, other)
+      it "may not show other participation" do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Role::Participant.name.to_sym, participation: other)
+        should_not be_able_to(:show, other)
       end
       
       it "may not show participation in other event" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
+        Fabricate(Event::Role::Participant.name.to_sym, participation: other)
         should_not be_able_to(:show, other)
       end
       
@@ -317,52 +322,63 @@ describe Ability::Events do
       end
       
       it "may not update other participation" do
-        other = Fabricate(Event::Participation::Participant.name.to_sym, event: event)
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Role::Participant.name.to_sym, participation: other)
         should_not be_able_to(:update, other)
       end
     end
     
     context Event::Application do 
-      let(:application) { Fabricate(:event_application, priority_1: event) }
-      
-      it "may not create new application for anybody" do
-        should_not be_able_to(:create, application)
-      end
-      
-      it "may not show application" do
-        should_not be_able_to(:show, application)
-      end
-      
-      it "may update application" do
-        should_not be_able_to(:update, application)
-      end
-      
+      let(:application) { Fabricate(:event_application, participation: participation) }
+
       it "may show his application" do
-        application.participation.person = person
         should be_able_to(:show, application)
       end
       
       it "may update his application" do
-        application.participation.person = person
         should be_able_to(:update, application)
       end
       
       it "may create his application" do
-        application.participation.person = person
         should be_able_to(:create, application)
       end
+      
+      context "other" do
+        let(:application) { Fabricate(:event_application, participation: Fabricate(:event_participation, event: event)) }
+        it "may not show application" do
+          should_not be_able_to(:show, application)
+        end
+        
+        it "may update application" do
+          should_not be_able_to(:update, application)
+        end
+      end
+      
     end
   end
   
   context :in_same_hierarchy do
     let(:role) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:bern)) }
+    let(:participation) { Fabricate(:event_participation, person: user, event: event) }
+        
+        
+     context Event::Participation do 
+      it "may create his participation" do
+        should be_able_to(:create, participation)
+      end
+      
+      it "may show his participation" do
+        should be_able_to(:show, participation)
+      end
+      
+      it "may update his participation" do
+        should be_able_to(:update, participation)
+      end
+      
+    end
     
     context Event::Application do 
-      let(:application) do
-        appl =  Fabricate(:event_application, priority_1: event)
-        appl.participation.person = person
-        appl
-      end
+      let(:application) { Fabricate(:event_application, participation: participation) }
 
       it "may create his application" do
         should be_able_to(:create, application)
@@ -382,17 +398,24 @@ describe Ability::Events do
   context :in_other_hierarchy do
     let(:role)  { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:innerroden)) }
     let(:event) { Fabricate(:course, group: groups(:be)) }
+    let(:participation) { Fabricate(:event_participation, person: user, event: event) }
+        
+    context Event::Participation do 
+      it "may not create his participation" do
+        should_not be_able_to(:create, participation)
+      end
+      
+      it "may show his participation" do
+        should be_able_to(:show, participation)
+      end
+      
+      it "may update his participation" do
+        should be_able_to(:update, participation)
+      end
+    end
     
     context Event::Application do 
-      let(:application) do
-        appl =  Fabricate(:event_application, priority_1: event)
-        appl.participation.person = person
-        appl
-      end
-
-      it "may not create his application" do
-        should_not be_able_to(:create, application)
-      end
+      let(:application) { Fabricate(:event_application, participation: participation) }
       
       it "may show his application" do
         should be_able_to(:show, application)
@@ -401,7 +424,6 @@ describe Ability::Events do
       it "may update his application" do
         should be_able_to(:update, application)
       end
-      
     end
   end
   

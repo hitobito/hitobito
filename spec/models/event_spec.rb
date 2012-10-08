@@ -1,15 +1,42 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id                     :integer          not null, primary key
+#  group_id               :integer          not null
+#  type                   :string(255)
+#  name                   :string(255)      not null
+#  number                 :string(255)
+#  motto                  :string(255)
+#  cost                   :string(255)
+#  maximum_participants   :integer
+#  contact_id             :integer
+#  description            :text
+#  location               :text
+#  application_opening_at :date
+#  application_closing_at :date
+#  application_conditions :text
+#  kind_id                :integer
+#  state                  :string(60)
+#  priorization           :boolean          default(FALSE), not null
+#  requires_approval      :boolean          default(FALSE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  participant_count      :integer          default(0)
+#
+
 require 'spec_helper'
 
 describe Event do
   
   subject do
     event = Fabricate(:event, group: groups(:top_group) )
-    Fabricate(Event::Participation::Leader.name.to_sym, event: event)
-    Fabricate(Event::Participation::Participant.name.to_sym, event: event)
-    p = Fabricate(:person)
-    Fabricate(Event::Participation::Participant.name.to_sym, event: event, person: p)
-    Fabricate(Event::Participation::Participant.name.to_sym, event: event, label: 'Irgendwas', person: p)
-    event
+    Fabricate(Event::Role::Leader.name.to_sym, participation:  Fabricate(:event_participation, event: event))
+    Fabricate(Event::Role::Participant.name.to_sym, participation:  Fabricate(:event_participation, event: event))
+    p = Fabricate(:event_participation, event: event)
+    Fabricate(Event::Role::Participant.name.to_sym, participation: p)
+    Fabricate(Event::Role::Participant.name.to_sym, participation: p, label: 'Irgendwas')
+    event.reload
   end
   
   

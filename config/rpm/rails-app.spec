@@ -129,6 +129,7 @@ echo -e "#Ruby version to use\nRUBY_VERSION=%{ruby_version}" > $RPM_BUILD_ROOT/%
 
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
 echo "# Rotate rails logs for %{name}
+# Created by %{name}.rpm
 %{wwwdir}/%{name}/www/log/*.log {
   daily
   missingok

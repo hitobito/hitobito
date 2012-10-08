@@ -64,7 +64,8 @@ class Person < ActiveRecord::Base
   has_many :groups, through: :roles
   
   has_many :event_participations, class_name: 'Event::Participation', dependent: :destroy, inverse_of: :person
-  has_many :event_applications, class_name: 'Event::Application', through: :event_participations
+  has_many :event_applications, class_name: 'Event::Application', through: :event_participations, source: :application
+  has_many :event_roles, class_name: 'Event::Role', through: :event_participations, source: :roles
   
   
   ### VALIDATIONS
@@ -88,12 +89,12 @@ class Person < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_participation(event_type)
-      statement = "CASE event_participations.type "
-      event_type.participation_types.each_with_index do |t, i|
+      statement = "CASE event_role.type "
+      event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << "END"
-      joins(:event_participations).order(statement)
+      joins(:event_roles).order(statement)
     end
   end
 

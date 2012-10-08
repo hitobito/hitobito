@@ -4,11 +4,11 @@ describe Event::Course do
   
   subject do
     event = Fabricate(:course, group: groups(:be) )
-    Fabricate(Event::Participation::Leader.name.to_sym, event: event)
-    Fabricate(Event::Participation::AssistantLeader.name.to_sym, event: event)
-    Fabricate(Event::Course::Participation::Participant.name.to_sym, event: event)
-    Fabricate(Event::Course::Participation::Participant.name.to_sym, event: event)
-    event
+    Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event))
+    Fabricate(Event::Role::AssistantLeader.name.to_sym, participation: Fabricate(:event_participation, event: event))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))
+    event.reload
   end
   
   context "#application_possible?" do

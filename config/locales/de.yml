@@ -41,17 +41,17 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
-      event/participation/assistant_leader:
+      event/role/assistant_leader:
         one: Hilfsleiter
-      event/participation/leader:
+      event/role/leader:
         one: Hauptleiter
-      event/participation/cook:
+      event/role/cook:
         one: Küche
-      event/participation/participant:
+      event/role/participant:
         one: TeilnehmerIn
-      event/participation/treasurer:
+      event/role/treasurer:
         one: Kassier
-      event/participation/speaker:
+      event/role/speaker:
         one: Referent
       
     attributes:
@@ -116,8 +116,10 @@ de:
         priorization: Priorisierung erforderlich
         requires_approval: Freigabe erforderlich
 
-      event/participation:
+      event/role:
         label: Bezeichnung
+
+      event/participation:
         person_id: Person
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)

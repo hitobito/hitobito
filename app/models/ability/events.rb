@@ -17,44 +17,51 @@ module Ability::Events
       end
     end
     
-    can :index_people, Event do |event|
+    can :index_participations, Event do |event|
       can_update_event?(event) ||
       events_with_permission(:contact_data).include?(event.id)
     end
     
     
     ### PARTICIPATIONS
-    
-    can :read, Event::Participation do |participation|
-      event = participation.event
-      participation.person_id == user.id ||
-      can_update_event?(event) ||
-      events_with_permission(:contact_data).include?(event.id)
-    end
-    
-    can :manage, Event::Participation do |participation|
+        
+    can :show, Event::Participation do |participation|
       participation.person_id == user.id ||
       can_update_event?(participation.event)
     end
     
-    ### APPLICATIONS
-    
-    can :show, Event::Application do |application|
-      application.participation.person_id == user.id ||
-      can_update_event?(application.priority_1)
-    end
-    
-    can :create, Event::Application do |application|
-      (application.participation.person_id == user.id &&
-       user_hierarchy.include?(application.priority_1.group_id)) ||
+    can :create, Event::Participation do |participation|
+      (participation.person_id == user.id &&
+       user_hierarchy.include?(participation.event.group_id)) ||
        
-      can_create_event?(application.priority_1)
+      can_update_event?(participation.event)
     end
     
-    can :update, Event::Application do |application|
-      application.participation.person_id == user.id ||
-      can_create_event?(application.priority_1)
+    can :update, Event::Participation do |participation|
+      participation.person_id == user.id ||
+      can_update_event?(participation.event)
     end
+    
+    can :destroy, Event::Participation do |participation|
+      participation.person_id == user.id ||
+      can_update_event?(participation.event)
+    end
+    
+    
+    ### EVENT APPLICATION
+    
+    can :manage, Event::Application do |application|
+      participation = application.participation
+      participation.person_id == user.id ||
+      can_create_event?(participation.event)
+    end
+    
+    ### EVENT ROLES
+        
+    can :manage, Event::Role do |role|
+      can_update_event?(role.participation.event)
+    end
+    
     
     ### EVENT KINDS
     if admin
@@ -77,8 +84,14 @@ module Ability::Events
   
   def events_with_permission(permission)
     @events_with_permission ||= {}
-    @events_with_permission[permission] ||= 
-      user.event_participations.to_a.select {|p| p.class.permissions.include?(permission) }.collect(&:event_id).uniq
+    @events_with_permission[permission] ||= find_events_with_permission(permission)
+      
+  end
+  
+  def find_events_with_permission(permission)
+    participations = user.event_participations.includes(:roles).to_a
+    participations.select {|p| p.roles.any? {|r| r.class.permissions.include?(permission) }}.
+                   collect(&:event_id)
   end
   
   def user_hierarchy

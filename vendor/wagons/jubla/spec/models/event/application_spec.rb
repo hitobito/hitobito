@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Jubla::Event::Application do
 
   let(:course)        { Fabricate(:course, group: group) }
-  let(:participation) { Fabricate(Event::Course::Participation::Participant.name.to_sym) }
+  let(:participation) { Fabricate(:event_participation, event: course) }
   
-  subject { Fabricate(:event_application, participation: participation, priority_1: course) }
+  subject { Fabricate(:event_application, participation: participation) }
 
   context "state" do
     

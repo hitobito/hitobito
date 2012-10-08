@@ -65,7 +65,7 @@ describe PeopleController, type: :controller do
         create_participation
         get :show, params 
         aside.find('h2').text.should eq 'Anmeldungen'
-        label.should eq "<a href=\"/events/1/applications/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>"
+        label.should eq "<a href=\"/events/1/participations/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>"
         dates.should eq '02.01.2010'
       end
 
@@ -73,7 +73,7 @@ describe PeopleController, type: :controller do
         course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk)) 
         course.dates.build(start_at: Time.zone.parse("2010-01-02"))
         course.save
-        participation = Fabricate("Event::Participation::Leader", person: top_leader) 
+        participation = Fabricate(:event_participation, person: top_leader, event: course) 
         Fabricate(:event_application, priority_1: course, participation: participation)
       end
     end

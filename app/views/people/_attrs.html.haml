@@ -20,4 +20,5 @@
 
   = render 'roles' if can?(:show_details, entry)
   = render 'pending_applications' if entry.pending_applications.present?
+  = render 'upcoming_events' if entry.upcoming_events.present?
 

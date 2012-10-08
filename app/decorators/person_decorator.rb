@@ -37,7 +37,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def pending_applications
-    Event::ApplicationDecorator.decorate(event_applications.pending.to_a)
+    Event::ApplicationDecorator.decorate(event_applications.pending)
+  end
+
+  def upcoming_events
+    EventDecorator.decorate(events.upcoming)
   end
   
   private

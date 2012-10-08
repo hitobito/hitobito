@@ -160,53 +160,67 @@ describe Event do
       end
     end
   end
-  
-  context ".in_year" do
+ 
+  context "finders" do
+
     let(:top_layer) { groups(:top_layer) }
     let(:slk) { event_kinds(:slk)}
     let(:event) { Fabricate(:event, group: top_layer, kind: slk) }
+
+    context ".in_year" do
+      context "one date" do
+        before { add_date(event, "2000-01-02") }
     
-    context "one date" do
-      before { add_date "2000-01-02" }
-  
-      it "uses dates create_at to determine if event matches" do
-        Event.in_year(2000).size.should eq 1
-        Event.in_year(2001).should_not be_present
-        Event.in_year(2000).first.should eq event 
-        Event.in_year("2000").first.should eq event
+        it "uses dates create_at to determine if event matches" do
+          Event.in_year(2000).size.should eq 1
+          Event.in_year(2001).should_not be_present
+          Event.in_year(2000).first.should eq event 
+          Event.in_year("2000").first.should eq event
+        end
+
+        it "raises argument error"do
+          expect { Event.in_year('')}.to raise_error(ArgumentError)
+          expect { Event.in_year(-1)}.to raise_error(ArgumentError)
+          expect { Event.in_year('asdf')}.to raise_error(ArgumentError)
+        end
+        
+      end
+      
+      context "starting at last day of year and another date in the following year" do
+        before { add_date(event, "2010-12-31 17:00") }
+        before { add_date(event, "2011-01-20") }
+    
+        it "finds event in old year" do
+          Event.in_year(2010).should == [event]
+        end
+        
+        it "finds event in following year" do
+          Event.in_year(2011).should == [event]
+        end
+        
+        it "does not find event in past year" do
+          Event.in_year(2009).should be_blank
+        end
+      end
+    end
+
+    context ".upcoming" do
+      subject { Event.upcoming }
+      it "does not find past events" do
+        add_date(event, "2010-12-31 17:00")
+        should_not be_present
       end
 
-      it "raises argument error"do
-        expect { Event.in_year('')}.to raise_error(ArgumentError)
-        expect { Event.in_year(-1)}.to raise_error(ArgumentError)
-        expect { Event.in_year('asdf')}.to raise_error(ArgumentError)
-      end
-      
-    end
-    
-    context "starting at last day of year and another date in the following year" do
-      before { add_date "2010-12-31 17:00" }
-      before { add_date "2011-01-20" }
-  
-      it "finds event in old year" do
-        Event.in_year(2010).should == [event]
-      end
-      
-      it "finds event in following year" do
-        Event.in_year(2011).should == [event]
-      end
-      
-      it "does not find event in past year" do
-        Event.in_year(2009).should be_blank
+      it "does find upcoming event" do
+        event.dates.build(start_at: 2.days.from_now).save
+        should eq [event]
       end
     end
-  
 
-    def add_date(start_at)
+    def add_date(event,start_at)
       start_at = Time.zone.parse(start_at)
       event.dates.build({start_at: start_at})
       event.save
     end
-
   end
 end

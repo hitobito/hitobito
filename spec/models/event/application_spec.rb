@@ -91,7 +91,6 @@ describe Event::Application do
       application = Fabricate(:event_application, priority_1: course, rejected: false, participation: participation)
       should_not be_present
     end
-
   end
 end
 

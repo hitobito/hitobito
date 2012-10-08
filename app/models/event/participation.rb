@@ -51,7 +51,7 @@ class Event::Participation < ActiveRecord::Base
   ### CALLBACKS
   
   before_validation :set_self_in_nested
-    
+
   
   ### INSTANCE METHODS
     

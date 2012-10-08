@@ -50,11 +50,18 @@ describe PeopleController, type: :controller do
       dom.should have_selector('a[data-method="delete"] i.icon-trash')
     end
 
-    context "event applications" do
-      let(:params) { { group_id: top_group.id, id: top_leader.id } }
-      let(:aside) { dom.find('aside:eq(2)') }
-      let(:label) { aside.find('tr:eq(1) td:eq(1) a').native.to_xml }
-      let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
+  end
+
+  describe "#show applications aside" do
+    let(:params) { { group_id: top_group.id, id: top_leader.id } }
+    let(:label) { aside.find('tr:eq(1) td:eq(1) a').native.to_xml }
+    let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
+    let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))  } 
+
+    context "pending event applications" do
+      let(:aside) { dom.find('aside[data-role="applications"]') }
+      let(:date) { Time.zone.parse("02-01-2010") }
+      let(:text) { "<a href=\"/events/1/applications/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>" }
 
       it "renders only if we have applications" do
         get :show, params 
@@ -62,20 +69,49 @@ describe PeopleController, type: :controller do
       end
 
       it "lists open applications" do
-        create_participation
+        create_application(date)
         get :show, params 
         aside.find('h2').text.should eq 'Anmeldungen'
-        label.should eq "<a href=\"/events/1/applications/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>"
+        label.should eq text
         dates.should eq '02.01.2010'
       end
+    end
 
-      def create_participation
-        course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk)) 
-        course.dates.build(start_at: Time.zone.parse("2010-01-02"))
-        course.save
-        participation = Fabricate("Event::Participation::Leader", person: top_leader) 
-        Fabricate(:event_application, priority_1: course, participation: participation)
+    context "upcoming events" do
+      let(:aside) { dom.find('aside[data-role="upcoming"]') }
+      let(:label) { aside.find('tr:eq(1) td:eq(1)').native.to_xml }
+      let(:date) { 2.days.from_now }
+      let(:pretty_date) { date.strftime("%d.%m.%Y")}
+
+      it "renders only if we have applications" do
+        get :show, params 
+        expect { aside }.to raise_error Capybara::ElementNotFound
       end
+
+      it "lists upcoming events" do
+        create_participation(date)
+        get :show, params 
+        aside.find('h2').text.should eq 'Events'
+        label.should eq "<td>Scharleiterkurs<br/><span class=\"muted\">Top</span>\n</td>"
+        dates.should eq pretty_date
+      end
+    end
+    
+
+    def create_application(date)
+      set_event_date(date)
+      participation = Fabricate("Event::Participation::Leader", person: top_leader) 
+      Fabricate(:event_application, priority_1: course, participation: participation)
+    end
+
+    def create_participation(date)
+      set_event_date(date)
+      participation = Fabricate("Event::Participation::Leader", person: top_leader, event: course) 
+    end
+
+    def set_event_date(date)
+      course.dates.build(start_at: date)
+      course.save
     end
   end
 

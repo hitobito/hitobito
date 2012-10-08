@@ -65,6 +65,7 @@ class Person < ActiveRecord::Base
   
   has_many :event_participations, class_name: 'Event::Participation', dependent: :destroy, inverse_of: :person
   has_many :event_applications, class_name: 'Event::Application', through: :event_participations
+  has_many :events, through: :event_participations
   
   
   ### VALIDATIONS

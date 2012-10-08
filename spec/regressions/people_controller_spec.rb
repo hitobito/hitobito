@@ -49,6 +49,34 @@ describe PeopleController, type: :controller do
       get :show, group_id: top_group.id, id: other.id
       dom.should have_selector('a[data-method="delete"] i.icon-trash')
     end
+
+    context "event applications" do
+      let(:params) { { group_id: top_group.id, id: top_leader.id } }
+      let(:aside) { dom.find('aside:eq(2)') }
+      let(:label) { aside.find('tr:eq(1) td:eq(1) a').native.to_xml }
+      let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
+
+      it "renders only if we have applications" do
+        get :show, params 
+        expect { aside }.to raise_error Capybara::ElementNotFound
+      end
+
+      it "lists open applications" do
+        create_participation
+        get :show, params 
+        aside.find('h2').text.should eq 'Anmeldungen'
+        label.should eq "<a href=\"/events/1/applications/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>"
+        dates.should eq '02.01.2010'
+      end
+
+      def create_participation
+        course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk)) 
+        course.dates.build(start_at: Time.zone.parse("2010-01-02"))
+        course.save
+        participation = Fabricate("Event::Participation::Leader", person: top_leader) 
+        Fabricate(:event_application, priority_1: course, participation: participation)
+      end
+    end
   end
 
   describe "#history" do

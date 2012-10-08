@@ -11,6 +11,10 @@ class PersonDecorator < ApplicationDecorator
   def full_name
     model.to_s.split('/').first
   end
+
+  def applications
+    Event::ApplicationDecorator.decorate(event_applications.pending)
+  end
   
   def full_label
     label = to_s

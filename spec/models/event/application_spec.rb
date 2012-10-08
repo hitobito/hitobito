@@ -65,6 +65,34 @@ describe Event::Application do
       p.answers.should have(2).items
     end
   end
+  
+  context ".pending" do
+    let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk)) }
+    subject { Event::Application.pending }
+
+    it "includes non rejected appliations" do
+      application = Fabricate(:event_application, priority_1: course, rejected: false)
+      should eq [application]
+    end
+
+    it "includes non reject applications where participation.event_id is missing" do
+      participation = Fabricate("Event::Participation::Leader", person: people(:top_leader)) 
+      application = Fabricate(:event_application, priority_1: course, rejected: false, participation: participation)
+      should eq [application]
+    end
+
+    it "does not includes non rejected appliations" do
+      application = Fabricate(:event_application, priority_1: course, rejected: true)
+      should_not be_present
+    end
+
+    it "does not includes non reject applications where participation.event_id is missing" do
+      participation = Fabricate("Event::Participation::Leader", person: people(:top_leader), event: course) 
+      application = Fabricate(:event_application, priority_1: course, rejected: false, participation: participation)
+      should_not be_present
+    end
+
+  end
 end
 
 

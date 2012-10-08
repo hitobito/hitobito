@@ -72,6 +72,7 @@ group :console do
   gem 'pry-nav'
   gem 'pry-stack_explorer'
   gem 'mailcatcher'
+  gem 'rdoc-tags'
 end
 
 group :guard do

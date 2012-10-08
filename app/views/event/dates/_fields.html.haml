@@ -1,11 +1,13 @@
 = f.labeled_input_field(:label, class: 'span3')
 = f.labeled(:start_at) do
   %label
-    = f.input_field(:start_at_date, class: 'span2 date')
-    = f.time_select(:start_at_time, include_blank: true)
+    = f.input_field(:start_at_date, class: 'span1 date')
+    = '&nbsp;'.html_safe
+    = f.time_field(:start_at_time)
     Uhrzeit ist optional
 = f.labeled(:finish_at) do
   %label
-    = f.input_field(:finish_at_date, class: 'span2 date')
-    = f.time_select(:finish_at_time, include_blank: true, ignore_date: true)
+    = f.input_field(:finish_at_date, class: 'span1 date')
+    = '&nbsp;'.html_safe
+    = f.time_field(:start_at_time)
     Uhrzeit ist optional

@@ -41,7 +41,18 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
-      
+      event/participation/assistant_leader:
+        one: Hilfsleiter
+      event/participation/leader:
+        one: Hauptleiter
+      event/participation/cook:
+        one: Küche
+      event/participation/participant:
+        one: TeilnehmerIn
+      event/participation/treasurer:
+        one: Kassier
+      event/participation/speaker:
+        one: Referent
       
     attributes:
       person:
@@ -96,6 +107,7 @@ de:
         application_conditions: Anmeldebedingungen
         dates: Daten
         questions: Fragen
+        kind_id: Kursart
       
       event/course:
         number: Kursnummer

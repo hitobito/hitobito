@@ -8,14 +8,23 @@ class EventDecorator < ApplicationDecorator
     "#{kind.label}<br/>#{h.muted(group.name)}".html_safe
   end
 
-  def dates
+  def dates_info
     model.dates.map { |date| format_event_date(date) }.join('<br/>').html_safe
   end
 
   def booking_info
     "#{participant_count} von #{maximum_participants}"
   end
-
+  
+  def possible_participation_links
+    model.class.participation_types.map do |type|
+      unless type.restricted
+        link = h.new_event_participation_path(self, event_participation: { type: type.sti_name})
+        h.link_to(type.model_name.human, link)
+      end
+    end.compact
+  end
+  
   private
   def format_event_date(date)
     start_at, finish_at = date.start_at, date.finish_at

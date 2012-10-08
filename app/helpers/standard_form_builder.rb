@@ -102,8 +102,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a field to enter a time. You might want to customize this.
   def time_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
-    time_select(attr, {}, html_options)
+    html_options[:class] ||= 'time'
+    time_select(attr, {include_blank: true, ignore_date: true}, html_options)
   end
 
   # Render a field to enter a date and time. You might want to customize this.
@@ -252,6 +252,21 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content_tag(:p, text, :class => 'help-block')
   end
 
+  # Returns the list of association entries, either from options[:list],
+  # the instance variable with the pluralized association name or all
+  # entries of the association klass.
+  def association_entries(attr, options = {})
+    list = options.delete(:list)
+    unless list
+      assoc = association(@object, attr)
+      list = @template.send(:instance_variable_get, :"@#{assoc.name.to_s.pluralize}")
+      unless list
+        list = assoc.klass.where(assoc.options[:conditions]).order(assoc.options[:order])
+      end
+    end
+    list
+  end
+
   private
 
   # Returns true if attr is a non-polymorphic association.
@@ -265,20 +280,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  # Returns the list of association entries, either from options[:list],
-  # the instance variable with the pluralized association name or all
-  # entries of the association klass.
-  def association_entries(attr, options)
-    list = options.delete(:list)
-    unless list
-      assoc = association(@object, attr)
-      list = @template.send(:instance_variable_get, :"@#{assoc.name.to_s.pluralize}")
-      unless list
-        list = assoc.klass.where(assoc.options[:conditions]).order(assoc.options[:order])
-      end
-    end
-    list
-  end
 
   # Returns true if the given attribute must be present.
   def required?(attr)

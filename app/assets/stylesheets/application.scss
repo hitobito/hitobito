@@ -171,6 +171,11 @@ input[type="color"],
   border-radius: 3px;
 }
 
+select.time {
+  width: 55px;
+  height: 30px;
+}
+
 
 label.checkbox,
 label.radio {
@@ -196,6 +201,12 @@ select[class*="span"] {
   *margin-top: 4px;
   line-height: 30px;
 }
+
+.dl-horizontal {
+  dt { width: 190px; }
+  dd { margin-left: 200px; }
+}
+
 // 
 
 

@@ -72,6 +72,7 @@ class Event < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :dates, allow_destroy: true
+  accepts_nested_attributes_for :questions, allow_destroy: true
 
 
   ### CLASS METHODS
@@ -93,8 +94,9 @@ class Event < ActiveRecord::Base
     end
   end
 
-  # TODO: copy all event_questions without event_id into a newly created event (probably in controller, not here)
-
+  
+  ### INSTANCE METHODS
+  
   # May participants apply now?
   def application_possible?
     (!application_opening_at? || application_opening_at <= ::Date.today) &&

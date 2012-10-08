@@ -46,14 +46,18 @@ setPersonId = (item) ->
 setupPersonTypeahead = (input) ->
   $(this).typeahead(source: findPeople, updater: setPersonId)
 
-setDatepicker = (event) ->
+#setDatepicker = (event) ->
   # TODO: fix datepicker on items created by js Bug #2708
-  $(':input.date').datepicker(dateFormat: 'dd.mm.yy')
+#  $(':input.date').datepicker(dateFormat: 'dd.mm.yy')
 
 $ ->
-  $(document).on('nested:fieldAdded', setDatepicker)
-  $(':input.date').datepicker(dateFormat: 'dd.mm.yy')
-  $(document).on('nested:fieldAdded', setDatepicker)
+  #$(document).on('nested:fieldAdded', setDatepicker)
+  #$(':input.date').datepicker(dateFormat: 'dd.mm.yy')
+  $(":input.date").live("click", ->
+    $(this).datepicker(dateFormat: 'dd.mm.yy')
+    $(this).datepicker('show'))
+
+  #$(document).on('nested:fieldAdded', setDatepicker)
   $('body').on('ajax:success','[data-replace]', replaceContent)
   
   $('body').on('ajax:before','[data-replace]', setDataType)

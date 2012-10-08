@@ -65,6 +65,33 @@ describe Group do
       subject.last.should == Group::SimpleGroup
     end
   end
+
+  describe ".can_offer_courses" do 
+    subject { Group.can_offer_courses }
+
+    it "includes federation" do
+      should include groups(:ch)
+    end
+    
+    it "includes states" do
+      should include groups(:be)
+      should include groups(:no)
+    end
+
+    it "includes flocks" do
+      should include groups(:thun)
+      should include groups(:ausserroden)
+      should include groups(:innerroden)
+      should include groups(:bern)
+      should include groups(:muri)
+    end
+
+    it "orders by parent and name" do
+      expected = ["Jubla Schweiz", "Kanton Bern", "Nordostschweiz", "Thun", "Ausserroden", 
+                  "Innerroden", "Bern", "Muri"]
+      subject.map(&:name).should eq expected
+    end
+  end
   
   
   def self.each_child(group)

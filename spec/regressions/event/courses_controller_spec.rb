@@ -44,13 +44,13 @@ describe Event::CoursesController, type: :controller do
       items.size.should eq 3
 
       first.text.should eq 'Alle Gruppen'
-      first[:href].should eq event_courses_path(year: Date.today.year)
+      first[:href].should eq event_courses_path(year: year)
 
       middle.text.should eq top_layer.name
-      middle[:href].should eq event_courses_path(year: Date.today.year, group: top_layer.id)
+      middle[:href].should eq event_courses_path(year: year, group: top_layer.id)
 
       last.text.should eq top_group.name
-      last[:href].should eq event_courses_path(year: Date.today.year, group: top_group.id)
+      last[:href].should eq event_courses_path(year: year, group: top_group.id)
     end
   end
 
@@ -60,8 +60,8 @@ describe Event::CoursesController, type: :controller do
 
     it "tabs contain year based pagination" do
       first, last = tabs.all('a').first, tabs.all('a').last
-      first.text.should eq (year - 3).to_s
-      first[:href].should eq event_courses_path(year: year - 3)
+      first.text.should eq (year - 2).to_s
+      first[:href].should eq event_courses_path(year: year - 2)
 
       last.text.should eq (year + 2).to_s
       last[:href].should eq event_courses_path(year: year + 2)
@@ -69,14 +69,14 @@ describe Event::CoursesController, type: :controller do
   end
 
 
-  context "GET index shows dropdown" do
+  context "GET index content" do
     let(:slk) { event_kinds(:slk)}
     let(:main) { dom.find("#main") }
     let(:slk_ev) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk), maximum_participants: 20 ) }
     let(:glk_ev) { Fabricate(:course, group: groups(:top_group), kind: event_kinds(:glk), maximum_participants: 20 ) }
 
     before do 
-      add_date(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02") 
+      add_date(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02") 
       add_date(glk_ev, "2009-01-2", "2011-01-02") 
     end
 
@@ -90,14 +90,14 @@ describe Event::CoursesController, type: :controller do
     end
 
     it "groups courses by course type" do
-      get :index, year: 2009
+      get :index, year: 2011
       main.all('h2').size.should eq 2
       main.find('h2:eq(1)').text.should eq 'Gruppenleiterkurs'
       main.find('h2:eq(2)').text.should eq 'Scharleiterkurs'
     end
 
     it "filters list with group param" do
-      get :index, year: 2009, group: slk_ev.group.id
+      get :index, year: 2011, group: glk_ev.group.id
       main.all('h2').size.should eq 1
     end
 

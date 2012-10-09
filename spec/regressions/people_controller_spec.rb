@@ -52,52 +52,59 @@ describe PeopleController, type: :controller do
 
   end
 
-  describe "#show applications aside" do
+  describe "#show aside" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:label) { aside.find('tr:eq(1) td:eq(1) a').native.to_xml }
     let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
+    let(:label) { aside.find('tr:eq(1) td:eq(1)') }
+    let(:label_link) { label.find('a') }
     let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))  } 
 
-    context "pending event applications" do
+    context "pending applications" do
       let(:aside) { dom.find('aside[data-role="applications"]') }
       let(:date) { Time.zone.parse("02-01-2010") }
-      let(:text) { "<a href=\"/events/1/participations/1\">Eventus<br/><span class=\"muted\">SLK  Top</span></a>" }
 
-      it "renders only if we have applications" do
+      it "is missing if we have no applications" do
         get :show, params 
         expect { aside }.to raise_error Capybara::ElementNotFound
       end
 
-      it "lists open applications" do
+      it "lists event label, link and dates" do
         create_application(date)
         get :show, params 
         aside.find('h2').text.should eq 'Anmeldungen'
-        label.should eq text
+        label_link[:href].should eq "/events/1/participations/1"
+        label_link.text.should =~ /Scharleiterkurs/
+        label.text.should =~ /Top/
         dates.should eq '02.01.2010'
       end
     end
 
     context "upcoming events" do
       let(:aside) { dom.find('aside[data-role="upcoming"]') }
-      let(:label) { aside.find('tr:eq(1) td:eq(1)').native.to_xml }
       let(:date) { 2.days.from_now }
       let(:pretty_date) { date.strftime("%d.%m.%Y")}
 
-      it "renders only if we have applications" do
+      it "is missing if we have no events" do
         get :show, params 
         expect { aside }.to raise_error Capybara::ElementNotFound
-
       end
 
-      it "lists upcoming events" do
+      it "is missing if we have no upcoming events" do
+        create_participation(2.days.ago)
+        get :show, params 
+        expect { aside }.to raise_error Capybara::ElementNotFound
+      end
+
+      it "lists event label, link and dates" do
         create_participation(date)
         get :show, params 
         aside.find('h2').text.should eq 'Events'
-        label.should eq "<td>Eventus<br/><span class=\"muted\">SLK  Top</span>\n</td>"
+        label_link[:href].should eq group_event_path(course.group, course)
+        label_link.text.should eq "Eventus"
+        label.text.should =~ /Top/
         dates.should eq pretty_date
       end
     end
-    
 
     def create_application(date)
       Fabricate(:event_application, priority_1: course, participation: create_participation(date))

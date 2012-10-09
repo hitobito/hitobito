@@ -3,6 +3,6 @@
     %h2 Events
     = table(entry.upcoming_events) do |t|
       - t.col('') do |event|
-        = event.label
+        = event.labeled_link
       - t.col('') do |event|
         = event.dates_info

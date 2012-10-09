@@ -44,8 +44,20 @@ class Event::Course < Event
 
   class << self
     def in_hierarchy(user)
-      only_group_id(Group.can_offer_courses.pluck(:id) & user.groups_hierarchy_ids)
+      only_group_id(groups_with_courses_in_hierarchy(user))
+    end
+    
+    def groups_with_courses_in_hierarchy(user)
+      Group.can_offer_courses.pluck(:id) & user.groups_hierarchy_ids
+    end
+    
+    def list(year)
+      in_year(year).
+      order_by_date.
+      includes(:group, :kind).
+      preload_all_dates.
+      uniq
     end
   end
-
+  
 end

@@ -18,15 +18,21 @@ describe Event::CoursesController, type: :controller do
   context "GET index" do
     let(:title_text) { dom.find('#content h1').text }
 
-    it "list all groups by default" do
+    it "list toplevel group with course per default" do
       get :index
+      title_text.should eq prefixed(top_group.name)
+    end
+
+    it "list all groups only with specific year" do
+      get :index, group: 0, year: 2012
       title_text.should eq prefixed('allen Gruppen')
     end
 
-    it "list specific group" do
-      get :index, group: top_layer.id
+    it "list specify groups only with specific year" do
+      get :index, group: top_layer.id, year: 2012
       title_text.should eq prefixed(top_layer.name)
     end
+
 
     def prefixed(text)
       "Verfügbare Kurse in #{text}"
@@ -61,10 +67,10 @@ describe Event::CoursesController, type: :controller do
     it "tabs contain year based pagination" do
       first, last = tabs.all('a').first, tabs.all('a').last
       first.text.should eq (year - 2).to_s
-      first[:href].should eq event_courses_path(year: year - 2)
+      first[:href].should eq event_courses_path(year: year - 2, group: top_group.id)
 
       last.text.should eq (year + 2).to_s
-      last[:href].should eq event_courses_path(year: year + 2)
+      last[:href].should eq event_courses_path(year: year + 2, group: top_group.id)
     end
   end
 
@@ -83,8 +89,10 @@ describe Event::CoursesController, type: :controller do
     it "list courses within table" do
       get :index, year: 2010
       main.find('h2').text.should eq 'Scharleiterkurs'
-      main.find('table td:eq(1)').native.to_xml.should eq '<td>Eventus<br/><span class="muted">SLK  Top</span></td>'
-      main.find('table td:eq(2)').native.to_xml.should eq "<td>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/></td>"
+      main.find('table td:eq(1) a').text.should eq 'Eventus'
+      main.find('table td:eq(1)').text.should eq "EventusSLK  Top"
+      main.find('table td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+      main.find('table td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
       main.find('table td:eq(3)').text.should eq '0 von 20'
       main.find('table td:eq(4)').text.should eq 'Geplant'
     end

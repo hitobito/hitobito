@@ -76,7 +76,10 @@ class Event < ActiveRecord::Base
   accepts_nested_attributes_for :dates, :questions, allow_destroy: true
   
   
+  ### SCOPES
+  
   scope :order_by_date, joins(:dates).order('event_dates.start_at')
+  scope :preload_all_dates, scoped.extending(Event::PreloadAllDates)
 
 
   ### CLASS METHODS
@@ -102,6 +105,7 @@ class Event < ActiveRecord::Base
     def attr_used?(attr)
       accessible_attributes.include?(attr)
     end
+    
     
   end
 

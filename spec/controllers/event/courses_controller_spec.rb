@@ -25,8 +25,20 @@ describe Event::CoursesController do
       assigns(:year).should eq year
       assigns(:year_range).should eq year_range
     end
+  end
 
+  context "GET index filter per group" do
+    before { sign_in(people(:top_leader)) }
 
+    it "defaults to toplevel group with courses in hiearchy" do
+      get :index
+      assigns(:group_id).should eq groups(:top_group).id
+    end
+
+    it "can be set via param, only if year is present" do
+      get :index, year: 2010, group: groups(:top_layer).id
+      assigns(:group_id).should eq groups(:top_layer).id
+    end
   end
 
 end

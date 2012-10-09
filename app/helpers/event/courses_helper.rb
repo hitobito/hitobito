@@ -21,11 +21,11 @@ module Event::CoursesHelper
   end
 
   def group_title
-    group_id > 0  ? Group.find(group_id).name : "Alle Gruppen"
+    group_id && group_id > 0  ? Group.find(group_id).name : "Alle Gruppen"
   end
 
   def group_param
-    group_id > 0 ? { group: group_id }  : {}
+    group_id && group_id > 0 ? { group: group_id }  : {}
   end
 
   def page_title

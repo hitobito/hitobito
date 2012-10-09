@@ -27,8 +27,8 @@ describe Event::Course do
         it { should_not be_application_possible }
       end
     end
-    
-    context "with opening date today" do
+
+    context "with ng date today" do
       before { subject.application_opening_at = Date.today}
       it { should be_application_possible }
     end
@@ -47,7 +47,33 @@ describe Event::Course do
       before { subject.state = 'created' }
       it { should_not be_application_possible }
     end
+
   end
-  
+
+  context "#advisor" do
+    let(:person) { Fabricate(:person) }
+    let(:person1) { Fabricate(:person) }
+
+    it "should add advisor if none is defined yet" do
+      event = Fabricate(:course, advisor_id: person.id)
+      event.advisor.should eq person
+    end
+
+    it "shouldn't change the advisor if the same is already set" do
+      event = Fabricate(:course, advisor_id: person.id)
+      event.advisor_id = person.id
+      event.save.should be_true
+      event.advisor.should eq person
+    end
+
+    it "should update the advisor if another person is assigned" do
+      event = Fabricate(:course, advisor_id: person.id)
+      event.advisor_id = person1.id
+      event.save.should be_true
+      event.advisor.should eq person1
+    end
+
+
+  end
   
 end

@@ -3,7 +3,7 @@
     %h2 Anmeldungen
     = table(entry.pending_applications) do |t|
       - t.col('') do |application|
-        = application.link
+        = application.labeled_link
       - t.col('') do |application|
-        = application.dates
+        = application.dates_info
     

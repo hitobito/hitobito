@@ -1,18 +1,14 @@
 class Event::ApplicationDecorator < ApplicationDecorator
   decorates 'event/application'
-  decorates_association :priority_1
+  decorates_association :event
 
-  def link
-    h.link_to event.label, h.event_participation_path(event, model)
+  def labeled_link
+    link = h.link_to(event.kind, h.event_participation_path(event, model))
+    safe_join([link, h.muted(event.group.name)], h.tag(:br))
   end
 
-  def dates
+  def dates_info
     event.dates_info
-  end
-
-  private
-  def event
-    priority_1
   end
 
 end

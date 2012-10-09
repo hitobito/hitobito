@@ -12,6 +12,7 @@ class Event::CoursesController < EventsController
 
   private
   def list_entries
+    set_group_vars
     set_year_vars
     scoped = model_scope.includes(:group, :kind, :dates).in_year(year) 
     limit_scope_for_user(scoped)
@@ -23,8 +24,16 @@ class Event::CoursesController < EventsController
     @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
   end
 
+  def set_group_vars
+    if can?(:manage_courses, current_user)
+      # assign default group on initial request
+      params[:group] = (groups_with_courses_in_hierarchy - [Group.root.id]).first unless params[:year].present? 
+      @group_id = params[:group].to_i 
+    end
+
+  end
+
   def limit_scope_for_user(scoped)
-    @group_id = params[:group].to_i
     if can?(:manage_courses, current_user)
       group_id > 0 ? scoped.only_group_id(group_id) : scoped
     else

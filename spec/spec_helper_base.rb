@@ -19,6 +19,8 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f }
 
 
 RSpec.configure do |config|
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -50,5 +52,11 @@ RSpec.configure do |config|
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
+  end
+
+  config.before(:all, :draper_with_helpers) do
+    c = ApplicationController.new
+    c.request = ActionDispatch::TestRequest.new
+    Draper::ViewContext.current = c.view_context
   end
 end

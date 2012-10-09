@@ -9,7 +9,7 @@
   = f.labeled_input_field :email
   
 = field_set_tag do
-  = f.inline_fields_for :phone_numbers, 'contactable/phone_number_fields'
+  = f.labeled_inline_fields_for :phone_numbers, 'contactable/phone_number_fields'
   
 = field_set_tag do
-  = f.inline_fields_for :social_accounts, 'contactable/social_account_fields'
+  = f.labeled_inline_fields_for :social_accounts, 'contactable/social_account_fields'

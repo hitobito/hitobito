@@ -8,6 +8,7 @@
     = f.labeled(:contact_id) do
       = f.string_field :contact_id, data: {provide: 'person', id_field: 'role_person_id'}
     = f.labeled_collection_select(:kind_id, f.association_entries(:kind_id), :id, :to_s, {}, class: 'span2')
+  //= render_extensions 'fields', locals: { f: f }
 
   %h2 Kursdaten
   = field_set_tag do

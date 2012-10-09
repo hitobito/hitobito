@@ -161,10 +161,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     belongs_to_field(attr, html_options)
   end
 
-
-  def inline_fields_for(assoc,partial_name=nil, &block) 
+  def labeled_inline_fields_for(assoc,partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
+      inline_fields_for(assoc,partial_name, &block)
+    end
+  end
+
+  def inline_fields_for(assoc,partial_name=nil, &block) 
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
           content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
@@ -175,7 +179,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:div, class: 'controls') do
         help_inline(link_to_add 'Eintrag hinzufügen', assoc)
       end
-    end
   end
   
   def error_messages

@@ -39,6 +39,7 @@ class Event::Role < ActiveRecord::Base
   ### CALLBACKS
   
   after_create :set_participation_active
+  after_destroy :destroy_participation_for_last
     
     
   ### INSTANCE METHODS
@@ -52,6 +53,12 @@ class Event::Role < ActiveRecord::Base
   
   def set_participation_active
     participation.update_column(:active, true)
+  end
+
+  def destroy_participation_for_last
+    if !participation.roles.exists? && participation.application_id?
+      participation.destroy
+    end 
   end
   
 end

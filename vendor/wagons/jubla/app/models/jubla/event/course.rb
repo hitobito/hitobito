@@ -3,6 +3,10 @@ module Jubla::Event::Course
 
   
   included do
+
+    attr_accessor :advisor_id
+    attr_accessible :advisor_id
+
     self.role_types += [Role::Advisor]
     
     # states are used for workflow
@@ -10,6 +14,8 @@ module Jubla::Event::Course
     self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
     
     validates :state, inclusion: possible_states
+
+    after_save :create_advisor
 
   
     # Define methods to query if a course is in the given state.
@@ -29,6 +35,33 @@ module Jubla::Event::Course
   
   def state
     super || possible_states.first
+  end
+
+  def advisor
+    @advisor ||= advisor_participation.try(:person)
+  end
+
+  def advisor_id
+    @advisor_id ||= advisor.try(:id)
+  end
+
+  def advisor_participation
+    @advisor_participation ||= participations.joins(:roles).where(event_roles: {type: Role::Advisor.sti_name}).first
+  end
+
+  private
+  def create_advisor
+    if advisor_participation.try(:person_id) != advisor_id
+      if advisor_participation
+        advisor_participation.roles.where(event_roles: {type: Role::Advisor.sti_name}).first.destroy
+      end
+      if advisor_id
+        participation = participations.where(person_id: advisor_id).first_or_create
+        role = Role::Advisor.new
+        role.participation = participation
+        role.save!
+      end
+    end
   end
   
   

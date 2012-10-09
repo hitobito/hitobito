@@ -6,5 +6,13 @@ class EventsController < CrudController
 
   # load group before authorization
   prepend_before_filter :parent
+
+  private 
+  
+  def build_entry 
+    event = model_params.delete(:type).constantize.new
+    event.group_id = model_params.delete(:group_id)
+    event
+  end
   
 end

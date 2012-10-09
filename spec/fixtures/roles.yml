@@ -18,3 +18,8 @@ top_leader:
   person: top_leader
   group: top_group
   type: Group::TopGroup::Leader
+
+bottom_member:
+  person: bottom_member
+  group: bottom_layer_one
+  type: Group::BottomLayer::Member

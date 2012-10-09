@@ -6,6 +6,7 @@ class Event::ParticipationsController < CrudController
   # load event before authorization
   prepend_before_filter :parent, :set_group
   before_render_form :load_priorities
+  before_render_show :load_answers
   
   
   def new
@@ -78,6 +79,10 @@ class Event::ParticipationsController < CrudController
       # TODO: restrict to visible courses
       @priority_2s = @priority_3s = Event::Course.where(kind_id: parent.kind_id)
     end
+  end
+  
+  def load_answers
+    @answers = entry.answers.includes(:question)
   end
   
   # A label for the current entry, including the model name, used for flash

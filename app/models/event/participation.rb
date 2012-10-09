@@ -62,7 +62,9 @@ class Event::Participation < ActiveRecord::Base
   def init_answers
     if answers.blank?
       event.questions.each do |q|
-        self.answers << q.answers.new
+        a = q.answers.new
+        a.question = q # without this, only the id is set
+        self.answers << a
       end
     end
   end

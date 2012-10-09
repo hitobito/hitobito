@@ -1,0 +1,21 @@
+- parent_sheet(EntrySheet.new(self, @event, :event_participations_path))
+- parent_sheet(GroupSheet.new(self, @event.group))
+- title entry.to_s
+
+#main.row-fluid
+  %article.span7
+    = render 'contactable/show', contactable: entry.person, only_public: true
+    
+    = render_attrs(entry.person, :birthday, :gender)
+    
+    -if can?(:show, entry) # participation
+      - @answers.each do |answer|
+        %p
+          = answer.answer
+          = muted(answer.question.question)
+    
+      %h4= t('activerecord.attributes.event/participation.additional_information')
+      = simple_format(entry.additional_information)
+  
+  -if can?(:show, entry) # participation
+    = render 'roles'

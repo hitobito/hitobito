@@ -54,6 +54,7 @@ module Jubla::Event::Course
     if advisor_participation.try(:person_id) != advisor_id
       if advisor_participation
         advisor_participation.roles.where(event_roles: {type: Role::Advisor.sti_name}).first.destroy
+        @advisor_participation = nil # remove it from cache to
       end
       if advisor_id
         participation = participations.where(person_id: advisor_id).first_or_create

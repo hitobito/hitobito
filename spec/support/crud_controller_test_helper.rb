@@ -55,8 +55,14 @@ module CrudControllerTestHelper
   end
   
   def test_attrs
-    action_specific_attr_name = "#{example.metadata[:action]}_entry_attrs".to_sym
-    respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
+    action = example.metadata[:action]
+    action_specific_attr_name = "#{action}_entry_attrs".to_sym
+    if respond_to?(action_specific_attr_name)
+      send(action_specific_attr_name)
+    else
+      action = {new: :create, edit: :update}[action.to_sym] || action
+      respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
+    end
   end
   
       
@@ -176,7 +182,7 @@ module CrudControllerTestHelper
     
         if bool
           it { should be_persisted }
-          it { should be_valid, entry.errors.full_messages.join("\n") }
+          it { entry.valid?; should(be_valid, entry.errors.full_messages.join("\n")) }
         else
           it { should_not be_persisted }
         end

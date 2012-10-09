@@ -43,6 +43,21 @@ class Event::Participation < ActiveRecord::Base
   
   before_validation :set_self_in_nested
 
+  
+  class << self
+    # Order people by the order participation types are listed in their event types.
+    def order_by_role(event_type)
+      statement = "CASE event_roles.type "
+      event_type.role_types.each_with_index do |t, i|
+        statement << "WHEN '#{t.sti_name}' THEN #{i} "
+      end
+      statement << "END"
+      joins(:roles).order(statement)
+    end
+  end
+
+
+  ### INSTANCE METHODS
 
   def init_answers
     if answers.blank?
@@ -52,7 +67,6 @@ class Event::Participation < ActiveRecord::Base
     end
   end
   
-  ### INSTANCE METHODS
     
   
   private

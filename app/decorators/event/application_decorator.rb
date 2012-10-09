@@ -1,5 +1,5 @@
 class Event::ApplicationDecorator < ApplicationDecorator
-
+  decorates 'event/application'
   decorates_association :priority_1
 
   def link

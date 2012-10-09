@@ -86,18 +86,7 @@ class Person < ActiveRecord::Base
   
   
   ### CLASS METHODS
-  
-  class << self
-    # Order people by the order participation types are listed in their event types.
-    def order_by_participation(event_type)
-      statement = "CASE event_role.type "
-      event_type.role_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i} "
-      end
-      statement << "END"
-      joins(:event_roles).order(statement)
-    end
-  end
+
 
   ### INSTANCE METHODS
   

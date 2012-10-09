@@ -108,8 +108,6 @@ de:
         dates: Daten
         questions: Fragen
         kind_id: Kursart
-        states:
-          created: Geplant
       
       event/course:
         number: Kursnummer
@@ -120,6 +118,7 @@ de:
 
       event/role:
         label: Bezeichnung
+        participation: Person
 
       event/participation:
         person_id: Person

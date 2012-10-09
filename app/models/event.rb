@@ -95,6 +95,12 @@ class Event < ActiveRecord::Base
     def upcoming
       joins(:dates).where("event_dates.start_at > ?", ::Date.today)
     end
+    
+    # Is the given attribute used in the current STI class
+    def attr_used?(attr)
+      accessible_attributes.include?(attr)
+    end
+
   end
 
   

@@ -14,7 +14,7 @@ class Event::Role < ActiveRecord::Base
 
   include NormalizedLabels
   
-    ### ATTRIBUTES
+  ### ATTRIBUTES
 
   class_attribute :permissions, :affiliate, :restricted
   self.permissions = []
@@ -25,15 +25,19 @@ class Event::Role < ActiveRecord::Base
   
   self.demodulized_route_keys = true
   
-  attr_accessible :label, :participation_id
+  attr_reader :person_id, :person
+  
+  attr_accessible :label
   
   
   ### ASSOCIATIONS
   
-  belongs_to :participation
+  belongs_to :participation, validate: true
   
   has_one :event, through: :participation
   has_one :person, through: :participation
+  
+  
   
   
   ### CALLBACKS
@@ -51,6 +55,7 @@ class Event::Role < ActiveRecord::Base
   
   private
   
+  # A participation with at least one role is active
   def set_participation_active
     participation.update_column(:active, true)
   end

@@ -11,10 +11,16 @@
 
 %p= entry.motto
 
-%p= entry.dates
+%p= entry.dates_full
 
 %p= entry.location
 
+%p
+  = entry.booking_info
+  Teilnehmende
+
 %p= entry.description
 
-= render_attrs entry, :cost, :application_opening_at, :application_closing_at, :maximum_participants, :contact_id
+= render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, :contact_id))
+
+= render_extensions :attrs

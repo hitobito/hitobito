@@ -31,11 +31,6 @@ class PersonDecorator < ApplicationDecorator
     functions_short(roles.to_a, :group, group)
   end
   
-  # render a list of all participations
-  def participations_short(event)
-    functions_short(event_participations.to_a, :event, event)
-  end
-
   def pending_applications
     Event::ApplicationDecorator.decorate(event_applications.pending)
   end

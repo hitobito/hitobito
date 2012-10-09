@@ -4,6 +4,18 @@ module Person::PreloadPublicAccounts
     base.do_preload_public_accounts
   end
   
+  def self.for(records)
+    records = Array(records)
+    
+    # preload accounts
+    ActiveRecord::Associations::Preloader.new(
+      records, 
+      [:phone_numbers, :social_accounts], 
+      :conditions => {:public => true}).run
+      
+    records
+  end
+  
   def do_preload_public_accounts
     @do_preload_public_accounts = true
   end
@@ -13,13 +25,7 @@ module Person::PreloadPublicAccounts
   def exec_queries
     records = super
     
-    if @do_preload_public_accounts
-      # preload roles
-      ActiveRecord::Associations::Preloader.new(
-        records, 
-        [:phone_numbers, :social_accounts], 
-        :conditions => {:public => true}).run
-    end
+    Person::PreloadPublicAccounts.for(records) if @do_preload_public_accounts
     
     records
   end

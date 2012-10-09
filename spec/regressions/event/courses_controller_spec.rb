@@ -72,7 +72,7 @@ describe Event::CoursesController, type: :controller do
   context "GET index content" do
     let(:slk) { event_kinds(:slk)}
     let(:main) { dom.find("#main") }
-    let(:slk_ev) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk), maximum_participants: 20 ) }
+    let(:slk_ev) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant' ) }
     let(:glk_ev) { Fabricate(:course, group: groups(:top_group), kind: event_kinds(:glk), maximum_participants: 20 ) }
 
     before do 

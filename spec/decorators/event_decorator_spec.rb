@@ -6,7 +6,7 @@ describe EventDecorator do
   let(:event) { Fabricate(:event, group: group, kind: event_kinds(:slk) ) }
   subject { EventDecorator.new(event) }
 
-  its(:label) { should eq "Scharleiterkurs<br/><span class=\"muted\">TopGroup</span>" }
+  its(:label) { should eq "Scharleiterkurs<br /><span class=\"muted\">TopGroup</span>" }
   
 
   describe "#dates" do
@@ -14,7 +14,7 @@ describe EventDecorator do
     it "joins multiple dates" do
       add_date(start_at: parse("2002-01-01"))
       add_date(start_at: parse("2002-01-01"))
-      subject.dates_info.should eq "01.01.2002<br/>01.01.2002"
+      subject.dates_info.should eq "01.01.2002<br />01.01.2002"
     end
    
     context "date objects"  do

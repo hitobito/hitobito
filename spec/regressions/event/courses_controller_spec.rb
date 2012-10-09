@@ -84,9 +84,9 @@ describe Event::CoursesController, type: :controller do
       get :index, year: 2010
       main.find('h2').text.should eq 'Scharleiterkurs'
       main.find('table td:eq(1)').native.to_xml.should eq '<td>Scharleiterkurs<br/><span class="muted">Top</span></td>'
-      main.find('table td:eq(2)').text.should eq 'Scharleiterkurs'
+      main.find('table td:eq(2)').native.to_xml.should eq "<td>02.01.2010<br/>02.01.2010</td>"
       main.find('table td:eq(3)').text.should eq '0 von 20'
-      main.find('table td:eq(4)').native.to_xml.should eq "<td>02.01.2010<br/>02.01.2010</td>"
+      main.find('table td:eq(4)').text.should eq 'Geplant'
     end
 
     it "groups courses by course type" do

@@ -78,12 +78,12 @@ describe Group do
       should include groups(:no)
     end
 
-    it "includes flocks" do
-      should include groups(:thun)
-      should include groups(:ausserroden)
-      should include groups(:innerroden)
-      should include groups(:bern)
-      should include groups(:muri)
+    it "does not include flocks" do
+      should_not include groups(:thun)
+      should_not include groups(:ausserroden)
+      should_not include groups(:innerroden)
+      should_not include groups(:bern)
+      should_not include groups(:muri)
     end
 
     it "orders by parent and name" do

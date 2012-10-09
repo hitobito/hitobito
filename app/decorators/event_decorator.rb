@@ -5,7 +5,7 @@ class EventDecorator < ApplicationDecorator
 
 
   def label
-    safe_join([kind.label, h.muted(group.name)], h.tag(:br))
+    safe_join([model.name, h.muted("#{kind.short_name} #{number} #{group.name}")], h.tag(:br))
   end
 
   def dates_info    

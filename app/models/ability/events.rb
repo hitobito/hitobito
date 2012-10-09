@@ -41,7 +41,7 @@ module Ability::Events
     
     can :create, Event::Participation do |participation|
       (participation.person_id == user.id &&
-       user.groups_hierarchy.include?(participation.event.group_id)) ||
+       user.groups_hierarchy_ids.include?(participation.event.group_id)) ||
        
       can_update_event?(participation.event)
     end

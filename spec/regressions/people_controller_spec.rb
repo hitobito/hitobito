@@ -61,7 +61,7 @@ describe PeopleController, type: :controller do
     context "pending event applications" do
       let(:aside) { dom.find('aside[data-role="applications"]') }
       let(:date) { Time.zone.parse("02-01-2010") }
-      let(:text) { "<a href=\"/events/1/participations/1\">Scharleiterkurs<br/><span class=\"muted\">Top</span></a>" }
+      let(:text) { "<a href=\"/events/1/participations/1\">Eventus<br/><span class=\"muted\">SLK  Top</span></a>" }
 
       it "renders only if we have applications" do
         get :show, params 
@@ -93,7 +93,7 @@ describe PeopleController, type: :controller do
         create_participation(date)
         get :show, params 
         aside.find('h2').text.should eq 'Events'
-        label.should eq "<td>Scharleiterkurs<br/><span class=\"muted\">Top</span>\n</td>"
+        label.should eq "<td>Eventus<br/><span class=\"muted\">SLK  Top</span>\n</td>"
         dates.should eq pretty_date
       end
     end

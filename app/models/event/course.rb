@@ -42,4 +42,10 @@ class Event::Course < Event
   attr_accessible :kind_id, :state, :priorization, :requires_approval
 
 
+  class << self
+    def in_hierarchy(user)
+      only_group_id(Group.can_offer_courses.pluck(:id) & user.groups_hierarchy_ids)
+    end
+  end
+
 end

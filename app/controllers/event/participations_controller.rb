@@ -1,7 +1,7 @@
 class Event::ParticipationsController < CrudController
   self.nesting = Event
   
-  decorates :event, :participation, :participations
+  decorates :event, :participation, :participations, :priority_2s
   
   # load event before authorization
   prepend_before_filter :parent, :set_group
@@ -75,9 +75,12 @@ class Event::ParticipationsController < CrudController
   end
     
   def load_priorities
-    if entry.application
-      # TODO: restrict to visible courses
-      @priority_2s = @priority_3s = Event::Course.where(kind_id: parent.kind_id)
+    if entry.application && entry.event.priorization
+      @priority_2s = @priority_3s = Event::Course.where(kind_id: parent.kind_id).
+                                                  in_year(parent.dates.first.try(:start_at).try(:year)).
+                                                  in_hierarchy(current_user).
+                                                  order_by_date.
+                                                  uniq
     end
   end
   

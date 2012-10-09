@@ -6,7 +6,7 @@ describe EventDecorator do
   let(:event) { Fabricate(:event, group: group, kind: event_kinds(:slk) ) }
   subject { EventDecorator.new(event) }
 
-  its(:label) { should eq "Scharleiterkurs<br /><span class=\"muted\">TopGroup</span>" }
+  its(:label) { should eq "Eventus<br /><span class=\"muted\">SLK  TopGroup</span>" }
   
 
   describe "#dates" do

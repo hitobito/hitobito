@@ -13,7 +13,7 @@ class Event::CoursesController < EventsController
   private
   def list_entries
     set_year_vars
-    scoped = model_scope.includes(:group, :kind, :dates).in_year(year) 
+    scoped = model_scope.includes(:group, :kind, :dates).in_year(year).order('event_kinds.id')
     limit_scope_for_user(scoped)
   end
 
@@ -28,12 +28,8 @@ class Event::CoursesController < EventsController
     if can?(:manage_courses, current_user)
       group_id > 0 ? scoped.only_group_id(group_id) : scoped
     else
-      scoped.only_group_id(groups_with_courses_in_hierarchy)
+      scoped.in_hierarchy(current_user)
     end
-  end
-
-  def groups_with_courses_in_hierarchy
-    Group.can_offer_courses.pluck(:id) & current_user.groups_hierarchy
   end
 
 end

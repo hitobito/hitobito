@@ -28,16 +28,25 @@ describe Ability::Events do
         should be_able_to(:index_participations, event)
       end
       
-      it "may not update event in other layer" do
+      it "may update event in lower layer" do
         other = Fabricate(:event, group: groups(:bern))
+        should be_able_to(:update, other)
+      end
+      
+      it "may not update event in other layer" do
+        other = Fabricate(:event, group: groups(:no))
         should_not be_able_to(:update, other)
       end
       
-      it "may not index people for event in his layer" do
+      it "may index people for event in lower layer" do
         other = Fabricate(:event, group: groups(:bern))
-        should_not be_able_to(:index_participations, other)
+        should be_able_to(:index_participations, other)
       end
       
+      it "may not index people for event in other layer" do
+        other = Fabricate(:event, group: groups(:no))
+        should_not be_able_to(:index_participations, other)
+      end
     end
     
     
@@ -61,8 +70,13 @@ describe Ability::Events do
         should be_able_to(:destroy, participation)
       end
       
-      it "may not show participation in event from other layer" do
+      it "may show participation in event from lower layer" do
         other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:bern)))
+        should be_able_to(:show, other)
+      end
+      
+      it "may not show participation in event from other layer" do
+        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:no)))
         should_not be_able_to(:show, other)
       end
     end

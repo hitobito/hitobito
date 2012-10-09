@@ -82,8 +82,10 @@ module Ability::Events
   private
   
   def can_update_event?(event)
+    event.group && (
     can_create_event?(event) ||
-    events_with_permission(:full).include?(event.id)
+    events_with_permission(:full).include?(event.id) ||
+    contains_any?(layers_full, collect_ids(event.group.layer_groups)))
   end
   
   def can_create_event?(event)

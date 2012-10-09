@@ -137,6 +137,7 @@ class Group < ActiveRecord::Base
     PeopleFilter.where("group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)", id, type)
   end
   
+  # The layer hierarchy without the layer of this group.
   def upper_layer_groups
     if new_record?
       if parent

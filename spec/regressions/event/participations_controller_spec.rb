@@ -25,10 +25,10 @@ describe Event::ParticipationsController, type: :controller do
   end
 
   before { sign_in(people(:top_leader)) } 
-  before { test_entry } # load test entry before tests to avoid some bugs
+  before { Fabricate(Event::Role::Leader.name.to_sym, participation: test_entry) }
   
   let(:scope_params) { {event_id: test_entry.event_id} }
 
-  include_examples 'crud controller', skip: [%w(index), %w(destroy)]
+  include_examples 'crud controller', skip: [%w(destroy)]
 
 end

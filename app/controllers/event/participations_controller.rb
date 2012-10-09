@@ -40,12 +40,13 @@ class Event::ParticipationsController < CrudController
   private
     
   def list_entries(action = :index)
-    parent.participations.
-           where(event_participations: {active: true}).
-           includes(:person, :roles).
-           order_by_role(parent.class).
-           merge(Person.order_by_name)
-           # TODO preload_public_accounts
+    records = parent.participations.
+                 where(event_participations: {active: true}).
+                 includes(:person, :roles).
+                 order_by_role(parent.class).
+                 merge(Person.order_by_name)
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    records
   end
   
   

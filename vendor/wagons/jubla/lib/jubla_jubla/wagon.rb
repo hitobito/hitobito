@@ -17,6 +17,7 @@ module JublaJubla
       Event::Application.send :include, Jubla::Event::Application
       
       GroupsController.send :include, Jubla::GroupsController
+      EventsController.send :include, Jubla::EventsController
     end 
 
 

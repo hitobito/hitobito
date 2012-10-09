@@ -11,7 +11,7 @@ module Ability::Events
     end
     
     if modify_permissions?
-      # BEWARE! Always pass an Event instance to create for correct abilities
+      # BEWARE! Always pass an Event instance to create for correct abilities when using the can? method
       can [:create, :destroy], Event do |event|
         can_create_event?(event)
       end
@@ -21,10 +21,19 @@ module Ability::Events
       can_update_event?(event) ||
       events_with_permission(:contact_data).include?(event.id)
     end
-    
+
+      
+    ### COURSES
+    if modify_permissions? 
+      can :manage_courses, Person do |person|
+        course_groups = Group.can_offer_courses
+        contains_any?(groups_group_full,collect_ids(course_groups)) || 
+          contains_any?(layers_full, course_groups.collect(&:layer_group_id)) 
+      end
+    end
+
     
     ### PARTICIPATIONS
-        
     can :show, Event::Participation do |participation|
       participation.person_id == user.id ||
       can_update_event?(participation.event)
@@ -32,7 +41,7 @@ module Ability::Events
     
     can :create, Event::Participation do |participation|
       (participation.person_id == user.id &&
-       user_hierarchy.include?(participation.event.group_id)) ||
+       user.groups_hierarchy.include?(participation.event.group_id)) ||
        
       can_update_event?(participation.event)
     end
@@ -94,8 +103,5 @@ module Ability::Events
                    collect(&:event_id)
   end
   
-  def user_hierarchy
-    @user_hierarchy ||= user.groups.collect(&:hierarchy).flatten.collect(&:id).uniq
-  end
   
 end

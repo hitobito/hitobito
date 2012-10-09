@@ -109,7 +109,7 @@ class Group < ActiveRecord::Base
     end
 
     def can_offer_courses
-      sti_names = all_types.select { |group| group.event_types != Group.event_types }.map(&:sti_name)
+      sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
       scoped.where(type: sti_names).order(:parent_id, :name)
     end
   end

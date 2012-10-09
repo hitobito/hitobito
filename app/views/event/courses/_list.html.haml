@@ -15,9 +15,15 @@
     - events.each do |event| 
       %tr
         %td= event.labeled_link
-        %td= event.dates_full
-        %td= event.booking_info
-        %td= event.state
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.dates_full
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.booking_info
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.state
         %td
           - if event.application_possible? && event.can_create_participation?
             = action_button 'Anmelden', new_event_participation_path(event) 

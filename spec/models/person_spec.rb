@@ -205,4 +205,23 @@ describe Person do
     end
   end
 
+  context "finders on participations" do
+    let(:group) { groups(:top_layer) }
+    let(:person) { people(:top_leader) }
+    let(:course) { Fabricate(:course, group: groups(:top_layer)) }
+
+    it ".pending_applications returns applications that are not active" do
+      participation = Fabricate(:event_participation, person: people(:top_leader))
+      application = Fabricate(:event_application, priority_1: course, participation: participation)
+      person.pending_applications.should eq [application]
+    end
+
+    it ".upcoming_events returns applications that are active" do
+      course.dates.build(start_at: 2.days.from_now)
+      course.save
+      participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
+      person.upcoming_events.should eq [course]
+    end
+  end
+
 end

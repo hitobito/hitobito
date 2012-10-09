@@ -68,7 +68,7 @@ describe PeopleController, type: :controller do
         expect { aside }.to raise_error Capybara::ElementNotFound
       end
 
-      it "lists event label, link and dates" do
+      it "lists application" do
         create_application(date)
         get :show, params 
         aside.find('h2').text.should eq 'Anmeldungen'
@@ -90,13 +90,13 @@ describe PeopleController, type: :controller do
       end
 
       it "is missing if we have no upcoming events" do
-        create_participation(2.days.ago)
+        create_participation(2.days.ago,true)
         get :show, params 
         expect { aside }.to raise_error Capybara::ElementNotFound
       end
 
       it "lists event label, link and dates" do
-        create_participation(date)
+        create_participation(date,true)
         get :show, params 
         aside.find('h2').text.should eq 'Events'
         label_link[:href].should eq group_event_path(course.group, course)
@@ -107,12 +107,12 @@ describe PeopleController, type: :controller do
     end
 
     def create_application(date)
-      Fabricate(:event_application, priority_1: course, participation: create_participation(date))
+      Fabricate(:event_application, priority_1: course, participation: create_participation(date,false))
     end
       
-    def create_participation(date)
+    def create_participation(date,active_participation=false)
       set_event_date(date)
-      Fabricate(:event_participation, person: top_leader, event: course) 
+      Fabricate(:event_participation, person: top_leader, event: course, active: active_participation) 
     end
 
     def set_event_date(date)

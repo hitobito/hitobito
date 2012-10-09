@@ -87,8 +87,7 @@ describe Group do
     end
 
     it "orders by parent and name" do
-      expected = ["Jubla Schweiz", "Kanton Bern", "Nordostschweiz", "Thun", "Ausserroden", 
-                  "Innerroden", "Bern", "Muri"]
+      expected = ["Jubla Schweiz", "Kanton Bern", "Nordostschweiz"]
       subject.map(&:name).should eq expected
     end
   end

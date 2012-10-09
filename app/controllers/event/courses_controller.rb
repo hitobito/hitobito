@@ -1,7 +1,7 @@
 class Event::CoursesController < EventsController
   self.nesting_optional = true
-  attr_reader :year, :group_id
-  helper_method :year, :group_id
+  attr_reader :year, :year_range, :group_id
+  helper_method :year, :year_range, :group_id
   decorates :events
 
   class << self
@@ -18,8 +18,9 @@ class Event::CoursesController < EventsController
   end
 
   def set_year_vars
-    @year = params[:year].to_i > 0 ? params[:year].to_i : Date.today.year
-    @years = (@year-3...@year+3)
+    this_year = Date.today.year
+    @year_range = (this_year-2... this_year+3)
+    @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
   end
 
   def limit_scope_for_user(scoped)

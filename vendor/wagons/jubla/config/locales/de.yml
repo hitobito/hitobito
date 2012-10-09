@@ -65,6 +65,10 @@ de:
         employment_percent: Stellenprozente
         honorary: Ehrenamt
 
+      event:
+        advisor_id: LKB
+        advisor: LKB
+
       event/course:
         states:
           created: Erstellt

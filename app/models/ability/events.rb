@@ -41,7 +41,7 @@ module Ability::Events
     
     can :create, Event::Participation do |participation|
       (participation.person_id == user.id &&
-       user.groups_hierarchy.include?(participation.event.group_id)) ||
+       user.groups_hierarchy_ids.include?(participation.event.group_id)) ||
        
       can_update_event?(participation.event)
     end
@@ -82,8 +82,10 @@ module Ability::Events
   private
   
   def can_update_event?(event)
+    event.group && (
     can_create_event?(event) ||
-    events_with_permission(:full).include?(event.id)
+    events_with_permission(:full).include?(event.id) ||
+    contains_any?(layers_full, collect_ids(event.group.layer_groups)))
   end
   
   def can_create_event?(event)

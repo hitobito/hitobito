@@ -57,7 +57,7 @@ class Event < ActiveRecord::Base
   belongs_to :kind
   belongs_to :contact, class_name: 'Person'
   
-  has_many :dates, dependent: :destroy, validate: true
+  has_many :dates, dependent: :destroy, validate: true, order: :start_at
   has_many :questions, dependent: :destroy, validate: true
   
   has_many :participations, dependent: :destroy
@@ -74,18 +74,23 @@ class Event < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :dates, :questions, allow_destroy: true
+  
+  
+  ### SCOPES
+  
+  scope :order_by_date, joins(:dates).order('event_dates.start_at')
+  scope :preload_all_dates, scoped.extending(Event::PreloadAllDates)
 
 
   ### CLASS METHODS
   
   class << self
     def in_year(year)
-      raise ArgumentError, "Invalid year: #{year}" if year.to_i <= 0
+      year = ::Date.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:group,:kind,:dates)
+      joins(:dates)
       .where(event_dates: { start_at: [start_at...finish_at] } )
-      .order('event_kinds.id, groups.name')
     end
 
     def only_group_id(*group_ids)
@@ -100,7 +105,8 @@ class Event < ActiveRecord::Base
     def attr_used?(attr)
       accessible_attributes.include?(attr)
     end
-
+    
+    
   end
 
   

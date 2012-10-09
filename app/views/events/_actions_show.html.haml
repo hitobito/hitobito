@@ -1,4 +1,5 @@
 - if entry.application_possible? && can?(:new, entry.participations.new)
   = action_button 'Anmelden', new_event_participation_path(entry) 
+  
 = button_action_edit if can?(:edit, entry)
 = button_action_destroy if can?(:destroy, entry)

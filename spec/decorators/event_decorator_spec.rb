@@ -8,7 +8,7 @@ describe EventDecorator, :draper_with_helpers do
   let(:event) { Fabricate(:event, group: group, kind: event_kinds(:slk) ) }
   subject { EventDecorator.new(event) }
 
-  its(:labeled_link) { should =~ /Scharleiterkurs/ }
+  its(:labeled_link) { should =~ /Eventus/ }
   its(:labeled_link) { should =~ /TopGroup/ }
   its(:labeled_link) { should =~ %r{<a href="/groups/#{group.id}/events/#{event.id}">} }
 
@@ -74,8 +74,8 @@ describe EventDecorator, :draper_with_helpers do
       end
     end
 
-    
   end
+  
   def parse(str)
     Time.zone.parse(str)
   end

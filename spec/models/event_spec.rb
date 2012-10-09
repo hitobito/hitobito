@@ -204,12 +204,6 @@ describe Event do
           Event.in_year(2000).first.should eq event 
           Event.in_year("2000").first.should eq event
         end
-
-        it "raises argument error"do
-          expect { Event.in_year('')}.to raise_error(ArgumentError)
-          expect { Event.in_year(-1)}.to raise_error(ArgumentError)
-          expect { Event.in_year('asdf')}.to raise_error(ArgumentError)
-        end
         
       end
       

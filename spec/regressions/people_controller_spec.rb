@@ -100,7 +100,7 @@ describe PeopleController, type: :controller do
         get :show, params 
         aside.find('h2').text.should eq 'Events'
         label_link[:href].should eq group_event_path(course.group, course)
-        label_link.text.should eq "Scharleiterkurs"
+        label_link.text.should eq "Eventus"
         label.text.should =~ /Top/
         dates.should eq pretty_date
       end

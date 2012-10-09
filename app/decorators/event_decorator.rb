@@ -4,9 +4,17 @@ class EventDecorator < ApplicationDecorator
   decorates :event
 
 
+  def label
+    safe_join([name, label_detail], h.tag(:br))
+  end
+  
   def labeled_link
-    link = h.link_to(kind.label, h.group_event_path(group,self))
-    safe_join([link, h.muted(group.name)], h.tag(:br))
+    link = h.link_to(name, h.group_event_path(group, self))
+    safe_join([link, label_detail], h.tag(:br))
+  end
+  
+  def label_detail
+    h.muted("#{kind.short_name} #{number} #{group.name}")
   end
 
   def dates_info    

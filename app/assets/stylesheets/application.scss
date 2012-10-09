@@ -213,6 +213,12 @@ select[class*="span"] {
 /* Layout */
 // -------------------------
 
+
+.highlight {
+  background-color: #FFD;
+}
+
+
 /* Header */
 body > header {
   @include clearfix;

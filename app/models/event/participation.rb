@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # == Schema Information
 #
 # Table name: event_participations
@@ -13,6 +15,8 @@
 #
 
 class Event::Participation < ActiveRecord::Base
+  
+  schema_validations except_type: :uniqueness
   
   self.demodulized_route_keys = true
   
@@ -36,7 +40,7 @@ class Event::Participation < ActiveRecord::Base
   
   ### VALIDATIONS
   
-  validates :person_id, uniqueness: {scope: :event_id}
+  validates :person_id, uniqueness: {scope: :event_id, message: 'Du hast dich für diesen Anlass bereits angemeldet.'}
   
   
   ### CALLBACKS

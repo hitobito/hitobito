@@ -1,13 +1,25 @@
 - title(page_title)
 
 = render 'event/courses/tabs' # wieso muss ich die explicit referenieren (actions findet er)
-- courses_by_kinds.each_entry do |kind, events| 
-  %h2= kind
-  %table.table
+
+%table.table
+  - courses_by_kinds.each_entry do |kind, events|
+    %tr
+      %td{colspan: 5}
+        %br/
+        %h2= kind 
     - events.each do |event| 
       %tr
         %td= event.labeled_link
-        %td= event.dates_info
-        - if can?(:manage_courses, current_user)
-          %td= event.booking_info
-          %td= event.state
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.dates_full
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.booking_info
+        %td
+          - if can?(:manage_courses, current_user)
+            = event.state
+        %td
+          - if event.application_possible? && can?(:new, event.participations.new)
+            = action_button 'Anmelden', new_event_participation_path(event) 

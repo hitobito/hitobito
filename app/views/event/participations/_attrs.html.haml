@@ -8,11 +8,16 @@
     
     = render_attrs(entry.person, :birthday, :gender)
     
+    %br/
+    
     -if can?(:show, entry) # participation
-      - @answers.each do |answer|
-        %p
-          = answer.answer
-          = muted(answer.question.question)
+      -if @answers.present?
+        %h4 Spezifische Angaben
+        %dl
+        - @answers.each do |answer|
+          %dt= answer.question.question
+          %dd= answer.answer
+        %br/
     
       %h4= t('activerecord.attributes.event/participation.additional_information')
       = simple_format(entry.additional_information)

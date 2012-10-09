@@ -4,7 +4,7 @@
 
 = entry_form(stacked: true, 
              submit_label: entry.new_record? ? 'Anmelden' : 'Speichern', 
-             cancel_url_new: event_path(@event)) do |f|
+             cancel_url_new: group_event_path(@event.group_id, @event)) do |f|
              
   = f.fields_for(:answers) do |fans|
     = render 'event/answers/fields', f: fans
@@ -13,10 +13,15 @@
     
   -if entry.application
     = f.fields_for(:application) do |fap|
-      = field_set_tag 'Ausweichdaten' do
-        %p Bitte gib weitere Kurse an, welche dir gehen würden.
-        = fap.labeled_belongs_to_field(:priority_2_id)
-        = fap.labeled_belongs_to_field(:priority_3_id)
-        
-        %b Informationen zu den Ausweichkursen
-        -# TODO re-use display stuff from main page
+      - if @event.priorization?
+        = field_set_tag 'Ausweichdaten' do
+          %p Bitte gib weitere Kurse an, welche dir gehen würden.
+          = fap.labeled_belongs_to_field(:priority_2_id)
+          = fap.labeled_belongs_to_field(:priority_3_id)
+          
+          %h4 Informationen zu den Kursen
+          %table.table
+            - @alternatives.each do |event| 
+              %tr{class: "#{'highlight' if event == @event}"}
+                %td= event.label
+                %td= event.dates_full

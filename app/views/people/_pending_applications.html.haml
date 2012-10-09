@@ -1,9 +1,9 @@
 %aside.span5{data: {role: 'applications'}}
   %section.group_children
     %h2 Anmeldungen
-    = table(entry.pending_applications, class: 'table') do |t|
+    = table(entry.pending_applications) do |t|
       - t.col('') do |application|
         = application.labeled_link
       - t.col('') do |application|
-        = application.dates_info
+        = application.dates_full
     

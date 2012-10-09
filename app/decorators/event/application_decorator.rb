@@ -3,7 +3,7 @@ class Event::ApplicationDecorator < ApplicationDecorator
   decorates 'event/application'
   decorates_association :event
 
-  delegate :dates_info, :kind, :group, to: :event
+  delegate :dates_info, :dates_full, :kind, :group, to: :event
 
   def labeled_link
     link = h.link_to(kind.label, h.event_participation_path(event,participation))

@@ -1,4 +1,4 @@
-- parent_sheet(EntrySheet.new(self, @event, :event_participations_path))
+- parent_sheet(EntrySheet.new(self, @event, :event_participations_path, :index_participations, group_event_path(@event.group, @event)))
 - parent_sheet(GroupSheet.new(self, @event.group))
 - title entry.to_s
 
@@ -10,7 +10,7 @@
     
     %br/
     
-    -if can?(:show, entry) # participation
+    -if can?(:show_details, entry) # participation
       -if @answers.present?
         %h4 Spezifische Angaben
         %dl
@@ -22,5 +22,4 @@
       %h4= t('activerecord.attributes.event/participation.additional_information')
       = simple_format(entry.additional_information)
   
-  -if can?(:show, entry) # participation
-    = render 'roles'
+  = render 'roles'

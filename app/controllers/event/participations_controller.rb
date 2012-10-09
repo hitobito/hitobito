@@ -17,7 +17,7 @@ class Event::ParticipationsController < CrudController
 
     
   def authorize!(action, *args)
-    if [:index, :show].include?(action)
+    if [:index].include?(action)
       super(:index_participations, parent)
     else
       super

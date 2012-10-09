@@ -36,6 +36,12 @@ module Ability::Events
     ### PARTICIPATIONS
     can :show, Event::Participation do |participation|
       participation.person_id == user.id ||
+      can_update_event?(participation.event) ||
+      events_with_permission(:contact_data).include?(participation.event_id)
+    end
+    
+    can :show_details, Event::Participation do |participation|
+      participation.person_id == user.id ||
       can_update_event?(participation.event)
     end
     

@@ -322,6 +322,7 @@ body > nav {
     @include responsive(phone, $mediaDesktop) { 
       margin-top: $vSpace;
     }
+    margin-bottom: $vSpace;
    
     h2 {
       border-bottom: 1px solid $grayLighter;

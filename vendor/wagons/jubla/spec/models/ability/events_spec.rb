@@ -319,10 +319,16 @@ describe Ability::Events do
         should be_able_to(:show, participation)
       end
       
-      it "may not show other participation" do
+      it "may show other participation" do
         other = Fabricate(:event_participation, event: event)
         Fabricate(Event::Role::Participant.name.to_sym, participation: other)
-        should_not be_able_to(:show, other)
+        should be_able_to(:show, other)
+      end
+      
+      it "may not show details of other participation" do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Role::Participant.name.to_sym, participation: other)
+        should_not be_able_to(:show_details, other)
       end
       
       it "may not show participation in other event" do

@@ -112,11 +112,12 @@ end
 class EntrySheet < Sheet
   attr_reader :entry
   
-  def initialize(view, entry, url_method = nil, can_action = :show)
+  def initialize(view, entry, url_method = nil, can_action = :show, default_url = nil)
     super(view, entry.to_s)
     @entry = entry
     @url_method = Array(url_method)
     @can_action = can_action
+    @default_url = default_url
   end
     
   def render_title
@@ -127,7 +128,7 @@ class EntrySheet < Sheet
     if @url_method.present? && can?(@can_action, entry)
       view.send(*@url_method, entry)
     else
-      entry
+      @default_url || entry
     end
   end
 end

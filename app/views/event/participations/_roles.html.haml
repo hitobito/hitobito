@@ -1,14 +1,15 @@
-%aside.span5
-  %section.group_children
-    %h2 Rollen
-    
-    = table(entry.roles) do |t|
-      - t.col('') do |role|
-        %strong
-          = role.to_s
-
-      - t.col('') do |role|
-        = link_action_edit(edit_event_role_path(entry.event, role)) if can?(:edit, role)
-        
-      - t.col('') do |role|
-        = link_action_destroy(event_role_path(entry.event, role)) if can?(:destroy, role)
+-if entry.roles.present?
+  %aside.span5
+    %section.group_children
+      %h2 Rollen
+      
+      = table(entry.roles) do |t|
+        - t.col('') do |role|
+          %strong
+            = role.to_s
+  
+        - t.col('') do |role|
+          = link_action_edit(edit_event_role_path(entry.event, role)) if can?(:edit, role)
+          
+        - t.col('') do |role|
+          = link_action_destroy(event_role_path(entry.event, role)) if can?(:destroy, role)

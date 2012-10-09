@@ -216,10 +216,10 @@ describe Person do
       person.pending_applications.should eq [application]
     end
 
-    pending ".upcoming_events returns applications that are active" do
+    it ".upcoming_events returns applications that are active" do
       course.dates.build(start_at: 2.days.from_now)
       course.save
-      participation = Fabricate(:event_participation, person: people(:top_leader), active: true)
+      participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
       person.upcoming_events.should eq [course]
     end
   end

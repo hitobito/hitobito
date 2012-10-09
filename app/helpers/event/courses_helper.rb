@@ -1,17 +1,25 @@
 # encoding: UTF-8
 module Event::CoursesHelper
 
-  def group_link_list(groups)
-    year_param = { year: @year || current_year }
+  def group_link_list
+    year_param = { year: @year }
     all_groups = link_to("Alle Gruppen", event_courses_path(year_param))
-    groups.map do |group|
+    can_offer_courses.map do |group|
       link = event_courses_path(year_param.merge(group: group.id))
       link_to(group.name, link)
     end.unshift(all_groups)
   end
 
+  def courses_by_kinds
+    entries.group_by { |entry| entry.kind.label }
+  end
+
+  def can_offer_courses
+    @offered_courses ||= Group.can_offer_courses 
+  end
+
   def group_title
-    group_id > 0  ? group_name : "Alle Gruppen"
+    group_id > 0  ? Group.find(group_id).name : "Alle Gruppen"
   end
 
   def group_param
@@ -19,6 +27,7 @@ module Event::CoursesHelper
   end
 
   def page_title
+    return "Verfügbare Kurse" unless can?(:manage_courses, current_user)
     title = group_id > 0 ? group_title : "allen Gruppen"
     "Verfügbare Kurse in #{title}"
   end

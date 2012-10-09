@@ -1,9 +1,7 @@
 class Event::CoursesController < EventsController
   self.nesting_optional = true
-  helper_method :courses_by_kinds, :can_offer_courses, :group_id,
-    :current_year, :group_name, :year
-  attr_reader :year
-
+  attr_reader :year, :group_id
+  helper_method :year, :group_id
   decorates :events
 
   class << self
@@ -14,31 +12,27 @@ class Event::CoursesController < EventsController
 
   private
   def list_entries
-    @year = params[:year].to_i > 0 ? params[:year].to_i : current_year 
+    set_year_vars
+    scoped = model_scope.includes(:group, :kind, :dates).in_year(year) 
+    limit_scope_for_user(scoped)
+  end
+
+  def set_year_vars
+    @year = params[:year].to_i > 0 ? params[:year].to_i : Date.today.year
     @years = (@year-3...@year+3)
-    scoped = super.includes(:group, :kind, :dates)
-    scoped = scoped.in_year(@year)
-    group_id > 0 ? scoped.for_group(group_id) : scoped.in_year(@year)
   end
 
-  def courses_by_kinds
-    entries.group_by { |entry| entry.kind.label }
+  def limit_scope_for_user(scoped)
+    @group_id = params[:group].to_i
+    if can?(:manage_courses, current_user)
+      group_id > 0 ? scoped.only_group_id(group_id) : scoped
+    else
+      scoped.only_group_id(groups_with_courses_in_hierarchy)
+    end
   end
 
-  def can_offer_courses
-    Group.can_offer_courses
-  end
-
-  def group_id
-    params[:group].to_i
-  end
-
-  def group_name
-    Group.find(group_id).name
-  end
-
-  def current_year
-    Date.today.year
+  def groups_with_courses_in_hierarchy
+    Group.can_offer_courses.pluck(:id) & current_user.groups_hierarchy
   end
 
 end

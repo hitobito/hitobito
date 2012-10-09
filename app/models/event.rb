@@ -88,8 +88,8 @@ class Event < ActiveRecord::Base
       .order('event_kinds.id, groups.name')
     end
 
-    def for_group(group_id)
-      where(group_id: group_id)
+    def only_group_id(*group_ids)
+      where(group_id: [group_ids].flatten)
     end
 
     def upcoming

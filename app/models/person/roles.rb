@@ -1,7 +1,12 @@
 module Person::Roles
   extend ActiveSupport::Concern
   
-  
+ 
+  # Uniq set of all group ids in hierarchy
+  def groups_hierarchy
+    @hierarchy ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
+  end
+
   # All layers this person belongs to
   def layer_groups
     groups.collect(&:layer_group).uniq

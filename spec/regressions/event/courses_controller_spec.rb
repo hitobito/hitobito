@@ -62,7 +62,7 @@ describe Event::CoursesController, type: :controller do
 
   context "GET index, shows yearwise paging" do
     before { get :index }
-    let(:tabs) { dom.find('#content .nav') }
+    let(:tabs) { dom.find('#content .pagination') }
 
     it "tabs contain year based pagination" do
       first, last = tabs.all('a').first, tabs.all('a').last
@@ -89,19 +89,19 @@ describe Event::CoursesController, type: :controller do
     it "list courses within table" do
       get :index, year: 2010
       main.find('h2').text.should eq 'Scharleiterkurs'
-      main.find('table td:eq(1) a').text.should eq 'Eventus'
-      main.find('table td:eq(1)').text.should eq "EventusSLK  Top"
-      main.find('table td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
-      main.find('table td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
-      main.find('table td:eq(3)').text.should eq '0 von 20'
-      main.find('table td:eq(4)').text.should eq 'Geplant'
+      main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
+      main.find('table tr:eq(2) td:eq(1)').text.should eq "EventusSLK  Top"
+      main.find('table tr:eq(2) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+      main.find('table tr:eq(2) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
+      main.find('table tr:eq(2) td:eq(3)').text.should eq '0 von 20'
+      main.find('table tr:eq(2) td:eq(4)').text.should eq 'Geplant'
     end
 
     it "groups courses by course type" do
       get :index, year: 2011
       main.all('h2').size.should eq 2
-      main.find('h2:eq(1)').text.should eq 'Gruppenleiterkurs'
-      main.find('h2:eq(2)').text.should eq 'Scharleiterkurs'
+      main.find('tr:eq(1) h2').text.should eq 'Gruppenleiterkurs'
+      main.find('tr:eq(3) h2').text.should eq 'Scharleiterkurs'
     end
 
     it "filters list with group param" do

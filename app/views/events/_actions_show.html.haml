@@ -1,4 +1,4 @@
-- if entry.application_possible? && can?(:new, entry.participations.new)
+- if entry.application_possible? && entry.can_create_participation?
   = action_button 'Anmelden', new_event_participation_path(entry) 
   
 = button_action_edit if can?(:edit, entry)

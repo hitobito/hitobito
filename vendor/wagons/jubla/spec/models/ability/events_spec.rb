@@ -378,7 +378,9 @@ describe Ability::Events do
         
      context Event::Participation do 
       it "may create his participation" do
-        should be_able_to(:create, participation)
+        p = event.participations.new
+        p.person_id = user
+        should be_able_to(:create, p)
       end
       
       it "may show his participation" do

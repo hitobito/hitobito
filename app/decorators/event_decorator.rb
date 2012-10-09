@@ -44,6 +44,12 @@ class EventDecorator < ApplicationDecorator
     h.t("activerecord.attributes.event/course.states.#{model.state}") if model.state
   end
   
+  def can_create_participation?
+    p = participations.new
+    p.person = current_user
+    can?(:new, p)
+  end
+  
   private
   
   def format_event_date(date)

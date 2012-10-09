@@ -21,7 +21,7 @@ class Event::CoursesController < EventsController
 
   def set_year_vars
     this_year = Date.today.year
-    @year_range = (this_year-2... this_year+3)
+    @year_range = (this_year-2)...(this_year+3)
     @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
   end
 

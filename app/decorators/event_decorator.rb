@@ -21,10 +21,6 @@ class EventDecorator < ApplicationDecorator
     info << " von #{maximum_participants}" if maximum_participants.to_i > 0
     info
   end
-
-  def state_info
-    h.t("activerecord.attributes.event.states.#{state || :created}")
-  end
   
   def possible_role_links
     model.class.role_types.map do |type|
@@ -36,7 +32,7 @@ class EventDecorator < ApplicationDecorator
   end
   
   def state
-    h.t("activerecord.attributes.event/course.states.#{model.state}")
+    h.t("activerecord.attributes.event/course.states.#{model.state}") if model.state
   end
   
   private

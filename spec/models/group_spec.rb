@@ -187,15 +187,15 @@ describe Group do
     context "role assignments"  do
       it "terminates own roles and children's roles" do
         id = Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer ).id
-        expect { bottom_layer.destroy }.to change(Role,:count).by(-1)
-        Role.only_deleted.find(:all).collect(&:id).should =~ [id]
+        expect { bottom_layer.destroy }.to change(Role,:count).by(-2)
+        Role.only_deleted.find(:all).collect(&:id).should =~ [id, ActiveRecord::Fixtures.identify(:bottom_member)]
       end
 
       it "terminates children's children's role assigments" do
         Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer)
         Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
         deleted_ids = top_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
-        expect { top_layer.destroy }.to change(Role,:count).by(-3)
+        expect { top_layer.destroy }.to change(Role,:count).by(-4)
         Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
       end
     end

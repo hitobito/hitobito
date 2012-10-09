@@ -57,14 +57,6 @@ describe Event::RolesController, type: :controller do
       it { should redirect_to event_participations_path(course.id) } 
     end
     
-    def it_should_set_attrs
-      it "should set params as entry attributes" do
-        attrs = test_attrs
-        #entry.participation(true)
-        #entry.person(true) # reload person on role once a participation is set
-        deep_attributes(attrs, entry).should == attrs
-      end
-    end
   end
   
 

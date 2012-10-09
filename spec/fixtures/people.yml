@@ -41,7 +41,13 @@
 #
 
 top_leader:
-  first_name: Foo
-  last_name: Bar
-  email: foobar@puzzle.ch
+  first_name: Top
+  last_name: Leader
+  email: top_leader@example.com
+  encrypted_password: $2a$04$jLzXBDwUuKP7EGzSLLFw7..ioMfWiDfT9lDpZ4BjRz/dM6fSu/CDW #foobar
+  
+bottom_member:
+  first_name: Bottom
+  last_name: Member
+  email: bottom_member@example.com
   encrypted_password: $2a$04$jLzXBDwUuKP7EGzSLLFw7..ioMfWiDfT9lDpZ4BjRz/dM6fSu/CDW #foobar

@@ -137,11 +137,11 @@ describe Person do
     end
     
     it "in_layer returns person for this layer" do
-      Person.in_layer(groups(:bottom_group_one_one)).should == [person]
+      Person.in_layer(groups(:bottom_group_one_one)).should =~ [people(:bottom_member), person]
     end
     
     it "in_or_below returns person for above layer" do
-      Person.in_or_below(groups(:top_layer)).should == [people(:top_leader), person]
+      Person.in_or_below(groups(:top_layer)).should =~ [people(:bottom_member), people(:top_leader), person]
     end
   end
   
@@ -155,23 +155,23 @@ describe Person do
     its(:layer_groups) { should include(groups(:top_layer), groups(:bottom_layer_one)) }
     
     it "has contact_data permission in both groups" do
-      person.groups_with_permission(:contact_data).to_set.should == [groups(:top_group), groups(:bottom_layer_one)].to_set
+      person.groups_with_permission(:contact_data).should =~ [groups(:top_group), groups(:bottom_layer_one)]
     end
     
     it "both groups are visible from above" do
-      person.groups_where_visible_from_above.to_set.should == [groups(:top_group), groups(:bottom_layer_one)].to_set
+      person.groups_where_visible_from_above.should =~ [groups(:top_group), groups(:bottom_layer_one)]
     end
     
     it "whole hierarchy may view this person" do
-      person.above_groups_visible_from.to_set.should == [groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)].to_set
+      person.above_groups_visible_from.should =~ [groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)]
     end
     
     it "in_layer returns person for this layer" do
-      Person.in_layer(groups(:bottom_group_one_one)).should == [person]
+      Person.in_layer(groups(:bottom_group_one_one)).should =~ [people(:bottom_member), person]
     end
     
     it "in_or_below returns person for any layer" do
-      Person.in_or_below(groups(:top_layer)).should == [people(:top_leader), person]
+      Person.in_or_below(groups(:top_layer)).should =~ [people(:bottom_member), people(:top_leader), person]
     end
   end
   

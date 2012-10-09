@@ -26,18 +26,28 @@ class Event::RolesController < CrudController
   private 
   
   def build_entry 
+    if model_params.blank? || !parent.class.role_types.collect(&:sti_name).include?(model_params[:type])
+      raise ActiveRecord::RecordNotFound 
+    end
+    
     # delete unused attributes
     model_params.delete(:event_id)
     model_params.delete(:person)
     
     role = model_params.delete(:type).constantize.new
+    
     role.participation = parent.participations.where(:person_id => model_params.delete(:person_id)).first_or_initialize
+    role.participation.init_answers if role.participation.new_record?
     role
   end
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     "#{models_label(false)} #{Event::RoleDecorator.decorate(entry).flash_info}".html_safe
+  end
+ 
+  def parent_scope
+    model_class
   end
   
   class << self

@@ -225,7 +225,7 @@ shared_examples "crud controller" do |options|
     context ".html", :format => :html, :unless => skip?(options, %w(destroy html)) do
       context "successfull", :combine => 'dhs' do
         it_should_redirect_to_index
-       it_should_have_flash(:notice)
+        it_should_have_flash(:notice)
       end
       
       context "with failure", :failing => true, :combine => 'dhf' do

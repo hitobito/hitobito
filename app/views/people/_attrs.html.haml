@@ -12,13 +12,14 @@
     
     - if entry.additional_information.present?
       %h4 Bemerkungen
-      %p= entry.additional_information
+      = simple_format(entry.additional_information)
 
     = render_attrs(entry, :birthday, :gender)
     
     = render_extensions :attrs
 
-  = render 'roles' if can?(:show_details, entry)
-  = render 'pending_applications' if entry.pending_applications.present?
-  = render 'upcoming_events' if entry.upcoming_events.present?
+  -if can?(:show_details, entry)
+    = render 'roles'
+    = render 'pending_applications' if entry.pending_applications.present?
+    = render 'upcoming_events' if entry.upcoming_events.present?
 

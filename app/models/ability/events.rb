@@ -87,8 +87,9 @@ module Ability::Events
   end
   
   def can_create_event?(event)
+    event.group && (
     groups_group_full.include?(event.group_id) ||
-    layers_full.include?(event.group.layer_group_id)
+    layers_full.include?(event.group.layer_group_id))
   end
   
   def events_with_permission(permission)

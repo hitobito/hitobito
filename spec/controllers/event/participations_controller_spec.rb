@@ -16,12 +16,12 @@ describe Event::ParticipationsController do
   context "GET new" do
     before { get :new, event_id: course.id }
     
-    it "builds application with answers" do
+    it "builds participation with answers" do
       participation = assigns(:participation)
       participation.application.should be_present
       participation.answers.should have(2).items
       participation.person.should == user
     end
   end
-  
+    
 end

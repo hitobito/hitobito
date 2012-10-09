@@ -25,7 +25,6 @@ class Event::Role < ActiveRecord::Base
   
   self.demodulized_route_keys = true
   
-  attr_reader :person_id, :person
   
   attr_accessible :label
   
@@ -36,8 +35,6 @@ class Event::Role < ActiveRecord::Base
   
   has_one :event, through: :participation
   has_one :person, through: :participation
-  
-  
   
   
   ### CALLBACKS
@@ -53,6 +50,10 @@ class Event::Role < ActiveRecord::Base
     string = label? ? "#{label} (#{model_name})" : model_name
   end
   
+  def person_id
+    person.try(:id)
+  end
+  
   private
   
   # A participation with at least one role is active
@@ -61,7 +62,7 @@ class Event::Role < ActiveRecord::Base
   end
 
   def destroy_participation_for_last
-    if !participation.roles.exists? && participation.application_id?
+    if !participation.roles.exists? || participation.application_id?
       participation.destroy
     end 
   end

@@ -25,6 +25,10 @@ class RolesController < CrudController
   private 
   
   def build_entry 
+    if model_params.blank? || !parent.class.role_types.collect(&:sti_name).include?(model_params[:type])
+      raise ActiveRecord::RecordNotFound 
+    end
+
     # delete unused attributes
     model_params.delete(:group_id)
     model_params.delete(:person)

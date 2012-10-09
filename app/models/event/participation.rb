@@ -43,6 +43,10 @@ class Event::Participation < ActiveRecord::Base
   
   before_validation :set_self_in_nested
 
+  ### SCOPES
+  scope :active, where(event_participations: { active: true})
+  scope :pending, where(event_participations: { active: false})
+  scope :upcoming, -> { joins({event: :dates}).where('event_dates.start_at >= ?', ::Date.today) } 
   
   class << self
     # Order people by the order participation types are listed in their event types.

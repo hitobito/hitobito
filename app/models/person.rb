@@ -31,8 +31,8 @@
 #  last_sign_in_ip        :string(255)
 #  name_mother            :string(255)
 #  name_father            :string(255)
-#  nationality            :string(255)
 #  profession             :string(255)
+#  nationality            :string(255)
 #  bank_account           :string(255)
 #  ahv_number             :string(255)
 #  ahv_number_old         :string(255)
@@ -111,6 +111,14 @@ class Person < ActiveRecord::Base
   
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     login? && super
+  end
+
+  def upcoming_events # how to use Event.upcoming scope here?
+    event_participations.includes(:event).upcoming.active.map(&:event)
+  end
+
+  def pending_applications
+    event_participations.includes(:event).pending.map(&:application)
   end
 
   private

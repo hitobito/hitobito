@@ -1,7 +1,9 @@
 # encoding: utf-8
-require_relative 'event/application_decorator.rb'
+require_relative 'event/application_decorator'
 class PersonDecorator < ApplicationDecorator
   decorates :person
+  decorates_association :upcoming_events, with: EventDecorator
+  decorates_association :pending_applications, with: Event::ApplicationDecorator
 
   include ContactableDecorator
 
@@ -29,14 +31,6 @@ class PersonDecorator < ApplicationDecorator
   # if a group is given, only render the roles of this group
   def roles_short(group = nil)
     functions_short(roles.to_a, :group, group)
-  end
-  
-  def pending_applications
-    Event::ApplicationDecorator.decorate(event_applications.pending)
-  end
-
-  def upcoming_events
-    EventDecorator.decorate(events.upcoming)
   end
   
   private

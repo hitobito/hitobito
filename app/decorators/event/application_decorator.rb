@@ -1,14 +1,13 @@
+# encoding: utf-8
 class Event::ApplicationDecorator < ApplicationDecorator
   decorates 'event/application'
   decorates_association :event
 
+  delegate :dates_info, :kind, :group, to: :event
+
   def labeled_link
-    link = h.link_to(event.kind, h.event_participation_path(event, model))
-    safe_join([link, h.muted(event.group.name)], h.tag(:br))
+    link = h.link_to(kind.label, h.event_participation_path(event,participation))
+    safe_join([link, h.muted(group.name)], h.tag(:br))
   end
-
-  def dates_info
-    event.dates_info
-  end
-
 end
+  

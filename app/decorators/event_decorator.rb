@@ -15,6 +15,10 @@ class EventDecorator < ApplicationDecorator
   def booking_info
     "#{participant_count} von #{maximum_participants}"
   end
+
+  def state_info
+    h.t("activerecord.attributes.event.states.#{state || :created}")
+  end
   
   def possible_role_links
     model.class.role_types.map do |type|

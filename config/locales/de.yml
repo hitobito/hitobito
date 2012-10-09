@@ -118,6 +118,7 @@ de:
 
       event/role:
         label: Bezeichnung
+        participation: Person
 
       event/participation:
         person_id: Person

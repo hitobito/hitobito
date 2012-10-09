@@ -58,10 +58,6 @@ class GroupDecorator < ApplicationDecorator
     h.params[:name] || (h.params[:role_types] ? 'Eigener Filter' : 'Mitglieder')
   end
   
-  def used_attributes(*attributes)
-    attributes.select { |name| model.class.attr_used?(name) }.map(&:to_s)
-  end
-
   def modifiable_attributes(*attributes)
     attributes = used_attributes(*attributes)
     attributes -= model.class.superior_attributes unless can?(:modify_superior, model)

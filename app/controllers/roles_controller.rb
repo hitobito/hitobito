@@ -3,14 +3,12 @@ class RolesController < CrudController
   self.nesting = Group
   
   decorates :role, :group
-  
-  skip_authorize_resource only: [:index, :show]
-  skip_authorization_check only: [:index, :show]
-  
+    
   # load group before authorization
   prepend_before_filter :parent
   
   hide_action :index, :show
+  
   
   def create
     super(location: group_people_path(entry.group_id))

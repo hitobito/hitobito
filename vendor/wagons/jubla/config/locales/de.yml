@@ -65,4 +65,13 @@ de:
         employment_percent: Stellenprozente
         honorary: Ehrenamt
 
+      event/course:
+        states:
+          created: Erstellt
+          confirmed: Bestätigt
+          application_open: Offen zur Anmeldung 
+          application_closed: Anmeldung abgeschlossen
+          canceled: Abgesagt
+          completed: Qualifikationen erfasst
+          closed: Abgeschlossen
       

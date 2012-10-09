@@ -7,7 +7,7 @@
   - t.col('Name')    do |p| 
     -# Any person listed can be shown
     = link_to(p.to_s, event_participation_path(@event, p))
-  - t.col('Funktion') {|p| p.participations_short(@event) }
+  - t.col('Rolle')    {|p| p.roles_short(@event) }
   - t.col('Email')    {|p| p.email }
   - t.col('Telefon')  {|p| p.all_phone_numbers(true) }
   - t.col('Adresse')  {|p| p.complete_address }

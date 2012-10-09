@@ -5,27 +5,38 @@ class EventDecorator < ApplicationDecorator
 
 
   def label
-    "#{kind.label}<br/>#{h.muted(group.name)}".html_safe
+    safe_join([kind.label, h.muted(group.name)], h.tag(:br))
   end
 
-  def dates_info
-    model.dates.map { |date| format_event_date(date) }.join('<br/>').html_safe
+  def dates_info    
+    safe_join(dates, h.tag(:br)) { |date| format_event_date(date) }
+  end
+  
+  def dates_full
+    safe_join(dates, h.tag(:br)) { |date| safe_join([format_event_date(date), h.muted(date.label)], ' ') }
   end
 
   def booking_info
-    "#{participant_count} von #{maximum_participants}"
+    info = participant_count.to_s
+    info << " von #{maximum_participants}" if maximum_participants.to_i > 0
+    info
   end
   
   def possible_role_links
     model.class.role_types.map do |type|
       unless type.restricted
-        link = h.new_event_role_path(self, event_participation: { type: type.sti_name})
+        link = h.new_event_role_path(self, event_role: { type: type.sti_name})
         h.link_to(type.model_name.human, link)
       end
     end.compact
   end
   
+  def state
+    h.t("activerecord.attributes.event/course.states.#{model.state}")
+  end
+  
   private
+  
   def format_event_date(date)
     start_at, finish_at = date.start_at, date.finish_at
     return format(start_at.to_date) if start_at && finish_at.nil? # single date only

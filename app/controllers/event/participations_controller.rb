@@ -1,7 +1,7 @@
 class Event::ParticipationsController < CrudController
   self.nesting = Event
   
-  decorates :event, :people, :person
+  decorates :event, :participation, :participations
   
   # load event before authorization
   prepend_before_filter :parent, :set_group
@@ -40,25 +40,22 @@ class Event::ParticipationsController < CrudController
   private
     
   def list_entries(action = :index)
-    parent.people.
+    parent.participations.
            where(event_participations: {active: true}).
-           preload_public_accounts.
-           includes(:event_participations, :event_roles).
-           order_by_participation(parent.class).
-           order_by_name
+           includes(:person, :roles).
+           order_by_role(parent.class).
+           merge(Person.order_by_name)
+           # TODO preload_public_accounts
   end
   
+  
+  # new and create are only invoked by people who wish to
+  # apply for an event themselves. A participation for somebody
+  # else is created through event roles. 
   def build_entry
-    # delete unused attributes
-    person_id = nil
-    if model_params
-      model_params.delete(:person)
-      person_id = model_params.delete(:person_id)
-    end
-
     participation = parent.participations.new
-    participation.person_id = person_id || current_user.id
-    if person_id.nil? && parent.supports_applications
+    participation.person = current_user
+    if parent.supports_applications
       appl = participation.build_application
       appl.priority_1 = parent
     end

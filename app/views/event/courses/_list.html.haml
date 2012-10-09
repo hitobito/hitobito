@@ -8,6 +8,6 @@
       %tr
         %td= event.labeled_link
         %td= event.dates_info
-        %td= event.booking_info
-        %td= event.state
-      
+        - if can?(:manage_courses, current_user)
+          %td= event.booking_info
+          %td= event.state

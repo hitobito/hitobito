@@ -1,7 +1,7 @@
 class Event::ParticipationsController < CrudController
   self.nesting = Event
   
-  decorates :event, :participation, :participations, :priority_2s
+  decorates :event, :participation, :participations, :alternatives
   
   # load event before authorization
   prepend_before_filter :parent, :set_group
@@ -14,21 +14,7 @@ class Event::ParticipationsController < CrudController
     entry.init_answers
     respond_with(entry)
   end
-  
-=begin
-  def create
-    super(location: event_participations_path(entry.event_id))
-  end
-  
-  def update
-    super(location: event_participation_path(entry.event_id, entry.id))
-  end
-  
-  def destroy
-    super(location: event_participations_path(entry.event_id))
-  end
-=end
-    
+
     
   def authorize!(action, *args)
     if [:index, :show].include?(action)
@@ -76,9 +62,10 @@ class Event::ParticipationsController < CrudController
     
   def load_priorities
     if entry.application && entry.event.priorization
-      @priority_2s = @priority_3s = Event::Course.list(parent.dates.first.try(:start_at).try(:year)).
-                                                  where(kind_id: parent.kind_id).
-                                                  in_hierarchy(current_user)
+      @alternatives = Event::Course.list(parent.dates.first.try(:start_at).try(:year)).
+                                    where(kind_id: parent.kind_id).
+                                    in_hierarchy(current_user)
+      @priority_2s = @priority_3s = (@alternatives.to_a - [parent]) 
     end
   end
   

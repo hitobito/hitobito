@@ -121,7 +121,7 @@ de:
         participation: Person
 
       event/participation:
-        person_id: Person
+        person_id: '' # Empty to get a nice message for uniqueness validation
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
@@ -143,7 +143,7 @@ de:
       event/answer:
         answer: Antwort
         
-      participation/answers:
+      answers:
         answer: Antwort
         
       event/kind:

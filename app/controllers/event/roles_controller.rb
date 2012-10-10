@@ -1,5 +1,5 @@
 class Event::RolesController < CrudController
-   
+  require_relative '../../decorators/event/role_decorator'
    
   self.nesting = Event
   

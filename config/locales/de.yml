@@ -186,3 +186,10 @@ de:
   people_filters:
     new:
       title: Personen filtern
+
+
+  # mailer keys
+  event:
+    participation_mailer:
+      created: 
+        subject: Du wurdest zu einem Event hinzugefügt

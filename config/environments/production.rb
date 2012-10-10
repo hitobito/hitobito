@@ -55,7 +55,7 @@ Jubla::Application.configure do
 
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[JUB] ",
-    :sender_address => %{"Jubla Web App" <jubla@puzzle.ch>},
+    :sender_address => %{"Jubla Web App" <#{Settings.email_sender}>},
     :exception_recipients => %w{jubla@puzzle.ch}
   
 

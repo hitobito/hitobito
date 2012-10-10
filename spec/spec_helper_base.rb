@@ -48,6 +48,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   config.include Devise::TestHelpers, :type => :controller
+  config.include(MailerMacros)
+  config.before(:each) { Object.new.extend(MailerMacros).reset_email }
   
   config.before :all do
     # load all fixtures

@@ -164,16 +164,16 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def labeled_inline_fields_for(assoc,partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
-      inline_fields_for(assoc,partial_name, &block)
+      inline_fields_for(assoc,partial_name,'controls controls-row', &block)
     end
   end
 
-  def inline_fields_for(assoc,partial_name=nil, &block) 
+  def inline_fields_for(assoc,partial_name=nil,control_class=nil,&block) 
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
           content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
           content << help_inline(fields.link_to_remove('Entfernen'))
-          content_tag(:div, content, class: 'controls controls-row') 
+          content_tag(:div, content, class: control_class) 
         end 
       end + 
       content_tag(:div, class: 'controls') do

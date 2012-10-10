@@ -15,7 +15,7 @@ class Event::CoursesController < EventsController
   def list_entries
     set_group_vars
     set_year_vars
-    scoped = model_scope.order('event_kinds.id').list(year)
+    scoped = model_scope.order('event_kinds.id').in_year(year).list
     limit_scope_for_user(scoped)
   end
 

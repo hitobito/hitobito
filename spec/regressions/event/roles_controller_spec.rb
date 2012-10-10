@@ -7,7 +7,7 @@ describe Event::RolesController, type: :controller do
   let(:course) do
     course = Fabricate(:course, group: groups(:top_layer))
     course.questions << Fabricate(:event_question, event: course)
-    course.questions << Fabricate(:event_question, event: course)
+    course.questions << Fabricate(:event_question, event: course, choices: 'yes, no')
     course
   end
   

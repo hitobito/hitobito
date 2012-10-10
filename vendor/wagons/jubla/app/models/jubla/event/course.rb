@@ -65,6 +65,13 @@ module Jubla::Event::Course
     end
   end
   
+  module ClassMethods
+    def application_possible
+      where(state: 'application_open').
+      where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', ::Date.today)
+    end
+  end
+  
   
   module Role
     class Advisor < ::Event::Role

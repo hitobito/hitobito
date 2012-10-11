@@ -15,3 +15,6 @@ social_account:
     - Skype
     - Webseite
     - MSN
+
+# Sender for all emails sent by the application
+email_sender: jubla@puzzle.ch

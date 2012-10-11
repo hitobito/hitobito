@@ -13,7 +13,7 @@
     
   -if entry.application
     = f.fields_for(:application) do |fap|
-      - if @event.priorization?
+      - if @event.priorization? && @priority_2s.present?
         = field_set_tag 'Ausweichdaten' do
           %p Bitte gib weitere Kurse an, welche dir gehen würden.
           = fap.labeled_belongs_to_field(:priority_2_id)

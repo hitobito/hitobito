@@ -4,7 +4,7 @@ kinds = Event::Kind.all
 def seed_course(group_id, kind)
   number = rand(1000)
   year = ::Date.today.year
-  date = ::Date.new(year) + rand(1000) - 500 # days
+  date = Time.new(year) + rand(1000).days - 500.days
   
   event = Event::Course.seed(:name, :group_id, 
     { group_id: group_id,
@@ -13,10 +13,10 @@ def seed_course(group_id, kind)
       number: number,
       maximum_participants: rand(30) + 10,
       application_opening_at: date,
-      application_closing_at: date + 60}
+      application_closing_at: date + 60.days}
   ).first
   
-  seed_dates(event, date + 90)
+  seed_dates(event, date + 90.days)
   seed_questions(event)
 end
 
@@ -25,16 +25,16 @@ def seed_dates(event, date)
     Event::Date.seed(:event_id, :start_at,
      {event_id: event.id,
       label: 'Vorweekend',
-      start_at: date += rand(10),
-      finish_at: date += rand(3)}
+      start_at: date += rand(10).days,
+      finish_at: date += rand(3).days}
     )
   end
   
   Event::Date.seed(:event_id, :start_at,
    {event_id: event.id,
     label: 'Kurs',
-    start_at: date += rand(20),
-    finish_at: date += 7 + rand(5)}
+    start_at: date += rand(20).days,
+    finish_at: date += 7 + rand(5).days}
   )
 end
 

@@ -148,7 +148,7 @@ de:
         
       event/kind:
         label: Bezeichnung
-        short_name: Kursname
+        short_name: Kurzname
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
@@ -186,3 +186,10 @@ de:
   people_filters:
     new:
       title: Personen filtern
+
+
+  # mailer keys
+  event:
+    participation_mailer:
+      created: 
+        subject: Du wurdest zu einem Event hinzugefügt

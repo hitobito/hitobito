@@ -1,5 +1,5 @@
 class Event::RolesController < CrudController
-   
+  require_relative '../../decorators/event/role_decorator'
    
   self.nesting = Event
   
@@ -38,6 +38,7 @@ class Event::RolesController < CrudController
     
     role.participation = parent.participations.where(:person_id => model_params.delete(:person_id)).first_or_initialize
     role.participation.init_answers if role.participation.new_record?
+
     role
   end
 

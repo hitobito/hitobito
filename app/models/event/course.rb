@@ -51,8 +51,7 @@ class Event::Course < Event
       Group.can_offer_courses.pluck(:id) & user.groups_hierarchy_ids
     end
     
-    def list(year)
-      in_year(year).
+    def list
       order_by_date.
       includes(:group, :kind).
       preload_all_dates.

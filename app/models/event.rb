@@ -101,6 +101,15 @@ class Event < ActiveRecord::Base
       joins(:dates).where("event_dates.start_at > ?", ::Date.today)
     end
     
+    def application_possible
+      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", ::Date.today).
+      where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", ::Date.today).
+      where("events.maximum_participants IS NULL OR " + 
+            "events.maximum_participants <= 0 OR " +
+            "events.participant_count < events.maximum_participants")
+    end
+    
+    
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       accessible_attributes.include?(attr)

@@ -25,7 +25,9 @@ class Event::Answer < ActiveRecord::Base
   private
   
   def assert_answer_is_in_choice_items
-    if question && question.choice_items.present? && !question.choice_items.include?(answer)
+    # still allow answer to be nil because otherwise participations could not 
+    # be created without answering all questions (required to create roles for other people)
+    if question && answer && question.choice_items.present? && !question.choice_items.include?(answer)
       errors.add(:answer, 'ist keine gültige Auswahl')
     end
   end

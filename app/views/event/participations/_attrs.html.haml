@@ -2,9 +2,6 @@
 - parent_sheet(GroupSheet.new(self, @event.group))
 - title entry.to_s
 
-= content_for(:head) do
-  = stylesheet_link_tag 'event/participation_print.css', :media => :print
-
 #main.row-fluid
   %article.span7
     = render 'contactable/show', contactable: entry.person, only_public: true

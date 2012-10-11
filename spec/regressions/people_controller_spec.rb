@@ -51,9 +51,22 @@ describe PeopleController, type: :controller do
     end
 
   end
-
-  describe "#show aside" do
+  describe "role aside" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
+    let(:aside) { dom.find('aside[data-role="roles"]') }
+    it "is missing if we have no applications" do
+      get :show, params 
+      aside.find('header').text.should eq 'Aktive Rollen'
+      aside.find('tr:eq(1) td:eq(1)').text.should include("Rolle")
+      aside.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
+      edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
+      aside.find('tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
+    end
+  end
+
+  describe "event asides" do
+    let(:params) { { group_id: top_group.id, id: top_leader.id } }
+    let(:header) { aside.find('header').text }
     let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { aside.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }
@@ -71,7 +84,7 @@ describe PeopleController, type: :controller do
       it "lists application" do
         create_application(date)
         get :show, params 
-        aside.find('h2').text.should eq 'Anmeldungen'
+        header.should eq 'Anmeldungen'
         label_link[:href].should eq "/events/1/participations/1"
         label_link.text.should =~ /Scharleiterkurs/
         label.text.should =~ /Top/
@@ -98,7 +111,7 @@ describe PeopleController, type: :controller do
       it "lists event label, link and dates" do
         create_participation(date,true)
         get :show, params 
-        aside.find('h2').text.should eq 'Events'
+        header.should eq 'Events'
         label_link[:href].should eq group_event_path(course.group, course)
         label_link.text.should eq "Eventus"
         label.text.should =~ /Top/

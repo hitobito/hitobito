@@ -1,0 +1,8 @@
+%aside.span5{data: {role: data_role}}
+  %section.group_children
+    %header=title
+    %table.table.table-condensed
+      - collection.each do |item|
+        %tr
+          %td= item.labeled_link
+          %td= item.dates_full

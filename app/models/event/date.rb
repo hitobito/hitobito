@@ -13,7 +13,7 @@ class Event::Date < ActiveRecord::Base
   
   attr_accessible :label, :start_at_date, :start_at_h, :start_at_min, :start_at, :finish_at
   attr_writer :start_at_date, :start_at_h, :start_at_min
-  attr_accessor :finish_at_date, :finish_at_h, :finish_at_min
+  attr_writer :finish_at_date, :finish_at_h, :finish_at_min
   
   belongs_to :event
 
@@ -45,14 +45,14 @@ class Event::Date < ActiveRecord::Base
 
   private
   def merge_start_at
-    if start_at_date.present?
+    if @start_at_date.present?
       date = start_at_date.to_date
       self.start_at = merge_date_time(date, start_at_h, start_at_min)
     end
   end
 
   def merge_finish_at
-    if finish_at_date.present?
+    if @finish_at_date.present?
       date = finish_at_date.to_date
       self.finish_at = merge_date_time(date, finish_at_h, finish_at_min)
     end

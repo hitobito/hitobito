@@ -3,6 +3,8 @@ log/*.log
 pkg/
 doc/rdoc
 db/*.sqlite3
+config/*
+zeus.json
 
 # ignore Gemfile.lock for wagons
 Gemfile.lock

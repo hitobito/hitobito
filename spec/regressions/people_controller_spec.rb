@@ -56,7 +56,7 @@ describe PeopleController, type: :controller do
     let(:aside) { dom.find('aside[data-role="roles"]') }
     it "is missing if we have no applications" do
       get :show, params 
-      aside.find('header').text.should eq 'Aktive Rollen'
+      aside.find('h2').text.should eq 'Aktive Rollen'
       aside.find('tr:eq(1) td:eq(1)').text.should include("Rolle")
       aside.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
@@ -66,7 +66,7 @@ describe PeopleController, type: :controller do
 
   describe "event asides" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:header) { aside.find('header').text }
+    let(:header) { aside.find('h2').text }
     let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { aside.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }

@@ -50,7 +50,7 @@ class Event::Participation < ActiveRecord::Base
   ### SCOPES
   scope :active, where(event_participations: { active: true})
   scope :pending, where(event_participations: { active: false})
-  scope :upcoming, -> { joins({event: :dates}).where('event_dates.start_at >= ?', ::Date.today) } 
+  scope :upcoming, -> { joins({event: :dates}).where('event_dates.start_at >= ?', ::Date.today).uniq } 
   
   class << self
     # Order people by the order participation types are listed in their event types.

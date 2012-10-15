@@ -369,13 +369,11 @@ body > footer {
   min-width: 0;
 }
 
-table {
-  th, td {
-    padding: 0 5px;
-  }
+.table-basic {
   
-  td {
-    height: 8px;
+  td, th {
+    border-top: none;
+    padding: 2px 5px;
   }
 }
 

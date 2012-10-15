@@ -10,10 +10,11 @@ namespace :ci do
   task :nightly => ['log:clear', 
                     'db:migrate', 
                     'erd',
-                    'brakeman',
                     'ci:setup:rspec',
                     'spec',
                     'wagon:test',
+                    'brakeman',
+                    'qa'
                     #'spec:integration'
                     ]
 end
@@ -32,7 +33,9 @@ end
 
 desc "Run quality analysis"
 task :qa do
-  sh 'rails_best_practices -x config,db .'
+  # do not fail if we find issues
+  sh 'rails_best_practices -x config,db -f html --vendor .' rescue true
+  true
 end
 
 namespace :erd do

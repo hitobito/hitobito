@@ -18,6 +18,7 @@
 # ignore static analysis artifacts
 coverage
 brakeman-output.tabs
+rails_best_practices_output.html
 doc/models.png
 spec/reports
 

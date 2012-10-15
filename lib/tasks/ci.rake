@@ -9,8 +9,8 @@ namespace :ci do
   desc "Runs the tasks for a nightly build"
   task :nightly => ['log:clear', 
                     'db:migrate', 
-                    #'erd',
-                    #'brakeman',
+                    'erd',
+                    'brakeman',
                     'ci:setup:rspec',
                     'spec',
                     'wagon:test',
@@ -25,7 +25,9 @@ end
 
 desc "Run brakeman"
 task :brakeman do
-  sh 'brakeman -o brakeman-output.tabs'
+  # some files seem to cause brakeman to hang. ignore them
+  ignores = %w(app/views/people_filters/_form.html.haml)
+  sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')}"
 end
 
 desc "Run quality analysis"

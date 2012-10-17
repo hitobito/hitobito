@@ -20,6 +20,6 @@
 
   -if can?(:show_details, entry)
     = render 'roles'
-    = render_event_aside :pending_applications
-    = render_event_aside :upcoming_events
+    = render 'event_aside', title: 'Anmeldungen', collection: entry.pending_applications
+    = render 'event_aside', title: 'Events', collection: entry.upcoming_events
 

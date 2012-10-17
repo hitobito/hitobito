@@ -1,13 +1,7 @@
-%aside.span5{data: {role: :roles}}
-  %section.group_children
-    %h2 Aktive Rollen
-    %table.table.table-basic
-      - entry.roles.each do |role|
-        %tr
-          %td
-            %strong
-              = role.to_s
-              = link_to(role.group, role.group)
-          %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
-          %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
-          
+=aside_table('Aktive Rollen', entry.roles) do |role|
+  %td
+    %strong
+      = role.to_s
+      = link_to(role.group, role.group)
+  %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
+  %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)

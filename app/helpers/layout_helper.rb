@@ -49,6 +49,15 @@ module LayoutHelper
     content_tag(:li, link_to(label, url), options)
   end
   
+  def aside(title, &block)
+    render(layout: 'shared/aside', locals: {title: title}, &block)
+  end
+  
+  def aside_table(title, collection, &block)
+    collection.inspect # force relation evaluation
+    render(layout: 'shared/aside_table', locals: {title: title, collection: collection}, &block) if collection.present?
+  end
+  
   def muted(text)
     content_tag(:span, text, class: 'muted')
   end

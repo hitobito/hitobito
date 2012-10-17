@@ -53,7 +53,7 @@ describe PeopleController, type: :controller do
   end
   describe "role aside" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:aside) { dom.find('aside[data-role="roles"]') }
+    let(:aside) { dom.all('aside')[0] }
     it "is missing if we have no applications" do
       get :show, params 
       aside.find('h2').text.should eq 'Aktive Rollen'
@@ -73,12 +73,12 @@ describe PeopleController, type: :controller do
     let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))  } 
 
     context "pending applications" do
-      let(:aside) { dom.find('aside[data-role="applications"]') }
+      let(:aside) { dom.all('aside')[1] }
       let(:date) { Time.zone.parse("02-01-2010") }
 
       it "is missing if we have no applications" do
         get :show, params 
-        expect { aside }.to raise_error Capybara::ElementNotFound
+        aside.should be_nil
       end
 
       it "lists application" do
@@ -93,19 +93,19 @@ describe PeopleController, type: :controller do
     end
 
     context "upcoming events" do
-      let(:aside) { dom.find('aside[data-role="upcoming"]') }
+      let(:aside) { dom.all('aside')[1] }
       let(:date) { 2.days.from_now }
       let(:pretty_date) { date.strftime("%d.%m.%Y")}
 
       it "is missing if we have no events" do
         get :show, params 
-        expect { aside }.to raise_error Capybara::ElementNotFound
+        aside.should be_nil
       end
 
       it "is missing if we have no upcoming events" do
         create_participation(2.days.ago,true)
         get :show, params 
-        expect { aside }.to raise_error Capybara::ElementNotFound
+        aside.should be_nil
       end
 
       it "lists event label, link and dates" do

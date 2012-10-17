@@ -2,8 +2,6 @@
 require_relative 'event/application_decorator'
 class PersonDecorator < ApplicationDecorator
   decorates :person
-  decorates_association :upcoming_events, with: EventDecorator
-  decorates_association :pending_applications, with: Event::ApplicationDecorator
 
   include ContactableDecorator
 
@@ -31,6 +29,23 @@ class PersonDecorator < ApplicationDecorator
   # if a group is given, only render the roles of this group
   def roles_short(group = nil)
     functions_short(roles.to_a, :group, group)
+  end
+  
+  def pending_applications
+    applications = model.pending_applications.
+                         includes(:event => [:kind, :group]).
+                         joins(event: :dates).
+                         order('event_dates.start_at').uniq
+    Event::PreloadAllDates.for(applications.collect(&:event))
+    
+    Event::ApplicationDecorator.decorate(applications)
+  end
+  
+  def upcoming_events
+    EventDecorator.decorate(model.upcoming_events.
+                                  includes(:kind, :group).
+                                  preload_all_dates.
+                                  order_by_date)
   end
   
   private

@@ -1,4 +1,4 @@
-= aside_table('Rollen', entry.roles) do |role|
+= section_table('Rollen', entry.roles) do |role|
   %td
     %strong= role.to_s
   %td= link_action_edit(edit_event_role_path(entry.event, role)) if can?(:edit, role)

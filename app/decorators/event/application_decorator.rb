@@ -6,8 +6,7 @@ class Event::ApplicationDecorator < ApplicationDecorator
   delegate :dates_info, :dates_full, :kind, :group, to: :event
 
   def labeled_link
-    link = h.link_to(kind.label, h.event_participation_path(event,participation))
-    safe_join([link, h.muted(group.name)], h.tag(:br))
+    event.labeled_link(h.event_participation_path(event, participation))
   end
 end
   

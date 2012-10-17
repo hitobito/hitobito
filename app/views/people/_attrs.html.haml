@@ -19,7 +19,8 @@
     = render_extensions :attrs
 
   -if can?(:show_details, entry)
-    = render 'roles'
-    = render 'event_aside', title: 'Anmeldungen', collection: entry.pending_applications
-    = render 'event_aside', title: 'Events', collection: entry.upcoming_events
+    %aside.span5
+      = render 'roles'
+      = render 'event_aside', title: 'Anmeldungen', collection: entry.pending_applications
+      = render 'event_aside', title: 'Events', collection: entry.upcoming_events
 

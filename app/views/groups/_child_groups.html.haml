@@ -1,4 +1,4 @@
-=aside_table('Untergruppen', entry.children_order_by_type) do |item|
+=section_table('Untergruppen', entry.children_order_by_type) do |item|
   %td
     - if item
       = muted(item.class.model_name.human)

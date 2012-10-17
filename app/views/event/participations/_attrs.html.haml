@@ -21,7 +21,8 @@
     
       %h4= t('activerecord.attributes.event/participation.additional_information')
       = simple_format(entry.additional_information)
-  
-  = render 'roles'
-  = render 'signature'
+      
+  %aside.span5
+    = render 'roles'
+    = render 'signature'
 

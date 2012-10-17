@@ -113,12 +113,12 @@ class Person < ActiveRecord::Base
     login? && super
   end
 
-  def upcoming_events # how to use Event.upcoming scope here?
-    event_participations.includes(:event).upcoming.active.map(&:event)
+  def upcoming_events
+    events.upcoming.merge(Event::Participation.active).uniq
   end
 
   def pending_applications
-    event_participations.includes(:event).pending.map(&:application)
+    event_applications.merge(Event::Participation.pending)
   end
 
   private

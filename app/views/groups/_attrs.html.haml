@@ -12,5 +12,6 @@
       = render 'contactable/show', contactable: @contact, only_public: true, with_name: true
 
     = render_extensions :attrs
-
-  = render 'child_groups'
+    
+  %aside.span5
+    = render 'child_groups'

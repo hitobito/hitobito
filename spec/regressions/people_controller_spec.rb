@@ -51,34 +51,34 @@ describe PeopleController, type: :controller do
     end
 
   end
-  describe "role aside" do
+  describe "role section" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:aside) { dom.all('aside')[0] }
+    let(:section) { dom.all('aside section')[0] }
     it "is missing if we have no applications" do
       get :show, params 
-      aside.find('h2').text.should eq 'Aktive Rollen'
-      aside.find('tr:eq(1) td:eq(1)').text.should include("Rolle")
-      aside.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
+      section.find('h2').text.should eq 'Aktive Rollen'
+      section.find('tr:eq(1) td:eq(1)').text.should include("Rolle")
+      section.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
-      aside.find('tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
+      section.find('tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
     end
   end
 
-  describe "event asides" do
+  describe "event sections" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:header) { aside.find('h2').text }
-    let(:dates) { aside.find('tr:eq(1) td:eq(2)').text.strip }
-    let(:label) { aside.find('tr:eq(1) td:eq(1)') }
+    let(:header) { section.find('h2').text }
+    let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
+    let(:label) { section.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }
     let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))  } 
 
     context "pending applications" do
-      let(:aside) { dom.all('aside')[1] }
+      let(:section) { dom.all('aside section')[1] }
       let(:date) { Time.zone.parse("02-01-2010") }
 
       it "is missing if we have no applications" do
         get :show, params 
-        aside.should be_nil
+        section.should be_nil
       end
 
       it "lists application" do
@@ -86,26 +86,26 @@ describe PeopleController, type: :controller do
         get :show, params 
         header.should eq 'Anmeldungen'
         label_link[:href].should eq "/events/#{course.id}/participations/#{appl.participation.id}"
-        label_link.text.should =~ /Scharleiterkurs/
+        label_link.text.should =~ /Eventus/
         label.text.should =~ /Top/
         dates.should eq '02.01.2010'
       end
     end
 
     context "upcoming events" do
-      let(:aside) { dom.all('aside')[1] }
+      let(:section) { dom.all('aside section')[1] }
       let(:date) { 2.days.from_now }
       let(:pretty_date) { date.strftime("%d.%m.%Y")}
 
       it "is missing if we have no events" do
         get :show, params 
-        aside.should be_nil
+        section.should be_nil
       end
 
       it "is missing if we have no upcoming events" do
         create_participation(2.days.ago,true)
         get :show, params 
-        aside.should be_nil
+        section.should be_nil
       end
 
       it "lists event label, link and dates" do

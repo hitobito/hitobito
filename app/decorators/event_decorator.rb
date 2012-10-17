@@ -8,9 +8,9 @@ class EventDecorator < ApplicationDecorator
     safe_join([name, label_detail], h.tag(:br))
   end
   
-  def labeled_link
-    link = h.link_to(name, h.group_event_path(group, self))
-    safe_join([link, label_detail], h.tag(:br))
+  def labeled_link(url = nil)
+    url ||= h.group_event_path(group, model)
+    safe_join([h.link_to(name, url), label_detail], h.tag(:br))
   end
   
   def label_detail

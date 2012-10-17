@@ -25,3 +25,6 @@
               %tr{class: "#{'highlight' if event == @event}"}
                 %td= event.label
                 %td= event.dates_full
+      - else
+        -# This is required for correct rendering
+        &nbsp;

@@ -210,13 +210,13 @@ describe Person do
     let(:person) { people(:top_leader) }
     let(:course) { Fabricate(:course, group: groups(:top_layer)) }
 
-    it ".pending_applications returns applications that are not active" do
+    it ".pending_applications returns events that are not active" do
       participation = Fabricate(:event_participation, person: people(:top_leader))
       application = Fabricate(:event_application, priority_1: course, participation: participation)
       person.pending_applications.should eq [application]
     end
 
-    it ".upcoming_events returns applications that are active" do
+    it ".upcoming_events returns events that are active" do
       course.dates.build(start_at: 2.days.from_now)
       course.save
       participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)

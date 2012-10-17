@@ -1,0 +1,4 @@
+top_course:
+  name: Top Course
+  group: top_layer
+  type: Event::Course

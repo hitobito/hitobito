@@ -116,20 +116,12 @@ module CrudControllerTestHelper
       it "should assign entries" do
         entries.should be_present
       end
-      
-      it "should provide entries method" do
-        controller.send(:entries).should be(entries)
-      end
     end
     
     # Test that entry is assigned.
     def it_should_assign_entry
       it "should assign entry" do
         entry.should == test_entry
-      end
-      
-      it "should provide entry method" do
-        controller.send(:entry).should be(entry)
       end
     end
     

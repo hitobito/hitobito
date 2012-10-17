@@ -1,0 +1,13 @@
+top_ov:
+  question: GA oder Halbtax?
+  choices: "GA, Halbtax, nix"
+  event: top_course
+
+top_vegi:
+  question: Vegi?
+  choices: "ja, nein"
+  event: top_course
+  
+top_more:
+  question: Sonst noch was?
+  event: top_course

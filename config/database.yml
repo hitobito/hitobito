@@ -5,7 +5,7 @@ base: &generic
   pool: 5
   timeout: 5000
   encoding: utf8
-<% %w(host port username password).each do |option| %>
+<% %w(host port username password socket).each do |option| %>
   <% value = ENV["RAILS_DB_#{option.upcase}"] %>
   <%= "#{option}: #{value}" if value.present? %>
 <% end %>

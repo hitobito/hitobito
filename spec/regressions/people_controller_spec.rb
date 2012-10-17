@@ -82,10 +82,10 @@ describe PeopleController, type: :controller do
       end
 
       it "lists application" do
-        create_application(date)
+        appl = create_application(date)
         get :show, params 
         header.should eq 'Anmeldungen'
-        label_link[:href].should eq "/events/1/participations/1"
+        label_link[:href].should eq "/events/#{course.id}/participations/#{appl.participation.id}"
         label_link.text.should =~ /Scharleiterkurs/
         label.text.should =~ /Top/
         dates.should eq '02.01.2010'

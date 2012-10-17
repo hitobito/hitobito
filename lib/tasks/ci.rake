@@ -14,7 +14,7 @@ namespace :ci do
                     'spec',
                     'wagon:test',
                     'brakeman',
-                    'qa'
+                    #'qa' raises StackLevelTooDeep for Ruby 1.9.3.p0
                     #'spec:integration'
                     ]
 end
@@ -28,13 +28,19 @@ desc "Run brakeman"
 task :brakeman do
   # some files seem to cause brakeman to hang. ignore them
   ignores = %w(app/views/people_filters/_form.html.haml)
-  sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')}"
+  begin
+    Timeout.timeout(120) do
+      sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')}"
+    end
+  rescue Timeout::Error => e
+    puts "\nBrakeman took too long. Aborting."
+  end
 end
 
 desc "Run quality analysis"
 task :qa do
   # do not fail if we find issues
-  sh 'rails_best_practices -x config,db -f html --vendor .' rescue true
+  sh 'rails_best_practices -x config,db -f html --vendor .' rescue nil
   true
 end
 
@@ -48,4 +54,11 @@ namespace :erd do
     ENV['filename']    ||= 'doc/models'
     ENV['filetype']    ||= 'png'
   end
+end
+
+desc "Load the mysql database configuration for the following tasks"
+task :mysql do
+  ENV['RAILS_DB_ADAPTER'] = 'mysql2'
+  ENV['RAILS_DB_NAME']    = 'jubla_test'
+  ENV['RAILS_DB_SOCKET']  = '/var/lib/mysql/mysql.sock'
 end

@@ -16,7 +16,7 @@ describe RolesController, type: :controller do
     { 
       label: 'Materialchef',
       type: Group::BottomLayer::Member.sti_name,
-      person_id: Fabricate(:person).id
+      person_id: people(:top_leader).id
     }
   end
   

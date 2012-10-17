@@ -385,7 +385,7 @@ describe Ability::Events do
      context Event::Participation do 
       it "may create his participation" do
         p = event.participations.new
-        p.person_id = user
+        p.person_id = user.id
         should be_able_to(:create, p)
       end
       

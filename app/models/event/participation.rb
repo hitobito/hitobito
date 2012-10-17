@@ -28,11 +28,12 @@ class Event::Participation < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
   
+  belongs_to :application, dependent: :destroy, validate: true
+  
   has_many :roles, dependent: :destroy
 
   has_many :answers, dependent: :destroy, validate: true
 
-  belongs_to :application, dependent: :destroy, validate: true
   
   
   accepts_nested_attributes_for :answers, :application

@@ -4,16 +4,10 @@ require 'spec_helper'
 
 describe Event::RolesController, type: :controller do
 
-  let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer))
-    course.questions << Fabricate(:event_question, event: course)
-    course.questions << Fabricate(:event_question, event: course, choices: 'yes, no')
-    course
-  end
+  # always use fixtures with crud controller examples, otherwise request reuse might produce errors
+  let(:test_entry) { event_roles(:top_leader) }
   
-  let(:participation) { Fabricate(:event_participation, event: course) }
-  
-  let(:test_entry) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
+  let(:course) { test_entry.event }
   
   let(:new_entry_attrs) do
     { 
@@ -39,7 +33,6 @@ describe Event::RolesController, type: :controller do
 
 
   before { sign_in(people(:top_leader)) } 
-  before { test_entry }
   
   # Override a few methods to match the actual behavior.
   class << self
@@ -75,7 +68,7 @@ describe Event::RolesController, type: :controller do
     context ".html", :format => :html do
       let(:params) { { model_identifier => create_entry_attrs } }
       it "creates answers on the go", :perform_request => false do
-        expect { perform_request }.to change { Event::Answer.count }.by(2)
+        expect { perform_request }.to change { Event::Answer.count }.by(3)
       end
       
      context "with valid params" do

@@ -7,7 +7,7 @@ class GroupsController < CrudController
 
   def index
     flash.keep
-    redirect_to Group.root
+    redirect_to group_path(Group.root.id)
   end
 
   def destroy

@@ -7,7 +7,7 @@
     = f.hidden_field :type
 
   = field_set_tag do
-    = f.labeled_input_fields(:name, :number, :description, :motto, :cost, :location)
+    = f.labeled_input_fields(*entry.used_attributes(:name, :number, :description, :motto, :cost, :location, :priorization, :state))
     = f.labeled(:contact_id) do
       = f.string_field :contact_id, data: {provide: 'person', id_field: 'role_person_id'}
     = f.labeled_collection_select(:kind_id, f.association_entries(:kind_id), :id, :to_s, {}, class: 'span2')

@@ -39,14 +39,14 @@ class Event::ParticipationMailer < ActionMailer::Base
     def prepare_info
       event_info = {}
       event_info[:name] = padded(:name)
-      event_info[:contact] = padded(:contact) { |event| "#{event.contact} (#{event.contact.email})" } 
+      event_info[:contact] = padded(:contact) { |event| "#{event.contact} (#{event.contact.email})" }  if event.contact
       event_info[:location] = padded(:location)
       event_info[:dates] = padded(:dates) do |event| 
         dates = event.dates.map(&:to_s)
         first = dates.shift
         rest = dates.map {|date| "".ljust(PADDING + 1) + date }
         [first, dates].join("\n").strip
-      end
+      end if event.dates.present?
       event_info
     end
 

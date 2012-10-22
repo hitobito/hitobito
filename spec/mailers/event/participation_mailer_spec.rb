@@ -4,7 +4,7 @@ require "spec_helper"
 describe Event::ParticipationMailer do
   describe "created" do
     let(:person) { people(:top_leader) }
-    let(:event) { Fabricate(:event, contact: person) }
+    let(:event) { Fabricate(:event) }
     let(:participation) { Fabricate(:event_participation,event: event) }
     let(:mail) { Event::ParticipationMailer.confirmation(person, participation) }
 
@@ -20,8 +20,9 @@ describe Event::ParticipationMailer do
     describe "event data" do
       subject { mail.body }
       it "renders set attributes only" do
-        should =~ /Kontaktperson:\s+Top Leader/
-        should_not =~ /Ort \/ Adresse:\s+some location/
+        should =~ /Name:\s+Eventus/
+        should_not =~ /Kontaktperson:\s+Top Leader/
+        should_not =~ /Daten/
       end
 
       it "renders location if set" do

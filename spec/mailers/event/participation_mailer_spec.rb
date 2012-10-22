@@ -13,9 +13,11 @@ describe Event::ParticipationMailer do
     it "renders the headers" do
       mail.subject.should eq "Bestätigung der Anmeldung"
       mail.to.should eq(["top_leader@example.com"])
-      mail.from.should eq(["from@example.com"])
+      mail.from.should eq(["jubla@puzzle.ch"])
       mail
-    end
+    end 
+
+
 
     describe "event data" do
       subject { mail.body }

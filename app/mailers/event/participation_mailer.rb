@@ -1,5 +1,6 @@
 class Event::ParticipationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  #default from: "from@example.com"
+#Settings.email_sender
   helper_method :partcipation_print_url, :event_details
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -15,7 +16,7 @@ class Event::ParticipationMailer < ActionMailer::Base
   end
 
   def partcipation_print_url
-    print_event_participation_path(@event, @participation)
+    print_event_participation_url(@event, @participation)
   end
 
   def event_details

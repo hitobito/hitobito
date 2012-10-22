@@ -1,0 +1,33 @@
+
+%html
+  %head
+    %meta{:charset => 'utf-8'}
+    %title= Jubla
+    = csrf_meta_tag
+
+    = stylesheet_link_tag 'event/participation_print.css', :media => :all
+
+  %body
+    #main.row-fluid
+      %article.span7
+        = render 'contactable/show', contactable: entry.person, only_public: true
+        
+        = render_attrs(entry.person, :birthday, :gender)
+        
+        %br/
+        
+        -if can?(:show_details, entry) # participation
+          -if @answers.present?
+            %h4 Spezifische Angaben
+            %dl
+            - @answers.each do |answer|
+              %dt= answer.question.question
+              %dd= answer.answer
+            %br/
+        
+          %h4= t('activerecord.attributes.event/participation.additional_information')
+          = simple_format(entry.additional_information)
+          
+      %aside.span5
+        = render 'roles'
+        = render 'signature'

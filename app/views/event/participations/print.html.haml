@@ -1,0 +1,34 @@
+!!! 5
+%html
+  %head
+    %meta{:charset => 'utf-8'}
+    %title= Jubla
+    = csrf_meta_tag
+    = stylesheet_link_tag 'event/participation_print.css', :media => :all
+    = javascript_include_tag 'application'
+    :javascript
+      $(function() { window.print(); })
+
+  %body
+    = entry.application_contact
+
+    %h4 Informationen zum Event
+    = render 'events/event', event: entry.event
+    %br/
+
+    %h4 Informationen zur Person
+    = entry.person
+    = render 'contactable/show', contactable: entry.person, only_public: true
+    %br/
+
+    = render 'details'
+
+    %h4 Unterschrift
+    %p Von dir oder eine erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
+    %table
+      %tr
+        %td 
+        %td 
+      %tr
+        %td.border Ort, Datum
+        %td.border Unterschrift

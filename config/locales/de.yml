@@ -101,6 +101,7 @@ de:
         name: Name
         motto: Motto
         cost: Kosten
+        contact: Kontaktperson
         maximum_participants: Maximale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
@@ -206,5 +207,5 @@ de:
   # mailer keys
   event:
     participation_mailer:
-      created: 
-        subject: Du wurdest zu einem Event hinzugefügt
+      confirmation: 
+        subject: Bestätigung der Anmeldung

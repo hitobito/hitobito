@@ -11,7 +11,11 @@ describe Event::KindsController, type: :controller do
   end
 
   let(:test_entry) { event_kinds(:slk) }
-  let(:test_entry_attrs) { { label: 'Automatic Bar Course', short_name: 'ABC' } }
+  let(:test_entry_attrs) { { label: 'Automatic Bar Course', 
+                             short_name: 'ABC',
+                             minimum_age: 21,
+                             qualification_kind_ids: [qualification_kinds(:sl).id],
+                             prolongation_ids: [qualification_kinds(:gl).id] } }
 
   before { sign_in(people(:top_leader)) } 
 

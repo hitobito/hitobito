@@ -32,13 +32,13 @@ Jubla::Application.routes.draw do
     resources :roles, module: 'event'
   end
   
+  resources :qualification_kinds
   
   devise_for :people, skip: [:registrations], path: "users"
   as :person do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
-  
 
   get 'static/:action', controller: 'static'
 

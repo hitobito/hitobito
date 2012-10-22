@@ -77,7 +77,7 @@ module CrudControllerTestHelper
           deep_attributes(attrs[key], assoc)
         end
       else
-        actual[key] = entry.attributes[key.to_s]
+        actual[key] = entry.send(key)
       end
     end
     actual

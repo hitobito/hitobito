@@ -176,6 +176,9 @@ select.time {
   height: 30px;
 }
 
+select[class*="span"][multiple] {
+  height: 120px;
+}
 
 label.checkbox,
 label.radio {

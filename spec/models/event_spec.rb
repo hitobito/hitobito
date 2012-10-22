@@ -233,14 +233,19 @@ describe Event do
       end
 
       it "does find upcoming event" do
-        event.dates.build(start_at: 2.days.from_now).save
+        event.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now).save
+        should eq [event]
+      end
+      
+      it "does find running event" do
+        event.dates.build(start_at: 2.days.ago, finish_at: 0.days.from_now).save
         should eq [event]
       end
     end
 
     def add_date(event,start_at)
       start_at = Time.zone.parse(start_at)
-      event.dates.build({start_at: start_at})
+      event.dates.build(start_at: start_at, finish_at: start_at + 5.days)
       event.save
     end
   end

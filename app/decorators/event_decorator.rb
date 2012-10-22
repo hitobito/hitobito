@@ -4,6 +4,10 @@ class EventDecorator < ApplicationDecorator
   decorates :event
 
 
+  def used_attribute(attr)
+    model.class.attr_used?(attr)
+  end
+
   def label
     safe_join([name, label_detail], h.tag(:br))
   end

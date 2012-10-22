@@ -14,5 +14,10 @@ class EventsController < CrudController
     event.group_id = model_params.delete(:group_id)
     event
   end
+
+  def assign_attributes
+    model_params.delete(:contact)
+    super
+  end
   
 end

@@ -1,0 +1,21 @@
+-parent_sheet GroupSheet.new(self, event.group)
+-title event.name
+
+=render 'events/tabs'
+
+#main.row-fluid
+  %article.span6
+    %h2 Zuteilung
+    %p
+      = event.booking_info
+      verfügbaren Plätzen zugeteilt
+    
+    = render 'list', list: @participants,
+                     right: lambda { |p| content_tag(:td, icon('arrow-right')) }
+    
+
+  %article.span6
+    %h2 Anmeldungen
+    = render 'list', list: @applications,
+                     left: lambda { |p| content_tag(:td, icon('arrow-left')) },
+                     right: lambda { |p| content_tag(:td, p.waiting_list_link) }

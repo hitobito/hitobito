@@ -21,6 +21,10 @@ module Ability::Events
       can_update_event?(event) ||
       events_with_permission(:contact_data).include?(event.id)
     end
+    
+    can :application_market, Event do |event| 
+      can_create_event?(event)
+    end
 
       
     ### COURSES
@@ -65,9 +69,15 @@ module Ability::Events
     
     ### EVENT APPLICATION
     
-    can :manage, Event::Application do |application|
+    # regular people can only create their applications 
+    can :create, Event::Application do |application|
       participation = application.participation
       participation.person_id == user.id ||
+      can_create_event?(participation.event)
+    end
+    
+    can [:update, :destroy], Event::Application do |application|
+      participation = application.participation
       can_create_event?(participation.event)
     end
     

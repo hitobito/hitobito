@@ -10,6 +10,14 @@ describe Event::Course do
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))
     event.reload
   end
+    
+  describe ".role_types" do
+    subject { Event::Course.role_types }
+    
+    it { should include(Event::Course::Role::Participant) }
+    it { should include(Jubla::Event::Course::Role::Advisor) }
+    it { should_not include(Event::Role::Participant) }
+  end
   
   context "#application_possible?" do
     before { subject.state = 'application_open' }

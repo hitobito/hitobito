@@ -217,7 +217,7 @@ describe Person do
     end
 
     it ".upcoming_events returns events that are active" do
-      course.dates.build(start_at: 2.days.from_now)
+      course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
       course.save
       participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
       person.upcoming_events.should eq [course]

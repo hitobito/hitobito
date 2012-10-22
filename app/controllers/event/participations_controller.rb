@@ -7,7 +7,8 @@ class Event::ParticipationsController < CrudController
   prepend_before_filter :parent, :set_group
   before_render_form :load_priorities
   before_render_show :load_answers
-  
+
+  after_save :send_confirmation_email
   
   def new
     assign_attributes
@@ -77,6 +78,10 @@ class Event::ParticipationsController < CrudController
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     "#{models_label(false)} #{Event::ParticipationDecorator.decorate(entry).flash_info}".html_safe
+  end
+
+  def send_confirmation_email
+    Event::ParticipationMailer.confirmation(current_user, @participation).deliver
   end
   
   class << self

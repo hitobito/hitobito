@@ -8,6 +8,8 @@ class PeopleController < CrudController
   # load group before authorization
   prepend_before_filter :parent
   
+  before_render_show :load_asides
+  
   def index
     action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
     
@@ -79,6 +81,20 @@ class PeopleController < CrudController
   def accessibles(action = :index)
     ability = Ability::Accessibles.new(current_user, @group)
     Person.accessible_by(ability, action)
+  end
+  
+  def load_asides
+    applications = entry.pending_applications.
+                         includes(:event => [:kind, :group]).
+                         joins(event: :dates).
+                         order('event_dates.start_at').uniq
+    Event::PreloadAllDates.for(applications.collect(&:event))
+    
+    @pending_applications = Event::ApplicationDecorator.decorate(applications)
+    @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
+                                                    includes(:kind, :group).
+                                                    preload_all_dates.
+                                                    order_by_date)
   end
   
 end

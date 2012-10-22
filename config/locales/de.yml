@@ -53,6 +53,9 @@ de:
         one: Kassier
       event/role/speaker:
         one: Referent
+      qualification_kind:
+        one: Qualifikationsart
+        other: Qualifikationsarten
       
     attributes:
       person:
@@ -98,6 +101,7 @@ de:
         name: Name
         motto: Motto
         cost: Kosten
+        contact: Kontaktperson
         maximum_participants: Maximale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
@@ -149,14 +153,21 @@ de:
       event/kind:
         label: Bezeichnung
         short_name: Kurzname
+        minimum_age: Mindestalter
+        preconditions: Vorbedingungen
+        prolongations: Verlängert
+        qualification_kinds: Qualifiziert für
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
         
-      role:
+      qualification_kind:
         label: Bezeichnung
-        group_id: Gruppe
-        person_id: Person
+        description: Beschreibung
+        validity: Gültigkeit
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
         
       phone_number:
         number: Nummer
@@ -168,6 +179,11 @@ de:
         number: Telefonnummer
         label: Telefonnummer Typ
         public: Öffentlich
+        
+      role:
+        label: Bezeichnung
+        group_id: Gruppe
+        person_id: Person
         
       social_account:
         name: Name
@@ -191,5 +207,5 @@ de:
   # mailer keys
   event:
     participation_mailer:
-      created: 
-        subject: Du wurdest zu einem Event hinzugefügt
+      confirmation: 
+        subject: Bestätigung der Anmeldung

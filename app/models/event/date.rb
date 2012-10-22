@@ -46,6 +46,14 @@ class Event::Date < ActiveRecord::Base
     @finish_at_min ||= finish_at.try(:min)
   end
 
+  def duration
+    @duration ||= Duration.new(start_at, finish_at)
+  end
+
+  def to_s
+    label? ? "#{label}: #{duration}" : duration
+  end
+  
   private
   def merge_start_at
     if @start_at_date.present?
@@ -67,9 +75,4 @@ class Event::Date < ActiveRecord::Base
     DateTime.new(date.year, date.month, date.day, h.to_i, min.to_i)
   end
 
-  def to_s
-    name = "#{start_at} - #{finish_at}"
-    label? ? "#{label}: #{name}" : name
-  end
-  
 end

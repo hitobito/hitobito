@@ -98,7 +98,7 @@ class Event < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:dates).where("event_dates.start_at > ?", ::Date.today)
+      joins(:dates).where("event_dates.finish_at >= ?", ::Date.today)
     end
     
     def application_possible

@@ -88,14 +88,14 @@ describe PeopleController, type: :controller do
         label_link[:href].should eq "/events/#{course.id}/participations/#{appl.participation.id}"
         label_link.text.should =~ /Eventus/
         label.text.should =~ /Top/
-        dates.should eq '02.01.2010'
+        dates.should eq '02.01.2010 - 07.01.2010'
       end
     end
 
     context "upcoming events" do
       let(:section) { dom.all('aside section')[1] }
       let(:date) { 2.days.from_now }
-      let(:pretty_date) { date.strftime("%d.%m.%Y")}
+      let(:pretty_date) { date.strftime("%d.%m.%Y") + ' - ' + (date + 5.days).strftime("%d.%m.%Y")}
 
       it "is missing if we have no events" do
         get :show, params 
@@ -103,13 +103,13 @@ describe PeopleController, type: :controller do
       end
 
       it "is missing if we have no upcoming events" do
-        create_participation(2.days.ago,true)
+        create_participation(10.days.ago, true)
         get :show, params 
         section.should be_nil
       end
 
       it "lists event label, link and dates" do
-        create_participation(date,true)
+        create_participation(date, true)
         get :show, params 
         header.should eq 'Events'
         label_link[:href].should eq group_event_path(course.group, course)
@@ -129,7 +129,7 @@ describe PeopleController, type: :controller do
     end
 
     def set_event_date(date)
-      course.dates.build(start_at: date)
+      course.dates.build(start_at: date, finish_at: date + 5.days)
       course.save
     end
   end

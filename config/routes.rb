@@ -26,17 +26,19 @@ Jubla::Application.routes.draw do
   resources :event_courses, module: 'event', controller: 'courses'
   
   resources :events do
-    resources :participations, module: 'event'
+    resources :participations, module: 'event' do
+      get 'print', on: :member
+    end
     resources :roles, module: 'event'
   end
   
+  resources :qualification_kinds
   
   devise_for :people, skip: [:registrations], path: "users"
   as :person do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
-  
 
   get 'static/:action', controller: 'static'
 

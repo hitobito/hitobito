@@ -11,11 +11,13 @@ if defined?(Bundler)
   puts "require gems:   #{Benchmark.measure(&b)}"
   
   # If you precompile assets before deploying to production, use this line
-  # Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # Bundler.require(*Rails.groups(assets: %w(development test)))
   
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
+
+ActionMailer::Base.default from: 'jubla@puzzle.ch'
 
 module Jubla
   class Application < Rails::Application
@@ -77,8 +79,9 @@ module Jubla
 
     
     config.generators do |g|
-      g.test_framework      :rspec, :fixture => true
+      g.test_framework      :rspec, fixture: true
 	    #g.fixture_replacement :fabrication
     end
   end
 end
+

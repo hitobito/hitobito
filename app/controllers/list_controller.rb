@@ -6,8 +6,8 @@
 # the user the same list as he left it.
 class ListController < ApplicationController
 
-  authorize_resource except: :index
   # customized cancan code to authorize with #model_class
+  authorize_resource except: :index
   before_filter :authorize_class, only: :index
   
   helper_method :model_class, :models_label, :entries, :path_args

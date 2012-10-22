@@ -1,5 +1,7 @@
-group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).pluck(:id)
-kinds = Event::Kind.all
+puts group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).order(:name).pluck(:id)
+puts kinds = Event::Kind.order(:label)
+puts "\n" * 10
+@@people_count = Person.count
 
 def seed_course(group_id, kind)
   number = rand(1000)
@@ -11,6 +13,7 @@ def seed_course(group_id, kind)
       name: "#{kind.short_name} #{number}",
       kind_id: kind.id,
       number: number,
+      state: Event::Course.possible_states.shuffle.first,
       maximum_participants: rand(30) + 10,
       application_opening_at: date,
       application_closing_at: date + 60.days}
@@ -18,6 +21,8 @@ def seed_course(group_id, kind)
   
   seed_dates(event, date + 90.days)
   seed_questions(event)
+  seed_leaders(event)
+  seed_participants(event)
 end
 
 def seed_dates(event, date)
@@ -46,6 +51,65 @@ def seed_questions(event)
       choices: q.choices}
     )
   end
+end
+
+def seed_leaders(event)
+  seed_event_role(event, Event::Role::Leader)
+  seed_event_role(event, Event::Role::AssistantLeader)
+  seed_event_role(event, Event::Role::Cook)
+  seed_event_role(event, Event::Role::Treasurer)
+  seed_event_role(event, Event::Role::Speaker)
+end
+
+def seed_participants(event)
+  5.times do
+    p = seed_event_role(event, Event::Course::Role::Participant)
+    seed_application(p)
+  end
+  
+  5.times do
+    p = seed_participation(event)
+    seed_application(p)
+  end
+end
+
+def seed_application(participation)
+  # generate random value no matter if application exists or not
+  prio = rand(3) + 1
+  rand_course = rand
+  unless participation.application
+    a = participation.build_application
+    a.send("priority_#{prio}_id=", participation.event_id)
+    a.priority_1_id ||= Event::Course.offset((Event::Course.count * rand_course).to_i).limit(1).pluck(:id).first
+    a.save!
+    participation.application = a
+    participation.save!
+  end
+end
+
+def seed_event_role(event, role_type)
+  p = seed_participation(event)
+  role_type.seed_once(:participation_id, {participation_id: p.id})
+  p
+end
+
+def seed_participation(event)
+  person_id = Person.offset(rand(@@people_count)).limit(1).pluck(:id).first
+  
+  p = Event::Participation.seed(:event_id, :person_id,
+    {event_id: event.id,
+     person_id: person_id}
+  ).first
+  
+  event.questions.order(:question).each do |q|
+    Event::Answer.seed_once(:participation_id, :question_id,
+      {participation_id: p.id,
+       question_id: q.id,
+       answer: q.choices? ? q.choice_items.shuffle.first : Faker::Lorem.sentence(1)}
+    )
+  end
+  
+  p
 end
 
 srand(42)

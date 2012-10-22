@@ -35,4 +35,8 @@ class Event::Application < ActiveRecord::Base
   def contact
     event.contact
   end
+  
+  def priority(event)
+    [1,2,3].detect {|i| send("priority_#{i}_id") == event.id }
+  end
 end

@@ -27,6 +27,9 @@ de:
       jubla/role/leader: Leitung
       jubla/role/member: Mitglied
       jubla/role/treasurer: Finanzchef
+      
+      jubla/event/course/advisor: Betreuer
+      
       group/state_board/supervisor: Stellenbegleitung
       group/child_group/child: Kind
       group/flock/leader: Scharleitung

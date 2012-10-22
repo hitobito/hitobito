@@ -165,10 +165,6 @@ describe Ability::Events do
         should be_able_to(:create, application)
       end
       
-      it "may show application" do
-        should be_able_to(:show, application)
-      end
-      
       it "may update application" do
         should be_able_to(:update, application)
       end
@@ -351,14 +347,6 @@ describe Ability::Events do
     context Event::Application do 
       let(:application) { Fabricate(:event_application, participation: participation) }
 
-      it "may show his application" do
-        should be_able_to(:show, application)
-      end
-      
-      it "may update his application" do
-        should be_able_to(:update, application)
-      end
-      
       it "may create his application" do
         should be_able_to(:create, application)
       end
@@ -369,7 +357,7 @@ describe Ability::Events do
           should_not be_able_to(:show, application)
         end
         
-        it "may update application" do
+        it "may not update application" do
           should_not be_able_to(:update, application)
         end
       end
@@ -405,13 +393,9 @@ describe Ability::Events do
       it "may create his application" do
         should be_able_to(:create, application)
       end
-      
-      it "may show his application" do
-        should be_able_to(:show, application)
-      end
-      
-      it "may update his application" do
-        should be_able_to(:update, application)
+
+      it "may not update his application" do
+        should_not be_able_to(:update, application)
       end
       
     end
@@ -439,12 +423,8 @@ describe Ability::Events do
     context Event::Application do 
       let(:application) { Fabricate(:event_application, participation: participation) }
       
-      it "may show his application" do
-        should be_able_to(:show, application)
-      end
-      
-      it "may update his application" do
-        should be_able_to(:update, application)
+      it "may not update his application" do
+        should_not be_able_to(:update, application)
       end
     end
   end

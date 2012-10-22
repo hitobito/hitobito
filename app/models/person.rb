@@ -31,8 +31,8 @@
 #  last_sign_in_ip        :string(255)
 #  name_mother            :string(255)
 #  name_father            :string(255)
-#  profession             :string(255)
 #  nationality            :string(255)
+#  profession             :string(255)
 #  bank_account           :string(255)
 #  ahv_number             :string(255)
 #  ahv_number_old         :string(255)
@@ -67,6 +67,8 @@ class Person < ActiveRecord::Base
   has_many :event_applications, class_name: 'Event::Application', through: :event_participations, source: :application
   has_many :event_roles, class_name: 'Event::Role', through: :event_participations, source: :roles
   has_many :events, through: :event_participations
+  
+  has_many :qualifications
   
   
   ### VALIDATIONS

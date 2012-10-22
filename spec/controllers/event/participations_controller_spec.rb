@@ -56,5 +56,16 @@ describe Event::ParticipationsController do
       end
     end
   end
+
+
+  context "POST create" do
+    specify do
+      post :create, event_id: other_course.id
+      participation = assigns(:participation)
+      should redirect_to event_participation_path(other_course, participation)
+      last_email.should be_present
+    end
+  end
+  
     
 end

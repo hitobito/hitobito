@@ -4,7 +4,7 @@
 #
 #  id                    :integer          not null, primary key
 #  person_id             :integer          not null
-#  qualification_type_id :integer          not null
+#  qualification_kind_id :integer          not null
 #  start_at              :date             not null
 #  finish_at             :date
 #
@@ -45,8 +45,8 @@ describe Qualification do
     end
     
     def build_qualification(validity, start_at)
-      type = Fabricate(:qualification_type, validity: validity)
-      Qualification.new(qualification_type: type, start_at: start_at)
+      kind = Fabricate(:qualification_kind, validity: validity)
+      Qualification.new(qualification_kind: kind, start_at: start_at)
     end
   end
   

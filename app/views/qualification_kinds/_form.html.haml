@@ -1,0 +1,9 @@
+= render 'shared/admin_tabs'
+
+= entry_form(:label, :description, :validity, 
+             buttons_bottom: false, 
+             cancel_url: qualification_kinds_path) do |f|
+  = f.labeled_input_fields :label, :description
+  = f.labeled(:validity) do
+    = f.input_field :validity, class: 'span1'
+    = f.help_inline 'Jahre'

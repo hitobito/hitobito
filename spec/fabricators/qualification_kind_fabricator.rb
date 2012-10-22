@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: qualification_types
+# Table name: qualification_kinds
 #
 #  id          :integer          not null, primary key
 #  label       :string(255)      not null
@@ -11,7 +11,7 @@
 #  deleted_at  :datetime
 #
 
-Fabricator(:qualification_type) do
+Fabricator(:qualification_kind) do
   label { Faker::Company.bs }
   validity { 2 }
 end

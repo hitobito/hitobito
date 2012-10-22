@@ -1,4 +1,4 @@
-QualificationType.seed(:label,
+QualificationKind.seed(:label,
  {label: 'Experte',
   validity: 2},
   

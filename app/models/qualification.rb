@@ -4,17 +4,17 @@
 #
 #  id                    :integer          not null, primary key
 #  person_id             :integer          not null
-#  qualification_type_id :integer          not null
+#  qualification_kind_id :integer          not null
 #  start_at              :date             not null
 #  finish_at             :date
 #
 
 class Qualification < ActiveRecord::Base
   
-  attr_accessible :qualification_type_id, :qualification_type, :start_at
+  attr_accessible :qualification_kind_id, :qualification_kind, :start_at
   
   belongs_to :person
-  belongs_to :qualification_type
+  belongs_to :qualification_kind
   
   before_validation :set_finish_at
   
@@ -22,8 +22,8 @@ class Qualification < ActiveRecord::Base
   private
   
   def set_finish_at
-    if start_at? && qualification_type && !qualification_type.validity.nil?
-      self.finish_at = (start_at + qualification_type.validity.years).end_of_year
+    if start_at? && qualification_kind && !qualification_kind.validity.nil?
+      self.finish_at = (start_at + qualification_kind.validity.years).end_of_year
     end
   end
   

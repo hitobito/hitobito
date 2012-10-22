@@ -1,0 +1,8 @@
+sl:
+  label: Super Lead
+  description: Blah
+  validity: 2
+  
+gl:
+  label: Group Lead
+  validity: 1

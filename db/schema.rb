@@ -46,17 +46,17 @@ ActiveRecord::Schema.define(:version => 20121022075849) do
 
   create_table "event_kinds_preconditions", :force => true do |t|
     t.integer "event_kind_id",         :null => false
-    t.integer "qualification_type_id", :null => false
+    t.integer "qualification_kind_id", :null => false
   end
 
   create_table "event_kinds_prolongations", :force => true do |t|
     t.integer "event_kind_id",         :null => false
-    t.integer "qualification_type_id", :null => false
+    t.integer "qualification_kind_id", :null => false
   end
 
-  create_table "event_kinds_qualification_types", :force => true do |t|
+  create_table "event_kinds_qualification_kinds", :force => true do |t|
     t.integer "event_kind_id",         :null => false
-    t.integer "qualification_type_id", :null => false
+    t.integer "qualification_kind_id", :null => false
   end
 
   create_table "event_participations", :force => true do |t|
@@ -178,7 +178,7 @@ ActiveRecord::Schema.define(:version => 20121022075849) do
     t.index ["contactable_id", "contactable_type"], :name => "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
 
-  create_table "qualification_types", :force => true do |t|
+  create_table "qualification_kinds", :force => true do |t|
     t.string   "label",                       :null => false
     t.integer  "validity"
     t.string   "description", :limit => 1023
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(:version => 20121022075849) do
 
   create_table "qualifications", :force => true do |t|
     t.integer "person_id",             :null => false
-    t.integer "qualification_type_id", :null => false
+    t.integer "qualification_kind_id", :null => false
     t.date    "start_at",              :null => false
     t.date    "finish_at"
   end

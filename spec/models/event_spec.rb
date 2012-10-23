@@ -233,20 +233,30 @@ describe Event do
       end
 
       it "does find upcoming event" do
-        event.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now).save
+        event.dates.create(start_at: 2.days.from_now, finish_at: 5.days.from_now)
         should eq [event]
       end
       
       it "does find running event" do
-        event.dates.build(start_at: 2.days.ago, finish_at: 0.days.from_now).save
+        event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now)
         should eq [event]
       end
+      
+      it "does find event ending at 5 to 12" do
+        event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now.midnight + 23.hours + 55.minutes)
+        should eq [event]
+      end
+      
+      it "does not find event ending at 5 past 12" do
+        event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now.midnight - 5.minutes)
+        should be_blank
+      end
+      
     end
 
     def add_date(event,start_at)
       start_at = Time.zone.parse(start_at)
-      event.dates.build(start_at: start_at, finish_at: start_at + 5.days)
-      event.save
+      event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
     end
   end
 end

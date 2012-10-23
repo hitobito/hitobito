@@ -89,8 +89,7 @@ class Event < ActiveRecord::Base
       year = ::Date.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates)
-      .where(event_dates: { start_at: [start_at...finish_at] } )
+      joins(:dates).where(event_dates: { start_at: [start_at...finish_at] } )
     end
 
     def only_group_id(*group_ids)
@@ -98,7 +97,7 @@ class Event < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:dates).where("event_dates.finish_at >= ?", ::Date.today)
+      joins(:dates).where("event_dates.finish_at >= ?", Time.zone.now.midnight)
     end
     
     def application_possible
@@ -109,12 +108,10 @@ class Event < ActiveRecord::Base
             "events.participant_count < events.maximum_participants")
     end
     
-    
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       accessible_attributes.include?(attr)
     end
-    
     
   end
 

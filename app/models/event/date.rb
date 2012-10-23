@@ -11,12 +11,12 @@
 
 class Event::Date < ActiveRecord::Base
   
-  attr_accessible :label, :start_at_date
-  attr_accessible :start_at, :start_at_min, :start_at_h
-  attr_accessible :finish_at, :finish_at_min, :finish_at_h
+  attr_accessible :label,
+                  :start_at, :start_at_min, :start_at_h, :start_at_date,
+                  :finish_at, :finish_at_min, :finish_at_h, :finish_at_date
 
-  attr_writer :start_at_date, :start_at_h, :start_at_min
-  attr_writer :finish_at_date, :finish_at_h, :finish_at_min
+  attr_writer :start_at_date, :start_at_h, :start_at_min,
+              :finish_at_date, :finish_at_h, :finish_at_min
   
   belongs_to :event
 

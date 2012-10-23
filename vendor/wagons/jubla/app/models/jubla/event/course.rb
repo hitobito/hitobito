@@ -4,8 +4,8 @@ module Jubla::Event::Course
   
   included do
 
-    attr_accessor :advisor_id
     attr_accessible :advisor_id
+    attr_accessor :advisor_id
 
     self.role_types += [Role::Advisor]
     
@@ -56,7 +56,7 @@ module Jubla::Event::Course
         advisor_participation.roles.where(event_roles: {type: Role::Advisor.sti_name}).first.destroy
         @advisor_participation = nil # remove it from cache to
       end
-      if advisor_id
+      if advisor_id.present?
         participation = participations.where(person_id: advisor_id).first_or_create
         role = Role::Advisor.new
         role.participation = participation

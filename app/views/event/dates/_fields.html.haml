@@ -1,7 +1,7 @@
 = f.labeled_input_field(:label, class: 'span3')
 = f.labeled(:start_at) do
   %label
-    = f.text_field(:start_at, class: 'span1 date')
+    = f.text_field(:start_at_date, class: 'span1 date')
     = '&nbsp;'.html_safe
     = f.select(:start_at_h, 0..23, {}, {class: 'time'})
     = ' : '
@@ -9,7 +9,7 @@
     Uhrzeit ist optional
 = f.labeled(:finish_at) do
   %label
-    = f.text_field(:finish_at, class: 'span1 date')
+    = f.text_field(:finish_at_date, class: 'span1 date')
     = '&nbsp;'.html_safe
     = f.select(:finish_at_h, 0..23, {}, {class: 'time'})
     = ' : '

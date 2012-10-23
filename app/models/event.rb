@@ -45,7 +45,7 @@ class Event < ActiveRecord::Base
   self.supports_applications = false
   self.possible_states = []
   
-  attr_accessible :name, :number, :motto, :cost, :maximum_participants, :contact_id, :contact,
+  attr_accessible :name, :number, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
                   :application_conditions, :dates_attributes, :questions_attributes
 
@@ -72,15 +72,15 @@ class Event < ActiveRecord::Base
   
   ### CALLBACKS
   
-  
-  accepts_nested_attributes_for :dates, :questions, allow_destroy: true
-  
+  before_validation :set_self_in_nested
   
   ### SCOPES
   
   scope :order_by_date, joins(:dates).order('event_dates.start_at')
   scope :preload_all_dates, scoped.extending(Event::PreloadAllDates)
 
+
+  accepts_nested_attributes_for :dates, :questions, allow_destroy: true
 
   ### CLASS METHODS
   
@@ -142,6 +142,11 @@ class Event < ActiveRecord::Base
     if type && group && !group.class.event_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed) 
     end
+  end
+
+  def set_self_in_nested
+    # don't try to set self in frozen nested attributes (-> marked for destroy)
+    (dates + questions).each {|e| e.event = self unless e.frozen? }
   end
 
 end

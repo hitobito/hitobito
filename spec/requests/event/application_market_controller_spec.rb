@@ -61,78 +61,48 @@ describe Event::ApplicationMarketController do
     leader
   end
   
+  def sign_in(user)
+    post person_session_path, person: {email: user.email, password: 'foobar'}
+  end
+  
   before { sign_in(people(:top_leader)) }
   
-  describe "GET index" do
-    
-    before { get :index, event_id: event.id }
-    
-    context "participants" do
-      subject { assigns(:participants) }
-      
-      it { should have(1).items }
-      
-      it "contains participant" do
-        should include(appl_participant)
-      end
-      
-      it "does not contain unassigned applications" do
-        should_not include(appl_prio_1)
-      end
-      
-      it "does not contain leader" do
-        should_not include(leader)
-      end
+  describe "requests are mutually undoable" do
+    before do
+      get event_application_market_index_path(event.id)
+      @participants = assigns(:participants)
+      @applications = assigns(:applications)
     end
     
-    context "applications" do
-      subject { assigns(:applications) }
+    it "starting from application" do
+      post participant_event_application_market_path(event.id, appl_prio_1.id, format: :js)
+      delete participant_event_application_market_path(event.id, appl_prio_1.id, format: :js)
       
-      it { should have(4).items }
+      get event_application_market_index_path(event.id)
       
-      it { should include(appl_prio_1) }
-      it { should include(appl_prio_2) }
-      it { should include(appl_prio_3) }
-      it { should include(appl_waiting) }
+      assigns(:applications).should == @applications
+      assigns(:participants).should == @participants
+    end   
+    
+    it "starting from application on waiting list" do
+      post participant_event_application_market_path(event.id, appl_waiting.id, format: :js)
+      delete participant_event_application_market_path(event.id, appl_waiting.id, format: :js)
       
-      it { should_not include(appl_participant) }
-      it { should_not include(appl_other) }
-      it { should_not include(appl_other_assigned) }
+      get event_application_market_index_path(event.id)
+
+      assigns(:applications).should == @applications
+      assigns(:participants).should == @participants
+    end
+        
+        
+    it "starting from participant" do
+      delete participant_event_application_market_path(event.id, appl_participant.id, format: :js)
+      post participant_event_application_market_path(event.id, appl_participant.id, format: :js)
       
-    end
-    
-  end
-  
-  
-  describe "POST participant" do
-    before { post :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js }
-    
-    it "creates role" do
-      appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
-    end
-  end
-  
-  describe "DELETE participant" do
-    before { delete :remove_participant, event_id: event.id, id: appl_participant.id, format: :js }
-    
-    it "removes role" do
-      appl_participant.reload.roles.should_not be_exists
-    end
-  end
-  
-  describe "POST waiting_list" do
-    before { post :put_on_waiting_list, event_id: event.id, id: appl_prio_1.id, format: :js }
-    
-    it "sets waiting list flag" do
-      appl_prio_1.reload.application.should be_waiting_list
-    end
-  end
-  
-  describe "DELETE waiting_list" do
-    before { delete :remove_from_waiting_list, event_id: event.id, id: appl_waiting.id, format: :js }
-    
-    it "sets waiting list flag" do
-      appl_waiting.reload.application.should_not be_waiting_list
+      get event_application_market_index_path(event.id)
+      
+      assigns(:applications).should == @applications
+      assigns(:participants).should == @participants
     end
   end
   

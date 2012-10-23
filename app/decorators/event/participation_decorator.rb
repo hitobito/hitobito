@@ -56,12 +56,12 @@ class Event::ParticipationDecorator < ApplicationDecorator
   def waiting_list_link(event)
     if application
       icon, title, method = if application.waiting_list
-        ['star', 'Von der nationalen Warteliste nehmen', :delete]
+        ['ok', 'Entfernen von der nationalen Warteliste', :delete]
       else
-        ['star-empty', 'Auf die nationale Warteliste setzen', :post]
+        ['minus', 'Hinzufügen zu der nationalen Warteliste', :post]
       end
       
-      h.link_to(h.icon("#{icon}"),
+      h.link_to(h.icon(application.waiting_list ? 'ok' : 'minus') + "&nbsp; Warteliste".html_safe,
                 h.waiting_list_event_application_market_path(event.id, id), 
                 title: title, 
                 remote: true, 

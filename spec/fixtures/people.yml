@@ -44,10 +44,10 @@ top_leader:
   first_name: Top
   last_name: Leader
   email: top_leader@example.com
-  encrypted_password: $2a$04$jLzXBDwUuKP7EGzSLLFw7..ioMfWiDfT9lDpZ4BjRz/dM6fSu/CDW #foobar
+  encrypted_password: "$2a$10$QNsqfC9Jo4cCl5DjNjZIZuF4mUJHc9a/PDZ3DS6pLA27MOfNaF2nu" #foobar
   
 bottom_member:
   first_name: Bottom
   last_name: Member
   email: bottom_member@example.com
-  encrypted_password: $2a$04$jLzXBDwUuKP7EGzSLLFw7..ioMfWiDfT9lDpZ4BjRz/dM6fSu/CDW #foobar
+  encrypted_password: "$2a$10$QNsqfC9Jo4cCl5DjNjZIZuF4mUJHc9a/PDZ3DS6pLA27MOfNaF2nu" #foobar

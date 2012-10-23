@@ -10,7 +10,7 @@
       %span#booking_info= event.booking_info
       verfügbaren Plätzen zugeteilt
     
-    %table.table.table-striped.table-hover{style: "width: 450px;"}
+    %table.table.table-striped.table-hover{style: "width: 550px;"}
       %tbody#participants
         - @participants.each do |p|
           = render 'participant', p: p
@@ -19,7 +19,7 @@
   %article.span6
     %h2 Anmeldungen
     
-    %table.table.table-striped.table-hover{style: "width: 450px;"}
+    %table.table.table-striped.table-hover{style: "width: 550px;"}
       %tbody#applications
         - @applications.each do |p|
           = render 'application', p: p

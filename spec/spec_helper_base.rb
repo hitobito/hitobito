@@ -50,6 +50,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   config.include(MailerMacros)
   config.before(:each) { Object.new.extend(MailerMacros).reset_email }
+  config.filter_run_excluding type: 'request'
   
   config.before :all do
     # load all fixtures

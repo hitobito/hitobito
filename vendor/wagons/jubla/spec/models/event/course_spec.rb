@@ -81,6 +81,10 @@ describe Event::Course do
       event.advisor.should eq person1
     end
 
+    it "shouldn't try to add advisor if id is empty" do
+      event = Fabricate(:course, advisor_id: '')
+      event.advisor.should be nil
+    end
 
   end
   

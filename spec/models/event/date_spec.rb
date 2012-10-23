@@ -21,8 +21,8 @@ describe Event::Date do
     event_date.start_at_date = date1
     event_date.finish_at_date = date2
     event_date.valid?.should be true
-    event_date.start_at.should == date1.to_datetime
-    event_date.finish_at.should == date2.to_datetime
+    event_date.start_at.should == date1.to_date.to_time
+    event_date.finish_at.should == date2.to_date.to_time
   end
 
   it 'should have date and time when hours and min are given' do
@@ -35,7 +35,7 @@ describe Event::Date do
     event_date.start_at_h = hours
     event_date.start_at_min = min
     event_date.valid?.should be true
-    event_date.start_at.should == DateTime.new(2012,12,12,18,10)
+    event_date.start_at.should == Time.zone.local(2012,12,12,18,10)
   end
 
   it 'should get hours,mins and date seperately' do

@@ -72,7 +72,7 @@ class Event::Date < ActiveRecord::Base
   def merge_date_time(date,h,min)
     h = h.blank? ? 00 : h
     min = min.blank? ? 00 : min
-    DateTime.new(date.year, date.month, date.day, h.to_i, min.to_i)
+    Time.zone.local(date.year, date.month, date.day, h.to_i, min.to_i)
   end
 
 end

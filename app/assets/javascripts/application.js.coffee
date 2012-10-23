@@ -17,6 +17,8 @@
 #= require_tree .
 #
 
+# scope for global functions
+window.Application ||= {}
 
 replaceContent = (e, data, status, xhr) ->
   replace = $(this).data('replace')
@@ -45,6 +47,21 @@ setPersonId = (item) ->
 
 setupPersonTypeahead = (input) ->
   $(this).typeahead(source: findPeople, updater: setPersonId)
+
+
+Application.moveElementToBottom = (elementId, targetId, callback) ->
+  $target = $('#' + targetId)
+  left = $target.offset().left
+  top = $target.offset().top + $target.height()
+  $element = $('#' + elementId)
+  leftOld = $element.offset().left
+  topOld = $element.offset().top
+  $element.children().each((i, c) -> $c = $(c); $c.css('width', $c.width()))
+  $element.css('left', leftOld)
+  $element.css('top', topOld)
+  $element.css('position', 'absolute')
+  $element.animate({left: left, top: top}, 300, callback)
+
 
 $ ->
   $(":input.date").live("click", ->

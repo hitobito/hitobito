@@ -62,8 +62,12 @@ class Event::Role < ActiveRecord::Base
   end
 
   def destroy_participation_for_last
-    if !participation.roles.exists? || participation.application_id?
-      participation.destroy
+    unless participation.roles.exists? 
+      if participation.application_id?
+        participation.update_column(:active, false)
+      else
+        participation.destroy
+      end
     end 
   end
   

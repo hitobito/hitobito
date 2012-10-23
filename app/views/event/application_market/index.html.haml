@@ -7,15 +7,19 @@
   %article.span6
     %h2 Zuteilung
     %p
-      = event.booking_info
+      %span#booking_info= event.booking_info
       verfügbaren Plätzen zugeteilt
     
-    = render 'list', list: @participants,
-                     right: lambda { |p| content_tag(:td, icon('arrow-right')) }
+    %table.table.table-striped.table-hover{style: "width: 450px;"}
+      %tbody#participants
+        - @participants.each do |p|
+          = render 'participant', p: p
     
 
   %article.span6
     %h2 Anmeldungen
-    = render 'list', list: @applications,
-                     left: lambda { |p| content_tag(:td, icon('arrow-left')) },
-                     right: lambda { |p| content_tag(:td, p.waiting_list_link) }
+    
+    %table.table.table-striped.table-hover{style: "width: 450px;"}
+      %tbody#applications
+        - @applications.each do |p|
+          = render 'application', p: p

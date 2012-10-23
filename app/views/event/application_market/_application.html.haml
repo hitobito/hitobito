@@ -1,0 +1,10 @@
+%tr{id: dom_id(p)}
+  %td
+    = link_to(icon('arrow-left'), 
+              participant_event_application_market_path(event, p), 
+              remote: true, 
+              method: :post)
+               
+  = render 'participation', p: p
+  
+  %td= p.waiting_list_link(event)

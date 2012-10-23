@@ -15,6 +15,8 @@ def seed_course(group_id, kind)
       number: number,
       state: Event::Course.possible_states.shuffle.first,
       maximum_participants: rand(30) + 10,
+      priorization: true,
+      requires_approval: true,
       application_opening_at: date,
       application_closing_at: date + 60.days}
   ).first

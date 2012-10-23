@@ -1,3 +1,6 @@
-%td= link_to(p.person.to_s, event_participation_path(p.event_id, p.id))
-%td= p.priority(event)
-%td= p.confirmation
+%td
+  %strong= link_to(p.person.to_s, event_participation_path(p.event_id, p.id))
+  %br/
+  = p.person.town
+%td= p.priority(event) if event.priorization?
+%td= p.confirmation if event.requires_approval?

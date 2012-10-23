@@ -17,8 +17,6 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-ActionMailer::Base.default from: 'jubla@puzzle.ch'
-
 module Jubla
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -77,11 +75,17 @@ module Jubla
     
     config.assets.precompile += %w(ie.css ie7.css)
 
-    
+
     config.generators do |g|
       g.test_framework      :rspec, fixture: true
 	    #g.fixture_replacement :fabrication
     end
+    
+    
+    config.to_prepare do
+      ActionMailer::Base.default from: Settings.email_sender
+    end
+    
   end
 end
 

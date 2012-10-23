@@ -2,7 +2,7 @@ class Event::ApplicationMarketController < ApplicationController
   
   before_filter :authorize
   
-  decorates :event, :participants, :applications
+  decorates :event, :participants, :applications, :participation
   
   helper_method :event
   
@@ -11,12 +11,32 @@ class Event::ApplicationMarketController < ApplicationController
     load_applications
   end
   
+  def add_participant
+    participation.create_participant_role(event)
+    event.reload
+  end
+  
+  def remove_participant
+    participation.remove_participant_role
+    event.reload
+  end
+  
+  def put_on_waiting_list
+    application.update_column(:waiting_list, true)
+    render 'waiting_list'
+  end
+  
+  def remove_from_waiting_list
+    application.update_column(:waiting_list, false)
+    render 'waiting_list'
+  end
+  
   private
   
   def load_participants
     @participants = event.participations.joins(:roles).
                                          where(event_roles: {type: event.class.participant_type.sti_name}).
-                                         includes(:person).
+                                         includes(:application, :person).
                                          merge(Person.order_by_name).
                                          uniq
   end
@@ -33,8 +53,17 @@ class Event::ApplicationMarketController < ApplicationController
                        uniq
   end
   
+  
   def event
     @event ||= Event.find(params[:event_id])
+  end
+  
+  def participation
+    @participation ||= Event::Participation.find(params[:id])
+  end
+  
+  def application
+    participation.application
   end
  
   def authorize

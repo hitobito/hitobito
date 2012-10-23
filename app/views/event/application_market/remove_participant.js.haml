@@ -1,0 +1,5 @@
+Application.moveElementToBottom('#{dom_id(@participation)}', 'applications', function() {
+$('##{dom_id(@participation)}').remove();
+$('#applications').append('#{escape_javascript(render('application', p: @participation))}');
+});
+$('#booking_info').html('#{escape_javascript(event.booking_info)}');

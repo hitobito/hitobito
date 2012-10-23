@@ -25,8 +25,13 @@ Jubla::Application.routes.draw do
     end
     resources :roles, module: 'event'
     
-    namespace :application_market, module: 'event', controller: :application_market do
-      get '/' => :index
+    resources :application_market, module: 'event', only: :index do
+      member do
+        post   'waiting_list' => 'application_market#put_on_waiting_list'
+        delete 'waiting_list' => 'application_market#remove_from_waiting_list'
+        post   'participant'  => 'application_market#add_participant'
+        delete 'participant'  => 'application_market#remove_participant'
+      end
     end
   end
   

@@ -1,7 +1,0 @@
-%table.table.table-striped.table-hover{style: "width: 400px;"}
-  %tbody
-    - list.each do |p|
-      %tr[p]
-        = left.call(p) if defined?(left)
-        = render 'participation', p: p
-        = right.call(p) if defined?(right)

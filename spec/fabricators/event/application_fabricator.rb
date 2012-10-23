@@ -12,6 +12,6 @@
 #
 
 Fabricator(:event_application, class_name: 'Event::Application') do
-  participation { Fabricate(:event_participation, event: Fabricate(:course)) }
-  priority_1    { |appl| appl[:participation].event }
+  priority_1    { Fabricate(:course) }
+  priority_2    { Fabricate(:course) }
 end

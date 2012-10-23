@@ -1,4 +1,4 @@
 - tab "Info", group_event_path(@event.group_id, @event) if can?(:show, @event)
 - tab "Teilnehmende", event_participations_path(@event) if can?(:index_participations, @event)
-- tab "Anmeldungen", event_application_market_path(@event) if @event.supports_applications && can?(:application_market, @event)
+- tab "Anmeldungen", event_application_market_index_path(@event) if @event.supports_applications && can?(:application_market, @event)
 

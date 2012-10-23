@@ -24,9 +24,10 @@ describe Event::Participation do
     course
   end
   
-  subject { course.participations.new }
+  
 
   context "#init_answers" do
+    subject { course.participations.new }
     
     context do
       before { subject.init_answers }
@@ -43,6 +44,8 @@ describe Event::Participation do
   end
   
   context "mass assignments" do
+    subject { course.participations.new }
+    
     it "assigns application and answers for new record" do
       q = course.questions
       subject.person_id = 42
@@ -71,6 +74,47 @@ describe Event::Participation do
       subject.person_id.should == p.id
       subject.additional_information.should == 'bla'
       subject.answers.should have(2).items
+    end
+  end
+  
+  describe "#create_participant_role" do
+    subject { Fabricate(:event_participation, event: course, application: Fabricate(:event_application)) }
+    
+    before do
+      p = subject
+      p.init_answers
+      p.save!
+    end
+        
+    it "creates role for given application" do
+      expect { subject.create_participant_role(course) }.to change { Event::Course::Role::Participant.count }.by(1)
+    end
+    
+    it "updates answers for other event" do
+      quest = course.questions.first
+      other = Fabricate(:course, group: groups(:top_layer))
+      other.questions << Fabricate(:event_question, event: other)
+      other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices)
+
+      expect { subject.create_participant_role(other) }.to change { Event::Answer.count }.by(1)
+    end
+  end
+  
+    
+  describe "#remove_participant_role" do
+    subject { Fabricate(:event_participation, event: course, application: Fabricate(:event_application)) }
+
+    before do
+      Fabricate(course.participant_type.name.to_sym, participation: subject)
+    end
+        
+    it "removes role for given application" do
+      expect { subject.remove_participant_role }.to change { Event::Course::Role::Participant.count }.by(-1)
+    end
+    
+    it "does not touch participation" do
+      subject.remove_participant_role
+      Event::Participation.where(id: subject.id).exists?.should be_true
     end
   end
 end

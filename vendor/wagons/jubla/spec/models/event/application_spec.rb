@@ -25,7 +25,7 @@ describe Jubla::Event::Application do
 
   context "region" do
     let(:person) { Fabricate(:person) }
-    let(:course) { group.events.create!(name: 'even', contact: person) }
+    let(:course) { group.events.create!(name: 'even', contact_id: person.id) }
     let(:group)  { groups(:city) }
     
     its(:contact) { should == person }

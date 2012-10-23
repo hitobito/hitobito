@@ -20,8 +20,6 @@ describe EventsController do
                       group_id: group.id
 
         event = assigns(:event)
-        require 'pry'
-        binding.pry
         should redirect_to(group_event_path(group, event))
         event.should be_persisted
         event.dates.should have(1).item

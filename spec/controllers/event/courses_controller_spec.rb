@@ -41,20 +41,4 @@ describe Event::CoursesController do
     end
   end
 
-  context "new" do
-
-    let(:group) { groups(:top_layer) }
-    let(:attrs) {  { type: 'Event::Course', group_id: group.id } } 
-    
-    it "top_leader should be allowed to create new event course" do
-
-      sign_in(people(:top_leader))
-      get :new, group_id: group.id, event: attrs
-
-    end
-  
-  end
-  
-
-
 end

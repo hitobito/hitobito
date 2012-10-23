@@ -112,8 +112,8 @@ de:
         dates: Daten
         questions: Fragen
         kind_id: Kursart
-      
-      event/course:
+
+        # course
         number: Kursnummer
         event_kind_id: Kursart
         state: Status

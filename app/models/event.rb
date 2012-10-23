@@ -135,6 +135,14 @@ class Event < ActiveRecord::Base
   def to_s
     name
   end
+
+  def init_questions
+    if questions.blank?
+      Event::Question.global.each do |q|
+        self.questions << q.dup
+      end
+    end
+  end
   
   private
   

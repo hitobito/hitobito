@@ -7,6 +7,12 @@ class EventsController < CrudController
   # load group before authorization
   prepend_before_filter :parent
 
+  def new
+    assign_attributes
+    entry.init_questions
+    respond_with(entry)
+  end
+
   private 
   
   def build_entry 

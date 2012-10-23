@@ -254,6 +254,14 @@ describe Event do
       
     end
 
+    context "#init_questions" do
+      it "adds 3 default questions" do
+        e = Event.new
+        e.init_questions
+        e.questions.should have(3).item
+      end
+    end
+
     def add_date(event,start_at)
       start_at = Time.zone.parse(start_at)
       event.dates.create(start_at: start_at, finish_at: start_at + 5.days)

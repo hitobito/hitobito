@@ -44,6 +44,14 @@ describe Event::ParticipationsController, type: :controller do
     end
   end
 
+  describe "POST create" do
+    it "prompts to change contact data" do
+      post :create,  event_id: course.id, participation: test_entry_attrs
+      flash[:notice].should =~ /Bitte überprüfe deine Kontaktdaten/
+      should redirect_to event_participation_path(course, assigns(:participation))
+    end
+  end
+
   describe "GET print" do
     subject { response.body }
     let(:person) { Fabricate(:person_with_address) }

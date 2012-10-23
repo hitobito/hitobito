@@ -209,3 +209,9 @@ de:
     participation_mailer:
       confirmation: 
         subject: Bestätigung der Anmeldung
+
+  # flash messages
+  participations:
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt.<br/> Bitte überprüfe deine Kontaktdaten."

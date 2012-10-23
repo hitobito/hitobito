@@ -8,7 +8,7 @@ class Event::ParticipationsController < CrudController
   prepend_before_filter :parent, :set_group
   before_render_form :load_priorities
 
-  after_save :send_confirmation_email
+  after_create :send_confirmation_email
   
   def new
     assign_attributes
@@ -29,6 +29,7 @@ class Event::ParticipationsController < CrudController
     load_answers
     render :print, layout: false
   end
+
   
   private
     
@@ -88,6 +89,7 @@ class Event::ParticipationsController < CrudController
   def send_confirmation_email
     Event::ParticipationMailer.confirmation(current_user, @participation).deliver
   end
+
   
   class << self
     def model_class

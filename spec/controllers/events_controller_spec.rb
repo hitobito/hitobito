@@ -7,6 +7,7 @@ describe EventsController do
 
       let(:group) { groups(:top_group) }
       let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+      let(:question)  {{ question: 'foo?', choices: '1,2,3,4' }}
       
       it "creates new event course with dates" do
   
@@ -15,6 +16,7 @@ describe EventsController do
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
                                 dates_attributes: [ date ],
+                                questions_attributes: [ question ],
                                 contact_id: people(:top_leader).id,
                                 type: 'Event::Course' }, 
                       group_id: group.id
@@ -24,6 +26,8 @@ describe EventsController do
         event.should be_persisted
         event.dates.should have(1).item
         event.dates.first.should be_persisted
+        event.questions.should have(1).item
+        event.questions.first.should be_persisted
 
       end
 

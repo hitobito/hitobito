@@ -53,7 +53,6 @@ Devise.setup do |config|
   # given strategies, for example, `config.http_authenticatable = [:token]` will
   # enable it only for token authentication.
   # config.http_authenticatable = false
-  config.http_authenticatable = true if Rails.env.test?
 
   # If http headers should be returned for AJAX requests. True by default.
   # config.http_authenticatable_on_xhr = true

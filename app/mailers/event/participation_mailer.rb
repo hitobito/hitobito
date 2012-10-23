@@ -46,7 +46,7 @@ class Event::ParticipationMailer < ActionMailer::Base
         dates = event.dates.map(&:to_s)
         first = dates.shift
         rest = dates.map {|date| "".ljust(PADDING + 1) + date }
-        [first, dates].join("\n").strip
+        [first, rest].join("\n").strip
       end if event.dates.present?
       event_info
     end

@@ -1,16 +1,7 @@
 header, nav, footer { 
   display: none;
 }
-#content {
-  .nav, .btn-toolbar { 
-    display: none;
-  }
-}
-.sheet {
-  .breadcrumb, > a {
-    display: none;
-  }
-}
+.muted { display: none; }
 table {
   width: 100%;
   border-spacing: 1em;

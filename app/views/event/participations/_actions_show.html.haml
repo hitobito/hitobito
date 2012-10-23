@@ -1,4 +1,3 @@
 = button_action_edit if can?(:edit, entry)
-%button.btn{onclick: 'window.print()'} 
-  %i.icon.icon-print 
-  %span Drucken 
+= action_button('Drucken', print_event_participation_path(entry.event, entry), :print, { target: 'new'})
+

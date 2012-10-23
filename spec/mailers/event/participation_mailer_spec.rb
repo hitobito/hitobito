@@ -41,7 +41,7 @@ describe Event::ParticipationMailer do
         event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
         event.dates.build(label: 'Kurs', start_at: Date.parse('2012-10-21'))
         should =~ /Daten:\s+Vorweekend: 18.10.2012 - 21.10.2012\n/
-        should =~ /\s+Kurs: 21.10.2012\n/
+        should =~ /\s{16}Kurs: 21.10.2012\n/
       end
     end
 

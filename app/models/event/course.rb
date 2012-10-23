@@ -28,7 +28,7 @@
 class Event::Course < Event
   
   # This statement is required because this class would not be loaded otherwise.
-  require_relative 'course/role/participant'
+  load Rails.root.join(*%w(app models event course role participant.rb))
   
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,

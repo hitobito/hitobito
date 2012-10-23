@@ -2,11 +2,11 @@ class Event::ParticipationsController < CrudController
   self.nesting = Event
   
   decorates :event, :participation, :participations, :alternatives
+  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   
   # load event before authorization
   prepend_before_filter :parent, :set_group
   before_render_form :load_priorities
-  before_render_show :load_answers
 
   after_save :send_confirmation_email
   
@@ -23,6 +23,11 @@ class Event::ParticipationsController < CrudController
     else
       super
     end
+  end
+
+  def print
+    load_answers
+    render :print, layout: false
   end
   
   private

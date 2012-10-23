@@ -2,12 +2,6 @@ Jubla::Application.routes.draw do
 
   root :to => 'dashboard#index'
 
-  resources :people, only: :show do
-    collection do
-      get :query
-    end
-  end
-
   resources :groups do
     resources :people do
       member do
@@ -30,6 +24,16 @@ Jubla::Application.routes.draw do
       get 'print', on: :member
     end
     resources :roles, module: 'event'
+    
+    namespace :application_market, module: 'event', controller: :application_market do
+      get '/' => :index
+    end
+  end
+  
+  resources :people, only: :show do
+    collection do
+      get :query
+    end
   end
   
   resources :qualification_kinds

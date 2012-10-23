@@ -4,11 +4,32 @@ describe Event::ApplicationMarketController do
   
   let(:event) { Fabricate(:course) }
   
-  let(:appl_prio_1)  { Fabricate(:event_participation, event: event, application: Fabricate(:event_application, priority_1: event)) }
-  let(:appl_prio_2)  { Fabricate(:event_participation, application: Fabricate(:event_application, priority_2: event)) }
-  let(:appl_prio_3)  { Fabricate(:event_participation, application: Fabricate(:event_application, priority_3: event)) }
-  let(:appl_waiting) { Fabricate(:event_participation, application: Fabricate(:event_application, waiting_list: true)) }
-  let(:appl_other)   { Fabricate(:event_participation, application: Fabricate(:event_application)) }
+  let(:appl_prio_1) do
+    Fabricate(:event_participation, 
+              event: event, 
+              application: Fabricate(:event_application, priority_1: event)) 
+  end
+  
+  let(:appl_prio_2) do
+    Fabricate(:event_participation, 
+              application: Fabricate(:event_application, priority_2: event))
+  end
+  
+  let(:appl_prio_3) do
+    Fabricate(:event_participation, 
+              application: Fabricate(:event_application, priority_3: event))
+  end
+  
+  let(:appl_waiting) do 
+    Fabricate(:event_participation, 
+              application: Fabricate(:event_application, waiting_list: true), 
+              event: Fabricate(:course, kind: event.kind))
+  end
+  
+  let(:appl_other) do
+    Fabricate(:event_participation, 
+              application: Fabricate(:event_application))
+  end
   let(:appl_other_assigned) do
     participation = Fabricate(:event_participation)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
@@ -31,8 +52,8 @@ describe Event::ApplicationMarketController do
   before do
     # init required data
     appl_prio_1
-    appl_prio_1
-    appl_prio_1
+    appl_prio_2
+    appl_prio_3
     appl_waiting
     appl_other
     appl_other_assigned
@@ -49,6 +70,8 @@ describe Event::ApplicationMarketController do
     context "participants" do
       subject { assigns(:participants) }
       
+      it { should have(1).items }
+      
       it "contains participant" do
         should include(appl_participant)
       end
@@ -64,6 +87,8 @@ describe Event::ApplicationMarketController do
     
     context "applications" do
       subject { assigns(:applications) }
+      
+      it { should have(4).items }
       
       it { should include(appl_prio_1) }
       it { should include(appl_prio_2) }

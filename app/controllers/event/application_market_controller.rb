@@ -2,7 +2,7 @@ class Event::ApplicationMarketController < ApplicationController
   
   before_filter :authorize
   
-  decorates :event, :participants, :applications, :participation
+  decorates :event, :participants, :participation
   
   helper_method :event
   
@@ -43,14 +43,16 @@ class Event::ApplicationMarketController < ApplicationController
   
   def load_applications
     filter = [1,2,3].collect { |i| "event_applications.priority_#{i}_id = ?" }.join(' OR ')
-    filter << " OR event_applications.waiting_list = ?"
+    filter << " OR (event_applications.waiting_list = ? AND events.kind_id = ?)"
     
-    @applications = Event::Participation.
+    @applications = Event::ParticipationDecorator.decorate(
+          Event::Participation.
+                       joins(:event).
                        includes(:application, :person).
-                       where(filter, event.id, event.id, event.id, true).
+                       where(filter, event.id, event.id, event.id, true, event.kind_id).
                        merge(Event::Participation.pending).
-                       merge(Person.order_by_name).
-                       uniq
+                       uniq.
+                       sort_by {|p| [p.application.priority(event) || 99, p.person.last_name, p.person.first_name] })
   end
   
   

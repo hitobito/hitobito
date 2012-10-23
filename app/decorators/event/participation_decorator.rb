@@ -29,7 +29,12 @@ class Event::ParticipationDecorator < ApplicationDecorator
   
   def priority(event)
     if application
-      prio = application.priority(event) || (application.waiting_list ? 'Warteliste' : nil)
+      prio = application.priority(event)
+      if prio
+        prio = "Prio #{prio}"
+      else
+        prio = application.waiting_list ? 'Warteliste' : nil
+      end
       content_tag(:span, prio, class: 'badge') if prio
     end
   end
@@ -41,7 +46,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
       elsif application.rejected?
         %w(&#x00D7; important abgelehnt)
       else
-        %w(? warning offen)
+        %w(? warning ausstehend)
       end
       
       content_tag(:span, label, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
@@ -51,12 +56,12 @@ class Event::ParticipationDecorator < ApplicationDecorator
   def waiting_list_link(event)
     if application
       icon, title, method = if application.waiting_list
-        ['down', 'Von der nationalen Warteliste nehmen', :delete]
+        ['star', 'Von der nationalen Warteliste nehmen', :delete]
       else
-        ['up', 'Auf die nationale Warteliste setzen', :post]
+        ['star-empty', 'Auf die nationale Warteliste setzen', :post]
       end
       
-      h.link_to(h.icon("chevron-#{icon}"),
+      h.link_to(h.icon("#{icon}"),
                 h.waiting_list_event_application_market_path(event.id, id), 
                 title: title, 
                 remote: true, 

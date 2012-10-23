@@ -29,5 +29,6 @@ top_course:
   name: Top Course
   group: top_layer
   type: Event::Course
+  kind: slk
   priorization: true
   requires_approval: true

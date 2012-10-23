@@ -47,6 +47,10 @@ class EventDecorator < ApplicationDecorator
   def state
     h.t("activerecord.attributes.event/course.states.#{model.state}") if model.state
   end
+
+  def state_collection
+    possible_states.collect {|s| [ h.t("activerecord.attributes.event/course.states.#{s}"), s ] }
+  end
   
   def can_create_participation?
     p = participations.new

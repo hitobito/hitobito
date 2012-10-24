@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper_request'
 
-describe "" do
+describe "Person Autocomplete" do
 
   subject { page }
   let(:group) { groups(:top_group) }

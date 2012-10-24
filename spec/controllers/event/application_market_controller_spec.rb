@@ -105,10 +105,20 @@ describe Event::ApplicationMarketController do
   
   
   describe "POST participant" do
-    before { post :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js }
     
     it "creates role" do
+      post :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js
+      
       appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
+    end
+    
+    it "shows error on existing participation" do
+      other = Fabricate(:course, group: groups(:top_layer))
+      Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
+
+      post :add_participant, event_id: other.id, id: appl_prio_1.id, format: :js
+      
+      should render_template('participation_exists_error')
     end
   end
   

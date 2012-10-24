@@ -102,7 +102,6 @@ describe Event::Participation do
     end
     
     it "raises error on existing participation" do
-      quest = course.questions.first
       other = Fabricate(:course, group: groups(:top_layer))
       Fabricate(:event_participation, event: other, person: subject.person, application: Fabricate(:event_application))
 

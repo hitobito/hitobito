@@ -14,13 +14,12 @@
       = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
 
     %h4 Informationen zum Anlass
-    = entry.event
+    = entry.event.to_s
+    %br/
     = entry.event.kind 
     = entry.event.number 
-    %br
-    = entry.event.with_br(:location, :dates_full)
-    %br
-    = entry.event.with_br(:motto, :description)
+    %br/
+    = entry.event.with_br(:location, :dates_full, :motto, :description)
 
     - if entry.event.priorization && @application.present?
       = render 'priorities'
@@ -28,6 +27,7 @@
     %h4 Informationen zur Person
     = entry.person
     = render 'contactable/show', contactable: entry.person, only_public: true
+    
     -if @answers.present?
       %h4 Spezifische Angaben
       %ul

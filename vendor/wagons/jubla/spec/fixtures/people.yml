@@ -1,0 +1,5 @@
+top_leader:
+  first_name: Top
+  last_name: Leader
+  email: top.leader@jubla.example.com
+  contact_data_visible: true

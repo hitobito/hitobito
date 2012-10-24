@@ -13,6 +13,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     event.labeled_link(h.event_participation_path(event, participation))
   end
   
+  
   def contact
     c = model.contact
     "#{c.class.base_class.name}Decorator".constantize.decorate(c)

@@ -66,11 +66,23 @@ class Event::Participation < ActiveRecord::Base
     def upcoming
       joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
     end
-    def leader_team(event)
-      where('event_roles.type <> ?', event.participant_type.sti_name)
+    
+    def leaders(event)
+      joins(:roles).where('event_roles.type <> ?', event.participant_type.sti_name)
     end
-    def participant_team(event)
-      where('event_roles.type = ?', event.participant_type.sti_name)
+    
+    def participants(event)
+      joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
+    end
+    
+    # load participations without affiliate roles
+    def participating(event)
+      affiliate_types = event.role_types.select(&:affiliate).collect(&:sti_name)
+      if affiliate_types.present?
+        joins(:roles).where("event_roles.type NOT IN (?)", affiliate_types)
+      else
+        scoped
+      end
     end
   end
 

@@ -30,7 +30,7 @@ module ContactableDecorator
 
   def primary_email
     if email.present?
-      content_tag(:p, h.value_with_muted(h.mail_to(email), 'Email'))
+      content_tag(:p, h.mail_to(email))
     end
   end
 

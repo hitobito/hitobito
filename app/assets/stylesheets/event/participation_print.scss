@@ -1,14 +1,18 @@
 header, nav, footer { 
   display: none;
 }
-.muted { display: none; }
+
 li { list-style: none; }
-table { td { vertical-align: top; }}
+
+table { 
+  td { vertical-align: top; }
+}
+
 table.signature {
   width: 100%;
   border-spacing: 1em;
-  td { 
-  }
+  
+  td { }
 
   td.border{
     border-top: 1px solid black;

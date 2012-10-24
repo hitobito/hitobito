@@ -18,6 +18,7 @@ module Event::ParticipationsHelper
       link_to(value, link)
     end
   end
+  
   def role_filter_title
     choices = Event::ParticipationsController::FILTER
     key = choices.keys.map(&:to_s).find { |key| params[:filter].to_s == key }

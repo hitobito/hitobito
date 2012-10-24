@@ -81,21 +81,19 @@ describe Event::ParticipationsController do
 
   context "GET index" do
     before { @leader, @participant = *create(Event::Role::Leader, course.participant_type) }
+    
     it "lists particpant and leader group by default" do
       get :index, event_id: course.id
-      assigns(:participations).size.should eq 2
+      assigns(:participations).should eq [@leader, @participant]
     end
 
     it "lists only leader_group" do
       get :index, event_id: course.id, filter: :leaders
-      assigns(:participations).size.should eq 1
       assigns(:participations).should eq [@leader]
     end
 
-
     it "lists only participant_group" do
       get :index, event_id: course.id, filter: :participants
-      assigns(:participations).size.should eq 1
       assigns(:participations).should eq [@participant]
     end
 

@@ -34,7 +34,7 @@ class EventDecorator < ApplicationDecorator
     info << " von #{maximum_participants}" if maximum_participants.to_i > 0
     info
   end
-  
+
   def possible_role_links
     klass.role_types.map do |type|
       unless type.restricted
@@ -58,14 +58,20 @@ class EventDecorator < ApplicationDecorator
     p.person = current_user
     can?(:new, p)
   end
+  
+  def description
+    h.simple_format(model.description) if model.description?
+  end
+  
+  def location
+    h.simple_format(model.location) if model.location?
+  end
 
   def with_br(*attrs)
     values = attrs.map do |attr|
-      value = send(attr)
-      [:description, :motto, :location].include?(attr) ? h.simple_format(value) : value
-    end.collect(&:presence).compact
-    safe_join(values,h.tag(:br))
-
+      send(attr).presence
+    end.compact
+    safe_join(values, h.tag(:br))
   end
   
 end

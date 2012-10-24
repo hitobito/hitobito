@@ -11,9 +11,9 @@ namespace :ci do
                     'db:migrate', 
                     'erd',
                     'ci:setup:rspec',
+                    'spec:requests', # run request specs first to get coverage from spec
                     'spec',
                     'wagon:test',
-                    'spec:requests',
                     'brakeman',
                     #'qa' raises StackLevelTooDeep for Ruby 1.9.3.p0
                     ]

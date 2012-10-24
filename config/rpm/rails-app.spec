@@ -15,7 +15,7 @@
 %define use_sphinx      0
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'spec test vendor/cache log tmp db/production.sqlite3'
+%define exclude_dirs 'spec test vendor/cache log tmp db/production.sqlite3 script/phantomjs'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml

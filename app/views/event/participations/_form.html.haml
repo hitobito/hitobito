@@ -11,7 +11,10 @@
     
   = f.labeled_text_area(:additional_information)
     
-  -if entry.application
+  -if entry.application && entry.new_record?
+    -# once given, priorities may not be changed anymore 
+    -# (@alternatives might not be in state application_open anymore in the future,
+    -#  causing missing choices for the dropdown)
     = f.fields_for(:application) do |fap|
       - if @event.priorization? && @priority_2s.present?
         = field_set_tag 'Ausweichdaten' do

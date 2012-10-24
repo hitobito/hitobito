@@ -1,0 +1,6 @@
+%section
+  %h4 Spezifische Angaben
+  %dl
+    - @answers.each do |answer|
+      %dt= answer.question.question
+      %dd= answer.answer

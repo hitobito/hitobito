@@ -8,31 +8,19 @@
     
     = render_attrs(entry.person, :birthday, :gender)
     
-    %br/
-    
     -if can?(:show_details, entry) # participation
       -if @answers.present?
-        %h4 Spezifische Angaben
-        %dl
-        - @answers.each do |answer|
-          %dt= answer.question.question
-          %dd= answer.answer
-        %br/
+        = render 'answers'
     
-      %h4= t('activerecord.attributes.event/participation.additional_information')
-      = simple_format(entry.additional_information || '-')
+      %section
+        %h4= t('activerecord.attributes.event/participation.additional_information')
+        = simple_format(entry.additional_information || '-')
       
-      - if can?(:create, entry) && @application.present? && (@application.priority_2_id? || @application.priority_3_id?)
-        %section
-          %h4 Ausweichdaten
-          %table.table
-            - [@application.priority_2, @application.priority_3].compact.each do |prio|
-              %tr
-                %td= prio.label
-                %td= prio.dates_full
+      - if @event.priorization && @application.present? && can?(:create, entry)
+        = render 'priorities'
       
   %aside.span5
-    - if entry.person == current_user && @application
+    - if entry.person == current_user && @application.present?
       = section 'Anmeldung an' do
         = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
     

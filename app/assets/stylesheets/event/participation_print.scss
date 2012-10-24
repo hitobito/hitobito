@@ -2,7 +2,9 @@ header, nav, footer {
   display: none;
 }
 .muted { display: none; }
-table {
+li { list-style: none; }
+table { td { vertical-align: top; }}
+table.signature {
   width: 100%;
   border-spacing: 1em;
   td { 

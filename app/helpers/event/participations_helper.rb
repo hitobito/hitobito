@@ -5,10 +5,6 @@ module Event::ParticipationsHelper
     str.html_safe
   end
 
-  def with_break(string)
-    safe_join(string,tag(:br))
-  end
-
   def edit_person_path
     person = entry.person
     group = person.groups.first

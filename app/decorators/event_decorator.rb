@@ -50,12 +50,22 @@ class EventDecorator < ApplicationDecorator
 
   def state_collection
     possible_states.collect {|s| [ h.t("activerecord.attributes.event/course.states.#{s}"), s ] }
+ 
   end
   
   def can_create_participation?
     p = participations.new
     p.person = current_user
     can?(:new, p)
+  end
+
+  def with_br(*attrs)
+    values = attrs.map do |attr|
+      value = send(attr)
+      [:description, :motto, :location].include?(attr) ? h.simple_format(value) : value
+    end.collect(&:presence).compact
+    safe_join(values,h.tag(:br))
+
   end
   
 end

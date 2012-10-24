@@ -1,6 +1,10 @@
 class Event::ParticipationsController < CrudController
+  
   self.nesting = Event
-  FILTER = { all: 'Alle Personen', leaders: 'Leitungsteam', participants: Event::Role::Participant.model_name.human }
+  
+  FILTER = { all: 'Alle Personen', 
+             leaders: 'Leitungsteam', 
+             participants: 'Teilnehmende' }
   
   decorates :event, :participation, :participations, :alternatives
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
@@ -42,14 +46,16 @@ class Event::ParticipationsController < CrudController
     records = parent.participations.
                  where(event_participations: {active: true}).
                  includes(:person, :roles).
+                 participating(parent).
                  order_by_role(parent.class).
-                 merge(Person.order_by_name)
+                 merge(Person.order_by_name).
+                 uniq
     Person::PreloadPublicAccounts.for(records.collect(&:person))
 
-    if FILTER.keys.map(&:to_s).include?(params[:filter].to_s)
-      scope =  params[:filter].to_sym == :participants ? :participant_team : :leader_team
-      records = records.send(scope, parent)
+    if FILTER.keys.map(&:to_s).include?(params[:filter])
+      records = records.send(params[:filter], parent)
     end
+    
     records
   end
   
@@ -100,10 +106,6 @@ class Event::ParticipationsController < CrudController
   def send_confirmation_email
     Event::ParticipationMailer.confirmation(current_user, @participation).deliver
   end
-
-  def filter_list
-  end
-
   
   class << self
     def model_class

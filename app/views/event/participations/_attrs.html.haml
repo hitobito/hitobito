@@ -20,8 +20,21 @@
         %br/
     
       %h4= t('activerecord.attributes.event/participation.additional_information')
-      = simple_format(entry.additional_information)
+      = simple_format(entry.additional_information || '-')
+      
+      - if can?(:create, entry) && @application.present? && (@application.priority_2_id? || @application.priority_3_id?)
+        %section
+          %h4 Ausweichdaten
+          %table.table
+            - [@application.priority_2, @application.priority_3].compact.each do |prio|
+              %tr
+                %td= prio.label
+                %td= prio.dates_full
       
   %aside.span5
+    - if entry.person == current_user && @application
+      = section 'Anmeldung an' do
+        = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
+    
     = render 'roles'
 

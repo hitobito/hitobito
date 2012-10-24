@@ -97,6 +97,16 @@ describe Event::Participation do
       other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices)
 
       expect { subject.create_participant_role(other) }.to change { Event::Answer.count }.by(1)
+      
+      subject.event_id.should == other.id
+    end
+    
+    it "raises error on existing participation" do
+      quest = course.questions.first
+      other = Fabricate(:course, group: groups(:top_layer))
+      Fabricate(:event_participation, event: other, person: subject.person, application: Fabricate(:event_application))
+
+      expect { subject.create_participant_role(other) }.to raise_error
     end
   end
   

@@ -16,10 +16,32 @@ describe Event::ParticipationsController do
     course
   end
   
+  let(:participation) do
+    p = Fabricate(:event_participation, event: course, application: Fabricate(:event_application, priority_2: Fabricate(:course, kind: course.kind)))
+    p.answers.create!(question_id: course.questions[0].id, answer: 'juhu')
+    p.answers.create!(question_id: course.questions[1].id, answer: 'blabla')
+    p
+  end
+  
+  
   let(:user) { people(:top_leader) }
   
   before { sign_in(user); other_course }
   
+
+  context "GET show" do
+    
+    before { get :show, event_id: course.id, id: participation.id }
+    
+    it "has two answers" do
+      assigns(:answers).should have(2).items
+    end
+    
+    it "has application" do
+      assigns(:application).should be_present
+    end
+  end
+
 
   context "GET new" do
     before { get :new, event_id: event.id }
@@ -56,7 +78,7 @@ describe Event::ParticipationsController do
       end
     end
   end
-
+  
 
   context "POST create" do
     specify do

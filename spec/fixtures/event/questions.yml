@@ -4,7 +4,7 @@ top_ov:
   event: top_course
 
 top_vegi:
-  question: Vegi?
+  question: Ich bin Vegetarier
   choices: "ja, nein"
   event: top_course
   

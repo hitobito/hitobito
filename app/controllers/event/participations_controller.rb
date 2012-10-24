@@ -52,8 +52,9 @@ class Event::ParticipationsController < CrudController
                  uniq
     Person::PreloadPublicAccounts.for(records.collect(&:person))
 
-    if FILTER.keys.map(&:to_s).include?(params[:filter])
-      records = records.send(params[:filter], parent)
+    if scope = FILTER.keys.detect {|k| k.to_s == params[:filter] }
+      # do not use params[:filter] in send to satisfy brakeman
+      records = records.send(scope, parent)
     end
     
     records

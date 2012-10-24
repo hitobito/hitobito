@@ -11,6 +11,9 @@
     = f.labeled_string_field :contact, data: {provide: 'person', id_field: 'event_contact_id'}
     = f.hidden_field :contact_id
 
+    - if entry.used_attribute(:state)
+      = f.labeled_select(:state, entry.state_collection, {}, { class: 'span2' })
+
     - if entry.used_attribute(:kind_id)
       = f.labeled_collection_select(:kind_id, f.association_entries(:kind_id), :id, :to_s, {}, class: 'span2')
   = render_extensions 'fields', locals: { f: f }

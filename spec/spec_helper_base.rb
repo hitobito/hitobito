@@ -47,14 +47,19 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+  
   config.include Devise::TestHelpers, :type => :controller
   config.include(MailerMacros)
-  config.before(:each) { Object.new.extend(MailerMacros).reset_email }
+  
   config.filter_run_excluding type: 'request'
   
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
+  end
+  
+  config.before(:each) do
+    ActionMailer::Base.deliveries = []
   end
 
   config.before(:all, :draper_with_helpers) do

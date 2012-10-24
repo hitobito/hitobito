@@ -56,6 +56,13 @@ namespace :erd do
   end
 end
 
+namespace :spec do
+  task :requests => :enable_requests
+  task :enable_requests do
+    ENV['SPEC_OPTS'] ||= "--tag type:request"
+  end
+end
+
 desc "Load the mysql database configuration for the following tasks"
 task :mysql do
   ENV['RAILS_DB_ADAPTER'] = 'mysql2'

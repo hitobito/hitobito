@@ -87,9 +87,14 @@ def seed_application(participation)
   prio = rand(3) + 1
   rand_course = rand
   unless participation.application
+    alt = Event::Course.where(kind_id: participation.event.kind_id).
+                        offset((Event::Course.count * rand_course).to_i).
+                        limit(2).
+                        pluck(:id)
     a = participation.build_application
-    a.send("priority_#{prio}_id=", participation.event_id)
-    a.priority_1_id ||= Event::Course.offset((Event::Course.count * rand_course).to_i).limit(1).pluck(:id).first
+    a.priority_1_id = participation.event_id
+    a.priority_2_id = alt.first
+    a.priority_3_id = alt.last
     a.save!
     participation.application = a
     participation.save!

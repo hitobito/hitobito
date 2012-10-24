@@ -2,4 +2,4 @@
   %td
     %strong= role.to_s
   %td= link_action_edit(edit_event_role_path(entry.event, role)) if can?(:edit, role)
-  %td= link_action_destroy(event_role_path(entry.event, role)) if can?(:destroy, role)
+  %td= link_action_destroy(event_role_path(entry.event, role)) if !role.restricted && can?(:destroy, role)

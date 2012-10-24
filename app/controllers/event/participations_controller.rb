@@ -32,6 +32,9 @@ class Event::ParticipationsController < CrudController
     render :print, layout: false
   end
 
+  def destroy
+    super(location: event_application_market_index_path(entry.event_id))
+  end
   
   private
     

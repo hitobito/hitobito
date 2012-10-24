@@ -85,7 +85,7 @@ class CrudController < ListController
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
     flash[:alert] ||= error_messages.presence || flash_message(:failure) if !destroyed && request.format == :html
-    location = !destroyed && request.env["HTTP_REFERER"].presence || index_url
+    location = (!destroyed && request.env["HTTP_REFERER"].presence) || (options[:location] || index_url)
     respond_with(entry, options.reverse_merge(:success => destroyed, :location => location), &block)
   end
 

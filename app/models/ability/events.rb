@@ -61,9 +61,10 @@ module Ability::Events
       can_update_event?(participation.event)
     end
     
+    # only participations with applications are destroyed directly
+    # other participations are destroyed via destroy of the last event role.
     can :destroy, Event::Participation do |participation|
-      participation.person_id == user.id ||
-      can_update_event?(participation.event)
+      can_create_event?(participation.event)
     end
     
     

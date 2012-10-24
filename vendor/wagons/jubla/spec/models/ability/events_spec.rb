@@ -228,8 +228,8 @@ describe Ability::Events do
         should be_able_to(:update, other)
       end
       
-      it "may destroy participation" do
-        should be_able_to(:destroy, other)
+      it "may not destroy participation" do
+        should_not be_able_to(:destroy, other)
       end
       
       it "may not show participation in other event" do

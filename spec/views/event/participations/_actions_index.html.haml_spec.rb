@@ -9,6 +9,7 @@ describe "event/participations/_actions_index.html.haml" do
 
   before do
     assign(:event, event)
+    view.stub(parent: event)
     controller.stub(current_user: top_leader)
     render 
     @dom = Capybara::Node::Simple.new(@rendered) 

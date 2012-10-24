@@ -1,5 +1,13 @@
 # encoding: UTF-8
 module Event::ParticipationsHelper
+  def event_attr_with_break(attr)
+    str = parent.send(attr) + tag(:br)
+    str.html_safe
+  end
+
+  def with_break(string)
+    safe_join(string,tag(:br))
+  end
 
   def edit_person_path
     person = entry.person
@@ -10,7 +18,7 @@ module Event::ParticipationsHelper
   def role_filter_links
     content = Event::ParticipationsController::FILTER.map do |key, value| 
       filter = key == :all ? {} : { filter: key }
-      link = event_participations_path(entry.event, entry, filter)
+      link = event_participations_path(parent, filter)
       link_to(value, link)
     end
   end

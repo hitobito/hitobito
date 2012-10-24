@@ -33,11 +33,11 @@ describe "event/participations/print.html.haml" do
 
 
   it "has event location, motto and description, renderd with simple_format" do
-    event.motto = "Welcome\nOn Board"
+    event.motto = "Welcome On Board"
     event.description = "foo\nbar"
     event.location = "blub\nbla"
     render
-    rendered.should =~ %r{<br />On Board}
+    rendered.should =~ %r{Welcome On Board}
     rendered.should =~ %r{<br />bar}
     rendered.should =~ %r{<br />bla}
   end

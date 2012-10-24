@@ -7,9 +7,9 @@ describe "" do
   let(:group) { groups(:top_group) }
 
   it "knows about visibility of dropdown menu", js: true do
-    sign_in 'top_leader@example.com', 'foobar'
+    sign_in
     visit root_path
-    page.body.should include("TopGroup")
+    page.should have_content("TopGroup")
     click_link 'TopGroup'
     should have_content ' Person hinzufügen'
     find('.dropdown-menu').should_not be_visible
@@ -23,8 +23,9 @@ describe "" do
 
 
   it "verifies content in typeahead", js: true do
-    sign_in 'top_leader@example.com', 'foobar'
+    sign_in 
     visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
+    page.should have_content("hinzufügen")
     find('.typeahead.dropdown-menu').should_not have_content 'Top Leader'
     fill_in "Person", with: "Top"
     find('.typeahead.dropdown-menu').should have_content 'Top Leader'

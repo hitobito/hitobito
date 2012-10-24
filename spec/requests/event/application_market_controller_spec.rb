@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_request'
 
 describe Event::ApplicationMarketController do
   
@@ -61,48 +61,104 @@ describe Event::ApplicationMarketController do
     leader
   end
   
-  def sign_in(user)
-    post person_session_path, person: {email: user.email, password: 'foobar'}
-  end
+  before { sign_in }
   
-  before { sign_in(people(:top_leader)) }
-  
-  describe "requests are mutually undoable" do
+  describe "requests are mutually undoable", js: true do
     before do
-      get event_application_market_index_path(event.id)
-      @participants = assigns(:participants)
-      @applications = assigns(:applications)
+      visit event_application_market_index_path(event.id)
+      
+      @participants = find('#participants').text
+      @applications = find('#applications').text
     end
     
-    it "starting from application" do
-      post participant_event_application_market_path(event.id, appl_prio_1.id, format: :js)
-      delete participant_event_application_market_path(event.id, appl_prio_1.id, format: :js)
+    context "waiting_list" do
+      it "starting from application" do
+        appl_id = "event_participation_#{appl_prio_1.id}"
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+        
+        find("#applications ##{appl_id}").click_link('Warteliste')
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
+        
+        find("#applications ##{appl_id}").click_link('Warteliste')
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+        
+        visit event_application_market_index_path(event.id)
+        
+        find('#participants').text == @participants
+        find('#applications').text == @applications
+      end   
       
-      get event_application_market_index_path(event.id)
-      
-      assigns(:applications).should == @applications
-      assigns(:participants).should == @participants
-    end   
-    
-    it "starting from application on waiting list" do
-      post participant_event_application_market_path(event.id, appl_waiting.id, format: :js)
-      delete participant_event_application_market_path(event.id, appl_waiting.id, format: :js)
-      
-      get event_application_market_index_path(event.id)
-
-      assigns(:applications).should == @applications
-      assigns(:participants).should == @participants
+      it "starting from application on waiting list" do
+        appl_id = "event_participation_#{appl_waiting.id}"
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
+        
+        find("#applications ##{appl_id}").click_link('Warteliste')
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+        
+        find("#applications ##{appl_id}").click_link('Warteliste')
+        find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
+        
+        
+        visit event_application_market_index_path(event.id)
+  
+        find('#participants').text == @participants
+        find('#applications').text == @applications
+      end
     end
         
+    context "participant" do
+      it "starting from application" do
+        appl_id = "event_participation_#{appl_prio_1.id}"
         
-    it "starting from participant" do
-      delete participant_event_application_market_path(event.id, appl_participant.id, format: :js)
-      post participant_event_application_market_path(event.id, appl_participant.id, format: :js)
+        find("#applications ##{appl_id} td:first a").trigger('click')
+        should_not have_selector("#applications ##{appl_id}")
+        find("#participants tr:last").should have_content(appl_prio_1.person.to_s)
+        
+        find("#participants ##{appl_id} td:last a").trigger('click')
+        should_not have_selector("#participants ##{appl_id}")
+        find("#applications tr:last").should have_content(appl_prio_1.person.to_s)
+        
+        visit event_application_market_index_path(event.id)
+        
+        find('#participants').text == @participants
+        find('#applications').text == @applications
+      end   
       
-      get event_application_market_index_path(event.id)
+      it "starting from application on waiting list" do
+        appl_id = "event_participation_#{appl_waiting.id}"
+        
+        find("#applications ##{appl_id} td:first a").trigger('click')
+        find("#participants tr:last").should have_content(appl_waiting.person.to_s)
+        should_not have_selector("#applications ##{appl_id}")
+        
+        find("#participants ##{appl_id} td:last a").trigger('click')
+        should_not have_selector("#participants ##{appl_id}")
+        find("#applications tr:last").should have_content(appl_waiting.person.to_s)
+        
+        visit event_application_market_index_path(event.id)
+        
+        find('#participants').text == @participants
+        find('#applications').text == @applications
+      end
       
-      assigns(:applications).should == @applications
-      assigns(:participants).should == @participants
+      it "starting from participant" do
+        appl_id = "event_participation_#{appl_participant.id}"
+        
+        find("#participants ##{appl_id} td:last a").trigger('click')
+        should_not have_selector("#participants ##{appl_id}")
+        find("#applications tr:last").should have_content(appl_participant.person.to_s)
+        
+        find("#applications ##{appl_id} td:first a").trigger('click')
+        find("#participants tr:last").should have_content(appl_participant.person.to_s)
+        should_not have_selector("#applications ##{appl_id}")
+        
+        
+        visit event_application_market_index_path(event.id)
+        
+        find('#participants').text == @participants
+        find('#applications').text == @applications
+      end
+    
     end
   end
   

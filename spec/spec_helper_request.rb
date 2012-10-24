@@ -8,8 +8,9 @@ Dir[Rails.root.join("spec/support/group/*.rb")].each {|f| require f }
 RSpec.configure do |config|
   config.include RequestHelpers, type: :request
 end
+
 Capybara.register_driver :poltergeist do |app|
-  options = { debug: false, inspector: true, timeout: 1 } 
+  options = { debug: false, inspector: true, timeout: 3 } 
   driver = Capybara::Poltergeist::Driver.new(app, options)
 end
 Capybara.javascript_driver = :poltergeist

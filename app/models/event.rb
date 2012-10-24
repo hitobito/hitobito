@@ -67,7 +67,7 @@ class Event < ActiveRecord::Base
   ### VALIDATIONS
   
   validate :assert_type_is_allowed_for_group
-  # TODO validate application_closing_at is after opening_at if both are present
+  validate :assert_application_closing_is_after_opening
   
   
   ### CALLBACKS
@@ -149,6 +149,12 @@ class Event < ActiveRecord::Base
   def assert_type_is_allowed_for_group
     if type && group && !group.class.event_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed) 
+    end
+  end
+  
+  def assert_application_closing_is_after_opening
+    if application_opening_at? && application_closing_at? && application_closing_at < application_opening_at
+      errors.add(:application_closing_at, :must_be_after_opening)
     end
   end
 

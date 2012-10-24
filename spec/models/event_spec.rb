@@ -267,4 +267,34 @@ describe Event do
       event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
     end
   end
+  
+  context "validations" do
+    subject { Fabricate(:event) }
+    
+    it "is valid with application closing after opening" do
+      subject.application_opening_at = Date.today - 5
+      subject.application_closing_at = Date.today + 5
+      
+      should be_valid
+    end
+    
+    it "is not valid with application closing before opening" do
+      subject.application_opening_at = Date.today - 5
+      subject.application_closing_at = Date.today - 6
+      
+      should_not be_valid
+    end
+    
+    it "is valid with application closing and without opening" do
+      subject.application_closing_at = Date.today - 6
+      
+      should be_valid
+    end
+    
+    it "is valid with application opening and without closing" do
+      subject.application_opening_at = Date.today - 6
+      
+      should be_valid
+    end
+  end
 end

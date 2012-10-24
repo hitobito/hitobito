@@ -6,6 +6,7 @@ de:
     errors: 
       messages: 
         type_not_allowed: kann hier nicht erstellt werden.
+        must_be_after_opening: muss nach dem Anmeldebeginn sein.
         
     models:
       group:

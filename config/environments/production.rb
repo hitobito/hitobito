@@ -50,7 +50,6 @@ Jubla::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
-  # TODO: change host once it is known
   config.action_mailer.default_url_options = { :host => 'jubla.puzzle.ch' }
 
   config.middleware.use ExceptionNotifier,

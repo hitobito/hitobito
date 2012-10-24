@@ -1,1 +1,3 @@
 = dropdown_button('Person hinzufügen', @event.possible_role_links, :plus) if can?(:new, @event.participations.new)
+.btn-group.pull-right
+  = dropdown_button(role_filter_title, role_filter_links)

@@ -60,11 +60,11 @@ class EventDecorator < ApplicationDecorator
   end
   
   def description
-    h.simple_format(model_description) if model.description?
+    h.simple_format(model.description) if model.description?
   end
   
   def location
-    h.simple_format(model_description) if model.description?
+    h.simple_format(model.location) if model.location?
   end
 
   def with_br(*attrs)

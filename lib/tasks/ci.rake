@@ -13,9 +13,9 @@ namespace :ci do
                     'ci:setup:rspec',
                     'spec',
                     'wagon:test',
+                    'spec:requests',
                     'brakeman',
                     #'qa' raises StackLevelTooDeep for Ruby 1.9.3.p0
-                    #'spec:integration'
                     ]
 end
 
@@ -59,6 +59,7 @@ end
 namespace :spec do
   task :requests => :enable_requests
   task :enable_requests do
+    puts ENV['PATH'] += File::PATH_SEPARATOR + File.join(File.dirname(__FILE__), '..', '..', "script") 
     ENV['SPEC_OPTS'] ||= "--tag type:request"
   end
 end

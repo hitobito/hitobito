@@ -7,8 +7,8 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer          not null
 #  person_id              :integer          not null
-#  additional_information :text
 #  created_at             :datetime         not null
+#  additional_information :text
 #  updated_at             :datetime         not null
 #  active                 :boolean          default(FALSE), not null
 #  application_id         :integer
@@ -65,6 +65,12 @@ class Event::Participation < ActiveRecord::Base
     
     def upcoming
       joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
+    end
+    def leader_team(event)
+      where('event_roles.type <> ?', event.participant_type.sti_name)
+    end
+    def participant_team(event)
+      where('event_roles.type = ?', event.participant_type.sti_name)
     end
   end
 

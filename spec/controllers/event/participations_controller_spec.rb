@@ -57,6 +57,34 @@ describe Event::ParticipationsController do
     end
   end
 
+  context "GET index" do
+    before { @leader, @participant = *create(Event::Role::Leader, course.participant_type) }
+    it "lists particpant and leader group by default" do
+      get :index, event_id: course.id
+      assigns(:participations).size.should eq 2
+    end
+
+    it "lists only leader_group" do
+      get :index, event_id: course.id, filter: :leaders
+      assigns(:participations).size.should eq 1
+      assigns(:participations).should eq [@leader]
+    end
+
+
+    it "lists only participant_group" do
+      get :index, event_id: course.id, filter: :participants
+      assigns(:participations).size.should eq 1
+      assigns(:participations).should eq [@participant]
+    end
+
+    def create(*roles)
+      roles.map do |role_class|
+        role = Fabricate(:event_role, type: role_class.name.to_sym)
+        Fabricate(:event_participation, event: course, roles: [role], active: true)
+      end
+    end
+  end
+
 
   context "POST create" do
     specify do

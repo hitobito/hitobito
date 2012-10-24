@@ -214,4 +214,12 @@ de:
   participations:
     create:
       flash:
-        success: "%{model} wurde erfolgreich erstellt.<br/> Bitte überprüfe deine Kontaktdaten."
+        success: "%{model} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten."
+    destroy:
+      flash:
+        success: "Anmeldung wurde erfolgreich gelöscht."
+        
+  event/participations:
+    show:
+      link:
+        delete: 'Anmeldung löschen'

@@ -47,8 +47,18 @@ describe Event::ParticipationsController, type: :controller do
   describe "POST create" do
     it "prompts to change contact data" do
       post :create,  event_id: course.id, participation: test_entry_attrs
-      flash[:notice].should =~ /Bitte überprüfe deine Kontaktdaten/
+      flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
       should redirect_to event_participation_path(course, assigns(:participation))
+    end
+  end
+
+  describe_action :delete, :destroy, format: :html, id: true do
+    it "redirects to application market" do
+      should redirect_to event_application_market_index_path(course)
+    end
+    
+    it "has flash noting the application" do
+      flash[:notice].should =~ /Anmeldung/
     end
   end
 

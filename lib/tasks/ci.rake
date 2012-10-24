@@ -59,8 +59,9 @@ end
 namespace :spec do
   task :requests => :enable_requests
   task :enable_requests do
-    puts ENV['PATH'] += File::PATH_SEPARATOR + File.join(File.dirname(__FILE__), '..', '..', "script") 
-    ENV['SPEC_OPTS'] ||= "--tag type:request"
+    ENV['PATH'] += File::PATH_SEPARATOR + File.join(File.dirname(__FILE__), '..', '..', "script")
+    ENV['SPEC_OPTS'] ||= ""
+    ENV['SPEC_OPTS'] += " --tag type:request"
   end
 end
 

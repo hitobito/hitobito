@@ -1,4 +1,7 @@
 = button_action_edit if can?(:edit, entry)
-= action_button('Drucken', print_event_participation_path(entry.event, entry), :print, { target: 'new'})
-= action_button('Kontaktdaten ändern', edit_person_path, :print) if can?(:edit, entry.person) && flash.present?
+= action_button('Drucken', print_event_participation_path(entry.event_id, entry), :print, { target: 'new'})
+- if can?(:edit, entry.person) && flash.present?
+  = action_button('Kontaktdaten ändern', edit_person_path, :edit)
+- if entry.application_id? && can?(:destroy, entry)
+  = button_action_destroy
 

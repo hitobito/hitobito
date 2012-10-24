@@ -7,6 +7,10 @@ def seed_course(group_id, kind)
   number = rand(1000)
   year = ::Date.today.year
   date = Time.new(year) + rand(1000).days - 500.days
+
+  location = [Faker::Address.street_address,
+              Faker::Address.zip,
+              Faker::Address.city].join("\n")
   
   event = Event::Course.seed(:name, :group_id, 
     { group_id: group_id,
@@ -16,6 +20,9 @@ def seed_course(group_id, kind)
       state: Event::Course.possible_states.shuffle.first,
       maximum_participants: rand(30) + 10,
       priorization: true,
+      location: location,
+      motto: Faker::Lorem.paragraphs(rand(1..3)).join("\n"),
+      description: Faker::Lorem.paragraphs(rand(1..3)).join("\n"),
       requires_approval: true,
       application_opening_at: date,
       application_closing_at: date + 60.days}

@@ -1,5 +1,21 @@
 # encoding: UTF-8
 ch = Group.roots.first
+srand(42)
+def contacts
+  { short_name: ('A'..'Z').to_a.sample(2).join,
+    address: Faker::Address.street_address,
+    zip_code: Faker::Address.zip,
+    town: Faker::Address.city,
+    country: 'Svizzera',
+    email: Faker::Internet.safe_email
+  } 
+end
+unless ch.address.present?
+  ch.update_attributes(contacts)
+  ch.default_children.each do |child_class|
+    child_class.first.update_attributes(contacts)
+  end
+end
 
 states = Group::State.seed(:name, :parent_id,
   {name: 'Kanton Bern',
@@ -44,8 +60,10 @@ states.each do |s|
       contactable_type: 'Group',
       number:           Faker::PhoneNumber.phone_number,
       label:            "Auskunft",
-      public:           true },
+      public:           true }
   )
+  ast = s.children.where(type: 'Group::StateAgency').first
+  ast.update_attributes(contacts)
 end
 
 Group::ProfessionalGroup.seed(:name, :parent_id,
@@ -66,19 +84,19 @@ Group::WorkGroup.seed(:name, :parent_id,
 
 regions = Group::Region.seed(:name, :parent_id,
   {name: 'Stadt',
-   parent_id: states[0].id },
+   parent_id: states[0].id }.merge(contacts),
    
   {name: 'Oberland',
-   parent_id: states[0].id },
+   parent_id: states[0].id }.merge(contacts),
    
   {name: 'Jura',
-   parent_id: states[0].id },
+   parent_id: states[0].id }.merge(contacts),
    
   {name: 'Stadt',
-   parent_id: states[1].id },
+   parent_id: states[1].id }.merge(contacts),
    
   {name: 'Oberland',
-   parent_id: states[1].id },
+   parent_id: states[1].id }.merge(contacts),
 )
 
 flocks = Group::Flock.seed(:name, :parent_id,

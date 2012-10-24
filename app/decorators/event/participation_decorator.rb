@@ -15,14 +15,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
     end
   end
 
-  def application_contact
-    if application && application.contact 
-      klass = application.contact.class.base_class
-      decorator = "#{klass}Decorator".constantize.decorate(application.contact)
-      h.render 'contactable/show', contactable: decorator, only_public: true
-    end
-  end
-
   def flash_info
     "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
   end

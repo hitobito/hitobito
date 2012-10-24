@@ -10,22 +10,37 @@
       $(function() { window.print(); })
 
   %body
-    = entry.application_contact
+    - if @application.present?
+      = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
 
-    %h4 Informationen zum Event
-    = render 'events/event', event: entry.event
+    %h4 Informationen zum Anlass
+    = entry.event.to_s
     %br/
+    = entry.event.kind 
+    = entry.event.number 
+    %br/
+    = entry.event.with_br(:location, :dates_full, :motto, :description)
+
+    - if entry.event.priorization && @application.present?
+      = render 'priorities'
 
     %h4 Informationen zur Person
     = entry.person
     = render 'contactable/show', contactable: entry.person, only_public: true
-    %br/
+    
+    -if @answers.present?
+      %h4 Spezifische Angaben
+      %ul
+      - @answers.each do |answer|
+        %li= "#{answer.question.question}: #{answer.answer}"
+      %br/
 
-    = render 'print_details'
+    - if entry.additional_information.present?
+      = simple_format(entry.additional_information)
 
     %h4 Unterschrift
-    %p Von dir oder eine erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
-    %table
+    %p Von dir oder einer erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
+    %table.signature
       %tr
         %td 
         %td 

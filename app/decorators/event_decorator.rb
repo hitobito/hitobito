@@ -34,7 +34,7 @@ class EventDecorator < ApplicationDecorator
     info << " von #{maximum_participants}" if maximum_participants.to_i > 0
     info
   end
-  
+
   def possible_role_links
     klass.role_types.map do |type|
       unless type.restricted
@@ -50,12 +50,28 @@ class EventDecorator < ApplicationDecorator
 
   def state_collection
     possible_states.collect {|s| [ h.t("activerecord.attributes.event/course.states.#{s}"), s ] }
+ 
   end
   
   def can_create_participation?
     p = participations.new
     p.person = current_user
     can?(:new, p)
+  end
+  
+  def description
+    h.simple_format(model_description) if model.description?
+  end
+  
+  def location
+    h.simple_format(model_description) if model.description?
+  end
+
+  def with_br(*attrs)
+    values = attrs.map do |attr|
+      send(attr).presence
+    end.compact
+    safe_join(values, h.tag(:br))
   end
   
 end

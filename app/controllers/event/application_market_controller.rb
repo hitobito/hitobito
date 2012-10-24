@@ -12,8 +12,12 @@ class Event::ApplicationMarketController < ApplicationController
   end
   
   def add_participant
-    participation.create_participant_role(event)
-    event.reload
+    if other_participation_exists?
+      render 'participation_exists_error'
+    else
+      participation.create_participant_role(event)
+      event.reload
+    end
   end
   
   def remove_participant
@@ -55,6 +59,9 @@ class Event::ApplicationMarketController < ApplicationController
                        sort_by {|p| [p.application.priority(event) || 99, p.person.last_name, p.person.first_name] })
   end
   
+  def other_participation_exists?
+    participation.event_id != event.id && event.participations.where(person_id: participation.person_id).exists?
+  end
   
   def event
     @event ||= Event.find(params[:event_id])

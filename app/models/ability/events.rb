@@ -69,7 +69,7 @@ module Ability::Events
     
     ### EVENT APPLICATION
     
-    # regular people can only create their applications 
+    # regular people can only create (but not update) their applications 
     can :create, Event::Application do |application|
       participation = application.participation
       participation.person_id == user.id ||

@@ -18,7 +18,7 @@
         %td= event.dates_full
         - if can?(:manage_courses, current_user)
           %td= event.booking_info
-          %td= event.state
+          %td= event.state_translated
         - else
           %td
             - if event.application_possible? && event.can_create_participation?

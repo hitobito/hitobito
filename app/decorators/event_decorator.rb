@@ -44,7 +44,7 @@ class EventDecorator < ApplicationDecorator
     end.compact
   end
   
-  def state
+  def state_translated
     h.t("activerecord.attributes.event/course.states.#{model.state}") if model.state
   end
 

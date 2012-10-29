@@ -33,6 +33,10 @@ module Jubla::Event::Course
     (!application_opening_at || application_opening_at <= ::Date.today)
   end
   
+  def qualification_possible?
+    !completed? && !closed?
+  end
+  
   def state
     super || possible_states.first
   end

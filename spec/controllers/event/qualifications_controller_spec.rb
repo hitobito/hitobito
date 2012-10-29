@@ -45,7 +45,18 @@ describe Event::QualificationsController do
   describe "PUT update" do
     subject { participant_1.qualifications }
     
-    context "with one qualification kind" do
+    context "with one existing qualifications" do
+      before do
+        participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
+                                                    start_at: event.qualification_date)
+        put :update, event_id: event.id, id: participant_1.id, format: :js
+      end
+      
+      it { should have(1).item }
+      it { should render_template('qualification') }
+    end
+     
+     context "without existing qualifications" do
       before { put :update, event_id: event.id, id: participant_1.id, format: :js }
       
       it { should have(1).item }
@@ -58,7 +69,16 @@ describe Event::QualificationsController do
     
     subject { participant_1.qualifications }
    
-    context "with one qualification kind" do
+    context "without existing qualifications" do
+      before do
+        delete :destroy, event_id: event.id, id: participant_1.id, format: :js
+      end
+      
+      it { should have(0).items }
+      it { should render_template('qualification') }
+    end
+   
+    context "with one existing qualification" do
       before do
         participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
                                                     start_at: event.qualification_date)

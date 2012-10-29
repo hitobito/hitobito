@@ -12,6 +12,7 @@ class Event::QualificationsController < ApplicationController
   
   def update
     # TODO: add prolongations
+    participation
     if event.kind_id?
       Qualification.transaction do
         event.kind.qualification_kinds.each do |q|

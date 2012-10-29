@@ -76,4 +76,51 @@ describe Event::QualificationsController, type: :controller do
     end
   end
   
+  describe 'PUT update' do
+    context "in open state" do
+      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+    
+      subject { participant_1.qualifications }
+    
+      it { should have(1).item }
+      it { should render_template('qualification') }
+    end
+    
+    context "in closed state" do
+      before { event.update_column(:state, 'closed') }
+      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+    
+      subject { participant_1.qualifications }
+    
+      it { should have(0).items }
+      it { should render_template('qualification') }
+    end
+  end
+  
+  describe 'DELETE destroy' do
+    before do
+      participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
+                                                    start_at: event.qualification_date)
+    end
+    
+    context "in open state" do
+      before { delete :destroy, event_id: event.id, id: participant_1.id, format: :js }
+    
+      subject { participant_1.qualifications }
+    
+      it { should have(0).item }
+      it { should render_template('qualification') }
+    end
+    
+    context "in closed state" do
+      before { event.update_column(:state, 'closed') }
+      before { delete :destroy, event_id: event.id, id: participant_1.id, format: :js }
+    
+      subject { participant_1.qualifications }
+    
+      it { should have(1).items }
+      it { should render_template('qualification') }
+    end
+  end
+  
 end

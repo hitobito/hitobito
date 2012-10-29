@@ -64,18 +64,23 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 
 $ ->
+  # wire up date picker
   $(":input.date").live("click", ->
     $(this).datepicker(dateFormat: 'dd.mm.yy')
     $(this).datepicker('show'))
 
+  # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)
-  
   $('body').on('ajax:before','[data-replace]', setDataType)
   
+  # wire up person auto complete
   $('[data-provide=person]').each(setupPersonTypeahead)
-  
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
   
+  # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))
 
+  # show alert if ajax requests fail
+  $(document).on('ajax:error', (event, xhr, status, error) ->
+    alert('Sorry, something went wrong\n(' + error + ')')

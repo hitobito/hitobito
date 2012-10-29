@@ -251,20 +251,6 @@ describe Event do
         event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now.midnight - 5.minutes)
         should be_blank
       end
-      
-    end
-
-    context "#init_questions" do
-      it "adds 3 default questions" do
-        e = Event.new
-        e.init_questions
-        e.questions.should have(3).item
-      end
-    end
-
-    def add_date(event,start_at)
-      start_at = Time.zone.parse(start_at)
-      event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
     end
   end
   
@@ -297,4 +283,41 @@ describe Event do
       should be_valid
     end
   end
+
+  context "#init_questions" do
+    it "adds 3 default questions" do
+      e = Event.new
+      e.init_questions
+      e.questions.should have(3).item
+    end
+  end
+
+  context "event_dates" do
+
+    it "should update event_date's start_at time" do
+      d = Time.zone.local(2012,12,12).to_date
+      e = Fabricate(:event)
+      e.dates.create(label: 'foo', start_at: d, finish_at: d)
+      ed = e.dates.first
+      e.update_attributes(dates_attributes: { "0" => {start_at_date: d, start_at_h: 18, start_at_min: 10, id: ed.id }})
+      e.dates.first.start_at.should == Time.zone.local(2012,12,12,18,10)
+    end
+
+    it "should update event_date's finish_at date" do
+      d1 = Time.zone.local(2012,12,12).to_date
+      d2 = Time.zone.local(2012,12,13).to_date
+      e = Fabricate(:event)
+      e.dates.create(label: 'foo', start_at: d1, finish_at: d1)
+      ed = e.dates.first
+      e.update_attributes(dates_attributes: { "0" => {finish_at_date: d2, id: ed.id }})
+      e.dates.first.finish_at.should == Time.zone.local(2012,12,13,00,00)
+    end
+
+  end
+
+  def add_date(event,start_at)
+    start_at = Time.zone.parse(start_at)
+    event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
+  end
+
 end

@@ -107,6 +107,14 @@ class Event < ActiveRecord::Base
             "events.maximum_participants <= 0 OR " +
             "events.participant_count < events.maximum_participants")
     end
+
+    # moved from event/course
+    def list
+      order_by_date.
+      includes(:group, :kind).
+      preload_all_dates.
+      uniq
+    end
     
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
@@ -149,6 +157,10 @@ class Event < ActiveRecord::Base
 
   def to_s
     name
+  end
+
+  def label_detail
+    "#{number} #{name}"
   end
 
   def init_questions

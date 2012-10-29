@@ -14,9 +14,6 @@ class Event::Date < ActiveRecord::Base
   attr_accessible :label,
                   :start_at, :start_at_min, :start_at_h, :start_at_date,
                   :finish_at, :finish_at_min, :finish_at_h, :finish_at_date
-
-  attr_writer :start_at_date, :start_at_h, :start_at_min,
-              :finish_at_date, :finish_at_h, :finish_at_min
   
   belongs_to :event
 
@@ -44,6 +41,36 @@ class Event::Date < ActiveRecord::Base
 
   def finish_at_min
     @finish_at_min ||= finish_at.try(:min)
+  end
+
+  def start_at_date=(value)
+    start_at_will_change! unless value == start_at_date
+    @start_at_date = value
+  end
+
+  def start_at_h=(value)
+    start_at_will_change! unless value == start_at_h
+    @start_at_h = value
+  end
+
+  def start_at_min=(value)
+    start_at_will_change! unless value == start_at_min
+    @start_at_min = value
+  end
+
+  def finish_at_date=(value)
+    finish_at_will_change! unless value == finish_at_date
+    @finish_at_date = value
+  end
+
+  def finish_at_h=(value)
+    finish_at_will_change! unless value == finish_at_h
+    @finish_at_h = value
+  end
+
+  def finish_at_min=(value)
+    finish_at_will_change! unless value == finish_at_min
+    @finish_at_min = value
   end
 
   def duration

@@ -40,12 +40,6 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     content_tag(:span, label, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
   end
   
-  def waiting_list_link(event)
-    h.toggle_link(waiting_list, 
-                  h.waiting_list_event_application_market_path(event.id, id),
-                  'Entfernen von der nationalen Warteliste',
-                  'Hinzufügen zu der nationalen Warteliste',
-                  'Warteliste')
-  end
+
 end
   

@@ -144,10 +144,10 @@ describe Event::ApplicationMarketController do
   end
   
   
-  describe "POST participant" do
+  describe "PUT participant" do
     
     it "creates role" do
-      post :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js
+      put :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js
       
       appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
     end
@@ -156,7 +156,7 @@ describe Event::ApplicationMarketController do
       other = Fabricate(:course, group: groups(:top_layer))
       Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
 
-      post :add_participant, event_id: other.id, id: appl_prio_1.id, format: :js
+      put :add_participant, event_id: other.id, id: appl_prio_1.id, format: :js
       
       should render_template('participation_exists_error')
     end
@@ -170,8 +170,8 @@ describe Event::ApplicationMarketController do
     end
   end
   
-  describe "POST waiting_list" do
-    before { post :put_on_waiting_list, event_id: event.id, id: appl_prio_1.id, format: :js }
+  describe "PUT waiting_list" do
+    before { put :put_on_waiting_list, event_id: event.id, id: appl_prio_1.id, format: :js }
     
     it "sets waiting list flag" do
       appl_prio_1.reload.application.should be_waiting_list

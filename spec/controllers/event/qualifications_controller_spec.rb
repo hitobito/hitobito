@@ -22,6 +22,10 @@ describe Event::QualificationsController do
   
   before { sign_in(people(:top_leader)) }
   
+  it "event kind has one qualification kind" do
+    event.kind.qualification_kinds.should == [qualification_kinds(:sl)]
+  end
+  
   
   describe "GET index" do
     before do
@@ -39,25 +43,30 @@ describe Event::QualificationsController do
   end
   
   describe "PUT update" do
-    before { put :update, event_id: event.id, id: participant_1.id, format: :js }
-    
     subject { participant_1.qualifications }
     
-    it { should have(1).item }
-    it { should render_template('qualification') }
+    context "with one qualification kind" do
+      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+      
+      it { should have(1).item }
+      it { should render_template('qualification') }
+    end
   end
   
   
   describe "DELETE destroy" do
-    before do
-      participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
-                                                  start_at: event.qualification_date)
-      delete :destroy, event_id: event.id, id: participant_1.id, format: :js
-    end
     
     subject { participant_1.qualifications }
-    
-    it { should have(0).items }
-    it { should render_template('qualification') }
+   
+    context "with one qualification kind" do
+      before do
+        participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
+                                                    start_at: event.qualification_date)
+        delete :destroy, event_id: event.id, id: participant_1.id, format: :js
+      end
+      
+      it { should have(0).items }
+      it { should render_template('qualification') }
+    end
   end
 end

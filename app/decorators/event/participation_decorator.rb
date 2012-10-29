@@ -7,7 +7,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :application
   
   delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, :town, to: :person
-  delegate :priority, :confirmation, :waiting_list_link, to: :application
+  delegate :priority, :confirmation, to: :application
   
   # render a list of all participations
   def roles_short(event)
@@ -23,5 +23,14 @@ class Event::ParticipationDecorator < ApplicationDecorator
   def qualification_link
     h.toggle_link(qualified?, h.event_qualification_path(event_id, model))
   end
-
+  
+  def waiting_list_link(event)
+    if application
+      h.toggle_link(application.waiting_list?, 
+                    h.waiting_list_event_application_market_path(event.id, id),
+                    'Entfernen von der nationalen Warteliste',
+                    'Hinzufügen zu der nationalen Warteliste',
+                    'Warteliste')
+    end
+  end
 end

@@ -2,6 +2,7 @@ desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
              'db:migrate',
              'ci:setup:rspec',
+             'spec:requests', # run request specs first to get coverage from spec
              'spec',
              'wagon:test']
 

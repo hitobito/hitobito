@@ -89,6 +89,12 @@ describe Event::ApplicationMarketController do
       end   
       
       it "starting from application on waiting list" do
+        find('#waiting_list').set(true)
+        click_button('Aktualisieren')
+        
+        @participants = find('#participants').text
+        @applications = find('#applications').text
+        
         appl_id = "event_participation_#{appl_waiting.id}"
         find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
         
@@ -125,6 +131,12 @@ describe Event::ApplicationMarketController do
       end   
       
       it "starting from application on waiting list" do
+        find('#waiting_list').set(true)
+        click_button('Aktualisieren')
+        
+        @participants = find('#participants').text
+        @applications = find('#applications').text
+        
         appl_id = "event_participation_#{appl_waiting.id}"
         
         find("#applications ##{appl_id} td:first a").trigger('click')

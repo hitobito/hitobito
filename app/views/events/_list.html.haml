@@ -1,0 +1,11 @@
+- @sheets = GroupSheet.new(self, @group, :group_events_path)
+= render 'event/page_per_year'
+= render 'groups/tabs'
+
+%table.table
+  - entries.each do |event| 
+    %tr
+      %td= event.labeled_link
+      %td= event.dates_full
+      %td= event.booking_info
+      %td= event.state

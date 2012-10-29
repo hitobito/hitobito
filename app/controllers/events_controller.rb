@@ -4,7 +4,7 @@ class EventsController < CrudController
 
   self.nesting = Group
   
-  decorates :event, :events
+  decorates :event, :events, :group
 
   # load group before authorization
   prepend_before_filter :parent

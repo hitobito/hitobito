@@ -20,6 +20,13 @@ class GroupDecorator < ApplicationDecorator
       end
     end.compact
   end
+
+  def possible_event_links
+    model.class.event_types.map do |type|
+      link = h.new_group_event_path(event: { group_id: self.id, type: type.sti_name})
+      h.link_to(type.model_name.human, link)
+    end
+  end
   
   def people_filter_links
     links = []

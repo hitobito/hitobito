@@ -1,4 +1,17 @@
-= section_table(title, collection) do |item|
-  %td
-    %strong= item.qualification_kind
-  %td= f(item.finish_at.to_date)
+%section 
+  %h2 
+    Qualifikation
+    - if can?(:qualify, entry)
+      .btn-group.pull-right.smaller
+        = button_action_add(new_group_person_qualification_path(parent, entry))
+
+  %table.table.table-basic
+    %tbody
+      - @qualifications.each do |item|
+        %tr
+          %td
+            %strong= item.qualification_kind
+          %td= f(item.finish_at.to_date)
+          - if can?(:qualify, entry)
+            %td= link_action_edit(edit_group_person_qualification_path(parent, entry, item))
+            %td= link_action_destroy(group_person_qualification_path(parent, entry, item))

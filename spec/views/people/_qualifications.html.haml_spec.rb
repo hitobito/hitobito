@@ -8,17 +8,46 @@ describe 'people/_qualifications.html.haml' do
   let(:dom) { @dom = Capybara::Node::Simple.new(@rendered) }
 
   before do
-    ql_sl = create_qualification
-    ql_gl = create_qualification finish_at_at: 1.year.ago, kind: gl
-    view.stub(parent: top_group, title: 'Qualifikationen', collection: [ql_sl, ql_gl])
-    render 
+    view.stub(parent: top_group, entry: top_leader)
+    view.stub(current_user: top_leader)
+    controller.stub(current_user: top_leader)
+  end
+  
+
+  context "table order" do
+    before do
+      assign(:qualifications,[create_qualification, create_qualification(finish_at_at: 1.year.ago, kind: gl)])
+      render 
+    end
+
+    it "lists qualifications finish_at DESC " do
+      dom.should have_css('table tr', count: 2)
+      dom.all('tr strong').first.text.should eq 'Super Lead'
+      dom.all('tr strong').last.text.should eq 'Group Lead'
+    end
   end
 
-  it "lists qualifications in table" do
-    dom.should have_css('table tr', count: 2)
-    dom.all('tr strong').first.text.should eq 'Super Lead'
-    dom.all('tr strong').last.text.should eq 'Group Lead'
+  context "action links" do
+    let(:ql_sl) { create_qualification }
+    before { assign(:qualifications, [ql_sl]) }
+
+    it "lists edit and delete buttons" do
+      render
+      dom.all('tr a').first[:href].should eq "#{path(ql_sl)}/edit"
+      dom.all('tr a').last[:href].should eq path(ql_sl)
+    end
+
+    it "has button to add new qualification" do
+      render
+      dom.all('a').first[:href].should eq new_group_person_qualification_path(top_group, top_leader)
+    end
+
+    def path(qualification)
+      group_person_qualification_path(top_group, top_leader, qualification)
+    end
+
   end
+  
 
   def create_qualification(opts={})
     opts = { kind: sl, finish_at: 1.year.from_now }.merge(opts)

@@ -7,6 +7,7 @@ Jubla::Application.routes.draw do
       member do
         get :history
       end
+      resources :qualifications
     end
     
     resources :roles, except: [:index, :show]
@@ -43,6 +44,7 @@ Jubla::Application.routes.draw do
     collection do
       get :query
     end
+
   end
   
   resources :qualification_kinds

@@ -14,7 +14,9 @@
         %h2= kind 
     - events.each do |event| 
       %tr
-        %td= event.labeled_link
+        %td
+          %strong
+            = event.labeled_link
         %td= event.dates_full
         - if can?(:manage_courses, current_user)
           %td= event.booking_info

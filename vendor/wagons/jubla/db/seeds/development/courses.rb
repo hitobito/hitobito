@@ -1,6 +1,5 @@
-puts group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).order(:name).pluck(:id)
-puts kinds = Event::Kind.order(:label)
-puts "\n" * 10
+group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).order(:name).pluck(:id)
+kinds = Event::Kind.order(:label)
 @@people_count = Person.count
 
 def seed_course(group_id, kind)

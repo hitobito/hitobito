@@ -4,7 +4,7 @@ module ContactableDecorator
     html = ''.html_safe
 
     if address?
-      html << address
+      html << safe_join(address.split("\n"), h.tag(:br))
       html << h.tag(:br)
     end
     

@@ -65,6 +65,7 @@ describe PeopleController, type: :controller do
   end
 
   describe "event sections" do
+    # TODO - probably better if we extract most of this into a view spec
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:header) { section.find('h2').text }
     let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
@@ -78,7 +79,7 @@ describe PeopleController, type: :controller do
 
       it "is missing if we have no applications" do
         get :show, params 
-        section.should be_nil
+        dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "lists application" do
@@ -99,13 +100,13 @@ describe PeopleController, type: :controller do
 
       it "is missing if we have no events" do
         get :show, params 
-        section.should be_nil
+        dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "is missing if we have no upcoming events" do
         create_participation(10.days.ago, true)
         get :show, params 
-        section.should be_nil
+        dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "lists event label, link and dates" do

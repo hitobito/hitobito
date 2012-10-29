@@ -1,7 +1,7 @@
 %section 
   %h2 
     Qualifikation
-    - if can?(:qualify, entry)
+    - if can?(:create, entry)
       .btn-group.pull-right.smaller
         = button_action_add(new_group_person_qualification_path(parent, entry))
 
@@ -12,6 +12,5 @@
           %td
             %strong= item.qualification_kind
           %td= f(item.finish_at.to_date)
-          - if can?(:qualify, entry)
-            %td= link_action_edit(edit_group_person_qualification_path(parent, entry, item))
+          - if can?(:destroy, entry)
             %td= link_action_destroy(group_person_qualification_path(parent, entry, item))

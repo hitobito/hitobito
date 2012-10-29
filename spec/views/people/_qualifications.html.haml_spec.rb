@@ -33,8 +33,7 @@ describe 'people/_qualifications.html.haml' do
 
     it "lists edit and delete buttons" do
       render
-      dom.all('tr a').first[:href].should eq "#{path(ql_sl)}/edit"
-      dom.all('tr a').last[:href].should eq path(ql_sl)
+      dom.all('tr a').first[:href].should eq path(ql_sl)
     end
 
     it "has button to add new qualification" do

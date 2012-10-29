@@ -25,13 +25,18 @@ module Ability::Events
     can :application_market, Event do |event| 
       can_create_event?(event)
     end
+    
+    can :qualify, Event do |event| 
+      can_create_event?(event) ||
+      events_with_permission(:qualify).include?(event.id) 
+    end
 
       
     ### COURSES
     if modify_permissions? 
       can :manage_courses, Person do |person|
         course_groups = Group.can_offer_courses
-        contains_any?(groups_group_full,collect_ids(course_groups)) || 
+        contains_any?(groups_group_full, collect_ids(course_groups)) || 
           contains_any?(layers_full, course_groups.collect(&:layer_group_id)) 
       end
     end
@@ -114,13 +119,12 @@ module Ability::Events
   def events_with_permission(permission)
     @events_with_permission ||= {}
     @events_with_permission[permission] ||= find_events_with_permission(permission)
-      
   end
   
   def find_events_with_permission(permission)
-    participations = user.event_participations.includes(:roles).to_a
-    participations.select {|p| p.roles.any? {|r| r.class.permissions.include?(permission) }}.
-                   collect(&:event_id)
+    @participations ||= user.event_participations.includes(:roles).to_a
+    @participations.select {|p| p.roles.any? {|r| r.class.permissions.include?(permission) }}.
+                    collect(&:event_id)
   end
   
   

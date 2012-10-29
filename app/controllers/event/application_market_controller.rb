@@ -38,11 +38,7 @@ class Event::ApplicationMarketController < ApplicationController
   private
   
   def load_participants
-    @participants = event.participations.joins(:roles).
-                                         where(event_roles: {type: event.class.participant_type.sti_name}).
-                                         includes(:application, :person).
-                                         merge(Person.order_by_name).
-                                         uniq
+    @participants = event.participants.includes(:application)
   end
   
   def load_applications

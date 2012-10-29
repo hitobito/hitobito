@@ -106,6 +106,20 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     time_select(attr, {include_blank: true, ignore_date: true}, html_options)
   end
 
+  # Render a select with minutes
+  def minutes_select(attr, html_options = {})
+    html_options[:class] ||= 'time'
+    ma = (0..59).collect { |n| [ "%02d" % n, n ] }
+    select(attr, ma, {}, html_options)
+  end
+
+  # Render a select with hours
+  def hours_select(attr, html_options = {})
+    html_options[:class] ||= 'time'
+    ma = (0..23).collect { |n| [ "%02d" % n, n ] }
+    select(attr, ma, {}, html_options)
+  end
+
   # Render a field to enter a date and time. You might want to customize this.
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'

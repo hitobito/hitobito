@@ -20,18 +20,22 @@ Jubla::Application.routes.draw do
   resources :event_courses, module: 'event', controller: 'courses'
   
   resources :events do
-    resources :participations, module: 'event' do
-      get 'print', on: :member
-    end
-    resources :roles, module: 'event'
-    
-    resources :application_market, module: 'event', only: :index do
-      member do
-        post   'waiting_list' => 'application_market#put_on_waiting_list'
-        delete 'waiting_list' => 'application_market#remove_from_waiting_list'
-        post   'participant'  => 'application_market#add_participant'
-        delete 'participant'  => 'application_market#remove_participant'
+    scope module: 'event' do
+      resources :participations do
+        get 'print', on: :member
       end
+      resources :roles
+      
+      resources :application_market, only: :index do
+        member do
+          put    'waiting_list' => 'application_market#put_on_waiting_list'
+          delete 'waiting_list' => 'application_market#remove_from_waiting_list'
+          put    'participant'  => 'application_market#add_participant'
+          delete 'participant'  => 'application_market#remove_participant'
+        end
+      end
+      
+      resources :qualifications, only: [:index, :update, :destroy]
     end
   end
   

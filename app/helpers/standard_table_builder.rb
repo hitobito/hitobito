@@ -85,7 +85,7 @@ class StandardTableBuilder
 
   def html_row(entry)
     attrs = {}
-    attrs[:id] = dom_id(entry) if entry.respond_to?(:dom_id)
+    attrs[:id] = dom_id(entry)
     content_tag_nested(:tr, cols, attrs) { |c| c.html_cell(entry) }
   end
 

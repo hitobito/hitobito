@@ -101,11 +101,18 @@ module StandardHelper
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end
   
-  def form_error_messages(object, form)
-    record = object.is_a?(Array) ? object.last : object
-    content = render('shared/error_messages', errors: record.errors, object: record)
+  def toggle_link(active, url, active_title = nil, inactive_title = nil, label = nil)
+    icon, method = active ? ['ok', :delete] : ['minus', :put]
+    title = active ? active_title : inactive_title
+    
+    caption = icon(icon)
+    caption << "&nbsp; ".html_safe << label if label
+    link_to(caption,
+            url, 
+            title: title, 
+            remote: true, 
+            method: method)
   end
-
 
   # Renders a simple unordered list, which will
   # simply render all passed items or yield them

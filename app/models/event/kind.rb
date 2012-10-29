@@ -20,11 +20,14 @@ class Event::Kind < ActiveRecord::Base
   
   has_many :events
   
+  # The qualifications to gain for this event kind
   has_and_belongs_to_many :qualification_kinds, join_table: 'event_kinds_qualification_kinds',
                                                 foreign_key: :event_kind_id
+  # The qualifications required to visit this event kind
   has_and_belongs_to_many :preconditions, join_table: 'event_kinds_preconditions', 
                                           class_name: 'QualificationKind', 
                                           foreign_key: :event_kind_id
+  # The qualifications that are prolonged when visiting this event kind
   has_and_belongs_to_many :prolongations, join_table: 'event_kinds_prolongations', 
                                           class_name: 'QualificationKind', 
                                           foreign_key: :event_kind_id

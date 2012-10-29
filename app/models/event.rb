@@ -133,11 +133,26 @@ class Event < ActiveRecord::Base
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 
+  # Sum the participations with the participant role and store in :participant_count
   def refresh_participant_count!
     count = participations.joins(:roles).
                            where(event_roles: {type: participant_type.sti_name}).
                            count(distinct: true)
     update_column(:participant_count, count)
+  end
+    
+  # All participations with the participant role
+  def participants
+    participations.joins(:roles).
+                   where(event_roles: {type: participant_type.sti_name}).
+                   includes(:person).
+                   merge(Person.order_by_name).
+                   uniq
+  end
+  
+  # Does this event provide qualifications
+  def qualifying?
+    kind_id? && kind.qualification_kinds.exists?
   end
 
   def to_s

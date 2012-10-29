@@ -18,14 +18,13 @@ describe Event::Participation do
   
   
   let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer))
+    course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course
   end
   
   
-
   context "#init_answers" do
     subject { course.participations.new }
     
@@ -124,6 +123,91 @@ describe Event::Participation do
     it "does not touch participation" do
       subject.remove_participant_role
       Event::Participation.where(id: subject.id).exists?.should be_true
+    end
+  end
+  
+  describe "#qualified?" do
+    subject { Fabricate(:event_participation, event: course) }
+    let(:quali_date) { Date.new(2012, 10, 20) }
+    before do
+      course.stub(:qualification_date).and_return(quali_date)
+    end
+    
+    context "event kind with one qualification kind" do
+      context "without qualifications" do
+        it { should_not be_qualified }
+        its(:qualifications) { should have(0).items }
+      end
+      
+      context "with old qualification" do
+        before do
+          Fabricate(:qualification, person: subject.person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2010, 04, 20))
+        end
+        
+        it { should_not be_qualified }
+        its(:qualifications) { should have(0).items }
+      end
+      
+      context "with event qualification" do
+        before do
+          Fabricate(:qualification, person: subject.person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+        its(:qualifications) { should have(1).items }
+      end
+    end
+    
+    context "event kind with multiple qualification kinds" do
+      let(:other_kind) { Fabricate(:qualification_kind) }
+      before do
+        course.kind.qualification_kinds << other_kind
+      end
+      
+      context "without qualifications" do
+        it { should_not be_qualified }
+        its(:qualifications) { should have(0).items }
+      end
+      
+      context "with one qualification" do
+        before do
+          Fabricate(:qualification, person: subject.person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        
+        it { should_not be_qualified }
+        its(:qualifications) { should have(1).item }
+      end
+      
+      context "with event qualification" do
+        before do
+          Fabricate(:qualification, person: subject.person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+          Fabricate(:qualification, person: subject.person, qualification_kind: other_kind, start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+        its(:qualifications) { should have(2).items }
+      end
+    end
+    
+    context "event kind without qualification kinds" do
+      let(:other_kind) { Fabricate(:qualification_kind) }
+      before do
+        course.kind.qualification_kinds.clear
+      end
+      
+      context "without qualifications" do
+        it { should be_qualified }
+        its(:qualifications) { should have(0).items }
+      end
+      
+      context "with qualification" do
+        before do
+          Fabricate(:qualification, person: subject.person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+        its(:qualifications) { should have(0).items }
+      end
     end
   end
 end

@@ -18,6 +18,8 @@ class Qualification < ActiveRecord::Base
   
   before_validation :set_finish_at
   
+  validates :qualification_kind_id, uniqueness: {scope: [:person_id, :start_at]}
+  
   
   private
   

@@ -5,7 +5,7 @@
 %table.table
   - entries.each do |event| 
     %tr
-      %td= event.labeled_link
+      %td
+        %strong= event.simple_link
       %td= event.dates_full
       %td= event.booking_info
-      %td= event.state

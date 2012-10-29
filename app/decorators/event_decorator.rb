@@ -14,11 +14,12 @@ class EventDecorator < ApplicationDecorator
   
   def labeled_link(url = nil)
     url ||= h.group_event_path(group_id, model)
-    safe_join([h.link_to(name, url), label_detail], h.tag(:br))
+    safe_join([h.link_to(name, url), h.muted(model.label_detail)], h.tag(:br))
   end
-  
-  def label_detail
-    h.muted(model.label_detail)
+
+  def simple_link(url = nil)
+    url ||= h.group_event_path(group_id, model)
+    h.link_to(name, url)
   end
 
   def dates_info    

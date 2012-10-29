@@ -145,7 +145,7 @@ class Event < ActiveRecord::Base
   end
 
   def label_detail
-    "#{number} #{group.name}"
+    "#{number} #{name}"
   end
 
   def init_questions

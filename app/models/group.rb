@@ -71,7 +71,7 @@ class Group < ActiveRecord::Base
   
   has_many :people_filters, dependent: :destroy
   
-  has_many :events
+  has_many :events, dependent: :destroy
   
   ### VALIDATIONS
   

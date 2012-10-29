@@ -18,7 +18,7 @@ class EventDecorator < ApplicationDecorator
   end
   
   def label_detail
-    h.muted("#{kind.short_name} #{number} #{group.name}")
+    h.muted(model.label_detail)
   end
 
   def dates_info    

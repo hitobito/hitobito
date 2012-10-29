@@ -52,5 +52,9 @@ class Event::Course < Event
     end
     
   end
+
+  def label_detail
+    "#{kind.short_name} #{number} #{group.name}"
+  end
   
 end

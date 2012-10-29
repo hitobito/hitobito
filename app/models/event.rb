@@ -144,6 +144,10 @@ class Event < ActiveRecord::Base
     name
   end
 
+  def label_detail
+    "#{number} #{group.name}"
+  end
+
   def init_questions
     if questions.blank?
       Event::Question.global.each do |q|

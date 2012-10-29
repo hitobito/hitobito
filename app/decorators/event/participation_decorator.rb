@@ -6,7 +6,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :event
   decorates_association :application
   
-  delegate :to_s, :email, :all_phone_numbers, :complete_address, :all_social_accounts, to: :person
+  delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, to: :person
   
   # render a list of all participations
   def roles_short(event)

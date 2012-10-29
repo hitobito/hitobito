@@ -90,7 +90,7 @@ describe Event::CoursesController, type: :controller do
       get :index, year: 2010
       main.find('h2').text.should eq 'Scharleiterkurs'
       main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
-      main.find('table tr:eq(2) td:eq(1)').text.should eq "EventusSLK  Top"
+      main.find('table tr:eq(2) td:eq(1)').text.strip.should eq "EventusSLK  Top"
       main.find('table tr:eq(2) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
       main.find('table tr:eq(2) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
       main.find('table tr:eq(2) td:eq(3)').text.should eq "0 von 20"
@@ -102,7 +102,7 @@ describe Event::CoursesController, type: :controller do
       sign_in(person)
       get :index, year: 2010
       main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
-      main.find('table tr:eq(2) td:eq(1)').text.should eq "EventusSLK  Top"
+      main.find('table tr:eq(2) td:eq(1)').text.strip.should eq "EventusSLK  Top"
       main.find('table tr:eq(2) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
       main.find('table tr:eq(2) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
       expect { main.find('table tr:eq(2) td:eq(4)') }.to raise_error

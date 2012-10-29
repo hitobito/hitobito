@@ -1,0 +1,10 @@
+= form_tag nil, class: 'form-inline', method: :get do
+  .btn-group{data_toggle: 'buttons-checkbox'}
+    = render 'prio_check', prio: 1
+    = render 'prio_check', prio: 2
+    = render 'prio_check', prio: 3
+    %label.checkbox
+      = check_box_tag :waiting_list, true, params[:waiting_list]
+      nationale Warteliste
+  
+  = submit_tag 'Aktualisieren', class: 'btn btn-small'

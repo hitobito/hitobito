@@ -46,17 +46,37 @@ class Event::ApplicationMarketController < ApplicationController
   end
   
   def load_applications
-    filter = [1,2,3].collect { |i| "event_applications.priority_#{i}_id = ?" }.join(' OR ')
-    filter << " OR (event_applications.waiting_list = ? AND events.kind_id = ?)"
-    
     @applications = Event::ParticipationDecorator.decorate(
           Event::Participation.
                        joins(:event).
                        includes(:application, :person).
-                       where(filter, event.id, event.id, event.id, true, event.kind_id).
+                       where(filter_applications).
                        merge(Event::Participation.pending).
                        uniq.
                        sort_by {|p| [p.application.priority(event) || 99, p.person.last_name, p.person.first_name] })
+  end
+  
+  def filter_applications
+    if params[:prio].nil? && params[:waiting_list].nil?
+      params[:prio] = %w(1 2 3)  # default filter
+    end
+    
+    conditions = []
+    args = []
+    if params[:prio]
+      ([1,2,3] & params[:prio].collect(&:to_i)).each do |i|
+        conditions << "event_applications.priority_#{i}_id = ?"
+        args << event.id
+      end
+    end
+    if params[:waiting_list]
+      conditions << "(event_applications.waiting_list = ? AND events.kind_id = ?)"
+      args << true << event.kind_id
+    end
+    
+    if conditions.present?
+      [conditions.join(" OR "), *args]
+    end
   end
   
   def other_participation_exists?

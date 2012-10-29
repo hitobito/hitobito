@@ -30,6 +30,7 @@ describe Event::ApplicationMarketController do
     Fabricate(:event_participation, 
               application: Fabricate(:event_application))
   end
+  
   let(:appl_other_assigned) do
     participation = Fabricate(:event_participation)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
@@ -65,42 +66,81 @@ describe Event::ApplicationMarketController do
   
   describe "GET index" do
     
-    before { get :index, event_id: event.id }
+    context "with standard filter" do
+      before { get :index, event_id: event.id }
+      
+      context "participants" do
+        subject { assigns(:participants) }
+        
+        it { should have(1).items }
+        
+        it "contains participant" do
+          should include(appl_participant)
+        end
+        
+        it "does not contain unassigned applications" do
+          should_not include(appl_prio_1)
+        end
+        
+        it "does not contain leader" do
+          should_not include(leader)
+        end
+      end
+      
+      context "applications" do
+        subject { assigns(:applications) }
+        
+        it { should have(3).items }
+        
+        it { should include(appl_prio_1) }
+        it { should include(appl_prio_2) }
+        it { should include(appl_prio_3) }
+        it { should_not include(appl_waiting) }
+        
+        it { should_not include(appl_participant) }
+        it { should_not include(appl_other) }
+        it { should_not include(appl_other_assigned) }
+      end
+    end
     
-    context "participants" do
-      subject { assigns(:participants) }
+    context "with mixed prio filter" do
+      before { get :index, event_id: event.id, prio: %w(1 3) }
+
+      subject { assigns(:applications) }
+      
+      it { should have(2).items }
+      
+      it { should include(appl_prio_1) }
+      it { should_not include(appl_prio_2) }
+      it { should include(appl_prio_3) }
+      it { should_not include(appl_waiting) }
+    end
+    
+    context "with prio and waiting list filter" do
+      before { get :index, event_id: event.id, prio: %w(2), waiting_list: true }
+
+      subject { assigns(:applications) }
+      
+      it { should have(2).items }
+      
+      it { should_not include(appl_prio_1) }
+      it { should include(appl_prio_2) }
+      it { should_not include(appl_prio_3) }
+      it { should include(appl_waiting) }
+    end
+    
+    context "with waiting list filter" do
+      before { get :index, event_id: event.id, waiting_list: true }
+
+      subject { assigns(:applications) }
       
       it { should have(1).items }
       
-      it "contains participant" do
-        should include(appl_participant)
-      end
-      
-      it "does not contain unassigned applications" do
-        should_not include(appl_prio_1)
-      end
-      
-      it "does not contain leader" do
-        should_not include(leader)
-      end
-    end
-    
-    context "applications" do
-      subject { assigns(:applications) }
-      
-      it { should have(4).items }
-      
-      it { should include(appl_prio_1) }
-      it { should include(appl_prio_2) }
-      it { should include(appl_prio_3) }
+      it { should_not include(appl_prio_1) }
+      it { should_not include(appl_prio_2) }
+      it { should_not include(appl_prio_3) }
       it { should include(appl_waiting) }
-      
-      it { should_not include(appl_participant) }
-      it { should_not include(appl_other) }
-      it { should_not include(appl_other_assigned) }
-      
     end
-    
   end
   
   

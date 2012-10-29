@@ -20,6 +20,21 @@ class Qualification < ActiveRecord::Base
   
   validates :qualification_kind_id, uniqueness: {scope: [:person_id, :start_at]}
   
+  class << self
+    def active
+      today = Date.today
+      where("qualifications.start_at <= ? AND qualifications.finish_at >= ?", today, today)
+    end
+    
+  end
+  
+  def active?
+    duration.active?
+  end
+  
+  def duration
+    Duration.new(start_at, finish_at)
+  end
   
   private
   

@@ -11,20 +11,12 @@ class Event::QualificationsController < ApplicationController
   end
   
   def update
-    # TODO: add prolongations
-    participation
-    if event.kind_id?
-      Qualification.transaction do
-        event.kind.qualification_kinds.each do |q|
-          participation.person.qualifications.create(qualification_kind: q, start_at: event.qualification_date)
-        end
-      end
-    end
+    qualifier.issue
     render 'qualification'
   end
   
   def destroy
-    participation.qualifications.destroy_all
+    qualifier.revoke
     render 'qualification'
   end
   
@@ -32,6 +24,10 @@ class Event::QualificationsController < ApplicationController
    
   def entries
     @participants ||= event.participants.includes(:event)
+  end
+  
+  def qualifier
+    Event::Qualifier.new(participation)
   end
   
   def event

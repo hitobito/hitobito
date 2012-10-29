@@ -3,6 +3,7 @@ slk:
   short_name: SLK
   preconditions: [gl]
   qualification_kinds: [sl]
+  prolongations: [gl]
  
 glk:
   label: Gruppenleiterkurs

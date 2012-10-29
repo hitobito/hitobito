@@ -43,7 +43,7 @@ describe Event::QualificationsController do
   end
   
   describe "PUT update" do
-    subject { participant_1.qualifications }
+    subject { Event::Qualifier.new(participant_1).qualifications }
     
     context "with one existing qualifications" do
       before do
@@ -67,7 +67,7 @@ describe Event::QualificationsController do
   
   describe "DELETE destroy" do
     
-    subject { participant_1.qualifications }
+    subject { Event::Qualifier.new(participant_1).qualifications }
    
     context "without existing qualifications" do
       before do

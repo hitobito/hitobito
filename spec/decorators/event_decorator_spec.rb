@@ -54,12 +54,12 @@ describe EventDecorator, :draper_with_helpers do
 
       it "start and finish" do
         add_date(start_at: parse("2002-01-01 13:30"),finish_at: parse("2002-01-13 15:30"))
-        subject.dates_info.should eq "01.01.2002 - 13.01.2002"
+        subject.dates_info.should eq "01.01.2002 13:30 - 13.01.2002 15:30"
       end
 
       it "start and finish on same day, start time" do
-        add_date(start_at: parse("2002-01-01 13:30"),finish_at: parse("2002-01-01"))
-        subject.dates_info.should eq "01.01.2002 13:30"
+        add_date(start_at: parse("2002-01-01"),finish_at: parse("2002-01-01 13:30"))
+        subject.dates_info.should eq "01.01.2002 00:00 - 13:30"
       end
 
       it "start and finish on same day, finish time" do

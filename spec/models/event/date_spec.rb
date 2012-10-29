@@ -62,4 +62,19 @@ describe Event::Date do
     event_date.finish_at_min.should == 10
   end
 
+  it 'should update hours,mins when a date was stored previously' do
+    date = Time.zone.local(2012,12,12).to_date
+    event_date = Event::Date.new(label: 'foobar')
+    event_date.event = Fabricate(:event, group: groups(:top_group))
+    # set start_at date
+    event_date.start_at_date = date
+    event_date.valid?.should be true
+    # update time
+    event_date.start_at_h = 18
+    event_date.start_at_min = 10
+    event_date.valid?.should be true
+
+    event_date.start_at.should == Time.zone.local(2012,12,12,18,10)
+  end
+
 end

@@ -1,10 +1,6 @@
 - title(page_title)
 
-.pagination
-  %ul
-    - year_range.each do |year|
-      %li{class: "#{'active' if year == @year}"}= link_to(year.to_s, event_courses_path({year: year}.merge(group_param)))
-
+= render 'event/page_per_year', paging_params:  group_param
 
 %table.table
   - courses_by_kinds.each_entry do |kind, events|

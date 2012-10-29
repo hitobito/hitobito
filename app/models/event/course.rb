@@ -59,7 +59,7 @@ class Event::Course < Event
   
   # The date on which qualification obtained in this course start
   def qualification_date
-    dates.reorder('event_dates.finish_at DESC').first.finish_at.to_date
+    @qualification_date ||= dates.reorder('event_dates.finish_at DESC').first.finish_at.to_date
   end
   
 end

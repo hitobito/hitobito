@@ -2,17 +2,21 @@ class Event::QualificationsController < ApplicationController
     
   before_filter :authorize
 
-  before_filter :entries, only: :index
-  
   decorates :event, :participants, :participation
   
   helper_method :event, :entries, :participation
   
+  def index
+    entries
+  end
   
   def update
+    # TODO: add prolongations
     if event.kind_id?
-      event.kind.qualification_kinds.each do |q|
-        participation.person.qualifications.create(qualification_kind: q, start_at: event.qualification_date)
+      Qualification.transaction do
+        event.kind.qualification_kinds.each do |q|
+          participation.person.qualifications.create(qualification_kind: q, start_at: event.qualification_date)
+        end
       end
     end
     render 'qualification'
@@ -26,7 +30,7 @@ class Event::QualificationsController < ApplicationController
   private
    
   def entries
-    @participants ||= event.participants
+    @participants ||= event.participants.includes(:event)
   end
   
   def event

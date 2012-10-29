@@ -135,7 +135,7 @@ class Event::Participation < ActiveRecord::Base
   end
   
   def qualification_kind_ids
-    event.kind_id? ? event.kind.qualification_kind_ids : []
+    event.kind_id? ? event.kind.qualification_kind_ids.to_a : []
   end
   
   private

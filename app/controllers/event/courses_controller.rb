@@ -1,7 +1,7 @@
 class Event::CoursesController < EventsController
   self.nesting_optional = true
-  attr_reader :year, :year_range, :group_id
-  helper_method :year, :year_range, :group_id
+  attr_reader :group_id
+  helper_method :group_id
   decorates :events
 
   class << self
@@ -13,17 +13,12 @@ class Event::CoursesController < EventsController
   private
   
   def list_entries
-    set_group_vars
     set_year_vars
-    scoped = model_scope.order('event_kinds.id').in_year(year).list
+    set_group_vars
+    scoped = model_scope.order('event_kinds.id').in_year(@year).list
     limit_scope_for_user(scoped)
   end
 
-  def set_year_vars
-    this_year = Date.today.year
-    @year_range = (this_year-2)...(this_year+3)
-    @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
-  end
 
   def set_group_vars
     if can?(:manage_courses, current_user)

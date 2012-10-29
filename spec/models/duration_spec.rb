@@ -28,11 +28,11 @@ describe Duration do
     context "time objects" do
       it "start_at only" do
         add_date(start_at: parse("2002-01-01 13:30"))
-        should eq "01.01.2002"
+        should eq "01.01.2002 13:30"
       end
       it "finish_at only" do
         add_date(finish_at: parse("2002-01-01 13:30"))
-        should eq  "01.01.2002"
+        should eq  "01.01.2002 13:30"
       end
 
       it "start and finish" do
@@ -55,7 +55,6 @@ describe Duration do
         should eq "01.01.2002 13:30 - 15:30"
       end
     end
-
   end
   
   def parse(str)

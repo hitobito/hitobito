@@ -262,10 +262,6 @@ describe Event do
       end
     end
 
-    def add_date(event,start_at)
-      start_at = Time.zone.parse(start_at)
-      event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
-    end
   end
   
   context "validations" do
@@ -296,5 +292,10 @@ describe Event do
       
       should be_valid
     end
+  end
+  
+  def add_date(event,start_at)
+    start_at = Time.zone.parse(start_at)
+    event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
   end
 end

@@ -118,6 +118,26 @@ class Event::Participation < ActiveRecord::Base
     roles.where(type: event.participant_type.sti_name).destroy_all
   end
   
+  # Does the person have all qualifications from the event?
+  def qualified?
+    qualification_kind_ids.size == qualifications.size
+  end
+  
+  # The qualifications a participant got in this event
+  def qualifications
+    quali_ids = qualification_kind_ids
+    if quali_ids.present?
+      person.qualifications.where(qualification_kind_id: quali_ids, 
+                                  start_at: event.qualification_date)
+    else
+      Qualification.where('1=0') # none!
+    end
+  end
+  
+  def qualification_kind_ids
+    event.kind_id? ? event.kind.qualification_kind_ids : []
+  end
+  
   private
   
   def set_self_in_nested

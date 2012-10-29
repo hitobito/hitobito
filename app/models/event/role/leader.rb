@@ -11,6 +11,6 @@
 # Hauptsleiter
 class Event::Role::Leader < Event::Role
   
-  self.permissions = [:full]
+  self.permissions = [:full, :qualify]
     
 end

@@ -1,0 +1,7 @@
+= render 'header'
+
+- if event.completed? || event.closed?
+  %p Im aktuellen Event Status können die Qualifikationen nicht mehr bearbeitet werden.
+
+= render 'list'
+

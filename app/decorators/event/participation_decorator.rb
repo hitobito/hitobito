@@ -6,7 +6,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :event
   decorates_association :application
   
-  delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, to: :person
+  delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, :town, to: :person
+  delegate :priority, :confirmation, :waiting_list_link, to: :application
   
   # render a list of all participations
   def roles_short(event)
@@ -19,46 +20,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
     "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
   end
   
-  def priority(event)
-    if application
-      prio = application.priority(event)
-      if prio
-        prio = "Prio #{prio}"
-      else
-        prio = application.waiting_list ? 'Warteliste' : nil
-      end
-      content_tag(:span, prio, class: 'badge') if prio
-    end
+  def qualification_link
+    h.toggle_link(qualified?, h.event_qualification_path(event_id, model))
   end
-  
-  def confirmation
-    if application
-      label, css, desc = if application.approved?
-        %w(&#x2713; success bestätigt)
-      elsif application.rejected?
-        %w(&#x00D7; important abgelehnt)
-      else
-        %w(? warning ausstehend)
-      end
-      
-      content_tag(:span, label, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
-    end
-  end
-  
-  def waiting_list_link(event)
-    if application
-      icon, title, method = if application.waiting_list
-        ['ok', 'Entfernen von der nationalen Warteliste', :delete]
-      else
-        ['minus', 'Hinzufügen zu der nationalen Warteliste', :post]
-      end
-      
-      h.link_to(h.icon(application.waiting_list ? 'ok' : 'minus') + "&nbsp; Warteliste".html_safe,
-                h.waiting_list_event_application_market_path(event.id, id), 
-                title: title, 
-                remote: true, 
-                method: method)
-    end
-  end
-  
+
 end

@@ -1,0 +1,8 @@
+%table.table.table-striped.table-hover
+  %tbody
+    - entries.each do |p|
+      %tr{id: dom_id(p)}
+        %td.center= p.qualification_link
+        %td
+          %strong= link_to(p.to_s, event_participation_path(@event, p))
+        %td= p.town

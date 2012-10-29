@@ -197,6 +197,18 @@ textarea {
   height: auto;
 }
 
+.table-basic {
+  margin-bottom: 0;
+  
+  td, th {
+    border-top: none;
+    padding: 2px 5px;
+  }
+}
+
+td.center {
+  text-align: center;
+}
 
 select[class*="span"] {
   min-height: 30px;
@@ -210,7 +222,15 @@ select[class*="span"] {
   dd { margin-left: 200px; }
 }
 
-// 
+
+.pull-right > .btn-group > .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-menu .dropdown-menu {
+  min-width: 0;
+}
 
 
 /* Layout */
@@ -363,21 +383,4 @@ body > footer {
   }
 }
 
-.pull-right > .btn-group > .dropdown-menu {
-  right: 0;
-  left: auto;
-}
-
-.dropdown-menu .dropdown-menu {
-  min-width: 0;
-}
-
-.table-basic {
-  margin-bottom: 0;
-  
-  td, th {
-    border-top: none;
-    padding: 2px 5px;
-  }
-}
 

@@ -3,7 +3,7 @@
     = link_to(icon('arrow-left'), 
               participant_event_application_market_path(event, p), 
               remote: true, 
-              method: :post)
+              method: :put)
                
   = render 'participation', p: p
   

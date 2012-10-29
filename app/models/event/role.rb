@@ -10,7 +10,7 @@
 
 class Event::Role < ActiveRecord::Base
   
-  Permissions = [:full, :contact_data]
+  Permissions = [:full, :qualify, :contact_data]
 
   include NormalizedLabels
   

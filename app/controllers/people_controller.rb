@@ -95,6 +95,7 @@ class PeopleController < CrudController
                                                     includes(:kind, :group).
                                                     preload_all_dates.
                                                     order_by_date)
+    @qualifications = entry.qualifications.includes(:qualification_kind).order_by_date
   end
   
 end

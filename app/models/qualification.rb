@@ -37,6 +37,8 @@ class Qualification < ActiveRecord::Base
   end
   
   private
+
+  scope :order_by_date, order('finish_at DESC')
   
   def set_finish_at
     if start_at? && qualification_kind && !qualification_kind.validity.nil?

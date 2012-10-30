@@ -231,7 +231,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     caption_or_content ||= captionize(attr, @object.class)
     add_css_class(html_options, 'controls')
 
-    errors = (@object.errors.keys & assoc_and_id_attr(attr).collect(&:to_sym)).present?
+    attr, attr_id = assoc_and_id_attr(attr)
+    errors = @object.errors.has_key?(attr) || @object.errors.has_key?(attr_id)
     content_tag(:div, :class => "control-group#{' error' if errors}") do
       label(attr, caption_or_content, :class => 'control-label') +
       content_tag(:div, content, html_options)

@@ -50,7 +50,6 @@ class Event < ActiveRecord::Base
                   :application_conditions, :dates_attributes, :questions_attributes
 
 
-
   ### ASSOCIATIONS
 
   belongs_to :group

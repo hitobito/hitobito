@@ -1,8 +1,8 @@
-- entry.used_attributes(:employment_percent).each do |attr|
-  = f.labeled_input_field attr
+- entry.used?(:employment_percent) do
+  = f.labeled_input_field :employment_percent
   
-- entry.used_attributes(:honorary).each do |attr|
-  = f.labeled(attr, "&nbsp;".html_safe) do
+- entry.used?(:honorary) do
+  = f.labeled(:honorary, "&nbsp;".html_safe) do
     = f.label(:honorary_true, class: 'radio inline') do
       = f.radio_button(:honorary, true) 
       = 'Ehrenamt'

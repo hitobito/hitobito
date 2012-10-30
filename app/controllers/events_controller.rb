@@ -20,7 +20,8 @@ class EventsController < CrudController
     model_scope.list.in_year(@year)
   end
 
-  private 
+  private
+  
   def set_year_vars
     this_year = Date.today.year
     @year_range = (this_year-2)...(this_year+3)
@@ -28,7 +29,8 @@ class EventsController < CrudController
   end
   
   def build_entry
-    event = model_params.delete(:type).constantize.new
+    type = model_params.delete(:type).presence || 'Event'
+    event = type.constantize.new
     event.group_id = model_params.delete(:group_id)
     event
   end

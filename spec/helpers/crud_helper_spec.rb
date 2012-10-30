@@ -158,7 +158,7 @@ describe CrudHelper do
       it { should match(/form [^>]*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" [^>]*?method="post"/) }
       it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="put"/) }
       it { should match(/input [^>]*?name="crud_test_model\[name\]" [^>]*?type="text" [^>]*?value="AAAAA"/) }
-      it { should match(/input [^>]*?name="crud_test_model\[birthdate\]" [^>]*?type="text" [^>]*?value="1910-01-01"/) }
+      it { should match(/input [^>]*?name="crud_test_model\[birthdate\]" [^>]*?type="text" [^>]*?value="01.01.1910"/) }
       it { should match(/input [^>]*?name="crud_test_model\[children\]" [^>]*?type="text" [^>]*?value=\"9\"/) }
       it { should match(/input [^>]*?name="crud_test_model\[human\]" [^>]*?type="checkbox"/) }
       it { should match(/button [^>]*?type="submit">Speichern<\/button>/) }

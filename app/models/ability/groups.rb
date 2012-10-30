@@ -40,6 +40,8 @@ module Ability::Groups
        layers_read.include?(group.layer_group.id))
     end
     
+    can :index_events, Group
+    
     ### ROLES
     
     if modify_permissions?

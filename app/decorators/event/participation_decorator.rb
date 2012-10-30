@@ -8,6 +8,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   
   delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, :town, to: :person
   delegate :priority, :confirmation, to: :application
+  delegate :qualified?, to: :qualifier
   
   # render a list of all participations
   def roles_short(event)
@@ -33,4 +34,9 @@ class Event::ParticipationDecorator < ApplicationDecorator
                     'Warteliste')
     end
   end
+  
+  def qualifier
+    Event::Qualifier.new(model)
+  end
+  
 end

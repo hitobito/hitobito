@@ -13,6 +13,9 @@ require 'spec_helper'
 
 describe Qualification do
   
+  let(:qualification) { Fabricate(:qualification) }
+  let(:person) { qualification.person }
+  
   describe "#set_finish_at" do
     let(:date) { Date.today }
     
@@ -47,6 +50,39 @@ describe Qualification do
     def build_qualification(validity, start_at)
       kind = Fabricate(:qualification_kind, validity: validity)
       Qualification.new(qualification_kind: kind, start_at: start_at)
+    end
+  end
+  
+  describe "#active" do
+    subject { qualification }
+    it { should be_active}
+  end
+  
+  describe ".active" do
+    subject { person.reload.qualifications.active }
+    
+    it "contains from today" do
+      q = Fabricate(:qualification, person: person, start_at: Date.today)
+      q.should be_active
+      should include(q)
+    end
+    
+    it "does contain until this year" do
+      q = Fabricate(:qualification, person: person, start_at: Date.today - 2.years)
+      q.should be_active
+      should include(q)
+    end
+    
+    it "does not contain past" do
+      q = Fabricate(:qualification, person: person, start_at: Date.today - 5.years)
+      q.should_not be_active
+      should_not include(q)
+    end
+    
+    it "does not contain future" do
+      q = Fabricate(:qualification, person: person, start_at: Date.today + 1.day)
+      q.should_not be_active
+      should_not include(q)
     end
   end
   

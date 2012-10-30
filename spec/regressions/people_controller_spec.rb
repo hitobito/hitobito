@@ -96,7 +96,7 @@ describe PeopleController, type: :controller do
     context "upcoming events" do
       let(:section) { dom.all('aside section')[1] }
       let(:date) { 2.days.from_now }
-      let(:pretty_date) { date.strftime("%d.%m.%Y") + ' - ' + (date + 5.days).strftime("%d.%m.%Y")}
+      let(:pretty_date) { date.strftime("%d.%m.%Y %H:%M") + ' - ' + (date + 5.days).strftime("%d.%m.%Y %H:%M")}
 
       it "is missing if we have no events" do
         get :show, params 

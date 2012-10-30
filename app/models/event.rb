@@ -101,8 +101,9 @@ class Event < ActiveRecord::Base
     end
     
     def application_possible
-      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", ::Date.today).
-      where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", ::Date.today).
+      today = ::Date.today
+      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today).
+      where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today).
       where("events.maximum_participants IS NULL OR " + 
             "events.maximum_participants <= 0 OR " +
             "events.participant_count < events.maximum_participants")

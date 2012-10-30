@@ -6,10 +6,10 @@ module Jubla::Event::ParticipationDecorator
   end
   
   def qualification_link_with_status
-    if event.completed? || event.closed?
-      h.icon(qualified? ? :ok : :minus)
-    else
+    if event.qualification_possible?
       qualification_link_without_status
+    else
+      h.icon(qualified? ? :ok : :minus)
     end
   end
   

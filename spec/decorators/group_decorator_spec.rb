@@ -27,4 +27,29 @@ describe GroupDecorator do
     end
   end
 
+  describe "new event links" do
+    let(:context) { double("context") }
+    let(:model) { double("model") }
+
+    before do
+      context.stub(can?: true)
+      context.stub_chain(:new_group_event_path, :link_to, :action_button, :dropdown_button)
+    end
+
+    it "should only create link for one possible event type" do
+      group = GroupDecorator.new(groups(:bottom_group_one_one))
+      group.stub(h: context)
+      group.should_receive(:new_event_button)
+      group.new_event_dropdown_button
+    end
+
+    it "should create link dropdown for multiple possible event types" do
+      group = GroupDecorator.new(groups(:top_group))
+      group.stub(h: context)
+      group.should_receive(:new_event_dropdown)
+      group.new_event_dropdown_button
+    end
+
+  end
+
 end

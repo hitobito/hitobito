@@ -15,7 +15,7 @@ describe Event::Course do
     subject { Event::Course.role_types }
     
     it { should include(Event::Course::Role::Participant) }
-    it { should include(Jubla::Event::Course::Role::Advisor) }
+    it { should include(Jubla::Event::Course::AffiliateAdvisor::Role::Advisor) }
     it { should_not include(Event::Role::Participant) }
   end
   

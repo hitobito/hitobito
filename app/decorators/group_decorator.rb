@@ -21,12 +21,36 @@ class GroupDecorator < ApplicationDecorator
     end.compact
   end
 
+  ### EVENT
+  def possible_events
+    model.class.event_types
+  end
+
+  def event_link(et)
+    h.new_group_event_path(event: { group_id: self.id, type: et.sti_name})
+  end
+
+  def new_event_button
+    e = possible_events.first
+    h.action_button("#{e.model_name.human} hinzufügen", event_link(e), :plus)
+  end
+
+  def new_event_dropdown
+    h.dropdown_button('Event hinzufügen', possible_event_links, :plus)
+  end
+
   def possible_event_links
-    model.class.event_types.map do |type|
-      link = h.new_group_event_path(event: { group_id: self.id, type: type.sti_name})
-      h.link_to(type.model_name.human, link)
+    possible_events.map do |type|
+      h.link_to(type.model_name.human, event_link(type))
     end
   end
+
+  def new_event_dropdown_button
+    if can?(:new, events.new)
+      possible_events.count == 1 ? new_event_button : new_event_dropdown
+    end
+  end
+
   
   def people_filter_links
     links = []

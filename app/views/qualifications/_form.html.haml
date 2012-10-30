@@ -1,0 +1,4 @@
+= entry_form(:start_at, :qualification_kind,
+  buttons_bottom: false, cancel_url: group_people_path(parents.first, parents.last)) do |f|
+  = f.labeled_belongs_to_field :qualification_kind
+  = f.labeled_input_field :start_at

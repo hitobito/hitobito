@@ -7,7 +7,7 @@ Jubla::Application.routes.draw do
       member do
         get :history
       end
-      resources :qualifications
+      resources :qualifications, only: [:new, :create, :destroy]
     end
     
     resources :roles, except: [:index, :show]

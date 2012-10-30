@@ -37,6 +37,10 @@ de:
       group/flock/president: Präses
       group/flock/guide: Leiter
 
+      event/camp:
+        one: Lager
+        other: Lager
+
     attributes:
       person:
         name_mother: Name Mutter

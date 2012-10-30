@@ -13,7 +13,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, 
+           :render, :f,
            :to => :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -91,7 +91,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a boolean field.
   def boolean_field(attr, html_options = {})
-    check_box(attr, html_options)
+    caption = ' ' + html_options.delete(:caption).to_s
+    label(attr, class: 'checkbox') do
+      check_box(attr, html_options) + caption
+    end
   end
 
   # Render a field to select a date. You might want to customize this.
@@ -123,7 +126,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a date and time. You might want to customize this.
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
-    datetime_select(attr, {}, html_options)
+    
+    text_field("#{attr}_date", class: 'span1 date', value: f(@object.send("#{attr}_date"))) + 
+    ' ' +
+    hours_select("#{attr}_hour") +
+    ' : ' +
+    minutes_select("#{attr}_min")
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
@@ -175,19 +183,21 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     belongs_to_field(attr, html_options)
   end
 
-  def labeled_inline_fields_for(assoc,partial_name=nil, &block) 
+  def labeled_inline_fields_for(assoc, partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
-      inline_fields_for(assoc,partial_name,'controls controls-row', &block)
+      nested_fields_for(assoc, partial_name, 'controls controls-row') do |fields|
+        content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+        content << help_inline(fields.link_to_remove('Entfernen'))
+        content_tag(:div, content, class: 'controls controls-row') 
+      end
     end
   end
 
-  def inline_fields_for(assoc,partial_name=nil,control_class=nil,&block) 
+  def nested_fields_for(assoc, partial_name=nil, control_class=nil, &block) 
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
-          content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
-          content << help_inline(fields.link_to_remove('Entfernen'))
-          content_tag(:div, content, class: control_class) 
+          block_given? ? capture(fields, &block) : render(partial_name, f: fields)
         end 
       end + 
       content_tag(:div, class: 'controls') do
@@ -323,7 +333,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
  def build_labeled_field(field_method, *args)
     options = args.extract_options!
     help = options.delete(:help)
+    help_inline = options.delete(:help_inline)
     text = send(field_method, *(args<<options)) + required_mark(args.first)
+    text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
     labeled(args.first, text)
   end

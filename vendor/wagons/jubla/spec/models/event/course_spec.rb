@@ -59,23 +59,24 @@ describe Event::Course do
   end
 
   context "#advisor" do
-    let(:person) { Fabricate(:person) }
+    let(:person)  { Fabricate(:person) }
     let(:person1) { Fabricate(:person) }
-
-    it "should add advisor if none is defined yet" do
-      event = Fabricate(:course, advisor_id: person.id)
-      event.advisor.should eq person
-    end
-
+    
+    let(:event)   { Fabricate(:course, advisor_id: person.id) } 
+    
+    subject { event }
+     
+    its(:advisor) { should == person }
+    its(:advisor_id) { should == person.id }
+    its(:advisor_participation) { should == person.event_participations.first }
+    
     it "shouldn't change the advisor if the same is already set" do
-      event = Fabricate(:course, advisor_id: person.id)
       event.advisor_id = person.id
       event.save.should be_true
       event.advisor.should eq person
     end
 
     it "should update the advisor if another person is assigned" do
-      event = Fabricate(:course, advisor_id: person.id)
       event.advisor_id = person1.id
       event.save.should be_true
       event.advisor.should eq person1
@@ -86,6 +87,14 @@ describe Event::Course do
       event.advisor.should be nil
     end
 
+    context "participation" do
+      subject { event.advisor_participation }
+      
+      it "should have advisor role" do
+        subject.roles.should have(1).item
+        subject.roles.first.should be_kind_of(Jubla::Event::Course::Role::Advisor)
+      end
+    end
   end
   
 end

@@ -5,7 +5,7 @@ module Jubla::Event::Course
   included do
 
     attr_accessible :advisor_id
-    attr_accessor :advisor_id
+    attr_writer :advisor_id
 
     self.role_types += [Role::Advisor]
     

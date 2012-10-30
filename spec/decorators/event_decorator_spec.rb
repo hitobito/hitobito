@@ -78,9 +78,10 @@ describe EventDecorator, :draper_with_helpers do
   def parse(str)
     Time.zone.parse(str)
   end
+  
   def add_date(date)
     event.dates.build(date)
-    event.save
+    event.save!
   end
 
 end

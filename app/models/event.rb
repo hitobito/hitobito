@@ -153,7 +153,7 @@ class Event < ActiveRecord::Base
   
   # Does this event provide qualifications
   def qualifying?
-    kind_id? && kind.qualification_kinds.exists?
+    kind_id? && kind.qualifying?
   end
 
   def to_s

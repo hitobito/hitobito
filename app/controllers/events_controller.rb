@@ -27,7 +27,7 @@ class EventsController < CrudController
     @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
   end
   
-  def build_entry 
+  def build_entry
     event = model_params.delete(:type).constantize.new
     event.group_id = model_params.delete(:group_id)
     event

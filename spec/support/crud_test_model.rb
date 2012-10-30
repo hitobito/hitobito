@@ -1,6 +1,9 @@
 # A dummy model used for general testing.
 class CrudTestModel < ActiveRecord::Base #:nodoc:
 
+  include DatetimeAttribute
+  datetime_attr :last_seen
+  
   attr_protected nil
 
 

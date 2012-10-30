@@ -2,12 +2,32 @@
 -title @event.name
 
 =render 'events/tabs'
-=render 'events/event',  event: entry 
-%p= entry.state
-%p
-  = entry.booking_info
-  Teilnehmende
 
-= render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, :contact_id))
+%section
+  = render_attrs(entry, :kind_id, :number, :motto, :state_translated)
+  = render_extensions :attrs
 
-= render_extensions :attrs
+= section 'Kursdaten' do
+  %p= entry.dates_full
+
+- if entry.location?
+  =section 'Ort' do
+    %p= entry.location
+
+- if entry.description?
+  = section 'Beschreibung' do
+    %p= entry.description
+
+- if entry.contact_id?
+  = section 'Kontaktperson' do
+    =render 'contactable/show', contactable: entry.contact, only_public: true, with_name: true
+
+
+=section 'Anmeldung' do
+  %p
+    = entry.booking_info
+    Teilnehmende
+  
+  = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, 
+                                               :application_conditions))
+

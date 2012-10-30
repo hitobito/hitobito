@@ -4,7 +4,7 @@ module Jubla::Event::Course
   included do
 
     include Jubla::Event::Course::AffiliateAdvisor
-   
+
     # states are used for workflow
     # translations in config/locales
     self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)

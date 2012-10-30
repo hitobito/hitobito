@@ -121,8 +121,9 @@ de:
         number: Nummer
         event_kind_id: Kursart
         state: Status
-        priorization: Priorisierung erforderlich
-        requires_approval: Freigabe erforderlich
+        state_translated: Status
+        priorization: Priorisierung
+        requires_approval: Freigabe
 
       event/role:
         label: Bezeichnung

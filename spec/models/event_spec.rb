@@ -301,7 +301,7 @@ describe Event do
       e = Fabricate(:event)
       e.dates.create(label: 'foo', start_at: d, finish_at: d)
       ed = e.dates.first
-      e.update_attributes(dates_attributes: { "0" => {start_at_date: d, start_at_h: 18, start_at_min: 10, id: ed.id }})
+      e.update_attributes(dates_attributes: { "0" => {start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id }})
       e.dates.first.start_at.should == Time.zone.local(2012,12,12,18,10)
     end
 
@@ -319,6 +319,6 @@ describe Event do
 
   def add_date(event,start_at)
     start_at = Time.zone.parse(start_at)
-    event.dates.create(start_at: start_at, finish_at: start_at + 5.days)
+    event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)
   end
 end

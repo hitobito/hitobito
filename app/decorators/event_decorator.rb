@@ -2,11 +2,7 @@
 
 class EventDecorator < ApplicationDecorator
   decorates :event
-
-
-  def used_attribute(attr)
-    model.class.attr_used?(attr)
-  end
+  decorates_association :contact
 
   def label
     safe_join([name, label_detail], h.tag(:br))
@@ -45,15 +41,14 @@ class EventDecorator < ApplicationDecorator
     end.compact
   end
   
-  def state_translated
-    h.t("activerecord.attributes.event/course.states.#{model.state}") if model.state
+  def state_translated(state = model.state)
+    h.t("activerecord.attributes.event/course.states.#{state}") if state
   end
 
   def state_collection
-    possible_states.collect {|s| [ h.t("activerecord.attributes.event/course.states.#{s}"), s ] }
- 
+    possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
-  
+    
   def can_create_participation?
     p = participations.new
     p.person = current_user

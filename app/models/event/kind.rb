@@ -37,6 +37,11 @@ class Event::Kind < ActiveRecord::Base
     "#{short_name} (#{label})"
   end
   
+  # is this event type qualifying
+  def qualifying?
+    qualification_kinds.exists? || prolongations.exists?
+  end
+  
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if events.exists?

@@ -21,11 +21,6 @@ module JublaJubla
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
-    end 
-
-    initializer "jubla.prepend_view_paths" do |app|
-      path = paths['app/views'].existent
-      ActionController::Base.prepend_view_path path
     end
 
     private

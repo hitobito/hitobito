@@ -50,6 +50,10 @@ class GroupDecorator < ApplicationDecorator
       possible_events.count == 1 ? new_event_button : new_event_dropdown
     end
   end
+  
+  def bottom?
+    klass.possible_children.none?(&:layer)
+  end
 
   
   def people_filter_links

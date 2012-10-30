@@ -12,17 +12,15 @@ class Event::ApplicationMarketController < ApplicationController
   end
   
   def add_participant
-    if other_participation_exists?
-      render 'participation_exists_error'
+    if assigner.createable?
+      assigner.create_role
     else
-      participation.create_participant_role(event)
-      event.reload
+      render 'participation_exists_error'
     end
   end
   
   def remove_participant
-    participation.remove_participant_role
-    event.reload
+    assigner.remove_role
   end
   
   def put_on_waiting_list
@@ -75,8 +73,8 @@ class Event::ApplicationMarketController < ApplicationController
     end
   end
   
-  def other_participation_exists?
-    participation.event_id != event.id && event.participations.where(person_id: participation.person_id).exists?
+  def assigner
+    @assigner ||= Event::ParticipantAssigner.new(event, participation)
   end
   
   def event

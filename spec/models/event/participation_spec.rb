@@ -76,54 +76,5 @@ describe Event::Participation do
     end
   end
   
-  describe "#create_participant_role" do
-    subject { Fabricate(:event_participation, event: course, application: Fabricate(:event_application)) }
-    
-    before do
-      p = subject
-      p.init_answers
-      p.save!
-    end
-        
-    it "creates role for given application" do
-      expect { subject.create_participant_role(course) }.to change { Event::Course::Role::Participant.count }.by(1)
-    end
-    
-    it "updates answers for other event" do
-      quest = course.questions.first
-      other = Fabricate(:course, group: groups(:top_layer))
-      other.questions << Fabricate(:event_question, event: other)
-      other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices)
-
-      expect { subject.create_participant_role(other) }.to change { Event::Answer.count }.by(1)
-      
-      subject.event_id.should == other.id
-    end
-    
-    it "raises error on existing participation" do
-      other = Fabricate(:course, group: groups(:top_layer))
-      Fabricate(:event_participation, event: other, person: subject.person, application: Fabricate(:event_application))
-
-      expect { subject.create_participant_role(other) }.to raise_error
-    end
-  end
-  
-    
-  describe "#remove_participant_role" do
-    subject { Fabricate(:event_participation, event: course, application: Fabricate(:event_application)) }
-
-    before do
-      Fabricate(course.participant_type.name.to_sym, participation: subject)
-    end
-        
-    it "removes role for given application" do
-      expect { subject.remove_participant_role }.to change { Event::Course::Role::Participant.count }.by(-1)
-    end
-    
-    it "does not touch participation" do
-      subject.remove_participant_role
-      Event::Participation.where(id: subject.id).exists?.should be_true
-    end
-  end
   
 end

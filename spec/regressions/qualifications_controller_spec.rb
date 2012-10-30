@@ -35,4 +35,18 @@ describe QualificationsController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(show), %w(edit), %w(index), %w(update)]
 
+  describe_action :get, :new do
+    context ".html", :format => :html do
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      it "renders sheets and form" do
+        perform_request
+        dom.should have_css('.sheet', count: 3)
+        dom.find_link('Top')[:href].should eq group_people_path(groups(:top_layer))
+        dom.find_link('TopGroup')[:href].should eq group_people_path(top_group)
+        dom.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
+      end
+    end
+  end
+  
+
 end

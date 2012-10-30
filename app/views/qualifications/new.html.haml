@@ -1,0 +1,6 @@
+- parent_sheet(EntrySheet.new(self, @person, [:group_person_path, @group]))
+- parent_sheet(GroupSheet.new(self, @group, :group_people_path, :index_people, group_path(@group)))
+
+- title ti(:title, :model => model_class_label(entry))
+
+= render 'form'

@@ -33,8 +33,6 @@ describe 'people/_qualifications.html.haml' do
 
     it "lists delete buttons" do
       render
-      require 'pry'
-      binding.pry
       dom.all('tr a').first[:href].should eq path(ql_sl)
     end
 

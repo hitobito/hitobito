@@ -54,6 +54,9 @@ de:
         one: Kassier
       event/role/speaker:
         one: Referent
+      qualification:
+        one: Qualifikation
+        other: Qualifikationen
       qualification_kind:
         one: Qualifikationsart
         other: Qualifikationsarten
@@ -161,6 +164,10 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+
+      qualification:
+        qualification_kind: Qualifiziert für
+        start_at: Seit
         
       qualification_kind:
         label: Bezeichnung

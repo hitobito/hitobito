@@ -115,7 +115,7 @@ de:
         kind_id: Kursart
 
         # course
-        number: Kursnummer
+        number: Nummer
         event_kind_id: Kursart
         state: Status
         priorization: Priorisierung erforderlich

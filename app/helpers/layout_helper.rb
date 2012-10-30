@@ -53,9 +53,18 @@ module LayoutHelper
     render(layout: 'shared/section', locals: {title: title}, &block)
   end
   
-  def section_table(title, collection, &block)
+  def section_table(title, collection, add_path = nil, &block)
     collection.inspect # force relation evaluation
-    render(layout: 'shared/section_table', locals: {title: title, collection: collection}, &block) if collection.present?
+    if add_path || collection.present?
+      if add_path
+        title = safe_join([title,
+                           content_tag(:span, 
+                                       button_action_add(add_path, nil, class: 'btn-small'), 
+                                       class: 'pull-right')])
+      end
+      render(layout: 'shared/section_table', 
+             locals: {title: title, collection: collection, add_path: add_path}, &block)
+    end 
   end
   
   def muted(text)

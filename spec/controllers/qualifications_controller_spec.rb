@@ -22,7 +22,7 @@ describe QualificationsController do
     it "redirects to show for person" do
       expect { 
         post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now }) 
-        should redirect_to group_people_path(group, person)
+        should redirect_to group_person_path(group, person)
       }.to change { Qualification.count }.by (1)
     end
 
@@ -40,7 +40,7 @@ describe QualificationsController do
     it "redirects to show for person" do
       expect { 
         post :destroy, params.merge(id: id) 
-        should redirect_to group_people_path(group, person)
+        should redirect_to group_person_path(group, person)
       }.to change { Qualification.count }.by (-1)
     end
 

@@ -99,7 +99,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
-    html_options[:class] ||= 'span6 date'
+    html_options[:class] ||= 'span2 date'
     html_options[:value] ||= f(@object.send(attr))
     text_field(attr, html_options)
   end

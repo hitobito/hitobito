@@ -50,6 +50,15 @@ describe Ability::Qualifications do
         should_not be_able_to(:destroy, qualification)
       end
     end
+    
+    context "on Flock Leader" do
+      let(:person) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)).person }
+
+      it "can create and destroy" do
+        should be_able_to(:create, qualification)
+        should be_able_to(:destroy, qualification)
+      end
+    end
   end
 
 

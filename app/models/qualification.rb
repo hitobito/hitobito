@@ -35,6 +35,10 @@ class Qualification < ActiveRecord::Base
   def duration
     Duration.new(start_at, finish_at)
   end
+
+  def to_s
+    "#{qualification_kind} (#{I18n.l(finish_at)})"
+  end
   
   private
 

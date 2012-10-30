@@ -33,8 +33,6 @@ describe 'people/_qualifications.html.haml' do
 
     it "lists delete buttons" do
       render
-      require 'pry'
-      binding.pry
       dom.all('tr a').first[:href].should eq path(ql_sl)
     end
 
@@ -52,7 +50,7 @@ describe 'people/_qualifications.html.haml' do
 
   def create_qualification(opts={})
     opts = { kind: sl, finish_at: 1.year.from_now }.merge(opts)
-    Fabricate(:qualification, qualification_kind: opts[:kind], finish_at: opts[:finish_at].to_date)
+    Fabricate(:qualification, person: top_leader, qualification_kind: opts[:kind], finish_at: opts[:finish_at].to_date)
   end
   
 end

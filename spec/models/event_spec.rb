@@ -251,9 +251,26 @@ describe Event do
         event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now.midnight - 5.minutes)
         should be_blank
       end
-      
-    end
 
+      it "does find event with only start date" do
+        event.dates.create(start_at: 1.day.from_now)
+        should eq [event]
+      end
+
+      it "does find event with only finish date" do
+        event.dates.create(finish_at: 1.day.from_now)
+        should eq [event]
+      end
+
+      it "does find event with only start date" do
+        event.dates.create(start_at: Time.zone.now.midnight + 5.minutes)
+        should eq [event]
+      end
+      it "does not find event with only finish date" do
+        event.dates.create(finish_at: Time.zone.now.midnight + 5.minutes)
+        should eq [event]
+      end
+    end
   end
   
   context "validations" do

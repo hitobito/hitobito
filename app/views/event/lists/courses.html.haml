@@ -1,4 +1,6 @@
-- title(page_title)
+- if can?(:manage_courses, current_user)
+  .pull-right
+    = dropdown_button(group_title, group_link_list)
 
 = render 'event/page_per_year', paging_params:  group_param
 

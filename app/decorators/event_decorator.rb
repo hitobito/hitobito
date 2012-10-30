@@ -8,6 +8,7 @@ class EventDecorator < ApplicationDecorator
     safe_join([name, label_detail], h.tag(:br))
   end
   
+
   def labeled_link(url = nil)
     url ||= h.group_event_path(group_id, model)
     safe_join([h.link_to(name, url), h.muted(model.label_detail)], h.tag(:br))
@@ -57,6 +58,12 @@ class EventDecorator < ApplicationDecorator
   
   def description
     h.simple_format(model.description) if model.description?
+  end
+
+  def description_short
+    if model.description?
+      h.simple_format(h.truncate(model.description, length: 60))
+    end
   end
   
   def location

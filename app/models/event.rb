@@ -96,7 +96,9 @@ class Event < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:dates).where("event_dates.finish_at >= ?", Time.zone.now.midnight)
+      midnight = Time.zone.now.midnight
+      joins(:dates).
+      where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
     
     def application_possible
@@ -160,7 +162,7 @@ class Event < ActiveRecord::Base
   end
 
   def label_detail
-    "#{number} #{name}"
+    "#{number} #{group.name}"
   end
 
   def init_questions

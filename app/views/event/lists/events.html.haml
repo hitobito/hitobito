@@ -1,0 +1,14 @@
+
+%table.table
+  - entries_by_month.each do |month, events|
+    %tr
+      %td{colspan: 3}
+        %br/
+        %h2= month 
+    - events.each do |event|
+      %tr
+        %td
+          %strong
+            = event.labeled_link
+        %td= event.dates_full
+        %td= event.description_short

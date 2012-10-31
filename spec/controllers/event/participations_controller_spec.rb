@@ -113,6 +113,14 @@ describe Event::ParticipationsController do
       should redirect_to event_participation_path(other_course, participation)
       last_email.should be_present
     end
+
+    it "creates participant role for non course events" do
+      post :create, event_id: Fabricate(:event).id
+      participation = assigns(:participation)
+      participation.roles.should have(1).item
+      role = participation.roles.first
+      role.participation.should eq participation.model
+    end
   end
   
     

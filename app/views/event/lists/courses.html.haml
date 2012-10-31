@@ -20,6 +20,4 @@
           %td= event.booking_info
           %td= event.state_translated
         - else
-          %td
-            - if event.application_possible? && event.can_create_participation?
-              = action_button 'Anmelden', new_event_participation_path(event) 
+          %td= apply_button_if_possible(event)

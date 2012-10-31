@@ -2,6 +2,10 @@ group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).ord
 @@kinds = Event::Kind.order(:label)
 @@people_count = Person.count
 
+def true?
+  [true, false].sample
+end
+
 def seed_event(group_id, type)
   values = event_values(group_id)
   case type
@@ -35,12 +39,14 @@ def seed_camp(values)
   date, number = values[:application_opening_at], values[:number]
   event = Event::Camp.seed(:name, :group_id, values.merge(name: "Lager #{number}")).first
   seed_dates(event, date + 90.days)
+  seed_questions(event) if true?
 end
 
 def seed_base_event(values)
   date, number = values[:application_opening_at], values[:number]
   event = Event.seed(:name, :group_id, values.merge(name: "Anlass #{number}")).first
   seed_dates(event, date + 90.days)
+  seed_questions(event) if true?
 end
 
 

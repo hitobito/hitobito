@@ -8,8 +8,7 @@
 
   = field_set_tag do
     = f.labeled_input_fields(*entry.used_attributes(:name, :number, :description, :motto, :cost, :location))
-    = f.labeled_string_field :contact, data: {provide: 'person', id_field: 'event_contact_id'}
-    = f.hidden_field :contact_id
+    = f.labeled_person_field :contact
 
     - entry.used?(:state) do
       = f.labeled_belongs_to_field(:state, list: entry.state_collection)

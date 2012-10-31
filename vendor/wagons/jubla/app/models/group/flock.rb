@@ -30,7 +30,7 @@ class Group::Flock < Group
   end
   
   def to_s
-    if attributes.include?(:kind)
+    if attributes.include?('kind')
       [kind, super].compact.join(" ")
     else
       # if kind is not selected from the database, we end up here

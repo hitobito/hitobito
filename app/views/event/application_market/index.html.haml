@@ -2,6 +2,7 @@
 -title event.name
 
 =render 'events/tabs'
+= action_button('Teilnehmer hinzufügen', new_event_participation_path(event, for_someone_else: true), :plus)
 
 #main.row-fluid
   %article.span6

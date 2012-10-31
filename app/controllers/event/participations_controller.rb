@@ -16,6 +16,7 @@ class Event::ParticipationsController < CrudController
   before_render_show :load_answers
 
   after_create :send_confirmation_email
+  before_save :set_participant_role
   
   def new
     assign_attributes
@@ -42,6 +43,14 @@ class Event::ParticipationsController < CrudController
   end
   
   private
+
+  def set_participant_role
+    if entry.event != Event::Course
+      role = entry.event.participant_type.new
+      role.participation = entry
+      entry.roles << role
+    end
+  end
     
   def list_entries(action = :index)
     records = event.participations.
@@ -68,10 +77,16 @@ class Event::ParticipationsController < CrudController
   def build_entry
     participation = event.participations.new
     participation.person = current_user
+
     if event.supports_applications
       appl = participation.build_application
       appl.priority_1 = event
+      if model_params && model_params.has_key?(:person_id)
+        model_params.delete(:person)
+        participation.person_id = model_params.delete(:person_id)
+      end
     end
+
     participation
   end
   

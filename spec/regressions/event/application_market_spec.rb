@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Event::ApplicationMarketController, type: :controller do
@@ -27,6 +28,7 @@ describe Event::ApplicationMarketController, type: :controller do
   describe 'GET index' do
     
     before { get :index, event_id: course.id }
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
     
     it { should render_template('index') }
     
@@ -41,6 +43,14 @@ describe Event::ApplicationMarketController, type: :controller do
     it "has event" do
       assigns(:event).should == course
     end
+
+    it "has add button" do
+      button = dom.find('.btn-group a')
+      button.text.should eq ' Teilnehmer hinzufügen'
+      button.should have_css('i.icon-plus')
+      button[:href].should eq new_event_participation_path(course, for_someone_else: true)
+    end
   end
+
   
 end

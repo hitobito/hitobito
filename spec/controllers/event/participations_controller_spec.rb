@@ -111,9 +111,9 @@ describe Event::ParticipationsController do
 
 
   context "POST create" do
-    let(:person)  { Fabricate(:person) }
-    let(:app1)    { Fabricate(:person) }
-    let(:app2)    { Fabricate(:person) }
+    let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
+    let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
+    let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
     
     before do
       # create one person with two approvers
@@ -173,7 +173,33 @@ describe Event::ParticipationsController do
       end
     end
     
+    it "creates participant role for non course events" do
+      post :create, event_id: Fabricate(:event).id
+      participation = assigns(:participation)
+      participation.roles.should have(1).item
+      role = participation.roles.first
+      role.participation.should eq participation.model
+    end
   end
-  
+
+  context "POST create for other user" do
+    let(:bottom_member) { people(:bottom_member) }
+    let(:participation) { assigns(:participation) }
+
+    it "top leader can create event for bottom member" do
+      post :create, event_id: course.id, event_participation: { person_id: bottom_member.id }
+      participation.should be_present
+      participation.persisted?.should be_true
+      should redirect_to event_participation_path(course, participation)
+    end
+
+    it "bottom member can not create event for top leader" do
+      sign_in(bottom_member)
+      post :create, event_id: course.id, event_participation: { person_id: user.id }
+      participation.person.should eq user
+      participation.persisted?.should be_false
+      should redirect_to root_url
+    end
+  end
     
 end

@@ -122,6 +122,25 @@ describe Event::ParticipationsController do
       role.participation.should eq participation.model
     end
   end
-  
+
+  context "POST create for other user" do
+    let(:bottom_member) { people(:bottom_member) }
+    let(:participation) { assigns(:participation) }
+
+    it "top leader can create event for bottom member" do
+      post :create, event_id: course.id, event_participation: { person_id: bottom_member.id }
+      participation.should be_present
+      participation.persisted?.should be_true
+      should redirect_to event_participation_path(course, participation)
+    end
+
+    it "bottom member can not create event for top leader" do
+      sign_in(bottom_member)
+      post :create, event_id: course.id, event_participation: { person_id: user.id }
+      participation.person.should eq user
+      participation.persisted?.should be_false
+      should redirect_to root_url
+    end
+  end
     
 end

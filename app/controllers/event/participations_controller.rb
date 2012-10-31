@@ -76,10 +76,16 @@ class Event::ParticipationsController < CrudController
   def build_entry
     participation = parent.participations.new
     participation.person = current_user
+
     if parent.supports_applications
       appl = participation.build_application
       appl.priority_1 = parent
+      if model_params && model_params.has_key?(:person_id)
+        model_params.delete(:person)
+        participation.person = Person.find(model_params.delete(:person_id))
+      end
     end
+
     participation
   end
   

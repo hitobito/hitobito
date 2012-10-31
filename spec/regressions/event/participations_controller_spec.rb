@@ -65,6 +65,13 @@ describe Event::ParticipationsController, type: :controller do
         should have_content "Anmeldung für #{event.name}"
       end
     end
+    it "renders person field when passed for_someone_else param" do
+      get :new, event_id: course.id, for_someone_else: true
+      person_field = subject.all('form .control-group')[0]
+      person_field.should have_content 'Person'
+      person_field.should have_css('input', count: 2)
+      person_field.all('input').first[:type].should eq 'hidden'
+    end
   end
 
   describe_action :delete, :destroy, format: :html, id: true do

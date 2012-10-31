@@ -26,8 +26,8 @@
 
   %h2 Anmeldung
   = field_set_tag do
-    = f.labeled_input_field(:application_opening_at, class: 'span1 date')
-    = f.labeled_input_field(:application_closing_at, class: 'span1 date')
+    = f.labeled_input_field(:application_opening_at)
+    = f.labeled_input_field(:application_closing_at)
     = f.labeled_input_field(:application_conditions)
     - entry.used?(:priorization) do
       = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')

@@ -128,7 +128,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
     
-    text_field("#{attr}_date", class: 'span1 date', value: f(@object.send("#{attr}_date"))) + 
+    date_field("#{attr}_date") + 
     ' ' +
     hours_select("#{attr}_hour") +
     ' : ' +

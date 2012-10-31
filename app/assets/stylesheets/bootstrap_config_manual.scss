@@ -5,8 +5,6 @@
 /* Now import the css files */
 @import "variables"; // Self-defined variables
 
-@import "bootstrap";
-
 // Core variables and mixins
 @import "bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
 @import "bootstrap/mixins";

@@ -188,7 +188,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
-    string_field(attr, data: {provide: 'person', id_field: "#{object_name}_#{attr_id}"})
+    string_field(attr, placeholder: 'Person suchen...', data: {provide: 'person', id_field: "#{object_name}_#{attr_id}"})
   end
   
   def labeled_inline_fields_for(assoc, partial_name=nil, &block) 

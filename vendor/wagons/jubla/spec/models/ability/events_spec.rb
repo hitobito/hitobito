@@ -80,24 +80,7 @@ describe Ability::Events do
         should_not be_able_to(:show, other)
       end
     end
-    
-    context Event::Application do 
-      let(:participation) { Fabricate(:event_participation, event: event) }
-      let(:application) { Fabricate(:event_application, participation: participation) }
-      
-      it "may create new application for anybody" do
-        should be_able_to(:create, application)
-      end
 
-      it "may update application" do
-        should be_able_to(:update, application)
-      end
-      
-      it "may not update applications of other groups" do
-        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: groups(:no))))
-        should_not be_able_to(:update, other)
-      end
-    end
   end
   
   context :group_full do
@@ -156,24 +139,7 @@ describe Ability::Events do
         should_not be_able_to(:show, other)
       end
     end
-    
-    context Event::Application do 
-      let(:participation) { Fabricate(:event_participation, event: event) }
-      let(:application) { Fabricate(:event_application, participation: participation) }
-      
-      it "may create new application for anybody" do
-        should be_able_to(:create, application)
-      end
-      
-      it "may update application" do
-        should be_able_to(:update, application)
-      end
-      
-      it "may not update applications of other groups" do
-        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: groups(:no))))
-        should_not be_able_to(:update, other)
-      end
-    end
+
   end
       
   context :event_full do
@@ -220,8 +186,8 @@ describe Ability::Events do
         should be_able_to(:show, other)
       end
       
-      it "may create participation" do
-        should be_able_to(:create, other)
+      it "may not create participation" do
+        should_not be_able_to(:create, other)
       end
       
       it "may update participation" do
@@ -242,27 +208,7 @@ describe Ability::Events do
         should_not be_able_to(:update, other)
       end
     end
-    
-    context Event::Application do 
-      let(:application) { Fabricate(:event_application, participation: Fabricate(:event_participation, event: event)) }
-      
-      it "may not create new application for anybody" do
-        should_not be_able_to(:create, application)
-      end
-      
-      it "may not show application" do
-        should_not be_able_to(:show, application)
-      end
-      
-      it "may not update application" do
-        should_not be_able_to(:update, application)
-      end
-      
-      it "may not show applications of other events" do
-        other = Fabricate(:event_application, participation: Fabricate(:event_participation, event: Fabricate(:course, group: group)))
-        should_not be_able_to(:show, other)
-      end
-    end
+
   end
   
   context :event_contact_data do 
@@ -333,8 +279,8 @@ describe Ability::Events do
         should_not be_able_to(:show, other)
       end
       
-      it "may update his participation" do
-        should be_able_to(:update, participation)
+      it "may not update his participation" do
+        should_not be_able_to(:update, participation)
       end
       
       it "may not update other participation" do
@@ -343,26 +289,7 @@ describe Ability::Events do
         should_not be_able_to(:update, other)
       end
     end
-    
-    context Event::Application do 
-      let(:application) { Fabricate(:event_application, participation: participation) }
-
-      it "may create his application" do
-        should be_able_to(:create, application)
-      end
-      
-      context "other" do
-        let(:application) { Fabricate(:event_application, participation: Fabricate(:event_participation, event: event)) }
-        it "may not show application" do
-          should_not be_able_to(:show, application)
-        end
-        
-        it "may not update application" do
-          should_not be_able_to(:update, application)
-        end
-      end
-      
-    end
+  
   end
   
   context :in_same_hierarchy do
@@ -381,24 +308,12 @@ describe Ability::Events do
         should be_able_to(:show, participation)
       end
       
-      it "may update his participation" do
-        should be_able_to(:update, participation)
+      it "may not update his participation" do
+        should_not be_able_to(:update, participation)
       end
       
     end
-    
-    context Event::Application do 
-      let(:application) { Fabricate(:event_application, participation: participation) }
 
-      it "may create his application" do
-        should be_able_to(:create, application)
-      end
-
-      it "may not update his application" do
-        should_not be_able_to(:update, application)
-      end
-      
-    end
   end
   
   context :in_other_hierarchy do
@@ -407,26 +322,19 @@ describe Ability::Events do
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
         
     context Event::Participation do 
-      it "may not create his participation" do
-        should_not be_able_to(:create, participation)
+      it "may create his participation" do
+        should be_able_to(:create, participation)
       end
       
       it "may show his participation" do
         should be_able_to(:show, participation)
       end
       
-      it "may update his participation" do
-        should be_able_to(:update, participation)
+      it "may not update his participation" do
+        should_not be_able_to(:update, participation)
       end
     end
     
-    context Event::Application do 
-      let(:application) { Fabricate(:event_application, participation: participation) }
-      
-      it "may not update his application" do
-        should_not be_able_to(:update, application)
-      end
-    end
   end
   
   context :admin do

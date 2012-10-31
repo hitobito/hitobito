@@ -5,8 +5,7 @@
              cancel_url: (entry.new_record? ? event_participations_path(@event.id) : event_participation_path(@event.id, entry.participation_id))) do |f|
   - if entry.new_record?
     = f.hidden_field :type
-    = f.hidden_field :person_id
-    = f.labeled_string_field :person, data: {provide: 'person', id_field: 'event_role_person_id'}
+    = f.labeled_person_field :person
   - else
     = f.labeled(:event_id, content_tag(:div, entry.event.to_s))
     = f.labeled(:person_id, content_tag(:div, entry.person.to_s))

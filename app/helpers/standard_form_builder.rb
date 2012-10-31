@@ -184,7 +184,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
-
+  
+  def person_field(attr, html_options = {})
+    attr, attr_id = assoc_and_id_attr(attr)
+    hidden_field(attr_id) +
+    string_field(attr, placeholder: 'Person suchen...', data: {provide: 'person', id_field: "#{object_name}_#{attr_id}"})
+  end
+  
   def labeled_inline_fields_for(assoc, partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +

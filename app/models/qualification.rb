@@ -37,7 +37,7 @@ class Qualification < ActiveRecord::Base
   end
 
   def to_s
-    "#{qualification_kind} (#{I18n.l(finish_at)})"
+    "#{qualification_kind} (bis #{I18n.l(finish_at)})"
   end
   
   private

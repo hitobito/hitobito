@@ -19,7 +19,7 @@ describe Qualification do
   it "includes qualification kind and finish_at in to_s" do
     quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl), 
                       start_at: Date.parse("2011-3-3").to_date)
-    quali.to_s.should eq "Super Lead (31.12.2013)"
+    quali.to_s.should eq "Super Lead (bis 31.12.2013)"
   end
   
   describe "#set_finish_at" do

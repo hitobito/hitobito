@@ -143,11 +143,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_check_box(attr, value, caption, html_options = {})
-    name = "#{@object.class.model_name.param_key}[#{attr}][]"
-    id = "#{@object.class.model_name.param_key}_#{attr}_#{value.to_s.downcase}"
-    html_options[:id] = id
+    model_param = @object.class.model_name.param_key
+    name = "#{model_param}[#{attr}][]"
+    id = "#{attr}_#{value.to_s.downcase}"
+    html_options[:id] = "#{model_param}_#{id}"
     label(id, class: 'checkbox inline') do
-      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) + 
+      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
       ' ' + 
       caption
     end

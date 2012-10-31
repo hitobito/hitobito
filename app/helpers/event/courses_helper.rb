@@ -1,6 +1,12 @@
 # encoding: UTF-8
 module Event::CoursesHelper
 
+  def apply_button_if_possible(event)
+     if event.application_possible? && event.can_create_participation?
+       action_button 'Anmelden', new_event_participation_path(event) 
+     end
+  end
+
   def group_link_list
     year_param = { year: @year }
     all_groups = link_to("Alle Gruppen", event_courses_path(year_param))

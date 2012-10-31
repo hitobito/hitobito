@@ -233,3 +233,8 @@ de:
     show:
       link:
         delete: 'Anmeldung löschen'
+
+
+  time:
+    formats:
+      month_year: '%B, %Y'

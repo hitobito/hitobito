@@ -8,6 +8,7 @@ describe Event::ParticipationsController, type: :controller do
   let(:test_entry) { event_participations(:top) }
   
   let(:course) { test_entry.event }
+  let(:event_base) { Fabricate(:event) }
   
   let(:test_entry_attrs) do
     { 
@@ -45,10 +46,24 @@ describe Event::ParticipationsController, type: :controller do
   end
 
   describe "POST create" do
-    it "prompts to change contact data" do
-      post :create,  event_id: course.id, participation: test_entry_attrs
-      flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
-      should redirect_to event_participation_path(course, assigns(:participation))
+    [:event_base, :course].each do |event_sym|
+      it "prompts to change contact data for #{event_sym}" do
+        event = send(event_sym)
+        post :create,  event_id: event.id, participation: test_entry_attrs
+        flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
+        should redirect_to event_participation_path(event, assigns(:participation))
+      end
+    end
+  end
+
+  describe "GET new" do
+    subject { Capybara::Node::Simple.new(response.body) }
+    [:event_base, :course].each do |event_sym|
+      it "renders title for #{event_sym}" do
+        event = send(event_sym)
+        get :new, event_id: event.id
+        should have_content "Anmeldung für #{event.name}"
+      end
     end
   end
 

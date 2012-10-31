@@ -33,8 +33,8 @@ module Ability::Common
     @groups_layer_full = user.groups_with_permission(:layer_full).to_a
     @groups_layer_read = user.groups_with_permission(:layer_read).to_a
 
-    @layers_read = layers(groups_layer_full, groups_layer_read).collect(&:id)
-    @layers_full = layers(groups_layer_full).collect(&:id)
+    @layers_read = layer_ids(groups_layer_full, groups_layer_read)
+    @layers_full = layer_ids(groups_layer_full)
     
     @groups_group_full.collect!(&:id)
     @groups_layer_full.collect!(&:id)
@@ -44,6 +44,10 @@ module Ability::Common
   
   def layers(*groups)
     groups.flatten.collect(&:layer_group).uniq
+  end
+  
+  def layer_ids(*groups)
+    collect_ids(layers(*groups))
   end
   
   def collect_ids(collection)

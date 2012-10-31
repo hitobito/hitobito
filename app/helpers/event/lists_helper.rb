@@ -22,7 +22,7 @@ module Event::ListsHelper
 
   def courses_by_kinds
     by_kind = @courses.group_by { |entry| entry.kind.label }
-    by_kind.each {|kind, entries| entries.sort_by! {|e| e.dates.first.try(:start_at) } }
+    by_kind.each {|kind, entries| entries.sort_by! {|e| e.dates.first.try(:start_at) || Time.zone.now } }
     by_kind
   end
 

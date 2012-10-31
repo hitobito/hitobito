@@ -20,7 +20,7 @@
         %h4= t('activerecord.attributes.event/participation.additional_information')
         = simple_format(entry.additional_information || '-')
       
-      - if @event.priorization && @application.present? && can?(:create, entry)
+      - if @event.priorization && @application.present? && can?(:show, @application)
         = render 'priorities'
       
   %aside.span5

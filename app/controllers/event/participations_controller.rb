@@ -7,10 +7,11 @@ class Event::ParticipationsController < CrudController
              participants: 'Teilnehmende' }
   
   decorates :event, :participation, :participations, :alternatives
-  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   
-  # load event before authorization
+  # load before authorization
+  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_filter :parent, :set_group
+  
   before_render_form :load_priorities
   before_render_show :load_answers
 
@@ -25,7 +26,7 @@ class Event::ParticipationsController < CrudController
     
   def authorize!(action, *args)
     if [:index].include?(action)
-      super(:index_participations, parent)
+      super(:index_participations, event)
     else
       super
     end
@@ -43,18 +44,18 @@ class Event::ParticipationsController < CrudController
   private
     
   def list_entries(action = :index)
-    records = parent.participations.
+    records = event.participations.
                  where(event_participations: {active: true}).
                  includes(:person, :roles).
-                 participating(parent).
-                 order_by_role(parent.class).
+                 participating(event).
+                 order_by_role(event.class).
                  merge(Person.order_by_name).
                  uniq
     Person::PreloadPublicAccounts.for(records.collect(&:person))
 
     if scope = FILTER.keys.detect {|k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(scope, parent)
+      records = records.send(scope, event)
     end
     
     records
@@ -65,32 +66,36 @@ class Event::ParticipationsController < CrudController
   # apply for an event themselves. A participation for somebody
   # else is created through event roles. 
   def build_entry
-    participation = parent.participations.new
+    participation = event.participations.new
     participation.person = current_user
-    if parent.supports_applications
+    if event.supports_applications
       appl = participation.build_application
-      appl.priority_1 = parent
+      appl.priority_1 = event
     end
     participation
+  end
+  
+  def event
+    parent
   end
   
   def assign_attributes
     super
     # Set these attrs again as a new application instance might have been created by the mass assignment.
-    entry.application.priority_1 ||= parent if entry.application
+    entry.application.priority_1 ||= event if entry.application
   end
   
   def set_group
-    @group = parent.group
+    @group = event.group
   end
     
   def load_priorities
     if entry.application && entry.event.priorization
       @alternatives = Event::Course.application_possible.
-                                    where(kind_id: parent.kind_id).
+                                    where(kind_id: event.kind_id).
                                     in_hierarchy(current_user).
                                     list
-      @priority_2s = @priority_3s = (@alternatives.to_a - [parent]) 
+      @priority_2s = @priority_3s = (@alternatives.to_a - [event]) 
     end
   end
   
@@ -105,7 +110,23 @@ class Event::ParticipationsController < CrudController
   end
 
   def send_confirmation_email
-    Event::ParticipationMailer.confirmation(current_user, @participation).deliver
+    if entry.person_id == current_user.id
+      Event::ParticipationMailer.confirmation(entry).deliver
+      if event.requires_approval? 
+        recipients = approvers.to_a
+        Event::ParticipationMailer.approval(recipients, entry).deliver if recipients.present?
+      end
+    end
+  end
+  
+  def approvers
+    approver_types = Role.types_with_permission(:approve_applications).collect(&:sti_name)
+    layer_ids = entry.person.groups.collect(&:layer_group_id).uniq
+    Person.select('people.first_name, people.last_name, people.nickname, people.email').
+           joins(roles: :group).
+           where(roles: {type: approver_types}, 
+                         groups: {layer_group_id: layer_ids}).
+           uniq
   end
   
   class << self

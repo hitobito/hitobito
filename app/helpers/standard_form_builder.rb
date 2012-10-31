@@ -238,9 +238,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     caption_or_content ||= captionize(attr, @object.class)
     add_css_class(html_options, 'controls')
 
-    attr_plain, attr_id = assoc_and_id_attr(attr)
-    errors = @object.errors.has_key?(attr_plain.to_sym) || @object.errors.has_key?(attr_id.to_sym)
-    content_tag(:div, :class => "control-group#{' error' if errors}") do
+    content_tag(:div, :class => "control-group#{' error' if errors_on?(attr)}") do
       label(attr, caption_or_content, :class => 'control-label') +
       content_tag(:div, content, html_options)
     end
@@ -317,6 +315,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def errors_on?(attr)
+    attr_plain, attr_id = assoc_and_id_attr(attr)
+    @object.errors.has_key?(attr_plain.to_sym) || @object.errors.has_key?(attr_id.to_sym)
+  end
 
   # Returns true if the given attribute must be present.
   def required?(attr)

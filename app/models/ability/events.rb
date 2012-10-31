@@ -80,6 +80,18 @@ module Ability::Events
       can_update_event?(role.participation.event)
     end
     
+    ### EVENT APPLICATION
+    can :show, Event::Application do |application|
+      participation = application.participation
+      (participation.person_id == user.id) ||
+       can_create_event?(participation.event)
+    end
+    
+    can :confirm, Event::Application do |application|
+      confirm_layer_ids = layer_ids(user.groups_with_permission(:confirm_applications))
+      confirm_layer_ids.present &&
+       contains_any?(confirm_layer_ids, application.participation.person.groups_hierarchy_ids)
+    end
     
     ### EVENT KINDS
     if admin

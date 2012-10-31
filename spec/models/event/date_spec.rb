@@ -92,5 +92,18 @@ describe Event::Date do
 
     event_date.start_at.should be_nil
   end
+  
+  it "is invalid on plain numbers input" do
+    date = event.dates.new(label: 'foobar')
+    date.start_at_date = '15.12'
+    date.should_not be_valid
+    date.should have(2).error_on(:start_at_date) # no idea why we get two, whatever
+  end
 
+  it "is invalid on plain numbers input" do
+    date = event.dates.new(label: 'foobar')
+    date.start_at_date = '77'
+    date.should_not be_valid
+    date.should have(2).error_on(:start_at_date)
+  end
 end

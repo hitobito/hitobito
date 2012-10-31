@@ -144,6 +144,15 @@ de:
         label: Beschreibung/Ort
         start_at: Von
         finish_at: Bis
+        start_at_date: Von Datum
+        finish_at_date: Bis Datum
+        
+      dates:
+        label: Beschreibung/Ort
+        start_at: Von
+        finish_at: Bis
+        start_at_date: Von Datum
+        finish_at_date: Bis Datum
         
       event/question:
         question: Frage
@@ -219,6 +228,8 @@ de:
     participation_mailer:
       confirmation: 
         subject: Bestätigung der Anmeldung
+      approval:
+        subject: Freigabe einer Kursanmeldung
 
   # flash messages
   participations:

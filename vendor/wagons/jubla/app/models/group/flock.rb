@@ -40,7 +40,7 @@ class Group::Flock < Group
 
 
   class Leader < Jubla::Role::Leader
-    self.permissions = [:layer_full, :contact_data, :login]
+    self.permissions = [:layer_full, :contact_data, :approve_applications, :login]
   end
   
   class CampLeader < ::Role

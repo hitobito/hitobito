@@ -56,11 +56,11 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'poltergeist'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
+  gem 'poltergeist'
 end
 
 group :console do

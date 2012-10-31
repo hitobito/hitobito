@@ -1,5 +1,5 @@
 = f.input_field(:number, class: 'span4')
 = f.collection_select(:label, Settings.phone_number.predefined_labels, :to_s, :to_s, {}, class: 'span2')
 = f.label(:public, class: 'checkbox span2') do
-  = f.input_field(:public)
+  = f.check_box(:public)
   = t(:"activerecord.attributes.social_account.public")

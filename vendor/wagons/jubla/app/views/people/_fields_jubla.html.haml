@@ -6,7 +6,7 @@
     - [:m, :w, ''].each do |key|
       = f.inline_radio_button(:gender, key, gender_label(key))
 
-  = f.labeled_input_field(:birthday, value: f(entry.birthday))
+  = f.labeled_input_field(:birthday)
 
 = field_set_tag do
   = f.labeled_input_fields(:nationality, :profession, :bank_account, :additional_information)

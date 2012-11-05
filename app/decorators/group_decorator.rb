@@ -14,7 +14,8 @@ class GroupDecorator < ApplicationDecorator
 
   def possible_role_links
     model.class.role_types.map do |type|
-      if type.visible_from_above? || can?(:index_local_people, model)
+      if !type.restricted &&
+        (type.visible_from_above? || can?(:index_local_people, model))  # users from above cannot create external roles
         link = h.new_group_role_path(self, role: { type: type.sti_name})
         h.link_to(type.model_name.human, link)
       end

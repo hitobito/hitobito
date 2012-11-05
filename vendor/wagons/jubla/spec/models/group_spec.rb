@@ -32,13 +32,12 @@ describe Group do
 
     it { should have(2).possible_children }
     it { should have(0).default_children }
-    it { should have(7).role_types }
+    it { should have(9).role_types }
     it { should be_layer }
   end
   
   describe Group::SimpleGroup do
     subject { Group::SimpleGroup }
-    
     it { should have(1).possible_children }
     it { should have(0).default_children }
     it { should have(4).role_types }

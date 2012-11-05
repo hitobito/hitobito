@@ -47,7 +47,7 @@ module Ability::Groups
     if modify_permissions?
       can :create, Role do |role|
         # BEWARE! Always pass a Role instance to create for correct abilities
-        can_update_group?(role.group)
+        !role.restricted && can_update_group?(role.group)
       end
     
       can :update, Role do |role|
@@ -88,6 +88,9 @@ module Ability::Groups
   end
     
   def can_modify_role?(role)
+    # restricted roles may only be modified in a special place
+    !role.class.restricted && (
+    
     # user has group_full, role in same group
     groups_group_full.include?(role.group.id) ||
     
@@ -98,6 +101,6 @@ module Ability::Groups
       # user has layer_full, role below layer and visible_from_above
       (role.class.visible_from_above && 
        contains_any?(layers_full, collect_ids(role.group.hierarchy)))
-    ))
+    )))
   end
 end

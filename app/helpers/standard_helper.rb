@@ -247,7 +247,7 @@ module StandardHelper
   # Formats an active record belongs_to association
   def format_assoc(obj, assoc)
     if val = obj.send(assoc.name)
-      assoc_link(assoc, val)
+      assoc_link(val)
     else
       ta(:no_entry, assoc)
     end
@@ -258,22 +258,26 @@ module StandardHelper
   def format_many_assoc(obj, assoc)
     values = obj.send(assoc.name)
     if values.size == 1
-      assoc_link(assoc, values.first)
+      assoc_link(values.first)
     elsif values.present?
-      simple_list(values) { |val| assoc_link(assoc, val) }
+      simple_list(values) { |val| assoc_link(val) }
     else
       ta(:no_entry, assoc)
     end
   end
 
   # Renders a link to the given association entry.
-  def assoc_link(assoc, val)
-    link_to_if(assoc_link?(assoc, val), val.to_s, val)
+  def assoc_link(val)
+    link_to_if(assoc_link?(val), val.to_s, val)
   end
 
   # Returns true if no link should be created when formatting the given association.
-  def assoc_link?(assoc, val)
+  def assoc_link?(val)
     respond_to?("#{val.class.base_class.model_name.underscore}_path".to_sym) && can?(:show, val)
+  end
+  
+  def model_link(val)
+    
   end
 
   # Returns the association proxy for the given attribute. The attr parameter

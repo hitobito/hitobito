@@ -12,6 +12,16 @@ module Person::Roles
     groups.collect(&:layer_group).uniq
   end
   
+  # All layer ids this person belongs to
+  def layer_group_ids
+    groups.collect(&:layer_group_id).uniq
+  end
+  
+  # all groups where this person has a non-restricted role
+  def non_restricted_groups
+    roles.to_a.reject {|r| r.class.restricted }.collect(&:group)
+  end
+  
   # All groups where this person has the given permission(s)
   def groups_with_permission(permission)
     @groups_with_permission ||= {}

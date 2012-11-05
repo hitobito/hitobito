@@ -70,7 +70,7 @@ module Ability::People
     
     (layers_read.present? && (
       # user has layer_full or layer_read, person in same layer
-      contains_any?(layers_read, collect_ids(person.layer_groups)) ||
+      contains_any?(layers_read, person.layer_group_ids) ||
 
       # user has layer_full or layer_read, person below layer and visible_from_above
       contains_any?(layers_read, collect_ids(person.above_groups_visible_from))
@@ -83,7 +83,7 @@ module Ability::People
     
     (layers_read.present? && (
       # user has layer_full or layer_read, person in same layer
-      contains_any?(layers_read, collect_ids(person.layer_groups)) ||
+      contains_any?(layers_read, person.layer_group_ids) ||
 
       # user has layer_full or layer_read, person below layer and visible_from_above
       contains_any?(layers_read, collect_ids(person.above_groups_visible_from))
@@ -92,11 +92,11 @@ module Ability::People
   
   def can_modify_person?(person)
     # user has group_full, person in same group
-    contains_any?(groups_group_full, collect_ids(person.groups)) ||
+    contains_any?(groups_group_full, collect_ids(person.non_restricted_groups)) ||
     
     (layers_full.present? && (
       # user has layer_full, person in same layer
-      contains_any?(layers_full, collect_ids(person.layer_groups)) ||
+      contains_any?(layers_full, person.non_restricted_groups.collect(&:layer_group_id).uniq) ||
       
       # user has layer_full, person below layer and visible_from_above
       contains_any?(layers_full, collect_ids(person.above_groups_visible_from))

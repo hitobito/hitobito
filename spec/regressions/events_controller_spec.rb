@@ -9,7 +9,7 @@ describe EventsController, type: :controller do
 
   before { sign_in(people(:top_leader)) } 
 
-  include_examples 'crud controller', skip: [%w(index), %w(new), %w(create), %w(edit), %w(update), %w(destroy)]
+  include_examples 'crud controller', skip: [%w(index),%w(new)]
 
   describe "GET #index" do
     render_views
@@ -55,5 +55,19 @@ describe EventsController, type: :controller do
     end
   end
 
+  describe "GET #new" do
+    render_views
+    let(:group) { groups(:top_group) }
+    let(:dom) { Capybara::Node::Simple.new(response.body) } 
+    
+    it "renders new form" do
+      get :new, group_id: group.id, event: {type: 'Event'}
+      dom.find('input#event_group_id')[:type].should eq 'hidden'
+      dom.find('input#event_group_id')[:value].should eq group.id.to_s
+      dom.find('input#event_type')[:type].should eq 'hidden'
+      dom.all('#questions_fields .fields').count.should eq 3
+      dom.all('#dates_fields').count.should eq 1
+    end
+  end
 
 end

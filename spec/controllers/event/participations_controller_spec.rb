@@ -166,7 +166,7 @@ describe Event::ParticipationsController do
           ActionMailer::Base.deliveries.should have(2).items
           
           first_email = ActionMailer::Base.deliveries.first
-          last_email.to.should == [app1.email, app2.email]
+          last_email.to.to_set.should == [app1.email, app2.email].to_set
           last_email.subject.should == 'Freigabe einer Kursanmeldung'
           first_email.subject.should == 'Bestätigung der Anmeldung'
         end

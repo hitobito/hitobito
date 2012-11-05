@@ -31,7 +31,7 @@ describe Event::ParticipationsController do
 
   context "GET index" do
     before { @leader, @advisor, @participant = *create(Event::Role::Leader, 
-                                                       Jubla::Event::Course::Role::Advisor, 
+                                                       Jubla::Event::Course::AffiliateAdvisor::Role::Advisor, 
                                                        course.participant_type) }
     
     it "lists participant and leader group by default without advisor" do

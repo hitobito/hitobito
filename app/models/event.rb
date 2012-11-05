@@ -52,7 +52,7 @@ class Event < ActiveRecord::Base
   
   attr_accessible :name, :number, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
-                  :application_conditions, :dates_attributes, :questions_attributes
+                  :application_conditions, :dates_attributes, :questions_attributes, :group_id
 
 
   ### ASSOCIATIONS

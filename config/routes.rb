@@ -38,6 +38,13 @@ Jubla::Application.routes.draw do
         end
       end
       
+      resources :applications, only: [] do
+        member do
+          put    :approve
+          delete :reject
+        end
+      end
+      
       resources :qualifications, only: [:index, :update, :destroy]
     end
   end

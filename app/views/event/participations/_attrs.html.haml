@@ -8,6 +8,9 @@
 
 #main.row-fluid
   %article.span7
+    - if @event.requires_approval? && @application.present? && can?(:show, @application)
+      = @application.confirmation_label
+    
     = render 'contactable/show', contactable: entry.person, only_public: true
     
     = render_attrs(entry.person, :birthday, :gender)
@@ -20,8 +23,8 @@
         %h4= t('activerecord.attributes.event/participation.additional_information')
         = simple_format(entry.additional_information || '-')
       
-      - if @event.priorization && @application.present? && can?(:show, @application)
-        = render 'priorities'
+    - if @event.priorization && @application.present? && can?(:show, @application)
+      = render 'priorities'
       
   %aside.span5
     - if entry.person == current_user && @application.present?

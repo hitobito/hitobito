@@ -28,19 +28,24 @@
 require 'spec_helper'
 
 describe Event do
-  
-  subject do
-    event = Fabricate(:event, group: groups(:top_group) )
-    Fabricate(Event::Role::Leader.name.to_sym, participation:  Fabricate(:event_participation, event: event))
-    Fabricate(Event::Role::Participant.name.to_sym, participation:  Fabricate(:event_participation, event: event))
-    p = Fabricate(:event_participation, event: event)
-    Fabricate(Event::Role::Participant.name.to_sym, participation: p)
-    Fabricate(Event::Role::Participant.name.to_sym, participation: p, label: 'Irgendwas')
-    event.reload
+
+  let(:event) { events(:top_course) }
+
+  context "#participations" do
+    
+    let(:event) { events(:top_event) } 
+
+    subject do
+      Fabricate(Event::Role::Leader.name.to_sym, participation:  Fabricate(:event_participation, event: event))
+      Fabricate(Event::Role::Participant.name.to_sym, participation:  Fabricate(:event_participation, event: event))
+      p = Fabricate(:event_participation, event: event)
+      Fabricate(Event::Role::Participant.name.to_sym, participation: p)
+      Fabricate(Event::Role::Participant.name.to_sym, participation: p, label: 'Irgendwas')
+      event.reload
+    end
+    its(:participant_count) { should == 2 }
   end
-  
-  
-  its(:participant_count) { should == 2 }
+
   
   context "#application_possible?" do
     
@@ -190,13 +195,9 @@ describe Event do
  
   context "finders" do
 
-    let(:top_layer) { groups(:top_layer) }
-    let(:slk) { event_kinds(:slk)}
-    let(:event) { Fabricate(:event, group: top_layer, kind: slk) }
-
     context ".in_year" do
       context "one date" do
-        before { add_date(event, "2000-01-02") }
+        before { set_start_finish(event, "2000-01-02") }
     
         it "uses dates create_at to determine if event matches" do
           Event.in_year(2000).size.should eq 1
@@ -208,8 +209,8 @@ describe Event do
       end
       
       context "starting at last day of year and another date in the following year" do
-        before { add_date(event, "2010-12-31 17:00") }
-        before { add_date(event, "2011-01-20") }
+        before { set_start_finish(event, "2010-12-31 17:00") }
+        before { set_start_finish(event, "2011-01-20") }
     
         it "finds event in old year" do
           Event.in_year(2010).should == [event]
@@ -228,7 +229,7 @@ describe Event do
     context ".upcoming" do
       subject { Event.upcoming }
       it "does not find past events" do
-        add_date(event, "2010-12-31 17:00")
+        set_start_finish(event, "2010-12-31 17:00")
         should_not be_present
       end
 
@@ -274,11 +275,18 @@ describe Event do
   end
   
   context "validations" do
-    subject { Fabricate(:event) }
-    
+    subject { event } 
+
+    it "is not valid without event_dates" do
+      event.dates.clear
+      event.valid?.should be_false
+      event.errors[:dates].should be_present
+    end
+
     it "is valid with application closing after opening" do
       subject.application_opening_at = Date.today - 5
       subject.application_closing_at = Date.today + 5
+      subject.valid?
       
       should be_valid
     end
@@ -312,10 +320,10 @@ describe Event do
   end
 
   context "event_dates" do
+    let(:e) { event } 
 
     it "should update event_date's start_at time" do
       d = Time.zone.local(2012,12,12).to_date
-      e = Fabricate(:event)
       e.dates.create(label: 'foo', start_at: d, finish_at: d)
       ed = e.dates.first
       e.update_attributes(dates_attributes: { "0" => {start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id }})
@@ -325,7 +333,6 @@ describe Event do
     it "should update event_date's finish_at date" do
       d1 = Time.zone.local(2012,12,12).to_date
       d2 = Time.zone.local(2012,12,13).to_date
-      e = Fabricate(:event)
       e.dates.create(label: 'foo', start_at: d1, finish_at: d1)
       ed = e.dates.first
       e.update_attributes(dates_attributes: { "0" => {finish_at_date: d2, id: ed.id }})
@@ -334,7 +341,7 @@ describe Event do
 
   end
 
-  def add_date(event,start_at)
+  def set_start_finish(event,start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)
   end

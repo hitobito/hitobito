@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Jubla::Event::Application do
 
   let(:course)        { Fabricate(:course, group: group) }
+  let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
   
   subject do
     Fabricate(:event_participation, event: course, application: Fabricate(:event_application)).application
@@ -23,7 +24,12 @@ describe Jubla::Event::Application do
 
   context "region" do
     let(:person) { Fabricate(:person) }
-    let(:course) { groups(:city).events.create!(name: 'even', contact_id: person.id) }
+    let(:course) do 
+      event = groups(:city).events.build(name: 'even', contact_id: person.id)
+      event.dates.build
+      event.save
+      event
+    end
 
     its(:contact) { should == person }
   end

@@ -50,7 +50,7 @@ describe EventsController, type: :controller do
     def event_with_date(opts = {})
       opts = {group: group, state: 'application_open', start_at: Date.today}.merge(opts)
       event = Fabricate(:event, group: opts[:group], state: opts[:state])
-      event.dates.create(label: 'dummy', start_at: opts[:start_at])
+      set_start_dates(event, opts[:start_at])
       event
     end
   end

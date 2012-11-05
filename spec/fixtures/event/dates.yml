@@ -1,0 +1,9 @@
+first:
+  label: Kurs
+  event: top_course
+  start_at: <%= Time.zone.parse("2012-3-01") %>
+
+second:
+  label: Event
+  event: top_event
+  start_at: <%= Time.zone.parse("2012-3-01") %>

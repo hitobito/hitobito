@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Event::ApplicationMarketController do
   
-  let(:event) { Fabricate(:course) }
+  let(:event) { events(:top_course) }
   
   let(:appl_prio_1) do
     Fabricate(:event_participation, 

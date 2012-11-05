@@ -104,8 +104,8 @@ describe Event::ListsController, type: :controller do
       let(:glk_ev) { Fabricate(:course, group: groups(:top_group), kind: event_kinds(:glk), maximum_participants: 20 ) }
 
       before do 
-        add_date(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02") 
-        add_date(glk_ev, "2009-01-2", "2011-01-02") 
+        set_start_dates(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02") 
+        set_start_dates(glk_ev, "2009-01-2", "2011-01-02") 
       end
 
       it "renders course info within table" do
@@ -148,10 +148,6 @@ describe Event::ListsController, type: :controller do
         dropdown.find('li:eq(3) a')[:href].should eq list_courses_path(year: 2010, group: top_group.id)
       end
 
-      def add_date(event, *dates)
-        dates.each { |date| event.dates.build(start_at: Time.zone.parse(date)) } 
-        event.save
-      end
     end
 
     def prefixed(text)

@@ -18,8 +18,8 @@ describe Event::ParticipationMailer do
   describe "event data" do
     it "renders set attributes only" do
       should =~ /Name:\s+Eventus/
+      should =~ /Daten/
       should_not =~ /Kontaktperson:\s+Top Leader/
-      should_not =~ /Daten/
     end
 
     it "renders location if set" do
@@ -28,11 +28,13 @@ describe Event::ParticipationMailer do
     end
 
     it "renders dates if set" do
+      event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
       should =~ /Daten:\s+Vorweekend: 18.10.2012 - 21.10.2012/
     end
 
     it "renders multiple dates below each other" do
+      event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
       event.dates.build(label: 'Kurs', start_at: Date.parse('2012-10-21'))
       should =~ /Daten:\s+Vorweekend: 18.10.2012 - 21.10.2012\n/

@@ -36,11 +36,12 @@ describe EventsController do
 
       end
       
-      it "creates new event course without contact,dates,advisor" do
+      it "creates new event course without contact,advisor" do
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
                                 contact_id: '',
                                 advisor_id: '',
+                                dates_attributes: [ date ],
                                 type: 'Event::Course' }, 
                       group_id: group.id
 

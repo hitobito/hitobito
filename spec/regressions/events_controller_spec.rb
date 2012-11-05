@@ -4,12 +4,17 @@ require 'spec_helper'
 describe EventsController, type: :controller do
   
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
-  let(:test_entry) { events(:top_course) }
-  let(:test_entry_attrs) { { name: 'Chief Leader Course' } }
+  let(:test_entry) { ev = events(:top_course); ev.dates.clear; ev }
+  let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+  let(:test_entry_attrs) { { name: 'Chief Leader Course',  dates_attributes: [ date ] } }
 
   before { sign_in(people(:top_leader)) } 
 
   include_examples 'crud controller', skip: [%w(index),%w(new)]
+
+  def deep_attributes(*args)
+    { name: "Chief Leader Course", dates_attributes:[ date ]}  
+  end
 
   describe "GET #index" do
     render_views

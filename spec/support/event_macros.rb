@@ -1,4 +1,4 @@
-module Events
+module EventMacros
 
   def set_start_finish(event, start_at, finish_at)
     event.dates.clear

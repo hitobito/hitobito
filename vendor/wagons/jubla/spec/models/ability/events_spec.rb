@@ -257,7 +257,7 @@ describe Ability::Events do
       end
       
     end
-    
+
     context Event::Participation do
       it "may show his participation" do
         should be_able_to(:show, participation)
@@ -378,6 +378,32 @@ describe Ability::Events do
       
       it "may not approve participations" do
         should_not be_able_to(:approve, participation.application)
+      end
+    end
+  end
+
+
+  context :only_bulei_can_edit_closed_events do
+    let(:course) { Fabricate(:course, group: groups(:be), state: 'closed') }
+    let(:event) { Fabricate(:event, group: groups(:be), state: 'closed') }
+
+    context :bulei do
+      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
+      it "can update course" do
+        should be_able_to(:update, course)
+      end
+      it "can update event" do
+        should be_able_to(:update, event)
+      end
+    end
+
+    context :ast do
+      let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
+      it "cannot update course" do
+        should_not be_able_to(:update, course)
+      end
+      it "can update event" do
+        should be_able_to(:update, event)
       end
     end
   end

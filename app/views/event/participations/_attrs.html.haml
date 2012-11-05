@@ -8,7 +8,7 @@
 
 #main.row-fluid
   %article.span7
-    - if @application.present? && @event.requires_approval? && can?(:show, @application)
+    - if @event.requires_approval? && @application.present? && can?(:show, @application)
       = @application.confirmation_label
     
     = render 'contactable/show', contactable: entry.person, only_public: true

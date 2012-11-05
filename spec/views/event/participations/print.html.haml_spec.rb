@@ -10,6 +10,7 @@ describe "event/participations/print.html.haml" do
 
   before do 
     assign(:application, Event::ApplicationDecorator.decorate(application))
+    assign(:event, EventDecorator.decorate(participation.event) )
     view.stub(path_args: participation.event)
     view.stub(entry: Event::ParticipationDecorator.decorate(participation) )
     controller.stub(current_user: bottom_member)

@@ -50,7 +50,7 @@ class Event < ActiveRecord::Base
   self.supports_applications = false
   self.possible_states = []
   
-  attr_accessible :name, :number, :motto, :cost, :maximum_participants, :contact_id,
+  attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
                   :application_conditions, :dates_attributes, :questions_attributes, :group_id
 
@@ -58,7 +58,6 @@ class Event < ActiveRecord::Base
   ### ASSOCIATIONS
 
   belongs_to :group
-  belongs_to :kind
   belongs_to :contact, class_name: 'Person'
   
   has_many :dates, dependent: :destroy, validate: true, order: :start_at

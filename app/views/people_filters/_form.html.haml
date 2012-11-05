@@ -31,11 +31,14 @@
                              role_type.model_name.human, 
                              checked: entry.role_types.include?(role_type.sti_name))
 
-  = field_set_tag('In welchem Bereich soll gesucht werden?') do
-    = f.labeled :kind, '&nbsp;'.html_safe do
-      = f.inline_radio_button(:kind, :deep, "Überall - Auf der Ebene #{@group.layer_group.to_s} und allen darunter liegenden Ebenen suchen", false)
-      = f.inline_radio_button(:kind, :layer, "Ebene - Nur auf der Ebene #{@group.layer_group.to_s} suchen", false)
-  
+  - if !@group.bottom?
+    = field_set_tag('In welchem Bereich soll gesucht werden?') do
+      = f.labeled :kind, '&nbsp;'.html_safe do
+        = f.inline_radio_button(:kind, :deep, "Überall - Auf der Ebene #{@group.layer_group.to_s} und allen darunter liegenden Ebenen suchen", false)
+        = f.inline_radio_button(:kind, :layer, "Ebene - Nur auf der Ebene #{@group.layer_group.to_s} suchen", false)
+  - else
+    = f.hidden_field(:kind, value: :layer)
+    
   - if can?(:create, entry)
     = field_set_tag('Filtern speichern') do
       = f.labeled_input_field :name, placeholder: 'Geben Sie einen Namen an, um diesen Filter zu speichern'

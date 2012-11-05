@@ -7,7 +7,7 @@
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
 
-  REQUIRED_MARK = '<span class="required">*</span>'.html_safe
+  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
 
   attr_reader :template
 
@@ -99,7 +99,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
-    html_options[:class] ||= 'span6 date'
+    html_options[:class] ||= 'span2 date'
+    html_options[:value] ||= f(@object.send(attr))
     text_field(attr, html_options)
   end
 
@@ -127,7 +128,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
     
-    text_field("#{attr}_date", class: 'span1 date', value: f(@object.send("#{attr}_date"))) + 
+    date_field("#{attr}_date") + 
     ' ' +
     hours_select("#{attr}_hour") +
     ' : ' +
@@ -142,11 +143,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_check_box(attr, value, caption, html_options = {})
-    name = "#{@object.class.model_name.param_key}[#{attr}][]"
-    id = "#{@object.class.model_name.param_key}_#{attr}_#{value.to_s.downcase}"
-    html_options[:id] = id
+    model_param = @object.class.model_name.param_key
+    name = "#{model_param}[#{attr}][]"
+    id = "#{attr}_#{value.to_s.downcase}"
+    html_options[:id] = "#{model_param}_#{id}"
     label(id, class: 'checkbox inline') do
-      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) + 
+      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
       ' ' + 
       caption
     end
@@ -182,7 +184,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
-
+  
+  def person_field(attr, html_options = {})
+    attr, attr_id = assoc_and_id_attr(attr)
+    hidden_field(attr_id) +
+    string_field(attr, placeholder: 'Person suchen...', data: {provide: 'person', id_field: "#{object_name}_#{attr_id}"})
+  end
+  
   def labeled_inline_fields_for(assoc, partial_name=nil, &block) 
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
@@ -230,7 +238,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     caption_or_content ||= captionize(attr, @object.class)
     add_css_class(html_options, 'controls')
 
-    content_tag(:div, :class => "control-group#{' error' if @object.errors.has_key?(attr)}") do
+    content_tag(:div, :class => "control-group#{' error' if errors_on?(attr)}") do
       label(attr, caption_or_content, :class => 'control-label') +
       content_tag(:div, content, html_options)
     end
@@ -307,6 +315,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def errors_on?(attr)
+    attr_plain, attr_id = assoc_and_id_attr(attr)
+    @object.errors.has_key?(attr_plain.to_sym) || @object.errors.has_key?(attr_id.to_sym)
+  end
 
   # Returns true if the given attribute must be present.
   def required?(attr)

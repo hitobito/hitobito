@@ -5,6 +5,17 @@ describe Group::Flock do
 
   let(:state_board_member) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
 
+  context "#to_s" do
+    its(:to_s) { should == 'Bern' }
+    
+    context "with kind" do
+      let(:kind) { Group::Flock::AVAILABLE_KINDS.first  }
+      before { subject.kind = kind}
+      
+      its(:to_s) { should == "#{kind} Bern" }
+    end
+  end
+  
   context "#available_advisors includes members from upper layers, filters affiliate roles" do
     let(:city_board_leader) { Fabricate(Group::RegionalBoard::Leader.name.to_sym, group: groups(:city_board)) }
     let(:external_cbm) { Fabricate(Jubla::Role::External.name.to_sym, group: groups(:city_board)) }

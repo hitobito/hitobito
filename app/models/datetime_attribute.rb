@@ -1,3 +1,4 @@
+# encoding: utf-8
 module DatetimeAttribute
   extend ActiveSupport::Concern
   
@@ -15,10 +16,14 @@ module DatetimeAttribute
       # use accessors to obtain persisted values
       date = send("#{attr}_date")
       if date.present?
-        date = date.to_date
         hour = send("#{attr}_hour").presence || 0
         min = send("#{attr}_min").presence || 0
-        send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
+        begin
+          date = date.to_date
+          send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
+        rescue Exception
+          errors.add("#{attr}_date", "ist nicht gültig")
+        end
       else
         send("#{attr}=", nil)
       end

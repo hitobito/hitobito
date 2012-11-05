@@ -28,6 +28,9 @@ de:
       jubla/role/member: Mitglied
       jubla/role/treasurer: Finanzchef
       
+      event/camp:
+        one: Lager
+        other: Lager
       jubla/event/course/advisor: Betreuer
       
       group/state_board/supervisor: Stellenbegleitung

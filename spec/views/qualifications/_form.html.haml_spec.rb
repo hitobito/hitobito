@@ -6,6 +6,8 @@ describe "qualifications/_form.html.haml" do
 
   before do
     qualification = person.qualifications.build
+    assign(:group, group)
+    assign(:person, person)
     path_args = [group, person, qualification]
     view.stub(parents: [group, person], entry: qualification, path_args: path_args)
   end

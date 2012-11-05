@@ -1,3 +1,11 @@
+# Implement a stack based navigation system.
+#
+# We always place a sheet for the current page on the stack, the previous 
+# sheet should return the user to where he came from 
+#
+# Besides title and link, the sheets also handle fallback links which are
+# used when the user is not allow to access the link itself.
+
 module SheetHelper
   
   def sheets
@@ -111,7 +119,7 @@ end
 
 class EntrySheet < Sheet
   attr_reader :entry
-  
+
   def initialize(view, entry, url_method = nil, can_action = :show, default_url = nil)
     super(view, entry.to_s)
     @entry = entry

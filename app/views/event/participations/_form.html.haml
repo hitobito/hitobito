@@ -1,10 +1,14 @@
 - parent_sheet(EntrySheet.new(self, @event, [:group_event_path, @event.group]))
-- parent_sheet(GroupSheet.new(self, @event.group))
+- event_group_sheet
 - title "Anmeldung für #{@event}"
 
 = entry_form(stacked: true, 
              submit_label: entry.new_record? ? 'Anmelden' : 'Speichern', 
              cancel_url_new: group_event_path(@event.group_id, @event)) do |f|
+
+
+  - if params[:for_someone_else]
+    = f.labeled_person_field(:person)
              
   = f.fields_for(:answers) do |fans|
     = render 'event/answers/fields', f: fans

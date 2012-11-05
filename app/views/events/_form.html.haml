@@ -1,20 +1,19 @@
-- parent_sheet(GroupSheet.new(self, @group, :group_event_path, :index_event))
+- event_group_sheet
 
-%h2 Infos
 = entry_form do |f|
+  %h2 Infos
   - if entry.new_record?
     = f.hidden_field :group_id
     = f.hidden_field :type
 
   = field_set_tag do
     = f.labeled_input_fields(*entry.used_attributes(:name, :number, :description, :motto, :cost, :location))
-    = f.labeled_string_field :contact, data: {provide: 'person', id_field: 'event_contact_id'}
-    = f.hidden_field :contact_id
+    = f.labeled_person_field :contact
 
-    - entry.used_attributes(:state).each do |a|
+    - entry.used?(:state) do
       = f.labeled_belongs_to_field(:state, list: entry.state_collection)
 
-    - entry.used_attributes(:kind_id).each do |a|
+    - entry.used?(:kind_id) do
       = f.labeled_input_field(:kind_id)
       
   = render_extensions 'fields', locals: { f: f }
@@ -26,11 +25,13 @@
 
   %h2 Anmeldung
   = field_set_tag do
-    = f.labeled_input_field(:application_opening_at, class: 'span1 date')
-    = f.labeled_input_field(:application_closing_at, class: 'span1 date')
+    = f.labeled_input_field(:application_opening_at)
+    = f.labeled_input_field(:application_closing_at)
     = f.labeled_input_field(:application_conditions)
-    = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')
-    = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
+    - entry.used?(:priorization) do
+      = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')
+    - entry.used?(:priorization) do
+      = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
     = f.labeled_input_field(:maximum_participants, class: 'span1')
     
   %h2 Angaben für Anmeldung

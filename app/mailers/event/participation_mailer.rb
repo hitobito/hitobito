@@ -1,29 +1,36 @@
 class Event::ParticipationMailer < ActionMailer::Base
-  #default from: "from@example.com"
-#Settings.email_sender
-  helper_method :partcipation_print_url, :event_details
+
+  helper_method :partcipation_url, :event_details
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
-  #   en.event.participation_mailer.created.subject
+  #   de.event.participation_mailer.created.subject
   #
-  def confirmation(person, participation)
-    @person = person
+  def confirmation(participation)
+    @person = participation.person
     @participation = participation
     @event = participation.event
-    mail to: person.email
+    mail to: @person.email
+  end
+  
+  def approval(approvers, participation)
+    @participation = participation
+    @person = participation.person
+    @event = participation.event
+    mail to: approvers.collect(&:email)
   end
 
-  def partcipation_print_url
-    print_event_participation_url(@event, @participation)
+  private
+  
+  def partcipation_url
+    event_participation_url(@event, @participation)
   end
 
   def event_details
     EventPresenter.new.present(@event)
   end
 
-  private
   ## Helper class for presenting event infos
   class EventPresenter
     PADDING = 15

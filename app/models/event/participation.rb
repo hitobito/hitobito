@@ -99,26 +99,6 @@ class Event::Participation < ActiveRecord::Base
     end
   end
   
-  def create_participant_role(event)
-    transaction do
-      unless event_id == event.id
-        # change this participation to the new event
-        self.event = event
-        update_column(:event_id, event.id)
-        update_answers(event)
-      end
-      # create role
-      role = event.participant_type.new
-      role.participation = self
-      role.save!
-    end
-  end
-  
-  def remove_participant_role
-    roles.where(type: event.participant_type.sti_name).destroy_all
-  end
-
-  
   private
   
   def set_self_in_nested
@@ -126,14 +106,4 @@ class Event::Participation < ActiveRecord::Base
     answers.each {|e| e.participation = self unless e.frozen? }
   end
 
-  # update the existing set of answers so that one exists for every question of event.
-  def update_answers(event)
-    current_answers = answers.includes(:question)
-    event.questions.each do |q|
-      exists = current_answers.any? do|a| 
-        a.question.question == q.question && a.question.choice_items == q.choice_items
-      end
-      answers.create(question_id: q.id) unless exists
-    end
-  end
 end

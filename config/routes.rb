@@ -18,7 +18,9 @@ Jubla::Application.routes.draw do
 
   resources :events  
   resources :event_kinds, module: 'event', controller: 'kinds'
-  resources :event_courses, module: 'event', controller: 'courses'
+
+  get 'list_courses', to: 'event/lists#courses', as: :list_courses
+  get 'list_events', to: 'event/lists#events', as: :list_events
   
   resources :events do
     scope module: 'event' do

@@ -1,3 +1,2 @@
-- entry.used_attributes(:advisor_id).each do |a|
-  = f.hidden_field :advisor_id
-  = f.labeled_string_field :advisor, data: {provide: 'person', id_field: 'event_advisor_id'}
+- entry.used?(:advisor_id) do
+  = f.labeled_person_field :advisor

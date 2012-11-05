@@ -1,6 +1,5 @@
 class EventsController < CrudController
-  attr_accessor :year_range
-  helper_method :year_range
+  include Event::YearBasedPaging
 
   self.nesting = Group
   
@@ -15,20 +14,22 @@ class EventsController < CrudController
     respond_with(entry)
   end
 
+  # list scope preload :groups, :kinds which we dont need
   def list_entries
     set_year_vars
-    model_scope.list.in_year(@year)
+    model_scope.
+      order_by_date.
+      preload_all_dates.
+      uniq.
+      in_year(@year)
   end
 
-  private 
-  def set_year_vars
-    this_year = Date.today.year
-    @year_range = (this_year-2)...(this_year+3)
-    @year = year_range.include?(params[:year].to_i) ? params[:year].to_i : this_year 
-  end
+  private
+  
   
   def build_entry
-    event = model_params.delete(:type).constantize.new
+    type = model_params.delete(:type).presence || 'Event'
+    event = type.constantize.new
     event.group_id = model_params.delete(:group_id)
     event
   end

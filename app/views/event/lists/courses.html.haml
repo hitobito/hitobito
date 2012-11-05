@@ -1,4 +1,6 @@
-- title(page_title)
+- if can?(:manage_courses, current_user)
+  .pull-right
+    = dropdown_button(group_title, group_link_list)
 
 = render 'event/page_per_year', paging_params:  group_param
 
@@ -18,6 +20,4 @@
           %td= event.booking_info
           %td= event.state_translated
         - else
-          %td
-            - if event.application_possible? && event.can_create_participation?
-              = action_button 'Anmelden', new_event_participation_path(event) 
+          %td= apply_button_if_possible(event)

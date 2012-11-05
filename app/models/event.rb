@@ -26,9 +26,14 @@
 #
 
 class Event < ActiveRecord::Base
-
-  # This statement is required because this class would not be loaded otherwise.
-  require_relative 'event/date'
+  
+  # This statement is required because these classes would not be loaded correctly otherwise.
+  # The price we pay for using classes as namespace.
+  load Rails.root.join(*%w(app models event date.rb))
+  load Rails.root.join(*%w(app models event role.rb))
+  load Rails.root.join(*%w(app decorators event application_decorator.rb))
+  load Rails.root.join(*%w(app decorators event role_decorator.rb))
+  
   
   ### ATTRIBUTES
 
@@ -48,7 +53,6 @@ class Event < ActiveRecord::Base
   attr_accessible :name, :number, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
                   :application_conditions, :dates_attributes, :questions_attributes
-
 
 
   ### ASSOCIATIONS
@@ -97,7 +101,9 @@ class Event < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:dates).where("event_dates.finish_at >= ?", Time.zone.now.midnight)
+      midnight = Time.zone.now.midnight
+      joins(:dates).
+      where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
     
     def application_possible
@@ -161,7 +167,7 @@ class Event < ActiveRecord::Base
   end
 
   def label_detail
-    "#{number} #{name}"
+    "#{number} #{group.name}"
   end
 
   def init_questions

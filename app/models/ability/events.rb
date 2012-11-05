@@ -53,16 +53,18 @@ module Ability::Events
       participation.person_id == user.id ||
       can_update_event?(participation.event)
     end
-    
+      
+    # create is only invoked by people who wish to
+    # apply for an event themselves. A participation for somebody
+    # else is created through event roles. 
+    # As an exception, participants may be created by an AST
     can :create, Event::Participation do |participation|
-      (participation.person_id == user.id &&
-       user.groups_hierarchy_ids.include?(participation.event.group_id)) ||
-       
-      can_update_event?(participation.event)
+      (participation.person_id == user.id) ||
+      can_create_event?(participation.event)
     end
     
+    # regular people can only create (but not update) their participations 
     can :update, Event::Participation do |participation|
-      participation.person_id == user.id ||
       can_update_event?(participation.event)
     end
     
@@ -71,28 +73,25 @@ module Ability::Events
     can :destroy, Event::Participation do |participation|
       can_create_event?(participation.event)
     end
-    
-    
-    ### EVENT APPLICATION
-    
-    # regular people can only create (but not update) their applications 
-    can :create, Event::Application do |application|
-      participation = application.participation
-      participation.person_id == user.id ||
-      can_create_event?(participation.event)
-    end
-    
-    can [:update, :destroy], Event::Application do |application|
-      participation = application.participation
-      can_create_event?(participation.event)
-    end
-    
+  
     ### EVENT ROLES
         
     can :manage, Event::Role do |role|
       can_update_event?(role.participation.event)
     end
     
+    ### EVENT APPLICATION
+    can :show, Event::Application do |application|
+      participation = application.participation
+      (participation.person_id == user.id) ||
+       can_create_event?(participation.event)
+    end
+    
+    can :confirm, Event::Application do |application|
+      confirm_layer_ids = layer_ids(user.groups_with_permission(:confirm_applications))
+      confirm_layer_ids.present &&
+       contains_any?(confirm_layer_ids, application.participation.person.groups_hierarchy_ids)
+    end
     
     ### EVENT KINDS
     if admin

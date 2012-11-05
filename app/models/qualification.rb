@@ -18,7 +18,7 @@ class Qualification < ActiveRecord::Base
   
   before_validation :set_finish_at
   
-  validates :qualification_kind_id, uniqueness: {scope: [:person_id, :start_at]}
+  validates :qualification_kind_id, uniqueness: {scope: [:person_id, :finish_at]}
   
   class << self
     def active
@@ -34,6 +34,10 @@ class Qualification < ActiveRecord::Base
   
   def duration
     Duration.new(start_at, finish_at)
+  end
+
+  def to_s
+    "#{qualification_kind} (bis #{I18n.l(finish_at)})"
   end
   
   private

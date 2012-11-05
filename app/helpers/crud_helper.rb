@@ -105,39 +105,39 @@ module CrudHelper
 
   # Standard button action to the show page of a given record.
   # Uses the current record if none is given.
-  def button_action_show(path = nil)
+  def button_action_show(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.show"), path, 'zoom-in'
+    action_button ti(:"link.show"), path, 'zoom-in', options
   end
 
   # Standard button action to the edit page of a given record.
   # Uses the current record if none is given.
-  def button_action_edit(path = nil)
+  def button_action_edit(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.edit"), path.is_a?(String) ? path : edit_polymorphic_path(path), 'edit'
+    action_button ti(:"link.edit"), path.is_a?(String) ? path : edit_polymorphic_path(path), 'edit', options
   end
 
   # Standard button action to the destroy action of a given record.
   # Uses the current record if none is given.
-  def button_action_destroy(path = nil)
+  def button_action_destroy(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.delete"), path, 'trash',
-                :data => { :confirm => ti(:confirm_delete),
-                           :method => :delete }
+    options[:date] = { :confirm => ti(:confirm_delete),
+                        :method => :delete }
+    action_button ti(:"link.delete"), path, 'trash', options
   end
 
   # Standard button action to the list page.
   # Links to the current model_class if no path is given.
-  def button_action_index(path = nil, url_options = {:returning => true})
+  def button_action_index(path = nil, url_options = {:returning => true}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.list"), path.is_a?(String) ? path : polymorphic_path(path, url_options), 'list'
+    action_button ti(:"link.list"), path.is_a?(String) ? path : polymorphic_path(path, url_options), 'list', options
   end
 
   # Standard button action to the new page.
   # Links to the current model_class if no path is given.
-  def button_action_add(path = nil, url_options = {})
+  def button_action_add(path = nil, url_options = {}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.add"), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus'
+    action_button ti(:"link.add"), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus', options
   end
   
   # Standard link action to the edit page of a given record.

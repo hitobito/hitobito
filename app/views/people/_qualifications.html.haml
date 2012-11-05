@@ -1,16 +1,7 @@
-%section 
-  %h2 
-    Qualifikation
-    - if can?(:create, entry)
-      .btn-group.pull-right.smaller
-        = button_action_add(new_group_person_qualification_path(parent, entry))
-
-  %table.table.table-basic
-    %tbody
-      - @qualifications.each do |item|
-        %tr
-          %td
-            %strong= item.qualification_kind
-          %td= f(item.finish_at.to_date)
-          - if can?(:destroy, entry)
-            %td= link_action_destroy(group_person_qualification_path(parent, entry, item))
+= section_table('Qualifikationen', @qualifications,
+                can?(:create, entry.qualifications.new) ? new_group_person_qualification_path(parent, entry) : nil) do |item|
+  %td
+    %strong= item.qualification_kind
+  %td= f(item.finish_at)
+  - if can?(:destroy, item)
+    %td= link_action_destroy(group_person_qualification_path(parent, entry, item))

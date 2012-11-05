@@ -18,7 +18,7 @@ module Ability::Events
     end
     
     can :index_participations, Event do |event|
-      can_update_event?(event) ||
+      can_manage_event?(event) ||
       events_with_permission(:contact_data).include?(event.id)
     end
     
@@ -45,13 +45,13 @@ module Ability::Events
     ### PARTICIPATIONS
     can :show, Event::Participation do |participation|
       participation.person_id == user.id ||
-      can_update_event?(participation.event) ||
+      can_manage_event?(participation.event) ||
       events_with_permission(:contact_data).include?(participation.event_id)
     end
     
     can [:print,:show_details], Event::Participation do |participation|
       participation.person_id == user.id ||
-      can_update_event?(participation.event)
+      can_manage_event?(participation.event)
     end
       
     # create is only invoked by people who wish to
@@ -65,7 +65,7 @@ module Ability::Events
     
     # regular people can only create (but not update) their participations 
     can :update, Event::Participation do |participation|
-      can_update_event?(participation.event)
+      can_manage_event?(participation.event)
     end
     
     # only participations with applications are destroyed directly
@@ -77,7 +77,7 @@ module Ability::Events
     ### EVENT ROLES
         
     can :manage, Event::Role do |role|
-      can_update_event?(role.participation.event)
+      can_manage_event?(role.participation.event)
     end
     
     ### EVENT APPLICATION
@@ -101,8 +101,12 @@ module Ability::Events
   end
   
   private
-  
+  # method is overriden in jubla wagon
   def can_update_event?(event)
+    can_manage_event?(event)
+  end
+  
+  def can_manage_event?(event)
     event.group && (
     can_create_event?(event) ||
     events_with_permission(:full).include?(event.id) ||

@@ -13,6 +13,7 @@ module JublaJubla
       Person.send :include, Jubla::Person
       Group.send  :include, Jubla::Group
       Role.send   :include, Jubla::Role
+      Ability.send :include, Jubla::Ability
       Event::Course.send :include, Jubla::Event::Course
       Event::Application.send :include, Jubla::Event::Application
       

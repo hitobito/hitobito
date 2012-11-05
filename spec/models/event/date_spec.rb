@@ -13,7 +13,7 @@ require 'spec_helper'
 
 describe Event::Date do
 
-  let(:event) { Fabricate(:event, group: groups(:top_group)) }
+  let(:event) { events(:top_course) }
   
   it 'should only store date when no time is given' do
     date1 = '12.12.2012'

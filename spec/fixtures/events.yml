@@ -25,6 +25,13 @@
 #  participant_count      :integer          default(0)
 #
 
+top_event:
+  name: Top Event
+  group: top_layer
+  type: Event
+  priorization: true
+  requires_approval: true
+
 top_course:
   name: Top Course
   group: top_layer

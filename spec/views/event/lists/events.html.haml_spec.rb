@@ -35,7 +35,7 @@ describe 'event/lists/events.html.haml' do
   def create_event(hash={})
     hash = ({type: :event, group: :top_group}).merge(hash)
     event = Fabricate(hash[:type], group: groups(hash[:group]))
-    event.dates.create(start_at: hash[:start_at]) if hash[:start_at]
+    set_start_dates(event, hash[:start_at])
     event
   end
   

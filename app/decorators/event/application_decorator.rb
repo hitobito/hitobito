@@ -10,7 +10,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   delegate :dates_info, :dates_full, :kind, :group, to: :event
 
   def labeled_link
-    event.labeled_link(h.event_participation_path(event, participation))
+    event.labeled_link(h.event_participation_path(event, participation)) if can?(:show, participation)
   end
   
   def contact
@@ -29,17 +29,32 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   end
   
   def confirmation
-    label, css, desc = if approved?
+    confirmation_badge(*confirmation_fields)
+  end
+  
+  def confirmation_label
+    label, css, desc = confirmation_fields
+    confirmation_badge(label, css, desc) +
+    " Kursfreigabe #{desc}"
+  end
+  
+  def confirmation_badge(label, css, desc)
+    content_tag(:span, label.html_safe, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
+  end
+  
+  private
+  
+  
+  
+  def confirmation_fields
+    if approved?
       %w(&#x2713; success bestätigt)
     elsif rejected?
       %w(&#x00D7; important abgelehnt)
     else
       %w(? warning ausstehend)
     end
-    
-    content_tag(:span, label, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
   end
-  
 
 end
   

@@ -1,7 +1,24 @@
-= button_action_edit if can?(:edit, entry)
-= action_button('Drucken', print_event_participation_path(entry.event_id, entry), :print, { target: 'new'})
+- if can?(:edit, entry)
+  = button_action_edit
+   
+- if entry.person_id == current_user.id
+  = action_button('Drucken', print_event_participation_path(@event, entry), :print, { target: 'new'})
+  
 - if can?(:edit, entry.person) && flash.present?
   = action_button('Kontaktdaten ändern', edit_person_path, :edit)
-- if entry.application_id? && can?(:destroy, entry)
-  = button_action_destroy
 
+- if @application.present? 
+  - if can?(:destroy, entry)
+    = button_action_destroy
+  
+  - if @event.requires_approval? && can?(:approve, @application)
+    - unless @application.approved?
+      = action_button('<strong>&#x2713;</strong>&nbsp; Freigeben'.html_safe, 
+                      approve_event_application_path(@event, @application),
+                      nil, 
+                      method: :put)
+    - unless @application.rejected?
+      = action_button('<strong>&#x00D7;</strong>&nbsp; Ablehnen'.html_safe, 
+                      reject_event_application_path(@event, @application), 
+                      nil, 
+                      method: :delete)

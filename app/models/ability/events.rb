@@ -46,10 +46,11 @@ module Ability::Events
     can :show, Event::Participation do |participation|
       participation.person_id == user.id ||
       can_update_event?(participation.event) ||
-      events_with_permission(:contact_data).include?(participation.event_id)
+      events_with_permission(:contact_data).include?(participation.event_id) ||
+      (participation.application_id? && can_approve_application?(participation))
     end
     
-    can [:print,:show_details], Event::Participation do |participation|
+    can [:print, :show_details], Event::Participation do |participation|
       participation.person_id == user.id ||
       can_update_event?(participation.event)
     end
@@ -83,14 +84,13 @@ module Ability::Events
     ### EVENT APPLICATION
     can :show, Event::Application do |application|
       participation = application.participation
-      (participation.person_id == user.id) ||
-       can_create_event?(participation.event)
+      participation.person_id == user.id ||
+       can_create_event?(participation.event) ||
+       (participation.application_id? && can_approve_application?(participation))
     end
     
-    can :confirm, Event::Application do |application|
-      confirm_layer_ids = layer_ids(user.groups_with_permission(:confirm_applications))
-      confirm_layer_ids.present &&
-       contains_any?(confirm_layer_ids, application.participation.person.groups_hierarchy_ids)
+    can [:approve, :reject], Event::Application do |application|
+      can_approve_application?(application.participation)
     end
     
     ### EVENT KINDS
@@ -113,6 +113,12 @@ module Ability::Events
     event.group && (
     groups_group_full.include?(event.group_id) ||
     layers_full.include?(event.group.layer_group_id))
+  end
+  
+  def can_approve_application?(participation)
+    confirm_layer_ids = layer_ids(user.groups_with_permission(:approve_applications))
+    confirm_layer_ids.present? &&
+     contains_any?(confirm_layer_ids, participation.person.groups_hierarchy_ids)
   end
   
   def events_with_permission(permission)

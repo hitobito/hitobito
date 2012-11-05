@@ -110,4 +110,5 @@ describe Event::ParticipationsController, type: :controller do
       should redirect_to root_url
     end
   end
+  
 end

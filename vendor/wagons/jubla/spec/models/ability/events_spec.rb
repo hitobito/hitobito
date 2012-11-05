@@ -6,6 +6,10 @@ describe Ability::Events do
   let(:group)   { role.group }
   let(:event)   { Fabricate(:event, group: group) }
   
+  let(:participant) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:bern)).person }
+  let(:participation) { Fabricate(:event_participation, person: participant, event: event, application: Fabricate(:event_application)) }
+  
+  
   subject { Ability.new(user.reload) }
 
   context :layer_full do
@@ -51,7 +55,6 @@ describe Ability::Events do
     
     
     context Event::Participation do
-      let(:participation) { Fabricate(:event_participation, event: event) }
       before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
       
       it "may show participation" do
@@ -115,7 +118,6 @@ describe Ability::Events do
     end
     
     context Event::Participation do
-      let(:participation) { Fabricate(:event_participation, event: event) }
       before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
       
       it "may show participation" do
@@ -342,6 +344,41 @@ describe Ability::Events do
     
     it "may manage event kinds" do
       should be_able_to(:manage, Event::Kind)
+    end
+  end
+  
+  context :flock_leader do
+    let(:event) { Fabricate(:course, group: groups(:be)) }
+    let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
+    
+    context "for his guides" do
+      it "may show participations" do
+        should be_able_to(:show, participation)
+      end
+      
+      it "may show application" do
+        should be_able_to(:show, participation.application)
+      end
+      
+      it "may approve participations" do
+        should be_able_to(:approve, participation.application)
+    end
+    end
+    
+    context "for other participants" do
+      let(:participant) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:muri)).person }
+      
+      it "may not show participations" do
+        should_not be_able_to(:show, participation)
+      end
+      
+      it "may not show application" do
+        should_not be_able_to(:show, participation.application)
+      end
+      
+      it "may not approve participations" do
+        should_not be_able_to(:approve, participation.application)
+      end
     end
   end
 

@@ -47,21 +47,24 @@ class Event::ParticipationMailer < ActionMailer::Base
     def prepare_info
       event_info = {}
       event_info[:name] = padded(:name)
-      event_info[:contact] = padded(:contact) { |event| "#{event.contact} (#{event.contact.email})" }  if event.contact
-      event_info[:location] = padded(:location)
-      event_info[:dates] = padded(:dates) do |event| 
-        dates = event.dates.map(&:to_s)
-        first = dates.shift
-        rest = dates.map {|date| "".ljust(PADDING + 1) + date }
-        [first, rest].join("\n").strip
-      end if event.dates.present?
+      event_info[:contact] = padded(:contact) { |event| "#{event.contact} (#{event.contact.email})" }
+      event_info[:location] = padded(:location) { |event| pad_array(event.location.split("\n")) } 
+      event_info[:dates] = padded(:dates) { |event|  pad_array(event.dates.map(&:to_s)) } 
       event_info
     end
 
-    def padded(key)
-      label = label_for(key)
-      value = block_given? ? "#{yield(event)}" : @event.send(key)
-      "#{label} #{value}" if value
+    def pad_array(parts)
+      first = parts.shift
+      rest = parts.map {|part| "".ljust(PADDING + 1) + part }
+      [first, rest].join("\n").strip
+    end
+
+    def padded(key) 
+      if @event.send(key).present?
+        label = label_for(key)
+        value = block_given? ? "#{yield(event)}" : @event.send(key)
+        "#{label} #{value}" if value
+      end
     end
 
     def label_for(key)

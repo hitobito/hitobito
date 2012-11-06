@@ -23,8 +23,9 @@ describe Event::ParticipationMailer do
     end
 
     it "renders location if set" do
-      event.location = 'some location'
-      should =~ /Ort \/ Adresse:\s+some location/
+      event.location = "Eigerplatz 4\n3006 Bern"
+      should =~ /Ort \/ Adresse:\s+Eigerplatz 4/
+      should =~ /\s{16}3006 Bern/
     end
 
     it "renders dates if set" do

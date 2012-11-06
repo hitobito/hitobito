@@ -21,14 +21,24 @@ describe "Person Autocomplete" do
     should have_content 'Rolle hinzufügen'
   end
 
-
   it "verifies content in typeahead", js: true do
     sign_in 
     visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
     page.should have_content("hinzufügen")
     find('.typeahead.dropdown-menu').should_not have_content 'Top Leader'
+    
+    # search name only
     fill_in "Person", with: "Top"
     find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    
+    # search name and town
+    fill_in "Person", with: "Top Super"
+    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    
+    # search with spaces
+    fill_in "Person", with: "Top  Super "
+    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    
     find('.typeahead.dropdown-menu').click
     click_button 'Speichern'
     should have_content 'Rolle Rolle für Top Leader in TopGroup wurde erfolgreich erstellt.'

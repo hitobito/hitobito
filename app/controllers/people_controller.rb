@@ -39,7 +39,7 @@ class PeopleController < CrudController
   def query
     @people = []
     if params.has_key?(:q) && params[:q].size >= 3
-      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname)).
+      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
                        only_public_data.
                        order_by_name.
                        limit(10)

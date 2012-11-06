@@ -8,15 +8,11 @@ class PersonDecorator < ApplicationDecorator
     {id: id, name: full_label}
   end
 
-  def full_name
-    model.to_s.split('/').first
-  end
-
   def full_label
     label = to_s
     label << ", #{town}" if town?
     if company?
-      name = "#{first_name} #{last_name}".strip
+      name = full_name
       label << " (#{name})" if name.present?
     else
       label << " (#{birthday.year})" if birthday

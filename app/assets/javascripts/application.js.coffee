@@ -38,15 +38,28 @@ findPeople = (query, process) ->
     return process(names)
   )
 
+typeaheadIdField = (input) ->
+  $('#' + input.data('id-field'))
+
+typeaheadHighlighter = (item) ->
+  query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
+  query = query.replace(/\s+/g, '|')
+  item.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
+
 setPersonId = (item) ->
   typeahead = this
   person = $.grep(typeahead.selection, (person) -> person.name == item)[0]
-  id_input = $('#' + typeahead.$element.data('id-field'))
-  id_input.val(person.id)
+  typeaheadIdField(typeahead.$element).val(person.id)
   item
 
 setupPersonTypeahead = (input) ->
-  $(this).typeahead(source: findPeople, updater: setPersonId)
+  $(this).typeahead(
+              source: findPeople, 
+              updater: setPersonId, 
+              matcher: (item) -> true, # match every value returned from server
+              items: 10,
+              highlighter: typeaheadHighlighter)
+  $(this).keydown(-> typeaheadIdField($(this)).val(null))
 
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->

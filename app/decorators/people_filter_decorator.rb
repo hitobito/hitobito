@@ -8,11 +8,17 @@ class PeopleFilterDecorator < ApplicationDecorator
   end
   
   def local_role_types(group)
-    group.role_types.select {|r| r.name.start_with?(group.name) }
+    group.role_types.select {|r| !r.restricted && local_role_type?(r) }
   end
   
   def global_role_types
-    Role.all_types.reject {|r| r.name.start_with?('Group::') }
+    Role.all_types.reject {|r| local_role_type?(r) }
+  end
+  
+  private
+  
+  def local_role_type?(type)
+    type.name.start_with?('Group::')
   end
   
 end

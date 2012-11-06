@@ -2,7 +2,17 @@ module Jubla::EventsController
   extend ActiveSupport::Concern
 
   included do 
+
     before_filter :remove_advisor, only: [:create, :update]
+    before_filter :remove_coach, only: [:create, :update]
+
+    def new
+      if entry.class.attr_used?(:coach_id) 
+        entry.coach_id = parent.available_coaches.first.id
+      end
+      super
+    end
+
   end
 
   private
@@ -10,5 +20,8 @@ module Jubla::EventsController
     model_params.delete(:advisor)
   end
 
+  def remove_coach
+    model_params.delete(:coach)
+  end
 
 end

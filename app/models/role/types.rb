@@ -34,6 +34,10 @@ module Role::Types
       all_types.select(&:affiliate)
     end
     
+    def external_types
+      all_types.select {|t| t.affiliate && !t.restricted }
+    end
+    
     def reset_types!
       @@all_types = nil
     end

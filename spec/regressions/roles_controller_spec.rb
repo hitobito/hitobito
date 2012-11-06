@@ -46,9 +46,11 @@ describe RolesController, type: :controller do
     end
     
     def it_should_redirect_to_index
-      it { should redirect_to person_path(entry.person_id) } 
+      it do
+        path = entry.destroyed? ? group_path(group) :person_path(entry.person_id)
+        should redirect_to path
+      end
     end
-    
   end
   
 

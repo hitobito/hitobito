@@ -61,7 +61,10 @@ class GroupDecorator < ApplicationDecorator
     links = []
     links << h.link_to('Mitglieder', h.group_people_path(model))
     if can?(:index_local_people, model)
-      links << h.link_to('Externe', h.group_people_path(model, role_types: Role.affiliate_types.collect(&:sti_name), name: 'Externe'))
+      links << h.link_to('Externe', 
+                         h.group_people_path(model, 
+                                             role_types: Role.external_types.collect(&:sti_name), 
+                                             name: 'Externe'))
     end
     
     if layer?
@@ -73,7 +76,8 @@ class GroupDecorator < ApplicationDecorator
       
       if can?(:new, model.people_filters.new)
         links << nil
-        links << h.link_to('Neuer Filter...', h.new_group_people_filter_path(id, people_filter: h.params.slice(:kind, :role_types)))
+        links << h.link_to('Neuer Filter...', 
+                           h.new_group_people_filter_path(id, people_filter: h.params.slice(:kind, :role_types)))
       end
     end
     links

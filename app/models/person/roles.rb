@@ -69,11 +69,10 @@ module Person::Roles
     
     # load people with/out affiliate roles
     def affiliate(ext = true)
-      affiliate_types = Role.affiliate_types.collect(&:sti_name)
       if ext
-        where(roles: {type: affiliate_types})
+        where(roles: {type: Role.external_types.collect(&:sti_name)})
       else
-        where("roles.type NOT IN (?)", affiliate_types)
+        where("roles.type NOT IN (?)", Role.affiliate_types.collect(&:sti_name))
       end
     end
     

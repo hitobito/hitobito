@@ -96,10 +96,14 @@ class Person < ActiveRecord::Base
     if company?
       company_name
     else
-      name = "#{first_name} #{last_name}".strip
+      name = full_name
       name << " / #{nickname}" if nickname?
       name
     end
+  end
+  
+  def full_name
+    "#{first_name} #{last_name}".strip
   end
 
   def all_roles

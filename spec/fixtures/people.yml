@@ -45,6 +45,7 @@ top_leader:
   last_name: Leader
   email: top_leader@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
+  town: Supertown
   
 bottom_member:
   first_name: Bottom

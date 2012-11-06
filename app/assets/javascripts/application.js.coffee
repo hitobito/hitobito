@@ -79,7 +79,7 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 $ ->
   # wire up date picker
   $(":input.date").live("click", ->
-    $(this).datepicker(dateFormat: 'dd.mm.yy')
+    $(this).datepicker()
     $(this).datepicker('show'))
 
   # wire up elements with ajax replace

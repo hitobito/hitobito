@@ -60,8 +60,9 @@ module Ability::Events
     # else is created through event roles. 
     # As an exception, participants may be created by an AST
     can :create, Event::Participation do |participation|
-      participation.event.application_possible? && 
-      ((participation.person_id == user.id) || can_create_event?(participation.event))
+      (participation.event.application_possible? && 
+       participation.person_id == user.id) || 
+      can_create_event?(participation.event)
     end
     
     # regular people can only create (but not update) their participations 

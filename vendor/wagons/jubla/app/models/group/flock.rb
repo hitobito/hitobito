@@ -1,6 +1,8 @@
 # Ebene Schar
 class Group::Flock < Group
   
+  include RestrictedRole
+  
   self.layer = true
   self.event_types = [Event, Event::Camp]
   
@@ -11,12 +13,7 @@ class Group::Flock < Group
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
   attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), as: :superior
 
-
-  belongs_to :advisor, class_name: "Person"
-  belongs_to :coach, class_name: "Person"
-
-
-  validates :kind, inclusion: AVAILABLE_KINDS
+  validates :kind, inclusion: AVAILABLE_KINDS, allow_blank: true
 
 
   def available_coaches 
@@ -59,10 +56,29 @@ class Group::Flock < Group
     self.permissions = [:layer_read, :login]
   end
   
+  # Kassier
   class Treasurer < Jubla::Role::Treasurer
     self.permissions = [:layer_read, :contact_data, :login]
   end
   
+  # Coach
+  class Coach < ::Role
+    self.permissions = [:layer_read, :login]
+    self.affiliate   = true
+    self.restricted  = true
+    self.visible_from_above = false
+  end
+  
+  # Betreuer
+  class Advisor < ::Role
+    self.permissions = [:layer_read, :login]
+    self.affiliate   = true
+    self.restricted  = true
+    self.visible_from_above = false
+  end
+  
   roles Leader, CampLeader, President, Guide, Treasurer
+  restricted_role :coach, Coach
+  restricted_role :advisor, Advisor
   
 end

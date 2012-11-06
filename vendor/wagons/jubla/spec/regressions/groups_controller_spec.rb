@@ -100,13 +100,13 @@ describe GroupsController, type: :controller  do
       [:leader, :asterix, true],
       [:leader, :asterix, false, { jubla_insurance: '1'} ],
       [:leader, :flock, false],
-      [:agent, :flock, false],
+      [:agent, :flock, true],
       [:agent, :region, true], 
       [:agent, :state, false]
     ]
 
     expected.each do |user, group, can_create_group, extra_attrs={}| 
-      context "#{user} create #{group}"  do
+      context "#{user} on #{group}"  do
         before { sign_in(send(user)) }
 
         it "#{can_create_group ? "can" : "cannot"} create group" do

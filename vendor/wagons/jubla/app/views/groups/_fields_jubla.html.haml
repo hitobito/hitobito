@@ -14,4 +14,4 @@
 
 = field_set_tag do
   - entry.modifiable_attributes(:coach_id, :advisor_id).each do |attr|
-    = f.labeled_input_field attr
+    = f.labeled_belongs_to_field attr, list: {coach_id: @coaches, advisor_id: @advisors}[attr.to_sym]

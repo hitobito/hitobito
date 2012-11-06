@@ -124,6 +124,7 @@ bern:
   name: Bern
   parent: city
   type: Group::Flock
+  kind: Jungwacht
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bern) %>
   lft: 18
   rgt: 25
@@ -156,6 +157,7 @@ muri:
   name: Muri
   parent: city
   type: Group::Flock
+  kind: Blauring
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:muri) %>
   lft: 26
   rgt: 27
@@ -164,6 +166,7 @@ thun:
   name: Thun
   parent: oberland
   type: Group::Flock
+  kind: Jungwacht
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:thun) %>
   lft: 32
   rgt: 35
@@ -180,6 +183,7 @@ innerroden:
   name: Innerroden
   parent: "no"
   type: Group::Flock
+  kind: Jubla
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:innerroden) %>
   lft: 43
   rgt: 44
@@ -188,6 +192,7 @@ ausserroden:
   name: Ausserroden
   parent: "no"
   type: Group::Flock
+  kind: Jungwacht
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:ausserroden) %>
   lft: 45
   rgt: 46

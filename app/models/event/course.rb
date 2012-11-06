@@ -39,9 +39,11 @@ class Event::Course < Event
   self.participant_type = Event::Course::Role::Participant
   self.supports_applications = true
   
-  attr_accessible :kind_id, :state, :priorization, :requires_approval
+  attr_accessible :number, :kind_id, :state, :priorization, :requires_approval
 
-
+  belongs_to :kind
+  
+  
   class << self
     def in_hierarchy(user)
       only_group_id(groups_with_courses_in_hierarchy(user))

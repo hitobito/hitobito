@@ -39,6 +39,8 @@ de:
       group/flock/camp_leader: Lagerleitung
       group/flock/president: Präses
       group/flock/guide: Leiter
+      group/flock/advisor: Scharbegleitung
+      group/flock/coach: Coach
 
       event/camp:
         one: Lager
@@ -65,7 +67,7 @@ de:
         kind: Art
         unsexed: Gemischt
         clairongarde: Clairongarde
-        founding_year: Gründungsjar
+        founding_year: Gründungsjahr
         coach: Coach
         coach_id: Coach
         advisor: Scharbegleitung

@@ -10,7 +10,7 @@
 # if you need additional things
 # please add conditionals like these
 
-%define use_delayed_job 0
+%define use_delayed_job 1
 %define use_memcached   0
 %define use_sphinx      0
 

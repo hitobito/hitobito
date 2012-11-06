@@ -6,10 +6,9 @@ gem 'rails', '3.2.8'
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancan'
-#gem 'delayed_job_active_record'
+gem 'delayed_job_active_record'
 gem 'decorates_before_rendering', '0.0.3'
 gem 'devise'
-gem 'display_case'
 gem 'draper'
 gem 'faker'
 gem 'haml'
@@ -35,8 +34,7 @@ group :assets do
   gem 'compass', '>= 0.13.alpha.0'
   gem 'compass-rails', '~> 1.0.2'
   gem 'jquery-rails'
-  gem 'sass-rails',   '~> 3.2.3'
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'sass-rails', '~> 3.2.3'
   gem 'therubyracer', :platforms => :ruby
   gem 'uglifier', '>= 1.0.3'
 end

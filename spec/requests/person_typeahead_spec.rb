@@ -21,27 +21,48 @@ describe "Person Autocomplete" do
     should have_content 'Rolle hinzufügen'
   end
 
-  it "verifies content in typeahead", js: true do
-    sign_in 
-    visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
-    page.should have_content("hinzufügen")
-    find('.typeahead.dropdown-menu').should_not have_content 'Top Leader'
+  context "highlights content in typeahead", js: true do
+    before do
+      sign_in 
+      visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
+    end
     
-    # search name only
-    fill_in "Person", with: "Top"
-    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    it "for regular queries" do
+      page.should have_content("hinzufügen")
     
-    # search name and town
-    fill_in "Person", with: "Top Super"
-    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+      fill_in "Person", with: "gibberish"
+      find('.typeahead.dropdown-menu').should_not have_content('o')
+      
+      fill_in "Person", with: "Top"
+      find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+      find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
+    end
     
-    # search with spaces
-    fill_in "Person", with: "Top  Super "
-    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    it "for two word queries" do
+      fill_in "Person", with: "Top Super"
+      sleep(0.5)
+      find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+      find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
+      find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
+    end
     
-    find('.typeahead.dropdown-menu').click
-    click_button 'Speichern'
-    should have_content 'Rolle Rolle für Top Leader in TopGroup wurde erfolgreich erstellt.'
-  end
+    it "for queries with weird spaces" do
+      fill_in "Person", with: "Top  Super "
+      sleep(0.5)
+      find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+      find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
+      find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
+    end
+  
+    it "saves content from typeahead" do
+      # search name only
+      fill_in "Person", with: "Top"
+      find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+      find('.typeahead.dropdown-menu li').click
+      
+      click_button 'Speichern'
+      should have_content 'Rolle Rolle für Top Leader in TopGroup wurde erfolgreich erstellt.'
+    end
 
+  end
 end

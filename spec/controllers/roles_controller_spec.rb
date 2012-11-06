@@ -34,12 +34,26 @@ describe RolesController do
     should redirect_to(group_person_path(group, person))
   end
 
-  it "POST destroy redirects to person after destroy" do
-    role = Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group)
-    post :destroy, {group_id: group.id, id: role.id }
+  describe "POST destroy" do
+    let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) } 
+    let(:notice) { "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." } 
+
     
-    flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
-    should redirect_to(person_path(person))
+    it "redirects to group" do
+      post :destroy, {group_id: group.id, id: role.id }
+
+      flash[:notice].should eq notice
+      should redirect_to(group_path(group))
+    end
+
+    it "redirects to person if user can still view person" do
+      Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
+      post :destroy, {group_id: group.id, id: role.id }
+
+      flash[:notice].should eq notice
+      should redirect_to(person_path(person))
+    end
+
   end
 
 end

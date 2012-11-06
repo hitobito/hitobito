@@ -17,9 +17,12 @@ class RolesController < CrudController
   def update
     super(location: group_person_path(entry.group_id, entry.person_id))
   end
-  
-  def destroy
-    super(location: person_path(entry.person_id))
+
+  def destroy 
+    super do |format|
+      location = can?(:show, entry.person) ? person_path(entry.person_id) : group_path(parent)
+      format.html { redirect_to(location) } 
+    end
   end
   
   private 

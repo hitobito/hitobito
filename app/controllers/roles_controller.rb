@@ -9,13 +9,18 @@ class RolesController < CrudController
   
   hide_action :index, :show
   
-  
   def create
     super(location: group_people_path(entry.group_id))
   end
   
   def update
-    super(location: group_person_path(entry.group_id, entry.person_id))
+    type = model_params && model_params.delete(:type)
+    if type && type != entry.type 
+      handle_type_change(type)
+      redirect_to(group_person_path(entry.group_id, entry.person_id))
+    else
+      super(location: group_person_path(entry.group_id, entry.person_id))
+    end
   end
 
   def destroy 
@@ -26,6 +31,14 @@ class RolesController < CrudController
   end
   
   private 
+  def handle_type_change(type)
+    role = type.constantize.new
+    role.initialize_dup(entry)
+    role.save
+    entry.destroy
+    flash[:notice] = @@helper.t('roles.role_changed', old_role: full_entry_label, new_role: role).html_safe
+    set_model_ivar(role)
+  end
   
   def build_entry 
     if model_params.blank? || !parent.class.role_types.collect(&:sti_name).include?(model_params[:type])
@@ -43,7 +56,7 @@ class RolesController < CrudController
   end
 
   # A label for the current entry, including the model name, used for flash
-  def full_entry_label
-    "#{models_label(false)} #{RoleDecorator.decorate(entry).flash_info}".html_safe
+  def full_entry_label(role=entry)
+    "#{models_label(false)} #{RoleDecorator.decorate(role).flash_info}".html_safe
   end
 end

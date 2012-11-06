@@ -239,6 +239,9 @@ de:
     destroy:
       flash:
         success: "Anmeldung wurde erfolgreich gelöscht."
+
+  roles:
+    role_changed: "%{old_role} zu <i>%{new_role}</i> geändert."
         
   event/participations:
     show:

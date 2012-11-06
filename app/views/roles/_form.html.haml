@@ -11,6 +11,7 @@
   - else
     = f.labeled(:group_id, content_tag(:div, entry.group.to_s))
     = f.labeled(:person_id, content_tag(:div, entry.person.to_s))
+    = f.labeled(:type, entry.possible_role_collection_select)
     
   = f.labeled_input_field(:label, 
                           data: {provide: :typeahead, source: entry.klass.available_labels}, 

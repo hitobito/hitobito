@@ -1,10 +1,30 @@
 require 'spec_helper'
-describe GroupDecorator do
+describe GroupDecorator, :draper_with_helpers do
+  include Rails.application.routes.url_helpers
+
+  let(:model) { double("model")}
+  let(:decorator) { GroupDecorator.new(model) } 
+  let(:context) { double("context")}
+  subject { decorator } 
+
+  describe "possible roles" do
+    let(:model) { groups(:top_group) } 
+    its(:possible_roles) { should eq [{:sti_name=>"Group::TopGroup::Leader", :human=>"Rolle"}, 
+                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Rolle"}]} 
+
+    describe "possible_role_links" do
+      subject { decorator.possible_role_links } 
+      its(:size) { should eq 2 } 
+      its(:first) { should eq "<a href=\"#{path(Group::TopGroup::Leader)}\">Rolle</a>" } 
+      its(:second) { should eq "<a href=\"#{path(Group::TopGroup::Member)}\">Rolle</a>" } 
+
+      def path(type)
+        new_group_role_path(model, role: {type: type})
+      end
+    end
+  end
 
   describe "selecting attributes" do
-    let(:model) { double("model")}
-    let(:subject) { GroupDecorator.new(model) }
-    let(:context) { double("context")}
     before do
       subject.stub(h: context)
       model.stub_chain(:class, :attr_used?) {|val| val }
@@ -28,9 +48,6 @@ describe GroupDecorator do
   end
 
   describe "new event links" do
-    let(:context) { double("context") }
-    let(:model) { double("model") }
-
     before do
       context.stub(can?: true)
       context.stub_chain(:new_group_event_path, :link_to, :action_button, :dropdown_button)

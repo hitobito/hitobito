@@ -114,6 +114,13 @@ class Person < ActiveRecord::Base
     permission?(:login)
   end
 
+  def male?
+    gender == 'm'
+  end
+  
+  def female?
+    gender == 'w'
+  end
   
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     login? && super

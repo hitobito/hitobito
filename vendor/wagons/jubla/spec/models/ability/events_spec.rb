@@ -83,9 +83,9 @@ describe Ability::Events do
         should_not be_able_to(:show, other)
       end
 
-      it "may not create when application is not possible" do
+      it "may still create when application is not possible" do
         event.stub(application_possible?: false)
-        should_not be_able_to(:create, participation)
+        should be_able_to(:create, participation)
       end
     end
 
@@ -332,6 +332,11 @@ describe Ability::Events do
       it "may create his participation" do
         participation.event.stub(application_possible?: true)
         should be_able_to(:create, participation)
+      end
+      
+      it "may not create his participation if application is not possible" do
+        participation.event.stub(application_possible?: false)
+        should_not be_able_to(:create, participation)
       end
       
       it "may show his participation" do

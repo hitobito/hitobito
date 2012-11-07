@@ -15,9 +15,15 @@ describe Event::Camp do
   describe ".role_types" do
     subject { Event::Camp.role_types }
     
+    it { should include(Event::Role::Leader) }
+    it { should include(Event::Role::AssistantLeader) }
+    it { should include(Event::Role::Cook) }
+    it { should include(Event::Role::Treasurer) }
+    it { should include(Event::Role::Speaker) }
     it { should include(Event::Role::Participant) }
     it { should include(Event::Camp::Role::Coach) }
   end
+
   #
   #context "#application_possible?" do
   #  before { subject.state = 'application_open' }

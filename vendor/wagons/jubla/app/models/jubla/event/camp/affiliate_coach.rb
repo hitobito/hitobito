@@ -15,7 +15,7 @@ module Jubla::Event::Camp::AffiliateCoach
 
   def coach
     if new_record?
-      Person.find(@coach_id)
+      Person.find(@coach_id) if @coach_id.present?
     else
       @coach ||= coach_participation.try(:person)
     end

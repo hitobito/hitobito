@@ -2,3 +2,8 @@ top_leader:
   person: top_leader
   group: federal_board
   type: Group::FederalBoard::Member
+
+flock_leader:
+  person: flock_leader
+  group: innerroden
+  type: Group::Flock::Leader

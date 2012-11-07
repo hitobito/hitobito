@@ -3,3 +3,9 @@ top_leader:
   last_name: Leader
   email: top.leader@jubla.example.com
   contact_data_visible: true
+
+flock_leader:
+  first_name: Flock
+  last_name: Leader
+  email: flock.leader@jubla.example.com
+  contact_data_visible: true

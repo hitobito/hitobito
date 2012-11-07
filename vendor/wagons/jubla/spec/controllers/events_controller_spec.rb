@@ -2,17 +2,16 @@ require 'spec_helper'
 
 describe EventsController do
 
-  before { sign_in(people(:top_leader)) }
-
   context "event_course" do
-    context "new" do
+
+    before { sign_in(people(:top_leader)) }
+
+    context "create with advisor" do
 
       let(:group) { groups(:ch) }
       let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
       let(:contact) { Person.first }
       let(:advisor) { Person.last }
-
-      # TODO: add questions
       
       it "creates new event course with dates,advisor" do
         post :create, event: {  group_id: group.id, 
@@ -55,6 +54,73 @@ describe EventsController do
     end
   end
   
+  context "event_camp" do
 
+    before { sign_in(people(:flock_leader)) }
+
+    context "create with coach" do
+
+      let(:group) { groups(:innerroden) }
+      let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+      let(:contact) { Person.first }
+      let(:coach) { Person.last }
+
+      it "creates new event camp with dates,coach" do
+        post :create, event: {  group_id: group.id, 
+                                name: 'foo', 
+                                dates_attributes: [ date ],
+                                contact_id: contact.id,
+                                coach_id: coach.id,
+                                type: 'Event::Camp' }, 
+                      group_id: group.id
+
+
+        event = assigns(:event)
+
+        should redirect_to(group_event_path(group, event))
+
+        event.should be_persisted
+        event.dates.should have(1).item
+        event.dates.first.should be_persisted
+        event.contact.should eq contact
+        event.coach.should eq coach
+
+      end
+    end
+
+    context "#new with default coach" do
+
+      let(:flock) { groups(:innerroden) }
+      let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+      let(:coach) { people(:top_leader) }
+
+      it "#new event camp it should set default coach" do
+
+        # assign flock coach
+        Fabricate(:role, group: flock, type: 'Group::Flock::Coach', person: coach)
+
+        post :new, event: {  group_id: flock.id, 
+                             type: 'Event::Camp' }, 
+                   group_id: flock.id
+
+        event = assigns(:event)
+        event.coach.should eq coach
+
+      end
+
+      it "#new event camp it should NOT set default coach" do
+
+        # no flock coach assigned
+
+        post :new, event: {  group_id: flock.id, 
+                             type: 'Event::Camp' }, 
+                   group_id: flock.id
+
+        event = assigns(:event)
+        event.coach.should be nil
+
+      end
+    end
+  end
 
 end

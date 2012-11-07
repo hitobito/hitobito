@@ -15,7 +15,7 @@ describe Event::Course do
     subject { Event::Course.role_types }
     
     it { should include(Event::Course::Role::Participant) }
-    it { should include(Jubla::Event::Course::AffiliateAdvisor::Role::Advisor) }
+    it { should include(Event::Course::Role::Advisor) }
     it { should_not include(Event::Role::Participant) }
   end
   
@@ -92,7 +92,7 @@ describe Event::Course do
       
       it "should have advisor role" do
         subject.roles.should have(1).item
-        subject.roles.first.should be_kind_of(Jubla::Event::Course::AffiliateAdvisor::Role::Advisor)
+        subject.roles.first.should be_kind_of(Event::Course::Role::Advisor)
       end
     end
   end

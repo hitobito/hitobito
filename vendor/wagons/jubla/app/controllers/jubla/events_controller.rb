@@ -6,13 +6,14 @@ module Jubla::EventsController
     before_filter :remove_advisor, only: [:create, :update]
     before_filter :remove_coach, only: [:create, :update]
 
-    def new
-      if entry.class.attr_used?(:coach_id)
-        entry.coach_id = parent.coach_id
-      end
-      super
-    end
+    before_render_form :default_coach, only: :new
 
+  end
+
+  def default_coach
+    if entry.class.attr_used?(:coach_id)
+      entry.coach_id = parent.coach_id
+    end
   end
 
   private

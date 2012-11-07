@@ -40,7 +40,7 @@ class Group::Flock < Group
   end
   
   def census_total(year)
-    MemberCount.total_for_flock(year, self).first
+    MemberCount.total_for_flock(year, self)
   end
 
   def census_details(year)

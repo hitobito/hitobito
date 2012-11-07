@@ -13,7 +13,7 @@ class Group::Federation < Group
            Group::State
   
   def census_total(year)
-    MemberCount.total_for_federation(year).first
+    MemberCount.total_for_federation(year)
   end
 
   def census_groups(year)

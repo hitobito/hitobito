@@ -5,6 +5,9 @@ class MemberCount < ActiveRecord::Base
   belongs_to :flock, class_name: 'Group::Flock'
   belongs_to :state, class_name: 'Group::State'
   
+  validates :born_in, uniqueness: { scope: [:flock_id, :year] }
+  
+  
   def total
     leader + child
   end
@@ -38,13 +41,14 @@ class MemberCount < ActiveRecord::Base
     end
     
     def total_for_federation(year)
-      totals(year).group(:year)
+      totals(year).group(:year).first
     end
     
     def total_for_flock(year, flock)
       totals(year).
       where(flock_id: flock.id).
-      group(:flock_id)
+      group(:flock_id).
+      first
     end
     
     def details_for_federation(year)

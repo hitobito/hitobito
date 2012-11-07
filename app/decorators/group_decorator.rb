@@ -5,6 +5,10 @@ class GroupDecorator < ApplicationDecorator
 
   include ContactableDecorator
 
+  class GroupedChildrenHelper
+
+  end
+
   def possible_children_links
     model.class.possible_children.map do |type|
       link = h.new_group_path(group: { parent_id: self.id, type: type.sti_name})
@@ -111,18 +115,9 @@ class GroupDecorator < ApplicationDecorator
     attributes
   end
 
-  def children_order_by_type
-    groups = children.order_by_type(model).to_a
-    result = []
-    type = groups.first.type if groups.present?
-    groups.each do |c|
-      if c.type != type
-        type = c.type
-        result.push(nil)
-      end
-      result.push(c)
-    end
-    result
+
+  def grouped_children
+    @grouped_children ||= GroupListDecorator.new(model)
   end
 
 end

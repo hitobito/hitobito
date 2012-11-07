@@ -1,5 +1,11 @@
-=section_table('Untergruppen', entry.children_order_by_type) do |item|
-  %td
-    - if item
-      = muted(item.class.model_name.human)
+- if list.layer.present?
+  =section_table(list.label_layer, list.layer) do |item|
+    %td
       = link_to(item.name, group_path(item.id))
+      = muted(item.class.model_name.human)
+
+- if list.sub.present?
+  =section_table(list.label_sub, list.sub) do |item|
+    %td
+      = link_to(item.name, group_path(item.id))
+      = muted(item.class.model_name.human)

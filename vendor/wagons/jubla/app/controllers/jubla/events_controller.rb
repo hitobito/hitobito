@@ -8,7 +8,7 @@ module Jubla::EventsController
 
     def new
       if entry.class.attr_used?(:coach_id)
-        entry.coach_id = parent.coach.try(:id)
+        entry.coach_id = parent.coach_id
       end
       super
     end

@@ -303,7 +303,6 @@ describe Ability::Events do
     let(:role) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:bern)) }
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
         
-        
      context Event::Participation do 
       it "may create his participation" do
         p = event.participations.new
@@ -393,29 +392,123 @@ describe Ability::Events do
     end
   end
 
-
-  context :only_bulei_can_edit_closed_events do
-    let(:course) { Fabricate(:course, group: groups(:be), state: 'closed') }
-    let(:event) { Fabricate(:event, group: groups(:be), state: 'closed') }
+  context :application_market do
+    let(:ast_event) { Fabricate(:event, group: groups(:be)) }
+    let(:bulei_event) { Fabricate(:event, group: groups(:ch)) } 
 
     context :bulei do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
-      it "can update course" do
-        should be_able_to(:update, course)
+      it "allowed for bulei event" do
+        should be_able_to(:application_market, bulei_event)
+      end 
+      it "denied for ast event" do
+        should_not be_able_to(:application_market, ast_event)
+      end 
+    end
+
+    context :ast do
+      let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
+      it "denied for bulei event" do
+        should_not be_able_to(:application_market, bulei_event)
+      end 
+      it "should for ast event" do
+        should be_able_to(:application_market, ast_event)
+      end 
+    end
+  end
+
+  context :qualify do
+    let(:ast_event) { Fabricate(:event, group: groups(:be)) }
+    let(:bulei_event) { Fabricate(:event, group: groups(:ch)) } 
+
+    before do
+      [ast_event, bulei_event].each do |event|
+        participation = Fabricate(:event_participation, event: event, person: user)
+        Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
       end
-      it "can update event" do
-        should be_able_to(:update, event)
+    end
+
+    context :bulei do
+      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
+      it "allowed for bulei event" do
+        should be_able_to(:qualify, bulei_event)
+      end 
+      it "allowed for ast event" do
+        should be_able_to(:qualify, ast_event)
+      end 
+    end
+
+    context :ast do
+      let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
+      it "allowed for bulei event" do
+        should be_able_to(:qualify, bulei_event)
+      end 
+      it "allowed for ast event" do
+        should be_able_to(:qualify, ast_event)
+      end 
+    end
+  end
+
+  context :closed_courses do
+    let(:course) { Fabricate(:course, group: groups(:be), state: 'closed') }
+
+    let(:event) { Fabricate(:event, group: groups(:be), state: 'closed') }
+    let(:participation) { Fabricate(:event_participation, event: course) }
+
+    context :bulei do
+      let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
+
+      it "can use application_market, destroy, qualify or update" do
+        course = Fabricate(:course, group: groups(:ch), state: 'closed')
+        [:application_market, :destroy, :qualify, :update].each do |action|
+          should be_able_to(action, course)
+        end
+      end
+
+      it "can assign qualifications" do
+        create_qualifying_participation(user, course)
+        should be_able_to(:qualify, course)
+      end
+
+      it "can create, update, destroy participations" do
+        course = Fabricate(:course, group: groups(:ch), state: 'closed')
+        participation = Fabricate(:event_participation, event: course) 
+        [:create,:update,:destroy].each { |action| should be_able_to(action, participation) } 
+      end
+
+      it "can manage event role" do
+        role = create_qualifying_participation(user, course)
+        should be_able_to(:manage, role)
       end
     end
 
     context :ast do
       let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
-      it "cannot update course" do
-        should_not be_able_to(:update, course)
+
+      it "cannot use application_market, destroy, qualify or update" do
+        [:application_market, :destroy, :qualify, :update].each do |action|
+          should_not be_able_to(action, course)
+        end
       end
-      it "can update event" do
-        should be_able_to(:update, event)
+
+      it "cannot assign qualifications" do
+        create_qualifying_participation(user, course)
+        should_not be_able_to(:qualify, course)
       end
+
+      it "cannot create, update, destroy participations" do
+        [:create,:update,:destroy].each { |action| should_not be_able_to(action, participation) } 
+      end
+
+      it "cannot manage event role" do
+        role = create_qualifying_participation(user, course)
+        should_not be_able_to(:manage, role)
+      end
+    end
+
+    def create_qualifying_participation(user, event)
+      participation = Fabricate(:event_participation, event: event, person: user)
+      Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
     end
   end
 

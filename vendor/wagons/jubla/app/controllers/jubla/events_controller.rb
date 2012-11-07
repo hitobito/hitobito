@@ -7,8 +7,8 @@ module Jubla::EventsController
     before_filter :remove_coach, only: [:create, :update]
 
     def new
-      if entry.class.attr_used?(:coach_id) 
-        entry.coach_id = parent.available_coaches.first.id
+      if entry.class.attr_used?(:coach_id)
+        entry.coach_id = parent.coach.try(:id)
       end
       super
     end

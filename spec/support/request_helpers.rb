@@ -1,5 +1,6 @@
 module RequestHelpers 
-
+  extend ActiveSupport::Concern
+  
   def sign_in(user = nil)
     user ||= people(:top_leader)
     visit person_session_path
@@ -22,6 +23,14 @@ module RequestHelpers
       page.driver.headers = { "Authorization" => "Basic #{encoded}" } 
     else
       raise "I don't know how to set basic auth!"
+    end
+  end
+
+  def obsolete_node_safe
+    begin
+      yield
+    rescue Capybara::Poltergeist::ObsoleteNode => e
+      pending
     end
   end
 

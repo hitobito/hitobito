@@ -4,7 +4,9 @@
 =render 'events/tabs'
 
 %section
-  = render_attrs(entry, *entry.used_attributes(:kind_id, :number, :motto, :state_translated))
+  = render_attrs(entry, *entry.used_attributes(:kind_id, :number, :motto))
+  - entry.used?(:state) do
+    = render_attrs(entry, :state_translated)
   = render_extensions :attrs
 
 = section 'Kursdaten' do

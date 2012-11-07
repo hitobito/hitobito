@@ -1,4 +1,3 @@
-
 %table.table.table-striped{style: 'width: auto;'}
   %thead
     %tr
@@ -18,7 +17,7 @@
   %tbody
     - @sub_groups.each do |g|
       %tr
-        %td= link_to(g.to_s, census_total_path(g, year: @year))
+        %td= link_to(g.to_s, census_evaluation_path(g, year: @year))
         %td.right= count_field(g, :leader_f)
         %td.right= count_field(g, :leader_m)
         %td.right= count_field(g, :child_f)

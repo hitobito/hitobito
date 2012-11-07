@@ -13,9 +13,13 @@ describe CensusEvaluation::FederationController, type: :controller do
   end
   
   describe "GET total" do
-    before { get :total, id: ch.id }
+    before { get :index, id: ch.id }
     
-    it { should render_template('total') }
+    it "renders correct templates" do
+      should render_template('index')
+      should render_template('_totals')
+      should render_template('_details')
+    end
   end
   
 end

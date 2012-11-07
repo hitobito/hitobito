@@ -2,7 +2,7 @@ class CensusEvaluation::FederationController < CensusEvaluation::BaseController
   
   self.sub_group_type = Group::State
 
-  def total
+  def index
     super
     @flocks = flock_confirmation_ratios
   end

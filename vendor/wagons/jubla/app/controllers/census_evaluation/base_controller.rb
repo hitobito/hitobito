@@ -8,13 +8,10 @@ class CensusEvaluation::BaseController < ApplicationController
   
   decorates :group, :sub_groups
   
-  def total
+  def index
     @sub_groups = sub_groups
-    @counts = counts_by_sub_group
+    @group_counts = counts_by_sub_group
     @total = group.census_total(year)
-  end
-  
-  def detail
     @details = group.census_details(year)
   end
   
@@ -23,8 +20,6 @@ class CensusEvaluation::BaseController < ApplicationController
   def sub_groups
     if sub_group_type
       group.descendants.where(type: sub_group_type.sti_name).reorder(:name)
-    else
-      Group.where('1=0') # none
     end
   end
   

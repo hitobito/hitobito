@@ -21,6 +21,6 @@ class Group::Federation < Group
   end
   
   def census_details(year)
-    MemberCount.details_for_federation(year, self)
+    MemberCount.details_for_federation(year)
   end 
 end

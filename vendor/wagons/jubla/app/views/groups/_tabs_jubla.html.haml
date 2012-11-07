@@ -1,1 +1,1 @@
-- tab "Statistik", census_total_path(@group) if @group.census?
+- tab "Statistik", census_evaluation_path(@group) if @group.census? && can?(:census, @group)

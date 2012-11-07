@@ -11,9 +11,13 @@ describe CensusEvaluation::FlockController, type: :controller do
   before { sign_in(people(:top_leader)) }
   
   describe "GET total" do
-    before { get :total, id: bern.id }
+    before { get :index, id: bern.id }
     
-    it { should render_template('total') }
+    it "renders correct templates" do
+      should render_template('index')
+      should_not render_template('_totals')
+      should render_template('_details')
+    end
   end
   
 end

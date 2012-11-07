@@ -1,0 +1,34 @@
+%table.table.table-striped.table-condensed{style: 'width: auto;'}
+  %thead
+    %tr
+      %th Jahrgang
+      %th.center{colspan: 2} Leitende
+      %th.center{colspan: 2} Kinder
+      %th.center Total
+      %th
+    %tr
+      %th
+      %th.center w
+      %th.center m
+      %th.center w
+      %th.center m
+      %th
+      %th
+  %tbody
+    - @details.each do |c|
+      %tr
+        %td.right= c.born_in
+        %td.right= count_value(c.leader_f)
+        %td.right= count_value(c.leader_m)
+        %td.right= count_value(c.child_f)
+        %td.right= count_value(c.child_m)
+        %td.right= count_value(c.total)
+        %td= render 'detail_actions', member_count: c
+    %tr
+      %th.right Total
+      %th.right= @total.leader_f
+      %th.right= @total.leader_m
+      %th.right= @total.child_f
+      %th.right= @total.child_m
+      %th.right= @total.total
+      %th

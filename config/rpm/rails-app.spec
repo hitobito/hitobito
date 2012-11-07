@@ -119,8 +119,8 @@ rm -rf $RPM_BUILD_ROOT
 ### end setting vars
 
 %if %{use_delayed_job}
-install -Dp -m0755 config/rpm/workers.init $RPM_BUILD_ROOT/%{initddir}/%{name}-workers
-sed -i s/APP_NAME/%{name}/g $RPM_BUILD_ROOT/%{initddir}/%{name}-workers
+install -Dp -m0755 config/rpm/workers.init $RPM_BUILD_ROOT/%{_initddir}/%{name}-workers
+sed -i s/APP_NAME/%{name}/g $RPM_BUILD_ROOT/%{_initddir}/%{name}-workers
 %endif
 
 # this has to be deployed manually.
@@ -232,7 +232,7 @@ fi
 %attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/db
 
 %if %{use_delayed_job}
-%{initddir}/%{name}-workers
+%{_initddir}/%{name}-workers
 %endif
 
 

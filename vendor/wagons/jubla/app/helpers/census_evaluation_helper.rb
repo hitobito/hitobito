@@ -2,8 +2,8 @@ module CensusEvaluationHelper
   
   EMPTY_COUNT_VALUE = '-'
   
-  def census_total_path(group)
-    send("census_#{group.klass.model_name.element}_total_group_path", group)
+  def census_total_path(group, options = {})
+    send("census_#{group.klass.model_name.element}_total_group_path", group, options)
   end
   
   def census_detail_path(group)

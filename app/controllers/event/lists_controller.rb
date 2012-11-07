@@ -19,9 +19,8 @@ class Event::ListsController < ApplicationController
 
   def courses
     authorize!(:index, Event::Course)
-    set_year_vars
     set_group_vars
-    scoped = Event::Course.order('event_kinds.id').in_year(@year).list
+    scoped = Event::Course.order('event_kinds.id').in_year(year).list
     @courses = limit_scope_for_user(scoped)
   end
 

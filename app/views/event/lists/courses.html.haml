@@ -2,7 +2,7 @@
   .pull-right
     = dropdown_button(group_title, group_link_list)
 
-= render 'event/page_per_year', paging_params:  group_param
+= render 'shared/page_per_year', paging_params: group_param
 
 %table.table
   - courses_by_kinds.each_entry do |kind, events|

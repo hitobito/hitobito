@@ -1,5 +1,7 @@
 class CensusEvaluation::BaseController < ApplicationController
   
+  include YearBasedPaging
+  
   class_attribute :sub_group_type
   
   before_filter :authorize
@@ -40,8 +42,17 @@ class CensusEvaluation::BaseController < ApplicationController
     @group ||= Group.find(params[:id])
   end
   
-  def year
-    @year ||= params[:year] || Census.last.year
+ 
+  def default_year
+    @default_year ||= Census.last.try(:year) || current_year
+  end
+  
+  def current_year
+    @current_year ||= Date.today.year
+  end
+  
+  def year_range
+    @year_range ||= (current_year-4)..(current_year)
   end
   
   def authorize

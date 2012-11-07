@@ -18,7 +18,7 @@
   %tbody
     - @sub_groups.each do |g|
       %tr
-        %td= link_to(g.to_s, census_total_path(g))
+        %td= link_to(g.to_s, census_total_path(g, year: @year))
         %td.right= count_field(g, :leader_f)
         %td.right= count_field(g, :leader_m)
         %td.right= count_field(g, :child_f)

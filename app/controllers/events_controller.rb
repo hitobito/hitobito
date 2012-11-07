@@ -1,5 +1,5 @@
 class EventsController < CrudController
-  include Event::YearBasedPaging
+  include YearBasedPaging
 
   self.nesting = Group
   
@@ -16,12 +16,11 @@ class EventsController < CrudController
 
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    set_year_vars
     model_scope.
       order_by_date.
       preload_all_dates.
       uniq.
-      in_year(@year)
+      in_year(year)
   end
 
   private

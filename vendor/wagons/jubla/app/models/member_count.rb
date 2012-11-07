@@ -5,7 +5,31 @@ class MemberCount < ActiveRecord::Base
   belongs_to :flock, class_name: 'Group::Flock'
   belongs_to :state, class_name: 'Group::State'
   
+  def total
+    leader + child
+  end
+  
+  def leader
+    leader_f.to_i + leader_m.to_i
+  end
+  
+  def child
+    child_f.to_i + child_m.to_i
+  end
+  
+  def f
+    leader_f.to_i + child_f.to_i
+  end
+  
+  def m
+    leader_m.to_i + child_m.to_i
+  end
+  
   class << self
+    
+    def total_by_states(year)
+      totals(year).group(:state_id)
+    end
     
     def total_by_flocks(year, state)
       totals(year).
@@ -13,21 +37,28 @@ class MemberCount < ActiveRecord::Base
       group(:flock_id)
     end
     
-    def total_by_states(year)
-      totals(year).group(:state_id)
+    def total_for_federation(year)
+      totals(year).group(:year)
     end
     
-    def details_for_flock(year, flock)
-      details(year).where(flock_id: flock.id)
+    def total_for_flock(year, flock)
+      totals(year).
+      where(flock_id: flock.id).
+      group(:flock_id)
+    end
+    
+    def details_for_federation(year)
+      details(year)
     end
     
     def details_for_state(year, state)
       details(year).where(state_id: state.id)
     end
     
-    def details_for_federation(year)
-      details(year)
+    def details_for_flock(year, flock)
+      details(year).where(flock_id: flock.id)
     end
+    
     
     private
     

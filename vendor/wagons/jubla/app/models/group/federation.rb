@@ -12,4 +12,15 @@ class Group::Federation < Group
            Group::WorkGroup,
            Group::State
   
+  def census_total(year)
+    MemberCount.total_for_federation(year).first
+  end
+
+  def census_groups(year)
+    MemberCount.total_by_states(year)
+  end
+  
+  def census_details(year)
+    MemberCount.details_for_federation(year, self)
+  end 
 end

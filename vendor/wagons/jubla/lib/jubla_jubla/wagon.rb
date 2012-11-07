@@ -24,6 +24,12 @@ module JublaJubla
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
     end
 
+    initializer "jubla.add_inflections" do |app|
+      ActiveSupport::Inflector.inflections do |inflect|
+        inflect.irregular 'census', 'censuses'
+      end
+    end
+
     private
 
     def seed_fixtures

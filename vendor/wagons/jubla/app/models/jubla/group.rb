@@ -17,4 +17,7 @@ module Jubla::Group
     attr_accessible :bank_account
   end
   
+  def census?
+    respond_to?(:census_total)
+  end
 end

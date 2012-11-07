@@ -18,4 +18,16 @@ class Group::State < Group
            
   attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage]), :as => :superior
   
+  def census_total(year)
+    MemberCount.total_by_states(year).where(state_id: id).first
+  end
+  
+  def census_groups(year)
+    MemberCount.total_by_flocks(year, self)
+  end
+  
+  def census_details(year)
+    MemberCount.details_for_state(year, self)
+  end
+  
 end

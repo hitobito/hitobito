@@ -206,8 +206,12 @@ textarea {
   }
 }
 
-td.center {
+td.center, th.center {
   text-align: center;
+}
+
+td.right, th.right {
+  text-align: right;
 }
 
 select[class*="span"] {

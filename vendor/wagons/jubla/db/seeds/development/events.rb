@@ -28,7 +28,7 @@ def event_values(group_id)
     number: number,
     maximum_participants: rand(30) + 10,
     location: location,
-    motto: Faker::Lorem.words(rand(25)).join(' '),
+    motto: Faker::Lorem.sentence,
     description: Faker::Lorem.paragraphs(rand(1..3)).join("\n"),
     requires_approval: true,
     application_opening_at: date,

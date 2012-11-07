@@ -74,7 +74,7 @@ group :console do
   gem 'rdoc-tags'
 end
 
-group :guard do
+group :guard_support do
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'spork', '1.0.0rc3'

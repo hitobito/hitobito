@@ -1,7 +1,7 @@
 module Ability::People
+ 
   
   def define_people_abilities
-    
     can :query, Person
 
     # Everybody may theoretically access the index page, but only the accessible people will be displayed.
@@ -11,15 +11,20 @@ module Ability::People
     can :show, Person do |person|
       can_show_person?(person)
     end
+
     
-    if detail_person_permissions?
+    if full_person_permissions?
       # View all person details
-      can [:show_details, :history], Person do |person| 
-        can_detail_person?(person)
+      can [:show_full, :history, :show_details], Person do |person| 
+        can_full_person?(person)
       end
     end
-    can [:show_details, :history], Person do |person|
+    can [:show_full, :history], Person do |person|
       person.id == user.id
+    end
+
+    can :show_details, Person do |person|
+      can_full_person?(person) || ((user_groups & collect_ids(person.groups)).present?)
     end
     
     if modify_permissions?
@@ -77,7 +82,7 @@ module Ability::People
     ))
   end
   
-  def can_detail_person?(person)
+  def can_full_person?(person)
     # user has group_full, person in same group
     contains_any?(groups_group_full, collect_ids(person.groups)) ||
     
@@ -103,7 +108,7 @@ module Ability::People
     ))
   end
   
-  def detail_person_permissions?
+  def full_person_permissions?
     @groups_group_full.present? || @groups_layer_full.present? || @groups_layer_read.present?
   end
   

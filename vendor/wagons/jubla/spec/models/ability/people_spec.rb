@@ -32,13 +32,13 @@ describe Ability::People do
     
     it "may not view any children in lower layers" do
       other = Fabricate(Group::ChildGroup::Child.name.to_sym, group: groups(:asterix))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
     
     it "may not view any affiliates in lower layers" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
         
@@ -87,13 +87,13 @@ describe Ability::People do
     
     it "may not view any public role in upper layers" do
       other = Fabricate(Group::StateBoard::Leader.name.to_sym, group: groups(:be_board))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
     
     it "may not view any public role in other flocks" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
     
@@ -123,7 +123,7 @@ describe Ability::People do
     
     it "may not view any affiliates in upper layers" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
     
@@ -145,7 +145,7 @@ describe Ability::People do
     let(:role)       { Fabricate(Group::StateBoard::Supervisor.name.to_sym, group: groups(:be_board), person: group_role.person) }
     
     it "may view details of himself" do
-      should be_able_to(:show_details, role.person.reload)
+      should be_able_to(:show_full, role.person.reload)
     end
     
     it "may modify himself" do
@@ -174,7 +174,7 @@ describe Ability::People do
     
     it "may view any public role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should be_able_to(:show_details, other.person.reload)
+      should be_able_to(:show_full, other.person.reload)
     end
     
     it "may not modify any role in same layer" do
@@ -185,7 +185,7 @@ describe Ability::People do
     
     it "may view any affiliates in same layer" do
       other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_security))
-      should be_able_to(:show_details, other.person.reload)
+      should be_able_to(:show_full, other.person.reload)
     end
     
     it "may modify any role in same group" do
@@ -196,12 +196,12 @@ describe Ability::People do
     
     it "may not view details of any public role in upper layers" do
       other = Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
     end
     
     it "may view any public role in groups below" do
       other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:thun))
-      should be_able_to(:show_details, other.person.reload)
+      should be_able_to(:show_full, other.person.reload)
     end
     
     it "may not modify any public role in groups below" do
@@ -230,7 +230,7 @@ describe Ability::People do
     let(:role) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
     
     it "may view details of himself" do
-      should be_able_to(:show_details, role.person.reload)
+      should be_able_to(:show_full, role.person.reload)
     end
     
     it "may modify himself" do
@@ -252,7 +252,7 @@ describe Ability::People do
         
     it "may not view details of others in same group" do
       other = Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
     end
     
     it "may not modify others in same group" do
@@ -268,7 +268,7 @@ describe Ability::People do
     
     it "may not view details of public role in same layer" do
       other = Fabricate(Group::ProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
     end
     
     it "may not modify any role in same layer" do
@@ -289,7 +289,7 @@ describe Ability::People do
     
     it "may not view details of any public role in upper layers" do
       other = Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
     end
     
     it "may view any public role in groups below" do
@@ -319,7 +319,7 @@ describe Ability::People do
     let(:role) { Fabricate(Group::WorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
         
     it "may view details of himself" do
-      should be_able_to(:show_details, role.person.reload)
+      should be_able_to(:show_full, role.person.reload)
     end
     
     it "may modify himself" do
@@ -341,7 +341,7 @@ describe Ability::People do
     
     it "may not view details of others in same group" do
       other = Fabricate(Group::WorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
-      should_not be_able_to(:show_details, other.person.reload)
+      should_not be_able_to(:show_full, other.person.reload)
     end
         
     it "may not view public role in same layer" do
@@ -441,4 +441,31 @@ describe Ability::People do
     end
   end
 
+  describe :show_details do
+    let(:other) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)).person.reload }
+
+    context 'layer full' do
+      let(:role) { Fabricate(Group::StateBoard::Leader.name.to_sym, group: groups(:be_board)) }
+      it "can show_details" do
+        should be_able_to(:show_details, other)
+        should be_able_to(:show_full, other)
+      end
+    end
+
+    context 'same group' do
+      let(:role) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
+      it "can show_details" do
+        should be_able_to(:show_details, other)
+        should_not be_able_to(:show_full, other)
+      end
+    end
+
+    context 'group below' do
+      let(:role) { Fabricate(Group::RegionalBoard::Member.name.to_sym, group: groups(:city_board)) }
+      it "cannot show_details" do
+        should_not be_able_to(:show_details, other)
+        should_not be_able_to(:show_full, other)
+      end
+    end
+  end
 end

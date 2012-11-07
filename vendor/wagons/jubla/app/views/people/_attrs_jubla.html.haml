@@ -1,4 +1,5 @@
 - if can?(:show_details, entry)
-  = render_attrs(entry, :nationality, :profession, :bank_account)
-  = render_attrs(entry, :ahv_number, :ahv_number_old, :j_s_number)
+  = render_attrs(entry, :nationality, :profession)
+- if can?(:show_full, entry)
+  = render_attrs(entry, :bank_account, :ahv_number, :ahv_number_old, :j_s_number)
   = render_attrs(entry, :insurance_company, :insurance_number)

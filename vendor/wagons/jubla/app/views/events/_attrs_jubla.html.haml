@@ -1,2 +1,1 @@
-- entry.used?(:advisor_id) do
-  = render_attrs entry, :advisor
+= render_attrs entry, *entry.used_attributes(:advisor_id, :coach_id)

@@ -32,7 +32,6 @@ describe EventsController do
         event.dates.first.should be_persisted
         event.contact.should eq contact
         event.advisor.should eq advisor
-
       end
       
       it "creates new event course without contact,advisor" do
@@ -48,7 +47,6 @@ describe EventsController do
 
         should redirect_to(group_event_path(group, event))
         event.should be_persisted
-
       end
 
     end
@@ -84,7 +82,6 @@ describe EventsController do
         event.dates.first.should be_persisted
         event.contact.should eq contact
         event.coach.should eq coach
-
       end
     end
 
@@ -95,7 +92,6 @@ describe EventsController do
       let(:coach) { people(:top_leader) }
 
       it "#new event camp it should set default coach" do
-
         # assign flock coach
         Fabricate(:role, group: flock, type: 'Group::Flock::Coach', person: coach)
 
@@ -105,20 +101,16 @@ describe EventsController do
 
         event = assigns(:event)
         event.coach.should eq coach
-
       end
 
       it "#new event camp it should NOT set default coach" do
-
         # no flock coach assigned
-
         post :new, event: {  group_id: flock.id, 
                              type: 'Event::Camp' }, 
                    group_id: flock.id
 
         event = assigns(:event)
         event.coach.should be nil
-
       end
     end
   end

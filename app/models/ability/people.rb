@@ -12,19 +12,14 @@ module Ability::People
       can_show_person?(person)
     end
 
-    
-    if full_person_permissions?
-      # View all person details
-      can [:show_full, :history, :show_details], Person do |person| 
-        can_full_person?(person)
-      end
-    end
     can [:show_full, :history], Person do |person|
+      can_full_person?(person) ||
       person.id == user.id
     end
 
     can :show_details, Person do |person|
-      can_full_person?(person) || ((user_groups & collect_ids(person.groups)).present?)
+      can_full_person?(person) || 
+      contains_any?(user_groups, collect_ids(person.groups))
     end
     
     if modify_permissions?

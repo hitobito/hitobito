@@ -3,10 +3,9 @@ module Jubla::EventsController
 
   included do 
 
-    before_filter :remove_advisor, only: [:create, :update]
-    before_filter :remove_coach, only: [:create, :update]
+    before_filter :remove_restricted, only: [:create, :update]
 
-    before_render_form :default_coach, only: :new
+    before_render_new :default_coach
 
   end
 
@@ -17,11 +16,9 @@ module Jubla::EventsController
   end
 
   private
-  def remove_advisor
+  
+  def remove_restricted
     model_params.delete(:advisor)
-  end
-
-  def remove_coach
     model_params.delete(:coach)
   end
 

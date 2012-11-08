@@ -31,6 +31,7 @@ class Event < ActiveRecord::Base
   # The price we pay for using classes as namespace.
   load Rails.root.join(*%w(app models event date.rb))
   load Rails.root.join(*%w(app models event role.rb))
+  load Rails.root.join(*%w(app models event restricted_role.rb))
   load Rails.root.join(*%w(app decorators event application_decorator.rb))
   load Rails.root.join(*%w(app decorators event role_decorator.rb))
   

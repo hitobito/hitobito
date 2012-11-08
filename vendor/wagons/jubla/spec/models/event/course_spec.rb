@@ -57,23 +57,22 @@ describe Event::Course do
     end
 
   end
-
+  
   context "#advisor" do
     let(:person)  { Fabricate(:person) }
     let(:person1) { Fabricate(:person) }
     
-    let(:event)   { Fabricate(:course, advisor_id: person.id) } 
+    let(:event)   { Fabricate(:course, advisor_id: person.id).reload } 
     
     subject { event }
      
     its(:advisor) { should == person }
     its(:advisor_id) { should == person.id }
-    its(:advisor_participation) { should == person.event_participations.first }
     
     it "shouldn't change the advisor if the same is already set" do
-      event.advisor_id = person.id
-      event.save.should be_true
-      event.advisor.should eq person
+      subject.advisor_id = person.id
+      expect { subject.save! }.not_to change { Event::Role.count }
+      subject.advisor.should eq person
     end
 
     it "should update the advisor if another person is assigned" do
@@ -86,15 +85,35 @@ describe Event::Course do
       event = Fabricate(:course, advisor_id: '')
       event.advisor.should be nil
     end
-
-    context "participation" do
-      subject { event.advisor_participation }
+    
+    it "removes existing advisor if id is set blank" do
+      subject.advisor_id = person.id
+      subject.save!
       
-      it "should have advisor role" do
-        subject.roles.should have(1).item
-        subject.roles.first.should be_kind_of(Event::Course::Role::Advisor)
-      end
+      subject.advisor_id = ''
+      expect { subject.save! }.to change { Event::Role.count }.by(-1) 
     end
+    
+    it "removes existing advisor participation if id is set blank" do
+      subject.advisor_id = person.id
+      subject.save!
+      
+      subject.advisor_id = ''
+      expect { subject.save! }.to change { Event::Participation.count }.by(-1) 
+    end
+    
+    it "removes existing and creates new advisor on reassignment" do
+      subject.advisor_id = person.id
+      subject.save!
+      
+      new_advisor = Fabricate(:person)
+      subject.advisor_id = new_advisor.id
+      expect { subject.save! }.not_to change { Event::Role.count }
+      Event.find(subject.id).advisor_id.should == new_advisor.id
+      subject.participations.where(person_id: person.id).should_not be_exists
+    end
+    
   end
+
   
 end

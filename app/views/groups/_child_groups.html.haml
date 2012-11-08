@@ -1,5 +1,5 @@
-- if list.layer.present?
-  =section_table(list.label_layer, list.layer) do |item|
+- list.layer.each do |key, values|
+  = section_table(key, values) do |item|
     %td
       = link_to(item.name, group_path(item.id))
       = muted(item.class.model_name.human)

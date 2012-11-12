@@ -40,7 +40,6 @@ class Role < ActiveRecord::Base
   ### CALLBACKS
   
   after_create :set_contact_data_visible
-  after_create :send_password_if_first_login_role
   after_destroy :reset_contact_data_visible
 
   
@@ -79,12 +78,6 @@ class Role < ActiveRecord::Base
     if permissions.include?(:contact_data) && 
        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
       person.update_attribute :contact_data_visible, false
-    end
-  end
-  
-  def send_password_if_first_login_role
-    if becomes(type.constantize).permissions.include?(:login) && person.encrypted_password.blank?
-      person.send_reset_password_instructions
     end
   end
   

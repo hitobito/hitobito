@@ -27,6 +27,7 @@ describe PeopleController do
     person.should be_persisted
     person.roles.should have(1).item
     person.roles.first.should be_persisted
+    last_email.should_not be_present
   end
 
   
@@ -54,6 +55,22 @@ describe PeopleController do
     it "preloads data for asides, ordered by finish_at" do
       get :show, group_id: group.id, id: people(:top_leader).id
       assigns(:qualifications).should eq [@ql_sl, @ql_gl]
+    end
+  end
+
+  describe "POST #send_password_instructions" do 
+    let(:person) { people(:bottom_member) } 
+
+    it "does not send instructions for self" do
+      post :send_password_instructions, group_id: group.id, id: top_leader.id, format: :js
+      flash[:notice].should_not be_present
+      last_email.should_not be_present
+    end
+
+    it "sends password instructions" do
+      post :send_password_instructions, group_id: groups(:bottom_layer_one).id, id: person.id, format: :js
+      flash[:notice].should eq  'Login Informationen wurden verschickt.'
+      last_email.should be_present
     end
   end
 end

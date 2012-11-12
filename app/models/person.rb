@@ -73,9 +73,13 @@ class Person < ActiveRecord::Base
   
   ### VALIDATIONS
   
-  validates :email, uniqueness: true, allow_nil: true
+  validates :email, uniqueness: true, allow_nil: true, allow_blank: true
   validates :gender, inclusion: %w(m w), allow_blank: true
   validate :assert_has_any_name
+
+
+  ### CALLBACKS
+  before_save :override_blank_email
  
  
   ### SCOPES
@@ -136,11 +140,19 @@ class Person < ActiveRecord::Base
 
   private
   def email_required?
-    login?
+    false
   end
   
   def password_required?
-    email_required? && password.present? && password_confirmation.present?
+    false
+  end
+
+  def email_changed?
+    false
+  end
+
+  def override_blank_email
+    write_attribute(:email, nil) if email.blank?
   end
   
   def assert_has_any_name

@@ -27,12 +27,15 @@ module Ability::People
       can :modify, Person do |person| 
         can_modify_person?(person)
       end
+      can :send_password_instructions, Person do |person| 
+        can_modify_person?(person) && person.id != user.id &&
+          person.login?  && person.email.present?
+      end
     end
     can :modify, Person do |person|
       person.id == user.id
     end
      
-         
      
     ### PEOPLE_FILTERS
     
@@ -48,6 +51,7 @@ module Ability::People
       filter.group_id? &&
       layers_full.present? && layers_full.include?(filter.group.layer_group_id)
     end
+
   end
   
   private

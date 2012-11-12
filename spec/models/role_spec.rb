@@ -67,8 +67,8 @@ describe Role do
     end
     
     context "send notifications on first login role" do
-      it "should send instructions to person" do
-        subject.person.should_receive(:send_reset_password_instructions)
+      it "should not send instructions to person" do
+        subject.person.should_receive(:send_reset_password_instructions).never
         subject.type = "Group::BottomLayer::Leader"
         subject.save.should be_true
       end

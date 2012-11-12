@@ -103,7 +103,12 @@ de:
           
       event/camp:
         kind_id: Lagerart
-      
+        
+      event/camp/kind:
+        label: Bezeichnung
+        updated_at: Geändert
+        deleted_at: Gelöscht
+        
       member_count:
         leader_m: Leitende m
         leader_f: Leitende w

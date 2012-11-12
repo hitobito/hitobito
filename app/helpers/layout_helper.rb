@@ -24,30 +24,6 @@ module LayoutHelper
     content_tag(:i, '', class: "icon icon-#{name}")
   end
   
-  def tab(label, url, alt_paths = [])
-    @tabs ||= []
-    @tabs << [label, url, alt_paths]
-  end
-
-  def render_tabs
-    return if @tabs.blank?
-    content_tag(:ul, class: 'nav nav-sub') do
-      safe_join(@tabs) { |label, url, alt_paths| nav(label, url, alt_paths) }
-    end
-  end
-    
-  # Create a list item for navigations.
-  # If alternative_paths are given, and they appear in the request url,
-  # the corresponding item is active.
-  # If not alternative paths are given, the item is only active if the link url equals the request url.
-  def nav(label, url, alternative_paths = [])
-    options = {}
-    if (alternative_paths.blank? && current_page?(url)) ||
-       alternative_paths.any? {|p| request.path =~ /\/#{p}\/?/ }
-      options[:class] = 'active'
-    end
-    content_tag(:li, link_to(label, url), options)
-  end
   
   def section(title, &block)
     render(layout: 'shared/section', locals: {title: title}, &block)

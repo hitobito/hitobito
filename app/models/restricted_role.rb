@@ -62,7 +62,7 @@ module RestrictedRole
       # getter for the person
       define_method attr do        
         if new_record?
-          id = restricted_role_id(attr, type)
+          id = restricted_role_id(attr, type).presence
           Person.find(id) if id
         else
           restricted_role(attr, type).try(:person)

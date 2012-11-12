@@ -26,7 +26,8 @@ describe Event::ListsController, type: :controller do
       get :events
       dom.should have_content "Demnächst stattfindende Anlässe"
       dom.should have_content I18n.l(tomorrow, format: :month_year)
-      dom.find('.nav .active').text.should eq 'Anlässe'
+      dom.find('body nav .active').text.should eq 'Kurse/Anlässe'
+      dom.find('#content .nav .active').text.should eq 'Anlässe'
     end
 
     it "renders event label with link" do

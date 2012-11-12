@@ -3,6 +3,7 @@ class Census < ActiveRecord::Base
   attr_accessible :year, :start_at, :finish_at
   
   validates :start_at, presence: true
+  validates :year, uniqueness: true
   
   class << self
     # The last census defined (may be the current one)

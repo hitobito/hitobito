@@ -16,6 +16,7 @@ describe EventsController do
       it "creates new event course with dates,advisor" do
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
+                                kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 dates_attributes: [ date ],
                                 contact_id: contact.id,
                                 advisor_id: advisor.id,
@@ -37,6 +38,7 @@ describe EventsController do
       it "creates new event course without contact,advisor" do
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
+                                kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 contact_id: '',
                                 advisor_id: '',
                                 dates_attributes: [ date ],
@@ -66,6 +68,7 @@ describe EventsController do
       it "creates new event camp with dates,coach" do
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
+                                kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 dates_attributes: [ date ],
                                 contact_id: contact.id,
                                 coach_id: coach.id,
@@ -95,7 +98,7 @@ describe EventsController do
         # assign flock coach
         Fabricate(:role, group: flock, type: 'Group::Flock::Coach', person: coach)
 
-        post :new, event: {  group_id: flock.id, 
+        get :new, event: {  group_id: flock.id, 
                              type: 'Event::Camp' }, 
                    group_id: flock.id
 
@@ -105,7 +108,7 @@ describe EventsController do
 
       it "#new event camp it should NOT set default coach" do
         # no flock coach assigned
-        post :new, event: {  group_id: flock.id, 
+        get :new, event: {  group_id: flock.id, 
                              type: 'Event::Camp' }, 
                    group_id: flock.id
 

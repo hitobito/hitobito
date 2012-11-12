@@ -59,8 +59,8 @@ describe Event::ParticipationsController do
         participation.application.priority_1.should == course
         participation.answers.should have(2).items
         participation.person.should == user
-        assigns(:priority_2s).collect(&:id).should =~ [other_course.id]
-        assigns(:alternatives).collect(&:id).should =~ [course.id, other_course.id]
+        assigns(:priority_2s).collect(&:id).should =~ [events(:top_course).id, other_course.id]
+        assigns(:alternatives).collect(&:id).should =~ [events(:top_course).id, course.id, other_course.id]
       end
     end
     

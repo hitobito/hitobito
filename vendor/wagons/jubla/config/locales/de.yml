@@ -100,4 +100,12 @@ de:
           canceled: Abgesagt
           completed: Qualifikationen erfasst
           closed: Abgeschlossen
+          
+      event/camp:
+        kind_id: Lagerart
       
+      member_count:
+        leader_m: Leitende m
+        leader_f: Leitende w
+        child_m: Kinder m
+        child_f: Kinder w

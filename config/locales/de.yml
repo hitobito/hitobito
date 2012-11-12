@@ -103,6 +103,7 @@ de:
       event:
         group_id: Gruppe
         name: Name
+        number: Nummer
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
@@ -115,11 +116,11 @@ de:
         application_conditions: Anmeldebedingungen
         dates: Daten
         questions: Fragen
-        kind_id: Kursart
+        kind_id: Art
 
         # course
-        number: Nummer
-        event_kind_id: Kursart
+      event/course:
+        kind_id: Kursart
         state: Status
         state_translated: Status
         priorization: Priorisierung

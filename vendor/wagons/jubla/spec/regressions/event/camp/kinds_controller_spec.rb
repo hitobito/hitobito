@@ -17,4 +17,13 @@ describe Event::Camp::KindsController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(show)]
 
+  
+  describe_action :get, :index do
+    it "main menu admin is active" do
+      dom = Capybara::Node::Simple.new(response.body)
+      item = dom.find('body nav ul.nav li', text: 'Admin')
+      item[:class].should == 'active'
+    end
+  end
+
 end

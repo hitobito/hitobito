@@ -15,6 +15,7 @@ describe EventsController do
 
         post :create, event: {  group_id: group.id, 
                                 name: 'foo', 
+                                kind_id: event_kinds(:slk).id,
                                 dates_attributes: [ date ],
                                 questions_attributes: [ question ],
                                 contact_id: people(:top_leader).id,

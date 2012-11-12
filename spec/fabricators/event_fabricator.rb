@@ -34,7 +34,7 @@ end
 
 Fabricator(:course, from: :event, class_name: :'Event::Course') do
   group { Group.all_types.detect {|t| t.event_types.include?(Event::Course) }.first }
-  kind { Fabricate(:event_kind) }
+  kind { Event::Kind.find_by_short_name('SLK') }
   priorization { true }
   requires_approval { true }
 end

@@ -129,7 +129,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_check_box(attr, value, caption, html_options = {})
-    model_param = @object.class.model_name.param_key
+    model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
     id = "#{attr}_#{value.to_s.downcase}"
     html_options[:id] = "#{model_param}_#{id}"
@@ -221,7 +221,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content = caption_or_content
       caption_or_content = nil
     end
-    caption_or_content ||= captionize(attr, @object.class)
+    caption_or_content ||= captionize(attr, klass)
     add_css_class(html_options, 'controls')
 
     content_tag(:div, :class => "control-group#{' error' if errors_on?(attr)}") do
@@ -310,8 +310,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def required?(attr)
     attr = attr.to_s
     attr, attr_id = assoc_and_id_attr(attr)
-    validators = @object.class.validators_on(attr) +
-                 @object.class.validators_on(attr_id)
+    validators = klass.validators_on(attr) +
+                 klass.validators_on(attr_id)
     validators.any? do |v|
       v.kind == :presence &&
       !v.options.key?(:if) && !v.options.key?(:unless)
@@ -336,6 +336,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
     labeled(args.first, text)
+  end
+  
+  def klass
+    @klass ||= @object.respond_to?(:klass) ? @object.klass : @object.class
   end
 
 end

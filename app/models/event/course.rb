@@ -43,6 +43,8 @@ class Event::Course < Event
 
   belongs_to :kind
   
+  validates :kind_id, presence: true
+  
   
   class << self
     def in_hierarchy(user)

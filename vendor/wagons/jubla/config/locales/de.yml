@@ -100,4 +100,9 @@ de:
           canceled: Abgesagt
           completed: Qualifikationen erfasst
           closed: Abgeschlossen
+      event/camp/kind:
+        label: Bezeichnung
+        updated_at: Geändert
+        deleted_at: Gelöscht
+        
       

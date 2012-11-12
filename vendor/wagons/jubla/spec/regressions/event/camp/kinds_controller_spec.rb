@@ -1,7 +1,6 @@
 # encoding:  utf-8
 
 require 'spec_helper'
-#require_relative '../../../../app/controllers/event/camp/kinds_controller.rb'
 
 describe Event::Camp::KindsController, type: :controller do
 
@@ -12,7 +11,7 @@ describe Event::Camp::KindsController, type: :controller do
   end
 
   let(:test_entry) { Event::Camp::Kind.first }
-  let(:test_entry_attrs) { { label: 'Automatic Bar Course' }}
+  let(:test_entry_attrs) { { label: 'The ultimate summer camp' }}
 
   before { sign_in(people(:top_leader)) } 
 

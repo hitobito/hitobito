@@ -88,11 +88,11 @@ describe Event::ListsController, type: :controller do
 
       it "tabs contain year based pagination" do
         first, last = tabs.all('a').first, tabs.all('a').last
-        first.text.should eq (year - 2).to_s
-        first[:href].should eq list_courses_path(year: year - 2, group: top_group.id)
+        first.text.should eq (year - 3).to_s
+        first[:href].should eq list_courses_path(year: year - 3, group: top_group.id)
 
-        last.text.should eq (year + 2).to_s
-        last[:href].should eq list_courses_path(year: year + 2, group: top_group.id)
+        last.text.should eq (year + 1).to_s
+        last[:href].should eq list_courses_path(year: year + 1, group: top_group.id)
       end
     end
 

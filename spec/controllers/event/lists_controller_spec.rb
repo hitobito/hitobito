@@ -22,7 +22,7 @@ describe Event::ListsController do
   context "GET #courses" do
     context "filters by year" do
       let(:year) { Date.today.year }
-      let(:year_range) { (year-2...year+3) }
+      let(:year_range) { (year-3..year+1) }
 
       it "defaults to current year" do
         get :courses

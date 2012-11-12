@@ -21,6 +21,7 @@ def person_attributes(role_type)
     zip_code:  Faker::Address.zip_code,
     town: Faker::Address.city,
     gender: %w(m w).shuffle.first,
+    birthday: random_date,
     encrypted_password: @encrypted_password
     }
     
@@ -32,6 +33,12 @@ def person_attributes(role_type)
   end
   
   attrs
+end
+
+def random_date
+  from = Time.new(1970)
+  to = Time.new(2000)
+  Time.at(from + rand * (to.to_f - from.to_f)).to_date
 end
 
 def seed_accounts(person, several = false)

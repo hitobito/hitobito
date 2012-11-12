@@ -1,6 +1,0 @@
-- defaults = defined?(paging_params) ? paging_params : {}
-
-.pagination
-  %ul
-    - year_range.each do |year|
-      %li{class: "#{'active' if year == @year}"}= link_to(year.to_s, {year: year}.merge(defaults))

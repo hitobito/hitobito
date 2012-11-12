@@ -1,16 +1,19 @@
 module Jubla::Ability
   extend ActiveSupport::Concern
   
-  
   included do
-    alias_method_chain :initialize, :jubla
+    alias_method_chain :define_abilities, :jubla
   end
   
-  def initialize_with_jubla(user)
-    initialize_without_jubla(user)
-
+  def define_abilities_with_jubla
+    define_abilities_without_jubla
+    
     customize_for_closed_events
+    
+    define_census_abilities
   end
+  
+  private
 
   # important, cannot statements have to go at the end to override previous can statements
   # if can statements are missing, returning false from cannot statements does not allow the action
@@ -28,10 +31,21 @@ module Jubla::Ability
     end
   end
 
-
-  private
+  def define_census_abilities
+    can :census, Group do |group|
+      layers_full.present? && 
+      contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
+    
+    can :approve_population, Group do |group|
+      group.kind_of?(Group::Flock) &&
+      layers_full.present? && 
+      contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
+  end
+  
   def is_closed_course?(event)
-    event.kind_of?(Event::Course) && event.state == 'closed'
+    event.kind_of?(Event::Course) && event.closed?
   end
   
 end

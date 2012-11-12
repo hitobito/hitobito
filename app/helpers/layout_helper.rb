@@ -67,8 +67,8 @@ module LayoutHelper
     end 
   end
   
-  def muted(text)
-    content_tag(:span, text, class: 'muted')
+  def muted(text = nil, &block)
+    content_tag(:span, text, class: 'muted', &block)
   end
   
   def value_with_muted(value, mute)
@@ -78,6 +78,7 @@ module LayoutHelper
   # Renders all partials with names that match "_#{key}_*.html.haml"
   # in alphabetical order.
   def render_extensions(key, options = {})
+    #require 'pry'; binding.pry
     safe_join(find_extensions(key, options.delete(:folder))) do |e|
       render options.merge(:partial => e) 
     end
@@ -99,7 +100,7 @@ module LayoutHelper
   end
   
   def extension_folders
-      [controller.controller_path]
+    [@virtual_path[/(.+)\/.*/, 1]]
   end
     
   private

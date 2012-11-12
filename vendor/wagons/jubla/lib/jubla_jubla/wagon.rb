@@ -6,7 +6,7 @@ module JublaJubla
     app_requirement '>= 0'
 
     # Add a load path for this specific wagon
-    # config.autoload_paths += %W( #{config.root}/lib )
+    config.autoload_paths += %W( #{config.root}/app/domain )
 
     config.to_prepare do
       # extend application classes here
@@ -22,6 +22,12 @@ module JublaJubla
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
+    end
+
+    initializer "jubla.add_inflections" do |app|
+      ActiveSupport::Inflector.inflections do |inflect|
+        inflect.irregular 'census', 'censuses'
+      end
     end
 
     private

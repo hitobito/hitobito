@@ -1,0 +1,4 @@
+class CensusesController < CrudController
+  
+  
+end

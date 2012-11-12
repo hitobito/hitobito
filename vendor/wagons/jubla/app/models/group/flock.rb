@@ -34,7 +34,18 @@ class Group::Flock < Group
       super
     end 
   end
+  
+  def census_groups(year)
+    []
+  end
+  
+  def census_total(year)
+    MemberCount.total_for_flock(year, self)
+  end
 
+  def census_details(year)
+    MemberCount.details_for_flock(year, self)
+  end
 
   class Leader < Jubla::Role::Leader
     self.permissions = [:layer_full, :contact_data, :approve_applications, :login]

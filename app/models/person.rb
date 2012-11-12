@@ -52,7 +52,7 @@ class Person < ActiveRecord::Base
                   :gender, :birthday, :additional_information,
                   :password, :password_confirmation, :remember_me
   
-  include Roles
+  include Groups
   include Contactable
   
   devise :database_authenticatable,
@@ -114,6 +114,13 @@ class Person < ActiveRecord::Base
     permission?(:login)
   end
 
+  def male?
+    gender == 'm'
+  end
+  
+  def female?
+    gender == 'w'
+  end
   
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     login? && super

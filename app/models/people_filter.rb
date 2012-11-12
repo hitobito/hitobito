@@ -42,6 +42,12 @@ class PeopleFilter < ActiveRecord::Base
     name
   end
   
+  class << self
+    def for_group(group)
+      where("group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)", group.id, group.type)
+    end
+  end
+  
   class RoleType < ActiveRecord::Base
     belongs_to :people_filter
     

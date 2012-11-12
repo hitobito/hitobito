@@ -10,17 +10,20 @@ class Ability
     super(user)
     
     if user.login?
-      define_people_abilities
-      define_groups_abilities
-      define_events_abilities
-      define_qualifications_abilities
+      define_abilities
     else
       # generall, a user without login permission cannot do anything
       can [:show, :modify], Person do |person|
         person.id == user.id
       end
     end
-
+  end
+  
+  def define_abilities
+    define_people_abilities
+    define_groups_abilities
+    define_events_abilities
+    define_qualifications_abilities
   end
   
 end

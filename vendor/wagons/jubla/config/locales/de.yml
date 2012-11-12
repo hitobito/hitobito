@@ -38,6 +38,10 @@ de:
         one: Lager
         other: Lager
       jubla/event/course/advisor: Betreuer
+
+      event/camp/kind:
+        one: Lagerart
+        other: Lagerarten
       
       group/state_board/supervisor: Stellenbegleitung
       group/child_group/child: Kind

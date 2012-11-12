@@ -6,7 +6,8 @@
   = hidden_field_tag(:year, @year)
   = save_form_buttons(f, nil, census_flock_group_path(@group))
 
-  = render layout: 'member_counts/table_header', locals: { before_columns: %w(Jahrgang)} do
+  = render layout: 'member_counts/table_header', 
+           locals: { before_columns: %w(Jahrgang)} do
     - @member_counts.each do |count|
       = fields_for 'member_count[]', count, builder: StandardFormBuilder do |f|
         %tr

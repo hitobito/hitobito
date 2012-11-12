@@ -2,6 +2,23 @@ class MemberCounter
   
   attr_reader :year, :flock
   
+  class << self
+    def create_counts_for(flock)
+      if current_census = Census.current
+        year = current_census.year
+        counter = new(year, flock)
+        if !counter.exists?
+          counter.count!
+          year
+        else
+          false
+        end
+      else
+        false
+      end
+    end
+  end
+  
   def initialize(year, flock)
     @year = year
     @flock = flock
@@ -15,6 +32,10 @@ class MemberCounter
         count.save!
       end
     end
+  end
+  
+  def exists?
+    MemberCount.where(flock_id: flock.id, year: year).exists?
   end
   
   def state

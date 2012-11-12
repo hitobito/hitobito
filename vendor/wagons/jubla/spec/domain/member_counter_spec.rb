@@ -21,6 +21,8 @@ describe MemberCounter do
     Fabricate(Group::Flock::Coach.name, group: flock, person: Fabricate(:person, gender: 'w', birthday: '1972-01-01'))
   end
 
+  it { should_not be_exists }
+  
   its(:state) { should == groups(:be) }
   
   its(:members) { should have(6).items }
@@ -31,6 +33,8 @@ describe MemberCounter do
                                            
   it "creates member counts" do
     expect { subject.count! }.to change { MemberCount.count }.by(4)
+    
+    should be_exists
     
     assert_member_counts(1985, 1, nil, nil, nil)
     assert_member_counts(1988, 1, nil, nil, nil)

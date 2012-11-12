@@ -7,4 +7,10 @@ describe Census do
     
     it { should == censuses(:two_o_12) }
   end
+  
+  describe '.current' do
+    subject { Census.current }
+    
+    it { should == censuses(:two_o_12) }
+  end
 end

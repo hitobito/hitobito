@@ -45,6 +45,12 @@ module Jubla::Ability
       contains_any?(layers_full, collect_ids(group.layer_groups))
     end
     
+    can :create_member_counts, Group do |group|
+      group.kind_of?(Group::Flock) &&
+      layers_full.present? && 
+      contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
+    
     can :update_member_counts, Group do |group|
       group.kind_of?(Group::Flock) &&
       layers_full.present? && 

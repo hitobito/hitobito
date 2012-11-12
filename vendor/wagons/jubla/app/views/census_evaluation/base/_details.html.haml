@@ -1,4 +1,7 @@
-= render layout: 'member_counts/table_header', locals: { before_columns: %w(Jahrgang), after_columns: ['Total', ''], classes: 'table-condensed'} do
+= render layout: 'member_counts/table_header', 
+         locals: { before_columns: %w(Jahrgang), 
+                   after_columns: ['Total', ''], 
+                   classes: 'table-condensed'} do
   - @details.each do |c|
     %tr
       %td.right= c.born_in

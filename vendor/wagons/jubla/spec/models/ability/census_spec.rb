@@ -15,6 +15,10 @@ describe Ability do
       should be_able_to(:update_member_counts, flock)
     end
     
+    it "may create member counts" do
+      should be_able_to(:create_member_counts, flock)
+    end
+    
     it "may approve population" do
       should be_able_to(:approve_population, flock)
     end
@@ -39,6 +43,10 @@ describe Ability do
       should be_able_to(:update_member_counts, flock)
     end
     
+    it "may create member counts" do
+      should be_able_to(:create_member_counts, flock)
+    end
+   
     it "may approve population" do
       should be_able_to(:approve_population, flock)
     end
@@ -79,6 +87,10 @@ describe Ability do
     
     it "may not update member counts" do
       should_not be_able_to(:update_member_counts, flock)
+    end
+    
+    it "may create member counts" do
+      should be_able_to(:create_member_counts, flock)
     end
     
     it "may approve population" do

@@ -9,6 +9,7 @@ class CensusEvaluation::BaseController < ApplicationController
   decorates :group, :sub_groups
   
   def index
+    current_census
     @sub_groups = sub_groups
     @group_counts = counts_by_sub_group
     @total = group.census_total(year)
@@ -37,9 +38,13 @@ class CensusEvaluation::BaseController < ApplicationController
     @group ||= Group.find(params[:id])
   end
   
+  def current_census
+    @current_census ||= Census.current
+  end
+  
  
   def default_year
-    @default_year ||= Census.last.try(:year) || current_year
+    @default_year ||= current_census.try(:year) || current_year
   end
   
   def current_year

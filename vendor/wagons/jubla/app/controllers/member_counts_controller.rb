@@ -1,20 +1,21 @@
 # encoding: utf-8
 class MemberCountsController < ApplicationController
-
-  before_filter :authorize
   
   decorates :group
   
   
   def edit
+    authorize!(:update_member_counts, flock)
     member_counts
   end
   
   def update
+    authorize!(:update_member_counts, flock)
+    
     counts = member_counts.update(params[:member_count].keys, params[:member_count].values)
     with_errors = counts.select { |c| c.errors.present? }
     if with_errors.blank?
-      flash[:notice] = "Die Mitgliederzahlen wurden erfolgreich gespeichert"
+      flash[:notice] = "Die Mitgliederzahlen für #{year} wurden erfolgreich gespeichert"
       redirect_to census_flock_group_path(flock, year: year)
     else
       messages = with_errors.collect{|e| "#{e.born_in}: #{e.errors.full_messages.join(", ")}" }.join("; ")
@@ -24,7 +25,14 @@ class MemberCountsController < ApplicationController
   end
 
   def create
+    authorize!(:create_member_counts, flock)
     
+    if year = MemberCounter.create_counts_for(flock)
+      flash[:notice] = "Die Mitgliederzahlen für #{year} wurden erfolgreich erzeugt."
+    end
+    
+    year ||= Date.today.year
+    redirect_to census_flock_group_path(flock, year: year)
   end
   
   private
@@ -40,9 +48,4 @@ class MemberCountsController < ApplicationController
   def year
     @year ||= params[:year] ? params[:year].to_i : raise(ActiveRecord::RecordNotFound, 'year required')
   end
-  
-  def authorize
-    authorize!(:update_member_counts, flock)
-  end
-  
 end

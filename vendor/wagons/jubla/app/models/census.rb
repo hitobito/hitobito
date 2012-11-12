@@ -5,9 +5,16 @@ class Census < ActiveRecord::Base
   validates :start_at, presence: true
   
   class << self
+    # The last census defined (may be the current one)
     def last
       order("start_at DESC").first
     end
+    
+    # The currently active census
+    def current
+      where('start_at <= ?', Date.today).order("start_at DESC").first
+    end
+    
   end
   
   def year

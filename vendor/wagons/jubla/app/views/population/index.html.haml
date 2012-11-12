@@ -1,1 +1,5 @@
 = table(@people, :to_s, :roles, :birthday, :gender)
+
+
+- if @approvable && can?(:create_member_counts, @group)
+  = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)

@@ -121,7 +121,7 @@ module CrudHelper
   # Uses the current record if none is given.
   def button_action_destroy(path = nil, options = {})
     path ||= path_args(entry)
-    options[:date] = { :confirm => ti(:confirm_delete),
+    options[:data] = { :confirm => ti(:confirm_delete),
                         :method => :delete }
     action_button ti(:"link.delete"), path, 'trash', options
   end

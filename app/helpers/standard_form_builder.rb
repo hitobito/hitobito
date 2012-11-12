@@ -74,18 +74,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an integer field.
   def integer_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
 
   # Render a float field.
   def float_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
 
   # Render a decimal field.
   def decimal_field(attr, html_options = {})
+    html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
 

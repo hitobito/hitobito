@@ -2,4 +2,4 @@
   = action_button 'Anmelden', new_event_participation_path(entry) 
   
 = button_action_edit if can?(:update, entry)
-= button_action_destroy if can?(:edit, entry)
+= button_action_destroy if can?(:destroy, entry)

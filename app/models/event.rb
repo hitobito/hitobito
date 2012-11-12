@@ -29,12 +29,11 @@ class Event < ActiveRecord::Base
   
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
-  load Rails.root.join(*%w(app models event date.rb))
-  load Rails.root.join(*%w(app models event role.rb))
-  load Rails.root.join(*%w(app models event restricted_role.rb))
-  load Rails.root.join(*%w(app decorators event application_decorator.rb))
-  load Rails.root.join(*%w(app decorators event role_decorator.rb))
-  
+  require_dependency 'event/date'
+  require_dependency 'event/role'
+  require_dependency 'event/restricted_role'
+  require_dependency 'event/application_decorator'
+  require_dependency 'event/role_decorator'
   
   ### ATTRIBUTES
 

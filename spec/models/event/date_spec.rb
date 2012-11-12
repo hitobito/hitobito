@@ -97,13 +97,13 @@ describe Event::Date do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '15.12'
     date.should_not be_valid
-    date.should have(2).error_on(:start_at_date) # no idea why we get two, whatever
+    date.should have(1).error_on(:start_at_date)
   end
 
   it "is invalid on plain numbers input" do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '77'
     date.should_not be_valid
-    date.should have(2).error_on(:start_at_date)
+    date.should have(1).error_on(:start_at_date)
   end
 end

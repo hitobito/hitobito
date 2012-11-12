@@ -242,12 +242,17 @@ de:
 
   roles:
     role_changed: "%{old_role} zu <i>%{new_role}</i> geändert."
+
+
+  people:
+    send_password_instructions: "Login Informationen wurden verschickt."
         
   event/participations:
     show:
       link:
         delete: 'Anmeldung löschen'
 
+    
 
   time:
     formats:

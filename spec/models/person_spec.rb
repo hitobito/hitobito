@@ -67,7 +67,7 @@ describe Person do
     Person.new(company: false, company_name: 'foo').should have(1).errors_on(:base)
   end
   
-  it "with login role requires email" do
+  it "with login role does not require email" do
     group = groups(:top_group)
     person = Person.new(last_name: 'Foo')
     
@@ -77,7 +77,7 @@ describe Person do
     role.group_id = group.id
     person.roles << role
     
-    person.should have(1).error_on(:email)
+    person.should have(0).error_on(:email)
   end
   
   it "can create person with role" do
@@ -221,6 +221,16 @@ describe Person do
       course.save
       participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
       person.upcoming_events.should eq [course]
+    end
+  end
+
+  context "email validation" do
+    it "can create two people with empty email" do
+      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2), allow_blank: true
+    end
+
+    it "cannot create two people same email" do
+      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error
     end
   end
 

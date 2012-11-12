@@ -38,7 +38,8 @@
           = render_tabs
           .btn-toolbar
             = yield :toolbar
-          = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+          #flash
+            = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
           = content_for?(:content) ? yield(:content) : yield
 
     %footer

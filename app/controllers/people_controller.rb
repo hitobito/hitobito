@@ -7,6 +7,9 @@ class PeopleController < CrudController
 
   # load group before authorization
   prepend_before_filter :parent
+
+  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, 
+                                       :send_password_instructions]
   
   before_render_show :load_asides
   
@@ -55,6 +58,13 @@ class PeopleController < CrudController
     else
       super
     end
+  end
+
+  # POST button, send password instructions
+  def send_password_instructions
+    entry.send_reset_password_instructions
+    flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
+    render partial: 'shared/update_flash', layout: false
   end
 
   private

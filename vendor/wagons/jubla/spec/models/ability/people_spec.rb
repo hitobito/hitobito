@@ -468,4 +468,45 @@ describe Ability::People do
       end
     end
   end
+
+  describe :send_password_instructions do
+    let(:other) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)).person.reload }
+
+    context 'layer full' do
+      let(:role) { Fabricate(Group::StateBoard::Leader.name.to_sym, group: groups(:be_board)) }
+      it "can send_password_instructions" do
+        should be_able_to(:send_password_instructions, other)
+      end
+
+      it "cannot send_password_instructions for person without email" do
+        other.email = nil
+        should_not be_able_to(:send_password_instructions, other)
+      end
+
+      it "cannot send_password_instructions for role without login permission" do
+        no_login = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board)).person.reload
+        should_not be_able_to(:send_password_instructions, no_login)
+      end
+
+      it "cannot send_password_instructions for self" do
+        should_not be_able_to(:send_password_instructions, role.person)
+      end
+
+    end
+
+    context 'same group' do
+      let(:role) { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
+      it "cannot send_password_instructions" do
+        should_not be_able_to(:send_password_instructions, other)
+      end
+    end
+
+    context 'group below' do
+      let(:role) { Fabricate(Group::RegionalBoard::Member.name.to_sym, group: groups(:city_board)) }
+      it "cannot send_password_instructions" do
+        should_not be_able_to(:send_password_instructions, other)
+      end
+    end
+  end
+
 end

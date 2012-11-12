@@ -1,4 +1,4 @@
 %ul.nav
   = nav "Gruppen", groups_path, %w(groups people)
   = nav "Kurse/Anlässe", list_courses_path, %w(event_courses)
-  = nav "Admin", event_kinds_path, %w(event_kinds qualification_kinds) if can?(:manage, Event::Kind)
+  = render_extensions(:nav_admin)

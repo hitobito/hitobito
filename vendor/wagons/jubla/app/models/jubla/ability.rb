@@ -11,6 +11,8 @@ module Jubla::Ability
     customize_for_closed_events
     
     define_census_abilities
+
+    define_event_abilities
   end
   
   private
@@ -54,6 +56,13 @@ module Jubla::Ability
   
   def is_closed_course?(event)
     event.kind_of?(Event::Course) && event.closed?
+  end
+
+  def define_event_abilities
+    if admin
+      can :manage, Event::Camp::Kind
+    end
+
   end
   
 end

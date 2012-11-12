@@ -133,8 +133,8 @@ class Group < ActiveRecord::Base
     hierarchy.select { |g| g.class.layer }
   end
   
-  def all_people_filters
-    PeopleFilter.where("group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)", id, type)
+  def groups_in_same_layer
+    Group.where(layer_group_id: layer_group_id)
   end
   
   # The layer hierarchy without the layer of this group.

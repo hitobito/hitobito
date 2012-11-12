@@ -1,4 +1,4 @@
-module Person::Roles
+module Person::Groups
   extend ActiveSupport::Concern
   
  

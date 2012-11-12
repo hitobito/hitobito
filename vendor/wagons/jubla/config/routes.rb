@@ -7,6 +7,8 @@ Rails.application.routes.draw do
         get 'census/state' => 'state#index'
         get 'census/flock' => 'flock#index'
       end
+      
+      get 'population' => 'population#index'
     end
   end
   

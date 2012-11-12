@@ -52,7 +52,7 @@ class Person < ActiveRecord::Base
                   :gender, :birthday, :additional_information,
                   :password, :password_confirmation, :remember_me
   
-  include Roles
+  include Groups
   include Contactable
   
   devise :database_authenticatable,

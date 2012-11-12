@@ -79,7 +79,7 @@ class GroupDecorator < ApplicationDecorator
     end
     
     if layer?
-      filters = all_people_filters
+      filters = PeopleFilter.for_group(model)
       if filters.present?
         links << nil
         filters.collect { |filter| links << people_filter_link(filter) }

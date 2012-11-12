@@ -4,7 +4,8 @@ class CensusEvaluation::FederationController < CensusEvaluation::BaseController
 
   def index
     super
-    @flocks = flock_confirmation_ratios
+    @show_confirmation_ratios = (year == current_year)
+    @flocks = flock_confirmation_ratios if @show_confirmation_ratios
   end
   
   private

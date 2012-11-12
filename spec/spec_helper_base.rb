@@ -52,7 +52,7 @@ RSpec.configure do |config|
   config.include(MailerMacros)
   config.include(EventMacros)
   
-  config.filter_run_excluding type: 'request'
+  config.filter_run_excluding type: 'request', performance: true
   
   config.before :all do
     # load all fixtures

@@ -4,19 +4,19 @@ class MemberCounter
   
   class << self
     def create_counts_for(flock)
-      if current_census = Census.current
-        year = current_census.year
-        counter = new(year, flock)
-        if !counter.exists?
-          counter.count!
-          year
-        else
-          false
-        end
+      census = Census.current
+      if current_counts?(flock, census)
+        new(census.year, flock).count!
+        census.year
       else
         false
       end
     end
+
+    def current_counts?(flock, census = Census.current)
+      census && new(census.year, flock).exists?
+    end
+
   end
   
   def initialize(year, flock)

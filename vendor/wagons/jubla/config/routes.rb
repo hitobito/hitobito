@@ -11,7 +11,10 @@ Rails.application.routes.draw do
       end
       
       get 'population' => 'population#index'
+      
     end
+    
+    resource :member_counts, only: [:create, :edit, :update]
   end
   
 end

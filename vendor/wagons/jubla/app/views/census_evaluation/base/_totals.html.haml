@@ -1,34 +1,18 @@
-%table.table.table-striped{style: 'width: auto;'}
-  %thead
+= render layout: 'member_counts/table_header', locals: { before_columns: [''], after_columns: ['Total', '']} do
+  - @sub_groups.each do |g|
     %tr
-      %th
-      %th.center{colspan: 2} Leitende
-      %th.center{colspan: 2} Kinder
-      %th.center Total
-      %th
-    %tr
-      %th
-      %th.center w
-      %th.center m
-      %th.center w
-      %th.center m
-      %th
-      %th
-  %tbody
-    - @sub_groups.each do |g|
-      %tr
-        %td= link_to(g.to_s, census_evaluation_path(g, year: @year))
-        %td.right= count_field(g, :leader_f)
-        %td.right= count_field(g, :leader_m)
-        %td.right= count_field(g, :child_f)
-        %td.right= count_field(g, :child_m)
-        %td.right= count_field(g, :total)
-        %td= render 'total_actions', group: g
-    %tr
-      %th Total
-      %th.right= @total.leader_f
-      %th.right= @total.leader_m
-      %th.right= @total.child_f
-      %th.right= @total.child_m
-      %th.right= @total.total
-      %th
+      %td= link_to(g.to_s, census_evaluation_path(g, year: @year))
+      %td.right= count_field(g, :leader_f)
+      %td.right= count_field(g, :leader_m)
+      %td.right= count_field(g, :child_f)
+      %td.right= count_field(g, :child_m)
+      %td.right= count_field(g, :total)
+      %td= render 'total_actions', group: g
+  %tr
+    %th Total
+    %th.right= @total.leader_f
+    %th.right= @total.leader_m
+    %th.right= @total.child_f
+    %th.right= @total.child_m
+    %th.right= @total.total
+    %th

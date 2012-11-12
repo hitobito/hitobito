@@ -1,0 +1,24 @@
+- before_columns ||= []
+- after_columns ||= []
+- classes ||= nil
+
+%table.table.table-striped{style: 'width: auto;', class: classes}
+  %thead
+    %tr
+      - before_columns.each do |c|
+        %th
+      %th.center{colspan: 2} Leitende
+      %th.center{colspan: 2} Kinder
+      - after_columns.each do |c|
+        %th
+    %tr
+      - before_columns.each do |c|
+        %th= c
+      %th.center w
+      %th.center m
+      %th.center w
+      %th.center m
+      - after_columns.each do |c|
+        %th= c
+  %tbody
+    = yield

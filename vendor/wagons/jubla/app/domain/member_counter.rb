@@ -18,7 +18,7 @@ class MemberCounter
   end
   
   def state
-    @state ||= flock.ancestors.where(type: Group::State.sti_name).first
+    @state ||= flock.state
   end
   
   def members

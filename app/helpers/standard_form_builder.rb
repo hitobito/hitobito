@@ -61,32 +61,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
-    html_options[:class] ||= 'span6'
-    super(attr, html_options)
+    html_options[:class] ||= 'span2'
+    text_field(attr, html_options)
   end
+  alias_method :integer_field, :number_field
+  alias_method :float_field,   :number_field
+  alias_method :decimal_field, :number_field
 
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
     html_options[:class] ||= 'span6'
-    text_field(attr, html_options)
-  end
-
-  # Render an integer field.
-  def integer_field(attr, html_options = {})
-    html_options[:class] ||= 'span2'
-    text_field(attr, html_options)
-  end
-
-  # Render a float field.
-  def float_field(attr, html_options = {})
-    html_options[:class] ||= 'span2'
-    text_field(attr, html_options)
-  end
-
-  # Render a decimal field.
-  def decimal_field(attr, html_options = {})
-    html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
 

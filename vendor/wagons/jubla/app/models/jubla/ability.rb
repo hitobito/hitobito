@@ -42,6 +42,14 @@ module Jubla::Ability
       layers_full.present? && 
       contains_any?(layers_full, collect_ids(group.layer_groups))
     end
+    
+    can :update_member_counts, Group do |group|
+      group.kind_of?(Group::Flock) &&
+      layers_full.present? && 
+      user.roles.any?{ |r| r.kind_of?(Group::StateAgency::Leader) || 
+                           r.kind_of?(Group::FederalBoard::Member) } &&
+      contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
   end
   
   def is_closed_course?(event)

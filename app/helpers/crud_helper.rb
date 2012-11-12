@@ -21,7 +21,7 @@ module CrudHelper
     options = attrs.extract_options!
     
     buttons_bottom = options.delete(:buttons_bottom)
-    submit_label = options.delete(:submit_label) || ti(:"button.save")
+    submit_label = options.delete(:submit_label)
     cancel_url = get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
@@ -42,6 +42,7 @@ module CrudHelper
   end
   
   def save_form_buttons(form, submit_label, cancel_url)
+    submit_label ||= ti(:"button.save")
     content_tag(:div, class: 'btn-toolbar') do
       submit_button(form, submit_label) +
       cancel_link(cancel_url)

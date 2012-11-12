@@ -1,0 +1,5 @@
+- if can?(:update_member_counts, @group)
+  - if @total
+    = button_action_edit(edit_group_member_counts_path(@group, year: @year))
+  - else
+    = button_action_add(group_member_counts_path(@group, year: @year), method: :post)

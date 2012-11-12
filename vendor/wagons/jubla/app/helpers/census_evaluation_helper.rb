@@ -16,6 +16,7 @@ module CensusEvaluationHelper
   end
   
   def count_value(value)
-    value || EMPTY_COUNT_VALUE
+    value.to_i > 0 ? value : EMPTY_COUNT_VALUE
   end
+  
 end

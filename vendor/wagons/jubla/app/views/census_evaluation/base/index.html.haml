@@ -1,9 +1,11 @@
 - @sheets = GroupSheet.new(self, @group)
 
+= render 'groups/tabs'
+
+= render 'actions_index'
 
 = render 'shared/page_per_year'
 
-= render 'groups/tabs'
 
 #main.row-fluid
   -if @total

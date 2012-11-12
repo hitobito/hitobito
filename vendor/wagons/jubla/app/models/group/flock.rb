@@ -13,6 +13,10 @@ class Group::Flock < Group
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
   attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), as: :superior
 
+  
+  has_many :member_counts
+
+
   validates :kind, inclusion: AVAILABLE_KINDS, allow_blank: true
 
 
@@ -33,6 +37,10 @@ class Group::Flock < Group
       # if kind is not selected from the database, we end up here
       super
     end 
+  end
+  
+  def state
+    ancestors.where(type: Group::State.sti_name).first
   end
   
   def census_groups(year)

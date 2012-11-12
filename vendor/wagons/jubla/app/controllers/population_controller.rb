@@ -10,6 +10,7 @@ class PopulationController < ApplicationController
     @people = load_people
   end
 
+  private
   
   def load_people
     Person.includes(:roles).
@@ -18,7 +19,6 @@ class PopulationController < ApplicationController
            order_by_role.
            order_by_name
   end
-  private
   
   def flock
     @flock ||= Group::Flock.find(params[:id])

@@ -19,7 +19,7 @@ describe CensusMailer do
   
     
   describe "#reminder" do 
-    let(:mail) { CensusMailer.reminder(people(:top_leader), census, ['test@example.com', 'test2@example.com']) }
+    let(:mail) { CensusMailer.reminder(people(:top_leader).email, census, ['test@example.com', 'test2@example.com']) }
     
     its(:subject) { should == "Bestandesmeldung ausfüllen" }
     its(:to)      { should == ['test@example.com', 'test2@example.com'] }

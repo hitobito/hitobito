@@ -17,5 +17,15 @@ describe CensusesController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(index), %w(show), %w(edit), %w(update), %w(destroy)]
 
+  describe_action :post, :create do
+    let(:params) { { model_identifier => test_attrs } }
+    it "should add job", :perform_request => false do
+      expect { perform_request }.to change { Delayed::Job.count }.by(1)
+    end
+    
+    it "with invalid params should not add job", :perform_request => false, :failing => true do
+      expect { perform_request }.not_to change { Delayed::Job.count }
+    end
+  end
   
 end

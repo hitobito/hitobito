@@ -3,11 +3,9 @@ class CensusInvitationJob < BaseJob
   RECIPIENT_ROLES = [Group::StateAgency::Leader,
                      Group::Flock::Leader,
                      Group::ChildGroup::Leader]
-  
-  attr_reader :census
-  
+    
   def initialize(census)
-    @census = census
+    @census_id = census.id
   end
   
   def perform
@@ -20,6 +18,10 @@ class CensusInvitationJob < BaseJob
            uniq.
            pluck(:email).
            compact
+  end
+  
+  def census
+    Census.find(@census_id)
   end
   
 end

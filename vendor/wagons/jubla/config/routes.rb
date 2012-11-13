@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         get 'census/federation' => 'federation#index'
         get 'census/state' => 'state#index'
         get 'census/flock' => 'flock#index'
+        post 'census/state/remind' => 'state#remind'
       end
       
       get 'population' => 'population#index'

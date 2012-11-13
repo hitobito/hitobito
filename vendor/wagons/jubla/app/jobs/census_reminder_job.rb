@@ -1,11 +1,11 @@
 class CensusReminderJob < BaseJob
     
-  attr_reader :census, :sender, :flock
+  attr_reader :census, :sender
   
   def initialize(sender, census, flock)
     @census = census
-    @sender = sender
-    @flock = flock
+    @sender = sender.email
+    @flock_id = flock.id
   end
   
   def perform
@@ -18,5 +18,9 @@ class CensusReminderJob < BaseJob
                  uniq.
                  pluck(:email).
                  compact
+  end
+  
+  def flock
+    Group::Flock.find(@flock_id)
   end
 end

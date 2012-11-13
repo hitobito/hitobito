@@ -39,6 +39,12 @@ module Jubla::Ability
       contains_any?(layers_full, collect_ids(group.layer_groups))
     end
     
+    # this is called on the state group
+    can :remind_census, Group do |group|
+      layers_full.present? && 
+      contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
+    
     can :approve_population, Group do |group|
       group.kind_of?(Group::Flock) &&
       layers_full.present? && 

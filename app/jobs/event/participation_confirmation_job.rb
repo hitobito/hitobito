@@ -1,9 +1,7 @@
 class Event::ParticipationConfirmationJob < BaseJob
   
-  attr_reader :participation
-  
   def initialize(participation)
-    @participation = participation
+    @participation_id = participation.id
   end
   
   def perform
@@ -23,6 +21,10 @@ class Event::ParticipationConfirmationJob < BaseJob
            uniq.
            pluck('people.email').
            compact
+  end
+  
+  def participation
+    @participation ||= Event::Participation.find(@participation_id)
   end
   
 end

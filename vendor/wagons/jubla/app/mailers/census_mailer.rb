@@ -4,7 +4,7 @@ class CensusMailer < ActionMailer::Base
   
   def reminder(sender, census, recipients)
     @census = census
-    mail to: recipients, from: sender.email
+    mail to: recipients, from: sender
   end
   
   def invitation(census, recipients)

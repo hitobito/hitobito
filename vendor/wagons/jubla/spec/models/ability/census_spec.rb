@@ -34,6 +34,10 @@ describe Ability do
     it "may view census for federation" do
       should be_able_to(:evaluate_census, group)
     end
+    
+    it "may remind census for state" do
+      should be_able_to(:remind_census, flock.state)
+    end
   end
   
   describe "State Agency Leader" do
@@ -63,10 +67,13 @@ describe Ability do
       should_not be_able_to(:evaluate_census, groups(:ch))
     end
   
+    it "may remind census for state" do
+      should be_able_to(:remind_census, flock.state)
+    end
+    
     context "for other state" do
       let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:no_agency)) }
       
-          
       it "may not update member counts" do
         should_not be_able_to(:update_member_counts, flock)
       end
@@ -77,6 +84,10 @@ describe Ability do
       
       it "may not view census for flock" do
         should_not be_able_to(:evaluate_census, flock)
+      end
+      
+      it "may not remind census" do
+        should_not be_able_to(:remind_census, flock.state)
       end
     end
   end
@@ -107,6 +118,10 @@ describe Ability do
     
     it "may not view census for federation" do
       should_not be_able_to(:evaluate_census, groups(:ch))
+    end
+    
+    it "may not remind census for state" do
+      should_not be_able_to(:remind_census, flock.state)
     end
   end
 end

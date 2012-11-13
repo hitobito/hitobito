@@ -12,7 +12,6 @@ describe CensusEvaluation::StateController do
   
   
   describe 'GET index' do
-    
     before { get :index, id: be.id }
     
     it "assigns counts" do
@@ -39,6 +38,30 @@ describe CensusEvaluation::StateController do
       details[2].born_in.should == 1988
       details[3].born_in.should == 1997
       details[4].born_in.should == 1999
+    end
+  end
+  
+  describe "POST remind" do
+    it "creates mail job" do
+      expect { post :remind, id: be.id, flock_id: bern.id, format: :js }.to change { Delayed::Job.count }.by(1)
+    end
+    
+    context ".js" do
+      before { post :remind, id: be.id, flock_id: bern.id, format: :js }
+      
+      it "renders update_flash" do
+        should render_template('census_evaluation/state/remind')
+      end
+      
+      it "sets flash messages" do
+        flash[:notice].should =~ /an Jungwacht Bern geschickt/
+      end
+    end
+    
+    it "redirects flock leaders" do
+      sign_in(people(:flock_leader))
+      expect {  post :remind, id: be.id, flock_id: bern.id, format: :js }.not_to change { Delayed::Job.count }
+      should redirect_to(root_path)
     end
   end
   

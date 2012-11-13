@@ -126,7 +126,7 @@ class Event::ParticipationsController < CrudController
 
   def send_confirmation_email
     if entry.person_id == current_user.id
-      Delayed::Job.enqueue Event::ParticipationConfirmationJob.new(entry)
+      Event::ParticipationConfirmationJob.new(entry).enqueue!
     end
   end
   

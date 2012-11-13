@@ -1,8 +1,9 @@
--title 'Jungschar Bern'
+.content-header
+  -title 'Jungschar Bern'
 
--tab 'Home', '#'
--tab 'Personen', '#'
--tab 'Gruppen', '#'
+  -tab 'Home', '#'
+  -tab 'Personen', '#'
+  -tab 'Gruppen', '#'
 
 - content_for :toolbar do
   = action_button 'Person hinzufügen', '#', :plus

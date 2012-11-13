@@ -4,9 +4,10 @@
 =render 'tabs'
 
 #main.row-fluid
-  %article.span7
+  %article.span5
     = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, entry)
     
+    %h2 Weitere Angaben
     - if entry.additional_information.present?
       %h4 Bemerkungen
       = simple_format(entry.additional_information)
@@ -16,7 +17,7 @@
     = render_extensions :attrs
 
   -if can?(:show_full, entry)
-    %aside.span5
+    %aside.span6.offset1
       = render 'roles'
       = render 'event_aside', title: 'Anmeldungen', collection: @pending_applications
       = render 'event_aside', title: 'Events', collection: @upcoming_events

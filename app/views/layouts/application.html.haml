@@ -34,8 +34,9 @@
     #page
       .container-fluid
         = render_sheets do
-          %h1= title
-          = render_tabs
+          .content-header
+            %h1= title
+            = render_tabs
           .btn-toolbar
             = yield :toolbar
           #flash

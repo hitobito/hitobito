@@ -56,9 +56,7 @@ module CrudHelper
   end
   
   def cancel_link(url)
-    content_tag(:div, class: 'btn-group') do
-      link_to(ti(:"button.cancel"), url, :class => 'btn')
-    end
+    link_to(ti(:"button.cancel"), url, :class => 'link')
   end
 
   # Create a table of the entries with the default or

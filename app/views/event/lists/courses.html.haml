@@ -1,23 +1,20 @@
 - if can?(:manage_courses, current_user)
-  .pull-right
-    = dropdown_button(group_title, group_link_list)
+  = pill_dropdown_button(group_title, group_link_list, nil, nil, 'pull-right')
 
 = render 'shared/page_per_year', paging_params: group_param
 
-%table.table
+%section
   - courses_by_kinds.each_entry do |kind, events|
-    %tr
-      %td{colspan: can?(:manage_courses, current_user) ? 4 : 3}
-        %br/
-        %h2= kind 
-    - events.each do |event| 
-      %tr
-        %td
-          %strong
-            = event.labeled_link
-        %td= event.dates_full
-        - if can?(:manage_courses, current_user)
-          %td= event.booking_info
-          %td= event.state_translated
-        - else
-          %td= apply_button_if_possible(event)
+    %h2= kind 
+    %table.table
+      - events.each do |event| 
+        %tr
+          %td
+            %strong
+              = event.labeled_link
+          %td= event.dates_full
+          - if can?(:manage_courses, current_user)
+            %td= event.booking_info
+            %td= event.state_translated
+          - else
+            %td= apply_button_if_possible(event)

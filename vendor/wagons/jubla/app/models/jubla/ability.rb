@@ -34,7 +34,7 @@ module Jubla::Ability
   end
 
   def define_census_abilities
-    can :census, Group do |group|
+    can :evaluate_census, Group do |group|
       layers_full.present? && 
       contains_any?(layers_full, collect_ids(group.layer_groups))
     end
@@ -57,6 +57,10 @@ module Jubla::Ability
       user.roles.any?{ |r| r.kind_of?(Group::StateAgency::Leader) || 
                            r.kind_of?(Group::FederalBoard::Member) } &&
       contains_any?(layers_full, collect_ids(group.layer_groups))
+    end
+    
+    if admin
+      can :manage, Census
     end
   end
   

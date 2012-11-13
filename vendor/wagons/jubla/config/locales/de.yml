@@ -27,22 +27,6 @@ de:
         other: Kantone
       group/work_group: Arbeitsgruppe
       
-      jubla/role/external: Extern
-      jubla/role/coach: Coach
-      jubla/role/group_admin: Gruppenverwaltung
-      jubla/role/leader: Leitung
-      jubla/role/member: Mitglied
-      jubla/role/treasurer: Finanzchef
-      
-      event/camp:
-        one: Lager
-        other: Lager
-      jubla/event/course/advisor: Betreuer
-
-      event/camp/kind:
-        one: Lagerart
-        other: Lagerarten
-      
       group/state_board/supervisor: Stellenbegleitung
       group/child_group/child: Kind
       group/flock/leader: Scharleitung
@@ -51,10 +35,27 @@ de:
       group/flock/guide: Leiter
       group/flock/advisor: Scharbegleitung
       group/flock/coach: Coach
-
+      
+      jubla/role/external: Extern
+      jubla/role/coach: Coach
+      jubla/role/group_admin: Gruppenverwaltung
+      jubla/role/leader: Leitung
+      jubla/role/member: Mitglied
+      jubla/role/treasurer: Finanzchef
+      
+      census:
+        one: Bestandesmeldungsperiode
+        other: Bestandesmeldungsperioden
+      
       event/camp:
         one: Lager
         other: Lager
+        
+      event/camp/kind:
+        one: Lagerart
+        other: Lagerarten
+
+      jubla/event/course/advisor: Betreuer
 
     attributes:
       person:
@@ -86,6 +87,11 @@ de:
       role:
         employment_percent: Stellenprozente
         honorary: Ehrenamt
+
+      census:
+        year: Jahr
+        start_at: Ab
+        finish_at: Stichtag
 
       event:
         advisor_id: LKB

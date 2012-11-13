@@ -26,6 +26,11 @@ module JublaJubla
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'
     end
+    
+    initializer "jubla.add_settings" do |app|
+      Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
+      Settings.reload!
+    end
 
     initializer "jubla.add_inflections" do |app|
       ActiveSupport::Inflector.inflections do |inflect|

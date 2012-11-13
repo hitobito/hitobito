@@ -8,17 +8,17 @@ class Event::ParticipationMailer < ActionMailer::Base
   #   de.event.participation_mailer.created.subject
   #
   def confirmation(participation)
-    @person = participation.person
     @participation = participation
+    @person = participation.person
     @event = participation.event
     mail to: @person.email
   end
   
-  def approval(approvers, participation)
+  def approval(participation, recipients)
     @participation = participation
     @person = participation.person
     @event = participation.event
-    mail to: approvers.collect(&:email)
+    mail to: recipients
   end
 
   private

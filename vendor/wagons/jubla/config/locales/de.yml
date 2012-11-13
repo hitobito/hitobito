@@ -120,3 +120,10 @@ de:
         leader_f: Leitende w
         child_m: Kinder m
         child_f: Kinder w
+        
+  # mailer keys
+  census_mailer:
+    invitation: 
+      subject: Bestandesmeldung ausfüllen
+    reminder:
+      subject: Bestandesmeldung ausfüllen

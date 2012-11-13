@@ -126,24 +126,11 @@ class Event::ParticipationsController < CrudController
 
   def send_confirmation_email
     if entry.person_id == current_user.id
-      Event::ParticipationMailer.confirmation(entry).deliver
-      if event.requires_approval? 
-        recipients = approvers.to_a
-        Event::ParticipationMailer.approval(recipients, entry).deliver if recipients.present?
-      end
+      Delayed::Job.enqueue Event::ParticipationConfirmationJob.new(entry)
     end
   end
   
-  def approvers
-    approver_types = Role.types_with_permission(:approve_applications).collect(&:sti_name)
-    layer_ids = entry.person.groups.collect(&:layer_group_id).uniq
-    Person.select('people.first_name, people.last_name, people.nickname, people.email').
-           joins(roles: :group).
-           where(roles: {type: approver_types}, 
-                         groups: {layer_group_id: layer_ids}).
-           uniq
-  end
-  
+
   class << self
     def model_class
       Event::Participation

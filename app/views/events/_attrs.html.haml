@@ -33,3 +33,8 @@
   = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, 
                                                :application_conditions))
 
+  - if entry.preconditions.present?
+    %p Vorbedingungen
+    %ul
+      - entry.preconditions.each do |label|
+        %li= label

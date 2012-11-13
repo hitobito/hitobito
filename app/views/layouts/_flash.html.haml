@@ -1,5 +1,5 @@
 - if flash[level].present?
   %div{:class => "alert alert-#{flash_class(level)}"}
-    = flash[level]
     %a.close{:'data-dismiss' => 'alert', :href => '#'} &times;
+    = simple_format([flash[level]].flatten.join("\n"))
   

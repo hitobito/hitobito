@@ -6,5 +6,4 @@
     
 = action_button('Drucken', '#', :print)
 
-.pull-right
-  = dropdown_button(@group.filter_name, @group.people_filter_links)
+= pill_dropdown_button(@group.filter_name, @group.people_filter_links, nil, nil, 'pull-right')

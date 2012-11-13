@@ -22,7 +22,7 @@ module CrudHelper
     
     buttons_bottom = options.delete(:buttons_bottom)
     submit_label = options.delete(:submit_label)
-    cancel_url = get_cancel_url(object, options)
+    cancel_url = params[:return_url] || get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
       content = save_form_buttons(form, submit_label, cancel_url)
@@ -56,9 +56,7 @@ module CrudHelper
   end
   
   def cancel_link(url)
-    content_tag(:div, class: 'btn-group') do
-      link_to(ti(:"button.cancel"), url, :class => 'btn')
-    end
+    link_to(ti(:"button.cancel"), url, :class => 'link')
   end
 
   # Create a table of the entries with the default or

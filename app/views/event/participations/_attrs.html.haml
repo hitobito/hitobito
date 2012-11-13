@@ -7,7 +7,7 @@
 - title entry.to_s
 
 #main.row-fluid
-  %article.span7
+  %article.span6
     - if @event.requires_approval? && @application.present? && can?(:show, @application)
       = @application.confirmation_label
     
@@ -26,7 +26,7 @@
     - if @event.priorization && @application.present? && can?(:show, @application)
       = render 'priorities'
       
-  %aside.span5
+  %aside.span5.offset1
     - if entry.person == current_user && @application.present?
       = section 'Anmeldung an' do
         = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true

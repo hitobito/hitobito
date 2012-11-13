@@ -19,6 +19,8 @@ $blue:                  #013888 !default;
 $blueDark:              #00173C !default;
 $green:                 #026829 !default;
 
+$borderColor:           darken(#F1F2F5, 5%) !default;
+
 // Scaffolding
 // -------------------------
 $bodyBackground:        $grayLighter !default;
@@ -31,7 +33,8 @@ $linkColorHover:        $blueDark !default;
 
 // Typography
 // -------------------------
-$sansFontFamily:        "Century Gothic", Helvetica, Arial, sans-serif !default;
+$sansFontFamily:        Helvetica, Arial, sans-serif !default;
+$headingFontFamily:     "Century Gothic", $sansFontFamily;
 $baseFontFamily:        $sansFontFamily !default;
 $headingsFontWeight:    normal !default;    // instead of browser default, bold
 

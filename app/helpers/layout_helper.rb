@@ -19,6 +19,10 @@ module LayoutHelper
   def dropdown_button(label, links, icon_name = nil, main_link = nil)
     render('shared/dropdown_button', label: label, links: links, icon_name: icon_name, main_link: main_link)
   end
+
+  def pill_dropdown_button(label, links, icon_name = nil, main_link = nil, css_classes = nil)
+    render('shared/pill_dropdown_button', label: label, links: links, icon_name: icon_name, main_link: main_link, css_classes: css_classes)
+  end
   
   def icon(name)
     content_tag(:i, '', class: "icon icon-#{name}")

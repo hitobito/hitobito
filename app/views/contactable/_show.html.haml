@@ -1,8 +1,9 @@
-%section.contactable
+.contactable.well
   %address
     %strong=contactable.to_s if defined?(with_name)
     =contactable.complete_address
     =contactable.primary_email
     =contactable.all_phone_numbers(only_public)
-  
-  =contactable.all_social_accounts(only_public)
+
+  .social
+    =contactable.all_social_accounts(only_public)

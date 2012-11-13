@@ -3,15 +3,16 @@
 =render 'groups/tabs'
 
 #main.row-fluid
-  %article.span7
+  %aside.span4
+    = render 'child_groups', list: entry.grouped_children
 
+  %article.span7.offset1
+    %h2 Kontaktangaben
     = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
 
     - if @contact
       %h4 Kontaktperson
       = render 'contactable/show', contactable: @contact, only_public: true, with_name: true
-
-    = render_extensions :attrs
     
-  %aside.span5
-    = render 'child_groups', list: entry.grouped_children
+    %h2 Weitere Angaben
+    = render_extensions :attrs

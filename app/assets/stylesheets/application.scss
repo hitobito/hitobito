@@ -11,7 +11,6 @@
  *= require_self
  *= require jquery-ui-1.8.16.custom
  *
-
  */
 
 /* Imports Compass */
@@ -25,13 +24,18 @@
 
 /* Typo */
 // -------------------------
+#{headings(all)} {
+  font-family: $headingFontFamily;
+  margin-top: 0;
+}
 
 h1 { 
   font-size: 2.333em !important;
-  border-bottom: 1px solid $grayLighter;
   padding-bottom: 10px;
   margin-bottom: $vSpace;
+  border-bottom: 1px solid $borderColor;
 }
+
 h2 { 
   font-size: 1.667em !important;
 }
@@ -41,10 +45,11 @@ h2 {
   h1 { margin-bottom: 0px; }
 }
 
+p:last-child { margin-bottom: 0; }
+
 .muted { color: $gray; }
 
-
-td p, td address {
+td p, address {
   margin: 0;
 }
 
@@ -52,12 +57,46 @@ td p, td address {
   margin: 0 0 0 25px;
 }
 
+.btn-toolbar .dropdown, .btn-toolbar .link {
+  font-size: 14px;
+}
+
+.btn-group + .link {
+  margin-left: $vSpace;
+} 
+
+// Definition list
+dl {
+  margin-top: 0;
+}
+.dl-horizontal {
+  padding: $vSpace*0.5 0;
+  border-top: 1px solid $borderColor;
+  margin: 0;
+
+  dd { 
+    margin-bottom: $vSpace*0.5;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  @include responsive(mediaTablet) {
+    dt { width: 180px; }
+    dd { margin-left: 200px; margin-bottom: 0; }
+  }
+
+  &:last-child {
+    border-bottom: 1px solid $borderColor;
+    margin-bottom: $vSpace;
+  }
+}
+
 /* Nav */
 // -------------------------
 .nav-sub {
   @include clearfix;
+  font-family: $headingFontFamily;
   margin-bottom: 0px;
-  border-bottom: 1px solid $grayLighter;
+  border-bottom: 1px solid $borderColor;
   & > li {
     float: left;
      a {
@@ -79,6 +118,7 @@ td p, td address {
   padding: 5px 10px;
   font-size: 1.385em;
   line-height: 1.538em;
+  font-family: $headingFontFamily;
 }
 
 .sheet .breadcrumb {
@@ -87,6 +127,7 @@ td p, td address {
   list-style: none;
   background: none;
   border: none;
+  font-family: $headingFontFamily;
   a { color: $gray; }
   ul { margin: 0;}
   & + .level { padding-top:0; }
@@ -96,11 +137,37 @@ td p, td address {
   padding: 6px 0 0;
 }
 
+// Pagination
+.pagination {
+  @include clearfix;
+  float: left;
+  margin-top: 0;
+}
+.pagination ul > .active > a, .pagination ul > .active > span {
+  color: $grayDark;
+}
+
+
+// Pills
+.nav-pills > li > a {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border: 1px solid $grayLight;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nav-pills .open .dropdown-toggle {
+  background-color: $blue;
+  border-color: $blue;
+}
 
 /* Forms & Buttons */
 // -------------------------
 .btn-toolbar {
+  margin-top: 0;
   margin-bottom: $vSpace;
+
 }
 .btn { 
   color: $green;
@@ -136,6 +203,10 @@ td p, td address {
 
 .form-horizontal .control-group {
   margin-bottom: 0;
+}
+
+.help-block {
+  margin: -5px 0 10px;
 }
 
 fieldset {
@@ -174,6 +245,7 @@ input[type="color"],
   font-size: 14px;
   line-height: 20px;
   color: $gray;
+  @include border-radius(3px);
 }
 
 select.time {
@@ -203,12 +275,21 @@ textarea {
   height: auto;
 }
 
-.table-basic {
-  margin-bottom: 0;
-  
+// Table
+.table {
+  border-bottom: 1px solid $borderColor;
+}
+
+.table, .table-basic {
   td, th {
-    border-top: none;
-    padding: 2px 5px;
+    padding-left: 0;
+    &:last-child { padding-right: 0; } 
+  }
+}
+
+.table-striped {
+  td:first-child {
+    padding-left: 8px;
   }
 }
 
@@ -227,19 +308,20 @@ select[class*="span"] {
   line-height: 30px;
 }
 
-.dl-horizontal {
-  dt { width: 190px; }
-  dd { margin-left: 200px; }
-}
-
-
 .pull-right > .btn-group > .dropdown-menu {
   right: 0;
   left: auto;
 }
 
 .dropdown-menu .dropdown-menu {
-  min-width: 0;
+  //min-width: 0;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
 }
 
 
@@ -260,6 +342,7 @@ body > header {
   padding: 10px 20px;
 
   .brand {
+    font-family: $headingFontFamily;
     font-weight: bold;
     float: left;
     font-size: 2.462em; // 32px
@@ -287,6 +370,7 @@ body > nav {
   }
   ul.nav {
     @include horizontal-list(15px);
+    font-family: $headingFontFamily;
     li {
       @include responsive(phone, $mediaTablet) {
         float: none;
@@ -330,9 +414,8 @@ body > nav {
     @include single-box-shadow($grayLight, 0, 2px, 8px);
     .sheet {
       margin:0 -10px -30px 10px;
-      .level { color: $gray; }
     }
-    .level { color: $grayLight; }
+    .level { color: $gray; }
   }
   &.current {
     background: url("shadow_left.png") transparent no-repeat bottom left;
@@ -356,16 +439,11 @@ body > nav {
       margin-top: $vSpace;
     }
     margin-bottom: $vSpace;
-   
-    h2 {
-      border-bottom: 1px solid $grayLighter;
-      padding-bottom: 10px;
-      margin-bottom: $vSpace*0.5;
-    }
   }
 
   section { 
-    @include clearfix; 
+    @include clearfix;
+    clear: both;
     margin-top: $vSpace;
     &:first-child { margin-top:0; } 
   }

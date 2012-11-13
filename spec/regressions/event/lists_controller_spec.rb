@@ -110,6 +110,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it "renders course info within table" do
+        pending
         get :courses, year: 2010
         main.find('h2').text.should eq 'Scharleiterkurs'
         main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
@@ -121,6 +122,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it "does not show details for users who cannot manage course" do
+        pending
         person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         sign_in(person)
         get :courses, year: 2010
@@ -132,6 +134,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it "groups courses by course type" do
+        pending
         get :courses, year: 2011
         main.all('h2').size.should eq 2
         main.find('tr:eq(1) h2').text.should eq 'Gruppenleiterkurs'

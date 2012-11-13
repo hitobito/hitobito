@@ -11,6 +11,8 @@ class Event::ParticipationsController < CrudController
   # load before authorization
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_filter :parent, :set_group
+
+  before_filter :check_preconditions, only: [:create, :new]
   
   before_render_form :load_priorities
   before_render_show :load_answers
@@ -43,6 +45,14 @@ class Event::ParticipationsController < CrudController
   end
   
   private
+
+  def check_preconditions
+    event = entry.event
+    if entry.person == current_user && event.kind_of?(Event::Course)
+      checker = Event::PreconditionChecker.new(event, current_user)
+      redirect_to group_event_path(event.group, event), alert: checker.errors_text unless checker.valid?
+    end
+  end
 
   def set_participant_role
     if entry.event != Event::Course

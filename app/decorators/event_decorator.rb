@@ -40,6 +40,10 @@ class EventDecorator < ApplicationDecorator
       end
     end.compact
   end
+
+  def preconditions 
+    model.kind_of?(Event::Course) &&  kind.preconditions.map(&:label)
+  end
   
   def state_translated(state = model.state)
     h.t("activerecord.attributes.event/course.states.#{state}") if state

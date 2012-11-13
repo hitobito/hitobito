@@ -27,8 +27,11 @@ describe Event::ParticipationsController do
     p
   end
   
-  
-  let(:user) { people(:top_leader) }
+  let(:user) do 
+    user = people(:top_leader)
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
+    user
+  end
   
   before { sign_in(user); other_course }
   
@@ -81,6 +84,7 @@ describe Event::ParticipationsController do
         assigns(:priority_2s).should be_nil
       end
     end
+
   end
 
   context "GET index" do
@@ -120,6 +124,8 @@ describe Event::ParticipationsController do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
       Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
+
+      person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
     end
     
     it "creates confirmation job" do
@@ -154,5 +160,22 @@ describe Event::ParticipationsController do
       should redirect_to root_url
     end
   end
-    
+
+  context "missing preconditions" do
+    before { user.qualifications.first.destroy } 
+
+    {new: :get, create: :post}.each do |action, method| 
+      before { send(method, action,  event_id: course.id) } 
+
+      context "#{method.upcase} #{action}"  do
+        it "redirects to event#show" do
+          should redirect_to group_event_path(course.group, course)
+        end
+        it "sets flash message" do
+          flash[:alert].last.should =~ /Folgende Qualifikationen fehlen: Group Lead/
+        end
+      end
+    end
+
+  end
 end

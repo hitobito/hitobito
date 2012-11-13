@@ -64,7 +64,7 @@ class PeopleController < CrudController
   def send_password_instructions
     entry.send_reset_password_instructions
     flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
-    render partial: 'shared/update_flash', layout: false
+    render 'shared/update_flash'
   end
 
   private

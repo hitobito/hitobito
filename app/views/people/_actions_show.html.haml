@@ -1,2 +1,3 @@
 = button_action_edit if can?(:edit, entry)
 = send_login_button 
+= action_button 'Passwort ändern', edit_person_registration_path if @person == current_user

@@ -28,7 +28,8 @@ class MemberCountsController < ApplicationController
     authorize!(:create_member_counts, flock)
     
     if year = MemberCounter.create_counts_for(flock)
-      flash[:notice] = "Die Mitgliederzahlen für #{year} wurden erfolgreich erzeugt."
+      total = MemberCount.total_for_flock(year, flock).try(:total) || 0
+      flash[:notice] = "Die Zahlen von Total #{total} Mitgliedern wurden für #{year} erfolgreich erzeugt."
     end
     
     year ||= Date.today.year

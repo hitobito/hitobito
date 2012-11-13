@@ -11,11 +11,4 @@
       %td.right= count_value(c.child_m)
       %td.right= count_value(c.total)
       %td= render 'detail_actions', member_count: c
-  %tr
-    %th.right Total
-    %th.right= @total.leader_f
-    %th.right= @total.leader_m
-    %th.right= @total.child_f
-    %th.right= @total.child_m
-    %th.right= @total.total
-    %th
+  = render 'total_row'

@@ -9,11 +9,4 @@
       %td.right= count_field(g, :child_m)
       %td.right= count_field(g, :total)
       %td= render 'total_actions', group: g
-  %tr
-    %th Total
-    %th.right= @total.leader_f
-    %th.right= @total.leader_m
-    %th.right= @total.child_f
-    %th.right= @total.child_m
-    %th.right= @total.total
-    %th
+  = render 'total_row'

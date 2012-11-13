@@ -23,12 +23,14 @@ describe Event::ParticipationsController, type: :controller do
   end
 
   let(:scope_params) { {event_id: course.id} }
-  
-  before { sign_in(people(:top_leader)) } 
-  
+
+  before do 
+    user = people(:top_leader)
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl)) 
+    sign_in(user) 
+  end
 
   include_examples 'crud controller', skip: [%w(destroy)]
-
 
   describe_action :put, :update, :id => true do
     let(:params) { {model_identifier => test_attrs} }

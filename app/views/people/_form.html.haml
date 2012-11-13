@@ -11,3 +11,5 @@
   = render 'contactable/fields', f: f
   
   = render_extensions :fields, locals: { f: f }
+
+  = hidden_field_tag('return_url', params[:return_url])

@@ -12,7 +12,7 @@ describe Event::ParticipationMailer do
   it "renders the headers" do
     mail.subject.should eq "Bestätigung der Anmeldung"
     mail.to.should eq(["top_leader@example.com"])
-    mail.from.should eq(["jubla@puzzle.ch"])
+    mail.from.should eq(["jubla+noreply@puzzle.ch"])
   end 
 
   describe "event data" do
@@ -48,9 +48,7 @@ describe Event::ParticipationMailer do
   end
   
   describe "#approval" do
-    let(:approvers) { [0,1].collect {|i| Fabricate(:person, email: "approver#{i}@example.com") }}
-    
-    let(:mail) { Event::ParticipationMailer.approval(approvers, participation) }
+    let(:mail) { Event::ParticipationMailer.approval(participation, ["approver0@example.com", "approver1@example.com"]) }
     
     it "should send to approvers" do
       mail.to.should == ["approver0@example.com", "approver1@example.com"]

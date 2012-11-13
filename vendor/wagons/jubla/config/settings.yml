@@ -1,0 +1,6 @@
+# Settings relevant for the jubla wagon
+# Overrides settings from the main application
+
+census:
+  default_finish_month: 10
+  default_finish_day: 31

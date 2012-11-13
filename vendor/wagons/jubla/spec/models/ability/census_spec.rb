@@ -24,15 +24,15 @@ describe Ability do
     end
     
     it "may view census for flock" do
-      should be_able_to(:census, flock)
+      should be_able_to(:evaluate_census, flock)
     end
     
     it "may view census for state" do
-      should be_able_to(:census, flock.state)
+      should be_able_to(:evaluate_census, flock.state)
     end
     
     it "may view census for federation" do
-      should be_able_to(:census, group)
+      should be_able_to(:evaluate_census, group)
     end
   end
   
@@ -52,15 +52,15 @@ describe Ability do
     end
     
     it "may view census for flock" do
-      should be_able_to(:census, flock)
+      should be_able_to(:evaluate_census, flock)
     end
     
     it "may view census for state" do
-      should be_able_to(:census, flock.state)
+      should be_able_to(:evaluate_census, flock.state)
     end
     
     it "may not view census for federation" do
-      should_not be_able_to(:census, groups(:ch))
+      should_not be_able_to(:evaluate_census, groups(:ch))
     end
   
     context "for other state" do
@@ -76,7 +76,7 @@ describe Ability do
       end
       
       it "may not view census for flock" do
-        should_not be_able_to(:census, flock)
+        should_not be_able_to(:evaluate_census, flock)
       end
     end
   end
@@ -98,15 +98,15 @@ describe Ability do
     end
     
     it "may view census for flock" do
-      should be_able_to(:census, flock)
+      should be_able_to(:evaluate_census, flock)
     end
     
     it "may not view census for state" do
-      should_not be_able_to(:census, flock.state)
+      should_not be_able_to(:evaluate_census, flock.state)
     end
     
     it "may not view census for federation" do
-      should_not be_able_to(:census, groups(:ch))
+      should_not be_able_to(:evaluate_census, groups(:ch))
     end
   end
 end

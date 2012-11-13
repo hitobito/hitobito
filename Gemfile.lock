@@ -443,6 +443,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   compass (>= 0.13.alpha.0)
   compass-rails (~> 1.0.2)
+  daemons
   database_cleaner
   debugger
   decorates_before_rendering (= 0.0.3)

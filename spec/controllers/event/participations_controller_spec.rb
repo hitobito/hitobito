@@ -27,8 +27,11 @@ describe Event::ParticipationsController do
     p
   end
   
-  
-  let(:user) { people(:top_leader) }
+  let(:user) do 
+    user = people(:top_leader)
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
+    user
+  end
   
   before { sign_in(user); other_course }
   
@@ -81,6 +84,7 @@ describe Event::ParticipationsController do
         assigns(:priority_2s).should be_nil
       end
     end
+
   end
 
   context "GET index" do
@@ -120,59 +124,14 @@ describe Event::ParticipationsController do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
       Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
+
+      person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
     end
     
-    context "without approvers" do
-      context "without requiring approval" do
-        it "sends confirmation email" do
-          course.update_column(:requires_approval, false)
-          post :create, event_id: course.id
-          
-          participation = assigns(:participation)
-          should redirect_to event_participation_path(course, participation)
-          ActionMailer::Base.deliveries.should have(1).item
-          last_email.subject.should == 'Bestätigung der Anmeldung'
-        end
-      end
+    it "creates confirmation job" do
+      expect { post :create, event_id: course.id }.to change { Delayed::Job.count }.by(1)
+    end
       
-      context "with event requiring approval" do
-        it "does only send approval" do
-          course.update_column(:requires_approval, true)
-          post :create, event_id: course.id
-          
-          ActionMailer::Base.deliveries.should have(1).item
-          last_email.subject.should == 'Bestätigung der Anmeldung'
-        end
-      end
-    end
-    
-    context "with approvers" do
-      context "without requiring approval" do
-        it "does not send approval if not required" do
-          course.update_column(:requires_approval, false)
-          sign_in(person)
-          post :create, event_id: course.id
-          
-          ActionMailer::Base.deliveries.should have(1).items
-          last_email.subject.should == 'Bestätigung der Anmeldung'
-        end
-      end
-      
-      context "with event requiring approval" do
-        it "sends confirmation and approvals to approvers" do
-          course.update_column(:requires_approval, true)
-          sign_in(person)
-          post :create, event_id: course.id
-          ActionMailer::Base.deliveries.should have(2).items
-          
-          first_email = ActionMailer::Base.deliveries.first
-          last_email.to.to_set.should == [app1.email, app2.email].to_set
-          last_email.subject.should == 'Freigabe einer Kursanmeldung'
-          first_email.subject.should == 'Bestätigung der Anmeldung'
-        end
-      end
-    end
-    
     it "creates participant role for non course events" do
       post :create, event_id: Fabricate(:event).id
       participation = assigns(:participation)
@@ -201,5 +160,22 @@ describe Event::ParticipationsController do
       should redirect_to root_url
     end
   end
-    
+
+  context "missing preconditions" do
+    before { user.qualifications.first.destroy } 
+
+    {new: :get, create: :post}.each do |action, method| 
+      before { send(method, action,  event_id: course.id) } 
+
+      context "#{method.upcase} #{action}"  do
+        it "redirects to event#show" do
+          should redirect_to group_event_path(course.group, course)
+        end
+        it "sets flash message" do
+          flash[:alert].last.should =~ /Folgende Qualifikationen fehlen: Group Lead/
+        end
+      end
+    end
+
+  end
 end

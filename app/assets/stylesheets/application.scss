@@ -244,13 +244,14 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDark !important;
+  color: $gray;
   @include border-radius(3px);
 }
 
 select.time {
   width: 55px;
   height: 30px;
+  margin-top: 5px;
 }
 
 select[class*="span"][multiple] {

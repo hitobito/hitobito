@@ -13,7 +13,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, :f,
+           :render, :f, :icon,
            :to => :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -87,7 +87,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def date_field(attr, html_options = {})
     html_options[:class] ||= 'span2 date'
     html_options[:value] ||= f(@object.send(attr))
-    text_field(attr, html_options)
+    content_tag(:div, class: 'input-prepend') do
+      content_tag(:span, icon(:calendar), class: 'add-on') +
+      text_field(attr, html_options)
+    end
   end
 
   # Render a field to enter a time. You might want to customize this.

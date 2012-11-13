@@ -56,6 +56,6 @@ class CensusEvaluation::BaseController < ApplicationController
   end
   
   def authorize
-    authorize!(:census, group)
+    authorize!(:evaluate_census, group)
   end
 end

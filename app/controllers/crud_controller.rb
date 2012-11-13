@@ -55,7 +55,7 @@ class CrudController < ListController
   def create(options = {}, &block)
     assign_attributes
     created = with_callbacks(:create, :save) { entry.save }
-    respond_with(entry, options.reverse_merge(:success => created), &block)
+    respond_with(entry, options.reverse_merge(success: created, location: params[:return_url]), &block)
   end
 
   # Display a form to edit an exisiting entry of this model.
@@ -73,7 +73,7 @@ class CrudController < ListController
   def update(options = {}, &block)
     assign_attributes
     updated = with_callbacks(:update, :save) { entry.save }
-    respond_with(entry, options.reverse_merge(:success => updated), &block)
+    respond_with(entry, options.reverse_merge(success: updated, location: params[:return_url]), &block)
   end
 
   # Destroy an existing entry of this model.

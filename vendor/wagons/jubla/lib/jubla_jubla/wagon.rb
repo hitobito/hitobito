@@ -6,7 +6,9 @@ module JublaJubla
     app_requirement '>= 0'
 
     # Add a load path for this specific wagon
-    config.autoload_paths += %W( #{config.root}/app/domain )
+    config.autoload_paths += %W( #{config.root}/app/domain
+                                 #{config.root}/app/jobs
+                               )
 
     config.to_prepare do
       # extend application classes here
@@ -25,6 +27,11 @@ module JublaJubla
       
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'
+    end
+    
+    initializer "jubla.add_settings" do |app|
+      Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
+      Settings.reload!
     end
 
     initializer "jubla.add_inflections" do |app|

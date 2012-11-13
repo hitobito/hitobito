@@ -28,14 +28,19 @@ lockfile=/var/lock/subsys/$prog
 
 APP_RUBY="/opt/ruby-${RUBY_VERSION}/bin/ruby"
 APP_USER=APP_NAME
+PID_DIR="${APP_HOME}/tmp/pids"
+
+test -d ${PID_DIR} || (mkdir ${PID_DIR} && chown $APP_USER:$APP_USER ${PID_DIR})
+
+# source rails env
+. "${APP_HOME}"/../.bash_profile
+
+cd ${APP_HOME}
 
 start()
 {
   echo -n $"Starting $prog: "
   daemon --user ${APP_USER} "bash -e -c '
-    export PATH='${PATH}';
-    export RUBYLIB='${RUBYLIB:-}';
-    export RAILS_ENV=production;
     ${APP_RUBY} ${APP_HOME}/script/delayed_job -p APP_NAME -n ${CPUS:-2} -m start;'"
   RETVAL=$?
   [ $RETVAL -eq 0 ] && touch $lockfile
@@ -47,9 +52,6 @@ stop()
 {
   echo -n $"Stopping $prog: "
   bash -e -c "
-    export PATH='${PATH}';
-    export RUBYLIB='${RUBYLIB}';
-    export RAILS_ENV=production;
     ${APP_RUBY} ${APP_HOME}/script/delayed_job -p APP_NAME -n ${CPUS:-2} -m stop;"
   RETVAL=$?
   [ $RETVAL -eq 0 ] && (rm -f $lockfile; echo_success) || echo_failure
@@ -63,11 +65,14 @@ restart() {
 
 rh_status() {
   RETVAL=1
-  for pidfile in $(ls -1 "${APP_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+  echo -n "${name} running: "
+  for pidfile in $(ls -1 "${PID_DIR}"/delayed_job.*.pid 2>/dev/null)
   do
     status -p $pidfile APP_NAME-workers || return $?
     RETVAL=$?
   done
+  [ $RETVAL -eq 0 ] && echo_success || echo_failure
+  echo
   return $RETVAL
 }
 

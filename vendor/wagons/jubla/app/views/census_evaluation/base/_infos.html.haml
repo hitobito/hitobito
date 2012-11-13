@@ -1,0 +1,10 @@
+- if @current_census && @year == @current_census.year
+  %p
+    Die aktuellen Bestandesmeldungen für
+    = @current_census.year
+    können ab dem
+    = f(@current_census.start_at)
+    erfasst werden.
+    - if @current_census.finish_at?
+      Stichtag ist der
+      = f(@current_census.finish_at)

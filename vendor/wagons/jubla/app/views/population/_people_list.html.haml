@@ -1,0 +1,21 @@
+%table.table
+  - @groups.each do |group|
+    %tr
+      %td
+        %br/
+        %h2= group.to_s
+    - @groups_people[group.id].each do |person| 
+      %tr
+        %td
+          = person.to_s
+        %td
+          = person.roles.first.to_s
+        %td
+          = person.birthday
+        %td
+          = person.gender
+        %td
+          = person_edit_link(person)
+        %td
+          = person_data_complete?(person) ? '' : badge_invalid
+        %td

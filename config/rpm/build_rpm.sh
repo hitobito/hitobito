@@ -30,7 +30,17 @@ fi
 for plat in $BUILD_PLATFORMS; do
   eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
   if [ $? -gt 0 ]; then
-    echo "Failed building RPM for $plat - See above for issues."
+    echo "Failed building RPM for $plat - See above for issues. Below we provide you with the logs from mock"
+    for logfile in /var/lib/mock/$plat/result/*log; do
+      echo "#######################################"
+      echo "# ${logfile}"
+      echo "#######################################"
+      echo
+      cat $logfile
+      echo
+    done
+    echo "Deleting also build-tag: build_${BUILD_NUMBER}"
+    git tag -d build_$BUILD_NUMBER
     exit 1
   fi
 done

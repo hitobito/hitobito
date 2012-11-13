@@ -1,5 +1,8 @@
-= table(@people, :to_s, :roles, :birthday, :gender)
+- @sheets = GroupSheet.new(self, @group)
 
+= render 'groups/tabs'
+
+= render 'people_list'
 
 - if @approvable && can?(:create_member_counts, @group)
   = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)

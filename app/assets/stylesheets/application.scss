@@ -140,7 +140,6 @@ dl {
 // Pagination
 .pagination {
   @include clearfix;
-  float: left;
   margin-top: 0;
 }
 .pagination ul > .active > a, .pagination ul > .active > span {

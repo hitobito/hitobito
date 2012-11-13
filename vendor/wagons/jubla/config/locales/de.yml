@@ -91,7 +91,7 @@ de:
       census:
         year: Jahr
         start_at: Ab
-        finish_at: Stichtag
+        finish_at: Stichdatum
 
       event:
         advisor_id: LKB

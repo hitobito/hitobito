@@ -1,5 +1,6 @@
 class Event::ListsController < ApplicationController
-  include Event::YearBasedPaging
+  include YearBasedPaging
+  
   attr_reader :group_id
   helper_method :group_id
 

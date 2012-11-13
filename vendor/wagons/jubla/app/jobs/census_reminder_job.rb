@@ -10,7 +10,7 @@ class CensusReminderJob < BaseJob
   
   def perform
     r = recipients
-    CensusMailer.reminder(sender, census, r) if r.present?
+    CensusMailer.reminder(sender, census, r).deliver if r.present?
   end
   
   def recipients

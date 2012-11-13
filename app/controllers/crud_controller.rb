@@ -55,7 +55,7 @@ class CrudController < ListController
   def create(options = {}, &block)
     assign_attributes
     created = with_callbacks(:create, :save) { entry.save }
-    respond_with(entry, options.reverse_merge(success: updated, location: params[:return_url]), &block)
+    respond_with(entry, options.reverse_merge(success: created, location: params[:return_url]), &block)
   end
 
   # Display a form to edit an exisiting entry of this model.

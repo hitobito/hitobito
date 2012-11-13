@@ -22,7 +22,7 @@ module CrudHelper
     
     buttons_bottom = options.delete(:buttons_bottom)
     submit_label = options.delete(:submit_label)
-    cancel_url = get_cancel_url(object, options)
+    cancel_url = params[:return_url] || get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
       content = save_form_buttons(form, submit_label, cancel_url)

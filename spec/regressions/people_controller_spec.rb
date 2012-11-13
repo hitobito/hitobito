@@ -174,4 +174,17 @@ describe PeopleController, type: :controller do
 
   end
 
+  describe "redirect_url" do
+    it "should adjust url if param redirect_url is given" do
+      get :new, group_id: top_group.id, 
+                role: { type: 'Group::TopGroup::Member', group_id: top_group.id },
+                return_url: 'foo'
+
+      dom.find('a', text: 'Abbrechen')[:href].should eq 'foo'
+      dom.find('input#return_url').value.should eq 'foo'
+
+    end
+
+  end
+
 end

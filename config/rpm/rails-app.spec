@@ -13,6 +13,7 @@
 %define use_delayed_job 1
 %define use_memcached   0
 %define use_sphinx      0
+%define use_imagemagick 0
 
 %define bundle_without_groups 'development test metrics guard console'
 %define exclude_dirs 'spec test vendor/cache log tmp db/production.sqlite3 script/phantomjs'
@@ -60,6 +61,10 @@ BuildRequires:	mysql-devel
 %endif
 %if %{use_pgsql}
 BuildRequires:	postgresql-devel
+%endif
+%if %{use_imagemagick}
+BuildRequires: ImageMagick-devel
+Requires: ImageMagick
 %endif
 Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
 Requires:	logrotate

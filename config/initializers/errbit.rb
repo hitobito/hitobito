@@ -1,4 +1,4 @@
-HoptoadNotifier.configure do |config|
+Airbrake.configure do |config|
   config.api_key     = '177f24a20b9b72f38e51e40bc9edbf7a'
   config.host        = 'errbit.puzzle.ch'
   config.port        = 443

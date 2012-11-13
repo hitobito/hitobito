@@ -9,6 +9,8 @@ class BaseJob
   end
   
   def error(job, exception)
+    Rails.logger.error(exception.message)
+    Rails.logger.error(exception.backtrace.join("\n"))
     Airbrake.notify(exception)
   end
 end

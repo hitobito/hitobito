@@ -73,7 +73,7 @@ module StandardHelper
 
   # Renders the formatted content of the given attribute with a label.
   def labeled_attr(obj, attr)
-    labeled(captionize(attr, obj.class), format_attr(obj, attr))
+    labeled(captionize(attr, object_class(obj)), format_attr(obj, attr))
   end
 
   # Renders a table for the given entries. One column is rendered for each attribute passed.
@@ -207,8 +207,7 @@ module StandardHelper
   end
   
   def model_class_label(entry)
-    klass = entry.respond_to?(:klass) ? entry.klass : entry.class
-    klass.model_name.human
+    object_class(entry).model_name.human
   end
 
   private
@@ -286,7 +285,7 @@ module StandardHelper
   # is returned. Returns nil if no association (or not of the given macro) was
   # found.
   def association(obj, attr, *macros)
-    klass = obj.respond_to?(:klass) ? obj.klass : obj.class
+    klass = object_class(obj)
     if klass.respond_to?(:reflect_on_association)
       name = assoc_and_id_attr(attr).first.to_sym
       assoc = klass.reflect_on_association(name)
@@ -304,6 +303,10 @@ module StandardHelper
     else
       [attr, "#{attr}_id"]
     end
+  end
+  
+  def object_class(obj)
+    obj.respond_to?(:klass) ? obj.klass : obj.class
   end
 
 end

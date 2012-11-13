@@ -118,7 +118,6 @@ de:
         questions: Fragen
         kind_id: Art
 
-        # course
       event/course:
         kind_id: Kursart
         state: Status

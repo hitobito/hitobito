@@ -176,13 +176,10 @@ input[type="color"],
   color: $gray;
 }
 
-.controls .input-prepend {
-  margin-bottom: 4px !important;
-}
-
 select.time {
   width: 55px;
   height: 30px;
+  margin-top: 5px;
 }
 
 select[class*="span"][multiple] {

@@ -11,9 +11,9 @@
         %td
           = person.roles.first.to_s
         %td
-          = person.birthday
+          = l(person.birthday)
         %td
-          = person.gender
+          = gender_label(person.gender)
         %td
           = person_edit_link(person)
         %td

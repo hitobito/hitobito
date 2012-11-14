@@ -1,2 +1,3 @@
-- tab "Bestand", population_group_path(@group) if @group.kind_of?(Group::Flock) && can?(:approve_population, @group)
+- if @group.kind_of?(Group::Flock) && can?(:approve_population, @group)
+  - tab tab_population_label, population_group_path(@group)
 - tab "Statistik", census_evaluation_path(@group) if @group.census? && can?(:evaluate_census, @group)

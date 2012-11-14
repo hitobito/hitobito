@@ -4,5 +4,5 @@
 
 = render 'people_list'
 
-- if @approvable && can?(:create_member_counts, @group)
+- if @group.population_approveable? && can?(:create_member_counts, @group)
   = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)

@@ -29,7 +29,7 @@ describe Event::ParticipationsController do
   
   let(:user) do 
     user = people(:top_leader)
-    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl)) 
     user
   end
   
@@ -161,7 +161,7 @@ describe Event::ParticipationsController do
     end
   end
 
-  context "missing preconditions" do
+  context "preconditions" do
     before { user.qualifications.first.destroy } 
 
     {new: :get, create: :post}.each do |action, method| 

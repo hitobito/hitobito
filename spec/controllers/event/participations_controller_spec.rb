@@ -27,13 +27,14 @@ describe Event::ParticipationsController do
     p
   end
   
-  let(:user) do 
-    user = people(:top_leader)
-    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl)) 
-    user
-  end
+  let(:user) { people(:top_leader) } 
   
-  before { sign_in(user); other_course }
+  before do
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl),
+                                    start_at: course.dates.first.start_at)  
+    sign_in(user) 
+    other_course
+  end
   
 
   context "GET show" do

@@ -26,7 +26,8 @@ describe Event::ParticipationsController, type: :controller do
 
   before do 
     user = people(:top_leader)
-    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl)) 
+    user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl),
+                                    start_at: course.dates.first.start_at) 
     sign_in(user) 
   end
 

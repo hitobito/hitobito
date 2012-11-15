@@ -42,7 +42,12 @@ Jubla::Application.routes.draw do
         resources :qualifications, only: [:index, :update, :destroy]
       end
     end
+
+    resource :csv_imports, only: [:new, :create] do
+      post :define_mapping, on: :member
+    end
   end
+
  
   resources :event_kinds, module: 'event', controller: 'kinds'
 

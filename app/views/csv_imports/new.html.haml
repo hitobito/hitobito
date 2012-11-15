@@ -1,0 +1,8 @@
+- title 'Personen über CSV importieren'
+- parent_sheet(GroupSheet.new(self, @group, :group_people_path))
+
+= standard_form(:csv_import, url: define_mapping_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
+  = f.labeled(:file, 'Csv Datei') do 
+    = f.file_field(:file, required: false)
+  = save_form_buttons(f, 'Hochladen', group_people_path(parent))
+

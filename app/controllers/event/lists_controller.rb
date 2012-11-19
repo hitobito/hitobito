@@ -13,7 +13,7 @@ class Event::ListsController < ApplicationController
     group_ids = current_user.groups_hierarchy_ids
       
     @events = Event.upcoming.only_group_id(group_ids)
-                  .includes(:dates, :group)
+                  .includes(:dates, :groups)
                   .where('events.type != "Event::Course" or events.type is null')
                   .order('event_dates.finish_at ASC')
   end
@@ -21,8 +21,8 @@ class Event::ListsController < ApplicationController
   def courses
     authorize!(:index, Event::Course)
     set_group_vars
-    scoped = Event::Course.order('event_kinds.id').in_year(year).list
-    @courses = limit_scope_for_user(scoped)
+    scope = Event::Course.order('event_kinds.id').in_year(year).list
+    @courses = limit_scope_for_user(scope)
   end
 
   private
@@ -37,11 +37,11 @@ class Event::ListsController < ApplicationController
 
   end
 
-  def limit_scope_for_user(scoped)
+  def limit_scope_for_user(scope)
     if can?(:manage_courses, current_user)
-      group_id > 0 ? scoped.only_group_id(group_id) : scoped
+      group_id > 0 ? scope.only_group_id(group_id) : scope
     else
-      scoped.in_hierarchy(current_user)
+      scope.in_hierarchy(current_user)
     end
   end
 

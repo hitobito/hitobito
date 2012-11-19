@@ -1,5 +1,5 @@
 - if entry.application_possible? && entry.can_create_participation?
-  = action_button 'Anmelden', new_event_participation_path(entry) 
+  = action_button 'Anmelden', new_group_event_participation_path(@group, entry) 
   
 = button_action_edit if can?(:update, entry)
 = button_action_destroy if can?(:destroy, entry)

@@ -14,7 +14,7 @@ module Event::ParticipationsHelper
   def role_filter_links
     content = Event::ParticipationsController::FILTER.map do |key, value| 
       filter = key == :all ? {} : { filter: key }
-      link = event_participations_path(parent, filter)
+      link = group_event_participations_path(@group, @event, filter)
       link_to(value, link)
     end
   end

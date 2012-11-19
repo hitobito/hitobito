@@ -6,6 +6,6 @@
   - entries.each do |event| 
     %tr
       %td
-        %strong= event.simple_link
+        %strong= link_to event.name, group_event_path(@group, event)
       %td= event.dates_full
       %td= event.booking_info

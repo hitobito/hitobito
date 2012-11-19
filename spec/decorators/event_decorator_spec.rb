@@ -8,7 +8,7 @@ describe EventDecorator, :draper_with_helpers do
   subject { EventDecorator.new(event) }
 
   its(:labeled_link) { should =~ /SLK  Top/ }
-  its(:labeled_link) { should =~ %r{<a href="/groups/#{event.group.id}/events/#{event.id}">} }
+  its(:labeled_link) { should =~ %r{<a href="/groups/#{event.group_ids.first}/events/#{event.id}">} }
 
   describe "#dates" do
 

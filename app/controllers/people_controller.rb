@@ -95,17 +95,17 @@ class PeopleController < CrudController
   
   def load_asides
     applications = entry.pending_applications.
-                         includes(event: [:group]).
+                         includes(event: [:groups]).
                          joins(event: :dates).
                          order('event_dates.start_at').uniq
     Event::PreloadAllDates.for(applications.collect(&:event))
     
     @pending_applications = Event::ApplicationDecorator.decorate(applications)
     @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
-                                                    includes(:group).
+                                                    includes(:groups).
                                                     preload_all_dates.
                                                     order_by_date)
-    @qualifications = entry.qualifications.includes(:person,:qualification_kind).order_by_date
+    @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
   
 end

@@ -71,7 +71,7 @@ class Group < ActiveRecord::Base
   
   has_many :people_filters, dependent: :destroy
   
-  has_many :events, dependent: :destroy
+  has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
   
   ### VALIDATIONS
   
@@ -158,6 +158,12 @@ class Group < ActiveRecord::Base
     name
   end
   
+  def new_event
+    event = events.new
+    event.groups << self
+    event
+  end
+  
   private
   
   def assert_type_is_allowed_for_parent
@@ -176,6 +182,12 @@ class Group < ActiveRecord::Base
       child = group_type.new(name: group_type.model_name.human)
       child.parent = self
       child.save!
+    end
+  end
+  
+  def destroy_orphaned_event(event)
+    if event.group_ids.blank? || event.groups_ids == [id]
+      event.destroy
     end
   end
 

@@ -71,7 +71,7 @@ describe PeopleController, type: :controller do
     let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { section.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }
-    let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))  } 
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))  } 
 
     context "pending applications" do
       let(:section) { dom.all('aside section')[1] }
@@ -86,7 +86,7 @@ describe PeopleController, type: :controller do
         appl = create_application(date)
         get :show, params 
         header.should eq 'Anmeldungen'
-        label_link[:href].should eq "/events/#{course.id}/participations/#{appl.participation.id}"
+        label_link[:href].should eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
         label_link.text.should =~ /Eventus/
         label.text.should =~ /Top/
         dates.should eq '02.01.2010 - 07.01.2010'
@@ -113,7 +113,7 @@ describe PeopleController, type: :controller do
         create_participation(date, true)
         get :show, params 
         header.should eq 'Events'
-        label_link[:href].should eq group_event_path(course.group, course)
+        label_link[:href].should eq group_event_path(course.groups.first, course)
         label_link.text.should eq "Eventus"
         label.text.should =~ /Top/
         dates.should eq pretty_date

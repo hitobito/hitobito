@@ -8,6 +8,8 @@ describe Event::QualificationsController do
     event
   end
   
+  let(:group) { event.groups.first }
+  
   let(:participant_1) do
     participation = Fabricate(:event_participation, event: event)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
@@ -32,7 +34,7 @@ describe Event::QualificationsController do
       participant_1
       participant_2
     
-      get :index, event_id: event.id
+      get :index, group_id: group.id, event_id: event.id
     end
     
     context "entries" do
@@ -49,7 +51,7 @@ describe Event::QualificationsController do
       before do
         participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
                                                     start_at: event.qualification_date)
-        put :update, event_id: event.id, id: participant_1.id, format: :js
+        put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
       
       it { should have(1).item }
@@ -57,7 +59,7 @@ describe Event::QualificationsController do
     end
      
      context "without existing qualifications" do
-      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+      before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
       
       it { should have(1).item }
       it { should render_template('qualification') }
@@ -71,7 +73,7 @@ describe Event::QualificationsController do
    
     context "without existing qualifications" do
       before do
-        delete :destroy, event_id: event.id, id: participant_1.id, format: :js
+        delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
       
       it { should have(0).items }
@@ -82,7 +84,7 @@ describe Event::QualificationsController do
       before do
         participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
                                                     start_at: event.qualification_date)
-        delete :destroy, event_id: event.id, id: participant_1.id, format: :js
+        delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
       
       it { should have(0).items }

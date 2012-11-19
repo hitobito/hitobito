@@ -7,6 +7,7 @@ de:
       messages: 
         type_not_allowed: kann hier nicht erstellt werden.
         must_be_after_opening: muss nach dem Anmeldebeginn sein.
+        must_have_same_type: müssen von denselbem Typ sein.
         
     models:
       group:
@@ -101,7 +102,7 @@ de:
         social_accounts: Social Media
       
       event:
-        group_id: Gruppe
+        group_ids: Gruppen
         name: Name
         number: Nummer
         motto: Motto

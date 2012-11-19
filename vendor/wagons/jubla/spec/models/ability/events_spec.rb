@@ -4,7 +4,7 @@ describe Ability::Events do
   
   let(:user)    { role.person }
   let(:group)   { role.group }
-  let(:event)   { Fabricate(:event, group: group) }
+  let(:event)   { Fabricate(:event, groups: [group]) }
   
   let(:participant) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:bern)).person }
   let(:participation) { Fabricate(:event_participation, person: participant, event: event, application: Fabricate(:event_application)) }
@@ -17,11 +17,11 @@ describe Ability::Events do
     
     context Event do
       it "may create event in his group" do
-        should be_able_to(:create, group.events.new)
+        should be_able_to(:create, group.new_event)
       end
       
       it "may create event in his layer" do
-        should be_able_to(:create, groups(:be).events.new)
+        should be_able_to(:create, groups(:be).new_event)
       end
       
       it "may update event in his layer" do
@@ -33,22 +33,22 @@ describe Ability::Events do
       end
       
       it "may update event in lower layer" do
-        other = Fabricate(:event, group: groups(:bern))
+        other = Fabricate(:event, groups: [groups(:bern)])
         should be_able_to(:update, other)
       end
       
       it "may not update event in other layer" do
-        other = Fabricate(:event, group: groups(:no))
+        other = Fabricate(:event, groups: [groups(:no)])
         should_not be_able_to(:update, other)
       end
       
       it "may index people for event in lower layer" do
-        other = Fabricate(:event, group: groups(:bern))
+        other = Fabricate(:event, groups: [groups(:bern)])
         should be_able_to(:index_participations, other)
       end
       
       it "may not index people for event in other layer" do
-        other = Fabricate(:event, group: groups(:no))
+        other = Fabricate(:event, groups: [groups(:no)])
         should_not be_able_to(:index_participations, other)
       end
     end
@@ -74,12 +74,12 @@ describe Ability::Events do
       end
       
       it "may show participation in event from lower layer" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:bern)))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bern)]))
         should be_able_to(:show, other)
       end
       
       it "may not show participation in event from other layer" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:no)))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:no)]))
         should_not be_able_to(:show, other)
       end
 
@@ -96,7 +96,7 @@ describe Ability::Events do
     
     context Event do
       it "may create event in his group" do
-        should be_able_to(:create, group.events.new)
+        should be_able_to(:create, group.new_event)
       end
       
       it "may update event in his group" do
@@ -112,12 +112,12 @@ describe Ability::Events do
       end
       
       it "may not update event in other group" do
-        other = Fabricate(:event, group: groups(:be_agency))
+        other = Fabricate(:event, groups: [groups(:be_agency)])
         should_not be_able_to(:update, other)
       end
       
       it "may not index people for event in other group" do
-        other = Fabricate(:event, group: groups(:be_agency))
+        other = Fabricate(:event, groups: [groups(:be_agency)])
         should_not be_able_to(:index_participations, other)
       end
     end
@@ -142,7 +142,7 @@ describe Ability::Events do
       end
       
       it "may not show participation in event from other group" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: groups(:be_agency)))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:be_agency)]))
         should_not be_able_to(:show, other)
       end
     end
@@ -158,7 +158,7 @@ describe Ability::Events do
     
     context Event do
       it "may not create events" do
-        should_not be_able_to(:create, group.events.new)
+        should_not be_able_to(:create, group.new_event)
       end
       
       it "may update his event" do
@@ -174,12 +174,12 @@ describe Ability::Events do
       end
       
       it "may not update other event" do
-        other = Fabricate(:event, group: group)
+        other = Fabricate(:event, groups: [group])
         should_not be_able_to(:update, other)
       end
       
       it "may not index people for other event" do
-        other = Fabricate(:event, group: group)
+        other = Fabricate(:event, groups: [group])
         should_not be_able_to(:index_participations, other)
       end
       
@@ -206,12 +206,12 @@ describe Ability::Events do
       end
       
       it "may not show participation in other event" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [group]))
         should_not be_able_to(:show, other)
       end
       
       it "may not update participation in other event" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [group]))
         should_not be_able_to(:update, other)
       end
     end
@@ -220,7 +220,7 @@ describe Ability::Events do
   
   context :event_contact_data do 
     let(:role)   { Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board)) }
-    let(:event)  { Fabricate(:event, group: groups(:be)) }
+    let(:event)  { Fabricate(:event, groups: [groups(:be)]) }
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }
     
     before { Fabricate(Event::Role::Cook.name.to_sym, participation: participation) } 
@@ -231,7 +231,7 @@ describe Ability::Events do
       end
       
       it "may not create events" do
-        should_not be_able_to(:create, groups(:be).events.new)
+        should_not be_able_to(:create, groups(:be).new_event)
       end
       
       it "may not update his event" do
@@ -247,17 +247,17 @@ describe Ability::Events do
       end
       
       it "may show other event" do
-        other = Fabricate(:event, group: groups(:be))
+        other = Fabricate(:event, groups: [groups(:be)])
         should be_able_to(:show, other)
       end
       
       it "may not update other event" do
-        other = Fabricate(:event, group: groups(:be))
+        other = Fabricate(:event, groups: [groups(:be)])
         should_not be_able_to(:update, other)
       end
       
       it "may not index people for other event" do
-        other = Fabricate(:event, group: groups(:be))
+        other = Fabricate(:event, groups: [groups(:be)])
         should_not be_able_to(:index_participations, other)
       end
       
@@ -281,7 +281,7 @@ describe Ability::Events do
       end
       
       it "may not show participation in other event" do
-        other = Fabricate(:event_participation, event: Fabricate(:event, group: group))
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [group]))
         Fabricate(Event::Role::Participant.name.to_sym, participation: other)
         should_not be_able_to(:show, other)
       end
@@ -324,7 +324,7 @@ describe Ability::Events do
   
   context :in_other_hierarchy do
     let(:role)  { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:innerroden)) }
-    let(:event) { Fabricate(:course, group: groups(:be)) }
+    let(:event) { Fabricate(:course, groups: [groups(:be)]) }
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
         
     context Event::Participation do 
@@ -358,7 +358,7 @@ describe Ability::Events do
   end
   
   context :flock_leader do
-    let(:event) { Fabricate(:course, group: groups(:be)) }
+    let(:event) { Fabricate(:course, groups: [groups(:be)]) }
     let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
     
     context "for his guides" do
@@ -393,8 +393,8 @@ describe Ability::Events do
   end
 
   context :application_market do
-    let(:ast_event) { Fabricate(:event, group: groups(:be)) }
-    let(:bulei_event) { Fabricate(:event, group: groups(:ch)) } 
+    let(:ast_event) { Fabricate(:event, groups: [groups(:be)]) }
+    let(:bulei_event) { Fabricate(:event, groups: [groups(:ch)]) } 
 
     context :bulei do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
@@ -418,8 +418,8 @@ describe Ability::Events do
   end
 
   context :qualify do
-    let(:ast_event) { Fabricate(:event, group: groups(:be)) }
-    let(:bulei_event) { Fabricate(:event, group: groups(:ch)) } 
+    let(:ast_event) { Fabricate(:event, groups: [groups(:be)]) }
+    let(:bulei_event) { Fabricate(:event, groups: [groups(:ch)]) } 
 
     before do
       [ast_event, bulei_event].each do |event|
@@ -450,16 +450,16 @@ describe Ability::Events do
   end
 
   context :closed_courses do
-    let(:course) { Fabricate(:course, group: groups(:be), state: 'closed') }
+    let(:course) { Fabricate(:course, groups: [groups(:be)], state: 'closed') }
 
-    let(:event) { Fabricate(:event, group: groups(:be), state: 'closed') }
+    let(:event) { Fabricate(:event, groups: [groups(:be)], state: 'closed') }
     let(:participation) { Fabricate(:event_participation, event: course) }
 
     context :bulei do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
 
       it "can use application_market, destroy, qualify or update" do
-        course = Fabricate(:course, group: groups(:ch), state: 'closed')
+        course = Fabricate(:course, groups: [groups(:ch)], state: 'closed')
         [:application_market, :destroy, :qualify, :update].each do |action|
           should be_able_to(action, course)
         end
@@ -471,7 +471,7 @@ describe Ability::Events do
       end
 
       it "can create, update, destroy participations" do
-        course = Fabricate(:course, group: groups(:ch), state: 'closed')
+        course = Fabricate(:course, groups: [groups(:ch)], state: 'closed')
         participation = Fabricate(:event_participation, event: course) 
         [:create,:update,:destroy].each { |action| should be_able_to(action, participation) } 
       end

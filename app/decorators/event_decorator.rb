@@ -9,13 +9,8 @@ class EventDecorator < ApplicationDecorator
   end
 
   def labeled_link(url = nil)
-    url ||= h.group_event_path(group_id, model)
+    url ||= h.group_event_path(group_ids.first, model)
     safe_join([h.link_to(name, url), h.muted(model.label_detail)], h.tag(:br))
-  end
-
-  def simple_link(url = nil)
-    url ||= h.group_event_path(group_id, model)
-    h.link_to(name, url)
   end
 
   def dates_info    
@@ -31,11 +26,15 @@ class EventDecorator < ApplicationDecorator
     info << " von #{maximum_participants}" if maximum_participants.to_i > 0
     info
   end
+  
+  def groups_info
+    groups.collect(&:name).join(', ')
+  end
 
-  def possible_role_links
+  def possible_role_links(group)
     klass.role_types.map do |type|
       unless type.restricted
-        link = h.new_event_role_path(self, event_role: { type: type.sti_name})
+        link = h.new_group_event_role_path(group, self, event_role: { type: type.sti_name})
         h.link_to(type.model_name.human, link)
       end
     end.compact

@@ -10,10 +10,9 @@ describe EventsController do
       let(:question)  {{ question: 'foo?', choices: '1,2,3,4' }}
       
       it "creates new event course with dates" do
-  
         sign_in(people(:top_leader))
 
-        post :create, event: {  group_id: group.id, 
+        post :create, event: {  group_ids: [group.id], 
                                 name: 'foo', 
                                 kind_id: event_kinds(:slk).id,
                                 dates_attributes: [ date ],

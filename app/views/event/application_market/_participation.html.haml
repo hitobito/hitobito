@@ -1,5 +1,5 @@
 %td
-  %strong= link_to(p.person.to_s, event_participation_path(p.event_id, p.id))
+  %strong= link_to(p.person.to_s, group_event_participation_path(@group, @event, p.id))
   %br/
   = p.person.town
 %td= p.priority(event) if event.priorization?

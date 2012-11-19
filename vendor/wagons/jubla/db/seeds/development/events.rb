@@ -1,4 +1,5 @@
-group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).order(:name).pluck(:id)
+course_group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_s)).order(:name).pluck(:id)
+camp_group_ids = Group.where(type: Group::Flock).pluck(:id)
 @@kinds = Event::Kind.order(:label)
 @@people_count = Person.count
 
@@ -24,7 +25,7 @@ def event_values(group_id)
               Faker::Address.zip,
               Faker::Address.city].join("\n")
   
-  values = { group_id: group_id,
+  values = { group_ids: [group_id],
     number: number,
     maximum_participants: rand(30) + 10,
     location: location,
@@ -37,19 +38,17 @@ end
 
 def seed_camp(values)
   date, number = values[:application_opening_at], values[:number]
-  event = Event::Camp.seed(:name, :group_id, values.merge(name: "Lager #{number}")).first
+  event = Event::Camp.seed(:name, values.merge(name: "Lager #{number}")).first
   seed_dates(event, date + 90.days)
   seed_questions(event) if true?
 end
 
 def seed_base_event(values)
   date, number = values[:application_opening_at], values[:number]
-  event = Event.seed(:name, :group_id, values.merge(name: "Anlass #{number}")).first
+  event = Event.seed(:name, values.merge(name: "Anlass #{number}")).first
   seed_dates(event, date + 90.days)
   seed_questions(event) if true?
 end
-
-
 
 def seed_course(values)
   date, number = values[:application_opening_at], values[:number]
@@ -62,7 +61,7 @@ def seed_course(values)
       priorization: true,
       requires_approval: true})
 
-  event = Event::Course.seed(:name, :group_id, values).first
+  event = Event::Course.seed(:name, values).first
   
   seed_dates(event, date + 90.days)
   seed_questions(event)
@@ -164,11 +163,17 @@ end
 
 srand(42)
 
-group_ids.each do |group_id|
+course_group_ids.each do |group_id|
   20.times do
     seed_event(group_id, :course)
-    seed_event(group_id, :camp)
     seed_event(group_id, :base)
+  end
+end
+
+camp_group_ids.each do |group_id|
+  10.times do
+    seed_event(group_id, :base)
+    seed_event(group_id, :camp)
   end
 end
 

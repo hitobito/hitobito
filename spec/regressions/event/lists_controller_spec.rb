@@ -19,7 +19,7 @@ describe Event::ListsController, type: :controller do
     let(:tomorrow) { 1.day.from_now }
     let(:table) { dom.find('table') }
     let(:description) { "Impedit rem occaecati quibusdam. Ad voluptatem dolorum hic. Non ad aut repudiandae. " }
-    let(:event) { Fabricate(:event, group: top_group, description: description) }
+    let(:event) { Fabricate(:event, groups: [top_group], description: description) }
     before  { event.dates.create(start_at: tomorrow) }
 
     it "renders title, grouper and selected tab" do
@@ -101,8 +101,8 @@ describe Event::ListsController, type: :controller do
     context "courses content" do
       let(:slk) { event_kinds(:slk)}
       let(:main) { dom.find("#main") }
-      let(:slk_ev) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant' ) }
-      let(:glk_ev) { Fabricate(:course, group: groups(:top_group), kind: event_kinds(:glk), maximum_participants: 20 ) }
+      let(:slk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant' ) }
+      let(:glk_ev) { Fabricate(:course, groups: [groups(:top_group)], kind: event_kinds(:glk), maximum_participants: 20 ) }
 
       before do 
         set_start_dates(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02") 
@@ -114,7 +114,7 @@ describe Event::ListsController, type: :controller do
         main.find('h2').text.should eq 'Scharleiterkurs'
         main.find('table tr:eq(1) td:eq(1) a').text.should eq 'Eventus'
         main.find('table tr:eq(1) td:eq(1)').text.strip.should eq "EventusSLK  Top"
-        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.groups.first, slk_ev)
         main.find('table tr:eq(1) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
         main.find('table tr:eq(1) td:eq(3)').text.should eq "0 von 20"
         main.find('table tr:eq(1) td:eq(4)').text.should eq 'Geplant'
@@ -126,7 +126,7 @@ describe Event::ListsController, type: :controller do
         get :courses, year: 2010
         main.find('table tr:eq(1) td:eq(1) a').text.should eq 'Eventus'
         main.find('table tr:eq(1) td:eq(1)').text.strip.should eq "EventusSLK  Top"
-        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.groups.first, slk_ev)
         main.find('table tr:eq(1) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
         expect { main.find('table tr:eq(2) td:eq(4)') }.to raise_error
       end
@@ -138,7 +138,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it "filters with group param" do
-        get :courses, year: 2011, group: glk_ev.group.id
+        get :courses, year: 2011, group: glk_ev.group_ids.first
         main.all('h2').size.should eq 1
       end
 

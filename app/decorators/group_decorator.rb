@@ -39,7 +39,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def event_link(et)
-    h.new_group_event_path(event: { group_id: self.id, type: et.sti_name})
+    h.new_group_event_path(event: {type: et.sti_name})
   end
 
   def new_event_button
@@ -58,7 +58,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def new_event_dropdown_button
-    if can?(:new, events.new)
+    if can?(:new, group.new_event)
       possible_events.count == 1 ? new_event_button : new_event_dropdown
     end
   end

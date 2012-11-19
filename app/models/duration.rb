@@ -35,6 +35,10 @@ class Duration < Struct.new(:start_at, :finish_at)
   def cover?(date)
     date.between?(start_at, finish_at)
   end
+  
+  def meaningful?
+    start_at.blank? || finish_at.blank? || start_at <= finish_at
+  end
 
   private
   

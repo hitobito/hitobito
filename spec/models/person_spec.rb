@@ -208,7 +208,7 @@ describe Person do
   context "finders on participations" do
     let(:group) { groups(:top_layer) }
     let(:person) { people(:top_leader) }
-    let(:course) { Fabricate(:course, group: groups(:top_layer)) }
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
 
     it ".pending_applications returns events that are not active" do
       participation = Fabricate(:event_participation, person: people(:top_leader))

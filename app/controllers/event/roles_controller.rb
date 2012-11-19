@@ -1,26 +1,26 @@
 class Event::RolesController < CrudController
   require_relative '../../decorators/event/role_decorator'
    
-  self.nesting = Event
+  self.nesting = Group, Event
   
-  decorates :event_role, :event
+  decorates :event_role, :event, :group
     
   # load group before authorization
-  prepend_before_filter :parent
+  prepend_before_filter :parent, :group
   
   hide_action :index, :show
   
   
   def create
-    super(location: event_participations_path(parent.id))
+    super(location: group_event_participations_path(group, event))
   end
   
   def update
-    super(location: event_participation_path(parent.id, entry.participation_id))
+    super(location: group_event_participation_path(group, event, entry.participation_id))
   end
   
   def destroy
-    super(location: event_participations_path(parent.id))
+    super(location: group_event_participations_path(group, event))
   end
   
   private 
@@ -45,6 +45,14 @@ class Event::RolesController < CrudController
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     "#{models_label(false)} #{Event::RoleDecorator.decorate(entry).flash_info}".html_safe
+  end
+  
+  def event
+    parent
+  end
+  
+  def group
+    @group ||= parents.first
   end
  
   def parent_scope

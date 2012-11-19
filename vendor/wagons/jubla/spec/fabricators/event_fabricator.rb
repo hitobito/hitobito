@@ -26,5 +26,5 @@
 #
 
 Fabricator(:camp, from: :event, class_name: :'Event::Camp') do
-  group { Group.all_types.detect {|t| t.event_types.include?(Event::Camp) }.first }
+  groups { [Group.all_types.detect {|t| t.event_types.include?(Event::Camp) }.first] }
 end

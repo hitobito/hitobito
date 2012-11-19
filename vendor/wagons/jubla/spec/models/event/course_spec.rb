@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Event::Course do
   
   subject do
-    event = Fabricate(:course, group: groups(:be) )
+    event = Fabricate(:course, groups: [groups(:be)] )
     Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event))
     Fabricate(Event::Role::AssistantLeader.name.to_sym, participation: Fabricate(:event_participation, event: event))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))

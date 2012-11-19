@@ -9,8 +9,9 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   delegate :dates_info, :dates_full, :kind, :group, to: :event
 
-  def labeled_link
-    event.labeled_link(h.event_participation_path(event, participation)) if can?(:show, participation)
+  def labeled_link(group = nil)
+    group ||= event.groups.first
+    event.labeled_link(h.group_event_participation_path(group, event, participation)) if can?(:show, participation)
   end
   
   def contact

@@ -2,7 +2,7 @@ class Event::ApplicationMarketController < ApplicationController
   
   before_filter :authorize
   
-  decorates :event, :participants, :participation
+  decorates :event, :participants, :participation, :group
   
   helper_method :event
   
@@ -78,7 +78,11 @@ class Event::ApplicationMarketController < ApplicationController
   end
   
   def event
-    @event ||= Event.find(params[:event_id])
+    @event ||= group.events.find(params[:event_id])
+  end
+  
+  def group
+    @group ||= Group.find(params[:group_id])
   end
   
   def participation

@@ -5,15 +5,18 @@ describe EventsController, type: :controller do
   
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { ev = events(:top_course); ev.dates.clear; ev }
+  let(:group) { test_entry.groups.first }
   let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
-  let(:test_entry_attrs) { { name: 'Chief Leader Course',  dates_attributes: [ date ] } }
+  let(:test_entry_attrs) { { name: 'Chief Leader Course', group_ids: [group.id], dates_attributes: [ date ] } }
 
+  let(:scope_params) { {group_id: group.id} }
+  
   before { sign_in(people(:top_leader)) } 
 
   include_examples 'crud controller', skip: [%w(index),%w(new)]
 
   def deep_attributes(*args)
-    { name: "Chief Leader Course", dates_attributes:[ date ]}  
+    { name: "Chief Leader Course", dates_attributes: [date], group_ids: [group.id]}  
   end
 
   describe "GET #index" do
@@ -27,7 +30,7 @@ describe EventsController, type: :controller do
       get :index, group_id: group.id
       dom.find('.dropdown-toggle').text.should include 'Event hinzufügen'
       [Event, Event::Course].each_with_index do |item, index|
-        path = new_group_event_path(event: {group_id: group.id, type: item.sti_name})
+        path = new_group_event_path(event: {type: item.sti_name})
         dom.all('.dropdown-menu a')[index].text.should eq item.model_name.human
         dom.all('.dropdown-menu a')[index][:href].should eq path
       end
@@ -53,8 +56,8 @@ describe EventsController, type: :controller do
     end
 
     def event_with_date(opts = {})
-      opts = {group: group, state: 'application_open', start_at: Date.today}.merge(opts)
-      event = Fabricate(:event, group: opts[:group], state: opts[:state])
+      opts = {groups: [group], state: 'application_open', start_at: Date.today}.merge(opts)
+      event = Fabricate(:event, groups: opts[:groups], state: opts[:state])
       set_start_dates(event, opts[:start_at])
       event
     end
@@ -67,8 +70,6 @@ describe EventsController, type: :controller do
     
     it "renders new form" do
       get :new, group_id: group.id, event: {type: 'Event'}
-      dom.find('input#event_group_id')[:type].should eq 'hidden'
-      dom.find('input#event_group_id')[:value].should eq group.id.to_s
       dom.find('input#event_type')[:type].should eq 'hidden'
       dom.all('#questions_fields .fields').count.should eq 3
       dom.all('#dates_fields').count.should eq 1

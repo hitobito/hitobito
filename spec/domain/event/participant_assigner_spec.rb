@@ -4,7 +4,7 @@ describe Event::ParticipantAssigner do
   
     
   let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))
+    course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course
@@ -30,7 +30,7 @@ describe Event::ParticipantAssigner do
     context "for other event" do
       let(:event) do
         quest = course.questions.first
-        other = Fabricate(:course, group: groups(:top_layer))
+        other = Fabricate(:course, groups: [groups(:top_layer)])
         other.questions << Fabricate(:event_question, event: other)
         other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices)
         other

@@ -2,7 +2,7 @@
   %tbody
     - entries.each do |p|
       %tr{id: dom_id(p)}
-        %td.center= p.qualification_link
+        %td.center= p.qualification_link(@group)
         %td
-          %strong= link_to(p.to_s, event_participation_path(@event, p))
+          %strong= link_to(p.to_s, group_event_participation_path(@group, @event, p))
         %td= p.town

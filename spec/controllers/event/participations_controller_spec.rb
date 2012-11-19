@@ -3,14 +3,16 @@ require 'spec_helper'
 
 describe Event::ParticipationsController do
   
+  let(:group) { groups(:top_layer) }
+  
   let(:other_course) do 
-    other = Fabricate(:course, group: course.group, kind: course.kind)
+    other = Fabricate(:course, groups: [group], kind: course.kind)
     other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
     other
   end
   
   let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer), priorization: true)
+    course = Fabricate(:course, groups: [group], priorization: true)
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course.dates << Fabricate(:event_date, event: course)
@@ -39,7 +41,7 @@ describe Event::ParticipationsController do
 
   context "GET show" do
     
-    before { get :show, event_id: course.id, id: participation.id }
+    before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
     
     it "has two answers" do
       assigns(:answers).should have(2).items
@@ -52,7 +54,7 @@ describe Event::ParticipationsController do
 
 
   context "GET new" do
-    before { get :new, event_id: event.id }
+    before { get :new, group_id: group.id, event_id: event.id }
     
     context "for course with priorization" do
       let(:event) { course }
@@ -70,7 +72,7 @@ describe Event::ParticipationsController do
     
     context "for event without application" do
       let(:event) do
-        event = Fabricate(:event, group: groups(:top_layer))
+        event = Fabricate(:event, groups: [group])
         event.questions << Fabricate(:event_question, event: event)
         event.questions << Fabricate(:event_question, event: event)
         event.dates << Fabricate(:event_date, event: event)
@@ -92,17 +94,17 @@ describe Event::ParticipationsController do
     before { @leader, @participant = *create(Event::Role::Leader, course.participant_type) }
     
     it "lists particpant and leader group by default" do
-      get :index, event_id: course.id
+      get :index, group_id: group.id, event_id: course.id
       assigns(:participations).should eq [@leader, @participant]
     end
 
     it "lists only leader_group" do
-      get :index, event_id: course.id, filter: :leaders
+      get :index, group_id: group.id, event_id: course.id, filter: :leaders
       assigns(:participations).should eq [@leader]
     end
 
     it "lists only participant_group" do
-      get :index, event_id: course.id, filter: :participants
+      get :index, group_id: group.id, event_id: course.id, filter: :participants
       assigns(:participations).should eq [@participant]
     end
 
@@ -130,11 +132,11 @@ describe Event::ParticipationsController do
     end
     
     it "creates confirmation job" do
-      expect { post :create, event_id: course.id }.to change { Delayed::Job.count }.by(1)
+      expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
     end
       
     it "creates participant role for non course events" do
-      post :create, event_id: Fabricate(:event).id
+      post :create, group_id: group.id, event_id: Fabricate(:event).id
       participation = assigns(:participation)
       participation.roles.should have(1).item
       role = participation.roles.first
@@ -147,15 +149,15 @@ describe Event::ParticipationsController do
     let(:participation) { assigns(:participation) }
 
     it "top leader can create event for bottom member" do
-      post :create, event_id: course.id, event_participation: { person_id: bottom_member.id }
+      post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
       participation.should be_present
       participation.persisted?.should be_true
-      should redirect_to event_participation_path(course, participation)
+      should redirect_to group_event_participation_path(group, course, participation)
     end
 
     it "bottom member can not create event for top leader" do
       sign_in(bottom_member)
-      post :create, event_id: course.id, event_participation: { person_id: user.id }
+      post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: user.id }
       participation.person.should eq user
       participation.persisted?.should be_false
       should redirect_to root_url
@@ -166,11 +168,11 @@ describe Event::ParticipationsController do
     before { user.qualifications.first.destroy } 
 
     {new: :get, create: :post}.each do |action, method| 
-      before { send(method, action,  event_id: course.id) } 
+      before { send(method, action, group_id: group.id, event_id: course.id) } 
 
       context "#{method.upcase} #{action}"  do
         it "redirects to event#show" do
-          should redirect_to group_event_path(course.group, course)
+          should redirect_to group_event_path(group, course)
         end
         it "sets flash message" do
           flash[:alert].last.should =~ /Folgende Qualifikationen fehlen: Group Lead/

@@ -24,7 +24,7 @@ class Event::ParticipationMailer < ActionMailer::Base
   private
   
   def partcipation_url
-    event_participation_url(@event, @participation)
+    group_event_participation_url(@event.groups.first, @event, @participation)
   end
 
   def event_details

@@ -84,9 +84,10 @@ class Event::ParticipationsController < CrudController
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
   # else is created through event roles. 
+  # (Except for course participants, who may be created by special other roles)
   def build_entry
     participation = event.participations.new
-    participation.person = current_user
+    participation.person = current_user unless params[:for_someone_else]
 
     if event.supports_applications
       appl = participation.build_application

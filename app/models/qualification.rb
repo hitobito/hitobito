@@ -18,9 +18,13 @@ class Qualification < ActiveRecord::Base
   
   before_validation :set_finish_at
   
-  validates :qualification_kind_id, uniqueness: {scope: [:person_id, :finish_at]}
+  validates :qualification_kind_id, uniqueness: {scope: [:person_id, :finish_at], 
+                                                 message: 'existiert in dieser Zeitspanne bereits'}
 
   delegate :cover?, :active?, to: :duration
+  
+  scope :order_by_date, order('finish_at DESC')
+  
   
   class << self
     def active
@@ -39,8 +43,6 @@ class Qualification < ActiveRecord::Base
   
   private
 
-  scope :order_by_date, order('finish_at DESC')
-  
   def set_finish_at
     if start_at? && qualification_kind && !qualification_kind.validity.nil?
       self.finish_at = (start_at + qualification_kind.validity.years).end_of_year

@@ -24,12 +24,6 @@ describe EventDecorator, :draper_with_helpers do
         subject.dates_info.should eq "01.01.2002"
       end
 
-      it "finish_at only" do
-        add_date(finish_at: "2002-01-01")
-        subject.dates_info.should eq  "01.01.2002"
-
-      end
-
       it "start and finish" do
         add_date(start_at: "2002-01-01", finish_at: "2002-01-13")
         subject.dates_info.should eq "01.01.2002 - 13.01.2002"
@@ -46,11 +40,7 @@ describe EventDecorator, :draper_with_helpers do
         add_date(start_at: "2002-01-01 13:30")
         subject.dates_info.should eq "01.01.2002 13:30"
       end
-      it "finish_at only" do
-        add_date(finish_at: "2002-01-01 13:30")
-        subject.dates_info.should eq  "01.01.2002 13:30"
-      end
-
+      
       it "start and finish" do
         add_date(start_at: "2002-01-01 13:30", finish_at: "2002-01-13 15:30")
         subject.dates_info.should eq "01.01.2002 13:30 - 13.01.2002 15:30"

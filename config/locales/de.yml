@@ -176,8 +176,8 @@ de:
         deleted_at: Gelöscht
 
       qualification:
-        qualification_kind: Qualifiziert für
-        qualification_kind_id: Qualifiziert für
+        qualification_kind: Qualifikation
+        qualification_kind_id: Qualifikation
         start_at: Seit
         
       qualification_kind:

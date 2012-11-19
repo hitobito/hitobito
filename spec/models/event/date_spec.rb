@@ -88,7 +88,7 @@ describe Event::Date do
     event_date.start_at_date = ''
     event_date.start_at_hour = 18
     event_date.start_at_min = 10
-    event_date.should be_valid
+    event_date.should_not be_valid
 
     event_date.start_at.should be_nil
   end

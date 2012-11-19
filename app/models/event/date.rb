@@ -17,6 +17,9 @@ class Event::Date < ActiveRecord::Base
   attr_accessible :label
   
   belongs_to :event
+  
+  validates :start_at, presence: true
+  
 
   def duration
     @duration ||= Duration.new(start_at, finish_at)

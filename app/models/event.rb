@@ -1,3 +1,4 @@
+# encoding: utf-8
 # == Schema Information
 #
 # Table name: events
@@ -69,9 +70,9 @@ class Event < ActiveRecord::Base
   
   ### VALIDATIONS
   
+  validates :dates, presence: {message: 'müssen ausgefüllt werden'}
   validate :assert_type_is_allowed_for_group
   validate :assert_application_closing_is_after_opening
-  validates_presence_of :dates
   
   
   ### CALLBACKS

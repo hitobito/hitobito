@@ -18,7 +18,7 @@
       
   = render_extensions 'fields', locals: { f: f }
 
-  %h2 Kursdaten
+  %h2 Daten
   = field_set_tag do
     %p Uhrzeiten sind optional
     = f.nested_fields_for :dates, 'event/dates/fields'

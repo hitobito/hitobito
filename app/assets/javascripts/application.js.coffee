@@ -61,6 +61,9 @@ setupPersonTypeahead = (input) ->
               highlighter: typeaheadHighlighter)
   $(this).keydown(-> typeaheadIdField($(this)).val(null))
 
+showDatePicker = (field) ->
+   field.datepicker()
+   field.datepicker('show')
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)
@@ -78,10 +81,9 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 $ ->
   # wire up date picker
-  $(":input.date").live("click", ->
-    $(this).datepicker()
-    $(this).datepicker('show'))
-
+  $(":input.date").live("click", -> showDatePicker($(this)))
+  $(".controls .icon-calendar").live("click", -> showDatePicker($(this).parent().siblings('.date')))
+    
   # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)
   $('body').on('ajax:before','[data-replace]', setDataType)

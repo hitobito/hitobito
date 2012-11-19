@@ -14,7 +14,7 @@ describe "qualifications/_form.html.haml" do
   subject { Capybara::Node::Simple.new(rendered) }
   it "translates form fields" do
     render
-    should have_content "Qualifiziert für"
+    should have_content "Qualifikation"
     should have_content "Seit"
   end
   

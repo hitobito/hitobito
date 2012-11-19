@@ -244,7 +244,6 @@ input[type="color"],
   font-size: 14px;
   line-height: 20px;
   color: $gray;
-  @include border-radius(3px);
 }
 
 select.time {

@@ -26,7 +26,7 @@ describe Jubla::Event::Application do
     let(:person) { Fabricate(:person) }
     let(:course) do 
       event = groups(:city).events.build(name: 'even', contact_id: person.id)
-      event.dates.build
+      event.dates.build(date)
       event.save
       event
     end

@@ -120,4 +120,9 @@ class GroupDecorator < ApplicationDecorator
     @grouped_children ||= GroupListDecorator.new(model)
   end
 
+
+  def type_name
+    klass.model_name.human
+  end
+
 end

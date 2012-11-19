@@ -15,4 +15,5 @@
       = render 'contactable/show', contactable: @contact, only_public: true
     
     %h2 Weitere Angaben
+    = render_attrs(entry, :type_name)
     = render_extensions :attrs

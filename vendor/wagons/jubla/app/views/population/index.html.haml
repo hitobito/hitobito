@@ -2,12 +2,15 @@
 
 = render 'groups/tabs'
 
-- if @group.population_approveable? && can?(:create_member_counts, @group)
-  #flash
-    .alert.alert-error
-      = 'Bitte ergänze Geburtsdatum und Geschlecht aller Mitglieder und bestätige den Bestand deiner Schar mit "Bestand bestätigen"'
+- if check_approveable?
+  .alert.alert-info.approveable
+    = 'Bitte ergänze Geburtsdatum und Geschlecht aller Mitglieder und bestätige den Bestand deiner Schar mit "Bestand bestätigen"'
 
 = render 'people_list'
 
-- if @group.population_approveable? && can?(:create_member_counts, @group)
-  = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)
+- if check_approveable?
+  - if people_data_complete?
+    = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)
+  - else
+    .alert.alert-alert.approveable
+      = 'Um den Bestand bestätigen zu können müssen bei allen Mitgliedern das Geburtsdatum und das Geschlecht ausgefüllt sein'

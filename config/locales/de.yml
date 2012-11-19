@@ -100,6 +100,7 @@ de:
         contact: Kontaktperson
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+        type_name: Gruppentyp
       
       event:
         group_ids: Gruppen

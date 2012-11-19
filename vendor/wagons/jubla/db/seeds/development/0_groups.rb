@@ -83,51 +83,51 @@ Group::WorkGroup.seed(:name, :parent_id,
 )
 
 regions = Group::Region.seed(:name, :parent_id,
-  {name: 'Stadt',
+  {name: 'Region Stadt',
    parent_id: states[0].id }.merge(contacts),
    
-  {name: 'Oberland',
+  {name: 'Region Oberland',
    parent_id: states[0].id }.merge(contacts),
    
-  {name: 'Jura',
+  {name: 'Region Jura',
    parent_id: states[0].id }.merge(contacts),
    
-  {name: 'Stadt',
+  {name: 'Region Stadt',
    parent_id: states[1].id }.merge(contacts),
    
-  {name: 'Oberland',
+  {name: 'Region Oberland',
    parent_id: states[1].id }.merge(contacts),
 )
 
 flocks = Group::Flock.seed(:name, :parent_id,
-  {name: 'Bern',
+  {name: 'Schar Bern',
    parent_id: regions[0].id },
    
-  {name: 'Muri',
+  {name: 'Schar Muri',
    parent_id: regions[0].id },
    
-  {name: 'Thun',
+  {name: 'Schar Thun',
    parent_id: regions[1].id },
    
-  {name: 'Interlaken',
+  {name: 'Schar Interlaken',
    parent_id: regions[1].id },
    
-  {name: 'Simmental',
+  {name: 'Schar Simmental',
    parent_id: regions[1].id },
    
-  {name: 'Biel',
+  {name: 'Schar Biel',
    parent_id: regions[2].id },
    
-  {name: 'Chräis Chäib',
+  {name: 'Schar Chräis Chäib',
    parent_id: regions[3].id },
    
-  {name: 'Wiedikon',
+  {name: 'Schar Wiedikon',
    parent_id: regions[3].id },
    
-  {name: 'Innerroden',
+  {name: 'Schar Innerroden',
    parent_id: states[2].id },
    
-  {name: 'Ausserroden',
+  {name: 'Schar Ausserroden',
    parent_id: states[2].id },
 )
 
@@ -150,52 +150,52 @@ flocks.each do |s|
 end
 
 Group::ChildGroup.seed(:name, :parent_id,
-  {name: 'Asterix',
+  {name: 'Kindergruppe Asterix',
    parent_id: flocks[0].id },
    
-  {name: 'Obelix',
+  {name: 'Kindergruppe Obelix',
    parent_id: flocks[0].id },
    
-  {name: 'Idefix',
+  {name: 'Kindergruppe Idefix',
    parent_id: flocks[0].id },
    
-  {name: 'Mickey',
+  {name: 'Kindergruppe Mickey',
    parent_id: flocks[1].id },
    
-  {name: 'Minnie',
+  {name: 'Kindergruppe Minnie',
    parent_id: flocks[2].id },
    
-  {name: 'Goofy',
+  {name: 'Kindergruppe Goofy',
    parent_id: flocks[3].id },
    
-  {name: 'Donald',
+  {name: 'Kindergruppe Donald',
    parent_id: flocks[4].id },
    
-  {name: 'Gaston',
+  {name: 'Kindergruppe Gaston',
    parent_id: flocks[5].id },
    
-  {name: 'Tim',
+  {name: 'Kindergruppe Tim',
    parent_id: flocks[6].id },
    
-  {name: 'Hadock',
+  {name: 'Kindergruppe Hadock',
    parent_id: flocks[7].id },
    
-  {name: 'Batman',
+  {name: 'Kindergruppe Batman',
    parent_id: flocks[8].id },
    
-  {name: 'Robin',
+  {name: 'Kindergruppe Robin',
    parent_id: flocks[8].id },
    
-  {name: 'Spiderman',
+  {name: 'Kindergruppe Spiderman',
    parent_id: flocks[9].id },
    
 )
 
 Group::SimpleGroup.seed(:name, :parent_id,
-  {name: 'Tschutter',
+  {name: 'Einfache Gruppe Tschutter',
    parent_id: flocks[0].id },
    
-  {name: 'Angestellte',
+  {name: 'Einfache Gruppe Angestellte',
    parent_id: states[0].id },
 )
    

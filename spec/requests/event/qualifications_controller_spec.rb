@@ -8,6 +8,7 @@ describe Event::QualificationsController do
     event
   end
   
+  let(:group) { event.groups.first }
   
   let(:participant_1)  do
     participation = Fabricate(:event_participation, event: event)
@@ -27,7 +28,7 @@ describe Event::QualificationsController do
     participant_2
     
     sign_in
-    visit event_qualifications_path(event.id)
+    visit group_event_qualifications_path(group.id, event.id)
   end
   
   it "qualification requests are mutually undoable", js: true do

@@ -6,6 +6,7 @@ class MemberCount < ActiveRecord::Base
   belongs_to :state, class_name: 'Group::State'
   
   validates :born_in, uniqueness: { scope: [:flock_id, :year] }
+  validates :leader_f, :leader_m, :child_f, :child_m, numericality: {greater_than_or_equal_to: 0, allow_nil: true}
   
   
   def total

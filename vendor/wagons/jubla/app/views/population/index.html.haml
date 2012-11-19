@@ -2,6 +2,11 @@
 
 = render 'groups/tabs'
 
+- if @group.population_approveable? && can?(:create_member_counts, @group)
+  #flash
+    .alert.alert-error
+      = 'Bitte ergänze Geburtsdatum und Geschlecht aller Mitglieder und bestätige den Bestand deiner Schar mit "Bestand bestätigen"'
+
 = render 'people_list'
 
 - if @group.population_approveable? && can?(:create_member_counts, @group)

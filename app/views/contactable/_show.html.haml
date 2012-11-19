@@ -1,6 +1,6 @@
 .contactable.well
   %address
-    %strong=contactable.to_s if defined?(with_name)
+    %strong=contactable.to_s
     =contactable.complete_address
     =contactable.primary_email
     =contactable.all_phone_numbers(only_public)

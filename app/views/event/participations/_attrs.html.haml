@@ -29,7 +29,7 @@
   %aside.span5.offset1
     - if entry.person == current_user && @application.present?
       = section 'Anmeldung an' do
-        = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
+        = render 'contactable/show', contactable: @application.contact, only_public: true
     
     = render 'roles'
 

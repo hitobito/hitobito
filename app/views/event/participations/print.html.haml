@@ -11,7 +11,7 @@
 
   %body
     - if @application.present?
-      = render 'contactable/show', contactable: @application.contact, only_public: true, with_name: true
+      = render 'contactable/show', contactable: @application.contact, only_public: true
 
     %h4 Informationen zum Anlass
     = @event.to_s
@@ -26,7 +26,6 @@
       = render 'priorities'
 
     %h4 Informationen zur Person
-    = entry.person
     = render 'contactable/show', contactable: entry.person, only_public: true
     
     -if @answers.present?

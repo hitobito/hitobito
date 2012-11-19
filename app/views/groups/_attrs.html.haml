@@ -12,7 +12,7 @@
 
     - if @contact
       %h4 Kontaktperson
-      = render 'contactable/show', contactable: @contact, only_public: true, with_name: true
+      = render 'contactable/show', contactable: @contact, only_public: true
     
     %h2 Weitere Angaben
     = render_extensions :attrs

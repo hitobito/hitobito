@@ -7,11 +7,20 @@ module PopulationHelper
             title: 'Bearbeiten', alt: 'Bearbeiten')
   end
 
-  def person_data_complete?(person)
-    %w[birthday gender].each do |a|
-      return false if person.send(a).blank?
+  def person_birthday(person)
+    if person.birthday.blank?
+      badge_invalid
+    else
+      l(person.birthday)
     end
-    true
+  end
+
+  def person_gender(person)
+    if person.gender.blank?
+      badge_invalid
+    else
+      gender_label(person.gender)
+    end
   end
 
   def badge_invalid
@@ -20,12 +29,24 @@ module PopulationHelper
 
   def tab_population_label
     label = 'Bestand'
-    label << " #{tab_attention_badge}" if @group.population_approveable?
+    label << " #{tab_attention_badge}" if check_approveable?
     label.html_safe
   end
 
   def tab_attention_badge
     '<span style="color: red;">!</span>'
+  end
+
+  def check_approveable?
+    @group.population_approveable? && can?(:create_member_counts, @group)
+  end
+
+  def people_data_complete?
+    @people.each do |p|
+      return false if p.birthday.blank?
+      return false if p.gender.blank?
+    end
+    true
   end
 
 end

@@ -110,35 +110,31 @@ describe Event::ListsController, type: :controller do
       end
 
       it "renders course info within table" do
-        pending
         get :courses, year: 2010
         main.find('h2').text.should eq 'Scharleiterkurs'
-        main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
-        main.find('table tr:eq(2) td:eq(1)').text.strip.should eq "EventusSLK  Top"
-        main.find('table tr:eq(2) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
-        main.find('table tr:eq(2) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
-        main.find('table tr:eq(2) td:eq(3)').text.should eq "0 von 20"
-        main.find('table tr:eq(2) td:eq(4)').text.should eq 'Geplant'
+        main.find('table tr:eq(1) td:eq(1) a').text.should eq 'Eventus'
+        main.find('table tr:eq(1) td:eq(1)').text.strip.should eq "EventusSLK  Top"
+        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+        main.find('table tr:eq(1) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
+        main.find('table tr:eq(1) td:eq(3)').text.should eq "0 von 20"
+        main.find('table tr:eq(1) td:eq(4)').text.should eq 'Geplant'
       end
 
       it "does not show details for users who cannot manage course" do
-        pending
         person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         sign_in(person)
         get :courses, year: 2010
-        main.find('table tr:eq(2) td:eq(1) a').text.should eq 'Eventus'
-        main.find('table tr:eq(2) td:eq(1)').text.strip.should eq "EventusSLK  Top"
-        main.find('table tr:eq(2) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
-        main.find('table tr:eq(2) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
+        main.find('table tr:eq(1) td:eq(1) a').text.should eq 'Eventus'
+        main.find('table tr:eq(1) td:eq(1)').text.strip.should eq "EventusSLK  Top"
+        main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.group, slk_ev)
+        main.find('table tr:eq(1) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
         expect { main.find('table tr:eq(2) td:eq(4)') }.to raise_error
       end
 
       it "groups courses by course type" do
-        pending
         get :courses, year: 2011
-        main.all('h2').size.should eq 2
-        main.find('tr:eq(1) h2').text.should eq 'Gruppenleiterkurs'
-        main.find('tr:eq(3) h2').text.should eq 'Scharleiterkurs'
+        main.all('h2')[0].text.should eq 'Gruppenleiterkurs'
+        main.all('h2')[1].text.should eq 'Scharleiterkurs'
       end
 
       it "filters with group param" do

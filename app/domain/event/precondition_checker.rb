@@ -30,43 +30,35 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
 
   private
   def validate_minimum_age
-    errors << :birthday unless starts_before_years(person.birthday, course_minimum_age)
+    errors << :birthday if person_age_at_course_start < course_minimum_age
   end
-
-  def starts_before_years(date, amount)
-    date && (date + amount.years) >= course_start_at
-  end
-
   def validate_precondition(qualification_kind)
-    validity = qualification_kind.validity
-    person_qualification = person_qualification_for(qualification_kind)
-    errors << qualification_kind.label unless qualification_valid?(person_qualification,validity)
+    errors << qualification_kind.label unless person_qualified_for(qualification_kind)
   end
 
   def person_qualifications
     @person_qualifications ||= person.qualifications
   end
 
-  def person_qualification_for(qualification_kind)
-    person_qualifications.first { |qualification| qualification.kind == qualification_kind }
-  end
-
-  def qualification_valid?(qualification,validity)
-    qualification && starts_before_years(qualification.start_at.to_time_in_current_zone, validity)
-  end
-
-  def person_age
-    dob = person.birthday
-    if dob
-      now = Time.now.utc.to_date
-      now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
-    else
-      0
+  def person_qualified_for(qualification_kind)
+    person_qualifications.active.find do |qualification| 
+      qualification.qualification_kind == qualification_kind  && 
+        qualification.cover?(course_start_at.to_date)
     end
   end
 
+  def person_age_at_course_start
+    age = 0
+    if birthday = person.birthday
+      age = course_start_at.year - birthday.year
+      age -= ((course_start_at.month > birthday.month || 
+               (course_start_at.month == birthday.month && course_start_at.day > birthday.day)) ? 1 : 0)
+    end
+    age
+  end
+
   def birthday_error_text
-    "Altersgrenze von #{course_minimum_age} unterschritten, du bist #{person_age} Jahre alt." 
+    "Altersgrenze von #{course_minimum_age} unterschritten, du bist #{person_age_at_course_start} Jahre alt." 
   end
 
   def qualifications_error_text

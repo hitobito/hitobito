@@ -19,21 +19,18 @@ class Qualification < ActiveRecord::Base
   before_validation :set_finish_at
   
   validates :qualification_kind_id, uniqueness: {scope: [:person_id, :finish_at]}
+
+  delegate :cover?, :active?, to: :duration
   
   class << self
     def active
       today = Date.today
       where("qualifications.start_at <= ? AND qualifications.finish_at >= ?", today, today)
     end
-    
-  end
-  
-  def active?
-    duration.active?
   end
   
   def duration
-    Duration.new(start_at, finish_at)
+    @duration ||= Duration.new(start_at, finish_at)
   end
 
   def to_s

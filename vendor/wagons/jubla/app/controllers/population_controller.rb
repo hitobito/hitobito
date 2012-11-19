@@ -6,12 +6,9 @@ class PopulationController < ApplicationController
   
   
   def index
-    @current_census = Census.current
-    @approvable = @current_census && !MemberCounter.new(@current_census.year, flock).exists?
     @groups = flock.groups_in_same_layer.order_by_type(flock)
     @people = load_people(@groups)
     @groups_people = load_groups_people
-
   end
 
   private

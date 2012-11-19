@@ -26,6 +26,7 @@ describe Event::PreconditionChecker do
     context "is younger than 16" do
       before { person.birthday = (course_start_at - 16.years - 1.day) } 
       its(:valid?) { should be_false } 
+      its("errors_text.last") { should =~ /du bist 15 Jahre alt/ }
     end
 
     context "is 16 years old" do
@@ -58,17 +59,26 @@ describe Event::PreconditionChecker do
       its("errors") { should be_empty } 
     end
 
+    context "person with expired and valid 'scharleiter'" do
+      before do 
+        qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) 
+        qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) 
+      end
+      its(:valid?) { should be_true } 
+      its("errors") { should be_empty } 
+    end
+
     context "multiple preconditions" do
       before { preconditions << qualification_kinds(:gl) } 
       its("errors_text.last") { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
     end
 
     def valid_date
-      (course_start_at - sl.validity.years) + 1.day # add one day here because of leap year
+      (course_start_at - sl.validity.years) 
     end
 
     def expired_date
-      valid_date - 1.day
+      (valid_date - 1.year).end_of_year
     end
   end
 end

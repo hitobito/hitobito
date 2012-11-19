@@ -15,7 +15,17 @@ module PopulationHelper
   end
 
   def badge_invalid
-    simple_format('<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>')
+    '<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>'.html_safe
+  end
+
+  def tab_population_label
+    label = 'Bestand'
+    label << " #{tab_attention_badge}" if @group.population_approveable?
+    label.html_safe
+  end
+
+  def tab_attention_badge
+    '<span style="color: red;">!</span>'
   end
 
 end

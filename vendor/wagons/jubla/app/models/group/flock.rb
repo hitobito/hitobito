@@ -55,6 +55,11 @@ class Group::Flock < Group
     MemberCount.details_for_flock(year, self)
   end
 
+  def population_approveable?
+    current_census = Census.current
+    current_census && !MemberCounter.new(current_census.year, self).exists?
+  end
+
   class Leader < Jubla::Role::Leader
     self.permissions = [:layer_full, :contact_data, :approve_applications, :login]
   end

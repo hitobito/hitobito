@@ -201,6 +201,7 @@ de:
         
       role:
         label: Bezeichnung
+        type: Rolle
         group_id: Gruppe
         person_id: Person
         

@@ -96,7 +96,7 @@ class Group::Flock < Group
     self.visible_from_above = false
   end
   
-  roles Leader, CampLeader, President, Guide, Treasurer
+  roles Leader, CampLeader, President, Treasurer, Guide
   restricted_role :coach, Coach
   restricted_role :advisor, Advisor
   

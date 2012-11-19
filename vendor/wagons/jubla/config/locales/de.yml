@@ -41,7 +41,7 @@ de:
       jubla/role/group_admin: Gruppenverwaltung
       jubla/role/leader: Leitung
       jubla/role/member: Mitglied
-      jubla/role/treasurer: Finanzchef
+      jubla/role/treasurer: Kassier
       
       census:
         one: Bestandesmeldungsperiode

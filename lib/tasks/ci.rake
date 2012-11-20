@@ -1,5 +1,6 @@
 desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
+             'wagon:bundle:update',
              'db:migrate',
              'ci:setup:rspec',
              'spec:requests', # run request specs first to get coverage from spec
@@ -9,6 +10,7 @@ task :ci => ['log:clear',
 namespace :ci do
   desc "Runs the tasks for a nightly build"
   task :nightly => ['log:clear', 
+                    'wagon:bundle:update',
                     'db:migrate', 
                     'erd',
                     'ci:setup:rspec',

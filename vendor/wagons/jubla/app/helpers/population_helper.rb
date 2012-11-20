@@ -41,12 +41,4 @@ module PopulationHelper
     @group.population_approveable? && can?(:create_member_counts, @group)
   end
 
-  def people_data_complete?
-    @people.each do |p|
-      return false if p.birthday.blank?
-      return false if p.gender.blank?
-    end
-    true
-  end
-
 end

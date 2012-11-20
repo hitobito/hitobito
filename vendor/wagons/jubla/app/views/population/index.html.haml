@@ -9,7 +9,7 @@
 = render 'people_list'
 
 - if check_approveable?
-  - if people_data_complete?
+  - if @people_data_complete
     = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)
   - else
     .alert.alert-alert.approveable

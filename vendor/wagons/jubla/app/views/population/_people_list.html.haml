@@ -6,13 +6,8 @@
         %h2= group.to_s
     - @groups_people[group.id].each do |person| 
       %tr
-        %td
-          = person.to_s
-        %td
-          = person.roles.first.to_s
-        %td
-          = person_birthday(person)
-        %td
-          = person_gender(person)
-        %td
-          = person_edit_link(person)
+        %td= person.to_s
+        %td= person.roles.first.to_s
+        %td= person_birthday(person)
+        %td= person_gender(person)
+        %td= person_edit_link(person)

@@ -48,6 +48,7 @@ module Jubla::Ability
     can :approve_population, Group do |group|
       group.kind_of?(Group::Flock) &&
       layers_full.present? && 
+      layers_full.include?(group.id)
       contains_any?(layers_full, collect_ids(group.layer_groups))
     end
     

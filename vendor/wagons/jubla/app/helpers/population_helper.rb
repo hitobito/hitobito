@@ -1,5 +1,7 @@
 module PopulationHelper
 
+  BADGE_INVALID = '<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>'.html_safe
+
   def person_edit_link(person)
     link_to(icon(:edit), 
             edit_group_person_path(person, group_id: @group.id, 
@@ -9,7 +11,7 @@ module PopulationHelper
 
   def person_birthday(person)
     if person.birthday.blank?
-      badge_invalid
+      BADGE_INVALID
     else
       l(person.birthday)
     end
@@ -17,24 +19,16 @@ module PopulationHelper
 
   def person_gender(person)
     if person.gender.blank?
-      badge_invalid
+      BADGE_INVALID
     else
       gender_label(person.gender)
     end
   end
-
-  def badge_invalid
-    '<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>'.html_safe
-  end
-
+  
   def tab_population_label
     label = 'Bestand'
-    label << " #{tab_attention_badge}" if check_approveable?
+    label << " <span style=\"color: red;\">!</span>" if check_approveable?
     label.html_safe
-  end
-
-  def tab_attention_badge
-    '<span style="color: red;">!</span>'
   end
 
   def check_approveable?

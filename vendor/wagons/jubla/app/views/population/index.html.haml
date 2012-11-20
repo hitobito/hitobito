@@ -3,8 +3,7 @@
 = render 'groups/tabs'
 
 - if check_approveable?
-  .alert.alert-info.approveable
-    = 'Bitte ergänze Geburtsdatum und Geschlecht aller Mitglieder und bestätige den Bestand deiner Schar mit "Bestand bestätigen"'
+  %p Bitte ergänze Geburtsdatum und Geschlecht aller Mitglieder und bestätige den Bestand deiner Schar mit "Bestand bestätigen".
 
 = render 'people_list'
 
@@ -12,5 +11,4 @@
   - if people_data_complete?
     = action_button('Bestand bestätigen', group_member_counts_path(@group), nil, method: :post)
   - else
-    .alert.alert-alert.approveable
-      = 'Um den Bestand bestätigen zu können müssen bei allen Mitgliedern das Geburtsdatum und das Geschlecht ausgefüllt sein'
+    %p Um den Bestand bestätigen zu können, müssen bei allen Mitgliedern das Geburtsdatum und das Geschlecht ausgefüllt sein.

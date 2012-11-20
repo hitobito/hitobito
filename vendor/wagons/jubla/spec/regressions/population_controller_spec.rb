@@ -26,7 +26,7 @@ describe PopulationController, type: :controller do
       get :index, id: ar.id
       dom.all('.table h2').count.should eq 1
       dom.should have_selector('a', text: 'Bestand bestätigen')
-      dom.should have_selector('.alert.alert-info.approveable')
+      dom.should have_content('Bitte ergänze')
       dom.find('a', text: 'Bestand').should have_selector('span', text: '!')
     end
   end

@@ -1,8 +1,8 @@
 module PopulationHelper
 
-  def person_edit_link(person)
+  def person_edit_link(person, group)
     link_to(icon(:edit), 
-            edit_group_person_path(person, group_id: @group.id, 
+            edit_group_person_path(person, group_id: group.id, 
                                    return_url: population_group_path(@group.id)),
             title: 'Bearbeiten', alt: 'Bearbeiten')
   end

@@ -8,6 +8,7 @@ describe Event::RolesController, type: :controller do
   let(:test_entry) { event_roles(:top_leader) }
   
   let(:course) { test_entry.event }
+  let(:group)  { course.groups.first }
   
   let(:new_entry_attrs) do
     { 
@@ -29,7 +30,7 @@ describe Event::RolesController, type: :controller do
     }
   end
  
-  let(:scope_params) { {event_id: course.id} }
+  let(:scope_params) { {group_id: group.id, event_id: course.id} }
 
 
   before { sign_in(people(:top_leader)) } 
@@ -39,15 +40,15 @@ describe Event::RolesController, type: :controller do
     def it_should_redirect_to_show
       it do
         if example.metadata[:action] == :create
-          should redirect_to event_participations_path(course.id)
+          should redirect_to group_event_participations_path(group, course)
         else
-          should redirect_to event_participation_path(course.id, entry.participation_id)
+          should redirect_to group_event_participation_path(group, course, entry.participation_id)
         end
       end 
     end
     
     def it_should_redirect_to_index
-      it { should redirect_to event_participations_path(course.id) } 
+      it { should redirect_to group_event_participations_path(group, course) } 
     end
     
   end

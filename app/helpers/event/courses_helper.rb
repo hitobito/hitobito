@@ -3,7 +3,7 @@ module Event::CoursesHelper
 
   def apply_button_if_possible(event)
      if event.application_possible? && event.can_create_participation?
-       action_button 'Anmelden', new_event_participation_path(event) 
+       action_button 'Anmelden', new_group_event_participation_path(event.groups.first, event) 
      end
   end
 

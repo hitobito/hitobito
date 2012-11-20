@@ -14,47 +14,46 @@ Jubla::Application.routes.draw do
     resources :roles, except: [:index, :show]
     
     resources :people_filters, only: [:new, :create, :destroy]
-    resources :events
+    
+    resources :events do
+      scope module: 'event' do
+        resources :participations do
+          get 'print', on: :member
+        end
+        
+        resources :roles
+        
+        resources :application_market, only: :index do
+          member do
+            put    'waiting_list' => 'application_market#put_on_waiting_list'
+            delete 'waiting_list' => 'application_market#remove_from_waiting_list'
+            put    'participant'  => 'application_market#add_participant'
+            delete 'participant'  => 'application_market#remove_participant'
+          end
+        end
+        
+        resources :applications, only: [] do
+          member do
+            put    :approve
+            delete :reject
+          end
+        end
+        
+        resources :qualifications, only: [:index, :update, :destroy]
+      end
+    end
   end
-
-  resources :events  
+ 
   resources :event_kinds, module: 'event', controller: 'kinds'
 
   get 'list_courses', to: 'event/lists#courses', as: :list_courses
   get 'list_events', to: 'event/lists#events', as: :list_events
   
-  resources :events do
-    scope module: 'event' do
-      resources :participations do
-        get 'print', on: :member
-      end
-      resources :roles
-      
-      resources :application_market, only: :index do
-        member do
-          put    'waiting_list' => 'application_market#put_on_waiting_list'
-          delete 'waiting_list' => 'application_market#remove_from_waiting_list'
-          put    'participant'  => 'application_market#add_participant'
-          delete 'participant'  => 'application_market#remove_participant'
-        end
-      end
-      
-      resources :applications, only: [] do
-        member do
-          put    :approve
-          delete :reject
-        end
-      end
-      
-      resources :qualifications, only: [:index, :update, :destroy]
-    end
-  end
   
   resources :people, only: :show do
     collection do
       get :query
     end
-
   end
   
   resources :qualification_kinds

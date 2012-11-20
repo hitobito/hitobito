@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106164240) do
+ActiveRecord::Schema.define(:version => 20121119092332) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(:version => 20121106164240) do
   end
 
   create_table "events", :force => true do |t|
-    t.integer  "group_id",                                                :null => false
     t.string   "type"
     t.string   "name",                                                    :null => false
     t.string   "number"
@@ -118,6 +117,12 @@ ActiveRecord::Schema.define(:version => 20121106164240) do
     t.datetime "created_at",                                              :null => false
     t.datetime "updated_at",                                              :null => false
     t.integer  "participant_count",                    :default => 0
+    t.integer  "application_contact_id"
+  end
+
+  create_table "events_groups", :id => false, :force => true do |t|
+    t.integer "event_id"
+    t.integer "group_id"
   end
 
   create_table "groups", :force => true do |t|
@@ -168,6 +173,7 @@ ActiveRecord::Schema.define(:version => 20121106164240) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "picture"
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
     t.index ["email"], :name => "index_people_on_email", :unique => true
   end
@@ -207,6 +213,7 @@ ActiveRecord::Schema.define(:version => 20121106164240) do
     t.integer "qualification_kind_id", :null => false
     t.date    "start_at",              :null => false
     t.date    "finish_at"
+    t.string  "origin"
   end
 
   create_table "roles", :force => true do |t|

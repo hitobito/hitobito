@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe Event::ParticipationsController do
   
+  let(:group) { groups(:ch) }
+  
   let(:course) do
-    course = Fabricate(:course, group: groups(:ch), priorization: true)
+    course = Fabricate(:course, groups: [group], priorization: true)
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course.dates << Fabricate(:event_date, event: course)
@@ -11,7 +13,7 @@ describe Event::ParticipationsController do
   end
   
   let(:other_course) do 
-    other = Fabricate(:course, group: course.group, kind: course.kind)
+    other = Fabricate(:course, groups: [group], kind: course.kind)
     other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
     other
   end
@@ -35,17 +37,17 @@ describe Event::ParticipationsController do
                                                        course.participant_type) }
     
     it "lists participant and leader group by default without advisor" do
-      get :index, event_id: course.id
+      get :index, group_id: group.id, event_id: course.id
       assigns(:participations).should eq [@leader, @participant]
     end
 
     it "lists only leader_group without advisor" do
-      get :index, event_id: course.id, filter: :leaders
+      get :index, group_id: group.id, event_id: course.id, filter: :leaders
       assigns(:participations).should eq [@leader]
     end
 
     it "lists only participant_group" do
-      get :index, event_id: course.id, filter: :participants
+      get :index, group_id: group.id, event_id: course.id, filter: :participants
       assigns(:participations).should eq [@participant]
     end
 

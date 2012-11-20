@@ -15,13 +15,13 @@ require 'spec_helper'
 
 describe Event::Application do
   
-  let(:course) { Fabricate(:course, group: groups(:top_layer)) }
+  let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
   
   subject { Event::Application.new }
 
   
   context ".pending" do
-    let(:course) { Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk)) }
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk)) }
     subject { Event::Application.pending }
 
     context "with assigned event role" do

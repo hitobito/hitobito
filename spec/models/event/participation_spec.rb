@@ -18,7 +18,7 @@ describe Event::Participation do
   
   
   let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer), kind: event_kinds(:slk))
+    course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course

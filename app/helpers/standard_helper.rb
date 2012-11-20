@@ -68,7 +68,7 @@ module StandardHelper
   def render_attrs(obj, *attrs)
     content_tag(:dl, class: "dl-horizontal") do 
       safe_join(attrs) { |a| labeled_attr(obj, a) }
-    end
+    end if attrs.present?
   end
 
   # Renders the formatted content of the given attribute with a label.

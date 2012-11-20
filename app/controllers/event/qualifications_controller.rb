@@ -2,7 +2,7 @@ class Event::QualificationsController < ApplicationController
     
   before_filter :authorize
 
-  decorates :event, :participants, :participation
+  decorates :event, :participants, :participation, :group
   
   helper_method :event, :entries, :participation
   
@@ -31,11 +31,15 @@ class Event::QualificationsController < ApplicationController
   end
   
   def event
-    @event ||= Event.find(params[:event_id])
+    @event ||= group.events.find(params[:event_id])
+  end
+    
+  def group
+    @group ||= Group.find(params[:group_id])
   end
   
   def participation
-    @participation ||= Event::Participation.find(params[:id])
+    @participation ||= event.participations.find(params[:id])
   end
   
   def authorize

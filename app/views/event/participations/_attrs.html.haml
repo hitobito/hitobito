@@ -1,15 +1,15 @@
 - parent_sheet(EntrySheet.new(self, 
                               @event, 
-                              :event_participations_path, 
+                              [:group_event_participations_path, @group], 
                               :index_participations, 
-                              group_event_path(@event.group, @event)))
+                              group_event_path(@group, @event)))
 - event_group_sheet
 - title entry.to_s
 
 #main.row-fluid
   %article.span6
     - if @event.requires_approval? && @application.present? && can?(:show, @application)
-      = @application.confirmation_label
+      %p= @application.confirmation_label
     
     = render 'contactable/show', contactable: entry.person, only_public: true
     

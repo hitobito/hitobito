@@ -19,6 +19,7 @@ class Event::Date < ActiveRecord::Base
   belongs_to :event
   
   validates :start_at, presence: true
+  validate  :assert_meaningful
   
 
   def duration
@@ -29,4 +30,11 @@ class Event::Date < ActiveRecord::Base
     label? ? "#{label}: #{duration}" : duration
   end
 
+  private
+  
+  def assert_meaningful
+    unless duration.meaningful?
+      errors.add(:finish_at, "muss nach Von liegen")
+    end
+  end
 end

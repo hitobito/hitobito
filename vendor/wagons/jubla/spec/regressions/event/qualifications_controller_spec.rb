@@ -11,6 +11,8 @@ describe Event::QualificationsController, type: :controller do
     event
   end
   
+  let(:group) { event.groups.first }
+  
   let(:participant_1) do
     participation = Fabricate(:event_participation, event: event)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
@@ -35,7 +37,7 @@ describe Event::QualificationsController, type: :controller do
   describe "GET index" do
 
     context "in open state" do
-      before { get :index, event_id: event.id }
+      before { get :index, group_id: group.id, event_id: event.id }
     
       subject { assigns(:participants) }
       
@@ -56,7 +58,7 @@ describe Event::QualificationsController, type: :controller do
     
     context "in closed state" do
       before { event.update_column(:state, 'closed') }
-      before { get :index, event_id: event.id }
+      before { get :index, group_id: group.id, event_id: event.id }
     
       subject { assigns(:participants) }
       
@@ -78,7 +80,7 @@ describe Event::QualificationsController, type: :controller do
   
   describe 'PUT update' do
     context "in open state" do
-      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+      before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
       subject { Event::Qualifier.new(participant_1).qualifications }
     
@@ -88,7 +90,7 @@ describe Event::QualificationsController, type: :controller do
     
     context "in closed state" do
       before { event.update_column(:state, 'closed') }
-      before { put :update, event_id: event.id, id: participant_1.id, format: :js }
+      before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
       subject { Event::Qualifier.new(participant_1).qualifications }
     
@@ -104,7 +106,7 @@ describe Event::QualificationsController, type: :controller do
     end
     
     context "in open state" do
-      before { delete :destroy, event_id: event.id, id: participant_1.id, format: :js }
+      before { delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
       subject { Event::Qualifier.new(participant_1).qualifications }
     
@@ -114,7 +116,7 @@ describe Event::QualificationsController, type: :controller do
     
     context "in closed state" do
       before { event.update_column(:state, 'closed') }
-      before { delete :destroy, event_id: event.id, id: participant_1.id, format: :js }
+      before { delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
       subject { Event::Qualifier.new(participant_1).qualifications }
     

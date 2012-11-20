@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe Event::RolesController do
   
+  let(:group) { groups(:top_layer) }
+  
   let(:course) do
-    course = Fabricate(:course, group: groups(:top_layer))
+    course = Fabricate(:course, groups: [group])
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course
@@ -14,7 +16,7 @@ describe Event::RolesController do
   before { sign_in(user) }
   
   context "GET new" do
-    before { get :new, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } }
+    before { get :new, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } }
     
     it "builds participation with answers" do
       role = assigns(:role)
@@ -30,7 +32,7 @@ describe Event::RolesController do
     context "without participation" do
            
      it "creates role and participation" do
-        post :create, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
+        post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
        
         role = assigns(:role)
         role.should be_persisted
@@ -52,7 +54,7 @@ describe Event::RolesController do
             
       it "creates role and participation" do
         expect {
-        post :create, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
+        post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
         }.to change { Event::Participation.count }.by(0)
         
         role = assigns(:role)

@@ -1,12 +1,10 @@
 - event_group_sheet
 
 = entry_form do |f|
-  %h2 Infos
   - if entry.new_record?
-    = f.hidden_field :group_id
     = f.hidden_field :type
 
-  = field_set_tag do
+  = field_set_tag 'Infos' do
     = f.labeled_input_fields(*entry.used_attributes(:name, :number, :description, :motto, :cost, :location))
     = f.labeled_person_field :contact
 
@@ -18,13 +16,20 @@
       
   = render_extensions 'fields', locals: { f: f }
 
-  %h2 Daten
-  = field_set_tag do
+  - if @groups.present?
+    = field_set_tag 'Durchgeführt von' do
+      = f.labeled(:group_ids, '&nbsp;'.html_safe) do 
+        = hidden_field_tag('event[group_ids][]', @group.id)
+        = f.inline_check_box(:group_ids, @group.id, @group.name, disabled: true)
+        - @groups.each do |group|
+          = f.inline_check_box(:group_ids, group.id, group.name)
+    
+
+  = field_set_tag 'Daten' do
     %p Uhrzeiten sind optional
     = f.nested_fields_for :dates, 'event/dates/fields'
 
-  %h2 Anmeldung
-  = field_set_tag do
+  = field_set_tag 'Anmeldung' do
     = f.labeled_input_field(:application_opening_at)
     = f.labeled_input_field(:application_closing_at)
     = f.labeled_input_field(:application_conditions)
@@ -34,7 +39,6 @@
       = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
     = f.labeled_input_field(:maximum_participants, class: 'span1')
     
-  %h2 Angaben für Anmeldung
-  %p Du kannst weitere Angaben für die Anmeldung verlangen 
-  = field_set_tag do
+  = field_set_tag 'Angaben für Anmeldung' do
+    %p Du kannst weitere Angaben für die Anmeldung verlangen 
     = f.nested_fields_for :questions, 'event/questions/fields'

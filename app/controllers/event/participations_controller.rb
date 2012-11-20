@@ -1,6 +1,6 @@
 class Event::ParticipationsController < CrudController
   
-  self.nesting = Event
+  self.nesting = Group, Event
   
   FILTER = { all: 'Alle Personen', 
              leaders: 'Leitungsteam', 
@@ -10,15 +10,15 @@ class Event::ParticipationsController < CrudController
   
   # load before authorization
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
-  prepend_before_filter :parent, :set_group
+  prepend_before_filter :parent, :group
 
   before_filter :check_preconditions, only: [:create, :new]
   
   before_render_form :load_priorities
   before_render_show :load_answers
 
+  after_create :create_participant_role
   after_create :send_confirmation_email
-  before_save :set_participant_role
   
   def new
     assign_attributes
@@ -40,7 +40,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def destroy
-    super(location: event_application_market_index_path(entry.event_id))
+    super(location: group_event_application_market_index_path(group, event))
   end
   
   private
@@ -49,15 +49,7 @@ class Event::ParticipationsController < CrudController
     event = entry.event
     if entry.person == current_user && event.kind_of?(Event::Course)
       checker = Event::PreconditionChecker.new(event, current_user)
-      redirect_to group_event_path(event.group, event), alert: checker.errors_text unless checker.valid?
-    end
-  end
-
-  def set_participant_role
-    if entry.event != Event::Course
-      role = entry.event.participant_type.new
-      role.participation = entry
-      entry.roles << role
+      redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
     end
   end
     
@@ -114,8 +106,8 @@ class Event::ParticipationsController < CrudController
     entry.application.priority_1 ||= event if entry.application
   end
   
-  def set_group
-    @group = event.group
+  def group
+    @group ||= parents.first
   end
     
   def load_priorities
@@ -138,13 +130,19 @@ class Event::ParticipationsController < CrudController
     "#{models_label(false)} #{Event::ParticipationDecorator.decorate(entry).flash_info}".html_safe
   end
 
+  def create_participant_role
+    if !entry.event.supports_applications
+      role = entry.event.participant_type.new
+      role.participation = entry
+      entry.roles << role
+    end
+  end
+  
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
     end
   end
-
-  
 
   class << self
     def model_class

@@ -8,6 +8,7 @@ describe Event::ParticipationsController, type: :controller do
   let(:test_entry) { event_participations(:top) }
   
   let(:course) { test_entry.event }
+  let(:group)  { course.groups.first }
   let(:event_base) { Fabricate(:event) }
   
   let(:test_entry_attrs) do
@@ -22,7 +23,7 @@ describe Event::ParticipationsController, type: :controller do
     }
   end
 
-  let(:scope_params) { {event_id: course.id} }
+  let(:scope_params) { {group_id: group.id, event_id: course.id} }
 
   before do 
     user = people(:top_leader)
@@ -52,9 +53,9 @@ describe Event::ParticipationsController, type: :controller do
     [:event_base, :course].each do |event_sym|
       it "prompts to change contact data for #{event_sym}" do
         event = send(event_sym)
-        post :create,  event_id: event.id, participation: test_entry_attrs
+        post :create, group_id: group.id, event_id: event.id, participation: test_entry_attrs
         flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
-        should redirect_to event_participation_path(event, assigns(:participation))
+        should redirect_to group_event_participation_path(group, event, assigns(:participation))
       end
     end
   end
@@ -64,12 +65,12 @@ describe Event::ParticipationsController, type: :controller do
     [:event_base, :course].each do |event_sym|
       it "renders title for #{event_sym}" do
         event = send(event_sym)
-        get :new, event_id: event.id
+        get :new, group_id: group.id, event_id: event.id
         should have_content "Anmeldung für #{event.name}"
       end
     end
     it "renders person field when passed for_someone_else param" do
-      get :new, event_id: course.id, for_someone_else: true
+      get :new, group_id: group.id, event_id: course.id, for_someone_else: true
       person_field = subject.all('form .control-group')[0]
       person_field.should have_content 'Person'
       person_field.should have_css('input', count: 2)
@@ -79,7 +80,7 @@ describe Event::ParticipationsController, type: :controller do
 
   describe_action :delete, :destroy, format: :html, id: true do
     it "redirects to application market" do
-      should redirect_to event_application_market_index_path(course)
+      should redirect_to group_event_application_market_index_path(group, course)
     end
     
     it "has flash noting the application" do
@@ -102,14 +103,14 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "renders participant and course contact" do
-      get :print, event_id: test_entry.event.id, id: test_entry.id
+      get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
       contact_address.text.should include person.address
       particpant_address.text.should include "bottom_member@example.com"
     end
 
     it "redirects users without permission" do
       sign_in(Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person)
-      get :print, event_id: test_entry.event.id, id: test_entry.id
+      get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
       should redirect_to root_url
     end
   end

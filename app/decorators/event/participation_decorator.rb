@@ -21,14 +21,14 @@ class Event::ParticipationDecorator < ApplicationDecorator
     "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
   end
   
-  def qualification_link
-    h.toggle_link(qualified?, h.event_qualification_path(event_id, model))
+  def qualification_link(group)
+    h.toggle_link(qualified?, h.group_event_qualification_path(group, event_id, model))
   end
   
-  def waiting_list_link(event)
+  def waiting_list_link(group, event)
     if application
       h.toggle_link(application.waiting_list?, 
-                    h.waiting_list_event_application_market_path(event.id, id),
+                    h.waiting_list_group_event_application_market_path(group, event, id),
                     'Entfernen von der nationalen Warteliste',
                     'Hinzufügen zu der nationalen Warteliste',
                     'Warteliste')

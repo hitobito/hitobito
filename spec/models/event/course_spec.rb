@@ -4,7 +4,7 @@ describe Event::Course do
   
       
   subject do
-    Fabricate(:course, group: groups(:top_group) )
+    Fabricate(:course, groups: [groups(:top_group)] )
   end
   
   context "#qualification_date" do

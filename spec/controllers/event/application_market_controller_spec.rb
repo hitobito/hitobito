@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Event::ApplicationMarketController do
   
   let(:event) { events(:top_course) }
+  let(:group) { event.groups.first }
   
   let(:appl_prio_1) do
     Fabricate(:event_participation, 
@@ -67,7 +68,7 @@ describe Event::ApplicationMarketController do
   describe "GET index" do
     
     context "with standard filter" do
-      before { get :index, event_id: event.id }
+      before { get :index, group_id: group.id, event_id: event.id }
       
       context "participants" do
         subject { assigns(:participants) }
@@ -104,7 +105,7 @@ describe Event::ApplicationMarketController do
     end
     
     context "with mixed prio filter" do
-      before { get :index, event_id: event.id, prio: %w(1 3) }
+      before { get :index, group_id: group.id, event_id: event.id, prio: %w(1 3) }
 
       subject { assigns(:applications) }
       
@@ -117,7 +118,7 @@ describe Event::ApplicationMarketController do
     end
     
     context "with prio and waiting list filter" do
-      before { get :index, event_id: event.id, prio: %w(2), waiting_list: true }
+      before { get :index, group_id: group.id, event_id: event.id, prio: %w(2), waiting_list: true }
 
       subject { assigns(:applications) }
       
@@ -130,7 +131,7 @@ describe Event::ApplicationMarketController do
     end
     
     context "with waiting list filter" do
-      before { get :index, event_id: event.id, waiting_list: true }
+      before { get :index, group_id: group.id, event_id: event.id, waiting_list: true }
 
       subject { assigns(:applications) }
       
@@ -147,23 +148,23 @@ describe Event::ApplicationMarketController do
   describe "PUT participant" do
     
     it "creates role" do
-      put :add_participant, event_id: event.id, id: appl_prio_1.id, format: :js
+      put :add_participant, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js
       
       appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
     end
     
     it "shows error on existing participation" do
-      other = Fabricate(:course, group: groups(:top_layer))
+      other = Fabricate(:course, groups: [groups(:top_layer)])
       Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
 
-      put :add_participant, event_id: other.id, id: appl_prio_1.id, format: :js
+      put :add_participant, group_id: group.id, event_id: other.id, id: appl_prio_1.id, format: :js
       
       should render_template('participation_exists_error')
     end
   end
   
   describe "DELETE participant" do
-    before { delete :remove_participant, event_id: event.id, id: appl_participant.id, format: :js }
+    before { delete :remove_participant, group_id: group.id, event_id: event.id, id: appl_participant.id, format: :js }
     
     it "removes role" do
       appl_participant.reload.roles.should_not be_exists
@@ -171,7 +172,7 @@ describe Event::ApplicationMarketController do
   end
   
   describe "PUT waiting_list" do
-    before { put :put_on_waiting_list, event_id: event.id, id: appl_prio_1.id, format: :js }
+    before { put :put_on_waiting_list, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js }
     
     it "sets waiting list flag" do
       appl_prio_1.reload.application.should be_waiting_list
@@ -179,7 +180,7 @@ describe Event::ApplicationMarketController do
   end
   
   describe "DELETE waiting_list" do
-    before { delete :remove_from_waiting_list, event_id: event.id, id: appl_waiting.id, format: :js }
+    before { delete :remove_from_waiting_list, group_id: group.id, event_id: event.id, id: appl_waiting.id, format: :js }
     
     it "sets waiting list flag" do
       appl_waiting.reload.application.should_not be_waiting_list

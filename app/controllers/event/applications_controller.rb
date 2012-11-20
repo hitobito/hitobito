@@ -18,15 +18,15 @@ class Event::ApplicationsController < ApplicationController
     application.rejected = !approved
     application.save!
     flash[:notice] = "Die Anmeldung wurde #{verb}"
-    redirect_to event_participation_path(participation.event_id, participation)
-  end
-  
-  def event
-    @event ||= Event.find(params[:event_id])
+    redirect_to group_event_participation_path(group, participation.event_id, participation)
   end
   
   def application
     @application ||= Event::Application.find(params[:id])
+  end
+  
+  def group
+    @group ||= Group.find(params[:group_id])
   end
   
   def participation

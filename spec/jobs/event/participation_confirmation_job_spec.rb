@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Event::ParticipationConfirmationJob do
     
-  let(:course) { Fabricate(:course, group: groups(:top_layer), priorization: true) }
+  let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
   
   let(:participation) do
     Fabricate(:event_participation, 

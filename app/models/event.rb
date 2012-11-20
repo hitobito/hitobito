@@ -53,12 +53,11 @@ class Event < ActiveRecord::Base
   
   attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
-                  :application_conditions, :dates_attributes, :questions_attributes, :group_id
+                  :application_conditions, :dates_attributes, :questions_attributes, :group_ids
 
 
   ### ASSOCIATIONS
 
-  belongs_to :group
   belongs_to :contact, class_name: 'Person'
   
   has_many :dates, dependent: :destroy, validate: true, order: :start_at
@@ -67,11 +66,14 @@ class Event < ActiveRecord::Base
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
   
+  has_and_belongs_to_many :groups
+  
   
   ### VALIDATIONS
   
   validates :dates, presence: {message: 'müssen ausgefüllt werden'}
-  validate :assert_type_is_allowed_for_group
+  validates :group_ids, presence: {message: 'müssen vorhanden sein'}
+  validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   
   
@@ -98,7 +100,7 @@ class Event < ActiveRecord::Base
     end
 
     def only_group_id(*group_ids)
-      where(group_id: [group_ids].flatten)
+      joins(:groups).where(groups: {id: [group_ids].flatten})
     end
 
     def upcoming
@@ -116,10 +118,9 @@ class Event < ActiveRecord::Base
             "events.participant_count < events.maximum_participants")
     end
 
-    # moved from event/course
     def list
       order_by_date.
-      includes(:group, :kind).
+      includes(:groups, :kind).
       preload_all_dates.
       uniq
     end
@@ -168,9 +169,17 @@ class Event < ActiveRecord::Base
   end
 
   def label_detail
-    "#{number} #{group.name}"
+    "#{number} #{group_names}"
+  end
+  
+  def group_names
+    groups.collect(&:name).join(', ')
   end
 
+  def application_duration
+    Duration.new(application_opening_at, application_closing_at)
+  end
+  
   def init_questions
     if questions.blank?
       Event::Question.global.each do |q|
@@ -194,14 +203,19 @@ class Event < ActiveRecord::Base
   
   private
   
-  def assert_type_is_allowed_for_group
-    if type && group && !group.class.event_types.collect(&:sti_name).include?(type)
-      errors.add(:type, :type_not_allowed) 
+  def assert_type_is_allowed_for_groups
+    if groups.present?
+      master = groups.first
+      if groups.any? {|g| g.class != master.class }
+        errors.add(:group_ids, :must_have_same_type)
+      elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
+        errors.add(:type, :type_not_allowed) 
+      end
     end
   end
   
   def assert_application_closing_is_after_opening
-    if application_opening_at? && application_closing_at? && application_closing_at < application_opening_at
+    unless application_duration.meaningful?
       errors.add(:application_closing_at, :must_be_after_opening)
     end
   end

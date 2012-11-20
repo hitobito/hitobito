@@ -58,7 +58,7 @@ class Event::Course < Event
   end
 
   def label_detail
-    "#{kind.short_name} #{number} #{group.name}"
+    "#{kind.short_name} #{number} #{group_names}"
   end
   
   # The date on which qualification obtained in this course start

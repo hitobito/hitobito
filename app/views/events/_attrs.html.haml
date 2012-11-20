@@ -7,6 +7,8 @@
   = render_attrs(entry, *entry.used_attributes(:kind_id, :number, :motto))
   - entry.used?(:state) do
     = render_attrs(entry, :state_translated)
+  %dl.dl-horizontal
+    = render 'shared/labeled', label: 'Durchgeführt von', content: entry.groups_info
   = render_extensions :attrs
 
 = section 'Daten' do

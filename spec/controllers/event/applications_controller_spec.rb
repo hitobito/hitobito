@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Event::ApplicationsController do
   
   let(:event) { events(:top_course) }
+  let(:group) { event.groups.first }
   let(:group_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
   let(:participant) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
   let(:participation) do
@@ -19,9 +20,9 @@ describe Event::ApplicationsController do
     before { sign_in(group_leader) }
     
     describe 'PUT approve' do
-      before { put :approve, event_id: event.id, id: application.id }
+      before { put :approve, group_id: group.id, event_id: event.id, id: application.id }
       
-      it { should redirect_to(event_participation_path(event, participation)) }
+      it { should redirect_to(group_event_participation_path(group, event, participation)) }
       
       it "sets flash" do
         flash[:notice].should =~ /freigegeben/
@@ -34,9 +35,9 @@ describe Event::ApplicationsController do
     end
     
     describe 'DELETE reject' do
-      before { delete :reject, event_id: event.id, id: application.id }
+      before { delete :reject, group_id: group.id, event_id: event.id, id: application.id }
       
-      it { should redirect_to(event_participation_path(event, participation)) }
+      it { should redirect_to(group_event_participation_path(group, event, participation)) }
       
       it "sets flash" do
         flash[:notice].should =~ /abgelehnt/
@@ -56,12 +57,12 @@ describe Event::ApplicationsController do
     before { sign_in(user) }
     
     describe 'PUT approve' do
-      before { put :approve, event_id: event.id, id: application.id }
+      before { put :approve, group_id: group.id, event_id: event.id, id: application.id }
       it { should redirect_to(root_url) }
     end
     
     describe 'DELETE reject' do
-      before { delete :reject, event_id: event.id, id: application.id }
+      before { delete :reject, group_id: group.id, event_id: event.id, id: application.id }
       it { should redirect_to(root_url) }
     end
   end

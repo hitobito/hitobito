@@ -1,10 +1,10 @@
-- parent_sheet(EntrySheet.new(self, @event, [:group_event_path, @event.group]))
+- parent_sheet(EntrySheet.new(self, @event, [:group_event_path, @group]))
 - event_group_sheet
 - title "Anmeldung für #{@event}"
 
 = entry_form(stacked: true, 
              submit_label: entry.new_record? ? 'Anmelden' : 'Speichern', 
-             cancel_url_new: group_event_path(@event.group_id, @event)) do |f|
+             cancel_url_new: group_event_path(@group, @event)) do |f|
 
 
   - if params[:for_someone_else]

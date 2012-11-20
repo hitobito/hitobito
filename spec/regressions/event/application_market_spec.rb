@@ -5,6 +5,7 @@ describe Event::ApplicationMarketController, type: :controller do
   
   render_views
   
+  let(:group)  { course.groups.first }
   let(:course) { events(:top_course) }
   
   before do
@@ -27,7 +28,8 @@ describe Event::ApplicationMarketController, type: :controller do
   
   describe 'GET index' do
     
-    before { get :index, event_id: course.id }
+    before { get :index, event_id: course.id, group_id: group.id }
+    
     let(:dom) { Capybara::Node::Simple.new(response.body) }
     
     it { should render_template('index') }
@@ -48,7 +50,7 @@ describe Event::ApplicationMarketController, type: :controller do
       button = dom.find('.btn-group a')
       button.text.should eq ' Teilnehmer hinzufügen'
       button.should have_css('i.icon-plus')
-      button[:href].should eq new_event_participation_path(course, for_someone_else: true)
+      button[:href].should eq new_group_event_participation_path(group, course, for_someone_else: true)
     end
   end
 

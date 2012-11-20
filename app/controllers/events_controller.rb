@@ -7,6 +7,8 @@ class EventsController < CrudController
 
   # load group before authorization
   prepend_before_filter :parent
+  
+  before_render_form :load_sister_groups
 
   def new
     assign_attributes
@@ -30,13 +32,27 @@ class EventsController < CrudController
     type = model_params && model_params.delete(:type).presence
     type ||= 'Event'
     event = type.constantize.new
-    event.group = parent
+    event.groups << parent
     event
   end
 
   def assign_attributes
     model_params.delete(:contact)
     super
+  end
+  
+  def group
+    parent
+  end
+  
+  def load_sister_groups
+    master = @event.groups.first
+    @groups = master.parent_id? ? 
+                master.parent.children.
+                              where(type: master.type).
+                              where('groups.id <> ?', group.id).
+                              order(:name) :
+                []
   end
   
 end

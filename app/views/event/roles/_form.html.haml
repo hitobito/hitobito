@@ -1,8 +1,8 @@
-- parent_sheet(EntrySheet.new(self, @event, :event_participations_path))
-- parent_sheet(GroupSheet.new(self, @event.group))
+- parent_sheet(EntrySheet.new(self, @event, [:group_event_participations_path, @group]))
+- parent_sheet(GroupSheet.new(self, @group))
 
 = entry_form(buttons_bottom: false,
-             cancel_url: (entry.new_record? ? event_participations_path(@event.id) : event_participation_path(@event.id, entry.participation_id))) do |f|
+             cancel_url: (entry.new_record? ? group_event_participations_path(@group, @event) : group_event_participation_path(@group, @event, entry.participation_id))) do |f|
   - if entry.new_record?
     = f.hidden_field :type
     = f.labeled_person_field :person

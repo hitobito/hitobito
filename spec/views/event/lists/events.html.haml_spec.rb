@@ -1,14 +1,18 @@
 # encoding: UTF-8
 require 'spec_helper'
+
 describe 'event/lists/events.html.haml' do
   let(:top_leader) { people(:top_leader) }
+  
   before do
     assign(:events, EventDecorator.decorate(events))
     view.stub(action_name: 'events', current_user: top_leader)
     controller.stub(current_user: top_leader)
 
   end
+  
   let(:dom) { Capybara::Node::Simple.new(rendered) }
+  
   subject { dom }
 
   context "grouping" do
@@ -28,13 +32,14 @@ describe 'event/lists/events.html.haml' do
       events.first.application_possible?.should eq true
       render
       link.text.should eq 'Anmelden'
-      link[:href].should eq new_event_participation_path(events.first)
+      event = events.first
+      link[:href].should eq new_group_event_participation_path(event.groups.first, event)
     end
   end
 
   def create_event(hash={})
     hash = ({type: :event, group: :top_group}).merge(hash)
-    event = Fabricate(hash[:type], group: groups(hash[:group]))
+    event = Fabricate(hash[:type], groups: [groups(hash[:group])])
     set_start_dates(event, hash[:start_at])
     event
   end

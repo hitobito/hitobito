@@ -4,7 +4,7 @@ require 'spec_helper_request'
 describe EventsController, js: true do
   
   let(:event) do
-    event = Fabricate(:course, kind: event_kinds(:slk), group: groups(:top_group))
+    event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)])
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     event
   end
@@ -12,7 +12,7 @@ describe EventsController, js: true do
   
   it "may set and remove contact from event" do
     sign_in
-    visit edit_group_event_path(event.group_id, event.id)
+    visit edit_group_event_path(event.group_ids.first, event.id)
    
 
     obsolete_node_safe do

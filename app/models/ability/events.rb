@@ -108,16 +108,16 @@ module Ability::Events
   end
   
   def can_manage_event?(event)
-    event.group && (
+    event.groups.present? && (
     can_create_event?(event) ||
     events_with_permission(:full).include?(event.id) ||
-    contains_any?(layers_full, collect_ids(event.group.layer_groups)))
+    contains_any?(layers_full, collect_ids(event.groups.collect(&:layer_groups).flatten)))
   end
   
   def can_create_event?(event)
-    event.group && (
-    groups_group_full.include?(event.group_id) ||
-    layers_full.include?(event.group.layer_group_id))
+    event.groups.present? && (
+    contains_any?(groups_group_full, event.group_ids) ||
+    contains_any?(layers_full, event.groups.collect(&:layer_group_id)))
   end
   
   def can_approve_application?(participation)

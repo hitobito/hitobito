@@ -7,7 +7,7 @@ module Jubla::Event::Application
   end
   
   def contact_with_group_type
-    group = event.group
+    group = event.groups.first
     if type = group.class.contact_group_type
       group.children.where(type: type.sti_name).first
     else

@@ -4,6 +4,8 @@ describe Event::ApplicationMarketController do
   
   let(:event) { Fabricate(:course) }
   
+  let(:group) { event.groups.first }
+  
   let(:appl_prio_1) do
     Fabricate(:event_participation, 
               event: event, 
@@ -65,7 +67,7 @@ describe Event::ApplicationMarketController do
   
   describe "requests are mutually undoable", js: true do
     before do
-      visit event_application_market_index_path(event.id)
+      visit group_event_application_market_index_path(group.id, event.id)
       
       @participants = find('#participants').text
       @applications = find('#applications').text
@@ -82,7 +84,7 @@ describe Event::ApplicationMarketController do
         find("#applications ##{appl_id}").click_link('Warteliste')
         find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
         
-        visit event_application_market_index_path(event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
         
         find('#participants').text == @participants
         find('#applications').text == @applications
@@ -105,7 +107,7 @@ describe Event::ApplicationMarketController do
         find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
         
         
-        visit event_application_market_index_path(event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
   
         find('#participants').text == @participants
         find('#applications').text == @applications
@@ -124,7 +126,7 @@ describe Event::ApplicationMarketController do
         should_not have_selector("#participants ##{appl_id}")
         find("#applications tr:last").should have_content(appl_prio_1.person.to_s)
         
-        visit event_application_market_index_path(event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
         
         find('#participants').text == @participants
         find('#applications').text == @applications
@@ -147,7 +149,7 @@ describe Event::ApplicationMarketController do
         should_not have_selector("#participants ##{appl_id}")
         find("#applications tr:last").should have_content(appl_waiting.person.to_s)
         
-        visit event_application_market_index_path(event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
         
         find('#participants').text == @participants
         find('#applications').text == @applications
@@ -165,7 +167,7 @@ describe Event::ApplicationMarketController do
         should_not have_selector("#applications ##{appl_id}")
         
         
-        visit event_application_market_index_path(event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
         
         find('#participants').text == @participants
         find('#applications').text == @applications

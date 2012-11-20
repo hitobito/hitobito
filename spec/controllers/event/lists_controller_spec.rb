@@ -61,7 +61,7 @@ describe Event::ListsController do
 
   def create_event(group, hash={})
     hash = ({finish_at: 1.day.from_now, type: :event}).merge(hash)
-    event = Fabricate(hash[:type], group: groups(group))
+    event = Fabricate(hash[:type], groups: [groups(group)])
     event.dates.create(start_at: hash[:finish_at] - 5.days, finish_at: hash[:finish_at])
     event
   end

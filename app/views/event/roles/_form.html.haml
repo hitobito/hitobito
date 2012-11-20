@@ -10,4 +10,4 @@
     = f.labeled(:event_id, content_tag(:div, entry.event.to_s))
     = f.labeled(:person_id, content_tag(:div, entry.person.to_s))
     
-  = f.labeled_input_field(:label, data: {provide: :typeahead, source: entry.class.available_labels})
+  = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})

@@ -6,8 +6,7 @@ class PopulationController < ApplicationController
   
   
   def index
-    @groups = flock.groups_in_same_layer.order_by_type(flock)
-    @people = load_people(@groups)
+    @groups = load_groups
     @groups_people = load_groups_people
     @people_data_complete = people_data_complete?
   end
@@ -34,18 +33,16 @@ class PopulationController < ApplicationController
 
   def load_groups_people
     groups_people = {}
-    load_groups.each do |group|
-      groups_people.merge!({group.id => PersonDecorator.decorate(load_people([group]))})
+    @groups.each do |group|
+      groups_people[group.id] = PersonDecorator.decorate(load_people([group]))
     end
     groups_people
   end
 
   def people_data_complete?
-    @people.each do |p|
-      return false if p.birthday.blank?
-      return false if p.gender.blank?
+    @groups_people.values.flatten.all? do |p|
+      p.birthday.present? && p.gender.present?
     end
-    true
   end
 
   def authorize

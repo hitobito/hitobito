@@ -67,10 +67,10 @@ class Event::ParticipationsController < CrudController
     if scope = FILTER.keys.detect {|k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event)
+
     # event specific filters (filter by role label)
-    elsif label = event.participation_role_labels.keys.detect {|k| k.to_s == params[:filter] }
-      # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(:role_label, label)
+    elsif label = event.participation_role_labels.any? {|k| k == params[:filter] }
+      records = records.role_label(params[:filter])
     end
     
     records

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -z "$RAILS_ENV"]
+then
+ env="development"
+else
+  env=$RAILS_ENV
+fi
+
+export RAILS_DB_ADAPTER=mysql2
+export RAILS_DB_NAME=jubla_$env
+export RAILS_DB_SOCKET=/var/lib/mysql/mysql.sock
+
+
+$@

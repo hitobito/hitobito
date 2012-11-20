@@ -27,10 +27,6 @@ class EventDecorator < ApplicationDecorator
     info
   end
   
-  def groups_info
-    groups.collect(&:name).join(', ')
-  end
-
   def possible_role_links(group)
     klass.role_types.map do |type|
       unless type.restricted

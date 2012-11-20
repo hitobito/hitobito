@@ -51,7 +51,7 @@ class EventsController < CrudController
                 master.parent.children.
                               where(type: master.type).
                               where('groups.id <> ?', group.id).
-                              order(:name) :
+                              reorder(:name) :
                 []
   end
   

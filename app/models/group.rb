@@ -27,20 +27,15 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach_id            :integer
-#  advisor_id          :integer
 #
 
 class Group < ActiveRecord::Base
   
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect {|a| "groups.#{a}"}
   
-  acts_as_nested_set dependent: :destroy
-  acts_as_paranoid
   
   include Group::Types
   include Contactable
-  
   
   ### ATTRIBUTES
   
@@ -57,12 +52,16 @@ class Group < ActiveRecord::Base
   
   after_create :set_layer_group_id
   after_create :create_default_children
+  after_destroy :destroy_orphaned_events
   
   # Root group may not be destroyed
   protect_if :root?
   
   
   ### ASSOCIATIONS
+  
+  acts_as_nested_set dependent: :destroy
+  acts_as_paranoid
   
   belongs_to :contact, class_name: 'Person'
   
@@ -185,8 +184,15 @@ class Group < ActiveRecord::Base
     end
   end
   
+  def destroy_orphaned_events
+    require 'pry'; binding.pry if kind_of?(Group::TopLayer)
+    events.includes(:groups).each do |e|
+      destroy_orphaned_event(e)
+    end
+  end
+  
   def destroy_orphaned_event(event)
-    if event.group_ids.blank? || event.groups_ids == [id]
+    if event.group_ids.blank? || event.group_ids == [id]
       event.destroy
     end
   end

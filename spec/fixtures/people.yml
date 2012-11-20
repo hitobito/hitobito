@@ -28,6 +28,7 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string(255)
 #  last_sign_in_ip        :string(255)
+#  picture                :string(255)
 #  name_mother            :string(255)
 #  name_father            :string(255)
 #  nationality            :string(255)

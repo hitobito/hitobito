@@ -53,7 +53,7 @@ describe GroupsController do
     end
 
     it "leader can destroy group" do
-      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change(Group,:count).by(-3)
+      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change(Group,:count).by(-4)
       should redirect_to groups(:top_layer)
     end
   end

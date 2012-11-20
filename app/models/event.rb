@@ -4,7 +4,6 @@
 # Table name: events
 #
 #  id                     :integer          not null, primary key
-#  group_id               :integer          not null
 #  type                   :string(255)
 #  name                   :string(255)      not null
 #  number                 :string(255)
@@ -24,6 +23,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  participant_count      :integer          default(0)
+#  application_contact_id :integer
 #
 
 class Event < ActiveRecord::Base
@@ -173,7 +173,7 @@ class Event < ActiveRecord::Base
   end
   
   def group_names
-    groups.collect(&:name).join(', ')
+    groups.join(', ')
   end
 
   def application_duration

@@ -332,8 +332,33 @@ describe Event do
 
   end
 
+  context "participation role labels" do
+
+    let(:event) { events(:top_event) } 
+    let(:participation) { Fabricate(:event_participation, event: event) }
+
+    it "should have 2 different labels" do
+      Fabricate(Event::Role::Participant.name.to_sym, participation: participation, label: 'Foolabel')
+      Fabricate(Event::Role::Participant.name.to_sym, participation: participation, label: 'Foolabel')
+      Fabricate(Event::Role::Participant.name.to_sym, participation: participation, label: 'Just label')
+      event.reload
+
+      event.participation_role_labels.count.should eq 2
+    end
+
+    it "should have no labels" do
+      Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))
+      Fabricate(Event::Role::Participant.name.to_sym, participation: participation)
+      event.reload
+
+      event.participation_role_labels.count.should eq 0
+    end
+
+  end
+
   def set_start_finish(event,start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)
   end
+
 end

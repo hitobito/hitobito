@@ -115,7 +115,7 @@ describe Event::ParticipationsController, type: :controller do
     end
   end
 
-  describe "participation role label filters" do
+  describe "participation role label filter" do
 
     let(:event) { events(:top_event) } 
     let(:parti1) { Fabricate(:event_participation, event: event) }
@@ -131,7 +131,7 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "filters by event role label" do
-      get :index, group_id: event.groups.first.id, event_id: event.id, filter: 'foolabel'
+      get :index, group_id: event.groups.first.id, event_id: event.id, filter: 'Foolabel'
 
       dom.should have_selector('a.dropdown-toggle', text: 'Foolabel')
       dom.should have_selector('.dropdown a', text: 'Foolabel')
@@ -140,6 +140,7 @@ describe Event::ParticipationsController, type: :controller do
       dom.should have_selector('a', text: parti1.person.to_s)
       dom.should have_selector('a', text: parti2.person.to_s)
       dom.should have_no_selector('a', text: parti3.person.to_s)
+
     end
 
   end

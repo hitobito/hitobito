@@ -22,7 +22,13 @@ module Event::ParticipationsHelper
   end
 
   def role_filters
-    role_labels = entry.event.participation_role_labels
-    Event::ParticipationsController::FILTER.merge(role_labels)
+    Event::ParticipationsController::FILTER.merge(event_role_filters)
+  end
+
+  def event_role_filters
+    links = {}
+    labels = entry.event.participation_role_labels
+    labels.each { |l| links[l.to_sym] = l }
+    links
   end
 end

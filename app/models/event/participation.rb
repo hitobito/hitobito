@@ -74,6 +74,11 @@ class Event::Participation < ActiveRecord::Base
     def participants(event)
       joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
     end
+
+    def role_label(role_label)
+      #require 'pry'; binding.pry
+      joins(:roles).where('event_roles.label = ?', role_label.to_s)
+    end
     
     # load participations without affiliate roles
     def participating(event)

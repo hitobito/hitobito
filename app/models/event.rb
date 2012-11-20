@@ -178,6 +178,19 @@ class Event < ActiveRecord::Base
       end
     end
   end
+
+  # gets a list of all user defined participation_roles_labels for this event
+ def participation_role_labels
+    role_labels = {}
+    participations.each do |p|
+      p.roles.each do |r|
+        if r.label.present? && !role_labels.include?(r.label)
+          role_labels.merge!({ r.label.downcase.to_sym => r.label })
+        end
+      end
+    end
+    role_labels
+  end
   
   private
   

@@ -25,7 +25,6 @@ class Event::ParticipationsController < CrudController
     entry.init_answers
     respond_with(entry)
   end
-
     
   def authorize!(action, *args)
     if [:index].include?(action)
@@ -72,14 +71,18 @@ class Event::ParticipationsController < CrudController
                  uniq
     Person::PreloadPublicAccounts.for(records.collect(&:person))
 
+    # default event filters
     if scope = FILTER.keys.detect {|k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event)
+    # event specific filters (filter by role label)
+    elsif label = event.participation_role_labels.keys.detect {|k| k.to_s == params[:filter] }
+      # do not use params[:filter] in send to satisfy brakeman
+      records = records.send(:role_label, label)
     end
     
     records
   end
-  
   
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
@@ -140,6 +143,7 @@ class Event::ParticipationsController < CrudController
       Event::ParticipationConfirmationJob.new(entry).enqueue!
     end
   end
+
   
 
   class << self

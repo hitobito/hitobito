@@ -8,7 +8,7 @@
   - entry.used?(:state) do
     = render_attrs(entry, :state_translated)
   %dl.dl-horizontal
-    = render 'shared/labeled', label: 'Durchgeführt von', content: entry.groups_info
+    = render 'shared/labeled', label: 'Durchgeführt von', content: entry.group_names
   = render_extensions :attrs
 
 = section 'Daten' do

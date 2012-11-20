@@ -3,7 +3,6 @@
 # Table name: events
 #
 #  id                     :integer          not null, primary key
-#  group_id               :integer          not null
 #  type                   :string(255)
 #  name                   :string(255)      not null
 #  number                 :string(255)
@@ -23,6 +22,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  participant_count      :integer          default(0)
+#  application_contact_id :integer
 #
 
 require 'spec_helper'
@@ -299,6 +299,12 @@ describe Event do
       subject.application_opening_at = Date.today - 6
       
       should be_valid
+    end
+    
+    it "requires groups" do
+      subject.group_ids = []
+      
+      should have(1).error_on(:group_ids)
     end
   end
 

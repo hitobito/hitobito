@@ -29,8 +29,8 @@ de:
         one: Social Media Adresse
         other: Social Media Adressen
       event:
-        one: Event
-        other: Events
+        one: Anlass
+        other: Anlässe
       event/course:
         one: Kurs
         other: Kurse

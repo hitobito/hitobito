@@ -2,11 +2,13 @@
 -title event.name
 
 =render 'events/tabs'
-= action_button('Teilnehmer hinzufügen', new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)
+
+- content_for(:toolbar) do
+  = action_button('TeilnehmerIn hinzufügen', new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)
 
 #main.row-fluid
   %article.span6
-    %h2 Zuteilung
+    %h2 Zugeteilte Teilnehmende
     %p{style: 'padding-top: 7px; margin-bottom: 20px;'}
       %span#booking_info= event.booking_info
       verfügbaren Plätzen zugeteilt

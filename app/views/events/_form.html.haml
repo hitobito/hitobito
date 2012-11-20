@@ -20,9 +20,9 @@
     = field_set_tag 'Durchgeführt von' do
       = f.labeled(:group_ids, '&nbsp;'.html_safe) do 
         = hidden_field_tag('event[group_ids][]', @group.id)
-        = f.inline_check_box(:group_ids, @group.id, @group.name, disabled: true)
+        = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
         - @groups.each do |group|
-          = f.inline_check_box(:group_ids, group.id, group.name)
+          = f.inline_check_box(:group_ids, group.id, group.to_s)
     
 
   = field_set_tag 'Daten' do

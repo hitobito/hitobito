@@ -7,6 +7,7 @@
 #  qualification_kind_id :integer          not null
 #  start_at              :date             not null
 #  finish_at             :date
+#  origin                :string(255)
 #
 
 class Qualification < ActiveRecord::Base

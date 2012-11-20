@@ -27,8 +27,6 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
-#  coach_id            :integer
-#  advisor_id          :integer
 #
 
 require 'spec_helper'
@@ -126,6 +124,7 @@ describe Group do
                                      groups(:bottom_layer_one), 
                                      groups(:bottom_layer_two), 
                                      groups(:bottom_group_one_one), 
+                                     groups(:bottom_group_one_one_one),
                                      groups(:bottom_group_one_two), 
                                      groups(:bottom_group_two_one)]
     end
@@ -139,7 +138,7 @@ describe Group do
     end
     
     it "works without possible groups" do
-      parent = groups(:bottom_group_one_one)
+      parent = groups(:bottom_group_one_two)
       parent.children.order_by_type(parent).should be_empty
     end
   end
@@ -170,33 +169,43 @@ describe Group do
     let(:bottom_group) { groups(:bottom_group_one_one) }
 
     context "children" do
-      it "destroys self and children" do
+      it "destroys self and all children" do
         deleted_ids = bottom_layer.self_and_descendants.collect(&:id)
-        expect { bottom_layer.destroy }.to change(Group,:count).by(-3)
+        expect { bottom_layer.destroy }.to change { Group.count }.by(-4)
         Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
       end
-
-      it "destroys children's children" do
-        deleted_ids = top_layer.self_and_descendants.collect(&:id)
-        deleted_ids -= [top_layer.id] # top layer cannot be deleted
-        expect { top_layer.destroy }.to change(Group,:count).by(-6)
-        Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
+      
+      it "does not destroy anything for root group" do
+        expect { top_layer.destroy }.not_to change { Group.count }
       end
     end
 
     context "role assignments"  do
-      it "terminates own roles and children's roles" do
-        id = Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer ).id
-        expect { bottom_layer.destroy }.to change(Role,:count).by(-2)
-        Role.only_deleted.find(:all).collect(&:id).should =~ [id, ActiveRecord::Fixtures.identify(:bottom_member)]
-      end
-
-      it "terminates children's children's role assigments" do
+      it "terminates own roles and all children's roles" do
         Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer)
         Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
-        deleted_ids = top_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
-        expect { top_layer.destroy }.to change(Role,:count).by(-4)
+        Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one_one))
+        deleted_ids = bottom_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
+        expect { bottom_layer.destroy }.to change(Role,:count).by(-4)
         Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
+      end
+    end
+    
+    context "events" do
+      let(:group) { groups(:bottom_layer_one) }
+      
+      it "destroys exclusive events" do
+        Fabricate(:event, groups: [group])
+        expect { group.destroy }.to change { Event.count }.by(-1)
+      end
+      
+      it "does not destroy events belonging to other groups as well" do
+        Fabricate(:event, groups: [group, groups(:bottom_layer_two)])
+        expect { group.destroy }.not_to change { Event.count }
+      end
+      
+      it "destroys event when removed from association" do
+        expect { top_layer.events = [events(:top_event)] }.to change { Event.count }.by(-1)
       end
     end
   end

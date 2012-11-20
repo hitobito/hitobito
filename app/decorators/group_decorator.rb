@@ -44,11 +44,11 @@ class GroupDecorator < ApplicationDecorator
 
   def new_event_button
     e = possible_events.first
-    h.action_button("#{e.model_name.human} hinzufügen", event_link(e), :plus)
+    h.action_button("#{e.model_name.human} erstellen", event_link(e), :plus)
   end
 
   def new_event_dropdown
-    h.dropdown_button('Event hinzufügen', possible_event_links, :plus)
+    h.dropdown_button('Anlass erstellen', possible_event_links, :plus)
   end
 
   def possible_event_links

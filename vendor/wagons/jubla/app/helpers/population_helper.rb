@@ -2,9 +2,9 @@ module PopulationHelper
 
   BADGE_INVALID = '<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>'.html_safe
 
-  def person_edit_link(person)
+  def person_edit_link(person, group)
     link_to(icon(:edit), 
-            edit_group_person_path(person, group_id: @group.id, 
+            edit_group_person_path(person, group_id: group.id, 
                                    return_url: population_group_path(@group.id)),
             title: 'Bearbeiten', alt: 'Bearbeiten')
   end
@@ -33,14 +33,6 @@ module PopulationHelper
 
   def check_approveable?
     @group.population_approveable? && can?(:create_member_counts, @group)
-  end
-
-  def people_data_complete?
-    @people.each do |p|
-      return false if p.birthday.blank?
-      return false if p.gender.blank?
-    end
-    true
   end
 
 end

@@ -12,7 +12,7 @@ module Event::ParticipationsHelper
   end
 
   def role_filter_links
-    content = Event::ParticipationsController::FILTER.map do |key, value| 
+    content = role_filters.map do |key, value| 
       filter = key == :all ? {} : { filter: key }
       link = group_event_participations_path(@group, @event, filter)
       link_to(value, link)
@@ -20,9 +20,14 @@ module Event::ParticipationsHelper
   end
   
   def role_filter_title
-    choices = Event::ParticipationsController::FILTER
+    choices = role_filters
     key = choices.keys.map(&:to_s).find { |key| params[:filter].to_s == key }
     key ||= choices.keys.first
     choices[key.to_sym]
+  end
+
+  def role_filters
+    role_labels = entry.event.participation_role_labels
+    Event::ParticipationsController::FILTER.merge(role_labels)
   end
 end

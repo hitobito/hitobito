@@ -72,9 +72,21 @@ class Group < ActiveRecord::Base
   
   has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
   
+  
   ### VALIDATIONS
   
   validate :assert_type_is_allowed_for_parent, on: :create
+  
+  
+  ### INDEX
+  
+  define_partial_index do
+    indexes name, short_name, sortable: true
+    indexes email, address, zip_code, town, country
+
+    indexes phone_numbers.number, as: :phone_number
+    indexes social_accounts.name, as: :social_account
+  end
   
   
   ### CLASS METHODS

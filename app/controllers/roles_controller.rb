@@ -14,6 +14,7 @@ class RolesController < CrudController
   end
   
   def update
+    sanitize_type
     type = model_params && model_params.delete(:type)
     if type && type != entry.type 
       handle_type_change(type)
@@ -31,9 +32,12 @@ class RolesController < CrudController
   end
   
   private 
+  
   def handle_type_change(type)
     role = type.constantize.new
-    role.initialize_dup(entry)
+    role.person_id = entry.person_id
+    role.group_id = entry.group_id
+    role.label = model_params[:label]
     role.save
     entry.destroy
     flash[:notice] = @@helper.t('roles.role_changed', old_role: full_entry_label, new_role: role).html_safe
@@ -41,9 +45,7 @@ class RolesController < CrudController
   end
   
   def build_entry 
-    if model_params.blank? || !parent.class.role_types.collect(&:sti_name).include?(model_params[:type])
-      raise ActiveRecord::RecordNotFound 
-    end
+    sanitize_type
 
     # delete unused attributes
     model_params.delete(:group_id)
@@ -53,6 +55,12 @@ class RolesController < CrudController
     role.group_id = parent.id
     role.person_id = model_params.delete(:person_id)
     role
+  end
+  
+  def sanitize_type
+    if model_params.blank? || !parent.class.role_types.collect(&:sti_name).include?(model_params[:type])
+      raise ActiveRecord::RecordNotFound 
+    end
   end
 
   # A label for the current entry, including the model name, used for flash

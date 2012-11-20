@@ -22,6 +22,7 @@ describe RolesController, type: :controller do
   
   let(:test_entry_attrs) do
     { 
+      type: Group::BottomLayer::Member.sti_name,
       label: 'Materialchef'
     }
   end

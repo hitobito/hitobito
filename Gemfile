@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.9'
 
 
 gem 'awesome_nested_set'
@@ -23,6 +23,7 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
+gem 'thinking-sphinx'
 gem 'wagons'
 # Remove once errbit is running again
 gem 'exception_notification'

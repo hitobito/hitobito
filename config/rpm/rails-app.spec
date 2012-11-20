@@ -12,7 +12,7 @@
 
 %define use_delayed_job 1
 %define use_memcached   0
-%define use_sphinx      0
+%define use_sphinx      1
 %define use_imagemagick 0
 
 %define bundle_without_groups 'development test metrics guard console'
@@ -146,6 +146,14 @@ echo "# Rotate rails logs for %{name}
 }
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
 
+%if %{use_sphinx}
+mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
+echo "# Reindex sphinx for %{name}
+# Created by %{name}.rpm
+*/10 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index
+" > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
+%endif
+
 export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
 %{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
@@ -226,6 +234,9 @@ fi
 %defattr(-,root,root,)
 %{_sysconfdir}/sysconfig/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
+%if %{use_sphinx}
+%{_sysconfdir}/cron.d/%{name}
+%endif
 
 %attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user

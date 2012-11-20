@@ -32,7 +32,7 @@ describe RolesController do
     
 
     it "redirects to person after update" do
-      put :update, {group_id: group.id, id: role.id, role: {label: 'bla'}}
+      put :update, {group_id: group.id, id: role.id, role: {label: 'bla', type: role.type}}
       
       flash[:notice].should eq notice
       role.reload.label.should eq 'bla'

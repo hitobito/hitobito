@@ -92,6 +92,17 @@ class Person < ActiveRecord::Base
   scope :order_by_company, order('people.company_name, people.last_name, people.first_name')
   
   
+  ### INDEXED FIELDS
+  
+  define_partial_index do
+    indexes first_name, last_name, company_name, nickname, company, sortable: true
+    indexes email, address, zip_code, town, country, birthday, additional_information
+            
+    indexes phone_numbers.number, as: :phone_number
+    indexes social_accounts.name, as: :social_account
+  end
+  
+  
   ### CLASS METHODS
 
 

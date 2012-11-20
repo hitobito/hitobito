@@ -87,6 +87,11 @@ module Jubla
       ActionMailer::Base.default from: Settings.email_sender
     end
     
+    config.after_initialize do
+      ThinkingSphinx.context.indexed_models.each do |model|
+        model.constantize.define_partial_indizes!
+      end
+    end
   end
 end
 

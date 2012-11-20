@@ -1,13 +1,14 @@
-%table.table
-  - @groups.each do |group|
-    %tr
-      %td{colspan: 5}
-        %br
-        %h2= group.to_s
+- @groups.each do |group|
+  %h2= group.to_s
+  %table.table.table-striped
     - @groups_people[group.id].each do |person| 
       %tr
         %td
-          = person.to_s
+          %strong
+            - if can?(:show, person)
+              = link_to(person.to_s, group_person_path(group, person))
+            - else
+              = person.to_s
         %td
           = person.roles.first.to_s
         %td
@@ -15,4 +16,5 @@
         %td
           = person_gender(person)
         %td
-          = person_edit_link(person, group)
+          = person_edit_link(person, group) if can?(:edit, person)
+

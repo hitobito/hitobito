@@ -58,7 +58,6 @@ module LayoutHelper
   # Renders all partials with names that match "_#{key}_*.html.haml"
   # in alphabetical order.
   def render_extensions(key, options = {})
-    #require 'pry'; binding.pry
     safe_join(find_extensions(key, options.delete(:folder))) do |e|
       render options.merge(:partial => e) 
     end

@@ -1,14 +1,9 @@
 # encoding: UTF-8
 module Event::ParticipationsHelper
+  
   def event_attr_with_break(attr)
     str = parent.send(attr) + tag(:br)
     str.html_safe
-  end
-
-  def edit_person_path
-    person = entry.person
-    group = person.groups.first
-    edit_group_person_path(group,person)
   end
 
   def role_filter_links

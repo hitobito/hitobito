@@ -15,9 +15,11 @@ class PopulationController < ApplicationController
   private
   
   def load_people(groups)
-    Person.includes(:roles).
+    Person.joins(:roles).
            where(roles: {group_id: groups.collect(&:id)}).
            affiliate(false).
+           preload_groups.
+           uniq.
            order_by_role.
            order_by_name
   end
@@ -33,10 +35,9 @@ class PopulationController < ApplicationController
   def load_groups_people
     groups_people = {}
     load_groups.each do |group|
-      groups_people.merge!({group.id => load_people([group])})
+      groups_people.merge!({group.id => PersonDecorator.decorate(load_people([group]))})
     end
     groups_people
-
   end
 
   def people_data_complete?

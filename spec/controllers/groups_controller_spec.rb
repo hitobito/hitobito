@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe GroupsController do
-  render_views
 
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader)  }
@@ -15,10 +14,26 @@ describe GroupsController do
     it "renders template when signed in" do
       sign_in(person)
       get :show, id: group.id
-      should render_template('groups/_attr')
+      should render_template('crud/show')
     end
   end
-
+  
+  describe "show" do
+    let(:group) { groups(:top_layer) }
+    
+    before do
+      sign_in(person)
+      get :show, id: group.id
+    end
+    
+    context "sub_groups" do
+      subject { assigns(:sub_groups) }
+      
+      its(:keys) { should == %w(Gruppen Untergruppen)}
+      its(:values) { should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
+                                [groups(:top_group)]]}
+    end
+  end
 
   describe "show, new then create" do
     before { sign_in(person) } 

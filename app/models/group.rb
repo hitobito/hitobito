@@ -185,7 +185,6 @@ class Group < ActiveRecord::Base
   end
   
   def destroy_orphaned_events
-    require 'pry'; binding.pry if kind_of?(Group::TopLayer)
     events.includes(:groups).each do |e|
       destroy_orphaned_event(e)
     end

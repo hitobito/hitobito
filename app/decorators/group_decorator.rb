@@ -2,6 +2,7 @@
 
 class GroupDecorator < ApplicationDecorator
   decorates :group
+  decorates_association :contact
 
   include ContactableDecorator
 
@@ -114,12 +115,6 @@ class GroupDecorator < ApplicationDecorator
     attributes -= model.class.superior_attributes unless can?(:modify_superior, model)
     attributes
   end
-
-
-  def grouped_children
-    @grouped_children ||= GroupListDecorator.new(model)
-  end
-
 
   def type_name
     klass.model_name.human

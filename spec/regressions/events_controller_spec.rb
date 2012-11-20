@@ -28,7 +28,7 @@ describe EventsController, type: :controller do
 
     it "renders dropdown to add new events" do
       get :index, group_id: group.id
-      dom.find('.dropdown-toggle').text.should include 'Event hinzufügen'
+      dom.find('.dropdown-toggle').text.should include 'Anlass erstellen'
       [Event, Event::Course].each_with_index do |item, index|
         path = new_group_event_path(event: {type: item.sti_name})
         dom.all('.dropdown-menu a')[index].text.should eq item.model_name.human

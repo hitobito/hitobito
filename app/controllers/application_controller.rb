@@ -12,11 +12,10 @@ class ApplicationController < ActionController::Base
   
   before_filter :authenticate_person!
   check_authorization :unless => :devise_controller?
-  
-  
+
   
   private
-  
+
   def current_user
     current_person
   end

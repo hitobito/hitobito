@@ -7,6 +7,8 @@ describe 'groups/_attrs.html.haml' do
 
   before do
     assign(:group, group)
+    assign(:sub_groups, {'Gruppen' => [groups(:bottom_layer_one)], 
+                         'Untergruppen' => [groups(:top_group)]})
     view.stub(current_user: current_user)
     controller.stub(current_user: current_user)
     view.stub(entry: GroupDecorator.decorate(group))

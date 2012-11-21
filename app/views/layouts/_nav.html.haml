@@ -1,1 +1,7 @@
+
+= form_tag '#', class: 'form-search pull-right', method: :get do
+  .input-append
+    = search_field_tag :q, params[:q], class: 'span3 search-query'
+    = button_tag icon(:search), class: 'btn'
+
 = render_main_nav

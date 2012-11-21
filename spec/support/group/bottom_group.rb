@@ -1,3 +1,5 @@
+require Rails.root.join("spec/support/group/external_role.rb")
+
 class Group::BottomGroup < Group
 
   children Group::BottomGroup
@@ -10,6 +12,6 @@ class Group::BottomGroup < Group
     self.visible_from_above = false
   end
   
-  roles Leader, Member
+  roles Leader, Member, Role::External
   
 end

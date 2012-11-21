@@ -63,9 +63,10 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries = []
   end
 
-  config.before(:all, :draper_with_helpers) do
+  config.before(:each, :draper_with_helpers) do
     c = ApplicationController.new
     c.request = ActionDispatch::TestRequest.new
+    c.stub(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
 end

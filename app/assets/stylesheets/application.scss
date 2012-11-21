@@ -392,6 +392,13 @@ body > nav {
       }
     }
   }
+  
+  form { 
+    margin-bottom: 0; 
+    
+    input[type="search"] { margin-bottom: 0 !important; }
+  }
+  
 }
 
 

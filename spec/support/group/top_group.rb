@@ -1,3 +1,5 @@
+require Rails.root.join("spec/support/group/external_role.rb")
+
 class Group::TopGroup < Group
 
   self.event_types = [Event, Event::Course]
@@ -9,7 +11,7 @@ class Group::TopGroup < Group
   class Member < ::Role
     self.permissions = [:contact_data, :login]
   end
-  
-  roles Leader, Member
+    
+  roles Leader, Member, Role::External
   
 end

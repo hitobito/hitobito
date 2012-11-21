@@ -18,11 +18,8 @@ class GroupsController < CrudController
   private 
   
   def build_entry 
-    if model_params.blank? || !Group.all_types.collect(&:sti_name).include?(model_params[:type])
-      raise ActiveRecord::RecordNotFound 
-    end
-    
-    group = model_params.delete(:type).constantize.new
+    type = model_params && model_params.delete(:type)
+    group = Group.find_group_type!(type).new
     group.parent_id = model_params.delete(:parent_id)
     group
   end

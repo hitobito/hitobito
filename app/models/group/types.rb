@@ -50,6 +50,18 @@ module Group::Types
       collect_types([], [self])
     end
     
+    def find_group_type!(sti_name)
+      type = all_types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
+      type
+    end
+    
+    def find_role_type!(sti_name)
+      type = role_types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      type
+    end
+    
     private
     
     def collect_types(all, types)

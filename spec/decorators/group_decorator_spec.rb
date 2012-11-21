@@ -5,18 +5,20 @@ describe GroupDecorator, :draper_with_helpers do
   let(:model) { double("model")}
   let(:decorator) { GroupDecorator.new(model) } 
   let(:context) { double("context")}
-  subject { decorator } 
+  subject { decorator }
 
   describe "possible roles" do
     let(:model) { groups(:top_group) } 
     its(:possible_roles) { should eq [{:sti_name=>"Group::TopGroup::Leader", :human=>"Rolle"}, 
-                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Rolle"}]} 
+                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Rolle"}, 
+                                      {:sti_name=>"Role::External", :human=>"Rolle"}]} 
 
     describe "possible_role_links" do
       subject { decorator.possible_role_links } 
-      its(:size) { should eq 2 } 
+      its(:size) { should eq 3 } 
       its(:first) { should eq "<a href=\"#{path(Group::TopGroup::Leader)}\">Rolle</a>" } 
       its(:second) { should eq "<a href=\"#{path(Group::TopGroup::Member)}\">Rolle</a>" } 
+      its(:third) { should eq "<a href=\"#{path(Role::External)}\">Rolle</a>" } 
 
       def path(type)
         new_group_role_path(model, role: {type: type})

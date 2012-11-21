@@ -1,6 +1,6 @@
 # encoding: UTF-8
 require 'spec_helper'
-describe RoleDecorator do
+describe RoleDecorator, :draper_with_helpers do
 
   let(:role) { roles(:top_leader)}
   let(:decorator) {  RoleDecorator.new(role) } 

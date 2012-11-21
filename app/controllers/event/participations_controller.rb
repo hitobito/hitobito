@@ -69,7 +69,7 @@ class Event::ParticipationsController < CrudController
       records = records.send(scope, event)
 
     # event specific filters (filter by role label)
-    elsif label = event.participation_role_labels.any? {|k| k == params[:filter] }
+    elsif event.participation_role_labels.include?(params[:filter])
       records = records.role_label(params[:filter])
     end
     

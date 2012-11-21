@@ -6,8 +6,12 @@ module ActiveRecord
     class << self
       def define_partial_index(&block)
         ThinkingSphinx.context.add_indexed_model self
+        
         self.sphinx_partial_indizes ||= []
         self.sphinx_partial_indizes << block
+        
+        include ThinkingSphinx::ActiveRecord::Scopes
+        include ThinkingSphinx::SearchMethods
       end
       
       def define_partial_indizes!

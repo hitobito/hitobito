@@ -2,7 +2,7 @@ module Import
   class Person
     extend Forwardable
     attr_reader :person, :hash, :phone_numbers, :social_accounts
-    def_delegators :person, :persisted?, :save
+    def_delegators :person, :persisted?, :save, :id
 
     def self.fields
       all = person_attributes + 
@@ -21,11 +21,11 @@ module Import
     end
 
     def add_role(group, role_type)
+      return if person.roles.any? { |role| role.group == group && role.type == role_type } 
       role = person.roles.build
       role.group = group
       role.type = role_type
     end
-
 
     def human_errors
       person.errors.messages.map do |key, value|
@@ -41,7 +41,7 @@ module Import
     end
 
     def create_person
-      @person = ::Person.new(hash)
+      @person = DoubletteFinder.new(hash).find_and_update || ::Person.new(hash)
     end
 
     def extract_settings_fields(model, value_key)
@@ -74,6 +74,44 @@ module Import
         { key: name, value: ::Person.human_attribute_name(name, default: '') }
       end
     end
+
+
+    class DoubletteFinder
+      attr_reader :attrs
+
+      DOUBLETTE_ATTRIBUTES = [
+        :first_name,
+        :last_name,
+        :zip_code,
+        :birthday
+      ]
+
+      def initialize(attrs)
+        @attrs = attrs
+      end
+
+      def query
+        criteria = attrs.select { |key, value| key =~ %r{#{DOUBLETTE_ATTRIBUTES.join("|")}} } 
+        criteria.reject! { |key, value| value.blank? }
+
+        first = criteria.map { |key, value| %Q{#{key}="#{value}"} }.join(" AND ")
+        second = %Q{email="#{attrs[:email]}"} if attrs[:email]
+
+        if first.present?
+          second ? [first, second].join(" OR ") : first
+        else
+          second
+        end
+      end
+      
+      def find_and_update
+        return unless query.present? 
+        person = ::Person.includes(:roles).where(query).first
+        person.attributes = attrs if person
+        person
+      end
+    end
+
   end
 
 end

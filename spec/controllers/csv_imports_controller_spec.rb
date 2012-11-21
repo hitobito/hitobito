@@ -57,5 +57,23 @@ describe CsvImportsController do
       end
     end
 
+    context "doublette handling" do
+      let(:mapping) { { vorname: :first_name, email: :email, role: role_type } }
+      let(:data) do
+        CSV.generate do |csv| 
+          csv << %w{vorname email}
+          csv << %w{foo foo@bar.net}
+        end
+      end 
+        
+      it "imports first person and displays errors for second person" do
+        person = Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
+        expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Role,:count).by(1)
+        flash[:notice].should eq  ["1 Person(Rolle) wurden erfolgreich aktualisiert."] 
+        flash[:alert].should_not be_present
+        should redirect_to group_people_path(group, role_types: role_type, name: "Rolle")
+      end
+
+    end
   end
 end

@@ -2,12 +2,13 @@
 module Import
   class PersonImporter
     attr_accessor :data, :role_type, :group, :errors,
-      :failure_count, :success_count
+      :failure_count, :success_count, :doublette_count
 
     def initialize(hash={})
       @errors = []
       @failure_count = 0
       @success_count = 0
+      @doublette_count = 0
 
       hash.each { |key, value| self.send("#{key}=", value) } 
     end
@@ -21,10 +22,14 @@ module Import
 
     def import_person(hash,index)
       person = Import::Person.new(hash)
+      doublette = person.persisted?
+
       person.add_role(group, role_type)
       person.save
       
-      if person.persisted?
+      if person.persisted? && doublette
+        @doublette_count += 1
+      elsif person.persisted?
         @success_count += 1
       else
         @failure_count += 1

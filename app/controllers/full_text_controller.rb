@@ -28,7 +28,7 @@ class FullTextController < ApplicationController
     entries
   end
   
-  def accessible_people
+  def accessible_people_ids
     Person.accessible_by(Ability::Accessibles.new(current_user)).pluck('people.id')
   end
   

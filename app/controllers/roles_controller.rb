@@ -45,10 +45,14 @@ class RolesController < CrudController
   
   def build_entry 
     # delete unused attributes
-    model_params.delete(:group_id)
-    model_params.delete(:person)
+    type = nil
+    if model_params
+      model_params.delete(:group_id)
+      model_params.delete(:person)
+      type = model_params.delete(:type)
+    end
     
-    role = parent.class.find_role_type!(model_params.delete(:type)).new
+    role = parent.class.find_role_type!(type).new
     role.group_id = parent.id
     role.person_id = model_params.delete(:person_id)
     role

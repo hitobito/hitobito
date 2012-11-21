@@ -54,6 +54,10 @@ RSpec.configure do |config|
   
   config.filter_run_excluding type: 'request', performance: true
   
+  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
+    config.filter_run_excluding :mysql
+  end
+  
   config.before :all do
     # load all fixtures
     self.class.fixtures :all

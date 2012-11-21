@@ -4,7 +4,7 @@ class Ability::Accessibles
   
   attr_reader :group
   
-  def initialize(user, group)
+  def initialize(user, group = nil)
     super(user)
     @group = group
 

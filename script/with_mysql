@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$RAILS_ENV"]
+if [ -z "$RAILS_ENV" ]
 then
  env="development"
 else

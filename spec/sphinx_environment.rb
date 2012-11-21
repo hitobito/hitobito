@@ -11,7 +11,13 @@ def sphinx_environment(*tables, &block)
 
     around(:each) do |example|
       DatabaseCleaner.start
-      ThinkingSphinx::Test.run &example
+      ThinkingSphinx::Test.run do
+        if ThinkingSphinx.sphinx_running?
+          example.call
+        else
+          puts 'SPHINX NOT RUNNING!'
+        end
+      end
       DatabaseCleaner.clean
     end
 

@@ -41,8 +41,8 @@ describe QualificationsController, type: :controller do
       it "renders sheets and form" do
         perform_request
         dom.should have_css('.sheet', count: 3)
-        dom.find_link('Top')[:href].should eq group_people_path(groups(:top_layer))
-        dom.find_link('TopGroup')[:href].should eq group_people_path(top_group)
+        dom.find_link('Top')[:href].should eq group_people_path(groups(:top_layer), returning: true)
+        dom.find_link('TopGroup')[:href].should eq group_people_path(top_group, returning: true)
         dom.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
       end
     end

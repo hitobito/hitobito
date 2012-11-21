@@ -9,25 +9,16 @@ class FullTextController < ApplicationController
 
   def index
     @people = PersonDecorator.decorate(list_entries)
-      
-      #company_ids = Company.accessible_by(current_ability).collect &:id
-      #@companies  = Company.search params[:search],
-      #  :include    => :order,
-      #  :match_mode => :extended,
-      #  :page       => params[:page],
-      #  :with       => {:sphinx_internal_id => company_ids}
-      
     respond_with(@people)
   end
   
   def query
     
-  end  
+  end
 
   private
   
   def list_entries
-    accessible_people_ids = Person.accessible_by(current_ability).pluck('people.id')
     entries = Person.search(params[:q], 
                             page: params[:page], 
                             order: 'last_name asc, first_name asc, @relevance desc',
@@ -35,6 +26,10 @@ class FullTextController < ApplicationController
     entries = Person::PreloadGroups.for(entries)
     entries = Person::PreloadPublicAccounts.for(entries)
     entries
+  end
+  
+  def accessible_people
+    Person.accessible_by(Ability::Accessibles.new(current_user)).pluck('people.id')
   end
   
   def entries

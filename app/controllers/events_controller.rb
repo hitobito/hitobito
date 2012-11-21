@@ -3,6 +3,8 @@ class EventsController < CrudController
 
   self.nesting = Group
   
+  self.remember_params += [:year]
+  
   decorates :event, :events, :group
 
   # load group before authorization

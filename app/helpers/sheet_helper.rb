@@ -134,7 +134,7 @@ class EntrySheet < Sheet
   
   def link_url(entry)
     if @url_method.present? && can?(@can_action, entry)
-      view.send(*@url_method, entry)
+      view.send(*@url_method, entry, returning: true)
     else
       @default_url || entry
     end

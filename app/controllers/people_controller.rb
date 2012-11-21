@@ -2,6 +2,8 @@ class PeopleController < CrudController
 
   self.nesting = Group
   self.nesting_optional = true
+  
+  self.remember_params += [:kind, :role_types]
 
   decorates :group, :person, :people
 
@@ -14,7 +16,8 @@ class PeopleController < CrudController
   before_render_show :load_asides
   
   def index
-    respond_with(people_for_group)
+    @people = people_for_group
+    respond_with(@people)
   end
 
   def history
@@ -53,31 +56,39 @@ class PeopleController < CrudController
   private
   
   def people_for_group
-    action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
-    
-    @people = list_entries(action)
-    
     if params[:role_types]
-      @people = @people.where(roles: {type: params[:role_types]})
+      list_entries(params[:kind]).where(roles: {type: params[:role_types]})
     else
-      @people = @people.affiliate(false)
-    end 
-    
-    if action != :index
-      @multiple_groups = true
-    else
-      @people = @people.order_by_role
+      list_entries(params[:kind]).affiliate(false)
     end
-    
-    @people.order_by_name
   end
   
-  def list_entries(action = :index)
-    accessibles(action).
+  def list_entries(kind)
+    list_scope(kind).
           preload_public_accounts.
           preload_groups.
-          uniq
+          uniq.
+          order_by_name
   end
+  
+  def list_scope(kind)
+    case kind
+    when 'deep'
+      @multiple_groups = true
+      accessibles.in_or_below(@group)
+    when 'layer'
+      @multiple_groups = true
+      accessibles.in_layer(@group)
+    else
+      accessibles(@group).order_by_role
+    end
+  end
+    
+  def accessibles(group = nil)
+    ability = Ability::Accessibles.new(current_user, group)
+    Person.accessible_by(ability)
+  end
+  
   
   def build_entry
     person = super
@@ -89,11 +100,6 @@ class PeopleController < CrudController
     person.roles << role
     
     person
-  end
-  
-  def accessibles(action = :index)
-    ability = Ability::Accessibles.new(current_user, @group)
-    Person.accessible_by(ability, action)
   end
   
   def load_asides

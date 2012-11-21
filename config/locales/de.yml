@@ -117,6 +117,8 @@ de:
         application_closing_at: Anmeldeschluss
         application_conditions: Anmeldebedingungen
         dates: Daten
+        dates_full: Daten
+        booking_info: Teilnehmende
         questions: Fragen
         kind_id: Art
 

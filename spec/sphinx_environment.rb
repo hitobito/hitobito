@@ -10,15 +10,15 @@ def sphinx_environment(*tables, &block)
     end
 
     around(:each) do |example|
-      DatabaseCleaner.start
       ThinkingSphinx::Test.run do
         if ThinkingSphinx.sphinx_running?
+          DatabaseCleaner.start
           example.call
+          DatabaseCleaner.clean
         else
           puts 'SPHINX NOT RUNNING!'
         end
       end
-      DatabaseCleaner.clean
     end
 
     yield

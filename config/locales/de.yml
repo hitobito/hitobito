@@ -243,6 +243,15 @@ de:
       flash:
         success: "Anmeldung wurde erfolgreich gelöscht."
 
+  csv_imports:
+    create:
+      flash:
+        success: "Datei wurde erfolgreich gelesen." 
+
+    update:
+      flash:
+        success: "Personen wurden erfolgreich importiert."
+
   roles:
     role_changed: "%{old_role} zu <i>%{new_role}</i> geändert."
 

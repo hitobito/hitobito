@@ -148,9 +148,11 @@ class GroupSheet < EntrySheet
       link_to(g.to_s, link_url(g))
     end
   end
+
   
   def breadcrumbs?
     entry.parent_id?
   end
 
 end
+

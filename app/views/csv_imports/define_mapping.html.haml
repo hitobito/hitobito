@@ -1,0 +1,14 @@
+- title 'Personen über CSV importieren'
+- parent_sheet(GroupSheet.new(self, @group, :group_people_path))
+
+= standard_form(:csv_import, url: group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
+  = hidden_field_tag :data, flash[:data]
+
+  %h2 Rolle festlegen
+  = f.labeled :role, 'Rolle' do
+    = f.collection_select(:role, possible_roles, :sti_name, :human, {}, {class: 'span3'})
+
+  %h2 Attribut Zuordnung festlegen
+  - flash[:columns].each do |column_name|
+    = f.labeled_collection_select(column_name, fields, :key, :value, {include_blank: true}, {class: 'span3'})
+  = save_form_buttons(f, 'Personen importieren', group_people_path(parent))

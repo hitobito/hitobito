@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.9'
 
-
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancan'
+gem 'cmess'
 gem 'daemons'
 gem 'delayed_job_active_record'
 gem 'decorates_before_rendering', '0.0.3'

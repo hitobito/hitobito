@@ -16,6 +16,7 @@ db/sphinx
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/*.pid
 /tmp
 *.swp
 

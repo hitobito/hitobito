@@ -264,7 +264,12 @@ de:
       link:
         delete: 'Anmeldung löschen'
 
-    
+  views:
+    pagination:
+      next: '>>'
+      previous: '<<'
+      first: Erste
+      last: Letzte
 
   time:
     formats:

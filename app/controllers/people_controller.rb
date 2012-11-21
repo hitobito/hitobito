@@ -14,24 +14,7 @@ class PeopleController < CrudController
   before_render_show :load_asides
   
   def index
-    action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
-    
-    @people = list_entries(action)
-    
-    if params[:role_types]
-      @people = @people.where(roles: {type: params[:role_types]})
-    else
-      @people = @people.affiliate(false)
-    end 
-    
-    if action != :index
-      @multiple_groups = true
-    else
-      @people = @people.order_by_role
-    end
-    
-    @people = @people.order_by_name
-    respond_with(@people)
+    respond_with(people_for_group)
   end
 
   def history
@@ -68,6 +51,26 @@ class PeopleController < CrudController
   end
 
   private
+  
+  def people_for_group
+    action = {'deep' => :deep_search, 'layer' => :layer_search}[params[:kind]] || :index
+    
+    @people = list_entries(action)
+    
+    if params[:role_types]
+      @people = @people.where(roles: {type: params[:role_types]})
+    else
+      @people = @people.affiliate(false)
+    end 
+    
+    if action != :index
+      @multiple_groups = true
+    else
+      @people = @people.order_by_role
+    end
+    
+    @people.order_by_name
+  end
   
   def list_entries(action = :index)
     accessibles(action).

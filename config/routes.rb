@@ -54,6 +54,8 @@ Jubla::Application.routes.draw do
   get 'list_courses', to: 'event/lists#courses', as: :list_courses
   get 'list_events', to: 'event/lists#events', as: :list_events
   
+  get 'full', to: 'full_text#index'
+  get 'query', to: 'full_text#query'
   
   resources :people, only: :show do
     collection do

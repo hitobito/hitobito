@@ -79,7 +79,6 @@ class Ability::Accessibles
                    
       can :deep_search, Person, 
           Person.only_public_data.
-                 visible_from_above.
                  in_or_below(group.layer_group).
                  where('roles.group_id' => user.groups) do |p| true end
     end

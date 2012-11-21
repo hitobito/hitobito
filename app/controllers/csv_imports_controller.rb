@@ -25,6 +25,7 @@ class CsvImportsController < ApplicationController
     map_headers_and_import
 
     set_flash(:notice, importer.success_count, "wurden erfolgreich importiert.")
+    set_flash(:notice, importer.doublette_count, "wurden erfolgreich aktualisiert.")
     set_flash(:alert, importer.failure_count, "konnten nicht importiert werden.")
     flash[:alert] += importer.errors if importer.failure_count > 0
 
@@ -73,7 +74,8 @@ class CsvImportsController < ApplicationController
   end
 
   def set_flash(key, count, suffix)
-    flash[key] = ["#{count} #{importer.human_name(count: count)} #{suffix}"] if count > 0
+    flash[key] ||= []
+    flash[key] += ["#{count} #{importer.human_name(count: count)} #{suffix}"] if count > 0
   end
 
   def redirect_params

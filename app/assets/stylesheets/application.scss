@@ -172,9 +172,9 @@ dl {
   color: $green;
   &:hover {
     color: darken($green, 10%); 
-    .icon { background-image: url("glyphicons-halflings-green.png"); }
+    .icon { background-image: image-url("glyphicons-halflings-green.png"); }
   } 
-  .icon { background-image: url("glyphicons-halflings-green-hover.png"); }
+  .icon { background-image: image-url("glyphicons-halflings-green-hover.png"); }
   .caret {
     border-top-color: $green;
   }
@@ -416,11 +416,11 @@ body > nav {
     .level { color: $gray; }
   }
   &.current {
-    background: url("shadow_left.png") transparent no-repeat bottom left;
+    background: image-url("shadow_left.png") transparent no-repeat bottom left;
     padding-bottom: 28px;
     margin-bottom:-58px !important;
     .container-shadow {
-      background: url("shadow_right.png") transparent no-repeat bottom right;
+      background: image-url("shadow_right.png") transparent no-repeat bottom right;
       padding-bottom: 28px;
       margin-bottom:-28px;
     }

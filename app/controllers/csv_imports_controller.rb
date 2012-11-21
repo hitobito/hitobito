@@ -60,10 +60,10 @@ class CsvImportsController < ApplicationController
       filename ||= "csv formular daten" 
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(parent) 
-      return false
+      false
+    else
+      true
     end
-
-    true
   end
 
   def map_headers_and_import

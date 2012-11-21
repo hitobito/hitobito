@@ -39,42 +39,61 @@ describe Import::Person do
     its('social_accounts.first.name') { should eq 'foobar' } 
   end
 
+  context "can assign mass assigned attributes" do
+    let(:data) { "all attributes - blacklist" }
+    let(:person) { Fabricate(:person) } 
+    it "all protected attributes are filtered via blacklist" do
+      public_attributes = person.attributes.reject { |key, value| Import::Person::BLACKLIST.include?(key.to_sym) } 
+      public_attributes.size.should eq 13
+      expect { Import::Person.new(public_attributes).person }.not_to raise_error
+    end
+  end
+
   describe "Import::Person::DoubletteFinder" do
     subject { Import::Person::DoubletteFinder.new(attrs) }
 
     context "empty attrs" do
       let(:attrs) { {} } 
-      its(:query) { should be_blank }
+      its(:query) { should eq [''] }
       its(:find_and_update) { should be_nil } 
     end
 
     context "firstname only" do
       before { Person.create(attrs)  } 
       let(:attrs) { { first_name: 'foo' } }
-      its(:query) { should eq 'first_name="foo"' }
+      its(:query) { should eq ['(first_name=?)', 'foo'] }
       its('find_and_update.first_name') { should eq 'foo' } 
     end
 
     context "email only" do
       before { Person.create(attrs.merge({first_name: 'foo'})) }
       let(:attrs) { { email: 'foo@bar.com' } }
-      its(:query) { should eq 'email="foo@bar.com"' }
+      its(:query) { should eq ['(email=?)',"foo@bar.com"] }
       its('find_and_update.first_name') { should eq 'foo' } 
     end
     
-    context "joins with or clause, updates first_name" do
-      before { Person.create(attrs.merge(first_name: 'foo')) }
+    context "joins with or clause, does not change first_name, adds nickname" do
+      before { Person.create(attrs.merge(first_name: 'foo', nickname: 'foobar')) }
       let(:attrs) { { email: 'foo@bar.com', first_name: 'bla' } }
-      its(:query) { should eq 'first_name="bla" OR email="foo@bar.com"' }
+      its(:query) { should eq ['(first_name=?) OR (email=?)', 'bla', 'foo@bar.com'] } 
       its('find_and_update.first_name') { should eq 'bla' } 
+      its('find_and_update.nickname') { should eq 'foobar' } 
     end  
 
     context "joins others with and" do
       before { Person.create(attrs) }
       let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '1991-05-06' } }
-      its(:query) { should eq 'last_name="bar" AND first_name="foo" AND zip_code="213" AND birthday="1991-05-06"' }
+      its(:query) { should eq ['(last_name=?) AND (first_name=?) AND (zip_code=?) AND (birthday=?)', 
+                               'bar', 'foo', '213', Time.zone.parse('1991-05-06').to_date] }
       its(:find_and_update) { should be_present } 
     end
+
+    # context "finds multiple matches" do
+    #   before { 2.times { Person.create(attrs) } }
+    #   let(:attrs) { {  first_name: 'foo'} }
+    #   subject { Import::Person::DoubletteFinder.new(attrs).find_and_update.errors }
+    #   its([:base]) { should eq ['2 Treffer in der Duplikatserkennung.'] }
+    # end
   end
 
 end

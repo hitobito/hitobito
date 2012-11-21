@@ -2,7 +2,7 @@ module Import
   class Person
     extend Forwardable
     attr_reader :person, :hash, :phone_numbers, :social_accounts
-    def_delegators :person, :persisted?, :save, :id
+    def_delegators :person, :persisted?, :save, :id, :errors
 
     def self.fields
       all = person_attributes + 
@@ -61,6 +61,7 @@ module Import
                  :id,
                  :last_sign_in_at,
                  :last_sign_in_ip,
+                 :picture,
                  :remember_created_at,
                  :reset_password_sent_at,
                  :reset_password_token,
@@ -91,27 +92,40 @@ module Import
       end
 
       def query
-        criteria = attrs.select { |key, value| key =~ %r{#{DOUBLETTE_ATTRIBUTES.join("|")}} } 
-        criteria.reject! { |key, value| value.blank? }
+        criteria = attrs.select { |key, value| key =~ %r{#{DOUBLETTE_ATTRIBUTES.join("|")}} && value.present? } 
 
-        first = criteria.map { |key, value| %Q{#{key}="#{value}"} }.join(" AND ")
-        second = %Q{email="#{attrs[:email]}"} if attrs[:email]
-
-        if first.present?
-          second ? [first, second].join(" OR ") : first
-        else
-          second
+        conditions = ['']
+        criteria.each do |key, value|
+          conditions.first << " AND " if conditions.first.present?
+          conditions.first << "(#{key}=?)"
+          value = Time.zone.parse(value).to_date if key.to_sym == :birthday
+          conditions << value
         end
+
+        if attrs[:email].present?
+          conditions.first << " OR " if conditions.first.present?
+          conditions.first << "(email=?)"
+          conditions << attrs[:email]
+        end
+        conditions
       end
       
       def find_and_update
-        return unless query.present? 
-        person = ::Person.includes(:roles).where(query).first
-        person.attributes = attrs if person
+        return if query.first.blank? 
+        people = ::Person.includes(:roles).where(query)
+
+        if people.present? 
+          person = people.first
+          if people.size == 1
+            blank_attrs = attrs.select {|key, value| person.attributes[key].blank? } 
+            person.attributes = blank_attrs
+          else
+            person.errors.add(:base, "#{people.size} Treffer in Duplikatserkennung.")
+          end
+        end
         person
       end
     end
-
   end
 
 end

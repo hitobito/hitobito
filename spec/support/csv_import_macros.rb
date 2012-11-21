@@ -5,8 +5,13 @@ module CsvImportMacros
   def path(name, extension=:csv)
     File.expand_path("../csv/#{name}.#{extension}", __FILE__)
   end
+
   def default_mapping
     { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' }
+  end
+
+  def generate_csv(*args)
+    CSV.generate { |csv| args.each { |arg| csv << arg }  } 
   end
 
 end

@@ -6,7 +6,7 @@ module Import
       @prefix = model.model_name.underscore
       @human = model.model_name.human
 
-      __setobj__(map_prefined_fields.with_indifferent_access)
+      super(map_prefined_fields.with_indifferent_access)
     end
 
     def fields

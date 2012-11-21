@@ -65,9 +65,9 @@ describe Import::PersonImporter do
     subject { person } 
 
 
-    context "adds role and updates email" do
+    context "adds role, does not update email" do
       before { importer.import } 
-      its(:email) { should eq 'bar@foo.net' } 
+      its(:email) { should eq 'foo@bar.net' } 
       its('roles.size') { should eq 1 }
       it "updates double and success count" do
         importer.doublette_count.should eq 1
@@ -84,8 +84,14 @@ describe Import::PersonImporter do
         importer.import 
         person.reload
       end
-      its(:email) { should eq 'bar@foo.net' } 
+      its(:email) { should eq 'foo@bar.net' } 
       its('roles.size') { should eq 1 }
+    end
+
+    context "marks multiple" do
+      before { Fabricate(:person, attrs.merge(email: 'asdf@asdf.net')); importer.import }
+      subject { importer } 
+      its(:errors) { should eq ['Zeile 1: 2 Treffer in Duplikatserkennung.'] }
     end
   end
 

@@ -6,7 +6,7 @@ module Ability::People
 
     # Everybody may theoretically access the index page, but only the accessible people will be displayed.
     # Check links to :index with can?(:index_people, @group)
-    can :index, Person
+    can :index, Person, accessible_people do |p| true end
     
     can :show, Person do |person|
       can_show_person?(person)
@@ -109,6 +109,60 @@ module Ability::People
   
   def full_person_permissions?
     @groups_group_full.present? || @groups_layer_full.present? || @groups_layer_read.present?
+  end
+  
+  def accessible_people
+    conditions = [""]
+    
+    if user.contact_data_visible?
+      # people with contact data visible
+      or_conditions(conditions, 'people.contact_data_visible = ?', true)
+    end
+    
+    if layers_read.present?
+      layer_groups = layers(user.groups_with_permission(:layer_full), 
+                            user.groups_with_permission(:layer_read))
+      
+      # people in same layer
+      or_conditions(conditions, "groups.layer_group_id IN (?)", layer_groups.collect(&:id))
+      
+      # people visible from above
+      visible_from_above_groups = ['']
+      collapse_groups_to_highest(layer_groups) do |layer_group|
+        or_conditions(visible_from_above_groups, 
+                      'groups.lft >= ? AND groups.rgt <= ?', 
+                      layer_group.left, 
+                      layer_group.rgt)
+      end
+      
+      visible_role_types = Role.visible_types.collect(&:sti_name)
+      visible_from_above_groups[0] = "(#{visible_from_above_groups.first}) AND roles.type IN (?)"
+      visible_from_above_groups << visible_role_types
+      or_conditions(conditions, *visible_from_above_groups)
+    end
+    
+    # people in same group
+    or_conditions(conditions, 'groups.id IN (?)', user.groups.collect(&:id))
+    
+    Person.only_public_data.joins(roles: :group).where(conditions).uniq
+  end
+  
+  # If group B is a child of group A, B is collapsed into A.
+  # e.g. input [A,B] -> output A
+  def collapse_groups_to_highest(layer_groups)
+    layer_groups.each do |group|
+      unless layer_groups.any? {|g| g.is_ancestor_of?(group) }
+        yield group
+      end
+    end
+  end
+ 
+  def or_conditions(conditions, clause, *args)
+    if conditions.first.present?
+      conditions.first << " OR "
+    end
+    conditions.first << "(#{clause})"
+    conditions.push(*args)
   end
   
 end

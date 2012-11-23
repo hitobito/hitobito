@@ -150,7 +150,7 @@ echo "# Rotate rails logs for %{name}
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-*/10 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index
+# */10 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 

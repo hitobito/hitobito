@@ -59,6 +59,8 @@ class Person < ActiveRecord::Base
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
   
+  mount_uploader :picture, PictureUploader
+  
   ### ASSOCIATIONS
   
   has_many :roles, dependent: :destroy, inverse_of: :person

@@ -45,7 +45,7 @@ module Import
     end
 
     def human_name(args={})
-      "#{::Person.model_name.human(args)}(#{human_role_name})"
+      "#{::Person.model_name.human(args)} (#{human_role_name})"
     end
 
     def human_role_name

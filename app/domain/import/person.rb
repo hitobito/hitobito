@@ -92,27 +92,30 @@ module Import
       end
 
       def query
-        criteria = attrs.select { |key, value| key =~ %r{#{DOUBLETTE_ATTRIBUTES.join("|")}} && value.present? } 
+        criteria = attrs.select { |key, value| value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym) } 
 
         conditions = ['']
         criteria.each do |key, value|
           conditions.first << " AND " if conditions.first.present?
-          conditions.first << "(#{key}=?)"
+          conditions.first << "#{key} = ?"
           value = Time.zone.parse(value).to_date if key.to_sym == :birthday
           conditions << value
         end
 
         if attrs[:email].present?
-          conditions.first << " OR " if conditions.first.present?
-          conditions.first << "(email=?)"
+          if conditions.first.present?
+            conditions[0] = "(#{conditions[0]}) OR "
+          end
+          conditions.first << "email = ?"
           conditions << attrs[:email]
         end
         conditions
       end
       
       def find_and_update
-        return if query.first.blank? 
-        people = ::Person.includes(:roles).where(query)
+        conditions = query
+        return if conditions.first.blank? 
+        people = ::Person.includes(:roles).where(conditions).to_a
 
         if people.present? 
           person = people.first
@@ -122,8 +125,8 @@ module Import
           else
             person.errors.add(:base, "#{people.size} Treffer in Duplikatserkennung.")
           end
+          person
         end
-        person
       end
     end
   end

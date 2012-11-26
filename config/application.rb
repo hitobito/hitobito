@@ -98,3 +98,4 @@ module Jubla
   end
 end
 
+require "prawn/measurement_extensions"

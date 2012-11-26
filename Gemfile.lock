@@ -257,9 +257,6 @@ GEM
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
-    prawnto (0.1.1)
-      prawn
-      rails (>= 2.1)
     progressbar (0.11.0)
     protective (0.1.0)
       activerecord
@@ -510,7 +507,7 @@ DEPENDENCIES
   nested_form
   paranoia
   poltergeist
-  prawnto
+  prawn
   protective
   pry
   pry-doc

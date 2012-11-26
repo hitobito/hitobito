@@ -38,6 +38,12 @@ describe PeopleController do
         
         assigns(:people).collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
       end
+      
+      it "generates pdf labels" do
+        get :index, group_id: group, format: :pdf
+        
+        @response.content_type.should == 'application/pdf'
+      end
     end
     
     context "layer" do

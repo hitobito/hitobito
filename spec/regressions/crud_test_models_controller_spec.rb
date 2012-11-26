@@ -88,7 +88,7 @@ describe CrudTestModelsController, type: :controller do
         end
         
         it "session should have query list param" do
-          session[:list_params]['/crud_test_models.html'].should == {q: 'AAAA'}
+          session[:list_params]['/crud_test_models'].should == {q: 'AAAA'}
         end
         
         context "with custom options", :combine => 'ihsc' do
@@ -101,7 +101,7 @@ describe CrudTestModelsController, type: :controller do
           end
           
           it "session should have query list param" do
-            session[:list_params]['/crud_test_models.html'].should == {q: 'DDD'}
+            session[:list_params]['/crud_test_models'].should == {q: 'DDD'}
           end
         end
       end
@@ -117,7 +117,7 @@ describe CrudTestModelsController, type: :controller do
           end
           
           it "session should have sort list param" do
-            session[:list_params]['/crud_test_models.html'].should == {sort: 'children', sort_dir: 'asc'}
+            session[:list_params]['/crud_test_models'].should == {sort: 'children', sort_dir: 'asc'}
           end
         end
         
@@ -137,7 +137,7 @@ describe CrudTestModelsController, type: :controller do
           end
           
           it "session should have sort list param" do
-            session[:list_params]['/crud_test_models.html'].should == {sort: 'chatty', sort_dir: 'desc'}
+            session[:list_params]['/crud_test_models'].should == {sort: 'chatty', sort_dir: 'desc'}
           end
         end
         
@@ -151,7 +151,7 @@ describe CrudTestModelsController, type: :controller do
           end
           
           it "session should have sort list param" do
-            session[:list_params]['/crud_test_models.html'].should == {q: 'DDD', sort: 'chatty', sort_dir: 'asc'}
+            session[:list_params]['/crud_test_models'].should == {q: 'DDD', sort: 'chatty', sort_dir: 'asc'}
           end
         end
       end

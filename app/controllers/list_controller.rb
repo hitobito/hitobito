@@ -289,8 +289,9 @@ class ListController < ApplicationController
 
     # Params are stored by request path to play nice when a controller
     # is used in different routes.
+    # Does not consider the format though
     def remember_key
-       request.path
+      @remember_key ||= request.path[/(.+?)(\.[^\/\.]+)?$/, 1]
     end
   end
 

@@ -2,7 +2,7 @@
 
 = button_group do
   = action_button('Liste importieren', new_group_csv_imports_path, :download) if can?(:new, @group.roles.new)
-  = action_button('Export', '#', :upload)
+  = action_button('Export', params.merge(format: :pdf, label_format_id: 42), :upload)
     
 = action_button('Drucken', '#', :print)
 

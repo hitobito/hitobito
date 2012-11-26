@@ -30,12 +30,12 @@ class PeopleFilter < ActiveRecord::Base
   end
   
   def role_types=(types)
-    @role_types = types
-    self.people_filter_role_types = types.collect {|t| RoleType.new(role_type: t) }
+    @role_types = Array(types.presence)
+    self.people_filter_role_types = @role_types.collect {|t| RoleType.new(role_type: t) }
   end
   
   def kind
-    super || 'deep'
+    super.presence || 'deep'
   end
   
   def to_s

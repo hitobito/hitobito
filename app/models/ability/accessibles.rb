@@ -70,7 +70,11 @@ class Ability::Accessibles
     # people in same group
     or_conditions(conditions, 'groups.id IN (?)', user.groups.collect(&:id))
     
-    Person.only_public_data.joins(roles: :group).where(conditions).uniq
+    Person.only_public_data.
+           joins(roles: :group).
+           where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
+           where(conditions).
+           uniq
   end
   
   # If group B is a child of group A, B is collapsed into A.

@@ -1,0 +1,134 @@
+@charset "utf-8";
+
+@import "variables";
+@import "compass/css3/font-face";
+@include font-face("Century Gothic", font-files(asset-path("century-gothic.ttf", font), asset-path("century-gothic.eot", font)));
+/*
+Theme Name  :  Jubla
+Theme URL   :  http://jubla.puzzle.ch/
+Version     :  0.1
+Author      :  Fritsch Pierre
+Author URL  :  http://www.wearecube.ch
+Mixed with  :  HTML5 Boilerplate & inseo 
+*  @see  https://github.com/h5bp/html5-boilerplate
+*  @see  https://github.com/inseo
+*/
+
+/** --- = @section GENERIC --- */
+
+/** Init Colors, remove shadows and backgrounds 
+ *  @see  http://www.sanbeiji.com/archives/953 */
+* {
+  color: #000 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  -ms-filter: none !important;
+      filter: none !important;
+  background-color: transparent !important;
+}
+
+/** Remove margin and width in <body>.
+ *  Init font. */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  font-size: 10pt;
+  font-family: $sansFontFamily; 
+}
+
+/** Titles followed by content
+ *  @note  just on Opera and IE 8+.
+ *  @see   http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28Cascading_Style_Sheets%29#cite_ref-75 */
+#{headings(all)} {
+  font-family: $headingFontFamily;
+  page-break-after: avoid;
+}
+
+h1, h2, h3, h4, h5, h6,
+blockquote,
+code, pre,
+tr,
+img {
+  page-break-inside: avoid;
+}
+
+/** Minimum lines before next page 
+ *  @note  Doesn't work on Firefox. */
+p {
+  orphans: 3;   /** bas de page */
+  widows: 3;  /** haut de page */
+}
+
+/** Repeat table header on different pages */
+thead {
+  display: table-header-group;
+}
+
+/** Links underlign */
+a:link {
+  text-decoration: none;
+}
+
+/** Links + URL (but not the anchors) */
+// a[href]:after {
+//   content: " (" attr(href) ")";
+// }
+
+// a[href^="#"]:after {
+//   content: "";
+// }
+
+/** Abbreviations */
+abbr[title]:after {
+  content: " (" attr(title) ")";
+}
+
+/** Image width */
+img {
+  max-width: 100% !important;
+}
+
+/** --- = @section STYLES PARTICULIERS --- */
+
+/** Remove some elements */
+header, nav, footer, 
+.nav, .breadcrumb, .btn-toolbar {
+  display: none;
+}
+
+/** Réinitialiser les marges et la largeur du conteneur principal. */
+#page {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+}
+
+li { list-style: none; }
+
+table {
+  width: 100%;
+  border-collapse:collapse;
+}
+
+table th {
+  text-align: left;
+}
+
+table td, 
+table th { 
+  vertical-align: top; 
+  padding:12px 12px 12px 0; 
+  border-bottom: 1px solid $grayLight;
+
+  p { margin: 0; padding: 0; }
+}
+
+table.signature {
+  width: 100%;
+  border-spacing: 1em;
+
+  td.border{
+    border-top: 1px solid black;
+  }
+}

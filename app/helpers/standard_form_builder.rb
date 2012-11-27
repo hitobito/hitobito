@@ -35,6 +35,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       has_many_field(attr, html_options)
     elsif attr.to_s.include?('password')
       password_field(attr, html_options)
+    elsif attr.to_s.include?('email')
+      email_field(attr, html_options)
     else
       custom_field_method = :"#{type}_field"
       if respond_to?(custom_field_method)
@@ -73,6 +75,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
     html_options[:class] ||= 'span6'
     text_field(attr, html_options)
+  end
+  
+  def email_field(attr, html_options = {})
+    html_options[:class] ||= 'span6'
+    super(attr, html_options)
   end
 
   # Render a boolean field.

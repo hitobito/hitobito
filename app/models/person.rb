@@ -73,6 +73,8 @@ class Person < ActiveRecord::Base
   
   has_many :qualifications
   
+  belongs_to :last_label_format, class_name: 'LabelFormat'
+  
   
   ### VALIDATIONS
   

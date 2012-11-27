@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+fixtures = Rails.root.join('db', 'seeds')
+SeedFu.seed ENV['NO_ENV'] ? [fixtures] : [fixtures, File.join(fixtures, Rails.env)]

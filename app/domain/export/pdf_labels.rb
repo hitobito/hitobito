@@ -1,6 +1,5 @@
 module Export
   class PdfLabels
-    FONT_NAME = 'Helvetica'
     
     attr_reader :format
     
@@ -12,37 +11,39 @@ module Export
       pdf = Prawn::Document.new(page_size: format.page_size, 
                                 page_layout: format.page_layout, 
                                 margin: 0.mm) 
-      pdf.font FONT_NAME, size: format.font_size
+      pdf.font Settings.pdf.labels.font_name, size: format.font_size
       
       contactables.each_with_index do |contactable, i|
-        # currently, no bounding box to make overflows visible.
-        # this is desired by the customer..
-        #pdf.bounding_box(position(pdf, i), width: format.width.mm, height: format.height.mm) do
-          #pdf.stroke_bounds
-          pos = position(pdf, i)
-          
-          pdf.text_box(address(contactable), at: [pos.first + format.padding_left.mm, 
-                                                  pos.last - format.padding_top.mm])
-        #end
+        print_address(pdf, address(contactable), position(pdf, i))
       end
       
       pdf.render
     end
-    
+
     private
+    
+    def print_address_in_bounding_box(pdf, address, pos)
+      pdf.bounding_box(pos, width: format.width.mm, height: format.height.mm) do
+        pdf.stroke_bounds
+        
+        pdf.text_box(address, at: [format.padding_left.mm, 
+                                   format.height.mm - format.padding_top.mm])
+      end
+    end
+    
+    def print_address(pdf, address, pos)
+      pdf.text_box(address, at: [pos.first + format.padding_left.mm, 
+                                 pos.last - format.padding_top.mm])
+    end
 
     def address(contactable)
       address = ""
-      if contactable.respond_to?(:company) && contactable.company? && contactable.company_name?
-        address << contactable.company_name << "\n"
-      end
+      address << contactable.company_name << "\n" if print_company?(contactable)
       address << contactable.full_name << "\n"
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
       address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
-      unless ['', 'ch', 'schweiz'].include?(contactable.country.to_s.strip.downcase)
-        address << contactable.country
-      end
+      address << contactable.country if print_country?(contactable.country)
       address
     end
       
@@ -56,6 +57,14 @@ module Export
       y = page_index / format.count_horizontal
       
       [x * format.width.mm, pdf.margin_box.height - (y * format.height.mm)]
+    end
+    
+    def print_company?(contactable)
+      contactable.respond_to?(:company) && contactable.company? && contactable.company_name?
+    end
+    
+    def print_country?(country)
+      !['', *Settings.pdf.labels.ignored_countries].include?(country.to_s.strip.downcase)
     end
   
   end

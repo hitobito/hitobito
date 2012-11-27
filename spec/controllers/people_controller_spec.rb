@@ -40,9 +40,10 @@ describe PeopleController do
       end
       
       it "generates pdf labels" do
-        get :index, group_id: group, format: :pdf
+        get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
         
         @response.content_type.should == 'application/pdf'
+        people(:top_leader).reload.last_label_format.should == label_formats(:standard)
       end
     end
     

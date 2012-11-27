@@ -10,10 +10,14 @@ module LayoutHelper
   end
   
   def button_group(&block)
-    @in_button_group = true
-    html = content_tag(:div, class: 'btn-group', &block)
-    @in_button_group = false
-    html
+    if @in_button_group
+      capture(&block)
+    else
+       @in_button_group = true
+      html = content_tag(:div, class: 'btn-group', &block)
+      @in_button_group = false
+      html
+    end
   end
   
   def dropdown_button(label, links, icon_name = nil, main_link = nil)

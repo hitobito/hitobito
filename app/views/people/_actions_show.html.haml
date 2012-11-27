@@ -1,3 +1,14 @@
-= button_action_edit if can?(:edit, entry)
-= send_login_button 
-= action_button 'Passwort ändern', edit_person_registration_path if @person == current_user
+- if can?(:edit, entry)
+  = button_action_edit
+  
+= dropdown_button('Export', people_export_links, :upload)
+  
+- if can?(:send_password_instructions, entry) 
+  = action_button('Login schicken', 
+                  send_password_instructions_group_person_path(parent, entry), 
+                  :envelope,
+                  remote: true, 
+                  method: :post)
+                  
+- if @person == current_user
+  = action_button 'Passwort ändern', edit_person_registration_path

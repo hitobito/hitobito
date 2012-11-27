@@ -19,6 +19,7 @@ db/sphinx
 /log/*.pid
 /tmp
 *.swp
+*.swo
 
 # ignore static analysis artifacts
 coverage

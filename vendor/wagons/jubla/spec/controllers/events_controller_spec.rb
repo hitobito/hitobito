@@ -4,12 +4,13 @@ describe EventsController do
 
   context "event_course" do
 
+    let(:group) { groups(:ch) }
+    let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+
     before { sign_in(people(:top_leader)) }
 
     context "create with advisor" do
 
-      let(:group) { groups(:ch) }
-      let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
       let(:contact) { Person.first }
       let(:advisor) { Person.last }
       
@@ -52,6 +53,26 @@ describe EventsController do
       end
 
     end
+
+    context "application contact" do
+
+      it "should set application contact if only one is available" do
+        post :create, event: {  group_ids: [group.id], 
+                                name: 'foo', 
+                                kind_id: Event::Kind.find_by_short_name('SLK').id,
+                                dates_attributes: [ date ],
+                                type: 'Event::Course' }, 
+                      group_id: group.id
+
+        event = assigns(:event)
+
+        event.application_contact.should eq event.possible_contact_groups.first
+        event.should be_persisted
+
+      end
+
+    end
+
   end
   
   context "event_camp" do

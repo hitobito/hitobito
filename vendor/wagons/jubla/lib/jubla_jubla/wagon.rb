@@ -24,6 +24,7 @@ module JublaJubla
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
+      EventDecorator.send :include, Jubla::EventDecorator
       
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'

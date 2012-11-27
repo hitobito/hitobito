@@ -1,9 +1,10 @@
 require 'spec_helper'
+require_relative '../../support/fabrication.rb'
 
 describe Event::Course do
   
   subject do
-    event = Fabricate(:course, groups: [groups(:be)] )
+    event = Fabricate(:jubla_course, groups: [groups(:be)] )
     Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event))
     Fabricate(Event::Role::AssistantLeader.name.to_sym, participation: Fabricate(:event_participation, event: event))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event))
@@ -62,7 +63,7 @@ describe Event::Course do
     let(:person)  { Fabricate(:person) }
     let(:person1) { Fabricate(:person) }
     
-    let(:event)   { Fabricate(:course, advisor_id: person.id).reload } 
+    let(:event)   { Fabricate(:jubla_course, advisor_id: person.id).reload } 
     
     subject { event }
      
@@ -82,7 +83,7 @@ describe Event::Course do
     end
 
     it "shouldn't try to add advisor if id is empty" do
-      event = Fabricate(:course, advisor_id: '')
+      event = Fabricate(:jubla_course, advisor_id: '')
       event.advisor.should be nil
     end
     
@@ -115,5 +116,31 @@ describe Event::Course do
     
   end
 
+  context "application contact" do
+
+    it "should have three possible contact groups" do
+      event = Fabricate(:jubla_course, groups: [groups(:be), groups(:no)])
+      event.possible_contact_groups.count.should eq 2
+      event.valid?.should be true
+    end
+
+    it "should have two possible contact groups" do
+      event = Fabricate(:jubla_course, groups: [groups(:no)])
+      event.possible_contact_groups.count.should eq 1
+    end
+
+    it "should validation should fail if no contact group is assigned" do
+      event = Fabricate(:jubla_course, groups: [groups(:no)])
+      event.application_contact_id = nil
+      event.valid?.should be false
+    end
+
+    it "should validation should fail if an invalid contact group is assigned" do
+      event = Fabricate(:jubla_course, groups: [groups(:no)])
+      event.application_contact_id = groups(:be).id
+      event.valid?.should be false
+    end
+
+  end
   
 end

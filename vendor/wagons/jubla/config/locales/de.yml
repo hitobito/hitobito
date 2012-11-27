@@ -96,6 +96,8 @@ de:
       event:
         advisor_id: LKB
         advisor: LKB
+        application_contact: Anmeldung an
+        application_contact_id: Anmeldung an
 
       event/course:
         states:

@@ -7,7 +7,7 @@ describe Ability::Events do
   let(:event)   { Fabricate(:event, groups: [group]) }
   
   let(:participant) { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:bern)).person }
-  let(:participation) { Fabricate(:event_participation, person: participant, event: event, application: Fabricate(:event_application)) }
+  let(:participation) { Fabricate(:event_participation, person: participant, event: event, application: Fabricate(:jubla_event_application)) }
   
   
   subject { Ability.new(user.reload) }
@@ -324,7 +324,7 @@ describe Ability::Events do
   
   context :in_other_hierarchy do
     let(:role)  { Fabricate(Group::Flock::Guide.name.to_sym, group: groups(:innerroden)) }
-    let(:event) { Fabricate(:course, groups: [groups(:be)]) }
+    let(:event) { Fabricate(:jubla_course, groups: [groups(:be)]) }
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
         
     context Event::Participation do 
@@ -358,7 +358,7 @@ describe Ability::Events do
   end
   
   context :flock_leader do
-    let(:event) { Fabricate(:course, groups: [groups(:be)]) }
+    let(:event) { Fabricate(:jubla_course, groups: [groups(:be)]) }
     let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern)) }
     
     context "for his guides" do
@@ -450,7 +450,7 @@ describe Ability::Events do
   end
 
   context :closed_courses do
-    let(:course) { Fabricate(:course, groups: [groups(:be)], state: 'closed') }
+    let(:course) { Fabricate(:jubla_course, groups: [groups(:be)], state: 'closed') }
 
     let(:event) { Fabricate(:event, groups: [groups(:be)], state: 'closed') }
     let(:participation) { Fabricate(:event_participation, event: course) }
@@ -459,7 +459,7 @@ describe Ability::Events do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
 
       it "can use application_market, destroy, qualify or update" do
-        course = Fabricate(:course, groups: [groups(:ch)], state: 'closed')
+        course = Fabricate(:jubla_course, groups: [groups(:ch)], state: 'closed')
         [:application_market, :destroy, :qualify, :update].each do |action|
           should be_able_to(action, course)
         end
@@ -471,7 +471,7 @@ describe Ability::Events do
       end
 
       it "can create, update, destroy participations" do
-        course = Fabricate(:course, groups: [groups(:ch)], state: 'closed')
+        course = Fabricate(:jubla_course, groups: [groups(:ch)], state: 'closed')
         participation = Fabricate(:event_participation, event: course) 
         [:create,:update,:destroy].each { |action| should be_able_to(action, participation) } 
       end

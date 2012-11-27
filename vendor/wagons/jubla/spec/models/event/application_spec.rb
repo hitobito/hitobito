@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Jubla::Event::Application do
 
-  let(:course) { Fabricate(:course, groups: [group]) }
+  let(:course) { Fabricate(:jubla_course, groups: [group]) }
   let(:date)   {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
   
   subject do
-    Fabricate(:event_participation, event: course, application: Fabricate(:event_application)).application
+    Fabricate(:event_participation, event: course, application: Fabricate(:jubla_event_application)).application
   end
 
 

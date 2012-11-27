@@ -28,7 +28,7 @@ describe Event::ListsController do
       
       get :events
       
-      assigns(:events_by_month).keys.should == ['Oktober, 2012', 'November, 2012']
+      assigns(:events_by_month).keys.should == ['Oktober 2012', 'November 2012']
     end
   end
 

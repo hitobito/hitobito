@@ -46,7 +46,7 @@ describe Event::ListsController, type: :controller do
         
         get :events
 
-        link.text.should eq 'Anmelden'
+        link.text.strip.should eq 'Anmelden'
         link[:href].should eq new_group_event_participation_path(event.groups.first, event)
       end
     end

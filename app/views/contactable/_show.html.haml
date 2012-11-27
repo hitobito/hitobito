@@ -1,7 +1,7 @@
 .contactable.well
   - if contactable.respond_to?(:picture)
     .profil-big.pull-right
-      = image_tag("profil_big.png")
+      = image_tag(contactable.picture_url, size: '72x72')
 
   %address
     %strong=contactable.to_s

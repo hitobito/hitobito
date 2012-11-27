@@ -12,11 +12,11 @@ class PictureUploader < CarrierWave::Uploader::Base
   storage :file
 
   # Process files as they are uploaded:
-  process :resize_to_fill => [200, 200]
+  process :resize_to_fill => [72, 72]
 
   # Create different versions of your uploaded files:
-  version :small do
-    process :resize_to_fill => [50, 50]
+  version :thumb do
+    process :resize_to_fill => [32, 32]
   end
 
   # Override the directory where uploaded files will be stored.
@@ -26,12 +26,9 @@ class PictureUploader < CarrierWave::Uploader::Base
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
-  # def default_url
-  #   # For Rails 3.1+ asset pipeline compatibility:
-  #   # asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
-  #
-  #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
-  # end
+  def default_url
+    asset_path(['profil', version_name].compact.join('_') + '.png')
+  end
   
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:

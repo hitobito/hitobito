@@ -20,7 +20,7 @@ module PeopleFilterHelper
       if can?(:new, @group.people_filters.new)
         links << nil
         links << link_to('Neuer Filter...', 
-                         new_group_people_filter_path(id, people_filter: params.slice(:kind, :role_types)))
+                         new_group_people_filter_path(@group.id, people_filter: params.slice(:kind, :role_types)))
       end
     end
     links

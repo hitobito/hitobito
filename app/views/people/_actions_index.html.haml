@@ -6,6 +6,4 @@
     
 = action_button('Drucken', 'javascript:window.print();', :print)
 
--#.pull-right
-  -#= dropdown_button(@group.filter_name, @group.people_filter_links, nil, nil)
-= pill_dropdown_button(people_filter_name, people_filter_links, nil, nil, 'pull-right')
+= pill_dropdown_button(people_filter_name, people_filter_links)

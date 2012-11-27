@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PeopleController do
   
-  before { sign_in(people(:top_leader)) }
+  before { sign_in(top_leader) }
   
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
@@ -155,5 +155,16 @@ describe PeopleController do
       flash[:notice].should eq  'Login Informationen wurden verschickt.'
       last_email.should be_present
     end
+  end
+  
+  describe "GET show" do
+        
+    it "generates pdf labels" do
+      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :pdf
+      
+      @response.content_type.should == 'application/pdf'
+      people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+    end
+    
   end
 end

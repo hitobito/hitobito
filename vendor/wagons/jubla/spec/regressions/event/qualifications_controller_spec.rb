@@ -6,7 +6,7 @@ describe Event::QualificationsController, type: :controller do
   render_views
   
   let(:event) do
-    event = Fabricate(:course, kind: Event::Kind.find_by_short_name('SLK'))
+    event = Fabricate(:jubla_course, kind: Event::Kind.find_by_short_name('SLK'))
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     event
   end

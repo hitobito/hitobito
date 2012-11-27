@@ -28,3 +28,19 @@
 Fabricator(:camp, from: :event, class_name: :'Event::Camp') do
   groups { [Group.all_types.detect {|t| t.event_types.include?(Event::Camp) }.first] }
 end
+
+Fabricator(:jubla_course, from: :course) do
+  application_contact do |attrs| 
+
+    contact_groups = []
+    groups = attrs[:groups]
+    groups.each do |g|
+      if type = g.class.contact_group_type
+        state_agencies = g.children.where(type: type.sti_name).all
+        contact_groups.concat(state_agencies)
+      end
+    end
+    contact_groups.sample
+
+  end
+end

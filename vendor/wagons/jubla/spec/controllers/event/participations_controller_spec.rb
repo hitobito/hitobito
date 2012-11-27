@@ -5,7 +5,7 @@ describe Event::ParticipationsController do
   let(:group) { groups(:ch) }
   
   let(:course) do
-    course = Fabricate(:course, groups: [group], priorization: true)
+    course = Fabricate(:jubla_course, groups: [group], priorization: true)
     course.questions << Fabricate(:event_question, event: course)
     course.questions << Fabricate(:event_question, event: course)
     course.dates << Fabricate(:event_date, event: course)
@@ -13,13 +13,13 @@ describe Event::ParticipationsController do
   end
   
   let(:other_course) do 
-    other = Fabricate(:course, groups: [group], kind: course.kind)
+    other = Fabricate(:jubla_course, groups: [group], kind: course.kind)
     other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
     other
   end
   
   let(:participation) do
-    p = Fabricate(:event_participation, event: course, application: Fabricate(:event_application, priority_2: Fabricate(:course, kind: course.kind)))
+    p = Fabricate(:event_participation, event: course, application: Fabricate(:jubla_event_application, priority_2: Fabricate(:jubla_course, kind: course.kind)))
     p.answers.create!(question_id: course.questions[0].id, answer: 'juhu')
     p.answers.create!(question_id: course.questions[1].id, answer: 'blabla')
     p

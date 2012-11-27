@@ -5,13 +5,22 @@ module Jubla::Event::Course
     include Event::RestrictedRole
     restricted_role :advisor, Event::Course::Role::Advisor
   
-    attr_accessible :advisor_id
+    attr_accessible :advisor_id, :application_contact_id
+
+    ### ASSOCIATIONS
+
+    belongs_to :application_contact, class_name: 'Group'
   
     # states are used for workflow
     # translations in config/locales
     self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
     
+  
+    ### VALIDATIONS
+    
     validates :state, inclusion: possible_states
+
+    validate :validate_application_contact
   
     # Define methods to query if a course is in the given state.
     # eg course.canceled?
@@ -20,8 +29,8 @@ module Jubla::Event::Course
         self.state == state
       end
     end
+
   end
-    
     
   # may participants apply now?
   def application_possible?
@@ -35,6 +44,24 @@ module Jubla::Event::Course
   
   def state
     super || possible_states.first
+  end
+
+  def possible_contact_groups
+    contact_groups = []
+    groups.each do |g|
+      if type = g.class.contact_group_type
+        children = g.children.where(type: type.sti_name).all
+        contact_groups.concat(children)
+      end
+    end
+    contact_groups
+  end
+
+  private
+  def validate_application_contact
+    if possible_contact_groups.none? {|g| g == application_contact }
+      errors.add(:application_contact_id, "muss definiert sein")
+    end
   end
   
   module ClassMethods

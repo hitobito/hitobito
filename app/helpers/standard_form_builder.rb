@@ -158,11 +158,20 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     list = association_entries(attr, html_options)
     if list.present?
+      prompt = if html_options[:prompt] 
+                 {prompt: html_options[:prompt]}
+               elsif html_options[:include_blank] 
+                 {include_blank: html_options[:include_blank]}
+               elsif html_options[:multiple]
+                 {}
+               else
+                 select_options(attr)
+               end
       collection_select(attr,
                         list,
                         :id,
                         :to_s,
-                        html_options[:multiple] ? {} : select_options(attr),
+                        prompt,
                         html_options)
     else
       help_inline(ta(:none_available, association(@object, attr)))

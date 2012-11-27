@@ -1,11 +1,11 @@
 = dropdown_button('Person hinzufügen', @group.possible_role_links, :plus) if can?(:new, @group.roles.new)
 
-= button_group do
-  = action_button('Liste importieren', new_group_csv_imports_path, :download) if can?(:new, @group.roles.new)
-  = action_button('Export', params.merge(format: :pdf, label_format_id: 42), :upload)
+= dropdown_button('Export', people_export_links, :upload)
+
+= action_button('Liste importieren', new_group_csv_imports_path, :download) if can?(:new, @group.roles.new)
     
-= action_button('Drucken', '#', :print)
+= action_button('Drucken', 'javascript:window.print();', :print)
 
 -#.pull-right
   -#= dropdown_button(@group.filter_name, @group.people_filter_links, nil, nil)
-= pill_dropdown_button(@group.filter_name, @group.people_filter_links, nil, nil, 'pull-right')
+= pill_dropdown_button(people_filter_name, people_filter_links, nil, nil, 'pull-right')

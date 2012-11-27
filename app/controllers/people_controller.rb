@@ -18,26 +18,9 @@ class PeopleController < CrudController
   def index
     @people = filter_entries
     respond_to do |format|
-      format.html
-      format.pdf do
-        #format = LabelFormat.find(params[:label_format_id])
-        format = OpenStruct.new(page_size: 'A4', 
-                                page_layout: :portrait, 
-                                width: 70, 
-                                height: 30, 
-                                padding_left: 5, 
-                                padding_top: 5, 
-                                count_horizontal: 3, 
-                                count_vertical: 10, 
-                                font_size: 12)
-        pdf = Export::PdfLabels.new(format).generate(@people)
-        send_data pdf, type: :pdf, disposition: 'inline'
-      end
+      format.html { @people = @people.page(params[:page]) }
+      format.pdf  { render_pdf(@people) }
     end
-  end
-
-  def history
-    @roles = entry.all_roles
   end
   
   # GET ajax, without @group
@@ -58,10 +41,17 @@ class PeopleController < CrudController
       flash.keep
       redirect_to group_person_path(entry.groups.select('groups.id').first, entry)
     else
-      super
+      respond_to do |format|
+        format.html { entry }
+        format.pdf  { render_pdf([entry]) }
+      end
     end
   end
 
+  def history
+    @roles = entry.all_roles
+  end
+  
   # POST button, send password instructions
   def send_password_instructions
     entry.send_reset_password_instructions
@@ -70,6 +60,15 @@ class PeopleController < CrudController
   end
 
   private
+  
+  def render_pdf(people)
+    label_format = LabelFormat.find(params[:label_format_id])
+    unless current_user.last_label_format_id == label_format.id
+      current_user.update_column(:last_label_format_id, label_format.id)
+    end
+    pdf = Export::PdfLabels.new(label_format).generate(people)
+    send_data pdf, type: :pdf, disposition: 'inline'
+  end
   
   def filter_entries
     if params[:role_types]

@@ -38,28 +38,21 @@ describe Event::ListsController, type: :controller do
       dom.should have_content I18n.l(tomorrow, format: :time)
       dom.should have_content "dolorum hi..."
     end
+      
+    context "application" do
+      let(:link) { dom.all('a').last }
+      it "contains apply button for future events" do
+        event.application_possible?.should eq true
+        
+        get :events
+
+        link.text.should eq 'Anmelden'
+        link[:href].should eq new_group_event_participation_path(event.groups.first, event)
+      end
+    end
   end
 
   context "GET courses" do
-
-    context "title" do
-      let(:title_text) { dom.find('#content h1').text }
-
-      it "defaults to courses within current users group" do
-        get :courses
-        title_text.should eq prefixed(top_group.name)
-      end
-
-      it "changes when showing all groups" do
-        get :courses, group: 0, year: 2012
-        title_text.should eq prefixed('allen Gruppen')
-      end
-
-      it "changes when showing specific groups" do
-        get :courses, group: top_layer.id, year: 2012
-        title_text.should eq prefixed(top_layer.name)
-      end
-    end
 
     context "filter dropdown" do
       before { get :courses }
@@ -150,9 +143,6 @@ describe Event::ListsController, type: :controller do
 
     end
 
-    def prefixed(text)
-      "Verfügbare Kurse in #{text}"
-    end
   end
 end
 

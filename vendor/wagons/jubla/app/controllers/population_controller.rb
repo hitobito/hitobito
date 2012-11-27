@@ -7,7 +7,7 @@ class PopulationController < ApplicationController
   
   def index
     @groups = load_groups
-    @groups_people = load_groups_people
+    @people_by_group = load_people_by_group
     @people_data_complete = people_data_complete?
   end
 
@@ -31,16 +31,14 @@ class PopulationController < ApplicationController
     flock.groups_in_same_layer.order_by_type(flock)
   end
 
-  def load_groups_people
-    groups_people = {}
-    @groups.each do |group|
-      groups_people[group.id] = PersonDecorator.decorate(load_people([group]))
+  def load_people_by_group
+    @groups.each_with_object({}) do |group, hash|
+      hash[group] = PersonDecorator.decorate(load_people([group]))
     end
-    groups_people
   end
 
   def people_data_complete?
-    @groups_people.values.flatten.all? do |p|
+    @people_by_group.values.flatten.all? do |p|
       p.birthday.present? && p.gender.present?
     end
   end

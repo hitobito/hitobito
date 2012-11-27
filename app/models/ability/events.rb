@@ -35,9 +35,9 @@ module Ability::Events
     ### COURSES
     if modify_permissions? 
       can :manage_courses, Person do |person|
-        course_groups = Group.can_offer_courses
+        course_groups = Group.course_offerers
         contains_any?(groups_group_full, collect_ids(course_groups)) || 
-          contains_any?(layers_full, course_groups.collect(&:layer_group_id)) 
+        contains_any?(layers_full, course_groups.collect(&:layer_group_id)) 
       end
     end
 

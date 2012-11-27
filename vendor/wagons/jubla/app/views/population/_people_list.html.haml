@@ -1,14 +1,10 @@
-- @groups.each do |group|
-  %h2= group.to_s
-  %table.table.table-striped
-    - @groups_people[group.id].each do |person| 
-      %tr
-        %td
-          %strong= link_to_if(can?(:show, person), person.to_s, group_person_path(group, person))
-        %td= person.roles_short(group)
-        %td= person_birthday(person)
-        %td= person_gender(person)
-        %td
-          - if can?(:edit, person)
-            = link_action_edit(edit_group_person_path(person, group_id: group.id, 
-                                                      return_url: population_group_path(@group.id)))
+= grouped_table(@people_by_group, 5) do |person, group|
+  %td
+    %strong= link_to_if(can?(:show, person), person.to_s, group_person_path(group, person))
+  %td= person.roles_short(group)
+  %td= person_birthday(person)
+  %td= person_gender(person)
+  %td
+    - if can?(:edit, person)
+      = link_action_edit(edit_group_person_path(person, group_id: group.id, 
+                                                return_url: population_group_path(@group.id)))

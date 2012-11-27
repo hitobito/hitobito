@@ -1,12 +1,12 @@
-%section
-  - entries_by_month.each do |month, events|
-    %h2= month 
-    %table.table
-      - events.each do |event|
-        %tr
-          %td
-            %strong
-              = event.labeled_link
-          %td= event.dates_full
-          %td= event.description_short
-          %td= apply_button_if_possible(event)
+- title("Demnächst stattfindende Anlässe")
+= render 'tabs'
+
+#main
+  %section
+    = grouped_table(@events_by_month, 4) do |event|
+      %td
+        %strong
+          = event.labeled_link
+      %td= event.dates_full
+      %td= event.description_short
+      %td= button_action_event_apply(event)

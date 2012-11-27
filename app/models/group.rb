@@ -119,9 +119,13 @@ class Group < ActiveRecord::Base
       reorder("#{statement} name") # acts_as_nested_set default to new order
     end
 
-    def can_offer_courses
+    def course_offerers
       sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
       scoped.where(type: sti_names).order(:parent_id, :name)
+    end
+    
+    def course_offerers_in_hierarchy(user)
+      course_offerers.pluck(:id) & user.groups_hierarchy_ids
     end
   end
   

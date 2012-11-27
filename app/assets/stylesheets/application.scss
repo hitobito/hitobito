@@ -323,6 +323,20 @@ textarea {
   }
 }
 
+.table-grouped {
+  thead:first-child th {
+    padding-top: 0px;
+  }
+  
+  th {
+    padding-top: 30px;
+    
+    h2 {
+      margin-bottom: 0;
+    }
+  }
+}
+
 td.center, th.center {
   text-align: center;
 }

@@ -48,12 +48,6 @@ class EventDecorator < ApplicationDecorator
     possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
     
-  def can_create_participation?
-    p = participations.new
-    p.person = current_user
-    can?(:new, p)
-  end
-  
   def description
     h.simple_format(model.description) if model.description?
   end

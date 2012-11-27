@@ -8,14 +8,27 @@ describe Event::ListsController do
     it "populates events in group_hierarchy, order by finished_at" do
       a = create_event(:bottom_layer_one)
       b = create_event(:top_layer, finish_at: 30.minutes.from_now)
+      
       get :events
-      assigns(:events).should eq [b,a]
+      
+      assigns(:events_by_month).values.should eq [[b,a]]
     end
 
     it "does not include courses" do
       create_event(:top_layer, type: :course)
+      
       get :events
-      assigns(:events).should be_empty
+      
+      assigns(:events_by_month).should be_empty
+    end
+    
+    it "groups by month" do
+      create_event(:top_layer, start_at: Time.zone.parse("2012-10-30"))
+      create_event(:top_layer, start_at: Time.zone.parse("2012-11-1"))
+      
+      get :events
+      
+      assigns(:events_by_month).keys.should == ['Oktober, 2012', 'November, 2012']
     end
   end
 
@@ -58,11 +71,11 @@ describe Event::ListsController do
     end
 
   end
-
+  
   def create_event(group, hash={})
-    hash = ({finish_at: 1.day.from_now, type: :event}).merge(hash)
+    hash = {start_at: 4.days.ago, finish_at: 1.day.from_now, type: :event}.merge(hash)
     event = Fabricate(hash[:type], groups: [groups(group)])
-    event.dates.create(start_at: hash[:finish_at] - 5.days, finish_at: hash[:finish_at])
+    event.dates.create(start_at: hash[:start_at], finish_at: hash[:finish_at])
     event
   end
   

@@ -1,6 +1,6 @@
 .contactable.well
-  .pull-right
-    .profil-big
+  - if contactable.respond_to?(:picture)
+    .profil-big.pull-right
       = image_tag("profil_big.png")
 
   %address

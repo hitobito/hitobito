@@ -273,6 +273,3 @@ de:
       first: Erste
       last: Letzte
 
-  time:
-    formats:
-      month_year: '%B, %Y'

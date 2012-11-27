@@ -59,8 +59,15 @@ module LayoutHelper
                                        class: 'pull-right')])
       end
       render(layout: 'shared/section_table', 
-             locals: {title: title, collection: collection, add_path: add_path}, &block)
+             locals: {title: title, collection: collection, add_path: add_path}, 
+             &block)
     end 
+  end
+  
+  def grouped_table(grouped_lists, column_count, &block)
+    render(layout: 'shared/grouped_table',
+           locals: {grouped_lists: grouped_lists, column_count: column_count},
+           &block)
   end
   
   def muted(text = nil, &block)

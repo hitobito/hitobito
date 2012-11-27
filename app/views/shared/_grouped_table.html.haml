@@ -1,0 +1,9 @@
+%table.table.table-grouped.table-striped.table-hover
+  - grouped_lists.each do |title, list|
+    %thead
+      %tr
+        %th{colspan: column_count}
+          %h2= title
+    %tbody
+      - list.each do |item|
+        %tr= yield item, title

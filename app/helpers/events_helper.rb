@@ -10,7 +10,7 @@ module EventsHelper
     
     if event.application_possible? && can?(:new, participation)
        group ||= event.groups.first
-       action_button 'Anmelden', new_group_event_participation_path(group, event) 
+       action_button 'Anmelden', new_group_event_participation_path(group, event), :check
      end
   end
 end

@@ -47,14 +47,12 @@ module Jubla::Event::Course
   end
 
   def possible_contact_groups
-    contact_groups = []
-    groups.each do |g|
+    groups.each_with_object([]) do |g, contact_groups|
       if type = g.class.contact_group_type
-        children = g.children.where(type: type.sti_name).all
+        children = g.children.where(type: type.sti_name)
         contact_groups.concat(children)
       end
     end
-    contact_groups
   end
 
   private

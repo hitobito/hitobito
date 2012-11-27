@@ -308,20 +308,14 @@ select[class*="span"] {
   line-height: 30px;
 }
 
-.pull-right > .btn-group > .dropdown-menu {
+.pull-right > .btn-group > .dropdown-menu,
+.pull-right > .dropdown > .dropdown-menu {
   right: 0;
   left: auto;
 }
 
 .dropdown-menu .dropdown-menu {
-  //min-width: 0;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left > .dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
+  min-width: 0;
 }
 
 

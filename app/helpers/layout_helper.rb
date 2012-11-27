@@ -13,19 +13,31 @@ module LayoutHelper
     if @in_button_group
       capture(&block)
     else
-       @in_button_group = true
+      @in_button_group = true
       html = content_tag(:div, class: 'btn-group', &block)
       @in_button_group = false
       html
     end
   end
   
-  def dropdown_button(label, links, icon_name = nil, main_link = nil)
-    render('shared/dropdown_button', label: label, links: links, icon_name: icon_name, main_link: main_link)
+  def dropdown_button(label, links, icon_name = nil, main_link = nil, button_class = 'btn')
+    render('shared/dropdown_button', 
+           label: label, 
+           links: links, 
+           icon_name: icon_name, 
+           main_link: main_link, 
+           button_class: button_class)
   end
 
-  def pill_dropdown_button(label, links, icon_name = nil, main_link = nil, css_classes = nil)
-    render('shared/pill_dropdown_button', label: label, links: links, icon_name: icon_name, main_link: main_link, css_classes: css_classes)
+  def pill_dropdown_button(label, links, css_classes = 'pull-right')
+    content_tag(:ul, class: "nav nav-pills #{css_classes}") do
+      content_tag(:li, class: 'dropdown') do
+        @in_button_group = true
+        html = dropdown_button(label, links, nil, nil, nil)
+        @in_button_group = false
+        html
+      end
+    end
   end
   
   def icon(name)

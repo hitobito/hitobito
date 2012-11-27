@@ -4,6 +4,23 @@ module Import
     attr_reader :person, :hash, :phone_numbers, :social_accounts
     def_delegators :person, :persisted?, :save, :id, :errors
 
+    BLACKLIST = [:contact_data_visible,
+                 :created_at,
+                 :current_sign_in_at,
+                 :current_sign_in_ip,
+                 :encrypted_password,
+                 :id,
+                 :last_sign_in_at,
+                 :last_sign_in_ip,
+                 :picture,
+                 :remember_created_at,
+                 :reset_password_sent_at,
+                 :reset_password_token,
+                 :sign_in_count,
+                 :last_label_format_id,
+                 :updated_at]
+
+
     def self.fields
       all = person_attributes + 
         Import::SettingsFields.new(PhoneNumber).fields + 
@@ -12,6 +29,13 @@ module Import
       all.sort_by { |entry| entry[:value] } 
     end
 
+    def self.person_attributes
+      # alle attributes - technische attributes
+      [::Person.column_names - BLACKLIST.map(&:to_s)].flatten.map! do |name|
+        { key: name, value: ::Person.human_attribute_name(name, default: '') }
+      end
+    end
+    
     def initialize(hash)
       prepare(hash)
 
@@ -52,30 +76,6 @@ module Import
         { value_key => hash.delete(key), :label => label } 
       end
     end
-
-    BLACKLIST = [:contact_data_visible,
-                 :created_at,
-                 :current_sign_in_at,
-                 :current_sign_in_ip,
-                 :encrypted_password,
-                 :id,
-                 :last_sign_in_at,
-                 :last_sign_in_ip,
-                 :picture,
-                 :remember_created_at,
-                 :reset_password_sent_at,
-                 :reset_password_token,
-                 :sign_in_count,
-                 :updated_at]
-
-    def self.person_attributes
-      # alle attributes - technischen attributes
-
-      [::Person.column_names - BLACKLIST.map(&:to_s)].flatten.map! do |name|
-        { key: name, value: ::Person.human_attribute_name(name, default: '') }
-      end
-    end
-
 
     class DoubletteFinder
       attr_reader :attrs

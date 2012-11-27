@@ -22,17 +22,11 @@ class PeopleController < CrudController
         @people = @people.page(params[:page])
       end
       format.pdf do
-        #format = LabelFormat.find(params[:label_format_id])
-        format = OpenStruct.new(page_size: 'A4', 
-                                page_layout: :portrait, 
-                                width: 70, 
-                                height: 30, 
-                                padding_left: 5, 
-                                padding_top: 5, 
-                                count_horizontal: 3, 
-                                count_vertical: 10, 
-                                font_size: 12)
-        pdf = Export::PdfLabels.new(format).generate(@people)
+        label_format = LabelFormat.find(params[:label_format_id])
+        unless current_user.last_label_format_id == label_format.id
+          current_user.update_column(:last_label_format_id, label_format.id)
+        end
+        pdf = Export::PdfLabels.new(label_format).generate(@people)
         send_data pdf, type: :pdf, disposition: 'inline'
       end
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119092332) do
+ActiveRecord::Schema.define(:version => 20121127080356) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -147,6 +147,19 @@ ActiveRecord::Schema.define(:version => 20121119092332) do
     t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
   end
 
+  create_table "label_formats", :force => true do |t|
+    t.string  "name",                                :null => false
+    t.string  "page_size",        :default => "A4",  :null => false
+    t.boolean "landscape",        :default => false, :null => false
+    t.float   "font_size",        :default => 11.0,  :null => false
+    t.float   "width",                               :null => false
+    t.float   "height",                              :null => false
+    t.integer "count_horizontal",                    :null => false
+    t.integer "count_vertical",                      :null => false
+    t.float   "padding_top",                         :null => false
+    t.float   "padding_left",                        :null => false
+  end
+
   create_table "people", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -174,6 +187,7 @@ ActiveRecord::Schema.define(:version => 20121119092332) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "picture"
+    t.integer  "last_label_format_id"
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
     t.index ["email"], :name => "index_people_on_email", :unique => true
   end
@@ -224,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20121119092332) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
+    t.index ["type"], :name => "index_roles_on_type"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
   end
 

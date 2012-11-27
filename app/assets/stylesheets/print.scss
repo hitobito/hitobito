@@ -108,7 +108,7 @@ li { list-style: none; }
 
 table {
   width: 100%;
-  border-collapse:collapse;
+  border-collapse: collapse;
 }
 
 table th {
@@ -124,9 +124,19 @@ table th {
   p { margin: 0; padding: 0; }
 }
 
+body.application .profil-big {
+  display: none;
+}
+
 table.signature {
   width: 100%;
   border-spacing: 1em;
+  border-collapse: inherit;
+
+  td {
+    vertical-align: top;
+    border: 0;
+  }
 
   td.border{
     border-top: 1px solid black;

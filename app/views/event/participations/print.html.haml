@@ -4,12 +4,11 @@
     %meta{:charset => 'utf-8'}
     %title= Jubla
     = csrf_meta_tag
-    = stylesheet_link_tag 'event/participation_print.css', :media => :all
-    = javascript_include_tag 'application'
+    = stylesheet_link_tag 'print.css', :media => :all
     :javascript
       $(function() { window.print(); })
 
-  %body
+  %body.application
     - if @application.present?
       = render 'contactable/show', contactable: @application.contact, only_public: true
 
@@ -40,10 +39,8 @@
 
     %h4 Unterschrift
     %p Von dir oder einer erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
+    %br/
     %table.signature
-      %tr
-        %td 
-        %td 
       %tr
         %td.border Ort, Datum
         %td.border Unterschrift

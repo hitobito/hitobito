@@ -1,4 +1,8 @@
 .contactable.well
+  .pull-right
+    .profil-big
+      = image_tag("profil_big.png")
+
   %address
     %strong=contactable.to_s
     =contactable.complete_address
@@ -6,4 +10,4 @@
     =contactable.all_phone_numbers(only_public)
 
   .social
-    =contactable.all_social_accounts(only_public)
+    =contactable.all_social_accounts(only_public)  

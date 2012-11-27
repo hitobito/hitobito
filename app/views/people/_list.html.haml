@@ -5,6 +5,9 @@
 = paginate @people
 
 = crud_table do |t|
+  - t.col()    do
+    .profil
+      = image_tag("profil.png")
   - t.col('Name')    do |p| 
     %strong
       -# Any person listed can be shown

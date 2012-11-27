@@ -24,8 +24,6 @@
 
 /* Typo */
 // -------------------------
-/* Typo */
-// -------------------------
 #{headings(all)} {
   font-family: $headingFontFamily;
   margin-top: 0;
@@ -206,6 +204,9 @@ dl {
   margin-bottom: 0;
 }
 
+.help-inline {
+  margin-top: 5px
+}
 .help-block {
   margin: -5px 0 10px;
 }
@@ -245,7 +246,7 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $gray;
+  color: $grayDark;
 }
 
 select.time {
@@ -274,6 +275,35 @@ label.radio {
 textarea {
   height: auto;
 }
+
+.fields-separation hr {
+  margin: 7px 0 15px;
+  border-top-color: $grayLight;
+}
+
+.fields .controls-row {
+  border-bottom: 1px solid $grayLight;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.fields .help-inline { 
+  float: right;
+}
+
+.remove_nested_fields {
+  color: $red;
+  margin: 0; 
+  padding: 0;
+  i { 
+    margin: 5px;
+  }
+  &:hover {
+    color: darken($red, 10%);
+  }
+}
+
 
 // Table
 .table {
@@ -446,6 +476,33 @@ body > nav {
     clear: both;
     margin-top: $vSpace;
     &:first-child { margin-top:0; } 
+  }
+}
+
+.profil, .profil-big {
+  background: $white;
+  border: 1px solid $grayLight;
+  overflow: hidden;
+  @include border-radius(3px);
+}
+.profil {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  .table-striped & {
+    margin-left: -8px;
+  }
+}
+.profil-big {
+  width: 72px;
+  height: 72px;
+  padding: 2px;
+}
+
+.contactable {
+  @include clearfix;
+  .profil-big {
+    margin: 0 0 0 10px;
   }
 }
 

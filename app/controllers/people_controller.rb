@@ -18,7 +18,9 @@ class PeopleController < CrudController
   def index
     @people = filter_entries
     respond_to do |format|
-      format.html
+      format.html do
+        @people = @people.page(params[:page])
+      end
       format.pdf do
         #format = LabelFormat.find(params[:label_format_id])
         format = OpenStruct.new(page_size: 'A4', 

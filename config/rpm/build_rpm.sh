@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 if [ -z $BUILD_NUMBER ]; then
   echo "Usage: BUILD_NUMBER=123 build_rpm.sh"
@@ -30,16 +30,16 @@ fi
 
 function notifyFailure {
   if [ $? -gt 0 ]; then
-    set +x
     echo "Failed building RPM for $plat - See above for issues. Below we provide you with the logs from mock"
-    for logfile in /var/lib/mock/$plat/result/*log; do
-      echo "#######################################"
+    #for logfile in /var/lib/mock/$plat/result/*log; do
+    logfile=/var/lib/mock/$plat/result/build.log;
+      echo "###############################################"
       echo "# ${logfile}"
-      echo "#######################################"
+      echo "###############################################"
       echo
       cat $logfile
       echo
-    done
+    #done
     echo "Deleting also build-tag: build_${BUILD_NUMBER}"
     git tag -d build_$BUILD_NUMBER
   fi

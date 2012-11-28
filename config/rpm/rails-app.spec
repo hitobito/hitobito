@@ -147,10 +147,11 @@ echo "# Rotate rails logs for %{name}
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
 
 %if %{use_sphinx}
+touch $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-# */15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
+*/15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
@@ -188,8 +189,7 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Runs after the package got installed.
 # Configure here any services etc.
 
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate" || exit 1
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake wagon:setup" || exit 1
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
 su %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1
@@ -249,6 +249,10 @@ fi
 
 %if %{use_delayed_job}
 %{_initddir}/%{name}-workers
+%endif
+
+%if %{use_sphinx}
+%attr(0660,root,%{name}) %{wwwdir}/%{name}/www/config/production.sphinx.conf
 %endif
 
 

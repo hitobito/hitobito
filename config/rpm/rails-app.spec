@@ -150,7 +150,7 @@ echo "# Rotate rails logs for %{name}
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
 
 %if %{use_sphinx}
-touch $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/config/production.sphinx.conf
+touch config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm

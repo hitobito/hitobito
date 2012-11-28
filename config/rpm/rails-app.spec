@@ -164,7 +164,7 @@ export PATH=%{ruby_bindir}:$PATH
 %{bundle_cmd} exec rake assets:precompile
 
 %if %{use_sphinx}
-%{bundle_cmd} exec rake thinking_sphinx:configure"
+%{bundle_cmd} exec rake thinking_sphinx:configure
 %endif
 
 # cleanup log and tmp and db we don't want them in

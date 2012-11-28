@@ -13,12 +13,11 @@ module PeopleHelper
     
     links << link_to('CSV', '#')
     
-    label_formats = LabelFormat.all.to_a
-    if label_formats.present?
+    if @label_formats.present?
       main_link = current_user.last_label_format_id ? 
-                  export_label_format_path(current_user.last_label_format) : 
+                  export_label_format_path(current_user.last_label_format_id) : 
                   '#'
-      links << {link_to('Etiketten', main_link) => export_label_format_links(label_formats) }
+      links << {link_to('Etiketten', main_link) => export_label_format_links(@label_formats) }
     end
       
     links
@@ -29,22 +28,23 @@ module PeopleHelper
   def export_label_format_links(label_formats)
     format_links = []
     if current_user.last_label_format_id?
-      format_links << export_label_format_link(current_user.last_label_format)
+      last_format = current_user.last_label_format
+      format_links << export_label_format_link(last_format.id, last_format.to_s)
       format_links << nil
     end
     
-    label_formats.each do |format| 
-      format_links << export_label_format_link(format)
+    label_formats.each do |id, label| 
+      format_links << export_label_format_link(id, label)
     end
     format_links
   end
   
-  def export_label_format_link(format)
-    link_to(format.to_s, export_label_format_path(format))
+  def export_label_format_link(id, label)
+    link_to(label, export_label_format_path(id))
   end
   
-  def export_label_format_path(format)
-    params.merge(format: :pdf, label_format_id: format.id)
+  def export_label_format_path(id)
+    params.merge(format: :pdf, label_format_id: id)
   end
 
 end

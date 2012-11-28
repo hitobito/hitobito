@@ -12,7 +12,9 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, :padding_left,
             numericality: {greater_than_or_equal_to: 0, allow_nil: true}
   
-            
+  after_save :sweep_cache
+  after_destroy :sweep_cache
+
   def to_s
     "#{name} (#{page_size}, #{dimensions})"
   end
@@ -25,4 +27,9 @@ class LabelFormat < ActiveRecord::Base
     landscape ? :landscape : :portrait
   end
   
+  private
+  
+  def sweep_cache
+    Rails.cache.delete('label_formats')
+  end
 end

@@ -11,7 +11,7 @@
 # please add conditionals like these
 
 %define use_delayed_job 1
-%define use_memcached   0
+%define use_memcached   1
 %define use_sphinx      1
 %define use_imagemagick 1
 

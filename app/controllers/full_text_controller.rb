@@ -52,6 +52,12 @@ class FullTextController < ApplicationController
   end
   
   def accessible_people_ids
+    Rails.cache.fetch("accessible_people_ids_for_#{current_user.id}", expires_in: 15.minutes) do
+      load_accessible_people_ids
+    end
+  end
+  
+  def load_accessible_people_ids
     accessible = Person.accessible_by(Ability::Accessibles.new(current_user))
     
     # This still selects all people attributes :(

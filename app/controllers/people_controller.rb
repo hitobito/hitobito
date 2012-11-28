@@ -13,7 +13,8 @@ class PeopleController < CrudController
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, 
                                        :send_password_instructions]
   
-  before_render_show :load_asides
+  before_render_index :load_label_formats
+  before_render_show :load_asides, :load_label_formats
   
   def index
     @people = filter_entries
@@ -134,6 +135,12 @@ class PeopleController < CrudController
                                                     preload_all_dates.
                                                     order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
+  end
+  
+  def load_label_formats
+    @label_formats = Rails.cache.fetch('label_formats') do
+      LabelFormat.all.each_with_object({}) {|f, result| result[f.id] = f.to_s }
+    end
   end
   
 end

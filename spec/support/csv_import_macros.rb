@@ -10,6 +10,10 @@ module CsvImportMacros
     { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' }
   end
 
+  def headers_mapping(parser)
+    parser.headers.inject({}) {|hash, header|  hash[header] = header; hash } 
+  end
+
   def generate_csv(*args)
     CSV.generate { |csv| args.each { |arg| csv << arg }  } 
   end

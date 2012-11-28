@@ -25,7 +25,12 @@ describe CsvImportsController do
       post :define_mapping, group_id: group.id, csv_import: { file: file } 
       flash[:data].should_not be_present
       flash[:alert].should =~ /Fehler beim Lesen von utf8.ods/
-      should redirect_to new_group_csv_imports_path
+      should redirect_to new_group_csv_imports_path(group)
+    end
+
+    it "renders form when submitted without file" do
+      post :define_mapping, group_id: group.id
+      should redirect_to new_group_csv_imports_path(group)
     end
   end
   
@@ -33,6 +38,12 @@ describe CsvImportsController do
     let(:data) { File.read(path(:utf8)) } 
     let(:role_type) { "Group::TopGroup::Leader" }
     let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday', role: role_type } }
+
+
+    it "redirects if role_type is missing" do
+      post :create, group_id: group.id, data: data, csv_import: { first_name: 'first_name' }
+      should redirect_to new_group_csv_imports_path(group)
+    end
 
     it "populates flash and redirects to group role list" do
       expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(1)
@@ -58,17 +69,41 @@ describe CsvImportsController do
       let(:mapping) { { Vorname: 'first_name', Telefon: 'phone_number_vater', role: role_type } }
       let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo }) } 
         
-      it "imports first person and displays errors for second person" do
-        expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(0)
-        flash[:alert].should eq ["1 Person (Rolle) konnten nicht importiert werden.", 
-                                 "Zeile 1: Telefonnummer muss ausgefüllt werden"]
+      it "is ignored" do
+        expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(1)
+        flash[:alert].should be_blank
         should redirect_to group_people_path(group, role_types: role_type, name: "Rolle")
       end
     end
 
+    context "list" do
+      let(:data) { File.read(path(:list)) } 
+      let(:last_person) { Person.last } 
+
+      context "mapping single attribute" do
+        let(:mapping) { { first_name: 'first_name', role: role_type } }
+
+        it "imports first name of all 4 people" do
+          expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(4)
+          flash[:alert].should be_blank
+          last_person.last_name.should be_blank
+          last_person.first_name.should be_present
+        end
+      end
+
+      context "mapping all attributes" do
+        let(:mapping) { headers_mapping(CSV.parse(data, headers: true)) } 
+
+        it "imports single person" do
+          expect { post :create, group_id: group.id, data: data, csv_import: mapping.merge(role: role_type) }.to change(Person,:count).by(1)
+          last_person.last_name.should be_present
+          last_person.phone_numbers.should have(4).items
+          last_person.social_accounts.should have(3).items
+        end
+      end
+    end
 
     context "doublette handling" do
-
       context "multiple updates to single person" do
         let(:mapping) { { vorname: :first_name, email: :email, nickname: :nickname, role: role_type } }
         let(:data) { generate_csv(%w{vorname email nickname}, %w{foo foo@bar.net foobar}, %w{bar bar@bar.net barfoo}) } 

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 if [ -z $BUILD_NUMBER ]; then
   echo "Usage: BUILD_NUMBER=123 build_rpm.sh"
@@ -27,9 +27,10 @@ build_flags=$(env | grep RAILS_ | while read line; do echo -n " --define=\"$(ech
 if [ -z $BUILD_PLATFORMS ]; then
   BUILD_PLATFORMS='epel-6-x86_64'
 fi
-for plat in $BUILD_PLATFORMS; do
-  eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
+
+function notifyFailure {
   if [ $? -gt 0 ]; then
+    set +x
     echo "Failed building RPM for $plat - See above for issues. Below we provide you with the logs from mock"
     for logfile in /var/lib/mock/$plat/result/*log; do
       echo "#######################################"
@@ -41,7 +42,11 @@ for plat in $BUILD_PLATFORMS; do
     done
     echo "Deleting also build-tag: build_${BUILD_NUMBER}"
     git tag -d build_$BUILD_NUMBER
-    exit 1
   fi
+}
+trap notifyFailure EXIT
+
+for plat in $BUILD_PLATFORMS; do
+  eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
 done
 #git push --tags

@@ -9,7 +9,7 @@ describe "Quicksearch", :mysql do
       visit root_path
       
       fill_in 'quicksearch', with: "top"
-      sleep(1)
+      sleep(2)
       
       dropdown = find('.typeahead.dropdown-menu')
       dropdown.should have_content("Top Leader, Supertown")

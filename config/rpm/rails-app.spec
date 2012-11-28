@@ -67,7 +67,6 @@ BuildRequires: ImageMagick-devel
 Requires: ImageMagick
 %endif
 %if %{use_sphinx}
-BuildRequires: sphinx
 Requires: sphinx
 %endif
 Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
@@ -151,6 +150,7 @@ echo "# Rotate rails logs for %{name}
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
 
 %if %{use_sphinx}
+touch $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
@@ -162,10 +162,6 @@ export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
 %{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
 %{bundle_cmd} exec rake assets:precompile
-
-%if %{use_sphinx}
-%{bundle_cmd} exec rake thinking_sphinx:configure
-%endif
 
 # cleanup log and tmp and db we don't want them in
 # the rpm
@@ -190,7 +186,6 @@ cp -p -r .bundle $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
 
 %if %{use_sphinx}
 install -p -d -m0755 $RPM_BUILD_ROOT/etc/sphinx
-cp config/production.sphinx.conf $RPM_BUILD_ROOT/etc/sphinx/%{name}.conf
 %endif
 
 # fix shebangs
@@ -203,6 +198,8 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1
+ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf $RPM_BUILD_ROOT/etc/sphinx/%{name}.conf
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif
@@ -261,7 +258,7 @@ fi
 %endif
 
 %if %{use_sphinx}
-%attr(-,%{name},%{name}) /etc/sphinx/%{name}.conf
+%attr(0660,root,%{name}) %{wwwdir}/%{name}/www/config/production.sphinx.conf
 %endif
 
 

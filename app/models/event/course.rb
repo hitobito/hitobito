@@ -55,6 +55,11 @@ class Event::Course < Event
   def label_detail
     "#{kind.short_name} #{number} #{group_names}"
   end
+    
+  # Does this event provide qualifications
+  def qualifying?
+    kind_id? && kind.qualifying?
+  end
   
   # The date on which qualification obtained in this course start
   def qualification_date

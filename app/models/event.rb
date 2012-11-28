@@ -158,11 +158,6 @@ class Event < ActiveRecord::Base
                    merge(Person.order_by_name).
                    uniq
   end
-  
-  # Does this event provide qualifications
-  def qualifying?
-    kind_id? && kind.qualifying?
-  end
 
   def to_s
     name

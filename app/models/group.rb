@@ -84,6 +84,8 @@ class Group < ActiveRecord::Base
     indexes name, short_name, sortable: true
     indexes email, address, zip_code, town, country
 
+    indexes parent.name, as: :parent_name
+    indexes parent.short_name, as: :parent_short_name
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
   end

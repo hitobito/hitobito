@@ -1,7 +1,11 @@
 
-= form_tag '#', class: 'form-inline pull-right', method: :get do
+= form_tag full_path, class: 'form-inline pull-right', method: :get do
   .input-append
-    = search_field_tag :q, params[:q], class: 'span3'
+    = search_field_tag :q, params[:q], 
+                       class: 'span4',
+                       id: 'quicksearch',
+                       data: { person_url: person_url(1).gsub(/\/1$/, ''), 
+                               group_url: groups_url } 
     = button_tag icon(:search), class: 'btn'
 
 = render_main_nav

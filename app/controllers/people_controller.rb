@@ -25,15 +25,16 @@ class PeopleController < CrudController
   
   # GET ajax, without @group
   def query
-    @people = []
+    people = []
     if params.has_key?(:q) && params[:q].size >= 3
-      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
+      people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
                        only_public_data.
                        order_by_name.
                        limit(10)
+      people = decorate(people)
     end
     
-    render json: decorate(@people).collect(&:as_typeahead)
+    render json: people.collect(&:as_typeahead)
   end
   
   def show

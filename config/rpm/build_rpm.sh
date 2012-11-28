@@ -11,6 +11,10 @@ DIR=$NAME-$VERSION.$BUILD_NUMBER
 TAR=$DIR.tar.gz
 mkdir $DIR
 git archive --format=tar build_$BUILD_NUMBER | (cd $DIR && tar -xf -)
+
+# comment the next line out if your project includes submodules
+#(git submodule --quiet foreach "pwd | awk -v dir=`pwd`/ '{sub(dir,\"\"); print}'") | xargs tar c | (cd $DIR && tar -xf -)
+
 sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ $DIR/config/rpm/*.spec
 tar czf $TAR $DIR
 rm -rf $DIR
@@ -49,4 +53,7 @@ trap notifyFailure EXIT
 for plat in $BUILD_PLATFORMS; do
   eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
 done
+
+# uncomment this line if you want to push build tags to the git server
+# ATTENTION: jenkins ldap user must have write rights to your git repository
 #git push --tags

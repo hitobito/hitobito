@@ -66,6 +66,10 @@ BuildRequires:	postgresql-devel
 BuildRequires: ImageMagick-devel
 Requires: ImageMagick
 %endif
+%if %{use_sphinx}
+BuildRequires: sphinx
+Requires: sphinx
+%endif
 Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
 Requires:	logrotate
 Requires:	opt-ruby-%{ruby_version}

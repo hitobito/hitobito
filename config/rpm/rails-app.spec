@@ -154,7 +154,7 @@ touch config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-*/15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
+*/15 * * * *  root  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
@@ -198,8 +198,8 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1
-ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf $RPM_BUILD_ROOT/etc/sphinx/%{name}.conf
+cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:rebuild || exit 1
+ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif

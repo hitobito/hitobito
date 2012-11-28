@@ -15,6 +15,7 @@ class FullTextController < ApplicationController
   end
   
   def query
+    logger.debug 'query'
     people = query_people.collect{|i| PersonDecorator.new(i).as_quicksearch }
     groups = query_groups.collect{|i| GroupDecorator.new(i).as_quicksearch }
     
@@ -51,7 +52,15 @@ class FullTextController < ApplicationController
   end
   
   def accessible_people_ids
-    Person.accessible_by(Ability::Accessibles.new(current_user)).pluck('people.id')
+    accessible = Person.accessible_by(Ability::Accessibles.new(current_user))
+    
+    # This still selects all people attributes :(
+    # accessible.pluck('people.id')
+    
+    # rewrite query to only include id column
+    sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
+    result = Person.connection.execute(sql)
+    result.collect {|row| row[0] }
   end
   
   def entries

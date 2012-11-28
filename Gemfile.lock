@@ -48,6 +48,8 @@ GEM
     bcrypt-ruby (3.0.1)
     binding_of_caller (0.6.8)
     bootstrap-sass (2.1.1.0)
+    bootstrap-wysihtml5-rails (0.3.1.11)
+      railties (>= 3.0)
     brakeman (1.8.2)
       activesupport
       erubis (~> 2.6)
@@ -472,6 +474,7 @@ DEPENDENCIES
   awesome_print
   bcrypt-ruby
   bootstrap-sass
+  bootstrap-wysihtml5-rails
   brakeman
   bullet
   cancan

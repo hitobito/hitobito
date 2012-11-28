@@ -15,6 +15,14 @@ class LabelFormat < ActiveRecord::Base
   after_save :sweep_cache
   after_destroy :sweep_cache
 
+  class << self
+    def all_as_hash
+      Rails.cache.fetch('label_formats') do
+        LabelFormat.order(:name).each_with_object({}) {|f, result| result[f.id] = f.to_s }
+      end
+    end
+  end
+
   def to_s
     "#{name} (#{page_size}, #{dimensions})"
   end

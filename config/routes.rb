@@ -49,7 +49,6 @@ Jubla::Application.routes.draw do
   end
 
  
-  resources :event_kinds, module: 'event', controller: 'kinds'
 
   get 'list_courses', to: 'event/lists#courses', as: :list_courses
   get 'list_events', to: 'event/lists#events', as: :list_events
@@ -62,8 +61,12 @@ Jubla::Application.routes.draw do
       get :query
     end
   end
+    
+  resources :event_kinds, module: 'event', controller: 'kinds'
   
   resources :qualification_kinds
+  
+  resources :custom_contents, only: [:index, :edit, :update]
   
   devise_for :people, skip: [:registrations], path: "users"
   as :person do

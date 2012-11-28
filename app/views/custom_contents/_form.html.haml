@@ -1,0 +1,6 @@
+= render 'shared/admin_tabs'
+
+= entry_form(cancel_url: custom_contents_path, buttons_bottom: false) do |f|
+  = f.labeled_input_field :subject
+  = f.labeled_text_area :body, class: 'span8 wysiwyg', rows: 20
+

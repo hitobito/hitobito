@@ -36,6 +36,7 @@ gem 'exception_notification'
 # in production environments by default.
 group :assets do
   gem 'bootstrap-sass'
+  gem 'bootstrap-wysihtml5-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'compass', '>= 0.13.alpha.0'
   gem 'compass-rails', '~> 1.0.2'

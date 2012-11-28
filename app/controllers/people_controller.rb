@@ -138,9 +138,7 @@ class PeopleController < CrudController
   end
   
   def load_label_formats
-    @label_formats = Rails.cache.fetch('label_formats') do
-      LabelFormat.all.each_with_object({}) {|f, result| result[f.id] = f.to_s }
-    end
+    @label_formats = LabelFormat.all_as_hash
   end
   
 end

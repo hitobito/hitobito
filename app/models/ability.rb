@@ -4,7 +4,7 @@ class Ability
   include Ability::People
   include Ability::Groups
   include Ability::Events
-  include Ability::Qualifications
+  include Ability::Various
   
   def initialize(user)
     super(user)
@@ -23,7 +23,7 @@ class Ability
     define_people_abilities
     define_groups_abilities
     define_events_abilities
-    define_qualifications_abilities
+    define_various_abilities
   end
   
 end

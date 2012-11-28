@@ -83,7 +83,7 @@ module CrudHelper
   # A block may be given to define the link path for the row entry.
   def action_col_edit(table, &block)
     action_col(table) do |e|
-      link_action_edit(action_path(e, &block))
+      link_action_edit(action_path(e, &block)) if can?(:edit, e)
     end
   end
 
@@ -91,7 +91,7 @@ module CrudHelper
   # A block may be given to define the link path for the row entry.
   def action_col_destroy(table, &block)
     action_col(table) do |e|
-      link_action_destroy(action_path(e, &block))
+      link_action_destroy(action_path(e, &block)) if can?(:destroy, e)
     end
   end
 

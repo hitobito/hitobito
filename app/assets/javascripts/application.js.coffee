@@ -13,6 +13,8 @@
 #= require jquery_ujs
 #= require jquery-ui
 #= require bootstrap
+#= require bootstrap-wysihtml5
+#= require bootstrap-wysihtml5/locales/de-DE
 #= require jquery_nested_form
 #= require_tree .
 #
@@ -113,6 +115,11 @@ $ ->
   # wire up person auto complete
   $('[data-provide=person]').each(setupPersonTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
+    
+  # wire up wysiwyg text areas
+  $('textarea.wysiwyg').wysihtml5({
+    locale: 'de-DE'
+  });
   
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->

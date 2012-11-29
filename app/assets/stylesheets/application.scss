@@ -173,9 +173,17 @@ dl {
   color: $green;
   &:hover {
     color: darken($green, 10%); 
-    [class^="icon-"], [class*=" icon-"] { background-image: image-url("glyphicons-halflings-green.png"); }
+    .icon,
+    [class^="icon-"], 
+    [class*=" icon-"] { 
+      background-image: image-url("glyphicons-halflings-green.png"); 
+    }
   } 
-  [class^="icon-"], [class*=" icon-"] { background-image: image-url("glyphicons-halflings-green-hover.png"); }
+  .icon,
+  [class^="icon-"], 
+  [class*=" icon-"] { 
+    background-image: image-url("glyphicons-halflings-green-hover.png");
+  }
 
   .caret {
     border-top-color: $green;

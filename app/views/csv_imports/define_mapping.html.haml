@@ -10,5 +10,5 @@
 
   = field_set_tag "Attribut Zuordnung festlegen" do
     - parser.headers.each do |column_name|
-      = f.labeled_collection_select(column_name, fields, :key, :value, {include_blank: true}, {class: 'span3'})
+      = f.labeled_collection_select(column_name, fields, :key, :value, {include_blank: true}, {class: 'span4'})
   = save_form_buttons(f, 'Personen importieren', group_people_path(group))

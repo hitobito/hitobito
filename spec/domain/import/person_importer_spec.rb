@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 describe Import::PersonImporter do
+  include CsvImportMacros
 
   let(:group) { groups(:top_group) } 
   let(:role_type) { "Group::TopGroup::Leader" }
@@ -94,6 +95,69 @@ describe Import::PersonImporter do
       its(:errors) { should eq ['Zeile 1: 2 Treffer in Duplikatserkennung.'] }
     end
   end
+
+  context "list file" do
+    let(:parser) { Import::CsvParser.new(File.read(path(:list))) }
+    let(:mapping) { headers_mapping(parser) } 
+    let(:data) { parser.map_data(mapping) }
+    before { parser.parse } 
+
+    context "importer reports errors" do
+      before { importer.import } 
+      subject { importer } 
+      
+      its(:errors) { should include "Zeile 1: Firma muss ausgefüllt werden" } 
+      its(:errors) { should include "Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl" } 
+      its(:errors) { should include "Zeile 4: PLZ ist keine Zahl" } 
+    end
+
+    context "imported person" do
+      before { importer.import } 
+      subject { Person.last } 
+
+      its(:first_name) { should eq 'Ramiro' }
+      its(:last_name) { should eq 'Brown' }
+      its(:additional_information) { should be_present } 
+      its(:company) { should eq false }
+      its(:company_name) { should eq 'Oda Cormier' }
+      its(:email) { should eq 'ramiro_brown@example.com' }
+      its(:address) { should eq '1649 Georgette Circles' }
+      its(:zip_code) { should eq 72026 }
+      its(:town) { should be_blank }
+      its(:gender) { should eq 'm' } 
+      its(:additional_information) { should be_present } 
+
+      context "phone numbers" do
+        subject { Person.last.phone_numbers } 
+        its(:size) { should eq 4 }
+        its('first.label') { should eq 'Privat' }
+        its('first.number') { should eq '1-637-999-2837 x7851' }
+
+        its('second.label') { should eq 'Mobil' }
+        its('second.label') { should eq 'Mobil' }
+
+        its('third.label') { should eq 'Arbeit' }
+        its('third.number') { should eq '1-403-4ä9-5561' }
+
+        its('fourth.label') { should eq 'Vater' }
+        its('fourth.number') { should eq '908.647.4334' }
+      end
+
+      context "social accounts" do
+        subject { Person.last.social_accounts } 
+        its(:size) { should eq 3 }
+        its('first.label') { should eq 'Skype' } 
+        its('first.name') { should eq 'florida_armstrong' } 
+
+        its('second.label') { should eq 'Webseite' } 
+        its('second.name') { should eq 'colliäs.com' } 
+
+        its('third.label') { should eq 'MSN' } 
+        its('third.name') { should eq 'reyes_mckenzie' } 
+      end
+    end
+  end
+
 
 end
 

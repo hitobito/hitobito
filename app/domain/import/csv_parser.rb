@@ -16,7 +16,7 @@ module Import
     def parse
       begin
         data = encode_as_utf8(@input)
-        @csv = CSV.parse(data, col_sep: find_separator(data), headers: true)
+        @csv = CSV.parse(data, col_sep: find_separator(data), headers: true, skip_blanks: true)
         strip_spaces
       rescue Exception => e
         @error = e.to_s
@@ -24,7 +24,7 @@ module Import
       error.blank?
     end
 
-    def map(header_mapping)
+    def map_data(header_mapping)
       header_mapping = header_mapping.with_indifferent_access
       header_mapping.reject! {|key, value| value.blank? } 
       csv.map do |row|

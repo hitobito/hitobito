@@ -247,8 +247,8 @@ ActiveRecord::Schema.define(:version => 20121128154905) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
-    t.index ["type"], :name => "index_roles_on_type"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
+    t.index ["type"], :name => "index_roles_on_type"
   end
 
   create_table "social_accounts", :force => true do |t|

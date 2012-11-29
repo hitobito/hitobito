@@ -15,7 +15,7 @@
     - t.col('Telefon') {|p| p.all_phone_numbers(true) }
     - t.col('Adresse') {|p| p.complete_address }
 
-- if params[:q].size < 3
+- if params[:q].to_s.size < 3
   %p Bitte geben Sie mindestens drei Zeichen ein.
 
 = paginate(entries)

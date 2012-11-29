@@ -10,12 +10,11 @@ class FullTextController < ApplicationController
   
 
   def index
-    @people = PersonDecorator.decorate(list_people)
+    @people = params[:q].to_s.size >= 3 ? PersonDecorator.decorate(list_people) : []
     respond_with(@people)
   end
   
   def query
-    logger.debug 'query'
     people = query_people.collect{|i| PersonDecorator.new(i).as_quicksearch }
     groups = query_groups.collect{|i| GroupDecorator.new(i).as_quicksearch }
     

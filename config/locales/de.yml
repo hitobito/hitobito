@@ -280,4 +280,4 @@ de:
       previous: '<<'
       first: Erste
       last: Letzte
-
+      truncate: '...'

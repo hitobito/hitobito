@@ -63,8 +63,8 @@ describe Ability do
       should be_able_to(:evaluate_census, flock.state)
     end
     
-    it "may not view census for federation" do
-      should_not be_able_to(:evaluate_census, groups(:ch))
+    it "may view census for federation" do
+      should be_able_to(:evaluate_census, groups(:ch))
     end
   
     it "may remind census for state" do
@@ -82,8 +82,8 @@ describe Ability do
         should_not be_able_to(:approve_population, flock)
       end
       
-      it "may not view census for flock" do
-        should_not be_able_to(:evaluate_census, flock)
+      it "may view census for flock" do
+        should be_able_to(:evaluate_census, flock)
       end
       
       it "may not remind census" do
@@ -112,12 +112,12 @@ describe Ability do
       should be_able_to(:evaluate_census, flock)
     end
     
-    it "may not view census for state" do
-      should_not be_able_to(:evaluate_census, flock.state)
+    it "may view census for state" do
+      should be_able_to(:evaluate_census, flock.state)
     end
     
-    it "may not view census for federation" do
-      should_not be_able_to(:evaluate_census, groups(:ch))
+    it "may view census for federation" do
+      should be_able_to(:evaluate_census, groups(:ch))
     end
     
     it "may not remind census for state" do

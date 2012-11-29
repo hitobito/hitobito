@@ -83,7 +83,8 @@ openQuicksearchResult = (item) ->
   url = typeahead.$element.data(item.type + "-url")
   if url
     window.location =  url + '/' + item.id
-    item.label + " wird geöffnet..."
+    label = $('<div/>').html(item.label).text()
+    label + " wird geöffnet..."
 
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->

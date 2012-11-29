@@ -17,7 +17,7 @@ describe "Quicksearch", :mysql do
           sleep(1)
           dropdown = find('.typeahead.dropdown-menu')
           if dropdown.text.blank?
-            sleep(3)
+            sleep(5)
             dropdown = find('.typeahead.dropdown-menu')
           end
         end

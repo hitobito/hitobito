@@ -88,6 +88,8 @@ class Group < ActiveRecord::Base
     indexes parent.short_name, as: :parent_short_name
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
+    
+    where "groups.deleted_at IS NULL"
   end
   
   

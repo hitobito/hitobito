@@ -26,21 +26,23 @@ describe Event::QualificationsController do
     # init required data
     participant_1
     participant_2
-    
-    sign_in
-    visit group_event_qualifications_path(group.id, event.id)
   end
   
   it "qualification requests are mutually undoable", js: true do
-    appl_id = "#event_participation_#{participant_1.id}"
-      
-    find("#{appl_id} td:first").should have_selector('.icon-minus')
+    obsolete_node_safe do
+      sign_in
+      visit group_event_qualifications_path(group.id, event.id)
     
-    find("#{appl_id} td:first a").trigger('click')
-    find("#{appl_id} td:first").should have_selector('.icon-ok')
+      appl_id = "#event_participation_#{participant_1.id}"
+        
+      find("#{appl_id} td:first").should have_selector('.icon-minus')
       
-    find("#{appl_id} td:first a").trigger('click')
-    find("#{appl_id} td:first").should have_selector('.icon-minus')
+      find("#{appl_id} td:first a").trigger('click')
+      find("#{appl_id} td:first").should have_selector('.icon-ok')
+        
+      find("#{appl_id} td:first a").trigger('click')
+      find("#{appl_id} td:first").should have_selector('.icon-minus')
+    end
   end
   
 end

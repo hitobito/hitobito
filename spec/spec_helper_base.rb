@@ -74,8 +74,4 @@ RSpec.configure do |config|
     Draper::ViewContext.current = c.view_context
   end
   
-  config.around(:each, type: 'request') do |example|
-    obsolete_node_safe(&example)
-  end
-  
 end

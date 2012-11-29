@@ -73,4 +73,9 @@ RSpec.configure do |config|
     c.stub(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
+  
+  config.around(:each, type: 'request') do |example|
+    obsolete_node_safe(&example)
+  end
+  
 end

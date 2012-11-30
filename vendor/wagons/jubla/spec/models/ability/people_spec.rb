@@ -52,11 +52,13 @@ describe Ability::People do
     
     it "may index groups in lower layer" do
       should be_able_to(:index_people, groups(:bern))
+      should be_able_to(:index_full_people, groups(:bern))
       should_not be_able_to(:index_local_people, groups(:bern))
     end
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:ch))
+      should be_able_to(:index_full_people, groups(:ch))
       should be_able_to(:index_local_people, groups(:ch))
     end
   end
@@ -129,11 +131,13 @@ describe Ability::People do
     
     it "may index groups in upper layer" do
       should be_able_to(:index_people, groups(:ch))
+      should_not be_able_to(:index_full_people, groups(:ch))
       should_not be_able_to(:index_local_people, groups(:ch))
     end
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:bern))
+      should be_able_to(:index_full_people, groups(:bern))
       should be_able_to(:index_local_people, groups(:bern))
     end
   end
@@ -217,11 +221,13 @@ describe Ability::People do
     
     it "may index groups in lower layer" do
       should be_able_to(:index_people, groups(:bern))
+      should be_able_to(:index_full_people, groups(:bern))
       should_not be_able_to(:index_local_people, groups(:bern))
     end
     
     it "may index groups in same layer" do
       should be_able_to(:index_people, groups(:be))
+      should be_able_to(:index_full_people, groups(:be))
       should be_able_to(:index_local_people, groups(:be))
     end
   end
@@ -310,6 +316,7 @@ describe Ability::People do
     
     it "may index groups anywhere" do
       should be_able_to(:index_people, groups(:no_board))
+      should_not be_able_to(:index_full_people, groups(:no_board))
       should_not be_able_to(:index_local_people, groups(:no_board))
     end
     
@@ -351,11 +358,13 @@ describe Ability::People do
     
     it "may not index same group" do
       should be_able_to(:index_people, groups(:be_state_camp))
+      should_not be_able_to(:index_full_people, groups(:be_state_camp))
       should_not be_able_to(:index_local_people, groups(:be_state_camp))
     end
     
     it "may not index groups in same layer" do
       should_not be_able_to(:index_people, groups(:be_board))
+      should_not be_able_to(:index_full_people, groups(:be_board))
       should_not be_able_to(:index_local_people, groups(:be_board))
     end
   end

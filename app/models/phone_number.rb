@@ -15,6 +15,8 @@ class PhoneNumber < ActiveRecord::Base
   attr_accessible :number, :label, :public, as: [:default, :superior]
   
   belongs_to :contactable, polymorphic: true
+
+  scope :public, where(public: true)
   
   
   def to_s

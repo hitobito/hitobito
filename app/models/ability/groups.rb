@@ -32,6 +32,13 @@ module Ability::Groups
     can :index_people, Group do |group|
       can_index_people?(group)
     end
+
+    can :index_full_people, Group do |group|
+      contains_any?(groups_group_full, [group.id]) ||
+        (layers_read.present? && 
+         contains_any?(layers_read, collect_ids(group.layer_groups)))
+    end
+
     
     # can index people that are not visible from above. eg. children, affiliates, ...
     can :index_local_people, Group do |group|

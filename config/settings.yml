@@ -31,3 +31,5 @@ pdf:
       - ch
       - schweiz
       
+csv:
+  separator: ;

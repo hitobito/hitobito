@@ -10,9 +10,8 @@ module PeopleHelper
 
   def people_export_links
     links = []
-    
-    links << link_to('CSV', '#')
-    
+    links << csv_links
+  
     if @label_formats.present?
       main_link = current_user.last_label_format_id ? 
                   export_label_format_path(current_user.last_label_format_id) : 
@@ -24,6 +23,19 @@ module PeopleHelper
   end
   
   private
+
+  def csv_links
+    if can?(:index_full_people, @group)
+      {link_to('CSV', '#') => [link_to('Adressliste', csv_path), 
+                               link_to('Alle Details', csv_path(details: true))] }
+    else
+      link_to('CSV', csv_path)
+    end
+  end
+
+  def csv_path(opts={})
+    group_people_path({format: :csv}.merge(opts))
+  end
   
   def export_label_format_links(label_formats)
     format_links = []

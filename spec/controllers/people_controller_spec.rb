@@ -45,6 +45,14 @@ describe PeopleController do
         @response.content_type.should == 'application/pdf'
         people(:top_leader).reload.last_label_format.should == label_formats(:standard)
       end
+
+      it "exports csv files" do
+        get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :csv
+
+        @response.content_type.should == 'text/csv'
+        @response.body.should =~ /^Vorname;Nachname/
+        @response.body.should =~ /^Top;Leader/
+      end
     end
     
     context "layer" do
@@ -164,6 +172,14 @@ describe PeopleController do
       
       @response.content_type.should == 'application/pdf'
       people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+    end
+
+    it "exports csv file" do
+      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :csv
+      
+      @response.content_type.should == 'text/csv'
+      @response.body.should =~ /^Vorname;Nachname/
+      @response.body.should =~ /^Top;Leader/
     end
     
   end

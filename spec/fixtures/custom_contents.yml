@@ -11,6 +11,17 @@
 #  placeholders_optional :string(255)
 #
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+login:
+  key: login
+  label: Login Email
+  subject: Your Login Data
+  body: "Hello {user}, here is your site to login: {login-url}"
+  placeholders_required: login-url
+  placeholders_optional: user
+  
+notes:
+  key: notes
+  label: Any Notes
+  body: Bla bla bla bla
 
 

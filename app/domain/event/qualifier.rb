@@ -59,6 +59,7 @@ class Event::Qualifier < Struct.new(:participation)
   
   def create_qualification(kind)
     person.qualifications.create(qualification_kind: kind, 
+                                 origin: event.to_s, 
                                  start_at: qualification_date)
   end
   

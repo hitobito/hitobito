@@ -78,6 +78,7 @@ describe Event::Qualifier do
         
         it { should_not be_qualified }
         its(:qualifications) { should have(1).item }
+
       end
       
       context "with event qualification" do
@@ -175,6 +176,7 @@ describe Event::Qualifier do
           qualis = person.qualifications.where(start_at: quali_date)
           qualis.should have(1).items
           qualis.detect {|q| q.qualification_kind == qualification_kinds(:gl) }.should be_present
+          qualis.first.origin.should eq course.to_s
         end
       end
       

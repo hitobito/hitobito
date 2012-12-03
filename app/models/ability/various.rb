@@ -19,6 +19,13 @@ module Ability::Various
     if admin
       can [:index, :update], CustomContent
     end
+
+    ### LABEL FORMATS
+    #
+    if admin
+      can [:index, :create, :update, :destroy], LabelFormat
+    end
+
   end
 
   

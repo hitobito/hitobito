@@ -65,6 +65,8 @@ Jubla::Application.routes.draw do
   resources :event_kinds, module: 'event', controller: 'kinds'
   
   resources :qualification_kinds
+
+  resources :label_formats
   
   resources :custom_contents, only: [:index, :edit, :update]
   

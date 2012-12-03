@@ -69,6 +69,10 @@ describe CustomContent do
       expect { subject.body_with_values('login-url' => 'example.com/login') }.to raise_error(ArgumentError)
     end
     
+    it "raises an error if non-defined placeholder is given" do
+      expect { custom_contents(:notes).body_with_values('foo' => 'bar') }.to raise_error(ArgumentError)
+    end
+    
     it "does not care about unused placeholders" do
       subject.body = "Hello You, here is your site to login: {login-url}"
       output = subject.body_with_values('user' => 'Fred', 'login-url' => 'example.com/login')

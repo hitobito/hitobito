@@ -101,33 +101,43 @@ regions = Group::Region.seed(:name, :parent_id,
 
 flocks = Group::Flock.seed(:name, :parent_id,
   {name: 'Bern',
+   kind: 'Jungwacht',
    parent_id: regions[0].id },
    
   {name: 'Muri',
+   kind: 'Blauring',
    parent_id: regions[0].id },
    
   {name: 'Thun',
+   kind: 'Jungwacht',
    parent_id: regions[1].id },
    
   {name: 'Interlaken',
+   kind: 'Jubla',
    parent_id: regions[1].id },
    
   {name: 'Simmental',
+   kind: 'Jungwacht',
    parent_id: regions[1].id },
    
   {name: 'Biel',
+   kind: 'Blauring',
    parent_id: regions[2].id },
    
   {name: 'Chräis Chäib',
+   kind: 'Jubla',
    parent_id: regions[3].id },
    
   {name: 'Wiedikon',
+   kind: 'Jubla',
    parent_id: regions[3].id },
    
   {name: 'Innerroden',
+   kind: 'Blaurint',
    parent_id: states[2].id },
    
   {name: 'Ausserroden',
+   kind: 'Jungwacht',
    parent_id: states[2].id },
 )
 

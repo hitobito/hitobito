@@ -3,7 +3,7 @@ require "spec_helper"
 
 describe Event::ParticipationMailer do
   
-  before(:each) do
+  before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join('db', 'seeds')]
   end

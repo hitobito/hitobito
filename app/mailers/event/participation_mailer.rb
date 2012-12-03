@@ -2,18 +2,21 @@ class Event::ParticipationMailer < ActionMailer::Base
 
   PADDING = 15
   
+  CONTENT_CONFIRMATION = 'event_application_confirmation'
+  CONTENT_APPROVAL     = 'event_application_approval'
+  
   def confirmation(participation)
     person = participation.person
     
     compose(participation,
-            'event_application_confirmation',
+            CONTENT_CONFIRMATION,
             person.email,
             'recipient-name' => person.first_name)
   end
   
   def approval(participation, recipients)
     compose(participation, 
-            'event_application_approval', 
+            CONTENT_APPROVAL, 
             recipients.collect(&:email).compact,
             'participant-name' => participation.person.to_s,
             'recipient-names'  => recipients.collect(&:first_name).join(', '))

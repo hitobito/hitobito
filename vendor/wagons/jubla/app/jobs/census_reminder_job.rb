@@ -10,17 +10,21 @@ class CensusReminderJob < BaseJob
   
   def perform
     r = recipients
-    CensusMailer.reminder(sender, census, r).deliver if r.present?
+    CensusMailer.reminder(sender, census, r, flock, state_agency).deliver if r.present?
   end
   
   def recipients
-    flock.people.where(roles: {type: Group::Flock::Leader.sti_name}).
-                 uniq.
-                 pluck(:email).
-                 compact
+    flock.people.only_public_data.
+                 where(roles: {type: Group::Flock::Leader.sti_name}).
+                 uniq
   end
   
   def flock
-    Group::Flock.find(@flock_id)
+    @flock ||= Group::Flock.find(@flock_id)
+  end
+  
+  def state_agency
+    state = flock.state
+    state.children.where(type: state.contact_group_type.sti_name).first
   end
 end

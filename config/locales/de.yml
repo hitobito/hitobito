@@ -238,15 +238,6 @@ de:
     new:
       title: Personen filtern
 
-
-  # mailer keys
-  event:
-    participation_mailer:
-      confirmation: 
-        subject: Bestätigung der Anmeldung
-      approval:
-        subject: Freigabe einer Kursanmeldung
-
   # flash messages
   participations:
     create:

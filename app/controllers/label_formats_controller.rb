@@ -1,0 +1,3 @@
+class LabelFormatsController < CrudController
+  
+end

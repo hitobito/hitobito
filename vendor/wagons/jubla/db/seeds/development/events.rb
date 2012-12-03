@@ -67,6 +67,12 @@ def seed_course(values)
   seed_questions(event)
   seed_leaders(event)
   seed_participants(event)
+
+  event.reload
+  application_contact = event.possible_contact_groups.sample
+  event.application_contact_id = application_contact.id
+  event.save!
+
 end
 
 def seed_dates(event, date)

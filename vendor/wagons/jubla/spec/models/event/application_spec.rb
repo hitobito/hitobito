@@ -21,18 +21,4 @@ describe Jubla::Event::Application do
     
     its(:contact) { should == groups(:federal_board)}
   end
-
-  context "region" do
-    let(:person) { Fabricate(:person) }
-    let(:course) do 
-      event = groups(:city).new_event
-      event.name = 'even'
-      event.contact_id = person.id
-      event.dates.build(date)
-      event.save!
-      event
-    end
-
-    its(:contact) { should == person }
-  end
 end

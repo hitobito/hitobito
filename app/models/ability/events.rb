@@ -3,7 +3,6 @@ module Ability::Events
   
   def define_events_abilities
     
-    # TODO: implement wicked event visibility
     can :read, Event
     
     can :update, Event do |event|

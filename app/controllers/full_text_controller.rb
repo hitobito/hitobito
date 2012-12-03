@@ -10,7 +10,11 @@ class FullTextController < ApplicationController
   
 
   def index
-    @people = params[:q].to_s.size >= 3 ? PersonDecorator.decorate(list_people) : []
+    @people = if params[:q].to_s.size >= 2
+      PersonDecorator.decorate(list_people)
+    else
+      Kaminari.paginate_array([]).page(1)
+    end
     respond_with(@people)
   end
   

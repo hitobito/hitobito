@@ -94,6 +94,8 @@ de:
         remember_me: Angemeldet bleiben
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+        picture: Neues Foto hochladen
+        remove_picture: Aktuelles Foto entfernen
         
       group:
         name: Name

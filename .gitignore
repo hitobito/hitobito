@@ -38,6 +38,9 @@ config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
 
+# uploaded pictures
+public/uploads
+
 # ama custom project setup
 TAGS
 /.vimrc

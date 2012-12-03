@@ -4,21 +4,11 @@ module Jubla::Event::Application
   
   included do
     alias_method_chain :contact, :group_type
-
-    def contact
-      if event.application_contact.present?
-        event.application_contact
-      else
-        contact_with_group_type
-      end
-    end
-    
   end
   
   def contact_with_group_type
-    group = event.groups.first
-    if type = group.class.contact_group_type
-      group.children.where(type: type.sti_name).first
+    if event.application_contact.present?
+      event.application_contact
     else
       contact_without_group_type
     end

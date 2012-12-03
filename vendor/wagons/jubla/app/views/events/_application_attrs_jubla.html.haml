@@ -1,8 +1,6 @@
 - entry.used?(:application_contact_id) do
   - if entry.application_contact.present?
     %dl.dl-horizontal
-      %dt.muted
-        Anmeldung an
-      %dd
+      = labeled('Anmeldung an') do
         %strong=entry.application_contact.to_s
         = GroupDecorator.new(entry.application_contact).complete_address

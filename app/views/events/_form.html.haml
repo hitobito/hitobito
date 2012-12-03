@@ -33,14 +33,15 @@
     = f.nested_fields_for :dates, 'event/dates/fields'
 
   = field_set_tag 'Anmeldung' do
-    = f.labeled_input_field(:application_opening_at)
-    = f.labeled_input_field(:application_closing_at)
-    = f.labeled_input_field(:application_conditions)
+    = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
+
     - entry.used?(:priorization) do
       = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')
-    - entry.used?(:priorization) do
+    - entry.used?(:requires_approval) do
       = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
-    = f.labeled_input_field(:maximum_participants, class: 'span1')
+    
+    = f.labeled_input_field(:maximum_participants)
+    
     = render_extensions 'application_fields', locals: { f: f }
     
   = field_set_tag 'Angaben für Anmeldung' do

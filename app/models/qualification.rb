@@ -12,7 +12,7 @@
 
 class Qualification < ActiveRecord::Base
   
-  attr_accessible :qualification_kind_id, :qualification_kind, :start_at
+  attr_accessible :qualification_kind_id, :qualification_kind, :start_at, :origin
   
   belongs_to :person
   belongs_to :qualification_kind

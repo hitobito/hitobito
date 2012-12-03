@@ -2,6 +2,7 @@
                 can?(:create, entry.qualifications.new) ? new_group_person_qualification_path(parent, entry) : nil) do |item|
   %td
     %strong= item.qualification_kind
+  %td= f(item.origin)
   %td= f(item.finish_at)
   - if can?(:destroy, item)
     %td= link_action_destroy(group_person_qualification_path(parent, entry, item))

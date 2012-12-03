@@ -100,34 +100,34 @@ regions = Group::Region.seed(:name, :parent_id,
 )
 
 flocks = Group::Flock.seed(:name, :parent_id,
-  {name: 'Schar Bern',
+  {name: 'Bern',
    parent_id: regions[0].id },
    
-  {name: 'Schar Muri',
+  {name: 'Muri',
    parent_id: regions[0].id },
    
-  {name: 'Schar Thun',
+  {name: 'Thun',
    parent_id: regions[1].id },
    
-  {name: 'Schar Interlaken',
+  {name: 'Interlaken',
    parent_id: regions[1].id },
    
-  {name: 'Schar Simmental',
+  {name: 'Simmental',
    parent_id: regions[1].id },
    
-  {name: 'Schar Biel',
+  {name: 'Biel',
    parent_id: regions[2].id },
    
-  {name: 'Schar Chräis Chäib',
+  {name: 'Chräis Chäib',
    parent_id: regions[3].id },
    
-  {name: 'Schar Wiedikon',
+  {name: 'Wiedikon',
    parent_id: regions[3].id },
    
-  {name: 'Schar Innerroden',
+  {name: 'Innerroden',
    parent_id: states[2].id },
    
-  {name: 'Schar Ausserroden',
+  {name: 'Ausserroden',
    parent_id: states[2].id },
 )
 
@@ -150,52 +150,52 @@ flocks.each do |s|
 end
 
 Group::ChildGroup.seed(:name, :parent_id,
-  {name: 'Kindergruppe Asterix',
+  {name: 'Asterix',
    parent_id: flocks[0].id },
    
-  {name: 'Kindergruppe Obelix',
+  {name: 'Obelix',
    parent_id: flocks[0].id },
    
-  {name: 'Kindergruppe Idefix',
+  {name: 'Idefix',
    parent_id: flocks[0].id },
    
-  {name: 'Kindergruppe Mickey',
+  {name: 'Mickey',
    parent_id: flocks[1].id },
    
-  {name: 'Kindergruppe Minnie',
+  {name: 'Minnie',
    parent_id: flocks[2].id },
    
-  {name: 'Kindergruppe Goofy',
+  {name: 'Goofy',
    parent_id: flocks[3].id },
    
-  {name: 'Kindergruppe Donald',
+  {name: 'Donald',
    parent_id: flocks[4].id },
    
-  {name: 'Kindergruppe Gaston',
+  {name: 'Gaston',
    parent_id: flocks[5].id },
    
-  {name: 'Kindergruppe Tim',
+  {name: 'Tim',
    parent_id: flocks[6].id },
    
-  {name: 'Kindergruppe Hadock',
+  {name: 'Hadock',
    parent_id: flocks[7].id },
    
-  {name: 'Kindergruppe Batman',
+  {name: 'Batman',
    parent_id: flocks[8].id },
    
-  {name: 'Kindergruppe Robin',
+  {name: 'Robin',
    parent_id: flocks[8].id },
    
-  {name: 'Kindergruppe Spiderman',
+  {name: 'Spiderman',
    parent_id: flocks[9].id },
    
 )
 
 Group::SimpleGroup.seed(:name, :parent_id,
-  {name: 'Einfache Gruppe Tschutter',
+  {name: 'Tschutter',
    parent_id: flocks[0].id },
    
-  {name: 'Einfache Gruppe Angestellte',
+  {name: 'Angestellte',
    parent_id: states[0].id },
 )
    

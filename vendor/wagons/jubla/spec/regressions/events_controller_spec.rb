@@ -40,5 +40,15 @@ describe EventsController, type: :controller  do
       end
     end
 
+    describe "view course" do
+      it "should display application contact address" do
+        course = Fabricate(:jubla_course, groups: [be, no])
+        course.save!
+
+        get :show, group_id: be.id, id: course.id
+        dom.should have_selector('dt', text: 'Anmeldung an')
+      end
+    end
+
   end
 end

@@ -116,11 +116,6 @@ $ ->
   $('[data-provide=person]').each(setupPersonTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
     
-  # wire up wysiwyg text areas
-  $('textarea.wysiwyg').wysihtml5({
-    locale: 'de-DE'
-  });
-    
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))

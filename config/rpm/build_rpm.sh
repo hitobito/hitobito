@@ -11,6 +11,10 @@ DIR=$NAME-$VERSION.$BUILD_NUMBER
 TAR=$DIR.tar.gz
 mkdir $DIR
 git archive --format=tar build_$BUILD_NUMBER | (cd $DIR && tar -xf -)
+
+# comment the next line out if your project includes submodules
+#(git submodule --quiet foreach "pwd | awk -v dir=`pwd`/ '{sub(dir,\"\"); print}'") | xargs tar c | (cd $DIR && tar -xf -)
+
 sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ $DIR/config/rpm/*.spec
 tar czf $TAR $DIR
 rm -rf $DIR
@@ -27,21 +31,29 @@ build_flags=$(env | grep RAILS_ | while read line; do echo -n " --define=\"$(ech
 if [ -z $BUILD_PLATFORMS ]; then
   BUILD_PLATFORMS='epel-6-x86_64'
 fi
-for plat in $BUILD_PLATFORMS; do
-  eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
+
+function notifyFailure {
   if [ $? -gt 0 ]; then
     echo "Failed building RPM for $plat - See above for issues. Below we provide you with the logs from mock"
-    for logfile in /var/lib/mock/$plat/result/*log; do
-      echo "#######################################"
+    #for logfile in /var/lib/mock/$plat/result/*log; do
+    logfile=/var/lib/mock/$plat/result/build.log;
+      echo "###############################################"
       echo "# ${logfile}"
-      echo "#######################################"
+      echo "###############################################"
       echo
       cat $logfile
       echo
-    done
+    #done
     echo "Deleting also build-tag: build_${BUILD_NUMBER}"
     git tag -d build_$BUILD_NUMBER
-    exit 1
   fi
+}
+trap notifyFailure EXIT
+
+for plat in $BUILD_PLATFORMS; do
+  eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
 done
+
+# uncomment this line if you want to push build tags to the git server
+# ATTENTION: jenkins ldap user must have write rights to your git repository
 #git push --tags

@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121127080356) do
+ActiveRecord::Schema.define(:version => 20121128154905) do
+
+  create_table "custom_contents", :force => true do |t|
+    t.string "key",                   :null => false
+    t.string "label",                 :null => false
+    t.string "subject"
+    t.text   "body"
+    t.string "placeholders_required"
+    t.string "placeholders_optional"
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -238,8 +247,8 @@ ActiveRecord::Schema.define(:version => 20121127080356) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
-    t.index ["type"], :name => "index_roles_on_type"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
+    t.index ["type"], :name => "index_roles_on_type"
   end
 
   create_table "social_accounts", :force => true do |t|

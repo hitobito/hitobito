@@ -13,6 +13,8 @@
 #= require jquery_ujs
 #= require jquery-ui
 #= require bootstrap
+#= require bootstrap-wysihtml5
+#= require bootstrap-wysihtml5/locales/de-DE
 #= require jquery_nested_form
 #= require_tree .
 #
@@ -29,41 +31,61 @@ replaceContent = (e, data, status, xhr) ->
 setDataType = (xhr) ->
   $(this).data('type', 'html')
   
-findPeople = (query, process) ->
-  return [] if query.length < 3
-  typeahead = this
-  $.get('/people/query', { q: query }, (data) ->
-    typeahead.selection = data
-    names = $.map(data, (person) -> person.name)
-    return process(names)
-  )
-
-typeaheadIdField = (input) ->
-  $('#' + input.data('id-field'))
-
-typeaheadHighlighter = (item) ->
-  query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
-  query = query.replace(/\s+/g, '|')
-  item.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
-
-setPersonId = (item) ->
-  typeahead = this
-  person = $.grep(typeahead.selection, (person) -> person.name == item)[0]
-  typeaheadIdField(typeahead.$element).val(person.id)
-  item
-
-setupPersonTypeahead = (input) ->
-  $(this).typeahead(
-              source: findPeople, 
-              updater: setPersonId, 
-              matcher: (item) -> true, # match every value returned from server
-              items: 10,
-              highlighter: typeaheadHighlighter)
-  $(this).keydown(-> typeaheadIdField($(this)).val(null))
-
 showDatePicker = (field) ->
    field.datepicker()
    field.datepicker('show')
+   
+# type aheads
+
+setupRemoteTypeahead = (input, items, updater) ->
+  input.attr('autocomplete', "off")
+  input.typeahead(
+         source: queryForTypeahead,
+         updater: updater,
+         matcher: (item) -> true, # match every value returned from server
+         sorter: (items) -> items, # keep order from server
+         items: items,
+         highlighter: typeaheadHighlighter)
+         
+queryForTypeahead = (query, process) ->
+  return [] if query.length < 3
+  $.get(this.$element.data('url'), { q: query }, (data) ->
+    json = $.map(data, (item) -> JSON.stringify(item))
+    return process(json)
+  )
+  
+typeaheadHighlighter = (item) ->
+  query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
+  query = query.replace(/\s+/g, '|')
+  JSON.parse(item).label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
+
+
+setupPersonTypeahead = (index, field) ->
+  input = $(this)
+  input.data('url', '/people/query')
+  setupRemoteTypeahead(input, 10, setPersonId)
+  input.keydown(-> $('#' + input.data('id-field')).val(null))
+
+setPersonId = (item) ->
+  typeahead = this
+  item = JSON.parse(item)
+  $('#' + typeahead.$element.data('id-field')).val(item.id)
+  item.label
+
+setupQuicksearch = ->
+  qs = $('#quicksearch')
+  qs.data('url', '/query')
+  setupRemoteTypeahead(qs, 20, openQuicksearchResult)
+
+openQuicksearchResult = (item) ->
+  typeahead = this
+  item = JSON.parse(item)
+  url = typeahead.$element.data(item.type + "-url")
+  if url
+    window.location =  url + '/' + item.id
+    label = $('<div/>').html(item.label).text()
+    label + " wird geöffnet..."
+
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)
@@ -80,6 +102,9 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 
 $ ->
+  # wire up quick search
+  setupQuicksearch();
+  
   # wire up date picker
   $(":input.date").live("click", -> showDatePicker($(this)))
   $(".controls .icon-calendar").live("click", -> showDatePicker($(this).parent().siblings('.date')))
@@ -91,6 +116,11 @@ $ ->
   # wire up person auto complete
   $('[data-provide=person]').each(setupPersonTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
+    
+  # wire up wysiwyg text areas
+  $('textarea.wysiwyg').wysihtml5({
+    locale: 'de-DE'
+  });
   
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->

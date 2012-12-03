@@ -73,8 +73,9 @@ module Import
       numbers = keys.select { |key| hash.has_key?(key) } 
       numbers.map do |key| 
         label = key.split('_').last.capitalize
-        { value_key => hash.delete(key), :label => label } 
-      end
+        value = hash.delete(key)
+        { value_key => value, :label => label } if value.present?
+      end.compact
     end
 
     class DoubletteFinder
@@ -93,12 +94,13 @@ module Import
 
       def query
         criteria = attrs.select { |key, value| value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym) } 
+        criteria.delete(:birthday) unless parse_date(criteria[:birthday])
 
         conditions = ['']
         criteria.each do |key, value|
           conditions.first << " AND " if conditions.first.present?
           conditions.first << "#{key} = ?"
-          value = Time.zone.parse(value).to_date if key.to_sym == :birthday
+          value = parse_date(value) if key.to_sym == :birthday
           conditions << value
         end
 
@@ -126,6 +128,16 @@ module Import
             person.errors.add(:base, "#{people.size} Treffer in Duplikatserkennung.")
           end
           person
+        end
+      end
+
+      private
+      def parse_date(date_string)
+        if date_string.present?
+          begin
+            Time.zone.parse(date_string).to_date
+          rescue ArgumentError
+          end
         end
       end
     end

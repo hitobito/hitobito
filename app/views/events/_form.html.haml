@@ -5,16 +5,19 @@
     = f.hidden_field :type
 
   = field_set_tag 'Infos' do
-    = f.labeled_input_fields(*entry.used_attributes(:name, :number, :description, :motto, :cost, :location))
-    = f.labeled_person_field :contact
+    = f.labeled_input_field(:name)
+    
+    - entry.used?(:kind_id) do
+      = f.labeled_input_field(:kind_id)
 
     - entry.used?(:state) do
       = f.labeled_belongs_to_field(:state, list: entry.state_collection)
-
-    - entry.used?(:kind_id) do
-      = f.labeled_input_field(:kind_id)
       
-  = render_extensions 'fields', locals: { f: f }
+    = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost, :location))
+    
+    = f.labeled_person_field :contact
+
+    = render_extensions 'fields', locals: { f: f }
 
   - if @groups.present?
     = field_set_tag 'Durchgeführt von' do

@@ -59,8 +59,15 @@ module LayoutHelper
                                        class: 'pull-right')])
       end
       render(layout: 'shared/section_table', 
-             locals: {title: title, collection: collection, add_path: add_path}, &block)
+             locals: {title: title, collection: collection, add_path: add_path}, 
+             &block)
     end 
+  end
+  
+  def grouped_table(grouped_lists, column_count, &block)
+    render(layout: 'shared/grouped_table',
+           locals: {grouped_lists: grouped_lists, column_count: column_count},
+           &block)
   end
   
   def muted(text = nil, &block)
@@ -69,33 +76,6 @@ module LayoutHelper
   
   def value_with_muted(value, mute)
     safe_join([f(value), muted(mute)], ' ')
-  end
-  
-  # Renders all partials with names that match "_#{key}_*.html.haml"
-  # in alphabetical order.
-  def render_extensions(key, options = {})
-    safe_join(find_extensions(key, options.delete(:folder))) do |e|
-      render options.merge(:partial => e) 
-    end
-  end        
-  
-  def find_extensions(key, folder = nil)
-      folders = extension_folders
-      folders << folder if folder
-      extensions = folders.collect do |f|
-          view_paths.collect do |path|
-              Dir.glob(File.join(path, f, "_#{key}_*.html.haml"))
-          end
-      end
-      extensions = extensions.flatten.sort_by { |f| File.basename(f) }
-      extensions.collect do |f|
-          m = f.match(/views.(.+?[\/\\])_(.+).html.haml/)
-          m[1] + m[2]
-      end
-  end
-  
-  def extension_folders
-    [@virtual_path[/(.+)\/.*/, 1]]
   end
     
   private

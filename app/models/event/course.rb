@@ -48,17 +48,17 @@ class Event::Course < Event
   
   class << self
     def in_hierarchy(user)
-      only_group_id(groups_with_courses_in_hierarchy(user))
+      with_group_id(Group.course_offerers_in_hierarchy(user))
     end
-    
-    def groups_with_courses_in_hierarchy(user)
-      Group.can_offer_courses.pluck(:id) & user.groups_hierarchy_ids
-    end
-    
   end
 
   def label_detail
     "#{kind.short_name} #{number} #{group_names}"
+  end
+    
+  # Does this event provide qualifications
+  def qualifying?
+    kind_id? && kind.qualifying?
   end
   
   # The date on which qualification obtained in this course start

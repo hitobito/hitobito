@@ -10,6 +10,9 @@ de:
         must_have_same_type: müssen von denselbem Typ sein.
         
     models:
+      custom_content:
+        one: Text
+        other: Texte
       group:
         one: Gruppe
         other: Gruppen
@@ -63,6 +66,11 @@ de:
         other: Qualifikationsarten
       
     attributes:
+      custom_content:
+        label: Text
+        subject: Betreff
+        body: Inhalt
+      
       person:
         first_name: Vorname
         last_name: Nachname
@@ -273,7 +281,4 @@ de:
       previous: '<<'
       first: Erste
       last: Letzte
-
-  time:
-    formats:
-      month_year: '%B, %Y'
+      truncate: '...'

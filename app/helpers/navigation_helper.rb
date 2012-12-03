@@ -7,7 +7,7 @@ module NavigationHelper
     'Kurse/Anlässe' => {url: :list_courses_path, 
                         active_for: %w(list_courses list_events)},
             'Admin' => {url: :event_kinds_path, 
-                        active_for: %w(event_kinds qualification_kinds), 
+                        active_for: %w(event_kinds qualification_kinds custom_contents), 
                         if: lambda {|_| can?(:manage, Event::Kind) } }
   }
   

@@ -11,11 +11,10 @@ describe EventsController, js: true do
   
   
   it "may set and remove contact from event" do
-    sign_in
-    visit edit_group_event_path(event.group_ids.first, event.id)
-   
-
     obsolete_node_safe do
+      sign_in
+      visit edit_group_event_path(event.group_ids.first, event.id)
+     
       # set contact
       fill_in "Kontaktperson", with: "Top"
       find('.typeahead.dropdown-menu').should have_content 'Top Leader'

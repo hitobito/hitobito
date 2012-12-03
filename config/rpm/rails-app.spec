@@ -11,12 +11,12 @@
 # please add conditionals like these
 
 %define use_delayed_job 1
-%define use_memcached   0
+%define use_memcached   1
 %define use_sphinx      1
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'spec test vendor/cache log tmp db/production.sqlite3 script/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp db/production.sqlite3 script/phantomjs'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
@@ -65,6 +65,9 @@ BuildRequires:	postgresql-devel
 %if %{use_imagemagick}
 BuildRequires: ImageMagick-devel
 Requires: ImageMagick
+%endif
+%if %{use_sphinx}
+Requires: sphinx
 %endif
 Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
 Requires:	logrotate
@@ -147,10 +150,11 @@ echo "# Rotate rails logs for %{name}
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/%{name}
 
 %if %{use_sphinx}
+touch config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-# */15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
+*/15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
@@ -180,6 +184,9 @@ done
 cp -p -r * $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
 cp -p -r .bundle $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
 
+%if %{use_sphinx}
+install -p -d -m0755 $RPM_BUILD_ROOT/etc/sphinx
+%endif
 
 # fix shebangs
 grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vendor/bundle -r | awk -F: '{ print $1 }' | uniq | while read line; do sed -i 's@^#\!/usr/\(local/\)\?bin/ruby@#\!/bin/env ruby@' $line; done
@@ -188,12 +195,11 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Runs after the package got installed.
 # Configure here any services etc.
 
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate" || exit 1
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake wagon:setup" || exit 1
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
-su %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake thinking_sphinx:configure" || exit 1
-ln -s %{wwwdir}/%{name}/config/production.sphinx.conf /etc/sphinx/%{name}.conf
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:config" || exit 1
+ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif
@@ -242,13 +248,17 @@ fi
 # run application as dedicated user
 %attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
 # allow write access to special directories
-%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/log
-%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/public
-%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%attr(0750,%{name},%{name}) %{wwwdir}/%{name}/www/db
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
+%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
 
 %if %{use_delayed_job}
 %{_initddir}/%{name}-workers
+%endif
+
+%if %{use_sphinx}
+%attr(0660,%{name},%{name}) %{wwwdir}/%{name}/www/config/production.sphinx.conf
 %endif
 
 

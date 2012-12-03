@@ -84,8 +84,12 @@ class Group < ActiveRecord::Base
     indexes name, short_name, sortable: true
     indexes email, address, zip_code, town, country
 
+    indexes parent.name, as: :parent_name
+    indexes parent.short_name, as: :parent_short_name
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
+    
+    where "groups.deleted_at IS NULL"
   end
   
   
@@ -119,9 +123,13 @@ class Group < ActiveRecord::Base
       reorder("#{statement} name") # acts_as_nested_set default to new order
     end
 
-    def can_offer_courses
+    def course_offerers
       sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
       scoped.where(type: sti_names).order(:parent_id, :name)
+    end
+    
+    def course_offerers_in_hierarchy(user)
+      course_offerers.pluck(:id) & user.groups_hierarchy_ids
     end
   end
   

@@ -13,7 +13,8 @@ class PeopleController < CrudController
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, 
                                        :send_password_instructions]
   
-  before_render_show :load_asides
+  before_render_index :load_label_formats
+  before_render_show :load_asides, :load_label_formats
   
   def index
     @people = filter_entries
@@ -25,15 +26,16 @@ class PeopleController < CrudController
   
   # GET ajax, without @group
   def query
-    @people = []
+    people = []
     if params.has_key?(:q) && params[:q].size >= 3
-      @people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
+      people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
                        only_public_data.
                        order_by_name.
                        limit(10)
+      people = decorate(people)
     end
     
-    render json: decorate(@people).collect(&:as_typeahead)
+    render json: people.collect(&:as_typeahead)
   end
   
   def show
@@ -133,6 +135,10 @@ class PeopleController < CrudController
                                                     preload_all_dates.
                                                     order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
+  end
+  
+  def load_label_formats
+    @label_formats = LabelFormat.all_as_hash
   end
   
 end

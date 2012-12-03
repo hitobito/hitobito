@@ -7,6 +7,7 @@
  *
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
+ *= require 'bootstrap-wysihtml5'
  *= require 'bootstrap_config'
  *= require_self
  *= require jquery-ui-1.8.16.custom
@@ -172,9 +173,18 @@ dl {
   color: $green;
   &:hover {
     color: darken($green, 10%); 
-    .icon { background-image: image-url("glyphicons-halflings-green.png"); }
+    .icon,
+    [class^="icon-"], 
+    [class*=" icon-"] { 
+      background-image: image-url("glyphicons-halflings-green.png"); 
+    }
   } 
-  .icon { background-image: image-url("glyphicons-halflings-green-hover.png"); }
+  .icon,
+  [class^="icon-"], 
+  [class*=" icon-"] { 
+    background-image: image-url("glyphicons-halflings-green-hover.png");
+  }
+
   .caret {
     border-top-color: $green;
   }
@@ -202,13 +212,6 @@ dl {
 
 .form-horizontal .control-group {
   margin-bottom: 0;
-}
-
-.help-inline {
-  margin-top: 5px
-}
-.help-block {
-  margin: -5px 0 10px;
 }
 
 fieldset {
@@ -252,7 +255,6 @@ input[type="color"],
 select.time {
   width: 55px;
   height: 30px;
-  margin-top: 5px;
 }
 
 select[class*="span"][multiple] {
@@ -266,10 +268,6 @@ label.radio {
   line-height: 20px;
   color: $gray;
   margin-right: 10px;
-}
-
-.controls div {
-  padding-top: 5px;
 }
 
 textarea {
@@ -320,6 +318,20 @@ textarea {
 .table-striped {
   td:first-child {
     padding-left: 8px;
+  }
+}
+
+.table-grouped {
+  thead:first-child th {
+    padding-top: 0px;
+  }
+  
+  th {
+    padding-top: 30px;
+    
+    h2 {
+      margin-bottom: 0;
+    }
   }
 }
 

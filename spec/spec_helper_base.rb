@@ -73,4 +73,5 @@ RSpec.configure do |config|
     c.stub(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
+  
 end

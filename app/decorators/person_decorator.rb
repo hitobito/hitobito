@@ -5,9 +5,13 @@ class PersonDecorator < ApplicationDecorator
   include ContactableDecorator
 
   def as_typeahead
-    {id: id, name: full_label}
+    {id: id, label: h.h(full_label)}
   end
 
+  def as_quicksearch
+    {id: id, label: h.h(full_label), type: :person}
+  end
+  
   def full_label
     label = to_s
     label << ", #{town}" if town?

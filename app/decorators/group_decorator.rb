@@ -29,7 +29,10 @@ class GroupDecorator < ApplicationDecorator
     end.compact
   end
 
-
+  def as_quicksearch
+    {id: id, label: h.safe_join([parent.to_s.presence, to_s].compact, ' > '), type: :group}
+  end
+  
   ### EVENT
   def possible_events
     model.class.event_types

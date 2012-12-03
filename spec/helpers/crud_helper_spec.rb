@@ -9,6 +9,9 @@ describe CrudHelper do
   include CrudTestHelper
   include NestedForm::ViewHelper
   
+  def can?(*args)
+    true
+  end
     
   before(:all) do 
     reset_db

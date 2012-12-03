@@ -99,8 +99,8 @@ class Event < ActiveRecord::Base
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] } )
     end
 
-    def only_group_id(*group_ids)
-      joins(:groups).where(groups: {id: [group_ids].flatten})
+    def with_group_id(*group_ids)
+      joins(:groups).where(groups: {id: group_ids.flatten})
     end
 
     def upcoming
@@ -157,11 +157,6 @@ class Event < ActiveRecord::Base
                    includes(:person).
                    merge(Person.order_by_name).
                    uniq
-  end
-  
-  # Does this event provide qualifications
-  def qualifying?
-    kind_id? && kind.qualifying?
   end
 
   def to_s

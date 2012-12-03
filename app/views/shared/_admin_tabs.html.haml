@@ -1,4 +1,5 @@
 - tab "Kursarten", event_kinds_path, %w(event_kinds) if can?(:index, Event::Kind)
 - tab "Qualifikationsarten", qualification_kinds_path, %w(qualification_kinds) if can?(:index, QualificationKind)
+- tab "Texte", custom_contents_path, %w(custom_contents) if can?(:index, CustomContent)
 = render_extensions(:admintabs)
 

@@ -65,8 +65,8 @@ describe Group do
     end
   end
 
-  describe ".can_offer_courses" do 
-    subject { Group.can_offer_courses }
+  describe ".course_offerers" do 
+    subject { Group.course_offerers }
 
     it "includes federation" do
       should include groups(:ch)

@@ -4,5 +4,5 @@
   - tab "Teilnehmende", group_event_participations_path(@group, @event) 
 - if @event.supports_applications && can?(:application_market, @event)
   - tab "Anmeldungen", group_event_application_market_index_path(@group, @event) 
-- if @event.qualifying? && can?(:qualify, @event)
+- if @event.kind_of?(Event::Course) && @event.qualifying? && can?(:qualify, @event)
   - tab "Qualifikationen", group_event_qualifications_path(@group, @event) 

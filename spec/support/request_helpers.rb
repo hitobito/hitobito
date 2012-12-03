@@ -9,8 +9,9 @@ module RequestHelpers
     click_button 'Anmelden'
   end
 
-  # not now
   private
+  
+  # not now
   def set_basic_auth(name, password)
     if page.driver.respond_to?(:basic_auth)
       page.driver.basic_auth(name, password)
@@ -29,7 +30,9 @@ module RequestHelpers
   def obsolete_node_safe
     begin
       yield
-    rescue Capybara::Poltergeist::ObsoleteNode => e
+    rescue Capybara::Poltergeist::ObsoleteNode => e1
+      pending
+    rescue Capybara::Poltergeist::TimeoutError => e2
       pending
     end
   end

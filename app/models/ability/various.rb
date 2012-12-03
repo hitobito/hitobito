@@ -1,6 +1,6 @@
-module Ability::Qualifications
+module Ability::Various
   
-  def define_qualifications_abilities
+  def define_various_abilities
     
     ### QUALIFICATION KINDS
     if admin
@@ -12,6 +12,12 @@ module Ability::Qualifications
       qualify_layers = collect_ids(layers(qualify_groups))
       qualify_layers.present? && 
         contains_any?(qualify_layers, qualification.person.groups_hierarchy_ids)
+    end
+    
+    ### CUSTOM CONTENTS
+    
+    if admin
+      can [:index, :update], CustomContent
     end
   end
 

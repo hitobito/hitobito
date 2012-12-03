@@ -8,17 +8,22 @@ class CsvImportsController < ApplicationController
   decorates :group
 
   def define_mapping
-    data = model_params[:file].read # UploadedFile
-    return unless parse_or_redirect(data)
-    flash.now[:notice] = parser.flash_notice
+    if model_params && model_params[:file]
+      data = model_params[:file] &&  model_params[:file].read
+      return unless parse_or_redirect(data)
+      flash.now[:notice] = parser.flash_notice
+    else
+      redirect_to new_group_csv_imports_path(group)
+    end
   end
 
 
   def create
-    data = params[:data].split.join("\n")
     @role_type = model_params.delete(:role)
 
-    return unless parse_or_redirect(data)
+    return redirect_to new_group_csv_imports_path(group) unless @role_type.present?
+    
+    return unless parse_or_redirect(params[:data])
 
     map_headers_and_import(model_params)
 
@@ -32,7 +37,7 @@ class CsvImportsController < ApplicationController
 
   private
   def custom_authorization
-    if action_name == "create"
+    if action_name == "create" && model_params[:role]
       role = model_params[:role].constantize.new
       role.group_id = group.id
       authorize! :create, role
@@ -50,7 +55,7 @@ class CsvImportsController < ApplicationController
   end
 
   def parse_or_redirect(data)
-    @parser = Import::CsvParser.new(data)
+    @parser = Import::CsvParser.new(data.strip)
     
     unless parser.parse
       filename = model_params[:file] && model_params[:file].original_filename
@@ -64,8 +69,9 @@ class CsvImportsController < ApplicationController
   end
 
   def map_headers_and_import(header_mapping)
+    data = parser.map_data(header_mapping)
     @importer = Import::PersonImporter.new(group: group, 
-                                           data: parser.map(header_mapping), 
+                                           data: data, 
                                            role_type: role_type)
     @importer.import
   end

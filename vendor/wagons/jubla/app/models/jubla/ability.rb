@@ -34,10 +34,7 @@ module Jubla::Ability
   end
 
   def define_census_abilities
-    can :evaluate_census, Group do |group|
-      layers_full.present? && 
-      contains_any?(layers_full, collect_ids(group.layer_groups))
-    end
+    can :evaluate_census, Group
     
     # this is called on the state group
     can :remind_census, Group do |group|

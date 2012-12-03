@@ -183,6 +183,7 @@ de:
         qualification_kind: Qualifikation
         qualification_kind_id: Qualifikation
         start_at: Seit
+        origin: Ursprung
         
       qualification_kind:
         label: Bezeichnung

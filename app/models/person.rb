@@ -79,7 +79,7 @@ class Person < ActiveRecord::Base
   
   ### VALIDATIONS
   
-  schema_validations except: [:picture, :create_at, :updated_at]
+  schema_validations except: [:picture, :created_at, :updated_at]
   validates :email, uniqueness: true, allow_nil: true, allow_blank: true
   validates :gender, inclusion: %w(m w), allow_blank: true
   validate :assert_has_any_name

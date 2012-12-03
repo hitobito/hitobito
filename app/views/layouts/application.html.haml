@@ -54,4 +54,5 @@
               &copy; Puzzle ITC #{Time.zone.now.year}
 
   = javascript_include_tag 'application'
+  = yield(:js_includes)
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)

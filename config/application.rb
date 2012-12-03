@@ -73,7 +73,7 @@ module Jubla
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
-    config.assets.precompile += %w(print.css ie.css ie7.css)
+    config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js)
 
 
     config.generators do |g|

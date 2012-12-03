@@ -46,12 +46,13 @@ class Person < ActiveRecord::Base
   
   # Setup accessible (or protected) attributes for your model
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
-                  :email, :address, :zip_code, :town, :country, :birthday]
+                  :email, :address, :zip_code, :town, :country, :birthday, :picture]
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
                   :email, :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information,
-                  :password, :password_confirmation, :remember_me
+                  :password, :password_confirmation, :remember_me,
+                  :picture, :remove_picture
   
   include Groups
   include Contactable
@@ -78,6 +79,7 @@ class Person < ActiveRecord::Base
   
   ### VALIDATIONS
   
+  schema_validations except: :picture
   validates :email, uniqueness: true, allow_nil: true, allow_blank: true
   validates :gender, inclusion: %w(m w), allow_blank: true
   validate :assert_has_any_name
@@ -90,7 +92,7 @@ class Person < ActiveRecord::Base
   ### SCOPES
 
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
-  scope :contact_data_visible, where(:contact_data_visible => true)
+  scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
   scope :order_by_name, order('people.last_name, people.first_name')
   scope :order_by_company, order('people.company_name, people.last_name, people.first_name')

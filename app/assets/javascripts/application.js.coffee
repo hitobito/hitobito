@@ -13,10 +13,9 @@
 #= require jquery_ujs
 #= require jquery-ui
 #= require bootstrap
-#= require bootstrap-wysihtml5
-#= require bootstrap-wysihtml5/locales/de-DE
 #= require jquery_nested_form
-#= require_tree .
+#= require jquery-ui-datepicker-i18n
+#= require_self
 #
 
 # scope for global functions
@@ -121,7 +120,7 @@ $ ->
   $('textarea.wysiwyg').wysihtml5({
     locale: 'de-DE'
   });
-  
+    
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))

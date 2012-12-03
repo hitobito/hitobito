@@ -6,6 +6,8 @@
 
 #main
   = crud_table do |t|
+    - t.col('') do |p|
+      .profil= image_tag(p.picture.thumb.url, size: '32x32')
     - t.col('Name')    do |p| 
       %strong
         -# Any person listed can be shown
@@ -15,7 +17,7 @@
     - t.col('Telefon') {|p| p.all_phone_numbers(true) }
     - t.col('Adresse') {|p| p.complete_address }
 
-- if params[:q].to_s.size < 3
-  %p Bitte geben Sie mindestens drei Zeichen ein.
+- if params[:q].to_s.size < 2
+  %p Bitte geben Sie mindestens zwei Zeichen ein.
 
 = paginate(entries)

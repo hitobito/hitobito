@@ -21,6 +21,7 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html { @people = @people.page(params[:page]) }
       format.pdf  { render_pdf(@people) }
+      format.csv  { render_csv(@people) }
     end
   end
   
@@ -46,6 +47,7 @@ class PeopleController < CrudController
       respond_to do |format|
         format.html { entry }
         format.pdf  { render_pdf([entry]) }
+        format.csv  { render_csv([entry]) }
       end
     end
   end
@@ -62,6 +64,13 @@ class PeopleController < CrudController
   end
 
   private
+  
+  def render_csv(people)
+    csv = params[:details] && can?(:index_full_people, @group) ?
+      Export::CsvPeople.export_full(people) :
+      Export::CsvPeople.export(people)
+    send_data csv, type: :csv
+  end
   
   def render_pdf(people)
     label_format = LabelFormat.find(params[:label_format_id])

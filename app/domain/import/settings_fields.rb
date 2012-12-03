@@ -13,10 +13,14 @@ module Import
       map {|key, value|  { key: key, value: value }  } 
     end
 
+    def key_for(label)
+      "#{prefix}_#{label}".downcase
+    end
+
     private
     def map_prefined_fields
       predefined_labels.each_with_object({}) do |label, hash| 
-        hash["#{prefix}_#{label}".downcase] = "#{human} #{label}" 
+        hash[key_for(label).downcase] = "#{human} #{label}" 
       end
     end
 

@@ -38,6 +38,7 @@
     - entry.used?(:priorization) do
       = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
     = f.labeled_input_field(:maximum_participants, class: 'span1')
+    = render_extensions 'application_fields', locals: { f: f }
     
   = field_set_tag 'Angaben für Anmeldung' do
     %p Du kannst weitere Angaben für die Anmeldung verlangen 

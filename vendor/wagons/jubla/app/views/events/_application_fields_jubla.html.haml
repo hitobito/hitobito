@@ -1,0 +1,3 @@
+- entry.used?(:application_contact_id) do
+  - if entry.multiple_contact_groups?
+    = f.labeled_input_field(:application_contact_id, include_blank: "Bitte auswählen")

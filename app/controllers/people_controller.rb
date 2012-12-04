@@ -54,6 +54,23 @@ class PeopleController < CrudController
 
   def history
     @roles = entry.all_roles
+
+    @events_by_type = EventDecorator.decorate(
+                      entry.events.
+                      merge(Event::Participation.active).uniq).
+                      group_by do |e| 
+      if e.type.present?
+        e.klass.model_name.human(count: 2)
+      else
+        'Events'
+      end
+    end
+
+    @events_by_type.each do |type, entries| 
+      entries.sort_by {|e| e.dates.first.try(:start_at) || Time.zone.now }.reverse!.
+              collect! {|e| EventDecorator.new(e) }
+    end
+
   end
   
   # POST button, send password instructions

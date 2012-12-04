@@ -176,7 +176,28 @@ describe PeopleController, type: :controller do
       role_row.find('td:eq(4)').text.should be_present
     end
 
+    it "lists all person's events" do
+
+      course1 = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
+      event1 = Fabricate(:event, groups: [groups(:top_layer)])
+      event2 = Fabricate(:event, groups: [groups(:top_layer)])
+      [course1,event1,event2].each do |event|
+        Fabricate(:event_role, participation: Fabricate(:event_participation, person: people(:top_leader), event: event), type: 'Event::Role::Leader')
+      end
+
+      get :history, group_id: top_group.id, id: top_leader.id
+
+      events = dom.find('events')
+
+      events.should have_selector('h2', text: 'Kurse')
+      events.should have_selector('h2', text: 'Events')
+
+      events.all('tr td strong a').size.should eq 3
+      
+    end
+
   end
+
 
   describe "redirect_url" do
     it "should adjust url if param redirect_url is given" do

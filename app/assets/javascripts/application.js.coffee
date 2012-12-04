@@ -58,13 +58,12 @@ typeaheadHighlighter = (item) ->
   query = query.replace(/\s+/g, '|')
   JSON.parse(item).label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
 
-
 setupPersonTypeahead = (index, field) ->
   input = $(this)
   input.data('url', '/people/query')
   setupRemoteTypeahead(input, 10, setPersonId)
   input.keydown((event) -> 
-    if event.keyCode != 9 && event.keyCode != 13
+    if isModifyingKey(event.which)
       $('#' + input.data('id-field')).val(null))
 
 setPersonId = (item) ->
@@ -88,6 +87,22 @@ openQuicksearchResult = (item) ->
     label = $('<div/>').html(item.label).text()
     label + " wird geöffnet..."
 
+isModifyingKey = (k) ->
+  ! (k == 20 || # Caps lock */
+     k == 16 || # Shift */
+     k == 9  || # Tab */
+     k == 13 || # Enter
+     k == 27 || # Escape Key
+     k == 17 || # Control Key
+     k == 91 || # Windows Command Key
+     k == 19 || # Pause Break
+     k == 18 || # Alt Key
+     k == 93 || # Right Click Point Key
+     ( k >= 35 && k <= 40 ) || # Home, End, Arrow Keys
+     k == 45 || # Insert Key
+     (k >= 33 && k <= 34 )  || # Page Down, Page Up
+     (k >= 112 && k <= 123) || # F1 - F12
+     (k >= 144 && k <= 145 ))  # Num Lock, Scroll Lock
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)

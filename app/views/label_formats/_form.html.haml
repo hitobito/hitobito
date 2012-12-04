@@ -1,18 +1,19 @@
 = render 'shared/admin_tabs'
 
 = entry_form(buttons_bottom: false, 
-             cancel_url: label_formats_path) do |f|
+             cancel_url: label_formats_path(returning: true)) do |f|
              
   #main.row-fluid
-    .span5
-      = f.labeled_input_fields :name, :font_size, :count_horizontal, :count_vertical
-      = f.labeled_collection_select(:page_size, Prawn::Document::PageGeometry::SIZES.keys, :to_s, :to_s, {}, class: 'span2')
+    %article.span6
+      = f.labeled_input_fields :name
+      = f.labeled_collection_select(:page_size, LabelFormat.available_page_sizes, :to_s, :to_s, {}, class: 'span4')
       = f.labeled(:landscape) do
         = f.inline_radio_button(:landscape, false, 'Hochformat')
         = f.inline_radio_button(:landscape, true, 'Querformat')
+      = f.labeled_input_fields :font_size, :count_horizontal, :count_vertical
       = f.labeled_input_field :width, help_inline: 'mm'
       = f.labeled_input_field :height, help_inline: 'mm'
       = f.labeled_input_field :padding_top, help_inline: 'mm'
       = f.labeled_input_field :padding_left, help_inline: 'mm'
-    .span6
-      = image_tag("label_formats.png")
+    %aside.span6
+      = image_tag("label_formats.png", size: '426x323')

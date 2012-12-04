@@ -1,10 +1,7 @@
+- include_wysiwyg_assets
+
 = render 'shared/admin_tabs'
 
--content_for :head do
-  = stylesheet_link_tag 'wysiwyg.css', :media => 'all'
-  
--content_for :js_includes do
-  = javascript_include_tag 'wysiwyg'
 
 = entry_form(cancel_url: custom_contents_path, buttons_bottom: false) do |f|
   = f.labeled_input_field :subject

@@ -148,6 +148,10 @@ class Person < ActiveRecord::Base
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     login? && super
   end
+  
+  def generate_
+    generate_reset_password_token! if should_generate_reset_token?
+  end
 
   def upcoming_events
     events.upcoming.merge(Event::Participation.active).uniq

@@ -209,6 +209,11 @@ module StandardHelper
     object_class(entry).model_name.human
   end
 
+  def include_wysiwyg_assets
+    content_for(:head)        { stylesheet_link_tag 'wysiwyg.css', :media => 'all' }
+    content_for(:js_includes) { javascript_include_tag 'wysiwyg' }
+  end
+
   private
 
   # Helper methods that are not directly called from templates.

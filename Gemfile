@@ -47,7 +47,6 @@ group :assets do
 end
 
 group :development, :test do
-  gem 'debugger'
   gem 'rspec-rails'
   gem 'sqlite3'
 end
@@ -69,6 +68,7 @@ group :test do
 end
 
 group :console do
+  gem 'debugger'
   gem 'awesome_print'
   gem 'hirb'
   gem 'wirble'

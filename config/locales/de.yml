@@ -10,6 +10,9 @@ de:
         must_have_same_type: müssen von denselbem Typ sein.
         
     models:
+      label_formats:
+        one: Etikettenformat
+        other: Etikettenformate
       custom_content:
         one: Text
         other: Texte
@@ -66,6 +69,19 @@ de:
         other: Qualifikationsarten
       
     attributes:
+
+      label_format:
+        name: Bezeichnung
+        page_size: Seitengrösse
+        landscape: Querformat
+        font_size: Schriftgrösse
+        width: Etikettenbreite
+        height: Etikettenhöhe
+        count_horizontal: Anz. Etik. nebeneinander
+        count_vertical: Anz. Etik. übereinander
+        padding_top: Abstand von oben (vom Seitenrand)
+        padding_left: Abstand von links (vom Seitenrand)
+
       custom_content:
         label: Text
         subject: Betreff

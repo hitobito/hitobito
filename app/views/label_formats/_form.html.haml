@@ -1,0 +1,14 @@
+= render 'shared/admin_tabs'
+
+= entry_form(buttons_bottom: false, 
+             cancel_url: label_formats_path) do |f|
+             
+  = f.labeled_input_fields :name, :page_size, :landscape, :font_size, :count_horizontal, :count_horizontal
+  .row
+    .span5
+      = f.labeled_input_field :width, help_inline: 'mm'
+      = f.labeled_input_field :height, help_inline: 'mm'
+      = f.labeled_input_field :padding_top, help_inline: 'mm'
+      = f.labeled_input_field :padding_left, help_inline: 'mm'
+    .span4
+      = image_tag("label_formats.png")

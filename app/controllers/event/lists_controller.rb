@@ -45,7 +45,7 @@ class Event::ListsController < ApplicationController
       unless params[:year].present? 
         params[:group_id] = Group.course_offerers.
                                   where(id: current_user.groups_hierarchy_ids).
-                                  where("groups.id IS NOT ?", Group.root.id).
+                                  where("groups.id <> ?", Group.root.id).
                                   select(:id).
                                   first.
                                   try(:id)

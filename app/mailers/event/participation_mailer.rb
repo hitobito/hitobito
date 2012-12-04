@@ -1,76 +1,61 @@
 class Event::ParticipationMailer < ActionMailer::Base
 
-  helper_method :partcipation_url, :event_details
-
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   de.event.participation_mailer.created.subject
-  #
+  PADDING = 15
+  
+  CONTENT_CONFIRMATION = 'event_application_confirmation'
+  CONTENT_APPROVAL     = 'event_application_approval'
+  
   def confirmation(participation)
-    @participation = participation
-    @person = participation.person
-    @event = participation.event
-    mail to: @person.email
+    person = participation.person
+    
+    compose(participation,
+            CONTENT_CONFIRMATION,
+            person.email,
+            'recipient-name' => person.first_name)
   end
   
   def approval(participation, recipients)
-    @participation = participation
-    @person = participation.person
-    @event = participation.event
-    mail to: recipients
+    compose(participation, 
+            CONTENT_APPROVAL, 
+            recipients.collect(&:email).compact,
+            'participant-name' => participation.person.to_s,
+            'recipient-names'  => recipients.collect(&:first_name).join(', '))
   end
 
   private
   
-  def partcipation_url
+  def compose(participation, content_key, recipients, values = {})
+    @participation = participation
+    @event = participation.event
+    
+    content = CustomContent.get(content_key)
+    values['event-details']   = event_details
+    values['application-url'] = "<a href=\"#{participation_url}\">#{participation_url}</a>"
+
+    mail to: recipients, subject: content.subject do |format|
+      format.html { render text: content.body_with_values(values) }
+    end
+  end
+  
+  def participation_url
     group_event_participation_url(@event.groups.first, @event, @participation)
   end
 
   def event_details
-    EventPresenter.new.present(@event)
+    infos = []
+    infos << @event.name
+    infos << labeled(:contact)  { "#{@event.contact}<br/>#{@event.contact.email}" }
+    infos << labeled(:dates)    { @event.dates.map(&:to_s).join("<br/>") } 
+    infos << labeled(:location) { @event.location.gsub("\n", "<br/>") } 
+    infos.compact.join("<br/><br/>")
   end
 
-  ## Helper class for presenting event infos
-  class EventPresenter
-    PADDING = 15
-    attr_reader :event
-
-    def present(event)
-      @event =  event
-      prepare_info.map do |key, value| 
-        value if value.present?
-      end.compact.join("\n")
+  def labeled(key) 
+    if value = @event.send(key).presence
+      label = @event.class.human_attribute_name(key)
+      formatted = block_given? ? yield : value
+      "#{label}:<br/>#{formatted}"
     end
-
-    private
-    def prepare_info
-      event_info = {}
-      event_info[:name] = padded(:name)
-      event_info[:contact] = padded(:contact) { |event| "#{event.contact} (#{event.contact.email})" }
-      event_info[:location] = padded(:location) { |event| pad_array(event.location.split("\n")) } 
-      event_info[:dates] = padded(:dates) { |event|  pad_array(event.dates.map(&:to_s)) } 
-      event_info
-    end
-
-    def pad_array(parts)
-      first = parts.shift
-      rest = parts.map {|part| "".ljust(PADDING + 1) + part }
-      [first, rest].join("\n").strip
-    end
-
-    def padded(key) 
-      if @event.send(key).present?
-        label = label_for(key)
-        value = block_given? ? "#{yield(event)}" : @event.send(key)
-        "#{label} #{value}" if value
-      end
-    end
-
-    def label_for(key)
-      "#{Event.human_attribute_name(key)}:".ljust(PADDING)
-    end
-
   end
 
 end

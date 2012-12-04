@@ -18,10 +18,13 @@ describe Event::ParticipationConfirmationJob do
   let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
   
   before do
+    SeedFu.quiet = true
+    SeedFu.seed [Rails.root.join('db', 'seeds')]
+    
     # create one person with two approvers
     Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
     Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
-    Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
+    Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))  
   end
   
   subject { Event::ParticipationConfirmationJob.new(participation) }

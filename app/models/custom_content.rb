@@ -18,7 +18,7 @@ class CustomContent < ActiveRecord::Base
   
   class << self
     def get(key)
-      find_by_key(key)
+      find_by_key(key) || raise(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
     end
   end
   
@@ -43,7 +43,12 @@ class CustomContent < ActiveRecord::Base
   end
   
   def body_with_values(placeholders = {})
-    placeholders_list.each_with_object(body.dup) do |placeholder, output|
+    available = placeholders_list
+    if non_existing = (placeholders.keys - available).presence
+      raise ArgumentError, "Placeholder(s) #{non_existing.join(', ')} given, but not defined for this custom content"
+    end
+    
+    available.each_with_object(body.dup) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
         if placeholders.key?(placeholder)

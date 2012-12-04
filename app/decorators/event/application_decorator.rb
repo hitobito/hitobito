@@ -16,7 +16,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   
   def contact
     c = model.contact
-    "#{c.class.base_class.name}Decorator".constantize.decorate(c)
+    c ? "#{c.class.base_class.name}Decorator".constantize.decorate(c) : nil
   end
   
   def priority(event)

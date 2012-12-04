@@ -44,6 +44,9 @@ be_agency:
   parent: be
   type: Group::StateAgency
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
+  zip_code: 3000
+  town: Bern
+  email: ast_be@jubla.example.com
   lft: 9
   rgt: 10
   

@@ -10,7 +10,7 @@ de:
         must_have_same_type: müssen von denselbem Typ sein.
         
     models:
-      label_formats:
+      label_format:
         one: Etikettenformat
         other: Etikettenformate
       custom_content:

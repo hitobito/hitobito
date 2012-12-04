@@ -2,3 +2,6 @@
   = f.labeled_person_field :advisor
 - entry.used?(:coach_id) do
   = f.labeled_person_field :coach
+- entry.used?(:condition_id) do
+  = f.labeled_collection_select(:condition_id, @conditions, :id, :label, { include_blank: true }, { class: 'span6' } )
+

@@ -2,6 +2,7 @@ course_group_ids = Group.where(type: [Group::State, Group::Federation].map(&:to_
 camp_group_ids = Group.where(type: Group::Flock).pluck(:id)
 @@kinds = Event::Kind.order(:label)
 @@people_count = Person.count
+@@conditions = {}
 
 def true?
   [true, false].sample
@@ -52,6 +53,7 @@ end
 
 def seed_course(values)
   date, number = values[:application_opening_at], values[:number]
+  group_id = values[:group_ids].first
   kind = @@kinds.shuffle.first 
 
   values = values.merge({ 
@@ -59,6 +61,7 @@ def seed_course(values)
       kind_id: kind.id,
       state: Event::Course.possible_states.shuffle.first,
       priorization: true,
+      condition_id: @@conditions[group_id].shuffle.first,
       requires_approval: true})
 
   event = Event::Course.seed(:name, values).first
@@ -167,9 +170,20 @@ def seed_participation(event)
   p
 end
 
+def seed_event_course_conditions(group_id)
+  [:tick, :trick, :track].each do |label|
+    data = { group_id: group_id, label: label, content: Faker::Lorem.paragraph(rand(3) + 1) }
+    condition = Event::Course::Condition.seed_once(:group_id, :label, data).first
+    @@conditions[group_id] ||= []
+    @@conditions[group_id] << condition.id
+  end
+end
+
 srand(42)
 
+
 course_group_ids.each do |group_id|
+  seed_event_course_conditions(group_id)
   20.times do
     seed_event(group_id, :course)
     seed_event(group_id, :base)

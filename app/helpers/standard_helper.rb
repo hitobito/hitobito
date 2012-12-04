@@ -28,7 +28,8 @@ module StandardHelper
   # Otherwise, calls format_type.
   def format_attr(obj, attr)
     format_type_attr_method = obj.class.respond_to?(:model_name) ? :"format_#{obj.class.base_class.model_name.underscore}_#{attr.to_s}" : :"format_#{obj.class.name.underscore}_#{attr.to_s}"
-    
+    format_type_attr_method = format_type_attr_method.to_s.gsub(%r{/},'_')  # deal with nested models
+
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)

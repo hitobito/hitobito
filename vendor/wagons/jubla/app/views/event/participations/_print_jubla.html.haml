@@ -1,0 +1,3 @@
+- if entry.event.kind_of?(Event::Course)
+  %h4 Kursbestimmung
+  %p= entry.event.condition.content.html_safe

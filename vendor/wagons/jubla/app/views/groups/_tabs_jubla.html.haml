@@ -1,3 +1,6 @@
 - if @group.kind_of?(Group::Flock) && can?(:approve_population, @group)
   - tab tab_population_label, population_group_path(@group)
+
+
 - tab "Statistik", census_evaluation_path(@group) if @group.census? && can?(:evaluate_census, @group)
+- tab "Kursbestimmungen", group_event_course_conditions_path(@group) if can?(:index_event_course_conditions, @group)

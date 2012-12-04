@@ -228,7 +228,7 @@ shared_examples "crud controller" do |options|
         it_should_have_flash(:notice)
       end
       
-      context "with failure", :failing => true, :combine => 'dhf' do
+      context "with failure", :failing => true, :unless => skip?(options, %w(destroy html invalid)), :combine => 'dhf' do
         it_should_redirect_to_index
         it_should_have_flash(:alert)
       end

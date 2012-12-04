@@ -5,8 +5,8 @@ module Jubla::Event::Course
     include Event::RestrictedRole
     restricted_role :advisor, Event::Course::Role::Advisor
   
-    attr_accessible :advisor_id, :application_contact_id
-  
+    attr_accessible :advisor_id, :application_contact_id, :condition_id
+
     # states are used for workflow
     # translations in config/locales
     self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
@@ -14,6 +14,13 @@ module Jubla::Event::Course
     ### ASSOCIATIONS
 
     belongs_to :application_contact, class_name: 'Group'
+    belongs_to :condition, class_name: 'Condition'
+  
+
+    ### ASSOCIATIONS
+
+    belongs_to :application_contact, class_name: 'Group'
+    belongs_to :condition, class_name: 'Condition'
     
   
     ### VALIDATIONS

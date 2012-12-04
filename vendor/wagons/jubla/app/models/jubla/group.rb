@@ -3,6 +3,10 @@ module Jubla::Group
   
   included do
     class_attribute :contact_group_type
+
+    attr_accessible :bank_account
+
+    has_many :course_conditions, class_name: '::Event::Course::Condition', dependent: :destroy
     
     # define global roles before children
     roles Jubla::Role::GroupAdmin, 
@@ -12,9 +16,6 @@ module Jubla::Group
     children Group::SimpleGroup
     
     root_types Group::Federation
-    
-    
-    attr_accessible :bank_account
   end
   
   def census?

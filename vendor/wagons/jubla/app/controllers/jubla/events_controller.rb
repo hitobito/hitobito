@@ -9,6 +9,8 @@ module Jubla::EventsController
 
     before_render_form :application_contacts
 
+    before_render_form :load_conditions
+
     before_save :set_application_contact
 
   end
@@ -34,6 +36,12 @@ module Jubla::EventsController
   end
 
   private
+
+
+  def load_conditions
+    return unless entry.kind_of?(Event::Course) 
+    @conditions = group.course_conditions
+  end
   
   def remove_restricted
     model_params.delete(:advisor)

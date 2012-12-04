@@ -37,6 +37,8 @@
     - if entry.additional_information.present?
       = simple_format(entry.additional_information)
 
+    = render_extensions 'print'
+
     %h4 Unterschrift
     %p Von dir oder einer erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
     %br/

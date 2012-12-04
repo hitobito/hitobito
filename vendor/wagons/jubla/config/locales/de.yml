@@ -50,10 +50,15 @@ de:
       event/camp:
         one: Lager
         other: Lager
+
         
       event/camp/kind:
         one: Lagerart
         other: Lagerarten
+
+      event/course/condition: 
+        one: Kursbestimmung
+        other: Kursbestimmungen
 
       jubla/event/course/advisor: Betreuer
 
@@ -108,6 +113,8 @@ de:
           canceled: Abgesagt
           completed: Qualifikationen erfasst
           closed: Abgeschlossen
+        condition: Kursbestimmung
+        condition_id: Kursbestimmung
           
       event/camp:
         kind_id: Lagerart
@@ -122,4 +129,8 @@ de:
         leader_f: Leitende w
         child_m: Kinder m
         child_f: Kinder w
+
+      event/course/condition:
+        label: Bezeichnung
+        content: Inhalt
         

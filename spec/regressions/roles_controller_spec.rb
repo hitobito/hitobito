@@ -48,7 +48,7 @@ describe RolesController, type: :controller do
     
     def it_should_redirect_to_index
       it do
-        path = entry.destroyed? ? group_path(group) :person_path(entry.person_id)
+        path = Role.where(id: entry.id).exists? ? person_path(entry.person_id) : group_path(group)
         should redirect_to path
       end
     end

@@ -186,8 +186,8 @@ describe Group do
         Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
         Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one_one))
         deleted_ids = bottom_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
-        expect { bottom_layer.destroy }.to change(Role,:count).by(-4)
-        Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
+        expect { bottom_layer.destroy }.to change { Role.unscoped.count }.by(-4)
+        #Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
       end
     end
     

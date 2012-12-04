@@ -144,7 +144,9 @@ describe PeopleController, type: :controller do
     end
 
     it "lists past roles" do
-      Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other).destroy
+      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
+      role.created_at = Time.zone.now - 2.years
+      role.destroy
       get :history, params
       dom.all('table tbody tr').size.should eq 2 
       role_row = dom.find('table tbody tr:eq(2)')
@@ -164,7 +166,9 @@ describe PeopleController, type: :controller do
     end
 
     it "lists past roles in other groups" do
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other).destroy
+      role = Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
+      role.created_at = Time.zone.now - 2.years
+      role.destroy
       get :history, params
       dom.all('table tbody tr').size.should eq 2 
       role_row = dom.find('table tbody tr:eq(2)')

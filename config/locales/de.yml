@@ -77,6 +77,10 @@ de:
         font_size: Schriftgrösse
         width: Etikettenbreite
         height: Etikettenhöhe
+        count_horizontal: Anz. Etik. nebeneinander
+        count_vertical: Anz. Etik. übereinander
+        padding_top: Abstand von oben (vom Seitenrand)
+        padding_left: Abstand von links (vom Seitenrand)
 
       custom_content:
         label: Text

@@ -18,7 +18,7 @@ namespace :ci do
                     'spec',
                     'wagon:test',
                     'brakeman',
-                    #'qa' raises StackLevelTooDeep for Ruby 1.9.3.p0
+                    'qa'
                     ]
 end
 

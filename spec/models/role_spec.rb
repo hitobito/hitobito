@@ -149,7 +149,7 @@ describe Role do
     it "deleted young roles from database" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
       a.destroy
-      Role.unscoped.where(id: a.id).should_not be_exists
+      Role.with_deleted.where(id: a.id).should_not be_exists
     end
     
     it "flags old roles" do

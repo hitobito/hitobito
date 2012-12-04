@@ -130,7 +130,7 @@ class Person < ActiveRecord::Base
   end
 
   def all_roles
-    records = Role.unscoped.where(person_id: id).order('deleted_at').includes(:group)
+    records = Role.with_deleted.where(person_id: id).order('deleted_at').includes(:group)
   end
   
   def login?

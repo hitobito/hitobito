@@ -14,8 +14,7 @@ module RolesHelper
     if group = role.group
       link_to(group, group)
     else
-       # if group was destroyed, we have to get it with #unscoped
-      group = Group.unscoped.where(id: role.group_id).first
+      group = Group.with_deleted.where(id: role.group_id).first
       group.to_s + " (Gelöscht)"
     end
   end

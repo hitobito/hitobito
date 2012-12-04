@@ -20,7 +20,7 @@ class Event::Camp::KindsController < CrudController
   end
   
   def model_scope
-    super.unscoped
+    super.with_deleted
   end
   
   class << self

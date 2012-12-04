@@ -20,7 +20,7 @@ class QualificationKindsController < CrudController
   end
   
   def model_scope
-    super.unscoped
+    super.with_deleted
   end
   
 end

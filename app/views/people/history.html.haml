@@ -3,7 +3,6 @@
 
 = render 'tabs'
 
-
 %h2 Rollen
 
 = table(@roles, class: 'table table-striped') do |t|
@@ -12,3 +11,12 @@
     = r.to_s
   - t.attr(:created_at, 'Von')
   - t.attr(:deleted_at, 'Bis')
+
+%events
+  = grouped_table(@events_by_type, 3) do |event|
+    %td
+      %strong
+        = event.labeled_link
+    %td.muted
+      = entry.event_roles(event)
+    %td= event.dates_full

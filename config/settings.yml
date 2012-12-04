@@ -33,3 +33,7 @@ pdf:
       
 csv:
   separator: ;
+
+role:
+  # If a role last less than this number of days, it is not archived
+  minimum_days_to_archive: 7

@@ -220,7 +220,7 @@ class ListController < ApplicationController
     def sort_expression
       col = sort_mappings[params[:sort].to_sym] ||
             "#{model_class.table_name}.#{params[:sort]}"
-      "#{col} #{sort_dir}"
+      Array(col).collect {|c| "#{c} #{sort_dir}" }.join(", ")
     end
 
     # The sort direction, either 'asc' or 'desc'.

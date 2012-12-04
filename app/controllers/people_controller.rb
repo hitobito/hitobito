@@ -75,7 +75,7 @@ class PeopleController < CrudController
   
   # POST button, send password instructions
   def send_password_instructions
-    entry.send_reset_password_instructions
+    SendLoginJob.new(entry, current_user).enqueue!
     flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
     render 'shared/update_flash'
   end

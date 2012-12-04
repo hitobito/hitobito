@@ -166,7 +166,7 @@ end
   
 REGEXP_ROWS = /<tr.+?<\/tr>/m
 REGEXP_HEADERS = /<th.+?<\/th>/m
-REGEXP_SORT_HEADERS = /<th><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
+REGEXP_SORT_HEADERS = /<th.*?><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
 REGEXP_ACTION_CELL = /<td class=\"action\"><a href.+?<\/a><\/td>/m
   
   

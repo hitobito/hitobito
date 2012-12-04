@@ -63,6 +63,14 @@ class Role < ActiveRecord::Base
     string = label? ? "#{label} (#{model_name})" : model_name
   end
   
+  # Soft destroy if older than certain amount of days, hard if younger
+  def destroy
+    if old_enough_to_archive?
+      super
+    else
+      destroy!
+    end
+  end
   
   private
   
@@ -87,4 +95,7 @@ class Role < ActiveRecord::Base
     end 
   end
   
+  def old_enough_to_archive?
+    (Time.zone.now - created_at) > Settings.role.minimum_days_to_archive.days
+  end
 end

@@ -27,7 +27,7 @@ module PeopleHelper
   def csv_links
     if can?(:index_full_people, @group)
       {link_to('CSV', '#') => [link_to('Adressliste', csv_path), 
-                               link_to('Alle Details', csv_path(details: true))] }
+                               link_to('Alle Angaben', csv_path(details: true))] }
     else
       link_to('CSV', csv_path)
     end

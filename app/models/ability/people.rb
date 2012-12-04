@@ -24,14 +24,19 @@ module Ability::People
     
     if modify_permissions?
       can :create, Person
+      
       can :modify, Person do |person| 
         can_modify_person?(person)
       end
+      
       can :send_password_instructions, Person do |person| 
-        can_modify_person?(person) && person.id != user.id &&
-          person.login?  && person.email.present?
+        person.id != user.id &&
+        person.email.present? &&
+        person.login? && 
+        can_modify_person?(person)
       end
     end
+    
     can :modify, Person do |person|
       person.id == user.id
     end

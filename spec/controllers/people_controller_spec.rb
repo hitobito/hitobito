@@ -153,15 +153,17 @@ describe PeopleController do
     let(:person) { people(:bottom_member) } 
 
     it "does not send instructions for self" do
-      post :send_password_instructions, group_id: group.id, id: top_leader.id, format: :js
+      expect do 
+        post :send_password_instructions, group_id: group.id, id: top_leader.id, format: :js
+      end.not_to change { Delayed::Job.count }
       flash[:notice].should_not be_present
-      last_email.should_not be_present
     end
 
     it "sends password instructions" do
-      post :send_password_instructions, group_id: groups(:bottom_layer_one).id, id: person.id, format: :js
+      expect do
+        post :send_password_instructions, group_id: groups(:bottom_layer_one).id, id: person.id, format: :js
+      end.to change { Delayed::Job.count }.by(1)
       flash[:notice].should eq  'Login Informationen wurden verschickt.'
-      last_email.should be_present
     end
   end
   

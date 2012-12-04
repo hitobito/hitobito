@@ -20,8 +20,14 @@ class LabelFormat < ActiveRecord::Base
   attr_accessible :name, :page_size, :landscape, :font_size, :width, :height, 
                   :padding_top, :padding_left, :count_horizontal, :count_vertical
   
+  class << self
+    def available_page_sizes
+      Prawn::Document::PageGeometry::SIZES.keys
+    end
+  end
+  
  
-  validates :page_size, inclusion: Prawn::Document::PageGeometry::SIZES.keys
+  validates :page_size, inclusion: available_page_sizes
  
   validates :width, :height, :font_size, :count_horizontal, :count_vertical,
             numericality: {greater_than_or_equal_to: 1, allow_nil: true}

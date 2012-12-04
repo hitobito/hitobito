@@ -49,7 +49,7 @@ describe RolesController do
     it "terminates and creates new role if type changes" do
       put :update, {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader}}
       should redirect_to(group_person_path(group, person))
-      role.reload.destroyed?.should be_true
+      Role.unscoped.where(id: role.id).should_not be_exists
       notice = "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Rolle</i> geändert."
       flash[:notice].should eq notice
     end

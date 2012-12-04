@@ -24,8 +24,6 @@ module Person::PreloadGroups
       :groups, 
       :select => Group::MINIMAL_SELECT).run
       
-    # TODO probably preload group ancestors
-    
     records
   end
   

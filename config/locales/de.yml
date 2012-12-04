@@ -70,23 +70,6 @@ de:
       
     attributes:
 
-      label_format:
-        name: Bezeichnung
-        page_size: Seitengrösse
-        landscape: Querformat
-        font_size: Schriftgrösse
-        width: Etikettenbreite
-        height: Etikettenhöhe
-        count_horizontal: Anz. Etik. nebeneinander
-        count_vertical: Anz. Etik. übereinander
-        padding_top: Abstand von oben (vom Seitenrand)
-        padding_left: Abstand von links (vom Seitenrand)
-
-      custom_content:
-        label: Text
-        subject: Betreff
-        body: Inhalt
-      
       person:
         first_name: Vorname
         last_name: Nachname
@@ -247,6 +230,25 @@ de:
         label: Social Media Typ
         public: Öffentlich
   
+      custom_content:
+        label: Text
+        subject: Betreff
+        body: Inhalt
+        
+      label_format:
+        name: Bezeichnung
+        page_size: Seitengrösse
+        landscape: Format
+        font_size: Schriftgrösse
+        width: Etikettenbreite
+        height: Etikettenhöhe
+        count_horizontal: Anzahl nebeneinander
+        count_vertical: Anzahl übereinander
+        padding_top: Rand oben
+        padding_left: Rand links
+        dimensions: Anzahl
+
+      
   
   # view keys
   

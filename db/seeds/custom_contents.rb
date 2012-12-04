@@ -1,6 +1,8 @@
 CustomContent.seed(:key,
   {key: 'send_login',
    label: 'Login senden',
+   subject: 'Willkommen bei der Jubla DB',
+   body: "Hallo {recipient-name}<br/><br/>Willkommen bei der Jubla Datenbank! Unter dem folgenden Link kannst Du dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>Bis bald im Wald!<br/><br/>{sender-name}",
    placeholders_required: 'login-url',
    placeholders_optional: 'recipient-name, sender-name'}, 
    

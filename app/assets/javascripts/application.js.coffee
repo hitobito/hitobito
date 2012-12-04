@@ -63,12 +63,15 @@ setupPersonTypeahead = (index, field) ->
   input = $(this)
   input.data('url', '/people/query')
   setupRemoteTypeahead(input, 10, setPersonId)
-  input.keydown(-> $('#' + input.data('id-field')).val(null))
+  input.keydown((event) -> 
+    if event.keyCode != 9 && event.keyCode != 13
+      $('#' + input.data('id-field')).val(null))
 
 setPersonId = (item) ->
   typeahead = this
   item = JSON.parse(item)
-  $('#' + typeahead.$element.data('id-field')).val(item.id)
+  idField = $('#' + typeahead.$element.data('id-field'))
+  idField.val(item.id)
   item.label
 
 setupQuicksearch = ->

@@ -107,7 +107,7 @@ class StandardTableBuilder
     end
 
     def html_header
-      content_tag :th, header
+      content_tag :th, header, html_options
     end
 
     def html_cell(entry)

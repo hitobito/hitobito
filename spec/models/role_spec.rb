@@ -146,8 +146,15 @@ describe Role do
   end
 
   context "#destroy" do
-    it "flags role as destroyed" do
+    it "deleted young roles from database" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a.destroy
+      Role.unscoped.where(id: a.id).should_not be_exists
+    end
+    
+    it "flags old roles" do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1
       a.destroy
       Role.only_deleted.find(a.id).should be_present
     end

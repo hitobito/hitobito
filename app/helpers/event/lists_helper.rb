@@ -5,7 +5,7 @@ module Event::ListsHelper
     year_param = { year: @year }
     all_groups = link_to("Alle Gruppen", list_courses_path(year_param))
     Group.course_offerers.map do |group|
-      link = list_courses_path(year_param.merge(group: group.id))
+      link = list_courses_path(year_param.merge(group_id: group.id))
       link_to(group.name, link)
     end.unshift(all_groups)
   end
@@ -15,7 +15,7 @@ module Event::ListsHelper
   end
 
   def group_param
-    group_id && group_id > 0 ? { group: group_id }  : {}
+    group_id && group_id > 0 ? { group_id: group_id } : {}
   end
 
 end

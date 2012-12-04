@@ -104,6 +104,7 @@ class Group < ActiveRecord::Base
       end
     end
 
+    # Attributes that may only be modified by people from superior layers
     def superior_attributes
       accessible_attributes(:superior).to_a - accessible_attributes(:default).to_a
     end
@@ -123,14 +124,12 @@ class Group < ActiveRecord::Base
       reorder("#{statement} name") # acts_as_nested_set default to new order
     end
 
+    # All groups that may offer courses
     def course_offerers
       sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
       scoped.where(type: sti_names).order(:parent_id, :name)
     end
     
-    def course_offerers_in_hierarchy(user)
-      course_offerers.pluck(:id) & user.groups_hierarchy_ids
-    end
   end
   
   

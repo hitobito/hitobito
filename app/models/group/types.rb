@@ -26,10 +26,13 @@ module Group::Types
       self.role_types = types + self.role_types
     end
     
+    # All group types available in the application
     def all_types
       @@all_types ||= collect_types([], root_types)
     end
     
+    # All root group types in the application.
+    # Used as a DSL method to define root types if arguments are given.
     def root_types(*types)
       @@root_types ||= []
       if types.present?
@@ -40,22 +43,26 @@ module Group::Types
       end
     end
     
+    # Helper method to clear the cached group and role types.
     def reset_types!
       @@root_types = []
       @@all_types = nil
       Role.reset_types!
     end
     
+    # All the group types underneath the current group type.
     def child_types
       collect_types([], [self])
     end
     
+    # Return the group type with the given sti_name or raise an exception if not found
     def find_group_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
       type
     end
     
+    # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?

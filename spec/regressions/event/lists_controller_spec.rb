@@ -68,10 +68,10 @@ describe Event::ListsController, type: :controller do
         first[:href].should eq list_courses_path(year: year)
 
         middle.text.should eq top_layer.name
-        middle[:href].should eq list_courses_path(year: year, group: top_layer.id)
+        middle[:href].should eq list_courses_path(year: year, group_id: top_layer.id)
 
         last.text.should eq top_group.name
-        last[:href].should eq list_courses_path(year: year, group: top_group.id)
+        last[:href].should eq list_courses_path(year: year, group_id: top_group.id)
       end
     end
 
@@ -83,10 +83,10 @@ describe Event::ListsController, type: :controller do
       it "tabs contain year based pagination" do
         first, last = tabs.all('a').first, tabs.all('a').last
         first.text.should eq (year - 3).to_s
-        first[:href].should eq list_courses_path(year: year - 3, group: top_group.id)
+        first[:href].should eq list_courses_path(year: year - 3, group_id: top_group.id)
 
         last.text.should eq (year + 1).to_s
-        last[:href].should eq list_courses_path(year: year + 1, group: top_group.id)
+        last[:href].should eq list_courses_path(year: year + 1, group_id: top_group.id)
       end
     end
 
@@ -131,14 +131,14 @@ describe Event::ListsController, type: :controller do
       end
 
       it "filters with group param" do
-        get :courses, year: 2011, group: glk_ev.group_ids.first
+        get :courses, year: 2011, group_id: glk_ev.group_ids.first
         main.all('h2').size.should eq 1
       end
 
       it "filters by year, keeps year in dropdown" do
         get :courses, year: 2010
         main.all('h2').size.should eq 1
-        dropdown.find('li:eq(3) a')[:href].should eq list_courses_path(year: 2010, group: top_group.id)
+        dropdown.find('li:eq(3) a')[:href].should eq list_courses_path(year: 2010, group_id: top_group.id)
       end
 
     end

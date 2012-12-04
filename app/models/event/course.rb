@@ -45,13 +45,6 @@ class Event::Course < Event
   
   validates :kind_id, presence: true
   
-  
-  class << self
-    def in_hierarchy(user)
-      with_group_id(Group.course_offerers_in_hierarchy(user))
-    end
-  end
-
   def label_detail
     "#{kind.short_name} #{number} #{group_names}"
   end

@@ -65,7 +65,7 @@ describe Event::ListsController do
       end
 
       it "can be set via param, only if year is present" do
-        get :courses, year: 2010, group: groups(:top_layer).id
+        get :courses, year: 2010, group_id: groups(:top_layer).id
         assigns(:group_id).should eq groups(:top_layer).id
       end
     end

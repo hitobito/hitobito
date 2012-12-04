@@ -92,23 +92,32 @@ class Event < ActiveRecord::Base
   ### CLASS METHODS
   
   class << self
+    # Events with at least one date in the given year
     def in_year(year)
       year = ::Date.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] } )
     end
-
-    def with_group_id(*group_ids)
-      joins(:groups).where(groups: {id: group_ids.flatten})
+    
+    # Events from groups in the hierarchy of the given user.
+    def in_hierarchy(user)
+      with_group_id(user.groups_hierarchy_ids)
+    end
+    
+    # Events belonging to the given group ids
+    def with_group_id(group_ids)
+      joins(:groups).where(groups: {id: group_ids})
     end
 
+    # Events running now or in the future.
     def upcoming
       midnight = Time.zone.now.midnight
       joins(:dates).
       where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
     
+    # Events that are open for applications.
     def application_possible
       today = ::Date.today
       where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today).
@@ -118,6 +127,7 @@ class Event < ActiveRecord::Base
             "events.participant_count < events.maximum_participants")
     end
 
+    # Default scope for event lists
     def list
       order_by_date.
       includes(:groups, :kind).

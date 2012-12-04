@@ -9,10 +9,9 @@ class Event::ListsController < ApplicationController
 
   def events
     authorize!(:index, Event)
-    group_ids = current_user.groups_hierarchy_ids
       
     events = Event.upcoming.
-                   with_group_id(group_ids).
+                   in_hierarchy(current_user).
                    includes(:dates, :groups).
                    where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
                    order('event_dates.finish_at ASC')
@@ -44,9 +43,14 @@ class Event::ListsController < ApplicationController
     if can?(:manage_courses, current_user)
       # assign default group on initial request
       unless params[:year].present? 
-        params[:group] = (Group.course_offerers_in_hierarchy(current_user) - [Group.root.id]).first
+        params[:group_id] = Group.course_offerers.
+                                  where(id: current_user.groups_hierarchy_ids).
+                                  where("groups.id IS NOT ?", Group.root.id).
+                                  select(:id).
+                                  first.
+                                  try(:id)
       end 
-      @group_id = params[:group].to_i 
+      @group_id = params[:group_id].to_i 
     end
 
   end

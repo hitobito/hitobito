@@ -1,4 +1,4 @@
-CustomContent.seed(:key,
+CustomContent.seed_once(:key,
   {key: 'send_login',
    label: 'Login senden',
    subject: 'Willkommen bei der Jubla DB',

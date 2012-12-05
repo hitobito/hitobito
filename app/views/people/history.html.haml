@@ -13,10 +13,10 @@
   - t.attr(:deleted_at, 'Bis')
 
 %events
-  = grouped_table(@events_by_type, 3) do |event|
+  = grouped_table(@participations_by_event_type, 3) do |participation|
     %td
       %strong
-        = event.labeled_link
+        = participation.event.labeled_link
     %td.muted
-      = entry.event_roles(event)
-    %td= event.dates_full
+      = participation.list_roles
+    %td= participation.event.dates_full

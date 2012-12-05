@@ -176,7 +176,7 @@ describe PeopleController, type: :controller do
       role_row.find('td:eq(4)').text.should be_present
     end
 
-    it "lists all person's events" do
+    it "lists person's events" do
 
       course1 = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
       event1 = Fabricate(:event, groups: [groups(:top_layer)])
@@ -190,7 +190,7 @@ describe PeopleController, type: :controller do
       events = dom.find('events')
 
       events.should have_selector('h2', text: 'Kurse')
-      events.should have_selector('h2', text: 'Events')
+      events.should have_selector('h2', text: 'Anlässe')
 
       events.all('tr td strong a').size.should eq 3
       

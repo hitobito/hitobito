@@ -38,5 +38,9 @@ class Event::ParticipationDecorator < ApplicationDecorator
   def qualifier
     Event::Qualifier.new(model)
   end
+
+  def list_roles
+    safe_join(roles, h.tag(:br)) { |role| role.to_s }
+  end
   
 end

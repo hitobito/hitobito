@@ -29,14 +29,6 @@ class PersonDecorator < ApplicationDecorator
   def roles_short(group = nil)
     functions_short(roles.to_a, :group, group)
   end
-
-  def event_roles(event)
-    roles = ""
-    event.people.find(id).roles.each do |r|
-      roles << r.to_s
-    end
-    roles
-  end
   
   private
   

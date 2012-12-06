@@ -2,25 +2,25 @@ require 'csv'
 module Export
   module CsvPeople
 
-
     def self.export(people)
-      Generator.new(people, Simple).csv
+      Generator.new(People.new(people)).csv
     end
 
     def self.export_full(people)
-      Generator.new(people, Full).csv
+      Generator.new(PeopleFull.new(people)).csv
     end
 
 
+    # Generate using people class for headers and value mapping
     class Generator
       attr_reader :csv
 
-      def initialize(people, exporter_class)
-        exported = people.map {|person| exporter_class.new(person) } 
+      def initialize(people)
         @csv = CSV.generate(options) do |csv|
-          csv << exporter_class.translated_headers
-          exported.each do |person|
-            csv << person.values
+          csv << people.values
+          people.list.each do |person|
+            hash = Person.new(person)
+            csv << people.keys.map { |key| hash[key] } 
           end
         end
       end
@@ -30,105 +30,111 @@ module Export
       end
     end
 
-    class Simple
-      attr_reader  :person, :hash
+    # Attributes of people we want to include 
+    class People < Hash
+      attr_reader :people
 
-      class << self
-        def headers
-          attributes + associations
-        end
+      def initialize(people)
+        super()
+        @people = people
 
-        def associations
-          [:roles] + settings_phone_numbers.keys.map(&:to_sym) 
-        end
-
-        def attributes
-          [:first_name, :last_name, :nickname, :email, :address, :zip_code, :town, :country, :birthday]
-        end
-
-        def settings_phone_numbers
-          @settings_phone_numbers ||= Import::SettingsFields.new(PhoneNumber)
-        end
-
-        def translated_headers
-          attributes.map { |attr| Person.human_attribute_name(attr) } + 
-            [Role.model_name.human(count: 2)] + 
-            settings_phone_numbers.values
-        end
+        attributes.each { |attr| merge!(attr => translate(attr)) }
+        merge!(roles: 'Rollen')
+        add_associations
       end
 
-      def initialize(person)
-        @person = person
-        @hash = core_attributes
-        add_roles
-        add_phone_numbers
-      end
-
-      def person_phone_numbers
-        person.phone_numbers.public
-      end
-
-      def values
-        self.class.headers.map { |header| hash[header] } 
+      def list
+        people
       end
 
       private
-      def core_attributes
-        attributes = person.attributes.symbolize_keys!
-        attributes.select! {|key| self.class.attributes.include?(key) } 
+      def model_class
+        ::Person
+      end
+      def attributes
+        (model_class.column_names.map(&:to_sym) - [:id, :picture]) &
+          [:first_name, :last_name, :nickname, :email, :address, :zip_code, :town, :country, :birthday]
       end
 
-      def add_roles
-        roles = person.roles.map do |role| 
-          "#{role} #{role.group}" 
+      def translate(attr)
+        model_class.human_attribute_name(attr)
+      end
+
+      def add_associations
+        merge!(labels(people.map(&:phone_numbers), Associations.phone_numbers))
+      end
+
+      def labels(collection, mapper) 
+        collection.flatten.map(&:label).uniq.each_with_object({}) do |label, obj|
+          obj[mapper.key(label)] = mapper.human(label)
         end
-        hash[:roles] = roles.join(', ')
-      end
-
-      def add_phone_numbers
-        fields = self.class.settings_phone_numbers
-        person_phone_numbers.each do |number|
-          hash[fields.key_for(number.label).to_sym] = number.value
-        end
-      end
-
+      end 
     end
 
-    class Full < Simple
-      class << self
-        def attributes
-          super | Import::Person.person_attributes.map { |entry| entry[:key].to_sym }
-        end
-
-        def associations
-          super | settings_social_accounts.keys.map(&:to_sym)
-        end
-
-        def translated_headers
-          super | settings_social_accounts.values
-        end
-
-        def settings_social_accounts
-          @settings_social_accounts ||= Import::SettingsFields.new(SocialAccount)
-        end
+    # adds social_accounts and company related attributes
+    class PeopleFull < People
+      def attributes
+        super | (model_class::PUBLIC_ATTRS - [:id, :picture])
       end
 
-      def person_phone_numbers
-        person.phone_numbers
-      end
-
-      def initialize(person)
+      def add_associations
         super
-        add_social_accounts
+        merge!(labels(people.map(&:social_accounts), Associations.social_accounts))
+      end
+    end
+
+    # Attributes of a person, handles associations
+    class Person < Hash
+      def initialize(person)
+        super()
+        merge!(person.attributes.symbolize_keys)
+        merge!(roles: map_roles(person.roles))
+        person.phone_numbers.each { |number| merge!(map_object(number)) }
+        person.social_accounts.each { |account| merge!(map_object(account)) }
       end
 
-      def add_social_accounts
-        fields = self.class.settings_social_accounts
-        
-        person.social_accounts.each do |account|
-          hash[fields.key_for(account.label).to_sym] = account.value
+      private
+      def map_object(object)
+        case object
+        when PhoneNumber then { Associations.phone_numbers.key(object.label) => object.value }
+        when SocialAccount then { Associations.social_accounts.key(object.label) => object.name }
+        end
+      end
+
+      def map_roles(roles)
+        roles.map { |role| "#{role} #{role.group}"  }.join(', ')
+      end
+    end
+
+    class Associations
+      attr_reader :model
+
+      class << self
+        def phone_numbers
+          @phone_numbers ||= self.new(PhoneNumber)
+        end
+
+        def social_accounts
+          @social_accounts ||= self.new(SocialAccount)
+        end
+      end
+
+      def initialize(model)
+        @model = model
+      end
+
+      def key(label)
+        "#{model.model_name.underscore}_#{label}".downcase.to_sym
+      end
+
+      def human(label)
+        case model.model_name
+        when "PhoneNumber" then "#{model.model_name.human} #{label.capitalize}"
+        when "SocialAccount" then label.capitalize
         end
       end
     end
+
+
   end
 end

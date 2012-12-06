@@ -1,17 +1,10 @@
 # encoding: UTF-8
 require 'spec_helper'
 describe Export::CsvPeople do
+
   let(:person) { people(:top_leader) } 
-
-  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Email", "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen", 
-                          "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit", "Telefonnummer Vater", "Telefonnummer Mutter", 
-                          "Telefonnummer Fax", "Telefonnummer Andere"] } 
-
-  let(:full_headers)   { ["Vorname", "Nachname", "Übername", "Email", "Adresse", "PLZ", "Ort", "Land", "Geburtstag",
-                          "Firmenname", "Firma", "Geschlecht", "Zusätzliche Angaben", "Rollen",
-                          "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit", "Telefonnummer Vater", "Telefonnummer Mutter", 
-                          "Telefonnummer Fax", "Telefonnummer Andere",
-                          "Social Media Adresse Skype", "Social Media Adresse Webseite", "Social Media Adresse MSN" ] }
+  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Email", "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
+  let(:full_headers) { ["Vorname", "Nachname", "Übername", "Email", "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Firmenname", "Firma", "Rollen" ] }
 
   describe Export::CsvPeople do
 
@@ -62,76 +55,120 @@ describe Export::CsvPeople do
 
         its(['Rollen']) { should eq "Rolle TopGroup" }
         its(['Telefonnummer Vater']) { should eq '123' }
-        its(['Social Media Adresse Skype']) { should eq 'foobar' }
-        its(['Geschlecht']) { should eq 'm' }
+        its(['Skype']) { should eq 'foobar' }
+        its(['Geschlecht']) { should be_blank }
       end
-    end
-
-  end
-
-  describe Export::CsvPeople::Simple do
-    let(:export) { Export::CsvPeople::Simple.new(person) } 
-    subject { Export::CsvPeople::Simple } 
-
-    its(:headers) { should eq  [:first_name, :last_name, :nickname, :email, :address, :zip_code, :town, :country, 
-                                :birthday, :roles, :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
-                                :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere] }
-
-    its(:translated_headers) { should eq simple_headers } 
-
-    it "#hash has data prepared for export" do
-      export.hash.should eq first_name: "Top", last_name: "Leader", nickname: nil, 
-        email: "top_leader@example.com", address: nil, zip_code: nil,
-        town: "Supertown", country: nil, birthday: nil, roles: "Rolle TopGroup" 
-    end
-
-    context "roles are comma separated list" do
-      subject { export.hash }
-      before { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person) } 
-      its([:roles]) { should eq "Rolle Group 11, Rolle TopGroup" } 
-    end 
-
-    context "phone numbers are seperate fields" do
-      before do
-        person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123)
-        person.phone_numbers << PhoneNumber.new(label: 'mobil', number: 321)
-        person.phone_numbers << PhoneNumber.new(label: 'privat', number: 321, public: false)
-      end
-
-      subject { export.hash }
-      
-      its([:phone_number_vater]) { should eq '123' } 
-      its([:phone_number_mobil]) { should eq '321' } 
-      its([:phone_number_privat]) { should be_nil } 
-      its(:keys) { should_not include :phone_number_privat  } 
     end
   end
 
-  describe Export::CsvPeople::Full do
-    let(:export) { Export::CsvPeople::Full.new(person) } 
-    subject { Export::CsvPeople::Full } 
+  describe Export::CsvPeople::Person do
+    subject { Export::CsvPeople::Person.new(person) } 
 
-    its(:headers) { should eq  [:first_name, :last_name, :nickname, :email, :address, :zip_code, :town, :country, 
-                                :birthday, :company_name, :company, :gender, :additional_information, :roles,
-                                :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
-                                :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere,
-                                :social_account_skype, :social_account_webseite, :social_account_msn] }
+    context "standard attributes" do
+      its([:id]) { should eq person.id }
+      its([:first_name]) { should eq 'Top' } 
+    end
 
-    its(:translated_headers) { should eq full_headers } 
+    context "roles" do
+      its([:roles]) { should eq 'Rolle TopGroup' } 
 
-    context "exports additional fields" do
-      before do
-        person.update_attribute(:gender, 'm')
-        person.phone_numbers << PhoneNumber.new(label: 'privat', number: 321, public: false)
-        person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
+      context "multiple roles" do
+        let(:group) { groups(:bottom_group_one_one) }
+        before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) } 
+
+        its([:roles]) { should eq 'Rolle Group 11, Rolle TopGroup' } 
       end
+    end
 
-      subject { export.hash }
-      
-      its([:phone_number_privat]) { should eq '321' } 
-      its([:social_account_skype]) { should eq 'foobar' } 
-      its([:gender]) { should eq 'm' } 
+    context "phone numbers" do
+      before { person.phone_numbers << PhoneNumber.new(label: 'foobar', number: 321) }
+      its([:phone_number_foobar]) { should eq '321' }
+    end
+
+    context "social accounts " do
+      before { person.social_accounts << SocialAccount.new(label: 'foobar', name: 'asdf') }
+      its([:social_account_foobar]) { should eq 'asdf' } 
     end
   end
-  
+
+  describe "Export::CsvPeople::Associations" do
+    subject { Export::CsvPeople::Associations } 
+
+    context "phone_numbers" do 
+      it "creates standard key and human translations" do
+        subject.phone_numbers.key('foo').should eq :phone_number_foo
+        subject.phone_numbers.human('foo').should eq 'Telefonnummer Foo'
+      end
+    end
+
+    context "social_accounts" do 
+      it "creates standard key and human translations" do
+        subject.social_accounts.key('foo').should eq :social_account_foo
+        subject.social_accounts.human('foo').should eq 'Foo'
+      end
+    end
+  end
+
+
+  describe Export::CsvPeople::People do
+    let(:list) { [person] } 
+    let(:people_list) { Export::CsvPeople::People.new(list) }
+    subject { people_list } 
+
+    its(:attributes) { should eq [:first_name, :last_name, :nickname, :email, :address, 
+                                  :zip_code, :town, :country, :birthday] }
+
+    context "standard attributes" do
+      its([:id]) { should be_blank } 
+      its([:roles]) { should eq 'Rollen' }
+      its([:first_name]) { should eq 'Vorname' }
+
+      context "key list" do
+        subject { people_list.keys.join(' ') }
+        it { should_not =~ /phone/ }
+        it { should_not =~ /social_account/ }
+      end
+    end
+
+    context "phone_numbers" do
+      before { person.phone_numbers << PhoneNumber.new(label: 'Privat', number: 321) }
+
+      its([:phone_number_privat]) { should eq 'Telefonnummer Privat' } 
+      its([:phone_number_mobil]) { should be_nil } 
+
+      context "different labels" do
+        let(:other) { people(:bottom_member) } 
+        let(:list) { [person, other] } 
+
+        before do 
+          other.phone_numbers << PhoneNumber.new(label: 'Foobar', number: 321)
+          person.phone_numbers << PhoneNumber.new(label: 'Privat', number: 321)
+        end 
+
+        its([:phone_number_privat]) { should eq 'Telefonnummer Privat' } 
+        its([:phone_number_foobar]) { should eq 'Telefonnummer Foobar' } 
+      end
+    end
+  end
+
+  describe Export::CsvPeople::PeopleFull do
+    let(:list) { [person] } 
+    let(:people_list) { Export::CsvPeople::PeopleFull.new(list) }
+    subject { people_list } 
+
+    its([:roles]) { should eq 'Rollen' }
+    its(:attributes) { should eq [:first_name, :last_name, :nickname, :email, :address, 
+                                  :zip_code, :town, :country, :birthday, :company_name, :company] }
+
+    its([:social_account_website]) { should be_blank } 
+
+    its([:company]) { should eq 'Firma' } 
+    its([:company_name]) { should eq 'Firmenname' } 
+
+    context "social accounts" do
+      before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
+      its([:social_account_webseite]) { should eq 'Webseite' } 
+    end
+  end
+
 end

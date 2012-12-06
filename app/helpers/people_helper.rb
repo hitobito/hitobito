@@ -34,7 +34,7 @@ module PeopleHelper
   end
 
   def csv_path(opts={})
-    group_people_path({format: :csv}.merge(opts))
+    params.merge({format: :csv}.merge(opts))
   end
   
   def export_label_format_links(label_formats)

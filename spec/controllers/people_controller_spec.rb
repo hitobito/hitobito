@@ -47,7 +47,7 @@ describe PeopleController do
       end
 
       it "exports csv files" do
-        get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :csv
+        get :index, group_id: group, format: :csv
 
         @response.content_type.should == 'text/csv'
         @response.body.should =~ /^Vorname;Nachname/

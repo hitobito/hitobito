@@ -13,8 +13,8 @@ module PeopleHelper
     links << csv_links
   
     if @label_formats.present?
-      main_link = current_user.last_label_format_id ? 
-                  export_label_format_path(current_user.last_label_format_id) : 
+      main_link = current_user.last_label_format_id ?
+                  export_label_format_path(current_user.last_label_format_id) :
                   '#'
       links << {link_to('Etiketten', main_link) => export_label_format_links(@label_formats) }
     end
@@ -25,18 +25,16 @@ module PeopleHelper
   private
 
   def csv_links
+    csv_path = params.merge({format: :csv})
+
     if can?(:index_full_people, @group)
-      {link_to('CSV', '#') => [link_to('Adressliste', csv_path), 
-                               link_to('Alle Angaben', csv_path(details: true))] }
+      {link_to('CSV', '#') => [link_to('Adressliste', csv_path),
+                               link_to('Alle Angaben', csv_path.merge(details: true))] }
     else
       link_to('CSV', csv_path)
     end
   end
 
-  def csv_path(opts={})
-    params.merge({format: :csv}.merge(opts))
-  end
-  
   def export_label_format_links(label_formats)
     format_links = []
     if current_user.last_label_format_id?
@@ -45,7 +43,7 @@ module PeopleHelper
       format_links << nil
     end
     
-    label_formats.each do |id, label| 
+    label_formats.each do |id, label|
       format_links << export_label_format_link(id, label)
     end
     format_links

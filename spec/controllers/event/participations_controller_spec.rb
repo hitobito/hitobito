@@ -108,6 +108,16 @@ describe Event::ParticipationsController do
       assigns(:participations).should eq [@participant]
     end
 
+
+    it "exports csv files" do
+      get :index, group_id: group, event_id: course.id, format: :csv
+
+      @response.content_type.should == 'text/csv'
+      @response.body.should =~ /^Vorname;Nachname/
+      @response.body.should =~ %r{^#{@leader.person.first_name};#{@leader.person.last_name}}
+      @response.body.should =~ %r{^#{@participant.person.first_name};#{@participant.person.last_name}}
+    end
+
     def create(*roles)
       roles.map do |role_class|
         role = Fabricate(:event_role, type: role_class.name.to_sym)

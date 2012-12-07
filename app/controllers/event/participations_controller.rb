@@ -1,9 +1,9 @@
 class Event::ParticipationsController < CrudController
-  
+ 
   self.nesting = Group, Event
   
-  FILTER = { all: 'Alle Personen', 
-             leaders: 'Leitungsteam', 
+  FILTER = { all: 'Alle Personen',
+             leaders: 'Leitungsteam',
              participants: 'Teilnehmende' }
   
   decorates :event, :participation, :participations, :alternatives
@@ -19,11 +19,20 @@ class Event::ParticipationsController < CrudController
 
   after_create :create_participant_role
   after_create :send_confirmation_email
+
   
   def new
     assign_attributes
     entry.init_answers
     respond_with(entry)
+  end
+
+  def index
+    @participations = entries
+    respond_to do |format|
+      format.html
+      format.csv  { render_csv }
+    end
   end
     
   def authorize!(action, *args)
@@ -44,6 +53,14 @@ class Event::ParticipationsController < CrudController
   end
   
   private
+  
+  def render_csv
+    csv = params[:details] && can?(:show_details, entries.first) ?
+      Export::CsvPeople.event_export_full(entries) :
+      Export::CsvPeople.event_export(entries)
+
+    send_data csv, type: :csv
+  end
 
   def check_preconditions
     event = entry.event
@@ -78,7 +95,7 @@ class Event::ParticipationsController < CrudController
   
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
-  # else is created through event roles. 
+  # else is created through event roles.
   # (Except for course participants, who may be created by special other roles)
   def build_entry
     participation = event.participations.new
@@ -116,7 +133,7 @@ class Event::ParticipationsController < CrudController
                                     where(kind_id: event.kind_id).
                                     in_hierarchy(current_user).
                                     list
-      @priority_2s = @priority_3s = (@alternatives.to_a - [event]) 
+      @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
   

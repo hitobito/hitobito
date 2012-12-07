@@ -10,6 +10,13 @@ module Export
       Generator.new(PeopleFull.new(people)).csv
     end
 
+    def self.event_export(participations)
+      Generator.new(EventPeople.new(participations)).csv
+    end
+
+    def self.event_export_full(participations)
+      Generator.new(EventPeopleFull.new(participations)).csv
+    end
 
     # Generate using people class for headers and value mapping
     class Generator
@@ -19,8 +26,8 @@ module Export
         @csv = CSV.generate(options) do |csv|
           csv << people.values
           people.list.each do |person|
-            hash = Person.new(person)
-            csv << people.keys.map { |key| hash[key] } 
+            hash = people.create(person)
+            csv << people.keys.map { |key| hash[key] }
           end
         end
       end
@@ -30,7 +37,7 @@ module Export
       end
     end
 
-    # Attributes of people we want to include 
+    # Attributes of people we want to include
     class People < Hash
       attr_reader :people
 
@@ -45,6 +52,10 @@ module Export
 
       def list
         people
+      end
+
+      def create(person)
+        Person.new(person)
       end
 
       private
@@ -64,11 +75,11 @@ module Export
         merge!(labels(people.map(&:phone_numbers), Associations.phone_numbers))
       end
 
-      def labels(collection, mapper) 
+      def labels(collection, mapper)
         collection.flatten.map(&:label).uniq.each_with_object({}) do |label, obj|
           obj[mapper.key(label)] = mapper.human(label)
         end
-      end 
+      end
     end
 
     # adds social_accounts and company related attributes
@@ -80,6 +91,53 @@ module Export
       def add_associations
         super
         merge!(labels(people.map(&:social_accounts), Associations.social_accounts))
+      end
+    end
+
+    # handles participations
+    class EventPeople < People
+      attr_reader :participations
+      class << self
+        def key(question)
+          "question_#{question.id}".to_sym
+        end
+      end
+
+      def initialize(participations)
+        @participations = participations
+        super(participations.map(&:person))
+        add_event_specifics
+      end
+
+      def list
+        @participations
+      end
+
+      def create(participation)
+        EventPerson.new(participation)
+      end
+
+      def add_event_specifics
+      end
+    end
+
+    class EventPeopleFull < EventPeople
+      def add_event_specifics
+        questions.each { |question| merge!(self.class.key(question) => question.question) }
+        merge!(additional_information: additional_information_human) if additional_information.present?
+      end
+
+      private
+      def questions
+        participations.map(&:answers).flatten.map(&:question).uniq
+      end
+
+      def additional_information
+        participations.map(&:additional_information).compact
+      end
+
+      def additional_information_human
+        Event::Participation.human_attribute_name(:additional_information)
       end
     end
 
@@ -103,6 +161,21 @@ module Export
 
       def map_roles(roles)
         roles.map { |role| "#{role} #{role.group}"  }.join(', ')
+      end
+    end
+
+    class EventPerson < Person
+      def initialize(participation)
+        super(participation.person)
+        merge!(roles: map_roles(participation.roles))
+        merge!(additional_information: participation.additional_information)
+        participation.answers.each do |answer|
+          merge!(EventPeople.key(answer.question) => answer.answer)
+        end
+      end
+
+      def map_roles(roles)
+        roles.map { |role| role  }.join(', ')
       end
     end
 
@@ -134,7 +207,6 @@ module Export
         end
       end
     end
-
-
   end
+
 end

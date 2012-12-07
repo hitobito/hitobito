@@ -1,4 +1,6 @@
 - if can?(:new, @event.participations.new)
   = dropdown_button('Person hinzufügen', @event.possible_role_links(@group), :plus) 
 
+= participations_csv_export_links
+
 = pill_dropdown_button(role_filter_title, role_filter_links)

@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe "event/participations/_actions_index.html.haml" do 
+describe "event/participations/_actions_index.html.haml" do
 
   #subject { render; Capybara::Node::Simple.new(rendered).all('a').last }
   let(:event) { EventDecorator.decorate(Fabricate(:course)) }
@@ -9,14 +9,21 @@ describe "event/participations/_actions_index.html.haml" do
   let(:add_role) { @dom.all('.dropdown-menu').first }
   let(:filter_role) { @dom.all('.dropdown-menu').last }
 
+  let(:params) { {"action"=>"index",
+                  "controller"=>"event/participations",
+                  "group_id"=>"1",
+                  "event_id"=>"36"} }
+
   before do
     assign(:event, event)
     assign(:group, event.groups.first)
     view.stub(parent: event)
     view.stub(entry: participation)
+    view.stub(entries: [participation])
     controller.stub(current_user: top_leader)
-    render 
-    @dom = Capybara::Node::Simple.new(@rendered) 
+    view.stub(params: params)
+    render
+    @dom = Capybara::Node::Simple.new(@rendered)
   end
 
   it "has dropdowns for adding and filtering" do

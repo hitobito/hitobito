@@ -135,6 +135,8 @@ sed -i s/APP_NAME/%{name}/g $RPM_BUILD_ROOT/%{_initddir}/%{name}-workers
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig
 echo -e "#Ruby version to use\nRUBY_VERSION=%{ruby_version}" > $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/%{name}
 
+echo "%{app_version}.%{build_number}" > VERSION
+
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
 echo "# Rotate rails logs for %{name}
 # Created by %{name}.rpm

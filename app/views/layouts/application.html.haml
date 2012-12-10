@@ -51,6 +51,9 @@
             = image_tag('logo_jubla.png')
           .footer_content.span9
             %p
+              Version
+              = Wagons.app_version
+            %p
               &copy; Puzzle ITC #{Time.zone.now.year}
 
   = javascript_include_tag 'application'

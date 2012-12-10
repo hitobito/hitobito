@@ -15,6 +15,9 @@ module Jubla::EventsController
 
   end
 
+
+  private
+  
   def default_coach
     if entry.class.attr_used?(:coach_id)
       entry.coach_id = parent.coach_id
@@ -35,12 +38,10 @@ module Jubla::EventsController
     end
   end
 
-  private
-
-
   def load_conditions
-    return unless entry.kind_of?(Event::Course) 
-    @conditions = group.course_conditions
+    if entry.kind_of?(Event::Course) 
+      @conditions = Event::Course::Condition.where(:group_id => entry.group_ids).order(:label)
+    end
   end
   
   def remove_restricted

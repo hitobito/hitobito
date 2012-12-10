@@ -113,8 +113,8 @@ de:
           canceled: Abgesagt
           completed: Qualifikationen erfasst
           closed: Abgeschlossen
-        condition: Kursbestimmung
-        condition_id: Kursbestimmung
+        condition: Kursbestimmungen
+        condition_id: Kursbestimmungen
           
       event/camp:
         kind_id: Lagerart
@@ -131,6 +131,7 @@ de:
         child_f: Kinder w
 
       event/course/condition:
+        group_id: Gruppe
         label: Bezeichnung
         content: Inhalt
         

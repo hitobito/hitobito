@@ -90,14 +90,6 @@ describe Ability::Various do
         end
       end
 
-      context "on Flock" do
-        let(:group) { groups(:muri) } 
-
-        it "cannot index and manage" do
-          should_not be_able_to(:index_event_course_conditions, group)
-          should_not be_able_to(:manage_event_course_conditions, course_condition)
-        end
-      end
     end
 
     context "StateAgency Leader" do
@@ -121,14 +113,6 @@ describe Ability::Various do
         end
       end
 
-      context "on Flock" do
-        let(:group) { groups(:muri) } 
-
-        it "cannot index and manage" do
-          should_not be_able_to(:index_event_course_conditions, group)
-          should_not be_able_to(:manage_event_course_conditions, course_condition)
-        end
-      end
     end
 
   end

@@ -1,7 +1,2 @@
 = render_attrs entry, *entry.used_attributes(:advisor_id, :coach_id)
 
-- entry.used?(:condition_id) do
-  = section 'Kursbestimmung' do 
-    - if entry.condition
-      %p= entry.condition.content.html_safe 
-

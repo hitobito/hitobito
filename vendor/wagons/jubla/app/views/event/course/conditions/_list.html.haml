@@ -1,4 +1,6 @@
-- parent_sheet(GroupSheet.new(self, group, :group_path))
-- title 'Kursbestimmungen verwalten'
+- @sheets = GroupSheet.new(self, @group)
+
+= render 'groups/tabs'
+
 = crud_table :label, :content
 

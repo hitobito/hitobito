@@ -2,12 +2,10 @@ class Event::Course::ConditionsController < CrudController
   self.nesting = Group
 
   helper_method :group
-  prepend_before_filter :parent, :group
-
-
-  def group
-    @group ||= parent
-  end
+  
+  decorates :group
+  
+  prepend_before_filter :parent
 
   def create
     super(location: group_event_course_conditions_path(group))
@@ -19,17 +17,22 @@ class Event::Course::ConditionsController < CrudController
  
 
   private
+  
+  def list_entries
+    super.includes(:group).order(:label)
+  end
+  
+  def group
+    @group ||= parent
+  end
+  
   def assign_attributes
     super
     entry.group = group
   end
 
   def parent_scope
-     parent.send(:course_conditions)
-  end
-
-  def group
-    parent
+     group.course_conditions
   end
 
   def authorize_class

@@ -84,6 +84,7 @@ module Jubla::Ability
     can :index_event_course_conditions, Group do |group|
       can_manage_course_event_conditions?(group)
     end
+    
     can :manage, Event::Course::Condition do |course_condition|
       can_manage_course_event_conditions?(course_condition.group)
     end
@@ -91,7 +92,6 @@ module Jubla::Ability
 
   def can_manage_course_event_conditions?(group)
     layers_full.present? &&
-      (group.layer? && !group.kind_of?(Group::Flock)) &&
       contains_any?(layers_full, collect_ids(group.layer_groups))
   end
   

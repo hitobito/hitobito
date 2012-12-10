@@ -50,7 +50,7 @@ de:
     show:
       title: "%{model}"
     new:
-      title: "%{model} hinzufügen"
+      title: "%{model} erstellen"
     edit:
       title: "%{model} bearbeiten"
     create:

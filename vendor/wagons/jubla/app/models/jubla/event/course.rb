@@ -16,13 +16,6 @@ module Jubla::Event::Course
     belongs_to :application_contact, class_name: 'Group'
     belongs_to :condition, class_name: 'Condition'
   
-
-    ### ASSOCIATIONS
-
-    belongs_to :application_contact, class_name: 'Group'
-    belongs_to :condition, class_name: 'Condition'
-    
-  
     ### VALIDATIONS
     
     validates :state, inclusion: possible_states

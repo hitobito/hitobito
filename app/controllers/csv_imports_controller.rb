@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CsvImportsController < ApplicationController
   attr_accessor :group
   attr_reader :importer, :parser, :role_type
@@ -8,34 +10,35 @@ class CsvImportsController < ApplicationController
   decorates :group
 
   def define_mapping
-    if model_params && model_params[:file]
-      data = model_params[:file] &&  model_params[:file].read
-      return unless parse_or_redirect(data)
-      flash.now[:notice] = parser.flash_notice
+    if model_params && valid_file?(model_params[:file])
+      if parse_or_redirect(model_params[:file].read)
+        flash.now[:notice] = parser.flash_notice
+      end
     else
+      flash[:alert] = 'Bitte wählen Sie eine gültige CSV Datei aus'
       redirect_to new_group_csv_imports_path(group)
     end
   end
 
-
   def create
     @role_type = model_params.delete(:role)
 
-    return redirect_to new_group_csv_imports_path(group) unless @role_type.present?
-    
-    return unless parse_or_redirect(params[:data])
-
-    map_headers_and_import(model_params)
-
-    set_flash(:notice, importer.success_count, "wurden erfolgreich importiert.")
-    set_flash(:notice, importer.doublette_count, "wurden erfolgreich aktualisiert.")
-    set_flash(:alert, importer.failure_count, "konnten nicht importiert werden.")
-    flash[:alert] += importer.errors if importer.failure_count > 0
-      
-    redirect_to group_people_path(redirect_params)
+    if @role_type.blank?
+      redirect_to new_group_csv_imports_path(group)
+    elsif parse_or_redirect(params[:data])
+      map_headers_and_import(model_params)
+  
+      set_flash(:notice, importer.success_count, "wurden erfolgreich importiert.")
+      set_flash(:notice, importer.doublette_count, "wurden erfolgreich aktualisiert.")
+      set_flash(:alert, importer.failure_count, "konnten nicht importiert werden.")
+      flash[:alert] += importer.errors if importer.failure_count > 0
+        
+      redirect_to group_people_path(redirect_params)
+    end
   end
 
   private
+  
   def custom_authorization
     if action_name == "create" && model_params[:role]
       role = model_params[:role].constantize.new
@@ -52,6 +55,10 @@ class CsvImportsController < ApplicationController
 
   def load_group
     @group = Group.find(params[:group_id])
+  end
+  
+  def valid_file?(io)
+    io.present? && io.content_type =~ /text\//
   end
 
   def parse_or_redirect(data)

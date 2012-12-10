@@ -83,7 +83,7 @@ class PeopleController < CrudController
   def render_csv(people)
     csv = params[:details] && can?(:index_full_people, @group) ?
       Export::CsvPeople.export_full(people) :
-      Export::CsvPeople.export(people)
+      Export::CsvPeople.export_address(people)
     send_data csv, type: :csv
   end
   

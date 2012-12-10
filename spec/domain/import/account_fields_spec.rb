@@ -1,7 +1,7 @@
 require 'spec_helper'
-describe Import::SettingsFields do
+describe Import::AccountFields do
 
-  subject { Import::SettingsFields.new(model) } 
+  subject { Import::AccountFields.new(model) } 
   context "PhoneNumber" do
     let(:model) { PhoneNumber } 
     its(:keys) { should eq ["phone_number_privat", "phone_number_mobil", "phone_number_arbeit", 

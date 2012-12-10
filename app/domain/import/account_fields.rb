@@ -1,5 +1,5 @@
 module Import
-  class SettingsFields < SimpleDelegator
+  class AccountFields < SimpleDelegator
     attr_reader :prefix, :human
 
     def initialize(model)

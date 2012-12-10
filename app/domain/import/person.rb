@@ -1,8 +1,9 @@
 module Import
   class Person
     extend Forwardable
-    attr_reader :person, :hash, :phone_numbers, :social_accounts
     def_delegators :person, :persisted?, :save, :id, :errors
+    
+    attr_reader :person, :hash, :phone_numbers, :social_accounts
 
     BLACKLIST = [:contact_data_visible,
                  :created_at,
@@ -23,8 +24,8 @@ module Import
 
     def self.fields
       all = person_attributes + 
-        Import::SettingsFields.new(PhoneNumber).fields + 
-        Import::SettingsFields.new(SocialAccount).fields
+        Import::AccountFields.new(PhoneNumber).fields + 
+        Import::AccountFields.new(SocialAccount).fields
 
       all.sort_by { |entry| entry[:value] } 
     end
@@ -39,9 +40,9 @@ module Import
     def initialize(hash)
       prepare(hash)
 
-      create_person
-      phone_numbers.each { |number| person.phone_numbers.build(number) } 
-      social_accounts.each { |account| person.social_accounts.build(account) } 
+      find_or_create_person
+      assign_phone_numbers
+      assign_social_accounts
     end
 
     def add_role(group, role_type)
@@ -64,12 +65,32 @@ module Import
       @social_accounts = extract_settings_fields(SocialAccount, :name)
     end
 
-    def create_person
+    def find_or_create_person
       @person = DoubletteFinder.new(hash).find_and_update || ::Person.new(hash)
+    end
+    
+    def assign_phone_numbers
+      assign_accounts(phone_numbers, person.phone_numbers) do |existing, imported|
+        existing.number == imported[:number]
+      end
+    end
+
+    def assign_social_accounts
+      assign_accounts(social_accounts, person.social_accounts) do |existing, imported|
+        existing.name == imported[:name] && existing.label == imported[:label]
+      end
+    end
+    
+    def assign_accounts(accounts, association, &block)
+      accounts.each do |imported|
+        unless association.any? {|a| yield a, imported }
+          association.build(imported)
+        end
+      end
     end
 
     def extract_settings_fields(model, value_key)
-      keys = Import::SettingsFields.new(model).keys
+      keys = Import::AccountFields.new(model).keys
       numbers = keys.select { |key| hash.has_key?(key) } 
       numbers.map do |key| 
         label = key.split('_').last.capitalize

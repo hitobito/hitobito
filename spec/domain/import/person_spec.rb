@@ -38,6 +38,41 @@ describe Import::Person do
     its('social_accounts.first.label') { should eq 'Skype' } 
     its('social_accounts.first.name') { should eq 'foobar' } 
   end
+  
+  context "keep existing phone numbers" do
+    before do
+      p = Fabricate(:person, email: 'foo@example.com')
+      p.phone_numbers.create!(number: '123', label: 'Privat')
+      p.phone_numbers.create!(number: '456', label: 'Mobil')
+      p.social_accounts.create!(name: 'foo', label: 'Skype')
+      p.social_accounts.create!(name: 'foo', label: 'MSN')
+    end
+    
+    let(:data) do
+       {first_name: 'foo', 
+        email: 'foo@example.com',
+        social_account_skype: 'foo', 
+        social_account_msn: 'bar', 
+        phone_number_mobil: '123' } 
+    end 
+    
+    subject { Import::Person.new(data).person } 
+
+    its('phone_numbers.first.label') { should eq 'Privat' } 
+    its('phone_numbers.first.number') { should eq '123' } 
+    its('phone_numbers.second.label') { should eq 'Mobil' } 
+    its('phone_numbers.second.number') { should eq '456' } 
+
+    its('social_accounts.first.label') { should eq 'Skype' } 
+    its('social_accounts.first.name') { should eq 'foo' } 
+    
+    its('social_accounts.second.label') { should eq 'MSN' } 
+    its('social_accounts.second.name') { should eq 'foo' } 
+    
+    its('social_accounts.third.label') { should eq 'Msn' } 
+    its('social_accounts.third.name') { should eq 'bar' } 
+  end
+
 
   context "can assign mass assigned attributes" do
     let(:data) { "all attributes - blacklist" }

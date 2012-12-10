@@ -14,9 +14,6 @@
 
 %events
   = grouped_table(@participations_by_event_type, 3) do |participation|
-    %td
-      %strong
-        = participation.event.labeled_link
-    %td.muted
-      = participation.list_roles
+    %td= participation.event.labeled_link
+    %td= participation.list_roles
     %td= participation.event.dates_full

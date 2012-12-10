@@ -55,16 +55,17 @@ class PeopleController < CrudController
   def history
     @roles = entry.all_roles
 
-    @participations_by_event_type = entry.event_participations.active.
-                      includes(:roles, event: [:dates, :groups]).
-                      uniq.
-                      order('event_dates.start_at DESC').
-                      group_by do |p| 
-                        p.event.class.model_name.human(count: 2)
-                      end
+    @participations_by_event_type = entry.event_participations.
+                                            active.
+                                            includes(:roles, event: [:dates, :groups]).
+                                            uniq.
+                                            order('event_dates.start_at DESC').
+                                            group_by do |p| 
+                                              p.event.class.model_name.human(count: 2)
+                                            end
 
     @participations_by_event_type.each do |kind, entries| 
-              entries.collect! {|e| Event::ParticipationDecorator.new(e) }
+      entries.collect! {|e| Event::ParticipationDecorator.new(e) }
     end
 
   end

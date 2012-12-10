@@ -122,7 +122,11 @@ table th {
   border-bottom: 1px solid $grayLight;
 
   p { margin: 0; padding: 0; }
+  
+  .profil {display: none; }
 }
+
+
 
 body.application .profil-big {
   display: none;

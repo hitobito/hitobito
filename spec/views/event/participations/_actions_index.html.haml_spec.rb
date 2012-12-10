@@ -21,6 +21,7 @@ describe "event/participations/_actions_index.html.haml" do
     view.stub(entry: participation)
     view.stub(entries: [participation])
     controller.stub(current_user: top_leader)
+    view.stub(current_user: top_leader)
     view.stub(params: params)
     render
     @dom = Capybara::Node::Simple.new(@rendered)

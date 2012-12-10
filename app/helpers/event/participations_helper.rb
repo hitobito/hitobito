@@ -32,14 +32,4 @@ module Event::ParticipationsHelper
     links
   end
 
-  def participations_csv_export_links
-    csv_path = params.merge(format: :csv)
-    csv_links = [link_to('Adressliste', csv_path),
-                 link_to('Alle Angaben', csv_path.merge(details: true))]
-    if can?(:show_details, entries.first)
-      dropdown_button('CSV Export', csv_links, :download)
-    else
-      link_to('CSV Export', csv_links.first)
-    end
-  end
 end

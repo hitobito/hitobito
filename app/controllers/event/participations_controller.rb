@@ -1,5 +1,7 @@
 class Event::ParticipationsController < CrudController
  
+  include RenderPeoplePdf
+ 
   self.nesting = Group, Event
   
   FILTER = { all: 'Alle Personen',
@@ -31,6 +33,7 @@ class Event::ParticipationsController < CrudController
     @participations = entries
     respond_to do |format|
       format.html
+      format.pdf  { render_pdf(@participations.collect(&:person)) }
       format.csv  { render_csv }
     end
   end

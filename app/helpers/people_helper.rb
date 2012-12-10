@@ -8,15 +8,15 @@ module PeopleHelper
     t("activerecord.attributes.person.genders.#{gender.presence || 'default'}")
   end
 
-  def people_export_links
+  def people_export_links(details = false)
     links = []
-    links << csv_links
+    links << csv_links(details)
   
-    if @label_formats.present?
+    if LabelFormat.all_as_hash.present?
       main_link = current_user.last_label_format_id ?
                   export_label_format_path(current_user.last_label_format_id) :
                   '#'
-      links << {link_to('Etiketten', main_link) => export_label_format_links(@label_formats) }
+      links << {link_to('Etiketten', main_link) => export_label_format_links }
     end
       
     links
@@ -24,10 +24,10 @@ module PeopleHelper
   
   private
 
-  def csv_links
+  def csv_links(details = false)
     csv_path = params.merge({format: :csv})
 
-    if can?(:index_full_people, @group)
+    if details
       {link_to('CSV', '#') => [link_to('Adressliste', csv_path),
                                link_to('Alle Angaben', csv_path.merge(details: true))] }
     else
@@ -35,7 +35,7 @@ module PeopleHelper
     end
   end
 
-  def export_label_format_links(label_formats)
+  def export_label_format_links
     format_links = []
     if current_user.last_label_format_id?
       last_format = current_user.last_label_format
@@ -43,7 +43,7 @@ module PeopleHelper
       format_links << nil
     end
     
-    label_formats.each do |id, label|
+    LabelFormat.all_as_hash.each do |id, label|
       format_links << export_label_format_link(id, label)
     end
     format_links

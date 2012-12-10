@@ -107,7 +107,13 @@ describe Event::ParticipationsController do
       get :index, group_id: group.id, event_id: course.id, filter: :participants
       assigns(:participations).should eq [@participant]
     end
-
+  
+    it "generates pdf labels" do
+      get :index, group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id, format: :pdf
+      
+      @response.content_type.should == 'application/pdf'
+      people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+    end
 
     it "exports csv files" do
       get :index, group_id: group, event_id: course.id, format: :csv

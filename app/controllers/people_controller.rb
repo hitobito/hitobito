@@ -1,5 +1,7 @@
 class PeopleController < CrudController
 
+  include RenderPeoplePdf
+
   self.nesting = Group
   self.nesting_optional = true
   
@@ -13,8 +15,7 @@ class PeopleController < CrudController
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, 
                                        :send_password_instructions]
   
-  before_render_index :load_label_formats
-  before_render_show :load_asides, :load_label_formats
+  before_render_show :load_asides
   
   def index
     @people = filter_entries
@@ -86,15 +87,6 @@ class PeopleController < CrudController
     send_data csv, type: :csv
   end
   
-  def render_pdf(people)
-    label_format = LabelFormat.find(params[:label_format_id])
-    unless current_user.last_label_format_id == label_format.id
-      current_user.update_column(:last_label_format_id, label_format.id)
-    end
-    pdf = Export::PdfLabels.new(label_format).generate(people)
-    send_data pdf, type: :pdf, disposition: 'inline'
-  end
-  
   def filter_entries
     if params[:role_types]
       list_entries(params[:kind]).where(roles: {type: params[:role_types]})
@@ -158,10 +150,6 @@ class PeopleController < CrudController
                                                     preload_all_dates.
                                                     order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
-  end
-  
-  def load_label_formats
-    @label_formats = LabelFormat.all_as_hash
   end
   
 end

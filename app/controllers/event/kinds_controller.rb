@@ -1,4 +1,7 @@
 class Event::KindsController < CrudController
+
+
+  before_render_form :load_assocations
   
   def create
     super(location: event_kinds_path)
@@ -21,6 +24,16 @@ class Event::KindsController < CrudController
   
   def model_scope
     super.with_deleted
+  end
+
+  def load_assocations
+    @preconditions = qualification_kinds | entry.preconditions
+    @prolongations = qualification_kinds | entry.prolongations
+    @qualification_kinds = qualification_kinds | entry.qualification_kinds
+  end
+
+  def qualification_kinds
+    @qualification_kinds ||= QualificationKind.without_deleted
   end
   
   class << self

@@ -14,6 +14,8 @@
 class QualificationKind < ActiveRecord::Base
   
   acts_as_paranoid
+
+  include Paranoia::CustomScopes
   
   attr_accessible :label, :validity, :description
   

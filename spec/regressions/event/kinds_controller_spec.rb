@@ -19,6 +19,10 @@ describe Event::KindsController, type: :controller do
 
   before { sign_in(people(:top_leader)) } 
 
-  include_examples 'crud controller', skip: [%w(show)]
+  include_examples 'crud controller', skip: [%w(show), %w(destroy)]
+
+  it "soft deletes" do
+    expect { post :destroy, id: test_entry.id }.to change { Event::Kind.without_deleted.count }.by(-1) 
+  end
 
 end

@@ -62,6 +62,9 @@ class Group < ActiveRecord::Base
   
   acts_as_nested_set dependent: :destroy
   acts_as_paranoid
+
+  include Paranoia::CustomScopes
+
   
   belongs_to :contact, class_name: 'Person'
   

@@ -20,18 +20,25 @@ describe GroupsController do
   
   describe "show" do
     let(:group) { groups(:top_layer) }
-    
-    before do
-      sign_in(person)
-      get :show, id: group.id
-    end
-    
+
+    before { sign_in(person) }
+    subject { assigns(:sub_groups) }
+
     context "sub_groups" do
-      subject { assigns(:sub_groups) }
+      before { get :show, id: group.id }
       
       its(:keys) { should == %w(Gruppen Untergruppen)}
       its(:values) { should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
                                 [groups(:top_group)]]}
+    end
+
+    context "deleted sub groups are not shown" do
+      before do 
+        groups(:bottom_layer_one).destroy
+        get :show, id: group.id 
+      end
+
+      its(:values) { should == [[groups(:bottom_layer_two)], [groups(:top_group)]] }
     end
   end
 
@@ -68,7 +75,7 @@ describe GroupsController do
     end
 
     it "leader can destroy group" do
-      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change(Group,:count).by(-4)
+      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change { Group.without_deleted.count}.by(-4)
       should redirect_to groups(:top_layer)
     end
   end

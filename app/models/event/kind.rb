@@ -32,6 +32,8 @@ class Event::Kind < ActiveRecord::Base
                                           class_name: 'QualificationKind', 
                                           foreign_key: :event_kind_id
 
+  include Paranoia::CustomScopes
+
   ### INSTANCE METHODS
   def to_s
     "#{short_name} (#{label})"

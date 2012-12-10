@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe EventsController do
 
+  let(:group) { groups(:top_group) }
+  let(:group2) { Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer)) }
+  let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: 'AAA', parent: groups(:top_layer)) }
+
   context "event_course" do
-    let(:group) { groups(:top_group) }
-    let(:group2) { Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer)) }
-    let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: 'AAA', parent: groups(:top_layer)) }
     
     before { group2 }
     
@@ -17,6 +18,13 @@ describe EventsController do
         get :new, group_id: group.id, event: { type: 'Event' }
         
         assigns(:groups).should == [group3, group2]
+      end
+
+      it "does not load deleted kinds" do
+        sign_in(people(:top_leader))
+
+        get :new, group_id: group.id, event: { type: 'Event::Course' }
+        assigns(:kinds).should_not include event_kinds(:old)
       end
     end
     
@@ -57,12 +65,48 @@ describe EventsController do
                       group_id: group.id
 
         should redirect_to(root_path)
+      end
+    end
 
+  end
+  
+  context "destroyed associations" do
+    let(:course) { Fabricate(:course, groups: [group, group2, group3]) }
+
+    before do
+      course
+      sign_in(people(:top_leader))
+    end
+
+    context "kind" do
+      before { course.kind.destroy } 
+
+      it "new does not include delted kind" do
+        get :new, group_id: group.id, event: { type: 'Event::Course' }
+        assigns(:kinds).should_not include(course.reload.kind)
+      end
+
+      it "edit does include deleted kind" do
+        get :edit, group_id: group.id, id: course.id
+        assigns(:kinds).should include(course.reload.kind)
       end
 
     end
+
+    context "groups" do
+      before { group3.destroy } 
+
+      it "new does not include delete" do
+        get :new, group_id: group.id, event: { type: 'Event::Course' }
+        assigns(:groups).should_not include(group3)
+      end
+
+      it "edit does include delete" do
+        get :edit, group_id: group.id, id: course.id
+        assigns(:groups).should include(group3)
+      end
+    end
   end
-  
 
 
 end

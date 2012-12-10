@@ -362,6 +362,34 @@ describe Event do
 
   end
 
+  context "destroyed associations" do
+    let(:event) { events(:top_course) }
+
+    it "keeps destroyed kind" do
+      event.kind.destroy
+      event.reload 
+
+      event.kind.should be_present
+    end
+
+    context "groups" do
+      let(:group_one) { groups(:bottom_layer_one) }
+      let(:group_two) { groups(:bottom_layer_two) }
+      let(:event) { Fabricate(:event, groups: [group_one, group_two]) }
+
+      it "keeps destroyed groups" do
+        event.groups.should have(2).items
+
+        group_one.destroy
+        group_one.should be_deleted
+        event.reload
+
+        event.groups.should have(2).items
+      end
+    end
+  end
+
+
   def set_start_finish(event,start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)

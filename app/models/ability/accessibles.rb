@@ -18,7 +18,7 @@ class Ability::Accessibles
       
       # user has any role in this group
       # user has layer read of the same layer as the group
-      if belonging_to_this_group? || layer_read_in_same_layer?
+      if belonging_to_this_group? || layer_read_in_same_layer? || user.root?
         can :index, Person, 
             group.people.only_public_data do |p| true end
           
@@ -69,6 +69,10 @@ class Ability::Accessibles
     
     # people in same group
     or_conditions(conditions, 'groups.id IN (?)', user.groups.collect(&:id))
+    
+    if conditions.first.blank? && !user.root?
+      or_conditions(conditions, '1=0')
+    end
     
     Person.only_public_data.
            joins(roles: :group).

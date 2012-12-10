@@ -23,7 +23,11 @@ email_sender: jubla+noreply@puzzle.ch
 # while the actual recipients go in the bcc field.
 email_mass_recipient: jubla@puzzle.ch
 
+# The person with this email has root access to everything
+# This person should only be used by the operators of the application, not the customers.
+root_email: jubla@puzzle.ch
 
+# Presets for PDF labels
 pdf:
   labels:
     font_name: Helvetica
@@ -31,6 +35,7 @@ pdf:
       - ch
       - schweiz
       
+# Presets for CSV export
 csv:
   separator: ;
 

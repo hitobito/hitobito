@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   alias_method :decorate, :__decorator_for__
   
   protect_from_forgery
-  helper_method :current_user
+  helper_method :current_user, :person_home_path
   
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => "Sie sind nicht berechtigt, diese Seite anzuzeigen"
@@ -26,4 +26,11 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def person_home_path(person)
+    if group = person.groups.select('groups.id').first
+      group_person_path(group, person)
+    else
+      group_path(Group.root)
+    end
+  end
 end

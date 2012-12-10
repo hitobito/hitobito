@@ -1,7 +1,7 @@
 %ul
-    - if person_signed_in?
-        %li= link_to current_person, group_person_path(current_person.groups.first, current_person)
-        %li= link_to "Ausloggen", destroy_person_session_path, method: "delete"
-    - else
-        %li= link_to "Anmelden", new_person_session_path
-        %li= link_to "Passwort vergessen?", new_person_password_path
+  - if person_signed_in?
+    %li= link_to current_user, person_home_path(current_user)
+    %li= link_to "Ausloggen", destroy_person_session_path, method: "delete"
+  - else
+    %li= link_to "Anmelden", new_person_session_path
+    %li= link_to "Passwort vergessen?", new_person_password_path

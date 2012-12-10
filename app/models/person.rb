@@ -129,12 +129,19 @@ class Person < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  # All time roles of this person, including deleted.
   def all_roles
     records = Role.with_deleted.where(person_id: id).order('deleted_at').includes(:group)
   end
   
+  # Is this person allowed to login?
   def login?
-    permission?(:login)
+    permission?(:login) || root?
+  end
+  
+  # Is this person root?
+  def root?
+    email == Settings.root_email
   end
 
   def male?

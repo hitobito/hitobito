@@ -9,7 +9,9 @@ class Ability
   def initialize(user)
     super(user)
     
-    if user.login?
+    if user.root?
+      can :manage, :all
+    elsif user.login?
       define_abilities
     else
       # generall, a user without login permission cannot do anything
@@ -25,5 +27,5 @@ class Ability
     define_events_abilities
     define_various_abilities
   end
-  
+
 end

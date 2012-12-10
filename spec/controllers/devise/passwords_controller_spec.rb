@@ -32,7 +32,7 @@ describe Devise::PasswordsController do
       it "#create shows invalid password" do
         post :create, person: { email: person.email }
         last_email.should_not be_present
-        flash[:alert].should eq  "Du kannst kein Passwort nicht zurücksetzen lassen."
+        flash[:alert].should eq  "Du bist nicht berechtigt, Dich hier anzumelden."
       end
     end
 

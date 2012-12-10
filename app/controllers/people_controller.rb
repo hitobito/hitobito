@@ -42,7 +42,7 @@ class PeopleController < CrudController
   def show
     if parent.nil?
       flash.keep
-      redirect_to group_person_path(entry.groups.select('groups.id').first, entry)
+      redirect_to person_home_path(entry)
     else
       respond_to do |format|
         format.html { entry }

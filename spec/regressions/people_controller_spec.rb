@@ -177,7 +177,6 @@ describe PeopleController, type: :controller do
     end
 
     it "lists person's events" do
-
       course1 = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
       event1 = Fabricate(:event, groups: [groups(:top_layer)])
       event2 = Fabricate(:event, groups: [groups(:top_layer)])
@@ -192,8 +191,7 @@ describe PeopleController, type: :controller do
       events.should have_selector('h2', text: 'Kurse')
       events.should have_selector('h2', text: 'Anlässe')
 
-      events.all('tr td strong a').size.should eq 3
-      
+      events.all('tr td a').size.should eq 3
     end
 
   end

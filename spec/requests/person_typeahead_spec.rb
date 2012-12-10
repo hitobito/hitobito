@@ -12,14 +12,14 @@ describe "Person Autocomplete" do
       visit root_path
       page.should have_content("TopGroup")
       click_link 'TopGroup'
-      should have_content ' Person hinzufügen'
+      should have_content ' Rolle hinzufügen'
       find('.dropdown-menu').should_not be_visible
-      click_link 'Person hinzufügen'
+      click_link 'Rolle hinzufügen'
       find('.dropdown-menu').should be_visible
       within(:css, '.dropdown-menu') do
         click_link 'Rolle'
       end
-      should have_content 'Rolle hinzufügen'
+      should have_content 'Rolle erstellen'
     end
   end
 
@@ -29,7 +29,7 @@ describe "Person Autocomplete" do
         sign_in 
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
       
-        page.should have_content("hinzufügen")
+        page.should have_content("Rolle erstellen")
       
         fill_in "Person", with: "gibberish"
         find('.typeahead.dropdown-menu').should_not have_content('o')

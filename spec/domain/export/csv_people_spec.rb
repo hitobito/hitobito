@@ -4,7 +4,7 @@ describe Export::CsvPeople do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:simple_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Email",
+  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Email",
                           "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
   let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Email", 
                         "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen", "Geschlecht", 
@@ -19,7 +19,7 @@ describe Export::CsvPeople do
 
 
     context "export" do
-      its(:headers) { should eq simple_headers }
+      its(:headers) { should =~ simple_headers }
 
       context "first row" do
 
@@ -68,7 +68,7 @@ describe Export::CsvPeople do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_address(list) }
 
-      its(:headers) { should eq simple_headers }
+      its(:headers) { should =~ simple_headers }
 
       context "first row" do
         subject { csv[0] }
@@ -91,7 +91,7 @@ describe Export::CsvPeople do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_full(list) }
 
-      its(:headers) { should eq simple_headers }
+      its(:headers) { should =~ simple_headers }
 
       context "first row" do
         subject { csv[0] }

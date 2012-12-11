@@ -7,8 +7,8 @@ describe Export::CsvPeople do
   let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Email",
                           "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
   let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Email", 
-                        "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen", "Geschlecht", 
-                        "Zusätzliche Angaben"] }
+                        "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", 
+                        "Zusätzliche Angaben", "Rollen"] }
 
   describe Export::CsvPeople do
 
@@ -19,7 +19,7 @@ describe Export::CsvPeople do
 
 
     context "export" do
-      its(:headers) { should =~ simple_headers }
+      its(:headers) { should == simple_headers }
 
       context "first row" do
 
@@ -45,7 +45,7 @@ describe Export::CsvPeople do
     end
 
     context "export_full" do
-      its(:headers) { should =~ full_headers }
+      its(:headers) { should == full_headers }
       let(:data) { Export::CsvPeople.export_full(list) }
 
       context "first row" do
@@ -68,7 +68,7 @@ describe Export::CsvPeople do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_address(list) }
 
-      its(:headers) { should =~ simple_headers }
+      its(:headers) { should == simple_headers }
 
       context "first row" do
         subject { csv[0] }
@@ -91,7 +91,7 @@ describe Export::CsvPeople do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_full(list) }
 
-      its(:headers) { should =~ simple_headers }
+      its(:headers) { should == simple_headers }
 
       context "first row" do
         subject { csv[0] }

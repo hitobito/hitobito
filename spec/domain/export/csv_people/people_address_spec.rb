@@ -7,7 +7,7 @@ describe Export::CsvPeople::PeopleAddress do
   let(:people_list) { Export::CsvPeople::PeopleAddress.new(list) }
   subject { people_list }
 
-  its(:attributes) { should =~ [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
+  its(:attributes) { should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
                                 :zip_code, :town, :country, :birthday] }
 
   context "standard attributes" do

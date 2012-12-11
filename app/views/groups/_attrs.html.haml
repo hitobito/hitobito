@@ -17,3 +17,4 @@
     %h2 Weitere Angaben
     = render_attrs(entry, :type_name)
     = render_extensions :attrs
+    = render_attrs(entry, :created_info, :updated_info) if can?(:show_details, @group)

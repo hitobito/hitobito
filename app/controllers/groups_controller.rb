@@ -1,5 +1,7 @@
 class GroupsController < CrudController
   
+  include Userstamp
+
   decorates :group, :groups, :contact
   
   before_render_show :load_sub_groups
@@ -41,6 +43,14 @@ class GroupsController < CrudController
     end
     # move this entry to the end
     @sub_groups['Untergruppen'] = @sub_groups.delete('Untergruppen')
+  end
+
+  def set_stamper
+    Person.stamper = current_user
+  end
+
+  def reset_stamper
+    Person.reset_stamper
   end
 
 end

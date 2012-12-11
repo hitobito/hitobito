@@ -38,6 +38,7 @@ de:
   time:
     formats:
       time: "%H:%M"
+      date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
 
   # list controller

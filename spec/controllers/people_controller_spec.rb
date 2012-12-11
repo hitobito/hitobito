@@ -185,4 +185,8 @@ describe PeopleController do
     end
     
   end
+
+  context "userstamp" do
+  end
+
 end

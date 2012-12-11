@@ -8,9 +8,10 @@ class EventDecorator < ApplicationDecorator
     safe_join([name, label_detail], h.tag(:br))
   end
 
-  def labeled_link(url = nil)
+  def labeled_link(url = nil, can = nil)
     url ||= h.group_event_path(group_ids.first, model)
-    safe_join([h.link_to(name, url), h.muted(model.label_detail)], h.tag(:br))
+    can = can?(:show, model) if can.nil?
+    safe_join([h.link_to_if(can, name, url), h.muted(model.label_detail)], h.tag(:br))
   end
 
   def dates_info    

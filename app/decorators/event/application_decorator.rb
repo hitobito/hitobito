@@ -11,7 +11,8 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def labeled_link(group = nil)
     group ||= event.groups.first
-    event.labeled_link(h.group_event_participation_path(group, event, participation)) if can?(:show, participation)
+    event.labeled_link(h.group_event_participation_path(group, event, participation),
+                       can?(:show, participation))
   end
   
   def contact

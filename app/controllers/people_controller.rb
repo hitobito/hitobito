@@ -151,5 +151,5 @@ class PeopleController < CrudController
                                                     order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
-  
+
 end

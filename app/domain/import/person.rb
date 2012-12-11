@@ -7,6 +7,8 @@ module Import
 
     BLACKLIST = [:contact_data_visible,
                  :created_at,
+                 :creator_id,
+                 :updater_id,
                  :current_sign_in_at,
                  :current_sign_in_ip,
                  :encrypted_password,

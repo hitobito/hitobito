@@ -16,6 +16,8 @@
     
     = render_extensions :attrs
 
+    = render_attrs(entry, :created_info, :updated_info) if can?(:show_details, entry)
+
   -if can?(:show_full, entry)
     %aside.span6.offset1
       = render 'roles'

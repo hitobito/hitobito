@@ -50,6 +50,22 @@ describe PeopleController, type: :controller do
       dom.should have_selector('a[data-method="delete"] i.icon-trash')
     end
 
+    it "leader can see created and updated info" do
+      sign_in(top_leader)
+      get :show, group_id: top_group.id, id: other.id
+      dom.should have_selector('dt', text: 'Erstellt')
+      dom.should have_selector('dt', text: 'Geändert')
+    end
+
+    it "member without permission to see details cannot see created or updated info" do
+      person1 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
+      person2 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
+      sign_in(person1)
+      get :show, id: person2
+      dom.should_not have_selector('dt', text: 'Erstellt')
+      dom.should_not have_selector('dt', text: 'Geändert')
+    end
+
   end
   describe "role section" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }

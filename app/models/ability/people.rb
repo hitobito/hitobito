@@ -1,5 +1,4 @@
 module Ability::People
- 
   
   def define_people_abilities
     can :query, Person

@@ -1,5 +1,5 @@
 class GroupsController < CrudController
-  
+
   decorates :group, :groups, :contact
   
   before_render_show :load_sub_groups

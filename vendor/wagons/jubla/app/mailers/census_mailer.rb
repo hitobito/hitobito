@@ -25,7 +25,7 @@ class CensusMailer < ActionMailer::Base
     content = CustomContent.get(CONTENT_INVITATION)
     values = { 'due-date' => due_date(census) }
 
-    mail to: Settings.email_mass_recipient, 
+    mail to: Settings.email.mass_recipient, 
          bcc: recipients, 
          subject: content.subject do |format|
       format.html { render text: content.body_with_values(values) }

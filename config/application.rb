@@ -83,7 +83,7 @@ module Jubla
     
     
     config.to_prepare do
-      ActionMailer::Base.default from: Settings.email_sender
+      ActionMailer::Base.default from: Settings.email.sender
     end
     
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|

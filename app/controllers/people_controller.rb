@@ -1,7 +1,6 @@
 class PeopleController < CrudController
 
   include RenderPeoplePdf
-  include Userstamp
 
   self.nesting = Group
   self.nesting_optional = true
@@ -153,12 +152,4 @@ class PeopleController < CrudController
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
 
-  def set_stamper
-    Person.stamper = current_user
-  end
-
-  def reset_stamper
-    Person.reset_stamper
-  end
-  
 end

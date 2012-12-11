@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   
   include DecoratesBeforeRendering
+  include Userstamp
   alias_method :decorate, :__decorator_for__
   
   protect_from_forgery
@@ -33,4 +34,13 @@ class ApplicationController < ActionController::Base
       group_path(Group.root)
     end
   end
+
+  def set_stamper
+    Person.stamper = current_user
+  end
+
+  def reset_stamper
+    Person.reset_stamper
+  end
+  
 end

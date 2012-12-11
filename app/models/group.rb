@@ -37,6 +37,9 @@ class Group < ActiveRecord::Base
   include Group::Types
   include Contactable
   
+  acts_as_paranoid
+  extend Paranoia::RegularScope
+  
   ### ATTRIBUTES
   
   class_attribute :event_types
@@ -61,9 +64,6 @@ class Group < ActiveRecord::Base
   ### ASSOCIATIONS
   
   acts_as_nested_set dependent: :destroy
-  acts_as_paranoid
-
-  include Paranoia::CustomScopes
 
   
   belongs_to :contact, class_name: 'Person'

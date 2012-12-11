@@ -19,8 +19,4 @@ class QualificationKindsController < CrudController
     entry.deleted_at = nil
   end
   
-  def model_scope
-    super.with_deleted
-  end
-  
 end

@@ -21,19 +21,17 @@ class Event::KindsController < CrudController
     super
     entry.deleted_at = nil
   end
-  
-  def model_scope
-    super.with_deleted
-  end
 
   def load_assocations
-    @preconditions = qualification_kinds | entry.preconditions
-    @prolongations = qualification_kinds | entry.prolongations
-    @qualification_kinds = qualification_kinds | entry.qualification_kinds
+    # append currently assigned values if they should not appear in the 
+    # possible qualification kinds. May happen if they are marked as deleted.
+    @preconditions = possible_qualification_kinds | entry.preconditions
+    @prolongations = possible_qualification_kinds | entry.prolongations
+    @qualification_kinds = possible_qualification_kinds | entry.qualification_kinds
   end
 
-  def qualification_kinds
-    @qualification_kinds ||= QualificationKind.without_deleted
+  def possible_qualification_kinds
+    @possible_qualification_kinds ||= QualificationKind.without_deleted
   end
   
   class << self

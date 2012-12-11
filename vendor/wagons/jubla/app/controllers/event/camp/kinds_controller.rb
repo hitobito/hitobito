@@ -19,10 +19,6 @@ class Event::Camp::KindsController < CrudController
     entry.deleted_at = nil
   end
   
-  def model_scope
-    super.with_deleted
-  end
-  
   class << self
     def model_class
       Event::Camp::Kind

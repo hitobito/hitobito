@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   
   include DecoratesBeforeRendering
   include Userstamp
+  
   alias_method :decorate, :__decorator_for__
   
   protect_from_forgery

@@ -18,10 +18,11 @@ describe ApplicationDecorator do
 
     it "should return date and time with updater/creator" do
       dec = PersonDecorator.new(@person)
+      dec.stub(:can?).and_return(true)
       dec.created_info.should =~ /#{I18n.l(@person.created_at.to_date)}/
+      dec.created_info.should =~ /#{@creator.to_s}/
       dec.updated_info.should =~ /#{I18n.l(@person.updated_at.to_date)}/
       dec.updated_info.should =~ /#{@updater.to_s}/
-      dec.created_info.should =~ /#{@creator.to_s}/
     end
   end
 

@@ -17,18 +17,21 @@ class ApplicationDecorator < Draper::Base
   end
 
   def updated_info
-    html = ""
-    html << l(updated_at, format: :date_time)
-    html << " "
-    html << h.link_to(updater.to_s, h.person_path(id: updater.id)) if updater.present?
-    html.html_safe
+    modification_info(updated_at, updater)
   end
 
   def created_info
-    html = ""
-    html << l(created_at, format: :date_time)
-    html << " "
-    html << h.link_to(creator.to_s, h.person_path(id: creator.id)) if creator.present?
+    modification_info(created_at, creator)
+  end
+  
+  private
+  
+  def modification_info(at, person)
+    html = l(at, format: :date_time)
+    if person.present?
+      html << " / "
+      html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(id: person.id))
+    end
     html.html_safe
   end
 

@@ -19,3 +19,8 @@ sl:
 gl:
   label: Group Lead
   validity: 1
+
+old: 
+  label: Old Qualification
+  validity: 1
+  deleted_at: 2010-10-3

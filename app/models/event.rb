@@ -48,7 +48,9 @@ class Event < ActiveRecord::Base
                      Event::Role::Participant]
   # The role of the participant
   self.participant_type = Event::Role::Participant
+  # Are Event::Applications possible for this event type
   self.supports_applications = false
+  # List of possible values for the state attribute.
   self.possible_states = []
   
   attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,

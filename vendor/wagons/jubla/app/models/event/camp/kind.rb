@@ -15,6 +15,7 @@ class Event::Camp
     self.table_name = 'event_camp_kinds'
   
     acts_as_paranoid
+    extend Paranoia::RegularScope
     
     attr_accessible :label
     

@@ -1,10 +1,6 @@
-class CustomContentsController < CrudController
+class CustomContentsController < SimpleCrudController
   
   decorates :custom_content
-  
-  def update
-    super(location: custom_contents_path)
-  end
   
   
   private

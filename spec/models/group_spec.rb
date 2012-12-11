@@ -171,7 +171,7 @@ describe Group do
     context "children" do
       it "destroys self and all children" do
         deleted_ids = bottom_layer.self_and_descendants.collect(&:id)
-        expect { bottom_layer.destroy }.to change { Group.count }.by(-4)
+        expect { bottom_layer.destroy }.to change { Group.without_deleted.count }.by(-4)
         Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
       end
       

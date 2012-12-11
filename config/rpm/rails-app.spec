@@ -69,6 +69,9 @@ Requires: ImageMagick
 %if %{use_sphinx}
 Requires: sphinx
 %endif
+%if %{use_memcached}
+Requires: memcached
+%endif
 Requires:	opt-ruby-%{ruby_version}-rubygem-passenger
 Requires:	logrotate
 Requires:	opt-ruby-%{ruby_version}

@@ -1,6 +1,3 @@
 = render 'shared/admin_tabs'
 
-= entry_form(buttons_bottom: false, 
-             cancel_url: event_camp_kinds_path) do |f|
-             
-   = f.labeled_input_fields :label
+= entry_form(:label, buttons_bottom: false)

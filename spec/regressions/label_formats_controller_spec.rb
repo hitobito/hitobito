@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-describe Event::LabelFormatsController, type: :controller do
+describe LabelFormatsController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to label_formats_path } 
+      it { should redirect_to label_formats_path(returning: true) } 
     end
   end
 

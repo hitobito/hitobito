@@ -14,9 +14,12 @@
 class Event::Kind < ActiveRecord::Base
   
   acts_as_paranoid
-  
+  extend Paranoia::RegularScope
   
   attr_accessible :label, :short_name, :minimum_age, :qualification_kind_ids, :precondition_ids, :prolongation_ids
+
+  
+  ### ASSOCIATIONS
   
   has_many :events
   
@@ -32,7 +35,9 @@ class Event::Kind < ActiveRecord::Base
                                           class_name: 'QualificationKind', 
                                           foreign_key: :event_kind_id
 
+
   ### INSTANCE METHODS
+  
   def to_s
     "#{short_name} (#{label})"
   end

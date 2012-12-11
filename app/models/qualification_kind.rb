@@ -14,9 +14,12 @@
 class QualificationKind < ActiveRecord::Base
   
   acts_as_paranoid
+  extend Paranoia::RegularScope
   
   attr_accessible :label, :validity, :description
   
+  
+  ### ASSOCIATIONS
   
   has_many :qualifications
   
@@ -31,6 +34,7 @@ class QualificationKind < ActiveRecord::Base
                                           class_name: 'Event::Kind', 
                                           association_foreign_key: :event_kind_id
   
+  ### INSTANCE METHODS
   
   def to_s
     label

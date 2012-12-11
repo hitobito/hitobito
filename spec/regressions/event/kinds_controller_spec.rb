@@ -6,7 +6,7 @@ describe Event::KindsController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to event_kinds_path } 
+      it { should redirect_to event_kinds_path(returning: true) } 
     end
   end
 
@@ -19,6 +19,10 @@ describe Event::KindsController, type: :controller do
 
   before { sign_in(people(:top_leader)) } 
 
-  include_examples 'crud controller', skip: [%w(show)]
+  include_examples 'crud controller', skip: [%w(show), %w(destroy)]
+
+  it "soft deletes" do
+    expect { post :destroy, id: test_entry.id }.to change { Event::Kind.without_deleted.count }.by(-1) 
+  end
 
 end

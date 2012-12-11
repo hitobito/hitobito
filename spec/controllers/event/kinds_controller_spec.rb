@@ -16,5 +16,32 @@ describe Event::KindsController do
     get :index
     assigns(:kinds).last.should == destroyed
   end
+
+  context "destroyed associations" do
+    let(:old) { qualification_kinds(:old) }
+    let(:kind) { event_kinds(:glk) } 
+
+    context "GET new" do
+      before { get :new } 
+
+      it "does not include deleted for when creating new" do
+        [:qualification_kinds, :preconditions, :prolongations].each do |list|
+          assigns(list).should_not include old
+        end
+      end
+    end
+
+    context "GET edit" do
+      before { kind.qualification_kinds << old }
+
+      it "includes deleted qualification_kind where it has been selected" do
+        get :edit, id: kind.id
+        assigns(:qualification_kinds).should include old
+        assigns(:preconditions).should_not include old
+        assigns(:prolongations).should_not include old
+      end
+    end
+  end
+
   
 end

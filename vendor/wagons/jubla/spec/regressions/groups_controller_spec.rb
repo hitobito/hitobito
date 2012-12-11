@@ -147,7 +147,7 @@ describe GroupsController, type: :controller  do
 
         it "#{can_destroy_group ? "can" : "cannot"} destroy group" do
           if can_destroy_group
-            expect { post :destroy, id: send(group).id }.to change(Group,:count).by(change_count(group))
+            expect { post :destroy, id: send(group).id }.to change { Group.without_deleted.count }.by(change_count(group))
           else
             expect { post :create, id: send(group).id }.not_to change(Group,:count)
           end

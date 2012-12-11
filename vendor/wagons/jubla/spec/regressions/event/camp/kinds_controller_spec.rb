@@ -6,7 +6,7 @@ describe Event::Camp::KindsController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to event_camp_kinds_path } 
+      it { should redirect_to event_camp_kinds_path(returning: true) } 
     end
   end
 

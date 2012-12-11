@@ -85,7 +85,7 @@ class CrudController < ListController
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
     flash[:alert] ||= error_messages.presence || flash_message(:failure) if !destroyed && request.format == :html
-    location = (!destroyed && request.env["HTTP_REFERER"].presence) || (options[:location] || index_url)
+    location = (!destroyed && request.env["HTTP_REFERER"].presence) || (options[:location] || index_path)
     respond_with(entry, options.reverse_merge(:success => destroyed, :location => location), &block)
   end
 
@@ -119,8 +119,8 @@ class CrudController < ListController
   end
 
   # Url of the index page to return to
-  def index_url
-    polymorphic_url(path_args(model_class), :returning => true)
+  def index_path
+    polymorphic_path(path_args(model_class), :returning => true)
   end
 
   # Access params for model

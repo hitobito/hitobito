@@ -6,7 +6,7 @@ describe CustomContentsController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to custom_contents_path } 
+      it { should redirect_to custom_contents_path(returning: true) } 
     end
   end
 

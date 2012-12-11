@@ -9,11 +9,14 @@ module CrudHelper
   def entry_form(*attrs, &block)
     options = attrs.extract_options!
     options[:buttons_bottom] = true unless options.has_key?(:buttons_bottom)
+    options[:cancel_url] ||= controller.is_a?(SimpleCrudController) ? 
+        polymorphic_path(path_args(model_class), :returning => true) : 
+        polymorphic_path(path_args(entry))
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     crud_form(path_args(entry), *attrs, options, &block)
   end
 
-  # Renders a generic form for the current entry with :default_attrs or the
+  # Renders a generic form for the given entry with :default_attrs or the
   # given attribute array, using the StandardFormBuilder. An options hash
   # may be given as the last argument.
   # If a block is given, a custom form may be rendered and attrs is ignored.
@@ -184,6 +187,6 @@ module CrudHelper
     cancel_url_new = options.delete(:cancel_url_new)
     cancel_url_edit = options.delete(:cancel_url_edit)
     url = record.new_record? ? cancel_url_new : cancel_url_edit
-    url || cancel_url || polymorphic_path(object, :returning => true)
+    url || cancel_url || polymorphic_path(object)
   end
 end

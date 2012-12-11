@@ -1,4 +1,4 @@
-class Event::Course::ConditionsController < CrudController
+class Event::Course::ConditionsController < SimpleCrudController
   self.nesting = Group
 
   helper_method :group
@@ -7,14 +7,6 @@ class Event::Course::ConditionsController < CrudController
   
   prepend_before_filter :parent
 
-  def create
-    super(location: group_event_course_conditions_path(group))
-  end
-  
-  def update
-    super(location: group_event_course_conditions_path(group))
-  end
- 
 
   private
   
@@ -24,6 +16,10 @@ class Event::Course::ConditionsController < CrudController
   
   def group
     @group ||= parent
+  end
+  
+  def index_path
+    group_event_course_conditions_path(group, returning: true)
   end
   
   def assign_attributes

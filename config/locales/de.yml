@@ -2,6 +2,10 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 de:
+  attributes:
+    created_info: Erstellt
+    updated_info: Geändert
+
   activerecord:
     errors: 
       messages: 
@@ -95,6 +99,8 @@ de:
         social_accounts: Social Media
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
+        created_at: Erstellt
+        updated_at: Geändert
         
       group:
         name: Name

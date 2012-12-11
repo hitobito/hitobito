@@ -10,9 +10,9 @@ describe GroupsController, type: :controller do
   let(:test_entry) { group } 
   let(:create_entry_attrs) { {name: 'foo', type: 'Group::TopGroup', parent_id: group.id } }
   let(:update_entry_attrs) { {name: 'bar'} }
+  let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   before { sign_in(user) }
-  
    
   include_examples 'crud controller', skip: [%w(index), %w(new), %w(destroy)]
 
@@ -49,4 +49,21 @@ describe GroupsController, type: :controller do
       templates.each { |template| should render_template(template) } 
     end
   end
+
+  context "created/updated info" do
+    it "user can see created or updated info" do
+      get :show, id: groups(:bottom_layer_one).id
+        dom.should have_selector('dt', text: 'Erstellt')
+        dom.should have_selector('dt', text: 'Geändert')
+    end
+
+    it "user cannot see created or updated info" do
+      sign_in(people(:bottom_member))
+      get :show, id: groups(:top_group).id
+        dom.should_not have_selector('dt', text: 'Erstellt')
+        dom.should_not have_selector('dt', text: 'Geändert')
+    end
+
+  end
+
 end

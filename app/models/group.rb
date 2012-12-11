@@ -27,6 +27,9 @@
 #  unsexed             :boolean          default(FALSE), not null
 #  clairongarde        :boolean          default(FALSE), not null
 #  founding_year       :integer
+#  creator_id             :integer
+#  updater_id             :integer
+#  deleter_id             :integer
 #
 
 class Group < ActiveRecord::Base
@@ -50,7 +53,6 @@ class Group < ActiveRecord::Base
 
   attr_readonly :type
 
-
   ### CALLBACKS
   
   after_create :set_layer_group_id
@@ -59,7 +61,8 @@ class Group < ActiveRecord::Base
   
   # Root group may not be destroyed
   protect_if :root?
-  
+
+  stampable stamper_class_name: :person
   
   ### ASSOCIATIONS
   

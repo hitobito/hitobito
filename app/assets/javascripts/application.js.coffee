@@ -120,7 +120,7 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 $ ->
   # wire up quick search
-  setupQuicksearch();
+  setupQuicksearch()
   
   # wire up date picker
   $(":input.date").live("click", -> showDatePicker($(this)))
@@ -141,3 +141,13 @@ $ ->
   # show alert if ajax requests fail
   $(document).on('ajax:error', (event, xhr, status, error) ->
     alert('Sorry, something went wrong\n(' + error + ')'))
+
+
+  # controll visibilty of group contact fields in relation to contact
+  $('#group_contact_id').on('change', do ->
+    open = !$('#group_contact_id').val()
+    ->
+      state = !$(this).val()
+      $('fieldset.info').slideToggle() if open != state
+      open = state
+  )

@@ -66,6 +66,7 @@ group :test do
   gem 'headless'
   gem 'launchy'
   gem 'poltergeist'
+  gem 'rspec-notify-osd'
 end
 
 group :console do

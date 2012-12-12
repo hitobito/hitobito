@@ -10,19 +10,19 @@ Jubla::Application.routes.draw do
       end
       resources :qualifications, only: [:new, :create, :destroy]
     end
-    
+
     resources :roles, except: [:index, :show]
-    
+
     resources :people_filters, only: [:new, :create, :destroy]
-    
+
     resources :events do
       scope module: 'event' do
         resources :participations do
           get 'print', on: :member
         end
-        
+
         resources :roles
-        
+
         resources :application_market, only: :index do
           member do
             put    'waiting_list' => 'application_market#put_on_waiting_list'
@@ -31,14 +31,14 @@ Jubla::Application.routes.draw do
             delete 'participant'  => 'application_market#remove_participant'
           end
         end
-        
+
         resources :applications, only: [] do
           member do
             put    :approve
             delete :reject
           end
         end
-        
+
         resources :qualifications, only: [:index, :update, :destroy]
       end
     end
@@ -46,30 +46,35 @@ Jubla::Application.routes.draw do
     resource :csv_imports, only: [:new, :create] do
       post :define_mapping, on: :member
     end
+
+    member do
+      get 'move', to: 'group/move#select', as: :select_move
+      post 'move', to: 'group/move#perform', as: :perform_move
+    end
   end
 
- 
+
 
   get 'list_courses', to: 'event/lists#courses', as: :list_courses
   get 'list_events', to: 'event/lists#events', as: :list_events
-  
+
   get 'full', to: 'full_text#index'
   get 'query', to: 'full_text#query'
-  
+
   resources :people, only: :show do
     collection do
       get :query
     end
   end
-    
+
   resources :event_kinds, module: 'event', controller: 'kinds'
-  
+
   resources :qualification_kinds
 
   resources :label_formats
-  
+
   resources :custom_contents, only: [:index, :edit, :update]
-  
+
   devise_for :people, skip: [:registrations], path: "users"
   as :person do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'

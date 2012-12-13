@@ -7,7 +7,7 @@ class ApplicationDecorator < Draper::Base
   def klass
     model.class
   end
-  
+
   def used_attributes(*attributes)
     attributes.select { |name| model.class.attr_used?(name) }.map(&:to_s)
   end
@@ -23,14 +23,14 @@ class ApplicationDecorator < Draper::Base
   def created_info
     modification_info(created_at, creator)
   end
-  
+
   private
-  
+
   def modification_info(at, person)
     html = l(at, format: :date_time)
     if person.present?
       html << " / "
-      html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(id: person.id))
+      html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person))
     end
     html.html_safe
   end

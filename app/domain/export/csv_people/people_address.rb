@@ -41,7 +41,7 @@ module Export::CsvPeople
 
     def labels(collection, mapper)
       collection.flatten.map(&:label).uniq.each_with_object({}) do |label, obj|
-        obj[mapper.key(label)] = mapper.human(label) if label.present?
+        obj[mapper.key(label)] = mapper.human(label) if label.present? # label should always be present
       end
     end
   end

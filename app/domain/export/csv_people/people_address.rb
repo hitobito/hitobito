@@ -21,13 +21,13 @@ module Export::CsvPeople
     end
 
     private
-    
+
     def model_class
       ::Person
     end
-    
+
     def attributes
-      [:first_name, :last_name, :nickname, :company_name, :company, :email, 
+      [:first_name, :last_name, :nickname, :company_name, :company, :email,
        :address, :zip_code, :town, :country, :birthday]
     end
 
@@ -41,7 +41,7 @@ module Export::CsvPeople
 
     def labels(collection, mapper)
       collection.flatten.map(&:label).uniq.each_with_object({}) do |label, obj|
-        obj[mapper.key(label)] = mapper.human(label)
+        obj[mapper.key(label)] = mapper.human(label) if label.present?
       end
     end
   end

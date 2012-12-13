@@ -6,6 +6,13 @@ class GroupDecorator < ApplicationDecorator
 
   include ContactableDecorator
 
+  def prepend_complete_address(html)
+    if contact
+      html << "c/o #{contact}"
+      html << h.tag(:br)
+    end
+  end
+
   def possible_children_links
     model.class.possible_children.map do |type|
       link = h.new_group_path(group: { parent_id: self.id, type: type.sti_name})
@@ -24,7 +31,7 @@ class GroupDecorator < ApplicationDecorator
     model.class.role_types.map do |type|
       if !type.restricted &&
         (type.visible_from_above? || can?(:index_local_people, model))  # users from above cannot create external roles
-        { sti_name: type.sti_name, human: type.model_name.human } 
+        { sti_name: type.sti_name, human: type.model_name.human }
       end
     end.compact
   end
@@ -32,7 +39,7 @@ class GroupDecorator < ApplicationDecorator
   def as_quicksearch
     {id: id, label: h.safe_join([parent.to_s.presence, to_s].compact, ' > '), type: :group}
   end
-  
+
   ### EVENT
   def possible_events
     model.class.event_types
@@ -62,7 +69,7 @@ class GroupDecorator < ApplicationDecorator
       possible_events.count == 1 ? new_event_button : new_event_dropdown
     end
   end
-  
+
   def bottom?
     klass.possible_children.none?(&:layer)
   end

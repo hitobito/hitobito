@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Export::CsvPeople::PeopleAddress do
-  
+
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:people_list) { Export::CsvPeople::PeopleAddress.new(list) }
@@ -40,5 +40,12 @@ describe Export::CsvPeople::PeopleAddress do
       its([:phone_number_privat]) { should eq 'Telefonnummer Privat' }
       its([:phone_number_foobar]) { should eq 'Telefonnummer Foobar' }
     end
+
+    context "blank label is not exported" do
+      before { person.phone_numbers << PhoneNumber.new(label: "", number: 321) }
+      its(:keys) { should_not include :phone_number_ }
+    end
   end
+
+
 end

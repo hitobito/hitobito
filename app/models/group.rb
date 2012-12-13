@@ -33,59 +33,60 @@
 #
 
 class Group < ActiveRecord::Base
-  
+
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect {|a| "groups.#{a}"}
-  
-  
+
+
   include Group::Types
   include Contactable
-  
+
   acts_as_paranoid
   extend Paranoia::RegularScope
-  
+
   ### ATTRIBUTES
-  
+
   class_attribute :event_types
   # All possible Event types that may be created for this group
   self.event_types = [Event]
-  
+
   attr_accessible :name, :short_name, :email, :contact_id
 
   attr_readonly :type
 
   ### CALLBACKS
-  
+
   after_create :set_layer_group_id
   after_create :create_default_children
   after_destroy :destroy_orphaned_events
-  
+  before_save :reset_contact_info
+
   # Root group may not be destroyed
   protect_if :root?
 
   stampable stamper_class_name: :person
-  
+
   ### ASSOCIATIONS
-  
+
   acts_as_nested_set dependent: :destroy
 
-  
+
   belongs_to :contact, class_name: 'Person'
-  
+
   has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
-  
+
   has_many :people_filters, dependent: :destroy
-  
+
   has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
-  
-  
+
+
   ### VALIDATIONS
-  
+
   validate :assert_type_is_allowed_for_parent, on: :create
-  
-  
+
+
   ### INDEX
-  
+
   define_partial_index do
     indexes name, short_name, sortable: true
     indexes email, address, zip_code, town, country
@@ -94,15 +95,15 @@ class Group < ActiveRecord::Base
     indexes parent.short_name, as: :parent_short_name
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
-    
+
     where "groups.deleted_at IS NULL"
   end
-  
-  
+
+
   ### CLASS METHODS
-  
+
   class << self
-    
+
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       [:default, :superior].any? do |role|
@@ -116,7 +117,7 @@ class Group < ActiveRecord::Base
     end
 
     # order groups by type. If a parent group is given, order the types
-    # as they appear in possible_children, otherwise order them 
+    # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
       types = parent_group ? parent_group.possible_children : Group.all_types
@@ -135,32 +136,32 @@ class Group < ActiveRecord::Base
       sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
       scoped.where(type: sti_names).order(:parent_id, :name)
     end
-    
+
   end
-  
-  
+
+
   ### INSTANCE METHODS
-  
-  
+
+
   # The hierarchy from top to bottom of and including this group.
   def hierarchy
     @hierarchy ||= self_and_ancestors.select(MINIMAL_SELECT)
   end
-  
+
   # The layer of this group.
   def layer_group
     layer ? self : layer_groups.last
   end
-  
+
   # The layer hierarchy from top to bottom of this group.
   def layer_groups
     hierarchy.select { |g| g.class.layer }
   end
-  
+
   def groups_in_same_layer
     Group.where(layer_group_id: layer_group_id)
   end
-  
+
   # The layer hierarchy without the layer of this group.
   def upper_layer_groups
     if new_record?
@@ -177,30 +178,43 @@ class Group < ActiveRecord::Base
       layer_groups - [layer_group]
     end
   end
-  
+
   def to_s
     name
   end
-  
+
   def new_event
     event = events.new
     event.groups << self
     event
   end
-  
+
+  ## readers and query methods for contact info
+  [:address, :town, :zip_code, :country].each do |attribute|
+    define_method(attribute) do
+      (contact && contact.public_send(attribute)) || super()
+    end
+
+    query_method = :"#{attribute}?"
+
+    define_method(query_method) do
+      (contact && contact.public_send(query_method)) || super()
+    end
+  end
+
   private
-  
+
   def assert_type_is_allowed_for_parent
     if type && parent && !parent.possible_children.collect(&:sti_name).include?(type)
-      errors.add(:type, :type_not_allowed) 
-    end 
+      errors.add(:type, :type_not_allowed)
+    end
   end
 
   def set_layer_group_id
     layer_group_id = self.class.layer ? id : parent.layer_group_id
     update_column(:layer_group_id, layer_group_id)
   end
-  
+
   def create_default_children
     default_children.each do |group_type|
       child = group_type.new(name: group_type.model_name.human)
@@ -208,16 +222,23 @@ class Group < ActiveRecord::Base
       child.save!
     end
   end
-  
+
   def destroy_orphaned_events
     events.includes(:groups).each do |e|
       destroy_orphaned_event(e)
     end
   end
-  
+
   def destroy_orphaned_event(event)
     if event.group_ids.blank? || event.group_ids == [id]
       event.destroy
+    end
+  end
+
+  def reset_contact_info
+    if contact
+      clear_contacts = { address: nil, town: nil, zip_code: nil, country: nil }
+      assign_attributes(clear_contacts)
     end
   end
 

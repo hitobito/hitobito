@@ -5,7 +5,7 @@ require 'cmess/guess_encoding'
 module Import
   class CsvParser
     extend Forwardable
-    def_delegators :csv, :size, :headers, :first, :to_csv, :[], :each
+    def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
     POSSIBLE_SEPARATORS = [",", "\t", ':', ';']
 
@@ -26,13 +26,17 @@ module Import
 
     def map_data(header_mapping)
       header_mapping = header_mapping.with_indifferent_access
-      header_mapping.reject! {|key, value| value.blank? } 
+      header_mapping.reject! {|key, value| value.blank? }
       csv.map do |row|
-        headers.each_with_object({}) do |name, object|
+        csv.headers.each_with_object({}) do |name, object|
           key = header_mapping[name]
           object[key] = row[name] if key.present?
         end
       end
+    end
+
+    def headers
+      csv.headers.reject { |header| header.blank? }
     end
 
     def flash_notice
@@ -52,7 +56,7 @@ module Import
       charset = Encoding::ISO8859_1 if charset == "MACINTOSH"
       input.force_encoding(charset).encode("UTF-8")
     end
- 
+
     def find_separator(input)
       start = input[0..500]
       POSSIBLE_SEPARATORS.inject do |most_seen,char|
@@ -61,12 +65,12 @@ module Import
     end
 
     def strip_spaces
-      headers.each {|header| header && header.strip! }
-      each do |row| 
+      csv.headers.each {|header| header && header.strip! }
+      each do |row|
         row.fields.each do |field|
           field && field.strip!
         end
       end
     end
   end
-end 
+end

@@ -9,10 +9,6 @@
   %article.span7.offset1
     %h2 Kontaktangaben
     = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
-
-    - if entry.contact_id?
-      %h4 Kontaktperson
-      = render 'contactable/show', contactable: entry.contact, only_public: true
     
     %h2 Weitere Angaben
     = render_attrs(entry, :type_name)

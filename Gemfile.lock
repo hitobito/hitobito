@@ -353,6 +353,8 @@ GEM
     rspec-expectations (2.11.3)
       diff-lcs (~> 1.1.3)
     rspec-mocks (2.11.3)
+    rspec-notify-osd (0.2.0)
+      rspec (~> 2.9)
     rspec-rails (2.11.4)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -533,6 +535,7 @@ DEPENDENCIES
   rails_config
   rb-inotify
   rdoc-tags
+  rspec-notify-osd
   rspec-rails
   sass-rails (~> 3.2.3)
   schema_validations

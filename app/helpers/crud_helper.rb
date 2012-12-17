@@ -94,7 +94,9 @@ module CrudHelper
   # A block may be given to define the link path for the row entry.
   def action_col_destroy(table, &block)
     action_col(table) do |e|
-      link_action_destroy(action_path(e, &block)) if can?(:destroy, e)
+      if can?(:destroy, e) && !e.destroyed? # paranoid entries may be destroyed but still be in the database
+        link_action_destroy(action_path(e, &block))
+      end 
     end
   end
 

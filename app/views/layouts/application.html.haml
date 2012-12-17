@@ -23,15 +23,18 @@
 
   %body
 
-    %header
+    %header#page-header
       .container-fluid
+        // Logo
         = link_to 'Jubla', root_path, :class => 'brand'
-        .options= render 'layouts/options'
+        // Navigation
+        %nav#page-navigation
+          - if current_user
+            = render 'layouts/nav'
+        // Options
+        .options
+          = render 'layouts/options'
         
-    %nav
-      - if current_user
-        .container-fluid= render 'layouts/nav'
-
     #page
       .container-fluid
         = render_sheets do
@@ -44,7 +47,7 @@
             = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
           = content_for?(:content) ? yield(:content) : yield
 
-    %footer
+    %footer#page-footer
       .container-fluid
         .row
           .span3

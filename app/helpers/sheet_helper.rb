@@ -72,6 +72,7 @@ class Sheet
   def render_parent(&block)
     render_breadcrumbs +
     render_title +
+    render_tabs +
     render_content(&block)
   end
   
@@ -79,14 +80,21 @@ class Sheet
     breadcrumbs.present?
   end
 
+  def render_tabs
+
+  end
+
   def render_breadcrumbs
     return "".html_safe unless breadcrumbs?
     
     content_tag(:div, class: 'breadcrumb') do
       content_tag(:ul) do
-        safe_join breadcrumbs.collect do |crumb|
-          content_tag(:li, crumb + divider)
+        crumbs = breadcrumbs.reverse.collect do |crumb|
+          content_tag(:li, crumb)
         end
+        content_tag(:li, 'gehoert zu ') +
+        StandardHelper::EMPTY_STRING + 
+        safe_join(crumbs, divider)
       end
     end
   end
@@ -104,7 +112,7 @@ class Sheet
   end
   
   def divider
-    content_tag(:span, '/', class: 'divider')
+    content_tag(:span, '>', class: 'divider')
   end
   
   def css_class

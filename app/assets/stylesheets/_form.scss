@@ -1,0 +1,139 @@
+/* Forms & Buttons */
+// -------------------------
+.btn-toolbar {
+  margin-top: 0;
+  margin-bottom: $vSpace;
+
+}
+.btn { 
+  color: $green;
+  &:hover {
+    color: darken($green, 10%); 
+    .icon,
+    [class^="icon-"], 
+    [class*=" icon-"] { 
+      background-image: image-url("glyphicons-halflings-green.png"); 
+    }
+  } 
+  .icon,
+  [class^="icon-"], 
+  [class*=" icon-"] { 
+    background-image: image-url("glyphicons-halflings-green-hover.png");
+  }
+
+  .caret {
+    border-top-color: $green;
+  }
+  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
+    color: $white;
+  }
+}
+
+// from bootstrap 2.1.1 << to remove after bootstrap-sass update
+.controls-row [class*="span"] + [class*="span"] {
+  @include responsive(mediaTablet) {
+    margin-left: 20px;
+  }
+}
+.controls-row {
+  @include clearfix;
+  *zoom: 1;
+  label.checkbox, label.radio {
+    padding-top: 6px;
+  }
+}
+.controls-row [class*="span"] {
+  float: left;
+}
+
+.form-horizontal .control-group {
+  margin-bottom: 0;
+}
+
+fieldset {
+  margin-bottom: 18px;
+}
+
+td {
+  select,
+  input[type="text"],
+  input[type="number"]  {
+  margin-bottom: 0 !important;
+  }
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  display: inline-block;
+  height: 20px;
+  padding: 4px 6px;
+  margin-bottom: 9px !important;
+  font-size: 14px;
+  line-height: 20px;
+  color: $grayDark;
+}
+
+select.time {
+  width: 55px;
+  height: 30px;
+}
+
+select[class*="span"][multiple] {
+  height: 120px;
+}
+
+label.checkbox,
+label.radio {
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: $gray;
+  margin-right: 10px;
+}
+
+textarea {
+  height: auto;
+}
+
+.fields-separation hr {
+  margin: 7px 0 15px;
+  border-top-color: $grayLight;
+}
+
+.fields .controls-row {
+  border-bottom: 1px solid $grayLight;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.fields .help-inline { 
+  float: right;
+}
+
+.remove_nested_fields {
+  color: $red;
+  margin: 0; 
+  padding: 0;
+  i { 
+    margin: 5px;
+  }
+  &:hover {
+    color: darken($red, 10%);
+  }
+}

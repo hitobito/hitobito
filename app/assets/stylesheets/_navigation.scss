@@ -1,0 +1,140 @@
+/* Nav */
+// -------------------------
+
+/* Navigation */
+#page-navigation { 
+  margin-top: 13px;
+  float: left;
+
+  @include responsive(phone, $mediaTablet) {
+    clear: both;
+    width: 100%;
+  }
+
+  .nav {
+    @include horizontal-list(15px);
+    font-family: $headingFontFamily;
+    li {
+      @include responsive(phone, $mediaTablet) {
+        float: none;
+        display:block;
+        padding:0; margin:0;
+      }
+      &.active a { background-color: white; }
+      a { 
+        @include single-text-shadow(white, 0, 1px, 0);
+        @include border-radius(4px);
+        font-size: 1.077em;
+        text-transform: uppercase;
+        color: $grayDark;
+        padding: 2px 5px;
+
+        &:hover { 
+          @include single-text-shadow($blueDark, 0, -1px, 0);
+          background-color: $blue; 
+          color: white;
+        }        
+      }
+    }
+  }  
+}
+
+.nav-sub {
+  @include clearfix;
+  //font-family: $headingFontFamily;
+  border-bottom: 1px solid $borderColor;
+  clear: both;
+  font-size: 0.938em;
+  & > li {
+    float: left;
+     a {
+      @include single-transition(border-color, 300ms);
+      padding: 8px 0;
+      margin-top: 2px;
+      margin-right: 30px;
+      line-height: 14px;
+      border-bottom: 2px solid $white;
+      &:hover { 
+        background: none; 
+        border-color: $grayLight; 
+      }
+    }
+  }
+  & > .active > a, & > .active > a:hover {
+    border-color: $blue;
+  }
+}
+
+.level { 
+  display: block;
+  font-family: $headingFontFamily;
+  font-size: 1.5em !important;
+  font-weight: bold;
+  line-height: 1.25em;
+  padding: 16px 20px 0 20px;
+}
+
+.level + .nav-sub {
+  padding: 0 20px 0 20px;
+  margin-bottom: 0;
+  border-bottom: none;
+  a { 
+    color: $gray;
+    border: none; 
+  }
+  .active a {
+    color: $grayDark;
+  }
+}
+
+// Breadcrumb
+.breadcrumb {
+  float: right;
+  margin: 15px 0 0;
+  padding: 5px 15px;
+  list-style: none;
+  background: none;
+  border: none;
+  font-family: $headingFontFamily;
+  a { 
+    color: $gray; 
+  }
+  ul { 
+    margin: 0;
+  }
+}
+
+// Pagination
+.pagination {
+  @include clearfix;
+  margin-top: 0;
+}
+.pagination ul > .active > a, .pagination ul > .active > span {
+  color: $grayDark;
+}
+
+
+// Pills
+.nav-pills > li > a {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border: 1px solid $grayLight;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nav-pills .open .dropdown-toggle {
+  background-color: $blue;
+  border-color: $blue;
+}
+
+
+.pull-right > .btn-group > .dropdown-menu,
+.pull-right > .dropdown > .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-menu .dropdown-menu {
+  min-width: 0;
+}

@@ -30,7 +30,7 @@ class ApplicationDecorator < Draper::Base
     html = l(at, format: :date_time)
     if person.present?
       html << " / "
-      html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person))
+      html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
     end
     html.html_safe
   end

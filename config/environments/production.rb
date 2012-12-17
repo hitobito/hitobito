@@ -28,7 +28,8 @@ Jubla::Application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  ssl = %w(true yes 1).include?(ENV['RAILS_HOST_SSL'])
+  config.force_ssl = ssl
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
@@ -50,7 +51,10 @@ Jubla::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => 'jubla.puzzle.ch' }
+  config.action_mailer.default_url_options = { 
+      host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
+      protocol: (ssl ? 'https' : 'http')
+    }
 
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[JUB] ",

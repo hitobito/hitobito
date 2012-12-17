@@ -69,9 +69,9 @@ de:
         nationality: Nationalität
         profession: Beruf
         bank_account: Bankverbindung
-        ahv_number: AHV Nummer
-        ahv_number_old: AHV Nummer alt
-        j_s_number: J+S Nummer
+        ahv_number: AHV-Nummer
+        ahv_number_old: AHV-Nummer alt
+        j_s_number: J+S-Nummer
         insurance_company: Versicherung
         insurance_number: Versicherungsnummer
         

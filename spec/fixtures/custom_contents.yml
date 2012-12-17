@@ -13,7 +13,7 @@
 
 login:
   key: login
-  label: Login Email
+  label: Login E-Mail
   subject: Your Login Data
   body: "Hello {user}, here is your site to login: {login-url}"
   placeholders_required: login-url

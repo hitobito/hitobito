@@ -1,6 +1,3 @@
-- parent_sheet(EntrySheet.new(self, @event, [:group_event_participations_path, @group]))
-- parent_sheet(GroupSheet.new(self, @group))
-
 = entry_form(buttons_bottom: false,
              cancel_url: (entry.new_record? ? group_event_participations_path(@group, @event) : group_event_participation_path(@group, @event, entry.participation_id))) do |f|
   - if entry.new_record?

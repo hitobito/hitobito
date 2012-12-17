@@ -8,7 +8,7 @@ class Event::ParticipationsController < CrudController
              leaders: 'Leitungsteam',
              participants: 'Teilnehmende' }
   
-  decorates :event, :participation, :participations, :alternatives
+  decorates :group, :event, :participation, :participations, :alternatives
   
   # load before authorization
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]

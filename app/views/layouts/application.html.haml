@@ -26,7 +26,7 @@
     %header#page-header
       .container-fluid
         // Logo
-        = link_to 'Jubla', root_path, :class => 'brand'
+        = link_to 'jubla.db', root_path, :class => 'brand'
         // Navigation
         %nav#page-navigation
           - if current_user
@@ -40,7 +40,7 @@
         = render_sheets do
           .content-header
             %h1= title
-            = render_tabs
+            = sheet.render_main_tabs
           .btn-toolbar
             = yield :toolbar
           #flash

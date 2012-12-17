@@ -1,5 +1,15 @@
-- tab "Info", group_path(@group)
-- tab "Personen", group_people_path(@group) if can?(:index_people, @group)
-- tab "Anlässe", group_events_path(@group)
+- bar.tab "Info", 
+          group_path(group)
 
-= render_extensions :tabs
+- if can?(:index_people, group)
+  - bar.tab "Personen", 
+            group_people_path(group, returning: true), 
+            [group_people_path(group), 
+             group_roles_path(group), 
+             new_group_csv_imports_path(group)]
+  
+- bar.tab "Anlässe", 
+          group_events_path(group, returning: true), 
+          [group_events_path(group)]
+
+= render_extensions :tabs, locals: { group: group, bar: bar }

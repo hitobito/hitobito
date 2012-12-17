@@ -18,14 +18,14 @@ module PopulationHelper
     end
   end
   
-  def tab_population_label
+  def tab_population_label(group)
     label = 'Bestand'
-    label << " <span style=\"color: red;\">!</span>" if check_approveable?
+    label << " <span style=\"color: red;\">!</span>" if check_approveable?(group)
     label.html_safe
   end
 
-  def check_approveable?
-    @group.population_approveable? && can?(:create_member_counts, @group)
+  def check_approveable?(group = @group)
+    group.population_approveable? && can?(:create_member_counts, group)
   end
 
 end

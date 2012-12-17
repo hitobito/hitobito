@@ -4,9 +4,9 @@ describe Export::CsvPeople do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Email",
+  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "E-Mail",
                           "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
-  let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Email", 
+  let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "E-Mail", 
                         "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", 
                         "Zusätzliche Angaben", "Rollen"] }
 
@@ -27,7 +27,7 @@ describe Export::CsvPeople do
 
         its(['Vorname']) { should eq person.first_name }
         its(['Nachname']) { should eq person.last_name }
-        its(['Email']) { should eq person.email }
+        its(['E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
         its(['Rollen']) { should eq "Rolle TopGroup" }
         its(['Geschlecht']) { should be_blank }

@@ -2,6 +2,8 @@ class QualificationsController < CrudController
 
   self.nesting = Group, Person
   
+  decorates :group, :person
+  
   # load parents before authorization
   prepend_before_filter :parent
   

@@ -3,6 +3,7 @@
 class GroupDecorator < ApplicationDecorator
   decorates :group
   decorates_association :contact
+  decorates_association :parent
 
   include ContactableDecorator
 

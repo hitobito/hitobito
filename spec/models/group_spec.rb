@@ -166,33 +166,34 @@ describe Group do
     let(:top_leader) { roles(:top_leader) }
     let(:top_layer) { groups(:top_layer) }
     let(:bottom_layer) { groups(:bottom_layer_one) }
-    let(:bottom_group) { groups(:bottom_group_one_one) }
+    let(:bottom_group) { groups(:bottom_group_one_two) }
 
     context "children" do
-      it "destroys self and all children" do
-        deleted_ids = bottom_layer.self_and_descendants.collect(&:id)
-        expect { bottom_layer.destroy }.to change { Group.without_deleted.count }.by(-4)
-        Group.only_deleted.find(:all).collect(&:id).should  =~ deleted_ids
+      it "destroys self" do
+        expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
+        Group.only_deleted.collect(&:id).should  =~ [bottom_group.id]
       end
-
+      
+      it "protects group with children" do
+        expect { bottom_layer.destroy }.not_to change { Group.without_deleted.count }
+      end
+      
       it "does not destroy anything for root group" do
         expect { top_layer.destroy }.not_to change { Group.count }
       end
     end
 
     context "role assignments"  do
-      it "terminates own roles and all children's roles" do
-        Fabricate(Group::BottomLayer::Member.name.to_s, group: bottom_layer)
-        Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
-        Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one_one))
-        deleted_ids = bottom_layer.self_and_descendants.map {|g| g.roles.collect(&:id) }.flatten
-        expect { bottom_layer.destroy }.to change { Role.with_deleted.count }.by(-4)
-        #Role.only_deleted.find(:all).collect(&:id).should =~ deleted_ids
+      it "terminates own roles" do
+        role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
+        deleted_ids = bottom_group.roles.collect(&:id)
+        # role is deleted permanantly as it is less than Settings.role.minimum_days_to_archive old
+        expect { bottom_group.destroy }.to change { Role.with_deleted.count }.by(-1)
       end
     end
 
     context "events" do
-      let(:group) { groups(:bottom_layer_one) }
+      let(:group) { groups(:bottom_group_one_two) }
 
       it "destroys exclusive events" do
         Fabricate(:event, groups: [group])
@@ -200,7 +201,7 @@ describe Group do
       end
 
       it "does not destroy events belonging to other groups as well" do
-        Fabricate(:event, groups: [group, groups(:bottom_layer_two)])
+        Fabricate(:event, groups: [group, groups(:bottom_group_one_one)])
         expect { group.destroy }.not_to change { Event.count }
       end
 

@@ -1,3 +1,3 @@
 = button_action_edit if can?(:edit, entry) 
-= button_action_destroy if can?(:destroy, entry) 
+= button_action_destroy if !entry.protected? && can?(:destroy, entry) 
 = dropdown_button('Neue Gruppe erstellen', entry.possible_children_links, :plus) if can?(:new, entry.children.new)

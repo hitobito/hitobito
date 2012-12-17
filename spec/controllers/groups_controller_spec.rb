@@ -34,11 +34,11 @@ describe GroupsController do
 
     context "deleted sub groups are not shown" do
       before do 
-        groups(:bottom_layer_one).destroy
-        get :show, id: group.id 
+        groups(:bottom_group_one_two).destroy
+        get :show, id: groups(:bottom_layer_one).id 
       end
 
-      its(:values) { should == [[groups(:bottom_layer_two)], [groups(:top_group)]] }
+      its(:values) { should == [[groups(:bottom_group_one_one)]] }
     end
   end
 
@@ -75,8 +75,8 @@ describe GroupsController do
     end
 
     it "leader can destroy group" do
-      expect { post :destroy, id: groups(:bottom_layer_one).id }.to change { Group.without_deleted.count}.by(-4)
-      should redirect_to groups(:top_layer)
+      expect { post :destroy, id: groups(:bottom_group_one_two).id }.to change { Group.without_deleted.count}.by(-1)
+      should redirect_to groups(:bottom_layer_one)
     end
   end
 end

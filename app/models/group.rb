@@ -62,7 +62,8 @@ class Group < ActiveRecord::Base
 
   # Root group may not be destroyed
   protect_if :root?
-
+  protect_if :children_without_deleted
+  
   stampable stamper_class_name: :person
 
   ### ASSOCIATIONS
@@ -183,12 +184,6 @@ class Group < ActiveRecord::Base
     name
   end
 
-  def new_event
-    event = events.new
-    event.groups << self
-    event
-  end
-
   ## readers and query methods for contact info
   [:address, :town, :zip_code, :country].each do |attribute|
     define_method(attribute) do
@@ -242,4 +237,7 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def children_without_deleted
+    children.without_deleted
+  end
 end

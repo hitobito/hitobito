@@ -65,7 +65,9 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def new_event_dropdown_button
-    if can?(:new, group.new_event)
+    event = events.new
+    event.groups << model
+    if can?(:new, event)
       possible_events.count == 1 ? new_event_button : new_event_dropdown
     end
   end

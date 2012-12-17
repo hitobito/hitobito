@@ -17,11 +17,11 @@ describe Ability::Events do
     
     context Event do
       it "may create event in his group" do
-        should be_able_to(:create, group.new_event)
+        should be_able_to(:create, group.events.new.tap {|e| e.groups << group})
       end
       
       it "may create event in his layer" do
-        should be_able_to(:create, groups(:be).new_event)
+        should be_able_to(:create, groups(:be).events.new.tap {|e| e.groups << group})
       end
       
       it "may update event in his layer" do
@@ -96,7 +96,7 @@ describe Ability::Events do
     
     context Event do
       it "may create event in his group" do
-        should be_able_to(:create, group.new_event)
+        should be_able_to(:create, group.events.new.tap {|e| e.groups << group})
       end
       
       it "may update event in his group" do
@@ -158,7 +158,7 @@ describe Ability::Events do
     
     context Event do
       it "may not create events" do
-        should_not be_able_to(:create, group.new_event)
+        should_not be_able_to(:create, group.events.new.tap {|e| e.groups << group})
       end
       
       it "may update his event" do
@@ -231,7 +231,7 @@ describe Ability::Events do
       end
       
       it "may not create events" do
-        should_not be_able_to(:create, groups(:be).new_event)
+        should_not be_able_to(:create, groups(:be).events.new.tap {|e| e.groups << group})
       end
       
       it "may not update his event" do

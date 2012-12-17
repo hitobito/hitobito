@@ -57,7 +57,6 @@ class Group < ActiveRecord::Base
 
   after_create :set_layer_group_id
   after_create :create_default_children
-  after_destroy :destroy_orphaned_events
   before_save :reset_contact_info
 
   # Root group may not be destroyed
@@ -196,7 +195,16 @@ class Group < ActiveRecord::Base
       (contact && contact.public_send(query_method)) || super()
     end
   end
-
+  
+  # create alias to call it again
+  alias_method :hard_destroy, :destroy!
+  def destroy!
+    # run nested_set callback on hard destroy
+    destroy_descendants_without_paranoia
+    hard_destroy
+    destroy_orphaned_events
+  end
+  
   private
 
   def assert_type_is_allowed_for_parent
@@ -240,4 +248,10 @@ class Group < ActiveRecord::Base
   def children_without_deleted
     children.without_deleted
   end
+  
+  def destroy_descendants_with_paranoia
+    # do not destroy descendants on soft delete
+  end
+  alias_method_chain :destroy_descendants, :paranoia
+
 end

@@ -168,19 +168,23 @@ describe Group do
     let(:bottom_layer) { groups(:bottom_layer_one) }
     let(:bottom_group) { groups(:bottom_group_one_two) }
 
-    context "children" do
-      it "destroys self" do
-        expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
-        Group.only_deleted.collect(&:id).should  =~ [bottom_group.id]
-      end
-      
-      it "protects group with children" do
-        expect { bottom_layer.destroy }.not_to change { Group.without_deleted.count }
-      end
-      
-      it "does not destroy anything for root group" do
-        expect { top_layer.destroy }.not_to change { Group.count }
-      end
+    it "destroys self" do
+      expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
+      Group.only_deleted.collect(&:id).should  =~ [bottom_group.id]
+      Group.should be_valid
+    end
+        
+    it "hard destroys self" do
+      expect { bottom_group.destroy! }.to change { Group.with_deleted.count }.by(-1)
+      Group.should be_valid
+    end
+    
+    it "protects group with children" do
+      expect { bottom_layer.destroy }.not_to change { Group.without_deleted.count }
+    end
+    
+    it "does not destroy anything for root group" do
+      expect { top_layer.destroy }.not_to change { Group.count }
     end
 
     context "role assignments"  do
@@ -195,11 +199,16 @@ describe Group do
     context "events" do
       let(:group) { groups(:bottom_group_one_two) }
 
-      it "destroys exclusive events" do
+      it "does not destroy exclusive events on soft destroy" do
         Fabricate(:event, groups: [group])
-        expect { group.destroy }.to change { Event.count }.by(-1)
+        expect { group.destroy }.not_to change { Event.count }
       end
 
+      it "destroys exclusive events on hard destroy" do
+        Fabricate(:event, groups: [group])
+        expect { group.destroy! }.to change { Event.count }.by(-1)
+      end
+      
       it "does not destroy events belonging to other groups as well" do
         Fabricate(:event, groups: [group, groups(:bottom_group_one_one)])
         expect { group.destroy }.not_to change { Event.count }

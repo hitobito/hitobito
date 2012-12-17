@@ -1,0 +1,8 @@
+house_js:
+  label: 'Hauslager J+S Kids'
+  
+house_kids:
+  label: 'Hauslager ohne J+S Kids'
+  
+house_teens:
+  label: 'Zeltlager J+S Teens'

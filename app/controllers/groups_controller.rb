@@ -17,7 +17,7 @@ class GroupsController < CrudController
 
   private 
   
-  def build_entry 
+  def build_entry
     type = model_params && model_params.delete(:type)
     group = Group.find_group_type!(type).new
     group.parent_id = model_params.delete(:parent_id)

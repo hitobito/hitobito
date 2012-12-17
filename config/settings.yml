@@ -18,21 +18,21 @@ social_account:
 
 email:
   # Sender for all emails sent by the application
-  sender: jubla+noreply@puzzle.ch
+  sender: noreply@jubla.ch
 
   # If mass emails are sent, this recipient is used in the to field,
   # while the actual recipients go in the bcc field.
-  mass_recipient: jubla@puzzle.ch
+  mass_recipient: noreply@jubla.ch
   
   # configuration for retrieving email
   retriever:
     type: pop3
     config:
-      address:    localhost
-      port:       995
-      user_name:  nil
-      password:   nil
-      enable_ssl: true
+      address:    <%= ENV['RAILS_MAIL_RETRIEVER_ADDRESS'] || 'localhost' %>
+      port:       <%= ENV['RAILS_MAIL_RETRIEVER_PORT'] || 995 %>
+      user_name:  <%= ENV['RAILS_MAIL_RETRIEVER_USER'] %>
+      password:   <%= ENV['RAILS_MAIL_RETRIEVER_PASSWORD'] %>
+      enable_ssl: <%= ENV['RAILS_MAIL_RETRIEVER_SSL'] %>
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application, not the customers.

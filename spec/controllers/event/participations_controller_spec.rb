@@ -168,6 +168,8 @@ describe Event::ParticipationsController do
       post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
       participation.should be_present
       participation.persisted?.should be_true
+      participation.should be_active
+      participation.roles.pluck(:type).should == [Event::Course::Role::Participant.sti_name]
       should redirect_to group_event_participation_path(group, course, participation)
     end
 

@@ -30,7 +30,7 @@ describe GroupsController, type: :controller do
       it "has a set of links"  do
         get :show, id: groups(:bottom_layer_one).id
         response.body.should =~ /Bearbeiten/
-        response.body.should =~ /Löschen/
+        response.body.should_not =~ /Löschen/
         response.body.should =~ /Gruppe erstellen/
       end
 

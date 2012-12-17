@@ -14,6 +14,13 @@
  *
  */
 
+.profiler-results { 
+  opacity: 0.2; 
+  &:hover {
+    opacity: 1;
+  }
+}
+
 /* Imports Compass */
 @import "variables";
 @import "media-queries";
@@ -23,451 +30,83 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/transition";
 
-/* Typo */
-// -------------------------
-#{headings(all)} {
-  font-family: $headingFontFamily;
-  margin-top: 0;
-}
-
-h1 { 
-  font-size: 2.333em !important;
-  padding-bottom: 10px;
-  margin-bottom: $vSpace;
-  border-bottom: 1px solid $borderColor;
-}
-
-h2 { 
-  font-size: 1.667em !important;
-}
-
-.content-header {
-  margin-bottom: $vSpace;
-  h1 { margin-bottom: 0px; }
-}
-
-p:last-child { margin-bottom: 0; }
-
-.muted { color: $gray; }
-
-td p, address {
-  margin: 0;
-}
-
-.alert ul {
-  margin: 0 0 0 25px;
-}
-
-.btn-toolbar .dropdown, .btn-toolbar .link {
-  font-size: 14px;
-}
-
-.btn-group + .link {
-  margin-left: $vSpace;
-} 
-
-// Definition list
-dl {
-  margin-top: 0;
-}
-.dl-horizontal {
-  padding: $vSpace*0.5 0;
-  border-top: 1px solid $borderColor;
-  margin: 0;
-
-  dd { 
-    margin-bottom: $vSpace*0.5;
-    &:last-child { margin-bottom: 0; }
-  }
-
-  @include responsive(mediaTablet) {
-    dt { width: 180px; }
-    dd { margin-left: 200px; margin-bottom: 0; }
-  }
-
-  &:last-child {
-    border-bottom: 1px solid $borderColor;
-    margin-bottom: $vSpace;
-  }
-}
-
-/* Nav */
-// -------------------------
-.nav-sub {
-  @include clearfix;
-  font-family: $headingFontFamily;
-  margin-bottom: 0px;
-  border-bottom: 1px solid $borderColor;
-  & > li {
-    float: left;
-     a {
-      @include single-transition(border-color, 300ms);
-      padding: 10px 0;
-      margin-right: 30px;
-      line-height: 14px;
-      border-bottom: 2px solid $white;
-      &:hover { background: none; border-color: $grayLight; }
-    }
-  }
-  & > .active > a, & > .active > a:hover {
-    border-color: $blue;
-  }
-}
-
-.level { 
-  display: block;
-  padding: 5px 10px;
-  font-size: 1.385em;
-  line-height: 1.538em;
-  font-family: $headingFontFamily;
-}
-
-.sheet .breadcrumb {
-  padding: 6px 10px 0;
-  margin: 0;
-  list-style: none;
-  background: none;
-  border: none;
-  font-family: $headingFontFamily;
-  a { color: $gray; }
-  ul { margin: 0;}
-  & + .level { padding-top:0; }
-}
-
-#content .breadcrumb {
-  padding: 6px 0 0;
-}
-
-// Pagination
-.pagination {
-  @include clearfix;
-  margin-top: 0;
-}
-.pagination ul > .active > a, .pagination ul > .active > span {
-  color: $grayDark;
-}
-
-
-// Pills
-.nav-pills > li > a {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  border: 1px solid $grayLight;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.nav-pills .open .dropdown-toggle {
-  background-color: $blue;
-  border-color: $blue;
-}
-
-/* Forms & Buttons */
-// -------------------------
-.btn-toolbar {
-  margin-top: 0;
-  margin-bottom: $vSpace;
-
-}
-.btn { 
-  color: $green;
-  &:hover {
-    color: darken($green, 10%); 
-    .icon,
-    [class^="icon-"], 
-    [class*=" icon-"] { 
-      background-image: image-url("glyphicons-halflings-green.png"); 
-    }
-  } 
-  .icon,
-  [class^="icon-"], 
-  [class*=" icon-"] { 
-    background-image: image-url("glyphicons-halflings-green-hover.png");
-  }
-
-  .caret {
-    border-top-color: $green;
-  }
-  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
-    color: $white;
-  }
-}
-
-// from bootstrap 2.1.1 << to remove after bootstrap-sass update
-.controls-row [class*="span"] + [class*="span"] {
-  @include responsive(mediaTablet) {
-    margin-left: 20px;
-  }
-}
-.controls-row {
-  @include clearfix;
-  *zoom: 1;
-  label.checkbox, label.radio {
-    padding-top: 6px;
-  }
-}
-.controls-row [class*="span"] {
-  float: left;
-}
-
-.form-horizontal .control-group {
-  margin-bottom: 0;
-}
-
-fieldset {
-  margin-bottom: 18px;
-}
-
-td {
-  select,
-  input[type="text"],
-  input[type="number"]  {
-  margin-bottom: 0 !important;
-  }
-}
-
-select,
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"],
-.uneditable-input {
-  display: inline-block;
-  height: 20px;
-  padding: 4px 6px;
-  margin-bottom: 9px !important;
-  font-size: 14px;
-  line-height: 20px;
-  color: $grayDark;
-}
-
-select.time {
-  width: 55px;
-  height: 30px;
-}
-
-select[class*="span"][multiple] {
-  height: 120px;
-}
-
-label.checkbox,
-label.radio {
-  height: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  color: $gray;
-  margin-right: 10px;
-}
-
-textarea {
-  height: auto;
-}
-
-.fields-separation hr {
-  margin: 7px 0 15px;
-  border-top-color: $grayLight;
-}
-
-.fields .controls-row {
-  border-bottom: 1px solid $grayLight;
-  margin-bottom: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.fields .help-inline { 
-  float: right;
-}
-
-.remove_nested_fields {
-  color: $red;
-  margin: 0; 
-  padding: 0;
-  i { 
-    margin: 5px;
-  }
-  &:hover {
-    color: darken($red, 10%);
-  }
-}
-
-
-// Table
-.table {
-  border-bottom: 1px solid $borderColor;
-}
-
-.table, .table-basic {
-  td, th {
-    padding-left: 0;
-    &:last-child { padding-right: 0; } 
-  }
-}
-
-.table-striped {
-  td:first-child {
-    padding-left: 8px;
-  }
-}
-
-.table-grouped {
-  thead:first-child th {
-    padding-top: 0px;
-  }
-  
-  th {
-    padding-top: 30px;
-    
-    h2 {
-      margin-bottom: 0;
-    }
-  }
-}
-
-td.center, th.center {
-  text-align: center;
-}
-
-td.right, th.right {
-  text-align: right;
-}
-
-select[class*="span"] {
-  min-height: 30px;
-  height: 30px;
-  *margin-top: 4px;
-  line-height: 30px;
-}
-
-.pull-right > .btn-group > .dropdown-menu,
-.pull-right > .dropdown > .dropdown-menu {
-  right: 0;
-  left: auto;
-}
-
-.dropdown-menu .dropdown-menu {
-  min-width: 0;
-}
+/* Imports Partials */
+@import "typography";
+@import "navigation";
+@import "form";
 
 
 /* Layout */
 // -------------------------
 
-.highlight {
-  background-color: #FFD;
-}
-
-
 /* Header */
-body > header {
+#page-header {
   @include clearfix;
-  background: white;
-  height: 40px;
-  padding: 10px 20px;
-
-  .brand {
-    font-family: $headingFontFamily;
-    font-weight: bold;
-    float: left;
-    font-size: 2.462em; // 32px
-    line-height: 1.250em; // 40px
-  }
-
-  .options {
-    float: right;
-    margin-top: 10px;
-    ul {
-      @include horizontal-list(10px);
-    }
+  margin: 10px 0 0;
+  
+  @include responsive(mediaTablet) {
+    margin: 10px 20px 0;
   }
 }
-
+.brand {
+  float: left;
+  margin-right: 40px;
+  font-family: $headingFontFamily;
+  font-weight: bold;
+  font-size: 2.462em; // 32px
+  line-height: 1.250em; // 40px
+  @include single-text-shadow(white, 0, 1px, 0);
+}
+.options {
+  float: right;
+  margin-top: 10px;
+  ul {
+    @include horizontal-list(10px);
+  }
+  a {
+    line-height: 30px;
+  }
+  form, input[type="search"] {
+    margin-bottom: 0 !important;
+  }
+}
 .options a, a.link {
   text-decoration: underline;
   &:hover { background: none; }
 }
 
-body > nav {
-  margin: 20px 0;
-  @include responsive(mediaTablet) {
-    padding: 0 16px;
-  }
-  ul.nav {
-    @include horizontal-list(15px);
-    font-family: $headingFontFamily;
-    li {
-      @include responsive(phone, $mediaTablet) {
-        float: none;
-        display:block;
-        padding:0; margin:0;
-      }
-      &.active a { background-color: white; }
-      a { 
-        @include single-text-shadow(white, 0, 1px, 0);
-        @include border-radius(4px);
-        font-size: 1.077em;
-        text-transform: uppercase;
-        color: $grayDark;
-        padding: 2px 5px;
-
-        &:hover { 
-          @include single-text-shadow($blueDark, 0, -1px, 0);
-          background-color: $blue; 
-          color: white;
-        }        
-      }
-    }
-  }
-  
-  form { 
-    margin-bottom: 0; 
-    
-    input[type="search"] { margin-bottom: 0 !important; }
-  }
-  
-}
-
-
 /* Content */
 #page {
-  margin: 0 40px 60px 20px;
   padding-bottom: 30px;
-  & > .sheet { margin: 0 20px;}
-  @include responsive(phone, $mediaTablet) { 
-    margin: 0 20px 20px 0;
+  margin: 20px 0 20px;
+  
+  @include responsive(mediaTablet) {
+    margin: 20px 20px;
   }
+
+  & > .sheet { margin: 0 20px;}
 }
 
-.sheet {
-  &.parent { 
-    padding-bottom: 1px; 
-    background: lighten($grayLighter, 3%);
-    @include single-box-shadow($grayLight, 0, 2px, 8px);
-    .sheet {
-      margin:0 -10px -30px 10px;
+.sheet.parent { 
+  padding-bottom: 1px; 
+  background: lighten($grayLighter, 1%);
+  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  .sheet {
+    margin:0 -10px -30px 10px;
+    &.parent {
+      background: lighten($grayLighter, 3%);
     }
-    .level { color: $gray; }
   }
-  &.current {
-    background: image-url("shadow_left.png") transparent no-repeat bottom left;
+  .level { color: $gray; }
+}
+.sheet.current {
+  background: image-url("shadow_left.png") transparent no-repeat bottom left;
+  padding-bottom: 28px;
+  margin-bottom:-58px !important;
+  .container-shadow {
+    background: image-url("shadow_right.png") transparent no-repeat bottom right;
     padding-bottom: 28px;
-    margin-bottom:-58px !important;
-    .container-shadow {
-      background: image-url("shadow_right.png") transparent no-repeat bottom right;
-      padding-bottom: 28px;
-      margin-bottom:-28px;
-    }
+    margin-bottom:-28px;
   }
 }
 
@@ -489,26 +128,11 @@ body > nav {
     margin-top: $vSpace;
     &:first-child { margin-top:0; } 
   }
-}
 
-.profil, .profil-big {
-  background: $white;
-  border: 1px solid $grayLight;
-  overflow: hidden;
-  @include border-radius(3px);
-}
-.profil {
-  width: 32px;
-  height: 32px;
-  padding: 1px;
-  .table-striped & {
-    margin-left: -8px;
+  .breadcrumb {
+    margin: 0;
+    padding: 5px 0 5px 15px;
   }
-}
-.profil-big {
-  width: 72px;
-  height: 72px;
-  padding: 2px;
 }
 
 .contactable {
@@ -518,9 +142,8 @@ body > nav {
   }
 }
 
-
 /* Footer */
-body > footer { 
+#page-footer { 
   padding-top: $vSpace*2;
   clear: both;
 
@@ -541,3 +164,32 @@ body > footer {
 }
 
 
+
+/* Shared */
+// -------------------------
+
+// Highlight
+.highlight {
+  background-color: #FFD;
+}
+
+// Profil 
+.profil, .profil-big {
+  background: $white;
+  border: 1px solid $grayLight;
+  overflow: hidden;
+  @include border-radius(3px);
+}
+.profil {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  .table-striped & {
+    margin-left: -8px;
+  }
+}
+.profil-big {
+  width: 72px;
+  height: 72px;
+  padding: 2px;
+}

@@ -18,7 +18,7 @@ class PhoneNumber < ActiveRecord::Base
 
   scope :public, where(public: true)
 
-  validates_presence_of :label
+  validates :label, presence: true
 
 
   def to_s

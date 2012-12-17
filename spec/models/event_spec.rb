@@ -373,15 +373,15 @@ describe Event do
     end
 
     context "groups" do
-      let(:group_one) { groups(:bottom_layer_one) }
-      let(:group_two) { groups(:bottom_layer_two) }
+      let(:group_one) { groups(:bottom_group_one_one) }
+      let(:group_two) { groups(:bottom_group_one_two) }
       let(:event) { Fabricate(:event, groups: [group_one, group_two]) }
 
       it "keeps destroyed groups" do
         event.groups.should have(2).items
 
-        group_one.destroy
-        group_one.should be_deleted
+        group_two.destroy
+        group_two.should be_deleted
         event.reload
 
         event.groups.should have(2).items

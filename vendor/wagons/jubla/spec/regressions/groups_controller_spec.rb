@@ -132,11 +132,12 @@ describe GroupsController, type: :controller  do
   end
 
 
-  describe_action :post, :destroy do 
+  describe_action :delete, :destroy do 
     expected = [
       [:leader, :asterix, true],
       [:leader, :flock, false],
-      [:agent, :flock, true],
+      [:agent, :asterix, true],
+      [:agent, :flock, false],
       [:agent, :region, false], 
       [:agent, :state, false]
     ]
@@ -147,16 +148,30 @@ describe GroupsController, type: :controller  do
 
         it "#{can_destroy_group ? "can" : "cannot"} destroy group" do
           if can_destroy_group
-            expect { post :destroy, id: send(group).id }.to change { Group.without_deleted.count }.by(change_count(group))
+            expect { delete :destroy, id: send(group).id }.to change { Group.without_deleted.count }.by(-1)
           else
-            expect { post :create, id: send(group).id }.not_to change(Group,:count)
+            expect { delete :destroy, id: send(group).id }.not_to change { Group.count }
           end
         end
       end
     end
-    def change_count(group)
-      (send(group).children.size + 1) * -1
+  end
+  
+  context "agent" do
+    before { sign_in(agent) }
+    
+    it "can destroy flock without subgroups" do
+      flock.children.destroy_all
+      expect { delete :destroy, id: flock.id }.to change { Group.without_deleted.count }.by(-1)
     end
   end
 
+  context "flock leader" do
+    before { sign_in(leader) }
+    
+    it "cannot destroy flock without subgroups" do
+      flock.children.destroy_all
+      expect { delete :destroy, id: flock.id }.not_to change { Group.count }
+    end
+  end
 end

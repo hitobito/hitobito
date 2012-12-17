@@ -18,7 +18,7 @@ class SocialAccount < ActiveRecord::Base
 
   belongs_to :contactable, polymorphic: true
 
-  validates_presence_of :label
+  validates :label, presence: true
 
   class << self
     def load_available_labels

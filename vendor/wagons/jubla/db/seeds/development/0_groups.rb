@@ -133,7 +133,7 @@ flocks = Group::Flock.seed(:name, :parent_id,
    parent_id: regions[3].id },
    
   {name: 'Innerroden',
-   kind: 'Blaurint',
+   kind: 'Blauring',
    parent_id: states[2].id },
    
   {name: 'Ausserroden',

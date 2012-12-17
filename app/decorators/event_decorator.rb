@@ -62,6 +62,32 @@ class EventDecorator < ApplicationDecorator
   def location
     h.simple_format(model.location) if model.location?
   end
+  
+  def issued_qualifications_info
+    qualis = kind.qualification_kinds.to_a
+    prolongs = kind.prolongations.to_a
+    info = ""
+    if qualis.present?
+      info << "Vergibt die Qualifikation"
+      info << "en" if qualis.size > 1
+      info << " "
+      info << qualis.join(', ')
+      if prolongs.present?
+        info << " und verlängert"
+      end
+    end
+    if prolongs.present?
+      if qualis.blank?
+        info << "Verlängert"
+      end
+      info << " existierende Qualifikationen "
+      info << prolongs.join(', ')
+    end
+    if prolongs.present? || qualis.present?
+      info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
+    end
+    info
+  end
 
   def with_br(*attrs)
     values = attrs.map do |attr|

@@ -57,12 +57,8 @@ class Event::Course < Event
   # The date on which qualification obtained in this course start
   def qualification_date
     @qualification_date ||= begin
-      candidates = dates.reorder('event_dates.finish_at DESC')
-      date = candidates.find {|d| d.finish_at.present? }
-      date ||= candidates.first
-      if date
-        date.finish_at  || date.start_at
-      end
+      last = dates.reorder('event_dates.start_at DESC').first
+      last.finish_at || last.start_at
     end.to_date
   end
 

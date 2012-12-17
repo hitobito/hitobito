@@ -29,14 +29,15 @@ require 'spec_helper'
 
 describe Event::Course do
 
-
   subject do
     Fabricate(:course, groups: [groups(:top_group)] )
   end
 
   its(:qualification_date) { should == Date.new(2012,5,11) }
+  
   context "#qualification_date" do
     before do
+      subject.dates.destroy_all
       add_date("2011-01-20")
       add_date("2011-02-15")
       add_date("2011-01-02")
@@ -52,7 +53,7 @@ describe Event::Course do
 
   context "multiple start_at" do
     before { subject.dates.create(start_at: Date.new(2012,5,14)) }
-    its(:qualification_date) { should == Date.new(2012,5,11) }
+    its(:qualification_date) { should == Date.new(2012,5,14) }
   end
 
 

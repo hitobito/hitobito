@@ -14,7 +14,7 @@ module Sheet
             content_tag(:li, crumb)
           end
           
-          content_tag(:li, 'geh&ouml;rt zu ') +
+          content_tag(:li, 'geh&ouml;rt zu '.html_safe) +
           StandardHelper::EMPTY_STRING + 
           safe_join(crumbs, divider)
         end

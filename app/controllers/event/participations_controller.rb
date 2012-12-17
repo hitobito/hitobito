@@ -151,7 +151,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def create_participant_role
-    if !entry.event.supports_applications
+    if !entry.event.supports_applications || entry.person_id != current_user.id
       role = entry.event.participant_type.new
       role.participation = entry
       entry.roles << role

@@ -41,13 +41,19 @@ Jubla::Application.routes.draw do
         
         resources :qualifications, only: [:index, :update, :destroy]
       end
+
     end
 
     resource :csv_imports, only: [:new, :create] do
       post :define_mapping, on: :member
     end
-  end
 
+    member do
+      get 'merge', to: 'group::merge#select'
+      post 'merge', to: 'group::merge#perform'
+    end
+
+  end
  
 
   get 'list_courses', to: 'event/lists#courses', as: :list_courses
@@ -77,6 +83,7 @@ Jubla::Application.routes.draw do
   end
 
   get 'static/:action', controller: 'static'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

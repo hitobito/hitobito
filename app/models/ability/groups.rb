@@ -27,6 +27,12 @@ module Ability::Groups
           contains_any?(layers_full, collect_ids(group.upper_layer_groups))
         end
       end
+
+      can :merge, Group do |group|
+        can_update_group?(group) &&
+        group.groups_with_same_parent_and_type.any? {|g| can_update_group?(g)}
+      end
+
     end
     
     can :index_people, Group do |group|

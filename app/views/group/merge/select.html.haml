@@ -1,0 +1,10 @@
+- title "#{@group.to_s} fusionieren"
+= form_tag(merge_group_path(@group)) do
+  = field_set_tag do
+    = labeled(:new_group_name) do
+      = text_field_tag(:new_group_name)
+    = labeled(:merge_group_id) do
+      - @mergeable_groups.each do |g|
+        = label(:merge_group_id, g.to_s)
+        = radio_button_tag(:merge_group_id, g.id)
+  = submit_tag

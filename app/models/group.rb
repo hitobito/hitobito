@@ -162,6 +162,10 @@ class Group < ActiveRecord::Base
     Group.where(layer_group_id: layer_group_id)
   end
 
+  def groups_with_same_parent_and_type
+    Group.where(parent_id: parent_id).where(type: type).where('id != ?',id)
+  end
+
   # The layer hierarchy without the layer of this group.
   def upper_layer_groups
     if new_record?

@@ -27,13 +27,11 @@
       .container-fluid
         // Logo
         = link_to 'jubla.db', root_path, :class => 'brand'
-        // Navigation
-        %nav#page-navigation
-          - if current_user
-            = render 'layouts/nav'
-        // Options
-        .options
-          = render 'layouts/options'
+        
+        - if current_user
+          = render 'layouts/nav'
+        - else
+          = render 'layouts/unauthorized'
         
     #page
       .container-fluid

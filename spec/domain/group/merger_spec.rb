@@ -52,7 +52,7 @@ describe Group::Merger do
       @person.reload.roles.only_deleted.count.should eq 1
 
       # last but not least, check nested set integrity
-      Group.valid?.should eq true
+      Group.should be_valid
 
     end
 

@@ -1,4 +1,6 @@
-- tab "Info", group_person_path(@group,@person) if can?(:show, @person)
-- tab "Verlauf", history_group_person_path(@group,@person) if can?(:history, @person)
+- if can?(:show, @person)
+  - bar.tab "Info", group_person_path(@group, @person), [group_person_path(@group, @person)]
+- if can?(:history, @person)
+  - bar.tab "Verlauf", history_group_person_path(@group, @person) 
 
-= render_extensions :tabs
+= render_extensions :tabs, locals: {bar: bar}

@@ -1,5 +1,3 @@
-- title 'Personen über CSV importieren'
-- parent_sheet(GroupSheet.new(self, group, :group_people_path))
 
 = standard_form(:csv_import, url: group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
   = hidden_field_tag :data, parser.to_csv

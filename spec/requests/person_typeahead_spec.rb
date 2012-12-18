@@ -11,7 +11,8 @@ describe "Person Autocomplete" do
       sign_in
       visit root_path
       page.should have_content("TopGroup")
-      click_link 'TopGroup'
+      page.should have_content("Personen")
+      click_link 'Personen'
       should have_content ' Rolle hinzufügen'
       find('.dropdown-menu').should_not be_visible
       click_link 'Rolle hinzufügen'

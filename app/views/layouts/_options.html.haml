@@ -9,9 +9,9 @@
     = form_tag full_path, class: 'form-inline', method: :get do
       .input-append
         = search_field_tag :q, params[:q], 
-                           class: 'span2',
+                           class: 'span4',
                            id: 'quicksearch',
-                           placeholder: 'search',
+                           placeholder: 'Suchen...',
                            data: { person_url: person_url(1).gsub(/\/1$/, ''), 
                                    group_url: groups_url } 
         = button_tag icon(:search), class: 'btn'

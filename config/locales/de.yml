@@ -80,7 +80,7 @@ de:
         company_name: Firmenname
         company: Firma
         nickname: Übername
-        email: Email
+        email: E-Mail
         password: Passwort
         current_password: Altes Passwort
         address: Adresse
@@ -105,7 +105,7 @@ de:
       group:
         name: Name
         short_name: Kurzname
-        email: Email
+        email: E-Mail
         password: Password
         address: Adresse
         zip_code: PLZ

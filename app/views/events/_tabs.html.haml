@@ -1,8 +1,8 @@
 - if can?(:show, @event)
-  - tab "Info", group_event_path(@group, @event) 
+  - bar.tab "Info", group_event_path(@group, @event) 
 - if can?(:index_participations, @event)
-  - tab "Teilnehmende", group_event_participations_path(@group, @event) 
+  - bar.tab "Teilnehmende", group_event_participations_path(@group, @event, returning: true), [group_event_participations_path(@group, @event), group_event_roles_path(@group, @event)]
 - if @event.supports_applications && can?(:application_market, @event)
-  - tab "Anmeldungen", group_event_application_market_index_path(@group, @event) 
+  - bar.tab "Anmeldungen", group_event_application_market_index_path(@group, @event) 
 - if @event.kind_of?(Event::Course) && @event.qualifying? && can?(:qualify, @event)
-  - tab "Qualifikationen", group_event_qualifications_path(@group, @event) 
+  - bar.tab "Qualifikationen", group_event_qualifications_path(@group, @event) 

@@ -1,7 +1,5 @@
 - title('Verfügbare Kurse')
 
-= render 'tabs'
-
 - content_for(:toolbar) do
   - if can?(:manage_courses, current_user)
     = pill_dropdown_button(group_title, group_link_list)

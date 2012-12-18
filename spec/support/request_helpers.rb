@@ -4,7 +4,7 @@ module RequestHelpers
   def sign_in(user = nil)
     user ||= people(:top_leader)
     visit person_session_path
-    fill_in 'Email', with: user.email
+    fill_in 'E-Mail', with: user.email
     fill_in 'Passwort', with: 'foobar'
     click_button 'Anmelden'
   end

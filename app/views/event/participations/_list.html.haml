@@ -1,7 +1,4 @@
-- event_group_sheet
-- title @event.name
-
-= render 'events/tabs'
+- title @event.to_s
 
 = crud_table do |t|
   - t.col('') do |p|
@@ -12,7 +9,7 @@
       -# Any person listed can be shown
       = link_to(p.to_s, group_event_participation_path(@group, @event, p))
   - t.col('Rolle')    {|p| p.roles_short(@event) }
-  - t.col('Email')    {|p| p.primary_email }
+  - t.col('E-Mail')    {|p| p.primary_email }
   - t.col('Telefon')  {|p| p.all_phone_numbers(true) }
   - t.col('Adresse')  {|p| p.complete_address }
 

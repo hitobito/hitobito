@@ -1,6 +1,4 @@
-- parent_sheet(GroupSheet.new(self, @group))
 - title "Mitgliederzahlen #{@year} bearbeiten"
-
 
 = form_for(@group, url: group_member_counts_path(@group), method: :put) do |f|
   = hidden_field_tag(:year, @year)

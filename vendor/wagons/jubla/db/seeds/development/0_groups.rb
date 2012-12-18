@@ -51,7 +51,7 @@ states.each do |s|
     { contactable_id:   s.id,
       contactable_type: 'Group',
       name:             'info@group.ch',
-      label:            'Email',
+      label:            'E-Mail',
       public:           true }
   )
 

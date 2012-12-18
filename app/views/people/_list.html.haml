@@ -1,6 +1,4 @@
-- @sheets = GroupSheet.new(self, @group, :group_people_path, :index_people)
-
-= render 'groups/tabs'
+- title @group.to_s
 
 = paginate @people
 
@@ -12,7 +10,7 @@
       -# Any person listed can be shown
       = link_to(p.to_s, @multiple_groups ? group_person_path(p.roles.first.group_id, p) : group_person_path(@group, p))
   - t.col('Rolle')   {|p| p.roles_short(@multiple_groups ? nil : @group) }
-  - t.col('Email')   {|p| p.primary_email }
+  - t.col('E-Mail')   {|p| p.primary_email }
   - t.col('Telefon') {|p| p.all_phone_numbers(true) }
   - t.col('Adresse') {|p| p.complete_address }
 

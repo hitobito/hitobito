@@ -1,7 +1,4 @@
--event_group_sheet
--title event.name
-
-=render 'events/tabs'
+-title event.to_s
 
 - content_for(:toolbar) do
   = action_button('TeilnehmerIn hinzufügen', new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)

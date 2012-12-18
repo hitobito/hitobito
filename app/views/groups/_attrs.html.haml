@@ -1,9 +1,6 @@
 
 #main.row-fluid
-  %aside.span4
-    = render 'child_groups'
-
-  %article.span7.offset1
+  %article.span6
     %h2 Kontaktangaben
     = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
     
@@ -11,3 +8,6 @@
     = render_attrs(entry, :type_name)
     = render_extensions :attrs
     = render_attrs(entry, :created_info, :updated_info) if can?(:show_details, @group)
+
+  %aside.span5.offset1
+    = render 'child_groups'

@@ -1,8 +1,8 @@
 module PopulationHelper
 
-  BADGE_INVALID = '<span class="badge badge-important"><i class="icon-exclamation-sign icon-white"></i></span>'.html_safe
+  BADGE_INVALID = '<span class="text-error">Angabe fehlt</span>'.html_safe
 
-  def person_birthday(person)
+  def person_birthday_with_check(person)
     if person.birthday.blank?
       BADGE_INVALID
     else
@@ -10,7 +10,7 @@ module PopulationHelper
     end
   end
 
-  def person_gender(person)
+  def person_gender_with_check(person)
     if person.gender.blank?
       BADGE_INVALID
     else

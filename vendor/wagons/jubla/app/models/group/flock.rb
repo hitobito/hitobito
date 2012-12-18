@@ -21,7 +21,7 @@ class Group::Flock < Group
 
 
   def available_coaches 
-    Person.in_layer(*layer_groups).where(roles: { type: Jubla::Role::Coach.sti_name })
+    Person.in_layer(*layer_groups).where(roles: { type: [Group::State::Coach, Group::Region::Coach].collect(&:sti_name) })
   end
 
   def available_advisors

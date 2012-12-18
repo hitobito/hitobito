@@ -17,6 +17,11 @@ unless ch.address.present?
   end
 end
 
+Group::FederalWorkGroup.seed(:name, :parent_id,
+  {name: 'AG Bundeslager',
+   parent_id: ch.id },
+)
+
 states = Group::State.seed(:name, :parent_id,
   {name: 'Kanton Bern',
    short_name: 'BE',
@@ -66,7 +71,7 @@ states.each do |s|
   ast.update_attributes(contacts)
 end
 
-Group::ProfessionalGroup.seed(:name, :parent_id,
+Group::StateProfessionalGroup.seed(:name, :parent_id,
   {name: 'FG Sicherheit',
    parent_id: states[0].id },
    
@@ -74,10 +79,7 @@ Group::ProfessionalGroup.seed(:name, :parent_id,
    parent_id: states[2].id },
 )
 
-Group::WorkGroup.seed(:name, :parent_id,
-  {name: 'AG Bundeslager',
-   parent_id: ch.id },
-   
+Group::StateWorkGroup.seed(:name, :parent_id,
   {name: 'AG Kantonslager',
    parent_id: states[0].id },
 )

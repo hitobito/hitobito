@@ -13,7 +13,7 @@ module Jubla::Role
     self.affiliate = true
   end
   
-  # J+S Coach
+  # Common superclass for all J+S Coach roles
   class Coach < ::Role
     self.permissions = [:contact_data, :login]
   end

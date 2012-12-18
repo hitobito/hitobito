@@ -68,7 +68,10 @@ class Ability::Accessibles
     end
     
     # people in same group
-    or_conditions(conditions, 'groups.id IN (?)', user.groups.collect(&:id))
+    group_ids = user.groups.collect(&:id).uniq
+    if group_ids.present?
+      or_conditions(conditions, 'groups.id IN (?)', group_ids)
+    end
     
     if conditions.first.blank? && !user.root?
       or_conditions(conditions, '1=0')

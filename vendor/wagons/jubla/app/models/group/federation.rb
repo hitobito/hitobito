@@ -8,8 +8,8 @@ class Group::Federation < Group
   
   children Group::FederalBoard,
            Group::OrganizationBoard,
-           Group::ProfessionalGroup,
-           Group::WorkGroup,
+           Group::FederalProfessionalGroup,
+           Group::FederalWorkGroup,
            Group::State
   
   def census_total(year)

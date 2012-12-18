@@ -96,11 +96,16 @@
   background: none;
   border: none;
   font-family: $headingFontFamily;
-  a { 
-    color: $gray; 
-  }
+
   ul { 
     margin: 0;
+    li {
+      color: $gray;
+      
+      a {
+
+      }
+    }
   }
 }
 

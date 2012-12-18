@@ -6,12 +6,16 @@ class Group::State < Group
   self.contact_group_type = Group::StateAgency
   self.event_types = [Event, Event::Course]
   
-  roles Jubla::Role::Coach
+    
+  class Coach < Jubla::Role::Coach
+  end
+  
+  roles Coach
   
   children Group::StateAgency,
            Group::StateBoard,
-           Group::ProfessionalGroup,
-           Group::WorkGroup,
+           Group::StateProfessionalGroup,
+           Group::StateWorkGroup,
            Group::Region,
            Group::Flock
            

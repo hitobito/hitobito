@@ -21,9 +21,9 @@ describe Group::Flock do
   end
 
   context "#available_coaches includes coach roles from upper layers" do
-    let(:state_coach) { Fabricate(Jubla::Role::Coach.name.to_sym, group: groups(:be)) }
-    let(:other_state_coach) { Fabricate(Jubla::Role::Coach.name.to_sym, group: groups(:no)) }
-    let(:region_coach) { Fabricate(Jubla::Role::Coach.name.to_sym, group: groups(:city)) }
+    let(:state_coach) { Fabricate(Group::State::Coach.name.to_sym, group: groups(:be)) }
+    let(:other_state_coach) { Fabricate(Group::State::Coach.name.to_sym, group: groups(:no)) }
+    let(:region_coach) { Fabricate(Group::Region::Coach.name.to_sym, group: groups(:city)) }
 
     its(:available_coaches) { should include(state_coach.person) } 
     its(:available_coaches) { should include(region_coach.person) } 
@@ -32,7 +32,7 @@ describe Group::Flock do
   end
   
   context "coach may be set" do
-    let(:state_coach) { Fabricate(Jubla::Role::Coach.name.to_sym, group: groups(:be)) }
+    let(:state_coach) { Fabricate(Group::State::Coach.name.to_sym, group: groups(:be)) }
     
     it "persists coach" do
       subject.coach_id = state_coach.person_id

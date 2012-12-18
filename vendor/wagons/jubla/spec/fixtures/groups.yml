@@ -53,7 +53,7 @@ be_agency:
 be_security:
   name: FG Sicherheit
   parent: be
-  type: Group::ProfessionalGroup
+  type: Group::StateProfessionalGroup
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 11
   rgt: 12
@@ -61,7 +61,7 @@ be_security:
 be_state_camp:
   name: AG Kantonslager
   parent: be
-  type: Group::WorkGroup
+  type: Group::StateWorkGroup
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:be) %>
   lft: 13
   rgt: 14

@@ -14,7 +14,7 @@ module Sheet
             content_tag(:li, crumb)
           end
           
-          content_tag(:li, 'geh&ouml;rt zu '.html_safe) +
+          content_tag(:li, 'geh&ouml;rt zu&nbsp;'.html_safe) +
           StandardHelper::EMPTY_STRING + 
           safe_join(crumbs, divider)
         end
@@ -34,7 +34,7 @@ module Sheet
     end
     
     def divider
-      content_tag(:span, '>', class: 'divider')
+      content_tag(:li, '>', class: 'divider')
     end
     
     def breadcrumbs?

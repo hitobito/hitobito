@@ -207,12 +207,12 @@ describe Ability::Accessibles do
           let(:group) { groups(:be_state_camp) }
           
           it "may get people with contact data" do
-            other = Fabricate(Group::WorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
             should include(other.person)
           end
           
           it "may not get people without contact data" do
-            other = Fabricate(Group::WorkGroup::Member.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::Member.name.to_sym, group: groups(:be_state_camp))
             should_not include(other.person)
           end
           
@@ -245,7 +245,7 @@ describe Ability::Accessibles do
       
       
       describe :login do
-        let(:role) { Fabricate(Group::WorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
+        let(:role) { Fabricate(Group::StateWorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
         
         it "has only login permission" do
           role.permissions.should == [:login]
@@ -259,7 +259,7 @@ describe Ability::Accessibles do
           end
           
           it "may get people in his group" do
-            other = Fabricate(Group::WorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
             should include(other.person)
           end
           

@@ -38,7 +38,7 @@ de:
       
       jubla/role/external: Extern
       jubla/role/coach: Coach
-      jubla/role/group_admin: Gruppenverwaltung
+      jubla/role/group_admin: Adressverwaltung
       jubla/role/leader: Leitung
       jubla/role/member: Mitglied
       jubla/role/treasurer: Kassier

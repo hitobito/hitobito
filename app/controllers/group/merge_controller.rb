@@ -4,7 +4,8 @@ class Group::MergeController < ApplicationController
 
   decorates :group
 
-  before_filter :authorize, :mergeable_groups
+  before_filter :authorize
+  before_filter :mergeable_groups, only: :select
   before_filter :check_params, :check_merge_group, only: :perform
 
   def select
@@ -12,7 +13,13 @@ class Group::MergeController < ApplicationController
 
   def perform
     merge = Group::Merger.new(group, @merge_group, params[:new_group_name])
-    redirect_to group_path(merge.new_group)
+    if merge.group2_valid?
+      merge.merge!
+      redirect_to group_path(merge.new_group)
+    else
+      flash[:alert] = 'Die gewählten Gruppen können nicht fusioniert werden.'
+      redirect_to merge_group_path(group)
+    end
   end
 
   private
@@ -22,12 +29,16 @@ class Group::MergeController < ApplicationController
   end
 
   def authorize
-    authorize!(:merge, group)
+    authorize!(:edit, group)
   end
 
   def mergeable_groups
-    groups = group.groups_with_same_parent_and_type
-    @mergeable_groups = groups.collect {|g| g if can?(:update, g)}
+    groups = group.sister_groups
+    @mergeable_groups = groups.select {|g| can?(:update, g)}
+    if @mergeable_groups.empty? 
+      flash[:alert] = 'Es sind keine Gruppen zum Fusionieren vorhanden.'
+      redirect_to group_path(group)
+    end
   end
 
   def check_params
@@ -35,15 +46,15 @@ class Group::MergeController < ApplicationController
       flash[:alert] = 'Name für neue Gruppe muss definiert werden.'
       redirect_to merge_group_path(group)
     elsif params[:merge_group_id].blank?
-      flash[:alert] = 'Bitte wähle eine Gruppe die fusioniert werden soll.'
+      flash[:alert] = 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
       redirect_to merge_group_path(group)
     end
   end
 
   def check_merge_group
     @merge_group ||= Group.find(params[:merge_group_id])
-    if !can?(:update, @merge_group)
-      flash[:alert] = 'Leider fehlt dir die Berechtigung diese Gruppe zu fusionieren.'
+    if (!can?(:update, @merge_group) || !can?(:update, group))
+      flash[:alert] = 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
       redirect_to merge_group_path(group)
     end
   end

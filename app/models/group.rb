@@ -162,7 +162,7 @@ class Group < ActiveRecord::Base
     Group.where(layer_group_id: layer_group_id)
   end
 
-  def groups_with_same_parent_and_type
+  def sister_groups
     Group.where(parent_id: parent_id).where(type: type).where('id != ?',id)
   end
 

@@ -16,16 +16,20 @@ filters = PeopleFilter.seed(:group_type, :name,
   kind: 'deep'}
 )
 
-PeopleFilter::RoleType.seed_once(:people_filter_id, :role_type,
- {people_filter_id: filters[0].id,
+RelatedRoleType.seed_once(:relation_id, :relation_type, :role_type,
+ {relation_id: filters[0].id,
+  relation_type: PeopleFilter.sti_name,
   role_type: 'Group::Flock::Leader'},
   
- {people_filter_id: filters[1].id,
+ {relation_id: filters[1].id,
+  relation_type: PeopleFilter.sti_name,
   role_type: 'Group::Flock::President'},
   
- {people_filter_id: filters[2].id,
+ {relation_id: filters[2].id,
+  relation_type: PeopleFilter.sti_name,
   role_type: 'Group::Flock::Leader'},
   
- {people_filter_id: filters[3].id,
+ {relation_id: filters[3].id,
+  relation_type: PeopleFilter.sti_name,
   role_type: 'Group::Flock::President'},
 )

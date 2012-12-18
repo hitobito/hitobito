@@ -24,6 +24,7 @@
 #  updated_at             :datetime         not null
 #  participant_count      :integer          default(0)
 #  application_contact_id :integer
+#  condition_id           :integer
 #
 
 class Event < ActiveRecord::Base
@@ -59,6 +60,8 @@ class Event < ActiveRecord::Base
 
 
   ### ASSOCIATIONS
+  
+  has_and_belongs_to_many :groups
 
   belongs_to :contact, class_name: 'Person'
   
@@ -68,8 +71,7 @@ class Event < ActiveRecord::Base
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
   
-  has_and_belongs_to_many :groups
-  
+  has_many :subscriptions, as: :subscriber, dependent: :destroy
   
   ### VALIDATIONS
   

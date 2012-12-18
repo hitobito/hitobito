@@ -54,7 +54,6 @@ describe Group::Merger do
       # last but not least, check nested set integrity
       Group.valid?.should eq true
 
-
     end
 
     it "should raise an error if one tries to merge to groups with different types/parent" do

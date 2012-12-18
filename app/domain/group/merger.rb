@@ -39,6 +39,11 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   end
 
   def move_children(group)
+    children = group1.children + group2.children
+    children.each do |child|
+      child.parent_id = new_group.id
+      child.save!
+    end
     group.children.update_all(parent_id: new_group.id)
   end
 

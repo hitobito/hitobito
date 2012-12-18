@@ -163,7 +163,7 @@ class Group < ActiveRecord::Base
   end
 
   def sister_groups
-    Group.where(parent_id: parent_id).where(type: type).where('id != ?',id)
+    Group.where(parent_id: parent_id).where(type: type).where('id != ?',id).without_deleted
   end
 
   # The layer hierarchy without the layer of this group.

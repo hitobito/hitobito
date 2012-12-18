@@ -1,4 +1,8 @@
 - title "#{@group.to_s} fusionieren"
+%p 
+  Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Events und Personen samt Rollen beider Gruppen in die neue Gruppe verschoben.
+  %br Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
+  %br
 = form_tag(merge_group_path(@group), class: 'form-horizontal') do
   = field_set_tag do
     .control-group
@@ -15,10 +19,6 @@
             = radio_button_tag(:merge_group_id, g.id)
             = g.to_s
           %br
-  .alert.alert-warning
-    %p 
-      Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Events und Personen samt Rollen beider Gruppen in die neue Gruppe verschoben.
-      %br Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
   .btn-toolbar
     .btn-group
       = submit_tag('Fusionieren', class: 'btn btn-primary')

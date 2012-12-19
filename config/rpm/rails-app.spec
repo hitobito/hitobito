@@ -2,7 +2,7 @@
 # add your specific settings here
 
 %define app_name     jubla
-%define app_version  1.0
+%define app_version  1.1
 %define ruby_version 1.9.3
 
 ### optional libs

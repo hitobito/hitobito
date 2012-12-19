@@ -26,6 +26,7 @@ module Jubla
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W( #{config.root}/app/domain
                                  #{config.root}/app/jobs
+                                 #{config.root}/app/utils
                                )
 
     # Only load the plugins named here, in the order given (default is alphabetical).

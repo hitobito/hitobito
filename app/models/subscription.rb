@@ -17,4 +17,6 @@ class Subscription < ActiveRecord::Base
   
   has_many :related_role_types, as: :relation, dependent: :destroy
   
+  # TODO: validate at least one related_role_type if subscriber_type == Group
+  
 end

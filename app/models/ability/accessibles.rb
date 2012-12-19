@@ -38,11 +38,11 @@ class Ability::Accessibles
   private
   
   def accessible_people
-    conditions = [""]
+    condition = OrCondition.new
     
     if user.contact_data_visible?
       # people with contact data visible
-      or_conditions(conditions, 'people.contact_data_visible = ?', true)
+      condition.or('people.contact_data_visible = ?', true)
     end
     
     if layers_read.present?
@@ -50,37 +50,39 @@ class Ability::Accessibles
                             user.groups_with_permission(:layer_read))
       
       # people in same layer
-      or_conditions(conditions, "groups.layer_group_id IN (?)", layer_groups.collect(&:id))
+      condition.or("groups.layer_group_id IN (?)", layer_groups.collect(&:id))
       
       # people visible from above
-      visible_from_above_groups = ['']
+      visible_from_above_groups = OrCondition.new
       collapse_groups_to_highest(layer_groups) do |layer_group|
-        or_conditions(visible_from_above_groups, 
-                      'groups.lft >= ? AND groups.rgt <= ?', 
-                      layer_group.left, 
-                      layer_group.rgt)
+        visible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?', 
+                                     layer_group.left, 
+                                     layer_group.rgt)
       end
       
-      visible_role_types = Role.visible_types.collect(&:sti_name)
-      visible_from_above_groups[0] = "(#{visible_from_above_groups.first}) AND roles.type IN (?)"
-      visible_from_above_groups << visible_role_types
-      or_conditions(conditions, *visible_from_above_groups)
+      query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
+      args = visible_from_above_groups.to_a[1..-1] + [Role.visible_types.collect(&:sti_name)]
+      condition.or(query, *args)
     end
     
     # people in same group
+<<<<<<< HEAD
     group_ids = user.groups.collect(&:id).uniq
     if group_ids.present?
       or_conditions(conditions, 'groups.id IN (?)', group_ids)
     end
+=======
+    condition.or('groups.id IN (?)', user.groups.collect(&:id))
+>>>>>>> query for all people of a mailing list
     
-    if conditions.first.blank? && !user.root?
-      or_conditions(conditions, '1=0')
+    if condition.blank? && !user.root?
+      condition.or('1=0')
     end
     
     Person.only_public_data.
            joins(roles: :group).
            where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
-           where(conditions).
+           where(condition.to_a).
            uniq
   end
   
@@ -93,15 +95,7 @@ class Ability::Accessibles
       end
     end
   end
- 
-  def or_conditions(conditions, clause, *args)
-    if conditions.first.present?
-      conditions.first << " OR "
-    end
-    conditions.first << "(#{clause})"
-    conditions.push(*args)
-  end
-  
+   
   def belonging_to_this_group?
     user_groups.include?(group.id)
   end

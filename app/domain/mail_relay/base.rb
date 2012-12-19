@@ -6,7 +6,7 @@ module MailRelay
     
     # Define a header that contains the original receiver address.
     # This header could be set by the mail server.
-    cattr :receiver_header
+    cattr_accessor :receiver_header
     self.receiver_header = 'X-Envelope-To'
     
     attr_reader :message

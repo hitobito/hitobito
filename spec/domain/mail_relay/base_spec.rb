@@ -8,12 +8,12 @@ describe MailRelay::Base do
   
   let(:relay) { MailRelay::Base.new(message) }
   
-  describe "#envelope_receiver" do
+  describe "#receiver_from_received_header" do
     context "simple" do
       let(:message) { simple }
       
       it "returns nil" do
-        relay.envelope_receiver.should be_nil
+        relay.receiver_from_received_header.should be_nil
       end
     end
     
@@ -21,7 +21,7 @@ describe MailRelay::Base do
       let(:message) { regular }
       
       it "returns receiver" do
-        relay.envelope_receiver.should == 'zumkehr@puzzle.ch'
+        relay.receiver_from_received_header.should == 'zumkehr@puzzle.ch'
       end
     end
     
@@ -29,7 +29,7 @@ describe MailRelay::Base do
       let(:message) { list }
       
       it "returns receiver" do
-        relay.envelope_receiver.should == 'zumkehr@puzzle.ch'
+        relay.receiver_from_received_header.should == 'zumkehr@puzzle.ch'
       end
     end
   end

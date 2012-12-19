@@ -81,6 +81,7 @@ group :console do
   gem 'pry-stack_explorer'
   gem 'mailcatcher'
   gem 'rdoc-tags'
+  gem 'zeus'
 end
 
 group :guard_support do

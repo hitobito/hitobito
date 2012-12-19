@@ -1,7 +1,7 @@
 class Group::Mover < Struct.new(:group)
 
   def candidates
-    @candidate||= filter(possible_candidates) - [parent, group]
+    @candidate||= possible_candidates - [parent, group]
   end
 
   def perform(target)
@@ -9,16 +9,17 @@ class Group::Mover < Struct.new(:group)
   end
 
   private
+  
   def parent
     group.parent
   end
 
-  def possible_candidates
+  def possible_groups
     parent.children | parent.hierarchy.map(&:siblings).flatten
   end
 
-  def filter(candidates)
-    candidates.select { |candidate| matching_childgroup?(candidate) }
+  def possible_candidates
+    possible_groups.select { |candidate| matching_childgroup?(candidate) }
   end
 
   def matching_childgroup?(candidate)

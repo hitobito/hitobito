@@ -37,5 +37,4 @@ class Group::MoveController < ApplicationController
     @target ||= (params[:mover] && params[:mover][:group]) && Group.find(params[:mover][:group])
   end
 
-
 end

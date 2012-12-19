@@ -5,8 +5,6 @@ describe FullTextController, :mysql, type: :controller do
 
   sphinx_environment(:people) do
   
-    before {sign_in(people(:top_leader)) }
-        
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
       @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
@@ -22,17 +20,32 @@ describe FullTextController, :mysql, type: :controller do
       
     describe "GET index" do
       
-      it "finds accessible person" do
-        get :index, q: @bg_leader.last_name[1..5]
+      context "as top leader" do
+        before {sign_in(people(:top_leader)) }
         
-        assigns(:people).should include(@bg_leader)
+        it "finds accessible person" do
+          get :index, q: @bg_leader.last_name[1..5]
+          
+          assigns(:people).should include(@bg_leader)
+        end
+        
+        it "does not find not accessible person" do
+          get :index, q: @bg_member.last_name[1..5]
+          
+          assigns(:people).should_not include(@bg_member)
+        end
       end
       
-      it "does not find not accessible person" do
-        get :index, q: @bg_member.last_name[1..5]
+      context "as root" do
+        before { sign_in(people(:root)) }
         
-        assigns(:people).should_not include(@bg_member)
+        it "finds every person" do
+          get :index, q: @bg_member.last_name[1..5]
+          
+          assigns(:people).should include(@bg_member)
+        end
       end
+      
     end
   
   end

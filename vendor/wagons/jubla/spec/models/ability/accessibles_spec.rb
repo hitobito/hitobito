@@ -8,7 +8,8 @@ describe Ability::Accessibles do
   [:index, :layer_search, :deep_search, :global].each do |action|
     context action do
       let(:action) { action }
-      let(:ability) { Ability::Accessibles.new(role.person.reload, action == :index ? group : nil) }
+      let(:user)   { role.person.reload }
+      let(:ability) { Ability::Accessibles.new(user, action == :index ? group : nil) }
       
       let(:all_accessibles) do
         people = Person.accessible_by(ability)
@@ -298,6 +299,27 @@ describe Ability::Accessibles do
         end
           
       end
+      
+      
+      describe :root do
+        let(:user) { people(:root) }
+        
+        context "every group" do
+          let(:group) { groups(:federal_board) }
+          
+          it "may get all people" do
+            other = Fabricate(Group::FederalBoard::Member.name.to_sym, group: group)
+            should include(other.person)
+          end
+          
+          it "may get affiliate people" do
+            other = Fabricate(Jubla::Role::External.name.to_sym, group: group)
+            should include(other.person)
+          end
+        end
+        
+      end
+    
     end
   end
 end

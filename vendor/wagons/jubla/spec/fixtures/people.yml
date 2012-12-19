@@ -9,3 +9,8 @@ flock_leader:
   last_name: Leader
   email: flock.leader@jubla.example.com
   contact_data_visible: true
+
+root:
+  company_name: 'Puzzle ITC'
+  company: true
+  email: <%= Settings.root_email %>

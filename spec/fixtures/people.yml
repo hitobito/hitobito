@@ -54,3 +54,9 @@ bottom_member:
   last_name: Member
   email: bottom_member@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
+
+root:
+  company_name: 'Puzzle ITC'
+  company: true
+  email: <%= Settings.root_email %>
+

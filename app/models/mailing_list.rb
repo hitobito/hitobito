@@ -23,6 +23,9 @@ class MailingList < ActiveRecord::Base
   
   has_many :subscriptions, dependent: :destroy
   
-
+  
+  def to_s
+    name
+  end
   
 end

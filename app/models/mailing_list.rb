@@ -24,8 +24,9 @@ class MailingList < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy
   
   
-  validates :mail_name, uniqueness: { allow_blank: true, case_sensitive: false },
-                        format: /[a-z0-9\-\_\.]+/
+  validates :mail_name, uniqueness: { case_sensitive: false },
+                        format: /[a-z0-9\-\_\.]+/,
+                        allow_blank: true
   validate :assert_mail_name_is_not_protected
 
   

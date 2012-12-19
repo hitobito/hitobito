@@ -66,14 +66,11 @@ class Ability::Accessibles
     end
     
     # people in same group
-<<<<<<< HEAD
     group_ids = user.groups.collect(&:id).uniq
     if group_ids.present?
-      or_conditions(conditions, 'groups.id IN (?)', group_ids)
+      condition.or('groups.id IN (?)', group_ids)
     end
-=======
-    condition.or('groups.id IN (?)', user.groups.collect(&:id))
->>>>>>> query for all people of a mailing list
+
     
     if condition.blank? && !user.root?
       condition.or('1=0')

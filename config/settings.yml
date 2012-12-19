@@ -24,6 +24,9 @@ email:
   # while the actual recipients go in the bcc field.
   mass_recipient: noreply@jubla.ch
   
+  # domain where mailing lists are located
+  list_domain: <%= ENV['RAILS_HOST_NAME'] || 'localhost' %>
+  
   # configuration for retrieving email
   retriever:
     type: pop3

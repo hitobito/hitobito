@@ -4,6 +4,11 @@ module MailRelay
   # to constrain which mails are sent to whom.
   class Base
     
+    # Define a header that contains the original receiver address.
+    # This header could be set by the mail server.
+    cattr :receiver_header
+    self.receiver_header = 'X-Envelope-To'
+    
     attr_reader :message
     
     # Retrieve, process and delete all mails from the mail server.
@@ -58,14 +63,28 @@ module MailRelay
       # do nothing
     end
     
+    # 
+    def original_receiver
+      receiver_from_x_header || 
+      receiver_from_received_header || 
+      raise("Could not determine original receiver for email:\n#{message.header}")
+    end
+    
     # Heuristic method to find actual receiver of the message.
     # May return nil if could not determine.
-    def envelope_receiver
-      if received = message.received && message.received.first
+    def receiver_from_received_header
+      if received = message.received
+        received = received.first if received.respond_to?(:first)
         received.info[/ for .*?([^\s<>]+@[^\s<>]+)/, 1]
       end
     end
-
+    
+    def receiver_from_x_header
+      if field = message.header[receiver_header]
+        field.to_s.split('@', 2).first
+      end
+    end
+    
     # Is the mail sent to a valid relay address?
     def relay_address?
       true

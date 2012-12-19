@@ -3,17 +3,86 @@ require 'spec_helper'
 describe MailingList do
   
   let(:list) { mailing_lists(:leaders) }
+  let(:person) { Fabricate(:person) }
+  let(:event)  { Fabricate(:event, groups: [list.group]) }
   
   describe 'validations' do
     # TODO
+  end
+  
+  describe '#subscribed?' do
+    context "people" do
+      it "is true if included" do
+        create_subscription(person)
+        
+        list.subscribed?(person).should be_true
+        list.subscribed?(people(:top_leader)).should be_false
+      end
+      
+      it "is false if excluded" do
+        create_subscription(person)
+        create_subscription(person, true)
+        
+        list.subscribed?(person).should be_false
+      end
+    end
+    
+    context "events" do
+      it "is true if active participation" do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        
+        list.subscribed?(p).should be_true
+      end
+      
+      it "is false if non active participation" do
+        create_subscription(event)
+        p = Fabricate(:event_participation, event: event).person
+        
+        list.subscribed?(p).should be_false
+      end 
+      
+      it "is false if explicitly excluded" do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        create_subscription(p, true)
+        
+        list.subscribed?(p).should be_false
+      end
+    end
+    
+    context "groups" do
+      it "is true if in group" do
+        sub = create_subscription(groups(:bottom_layer_one))
+        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        
+        list.subscribed?(p).should be_true
+      end
+      
+      it "is false if different role in groupn" do
+        sub = create_subscription(groups(:bottom_layer_one))
+        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+        
+        list.subscribed?(p).should be_false
+      end 
+      
+      it "is false if explicitly excluded" do
+        sub = create_subscription(groups(:bottom_layer_one))
+        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        create_subscription(p, true)
+        
+        list.subscribed?(p).should be_false
+      end
+    end
   end
   
   describe '#people' do
     
     subject { list.people }
     
-    let(:person) { Fabricate(:person) }
-    let(:event)  { Fabricate(:event, groups: [list.group]) }
     
     context "only people" do
       it "includes single person" do
@@ -273,6 +342,13 @@ describe MailingList do
         should include(pe3)
         should include(pg1)
         should have(4).items
+        
+        list.subscribed?(people(:top_leader)).should be_true
+        list.subscribed?(pe2).should be_true
+        list.subscribed?(pe3).should be_true
+        list.subscribed?(pg1).should be_true
+        list.subscribed?(pg2).should be_false
+        list.subscribed?(pe1).should be_false
       end
     end
   end

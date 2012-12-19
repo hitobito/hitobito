@@ -34,7 +34,9 @@ class MailingList < ActiveRecord::Base
     name
   end
   
-  
+  def subscribed?(person)
+    people.where(id: person.id).exists?
+  end
   
   def people
     condition = OrCondition.new

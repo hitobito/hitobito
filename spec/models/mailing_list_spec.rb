@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe MailingList do
   
-  let(:list) { mailing_lists(:leaders) }
+  let(:list)   { Fabricate(:mailing_list, group: groups(:top_layer)) }
   let(:person) { Fabricate(:person) }
   let(:event)  { Fabricate(:event, groups: [list.group]) }
   

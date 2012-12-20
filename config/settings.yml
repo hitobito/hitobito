@@ -30,6 +30,8 @@ email:
   # configuration for retrieving email
   retriever:
     type: pop3
+    # interval to check for new mails in minutes
+    interval: 3
     config:
       address:    <%= ENV['RAILS_MAIL_RETRIEVER_ADDRESS'] || 'localhost' %>
       port:       <%= ENV['RAILS_MAIL_RETRIEVER_PORT'] || 995 %>

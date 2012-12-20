@@ -16,7 +16,7 @@ module MailRelay
       begin
         messages = Mail.find_and_delete
         messages.each do |message|
-          self.new(message).relay
+          new(message).relay
         end
       end while messages.present?
     end
@@ -44,10 +44,8 @@ module MailRelay
       if destinations.present?
         message.singleton_class.send(:include, ManualDestinations)
         message.destinations = destinations
-        if defined?(ActionMailer::Base)
-          ActionMailer::Base.wrap_delivery_behavior(message)
-        end
-        message.deliver
+        message.header['Precedence'] = 'list'
+        deliver(message)
       end
     end
     
@@ -63,22 +61,29 @@ module MailRelay
       # do nothing
     end
     
-    # 
-    def original_receiver
+    # The receiver account that originally got this email.
+    # Returns only the part before the @ sign
+    def envelope_receiver_name
       receiver_from_x_header || 
       receiver_from_received_header || 
       raise("Could not determine original receiver for email:\n#{message.header}")
     end
+    
+    def sender_email
+      @sender_email ||= message.from && message.from.first
+    end
+    
     
     # Heuristic method to find actual receiver of the message.
     # May return nil if could not determine.
     def receiver_from_received_header
       if received = message.received
         received = received.first if received.respond_to?(:first)
-        received.info[/ for .*?([^\s<>]+@[^\s<>]+)/, 1]
+        received.info[/ for .*?([^\s<>]+)@[^\s<>]+/, 1]
       end
     end
     
+    # Try to read the envelope receiver from the given x header
     def receiver_from_x_header
       if field = message.header[receiver_header]
         field.to_s.split('@', 2).first
@@ -98,6 +103,15 @@ module MailRelay
     # List of receiver email addresses for the resent email.
     def receivers
       []
+    end
+    
+    private
+    
+    def deliver(message)
+      if defined?(ActionMailer::Base)
+        ActionMailer::Base.wrap_delivery_behavior(message)
+      end
+      message.deliver
     end
     
   end

@@ -1,0 +1,9 @@
+leader_groups_bottom_layer:
+  relation: leaders_group
+  relation_type: Subscription
+  role_type: Group::BottomLayer::Leader
+  
+leader_groups_bottom_group:
+  relation: leaders_group
+  relation_type: Subscription
+  role_type: Group::BottomGroup::Leader

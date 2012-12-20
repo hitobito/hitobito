@@ -2,7 +2,7 @@ Fabricator(:person) do
   first_name { Faker::Name.first_name }
   last_name { Faker::Name.last_name }
   nickname { Faker::Name.first_name }
-  email { |attrs| "#{attrs[:first_name]}.#{attrs[:last_name]}#{sequence}@jubla.example.com" }
+  email { |attrs| "#{attrs[:first_name].downcase.gsub(/[^a-z]/, '')}.#{attrs[:last_name].downcase.gsub(/[^a-z]/, '')}#{sequence}@jubla.example.com" }
 end
 
 Fabricator(:person_with_address, from: :person) do

@@ -7,7 +7,7 @@ describe MailRelay::Base do
   let(:list)    { Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'list.eml'))) }
   
   let(:relay) { MailRelay::Base.new(message) }
-  
+    
   describe "#receiver_from_received_header" do
     context "simple" do
       let(:message) { simple }
@@ -21,7 +21,7 @@ describe MailRelay::Base do
       let(:message) { regular }
       
       it "returns receiver" do
-        relay.receiver_from_received_header.should == 'zumkehr@puzzle.ch'
+        relay.receiver_from_received_header.should == 'zumkehr'
       end
     end
     
@@ -29,7 +29,17 @@ describe MailRelay::Base do
       let(:message) { list }
       
       it "returns receiver" do
-        relay.receiver_from_received_header.should == 'zumkehr@puzzle.ch'
+        relay.receiver_from_received_header.should == 'zumkehr'
+      end
+    end
+  end
+  
+  describe "#envelope_receiver_name" do
+    context "regular" do
+      let(:message) { regular }
+      
+      it "returns receiver" do
+        relay.envelope_receiver_name.should == 'zumkehr'
       end
     end
   end

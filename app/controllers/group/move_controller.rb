@@ -1,12 +1,11 @@
 class Group::MoveController < ApplicationController
   decorates :group
-  helper_method :group
+  #helper_method :group
   before_filter :group
+  before_filter :candidates, only: :select
 
   def select
     authorize!(:update, group)
-
-    @candidates = candidates
   end
 
   def perform
@@ -25,8 +24,14 @@ class Group::MoveController < ApplicationController
   end
 
   def candidates
-    mover.candidates.select { |candidate| can?(:create, candidate) }.
+    @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
     group_by { |candidate| candidate.class.model_name.human }
+
+    if @candidates.empty? 
+      flash[:alert] = 'Diese Gruppe kann leider nicht verschoben werden.'
+      redirect_to group_path(group)
+    end
+
   end
 
   def mover
@@ -34,7 +39,7 @@ class Group::MoveController < ApplicationController
   end
 
   def target
-    @target ||= (params[:mover] && params[:mover][:group]) && Group.find(params[:mover][:group])
+    @target ||= (params[:move] && params[:move][:target_group_id]) && Group.find(params[:move][:target_group_id])
   end
 
 

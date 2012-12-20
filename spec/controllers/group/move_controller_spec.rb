@@ -18,7 +18,7 @@ describe Group::MoveController do
 
   context "POST :perform" do
     it "performs moving" do
-      post :perform, id: group.id, mover: { group: target.id }
+      post :perform, id: group.id, move: { target_group_id: target.id }
       flash[:notice].should eq "#{group} wurde nach #{target} verschoben."
       should redirect_to(group)
     end

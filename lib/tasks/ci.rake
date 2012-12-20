@@ -30,7 +30,8 @@ end
 desc "Run brakeman"
 task :brakeman do
   # some files seem to cause brakeman to hang. ignore them
-  ignores = %w(app/views/people_filters/_form.html.haml)
+  ignores = %w(app/views/people_filters/_form.html.haml
+               app/models/mailing_list.rb)
   begin
     Timeout.timeout(120) do
       sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')}"

@@ -11,6 +11,9 @@
 
 class Subscription < ActiveRecord::Base
   
+  attr_accessible :subscriber_id
+  
+  
   belongs_to :mailing_list
   
   belongs_to :subscriber, polymorphic: true

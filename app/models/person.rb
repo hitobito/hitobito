@@ -82,6 +82,9 @@ class Person < ActiveRecord::Base
   
   has_many :qualifications
   
+  has_many :subscriptions, as: :subscriber, dependent: :destroy
+  
+  
   belongs_to :last_label_format, class_name: 'LabelFormat'
   
   

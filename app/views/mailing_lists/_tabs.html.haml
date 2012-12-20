@@ -1,0 +1,8 @@
+- bar.tab "Info", 
+          group_mailing_list_path(@group, @mailing_list)
+
+- if can?(:index_subscriptions, @mailing_list)
+  - bar.tab "Abonnenten", 
+            group_mailing_list_subscriptions_path(@group, @mailing_list, returning: true), 
+            [group_mailing_list_subscriptions_path(@group, @mailing_list)]
+  

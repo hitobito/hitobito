@@ -4,6 +4,7 @@ class Ability
   include Ability::People
   include Ability::Groups
   include Ability::Events
+  include Ability::MailingLists
   include Ability::Various
   
   def initialize(user)
@@ -25,6 +26,7 @@ class Ability
     define_people_abilities
     define_groups_abilities
     define_events_abilities
+    define_mailing_lists_abilities
     define_various_abilities
   end
 

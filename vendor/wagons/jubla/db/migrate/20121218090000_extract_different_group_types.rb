@@ -34,12 +34,13 @@ class ExtractDifferentGroupTypes < ActiveRecord::Migration
     
     
     # filters
-    PeopleFilter::RoleType.where(role_type: %w(Group::WorkGroup::Leader 
-                                               Group::WorkGroup::Member 
-                                               Group::ProfessionalGroup::Leader 
-                                               Group::ProfessionalGroup::Member 
-                                               Jubla::Role::Coach)).
-                           destroy_all
+    role_types = defined?(PeopleFilter::RoleType) ? PeopleFilter::RoleType : RelatedRoleType
+    role_types.where(role_type: %w(Group::WorkGroup::Leader 
+                                   Group::WorkGroup::Member 
+                                   Group::ProfessionalGroup::Leader 
+                                   Group::ProfessionalGroup::Member 
+                                   Jubla::Role::Coach)).
+               destroy_all
   end
 
   def down

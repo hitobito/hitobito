@@ -78,6 +78,9 @@ class Group < ActiveRecord::Base
   has_many :people_filters, dependent: :destroy
 
   has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
+  
+  has_many :mailing_lists, dependent: :destroy
+  has_many :subscriptions, as: :subscriber, dependent: :destroy
 
 
   ### VALIDATIONS

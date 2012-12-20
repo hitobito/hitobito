@@ -14,30 +14,9 @@ de:
         must_have_same_type: müssen von denselbem Typ sein.
         
     models:
-      label_format:
-        one: Etikettenformat
-        other: Etikettenformate
       custom_content:
         one: Text
         other: Texte
-      group:
-        one: Gruppe
-        other: Gruppen
-      person:
-        one: Person
-        other: Personen
-      people_filter:
-        one: Filter
-        other: Filter
-      phone_number:
-        one: Telefonnummer
-        other: Telefonnummern
-      role:
-        one: Rolle
-        other: Rollen
-      social_account:
-        one: Social Media Adresse
-        other: Social Media Adressen
       event:
         one: Anlass
         other: Anlässe
@@ -65,12 +44,40 @@ de:
         one: Kassier
       event/role/speaker:
         one: Referent
+      group:
+        one: Gruppe
+        other: Gruppen
+      label_format:
+        one: Etikettenformat
+        other: Etikettenformate
+      mailing_list:
+        one: Abo
+        other: Abos
+      person:
+        one: Person
+        other: Personen
+      people_filter:
+        one: Filter
+        other: Filter
+      phone_number:
+        one: Telefonnummer
+        other: Telefonnummern
       qualification:
         one: Qualifikation
         other: Qualifikationen
       qualification_kind:
         one: Qualifikationsart
         other: Qualifikationsarten
+      role:
+        one: Rolle
+        other: Rollen
+      social_account:
+        one: Social Media Adresse
+        other: Social Media Adressen
+      subscription:
+        one: Abonnent
+        other: Abonnenten
+        
       
     attributes:
 
@@ -236,6 +243,15 @@ de:
         label: Social Media Typ
         public: Öffentlich
   
+      mailing_list:
+        name: Name
+        description: Beschreibung
+        publisher: Herausgeber
+        subscribable: Abonnenten dürfen sich selbst an/abmelden
+        mail_name: Mailinglisten Adresse
+        subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
+        additional_sender: Zusätzlicher Absender
+        
       custom_content:
         label: Text
         subject: Betreff

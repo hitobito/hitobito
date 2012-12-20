@@ -11,5 +11,9 @@
 - bar.tab "Anlässe", 
           group_events_path(group, returning: true), 
           [group_events_path(group)]
-
+  
+- bar.tab "Abos", 
+          group_mailing_lists_path(group, returning: true), 
+          [group_mailing_lists_path(group)]
+          
 = render_extensions :tabs, locals: { group: group, bar: bar }

@@ -43,6 +43,10 @@ Jubla::Application.routes.draw do
       end
 
     end
+    
+    resources :mailing_lists do
+      resources :subscriptions
+    end
 
     resource :csv_imports, only: [:new, :create] do
       post :define_mapping, on: :member

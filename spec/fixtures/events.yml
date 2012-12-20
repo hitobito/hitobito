@@ -23,6 +23,7 @@
 #  updated_at             :datetime         not null
 #  participant_count      :integer          default(0)
 #  application_contact_id :integer
+#  condition_id           :integer
 #
 
 top_event:

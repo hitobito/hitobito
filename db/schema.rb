@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210142459) do
+ActiveRecord::Schema.define(:version => 20121218132440) do
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
@@ -172,6 +172,17 @@ ActiveRecord::Schema.define(:version => 20121210142459) do
     t.float   "padding_left",                        :null => false
   end
 
+  create_table "mailing_lists", :force => true do |t|
+    t.string  "name",                                    :null => false
+    t.integer "group_id",                                :null => false
+    t.text    "description"
+    t.string  "publisher"
+    t.string  "mail_name"
+    t.string  "additional_sender"
+    t.boolean "subscribable",         :default => false, :null => false
+    t.boolean "subscribers_may_post", :default => false, :null => false
+  end
+
   create_table "people", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -204,11 +215,6 @@ ActiveRecord::Schema.define(:version => 20121210142459) do
     t.integer  "updater_id"
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
     t.index ["email"], :name => "index_people_on_email", :unique => true
-  end
-
-  create_table "people_filter_role_types", :force => true do |t|
-    t.integer "people_filter_id"
-    t.string  "role_type",        :null => false
   end
 
   create_table "people_filters", :force => true do |t|
@@ -244,6 +250,12 @@ ActiveRecord::Schema.define(:version => 20121210142459) do
     t.string  "origin"
   end
 
+  create_table "related_role_types", :force => true do |t|
+    t.integer "relation_id"
+    t.string  "role_type",     :null => false
+    t.string  "relation_type"
+  end
+
   create_table "roles", :force => true do |t|
     t.integer  "person_id",  :null => false
     t.integer  "group_id",   :null => false
@@ -263,6 +275,13 @@ ActiveRecord::Schema.define(:version => 20121210142459) do
     t.string  "label"
     t.boolean "public",           :default => true, :null => false
     t.index ["contactable_id", "contactable_type"], :name => "index_social_accounts_on_contactable_id_and_contactable_type"
+  end
+
+  create_table "subscriptions", :force => true do |t|
+    t.integer "mailing_list_id",                    :null => false
+    t.integer "subscriber_id",                      :null => false
+    t.string  "subscriber_type",                    :null => false
+    t.boolean "excluded",        :default => false, :null => false
   end
 
 end

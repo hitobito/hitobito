@@ -2,24 +2,14 @@
 %p 
   Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Events und Personen samt Rollen beider Gruppen in die neue Gruppe verschoben.
   %br Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
-  %br
-= form_tag(merge_group_path(@group), class: 'form-horizontal') do
+
+= standard_form(:merger, url: perform_merge_group_path(@group), builder: PlainObjectFormBuilder) do |f|
   = field_set_tag do
-    .control-group
-      %label.control-label Neuer Gruppenname
-      .controls
-        = text_field_tag(:new_group_name)
-        %span.required *
+    = label(:merger, :new_group_name, 'Name der neuen Gruppe')
+    = f.string_field(:new_group_name)
+    
   = field_set_tag do
-    .controler-group
-      %label.control-label Fusionieren mit
-      .controls
-        - @mergeable_groups.each do |g|
-          %label.radio.inline
-            = radio_button_tag(:merge_group_id, g.id)
-            = g.to_s
-          %br
-  .btn-toolbar
-    .btn-group
-      = submit_tag('Fusionieren', class: 'btn btn-primary')
-    = link_to('Abbrechen', group_path, class: 'link')
+    - @candidates.each do |group|
+      = f.inline_radio_button(:merge_group_id, group.id, group.to_s, false)
+
+  = save_form_buttons(f, 'Gruppe fusionieren', group_path(@group))

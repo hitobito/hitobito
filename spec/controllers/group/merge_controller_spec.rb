@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Group::MergeController do
   
-  context "GET" do
+  context "GET :select" do
     
     it "should redirect to group show if it's not possible to merge" do
 
@@ -20,22 +20,22 @@ describe Group::MergeController do
     
   end
 
-  context "POST" do
+  context "POST :perform" do
     it "should redirect to form if params are missing" do
 
       group = groups(:bottom_layer_one)
 
       sign_in(people(:top_leader))
 
-      post :perform, id: group.id, new_group_name: 'foo'
+      post :perform, id: group.id, merger: { new_group_name: 'foo' }
 
       flash[:alert].should =~ /Bitte wähle eine Gruppe mit der fusioniert werden soll/
-      should redirect_to(merge_group_path(group))
+      should redirect_to(select_merge_group_path(group))
 
-      post :perform, id: group.id, merge_group_id: '33'
+      post :perform, id: group.id, merger: { merge_group_id: '33' }
 
       flash[:alert].should =~ /Name für neue Gruppe muss definiert werden/
-      should redirect_to(merge_group_path(group))
+      should redirect_to(select_merge_group_path(group))
 
     end
 
@@ -50,10 +50,10 @@ describe Group::MergeController do
 
       sign_in(user)
 
-      post :perform, id: group1.id, new_group_name: 'foo', merge_group_id: group2.id
+      post :perform, id: group1.id, merger: { new_group_name: 'foo', merge_group_id: group2.id }
 
       flash[:alert].should =~ /Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/
-      should redirect_to(merge_group_path(group1))
+      should redirect_to(select_merge_group_path(group1))
 
     end
   end

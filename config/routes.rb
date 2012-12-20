@@ -27,8 +27,8 @@ Jubla::Application.routes.draw do
           member do
             put    'waiting_list' => 'application_market#put_on_waiting_list'
             delete 'waiting_list' => 'application_market#remove_from_waiting_list'
-            put    'participant'  => 'application_market#add_participant'
-            delete 'participant'  => 'application_market#remove_participant'
+            put    'participant' => 'application_market#add_participant'
+            delete 'participant' => 'application_market#remove_participant'
           end
         end
 
@@ -49,19 +49,19 @@ Jubla::Application.routes.draw do
     end
 
     member do
-      get 'merge', :to => 'group/merge#select'
-      post 'merge', :to => 'group/merge#perform'
+      get 'merge' => 'group/merge#select', as: :select_merge
+      post 'merge' => 'group/merge#perform', as: :perform_merge
 
-      get 'move', to: 'group/move#select', as: :select_move
-      post 'move', to: 'group/move#perform', as: :perform_move
+      get 'move' => 'group/move#select', as: :select_move
+      post 'move' => 'group/move#perform', as: :perform_move
     end
   end
 
-  get 'list_courses', to: 'event/lists#courses', as: :list_courses
-  get 'list_events', to: 'event/lists#events', as: :list_events
+  get 'list_courses' => 'event/lists#courses', as: :list_courses
+  get 'list_events' => 'event/lists#events', as: :list_events
 
-  get 'full', to: 'full_text#index'
-  get 'query', to: 'full_text#query'
+  get 'full' => 'full_text#index'
+  get 'query' => 'full_text#query'
 
   resources :people, only: :show do
     collection do

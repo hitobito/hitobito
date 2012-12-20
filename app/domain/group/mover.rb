@@ -14,8 +14,7 @@ class Group::Mover < Struct.new(:group)
     group.parent
   end
 
-  def possible_candidates
-    return [] if parent.nil?
+  def possible_groups
     parent.children | parent.hierarchy.map(&:siblings).flatten
   end
 

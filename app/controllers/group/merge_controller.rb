@@ -18,7 +18,7 @@ class Group::MergeController < ApplicationController
       redirect_to group_path(merge.new_group)
     else
       flash[:alert] = 'Die gewählten Gruppen können nicht fusioniert werden.'
-      redirect_to merge_group_path(group)
+      redirect_to select_merge_group_path(group)
     end
   end
 

@@ -165,6 +165,10 @@ class Group < ActiveRecord::Base
     Group.where(layer_group_id: layer_group_id)
   end
 
+  def sister_groups
+    Group.where(parent_id: parent_id).where(type: type).where('id != ?',id).without_deleted
+  end
+
   # The layer hierarchy without the layer of this group.
   def upper_layer_groups
     if new_record?

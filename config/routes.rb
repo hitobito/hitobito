@@ -45,7 +45,13 @@ Jubla::Application.routes.draw do
     end
     
     resources :mailing_lists do
-      resources :subscriptions
+      resources :subscriptions, only: [:index, :destroy] do
+        collection do
+          resources :person, only: [:new, :create], controller: 'subscriber/person'
+          resources :group, only: [:new, :create], controller: 'subscriber/group'
+          resources :event, only: [:new, :create], controller: 'subscriber/event'
+        end
+      end
     end
 
     resource :csv_imports, only: [:new, :create] do

@@ -3,7 +3,6 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   attr_reader :new_group
 
   def merge!
-
     raise('Cant merge these Groups') unless group2_valid?
 
     ::Group.transaction do 
@@ -54,9 +53,8 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
       new_role.group_id = new_group.id
       new_role.save!
     end
-
   end
-
+  
   def delete_old_groups
     group1.destroy
     group2.destroy

@@ -1,14 +1,17 @@
 - title "#{@group.to_s} fusionieren"
-%p 
-  Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Events und Personen samt Rollen beider Gruppen in die neue Gruppe verschoben.
-  %br Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
 
-= standard_form(:merger, url: perform_merge_group_path(@group), builder: PlainObjectFormBuilder) do |f|
+%p 
+  Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen samt Rollen beider Gruppen zusammengeführt.
+  %br 
+  Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
+
+= standard_form(:merger, url: merge_group_path(@group), builder: PlainObjectFormBuilder) do |f|
   = field_set_tag do
     = label(:merger, :new_group_name, 'Name der neuen Gruppe')
     = f.string_field(:new_group_name)
     
   = field_set_tag do
+    = label(:merger, :merge_group_id, "#{@group.to_s} fusionieren mit")
     - @candidates.each do |group|
       = f.inline_radio_button(:merge_group_id, group.id, group.to_s, false)
 

@@ -61,6 +61,10 @@ describe Group::Mover do
       before { move.perform(target); }
 
       its(:parent) { should eq target }
+      
+      it "nested set should still be valid" do
+        Group.should be_valid
+      end
     end
 
     context "association count" do

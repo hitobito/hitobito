@@ -53,11 +53,11 @@ Jubla::Application.routes.draw do
     end
 
     member do
-      get 'merge' => 'group/merge#select', as: :select_merge
-      post 'merge' => 'group/merge#perform', as: :perform_merge
+      get 'merge' => 'group/merge#select'
+      post 'merge' => 'group/merge#perform'
 
-      get 'move' => 'group/move#select', as: :select_move
-      post 'move' => 'group/move#perform', as: :perform_move
+      get 'move' => 'group/move#select'
+      post 'move' => 'group/move#perform'
     end
   end
 

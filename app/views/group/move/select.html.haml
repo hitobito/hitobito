@@ -1,7 +1,8 @@
 - title "Gruppe verschieben"
+
 %p= "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
 
-= standard_form(:move, url: perform_move_group_path(@group), builder: PlainObjectFormBuilder) do |f|
+= standard_form(:move, url: move_group_path(@group), builder: PlainObjectFormBuilder) do |f|
   - @candidates.each do |label, values|
     = field_set_tag label do
       - values.each do |candidate| 

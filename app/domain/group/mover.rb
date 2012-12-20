@@ -5,7 +5,8 @@ class Group::Mover < Struct.new(:group)
   end
 
   def perform(target)
-    group.update_column(:parent_id, target.id)
+    group.parent_id = target.id
+    group.save
   end
 
   private
@@ -15,7 +16,11 @@ class Group::Mover < Struct.new(:group)
   end
 
   def possible_groups
-    parent.children | parent.hierarchy.map(&:siblings).flatten
+    if parent
+      parent.children | parent.hierarchy.map(&:siblings).flatten
+    else
+      []
+    end
   end
 
   def possible_candidates

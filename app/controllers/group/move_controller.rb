@@ -1,24 +1,34 @@
+# encoding: utf-8
 class Group::MoveController < ApplicationController
+  
   decorates :group
   helper_method :group
+  
   before_filter :group
-  before_filter :candidates, only: :select
+  before_filter :authorize
 
   def select
-    authorize!(:update, group)
+    candidates
   end
 
   def perform
-    authorize!(:update, group)
-    authorize!(:create, target)
-
-    if target && mover.perform(target)
-      flash[:notice] = "#{group} wurde nach #{target} verschoben."
+    if target 
+      authorize!(:create, target)
+      
+      if mover.perform(target)
+        flash[:notice] = "#{group} wurde nach #{target} verschoben."
+      else
+        flash[:alert] = group.errors.full_messages.join(", ")
+      end
+      redirect_to(group)
+    else
+      flash[:alert] = 'Bitte wähle eine Gruppe aus.'
+      redirect_to move_group_path(group)
     end
-    redirect_to(group)
   end
 
   private
+  
   def group
     @group ||= Group.find(params[:id])
   end
@@ -28,10 +38,9 @@ class Group::MoveController < ApplicationController
     group_by { |candidate| candidate.class.model_name.human }
 
     if @candidates.empty? 
-      flash[:alert] = 'Diese Gruppe kann leider nicht verschoben werden.'
+      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen.'
       redirect_to group_path(group)
     end
-
   end
 
   def mover
@@ -40,6 +49,10 @@ class Group::MoveController < ApplicationController
 
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) && Group.find(params[:move][:target_group_id])
+  end
+  
+  def authorize
+    authorize!(:update, group)
   end
 
 end

@@ -9,16 +9,28 @@ module MailRelay
     cattr_accessor :receiver_header
     self.receiver_header = 'X-Envelope-To'
     
+    # Number of emails to retrieve in one batch.
+    class_attribute :retrieve_count
+    self.retrieve_count = 5
+    
     attr_reader :message
     
     # Retrieve, process and delete all mails from the mail server.
     def self.relay_current
       begin
-        messages = Mail.find_and_delete
-        messages.each do |message|
-          new(message).relay
+        last_exception = nil
+        
+        mails = Mail.find_and_delete(count: retrieve_count) do |message|
+          begin
+            new(message).relay
+          rescue Exception => e
+            last_exception = e
+          end
         end
-      end while messages.present?
+        
+        raise(last_exception) if last_exception.present?
+        
+      end while mails.size >= retrieve_count
     end
     
     def initialize(message)

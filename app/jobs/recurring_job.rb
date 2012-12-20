@@ -1,10 +1,13 @@
+# A job that is run regularly after a certain interval.
 class RecurringJob < BaseJob
   
   class << self
+    # Define the interval to run this job. Default is 15 minutes.
     def run_every(seconds)
       @interval = seconds
     end
     
+    # The interval to run this job.
     def interval
       @interval
     end
@@ -19,14 +22,17 @@ class RecurringJob < BaseJob
     reschedule
   end
   
+  # Enqueue delayed job if it is not enqueued already
   def schedule
     enqueue!(priority: 5) unless scheduled?
   end
 
+  # Is this job enqueued in delayed job?
   def scheduled?
     delayed_jobs.present?
   end
   
+  # The interval to run this job.
   def interval
     self.class.interval
   end

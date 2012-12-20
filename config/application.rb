@@ -85,6 +85,8 @@ module Jubla
     
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
+      
+      #MailRelayJob.new.schedule
     end
     
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|

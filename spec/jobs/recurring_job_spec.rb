@@ -24,6 +24,7 @@ describe RecurringJob do
     
   it "is rescheduled after failed run" do
     RecurringJob.any_instance.should_receive(:perform_internal).and_raise('error!')
+    RecurringJob.any_instance.should_receive(:error).with(anything, an_instance_of(RuntimeError))
     
     now = Time.zone.now
     subject.enqueue!(run_at: now)

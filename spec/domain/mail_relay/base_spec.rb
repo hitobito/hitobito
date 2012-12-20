@@ -68,4 +68,45 @@ describe MailRelay::Base do
       its(:from) { should == ['animation@jublaluzern.ch'] }
     end
   end
+  
+  describe ".relay_current" do
+    it "processes all mails" do
+      MailRelay::Base.retrieve_count = 5
+      
+      first = true
+      Mail.should_receive(:find_and_delete) do |options, &block|
+        msgs = first ? [1,2,3,4,5] : [6,7,8]
+        msgs.each {|m| block.call(m) }
+        first = false
+        msgs
+      end.twice
+      
+      m = mock
+      m.stub(:relay)
+      MailRelay::Base.stub(:new).and_return(m)
+      MailRelay::Base.should_receive(:new).exactly(8).times
+      
+      MailRelay::Base.relay_current
+    end
+    
+    it "fails after one batch" do
+      MailRelay::Base.retrieve_count = 5
+      
+      first = true
+      Mail.should_receive(:find_and_delete) do |options, &block|
+        msgs = first ? [1,2,3,4,5] : [6,7,8]
+        msgs.each {|m| block.call(m) }
+        first = false
+        msgs
+      end
+      
+      m = mock
+      mock.stub(:relay)
+      MailRelay::Base.stub(:new).with(anything).and_return(m)
+      MailRelay::Base.stub(:new).with(3).and_raise("failure!")
+      MailRelay::Base.should_receive(:new).exactly(5).times
+      
+      expect { MailRelay::Base.relay_current }.to raise_error('failure!')
+    end
+  end
 end

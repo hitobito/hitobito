@@ -86,6 +86,7 @@ module Jubla
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
       
+      # Assert the mail relay job is scheduled on every restart.
       #MailRelayJob.new.schedule
     end
     

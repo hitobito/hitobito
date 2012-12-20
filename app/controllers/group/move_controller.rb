@@ -1,6 +1,6 @@
 class Group::MoveController < ApplicationController
   decorates :group
-  #helper_method :group
+  helper_method :group
   before_filter :group
   before_filter :candidates, only: :select
 
@@ -41,6 +41,5 @@ class Group::MoveController < ApplicationController
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) && Group.find(params[:move][:target_group_id])
   end
-
 
 end

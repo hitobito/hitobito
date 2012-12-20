@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   resources :censuses, only: [:new, :create]
   
   resources :event_camp_kinds, module: 'event', controller: 'camp/kinds'

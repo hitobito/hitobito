@@ -1,0 +1,10 @@
+- title "Gruppe verschieben"
+%p= "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
+
+= standard_form(:move, url: perform_move_group_path(@group), builder: PlainObjectFormBuilder) do |f|
+  - @candidates.each do |label, values|
+    = field_set_tag label do
+      - values.each do |candidate| 
+        = f.inline_radio_button(:target_group_id, candidate.id, candidate.to_s, false)
+
+  = save_form_buttons(f, 'Gruppe verschieben', group_path(@group))

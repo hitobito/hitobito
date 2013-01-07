@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.9'
+gem 'rails', '3.2.10'
 
 gem 'airbrake'
 gem 'awesome_nested_set'
@@ -28,10 +28,8 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
-gem 'thinking-sphinx'
+gem 'thinking-sphinx', '~> 2.0'
 gem 'wagons'
-# Remove once errbit is running again
-gem 'exception_notification'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -93,7 +91,7 @@ end
 
 group :metrics do
   gem 'annotate'
-  gem 'metrical' 
+  #gem 'metrical' 
   gem 'brakeman'
   gem 'ci_reporter'
   gem 'rails_code_qa'

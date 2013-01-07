@@ -56,10 +56,11 @@ Jubla::Application.configure do
       protocol: (ssl ? 'https' : 'http')
     }
 
-  config.middleware.use ExceptionNotifier,
-    :email_prefix => "[JUB] ",
-    :sender_address => %{"Jubla Web App" <#{Settings.email.sender}>},
-    :exception_recipients => %w{jubla@puzzle.ch}
+  # Use Exception Notifier Gem to send exception emails
+  #config.middleware.use ExceptionNotifier,
+  #  :email_prefix => "[JUB] ",
+  #  :sender_address => %{"Jubla Web App" <#{Settings.email.sender}>},
+  #  :exception_recipients => %w{jubla@puzzle.ch}
   
 
   # Enable threaded mode

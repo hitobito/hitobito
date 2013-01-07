@@ -1,3 +1,9 @@
 - title @group.to_s
 
-= crud_table
+= crud_table do |t|
+  - t.col('Name') do |s|
+    %strong
+      = link_to(s.to_s, group_mailing_list_path(@group, s.id))
+  - t.col('Beschreibung') { |s| s.description }
+  - t.col('Herausgeber') { |s| s.publisher }
+  - t.col('Mailinglisten Adresse') { |s| s.mail_name }

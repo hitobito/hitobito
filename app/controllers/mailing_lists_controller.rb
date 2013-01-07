@@ -2,7 +2,7 @@ class MailingListsController < CrudController
   
   self.nesting = Group
 
-  decorates :group
+  decorates :group, :mailing_list
   
   prepend_before_filter :parent
   

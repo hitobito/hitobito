@@ -148,7 +148,7 @@ class Group < ActiveRecord::Base
 
   # The hierarchy from top to bottom of and including this group.
   def hierarchy
-    @hierarchy ||= self_and_ancestors.select(MINIMAL_SELECT)
+    @hierarchy ||= self_and_ancestors
   end
 
   # The layer of this group.

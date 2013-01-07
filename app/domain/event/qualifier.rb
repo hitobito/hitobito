@@ -24,6 +24,7 @@ class Event::Qualifier < Struct.new(:participation)
     qualifications_for(qualification_kind_ids)
   end
   
+  # The qualifications of a participant that got prolonged with this event
   def prolongations
     qualifications_for(prolongation_kind_ids)
   end
@@ -52,8 +53,9 @@ class Event::Qualifier < Struct.new(:participation)
     end
   end
   
+  # The qualifications a participant had before this event
   def prolonged_qualifications
-    person.qualifications.active.
+    person.qualifications.active(event.start_date).
                           where(qualification_kind_id: prolongation_kind_ids)
   end
   

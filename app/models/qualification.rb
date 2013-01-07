@@ -28,9 +28,9 @@ class Qualification < ActiveRecord::Base
   
   
   class << self
-    def active
-      today = Date.today
-      where("qualifications.start_at <= ? AND qualifications.finish_at >= ?", today, today)
+    def active(date = nil)
+      date ||= Date.today
+      where("qualifications.start_at <= ? AND qualifications.finish_at >= ?", date, date)
     end
   end
   

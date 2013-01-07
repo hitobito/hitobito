@@ -56,14 +56,15 @@ Jubla::Application.configure do
       protocol: (ssl ? 'https' : 'http')
     }
 
-  config.middleware.use ExceptionNotifier,
-    :email_prefix => "[JUB] ",
-    :sender_address => %{"Jubla Web App" <#{Settings.email.sender}>},
-    :exception_recipients => %w{jubla@puzzle.ch}
+  # Use Exception Notifier Gem to send exception emails
+  #config.middleware.use ExceptionNotifier,
+  #  :email_prefix => "[JUB] ",
+  #  :sender_address => %{"Jubla Web App" <#{Settings.email.sender}>},
+  #  :exception_recipients => %w{jubla@puzzle.ch}
   
 
   # Enable threaded mode
-  # config.threadsafe!
+  config.threadsafe!
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)

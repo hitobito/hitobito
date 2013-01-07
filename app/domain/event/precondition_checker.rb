@@ -22,16 +22,20 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
 
   def errors_text
     text = []
-    text << "<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>"
-    text << birthday_error_text if errors.delete(:birthday)
-    text << qualifications_error_text  if errors.present?
+    if errors.present?
+      text << "<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>"
+      text << birthday_error_text if errors.delete(:birthday)
+      text << qualifications_error_text  if errors.present?
+    end
     text
   end
 
   private
+  
   def validate_minimum_age
     errors << :birthday if person_age_at_course_start < course_minimum_age
   end
+  
   def validate_precondition(qualification_kind)
     errors << qualification_kind.label unless person_qualified_for(qualification_kind)
   end
@@ -41,7 +45,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def person_qualified_for(qualification_kind)
-    person_qualifications.active.find do |qualification| 
+    person_qualifications.active(course.start_date).find do |qualification| 
       qualification.qualification_kind == qualification_kind  && 
         qualification.cover?(course_start_at.to_date)
     end

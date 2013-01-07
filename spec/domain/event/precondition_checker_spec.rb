@@ -56,7 +56,7 @@ describe Event::PreconditionChecker do
     context "person with valid 'scharleiter'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
       its(:valid?) { should be_true } 
-      its("errors") { should be_empty } 
+      its(:errors_text) { should == [] }
     end
 
     context "person with expired and valid 'scharleiter'" do
@@ -65,7 +65,7 @@ describe Event::PreconditionChecker do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) 
       end
       its(:valid?) { should be_true } 
-      its("errors") { should be_empty } 
+      its(:errors_text) { should == [] } 
     end
 
     context "multiple preconditions" do

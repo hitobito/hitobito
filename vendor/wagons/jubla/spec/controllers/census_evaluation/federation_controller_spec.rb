@@ -15,6 +15,7 @@ describe CensusEvaluation::FederationController do
   
   
   describe 'GET total' do
+    before { @controller.stub(:current_year).and_return(2012) }
     
     before { get :index, id: ch.id }
     

@@ -62,5 +62,9 @@ class Event::Course < Event
       last.finish_at || last.start_at
     end.to_date
   end
+  
+  def start_date
+    @start_date ||= dates.first.start_at.to_date
+  end
 
 end

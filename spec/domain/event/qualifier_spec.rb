@@ -112,6 +112,106 @@ describe Event::Qualifier do
         its(:qualifications) { should have(0).items }
       end
     end
+    
+    context "with qualification and prolongation kind" do
+      context "without existing qualifications" do
+        it { should_not be_qualified }
+      end
+      
+      context "with old qualification and prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2008, 2, 23))
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
+        end
+        it { should_not be_qualified }
+      end
+      
+      context "only with existing qualification" do
+        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date) }
+        it { should be_qualified }
+      end
+      
+      context "with existing qualification and existing prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date - 1.year)
+        end
+        it { should_not be_qualified }
+      end
+      
+      context "with existing qualification and prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2008, 2, 23))
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        it { should be_qualified }
+      end
+    end
+    
+    context "only with prolongation kind" do
+      let(:kind) { event_kinds(:fk) }
+      
+      context "without existing qualifications" do
+        it { should be_qualified }
+      end
+      
+      context "with old qualification" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2008, 2, 23))
+        end
+        
+        it { should be_qualified }
+      end
+      
+      context "with existing, but not prolonged qualification" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date - 1.year)
+        end
+        
+        it { should_not be_qualified }
+      end
+      
+      context "with one existing prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+      end
+      
+      context "with two existing prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+      end
+      
+      context "with old qualification and existing prolongation" do
+        before do
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2008, 2, 23))
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
+          
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date - 1.year)
+          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
+        end
+        
+        it { should be_qualified }
+      end
+    end
   end
   
   describe '#issue' do
@@ -247,80 +347,5 @@ describe Event::Qualifier do
       end
     end
   end
-  
-  describe "#qualified?" do
-    context "with qualification and prolongation kind" do
-      context "without existing qualifications" do
-        it { should_not be_qualified }
-      end
-      
-      context "with old qualification and prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2011, 2, 23))
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
-        end
-        it { should_not be_qualified }
-      end
-      
-      context "only with existing qualification" do
-        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date) }
-        it { should be_qualified }
-      end
-      
-      context "with existing qualification and old prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2011, 2, 23))
-        end
-        it { should_not be_qualified }
-      end
-      
-      context "with existing qualification and prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2011, 2, 23))
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
-        end
-        it { should be_qualified }
-      end
-    end
-    
-    context "only with prolongation kind" do
-      let(:kind) { event_kinds(:fk) }
-      
-      context "without existing qualifications" do
-        it { should be_qualified }
-      end
-      
-      context "with old prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2011, 2, 23))
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
-        end
-        it { should_not be_qualified }
-      end
-      
-      context "with one existing prolongation" do
-        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date) }
-        it { should be_qualified }
-      end
-      
-      context "with two existing prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
-        end
-        it { should be_qualified }
-      end
-      
-      context "with old qualification and existing prolongation" do
-        before do
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2011, 2, 23))
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: quali_date)
-          Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date)
-        end
-        it { should be_qualified }
-      end
-    end
-  end
+ 
 end

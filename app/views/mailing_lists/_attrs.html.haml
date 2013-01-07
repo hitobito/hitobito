@@ -1,0 +1,5 @@
+#main.row-fluid
+  %article.span5
+    = render_attrs(entry, :name, :description, :publisher, :mail_name, :additional_sender)
+    = entry.subscribable_info
+    = entry.subscribers_may_post_info

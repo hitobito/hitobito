@@ -15,7 +15,7 @@
   = field_set_tag('Welche Rollen sollen angezeigt werden?') do
     %p Je nach Suchbereich wird nur nach gewissen Rollen gesucht.
     - @role_types.each do |layer, groups|
-      %b= layer
+      %h5= layer
       - groups.each do |group, role_types|
         = f.labeled nil, group do 
           - role_types.each do |role_type|

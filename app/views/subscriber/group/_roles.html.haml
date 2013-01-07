@@ -1,6 +1,6 @@
 - if @role_types
   - @role_types.each do |layer, groups|
-    %b= layer
+    %h5= layer
     - groups.each do |group, role_types|
       .control-group
         = label_tag(nil, group, class: 'control-label')

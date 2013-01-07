@@ -5,9 +5,9 @@ class MailingListDecorator < ApplicationDecorator
 
   def subscribable_info
     html = ''.html_safe
-    html << 'Abonnenten dürfen sich '
+    html << 'Abonnenten dürfen sich'
     if !subscribable
-      html << content_tag(:strong, 'nicht')
+      html << content_tag(:strong, ' nicht')
     end
     html << ' selbst an/abmelden'
     html << h.tag(:br)
@@ -15,9 +15,9 @@ class MailingListDecorator < ApplicationDecorator
 
   def subscribers_may_post_info
     html = ''.html_safe
-    html << 'Abonnenten dürfen '
-    if !subscribable
-      html << content_tag(:strong, 'nicht')
+    html << 'Abonnenten dürfen'
+    if !subscribers_may_post
+      html << content_tag(:strong, ' nicht')
     end
     html << ' auf die Mailingliste schreiben'
     html << h.tag(:br)

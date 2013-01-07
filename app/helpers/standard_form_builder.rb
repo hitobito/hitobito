@@ -193,7 +193,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
-    string_field(attr, placeholder: 'Person suchen...', data: {provide: 'person', id_field: "#{object_name}_#{attr_id}"})
+    string_field(attr, 
+                 placeholder: 'Person suchen...', 
+                 data: {provide: 'entity', 
+                        id_field: "#{object_name}_#{attr_id}",
+                        url: @template.query_people_path})
   end
   
   def labeled_inline_fields_for(assoc, partial_name=nil, &block) 

@@ -12,6 +12,7 @@
                              class: 'span4',
                              id: 'quicksearch',
                              placeholder: 'Suchen...',
-                             data: { person_url: person_url(1).gsub(/\/1$/, ''), 
-                                     group_url: groups_url } 
+                             data: { url: query_path,
+                                     person_url: person_path(1).gsub(/\/1$/, ''), 
+                                     group_url: groups_path } 
           = button_tag icon(:search), class: 'btn'

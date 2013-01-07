@@ -1,0 +1,2 @@
+- if can?(:new, @mailing_list.subscriptions.new)
+  = action_button 'Rollen hinzufügen', new_group_mailing_list_group_path(@group, @mailing_list), 'plus'

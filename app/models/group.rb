@@ -165,8 +165,16 @@ class Group < ActiveRecord::Base
     Group.where(layer_group_id: layer_group_id)
   end
 
+  # siblings with the same type
   def sister_groups
-    Group.where(parent_id: parent_id).where(type: type).where('id != ?',id).without_deleted
+    Group.where(parent_id: parent_id, type: type).where('id <> ?', id).without_deleted
+  end
+  
+  # siblings with the same type and all their descendant groups, including self
+  def sister_groups_with_descendants
+    Group.joins("LEFT JOIN groups AS sister_groups " + 
+                "ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt").
+          where(sister_groups: { parent_id: parent_id, type: type})
   end
 
   # The layer hierarchy without the layer of this group.

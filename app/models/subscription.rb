@@ -13,6 +13,10 @@ class Subscription < ActiveRecord::Base
   
   attr_accessible :subscriber_id
   
+  include RelatedRoleType::Assigners
+  
+  
+  ### ASSOCIATIONS
   
   belongs_to :mailing_list
   
@@ -20,6 +24,20 @@ class Subscription < ActiveRecord::Base
   
   has_many :related_role_types, as: :relation, dependent: :destroy
   
-  # TODO: validate at least one related_role_type if subscriber_type == Group
+  
+  ### VALIDATIONS
+  
+  validates :related_role_types, presence: { if: lambda { |s| s.subscriber.is_a?(Group) } }
+
+
+  ### INSTANCE METHODS
+  
+  def to_s
+    string = subscriber.to_s
+    if related_role_types.present?
+      string << ' (' << related_role_types.join(', ') << ')'
+    end
+    string
+  end
   
 end

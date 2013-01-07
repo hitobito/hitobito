@@ -64,3 +64,4 @@ de:
       flash:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
+        

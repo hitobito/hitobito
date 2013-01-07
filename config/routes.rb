@@ -3,6 +3,15 @@ Jubla::Application.routes.draw do
   root :to => 'dashboard#index'
 
   resources :groups do
+    
+    member do
+      get 'merge' => 'group/merge#select'
+      post 'merge' => 'group/merge#perform'
+
+      get 'move' => 'group/move#select'
+      post 'move' => 'group/move#perform'
+    end
+    
     resources :people do
       member do
         get :history
@@ -48,7 +57,12 @@ Jubla::Application.routes.draw do
       resources :subscriptions, only: [:index, :destroy] do
         collection do
           resources :person, only: [:new, :create], controller: 'subscriber/person'
-          resources :group, only: [:new, :create], controller: 'subscriber/group'
+          resources :group, only: [:new, :create], controller: 'subscriber/group' do
+            collection do
+              get :query
+              get :roles
+            end
+          end
           resources :event, only: [:new, :create], controller: 'subscriber/event'
         end
       end
@@ -58,13 +72,6 @@ Jubla::Application.routes.draw do
       post :define_mapping, on: :member
     end
 
-    member do
-      get 'merge' => 'group/merge#select'
-      post 'merge' => 'group/merge#perform'
-
-      get 'move' => 'group/move#select'
-      post 'move' => 'group/move#perform'
-    end
   end
 
   get 'list_courses' => 'event/lists#courses', as: :list_courses

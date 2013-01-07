@@ -111,6 +111,42 @@ describe Group do
     end
   end
 
+  context "#sister_groups_with_descendants" do
+    subject { group.sister_groups_with_descendants.to_a }
+    
+    context "for root" do
+      let(:group) { groups(:top_layer) }
+      
+      it "contains all groups" do
+        should =~ Group.all
+      end
+    end
+    
+    context "for group without children or sisters" do
+      let(:group) { groups(:top_group) }
+      
+      it "only contains self" do
+        should == [group]
+      end
+    end
+    
+    context "for layer" do
+      let(:group) { groups(:bottom_layer_one) }
+      
+      it "contains other layers and their descendants" do
+        should =~ [group.self_and_descendants, groups(:bottom_layer_two).self_and_descendants].flatten
+      end
+    end
+
+    context "for group" do
+      let(:group) { groups(:bottom_group_one_one) }
+      
+      it "contains other groups and their descendants" do
+        should =~ [group, groups(:bottom_group_one_one_one), groups(:bottom_group_one_two)]
+      end
+    end
+  end
+
   context ".all_types" do
     it "lists all types" do
       Set.new(Group.all_types).should == Set.new([Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup])

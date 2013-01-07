@@ -36,6 +36,33 @@ showDatePicker = (field) ->
    
 # type aheads
 
+setupEntityTypeahead = (index, field) ->
+  input = $(this)
+  setupRemoteTypeahead(input, 10, setEntityId)
+  input.keydown((event) -> 
+    if isModifyingKey(event.which)
+      $('#' + input.data('id-field')).val(null).change())
+
+setEntityId = (item) ->
+  typeahead = this
+  item = JSON.parse(item)
+  idField = $('#' + typeahead.$element.data('id-field'))
+  idField.val(item.id).change()
+  $('<div/>').html(item.label).text()
+
+setupQuicksearch = ->
+  qs = $('#quicksearch')
+  setupRemoteTypeahead(qs, 20, openQuicksearchResult)
+
+openQuicksearchResult = (item) ->
+  typeahead = this
+  item = JSON.parse(item)
+  url = typeahead.$element.data(item.type + "-url")
+  if url
+    window.location =  url + '/' + item.id
+    label = $('<div/>').html(item.label).text()
+    label + " wird geöffnet..."
+
 setupRemoteTypeahead = (input, items, updater) ->
   input.attr('autocomplete', "off")
   input.typeahead(
@@ -58,34 +85,6 @@ typeaheadHighlighter = (item) ->
   query = query.replace(/\s+/g, '|')
   JSON.parse(item).label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
 
-setupPersonTypeahead = (index, field) ->
-  input = $(this)
-  input.data('url', '/people/query')
-  setupRemoteTypeahead(input, 10, setPersonId)
-  input.keydown((event) -> 
-    if isModifyingKey(event.which)
-      $('#' + input.data('id-field')).val(null))
-
-setPersonId = (item) ->
-  typeahead = this
-  item = JSON.parse(item)
-  idField = $('#' + typeahead.$element.data('id-field'))
-  idField.val(item.id)
-  item.label
-
-setupQuicksearch = ->
-  qs = $('#quicksearch')
-  qs.data('url', '/query')
-  setupRemoteTypeahead(qs, 20, openQuicksearchResult)
-
-openQuicksearchResult = (item) ->
-  typeahead = this
-  item = JSON.parse(item)
-  url = typeahead.$element.data(item.type + "-url")
-  if url
-    window.location =  url + '/' + item.id
-    label = $('<div/>').html(item.label).text()
-    label + " wird geöffnet..."
 
 isModifyingKey = (k) ->
   ! (k == 20 || # Caps lock */
@@ -131,7 +130,7 @@ $ ->
   $('body').on('ajax:before','[data-replace]', setDataType)
   
   # wire up person auto complete
-  $('[data-provide=person]').each(setupPersonTypeahead)
+  $('[data-provide=entity]').each(setupEntityTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
     
   # set insertFields function for nested-form gem

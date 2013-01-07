@@ -36,9 +36,17 @@ class GroupDecorator < ApplicationDecorator
       end
     end.compact
   end
-
+  
+  def as_typeahead
+    {id: id, label: label_with_parent}
+  end
+  
   def as_quicksearch
-    {id: id, label: h.safe_join([parent.to_s.presence, to_s].compact, ' > '), type: :group}
+    {id: id, label: label_with_parent, type: :group}
+  end
+  
+  def label_with_parent
+    h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
   end
 
   ### EVENT

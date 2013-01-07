@@ -252,6 +252,9 @@ de:
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
         
+      subscription:
+        related_role_types: Rollen
+        
       custom_content:
         label: Text
         subject: Betreff

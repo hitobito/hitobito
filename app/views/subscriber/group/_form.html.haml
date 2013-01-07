@@ -1,0 +1,15 @@
+= entry_form(url: group_mailing_list_group_index_path(@group, @mailing_list)) do |f|
+  
+  = field_set_tag('Gruppe') do
+    = f.string_field(:subscriber, 
+                     placeholder: 'Gruppe suchen...',
+                     data: {provide: 'entity', 
+                            id_field: "subscription_subscriber_id", 
+                            url: query_group_mailing_list_group_index_path(@group, @mailing_list)})
+                                 
+    = f.hidden_field(:subscriber_id, 
+                     data: { remote: true, 
+                             url: roles_group_mailing_list_group_index_path(@group, @mailing_list)})
+  
+  = field_set_tag('Rollen') do
+    #roles= render 'roles'

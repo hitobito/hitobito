@@ -230,7 +230,7 @@ describe Person do
 
   context "email validation" do
     it "can create two people with empty email" do
-      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2), allow_blank: true
+      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
     end
 
     it "cannot create two people same email" do

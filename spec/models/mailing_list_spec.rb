@@ -53,24 +53,24 @@ describe MailingList do
     
     context "groups" do
       it "is true if in group" do
-        sub = create_subscription(groups(:bottom_layer_one))
-        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         
         list.subscribed?(p).should be_true
       end
       
       it "is false if different role in groupn" do
-        sub = create_subscription(groups(:bottom_layer_one))
-        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
         
         list.subscribed?(p).should be_false
       end 
       
       it "is false if explicitly excluded" do
-        sub = create_subscription(groups(:bottom_layer_one))
-        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        sub = create_subscription(groups(:bottom_layer_one), false, 
+                                  Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
         
@@ -142,8 +142,8 @@ describe MailingList do
     
     context "only groups" do
       it "includes people with the given roles" do
-        sub = create_subscription(groups(:bottom_layer_one))
-        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
         
         role = Group::BottomGroup::Leader.name.to_sym
         p1 = Fabricate(role, group: groups(:bottom_group_one_one)).person
@@ -160,11 +160,11 @@ describe MailingList do
       end
       
       it "includes people with the given roles in multiple groups" do
-        sub1 = create_subscription(groups(:bottom_layer_one))
-        sub1.related_role_types.create!(role_type: Group::BottomLayer::Leader.sti_name)
-        sub1.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one))
-        sub2.related_role_types.create!(role_type: Group::BottomGroup::Member.sti_name)
+        sub1 = create_subscription(groups(:bottom_layer_one), false,
+                                   Group::BottomLayer::Leader.sti_name,
+                                   Group::BottomGroup::Leader.sti_name)
+        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+                                   Group::BottomGroup::Member.sti_name)
         
         p1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         p2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -212,8 +212,8 @@ describe MailingList do
     
     context "groups with excluded" do
       it "excludes person from groups" do
-        sub = create_subscription(groups(:bottom_layer_one))
-        sub.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
         
         role = Group::BottomGroup::Leader.name.to_sym
         p1 = Fabricate(role, group: groups(:bottom_group_one_one)).person
@@ -244,11 +244,11 @@ describe MailingList do
         
         
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one))
-        sub1.related_role_types.create!(role_type: Group::BottomLayer::Leader.sti_name)
-        sub1.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one))
-        sub2.related_role_types.create!(role_type: Group::BottomGroup::Member.sti_name)
+        sub1 = create_subscription(groups(:bottom_layer_one), false,
+                                   Group::BottomLayer::Leader.sti_name,
+                                   Group::BottomGroup::Leader.sti_name)
+        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+                                   Group::BottomGroup::Member.sti_name)
         
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -284,11 +284,11 @@ describe MailingList do
         
         
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one))
-        sub1.related_role_types.create!(role_type: Group::BottomLayer::Leader.sti_name)
-        sub1.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one))
-        sub2.related_role_types.create!(role_type: Group::BottomGroup::Member.sti_name)
+        sub1 = create_subscription(groups(:bottom_layer_one), false,
+                                   Group::BottomLayer::Leader.sti_name,
+                                   Group::BottomGroup::Leader.sti_name)
+        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+                                   Group::BottomGroup::Member.sti_name)
         
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -324,11 +324,11 @@ describe MailingList do
         
         
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one))
-        sub1.related_role_types.create!(role_type: Group::BottomLayer::Leader.sti_name)
-        sub1.related_role_types.create!(role_type: Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one))
-        sub2.related_role_types.create!(role_type: Group::BottomGroup::Member.sti_name)
+        sub1 = create_subscription(groups(:bottom_layer_one), false,
+                                   Group::BottomLayer::Leader.sti_name,
+                                   Group::BottomGroup::Leader.sti_name)
+        sub2 = create_subscription(groups(:bottom_group_one_one), false, 
+                                   Group::BottomGroup::Member.sti_name)
         
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -353,10 +353,11 @@ describe MailingList do
     end
   end
   
-  def create_subscription(subscriber, excluded = false)
+  def create_subscription(subscriber, excluded = false, *role_types)
     sub = list.subscriptions.new
     sub.subscriber = subscriber
     sub.excluded = excluded
+    sub.related_role_types = role_types.collect {|t| RelatedRoleType.new(role_type: t) }
     sub.save!
     sub
   end

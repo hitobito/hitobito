@@ -11,6 +11,8 @@
 
 class PeopleFilter < ActiveRecord::Base
   
+  include RelatedRoleType::Assigners
+  
   attr_accessible :name, :kind, :role_types
   
   
@@ -24,15 +26,6 @@ class PeopleFilter < ActiveRecord::Base
 
   default_scope order(:name).includes(:related_role_types)
   
-  
-  def role_types
-    @role_types ||= related_role_types.collect(&:to_s)
-  end
-  
-  def role_types=(types)
-    @role_types = Array(types.presence)
-    self.related_role_types = @role_types.collect {|t| RelatedRoleType.new(role_type: t) }
-  end
   
   def kind
     super.presence || 'deep'

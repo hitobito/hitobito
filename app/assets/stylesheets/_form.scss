@@ -54,6 +54,15 @@ fieldset {
   margin-bottom: 18px;
 }
 
+legend {
+  margin-bottom: 10px;
+}
+
+legend + * {
+  -webkit-margin-top-collapse : separate;
+  margin-top: 10px;
+}
+
 td {
   select,
   input[type="text"],

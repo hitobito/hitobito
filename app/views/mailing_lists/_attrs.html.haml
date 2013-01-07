@@ -1,0 +1,19 @@
+#main.row-fluid
+  %article.span5
+    = render_attrs(entry, :name, :description, :publisher, :mail_name, :additional_sender)
+    - if entry.subscribable
+      Abonnenten dürfen sich selbst an/abmelden
+    - else
+      Abonnenten dürfen sich
+      %strong 
+        nicht 
+      selbst an/abmelden
+    %br
+    - if entry.subscribers_may_post
+      Abonnenten dürfen auf die Mailingliste schreiben
+    - else
+      Abonnenten dürfen 
+      %strong 
+        nicht 
+      auf die Mailingliste schreiben
+

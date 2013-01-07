@@ -33,7 +33,7 @@ describe "Person Autocomplete" do
         page.should have_content("Rolle erstellen")
       
         fill_in "Person", with: "gibberish"
-        find('.typeahead.dropdown-menu').should_not have_content('o')
+        page.should_not have_selector('.typeahead.dropdown-menu')
         
         fill_in "Person", with: "Top"
         find('.typeahead.dropdown-menu li').should have_content 'Top Leader'

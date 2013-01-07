@@ -24,6 +24,7 @@ gem 'nested_form'
 gem 'paranoia'
 gem 'prawn'
 gem 'protective'
+gem 'rack', '1.4.1' # fix this version to avoid warning in 1.4.2
 gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'

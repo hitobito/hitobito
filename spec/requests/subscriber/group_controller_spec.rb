@@ -22,6 +22,7 @@ describe Subscriber::GroupController, js: true do
       
       # select entry from typeahead
       find(".typeahead.dropdown-menu li a", text: 'Top > Bottom One').click
+      sleep(0.5)
         
       find('#subscription_subscriber_id').value.should == subscriber_id.to_s
       

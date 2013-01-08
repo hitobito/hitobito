@@ -2,7 +2,7 @@ ENV['RAILS_GROUPS'] = "assets"
 
 require 'spec_helper_base'
 require 'shared_db_connection' # see https://github.com/jnicklas/capybara Transactions and db setup
-#Dir[Rails.root.join("spec/support/group/*.rb")].each {|f| require f }
+require 'capybara/poltergeist'
 
 if ENV['HEADLESS'] == 'true'
   require 'headless'
@@ -16,7 +16,6 @@ if ENV['HEADLESS'] == 'true'
 elsif ENV['HEADLESS'] == 'false'
   # use selenium-webkit driver
 else
-  require 'capybara/poltergeist'
   Capybara.register_driver :poltergeist do |app|
     options = { debug: false, inspector: true, timeout: 10 } 
     driver = Capybara::Poltergeist::Driver.new(app, options)

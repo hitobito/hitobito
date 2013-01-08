@@ -1,5 +1,6 @@
 .bundle/
 log/*.log
+tmp/
 pkg/
 doc/rdoc
 db/*.sqlite3

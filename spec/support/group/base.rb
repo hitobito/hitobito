@@ -1,4 +1,3 @@
-
 # no wagons loaded
 unless ENV['APP_ROOT']
   Group.reset_types!

@@ -1,4 +1,4 @@
-require Rails.root.join("spec/support/group/base.rb")
+#require Rails.root.join("spec/support/group/base.rb")
 
 class Group::GlobalGroup < Group
 

@@ -31,7 +31,7 @@ describe EventsController, type: :controller do
       dom.find('.dropdown-toggle').text.should include 'Anlass erstellen'
       [Event, Event::Course].each_with_index do |item, index|
         path = new_group_event_path(event: {type: item.sti_name})
-        dom.all('.dropdown-menu a')[index].text.should eq item.model_name.human
+        dom.all('.dropdown-menu a')[index].text.should eq item.label
         dom.all('.dropdown-menu a')[index][:href].should eq path
       end
     end

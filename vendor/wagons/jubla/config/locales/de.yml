@@ -27,15 +27,90 @@ de:
         other: Kantone
       group/work_group: Arbeitsgruppe
       
-      group/state_board/supervisor: Stellenbegleitung
-      group/child_group/child: Kind
-      group/flock/leader: Scharleitung
-      group/flock/camp_leader: Lagerleitung
-      group/flock/president: Präses
-      group/flock/guide: Leiter
-      group/flock/advisor: Scharbegleitung
-      group/flock/coach: Coach
+                
+      group/federal_board/member:
+        one: Mitglied
+        long: Bundesleitung
+                
+      group/federal_professional_group/leader:
+        one: Leitung
+        long: Bund FG Leitung
+      group/federal_professional_group/member: 
+        one: Leitung
+        long: Bund FG Mitglied
+        
+      group/federal_work_group/leader:
+        one: Leitung
+        long: Bund AG Leitung
+      group/federal_work_group/member: 
+        one: Leitung
+        long: Bund AG Mitglied
+        
+      group/state_board/leader:
+        one: Leitung
+        long: Kantonsleitung Leitung
+      group/state_board/member:
+        one: Mitglied
+        long: Kantonsleitung Mitglied
+      group/state_board/supervisor: 
+        one: Stellenbegleitung
+        
+      group/state_agency/leader:
+        one: Leitung
+        long: AST Leitung
+        
+      group/state_professional_group/leader:
+        one: Leitung
+        long: Kanton FG Leitung
+      group/state_professional_group/member: 
+        one: Leitung
+        long: Kanton FG Mitglied
       
+      group/state_work_group/leader:
+        one: Leitung
+        long: Kanton AG Leitung
+      group/state_work_group/member: 
+        one: Leitung
+        long: Kanton AG Mitglied
+        
+      group/regional_board/leader:
+        one: Leitung
+        long: Regionalleitung Leitung
+      group/regional_board/member:
+        one: Mitglied
+        long: Regionalleitung Mitglied
+      
+      group/regional_professional_group/leader:
+        one: Leitung
+        long: Region FG Leitung
+      group/regional_professional_group/member: 
+        one: Leitung
+        long: Region FG Mitglied
+
+      group/regional_work_group/leader:
+        one: Leitung
+        long: Region AG Leitung
+      group/regional_work_group/member: 
+        one: Leitung
+        long: Region AG Mitglied
+        
+      group/flock/leader: 
+        one: Scharleitung
+      group/flock/camp_leader: 
+        one: Lagerleitung
+      group/flock/president: 
+        one: Präses
+      group/flock/guide: 
+        one: Leiter
+        long: Schar Leiter
+      group/flock/advisor: 
+        one: Scharbegleitung
+      group/flock/coach: 
+        one: Coach
+        
+      group/child_group/child: 
+        one: Kind
+        
       jubla/role/external: Extern
       jubla/role/coach: Coach
       jubla/role/group_admin: Adressverwaltung

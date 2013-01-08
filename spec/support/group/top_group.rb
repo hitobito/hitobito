@@ -1,5 +1,3 @@
-require Rails.root.join("spec/support/group/base.rb")
-
 class Group::TopGroup < Group
 
   self.event_types = [Event, Event::Course]

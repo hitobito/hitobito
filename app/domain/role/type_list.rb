@@ -28,7 +28,7 @@ class Role
       # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
-        @role_types['Global'][group_name(group)] = types if types.present?
+        @role_types['Global'][group.label] = types if types.present?
       end
       
       # global roles
@@ -48,7 +48,7 @@ class Role
     
     def set_role_types(layer, group)
       types = local_role_types(group)
-      @role_types[group_name(layer)][group_name(group)] = types if types.present?
+      @role_types[layer.label][group.label] = types if types.present?
     end
     
     # groups appearing in the possible children of more than one group
@@ -80,11 +80,7 @@ class Role
       end
       global
     end
-    
-    def group_name(group)
-      group.model_name.human
-    end
-        
+
     def local_role_types(group)
       group.role_types.select {|r| !r.restricted && local_role_type?(r) }
     end

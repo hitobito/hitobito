@@ -36,7 +36,7 @@ class GroupsController < CrudController
   def load_sub_groups
     @sub_groups = Hash.new {|h, k| h[k] = [] }
     entry.children.without_deleted.order_by_type(entry).each do |group|
-      label = group.layer ? group.class.model_name.human(count: 2) : 'Untergruppen'
+      label = group.layer ? group.class.label_plural : 'Untergruppen'
       @sub_groups[label] << group
     end
     # move this entry to the end

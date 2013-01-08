@@ -1,4 +1,3 @@
-require Rails.root.join("spec/support/group/base.rb")
 require Rails.root.join("spec/support/group/top_group.rb")
 require Rails.root.join("spec/support/group/bottom_layer.rb")
 

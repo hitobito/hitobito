@@ -1,4 +1,3 @@
-require Rails.root.join("spec/support/group/base.rb")
 require Rails.root.join("spec/support/group/bottom_group.rb")
 
 class Group::BottomLayer < Group

@@ -69,6 +69,14 @@ module Group::Types
       type
     end
     
+    def label
+      model_name.human
+    end
+    
+    def label_plural
+      model_name.human(count: 2)
+    end
+    
     private
     
     def collect_types(all, types)

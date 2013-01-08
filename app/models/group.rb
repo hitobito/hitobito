@@ -235,7 +235,7 @@ class Group < ActiveRecord::Base
 
   def create_default_children
     default_children.each do |group_type|
-      child = group_type.new(name: group_type.model_name.human)
+      child = group_type.new(name: group_type.label)
       child.parent = self
       child.save!
     end

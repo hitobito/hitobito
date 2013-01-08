@@ -54,7 +54,8 @@ module Role::Types
     end
     
     def label_long
-      model_name.human
+      I18n.translate("activerecord.models.#{model_name.i18n_key}.long",
+                     default: label)
     end
   end
 end

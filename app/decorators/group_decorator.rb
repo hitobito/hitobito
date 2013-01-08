@@ -17,7 +17,7 @@ class GroupDecorator < ApplicationDecorator
   def possible_children_links
     model.class.possible_children.map do |type|
       link = h.new_group_path(group: { parent_id: self.id, type: type.sti_name})
-      h.link_to(type.model_name.human, link)
+      h.link_to(type.label, link)
     end
   end
 
@@ -32,7 +32,7 @@ class GroupDecorator < ApplicationDecorator
     model.class.role_types.map do |type|
       if !type.restricted &&
         (type.visible_from_above? || can?(:index_local_people, model))  # users from above cannot create external roles
-        { sti_name: type.sti_name, human: type.model_name.human }
+        { sti_name: type.sti_name, human: type.label }
       end
     end.compact
   end
@@ -60,7 +60,7 @@ class GroupDecorator < ApplicationDecorator
 
   def new_event_button
     e = possible_events.first
-    h.action_button("#{e.model_name.human} erstellen", event_link(e), :plus)
+    h.action_button("#{e.label} erstellen", event_link(e), :plus)
   end
 
   def new_event_dropdown
@@ -69,7 +69,7 @@ class GroupDecorator < ApplicationDecorator
 
   def possible_event_links
     possible_events.map do |type|
-      h.link_to(type.model_name.human, event_link(type))
+      h.link_to(type.label, event_link(type))
     end
   end
 
@@ -92,7 +92,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def type_name
-    klass.model_name.human
+    klass.label
   end
 
 end

@@ -144,6 +144,14 @@ class Event < ActiveRecord::Base
       accessible_attributes.include?(attr)
     end
     
+    def label
+      model_name.human
+    end
+    
+    def label_plural
+      model_name.human(count: 2)
+    end
+    
   end
 
   

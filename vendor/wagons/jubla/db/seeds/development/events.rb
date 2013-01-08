@@ -90,7 +90,7 @@ def seed_dates(event, date)
   
   Event::Date.seed(:event_id, :start_at,
    {event_id: event.id,
-    label: event.class.model_name.human,
+    label: event.class.label,
     start_at: date += rand(20).days,
     finish_at: date += 7 + rand(5).days}
   )

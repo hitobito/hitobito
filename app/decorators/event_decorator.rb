@@ -31,8 +31,8 @@ class EventDecorator < ApplicationDecorator
   def possible_role_links(group)
     klass.role_types.map do |type|
       unless type.restricted
-        link = h.new_group_event_role_path(group, self, event_role: { type: type.sti_name})
-        h.link_to(type.model_name.human, link)
+        link = h.new_group_event_role_path(group, self, event_role: { type: type.sti_name })
+        h.link_to(type.label, link)
       end
     end.compact
   end

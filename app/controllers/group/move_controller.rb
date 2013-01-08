@@ -35,7 +35,7 @@ class Group::MoveController < ApplicationController
 
   def candidates
     @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
-    group_by { |candidate| candidate.class.model_name.human }
+    group_by { |candidate| candidate.class.label }
 
     if @candidates.empty? 
       flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen.'

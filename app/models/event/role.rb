@@ -42,11 +42,17 @@ class Event::Role < ActiveRecord::Base
   after_create :set_participation_active
   after_destroy :destroy_participation_for_last
     
+  class << self
+    def label
+      model_name.human
+    end
+  end
+    
     
   ### INSTANCE METHODS
     
   def to_s
-    model_name = self.class.model_name.human
+    model_name = self.class.label
     string = label? ? "#{label} (#{model_name})" : model_name
   end
   

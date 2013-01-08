@@ -62,7 +62,7 @@ class PeopleController < CrudController
                                             uniq.
                                             order('event_dates.start_at DESC').
                                             group_by do |p| 
-                                              p.event.class.model_name.human(count: 2)
+                                              p.event.class.label_plural
                                             end
 
     @participations_by_event_type.each do |kind, entries| 

@@ -49,7 +49,7 @@ module Import
     end
 
     def human_role_name
-      @role_name ||= @role_type.constantize.model_name.human
+      @role_name ||= @role_type.constantize.label
     end
 
   end

@@ -1,5 +1,3 @@
-require Rails.root.join("spec/support/group/base.rb")
-
 class Group::BottomGroup < Group
 
   children Group::BottomGroup

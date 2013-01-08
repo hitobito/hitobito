@@ -59,7 +59,7 @@ class Role < ActiveRecord::Base
   ### INSTANCE METHODS
   
   def to_s
-    model_name = self.class.model_name.human
+    model_name = self.class.label
     string = label? ? "#{label} (#{model_name})" : model_name
   end
   

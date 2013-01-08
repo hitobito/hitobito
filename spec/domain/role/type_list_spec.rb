@@ -12,8 +12,9 @@ describe Role::TypeList do
        {"Bottom Layer" => [Group::BottomLayer::Leader, Group::BottomLayer::Member]}], 
        
       ['Global', 
-       {"Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
+       {
         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member], 
+        "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
         "Global" => [Role::External]}], 
     ]
   end
@@ -25,8 +26,9 @@ describe Role::TypeList do
        {"Bottom Layer" => [Group::BottomLayer::Leader, Group::BottomLayer::Member]}], 
        
       ['Global', 
-       {"Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
+       {
         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member], 
+        "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
         "Global" => [Role::External]}], 
     ]
   end
@@ -47,8 +49,9 @@ describe Role::TypeList do
     list = Role::TypeList.new(Group::BottomGroup)
     list.to_enum.to_a.should == [
       ['Global', 
-       {"Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
+       {
         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member], 
+        "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member], 
         "Global" => [Role::External]}], 
     ]
   end

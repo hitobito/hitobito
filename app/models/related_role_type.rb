@@ -17,7 +17,7 @@ class RelatedRoleType < ActiveRecord::Base
   validates :role_type, inclusion: {in: lambda { |i| Role.all_types.collect(&:sti_name) } }
   
   def to_s
-    role_type.constantize.model_name.human
+    role_type.constantize.label_long
   end
   
 end

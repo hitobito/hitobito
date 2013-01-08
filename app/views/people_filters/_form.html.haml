@@ -21,7 +21,7 @@
           - role_types.each do |role_type|
             = f.inline_check_box(:role_types, 
                                  role_type.sti_name, 
-                                 role_type.model_name.human, 
+                                 role_type.label, 
                                  checked: entry.role_types.include?(role_type.sti_name))
 
   - if !@group.bottom?

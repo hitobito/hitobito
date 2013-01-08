@@ -2,11 +2,17 @@ require 'thinking_sphinx/test'
 
 def sphinx_environment(*tables, &block)
   obj = self
+  transactional = self.use_transactional_fixtures
+  #strategy = DatabaseCleaner.strategy
   begin
     before(:all) do
       obj.use_transactional_fixtures = false
       DatabaseCleaner.strategy = :truncation, {:only => tables}
       ThinkingSphinx::Test.init
+    end
+    
+    before(:each) do
+      ThinkingSphinx::Test.index
     end
 
     around(:each) do |example|
@@ -24,8 +30,8 @@ def sphinx_environment(*tables, &block)
     yield
   ensure
     after(:all) do
-      DatabaseCleaner.strategy = :transaction
-      obj.use_transactional_fixtures = true
+      #DatabaseCleaner.strategy = :transaction
+      obj.use_transactional_fixtures = transactional
     end
   end
 end

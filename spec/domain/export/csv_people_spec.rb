@@ -39,7 +39,10 @@ describe Export::CsvPeople do
           end
 
           its(['Telefonnummer Vater']) { should eq '123' }
-          its(['Rollen']) { should eq 'Member Group 11, Leader TopGroup' }
+          
+          it "roles should be complete" do
+            subject['Rollen'].split(', ').should =~ ['Member Group 11', 'Leader TopGroup']
+          end
         end
       end
     end

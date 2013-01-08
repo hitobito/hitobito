@@ -3,7 +3,6 @@ require 'thinking_sphinx/test'
 def sphinx_environment(*tables, &block)
   obj = self
   transactional = self.use_transactional_fixtures
-  #strategy = DatabaseCleaner.strategy
   begin
     before(:all) do
       obj.use_transactional_fixtures = false
@@ -30,7 +29,7 @@ def sphinx_environment(*tables, &block)
     yield
   ensure
     after(:all) do
-      #DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.strategy = defined?(DB_CLEANER_STRATEGY) ? DB_CLEANER_STRATEGY : :transaction
       obj.use_transactional_fixtures = transactional
     end
   end

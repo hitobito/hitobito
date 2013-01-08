@@ -3,6 +3,9 @@ ENV['RAILS_GROUPS'] = "assets"
 require 'spec_helper_base'
 require 'capybara/poltergeist'
 
+# define constant to reset in sphinx tests
+DB_CLEANER_STRATEGY = :truncation
+
 RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -10,7 +13,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   
   config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = DB_CLEANER_STRATEGY
   end  
     
   config.before(:each) do

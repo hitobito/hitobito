@@ -66,6 +66,7 @@ group :test do
   gem 'launchy'
   gem 'poltergeist'
   gem 'rspec-notify-osd'
+  gem 'libwebsocket', '0.1.5'
 end
 
 group :console do

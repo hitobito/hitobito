@@ -60,19 +60,46 @@
 .options {
   float: right;
   margin-top: 10px;
-  ul {
-    @include horizontal-list(10px);
+  > ul {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    
+    > li {
+      list-style-image: none;
+      list-style-type: none;
+      margin-left: 0;
+      white-space: nowrap;
+      display: inline;
+      float: left;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
   }
+  
   a {
     line-height: 30px;
   }
   form, input[type="search"] {
     margin-bottom: 0 !important;
   }
+  
 }
 .options a, a.link {
   text-decoration: underline;
   &:hover { background: none; }
+}
+
+.dropdown-menu {
+  a {
+    text-decoration: none;
+  }
+  .active {
+    a, a:hover {
+      color: $white;
+    }
+  }
 }
 
 /* Content */

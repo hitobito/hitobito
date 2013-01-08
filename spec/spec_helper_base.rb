@@ -48,9 +48,10 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   
-  config.include Devise::TestHelpers, :type => :controller
   config.include(MailerMacros)
   config.include(EventMacros)
+  config.include Devise::TestHelpers, :type => :controller
+  config.include RequestHelpers, type: :request
   
   config.filter_run_excluding type: 'request', performance: true
   
@@ -74,14 +75,4 @@ RSpec.configure do |config|
     Draper::ViewContext.current = c.view_context
   end
   
-  if ENV['HEADLESS'] == 'true'
-    require 'headless'
-  
-    headless = Headless.new
-    headless.start
-  
-    at_exit do
-      headless.destroy
-    end
-  end
 end

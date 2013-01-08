@@ -1,5 +1,4 @@
 module RequestHelpers 
-  extend ActiveSupport::Concern
   
   def sign_in(user = nil)
     user ||= people(:top_leader)

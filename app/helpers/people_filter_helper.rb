@@ -33,7 +33,7 @@ module PeopleFilterHelper
   private
   
   def people_filter_link(filter)
-     link = group_people_path(kind: filter.kind, role_types: filter.role_types.collect(&:to_s), name: filter.name)
+     link = group_people_path(kind: filter.kind, role_types: filter.role_types, name: filter.name)
      html = link_to(filter.name, link)
 
      if can?(:destroy, filter)

@@ -101,10 +101,10 @@
     margin: 0;
     li {
       color: $gray;
-      
-      a {
+      display: inline-block;
+      text-shadow: 0 1px 0 white;
 
-      }
+      a {  }
     }
   }
 }

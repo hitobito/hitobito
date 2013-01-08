@@ -20,6 +20,7 @@ db/sphinx
 /tmp
 *.swp
 *.swo
+C\:\\*
 
 # ignore static analysis artifacts
 coverage
@@ -38,7 +39,6 @@ config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
 config/*.sphinx.conf
-
 
 # uploaded pictures
 public/uploads

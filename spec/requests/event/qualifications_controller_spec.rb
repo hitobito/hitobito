@@ -37,10 +37,10 @@ describe Event::QualificationsController do
         
       find("#{appl_id} td:first").should have_selector('.icon-minus')
       
-      find("#{appl_id} td:first a").trigger('click')
+      find("#{appl_id} td:first a").click
       find("#{appl_id} td:first").should have_selector('.icon-ok')
         
-      find("#{appl_id} td:first a").trigger('click')
+      find("#{appl_id} td:first a").click
       find("#{appl_id} td:first").should have_selector('.icon-minus')
     end
   end

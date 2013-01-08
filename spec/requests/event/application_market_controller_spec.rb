@@ -134,11 +134,11 @@ describe Event::ApplicationMarketController do
           
           appl_id = "event_participation_#{appl_prio_1.id}"
           
-          find("#applications ##{appl_id} td:first a").trigger('click')
+          find("#applications ##{appl_id} td:first a").click
           should_not have_selector("#applications ##{appl_id}")
           find("#participants tr:last").should have_content(appl_prio_1.person.to_s)
           
-          find("#participants ##{appl_id} td:last a").trigger('click')
+          find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
           find("#applications tr:last").should have_content(appl_prio_1.person.to_s)
           
@@ -165,11 +165,11 @@ describe Event::ApplicationMarketController do
           
           appl_id = "event_participation_#{appl_waiting.id}"
           
-          find("#applications ##{appl_id} td:first a").trigger('click')
+          find("#applications ##{appl_id} td:first a").click
           find("#participants tr:last").should have_content(appl_waiting.person.to_s)
           should_not have_selector("#applications ##{appl_id}")
           
-          find("#participants ##{appl_id} td:last a").trigger('click')
+          find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
           find("#applications tr:last").should have_content(appl_waiting.person.to_s)
           
@@ -190,11 +190,11 @@ describe Event::ApplicationMarketController do
           
           appl_id = "event_participation_#{appl_participant.id}"
           
-          find("#participants ##{appl_id} td:last a").trigger('click')
+          find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
           find("#applications tr:last").should have_content(appl_participant.person.to_s)
           
-          find("#applications ##{appl_id} td:first a").trigger('click')
+          find("#applications ##{appl_id} td:first a").click
           find("#participants tr:last").should have_content(appl_participant.person.to_s)
           should_not have_selector("#applications ##{appl_id}")
           

@@ -1,6 +1,6 @@
 module RelatedRoleType::Assigners
   def role_types
-    @role_types ||= related_role_types.collect(&:to_s)
+    @role_types ||= related_role_types.collect(&:role_type)
   end
   
   def role_types=(types)

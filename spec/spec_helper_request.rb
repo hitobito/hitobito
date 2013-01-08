@@ -9,8 +9,10 @@ RSpec.configure do |config|
   config.include RequestHelpers, type: :request
 end
 
-Capybara.register_driver :poltergeist do |app|
-  options = { debug: false, inspector: true, timeout: 10 } 
-  driver = Capybara::Poltergeist::Driver.new(app, options)
+if ENV['HEADLESS'].blank?
+  Capybara.register_driver :poltergeist do |app|
+    options = { debug: false, inspector: true, timeout: 10 } 
+    driver = Capybara::Poltergeist::Driver.new(app, options)
+  end
+  Capybara.javascript_driver = :poltergeist
 end
-Capybara.javascript_driver = :poltergeist

@@ -10,6 +10,18 @@ describe EventDecorator, :draper_with_helpers do
   its(:labeled_link) { should =~ /SLK  Top/ }
   its(:labeled_link) { should =~ %r{<a href="/groups/#{event.group_ids.first}/events/#{event.id}">} }
 
+  context "typeahead label" do
+    subject { EventDecorator.new(event).as_typeahead[:label] }
+    it { should eq "#{event} &gt; #{event.groups.first}" }
+
+    context "multiple groups are joined and truncated" do
+      before { event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
+                                groups(:bottom_layer_two), groups(:bottom_group_two_one)] }
+
+      it { should eq "#{event} &gt; Top, TopGroup, Bottom One, ..." }
+    end
+  end
+
   describe "#dates" do
 
     it "joins multiple dates" do
@@ -17,7 +29,7 @@ describe EventDecorator, :draper_with_helpers do
       add_date(start_at: "2002-01-01")
       subject.dates_info.should eq "01.01.2002<br />01.01.2002"
     end
-   
+
     context "date objects"  do
       it "start_at only" do
         add_date(start_at: "2002-01-01")
@@ -40,7 +52,7 @@ describe EventDecorator, :draper_with_helpers do
         add_date(start_at: "2002-01-01 13:30")
         subject.dates_info.should eq "01.01.2002 13:30"
       end
-      
+
       it "start and finish" do
         add_date(start_at: "2002-01-01 13:30", finish_at: "2002-01-13 15:30")
         subject.dates_info.should eq "01.01.2002 13:30 - 13.01.2002 15:30"
@@ -63,11 +75,11 @@ describe EventDecorator, :draper_with_helpers do
     end
 
   end
-  
+
   def parse(str)
     Time.zone.parse(str)
   end
-  
+
   def add_date(date)
     %w[:start_at, :finish_at].each do |key|
       date[key] = parse(date[key]) if date.key?(key)

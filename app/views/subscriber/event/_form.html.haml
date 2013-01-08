@@ -1,0 +1,11 @@
+= entry_form(buttons_bottom: false,
+             url: group_mailing_list_event_index_path(@group, @mailing_list)) do |f|
+
+  = field_set_tag('Anlass') do
+    = f.string_field(:subscriber,
+                     placeholder: 'Anlass suchen...',
+                     data: {provide: 'entity',
+                            id_field: "subscription_subscriber_id",
+                            url: query_group_mailing_list_event_index_path(@group, @mailing_list)})
+
+    = f.hidden_field(:subscriber_id)

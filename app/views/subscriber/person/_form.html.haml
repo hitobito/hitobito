@@ -1,0 +1,11 @@
+= entry_form(buttons_bottom: false,
+             url: group_mailing_list_person_index_path(@group, @mailing_list)) do |f|
+
+  = field_set_tag('Person') do
+    = f.string_field(:subscriber,
+                     placeholder: 'Person suchen...',
+                     data: {provide: 'entity',
+                            id_field: "subscription_subscriber_id",
+                            url: query_people_path})
+
+    = f.hidden_field(:subscriber_id)

@@ -63,7 +63,11 @@ Jubla::Application.routes.draw do
               get :roles
             end
           end
-          resources :event, only: [:new, :create], controller: 'subscriber/event'
+          resources :event, only: [:new, :create], controller: 'subscriber/event' do
+            collection  do
+              get :query
+            end
+          end
         end
       end
     end

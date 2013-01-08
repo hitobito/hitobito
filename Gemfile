@@ -42,7 +42,7 @@ group :assets do
   gem 'compass-rails', '~> 1.0.2'
   gem 'jquery-rails', '2.1.3'
   gem 'sass-rails', '~> 3.2.3'
-  gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -66,7 +66,6 @@ group :test do
   gem 'launchy'
   gem 'poltergeist'
   gem 'rspec-notify-osd'
-  gem 'libwebsocket', '0.1.5'
 end
 
 group :console do

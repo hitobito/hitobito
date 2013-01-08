@@ -27,7 +27,7 @@ describe GroupsController do
     context "sub_groups" do
       before { get :show, id: group.id }
       
-      its(:keys) { should == %w(Gruppen Untergruppen)}
+      its(:keys) { should == ['Bottom Layer', 'Untergruppen'] }
       its(:values) { should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
                                 [groups(:top_group)]]}
     end

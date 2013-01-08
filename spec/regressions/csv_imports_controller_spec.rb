@@ -37,7 +37,7 @@ describe CsvImportsController, type: :controller do
 
     it "imports single person only" do
       expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(1)
-      should redirect_to group_people_path(group, name: 'Rolle', role_types: role_type)
+      should redirect_to group_people_path(group, name: 'Leader', role_types: role_type)
     end
     
   end

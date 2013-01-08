@@ -12,7 +12,7 @@ describe Group::MoveController do
   context "GET :select" do
     it "assigns candidates" do
       get :select, id: group.id
-      assigns(:candidates)['Gruppe'].should include target
+      assigns(:candidates)['Bottom Layer'].should include target
     end
   end
 

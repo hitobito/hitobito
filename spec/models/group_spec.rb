@@ -149,7 +149,7 @@ describe Group do
 
   context ".all_types" do
     it "lists all types" do
-      Set.new(Group.all_types).should == Set.new([Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup])
+      Group.all_types =~ [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup]
     end
   end
 

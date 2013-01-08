@@ -6,7 +6,7 @@ describe RoleDecorator, :draper_with_helpers do
   let(:decorator) {  RoleDecorator.new(role) } 
   subject { decorator } 
 
-  its(:flash_info) { should eq "<i>Rolle</i> für <i>Top Leader</i> in <i>TopGroup</i>" }
+  its(:flash_info) { should eq "<i>Leader</i> für <i>Top Leader</i> in <i>TopGroup</i>" }
 
   describe "possible_role_collection_select" do
     subject { Capybara::Node::Simple.new(decorator.possible_role_collection_select) } 

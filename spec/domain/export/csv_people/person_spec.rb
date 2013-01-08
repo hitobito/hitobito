@@ -12,13 +12,13 @@ describe Export::CsvPeople::Person do
   end
 
   context "roles" do
-    its([:roles]) { should eq 'Rolle TopGroup' }
+    its([:roles]) { should eq 'Leader TopGroup' }
 
     context "multiple roles" do
       let(:group) { groups(:bottom_group_one_one) }
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
-      its([:roles]) { should eq 'Rolle Group 11, Rolle TopGroup' }
+      its([:roles]) { should eq 'Member Group 11, Leader TopGroup' }
     end
   end
 

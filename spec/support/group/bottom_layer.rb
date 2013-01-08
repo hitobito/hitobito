@@ -1,3 +1,4 @@
+require Rails.root.join("spec/support/group/base.rb")
 require Rails.root.join("spec/support/group/bottom_group.rb")
 
 class Group::BottomLayer < Group
@@ -14,7 +15,7 @@ class Group::BottomLayer < Group
     self.permissions = [:layer_read, :login]
   end
   
-  roles Leader, Member, Role::External
+  roles Leader, Member
   
 end
 

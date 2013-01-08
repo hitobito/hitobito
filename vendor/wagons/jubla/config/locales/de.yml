@@ -50,7 +50,6 @@ de:
       event/camp:
         one: Lager
         other: Lager
-
         
       event/camp/kind:
         one: Lagerart

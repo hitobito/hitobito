@@ -29,7 +29,7 @@ describe Export::CsvPeople do
         its(['Nachname']) { should eq person.last_name }
         its(['E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
-        its(['Rollen']) { should eq "Rolle TopGroup" }
+        its(['Rollen']) { should eq "Leader TopGroup" }
         its(['Geschlecht']) { should be_blank }
 
         context "roles and phone number" do
@@ -39,7 +39,7 @@ describe Export::CsvPeople do
           end
 
           its(['Telefonnummer Vater']) { should eq '123' }
-          its(['Rollen']) { should eq 'Rolle Group 11, Rolle TopGroup' }
+          its(['Rollen']) { should eq 'Member Group 11, Leader TopGroup' }
         end
       end
     end
@@ -57,7 +57,7 @@ describe Export::CsvPeople do
 
         subject { csv[0] }
 
-        its(['Rollen']) { should eq "Rolle TopGroup" }
+        its(['Rollen']) { should eq "Leader TopGroup" }
         its(['Telefonnummer Vater']) { should eq '123' }
         its(['Skype']) { should eq 'foobar' }
         its(['Geschlecht']) { should eq 'm' }

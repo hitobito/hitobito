@@ -1,0 +1,18 @@
+de:
+  activerecord:
+    models:
+      group/top_layer: Top Layer
+      group/top_group: Top Group
+      group/bottom_layer: Bottom Layer
+      group/bottom_group: Bottom Group
+      group/global_group: Global Group
+      
+      group/top_layer/leader: Leader
+      group/top_layer/member: Member
+      group/top_group/leader: Leader
+      group/top_group/member: Member
+      group/bottom_layer/leader: Leader
+      group/bottom_layer/member: Member
+      group/bottom_group/leader: Leader
+      group/bottom_group/member: Member
+      role/external: External

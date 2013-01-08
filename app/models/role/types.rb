@@ -48,5 +48,13 @@ module Role::Types
     def reset_types!
       @@all_types = nil
     end
+    
+    def label
+      model_name.human
+    end
+    
+    def label_long
+      model_name.human
+    end
   end
 end

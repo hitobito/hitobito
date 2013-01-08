@@ -18,9 +18,9 @@ describe "Person Autocomplete" do
       click_link 'Rolle hinzufügen'
       find('.dropdown-menu').should be_visible
       within(:css, '.dropdown-menu') do
-        click_link 'Rolle'
+        click_link 'Leader'
       end
-      should have_content 'Rolle erstellen'
+      should have_content 'Leader erstellen'
     end
   end
 
@@ -30,7 +30,7 @@ describe "Person Autocomplete" do
         sign_in 
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
       
-        page.should have_content("Rolle erstellen")
+        page.should have_content("Leader erstellen")
       
         fill_in "Person", with: "gibberish"
         page.should_not have_selector('.typeahead.dropdown-menu')
@@ -78,7 +78,7 @@ describe "Person Autocomplete" do
         find('.typeahead.dropdown-menu li').click
         
         click_button 'Speichern'
-        should have_content 'Rolle Rolle für Top Leader in TopGroup wurde erfolgreich erstellt.'
+        should have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
       end
     end
 

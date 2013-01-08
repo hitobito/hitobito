@@ -23,12 +23,12 @@ describe RolesController do
     
     role = person.reload.roles.first
     role.group_id.should == group.id
-    flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+    flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
     role.should be_kind_of(Group::TopGroup::Member)
   end
 
   describe "PUT update" do
-    let(:notice) { "Rolle <i>bla (Rolle)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  } 
+    let(:notice) { "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  } 
     
 
     it "redirects to person after update" do
@@ -50,14 +50,14 @@ describe RolesController do
       put :update, {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader}}
       should redirect_to(group_person_path(group, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
-      notice = "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Rolle</i> geändert."
+      notice = "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
       flash[:notice].should eq notice
     end
 
   end
 
   describe "POST destroy" do
-    let(:notice) { "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." } 
+    let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." } 
 
     
     it "redirects to group" do

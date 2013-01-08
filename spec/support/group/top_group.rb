@@ -1,4 +1,4 @@
-require Rails.root.join("spec/support/group/external_role.rb")
+require Rails.root.join("spec/support/group/base.rb")
 
 class Group::TopGroup < Group
 
@@ -12,6 +12,6 @@ class Group::TopGroup < Group
     self.permissions = [:contact_data, :login]
   end
     
-  roles Leader, Member, Role::External
+  roles Leader, Member
   
 end

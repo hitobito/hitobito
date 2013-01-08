@@ -65,15 +65,15 @@ describe PeopleController, type: :controller do
       dom.should_not have_selector('dt', text: 'Erstellt')
       dom.should_not have_selector('dt', text: 'Geändert')
     end
-
   end
+  
   describe "role section" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:section) { dom.all('aside section')[0] }
     it "is missing if we have no applications" do
       get :show, params 
       section.find('h2').text.should eq 'Aktive Rollen'
-      section.find('tr:eq(1) td:eq(1)').text.should include("Rolle")
+      section.find('tr:eq(1) td:eq(1)').text.should include("Leader")
       section.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
       section.find('tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
@@ -154,7 +154,7 @@ describe PeopleController, type: :controller do
       dom.all('table tbody tr').size.should eq 1 
       role_row = dom.find('table tbody tr:eq(1)')
       role_row.find('td:eq(1) a').text.should eq 'TopGroup'
-      role_row.find('td:eq(2)').text.strip.should eq 'Rolle'
+      role_row.find('td:eq(2)').text.strip.should eq 'Member'
       role_row.find('td:eq(3)').text.should be_present
       role_row.find('td:eq(4)').text.should_not be_present
     end
@@ -167,7 +167,7 @@ describe PeopleController, type: :controller do
       dom.all('table tbody tr').size.should eq 2 
       role_row = dom.find('table tbody tr:eq(2)')
       role_row.find('td:eq(1) a').text.should eq 'Group 11'
-      role_row.find('td:eq(2)').text.strip.should eq 'Rolle'
+      role_row.find('td:eq(2)').text.strip.should eq 'Member'
       role_row.find('td:eq(3)').text.should be_present
       role_row.find('td:eq(4)').text.should be_present
     end

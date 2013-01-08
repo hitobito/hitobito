@@ -21,12 +21,16 @@ class Role
       @role_types = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] } }
       
       # layers
-      compose_role_list_by_layer(layer)
+      unless @global_group_types.include?(layer)
+        compose_role_list_by_layer(layer)
+      end
+      
       # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
-        @role_types['Global'][group.model_name.human] = types if types.present?
+        @role_types['Global'][group_name(group)] = types if types.present?
       end
+      
       # global roles
       @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
     end
@@ -44,12 +48,13 @@ class Role
     
     def set_role_types(layer, group)
       types = local_role_types(group)
-      @role_types[layer.model_name.human][group.model_name.human] = types if types.present?
+      @role_types[group_name(layer)][group_name(group)] = types if types.present?
     end
     
     # groups appearing in the possible children of more than one group
     def find_global_group_types(seen_types, group)
       global = []
+      
       group.possible_children.each do |child|
         if seen_types.include?(child)
           global << child unless child.layer
@@ -74,6 +79,10 @@ class Role
         end
       end
       global
+    end
+    
+    def group_name(group)
+      group.model_name.human
     end
         
     def local_role_types(group)

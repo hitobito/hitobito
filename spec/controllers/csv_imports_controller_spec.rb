@@ -47,9 +47,9 @@ describe CsvImportsController do
 
     it "populates flash and redirects to group role list" do
       expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(1)
-      flash[:notice].should eq ["1 Person (Rolle) wurden erfolgreich importiert."]
+      flash[:notice].should eq ["1 Person (Leader) wurden erfolgreich importiert."]
       flash[:alert].should_not be_present
-      should redirect_to group_people_path(group, role_types: role_type, name: "Rolle")
+      should redirect_to group_people_path(group, role_types: role_type, name: "Leader")
     end
 
 
@@ -59,9 +59,9 @@ describe CsvImportsController do
 
       it "imports first person and displays errors for second person" do
         expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(0)
-        flash[:alert].should eq ["1 Person (Rolle) konnten nicht importiert werden.", 
+        flash[:alert].should eq ["1 Person (Leader) konnten nicht importiert werden.", 
                                  "Zeile 1: Bitte geben Sie einen Namen für diese Person ein"]
-        should redirect_to group_people_path(group, role_types: role_type, name: "Rolle")
+        should redirect_to group_people_path(group, role_types: role_type, name: "Leader")
       end
     end
 
@@ -72,7 +72,7 @@ describe CsvImportsController do
       it "is ignored" do
         expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(1)
         flash[:alert].should be_blank
-        should redirect_to group_people_path(group, role_types: role_type, name: "Rolle")
+        should redirect_to group_people_path(group, role_types: role_type, name: "Leader")
       end
     end
 
@@ -118,7 +118,7 @@ describe CsvImportsController do
           post :create, group_id: group.id, data: data, csv_import: mapping
           Role.count.should eq @role_count + 1
           Person.count.should eq @person_count
-          flash[:notice].should eq  ["1 Person (Rolle) wurden erfolgreich aktualisiert."] 
+          flash[:notice].should eq  ["1 Person (Leader) wurden erfolgreich aktualisiert."] 
           @person.reload.nickname.should eq 'foobar'
         end
       end
@@ -131,7 +131,7 @@ describe CsvImportsController do
           Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
           Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
           post :create, group_id: group.id, data: data, csv_import: mapping
-          flash[:alert].should eq ["1 Person (Rolle) konnten nicht importiert werden.", 
+          flash[:alert].should eq ["1 Person (Leader) konnten nicht importiert werden.", 
                                    "Zeile 1: 2 Treffer in Duplikatserkennung."]
         end
       end

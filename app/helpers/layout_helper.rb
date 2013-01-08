@@ -54,8 +54,8 @@ module LayoutHelper
     if add_path || collection.present?
       if add_path
         title = safe_join([title,
-                           content_tag(:span, 
-                                       button_action_add(add_path, nil, class: 'btn-small'), 
+                           content_tag(:span,
+                                       action_button('Erstellen', add_path, 'plus', class: 'btn-small'), 
                                        class: 'pull-right')])
       end
       render(layout: 'shared/section_table', 

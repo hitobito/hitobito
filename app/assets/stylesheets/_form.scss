@@ -135,6 +135,10 @@ textarea {
   float: right;
 }
 
+.form-horizontal .controls .help-block {
+  margin: 0 0 10px 0;
+}
+
 .remove_nested_fields {
   color: $red;
   margin: 0; 

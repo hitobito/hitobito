@@ -141,7 +141,7 @@ module CrudHelper
   # Links to the current model_class if no path is given.
   def button_action_add(path = nil, url_options = {}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.add"), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus', options
+    action_button ti(:"link.add", model: models_label(false)), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus', options
   end
   
   # Standard link action to the edit page of a given record.

@@ -9,6 +9,11 @@ class MailingListsController < CrudController
   
   private
   
+  def list_entries
+    super.order(:name)
+  end
+  
+  
   alias_method :group, :parent
   
 end

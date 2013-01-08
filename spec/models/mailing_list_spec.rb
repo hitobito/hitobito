@@ -7,7 +7,31 @@ describe MailingList do
   let(:event)  { Fabricate(:event, groups: [list.group]) }
   
   describe 'validations' do
-    # TODO
+    it "succeed with mail_name" do
+      list.mail_name = 'aa-b'
+      list.should be_valid
+    end
+    
+    it "succeed with one char mail_name" do
+      list.mail_name = 'a'
+      list.should be_valid
+    end
+    
+    it "fails with mail_name and invalid chars" do
+      list.mail_name = 'a@aa'
+      list.should have(1).error_on(:mail_name)
+    end
+    
+    it "fails with mail_name and invalid first char" do
+      list.mail_name = '-aa'
+      list.should have(1).error_on(:mail_name)
+    end
+    
+    it "fails with duplicate mail name" do
+      Fabricate(:mailing_list, mail_name: 'foo', group: groups(:bottom_layer_one))
+      list.mail_name = 'foo'
+      list.should have(1).error_on(:mail_name)
+    end
   end
   
   describe '#subscribed?' do

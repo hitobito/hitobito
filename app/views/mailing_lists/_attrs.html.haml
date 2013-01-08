@@ -1,5 +1,11 @@
 #main.row-fluid
   %article.span5
-    = render_attrs(entry, :name, :description, :publisher, :mail_name, :additional_sender)
+    = format_attr(entry, :description)
+    
+    = render_attrs(entry, :publisher)
+    
+    - if can?(:edit, entry)
+      = render_attrs(entry, :mail_address, :additional_sender)
+    
     = entry.subscribable_info
     = entry.subscribers_may_post_info

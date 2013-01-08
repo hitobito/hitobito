@@ -25,7 +25,7 @@ de:
     link:
       show: Anzeigen
       edit: Bearbeiten
-      add: Erstellen
+      add: "%{model} erstellen"
       delete: Löschen
       list: Liste
       

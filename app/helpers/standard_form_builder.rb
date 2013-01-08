@@ -293,7 +293,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   
   # Generates a help block for fields
   def help_block(text)
-    content_tag(:p, text, :class => 'help-block')
+    content_tag(:span, text, :class => 'help-block')
   end
 
   # Returns the list of association entries, either from options[:list],

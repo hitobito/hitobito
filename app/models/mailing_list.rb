@@ -25,7 +25,7 @@ class MailingList < ActiveRecord::Base
   
   
   validates :mail_name, uniqueness: { case_sensitive: false },
-                        format: /[a-z0-9\-\_\.]+/,
+                        format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
   validate :assert_mail_name_is_not_protected
 
@@ -33,6 +33,14 @@ class MailingList < ActiveRecord::Base
   
   def to_s
     name
+  end
+  
+  def mail_address
+    "#{mail_name}@#{mail_domain}" if mail_name?
+  end
+  
+  def mail_domain
+    Settings.email.list_domain
   end
   
   def subscribed?(person)

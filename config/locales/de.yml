@@ -249,6 +249,7 @@ de:
         publisher: Herausgeber
         subscribable: Abonnenten dürfen sich selbst an/abmelden
         mail_name: Mailinglisten Adresse
+        mail_address: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
         

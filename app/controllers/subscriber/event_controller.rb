@@ -9,7 +9,7 @@ module Subscriber
       events = []
       if params.has_key?(:q) && params[:q].size >= 3
         events = Event.order_by_date.
-                 in_year(Time.zone.now.year).
+                 since(start_of_last_year).
                  joins(:groups).
                  joins("LEFT OUTER JOIN event_kinds on events.kind_id = event_kinds.id AND events.type = '#{Event::Course.sti_name}'").
                  where(groups: { id: @group.sister_groups_with_descendants }).
@@ -24,23 +24,18 @@ module Subscriber
 
     private
 
+    def start_of_last_year
+      Time.zone.now.prev_year.beginning_of_year
+    end
+
     def assign_attributes
       if model_params && model_params[:subscriber_id].present?
         entry.subscriber = Event.find(model_params[:subscriber_id])
       end
     end
 
-
-    def replace_validation_errors
-      if entry.errors[:subscriber_type].present?
-        entry.errors.clear
-        entry.errors.add(:base, 'Anlass muss ausgewählt werden')
-      end
-
-      if entry.errors[:subscriber_id].present?
-        entry.errors.clear
-        entry.errors.add(:base, 'Anlass wurde bereits hinzugefügt')
-      end
+    def model_label
+      Event.model_name.human
     end
   end
 end

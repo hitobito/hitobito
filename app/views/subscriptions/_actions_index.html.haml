@@ -1,4 +1,5 @@
 - if can?(:new, @mailing_list.subscriptions.new)
   = action_button 'Rollen hinzufügen', new_group_mailing_list_group_path(@group, @mailing_list), 'plus'
   = action_button 'Person hinzufügen', new_group_mailing_list_person_path(@group, @mailing_list), 'plus'
+  = action_button 'Person entfernen', new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus'
   = action_button 'Anlass hinzufügen', new_group_mailing_list_event_path(@group, @mailing_list), 'plus'

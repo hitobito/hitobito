@@ -1,9 +1,10 @@
 Jubla::Application.routes.draw do
 
+
   root :to => 'dashboard#index'
 
   resources :groups do
-    
+
     member do
       get 'merge' => 'group/merge#select'
       post 'merge' => 'group/merge#perform'
@@ -11,7 +12,7 @@ Jubla::Application.routes.draw do
       get 'move' => 'group/move#select'
       post 'move' => 'group/move#perform'
     end
-    
+
     resources :people do
       member do
         get :history
@@ -52,11 +53,12 @@ Jubla::Application.routes.draw do
       end
 
     end
-    
+
     resources :mailing_lists do
       resources :subscriptions, only: [:index, :destroy] do
         collection do
           resources :person, only: [:new, :create], controller: 'subscriber/person'
+          resources :exclude_person, only: [:new, :create], controller: 'subscriber/exclude_person'
           resources :group, only: [:new, :create], controller: 'subscriber/group' do
             collection do
               get :query
@@ -68,6 +70,7 @@ Jubla::Application.routes.draw do
               get :query
             end
           end
+          resource :user, only: [:create, :destroy], controller: 'subscriber/user'
         end
       end
     end

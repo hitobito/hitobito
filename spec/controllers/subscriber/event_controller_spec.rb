@@ -22,18 +22,20 @@ describe Subscriber::EventController do
       it { should =~ /event &gt; TopGroup/ }
     end
 
-    context "lists only future events in current year" do
+    context "lists events from previous year onwards" do
       before do
         create_event('event now', now)
         create_event('event later', now + 5.minutes)
         create_event('event last_year', now - 1.year)
+        create_event('event two_years_ago', now - 5.years)
 
         get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
       end
 
       it { should =~ /now/ }
       it { should =~ /later/ }
-      it { should_not =~ /last_year/ }
+      it { should =~ /last_year/ }
+      it { should_not =~ /two_years_ago/ }
     end
 
     context "list only events from self, sister and descendants" do
@@ -105,7 +107,7 @@ describe Subscriber::EventController do
 
   def create_event(name, start_at, event_group=group)
     event = Fabricate(:event, name: name, groups: [event_group])
-    Fabricate(:event_date, event: event, start_at: start_at)
+    event.dates.first.update_attribute(:start_at, start_at)
   end
 
 end

@@ -99,7 +99,7 @@ class EventDecorator < ApplicationDecorator
   def as_typeahead
     groups_label = groups.first.to_s
     if groups.size > 1
-      groups_label = h.truncate(groups.join(', '), count: 40)
+      groups_label = h.truncate(groups.join(', '), count: 40, separator: ',')
     end
     {id: id, label: h.safe_join([to_s, groups_label], ' > ')}
   end

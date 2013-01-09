@@ -1,6 +1,7 @@
-= entry_form(buttons_bottom: false,
-             url: url) do |f|
+- title ti('Abonnent entfernen')
 
+= standard_form(subscription, url: group_mailing_list_exclude_person_index_path(mailing_list.group, mailing_list)) do |f|
+  = f.error_messages
   = field_set_tag('Person') do
     = f.string_field(:subscriber,
                      placeholder: 'Person suchen...',
@@ -9,3 +10,4 @@
                             url: query_people_path})
 
     = f.hidden_field(:subscriber_id)
+  = save_form_buttons(f, 'Person entfernen', mailing_list_subscriptions_path)

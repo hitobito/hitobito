@@ -18,7 +18,7 @@ describe EventDecorator, :draper_with_helpers do
       before { event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
                                 groups(:bottom_layer_two), groups(:bottom_group_two_one)] }
 
-      it { should eq "#{event} &gt; Top, TopGroup, Bottom One, ..." }
+      it { should eq "#{event} &gt; Top, TopGroup, Bottom One..." }
     end
   end
 

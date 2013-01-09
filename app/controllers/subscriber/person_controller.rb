@@ -9,19 +9,23 @@ module Subscriber
     def assign_attributes
       if model_params && model_params[:subscriber_id].present?
         entry.subscriber = Person.find(model_params[:subscriber_id])
+        entry.excluded = false
       end
     end
 
-    def replace_validation_errors
-      if entry.errors[:subscriber_type].present?
-        entry.errors.clear
-        entry.errors.add(:base, 'Person muss ausgewählt werden')
-      end
+    def build_entry
+      find_excluded_subscription || model_scope.new
+    end
 
-      if entry.errors[:subscriber_id].present?
-        entry.errors.clear
-        entry.errors.add(:base, 'Person wurde bereits hinzugefügt')
+    def find_excluded_subscription
+      if model_params && model_params[:subscriber_id].present?
+        mailing_list.subscriptions.where(subscriber_id: model_params[:subscriber_id],
+                                         subscriber_type: Person.sti_name, excluded: true).first
       end
+    end
+
+    def model_label
+      Person.model_name.human
     end
   end
 end

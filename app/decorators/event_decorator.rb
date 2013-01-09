@@ -14,10 +14,10 @@ class EventDecorator < ApplicationDecorator
     safe_join([h.link_to_if(can, name, url), h.muted(model.label_detail)], h.tag(:br))
   end
 
-  def dates_info    
+  def dates_info
     safe_join(dates, h.tag(:br)) { |date| date.duration }
   end
-  
+
   def dates_full
     safe_join(dates, h.tag(:br)) { |date| safe_join([date.duration, h.muted(date.label)], ' ') }
   end
@@ -27,7 +27,7 @@ class EventDecorator < ApplicationDecorator
     info << " von #{maximum_participants}" if maximum_participants.to_i > 0
     info
   end
-  
+
   def possible_role_links(group)
     klass.role_types.map do |type|
       unless type.restricted
@@ -37,10 +37,10 @@ class EventDecorator < ApplicationDecorator
     end.compact
   end
 
-  def preconditions 
+  def preconditions
     model.kind_of?(Event::Course) &&  kind.preconditions.map(&:label)
   end
-  
+
   def state_translated(state = model.state)
     h.t("activerecord.attributes.event/course.states.#{state}") if state
   end
@@ -48,7 +48,7 @@ class EventDecorator < ApplicationDecorator
   def state_collection
     possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
-    
+
   def description
     h.simple_format(model.description) if model.description?
   end
@@ -58,11 +58,11 @@ class EventDecorator < ApplicationDecorator
       h.simple_format(h.truncate(model.description, length: 60))
     end
   end
-  
+
   def location
     h.simple_format(model.location) if model.location?
   end
-  
+
   def issued_qualifications_info
     qualis = kind.qualification_kinds.to_a
     prolongs = kind.prolongations.to_a
@@ -95,5 +95,12 @@ class EventDecorator < ApplicationDecorator
     end.compact
     safe_join(values, h.tag(:br))
   end
-  
+
+  def as_typeahead
+    groups_label = groups.first.to_s
+    if groups.size > 1
+      groups_label = h.truncate(groups.join(', '), count: 40)
+    end
+    {id: id, label: h.safe_join([to_s, groups_label], ' > ')}
+  end
 end

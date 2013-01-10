@@ -1,6 +1,7 @@
 class PeopleController < CrudController
 
   include RenderPeoplePdf
+  include RenderPeopleCsv
 
   self.nesting = Group
   self.nesting_optional = true
@@ -22,7 +23,7 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html { @people = @people.page(params[:page]) }
       format.pdf  { render_pdf(@people) }
-      format.csv  { render_csv(@people) }
+      format.csv  { render_csv(@people, @group) }
     end
   end
   
@@ -48,7 +49,7 @@ class PeopleController < CrudController
       respond_to do |format|
         format.html { entry }
         format.pdf  { render_pdf([entry]) }
-        format.csv  { render_csv([entry]) }
+        format.csv  { render_csv([entry], @group) }
       end
     end
   end
@@ -80,12 +81,6 @@ class PeopleController < CrudController
 
   private
   
-  def render_csv(people)
-    csv = params[:details] && can?(:index_full_people, @group) ?
-      Export::CsvPeople.export_full(people) :
-      Export::CsvPeople.export_address(people)
-    send_data csv, type: :csv
-  end
   
   def filter_entries
     if params[:role_types]

@@ -134,51 +134,54 @@ describe Event::ParticipationsController do
 
 
   context "POST create" do
-    let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
-    let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
-    let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
     
-    before do
-      # create one person with two approvers
-      Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
-
-      person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
-    end
+    context "for current user" do
+      let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
+      let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
+      let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
     
-    it "creates confirmation job" do
-      expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
-    end
+      before do
+        # create one person with two approvers
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
+  
+        person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl)) 
+      end
       
-    it "creates participant role for non course events" do
-      post :create, group_id: group.id, event_id: Fabricate(:event).id
-      participation = assigns(:participation)
-      participation.roles.should have(1).item
-      role = participation.roles.first
-      role.participation.should eq participation.model
-    end
-  end
-
-  context "POST create for other user" do
-    let(:bottom_member) { people(:bottom_member) }
-    let(:participation) { assigns(:participation) }
-
-    it "top leader can create event for bottom member" do
-      post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
-      participation.should be_present
-      participation.persisted?.should be_true
-      participation.should be_active
-      participation.roles.pluck(:type).should == [Event::Course::Role::Participant.sti_name]
-      should redirect_to group_event_participation_path(group, course, participation)
+      it "creates confirmation job" do
+        expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
+      end
+        
+      it "creates participant role for non course events" do
+        post :create, group_id: group.id, event_id: Fabricate(:event).id
+        participation = assigns(:participation)
+        participation.roles.should have(1).item
+        role = participation.roles.first
+        role.participation.should eq participation.model
+      end
     end
 
-    it "bottom member can not create event for top leader" do
-      sign_in(bottom_member)
-      post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: user.id }
-      participation.person.should eq user
-      participation.persisted?.should be_false
-      should redirect_to root_url
+    context "other user" do
+      let(:bottom_member) { people(:bottom_member) }
+      let(:participation) { assigns(:participation) }
+  
+      it "top leader can create participation for bottom member" do
+        post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
+        participation.should be_present
+        participation.persisted?.should be_true
+        participation.should be_active
+        participation.roles.pluck(:type).should == [Event::Course::Role::Participant.sti_name]
+        should redirect_to group_event_participation_path(group, course, participation)
+      end
+  
+      it "bottom member can not create participation for top leader" do
+        sign_in(bottom_member)
+        post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: user.id }
+        participation.person.should eq user
+        participation.persisted?.should be_false
+        should redirect_to root_url
+      end
     end
   end
 

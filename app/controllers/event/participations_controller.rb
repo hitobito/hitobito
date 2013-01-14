@@ -110,6 +110,7 @@ class Event::ParticipationsController < CrudController
       if model_params && model_params.has_key?(:person_id)
         model_params.delete(:person)
         participation.person_id = model_params.delete(:person_id)
+        params[:for_someone_else] = true
       end
     end
 
@@ -151,7 +152,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def create_participant_role
-    if !entry.event.supports_applications || entry.person_id != current_user.id
+    if !entry.event.supports_applications || (can?(:create, event) && params[:for_someone_else])
       role = entry.event.participant_type.new
       role.participation = entry
       entry.roles << role

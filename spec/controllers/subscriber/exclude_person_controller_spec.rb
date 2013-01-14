@@ -43,7 +43,7 @@ describe Subscriber::ExcludePersonController do
     it "without subscriber_id replaces error" do
       post :create, group_id: group.id, mailing_list_id: list.id
 
-      should render_template('subscriber/exclude_person/new')
+      should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
       assigns(:subscription).errors[:base].should eq ["Person muss ausgewählt werden"]
     end
@@ -53,8 +53,7 @@ describe Subscriber::ExcludePersonController do
       post :create, group_id: group.id, mailing_list_id: list.id,
         subscription: { subscriber_id: other.id }
 
-
-      should render_template('subscriber/exclude_person/new')
+      should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
       assigns(:subscription).errors[:base].should eq ["#{other} ist kein Abonnent"]
     end
@@ -67,7 +66,7 @@ describe Subscriber::ExcludePersonController do
       expect { post :create, group_id: group.id, mailing_list_id: list.id,
                subscription: { subscriber_id: person.id } }.not_to change(Subscription, :count)
 
-      should render_template('subscriber/exclude_person/new')
+      should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
       assigns(:subscription).errors[:base].should eq ["#{person} ist kein Abonnent"]
     end

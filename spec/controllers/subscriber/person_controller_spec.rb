@@ -14,7 +14,7 @@ describe Subscriber::PersonController do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
 
-      should render_template('subscriber/person/new')
+      should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
       assigns(:subscription).errors[:base].should eq ["Person muss ausgewählt werden"]
     end
@@ -25,7 +25,7 @@ describe Subscriber::PersonController do
       expect { post :create, group_id: group.id, mailing_list_id: list.id,
                subscription: { subscriber_id: person.id } }.not_to change(Subscription, :count)
 
-      should render_template('subscriber/person/new')
+      should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
       assigns(:subscription).errors[:base].should eq ["Person wurde bereits hinzugefügt"]
     end

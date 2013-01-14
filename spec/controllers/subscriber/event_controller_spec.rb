@@ -19,7 +19,7 @@ describe Subscriber::EventController do
         get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /event &gt; TopGroup/ }
+      it { should =~ /event \(TopGroup\)/ }
     end
 
     context "lists events from previous year onwards" do
@@ -82,6 +82,18 @@ describe Subscriber::EventController do
 
   context "POST create" do
 
+    let(:event) { Fabricate(:event, groups: [group]) }
+
+    it "adds subscription" do
+      expect do
+        post :create, group_id: group.id, 
+                      mailing_list_id: list.id,
+                      subscription: { subscriber_id: event.id }
+      end.to change(Subscription, :count).by(1)
+
+      should redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
+    end
+    
     it "without subscriber_id replaces error" do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
@@ -93,10 +105,13 @@ describe Subscriber::EventController do
 
     it "duplicated subscription replaces error" do
       subscription = list.subscriptions.build
-      subscription.update_attribute(:subscriber, events(:top_event))
+      subscription.update_attribute(:subscriber, event)
 
-      expect { post :create, group_id: group.id, mailing_list_id: list.id,
-               subscription: { subscriber_id: events(:top_event).id } }.not_to change(Subscription, :count)
+      expect do
+        post :create, group_id: group.id, 
+                      mailing_list_id: list.id,
+                      subscription: { subscriber_id: event.id }
+      end.not_to change(Subscription, :count)
 
       should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item

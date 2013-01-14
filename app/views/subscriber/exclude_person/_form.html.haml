@@ -1,0 +1,7 @@
+- title ti('Abonnent ausschliessen')
+
+= entry_form(buttons_bottom: false,
+             url: group_mailing_list_exclude_person_index_path(@group, @mailing_list)) do |f|
+
+  = f.labeled(:subscriber, 'Person') do
+    = f.person_field(:subscriber)

@@ -2,15 +2,14 @@
 module Subscriber
   class PersonController < BaseController
 
+    skip_authorize_resource # must be in leaf class
+    
     before_render_form :replace_validation_errors
 
     private
-
-    def assign_attributes
-      if model_params && model_params[:subscriber_id].present?
-        entry.subscriber = Person.find(model_params[:subscriber_id])
-        entry.excluded = false
-      end
+    
+    def subscriber
+      Person.find(subscriber_id)
     end
 
     def build_entry

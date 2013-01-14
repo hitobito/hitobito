@@ -1,4 +1,5 @@
 = button_action_edit if can?(:edit, entry)
 = button_action_destroy if can?(:destroy, entry)
 = button_toggle_subscription
-= dropdown_button('Export', people_export_links(can?(:index_full_people, @group)), :download) if can?(:manage, entry)
+- if can?(:update, @mailing_list)
+  = dropdown_button('Export', people_export_links(false), :download)

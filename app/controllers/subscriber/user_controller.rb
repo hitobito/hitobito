@@ -2,31 +2,48 @@
 module Subscriber
   class UserController < ApplicationController
 
-    include PlainControllerSupport
-
+    before_filter :authorize
+      
     def create
-      if subscription.persisted?
-        subscription.excluded = false
-      end
-
+      subscription.excluded = false
       subscription.save
-      redirect_to(mailing_list_path, notice: success_message(:subscribed))
+      redirect_to(mailing_list_path, notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
     end
 
     def destroy
-      subscription.update_attribute(:excluded, true)
-      redirect_to(mailing_list_path, notice: success_message(:unsubscribed))
+      mailing_list.exclude_person(current_user)
+      redirect_to(mailing_list_path, notice: "Du wurdest erfolgreich vom Abo entfernt")
     end
 
     private
 
-    def custom_authorization
+    def authorize
       raise CanCan::AccessDenied unless mailing_list.subscribable?
-      super
+      authorize!(:update, subscription)
+    end
+    
+    def subscription
+      @subscription ||= find_subscription || build_subscription
     end
 
-    def person
-      current_user
+    def build_subscription
+      subscription = mailing_list.subscriptions.new
+      subscription.subscriber = current_user
+      subscription
+    end
+
+    def find_subscription
+      mailing_list.subscriptions.where(subscriber_id: current_user.id, 
+                                       subscriber_type: Person.sti_name).
+                                 first
+    end
+
+    def mailing_list
+      @mailing_list ||= MailingList.find(params[:mailing_list_id])
+    end
+
+    def mailing_list_path
+      group_mailing_list_path(group_id: mailing_list.group.id, id: mailing_list.id)
     end
 
   end

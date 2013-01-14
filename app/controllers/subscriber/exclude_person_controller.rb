@@ -1,65 +1,41 @@
 # encoding: UTF-8
 module Subscriber
-  class ExcludePersonController < ApplicationController
-
-    include PlainControllerSupport
-
-    decorates :group
-
-    respond_to :html
-    helper_method :subscription, :mailing_list, :mailing_list_subscriptions_path
-    before_filter :load_instance_variables
-
-    def create
-      assign_attributes
-
-      if subscribed? && create_or_destroy
-        redirect_to(mailing_list_subscriptions_path, notice: success_message(:unsubscribed))
-      else
-        subscription.errors.add(:base, error_message)
-        respond_with(subscription, success: false)
-      end
-    end
+  class ExcludePersonController < PersonController
+    
+    skip_authorize_resource # must be in leaf class
+    
+    before_create :assert_subscribed
 
     private
 
     def assign_attributes
-      subscription.subscriber = person
-      subscription.excluded = true
+      super
+      entry.excluded = true
     end
-
-    def subscribed?
-      subscriber_id && mailing_list.subscribed?(person)
+    
+    def assert_subscribed
+      if subscriber_id
+        unless mailing_list.subscribed?(subscriber)
+          entry.errors.add(:base, "#{subscriber.to_s} ist kein Abonnent")
+          false
+        end
+      end
     end
-
-    def create_or_destroy
-       subscription.persisted? ? subscription.destroy : subscription.save
+    
+    def save_entry
+      if subscriber_id
+        @mailing_list.exclude_person(subscriber)
+      else
+        super
+      end
     end
-
-    def mailing_list_subscriptions_path
-      group_mailing_list_subscriptions_path(mailing_list.group, mailing_list)
-    end
-
-    def load_instance_variables
-      subscription
-      @mailing_list = mailing_list
-      @group = mailing_list.group
-    end
-
-    def person
-      @person ||= (subscriber_id && Person.find(subscriber_id))
-    end
-
-    def subscriber_id
-      params[:subscription] && params[:subscription][:subscriber_id]
-    end
-
-    def extra_find_conditions
-      { excluded: false }
-    end
-
-    def error_message
-      person ? "#{person} ist kein Abonnent" : 'Person muss ausgewählt werden'
+    
+    def flash_message(state)
+      if state == :success
+        "Abonnent #{subscriber} wurde erfolgreich ausgeschlossen"
+      else 
+        super
+      end
     end
 
   end

@@ -2,6 +2,8 @@
 module Subscriber
   class GroupController < BaseController
     
+    skip_authorize_resource # must be in leaf class
+    
     before_render_form :replace_validation_errors
     before_render_form :load_role_types
     
@@ -28,19 +30,17 @@ module Subscriber
     private
     
     def assign_attributes
-      if model_params.present?
-        entry.subscriber = selected_group
-        entry.role_types = model_params[:role_types]
-      end
+      super
+      entry.role_types = model_params[:role_types] if model_params
     end
     
     def load_role_types
-      @role_types = Role::TypeList.new(selected_group.class) if selected_group
+      @role_types = Role::TypeList.new(subscriber.class) if subscriber
     end
     
-    def selected_group
+    def subscriber
       @selected_group ||= @group.sister_groups_with_descendants.
-                                 where(id: model_params && model_params[:subscriber_id]).
+                                 where(id: subscriber_id).
                                  first
     end
     

@@ -12,13 +12,13 @@ describe EventDecorator, :draper_with_helpers do
 
   context "typeahead label" do
     subject { EventDecorator.new(event).as_typeahead[:label] }
-    it { should eq "#{event} &gt; #{event.groups.first}" }
+    it { should eq "#{event} (#{event.groups.first})" }
 
     context "multiple groups are joined and truncated" do
       before { event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
                                 groups(:bottom_layer_two), groups(:bottom_group_two_one)] }
 
-      it { should eq "#{event} &gt; Top, TopGroup, Bottom One..." }
+      it { should eq "#{event} (Top, TopGroup, Bottom One...)" }
     end
   end
 

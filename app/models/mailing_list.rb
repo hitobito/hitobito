@@ -47,6 +47,20 @@ class MailingList < ActiveRecord::Base
     people.where(id: person.id).exists?
   end
   
+  def exclude_person(person)
+    subscriptions.where(subscriber_id: person.id, 
+                        subscriber_type: Person.sti_name,
+                        excluded: false).
+                  destroy_all
+                  
+    if subscribed?(person)
+      sub = subscriptions.new
+      sub.subscriber = person
+      sub.excluded = true
+      sub.save
+    end
+  end
+  
   def people
     condition = OrCondition.new
     # person subscribers

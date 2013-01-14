@@ -54,7 +54,7 @@ class CrudController < ListController
   #   POST /entries.json
   def create(options = {}, &block)
     assign_attributes
-    created = with_callbacks(:create, :save) { entry.save }
+    created = with_callbacks(:create, :save) { save_entry }
     respond_with(entry, options.reverse_merge(success: created, location: params[:return_url].presence), &block)
   end
 
@@ -72,7 +72,7 @@ class CrudController < ListController
   #   PUT /entries/1.json
   def update(options = {}, &block)
     assign_attributes
-    updated = with_callbacks(:update, :save) { entry.save }
+    updated = with_callbacks(:update, :save) { save_entry }
     respond_with(entry, options.reverse_merge(success: updated, location: params[:return_url].presence), &block)
   end
 
@@ -111,6 +111,11 @@ class CrudController < ListController
   # Assigns the attributes from the params to the model entry.
   def assign_attributes
     entry.attributes = model_params 
+  end
+  
+  # perform the save operation
+  def save_entry
+    entry.save
   end
 
   # A label for the current entry, including the model name.

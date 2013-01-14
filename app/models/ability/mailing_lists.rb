@@ -8,7 +8,9 @@ module Ability::MailingLists
     end
     
     can :manage, Subscription do |subscription|
-      can_modify_mailing_list?(subscription.mailing_list)
+      list = subscription.mailing_list
+      (list.subscribable? && subscription.subscriber == user) ||
+      can_modify_mailing_list?(list)
     end
   end
   

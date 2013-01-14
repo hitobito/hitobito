@@ -3,7 +3,9 @@ Airbrake.configure do |config|
   config.host        = 'errbit.puzzle.ch'
   config.port        = 443
   config.secure      = config.port == 443
-  config.ignore       << ActionController::MethodNotAllowed
-  config.ignore       << ActionController::RoutingError
-  config.ignore       << ActionController::UnknownHttpMethod
+  config.ignore         << ActionController::MethodNotAllowed
+  config.ignore         << ActionController::RoutingError
+  config.ignore         << ActionController::UnknownHttpMethod
+  config.params_filters << 'RAILS_DB_PASSWORD'
+  config.params_filters << 'RAILS_MAIL_RETRIEVER_PASSWORD'
 end

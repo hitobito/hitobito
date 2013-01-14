@@ -208,4 +208,6 @@ de:
         group_id: Gruppe
         label: Bezeichnung
         content: Inhalt
-        
+
+      event/kind:
+        j_s_description: J+S Bezeichnung

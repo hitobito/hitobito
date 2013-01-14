@@ -18,6 +18,7 @@ module JublaJubla
       Ability.send :include, Jubla::Ability
       Event::Course.send :include, Jubla::Event::Course
       Event::Application.send :include, Jubla::Event::Application
+      Event::Kind.send :include, Jubla::Event::Kind
       
       GroupsController.send :include, Jubla::GroupsController
       EventsController.send :include, Jubla::EventsController

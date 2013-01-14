@@ -191,7 +191,7 @@ de:
         answer: Antwort
         
       event/kind:
-        label: Bezeichnung
+        label: Verbandsbezeichnung
         short_name: Kurzname
         minimum_age: Mindestalter
         preconditions: Vorbedingungen

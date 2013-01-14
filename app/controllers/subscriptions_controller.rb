@@ -8,6 +8,14 @@ class SubscriptionsController < CrudController
   prepend_before_filter :parent
   
   alias_method :mailing_list, :parent
+
+
+  def index
+    @group_subs = group_subscriptions
+    @person_subs = person_subscriptions
+    @event_subs = event_subscriptions
+    @excluded_person_subs = person_subscriptions(true)
+  end
   
   def authorize!(action, *args)
     if :index == action
@@ -16,34 +24,29 @@ class SubscriptionsController < CrudController
       super
     end
   end
-
-  def index
-    @group_subs = get_group_subscriptions
-    @person_subs = get_person_subscriptions
-    @event_subs = get_event_subscriptions
-    @excluded_person_subs = get_person_subscriptions(true)
-  end
-
+  
   private
 
-  def get_group_subscriptions
-    mailing_list.subscriptions.where(subscriber_type: 'Group').
-      joins('inner join groups on groups.id = subscriptions.subscriber_id').
-      order('groups.name').
-      includes(:subscriber, :mailing_list, :related_role_types)
+  def group_subscriptions
+    subscriptions_for_type(Group).
+      includes(:related_role_types).
+      order('groups.name')
   end
 
-  def get_person_subscriptions(excluded = false)
-    mailing_list.subscriptions.where(subscriber_type: 'Person', excluded: excluded).
-      joins('inner join people on people.id = subscriptions.subscriber_id').
-      order('people.last_name', 'people.first_name').
-      includes(:subscriber, :mailing_list)
+  def person_subscriptions(excluded = false)
+    subscriptions_for_type(Person).
+      where(excluded: excluded).
+      order('people.last_name', 'people.first_name')
   end
 
-  def get_event_subscriptions
-    mailing_list.subscriptions.where(subscriber_type: 'Event').
-      joins('inner join events on events.id = subscriptions.subscriber_id').
-      order('events.name').
+  def event_subscriptions
+    subscriptions_for_type(Event).order('events.name')
+  end
+  
+  def subscriptions_for_type(klass)
+    mailing_list.subscriptions.
+      where(subscriber_type: klass.name).
+      joins("INNER JOIN #{klass.table_name} ON #{klass.table_name}.id = subscriptions.subscriber_id").
       includes(:subscriber, :mailing_list)
   end
 

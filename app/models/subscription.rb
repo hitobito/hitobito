@@ -37,7 +37,7 @@ class Subscription < ActiveRecord::Base
 
   def to_s
     string = subscriber.to_s
-    if related_role_types.present?
+    if subscriber.is_a?(Group) && related_role_types.present?
       string << ' (' << related_role_types.join(', ') << ')'
     end
     string

@@ -63,8 +63,9 @@ Jubla::Application.configure do
   #  :exception_recipients => %w{jubla@puzzle.ch}
   
 
-  # Enable threaded mode
-  config.threadsafe!
+  # Enable threaded mode 
+  # Unless for rake tasks (especially for db:seed)
+  config.threadsafe! unless $rails_rake_task
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -75,5 +76,5 @@ Jubla::Application.configure do
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  config.active_record.auto_explain_threshold_in_seconds = 1.0
 end

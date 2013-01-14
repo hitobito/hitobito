@@ -42,7 +42,7 @@ class PeopleController < CrudController
   end
   
   def show
-    if parent.nil?
+    if group.nil?
       flash.keep
       redirect_to person_home_path(entry)
     else
@@ -81,6 +81,7 @@ class PeopleController < CrudController
 
   private
   
+  alias_method :group, :parent
   
   def filter_entries
     if params[:role_types]
@@ -115,7 +116,10 @@ class PeopleController < CrudController
     ability = Ability::Accessibles.new(current_user, group)
     Person.accessible_by(ability)
   end
-  
+    
+  def authorize_class
+    authorize!(:index_people, group)
+  end
   
   def build_entry
     person = super
@@ -125,7 +129,7 @@ class PeopleController < CrudController
   
   def create_role
     type = params[:role] && params[:role][:type]
-    role = parent.class.find_role_type!(type).new
+    role = group.class.find_role_type!(type).new
     role.group_id = params[:role][:group_id]
     authorize! :create, role
     

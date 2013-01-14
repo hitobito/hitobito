@@ -17,15 +17,11 @@ class SubscriptionsController < CrudController
     @excluded_person_subs = person_subscriptions(true)
   end
   
-  def authorize!(action, *args)
-    if :index == action
-      super(:index_subscriptions, mailing_list)
-    else
-      super
-    end
-  end
-  
   private
+  
+  def authorize_class
+    authorize!(:index_subscriptions, mailing_list)
+  end
 
   def group_subscriptions
     subscriptions_for_type(Group).

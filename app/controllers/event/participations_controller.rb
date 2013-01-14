@@ -37,14 +37,6 @@ class Event::ParticipationsController < CrudController
       format.csv  { render_csv }
     end
   end
-    
-  def authorize!(action, *args)
-    if [:index].include?(action)
-      super(:index_participations, event)
-    else
-      super
-    end
-  end
 
   def print
     load_answers
@@ -56,6 +48,10 @@ class Event::ParticipationsController < CrudController
   end
   
   private
+  
+  def authorize_class
+    authorize!(:index_participations, event)
+  end
   
   def render_csv
     csv = params[:details] && can?(:show_details, entries.first) ?
@@ -76,7 +72,7 @@ class Event::ParticipationsController < CrudController
   def list_entries(action = :index)
     records = event.participations.
                  where(event_participations: {active: true}).
-                 includes(:person, :roles).
+                 includes(:person, :roles, :event).
                  participating(event).
                  order_by_role(event.class).
                  merge(Person.order_by_name).

@@ -1,0 +1,5 @@
+%h2= title
+
+= table(subs, class: 'table table-striped') do |t|
+  - t.col('', width: '98%') { |e| e.to_s }
+  - t.col('') { |e| link_action_destroy(group_mailing_list_subscription_path(@group.id,e.mailing_list.id, e.id)) }

@@ -19,6 +19,7 @@ module DatetimeAttribute
         hour = send("#{attr}_hour").presence || 0
         min = send("#{attr}_min").presence || 0
         begin
+          date = ActiveRecord::ConnectionAdapters::Column.date_string_to_long_year(date)
           date = date.to_date
           send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
         rescue Exception

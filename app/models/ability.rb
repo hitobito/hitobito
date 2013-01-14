@@ -15,6 +15,8 @@ class Ability
     elsif user.login?
       define_abilities
     else
+      can :show, Group
+      
       # generall, a user without login permission cannot do anything
       can [:show, :modify], Person do |person|
         person.id == user.id

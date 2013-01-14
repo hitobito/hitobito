@@ -1,3 +1,6 @@
 - title @mailing_list.to_s
 
-= list_table
+= render('subs_table', title: 'Gruppen (Rollen)', subs: @group_subs)
+= render('subs_table', title: 'Personen', subs: @person_subs)
+= render('subs_table', title: 'Events', subs: @event_subs)
+= render('subs_table', title: 'Ausgeschlossene Personen', subs: @excluded_person_subs)

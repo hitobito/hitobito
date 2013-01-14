@@ -26,7 +26,19 @@ describe Event::Date do
     event_date.start_at.should == date1.to_date.to_time
     event_date.finish_at.should == date2.to_date.to_time
   end
+  
+  it 'should store short format date' do
+    date1 = '1.2.98'
+    date2 = '11.12.01'
+    event_date = event.dates.new(label: 'foobar')
+    event_date.start_at_date = date1
+    event_date.finish_at_date = date2
 
+    event_date.should be_valid
+    event_date.start_at.should == Time.zone.local(1998,2,1)
+    event_date.finish_at.should == Time.zone.local(2001,12,11)
+  end
+  
   it 'should have date and time when hours and min are given' do
     date1 = Time.zone.local(2012,12,12).to_date
     hours = 18

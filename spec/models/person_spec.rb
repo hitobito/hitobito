@@ -94,6 +94,16 @@ describe Person do
     person.save.should be_true
   end
   
+  it "#order_by_name orders people by company, company_name or last_name" do
+    Person.destroy_all
+    p1 = Fabricate(:person, company: true, company_name: 'ZZ', last_name: 'AA')
+    p2 = Fabricate(:person, company: false, company_name: 'ZZ', first_name: 'BB', last_name: 'ZZ')
+    p3 = Fabricate(:person, company: true, company_name: 'AA', last_name: 'ZZ')
+    p4 = Fabricate(:person, company: false, first_name: 'BB', last_name: 'AA')
+
+    Person.order_by_name.should == [p3, p4, p2, p1]
+  end
+  
   context "with one role" do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
     

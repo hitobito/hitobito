@@ -8,6 +8,8 @@
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s, group_event_participation_path(@group, @event, p))
+      %br/
+      = muted p.person.additional_name
   - t.col('Rolle')    {|p| p.roles_short(@event) }
   - t.col('E-Mail')    {|p| p.primary_email }
   - t.col('Telefon')  {|p| p.all_phone_numbers(true) }

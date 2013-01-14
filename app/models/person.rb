@@ -105,8 +105,12 @@ class Person < ActiveRecord::Base
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
-  scope :order_by_name, order('people.last_name, people.first_name')
-  scope :order_by_company, order('people.company_name, people.last_name, people.first_name')
+  scope :order_by_name, order("CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
+                              " THEN people.company_name ELSE people.first_name END",
+                              "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
+                              " THEN people.first_name ELSE people.last_name END",
+                              "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
+                              " THEN people.last_name ELSE people.nickname END")
   
   
   ### INDEXED FIELDS

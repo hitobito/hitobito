@@ -9,6 +9,8 @@
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s, @multiple_groups ? group_person_path(p.roles.first.group_id, p) : group_person_path(@group, p))
+      %br/
+      = muted p.additional_name
   - t.col('Rolle')   {|p| p.roles_short(@multiple_groups ? nil : @group) }
   - t.col('E-Mail')   {|p| p.primary_email }
   - t.col('Telefon') {|p| p.all_phone_numbers(true) }

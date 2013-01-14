@@ -24,6 +24,14 @@ class PersonDecorator < ApplicationDecorator
     label
   end
   
+  def additional_name
+    if company?
+      full_name
+    else
+      company_name
+    end
+  end
+  
   # render a list of all roles
   # if a group is given, only render the roles of this group
   def roles_short(group = nil)

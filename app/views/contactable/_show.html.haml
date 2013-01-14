@@ -4,7 +4,7 @@
       = image_tag(contactable.picture_url, size: '72x72')
 
   %address
-    %strong=contactable.to_s
+    =contactable.address_name
     =contactable.complete_address
     =contactable.primary_email
     =contactable.all_phone_numbers(only_public)

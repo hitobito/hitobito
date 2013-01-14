@@ -60,7 +60,7 @@ module Export
     end
     
     def print_company?(contactable)
-      contactable.respond_to?(:company) && contactable.company? && contactable.company_name?
+      contactable.respond_to?(:company) && contactable.company_name?
     end
     
     def print_country?(country)

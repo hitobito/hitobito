@@ -1,13 +1,17 @@
 module ContactableDecorator
 
+  def address_name
+    content_tag(:strong, to_s)
+  end
+
   def complete_address
     html = ''.html_safe
 
     prepend_complete_address(html)
 
     if address?
-      html << safe_join(address.split("\n"), h.tag(:br))
-      html << h.tag(:br)
+      html << safe_join(address.split("\n"), br)
+      html << br
     end
 
     if zip_code?
@@ -20,7 +24,7 @@ module ContactableDecorator
     end
 
     if country? && (zip_code? || town?)
-      html << h.tag(:br)
+      html << br
     end
 
     if country?
@@ -58,11 +62,15 @@ module ContactableDecorator
       end
     end.compact
 
-    html = h.safe_join(html, h.tag(:br))
+    html = h.safe_join(html, br)
     content_tag(:p, html) if html.present?
   end
 
   private
+  
+  def br
+    h.tag(:br)
+  end
 
   def prepend_complete_address(html)
   end

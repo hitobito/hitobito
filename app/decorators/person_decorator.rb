@@ -24,6 +24,24 @@ class PersonDecorator < ApplicationDecorator
     label
   end
   
+  def address_name
+    html = ''.html_safe
+    if company?
+      html << content_tag(:strong, company_name)
+      if full_name.present?
+        html << br
+        html << full_name
+      end
+    else
+      if company_name.present?
+        html << company_name
+        html << br
+      end
+      html << content_tag(:strong, to_s)
+    end
+    html
+  end
+  
   def additional_name
     if company?
       full_name

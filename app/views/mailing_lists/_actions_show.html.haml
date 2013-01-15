@@ -1,5 +1,3 @@
 = button_action_edit if can?(:edit, entry)
 = button_action_destroy if can?(:destroy, entry)
 = button_toggle_subscription
-- if can?(:update, @mailing_list)
-  = dropdown_button('Export', people_export_links(false), :download)

@@ -3,3 +3,6 @@
   = action_button 'Gruppe/Rollen hinzufügen', new_group_mailing_list_group_path(@group, @mailing_list), 'plus'
   = action_button 'Anlass hinzufügen', new_group_mailing_list_event_path(@group, @mailing_list), 'plus'
   = action_button 'Person ausschliessen', new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus'
+
+- if can?(:update, @mailing_list)
+  = dropdown_button('Export', people_export_links(false), :download)

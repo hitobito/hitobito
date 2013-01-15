@@ -48,8 +48,11 @@ module ContactableDecorator
     nested_values(social_accounts, only_public) do |name|
       if email?(name)
         h.mail_to(name)
-      elsif url?(name)
-        h.link_to(name,name)
+      elsif url_with_protocol?(name)
+        h.link_to(name,name, target: '_blank')
+      elsif url_without_protocol?(name)
+        url = "http://" + name
+        h.link_to(url, url, target: '_blank')
       else
         name
       end
@@ -81,8 +84,14 @@ module ContactableDecorator
     /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
   end
 
-  def url?(str)
-    /(?=^\S*$)(?=(^www\..+$)|([a-z]*:\/\/.*$)).*/.match(str)
+  def url_with_protocol?(str)
+    # includes no white-spaces AND includes proto://
+    /(?=^\S*$)(?=([a-z]*:\/\/.*$)).*/.match(str)
+  end
+
+  def url_without_protocol?(str)
+    # includes no white-spaces AND includes www.*
+    /(?=^\S*$)(?=(^www\..+$)).*/.match(str)
   end
 
 end

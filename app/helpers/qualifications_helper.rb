@@ -1,6 +1,11 @@
+# encoding: UTF-8
 module QualificationsHelper
   
   def format_qualification_kind_validity(kind)
-    "#{f(kind.validity)} Jahre"
+    if kind.validity.present?
+      "#{f(kind.validity)} Jahre"
+    else
+      "unbeschränkt"
+    end
   end
 end

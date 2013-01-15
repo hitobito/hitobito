@@ -1,7 +1,6 @@
 class PeopleController < CrudController
 
   include RenderPeoplePdf
-  include RenderPeopleCsv
 
   self.nesting = Group
   self.nesting_optional = true
@@ -13,7 +12,7 @@ class PeopleController < CrudController
   # load group before authorization
   prepend_before_filter :parent
 
-  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, 
+  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy,
                                        :send_password_instructions]
   
   before_render_show :load_asides
@@ -62,11 +61,11 @@ class PeopleController < CrudController
                                             includes(:roles, event: [:dates, :groups]).
                                             uniq.
                                             order('event_dates.start_at DESC').
-                                            group_by do |p| 
+                                            group_by do |p|
                                               p.event.class.label_plural
                                             end
 
-    @participations_by_event_type.each do |kind, entries| 
+    @participations_by_event_type.each do |kind, entries|
       entries.collect! {|e| Event::ParticipationDecorator.new(e) }
     end
 
@@ -82,6 +81,14 @@ class PeopleController < CrudController
   private
   
   alias_method :group, :parent
+
+  def render_csv(people, group)
+    csv = params[:details] && can?(:index_full_people, group) ?
+      Export::CsvPeople.export_full(people) :
+      Export::CsvPeople.export_address(people)
+    send_data csv, type: :csv
+  end
+
   
   def filter_entries
     if params[:role_types]

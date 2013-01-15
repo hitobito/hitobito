@@ -7,6 +7,7 @@ describe Role do
     
     it { should_not be_affiliate }
     it { should be_visible_from_above }
+    it { should_not be_external }
     
     its(:permissions) { should ==  [:layer_full, :contact_data, :approve_applications, :login] }
     
@@ -27,6 +28,22 @@ describe Role do
   
     it { should be_affiliate }
     it { should_not be_visible_from_above }
+    it { should be_external }
+    
+    its(:permissions) { should ==  [] }
+    
+    it "may be created for region" do
+      role = Fabricate.build(subject.name.to_sym, group: groups(:city))
+      role.should be_valid
+    end
+  end
+  
+  describe Jubla::Role::Alumnus do
+    subject { Jubla::Role::Alumnus }
+  
+    it { should be_affiliate }
+    it { should be_visible_from_above }
+    it { should_not be_external }
     
     its(:permissions) { should ==  [] }
     
@@ -37,7 +54,7 @@ describe Role do
   end
   
   describe "#all_types" do
-    subject { Role.all_types}
+    subject { Role.all_types }
     
     it "must have master role as the first item" do
       subject.first.should == Group::FederalBoard::Member
@@ -47,5 +64,4 @@ describe Role do
       subject.last.should == Jubla::Role::Alumnus
     end
   end
-  
 end

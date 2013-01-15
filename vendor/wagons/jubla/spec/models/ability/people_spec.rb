@@ -42,6 +42,13 @@ describe Ability::People do
       should_not be_able_to(:update, other)
     end
         
+    it "may view alumni in lower layers" do
+      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be))
+      should be_able_to(:show_full, other.person.reload)
+      should be_able_to(:update, other)
+    end
+    
+        
     it "may not modify any restricted roles in lower layers" do
       other = Fabricate(Group::Flock::Coach.name.to_sym, group: groups(:bern))
       Fabricate(Group::State::Coach.name.to_sym, group: groups(:be), person: other.person)
@@ -219,6 +226,11 @@ describe Ability::People do
       should_not be_able_to(:show, other.person.reload)
     end
     
+    it "may view alumni in groups below" do
+      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:thun))
+      should be_able_to(:show, other.person.reload)
+    end
+    
     it "may index groups in lower layer" do
       should be_able_to(:index_people, groups(:bern))
       should be_able_to(:index_full_people, groups(:bern))
@@ -256,7 +268,11 @@ describe Ability::People do
       should be_able_to(:show, other.person.reload)
     end
         
-    it "may not view details of others in same group" do
+    it "may view details of others in same group" do
+      other = Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board))
+      should be_able_to(:show_details, other.person.reload)
+    end
+    it "may not view full of others in same group" do
       other = Fabricate(Group::StateBoard::Member.name.to_sym, group: groups(:be_board))
       should_not be_able_to(:show_full, other.person.reload)
     end
@@ -314,6 +330,12 @@ describe Ability::People do
       should_not be_able_to(:show, other.person.reload)
     end
     
+    it "may index own group" do
+      should be_able_to(:index_people, groups(:be_board))
+      should be_able_to(:index_local_people, groups(:be_board))
+      should_not be_able_to(:index_full_people, groups(:be_board))
+    end
+    
     it "may index groups anywhere" do
       should be_able_to(:index_people, groups(:no_board))
       should_not be_able_to(:index_full_people, groups(:no_board))
@@ -346,7 +368,22 @@ describe Ability::People do
       should be_able_to(:show, other.person.reload)
     end
     
+    it "may view externals in same group" do
+      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+      should be_able_to(:show, other.person.reload)
+    end
+    
+    it "may view alumni in same group" do
+      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+      should be_able_to(:show, other.person.reload)
+    end
+    
     it "may not view details of others in same group" do
+      other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+      should be_able_to(:show_details, other.person.reload)
+    end
+    
+    it "may not view full of others in same group" do
       other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
       should_not be_able_to(:show_full, other.person.reload)
     end
@@ -356,10 +393,10 @@ describe Ability::People do
       should_not be_able_to(:show, other.person.reload)
     end
     
-    it "may not index same group" do
+    it "may index same group" do
       should be_able_to(:index_people, groups(:be_state_camp))
+      should be_able_to(:index_local_people, groups(:be_state_camp))
       should_not be_able_to(:index_full_people, groups(:be_state_camp))
-      should_not be_able_to(:index_local_people, groups(:be_state_camp))
     end
     
     it "may not index groups in same layer" do

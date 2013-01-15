@@ -4,8 +4,14 @@ class CensusEvaluation::FederationController < CensusEvaluation::BaseController
 
   def index
     super
-    @show_confirmation_ratios = (year == current_year)
-    @flocks = flock_confirmation_ratios if @show_confirmation_ratios
+
+    respond_to do |format|
+      format.html do
+        @show_confirmation_ratios = (year == current_year)
+        @flocks = flock_confirmation_ratios if @show_confirmation_ratios
+      end
+      format.csv { send_data Export::CensusFlock.new(year).to_csv, type: :csv }
+    end
   end
   
   private

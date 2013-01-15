@@ -76,6 +76,18 @@ describe EventDecorator, :draper_with_helpers do
 
   end
 
+  context "event kind info" do
+
+    let(:kind) { Fabricate(:event_kind, minimum_age: 99, qualification_kinds: [qualification_kinds(:sl)]) }
+    let(:course) { Fabricate(:course, kind: kind) }
+    subject { EventDecorator.new(course) }
+
+    it "should return minimum age and required qualification kinds" do
+      subject.kind_info.should =~ /Super Lead/
+      subject.kind_info.should =~ /99/
+    end
+  end
+
   def parse(str)
     Time.zone.parse(str)
   end

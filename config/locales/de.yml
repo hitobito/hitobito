@@ -137,7 +137,7 @@ de:
         location: Ort / Adresse
         application_opening_at: Anmeldebeginn
         application_closing_at: Anmeldeschluss
-        application_conditions: Anmeldebedingungen
+        application_conditions: Aufnahmebedingungen
         dates: Daten
         dates_full: Daten
         booking_info: Teilnehmende

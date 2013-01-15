@@ -21,5 +21,17 @@ describe CensusEvaluation::FederationController, type: :controller do
       should render_template('_details')
     end
   end
+
+  describe "GET csv" do
+
+    before { get :index, id: ch.id, format: :csv }
+    let(:csv) { CSV.parse(response.body, headers: true, col_sep: ';') }
+    
+    it "renders correct templates" do
+      response.should be_success
+      csv.should have(5).items
+      csv.headers.should have(10).items
+    end
+  end
   
 end

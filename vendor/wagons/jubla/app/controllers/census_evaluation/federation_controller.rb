@@ -10,7 +10,11 @@ class CensusEvaluation::FederationController < CensusEvaluation::BaseController
         @show_confirmation_ratios = (year == current_year)
         @flocks = flock_confirmation_ratios if @show_confirmation_ratios
       end
-      format.csv { send_data Export::CensusFlock.new(year).to_csv, type: :csv }
+      format.csv do
+        authorize!(:create, Census)
+        csv = Export::CensusFlock.new(year).to_csv
+        send_data csv, type: :csv
+      end
     end
   end
   

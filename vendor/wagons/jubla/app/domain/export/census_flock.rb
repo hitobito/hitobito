@@ -4,8 +4,6 @@ require 'ostruct'
 module Export
   class CensusFlock < Struct.new(:year)
 
-    attr_reader :items
-
     class << self
       def headers
         { name: human(:name),
@@ -16,7 +14,7 @@ module Export
           town: human(:town) ,
           jubla_insurance: human(:jubla_insurance),
           jubla_full_coverage: human(:jubla_full_coverage),
-          leader_count: "Leiter",
+          leader_count: "Leitende",
           child_count: "Kinder" }
       end
 
@@ -36,8 +34,8 @@ module Export
     end
 
     def to_csv
-      @csv = CSV.generate(options) do |csv|
-        csv << self.class.headers.values
+      CSV.generate(options) do |csv|
+        csv << self.class.labels
         items.each do |item|
           csv << item.values
         end
@@ -75,8 +73,8 @@ module Export
         address: flock.address,
         zip_code: flock.zip_code,
         town: flock.town,
-        jubla_insurance: flock.jubla_insurance,
-        jubla_full_coverage: flock.jubla_full_coverage,
+        jubla_insurance: flock.jubla_insurance ? 'ja' : 'nein',
+        jubla_full_coverage: flock.jubla_full_coverage ? 'ja' : 'nein',
         leader_count: member_count.leader,
         child_count: member_count.child }
     end
@@ -84,7 +82,6 @@ module Export
     def null_member_count
       OpenStruct.new(leader: nil, child: nil)
     end
-
 
     def options
       { col_sep: Settings.csv.separator.strip }

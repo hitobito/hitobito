@@ -35,7 +35,7 @@ class MemberCount < ActiveRecord::Base
       totals(year).group(:state_id)
     end
     
-    def total_by_flocks(year, state=nil)
+    def total_by_flocks(year, state)
       totals(year).
       where(flock_id: state.descendants.where(type: Group::Flock.sti_name)).
       group(:flock_id)

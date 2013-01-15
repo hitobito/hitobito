@@ -48,6 +48,8 @@ module ContactableDecorator
     nested_values(social_accounts, only_public) do |name|
       if email?(name)
         h.mail_to(name)
+      elsif url?(name)
+        h.link_to(name,name)
       else
         name
       end
@@ -77,6 +79,10 @@ module ContactableDecorator
 
   def email?(str)
     /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
+  end
+
+  def url?(str)
+    /(?=^\S*$)(?=(^www\..+$)|([a-z]*:\/\/.*$)).*/.match(str)
   end
 
 end

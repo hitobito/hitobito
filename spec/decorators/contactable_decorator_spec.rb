@@ -6,6 +6,10 @@ describe ContactableDecorator do
     group.phone_numbers.new(number: '031 12345', label: 'Home', public: true)
     group.phone_numbers.new(number: '041 12345', label: 'Work', public: true)
     group.phone_numbers.new(number: '079 12345', label: 'Mobile', public: false)
+    group.social_accounts.new(name: 'www.puzzle.ch', label: 'link1')
+    group.social_accounts.new(name: 'http://puzzle.ch', label: 'link2')
+    group.social_accounts.new(name: 'bad.website.link', label: 'bad link1')
+    group.social_accounts.new(name: 'www.', label: 'bad link2')
     @group = GroupDecorator.decorate(group)
   end
 
@@ -32,6 +36,18 @@ describe ContactableDecorator do
       it { should =~ /031.*Home/ }
       it { should =~ /041.*Work/ }
       it { should =~ /079.*Mobile/ }
+    end
+  end
+
+  describe "#all_social_accounts" do
+    context "web links" do
+      subject { @group.all_social_accounts }
+
+      it { should =~ /www.puzzle.ch<\/a>/ }
+      it { should =~ /http:\/\/puzzle.ch<\/a>/ }
+      it { should_not =~ /bad.website.link<\/a>/ }
+      it { should_not =~ /www.<\/a>/ }
+
     end
   end
 

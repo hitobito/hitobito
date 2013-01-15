@@ -1,7 +1,5 @@
 class MailingListsController < CrudController
 
-  include RenderPeoplePdf
-  include RenderPeopleCsv
 
   self.nesting = Group
 
@@ -12,11 +10,6 @@ class MailingListsController < CrudController
 
   def show
     @mailing_list = entry
-    respond_to do |format|
-      format.html
-      format.pdf  { render_pdf(entry.people) }
-      format.csv  { render_csv(entry.people, @group) }
-    end
   end
 
   private

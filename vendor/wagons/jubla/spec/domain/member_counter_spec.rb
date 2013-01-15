@@ -31,6 +31,7 @@ describe MemberCounter do
     
     its(:excluded_role_types) { should =~ %w(Group::Flock::Coach 
                                              Group::Flock::Advisor 
+                                             Jubla::Role::Alumnus
                                              Jubla::Role::External)}
                                              
     it "creates member counts" do

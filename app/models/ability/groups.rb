@@ -49,7 +49,7 @@ module Ability::Groups
 
     # can index people that are not visible from above. eg. children, affiliates, ...
     can :index_local_people, Group do |group|
-      user.groups.include?(group.id) ||
+      user_groups.include?(group.id) ||
       (layers_read.present? &&
        layers_read.include?(group.layer_group.id))
     end

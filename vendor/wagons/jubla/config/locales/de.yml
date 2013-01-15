@@ -112,6 +112,7 @@ de:
         one: Kind
         
       jubla/role/external: Extern
+      jubla/role/alumnus: Ehemalig
       jubla/role/coach: Coach
       jubla/role/group_admin: Adressverwaltung
       jubla/role/leader: Leitung

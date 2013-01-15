@@ -21,7 +21,7 @@ describe Group do
     
     it { should have(6).possible_children }
     it { should have(2).default_children }
-    it { should have(2).role_types }
+    it { should have(3).role_types }
     it { should be_layer }
     
     its(:possible_children) { should include(Group::SimpleGroup) }
@@ -32,7 +32,7 @@ describe Group do
 
     it { should have(2).possible_children }
     it { should have(0).default_children }
-    it { should have(9).role_types }
+    it { should have(10).role_types }
     it { should be_layer }
   end
   
@@ -40,7 +40,7 @@ describe Group do
     subject { Group::SimpleGroup }
     it { should have(1).possible_children }
     it { should have(0).default_children }
-    it { should have(4).role_types }
+    it { should have(5).role_types }
     it { should_not be_layer }
     its(:possible_children) { should include(Group::SimpleGroup) }
     

@@ -39,9 +39,14 @@ module Role::Types
       all_types.select(&:affiliate)
     end
     
-    # Role types that are external, i.e. affiliate but not restricted
+    # Role types that are external
     def external_types
-      all_types.select {|t| t.affiliate && !t.restricted }
+      all_types.select(&:external?)
+    end
+    
+    # An role external to a group, i.e. affiliate but not restricted
+    def external?
+      affiliate && !restricted
     end
     
     # Helper method to clear the cached role types.

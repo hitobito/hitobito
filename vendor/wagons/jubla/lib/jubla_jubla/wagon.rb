@@ -29,6 +29,9 @@ module JublaJubla
       
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'
+      
+      PeopleFilterHelper.send :include, Jubla::PeopleFilterHelper
+      PeopleFilterHelper.alias_method_chain :main_people_filter_links, :alumni
     end
     
     initializer "jubla.add_settings" do |app|

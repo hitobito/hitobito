@@ -44,7 +44,7 @@ describe Role do
     end
     
     it "must have external role as last item" do
-      subject.last.should == Jubla::Role::External
+      subject.last.should == Jubla::Role::Alumnus
     end
   end
   

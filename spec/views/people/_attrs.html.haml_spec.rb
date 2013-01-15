@@ -33,7 +33,6 @@ describe 'people/_attrs.html.haml' do
   context "viewed by person in same group" do
     let(:person) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload }
     let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload } 
-    before { current_user.stub(login?: true) } 
 
     it "does not show roles" do
       a = Ability.new(current_user)

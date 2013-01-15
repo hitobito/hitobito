@@ -29,11 +29,8 @@ class ApplicationController < ActionController::Base
   end
   
   def person_home_path(person)
-    if group = person.groups.select('groups.id').first
-      group_person_path(group, person)
-    else
-      group_path(Group.root)
-    end
+    group = person.groups.select('groups.id').first || Group.root
+    group_person_path(group, person)
   end
 
   def set_stamper

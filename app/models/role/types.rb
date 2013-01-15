@@ -2,7 +2,7 @@ module Role::Types
   extend ActiveSupport::Concern
   
   # All possible permissions
-  Permissions = [:admin, :layer_full, :layer_read, :group_full, :contact_data, :login, :qualify, :approve_applications] 
+  Permissions = [:admin, :layer_full, :layer_read, :group_full, :contact_data, :group_read, :qualify, :approve_applications] 
   
   
   included do

@@ -7,11 +7,11 @@ class Group::BottomLayer < Group
 
 
   class Leader < ::Role
-    self.permissions = [:layer_full, :contact_data, :approve_applications, :login]
+    self.permissions = [:layer_full, :contact_data, :approve_applications]
   end
   
   class Member < ::Role
-    self.permissions = [:layer_read, :login]
+    self.permissions = [:layer_read]
   end
   
   roles Leader, Member

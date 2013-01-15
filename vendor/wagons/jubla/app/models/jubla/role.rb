@@ -24,7 +24,7 @@ module Jubla::Role
   
   # Adressverwaltung
   class GroupAdmin < ::Role
-    self.permissions = [:group_full, :login]
+    self.permissions = [:group_full]
   end
   
   # Extern
@@ -36,13 +36,13 @@ module Jubla::Role
   
   # Ehemalige
   class Alumnus < ::Role
-    self.permissions = []
+    self.permissions = [:group_read]
     self.affiliate = true
   end
   
   # Common superclass for all J+S Coach roles
   class Coach < ::Role
-    self.permissions = [:contact_data, :login]
+    self.permissions = [:contact_data, :group_read]
   end
   
   # Common superclass for all leader roles

@@ -9,7 +9,7 @@ describe Role do
     it { should be_visible_from_above }
     it { should_not be_external }
     
-    its(:permissions) { should ==  [:layer_full, :contact_data, :approve_applications, :login] }
+    its(:permissions) { should ==  [:layer_full, :contact_data, :approve_applications] }
     
     it "may be created for flock" do
       role = Fabricate.build(subject.name.to_sym, group: groups(:bern))
@@ -45,7 +45,7 @@ describe Role do
     it { should be_visible_from_above }
     it { should_not be_external }
     
-    its(:permissions) { should ==  [] }
+    its(:permissions) { should ==  [:group_read] }
     
     it "may be created for region" do
       role = Fabricate.build(subject.name.to_sym, group: groups(:city))

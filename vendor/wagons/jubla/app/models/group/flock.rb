@@ -61,33 +61,33 @@ class Group::Flock < Group
   end
 
   class Leader < Jubla::Role::Leader
-    self.permissions = [:layer_full, :contact_data, :approve_applications, :login]
+    self.permissions = [:layer_full, :contact_data, :approve_applications]
   end
   
   class CampLeader < ::Role
-    self.permissions = [:layer_full, :contact_data, :login]
+    self.permissions = [:layer_full, :contact_data]
   end
   
   # Präses
   class President < ::Role
-    self.permissions = [:layer_read, :contact_data, :login]
+    self.permissions = [:layer_read, :contact_data]
     
     attr_accessible :employment_percent, :honorary
   end
   
   # Leiter
   class Guide < ::Role
-    self.permissions = [:layer_read, :login]
+    self.permissions = [:layer_read]
   end
   
   # Kassier
   class Treasurer < Jubla::Role::Treasurer
-    self.permissions = [:layer_read, :contact_data, :login]
+    self.permissions = [:layer_read, :contact_data]
   end
   
   # Coach
   class Coach < ::Role
-    self.permissions = [:layer_read, :login]
+    self.permissions = [:layer_read]
     self.affiliate   = true
     self.restricted  = true
     self.visible_from_above = false
@@ -95,7 +95,7 @@ class Group::Flock < Group
   
   # Betreuer
   class Advisor < ::Role
-    self.permissions = [:layer_read, :login]
+    self.permissions = [:layer_read]
     self.affiliate   = true
     self.restricted  = true
     self.visible_from_above = false

@@ -7,6 +7,7 @@ class Group::SimpleGroup < Group
   end
   
   class Member < Jubla::Role::Member
+    self.permissions = [:group_read]
   end
   
   roles Leader, Member

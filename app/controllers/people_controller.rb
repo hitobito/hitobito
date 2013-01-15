@@ -22,7 +22,7 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html { @people = @people.page(params[:page]) }
       format.pdf  { render_pdf(@people) }
-      format.csv  { render_csv(@people, @group) }
+      format.csv  { render_csv(@people.to_a, @group) }
     end
   end
   
@@ -83,7 +83,9 @@ class PeopleController < CrudController
   alias_method :group, :parent
 
   def render_csv(people, group)
-    csv = params[:details] && can?(:index_full_people, group) ?
+    allow_full = people.size == 1 ? can?(:show_full, people.first) : 
+                                    can?(:index_full_people, group)
+    csv = allow_full && params[:details] ?
       Export::CsvPeople.export_full(people) :
       Export::CsvPeople.export_address(people)
     send_data csv, type: :csv
@@ -126,6 +128,16 @@ class PeopleController < CrudController
     
   def authorize_class
     authorize!(:index_people, group)
+  end
+  
+  def find_entry
+    if group && group.root?
+      # every person may be displayed underneath the root group, 
+      # even if it does not directly belong to it.
+      Person.find(params[:id])
+    else
+      super
+    end
   end
   
   def build_entry

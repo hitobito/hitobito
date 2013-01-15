@@ -9,10 +9,9 @@ describe Devise::SessionsController do
     role.person.reload
   end
 
-  context "person has single role, no login permission" do
+  context "person has single role" do
     subject { person.roles.first }
     its(:type) { should eq "Group::BottomGroup::Member" }
-    its(:permissions) { should_not be_present }
     specify "person has only single role" do
       person.roles.size.should eq 1
     end

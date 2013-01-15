@@ -214,8 +214,8 @@ describe Person do
     let(:group) { groups(:bottom_group_one_one) }
     let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person.reload }
 
-    it "cannot reset password if we have no login permission" do
-      person.send_reset_password_instructions.should be_false
+    it "can reset password" do
+      person.send_reset_password_instructions.should be_kind_of(Mail::Message)
     end
   end
 

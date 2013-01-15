@@ -150,7 +150,7 @@ class Person < ActiveRecord::Base
   
   # Is this person allowed to login?
   def login?
-    permission?(:login) || root?
+    persisted?
   end
   
   # Is this person root?

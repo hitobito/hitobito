@@ -27,10 +27,8 @@ describe Devise::PasswordsController do
     end
 
     context "without login permission" do
-      let(:person) { Fabricate("Group::BottomGroup::Member", group: bottom_group).person.reload }
-
       it "#create shows invalid password" do
-        post :create, person: { email: person.email }
+        post :create, person: { email: 'not-existing@example.com' }
         last_email.should_not be_present
         flash[:alert].should eq  "Du bist nicht berechtigt, Dich hier anzumelden."
       end

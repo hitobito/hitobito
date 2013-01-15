@@ -245,11 +245,11 @@ describe Ability::Accessibles do
       end
       
       
-      describe :login do
+      describe :group_read do
         let(:role) { Fabricate(Group::StateWorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
         
         it "has only login permission" do
-          role.permissions.should == [:login]
+          role.permissions.should == [:group_read]
         end
       
         context "own group" do
@@ -264,8 +264,13 @@ describe Ability::Accessibles do
             should include(other.person)
           end
           
-          it "may get affiliate people in his group" do
+          it "may get external people in his group" do
             other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+            should include(other.person)
+          end
+          
+          it "may get alumni in his group" do
+            other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
             should include(other.person)
           end
         end
@@ -300,6 +305,62 @@ describe Ability::Accessibles do
           
       end
       
+      
+      describe 'no permissions' do
+        let(:role) { Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp)) }
+        
+        it "has no permissions" do
+          role.permissions.should == []
+        end
+      
+        context "own group" do
+          let(:group) { role.group }
+          
+          if action == :index
+            it "may not get himself" do
+              should_not include(role.person)
+            end
+          else
+            it "may get himself" do
+              should include(role.person)
+            end
+          end
+          
+          it "may not get people in his group" do
+            other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+            should_not include(other.person)
+          end
+          
+          it "may not get external people in his group" do
+            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+            should_not include(other.person)
+          end
+          
+          it "may not get alumni in his group" do
+            other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+            should_not include(other.person)
+          end
+        end
+              
+        context "group in same layer" do
+          let(:group) { groups(:be_board) }
+          
+          it "may not get people with contact data" do
+            other = Fabricate(Group::StateBoard::Leader.name.to_sym, group: groups(:be_board))
+            should_not include(other.person)
+          end
+        end
+        
+        context "lower group" do
+          let(:group) { groups(:bern) }
+          
+          it "may not get people with contact data" do
+            other = Fabricate(Group::Flock::Leader.name.to_sym, group: groups(:bern))
+            should_not include(other.person)
+          end
+        end
+          
+      end
       
       describe :root do
         let(:user) { people(:root) }

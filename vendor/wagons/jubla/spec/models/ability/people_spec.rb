@@ -344,7 +344,7 @@ describe Ability::People do
     
   end
   
-  describe :login do
+  describe :group_read do
     let(:role) { Fabricate(Group::StateWorkGroup::Member.name.to_sym, group: groups(:be_state_camp)) }
         
     it "may view details of himself" do
@@ -406,7 +406,67 @@ describe Ability::People do
     end
   end
   
-  
+  describe 'no permissions' do
+    let(:role) { Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp)) }
+        
+    it "may view details of himself" do
+      should be_able_to(:show_full, role.person.reload)
+    end
+    
+    it "may modify himself" do
+      should be_able_to(:modify, role.person.reload)
+    end
+    
+    it "may not modify his role" do
+      should_not be_able_to(:update, role)
+    end
+        
+    it "may not create other users" do
+      should_not be_able_to(:create, Person)
+    end
+    
+    it "may not view others in same group" do
+      other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+      should_not be_able_to(:show, other.person.reload)
+    end
+    
+    it "may not view externals in same group" do
+      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+      should_not be_able_to(:show, other.person.reload)
+    end
+    
+    it "may not view alumni in same group" do
+      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+      should_not be_able_to(:show, other.person.reload)
+    end
+    
+    it "may not view details of others in same group" do
+      other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+      should_not be_able_to(:show_details, other.person.reload)
+    end
+    
+    it "may not view full of others in same group" do
+      other = Fabricate(Group::StateWorkGroup::Leader.name.to_sym, group: groups(:be_state_camp))
+      should_not be_able_to(:show_full, other.person.reload)
+    end
+        
+    it "may not view public role in same layer" do
+      other = Fabricate(Group::StateProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
+      should_not be_able_to(:show, other.person.reload)
+    end
+    
+    it "may index same group" do
+      should_not be_able_to(:index_people, groups(:be_state_camp))
+      should_not be_able_to(:index_local_people, groups(:be_state_camp))
+      should_not be_able_to(:index_full_people, groups(:be_state_camp))
+    end
+    
+    it "may not index groups in same layer" do
+      should_not be_able_to(:index_people, groups(:be_board))
+      should_not be_able_to(:index_full_people, groups(:be_board))
+      should_not be_able_to(:index_local_people, groups(:be_board))
+    end
+  end
   
   describe "people filter" do
     
@@ -529,9 +589,9 @@ describe Ability::People do
         should_not be_able_to(:send_password_instructions, other)
       end
 
-      it "cannot send_password_instructions for role without login permission" do
-        no_login = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board)).person.reload
-        should_not be_able_to(:send_password_instructions, no_login)
+      it "can send_password_instructions for external role" do
+        external = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board)).person.reload
+        should be_able_to(:send_password_instructions, external)
       end
 
       it "cannot send_password_instructions for self" do

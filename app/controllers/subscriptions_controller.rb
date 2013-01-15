@@ -14,7 +14,7 @@ class SubscriptionsController < CrudController
 
   def index
     respond_to do |format|
-      format.html { load_instance_variables }
+      format.html { load_grouped_subscriptions }
       format.pdf  { render_pdf(mailing_list.people) }
       format.csv  { render_csv(mailing_list.people) }
     end
@@ -26,7 +26,7 @@ class SubscriptionsController < CrudController
     authorize!(:index_subscriptions, mailing_list)
   end
 
-  def load_instance_variables
+  def load_grouped_subscriptions
     @group_subs = group_subscriptions
     @person_subs = person_subscriptions
     @event_subs = event_subscriptions

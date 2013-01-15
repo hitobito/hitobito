@@ -4,5 +4,5 @@
   = action_button 'Anlass hinzufügen', new_group_mailing_list_event_path(@group, @mailing_list), 'plus'
   = action_button 'Person ausschliessen', new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus'
 
-- if can?(:update, @mailing_list)
+- if can?(:index_subscriptions, @mailing_list)
   = dropdown_button('Export', people_export_links(false), :download)

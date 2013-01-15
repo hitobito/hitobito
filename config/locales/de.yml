@@ -170,15 +170,11 @@ de:
         label: Beschreibung/Ort
         start_at: Von
         finish_at: Bis
-        start_at_date: Von Datum
-        finish_at_date: Bis Datum
         
       dates:
         label: Beschreibung/Ort
-        start_at: Von
-        finish_at: Bis
-        start_at_date: Von Datum
-        finish_at_date: Bis Datum
+        start_at: Von Datum
+        finish_at: Bis Datum
         
       event/question:
         question: Frage

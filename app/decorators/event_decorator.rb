@@ -37,10 +37,6 @@ class EventDecorator < ApplicationDecorator
     end.compact
   end
 
-  def preconditions
-    model.kind_of?(Event::Course) &&  kind.preconditions.map(&:label)
-  end
-
   def state_translated(state = model.state)
     h.t("activerecord.attributes.event/course.states.#{state}") if state
   end
@@ -104,19 +100,8 @@ class EventDecorator < ApplicationDecorator
     {id: id, label: "#{model.to_s} (#{groups_label})"}
   end
 
-  def kind?
+  def course_kind?
     model.kind_of?(Event::Course) && kind.present?
-  end
-
-  def kind_info
-    html = ''.html_safe
-    html << h.labeled('Mindestalter', kind.minimum_age)
-    html << h.labeled('erford. Qualifikationen', quali_kinds)
-    content_tag(:dl, class: "dl-horizontal") { html }
-  end
-
-  def quali_kinds
-    safe_join(kind.qualification_kinds, ', ') { |q| q.to_s }
   end
 
 end

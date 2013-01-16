@@ -16,7 +16,7 @@ guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAIL
   watch(%r{^app/controllers/.+\.rb$})
 end
 
-guard 'rspec', :cli => '--drb' do
+guard 'rspec', :cli => '--drb -b' do
   # debugging:
   #watch(%r{^.*\.rb$}) {|m| puts "#{m} changed" }
 

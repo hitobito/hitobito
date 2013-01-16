@@ -1,11 +1,14 @@
-
 %section
   = render_attrs(entry, *entry.used_attributes(:kind_id, :number, :motto))
+  
   - entry.used?(:state) do
     = render_attrs(entry, :state_translated)
+    
   %dl.dl-horizontal
     = render 'shared/labeled', label: 'Durchgeführt von', content: entry.group_names
+    
   = render_extensions :attrs
+
 
 = section 'Daten' do
   %p= entry.dates_full
@@ -24,21 +27,22 @@
 
 
 = section 'Anmeldung' do
-  %p
-    = entry.booking_info
-    Teilnehmende
+  %dl.dl-horizontal
+    = labeled('Bereits Angemeldet', "#{entry.booking_info} Personen")
   
-  = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, 
-                                               :application_conditions))
-  - if entry.kind?
-    = entry.kind_info
-
-  - if entry.preconditions.present?
-    %p Vorbedingungen
-    %ul
-      - entry.preconditions.each do |label|
-        %li= label
+  = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at))
   
+  %dl.dl-horizontal
+    = labeled('Aufnahmebedingungen', format_attr(entry, :application_conditions))
+    - if entry.course_kind?
+      = labeled('Mindestalter', entry.kind.minimum_age? ? "#{entry.kind.minimum_age} Jahre" : '')
+      = labeled('Erford. Qualifikationen', entry.kind.preconditions.join(', '))
+    
+  - if entry.course_kind?
+    %dl.dl-horizontal
+      = labeled('Qualifiziert für', entry.kind.qualification_kinds.join(', '))
+      = labeled('Verlängert', entry.kind.prolongations.join(', '))
+      
   = render_extensions 'application_attrs', folder: 'events'
 
 = render_extensions :show

@@ -30,7 +30,7 @@ guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAIL
   watch(%r{^#{wagon}/app/controllers/.+\.rb$})
 end
 
-guard 'rspec', :version => 2, :cli => '--drb --drb-port 8991' do
+guard 'rspec', :cli => '--drb --drb-port 8991' do
   watch(%r{^.*\.rb$}) {|m| puts m }
 
   watch(%r{^#{wagon}/(spec/.+_spec\.rb)$}) { |m| m[1] }

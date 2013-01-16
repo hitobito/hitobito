@@ -20,7 +20,7 @@ describe 'events/_attrs.html.haml' do
   context "course" do
     let(:event) { EventDecorator.decorate(events(:top_course)) } 
     it "lists preconditions" do
-      should have_content 'Vorbedingungen'
+      should have_content 'Qualifikationen'
       should have_content 'Group Lead'
     end
   end
@@ -28,7 +28,7 @@ describe 'events/_attrs.html.haml' do
   context "event" do
     let(:event) { EventDecorator.decorate(events(:top_event)) } 
     it "lists preconditions" do
-      should_not have_content 'Vorbedingungen'
+      should_not have_content 'Qualifikationen'
     end
   end
 

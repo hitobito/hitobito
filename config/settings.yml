@@ -12,9 +12,12 @@ phone_number:
     
 social_account:
   predefined_labels:
-    - Skype
-    - Webseite
+    - E-Mail
+    - Facebook
     - MSN
+    - Skype
+    - Twitter
+    - Webseite
 
 email:
   # Sender for all emails sent by the application

@@ -144,16 +144,16 @@ describe Import::PersonImporter do
       end
 
       context "social accounts" do
-        subject { Person.last.social_accounts } 
+        subject { Person.last.social_accounts.order(:label) } 
         its(:size) { should eq 3 }
-        its('first.label') { should eq 'Skype' } 
-        its('first.name') { should eq 'florida_armstrong' } 
+        its('first.label') { should eq 'MSN' } 
+        its('first.name') { should eq 'reyes_mckenzie' } 
+        
+        its('second.label') { should eq 'Skype' } 
+        its('second.name') { should eq 'florida_armstrong' } 
 
-        its('second.label') { should eq 'Webseite' } 
-        its('second.name') { should eq 'colliäs.com' } 
-
-        its('third.label') { should eq 'MSN' } 
-        its('third.name') { should eq 'reyes_mckenzie' } 
+        its('third.label') { should eq 'Webseite' } 
+        its('third.name') { should eq 'colliäs.com' } 
       end
     end
   end

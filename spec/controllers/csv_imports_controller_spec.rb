@@ -60,7 +60,7 @@ describe CsvImportsController do
       it "imports first person and displays errors for second person" do
         expect { post :create, group_id: group.id, data: data, csv_import: mapping }.to change(Person,:count).by(0)
         flash[:alert].should eq ["1 Person (Leader) konnten nicht importiert werden.", 
-                                 "Zeile 1: Bitte geben Sie einen Namen für diese Person ein"]
+                                 "Zeile 1: Bitte geben Sie einen Namen ein"]
         should redirect_to group_people_path(group, role_types: role_type, name: "Leader")
       end
     end

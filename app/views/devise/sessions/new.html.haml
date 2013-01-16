@@ -1,6 +1,6 @@
 -title 'Anmelden'
 
-= standard_form(resource, {url: session_path(resource_name)}) do |f|
+= standard_form(resource, {url: person_session_path}) do |f|
   = f.error_messages
   = f.labeled_input_field(:email)
   = f.labeled_input_field(:password)

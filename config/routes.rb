@@ -56,6 +56,12 @@ Jubla::Application.routes.draw do
         end
 
         resources :qualifications, only: [:index, :update, :destroy]
+        
+        member do
+          get  'register' => 'register#index'
+          post 'register' => 'register#check'
+          put  'register' => 'register#register'
+        end
       end
 
     end

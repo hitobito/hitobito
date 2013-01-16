@@ -1,0 +1,4 @@
+- title 'Kontaktdaten erfassen'
+
+= crud_form(entry, url: register_group_event_path(group, event), method: :put, cancel_url: register_group_event_path(group, event)) do |f|
+  = render 'people/fields', f: f

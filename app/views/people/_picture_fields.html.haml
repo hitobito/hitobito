@@ -1,0 +1,7 @@
+= field_set_tag do
+  = f.labeled :picture do
+    = f.file_field :picture, type: :file
+
+  - if entry.picture.present?
+    = f.labeled :remove_picture do
+      = f.boolean_field :remove_picture

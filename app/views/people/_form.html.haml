@@ -4,19 +4,8 @@
     = hidden_field_tag('role[group_id]', params[:role][:group_id])
     = hidden_field_tag('role[type]', params[:role][:type])
   
-  = field_set_tag do
-    = f.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company
-
-  = field_set_tag do
-    = f.labeled :picture do
-      = f.file_field :picture, type: :file
-
-    - if entry.picture.present?
-      = f.labeled :remove_picture do
-        = f.boolean_field :remove_picture
-
-  = render 'contactable/fields', f: f
+  = render 'fields', f: f
   
-  = render_extensions :fields, locals: { f: f }
+  = render 'picture_fields', f: f
 
   = hidden_field_tag('return_url', params[:return_url])

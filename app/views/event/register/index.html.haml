@@ -1,0 +1,10 @@
+#main.row-fluid
+  %article.span6
+    %h3 Login
+    = render template: 'devise/sessions/new'
+    
+  %article.span6
+    %h3 Du hast noch kein Login?
+    = render 'email_check'
+
+

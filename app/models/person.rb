@@ -61,14 +61,17 @@ class Person < ActiveRecord::Base
   include Contactable
   
   devise :database_authenticatable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, 
+         :rememberable, 
+         :trackable, 
+         :validatable
   
   mount_uploader :picture, PictureUploader
 
   model_stamper
-
   stampable stamper_class_name: :person,
             deleter: false
+  
   
   ### ASSOCIATIONS
   
@@ -143,6 +146,22 @@ class Person < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  def male?
+    gender == 'm'
+  end
+  
+  def female?
+    gender == 'w'
+  end
+  
+  def upcoming_events
+    events.upcoming.merge(Event::Participation.active).uniq
+  end
+
+  def pending_applications
+    event_applications.merge(Event::Participation.pending)
+  end
+  
   # All time roles of this person, including deleted.
   def all_roles
     records = Role.with_deleted.where(person_id: id).order('deleted_at').includes(:group)
@@ -157,32 +176,19 @@ class Person < ActiveRecord::Base
   def root?
     email == Settings.root_email
   end
-
-  def male?
-    gender == 'm'
-  end
-  
-  def female?
-    gender == 'w'
-  end
   
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
-    login? && super
+    persisted? && super
   end
   
-  def generate_
-    generate_reset_password_token! if should_generate_reset_token?
+  def clear_reset_password_token!
+    clear_reset_password_token && save(validate: false)
   end
-
-  def upcoming_events
-    events.upcoming.merge(Event::Participation.active).uniq
-  end
-
-  def pending_applications
-    event_applications.merge(Event::Participation.pending)
-  end
-
+  
+  public :generate_reset_password_token!
+  
   private
+  
   def email_required?
     false
   end

@@ -315,3 +315,7 @@ de:
       first: Erste
       last: Letzte
       truncate: '...'
+      
+  errors:
+    messages:
+      extension_white_list_error: "kann nur Dateien der Typen %{allowed_types} verarbeiten."

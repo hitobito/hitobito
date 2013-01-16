@@ -114,4 +114,22 @@ describe Ability::Groups do
     end
   end
 
+  context "deleted group" do
+    let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: group) }
+    let(:group) { groups(:ausserroden) } 
+    before { group.destroy } 
+
+    it "may not create subgroup" do
+      should_not be_able_to(:create, group.children.new)
+    end
+
+    it "may not update group" do
+      should_not be_able_to(:update, group)
+    end
+
+    it "may reactivate group" do
+      should be_able_to(:reactivate, group)
+    end
+  end
+
 end

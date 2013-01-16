@@ -15,12 +15,16 @@ module Sheet
           end
           
           content_tag(:li, 'geh&ouml;rt zu&nbsp;'.html_safe) +
-          StandardHelper::EMPTY_STRING + 
+          StandardHelper::EMPTY_STRING +
           safe_join(crumbs, divider)
         end
       end
     end
     
+    def title
+      entry.deleted? ? "#{super} (gelöscht)" : super
+    end
+
     private
     
     def link_url

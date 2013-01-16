@@ -3,7 +3,7 @@ module Ability::Groups
   def define_groups_abilities
     can :read, Group
 
-    can :show_details, Group do |group|
+    can [:show_details, :deleted_subgroups], Group do |group|
       can_detail_group?(group)
     end
 
@@ -11,7 +11,8 @@ module Ability::Groups
       can :create, Group do |group|
         # BEWARE! Always pass a Group instance to create for correct abilities
         group.parent.present? &&
-        can_create_group?(group.parent)
+        can_create_group?(group.parent) &&
+        !group.parent.deleted?
       end
 
       can :destroy, Group do |group|
@@ -19,13 +20,17 @@ module Ability::Groups
       end
 
       can :update, Group do |group|
-        can_update_group?(group)
+        can_update_group?(group) && !group.deleted?
       end
 
       can :move, Group do |group, parent|
         can_destroy_group?(group) &&
         can_create_group?(parent) &&
         parent != group.parent
+      end
+
+      can :reactivate, Group do |group|
+        can_update_group?(group)
       end
 
       if layers_full.present?
@@ -61,7 +66,7 @@ module Ability::Groups
     if modify_permissions?
       can :create, Role do |role|
         # BEWARE! Always pass a Role instance to create for correct abilities
-        !role.restricted && can_update_group?(role.group)
+        !role.restricted && can_update_group?(role.group) && !role.group.deleted?
       end
 
       can :update, Role do |role|
@@ -81,8 +86,7 @@ module Ability::Groups
 
   def can_update_group?(group)
     # user has group_full for this group
-    groups_group_full.include?(group.id) ||
-    can_create_group?(group)
+    (groups_group_full.include?(group.id) || can_create_group?(group))
   end
 
   def can_create_group?(group)

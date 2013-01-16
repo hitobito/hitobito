@@ -5,9 +5,9 @@ require 'spec_helper'
 describe GroupsController, type: :controller do
 
   let(:group) { groups(:top_layer) }
-  let(:user) { Fabricate(Group::TopLayer::Member.name.to_sym, group: group).person } 
+  let(:user) { Fabricate(Group::TopLayer::Member.name.to_sym, group: group).person }
 
-  let(:test_entry) { group } 
+  let(:test_entry) { group }
   let(:create_entry_attrs) { {name: 'foo', type: 'Group::TopGroup', parent_id: group.id } }
   let(:update_entry_attrs) { {name: 'bar'} }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
@@ -41,18 +41,18 @@ describe GroupsController, type: :controller do
     end
     
     it "#new" do
-      templates = ["shared/_error_messages", 
-                   "contactable/_fields", 
+      templates = ["shared/_error_messages",
+                   "contactable/_fields",
                    "contactable/_phone_number_fields",
-                   "contactable/_social_account_fields", 
-                   "groups/_form", 
-                   "crud/new", 
+                   "contactable/_social_account_fields",
+                   "groups/_form",
+                   "crud/new",
                    "layouts/_nav",
-                   "layouts/_flash", 
+                   "layouts/_flash",
                    "layouts/application"]
 
       get :new, group: { parent_id: group.id, type: 'Group::TopGroup' }
-      templates.each { |template| should render_template(template) } 
+      templates.each { |template| should render_template(template) }
     end
   end
 
@@ -69,7 +69,15 @@ describe GroupsController, type: :controller do
         dom.should_not have_selector('dt', text: 'Erstellt')
         dom.should_not have_selector('dt', text: 'Geändert')
     end
+  end
 
+  context "GET #deleted_subgroups"do
+    before { groups(:bottom_group_one_one_one).destroy }
+
+    it "renders delete subgroups with link" do
+      get :deleted_subgroups, id: groups(:bottom_group_one_one).id
+      dom.should have_link "Group 111"
+    end
   end
 
 end

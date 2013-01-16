@@ -21,22 +21,22 @@ module Ability::Events
       events_with_permission(:contact_data).include?(event.id)
     end
     
-    can :application_market, Event do |event| 
+    can :application_market, Event do |event|
       can_create_event?(event)
     end
     
-    can :qualify, Event do |event| 
+    can :qualify, Event do |event|
       can_create_event?(event) ||
-      events_with_permission(:qualify).include?(event.id) 
+      events_with_permission(:qualify).include?(event.id)
     end
 
       
     ### COURSES
-    if modify_permissions? 
+    if modify_permissions?
       can :manage_courses, Person do |person|
         course_groups = Group.course_offerers
-        contains_any?(groups_group_full, collect_ids(course_groups)) || 
-        contains_any?(layers_full, course_groups.collect(&:layer_group_id)) 
+        contains_any?(groups_group_full, collect_ids(course_groups)) ||
+        contains_any?(layers_full, course_groups.collect(&:layer_group_id))
       end
     end
 
@@ -56,15 +56,15 @@ module Ability::Events
       
     # create is only invoked by people who wish to
     # apply for an event themselves. A participation for somebody
-    # else is created through event roles. 
+    # else is created through event roles.
     # As an exception, participants may be created by an AST
     can :create, Event::Participation do |participation|
-      (participation.event.application_possible? && 
-       participation.person_id == user.id) || 
+      (participation.event.application_possible? &&
+       participation.person_id == user.id) ||
       can_create_event?(participation.event)
     end
     
-    # regular people can only create (but not update) their participations 
+    # regular people can only create (but not update) their participations
     can :update, Event::Participation do |participation|
       can_manage_event?(participation.event)
     end
@@ -116,7 +116,8 @@ module Ability::Events
   def can_create_event?(event)
     event.groups.present? && (
     contains_any?(groups_group_full, event.group_ids) ||
-    contains_any?(layers_full, event.groups.collect(&:layer_group_id)))
+    contains_any?(layers_full, event.groups.collect(&:layer_group_id))) &&
+    event.groups.any? {|group| !group.deleted? }
   end
   
   def can_approve_application?(participation)

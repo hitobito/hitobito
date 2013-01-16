@@ -512,4 +512,14 @@ describe Ability::Events do
     end
   end
 
+  context "destroyed group" do
+    let(:group) { groups(:ausserroden) }
+    let(:role) { Fabricate(Group::Flock::Leader.name.to_sym, group: group) }
+    before { group.destroy } 
+
+    it "cannot create new event" do
+      should_not be_able_to(:create, group.events.new.tap {|e| e.groups << group})
+    end
+  end
+
 end

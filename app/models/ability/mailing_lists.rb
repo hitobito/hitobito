@@ -18,8 +18,9 @@ module Ability::MailingLists
     group = list.group
     
     # user has group_full for this group
-    groups_group_full.include?(group.id) ||
+    (groups_group_full.include?(group.id) ||
      # user has layer_full, group in same layer
-    layers_full.include?(group.layer_group_id)
+    layers_full.include?(group.layer_group_id)) &&
+    !group.deleted?
   end
 end

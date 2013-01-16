@@ -5,6 +5,7 @@ class GroupsController < CrudController
   before_render_show :load_sub_groups
   before_render_form :load_contacts
 
+
   def index
     flash.keep
     redirect_to group_path(Group.root.id)
@@ -13,9 +14,21 @@ class GroupsController < CrudController
   def destroy
     super(location: entry.parent)
   end
-  
 
-  private 
+  def deleted_subgroups
+    @sub_group_models = entry.children.only_deleted
+    load_sub_groups
+  end
+
+  def reactivate
+    entry.update_attribute(:deleted_at, nil)
+
+    flash[:notice] = "Gruppe <i>#{entry}</i> wurde erfolgreich reaktiviert."
+    redirect_to entry
+  end
+
+
+  private
   
   def build_entry
     type = model_params && model_params.delete(:type)
@@ -24,7 +37,7 @@ class GroupsController < CrudController
     group
   end
 
-  def assign_attributes 
+  def assign_attributes
     role = entry.class.superior_attributes.present? && can?(:modify_superior, entry) ? :superior : :default
     entry.assign_attributes(model_params, as: role)
   end
@@ -35,12 +48,15 @@ class GroupsController < CrudController
   
   def load_sub_groups
     @sub_groups = Hash.new {|h, k| h[k] = [] }
-    entry.children.without_deleted.order_by_type(entry).each do |group|
+    @sub_group_models ||= entry.children.without_deleted
+    @sub_group_models.order_by_type(entry).each do |group|
       label = group.layer ? group.class.label_plural : 'Untergruppen'
       @sub_groups[label] << group
     end
     # move this entry to the end
     @sub_groups['Untergruppen'] = @sub_groups.delete('Untergruppen')
   end
+
+
 
 end

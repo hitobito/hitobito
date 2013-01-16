@@ -12,6 +12,9 @@ Jubla::Application.routes.draw do
   resources :groups do
 
     member do
+      get :deleted_subgroups
+      post :reactivate
+
       get 'merge' => 'group/merge#select'
       post 'merge' => 'group/merge#perform'
 

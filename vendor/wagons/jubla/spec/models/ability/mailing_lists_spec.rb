@@ -157,5 +157,24 @@ describe Ability::MailingLists do
         should_not be_able_to(:create, Fabricate(:mailing_list, group: groups(:ch)).subscriptions.new)
       end
     end
+
+    context "destroyed group" do
+      let(:group) { groups(:ausserroden) } 
+      let(:list) {  Fabricate(:mailing_list, group: groups(:ch)) } 
+
+      before { list; group.destroy }
+
+      it "may not create mailing list" do
+        should_not be_able_to(:create, Fabricate(:mailing_list, group: groups(:ch)))
+      end
+
+      it "may not update mailing list" do
+        should_not be_able_to(:update, list)
+      end
+
+      it "may not create subscription" do
+        should_not be_able_to(:create, list.subscriptions.new)
+      end
+    end
   end
 end

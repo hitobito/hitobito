@@ -3,6 +3,12 @@ Jubla::Application.routes.draw do
 
   root :to => 'dashboard#index'
 
+  resources :people, only: :show do
+    collection do
+      get :query
+    end
+  end
+  
   resources :groups do
 
     member do
@@ -86,12 +92,6 @@ Jubla::Application.routes.draw do
 
   get 'full' => 'full_text#index'
   get 'query' => 'full_text#query'
-
-  resources :people, only: :show do
-    collection do
-      get :query
-    end
-  end
 
   resources :event_kinds, module: 'event', controller: 'kinds'
 

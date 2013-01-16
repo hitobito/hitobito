@@ -6,7 +6,10 @@ class Group::FederalBoard < Group
     
     attr_accessible :employment_percent
   end
+
+  class President < Member
+  end
   
-  roles Member
+  roles Member, President
   
 end

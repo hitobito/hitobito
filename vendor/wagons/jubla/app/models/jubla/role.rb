@@ -61,6 +61,10 @@ module Jubla::Role
   class Treasurer < ::Role
     
   end
+
+  # Intended to be used with mailing lists
+  class DispatchAddress < ::Role
+  end
   
   
 end

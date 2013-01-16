@@ -21,7 +21,7 @@ describe Export::CsvPeople::Participation do
       Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
       Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
     end
-    its([:roles]) { should eq 'Hauptleiter, Hilfsleiter' }
+    its([:roles]) { should eq 'Hauptleitung, Leitung' }
   end
 
   context "with answers" do

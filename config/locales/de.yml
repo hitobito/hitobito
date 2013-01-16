@@ -33,9 +33,9 @@ de:
         one: Kursart
         other: Kursarten
       event/role/assistant_leader:
-        one: Hilfsleiter
+        one: Leitung
       event/role/leader:
-        one: Hauptleiter
+        one: Hauptleitung
       event/role/cook:
         one: Küche
       event/role/participant:

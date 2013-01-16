@@ -6,8 +6,8 @@ describe Export::CsvPeople do
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "E-Mail",
                           "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
-  let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "E-Mail", 
-                        "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", 
+  let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "E-Mail",
+                        "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag",
                         "Zusätzliche Angaben", "Rollen"] }
 
   describe Export::CsvPeople do
@@ -84,7 +84,7 @@ describe Export::CsvPeople do
             Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
             Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
           end
-          its(['Rollen']) { should eq 'Hauptleiter, Hilfsleiter' }
+          its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
         end
       end
     end
@@ -112,7 +112,7 @@ describe Export::CsvPeople do
             Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
             Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
           end
-          its(['Rollen']) { should eq 'Hauptleiter, Hilfsleiter' }
+          its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
         end
 
         context "with answers" do

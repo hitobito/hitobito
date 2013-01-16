@@ -8,12 +8,15 @@ class Group::StateBoard < Group
   class Member < Jubla::Role::Member
     self.permissions = [:group_read, :contact_data]
   end
+
+  class President < Member
+  end
   
   # Stellenbegleitung
   class Supervisor < ::Role
     self.permissions = [:layer_read]
   end
   
-  roles Leader, Member, Supervisor
+  roles Leader, Member, Supervisor, President
   
 end

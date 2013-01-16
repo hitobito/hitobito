@@ -31,6 +31,9 @@ de:
       group/federal_board/member:
         one: Mitglied
         long: Bundesleitung
+      group/federal_board/president:
+        one: Präses
+        long: Bundesleitung Präses
                 
       group/federal_professional_group/leader:
         one: Leitung
@@ -49,6 +52,10 @@ de:
       group/state_board/leader:
         one: Leitung
         long: Kantonsleitung Leitung
+      group/state_board/president:
+        one: Präses
+        long: Kantonsleitung Präses
+
       group/state_board/member:
         one: Mitglied
         long: Kantonsleitung Mitglied
@@ -79,6 +86,9 @@ de:
       group/regional_board/member:
         one: Mitglied
         long: Regionalleitung Mitglied
+      group/regional_board/president:
+        one: Präses
+        long: Regionalleitung Präses
       
       group/regional_professional_group/leader:
         one: Leitung

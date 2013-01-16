@@ -8,7 +8,10 @@ class Group::RegionalBoard < Group
   class Member < Jubla::Role::Member
     self.permissions = [:layer_read, :contact_data]
   end
+
+  class President < Member
+  end
   
-  roles Leader, Member
+  roles Leader, Member, President
   
 end

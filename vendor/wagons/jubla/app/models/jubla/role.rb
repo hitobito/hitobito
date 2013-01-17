@@ -6,6 +6,9 @@ module Jubla::Role
     self.alumnus = false
     
     Alumnus.alumnus = true
+
+    protect_if :alumnus
+    after_destroy :create_alumnus_role
   end
   
   
@@ -15,10 +18,7 @@ module Jubla::Role
     def external?
       affiliate && !restricted && !alumnus
     end
-    
   end
-  
-  
   
   # Common roles not attached to a specific group
   
@@ -65,6 +65,20 @@ module Jubla::Role
   # Intended to be used with mailing lists
   class DispatchAddress < ::Role
   end
-  
+
+  private
+
+  def create_alumnus_role
+    if !self.class.external? && old_enough_to_archive? && last_role_for_person_in_group?
+      role = Jubla::Role::Alumnus.new
+      role.person = self.person
+      role.group = self.group
+      role.save
+    end
+  end
+
+  def last_role_for_person_in_group?
+     group.roles.where(person_id: person_id).empty?
+  end
   
 end

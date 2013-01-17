@@ -64,4 +64,57 @@ describe Role do
       subject.last.should == Jubla::Role::Alumnus
     end
   end
+
+
+  context "#destroy" do
+    let(:role) { Fabricate(role_class.name.to_s, group: groups(:bern), created_at: created_at) }
+    let(:role_class) { Group::Flock::Leader }
+    let(:created_at) { Time.zone.now }
+
+    context "young role" do
+      it "deletes from database" do
+        expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+        Role.with_deleted.where(id: role.id).should_not be_exists
+      end
+    end
+
+    context "old roles" do
+      let(:created_at) { Time.zone.now - Settings.role.minimum_days_to_archive.days - 1 }
+
+      context "single role" do
+        it "flags as deleted, creates alumnus role" do
+          expect { role.destroy }.to change { Jubla::Role::Alumnus.count }.by(1)
+          Role.only_deleted.find(role.id).should be_present
+        end
+      end
+
+      context "multiple roles" do
+        before { Fabricate(role_class.name.to_s, group: groups(:bern), person: role.person, created_at: created_at) }
+
+        it "flags as deleted, does not create alumnus role" do
+          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          Role.only_deleted.find(role.id).should be_present
+        end
+      end
+
+      context "external role" do
+        let(:role_class) { Jubla::Role::External }
+
+        it "flags as deleted, does not create alumnus role" do
+          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          Role.only_deleted.find(role.id).should be_present
+        end
+      end
+
+      context "alumnus role" do
+        let(:role_class) { Jubla::Role::Alumnus }
+        before { role } # ensure we have created the original Alumnus role before expecting
+
+        it "cannot be destroyed, does not create alumnus role" do
+          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          Role.find(role.id).should be_present
+        end
+      end
+    end
+  end
 end

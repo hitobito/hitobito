@@ -65,7 +65,7 @@ describe Group do
     end
   end
 
-  describe ".course_offerers" do 
+  describe ".course_offerers" do
     subject { Group.course_offerers }
 
     it "includes federation" do
@@ -103,7 +103,7 @@ describe Group do
   each_child(Group::Federation) do |group|
     context group do
 
-      # TODO - pz should this not read 
+      # TODO - pz should this not read
       # group.possible_children.should include(*group.default_children)
       # instead?
       #

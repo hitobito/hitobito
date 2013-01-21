@@ -15,8 +15,8 @@ $white:                 #fff !default;
 
 // Accent colors
 // ----------------------------
-$blue:                  #013888 !default;
-$blueDark:              #00173C !default;
+$blue:                  #014CBC !default;
+$blueDark:              #013888 !default; //#00173C
 $green:                 #026829 !default;
 $red:                   #A1090F !default;
 
@@ -24,7 +24,7 @@ $borderColor:           darken(#F1F2F5, 5%) !default;
 
 // Scaffolding
 // -------------------------
-$bodyBackground:        $grayLighter !default;
+$bodyBackground:        darken($grayLighter, 1.5%) !default; // $grayLighter ;
 $textColor:             $grayDarker !default;
 
 // Links

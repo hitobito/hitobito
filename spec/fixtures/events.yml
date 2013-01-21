@@ -30,8 +30,6 @@ top_event:
   name: Top Event
   groups: top_layer
   type: Event
-  priorization: true
-  requires_approval: true
 
 top_course:
   name: Top Course

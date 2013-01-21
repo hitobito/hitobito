@@ -4,24 +4,10 @@ class Event::RegisterController < ApplicationController
   
   helper_method :resource, :entry, :group, :event
   
+  before_filter :assert_external_application_possible
+  
   def index
-    if event.application_possible?
-      if current_user
-        redirect_to group_event_path(group, event)
-      else
-        # supports external applications?
-        flash.now[:notice] = "Du musst dich einloggen um dich für den Anlass '#{event.to_s}' anzumelden."
-      end
-      
-    else
-      flash[:alert] = "Das Anmeldefenster für diesen Anlass ist geschlossen."
-      
-      if current_user
-        redirect_to group_event_path(group, event)
-      else
-        redirect_to new_person_session_path
-      end
-    end
+    flash.now[:notice] = "Du musst dich einloggen um dich für den Anlass '#{event.to_s}' anzumelden."
   end
   
   def check
@@ -46,7 +32,7 @@ class Event::RegisterController < ApplicationController
   
   def register
     if create_person
-      sign_in(:person, @person)
+      sign_in(:person, person)
       flash[:notice] = 'Deine Daten wurden aufgenommen. Du kannst dich nun für den Anlass anmelden.'
       redirect_to group_event_path(group, event)
     else
@@ -55,6 +41,25 @@ class Event::RegisterController < ApplicationController
   end
   
   private
+  
+  def assert_external_application_possible
+    if event.application_possible?
+      if current_user
+        redirect_to group_event_path(group, event)
+      else
+        # supports external applications?
+      end
+      
+    else
+      flash[:alert] = "Das Anmeldefenster für diesen Anlass ist geschlossen."
+      
+      if current_user
+        redirect_to group_event_path(group, event)
+      else
+        redirect_to new_person_session_path
+      end
+    end
+  end
   
   def create_person
     person.attributes = params[:person]

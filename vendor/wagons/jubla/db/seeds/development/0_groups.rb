@@ -64,7 +64,7 @@ states.each do |s|
     { contactable_id:   s.id,
       contactable_type: 'Group',
       number:           Faker::PhoneNumber.phone_number,
-      label:            "Auskunft",
+      label:            Settings.phone_number.predefined_labels.first,
       public:           true }
   )
   ast = s.children.where(type: 'Group::StateAgency').first
@@ -156,7 +156,7 @@ flocks.each do |s|
     { contactable_id:   s.id,
       contactable_type: 'Group',
       number:           Faker::PhoneNumber.phone_number,
-      label:            "Auskunft",
+      label:            Settings.phone_number.predefined_labels.first,
       public:           true },
   )
 end

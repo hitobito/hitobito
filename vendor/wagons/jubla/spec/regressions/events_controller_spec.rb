@@ -47,6 +47,7 @@ describe EventsController, type: :controller  do
 
         get :show, group_id: be.id, id: course.id
         dom.should have_selector('dt', text: 'Anmeldung an')
+        dom.should have_selector('dt', text: 'J+S Bezeichnung')
       end
     end
 

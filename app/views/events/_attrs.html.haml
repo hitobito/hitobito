@@ -1,6 +1,15 @@
 %section
-  = render_attrs(entry, *entry.used_attributes(:kind_id, :number, :motto))
-  
+  %dl.dl-horizontal
+    - if entry.course_kind?
+      = labeled_attr(entry, :kind_id)
+      = render_extensions :kind
+
+    - entry.used?(:number) do
+      = labeled_attr(entry, :number)
+
+    - entry.used?(:motto) do
+      = labeled_attr(entry, :motto)
+      
   - entry.used?(:state) do
     = render_attrs(entry, :state_translated)
     
@@ -8,7 +17,6 @@
     = render 'shared/labeled', label: 'Durchgeführt von', content: entry.group_names
     
   = render_extensions :attrs
-
 
 = section 'Daten' do
   %p= entry.dates_full

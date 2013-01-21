@@ -110,9 +110,8 @@ describe Role do
         let(:role_class) { Jubla::Role::Alumnus }
         before { role } # ensure we have created the original Alumnus role before expecting
 
-        it "cannot be destroyed, does not create alumnus role" do
+        it "can be destroyed, creates new alumnus role" do
           expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
-          Role.find(role.id).should be_present
         end
       end
     end

@@ -1,9 +1,9 @@
 module Ability::Groups
 
   def define_groups_abilities
-    can :read, Group
+    can [:read, :deleted_subgroups], Group
 
-    can [:show_details, :deleted_subgroups], Group do |group|
+    can :show_details, Group do |group|
       can_detail_group?(group)
     end
 

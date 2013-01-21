@@ -7,7 +7,6 @@ module Jubla::Role
     
     Alumnus.alumnus = true
 
-    protect_if :alumnus
     after_destroy :create_alumnus_role
   end
   
@@ -73,6 +72,7 @@ module Jubla::Role
       role = Jubla::Role::Alumnus.new
       role.person = self.person
       role.group = self.group
+      role.label = self.class.label
       role.save
     end
   end

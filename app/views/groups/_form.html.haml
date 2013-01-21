@@ -4,7 +4,8 @@
     = f.hidden_field :type
     
   = field_set_tag do
-    = f.labeled_input_fields(:name, :short_name, :contact_id)
+    = f.labeled_input_fields(:name, :short_name)
+    = f.labeled_input_field(:contact_id, help_inline: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.')
     
   = render 'contactable/fields', f: f 
   

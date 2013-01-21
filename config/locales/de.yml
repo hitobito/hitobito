@@ -283,7 +283,7 @@ de:
   participations:
     create:
       flash:
-        success: "%{model} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten."
+        success: "%{model} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese ggf. an. <br />Für die Anmeldung musst du dieses Formular über <b>Drucken</b> ausdrucken, unterzeichnen und an die entsprechende Adresse per Post schicken."
     destroy:
       flash:
         success: "Anmeldung wurde erfolgreich gelöscht."

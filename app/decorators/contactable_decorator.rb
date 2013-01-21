@@ -1,5 +1,7 @@
 module ContactableDecorator
 
+  include AddressHelper
+
   def address_name
     content_tag(:strong, to_s)
   end
@@ -23,11 +25,11 @@ module ContactableDecorator
       html << town
     end
 
-    if country? && (zip_code? || town?)
+    if show_country? && (zip_code? || town?)
       html << br
     end
 
-    if country?
+    if show_country?
       html << country
     end
 
@@ -69,6 +71,10 @@ module ContactableDecorator
   end
 
   def prepend_complete_address(html)
+  end
+
+  def show_country?
+    country? && print_country?(country)
   end
   
 end

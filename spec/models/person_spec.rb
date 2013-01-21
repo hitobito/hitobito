@@ -259,5 +259,18 @@ describe Person do
     person.all_roles.should == [r1, r3, r2]
 
   end
+  
+  context "#ignored_country?" do
+    it "ignores ch, schweiz" do
+      person = Person.new(country: 'Schweiz')
+      person.ignored_country?.should be_true
+      person = Person.new(country: 'CH')
+      person.ignored_country?.should be_true
+    end
+  
+    it "does not ignore other countries" do
+      person = Person.new(country: 'USA')
+      person.ignored_country?.should be_false
+    end
   end
 end

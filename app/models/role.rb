@@ -77,7 +77,7 @@ class Role < ActiveRecord::Base
   # If this role has contact_data permissions, set the flag on the person
   def set_contact_data_visible
     if becomes(type.constantize).permissions.include?(:contact_data)
-      person.update_attribute :contact_data_visible, true
+      person.update_column :contact_data_visible, true
     end
   end
   
@@ -85,7 +85,7 @@ class Role < ActiveRecord::Base
   def reset_contact_data_visible
     if permissions.include?(:contact_data) && 
        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
-      person.update_attribute :contact_data_visible, false
+      person.update_column :contact_data_visible, false
     end
   end
   

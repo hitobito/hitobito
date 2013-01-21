@@ -19,6 +19,10 @@ module Contactable
   end
 
 
+  def ignored_country?
+    ['', *Settings.address.ignored_countries].include?(country.to_s.strip.downcase)
+  end
+
   private
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)

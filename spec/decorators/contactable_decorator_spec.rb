@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ContactableDecorator do
   before do
-    group = Group.new({ id: 1, name: 'foo', address: 'foostreet 3', zip_code: '4242', town: 'footown', email: 'foo@foobar.com' })
+    group = Group.new({ id: 1, name: 'foo', address: 'foostreet 3', zip_code: '4242', town: 'footown', email: 'foo@foobar.com', country: 'Schweiz' })
     group.phone_numbers.new(number: '031 12345', label: 'Home', public: true)
     group.phone_numbers.new(number: '041 12345', label: 'Work', public: true)
     group.phone_numbers.new(number: '079 12345', label: 'Mobile', public: false)
@@ -48,6 +48,19 @@ describe ContactableDecorator do
       it { should_not =~ /bad.website.link<\/a>/ }
       it { should_not =~ /www.<\/a>/ }
 
+    end
+  end
+
+  describe "addresses" do
+    context "country" do
+      it "shouldn't print country ch/schweiz" do
+        @group.complete_address.should_not =~ /Schweiz/
+      end
+
+      it "should print country" do
+        @group.country = "the ultimate country"
+        @group.complete_address.should =~ /the ultimate country/
+      end
     end
   end
 

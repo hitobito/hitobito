@@ -50,9 +50,12 @@ root_email: jubla@puzzle.ch
 pdf:
   labels:
     font_name: Helvetica
-    ignored_countries:
-      - ch
-      - schweiz
+
+# Preset for addresses
+address:
+  ignored_countries:
+    - ch
+    - schweiz
       
 # Presets for CSV export
 csv:

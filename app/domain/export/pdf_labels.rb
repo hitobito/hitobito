@@ -2,6 +2,8 @@ module Export
   class PdfLabels
     
     attr_reader :format
+
+    include AddressHelper
     
     def initialize(format)
       @format = format
@@ -61,10 +63,6 @@ module Export
     
     def print_company?(contactable)
       contactable.respond_to?(:company) && contactable.company_name?
-    end
-    
-    def print_country?(country)
-      !['', *Settings.pdf.labels.ignored_countries].include?(country.to_s.strip.downcase)
     end
   
   end

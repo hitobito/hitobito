@@ -49,7 +49,7 @@ root_email: jubla@puzzle.ch
 # Presets for PDF labels
 pdf:
   labels:
-    font_name: Helvetica
+    font_name: <%= Rails.root.join('app', 'assets', 'fonts', 'century-gothic.ttf') %>
 
 # Preset for addresses
 address:

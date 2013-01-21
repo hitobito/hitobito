@@ -17,7 +17,7 @@ describe 'contactable/_show.html.haml' do
       should have_content('foo')
       should have_content('bar')
       should have_content('123')
-      should have_content('ch')
+      should_not have_content('ch')
     end
   end
 

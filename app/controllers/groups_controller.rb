@@ -16,12 +16,11 @@ class GroupsController < CrudController
   end
 
   def deleted_subgroups
-    @sub_group_models = entry.children.only_deleted
-    load_sub_groups
+    load_sub_groups(entry.children.only_deleted)
   end
 
   def reactivate
-    entry.update_attribute(:deleted_at, nil)
+    entry.update_column(:deleted_at, nil)
 
     flash[:notice] = "Gruppe <i>#{entry}</i> wurde erfolgreich reaktiviert."
     redirect_to entry
@@ -46,10 +45,9 @@ class GroupsController < CrudController
     @contacts = entry.people.affiliate(false).only_public_data.order_by_name
   end
   
-  def load_sub_groups
+  def load_sub_groups(scope = entry.children.without_deleted)
     @sub_groups = Hash.new {|h, k| h[k] = [] }
-    @sub_group_models ||= entry.children.without_deleted
-    @sub_group_models.order_by_type(entry).each do |group|
+    scope.order_by_type(entry).each do |group|
       label = group.layer ? group.class.label_plural : 'Untergruppen'
       @sub_groups[label] << group
     end

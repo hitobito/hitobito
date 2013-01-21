@@ -6,7 +6,7 @@
     %h2 Weitere Angaben
     = render_attrs(entry, :type_name)
     = render_extensions :attrs
-    = render_attrs(entry, :created_info, :updated_info) if can?(:show_details, @group)
+    = render_present_attrs(entry, :created_info, :updated_info, :deleted_info) if can?(:show_details, @group)
 
   %aside.span5.offset1
     = render 'child_groups'

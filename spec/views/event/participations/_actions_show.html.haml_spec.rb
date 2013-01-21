@@ -21,17 +21,10 @@ describe "event/participations/_actions_show.html.haml" do
   context "last button" do
     subject { Capybara::Node::Simple.new(rendered).all('a').last }
   
-    context "last button per default is the print button"do
+    context "last button per default is the change contact data button" do
       before { render }
     
-      its([:href]) { should eq print_group_event_participation_path(group, event, participation) }
-      its(:text) { should eq " Drucken" } # space because of icon
-    end
-  
-    context "renders edit contact data button when flash is present?" do
-      before { controller.flash[:notice] = 'asdf' }
-      before { render }
-      its([:href]) { should eq edit_group_person_path(participant.groups.first, participant) }
+      its([:href]) { should eq edit_group_person_path(user.groups.first, user) }
       its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
     end
   end

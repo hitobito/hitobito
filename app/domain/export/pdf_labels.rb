@@ -2,8 +2,6 @@ module Export
   class PdfLabels
     
     attr_reader :format
-
-    include AddressHelper
     
     def initialize(format)
       @format = format
@@ -45,7 +43,7 @@ module Export
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
       address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
-      address << contactable.country if print_country?(contactable.country)
+      address << contactable.country unless contactable.ignored_country?
       address
     end
       

@@ -247,5 +247,18 @@ describe Person do
       expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error
     end
   end
-
+  
+  context "#ignored_country?" do
+    it "ignores ch, schweiz" do
+      person = Person.new(country: 'Schweiz')
+      person.ignored_country?.should be_true
+      person = Person.new(country: 'CH')
+      person.ignored_country?.should be_true
+    end
+  
+    it "does not ignore other countries" do
+      person = Person.new(country: 'USA')
+      person.ignored_country?.should be_false
+    end
+  end
 end

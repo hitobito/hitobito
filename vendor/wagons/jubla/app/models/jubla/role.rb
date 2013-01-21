@@ -62,7 +62,7 @@ module Jubla::Role
     
   end
 
-  # Intended to be used with mailing lists
+  # Versandadresse. Intended to be used with mailing lists
   class DispatchAddress < ::Role
   end
 

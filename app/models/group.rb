@@ -63,7 +63,7 @@ class Group < ActiveRecord::Base
   protect_if :root?
   protect_if :children_without_deleted
   
-  stampable stamper_class_name: :person
+  stampable stamper_class_name: :person, deleter: true
 
   ### ASSOCIATIONS
 

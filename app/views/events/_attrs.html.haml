@@ -1,6 +1,6 @@
 %section
   %dl.dl-horizontal
-    - if entry.course_kind?
+    - entry.used?(:kind_id) do
       = labeled_attr(entry, :kind_id)
       = render_extensions :kind
 

@@ -67,10 +67,20 @@ module StandardHelper
   end
 
   # Renders a list of attributes with label and value for a given object.
-  def render_attrs(obj, *attrs)
+  # If the optional block returns false for a given attribute, it will not be rendered.
+  def render_attrs(obj, *attrs, &block)
     content_tag(:dl, class: "dl-horizontal") do 
-      safe_join(attrs) { |a| labeled_attr(obj, a) }
+      safe_join(attrs) do |a| 
+        labeled_attr(obj, a) if !block_given? || yield(a)
+      end
     end if attrs.present?
+  end
+  
+  # Like #render_attrs, but only for attributes with a present value.
+  def render_present_attrs(obj, *attrs)
+    render_attrs(obj, *attrs) do |a|
+      obj.send(a).present?
+    end
   end
 
   # Renders the formatted content of the given attribute with a label.

@@ -10,6 +10,7 @@ module Jubla::Group
     
     # define global roles before children
     roles Jubla::Role::GroupAdmin, 
+          Jubla::Role::DispatchAddress,
           Jubla::Role::External,
           Jubla::Role::Alumnus
           

@@ -164,7 +164,7 @@ class Person < ActiveRecord::Base
   
   # All time roles of this person, including deleted.
   def all_roles
-    records = Role.with_deleted.where(person_id: id).order('deleted_at').includes(:group)
+    records = Role.with_deleted.where(person_id: id).includes(:group).order('groups.name', 'roles.deleted_at')
   end
   
   # Is this person allowed to login?

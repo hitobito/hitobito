@@ -23,10 +23,16 @@ class ApplicationDecorator < Draper::Base
   def created_info
     modification_info(created_at, creator)
   end
+  
+  def deleted_info
+    modification_info(deleted_at, deleter)
+  end
 
   private
 
   def modification_info(at, person)
+    return '' if at.nil?
+    
     html = l(at, format: :date_time)
     if person.present?
       html << " "

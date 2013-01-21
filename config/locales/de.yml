@@ -5,6 +5,7 @@ de:
   attributes:
     created_info: Erstellt
     updated_info: Geändert
+    deleted_info: Gelöscht
 
   activerecord:
     errors: 

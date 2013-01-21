@@ -49,6 +49,11 @@
 .form-horizontal .control-group {
   margin-bottom: 0;
 }
+@include responsive(mediaPhone) {
+  .form-horizontal .btn-toolbar {
+    margin-left: 180px;
+  }
+}
 
 fieldset {
   margin-bottom: 18px;
@@ -111,7 +116,6 @@ label.radio {
   height: 20px;
   font-size: 14px;
   line-height: 20px;
-  color: $gray;
   margin-right: 10px;
 }
 

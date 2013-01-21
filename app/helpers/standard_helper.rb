@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # A view helper to standartize often used functions like formatting,
 # tables, forms or action links. This helper is ideally defined in the
 # ApplicationController.
@@ -220,6 +222,10 @@ module StandardHelper
   
   def model_class_label(entry)
     object_class(entry).model_name.human
+  end
+
+  def honeypot(name = :name)
+    text_field_tag(name, nil, placeholder: 'Bitte dieses Feld nicht ausfüllen', style: 'position:absolute;left:-9999px;')
   end
 
   def include_wysiwyg_assets

@@ -62,6 +62,13 @@ describe Event::RegisterController do
       end
     end
     
+    context "with honeypot filled" do
+      it "redirects to login" do
+        post :check, group_id: group.id, id: event.id, person: { email: 'foo@example.com'}, name: 'Foo'
+        should redirect_to(new_person_session_path)
+      end
+    end
+    
     context "for existing person" do
       it "generates one time login token" do
         post :check, group_id: group.id, id: event.id, person: {email: people(:top_leader).email }
@@ -92,6 +99,12 @@ describe Event::RegisterController do
       end
     end
     
+    context "with honeypot filled" do
+      it "redirects to login" do
+        put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'foo@example.com'}, name: 'Foo'
+        should redirect_to(new_person_session_path)
+      end
+    end
     
     context "with invalid data" do
       it "does not create person" do

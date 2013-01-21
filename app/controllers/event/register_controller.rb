@@ -5,6 +5,7 @@ class Event::RegisterController < ApplicationController
   helper_method :resource, :entry, :group, :event
   
   before_filter :assert_external_application_possible
+  before_filter :assert_honeypot_is_empty, only: [:check, :register]
   
   def index
     flash.now[:notice] = "Du musst dich einloggen um dich für den Anlass '#{event.to_s}' anzumelden."
@@ -58,6 +59,12 @@ class Event::RegisterController < ApplicationController
       else
         redirect_to new_person_session_path
       end
+    end
+  end
+  
+  def assert_honeypot_is_empty
+    if params[:name].present?
+      redirect_to new_person_session_path
     end
   end
   

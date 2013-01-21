@@ -8,6 +8,7 @@ class Event::RegisterController < ApplicationController
   before_filter :assert_honeypot_is_empty, only: [:check, :register]
   
   def index
+    session[:person_return_to] = show_event_path
     flash.now[:notice] = "Du musst dich einloggen um dich für den Anlass '#{event.to_s}' anzumelden."
   end
   
@@ -35,7 +36,7 @@ class Event::RegisterController < ApplicationController
     if create_person
       sign_in(:person, person)
       flash[:notice] = 'Deine Daten wurden aufgenommen. Du kannst dich nun für den Anlass anmelden.'
-      redirect_to group_event_path(group, event)
+      redirect_to show_event_path
     else
       render 'register'
     end
@@ -46,7 +47,7 @@ class Event::RegisterController < ApplicationController
   def assert_external_application_possible
     if event.application_possible?
       if current_user
-        redirect_to group_event_path(group, event)
+        redirect_to show_event_path
       else
         # supports external applications?
       end
@@ -55,7 +56,7 @@ class Event::RegisterController < ApplicationController
       flash[:alert] = "Das Anmeldefenster für diesen Anlass ist geschlossen."
       
       if current_user
-        redirect_to group_event_path(group, event)
+        redirect_to show_event_path
       else
         redirect_to new_person_session_path
       end
@@ -86,6 +87,10 @@ class Event::RegisterController < ApplicationController
   
   def group
     @group ||= Group.find(params[:group_id])
+  end
+  
+  def show_event_path
+    group_event_path(group, event)
   end
     
   def devise_controller?

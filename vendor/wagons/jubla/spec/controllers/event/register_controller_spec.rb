@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Event::RegisterController do
   
-  let(:event) { Fabricate(:event, groups: [groups(:be_board)]) }
+  let(:event) { Fabricate(:event, groups: [groups(:be_board)], external_applications: true) }
   let(:group) { event.groups.first }
   
   describe 'PUT register' do

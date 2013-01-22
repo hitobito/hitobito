@@ -94,7 +94,6 @@ class Person < ActiveRecord::Base
   ### VALIDATIONS
   
   schema_validations except: [:picture, :created_at, :updated_at]
-  validates :email, uniqueness: true, allow_nil: true, allow_blank: true
   validates :gender, inclusion: %w(m w), allow_blank: true
   validate :assert_has_any_name
 
@@ -144,6 +143,10 @@ class Person < ActiveRecord::Base
   
   def full_name
     "#{first_name} #{last_name}".strip
+  end
+  
+  def greeting_name
+    first_name.presence || nickname.presence || last_name.presence || company_name
   end
 
   def male?
@@ -216,12 +219,10 @@ class Person < ActiveRecord::Base
     false
   end
   
+  # Checks whether a password is needed or not. For validations only.
+  # Passwords are required if the password or confirmation are being set somewhere.
   def password_required?
-    false
-  end
-
-  def email_changed?
-    false
+    !password.nil? || !password_confirmation.nil?
   end
 
   def override_blank_email

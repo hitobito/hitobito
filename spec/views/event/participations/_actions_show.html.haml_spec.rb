@@ -13,6 +13,10 @@ describe "event/participations/_actions_show.html.haml" do
     view.stub(entry: participation) 
     controller.stub(current_user: user)
     view.stub(:current_user) {user}
+    controller.request.path_parameters[:action] = 'show'
+    controller.request.path_parameters[:group_id] = 42
+    controller.request.path_parameters[:event_id] = 42
+    controller.request.path_parameters[:id] = 42
     assign(:event, event)
     assign(:group, group)
   end
@@ -24,7 +28,7 @@ describe "event/participations/_actions_show.html.haml" do
     context "last button per default is the change contact data button" do
       before { render }
     
-      its([:href]) { should eq edit_group_person_path(user.groups.first, user) }
+      its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: '/groups/42/events/42/participations/42') }
       its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
     end
   end

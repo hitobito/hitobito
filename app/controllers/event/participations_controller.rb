@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Event::ParticipationsController < CrudController
  
   include RenderPeoplePdf
@@ -63,7 +65,7 @@ class Event::ParticipationsController < CrudController
 
   def check_preconditions
     event = entry.event
-    if entry.person == current_user && event.kind_of?(Event::Course)
+    if user_course_application?
       checker = Event::PreconditionChecker.new(event, current_user)
       redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
     end
@@ -113,18 +115,10 @@ class Event::ParticipationsController < CrudController
     participation
   end
   
-  def event
-    parent
-  end
-  
   def assign_attributes
     super
     # Set these attrs again as a new application instance might have been created by the mass assignment.
     entry.application.priority_1 ||= event if entry.application
-  end
-  
-  def group
-    @group ||= parents.first
   end
     
   def load_priorities
@@ -160,7 +154,31 @@ class Event::ParticipationsController < CrudController
       Event::ParticipationConfirmationJob.new(entry).enqueue!
     end
   end
-
+  
+  def set_success_notice
+    if action_name.to_s == 'create'
+      notice = "#{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+      if user_course_application?
+        notice += "<br />Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
+      end
+      flash[:notice] ||= notice
+    else
+      super
+    end
+  end
+  
+  def user_course_application?
+    entry.person == current_user && event.kind_of?(Event::Course)
+  end
+    
+  def event
+    parent
+  end
+  
+  def group
+    @group ||= parents.first
+  end
+  
   class << self
     def model_class
       Event::Participation

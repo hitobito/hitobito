@@ -5,7 +5,7 @@ class PersonMailer < ActionMailer::Base
   def login(recipient, sender)
     content = CustomContent.get(CONTENT_LOGIN)
     values = {
-      'recipient-name' => recipient.first_name,
+      'recipient-name' => recipient.greeting_name,
       'sender-name'    => sender.to_s,
       'login-url'      => "<a href=\"#{login_url(recipient)}\">#{login_url(recipient)}</a>"
     }

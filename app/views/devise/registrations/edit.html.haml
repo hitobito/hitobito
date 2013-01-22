@@ -1,9 +1,9 @@
--title "Passwort #{change_password_label}"
+-title "Passwort #{@old_password ? 'ändern' : 'setzen'}"
 
 = standard_form(resource, {url: person_registration_path,  method: :put}) do |f|
   = f.error_messages
-  - if resource.encrypted_password?
+  - if @old_password
     = f.labeled(:current_password, 'Altes Passwort') { f.input_field(:current_password) }
   = f.labeled(:password, 'Neues Passwort') { f.input_field(:password) }
   = f.labeled(:password_confirmation, 'Neues Passwort bestätigen') { f.input_field(:password_confirmation) }
-  = save_form_buttons(f, "Passwort #{change_password_label}", person_path(resource))
+  = save_form_buttons(f, title, person_path(resource))

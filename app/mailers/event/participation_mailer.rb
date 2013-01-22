@@ -9,7 +9,7 @@ class Event::ParticipationMailer < ActionMailer::Base
     compose(participation,
             CONTENT_CONFIRMATION,
             person.email,
-            'recipient-name' => person.first_name)
+            'recipient-name' => person.greeting_name)
   end
   
   def approval(participation, recipients)
@@ -17,7 +17,7 @@ class Event::ParticipationMailer < ActionMailer::Base
             CONTENT_APPROVAL, 
             recipients.collect(&:email).compact,
             'participant-name' => participation.person.to_s,
-            'recipient-names'  => recipients.collect(&:first_name).join(', '))
+            'recipient-names'  => recipients.collect(&:greeting_name).join(', '))
   end
 
   private

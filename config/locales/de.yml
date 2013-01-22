@@ -139,12 +139,12 @@ de:
         application_opening_at: Anmeldebeginn
         application_closing_at: Anmeldeschluss
         application_conditions: Aufnahmebedingungen
+        external_applications: Externe Anmeldungen
         dates: Daten
         dates_full: Daten
         booking_info: Teilnehmende
         questions: Fragen
         kind_id: Art
-        external_applications: Externe Anmeldungen
 
       event/course:
         kind_id: Kursart

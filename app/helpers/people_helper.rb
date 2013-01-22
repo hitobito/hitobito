@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module PeopleHelper
 
   def format_gender(person)
@@ -20,6 +22,10 @@ module PeopleHelper
     end
       
     links
+  end
+
+  def change_password_label
+    entry.encrypted_password? ? "ändern" : "setzen"
   end
   
   private

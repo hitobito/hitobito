@@ -3,12 +3,12 @@
   
 = dropdown_button('Export', people_export_links(can?(:show_full, entry)), :download)
 
-- if can?(:send_password_instructions, entry) 
-  = action_button('Login schicken', 
-                  send_password_instructions_group_person_path(parent, entry), 
+- if can?(:send_password_instructions, entry)
+  = action_button('Login schicken',
+                  send_password_instructions_group_person_path(parent, entry),
                   :envelope,
-                  remote: true, 
+                  remote: true,
                   method: :post)
                   
 - if @person == current_user
-  = action_button 'Passwort ändern', edit_person_registration_path
+  = action_button "Passwort #{change_password_label}", edit_person_registration_path

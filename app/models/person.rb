@@ -48,7 +48,7 @@
 class Person < ActiveRecord::Base
   
   # Setup accessible (or protected) attributes for your model
-  PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company, 
+  PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
                   :email, :address, :zip_code, :town, :country, :birthday, :picture]
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
@@ -61,9 +61,9 @@ class Person < ActiveRecord::Base
   include Contactable
   
   devise :database_authenticatable,
-         :recoverable, 
-         :rememberable, 
-         :trackable, 
+         :recoverable,
+         :rememberable,
+         :trackable,
          :validatable
   
   mount_uploader :picture, PictureUploader
@@ -183,6 +183,29 @@ class Person < ActiveRecord::Base
   
   def clear_reset_password_token!
     clear_reset_password_token && save(validate: false)
+  end
+
+  # Owner: Devise::Models::DatabaseAuthenticatable
+  # We override this to allow users updating passwords when no password has been set
+  def update_with_password(params, *options)
+    current_password = params.delete(:current_password)
+
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    end
+
+    result = if encrypted_password.nil? || valid_password?(current_password)
+               update_attributes(params, *options)
+             else
+               self.assign_attributes(params, *options)
+               self.valid?
+               self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+               false
+             end
+
+    clean_up_passwords
+    result
   end
   
   public :generate_reset_password_token!

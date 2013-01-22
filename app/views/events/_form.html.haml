@@ -33,6 +33,7 @@
 
   = field_set_tag 'Anmeldung' do
     = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
+    = f.labeled_boolean_field(:external_applications, caption: 'Externe können sich für diesen Anlass anmelden')
 
     - entry.used?(:priorization) do
       = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')

@@ -24,10 +24,6 @@ module PeopleHelper
     links
   end
 
-  def change_password_label
-    entry.encrypted_password? ? "ändern" : "setzen"
-  end
-  
   private
 
   def csv_links(details = false)

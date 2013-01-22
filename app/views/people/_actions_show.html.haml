@@ -10,5 +10,5 @@
                   remote: true,
                   method: :post)
                   
-- if @person == current_user
-  = action_button "Passwort #{change_password_label}", edit_person_registration_path
+- if entry == current_user
+  = action_button "Passwort #{entry.encrypted_password? ? "ändern" : "setzen"}", edit_person_registration_path

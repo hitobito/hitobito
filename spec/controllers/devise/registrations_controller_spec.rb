@@ -10,24 +10,20 @@ describe Devise::RegistrationsController do
 
   before { sign_in(person) }
 
-  def prepare(hash={})
-    person.update_column(:encrypted_password, nil) if hash[:reset_password]
-    sign_in(person)
-    yield
-  end
-
+  subject { dom }
+  
   describe "GET #edit" do
-    subject { dom }
 
     context "user with password" do
-      before { prepare { get :edit }  }
-
+      before { get :edit }
       it { should have_content 'Passwort ändern' }
       it { should have_content 'Altes Passwort' }
     end
 
     context "user without password" do
-      before { prepare(reset_password: true) { get :edit } }
+      before { person.update_column(:encrypted_password, nil) }
+      before { sign_in(person) }
+      before { get :edit }
 
       it { should have_content 'Passwort setzen' }
       it { should_not have_content 'Altes Passwort' }
@@ -35,24 +31,55 @@ describe Devise::RegistrationsController do
   end
 
   describe "put #update" do
-    let(:data) { { passsword: 'foobar', password_confirmation: 'foobar' } }
+    let(:data) { { password: 'foofoo', password_confirmation: 'foofoo' } }
 
-    context "without with password" do
-      subject { dom }
-      before { prepare { put :update, person: data }  }
+    context "with old password" do
+      before { put :update, person: data.merge(current_password: 'foobar') }
 
+      it { should redirect_to(root_path) }
+      it { flash[:notice].should eq 'Deine Daten wurden aktualisiert.' }
+    end
+    
+    context "with wrong old password" do
+      before { put :update, person: data.merge(current_password: 'barfoo') }
+
+      it { should render_template('edit') }
+      it { should have_content 'Altes Passwort ist nicht gültig' }
+    end
+    
+    context "without old password" do
+      before { put :update, person: data }
+
+      it { should render_template('edit') }
       it { should have_content 'Altes Passwort muss ausgefüllt werden' }
     end
 
-
     context "user without password" do
-      before { prepare(reset_password: true) { put :update, person: data }  }
+      before { person.update_column(:encrypted_password, nil) }
+      before { sign_in(person) }
+      before { put :update, person: data }
 
-      it { should_not have_content 'Altes Passwort muss ausgefüllt werden' }
+      it { should redirect_to(root_path) }
       it { flash[:notice].should eq 'Deine Daten wurden aktualisiert.' }
     end
 
+    context "with wrong confirmation" do
+      before { put :update, person: { current_password: 'foobar', passsword: 'foofoo', password_confirmation: 'barfoo' } }
+
+      it { should render_template('edit') }
+      it { should have_content 'Passwort stimmt nicht mit der Bestätigung überein' }
+    end
     
+    
+    context "with empty password" do
+      it "does not change password" do
+        old = person.encrypted_password
+        put :update, person: { current_password: 'foobar', passsword: '', password_confirmation: '' }
+        
+        should redirect_to(root_path)
+        person.reload.encrypted_password.should == old
+      end
+    end
   end
 
 end

@@ -6,7 +6,7 @@ class Event::RegisterMailer < ActionMailer::Base
     content = CustomContent.get(CONTENT_REGISTER_LOGIN)
     url = event_url(recipient, group, event)
     values = {
-      'recipient-name' => recipient.first_name,
+      'recipient-name' => recipient.greeting_name,
       'event-name'     => event.to_s,
       'event-url'      => "<a href=\"#{url}\">#{url}</a>"
     }

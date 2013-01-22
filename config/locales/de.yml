@@ -144,6 +144,7 @@ de:
         booking_info: Teilnehmende
         questions: Fragen
         kind_id: Art
+        external_applications: Externe Anmeldungen
 
       event/course:
         kind_id: Kursart

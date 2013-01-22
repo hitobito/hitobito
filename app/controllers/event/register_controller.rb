@@ -15,8 +15,7 @@ class Event::RegisterController < ApplicationController
   def check
     if params[:person][:email].present?
       if user = Person.find_by_email(params[:person][:email])
-        user.generate_reset_password_token!
-        # send email
+        Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = "Wir haben dich in unserer Datenbank gefunden.\n\n" + 
                              "Wir haben dir ein E-Mail mit einem Link geschickt, " + 
                              "wo du dich direkt für den Anlass anmelden kannst."
@@ -27,7 +26,7 @@ class Event::RegisterController < ApplicationController
         render 'register'
       end
     else
-      flash.now[:alert] = 'Bitte gibt eine Emailadresse ein'
+      flash.now[:alert] = 'Bitte gib eine Emailadresse ein'
       render 'index'
     end
   end
@@ -64,7 +63,7 @@ class Event::RegisterController < ApplicationController
   end
   
   def assert_honeypot_is_empty
-    if params[:name].present?
+    if params[:person].delete(:name).present?
       redirect_to new_person_session_path
     end
   end

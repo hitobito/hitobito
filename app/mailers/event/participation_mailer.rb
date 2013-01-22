@@ -1,7 +1,5 @@
 class Event::ParticipationMailer < ActionMailer::Base
 
-  PADDING = 15
-  
   CONTENT_CONFIRMATION = 'event_application_confirmation'
   CONTENT_APPROVAL     = 'event_application_approval'
   

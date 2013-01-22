@@ -64,16 +64,17 @@ describe Event::RegisterController do
     
     context "with honeypot filled" do
       it "redirects to login" do
-        post :check, group_id: group.id, id: event.id, person: { email: 'foo@example.com'}, name: 'Foo'
+        post :check, group_id: group.id, id: event.id, person: { email: 'foo@example.com', name: 'Foo' }
         should redirect_to(new_person_session_path)
       end
     end
     
     context "for existing person" do
       it "generates one time login token" do
-        post :check, group_id: group.id, id: event.id, person: {email: people(:top_leader).email }
+        expect do
+          post :check, group_id: group.id, id: event.id, person: {email: people(:top_leader).email }
+        end.to change { Delayed::Job.count }.by(1)
         should render_template('index')
-        people(:top_leader).reload.reset_password_token.should be_present
         flash[:notice].should be_present
       end
     end
@@ -101,7 +102,7 @@ describe Event::RegisterController do
     
     context "with honeypot filled" do
       it "redirects to login" do
-        put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'foo@example.com'}, name: 'Foo'
+        put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'foo@example.com', name: 'Foo'}
         should redirect_to(new_person_session_path)
       end
     end

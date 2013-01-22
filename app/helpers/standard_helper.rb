@@ -224,10 +224,6 @@ module StandardHelper
     object_class(entry).model_name.human
   end
 
-  def honeypot(name = :name)
-    text_field_tag(name, nil, placeholder: 'Bitte dieses Feld nicht ausfüllen', style: 'position:absolute;left:-9999px;')
-  end
-
   def include_wysiwyg_assets
     content_for(:head)        { stylesheet_link_tag 'wysiwyg.css', :media => 'all' }
     content_for(:js_includes) { javascript_include_tag 'wysiwyg' }

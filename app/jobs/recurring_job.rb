@@ -49,12 +49,10 @@ class RecurringJob < BaseJob
   end
   
   def next_run
-    next_run = interval.from_now
     if job = delayed_jobs.first
-      begin
-        next_run = job.run_at + interval
-      end while next_run < Time.zone.now
+      [Time.zone.now, job.run_at + interval].max
+    else
+      interval.from_now
     end
-    next_run
   end
 end

@@ -16,12 +16,15 @@ class Event::Role < ActiveRecord::Base
   
   ### ATTRIBUTES
 
-  class_attribute :permissions, :affiliate, :restricted
+  class_attribute :permissions, :affiliate, :restricted, :leader
+
   self.permissions = []
-  # Whether this participation is an active member or an affiliate person of the corresponding event.
+  # Whether this role is an active member or an affiliate person of the corresponding event.
   self.affiliate = false
-  # Whether this kind of participation is specially managed or open for general modifications.
+  # Whether this role is specially managed or open for general modifications.
   self.restricted = false
+  # Whether this role is a leader type.
+  self.leader = false
   
   self.demodulized_route_keys = true
   
@@ -68,13 +71,13 @@ class Event::Role < ActiveRecord::Base
   end
 
   def destroy_participation_for_last
-    unless participation.roles.exists? 
+    unless participation.roles.exists?
       if participation.application_id?
         participation.update_column(:active, false)
       else
         participation.destroy
       end
-    end 
+    end
   end
   
 end

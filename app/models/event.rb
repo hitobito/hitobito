@@ -40,7 +40,7 @@ class Event < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :role_types, :participant_type, :supports_applications, :possible_states
+  class_attribute :role_types, :participant_type, :leader_types, :supports_applications, :possible_states
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -159,6 +159,9 @@ class Event < ActiveRecord::Base
       model_name.human(count: 2)
     end
 
+    def leader_types
+      role_types.select(&:leader)
+    end
   end
 
 
@@ -181,11 +184,7 @@ class Event < ActiveRecord::Base
 
   # All participations with the participant role
   def participants
-    participations.joins(:roles).
-                   where(event_roles: {type: participant_type.sti_name}).
-                   includes(:person).
-                   merge(Person.order_by_name).
-                   uniq
+    participations_for(participant_type)
   end
 
   def to_s
@@ -220,6 +219,14 @@ class Event < ActiveRecord::Base
                   where('event_roles.label <> ""').
                   uniq.order(:label).
                   pluck(:label)
+  end
+
+  def participations_for(*role_types)
+    participations.joins(:roles).
+                   where(event_roles: {type: role_types.map(&:sti_name)}).
+                   includes(:person).
+                   merge(Person.order_by_name).
+                   uniq
   end
 
   private

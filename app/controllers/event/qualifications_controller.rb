@@ -12,6 +12,7 @@ class Event::QualificationsController < ApplicationController
   
   def update
     qualifier.issue
+    @failed = !qualifier.qualified?
     render 'qualification'
   end
   
@@ -23,7 +24,8 @@ class Event::QualificationsController < ApplicationController
   private
    
   def entries
-    @participants ||= event.participants.includes(:event)
+    @participants ||= event.participations_for(event.class.participant_type,
+                                               *event.class.leader_types).includes(:event)
   end
   
   def qualifier

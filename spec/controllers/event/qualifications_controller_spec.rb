@@ -10,15 +10,13 @@ describe Event::QualificationsController do
   
   let(:group) { event.groups.first }
   
-  let(:participant_1) do
-    participation = Fabricate(:event_participation, event: event)
-    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
-    participation
-  end
+  let(:participant_1)  { create_participation(Event::Course::Role::Participant) }
+  let(:participant_2)  { create_participation(Event::Course::Role::Participant) }
+  let(:leader_1)       { create_participation(Event::Role::Leader) }
   
-  let(:participant_2) do
+  def create_participation(role)
     participation = Fabricate(:event_participation, event: event)
-    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
+    Fabricate(role.name.to_sym, participation: participation)
     participation
   end
   
@@ -33,6 +31,7 @@ describe Event::QualificationsController do
     before do
       participant_1
       participant_2
+      leader_1
     
       get :index, group_id: group.id, event_id: event.id
     end
@@ -40,8 +39,9 @@ describe Event::QualificationsController do
     context "entries" do
       subject { assigns(:participants) }
       
-      it { should have(2).items }
+      it { should have(3).items }
     end
+
   end
   
   describe "PUT update" do
@@ -64,6 +64,14 @@ describe Event::QualificationsController do
       it { should have(1).item }
       it { should render_template('qualification') }
     end
+
+     context "without existing qualifications for leader" do
+       subject { Event::Qualifier.new(leader_1).qualifications }
+       before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
+
+       it { assigns(:failed).should be_true }
+
+     end
   end
   
   

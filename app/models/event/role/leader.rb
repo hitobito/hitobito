@@ -12,5 +12,7 @@
 class Event::Role::Leader < Event::Role
   
   self.permissions = [:full, :qualify]
+
+  self.leader = true
     
 end

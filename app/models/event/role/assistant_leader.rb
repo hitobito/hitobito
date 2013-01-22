@@ -12,5 +12,7 @@
 class Event::Role::AssistantLeader < Event::Role
   
   self.permissions = [:full]
-    
+
+  self.leader = true
+
 end

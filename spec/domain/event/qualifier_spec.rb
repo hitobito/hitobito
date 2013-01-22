@@ -9,10 +9,11 @@ describe Event::Qualifier do
     event.dates.create!(start_at: Date.new(2012, 10, 02), finish_at: quali_date)
     event
   end
-  
+
+  let(:participant_role) { Event::Course::Role::Participant }
   let(:participant) do
     participation = Fabricate(:event_participation, event: course)
-    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
+    Fabricate(participant_role.name.to_sym, participation: participation)
     participation
   end
   
@@ -216,10 +217,24 @@ describe Event::Qualifier do
   
   describe '#issue' do
     context "with qualification and prolongation kind" do
+
       context "without existing qualifications" do
         before { subject.issue }
         
         its(:qualifications) { should have(1).item }
+
+        context "for leader" do
+          let(:participant_role) { Event::Role::Leader }
+
+          it "does not create additional qualification" do
+            expect { subject.issue }.not_to change { person.reload.qualifications.count }
+          end
+
+          it "does not create additional qualification, even with participant role" do
+            Fabricate(Event::Course::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: course))
+            expect { subject.issue }.not_to change { person.reload.qualifications.count }
+          end
+        end
       end
       
       context "with existing qualification" do
@@ -228,7 +243,16 @@ describe Event::Qualifier do
         it "does not create additional qualification" do
           expect { subject.issue }.not_to change { person.reload.qualifications.count }
         end
+
+        context "for leader" do
+          let(:participant_role) { Event::Role::Leader }
+
+          it "does not create additional qualification" do
+            expect { subject.issue }.not_to change { person.reload.qualifications.count }
+          end
+        end
       end
+
       
       context "with existing prolongation" do
         before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2011, 9, 15)) }
@@ -307,6 +331,7 @@ describe Event::Qualifier do
           qualis.should be_empty
         end
       end
+
     end
     
   end
@@ -322,8 +347,13 @@ describe Event::Qualifier do
       context "with existing qualification" do
         before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: quali_date) }
         
-        it "removes qualification" do
-          expect { subject.revoke }.to change { person.reload.qualifications.count }.by(-1)
+        [Event::Course::Role::Participant, Event::Role::Leader].each do |role|
+          context "#{role.name}" do
+            let(:role_type) { role }
+            it "removes qualification" do
+              expect { subject.revoke }.to change { person.reload.qualifications.count }.by(-1)
+            end
+          end
         end
       end
       
@@ -341,8 +371,13 @@ describe Event::Qualifier do
       context "with old qualification" do
         before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2005, 9, 15)) }
         
-        it "creates only qualification" do
-          expect { subject.revoke }.not_to change { person.reload.qualifications.count }
+        [Event::Course::Role::Participant, Event::Role::Leader].each do |role|
+          context "#{role.name}" do
+            let(:role_type) { role }
+            it "creates only qualification" do
+              expect { subject.revoke }.not_to change { person.reload.qualifications.count }
+            end
+          end
         end
       end
     end

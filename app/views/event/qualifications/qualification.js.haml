@@ -1,1 +1,4 @@
+- if @failed
+  alert("#{escape_javascript(participation.person.to_s)} hat keine Qualifikationen, die verlängert werden können.");
+
 $('##{dom_id(participation)} td:first').html('#{escape_javascript(participation.qualification_link(@group))}')

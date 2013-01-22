@@ -159,18 +159,18 @@ describe PeopleController, type: :controller do
       role_row.find('td:eq(4)').text.should_not be_present
     end
 
-    #it "lists past roles" do
-    #  role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
-    #  role.created_at = Time.zone.now - 2.years
-    #  role.destroy
-    #  get :history, params
-    #  dom.all('table tbody tr').size.should eq 2 
-    #  role_row = dom.find('table tbody tr:eq(2)')
-    #  role_row.find('td:eq(1) a').text.should eq 'Group 11'
-    #  role_row.find('td:eq(2)').text.strip.should eq 'Member'
-    #  role_row.find('td:eq(3)').text.should be_present
-    #  role_row.find('td:eq(4)').text.should be_present
-    #end
+    it "lists past roles" do
+      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
+      role.created_at = Time.zone.now - 2.years
+      role.destroy
+      get :history, params
+      dom.all('table tbody tr').size.should eq 2 
+      role_row = dom.find('table tbody tr:eq(1)')
+      role_row.find('td:eq(1) a').text.should eq 'Group 11'
+      role_row.find('td:eq(2)').text.strip.should eq 'Member'
+      role_row.find('td:eq(3)').text.should be_present
+      role_row.find('td:eq(4)').text.should be_present
+    end
 
     it "lists roles in other groups" do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)

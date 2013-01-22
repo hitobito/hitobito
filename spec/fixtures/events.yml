@@ -38,3 +38,4 @@ top_course:
   kind: slk
   priorization: true
   requires_approval: true
+  external_applications: true

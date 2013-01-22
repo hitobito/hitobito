@@ -38,7 +38,7 @@
   %dl.dl-horizontal
     = labeled('Bereits Angemeldet', "#{entry.booking_info} Personen")
   
-  = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at))
+  = render_attrs(entry, *entry.used_attributes(:cost, :application_opening_at, :application_closing_at, :external_applications))
   
   %dl.dl-horizontal
     = labeled('Aufnahmebedingungen', format_attr(entry, :application_conditions))

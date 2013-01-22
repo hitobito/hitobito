@@ -25,6 +25,7 @@
 #  participant_count      :integer          default(0)
 #  application_contact_id :integer
 #  condition_id           :integer
+#  external_applications  :boolean          default(FALSE), not null
 #
 
 class Event < ActiveRecord::Base
@@ -56,7 +57,8 @@ class Event < ActiveRecord::Base
 
   attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
-                  :application_conditions, :dates_attributes, :questions_attributes, :group_ids
+                  :application_conditions, :dates_attributes, :questions_attributes, :group_ids,
+                  :external_applications
 
 
   ### ASSOCIATIONS

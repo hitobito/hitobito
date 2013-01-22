@@ -2,10 +2,35 @@ require 'spec_helper'
 
 describe Event::RegisterController do
   
-  let(:event) { events(:top_event) }
+  let(:event) do
+    events(:top_event).tap do |e|
+      e.update_column(:external_applications, true)
+    end
+  end
   let(:group) { event.groups.first }
   
   context "GET index" do
+    
+    context "no external applications" do
+      before do
+        event.update_column(:external_applications, false)
+      end
+      
+      context "as logged in user" do
+        before { sign_in(people(:top_leader)) }
+        it "displays event page" do
+          get :index, group_id: group.id, id: event.id
+          should redirect_to(group_event_path(group, event))
+        end
+      end
+      
+      context "as external user" do
+        it "displays standard login forms" do
+          get :index, group_id: group.id, id: event.id
+          should redirect_to(new_person_session_path)
+        end
+      end
+    end
     
     context "application possible" do
       before do

@@ -44,27 +44,31 @@ class Event::RegisterController < ApplicationController
   private
   
   def assert_external_application_possible
-    if event.application_possible?
-      if current_user
-        redirect_to show_event_path
+    if event.external_applications?
+      if event.application_possible?
+        if current_user
+          redirect_to show_event_path
+        end
       else
-        # supports external applications?
+        flash[:alert] = "Das Anmeldefenster für diesen Anlass ist geschlossen."
+        application_not_possible
       end
-      
     else
-      flash[:alert] = "Das Anmeldefenster für diesen Anlass ist geschlossen."
-      
-      if current_user
-        redirect_to show_event_path
-      else
-        redirect_to new_person_session_path
-      end
+      application_not_possible
+    end
+  end
+  
+  def application_not_possible
+    if current_user
+      redirect_to show_event_path
+    else
+      redirect_to new_person_session_path
     end
   end
   
   def assert_honeypot_is_empty
     if params[:person].delete(:name).present?
-      redirect_to new_person_session_path
+      application_not_possible
     end
   end
   

@@ -95,11 +95,12 @@ class Person < ActiveRecord::Base
   
   schema_validations except: [:picture, :created_at, :updated_at]
   validates :gender, inclusion: %w(m w), allow_blank: true
+  validates :company_name, presence: { if: :company? }
   validate :assert_has_any_name
 
 
   ### CALLBACKS
-  before_save :override_blank_email
+  before_validation :override_blank_email
  
  
   ### SCOPES
@@ -226,11 +227,11 @@ class Person < ActiveRecord::Base
   end
 
   def override_blank_email
-    write_attribute(:email, nil) if email.blank?
+    self.email = nil if email.blank?
   end
   
   def assert_has_any_name
-    if first_name.blank? && last_name.blank? && ((company? && company_name.blank?) || (!company? && nickname.blank?))
+    if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, "Bitte geben Sie einen Namen ein")
     end
   end

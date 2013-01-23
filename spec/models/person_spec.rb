@@ -56,7 +56,7 @@ describe Person do
   end
   
   it "company only with nickname is not valid" do
-    Person.new(company: true, nickname: 'foo').should have(1).errors_on(:base)
+    Person.new(company: true, nickname: 'foo').should have(1).errors_on(:company_name)
   end
   
   it "company only with company name is valid" do

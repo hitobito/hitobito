@@ -28,9 +28,9 @@ module CrudHelper
     cancel_url = params[:return_url] || get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
-      content = save_form_buttons(form, submit_label, cancel_url)
+      content = form.error_messages
       
-      content << form.error_messages
+      content << save_form_buttons(form, submit_label, cancel_url)
       
       content << if block_given?
         capture(form, &block)

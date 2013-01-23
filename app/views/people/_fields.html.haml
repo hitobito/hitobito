@@ -3,4 +3,14 @@
 
 = render 'contactable/fields', f: f
 
+= field_set_tag do
+  = f.labeled(:gender) do
+    - [:m, :w, ''].each do |key|
+      = f.inline_radio_button(:gender, key, gender_label(key))
+
+  = f.labeled_string_field(:birthday, help_inline: 'dd.mm.yyyy', class: 'span2', value: f(entry.birthday))
+
 = render_extensions :fields, locals: { f: f }
+
+= field_set_tag do
+  = f.labeled_input_fields(:additional_information)

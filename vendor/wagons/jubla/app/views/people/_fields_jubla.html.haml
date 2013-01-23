@@ -2,14 +2,7 @@
   = f.labeled_input_fields(:name_mother, :name_father)
 
 = field_set_tag do
-  = f.labeled(:gender) do
-    - [:m, :w, ''].each do |key|
-      = f.inline_radio_button(:gender, key, gender_label(key))
-
-  = f.labeled_string_field(:birthday, help_inline: 'dd.mm.yyyy', class: 'span2', value: f(entry.birthday))
-
-= field_set_tag do
-  = f.labeled_input_fields(:nationality, :profession, :bank_account, :additional_information)
+  = f.labeled_input_fields(:nationality, :profession, :bank_account)
 
 = field_set_tag do
   = f.labeled_input_fields(:ahv_number, :ahv_number_old, :j_s_number)

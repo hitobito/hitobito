@@ -36,7 +36,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
   
   def qualifier
-    Event::Qualifier.new(model)
+    Event::Qualifier.for(model)
   end
 
   def list_roles

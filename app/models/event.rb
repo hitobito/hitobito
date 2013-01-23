@@ -158,34 +158,10 @@ class Event < ActiveRecord::Base
     def label_plural
       model_name.human(count: 2)
     end
-
-    def leader_types
-      role_types.select(&:leader)
-    end
   end
 
 
   ### INSTANCE METHODS
-
-  # May participants apply now?
-  def application_possible?
-    (!application_opening_at? || application_opening_at <= ::Date.today) &&
-    (!application_closing_at? || application_closing_at >= ::Date.today) &&
-    (maximum_participants.to_i == 0 || participant_count < maximum_participants)
-  end
-
-  # Sum the participations with the participant role and store in :participant_count
-  def refresh_participant_count!
-    count = participations.joins(:roles).
-                           where(event_roles: {type: participant_type.sti_name}).
-                           count(distinct: true)
-    update_column(:participant_count, count)
-  end
-
-  # All participations with the participant role
-  def participants
-    participations_for(participant_type)
-  end
 
   def to_s
     name
@@ -202,7 +178,22 @@ class Event < ActiveRecord::Base
   def application_duration
     Duration.new(application_opening_at, application_closing_at)
   end
+  
+  # May participants apply now?
+  def application_possible?
+    (!application_opening_at? || application_opening_at <= ::Date.today) &&
+    (!application_closing_at? || application_closing_at >= ::Date.today) &&
+    (maximum_participants.to_i == 0 || participant_count < maximum_participants)
+  end
 
+  # Sum the participations with the participant role and store in :participant_count
+  def refresh_participant_count!
+    count = participations.joins(:roles).
+                           where(event_roles: {type: participant_type.sti_name}).
+                           count(distinct: true)
+    update_column(:participant_count, count)
+  end
+  
   def init_questions
     if questions.blank?
       Event::Question.global.each do |q|
@@ -211,6 +202,15 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def participations_for(*role_types)
+    participations.joins(:roles).
+                   where(event_roles: {type: role_types.map(&:sti_name)}).
+                   includes(:person).
+                   order_by_role(self.class).
+                   merge(Person.order_by_name).
+                   uniq
+  end
+  
   # gets a list of all user defined participation role labels for this event
   def participation_role_labels
     @participation_role_labels ||=
@@ -219,14 +219,6 @@ class Event < ActiveRecord::Base
                   where('event_roles.label <> ""').
                   uniq.order(:label).
                   pluck(:label)
-  end
-
-  def participations_for(*role_types)
-    participations.joins(:roles).
-                   where(event_roles: {type: role_types.map(&:sti_name)}).
-                   includes(:person).
-                   merge(Person.order_by_name).
-                   uniq
   end
 
   private

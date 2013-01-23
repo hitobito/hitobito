@@ -36,7 +36,7 @@ class Event::ApplicationMarketController < ApplicationController
   private
   
   def load_participants
-    @participants = event.participants.includes(:application)
+    @participants = event.participations_for(event.participant_type).includes(:application)
   end
   
   def load_applications

@@ -2,9 +2,9 @@ class Event::QualificationsController < ApplicationController
     
   before_filter :authorize
 
-  decorates :event, :participants, :participation, :group
+  decorates :event, :leaders, :participants, :participation, :group
   
-  helper_method :event, :entries, :participation
+  helper_method :event, :participation
   
   def index
     entries
@@ -24,12 +24,12 @@ class Event::QualificationsController < ApplicationController
   private
    
   def entries
-    @participants ||= event.participations_for(event.class.participant_type,
-                                               *event.class.leader_types).includes(:event)
+    @leaders ||= participations(*Event::Qualifier.leader_types(event))
+    @participants ||= participations(event.class.participant_type)
   end
   
   def qualifier
-    Event::Qualifier.new(participation)
+    Event::Qualifier.for(participation)
   end
   
   def event
@@ -42,6 +42,10 @@ class Event::QualificationsController < ApplicationController
   
   def participation
     @participation ||= event.participations.find(params[:id])
+  end
+  
+  def participations(*role_types)
+    event.participations_for(*role_types).includes(:event)
   end
   
   def authorize

@@ -68,26 +68,30 @@ class EventDecorator < ApplicationDecorator
     end.compact
   end
   
-  def issued_qualifications_info
+  def issued_qualifications_info_for_leaders
+    prolongs = kind.qualification_kinds.to_a
+    info = ""
+    if prolongs.present?
+      info << "Verlängert "
+      info << issued_prolongations_info(prolongs)
+      info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
+    end
+    info
+  end
+  
+  def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds.to_a
     prolongs = kind.prolongations.to_a
     info = ""
-    if qualis.present?
-      info << "Vergibt die Qualifikation"
-      info << "en" if qualis.size > 1
-      info << " "
-      info << qualis.join(', ')
-      if prolongs.present?
-        info << " und verlängert"
-      end
-    end
+    info << issued_qualifications_info(qualis)
     if prolongs.present?
-      if qualis.blank?
-        info << "Verlängert"
+      if qualis.present?
+        info << " und verlängert"
+      else
+        info << "Verlängert "
       end
-      info << " existierende Qualifikationen "
-      info << prolongs.join(', ')
     end
+    info << issued_prolongations_info(prolongs)
     if prolongs.present? || qualis.present?
       info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
     end
@@ -111,6 +115,28 @@ class EventDecorator < ApplicationDecorator
 
   def course_kind?
     model.kind_of?(Event::Course) && kind.present?
+  end
+  
+  private
+  
+  def issued_qualifications_info(qualification_kinds)
+    info = ""
+    if qualification_kinds.present?
+      info << "Vergibt die Qualifikation"
+      info << "en" if qualification_kinds.size > 1
+      info << " "
+      info << qualification_kinds.join(', ')
+    end
+    info
+  end
+  
+  def issued_prolongations_info(qualification_kinds)
+    info = ""
+    if qualification_kinds.present?
+      info << " existierende Qualifikationen "
+      info << qualification_kinds.join(', ')
+    end
+    info
   end
 
 end

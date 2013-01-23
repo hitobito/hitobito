@@ -82,7 +82,7 @@ describe Event::QualificationsController, type: :controller do
     context "in open state" do
       before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
-      subject { Event::Qualifier.new(participant_1).qualifications }
+      subject { Event::Qualifier.for(participant_1).qualifications }
     
       it { should have(1).item }
       it { should render_template('qualification') }
@@ -92,7 +92,7 @@ describe Event::QualificationsController, type: :controller do
       before { event.update_column(:state, 'closed') }
       before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
-      subject { Event::Qualifier.new(participant_1).qualifications }
+      subject { Event::Qualifier.for(participant_1).qualifications }
     
       it { should have(0).items }
       it { should render_template('qualification') }
@@ -108,7 +108,7 @@ describe Event::QualificationsController, type: :controller do
     context "in open state" do
       before { delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
-      subject { Event::Qualifier.new(participant_1).qualifications }
+      subject { Event::Qualifier.for(participant_1).qualifications }
     
       it { should have(0).item }
       it { should render_template('qualification') }
@@ -118,7 +118,7 @@ describe Event::QualificationsController, type: :controller do
       before { event.update_column(:state, 'closed') }
       before { delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
     
-      subject { Event::Qualifier.new(participant_1).qualifications }
+      subject { Event::Qualifier.for(participant_1).qualifications }
     
       it { should have(1).items }
       it { should render_template('qualification') }

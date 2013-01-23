@@ -7,7 +7,7 @@ class Event::ParticipationsController < CrudController
   self.nesting = Group, Event
   
   FILTER = { all: 'Alle Personen',
-             leaders: 'Leitungsteam',
+             teamers: 'Leitungsteam',
              participants: 'Teilnehmende' }
   
   decorates :group, :event, :participation, :participations, :alternatives
@@ -71,7 +71,7 @@ class Event::ParticipationsController < CrudController
     end
   end
     
-  def list_entries(action = :index)
+  def list_entries
     records = event.participations.
                  where(event_participations: {active: true}).
                  includes(:person, :roles, :event).

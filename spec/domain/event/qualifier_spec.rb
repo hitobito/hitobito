@@ -20,7 +20,7 @@ describe Event::Qualifier do
   let(:person) { participant.person }
   let(:quali_date) { Date.new(2012, 10, 20) }
   
-  subject { Event::Qualifier.new(participant) }
+  subject { Event::Qualifier.for(participant) }
   
   context "spec preconditions" do
     it "event kind has one qualification kind" do
@@ -100,7 +100,7 @@ describe Event::Qualifier do
       end
       
       context "without qualifications" do
-        it { should be_qualified }
+        it { should_not be_qualified }
         its(:qualifications) { should have(0).items }
       end
       
@@ -159,7 +159,7 @@ describe Event::Qualifier do
       let(:kind) { event_kinds(:fk) }
       
       context "without existing qualifications" do
-        it { should be_qualified }
+        it { should_not be_qualified }
       end
       
       context "with old qualification" do
@@ -167,7 +167,7 @@ describe Event::Qualifier do
           Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl), start_at: Date.new(2008, 2, 23))
         end
         
-        it { should be_qualified }
+        it { should_not be_qualified }
       end
       
       context "with existing, but not prolonged qualification" do

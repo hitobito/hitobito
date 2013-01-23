@@ -42,7 +42,7 @@ describe Event::ParticipationsController do
     end
 
     it "lists only leader_group without advisor" do
-      get :index, group_id: group.id, event_id: course.id, filter: :leaders
+      get :index, group_id: group.id, event_id: course.id, filter: :teamers
       assigns(:participations).should eq [@leader]
     end
 

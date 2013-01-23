@@ -67,7 +67,7 @@ class Event::Participation < ActiveRecord::Base
       joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
     end
     
-    def leaders(event)
+    def teamers(event)
       joins(:roles).where('event_roles.type <> ?', event.participant_type.sti_name)
     end
     

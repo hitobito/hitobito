@@ -37,15 +37,14 @@ describe Event::QualificationsController do
     end
     
     context "entries" do
-      subject { assigns(:participants) }
-      
-      it { should have(3).items }
+      it { assigns(:participants).should have(2).items }
+      it { assigns(:leaders).should have(1).items }
     end
 
   end
   
   describe "PUT update" do
-    subject { Event::Qualifier.new(participant_1).qualifications }
+    subject { Event::Qualifier.for(participant_1).qualifications }
     
     context "with one existing qualifications" do
       before do
@@ -58,7 +57,7 @@ describe Event::QualificationsController do
       it { should render_template('qualification') }
     end
      
-     context "without existing qualifications" do
+    context "without existing qualifications" do
       before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
       
       it { should have(1).item }
@@ -66,18 +65,16 @@ describe Event::QualificationsController do
     end
 
      context "without existing qualifications for leader" do
-       subject { Event::Qualifier.new(leader_1).qualifications }
        before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
 
        it { assigns(:failed).should be_true }
-
      end
   end
   
   
   describe "DELETE destroy" do
     
-    subject { Event::Qualifier.new(participant_1).qualifications }
+    subject { Event::Qualifier.for(participant_1).qualifications }
    
     context "without existing qualifications" do
       before do

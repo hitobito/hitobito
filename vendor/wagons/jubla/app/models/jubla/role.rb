@@ -26,6 +26,10 @@ module Jubla::Role
     self.permissions = [:group_full]
   end
   
+  # Versandadresse. Intended to be used with mailing lists
+  class DispatchAddress < ::Role
+  end
+  
   # Extern
   class External < ::Role
     self.permissions = []
@@ -59,10 +63,6 @@ module Jubla::Role
   # Common superclass for all traesurer roles
   class Treasurer < ::Role
     
-  end
-
-  # Versandadresse. Intended to be used with mailing lists
-  class DispatchAddress < ::Role
   end
 
   private

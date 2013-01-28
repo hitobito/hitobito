@@ -1,4 +1,4 @@
-- if can?(:new, @event.participations.new)
+- if can?(:new, @event.new_role)
   = dropdown_button('Person hinzufügen', @event.possible_role_links(@group), :plus) 
 
 = dropdown_button('Export', people_export_links(can?(:show_details, entries.first)), :download)

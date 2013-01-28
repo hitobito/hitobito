@@ -7,29 +7,39 @@ module Event::ParticipationsHelper
   end
 
   def role_filter_links
-    content = role_filters.map do |key, value|
-      filter = key == :all ? {} : { filter: key }
-      link = group_event_participations_path(@group, @event, filter)
-      link_to(value, link)
+    label_links = event_role_label_filter_links
+    if label_links.present?
+      event_role_filter_links + [nil] + label_links
+    else
+      event_role_filter_links
     end
   end
   
   def role_filter_title
-    choices = role_filters
-    key = choices.keys.map(&:to_s).find { |key| params[:filter].to_s == key }
-    key ||= choices.keys.first
-    choices[key.to_sym]
+    filter = params[:filter]
+    if @event.participation_role_labels.include?(filter)
+      filter
+    else
+      predefined = Event::ParticipationsController::FILTER.with_indifferent_access
+      predefined[filter] || predefined.values.first
+    end
   end
 
-  def role_filters
-    Event::ParticipationsController::FILTER.merge(event_role_filters)
+  private
+  
+  def event_role_filter_links
+    Event::ParticipationsController::FILTER.collect do |key, value|
+      link_to(value, event_participation_filter_link(key))
+    end
+  end
+  
+  def event_role_label_filter_links
+    @event.participation_role_labels.collect do |label|
+      link_to(label, event_participation_filter_link(label))
+    end
   end
 
-  def event_role_filters
-    links = {}
-    labels = entry.event.participation_role_labels
-    labels.each { |l| links[l.to_sym] = l }
-    links
+  def event_participation_filter_link(filter)
+    group_event_participations_path(@group, @event, filter: filter)
   end
-
 end

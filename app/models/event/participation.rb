@@ -75,7 +75,7 @@ class Event::Participation < ActiveRecord::Base
       joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
     end
 
-    def role_label(label)
+    def with_role_label(label)
       joins(:roles).where('event_roles.label = ?', label)
     end
     

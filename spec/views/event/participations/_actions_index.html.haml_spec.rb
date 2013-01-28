@@ -1,13 +1,15 @@
+# encoding: utf-8
 require 'spec_helper'
+
 describe "event/participations/_actions_index.html.haml" do
 
   #subject { render; Capybara::Node::Simple.new(rendered).all('a').last }
-  let(:event) { EventDecorator.decorate(Fabricate(:course)) }
-  let(:top_leader) { people(:top_leader) }
-  let(:application) { Fabricate(:event_application, priority_1: event)}
-  let(:participation) { Fabricate(:event_participation, application: application, person: top_leader, event: event) }
-  let(:add_role) { @dom.all('.dropdown-menu').first }
-  let(:filter_role) { @dom.all('.dropdown-menu').last }
+  let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
+  let(:participation) { Fabricate(:event_participation, event: event) }
+  let(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
+  
+  let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
+  let(:dropdowns) { dom.all('.dropdown-toggle') }
 
   let(:params) { {"action"=>"index",
                   "controller"=>"event/participations",
@@ -18,17 +20,28 @@ describe "event/participations/_actions_index.html.haml" do
     assign(:event, event)
     assign(:group, event.groups.first)
     view.stub(parent: event)
-    view.stub(entry: participation)
     view.stub(entries: [participation])
-    controller.stub(current_user: top_leader)
-    view.stub(current_user: top_leader)
     view.stub(params: params)
-    render
-    @dom = Capybara::Node::Simple.new(@rendered)
   end
 
-  it "has dropdowns for adding and filtering" do
-    add_role.should be_present
-    filter_role.should be_present
+  it "top leader has dropdowns for adding and filtering" do
+    login_as(people(:top_leader))
+    
+    dropdowns[0].should have_content('Person hinzufügen')
+    dropdowns[1].should have_content('Export')
+    dropdowns.last.should have_content('Alle Personen')
+  end
+  
+  it "event leader has dropdowns for adding and filtering" do
+    login_as(leader.participation.person)
+    
+    dropdowns[0].should have_content('Person hinzufügen')
+    dropdowns[1].should have_content('Export')
+    dropdowns.last.should have_content('Alle Personen')
+  end
+  
+  def login_as(user)
+    controller.stub(current_user: user)
+    view.stub(current_user: user)
   end
 end

@@ -58,6 +58,13 @@ class EventDecorator < ApplicationDecorator
       'nicht möglich'
     end
   end
+  
+  def new_role
+    p = participations.new
+    role = p.roles.new
+    role.participation = p
+    role
+  end
 
   def possible_role_links(group)
     klass.role_types.map do |type|

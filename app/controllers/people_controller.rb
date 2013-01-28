@@ -22,7 +22,7 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html { @people = @people.page(params[:page]) }
       format.pdf  { render_pdf(@people) }
-      format.csv  { render_csv(@people.to_a, @group) }
+      format.csv  { render_csv(@people, @group) }
     end
   end
   
@@ -82,15 +82,45 @@ class PeopleController < CrudController
   
   alias_method :group, :parent
 
-  def render_csv(people, group)
-    allow_full = people.size == 1 ? can?(:show_full, people.first) : 
-                                    can?(:index_full_people, group)
-    csv = allow_full && params[:details] ?
-      Export::CsvPeople.export_full(people) :
-      Export::CsvPeople.export_address(people)
-    send_data csv, type: :csv
+  def create_role
+    type = params[:role] && params[:role][:type]
+    role = group.class.find_role_type!(type).new
+    role.group_id = params[:role][:group_id]
+    authorize! :create, role
+    
+    role
+  end
+  
+  def load_asides
+    applications = entry.pending_applications.
+                         includes(event: [:groups]).
+                         joins(event: :dates).
+                         order('event_dates.start_at').uniq
+    Event::PreloadAllDates.for(applications.collect(&:event))
+    
+    @pending_applications = Event::ApplicationDecorator.decorate(applications)
+    @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
+                                                    includes(:groups).
+                                                    preload_all_dates.
+                                                    order_by_date)
+    @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
 
+  def find_entry
+    if group && group.root?
+      # every person may be displayed underneath the root group, 
+      # even if it does not directly belong to it.
+      Person.find(params[:id])
+    else
+      super
+    end
+  end
+  
+  def build_entry
+    person = super
+    person.roles << create_role
+    person
+  end
   
   def filter_entries
     if params[:role_types]
@@ -125,49 +155,25 @@ class PeopleController < CrudController
     ability = Ability::Accessibles.new(current_user, group)
     Person.accessible_by(ability)
   end
+      
+  def render_csv(people, group)
+    full = params[:details] && params[:kind].blank?
+    full &&= people.size == 1 ? can?(:show_full, people.first) : 
+                                can?(:index_full_people, group)
     
-  def authorize_class
-    authorize!(:index_people, group)
+    send_data export_csv(people, full), type: :csv
   end
-  
-  def find_entry
-    if group && group.root?
-      # every person may be displayed underneath the root group, 
-      # even if it does not directly belong to it.
-      Person.find(params[:id])
+
+  def export_csv(people, full)
+    if full
+      people = people.select('people.*') if people.is_a?(ActiveRecord::Relation)
+      Export::CsvPeople.export_full(people)
     else
-      super
+      Export::CsvPeople.export_address(people)
     end
   end
   
-  def build_entry
-    person = super
-    person.roles << create_role
-    person
+  def authorize_class
+    authorize!(:index_people, group)
   end
-  
-  def create_role
-    type = params[:role] && params[:role][:type]
-    role = group.class.find_role_type!(type).new
-    role.group_id = params[:role][:group_id]
-    authorize! :create, role
-    
-    role
-  end
-  
-  def load_asides
-    applications = entry.pending_applications.
-                         includes(event: [:groups]).
-                         joins(event: :dates).
-                         order('event_dates.start_at').uniq
-    Event::PreloadAllDates.for(applications.collect(&:event))
-    
-    @pending_applications = Event::ApplicationDecorator.decorate(applications)
-    @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
-                                                    includes(:groups).
-                                                    preload_all_dates.
-                                                    order_by_date)
-    @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
-  end
-
 end

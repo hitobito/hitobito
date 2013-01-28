@@ -50,6 +50,7 @@ top_leader:
   email: top_leader@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
   town: Supertown
+  additional_information: bla bla
   
 bottom_member:
   first_name: Bottom

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe PeopleController do
@@ -46,12 +47,20 @@ describe PeopleController do
         people(:top_leader).reload.last_label_format.should == label_formats(:standard)
       end
 
-      it "exports csv files" do
+      it "exports address csv files" do
         get :index, group_id: group, format: :csv
 
         @response.content_type.should == 'text/csv'
         @response.body.should =~ /^Vorname;Nachname/
         @response.body.should =~ /^Top;Leader/
+      end
+
+      it "exports full csv files" do
+        get :index, group_id: group, details: true, format: :csv
+
+        @response.content_type.should == 'text/csv'
+        @response.body.should =~ /^Vorname;Nachname;.*;Zusätzliche Angaben/
+        @response.body.should =~ /^Top;Leader;.*;bla bla/
       end
     end
     
@@ -72,6 +81,18 @@ describe PeopleController do
                     kind: 'layer'
         
         assigns(:people).collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
+      end
+      
+      it "exports only address csv when types given" do
+        get :index, group_id: group, 
+                    role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name], 
+                    kind: 'layer',
+                    details: true,
+                    format: :csv
+        
+        @response.content_type.should == 'text/csv'
+        @response.body.should =~ /^Vorname;Nachname;.*/
+        @response.body.should_not =~ /Zusätzliche Angaben/
       end
     end
     

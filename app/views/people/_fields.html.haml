@@ -8,7 +8,10 @@
     - [:m, :w, ''].each do |key|
       = f.inline_radio_button(:gender, key, gender_label(key))
 
-  = f.labeled_string_field(:birthday, help_inline: 'dd.mm.yyyy', class: 'span2', value: f(entry.birthday))
+  = f.labeled_string_field(:birthday, 
+                           value: entry.birthday? ? l(entry.birthday) : nil,
+                           help_inline: 'dd.mm.yyyy', 
+                           class: 'span2')
 
 = render_extensions :fields, locals: { f: f }
 

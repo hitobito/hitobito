@@ -49,13 +49,15 @@
       .container-fluid
         .row
           .span3
-            = image_tag('logo_jubla.png')
+            = link_to image_tag('logo_jubla.png'), 'http://www.jubla.ch'
           .footer_content.span9
             %p
               Version
               = Wagons.app_version
             %p
-              &copy; Puzzle ITC #{Time.zone.now.year}
+              &copy; 
+              = link_to 'Puzzle ITC', 'http://puzzle.ch'
+              = Time.zone.now.year
 
   = javascript_include_tag 'application'
   = yield(:js_includes)

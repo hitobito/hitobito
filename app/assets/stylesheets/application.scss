@@ -182,6 +182,9 @@
     @include responsive(phone, $mediaTablet) {
       padding: 20px;
     }
+    a {
+      color: $white;
+    }
   }
 
   & > .container-fluid {

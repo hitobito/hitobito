@@ -20,8 +20,8 @@ de:
       timeout: 'Deine Sitzung ist abgelaufen, bitte melde Dich erneut an.'
       inactive: 'Dein Account ist nicht aktiv.'
     sessions:
-      signed_in: 'Erfolgreich angemeldet.'
-      signed_out: 'Erfolgreich abgemeldet.'
+      signed_in: ''
+      signed_out: 'Du bist jetzt abgemeldet.'
     passwords:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
       updated: 'Dein Passwort wurde geändert. Du bist jetzt angemeldet.'

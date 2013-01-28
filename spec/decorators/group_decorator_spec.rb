@@ -16,9 +16,9 @@ describe GroupDecorator, :draper_with_helpers do
     describe "possible_role_links" do
       subject { decorator.possible_role_links } 
       its(:size) { should eq 3 } 
-      its(:first) { should eq "<a href=\"#{path(Group::TopGroup::Leader)}\">Leader</a>" } 
-      its(:second) { should eq "<a href=\"#{path(Group::TopGroup::Member)}\">Member</a>" } 
-      its(:third) { should eq "<a href=\"#{path(Role::External)}\">External</a>" } 
+      its(:first) { should eq "<a href=\"#{path(Group::TopGroup::Leader)}\">als Leader</a>" } 
+      its(:second) { should eq "<a href=\"#{path(Group::TopGroup::Member)}\">als Member</a>" } 
+      its(:third) { should eq "<a href=\"#{path(Role::External)}\">als External</a>" } 
 
       def path(type)
         new_group_role_path(model, role: {type: type})

@@ -24,7 +24,7 @@ class GroupDecorator < ApplicationDecorator
   def possible_role_links
     possible_roles.map do |entry|
       link = h.new_group_role_path(self, role: { type: entry[:sti_name]})
-      h.link_to(entry[:human], link)
+      h.link_to("als #{entry[:human]}", link)
     end
   end
 

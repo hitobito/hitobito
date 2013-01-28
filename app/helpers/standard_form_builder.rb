@@ -13,7 +13,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, :f, :l, :icon,
+           :render, :f, :icon,
            :to => :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -93,7 +93,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     val = @object.send(attr)
-    html_options[:value] ||= val ? l(val) : nil
+    html_options[:value] ||= val ? f(val) : nil
     html_options[:class] ||= 'span2 date'
     content_tag(:div, class: 'input-prepend') do
       content_tag(:span, icon(:calendar), class: 'add-on') +

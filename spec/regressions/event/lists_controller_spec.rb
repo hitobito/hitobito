@@ -40,7 +40,7 @@ describe Event::ListsController, type: :controller do
     end
       
     context "application" do
-      let(:link) { dom.all('a').last }
+      let(:link) { dom.all('table a').last }
       it "contains apply button for future events" do
         event.application_possible?.should eq true
         

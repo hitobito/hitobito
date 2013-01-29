@@ -11,7 +11,7 @@ describe PeopleFilterHelper do
   end
   
   
-  context "#main_people_filter_links" do
+  context "#main_people_filter_items" do
     
     let(:group) { groups(:top_layer) }
     
@@ -19,7 +19,7 @@ describe PeopleFilterHelper do
       @group = group
     end
     
-    subject { main_people_filter_links }
+    subject { main_people_filter_items }
     
     it { should have(2).items }
     

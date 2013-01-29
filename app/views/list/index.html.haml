@@ -1,6 +1,8 @@
 - title ti(:title, :models => models_label)
 
-- content_for(:toolbar, render('actions_index'))
+- content_for :toolbar do
+  .btn-toolbar
+    = render('actions_index')
 
 #main
   = render 'list'

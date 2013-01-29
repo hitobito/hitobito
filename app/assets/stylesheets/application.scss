@@ -113,7 +113,6 @@
 
   & > .sheet { margin: 0 20px;}
 }
-
 .sheet.parent { 
   padding-bottom: 1px; 
   background: lighten($grayLighter, 1%);
@@ -136,7 +135,6 @@
     margin-bottom:-28px;
   }
 }
-
 #content {
   @include single-box-shadow($grayLight, 0, 2px, 8px);
   background: white;
@@ -161,14 +159,15 @@
     padding: 5px 0 5px 15px;
   }
 }
-
 .contactable {
   @include clearfix;
   .profil-big {
     margin: 0 0 0 10px;
   }
 }
-
+#main {
+  clear: both;
+}
 /* Footer */
 #page-footer { 
   padding-top: $vSpace*2;
@@ -201,6 +200,11 @@
 // Highlight
 .highlight {
   background-color: #FFD;
+}
+
+// Flash
+#flash {
+  clear: both;
 }
 
 // Profil 

@@ -1,16 +1,15 @@
 -title 'Roland Studer'
 
--content_for(:toolbar) do
-  .btn-group
-    %a.btn{:href => "#"}
-      %i.icon.icon-edit
-      Editieren
-  .btn-group
-    %a.btn{:href => "#"}
-      %i.icon.icon-trash
-      Kontakt löschen
-
-
+- content_for :toolbar do
+  .btn-toolbar
+    .btn-group
+      %a.btn{:href => "#"}
+        %i.icon.icon-edit
+        Editieren
+    .btn-group
+      %a.btn{:href => "#"}
+        %i.icon.icon-trash
+        Kontakt löschen
 
 #main.row-fluid
 

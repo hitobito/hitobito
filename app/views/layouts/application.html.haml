@@ -40,10 +40,8 @@
             %h1= title
             = sheet.render_main_tabs
           = yield :filter
-          .btn-toolbar
-            = yield :toolbar
-          #flash
-            = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+          = yield :toolbar
+          = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
           = content_for?(:content) ? yield(:content) : yield
 
     %footer#page-footer

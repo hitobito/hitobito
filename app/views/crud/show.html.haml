@@ -1,6 +1,8 @@
 - title entry.to_s
 
-- content_for(:toolbar, render('actions_show'))
+- content_for :toolbar do
+  .btn-toolbar
+    = render('actions_show')
 
 = render 'attrs'
 

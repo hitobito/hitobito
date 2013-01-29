@@ -118,7 +118,8 @@
   @include clearfix;
   margin-top: 0;
 }
-.pagination ul > .active > a, .pagination ul > .active > span {
+.pagination ul > .active > a, 
+.pagination ul > .active > span {
   color: $grayDark;
 }
 
@@ -131,19 +132,44 @@
   margin-top: 0;
   margin-bottom: 0;
 }
-
 .nav-pills .open .dropdown-toggle {
   background-color: $blue;
   border-color: $blue;
 }
+.toolbar-pills {
+  float: left;
+  .nav-pills { 
+    float: left; 
+  }
+  li > a {
+    margin-right: 5px;
+  }
+  & + .btn-toolbar {
+    float: left;
+  }
+}
+.group-pills > li {
+  & > a {
+    border-left: none;
+    @include border-radius(0px);
+    margin-right: 0;
+  }
+  &:first-child > a {
+    border-left: 1px solid $grayLight;
+    @include border-left-radius(6px);
+  }
+  &:last-child > a {
+    @include border-right-radius(6px);
+    margin-right: 5px;
+  }
+}
 
-
+// Dropdown
+.dropdown-menu .dropdown-menu {
+  min-width: 0;
+}
 .pull-right > .btn-group > .dropdown-menu,
 .pull-right > .dropdown > .dropdown-menu {
   right: 0;
   left: auto;
-}
-
-.dropdown-menu .dropdown-menu {
-  min-width: 0;
 }

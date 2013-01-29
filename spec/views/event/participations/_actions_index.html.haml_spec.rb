@@ -24,20 +24,18 @@ describe "event/participations/_actions_index.html.haml" do
     view.stub(params: params)
   end
 
-  it "top leader has dropdowns for adding and filtering" do
+  it "top leader has dropdowns for adding and exporting" do
     login_as(people(:top_leader))
     
     dropdowns[0].should have_content('Person hinzufügen')
     dropdowns[1].should have_content('Export')
-    dropdowns.last.should have_content('Alle Personen')
   end
   
-  it "event leader has dropdowns for adding and filtering" do
+  it "event leader has dropdowns for adding and exporting" do
     login_as(leader.participation.person)
     
     dropdowns[0].should have_content('Person hinzufügen')
     dropdowns[1].should have_content('Export')
-    dropdowns.last.should have_content('Alle Personen')
   end
   
   def login_as(user)

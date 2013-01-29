@@ -5,6 +5,7 @@ class Event::ParticipationsController < CrudController
   include RenderPeoplePdf
  
   self.nesting = Group, Event
+  self.remember_params += [:filter]
   
   FILTER = { all: 'Alle Personen',
              teamers: 'Leitungsteam',

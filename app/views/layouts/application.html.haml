@@ -25,7 +25,6 @@
 
     %header#page-header
       .container-fluid
-        // Logo
         = link_to 'jubla.db', root_path, :class => 'brand'
         
         - if current_user
@@ -39,9 +38,13 @@
           .content-header
             %h1= title
             = sheet.render_main_tabs
+            
           = yield :filter
-          = yield :toolbar
+          - if content_for?(:toolbar)
+            .btn-toolbar= yield :toolbar
+            
           = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+          
           = content_for?(:content) ? yield(:content) : yield
 
     %footer#page-footer

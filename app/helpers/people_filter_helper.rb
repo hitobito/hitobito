@@ -2,6 +2,12 @@ module PeopleFilterHelper
 
   PREDEFINED_FILTERS = %w(Mitglieder Externe)
 
+  def people_filter_navigation
+    pill_navigation(main_people_filter_items, custom_people_filter_links, *custom_people_filter_label)
+  end
+  
+  private
+  
   def main_people_filter_items
     items = []
     items << people_pill_item('Mitglieder', group_people_path(@group))
@@ -36,8 +42,6 @@ module PeopleFilterHelper
       ['Weitere Ansichten', false]
     end
   end
-  
-  private
   
   def people_pill_item(label, url)
     pill_item(link_to(label, url), active_people_filter_label == label)

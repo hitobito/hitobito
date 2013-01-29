@@ -36,9 +36,8 @@ module LayoutHelper
     if dropdown_links.present?
       nav += pill_dropdown_button(dropdown_label, dropdown_links, nil, ('active' if dropdown_active))
     end
-    content_tag(:div, class: 'toolbar-pills') do 
-      nav
-    end
+    
+    content_tag(:div, nav, class: 'toolbar-pills')
   end
   
   def pill_item(content, active = false)

@@ -1,5 +1,7 @@
 - title @event.to_s
 
+- content_for(:filter, participations_filter_navigation)
+
 = crud_table do |t|
   - t.col('') do |p|
     .profil

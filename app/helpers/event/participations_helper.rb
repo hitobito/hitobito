@@ -6,33 +6,32 @@ module Event::ParticipationsHelper
     str.html_safe
   end
 
-  def role_filter_links
-    label_links = event_role_label_filter_links
-    if label_links.present?
-      event_role_filter_links + [nil] + label_links
-    else
-      event_role_filter_links
-    end
-  end
-  
-  def role_filter_title
-    filter = params[:filter]
-    if @event.participation_role_labels.include?(filter)
-      filter
-    else
-      predefined = Event::ParticipationsController::FILTER.with_indifferent_access
-      predefined[filter] || predefined.values.first
-    end
+  def participations_filter_navigation
+    pill_navigation(main_participation_filter_items, event_role_label_filter_links, *custom_role_filter_label)
   end
 
   private
-  
-  def event_role_filter_links
+
+  def main_participation_filter_items
+    predefined = Event::ParticipationsController::FILTER.with_indifferent_access
     Event::ParticipationsController::FILTER.collect do |key, value|
-      link_to(value, event_participation_filter_link(key))
+      active = !role_label_filter_active? && (predefined[params[:filter]] == value || (params[:filter].blank? && predefined.values.first == value))
+      pill_item(link_to(value, event_participation_filter_link(key)), active)
     end
   end
   
+  def custom_role_filter_label
+    if role_label_filter_active?
+      [params[:filter], true]
+    else
+      ['Weitere Ansichten', false]
+    end
+  end
+  
+  def role_label_filter_active?
+    @event.participation_role_labels.include?(params[:filter])
+  end
+    
   def event_role_label_filter_links
     @event.participation_role_labels.collect do |label|
       link_to(label, event_participation_filter_link(label))

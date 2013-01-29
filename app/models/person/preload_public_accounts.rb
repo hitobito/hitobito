@@ -9,8 +9,7 @@ module Person::PreloadPublicAccounts
     
     # preload accounts
     ActiveRecord::Associations::Preloader.new(
-      records, 
-      #[:phone_numbers, :social_accounts],
+      records,
       :phone_numbers, 
       :conditions => {:public => true}).run
       

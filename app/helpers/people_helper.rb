@@ -9,6 +9,14 @@ module PeopleHelper
   def gender_label(gender)
     t("activerecord.attributes.person.genders.#{gender.presence || 'default'}")
   end
+  
+  def can_export_people_details?
+    if params[:kind].blank? 
+      can?(:index_full_people, @group)
+    else
+      can?(:index_deep_full_people, @group)
+    end
+  end
 
   def people_export_links(details = false)
     links = []

@@ -25,8 +25,8 @@ module Export::CsvPeople
     end
 
     def add_associations
-      super
-      merge!(labels(people.map(&:social_accounts), Accounts.social_accounts))
+      merge!(labels(people.map(&:phone_numbers).flatten, Accounts.phone_numbers))
+      merge!(labels(people.map(&:social_accounts).flatten, Accounts.social_accounts))
     end
   end
 end

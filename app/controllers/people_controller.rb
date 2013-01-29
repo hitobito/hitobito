@@ -18,11 +18,10 @@ class PeopleController < CrudController
   before_render_show :load_asides
   
   def index
-    @people = filter_entries
     respond_to do |format|
-      format.html { @people = @people.page(params[:page]) }
-      format.pdf  { render_pdf(@people) }
-      format.csv  { render_csv(@people, @group) }
+      format.html { @people = filter_entries.preload_public_accounts.page(params[:page]) }
+      format.pdf  { render_pdf(filter_entries) }
+      format.csv  { render_entries_csv }
     end
   end
   
@@ -39,7 +38,7 @@ class PeopleController < CrudController
     
     render json: people.collect(&:as_typeahead)
   end
-  
+
   def show
     if group.nil?
       flash.keep
@@ -48,7 +47,7 @@ class PeopleController < CrudController
       respond_to do |format|
         format.html { entry }
         format.pdf  { render_pdf([entry]) }
-        format.csv  { render_csv([entry], @group) }
+        format.csv  { render_entry_csv }
       end
     end
   end
@@ -132,7 +131,6 @@ class PeopleController < CrudController
   
   def list_entries(kind = nil)
     list_scope(kind).
-          preload_public_accounts.
           preload_groups.
           uniq.
           order_by_name
@@ -155,21 +153,37 @@ class PeopleController < CrudController
     ability = Ability::Accessibles.new(current_user, group)
     Person.accessible_by(ability)
   end
-      
-  def render_csv(people, group)
-    full = params[:details] && params[:kind].blank?
-    full &&= people.size == 1 ? can?(:show_full, people.first) : 
-                                can?(:index_full_people, group)
-    
-    send_data export_csv(people, full), type: :csv
-  end
-
-  def export_csv(people, full)
-    if full
-      people = people.select('people.*') if people.is_a?(ActiveRecord::Relation)
-      Export::CsvPeople.export_full(people)
+  
+  def render_entries_csv
+    full = full_csv_export?
+    entries = if full
+      filter_entries.select('people.*').includes(:phone_numbers, :social_accounts)
     else
-      Export::CsvPeople.export_address(people)
+      filter_entries.preload_public_accounts
+    end
+    render_csv(entries, full)
+  end
+ 
+  def render_entry_csv
+    render_csv([entry], params[:details].present? && can?(:show_full, entry))
+  end
+  
+  def render_csv(entries, full)
+    csv = if full
+      Export::CsvPeople.export_full(entries)
+    else
+      Export::CsvPeople.export_address(entries)
+    end
+    send_data csv, type: :csv
+  end
+    
+  def full_csv_export?
+    if params[:details].present?
+      if params[:kind].blank?
+        can?(:index_full_people, @group)
+      else
+        can?(:index_deep_full_people, @group)
+      end
     end
   end
   

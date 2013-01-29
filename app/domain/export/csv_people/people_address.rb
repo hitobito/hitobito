@@ -36,11 +36,11 @@ module Export::CsvPeople
     end
 
     def add_associations
-      merge!(labels(people.map(&:phone_numbers), Accounts.phone_numbers))
+      merge!(labels(people.map(&:phone_numbers).flatten.select(&:public?), Accounts.phone_numbers))
     end
 
     def labels(collection, mapper)
-      collection.flatten.map(&:label).uniq.each_with_object({}) do |label, obj|
+      collection.map(&:label).uniq.each_with_object({}) do |label, obj|
         obj[mapper.key(label)] = mapper.human(label) if label.present? # label should always be present
       end
     end

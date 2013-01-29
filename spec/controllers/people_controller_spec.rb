@@ -12,6 +12,10 @@ describe PeopleController do
     
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+      Fabricate(:phone_number, contactable: @tg_member, number: '123', label: 'Privat', public: true)
+      Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
+      Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
+      Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
       @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
       
       @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -42,7 +46,7 @@ describe PeopleController do
       
       it "generates pdf labels" do
         get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
-        
+
         @response.content_type.should == 'application/pdf'
         people(:top_leader).reload.last_label_format.should == label_formats(:standard)
       end
@@ -51,48 +55,71 @@ describe PeopleController do
         get :index, group_id: group, format: :csv
 
         @response.content_type.should == 'text/csv'
-        @response.body.should =~ /^Vorname;Nachname/
-        @response.body.should =~ /^Top;Leader/
+        @response.body.should =~ /^Vorname;Nachname;.*Privat/
+        @response.body.should =~ /^Top;Leader;.*/
+        @response.body.should =~ /123/
+        @response.body.should_not =~ /skypefoo/
+        @response.body.should_not =~ /Zusätzliche Angaben/
+        @response.body.should_not =~ /Mobile/
       end
 
       it "exports full csv files" do
         get :index, group_id: group, details: true, format: :csv
 
         @response.content_type.should == 'text/csv'
-        @response.body.should =~ /^Vorname;Nachname;.*;Zusätzliche Angaben/
+        @response.body.should =~ /^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;Skype/
         @response.body.should =~ /^Top;Leader;.*;bla bla/
+        @response.body.should =~ /123;456;.*facefoo;skypefoo/
       end
     end
     
     context "layer" do
       let(:group) { groups(:bottom_layer_one) }
       
-      before { sign_in(@bl_leader) }
-      
-      it "loads group members when no types given" do
-        get :index, group_id: group, kind: 'layer'
+      context "with layer full" do
+        before { sign_in(@bl_leader) }
         
-        assigns(:people).collect(&:id).should =~ [people(:bottom_member), @bl_leader].collect(&:id)
+        it "loads group members when no types given" do
+          get :index, group_id: group, kind: 'layer'
+          
+          assigns(:people).collect(&:id).should =~ [people(:bottom_member), @bl_leader].collect(&:id)
+        end
+        
+        it "loads selected roles of a group when types given" do
+          get :index, group_id: group, 
+                      role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name], 
+                      kind: 'layer'
+          
+          assigns(:people).collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
+        end
+        
+        it "exports full csv when types given and ability exists" do
+          get :index, group_id: group, 
+                      role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name], 
+                      kind: 'layer',
+                      details: true,
+                      format: :csv
+          
+          @response.content_type.should == 'text/csv'
+          @response.body.should =~ /^Vorname;Nachname;.*Zusätzliche Angaben/
+        end
       end
       
-      it "loads selected roles of a group when types given" do
-        get :index, group_id: group, 
-                    role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name], 
-                    kind: 'layer'
+      context "with contact data" do
+        before { sign_in(@tg_member) }
         
-        assigns(:people).collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
-      end
-      
-      it "exports only address csv when types given" do
-        get :index, group_id: group, 
-                    role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name], 
-                    kind: 'layer',
-                    details: true,
-                    format: :csv
-        
-        @response.content_type.should == 'text/csv'
-        @response.body.should =~ /^Vorname;Nachname;.*/
-        @response.body.should_not =~ /Zusätzliche Angaben/
+        it "exports only address csv when types given and no ability exists" do
+          get :index, group_id: group, 
+                      role_types: [Group::BottomLayer::Leader.sti_name, Group::BottomLayer::Member.sti_name], 
+                      kind: 'layer',
+                      details: true,
+                      format: :csv
+          
+          @response.content_type.should == 'text/csv'
+          @response.body.should =~ /^Vorname;Nachname;.*/
+          @response.body.should_not =~ /Zusätzliche Angaben/
+          @response.body.split("\n").should have(2).items
+        end
       end
     end
     

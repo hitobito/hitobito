@@ -28,6 +28,20 @@ module LayoutHelper
            main_link: main_link, 
            button_class: button_class)
   end
+  
+  def pill_navigation(top_links, dropdown_links = [])
+    nav = content_tag(:div, class: 'pagination') do
+      content_tag(:ul) do
+        safe_join(top_links) do |link|
+          content_tag(:li, link)
+        end
+      end
+    end
+    if dropdown_links.present?
+      nav += pill_dropdown_button('Weitere Ansichten', dropdown_links, nil)
+    end
+    nav
+  end
 
   def pill_dropdown_button(label, links, css_classes = 'pull-right')
     content_tag(:ul, class: "nav nav-pills #{css_classes}") do

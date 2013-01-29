@@ -39,6 +39,7 @@
           .content-header
             %h1= title
             = sheet.render_main_tabs
+          = yield :filter
           .btn-toolbar
             = yield :toolbar
           #flash

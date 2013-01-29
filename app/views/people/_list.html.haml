@@ -1,5 +1,8 @@
 - title @group.to_s
 
+- content_for(:filter) do
+  = pill_navigation(main_people_filter_links, custom_people_filter_links)
+
 = paginate @people
 
 = crud_table do |t|
@@ -12,7 +15,7 @@
       %br/
       = muted p.additional_name
   - t.col('Rolle')   {|p| p.roles_short(@multiple_groups ? nil : @group) }
-  - t.col('E-Mail')   {|p| p.primary_email }
+  - t.col('E-Mail')  {|p| p.primary_email }
   - t.col('Telefon') {|p| p.all_phone_numbers(true) }
   - t.col('Adresse') {|p| p.complete_address }
 

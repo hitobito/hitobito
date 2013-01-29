@@ -11,7 +11,21 @@ describe PeopleFilterHelper do
   end
   
   
-  context "#people_filter_links" do
+  context "#main_people_filter_links" do
+    
+    let(:group) { groups(:top_layer) }
+    
+    before do
+      @group = group
+    end
+    
+    subject { main_people_filter_links }
+    
+    it { should have(2).items }
+    
+  end
+    
+  context "#custom_people_filter_links" do
     
     let(:group) { groups(:top_layer) }
     
@@ -23,11 +37,10 @@ describe PeopleFilterHelper do
       @group = group
     end
     
-    subject { people_filter_links }
+    subject { custom_people_filter_links }
     
-    it { should have(6).items }
-    its([3]) { should be_kind_of(Hash) }
+    it { should have(3).items }
+    its([0]) { should be_kind_of(Hash) }
     
   end
-  
 end

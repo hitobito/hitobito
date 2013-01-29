@@ -1,19 +1,8 @@
 module PeopleFilterHelper
-  
-  def people_filter_links
-    links = main_people_filter_links
-    if @group.layer?
-      add_custom_people_filter_links(links)
-      add_define_custom_people_filter_link(links)
-    end
-    links
-  end
 
   def people_filter_name
     params[:name] || (params[:role_types] ? 'Eigener Filter' : 'Mitglieder')
   end
-  
-  private
   
   def main_people_filter_links
     links = []
@@ -27,12 +16,21 @@ module PeopleFilterHelper
     links
   end
   
+  def custom_people_filter_links
+    links = []
+    if @group.layer?
+      add_custom_people_filter_links(links)
+      add_define_custom_people_filter_link(links)
+    end
+    links
+  end
+  
+  private
+  
+  
   def add_custom_people_filter_links(links)
     filters = PeopleFilter.for_group(@group)
-    if filters.present?
-      links << nil
-      filters.each { |filter| links << people_filter_link(filter) }
-    end
+    filters.each { |filter| links << people_filter_link(filter) }
   end
   
   def add_define_custom_people_filter_link(links)

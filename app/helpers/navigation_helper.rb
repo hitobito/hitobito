@@ -4,8 +4,10 @@ module NavigationHelper
   MAIN = {
           'Gruppen' => {url: :groups_path, 
                         active_for: %w(groups people)},
-    'Kurse/Anlässe' => {url: :list_courses_path, 
-                        active_for: %w(list_courses list_events)},
+          'Anlässe' => {url: :list_events_path, 
+                        active_for: %w(list_events)},
+            'Kurse' => {url: :list_courses_path, 
+                        active_for: %w(list_courses)},
             'Admin' => {url: :event_kinds_path, 
                         active_for: %w(event_kinds qualification_kinds custom_contents label_formats), 
                         if: lambda {|_| can?(:manage, Event::Kind) } }

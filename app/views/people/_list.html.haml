@@ -1,7 +1,7 @@
 - title @group.to_s
 
 - content_for(:filter) do
-  = pill_navigation(main_people_filter_links, custom_people_filter_links)
+  = pill_navigation(main_people_filter_items, custom_people_filter_links, *custom_people_filter_label)
 
 = paginate @people
 

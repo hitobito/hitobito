@@ -29,23 +29,23 @@ module LayoutHelper
            button_class: button_class)
   end
   
-  def pill_navigation(top_links, dropdown_links = [])
+  def pill_navigation(top_items, dropdown_links = [], dropdown_label = 'Weitere Ansichten', dropdown_active = false)
     nav = content_tag(:div, class: 'pagination') do
-      content_tag(:ul) do
-        safe_join(top_links) do |link|
-          content_tag(:li, link)
-        end
-      end
+      content_tag(:ul, safe_join(top_items))
     end
     if dropdown_links.present?
-      nav += pill_dropdown_button('Weitere Ansichten', dropdown_links, nil)
+      nav += pill_dropdown_button(dropdown_label, dropdown_links, nil, ('active' if dropdown_active))
     end
     nav
   end
+  
+  def pill_item(content, active = false)
+    content_tag(:li, content, class: ('active' if active))
+  end
 
-  def pill_dropdown_button(label, links, css_classes = 'pull-right')
-    content_tag(:ul, class: "nav nav-pills #{css_classes}") do
-      content_tag(:li, class: 'dropdown') do
+  def pill_dropdown_button(label, links, ul_classes = 'pull-right', li_classes = nil)
+    content_tag(:ul, class: "nav nav-pills #{ul_classes}") do
+      content_tag(:li, class: "dropdown #{li_classes}") do
         @in_button_group = true
         html = dropdown_button(label, links, nil, nil, nil)
         @in_button_group = false

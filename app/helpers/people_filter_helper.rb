@@ -1,19 +1,17 @@
 module PeopleFilterHelper
 
-  def people_filter_name
-    params[:name] || (params[:role_types] ? 'Eigener Filter' : 'Mitglieder')
-  end
-  
-  def main_people_filter_links
-    links = []
-    links << link_to('Mitglieder', group_people_path(@group))
+  PREDEFINED_FILTERS = %w(Mitglieder Externe)
+
+  def main_people_filter_items
+    items = []
+    items << people_pill_item('Mitglieder', group_people_path(@group))
     if can?(:index_local_people, @group)
-      links << link_to('Externe', 
-                       group_people_path(@group, 
-                                         role_types: Role.external_types.collect(&:sti_name), 
-                                         name: 'Externe'))
+      items << people_pill_item('Externe', 
+                                 group_people_path(@group, 
+                                                   role_types: Role.external_types.collect(&:sti_name), 
+                                                   name: 'Externe'))
     end
-    links
+    items
   end
   
   def custom_people_filter_links
@@ -25,8 +23,29 @@ module PeopleFilterHelper
     links
   end
   
+  def custom_people_filter_label
+    if params[:name].present?
+      if PREDEFINED_FILTERS.include?(params[:name])
+        ['Weitere Ansichten', false]
+      else
+        [params[:name], true]
+      end
+    elsif params[:role_types].present?
+      ['Eigener Filter', true]
+    else
+      ['Weitere Ansichten', false]
+    end
+  end
+  
   private
   
+  def people_pill_item(label, url)
+    pill_item(link_to(label, url), active_people_filter_label == label)
+  end
+  
+  def active_people_filter_label
+    params[:name].presence || params[:role_types].present? || PREDEFINED_FILTERS.first
+  end
   
   def add_custom_people_filter_links(links)
     filters = PeopleFilter.for_group(@group)

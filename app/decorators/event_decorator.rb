@@ -23,8 +23,8 @@ class EventDecorator < ApplicationDecorator
   end
 
   def booking_info
-    info = participant_count.to_s
-    info << " von #{maximum_participants}" if maximum_participants.to_i > 0
+    info = "#{participant_count.to_s} Anmeldungen"
+    info << " für #{maximum_participants} Plätze" if maximum_participants.to_i > 0
     info
   end
 

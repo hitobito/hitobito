@@ -41,7 +41,7 @@
       %dl.dl-horizontal
         = labeled_attr(entry, :application_opening_at)
         = labeled_attr(entry, :application_closing_at)
-        = labeled('Anmeldungen', "#{entry.booking_info} Personen")
+        = labeled_attr(entry, :booking_info)
         = labeled('Externe Anmeldung', entry.external_application_link(@group))
   
       %dl.dl-horizontal

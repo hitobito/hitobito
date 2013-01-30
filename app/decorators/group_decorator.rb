@@ -13,6 +13,12 @@ class GroupDecorator < ApplicationDecorator
       html << h.tag(:br)
     end
   end
+  
+  def all_phone_numbers(only_public = true)
+    numbers = phone_numbers
+    numbers += contact.phone_numbers if contact
+    nested_values(numbers, only_public)
+  end
 
   def possible_children_links
     model.class.possible_children.map do |type|

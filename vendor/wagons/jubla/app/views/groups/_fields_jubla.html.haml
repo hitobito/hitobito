@@ -5,7 +5,7 @@
         = f.inline_radio_button(:kind, kind, kind)
 
   - entry.modifiable_attributes(:unsexed).each do |attr|
-    = f.labeled(attr, "&nbsp;".html_safe) do
+    = f.labeled(attr, 'Gruppenstunde') do
       = f.inline_radio_button(:unsexed, true, 'Gemischt')
       = f.inline_radio_button(:unsexed, false, 'Geschlechtergetrennt')
 

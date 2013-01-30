@@ -132,6 +132,9 @@ $ ->
   # wire up person auto complete
   $('[data-provide=entity]').each(setupEntityTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
+
+  # wire up tooltips
+  $('[rel=tooltip]').tooltip({placement: 'right'})
     
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
@@ -140,7 +143,6 @@ $ ->
   # show alert if ajax requests fail
   $(document).on('ajax:error', (event, xhr, status, error) ->
     alert('Sorry, something went wrong\n(' + error + ')'))
-
 
   # controll visibilty of group contact fields in relation to contact
   $('#group_contact_id').on('change', do ->

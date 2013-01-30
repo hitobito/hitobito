@@ -1,5 +1,10 @@
-= f.input_field(:name, class: 'span4')
-= f.input_field(:label, class: 'span2', data: {provide: :typeahead, source: SocialAccount.available_labels})
-= f.label(:public, class: 'checkbox span2') do
-  = f.check_box(:public)
-  = t(:"activerecord.attributes.social_account.public")
+= f.input_field(:name, 
+                class: 'span4', 
+                placeholder: 'Website, Skypename, Profillink...')
+                
+= f.input_field(:label, 
+                class: 'span2', 
+                placeholder: 'Art (Skype, Facebook...)', 
+                data: {provide: :typeahead, source: SocialAccount.available_labels})
+                
+= render 'contactable/public_check_box', f: f

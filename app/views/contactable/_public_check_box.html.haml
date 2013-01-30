@@ -1,0 +1,5 @@
+= f.label(:public, class: 'checkbox span2') do
+  = f.check_box(:public)
+  %span{rel: 'tooltip', title: "Private Einträge sind nur für die eigene Gruppe sichtbar. Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen sichtbar, wenn du selbst eine Leitungsperson bist."}
+    = t(:"activerecord.attributes.social_account.public")
+    %i.icon.icon-info-sign

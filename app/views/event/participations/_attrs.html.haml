@@ -12,8 +12,7 @@
       -if @answers.present?
         = render 'answers'
     
-      %section
-        %h4= t('activerecord.attributes.event/participation.additional_information')
+      = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')
       
     - if @event.priorization && @application.present? && can?(:show, @application)

@@ -220,6 +220,10 @@ class Group < ActiveRecord::Base
     destroy_orphaned_events
   end
   
+  def decorator_class
+    GroupDecorator
+  end
+  
   private
 
   def assert_type_is_allowed_for_parent

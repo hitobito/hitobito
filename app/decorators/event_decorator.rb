@@ -36,7 +36,7 @@ class EventDecorator < ApplicationDecorator
     possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
 
-  def description
+  def description_formatted
     h.simple_format(model.description) if model.description?
   end
 
@@ -46,7 +46,7 @@ class EventDecorator < ApplicationDecorator
     end
   end
 
-  def location
+  def location_formatted
     h.simple_format(model.location) if model.location?
   end
   

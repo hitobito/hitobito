@@ -23,10 +23,6 @@ describe "event/participations/print.html.haml" do
       should have_content bottom_member.email
     end
 
-    it "renders two contacts partials" do
-      should have_css('.contactable', count: 2)
-    end
-
     it "has signatures table" do
       should have_css('table.signature')
     end

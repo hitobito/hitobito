@@ -1,58 +1,59 @@
-%section
-  %dl.dl-horizontal
-    - entry.used?(:kind_id) do
-      = labeled_attr(entry, :kind_id)
-      = render_extensions :kind
-
-    - entry.used?(:number) do
-      = labeled_attr(entry, :number)
-
-    - entry.used?(:motto) do
-      = labeled_attr(entry, :motto)
-      
-  - entry.used?(:state) do
-    = render_attrs(entry, :state_translated)
-    
-  %dl.dl-horizontal
-    = render 'shared/labeled', label: 'Durchgeführt von', content: entry.group_names
-    
-  = render_extensions :attrs
-
-= section 'Daten' do
-  %p= entry.dates_full
-
-- if entry.location?
-  = section 'Ort' do
-    %p= entry.location
-
-- if entry.description?
-  = section 'Beschreibung' do
-    %p= entry.description
-
-- if entry.contact_id?
-  = section 'Kontaktperson' do
-    =render 'contactable/show', contactable: entry.contact, only_public: true
-
-
-= section 'Anmeldung' do
-  %dl.dl-horizontal
-    = labeled_attr(entry, :cost)
-    = labeled('Bereits Angemeldet', "#{entry.booking_info} Personen")
-    = labeled_attr(entry, :application_opening_at)
-    = labeled_attr(entry, :application_closing_at)
-    = labeled('Externe Anmeldung', entry.external_application_link(@group))
-  
-  %dl.dl-horizontal
-    = labeled('Aufnahmebedingungen', format_attr(entry, :application_conditions))
-    - if entry.course_kind?
-      = labeled('Mindestalter', entry.kind.minimum_age? ? "#{entry.kind.minimum_age} Jahre" : '')
-      = labeled('Erford. Qualifikationen', entry.kind.preconditions.join(', '))
-    
-  - if entry.course_kind?
+#main.row-fluid
+  %article.span7
     %dl.dl-horizontal
-      = labeled('Qualifiziert für', entry.kind.qualification_kinds.join(', '))
-      = labeled('Verlängert', entry.kind.prolongations.join(', '))
+      = labeled('Daten', entry.dates_full)
+      = labeled_attr(entry, :motto)
+      = labeled_attr(entry, :cost)
+    
+    - if entry.description?
+      = render_attrs(entry, :description)
+        
+    - if entry.location?
+      = render_attrs(entry, :location)
       
-  = render_extensions 'application_attrs', folder: 'events'
+    = render_extensions :show
+    
+  %aside.span5
+    = section 'Kontakt' do
+      %dl.dl-horizontal
+        - entry.used?(:kind_id) do
+          = labeled_attr(entry, :kind_id)
+          = render_extensions :kind, folder: 'events'
+          
+        - entry.used?(:number) do
+          = labeled_attr(entry, :number)
+          
+        = labeled('Durchgeführt von', entry.group_names)
+          
+        - entry.used?(:state) do
+          = labeled_attr(entry, :state_translated)
+    
+        = render_extensions :attrs, folder: 'events'
 
-= render_extensions :show
+
+      - if entry.contact_id?
+        %dl.dl-horizontal
+          = labeled('Kontakt', entry.contact.complete_contact)
+
+
+    = section 'Anmeldung' do
+      %dl.dl-horizontal
+        = labeled_attr(entry, :application_opening_at)
+        = labeled_attr(entry, :application_closing_at)
+        = labeled('Anmeldungen', "#{entry.booking_info} Personen")
+        = labeled('Externe Anmeldung', entry.external_application_link(@group))
+  
+      %dl.dl-horizontal
+        = labeled('Aufnahmebedingungen', format_attr(entry, :application_conditions))
+        - if entry.course_kind?
+          = labeled('Mindestalter', entry.kind.minimum_age? ? "#{entry.kind.minimum_age} Jahre" : '')
+          = labeled('Erforderliche Qualifikationen', entry.kind.preconditions.join(', '))
+    
+      - if entry.course_kind?
+        %dl.dl-horizontal
+          = labeled('Qualifiziert für', entry.kind.qualification_kinds.join(', '))
+          = labeled('Verlängert', entry.kind.prolongations.join(', '))
+      
+      = render_extensions 'application_attrs', folder: 'events'
+
+

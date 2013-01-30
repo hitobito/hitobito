@@ -94,8 +94,6 @@ describe Event::ParticipationsController, type: :controller do
     let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) } 
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
-    let(:contact_address) { dom.all('address').first }
-    let(:particpant_address) { dom.all('address').last }
 
     before do
       test_entry.event.update_attribute(:contact, person)
@@ -104,8 +102,8 @@ describe Event::ParticipationsController, type: :controller do
 
     it "renders participant and course contact" do
       get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
-      contact_address.text.should include person.address
-      particpant_address.text.should include "bottom_member@example.com"
+      response.body.should include person.address
+      response.body.should include "bottom_member@example.com"
     end
 
     it "redirects users without permission" do

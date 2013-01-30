@@ -33,6 +33,14 @@ module ContactableDecorator
 
     content_tag(:p, html)
   end
+  
+  def complete_contact
+    address_name + 
+    complete_address + 
+    primary_email +
+    all_phone_numbers(true) + 
+    all_social_accounts(true)
+  end
 
   def primary_email
     if email.present?

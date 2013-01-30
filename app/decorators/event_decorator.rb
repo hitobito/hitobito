@@ -36,18 +36,10 @@ class EventDecorator < ApplicationDecorator
     possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
 
-  def description_formatted
-    h.simple_format(model.description) if model.description?
-  end
-
   def description_short
     if model.description?
       h.simple_format(h.truncate(model.description, length: 60))
     end
-  end
-
-  def location_formatted
-    h.simple_format(model.location) if model.location?
   end
   
   def external_application_link(group)

@@ -42,9 +42,15 @@ class Event::ParticipationMailer < ActionMailer::Base
   def event_details
     infos = []
     infos << @event.name
-    infos << labeled(:contact)  { "#{@event.contact}<br/>#{@event.contact.email}" }
     infos << labeled(:dates)    { @event.dates.map(&:to_s).join("<br/>") } 
+    infos << labeled(:motto)
+    infos << labeled(:cost)
+    infos << labeled(:description) { @event.description.gsub("\n", "<br/>") }
     infos << labeled(:location) { @event.location.gsub("\n", "<br/>") } 
+    infos << labeled(:contact)  { "#{@event.contact}<br/>#{@event.contact.email}" }
+    infos << answers_details
+    infos << additional_information_details
+    infos << "TeilnehmerIn:<br/>#{@participation.person.decorate.complete_contact}"
     infos.compact.join("<br/><br/>")
   end
 
@@ -55,5 +61,21 @@ class Event::ParticipationMailer < ActionMailer::Base
       "#{label}:<br/>#{formatted}"
     end
   end
-
+  
+  def answers_details
+    if @participation.answers.present?
+      text = ["Fragen:"]
+      @participation.answers.each do |a|
+        text << "#{a.question.question}: #{a.answer}"
+      end
+      text.join("<br/>")
+    end
+  end
+  
+  def additional_information_details
+    if @participation.additional_information?
+      "#{t('activerecord.attributes.event/participation.additional_information')}:<br/>#{@participation.additional_information.gsub("\n", "<br/>")}"
+    end
+  end
+  
 end

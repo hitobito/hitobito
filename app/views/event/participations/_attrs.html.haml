@@ -1,12 +1,15 @@
 
 #main.row-fluid
   %article.span6
+    
     - if @event.requires_approval? && @application.present? && can?(:show, @application)
       %p= @application.confirmation_label
+      %br/
     
     = render 'contactable/show', contactable: entry.person, only_public: true
     
-    = render_attrs(entry.person, :birthday, :gender)
+    %div
+      = render_attrs(entry.person, :birthday, :gender)
     
     -if can?(:show_details, entry) # participation
       -if @answers.present?

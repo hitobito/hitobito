@@ -9,7 +9,7 @@ CustomContent.seed_once(:key,
   {key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
    label: 'Anlass: E-Mail Anmeldebestätigung',
    subject: 'Bestätigung der Anmeldung',
-   body: "Hallo {recipient-name}<br/><br/>Du hast dich für folgenden Anlass angemeldet:<br/><br/>{event-details}<br/><br/>Du kannst deine Anmeldung unter folgender Adresse einsehen und eine Bestätigung ausdrucken:<br/><br/>{application-url}",
+   body: "Hallo {recipient-name}<br/><br/>Du hast dich für folgenden Anlass angemeldet:<br/><br/>{event-details}<br/><br/>Falls du ein Login hast, kannst du deine Anmeldung unter folgender Adresse einsehen und eine Bestätigung ausdrucken:<br/><br/>{application-url}",
    placeholders_required: 'event-details, application-url',
    placeholders_optional: 'recipient-name'},
    

@@ -18,6 +18,7 @@ social_account:
     - Skype
     - Twitter
     - Webseite
+    - Andere
 
 email:
   # Sender for all emails sent by the application

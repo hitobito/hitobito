@@ -1,15 +1,16 @@
 #main.row-fluid
   %article.span7
-    %dl.dl-horizontal
-      = labeled('Daten', entry.dates_full)
-      = labeled_attr(entry, :motto)
-      = labeled_attr(entry, :cost)
-    
-    - if entry.description?
-      = render_attrs(entry, :description)
-        
-    - if entry.location?
-      = render_attrs(entry, :location)
+    %div
+      %dl.dl-horizontal
+        = labeled('Daten', entry.dates_full)
+        = labeled_attr(entry, :motto)
+        = labeled_attr(entry, :cost)
+      
+      - if entry.description?
+        = render_attrs(entry, :description)
+          
+      - if entry.location?
+        = render_attrs(entry, :location)
       
     = render_extensions :show
     

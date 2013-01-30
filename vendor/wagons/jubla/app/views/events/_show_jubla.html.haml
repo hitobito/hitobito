@@ -1,4 +1,4 @@
 - entry.used?(:condition_id) do
   - if entry.condition
-    %dl.dl-horizontal
-      =labeled('Bestimmungen', entry.condition.content.html_safe)
+    = section 'Kursbestimmungen' do
+      = entry.condition.content.html_safe

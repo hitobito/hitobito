@@ -6,7 +6,12 @@
                      data: {provide: 'entity', 
                             id_field: "subscription_subscriber_id", 
                             url: query_group_mailing_list_group_index_path(@group, @mailing_list)})
-                                 
+
+    - help = "Es können nur Gruppen unterhalb der Abogruppe "
+    - help << "oder unterhalb der benachbarten Gruppen vom Typ #{@group.klass.label} " if @group.sister_groups.exists?
+    - help << "ausgewählt werden"
+    = f.help_block(help)
+    
     = f.hidden_field(:subscriber_id, 
                      data: { remote: true, 
                              url: roles_group_mailing_list_group_index_path(@group, @mailing_list)})

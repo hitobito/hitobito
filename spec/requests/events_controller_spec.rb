@@ -22,7 +22,8 @@ describe EventsController, js: true do
       click_button 'Speichern'
       
       # show event
-      find('.contactable').should have_content 'Top Leader'
+      find('aside').should have_content 'Kontakt'
+      find('aside').should have_content 'Top Leader'
       click_link 'Bearbeiten'
       
       # remove contact

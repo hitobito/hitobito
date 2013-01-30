@@ -169,7 +169,7 @@ class Event::ParticipationsController < CrudController
   end
   
   def user_course_application?
-    entry.person == current_user && event.kind_of?(Event::Course)
+    entry.person == current_user && event.supports_applications
   end
     
   def event

@@ -111,10 +111,6 @@ class EventDecorator < ApplicationDecorator
     end
     {id: id, label: "#{model.to_s} (#{groups_label})"}
   end
-
-  def course_kind?
-    model.kind_of?(Event::Course) && kind.present?
-  end
   
   private
   

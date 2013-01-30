@@ -81,9 +81,9 @@ describe Event::ListsController, type: :controller do
       let(:tabs) { dom.find('#content .pagination') }
 
       it "tabs contain year based pagination" do
-        first, last = tabs.all('a').first, tabs.all('a').last
-        first.text.should eq (year - 3).to_s
-        first[:href].should eq list_courses_path(year: year - 3, group_id: top_group.id)
+        first, last = tabs.all('a')[1], tabs.all('a')[-2]
+        first.text.should eq (year - 2).to_s
+        first[:href].should eq list_courses_path(year: year - 2, group_id: top_group.id)
 
         last.text.should eq (year + 1).to_s
         last[:href].should eq list_courses_path(year: year + 1, group_id: top_group.id)

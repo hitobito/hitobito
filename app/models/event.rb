@@ -40,7 +40,13 @@ class Event < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :role_types, :participant_type, :leader_types, :supports_applications, :possible_states
+  class_attribute :role_types, 
+                  :participant_type, 
+                  :leader_types, 
+                  :supports_applications, 
+                  :possible_states, 
+                  :kind_class
+                  
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -54,6 +60,8 @@ class Event < ActiveRecord::Base
   self.supports_applications = false
   # List of possible values for the state attribute.
   self.possible_states = []
+  # The class used for the kind_id
+  self.kind_class = nil
 
   attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,
                   :description, :location, :application_opening_at, :application_closing_at,
@@ -195,11 +203,7 @@ class Event < ActiveRecord::Base
   end
   
   def init_questions
-    if questions.blank?
-      Event::Question.global.each do |q|
-        self.questions << q.dup
-      end
-    end
+    # do nothing by default
   end
 
   def participations_for(*role_types)
@@ -219,6 +223,10 @@ class Event < ActiveRecord::Base
                   where('event_roles.label <> ""').
                   uniq.order(:label).
                   pluck(:label)
+  end
+  
+  def course_kind?
+    kind_class == Event::Kind && kind.present?
   end
 
   private

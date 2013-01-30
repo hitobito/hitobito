@@ -39,6 +39,7 @@ class Event::Course < Event
                      Event::Course::Role::Participant]
   self.participant_type = Event::Course::Role::Participant
   self.supports_applications = true
+  self.kind_class = Event::Kind
 
   attr_accessible :number, :kind_id, :state, :priorization, :requires_approval
 
@@ -66,5 +67,12 @@ class Event::Course < Event
   def start_date
     @start_date ||= dates.first.start_at.to_date
   end
-
+  
+  def init_questions
+    if questions.blank?
+      Event::Question.global.each do |q|
+        self.questions << q.dup
+      end
+    end
+  end
 end

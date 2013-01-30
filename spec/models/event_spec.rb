@@ -328,10 +328,16 @@ describe Event do
   end
 
   context "#init_questions" do
-    it "adds 3 default questions" do
-      e = Event.new
+    it "adds 3 default questions for courses" do
+      e = Event::Course.new
       e.init_questions
       e.questions.should have(3).items
+    end
+    
+    it "does nothing for regular events" do
+      e = Event.new
+      e.init_questions
+      e.questions.should be_blank
     end
   end
 

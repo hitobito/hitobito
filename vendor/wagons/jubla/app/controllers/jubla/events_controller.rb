@@ -8,7 +8,6 @@ module Jubla::EventsController
 
     before_render_form :application_contacts
     before_render_form :load_conditions
-    before_render_form :load_camp_kinds
 
     before_save :set_application_contact
   end
@@ -41,14 +40,7 @@ module Jubla::EventsController
       @conditions = Event::Course::Condition.where(:group_id => entry.group_ids).order(:label)
     end
   end
-  
-  def load_camp_kinds
-    if entry.is_a?(Event::Camp)
-      @kinds = Event::Camp::Kind.without_deleted
-      @kinds << entry.kind if entry.kind && entry.kind.deleted?
-    end
-  end
-  
+
   def remove_restricted
     model_params.delete(:advisor)
     model_params.delete(:coach)

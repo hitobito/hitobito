@@ -63,8 +63,8 @@ class EventsController < CrudController
   end
 
   def load_kinds
-    if entry.is_a?(Event::Course)
-      @kinds = Event::Kind.without_deleted
+    if entry.kind_class
+      @kinds = entry.kind_class.without_deleted
       @kinds << entry.kind if entry.kind && entry.kind.deleted?
     end
   end

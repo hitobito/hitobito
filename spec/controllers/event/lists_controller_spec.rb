@@ -35,24 +35,18 @@ describe Event::ListsController do
   context "GET #courses" do
     context "filters by year" do
       let(:year) { Date.today.year }
-      let(:year_range) { (year-3..year+1) }
+      let(:year_range) { (year-2..year+1) }
 
       it "defaults to current year" do
         get :courses
         assigns(:year).should eq year
-        assigns(:year_range).should eq year_range
+        controller.send(:year_range).should eq year_range
       end
 
       it "reads year from params, populates vars"do
         get :courses, year: 2010
         assigns(:year).should eq 2010
-        assigns(:year_range).should eq year_range
-      end
-
-      it "years has a reasonable limit" do
-        get :courses, year: 1995
-        assigns(:year).should eq year
-        assigns(:year_range).should eq year_range
+        controller.send(:year_range).should eq 2008..2011
       end
     end
 

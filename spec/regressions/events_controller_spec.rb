@@ -49,7 +49,7 @@ describe EventsController, type: :controller do
       event_with_date(start_at: today)
       ev = event_with_date(start_at: last_year)
       get :index, group_id: group.id, year: last_year.year
-      dom.all('.pagination li').count.should eq 5
+      dom.all('.pagination li').count.should eq 6
       dom.all('#main table tbody tr').count.should eq 1
       dom.find('#main table tbody tr').text.should include ev.name
       dom.find_link(last_year.year.to_s).native.parent[:class].should eq 'active'
@@ -69,7 +69,7 @@ describe EventsController, type: :controller do
     let(:dom) { Capybara::Node::Simple.new(response.body) } 
     
     it "renders new form" do
-      get :new, group_id: group.id, event: {type: 'Event'}
+      get :new, group_id: group.id, event: {type: 'Event::Course'}
       dom.find('input#event_type')[:type].should eq 'hidden'
       dom.all('#questions_fields .fields').count.should eq 3
       dom.all('#dates_fields').count.should eq 1

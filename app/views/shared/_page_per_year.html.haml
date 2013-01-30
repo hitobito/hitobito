@@ -2,5 +2,16 @@
 
 .pagination
   %ul
+    %li= link_to(raw(t 'views.pagination.previous'), {year: year-1}.merge(paging_params), :rel => 'prev')
+    - if year_range.first > default_year
+      %li= link_to(default_year, {year: default_year}.merge(paging_params))
+      - if year_range.first > default_year + 1
+        = render 'kaminari/gap'
     - year_range.each do |year|
       %li{class: "#{'active' if year == @year}"}= link_to(year.to_s, {year: year}.merge(paging_params))
+    - if year_range.last < default_year
+      - if year_range.last < default_year - 1
+        = render 'kaminari/gap'
+      %li= link_to(default_year, {year: default_year}.merge(paging_params))
+    %li= link_to(raw(t 'views.pagination.next'), {year: year+1}.merge(paging_params), :rel => 'next')
+    

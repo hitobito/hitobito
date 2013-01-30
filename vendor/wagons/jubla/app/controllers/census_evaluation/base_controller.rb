@@ -52,7 +52,7 @@ class CensusEvaluation::BaseController < ApplicationController
   end
   
   def year_range
-    @year_range ||= (current_year-4)..(current_year)
+    @year_range ||= (year-3)..(year+1)
   end
   
   def authorize

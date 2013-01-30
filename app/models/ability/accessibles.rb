@@ -38,6 +38,18 @@ class Ability::Accessibles
   private
   
   def accessible_people
+    if user.root?
+      Person.only_public_data
+    else
+      Person.only_public_data.
+             joins(roles: :group).
+             where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
+             where(accessible_conditions.to_a).
+             uniq
+    end
+  end
+  
+  def accessible_conditions
     condition = OrCondition.new
     
     if user.contact_data_visible?
@@ -69,17 +81,11 @@ class Ability::Accessibles
     if groups_group_read.present?
       condition.or('groups.id IN (?)', groups_group_read)
     end
-
-    # root can access everybody, everybody else can access themselves
-    unless user.root?
-      condition.or('people.id = ?', user.id)
-    end
     
-    Person.only_public_data.
-           joins(roles: :group).
-           where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
-           where(condition.to_a).
-           uniq
+    # everybody else can access themselves
+    condition.or('people.id = ?', user.id)
+    
+    condition
   end
   
   # If group B is a child of group A, B is collapsed into A.

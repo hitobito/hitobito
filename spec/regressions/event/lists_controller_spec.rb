@@ -76,7 +76,6 @@ describe Event::ListsController, type: :controller do
       end
     end
 
-
     context "yearwise paging" do
       before { get :courses }
       let(:tabs) { dom.find('#content .pagination') }
@@ -90,7 +89,6 @@ describe Event::ListsController, type: :controller do
         last[:href].should eq list_courses_path(year: year + 1, group_id: top_group.id)
       end
     end
-
 
     context "courses content" do
       let(:slk) { event_kinds(:slk)}
@@ -110,7 +108,7 @@ describe Event::ListsController, type: :controller do
         main.find('table tr:eq(1) td:eq(1)').text.strip.should eq "EventusSLK  Top"
         main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.groups.first, slk_ev)
         main.find('table tr:eq(1) td:eq(2)').native.to_xml.should eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
-        main.find('table tr:eq(1) td:eq(3)').text.should eq "0 von 20"
+        main.find('table tr:eq(1) td:eq(3)').text.should eq "0 Anmeldungen für 20 Plätze"
         main.find('table tr:eq(1) td:eq(4)').text.should eq 'Geplant'
       end
 

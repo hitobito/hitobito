@@ -379,6 +379,17 @@ describe Ability::Accessibles do
           end
         end
         
+        if action == :global
+          it "may get herself" do
+            should include(user)
+          end
+          
+          it "may get people outside groups" do
+            other = Fabricate(:person)
+            should include(other)
+          end
+        end
+        
       end
     
     end

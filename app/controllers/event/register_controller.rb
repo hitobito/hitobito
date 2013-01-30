@@ -34,8 +34,8 @@ class Event::RegisterController < ApplicationController
   def register
     if create_person
       sign_in(:person, person)
-      flash[:notice] = 'Deine Daten wurden aufgenommen. Du kannst dich nun für den Anlass anmelden.'
-      redirect_to show_event_path
+      flash[:notice] = 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung.'
+      redirect_to new_group_event_participation_path(group, event)
     else
       render 'register'
     end

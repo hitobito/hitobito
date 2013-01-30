@@ -120,7 +120,7 @@ describe Event::RegisterController do
           put :register, group_id: group.id, id: event.id, person: {last_name: 'foo', email: 'not-existing@example.com' }
         end.to change { Person.count }.by(1)
         
-        should redirect_to(group_event_path(group, event))
+        should redirect_to(new_group_event_participation_path(group, event))
         flash[:notice].should be_present
       end
     end

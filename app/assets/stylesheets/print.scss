@@ -93,7 +93,7 @@ img {
 
 /** Remove some elements */
 header, nav, footer, 
-.nav, .breadcrumb, .btn-toolbar {
+.nav, .breadcrumb, .btn-toolbar, .btn {
   display: none;
 }
 
@@ -126,23 +126,54 @@ table th {
   .profil {display: none; }
 }
 
-
-
-body.application .profil-big {
-  display: none;
+section {
+  margin-bottom: 25px;
 }
 
-table.signature {
-  width: 100%;
-  border-spacing: 1em;
-  border-collapse: inherit;
+article {
+  float: left;
+  width: 60%;
+  margin-right: 25px;
+}
 
-  td {
-    vertical-align: top;
-    border: 0;
+aside {
+  table.table {
+    width: auto;
   }
+  
+}
 
-  td.border{
-    border-top: 1px solid black;
+.row-fluid {
+  clear: both;
+}
+
+dd > p {
+  margin: 0px;
+}
+
+body.application {
+  h1 { font-size: 1.4em; }
+  h2 { font-size: 1.3em; }
+  h3 { font-size: 1.2em; }
+  h4 { font-size: 1.1em; }
+  h5 { font-size: 1.1em; }
+  
+  .profil-big {
+    display: none;
+  }
+  
+  table.signature {
+    width: 100%;
+    border-spacing: 1em;
+    border-collapse: inherit;
+  
+    td {
+      vertical-align: top;
+      border: 0;
+    }
+  
+    td.border{
+      border-top: 1px solid black;
+    }
   }
 }

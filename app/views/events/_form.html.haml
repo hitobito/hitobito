@@ -3,7 +3,7 @@
   - if entry.new_record?
     = f.hidden_field :type
 
-  = field_set_tag 'Infos' do
+  = field_set_tag do
     = f.labeled_input_field(:name)
     
     - entry.used?(:kind_id) do
@@ -45,5 +45,8 @@
     = render_extensions 'application_fields', locals: { f: f }
     
   = field_set_tag 'Angaben für Anmeldung' do
-    %p Du kannst weitere Angaben für die Anmeldung verlangen 
+    %p 
+      Hier kannst du weitere Angaben für die Anmeldung verlangen. 
+      Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer, 
+      um beliebige Antworten zu ermöglichen.
     = f.nested_fields_for :questions, 'event/questions/fields'

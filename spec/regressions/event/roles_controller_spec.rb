@@ -40,7 +40,7 @@ describe Event::RolesController, type: :controller do
     def it_should_redirect_to_show
       it do
         if example.metadata[:action] == :create
-          should redirect_to group_event_participations_path(group, course)
+          should redirect_to edit_group_event_participation_path(group, course, entry.participation_id)
         else
           should redirect_to group_event_participation_path(group, course, entry.participation_id)
         end

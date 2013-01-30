@@ -41,6 +41,7 @@ describe Event::RolesController do
         participation.event_id.should == course.id
         participation.person_id.should == user.id
         participation.answers.should have(2).items
+        should redirect_to(edit_group_event_participation_path(group, course, participation))
       end
     end
     
@@ -62,6 +63,7 @@ describe Event::RolesController do
         role.should be_kind_of(Event::Role::Leader)
         role.participation.should == participation
         participation.answers.should have(0).items # o items as we didn't create any in the before block
+        should redirect_to(group_event_participations_path(group, course))
       end
     end
     

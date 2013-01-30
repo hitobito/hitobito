@@ -1,4 +1,4 @@
-= entry_form(url: group_mailing_list_group_index_path(@group, @mailing_list)) do |f|
+= entry_form(url: group_mailing_list_group_index_path(@group, @mailing_list), stacked: true) do |f|
   
   = field_set_tag('Gruppe') do
     = f.string_field(:subscriber, 

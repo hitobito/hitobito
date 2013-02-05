@@ -14,7 +14,7 @@ class Event::ListsController < ApplicationController
                    in_hierarchy(current_user).
                    includes(:dates, :groups).
                    where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
-                   order('event_dates.finish_at ASC')
+                   order('event_dates.start_at ASC')
                   
     @events_by_month = EventDecorator.decorate(events).group_by do |entry|
       if entry.dates.present?

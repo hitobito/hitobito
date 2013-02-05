@@ -5,13 +5,13 @@ describe Event::ListsController do
   let(:person) { people(:bottom_member) } 
   
   context "GET #events" do
-    it "populates events in group_hierarchy, order by finished_at" do
+    it "populates events in group_hierarchy, order by start_at" do
       a = create_event(:bottom_layer_one)
-      b = create_event(:top_layer, finish_at: 30.minutes.from_now)
+      b = create_event(:top_layer, start_at: 1.year.ago)
       
       get :events
       
-      assigns(:events_by_month).values.should eq [[b,a]]
+      assigns(:events_by_month).values.should eq [[b],[a]]
     end
 
     it "does not include courses" do

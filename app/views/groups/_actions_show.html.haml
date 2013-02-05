@@ -1,6 +1,6 @@
 - if can?(:edit, entry)
-  = group_edit_button
-- if can?(:new, entry.children.new)
-  = dropdown_button('Gruppe erstellen', entry.possible_children_links, :plus)
+  = Dropdown::GroupEdit.new(self, entry)
+- if entry.possible_children.present? && can?(:new, entry.children.new)
+  = Dropdown::GroupAdd.new(self, entry)
 - if entry.deleted? && can?(:reactivate, entry)
   = action_button('Reaktivieren', reactivate_group_path(@group), :retweet, method: :post)

@@ -1,8 +1,8 @@
-= dropdown_button('Person hinzufügen', @group.possible_role_links, :plus) if can?(:new, @group.roles.new)
+= Dropdown::RoleAdd.new(self, @group) if can?(:new, @group.roles.new)
 
 = action_button('Liste importieren', new_group_csv_imports_path, :upload) if can?(:new, @group.roles.new)
 
-= dropdown_button('Export', people_export_links(can_export_people_details?), :download)
+= dropdown_people_export(can_export_people_details?)
 
 = action_button('Drucken', 'javascript:window.print();', :print)
 

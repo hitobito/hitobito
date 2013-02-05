@@ -2,9 +2,9 @@
 
 - content_for :toolbar do
   - if can?(:manage_courses, current_user)
-    = pill_dropdown_button(group_title, group_link_list)
+    = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, year, group_id))
 
-= render 'shared/page_per_year', paging_params: group_param
+= render 'shared/page_per_year', paging_params: group_id.to_i > 0 ? { group_id: group_id } : {}
 
 #main
   %section

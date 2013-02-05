@@ -23,38 +23,12 @@ module LayoutHelper
   ensure
     @in_button_group = false
   end
-  
-  def dropdown_button(label, links, icon_name = nil, main_link = nil, button_class = 'btn')
-    render('shared/dropdown_button', 
-           label: label, 
-           links: links, 
-           icon_name: icon_name, 
-           main_link: main_link, 
-           button_class: button_class)
-  end
-  
-  def pill_navigation(top_items, dropdown_links = [], dropdown_label = 'Weitere Ansichten', dropdown_active = false)
-    nav = content_tag(:ul, class: 'nav nav-pills group-pills') do
-      safe_join(top_items)
-    end
-    if dropdown_links.present?
-      nav += pill_dropdown_button(dropdown_label, dropdown_links, nil, ('active' if dropdown_active))
-    end
-    
-    content_tag(:div, nav, class: 'toolbar-pills')
-  end
-  
-  def pill_item(content, active = false)
-    content_tag(:li, content, class: ('active' if active))
-  end
-
-  def pill_dropdown_button(label, links, ul_classes = 'pull-right', li_classes = nil)
+ 
+  def pill_dropdown_button(dropdown, ul_classes = 'pull-right')
+    dropdown.button_class = nil
     content_tag(:ul, class: "nav nav-pills #{ul_classes}") do
-      content_tag(:li, class: "dropdown #{li_classes}") do
-        @in_button_group = true
-        html = dropdown_button(label, links, nil, nil, nil)
-        @in_button_group = false
-        html
+      content_tag(:li, class: "dropdown") do
+        in_button_group { dropdown.to_s }
       end
     end
   end
@@ -62,7 +36,6 @@ module LayoutHelper
   def icon(name)
     content_tag(:i, '', class: "icon icon-#{name}")
   end
-  
   
   def section(title, &block)
     render(layout: 'shared/section', locals: {title: title}, &block)

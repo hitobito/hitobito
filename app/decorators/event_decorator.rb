@@ -58,15 +58,6 @@ class EventDecorator < ApplicationDecorator
     role
   end
 
-  def possible_role_links(group)
-    klass.role_types.map do |type|
-      unless type.restricted
-        link = h.new_group_event_role_path(group, self, event_role: { type: type.sti_name })
-        h.link_to(type.label, link)
-      end
-    end.compact
-  end
-  
   def issued_qualifications_info_for_leaders
     prolongs = kind.qualification_kinds.to_a
     info = ""

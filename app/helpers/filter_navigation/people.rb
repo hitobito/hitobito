@@ -25,12 +25,12 @@ module FilterNavigation
         if PREDEFINED_FILTERS.include?(name)
           @active_label = name
         else
-          @dropdown_label = name
-          @dropdown_active = true
+          dropdown.label = name
+          dropdown.active = true
         end
       elsif role_types.present?
-        @dropdown_label = 'Eigener Filter'
-        @dropdown_active = true
+        dropdown.label = 'Eigener Filter'
+        dropdown.active = true
       else
         @active_label = PREDEFINED_FILTERS.first
       end
@@ -54,25 +54,28 @@ module FilterNavigation
      
     def add_custom_people_filter_links
       filters = PeopleFilter.for_group(group)
-      filters.each { |filter| dropdown_link(people_filter_link(filter)) }
+      filters.each { |filter| people_filter_link(filter) }
     end
     
     def add_define_custom_people_filter_link
       if can?(:new, group.people_filters.new)
         link = template.new_group_people_filter_path(group.id, people_filter: {kind: kind, role_types: role_types})
-        dropdown_link(nil) if dropdown_links.present?
-        dropdown_link(link_to('Neuer Filter...', link))
+        dropdown.divider if dropdown.items.present?
+        dropdown.item('Neuer Filter...', link)
       end
     end
     
     def people_filter_link(filter)
        link = filter_path(kind: filter.kind, role_types: filter.role_types, name: filter.name)
-       html = link_to(filter.name, link)
   
        if can?(:destroy, filter)
-         { html => [template.link_action_destroy(template.group_people_filter_path(group, filter))] }
+         sub_item = [template.icon(:trash),
+                     template.group_people_filter_path(group, filter),
+                     data: { confirm: template.ti(:confirm_delete),
+                             method:  :delete }]
+         dropdown.item(filter.name, link, sub_item)
        else
-         html
+         dropdown.item(filter.name, link)
        end
     end
     

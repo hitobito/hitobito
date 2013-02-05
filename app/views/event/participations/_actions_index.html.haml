@@ -1,7 +1,7 @@
 - if can?(:new, @event.new_role)
-  = dropdown_button('Person hinzufügen', @event.possible_role_links(@group), :plus) 
+  = Dropdown::Event::RoleAdd.new(self, @group, @event) 
 
-= dropdown_button('Export', people_export_links(can?(:show_details, entries.first)), :download)
+= dropdown_people_export(can?(:show_details, entries.first))
 
 = action_button('Drucken', 'javascript:window.print();', :print)
 

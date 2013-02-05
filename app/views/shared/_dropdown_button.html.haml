@@ -12,18 +12,17 @@
     %b.caret
       
   %ul.dropdown-menu{role: "menu"}
-    - links.each do |link|
-      - if link.kind_of?(Hash)
-        - link.each do |main, subs|
-          %li.dropdown-submenu
-            = main
-            %ul.dropdown-menu
-              - subs.each do |sub|
-                - if sub.present?
-                  %li= sub
-                - else
-                  %li.divider
-      - elsif link.present?
-        %li= link
-      - else
+    - items.each do |item|
+      - if item.nil?
         %li.divider
+      - elsif item.sub_items?
+        %li.dropdown-submenu
+          = link_to(item.label, item.url, item.options)
+          %ul.dropdown-menu
+            - item.sub_items.each do |sub|
+              - if sub.present?
+                %li= link_to(sub.label, sub.url, sub.options)
+              - else
+                %li.divider
+      - else
+        %li= link_to(item.label, item.url, item.options)

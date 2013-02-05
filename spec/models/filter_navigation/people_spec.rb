@@ -10,6 +10,8 @@ describe FilterNavigation::People, type: :model do
       t.stub(new_group_people_filter_path: 'new_people_filter_path')
       t.stub(link_to: '<a>')
       t.stub(link_action_destroy: '<a>')
+      t.stub(icon: '<i>')
+      t.stub(ti: 'delete')
       t.stub(content_tag: '<content>')
     end
   end
@@ -24,10 +26,9 @@ describe FilterNavigation::People, type: :model do
     
     its(:main_items)      { should have(2).items }
     its(:active_label)    { should == 'Mitglieder' }
-    its(:dropdown_active) { should be_false }
-    its(:dropdown_label)  { should == 'Weitere Ansichten' }
-    its(:dropdown_links)  { should have(1).item }
-    
+    its('dropdown.active') { should be_false }
+    its('dropdown.label')  { should == 'Weitere Ansichten' }
+    its('dropdown.items')  { should have(1).item }
     
     context "with custom filters" do
       
@@ -37,9 +38,9 @@ describe FilterNavigation::People, type: :model do
                                      role_types: role_types)
       end
           
-      its(:dropdown_active) { should be_false }
-      its(:dropdown_label)  { should == 'Weitere Ansichten' }
-      its(:dropdown_links)  { should have(3).items }
+      its('dropdown.active') { should be_false }
+      its('dropdown.label')  { should == 'Weitere Ansichten' }
+      its('dropdown.items')  { should have(3).items }
       
     end
   end
@@ -56,8 +57,8 @@ describe FilterNavigation::People, type: :model do
     
     its(:main_items)      { should have(2).items }
     its(:active_label)    { should == nil }
-    its(:dropdown_active) { should be_true }
-    its(:dropdown_label)  { should == 'Leaders' }
-    its(:dropdown_links)  { should have(3).item }
+    its('dropdown.active') { should be_true }
+    its('dropdown.label')  { should == 'Leaders' }
+    its('dropdown.items')  { should have(3).item }
   end
 end

@@ -17,15 +17,15 @@ module FilterNavigation
         @filter = filter
         init_labels
         init_items
-        init_dropdown_links
+        init_dropdown_items
       end
       
       private
     
       def init_labels
         if role_labels.include?(filter)
-          @dropdown_label = filter
-          @dropdown_active = true
+          dropdown.label = filter
+          dropdown.active = true
         elsif PREDEFINED_FILTERS.has_key?(filter)
           @active_label = PREDEFINED_FILTERS[filter]
         elsif filter.blank?
@@ -39,9 +39,9 @@ module FilterNavigation
         end
       end
       
-      def init_dropdown_links
+      def init_dropdown_items
         role_labels.each do |label|
-          dropdown_link(link_to(label, event_participation_filter_link(label)))
+          dropdown.item(label, event_participation_filter_link(label))
         end
       end
         

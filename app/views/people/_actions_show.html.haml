@@ -1,7 +1,7 @@
 - if can?(:edit, entry)
   = button_action_edit
   
-= dropdown_button('Export', people_export_links(can?(:show_full, entry)), :download)
+= dropdown_people_export(can?(:show_full, entry))
 
 - if can?(:send_password_instructions, entry)
   = action_button('Login schicken',

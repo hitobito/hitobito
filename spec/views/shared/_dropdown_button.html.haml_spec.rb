@@ -13,7 +13,8 @@ describe "shared/_dropdown_button.html.haml" do
   it "renders dropdown" do
     render partial: 'shared/dropdown_button', 
            locals: {label: 'Neue Gruppe erstellen', 
-                    links: [['Group::TopGroup', '#'], ['Group::BottomLayer', '#']],
+                    items: [Dropdown::Item.new('Group::TopGroup', '#'), 
+                            Dropdown::Item.new('Group::BottomLayer', '#')],
                     icon_name: nil,
                     main_link: nil}
                     

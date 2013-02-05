@@ -2,7 +2,7 @@
 module Import
   class PersonImporter
     attr_accessor :data, :role_type, :group, :errors, :doublettes,
-      :failure_count, :success_count, :doublette_count
+                  :failure_count, :success_count, :doublette_count
 
 
     def initialize(hash={})

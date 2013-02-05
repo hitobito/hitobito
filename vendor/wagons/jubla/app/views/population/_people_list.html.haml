@@ -6,5 +6,5 @@
   %td= person_gender_with_check(person)
   %td
     - if can?(:edit, person)
-      = link_action_edit(edit_group_person_path(person, group_id: group.id, 
+      = link_action_edit(edit_group_person_path(group, person, 
                                                 return_url: population_group_path(@group.id)))

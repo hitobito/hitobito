@@ -9,7 +9,7 @@
     - t.col('Name')    do |p| 
       %strong
         -# Any person listed can be shown
-        = link_to(p.to_s, group_person_path(p.roles.first.group_id, p))
+        = link_to(p.to_s, group_person_path(p.default_group_id, p))
     - t.col('Rolle')   {|p| p.roles_short(nil) }
     - t.col('E-Mail')   {|p| p.primary_email }
     - t.col('Telefon') {|p| p.all_phone_numbers(true) }

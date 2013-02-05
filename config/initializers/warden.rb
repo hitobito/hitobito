@@ -15,13 +15,3 @@ Warden::Manager.prepend_before_logout do |record, warden, options|
 end
 
 Warden::Strategies.add(:one_time_token_authenticatable, Devise::Strategies::OneTimeTokenAuthenticatable)
-
-module Warden
-  class Proxy
-    def authenticate_with_pry(*args)
-      #require 'pry'; binding.pry
-      authenticate_without_pry(*args)
-    end
-    alias_method_chain :authenticate, :pry
-  end
-end

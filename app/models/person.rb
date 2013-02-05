@@ -171,6 +171,10 @@ class Person < ActiveRecord::Base
     records = Role.with_deleted.where(person_id: id).includes(:group).order('groups.name', 'roles.deleted_at')
   end
   
+  def default_group_id
+    primary_group_id || groups.select('groups.id').first.try(:id) || Group.root.id
+  end
+  
   # Is this person allowed to login?
   def login?
     persisted?

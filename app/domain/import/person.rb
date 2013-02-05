@@ -21,6 +21,7 @@ module Import
                  :reset_password_token,
                  :sign_in_count,
                  :last_label_format_id,
+                 :primary_group_id,
                  :updated_at]
 
 

@@ -2,7 +2,7 @@
 
 = action_button('Liste importieren', new_group_csv_imports_path, :upload) if can?(:new, @group.roles.new)
 
-= dropdown_people_export(can_export_people_details?)
+= dropdown_people_export(index_full_ability?)
 
 = action_button('Drucken', 'javascript:window.print();', :print)
 

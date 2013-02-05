@@ -9,6 +9,8 @@ class PeopleController < CrudController
 
   decorates :group, :person, :people
   
+  helper_method :index_full_ability?
+  
   # load group before authorization
   prepend_before_filter :parent
 
@@ -19,7 +21,7 @@ class PeopleController < CrudController
   
   def index
     respond_to do |format|
-      format.html { @people = filter_entries.preload_public_accounts.page(params[:page]) }
+      format.html { set_entries }
       format.pdf  { render_pdf(filter_entries) }
       format.csv  { render_entries_csv }
     end
@@ -121,6 +123,15 @@ class PeopleController < CrudController
     person
   end
   
+  def set_entries
+    @people = filter_entries.page(params[:page])
+    if index_full_ability?
+      @people = @people.includes(:phone_numbers)
+    else
+      @people = @people.preload_public_accounts
+    end
+  end
+  
   def filter_entries
     if params[:role_types]
       list_entries(params[:kind]).where(roles: {type: params[:role_types]})
@@ -155,7 +166,7 @@ class PeopleController < CrudController
   end
   
   def render_entries_csv
-    full = full_csv_export?
+    full = params[:details].present? && index_full_ability?
     entries = if full
       filter_entries.select('people.*').includes(:phone_numbers, :social_accounts)
     else
@@ -177,13 +188,11 @@ class PeopleController < CrudController
     send_data csv, type: :csv
   end
     
-  def full_csv_export?
-    if params[:details].present?
-      if params[:kind].blank?
-        can?(:index_full_people, @group)
-      else
-        can?(:index_deep_full_people, @group)
-      end
+  def index_full_ability?
+    if params[:kind].blank?
+      can?(:index_full_people, @group)
+    else
+      can?(:index_deep_full_people, @group)
     end
   end
   

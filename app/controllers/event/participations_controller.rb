@@ -7,10 +7,6 @@ class Event::ParticipationsController < CrudController
   self.nesting = Group, Event
   self.remember_params += [:filter]
   
-  FILTER = { all: 'Alle Personen',
-             teamers: 'Leitungsteam',
-             participants: 'Teilnehmende' }
-  
   decorates :group, :event, :participation, :participations, :alternatives
   
   # load before authorization
@@ -83,9 +79,9 @@ class Event::ParticipationsController < CrudController
     Person::PreloadPublicAccounts.for(records.collect(&:person))
 
     # default event filters
-    if scope = FILTER.keys.detect {|k| k.to_s == params[:filter] }
+    if scope = FilterNavigation::Event::Participations::PREDEFINED_FILTERS.keys.detect {|k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(scope, event) unless scope == :all
+      records = records.send(scope, event) unless scope.to_s == 'all'
       
     # event specific filters (filter by role label)
     elsif event.participation_role_labels.include?(params[:filter])

@@ -1,6 +1,6 @@
 - title @group.to_s
 
-- content_for(:filter, people_filter_navigation)
+- content_for(:filter, FilterNavigation::People.new(self, @group, params[:name], params[:role_types], params[:kind]))
 
 = paginate @people
 

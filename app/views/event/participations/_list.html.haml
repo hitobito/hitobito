@@ -1,6 +1,6 @@
 - title @event.to_s
 
-- content_for(:filter, participations_filter_navigation)
+- content_for(:filter, FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter]))
 
 = crud_table do |t|
   - t.col('') do |p|

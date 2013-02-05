@@ -13,7 +13,7 @@ class PeopleFilter < ActiveRecord::Base
   
   include RelatedRoleType::Assigners
   
-  attr_accessible :name, :kind, :role_types
+  attr_accessible :name, :role_types
   
   
   belongs_to :group
@@ -21,15 +21,9 @@ class PeopleFilter < ActiveRecord::Base
   has_many :related_role_types, as: :relation, dependent: :destroy
   
   validates :name, uniqueness: {scope: [:group_id, :group_type]}
-  validates :kind, inclusion: %w(group layer deep)
 
 
   default_scope order(:name).includes(:related_role_types)
-  
-  
-  def kind
-    super.presence || 'deep'
-  end
   
   def to_s
     name

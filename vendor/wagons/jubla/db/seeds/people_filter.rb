@@ -1,19 +1,15 @@
 filters = PeopleFilter.seed(:group_type, :name,
  {name: 'Scharleiter',
-  group_type: 'Group::State',
-  kind: 'deep'},
+  group_type: 'Group::State'},
   
  {name: 'Präses',
-  group_type: 'Group::State',
-  kind: 'deep'},
+  group_type: 'Group::State'},
   
  {name: 'Scharleiter',
-  group_type: 'Group::Region',
-  kind: 'deep'},
+  group_type: 'Group::Region'},
   
  {name: 'Präses',
-  group_type: 'Group::Region',
-  kind: 'deep'}
+  group_type: 'Group::Region'}
 )
 
 RelatedRoleType.seed_once(:relation_id, :relation_type, :role_type,

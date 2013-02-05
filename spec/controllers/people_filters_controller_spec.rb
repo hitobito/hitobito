@@ -20,16 +20,16 @@ describe PeopleFiltersController do
   context "POST create" do
     it "redirects to show for search" do
       expect {
-        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}, button: 'search'
+        post :create, group_id: group.id, people_filter: {role_types: role_types}, button: 'search'
       }.not_to change { PeopleFilter.count } 
       
-      should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer'))
+      should redirect_to(group_people_path(group, role_types: role_types, kind: 'deep'))
     end
     
     it "saves filter and redirects to show with save" do
       expect {
-        post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}, button: 'save'
-        should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer', name: 'Test Filter'))
+        post :create, group_id: group.id, people_filter: {role_types: role_types, name: 'Test Filter'}, button: 'save'
+        should redirect_to(group_people_path(group, role_types: role_types, kind: 'deep', name: 'Test Filter'))
       }.to change { PeopleFilter.count }.by(1)
     end
     
@@ -44,15 +44,15 @@ describe PeopleFiltersController do
       
       it "redirects to show with search" do
         expect {
-          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer'}, button: 'search'
+          post :create, group_id: group.id, people_filter: {role_types: role_types}, button: 'search'
         }.not_to change { PeopleFilter.count } 
         
-        should redirect_to(group_people_path(group, role_types: role_types, kind: 'layer'))
+        should redirect_to(group_people_path(group, role_types: role_types, kind: 'deep'))
       end
       
       it "is not authorized with save" do
         expect {
-          post :create, group_id: group.id, people_filter: {role_types: role_types, kind: 'layer', name: 'Test Filter'}, button: 'save'
+          post :create, group_id: group.id, people_filter: {role_types: role_types, name: 'Test Filter'}, button: 'save'
         }.not_to change { PeopleFilter.count }
         
         should redirect_to(root_path)

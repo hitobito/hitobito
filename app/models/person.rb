@@ -87,6 +87,7 @@ class Person < ActiveRecord::Base
   has_many :subscriptions, as: :subscriber, dependent: :destroy
   
   
+  belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
   
   

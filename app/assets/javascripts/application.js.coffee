@@ -85,7 +85,6 @@ typeaheadHighlighter = (item) ->
   query = query.replace(/\s+/g, '|')
   JSON.parse(item).label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
 
-
 isModifyingKey = (k) ->
   ! (k == 20 || # Caps lock */
      k == 16 || # Shift */
@@ -102,6 +101,7 @@ isModifyingKey = (k) ->
      (k >= 33 && k <= 34 )  || # Page Down, Page Up
      (k >= 112 && k <= 123) || # F1 - F12
      (k >= 144 && k <= 145 ))  # Num Lock, Scroll Lock
+
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)

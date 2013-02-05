@@ -18,6 +18,7 @@ module Export::CsvPeople
                         current_sign_in_ip
                         last_sign_in_ip
                         picture
+                        primary_group_id
                         last_label_format_id)
     
     def attributes

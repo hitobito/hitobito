@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130122065600) do
+ActiveRecord::Schema.define(:version => 20130205154028) do
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
@@ -155,9 +155,9 @@ ActiveRecord::Schema.define(:version => 20130122065600) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "deleter_id"
-    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
-    t.index ["parent_id"], :name => "index_groups_on_parent_id"
     t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
+    t.index ["parent_id"], :name => "index_groups_on_parent_id"
+    t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
   end
 
   create_table "label_formats", :force => true do |t|
@@ -214,15 +214,15 @@ ActiveRecord::Schema.define(:version => 20130122065600) do
     t.integer  "last_label_format_id"
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.index ["email"], :name => "index_people_on_email", :unique => true
+    t.integer  "primary_group_id"
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
+    t.index ["email"], :name => "index_people_on_email", :unique => true
   end
 
   create_table "people_filters", :force => true do |t|
     t.string  "name",       :null => false
     t.integer "group_id"
     t.string  "group_type"
-    t.string  "kind",       :null => false
   end
 
   create_table "phone_numbers", :force => true do |t|
@@ -265,8 +265,8 @@ ActiveRecord::Schema.define(:version => 20130122065600) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
-    t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
     t.index ["type"], :name => "index_roles_on_type"
+    t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
   end
 
   create_table "social_accounts", :force => true do |t|

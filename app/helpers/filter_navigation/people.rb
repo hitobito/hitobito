@@ -3,16 +3,16 @@ module FilterNavigation
     
     PREDEFINED_FILTERS = %w(Mitglieder Externe)
     
-    attr_reader :group, :name, :role_types, :kind
+    attr_reader :group, :name, :role_types, :deep
     
     delegate :can?, to: :template
     
-    def initialize(template, group, name, role_types, kind)
+    def initialize(template, group, name, role_types, deep = false)
       super(template)
       @group = group
       @name = name
       @role_types = role_types
-      @kind = kind
+      @deep = deep
       init_labels
       init_items
       init_dropdown_links
@@ -59,14 +59,14 @@ module FilterNavigation
     
     def add_define_custom_people_filter_link
       if can?(:new, group.people_filters.new)
-        link = template.new_group_people_filter_path(group.id, people_filter: {kind: kind, role_types: role_types})
+        link = template.new_group_people_filter_path(group.id, people_filter: {role_types: role_types})
         dropdown.divider if dropdown.items.present?
         dropdown.item('Neuer Filter...', link)
       end
     end
     
     def people_filter_link(filter)
-       link = filter_path(kind: filter.kind, role_types: filter.role_types, name: filter.name)
+       link = filter_path(kind: 'deep', role_types: filter.role_types, name: filter.name)
   
        if can?(:destroy, filter)
          sub_item = [template.icon(:trash),

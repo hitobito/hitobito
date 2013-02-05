@@ -15,7 +15,7 @@ describe PeopleFilter do
   
   it "creates RoleTypes on assignment" do
     group = groups(:top_layer)
-    filter = group.people_filters.new(name: 'Test', kind: 'layer')
+    filter = group.people_filters.new(name: 'Test')
     filter.role_types = ['Group::TopGroup::Leader', 'Group::TopGroup::Member']
     types = filter.related_role_types
     
@@ -25,10 +25,5 @@ describe PeopleFilter do
     filter.should be_valid
     expect { filter.save }.to change { RelatedRoleType.count }.by(2)
   end
-  
-  it "has group as default kind" do
-    PeopleFilter.new.kind.should == 'deep'
-  end
-  
   
 end

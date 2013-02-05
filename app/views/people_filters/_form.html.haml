@@ -1,5 +1,5 @@
 
-= standard_form(path_args(entry)) do |f|
+= standard_form(path_args(entry), noindent: true) do |f|
 
   .btn-toolbar
     .btn-group
@@ -13,7 +13,6 @@
   = f.error_messages
   
   = field_set_tag('Welche Rollen sollen angezeigt werden?') do
-    %p Je nach Suchbereich wird nur nach gewissen Rollen gesucht.
     - @role_types.each do |layer, groups|
       %h5= layer
       - groups.each do |group, role_types|
@@ -23,14 +22,6 @@
                                  role_type.sti_name, 
                                  role_type.label, 
                                  checked: entry.role_types.include?(role_type.sti_name))
-
-  - if !@group.bottom?
-    = field_set_tag('In welchem Bereich soll gesucht werden?') do
-      = f.labeled :kind, '&nbsp;'.html_safe do
-        = f.inline_radio_button(:kind, :deep, "Überall - Auf der Ebene #{@group.layer_group.to_s} und allen darunter liegenden Ebenen suchen", false)
-        = f.inline_radio_button(:kind, :layer, "Ebene - Nur auf der Ebene #{@group.layer_group.to_s} suchen", false)
-  - else
-    = f.hidden_field(:kind, value: :layer)
     
   - if can?(:create, entry)
     = field_set_tag('Filtern speichern') do

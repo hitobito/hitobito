@@ -49,10 +49,6 @@ class GroupDecorator < ApplicationDecorator
     klass.possible_children
   end
 
-  def bottom?
-    possible_children.none?(&:layer)
-  end
-
   def modifiable_attributes(*attributes)
     attributes = used_attributes(*attributes)
     attributes -= model.class.superior_attributes unless can?(:modify_superior, model)

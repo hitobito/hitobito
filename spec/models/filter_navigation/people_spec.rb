@@ -34,7 +34,6 @@ describe FilterNavigation::People, type: :model do
       
       before do
         group.people_filters.create!(name: 'Leaders', 
-                                     kind: 'deep', 
                                      role_types: role_types)
       end
           
@@ -49,7 +48,6 @@ describe FilterNavigation::People, type: :model do
     
     before do
       group.people_filters.create!(name: 'Leaders', 
-                                   kind: 'deep', 
                                    role_types: role_types)
     end
       

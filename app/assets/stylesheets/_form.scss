@@ -48,9 +48,13 @@
 .form-horizontal .control-group {
   margin-bottom: 0;
 }
+
 @include responsive(mediaPhone) {
   .form-horizontal .btn-toolbar {
     margin-left: 180px;
+  }
+  .form-horizontal.form-noindent .btn-toolbar {
+    margin-left: 0;
   }
 }
 

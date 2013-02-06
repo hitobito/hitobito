@@ -21,22 +21,18 @@ module Ability::People
       contains_any?(groups_group_read, collect_ids(person.groups))
     end
     
+    can [:modify, :primary_group], Person do |person| 
+      person.id == user.id ||
+      can_modify_person?(person)
+    end
+    
     if modify_permissions?
       can :create, Person
-      
-      can :modify, Person do |person| 
-        person.id == user.id ||
-        can_modify_person?(person)
-      end
       
       can :send_password_instructions, Person do |person| 
         person.id != user.id &&
         person.email.present? &&
         can_modify_person?(person)
-      end
-    else
-      can :modify, Person do |person|
-        person.id == user.id
       end
     end
      

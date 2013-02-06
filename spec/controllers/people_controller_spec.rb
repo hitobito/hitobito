@@ -234,7 +234,13 @@ describe PeopleController do
     
   end
 
-  context "userstamp" do
+  describe "PUT primary_group" do
+    it "sets primary group" do
+      put :primary_group, group_id: group, id: top_leader.id, primary_group_id: group.id, format: :js
+      
+      top_leader.reload.primary_group_id.should == group.id
+      should render_template('primary_group')
+    end
   end
 
 end

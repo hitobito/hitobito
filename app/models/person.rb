@@ -48,7 +48,7 @@
 class Person < ActiveRecord::Base
   
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
-                  :email, :address, :zip_code, :town, :country, :birthday, :picture]
+                  :email, :address, :zip_code, :town, :country, :birthday, :picture, :primary_group_id]
   
   attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
                   :email, :address, :zip_code, :town, :country,
@@ -119,8 +119,8 @@ class Person < ActiveRecord::Base
   ### INDEXED FIELDS
   
   define_partial_index do
-    indexes first_name, last_name, company_name, nickname, company, sortable: true
-    indexes email, address, zip_code, town, country, birthday, additional_information
+    indexes first_name, last_name, company_name, nickname, company, email, sortable: true
+    indexes address, zip_code, town, country, birthday, additional_information
             
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
@@ -172,7 +172,7 @@ class Person < ActiveRecord::Base
   end
   
   def default_group_id
-    primary_group_id || groups.select('groups.id').first.try(:id) || Group.root.id
+    primary_group_id || groups.first.try(:id) || Group.root.id
   end
   
   # Is this person allowed to login?

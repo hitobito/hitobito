@@ -26,6 +26,7 @@ Jubla::Application.routes.draw do
       member do
         get :history
         post :send_password_instructions
+        put :primary_group
       end
       resources :qualifications, only: [:new, :create, :destroy]
     end

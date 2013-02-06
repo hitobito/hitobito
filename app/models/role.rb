@@ -40,7 +40,10 @@ class Role < ActiveRecord::Base
   ### CALLBACKS
   
   after_create :set_contact_data_visible
+  after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
+  after_destroy :reset_primary_group
+  
 
   
   ### CLASS METHODS
@@ -86,6 +89,18 @@ class Role < ActiveRecord::Base
     if permissions.include?(:contact_data) && 
        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
       person.update_column :contact_data_visible, false
+    end
+  end
+  
+  def set_first_primary_group
+    if person.roles.count <= 1
+      person.update_column :primary_group_id, group_id
+    end
+  end
+  
+  def reset_primary_group
+    if person.primary_group_id == group_id && person.roles.where(group_id: group_id).count == 0
+      person.update_column :primary_group_id, nil
     end
   end
   

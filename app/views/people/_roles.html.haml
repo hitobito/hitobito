@@ -3,5 +3,13 @@
     %strong
       = link_to(role.group, role.group)
       = role.to_s
+  - if can?(:primary_group, entry)
+    %td
+      = link_to(icon(entry.primary_group_id == role.group_id ? 'star' : 'star-empty'),
+                primary_group_group_person_path(@group, entry, primary_group_id: role.group_id),
+                title: 'Hauptgruppe setzen',
+                alt: 'Hauptgruppe setzen',
+                class: "group-#{role.group_id}",
+                data: {method: :put, remote: true})
   %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
   %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)

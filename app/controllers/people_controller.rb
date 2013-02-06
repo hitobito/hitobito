@@ -15,7 +15,7 @@ class PeopleController < CrudController
   prepend_before_filter :parent
 
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy,
-                                       :send_password_instructions]
+                                       :send_password_instructions, :primary_group]
   
   before_render_show :load_asides
   
@@ -24,6 +24,19 @@ class PeopleController < CrudController
       format.html { set_entries }
       format.pdf  { render_pdf(filter_entries) }
       format.csv  { render_entries_csv }
+    end
+  end
+  
+  def show
+    if group.nil?
+      flash.keep
+      redirect_to person_home_path(entry)
+    else
+      respond_to do |format|
+        format.html { entry }
+        format.pdf  { render_pdf([entry]) }
+        format.csv  { render_entry_csv }
+      end
     end
   end
   
@@ -39,19 +52,6 @@ class PeopleController < CrudController
     end
     
     render json: people.collect(&:as_typeahead)
-  end
-
-  def show
-    if group.nil?
-      flash.keep
-      redirect_to person_home_path(entry)
-    else
-      respond_to do |format|
-        format.html { entry }
-        format.pdf  { render_pdf([entry]) }
-        format.csv  { render_entry_csv }
-      end
-    end
   end
 
   def history
@@ -77,6 +77,11 @@ class PeopleController < CrudController
     SendLoginJob.new(entry, current_user).enqueue!
     flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
     render 'shared/update_flash'
+  end
+  
+  # PUT button, ajax
+  def primary_group
+    entry.update_column :primary_group_id, params[:primary_group_id]
   end
 
   private

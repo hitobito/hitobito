@@ -38,10 +38,11 @@ describe Role do
 
   context "regular" do
     let(:person) { Fabricate(:person) }
+    let(:group) { groups(:bottom_layer_one) }
     subject do
       r = Role.new
       r.person = person
-      r.group = groups(:bottom_layer_one)
+      r.group = group
       r
     end
 
@@ -66,19 +67,38 @@ describe Role do
       end
     end
     
-    context "send notifications on first login role" do
-      it "should not send instructions to person" do
-        subject.person.should_receive(:send_reset_password_instructions).never
-        subject.type = "Group::BottomLayer::Leader"
+    context "primary group" do
+      before { subject.type = "Group::BottomLayer::Leader" }
+      
+      it "is set for first role" do
         subject.save.should be_true
+        person.primary_group_id.should == group.id
       end
       
-      it "should not send instructions to person with login" do
-        Fabricate(Group::BottomLayer::Member.name.to_s, person: subject.person, group: subject.group)
-        subject.person.update_attribute(:encrypted_password, 'asdfasd')
-        subject.person.should_receive(:send_reset_password_instructions).never
-        subject.type = "Group::BottomLayer::Leader"
-        subject.save.should be_true
+      it "is not set on subsequent roles" do
+        Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
+        subject.save
+        person.primary_group_id.should_not == group.id
+      end
+      
+      it "is reset if role is destroyed" do
+        subject.save
+        subject.destroy.should be_true
+        person.primary_group_id.should be_nil
+      end
+      
+      it "is not reset if role is destroyed and other roles in the same group exist" do
+        Fabricate(Group::BottomLayer::Member.name.to_s, person: person, group: group)
+        subject.save
+        subject.destroy.should be_true
+        person.primary_group_id.should == group.id
+      end
+      
+      it "is not reset if role is destroyed and primary group is another group" do
+        subject.save
+        person.update_column :primary_group_id, 42
+        subject.destroy.should be_true
+        person.primary_group_id.should == 42
       end
     end
     

@@ -14,6 +14,7 @@ describe 'people/_attrs.html.haml' do
 
   before do
     assign(:qualifications, [])
+    assign(:group, group)
     person.phone_numbers.create(label: 'private phone', public: false)
     view.stub(parent: top_group)
     view.stub(entry: PersonDecorator.decorate(person))

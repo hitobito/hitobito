@@ -32,6 +32,7 @@
 #  last_label_format_id   :integer
 #  creator_id             :integer
 #  updater_id             :integer
+#  primary_group_id       :integer
 #  name_mother            :string(255)
 #  name_father            :string(255)
 #  nationality            :string(255)

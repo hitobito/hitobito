@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: subscriptions
+#
+#  id              :integer          not null, primary key
+#  mailing_list_id :integer          not null
+#  subscriber_id   :integer          not null
+#  subscriber_type :string(255)      not null
+#  excluded        :boolean          default(FALSE), not null
+#
+
 leaders_group:
   mailing_list: leaders
   subscriber: top_layer

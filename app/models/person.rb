@@ -31,6 +31,9 @@
 #  last_sign_in_ip        :string(255)
 #  picture                :string(255)
 #  last_label_format_id   :integer
+#  creator_id             :integer
+#  updater_id             :integer
+#  primary_group_id       :integer
 #  name_mother            :string(255)
 #  name_father            :string(255)
 #  nationality            :string(255)
@@ -41,8 +44,6 @@
 #  j_s_number             :string(255)
 #  insurance_company      :string(255)
 #  insurance_number       :string(255)
-#  creator_id             :integer
-#  updater_id             :integer
 #
 
 class Person < ActiveRecord::Base

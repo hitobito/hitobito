@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: related_role_types
+#
+#  id            :integer          not null, primary key
+#  relation_id   :integer
+#  role_type     :string(255)      not null
+#  relation_type :string(255)
+#
+
 leader_groups_bottom_layer:
   relation: leaders_group
   relation_type: Subscription

@@ -24,8 +24,8 @@
 #  updated_at             :datetime         not null
 #  participant_count      :integer          default(0)
 #  application_contact_id :integer
+#  external_applications  :boolean          default(FALSE)
 #  condition_id           :integer
-#  external_applications  :boolean          default(FALSE), not null
 #
 
 class Event < ActiveRecord::Base

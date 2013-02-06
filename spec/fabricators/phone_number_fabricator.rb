@@ -1,11 +1,11 @@
 # == Schema Information
 #
-# Table name: social_accounts
+# Table name: phone_numbers
 #
 #  id               :integer          not null, primary key
 #  contactable_id   :integer          not null
 #  contactable_type :string(255)      not null
-#  name             :string(255)      not null
+#  number           :string(255)      not null
 #  label            :string(255)
 #  public           :boolean          default(TRUE), not null
 #

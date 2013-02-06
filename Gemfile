@@ -13,7 +13,7 @@ gem 'dalli'
 gem 'delayed_job_active_record'
 gem 'decorates_before_rendering', '0.0.3'
 gem 'devise'
-gem 'draper'
+gem 'draper', '< 1.0'
 gem 'faker'
 gem 'haml'
 gem 'kaminari'
@@ -56,6 +56,7 @@ group :development do
   gem 'quiet_assets'
   gem 'sextant'
   gem 'rack-mini-profiler'
+  gem "better_errors"
 end
 
 group :test do

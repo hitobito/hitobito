@@ -133,7 +133,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-    label("#{attr}_#{value.to_s.downcase}", class: "radio#{' inline' if inline}") do
+   
+    label(id_from_value(attr, value), class: "radio#{' inline' if inline}") do
       radio_button(attr, value, html_options) + ' ' + 
       caption
     end
@@ -142,7 +143,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def inline_check_box(attr, value, caption, html_options = {})
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
-    id = "#{attr}_#{value.to_s.downcase}"
+    id = id_from_value(attr, value)
     html_options[:id] = "#{model_param}_#{id}"
     label(id, class: 'checkbox inline') do
       @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
@@ -373,6 +374,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   
   def klass
     @klass ||= @object.respond_to?(:klass) ? @object.klass : @object.class
+  end
+  
+  def id_from_value(attr, value)
+    "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
   end
 
 end

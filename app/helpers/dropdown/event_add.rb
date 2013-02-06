@@ -12,7 +12,7 @@ module Dropdown
     def to_s
       if items.size == 1
         item = items.first
-        template.action_button("#{item.label} erstellen", item.link, icon)
+        template.action_button("#{item.label} erstellen", item.url, icon)
       else
         super
       end

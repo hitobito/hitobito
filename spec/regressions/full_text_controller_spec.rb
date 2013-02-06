@@ -6,6 +6,7 @@ describe FullTextController, :mysql, type: :controller do
   sphinx_environment(:people) do
   
     before do
+      Rails.cache.clear
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
       @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
       

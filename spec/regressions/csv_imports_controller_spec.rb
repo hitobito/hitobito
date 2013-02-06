@@ -25,8 +25,8 @@ describe CsvImportsController, type: :controller do
       post :define_mapping, group_id: group.id, csv_import: { file: file } 
       should render_template(:define_mapping)
       should have_content '1 Datensatz erfolgreich gelesen.'
-      should have_content 'Rolle festlegen'
-      should have_content 'Attribut Zuordnung festlegen'
+      should have_content 'Rolle auswählen'
+      should have_content 'Spalten zu Feldern zuordnen'
     end
   end
 

@@ -36,7 +36,9 @@ module Jubla::Ability
   end
 
   def define_census_abilities
-    can :evaluate_census, Group
+    can :evaluate_census, Group do |group|
+      !external?
+    end
     
     # this is called on the state group
     can :remind_census, Group do |group|

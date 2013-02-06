@@ -7,15 +7,18 @@
             [group_people_path(group),
              group_roles_path(group),
              new_group_csv_imports_path(group)]
+
+- if can?(:index_events, group)
+  - bar.tab "Anlässe",
+            group_events_path(group, returning: true),
+            [group_events_path(group)]
   
-- bar.tab "Anlässe",
-          group_events_path(group, returning: true),
-          [group_events_path(group)]
-  
-- bar.tab "Abos",
-          group_mailing_lists_path(group, returning: true),
-          [group_mailing_lists_path(group)]
-          
+- if can?(:index_mailing_lists, group)
+  - bar.tab "Abos",
+            group_mailing_lists_path(group, returning: true),
+            [group_mailing_lists_path(group)]
+
 = render_extensions :tabs, locals: { group: group, bar: bar }
 
-- bar.tab "Gelöscht", deleted_subgroups_group_path(group)
+- if can?(:show_deleted, group)
+  - bar.tab "Gelöscht", deleted_subgroups_group_path(group)

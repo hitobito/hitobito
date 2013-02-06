@@ -63,5 +63,9 @@ module Ability::Common
   def modify_permissions?
     @groups_group_full.present? || @groups_layer_full.present?
   end
+  
+  def external?
+    user.roles.all? {|r| r.class.external? }
+  end
 
 end

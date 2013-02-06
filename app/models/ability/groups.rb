@@ -64,6 +64,12 @@ module Ability::Groups
     end
 
     can :index_events, Group
+    
+    can :index_mailing_lists, Group
+    
+    can :show_deleted, Group do |group|
+      !external?
+    end
 
     ### ROLES
 

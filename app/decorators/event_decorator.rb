@@ -4,10 +4,6 @@ class EventDecorator < ApplicationDecorator
   decorates :event
   decorates_association :contact
 
-  def label
-    safe_join([name, label_detail], h.tag(:br))
-  end
-
   def labeled_link(url = nil, can = nil)
     url ||= h.group_event_path(group_ids.first, model)
     can = can?(:show, model) if can.nil?
@@ -59,10 +55,10 @@ class EventDecorator < ApplicationDecorator
   end
 
   def issued_qualifications_info_for_leaders
-    prolongs = kind.qualification_kinds.to_a
+    prolongs = kind.qualification_kinds.order(:label).to_a
     info = ""
     if prolongs.present?
-      info << "Verlängert "
+      info << "Verlängert"
       info << issued_prolongations_info(prolongs)
       info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
     end
@@ -70,15 +66,15 @@ class EventDecorator < ApplicationDecorator
   end
   
   def issued_qualifications_info_for_participants
-    qualis = kind.qualification_kinds.to_a
-    prolongs = kind.prolongations.to_a
+    qualis = kind.qualification_kinds.order(:label).to_a
+    prolongs = kind.prolongations.order(:label).to_a
     info = ""
     info << issued_qualifications_info(qualis)
     if prolongs.present?
       if qualis.present?
         info << " und verlängert"
       else
-        info << "Verlängert "
+        info << "Verlängert"
       end
     end
     info << issued_prolongations_info(prolongs)
@@ -86,13 +82,6 @@ class EventDecorator < ApplicationDecorator
       info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
     end
     info
-  end
-
-  def with_br(*attrs)
-    values = attrs.map do |attr|
-      send(attr).presence
-    end.compact
-    safe_join(values, h.tag(:br))
   end
 
   def as_typeahead

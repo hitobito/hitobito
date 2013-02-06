@@ -34,6 +34,12 @@ describe FullTextController, :mysql, type: :controller do
           
           assigns(:people).should_not include(@bg_member)
         end
+        
+        it "does not search for too short queries" do
+          get :index, q: 'e'
+          
+          assigns(:people).should == []
+        end
       end
       
       context "as root" do
@@ -46,6 +52,30 @@ describe FullTextController, :mysql, type: :controller do
         end
       end
       
+    end
+    
+    describe 'GET query' do
+      
+      before {sign_in(people(:top_leader)) }
+              
+              
+      it "finds accessible person" do
+        get :query, q: @bg_leader.last_name[1..5]
+        
+        @response.body.should include(@bg_leader.full_name)
+      end
+      
+      it "does not find not accessible person" do
+        get :query, q: @bg_member.last_name[1..5]
+        
+        @response.body.should_not include(@bg_leader.full_name)
+      end
+      
+      it "finds groups" do
+        get :query, q: groups(:bottom_layer_one).to_s[1..5]
+        
+        @response.body.should include(groups(:bottom_layer_one).to_s)
+      end
     end
   
   end

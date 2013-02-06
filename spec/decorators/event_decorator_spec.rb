@@ -1,10 +1,11 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe EventDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
 
-  let(:event) { ev = events(:top_course); ev.dates.clear; ev }
+  let(:event) { events(:top_course) }
   subject { EventDecorator.new(event) }
 
   its(:labeled_link) { should =~ /SLK  Top/ }
@@ -23,6 +24,8 @@ describe EventDecorator, :draper_with_helpers do
   end
 
   describe "#dates" do
+    
+    before { event.dates.clear }
 
     it "joins multiple dates" do
       add_date(start_at: "2002-01-01")
@@ -74,17 +77,66 @@ describe EventDecorator, :draper_with_helpers do
       end
     end
 
-  end
-
-  def parse(str)
-    Time.zone.parse(str)
-  end
-
-  def add_date(date)
-    %w[:start_at, :finish_at].each do |key|
-      date[key] = parse(date[key]) if date.key?(key)
+    def add_date(date)
+      %w[:start_at, :finish_at].each do |key|
+        date[key] = parse(date[key]) if date.key?(key)
+      end
+      event.dates.build(date)
+      event.save!
     end
-    event.dates.build(date)
-    event.save!
+    
+    def parse(str)
+      Time.zone.parse(str)
+    end
+    
   end
+
+  context "qualification infos" do
+    context "with qualifications and prolongations" do
+      its(:issued_qualifications_info_for_leaders) do
+        should == "Verlängert existierende Qualifikationen Super Lead auf den 01.03.2012 (letztes Kursdatum)."
+      end
+      
+      its(:issued_qualifications_info_for_participants) do
+        should == "Vergibt die Qualifikation Super Lead und verlängert existierende Qualifikationen Group Lead auf den 01.03.2012 (letztes Kursdatum)."
+      end
+    end
+    
+    context "only with qualifications" do
+      before { event.kind = event_kinds(:glk) }
+      
+      its(:issued_qualifications_info_for_leaders) do
+        should == "Verlängert existierende Qualifikationen Group Lead auf den 01.03.2012 (letztes Kursdatum)."
+      end
+      
+      its(:issued_qualifications_info_for_participants) do
+        should == "Vergibt die Qualifikation Group Lead auf den 01.03.2012 (letztes Kursdatum)."
+      end
+    end
+    
+    context "only with prolongations" do
+      before { event.kind = event_kinds(:fk) }
+      
+      its(:issued_qualifications_info_for_leaders) do
+        should == ""
+      end
+      
+      its(:issued_qualifications_info_for_participants) do
+        should == "Verlängert existierende Qualifikationen Group Lead, Super Lead auf den 01.03.2012 (letztes Kursdatum)."
+      end
+    end
+    
+    context "without qualifications and prolongations" do
+      before { event.kind = event_kinds(:old) }
+      
+      its(:issued_qualifications_info_for_leaders) do
+        should == ""
+      end
+      
+      its(:issued_qualifications_info_for_participants) do
+        should == ""
+      end
+    end
+  end
+
 end

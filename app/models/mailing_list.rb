@@ -57,7 +57,7 @@ class MailingList < ActiveRecord::Base
       sub = subscriptions.new
       sub.subscriber = person
       sub.excluded = true
-      sub.save
+      sub.save!
     end
   end
   

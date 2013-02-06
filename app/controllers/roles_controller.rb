@@ -37,7 +37,7 @@ class RolesController < CrudController
     role.person_id = entry.person_id
     role.group_id = entry.group_id
     role.label = model_params[:label]
-    role.save
+    role.save!
     entry.destroy
     flash[:notice] = @@helper.t('roles.role_changed', old_role: full_entry_label, new_role: role).html_safe
     set_model_ivar(role)

@@ -73,7 +73,7 @@ module Jubla::Role
       role.person = self.person
       role.group = self.group
       role.label = self.class.label
-      role.save
+      role.save!
     end
   end
 

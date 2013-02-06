@@ -11,7 +11,7 @@ module Jubla::Event::RegisterController
       role = Jubla::Role::External.new
       role.group = group
       role.person = person
-      role.save
+      role.save!
       person.roles << role
       true
     end

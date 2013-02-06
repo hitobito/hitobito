@@ -6,8 +6,11 @@ module Subscriber
       
     def create
       subscription.excluded = false
-      subscription.save
-      redirect_to(mailing_list_path, notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
+      if subscription.save
+        redirect_to(mailing_list_path, notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
+      else
+        redirect_to(mailing_list_path, alert: "Du konntest dem Abo nicht hinzugefügt werden: #{subscription.errors.full_messages.join(", ")}")
+      end
     end
 
     def destroy

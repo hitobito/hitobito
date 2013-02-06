@@ -144,6 +144,9 @@ $ ->
   $(document).on('ajax:error', (event, xhr, status, error) ->
     alert('Sorry, something went wrong\n(' + error + ')'))
 
+  # make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)
+  $('ul.typeahead').live('mousedown', (e) -> e.preventDefault())
+
   # controll visibilty of group contact fields in relation to contact
   $('#group_contact_id').on('change', do ->
     open = !$('#group_contact_id').val()

@@ -19,7 +19,8 @@ class MemberCountsController < ApplicationController
       redirect_to census_flock_group_path(flock, year: year)
     else
       messages = with_errors.collect{|e| "#{e.born_in}: #{e.errors.full_messages.join(", ")}" }.join("; ")
-      flash.now[:alert] = "Nicht alle Jahrgänge konnten gespeichert werden. Bitte überprüfen Sie Ihre Angaben. (#{messages})"
+      flash.now[:alert] = "Nicht alle Jahrgänge konnten gespeichert werden. " + 
+                          "Bitte überprüfen Sie Ihre Angaben. (#{messages})"
       render "edit"
     end
   end

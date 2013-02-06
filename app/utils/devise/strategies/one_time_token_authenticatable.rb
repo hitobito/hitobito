@@ -10,7 +10,8 @@ module Devise
     class OneTimeTokenAuthenticatable < TokenAuthenticatable
 
       def authenticate!
-        resource = mapping.to.find_for_authentication(:reset_password_token => authentication_hash[authentication_keys.first])
+        token = authentication_hash[authentication_keys.first]
+        resource = mapping.to.find_for_authentication(reset_password_token: token)
         return fail(:invalid_token) unless resource
 
         success = validate(resource) do

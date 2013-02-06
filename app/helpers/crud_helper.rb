@@ -118,7 +118,10 @@ module CrudHelper
   # Uses the current record if none is given.
   def button_action_edit(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.edit"), path.is_a?(String) ? path : edit_polymorphic_path(path), 'edit', options
+    action_button ti(:"link.edit"), 
+                  path.is_a?(String) ? path : edit_polymorphic_path(path), 
+                  'edit', 
+                  options
   end
 
   # Standard button action to the destroy action of a given record.
@@ -134,21 +137,30 @@ module CrudHelper
   # Links to the current model_class if no path is given.
   def button_action_index(path = nil, url_options = {:returning => true}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.list"), path.is_a?(String) ? path : polymorphic_path(path, url_options), 'list', options
+    action_button ti(:"link.list"), 
+                  path.is_a?(String) ? path : polymorphic_path(path, url_options), 
+                  'list', 
+                  options
   end
 
   # Standard button action to the new page.
   # Links to the current model_class if no path is given.
   def button_action_add(path = nil, url_options = {}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.add", model: models_label(false)), path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 'plus', options
+    action_button ti(:"link.add", model: models_label(false)), 
+                  path.is_a?(String) ? path : new_polymorphic_path(path, url_options), 
+                  'plus', 
+                  options
   end
   
   # Standard link action to the edit page of a given record.
   # Uses the current record if none is given.
   def link_action_edit(path = nil)
     path ||= path_args(entry)
-    link_to(icon(:edit), path.is_a?(String) ? path : edit_polymorphic_path(path), title: 'Bearbeiten', alt: 'Bearbeiten')
+    link_to(icon(:edit), 
+            path.is_a?(String) ? path : edit_polymorphic_path(path), 
+            title: 'Bearbeiten', 
+            alt: 'Bearbeiten')
   end
   
   # Standard link action to the destroy action of a given record.

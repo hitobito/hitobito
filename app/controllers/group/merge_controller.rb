@@ -37,7 +37,8 @@ class Group::MergeController < ApplicationController
     groups = group.sister_groups
     @candidates = groups.select {|g| can?(:update, g)}
     if @candidates.empty? 
-      flash[:alert] = 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst dort nicht über die nötigen Berechtigungen.'
+      flash[:alert] = 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder ' + 
+                      'Du verfügst dort nicht über die nötigen Berechtigungen.'
       redirect_to group_path(group)
     end
   end

@@ -38,7 +38,8 @@ class Group::MoveController < ApplicationController
     group_by { |candidate| candidate.class.label }
 
     if @candidates.empty? 
-      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen.'
+      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder ' + 
+                      'Du verfügst nicht über die nötigen Berechtigungen.'
       redirect_to group_path(group)
     end
   end

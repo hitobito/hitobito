@@ -74,7 +74,9 @@ class Event::ParticipationMailer < ActionMailer::Base
   
   def additional_information_details
     if @participation.additional_information?
-      "#{t('activerecord.attributes.event/participation.additional_information')}:<br/>#{@participation.additional_information.gsub("\n", "<br/>")}"
+      t('activerecord.attributes.event/participation.additional_information') +
+      ":<br/>" + 
+      @participation.additional_information.gsub("\n", "<br/>")
     end
   end
   

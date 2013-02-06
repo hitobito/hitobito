@@ -96,7 +96,9 @@ class MailingList < ActiveRecord::Base
                  "ON related_role_types.relation_type = 'Subscription' " <<
                  "AND related_role_types.relation_id = subscriptions.id").
            where(subscriptions: { mailing_list_id: id }).
-           where("people.id NOT IN (#{subscriptions.select(:subscriber_id).where(excluded: true, subscriber_type: Person.sti_name).to_sql})").
+           where("people.id NOT IN (#{subscriptions.select(:subscriber_id).
+                                                    where(excluded: true, subscriber_type: Person.sti_name).
+                                                    to_sql})").
            where(condition.to_a).
            uniq
   end

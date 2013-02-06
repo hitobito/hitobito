@@ -13,7 +13,8 @@ module Event::Qualifier
     end
   
     def has_all_prolongations?(kind_ids)
-      obtained_qualifications_for(kind_ids).size == existing_qualifications(kind_ids).pluck(:qualification_kind_id).uniq.size
+      obtained_qualifications_for(kind_ids).size == 
+      existing_qualifications(kind_ids).pluck(:qualification_kind_id).uniq.size
     end
   
     def create_qualifications

@@ -6,7 +6,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :event
   decorates_association :application
   
-  delegate :to_s, :email, :all_phone_numbers, :complete_address, :primary_email, :all_social_accounts, :town, to: :person
+  delegate :to_s, :email, :all_phone_numbers, :complete_address, 
+           :primary_email, :all_social_accounts, :town, to: :person
   delegate :priority, :confirmation, to: :application
   delegate :qualified?, to: :qualifier
   

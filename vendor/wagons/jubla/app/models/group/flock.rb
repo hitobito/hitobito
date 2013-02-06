@@ -11,7 +11,9 @@ class Group::Flock < Group
   AVAILABLE_KINDS = %w(Jungwacht Blauring Jubla)
   
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
-  attr_accessible *(accessible_attributes.to_a + [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), as: :superior
+  attr_accessible *(accessible_attributes.to_a + 
+                    [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), 
+                  as: :superior
 
   
   has_many :member_counts
@@ -21,13 +23,16 @@ class Group::Flock < Group
 
 
   def available_coaches 
-    Person.in_layer(*layer_groups).where(roles: { type: [Group::State::Coach, Group::Region::Coach].collect(&:sti_name) })
+    coach_role_types = [Group::State::Coach, Group::Region::Coach].collect(&:sti_name)
+    Person.in_layer(*layer_groups).
+           where(roles: { type: coach_role_types })
   end
 
   def available_advisors
+    advisor_group_types = [Group::StateBoard, Group::RegionalBoard].collect(&:sti_name)
     Person.in_layer(*layer_groups).
-      where(groups: { type: [Group::StateBoard, Group::RegionalBoard].collect(&:sti_name) }).
-      where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
+           where(groups: { type: advisor_group_types }).
+           where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
   end
   
   def to_s

@@ -27,7 +27,11 @@ module Dropdown
     
     def item(label, url, *sub_items)
       opts = sub_items.extract_options!
-      subs = sub_items.collect {|sub_label, sub_url, sub_options| (sub_label || sub_url) ? Item.new(sub_label, sub_url, [], sub_options) : nil }
+      subs = sub_items.collect do |sub_label, sub_url, sub_options|
+        if sub_label || sub_url 
+          Item.new(sub_label, sub_url, [], sub_options)
+        end
+      end
       @items << Item.new(label, url, subs, opts)
     end
   end

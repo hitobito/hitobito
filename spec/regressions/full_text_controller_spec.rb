@@ -13,8 +13,12 @@ describe FullTextController, :mysql, type: :controller do
       @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
       @bl_extern = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one)).person
       
-      @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
-      @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+      @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, 
+                             group: groups(:bottom_group_one_one),
+                             person: Fabricate(:person, last_name: 'Schurter', first_name: 'Franz')).person
+      @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, 
+                             group: groups(:bottom_group_one_one),
+                             person: Fabricate(:person, last_name: 'Bindella', first_name: 'Yasmine')).person
       
       ThinkingSphinx::Test.index
     end
@@ -69,7 +73,7 @@ describe FullTextController, :mysql, type: :controller do
       it "does not find not accessible person" do
         get :query, q: @bg_member.last_name[1..5]
         
-        @response.body.should_not include(@bg_leader.full_name)
+        @response.body.should_not include(@bg_member.full_name)
       end
       
       it "finds groups" do

@@ -122,7 +122,7 @@ GEM
       activesupport (>= 3.2.6)
     delayed_job (3.0.5)
       activesupport (~> 3.0)
-    delayed_job_active_record (0.4.0)
+    delayed_job_active_record (0.3.3)
       activerecord (>= 2.1.0, < 4)
       delayed_job (~> 3.0)
     devise (2.2.3)
@@ -440,7 +440,7 @@ DEPENDENCIES
   database_cleaner
   debugger
   decorates_before_rendering (= 0.0.3)
-  delayed_job_active_record
+  delayed_job_active_record (< 0.4)
   devise
   draper (< 1.0)
   fabrication

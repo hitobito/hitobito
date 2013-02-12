@@ -174,7 +174,8 @@ class Group < ActiveRecord::Base
   def sister_groups_with_descendants
     Group.joins("LEFT JOIN groups AS sister_groups " + 
                 "ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt").
-          where(sister_groups: { parent_id: parent_id, type: type})
+          where("sister_groups.type = ?", type).
+          where(parent_id? ? ["sister_groups.parent_id = ?", parent_id] : "sister_groups.parent_id IS NULL")
   end
 
   # The layer hierarchy without the layer of this group.

@@ -30,7 +30,7 @@
 Fabricator(:event) do
   name { 'Eventus' }
   groups { [Group.all_types.first.first] }
-  after_build { |event| event.dates.build(start_at: Time.zone.local(2012,05,11)) } 
+  before_validation { |event| event.dates.build(start_at: Time.zone.local(2012,05,11)) } 
 end
 
 

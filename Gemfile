@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 
 gem 'airbrake'
 gem 'awesome_nested_set'
@@ -24,7 +24,7 @@ gem 'nested_form'
 gem 'paranoia'
 gem 'prawn'
 gem 'protective'
-gem 'rack', '1.4.1' # fix this version to avoid warning in 1.4.2
+gem 'rack'
 gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
@@ -93,7 +93,6 @@ end
 
 group :metrics do
   gem 'annotate'
-  #gem 'metrical' 
   gem 'brakeman'
   gem 'ci_reporter'
   gem 'rails_code_qa'

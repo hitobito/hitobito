@@ -50,7 +50,7 @@ class Event::RolesController < CrudController
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
-    "#{models_label(false)} #{Event::RoleDecorator.decorate(entry).flash_info}".html_safe
+    "Rolle #{Event::RoleDecorator.decorate(entry).flash_info}".html_safe
   end
   
   def event

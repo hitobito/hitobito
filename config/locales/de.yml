@@ -40,11 +40,11 @@ de:
       event/role/cook:
         one: Küche
       event/role/participant:
-        one: TeilnehmerIn
+        one: Teilnehmer/-in
       event/role/treasurer:
         one: Kassier
       event/role/speaker:
-        one: Referent
+        one: Referent/-in
       group:
         one: Gruppe
         other: Gruppen

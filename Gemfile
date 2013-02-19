@@ -10,14 +10,14 @@ gem 'carrierwave'
 gem 'cmess'
 gem 'daemons'
 gem 'dalli'
-gem 'delayed_job_active_record', '< 0.4' # set version as long #32 is not fixed: https://github.com/collectiveidea/delayed_job_active_record/issues/32
+gem 'delayed_job_active_record'
 gem 'decorates_before_rendering', '0.0.3'
 gem 'devise'
 gem 'draper', '< 1.0'
 gem 'faker'
 gem 'haml'
 gem 'kaminari'
-gem "magiclabs-userstamp", require: 'userstamp'
+gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
@@ -56,7 +56,7 @@ group :development do
   gem 'quiet_assets'
   gem 'sextant'
   gem 'rack-mini-profiler'
-  gem "better_errors"
+  gem 'better_errors'
 end
 
 group :test do

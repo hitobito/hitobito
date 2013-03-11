@@ -7,6 +7,9 @@ require File.expand_path('../config/application', __FILE__)
 
 # custom requires
 require 'ci/reporter/rake/rspec' unless Rails.env.production?
-require 'rails-erd' if Rails.env.development?
+if Rails.env.development?
+  require 'rails-erd'
+  require 'rails_code_qa'
+end 
 
 Jubla::Application.load_tasks

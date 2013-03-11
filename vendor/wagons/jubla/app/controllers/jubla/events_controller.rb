@@ -1,7 +1,7 @@
-module Jubla::EventsController 
+module Jubla::EventsController
   extend ActiveSupport::Concern
 
-  included do 
+  included do
     before_filter :remove_restricted, only: [:create, :update]
 
     before_render_new :default_coach
@@ -14,7 +14,7 @@ module Jubla::EventsController
 
 
   private
-  
+
   def default_coach
     if entry.class.attr_used?(:coach_id)
       entry.coach_id = parent.coach_id
@@ -36,8 +36,8 @@ module Jubla::EventsController
   end
 
   def load_conditions
-    if entry.kind_of?(Event::Course) 
-      @conditions = Event::Course::Condition.where(:group_id => entry.group_ids).order(:label)
+    if entry.kind_of?(Event::Course)
+      @conditions = Event::Course::Condition.where(group_id: entry.group_ids).order(:label)
     end
   end
 

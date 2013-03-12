@@ -9,11 +9,10 @@ Gem::Specification.new do |s|
   s.version     = JublaJubla::VERSION
   s.authors     = ["Pascal Zumkehr"]
   s.email       = ["zumkehr@puzzle.ch"]
-  #s.homepage    = "TODO"
-  s.summary     = "Jubla"
-  s.description = "TODO: description"
+  s.summary     = "Jubla organization specific features"
+  s.description = "Jubla organization specific features"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile"]
-  s.test_files = Dir["test/**/*"]
+  s.test_files = Dir["spec/**/*"]
 
 end

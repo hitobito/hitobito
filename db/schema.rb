@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130205154028) do
+ActiveRecord::Schema.define(:version => 20130325141319) do
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
@@ -267,6 +267,15 @@ ActiveRecord::Schema.define(:version => 20130205154028) do
     t.datetime "deleted_at"
     t.index ["type"], :name => "index_roles_on_type"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
+  end
+
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.index ["updated_at"], :name => "index_sessions_on_updated_at"
+    t.index ["session_id"], :name => "index_sessions_on_session_id"
   end
 
   create_table "social_accounts", :force => true do |t|

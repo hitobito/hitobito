@@ -47,53 +47,53 @@
 #
 
 class Person < ActiveRecord::Base
-  
+
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
                   :email, :address, :zip_code, :town, :country, :birthday, :picture, :primary_group_id]
-  
+
   attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
                   :email, :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information,
                   :password, :password_confirmation, :remember_me,
                   :picture, :remove_picture
-  
+
   include Groups
   include Contactable
-  
+
   devise :database_authenticatable,
          :recoverable,
          :rememberable,
          :trackable,
          :validatable
-  
+
   mount_uploader :picture, PictureUploader
 
   model_stamper
   stampable stamper_class_name: :person,
             deleter: false
-  
-  
+
+
   ### ASSOCIATIONS
-  
-  has_many :roles, dependent: :destroy, inverse_of: :person
+
+  has_many :roles, inverse_of: :person
   has_many :groups, through: :roles
-  
+
   has_many :event_participations, class_name: 'Event::Participation', dependent: :destroy, inverse_of: :person
   has_many :event_applications, class_name: 'Event::Application', through: :event_participations, source: :application
   has_many :event_roles, class_name: 'Event::Role', through: :event_participations, source: :roles
   has_many :events, through: :event_participations
-  
-  has_many :qualifications
-  
+
+  has_many :qualifications, dependent: :destroy
+
   has_many :subscriptions, as: :subscriber, dependent: :destroy
-  
-  
+
+
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
-  
-  
+
+
   ### VALIDATIONS
-  
+
   schema_validations except: [:picture, :created_at, :updated_at]
   validates :gender, inclusion: %w(m w), allow_blank: true
   validates :company_name, presence: { if: :company? }
@@ -102,8 +102,9 @@ class Person < ActiveRecord::Base
 
   ### CALLBACKS
   before_validation :override_blank_email
- 
- 
+  before_destroy :destroy_roles
+
+
   ### SCOPES
 
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
@@ -115,24 +116,24 @@ class Person < ActiveRecord::Base
                               " THEN people.first_name ELSE people.last_name END",
                               "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
                               " THEN people.last_name ELSE people.nickname END")
-  
-  
+
+
   ### INDEXED FIELDS
-  
+
   define_partial_index do
     indexes first_name, last_name, company_name, nickname, company, email, sortable: true
     indexes address, zip_code, town, country, birthday, additional_information
-            
+
     indexes phone_numbers.number, as: :phone_number
     indexes social_accounts.name, as: :social_account
   end
-  
-  
+
+
   ### CLASS METHODS
 
 
   ### INSTANCE METHODS
-  
+
   def to_s
     if company?
       company_name
@@ -142,11 +143,11 @@ class Person < ActiveRecord::Base
       name
     end
   end
-  
+
   def full_name
     "#{first_name} #{last_name}".strip
   end
-  
+
   def greeting_name
     first_name.presence || nickname.presence || last_name.presence || company_name
   end
@@ -154,11 +155,11 @@ class Person < ActiveRecord::Base
   def male?
     gender == 'm'
   end
-  
+
   def female?
     gender == 'w'
   end
-  
+
   def upcoming_events
     events.upcoming.merge(Event::Participation.active).uniq
   end
@@ -166,30 +167,30 @@ class Person < ActiveRecord::Base
   def pending_applications
     event_applications.merge(Event::Participation.pending)
   end
-  
+
   # All time roles of this person, including deleted.
   def all_roles
     records = Role.with_deleted.where(person_id: id).includes(:group).order('groups.name', 'roles.deleted_at')
   end
-  
+
   def default_group_id
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
-  
+
   # Is this person allowed to login?
   def login?
     persisted?
   end
-  
+
   # Is this person root?
   def root?
     email == Settings.root_email
   end
-  
+
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     persisted? && super
   end
-  
+
   def clear_reset_password_token!
     clear_reset_password_token && save(validate: false)
   end
@@ -216,15 +217,15 @@ class Person < ActiveRecord::Base
     clean_up_passwords
     result
   end
-  
+
   public :generate_reset_password_token!
-  
+
   private
-  
+
   def email_required?
     false
   end
-  
+
   # Checks whether a password is needed or not. For validations only.
   # Passwords are required if the password or confirmation are being set somewhere.
   def password_required?
@@ -234,11 +235,17 @@ class Person < ActiveRecord::Base
   def override_blank_email
     self.email = nil if email.blank?
   end
-  
+
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, "Bitte geben Sie einen Namen ein")
     end
   end
-  
+
+  # Destroy all related roles before destroying this person.
+  # dependent: :destroy does not work here, because roles are paranoid.
+  def destroy_roles
+    roles.with_deleted.delete_all
+  end
+
 end

@@ -49,6 +49,7 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'sqlite3'
+  gem 'tarantula', require: 'tarantula-rails3'
 end
 
 group :development do

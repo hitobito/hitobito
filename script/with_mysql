@@ -2,7 +2,7 @@
 
 if [ -z "$RAILS_ENV" ]
 then
- env="development"
+  env="development"
 else
   env=$RAILS_ENV
 fi

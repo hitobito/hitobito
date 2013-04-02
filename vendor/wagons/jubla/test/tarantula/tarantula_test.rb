@@ -20,6 +20,12 @@ class TarantulaTest < ActionController::IntegrationTest
     post '/users/sign_in', person: {email: person.email, password: 'foobar'}
     follow_redirect!
 
-    tarantula_crawl(self)
+    t = tarantula_crawler(self)
+    #t.handlers << Relevance::Tarantula::TidyHandler.new
+    t.skip_uri_patterns << /year=201[04-9]/
+    t.skip_uri_patterns << /year=200[0-9]/
+    t.skip_uri_patterns << /year=202[0-9]/
+    t.crawl_timeout = 5.minutes
+    t.crawl
   end
 end

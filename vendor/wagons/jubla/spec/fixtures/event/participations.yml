@@ -1,0 +1,19 @@
+top_leader:
+  event: top_course
+  person: top_leader
+  active: true
+
+top_participant:
+  event: top_course
+  person: flock_leader_bern
+  active: true
+
+camp_leader:
+  event: camp
+  person: flock_leader_bern
+  active: true
+
+camp_child:
+  event: camp
+  person: child
+  active: true

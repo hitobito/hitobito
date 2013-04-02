@@ -14,6 +14,14 @@ class TarantulaTest < ActionController::IntegrationTest
     crawl_as(people(:top_leader))
   end
 
+  def test_tarantula_as_flock_leader
+    crawl_as(people(:flock_leader_bern))
+  end
+
+  def test_tarantula_as_child
+    crawl_as(people(:child))
+  end
+
   def crawl_as(person)
     person.password = 'foobar'
     person.save!
@@ -25,6 +33,10 @@ class TarantulaTest < ActionController::IntegrationTest
     t.skip_uri_patterns << /year=201[04-9]/
     t.skip_uri_patterns << /year=200[0-9]/
     t.skip_uri_patterns << /year=202[0-9]/
+    t.skip_uri_patterns << /users\/sign_out/
+    # no modifications of user roles (and thereof its permissions)
+    t.skip_uri_patterns << /groups\/\d+\/roles\/(#{person.roles.collect(&:id).join("|")})$/
+
     t.crawl_timeout = 5.minutes
     t.crawl
   end

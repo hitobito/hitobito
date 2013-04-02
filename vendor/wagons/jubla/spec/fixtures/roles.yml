@@ -7,3 +7,13 @@ flock_leader:
   person: flock_leader
   group: innerroden
   type: Group::Flock::Leader
+
+flock_leader_bern:
+  person: flock_leader_bern
+  group: bern
+  type: Group::Flock::Leader
+
+flock_child:
+  person: child
+  group: asterix
+  type: Group::ChildGroup::Child

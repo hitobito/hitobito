@@ -1,0 +1,21 @@
+first:
+  label: Vorbereitung
+  event: top_course
+  start_at: <%= Time.zone.parse("2012-3-01") %>
+
+first_two:
+  label: Kurs
+  event: top_course
+  start_at: <%= Time.zone.parse("2012-4-03") %>
+  finish_at: <%= Time.zone.parse("2012-4-10") %>
+
+second:
+  label: Event
+  event: top_event
+  start_at: <%= Time.zone.parse("2012-9-01") %>
+
+third:
+  label: Lager
+  event: camp
+  start_at: <%= Time.zone.parse("2012-6-01") %>
+  finish_at: <%= Time.zone.parse("2012-6-08") %>

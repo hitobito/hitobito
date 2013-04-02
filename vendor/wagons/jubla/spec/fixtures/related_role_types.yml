@@ -1,0 +1,19 @@
+# == Schema Information
+#
+# Table name: related_role_types
+#
+#  id            :integer          not null, primary key
+#  relation_id   :integer
+#  role_type     :string(255)      not null
+#  relation_type :string(255)
+#
+
+leader_groups_flock:
+  relation: leaders_group
+  relation_type: Subscription
+  role_type: Group::Flock::Leader
+
+leader_groups_state_board:
+  relation: leaders_group
+  relation_type: Subscription
+  role_type: Group::StateBoard::Leader

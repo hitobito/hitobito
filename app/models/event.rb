@@ -40,13 +40,13 @@ class Event < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :role_types, 
-                  :participant_type, 
-                  :leader_types, 
-                  :supports_applications, 
-                  :possible_states, 
+  class_attribute :role_types,
+                  :participant_type,
+                  :leader_types,
+                  :supports_applications,
+                  :possible_states,
                   :kind_class
-                  
+
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -166,6 +166,21 @@ class Event < ActiveRecord::Base
     def label_plural
       model_name.human(count: 2)
     end
+
+    # Return the event type with the given sti_name or raise an exception if not found
+    def find_event_type!(sti_name)
+      types = [Event] + Event.subclasses
+      type = types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No event '#{sti_name}' found" if type.nil?
+      type
+    end
+
+    # Return the role type with the given sti_name or raise an exception if not found
+    def find_role_type!(sti_name)
+      type = role_types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      type
+    end
   end
 
 
@@ -186,7 +201,7 @@ class Event < ActiveRecord::Base
   def application_duration
     Duration.new(application_opening_at, application_closing_at)
   end
-  
+
   # May participants apply now?
   def application_possible?
     (!application_opening_at? || application_opening_at <= ::Date.today) &&
@@ -201,7 +216,7 @@ class Event < ActiveRecord::Base
                            count(distinct: true)
     update_column(:participant_count, count)
   end
-  
+
   def init_questions
     # do nothing by default
   end
@@ -214,7 +229,7 @@ class Event < ActiveRecord::Base
                    merge(Person.order_by_name).
                    uniq
   end
-  
+
   # gets a list of all user defined participation role labels for this event
   def participation_role_labels
     @participation_role_labels ||=
@@ -224,7 +239,7 @@ class Event < ActiveRecord::Base
                   uniq.order(:label).
                   pluck(:label)
   end
-  
+
   def course_kind?
     kind_class == Event::Kind && kind.present?
   end

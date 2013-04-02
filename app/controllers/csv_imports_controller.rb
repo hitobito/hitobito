@@ -23,29 +23,29 @@ class CsvImportsController < ApplicationController
   def create
     @role_type = model_params.delete(:role)
 
-    if @role_type.blank?
+    if @role_type.blank? || !group.class.role_types.collect(&:sti_name).include?(@role_type)
       redirect_to new_group_csv_imports_path(group)
     elsif parse_or_redirect(params[:data])
       map_headers_and_import(model_params)
-  
+
       set_flash(:notice, importer.success_count, "wurden erfolgreich importiert.")
       set_flash(:notice, importer.doublette_count, "wurden erfolgreich aktualisiert.")
       set_flash(:alert, importer.failure_count, "konnten nicht importiert werden.")
       flash[:alert] += importer.errors if importer.failure_count > 0
-        
+
       redirect_to group_people_path(redirect_params)
     end
   end
 
   private
-  
+
   def custom_authorization
     if action_name == "create" && model_params[:role]
-      role = model_params[:role].constantize.new
+      role = group.class.find_role_type!(model_params[:role]).new
       role.group_id = group.id
       authorize! :create, role
     else
-      authorize! :new, group.roles.new 
+      authorize! :new, group.roles.new
     end
   end
 
@@ -56,19 +56,19 @@ class CsvImportsController < ApplicationController
   def load_group
     @group = Group.find(params[:group_id])
   end
-  
+
   def valid_file?(io)
     io.present? && io.content_type =~ /text\//
   end
 
   def parse_or_redirect(data)
     @parser = Import::CsvParser.new(data.strip)
-    
+
     unless parser.parse
       filename = model_params[:file] && model_params[:file].original_filename
-      filename ||= "csv formular daten" 
+      filename ||= "csv formular daten"
       flash[:alert] = parser.flash_alert(filename)
-      redirect_to new_group_csv_imports_path(group) 
+      redirect_to new_group_csv_imports_path(group)
       false
     else
       true
@@ -77,8 +77,8 @@ class CsvImportsController < ApplicationController
 
   def map_headers_and_import(header_mapping)
     data = parser.map_data(header_mapping)
-    @importer = Import::PersonImporter.new(group: group, 
-                                           data: data, 
+    @importer = Import::PersonImporter.new(group: group,
+                                           data: data,
                                            role_type: role_type)
     @importer.import
   end
@@ -89,7 +89,7 @@ class CsvImportsController < ApplicationController
   end
 
   def redirect_params
-    name = case role_type 
+    name = case role_type
            when /Member/ then 'Mitglieder'
            when /External/ then 'Externe'
            else importer.human_role_name

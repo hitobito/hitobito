@@ -35,7 +35,7 @@ class EventsController < CrudController
   def build_entry
     type = model_params && model_params.delete(:type).presence
     type ||= 'Event'
-    event = type.constantize.new
+    event = Event.find_event_type!(type).new
     event.groups << parent
     event
   end

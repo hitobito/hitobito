@@ -145,6 +145,7 @@ echo "# Rotate rails logs for %{name}
 # Created by %{name}.rpm
 %{wwwdir}/%{name}/www/log/*.log {
   daily
+  minsize 10M
   missingok
   rotate 7
   compress

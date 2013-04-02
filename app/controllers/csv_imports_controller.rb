@@ -58,7 +58,7 @@ class CsvImportsController < ApplicationController
   end
 
   def valid_file?(io)
-    io.present? && io.content_type =~ /text\//
+    io.present? && io.respond_to?(:content_type) && io.content_type =~ /text\//
   end
 
   def parse_or_redirect(data)

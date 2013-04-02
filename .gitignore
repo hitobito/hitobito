@@ -30,6 +30,7 @@ doc/models.png
 spec/reports
 
 app/assets/.sass-cache
+.sass-cache
 app/assets/stylesheets_generated
 
 # precompiled assets

@@ -1,0 +1,20 @@
+# Adjust this file according to your databases
+
+# connection configuration for the legacy jubla ost database
+database:
+  adapter: mysql2
+  host: localhost
+  database: jublaost
+  username: root
+  password: root
+  socket: /var/run/mysqld/mysqld.sock
+  encoding: latin1
+
+# mapping of the cantons to the group ids of the target db.
+kanton:
+  be: 5
+  lu: 14
+  sg: 11
+  sh: 17
+  uw: 20
+  zh: 8

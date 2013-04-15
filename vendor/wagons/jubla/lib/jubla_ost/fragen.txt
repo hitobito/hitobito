@@ -1,0 +1,23 @@
+* Was bedeuten die Schartypen
+  - intern (ohne Publikation)
+  - andere (mit Publikation)
+  - nur IAST
+  - Ehemalige
+
+* Was geschieht mit Schar ohne SCREID (Jugendstufe)?
+
+* Was geschieht mit der Funktion Kala Kontakt, Material?
+
+* Was geschieht mit den Funktionen Lagerleitung, Kasse bei Gruppen, welche diese Rollen nicht haben? (in Label schreiben?)
+
+* Sind alle Personen einer Schar ohne spezifische PersFunkt automatisch Kinder? Wie soll die Defaultkindergruppe heissen? Sind Gruppenleiter irgendwie errurierbar?
+
+* Schar: Bank, Konto, PC, Bankort, BankPC, BankBC: Wir haben nur bank_account. Welche Felder, wie kombiniert?
+
+* Schar: bedeutet erloschen das selbe wie gelöscht?
+
+* Person: Zusatz = Firmenname?
+
+* Person: Aboutme + Bemerkung kombinieren?
+
+* Regionalleitungen Luzern, SurSeeTal, Entlebuch vs Regio-Teams: Reichen letztere?

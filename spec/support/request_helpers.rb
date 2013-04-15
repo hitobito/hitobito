@@ -13,9 +13,10 @@ module RequestHelpers
   def obsolete_node_safe
     begin
       yield
-    rescue Capybara::Poltergeist::ObsoleteNode => e1
-      pending
-    rescue Capybara::Poltergeist::TimeoutError => e2
+    rescue Capybara::TimeoutError,
+           Capybara::ElementNotFound,
+           Capybara::Poltergeist::ObsoleteNode,
+           Capybara::Poltergeist::TimeoutError => e
       pending
     end
   end

@@ -1,5 +1,6 @@
 module JublaOst
-  class RegionRelei
+  class RegionRelei < Base
     self.table_name = 'tmRegionRelei'
+    self.primary_key = 'RSID'
   end
 end

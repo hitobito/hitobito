@@ -1,4 +1,4 @@
-* Was bedeuten die Schartypen
+* Was bedeuten die folgenden Schartypen, welchen Gruppentypen entsprechen sie
   - intern (ohne Publikation)
   - andere (mit Publikation)
   - nur IAST
@@ -10,14 +10,32 @@
 
 * Was geschieht mit den Funktionen Lagerleitung, Kasse bei Gruppen, welche diese Rollen nicht haben? (in Label schreiben?)
 
+* Regionalleitungen Luzern, SurSeeTal, Entlebuch vs Regio-Teams: Reichen letztere?
+
+* Eine Person kann in einer Schar eine Bemerkung, einen Job und eine Gruppe haben. Der Job oder die Bemerkung könnte als Label bei einer Rolle verwendet werden, jedoch bei welcher, falls mehrere Funktionen definiert sind? Soll für den Gruppenwert eine Kindergruppe erstellt werden, und die Person nur dort hinzugefügt werden?
+
 * Sind alle Personen einer Schar ohne spezifische PersFunkt automatisch Kinder? Wie soll die Defaultkindergruppe heissen? Sind Gruppenleiter irgendwie errurierbar?
 
 * Schar: Bank, Konto, PC, Bankort, BankPC, BankBC: Wir haben nur bank_account. Welche Felder, wie kombiniert?
 
 * Schar: bedeutet erloschen das selbe wie gelöscht?
 
-* Person: Zusatz = Firmenname?
+* Person: Zusatz = Firmenname? (Schwester Josette Egli, Werbeabteilung, ..)
 
-* Person: Aboutme + Bemerkung kombinieren?
+* Person: Aboutme + Bemerkung + Zusatz kombinieren?
 
-* Regionalleitungen Luzern, SurSeeTal, Entlebuch vs Regio-Teams: Reichen letztere?
+* Person: Telefonnumern öffentlich oder nicht, welche?
+
+* Person: Was wenn nicht aktiv, aber kein austritt datum? Soll 'aktiv' überhaupt verwendet werden?
+
+* Person: 1765 Personen sind keiner Schar zugeteilt. Ebenfalls importieren? Welche Eintrittdaten?
+
+* Person: 90 Personen haben eine Funktion (Leitung, Kasse, Präses) in einer Schar, sind dieser aber nicht zugeteilt. Trotzdem zuteilen?
+
+* Person: Passwörter unter 6 Zeichen werden nicht übernommen
+
+* Person: Falls kein Erstelldatum, aktuelles Datum verwenden?
+
+* PersSchar ohne Eintritt: Aktuelles Datum verwenden?
+
+* Hat ein Präses auf Bund/Kanton/Region ebenfalls Stellenprozente und Ehrenamtlichkeit? Falls ja, müsste Jubla.db noch angepasst werden.

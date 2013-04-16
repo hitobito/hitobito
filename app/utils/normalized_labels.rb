@@ -1,16 +1,16 @@
 module NormalizedLabels
   extend ActiveSupport::Concern
-  
+
   included do
     before_save :normalize_label
   end
-  
+
   private
-  
+
   # If a case-insensitive same label already exists, use this one
   def normalize_label
     return if label.blank?
-    
+
     fresh = self.class.available_labels.none? do |l|
       equal = l.casecmp(label) == 0
       self.label = l if equal
@@ -18,22 +18,28 @@ module NormalizedLabels
     end
     self.class.sweep_available_labels if fresh
   end
-  
+
   module ClassMethods
     def available_labels
-      @available_labels ||= load_available_labels
+      Rails.cache.fetch(labels_cache_key) do
+        load_available_labels
+      end
     end
-    
+
     def sweep_available_labels
-      @available_labels = nil
+      Rails.cache.delete(labels_cache_key)
     end
-    
+
     private
-    
+
     def load_available_labels
       order(:label).uniq.pluck(:label).compact
     end
+
+    def labels_cache_key
+      "#{name}.Labels"
+    end
   end
-  
-  
+
+
 end

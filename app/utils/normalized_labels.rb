@@ -37,7 +37,7 @@ module NormalizedLabels
     end
 
     def labels_cache_key
-      "#{name}.Labels"
+      "#{base_class.name}.Labels"
     end
   end
 

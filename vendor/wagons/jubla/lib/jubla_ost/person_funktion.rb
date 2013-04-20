@@ -10,7 +10,7 @@ module JublaOst
         unhandled_schars = person_schars.keys
 
         # create roles for all tmPersFunkt
-        where(PEID: legacy.PEID).each do |person_funktion|
+        where(PEID: legacy.PEID).where('SCID IS NOT NULL').each do |person_funktion|
           scid = person_funktion.SCID
           create_role(current, scid, person_schars[scid], Funktion.all[person_funktion.FUID])
           unhandled_schars.delete(scid)
@@ -63,10 +63,12 @@ module JublaOst
         end
         role.created_at ||= Time.zone.now
         role.updated_at = role.created_at
+        # roles of deleted groups are always deleted as well
+        role.deleted_at ||= group.deleted_at
       end
 
       def create_alumnus_role(role)
-        unless role.person.roles.where(type: Jubla::Role::Alumnus.sti_name).exists?
+        unless role.person.roles.where(group_id: role.group_id, type: Jubla::Role::Alumnus.sti_name).exists?
           alumnus = Jubla::Role::Alumnus.new
           alumnus.person = role.person
           alumnus.group = role.group

@@ -1,4 +1,4 @@
-* Was bedeuten die folgenden Schartypen, welchen Gruppentypen entsprechen sie
+* Was bedeuten die folgenden Schartypen, welchen Gruppentypen entsprechen sie, bestehen weitere Abhängigkeiten?
   - intern (ohne Publikation)
   - andere (mit Publikation)
   - nur IAST
@@ -18,7 +18,7 @@
 
 * Schar: Bank, Konto, PC, Bankort, BankPC, BankBC: Wir haben nur bank_account. Welche Felder, wie kombiniert?
 
-* Schar: bedeutet erloschen das selbe wie gelöscht?
+* Schar: bedeutet erloschen das selbe wie gelöscht? Welches Datum (1.1., 31.12.)?
 
 * Person: Zusatz = Firmenname? (Schwester Josette Egli, Werbeabteilung, ..)
 
@@ -39,3 +39,25 @@
 * PersSchar ohne Eintritt: Aktuelles Datum verwenden?
 
 * Hat ein Präses auf Bund/Kanton/Region ebenfalls Stellenprozente und Ehrenamtlichkeit? Falls ja, müsste Jubla.db noch angepasst werden.
+
+* Qualifikationen: Was sind die entsprechenden Qualifikationen zu den folgenden J+S Stufen
+  - GL
+  - LL
+  - FK
+  - EX
+  - VA
+  - ET
+
+* Kurs TN Status: Wie sollen die folgenden Funktionen auf die Kursrollen in der JublaDB abgebildet werden:
+  - Kurshauptleiter
+  - Leiter Experte
+  - Leiter Ausbildner
+  - Leiter (inkl. J+S FK-Modul)
+  - Leiter (exkl. J+S FK-Modul)
+  - Leiter als Teiln.
+  - Teilnehmer
+  - Küche/Personal
+  - GK - Teilnehmer (ohne Kurs)
+  - GLK - Teilnehmer (ohne Kurs)
+  - SLK - Teilnehmer (ohne Kurs)
+  - Kurspersonal inkl. FK

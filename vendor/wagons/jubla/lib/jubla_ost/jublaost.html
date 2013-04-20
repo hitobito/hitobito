@@ -1,0 +1,4888 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de" dir="ltr">
+<head>
+<link rel="icon" href="http://admin.awardic.net/phpMyAdmin/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="http://admin.awardic.net/phpMyAdmin/favicon.ico" type="image/x-icon" />
+<title>phpMyAdmin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="http://admin.awardic.net/phpMyAdmin/css/phpmyadmin.css.php?token=f8272e396d1ed2ba851a57ac44770a91&amp;js_frame=right" />
+    <link rel="stylesheet" type="text/css" href="http://admin.awardic.net/phpMyAdmin/css/print.css?token=f8272e396d1ed2ba851a57ac44770a91" media="print" />
+    <script type="text/javascript" language="javascript">
+    <!--
+    // Updates the title of the frameset if possible (ns4 does not allow this)
+    if (typeof(parent.document) != 'undefined' && typeof(parent.document) != 'unknown'
+        && typeof(parent.document.title) == 'string') {
+        parent.document.title = 'admin.awardic.net / localhost / jublaost  / v_ordnerlogin | phpMyAdmin 2.8.0.3';
+    }
+    
+    //-->
+    </script>
+        
+        <script src="http://admin.awardic.net/phpMyAdmin/js/tooltip.js" type="text/javascript"
+            language="javascript"></script>
+        <meta name="OBGZip" content="true" />
+    </head>
+
+    <body>
+    <div id="TooltipContainer" onmouseover="holdTooltip();" onmouseout="swapTooltip('default');"></div>
+    <div id="serverinfo">
+<a href="main.php?token=f8272e396d1ed2ba851a57ac44770a91" class="item">        <img class="icon" src="http://admin.awardic.net/phpMyAdmin/themes/original/img/s_host.png" width="16" height="16" alt="" /> 
+Server: localhost</a>
+        <span class="separator"><img class="icon" src="http://admin.awardic.net/phpMyAdmin/themes/original/img/item_ltr.png" width="5" height="9" alt="-" /></span>
+<a href="db_details_structure.php?db=jublaost&amp;token=f8272e396d1ed2ba851a57ac44770a91" class="item">        <img class="icon" src="http://admin.awardic.net/phpMyAdmin/themes/original/img/s_db.png" width="16" height="16" alt="" /> 
+Datenbank: jublaost</a>
+        <span class="separator"><img class="icon" src="http://admin.awardic.net/phpMyAdmin/themes/original/img/item_ltr.png" width="5" height="9" alt="-" /></span>
+<a href="tbl_properties_structure.php?db=jublaost&amp;table=v_ordnerlogin&amp;token=f8272e396d1ed2ba851a57ac44770a91" class="item">        <img class="icon" src="http://admin.awardic.net/phpMyAdmin/themes/original/img/b_views.png" width="16" height="16" alt="" /> 
+Ansicht: v_ordnerlogin</a>
+</div><div>
+<h2>tAbos</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ABID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ZEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        REID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        SVREID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        FUID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        KUID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Bezahltbis 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Preisjahr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Bem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(250)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        MailVers 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tAst</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ASID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Ast 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Strasse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PLZ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Ort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Tel 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Fax 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Email 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Stellenleiter 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Passwort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div >
+<h2>tBestandKantAntw</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>KAID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KASCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        fr1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        fr3 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr4 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        fr5 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr6 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        fr7 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr8 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        fr9 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr10 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div >
+<h2>tBestandesmeldungen</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>BMID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        jahr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        mj 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m5 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m6 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m7 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m8 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m9 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m10 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m11 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m12 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m13 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m14 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        m15 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        m16 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        leiter 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        leiterin 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        mplattform 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        wplattform 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        leiterplattform 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        leiterinplattform 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        wj 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w5 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w6 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w7 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w8 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w9 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w10 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w11 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w12 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w13 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w14 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        w15 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        w16 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        KAuslm 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KAuslw 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAuslw 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAuslm 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Jublavers 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Vollkasko 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        VersGes 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        datum 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        schar 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        changePEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tClairon</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>clID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clSCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        clName 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clVorname 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        clAdr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clOrt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        clTel1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clTel2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        clMail 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(70)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clPage 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tFunktion</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>FUID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Funktion 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Abkuerz 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        exklusiv 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Reihenfolge 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tKanton</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>Kanton</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Kursbed 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        KursbedHTML 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KursbedURL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kursanmeldung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        agenda 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        engagaus 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KSchubErw 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td>KHL könne</td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        astmail 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(55)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        defkursweb 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        defkurspict 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        defkursguest 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        ASTerfTn 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ASTerfCoach 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        KursChange 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        startseite 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        startseitehead 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        dbURL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        mailinfo 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        SLGKanm 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        showfunk 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(1)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        showvers 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        showET 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BESRbank 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(80)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BESRempf 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(93)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BESRkonto 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BESRcode 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(8)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BESRkontonr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BESRx 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">float</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BESRy 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">float</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        News2akt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        News2desc 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tKurs</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>KUID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kbez 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        adresse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(200)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        vwort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        organ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        sf 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">LS/T</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        fr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        stufe 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('GK', 'GL', 'LL', 'FK', 'VA', 'CO', 'ET')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        tnvorgesehen 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        start 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ende 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        vwstart 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        vwende 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        anmeldeschluss 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        anmschluss 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        anmeldungan 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        anmeldestart 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kosten 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        knr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        motto 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(80)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        bem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        klbem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(80)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs1typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs2typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs3 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs3typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs4 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs4typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs5 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs5typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs6 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs6typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        bgein 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        tnanzeigen 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        tnzuteilung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(1)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">SG</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        urlhomepage 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        urlfotos 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        urlgb 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kassier 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        mat 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tKursBG</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>BGID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KUID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Name 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tKursInteresse</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>PEID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LetzteAenderung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0000-00-00</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kursjahr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Kurswoche 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        GK 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        GLK 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SLK 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Andere 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Aufgabe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BemerkungKL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BermerkungKLaend 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BemerkungKLaend 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Interesse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tKursTnStatus</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>MSID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(4) </td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        abk 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(5)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        bezeich 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(30)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        sort1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        sort2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        jsform 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tLager</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>LAID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LASCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LALL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAstart 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAende 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAPLZ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(7)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAkanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAadresse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAtel 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAmotto 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(70)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LApers 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAjs 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LApersjs 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAart 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('HL', 'ZL', 'UW', 'AN')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAbem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAcoach 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAkorda 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LAkordb 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tNasa</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>NAID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        IID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        NaPEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        chPEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        eDatum 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0000-00-00</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        aDatum 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">timestamp</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">CURRENT_TIMESTAMP</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        EiBem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bemerk 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Empf 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(3)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tPersOrdner</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ORID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        oPEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        ordner 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ro 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tPersonen</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>PEID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Name 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Vorname 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        vulgo 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Beruf 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Zusatz 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Strasse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Postfach 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        PLZ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Ort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(23)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        nation 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(3)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">CH</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Email 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Tel1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Tel2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Mobil 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Fax 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Geburtstag 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">datetime</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Gesch 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('m', 'w')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        AHV 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(15)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        versges 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        verspol 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        JSNr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(16)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Erfasst 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">datetime</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        aktiv 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(1)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        aboutme 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        JSStufe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        JSKursnr 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        JSAktualisierung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        ChangePEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ChangeDate 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">timestamp</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">CURRENT_TIMESTAMP</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Passwort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(12)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">udfv763r</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        konto 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Schub 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        engagieremich 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        schuberweit 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Infomail 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Infomail2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        nothelfer 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">datetime</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        onlinekontakt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        agenda1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        agenda2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        login 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">PEID</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        lastlogin 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">datetime</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">0000-00-00 00:00:00</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        lastloginip 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tRegion</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>REID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Region 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        ASID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Reihenfolge 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tSchar</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>SCID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        st 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">10</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Schar 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Scharkurz 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(40)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SCREID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Begleitung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        PLZ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Ort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        scharkanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">SG</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        URL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(40)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SCemail 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Coach 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kontakt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Adresse1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Adresse2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Art 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('br', 'jw', 'jubla')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        geschlechtergetrennt 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        geschlechtergemischt 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Gemeinde 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Pfarrei 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Bank 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Konto 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        PC 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bankort 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BankPC 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        BankBC 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        praeses 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        praeses_lohn 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        praeses_prozent 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        praeses_spesen 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Jublavers 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Vollkasko 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        VersGes 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        rpk 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        isVerein 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        erloschen 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        leitungsteamanzeigen 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        detailsanzeigen 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('', '1')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        detailsMail 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        detailsTel2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        lpw 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(12)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        agenda 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        gruendung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        clairon 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        PersSuche 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td>Personensuche erlauben</td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tScharOrdner</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>OSID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        oSCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        sordner 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ro 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">SG</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tSchartyp</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        st 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        schartyp 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        sort1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tSpezialFunkt</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>SPID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        SpPEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Coach 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        CoachKurs 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        CoachVerwKt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tStatus</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>STID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        status 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(15)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tZeitschriften</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ZEID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ZeitName 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Redaktion 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(60)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Kanton 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>thLagerart</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>LA</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Lagerart 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(15)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>thNasaInt</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>NAIID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        NAinteresse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        NAkt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        NAtyp 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmAstRegion</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ARID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Ast 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        REID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmPersFunkt</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>PEFUid</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        FUID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        SCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmPersKurs</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>KMID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        KUID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(255)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        MSID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        vegetarisch 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        billet 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('--', 'GA', 'HT')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        unterschriften 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        GLseit 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SLseit 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LLseit 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Funktionen 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(50)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs3 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs4 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        kurs5 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(30)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        kurs6 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        bg 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        BESR 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(20)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        bezahlt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        qual 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        bemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        tnbemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        vorkurs 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(10)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        woche 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        AnmFreigabeSL 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Stufe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(5)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        AnmFreigabeID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        anm1 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        anm2 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        anm3 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        anm4 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Anmeldung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmPersLager</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>PLID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        LAID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        LPEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Lbem 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(255)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        billet 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('-', 'h', 'g')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        besFK 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(1)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmPersSchar</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>PSID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        SCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Eintritt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Austritt 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Bemerkung 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">text</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        Jobs 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(150)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        Gruppe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(100)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        showlist 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(1)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmRegionRelei</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>RSID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        RegID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        ReleiSCID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tmordnergruppen</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(11)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        gruppe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(24)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tpEtiketten</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>ETID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        rechts 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        oben 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        breite 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">decimal(4,2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">70.00</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        hoehe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">decimal(4,2)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">29.70</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        neben 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">3</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        uber 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">10</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        groesse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">11</td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>tpListe</h2>
+ 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        <u>LIID</u> 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(9)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        PEID 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">0</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        links 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">15</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        oben 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">smallint(6)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">15</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        orient 
+    </td>
+    <td xml:lang="en" dir="ltr">enum('P', 'L')</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">L</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        groesse 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">float</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">9</td>
+            <td></td>
+</tr>
+         
+<tr class="odd">
+    <td nowrap="nowrap">
+        typ 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(4)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">1</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        font 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(2)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>v_ordnerauth</h2>
+Tabellen-Kommentar: VIEW<br /><br /> 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        login 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap">PEID</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        passwd 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">var(13)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>v_ordnergruppen</h2>
+Tabellen-Kommentar: VIEW<br /><br /> 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        login 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap">PEID</td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        gruppe 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(24)</td>
+    <td>Nein</td>
+    <td nowrap="nowrap"></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+    <div>
+<h2>v_ordnerlogin</h2>
+Tabellen-Kommentar: VIEW<br /><br /> 
+
+<table width="100%" class="print">
+<tr><th width="50">Feld</th>
+    <th width="80">Typ</th>
+    <th width="40">Null</th>
+    <th width="70">Standard</th>
+        <th>Kommentare</th>
+</tr>
+     
+<tr class="odd">
+    <td nowrap="nowrap">
+        login 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(25)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+<tr class="even">
+    <td nowrap="nowrap">
+        ordner 
+    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(130)</td>
+    <td>Ja</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+         
+</table>
+</div>
+     
+<script type="text/javascript" language="javascript">
+//<![CDATA[
+function printPage()
+{
+    document.getElementById('print').style.visibility = 'hidden';
+    // Do print the page
+    if (typeof(window.print) != 'undefined') {
+        window.print();
+    }
+    document.getElementById('print').style.visibility = '';
+}
+//]]>
+</script>
+<br /><br /><input type="button" id="print" value="Drucken" onclick="printPage()" /><script type="text/javascript" language="javascript">
+//<![CDATA[
+// updates current settings
+window.parent.setAll('de-utf-8', 'utf8_unicode_ci', '1', 'jublaost', 'v_ordnerlogin');
+
+
+// set current db, table and sql query in the querywindow
+window.parent.reload_querywindow(
+    "jublaost",
+    "v_ordnerlogin",
+    "");
+
+
+// reset content frame name, as querywindow needs to set a unique name
+// before submitting form data, and navigation frame needs the original name
+window.parent.frames[1].name = 'frame_content';
+//]]>
+</script>
+<div id="selflink">
+<a href="index.php?target=db_datadict.php&amp;db=jublaost&amp;table=v_ordnerlogin&amp;token=f8272e396d1ed2ba851a57ac44770a91" target="_blank">Neues phpMyAdmin Fenster</a>
+</div>
+</body>
+</html>

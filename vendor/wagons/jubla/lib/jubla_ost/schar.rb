@@ -90,10 +90,14 @@ module JublaOst
         if legacy.URL.present?
           group.social_accounts.build(label: 'Webseite', name: legacy.URL, public: true)
         end
+        if legacy.erloschen.present?
+          group.deleted_at = Time.zone.local(legacy.erloschen, 12, 31)
+        end
       end
 
       def migrate_flock_attributes(group, legacy)
         group.kind = KINDS[legacy.Art]
+        # TODO handle name to avoid duplicate beginning like "Jungschar Jungschar Thurgau"
         group.unsexed = legacy.geschlechtergemischt == '1'
         group.parish = legacy.Pfarrei
         group.jubla_insurance = legacy.Jublavers == 1

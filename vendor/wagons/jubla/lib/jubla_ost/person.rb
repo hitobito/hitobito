@@ -10,7 +10,9 @@ module JublaOst
         i = 0
         find_each do |legacy|
           if person = find_or_create_person(legacy)
+            migrate_qualification(person, legacy)
             PersonFunktion.migrate_person_roles(person, legacy)
+            PersonKurs.migrate_person_kurse(person, legacy)
           end
           print "\r #{i+=1} people processed "
         end
@@ -58,7 +60,7 @@ module JublaOst
         current.insurance_company = legacy.versges
         current.insurance_number = legacy.verspol
         current.j_s_number = legacy.JSNr
-        current.additional_information = legacy.Bemerkung
+        current.additional_information = combine("\n\n", legacy.Bemerkung, legacy.aboutme)
 
         current.created_at = legacy.Erfasst || Time.zone.now
         current.updated_at = legacy.ChangeDate || Time.zone.now
@@ -82,7 +84,18 @@ module JublaOst
       def parse_social_accounts(current, legacy)
         #TODO
       end
-
+      
+      def migrate_qualification(person, legacy)
+        if legacy.JSStufe.present?
+          quali = person.qualifications.build
+          quali.qualification_kind = QualificationKind.find(JublaOst::Config.qualification_kind_id(legacy.JSStufe))
+          if legacy.JSAktualisierung.present?
+            quali.start_at = Date.new(legacy.JSAktualisierung)
+          end 
+          quali.origin = legacy.JSKursnr
+          quali.save!
+        end
+      end
     end
 
     def no_names?

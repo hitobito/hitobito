@@ -48,6 +48,8 @@
   - VA
   - ET
 
+* Qualifikationen: Welches Startdatum soll genommen werden, falls dies leer ist?
+
 * Kurs TN Status: Wie sollen die folgenden Funktionen auf die Kursrollen in der JublaDB abgebildet werden:
   - Kurshauptleiter
   - Leiter Experte
@@ -61,3 +63,21 @@
   - GLK - Teilnehmer (ohne Kurs)
   - SLK - Teilnehmer (ohne Kurs)
   - Kurspersonal inkl. FK
+
+* Kurs Stufe: Entspricht dies der Kursart? Was sind die entsprechenden:
+  - GK
+  - GL
+  - LL
+  - FK
+  - VA
+  - CO
+  - ET
+
+* Kurs: Existiert in Jubla Ost ebenfalls ein Status? Falls nein, welchen nehmen wir?
+
+* Kurs: Kassier und Mat ebenfalls übernehmen? 
+
+* Kurs Fragen 1 und 2 sind teilweise leer, trotzdem finden sich Antworten der TN dazu - Können diese ignoriert werden?
+
+* Was beinhaltet die Tabelle TKursBG (Spalten KUID, Name)?
+

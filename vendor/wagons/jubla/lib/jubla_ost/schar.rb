@@ -39,10 +39,6 @@ module JublaOst
         flocks
       end
 
-      def cache
-        @cache ||= {}
-      end
-
       private
 
       def other_types

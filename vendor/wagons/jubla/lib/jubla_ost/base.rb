@@ -12,11 +12,16 @@ module JublaOst
           JublaOst::Region.migrate
 
           ActiveRecord::Base.record_timestamps = false
+          JublaOst::Kurs.migrate
           JublaOst::Person.migrate
           ActiveRecord::Base.record_timestamps = true
         end
       end
 
+      def cache
+        @cache ||= {}
+      end
+      
       private
 
       def combine(separator, *values)

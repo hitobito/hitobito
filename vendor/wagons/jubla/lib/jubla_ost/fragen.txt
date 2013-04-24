@@ -4,6 +4,37 @@
   - nur IAST
   - Ehemalige
 
+* Qualifikationen: Was sind die entsprechenden Qualifikationen zu den folgenden J+S Stufen
+  - GL
+  - LL
+  - FK
+  - EX
+  - VA
+  - ET
+
+* Kurs TN Status: Wie sollen die folgenden Funktionen auf die Kursrollen in der JublaDB abgebildet werden:
+  - Kurshauptleiter
+  - Leiter Experte
+  - Leiter Ausbildner
+  - Leiter (inkl. J+S FK-Modul)
+  - Leiter (exkl. J+S FK-Modul)
+  - Leiter als Teiln.
+  - Teilnehmer
+  - Küche/Personal
+  - GK - Teilnehmer (ohne Kurs)
+  - GLK - Teilnehmer (ohne Kurs)
+  - SLK - Teilnehmer (ohne Kurs)
+  - Kurspersonal inkl. FK
+
+* Kurs Stufe: Entspricht dies der Kursart? Was sind die entsprechenden:
+  - GK
+  - GL
+  - LL
+  - FK
+  - VA
+  - CO
+  - ET
+  
 * Was geschieht mit einer Schar ohne SCREID (= ohne Region, z.B. Jugendstufe)?
 
 * Was geschieht mit der Funktion Kala Kontakt, Material?
@@ -42,38 +73,7 @@
 
 * Hat ein Präses auf Bund/Kanton/Region ebenfalls Stellenprozente und Ehrenamtlichkeit? Falls ja, müsste Jubla.db noch angepasst werden (kleine Sache)
 
-* Qualifikationen: Was sind die entsprechenden Qualifikationen zu den folgenden J+S Stufen
-  - GL
-  - LL
-  - FK
-  - EX
-  - VA
-  - ET
-
 * Qualifikationen: Welches Startdatum soll genommen werden, falls dies leer ist?
-
-* Kurs TN Status: Wie sollen die folgenden Funktionen auf die Kursrollen in der JublaDB abgebildet werden:
-  - Kurshauptleiter
-  - Leiter Experte
-  - Leiter Ausbildner
-  - Leiter (inkl. J+S FK-Modul)
-  - Leiter (exkl. J+S FK-Modul)
-  - Leiter als Teiln.
-  - Teilnehmer
-  - Küche/Personal
-  - GK - Teilnehmer (ohne Kurs)
-  - GLK - Teilnehmer (ohne Kurs)
-  - SLK - Teilnehmer (ohne Kurs)
-  - Kurspersonal inkl. FK
-
-* Kurs Stufe: Entspricht dies der Kursart? Was sind die entsprechenden:
-  - GK
-  - GL
-  - LL
-  - FK
-  - VA
-  - CO
-  - ET
 
 * Kurs: Existiert in Jubla Ost ebenfalls ein Status? Falls nein, welchen nehmen wir?
 

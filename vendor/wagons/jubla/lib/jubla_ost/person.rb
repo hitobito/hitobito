@@ -5,6 +5,8 @@ module JublaOst
     self.primary_key = 'PEID'
 
     class << self
+      
+      include AutoLinkHelper
 
       def migrate
         i = 0
@@ -34,6 +36,7 @@ module JublaOst
           puts "#{person.inspect} ist nicht gültig: #{person.errors.full_messages.join(", ")}"
           raise ActiveRecord::RecordInvalid, person
         end
+        cache[legacy.PEID] = person.id
         person
       end
 
@@ -49,7 +52,7 @@ module JublaOst
         current.address = combine("\n", legacy.Strasse, legacy.Postfach)
         current.zip_code = legacy.PLZ.to_i > 0 ? legacy.PLZ.to_i : nil
         current.town = legacy.Ort
-        current.email = legacy.Email.downcase if legacy.Email
+        current.email = legacy.Email.downcase if legacy.Email.present?
         current.birthday = legacy.Geburtstag
         current.gender = legacy.Gesch
 
@@ -82,7 +85,24 @@ module JublaOst
       end
 
       def parse_social_accounts(current, legacy)
-        #TODO
+        accounts = legacy.onlinekontakt.to_s.strip.split("\n")
+        accounts.each do |account|
+          label, name = account.split(":", 2)
+          if name.nil?
+            name = label.strip
+            if email?(name)
+              label = 'E-Mail'
+            elsif url?(name)
+              label = 'Webseite'
+            else
+              label = 'Andere'
+            end
+          else
+            label.strip!
+            name.strip!
+          end
+          current.social_accounts.build(name: name, label: label)
+        end
       end
       
       def migrate_qualification(person, legacy)

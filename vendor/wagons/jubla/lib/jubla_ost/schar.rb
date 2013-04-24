@@ -96,7 +96,10 @@ module JublaOst
         group.email = legacy.SCemail
         group.address = combine("\n", legacy.Adresse1, legacy.Adresse2)
         # TODO: bank_account, Kontakt
-        migrate_flock_attributes(group, legacy) if group.is_a?(Group::Flock)
+        if group.is_a?(Group::Flock)
+          sanitize_name(group)
+          migrate_flock_attributes(group, legacy)
+        end
         if legacy.URL.present?
           group.social_accounts.build(label: 'Webseite', name: legacy.URL, public: true)
         end
@@ -107,13 +110,28 @@ module JublaOst
 
       def migrate_flock_attributes(group, legacy)
         group.kind = KINDS[legacy.Art]
-        # TODO handle name to avoid duplicate beginning like "Jungschar Jungschar Thurgau"
         group.unsexed = legacy.geschlechtergemischt == '1'
         group.parish = legacy.Pfarrei
         group.jubla_insurance = legacy.Jublavers == 1
         group.jubla_full_coverage = legacy.Vollkasko == 1
         group.founding_year = legacy.gruendung
         group.clairongarde = legacy.clairon == 1
+      end
+      
+      def sanitize_name(group)
+        name = group.name
+        name = strip_starting(name, 'Jungwacht ')
+        name = strip_starting(name, 'Blauring ')
+        name = strip_starting(name, 'Jubla ')
+        group_name = name
+      end
+      
+      def strip_starting(string, start)
+        if string.starts_with?(start)
+          string[start.size..-1]
+        else
+          string
+        end
       end
 
     end

@@ -12,11 +12,13 @@ module AutoLinkHelper
       str
     end
   end
-  
-  private
 
   def email?(str)
     /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
+  end
+  
+  def url?(str)
+    url_with_protocol(str) || url_without_protocol?(str)
   end
 
   def url_with_protocol?(str)

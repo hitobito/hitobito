@@ -34,12 +34,28 @@ module JublaOst
      end
       
       def migrate_answers(participation, person_kurs)
-        # TODO migrate ÖV Abo and Vegi answers
+        cache = Kurs.questions[person_kurs.KUID]
+        
+        participation.answers.build(answer: vegi_answer(person_kurs), question_id: cache[:vegi].id)
+        participation.answers.build(answer: abo_answer(person_kurs), question_id: cache[:abo].id)
+        
         (1..6).each do |i|
-          a = person_kurs.attributes["kurs#{i}"]
-          if a.present?
-            participation.answers.build(answer: a, question_id: )
+          if question = cache[i]
+            a = person_kurs.attributes["kurs#{i}"]
+            participation.answers.build(answer: a, question_id: question.id)
           end
+        end
+      end
+      
+      def vegi_answers(person_kurs)
+        person_kurs.vegetarisch == 1 ? 'ja' : 'nein'
+      end
+      
+      def abo_answer(person_kurs)
+        case person_kurs.billet
+        when 'GA' then 'GA'
+        when 'HT' then 'Halbtax / unter 16'
+        else 'keine Vergünstigung'
         end
       end
       

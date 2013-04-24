@@ -15,6 +15,10 @@ module JublaOst
         end
       end
       
+      def questions
+        @questions ||= {}
+      end
+      
       private
       
       def migrate_attributes(current, legacy)
@@ -51,17 +55,26 @@ module JublaOst
       end
       
       def migrate_questions(current, legacy)
-        # TODO: allen Kursen die Fragen nach ÖV Abo und Vegi hinzufügen
-        # TODO: Question index und neue id im cache speichern
+        cache = questions[legacy.kuid] ||= {}
+        
+        cache[:abo] = build_question(current, 'Ich habe folgendes ÖV Abo', 'GA, Halbtax / unter 16, keine Vergünstigung')
+        cache[:vegi] = build_question(current, 'Ich bin Vegetarier', 'ja, nein')
+        
         (1..6).each do |i|
           q = legacy.attributes["kurs#{i}"]
           type = legacy.attributes["kurs#{i}typ"]
           if q.present?
-          	question = current.questions.build
-          	question.question = q
-          	question.choices = 'ja,nein' if type == 1
+            choices = type == 1 ? 'ja, nein' : nil
+            cache[i] = build_question(current, q, choices)
           end
         end
+      end
+      
+      def build_question(current, question, choices)
+        q = current.questions.build
+        q.question = question
+        q.choices = choices
+        q
       end
     	
     end

@@ -21,22 +21,15 @@ module JublaOst
         migrate_groups(current, legacy, *other_types) do |g|
           group_class(g.Schar, Group::StateProfessionalGroup, Group::StateWorkGroup)
         end
+        # TODO delete default kalei
       end
 
       def migrate_region(current, legacy)
-        # TODO Releis via RegionRelei
+        migrate_releis(current, legacy)
         migrate_groups(current, legacy, JublaOst::Schartyp::Schar) {|g| Group::Flock }
         migrate_groups(current, legacy, *other_types) do |g|
           group_class(g.Schar, Group::RegionalProfessionalGroup, Group::RegionalWorkGroup)
         end
-      end
-
-      def flocks(region_id, *types)
-        flocks = where('SCREID = ?', region_id)
-        if types.present?
-          flocks = flocks.where('st IN (?)', types.collect(&:id))
-        end
-        flocks
       end
 
       private
@@ -48,19 +41,40 @@ module JublaOst
          JublaOst::Schartyp::Ehemalige]
       end
 
-      def migrate_groups(current, legacy, *types)
+      def migrate_groups(parent, legacy)
         flocks(legacy.REID, *types).each do |group|
           clazz = yield group
-          migrate_group(current, group, clazz)
+          migrate_group(parent, group, clazz)
         end
       end
 
+      def flocks(region_id, *types)
+        flocks = where('SCREID = ?', region_id)
+        if types.present?
+          flocks = flocks.where('st IN (?)', types.collect(&:id))
+        end
+        flocks
+      end
+      
       def group_class(name, fg_class, ag_class)
         case name
         when /^FG /, /^Fachgruppe / then fg_class
         when /^AG / then ag_class
         else Group::SimpleGroup
         end
+      end
+      
+      def migrate_releis(parent, legacy)
+        releis(legacy.REID).each do |group|
+          migrate_group(parent, group, Group::Relei)
+        end
+      end
+      
+      def releis(region_id)
+        joins('tmRegionRelei ON tmRegionRelei.ReleiSCID = tSchar.SCID').
+        where('tmRegionRelei.RegID = ? AND tSchar.st = ?', 
+              region_id, 
+              JublaOst::Schartyp::Relei.id)
       end
 
       def migrate_group(parent, legacy_group, clazz)

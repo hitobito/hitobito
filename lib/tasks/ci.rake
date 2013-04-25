@@ -89,3 +89,18 @@ task :mysql do
   ENV['RAILS_DB_NAME']    = 'jubla_test'
   ENV['RAILS_DB_SOCKET']  = '/var/lib/mysql/mysql.sock'
 end
+
+namespace :jubla do
+  desc "Print all groups, roles and permissions"
+  task :permissions => :environment do
+    Role::TypeList.new(Group::Federation).each do |layer, groups| 
+      puts layer
+      groups.each do |group, roles| 
+        puts '  ' + group
+        roles.each do |r| 
+          puts "    #{r.model_name.human}: #{r.permissions.inspect}" 
+        end
+      end
+    end
+  end
+end

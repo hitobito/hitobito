@@ -8,7 +8,7 @@
 
 * 8 Teilnahmen ohne KursTnStatus (=0). Welche Rolle?
 
-* Doppelte Emailadressen:
+* 313 Personen haben doppelte Emailadressen.
 
 
 

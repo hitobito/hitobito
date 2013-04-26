@@ -8,6 +8,7 @@ module JublaOst
       @@all[id] = instance
     end
 
+    None = new(0, Event::Course::Role::Participant)
     Kurshauptleiter = new(10, Event::Role::Leader)
     LeiterExperte = new(20, Event::Role::AssistantLeader)
     LeiterAusbildner = new(30, Event::Role::AssistantLeader)

@@ -6,6 +6,12 @@
     237 Kantonsleitung Schaffhausen (reid 15)
     244 Verbandsleitung (reid 7)
 
+* 8 Teilnahmen ohne KursTnStatus (=0). Welche Rolle?
+
+* Doppelte Emailadressen:
+
+
+
 ==================================================================
 
 

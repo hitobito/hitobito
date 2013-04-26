@@ -18,7 +18,7 @@ module JublaOst
 
       def migrate_state(current, legacy)
         migrate_groups(current, legacy, JublaOst::Schartyp::Kalei) {|g| Group::StateBoard }
-        migrate_groups(current, legacy, *other_types) do |g|
+        migrate_groups(current, legacy, JublaOst::Schartyp::Schar, *other_types) do |g|
           group_class(g.Schar, Group::StateProfessionalGroup, Group::StateWorkGroup)
         end
         # TODO delete default kalei
@@ -41,7 +41,7 @@ module JublaOst
          JublaOst::Schartyp::Ehemalige]
       end
 
-      def migrate_groups(parent, legacy)
+      def migrate_groups(parent, legacy, *types)
         flocks(legacy.REID, *types).each do |group|
           clazz = yield group
           migrate_group(parent, group, clazz)
@@ -55,7 +55,7 @@ module JublaOst
         end
         flocks
       end
-      
+
       def group_class(name, fg_class, ag_class)
         case name
         when /^FG /, /^Fachgruppe / then fg_class
@@ -63,17 +63,17 @@ module JublaOst
         else Group::SimpleGroup
         end
       end
-      
+
       def migrate_releis(parent, legacy)
         releis(legacy.REID).each do |group|
-          migrate_group(parent, group, Group::Relei)
+          migrate_group(parent, group, Group::RegionalBoard)
         end
       end
-      
+
       def releis(region_id)
-        joins('tmRegionRelei ON tmRegionRelei.ReleiSCID = tSchar.SCID').
-        where('tmRegionRelei.RegID = ? AND tSchar.st = ?', 
-              region_id, 
+        joins('LEFT JOIN tmRegionRelei ON tmRegionRelei.ReleiSCID = tSchar.SCID').
+        where('tmRegionRelei.RegID = ? AND tSchar.st = ?',
+              region_id,
               JublaOst::Schartyp::Relei.id)
       end
 
@@ -117,17 +117,17 @@ module JublaOst
         group.founding_year = legacy.gruendung
         group.clairongarde = legacy.clairon == 1
       end
-      
+
       def sanitize_name(group)
         name = group.name
         name = strip_starting(name, 'Jungwacht ')
         name = strip_starting(name, 'Blauring ')
         name = strip_starting(name, 'Jubla ')
-        group_name = name
+        group.name = name
       end
-      
+
       def strip_starting(string, start)
-        if string.starts_with?(start)
+        if string.downcase.starts_with?(start.downcase)
           string[start.size..-1]
         else
           string

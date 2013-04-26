@@ -1,5 +1,5 @@
 module JublaOst
-  class KursTnStatus < Struct(:id, :role)
+  class KursTnStatus < Struct.new(:id, :role)
     cattr_reader :all
 
     def self.new(id, role)
@@ -7,7 +7,7 @@ module JublaOst
       @@all ||= {}
       @@all[id] = instance
     end
-    
+
     Kurshauptleiter = new(10, Event::Role::Leader)
     LeiterExperte = new(20, Event::Role::AssistantLeader)
     LeiterAusbildner = new(30, Event::Role::AssistantLeader)

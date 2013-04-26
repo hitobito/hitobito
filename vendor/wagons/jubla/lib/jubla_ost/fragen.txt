@@ -1,3 +1,14 @@
+* Nicht migrierte Scharen
+    71 Jugendstufe (reid null)
+    201-3 Regionalleitung Surseetal, Entlebuch, Luzern (reid 12)
+    218 Kantonsleitung OW/NW (reid 13)
+    223 Bundesleitung (reid 7)
+    237 Kantonsleitung Schaffhausen (reid 15)
+    244 Verbandsleitung (reid 7)
+
+==================================================================
+
+
 * Was bedeuten die folgenden Schartypen, welchen Gruppentypen entsprechen sie, bestehen weitere Abhängigkeiten (zu Rollen etc)?
   - intern (ohne Publikation)
   - andere (mit Publikation)
@@ -34,7 +45,7 @@
   - VA
   - CO
   - ET
-  
+
 * Was geschieht mit einer Schar ohne SCREID (= ohne Region, z.B. Jugendstufe)?
 
 * Was geschieht mit der Funktion Kala Kontakt, Material?
@@ -47,7 +58,7 @@
 
 * Werden in Jubla Ost überhaupt Kinder verwaltet? Falls ja, wie machen wir die Zuteilung zu Kindergruppen? Sind Gruppenleiter irgendwie errurierbar?
 
-* Sind alle Personen einer Schar ohne spezifische PersFunkt automatisch Gruppenleiter? 
+* Sind alle Personen einer Schar ohne spezifische PersFunkt automatisch Gruppenleiter?
 
 * Schar: Bank, Konto, PC, Bankort, BankPC, BankBC: Wir haben nur bank_account. Welche Felder, wie kombiniert?
 
@@ -79,7 +90,7 @@
 
 * Kurs: Welche Bezeichnungen sollen für die Daten gewählt werden?
 
-* Kurs: Kassier und Mat ebenfalls übernehmen? 
+* Kurs: Kassier und Mat ebenfalls übernehmen?
 
 * Kurs Fragen 1 und 2 sind teilweise leer, trotzdem finden sich Antworten der TN dazu - Können diese ignoriert werden?
 
@@ -92,87 +103,87 @@
 Folgende Spalten konnten noch nicht zugeordnet werden:
 
 * Person:
-    Zusatz  varchar(50) Ja  NULL    
-    aktiv   tinyint(1)  Ja  1   
-    ChangePEID  smallint(6) Ja  0   
-    Schub   tinyint(4)  Ja  NULL    
-    engagieremich   tinyint(4)  Ja  NULL    
-    schuberweit tinyint(4)  Nein    0   
-    Infomail    tinyint(4)  Ja  NULL    
-    Infomail2   tinyint(4)  Ja  NULL    
-    nothelfer   datetime    Ja  NULL    
-    onlinekontakt   varchar(255)    Ja  NULL    
-    agenda1 int(11) Nein    0   
-    agenda2 int(11) Nein    0   
-    login   varchar(25) Nein    PEID    
-    lastlogin   datetime    Ja  0000-00-00 00:00:00 
+    Zusatz  varchar(50) Ja  NULL
+    aktiv   tinyint(1)  Ja  1
+    ChangePEID  smallint(6) Ja  0
+    Schub   tinyint(4)  Ja  NULL
+    engagieremich   tinyint(4)  Ja  NULL
+    schuberweit tinyint(4)  Nein    0
+    Infomail    tinyint(4)  Ja  NULL
+    Infomail2   tinyint(4)  Ja  NULL
+    nothelfer   datetime    Ja  NULL
+    onlinekontakt   varchar(255)    Ja  NULL
+    agenda1 int(11) Nein    0
+    agenda2 int(11) Nein    0
+    login   varchar(25) Nein    PEID
+    lastlogin   datetime    Ja  0000-00-00 00:00:00
     lastloginip
 
 * Schar
-    Begleitung  int(11) Ja  NULL    
-    Coach   int(11) Ja  NULL    
-    Kontakt int(11) Ja  NULL    
-    Gemeinde    varchar(100)    Ja  NULL    
-    Bank    varchar(150)    Ja  NULL    
-    Konto   varchar(30) Ja  NULL    
-    PC  varchar(20) Ja  NULL    
-    Bankort varchar(20) Ja  NULL    
-    BankPC  varchar(20) Ja  NULL    
-    BankBC  varchar(20) Ja  NULL    
-    praeses varchar(20) Ja  NULL    
-    praeses_lohn    enum('', '1')   Ja  NULL    
-    praeses_prozent smallint(6) Ja  NULL    
-    praeses_spesen  enum('', '1')   Ja  NULL    
-    VersGes varchar(20) Ja  NULL    
-    rpk text    Ja  NULL    
-    isVerein    tinyint(4)  Ja  NULL    
-    erloschen   smallint(6) Ja  NULL    
-    leitungsteamanzeigen    enum('', '1')   Ja  NULL    
-    detailsanzeigen enum('', '1')   Ja  NULL    
-    detailsMail tinyint(4)  Nein    1   
-    detailsTel2 tinyint(4)  Nein    1   
-    lpw varchar(12) Ja  NULL    
-    agenda  int(11) Ja  NULL    
+    Begleitung  int(11) Ja  NULL
+    Coach   int(11) Ja  NULL
+    Kontakt int(11) Ja  NULL
+    Gemeinde    varchar(100)    Ja  NULL
+    Bank    varchar(150)    Ja  NULL
+    Konto   varchar(30) Ja  NULL
+    PC  varchar(20) Ja  NULL
+    Bankort varchar(20) Ja  NULL
+    BankPC  varchar(20) Ja  NULL
+    BankBC  varchar(20) Ja  NULL
+    praeses varchar(20) Ja  NULL
+    praeses_lohn    enum('', '1')   Ja  NULL
+    praeses_prozent smallint(6) Ja  NULL
+    praeses_spesen  enum('', '1')   Ja  NULL
+    VersGes varchar(20) Ja  NULL
+    rpk text    Ja  NULL
+    isVerein    tinyint(4)  Ja  NULL
+    erloschen   smallint(6) Ja  NULL
+    leitungsteamanzeigen    enum('', '1')   Ja  NULL
+    detailsanzeigen enum('', '1')   Ja  NULL
+    detailsMail tinyint(4)  Nein    1
+    detailsTel2 tinyint(4)  Nein    1
+    lpw varchar(12) Ja  NULL
+    agenda  int(11) Ja  NULL
     PersSuche   tinyint(4)  Nein    0   Personensuche erlauben
-    
+
 * PersonSchar
-    Bemerkung   text    Ja  NULL    
-    Jobs    varchar(150)    Ja  NULL    
-    Gruppe  varchar(100)    Ja  NULL    
+    Bemerkung   text    Ja  NULL
+    Jobs    varchar(150)    Ja  NULL
+    Gruppe  varchar(100)    Ja  NULL
     showlist    tinyint(1)  Nein    1
-   
+
 * Kurs
     organ   varchar(50) Ja  NULL    Bulei, Relei Stadt, Jubla Kanton Luzern, ..
     sf  varchar(20) Ja  LS/T    immer LS/T
     fr  varchar(20) Ja  NULL    leer
-    anmschluss  tinyint(4)  Ja  NULL    
+    anmschluss  tinyint(4)  Ja  NULL
     anmeldungan varchar(255)    Ja  NULL    leer
-    klbem   tinytext    Ja  NULL    
+    klbem   tinytext    Ja  NULL
     bgein   tinyint(4)  Ja  NULL    bool
     tnanzeigen  tinyint(255)    Ja  NULL    bool
     tnzuteilung tinyint(1)  Nein    1   bool
-    urlhomepage varchar(100)    Ja  NULL    
-    urlfotos    varchar(100)    Ja  NULL    
-    urlgb   varchar(100)    Ja  NULL    
+    urlhomepage varchar(100)    Ja  NULL
+    urlfotos    varchar(100)    Ja  NULL
+    urlgb   varchar(100)    Ja  NULL
     kassier mediumint(8)    Ja  NULL    ref
     mat mediumint(8)    Ja  NULL    ref
 
 * Person Kurs
     unterschriften  tinyint(4)  Ja  NULL    bool
-    GLseit  varchar(20) Ja  NULL    
-    SLseit  varchar(20) Ja  NULL    
-    LLseit  varchar(20) Ja  NULL    
-    Funktionen  varchar(50) Ja  NULL    
-    bg  smallint(6) Ja  NULL    
-    BESR    varchar(20) Ja  1   
-    bezahlt date    Ja  NULL    
+    GLseit  varchar(20) Ja  NULL
+    SLseit  varchar(20) Ja  NULL
+    LLseit  varchar(20) Ja  NULL
+    Funktionen  varchar(50) Ja  NULL
+    bg  smallint(6) Ja  NULL
+    BESR    varchar(20) Ja  1
+    bezahlt date    Ja  NULL
     qual    tinyint(4)  Ja  NULL    -1/0
     vorkurs varchar(10) Ja  NULL    int
-    woche   tinyint(4)  Ja  NULL    
-    AnmFreigabeSL   date    Ja  NULL    
+    woche   tinyint(4)  Ja  NULL
+    AnmFreigabeSL   date    Ja  NULL
     Stufe   varchar(5)  Ja  NULL    LL, GL
-    AnmFreigabeID   int(11) Ja  NULL    
-    anm1    int(11) Ja  NULL    
-    anm2    int(11) Ja  NULL    
-    anm3    int(11) Ja  NULL    
-    anm4    int(11) Ja  NULL    
+    AnmFreigabeID   int(11) Ja  NULL
+    anm1    int(11) Ja  NULL
+    anm2    int(11) Ja  NULL
+    anm3    int(11) Ja  NULL
+    anm4    int(11) Ja  NULL

@@ -5,7 +5,7 @@ module JublaOst
     self.primary_key = 'PEID'
 
     class << self
-      
+
       include AutoLinkHelper
 
       def migrate
@@ -25,7 +25,10 @@ module JublaOst
       def find_or_create_person(legacy)
         if legacy.Email.present?
           person = ::Person.find_by_email(legacy.Email.downcase)
-          return person if person
+          if person
+            cache[legacy.PEID] = person.id
+            return person
+          end
         end
 
         return if legacy.no_names? && legacy.Zusatz.blank?
@@ -85,35 +88,53 @@ module JublaOst
       end
 
       def parse_social_accounts(current, legacy)
-        accounts = legacy.onlinekontakt.to_s.strip.split("\n")
+        accounts = legacy.onlinekontakt.to_s.strip.split("\n").collect(&:presence).compact
         accounts.each do |account|
-          label, name = account.split(":", 2)
-          if name.nil?
-            name = label.strip
-            if email?(name)
-              label = 'E-Mail'
-            elsif url?(name)
-              label = 'Webseite'
-            else
-              label = 'Andere'
-            end
+          if account.strip =~ /^https?:\/\//
+            name = account.strip
+            label = 'Webseite'
           else
-            label.strip!
-            name.strip!
+            label, name = account.split(":", 2)
+            if name.nil?
+              name = label.strip
+              if email?(name)
+                label = 'E-Mail'
+              elsif url?(name)
+                label = 'Webseite'
+              else
+                label = 'Andere'
+              end
+            else
+              label.strip!
+              label = 'E-Mail' if %w(Mail Mail? GMX).include?(label)
+              label = 'Webseite' if %w(WEB WWW).include?(label)
+              label = 'Skype' if label == 'Skype 1'
+              label = 'Facebook' if label == 'fb'
+              label = 'MSN' if label = 'Msn.'
+              name.strip!
+            end
           end
-          current.social_accounts.build(name: name, label: label)
+          # avoid entries with label and without name, e.g. "Skype: "
+          current.social_accounts.build(name: name, label: label) if name.present?
         end
       end
-      
+
       def migrate_qualification(person, legacy)
         if legacy.JSStufe.present?
           quali = person.qualifications.build
           quali.qualification_kind = QualificationKind.find(JublaOst::Config.qualification_kind_id(legacy.JSStufe))
           if legacy.JSAktualisierung.present?
-            quali.start_at = Date.new(legacy.JSAktualisierung)
-          end 
+            quali.start_at = Date.new(legacy.JSAktualisierung.to_i)
+          else
+            quali.start_at = Date.today
+          end
           quali.origin = legacy.JSKursnr
-          quali.save!
+          quali.valid? # set finish_at
+          unless person.qualifications.where(finish_at: quali.finish_at,
+                                             qualification_kind_id: quali.qualification_kind_id).
+                                       exists?
+            quali.save!
+          end
         end
       end
     end

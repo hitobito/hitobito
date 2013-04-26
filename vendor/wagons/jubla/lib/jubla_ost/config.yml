@@ -18,20 +18,22 @@ kanton:
   sh: 17
   uw: 20
   zh: 8
-  
+
+# mapping of tPerson.JSStufe to the qualification kinds
 qualification_kinds:
-  GL: 1
-  LL: 2
-  FK: 3
-  EX: 4
-  VA: 5
-  ET: 6
-  
-event_kinds:
-  GK: 1
-  GL: 2  
-  LL: 3
+  GL: 2
+  LL: 5
   FK: 4
-  VA: 5
-  CO: 6
+  EX: 1
+  VA: 3
+  ET: 6
+
+# mapping of tKurs.stufe to the event kind
+event_kinds:
+  GK: 4
+  GL: 2
+  LL: 1
+  FK: 5
+  VA: 6
+  CO: 3
   ET: 7

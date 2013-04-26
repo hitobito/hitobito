@@ -7,21 +7,30 @@ module JublaOst
     class << self
       def migrate
         ActiveRecord::Base.transaction do
-          sanitize_source
+          begin
+            sanitize_source
 
-          JublaOst::Region.migrate
+            JublaOst::Region.migrate
+            JublaOst::Kurs.migrate
 
-          ActiveRecord::Base.record_timestamps = false
-          JublaOst::Kurs.migrate
-          JublaOst::Person.migrate
-          ActiveRecord::Base.record_timestamps = true
+            ActiveRecord::Base.record_timestamps = false
+            JublaOst::Person.migrate
+            ActiveRecord::Base.record_timestamps = true
+
+          rescue Exception => e
+            # some weird Sqlite3 BusyExceptions on rollback prevent
+            # the original message being passed on, so print it here
+            puts e.message
+            puts e.backtrace.join("\n")
+            raise e
+          end
         end
       end
 
       def cache
         @cache ||= {}
       end
-      
+
       private
 
       def combine(separator, *values)
@@ -33,6 +42,7 @@ module JublaOst
         sanitize_dates(JublaOst::PersonSchar, 'Austritt')
         sanitize_dates(JublaOst::Person, 'Geburtstag')
         sanitize_emails
+        sanitize_kurse
       end
 
       def sanitize_dates(clazz, attr)
@@ -41,6 +51,11 @@ module JublaOst
           clazz.where("#{attr} LIKE ?", "#{year}-00-00%").
                 update_all("#{attr} = '#{year}-01-01'")
         end
+      end
+
+      def sanitize_kurse
+        Kurs.find(459).update_column(:anmeldestart, Date.new(2012,12,01))
+        Kurs.find(468).update_column(:start, Date.new(2012,04,20))
       end
 
       def sanitize_emails

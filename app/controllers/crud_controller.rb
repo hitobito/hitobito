@@ -9,7 +9,7 @@ class CrudController < ListController
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy]
 
   delegate :model_identifier, :to => 'self.class'
-  
+
   # Defines before and after callback hooks for create, update, save and destroy actions.
   define_model_callbacks :create, :update, :save, :destroy
 
@@ -21,9 +21,9 @@ class CrudController < ListController
   after_destroy :set_success_notice
 
   helper_method :entry, :full_entry_label
-  
+
   hide_action :model_identifier, :run_callbacks
-  
+
   # Simple helper object to give access to required view helper methods.
   @@helper = Object.new.extend(ActionView::Helpers::TranslationHelper).
                         extend(ActionView::Helpers::OutputSafetyHelper)
@@ -55,7 +55,7 @@ class CrudController < ListController
   def create(options = {}, &block)
     assign_attributes
     created = with_callbacks(:create, :save) { save_entry }
-    respond_with(entry, options.reverse_merge(success: created, location: params[:return_url].presence), &block)
+    respond_with(entry, options.reverse_merge(success: created, location: return_path), &block)
   end
 
   # Display a form to edit an exisiting entry of this model.
@@ -73,7 +73,7 @@ class CrudController < ListController
   def update(options = {}, &block)
     assign_attributes
     updated = with_callbacks(:update, :save) { save_entry }
-    respond_with(entry, options.reverse_merge(success: updated, location: params[:return_url].presence), &block)
+    respond_with(entry, options.reverse_merge(success: updated, location: return_path), &block)
   end
 
   # Destroy an existing entry of this model.
@@ -110,9 +110,9 @@ class CrudController < ListController
 
   # Assigns the attributes from the params to the model entry.
   def assign_attributes
-    entry.attributes = model_params 
+    entry.attributes = model_params
   end
-  
+
   # perform the save operation
   def save_entry
     entry.save
@@ -151,12 +151,17 @@ class CrudController < ListController
             :"crud.#{scope}"]
     @@helper.t(keys.shift, :model => full_entry_label, :default => keys)
   end
-  
+
   # Html safe error messages of the current entry.
   def error_messages
     @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
   end
 
+  def return_path
+    if params[:return_url].present?
+      URI.parse(params[:return_url]).path rescue nil
+    end
+  end
 
   class << self
     # The identifier of the model used for form parameters.
@@ -164,7 +169,7 @@ class CrudController < ListController
     def model_identifier
       @model_identifier ||= model_class.model_name.param_key
     end
-    
+
     # Convenience callback to apply a callback on both form actions (new and edit).
     def before_render_form(*methods)
       before_render_new *methods
@@ -172,7 +177,7 @@ class CrudController < ListController
     end
   end
 
-  # Custom Responder that handles the controller's path_args. 
+  # Custom Responder that handles the controller's path_args.
   # An additional :success option is used to handle action callback chain halts.
   class Responder < ActionController::Responder
 

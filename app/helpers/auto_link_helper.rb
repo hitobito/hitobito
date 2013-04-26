@@ -1,5 +1,5 @@
 module AutoLinkHelper
-  
+
   def auto_link(str)
     if email?(str)
       mail_to(str)
@@ -16,9 +16,9 @@ module AutoLinkHelper
   def email?(str)
     /\A([\w\.\-\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i.match(str)
   end
-  
+
   def url?(str)
-    url_with_protocol(str) || url_without_protocol?(str)
+    url_with_protocol?(str) || url_without_protocol?(str)
   end
 
   def url_with_protocol?(str)
@@ -30,5 +30,5 @@ module AutoLinkHelper
     # includes no white-spaces AND includes www.*
     /(?=^\S*$)(?=(^www\..+$)).*/.match(str)
   end
-  
+
 end

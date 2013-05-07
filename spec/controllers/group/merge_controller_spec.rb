@@ -2,9 +2,9 @@
 require 'spec_helper'
 
 describe Group::MergeController do
-  
+
   context "GET :select" do
-    
+
     it "should redirect to group show if it's not possible to merge" do
       group = groups(:top_layer) # top_layer group has no sister groups
 
@@ -15,7 +15,7 @@ describe Group::MergeController do
       flash[:alert].should =~ /Es sind keine gleichen Gruppen zum Fusionieren vorhanden/
       should redirect_to(group_path(group))
     end
-    
+
   end
 
   context "POST :perform" do
@@ -40,8 +40,8 @@ describe Group::MergeController do
       group2 = groups(:bottom_layer_two)
       group3 = Fabricate(Group::BottomLayer.name.to_s, name: 'Foo', parent_id: group1.parent_id)
 
-      user = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: group1).person
-      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: group3, person_id: user.id)
+      user = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: group1).person
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: group3, person_id: user.id)
 
       sign_in(user)
 

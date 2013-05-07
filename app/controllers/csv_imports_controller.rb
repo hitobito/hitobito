@@ -4,7 +4,7 @@ class CsvImportsController < ApplicationController
   attr_accessor :group
   attr_reader :importer, :parser, :role_type
 
-  helper_method :group, :parser
+  helper_method :group, :parser, :guess
   before_filter :load_group
   before_filter :custom_authorization
   decorates :group
@@ -47,6 +47,11 @@ class CsvImportsController < ApplicationController
     else
       authorize! :new, group.roles.new
     end
+  end
+
+  def guess(header)
+    @column_guesser ||= Import::PersonColumnGuesser.new(parser.headers)
+    @column_guesser[header][:key]
   end
 
   def model_params

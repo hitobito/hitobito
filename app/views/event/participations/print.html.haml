@@ -11,64 +11,56 @@
   %body.application
     .row-fluid
       %h1 Anmeldung für #{@event.to_s}
-    
+
       %article.span7
         %section
           %dl.dl-horizontal
             = labeled('Daten', @event.dates_full)
             = labeled_attr(@event, :motto)
             = labeled_attr(@event, :cost)
-          
+
           - if @event.description?
             = render_attrs(@event, :description)
-              
+
           - if @event.location?
             = render_attrs(@event, :location)
-            
+
           %dl.dl-horizontal
             - @event.used?(:kind_id) do
               = labeled_attr(@event, :kind_id)
-              
+
             - @event.used?(:number) do
               = labeled_attr(@event, :number)
-              
+
             = labeled('Durchgeführt von', @event.group_names)
-        
-        
+
+
         -if @answers.present?
           = section 'Spezifische Angaben' do
             %ul
             - @answers.each do |answer|
               %li= "#{answer.question.question}: #{answer.answer}"
-    
+
         - if entry.additional_information.present?
           = section t('activerecord.attributes.event/participation.additional_information') do
             = simple_format(entry.additional_information)
-        
+
         - if @event.priorization && @application.present?
           = render 'priorities'
-        
+
       %aside.span5
         - if @application.present?
           = section 'Anmeldung an' do
             = @application.contact.decorate.complete_contact
-        
+
         - if @event.contact_id?
           = section 'Kontakt' do
             = @event.contact.complete_contact
-    
+
         = section 'TeilnehmerIn' do
           = render 'contactable/show', contactable: entry.person, only_public: true
-  
-     
+
+
     .row-fluid
-  
       = render_extensions 'print'
-  
-      = section 'Unterschrift' do
-        %p Von dir oder einer erziehungsberechtigten Person, falls du jünger als 18 Jahre bist.
-        %br/
-        %table.signature
-          %tr
-            %td.border Ort, Datum
-            %td.border Unterschrift
+

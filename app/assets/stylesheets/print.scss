@@ -9,14 +9,14 @@ Theme URL   :  http://jubla.puzzle.ch/
 Version     :  0.1
 Author      :  Fritsch Pierre
 Author URL  :  http://www.wearecube.ch
-Mixed with  :  HTML5 Boilerplate & inseo 
+Mixed with  :  HTML5 Boilerplate & inseo
 *  @see  https://github.com/h5bp/html5-boilerplate
 *  @see  https://github.com/inseo
 */
 
 /** --- = @section GENERIC --- */
 
-/** Init Colors, remove shadows and backgrounds 
+/** Init Colors, remove shadows and backgrounds
  *  @see  http://www.sanbeiji.com/archives/953 */
 * {
   color: #000 !important;
@@ -34,7 +34,7 @@ body {
   padding: 0 !important;
   width: auto !important;
   font-size: 10pt;
-  font-family: $sansFontFamily; 
+  font-family: $sansFontFamily;
 }
 
 /** Titles followed by content
@@ -53,7 +53,7 @@ img {
   page-break-inside: avoid;
 }
 
-/** Minimum lines before next page 
+/** Minimum lines before next page
  *  @note  Doesn't work on Firefox. */
 p {
   orphans: 3;   /** bas de page */
@@ -92,7 +92,7 @@ img {
 /** --- = @section STYLES PARTICULIERS --- */
 
 /** Remove some elements */
-header, nav, footer, 
+header, nav, footer,
 .nav, .breadcrumb, .btn-toolbar, .btn {
   display: none;
 }
@@ -115,14 +115,14 @@ table th {
   text-align: left;
 }
 
-table td, 
-table th { 
-  vertical-align: top; 
-  padding:12px 12px 12px 0; 
+table td,
+table th {
+  vertical-align: top;
+  padding:12px 12px 12px 0;
   border-bottom: 1px solid $grayLight;
 
   p { margin: 0; padding: 0; }
-  
+
   .profil {display: none; }
 }
 
@@ -140,7 +140,7 @@ aside {
   table.table {
     width: auto;
   }
-  
+
 }
 
 .row-fluid {
@@ -157,23 +157,8 @@ body.application {
   h3 { font-size: 1.2em; }
   h4 { font-size: 1.1em; }
   h5 { font-size: 1.1em; }
-  
+
   .profil-big {
     display: none;
-  }
-  
-  table.signature {
-    width: 100%;
-    border-spacing: 1em;
-    border-collapse: inherit;
-  
-    td {
-      vertical-align: top;
-      border: 0;
-    }
-  
-    td.border{
-      border-top: 1px solid black;
-    }
   }
 }

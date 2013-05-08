@@ -62,7 +62,7 @@ class Group < ActiveRecord::Base
   # Root group may not be destroyed
   protect_if :root?
   protect_if :children_without_deleted
-  
+
   stampable stamper_class_name: :person, deleter: true
 
   ### ASSOCIATIONS
@@ -78,7 +78,7 @@ class Group < ActiveRecord::Base
   has_many :people_filters, dependent: :destroy
 
   has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
-  
+
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
@@ -161,18 +161,14 @@ class Group < ActiveRecord::Base
     hierarchy.select { |g| g.class.layer }
   end
 
-  def groups_in_same_layer
-    Group.where(layer_group_id: layer_group_id)
-  end
-
   # siblings with the same type
   def sister_groups
     Group.where(parent_id: parent_id, type: type).where('id <> ?', id).without_deleted
   end
-  
+
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
-    Group.joins("LEFT JOIN groups AS sister_groups " + 
+    Group.joins("LEFT JOIN groups AS sister_groups " +
                 "ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt").
           where("sister_groups.type = ?", type).
           where(parent_id? ? ["sister_groups.parent_id = ?", parent_id] : "sister_groups.parent_id IS NULL")
@@ -211,7 +207,7 @@ class Group < ActiveRecord::Base
       (contact && contact.public_send(query_method)) || super()
     end
   end
-  
+
   # create alias to call it again
   alias_method :hard_destroy, :destroy!
   def destroy!
@@ -220,11 +216,11 @@ class Group < ActiveRecord::Base
     hard_destroy
     destroy_orphaned_events
   end
-  
+
   def decorator_class
     GroupDecorator
   end
-  
+
   private
 
   def assert_type_is_allowed_for_parent
@@ -268,7 +264,7 @@ class Group < ActiveRecord::Base
   def children_without_deleted
     children.without_deleted
   end
-  
+
   def destroy_descendants_with_paranoia
     # do not destroy descendants on soft delete
   end

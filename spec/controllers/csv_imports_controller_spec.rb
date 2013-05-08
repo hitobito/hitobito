@@ -45,13 +45,18 @@ describe CsvImportsController do
       should redirect_to new_group_csv_imports_path(group)
     end
 
+
+    it "renders define_mapping if button is pressed" do
+      post :create, required_params.merge(button: '')
+      should render_template(:define_mapping)
+    end
+
     it "populates flash and redirects to group role list" do
       expect { post :create, required_params }.to change(Person,:count).by(1)
       flash[:notice].should eq ["1 Person (Leader) wurde erfolgreich importiert."]
       flash[:alert].should_not be_present
       should redirect_to group_people_path(group, role_types: role_type, name: "Leader")
     end
-
 
     context "mapping misses attribute" do
       let(:mapping) { { email: :email, role: role_type } }

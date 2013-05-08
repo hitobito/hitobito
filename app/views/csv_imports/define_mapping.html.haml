@@ -1,8 +1,6 @@
 = standard_form(:csv_import, method: :post, url: preview_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
   = hidden_field_tag :data, parser.to_csv
 
-  = save_form_buttons(f, 'Personen importieren', group_people_path(group))
-
   = field_set_tag "Rolle auswählen" do
     = f.labeled :role_type, 'Rolle' do
       = select_tag(:role_type, options_from_collection_for_select(possible_roles, :sti_name, :human, params[:role_type]), {class: 'span3'})

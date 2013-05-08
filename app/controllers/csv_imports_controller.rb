@@ -4,7 +4,9 @@ class CsvImportsController < ApplicationController
   attr_accessor :group
   attr_reader :importer, :parser, :entries
 
-  helper_method :group, :parser, :guess, :model_class, :entries, :relevant_attrs, :role_name
+  helper_method :group, :parser, :guess, :model_class, :entries, :role_name,
+    :relevant_attrs, :relevant_contacts, :contact_value
+
   before_filter :load_group
   before_filter :custom_authorization
   decorates :group
@@ -23,33 +25,42 @@ class CsvImportsController < ApplicationController
   def preview
     valid_for_import? do
       @entries = importer.people.map(&:person)
-      ary(flash.now, :notice, pluralized(importer.new_count, "neu importiert."))
-      ary(flash.now, :notice, pluralized(importer.doublette_count, "aktualisiert."))
-      ary(flash.now, :alert, pluralized(importer.failure_count, "nicht importiert."))
-      importer.errors.each { |error| ary(flash.now, :alert, error) }
+      set_importer_flash_info("neu importiert.", "aktualisiert.", "nicht importiert.")
     end
-  end
-
-  def ary(flash_hash, key, text)
-    flash_hash[key] ||= []
-    flash_hash[key] << text if text.present?
   end
 
 
   def create
     valid_for_import? do
-      importer.import
+      if !params[:button]
+        importer.import
+        @entries = importer.people.map(&:person)
 
-      ary(flash, :notice, pluralized(importer.new_count, "erfolgreich importiert."))
-      ary(flash, :notice, pluralized(importer.doublette_count, "erfolgreich aktualisiert."))
-      ary(flash, :alert, pluralized(importer.failure_count, "nicht importiert."))
-      importer.errors.each { |error| ary(flash.now, :alert, error) }
-
-      redirect_to group_people_path(redirect_params)
+        set_importer_flash_info("erfolgreich importiert.", "erfolgreich aktualisiert." , "nicht importiert.")
+        redirect_to group_people_path(redirect_params)
+      else
+        define_mapping
+        render :define_mapping
+      end
     end
   end
 
   private
+
+ def set_importer_flash_info(*suffixes)
+   reversed = suffixes.reverse
+
+   add_to_flash(:notice, pluralized(importer.new_count, reversed.pop))
+   add_to_flash(:notice, pluralized(importer.doublette_count,reversed.pop))
+   add_to_flash(:alert, pluralized(importer.failure_count, reversed.pop))
+   importer.errors.each { |error| add_to_flash(:alert, error) }
+ end
+
+  def add_to_flash(key, text)
+    flash_hash = action_name == "preview" ? flash.now : flash
+    flash_hash[key] ||= []
+    flash_hash[key] << text if text.present?
+  end
 
   def valid_for_import?
     if role_type.blank? || !group.class.role_types.collect(&:sti_name).include?(role_type)
@@ -147,7 +158,21 @@ class CsvImportsController < ApplicationController
   end
 
   def relevant_attrs
-    Import::Person.person_attributes.map { |f| f[:key] }
+    Import::Person.person_attributes.select { |f| params[:csv_import].values.include?(f[:key].to_s) }.map { |f| f[:key]  }
+  end
+
+  def relevant_contacts(key)
+    @account_types ||= { phone_numbers: Import::AccountFields.new(PhoneNumber),
+                         social_accounts: Import::AccountFields.new(SocialAccount) }
+    @account_types[key].fields.select { |f| params[:csv_import].values.include?(f[:key].to_s) }.each do |contact|
+      yield(contact)
+    end
+  end
+
+  def contact_value(key, contacts)
+    key = key.split('_').last
+    contact = contacts.find { |c| c.label.downcase == key }
+    contact && contact.value
   end
 
 end

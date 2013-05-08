@@ -10,7 +10,7 @@ module JublaOst
 
       def migrate
         i = 0
-        find_each do |legacy|
+        find_each(batch_size: 50) do |legacy|
           if person = find_or_create_person(legacy)
             migrate_qualification(person, legacy)
             PersonFunktion.migrate_person_roles(person, legacy)

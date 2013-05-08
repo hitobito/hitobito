@@ -8,7 +8,7 @@ module JublaOst
 
     class << self
       def migrate_person_kurse(current, legacy)
-        where(PEID: legacy.PEID).includes(:kurs_basisgrupppe).each do |person_kurs|
+        where(PEID: legacy.PEID).where('KUID <> 0').includes(:kurs_basisgruppe).each do |person_kurs|
           create_participation(current, person_kurs)
         end
       end

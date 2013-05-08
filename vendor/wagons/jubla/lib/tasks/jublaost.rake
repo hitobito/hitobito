@@ -5,6 +5,7 @@ namespace :jublaost do
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/base"
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/funktion"
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/kurs"
+    require "#{JublaJubla::Wagon.root}/lib/jubla_ost/kurs_basisgruppe"
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/kurs_tn_status"
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/person_funktion"
     require "#{JublaJubla::Wagon.root}/lib/jubla_ost/person_kurs"

@@ -10,11 +10,11 @@ module JublaOst
       end
 
       def qualification_kind_id(shortname)
-        config['qualification_kinds'][shortname.upcase] || raise("No JS Stufe '#{shortname}' found")
+        config['qualification_kinds'][shortname.upcase]
       end
 
       def event_kind_id(shortname)
-        config['event_kinds'][shortname.upcase] # may be nil
+        config['event_kinds'][shortname.upcase]
       end
 
       def config

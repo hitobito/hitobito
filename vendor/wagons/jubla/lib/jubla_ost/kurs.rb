@@ -6,7 +6,7 @@ module JublaOst
 
     class << self
       def migrate
-        find_each do |legacy|
+        find_each(batch_size: 200) do |legacy|
           if legacy.kbez.present? && legacy.Kanton != 'CH' && JublaOst::Config.event_kind_id(legacy.stufe).present?
             course = Event::Course.new
             course.groups = [Group::State.find(JublaOst::Config.kanton_id(legacy.Kanton))]
@@ -55,6 +55,7 @@ module JublaOst
           current.description += "\n\n"
         end
         values.each do |label, value|
+          current.description ||= ''
           current.description += "#{label}: #{value}\n"
         end
       end

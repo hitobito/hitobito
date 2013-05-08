@@ -32,6 +32,7 @@ module JublaOst
         migrate_groups(current, legacy, *other_types) do |g|
           group_class(g.Schar, Group::RegionalProfessionalGroup, Group::RegionalWorkGroup)
         end
+        # TODO delete default relei
       end
 
       private

@@ -58,7 +58,6 @@ module JublaOst
 
       def create_role(current, scid, person_schar, funktion)
         if group = find_group(current, scid)
-          group = Group.find(group_id)
           role = build_role(group, funktion)
           assign_attributes(role, current, group, person_schar)
           role.save!

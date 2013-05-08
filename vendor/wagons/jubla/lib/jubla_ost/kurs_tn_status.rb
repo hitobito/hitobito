@@ -20,6 +20,6 @@ module JublaOst
     GKTeilnehmer = new(200, Event::Course::Role::Participant)
     GLKTeilnehmer = new(210, Event::Course::Role::Participant)
     SLKTeilnehmer = new(220, Event::Course::Role::Participant)
-    Kurspersonal = new(45, Event::Role::Speaker)
+    Kurspersonal = new(45, Event::Role::AssistantLeader)
   end
 end

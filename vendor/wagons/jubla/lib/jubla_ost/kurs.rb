@@ -7,7 +7,7 @@ module JublaOst
     class << self
       def migrate
         find_each do |legacy|
-          if legacy.kbez.present? && legacy.Kanton != 'CH'
+          if legacy.kbez.present? && legacy.Kanton != 'CH' && JublaOst::Config.event_kind_id(legacy.stufe).present?
             course = Event::Course.new
             course.groups = [Group::State.find(JublaOst::Config.kanton_id(legacy.Kanton))]
             migrate_attributes(course, legacy)
@@ -37,8 +37,26 @@ module JublaOst
         current.kind_id = JublaOst::Config.event_kind_id(legacy.stufe)
         current.application_contact_id = current.possible_contact_groups.first.id
 
+        migrate_urls(current, legacy)
         migrate_dates(current, legacy)
         migrate_questions(current, legacy)
+
+        current.state = current.dates.first.start_at.year == 2013 ? 'application_open' : 'closed'
+      end
+
+      def migrate_urls(current, legacy)
+        urls = {urlhomepage: 'Homepage', urlfotos: 'Fotos', urlgb: 'Gästebuch'}
+        values = {}
+        urls.each do |attr, label|
+          val = legacy.send(attr).presence
+          values[label] = val if val
+        end
+        if values.present? && current.description?
+          current.description += "\n\n"
+        end
+        values.each do |label, value|
+          current.description += "#{label}: #{value}\n"
+        end
       end
 
       def migrate_dates(current, legacy)
@@ -64,15 +82,6 @@ module JublaOst
 
         cache[:abo] = build_question(current, 'Ich habe folgendes ÖV Abo', 'GA, Halbtax / unter 16, keine Vergünstigung')
         cache[:vegi] = build_question(current, 'Ich bin Vegetarier', 'ja, nein')
-
-        (1..6).each do |i|
-          q = legacy.attributes["kurs#{i}"]
-          type = legacy.attributes["kurs#{i}typ"]
-          if q.present?
-            choices = type == 1 ? 'ja, nein' : nil
-            cache[i] = build_question(current, q, choices)
-          end
-        end
       end
 
       def build_question(current, question, choices)

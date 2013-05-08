@@ -14,6 +14,8 @@ module JublaOst
              'jw' => 'Jungwacht',
              'jubla' => 'Jubla'}
 
+    IGNORED = [71, 223, 244]
+
     class << self
 
       def migrate_state(current, legacy)
@@ -95,7 +97,6 @@ module JublaOst
         group.town = legacy.Ort
         group.email = legacy.SCemail
         group.address = combine("\n", legacy.Adresse1, legacy.Adresse2)
-        # TODO: bank_account, Kontakt
         if group.is_a?(Group::Flock)
           sanitize_name(group)
           migrate_flock_attributes(group, legacy)
@@ -111,7 +112,11 @@ module JublaOst
       def migrate_flock_attributes(group, legacy)
         group.kind = KINDS[legacy.Art]
         group.unsexed = legacy.geschlechtergemischt == '1'
-        group.parish = legacy.Pfarrei
+        if legacy.Gemeinde.present?
+          group.parish = "#{legacy.Pfarrei} (#{legacy.Gemeinde})"
+        else
+          group.parish = legacy.Pfarrei
+        end
         group.jubla_insurance = legacy.Jublavers == 1
         group.jubla_full_coverage = legacy.Vollkasko == 1
         group.founding_year = legacy.gruendung

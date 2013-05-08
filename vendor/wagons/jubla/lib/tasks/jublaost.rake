@@ -20,10 +20,10 @@ namespace :jublaost do
 
     JublaOst::Base.migrate
 
-    seconds = Time.now - start
+    seconds = (Time.now - start).to_i
     minutes = seconds / 60
 
-    puts "Migrated the following models in #{minutes}:#{seconds % 60} minutes"
+    puts "\n\nMigrated the following models in #{minutes}:#{seconds % 60} minutes"
     counts.each do |model, count|
       puts "#{count - old_count[model]} #{model.model_name.pluralize}"
     end

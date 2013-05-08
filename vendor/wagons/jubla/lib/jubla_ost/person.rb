@@ -66,24 +66,27 @@ module JublaOst
         current.insurance_company = legacy.versges
         current.insurance_number = legacy.verspol
         current.j_s_number = legacy.JSNr
-        current.additional_information = combine("\n\n", legacy.Bemerkung, legacy.aboutme)
+
+        if !current.company? && legacy.Zusatz.present?
+          current.additional_information = combine("\n\n", legacy.Bemerkung, "Zusatz: #{legacy.Zusatz}")
+        else
+          current.additional_information = legacy.Bemerkung
+        end
 
         current.created_at = legacy.Erfasst || Time.zone.now
-        current.updated_at = legacy.ChangeDate || Time.zone.now
-        # TODO set ChangePEID somehow
-        current.password = legacy.Passwort if legacy.Passwort && legacy.Passwort.size >= 6
+        current.updated_at = legacy.ChangeDate || current.created_at
 
         build_phone_number(current, legacy.Tel1, 'Privat')
         build_phone_number(current, legacy.Tel2, 'Arbeit')
-        build_phone_number(current, legacy.Mobil, 'Mobil')
+        build_phone_number(current, legacy.Mobil, 'Mobil', false)
         build_phone_number(current, legacy.Fax, 'Fax')
 
         parse_social_accounts(current, legacy)
       end
 
-      def build_phone_number(current, number, label)
+      def build_phone_number(current, number, label, public = true)
         if number.present?
-          current.phone_numbers.build(number: number, label: label)
+          current.phone_numbers.build(number: number, label: label, public: public)
         end
       end
 
@@ -120,20 +123,18 @@ module JublaOst
       end
 
       def migrate_qualification(person, legacy)
-        if legacy.JSStufe.present?
-          quali = person.qualifications.build
-          quali.qualification_kind = QualificationKind.find(JublaOst::Config.qualification_kind_id(legacy.JSStufe))
-          if legacy.JSAktualisierung.present?
+        if legacy.JSStufe.present? && legacy.JSAktualisierung.present?
+          kind_ids = Array(JublaOst::Config.qualification_kind_id(legacy.JSStufe))
+          kind_ids.each do |kind_id|
+            quali = person.qualifications.build
+            quali.qualification_kind = QualificationKind.find(kind_id)
             quali.start_at = Date.new(legacy.JSAktualisierung.to_i)
-          else
-            quali.start_at = Date.today
-          end
-          quali.origin = legacy.JSKursnr
-          quali.valid? # set finish_at
-          unless person.qualifications.where(finish_at: quali.finish_at,
-                                             qualification_kind_id: quali.qualification_kind_id).
-                                       exists?
-            quali.save!
+            quali.origin = legacy.JSKursnr
+            quali.valid? # set finish_at
+            existing = person.qualifications.where(finish_at: quali.finish_at,
+                                                   qualification_kind_id: quali.qualification_kind_id)
+
+            quali.save! unless existing.exists?
           end
         end
       end

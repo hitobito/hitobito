@@ -23,8 +23,10 @@ kanton:
 qualification_kinds:
   GL: 2
   LL: 5
-  FK: 4
-  EX: 1
+  FK:
+  EX:
+    - 1
+    - 4
   VA: 3
   ET: 6
 
@@ -34,6 +36,6 @@ event_kinds:
   GL: 2
   LL: 1
   FK: 5
-  VA: 6
+  VA:
   CO: 3
   ET: 7

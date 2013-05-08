@@ -9,16 +9,34 @@ module JublaOst
         person_schars = find_person_schars(legacy.PEID)
         unhandled_schars = person_schars.keys
 
-        # create roles for all tmPersFunkt
-        where(PEID: legacy.PEID).where('SCID IS NOT NULL').each do |person_funktion|
-          scid = person_funktion.SCID
-          create_role(current, scid, person_schars[scid], Funktion.all[person_funktion.FUID])
-          unhandled_schars.delete(scid)
-        end
+        if legacy.aktiv != 3 # verstorben
+          # create roles for all tmPersFunkt
+          where(PEID: legacy.PEID).where('SCID IS NOT NULL').each do |person_funktion|
+            scid = person_funktion.SCID
+            funktion = Funktion.all[person_funktion.FUID]
+            if person_schar = person_schars[scid]
+              create_role(current, scid, person_schar, funktion)
+              unhandled_schars.delete(scid)
+            else
+              # person_funktion without person_schar
+              if group = find_group(current, scid)
+                create_alumnus_role(current, group, build_role(group, funktion).class.label, Time.zone.now)
+              end
+            end
+          end
 
-        # create roles for all tmPersSchar without tmPersFunkt
-        unhandled_schars.each do |scid|
-          create_role(current, scid, person_schars[scid], nil)
+          # create roles for all tmPersSchar without tmPersFunkt
+          unhandled_schars.each do |scid|
+            create_role(current, scid, person_schars[scid], nil)
+          end
+
+        else
+          # create alumnus roles for deads
+          person_schars.each do |scid|
+            if group = find_group(current, scid)
+              create_alumnus_role(current, group, 'Verstorben', current.updated_at)
+            end
+          end
         end
       end
 
@@ -30,14 +48,20 @@ module JublaOst
         end
       end
 
-      def create_role(current, scid, person_schar, funktion)
+      def find_group(current, scid)
         if group_id = Schar.cache[scid]
+          Group.find(group_id)
+        elsif !Schar::IGNORED.include?(scid)
+          puts "No Schar with id=#{scid} found while migrating roles of #{current.to_s}"
+        end
+      end
+
+      def create_role(current, scid, person_schar, funktion)
+        if group = find_group(current, scid)
           group = Group.find(group_id)
           role = build_role(group, funktion)
           assign_attributes(role, current, group, person_schar)
           role.save!
-        else
-          puts "No Schar with id=#{scid} found while migrating roles of #{current.to_s}"
         end
       end
 
@@ -55,25 +79,26 @@ module JublaOst
         role.group = group
         # TODO set präses attributes
         if person_schar
+          role.label ||= person_schar.Jobs.presence
           role.created_at = person_schar.Eintritt
           if person_schar.Austritt
             role.deleted_at = person_schar.Austritt
-            create_alumnus_role(role)
+            create_alumnus_role(role.person, role.group, role.class.label, role.deleted_at)
           end
         end
-        role.created_at ||= Time.zone.now
+        role.created_at ||= current.created_at
         role.updated_at = role.created_at
         # roles of deleted groups are always deleted as well
         role.deleted_at ||= group.deleted_at
       end
 
-      def create_alumnus_role(role)
-        unless role.person.roles.where(group_id: role.group_id, type: Jubla::Role::Alumnus.sti_name).exists?
+      def create_alumnus_role(person, group, label, date)
+        unless person.roles.where(group_id: group.id, type: Jubla::Role::Alumnus.sti_name).exists?
           alumnus = Jubla::Role::Alumnus.new
-          alumnus.person = role.person
-          alumnus.group = role.group
-          alumnus.created_at = alumnus.updated_at = role.deleted_at
-          alumnus.label = role.class.label
+          alumnus.person = person
+          alumnus.group = group
+          alumnus.created_at = alumnus.updated_at = date
+          alumnus.label = label
           alumnus.save!
         end
       end

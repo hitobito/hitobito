@@ -4,9 +4,11 @@ module JublaOst
     self.table_name = 'tmPersKurs'
     self.primary_key = 'KMID'
 
+    belongs_to :kurs_basisgruppe, foreign_key: 'bg'
+
     class << self
       def migrate_person_kurse(current, legacy)
-        where(PEID: legacy.PEID).each do |person_kurs|
+        where(PEID: legacy.PEID).includes(:kurs_basisgrupppe).each do |person_kurs|
           create_participation(current, person_kurs)
         end
       end
@@ -37,7 +39,7 @@ module JublaOst
         participation.created_at = participation.updated_at = person_kurs.Anmeldung || Time.zone.now
 
         migrate_answers(participation, person_kurs)
-        migrate_role(participation, person_kurs.MSID)
+        migrate_role(participation, person_kurs.MSID, person_kurs.kurs_basisgruppe.try(:Name))
      end
 
       def migrate_answers(participation, person_kurs)
@@ -45,22 +47,6 @@ module JublaOst
 
         participation.answers.build(answer: vegi_answer(person_kurs), question_id: cache[:vegi].id)
         participation.answers.build(answer: abo_answer(person_kurs), question_id: cache[:abo].id)
-
-        (1..6).each do |i|
-          if question = cache[i]
-            a = person_kurs.attributes["kurs#{i}"].presence
-            if a.present? && question.choices == 'ja, nein'
-              a = 'ja' if a == '1' || a == '-1'
-              a = 'nein' if a == '0'
-            end
-            answer = participation.answers.build(answer: a, question_id: question.id)
-            answer.participation = participation
-            unless answer.valid?
-              answer.answer = nil
-              puts "PEID=#{person_kurs.PEID}, KUID=#{person_kurs.KUID}: Wrong answer to question #{i} '#{question.question} (#{question.choices})': #{a.inspect}"
-            end
-          end
-        end
       end
 
       def vegi_answer(person_kurs)
@@ -75,9 +61,10 @@ module JublaOst
         end
       end
 
-      def migrate_role(participation, funktion)
+      def migrate_role(participation, funktion, label)
         role = KursTnStatus.all[funktion].role.new
         role.participation = participation
+        role.label = label
         participation.roles << role
       end
     end

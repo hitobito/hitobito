@@ -1,12 +1,21 @@
-%h3= "Folgende Personen werde mit <strong>Rolle #{role_name}</strong> in die <strong>Gruppe #{group}</strong> importiert.".html_safe
-//%div{style: 'width: 100%; overflow: auto; margin: 1em;' }
-%div
+%h3
+  Folgende Personen werden mit der
+  %strong
+    Rolle
+    =role_name
+  in die
+  %strong
+    Gruppe
+    =group
+  importiert.
+
+%div{style: 'height: 500px; margin-bottom: 20px; overflow: auto;'}
   = list_table do |t|
     - t.col("") do |p|
       - if p.persisted?
-        %i.icon.icon-refresh{title: 'wird aktualisiert'}
+        %i.icon.icon-refresh{title: 'Wird aktualisiert'}
       - else
-        %i.icon.icon-plus{title: 'wird neu importiert'}
+        %i.icon.icon-plus{title: 'Wird neu erfasst'}
 
     - t.attrs *relevant_attrs
 
@@ -19,8 +28,8 @@
   = render 'hidden_form_fields'
   .btn-toolbar
     .btn-group
-      = f.submit('Personen importieren', class: 'btn btn-primary')
+      = f.submit('Personen jetzt importieren', class: 'btn btn-primary')
     .btn-group
-      = f.button('Zurück', class: 'btn btn-secondary')
+      = f.button('Zurück', class: 'btn btn-secondary', value: 'back')
     = link_to('Abbrechen', group_people_path(group), class: 'link')
 

@@ -34,6 +34,26 @@ describe CsvImportsController do
     end
   end
 
+  describe "POST preview" do
+    let(:data) { File.read(path(:utf8)) }
+    let(:role_type) { "Group::TopGroup::Leader" }
+    let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' } }
+    let(:required_params) { { group_id: group.id, data: data, role_type: role_type, csv_import: mapping } }
+
+    it "renders preview" do
+      post :preview, required_params
+      should render_template(:preview)
+    end
+
+    it "renders define mapping if mapping has duplicates" do
+      params = required_params.clone
+      params[:csv_import] = { Vorname: 'first_name', Nachname: 'first_name', Geburtsdatum: 'birthday',  }
+      post :preview, params
+      should render_template(:define_mapping)
+      flash[:alert].should =~ /Vorname/
+    end
+  end
+
   describe "POST #create" do
     let(:data) { File.read(path(:utf8)) }
     let(:role_type) { "Group::TopGroup::Leader" }
@@ -45,9 +65,8 @@ describe CsvImportsController do
       should redirect_to new_group_csv_imports_path(group)
     end
 
-
     it "renders define_mapping if button is pressed" do
-      post :create, required_params.merge(button: '')
+      post :create, required_params.merge(button: 'back')
       should render_template(:define_mapping)
     end
 

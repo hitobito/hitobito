@@ -7,10 +7,11 @@
       = f.help_block 'Allen importierten Personen wird diese Rolle zugewiesen'
 
   = field_set_tag "Spalten zu Feldern zuordnen" do
-    = f.labeled(nil, '<i>Spalte aus CSV</i>'.html_safe) do
+    = f.labeled(nil, content_tag(:i, 'Spalte aus CSV')) do
       %i{style: 'line-height: 30px'} Feld in der Datenbank
+    %br/
     - parser.headers.each do |column_name|
       = f.labeled(column_name, column_name) do
         = f.collection_select(column_name, fields, :key, :value, {include_blank: true, selected: guess(column_name)}, {class: 'span4'})
 
-  = save_form_buttons(f, 'Personen importieren', group_people_path(group))
+  = save_form_buttons(f, 'Vorschau', group_people_path(group))

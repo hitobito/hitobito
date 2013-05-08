@@ -29,18 +29,17 @@ class CsvImportsController < ApplicationController
     end
   end
 
-
   def create
     valid_for_import? do
-      if !params[:button]
+      if params[:button] == 'back'
+        define_mapping
+        render :define_mapping
+      else
         importer.import
         @entries = importer.people.map(&:person)
 
         set_importer_flash_info("erfolgreich importiert.", "erfolgreich aktualisiert." , "nicht importiert.")
         redirect_to group_people_path(redirect_params)
-      else
-        define_mapping
-        render :define_mapping
       end
     end
   end
@@ -65,8 +64,8 @@ class CsvImportsController < ApplicationController
   def valid_for_import?
     if role_type.blank? || !group.class.role_types.collect(&:sti_name).include?(role_type)
       redirect_to new_group_csv_imports_path(group)
-    elsif parse_or_redirect
-      map_headers_and_import(params[:csv_import])
+    elsif parse_or_redirect && sane_mapping?
+      map_headers_and_import
       yield
     end
   end
@@ -108,8 +107,40 @@ class CsvImportsController < ApplicationController
     end
   end
 
-  def map_headers_and_import(header_mapping)
-    data = parser.map_data(header_mapping)
+  def sane_mapping?
+    duplicates = find_duplicate_mappings
+    if duplicates.present?
+      fields = Import::Person.fields.each_with_object({}) {|f, o| o[f[:key]] = f[:value]}
+      list = duplicates.collect {|d| fields[d.to_s] }.join(", ")
+      if duplicates.size == 1
+        flash.now[:alert] = "#{list} wurde mehrfach zugewiesen"
+      else
+        flash.now[:alert] = "#{list} wurden mehrfach zugewiesen"
+      end
+      render :define_mapping
+      false
+    else
+      true
+    end
+  end
+
+  def find_duplicate_mappings
+    duplicates = []
+    seen = []
+    params[:csv_import].each do |header, attr|
+      if attr.present?
+        if seen.include?(attr)
+          duplicates << attr
+        else
+          seen << attr
+        end
+      end
+    end
+    duplicates.uniq
+  end
+
+  def map_headers_and_import
+    data = parser.map_data(params[:csv_import])
     @importer = Import::PersonImporter.new(group: group,
                                            data: data,
                                            role_type: role_type)

@@ -53,7 +53,7 @@ describe CsvImportsController, type: :controller do
     it "imports single person only" do
       expect { post :preview, group_id: group.id, data: data, role_type: role_type, csv_import: mapping }.not_to change(Person,:count).by(1)
       should have_css 'table'
-      should have_button 'Personen importieren'
+      should have_button 'Personen jetzt importieren'
       should have_button 'Zurück'
     end
   end

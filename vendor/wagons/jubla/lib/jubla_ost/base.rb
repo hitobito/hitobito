@@ -17,6 +17,8 @@ module JublaOst
             JublaOst::Person.migrate
             ActiveRecord::Base.record_timestamps = true
 
+            # TODO assign Schar#Begleitung, Kurs#Kassier, Kurs#Mat
+
           rescue Exception => e
             # some weird Sqlite3 BusyExceptions on rollback prevent
             # the original message being passed on, so print it here
@@ -43,6 +45,7 @@ module JublaOst
         sanitize_dates(JublaOst::Person, 'Geburtstag')
         sanitize_emails
         sanitize_kurse
+        remove_duplicate_emails
       end
 
       def sanitize_dates(clazz, attr)
@@ -67,6 +70,13 @@ module JublaOst
         Person.where(Email: 'cma@x-tra').update_all(Email: 'cma@x-tra.ch')
         Person.where(Email: 'm.kilchmann@shinternet').update_all(Email: 'm.kilchmann@shinternet.ch')
         Person.where(Email: 'test@test').update_all(Email: nil)
+      end
+
+      def remove_duplicate_emails
+        ids = Person.joins("p1 INNER JOIN tPersonen p2 ON p1.email = p2.email AND p1.peid <> p2.peid")
+                    .where("p1.email IS NOT NULL AND p1.email <> ''")
+                    .pluck("p1.PEID")
+        Person.where(PEID: ids).update_all(Email: nil) if ids.present?
       end
     end
   end

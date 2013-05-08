@@ -77,7 +77,6 @@ module JublaOst
       def assign_attributes(role, current, group, person_schar)
         role.person = current
         role.group = group
-        # TODO set präses attributes
         if person_schar
           role.label ||= person_schar.Jobs.presence
           role.created_at = person_schar.Eintritt

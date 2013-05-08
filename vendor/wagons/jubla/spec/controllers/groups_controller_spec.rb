@@ -11,11 +11,10 @@ describe GroupsController do
     assigns(:advisors).should eq flock.available_advisors.only_public_data.order_by_name
   end
 
-  # TODO - advisors and coaches are not available on create because hierachy is empty
   it "#new - loads advisors and coaches" do
     get :new, group: { parent_id: flock.parent.id, type: flock.type }
-    assigns(:coaches).should_not be_present 
+    assigns(:coaches).should_not be_present
     assigns(:advisors).should_not be_present
   end
-  
+
 end

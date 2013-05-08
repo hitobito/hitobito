@@ -26,12 +26,11 @@ describe Devise::SessionsController do
       controller.send(:current_person).should_not be_present
     end
 
-    # TODO - login without login permission
     it "logs in person even when they have no login permission" do
       post :create, person: { email: person.email, password: 'password' }
       flash[:alert].should_not be_present
       controller.send(:current_person).should be_present
     end
   end
-  
+
 end

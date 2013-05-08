@@ -12,7 +12,7 @@ describe PeopleController, type: :controller do
   let(:other) { Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person  }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-  before { sign_in(top_leader) } 
+  before { sign_in(top_leader) }
 
 
   def scope_params
@@ -34,14 +34,14 @@ describe PeopleController, type: :controller do
 
     it "renders my own page" do
       get :show, group_id: top_group.id, id: top_leader.id
-      page_content.each { |text|  response.body.should =~ /#{text}/ } 
+      page_content.each { |text|  response.body.should =~ /#{text}/ }
     end
 
     it "renders page of other group member" do
       sign_in(Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person)
       get :show, group_id: top_group.id, id: other.id
-      page_content.grep(/Info/).each { |text|  response.body.should =~ /#{text}/ } 
-      page_content.grep(/[^Info]/).each { |text|  response.body.should_not =~ /#{text}/ } 
+      page_content.grep(/Info/).each { |text|  response.body.should =~ /#{text}/ }
+      page_content.grep(/[^Info]/).each { |text|  response.body.should_not =~ /#{text}/ }
       dom.should_not have_selector('a[data-method="delete"] i.icon-trash')
     end
 
@@ -66,12 +66,12 @@ describe PeopleController, type: :controller do
       dom.should_not have_selector('dt', text: 'Geändert')
     end
   end
-  
+
   describe "role section" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:section) { dom.all('aside section')[0] }
     it "contains roles" do
-      get :show, params 
+      get :show, params
       section.find('h2').text.should eq 'Aktive Rollen'
       section.find('tr:eq(1) td:eq(1)').text.should include("Leader")
       section.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
@@ -81,26 +81,25 @@ describe PeopleController, type: :controller do
   end
 
   describe "event sections" do
-    # TODO - probably better if we extract most of this into a view spec
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:header) { section.find('h2').text }
     let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { section.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }
-    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))  } 
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))  }
 
     context "pending applications" do
       let(:section) { dom.all('aside section')[1] }
       let(:date) { Time.zone.parse("02-01-2010") }
 
       it "is missing if we have no applications" do
-        get :show, params 
+        get :show, params
         dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "lists application" do
         appl = create_application(date)
-        get :show, params 
+        get :show, params
         header.should eq 'Anmeldungen'
         label_link[:href].should eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
         label_link.text.should =~ /Eventus/
@@ -115,19 +114,19 @@ describe PeopleController, type: :controller do
       let(:pretty_date) { date.strftime("%d.%m.%Y %H:%M") + ' - ' + (date + 5.days).strftime("%d.%m.%Y %H:%M")}
 
       it "is missing if we have no events" do
-        get :show, params 
+        get :show, params
         dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "is missing if we have no upcoming events" do
         create_participation(10.days.ago, true)
-        get :show, params 
+        get :show, params
         dom.should have_css('aside section', count: 2) # only role and qualification
       end
 
       it "lists event label, link and dates" do
         create_participation(date, true)
-        get :show, params 
+        get :show, params
         header.should eq 'Anlässe'
         label_link[:href].should eq group_event_path(course.groups.first, course)
         label_link.text.should eq "Eventus"
@@ -139,10 +138,10 @@ describe PeopleController, type: :controller do
     def create_application(date)
       Fabricate(:event_application, priority_1: course, participation: create_participation(date,false))
     end
-      
+
     def create_participation(date,active_participation=false)
       set_start_finish(course, date, date + 5.days)
-      Fabricate(:event_participation, person: top_leader, event: course, active: active_participation) 
+      Fabricate(:event_participation, person: top_leader, event: course, active: active_participation)
     end
 
   end
@@ -151,7 +150,7 @@ describe PeopleController, type: :controller do
     let(:params) { {group_id: top_group.id, id: other.id } }
     it "list current role and group" do
       get :history, params
-      dom.all('table tbody tr').size.should eq 1 
+      dom.all('table tbody tr').size.should eq 1
       role_row = dom.find('table tbody tr:eq(1)')
       role_row.find('td:eq(1) a').text.should eq 'TopGroup'
       role_row.find('td:eq(2)').text.strip.should eq 'Member'
@@ -164,7 +163,7 @@ describe PeopleController, type: :controller do
       role.created_at = Time.zone.now - 2.years
       role.destroy
       get :history, params
-      dom.all('table tbody tr').size.should eq 2 
+      dom.all('table tbody tr').size.should eq 2
       role_row = dom.find('table tbody tr:eq(1)')
       role_row.find('td:eq(1) a').text.should eq 'Group 11'
       role_row.find('td:eq(2)').text.strip.should eq 'Member'
@@ -175,7 +174,7 @@ describe PeopleController, type: :controller do
     it "lists roles in other groups" do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
       get :history, params
-      dom.all('table tbody tr').size.should eq 2 
+      dom.all('table tbody tr').size.should eq 2
       role_row = dom.find('table tbody tr:eq(2)')
       role_row.find('td:eq(1) a').text.should eq 'TopGroup'
       role_row.find('td:eq(4)').text.should_not be_present
@@ -186,7 +185,7 @@ describe PeopleController, type: :controller do
       role.created_at = Time.zone.now - 2.years
       role.destroy
       get :history, params
-      dom.all('table tbody tr').size.should eq 2 
+      dom.all('table tbody tr').size.should eq 2
       role_row = dom.find('table tbody tr:eq(2)')
       role_row.find('td:eq(1) a').text.should eq 'TopGroup'
       role_row.find('td:eq(4)').text.should be_present
@@ -215,7 +214,7 @@ describe PeopleController, type: :controller do
 
   describe "redirect_url" do
     it "should adjust url if param redirect_url is given" do
-      get :new, group_id: top_group.id, 
+      get :new, group_id: top_group.id,
                 role: { type: 'Group::TopGroup::Member', group_id: top_group.id },
                 return_url: 'foo'
 

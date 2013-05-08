@@ -51,7 +51,7 @@ module MailRelay
       Rails.logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.destinations.size} people")
 
       # Set sender to actual server to satisfy SPF: http://www.openspf.org/Best_Practices/Webgenerated
-      message.sender = "#{envelope_receiver_name}@#{Settings.email.list_domain}"
+      message.sender = "#{envelope_receiver_name}+bounce@#{Settings.email.list_domain}"
       message.header['List-Id'] = "#{envelope_receiver_name}.#{Settings.email.list_domain}"
       super
     end

@@ -8,7 +8,7 @@ describe "event/participations/print.html.haml" do
   let(:application) { Fabricate(:event_application, priority_1: event)}
   let(:participation) { Fabricate(:event_participation, application: application, person: bottom_member, event: event) }
 
-  before do 
+  before do
     assign(:application, Event::ApplicationDecorator.decorate(application))
     assign(:event, EventDecorator.decorate(participation.event) )
     view.stub(path_args: participation.event)
@@ -22,10 +22,6 @@ describe "event/participations/print.html.haml" do
       should have_content top_leader.email
       should have_content bottom_member.email
     end
-
-    it "has signatures table" do
-      should have_css('table.signature')
-    end
   end
 
 
@@ -38,5 +34,5 @@ describe "event/participations/print.html.haml" do
     rendered.should =~ %r{<br />bar}
     rendered.should =~ %r{<br />bla}
   end
-  
+
 end

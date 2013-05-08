@@ -33,7 +33,7 @@ module NormalizedLabels
     private
 
     def load_available_labels
-      order(:label).uniq.pluck(:label).compact
+      base_class.order(:label).uniq.pluck(:label).compact
     end
 
     def labels_cache_key

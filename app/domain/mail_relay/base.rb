@@ -24,6 +24,7 @@ module MailRelay
           begin
             new(message).relay
           rescue Exception => e
+            message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
           end
         end

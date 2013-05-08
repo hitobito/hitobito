@@ -93,8 +93,12 @@ describe MailRelay::Base do
       MailRelay::Base.retrieve_count = 5
 
       first = true
+
+      msgs1 = (1..5).collect {|i| m = mock; m.stub(:mark_for_delete=); m}
+      msgs2 = (6..8).collect {|i| m = mock; m.stub(:mark_for_delete=); m}
+
       Mail.should_receive(:find_and_delete) do |options, &block|
-        msgs = first ? [1,2,3,4,5] : [6,7,8]
+        msgs = first ? msgs1 : msgs2
         msgs.each {|m| block.call(m) }
         first = false
         msgs
@@ -103,7 +107,7 @@ describe MailRelay::Base do
       m = mock
       mock.stub(:relay)
       MailRelay::Base.stub(:new).with(anything).and_return(m)
-      MailRelay::Base.stub(:new).with(3).and_raise("failure!")
+      MailRelay::Base.stub(:new).with(msgs1[2]).and_raise("failure!")
       MailRelay::Base.should_receive(:new).exactly(5).times
 
       expect { MailRelay::Base.relay_current }.to raise_error(MailRelay::Error)

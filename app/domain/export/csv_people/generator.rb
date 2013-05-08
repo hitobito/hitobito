@@ -11,6 +11,10 @@ module Export::CsvPeople
           csv << people.keys.map { |key| hash[key] }
         end
       end
+      if Settings.csv.encoding.present?
+        # convert to 8859 for excel which is too stupid to handle utf-8
+        @csv = Iconv.conv(Settings.csv.encoding, 'UTF-8', @csv)
+      end
     end
 
     def options

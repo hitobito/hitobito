@@ -26,25 +26,25 @@
     %header#page-header
       .container-fluid
         = link_to 'jubla.db', root_path, :class => 'brand'
-        
+
         - if current_user
           = render 'layouts/nav'
         - else
           = render 'layouts/unauthorized'
-        
+
     #page
       .container-fluid
         = render_sheets do
           .content-header
             %h1= title
             = sheet.render_main_tabs
-            
+
           = yield :filter
           - if content_for?(:toolbar)
             .btn-toolbar= yield :toolbar
-            
+
           = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
-          
+
           = content_for?(:content) ? yield(:content) : yield
 
     %footer#page-footer
@@ -54,11 +54,15 @@
             = link_to image_tag('logo_jubla.png'), 'http://www.jubla.ch'
           .footer_content.span9
             %p
+              = link_to 'Fragen und Anregungen', 'http://feedback.jubla.ch', target: '_blank'
+              %br/
+              = link_to 'Hilfe', 'http://jubla.ch/datenbank', target: '_blank'
+            %p
               Version
               = Wagons.app_version
-            %p
-              &copy; 
-              = link_to 'Puzzle ITC', 'http://puzzle.ch'
+              %br/
+              &copy;
+              = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
               = Time.zone.now.year
 
   = javascript_include_tag 'application'

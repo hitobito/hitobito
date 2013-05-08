@@ -13,7 +13,7 @@ module MailRelay
 
     # If the email is sent to an address that is not a valid relay, this method is called.
     def reject_not_existing
-      Rails.logger.info("Ignored email to '#{envelope_receiver_name}'")
+      Rails.logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
     end
 
     # Is the mail sent to a valid relay address?
@@ -48,6 +48,10 @@ module MailRelay
     private
 
     def deliver(message)
+      Rails.logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.destinations.size} people")
+
+      # Set sender to actual server to satisfy SPF: http://www.openspf.org/Best_Practices/Webgenerated
+      message.sender = "#{envelope_receiver_name}@#{Settings.email.list_domain}"
       message.header['List-Id'] = "#{envelope_receiver_name}.#{Settings.email.list_domain}"
       super
     end

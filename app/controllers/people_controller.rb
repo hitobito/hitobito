@@ -4,21 +4,21 @@ class PeopleController < CrudController
 
   self.nesting = Group
   self.nesting_optional = true
-  
+
   self.remember_params += [:name, :kind, :role_types]
 
   decorates :group, :person, :people
-  
+
   helper_method :index_full_ability?
-  
+
   # load group before authorization
   prepend_before_filter :parent
 
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
-  
+
   before_render_show :load_asides
-  
+
   def index
     respond_to do |format|
       format.html { set_entries }
@@ -26,7 +26,7 @@ class PeopleController < CrudController
       format.csv  { render_entries_csv }
     end
   end
-  
+
   def show
     if group.nil?
       flash.keep
@@ -39,7 +39,7 @@ class PeopleController < CrudController
       end
     end
   end
-  
+
   # GET ajax, without @group
   def query
     people = []
@@ -50,7 +50,7 @@ class PeopleController < CrudController
                        limit(10)
       people = decorate(people)
     end
-    
+
     render json: people.collect(&:as_typeahead)
   end
 
@@ -71,21 +71,21 @@ class PeopleController < CrudController
     end
 
   end
-  
+
   # POST button, send password instructions
   def send_password_instructions
     SendLoginJob.new(entry, current_user).enqueue!
     flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
     render 'shared/update_flash'
   end
-  
+
   # PUT button, ajax
   def primary_group
     entry.update_column :primary_group_id, params[:primary_group_id]
   end
 
   private
-  
+
   alias_method :group, :parent
 
   def create_role
@@ -93,17 +93,17 @@ class PeopleController < CrudController
     role = group.class.find_role_type!(type).new
     role.group_id = params[:role][:group_id]
     authorize! :create, role
-    
+
     role
   end
-  
+
   def load_asides
     applications = entry.pending_applications.
                          includes(event: [:groups]).
                          joins(event: :dates).
                          order('event_dates.start_at').uniq
     Event::PreloadAllDates.for(applications.collect(&:event))
-    
+
     @pending_applications = Event::ApplicationDecorator.decorate(applications)
     @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
                                                     includes(:groups).
@@ -114,20 +114,20 @@ class PeopleController < CrudController
 
   def find_entry
     if group && group.root?
-      # every person may be displayed underneath the root group, 
+      # every person may be displayed underneath the root group,
       # even if it does not directly belong to it.
       Person.find(params[:id])
     else
       super
     end
   end
-  
+
   def build_entry
     person = super
     person.roles << create_role
     person
   end
-  
+
   def set_entries
     @people = filter_entries.page(params[:page])
     if index_full_ability?
@@ -136,7 +136,7 @@ class PeopleController < CrudController
       @people = @people.preload_public_accounts
     end
   end
-  
+
   def filter_entries
     if params[:role_types]
       list_entries(params[:kind]).where(roles: {type: params[:role_types]})
@@ -144,14 +144,14 @@ class PeopleController < CrudController
       list_entries.affiliate(false)
     end
   end
-  
+
   def list_entries(kind = nil)
     list_scope(kind).
           preload_groups.
           uniq.
           order_by_name
   end
-  
+
   def list_scope(kind = nil)
     case kind
     when 'deep'
@@ -164,12 +164,12 @@ class PeopleController < CrudController
       accessibles(@group).order_by_role
     end
   end
-    
+
   def accessibles(group = nil)
     ability = Ability::Accessibles.new(current_user, group)
     Person.accessible_by(ability)
   end
-  
+
   def render_entries_csv
     full = params[:details].present? && index_full_ability?
     entries = if full
@@ -179,11 +179,11 @@ class PeopleController < CrudController
     end
     render_csv(entries, full)
   end
- 
+
   def render_entry_csv
     render_csv([entry], params[:details].present? && can?(:show_full, entry))
   end
-  
+
   def render_csv(entries, full)
     csv = if full
       Export::CsvPeople.export_full(entries)
@@ -192,7 +192,7 @@ class PeopleController < CrudController
     end
     send_data csv, type: :csv
   end
-    
+
   def index_full_ability?
     if params[:kind].blank?
       can?(:index_full_people, @group)
@@ -200,7 +200,7 @@ class PeopleController < CrudController
       can?(:index_deep_full_people, @group)
     end
   end
-  
+
   def authorize_class
     authorize!(:index_people, group)
   end

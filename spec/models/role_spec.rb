@@ -143,37 +143,38 @@ describe Role do
 
   describe ".normalize_label" do
     it "reuses existing label" do
-      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO', group: groups(:bottom_layer_one))
-      a2.label.should == 'Foo'
+      a2.label.should == 'foo'
     end
   end
 
   describe "#available_labels" do
+    before { Role.sweep_available_labels }
     subject { Group::BottomLayer::Leader.available_labels }
 
     it "includes labels from database" do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'FOo', group: groups(:bottom_layer_one))
-      should == ['Foo']
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'FOo', group: groups(:bottom_layer_one))
+      should == ['foo']
     end
 
-    it "includes labels from this type only" do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+    it "includes labels from all types" do
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', group: groups(:bottom_layer_one))
-      should == ['Foo']
+      should == ['Bar', 'foo']
     end
   end
 
   context "#destroy" do
     it "deleted young roles from database" do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       a.destroy
       Role.with_deleted.where(id: a.id).should_not be_exists
     end
 
     it "flags old roles" do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'Foo', group: groups(:bottom_layer_one))
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
       a.destroy
       Role.only_deleted.find(a.id).should be_present

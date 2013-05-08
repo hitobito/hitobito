@@ -1,12 +1,12 @@
-- entry.used?(:employment_percent) do
-  = f.labeled_input_field :employment_percent
-  
 - entry.used?(:honorary) do
-  = f.labeled(:honorary, "&nbsp;".html_safe) do
+  = f.labeled(:honorary, 'Beschäftigung') do
     = f.label(:honorary_true, class: 'radio inline') do
-      = f.radio_button(:honorary, true) 
+      = f.radio_button(:honorary, true)
       = 'Ehrenamt'
 
     = f.label(:honorary_false, class: 'radio inline') do
-      = f.radio_button(:honorary, false) 
+      = f.radio_button(:honorary, false)
       = 'Vollamt'
+
+- entry.used?(:employment_percent) do
+  = f.labeled_input_field :employment_percent

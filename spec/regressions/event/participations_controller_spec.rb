@@ -6,13 +6,13 @@ describe Event::ParticipationsController, type: :controller do
 
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { event_participations(:top) }
-  
+
   let(:course) { test_entry.event }
   let(:group)  { course.groups.first }
   let(:event_base) { Fabricate(:event) }
-  
+
   let(:test_entry_attrs) do
-    { 
+    {
       additional_information: 'blalbalbalsbla',
       answers_attributes: [
         {answer: 'Halbtax', question_id: event_questions(:top_ov).id},
@@ -25,18 +25,18 @@ describe Event::ParticipationsController, type: :controller do
 
   let(:scope_params) { {group_id: group.id, event_id: course.id} }
 
-  before do 
+  before do
     user = people(:top_leader)
     user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl),
-                                    start_at: course.dates.first.start_at) 
-    sign_in(user) 
+                                    start_at: course.dates.first.start_at)
+    sign_in(user)
   end
 
   include_examples 'crud controller', skip: [%w(destroy)]
 
   describe_action :put, :update, :id => true do
     let(:params) { {model_identifier => test_attrs} }
-    
+
     context ".html", :format => :html do
       context "with valid params", :combine => 'uhv' do
         it "updates answer attributes" do
@@ -76,13 +76,20 @@ describe Event::ParticipationsController, type: :controller do
       person_field.should have_css('input', count: 2)
       person_field.all('input').first[:type].should eq 'hidden'
     end
+
+    it "renders alternatives" do
+      a = Fabricate(:course, kind_id: course.kind_id)
+      a.dates.create!(start_at: course.dates.first.start_at + 2.weeks)
+      get :new, group_id: group.id, event_id: course.id
+      should have_content a.name
+    end
   end
 
   describe_action :delete, :destroy, format: :html, id: true do
     it "redirects to application market" do
       should redirect_to group_event_application_market_index_path(group, course)
     end
-    
+
     it "has flash noting the application" do
       flash[:notice].should =~ /Anmeldung/
     end
@@ -91,7 +98,7 @@ describe Event::ParticipationsController, type: :controller do
   describe "GET print" do
     subject { response.body }
     let(:person) { Fabricate(:person_with_address) }
-    let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) } 
+    let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) }
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
@@ -115,7 +122,7 @@ describe Event::ParticipationsController, type: :controller do
 
   describe "participation role label filter" do
 
-    let(:event) { events(:top_event) } 
+    let(:event) { events(:top_event) }
     let(:parti1) { Fabricate(:event_participation, event: event) }
     let(:parti2) { Fabricate(:event_participation, event: event) }
     let(:parti3) { Fabricate(:event_participation, event: event) }
@@ -142,5 +149,5 @@ describe Event::ParticipationsController, type: :controller do
     end
 
   end
-  
+
 end

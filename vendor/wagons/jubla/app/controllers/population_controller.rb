@@ -1,10 +1,10 @@
 class PopulationController < ApplicationController
-  
+
   before_filter :authorize
 
   decorates :groups, :people, :group
-  
-  
+
+
   def index
     @groups = load_groups
     @people_by_group = load_people_by_group
@@ -12,10 +12,10 @@ class PopulationController < ApplicationController
   end
 
   private
-  
+
   def load_people(groups)
     Person.joins(:roles).
-           where(roles: {group_id: groups.collect(&:id)}).
+           where(roles: {group_id: groups.collect(&:id), deleted_at: nil}).
            affiliate(false).
            preload_groups.
            uniq.
@@ -28,7 +28,7 @@ class PopulationController < ApplicationController
   end
 
   def load_groups
-    flock.groups_in_same_layer.order_by_type(flock)
+    flock.self_and_descendants.order_by_type(flock)
   end
 
   def load_people_by_group
@@ -46,5 +46,5 @@ class PopulationController < ApplicationController
   def authorize
     authorize!(:approve_population, flock)
   end
-  
+
 end

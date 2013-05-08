@@ -4,6 +4,10 @@ class EventDecorator < ApplicationDecorator
   decorates :event
   decorates_association :contact
 
+  def label
+    safe_join([name, label_detail], h.tag(:br))
+  end
+
   def labeled_link(url = nil, can = nil)
     url ||= h.group_event_path(group_ids.first, model)
     can = can?(:show, model) if can.nil?
@@ -37,7 +41,7 @@ class EventDecorator < ApplicationDecorator
       h.simple_format(h.truncate(model.description, length: 60))
     end
   end
-  
+
   def external_application_link(group)
     if external_applications?
       url = h.register_group_event_url(group, id)
@@ -46,7 +50,7 @@ class EventDecorator < ApplicationDecorator
       'nicht möglich'
     end
   end
-  
+
   def new_role
     p = participations.new
     role = p.roles.new
@@ -64,7 +68,7 @@ class EventDecorator < ApplicationDecorator
     end
     info
   end
-  
+
   def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds.order(:label).to_a
     prolongs = kind.prolongations.order(:label).to_a
@@ -91,9 +95,9 @@ class EventDecorator < ApplicationDecorator
     end
     {id: id, label: "#{model.to_s} (#{groups_label})"}
   end
-  
+
   private
-  
+
   def issued_qualifications_info(qualification_kinds)
     info = ""
     if qualification_kinds.present?
@@ -104,7 +108,7 @@ class EventDecorator < ApplicationDecorator
     end
     info
   end
-  
+
   def issued_prolongations_info(qualification_kinds)
     info = ""
     if qualification_kinds.present?

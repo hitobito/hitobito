@@ -9,11 +9,11 @@
 #
 
 class Event::Role < ActiveRecord::Base
-  
+
   Permissions = [:full, :qualify, :contact_data]
 
   include NormalizedLabels
-  
+
   ### ATTRIBUTES
 
   class_attribute :permissions, :affiliate, :restricted, :leader
@@ -25,46 +25,46 @@ class Event::Role < ActiveRecord::Base
   self.restricted = false
   # Whether this role is a leader type.
   self.leader = false
-  
+
   self.demodulized_route_keys = true
-  
-  
+
+
   attr_accessible :label
-  
-  
+
+
   ### ASSOCIATIONS
-  
+
   belongs_to :participation, validate: true
-  
+
   has_one :event, through: :participation
   has_one :person, through: :participation
-  
-  
+
+
   ### CALLBACKS
-  
+
   after_create :set_participation_active
   after_destroy :destroy_participation_for_last
-    
+
   class << self
     def label
       model_name.human
     end
   end
-    
-    
+
+
   ### INSTANCE METHODS
-    
+
   def to_s
     model_name = self.class.label
     string = label? ? "#{label} (#{model_name})" : model_name
   end
-  
+
   def person_id
     person.try(:id)
   end
-  
+
   private
-  
+
   # A participation with at least one role is active
   def set_participation_active
     participation.update_column(:active, true)
@@ -79,5 +79,5 @@ class Event::Role < ActiveRecord::Base
       end
     end
   end
-  
+
 end

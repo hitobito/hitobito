@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Import::PersonImporter do
   include CsvImportMacros
 
-  let(:group) { groups(:top_group) } 
+  let(:group) { groups(:top_group) }
   let(:role_type) { "Group::TopGroup::Leader" }
-  let(:importer)  { Import::PersonImporter.new(group: group, role_type: role_type, data: data)  } 
-  subject { importer } 
+  let(:importer)  { Import::PersonImporter.new(group: group, role_type: role_type, data: data)  }
+  subject { importer }
 
   context "minimal" do
     let(:data) { [ {first_name: 'foo'} ] }
@@ -40,19 +40,19 @@ describe Import::PersonImporter do
     end
 
     context "result" do
-      before { importer.import } 
-      its(:success_count)  { should eq 1 }
+      before { importer.import }
+      its(:new_count)  { should eq 1 }
       its(:failure_count)  { should eq 1 }
     end
 
     context "base error" do
       let(:data) { [ {} ] }
-      before { importer.import } 
+      before { importer.import }
       its('errors.first') { should eq "Zeile 1: Bitte geben Sie einen Namen ein" }
     end
 
     context "zip_code validation" do
-      before { importer.import } 
+      before { importer.import }
       its('errors.first') { should eq "Zeile 2: PLZ ist keine Zahl" }
     end
   end
@@ -63,16 +63,16 @@ describe Import::PersonImporter do
     let(:person) { @person.reload }
 
     before { @person = Fabricate(:person, attrs) }
-    subject { person } 
+    subject { person }
 
 
     context "adds role, does not update email" do
-      before { importer.import } 
-      its(:email) { should eq 'foo@bar.net' } 
+      before { importer.import }
+      its(:email) { should eq 'foo@bar.net' }
       its('roles.size') { should eq 1 }
       it "updates double and success count" do
         importer.doublette_count.should eq 1
-        importer.success_count.should eq 0
+        importer.new_count.should eq 0
       end
     end
 
@@ -82,53 +82,65 @@ describe Import::PersonImporter do
         role.group = group
         role.type = role_type
         role.save
-        importer.import 
+        importer.import
         person.reload
       end
-      its(:email) { should eq 'foo@bar.net' } 
+      its(:email) { should eq 'foo@bar.net' }
       its('roles.size') { should eq 1 }
     end
 
     context "marks multiple" do
       before { Fabricate(:person, attrs.merge(email: 'asdf@asdf.net')); importer.import }
-      subject { importer } 
+      subject { importer }
       its(:errors) { should eq ['Zeile 1: 2 Treffer in Duplikatserkennung.'] }
+    end
+
+    context "person loaded multiple times via doublette finder" do
+      let(:attrs) { { email: 'foo@bar.net', nickname: '', last_name: '' } }
+      let(:data) { [{email: 'foo@bar.net', nickname: 'nickname', social_account_msn: 'msn' },
+                    {email: 'foo@bar.net', last_name: 'last_name', social_account_skype: 'skype' }] }
+
+      before { importer.import }
+      its('roles.size') { should eq 1 }
+      its(:nickname) { should eq 'nickname' }
+      its(:last_name) { should eq 'last_name' }
+      its('social_accounts.size') { should eq 2 }
     end
   end
 
   context "list file" do
     let(:parser) { Import::CsvParser.new(File.read(path(:list))) }
-    let(:mapping) { headers_mapping(parser) } 
+    let(:mapping) { headers_mapping(parser) }
     let(:data) { parser.map_data(mapping) }
-    before { parser.parse } 
+    before { parser.parse }
 
     context "importer reports errors" do
-      before { importer.import } 
-      subject { importer } 
-      
-      its(:errors) { should include "Zeile 1: Firma muss ausgefüllt werden" } 
-      its(:errors) { should include "Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl" } 
-      its(:errors) { should include "Zeile 4: PLZ ist keine Zahl" } 
+      before { importer.import }
+      subject { importer }
+
+      its(:errors) { should include "Zeile 1: Firma muss ausgefüllt werden" }
+      its(:errors) { should include "Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl" }
+      its(:errors) { should include "Zeile 4: PLZ ist keine Zahl" }
     end
 
     context "imported person" do
-      before { importer.import } 
-      subject { Person.last } 
+      before { importer.import }
+      subject { Person.last }
 
       its(:first_name) { should eq 'Ramiro' }
       its(:last_name) { should eq 'Brown' }
-      its(:additional_information) { should be_present } 
+      its(:additional_information) { should be_present }
       its(:company) { should eq false }
       its(:company_name) { should eq 'Oda Cormier' }
       its(:email) { should eq 'ramiro_brown@example.com' }
       its(:address) { should eq '1649 Georgette Circles' }
       its(:zip_code) { should eq 72026 }
       its(:town) { should be_blank }
-      its(:gender) { should eq 'm' } 
-      its(:additional_information) { should be_present } 
+      its(:gender) { should eq 'm' }
+      its(:additional_information) { should be_present }
 
       context "phone numbers" do
-        subject { Person.last.phone_numbers } 
+        subject { Person.last.phone_numbers }
         its(:size) { should eq 4 }
         its('first.label') { should eq 'Privat' }
         its('first.number') { should eq '1-637-999-2837 x7851' }
@@ -144,16 +156,16 @@ describe Import::PersonImporter do
       end
 
       context "social accounts" do
-        subject { Person.last.social_accounts.order(:label) } 
+        subject { Person.last.social_accounts.order(:label) }
         its(:size) { should eq 3 }
-        its('first.label') { should eq 'MSN' } 
-        its('first.name') { should eq 'reyes_mckenzie' } 
-        
-        its('second.label') { should eq 'Skype' } 
-        its('second.name') { should eq 'florida_armstrong' } 
+        its('first.label') { should eq 'MSN' }
+        its('first.name') { should eq 'reyes_mckenzie' }
 
-        its('third.label') { should eq 'Webseite' } 
-        its('third.name') { should eq 'colliäs.com' } 
+        its('second.label') { should eq 'Skype' }
+        its('second.name') { should eq 'florida_armstrong' }
+
+        its('third.label') { should eq 'Webseite' }
+        its('third.name') { should eq 'colliäs.com' }
       end
     end
   end

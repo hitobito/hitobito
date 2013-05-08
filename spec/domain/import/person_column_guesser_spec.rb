@@ -2,7 +2,9 @@ require 'spec_helper'
 describe  Import::PersonColumnGuesser do
 
   let(:headers) { ['Geschlecht', 'vorname', 'Name', 'skype'] }
-  let(:guesser) { Import::PersonColumnGuesser.new(headers) }
+  let(:guesser) { Import::PersonColumnGuesser.new(headers, params) }
+  let(:nil_key) { { key: nil } }
+  let(:params) { {} }
 
   context "maps default values for header" do
     subject { guesser.mapping }
@@ -16,8 +18,16 @@ describe  Import::PersonColumnGuesser do
     end
 
     context "handles noexisting headers" do
-      let(:headers) { ["asdf" ] }
-      its(['asdf']) { should eq Hash.new(key:nil) }
+      let(:headers) { ["Geburtsdatum", "Email"] }
+
+      its(['Geburtsdatum']) { should eq nil_key }
+      its(['Email']) { should eq nil_key }
+    end
+
+    context "params override mapping" do
+      let(:params) { { "Name" => "first_name" } }
+
+      its(['Name']) { should eq field_for(:first_name) }
     end
   end
 

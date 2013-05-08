@@ -1,9 +1,11 @@
 module Import
   class PersonColumnGuesser
-    attr_reader :columns, :headers, :mapping
+    attr_reader :columns, :headers, :mapping, :params
 
-    def initialize(headers)
+    def initialize(headers, params={})
       @headers = headers
+      @params = params
+
       population_mapping
     end
 
@@ -15,12 +17,29 @@ module Import
     private
     def population_mapping
       @mapping = headers.each_with_object({}) do |header, memo|
-        memo[header] = default_or_null_value(header)
+        memo[header] = find_field(header)
       end
     end
 
-    def default_or_null_value(header)
-      Import::Person.fields.find { |field| field[:value].downcase[header.downcase] } || { key: nil }
+    def find_field(header)
+       params_field(header) || import_person_field(header) || null_field
     end
+
+    def params_field(header)
+      params[header] && person_fields.find { |field| field[:key] == params[header] }
+    end
+
+    def import_person_field(header)
+     person_fields.find { |field| field[:value].downcase[header.downcase] }
+    end
+
+    def null_field
+      { key: nil }
+    end
+
+    def person_fields
+      @person_fields ||= Import::Person.fields
+    end
+
   end
 end

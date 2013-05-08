@@ -1,12 +1,11 @@
-
-= standard_form(:csv_import, url: group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
+= standard_form(:csv_import, method: :post, url: preview_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
   = hidden_field_tag :data, parser.to_csv
 
   = save_form_buttons(f, 'Personen importieren', group_people_path(group))
 
   = field_set_tag "Rolle auswählen" do
-    = f.labeled :role, 'Rolle' do
-      = f.collection_select(:role, possible_roles, :sti_name, :human, {}, {class: 'span3'})
+    = f.labeled :role_type, 'Rolle' do
+      = select_tag(:role_type, options_from_collection_for_select(possible_roles, :sti_name, :human, params[:role_type]), {class: 'span3'})
       = f.help_block 'Allen importierten Personen wird diese Rolle zugewiesen'
 
   = field_set_tag "Spalten zu Feldern zuordnen" do
@@ -14,6 +13,6 @@
       %i{style: 'line-height: 30px'} Feld in der Datenbank
     - parser.headers.each do |column_name|
       = f.labeled(column_name, column_name) do
-        = f.collection_select(column_name, fields, :key, :value, {include_blank: true}, {class: 'span4'})
-      
+        = f.collection_select(column_name, fields, :key, :value, {include_blank: true, selected: guess(column_name)}, {class: 'span4'})
+
   = save_form_buttons(f, 'Personen importieren', group_people_path(group))

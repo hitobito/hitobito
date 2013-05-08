@@ -8,7 +8,7 @@ Jubla::Application.routes.draw do
       get :query
     end
   end
-  
+
   resources :groups do
 
     member do
@@ -60,7 +60,7 @@ Jubla::Application.routes.draw do
         end
 
         resources :qualifications, only: [:index, :update, :destroy]
-        
+
         member do
           get  'register' => 'register#index'
           post 'register' => 'register#check'
@@ -92,6 +92,7 @@ Jubla::Application.routes.draw do
     end
 
     resource :csv_imports, only: [:new, :create] do
+      post :preview, on: :member
       post :define_mapping, on: :member
     end
 

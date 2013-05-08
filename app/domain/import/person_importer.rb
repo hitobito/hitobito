@@ -2,46 +2,24 @@
 module Import
   class PersonImporter
     attr_accessor :data, :role_type, :group, :errors, :doublettes,
-                  :failure_count, :success_count, :doublette_count
+                  :failure_count, :new_count, :doublette_count
 
 
     def initialize(hash={})
       @errors = []
       @failure_count = 0
-      @success_count = 0
-      @doublette_count = 0
-      @doublettes = []
+      @new_count = 0
+      @doublettes = {}
+      hash.each { |key, value| self.send("#{key}=", value) }
+    end
 
-      hash.each { |key, value| self.send("#{key}=", value) } 
+    def people
+      @people ||= data.each_with_index.map { |hash,index|  populate_people(hash,index) }
     end
 
     def import
-      data.each_with_index do |hash,index| 
-        import_person(hash,index)
-      end
-      errors.present?
-    end
-
-    def import_person(hash,index)
-      person = Import::Person.new(hash)
-      doublette = person.persisted?
-
-      person.add_role(group, role_type)
-      if person.errors.empty? && person.save
-        if doublette 
-          if !doublettes.include?(person.id)
-            @doublette_count += 1 
-            @doublettes << person.id
-          end
-        else person.persisted?
-          @success_count += 1
-        end
-        true
-      else
-        @failure_count += 1
-        errors << "Zeile #{index + 1}: #{person.human_errors}"
-        false
-      end
+      save_results = people.map(&:save)
+      save_results.all? { |result| result }
     end
 
     def human_name(args={})
@@ -52,5 +30,45 @@ module Import
       @role_name ||= @role_type.constantize.label
     end
 
+    def doublette_count
+      doublettes.keys.count
+    end
+
+    private
+    def populate_people(hash,index)
+      person = Import::Person.new(hash)
+      doublette = person.persisted?
+      person.add_role(group, role_type)
+
+      # DoubletteFinder in Person populates errors, still check if initialized person is valid
+      if person.errors.empty? && person.valid?
+        if doublette
+          if !doublettes.has_key?(person.id)
+            doublettes[person.id] = person
+          else
+            consolidate_doublette(person)
+          end
+          person = doublettes[person.id]
+        else
+          @new_count += 1
+        end
+      else
+        @failure_count += 1
+        errors << "Zeile #{index + 1}: #{person.human_errors}"
+      end
+      person
+    end
+
+
+    def consolidate_doublette(import_person)
+      unified_import_person = doublettes[import_person.id]
+      person = unified_import_person.person
+
+      blank_attrs = import_person.hash.select {|key, value| person.attributes[key].blank? }
+      person.attributes = blank_attrs
+
+      person.phone_numbers << import_person.person.phone_numbers
+      person.social_accounts << import_person.person.social_accounts
+    end
   end
 end

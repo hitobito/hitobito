@@ -2,7 +2,7 @@ require 'spec_helper'
 
 
 describe "Export::CsvPeople::Accounts" do
-  
+
   subject { Export::CsvPeople::Accounts }
 
   context "phone_numbers" do
@@ -15,7 +15,7 @@ describe "Export::CsvPeople::Accounts" do
   context "social_accounts" do
     it "creates standard key and human translations" do
       subject.social_accounts.key('foo').should eq :social_account_foo
-      subject.social_accounts.human('foo').should eq 'Foo'
+      subject.social_accounts.human('foo').should eq 'Social Media Adresse Foo'
     end
   end
 end

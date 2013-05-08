@@ -21,10 +21,7 @@ module Export::CsvPeople
     end
 
     def human(label)
-      case model.model_name
-      when "PhoneNumber" then "#{model.model_name.human} #{label.capitalize}"
-      when "SocialAccount" then label.capitalize
-      end
+      "#{model.model_name.human} #{label.capitalize}"
     end
   end
 end

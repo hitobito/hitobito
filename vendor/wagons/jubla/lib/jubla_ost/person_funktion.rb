@@ -32,7 +32,7 @@ module JublaOst
 
         else
           # create alumnus roles for deads
-          person_schars.each do |scid|
+          unhandled_schars.each do |scid|
             if group = find_group(current, scid)
               create_alumnus_role(current, group, 'Verstorben', current.updated_at)
             end

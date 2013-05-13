@@ -6,7 +6,7 @@ module JublaOst
 
     class << self
       def migrate
-        find_each(batch_size: 200) do |legacy|
+        find_each(batch_size: 100) do |legacy|
           if legacy.kbez.present? && legacy.Kanton != 'CH' && JublaOst::Config.event_kind_id(legacy.stufe).present?
             course = Event::Course.new
             course.groups = [Group::State.find(JublaOst::Config.kanton_id(legacy.Kanton))]
@@ -19,7 +19,8 @@ module JublaOst
       end
 
       def migrate_special_roles
-        find_each(batch_size: 50) do |legacy|
+        select('KUID, kassier, mat').
+        find_each(batch_size: 100) do |legacy|
           if id = cache[legacy.KUID]
             current = Event::Course.find(id)
             create_event_role(current, legacy.kassier, Event::Role::Treasurer)

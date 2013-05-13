@@ -36,9 +36,10 @@ module JublaOst
       end
 
       def migrate_advisors
+        select('SCID, Begleitung').
         where(st: JublaOst::Schartyp::Schar.id).
         where('Begleitung IS NOT NULL').
-        find_each(batch_size: 50) do |legacy|
+        find_each(batch_size: 100) do |legacy|
           if id = cache[legacy.SCID]
             current = Group::Flock.find(id)
             current.advisor_id = JublaOst::Person.cache[legacy.Begleitung]

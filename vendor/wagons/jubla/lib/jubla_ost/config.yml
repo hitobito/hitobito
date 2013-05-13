@@ -10,32 +10,66 @@ database:
   socket: /var/run/mysqld/mysqld.sock
   encoding: latin1
 
+
 # mapping of the cantons to the group ids of the target db.
 kanton:
-  be: 5
-  lu: 14
-  sg: 11
-  sh: 17
-  uw: 20
-  zh: 8
+  be: 64
+  lu: 120
+  sg: 143
+  sh: 211
+  uw: 208
+  zh: 67
 
 # mapping of tPerson.JSStufe to the qualification kinds
 qualification_kinds:
-  GL: 2
-  LL: 5
-  FK:
+  GL: 18  # J+S Leiter LS/T Jugendsport
+  LL: 24  # J+S Leiter LS/T Jugendsport, Lagerleiter
+  FK:     # nil
   EX:
-    - 1
-    - 4
-  VA: 3
-  ET: 6
+    - 1   # J+S Experte LS/T
+    - 25  # Zusatz Kursleiter
+  VA: 1   # J+S Experte LS/T
+  ET: 26  # Einstufungstest
 
 # mapping of tKurs.stufe to the event kind
 event_kinds:
-  GK: 4
-  GL: 2
-  LL: 1
-  FK: 5
-  VA:
-  CO: 3
-  ET: 7
+  GK: 15 # GK
+  GL: 5  # GLK
+  LL: 4  # SLK
+  FK: 16 # FK
+  VA:    # nil
+  CO: 12 # CoK
+  ET: 17 # ET
+
+
+# development
+
+# mapping of the cantons to the group ids of the target db.
+#kanton:
+#  be: 5
+#  lu: 14
+#  sg: 11
+#  sh: 17
+#  uw: 20
+#  zh: 8
+
+# mapping of tPerson.JSStufe to the qualification kinds
+#qualification_kinds:
+#  GL: 2
+#  LL: 5
+#  FK:
+#  EX:
+#    - 1
+#    - 4
+#  VA: 3
+#  ET: 6
+
+# mapping of tKurs.stufe to the event kind
+#event_kinds:
+#  GK: 4
+#  GL: 2
+#  LL: 1
+#  FK: 5
+#  VA:
+#  CO: 3
+#  ET: 7

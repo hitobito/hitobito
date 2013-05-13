@@ -84,6 +84,7 @@ module JublaOst
                     .where("p1.email IS NOT NULL AND p1.email <> ''")
                     .pluck("p1.PEID")
         Person.where(PEID: ids).update_all(Email: nil) if ids.present?
+        puts "#{ids.size} duplicate emails removed"
       end
     end
   end

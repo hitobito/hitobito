@@ -17,8 +17,8 @@ module JublaOst
 
       def create_participation(current, person_kurs)
         if event_id = Kurs.cache[person_kurs.KUID]
-          course = Event::Course.find(event_id)
-          participation = course.participations.build
+          participation = Event::Participation.new
+          participation.event_id = event_id
           participation.person = current
           assign_attributes(participation, person_kurs)
           unless participation.save

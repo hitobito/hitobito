@@ -22,7 +22,9 @@ module JublaOst
 
       def migrate_updaters
         select('PEID, ChangePEID').find_each(batch_size: 100) do |legacy|
-          if id = cache[legacy.PEID] && updater_id = cache[legacy.ChangePEID]
+          id = cache[legacy.PEID]
+          updater_id = cache[legacy.ChangePEID]
+          if id && updater_id
             ::Person.where(id: id).update_all(updater_id: updater_id)
           end
         end

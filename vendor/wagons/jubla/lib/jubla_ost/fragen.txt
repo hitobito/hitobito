@@ -1,9 +1,9 @@
 * Nicht migrierte Scharen
     71 Jugendstufe (reid null)
     201-3 Regionalleitung Surseetal, Entlebuch, Luzern (reid 12)
-    218 Kantonsleitung OW/NW (reid 13)
+    *218 Kantonsleitung OW/NW (reid 13)
     223 Bundesleitung (reid 7)
-    237 Kantonsleitung Schaffhausen (reid 15)
+    *237 Kantonsleitung Schaffhausen (reid 15)
     244 Verbandsleitung (reid 7)
 
 * 8 Teilnahmen ohne KursTnStatus (=0). Welche Rolle?

@@ -20,6 +20,14 @@ module JublaOst
         end
       end
 
+      def migrate_updaters
+        select('PEID, ChangePEID').find_each(batch_size: 100) do |legacy|
+          if id = cache[legacy.PEID] && updater_id = cache[legacy.ChangePEID]
+            ::Person.where(id: id).update_all(updater_id: updater_id)
+          end
+        end
+      end
+
       private
 
       def find_or_create_person(legacy)
@@ -73,8 +81,8 @@ module JublaOst
           current.additional_information = legacy.Bemerkung
         end
 
-        current.created_at = legacy.Erfasst || Time.zone.now
-        current.updated_at = legacy.ChangeDate || current.created_at
+        current.created_at = local_time(legacy.Erfasst) || Time.zone.now
+        current.updated_at = local_time(legacy.ChangeDate) || current.created_at
 
         build_phone_number(current, legacy.Tel1, 'Privat')
         build_phone_number(current, legacy.Tel2, 'Arbeit')

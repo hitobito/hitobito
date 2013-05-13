@@ -9,7 +9,7 @@ module JublaOst
         person_schars = find_person_schars(legacy.PEID)
         unhandled_schars = person_schars.keys
 
-        if legacy.aktiv != 3 # verstorben
+        if legacy.read_attribute_before_type_cast('aktiv') != 3 # verstorben
           # create roles for all tmPersFunkt
           where(PEID: legacy.PEID).where('SCID IS NOT NULL').each do |person_funktion|
             scid = person_funktion.SCID

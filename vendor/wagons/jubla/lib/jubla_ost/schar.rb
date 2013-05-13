@@ -19,20 +19,32 @@ module JublaOst
     class << self
 
       def migrate_state(current, legacy)
+        delete_default_groups(current, Group::StateBoard)
         migrate_groups(current, legacy, JublaOst::Schartyp::Kalei) {|g| Group::StateBoard }
         migrate_groups(current, legacy, JublaOst::Schartyp::Schar, *other_types) do |g|
           group_class(g.Schar, Group::StateProfessionalGroup, Group::StateWorkGroup)
         end
-        # TODO delete default kalei
       end
 
       def migrate_region(current, legacy)
+        delete_default_groups(current, Group::RegionalBoard)
         migrate_releis(current, legacy)
         migrate_groups(current, legacy, JublaOst::Schartyp::Schar) {|g| Group::Flock }
         migrate_groups(current, legacy, *other_types) do |g|
           group_class(g.Schar, Group::RegionalProfessionalGroup, Group::RegionalWorkGroup)
         end
-        # TODO delete default relei
+      end
+
+      def migrate_advisors
+        where(st: JublaOst::Schartyp::Schar.id).
+        where('Begleitung IS NOT NULL').
+        find_each(batch_size: 50) do |legacy|
+          if id = cache[legacy.SCID]
+            current = Group::Flock.find(id)
+            current.advisor_id = JublaOst::Person.cache[legacy.Begleitung]
+            current.save!
+          end
+        end
       end
 
       private
@@ -42,6 +54,12 @@ module JublaOst
          JublaOst::Schartyp::Andere,
          JublaOst::Schartyp::Iast,
          JublaOst::Schartyp::Ehemalige]
+      end
+
+      def delete_default_groups(parent, type)
+        parent.children.where(type: type.sti_name).each do |group|
+          group.destroy! unless group.people.exists?
+        end
       end
 
       def migrate_groups(parent, legacy, *types)

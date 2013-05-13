@@ -17,8 +17,9 @@ module JublaOst
             JublaOst::Person.migrate
             ActiveRecord::Base.record_timestamps = true
 
-            # TODO assign Schar#Begleitung, Kurs#Kassier, Kurs#Mat
-
+            JublaOst::Schar.migrate_advisors
+            JublaOst::Kurs.migrate_special_roles
+            JublaOst::Person.migrate_updaters
           rescue Exception => e
             # some weird Sqlite3 BusyExceptions on rollback prevent
             # the original message being passed on, so print it here
@@ -37,6 +38,12 @@ module JublaOst
 
       def combine(separator, *values)
         values.collect(&:presence).compact.join(separator)
+      end
+
+      def local_time(val)
+        return nil if val.blank?
+        utc = val.utc
+        Time.zone.local(utc.year, utc.month, utc.day, utc.hour, utc.min, utc.sec)
       end
 
       def sanitize_source

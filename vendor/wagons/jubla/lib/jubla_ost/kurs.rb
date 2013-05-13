@@ -18,6 +18,16 @@ module JublaOst
         end
       end
 
+      def migrate_special_roles
+        find_each(batch_size: 50) do |legacy|
+          if id = cache[legacy.KUID]
+            current = Event::Course.find(id)
+            create_event_role(current, legacy.kassier, Event::Role::Treasurer)
+            create_event_role(current, legacy.mat, Event::Role::AssistantLeader, 'Material')
+          end
+        end
+      end
+
       def questions
         @questions ||= {}
       end
@@ -92,6 +102,15 @@ module JublaOst
         q
       end
 
+      def create_event_role(event, peid, role_type, label = nil)
+        if person_id = JublaOst::Person.cache[peid]
+          participation = event.participations.where(person_id: person_id).first_or_create!(active: true)
+          role = role_type.new
+          role.participation = participation
+          role.label = label
+          role.save!
+        end
+      end
     end
   end
 end

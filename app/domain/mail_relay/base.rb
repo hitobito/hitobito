@@ -13,7 +13,7 @@ module MailRelay
     class_attribute :retrieve_count
     self.retrieve_count = 5
 
-    # The domain where mails are received.
+    # The local domain where mails are received.
     class_attribute :mail_domain
     self.mail_domain = 'localhost'
 

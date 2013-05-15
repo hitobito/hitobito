@@ -85,6 +85,7 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates :name, uniqueness: {scope: :parent_id}
   validate :assert_type_is_allowed_for_parent, on: :create
 
 

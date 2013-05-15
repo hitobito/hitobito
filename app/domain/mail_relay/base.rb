@@ -98,7 +98,6 @@ module MailRelay
       @sender_email ||= message.from && message.from.first
     end
 
-
     # Heuristic method to find actual receiver of the message.
     # May return nil if could not determine.
     def receiver_from_received_header
@@ -131,7 +130,7 @@ module MailRelay
     end
 
     def envelope_sender
-      "#{envelope_receiver_name}@#{mail_domain}"
+      "#{envelope_receiver_name}-bounces+#{sender_email.gsub('@', '=')}@#{mail_domain}"
     end
 
     def list_id

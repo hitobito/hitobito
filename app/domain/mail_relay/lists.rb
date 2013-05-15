@@ -14,8 +14,20 @@ module MailRelay
     end
 
     # If the email is sent to an address that is not a valid relay, this method is called.
+    # Forwards bounce messages to the original sender
     def reject_not_existing
-      logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
+      data = envelope_receiver_name.match(/^(.+)\-bounces+(.+=.+)$/)
+      if data && MailingList.where(mail_name: data[1]).exists?
+        message.to = data[2].gsub('=', '@')
+
+        env_sender = "#{data[1]}-bounces@#{mail_domain}"
+        message.sender = env_sender
+        message.smtp_envelope_from = env_sender
+
+        deliver(message)
+      else
+        logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
+      end
     end
 
     # Is the mail sent to a valid relay address?
@@ -47,14 +59,10 @@ module MailRelay
       @sender ||= Person.where(email: sender_email).first
     end
 
-    def envelope_sender
-      "#{envelope_receiver_name}+bounce@#{mail_domain}"
-    end
-
     private
 
     def deliver(message)
-      logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.destinations.size} people")
+      logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.smtp_envelope_to.size} people")
       super
     end
 

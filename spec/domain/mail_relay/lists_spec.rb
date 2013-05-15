@@ -5,11 +5,12 @@ describe MailRelay::Lists do
   let(:message) do
     mail = Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'regular.eml')))
     mail.header['X-Envelope-To'] = nil
-    mail.header['X-Envelope-To'] = list.mail_name
+    mail.header['X-Envelope-To'] = envelope_to
     mail.from = from
     mail
   end
 
+  let(:envelope_to) { list.mail_name }
 
   let(:bll)  { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
   let(:bgl1) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
@@ -174,9 +175,25 @@ describe MailRelay::Lists do
     end
   end
 
+  context "bounce" do
+    let(:from) { 'deamon@example.com' }
+
+    let(:envelope_to) { "#{list.mail_name}-bounces+test=example.com" }
+
+    its(:sender_email) { should == from }
+
+    it "forwards bounce message" do
+      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+      last_email.smtp_envelope_to.should == ['test@example.com']
+      last_email.smtp_envelope_from.should == "#{list.mail_name}-bounces@localhost"
+      last_email.from.should == [from]
+    end
+  end
+
   context "non existing list" do
     let(:from) { people(:top_leader).email }
-    before { message.header['X-Envelope-To'] = 'foo' }
+    let(:envelope_to) { 'foo' }
 
     it { should_not be_relay_address }
 

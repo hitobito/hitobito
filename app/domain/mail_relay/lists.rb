@@ -26,7 +26,7 @@ module MailRelay
 
         deliver(message)
       else
-        logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
+        logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for list #{envelope_receiver_name}")
       end
     end
 
@@ -66,10 +66,10 @@ module MailRelay
     private
 
     def deliver(message)
-      logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.smtp_envelope_to.size} people")
+      strip_spam_headers(message)
+      logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for list #{envelope_receiver_name} to #{message.smtp_envelope_to.size} people")
       super
     end
-
 
     def sender_is_additional_sender?
       mailing_list.additional_sender.to_s.split(',').collect(&:strip).include?(sender_email)
@@ -83,6 +83,14 @@ module MailRelay
     def sender_is_list_member?
       sender.present? &&
       mailing_list.people.where(id: sender.id).exists?
+    end
+
+    # strip spam headers because they might produce encoding issues (Encoding::UndefinedConversionError)
+    def strip_spam_headers(message)
+      spam_headers = message.header.select {|field| field.name =~ /^X-DSPAM/i }
+      spam_headers.each do |field|
+        message.header[field.name] = nil
+      end
     end
 
     def logger

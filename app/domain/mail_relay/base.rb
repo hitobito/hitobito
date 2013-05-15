@@ -130,7 +130,7 @@ module MailRelay
     end
 
     def envelope_sender
-      "#{envelope_receiver_name}-bounces+#{sender_email.gsub('@', '=')}@#{mail_domain}"
+      "#{envelope_receiver_name}@#{mail_domain}"
     end
 
     def list_id

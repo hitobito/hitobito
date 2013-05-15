@@ -16,7 +16,7 @@ module MailRelay
     # If the email is sent to an address that is not a valid relay, this method is called.
     # Forwards bounce messages to the original sender
     def reject_not_existing
-      data = envelope_receiver_name.match(/^(.+)\-bounces+(.+=.+)$/)
+      data = envelope_receiver_name.match(/^(.+)\-bounces\+(.+=.+)$/)
       if data && MailingList.where(mail_name: data[1]).exists?
         message.to = data[2].gsub('=', '@')
 
@@ -57,6 +57,10 @@ module MailRelay
 
     def sender
       @sender ||= Person.where(email: sender_email).first
+    end
+
+    def envelope_sender
+      "#{envelope_receiver_name}-bounces+#{sender_email.gsub('@', '=')}@#{mail_domain}"
     end
 
     private

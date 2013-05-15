@@ -1,0 +1,18 @@
+%div.well.well-large
+  Die Rolle
+  = entry.klass.label
+  in der Gruppe
+  = entry.group
+  - if entry.permissions.present?
+    hat folgende Berechtigungen:
+    %br/
+    %br/
+    %ul
+      - entry.permissions.each do |perm|
+        %li= t("permission.description.#{perm}")
+  - else
+    kann nur öffentliche Daten (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
+
+  - unless entry.visible_from_above
+    %br/
+    %p Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.

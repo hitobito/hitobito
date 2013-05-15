@@ -8,12 +8,12 @@ de:
     deleted_info: Gelöscht
 
   activerecord:
-    errors: 
-      messages: 
+    errors:
+      messages:
         type_not_allowed: kann hier nicht erstellt werden.
         must_be_after_opening: muss nach dem Anmeldebeginn sein.
         must_have_same_type: müssen von denselbem Typ sein.
-        
+
     models:
       custom_content:
         one: Text
@@ -78,8 +78,8 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
-        
-      
+
+
     attributes:
 
       person:
@@ -109,7 +109,7 @@ de:
         remove_picture: Aktuelles Foto entfernen
         created_at: Erstellt
         updated_at: Geändert
-        
+
       group:
         name: Name
         short_name: Kurzname
@@ -124,7 +124,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         type_name: Gruppentyp
-      
+
       event:
         group_ids: Gruppen
         name: Name
@@ -162,32 +162,32 @@ de:
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
-        
+
       event/application:
         priority_1_id: "Kurs"
         priority_2_id: "1. Ausweichkurs"
         priority_3_id: "2. Ausweichkurs"
-        
+
       event/date:
         label: Beschreibung/Ort
         start_at: Von
         finish_at: Bis
-        
+
       dates:
         label: Beschreibung/Ort
         start_at: Von Datum
         finish_at: Bis Datum
-        
+
       event/question:
         question: Frage
         choices: Mögliche Antworten
-        
+
       event/answer:
         answer: Antwort
-        
+
       answers:
         answer: Antwort
-        
+
       event/kind:
         label: Verbandsbezeichnung
         short_name: Kurzname
@@ -204,7 +204,7 @@ de:
         qualification_kind_id: Qualifikation
         start_at: Seit
         origin: Ursprung
-        
+
       qualification_kind:
         label: Bezeichnung
         description: Beschreibung
@@ -212,35 +212,35 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
-        
+
       phone_number:
         number: Nummer
         label: Typ
         public: Öffentlich
-                
+
       # used for nested phone_numbers
       phone_numbers:
         number: Telefonnummer
         label: Telefonnummer Typ
         public: Öffentlich
-        
+
       role:
         label: Bezeichnung
         type: Rolle
         group_id: Gruppe
         person_id: Person
-        
+
       social_account:
         name: Name
         label: Typ
         public: Öffentlich
-        
+
       # used for nested social accounts
       social_accounts:
         name: Social Media Name
         label: Social Media Typ
         public: Öffentlich
-  
+
       mailing_list:
         name: Name
         description: Beschreibung
@@ -250,15 +250,15 @@ de:
         mail_address: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
-        
+
       subscription:
         related_role_types: Rollen
-        
+
       custom_content:
         label: Text
         subject: Betreff
         body: Inhalt
-        
+
       label_format:
         name: Bezeichnung
         page_size: Seitengrösse
@@ -272,10 +272,19 @@ de:
         padding_left: Rand links
         dimensions: Anzahl
 
-      
-  
+  permission:
+    description:
+      admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
+      layer_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen.
+      layer_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
+      group_full: Lesen und Schreiben auf der Gruppe.
+      group_read: Lesen auf der Gruppe.
+      contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
+      qualify: Qualifizieren aller Kursteilnehmenden dieser Ebene.
+      approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+
   # view keys
-  
+
   people_filters:
     new:
       title: Personen filtern
@@ -289,7 +298,7 @@ de:
   csv_imports:
     create:
       flash:
-        success: "Datei wurde erfolgreich gelesen." 
+        success: "Datei wurde erfolgreich gelesen."
 
     update:
       flash:
@@ -301,7 +310,7 @@ de:
 
   people:
     send_password_instructions: "Login Informationen wurden verschickt."
-        
+
   event/participations:
     show:
       link:
@@ -314,7 +323,7 @@ de:
       first: Erste
       last: Letzte
       truncate: '...'
-      
+
   errors:
     messages:
       extension_white_list_error: "kann nur Dateien der Typen %{allowed_types} verarbeiten."

@@ -5,27 +5,27 @@
 
   = field_set_tag do
     = f.labeled_input_field(:name)
-    
+
     - entry.used?(:kind_id) do
       = f.labeled_input_field(:kind_id)
 
     - entry.used?(:state) do
-      = f.labeled_belongs_to_field(:state, list: entry.state_collection)
-      
+      = f.labeled_belongs_to_field(:state, list: entry.state_collection) if entry.possible_states.present?
+
     = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost, :location))
-    
+
     = f.labeled_person_field :contact
 
     = render_extensions 'fields', locals: { f: f }
 
   - if @groups.present?
     = field_set_tag 'Durchgeführt von' do
-      = f.labeled(:group_ids, '&nbsp;'.html_safe) do 
+      = f.labeled(:group_ids, '&nbsp;'.html_safe) do
         = hidden_field_tag('event[group_ids][]', @group.id)
         = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
         - @groups.each do |group|
           = f.inline_check_box(:group_ids, group.id, group.to_s)
-    
+
 
   = field_set_tag 'Daten' do
     %p Uhrzeiten sind optional
@@ -39,14 +39,14 @@
       = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')
     - entry.used?(:requires_approval) do
       = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
-    
+
     = f.labeled_input_field(:maximum_participants)
-    
+
     = render_extensions 'application_fields', locals: { f: f }
-    
+
   = field_set_tag 'Angaben für Anmeldung' do
-    %p 
-      Hier kannst du weitere Angaben für die Anmeldung verlangen. 
-      Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer, 
+    %p
+      Hier kannst du weitere Angaben für die Anmeldung verlangen.
+      Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
       um beliebige Antworten zu ermöglichen.
     = f.nested_fields_for :questions, 'event/questions/fields'

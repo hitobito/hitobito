@@ -63,7 +63,7 @@ describe MailRelay::Base do
       end
 
       it { should be_present }
-      its(:destinations) { should == receivers }
+      its(:smtp_envelope_to) { should == receivers }
       its(:to) { should == ['zumkehr@puzzle.ch'] }
       its(:from) { should == ['animation@jublaluzern.ch'] }
     end

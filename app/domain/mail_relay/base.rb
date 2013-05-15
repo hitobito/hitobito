@@ -6,12 +6,16 @@ module MailRelay
 
     # Define a header that contains the original receiver address.
     # This header could be set by the mail server.
-    cattr_accessor :receiver_header
+    class_attribute :receiver_header
     self.receiver_header = 'X-Envelope-To'
 
     # Number of emails to retrieve in one batch.
     class_attribute :retrieve_count
     self.retrieve_count = 5
+
+    # The domain where mails are received.
+    class_attribute :mail_domain
+    self.mail_domain = 'localhost'
 
     attr_reader :message
 
@@ -55,9 +59,17 @@ module MailRelay
     def resend
       destinations = receivers
       if destinations.present?
-        message.singleton_class.send(:include, ManualDestinations)
-        message.destinations = destinations
+        # set destinations
+        message.smtp_envelope_to = destinations
+
+        # Set sender to actual server to satisfy SPF: http://www.openspf.org/Best_Practices/Webgenerated
+        message.sender = envelope_sender
+        message.smtp_envelope_from = envelope_sender
+
+        # set list headers
         message.header['Precedence'] = 'list'
+        message.header['List-Id'] = list_id
+
         deliver(message)
       end
     end
@@ -116,6 +128,14 @@ module MailRelay
     # List of receiver email addresses for the resent email.
     def receivers
       []
+    end
+
+    def envelope_sender
+      "#{envelope_receiver_name}@#{mail_domain}"
+    end
+
+    def list_id
+      "#{envelope_receiver_name}.#{mail_domain}"
     end
 
     private

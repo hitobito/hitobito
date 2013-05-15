@@ -9,12 +9,16 @@ class BaseJob
   end
 
   def error(job, exception, payload = {})
-    Rails.logger.error(exception.message)
-    Rails.logger.error(exception.backtrace.join("\n"))
+    logger.error(exception.message)
+    logger.error(exception.backtrace.join("\n"))
     Airbrake.notify(exception, cgi_data: ENV, parameters: payload)
   end
 
   def delayed_jobs
     Delayed::Job.where(handler: self.to_yaml)
+  end
+
+  def logger
+    Delayed::Worker.logger || Rails.logger
   end
 end

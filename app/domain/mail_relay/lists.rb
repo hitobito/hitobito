@@ -1,6 +1,8 @@
 module MailRelay
   class Lists < Base
 
+    self.mail_domain = Settings.email.list_domain
+
     # If the email sender was not allowed to post messages, this method is called.
     def reject_not_allowed
       if sender_email.present?
@@ -13,7 +15,7 @@ module MailRelay
 
     # If the email is sent to an address that is not a valid relay, this method is called.
     def reject_not_existing
-      Rails.logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
+      logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for #{envelope_receiver_name}")
     end
 
     # Is the mail sent to a valid relay address?
@@ -45,16 +47,17 @@ module MailRelay
       @sender ||= Person.where(email: sender_email).first
     end
 
+    def envelope_sender
+      "#{envelope_receiver_name}+bounce@#{mail_domain}"
+    end
+
     private
 
     def deliver(message)
-      Rails.logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.destinations.size} people")
-
-      # Set sender to actual server to satisfy SPF: http://www.openspf.org/Best_Practices/Webgenerated
-      message.sender = "#{envelope_receiver_name}+bounce@#{Settings.email.list_domain}"
-      message.header['List-Id'] = "#{envelope_receiver_name}.#{Settings.email.list_domain}"
+      logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for #{envelope_receiver_name} to #{message.destinations.size} people")
       super
     end
+
 
     def sender_is_additional_sender?
       mailing_list.additional_sender.to_s.split(',').collect(&:strip).include?(sender_email)
@@ -68,6 +71,10 @@ module MailRelay
     def sender_is_list_member?
       sender.present? &&
       mailing_list.people.where(id: sender.id).exists?
+    end
+
+    def logger
+      Delayed::Worker.logger || Rails.logger
     end
   end
 end

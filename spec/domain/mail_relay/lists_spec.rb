@@ -57,7 +57,7 @@ describe MailRelay::Lists do
     it "relays" do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.destinations.should =~ subscribers.collect(&:email)
+      last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
     end
   end
 
@@ -75,7 +75,7 @@ describe MailRelay::Lists do
     it "relays" do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.destinations.should =~ subscribers.collect(&:email)
+      last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
     end
   end
 
@@ -95,7 +95,7 @@ describe MailRelay::Lists do
       it "relays" do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-        last_email.destinations.should =~ subscribers.collect(&:email)
+        last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
       end
     end
 
@@ -110,7 +110,7 @@ describe MailRelay::Lists do
       it "rejects" do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-        last_email.destinations.should == [from]
+        last_email.smtp_envelope_to.should == [from]
         last_email.body.should =~ /nicht berechtigt/
       end
     end
@@ -129,7 +129,7 @@ describe MailRelay::Lists do
     it "rejects" do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.destinations.should == [from]
+      last_email.smtp_envelope_to.should == [from]
       last_email.body.should =~ /nicht berechtigt/
     end
   end
@@ -144,7 +144,7 @@ describe MailRelay::Lists do
     it "rejects" do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.destinations.should == [from]
+      last_email.smtp_envelope_to.should == [from]
       last_email.body.should =~ /nicht berechtigt/
     end
   end
@@ -158,7 +158,7 @@ describe MailRelay::Lists do
     it "rejects" do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.destinations.should == [from]
+      last_email.smtp_envelope_to.should == [from]
       last_email.body.should =~ /nicht berechtigt/
     end
   end

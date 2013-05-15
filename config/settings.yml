@@ -1,4 +1,9 @@
-
+application:
+  name: jubla.db
+  footer:
+    logo_image: logo_jubla.png
+    logo_url: http://puzzle.ch
+    links: {}
 
 phone_number:
   predefined_labels:

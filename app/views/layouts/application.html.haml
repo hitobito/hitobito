@@ -3,7 +3,7 @@
 %html
   %head
     %meta{:charset => 'utf-8'}
-    %title= "jubla.db - #{title}"
+    %title= "#{Settings.application.name} - #{title}"
     = csrf_meta_tag
 
     <!-- HTML5 shim, for IE6-8 support of HTML elements -->
@@ -27,7 +27,7 @@
 
     %header#page-header
       .container-fluid
-        = link_to 'jubla.db', root_path, :class => 'brand'
+        = link_to Settings.application.name, root_path, :class => 'brand'
 
         - if current_user
           = render 'layouts/nav'
@@ -52,13 +52,14 @@
     %footer#page-footer
       .container-fluid
         .row
+          - footer = Settings.application.footer
           .span3
-            = link_to image_tag('logo_jubla.png'), 'http://www.jubla.ch'
+            = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
           .footer_content.span9
             %p
-              = link_to 'Fragen und Anregungen', 'http://feedback.jubla.ch', target: '_blank'
-              %br/
-              = link_to 'Hilfe', 'http://jubla.ch/datenbank', target: '_blank'
+              -footer.links.to_hash.each do |label, url|
+                = link_to label, url, target: '_blank'
+                %br/
             %p
               Version
               = Wagons.app_version

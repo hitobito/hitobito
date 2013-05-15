@@ -1,5 +1,13 @@
 # Settings relevant for the jubla wagon
 # Overrides settings from the main application
+application:
+  name: jubla.db
+  footer:
+    logo_image: logo_jubla.png
+    logo_url: http://www.jubla.ch
+    links:
+      "Fragen und Anregungen": http://feedback.jubla.ch
+      Hilfe: http://jubla.ch/datenbank
 
 census:
   default_finish_month: 10

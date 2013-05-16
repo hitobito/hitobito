@@ -49,7 +49,7 @@
           = render 'priorities'
 
       %aside.span5
-        - if @application.present?
+        - if @application.present? && @application.contact.present?
           = section 'Anmeldung an' do
             = @application.contact.decorate.complete_contact
 

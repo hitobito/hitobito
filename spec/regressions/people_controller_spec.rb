@@ -28,8 +28,9 @@ describe PeopleController, type: :controller do
 
     it "cannot view person in uppper group" do
       sign_in(Fabricate(Group::BottomGroup::Leader.name.to_sym, group: bottom_group).person)
-      get :show, group_id: top_group.id, id: top_leader.id
-      flash[:alert].should eq "Sie sind nicht berechtigt, diese Seite anzuzeigen"
+      expect do
+        get :show, group_id: top_group.id, id: top_leader.id
+      end.to raise_error(CanCan::AccessDenied)
     end
 
     it "renders my own page" do

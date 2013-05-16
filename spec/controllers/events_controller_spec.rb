@@ -7,16 +7,16 @@ describe EventsController do
   let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: 'AAA', parent: groups(:top_layer)) }
 
   context "event_course" do
-    
+
     before { group2 }
-    
+
     context "GET new" do
       it "loads sister groups" do
         sign_in(people(:top_leader))
         group3
-        
+
         get :new, group_id: group.id, event: { type: 'Event' }
-        
+
         assigns(:groups).should == [group3, group2]
       end
 
@@ -27,21 +27,21 @@ describe EventsController do
         assigns(:kinds).should_not include event_kinds(:old)
       end
     end
-    
+
     context "POST create" do
       let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
       let(:question)  {{ question: 'foo?', choices: '1,2,3,4' }}
-      
+
       it "creates new event course with dates" do
         sign_in(people(:top_leader))
 
-        post :create, event: {  group_ids: [group.id, group2.id], 
-                                name: 'foo', 
+        post :create, event: {  group_ids: [group.id, group2.id],
+                                name: 'foo',
                                 kind_id: event_kinds(:slk).id,
                                 dates_attributes: [ date ],
                                 questions_attributes: [ question ],
                                 contact_id: people(:top_leader).id,
-                                type: 'Event::Course' }, 
+                                type: 'Event::Course' },
                       group_id: group.id
 
         event = assigns(:event)
@@ -51,7 +51,7 @@ describe EventsController do
         event.dates.first.should be_persisted
         event.questions.should have(1).item
         event.questions.first.should be_persisted
-        
+
         event.group_ids.should =~ [group.id, group2.id]
       end
 
@@ -59,17 +59,17 @@ describe EventsController do
         user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
         sign_in(user.person)
 
-        post :create, event: {  group_id: group.id, 
-                                name: 'foo', 
-                                type: 'Event::Course' }, 
-                      group_id: group.id
-
-        should redirect_to(root_path)
+        expect do
+          post :create, event: {  group_id: group.id,
+                                  name: 'foo',
+                                  type: 'Event::Course' },
+                        group_id: group.id
+        end.to raise_error(CanCan::AccessDenied)
       end
     end
 
   end
-  
+
   context "destroyed associations" do
     let(:course) { Fabricate(:course, groups: [group, group2, group3]) }
 
@@ -79,7 +79,7 @@ describe EventsController do
     end
 
     context "kind" do
-      before { course.kind.destroy } 
+      before { course.kind.destroy }
 
       it "new does not include delted kind" do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
@@ -94,7 +94,7 @@ describe EventsController do
     end
 
     context "groups" do
-      before { group3.destroy } 
+      before { group3.destroy }
 
       it "new does not include delete" do
         get :new, group_id: group.id, event: { type: 'Event::Course' }

@@ -5,7 +5,7 @@ describe QualificationsController do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
   let(:params) { { group_id: group.id, person_id: person.id } }
-  
+
 
 
   context "GET new" do
@@ -20,17 +20,17 @@ describe QualificationsController do
   context "POST create" do
     let(:kind) { qualification_kinds(:gl)}
     it "redirects to show for person" do
-      expect { 
-        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now }) 
+      expect do
+        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
         should redirect_to group_person_path(group, person)
-      }.to change { Qualification.count }.by (1)
+      end.to change { Qualification.count }.by (1)
     end
 
     it "fails without permission" do
       sign_in(people(:bottom_member))
-      expect { 
-        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now }) 
-      }.not_to change { Qualification.count }.by (1)
+      expect do
+        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -38,21 +38,19 @@ describe QualificationsController do
     let(:id) { @qualification.id }
     before { @qualification = Fabricate(:qualification, person: person)}
     it "redirects to show for person" do
-      expect { 
-        post :destroy, params.merge(id: id) 
+      expect do
+        post :destroy, params.merge(id: id)
         should redirect_to group_person_path(group, person)
-      }.to change { Qualification.count }.by (-1)
+      end.to change { Qualification.count }.by (-1)
     end
 
     it "fails without permission" do
       sign_in(people(:bottom_member))
-      expect { 
-        post :destroy, params.merge(id: id) 
-      }.not_to change { Qualification.count }.by (-1)
+      expect { post :destroy, params.merge(id: id) }.to raise_error(CanCan::AccessDenied)
     end
   end
-  
-  
-  
+
+
+
 end
 

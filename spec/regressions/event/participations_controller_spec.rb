@@ -115,8 +115,9 @@ describe Event::ParticipationsController, type: :controller do
 
     it "redirects users without permission" do
       sign_in(Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person)
-      get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
-      should redirect_to root_url
+      expect do
+        get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 

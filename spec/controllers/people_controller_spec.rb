@@ -173,13 +173,11 @@ describe PeopleController do
       user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
       sign_in(user.person)
 
-      expect {
+      expect do
         post :create, group_id: group.id,
                       role: {type: 'Group::TopGroup::Member', group_id: group.id},
                       person: {last_name: 'Foo', email: 'foo@example.com'}
-      }.not_to change { Person.count }
-
-      should redirect_to(root_path)
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -202,9 +200,10 @@ describe PeopleController do
 
     it "does not send instructions for self" do
       expect do
-        post :send_password_instructions, group_id: group.id, id: top_leader.id, format: :js
+        expect do
+          post :send_password_instructions, group_id: group.id, id: top_leader.id, format: :js
+        end.to raise_error(CanCan::AccessDenied)
       end.not_to change { Delayed::Job.count }
-      flash[:notice].should_not be_present
     end
 
     it "sends password instructions" do

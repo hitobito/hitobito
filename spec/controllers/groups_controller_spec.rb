@@ -68,7 +68,7 @@ describe GroupsController do
 
     describe "#destroy" do
       it "leader cannot destroy his group" do
-        expect { post :destroy, id: group.id }.not_to change { Group.count }
+        expect { post :destroy, id: group.id }.to raise_error(CanCan::AccessDenied)
       end
 
       it "leader can destroy group" do

@@ -9,9 +9,9 @@ task :ci => ['log:clear',
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"
-  task :nightly => ['log:clear', 
+  task :nightly => ['log:clear',
                     'wagon:bundle:update',
-                    'db:migrate', 
+                    'db:migrate',
                     'erd',
                     'ci:setup:rspec',
                     'spec:requests', # run request specs first to get coverage from spec
@@ -61,7 +61,7 @@ namespace :erd do
 end
 
 if Rake::Task.task_defined?('spec:requests') # only if current environment knows rspec
-  Rake::Task['spec:requests'].actions.clear 
+  Rake::Task['spec:requests'].actions.clear
   namespace :spec do
     RSpec::Core::RakeTask.new(:requests => 'db:test:prepare') do |t|
       # include phantomjs binary in path
@@ -69,12 +69,12 @@ if Rake::Task.task_defined?('spec:requests') # only if current environment knows
       t.pattern = "./spec/requests/**/*_spec.rb"
       t.spec_opts = "--tag type:request"
     end
-    
+
     RSpec::Core::RakeTask.new(:performance => 'db:test:prepare') do |t|
       t.pattern = "./spec/performance/**/*_spec.rb"
       t.spec_opts = "--tag performance:true"
     end
-    
+
     [:domain, :regressions, :decorators].each do |dir|
       RSpec::Core::RakeTask.new(dir => 'db:test:prepare') do |t|
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
@@ -93,12 +93,12 @@ end
 namespace :jubla do
   desc "Print all groups, roles and permissions"
   task :permissions => :environment do
-    Role::TypeList.new(Group::Federation).each do |layer, groups| 
+    Role::TypeList.new(Group.root_types.first).each do |layer, groups|
       puts layer
-      groups.each do |group, roles| 
+      groups.each do |group, roles|
         puts '  ' + group
-        roles.each do |r| 
-          puts "    #{r.model_name.human}: #{r.permissions.inspect}" 
+        roles.each do |r|
+          puts "    #{r.model_name.human}: #{r.permissions.inspect}"
         end
       end
     end

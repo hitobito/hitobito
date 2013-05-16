@@ -54,7 +54,8 @@
         .row
           - footer = Settings.application.footer
           .span3
-            = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
+            - if footer.logo_image.present?
+              = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
           .footer_content.span9
             %p
               -footer.links.to_hash.each do |label, url|

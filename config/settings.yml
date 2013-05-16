@@ -1,7 +1,7 @@
 application:
   name: jubla.db
   footer:
-    logo_image: logo_jubla.png
+    #logo_image: logo_jubla.png
     logo_url: http://puzzle.ch
     links: {}
 
@@ -27,11 +27,11 @@ social_account:
 
 email:
   # Sender for all emails sent by the application
-  sender: noreply@jubla.ch
+  sender: <%= ENV['RAILS_HOST_NAME'].present? ? "noreply@#{ENV['RAILS_HOST_NAME']}" : 'noreply@localhost' %>
 
   # If mass emails are sent, this recipient is used in the to field,
   # while the actual recipients go in the bcc field.
-  mass_recipient: noreply@jubla.ch
+  mass_recipient: <%= ENV['RAILS_HOST_NAME'].present? ? "noreply@#{ENV['RAILS_HOST_NAME']}" : 'noreply@localhost' %>
 
   # domain where mailing lists are located
   list_domain: <%= ENV['RAILS_HOST_NAME'] || 'localhost' %>
@@ -65,6 +65,7 @@ address:
 
 # Presets for CSV export
 csv:
+  # optimized for M$ Excel
   separator: ;
   encoding: ISO-8859-1//IGNORE
 

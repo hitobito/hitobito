@@ -1,28 +1,31 @@
 # Ebene Schar
 class Group::Flock < Group
-  
+
   include RestrictedRole
-  
+
   self.layer = true
   self.event_types = [Event, Event::Camp]
-  
+
   children Group::ChildGroup
-  
+
   AVAILABLE_KINDS = %w(Jungwacht Blauring Jubla)
-  
+
   attr_accessible :bank_account, :parish, :kind, :unsexed, :clairongarde, :founding_year
-  attr_accessible *(accessible_attributes.to_a + 
-                    [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]), 
+  attr_accessible *(accessible_attributes.to_a +
+                    [:jubla_insurance, :jubla_full_coverage, :coach_id, :advisor_id]),
                   as: :superior
 
-  
+
   has_many :member_counts
 
+  # remove existing uniqueness validator
+  self.validate_unique_name = false
+  validates :name, uniqueness: {scope: [:parent_id, :kind]}
 
   validates :kind, inclusion: AVAILABLE_KINDS, allow_blank: true
 
 
-  def available_coaches 
+  def available_coaches
     coach_role_types = [Group::State::Coach, Group::Region::Coach].collect(&:sti_name)
     Person.in_layer(*layer_groups).
            where(roles: { type: coach_role_types })
@@ -34,24 +37,24 @@ class Group::Flock < Group
            where(groups: { type: advisor_group_types }).
            where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
   end
-  
+
   def to_s
     if attributes.include?('kind')
       [kind, super].compact.join(" ")
     else
       # if kind is not selected from the database, we end up here
       super
-    end 
+    end
   end
-  
+
   def state
     ancestors.where(type: Group::State.sti_name).first
   end
-  
+
   def census_groups(year)
     []
   end
-  
+
   def census_total(year)
     MemberCount.total_for_flock(year, self)
   end
@@ -68,28 +71,28 @@ class Group::Flock < Group
   class Leader < Jubla::Role::Leader
     self.permissions = [:layer_full, :contact_data, :approve_applications]
   end
-  
+
   class CampLeader < ::Role
     self.permissions = [:layer_full, :contact_data]
   end
-  
+
   # Präses
   class President < ::Role
     self.permissions = [:layer_read, :contact_data]
-    
+
     attr_accessible :employment_percent, :honorary
   end
-  
+
   # Leiter
   class Guide < ::Role
     self.permissions = [:layer_read]
   end
-  
+
   # Kassier
   class Treasurer < Jubla::Role::Treasurer
     self.permissions = [:layer_read, :contact_data]
   end
-  
+
   # Coach
   class Coach < ::Role
     self.permissions = [:layer_read]
@@ -97,7 +100,7 @@ class Group::Flock < Group
     self.restricted  = true
     self.visible_from_above = false
   end
-  
+
   # Betreuer
   class Advisor < ::Role
     self.permissions = [:layer_read]
@@ -105,9 +108,9 @@ class Group::Flock < Group
     self.restricted  = true
     self.visible_from_above = false
   end
-  
+
   roles Leader, CampLeader, President, Treasurer, Guide
   restricted_role :coach, Coach
   restricted_role :advisor, Advisor
-  
+
 end

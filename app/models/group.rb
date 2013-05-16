@@ -85,7 +85,11 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates :name, uniqueness: {scope: :parent_id}
+  # configurable name uniqueness validation
+  class_attribute :validate_unique_name
+  self.validate_unique_name = true
+  validates :name, uniqueness: {scope: :parent_id, if: :validate_unique_name}
+
   validate :assert_type_is_allowed_for_parent, on: :create
 
 

@@ -34,6 +34,27 @@ describe Group do
     it { should have(0).default_children }
     it { should have(11).role_types }
     it { should be_layer }
+
+    it "may have same name as other flock with different kind" do
+      parent = groups(:city)
+      flock = Group::Flock.new(name: 'bla', kind: 'Jungwacht')
+      flock.parent = parent
+      flock.save!
+      other = Group::Flock.new(name: 'bla', kind: 'Blauring')
+      other.parent = parent
+      other.valid?
+      other.errors.full_messages.should == []
+    end
+
+    it "may not have same name as other flock with empty kind" do
+      parent = groups(:city)
+      flock = Group::Flock.new(name: 'bla')
+      flock.parent = parent
+      flock.save!
+      other = Group::Flock.new(name: 'bla')
+      other.parent = parent
+      other.should_not be_valid
+    end
   end
 
   describe Group::SimpleGroup do
@@ -50,6 +71,25 @@ describe Group do
 
     it "includes the external role" do
       subject.role_types.should include(Jubla::Role::External)
+    end
+
+    it "may have same name as other group with different parent" do
+      flock = Group::SimpleGroup.new(name: 'bla')
+      flock.parent = groups(:city)
+      flock.save!
+      other = Group::SimpleGroup.new(name: 'bla')
+      other.parent = groups(:bern)
+      other.should be_valid
+    end
+
+    it "may not have same name as group with same parent" do
+      parent = groups(:city)
+      flock = Group::SimpleGroup.new(name: 'bla')
+      flock.parent = parent
+      flock.save!
+      other = Group::SimpleGroup.new(name: 'bla')
+      other.parent = parent
+      other.should_not be_valid
     end
   end
 

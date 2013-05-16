@@ -28,8 +28,8 @@ describe PopulationController do
     describe "people by group" do
       subject { assigns(:people_by_group) }
 
-      it { subject[flock].collect(&:to_s).should == [leader, guide].collect(&:to_s)}
-      it { subject[groups(:asterix)].collect(&:to_s).should == [group_leader, child].collect(&:to_s) }
+      it { subject[flock].collect(&:to_s).should =~ [leader,people(:flock_leader_bern), guide].collect(&:to_s)}
+      it { subject[groups(:asterix)].collect(&:to_s).should =~ [group_leader, child, people(:child)].collect(&:to_s) }
       it { subject[groups(:obelix)].should == [] }
     end
 

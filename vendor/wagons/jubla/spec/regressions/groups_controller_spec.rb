@@ -2,7 +2,7 @@ require 'spec_helper'
 describe GroupsController, type: :controller  do
   include CrudControllerTestHelper
   render_views
- 
+
   let(:asterix)  { groups(:asterix) }
   let(:flock) { groups(:bern) }
   let(:agency) { groups(:be_agency) }
@@ -19,15 +19,15 @@ describe GroupsController, type: :controller  do
   let(:default_attrs) { { name: 'dummy' } }
   let(:mass_assignment_error) { ActiveModel::MassAssignmentSecurity::Error }
 
-  describe_action :get, :edit, id: true do 
+  describe_action :get, :edit, id: true do
     expected = [
       [:leader, :flock, false],
       [:agent, :flock, true],
-      [:agent, :region, true], 
+      [:agent, :region, true],
       [:agent, :state, false]
     ]
 
-    expected.each do |user, group, super_attr_present| 
+    expected.each do |user, group, super_attr_present|
       context "#{user} on #{group}" do
         before { sign_in(send(user)) }
         it " #{super_attr_present ? "can" : "cannot"} see superior_attributes" do
@@ -43,25 +43,35 @@ describe GroupsController, type: :controller  do
     end
   end
 
-  describe_action :get, :new do 
+  describe_action :get, :new do
     expected = [
       [:leader, :asterix, true],
-      [:leader, :flock, false],
       [:agent, :flock, true],
-      [:agent, :region, true], 
-      [:agent, :state, false]
+      [:agent, :region, true],
     ]
-    expected.each do |user, group, can_render_form| 
+    expected.each do |user, group, can_render_form|
       context "#{user} new #{group}"  do
         before { sign_in(send(user)) }
 
-        it "#{can_render_form ? "can" : "cannot"} render form" do
-          get :new, group: { type: send(group).type, parent_id: send(group).parent.id } 
-          if can_render_form
-            dom.should have_selector('form[action="/groups"]')
-          else
-            response.should redirect_to root_url unless can_render_form
-          end
+        it "can render form" do
+          get :new, group: { type: send(group).type, parent_id: send(group).parent.id }
+          dom.should have_selector('form[action="/groups"]')
+        end
+      end
+    end
+
+    expected = [
+      [:leader, :flock, false],
+      [:agent, :state, false]
+    ]
+    expected.each do |user, group, can_render_form|
+      context "#{user} new #{group}"  do
+        before { sign_in(send(user)) }
+
+        it "cannot render form" do
+          expect do
+            get :new, group: { type: send(group).type, parent_id: send(group).parent.id }
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
     end
@@ -72,13 +82,13 @@ describe GroupsController, type: :controller  do
       [:leader, :flock, true],
       [:leader, :flock, false, { jubla_insurance: '1' }],
       [:agent, :flock, true, { jubla_insurance: '1' }],
-      [:agent, :region, true, { jubla_insurance: '1' } ], 
+      [:agent, :region, true, { jubla_insurance: '1' } ],
       [:agent, :state, true],
       [:agent, :state, false, {jubla_insurance: '1'}],
       [:bulei, :state, true, {jubla_insurance: '1'}],
     ]
 
-    expected.each do |user, group, super_attr_update, extra_attrs={} | 
+    expected.each do |user, group, super_attr_update, extra_attrs={} |
       context "#{user} on #{group}" do
         before { sign_in(send(user)) }
         it "#{super_attr_update ? "can" : "cannot"} update with #{extra_attrs}" do
@@ -95,17 +105,17 @@ describe GroupsController, type: :controller  do
   end
 
 
-  describe_action :post, :create do 
+  describe_action :post, :create do
     expected = [
       [:leader, :asterix, true],
       [:leader, :asterix, false, { jubla_insurance: '1'} ],
       [:leader, :flock, false],
       [:agent, :flock, true],
-      [:agent, :region, true], 
+      [:agent, :region, true],
       [:agent, :state, false]
     ]
 
-    expected.each do |user, group, can_create_group, extra_attrs={}| 
+    expected.each do |user, group, can_create_group, extra_attrs={}|
       context "#{user} on #{group}"  do
         before { sign_in(send(user)) }
 
@@ -117,7 +127,9 @@ describe GroupsController, type: :controller  do
             should redirect_to group_path(assigns(:group))
           else
             if extra_attrs.empty?
-              expect { post :create, group: attrs }.not_to change(Group,:count) 
+              expect do
+                expect { post :create, group: attrs }.to raise_error(CanCan::AccessDenied)
+              end.not_to change(Group,:count)
             else
               expect { post :create, group: attrs }.to raise_error(mass_assignment_error)
             end
@@ -132,34 +144,47 @@ describe GroupsController, type: :controller  do
   end
 
 
-  describe_action :delete, :destroy do 
-    expected = [
-      [:leader, :asterix, true],
-      [:leader, :flock, false],
+  describe_action :delete, :destroy do
+    [ [:leader, :asterix, true],
       [:agent, :asterix, true],
-      [:agent, :flock, false],
-      [:agent, :region, false], 
-      [:agent, :state, false]
-    ]
-
-    expected.each do |user, group, can_destroy_group| 
+    ].each do |user, group, can_destroy_group|
       context "#{user} destroy #{group}"  do
         before { sign_in(send(user)) }
 
-        it "#{can_destroy_group ? "can" : "cannot"} destroy group" do
-          if can_destroy_group
-            expect { delete :destroy, id: send(group).id }.to change { Group.without_deleted.count }.by(-1)
-          else
-            expect { delete :destroy, id: send(group).id }.not_to change { Group.count }
-          end
+        it "can destroy group" do
+          expect { delete :destroy, id: send(group).id }.to change { Group.without_deleted.count }.by(-1)
+        end
+      end
+    end
+
+    [ [:agent, :flock, false],
+      [:agent, :region, false],
+    ].each do |user, group, can_destroy_group|
+      context "#{user} destroy #{group}"  do
+        before { sign_in(send(user)) }
+
+        it "cannot destroy group with children" do
+          expect { delete :destroy, id: send(group).id }.not_to change { Group.without_deleted.count }
+        end
+      end
+    end
+
+    [ [:leader, :flock, false],
+      [:agent, :state, false]
+    ].each do |user, group, can_destroy_group|
+      context "#{user} destroy #{group}"  do
+        before { sign_in(send(user)) }
+
+        it "is not allowed to destroy group" do
+          expect { delete :destroy, id: send(group).id }.to raise_error(CanCan::AccessDenied)
         end
       end
     end
   end
-  
+
   context "agent" do
     before { sign_in(agent) }
-    
+
     it "can destroy flock without subgroups" do
       flock.children.destroy_all
       expect { delete :destroy, id: flock.id }.to change { Group.without_deleted.count }.by(-1)
@@ -168,10 +193,12 @@ describe GroupsController, type: :controller  do
 
   context "flock leader" do
     before { sign_in(leader) }
-    
+
     it "cannot destroy flock without subgroups" do
       flock.children.destroy_all
-      expect { delete :destroy, id: flock.id }.not_to change { Group.count }
+      expect do
+         expect { delete :destroy, id: flock.id }.to raise_error(CanCan::AccessDenied)
+      end.not_to change { Group.count }
     end
   end
 end

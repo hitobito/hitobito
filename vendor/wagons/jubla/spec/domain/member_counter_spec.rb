@@ -22,8 +22,8 @@ describe MemberCounter do
   end
 
   it "flock has affiliate and deleted people as well" do
-    flock.people.count.should == 4
-    Person.joins(:roles).where(roles: {group_id: flock.id}).count.should == 5
+    flock.people.count.should == 5
+    Person.joins(:roles).where(roles: {group_id: flock.id}).count.should == 6
   end
 
   context "instance" do
@@ -34,10 +34,10 @@ describe MemberCounter do
 
     its(:state) { should == groups(:be) }
 
-    its(:members) { should have(6).items }
+    its(:members) { should have(8).items }
 
     it "creates member counts" do
-      expect { subject.count! }.to change { MemberCount.count }.by(4)
+      expect { subject.count! }.to change { MemberCount.count }.by(5)
 
       should be_exists
 
@@ -52,7 +52,7 @@ describe MemberCounter do
   context ".create_count_for" do
     it "creates count with current census" do
       censuses(:two_o_12).destroy
-      expect { MemberCounter.create_counts_for(flock) }.to change { MemberCount.where(year: 2011).count }.by(4)
+      expect { MemberCounter.create_counts_for(flock) }.to change { MemberCount.where(year: 2011).count }.by(5)
     end
 
     it "does not create counts with existing ones" do

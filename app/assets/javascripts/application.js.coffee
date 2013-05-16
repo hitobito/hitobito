@@ -29,17 +29,17 @@ replaceContent = (e, data, status, xhr) ->
 
 setDataType = (xhr) ->
   $(this).data('type', 'html')
-  
+
 showDatePicker = (field) ->
    field.datepicker()
    field.datepicker('show')
-   
+
 # type aheads
 
 setupEntityTypeahead = (index, field) ->
   input = $(this)
   setupRemoteTypeahead(input, 10, setEntityId)
-  input.keydown((event) -> 
+  input.keydown((event) ->
     if isModifyingKey(event.which)
       $('#' + input.data('id-field')).val(null).change())
 
@@ -72,14 +72,14 @@ setupRemoteTypeahead = (input, items, updater) ->
          sorter: (items) -> items, # keep order from server
          items: items,
          highlighter: typeaheadHighlighter)
-         
+
 queryForTypeahead = (query, process) ->
   return [] if query.length < 3
   $.get(this.$element.data('url'), { q: query }, (data) ->
     json = $.map(data, (item) -> JSON.stringify(item))
     return process(json)
   )
-  
+
 typeaheadHighlighter = (item) ->
   query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
   query = query.replace(/\s+/g, '|')
@@ -120,22 +120,25 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 $ ->
   # wire up quick search
   setupQuicksearch()
-  
+
   # wire up date picker
   $(":input.date").live("click", -> showDatePicker($(this)))
   $(".controls .icon-calendar").live("click", -> showDatePicker($(this).parent().siblings('.date')))
-    
+
   # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)
   $('body').on('ajax:before','[data-replace]', setDataType)
-  
+
+  # wire up disabled links
+  $('body').on('click', 'a.disabled', (event) -> $.rails.stopEverything(event); event.preventDefault();)
+
   # wire up person auto complete
   $('[data-provide=entity]').each(setupEntityTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
 
   # wire up tooltips
   $('body').tooltip({ selector: '[rel=tooltip]', placement: 'right' });
-    
+
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
     $(link).closest('form').find("##{assoc}_fields").append($(content))

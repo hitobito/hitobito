@@ -1,5 +1,6 @@
-- if flash[level].present?
-  #flash
+-# div must always exist to insert flash messages with ajax
+#flash
+  - if flash[level].present?
     %div{:class => "alert alert-#{flash_class(level)}"}
       %a.close{:'data-dismiss' => 'alert', :href => '#'} &times;
       = simple_format([flash[level]].flatten.join("\n"))

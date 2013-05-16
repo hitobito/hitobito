@@ -37,6 +37,28 @@ class TarantulaTest < ActionController::IntegrationTest
     # no modifications of user roles (and thereof its permissions)
     t.skip_uri_patterns << /groups\/\d+\/roles\/(#{person.roles.collect(&:id).join("|")})$/
 
+    # The type or merge_group_id tarantula generates is not from the
+    # given selection, thus producing 404s.
+    t.allow_404_for /groups$/
+    t.allow_404_for /groups\/\d+\/roles$/
+    t.allow_404_for /groups\/\d+\/roles\/\d+$/
+    t.allow_404_for /groups\/\d+\/people$/
+    t.allow_404_for /groups\/\d+\/merge$/
+    t.allow_404_for /groups\/\d+\/move$/
+    t.allow_404_for /groups\/\d+\/events$/
+    t.allow_404_for /groups\/\d+\/events\/\d+$/
+    t.allow_404_for /groups\/\d+\/events\/\d+\/roles$/
+    t.allow_404_for /groups\/\d+\/events\/\d+\/roles\/\d+$/
+    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/person$/
+    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/
+    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/
+    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/
+    t.allow_404_for /event_kinds\/\d+$/
+    t.allow_404_for /event_kinds$/
+    t.allow_404_for /groups\/\d+\/member_counts$/
+    # custom return_urls end up like that.
+    t.allow_404_for /^\-?\d+$/
+
     t.crawl_timeout = 5.minutes
     t.crawl
   end

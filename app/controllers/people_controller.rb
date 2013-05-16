@@ -75,13 +75,23 @@ class PeopleController < CrudController
   # POST button, send password instructions
   def send_password_instructions
     SendLoginJob.new(entry, current_user).enqueue!
-    flash.now[:notice] = I18n.t("#{controller_name}.#{action_name}")
-    render 'shared/update_flash'
+    notice = I18n.t("#{controller_name}.#{action_name}")
+    respond_to do |format|
+      format.html { redirect_to group_person_path(group, entry), notice: notice }
+      format.js do
+        flash.now.notice = notice
+        render 'shared/update_flash'
+      end
+    end
   end
 
   # PUT button, ajax
   def primary_group
     entry.update_column :primary_group_id, params[:primary_group_id]
+    respond_to do |format|
+      format.html { redirect_to group_person_path(group, entry) }
+      format.js
+    end
   end
 
   private

@@ -140,6 +140,9 @@ module JublaOst
             quali.qualification_kind = QualificationKind.find(kind_id)
             quali.start_at = Date.new(legacy.JSAktualisierung.to_i)
             quali.origin = legacy.JSKursnr
+            if duration = quali.qualification_kind.validity
+              quali.start_at -= duration.years
+            end
             quali.valid? # set finish_at
             existing = person.qualifications.where(finish_at: quali.finish_at,
                                                    qualification_kind_id: quali.qualification_kind_id)

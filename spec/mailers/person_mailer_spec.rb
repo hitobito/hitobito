@@ -15,7 +15,7 @@ describe Event::ParticipationMailer do
   subject { mail }
   
   its(:to)      { should == [recipient.email] }
-  its(:from)    { should == [sender.email] }
+  its(:reply_to)    { should == [sender.email] }
   its(:subject) { should == 'Willkommen bei der Jubla DB' }
   its(:body)    { should =~ /Hallo Bottom<br\/>/}
   

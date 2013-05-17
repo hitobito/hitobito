@@ -10,7 +10,7 @@ class PersonMailer < ActionMailer::Base
       'login-url'      => "<a href=\"#{login_url(recipient)}\">#{login_url(recipient)}</a>"
     }
 
-    mail to: recipient.email, from: sender.email, subject: content.subject do |format|
+    mail to: recipient.email, reply_to: sender.email, subject: content.subject do |format|
       format.html { render text: content.body_with_values(values) }
     end
   end

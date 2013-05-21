@@ -59,6 +59,11 @@ class TarantulaTest < ActionController::IntegrationTest
     # custom return_urls end up like that.
     t.allow_404_for /^\-?\d+$/
 
+    # sphinx not running
+    t.allow_500_for /full$/
+    # delete qualification is not allowed after role was removed from person
+    t.allow_500_for /groups\/\d+\/people\/\d+\/qualifications\/\d+$/
+
     t.crawl_timeout = 5.minutes
     t.crawl
   end

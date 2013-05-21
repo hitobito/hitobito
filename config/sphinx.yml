@@ -11,7 +11,7 @@ base: &generic
 
 development:
   <<: *generic
-  port: 9312
+  port: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>
 
 test:
   <<: *generic
@@ -20,4 +20,4 @@ test:
 
 production:
   <<: *generic
-  port: 9312
+  port: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>

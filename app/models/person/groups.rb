@@ -58,13 +58,18 @@ module Person::Groups
 
     # scope listing all people with a role in the given layer.
     def in_layer(*groups)
-      joins(roles: :group).where(groups: {layer_group_id: groups.collect(&:layer_group_id) }).uniq
+      joins(roles: :group).
+      where(roles: {deleted_at: nil},
+            groups: {layer_group_id: groups.collect(&:layer_group_id) }).
+      uniq
     end
 
     # scope listing all people with a role in or below the given group.
     def in_or_below(group)
       joins(roles: :group).
-      where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).uniq
+      where(roles: {deleted_at: nil}).
+      where("groups.lft >= :lft AND groups.rgt <= :rgt", lft: group.lft, rgt: group.rgt).
+      uniq
     end
 
     # load people with/out affiliate roles

@@ -13,11 +13,11 @@ class Event::ParticipationConfirmationJob < BaseJob
   
   def approvers
     approver_types = Role.types_with_permission(:approve_applications).collect(&:sti_name)
-    layer_ids = participation.person.groups.collect(&:layer_group_id).uniq
+    layer_ids = participation.person.groups.without_deleted.collect(&:layer_group_id).uniq
     Person.only_public_data.
            joins(roles: :group).
-           where(roles: {type: approver_types}, 
-                         groups: {layer_group_id: layer_ids}).
+           where(roles: {type: approver_types, deleted_at: nil}, 
+                 groups: {layer_group_id: layer_ids}).
            uniq
   end
   

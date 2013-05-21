@@ -1,7 +1,12 @@
 ### application settings
 # add your specific settings here
 
+%if "%{?RPM_APP_NAME}" == ""
 %define app_name     jubla
+%else
+%define app_name     RPM_APP_NAME
+%endif
+
 %define app_version  1.1
 %define ruby_version 1.9.3
 

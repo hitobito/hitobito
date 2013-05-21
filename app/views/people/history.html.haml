@@ -1,15 +1,16 @@
-
 %h2 Rollen
 
 = table(@roles, class: 'table table-striped') do |t|
   - t.attr(:group_id, 'Gruppe')
-  - t.col('Rolle') do |r| 
+  - t.col('Rolle') do |r|
     = r.to_s
   - t.attr(:created_at, 'Von')
   - t.attr(:deleted_at, 'Bis')
 
 %events
-  = grouped_table(@participations_by_event_type, 3) do |participation|
+  = render(layout: 'shared/grouped_table',
+           locals: {grouped_lists: @participations_by_event_type,
+                    column_count: 3}) do |participation|
     %td= participation.event.labeled_link
     %td= participation.list_roles
     %td= participation.event.dates_full

@@ -1,3 +1,4 @@
+# encoding: utf-8
 module JublaOst
   class Base < ActiveRecord::Base
     self.abstract_class = true
@@ -6,7 +7,7 @@ module JublaOst
 
     class << self
       def migrate
-        ActiveRecord::Base.transaction do
+        #ActiveRecord::Base.transaction do
           begin
             sanitize_source
 
@@ -27,7 +28,7 @@ module JublaOst
             puts e.backtrace.join("\n")
             raise e
           end
-        end
+        #end
       end
 
       def cache
@@ -52,6 +53,7 @@ module JublaOst
         sanitize_dates(JublaOst::Person, 'Geburtstag')
         sanitize_emails
         sanitize_kurse
+        sanitize_groups
         remove_duplicate_emails
       end
 
@@ -61,6 +63,10 @@ module JublaOst
           clazz.where("#{attr} LIKE ?", "#{year}-00-00%").
                 update_all("#{attr} = '#{year}-01-01'")
         end
+      end
+
+      def sanitize_groups
+        Schar.find(421).update_column(:Schar, 'Anwärter Camp 2012 - 2')
       end
 
       def sanitize_kurse

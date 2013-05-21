@@ -14,8 +14,8 @@
  *
  */
 
-.profiler-results { 
-  opacity: 0.2; 
+.profiler-results {
+  opacity: 0.2;
   &:hover {
     opacity: 1;
   }
@@ -43,7 +43,7 @@
 #page-header {
   @include clearfix;
   margin: 10px 0 0;
-  
+
   @include responsive(mediaTablet) {
     margin: 10px 20px 0;
   }
@@ -65,7 +65,7 @@
     padding: 0;
     border: 0;
     overflow: hidden;
-    
+
     > li {
       list-style-image: none;
       list-style-type: none;
@@ -77,14 +77,14 @@
       padding-right: 10px;
     }
   }
-  
+
   a {
     line-height: 30px;
   }
   form, input[type="search"] {
     margin-bottom: 0 !important;
   }
-  
+
 }
 .options a, a.link {
   text-decoration: underline;
@@ -106,15 +106,15 @@
 #page {
   padding-bottom: 30px;
   margin: 20px 0 20px;
-  
+
   @include responsive(mediaTablet) {
     margin: 20px 20px;
   }
 
   & > .sheet { margin: 0 20px;}
 }
-.sheet.parent { 
-  padding-bottom: 1px; 
+.sheet.parent {
+  padding-bottom: 1px;
   background: lighten($grayLighter, 1%);
   @include single-box-shadow($grayLight, 0, 2px, 8px);
   .sheet {
@@ -141,17 +141,17 @@
   padding: 16px 20px 20px;
 
   aside {
-    @include responsive(phone, $mediaDesktop) { 
+    @include responsive(phone, $mediaDesktop) {
       margin-top: $vSpace;
     }
     margin-bottom: $vSpace;
   }
 
-  section { 
+  section {
     @include clearfix;
     clear: both;
     margin-top: $vSpace;
-    &:first-child { margin-top:0; } 
+    &:first-child { margin-top:0; }
   }
 
   .breadcrumb {
@@ -169,7 +169,7 @@
   clear: both;
 }
 /* Footer */
-#page-footer { 
+#page-footer {
   padding-top: $vSpace*2;
   clear: both;
 
@@ -203,7 +203,7 @@
 }
 
 // Flash
-#flash {
+#flash .alert {
   clear: both;
 }
 
@@ -211,7 +211,7 @@
   text-align: left;
 }
 
-// Profil 
+// Profil
 .profil, .profil-big {
   background: $white;
   border: 1px solid $grayLight;
@@ -232,6 +232,6 @@
   padding: 2px;
 }
 
-.icon-calendar { 
+.icon-calendar {
   cursor: pointer;
 }

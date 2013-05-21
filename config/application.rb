@@ -64,9 +64,8 @@ module Jubla
     # parameters by using an attr_accessible or attr_protected declaration.
     config.active_record.whitelist_attributes = true
 
-    config.cache_store = :dalli_store, {compress: true}
-
-    config.session_store ActionDispatch::Session::CacheStore, expire_after: 120.minutes
+    config.cache_store = :dalli_store, {compress: true,
+                                        namespace: ENV['RAILS_HOST_NAME'] || 'jubla'}
 
     # Enable the asset pipeline
     config.assets.enabled = true

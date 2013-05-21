@@ -51,19 +51,12 @@ Jubla::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { 
+  config.action_mailer.default_url_options = {
       host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
       protocol: (ssl ? 'https' : 'http')
     }
 
-  # Use Exception Notifier Gem to send exception emails
-  #config.middleware.use ExceptionNotifier,
-  #  :email_prefix => "[JUB] ",
-  #  :sender_address => %{"Jubla Web App" <#{Settings.email.sender}>},
-  #  :exception_recipients => %w{jubla@puzzle.ch}
-  
-
-  # Enable threaded mode 
+  # Enable threaded mode
   # Unless for rake tasks (especially for db:seed)
   config.threadsafe! unless $rails_rake_task
 

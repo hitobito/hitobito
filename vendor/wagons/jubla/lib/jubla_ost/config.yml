@@ -13,33 +13,35 @@ database:
 
 # mapping of the cantons to the group ids of the target db.
 kanton:
-  be: 64
-  lu: 120
-  sg: 143
-  sh: 211
-  uw: 208
-  zh: 67
+  be: 32
+  lu: 4
+  sg: 65
+  sh: 44
+  uw: 41
+  zh: 62
 
 # mapping of tPerson.JSStufe to the qualification kinds
 qualification_kinds:
-  GL: 18  # J+S Leiter LS/T Jugendsport
-  LL: 24  # J+S Leiter LS/T Jugendsport, Lagerleiter
+  GL: 4  # J+S Leiter LS/T Jugendsport
+  LL:    # J+S Leiter LS/T Jugendsport, Lagerleiter
+    - 4
+    - 6
   FK:     # nil
   EX:
-    - 1   # J+S Experte LS/T
-    - 25  # Zusatz Kursleiter
-  VA: 1   # J+S Experte LS/T
-  ET: 26  # Einstufungstest
+    - 10  # J+S Experte LS/T
+    - 12  # Zusatz Kursleiter
+  VA: 10  # J+S Experte LS/T
+  ET: 13  # Einstufungstest
 
 # mapping of tKurs.stufe to the event kind
 event_kinds:
-  GK: 15 # GK
-  GL: 5  # GLK
-  LL: 4  # SLK
-  FK: 16 # FK
+  GK: 11 # GK
+  GL: 4  # GLK
+  LL: 6  # SLK
+  FK: 23 # FK
   VA:    # nil
-  CO: 12 # CoK
-  ET: 17 # ET
+  CO: 15 # CoK
+  ET: 12 # ET
 
 
 # development

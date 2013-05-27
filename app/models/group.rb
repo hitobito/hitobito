@@ -168,12 +168,18 @@ class Group < ActiveRecord::Base
 
   # siblings with the same type
   def sister_groups
-    Group.where(parent_id: parent_id, type: type).where('id <> ?', id).without_deleted
+    self_and_sister_groups.where('id <> ?', id)
+  end
+
+  def self_and_sister_groups
+    Group.without_deleted.
+          where(parent_id: parent_id, type: type)
   end
 
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
-    Group.joins("LEFT JOIN groups AS sister_groups " +
+    Group.without_deleted.
+          joins("LEFT JOIN groups AS sister_groups " +
                 "ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt").
           where("sister_groups.type = ?", type).
           where(parent_id? ? ["sister_groups.parent_id = ?", parent_id] : "sister_groups.parent_id IS NULL")

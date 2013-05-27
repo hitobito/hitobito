@@ -51,13 +51,7 @@ class EventsController < CrudController
 
   def load_sister_groups
     master = @event.groups.first
-    @groups = master.parent_id? ?
-                master.parent.children.
-                              without_deleted.
-                              where(type: master.type).
-                              where('groups.id <> ?', group.id).
-                              reorder(:name) :
-                []
+    @groups = master.self_and_sister_groups.reorder(:name)
     # union to include assigned deleted events
     @groups = (@groups | @event.groups) - [group]
   end

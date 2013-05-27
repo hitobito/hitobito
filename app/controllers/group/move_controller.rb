@@ -1,9 +1,9 @@
 # encoding: utf-8
 class Group::MoveController < ApplicationController
-  
+
   decorates :group
   helper_method :group
-  
+
   before_filter :group
   before_filter :authorize
 
@@ -12,9 +12,9 @@ class Group::MoveController < ApplicationController
   end
 
   def perform
-    if target 
+    if target && mover.candidates.include?(target)
       authorize!(:create, target)
-      
+
       if mover.perform(target)
         flash[:notice] = "#{group} wurde nach #{target} verschoben."
       else
@@ -28,17 +28,18 @@ class Group::MoveController < ApplicationController
   end
 
   private
-  
+
   def group
     @group ||= Group.find(params[:id])
   end
 
   def candidates
     @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
-    group_by { |candidate| candidate.class.label }
+                                   group_by { |candidate| candidate.class.label }
+    @candidates.each {|type, groups| groups.sort_by(&:name) }
 
-    if @candidates.empty? 
-      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder ' + 
+    if @candidates.empty?
+      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder ' +
                       'Du verfügst nicht über die nötigen Berechtigungen.'
       redirect_to group_path(group)
     end
@@ -51,7 +52,7 @@ class Group::MoveController < ApplicationController
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) && Group.find(params[:move][:target_group_id])
   end
-  
+
   def authorize
     authorize!(:update, group)
   end

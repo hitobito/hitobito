@@ -41,7 +41,7 @@ module Role::Types
       all_types.select(&:affiliate)
     end
 
-    # Role types that are external
+    # Role types that are external.
     def external_types
       all_types.select(&:external?)
     end

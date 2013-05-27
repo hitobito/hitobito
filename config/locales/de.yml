@@ -280,7 +280,7 @@ de:
       group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
       group_read: Lesen auf der Gruppe.
       contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
-      qualify: Qualifizieren aller Kursteilnehmenden dieser Ebene.
+      qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
       approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 
   # view keys

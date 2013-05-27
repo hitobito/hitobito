@@ -64,7 +64,7 @@ class TarantulaTest < ActionController::IntegrationTest
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for /groups\/\d+\/people\/\d+\/qualifications\/\d+$/
 
-    t.crawl_timeout = 5.minutes
+    t.crawl_timeout = 10.minutes
     t.crawl
   end
 end

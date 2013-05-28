@@ -25,7 +25,6 @@
 #  participant_count      :integer          default(0)
 #  application_contact_id :integer
 #  external_applications  :boolean          default(FALSE)
-#  condition_id           :integer
 #
 
 class Event < ActiveRecord::Base

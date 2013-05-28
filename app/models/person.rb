@@ -34,16 +34,6 @@
 #  creator_id             :integer
 #  updater_id             :integer
 #  primary_group_id       :integer
-#  name_mother            :string(255)
-#  name_father            :string(255)
-#  nationality            :string(255)
-#  profession             :string(255)
-#  bank_account           :string(255)
-#  ahv_number             :string(255)
-#  ahv_number_old         :string(255)
-#  j_s_number             :string(255)
-#  insurance_company      :string(255)
-#  insurance_number       :string(255)
 #
 
 class Person < ActiveRecord::Base

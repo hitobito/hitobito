@@ -46,9 +46,4 @@ public/uploads
 # ama custom project setup
 TAGS
 /.vimrc
-vendor/wagons/jubla/TAGS
 /todo.tasks
-vendor/wagons/jubla/config/environment.rb
-vendor/wagons/jubla/config/application.rb
-vendor/wagons/jubla/config/boot.rb
-vendor/wagons/jubla/config/environments

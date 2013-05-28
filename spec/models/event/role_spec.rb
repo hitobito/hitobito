@@ -1,11 +1,15 @@
 # == Schema Information
 #
-# Table name: event_roles
+# Table name: roles
 #
-#  id               :integer          not null, primary key
-#  type             :string(255)      not null
-#  participation_id :integer          not null
-#  label            :string(255)
+#  id         :integer          not null, primary key
+#  person_id  :integer          not null
+#  group_id   :integer          not null
+#  type       :string(255)      not null
+#  label      :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :datetime
 #
 
 require 'spec_helper'

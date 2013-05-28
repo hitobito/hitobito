@@ -17,7 +17,7 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module Jubla
+module Hitobito
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -65,7 +65,7 @@ module Jubla
     config.active_record.whitelist_attributes = true
 
     config.cache_store = :dalli_store, {compress: true,
-                                        namespace: ENV['RAILS_HOST_NAME'] || 'jubla'}
+                                        namespace: ENV['RAILS_HOST_NAME'] || 'hitobito'}
 
     # Enable the asset pipeline
     config.assets.enabled = true

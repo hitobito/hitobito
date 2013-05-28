@@ -44,7 +44,7 @@ describe Import::CsvParser do
   context "two rows with empty field" do
     let(:data) { File.read(path(:two_rows)) }
     its(:headers) { should eq ["Vorname", "Nachname", "Geburtsdatum", "Ort", "Email"]  }
-    its([1]) { should eq CSV::Row.new(subject.headers, ["Helin", "Fietz","","Bern","fietz.helin@jubla.example.com"]) }
+    its([1]) { should eq CSV::Row.new(subject.headers, ["Helin", "Fietz","","Bern","fietz.helin@hitobito.example.com"]) }
   end
 
   context "empty header" do

@@ -1,9 +1,9 @@
 # All settings may be overriden in wagons!
 
 application:
-  name: hito.bito
+  name: hito.bito  # set same name in email.sender and .mass_recipient
   footer:
-    #logo_image: logo_jubla.png
+    #logo_image: logo_hitobito.png
     logo_url: http://puzzle.ch
     links: {}
 

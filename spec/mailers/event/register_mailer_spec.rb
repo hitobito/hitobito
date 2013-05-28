@@ -17,7 +17,7 @@ describe Event::RegisterMailer do
 
   context "headers" do
     subject { mail }
-    its(:subject) { should eq "Anmeldelink für Jubla Anlass" }
+    its(:subject) { should eq "Anmeldelink für Anlass" }
     its(:to)      { should eq(["fooo@example.com"]) }
     its(:from)    { should eq(["noreply@localhost"]) }
   end

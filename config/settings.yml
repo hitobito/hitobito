@@ -1,7 +1,7 @@
 # All settings may be overriden in wagons!
 
 application:
-  name: jubla.db
+  name: hito.bito
   footer:
     #logo_image: logo_jubla.png
     logo_url: http://puzzle.ch
@@ -27,14 +27,16 @@ social_account:
     - Webseite
     - Andere
 
-<% mail_domain = ENV['RAILS_HOST_NAME'].presence || 'localhost' %>
+<% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
+                 ENV['RAILS_HOST_NAME'].presence ||
+                 'localhost' %>
 email:
   # Sender for all emails sent by the application
-  sender: <%= "jubla.db <noreply@#{mail_domain}>" %>
+  sender: <%= "hito.bito <noreply@#{mail_domain}>" %>
 
   # If mass emails are sent, this recipient is used in the to field,
   # while the actual recipients go in the bcc field.
-  mass_recipient: <%= "jubla.db <noreply@#{mail_domain}>" %>
+  mass_recipient: <%= "hito.bito <noreply@#{mail_domain}>" %>
 
   # domain where mailing lists are located
   list_domain: <%= mail_domain %>
@@ -53,7 +55,7 @@ email:
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application, not the customers.
-root_email: jubla@puzzle.ch
+root_email: hitobito@puzzle.ch
 
 # Presets for PDF labels
 pdf:

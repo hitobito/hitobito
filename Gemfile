@@ -102,9 +102,9 @@ group :metrics do
   gem 'simplecov-rcov'
 end
 
-# Load all wagons found in vendor/wagons/*
-group :development, :production do
-    Dir[File.expand_path('../vendor/wagons/**/*.gemspec', __FILE__)].each do |spec|
-        gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
-    end
-end
+# Include the wagon gems you want attached in Wagonfile.
+# Do not check Wagonfile into source control.
+#
+# To create a Wagonfile suitable for development, run 'rake wagon:file'
+wagonfile = File.expand_path('../Wagonfile', __FILE__)
+eval(File.read(wagonfile)) if File.exist?(wagonfile)

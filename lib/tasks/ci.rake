@@ -91,7 +91,7 @@ task :mysql do
   ENV['RAILS_DB_SOCKET']   = '/var/run/mysqld/mysqld.sock'
 end
 
-namespace :jubla do
+namespace :hitobito do
   desc "Print all groups, roles and permissions"
   task :permissions => :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|

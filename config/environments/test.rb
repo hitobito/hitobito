@@ -6,7 +6,7 @@ Jubla::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
-  
+
   config.cache_store = :memory_store
 
   # Configure static asset server for tests with Cache-Control for performance
@@ -37,4 +37,6 @@ Jubla::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
 end

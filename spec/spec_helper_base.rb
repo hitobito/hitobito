@@ -17,6 +17,8 @@ require "cancan/matchers"
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each {|f| require f }
 
+# Add test locales
+Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -36,12 +38,12 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
-  
+
   # This will pick up all of the fixtures defined in spec/fixtures into your
   # database and you'll be able to test with some sample data
   # (eg. Countries, States, etc.)
   #config.global_fixtures = :all
-    
+
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
@@ -52,23 +54,23 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
-  
+
   config.include(MailerMacros)
   config.include(EventMacros)
   config.include Devise::TestHelpers, :type => :controller
   config.include RequestHelpers, type: :request
-  
+
   config.filter_run_excluding type: 'request', performance: true
-  
+
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql
   end
-  
+
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
   end
-  
+
   config.before(:each) do
     ActionMailer::Base.deliveries = []
   end
@@ -79,5 +81,5 @@ RSpec.configure do |config|
     c.stub(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
-  
+
 end

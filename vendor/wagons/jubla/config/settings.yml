@@ -12,3 +12,15 @@ application:
 census:
   default_finish_month: 10
   default_finish_day: 31
+
+email:
+  # Sender for all emails sent by the application
+  sender: <%= ENV['RAILS_HOST_NAME'].present? ?
+                 "jubla.db <noreply@#{ENV['RAILS_HOST_NAME']}>" :
+                 'jubla.db <noreply@localhost>' %>
+
+  # If mass emails are sent, this recipient is used in the to field,
+  # while the actual recipients go in the bcc field.
+  mass_recipient: <%= ENV['RAILS_HOST_NAME'].present? ?
+                        "jubla.db <noreply@#{ENV['RAILS_HOST_NAME']}>" :
+                        'jubla.db <noreply@localhost>' %>

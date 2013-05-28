@@ -1,7 +1,7 @@
-jQuery(function () {
- 
+jQuery(function ($) {
+
     $.datepicker.regional["en"] = {}, //datepicker defaults are in English!
- 
+
     $.datepicker.regional['de'] = {
         closeText:   "Schliessen",
         prevText:    "Voriger Monat",

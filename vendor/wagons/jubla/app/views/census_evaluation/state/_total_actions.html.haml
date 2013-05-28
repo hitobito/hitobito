@@ -1,8 +1,0 @@
--if @group_counts[group.id].nil? && can?(:remind_census, @group)
-  = action_button('Erinnern',
-                  census_state_remind_group_path(@group, flock_id: group.id),
-                  nil,
-                  class: 'btn-small',
-                  id: "reminder_#{group.id}",
-                  data: {remote: true, method: :post, disable_with: 'Erinnern'})
-

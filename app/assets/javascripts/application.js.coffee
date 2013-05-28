@@ -21,6 +21,11 @@
 # scope for global functions
 window.Application ||= {}
 
+# add trim function for older browsers
+if !String.prototype.trim
+  String.prototype.trim = () -> this.replace(/^\s+|\s+$/g, '')
+
+
 replaceContent = (e, data, status, xhr) ->
   replace = $(this).data('replace')
   el = if replace is true then $(this).closest('form') else $("##{replace}")

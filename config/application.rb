@@ -86,7 +86,9 @@ module Jubla
       ActionMailer::Base.default from: Settings.email.sender
 
       # Assert the mail relay job is scheduled on every restart.
-      MailRelayJob.new.schedule if Delayed::Job.table_exists?
+      if Delayed::Job.table_exists? && Settings.email.retriever.config.address
+        MailRelayJob.new.schedule
+      end
     end
 
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|

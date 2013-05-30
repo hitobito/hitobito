@@ -5,7 +5,11 @@ if [ -z $BUILD_NUMBER ]; then
   exit 1
 fi
 git tag -a build_$BUILD_NUMBER -m "automatic build tag $BUILD_NUMBER"
-NAME=`grep -E '^%define app_name' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+if [ -z $RPM_APP_NAME ]; then
+  NAME=$RPM_APP_NAME
+else
+  NAME=`grep -E '^%define app_name' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+fi
 VERSION=`grep -E '^%define app_version' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
 DIR=$NAME-$VERSION.$BUILD_NUMBER
 TAR=$DIR.tar.gz

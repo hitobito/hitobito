@@ -7,7 +7,7 @@
 %define app_name     RPM_APP_NAME
 %endif
 
-%define app_version  1.1
+%define app_version  1.2
 %define ruby_version 1.9.3
 
 ### optional libs

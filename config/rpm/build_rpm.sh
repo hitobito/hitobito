@@ -6,9 +6,9 @@ if [ -z $BUILD_NUMBER ]; then
 fi
 git tag -a build_$BUILD_NUMBER -m "automatic build tag $BUILD_NUMBER"
 if [ -z $RPM_APP_NAME ]; then
-  NAME=$RPM_APP_NAME
-else
   NAME=`grep -E '^%define app_name' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+else
+  NAME=$RPM_APP_NAME
 fi
 VERSION=`grep -E '^%define app_version' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
 DIR=$NAME-$VERSION.$BUILD_NUMBER

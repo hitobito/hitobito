@@ -19,4 +19,4 @@ email:
 
   # If mass emails are sent, this recipient is used in the to field,
   # while the actual recipients go in the bcc field.
-  mass_recipient: noreply@db.jubla.ch
+  mass_recipient: <%= "jubla.db <noreply@#{ENV['RAILS_HOST_NAME'].presence || 'localhost'}>" %>

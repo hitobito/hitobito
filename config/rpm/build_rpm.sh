@@ -20,9 +20,9 @@ TAR=$DIR.tar.gz
 mkdir $DIR
 mkdir -p $DIR/vendor/wagons
 
-(cd hitobito; git archive --format=tar build_$BUILD_NUMBER | (cd $DIR && tar -xf -))
+(cd hitobito; git archive --format=tar build_$BUILD_NUMBER) | (cd $DIR && tar -xf -)
 for dir in hitobito_*; do
-	(cd $dir; git archive --format=tar build_$BUILD_NUMBER | (cd $DIR/vendor/wagons/$dir && tar -xf -))
+	(cd $dir; git archive --format=tar build_$BUILD_NUMBER) | (cd $DIR/vendor/wagons/$dir && tar -xf -)
 done
 
 # comment the next line out if your project includes submodules

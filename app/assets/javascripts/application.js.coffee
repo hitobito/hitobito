@@ -12,7 +12,19 @@
 #= require jquery
 #= require jquery_ujs
 #= require jquery-ui
-#= require bootstrap
+# require bootstrap-transition
+# require bootstrap-affix
+#= require bootstrap-alert
+#= require bootstrap-button
+# require bootstrap-carousel
+# require bootstrap-collapse
+#= require bootstrap-dropdown
+# require bootstrap-modal
+# require bootstrap-scrollspy
+# require bootstrap-tab
+#= require bootstrap-tooltip
+# require bootstrap-popover
+#= require bootstrap-typeahead
 #= require jquery_nested_form
 #= require jquery-ui-datepicker-i18n
 #= require_self

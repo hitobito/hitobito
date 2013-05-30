@@ -19,7 +19,7 @@
 
 // Base CSS
 @import "bootstrap/type";
-@import "bootstrap/code";
+//@import "bootstrap/code";
 @import "bootstrap/forms";
 @import "bootstrap/tables";
 
@@ -40,20 +40,20 @@
 @import "bootstrap/navbar";
 @import "bootstrap/breadcrumbs";
 @import "bootstrap/pagination";
-@import "bootstrap/pager";
+//@import "bootstrap/pager";
 
 // Components: Popovers
-@import "bootstrap/modals";
+//@import "bootstrap/modals";
 @import "bootstrap/tooltip";
-@import "bootstrap/popovers";
+//@import "bootstrap/popovers";
 
 // Components: Misc
-@import "bootstrap/thumbnails";
+//@import "bootstrap/thumbnails";
 @import "bootstrap/labels-badges";
-@import "bootstrap/progress-bars";
-@import "bootstrap/accordion";
-@import "bootstrap/carousel";
-@import "bootstrap/hero-unit";
+//@import "bootstrap/progress-bars";
+//@import "bootstrap/accordion";
+//@import "bootstrap/carousel";
+//@import "bootstrap/hero-unit";
 
 // Utility classes
 @import "bootstrap/utilities"; // Has to be last to override when necessary

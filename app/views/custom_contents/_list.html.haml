@@ -1,1 +1,2 @@
-= crud_table :label, :subject, :body
+= crud_table :label, :subject, :body do |t|
+  - action_col_edit(t)

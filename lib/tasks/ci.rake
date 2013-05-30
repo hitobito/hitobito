@@ -33,11 +33,12 @@ task :brakeman do
   ignores = %w(app/views/people_filters/_form.html.haml
                app/models/mailing_list.rb)
   begin
-    Timeout.timeout(120) do
-      sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')}"
+    Timeout.timeout(300) do
+      sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')} --no-progress"
     end
   rescue Timeout::Error => e
     puts "\nBrakeman took too long. Aborting."
+    FileUtils.touch('brakeman-output.tabs')
   end
 end
 

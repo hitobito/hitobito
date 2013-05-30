@@ -1,7 +1,7 @@
 ### application settings
 # add your specific settings here
 
-%define app_name     RPM_APP_NAME
+%define app_name     RPM_NAME
 
 %define app_version  1.2
 %define ruby_version 1.9.3

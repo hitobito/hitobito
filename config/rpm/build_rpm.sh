@@ -1,12 +1,11 @@
 #!/bin/bash -e
 
-if [[ (-z $BUILD_NUMBER) || (-z $RPM_APP_NAME) ]]; then
-  echo "Usage: BUILD_NUMBER=123 RPM_APP_NAME=hitobito build_rpm.sh"
+if [[ (-z $BUILD_NUMBER) || (-z $RPM_NAME) ]]; then
+  echo "Usage: BUILD_NUMBER=123 RPM_NAME=hitobito build_rpm.sh"
   exit 1
 fi
 
 # set variables
-NAME=$RPM_APP_NAME
 VERSION=`grep -E '^%define app_version' hitobito/config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
 
 # tag all repositories
@@ -15,7 +14,7 @@ for dir in hitobito*; do
 done
 
 # compose sources
-DIR=$NAME-$VERSION.$BUILD_NUMBER
+DIR=$RPM_NAME-$VERSION.$BUILD_NUMBER
 TAR=$DIR.tar.gz
 mkdir -p sources/vendor/wagons
 
@@ -30,7 +29,7 @@ done
 
 # config sources
 sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ sources/config/rpm/*.spec
-sed -i s/RPM_APP_NAME/$RPM_APP_NAME/ sources/config/rpm/*.spec
+sed -i s/RPM_NAME/$RPM_NAME/ sources/config/rpm/*.spec
 mv -f sources/config/rpm/Wagonfile sources 
 
 # tar sources

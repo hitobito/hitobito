@@ -5,37 +5,37 @@ if [[ (-z $BUILD_NUMBER) || (-z $RPM_APP_NAME) ]]; then
   exit 1
 fi
 
+# set variables
+NAME=$RPM_APP_NAME
+VERSION=`grep -E '^%define app_version' hitobito/config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+
 # tag all repositories
 for dir in hitobito*; do
 	(cd $dir; git tag -a build_$BUILD_NUMBER -m "automatic build tag $BUILD_NUMBER")
 done
 
-# set variables
-NAME=$RPM_APP_NAME
-VERSION=`grep -E '^%define app_version' hitobito/config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
-
 # compose sources
-DIR=$NAME-$VERSION.$BUILD_NUMBER
-TAR=$DIR.tar.gz
-mkdir $DIR
-mkdir -p $DIR/vendor/wagons
+TAR=$NAME-$VERSION.$BUILD_NUMBER.tar.gz
+mkdir -p sources/vendor/wagons
 
-(cd hitobito; git archive --format=tar build_$BUILD_NUMBER) | (cd $DIR && tar -xf -)
+echo 'git archive'
+(cd hitobito; git archive --format=tar build_$BUILD_NUMBER) | (cd sources && tar -xf -)
 for dir in hitobito_*; do
-	(cd $dir; git archive --format=tar build_$BUILD_NUMBER) | (cd $DIR/vendor/wagons/$dir && tar -xf -)
+    mkdir -p sources/vendor/wagons/$dir
+	(cd $dir; git archive --format=tar build_$BUILD_NUMBER) | (cd sources/vendor/wagons/$dir && tar -xf -)
 done
 
 # comment the next line out if your project includes submodules
-#(git submodule --quiet foreach "pwd | awk -v dir=`pwd`/ '{sub(dir,\"\"); print}'") | xargs tar c | (cd $DIR && tar -xf -)
+#(git submodule --quiet foreach "pwd | awk -v dir=`pwd`/ '{sub(dir,\"\"); print}'") | xargs tar c | (cd sources && tar -xf -)
 
 # config sources
-sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ $DIR/config/rpm/*.spec
-sed -i s/RPM_APP_NAME/$RPM_APP_NAME/ $DIR/config/rpm/*.spec
-mv -f $DIR/config/rpm/Wagonfile $DIR 
+sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ sources/config/rpm/*.spec
+sed -i s/RPM_APP_NAME/$RPM_APP_NAME/ sources/config/rpm/*.spec
+mv -f sources/config/rpm/Wagonfile sources 
 
 # tar sources
-tar czf $TAR $DIR
-rm -rf $DIR
+tar czf $TAR sources
+rm -rf sources
 
 # build source rpm
 build=`rpmbuild -ts $TAR`

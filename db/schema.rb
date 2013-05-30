@@ -155,9 +155,9 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "deleter_id"
-    t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
-    t.index ["parent_id"], :name => "index_groups_on_parent_id"
     t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
+    t.index ["parent_id"], :name => "index_groups_on_parent_id"
+    t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
   end
 
   create_table "label_formats", :force => true do |t|
@@ -215,8 +215,8 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "primary_group_id"
-    t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
     t.index ["email"], :name => "index_people_on_email", :unique => true
+    t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
   end
 
   create_table "people_filters", :force => true do |t|
@@ -265,8 +265,8 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "deleted_at"
-    t.index ["type"], :name => "index_roles_on_type"
     t.index ["person_id", "group_id"], :name => "index_roles_on_person_id_and_group_id"
+    t.index ["type"], :name => "index_roles_on_type"
   end
 
   create_table "sessions", :force => true do |t|
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.text     "data"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.index ["updated_at"], :name => "index_sessions_on_updated_at"
     t.index ["session_id"], :name => "index_sessions_on_session_id"
+    t.index ["updated_at"], :name => "index_sessions_on_updated_at"
   end
 
   create_table "social_accounts", :force => true do |t|

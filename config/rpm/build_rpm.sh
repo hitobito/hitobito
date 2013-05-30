@@ -15,10 +15,10 @@ for dir in hitobito*; do
 done
 
 # compose sources
-TAR=$NAME-$VERSION.$BUILD_NUMBER.tar.gz
+DIR=$NAME-$VERSION.$BUILD_NUMBER
+TAR=$DIR.tar.gz
 mkdir -p sources/vendor/wagons
 
-echo 'git archive'
 (cd hitobito; git archive --format=tar build_$BUILD_NUMBER) | (cd sources && tar -xf -)
 for dir in hitobito_*; do
     mkdir -p sources/vendor/wagons/$dir
@@ -34,8 +34,9 @@ sed -i s/RPM_APP_NAME/$RPM_APP_NAME/ sources/config/rpm/*.spec
 mv -f sources/config/rpm/Wagonfile sources 
 
 # tar sources
-tar czf $TAR sources
-rm -rf sources
+mv sources $DIR
+tar czf $TAR $DIR
+rm -rf $DIR
 
 # build source rpm
 build=`rpmbuild -ts $TAR`

@@ -1,11 +1,7 @@
 ### application settings
 # add your specific settings here
 
-%if "%{?RPM_APP_NAME}" == ""
-%define app_name     hitobito
-%else
 %define app_name     RPM_APP_NAME
-%endif
 
 %define app_version  1.2
 %define ruby_version 1.9.3
@@ -171,7 +167,7 @@ echo "# Reindex sphinx for %{name}
 
 export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
-%{bundle_cmd} install --local --deployment --without %{bundle_without_groups}
+%{bundle_cmd} install --local --path vendor/bundle --without %{bundle_without_groups}
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake assets:precompile
 
 # cleanup log and tmp and db we don't want them in

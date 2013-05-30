@@ -1,27 +1,43 @@
 #!/bin/bash -e
 
-if [ -z $BUILD_NUMBER ]; then
-  echo "Usage: BUILD_NUMBER=123 build_rpm.sh"
+if [[ (-z $BUILD_NUMBER) || (-z $RPM_APP_NAME) ]]; then
+  echo "Usage: BUILD_NUMBER=123 RPM_APP_NAME=hitobito build_rpm.sh"
   exit 1
 fi
-git tag -a build_$BUILD_NUMBER -m "automatic build tag $BUILD_NUMBER"
-if [ -z $RPM_APP_NAME ]; then
-  NAME=`grep -E '^%define app_name' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
-else
-  NAME=$RPM_APP_NAME
-fi
-VERSION=`grep -E '^%define app_version' config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+
+# tag all repositories
+for dir in hitobito*; do
+	(cd $dir; git tag -a build_$BUILD_NUMBER -m "automatic build tag $BUILD_NUMBER")
+done
+
+# set variables
+NAME=$RPM_APP_NAME
+VERSION=`grep -E '^%define app_version' hitobito/config/rpm/*.spec | head -n 1 | awk '{ print $3 }'`
+
+# compose sources
 DIR=$NAME-$VERSION.$BUILD_NUMBER
 TAR=$DIR.tar.gz
 mkdir $DIR
-git archive --format=tar build_$BUILD_NUMBER | (cd $DIR && tar -xf -)
+mkdir -p $DIR/vendor/wagons
+
+(cd hitobito; git archive --format=tar build_$BUILD_NUMBER | (cd $DIR && tar -xf -))
+for dir in hitobito_*; do
+	(cd $dir; git archive --format=tar build_$BUILD_NUMBER | (cd $DIR/vendor/wagons/$dir && tar -xf -))
+done
 
 # comment the next line out if your project includes submodules
 #(git submodule --quiet foreach "pwd | awk -v dir=`pwd`/ '{sub(dir,\"\"); print}'") | xargs tar c | (cd $DIR && tar -xf -)
 
+# config sources
 sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ $DIR/config/rpm/*.spec
+sed -i s/RPM_APP_NAME/$RPM_APP_NAME/ $DIR/config/rpm/*.spec
+mv -f $DIR/config/rpm/Wagonfile $DIR 
+
+# tar sources
 tar czf $TAR $DIR
 rm -rf $DIR
+
+# build source rpm
 build=`rpmbuild -ts $TAR`
 if [ $? -gt 0 ]; then
   echo "Failed building SRPM"
@@ -36,6 +52,7 @@ if [ -z $BUILD_PLATFORMS ]; then
   BUILD_PLATFORMS='epel-6-x86_64'
 fi
 
+# notification trap function
 function notifyFailure {
   if [ $? -gt 0 ]; then
     echo "Failed building RPM for $plat - See above for issues. Below we provide you with the logs from mock"
@@ -54,6 +71,7 @@ function notifyFailure {
 }
 trap notifyFailure EXIT
 
+# build rpms
 for plat in $BUILD_PLATFORMS; do
   eval "/usr/bin/mock -r $plat --rebuild $build_flags $SRPM"
 done

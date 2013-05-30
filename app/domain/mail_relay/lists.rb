@@ -1,7 +1,16 @@
 module MailRelay
   class Lists < Base
 
+    SENDER_SUFFIX = '-bounces'
+
     self.mail_domain = Settings.email.list_domain
+
+    class << self
+      def personal_return_path(list_name, sender_email)
+        # recipient format (before @) must match regexp in #reject_not_existing
+        "#{list_name}#{SENDER_SUFFIX}+#{sender_email.gsub('@', '=')}@#{mail_domain}"
+      end
+    end
 
     # If the email sender was not allowed to post messages, this method is called.
     def reject_not_allowed
@@ -16,11 +25,11 @@ module MailRelay
     # If the email is sent to an address that is not a valid relay, this method is called.
     # Forwards bounce messages to the original sender
     def reject_not_existing
-      data = envelope_receiver_name.match(/^(.+)\-bounces\+(.+=.+)$/)
+      data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
       if data && MailingList.where(mail_name: data[1]).exists?
         message.to = data[2].gsub('=', '@')
 
-        env_sender = "#{data[1]}-bounces@#{mail_domain}"
+        env_sender = "#{data[1]}#{SENDER_SUFFIX}@#{mail_domain}"
         message.sender = env_sender
         message.smtp_envelope_from = env_sender
 
@@ -60,7 +69,7 @@ module MailRelay
     end
 
     def envelope_sender
-      "#{envelope_receiver_name}-bounces+#{sender_email.gsub('@', '=')}@#{mail_domain}"
+      self.class.personal_return_path(envelope_receiver_name, sender_email)
     end
 
     private

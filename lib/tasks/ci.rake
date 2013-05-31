@@ -31,6 +31,7 @@ desc "Run brakeman"
 task :brakeman do
   # some files seem to cause brakeman to hang. ignore them
   ignores = %w(app/views/people_filters/_form.html.haml
+               app/views/csv_imports/define_mapping.html.haml
                app/models/mailing_list.rb)
   begin
     Timeout.timeout(300) do

@@ -9,10 +9,6 @@ def sphinx_environment(*tables, &block)
       DatabaseCleaner.strategy = :truncation, {:only => tables}
       ThinkingSphinx::Test.init
     end
-    
-    before(:each) do
-      ThinkingSphinx::Test.index
-    end
 
     around(:each) do |example|
       ThinkingSphinx::Test.run do
@@ -33,4 +29,15 @@ def sphinx_environment(*tables, &block)
       obj.use_transactional_fixtures = transactional
     end
   end
+end
+
+def index_sphinx
+  ThinkingSphinx::Test.index
+  # Wait for index to finish. If entries are not found, probably increase the sleep period.
+  sleep 1
+  sleep 0.25 until index_finished?
+end
+
+def index_finished?
+  Dir[Rails.root.join('db', 'sphinx', 'test', '*.{new,tmp}.*')].empty?
 end

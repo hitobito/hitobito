@@ -191,18 +191,26 @@ class ListController < ApplicationController
   # Sort functionality for the index table.
   # Extracted into an own module for convenience.
   module Sort
+    extend ActiveSupport::Concern
+
     # Adds a :sort_mappings class attribute.
-    def self.included(controller)
+    included do
       # Define a map of (virtual) attributes to SQL order expressions.
       # May be used for sorting table columns that do not appear directly
       # in the database table. E.g., map :city_id => 'cities.name' to
       # sort the displayed city names.
-      controller.class_attribute :sort_mappings
-      controller.sort_mappings = {}
+      class_attribute :sort_mappings_with_indifferent_access
+      self.sort_mappings = {}
 
-      controller.helper_method :sortable?
+      helper_method :sortable?
 
-      controller.alias_method_chain :list_entries, :sort
+      alias_method_chain :list_entries, :sort
+    end
+
+    module ClassMethods
+      def sort_mappings=(hash)
+        self.sort_mappings_with_indifferent_access = hash.with_indifferent_access
+      end
     end
 
     private
@@ -218,7 +226,7 @@ class ListController < ApplicationController
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      col = sort_mappings[params[:sort]] ||
+      col = sort_mappings_with_indifferent_access[params[:sort]] ||
             "#{model_class.table_name}.#{params[:sort]}"
       Array(col).collect {|c| "#{c} #{sort_dir}" }.join(", ")
     end
@@ -231,11 +239,7 @@ class ListController < ApplicationController
     # Returns true if the passed attribute is sortable.
     def sortable?(attr)
       model_class.column_names.include?(attr.to_s) ||
-      sort_mappings.include?(attr)
-    end
-
-    def sort_mappings
-      self.class.sort_mappings.with_indifferent_access
+      sort_mappings_with_indifferent_access.include?(attr)
     end
   end
 

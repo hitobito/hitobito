@@ -1,12 +1,13 @@
 module JublaJubla
   class Wagon < Rails::Engine
     include Wagons::Wagon
-    
+
     # Set the required application version.
     app_requirement '>= 0'
 
     # Add a load path for this specific wagon
-    config.autoload_paths += %W( #{config.root}/app/domain
+    config.autoload_paths += %W( #{config.root}/app/abilities
+                                 #{config.root}/app/domain
                                  #{config.root}/app/jobs
                                )
 
@@ -15,25 +16,32 @@ module JublaJubla
       Person.send :include, Jubla::Person
       Group.send  :include, Jubla::Group
       Role.send   :include, Jubla::Role
-      Ability.send :include, Jubla::Ability
       Event::Course.send :include, Jubla::Event::Course
       Event::Application.send :include, Jubla::Event::Application
       Event::Kind.send :include, Jubla::Event::Kind
-      
+
+      Ability.send :include, Jubla::Ability
+
+      GroupAbility.send :include, Jubla::GroupAbility
+      SimpleAbility.send :include, Jubla::SimpleAbility
+
+      # load this class after all abilities have been defined
+      AbilityNew.register Event::Course::ConditionAbility
+
       GroupsController.send :include, Jubla::GroupsController
       EventsController.send :include, Jubla::EventsController
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       Event::RegisterController.send :include, Jubla::Event::RegisterController
-      
+
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
       EventDecorator.send :include, Jubla::EventDecorator
-      
+
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'
-      
+
       FilterNavigation::People.send :include, Jubla::FilterNavigation::People
     end
-    
+
     initializer "jubla.add_settings" do |app|
       Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
       Settings.reload!

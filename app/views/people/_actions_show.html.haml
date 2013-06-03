@@ -1,14 +1,14 @@
 - if can?(:edit, entry)
   = button_action_edit
-  
+
 = dropdown_people_export(can?(:show_full, entry))
 
-- if can?(:send_password_instructions, entry)
+- if entry.email? && can?(:send_password_instructions, entry)
   = action_button('Login schicken',
                   send_password_instructions_group_person_path(parent, entry),
                   :envelope,
                   remote: true,
                   method: :post)
-                  
+
 - if entry == current_user
   = action_button "Passwort #{entry.encrypted_password? ? "ändern" : "setzen"}", edit_person_registration_path

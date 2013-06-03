@@ -1,19 +1,20 @@
 - title('Verfügbare Kurse')
+- manager = can?(:manage_courses, Event)
 
 - content_for :toolbar do
-  - if can?(:manage_courses, current_user)
+  - if manager
     = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, year, group_id))
 
 = render 'shared/page_per_year', paging_params: group_id.to_i > 0 ? { group_id: group_id } : {}
 
 #main
   %section
-    = grouped_table(@courses_by_kind, can?(:manage_courses, current_user) ? 4 : 3) do |event|
+    = grouped_table(@courses_by_kind, manager) ? 4 : 3) do |event|
       %td
         %strong
           = event.labeled_link
       %td= event.dates_full
-      - if can?(:manage_courses, current_user)
+      - if manager
         %td= event.booking_info
         %td= event.state_translated
       - else

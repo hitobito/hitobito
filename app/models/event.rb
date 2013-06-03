@@ -37,6 +37,7 @@ class Event < ActiveRecord::Base
   require_dependency 'event/restricted_role'
   require_dependency 'event/application_decorator'
   require_dependency 'event/role_decorator'
+  require_dependency 'event/role_ability'
 
   ### ATTRIBUTES
 

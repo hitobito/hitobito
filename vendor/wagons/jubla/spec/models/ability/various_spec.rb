@@ -4,7 +4,7 @@ describe Ability::Various do
   let(:user) { role.person}
   let(:group) { role.group }
 
-  subject { Ability.new(user.reload) }
+  subject { AbilityNew.new(user.reload) }
 
   describe "qualification" do
 
@@ -67,13 +67,13 @@ describe Ability::Various do
   end
 
   describe "event_course_conditions" do
-    let(:course_condition) { group.course_conditions.build } 
+    let(:course_condition) { group.course_conditions.build }
 
     context "FederalBoard Member" do
       let(:role) { Fabricate(Group::FederalBoard::Member.name.to_sym, group: groups(:federal_board)) }
 
       context "on Federation" do
-        let(:group) { groups(:ch) } 
+        let(:group) { groups(:ch) }
 
         it "can index and manage" do
           should be_able_to(:index_event_course_conditions, group)
@@ -82,7 +82,7 @@ describe Ability::Various do
       end
 
       context "on State" do
-        let(:group) { groups(:be) } 
+        let(:group) { groups(:be) }
 
         it "can index and manage" do
           should be_able_to(:index_event_course_conditions, group)
@@ -96,7 +96,7 @@ describe Ability::Various do
       let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }
 
       context "on Federation" do
-        let(:group) { groups(:ch) } 
+        let(:group) { groups(:ch) }
 
         it "cannot index and manage" do
           should_not be_able_to(:index_event_course_conditions, group)
@@ -105,7 +105,7 @@ describe Ability::Various do
       end
 
       context "on State" do
-        let(:group) { groups(:be) } 
+        let(:group) { groups(:be) }
 
         it "can index and manage" do
           should be_able_to(:index_event_course_conditions, group)

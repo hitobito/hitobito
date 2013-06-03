@@ -100,13 +100,6 @@ class Person < ActiveRecord::Base
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
-  scope :order_by_name, order("CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.company_name ELSE people.first_name END",
-                              "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.first_name ELSE people.last_name END",
-                              "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.last_name ELSE people.nickname END")
-
 
   ### INDEXED FIELDS
 
@@ -120,6 +113,21 @@ class Person < ActiveRecord::Base
 
 
   ### CLASS METHODS
+
+  class << self
+    def order_by_name
+      order(company_case_column(:company_name, :first_name),
+            company_case_column(:first_name, :last_name),
+            company_case_column(:last_name, :nickname))
+    end
+
+    private
+
+    def company_case_column(if_company, otherwise)
+      "CASE WHEN people.company = #{connection.quoted_true} " +
+      "THEN people.#{if_company} ELSE people.#{otherwise} END"
+    end
+  end
 
 
   ### INSTANCE METHODS

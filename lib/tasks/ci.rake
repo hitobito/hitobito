@@ -29,6 +29,7 @@ end
 
 desc "Run brakeman"
 task :brakeman do
+  FileUtils.rm_f('brakeman-output.tabs')
   # some files seem to cause brakeman to hang. ignore them
   ignores = %w(app/views/people_filters/_form.html.haml
                app/views/csv_imports/define_mapping.html.haml
@@ -39,7 +40,6 @@ task :brakeman do
     end
   rescue Timeout::Error => e
     puts "\nBrakeman took too long. Aborting."
-    FileUtils.touch('brakeman-output.tabs')
   end
 end
 

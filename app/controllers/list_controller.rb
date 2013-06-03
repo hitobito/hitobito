@@ -9,7 +9,7 @@ class ListController < ApplicationController
   # customized cancan code to authorize with #model_class
   authorize_resource except: :index
   before_filter :authorize_class, only: :index
-  
+
   helper_method :model_class, :models_label, :entries, :path_args
 
   delegate :model_class, :models_label, :to => 'self.class'
@@ -17,7 +17,7 @@ class ListController < ApplicationController
   hide_action :model_class, :models_label, :inheritable_root_controller
 
   respond_to :html
-  
+
   ##############  ACTIONS  ############################################
 
   # List all entries of this model.
@@ -71,14 +71,14 @@ class ListController < ApplicationController
     else
       ivar_name(value.class)
     end
-    
+
     instance_variable_set(:"@#{name}", value)
   end
-  
+
   def ivar_name(klass)
     klass.base_class.name.demodulize.underscore
   end
-  
+
   def authorize_class
     authorize!(action_name.to_sym, model_class)
   end
@@ -218,7 +218,7 @@ class ListController < ApplicationController
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      col = sort_mappings[params[:sort].to_sym] ||
+      col = sort_mappings[params[:sort]] ||
             "#{model_class.table_name}.#{params[:sort]}"
       Array(col).collect {|c| "#{c} #{sort_dir}" }.join(", ")
     end
@@ -231,7 +231,11 @@ class ListController < ApplicationController
     # Returns true if the passed attribute is sortable.
     def sortable?(attr)
       model_class.column_names.include?(attr.to_s) ||
-      sort_mappings.include?(attr.to_sym)
+      sort_mappings.include?(attr)
+    end
+
+    def sort_mappings
+      self.class.sort_mappings.with_indifferent_access
     end
   end
 

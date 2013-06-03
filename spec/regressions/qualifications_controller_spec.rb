@@ -17,11 +17,11 @@ describe QualificationsController, type: :controller do
     def it_should_redirect_to_show
       it do
         should redirect_to group_person_path(top_group, top_leader)
-      end 
+      end
     end
-    
+
     def it_should_redirect_to_index
-      it { should redirect_to group_person_path(top_group, top_leader) } 
+      it { should redirect_to group_person_path(top_group, top_leader) }
     end
   end
 
@@ -29,7 +29,7 @@ describe QualificationsController, type: :controller do
   let(:test_entry_attrs) { { start_at: 1.days.from_now.to_date, qualification_kind_id: qualification_kinds(:sl).id } }
 
   before do
-    sign_in(people(:top_leader)) 
+    sign_in(people(:top_leader))
     @entry = Fabricate(:qualification, person: top_leader)
   end
 
@@ -37,17 +37,17 @@ describe QualificationsController, type: :controller do
 
   describe_action :get, :new do
     context ".html", :format => :html do
-      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:page) { Capybara::Node::Simple.new(response.body).find('#page') }
       it "renders sheets and form" do
         perform_request
-        dom.should have_css('.sheet', count: 3)
-        dom.find_link('Top')[:href].should eq group_path(groups(:top_layer))
-        dom.find_link('TopGroup')[:href].should eq group_path(top_group)
-        dom.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
-        dom.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
+        page.should have_css('.sheet', count: 3)
+        page.find_link('Top')[:href].should eq group_path(groups(:top_layer))
+        page.find_link('TopGroup')[:href].should eq group_path(top_group)
+        page.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
+        page.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
       end
     end
   end
-  
+
 
 end

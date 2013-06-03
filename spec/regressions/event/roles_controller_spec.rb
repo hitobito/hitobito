@@ -6,35 +6,37 @@ describe Event::RolesController, type: :controller do
 
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { event_roles(:top_leader) }
-  
+
   let(:course) { test_entry.event }
   let(:group)  { course.groups.first }
-  
+
   let(:new_entry_attrs) do
-    { 
+    {
       type: Event::Role::AssistantLeader.sti_name
     }
   end
-    
+
   let(:create_entry_attrs) do
-    { 
+    {
       label: 'Materialchef',
       type: Event::Role::AssistantLeader.sti_name,
       person_id: Fabricate(:person).id
     }
   end
-  
+
   let(:test_entry_attrs) do
-    { 
+    {
       label: 'Materialchef'
     }
   end
- 
-  let(:scope_params) { {group_id: group.id, event_id: course.id} }
+
+  def scope_params
+     {group_id: group.id, event_id: course.id}
+  end
 
 
-  before { sign_in(people(:top_leader)) } 
-  
+  before { sign_in(people(:top_leader)) }
+
   # Override a few methods to match the actual behavior.
   class << self
     def it_should_redirect_to_show
@@ -44,15 +46,15 @@ describe Event::RolesController, type: :controller do
         else
           should redirect_to group_event_participation_path(group, course, entry.participation_id)
         end
-      end 
+      end
     end
-    
+
     def it_should_redirect_to_index
-      it { should redirect_to group_event_participations_path(group, course) } 
+      it { should redirect_to group_event_participations_path(group, course) }
     end
-    
+
   end
-  
+
 
   include_examples 'crud controller', skip: [%w(index), %w(show), %w(new plain), %w(create html)]
 
@@ -64,19 +66,19 @@ describe Event::RolesController, type: :controller do
       end
     end
   end
-  
+
   describe_action :post, :create do
     context ".html", :format => :html do
       let(:params) { { model_identifier => create_entry_attrs } }
       it "creates answers on the go", :perform_request => false do
         expect { perform_request }.to change { Event::Answer.count }.by(3)
       end
-      
+
      context "with valid params" do
         it_should_redirect_to_show
         #it_should_set_attrs
         it_should_have_flash(:notice)
-        
+
         it "should persist entry" do
           entry.should be_persisted
           entry.should be_kind_of(Event::Role::AssistantLeader)
@@ -87,7 +89,7 @@ describe Event::RolesController, type: :controller do
       end
     end
   end
-  
+
   describe_action :delete, :destroy, :id => true do
     context ".html", :format => :html do
       it "should destroy participation for last role", :perform_request => false do

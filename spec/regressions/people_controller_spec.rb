@@ -219,7 +219,7 @@ describe PeopleController, type: :controller do
                 role: { type: 'Group::TopGroup::Member', group_id: top_group.id },
                 return_url: 'foo'
 
-      dom.find('a', text: 'Abbrechen')[:href].should eq 'foo'
+      dom.all('a', text: 'Abbrechen').first[:href].should eq 'foo'
       dom.find('input#return_url').value.should eq 'foo'
 
     end

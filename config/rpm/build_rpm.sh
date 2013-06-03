@@ -30,7 +30,7 @@ done
 # config sources
 sed -i s/BUILD_NUMBER/$BUILD_NUMBER/ sources/config/rpm/*.spec
 sed -i s/RPM_NAME/$RPM_NAME/ sources/config/rpm/*.spec
-mv -f sources/config/rpm/Wagonfile sources 
+mv -f sources/config/rpm/Wagonfile sources
 
 # tar sources
 mv sources $DIR

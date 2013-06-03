@@ -2,27 +2,29 @@
 require 'spec_helper'
 
 describe EventsController, type: :controller do
-  
+
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { ev = events(:top_course); ev.dates.clear; ev }
   let(:group) { test_entry.groups.first }
   let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
   let(:test_entry_attrs) { { name: 'Chief Leader Course', group_ids: [group.id], dates_attributes: [ date ] } }
 
-  let(:scope_params) { {group_id: group.id} }
-  
-  before { sign_in(people(:top_leader)) } 
+  def scope_params
+    {group_id: group.id}
+  end
+
+  before { sign_in(people(:top_leader)) }
 
   include_examples 'crud controller', skip: [%w(index),%w(new)]
 
   def deep_attributes(*args)
-    { name: "Chief Leader Course", dates_attributes: [date], group_ids: [group.id]}  
+    { name: "Chief Leader Course", dates_attributes: [date], group_ids: [group.id]}
   end
 
   describe "GET #index" do
     render_views
     let(:group) { groups(:top_group) }
-    let(:dom) { Capybara::Node::Simple.new(response.body) } 
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
     let(:today) { Date.today }
     let(:last_year) { 1.year.ago }
 
@@ -66,8 +68,8 @@ describe EventsController, type: :controller do
   describe "GET #new" do
     render_views
     let(:group) { groups(:top_group) }
-    let(:dom) { Capybara::Node::Simple.new(response.body) } 
-    
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
     it "renders new form" do
       get :new, group_id: group.id, event: {type: 'Event::Course'}
       dom.find('input#event_type')[:type].should eq 'hidden'

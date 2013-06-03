@@ -51,8 +51,8 @@ describe Import::CsvParser do
     let(:data) { File.read(path(:empty_header)) }
     its('csv.headers') { should eq ["first", "", "last"]  }
     its(:headers) { should eq ["first", "last"]  }
-    its([0]) { should eq CSV::Row.new(subject.headers, ["foo", nil,"bar"]) }
-    its([1]) { should eq CSV::Row.new(subject.headers, [nil, "foobar", nil]) }
+    its([0]) { should eq CSV::Row.new(subject.csv.headers, ["foo", nil,"bar"]) }
+    its([1]) { should eq CSV::Row.new(subject.csv.headers, [nil, "foobar", nil]) }
 
   end
 

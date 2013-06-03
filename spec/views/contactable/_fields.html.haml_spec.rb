@@ -4,12 +4,14 @@ describe 'contactable/_fields.html.haml' do
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
   let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}, nil) }
-  subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info') }
+
+  subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info', visible: false) }
 
   before do
     view.extend StandardHelper
     view.stub(entry: GroupDecorator.decorate(group), f: form_builder)
   end
+
   context "standard" do
     before { render }
 
@@ -18,7 +20,6 @@ describe 'contactable/_fields.html.haml' do
 
 
   context "when contact is set" do
-
     before do
       group.contact = current_user
       render

@@ -6,7 +6,7 @@ describe Event::ListsController, type: :controller do
 
   render_views
 
-  before { sign_in(people(:top_leader)) } 
+  before { sign_in(people(:top_leader)) }
 
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
@@ -31,18 +31,18 @@ describe Event::ListsController, type: :controller do
 
     it "renders event label with link" do
       get :events
-      dom.find('table a')[:href].should eq group_event_path(top_group.id, event.id)
+      dom.all('table tr a').first[:href].should eq group_event_path(top_group.id, event.id)
       dom.should have_content 'Eventus'
       dom.should have_content 'TopGroup'
       dom.should have_content I18n.l(tomorrow, format: :time)
       dom.should have_content "dolorum hi..."
     end
-      
+
     context "application" do
       let(:link) { dom.all('table a').last }
       it "contains apply button for future events" do
         event.application_possible?.should eq true
-        
+
         get :events
 
         link.text.strip.should eq 'Anmelden'
@@ -56,7 +56,7 @@ describe Event::ListsController, type: :controller do
     context "filter dropdown" do
       before { get :courses }
       let(:items) { dropdown.all('a') }
-      let(:first) { items.first }  
+      let(:first) { items.first }
       let(:middle) { items[1] }
       let(:last) { items.last}
 
@@ -71,7 +71,7 @@ describe Event::ListsController, type: :controller do
 
         last.text.should eq top_group.name
         last[:href].should eq list_courses_path(year: year, group_id: top_group.id)
-        
+
         dom.find('body nav .active').text.should eq 'Kurse'
       end
     end
@@ -96,9 +96,9 @@ describe Event::ListsController, type: :controller do
       let(:slk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant' ) }
       let(:glk_ev) { Fabricate(:course, groups: [groups(:top_group)], kind: event_kinds(:glk), maximum_participants: 20 ) }
 
-      before do 
-        set_start_dates(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02") 
-        set_start_dates(glk_ev, "2009-01-2", "2011-01-02") 
+      before do
+        set_start_dates(slk_ev, "2009-01-2", "2010-01-2", "2010-01-02", "2011-01-02")
+        set_start_dates(glk_ev, "2009-01-2", "2011-01-02")
       end
 
       it "renders course info within table" do

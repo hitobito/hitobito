@@ -3,7 +3,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
   include DatetimeAttribute
   datetime_attr :last_seen
-  
+
   attr_protected nil
 
 
@@ -25,7 +25,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   def chatty
     remarks.size
   end
-  
+
   def klass
     self.class
   end
@@ -157,19 +157,19 @@ class CrudTestModelsController < CrudController #:nodoc:
     @called_callbacks ||= []
     @called_callbacks << callback
   end
-  
+
   def authorize_class
     #nada
   end
 
 end
-  
+
 REGEXP_ROWS = /<tr.+?<\/tr>/m
 REGEXP_HEADERS = /<th.+?<\/th>/m
 REGEXP_SORT_HEADERS = /<th.*?><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
 REGEXP_ACTION_CELL = /<td class=\"action\"><a href.+?<\/a><\/td>/m
-  
-  
+
+
 # A simple test helper to prepare the test database with a CrudTestModel model.
 # This helper is used to test the CrudController and various helpers
 # without the need for an application based model.
@@ -275,14 +275,14 @@ module CrudTestHelper
   def special_routing
     controller = @controller || controller  # test:unit uses instance variable, rspec the method
     @routes = ActionDispatch::Routing::RouteSet.new
+    @routes.draw { resources :crud_test_models }
+
     _routes = @routes
 
     controller.singleton_class.send(:include, _routes.url_helpers)
     controller.view_context_class = Class.new(controller.view_context_class) do
       include _routes.url_helpers
     end
-
-    @routes.draw { resources :crud_test_models }
   end
 
   def create(index, companion)

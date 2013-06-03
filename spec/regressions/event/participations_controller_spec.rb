@@ -23,7 +23,9 @@ describe Event::ParticipationsController, type: :controller do
     }
   end
 
-  let(:scope_params) { {group_id: group.id, event_id: course.id} }
+  def scope_params
+    {group_id: group.id, event_id: course.id}
+  end
 
   before do
     user = people(:top_leader)

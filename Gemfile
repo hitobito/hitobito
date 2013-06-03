@@ -29,7 +29,7 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
-gem 'thinking-sphinx', '~> 2.0'
+gem 'thinking-sphinx', '~> 2.1'
 gem 'wagons'
 
 # Gems used only for assets and not required
@@ -39,11 +39,11 @@ group :assets do
   gem 'bootstrap-wysihtml5-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'compass', '>= 0.13.alpha.0'
-  gem 'compass-rails', '~> 1.0.2'
+  gem 'compass-rails'
   gem 'jquery-rails', '2.1.3'
   gem 'sass-rails', '~> 3.2.3'
-  gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
-  gem 'uglifier', '>= 1.0.3'
+  gem 'therubyracer', :platforms => :ruby
+  gem 'uglifier'
 end
 
 group :development, :test do
@@ -61,7 +61,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', '~> 1.1'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

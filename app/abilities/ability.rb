@@ -39,8 +39,8 @@ class Ability
            PersonAbility,
            QualificationAbility,
            RoleAbility,
-           SimpleAbility,
-           SubscriptionAbility
+           SubscriptionAbility,
+           VariousAbility
 
 
   def initialize(user)

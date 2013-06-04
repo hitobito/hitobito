@@ -1,4 +1,4 @@
-module Jubla::SimpleAbility
+module Jubla::VariousAbility
   extend ActiveSupport::Concern
 
   included do

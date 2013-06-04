@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe Ability::People do
-
+describe PersonAbility do
 
   subject { ability }
   let(:ability) { Ability.new(role.person.reload) }

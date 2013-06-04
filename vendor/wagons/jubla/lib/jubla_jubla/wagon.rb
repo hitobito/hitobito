@@ -26,7 +26,7 @@ module JublaJubla
       Event::ParticipationAbility.send :include, Jubla::Event::ParticipationAbility
       Event::RoleAbility.send :include, Jubla::Event::RoleAbility
       GroupAbility.send :include, Jubla::GroupAbility
-      SimpleAbility.send :include, Jubla::SimpleAbility
+      VariousAbility.send :include, Jubla::VariousAbility
 
       # load this class after all abilities have been defined
       Ability.register Event::Course::ConditionAbility

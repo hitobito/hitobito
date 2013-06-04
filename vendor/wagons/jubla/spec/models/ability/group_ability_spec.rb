@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe Ability::Groups do
+describe GroupAbility do
 
 
   subject { ability }

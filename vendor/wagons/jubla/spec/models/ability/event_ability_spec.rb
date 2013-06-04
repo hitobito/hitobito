@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ability::Events do
+describe EventAbility do
 
   let(:user)    { role.person }
   let(:group)   { role.group }

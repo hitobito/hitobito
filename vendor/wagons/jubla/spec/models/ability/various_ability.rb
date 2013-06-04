@@ -1,5 +1,6 @@
 require 'spec_helper'
-describe Ability::Various do
+
+describe VariousAbility do
 
   let(:user) { role.person}
   let(:group) { role.group }

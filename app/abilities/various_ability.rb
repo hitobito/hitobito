@@ -1,4 +1,4 @@
-class SimpleAbility < AbilityDsl::Base
+class VariousAbility < AbilityDsl::Base
 
   on(CustomContent) do
     permission(:admin).may(:index, :update).all

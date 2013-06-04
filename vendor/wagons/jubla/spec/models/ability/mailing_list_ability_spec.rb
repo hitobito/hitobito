@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ability::MailingLists do
+describe MailingListAbility do
 
   let(:user) { role.person }
   let(:group) { role.group }

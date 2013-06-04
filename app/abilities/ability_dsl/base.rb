@@ -84,8 +84,10 @@ module AbilityDsl
 
     def user_groups
       @user_groups ||= case permission
-      when :group_full, :layer_full then user_context.groups_group_full
-      when :group_read, :layer_read then user_context.groups_group_read
+      when :group_full then user_context.groups_group_full
+      when :layer_full then user_context.groups_layer_full
+      when :group_read then user_context.groups_group_read
+      when :layer_read then user_context.groups_layer_read
       else []
       end
     end

@@ -1,0 +1,62 @@
+require 'spec_helper'
+
+describe AbilityDsl::UserContext do
+
+  subject { AbilityDsl::UserContext.new(user) }
+
+  context :top_leader do
+    let(:user) { people(:top_leader) }
+
+    its(:groups_group_full) { should =~ [] }
+    its(:groups_group_read) { should =~ [] }
+    its(:groups_layer_full) { should =~ [groups(:top_group).id] }
+    its(:groups_layer_read) { should =~ [groups(:top_group).id] }
+    its(:layers_full)       { should =~ [groups(:top_layer).id] }
+    its(:layers_read)       { should =~ [groups(:top_layer).id] }
+    its(:admin)             { should be_true }
+    its(:all_permissions)   { should =~ [:admin, :layer_full, :layer_read, :contact_data, :qualify] }
+
+    it "has no events with permission full" do
+      subject.events_with_permission(:full).should be_blank
+    end
+  end
+
+  context :bottom_member do
+    let(:user) { people(:bottom_member) }
+
+    its(:groups_group_full) { should =~ [] }
+    its(:groups_group_read) { should =~ [] }
+    its(:groups_layer_full) { should =~ [] }
+    its(:groups_layer_read) { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_full)       { should =~ [] }
+    its(:layers_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:admin)             { should be_false }
+    its(:all_permissions)   { should =~ [:layer_read] }
+
+    it "has events with permission full" do
+      subject.events_with_permission(:full).should =~ [events(:top_course).id]
+    end
+  end
+
+  context :multiple_roles do
+    let(:user) do
+      p = Fabricate(:person)
+      Fabricate(Group::TopGroup::Member.sti_name.to_sym, group: groups(:top_group), person: p)
+      Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: groups(:bottom_layer_one), person: p)
+      Fabricate(Group::BottomGroup::Member.sti_name.to_sym, group: groups(:bottom_group_one_two), person: p)
+      Fabricate(Role::External.sti_name.to_sym, group: groups(:bottom_group_one_two), person: p)
+      Fabricate(Group::TopGroup::Leader.sti_name.to_sym, group: groups(:top_group), person: p, deleted_at: 2.years.ago)
+      p
+    end
+
+    its(:groups_group_full) { should =~ [] }
+    its(:groups_group_read) { should =~ [groups(:top_group).id, groups(:bottom_group_one_two).id] }
+    its(:groups_layer_full) { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_layer_read) { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_full)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:admin)             { should be_false }
+    its(:all_permissions)   { should =~ [:layer_full, :layer_read, :group_read, :contact_data, :approve_applications] }
+  end
+
+end

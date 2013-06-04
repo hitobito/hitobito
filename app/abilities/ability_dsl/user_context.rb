@@ -2,7 +2,6 @@ module AbilityDsl
   class UserContext
 
     attr_reader :user,
-                :user_groups,
                 :groups_group_full,
                 :groups_group_read,
                 :groups_layer_full,
@@ -26,8 +25,8 @@ module AbilityDsl
       permissions
     end
 
-    def layer_ids(*groups)
-      groups.flatten.collect(&:layer_group_id).uniq
+    def layer_ids(groups)
+      groups.collect(&:layer_group_id).uniq
     end
 
     def events_with_permission(permission)
@@ -43,10 +42,10 @@ module AbilityDsl
       @groups_group_full = user.groups_with_permission(:group_full).to_a
       @groups_group_read = user.groups_with_permission(:group_read).to_a + @groups_group_full
       @groups_layer_full = user.groups_with_permission(:layer_full).to_a
-      @groups_layer_read = user.groups_with_permission(:layer_read).to_a
+      @groups_layer_read = user.groups_with_permission(:layer_read).to_a + @groups_layer_full
 
-      @layers_read = layer_ids(@groups_layer_full, @groups_layer_read)
       @layers_full = layer_ids(@groups_layer_full)
+      @layers_read = layer_ids(@groups_layer_read)
 
       @groups_group_full.collect!(&:id)
       @groups_group_read.collect!(&:id)

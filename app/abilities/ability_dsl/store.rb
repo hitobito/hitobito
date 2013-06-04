@@ -1,11 +1,8 @@
 module AbilityDsl
   class Store
 
-    attr_reader :ability_classes
-
-    def register(*ability_classes)
-      @ability_classes ||= []
-      @ability_classes += ability_classes
+    def register(*classes)
+      ability_classes.concat(classes)
     end
 
     def configs_for_permissions(permissions)
@@ -18,7 +15,7 @@ module AbilityDsl
     def general_constraints(subject_class, action)
       [config(Recorder::General::Permission, subject_class, action),
        config(Recorder::General::Permission, subject_class, Recorder::General::AllAction)].
-      compact.collect(&:constraint)
+      compact
     end
 
 
@@ -42,6 +39,10 @@ module AbilityDsl
 
     def config(permission, subject_class, action)
       configs[[permission, subject_class, action]]
+    end
+
+    def ability_classes
+      @ability_classes ||= []
     end
 
   end

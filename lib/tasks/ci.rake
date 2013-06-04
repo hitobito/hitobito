@@ -75,7 +75,7 @@ if Rake::Task.task_defined?('spec:requests') # only if current environment knows
       t.spec_opts = "--tag performance:true"
     end
 
-    [:domain, :regressions, :decorators].each do |dir|
+    [:abilities, :domain, :regressions, :decorators].each do |dir|
       RSpec::Core::RakeTask.new(dir => 'db:test:prepare') do |t|
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
       end
@@ -95,11 +95,11 @@ namespace :jubla do
   desc "Print all groups, roles and permissions"
   task :permissions => :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts layer
+      puts '   * ' + layer
       groups.each do |group, roles|
-        puts '  ' + group
+        puts '      * ' + group
         roles.each do |r|
-          puts "    #{r.model_name.human}: #{r.permissions.inspect}"
+          puts "         * #{r.model_name.human}: #{r.permissions.inspect}"
         end
       end
     end

@@ -57,16 +57,16 @@ module AbilityDsl
       user_groups.include?(group_id)
     end
 
-    def permission_in_groups?(groups)
-      contains_any?(user_groups, groups)
+    def permission_in_groups?(group_ids)
+      contains_any?(user_groups, group_ids)
     end
 
     def permission_in_layer?(layer_id)
       user_layers.include?(layer_id)
     end
 
-    def permission_in_layers?(layers)
-      contains_any?(user_layers, layers)
+    def permission_in_layers?(layer_ids)
+      contains_any?(user_layers, layer_ids)
     end
 
     def user_groups
@@ -87,15 +87,7 @@ module AbilityDsl
 
     # Are any items of the existing list present in the list of required items?
     def contains_any?(required, existing)
-      (required & collect_ids(existing)).present?
-    end
-
-    def collect_ids(collection)
-      if collection.first.is_a?(Fixnum)
-        collection
-      else
-        collection.collect(&:id)
-      end
+      (required & existing).present?
     end
 
     def user

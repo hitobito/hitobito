@@ -17,7 +17,7 @@ module AbilityDsl::Conditions
     end
 
     def in_same_layer_or_below
-      permission_in_layers?(event.groups.collect(&:layer_groups).flatten)
+      permission_in_layers?(event.groups.collect {|g| g.layer_groups.collect(&:id) }.flatten)
     end
 
     private
@@ -30,7 +30,7 @@ module AbilityDsl::Conditions
       user_context.events_with_permission(permission).include?(event.id)
     end
 
-    def at_least_on_group_not_deleted
+    def at_least_one_group_not_deleted
       event.groups.present? &&
       event.groups.any? {|group| !group.deleted? }
     end

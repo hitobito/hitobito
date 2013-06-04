@@ -5,7 +5,7 @@ describe Ability::MailingLists do
   let(:user) { role.person }
   let(:group) { role.group }
 
-  subject { AbilityNew.new(user.reload) }
+  subject { Ability.new(user.reload) }
 
   context "layer full" do
     let(:role) { Fabricate(Group::StateAgency::Leader.name.to_sym, group: groups(:be_agency)) }

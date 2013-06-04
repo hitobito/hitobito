@@ -4,7 +4,7 @@ describe Ability::Various do
   let(:user) { role.person}
   let(:group) { role.group }
 
-  subject { AbilityNew.new(user.reload) }
+  subject { Ability.new(user.reload) }
 
   describe "qualification" do
 

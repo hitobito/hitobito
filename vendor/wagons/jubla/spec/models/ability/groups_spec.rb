@@ -5,7 +5,7 @@ describe Ability::Groups do
 
 
   subject { ability }
-  let(:ability) { AbilityNew.new(role.person.reload) }
+  let(:ability) { Ability.new(role.person.reload) }
 
 
   context "layer full" do

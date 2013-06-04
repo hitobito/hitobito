@@ -10,7 +10,7 @@ class SubscriptionAbility < AbilityDsl::Base
 
   def her_own
     list = subject.mailing_list
-    list.subscribable? && subscription.subscriber == user
+    list.subscribable? && subject.subscriber == user
   end
 
   def general_conditions

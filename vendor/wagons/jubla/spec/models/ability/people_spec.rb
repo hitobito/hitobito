@@ -295,7 +295,7 @@ describe Ability::People do
 
     it "may not modify any role in same layer" do
       other = Fabricate(Group::StateProfessionalGroup::Member.name.to_sym, group: groups(:be_security))
-      should_not be_able_to(:modify, other.person.reload)
+      should_not be_able_to(:update, other.person.reload)
       should_not be_able_to(:update, other)
     end
 

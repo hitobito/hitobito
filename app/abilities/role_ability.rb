@@ -19,7 +19,7 @@ class RoleAbility < AbilityDsl::Base
 
   def in_same_layer_or_visible_below
     in_same_layer ||
-    (subject.visible_from_above? && permission_in_layers?(group.layer_groups))
+    (subject.visible_from_above? && permission_in_layers?(group.layer_groups.collect(&:id)))
   end
 
   private

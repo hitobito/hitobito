@@ -17,7 +17,7 @@ class EventAbility < AbilityDsl::Base
 
   def general_conditions
     case action
-    when :create, :destroy, :application_market then at_least_on_group_not_deleted
+    when :create, :destroy, :application_market then at_least_one_group_not_deleted
     else true
     end
   end
@@ -27,16 +27,20 @@ class EventAbility < AbilityDsl::Base
   end
 
   def if_in_course_group
-    in_same_groups(Group.course_offerers)
+    in_same_groups(course_offerers)
   end
 
   def if_in_course_layer
-    in_same_layers(Group.course_offerers)
+    in_same_layers(course_offerers)
   end
 
   private
 
   def event
     subject
+  end
+
+  def course_offerers
+    @course_offerers ||= Group.course_offerers.pluck(:id)
   end
 end

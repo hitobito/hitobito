@@ -11,8 +11,9 @@ module JublaJubla
                                  #{config.root}/app/jobs
                                )
 
+    # extend application classes here
     config.to_prepare do
-      # extend application classes here
+      ### models
       Person.send :include, Jubla::Person
       Group.send  :include, Jubla::Group
       Role.send   :include, Jubla::Role
@@ -20,22 +21,27 @@ module JublaJubla
       Event::Application.send :include, Jubla::Event::Application
       Event::Kind.send :include, Jubla::Event::Kind
 
-      Ability.send :include, Jubla::Ability
-
+      ### abilities
+      EventAbility.send :include, Jubla::EventAbility
+      Event::ParticipationAbility.send :include, Jubla::Event::ParticipationAbility
+      Event::RoleAbility.send :include, Jubla::Event::RoleAbility
       GroupAbility.send :include, Jubla::GroupAbility
       SimpleAbility.send :include, Jubla::SimpleAbility
 
       # load this class after all abilities have been defined
-      AbilityNew.register Event::Course::ConditionAbility
+      Ability.register Event::Course::ConditionAbility
 
+      ### controllers
       GroupsController.send :include, Jubla::GroupsController
       EventsController.send :include, Jubla::EventsController
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       Event::RegisterController.send :include, Jubla::Event::RegisterController
 
+      ### decorators
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
       EventDecorator.send :include, Jubla::EventDecorator
 
+      ### helpers
       # add more active_for urls to main navigation
       NavigationHelper::MAIN['Admin'][:active_for] << 'event_camp_kinds'
 

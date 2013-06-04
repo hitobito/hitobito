@@ -17,7 +17,9 @@ module AbilityDsl
     end
 
     def permission(permission)
-      # TODO validate permission
+      unless (Role::Permissions + [:any]).include?(permission)
+        raise "Unknown permission #{permission.inspect}"
+      end
       @permission = permission
       self
     end
@@ -29,7 +31,7 @@ module AbilityDsl
 
     def method_missing(name, *args)
       if args.blank? && ability_class.condition_methods.include?(name)
-        AbilityNew.add_config(@permission, @subject_class, @actions, name)
+        Ability.add_config(@permission, @subject_class, @actions, name)
         nil
       else
         super

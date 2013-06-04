@@ -32,7 +32,7 @@ class GroupAbility < AbilityDsl::Base
 
   def with_parent_in_same_layer_or_below
     parent = group.parent
-    parent && !parent.deleted? && permission_in_layers?(parent.layer_groups)
+    parent && !parent.deleted? && permission_in_layers?(parent.layer_groups.collect(&:id))
   end
 
   def in_same_layer_or_below_except_permission_giving
@@ -42,7 +42,7 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def in_below_layers
-    permission_in_layers?(group.upper_layer_groups)
+    permission_in_layers?(group.upper_layer_groups.collect(&:id))
   end
 
   def unless_external

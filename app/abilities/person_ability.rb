@@ -32,20 +32,20 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def in_same_group
-    permission_in_groups?(subject.groups)
+    permission_in_groups?(subject.group_ids)
   end
 
   def in_same_layer_or_visible_below
     permission_in_layers?(subject.layer_group_ids) ||
-    permission_in_layers?(subject.above_groups_visible_from)
+    permission_in_layers?(subject.above_groups_visible_from.collect(&:id))
   end
 
   def non_restricted_in_same_group
-    permission_in_groups?(subject.non_restricted_groups)
+    permission_in_groups?(subject.non_restricted_groups.collect(&:id))
   end
 
   def non_restricted_in_same_layer_or_visible_below
-    permission_in_layers?(subject.non_restricted_groups.collect(&:layer_group_id).uniq) ||
-    permission_in_layers?(subject.above_groups_visible_from)
+    permission_in_layers?(subject.non_restricted_groups.collect(&:layer_group_id)) ||
+    permission_in_layers?(subject.above_groups_visible_from.collect(&:id))
   end
 end

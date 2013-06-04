@@ -1,4 +1,4 @@
-class AbilityNew
+class Ability
 
   include CanCan::Ability
 
@@ -43,35 +43,28 @@ class AbilityNew
            SubscriptionAbility
 
 
-  def initialize(user, *subject_classes)
-    @user_context = AbilityDsl::UserContext.new(user)
-
-    alias_action :update, :destroy, :to => :modify
-
-    required_abilities = subject_classes.present? ?
-      abilities.slice!(subject_classes) :
-      abilities
-
-    define(required_abilities)
+  def initialize(user)
+    if user.root?
+      can :manage, :all
+    else
+      @user_context = AbilityDsl::UserContext.new(user)
+      define
+    end
   end
 
-  def abilities
-    self.class.abilities
-  end
-
-  def define(required_abilities)
-    required_abilities.each do |subject_class, permissions|
+  def define
+    self.class.abilities.each do |subject_class, permissions|
       permissions.each do |permission, actions|
         if user_context.has_permission?(permission)
           actions.each do |action, condition|
-            define_ability(action, subject_class, permission, condition)
+            define_ability(permission, subject_class, action, condition)
           end
         end
       end
     end
   end
 
-  def define_ability(action, subject_class, permission, condition)
+  def define_ability(permission, subject_class, action, condition)
     if condition == :all
       can action, subject_class
     elsif condition != :none

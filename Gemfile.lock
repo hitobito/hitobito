@@ -50,7 +50,6 @@ GEM
     better_errors (0.5.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
-    binding_of_caller (0.6.8)
     bootstrap-sass (2.2.2.0)
       sass (~> 3.2)
     bootstrap-wysihtml5-rails (0.3.1.17)
@@ -241,9 +240,6 @@ GEM
       pry (~> 0.9.10)
     pry-rails (0.2.2)
       pry (>= 0.9.10)
-    pry-stack_explorer (0.4.8)
-      binding_of_caller (~> 0.6.8)
-      pry (~> 0.9.11)
     quiet_assets (1.0.1)
       railties (~> 3.1)
     rack (1.4.5)
@@ -470,7 +466,6 @@ DEPENDENCIES
   pry-doc
   pry-nav
   pry-rails
-  pry-stack_explorer
   quiet_assets
   rack
   rack-mini-profiler

@@ -9,7 +9,7 @@
 
 #main
   %section
-    = grouped_table(@courses_by_kind, manager) ? 4 : 3) do |event|
+    = grouped_table(@courses_by_kind, manager ? 4 : 3) do |event|
       %td
         %strong
           = event.labeled_link

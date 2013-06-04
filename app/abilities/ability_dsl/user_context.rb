@@ -16,16 +16,14 @@ module AbilityDsl
       init_groups
     end
 
-    def has_permission?(permission)
-      case permission
-      when :any then true
-      when :admin then admin
-      when :layer_full then @layers_full.present?
-      when :layer_read then @layers_read.present?
-      when :group_full then @groups_group_full.present?
-      when :group_read then @groups_group_read.present?
-      else user.groups_with_permission(permission).present?
+    def all_permissions
+      permissions = user.roles.collect(&:permissions).flatten.uniq
+      Role::PermissionImplications.each do |given, implicated|
+        if permissions.include?(given) && !permissions.include?(implicated)
+          permissions << implicated
+        end
       end
+      permissions
     end
 
     def layer_ids(*groups)

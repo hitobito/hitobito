@@ -1,5 +1,6 @@
 class Event::RoleAbility < AbilityDsl::Base
-  include AbilityDsl::Conditions::Event
+
+  include AbilityDsl::Constraints::Event
 
   on(::Event::Role) do
     permission(:any).may(:manage).for_leaded_events

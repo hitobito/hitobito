@@ -1,4 +1,4 @@
-module AbilityDsl::Conditions
+module AbilityDsl::Constraints
   module Event
     def for_leaded_events
       permission_in_event?(:full)
@@ -20,6 +20,11 @@ module AbilityDsl::Conditions
       permission_in_layers?(event.groups.collect {|g| g.layer_groups.collect(&:id) }.flatten)
     end
 
+    def at_least_one_group_not_deleted
+      event.groups.present? &&
+      event.groups.any? {|group| !group.deleted? }
+    end
+
     private
 
     def event
@@ -30,9 +35,5 @@ module AbilityDsl::Conditions
       user_context.events_with_permission(permission).include?(event.id)
     end
 
-    def at_least_one_group_not_deleted
-      event.groups.present? &&
-      event.groups.any? {|group| !group.deleted? }
-    end
   end
 end

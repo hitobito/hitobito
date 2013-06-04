@@ -29,7 +29,7 @@ module JublaJubla
       VariousAbility.send :include, Jubla::VariousAbility
 
       # load this class after all abilities have been defined
-      Ability.register Event::Course::ConditionAbility
+      Ability.store.register Event::Course::ConditionAbility
 
       ### controllers
       GroupsController.send :include, Jubla::GroupsController

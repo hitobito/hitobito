@@ -1,7 +1,7 @@
 class Event::ApplicationAbility < AbilityDsl::Base
 
-  include AbilityDsl::Conditions::Event
-  include AbilityDsl::Conditions::Event::Participation
+  include AbilityDsl::Constraints::Event
+  include AbilityDsl::Constraints::Event::Participation
 
   on(Event::Application) do
     permission(:any).may(:show).her_own

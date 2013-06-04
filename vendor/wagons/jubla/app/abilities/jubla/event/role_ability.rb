@@ -1,11 +1,12 @@
 module Jubla::Event::RoleAbility
   extend ActiveSupport::Concern
-  include Jubla::EventAbility
 
-  private
+  include Jubla::EventConstraints
 
-  def may_run_action_if_closed?
-    may_modify_closed?(:manage)
+  included do
+    on(Event::Role) do
+      general.not_closed_or_admin
+    end
   end
 
 end

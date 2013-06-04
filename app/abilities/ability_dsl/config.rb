@@ -1,41 +1,15 @@
 module AbilityDsl
   class Config
 
-    attr_reader :ability_class
+    attr_reader :permission, :subject_class, :action, :ability_class, :constraint
 
-    def initialize(ability_class)
-      @ability_class = ability_class
-    end
-
-    def define
-      ability_class.configs.each do |subject_class, permission_blocks|
-        @subject_class = subject_class
-        permission_blocks.each do |block|
-          instance_eval(&block)
-        end
-      end
-    end
-
-    def permission(permission)
-      unless (Role::Permissions + [:any]).include?(permission)
-        raise "Unknown permission #{permission.inspect}"
-      end
+    def initialize(permission, subject_class, action, ability_class, constraint)
       @permission = permission
-      self
+      @subject_class = subject_class
+      @action = action
+      @ability_class = ability_class
+      @constraint = constraint
     end
 
-    def may(*actions)
-      @actions = actions
-      self
-    end
-
-    def method_missing(name, *args)
-      if args.blank? && ability_class.condition_methods.include?(name)
-        Ability.add_config(@permission, @subject_class, @actions, name)
-        nil
-      else
-        super
-      end
-    end
   end
 end

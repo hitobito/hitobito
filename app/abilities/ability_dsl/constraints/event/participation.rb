@@ -1,4 +1,4 @@
-module AbilityDsl::Conditions::Event
+module AbilityDsl::Constraints::Event
   module Participation
 
     def her_own

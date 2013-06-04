@@ -1,25 +1,21 @@
 class EventAbility < AbilityDsl::Base
 
-  include AbilityDsl::Conditions::Event
+  include AbilityDsl::Constraints::Event
 
   on(Event) do
     permission(:any).may(:read).all
-    permission(:any).may(:update).for_leaded_events
     permission(:any).may(:index_participations).for_event_contacts
+    permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify).for_qualify_event
-    permission(:group_full).may(:create, :update, :destroy, :index_participations, :application_market, :qualify).in_same_group
-    permission(:layer_full).may(:update, :index_participations).in_same_layer_or_below
-    permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
 
+    permission(:group_full).may(:index_participations, :create, :update, :destroy, :application_market, :qualify).in_same_group
     permission(:group_full).may(:manage_courses).if_in_course_group
-    permission(:layer_full).may(:manage_courses).if_in_course_layer
-  end
 
-  def general_conditions
-    case action
-    when :create, :destroy, :application_market then at_least_one_group_not_deleted
-    else true
-    end
+    permission(:layer_full).may(:index_participations, :update).in_same_layer_or_below
+    permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
+    permission(:layer_full).may(:manage_courses).if_in_course_layer
+
+    general(:create, :destroy, :application_market, :qualify).at_least_one_group_not_deleted
   end
 
   def for_qualify_event

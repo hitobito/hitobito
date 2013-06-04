@@ -107,12 +107,10 @@ namespace :jubla do
 
   desc "Print all abilities"
   task :abilities => :environment do
-    Ability.abilities.each do |subject_class, permissions|
-      permissions.each do |permission, actions|
-        actions.each do |action, condition|
-          puts "#{permission.to_s.ljust(18)}\t#{subject_class.to_s.ljust(23)}\t#{action.to_s.ljust(25)}\t#{condition}"
-        end
-      end
+    puts ['Permission'.ljust(18), "\t", 'Class'.ljust(24), "\t", 'Action'.ljust(25), "\t", 'Constraint'].join()
+    puts '=' * 100
+    Ability.store.configs_for_permissions(Role::Permissions + [AbilityDsl::Recorder::General::Permission]) do |c|
+      puts "#{c.permission.to_s.ljust(18)}\t#{c.subject_class.to_s.ljust(24)}\t#{c.action.to_s.ljust(25)}\t#{c.constraint}"
     end
   end
 end

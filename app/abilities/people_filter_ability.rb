@@ -1,6 +1,6 @@
 class PeopleFilterAbility < AbilityDsl::Base
 
-  include AbilityDsl::Conditions::Group
+  include AbilityDsl::Constraints::Group
 
   on(::PeopleFilter) do
     permission(:contact_data).may(:new).all

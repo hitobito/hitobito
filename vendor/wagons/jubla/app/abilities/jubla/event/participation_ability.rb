@@ -1,11 +1,13 @@
 module Jubla::Event::ParticipationAbility
   extend ActiveSupport::Concern
-  include Jubla::EventAbility
 
-  private
+  include Jubla::EventConstraints
 
-  def may_run_action_if_closed?
-    may_modify_closed?(:create, :update, :destroy)
+  included do
+    on(Event::Participation) do
+      general(:update, :destroy).not_closed_or_admin
+      general(:create).at_least_one_group_not_deleted_and_not_closed_or_admin
+    end
   end
 
 end

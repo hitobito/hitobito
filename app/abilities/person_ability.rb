@@ -2,29 +2,30 @@ class PersonAbility < AbilityDsl::Base
 
   on(Person) do
     permission(:any).may(:index, :query).all
-
     permission(:any).may(:show, :show_full, :history, :update, :primary_group).herself
+
     permission(:contact_data).may(:show).other_with_contact_data
+
     permission(:group_read).may(:show, :show_details).in_same_group
-    permission(:layer_read).may(:show, :show_full, :show_details, :history).in_same_layer_or_visible_below
-    permission(:group_full).may(:show_full, :show_details, :history).in_same_group
+
+    permission(:group_full).may(:show_full, :history).in_same_group
     permission(:group_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_group
+    permission(:group_full).may(:create).all  # restrictions are on Roles
+
+    permission(:layer_read).may(:show, :show_full, :show_details, :history).in_same_layer_or_visible_below
+
     permission(:layer_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_layer_or_visible_below
+    permission(:layer_full).may(:create).all # restrictions are on Roles
 
-    # restrictions are on roles
-    permission(:group_full).may(:create).all
-    permission(:layer_full).may(:create).all
-  end
-
-  def general_conditions
-    case action
-    when :send_password_instructions then user.id != subject.id
-    else true
-    end
+    general(:send_password_instructions).not_self
   end
 
   def herself
     subject.id == user.id
+  end
+
+  def not_self
+    subject.id != user.id
   end
 
   def other_with_contact_data

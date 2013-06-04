@@ -1,34 +1,51 @@
 module AbilityDsl
+  # Base class for defining abilities.
+  # Abilities are defined for models, usually only for one per ability class.
+  # Eg.
+  #  on(Person) do
+  #    permission(:any).may(:index).all
+  #    permission(:group_read).may(:show).in_same_group
+  #    permission(:layer_full).may(:update, :destroy).in_same_layer_or_below
+  #  end
+  #
+  # All permissions in the given block apply for a Person object.
+  # Each permission then is defined for one Role::Permission, several actions and
+  # one arbitrary constraint.
+  # This constraint must exist as an instance method in the same class and return
+  # true if the current Person subject applies. The constraint method should have
+  # a speaking name that describes its complete purpose.
   class Base
 
     private
-    attr_reader :user_context, :subject, :permission, :action
+    attr_reader :user_context, :subject, :permission
 
     public
 
-    def initialize(user_context, subject, permission, action)
+    def initialize(user_context, subject, permission)
       @user_context = user_context
       @subject = subject
       @permission = permission
-      @action = action
     end
 
     class << self
-      attr_reader :subject_class, :configs
+      attr_reader :abilities
 
-      # an ability class may define mulitple subject classes,
+      # Define permissions for the given subject_class.
+      # An ability class may define mulitple subject classes,
       # but a subject class may only appear in one ability class.
+      # See Ability.register as well.
       def on(subject_class, &block)
-        @configs ||= {}
-        @configs[subject_class] ||= []
-        @configs[subject_class] << block
+        @abilities ||= {}
+        @abilities[subject_class] ||= []
+        @abilities[subject_class] << block
       end
 
       def subject_classes
-        @configs.keys
+        @abilities.keys
       end
 
-      def condition_methods
+      # Available constraint methods in this ability class
+      def constraint_methods
         # public methods from base and all subclasses
         ancestors.each_with_object([]) do |current, methods|
           methods.concat(current.public_instance_methods(false))
@@ -37,16 +54,12 @@ module AbilityDsl
       end
     end
 
-    # called for any permission, action and condition except :all
-    # TODO refactor to dsl
-    def general_conditions
-      true
-    end
-
+    # Matches all subjects
     def all
       true
     end
 
+    # Matches no subjects
     def none
       false
     end
@@ -92,10 +105,6 @@ module AbilityDsl
 
     def user
       user_context.user
-    end
-
-    def subject_class
-      self.class.subject_class
     end
 
   end

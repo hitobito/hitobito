@@ -32,7 +32,6 @@ class FullTextController < ApplicationController
   private
 
   def list_people
-    Person.search(params[:q])
     entries = Person.search(params[:q],
                             page: params[:page],
                             order: 'last_name asc, first_name asc, @relevance desc',
@@ -61,7 +60,7 @@ class FullTextController < ApplicationController
   end
 
   def load_accessible_people_ids
-    accessible = Person.accessible_by(Ability::Accessibles.new(current_user))
+    accessible = Person.accessible_by(PersonAccessibles.new(current_user))
 
     # This still selects all people attributes :(
     # accessible.pluck('people.id')

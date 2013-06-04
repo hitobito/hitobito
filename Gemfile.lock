@@ -50,8 +50,6 @@ GEM
     better_errors (0.9.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
-    binding_of_caller (0.7.1)
-      debug_inspector (>= 0.0.1)
     bootstrap-sass (2.3.1.2)
       sass (~> 3.2)
     bootstrap-wysihtml5-rails (0.3.1.20)
@@ -111,7 +109,6 @@ GEM
     daemons (1.1.9)
     dalli (2.6.4)
     database_cleaner (1.0.1)
-    debug_inspector (0.0.2)
     debugger (1.6.0)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -244,9 +241,6 @@ GEM
       pry (~> 0.9.10)
     pry-rails (0.3.0)
       pry (>= 0.9.10)
-    pry-stack_explorer (0.4.9)
-      binding_of_caller (>= 0.7)
-      pry (~> 0.9.11)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
     rack (1.4.5)
@@ -478,7 +472,6 @@ DEPENDENCIES
   pry-doc
   pry-nav
   pry-rails
-  pry-stack_explorer
   quiet_assets
   rack
   rack-mini-profiler

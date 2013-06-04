@@ -5,6 +5,9 @@ module Role::Types
   Permissions = [:admin, :layer_full, :layer_read, :group_full, :group_read,
                  :contact_data, :qualify, :approve_applications]
 
+  # If a role contains the first permission, the second one is automatically active as well
+  PermissionImplications = {:layer_full => :layer_read,
+                            :group_full => :group_read}
 
   included do
     class_attribute :permissions, :visible_from_above, :affiliate, :restricted

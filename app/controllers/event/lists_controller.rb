@@ -40,7 +40,7 @@ class Event::ListsController < ApplicationController
   private
 
   def set_group_vars
-    if can?(:manage_courses, current_user)
+    if can?(:manage_courses, Event)
       # assign default group on initial request
       unless params[:year].present?
         params[:group_id] = Group.course_offerers.
@@ -56,7 +56,7 @@ class Event::ListsController < ApplicationController
   end
 
   def limit_scope_for_user(scope)
-    if can?(:manage_courses, current_user)
+    if can?(:manage_courses, Event)
       group_id > 0 ? scope.with_group_id(group_id) : scope
     else
       scope.in_hierarchy(current_user)

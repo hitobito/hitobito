@@ -176,7 +176,7 @@ class PeopleController < CrudController
   end
 
   def accessibles(group = nil)
-    ability = Ability::Accessibles.new(current_user, group)
+    ability = PersonAccessibles.new(current_user, group)
     Person.accessible_by(ability)
   end
 

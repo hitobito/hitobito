@@ -3,16 +3,6 @@ describe Group::Mover do
 
   let(:move) { Group::Mover.new(group) }
 
-  describe "#ability" do
-    let(:user) { people(:top_leader) }
-    subject {  Ability.new(user) }
-
-    it "top_leader" do
-      should be_able_to(:move, groups(:bottom_group_one_one), groups(:bottom_layer_two))
-    end
-
-  end
-
   describe "#candidates" do
     subject { Group::Mover.new(group) }
 

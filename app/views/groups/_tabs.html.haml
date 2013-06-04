@@ -12,7 +12,7 @@
   - bar.tab "Anlässe",
             group_events_path(group, returning: true),
             [group_events_path(group)]
-  
+
 - if can?(:index_mailing_lists, group)
   - bar.tab "Abos",
             group_mailing_lists_path(group, returning: true),
@@ -20,5 +20,5 @@
 
 = render_extensions :tabs, locals: { group: group, bar: bar }
 
-- if can?(:show_deleted, group)
+- if can?(:deleted_subgroups, group)
   - bar.tab "Gelöscht", deleted_subgroups_group_path(group)

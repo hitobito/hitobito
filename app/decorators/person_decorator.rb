@@ -55,6 +55,14 @@ class PersonDecorator < ApplicationDecorator
   def roles_short(group = nil)
     functions_short(roles.to_a, :group, group)
   end
+
+  # returns roles grouped by their group
+  def roles_grouped
+    roles.each_with_object(Hash.new {|h,k| h[k] = []}) do |role, memo|
+      memo[role.group] << role
+    end
+  end
+
   
   private
   

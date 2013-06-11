@@ -7,7 +7,7 @@ describe RolesController do
   
   let(:group)  { groups(:top_group) }
   let(:person) { Fabricate(:person)}
-  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) } 
+  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) }
     
   it "GET new sets a role of the correct type" do
     get :new, {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
@@ -28,7 +28,7 @@ describe RolesController do
   end
 
   describe "PUT update" do
-    let(:notice) { "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  } 
+    let(:notice) { "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  }
     
 
     it "redirects to person after update" do
@@ -57,7 +57,7 @@ describe RolesController do
   end
 
   describe "POST destroy" do
-    let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." } 
+    let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 
     
     it "redirects to group" do
@@ -75,6 +75,22 @@ describe RolesController do
       should redirect_to(person_path(person))
     end
 
+  end
+
+
+  describe "handling redirect_to param" do
+    it "GET new sets redirect_to in flash when passed" do
+      get :new, {group_id: group.id, role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name},
+                 redirect_to_person: true}
+      flash[:redirect_to].should eq  group_person_path(group, person)
+    end
+
+
+    it "POST create redirects to people after create" do
+      controller.stub(flash: { redirect_to: group_person_path(group, person) })
+      post :create, group_id: group.id, role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name}
+      should redirect_to group_person_path(group, person)
+    end
   end
 
 end

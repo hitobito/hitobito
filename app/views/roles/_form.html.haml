@@ -1,7 +1,6 @@
 -#main.row-fluid
   -#.span7
-= entry_form(buttons_bottom: false,
-             cancel_url: (entry.new_record? ? group_people_path(entry.group_id) : group_person_path(entry.group_id, entry.person_id))) do |f|
+= entry_form(buttons_bottom: false, cancel_url: role_cancel_url) do |f|
   - if entry.new_record?
     = f.hidden_field :group_id
     = f.hidden_field :type

@@ -9,13 +9,21 @@ class RolesController < CrudController
   
   hide_action :index, :show
   
+  def new
+    if params[:redirect_to_person]
+      flash[:redirect_to] = group_person_path(parent.id, entry.person.id)
+    end
+
+    super
+  end
+
   def create
-    super(location: group_people_path(entry.group_id))
+    super(location: flash[:redirect_to] || group_people_path(entry.group_id))
   end
   
   def update
     type = model_params && model_params.delete(:type)
-    if type && type != entry.type 
+    if type && type != entry.type
       handle_type_change(type)
       redirect_to(group_person_path(entry.group_id, entry.person_id))
     else
@@ -23,14 +31,14 @@ class RolesController < CrudController
     end
   end
 
-  def destroy 
+  def destroy
     super do |format|
       location = can?(:show, entry.person) ? person_path(entry.person_id) : group_path(parent)
-      format.html { redirect_to(location) } 
+      format.html { redirect_to(location) }
     end
   end
   
-  private 
+  private
   
   def handle_type_change(type)
     role = parent.class.find_role_type!(type).new
@@ -43,7 +51,7 @@ class RolesController < CrudController
     set_model_ivar(role)
   end
   
-  def build_entry 
+  def build_entry
     # delete unused attributes
     type = nil
     if model_params

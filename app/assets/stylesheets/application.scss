@@ -235,3 +235,22 @@
 .icon-calendar {
   cursor: pointer;
 }
+
+#content section.roles { 
+  overflow: visible;
+  table { 
+    border: none;
+    td:first-child { width: 0.1em; }
+    td:nth-child(2) { width: 85%; }
+    td { border: none } 
+    tr.group {
+      td { border-bottom: 1px solid $grayLight; }
+    }
+    tr.role { 
+      td { padding: 2px; }
+    }
+    tr.role-add {
+      td { padding-bottom: 1.5em; }
+    }
+  }
+}

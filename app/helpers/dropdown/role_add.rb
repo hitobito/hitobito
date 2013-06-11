@@ -11,13 +11,17 @@ module Dropdown
     end
     
     private
-    
+
     def init_items
       group.possible_roles.each do |entry|
-        link = template.new_group_role_path(group, role: { type: entry[:sti_name]})
-        item("als #{entry[:human]}", link)
+        item("als #{entry[:human]}", link(entry))
       end
     end
+
+    def link(entry)
+      template.new_group_role_path(group, role: { type: entry[:sti_name]})
+    end
+
     
   end
 end

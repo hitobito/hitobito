@@ -71,13 +71,15 @@ describe PeopleController, type: :controller do
   describe "role section" do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:section) { dom.all('aside section')[0] }
+
     it "contains roles" do
       get :show, params
       section.find('h2').text.should eq 'Aktive Rollen'
-      section.find('tr:eq(1) td:eq(1)').text.should include("Leader")
-      section.find('tr:eq(1) td:eq(1)').text.should include("TopGroup")
+      section.find('tr:eq(1)').text.should include("TopGroup")
+      section.should have_css('.btn-mini.dropdown-toggle')
+      section.find('tr:eq(2)').text.should include("Leader")
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
-      section.find('tr:eq(1) td:eq(3)').native.to_xml.should include edit_role_path
+      section.find('tr:eq(2) td:eq(3)').native.to_xml.should include edit_role_path
     end
   end
 

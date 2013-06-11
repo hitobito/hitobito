@@ -9,7 +9,8 @@
     - unless main_link
       = icon(icon_name) if icon_name
       = label
-    %b.caret
+    - if carret
+      %b.caret
       
   %ul.dropdown-menu{role: "menu"}
     - items.each do |item|

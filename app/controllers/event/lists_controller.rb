@@ -35,9 +35,21 @@ class Event::ListsController < ApplicationController
       entries.sort_by! {|e| e.dates.first.try(:start_at) || Time.zone.now }.
               collect! {|e| EventDecorator.new(e) }
     end
+
+    respond_to do |format|
+      format.html { @courses_by_kind }
+      format.csv  { render_courses_csv }
+    end
   end
 
   private
+
+  def render_courses_csv
+    if can?(:export, Event)
+      csv = Export::Courses::List.new(@courses_by_kind.values.flatten).to_csv
+      send_data csv, type: :csv
+    end
+  end
 
   def set_group_vars
     if can?(:manage_courses, Event)

@@ -64,6 +64,20 @@ describe Event::ListsController do
       end
     end
 
+
+    context "exports to csv" do
+      let(:rows) { response.body.split("\n") }
+      let(:course)  { Fabricate(:course) }
+      before { Fabricate(:event_date, event: course)  }
+
+      it "renders csv headers" do
+        get :courses, format: :csv
+        response.should be_success
+        rows.first.should match(/^Organisatoren;Nummer;Kursart;.*Hauptleitung Telefonnummern$/)
+        rows.should have(2).rows
+      end
+    end
+
   end
   
   def create_event(group, hash={})

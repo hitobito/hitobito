@@ -9,7 +9,7 @@ module Jubla::Event::Course
 
     # states are used for workflow
     # translations in config/locales
-    self.possible_states = %w(created confirmed application_open application_closed canceled completed closed)
+    self.possible_states = %w(created confirmed application_open application_closed assignment_closed canceled completed closed)
 
     ### ASSOCIATIONS
 

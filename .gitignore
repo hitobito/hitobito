@@ -47,8 +47,11 @@ public/uploads
 TAGS
 /.vimrc
 vendor/wagons/jubla/TAGS
-/todo.tasks
+todo.tasks
 vendor/wagons/jubla/config/environment.rb
 vendor/wagons/jubla/config/application.rb
 vendor/wagons/jubla/config/boot.rb
 vendor/wagons/jubla/config/environments
+Guardfile.zeus
+tags
+vendor/wagons/jubla/tags

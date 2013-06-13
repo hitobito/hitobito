@@ -47,6 +47,7 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'binding_of_caller'
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'tarantula', require: 'tarantula-rails3'

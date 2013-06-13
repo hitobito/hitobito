@@ -169,7 +169,8 @@ de:
         priority_3_id: "2. Ausweichkurs"
 
       event/date:
-        label: Beschreibung/Ort
+        label: Beschreibung
+        location: Ort
         start_at: Von
         finish_at: Bis
 

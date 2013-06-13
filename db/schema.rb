@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325141319) do
+ActiveRecord::Schema.define(:version => 20130613095249) do
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.string   "label"
     t.datetime "start_at"
     t.datetime "finish_at"
+    t.string   "location"
   end
 
   create_table "event_kinds", :force => true do |t|

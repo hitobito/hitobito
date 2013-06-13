@@ -32,5 +32,14 @@ describe 'events/_attrs.html.haml' do
     end
   end
 
+
+  context "event dates" do
+    let(:event) { EventDecorator.decorate(event_with_date) }
+    let(:event_with_date) { Fabricate(:event_date, event: events(:top_event), label: "Vorweekend", location: "Im Wald").event }
+    it "joins event date label and location" do
+      should have_content "Vorweekend, Im Wald"
+    end
+  end
+
 end
 

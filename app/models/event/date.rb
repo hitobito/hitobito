@@ -7,6 +7,7 @@
 #  label     :string(255)
 #  start_at  :datetime
 #  finish_at :datetime
+#  location  :string(255)
 #
 
 class Event::Date < ActiveRecord::Base
@@ -14,7 +15,7 @@ class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
   
-  attr_accessible :label
+  attr_accessible :label, :location
   
   belongs_to :event
   

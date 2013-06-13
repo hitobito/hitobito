@@ -7,6 +7,7 @@
 #  label     :string(255)
 #  start_at  :datetime
 #  finish_at :datetime
+#  location  :string(255)
 #
 
 Fabricator(:event_date, class_name: 'Event::Date') do

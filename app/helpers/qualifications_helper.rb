@@ -14,8 +14,6 @@ module QualificationsHelper
   def format_unbounded_value(value)
     if value.present?
       yield f(value)
-    else
-      "unbeschränkt"
     end
   end
   

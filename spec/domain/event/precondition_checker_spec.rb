@@ -43,23 +43,28 @@ describe Event::PreconditionChecker do
 
     before { preconditions << sl }
 
-    context "person without 'scharleiter'" do
+    context "person without 'super lead'" do
       its(:valid?) { should be_false }
       its("errors_text.last") { should =~ /Super Lead/ }
     end
 
-    context "person with expired 'scharleiter'" do
+    context "person with expired 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
       its(:valid?) { should be_false }
+
+      context "'super lead kind' reactivateable in range" do
+        before { sl.update_attribute(:reactivateable, Date.today.year - expired_date.year) }
+        its(:valid?) { should be_true }
+      end
     end
 
-    context "person with valid 'scharleiter'" do
+    context "person with valid 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
       its(:valid?) { should be_true }
       its(:errors_text) { should == [] }
     end
 
-    context "person with expired and valid 'scharleiter'" do
+    context "person with expired and valid 'super lead'" do
       before do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -68,7 +73,7 @@ describe Event::PreconditionChecker do
       its(:errors_text) { should == [] }
     end
 
-    context "person with unlimited 'scharleiter'" do
+    context "person with unlimited 'super lead'" do
       before do
         sl.update_attribute(:validity, nil)
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: course_start_at - 1.day)

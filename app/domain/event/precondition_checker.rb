@@ -15,8 +15,11 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
 
   def validate
     validate_minimum_age if course_minimum_age
-    course_preconditions.each do |qualification_kind| 
-      validate_precondition(qualification_kind)
+
+    course_preconditions.each do |qualification_kind|
+      if !(active?(qualification_kind) || reactivateable?(qualification_kind))
+        errors << qualification_kind.label
+      end
     end
   end
 
@@ -41,13 +44,18 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def person_qualifications
-    @person_qualifications ||= person.qualifications
+    @person_qualifications ||= person.qualifications.where(qualification_kind_id: course_preconditions.map(&:id))
   end
 
-  def person_qualified_for(qualification_kind)
-    person_qualifications.active(course.start_date).find do |qualification| 
-      qualification.qualification_kind == qualification_kind  && 
-        qualification.cover?(course_start_at.to_date)
+  def active?(qualification_kind)
+    person_qualifications.active(course.start_date).find do |qualification|
+      qualification.cover?(course_start_at.to_date)
+    end
+  end
+
+  def reactivateable?(qualification_kind)
+    person_qualifications.find do |qualification|
+      qualification.reactivateable?(course_start_at.to_date)
     end
   end
 
@@ -55,14 +63,14 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     age = 0
     if birthday = person.birthday
       age = course_start_at.year - birthday.year
-      age -= ((course_start_at.month > birthday.month || 
+      age -= ((course_start_at.month > birthday.month ||
                (course_start_at.month == birthday.month && course_start_at.day > birthday.day)) ? 1 : 0)
     end
     age
   end
 
   def birthday_error_text
-    "Altersgrenze von #{course_minimum_age} unterschritten, du bist #{person_age_at_course_start} Jahre alt." 
+    "Altersgrenze von #{course_minimum_age} unterschritten, du bist #{person_age_at_course_start} Jahre alt."
   end
 
   def qualifications_error_text

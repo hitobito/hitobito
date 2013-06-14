@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Event::ListsController do
   before { sign_in(person) }
-  let(:person) { people(:bottom_member) } 
+  let(:person) { people(:bottom_member) }
   
   context "GET #events" do
     it "populates events in group_hierarchy, order by start_at" do
@@ -71,6 +71,7 @@ describe Event::ListsController do
       before { Fabricate(:event_date, event: course)  }
 
       it "renders csv headers" do
+        controller.stub(current_user: people(:root))
         get :courses, format: :csv
         response.should be_success
         rows.first.should match(/^Organisatoren;Nummer;Kursart;.*Hauptleitung Telefonnummern$/)

@@ -213,6 +213,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+        reactivateable: Reaktivierbar
 
       phone_number:
         number: Nummer

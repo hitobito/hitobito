@@ -17,6 +17,7 @@ class Event::ParticipationsController < CrudController
   
   before_render_form :load_priorities
   before_render_show :load_answers
+  before_render_show :load_qualifications
 
   after_create :create_participant_role
   after_create :send_confirmation_email
@@ -132,6 +133,10 @@ class Event::ParticipationsController < CrudController
   def load_answers
     @answers = entry.answers.includes(:question)
     @application = Event::ApplicationDecorator.decorate(entry.application)
+  end
+
+  def load_qualifications
+    @qualifications = entry.person.qualifications.includes(:qualification_kind).order_by_date
   end
   
   # A label for the current entry, including the model name, used for flash

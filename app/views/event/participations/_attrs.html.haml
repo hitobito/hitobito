@@ -12,6 +12,8 @@
       = render_attrs(entry.person, :birthday, :gender)
     
     -if can?(:show_details, entry) # participation
+      = render_extensions :details, folder: :people, locals: { entry: entry.person, show_full: true } 
+
       -if @answers.present?
         = render 'answers'
     
@@ -27,4 +29,7 @@
         = render 'contactable/show', contactable: @application.contact, only_public: true
     
     = render 'roles'
+
+    - if can?(:show_details, entry)
+      = render 'people/qualifications', entry: entry.person, create_button: false
 

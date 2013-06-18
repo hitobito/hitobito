@@ -8,7 +8,7 @@
       %div
         = render_attrs(entry, :birthday, :gender)
         
-        = render_extensions :details
+        = render_extensions :details, locals: { show_full: can?(:show_full, entry) } 
     
         = render_attrs(entry, :created_info, :updated_info)
         
@@ -21,5 +21,5 @@
       = render 'roles'
       = render 'event_aside', title: 'Anmeldungen', collection: @pending_applications
       = render 'event_aside', title: 'Anlässe', collection: @upcoming_events
-      = render 'qualifications'
+      = render 'qualifications', create_button: can?(:create, entry.qualifications.new)
 

@@ -8,7 +8,7 @@ describe 'people/_qualifications.html.haml' do
   let(:dom) { @dom = Capybara::Node::Simple.new(@rendered) }
 
   before do
-    view.stub(parent: top_group, entry: top_leader)
+    view.stub(parent: top_group, entry: top_leader, create_button: true)
     view.stub(current_user: top_leader)
     controller.stub(current_user: top_leader)
   end

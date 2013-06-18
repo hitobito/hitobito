@@ -17,7 +17,7 @@ describe Export::Courses::List do
                             :leader_name, :leader_address, :leader_zip_code, :leader_town, :leader_email, :leader_phone_numbers ] }
 
 
-    its(:values) { should =~ ["Organisatoren", "Nummer", "Kursart", "Beschreibung", "Status", "Ort / Adresse",
+    its(:values) { should =~ ["Organisatoren", "Kursnummer", "Kursart", "Beschreibung", "Status", "Ort / Adresse",
                               "Datum 1 Beschreibung", "Datum 1 Ort", "Datum 1 Zeitraum", "Datum 2 Beschreibung", "Datum 2 Ort", "Datum 2 Zeitraum", "Datum 3 Beschreibung", "Datum 3 Ort", "Datum 3 Zeitraum",
                               "Kontaktperson Name", "Kontaktperson Adresse", "Kontaktperson PLZ", "Kontaktperson Ort", "Kontaktperson E-Mail", "Kontaktperson Telefonnummern",
                               "Hauptleitung Name", "Hauptleitung Adresse", "Hauptleitung PLZ", "Hauptleitung Ort", "Hauptleitung E-Mail", "Hauptleitung Telefonnummern"] }
@@ -30,7 +30,7 @@ describe Export::Courses::List do
 
     context "headers" do
       subject { csv.first }
-      it { should match(/^Organisatoren;Nummer;Kursart;.*Hauptleitung Telefonnummern$/) }
+      it { should match(/^Organisatoren;Kursnummer;Kursart;.*Hauptleitung Telefonnummern$/) }
     end
 
     context "first row" do

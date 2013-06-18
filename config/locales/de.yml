@@ -149,6 +149,7 @@ de:
       event/course:
         kind_id: Kursart
         state: Status
+        number: Kursnummer
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe

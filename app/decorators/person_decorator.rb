@@ -63,6 +63,10 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
+  # returns uniq, flattend group hierarchy across groups
+  def layer_groups
+    groups.map(&:layer_groups).flatten.uniq
+  end
   
   private
   

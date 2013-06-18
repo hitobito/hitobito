@@ -6,7 +6,7 @@
       %p= @application.confirmation_label
       %br/
     
-    = render 'contactable/show', contactable: entry.person, only_public: true
+    = render 'contactable/show', contactable: entry.person, only_public: cannot?(:show_details, entry)
     
     %div
       = render_attrs(entry.person, :birthday, :gender)

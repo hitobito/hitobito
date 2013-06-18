@@ -6,7 +6,7 @@
   - t.col('') do |p|
     .profil
       = image_tag(p.person.picture.thumb.url, size: '32x32')
-  - t.col('Name') do |p| 
+  - t.col('Name') do |p|
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s, group_event_participation_path(@group, @event, p))
@@ -14,6 +14,6 @@
       = muted p.person.additional_name
   - t.col('Rolle')    {|p| p.roles_short(@event) }
   - t.col('E-Mail')    {|p| p.primary_email }
-  - t.col('Telefon')  {|p| p.all_phone_numbers(true) }
+  - t.col('Telefon')  {|p| p.all_phone_numbers(cannot?(:show_details, p)) }
   - t.col('Adresse')  {|p| p.complete_address }
 

@@ -24,6 +24,7 @@ class PeopleController < CrudController
       format.html { set_entries }
       format.pdf  { render_pdf(filter_entries) }
       format.csv  { render_entries_csv }
+      format.email { render_email_addresses }
     end
   end
 
@@ -188,6 +189,11 @@ class PeopleController < CrudController
       filter_entries.preload_public_accounts
     end
     render_csv(entries, full)
+  end
+
+  def render_email_addresses
+    text = filter_entries.preload_public_accounts.map(&:email).join(',')
+    render text: text
   end
 
   def render_entry_csv

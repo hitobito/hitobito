@@ -17,6 +17,7 @@ module Dropdown
     def init_items
       csv_links
       label_links
+      email_link
     end
     
     def csv_links
@@ -26,6 +27,12 @@ module Dropdown
         item('CSV', '#', ['Adressliste', csv_path], ['Alle Angaben', csv_path.merge(details: true)])
       else
         item('CSV', csv_path)
+      end
+    end
+
+    def email_link
+      if template.current_page?(controller: 'people', action: 'index')
+        item('Alle Email Addressen', params.merge({format: :email}), target: :new)
       end
     end
     

@@ -71,6 +71,12 @@ describe PeopleController do
         @response.body.should =~ /^Top;Leader;.*;bla bla/
         @response.body.should =~ /123;456;.*facefoo;skypefoo/
       end
+
+      it "renders email addresses" do
+        get :index, group_id: group, format: :email
+        @response.content_type.should == 'text/plain'
+        @response.body.should == "top_leader@example.com,#{@tg_member.email}"
+      end
     end
 
     context "layer" do

@@ -98,9 +98,9 @@ describe Person do
   it "#order_by_name orders people by company, company_name or last_name" do
     Person.destroy_all
     p1 = Fabricate(:person, company: true, company_name: 'ZZ', last_name: 'AA')
-    p2 = Fabricate(:person, company: false, company_name: 'ZZ', first_name: 'BB', last_name: 'ZZ')
+    p2 = Fabricate(:person, company: false, company_name: 'ZZ', first_name: 'ZZ', last_name: 'BB')
     p3 = Fabricate(:person, company: true, company_name: 'AA', last_name: 'ZZ')
-    p4 = Fabricate(:person, company: false, first_name: 'BB', last_name: 'AA')
+    p4 = Fabricate(:person, company: false, first_name: 'AA', last_name: 'BB')
 
     Person.order_by_name.should == [p3, p4, p2, p1]
   end

@@ -111,11 +111,11 @@ class Person < ActiveRecord::Base
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
   scope :order_by_name, order("CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.company_name ELSE people.first_name END",
+                              " THEN people.company_name ELSE people.last_name END",
                               "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.first_name ELSE people.last_name END",
+                              " THEN people.last_name ELSE people.first_name END",
                               "CASE WHEN people.company = #{ActiveRecord::Base.connection.quoted_true}" +
-                              " THEN people.last_name ELSE people.nickname END")
+                              " THEN people.first_name ELSE people.nickname END")
 
 
   ### INDEXED FIELDS

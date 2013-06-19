@@ -1,5 +1,5 @@
 = section_table('Qualifikationen', @qualifications,
-                show_buttons ? new_group_person_qualification_path(parent, entry) : nil) do |item|
+                show_buttons && can?(:create, entry.qualifications.new) ? new_group_person_qualification_path(parent, entry) : nil) do |item|
   %td
     %strong= item.qualification_kind
   %td= f(item.origin)

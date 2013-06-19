@@ -11,7 +11,12 @@ module PeopleHelper
   end
   
   def dropdown_people_export(details = false)
-    Dropdown::PeopleExport.new(self, current_user, params, details).to_s
+    Dropdown::PeopleExport.new(self, current_user, params, details, false).to_s
   end
+
+  def dropdown_people_export_with_email_addresses(details = false)
+    Dropdown::PeopleExport.new(self, current_user, params, details, true).to_s
+  end
+
 
 end

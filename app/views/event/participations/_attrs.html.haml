@@ -31,5 +31,5 @@
     = render 'roles'
 
     - if can?(:show_details, entry)
-      = render 'people/qualifications', entry: entry.person
+      = render 'people/qualifications', entry: entry.person, show_buttons: false
 

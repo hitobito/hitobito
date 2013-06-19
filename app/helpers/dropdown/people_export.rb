@@ -3,11 +3,12 @@ module Dropdown
     
     attr_reader :user, :params
     
-    def initialize(template, user, params, details)
+    def initialize(template, user, params, details, email_addresses)
       super(template, 'Export', :download)
       @user = user
       @params = params
       @details = details
+      @email_addresses = email_addresses
       
       init_items
     end
@@ -17,7 +18,7 @@ module Dropdown
     def init_items
       csv_links
       label_links
-      email_link
+      email_addresses_link
     end
     
     def csv_links
@@ -30,8 +31,8 @@ module Dropdown
       end
     end
 
-    def email_link
-      if template.current_page?(controller: 'people', action: 'index')
+    def email_addresses_link
+      if @email_addresses
         item('Alle Email Addressen', params.merge({format: :email}), target: :new)
       end
     end

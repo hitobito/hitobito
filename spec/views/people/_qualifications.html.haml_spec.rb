@@ -8,7 +8,7 @@ describe 'people/_qualifications.html.haml' do
   let(:dom) { @dom = Capybara::Node::Simple.new(@rendered) }
 
   before do
-    view.stub(parent: top_group, entry: top_leader, create_button: true)
+    view.stub(parent: top_group, entry: top_leader, show_buttons: true)
     view.stub(current_user: top_leader)
     controller.stub(current_user: top_leader)
   end
@@ -17,7 +17,7 @@ describe 'people/_qualifications.html.haml' do
   context "table order" do
     before do
       assign(:qualifications,[create_qualification, create_qualification(finish_at_at: 1.year.ago, kind: gl)])
-      render 
+      render
     end
 
     it "lists qualifications finish_at DESC " do

@@ -1,4 +1,3 @@
-- show_buttons = current_page?(controller: 'people', action: 'show')
 = section_table('Qualifikationen', @qualifications,
                 show_buttons ? new_group_person_qualification_path(parent, entry) : nil) do |item|
   %td

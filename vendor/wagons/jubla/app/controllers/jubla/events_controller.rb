@@ -10,10 +10,17 @@ module Jubla::EventsController
     before_render_form :load_conditions
 
     before_save :set_application_contact
+
+    alias_method_chain :list_entries, :type
   end
 
 
   private
+
+  def list_entries_with_type
+    type = params[:type] ? params[:type] :  [Event.sti_name, nil]
+    list_entries_without_type.where(type: type)
+  end
 
   def default_coach
     if entry.class.attr_used?(:coach_id)

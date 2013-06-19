@@ -15,13 +15,13 @@ describe EventsController do
       let(:advisor) { Person.last }
       
       it "creates new event course with dates,advisor" do
-        post :create, event: {  group_ids: [group.id], 
-                                name: 'foo', 
+        post :create, event: {  group_ids: [group.id],
+                                name: 'foo',
                                 kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 dates_attributes: [ date ],
                                 contact_id: contact.id,
                                 advisor_id: advisor.id,
-                                type: 'Event::Course' }, 
+                                type: 'Event::Course' },
                       group_id: group.id
 
 
@@ -37,13 +37,13 @@ describe EventsController do
       end
       
       it "creates new event course without contact,advisor" do
-        post :create, event: {  group_ids: [group.id], 
-                                name: 'foo', 
+        post :create, event: {  group_ids: [group.id],
+                                name: 'foo',
                                 kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 contact_id: '',
                                 advisor_id: '',
                                 dates_attributes: [ date ],
-                                type: 'Event::Course' }, 
+                                type: 'Event::Course' },
                       group_id: group.id
 
         event = assigns(:event)
@@ -57,11 +57,11 @@ describe EventsController do
     context "application contact" do
 
       it "should set application contact if only one is available" do
-        post :create, event: {  group_ids: [group.id], 
-                                name: 'foo', 
+        post :create, event: {  group_ids: [group.id],
+                                name: 'foo',
                                 kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 dates_attributes: [ date ],
-                                type: 'Event::Course' }, 
+                                type: 'Event::Course' },
                       group_id: group.id
 
         event = assigns(:event)
@@ -87,13 +87,13 @@ describe EventsController do
       let(:coach) { Person.last }
 
       it "creates new event camp with dates,coach" do
-        post :create, event: {  group_ids: [group.id], 
-                                name: 'foo', 
+        post :create, event: {  group_ids: [group.id],
+                                name: 'foo',
                                 kind_id: Event::Kind.find_by_short_name('SLK').id,
                                 dates_attributes: [ date ],
                                 contact_id: contact.id,
                                 coach_id: coach.id,
-                                type: 'Event::Camp' }, 
+                                type: 'Event::Camp' },
                       group_id: group.id
 
 
@@ -119,8 +119,8 @@ describe EventsController do
         # assign flock coach
         Fabricate(:role, group: flock, type: 'Group::Flock::Coach', person: coach)
 
-        get :new, event: {  group_ids: [flock.id], 
-                             type: 'Event::Camp' }, 
+        get :new, event: {  group_ids: [flock.id],
+                             type: 'Event::Camp' },
                    group_id: flock.id
 
         event = assigns(:event)
@@ -129,13 +129,54 @@ describe EventsController do
 
       it "#new event camp it should NOT set default coach" do
         # no flock coach assigned
-        get :new, event: {  group_ids: [flock.id], 
-                             type: 'Event::Camp' }, 
+        get :new, event: {  group_ids: [flock.id],
+                             type: 'Event::Camp' },
                    group_id: flock.id
 
         event = assigns(:event)
         event.coach.should be nil
       end
+    end
+  end
+
+
+  context "#index filters based on type" do
+    require_relative '../support/fabrication.rb'
+    before { sign_in(people(:top_leader)) }
+
+    context "Jubla Schweiz" do
+      let(:group) { groups(:ch) }
+      let!(:event) { Fabricate(:event, groups: [group]) }
+      let!(:course) { Fabricate(:jubla_course, groups: [group]) }
+
+
+      it "lists events" do
+        get :index, group_id: group.id, year: 2012
+        assigns(:events).should eq [event, events(:top_event)]
+      end
+
+      it "lists courses" do
+        get :index, group_id: group.id, year: 2012, type: Event::Course.sti_name
+        assigns(:events).should eq [course]
+      end
+    end
+
+    context "Schar Thun" do
+      let(:group) { groups(:thun) }
+      let!(:event) { Fabricate(:event, groups: [group]) }
+      let!(:camp) { Fabricate(:camp, groups: [group]) }
+
+      it "lists event" do
+        get :index, group_id: group.id, year: 2012
+        assigns(:events).should eq [event]
+      end
+
+
+      it "lists camp" do
+        get :index, group_id: group.id, year: 2012, type: Event::Camp.sti_name
+        assigns(:events).should eq [camp]
+      end
+
     end
   end
 

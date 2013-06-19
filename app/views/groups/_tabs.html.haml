@@ -8,10 +8,6 @@
              group_roles_path(group),
              new_group_csv_imports_path(group)]
 
-- if can?(:index_events, group)
-  - bar.tab "Anlässe",
-            group_events_path(group, returning: true),
-            [group_events_path(group)]
 
 - if can?(:index_mailing_lists, group)
   - bar.tab "Abos",

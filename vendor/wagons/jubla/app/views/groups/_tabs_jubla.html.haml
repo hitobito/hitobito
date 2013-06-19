@@ -1,3 +1,15 @@
+- if can?(:index_events, group)
+  - bar.tab("Anlässe", group_events_path(group, returning: true),  [group_events_path(group)])
+
+  - if supports_camps?(group)
+    - bar.tab("Lager", group_events_path(group, type: Event::Camp.sti_name, returning: true),
+      [group_events_path(group, type: Event::Camp.sti_name)])
+
+  - if supports_courses?(group)
+    - bar.tab("Kurse", group_events_path(group, type: Event::Course.sti_name, returning: true),
+      [group_events_path(group, type: Event::Course.sti_name)])
+
+
 - if group.kind_of?(Group::Flock) && can?(:approve_population, group)
   - bar.tab tab_population_label(group), population_group_path(group)
 

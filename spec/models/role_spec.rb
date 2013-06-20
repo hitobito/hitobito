@@ -181,4 +181,17 @@ describe Role do
     end
   end
 
+  context "#label_long adds group to role", focus: true do
+    subject { role.label_long }
+
+    context "group with long key" do
+      let(:role) { Group::BottomLayer::Leader }
+      it { should eq 'Leader Bottom Layer Long' }
+    end
+
+    context "group without long key" do
+      let(:role) { Group::BottomGroup::Leader }
+      it { should eq 'Leader Bottom Group' }
+    end
+  end
 end

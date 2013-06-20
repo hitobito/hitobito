@@ -152,7 +152,7 @@ class PeopleController < CrudController
     if params[:role_types]
       list_entries(params[:kind]).where(roles: {type: params[:role_types]})
     else
-      list_entries.affiliate(false)
+      list_entries.members
     end
   end
 

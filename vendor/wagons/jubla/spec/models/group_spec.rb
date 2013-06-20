@@ -21,7 +21,7 @@ describe Group do
 
     it { should have(6).possible_children }
     it { should have(2).default_children }
-    it { should have(4).role_types }
+    it { should have(3).role_types }
     it { should be_layer }
 
     its(:possible_children) { should include(Group::SimpleGroup) }
@@ -57,11 +57,11 @@ describe Group do
     its(:possible_children) { should include(Group::SimpleGroup) }
 
     it "includes the common roles" do
-      subject.role_types.should include(Jubla::Role::GroupAdmin)
+      subject.role_types.should include(Group::SimpleGroup::GroupAdmin)
     end
 
     it "includes the external role" do
-      subject.role_types.should include(Jubla::Role::External)
+      subject.role_types.should include(Group::SimpleGroup::External)
     end
 
     it "may have same name as other group with different parent" do

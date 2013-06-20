@@ -11,9 +11,9 @@ module Jubla::FilterNavigation::People
   def init_items_with_alumni
     init_items_without_alumni
     
-    if can?(:index_full_people, group) || can?(:index_local_people, group) 
-      item('Ehemalige', 
-           filter_path(role_types: [Role::Alumnus.sti_name], 
+    if can?(:index_full_people, group) || can?(:index_local_people, group)
+      item('Ehemalige',
+           filter_path(role_types: group.role_types.select(&:alumnus?).map(&:sti_name),
                        name: 'Ehemalige'))
     end
   end

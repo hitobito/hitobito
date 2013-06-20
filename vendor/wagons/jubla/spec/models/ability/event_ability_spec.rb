@@ -92,7 +92,7 @@ describe EventAbility do
   end
 
   context :group_full do
-    let(:role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_board)) }
+    let(:role) { Fabricate(Group::StateBoard::GroupAdmin.name.to_sym, group: groups(:be_board)) }
 
     context Event do
       it "may create event in his group" do

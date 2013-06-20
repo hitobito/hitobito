@@ -27,6 +27,24 @@ de:
         other: Kantone
       group/work_group: Arbeitsgruppe
       
+      group/federal_professional_group: 
+        one: Fachgruppe
+        long: Fachgruppe Bund
+      group/federal_work_group:
+        one: Arbeitsgruppe
+        long: Arbeitsgruppe Bund
+      group/state_professional_group:
+        one: Fachgruppe
+        long: Fachgruppe Kanton
+      group/state_work_group:
+        one: Arbeitsgruppe
+        long: Arbeitsgruppe Kanton
+      group/regional_professional_group:
+        one: Fachgruppe
+        long: Fachgruppe Region
+      group/regional_work_group:
+        one: Arbeitsgruppe
+        long: Arbeitsgruppe Region
                 
       group/federal_board/member:
         one: Mitglied
@@ -129,7 +147,32 @@ de:
       jubla/role/leader: Leitung
       jubla/role/member: Mitglied
       jubla/role/treasurer: Kassier
+
+      group/state_professional_group/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Fachgruppe
+
+      group/state_board/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Kantonsvorstand
       
+      group/region/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Region
+
+      group/regional_board/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Regionalleitung
+
+      group/flock/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Schar
+
+      group/simple_group/dispatch_address:
+        one: Versandadresse
+        long: Versandadresse Einfache Gruppe
+
+
       census:
         one: Bestandesmeldungsperiode
         other: Bestandesmeldungsperioden

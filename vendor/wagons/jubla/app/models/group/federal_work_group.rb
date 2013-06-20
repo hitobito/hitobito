@@ -5,7 +5,16 @@ class Group::FederalWorkGroup < Group::WorkGroup
   
   class Member < Group::WorkGroup::Member
   end
+
+  class Alumnus < Jubla::Role::Alumnus
+  end
   
-  roles Leader, Member
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Member, Alumnus, GroupAdmin, External
   
 end

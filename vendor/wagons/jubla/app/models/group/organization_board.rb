@@ -12,7 +12,19 @@ class Group::OrganizationBoard < Group
   class Member < Jubla::Role::Member
     self.permissions = [:contact_data, :group_read]
   end
+
+  class Alumnus < Jubla::Role::Alumnus
+  end
+
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
   
-  roles Leader, Treasurer, Member
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Treasurer, Member, Alumnus, DispatchAddress, GroupAdmin, External
   
 end

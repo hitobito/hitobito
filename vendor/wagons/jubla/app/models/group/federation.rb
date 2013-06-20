@@ -22,5 +22,16 @@ class Group::Federation < Group
   
   def census_details(year)
     MemberCount.details_for_federation(year)
-  end 
+  end
+
+  class Alumnus < Jubla::Role::Alumnus
+  end
+
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Alumnus, GroupAdmin, External
 end

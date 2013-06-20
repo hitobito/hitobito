@@ -44,7 +44,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:federal_board))
+            other = Fabricate(Group::FederalBoard::External.name.to_sym, group: groups(:federal_board))
             should include(other.person)
           end
         end
@@ -58,7 +58,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
+            other = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board))
             should_not include(other.person)
           end
         end
@@ -85,7 +85,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
+            other = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board))
             should include(other.person)
           end
         end
@@ -99,7 +99,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_agency))
+            other = Fabricate(Group::StateAgency::External.name.to_sym, group: groups(:be_agency))
             should include(other.person)
           end
         end
@@ -113,7 +113,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
+            other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end
         end
@@ -130,7 +130,7 @@ describe PersonAccessibles do
       end
 
       describe :group_full do
-        let(:role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_board)) }
+        let(:role) { Fabricate(Group::StateBoard::GroupAdmin.name.to_sym, group: groups(:be_board)) }
 
         it "has group full permission" do
           role.permissions.should include(:group_full)
@@ -149,7 +149,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
+            other = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board))
             should include(other.person)
           end
         end
@@ -163,7 +163,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_agency))
+            other = Fabricate(Group::StateAgency::External.name.to_sym, group: groups(:be_agency))
             should_not include(other.person)
           end
         end
@@ -199,7 +199,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
+            other = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board))
             should include(other.person)
           end
         end
@@ -218,7 +218,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp))
             should_not include(other.person)
           end
         end
@@ -237,7 +237,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
+            other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end
         end
@@ -265,12 +265,12 @@ describe PersonAccessibles do
           end
 
           it "may get external people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp))
             should include(other.person)
           end
 
           it "may get alumni in his group" do
-            other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::Alumnus.name.to_sym, group: groups(:be_state_camp))
             should include(other.person)
           end
         end
@@ -284,7 +284,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board))
+            other = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board))
             should_not include(other.person)
           end
         end
@@ -298,7 +298,7 @@ describe PersonAccessibles do
           end
 
           it "may not get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
+            other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:bern))
             should_not include(other.person)
           end
         end
@@ -307,7 +307,7 @@ describe PersonAccessibles do
 
 
       describe 'no permissions' do
-        let(:role) { Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp)) }
+        let(:role) { Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp)) }
 
         it "has no permissions" do
           role.permissions.should == []
@@ -332,12 +332,12 @@ describe PersonAccessibles do
           end
 
           it "may not get external people in his group" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp))
             should_not include(other.person)
           end
 
           it "may not get alumni in his group" do
-            other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+            other = Fabricate(Group::StateWorkGroup::Alumnus.name.to_sym, group: groups(:be_state_camp))
             should_not include(other.person)
           end
         end
@@ -374,7 +374,7 @@ describe PersonAccessibles do
           end
 
           it "may get affiliate people" do
-            other = Fabricate(Jubla::Role::External.name.to_sym, group: group)
+            other = Fabricate(Group::FederalBoard::External.name.to_sym, group: group)
             should include(other.person)
           end
         end

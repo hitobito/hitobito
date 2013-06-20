@@ -6,6 +6,18 @@ class Group::RegionalWorkGroup < Group::WorkGroup
   class Member < Group::WorkGroup::Member
   end
   
-  roles Leader, Member
+  class Alumnus < Jubla::Role::Alumnus
+  end
+
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+  
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Member, Alumnus, DispatchAddress, GroupAdmin, External
   
 end

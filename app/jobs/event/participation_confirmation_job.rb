@@ -21,7 +21,7 @@ class Event::ParticipationConfirmationJob < BaseJob
   def approvers
     approver_types = Role.types_with_permission(:approve_applications).collect(&:sti_name)
     layer_ids = participation.person.groups.without_deleted.
-                                            merge(Person.affiliate(false)).
+                                            merge(Person.members).
                                             collect(&:layer_group_id).
                                             uniq
     Person.only_public_data.

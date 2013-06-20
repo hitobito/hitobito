@@ -48,7 +48,7 @@ class MemberCounter
     Person.joins(:roles).
            includes(:roles).
            where(roles: {group_id: flock.self_and_descendants, deleted_at: nil}).
-           affiliate(false).
+           members.
            uniq
   end
 

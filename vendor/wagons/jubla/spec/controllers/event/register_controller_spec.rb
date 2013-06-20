@@ -9,7 +9,7 @@ describe Event::RegisterController do
     it "creates external role" do
       expect do
         put :register, group_id: group.id, id: event.id, person: {last_name: 'foo', email: 'foo@example.com'}
-      end.to change { Jubla::Role::External.where(group_id: group.id).count }.by(1)
+      end.to change { Group::StateBoard::External.where(group_id: group.id).count }.by(1)
     end
   end
 end

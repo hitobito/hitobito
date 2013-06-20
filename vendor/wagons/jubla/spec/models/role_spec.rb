@@ -23,8 +23,8 @@ describe Role do
     end
   end
 
-  describe Jubla::Role::External do
-    subject { Jubla::Role::External }
+  describe Group::Region::External do
+    subject { Group::Region::External }
 
     it { should be_affiliate }
     it { should_not be_visible_from_above }
@@ -38,8 +38,8 @@ describe Role do
     end
   end
 
-  describe Jubla::Role::Alumnus do
-    subject { Jubla::Role::Alumnus }
+  describe Group::Region::Alumnus do
+    subject { Group::Region::Alumnus }
 
     it { should be_affiliate }
     it { should be_visible_from_above }
@@ -56,12 +56,12 @@ describe Role do
   describe "#all_types" do
     subject { Role.all_types }
 
-    it "must have master role as the first item" do
-      subject.first.should == Group::FederalBoard::Member
+    it "starts with top most role" do
+      subject.first.should == Group::Federation::Alumnus
     end
 
-    it "must have external role as last item" do
-      subject.last.should == Jubla::Role::Alumnus
+    it "finishes with bottom most role" do
+      subject.last.should == Group::SimpleGroup::External
     end
   end
 
@@ -73,7 +73,7 @@ describe Role do
 
     context "young role" do
       it "deletes from database" do
-        expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+        expect { role.destroy }.not_to change { Group::Flock::Alumnus.count }
         Role.with_deleted.where(id: role.id).should_not be_exists
       end
     end
@@ -83,7 +83,7 @@ describe Role do
 
       context "single role" do
         it "flags as deleted, creates alumnus role" do
-          expect { role.destroy }.to change { Jubla::Role::Alumnus.count }.by(1)
+          expect { role.destroy }.to change { Group::Flock::Alumnus.count }.by(1)
           Role.only_deleted.find(role.id).should be_present
         end
       end
@@ -92,26 +92,26 @@ describe Role do
         before { Fabricate(role_class.name.to_s, group: groups(:bern), person: role.person, created_at: created_at) }
 
         it "flags as deleted, does not create alumnus role" do
-          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          expect { role.destroy }.not_to change { Group::Flock::Alumnus.count }
           Role.only_deleted.find(role.id).should be_present
         end
       end
 
       context "external role" do
-        let(:role_class) { Jubla::Role::External }
+        let(:role_class) { Group::Flock::External }
 
         it "flags as deleted, does not create alumnus role" do
-          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          expect { role.destroy }.not_to change { Group::Flock::Alumnus.count }
           Role.only_deleted.find(role.id).should be_present
         end
       end
 
       context "alumnus role" do
-        let(:role_class) { Jubla::Role::Alumnus }
+        let(:role_class) { Group::Flock::Alumnus }
         before { role } # ensure we have created the original Alumnus role before expecting
 
         it "can be destroyed, creates new alumnus role" do
-          expect { role.destroy }.not_to change { Jubla::Role::Alumnus.count }
+          expect { role.destroy }.not_to change { Group::Flock::Alumnus.count }
         end
       end
     end

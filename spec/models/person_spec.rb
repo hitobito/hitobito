@@ -88,7 +88,7 @@ describe Person do
   it "can create person with role" do
     group = groups(:top_group)
     person = Person.new(last_name: 'Foo', email: 'foo@example.com')
-    role = group.class.roles.first.new
+    role = group.class.role_types.first.new
     role.group_id = group.id
     person.roles << role
 

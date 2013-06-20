@@ -18,6 +18,18 @@ class Group::StateBoard < Group
     self.permissions = [:layer_read]
   end
 
-  roles Leader, Member, Supervisor, President
+  class Alumnus < Jubla::Role::Alumnus
+  end
+
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+  
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Member, Supervisor, President, Alumnus, DispatchAddress, GroupAdmin, External
 
 end

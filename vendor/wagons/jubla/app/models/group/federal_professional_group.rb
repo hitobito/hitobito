@@ -7,6 +7,15 @@ class Group::FederalProfessionalGroup < Group::ProfessionalGroup
   class Member < Group::ProfessionalGroup::Member
   end
   
-  roles Leader, Member
+  class Alumnus < Jubla::Role::Alumnus
+  end
+  
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Member, Alumnus, GroupAdmin, External
   
 end

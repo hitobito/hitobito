@@ -24,7 +24,7 @@ describe PersonAbility do
     end
 
     it "may modify affiliates in the same layer" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:ch))
+      other = Fabricate(Group::Federation::External.name.to_sym, group: groups(:ch))
       should be_able_to(:update, other.person.reload)
       should be_able_to(:update, other)
     end
@@ -36,13 +36,13 @@ describe PersonAbility do
     end
 
     it "may not view any affiliates in lower layers" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
+      other = Fabricate(Group::State::External.name.to_sym, group: groups(:be))
       should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
 
     it "may view alumni in lower layers" do
-      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be))
+      other = Fabricate(Group::State::Alumnus.name.to_sym, group: groups(:be))
       should be_able_to(:show_full, other.person.reload)
       should be_able_to(:update, other)
     end
@@ -106,7 +106,7 @@ describe PersonAbility do
     end
 
     it "may modify affiliates in his flock" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:bern))
+      other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:bern))
       should be_able_to(:update, other.person.reload)
       should be_able_to(:update, other)
       should be_able_to(:create, other)
@@ -130,7 +130,7 @@ describe PersonAbility do
     end
 
     it "may not view any affiliates in upper layers" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be))
+      other = Fabricate(Group::State::External.name.to_sym, group: groups(:be))
       should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
     end
@@ -151,7 +151,7 @@ describe PersonAbility do
 
   describe :layer_read do
     # member with additional group_admin role
-    let(:group_role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_board)) }
+    let(:group_role) { Fabricate(Group::StateBoard::GroupAdmin.name.to_sym, group: groups(:be_board)) }
     let(:role)       { Fabricate(Group::StateBoard::Supervisor.name.to_sym, group: groups(:be_board), person: group_role.person) }
 
     it "may view details of himself" do
@@ -194,7 +194,7 @@ describe PersonAbility do
     end
 
     it "may view any affiliates in same layer" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_security))
+      other = Fabricate(Group::StateProfessionalGroup::External.name.to_sym, group: groups(:be_security))
       should be_able_to(:show_full, other.person.reload)
     end
 
@@ -221,12 +221,12 @@ describe PersonAbility do
     end
 
     it "may not view any affiliates in groups below" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:thun))
+      other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:thun))
       should_not be_able_to(:show, other.person.reload)
     end
 
     it "may view alumni in groups below" do
-      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:thun))
+      other = Fabricate(Group::Flock::Alumnus.name.to_sym, group: groups(:thun))
       should be_able_to(:show, other.person.reload)
     end
 
@@ -299,7 +299,7 @@ describe PersonAbility do
     end
 
     it "may not view affiliates in other group of same layer" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_security))
+      other = Fabricate(Group::StateProfessionalGroup::External.name.to_sym, group: groups(:be_security))
       should_not be_able_to(:show, other.person.reload)
     end
 
@@ -325,7 +325,7 @@ describe PersonAbility do
     end
 
     it "may not view any affiliates in groups below" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:thun))
+      other = Fabricate(Group::Flock::External.name.to_sym, group: groups(:thun))
       should_not be_able_to(:show, other.person.reload)
     end
 
@@ -368,12 +368,12 @@ describe PersonAbility do
     end
 
     it "may view externals in same group" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+      other = Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp))
       should be_able_to(:show, other.person.reload)
     end
 
     it "may view alumni in same group" do
-      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+      other = Fabricate(Group::StateWorkGroup::Alumnus.name.to_sym, group: groups(:be_state_camp))
       should be_able_to(:show, other.person.reload)
     end
 
@@ -406,7 +406,7 @@ describe PersonAbility do
   end
 
   describe 'no permissions' do
-    let(:role) { Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp)) }
+    let(:role) { Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp)) }
 
     it "may view details of himself" do
       should be_able_to(:show_full, role.person.reload)
@@ -430,12 +430,12 @@ describe PersonAbility do
     end
 
     it "may not view externals in same group" do
-      other = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_state_camp))
+      other = Fabricate(Group::StateWorkGroup::External.name.to_sym, group: groups(:be_state_camp))
       should_not be_able_to(:show, other.person.reload)
     end
 
     it "may not view alumni in same group" do
-      other = Fabricate(Jubla::Role::Alumnus.name.to_sym, group: groups(:be_state_camp))
+      other = Fabricate(Group::StateWorkGroup::Alumnus.name.to_sym, group: groups(:be_state_camp))
       should_not be_able_to(:show, other.person.reload)
     end
 
@@ -584,7 +584,7 @@ describe PersonAbility do
       end
 
       it "can send_password_instructions for external role" do
-        external = Fabricate(Jubla::Role::External.name.to_sym, group: groups(:be_board)).person.reload
+        external = Fabricate(Group::StateBoard::External.name.to_sym, group: groups(:be_board)).person.reload
         should be_able_to(:send_password_instructions, external)
       end
 

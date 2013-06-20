@@ -11,6 +11,18 @@ class Group::ChildGroup < Group
     self.visible_from_above = false
   end
   
-  roles Leader, Child
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  class Alumnus < Jubla::Role::Alumnus
+  end
+  
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Leader, Child, DispatchAddress, Alumnus, GroupAdmin, External
   
 end

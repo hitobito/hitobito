@@ -69,7 +69,7 @@ describe GroupAbility do
   end
 
   context "group full" do
-    let(:role) { Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: groups(:be_security)) }
+    let(:role) { Fabricate(Group::StateProfessionalGroup::GroupAdmin.name.to_sym, group: groups(:be_security)) }
 
     context "in own group" do
       let(:group) { role.group }

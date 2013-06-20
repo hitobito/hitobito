@@ -69,12 +69,16 @@ module Jubla::Role
 
   def create_alumnus_role
     if !self.class.external? && old_enough_to_archive? && last_role_for_person_in_group?
-      role = Jubla::Role::Alumnus.new
+      role = alumnus_class.new
       role.person = self.person
       role.group = self.group
       role.label = self.class.label
       role.save!
     end
+  end
+
+  def alumnus_class
+    "#{self.group.class.to_s}::Alumnus".constantize
   end
 
   def last_role_for_person_in_group?

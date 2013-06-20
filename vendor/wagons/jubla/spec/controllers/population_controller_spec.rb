@@ -8,7 +8,7 @@ describe PopulationController do
 
   let!(:leader) { Fabricate(Group::Flock::Leader.name.to_sym, group: flock).person }
   let!(:guide) { Fabricate(Group::Flock::Guide.name.to_sym, group: flock).person }
-  let!(:alumnus) { Fabricate(Jubla::Role::Alumnus.name.to_sym, group: flock).person }
+  let!(:alumnus) { Fabricate(Group::Flock::Alumnus.name.to_sym, group: flock).person }
   let!(:deleted) { Fabricate(Group::Flock::Leader.name.to_sym, group: flock, deleted_at: 1.year.ago) }
   let!(:group_leader) { Fabricate(Group::ChildGroup::Leader.name.to_sym, group: asterix, person: guide).person }
   let!(:child) { Fabricate(Group::ChildGroup::Child.name.to_sym, group: asterix).person }

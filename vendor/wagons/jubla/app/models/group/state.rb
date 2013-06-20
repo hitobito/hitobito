@@ -10,7 +10,19 @@ class Group::State < Group
   class Coach < Jubla::Role::Coach
   end
   
-  roles Coach
+  class Alumnus < Jubla::Role::Alumnus
+  end
+
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class External < Jubla::Role::External
+  end
+
+  roles Coach, Alumnus, DispatchAddress, GroupAdmin, External
   
   children Group::StateAgency,
            Group::StateBoard,

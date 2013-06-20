@@ -15,7 +15,7 @@ describe MemberCounter do
     Fabricate(Group::ChildGroup::Child.name, group: asterix, person: Fabricate(:person, gender: 'm', birthday: '1999-01-01'))
     Fabricate(Group::ChildGroup::Child.name, group: obelix, person: Fabricate(:person, gender: 'w', birthday: '1999-02-02'))
     # external roles, not counted
-    Fabricate(Jubla::Role::External.name, group: obelix, person: Fabricate(:person, gender: 'm', birthday: '1971-01-01'))
+    Fabricate(Group::ChildGroup::External.name, group: obelix, person: Fabricate(:person, gender: 'm', birthday: '1971-01-01'))
     Fabricate(Group::Flock::Coach.name, group: flock, person: Fabricate(:person, gender: 'w', birthday: '1972-01-01'))
     old = Fabricate(Group::Flock::Guide.name, group: flock, person: Fabricate(:person, gender: 'w', birthday: '1977-03-01'), created_at: 2.years.ago)
     old.destroy # soft delete role, create alumnus

@@ -6,10 +6,10 @@ describe EventsController, type: :controller  do
  
   let(:be) { groups(:be) }
   let(:no) { groups(:no) }
-  let(:dom) { Capybara::Node::Simple.new(response.body) } 
+  let(:dom) { Capybara::Node::Simple.new(response.body) }
   
-  before do 
-    Fabricate(Jubla::Role::GroupAdmin.name.to_sym, group: be, person: people(:top_leader))
+  before do
+    Fabricate(Group::State::GroupAdmin.name.to_sym, group: be, person: people(:top_leader))
     sign_in(people(:top_leader))
   end
 

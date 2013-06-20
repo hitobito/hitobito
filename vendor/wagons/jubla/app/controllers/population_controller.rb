@@ -16,7 +16,7 @@ class PopulationController < ApplicationController
   def load_people(groups)
     Person.joins(:roles).
            where(roles: {group_id: groups.collect(&:id), deleted_at: nil}).
-           affiliate(false).
+           members.
            preload_groups.
            uniq.
            order_by_role.

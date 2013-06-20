@@ -4,28 +4,48 @@
   margin-top: 0;
   margin-bottom: $vSpace;
 }
-.btn { 
-  color: $green;
-  &:hover {
-    color: darken($green, 10%); 
+.btn {
+  color: $blueDark;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    background: $purple;
+    @include single-text-shadow($purpleDark, 0, -1px, 1px);
+    border-color: $purpleDark;
     .icon,
-    [class^="icon-"], 
-    [class*=" icon-"] { 
-      background-image: image-url("glyphicons-halflings-green.png"); 
+    [class^="icon-"],
+    [class*=" icon-"] {
+      background-image: image-url("glyphicons-halflings-white.png");
     }
-  } 
+    .caret {
+      border-top-color: $white;
+    }
+  }
   .icon,
-  [class^="icon-"], 
-  [class*=" icon-"] { 
-    background-image: image-url("glyphicons-halflings-green-hover.png");
+  [class^="icon-"],
+  [class*=" icon-"] {
+    background-image: image-url("glyphicons-halflings-green.png");
   }
 
   .caret {
-    border-top-color: $green;
+    border-top-color: $blueDark;
   }
-  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
-    color: $white;
-  }
+}
+
+.btn-primary {
+  color: $white;
+  background: $blue;
+  border-color: $blue;
+  @include single-text-shadow($blueDark, 0, -1px, 1px);
+
+}
+
+.btn-group.open .btn.dropdown-toggle {
+  background: $purpleDark;
+  color: $white;
+  border-color: $purpleDark;
 }
 
 // from bootstrap 2.1.1 << to remove after bootstrap-sass update
@@ -102,7 +122,12 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDark;
+  color: $grayDarker;
+
+  &:focus {
+    border-color: $purple;
+    @include single-box-shadow(lighten($purple, 5%), 0, 0, 6px, 0, false);
+  }
 }
 
 select.time {
@@ -138,7 +163,7 @@ textarea {
   padding-bottom: 5px;
 }
 
-.fields .help-inline { 
+.fields .help-inline {
   float: right;
 }
 
@@ -148,9 +173,9 @@ textarea {
 
 .remove_nested_fields {
   color: $red;
-  margin: 0; 
+  margin: 0;
   padding: 0;
-  i { 
+  i {
     margin: 5px;
   }
   &:hover {

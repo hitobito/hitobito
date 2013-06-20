@@ -39,23 +39,50 @@
 /* Layout */
 // -------------------------
 
+body {
+  padding: 0;
+}
+
 /* Header */
 #page-header {
   @include clearfix;
-  margin: 10px 0 0;
+  padding: 10px 10px 0;
+  background: $pageBackground;
 
   @include responsive(mediaTablet) {
-    margin: 10px 20px 0;
+    padding: 10px 20px 0;
+  }
+
+  .options a {
+    color: lighten($pageBackground, 35%);
+    &:hover {
+      color: $white;
+    }
   }
 }
+
+// Logo
 .brand {
+  display: block;
   float: left;
+  width: 230px;
+  height: 30px;
+  padding: 10px 0;
   margin-right: 40px;
-  font-family: $headingFontFamily;
-  font-weight: bold;
-  font-size: 2.462em; // 32px
-  line-height: 1.250em; // 40px
-  @include single-text-shadow(white, 0, 1px, 0);
+
+  background: image-url("logo.png") transparent no-repeat 0px 10px;
+
+  // Hide text
+  text-indent: -9999px;
+  white-space: nowrap;
+
+  // Retina version
+  @media
+    only screen and (-webkit-min-device-pixel-ratio : 2),
+    only screen and (min-device-pixel-ratio : 2) {
+      background: image-url("logo@2x.png") transparent no-repeat 0px 10px;
+      background-size: 230px 30px;
+  }
 }
 .options {
   float: right;
@@ -104,23 +131,23 @@
 
 /* Content */
 #page {
-  padding-bottom: 30px;
-  margin: 20px 0 20px;
+  padding: 20px 10px 90px;
+  background: $pageBackground;
 
   @include responsive(mediaTablet) {
-    margin: 20px 20px;
+    padding: 20px 20px 90px;
   }
 
   & > .sheet { margin: 0 20px;}
 }
 .sheet.parent {
   padding-bottom: 1px;
-  background: lighten($grayLighter, 1%);
-  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  background: lighten($contentBackground, 3%);
+  @include single-box-shadow($shadowColor, 0, 2px, 8px, $shadowColor);
   .sheet {
     margin:0 -10px -30px 10px;
     &.parent {
-      background: lighten($grayLighter, 3%);
+      background: lighten($contentBackground, 6%);
     }
   }
   .level { color: $gray; }
@@ -135,8 +162,12 @@
     margin-bottom:-28px;
   }
 }
+.sheet,
 #content {
-  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  @include border-radius($bordeRadius);
+}
+#content {
+  @include single-box-shadow($shadowColor, 0, 2px, 8px, $shadowColor);
   background: white;
   padding: 16px 20px 20px;
 
@@ -170,9 +201,7 @@
 }
 /* Footer */
 #page-footer {
-  padding-top: $vSpace*2;
   clear: both;
-
   color: $white;
 
   .footer_content {
@@ -187,8 +216,8 @@
   }
 
   & > .container-fluid {
-    @include single-box-shadow($grayDarker, 0, 2px, 8px, 0, true);
-    background: $grayDark;
+    @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
+    background: $bodyBackground;
   }
 }
 
@@ -209,6 +238,12 @@
 
 .tooltip-inner {
   text-align: left;
+}
+
+// well
+.well {
+  border: none;
+  background: $grayLighter;
 }
 
 // Profil
@@ -232,6 +267,12 @@
   padding: 2px;
 }
 
+// Calendar
 .icon-calendar {
   cursor: pointer;
 }
+.ui-datepicker td .ui-state-default:hover {
+  background-color: $purple !important;
+}
+
+

@@ -57,7 +57,7 @@ module Dropdown
       LabelFormat.all_as_hash.each do |id, label|
         format_links << [label, export_label_format_path(id)]
       end
-      format_links
+      format_links.each { |link| link.present? && link << { target: :new } }
     end
     
     def export_label_format_path(id)

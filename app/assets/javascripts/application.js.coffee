@@ -35,11 +35,19 @@ replaceContent = (e, data, status, xhr) ->
 setDataType = (xhr) ->
   $(this).data('type', 'html')
 
-showDatePicker = (field) ->
-   field.datepicker()
-   field.datepicker('show')
+# start selection on previously selected date
+datepicker = do ->
+  lastDate = null
+  track = -> lastDate = $(this).val()
 
-# type aheads
+  show: ->
+    field = $(this)
+    field.datepicker(onSelect: track)
+    field.datepicker('show')
+
+    if lastDate && field.val() is ""
+      field.datepicker('setDate', lastDate)
+      field.val('') # user must confirm selection
 
 setupEntityTypeahead = (index, field) ->
   input = $(this)
@@ -127,8 +135,7 @@ $ ->
   setupQuicksearch()
 
   # wire up date picker
-  $(":input.date").live("click", -> showDatePicker($(this)))
-  $(".controls .icon-calendar").live("click", -> showDatePicker($(this).parent().siblings('.date')))
+  $(":input.date, .controls .icon-calendar").live('click', datepicker.show)
 
   # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)
@@ -142,7 +149,7 @@ $ ->
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
 
   # wire up tooltips
-  $('body').tooltip({ selector: '[rel=tooltip]', placement: 'right' });
+  $('body').tooltip({ selector: '[rel=tooltip]', placement: 'right' })
 
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->

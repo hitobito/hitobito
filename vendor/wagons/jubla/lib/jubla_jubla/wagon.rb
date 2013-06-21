@@ -41,6 +41,7 @@ module JublaJubla
       ### decorators
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator
       EventDecorator.send :include, Jubla::EventDecorator
+      PersonDecorator.send :include, Jubla::PersonDecorator
 
       ### helpers
       # add more active_for urls to main navigation

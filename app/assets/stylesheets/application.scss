@@ -248,6 +248,7 @@
     }
     tr.role { 
       td { padding: 2px; }
+      td:last-child { text-align: right; } 
     }
     tr.role-add {
       td { padding-bottom: 1.5em; }

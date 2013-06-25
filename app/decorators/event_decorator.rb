@@ -99,7 +99,7 @@ class EventDecorator < ApplicationDecorator
   private
 
   def label_and_location(date)
-    [date.label, date.location].compact.join(', ')
+    [date.label, date.location].reject(&:empty?).join(', ')
   end
 
   def issued_qualifications_info(qualification_kinds)

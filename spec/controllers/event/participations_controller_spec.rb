@@ -160,6 +160,7 @@ describe Event::ParticipationsController do
         role = participation.roles.first
         role.participation.should eq participation.model
       end
+
     end
 
     context "other user" do
@@ -200,5 +201,44 @@ describe Event::ParticipationsController do
       end
     end
 
+  end
+
+
+  context "multiple choice answers" do
+    let(:event) { events(:top_event) }
+    let(:question) { event_questions(:top_ov) }
+
+    before do
+      question.update_attribute(:multiple_choices, true)
+      event.questions << question
+    end
+
+    context "POST #create" do
+      let(:answers_attributes) { {"0"=>{"question_id"=>question.id, "answer"=> ["1", "2"] } } }
+
+      it "handles multiple choice answers" do
+        post :create, group_id: event.groups.first.id, event_id: event.id, event_participation: { answers_attributes: answers_attributes }
+        assigns(:participation).answers.first.answer.should eq "GA, Halbtax"
+      end
+    end
+
+    context "PUT #update" do
+      let!(:participation) { Fabricate(:event_participation, event: event, person: user) }
+      let(:values) { ["0"] }
+      let(:answer) { participation.answers.build }
+      let(:answers_attributes) { {"0"=>{"question_id"=>question.id, "answer"=> ["0"], id: answer.id } } }
+
+      before do
+        answer.answer = "GA, Halbtax"
+        answer.question = question
+        answer.save
+      end
+
+      it "handles resetting of multiple choice answers" do
+        participation.answers.first.answer.should eq "GA, Halbtax"
+        put :update, group_id: event.groups.first.id, event_id: event.id, id: participation.id, event_participation: { answers_attributes: answers_attributes }
+        participation.reload.answers.first.answer.should be_nil
+      end
+    end
   end
 end

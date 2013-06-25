@@ -49,7 +49,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a password field
   def password_field(attr, html_options = {})
-    html_options[:class] ||= 'span6' 
+    html_options[:class] ||= 'span6'
     super(attr, html_options)
   end
 
@@ -125,7 +125,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
     
-    date_field("#{attr}_date") + 
+    date_field("#{attr}_date") +
     ' ' +
     hours_select("#{attr}_hour") +
     ' : ' +
@@ -133,12 +133,33 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-   
     label(id_from_value(attr, value), class: "radio#{' inline' if inline}") do
-      radio_button(attr, value, html_options) + ' ' + 
+      radio_button(attr, value, html_options) + ' ' +
       caption
     end
   end
+
+  # custom build tags (check_box includes "0" for every value)
+  # - custom param name to allow array values without sending "0" for not selected boxes (like check_box helper)
+  # - sanitized id copied from private ActionView::Helpers::FormTagHelper#sanitized_to_id  (used in label_tag)
+  def inline_nested_form_custom_checkbox(attr, value, index)
+    name = object_name + "[#{attr}][]"
+    sanitized_id = "#{object_name}_#{index}".gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
+    checked = @object.send(attr).to_s.split(',').include?(value)
+    hidden_field = index == 0 ? @template.hidden_field_tag(name, index) : ""
+
+    @template.label_tag(sanitized_id, class: 'checkbox') do
+      hidden_field.html_safe + @template.check_box_tag(name, index + 1, checked, id: sanitized_id) + ' ' + value
+    end
+  end
+
+  def inline_check_box_button(attr, value, caption, html_options = {})
+    label(id_from_value(attr, value), class: "checkbox") do
+      check_box(attr, html_options) + ' ' +
+      caption
+    end
+  end
+
 
   def inline_check_box(attr, value, caption, html_options = {})
     model_param = klass.model_name.param_key
@@ -147,7 +168,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:id] = "#{model_param}_#{id}"
     label(id, class: 'checkbox inline') do
       @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
-      ' ' + 
+      ' ' +
       caption
     end
   end
@@ -160,9 +181,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     list = association_entries(attr, html_options)
     if list.present?
-      prompt = if html_options[:prompt] 
+      prompt = if html_options[:prompt]
                  {prompt: html_options[:prompt]}
-               elsif html_options[:include_blank] 
+               elsif html_options[:include_blank]
                  {include_blank: html_options[:include_blank]}
                elsif html_options[:multiple]
                  {}
@@ -195,30 +216,30 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
-    string_field(attr, 
-                 placeholder: 'Person suchen...', 
-                 data: {provide: 'entity', 
+    string_field(attr,
+                 placeholder: 'Person suchen...',
+                 data: {provide: 'entity',
                         id_field: "#{object_name}_#{attr_id}",
                         url: @template.query_people_path})
   end
   
-  def labeled_inline_fields_for(assoc, partial_name=nil, &block) 
+  def labeled_inline_fields_for(assoc, partial_name=nil, &block)
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
       nested_fields_for(assoc, partial_name, 'controls controls-row') do |fields|
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
         content << help_inline(fields.link_to_remove('Entfernen'))
-        content_tag(:div, content, class: 'controls controls-row') 
+        content_tag(:div, content, class: 'controls controls-row')
       end
     end
   end
 
-  def nested_fields_for(assoc, partial_name=nil, control_class=nil, &block) 
+  def nested_fields_for(assoc, partial_name=nil, control_class=nil, &block)
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc) do |fields|
           block_given? ? capture(fields, &block) : render(partial_name, f: fields)
-        end 
-      end + 
+        end
+      end +
       content_tag(:div, class: 'controls') do
         help_inline(link_to_add 'Eintrag hinzufügen', assoc)
       end

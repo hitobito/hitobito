@@ -183,6 +183,7 @@ de:
       event/question:
         question: Frage
         choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
 
       event/answer:
         answer: Antwort

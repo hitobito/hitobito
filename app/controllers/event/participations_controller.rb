@@ -160,7 +160,7 @@ class Event::ParticipationsController < CrudController
   
   def set_success_notice
     if action_name.to_s == 'create'
-      notice = "#{full_entry_label} wurde erfolgreich erstellt. " + 
+      notice = "#{full_entry_label} wurde erfolgreich erstellt. " +
                "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
       if user_course_application?
         notice += "<br />Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, " +

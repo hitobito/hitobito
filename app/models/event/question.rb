@@ -1,19 +1,19 @@
 # encoding: utf-8
-
 # == Schema Information
 #
 # Table name: event_questions
 #
-#  id       :integer          not null, primary key
-#  event_id :integer
-#  question :string(255)
-#  choices  :string(255)
+#  id               :integer          not null, primary key
+#  event_id         :integer
+#  question         :string(255)
+#  choices          :string(255)
+#  multiple_choices :boolean          default(FALSE)
 #
 
 class Event::Question < ActiveRecord::Base
   
   
-  attr_accessible :question, :choices
+  attr_accessible :question, :choices, :multiple_choices
   
   
   belongs_to :event
@@ -26,10 +26,10 @@ class Event::Question < ActiveRecord::Base
   scope :global, where(event_id: nil)
   
   
-  
   def choice_items
     choices.to_s.split(',').collect(&:strip)
   end
+
   
   private
   

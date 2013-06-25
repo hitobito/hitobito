@@ -29,6 +29,7 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/border-radius";
 @import "compass/css3/transition";
+@import "compass/css3/opacity";
 
 /* Imports Partials */
 @import "typography";
@@ -254,4 +255,10 @@
       td { padding-bottom: 1.5em; }
     }
   }
+}
+
+.icon-muted { @include opacity(0.7); }
+.contactable.well .contact {
+  address { margin-left: 1em; }
+  .social { margin-left: 1em; }
 }

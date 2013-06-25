@@ -42,6 +42,7 @@ datepicker = do ->
 
   show: ->
     field = $(this)
+    field = if field.is('.icon-calendar') then field.parent().siblings('.date')
     field.datepicker(onSelect: track)
     field.datepicker('show')
 

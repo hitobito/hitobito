@@ -160,6 +160,7 @@ class PeopleController < CrudController
     list_scope(kind).
           preload_groups.
           uniq.
+          order_by_role.
           order_by_name
   end
 
@@ -172,7 +173,7 @@ class PeopleController < CrudController
       @multiple_groups = true
       accessibles.in_layer(@group)
     else
-      accessibles(@group).order_by_role
+      accessibles(@group)
     end
   end
 

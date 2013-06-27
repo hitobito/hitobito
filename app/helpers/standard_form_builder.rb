@@ -145,7 +145,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def inline_nested_form_custom_checkbox(attr, value, index)
     name = object_name + "[#{attr}][]"
     sanitized_id = "#{object_name}_#{index}".gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
-    checked = @object.send(attr).to_s.split(',').include?(value)
+    checked = @object.send(attr).to_s.split(', ').include?(value)
     hidden_field = index == 0 ? @template.hidden_field_tag(name, index) : ""
 
     @template.label_tag(sanitized_id, class: 'checkbox') do

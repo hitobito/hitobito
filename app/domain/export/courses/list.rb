@@ -1,4 +1,3 @@
-require 'csv'
 module Export
   module Courses
     class List
@@ -12,12 +11,10 @@ module Export
         @rows ||= courses.map { |course| new_row(course) }
       end
 
-      def to_csv
-        CSV.generate(options) do |csv|
-          csv << labels.values
-          rows.each do |row|
-            csv << values(row)
-          end
+      def to_csv(generator)
+        generator << labels.values
+        rows.each do |row|
+          generator << values(row)
         end
       end
 

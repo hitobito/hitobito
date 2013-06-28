@@ -1,5 +1,6 @@
 module Export
   module Courses
+
     class JublaList < List
       def initialize(courses)
         super(courses)
@@ -36,6 +37,11 @@ module Export
         else {}
         end
       end
+    end
+
+    # Override the export method used in controller
+    def self.export_list(courses)
+      Export::Csv::Generator.new(Export::Courses::JublaList.new(courses)).csv
     end
 
   end

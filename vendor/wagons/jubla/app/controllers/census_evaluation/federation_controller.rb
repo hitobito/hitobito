@@ -12,14 +12,17 @@ class CensusEvaluation::FederationController < CensusEvaluation::BaseController
       end
       format.csv do
         authorize!(:create, Census)
-        csv = Export::CensusFlock.new(year).to_csv
         send_data csv, type: :csv
       end
     end
   end
   
   private
-  
+
+  def csv
+    Export::Csv::Generator.new(Export::CensusFlock.new(year)).csv
+  end
+
   def flock_confirmation_ratios
     @sub_groups.inject({}) do |hash, state|
       hash[state.id] = {confirmed: number_of_confirmations(state), total: number_of_flocks(state)}

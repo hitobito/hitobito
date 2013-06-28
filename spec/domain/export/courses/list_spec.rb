@@ -25,8 +25,9 @@ describe Export::Courses::List do
 
 
   context "to_csv" do
+    let(:courses) { [course] }
     let(:course) { Fabricate.build(:course, groups: [groups(:top_group)], location: 'somewhere', state: 'somestate')  }
-    let(:csv) { Export::Courses::List.new([course]).to_csv.split("\n")  }
+    let(:csv) { Export::Csv::Generator.new(list).csv.split("\n")  }
 
     context "headers" do
       subject { csv.first }
@@ -71,7 +72,8 @@ describe Export::Courses::List do
 
   context "multiple courses" do
     let(:course) { Fabricate.build(:course) }
-    subject { Export::Courses::List.new([course, course, course, course]).to_csv.split("\n")  }
+    let(:courses) { [course, course, course, course] }
+    subject { Export::Csv::Generator.new(list).csv.split("\n") }
     it { should have(5).rows }
   end
 

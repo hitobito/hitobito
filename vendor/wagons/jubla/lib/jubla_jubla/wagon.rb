@@ -36,7 +36,6 @@ module JublaJubla
       EventsController.send :include, Jubla::EventsController
       Event::QualificationsController.send :include, Jubla::Event::QualificationsController
       Event::RegisterController.send :include, Jubla::Event::RegisterController
-      Event::ListsController.send :include, Jubla::Event::ListsController
 
       ### decorators
       Event::ParticipationDecorator.send :include, Jubla::Event::ParticipationDecorator

@@ -33,12 +33,10 @@ module Export
       @items ||= build_items
     end
 
-    def to_csv
-      CSV.generate(options) do |csv|
-        csv << self.class.labels
-        items.each do |item|
-          csv << item.values
-        end
+    def to_csv(generator)
+      generator << self.class.labels
+      items.each do |item|
+        generator << item.values
       end
     end
 

@@ -3,21 +3,26 @@ module Export
   module CsvPeople
 
     def self.export_address(people)
-      Generator.new(PeopleAddress.new(people)).csv
+      export(PeopleAddress, people)
     end
 
     def self.export_full(people)
-      Generator.new(PeopleFull.new(people)).csv
+      export(PeopleFull,people)
     end
 
     def self.export_participations_address(participations)
-      Generator.new(ParticipationsAddress.new(participations)).csv
+      export(ParticipationsAddress,participations)
     end
 
     def self.export_participations_full(participations)
-      Generator.new(ParticipationsFull.new(participations)).csv
+      export(ParticipationsFull,participations)
     end
 
+    private
+
+    def self.export(exporter, people)
+      Export::Csv::Generator.new(exporter.new(people)).csv
+    end
   end
 
 end

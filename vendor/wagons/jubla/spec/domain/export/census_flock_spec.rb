@@ -65,7 +65,7 @@ describe Export::CensusFlock do
 
   describe "to_csv" do
     
-    subject { census_flock.to_csv.split("\n") }
+    subject { Export::Csv::Generator.new(census_flock).csv.split("\n") }
 
     its(:first) { should eq "Name;Kontakt Vorname;Kontakt Nachname;Adresse;PLZ;Ort;Jubla Versicherung;Jubla Vollkasko;Leitende;Kinder" }
     its(:second) { should eq "Ausserroden;;;;;;nein;nein;;" }

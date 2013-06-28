@@ -26,7 +26,7 @@ describe Import::Person do
 
   context "extract phone numbers" do
     let(:data) { {first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' } }
-    subject { Import::Person.new(data).person }
+    subject { Import::Person.new(data, []).person }
 
     its(:first_name) { should eq 'foo' }
     its('phone_numbers.first') { should be_present }
@@ -55,7 +55,7 @@ describe Import::Person do
         phone_number_mobil: '123' }
     end
 
-    subject { Import::Person.new(data).person }
+    subject { Import::Person.new(data, []).person }
 
     its('phone_numbers.first.label') { should eq 'Privat' }
     its('phone_numbers.first.number') { should eq '123' }
@@ -79,7 +79,29 @@ describe Import::Person do
     it "all protected attributes are filtered via blacklist" do
       public_attributes = person.attributes.reject { |key, value| Import::Person::BLACKLIST.include?(key.to_sym) }
       public_attributes.size.should eq 13
-      expect { Import::Person.new(public_attributes).person }.not_to raise_error
+      expect { Import::Person.new(public_attributes, []).person }.not_to raise_error
+    end
+  end
+
+
+  context "tracks emails" do
+    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com','foo@bar.com'] }
+
+    let!(:people) do
+      emails_tracker = []
+      emails.map do |email|
+        person = Fabricate.build(:person, email: email).attributes.select {|attr| attr =~ /name|email/ }
+        Import::Person.new(person, emails_tracker)
+      end
+    end
+
+    it "validates uniquness of emails in currently imported person set" do
+      people.first.should be_valid
+      people.second.should be_valid
+      people.third.should be_valid
+      people.fourth.should be_valid
+      people.fifth.should_not be_valid
+      people.fifth.human_errors.should eq 'E-Mail ist bereits vergeben'
     end
   end
 

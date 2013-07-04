@@ -37,6 +37,13 @@ describe Import::PersonDoubletteFinder do
     its(:query) { should eq ['last_name = ? AND first_name = ? AND zip_code = ? AND birthday = ?',
                              'bar', 'foo', '213', Time.zone.parse('1991-05-06').to_date] }
     its(:find_and_update) { should be_present }
+
+    context "ignores invalid birthday" do
+      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '-' } }
+
+      its(:query) { should eq ['last_name = ? AND first_name = ? AND zip_code = ?', 'bar', 'foo', '213'] }
+      its(:find_and_update) { should be_present }
+    end
   end
 
   context "multiple updates to the same person" do
@@ -44,4 +51,5 @@ describe Import::PersonDoubletteFinder do
     let(:attrs) { { email: 'foo@bar.com' } }
     its('find_and_update.first_name') { should eq 'foo' }
   end
+
 end

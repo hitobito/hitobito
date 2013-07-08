@@ -4,6 +4,9 @@ class CensusInvitationJob < BaseJob
                      Group::Flock::Leader,
                      Group::ChildGroup::Leader]
 
+
+  self.parameters = [:census_id]
+
   def initialize(census)
     @census_id = census.id
   end

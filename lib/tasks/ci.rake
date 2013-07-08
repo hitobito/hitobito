@@ -75,7 +75,7 @@ if Rake::Task.task_defined?('spec:requests') # only if current environment knows
       t.spec_opts = "--tag performance:true"
     end
 
-    [:abilities, :domain, :regressions, :decorators].each do |dir|
+    [:abilities, :decorators, :domain, :jobs, :regressions].each do |dir|
       RSpec::Core::RakeTask.new(dir => 'db:test:prepare') do |t|
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
       end

@@ -1,5 +1,7 @@
 class Event::ParticipationConfirmationJob < BaseJob
 
+  self.parameters = [:participation_id]
+
   def initialize(participation)
     @participation_id = participation.id
   end

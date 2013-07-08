@@ -98,6 +98,7 @@ class Person < ActiveRecord::Base
   validates :gender, inclusion: %w(m w), allow_blank: true
   validates :company_name, presence: { if: :company? }
   validate :assert_has_any_name
+  # more validations defined by devise
 
 
   ### CALLBACKS
@@ -185,6 +186,14 @@ class Person < ActiveRecord::Base
   # Is this person root?
   def root?
     email == Settings.root_email
+  end
+
+  # Overwrite to handle uniquness validation race conditions
+  def save(*args)
+    super
+  rescue ActiveRecord::RecordNotUnique => e
+    errors.add(:email, :taken)
+    false
   end
 
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb

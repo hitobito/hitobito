@@ -284,4 +284,14 @@ describe Person do
     end
   end
 
+  context "#save" do
+    it "does not save person with duplicate email even when validation fails" do
+      person = Person.new
+      person.first_name = 'Foo'
+      person.email = people(:top_leader).email
+      person.save(validate: false).should be_false
+      person.errors[:email].should == ['ist bereits vergeben']
+    end
+  end
+
 end

@@ -227,6 +227,7 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
 %endif
 
 touch %{wwwdir}/%{name}/www/tmp/restart.txt
+rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
 
 %preun
 # Run before uninstallation
@@ -237,6 +238,10 @@ touch %{wwwdir}/%{name}/www/tmp/restart.txt
 if [ "$1" = 0 ] ; then
   /sbin/service %{name}-workers stop > /dev/null 2>&1
   /sbin/chkconfig --del %{name}-workers || :
+fi
+if [ "$1" = 1 ] ; then
+  touch %{wwwdir}/%{name}/www/tmp/stop.txt
+  /sbin/service %{name}-workers stop >/dev/null 2>&1
 fi
 %endif
 

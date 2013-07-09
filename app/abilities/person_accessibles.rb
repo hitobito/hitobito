@@ -105,7 +105,7 @@ class PersonAccessibles
   end
 
   def layer_read_in_above_layer?
-    layers_read.present? && (layers_read & group.layer_groups.collect(&:id)).present?
+    layers_read.present? && (layers_read & group.layer_hierarchy.collect(&:id)).present?
   end
 
   def read_layer_groups

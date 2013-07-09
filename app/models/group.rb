@@ -158,11 +158,11 @@ class Group < ActiveRecord::Base
 
   # The layer of this group.
   def layer_group
-    layer ? self : layer_groups.last
+    layer ? self : layer_hierarchy.last
   end
 
   # The layer hierarchy from top to bottom of this group.
-  def layer_groups
+  def layer_hierarchy
     hierarchy.select { |g| g.class.layer }
   end
 
@@ -186,19 +186,19 @@ class Group < ActiveRecord::Base
   end
 
   # The layer hierarchy without the layer of this group.
-  def upper_layer_groups
+  def upper_layer_hierarchy
     if new_record?
       if parent
         if layer?
-          parent.layer_groups
+          parent.layer_hierarchy
         else
-          parent.layer_groups - [parent.layer_group]
+          parent.layer_hierarchy - [parent.layer_group]
         end
       else
         []
       end
     else
-      layer_groups - [layer_group]
+      layer_hierarchy - [layer_group]
     end
   end
 

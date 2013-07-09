@@ -27,13 +27,13 @@ class Group::Flock < Group
 
   def available_coaches
     coach_role_types = [Group::State::Coach, Group::Region::Coach].collect(&:sti_name)
-    Person.in_layer(*layer_groups).
+    Person.in_layer(*layer_hierarchy).
            where(roles: { type: coach_role_types })
   end
 
   def available_advisors
     advisor_group_types = [Group::StateBoard, Group::RegionalBoard].collect(&:sti_name)
-    Person.in_layer(*layer_groups).
+    Person.in_layer(*layer_hierarchy).
            where(groups: { type: advisor_group_types }).
            where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
   end

@@ -51,17 +51,17 @@ describe Group do
     end
   end
 
-  context "#layer_groups" do
+  context "#layer_hierarchy" do
     it "is itself for top layer" do
-      groups(:top_layer).layer_groups.should == [groups(:top_layer)]
+      groups(:top_layer).layer_hierarchy.should == [groups(:top_layer)]
     end
 
     it "is next upper layer for top layer group" do
-      groups(:top_group).layer_groups.should == [groups(:top_layer)]
+      groups(:top_group).layer_hierarchy.should == [groups(:top_layer)]
     end
 
     it "is all upper layers for regular layer" do
-      groups(:bottom_layer_one).layer_groups.should == [groups(:top_layer), groups(:bottom_layer_one)]
+      groups(:bottom_layer_one).layer_hierarchy.should == [groups(:top_layer), groups(:bottom_layer_one)]
     end
   end
 
@@ -75,18 +75,18 @@ describe Group do
     end
   end
 
-  context "#upper_layer_groups" do
+  context "#upper_layer_hierarchy" do
     context "for existing group" do
       it "contains only upper for layer" do
-        groups(:bottom_layer_one).upper_layer_groups.should == [groups(:top_layer)]
+        groups(:bottom_layer_one).upper_layer_hierarchy.should == [groups(:top_layer)]
       end
 
       it "contains only upper for group" do
-        groups(:bottom_group_one_one).upper_layer_groups.should == [groups(:top_layer)]
+        groups(:bottom_group_one_one).upper_layer_hierarchy.should == [groups(:top_layer)]
       end
 
       it "is empty for top layer" do
-        groups(:top_group).upper_layer_groups.should be_empty
+        groups(:top_group).upper_layer_hierarchy.should be_empty
       end
     end
 
@@ -94,45 +94,45 @@ describe Group do
       it "contains only upper for layer" do
         group = Group::BottomLayer.new
         group.parent = groups(:top_layer)
-        group.upper_layer_groups.should == [groups(:top_layer)]
+        group.upper_layer_hierarchy.should == [groups(:top_layer)]
       end
 
       it "contains only upper for group" do
         group = Group::BottomGroup.new
         group.parent = groups(:bottom_layer_one)
-        group.upper_layer_groups.should == [groups(:top_layer)]
+        group.upper_layer_hierarchy.should == [groups(:top_layer)]
       end
 
       it "is empty for top layer" do
         group = Group::TopGroup.new
         group.parent = groups(:top_layer)
-        group.upper_layer_groups.should be_empty
+        group.upper_layer_hierarchy.should be_empty
       end
     end
   end
 
   context "#sister_groups_with_descendants" do
     subject { group.sister_groups_with_descendants.to_a }
-    
+
     context "for root" do
       let(:group) { groups(:top_layer) }
-      
+
       it "contains all groups" do
         should =~ Group.all
       end
     end
-    
+
     context "for group without children or sisters" do
       let(:group) { groups(:top_group) }
-      
+
       it "only contains self" do
         should == [group]
       end
     end
-    
+
     context "for layer" do
       let(:group) { groups(:bottom_layer_one) }
-      
+
       it "contains other layers and their descendants" do
         should =~ [group.self_and_descendants, groups(:bottom_layer_two).self_and_descendants].flatten
       end
@@ -140,7 +140,7 @@ describe Group do
 
     context "for group" do
       let(:group) { groups(:bottom_group_one_one) }
-      
+
       it "contains other groups and their descendants" do
         should =~ [group, groups(:bottom_group_one_one_one), groups(:bottom_group_one_two)]
       end
@@ -209,16 +209,16 @@ describe Group do
       Group.only_deleted.collect(&:id).should  =~ [bottom_group.id]
       Group.should be_valid
     end
-        
+
     it "hard destroys self" do
       expect { bottom_group.destroy! }.to change { Group.with_deleted.count }.by(-1)
       Group.should be_valid
     end
-    
+
     it "protects group with children" do
       expect { bottom_layer.destroy }.not_to change { Group.without_deleted.count }
     end
-    
+
     it "does not destroy anything for root group" do
       expect { top_layer.destroy }.not_to change { Group.count }
     end
@@ -244,7 +244,7 @@ describe Group do
         Fabricate(:event, groups: [group])
         expect { group.destroy! }.to change { Event.count }.by(-1)
       end
-      
+
       it "does not destroy events belonging to other groups as well" do
         Fabricate(:event, groups: [group, groups(:bottom_group_one_one)])
         expect { group.destroy }.not_to change { Event.count }

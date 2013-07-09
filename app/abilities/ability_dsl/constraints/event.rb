@@ -17,7 +17,7 @@ module AbilityDsl::Constraints
     end
 
     def in_same_layer_or_below
-      permission_in_layers?(event.groups.collect {|g| g.layer_groups.collect(&:id) }.flatten)
+      permission_in_layers?(event.groups.collect {|g| g.layer_hierarchy.collect(&:id) }.flatten)
     end
 
     def at_least_one_group_not_deleted

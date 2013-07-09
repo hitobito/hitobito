@@ -171,7 +171,10 @@ class Person < ActiveRecord::Base
 
   # All time roles of this person, including deleted.
   def all_roles
-    records = Role.with_deleted.where(person_id: id).includes(:group).order('groups.name', 'roles.deleted_at')
+    records = Role.with_deleted.
+                   where(person_id: id).
+                   includes(:group).
+                   order('groups.name', 'roles.deleted_at')
   end
 
   def default_group_id

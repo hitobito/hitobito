@@ -2,32 +2,34 @@
   %section.roles
     %h2= title
 
-    %table.table.table-basic.roles
+    %table.table.table-basic
       %tbody
-        - grouped_roles.each do |group,roles|
-          %tr.group
+        - grouped_roles.each do |group, roles|
+          %tr
             %td
               - if can?(:primary_group, entry)
-                - group_id = roles.first.group_id
-                = link_to(icon(entry.primary_group_id == group_id ? 'star' : 'star-empty'),
-                          primary_group_group_person_path(@group, entry, primary_group_id: group_id),
+                = link_to(icon(entry.primary_group_id == group.id ? 'star' : 'star-empty'),
+                          primary_group_group_person_path(@group, entry, primary_group_id: group.id),
                           title: 'Hauptgruppe setzen',
                           alt: 'Hauptgruppe setzen',
-                          class: "group-#{group_id}",
+                          class: "group-#{group.id}",
                           data: {method: :put, remote: true})
+
             %td
               %strong= link_to(group, group)
+              %br/
+              %table.roles
+                %tbody
+                  - roles.each_with_index do |role, index|
+                    %tr
+                      %td.muted
+                        &nbsp;
+                        %strong
+                          = role.to_s
+                      %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
+                      %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
 
-            %td.pull-right
+            %td
               - if can?(:new, group.roles.new)
-                = Dropdown::RoleAddMini.new(self, group, entry)
+                = Dropdown::RoleAddForPerson.new(self, group, entry)
 
-          - roles.each_with_index do |role, index|
-            %tr.role
-              %td
-              %td.muted
-                %strong
-                  = role.to_s
-              %td
-                = link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
-                = link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)

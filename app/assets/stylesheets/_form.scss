@@ -4,19 +4,19 @@
   margin-top: 0;
   margin-bottom: $vSpace;
 }
-.btn { 
+.btn {
   color: $green;
   &:hover {
-    color: darken($green, 10%); 
+    color: darken($green, 10%);
     .icon,
-    [class^="icon-"], 
-    [class*=" icon-"] { 
-      background-image: image-url("glyphicons-halflings-green.png"); 
+    [class^="icon-"],
+    [class*=" icon-"] {
+      background-image: image-url("glyphicons-halflings-green.png");
     }
-  } 
+  }
   .icon,
-  [class^="icon-"], 
-  [class*=" icon-"] { 
+  [class^="icon-"],
+  [class*=" icon-"] {
     background-image: image-url("glyphicons-halflings-green-hover.png");
   }
 
@@ -138,7 +138,7 @@ textarea {
   padding-bottom: 5px;
 }
 
-.fields .help-inline { 
+.fields .help-inline {
   float: right;
 }
 
@@ -146,11 +146,15 @@ textarea {
   margin: 0 0 10px 0;
 }
 
+.controls > .text {
+  line-height: 29px;
+}
+
 .remove_nested_fields {
   color: $red;
-  margin: 0; 
+  margin: 0;
   padding: 0;
-  i { 
+  i {
     margin: 5px;
   }
   &:hover {

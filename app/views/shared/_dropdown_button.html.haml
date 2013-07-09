@@ -4,14 +4,13 @@
 = button_group do
   - if main_link
     = action_button(label, main_link, icon_name, in_button_group: true)
-    
+
   %a.dropdown-toggle{'data-toggle' => 'dropdown', href: '#', class: button_class}
     - unless main_link
       = icon(icon_name) if icon_name
       = label
-    - if carret
-      %b.caret
-      
+    %b.caret
+
   %ul.dropdown-menu{role: "menu"}
     - items.each do |item|
       - if item.nil?

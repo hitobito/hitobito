@@ -237,24 +237,19 @@
   cursor: pointer;
 }
 
-#content section.roles { 
+
+#content section.roles {
   overflow: visible;
-  table { 
+}
+
+table.roles {
+  width: 100%;
+  td {
     border: none;
-    td:first-child { width: 0.1em; }
-    td:nth-child(2) { width: 85%; }
-    td { border: none } 
-    tr.group {
-      td { border-bottom: 1px solid $grayLight; }
-    }
-    tr.role { 
-      td { padding: 2px; }
-      td:last-child { text-align: right; } 
-    }
-    tr.role-add {
-      td { padding-bottom: 1.5em; }
-    }
+    padding: 0px;
   }
+  td:first-child { width: 100%; }
+  td { min-width: 20px; }
 }
 
 .icon-muted { @include opacity(0.7); }

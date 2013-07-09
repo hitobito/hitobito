@@ -1,15 +1,23 @@
 -#main.row-fluid
   -#.span7
 = entry_form(buttons_bottom: false, cancel_url: role_cancel_url) do |f|
+  = hidden_field_tag('return_url', params[:return_url])
   - if entry.new_record?
     = f.hidden_field :group_id
     = f.hidden_field :type
-    = f.labeled_person_field(:person,
-                             help_inline: link_to('Neue Person erfassen',
-                                                  new_group_person_path(@group, role: {type: entry.type, group_id: entry.group_id})))
+    - if entry.person
+      = f.hidden_field :person_id
+      = f.labeled(:person_id) do
+        .text= entry.person
+    - else
+      = f.labeled_person_field(:person,
+                               help_inline: link_to('Neue Person erfassen',
+                                                    new_group_person_path(@group, role: {type: entry.type, group_id: entry.group_id})))
   - else
-    = f.labeled(:group_id, content_tag(:div, entry.group.to_s))
-    = f.labeled(:person_id, content_tag(:div, entry.person.to_s))
+    = f.labeled(:group_id) do
+      .text= entry.group
+    = f.labeled(:person_id) do
+      .text= entry.person
     = f.labeled(:type, entry.possible_role_collection_select)
 
   = f.labeled_input_field(:label,

@@ -50,14 +50,15 @@ module Dropdown
       format_links = []
       if user.last_label_format_id?
         last_format = user.last_label_format
-        format_links << [last_format.to_s, export_label_format_path(last_format.id)]
+        format_links << [last_format.to_s, export_label_format_path(last_format.id), target: :new]
         format_links << nil
       end
 
       LabelFormat.all_as_hash.each do |id, label|
-        format_links << [label, export_label_format_path(id)]
+        format_links << [label, export_label_format_path(id), target: :new]
       end
-      format_links.each { |link| link.present? && link << { target: :new } }
+
+      format_links
     end
 
     def export_label_format_path(id)

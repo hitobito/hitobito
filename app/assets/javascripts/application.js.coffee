@@ -42,7 +42,9 @@ datepicker = do ->
 
   show: ->
     field = $(this)
-    field = if field.is('.icon-calendar') then field.parent().siblings('.date')
+    console.log(field)
+    if field.is('.icon-calendar')
+      field = field.parent().siblings('.date')
     field.datepicker(onSelect: track)
     field.datepicker('show')
 
@@ -136,7 +138,7 @@ $ ->
   setupQuicksearch()
 
   # wire up date picker
-  $(":input.date, .controls .icon-calendar").live('click', datepicker.show)
+  $("input.date, .controls .icon-calendar").live('click', datepicker.show)
 
   # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)

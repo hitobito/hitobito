@@ -1,8 +1,5 @@
-= f.labeled(:label, 'Beschreibung/Ort', nil, class: 'controls-row') do
-  = f.string_field(:label, class: 'span3')
-  = f.string_field(:location, class: 'span3')
-  %span.help-inline
-    = f.link_to_remove('Entfernen')
+= f.labeled_string_field(:label, help_inline: f.link_to_remove('Entfernen'))
+= f.labeled_string_field(:location)
 = f.labeled_datetime_field(:start_at)
 = f.labeled_datetime_field(:finish_at)
 .controls.fields-separation

@@ -5,4 +5,4 @@
   = action_button 'Person ausschliessen', new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus'
 
 - if can?(:index_subscriptions, @mailing_list)
-  = dropdown_people_export(false)
+  = dropdown_people_export

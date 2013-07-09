@@ -1,20 +1,20 @@
 # encoding: utf-8
 
 class Event::ParticipationsController < CrudController
- 
-  include RenderPeoplePdf
- 
+
+  include RenderPeopleExports
+
   self.nesting = Group, Event
   self.remember_params += [:filter]
-  
+
   decorates :group, :event, :participation, :participations, :alternatives
-  
+
   # load before authorization
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_filter :parent, :group
 
   before_filter :check_preconditions, only: [:create, :new]
-  
+
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_qualifications
@@ -22,7 +22,7 @@ class Event::ParticipationsController < CrudController
   after_create :create_participant_role
   after_create :send_confirmation_email
 
-  
+
   def new
     assign_attributes
     entry.init_answers
@@ -35,6 +35,7 @@ class Event::ParticipationsController < CrudController
       format.html
       format.pdf  { render_pdf(@participations.collect(&:person)) }
       format.csv  { render_csv }
+      format.email  { render_emails(@participations.collect(&:person)) }
     end
   end
 
@@ -46,13 +47,13 @@ class Event::ParticipationsController < CrudController
   def destroy
     super(location: group_event_application_market_index_path(group, event))
   end
-  
+
   private
-  
+
   def authorize_class
     authorize!(:index_participations, event)
   end
-  
+
   def render_csv
     csv = params[:details] && can?(:show_details, entries.first) ?
       Export::CsvPeople.export_participations_full(entries) :
@@ -68,7 +69,7 @@ class Event::ParticipationsController < CrudController
       redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
     end
   end
-    
+
   def list_entries
     records = event.participations.
                     where(event_participations: {active: true}).
@@ -84,15 +85,15 @@ class Event::ParticipationsController < CrudController
     if scope = valid_scopes.detect {|k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event) unless scope.to_s == 'all'
-      
+
     # event specific filters (filter by role label)
     elsif event.participation_role_labels.include?(params[:filter])
       records = records.with_role_label(params[:filter])
     end
-    
+
     records
   end
-  
+
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
   # else is created through event roles.
@@ -113,13 +114,13 @@ class Event::ParticipationsController < CrudController
 
     participation
   end
-  
+
   def assign_attributes
     super
     # Set these attrs again as a new application instance might have been created by the mass assignment.
     entry.application.priority_1 ||= event if entry.application
   end
-    
+
   def load_priorities
     if entry.application && entry.event.priorization
       @alternatives = Event::Course.application_possible.
@@ -129,7 +130,7 @@ class Event::ParticipationsController < CrudController
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
-  
+
   def load_answers
     @answers = entry.answers.includes(:question)
     @application = Event::ApplicationDecorator.decorate(entry.application)
@@ -138,7 +139,7 @@ class Event::ParticipationsController < CrudController
   def load_qualifications
     @qualifications = entry.person.qualifications.includes(:qualification_kind).order_by_date
   end
-  
+
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     "#{models_label(false)} #{Event::ParticipationDecorator.decorate(entry).flash_info}".html_safe
@@ -151,13 +152,13 @@ class Event::ParticipationsController < CrudController
       entry.roles << role
     end
   end
-  
+
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
     end
   end
-  
+
   def set_success_notice
     if action_name.to_s == 'create'
       notice = "#{full_entry_label} wurde erfolgreich erstellt. " +
@@ -171,19 +172,19 @@ class Event::ParticipationsController < CrudController
       super
     end
   end
-  
+
   def user_course_application?
     entry.person == current_user && event.supports_applications
   end
-    
+
   def event
     parent
   end
-  
+
   def group
     @group ||= parents.first
   end
-  
+
   class << self
     def model_class
       Event::Participation

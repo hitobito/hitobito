@@ -23,6 +23,7 @@ class EventsController < CrudController
   # list scope preload :groups, :kinds which we dont need
   def list_entries
     model_scope.
+      where(type: params[:type]).
       order_by_date.
       preload_all_dates.
       uniq.
@@ -49,6 +50,13 @@ class EventsController < CrudController
     parent
   end
 
+  def index_path
+    typed_group_events_path(group, @event.class, returning: true)
+  end
+
+
+  private
+
   def load_sister_groups
     master = @event.groups.first
     @groups = master.self_and_sister_groups.reorder(:name)
@@ -60,6 +68,19 @@ class EventsController < CrudController
     if entry.kind_class
       @kinds = entry.kind_class.without_deleted
       @kinds << entry.kind if entry.kind && entry.kind.deleted?
+    end
+  end
+
+  def typed_group_events_path(group, event_type, options = {})
+    path = "#{event_type.type_name}_group_events_path"
+    send(path, group, options)
+  end
+
+  def type_name(event_type)
+    if event_type == Event
+      'simple'
+    else
+      event_type.name.demodulize.underscore
     end
   end
 end

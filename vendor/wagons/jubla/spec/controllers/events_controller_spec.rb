@@ -13,7 +13,7 @@ describe EventsController do
 
       let(:contact) { Person.first }
       let(:advisor) { Person.last }
-      
+
       it "creates new event course with dates,advisor" do
         post :create, event: {  group_ids: [group.id],
                                 name: 'foo',
@@ -35,7 +35,7 @@ describe EventsController do
         event.contact.should eq contact
         event.advisor.should eq advisor
       end
-      
+
       it "creates new event course without contact,advisor" do
         post :create, event: {  group_ids: [group.id],
                                 name: 'foo',
@@ -74,7 +74,7 @@ describe EventsController do
     end
 
   end
-  
+
   context "event_camp" do
 
     before { sign_in(people(:flock_leader)) }

@@ -1,5 +1,5 @@
 
-= entry_form do |f|
+= entry_form cancel_url_new: typed_group_events_path(@group, entry.klass) do |f|
   - if entry.new_record?
     = f.hidden_field :type
 

@@ -12,11 +12,15 @@ class Group::MergeController < ApplicationController
   end
 
   def perform
-    merge = Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
-    if merge.group2_valid?
-      merge.merge!
-      flash[:notice] = "Die gewählten Gruppen wurden zur neuen Gruppe #{merge.new_group_name} fusioniert."
-      redirect_to group_path(merge.new_group)
+    merger = Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
+    if merger.group2_valid?
+      if merger.merge!
+        flash[:notice] = "Die gewählten Gruppen wurden zur neuen Gruppe #{merger.new_group_name} fusioniert."
+        redirect_to group_path(merger.new_group)
+      else
+        flash[:alert] = merger.errors.join("<br/>").html_safe
+        redirect_to merge_group_path(group)
+      end
     else
       flash[:alert] = 'Die gewählten Gruppen können nicht fusioniert werden.'
       redirect_to merge_group_path(group)

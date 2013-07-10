@@ -18,9 +18,6 @@ class Group::Flock < Group
 
   has_many :member_counts
 
-  # remove existing uniqueness validator
-  self.validate_unique_name = false
-  validates :name, uniqueness: {scope: [:parent_id, :kind]}
 
   validates :kind, inclusion: AVAILABLE_KINDS, allow_blank: true
 

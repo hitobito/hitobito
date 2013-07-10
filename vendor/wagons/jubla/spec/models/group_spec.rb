@@ -46,15 +46,6 @@ describe Group do
       other.errors.full_messages.should == []
     end
 
-    it "may not have same name as other flock with empty kind" do
-      parent = groups(:city)
-      flock = Group::Flock.new(name: 'bla')
-      flock.parent = parent
-      flock.save!
-      other = Group::Flock.new(name: 'bla')
-      other.parent = parent
-      other.should_not be_valid
-    end
   end
 
   describe Group::SimpleGroup do
@@ -82,15 +73,6 @@ describe Group do
       other.should be_valid
     end
 
-    it "may not have same name as group with same parent" do
-      parent = groups(:city)
-      flock = Group::SimpleGroup.new(name: 'bla')
-      flock.parent = parent
-      flock.save!
-      other = Group::SimpleGroup.new(name: 'bla')
-      other.parent = parent
-      other.should_not be_valid
-    end
   end
 
   describe "#all_types" do

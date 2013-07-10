@@ -26,6 +26,14 @@ describe PeopleFiltersController do
       should redirect_to(group_people_path(group, role_types: role_types, kind: 'deep'))
     end
 
+    it "redirects to show for empty search" do
+      expect do
+        post :create, group_id: group.id, button: 'search'
+      end.not_to change { PeopleFilter.count }
+
+      should redirect_to(group_people_path(group, role_types: {}, kind: 'deep'))
+    end
+
     it "saves filter and redirects to show with save" do
       expect do
         post :create, group_id: group.id, people_filter: {role_types: role_types, name: 'Test Filter'}, button: 'save'

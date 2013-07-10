@@ -17,11 +17,11 @@ describe QualificationsController, type: :controller do
     def it_should_redirect_to_show
       it do
         should redirect_to group_person_path(top_group, top_leader)
-      end 
+      end
     end
-    
+
     def it_should_redirect_to_index
-      it { should redirect_to group_person_path(top_group, top_leader) } 
+      it { should redirect_to group_person_path(top_group, top_leader) }
     end
   end
 
@@ -29,7 +29,7 @@ describe QualificationsController, type: :controller do
   let(:test_entry_attrs) { { start_at: 1.days.from_now.to_date, qualification_kind_id: qualification_kinds(:sl).id } }
 
   before do
-    sign_in(people(:top_leader)) 
+    sign_in(people(:top_leader))
     @entry = Fabricate(:qualification, person: top_leader)
   end
 
@@ -44,10 +44,10 @@ describe QualificationsController, type: :controller do
         dom.find_link('Top')[:href].should eq group_path(groups(:top_layer))
         dom.find_link('TopGroup')[:href].should eq group_path(top_group)
         dom.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
-        dom.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
+        dom.find_link('Leader Top')[:href].should eq group_person_path(top_group, top_leader)
       end
     end
   end
-  
+
 
 end

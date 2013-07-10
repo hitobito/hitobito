@@ -64,6 +64,6 @@ describe Event::ParticipationMailer do
     end
 
     it { should =~ /Hallo firsty, lasty/}
-    it { should =~ /Top Leader hat sich/}
+    it { should =~ /Leader Top hat sich/}
   end
 end

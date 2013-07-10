@@ -146,7 +146,7 @@ class Person < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}".strip
+    "#{last_name} #{first_name}".strip
   end
 
   def greeting_name

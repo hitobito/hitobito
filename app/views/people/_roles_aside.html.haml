@@ -23,7 +23,6 @@
                   - roles.each_with_index do |role, index|
                     %tr
                       %td.muted
-                        &nbsp;
                         %strong
                           = role.to_s
                       %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)

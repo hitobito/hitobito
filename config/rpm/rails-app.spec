@@ -226,8 +226,8 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
 /sbin/service %{name}-workers restart >/dev/null 2>&1
 %endif
 
-touch %{wwwdir}/%{name}/www/tmp/restart.txt
 rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
+touch %{wwwdir}/%{name}/www/tmp/restart.txt
 
 %preun
 # Run before uninstallation

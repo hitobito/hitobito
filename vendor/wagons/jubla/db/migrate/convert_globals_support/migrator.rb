@@ -24,8 +24,8 @@ class Migrator < Struct.new(:role_type)
 
   def update_roles
     group_types_roles_map.each do |group_type, new_role_type|
-      role_type.joins(:group).update_all("roles.type = '#{new_role_type}'",
-                                         "groups.type = '#{group_type}'")
+      ids = role_type.joins(:group).where(groups: {type: group_type}).map(&:id)
+      role_type.where(id: ids).update_all(type: new_role_type)
     end
   end
 

@@ -24,14 +24,17 @@ class Group::Federation < Group
     MemberCount.details_for_federation(year)
   end
 
-  class Alumnus < Jubla::Role::Alumnus
+  class GroupAdmin < Jubla::Role::GroupAdmin
   end
 
-  class GroupAdmin < Jubla::Role::GroupAdmin
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Alumnus, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles GroupAdmin, Alumnus, External, DispatchAddress
 end

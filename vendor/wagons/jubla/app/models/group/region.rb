@@ -7,19 +7,19 @@ class Group::Region < Group
   class Coach < Jubla::Role::Coach
   end
   
-  class Alumnus < Jubla::Role::Alumnus
+  class GroupAdmin < Jubla::Role::GroupAdmin
   end
 
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-  
-  class GroupAdmin < Jubla::Role::GroupAdmin
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Coach, Alumnus, DispatchAddress, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Coach, GroupAdmin, Alumnus, External, DispatchAddress
   
   children Group::RegionalBoard,
            Group::RegionalProfessionalGroup,

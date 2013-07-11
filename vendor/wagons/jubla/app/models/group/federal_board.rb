@@ -11,15 +11,18 @@ class Group::FederalBoard < Group
     attr_accessible :honorary
   end
   
-  class Alumnus < Jubla::Role::Alumnus
+  class GroupAdmin < Jubla::Role::GroupAdmin
   end
 
-  class GroupAdmin < Jubla::Role::GroupAdmin
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Member, President, Alumnus, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Member, President, GroupAdmin, Alumnus, External, DispatchAddress
 
 end

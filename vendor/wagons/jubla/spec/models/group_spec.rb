@@ -21,7 +21,7 @@ describe Group do
 
     it { should have(6).possible_children }
     it { should have(2).default_children }
-    it { should have(3).role_types }
+    it { should have(4).role_types }
     it { should be_layer }
 
     its(:possible_children) { should include(Group::SimpleGroup) }

@@ -5,18 +5,18 @@ class Group::StateAgency < Group
     self.permissions = [:layer_full, :contact_data, :qualify]
   end
 
-  class Alumnus < Jubla::Role::Alumnus
+  class GroupAdmin < Jubla::Role::GroupAdmin
   end
 
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-  
-  class GroupAdmin < Jubla::Role::GroupAdmin
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Leader, Alumnus, DispatchAddress, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Leader, GroupAdmin, Alumnus, External, DispatchAddress
   
 end

@@ -6,18 +6,18 @@ class Group::StateWorkGroup < Group::WorkGroup
   class Member < Group::WorkGroup::Member
   end
 
-  class Alumnus < Jubla::Role::Alumnus
+  class GroupAdmin < Jubla::Role::GroupAdmin
   end
 
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-  
-  class GroupAdmin < Jubla::Role::GroupAdmin
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Leader, Member, Alumnus, DispatchAddress, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Leader, Member, GroupAdmin, Alumnus, External, DispatchAddress
   
 end

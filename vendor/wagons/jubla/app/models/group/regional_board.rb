@@ -13,18 +13,18 @@ class Group::RegionalBoard < Group
     attr_accessible :employment_percent, :honorary
   end
 
-  class Alumnus < Jubla::Role::Alumnus
-  end
-
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-
   class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Leader, Member, President, Alumnus, DispatchAddress, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Leader, Member, President, GroupAdmin, Alumnus, External, DispatchAddress
 
 end

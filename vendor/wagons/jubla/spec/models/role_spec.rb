@@ -57,11 +57,11 @@ describe Role do
     subject { Role.all_types }
 
     it "starts with top most role" do
-      subject.first.should == Group::Federation::Alumnus
+      subject.first.should == Group::Federation::GroupAdmin
     end
 
     it "finishes with bottom most role" do
-      subject.last.should == Group::SimpleGroup::External
+      subject.last.should == Group::SimpleGroup::DispatchAddress
     end
   end
 

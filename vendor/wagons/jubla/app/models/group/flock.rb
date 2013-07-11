@@ -106,19 +106,19 @@ class Group::Flock < Group
     self.visible_from_above = false
   end
 
-  class Alumnus < Jubla::Role::Alumnus
-  end
-
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-
   class GroupAdmin < Jubla::Role::GroupAdmin
+  end
+
+  class Alumnus < Jubla::Role::Alumnus
   end
 
   class External < Jubla::Role::External
   end
 
-  roles Leader, CampLeader, President, Treasurer, Guide, DispatchAddress, Alumnus, GroupAdmin, External
+  class DispatchAddress < Jubla::Role::DispatchAddress
+  end
+
+  roles Leader, CampLeader, President, Treasurer, Guide, GroupAdmin, Alumnus, External, DispatchAddress
   restricted_role :coach, Coach
   restricted_role :advisor, Advisor
 

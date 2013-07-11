@@ -9,18 +9,4 @@ class Group::WorkGroup < Group
     self.permissions = [:group_read]
   end
 
-  class Alumnus < Jubla::Role::Alumnus
-  end
-
-  class DispatchAddress < Jubla::Role::DispatchAddress
-  end
-
-  class GroupAdmin < Jubla::Role::GroupAdmin
-  end
-
-  class External < Jubla::Role::External
-  end
-
-  roles Alumnus, DispatchAddress, GroupAdmin, External
-  
 end

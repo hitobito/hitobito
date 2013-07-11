@@ -138,7 +138,7 @@ $ ->
   setupQuicksearch()
 
   # wire up date picker
-  $("input.date, .controls .icon-calendar").live('click', datepicker.show)
+  $('body').on('click', 'input.date, .controls .icon-calendar', datepicker.show)
 
   # wire up elements with ajax replace
   $('body').on('ajax:success','[data-replace]', replaceContent)
@@ -163,7 +163,7 @@ $ ->
     alert('Sorry, something went wrong\n(' + error + ')'))
 
   # make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)
-  $('ul.typeahead').live('mousedown', (e) -> e.preventDefault())
+  $('body').on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
 
   # controll visibilty of group contact fields in relation to contact
   $('#group_contact_id').on('change', do ->

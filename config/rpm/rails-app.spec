@@ -227,10 +227,9 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
 %endif
 
 echo "Restarting application..."
-whoami
 rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
 
-ll %{wwwdir}/%{name}/www/tmp
+ls -al %{wwwdir}/%{name}/www/tmp
 
 touch %{wwwdir}/%{name}/www/tmp/restart.txt
 

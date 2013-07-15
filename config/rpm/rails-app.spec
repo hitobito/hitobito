@@ -206,6 +206,8 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Runs after the package got installed.
 # Configure here any services etc.
 
+touch %{wwwdir}/%{name}/www/tmp/stop.txt
+
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
@@ -226,12 +228,8 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
 /sbin/service %{name}-workers restart >/dev/null 2>&1
 %endif
 
-echo "Restarting application..."
-rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
-
-ls -al %{wwwdir}/%{name}/www/tmp
-
 touch %{wwwdir}/%{name}/www/tmp/restart.txt
+rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
 
 %preun
 # Run before uninstallation
@@ -244,7 +242,6 @@ if [ "$1" = 0 ] ; then
   /sbin/chkconfig --del %{name}-workers || :
 fi
 if [ "$1" = 1 ] ; then
-  touch %{wwwdir}/%{name}/www/tmp/stop.txt
   /sbin/service %{name}-workers stop >/dev/null 2>&1
 fi
 %endif

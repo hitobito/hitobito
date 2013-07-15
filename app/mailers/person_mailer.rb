@@ -26,10 +26,7 @@ class PersonMailer < ActionMailer::Base
   end
 
   def return_path(sender)
-    app_sender = Settings.email.sender
-    app_sender_name = app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
-
-    MailRelay::Lists.personal_return_path(app_sender_name, sender.email)
+    MailRelay::Lists.personal_return_path(MailRelay::Lists.app_sender_name, sender.email)
   end
 
 end

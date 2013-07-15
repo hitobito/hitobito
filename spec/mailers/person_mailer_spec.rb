@@ -14,9 +14,9 @@ describe Event::ParticipationMailer do
 
   subject { mail }
 
-  its(:to)      { should == [recipient.email] }
-  its(:reply_to)    { should == [sender.email] }
-  its(:subject) { should == 'Willkommen bei hito.bito' }
-  its(:body)    { should =~ /Hallo Bottom<br\/>/}
+  its(:to)       { should == [recipient.email] }
+  its(:reply_to) { should == [sender.email] }
+  its(:subject)  { should == "Willkommen bei #{Settings.application.name}" }
+  its(:body)     { should =~ /Hallo Bottom<br\/>/}
 
 end

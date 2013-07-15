@@ -3,6 +3,10 @@ Hitobito::Application.routes.draw do
 
   root :to => 'dashboard#index'
 
+  match '/404', to: 'errors#404'
+  match '/500', to: 'errors#500'
+  match '/503', to: 'errors#503'
+
   resources :people, only: :show do
     collection do
       get :query

@@ -49,6 +49,8 @@ module Hitobito
     config.i18n.default_locale = 'de-CH'
     config.i18n.fallbacks = ['de']
 
+    # Route errors over the Rails application.
+    config.exceptions_app = self.routes
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

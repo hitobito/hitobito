@@ -9,8 +9,7 @@ describe Group::Merger do
   context "merge groups" do
 
     before do
-      
-      @person = Fabricate(Group::BottomLayer::Member.name.to_sym, 
+      @person = Fabricate(Group::BottomLayer::Member.name.to_sym,
                          created_at: Date.today - 14, group: group1).person
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: group1)
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: group2)
@@ -18,11 +17,9 @@ describe Group::Merger do
       Fabricate(:event, groups: [group1])
       Fabricate(:event, groups: [group1])
       Fabricate(:event, groups: [group2])
-
     end
 
     it "creates a new group and merges roles, events" do
-
       merge = Group::Merger.new(group1, group2, 'foo')
       merge.group2_valid?.should eq true
 
@@ -39,8 +36,8 @@ describe Group::Merger do
       new_group.roles.count.should eq 4
 
       # recent groups
-      expect { Group.without_deleted.find(group1.id) }.to raise_error(ActiveRecord::RecordNotFound) 
-      expect { Group.without_deleted.find(group2.id) }.to raise_error(ActiveRecord::RecordNotFound) 
+      expect { Group.without_deleted.find(group1.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Group.without_deleted.find(group2.id) }.to raise_error(ActiveRecord::RecordNotFound)
       group1.children.count.should eq 0
       group2.children.count.should eq 0
       group1.roles.count.should eq 0
@@ -53,12 +50,20 @@ describe Group::Merger do
 
       # last but not least, check nested set integrity
       Group.should be_valid
-
     end
 
     it "should raise an error if one tries to merge to groups with different types/parent" do
       merge = Group::Merger.new(group1, other_group, 'foo')
       expect { merge.merge! }.to raise_error
+    end
+
+    it "add events from both groups only once" do
+      e = Fabricate(:event, groups: [group1, group2])
+      merge = Group::Merger.new(group1, group2, 'foo')
+      merge.merge!
+
+      e.reload
+      e.groups.should =~ [group1, group2, merge.new_group]
     end
 
   end

@@ -37,7 +37,7 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   end
 
   def update_events
-    events = group1.events + group2.events
+    events = (group1.events + group2.events).uniq
     events.each do |event|
       event.groups << new_group
       event.save!

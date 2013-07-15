@@ -15,7 +15,7 @@ describe "Quicksearch", :mysql do
         dropdown = find('.typeahead.dropdown-menu')
 
         if dropdown.text.present?
-          dropdown.should have_content("Leader Top, Supertown")
+          dropdown.should have_content("Top Leader, Supertown")
           dropdown.should have_content("Top > TopGroup")
           dropdown.should have_content("Top")
         else

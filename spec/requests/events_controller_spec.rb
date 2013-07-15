@@ -17,17 +17,17 @@ describe EventsController, js: true do
 
       # set contact
       fill_in "Kontaktperson", with: "Top"
-      find('.typeahead.dropdown-menu').should have_content 'Leader Top'
+      find('.typeahead.dropdown-menu').should have_content 'Top Leader'
       find('.typeahead.dropdown-menu').click
       click_button 'Speichern'
 
       # show event
       find('aside').should have_content 'Kontakt'
-      find('aside').should have_content 'Leader Top'
+      find('aside').should have_content 'Top Leader'
       click_link 'Bearbeiten'
 
       # remove contact
-      find('#event_contact').value.should == 'Leader Top'
+      find('#event_contact').value.should == 'Top Leader'
       fill_in "Kontaktperson", with: ""
       click_button 'Speichern'
 

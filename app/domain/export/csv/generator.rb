@@ -26,7 +26,7 @@ module Export
       end
 
       def options
-        { col_sep: Settings.csv.separator.strip }
+        { col_sep: Settings.csv.separator.strip, row_sep: "\r\n" }
       end
     end
   end

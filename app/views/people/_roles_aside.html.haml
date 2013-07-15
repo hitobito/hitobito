@@ -22,7 +22,7 @@
                 %tbody
                   - roles.each_with_index do |role, index|
                     %tr
-                      %td.muted
+                      %td
                         %strong
                           = role.to_s
                       %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
@@ -30,5 +30,6 @@
 
             %td
               - if can?(:new, group.roles.new)
-                = Dropdown::RoleAddForPerson.new(self, group, entry)
+                %span.pull-right
+                  = Dropdown::RoleAddForPerson.new(self, group, entry)
 

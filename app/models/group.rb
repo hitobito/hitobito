@@ -197,7 +197,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def to_s
+  def to_s(format = :default)
     name
   end
 

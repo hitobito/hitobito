@@ -66,7 +66,7 @@ restart() {
 rh_status() {
   RETVAL=1
   echo -n "${name} running: "
-  for pidfile in $(ls -1 "${PID_DIR}"/delayed_job.*.pid 2>/dev/null)
+  for pidfile in $(ls -1 "${PID_DIR}"/delayed_job.?.pid 2>/dev/null)
   do
     status -p $pidfile APP_NAME-workers || return $?
     RETVAL=$?

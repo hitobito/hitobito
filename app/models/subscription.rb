@@ -35,8 +35,8 @@ class Subscription < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s
-    string = subscriber.to_s.dup
+  def to_s(format = :default)
+    string = subscriber.to_s(format).dup
     if subscriber.is_a?(Group) && related_role_types.present?
       string << ' (' << related_role_types.join(', ') << ')'
     end

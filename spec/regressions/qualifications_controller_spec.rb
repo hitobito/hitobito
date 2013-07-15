@@ -44,7 +44,7 @@ describe QualificationsController, type: :controller do
         dom.find_link('Top')[:href].should eq group_path(groups(:top_layer))
         dom.find_link('TopGroup')[:href].should eq group_path(top_group)
         dom.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
-        dom.find_link('Leader Top')[:href].should eq group_person_path(top_group, top_leader)
+        dom.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
       end
     end
   end

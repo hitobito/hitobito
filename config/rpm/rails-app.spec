@@ -206,11 +206,9 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Runs after the package got installed.
 # Configure here any services etc.
 
-echo "Running migrations and seeds..."
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
-echo "Restarting sphinx..."
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:config" || exit 1
 ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
 /sbin/chkconfig --add searchd || :
@@ -218,20 +216,21 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
 %endif
 
 %if %{use_memcached}
-echo "Restarting memcached..."
 /sbin/chkconfig --add memcached || :
 (/sbin/service memcached status >/dev/null 2>&1 || \
   /sbin/service memcached start >/dev/null 2>&1) && /sbin/service memcached condrestart
 %endif
 
 %if %{use_delayed_job}
-echo "Restarting workers..."
 /sbin/chkconfig --add %{name}-workers || :
 /sbin/service %{name}-workers restart >/dev/null 2>&1
 %endif
 
 echo "Restarting application..."
+whoami
 rm -f %{wwwdir}/%{name}/www/tmp/stop.txt
+
+ll %{wwwdir}/%{name}/www/tmp
 
 touch %{wwwdir}/%{name}/www/tmp/restart.txt
 
@@ -246,7 +245,6 @@ if [ "$1" = 0 ] ; then
   /sbin/chkconfig --del %{name}-workers || :
 fi
 if [ "$1" = 1 ] ; then
-  echo "Stopping application and workers..."
   touch %{wwwdir}/%{name}/www/tmp/stop.txt
   /sbin/service %{name}-workers stop >/dev/null 2>&1
 fi

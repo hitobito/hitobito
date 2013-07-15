@@ -135,18 +135,23 @@ class Person < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s
+  def to_s(format = :default)
     if company?
       company_name
     else
-      name = full_name
+      name = ""
+      if format == :list
+        name << "#{last_name} #{first_name}".strip
+      else
+        name << full_name
+      end
       name << " / #{nickname}" if nickname?
       name
     end
   end
 
   def full_name
-    "#{last_name} #{first_name}".strip
+    "#{first_name} #{last_name}".strip
   end
 
   def greeting_name

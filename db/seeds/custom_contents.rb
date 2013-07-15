@@ -1,8 +1,8 @@
 CustomContent.seed_once(:key,
   {key: 'send_login',
    label: 'Login senden',
-   subject: 'Willkommen bei hito.bito',
-   body: "Hallo {recipient-name}<br/><br/>Willkommen bei hito.bito! Unter dem folgenden Link kannst du dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>Bis bald im Wald!<br/><br/>{sender-name}",
+   subject: "Willkommen bei #{Settings.application.name}",
+   body: "Hallo {recipient-name}<br/><br/>Willkommen bei #{Settings.application.name}! Unter dem folgenden Link kannst du dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>Bis bald!<br/><br/>{sender-name}",
    placeholders_required: 'login-url',
    placeholders_optional: 'recipient-name, sender-name'},
 

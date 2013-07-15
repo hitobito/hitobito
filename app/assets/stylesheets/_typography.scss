@@ -1,23 +1,22 @@
 
 /* Typo */
 // -------------------------
-#{headings(2)} {
+#{headings(all)} {
   font-family: $headingFontFamily;
   margin-top: 0;
 }
 
 h1 {
   font-size: 1.5em !important;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 1.25em;
 }
 
-h2 {
+h2 { 
   font-size: 1.5em !important;
-  font-weight: 700;
 }
 
-h3 {
+h3 { 
   font-size: 1.25em !important;
 }
 
@@ -48,7 +47,7 @@ td p, address {
 
 .btn-group + .link {
   margin-left: $vSpace;
-}
+} 
 
 // Definition list
 dl {
@@ -59,7 +58,7 @@ dl {
   border-top: 1px solid $borderColor;
   margin: 0;
 
-  dd {
+  dd { 
     margin-bottom: $vSpace*0.5;
     &:last-child { margin-bottom: 0; }
   }
@@ -80,15 +79,10 @@ dl {
   border-bottom: 1px solid $borderColor;
 }
 
-.table,
-.table-basic {
-  td,
-  th {
+.table, .table-basic {
+  td, th {
     padding-left: 0;
-    border-color: $borderColor;
-    &:last-child {
-      padding-right: 0;
-    }
+    &:last-child { padding-right: 0; } 
   }
 }
 
@@ -102,29 +96,22 @@ dl {
   thead:first-child th {
     padding-top: 0px;
   }
-
+  
   th {
     padding-top: 30px;
-
+    
     h2 {
       margin-bottom: 0;
     }
   }
 }
 
-td.center,
-th.center {
+td.center, th.center {
   text-align: center;
 }
 
-td.right,
-th.right {
+td.right, th.right {
   text-align: right;
-}
-
-.table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
-  background-color: lighten($purple, 50%);
 }
 
 select[class*="span"] {

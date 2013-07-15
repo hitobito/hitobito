@@ -1,0 +1,230 @@
+
+
+/* Layout */
+// -------------------------
+
+/* Header */
+#page-header {
+  @include clearfix;
+  margin: 10px 0 0;
+
+  @include responsive(mediaTablet) {
+    margin: 10px 20px 0;
+  }
+}
+.brand {
+  float: left;
+  margin-right: 40px;
+  font-family: $headingFontFamily;
+  font-weight: bold;
+  font-size: 2.462em; // 32px
+  line-height: 1.250em; // 40px
+  @include single-text-shadow(white, 0, 1px, 0);
+}
+.options {
+  float: right;
+  margin-top: 10px;
+  > ul {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+
+    > li {
+      list-style-image: none;
+      list-style-type: none;
+      margin-left: 0;
+      white-space: nowrap;
+      display: inline;
+      float: left;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  a {
+    line-height: 30px;
+  }
+  form, input[type="search"] {
+    margin-bottom: 0 !important;
+  }
+
+}
+.options a, a.link {
+  text-decoration: underline;
+  &:hover { background: none; }
+}
+
+.dropdown-menu {
+  a {
+    text-decoration: none;
+  }
+  .active {
+    a, a:hover {
+      color: $white;
+    }
+  }
+}
+
+/* Content */
+#page {
+  padding-bottom: 30px;
+  margin: 20px 0 20px;
+
+  @include responsive(mediaTablet) {
+    margin: 20px 20px;
+  }
+
+  & > .sheet { margin: 0 20px;}
+}
+.sheet.parent {
+  padding-bottom: 1px;
+  background: lighten($grayLighter, 1%);
+  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  .sheet {
+    margin:0 -10px -30px 10px;
+    &.parent {
+      background: lighten($grayLighter, 3%);
+    }
+  }
+  .level { color: $gray; }
+}
+.sheet.current {
+  background: image-url("shadow_left.png") transparent no-repeat bottom left;
+  padding-bottom: 28px;
+  margin-bottom:-58px !important;
+  .container-shadow {
+    background: image-url("shadow_right.png") transparent no-repeat bottom right;
+    padding-bottom: 28px;
+    margin-bottom:-28px;
+  }
+}
+#content {
+  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  background: white;
+  padding: 16px 20px 20px;
+
+  aside {
+    @include responsive(phone, $mediaDesktop) {
+      margin-top: $vSpace;
+    }
+    margin-bottom: $vSpace;
+  }
+
+  section {
+    @include clearfix;
+    clear: both;
+    margin-top: $vSpace;
+    &:first-child { margin-top:0; }
+  }
+
+  .breadcrumb {
+    margin: 0;
+    padding: 5px 0 5px 15px;
+  }
+}
+.contactable {
+  @include clearfix;
+  .profil-big {
+    margin: 0 0 0 10px;
+  }
+}
+#main {
+  clear: both;
+}
+/* Footer */
+#page-footer {
+  padding-top: $vSpace*2;
+  clear: both;
+
+  color: $white;
+
+  .footer_content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    @include responsive(phone, $mediaTablet) {
+      padding: 20px;
+    }
+    a {
+      color: $white;
+    }
+  }
+
+  & > .container-fluid {
+    @include single-box-shadow($grayDarker, 0, 2px, 8px, 0, true);
+    background: $grayDark;
+  }
+}
+
+
+
+/* Shared */
+// -------------------------
+
+// Highlight
+.highlight {
+  background-color: #FFD;
+}
+
+// Flash
+#flash .alert {
+  clear: both;
+}
+
+.tooltip-inner {
+  text-align: left;
+}
+
+// Profil
+.profil, .profil-big {
+  background: $white;
+  border: 1px solid $grayLight;
+  overflow: hidden;
+  @include border-radius(3px);
+}
+.profil {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  .table-striped & {
+    margin-left: -8px;
+  }
+}
+.profil-big {
+  width: 72px;
+  height: 72px;
+  padding: 2px;
+}
+
+.icon-calendar {
+  cursor: pointer;
+}
+
+
+#content section.roles {
+  overflow: visible;
+}
+
+table.roles {
+  width: 100%;
+  td {
+    border: none;
+    padding: 0px;
+  }
+  td:first-child { padding-left: 10px; width: 100%; }
+  td { min-width: 20px; }
+}
+
+.icon-muted { opacity: 0.7; }
+.contactable.well .contact {
+  address { margin-left: 1em; }
+  .social { margin-left: 1em; }
+}
+
+.profiler-results {
+  opacity: 0.2;
+  &:hover {
+    opacity: 1;
+  }
+}
+

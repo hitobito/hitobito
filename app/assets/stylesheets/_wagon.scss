@@ -1,0 +1,6 @@
+// one wagon may override this file in order to customize styles
+
+@import "compass/css3/font-face";
+@include font-face("Century Gothic", font-files(asset-path("century-gothic.ttf", font), asset-path("century-gothic.eot", font)));
+//@import url(http://fonts.googleapis.com/css?family=Varela+Round);
+//@import url(http://fonts.googleapis.com/css?family=Quicksand:400,700);e with custom styles

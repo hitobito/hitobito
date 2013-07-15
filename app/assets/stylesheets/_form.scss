@@ -5,47 +5,27 @@
   margin-bottom: $vSpace;
 }
 .btn {
-  color: $blueDark;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: $white;
-    background: $purple;
-    @include single-text-shadow($purpleDark, 0, -1px, 1px);
-    border-color: $purpleDark;
+  color: $green;
+  &:hover {
+    color: darken($green, 10%);
     .icon,
     [class^="icon-"],
     [class*=" icon-"] {
-      background-image: image-url("glyphicons-halflings-white.png");
-    }
-    .caret {
-      border-top-color: $white;
+      background-image: image-url("glyphicons-halflings-green.png");
     }
   }
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
-    background-image: image-url("glyphicons-halflings-green.png");
+    background-image: image-url("glyphicons-halflings-green-hover.png");
   }
 
   .caret {
-    border-top-color: $blueDark;
+    border-top-color: $green;
   }
-}
-
-.btn-primary {
-  color: $white;
-  background: $blue;
-  border-color: $blue;
-  @include single-text-shadow($blueDark, 0, -1px, 1px);
-
-}
-
-.btn-group.open .btn.dropdown-toggle {
-  background: $purpleDark;
-  color: $white;
-  border-color: $purpleDark;
+  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
+    color: $white;
+  }
 }
 
 // from bootstrap 2.1.1 << to remove after bootstrap-sass update
@@ -122,12 +102,7 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDarker;
-
-  &:focus {
-    border-color: $purple;
-    @include single-box-shadow(lighten($purple, 5%), 0, 0, 6px, 0, false);
-  }
+  color: $grayDark;
 }
 
 select.time {
@@ -169,6 +144,10 @@ textarea {
 
 .form-horizontal .controls .help-block {
   margin: 0 0 10px 0;
+}
+
+.controls > .text {
+  line-height: 29px;
 }
 
 .remove_nested_fields {

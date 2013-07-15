@@ -145,10 +145,9 @@ describe Event::ParticipationsController, type: :controller do
       dom.should have_selector('.dropdown a', text: 'Foolabel')
       dom.should have_selector('.dropdown a', text: 'Just label')
 
-      dom.should have_selector('a', text: parti1.person.to_s)
-      dom.should have_selector('a', text: parti2.person.to_s)
-      dom.should have_no_selector('a', text: parti3.person.to_s)
-
+      dom.should have_selector('a', text: parti1.person.to_s(:list))
+      dom.should have_selector('a', text: parti2.person.to_s(:list))
+      dom.should have_no_selector('a', text: parti3.person.to_s(:list))
     end
 
   end

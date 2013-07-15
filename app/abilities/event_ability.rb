@@ -15,6 +15,8 @@ class EventAbility < AbilityDsl::Base
     permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
     permission(:layer_full).may(:manage_courses).if_in_course_layer
 
+    permission(:admin).may(:export).all
+
     general(:create, :destroy, :application_market, :qualify).at_least_one_group_not_deleted
   end
 

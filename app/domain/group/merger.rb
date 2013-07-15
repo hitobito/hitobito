@@ -1,17 +1,18 @@
 class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
 
-  attr_reader :new_group
+  attr_reader :new_group, :errors
 
   def merge!
     raise('Cant merge these Groups') unless group2_valid?
 
-    ::Group.transaction do 
-      create_new_group
-      update_events
-      copy_roles
-      move_children(group1)
-      move_children(group2)
-      delete_old_groups
+    ::Group.transaction do
+      if create_new_group
+        update_events
+        copy_roles
+        move_children(group1)
+        move_children(group2)
+        delete_old_groups
+      end
     end
   end
 
@@ -20,17 +21,23 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   end
 
   private
+
   def create_new_group
     new_group = group1.class.new
     new_group.name = new_group_name
     new_group.parent_id = group1.parent_id
-    new_group.save!
-    new_group.reload
-    @new_group = new_group
+    success = new_group.save
+    if success
+      new_group.reload
+      @new_group = new_group
+    else
+      @errors = new_group.errors.full_messages
+    end
+    success
   end
 
   def update_events
-    events = group1.events + group2.events
+    events = (group1.events + group2.events).uniq
     events.each do |event|
       event.groups << new_group
       event.save!
@@ -48,13 +55,13 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
 
   def copy_roles
     roles = group1.roles + group2.roles
-    roles.each do |role| 
+    roles.each do |role|
       new_role = role.dup
       new_role.group_id = new_group.id
       new_role.save!
     end
   end
-  
+
   def delete_old_groups
     group1.destroy
     group2.destroy

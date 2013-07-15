@@ -1,15 +1,17 @@
 - title "#{@group.to_s} fusionieren"
 
-%p 
+%p
   Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen samt Rollen beider Gruppen zusammengeführt.
-  %br 
-  Dieser Vorgang kann nicht mehr Rückgängig gemacht werden !
+  Abos werden nicht übernommen.
+  Die bisherigen Gruppen werden danach unter 'Gelöscht' weiterhin einsehbar sein.
+  %br
+  Dieser Vorgang kann nicht mehr rückgängig gemacht werden!
 
 = standard_form(:merger, url: merge_group_path(@group), builder: PlainObjectFormBuilder) do |f|
   = field_set_tag do
     = label(:merger, :new_group_name, 'Name der neuen Gruppe')
     = f.string_field(:new_group_name)
-    
+
   = field_set_tag do
     = label(:merger, :merge_group_id, "#{@group.to_s} fusionieren mit")
     - @candidates.each do |group|

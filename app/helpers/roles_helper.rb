@@ -2,6 +2,14 @@
 
 module RolesHelper
   
+  def role_cancel_url
+    if flash[:redirect_to]
+      flash[:redirect_to]
+    else
+      entry.new_record? ? group_people_path(entry.group_id) : group_person_path(entry.group_id, entry.person_id)
+    end
+  end
+
   def format_role_created_at(role)
     f(role.created_at.to_date)
   end

@@ -268,7 +268,8 @@ describe Event::Qualifier do
       end
       
       context "with expired prolongation" do
-        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2005, 9, 15)) }
+        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: start_at) }
+        let(:start_at) { Date.new(2005, 9, 15) }
         
         it "creates only qualification" do
           expect { subject.issue }.to change { person.reload.qualifications.count }.by(1)
@@ -277,6 +278,19 @@ describe Event::Qualifier do
           qualis.should have(1).item
           qualis.detect {|q| q.qualification_kind == qualification_kinds(:gl) }.should be_blank
           qualis.detect {|q| q.qualification_kind == qualification_kinds(:sl) }.should be_present
+        end
+
+        context "reactivateable qualification kind" do
+          before { qualification_kinds(:gl).update_attribute(:reactivateable, Date.today.year - start_at.year) }
+
+          it "creates qualification and prolongation" do
+            expect { subject.issue }.to change { person.reload.qualifications.count }.by(2)
+
+            qualis = person.qualifications.where(start_at: quali_date)
+            qualis.should have(2).item
+            qualis.detect {|q| q.qualification_kind == qualification_kinds(:gl) }.should be_present
+            qualis.detect {|q| q.qualification_kind == qualification_kinds(:sl) }.should be_present
+          end
         end
       end
     end
@@ -322,13 +336,26 @@ describe Event::Qualifier do
       end
       
       context "with expired prolongation" do
-        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: Date.new(2005, 9, 15)) }
+        before { Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:gl), start_at: start_at) }
+        let(:start_at) { Date.new(2005, 9, 15) }
         
         it "creates nothing" do
           expect { subject.issue }.not_to change { person.reload.qualifications.count }
           
           qualis = person.qualifications.where(start_at: quali_date)
           qualis.should be_empty
+        end
+
+        context "reactivateable qualification kind" do
+          before { qualification_kinds(:gl).update_attribute(:reactivateable, Date.today.year - start_at.year) }
+
+          it "creates prolongation" do
+            expect { subject.issue }.to change { person.reload.qualifications.count }.by(1)
+
+            qualis = person.qualifications.where(start_at: quali_date)
+            qualis.should have(1).item
+            qualis.detect {|q| q.qualification_kind == qualification_kinds(:gl) }.should be_present
+          end
         end
       end
 

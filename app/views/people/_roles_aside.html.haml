@@ -1,0 +1,35 @@
+- if grouped_roles.present?
+  %section.roles
+    %h2= title
+
+    %table.table.table-basic
+      %tbody
+        - grouped_roles.each do |group, roles|
+          %tr
+            %td
+              - if can?(:primary_group, entry)
+                = link_to(icon(entry.primary_group_id == group.id ? 'star' : 'star-empty'),
+                          primary_group_group_person_path(@group, entry, primary_group_id: group.id),
+                          title: 'Hauptgruppe setzen',
+                          alt: 'Hauptgruppe setzen',
+                          class: "group-#{group.id}",
+                          data: {method: :put, remote: true})
+
+            %td
+              %strong= link_to(group, group)
+              %br/
+              %table.roles
+                %tbody
+                  - roles.each_with_index do |role, index|
+                    %tr
+                      %td
+                        %strong
+                          = role.to_s
+                      %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
+                      %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
+
+            %td
+              - if can?(:new, group.roles.new)
+                %span.pull-right
+                  = Dropdown::RoleAddForPerson.new(self, group, entry)
+

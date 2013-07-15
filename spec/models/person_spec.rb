@@ -78,21 +78,21 @@ describe Person do
   it "can create person with role" do
     group = groups(:top_group)
     person = Person.new(last_name: 'Foo', email: 'foo@example.com')
-    role = group.class.roles.first.new
+    role = group.class.role_types.first.new
     role.group_id = group.id
     person.roles << role
 
     person.save.should be_true
   end
 
-  it "#order_by_name orders people by company, company_name or last_name" do
+  it "#order_by_name orders people by company_name or last_name" do
     Person.destroy_all
     p1 = Fabricate(:person, company: true, company_name: 'ZZ', last_name: 'AA')
-    p2 = Fabricate(:person, company: false, company_name: 'ZZ', first_name: 'BB', last_name: 'ZZ')
+    p2 = Fabricate(:person, company: false, company_name: 'ZZ', first_name: 'ZZ', last_name: 'BB')
     p3 = Fabricate(:person, company: true, company_name: 'AA', last_name: 'ZZ')
-    p4 = Fabricate(:person, company: false, first_name: 'BB', last_name: 'AA')
+    p4 = Fabricate(:person, company: false, first_name: 'AA', last_name: 'BB')
 
-    Person.order_by_name.should == [p3, p4, p2, p1]
+    Person.order_by_name.collect(&:to_s).should == [p3, p4, p2, p1].collect(&:to_s)
   end
 
   context "with one role" do
@@ -271,6 +271,16 @@ describe Person do
       person = people(:top_leader)
       person.roles.first.update_attribute(:created_at, 2.years.ago)
       expect { person.destroy }.to change { Role.with_deleted.count }.by(-1)
+    end
+  end
+
+  context "#save" do
+    it "does not save person with duplicate email even when validation fails" do
+      person = Person.new
+      person.first_name = 'Foo'
+      person.email = people(:top_leader).email
+      person.save(validate: false).should be_false
+      person.errors[:email].should == ['ist bereits vergeben']
     end
   end
 

@@ -62,57 +62,10 @@ namespace :erd do
   end
 end
 
-if Rake::Task.task_defined?('spec:requests') # only if current environment knows rspec
-  Rake::Task['spec:requests'].actions.clear
-  namespace :spec do
-    RSpec::Core::RakeTask.new(:requests => 'db:test:prepare') do |t|
-      # include phantomjs binary in path
-      ENV['PATH'] += File::PATH_SEPARATOR + File.join(File.dirname(__FILE__), '..', '..', "script")
-      t.pattern = "./spec/requests/**/*_spec.rb"
-      t.spec_opts = "--tag type:request"
-    end
-
-    RSpec::Core::RakeTask.new(:performance => 'db:test:prepare') do |t|
-      t.pattern = "./spec/performance/**/*_spec.rb"
-      t.spec_opts = "--tag performance:true"
-    end
-
-    [:abilities, :domain, :regressions, :decorators].each do |dir|
-      RSpec::Core::RakeTask.new(dir => 'db:test:prepare') do |t|
-        t.pattern = "./spec/#{dir}/**/*_spec.rb"
-      end
-    end
-  end
-end
-
 desc "Load the mysql database configuration for the following tasks"
 task :mysql do
   ENV['RAILS_DB_ADAPTER']  = 'mysql2'
   ENV['RAILS_DB_NAME']     = 'hitobito_test'
   ENV['RAILS_DB_PASSWORD'] = 'root'
   ENV['RAILS_DB_SOCKET']   = '/var/run/mysqld/mysqld.sock'
-end
-
-namespace :hitobito do
-  desc "Print all groups, roles and permissions"
-  task :permissions => :environment do
-    Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts '   * ' + layer
-      groups.each do |group, roles|
-        puts '      * ' + group
-        roles.each do |r|
-          puts "         * #{r.model_name.human}: #{r.permissions.inspect}"
-        end
-      end
-    end
-  end
-
-  desc "Print all abilities"
-  task :abilities => :environment do
-    puts ['Permission'.ljust(18), "\t", 'Class'.ljust(24), "\t", 'Action'.ljust(25), "\t", 'Constraint'].join()
-    puts '=' * 100
-    Ability.store.configs_for_permissions(Role::Permissions + [AbilityDsl::Recorder::General::Permission]) do |c|
-      puts "#{c.permission.to_s.ljust(18)}\t#{c.subject_class.to_s.ljust(24)}\t#{c.action.to_s.ljust(25)}\t#{c.constraint}"
-    end
-  end
 end

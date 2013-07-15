@@ -2,17 +2,17 @@
 module NavigationHelper
 
   MAIN = {
-          'Gruppen' => {url: :groups_path, 
+          'Gruppen' => {url: :groups_path,
                         active_for: %w(groups people)},
-          'Anlässe' => {url: :list_events_path, 
+          'Anlässe' => {url: :list_events_path,
                         active_for: %w(list_events)},
-            'Kurse' => {url: :list_courses_path, 
+            'Kurse' => {url: :list_courses_path,
                         active_for: %w(list_courses)},
-            'Admin' => {url: :event_kinds_path, 
-                        active_for: %w(event_kinds qualification_kinds custom_contents label_formats), 
+            'Admin' => {url: :event_kinds_path,
+                        active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
                         if: lambda {|_| can?(:manage, Event::Kind) } }
   }
-  
+
 
   def render_main_nav
     content_tag_nested(:ul, MAIN, class: 'nav') do |label, options|
@@ -24,7 +24,7 @@ module NavigationHelper
       end
     end
   end
-    
+
   # Create a list item for navigations.
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
@@ -37,25 +37,26 @@ module NavigationHelper
     end
     content_tag(:li, link_to(label, url), options)
   end
-  
-  def tab_bar(&block)
-    bar = TabBar.new(self)
+
+  def tab_bar(current_path, &block)
+    bar = TabBar.new(self, current_path)
     yield bar
     bar.render
   end
-  
+
 end
 
 class TabBar
-  
-  attr_reader :view
-  
+
+  attr_reader :view, :current_path
+
   delegate :content_tag, :link_to, :safe_join, :request, :current_page?, to: :view
-  
-  def initialize(view)
+
+  def initialize(view, current_path)
     @view = view
+    @current_path = current_path
   end
-  
+
     # Create a list item for navigations.
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
@@ -64,12 +65,12 @@ class TabBar
     @tabs ||= []
     @tabs << [label, url, alt_paths]
   end
-  
+
   def render
     return if @tabs.blank?
-    
+
     active_url = find_active_tab
-    
+
     content_tag(:ul, class: 'nav nav-sub') do
       safe_join(@tabs) do |label, url, _|
         content_tag(:li, link_to(label, url), class: (url == active_url ? 'active' : nil))
@@ -77,16 +78,18 @@ class TabBar
     end
   end
 
-  
+
   private
-  
+
   # if current_page matches, this tab is active
   # if alt_paths matches, this tab is active
   # if nothing matches, first tab is active
   def find_active_tab
     active = @tabs.detect {|_, url, _| current_page?(url) }
     if active.nil?
-      active = @tabs.detect {|_, _, alt_paths| alt_paths.any? {|p| request.path =~ /\/?#{p}\/?/ }}
+      active = @tabs.detect do |_, _, alt_paths|
+        alt_paths.any? {|p| current_path =~ /\/?#{p}\/?/ }
+      end
     end
     active ? active.second : @tabs.first.second
   end

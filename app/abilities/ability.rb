@@ -20,6 +20,8 @@ class Ability
 
 
   def initialize(user)
+    return if user.nil?
+
     if user.root?
       can :manage, :all
     else

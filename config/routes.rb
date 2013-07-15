@@ -40,6 +40,11 @@ Hitobito::Application.routes.draw do
     resources :people_filters, only: [:new, :create, :destroy]
 
     resources :events do
+      collection do
+        get 'simple' => 'events#index'
+        get 'course' => 'events#index', type: 'Event::Course'
+      end
+
       scope module: 'event' do
         resources :participations do
           get 'print', on: :member

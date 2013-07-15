@@ -18,7 +18,7 @@ describe Qualification do
   let(:person) { qualification.person }
 
   it "includes qualification kind and finish_at in to_s" do
-    quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl), 
+    quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
                       start_at: Date.parse("2011-3-3").to_date)
     quali.to_s.should eq "Super Lead (bis 31.12.2013)"
   end
@@ -90,6 +90,51 @@ describe Qualification do
       q = Fabricate(:qualification, person: person, start_at: Date.today + 1.day)
       q.should_not be_active
       should_not include(q)
+    end
+  end
+
+  describe "reactivateable qualification kind" do
+    subject { person.reload.qualifications }
+
+    let(:today) { Date.today }
+    let(:kind) { qualification_kinds(:sl) }
+    let(:start_date) { today - 1.years }
+    let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date)}
+
+    context "missing" do
+      it { q.should be_active }
+      it { q.should_not be_reactivateable }
+    end
+
+    context "when present" do
+      before { kind.update_column(:reactivateable, 2) }
+
+      context "active qualification" do
+        it { q.should be_active }
+        it { q.should_not be_reactivateable }
+      end
+
+      context "expired qualification within reactivateable limit" do
+        let(:start_date) { today - 3.years }
+
+        it { q.should_not be_active }
+        it { q.should be_reactivateable }
+      end
+
+      context "expired qualification past reactivateable limit" do
+        let(:start_date) { today - 5.years }
+
+        it { q.should_not be_active }
+        it { q.should_not be_reactivateable }
+      end
+    end
+
+    context "#reactivateable? takes parameter" do
+      let(:start_date) { today - 3.years }
+      before { kind.update_column(:reactivateable, 2) }
+
+      it { q.should be_reactivateable }
+      it { q.reactivateable?(today + 2.years).should be_false }
     end
   end
   

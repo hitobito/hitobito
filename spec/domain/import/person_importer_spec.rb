@@ -57,6 +57,14 @@ describe Import::PersonImporter do
     end
   end
 
+  context "duplicate emails" do
+    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com','foo@bar.com'] }
+    let(:data) { emails.map { |email| Fabricate.build(:person, email: email).attributes.select {|attr| attr =~ /name|email/ } } }
+    before { importer.import }
+    its(:errors) { should have(1).item }
+    its('errors.last') { should eq "Zeile 5: E-Mail ist bereits vergeben" }
+  end
+
   context "doublettes" do
     let(:attrs) { {first_name: 'foobar', email: 'foo@bar.net' } }
     let(:data) { [attrs.merge(email: 'bar@foo.net')] }

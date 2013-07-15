@@ -1,5 +1,6 @@
 module Export::CsvPeople
-  class ParticipationsFull < ParticipationsAddress
+  class ParticipationsFull < PeopleFull
+    include ParticipationSupport
     
     def add_event_specifics
       questions.each { |question| merge!(:"question_#{question.id}" => question.question) }

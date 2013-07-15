@@ -38,6 +38,13 @@ class Qualification < ActiveRecord::Base
   def duration
     @duration ||= Duration.new(start_at, finish_at)
   end
+  
+  def reactivateable?(date = nil)
+    date ||= Date.today
+    if finish_at && qualification_kind.reactivateable && !cover?(date)
+      (finish_at + qualification_kind.reactivateable.years) >= date
+    end
+  end
 
   def to_s
     if finish_at?

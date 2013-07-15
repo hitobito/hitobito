@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Event::ListsController do
   before { sign_in(person) }
-  let(:person) { people(:bottom_member) } 
+  let(:person) { people(:bottom_member) }
   
   context "GET #events" do
     it "populates events in group_hierarchy, order by start_at" do
@@ -61,6 +61,21 @@ describe Event::ListsController do
       it "can be set via param, only if year is present" do
         get :courses, year: 2010, group_id: groups(:top_layer).id
         assigns(:group_id).should eq groups(:top_layer).id
+      end
+    end
+
+
+    context "exports to csv" do
+      let(:rows) { response.body.split("\n") }
+      let(:course)  { Fabricate(:course) }
+      before { Fabricate(:event_date, event: course)  }
+
+      it "renders csv headers" do
+        controller.stub(current_user: people(:root))
+        get :courses, format: :csv
+        response.should be_success
+        rows.first.should match(/^Organisatoren;Kursnummer;Kursart;.*Hauptleitung Telefonnummern$/)
+        rows.should have(2).rows
       end
     end
 

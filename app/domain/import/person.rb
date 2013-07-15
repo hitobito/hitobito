@@ -1,9 +1,9 @@
 module Import
   class Person
     extend Forwardable
-    def_delegators :person, :persisted?, :valid?, :save, :id, :errors
+    def_delegators :person, :persisted?, :save, :id, :errors
 
-    attr_reader :person, :hash, :phone_numbers, :social_accounts
+    attr_reader :person, :hash, :phone_numbers, :social_accounts, :emails
 
     BLACKLIST = [:contact_data_visible,
                  :created_at,
@@ -40,7 +40,8 @@ module Import
       end
     end
 
-    def initialize(hash)
+    def initialize(hash, emails)
+      @emails = emails
       prepare(hash)
 
       find_or_initialize_person
@@ -59,6 +60,11 @@ module Import
       person.errors.messages.map do |key, value|
         key == :base ? value : "#{::Person.human_attribute_name(key)} #{value.join}"
       end.flatten.join(', ')
+    end
+
+    # comply with db uniq index constraint on email
+    def valid?
+      person.email ? (person.valid? && email_valid?) : person.valid?
     end
 
     private
@@ -102,6 +108,15 @@ module Import
       end.compact
     end
 
+    def email_valid?
+      if emails.include?(person.email)
+        person.errors.add(:email, :taken)
+        false
+      else
+        (emails << person.email) && true
+        true
+      end
+    end
   end
 
 end

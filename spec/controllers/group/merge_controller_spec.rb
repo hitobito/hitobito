@@ -50,5 +50,6 @@ describe Group::MergeController do
       flash[:alert].should =~ /Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/
       should redirect_to(merge_group_path(group1))
     end
+
   end
 end

@@ -13,8 +13,8 @@ module Event::Qualifier
     end
   
     def has_all_prolongations?(kind_ids)
-      obtained_qualifications_for(kind_ids).size == 
-      existing_qualifications(kind_ids).pluck(:qualification_kind_id).uniq.size
+      obtained_qualifications_for(kind_ids).size ==
+      prolongable_qualifications(kind_ids).map(&:qualification_kind_id).uniq.size
     end
   
     def create_qualifications
@@ -26,17 +26,18 @@ module Event::Qualifier
     # creates new qualification for existing qualifications (prologation mechanism)
     def create_prolongations(kind_ids)
       if kind_ids.present?
-        existing_qualifications(kind_ids).includes(:qualification_kind).each do |q|
+        prolongable_qualifications(kind_ids).each do |q|
           create_qualification(q.qualification_kind)
         end
       end
     end
   
     # The qualifications a participant had before this event
-    def existing_qualifications(kind_ids)
-      person.qualifications.
-             active(event.start_date).
-             where(qualification_kind_id: kind_ids)
+    def prolongable_qualifications(kind_ids)
+      person.qualifications
+         .includes(:qualification_kind)
+         .where(qualification_kind_id: kind_ids)
+         .select { |quali| quali.cover?(event.start_date) || quali.reactivateable?(event.start_date) }
     end
   
     def create_qualification(kind)

@@ -34,7 +34,7 @@ describe Subscriber::GroupController, js: true do
 
       click_button 'Speichern'
 
-      page.should have_content('Abonnent Bottom One (Leader) wurde erfolgreich')
+      page.should have_content('Abonnent Bottom One (Leader Bottom Group) wurde erfolgreich')
     end
   end
 end

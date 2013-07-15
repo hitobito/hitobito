@@ -10,6 +10,11 @@ module MailRelay
         # recipient format (before @) must match regexp in #reject_not_existing
         "#{list_name}#{SENDER_SUFFIX}+#{sender_email.gsub('@', '=')}@#{mail_domain}"
       end
+
+      def app_sender_name
+        app_sender = Settings.email.sender
+        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+      end
     end
 
     # If the email sender was not allowed to post messages, this method is called.
@@ -26,7 +31,7 @@ module MailRelay
     # Forwards bounce messages to the original sender
     def reject_not_existing
       data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
-      if data && MailingList.where(mail_name: data[1]).exists?
+      if data && valid_address?(data[1])
         message.to = data[2].gsub('=', '@')
 
         env_sender = "#{data[1]}#{SENDER_SUFFIX}@#{mail_domain}"
@@ -37,6 +42,10 @@ module MailRelay
       else
         logger.info("#{Time.now.strftime('%FT%T%z')}: Ignored email from #{sender_email} for list #{envelope_receiver_name}")
       end
+    end
+
+    def valid_address?(mail_name)
+      self.class.app_sender_name == mail_name || MailingList.where(mail_name: mail_name).exists?
     end
 
     # Is the mail sent to a valid relay address?

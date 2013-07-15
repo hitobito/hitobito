@@ -28,16 +28,28 @@ class Event::ListsController < ApplicationController
   def courses
     authorize!(:index, Event::Course)
     set_group_vars
-    scope = Event::Course.order('event_kinds.label').in_year(year).list
-    courses = EventDecorator.decorate(limit_scope_for_user(scope))
+
+    courses = EventDecorator.decorate(limit_scope_for_user)
     @courses_by_kind = courses.group_by { |entry| entry.kind.label }
     @courses_by_kind.each do |kind, entries|
       entries.sort_by! {|e| e.dates.first.try(:start_at) || Time.zone.now }.
               collect! {|e| EventDecorator.new(e) }
     end
+
+    respond_to do |format|
+      format.html { @courses_by_kind }
+      format.csv  { render_courses_csv(@courses_by_kind.values.flatten) }
+    end
   end
 
   private
+
+  def render_courses_csv(courses)
+    if can?(:export, Event)
+      csv = Export::Courses.export_list(courses)
+      send_data csv, type: :csv
+    end
+  end
 
   def set_group_vars
     if can?(:manage_courses, Event)
@@ -55,12 +67,20 @@ class Event::ListsController < ApplicationController
 
   end
 
-  def limit_scope_for_user(scope)
+  def limit_scope_for_user
     if can?(:manage_courses, Event)
       group_id > 0 ? scope.with_group_id(group_id) : scope
     else
       scope.in_hierarchy(current_user)
     end
+  end
+
+  def scope
+    Event::Course
+      .includes(:groups, :kind)
+      .order('event_kinds.label')
+      .in_year(year)
+      .list
   end
 
 end

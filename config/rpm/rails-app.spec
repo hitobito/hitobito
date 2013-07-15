@@ -161,7 +161,7 @@ touch config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-*/15 * * * *  %{name}  cd /%{wwwdir}/%{name}/www && . /%{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
+*/15 * * * *  %{name}  cd %{wwwdir}/%{name}/www && . %{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
@@ -233,6 +233,9 @@ touch %{wwwdir}/%{name}/www/tmp/restart.txt
 if [ "$1" = 0 ] ; then
   /sbin/service %{name}-workers stop > /dev/null 2>&1
   /sbin/chkconfig --del %{name}-workers || :
+fi
+if [ "$1" = 1 ] ; then
+  /sbin/service %{name}-workers stop >/dev/null 2>&1
 fi
 %endif
 

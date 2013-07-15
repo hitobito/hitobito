@@ -149,6 +149,7 @@ de:
       event/course:
         kind_id: Kursart
         state: Status
+        number: Kursnummer
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
@@ -169,7 +170,8 @@ de:
         priority_3_id: "2. Ausweichkurs"
 
       event/date:
-        label: Beschreibung/Ort
+        label: Beschreibung
+        location: Ort
         start_at: Von
         finish_at: Bis
 
@@ -181,6 +183,7 @@ de:
       event/question:
         question: Frage
         choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
 
       event/answer:
         answer: Antwort
@@ -212,6 +215,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+        reactivateable: Reaktivierbar
 
       phone_number:
         number: Nummer

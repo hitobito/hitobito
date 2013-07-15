@@ -1,15 +1,31 @@
 module Export::CsvPeople
+
   # Attributes of people we want to include
-  class PeopleAddress < Hash
-    attr_reader :people
+  class PeopleAddress
+    attr_reader :people, :hash
+    delegate :[], :merge!, :keys, :values, to: :hash
 
     def initialize(people)
-      super()
       @people = people
+      @hash = Hash.new
 
       attributes.each { |attr| merge!(attr => translate(attr)) }
       merge!(roles: 'Rollen')
       add_associations
+    end
+
+    def to_csv(csv)
+      csv << values
+      list.each do |person|
+        hash = create(person)
+        csv << keys.map { |key| hash[key] }
+      end
+    end
+
+    private
+
+    def model_class
+      ::Person
     end
 
     def list
@@ -18,12 +34,6 @@ module Export::CsvPeople
 
     def create(person)
       Export::CsvPeople::Person.new(person)
-    end
-
-    private
-
-    def model_class
-      ::Person
     end
 
     def attributes

@@ -57,7 +57,7 @@ module Import
       if date_string.present?
         begin
           Time.zone.parse(date_string).to_date
-        rescue ArgumentError
+        rescue
         end
       end
     end

@@ -3,8 +3,6 @@ require 'sphinx_environment'
 
 describe "Quicksearch", :mysql do
 
-  before { index_sphinx }
-
   sphinx_environment(:people, :groups) do
     it "finds people and groups", js: true do
       obsolete_node_safe do

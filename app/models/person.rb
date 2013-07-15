@@ -88,6 +88,7 @@ class Person < ActiveRecord::Base
   validates :gender, inclusion: %w(m w), allow_blank: true
   validates :company_name, presence: { if: :company? }
   validate :assert_has_any_name
+  # more validations defined by devise
 
 
   ### CALLBACKS
@@ -100,6 +101,7 @@ class Person < ActiveRecord::Base
   scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
+
 
   ### INDEXED FIELDS
 
@@ -116,9 +118,9 @@ class Person < ActiveRecord::Base
 
   class << self
     def order_by_name
-      order(company_case_column(:company_name, :first_name),
-            company_case_column(:first_name, :last_name),
-            company_case_column(:last_name, :nickname))
+      order(company_case_column(:company_name, :last_name),
+            company_case_column(:last_name, :first_name),
+            company_case_column(:first_name, :nickname))
     end
 
     private
@@ -132,11 +134,16 @@ class Person < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s
+  def to_s(format = :default)
     if company?
       company_name
     else
-      name = full_name
+      name = ""
+      if format == :list
+        name << "#{last_name} #{first_name}".strip
+      else
+        name << full_name
+      end
       name << " / #{nickname}" if nickname?
       name
     end
@@ -168,7 +175,10 @@ class Person < ActiveRecord::Base
 
   # All time roles of this person, including deleted.
   def all_roles
-    records = Role.with_deleted.where(person_id: id).includes(:group).order('groups.name', 'roles.deleted_at')
+    records = Role.with_deleted.
+                   where(person_id: id).
+                   includes(:group).
+                   order('groups.name', 'roles.deleted_at')
   end
 
   def default_group_id
@@ -183,6 +193,14 @@ class Person < ActiveRecord::Base
   # Is this person root?
   def root?
     email == Settings.root_email
+  end
+
+  # Overwrite to handle uniquness validation race conditions
+  def save(*args)
+    super
+  rescue ActiveRecord::RecordNotUnique => e
+    errors.add(:email, :taken)
+    false
   end
 
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb

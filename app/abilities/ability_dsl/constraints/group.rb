@@ -11,7 +11,7 @@ module AbilityDsl::Constraints
 
     # uses the layers where the corresponding permission is defined
     def in_same_layer_or_below
-      group && permission_in_layers?(group.layer_groups.collect(&:id))
+      group && permission_in_layers?(group.layer_hierarchy.collect(&:id))
     end
 
     def group_not_deleted

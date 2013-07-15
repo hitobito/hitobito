@@ -1,7 +1,11 @@
 #main.row-fluid
   %article.span6
     %h2 Kontaktangaben
-    = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
+    - if !entry.contact
+      = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
+    - else
+      = render 'contactable/show_group_with_contact', group: entry, contact: entry.contact, only_public: cannot?(:show_details, @group)
+
     
     %h2 Weitere Angaben
     = render_attrs(entry, :type_name)

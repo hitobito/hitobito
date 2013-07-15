@@ -19,7 +19,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def dates_full
-    safe_join(dates, h.tag(:br)) { |date| safe_join([date.duration, h.muted(date.label)], ' ') }
+    safe_join(dates, h.tag(:br)) { |date| safe_join([date.duration, h.muted(label_and_location(date))], ' ') }
   end
 
   def booking_info
@@ -97,6 +97,10 @@ class EventDecorator < ApplicationDecorator
   end
 
   private
+
+  def label_and_location(date)
+    [date.label, date.location].compact.reject(&:empty?).join(', ')
+  end
 
   def issued_qualifications_info(qualification_kinds)
     info = ""

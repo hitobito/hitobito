@@ -72,13 +72,9 @@ module Person::Groups
       uniq
     end
 
-    # load people with/out affiliate roles
-    def affiliate(ext = true)
-      if ext
-        where(roles: {type: Role.external_types.collect(&:sti_name)})
-      else
-        where("roles.type NOT IN (?)", Role.affiliate_types.collect(&:sti_name))
-      end
+    # load people without affiliate roles
+    def members
+      where("roles.type NOT IN (?)", Role.affiliate_types.collect(&:sti_name))
     end
 
     # Order people by the order role types are listed in their group types.

@@ -1,30 +1,34 @@
 
 #main.row-fluid
   %article.span6
-    
+
     - if @event.requires_approval? && @application.present? && can?(:show, @application)
       %p= @application.confirmation_label
       %br/
-    
-    = render 'contactable/show', contactable: entry.person, only_public: true
-    
-    %div
-      = render_attrs(entry.person, :birthday, :gender)
-    
+
+    = render 'contactable/show', contactable: entry.person, only_public: cannot?(:show_details, entry)
+
+    = render_attrs(entry.person, :birthday, :gender)
+
     -if can?(:show_details, entry) # participation
+      = render_extensions :details, folder: :people, locals: { entry: entry.person, show_full: true }
+
       -if @answers.present?
         = render 'answers'
-    
+
       = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')
-      
+
     - if @event.priorization && @application.present? && can?(:show, @application)
       = render 'priorities'
-      
+
   %aside.span5.offset1
     - if entry.person == current_user && @application.present? && @application.contact.present?
       = section 'Anmeldung an' do
         = render 'contactable/show', contactable: @application.contact, only_public: true
-    
+
     = render 'roles'
+
+    - if can?(:show_details, entry)
+      = render 'people/qualifications', entry: entry.person, show_buttons: false
 

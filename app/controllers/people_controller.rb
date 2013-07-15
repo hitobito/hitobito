@@ -1,6 +1,6 @@
 class PeopleController < CrudController
 
-  include RenderPeoplePdf
+  include RenderPeopleExports
 
   self.nesting = Group
   self.nesting_optional = true
@@ -24,6 +24,7 @@ class PeopleController < CrudController
       format.html { set_entries }
       format.pdf  { render_pdf(filter_entries) }
       format.csv  { render_entries_csv }
+      format.email { render_emails(filter_entries) }
     end
   end
 
@@ -151,7 +152,7 @@ class PeopleController < CrudController
     if params[:role_types]
       list_entries(params[:kind]).where(roles: {type: params[:role_types]})
     else
-      list_entries.affiliate(false)
+      list_entries.members
     end
   end
 
@@ -159,6 +160,7 @@ class PeopleController < CrudController
     list_scope(kind).
           preload_groups.
           uniq.
+          order_by_role.
           order_by_name
   end
 
@@ -171,7 +173,7 @@ class PeopleController < CrudController
       @multiple_groups = true
       accessibles.in_layer(@group)
     else
-      accessibles(@group).order_by_role
+      accessibles(@group)
     end
   end
 

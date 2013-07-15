@@ -1,0 +1,21 @@
+.contactable.well
+  %address
+    %strong=group.to_s
+    =group.primary_email
+    =group.all_phone_numbers(only_public)
+  .social
+    =group.all_social_accounts(only_public)
+
+  %div.contact
+    %br
+    .muted
+      %i.icon-user.icon-muted
+      %strong Kontaktperson
+    %address
+      =group.address_name
+      =group.complete_address
+      =contact.primary_email
+      =contact.all_phone_numbers(only_public)
+
+    .social
+      =contact.all_social_accounts(only_public)

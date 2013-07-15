@@ -3,7 +3,10 @@ de:
     models:
       group/top_layer: Top Layer
       group/top_group: Top Group
-      group/bottom_layer: Bottom Layer
+      group/bottom_layer:
+        one: Bottom Layer
+        other: Bottom Layer
+        long: Bottom Layer Long
       group/bottom_group: Bottom Group
       group/global_group: Global Group
       

@@ -1,5 +1,5 @@
 - if can?(:new, @event.new_role)
-  = Dropdown::Event::RoleAdd.new(self, @group, @event) 
+  = Dropdown::Event::RoleAdd.new(self, @group, @event)
 
 = dropdown_people_export(can?(:show_details, entries.first))
 

@@ -167,6 +167,14 @@ class Event < ActiveRecord::Base
       model_name.human(count: 2)
     end
 
+    def type_name
+      if self == base_class
+        'simple'
+      else
+        name.demodulize.underscore
+      end
+    end
+
     # Return the event type with the given sti_name or raise an exception if not found
     def find_event_type!(sti_name)
       types = [Event] + Event.subclasses
@@ -186,7 +194,7 @@ class Event < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s
+  def to_s(format = :default)
     name
   end
 

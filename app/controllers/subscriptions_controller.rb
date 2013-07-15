@@ -1,27 +1,28 @@
 # encoding: utf-8
 class SubscriptionsController < CrudController
-  
-  include RenderPeoplePdf
+
+  include RenderPeopleExports
 
   self.nesting = Group, MailingList
-  
+
   decorates :group
-  
+
   prepend_before_filter :parent
-  
+
   alias_method :mailing_list, :parent
 
 
   def index
     respond_to do |format|
-      format.html { load_grouped_subscriptions }
-      format.pdf  { render_pdf(mailing_list.people) }
-      format.csv  { render_csv(mailing_list.people) }
+      format.html  { load_grouped_subscriptions }
+      format.pdf   { render_pdf(mailing_list.people) }
+      format.csv   { render_csv(mailing_list.people) }
+      format.email { render_emails(mailing_list.people) }
     end
   end
-  
+
   private
-  
+
   def authorize_class
     authorize!(:index_subscriptions, mailing_list)
   end
@@ -53,7 +54,7 @@ class SubscriptionsController < CrudController
   def event_subscriptions
     subscriptions_for_type(Event).order('events.name')
   end
-  
+
   def subscriptions_for_type(klass)
     mailing_list.subscriptions.
       where(subscriber_type: klass.name).

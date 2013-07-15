@@ -4,6 +4,6 @@
       %tr{id: dom_id(p)}
         %td.center= p.qualification_link(@group)
         %td
-          %strong= link_to(p.to_s, group_event_participation_path(@group, @event, p))
+          %strong= link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
         %td= p.roles_short(@event)
         %td= p.town

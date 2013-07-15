@@ -29,16 +29,18 @@ rails_best_practices_output.html
 doc/models.png
 spec/reports
 
-.sass-cache
-app/assets/stylesheets_generated
 
 # precompiled assets
+.sass-cache
+app/assets/stylesheets_generated
 public/assets
 
+# local settings
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
 config/*.sphinx.conf
+Wagonfile
 
 # uploaded pictures
 public/uploads
@@ -47,3 +49,4 @@ public/uploads
 TAGS
 /.vimrc
 /todo.tasks
+

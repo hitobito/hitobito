@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325141319) do
+ActiveRecord::Schema.define(:version => 20130710080936) do
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.integer "participation_id", :null => false
     t.integer "question_id",      :null => false
     t.string  "answer"
+    t.index ["participation_id", "question_id"], :name => "index_event_answers_on_participation_id_and_question_id"
   end
 
   create_table "event_applications", :force => true do |t|
@@ -57,6 +58,8 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.string   "label"
     t.datetime "start_at"
     t.datetime "finish_at"
+    t.string   "location"
+    t.index ["event_id"], :name => "index_event_dates_on_event_id"
   end
 
   create_table "event_kinds", :force => true do |t|
@@ -71,16 +74,19 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
   create_table "event_kinds_preconditions", :force => true do |t|
     t.integer "event_kind_id",         :null => false
     t.integer "qualification_kind_id", :null => false
+    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_preconditions", :unique => true
   end
 
   create_table "event_kinds_prolongations", :force => true do |t|
     t.integer "event_kind_id",         :null => false
     t.integer "qualification_kind_id", :null => false
+    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_prolongations", :unique => true
   end
 
   create_table "event_kinds_qualification_kinds", :force => true do |t|
     t.integer "event_kind_id",         :null => false
     t.integer "qualification_kind_id", :null => false
+    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_qualification_kinds", :unique => true
   end
 
   create_table "event_participations", :force => true do |t|
@@ -92,18 +98,24 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.boolean  "active",                 :default => false, :null => false
     t.integer  "application_id"
     t.index ["event_id", "person_id"], :name => "index_event_participations_on_event_id_and_person_id", :unique => true
+    t.index ["event_id"], :name => "index_event_participations_on_event_id"
+    t.index ["person_id"], :name => "index_event_participations_on_person_id"
   end
 
   create_table "event_questions", :force => true do |t|
     t.integer "event_id"
     t.string  "question"
     t.string  "choices"
+    t.boolean "multiple_choices", :default => false
+    t.index ["event_id"], :name => "index_event_questions_on_event_id"
   end
 
   create_table "event_roles", :force => true do |t|
     t.string  "type",             :null => false
     t.integer "participation_id", :null => false
     t.string  "label"
+    t.index ["type"], :name => "index_event_roles_on_type"
+    t.index ["participation_id"], :name => "index_event_roles_on_participation_id"
   end
 
   create_table "events", :force => true do |t|
@@ -128,11 +140,13 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.integer  "participant_count",                    :default => 0
     t.integer  "application_contact_id"
     t.boolean  "external_applications",                :default => false
+    t.index ["kind_id"], :name => "index_events_on_kind_id"
   end
 
   create_table "events_groups", :id => false, :force => true do |t|
     t.integer "event_id"
     t.integer "group_id"
+    t.index ["event_id", "group_id"], :name => "index_events_groups_on_event_id_and_group_id", :unique => true
   end
 
   create_table "groups", :force => true do |t|
@@ -182,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.string  "additional_sender"
     t.boolean "subscribable",         :default => false, :null => false
     t.boolean "subscribers_may_post", :default => false, :null => false
+    t.index ["group_id"], :name => "index_mailing_lists_on_group_id"
   end
 
   create_table "people", :force => true do |t|
@@ -223,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.string  "name",       :null => false
     t.integer "group_id"
     t.string  "group_type"
+    t.index ["group_id", "group_type"], :name => "index_people_filters_on_group_id_and_group_type"
   end
 
   create_table "phone_numbers", :force => true do |t|
@@ -235,12 +251,13 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
   end
 
   create_table "qualification_kinds", :force => true do |t|
-    t.string   "label",                       :null => false
+    t.string   "label",                          :null => false
     t.integer  "validity"
-    t.string   "description", :limit => 1023
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.string   "description",    :limit => 1023
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.datetime "deleted_at"
+    t.integer  "reactivateable"
   end
 
   create_table "qualifications", :force => true do |t|
@@ -249,12 +266,16 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.date    "start_at",              :null => false
     t.date    "finish_at"
     t.string  "origin"
+    t.index ["person_id"], :name => "index_qualifications_on_person_id"
+    t.index ["qualification_kind_id"], :name => "index_qualifications_on_qualification_kind_id"
   end
 
   create_table "related_role_types", :force => true do |t|
     t.integer "relation_id"
     t.string  "role_type",     :null => false
     t.string  "relation_type"
+    t.index ["relation_id", "relation_type"], :name => "index_related_role_types_on_relation_id_and_relation_type"
+    t.index ["role_type"], :name => "index_related_role_types_on_role_type"
   end
 
   create_table "roles", :force => true do |t|
@@ -292,6 +313,8 @@ ActiveRecord::Schema.define(:version => 20130325141319) do
     t.integer "subscriber_id",                      :null => false
     t.string  "subscriber_type",                    :null => false
     t.boolean "excluded",        :default => false, :null => false
+    t.index ["mailing_list_id"], :name => "index_subscriptions_on_mailing_list_id"
+    t.index ["subscriber_id", "subscriber_type"], :name => "index_subscriptions_on_subscriber_id_and_subscriber_type"
   end
 
 end

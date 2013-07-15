@@ -15,11 +15,16 @@ describe EventsController, type: :controller do
 
   before { sign_in(people(:top_leader)) }
 
+  def self.it_should_redirect_to_index
+    it { should redirect_to course_group_events_path(group.id, :returning => true) }
+  end
+
   include_examples 'crud controller', skip: [%w(index),%w(new)]
 
   def deep_attributes(*args)
     { name: "Chief Leader Course", dates_attributes: [date], group_ids: [group.id]}
   end
+
 
   describe "GET #index" do
     render_views
@@ -28,14 +33,14 @@ describe EventsController, type: :controller do
     let(:today) { Date.today }
     let(:last_year) { 1.year.ago }
 
-    it "renders dropdown to add new events" do
+    it "renders button to add new events" do
       get :index, group_id: group.id
-      dom.find('.dropdown-toggle').text.should include 'Anlass erstellen'
-      [Event, Event::Course].each_with_index do |item, index|
-        path = new_group_event_path(event: {type: item.sti_name})
-        dom.all('.dropdown-menu a')[index].text.should eq item.label
-        dom.all('.dropdown-menu a')[index][:href].should eq path
-      end
+      dom.find('.btn-toolbar .btn').text.should include 'Anlass erstellen'
+    end
+
+    it "renders button to add new courses" do
+      get :index, group_id: group.id, type: 'Event::Course'
+      dom.find('.btn-toolbar .btn').text.should include 'Kurs erstellen'
     end
 
     it "lists entries for current year" do

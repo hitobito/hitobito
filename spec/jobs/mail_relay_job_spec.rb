@@ -10,4 +10,7 @@ describe MailRelayJob do
     subject.perform
     subject.delayed_jobs.should be_exists
   end
+
+  its(:parameters) { should be_blank }
+
 end

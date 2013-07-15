@@ -12,6 +12,9 @@ Fabricator(:person_with_address, from: :person) do
   country { Faker::Address.country }
 end
 
+Fabricator(:person_with_address_and_phone, from: :person_with_address) do
+  phone_numbers { [Fabricate(:phone_number)] }
+end
 
 Fabricator(:company, from: :person) do
   company_name { Faker::Company.name }

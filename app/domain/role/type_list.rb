@@ -72,7 +72,7 @@ class Role
       global = []
       seen_types = []
       group.child_types.each do |child|
-        child.roles.each do |role|
+        child.role_types.each do |role|
           if seen_types.include?(role)
             global << role
           end

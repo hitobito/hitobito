@@ -94,7 +94,7 @@ describe Export::CsvPeople do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_full(list) }
 
-      its(:headers) { should == simple_headers }
+      its(:headers) { should == full_headers }
 
       context "first row" do
         subject { csv[0] }

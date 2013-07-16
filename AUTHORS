@@ -1,0 +1,23 @@
+Hitobito is created by the following people:
+
+Code:
+  Pascal Zumkehr, Puzzle ITC
+  Andreas Maierhofer, Puzzle ITC
+  Pascal Simon, Puzzle ITC
+
+Design & Style:
+  Roland Studer, Puzzle ITC
+  Pierre Fritsch, Puzzle ITC
+    
+With help from many libraries and frameworks including:
+  Ruby on Rails
+  Wagons
+  Twitter Bootstrap
+  Haml
+  Devise
+  CanCan
+  Delayed Job
+  Thinking Sphinx
+  RSpec
+  Dry Crud
+  ...and many others

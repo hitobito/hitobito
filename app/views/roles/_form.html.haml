@@ -14,16 +14,15 @@
                                    help_inline: link_to('Neue Person erfassen',
                                                         new_group_person_path(@group, role: {type: entry.type, group_id: entry.group_id})))
       - else
-        = f.labeled(:group_id) do
-          .text= entry.group
         = f.labeled(:person_id) do
           .text= entry.person
         = f.labeled(:type, entry.possible_role_collection_select)
-        = f.labeled_input_field(:label,
-                                data: {provide: :typeahead, source: entry.klass.available_labels},
-                                help: 'Optionale Bezeichnung der Rolle dieser Person, z.B. Materialverantwortlicher, Webmaster, ..')
 
-        = render_extensions :fields, locals: { f: f }
+      = f.labeled_input_field(:label,
+                              data: {provide: :typeahead, source: entry.klass.available_labels},
+                              help: 'Optionale Bezeichnung der Rolle dieser Person, z.B. Materialverantwortlicher, Webmaster, ..')
+
+      = render_extensions :fields, locals: { f: f }
 
   .span5
     %br/

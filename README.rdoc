@@ -2,10 +2,13 @@
 
 Hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
 
+=== Plugin architecture
+
+
 
 === Development
 
-Hitobito is developed at Puzzle ITC, Bern. To get going, issue the following commands in the main directory.
+To get going, issue the following commands in the main directory:
 
   yum install memcached sphinxsearch
 
@@ -14,11 +17,12 @@ Hitobito is developed at Puzzle ITC, Bern. To get going, issue the following com
   rake db:setup:all
   rails server
   
-To start the search server, run background jobs or the development mail catcher, run
+To start the search server, run background jobs or the development mail catcher, run:
 
   rake ts:start
   rake jobs:work
   mailcatcher -v -f
+
 
 === Deployment
 
@@ -43,3 +47,12 @@ RAILS_SECRET_TOKEN::            Secret token for the sessions (128 byte hex)
 RAILS_AIRBRAKE_HOST::           Host name of the airbrake instance to send errors to
 RAILS_AIRBRAKE_PORT::           Port of the airbrake instance
 RAILS_AIRBRAKE_API_KEY::        Airbrake api key of the application
+
+
+=== License
+
+Hitobito is released under the GNU Affero General Public License. 
+Copyright 2012-2013 by Jungwacht Blauring Schweiz. 
+See COPYING for more details.
+
+Hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].

@@ -27,6 +27,7 @@ coverage
 brakeman-output.tabs
 rails_best_practices_output.html
 doc/models.png
+doc/app
 spec/reports
 
 

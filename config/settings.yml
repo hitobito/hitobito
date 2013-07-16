@@ -7,26 +7,6 @@ application:
     logo_url: http://puzzle.ch
     links: {}
 
-phone_number:
-  predefined_labels:
-    - Privat
-    - Mobil
-    - Arbeit
-    - Vater
-    - Mutter
-    - Fax
-    - Andere
-
-social_account:
-  predefined_labels:
-    - E-Mail
-    - Facebook
-    - MSN
-    - Skype
-    - Twitter
-    - Webseite
-    - Andere
-
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
                  'localhost' %>
@@ -57,10 +37,31 @@ email:
 # This person should only be used by the operators of the application, not the customers.
 root_email: hitobito@puzzle.ch
 
+
+phone_number:
+  predefined_labels:
+    - Privat
+    - Mobil
+    - Arbeit
+    - Vater
+    - Mutter
+    - Fax
+    - Andere
+
+social_account:
+  predefined_labels:
+    - E-Mail
+    - Facebook
+    - MSN
+    - Skype
+    - Twitter
+    - Webseite
+    - Andere
+
 # Presets for PDF labels
 pdf:
   labels:
-    font_name: <%= Rails.root.join('app', 'assets', 'fonts', 'century-gothic.ttf') %>
+    font_name: Helvetica
 
 # Preset for addresses
 address:

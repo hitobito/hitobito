@@ -24,9 +24,12 @@ module Export
 
     # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos)
-      pdf.bounding_box(pos, width: format.width.mm, height: format.height.mm) do
+      pdf.bounding_box(pos,
+                       width: format.width.mm - min_border,
+                       height: format.height.mm - min_border) do
+        #pdf.stroke_bounds
         pdf.text_box(address, at: [format.padding_left.mm,
-                                   format.height.mm - format.padding_top.mm])
+                                   format.height.mm - format.padding_top.mm - min_border])
       end
     end
 
@@ -61,6 +64,10 @@ module Export
 
     def print_company?(contactable)
       contactable.respond_to?(:company) && contactable.company_name?
+    end
+
+    def min_border
+      Settings.pdf.labels.min_border.to_i.mm
     end
 
   end

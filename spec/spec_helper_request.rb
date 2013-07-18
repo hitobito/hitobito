@@ -25,6 +25,8 @@ RSpec.configure do |config|
   end
 end
 
+Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+
 
 if ENV['HEADLESS'] == 'true'
   require 'headless'
@@ -36,7 +38,7 @@ if ENV['HEADLESS'] == 'true'
     headless.destroy
   end
 
-  Capybara.default_wait_time = 10
+  Capybara.default_wait_time = 5
 elsif ENV['HEADLESS'] == 'false'
   # use selenium-webkit driver
 else

@@ -10,10 +10,13 @@ module RequestHelpers
 
   private
 
+  # catch some errors occuring now and then in capybara tests
   def obsolete_node_safe
     begin
       yield
-    rescue Capybara::TimeoutError,
+    rescue Errno::ECONNREFUSED,
+           Timeout::Error,
+           Capybara::TimeoutError,
            Capybara::ElementNotFound,
            Capybara::Poltergeist::ObsoleteNode,
            Capybara::Poltergeist::TimeoutError => e

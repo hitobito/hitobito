@@ -9,4 +9,5 @@ Airbrake.configure do |config|
   config.params_filters << 'RAILS_DB_PASSWORD'
   config.params_filters << 'RAILS_MAIL_RETRIEVER_PASSWORD'
   config.params_filters << 'RAILS_AIRBRAKE_API_KEY'
+  config.params_filters << 'RAILS_SECRET_TOKEN'
 end

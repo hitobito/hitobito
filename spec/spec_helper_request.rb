@@ -36,7 +36,7 @@ if ENV['HEADLESS'] == 'true'
     headless.destroy
   end
 
-  Capybara.default_wait_time = 5
+  Capybara.default_wait_time = 10
 elsif ENV['HEADLESS'] == 'false'
   # use selenium-webkit driver
 else

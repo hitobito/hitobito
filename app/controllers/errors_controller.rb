@@ -1,7 +1,10 @@
-class ErrorsController < ApplicationController
-  skip_before_filter :set_stamper
-  skip_before_filter :authenticate_person!
-  skip_after_filter :reset_stamper
+class ErrorsController < ActionController::Base
+  layout 'application'
+  helper_method :current_user
 
-  skip_authorization_check
+  private
+
+  def current_user
+    false
+  end
 end

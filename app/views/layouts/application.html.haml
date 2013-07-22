@@ -32,7 +32,7 @@
 
         - if current_user
           = render 'layouts/nav'
-        - else
+        - elsif current_user.nil? # nil without login, false on error
           = render 'layouts/unauthorized'
 
     #page

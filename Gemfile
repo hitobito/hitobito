@@ -50,7 +50,7 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'rspec-rails'
   gem 'sqlite3'
-  gem 'tarantula', github: 'codez/tarantula', require: 'tarantula-rails3'
+  gem 'codez-tarantula', require: 'tarantula-rails3'
 end
 
 group :development do

@@ -57,7 +57,6 @@ group :development do
   gem 'bullet'
   gem 'quiet_assets'
   gem 'sextant'
-  gem 'rack-mini-profiler'
   gem 'better_errors'
 end
 

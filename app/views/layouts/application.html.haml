@@ -65,9 +65,10 @@
                 = link_to label, url, target: '_blank'
                 %br/
             %p
-              Version
-              = Wagons.app_version
-              %br/
+              - if Wagons.app_version.to_s > '0.0'
+                Version
+                = Wagons.app_version
+                %br/
               &copy;
               = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
               = Time.zone.now.year

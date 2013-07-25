@@ -168,7 +168,11 @@ echo "# Reindex sphinx for %{name}
 export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
 %{bundle_cmd} install --local --path vendor/bundle --without %{bundle_without_groups}
+
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake assets:precompile
+RAILS_GROUPS=assets bundle exec rails generate error_page 404
+RAILS_GROUPS=assets bundle exec rails generate error_page 500
+RAILS_GROUPS=assets bundle exec rails generate error_page 503
 
 # cleanup log and tmp and db we don't want them in
 # the rpm

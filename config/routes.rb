@@ -127,8 +127,6 @@ Hitobito::Application.routes.draw do
     put 'users' => 'devise/registrations#update', :as => 'person_registration'
   end
 
-  get 'static/:action', controller: 'static'
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

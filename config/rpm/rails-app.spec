@@ -17,7 +17,7 @@
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'doc spec test vendor/cache log tmp db/production.sqlite3 script/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci db/production.sqlite3 script/phantomjs'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
@@ -167,7 +167,7 @@ echo "# Reindex sphinx for %{name}
 
 export PATH=%{ruby_bindir}:$PATH
 ([ ! -f ~/.gemrc ] || grep -q no-ri ~/.gemrc) || echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
-%{bundle_cmd} install --local --path vendor/bundle --without %{bundle_without_groups}
+%{bundle_cmd} install --path vendor/bundle --without %{bundle_without_groups}
 
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake assets:precompile
 RAILS_GROUPS=assets bundle exec rails generate error_page 404

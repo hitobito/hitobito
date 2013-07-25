@@ -1,9 +1,9 @@
+# always call with RAILS_GROUPS=assets
 class ErrorPageGenerator < Rails::Generators::NamedBase
 
   desc "Generate a static error page based on the layout."
 
   def generate_page
-    ENV['RAILS_GROUPS'] = 'assets'
 
     error = if file_name =~ /^\d{3}$/
       file_name

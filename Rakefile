@@ -13,3 +13,11 @@ if Rails.env.development?
 end
 
 Hitobito::Application.load_tasks
+
+
+STATS_DIRECTORIES << ['Abilities', "#{Rails.root}/app/abilities"]
+STATS_DIRECTORIES << ['Decorators', "#{Rails.root}/app/decorators"]
+STATS_DIRECTORIES << ['Domain', "#{Rails.root}/app/domain"]
+STATS_DIRECTORIES << ['Jobs', "#{Rails.root}/app/jobs"]
+STATS_DIRECTORIES << ['Mailers', "#{Rails.root}/app/mailers"]
+STATS_DIRECTORIES << ['Utils', "#{Rails.root}/app/utils"]

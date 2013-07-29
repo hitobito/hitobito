@@ -14,6 +14,9 @@ module AbilityDsl
   # This constraint must exist as an instance method in the same class and return
   # true if the current Person subject applies. The constraint method should have
   # a speaking name that describes its complete purpose.
+  #
+  # With a +general+ constraint an additional requirement for certain actions
+  # may be defined, indifferent of the user's permissions.
   class Base
 
     private

@@ -8,7 +8,7 @@ class EventAbility < AbilityDsl::Base
     permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify).for_qualify_event
 
-    permission(:group_full).may(:index_participations, :create, :update, :destroy, :application_market, :qualify).in_same_group
+    permission(:group_full).may(:index_participations, :create, :update, :destroy).in_same_group
     permission(:group_full).may(:manage_courses).if_in_course_group
 
     permission(:layer_full).may(:index_participations, :update).in_same_layer_or_below

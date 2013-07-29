@@ -30,7 +30,7 @@ describe GroupsController do
 
         its(:keys) { should == ['Bottom Layer', 'Untergruppen'] }
         its(:values) { should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
-                                  [groups(:top_group)]]}
+                                  [groups(:top_group), groups(:toppers)]]}
       end
 
       context "deleted sub groups are not shown" do

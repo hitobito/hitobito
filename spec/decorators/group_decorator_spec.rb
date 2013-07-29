@@ -3,15 +3,16 @@ describe GroupDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
   let(:model) { double("model")}
-  let(:decorator) { GroupDecorator.new(model) } 
+  let(:decorator) { GroupDecorator.new(model) }
   let(:context) { double("context")}
   subject { decorator }
 
   describe "possible roles" do
-    let(:model) { groups(:top_group) } 
-    its(:possible_roles) { should eq [{:sti_name=>"Group::TopGroup::Leader", :human=>"Leader"}, 
-                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Member"}, 
-                                      {:sti_name=>"Role::External", :human=>"External"}]} 
+    let(:model) { groups(:top_group) }
+    its(:possible_roles) { should eq [{:sti_name=>"Group::TopGroup::Leader", :human=>"Leader"},
+                                      {:sti_name=>"Group::TopGroup::Secretary", :human=>"Secretary"},
+                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Member"},
+                                      {:sti_name=>"Role::External", :human=>"External"}]}
   end
 
   describe "selecting attributes" do

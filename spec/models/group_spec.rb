@@ -162,7 +162,8 @@ describe Group do
                                      groups(:bottom_group_one_one),
                                      groups(:bottom_group_one_one_one),
                                      groups(:bottom_group_one_two),
-                                     groups(:bottom_group_two_one)]
+                                     groups(:bottom_group_two_one),
+                                     groups(:toppers)]
     end
 
     it "has correct ordering with parent group" do
@@ -170,7 +171,8 @@ describe Group do
       parent.children.order_by_type(parent).should ==
           [groups(:top_group),
            groups(:bottom_layer_one),
-           groups(:bottom_layer_two)]
+           groups(:bottom_layer_two),
+           groups(:toppers)]
     end
 
     it "works without possible groups" do

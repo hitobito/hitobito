@@ -34,7 +34,7 @@ top_layer:
   type: Group::TopLayer
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:top_layer) %>
   lft: 1
-  rgt: 16
+  rgt: 18
 
 top_group:
   name: TopGroup
@@ -43,7 +43,15 @@ top_group:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:top_layer) %>
   lft: 2
   rgt: 3
-  
+
+toppers:
+  name: Toppers
+  type: Group::GlobalGroup
+  parent: top_layer
+  layer_group_id: <%= ActiveRecord::Fixtures.identify(:top_layer) %>
+  lft: 16
+  rgt: 17
+
 bottom_layer_one:
   name: Bottom One
   type: Group::BottomLayer
@@ -51,7 +59,7 @@ bottom_layer_one:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 4
   rgt: 11
-  
+
 bottom_group_one_one:
   name: Group 11
   type: Group::BottomGroup
@@ -59,7 +67,7 @@ bottom_group_one_one:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 5
   rgt: 8
-    
+
 bottom_group_one_one_one:
   name: Group 111
   type: Group::BottomGroup
@@ -67,7 +75,7 @@ bottom_group_one_one_one:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 6
   rgt: 7
-  
+
 bottom_group_one_two:
   name: Group 12
   type: Group::BottomGroup
@@ -75,7 +83,7 @@ bottom_group_one_two:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 9
   rgt: 10
-  
+
 bottom_layer_two:
   name: Bottom Two
   type: Group::BottomLayer
@@ -83,7 +91,7 @@ bottom_layer_two:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_two) %>
   lft: 12
   rgt: 15
-  
+
 bottom_group_two_one:
   name: Group 21
   type: Group::BottomGroup
@@ -91,4 +99,4 @@ bottom_group_two_one:
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_two) %>
   lft: 13
   rgt: 14
- 
+

@@ -13,12 +13,13 @@ describe RoleDecorator, :draper_with_helpers do
     it "has select and two options" do
       subject.find('select')[:name].should eq "role[type]"
       subject.all('option')[0][:value].should eq "Group::TopGroup::Leader"
-      subject.all('option')[1][:value].should eq "Group::TopGroup::Member"
+      subject.all('option')[1][:value].should eq "Group::TopGroup::Secretary"
+      subject.all('option')[2][:value].should eq "Group::TopGroup::Member"
     end
 
     it "preselects option" do
       role.type = "Group::TopGroup::Member"
-      subject.all('option')[1][:selected].should eq "selected"
+      subject.all('option')[2][:selected].should eq "selected"
     end
   end
 end

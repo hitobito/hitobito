@@ -1,14 +1,33 @@
-== Welcome to Hitobito
+== Welcome to hitobito
 
-Hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
+hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
+
+=== Development
+
+To get going, after you got a copy of hitobito and at least one wagon with an organization
+structure setup as described below, issue the following commands in the main directory:
+
+  yum install sqlite3 memcached sphinxsearch   # install system dependencies
+
+  bundle               # install gem dependencies
+  rake db:create       # create a development database (Sqlite3)
+  rake db:setup:all    # run migrations and load seed data of the app and all wagons
+  rails server         # start the rails server
+  
+To start the search server, run background jobs or the development mail catcher, run:
+
+  rake ts:start
+  rake jobs:work
+  mailcatcher -v -f
+
 
 === Group Hierarchy
 
-Hitobito provides a powerful meta-model to describe group structures. 
+hitobito provides a powerful meta-model to describe group structures. 
 Groups are always of a specific type and are arranged in a tree.
 Each group type may have several different role types. 
 
-This core part of Hitobito does not provide any specific group or role types.
+This core part of hitobito does not provide any specific group or role types.
 They have to be defined in a separate plugin, specific to your organization structure.
 
 An example group type definition might look like this:
@@ -59,16 +78,16 @@ See hitobito_generic for a complete example group structure.
 
 === Plugin architecture
 
-Hitobito is built on the plugin framework {Wagons}[http://github.com/codez/wagons].
-With Wagons, arbitrary features and extensions may be created for Hitobito.
-As mentioned above, as there are no group types coming from Hitobito itself, 
-at least one wagon is required to define group types in order to use Hitobito.
+hitobito is built on the plugin framework {Wagons}[http://github.com/codez/wagons].
+With Wagons, arbitrary features and extensions may be created for hitobito.
+As mentioned above, as there are no group types coming from hitobito itself, 
+at least one wagon is required to define group types in order to use hitobito.
 
 A few basic things to consider when working with Wagons:
 
-* The main Hitobito application and all wagons should reside in the same subdirectory.
+* The main hitobito application and all wagons should reside in the same subdirectory.
 * Copy the +Wagonfile.ci+ to +Wagonfile+ to load all wagons in sibling directories in development mode.
-* Wagons use the same database as the main application. When creating migrations in Hitobito,
+* Wagons use the same database as the main application. When creating migrations in hitobito,
   make sure to remove all wagon additions from the database before the schema is dumped. 
   This is easiest by dropping and recreating the development database.
 * When new gem dependencies are added to the main application, run <tt>rake wagon:bundle:update</tt>
@@ -77,25 +96,6 @@ A few basic things to consider when working with Wagons:
   to a sibling directory and adjust the wagon's file <tt>app_root.rb</tt> accordingly.
 
 See Wagons for more information on wagons and its available rake tasks.
-
-
-=== Development
-
-To get going, after you got a copy of Hitobito and at least one wagon with an organization
-structure setup as described above, issue the following commands in the main directory:
-
-  yum install sqlite3 memcached sphinxsearch   # install system dependencies
-
-  bundle               # install gem dependencies
-  rake db:create       # create a development database (Sqlite3)
-  rake db:setup:all    # run migrations and load seed data of the app and all wagons
-  rails server         # start the rails server
-  
-To start the search server, run background jobs or the development mail catcher, run:
-
-  rake ts:start
-  rake jobs:work
-  mailcatcher -v -f
 
 
 === Deployment
@@ -107,7 +107,7 @@ RAILS_DB_USERNAME::             Username to connect to the database
 RAILS_DB_PASSWORD::             Password to connect to the database
 RAILS_DB_HOST::                 Host to connect to the database
 RAILS_DB_PORT::                 Port to connect to the dababase
-RAILS_DB_ADAPTER::              Databaseadapter (mysql2 or sqlite3)
+RAILS_DB_ADAPTER::              Database adapter
 RAILS_HOST_NAME::               Public host name of the application, used for links in emails
 RAILS_HOST_SSL::                Does the application run on https (true or false)
 RAILS_MAIL_DOMAIN::             The domain name for the mailing lists, default is RAILS_HOST_NAME
@@ -125,8 +125,8 @@ RAILS_AIRBRAKE_API_KEY::        Airbrake api key of the application
 
 === License
 
-Hitobito is released under the GNU Affero General Public License. 
+hitobito is released under the GNU Affero General Public License. 
 Copyright 2012-2013 by Jungwacht Blauring Schweiz. 
 See COPYING for more details.
 
-Hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].
+hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].

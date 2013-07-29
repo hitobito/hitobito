@@ -8,11 +8,13 @@
 namespace :license do
   task :config do
     ENV['COPYRIGHT_HOLDER'] ||= 'Jungwacht Blauring Schweiz'
+    ENV['COPYRIGHT_SOURCE'] ||= 'https://github.com/hitobito/hitobito'
 
     ENV['PREAMBLE'] ||= <<-END.strip
 Copyright (c) 2012-#{Time.now.year}, #{ENV['COPYRIGHT_HOLDER']}. This file is
 part of Hitobito and licensed under the Affero General Public License version 3
-or later. See the COPYING file.
+or later. See the COPYING file at the top-level directory or at
+#{ENV['COPYRIGHT_SOURCE']}.
 END
 
     FORMATS = {

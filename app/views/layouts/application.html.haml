@@ -74,8 +74,14 @@
                 Version
                 = Wagons.app_version
                 %br/
-              Developed by
+
+              = link_to 'Quellcode', 'https://github.com/hitobito', target: '_blank'
+              verfügbar unter der
+              = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
+              %br/
+              Entwickelt von
               = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
+              2012 -
               = Time.zone.now.year
 
   = javascript_include_tag 'application'

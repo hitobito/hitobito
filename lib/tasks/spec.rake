@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 if Rake::Task.task_defined?('spec:requests') # only if current environment knows rspec
   Rake::Task['spec:requests'].actions.clear
   namespace :spec do

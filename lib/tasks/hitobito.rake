@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 namespace :hitobito do
   desc "Print all groups, roles and permissions"
   task :permissions => :environment do

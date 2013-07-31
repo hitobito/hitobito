@@ -24,6 +24,11 @@ module MailRelay
       end
     end
 
+    def initialize(message)
+      strip_spam_headers(message)
+      super(message)
+    end
+
     # If the email sender was not allowed to post messages, this method is called.
     def reject_not_allowed
       if sender_email.present?
@@ -91,7 +96,6 @@ module MailRelay
     private
 
     def deliver(message)
-      strip_spam_headers(message)
       logger.info("#{Time.now.strftime('%FT%T%z')}: Relaying email from #{sender_email} for list #{envelope_receiver_name} to #{message.smtp_envelope_to.size} people")
       super
     end

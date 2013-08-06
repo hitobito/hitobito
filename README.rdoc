@@ -7,7 +7,7 @@ hitobito is an open source web application to manage complex group hierarchies w
 To get going, after you got a copy of hitobito and at least one wagon with an organization
 structure setup as described below, issue the following commands in the main directory:
 
-  yum install sqlite3 memcached sphinxsearch   # install system dependencies
+  yum install sqlite memcached sphinxsearch   # install system dependencies
 
   bundle               # install gem dependencies
   rake db:create       # create a development database (Sqlite3)

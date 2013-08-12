@@ -59,7 +59,7 @@ module CrudHelper
 
   def submit_button(form, label)
     content_tag(:div, class: 'btn-group') do
-      form.button(label, :class => 'btn btn-primary')
+      form.button(label, :class => 'btn btn-primary', :data => { :disable_with => label })
     end
   end
 

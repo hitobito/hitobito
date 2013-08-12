@@ -6,6 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module MailRelay
+  # The mailing list implementation.
+  #
+  # A special bouncing mechanism is applied: When relaying an email, the original sender
+  # is encoded in the return path, e.g. as my-list+sender=example.com@mail-domain.com.
+  # When a receiving server bounces the mail, it is relayed again to the original sender,
+  # based on the encoded return path address.
   class Lists < Base
 
     SENDER_SUFFIX = '-bounces'

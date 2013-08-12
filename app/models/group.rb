@@ -91,7 +91,7 @@ class Group < ActiveRecord::Base
 
 
   ### VALIDATIONS
-
+  validates :email, format: Devise.email_regexp, allow_blank: true
   validate :assert_type_is_allowed_for_parent, on: :create
 
 

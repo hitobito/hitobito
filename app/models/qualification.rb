@@ -18,22 +18,22 @@
 #
 
 class Qualification < ActiveRecord::Base
-  
+
   attr_accessible :qualification_kind_id, :qualification_kind, :start_at, :origin
-  
+
   belongs_to :person
   belongs_to :qualification_kind
-  
+
   before_validation :set_finish_at
-  
+
   validates :qualification_kind_id, uniqueness: {scope: [:person_id, :finish_at],
                                                  message: 'existiert in dieser Zeitspanne bereits'}
 
   delegate :cover?, :active?, to: :duration
-  
+
   scope :order_by_date, order('finish_at DESC')
-  
-  
+
+
   class << self
     def active(date = nil)
       date ||= Date.today
@@ -41,14 +41,14 @@ class Qualification < ActiveRecord::Base
         where("qualifications.finish_at >= ? OR qualifications.finish_at IS NULL", date)
     end
   end
-  
+
   def duration
     @duration ||= Duration.new(start_at, finish_at)
   end
-  
+
   def reactivateable?(date = nil)
     date ||= Date.today
-    if finish_at && qualification_kind.reactivateable && !cover?(date)
+    if finish_at? && qualification_kind.reactivateable? && !cover?(date)
       (finish_at + qualification_kind.reactivateable.years) >= date
     end
   end
@@ -60,7 +60,7 @@ class Qualification < ActiveRecord::Base
       qualification_kind.to_s
     end
   end
-  
+
   private
 
   def set_finish_at
@@ -68,5 +68,5 @@ class Qualification < ActiveRecord::Base
       self.finish_at = (start_at + qualification_kind.validity.years).end_of_year
     end
   end
-  
+
 end

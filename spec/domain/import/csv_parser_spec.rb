@@ -29,6 +29,12 @@ describe Import::CsvParser do
     its(:to_csv) { should eq "Vorname,Nachname,Geburtsdatum\nÉsaïe,Gärber,25.08.1992\nFoo,Bar,25.08.1992\n" }
   end
 
+  context "empty lines" do
+    let(:data) { File.read(path(:empty_lines)) }
+    its(:size) { should eq 2 }
+    its(:to_csv) { should eq "Vorname,Nachname,Geburtsdatum\nÉsaïe,Gärber,25.08.1992\nFoo,Bar,25.08.1992\n" }
+  end
+
   context "fields with blanks" do
     let(:data) { File.read(path(:fields_with_blanks)) }
     its(:size) { should eq 1 }

@@ -22,7 +22,9 @@ module Import
     def parse
       begin
         data = encode_as_utf8(@input)
-        @csv = CSV.parse(data, col_sep: find_separator(data), headers: true, skip_blanks: true)
+        separator = find_separator(data)
+        sanitized = remove_empty_lines(data, separator)
+        @csv = CSV.parse(sanitized, col_sep: separator, headers: true, skip_blanks: true)
         strip_spaces
       rescue Exception => e
         @error = e.to_s
@@ -61,6 +63,11 @@ module Import
       raise "Enthält keine Daten" if charset == "UNKNOWN"
       charset = Encoding::ISO8859_1 if charset == "MACINTOSH"
       input.force_encoding(charset).encode("UTF-8")
+    end
+
+    # removes empty lines (",,,,,\n"), happens when data is not on first line in spreadsheet
+    def remove_empty_lines(raw, separator)
+      raw.lines.reject { |line| line.strip.split(separator).all?(&:empty?) }.join
     end
 
     def find_separator(input)

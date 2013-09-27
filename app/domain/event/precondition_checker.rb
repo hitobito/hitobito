@@ -40,11 +40,11 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   private
-  
+
   def validate_minimum_age
-    errors << :birthday if person_age_at_course_start < course_minimum_age
+    errors << :birthday unless person.birthday && old_enough?
   end
-  
+
   def validate_precondition(qualification_kind)
     errors << qualification_kind.label unless person_qualified_for(qualification_kind)
   end
@@ -65,18 +65,12 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     end
   end
 
-  def person_age_at_course_start
-    age = 0
-    if birthday = person.birthday
-      age = course_start_at.year - birthday.year
-      age -= ((course_start_at.month > birthday.month ||
-               (course_start_at.month == birthday.month && course_start_at.day > birthday.day)) ? 1 : 0)
-    end
-    age
+  def old_enough?
+    (course_start_at - course_minimum_age.years) >= person.birthday
   end
 
   def birthday_error_text
-    "Altersgrenze von #{course_minimum_age} unterschritten, du bist #{person_age_at_course_start} Jahre alt."
+    "Altersgrenze von #{course_minimum_age} unterschritten."
   end
 
   def qualifications_error_text

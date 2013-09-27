@@ -24,16 +24,17 @@ describe Event::PreconditionChecker do
 
   describe "minimum age person" do
     before { course.kind.minimum_age = 16 }
+    let(:too_young_error) { "Altersgrenze von 16 unterschritten." }
 
     context "has no birthday" do
       its(:valid?) { should be_false }
-      its("errors_text.last") { should =~ /du bist 0 Jahre alt/ }
+      its("errors_text.last") { should eq too_young_error }
     end
-    
+
     context "is younger than 16" do
-      before { person.birthday = (course_start_at - 16.years - 1.day) }
+      before { person.birthday = (course_start_at - (16.years - 1.day)) }
       its(:valid?) { should be_false }
-      its("errors_text.last") { should =~ /du bist 15 Jahre alt/ }
+      its("errors_text.last") { should eq too_young_error }
     end
 
     context "is 16 years old" do
@@ -42,6 +43,11 @@ describe Event::PreconditionChecker do
       its("errors") { should be_empty }
     end
 
+    context "is 16 years and a day" do
+      before { person.birthday = course_start_at - (16.years + 1.day) }
+      its(:valid?) { should be_true }
+      its("errors") { should be_empty }
+    end
   end
 
   describe "qualification" do

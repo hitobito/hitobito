@@ -81,7 +81,7 @@ address:
 csv:
   # optimized for M$ Excel
   separator: ;
-  encoding: ISO-8859-1//IGNORE
+  encoding: ISO-8859-1//TRANSLIT//IGNORE
 
 role:
   # If a role last less than this number of days, it is not archived

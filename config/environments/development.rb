@@ -24,9 +24,22 @@ Hitobito::Application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  # mailcatcher
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+  # Mail sender
+  config.action_mailer.delivery_method = (ENV['RAILS_MAIL_DELIVERY_METHOD'].presence || :smtp).to_sym
+
+  if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
+    case config.action_mailer.delivery_method.to_s 
+    when 'smtp' 
+      config.action_mailer.smtp_settings = 
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+    when 'sendmail'
+      config.action_mailer.sendmail_settings = 
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+    end
+  else
+    # mailcatcher
+    config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+  end
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

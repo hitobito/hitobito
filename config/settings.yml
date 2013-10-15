@@ -6,7 +6,7 @@
 # All settings may be overriden in wagons!
 
 application:
-  name: hitobito  # set same name in email.sender and .mass_recipient
+  name: hitobito  # set same name in email.sender and email.mass_recipient
   footer:
     #logo_image: logo_hitobito.png
     logo_url: http://puzzle.ch
@@ -15,6 +15,7 @@ application:
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
                  'localhost' %>
+
 email:
   # Sender for all emails sent by the application
   sender: <%= "hitobito <noreply@#{mail_domain}>" %>
@@ -30,13 +31,17 @@ email:
   retriever:
     # interval to check for new mails in minutes
     interval: 1
-    type: pop3
+    type: <%= ENV['RAILS_MAIL_RETRIEVER_TYPE'] || 'pop3' %>   
     config:
-      address:    <%= ENV['RAILS_MAIL_RETRIEVER_ADDRESS'] %>
-      port:       <%= ENV['RAILS_MAIL_RETRIEVER_PORT'] || 995 %>
-      user_name:  <%= ENV['RAILS_MAIL_RETRIEVER_USER'] %>
-      password:   <%= ENV['RAILS_MAIL_RETRIEVER_PASSWORD'] %>
-      enable_ssl: <%= %w(true yes 1).include?(ENV['RAILS_MAIL_RETRIEVER_SSL']) %>
+      <% if ENV['RAILS_MAIL_RETRIEVER_CONFIG'].present? %>
+        <%= "{ #{ENV['RAILS_MAIL_RETRIEVER_CONFIG']} }" %>
+      <% else %>
+        address:    <%= ENV['RAILS_MAIL_RETRIEVER_ADDRESS'] %>
+        port:       <%= ENV['RAILS_MAIL_RETRIEVER_PORT'] || 995 %>
+        user_name:  <%= ENV['RAILS_MAIL_RETRIEVER_USER'] %>
+        password:   <%= ENV['RAILS_MAIL_RETRIEVER_PASSWORD'] %>
+        enable_ssl: <%= %w(true yes 1).include?(ENV['RAILS_MAIL_RETRIEVER_SSL']) %>
+      <% end %>
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application, not the customers.

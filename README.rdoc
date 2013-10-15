@@ -103,40 +103,42 @@ See Wagons for more information on wagons and its available rake tasks.
 
 For a productive enviroment, the following environment variables may be defined:
 
+RAILS_HOST_NAME::               Public host name of the application, used for links in emails.
+                                This value is required.
+RAILS_HOST_SSL::                Does the application run on https (true or false).
+                                Default is false.
+RAILS_SECRET_TOKEN::            Secret token for the sessions (128 byte hex).
+                                This value should be set for security reasons.
 RAILS_DB_NAME::                 Name of the database.
 RAILS_DB_USERNAME::             Username to connect to the database.
 RAILS_DB_PASSWORD::             Password to connect to the database.
 RAILS_DB_HOST::                 Host to connect to the database.
 RAILS_DB_PORT::                 Port to connect to the dababase.
 RAILS_DB_ADAPTER::              Database adapter. Default is sqlite3.
-RAILS_HOST_NAME::               Public host name of the application, used for links in emails.
-                                This value is required.
-RAILS_HOST_SSL::                Does the application run on https (true or false).
-                                Default is false.
 RAILS_MAIL_DELIVERY_METHOD::    smtp or sendmail. See {ActionMailer}[http://api.rubyonrails.org/classes/ActionMailer/Base.html] for details.
-RAILS_MAIL_DELIVERY_CONFIG::    A comma-separated key: value list with all required
+RAILS_MAIL_DELIVERY_CONFIG::    A comma-separated "key: value" list with all required
                                 delivery settings for the chosen method, 
                                 e.g. "address: smtp.local, port: 25". See 
                                 {ActionMailer}[http://api.rubyonrails.org/classes/ActionMailer/Base.html] 
                                 for valid options. If this variable is empty, 
-                                the Rails defaults are used.
+                                the Rails defaults (localhost:25) are used.
 RAILS_MAIL_PERFORM_DELIVERIES:: Set to false when no mails should be delivered at all.
 RAILS_MAIL_DOMAIN::             The domain name for the mailing lists, default is RAILS_HOST_NAME.
 RAILS_MAIL_RETRIEVER_TYPE::     pop3 or imap, anything supported by the 
                                 {Mail}[https://github.com/mikel/mail] gem. 
                                 Default is pop3.
-RAILS_MAIL_RETRIEVER_CONFIG::   A comma-separated key: value list with all required
+RAILS_MAIL_RETRIEVER_CONFIG::   A comma-separated "key: value" list with all required
                                 retriever settings, e.g. 
                                 "address: mailhost.local, port: 995, enable_ssl: true". 
                                 See {Mail}[https://github.com/mikel/mail] for 
-                                valid options. If this variable is empty, mailing lists will not 
-                                work.
-RAILS_SPHINX_PORT::             Unique port of the sphinx server. Defaults to 9312.
-RAILS_SECRET_TOKEN::            Secret token for the sessions (128 byte hex).
-RAILS_AIRBRAKE_HOST::           Host name of the airbrake instance to send errors to.
-                                Nothing is sent if this variable is empty.
-RAILS_AIRBRAKE_PORT::           Port of the airbrake instance.
+                                valid options. If this variable is empty, 
+                                mailing lists will not work.
+RAILS_SPHINX_PORT::             Unique port of the sphinx server for this application instance.
+                                Defaults to 9312.
 RAILS_AIRBRAKE_API_KEY::        Airbrake api key of the application.
+                                Nothing is sent if this variable is empty.
+RAILS_AIRBRAKE_HOST::           Host name of the airbrake instance to send errors to.
+RAILS_AIRBRAKE_PORT::           Port of the airbrake instance. Defaults to 443
 
 
 === License

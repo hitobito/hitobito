@@ -56,6 +56,7 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
     children.each do |child|
       child.parent_id = new_group.id
       child.save!
+      child.update_attribute(:layer_group_id, child.layer_group.id)
     end
     group.children.update_all(parent_id: new_group.id)
   end

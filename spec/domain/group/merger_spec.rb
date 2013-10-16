@@ -73,5 +73,14 @@ describe Group::Merger do
       e.groups.should =~ [group1, group2, merge.new_group]
     end
 
+    it "updates layer_group_id for children" do
+      merge = Group::Merger.new(group1, group2, 'foo')
+      merge.merge!
+
+      new_group = Group.find(merge.new_group.id)
+      group1.children.map(&:layer_group_id).uniq.should eq [new_group.id]
+      group2.children.map(&:layer_group_id).uniq.should eq [new_group.id]
+    end
+
   end
 end

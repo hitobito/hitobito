@@ -30,7 +30,7 @@ class Duration < Struct.new(:start_at, :finish_at)
       ''
     end
   end
-  
+
   def active?
     if date_only?(start_at) && date_only?(finish_at)
       cover?(Date.today)
@@ -38,21 +38,23 @@ class Duration < Struct.new(:start_at, :finish_at)
       cover?(Time.zone.now)
     end
   end
-  
+
   def cover?(date)
-    if finish_at
+    if start_at && finish_at
       date.between?(start_at, finish_at)
-    else
+    elsif finish_at
+      date <= finish_at
+    elsif start_at
       start_at <= date
     end
   end
-  
+
   def meaningful?
     start_at.blank? || finish_at.blank? || start_at <= finish_at
   end
 
   private
-  
+
   def format_datetime(value)
     if date_only?(value)
       format_date(value)
@@ -60,17 +62,17 @@ class Duration < Struct.new(:start_at, :finish_at)
       "#{format_date(value)} #{format_time(value)}"
     end
   end
-  
+
   def format_time(value)
     I18n.l(value, format: :time)
   end
-  
+
   def format_date(value)
     I18n.l(value.to_date)
   end
-  
+
   def date_only?(value)
     !value.respond_to?(:seconds_since_midnight) || value.seconds_since_midnight.zero?
   end
-  
+
 end

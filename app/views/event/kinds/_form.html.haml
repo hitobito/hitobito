@@ -6,6 +6,6 @@
 = entry_form(buttons_bottom: false) do |f|
    = f.labeled_input_fields :label, :short_name
    = render_extensions 'fields', locals: { f: f }
-   = f.labeled_input_field :minimum_age, help_inline: 'Jahre'
+   = f.labeled_input_field :minimum_age, help_inline: 'Jahre (Jahrgang am ersten Kursdatum massgebend)'
    = f.labeled_input_fields :precondition_ids, :qualification_kind_ids
    = f.labeled_input_field :prolongation_ids, help: 'Mit <Ctrl> + Klick können mehrere Qualifikationsarten ausgewählt werden.'

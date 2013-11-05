@@ -32,19 +32,19 @@ describe Event::PreconditionChecker do
     end
 
     context "is younger than 16" do
-      before { person.birthday = (course_start_at - (16.years - 1.day)) }
+      before { person.birthday = (course_start_at.beginning_of_year - 15.years) }
       its(:valid?) { should be_false }
       its("errors_text.last") { should eq too_young_error }
     end
 
-    context "is 16 years old" do
+    context "is 16 years during course" do
       before { person.birthday = course_start_at - 16.years }
       its(:valid?) { should be_true }
       its("errors") { should be_empty }
     end
 
-    context "is 16 years and a day" do
-      before { person.birthday = course_start_at - (16.years + 1.day) }
+    context "is 16 years end of year" do
+      before { person.birthday = course_start_at.end_of_year - 16.years }
       its(:valid?) { should be_true }
       its("errors") { should be_empty }
     end

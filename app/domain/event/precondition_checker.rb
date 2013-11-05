@@ -66,7 +66,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def old_enough?
-    (course_start_at - course_minimum_age.years) >= person.birthday
+    (course_start_at.end_of_year - course_minimum_age.years) >= person.birthday
   end
 
   def birthday_error_text

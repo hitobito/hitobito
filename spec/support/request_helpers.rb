@@ -27,7 +27,7 @@ module RequestHelpers
            Capybara::ElementNotFound,
            Capybara::Poltergeist::ObsoleteNode,
            Capybara::Poltergeist::TimeoutError => e
-      pending
+      pending e.message
     end
   end
 

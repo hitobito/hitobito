@@ -27,7 +27,7 @@ describe "Quicksearch", :mysql do
           dropdown.should have_content("Top")
         else
           # stupid poltergeist, not stable enough
-          pending
+          pending 'dropdown did not appear'
         end
       end
     end

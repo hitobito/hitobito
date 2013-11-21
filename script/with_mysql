@@ -1,4 +1,9 @@
 #!/bin/bash
+# prepare the environment to use the local mysql database, e.g.
+#  script/with_mysql rails s
+#
+# rake tasks may use the followint subtask:
+#  rake mysql test:requests
 
 if [ -z "$RAILS_ENV" ]
 then

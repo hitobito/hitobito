@@ -146,6 +146,14 @@ class PeopleController < CrudController
     person
   end
 
+  def assign_attributes
+    if model_params.present?
+      email = model_params.delete(:email)
+      entry.email = email if can?(:update_email, entry)
+    end
+    super
+  end
+
   def set_entries
     @people = filter_entries.page(params[:page])
     if index_full_ability?

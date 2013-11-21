@@ -48,7 +48,7 @@ class Person < ActiveRecord::Base
                   :email, :address, :zip_code, :town, :country, :birthday, :picture, :primary_group_id]
 
   attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
-                  :email, :address, :zip_code, :town, :country,
+                  :address, :zip_code, :town, :country,
                   :gender, :birthday, :additional_information,
                   :password, :password_confirmation, :remember_me,
                   :picture, :remove_picture
@@ -194,6 +194,11 @@ class Person < ActiveRecord::Base
   # Is this person allowed to login?
   def login?
     persisted?
+  end
+
+  # Does this person have a password set?
+  def password?
+    encrypted_password?
   end
 
   # Is this person root?

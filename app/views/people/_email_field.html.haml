@@ -1,0 +1,6 @@
+- if can?(:update_email, entry)
+  = f.labeled_input_field :email
+- else
+  = f.labeled(:email) do
+    %p.inline= entry.email
+    = f.help_block 'Die E-Mail Addresse einer Person mit Login kann nur von ihr selbst geändert werden.'

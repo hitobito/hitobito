@@ -9,12 +9,12 @@
     = f.string_field(:zip_code, class: 'span2')
     = f.string_field(:town, class: 'span4')
   = f.labeled_input_field(:country)
- 
+
 = field_set_tag do
-  = f.labeled_input_field :email
-  
+  = render 'email_field', f: f
+
 = field_set_tag do
   = f.labeled_inline_fields_for :phone_numbers, 'contactable/phone_number_fields'
-  
+
 = field_set_tag do
   = f.labeled_inline_fields_for :social_accounts, 'contactable/social_account_fields'

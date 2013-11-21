@@ -58,6 +58,7 @@ group :development do
   gem 'quiet_assets'
   gem 'sextant'
   gem 'better_errors'
+  gem 'spring-commands-rspec'
 end
 
 group :test do

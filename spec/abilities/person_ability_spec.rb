@@ -18,11 +18,23 @@ describe PersonAbility do
     it "may modify any public role in lower layers" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       should be_able_to(:update, other.person.reload)
+      should be_able_to(:update_email, other.person)
       should be_able_to(:update, other)
+    end
+
+    it "as admin may update email with password anywhere" do
+      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), person: other)
+      should be_able_to(:update, other.reload)
+      should be_able_to(:update_email, other)
     end
 
     it "may modify its role" do
       should be_able_to(:update, role)
+    end
+
+    it "may modify its password" do
+      should be_able_to(:update_email, role.person)
     end
 
     it "may not destroy its role" do
@@ -32,6 +44,7 @@ describe PersonAbility do
     it "may modify affiliates in the same layer" do
       other = Fabricate(Role::External.name.to_sym, group: groups(:top_layer))
       should be_able_to(:update, other.person.reload)
+      should be_able_to(:update_email, other.person)
       should be_able_to(:update, other)
     end
 
@@ -79,9 +92,17 @@ describe PersonAbility do
     it "may modify any public role in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       should be_able_to(:update, other.person.reload)
+      should be_able_to(:update_email, other.person)
       should be_able_to(:update, other)
       should be_able_to(:create, other)
       should be_able_to(:destroy, other)
+    end
+
+    it "may not modify email of other person in same layer with password" do
+      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), person: other)
+      should be_able_to(:update, other.reload)
+      should_not be_able_to(:update_email, other)
     end
 
     it "may not view any public role in upper layers" do
@@ -107,6 +128,7 @@ describe PersonAbility do
     it "may modify children in his layer" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       should be_able_to(:update, other.person.reload)
+      should be_able_to(:update_email, other.person)
       should be_able_to(:update, other)
       should be_able_to(:create, other)
       should be_able_to(:destroy, other)
@@ -297,6 +319,80 @@ describe PersonAbility do
 
   end
 
+  describe :group_full do
+    let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
+
+    it "may view details of himself" do
+      should be_able_to(:show_full, role.person.reload)
+    end
+
+    it "may update himself" do
+      should be_able_to(:update, role.person.reload)
+      should be_able_to(:update_email, role.person)
+    end
+
+    it "may update her email with password" do
+      himself = role.person.reload
+      himself.encrypted_password = 'foooo'
+      should be_able_to(:update_email, himself)
+    end
+
+    it "may update his role" do
+      should be_able_to(:update, role)
+    end
+
+    it "may create other users" do
+      should be_able_to(:create, Person)
+    end
+
+    it "may view and update others in same group" do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      should be_able_to(:show, other.person.reload)
+      should be_able_to(:update, other.person)
+      should be_able_to(:update_email, other.person)
+    end
+
+    it "may not update email for other with password" do
+      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: other)
+      should be_able_to(:update, other.reload)
+      should_not be_able_to(:update_email, other)
+    end
+
+    it "may view and update externals in same group" do
+      other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one))
+      should be_able_to(:show, other.person.reload)
+      should be_able_to(:update, other.person)
+    end
+
+    it "may view details of others in same group" do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      should be_able_to(:show_details, other.person.reload)
+    end
+
+    it "may view full of others in same group" do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      should be_able_to(:show_full, other.person.reload)
+    end
+
+    it "may not view public role in same layer" do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two))
+      should_not be_able_to(:show, other.person.reload)
+    end
+
+    it "may index same group" do
+      should be_able_to(:index_people, groups(:bottom_group_one_one))
+      should be_able_to(:index_local_people, groups(:bottom_group_one_one))
+      should be_able_to(:index_full_people, groups(:bottom_group_one_one))
+    end
+
+    it "may not index groups in same layer" do
+      should_not be_able_to(:index_people, groups(:bottom_group_one_two))
+      should_not be_able_to(:index_full_people, groups(:bottom_group_one_two))
+      should_not be_able_to(:index_local_people, groups(:bottom_group_one_two))
+    end
+  end
+
   describe :group_read do
     let(:role) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)) }
 
@@ -306,6 +402,7 @@ describe PersonAbility do
 
     it "may update himself" do
       should be_able_to(:update, role.person.reload)
+      should be_able_to(:update_email, role.person)
     end
 
     it "may not update his role" do
@@ -326,7 +423,7 @@ describe PersonAbility do
       should be_able_to(:show, other.person.reload)
     end
 
-    it "may not view details of others in same group" do
+    it "may view details of others in same group" do
       other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
       should be_able_to(:show_details, other.person.reload)
     end
@@ -363,6 +460,7 @@ describe PersonAbility do
 
     it "may modify himself" do
       should be_able_to(:update, role.person.reload)
+      should be_able_to(:update_email, role.person)
     end
 
     it "may not modify his role" do

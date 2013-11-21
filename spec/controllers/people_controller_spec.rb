@@ -175,6 +175,7 @@ describe PeopleController do
       person = assigns(:person)
       should redirect_to(group_person_path(group, person))
       person.should be_persisted
+      person.email.should == 'foo@example.com'
       person.roles.should have(1).item
       person.roles.first.should be_persisted
       last_email.should_not be_present
@@ -190,6 +191,32 @@ describe PeopleController do
                       role: {type: 'Group::TopGroup::Member', group_id: group.id},
                       person: {last_name: 'Foo', email: 'foo@example.com'}
       end.to raise_error(CanCan::AccessDenied)
+    end
+  end
+
+  context "PUT update" do
+    let(:person) { people(:bottom_member) }
+    let(:group) { person.groups.first }
+
+    it 'as admin updates email with password' do
+      put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
+      assigns(:person).email.should == 'foo@example.com'
+    end
+
+    context 'as bottom leader' do
+      before { sign_in(Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person) }
+
+      it 'updates email without password' do
+        person.update_column(:encrypted_password, nil)
+        put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
+        assigns(:person).email.should == 'foo@example.com'
+      end
+
+      it 'does not update email with password' do
+        put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
+        assigns(:person).email.should == 'bottom_member@example.com'
+      end
+
     end
   end
 

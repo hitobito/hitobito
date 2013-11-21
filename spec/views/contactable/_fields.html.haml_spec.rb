@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+
 describe 'contactable/_fields.html.haml' do
 
   let(:group) { groups(:top_layer) }
@@ -15,8 +16,20 @@ describe 'contactable/_fields.html.haml' do
   subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info', visible: false) }
 
   before do
+    controller.controller_path = "groups"
+    controller.request.path_parameters[:controller] = "groups"
     view.extend StandardHelper
     view.stub(entry: GroupDecorator.decorate(group), f: form_builder)
+
+    # mock render call to emai_field partial
+    render_method = view.method(:render)
+    view.should_receive(:render) do |*args|
+      if args == ['email_field', f: form_builder]
+        ''
+      else
+        render_method.call(*args)
+      end
+    end.twice
   end
 
   context "standard" do

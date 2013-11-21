@@ -29,7 +29,7 @@
         - t.col(account[:value]) { |p| contact_value(account[:key], p.phone_numbers) }
 
 
-= standard_form(:csv_import, url: group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
+= standard_form(:field_mappings, url: group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
   = render 'hidden_form_fields'
   .btn-toolbar
     .btn-group

@@ -6,6 +6,6 @@
 = hidden_field_tag :data, params[:data]
 = hidden_field_tag :role_type,  params[:role_type]
 
-= fields_for :csv_import do |f|
-  - params[:csv_import].each do |key, value|
+= fields_for :field_mappings do |f|
+  - field_mappings.each do |key, value|
     = f.hidden_field key, value: value

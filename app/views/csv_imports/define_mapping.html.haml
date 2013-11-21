@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(:csv_import, method: :post, url: preview_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
+= standard_form(:field_mappings, method: :post, url: preview_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
   = hidden_field_tag :data, parser.to_csv
 
   = field_set_tag "Rolle auswählen" do

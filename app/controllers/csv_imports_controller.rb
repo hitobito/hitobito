@@ -10,7 +10,7 @@ class CsvImportsController < ApplicationController
   attr_reader :importer, :parser, :entries
 
   helper_method :group, :parser, :guess, :model_class, :entries, :role_name,
-    :relevant_attrs, :relevant_contacts, :contact_value
+                :relevant_attrs, :relevant_contacts, :contact_value, :field_mappings
 
   before_filter :load_group
   before_filter :custom_authorization
@@ -86,7 +86,7 @@ class CsvImportsController < ApplicationController
   end
 
   def guess(header)
-    @column_guesser ||= Import::PersonColumnGuesser.new(parser.headers, params[:csv_import])
+    @column_guesser ||= Import::PersonColumnGuesser.new(parser.headers, field_mappings)
     @column_guesser[header][:key]
   end
 
@@ -134,7 +134,7 @@ class CsvImportsController < ApplicationController
   def find_duplicate_mappings
     duplicates = []
     seen = []
-    params[:csv_import].each do |header, attr|
+    field_mappings.each do |header, attr|
       if attr.present?
         if seen.include?(attr)
           duplicates << attr
@@ -147,7 +147,7 @@ class CsvImportsController < ApplicationController
   end
 
   def map_headers_and_import
-    data = parser.map_data(params[:csv_import])
+    data = parser.map_data(field_mappings)
     @importer = Import::PersonImporter.new(group: group,
                                            data: data,
                                            role_type: role_type)
@@ -179,6 +179,10 @@ class CsvImportsController < ApplicationController
     params[:csv_import] && params[:csv_import][:file]
   end
 
+  def field_mappings
+    params[:field_mappings] || {}
+  end
+
   def role_name
     role_type.constantize.model_name.human
   end
@@ -196,13 +200,13 @@ class CsvImportsController < ApplicationController
   end
 
   def relevant_attrs
-    Import::Person.person_attributes.select { |f| params[:csv_import].values.include?(f[:key].to_s) }.map { |f| f[:key]  }
+    Import::Person.person_attributes.select { |f| field_mappings.values.include?(f[:key].to_s) }.map { |f| f[:key]  }
   end
 
   def relevant_contacts(key)
     @account_types ||= { phone_numbers: Import::AccountFields.new(PhoneNumber),
                          social_accounts: Import::AccountFields.new(SocialAccount) }
-    @account_types[key].fields.select { |f| params[:csv_import].values.include?(f[:key].to_s) }.each do |contact|
+    @account_types[key].fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.each do |contact|
       yield(contact)
     end
   end

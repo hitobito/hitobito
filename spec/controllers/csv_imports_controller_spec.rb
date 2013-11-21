@@ -53,7 +53,7 @@ describe CsvImportsController do
 
     it "renders define mapping if mapping has duplicates" do
       params = required_params.clone
-      params[:csv_import] = { Vorname: 'first_name', Nachname: 'first_name', Geburtsdatum: 'birthday',  }
+      params[:field_mappings] = { Vorname: 'first_name', Nachname: 'first_name', Geburtsdatum: 'birthday',  }
       post :preview, params
       should render_template(:define_mapping)
       flash[:alert].should =~ /Vorname/
@@ -64,10 +64,10 @@ describe CsvImportsController do
     let(:data) { File.read(path(:utf8)) }
     let(:role_type) { "Group::TopGroup::Leader" }
     let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' } }
-    let(:required_params) { { group_id: group.id, data: data, role_type: role_type, csv_import: mapping } }
+    let(:required_params) { { group_id: group.id, data: data, role_type: role_type, field_mappings: mapping } }
 
     it "redirects if role_type is missing" do
-      post :create, group_id: group.id, data: data, csv_import: { first_name: 'first_name' }
+      post :create, group_id: group.id, data: data, field_mappings: { first_name: 'first_name' }
       should redirect_to new_group_csv_imports_path(group)
     end
 

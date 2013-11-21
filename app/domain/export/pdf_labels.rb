@@ -49,7 +49,7 @@ module Export
     def address(contactable)
       address = ""
       address << contactable.company_name << "\n" if print_company?(contactable)
-      address << contactable.full_name << "\n"
+      address << contactable.full_name << "\n" if contactable.full_name.present?
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
       address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"

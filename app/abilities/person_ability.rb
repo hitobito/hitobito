@@ -11,21 +11,19 @@ class PersonAbility < AbilityDsl::Base
     permission(:any).may(:index, :query).all
     permission(:any).may(:show, :show_full, :history, :update, :update_email, :primary_group).herself
 
-    permission(:admin).may(:update_email).all
-
     permission(:contact_data).may(:show).other_with_contact_data
 
     permission(:group_read).may(:show, :show_details).in_same_group
 
     permission(:group_full).may(:show_full, :history).in_same_group
     permission(:group_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_group
-    permission(:group_full).may(:update_email).for_person_without_password
+    permission(:group_full).may(:update_email).if_permissions_in_all_capable_groups
     permission(:group_full).may(:create).all  # restrictions are on Roles
 
     permission(:layer_read).may(:show, :show_full, :show_details, :history).in_same_layer_or_visible_below
 
     permission(:layer_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_layer_or_visible_below
-    permission(:layer_full).may(:update_email).for_person_without_password
+    permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_above
     permission(:layer_full).may(:create).all # restrictions are on Roles
 
     general(:send_password_instructions).not_self
@@ -43,17 +41,13 @@ class PersonAbility < AbilityDsl::Base
     subject.contact_data_visible?
   end
 
-  def for_person_without_password
-    !subject.password?
-  end
-
   def in_same_group
     permission_in_groups?(subject.group_ids)
   end
 
   def in_same_layer_or_visible_below
     permission_in_layers?(subject.layer_group_ids) ||
-    permission_in_layers?(subject.above_groups_visible_from.collect(&:id))
+    permission_in_layers?(subject.above_groups_where_visible_from.collect(&:id))
   end
 
   def non_restricted_in_same_group
@@ -62,6 +56,29 @@ class PersonAbility < AbilityDsl::Base
 
   def non_restricted_in_same_layer_or_visible_below
     permission_in_layers?(subject.non_restricted_groups.collect(&:layer_group_id)) ||
-    permission_in_layers?(subject.above_groups_visible_from.collect(&:id))
+    permission_in_layers?(subject.above_groups_where_visible_from.collect(&:id))
   end
+
+  def if_permissions_in_all_capable_groups
+    # true if capable roles is empty.
+    capable_roles.all? do |role|
+      permission_in_group?(role.group_id)
+    end
+  end
+
+  def if_permissions_in_all_capable_groups_or_above
+    # true if capable roles is empty.
+    capable_roles.all? do |role|
+      permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
+      user_context.groups_group_full.include?(role.group_id)
+    end
+  end
+
+  # Roles that are capable of doing anything a their group
+  def capable_roles
+    # restricted roles are not included because the may not be modified
+    # in their group (and thus are not vulnerable to email updates)
+    subject.roles.reject { |r| r.class.restricted || r.class.permissions.blank? }
+  end
+
 end

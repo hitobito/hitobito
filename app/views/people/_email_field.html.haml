@@ -3,4 +3,6 @@
 - else
   = f.labeled(:email) do
     %p.inline= entry.email
-    = f.help_block 'Die E-Mail Addresse einer Person mit Login kann nur von ihr selbst geändert werden.'
+    = f.help_block do
+      Die E-Mail Adresse einer Person mit mehreren Rollen kann nur
+      von einem über alle diese Rollen übergeordneten Benutzer geändert werden.

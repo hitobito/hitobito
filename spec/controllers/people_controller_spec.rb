@@ -206,13 +206,14 @@ describe PeopleController do
     context 'as bottom leader' do
       before { sign_in(Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person) }
 
-      it 'updates email without password' do
+      it 'updates email for person in one group' do
         person.update_column(:encrypted_password, nil)
         put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
         assigns(:person).email.should == 'foo@example.com'
       end
 
-      it 'does not update email with password' do
+      it 'does not update email for person in multiple groups' do
+        Fabricate(Group::BottomLayer::Member.name.to_sym, person: person, group: groups(:bottom_layer_two))
         put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
         assigns(:person).email.should == 'bottom_member@example.com'
       end

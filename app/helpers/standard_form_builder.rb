@@ -82,7 +82,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     text_field(attr, html_options)
   end
-  
+
   def email_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
     super(attr, html_options)
@@ -130,7 +130,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a date and time. You might want to customize this.
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
-    
+
     date_field("#{attr}_date") +
     ' ' +
     hours_select("#{attr}_hour") +
@@ -178,7 +178,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       caption
     end
   end
-  
+
   # Render a select element for a :belongs_to association defined by attr.
   # Use additional html_options for the select element.
   # To pass a custom element list, specify the list with the :list key or
@@ -218,7 +218,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
-  
+
   def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
@@ -228,7 +228,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                         id_field: "#{object_name}_#{attr_id}",
                         url: @template.query_people_path})
   end
-  
+
   def labeled_inline_fields_for(assoc, partial_name=nil, &block)
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
@@ -250,7 +250,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         help_inline(link_to_add 'Eintrag hinzufügen', assoc)
       end
   end
-  
+
   def error_messages
     template.render('shared/error_messages', errors: @object.errors, object: @object)
   end
@@ -281,7 +281,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:div, content, html_options)
     end
   end
-  
+
   def indented(content = nil, &block)
     content = capture(&block) if block_given?
     content_tag(:div, :class => "control-group") do
@@ -319,10 +319,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def help_inline(text)
     content_tag(:span, text, :class => 'help-inline')
   end
-  
+
   # Generates a help block for fields
-  def help_block(text)
-    content_tag(:span, text, :class => 'help-block')
+  def help_block(text = nil, &block)
+    content_tag(:span, text, :class => 'help-block', &block)
   end
 
   # Returns the list of association entries, either from options[:list],
@@ -339,7 +339,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     list
   end
-  
+
   def honeypot(name = :name)
     content_tag(:div, :class => "control-group", :style => 'position:absolute;left:-9999px;') do
       label(name, name, :class => 'control-label') +
@@ -398,11 +398,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     text << help_block(help) if help.present?
     labeled(args.first, text)
   end
-  
+
   def klass
     @klass ||= @object.respond_to?(:klass) ? @object.klass : @object.class
   end
-  
+
   def id_from_value(attr, value)
     "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
   end

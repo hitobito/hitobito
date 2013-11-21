@@ -18,14 +18,22 @@ module Role::Types
 
   included do
     class_attribute :permissions, :visible_from_above, :affiliate, :restricted
+
     # All permission a person with this role has on the corresponding group.
     self.permissions = []
+
     # Whether a person with this role is visible for somebody with layer_read permission above the current layer.
     self.visible_from_above = true
+
     # Whether this role is an active member or an affiliate person of the corresponding group.
     self.affiliate = false
+
     # Whether this kind of role is specially managed or open for general modifications.
-    # A restricted role should always be an affiliate as well
+    # Restricted roles do not actually belong to the group like members or affiliates,
+    # but are rather external controllers/supervisors/... that need access to the group's
+    # information. So they do not appear in the people lists of the group, but rather
+    # in the group attributes.
+    # A restricted role should always be an affiliate as well.
     self.restricted = false
   end
 

@@ -175,7 +175,7 @@ describe Person do
     end
 
     it "whole hierarchy may view this person" do
-      person.above_groups_visible_from.should =~ [groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)]
+      person.above_groups_where_visible_from.should =~ [groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)]
     end
 
     it "in_layer returns person for this layer" do

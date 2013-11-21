@@ -1,0 +1,15 @@
+inherit_from: rubocop-todo.yml
+
+AllCops:
+  Excludes:
+    - db/**
+    - config/**
+
+ClassLength:
+  Max: 200
+
+MethodLength:
+  Max: 20
+
+CyclomaticComplexity:
+  Max: 8

@@ -7,7 +7,7 @@
 
 namespace :hitobito do
   desc "Print all groups, roles and permissions"
-  task :permissions => :environment do
+  task :roles => :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
       puts '   * ' + layer
       groups.each do |group, roles|

@@ -58,7 +58,6 @@ group :development do
   gem 'quiet_assets'
   gem 'sextant'
   gem 'better_errors'
-  gem 'spring-commands-rspec'
 end
 
 group :test do
@@ -84,6 +83,7 @@ group :console do
   gem 'mailcatcher'
   gem 'rdoc-tags'
   gem 'zeus'
+  gem 'spring-commands-rspec'
 end
 
 group :guard_support do
@@ -101,6 +101,7 @@ group :metrics do
   gem 'rails_best_practices'
   gem 'rails-erd'
   gem 'simplecov-rcov'
+  gem 'rubocop'
 end
 
 # Include the wagon gems you want attached in Wagonfile.

@@ -74,6 +74,8 @@ module Hitobito
     # parameters by using an attr_accessible or attr_protected declaration.
     config.active_record.whitelist_attributes = true
 
+    config.log_tags = [:uuid]
+
     config.cache_store = :dalli_store, {compress: true,
                                         namespace: ENV['RAILS_HOST_NAME'] || 'hitobito'}
 

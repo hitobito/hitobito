@@ -12,7 +12,8 @@ task :ci => ['log:clear',
              'ci:setup:rspec',
              'spec:requests', # run request specs first to get coverage from spec
              'spec',
-             'wagon:test']
+             'wagon:test',
+             'rubocop']
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"
@@ -25,6 +26,7 @@ namespace :ci do
                     'spec',
                     'wagon:test',
                     'brakeman',
+                    'rubocop:report',
                     #'qa' # stack level too deep on jenkins :(
                     ]
 end

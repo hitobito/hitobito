@@ -200,15 +200,17 @@ class CsvImportsController < ApplicationController
   end
 
   def relevant_attrs
-    Import::Person.person_attributes.select { |f| field_mappings.values.include?(f[:key].to_s) }.map { |f| f[:key]  }
+    Import::Person.person_attributes.
+      select { |f| field_mappings.values.include?(f[:key].to_s) }.
+      map { |f| f[:key]  }
   end
 
   def relevant_contacts(key)
     @account_types ||= { phone_numbers: Import::AccountFields.new(PhoneNumber),
                          social_accounts: Import::AccountFields.new(SocialAccount) }
-    @account_types[key].fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.each do |contact|
-      yield(contact)
-    end
+    @account_types[key].fields.
+      select { |f| field_mappings.values.include?(f[:key].to_s) }.
+      each { |contact| yield(contact) }
   end
 
   def contact_value(key, contacts)

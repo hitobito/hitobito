@@ -328,6 +328,8 @@ GEM
       parser (~> 2.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.1.4)
+    rubocop-checkstyle_formatter (0.0.4)
+      rubocop (>= 0.9.0)
     ruby-graphviz (1.0.9)
     ruby-nuggets (0.9.3)
     ruby-progressbar (1.1.0)
@@ -498,6 +500,7 @@ DEPENDENCIES
   rspec-notify-osd
   rspec-rails
   rubocop
+  rubocop-checkstyle_formatter
   sass-rails (~> 3.2.3)
   schema_validations
   seed-fu

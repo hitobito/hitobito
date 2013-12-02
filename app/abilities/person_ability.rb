@@ -22,7 +22,9 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_read).may(:show, :show_full, :show_details, :history).in_same_layer_or_visible_below
 
-    permission(:layer_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_layer_or_visible_below
+    permission(:layer_full).
+      may(:update, :primary_group, :send_password_instructions).
+      non_restricted_in_same_layer_or_visible_below
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_above
     permission(:layer_full).may(:create).all # restrictions are on Roles
 

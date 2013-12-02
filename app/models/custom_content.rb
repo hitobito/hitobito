@@ -20,41 +20,44 @@
 
 class CustomContent < ActiveRecord::Base
   attr_accessible :body, :subject
-  
+
   validate :assert_required_placeholders_are_used
-  
+
   class << self
     def get(key)
-      find_by_key(key) || raise(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
+      find_by_key(key) ||
+      raise(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
     end
   end
-  
+
   def to_s
     label
   end
-  
+
   def placeholders_list
     placeholders_required_list + placeholders_optional_list
   end
-  
+
   def placeholders_required_list
     as_list(placeholders_required)
   end
-  
+
   def placeholders_optional_list
     as_list(placeholders_optional)
   end
-  
+
   def placeholder_token(key)
     "{#{key}}"
   end
-  
+
   def body_with_values(placeholders = {})
     available = placeholders_list
     if non_existing = (placeholders.keys - available).presence
-      raise ArgumentError, "Placeholder(s) #{non_existing.join(', ')} given, but not defined for this custom content"
+      raise(ArgumentError,
+            "Placeholder(s) #{non_existing.join(', ')} given, " <<
+            "but not defined for this custom content")
     end
-    
+
     available.each_with_object(body.dup) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
@@ -66,13 +69,13 @@ class CustomContent < ActiveRecord::Base
       end
     end
   end
-  
+
   private
-  
+
   def as_list(placeholders)
     placeholders.to_s.split(',').collect(&:strip)
   end
-  
+
   def assert_required_placeholders_are_used
     placeholders_required_list.each do |placeholder|
       unless body.include?(placeholder_token(placeholder))

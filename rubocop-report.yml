@@ -1,0 +1,20 @@
+# Rubocop configuration to generate a violation report
+
+AllCops:
+  Excludes:
+    - db/**
+    - config/**
+    - script/**
+    - tmp/**
+
+ClassLength:
+  Max: 150
+
+MethodLength:
+  Max: 10
+
+CyclomaticComplexity:
+  Max: 6
+
+LineLength:
+  Max: 100

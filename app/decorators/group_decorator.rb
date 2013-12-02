@@ -21,21 +21,22 @@ class GroupDecorator < ApplicationDecorator
 
   def possible_roles
     klass.role_types.map do |type|
+        # users from above cannot create external roles
       if !type.restricted &&
-        (type.visible_from_above? || can?(:index_local_people, model))  # users from above cannot create external roles
+        (type.visible_from_above? || can?(:index_local_people, model))
         { sti_name: type.sti_name, human: type.label }
       end
     end.compact
   end
-  
+
   def as_typeahead
     {id: id, label: label_with_parent}
   end
-  
+
   def as_quicksearch
     {id: id, label: label_with_parent, type: :group}
   end
-  
+
   def label_with_parent
     h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
   end
@@ -43,7 +44,7 @@ class GroupDecorator < ApplicationDecorator
   def possible_events
     klass.event_types
   end
-  
+
   def possible_children
     klass.possible_children
   end

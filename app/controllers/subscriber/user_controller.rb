@@ -9,13 +9,16 @@ module Subscriber
   class UserController < ApplicationController
 
     before_filter :authorize
-      
+
     def create
       subscription.excluded = false
       if subscription.save
-        redirect_to(mailing_list_path, notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
+        redirect_to(mailing_list_path,
+                    notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
       else
-        redirect_to(mailing_list_path, alert: "Du konntest dem Abo nicht hinzugefügt werden: #{subscription.errors.full_messages.join(", ")}")
+        redirect_to(mailing_list_path,
+                    alert: "Du konntest dem Abo nicht hinzugefügt werden: " <<
+                            subscription.errors.full_messages.join(", "))
       end
     end
 
@@ -30,7 +33,7 @@ module Subscriber
       raise CanCan::AccessDenied unless mailing_list.subscribable?
       authorize!(:update, subscription)
     end
-    
+
     def subscription
       @subscription ||= find_subscription || build_subscription
     end
@@ -42,7 +45,7 @@ module Subscriber
     end
 
     def find_subscription
-      mailing_list.subscriptions.where(subscriber_id: current_user.id, 
+      mailing_list.subscriptions.where(subscriber_id: current_user.id,
                                        subscriber_type: Person.sti_name).
                                  first
     end

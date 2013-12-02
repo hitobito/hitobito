@@ -25,11 +25,25 @@ end
 begin
   require 'rubocop/rake_task'
 
-  desc 'Run RuboCop '
+  desc 'Run rubocop.yml and fail if any issues are detected'
   Rubocop::RakeTask.new(:rubocop) do |task|
-    # don't abort rake on failure
-    task.fail_on_error = false
+    task.fail_on_error = true
   end
 rescue LoadError
   # no rubocop available, no problem
+end
+
+namespace :rubocop do
+  desc 'Run rubocop-reports.yml and generate report'
+  task :report do
+    # do not fail if we find issues
+    sh %w(rubocop
+          --config rubocop-report.yml
+          --require rubocop/formatter/checkstyle_formatter
+          --format Rubocop::Formatter::CheckstyleFormatter
+          --no-color
+          --rails
+          --out tmp/rubocop.xml).join(' ') rescue nil
+    true
+  end
 end

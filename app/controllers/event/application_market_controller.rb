@@ -6,18 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationMarketController < ApplicationController
-  
+
   before_filter :authorize
-  
+
   decorates :event, :participants, :participation, :group
-  
+
   helper_method :event
-  
+
   def index
     load_participants
     load_applications
   end
-  
+
   def add_participant
     if assigner.createable?
       assigner.create_role
@@ -25,43 +25,47 @@ class Event::ApplicationMarketController < ApplicationController
       render 'participation_exists_error'
     end
   end
-  
+
   def remove_participant
     assigner.remove_role
   end
-  
+
   def put_on_waiting_list
     application.update_column(:waiting_list, true)
     render 'waiting_list'
   end
-  
+
   def remove_from_waiting_list
     application.update_column(:waiting_list, false)
     render 'waiting_list'
   end
-  
+
   private
-  
+
   def load_participants
     @participants = event.participations_for(event.participant_type).includes(:application)
   end
-  
+
   def load_applications
-    @applications = Event::ParticipationDecorator.decorate(
-          Event::Participation.
+    applications = Event::Participation.
                        joins(:event).
                        includes(:application, :person).
                        where(filter_applications).
                        merge(Event::Participation.pending).
-                       uniq.
-                       sort_by {|p| [p.application.priority(event) || 99, p.person.last_name, p.person.first_name] })
+                       uniq
+    applications.sort_by! do |p|
+      [p.application.priority(event) || 99,
+       p.person.last_name,
+       p.person.first_name]
+    end
+    @applications = Event::ParticipationDecorator.decorate(applications)
   end
-  
+
   def filter_applications
     if params[:prio].nil? && params[:waiting_list].nil?
       params[:prio] = %w(1 2 3)  # default filter
     end
-    
+
     conditions = []
     args = []
     if params[:prio]
@@ -74,32 +78,32 @@ class Event::ApplicationMarketController < ApplicationController
       conditions << "(event_applications.waiting_list = ? AND events.kind_id = ?)"
       args << true << event.kind_id
     end
-    
+
     if conditions.present?
       [conditions.join(" OR "), *args]
     end
   end
-  
+
   def assigner
     @assigner ||= Event::ParticipantAssigner.new(event, participation)
   end
-  
+
   def event
     @event ||= group.events.find(params[:event_id])
   end
-  
+
   def group
     @group ||= Group.find(params[:group_id])
   end
-  
+
   def participation
     @participation ||= Event::Participation.find(params[:id])
   end
-  
+
   def application
     participation.application
   end
- 
+
   def authorize
     authorize!(:application_market, event)
   end

@@ -34,6 +34,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {})
     type = column_type(@object, attr)
+    custom_field_method = :"#{type}_field"
     if type == :text
       text_area(attr, html_options)
     elsif association_kind?(attr, type, :belongs_to)
@@ -44,13 +45,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       password_field(attr, html_options)
     elsif attr.to_s.include?('email')
       email_field(attr, html_options)
+    elsif respond_to?(custom_field_method)
+      send(custom_field_method, attr, html_options)
     else
-      custom_field_method = :"#{type}_field"
-      if respond_to?(custom_field_method)
-        send(custom_field_method, attr, html_options)
-      else
-        text_field(attr, html_options)
-      end
+      text_field(attr, html_options)
     end
   end
 

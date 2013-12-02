@@ -20,43 +20,44 @@
 #
 
 class Event::Participation < ActiveRecord::Base
-  
+
   schema_validations except_type: :uniqueness
-  
+
   self.demodulized_route_keys = true
-  
+
   attr_accessible :additional_information, :answers_attributes, :application_attributes
-  
-  
+
+
   ### ASSOCIATIONS
-  
+
   belongs_to :event
   belongs_to :person
-  
+
   belongs_to :application, dependent: :destroy, validate: true
-  
+
   has_many :roles, dependent: :destroy
 
   has_many :answers, dependent: :destroy, validate: true
 
-  
-  
+
+
   accepts_nested_attributes_for :answers, :application
-  
-  
+
+
   ### VALIDATIONS
-  
-  validates :person_id, uniqueness: {scope: :event_id, message: 'Du hast dich für diesen Anlass bereits angemeldet.'}
-  
-  
+
+  validates :person_id, uniqueness: { scope: :event_id,
+                                      message: 'Du hast dich für diesen Anlass bereits angemeldet.' }
+
+
   ### CALLBACKS
-  
+
   before_validation :set_self_in_nested
 
   ### SCOPES
   scope :active, where(active: true)
   scope :pending, where(active: false)
-  
+
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
@@ -67,15 +68,15 @@ class Event::Participation < ActiveRecord::Base
       statement << "END"
       joins(:roles).order(statement)
     end
-    
+
     def upcoming
       joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
     end
-    
+
     def teamers(event)
       joins(:roles).where('event_roles.type <> ?', event.participant_type.sti_name)
     end
-    
+
     def participants(event)
       joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
     end
@@ -83,7 +84,7 @@ class Event::Participation < ActiveRecord::Base
     def with_role_label(label)
       joins(:roles).where('event_roles.label = ?', label)
     end
-    
+
     # load participations without affiliate roles
     def participating(event)
       affiliate_types = event.role_types.select(&:affiliate).collect(&:sti_name)
@@ -107,9 +108,9 @@ class Event::Participation < ActiveRecord::Base
       end
     end
   end
-  
+
   private
-  
+
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     answers.each {|e| e.participation = self unless e.frozen? }

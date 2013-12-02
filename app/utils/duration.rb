@@ -11,17 +11,7 @@ class Duration < Struct.new(:start_at, :finish_at)
 
   def to_s(format = :long)
     if start_at && finish_at
-      if start_at == finish_at
-        format_datetime(start_at)
-      elsif start_at.to_date == finish_at.to_date
-        "#{format_date(start_at)} #{format_time(start_at)} - #{format_time(finish_at)}"
-      else
-        if format == :short
-          "#{format_date(start_at)} - #{format_date(finish_at)}"
-        else
-          "#{format_datetime(start_at)} - #{format_datetime(finish_at)}"
-        end
-      end
+      format_start_finish(format)
     elsif start_at
       format_datetime(start_at)
     elsif finish_at
@@ -54,6 +44,20 @@ class Duration < Struct.new(:start_at, :finish_at)
   end
 
   private
+
+  def format_start_finish(format)
+    if start_at == finish_at
+      format_datetime(start_at)
+    elsif start_at.to_date == finish_at.to_date
+      "#{format_date(start_at)} #{format_time(start_at)} - #{format_time(finish_at)}"
+    else
+      if format == :short
+        "#{format_date(start_at)} - #{format_date(finish_at)}"
+      else
+        "#{format_datetime(start_at)} - #{format_datetime(finish_at)}"
+      end
+    end
+  end
 
   def format_datetime(value)
     if date_only?(value)

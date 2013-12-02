@@ -122,7 +122,9 @@ class PersonAccessibles
   end
 
   def read_layer_groups
-    (user.groups_with_permission(:layer_full) + user.groups_with_permission(:layer_read)).collect(&:layer_group).uniq
+    (user.groups_with_permission(:layer_full) +
+     user.groups_with_permission(:layer_read)).
+      collect(&:layer_group).uniq
   end
 
 end

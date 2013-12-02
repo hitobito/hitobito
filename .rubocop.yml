@@ -1,20 +1,22 @@
+# Rubocop configuration that MUST hold for every build.
+
 inherit_from: rubocop-todo.yml
 
 AllCops:
   Excludes:
     - db/**
     - config/**
-    #- spec/**
+    - script/**
+    - spec/**
 
 ClassLength:
-  Max: 200  # Try to reduce this value
+  Max: 185  # Try to reduce this value
 
 MethodLength:
-  Max: 20  # Try to reduce this value
+  Max: 18  # Try to reduce this value
 
 CyclomaticComplexity:
   Max: 8  # Try to reduce this value
 
 LineLength:
-  Enabled: false
-  Max: 100  # Try to reduce this value
+  Max: 115  # Try to reduce this value

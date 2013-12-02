@@ -119,6 +119,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         last_email.smtp_envelope_to.should == [from]
+        last_email.from.should == ["#{list.mail_name}@localhost"]
         last_email.body.should =~ /nicht berechtigt/
       end
     end
@@ -138,6 +139,7 @@ describe MailRelay::Lists do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
+      last_email.from.should == ["#{list.mail_name}@localhost"]
       last_email.body.should =~ /nicht berechtigt/
     end
   end
@@ -153,6 +155,7 @@ describe MailRelay::Lists do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
+      last_email.from.should == ["#{list.mail_name}@localhost"]
       last_email.body.should =~ /nicht berechtigt/
     end
   end
@@ -167,6 +170,7 @@ describe MailRelay::Lists do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
+      last_email.from.should == ["#{list.mail_name}@localhost"]
       last_email.body.should =~ /nicht berechtigt/
     end
   end

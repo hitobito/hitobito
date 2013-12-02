@@ -69,29 +69,6 @@ class MailingList < ActiveRecord::Base
   end
 
   def people
-    condition = OrCondition.new
-    # person subscribers
-    condition.or("subscriptions.subscriber_type = ? AND " <<
-                 "subscriptions.excluded = ? AND " <<
-                 "subscriptions.subscriber_id = people.id",
-                 Person.sti_name,
-                 false)
-
-    # event subscribers
-    condition.or("subscriptions.subscriber_type = ? AND " <<
-                 "subscriptions.subscriber_id = event_participations.event_id AND " <<
-                 "event_participations.active = ?",
-                 Event.sti_name,
-                 true)
-
-    # group subscribers
-    condition.or("subscriptions.subscriber_type = ? AND " <<
-                 "subscriptions.subscriber_id = sub_groups.id AND " <<
-                 "groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND " <<
-                 "roles.type = related_role_types.role_type AND " <<
-                 "roles.deleted_at IS NULL",
-                 Group.sti_name)
-
     Person.only_public_data.
            joins("LEFT JOIN roles ON people.id = roles.person_id").
            joins("LEFT JOIN groups ON roles.group_id = groups.id").
@@ -107,11 +84,44 @@ class MailingList < ActiveRecord::Base
            where("people.id NOT IN (#{subscriptions.select(:subscriber_id).
                                                     where(excluded: true, subscriber_type: Person.sti_name).
                                                     to_sql})").
-           where(condition.to_a).
+           where(suscriber_conditions).
            uniq
   end
 
   private
+
+  def suscriber_conditions
+    condition = OrCondition.new
+    person_subscribers(condition)
+    event_subscribers(condition)
+    group_subscribers(condition)
+    condition.to_a
+  end
+
+  def person_subscribers(condition)
+    condition.or("subscriptions.subscriber_type = ? AND " <<
+                 "subscriptions.excluded = ? AND " <<
+                 "subscriptions.subscriber_id = people.id",
+                 Person.sti_name,
+                 false)
+  end
+
+  def group_subscribers(condition)
+    condition.or("subscriptions.subscriber_type = ? AND " <<
+                 "subscriptions.subscriber_id = sub_groups.id AND " <<
+                 "groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND " <<
+                 "roles.type = related_role_types.role_type AND " <<
+                 "roles.deleted_at IS NULL",
+                 Group.sti_name)
+  end
+
+  def event_subscribers(condition)
+    condition.or("subscriptions.subscriber_type = ? AND " <<
+                 "subscriptions.subscriber_id = event_participations.event_id AND " <<
+                 "event_participations.active = ?",
+                 Event.sti_name,
+                 true)
+  end
 
   def assert_mail_name_is_not_protected
     if mail_name? && main = Settings.email.retriever.config.user_name.presence

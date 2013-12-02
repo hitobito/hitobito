@@ -12,6 +12,7 @@ describe "Quicksearch", :mysql do
 
   sphinx_environment(:people, :groups) do
     it "finds people and groups", js: true do
+      index_sphinx
       obsolete_node_safe do
         sign_in
         visit root_path

@@ -57,40 +57,46 @@ class PersonAccessibles
 
   def accessible_conditions
     condition = OrCondition.new
-
-    if user.contact_data_visible?
-      # people with contact data visible
-      condition.or('people.contact_data_visible = ?', true)
-    end
+    condition.or(*herself_condition)
+    condition.or(*contact_data_condition) if user.contact_data_visible?
+    condition.or(*in_same_group_condition) if groups_group_read.present?
 
     if layers_read.present?
       layer_groups = read_layer_groups
-
-      # people in same layer
-      condition.or("groups.layer_group_id IN (?)", layer_groups.collect(&:id))
-
-      # people visible from above
-      visible_from_above_groups = OrCondition.new
-      collapse_groups_to_highest(layer_groups) do |layer_group|
-        visible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
-                                     layer_group.left,
-                                     layer_group.rgt)
-      end
-
-      query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
-      args = visible_from_above_groups.to_a[1..-1] + [Role.visible_types.collect(&:sti_name)]
-      condition.or(query, *args)
+      condition.or(*in_same_layer_condition(layer_groups))
+      condition.or(*visible_from_above_condition(layer_groups))
     end
-
-    # people in group with group_read
-    if groups_group_read.present?
-      condition.or('groups.id IN (?)', groups_group_read)
-    end
-
-    # everybody else can access themselves
-    condition.or('people.id = ?', user.id)
 
     condition
+  end
+
+  def contact_data_condition
+    ['people.contact_data_visible = ?', true]
+  end
+
+  def herself_condition
+    ['people.id = ?', user.id]
+  end
+
+  def in_same_group_condition
+    ['groups.id IN (?)', groups_group_read]
+  end
+
+  def in_same_layer_condition(layer_groups)
+    ["groups.layer_group_id IN (?)", layer_groups.collect(&:id)]
+  end
+
+  def visible_from_above_condition(layer_groups)
+    visible_from_above_groups = OrCondition.new
+    collapse_groups_to_highest(layer_groups) do |layer_group|
+      visible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
+                                   layer_group.left,
+                                   layer_group.rgt)
+    end
+
+    query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
+    args = visible_from_above_groups.to_a[1..-1] + [Role.visible_types.collect(&:sti_name)]
+    [query, *args]
   end
 
   # If group B is a child of group A, B is collapsed into A.

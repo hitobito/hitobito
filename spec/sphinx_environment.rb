@@ -7,34 +7,16 @@
 
 require 'thinking_sphinx/test'
 
+# Use this block to run a set of examples inside sphinx.
+# Call #index_sphinx once your test data is set up.
 def sphinx_environment(*tables, &block)
-  obj = self
   transactional = self.use_transactional_fixtures
   begin
-    before(:all) do
-      obj.use_transactional_fixtures = false
-      DatabaseCleaner.strategy = :truncation, {:only => tables}
-      ThinkingSphinx::Test.init
-    end
-
-    around(:each) do |example|
-      ThinkingSphinx::Test.run do
-        if ThinkingSphinx.sphinx_running?
-          DatabaseCleaner.start
-          example.call
-          DatabaseCleaner.clean
-        else
-          puts 'SPHINX NOT RUNNING!'
-        end
-      end
-    end
-
+    init_sphinx_before_all(tables)
+    run_sphinx_around_example
     yield
   ensure
-    after(:all) do
-      DatabaseCleaner.strategy = defined?(DB_CLEANER_STRATEGY) ? DB_CLEANER_STRATEGY : :transaction
-      obj.use_transactional_fixtures = transactional
-    end
+    reset_configuration_affter_all(transactional)
   end
 end
 
@@ -44,6 +26,38 @@ def index_sphinx
   sleep 1
   sleep 0.25 until index_finished?
 end
+
+def init_sphinx_before_all(tables)
+  obj = self
+  before(:all) do
+    obj.use_transactional_fixtures = false
+    DatabaseCleaner.strategy = :truncation, { only: tables }
+    ThinkingSphinx::Test.init
+  end
+end
+
+def run_sphinx_around_example
+  around(:each) do |example|
+    ThinkingSphinx::Test.run do
+      if ThinkingSphinx.sphinx_running?
+        DatabaseCleaner.start
+        example.call
+        DatabaseCleaner.clean
+      else
+        puts 'SPHINX NOT RUNNING!'
+      end
+    end
+  end
+end
+
+def reset_configuration_affter_all(transactional)
+  obj = self
+  after(:all) do
+    DatabaseCleaner.strategy = defined?(DB_CLEANER_STRATEGY) ? DB_CLEANER_STRATEGY : :transaction
+    obj.use_transactional_fixtures = transactional
+  end
+end
+
 
 def index_finished?
   Dir[Rails.root.join('db', 'sphinx', 'test', '*.{new,tmp}.*')].empty?

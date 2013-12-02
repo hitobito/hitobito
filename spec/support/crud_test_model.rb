@@ -219,33 +219,44 @@ module CrudTestHelper
   def setup_db
     without_transaction do
       silence_stream(STDOUT) do
-        ActiveRecord::Base.connection.create_table :crud_test_models, :force => true do |t|
-          t.string   :name, :null => false, :limit => 50
-          t.string   :password
-          t.string   :whatever
-          t.integer  :children
-          t.integer  :companion_id
-          t.float    :rating
-          t.decimal  :income, :precision => 14, :scale => 2
-          t.date     :birthdate
-          t.time     :gets_up_at
-          t.datetime :last_seen
-          t.boolean  :human, :default => true
-          t.text     :remarks
-
-          t.timestamps
-        end
+        create_crud_test_models_table
+        create_other_crud_test_models_table
+        create_crud_test_models_other_crud_test_models
       end
-      ActiveRecord::Base.connection.create_table :other_crud_test_models, :force => true do |t|
-        t.string   :name, :null => false, :limit => 50
-        t.integer  :more_id
-      end
-      ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, :force => true do |t|
-        t.belongs_to :crud_test_model
-        t.belongs_to :other_crud_test_model
-      end
-
       CrudTestModel.reset_column_information
+    end
+  end
+
+  def create_crud_test_models_table
+    ActiveRecord::Base.connection.create_table :crud_test_models, :force => true do |t|
+      t.string   :name, :null => false, :limit => 50
+      t.string   :password
+      t.string   :whatever
+      t.integer  :children
+      t.integer  :companion_id
+      t.float    :rating
+      t.decimal  :income, :precision => 14, :scale => 2
+      t.date     :birthdate
+      t.time     :gets_up_at
+      t.datetime :last_seen
+      t.boolean  :human, :default => true
+      t.text     :remarks
+
+      t.timestamps
+    end
+  end
+
+  def create_other_crud_test_models_table
+    ActiveRecord::Base.connection.create_table :other_crud_test_models, :force => true do |t|
+      t.string   :name, :null => false, :limit => 50
+      t.integer  :more_id
+    end
+  end
+
+  def create_crud_test_models_other_crud_test_models
+    ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, :force => true do |t|
+      t.belongs_to :crud_test_model
+      t.belongs_to :other_crud_test_model
     end
   end
 

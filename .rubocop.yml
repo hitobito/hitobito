@@ -4,12 +4,17 @@ AllCops:
   Excludes:
     - db/**
     - config/**
+    #- spec/**
 
 ClassLength:
-  Max: 200
+  Max: 200  # Try to reduce this value
 
 MethodLength:
-  Max: 20
+  Max: 20  # Try to reduce this value
 
 CyclomaticComplexity:
-  Max: 8
+  Max: 8  # Try to reduce this value
+
+LineLength:
+  Enabled: false
+  Max: 100  # Try to reduce this value

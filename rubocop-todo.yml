@@ -119,9 +119,6 @@ Lambda:
 LeadingCommentSpace:
   Enabled: false
 
-LineLength:
-  Enabled: false
-
 Loop:
   Enabled: false
 

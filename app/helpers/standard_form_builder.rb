@@ -1,4 +1,5 @@
 # encoding: utf-8
+# rubocop:disable ClassLength
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -187,25 +188,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     list = association_entries(attr, html_options)
     if list.present?
-      prompt = if html_options[:prompt]
-                 {prompt: html_options[:prompt]}
-               elsif html_options[:include_blank]
-                 {include_blank: html_options[:include_blank]}
-               elsif html_options[:multiple]
-                 {}
-               else
-                 select_options(attr)
-               end
       collection_select(attr,
                         list,
                         :id,
                         :to_s,
-                        prompt,
+                        collection_prompt(attr, html_options),
                         html_options)
     else
       help_inline(ta(:none_available, association(@object, attr)))
     end
   end
+
 
   # Render a multi select element for a :has_many or :has_and_belongs_to_many
   # association defined by attr.
@@ -287,6 +280,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content_tag(:div, :class => "control-group") do
       content_tag(:label, '', :class => 'control-label') +
       content_tag(:div, content, :class => 'controls')
+    end
+  end
+
+  def collection_prompt(attr, html_options)
+    if html_options[:prompt]
+      {prompt: html_options[:prompt]}
+    elsif html_options[:include_blank]
+      {include_blank: html_options[:include_blank]}
+    elsif html_options[:multiple]
+      {}
+    else
+      select_options(attr)
     end
   end
 

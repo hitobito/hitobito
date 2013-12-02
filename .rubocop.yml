@@ -8,6 +8,7 @@ AllCops:
     - config/**
     - script/**
     - spec/**
+    - vendor/**
 
 ClassLength:
   Max: 185  # Try to reduce this value

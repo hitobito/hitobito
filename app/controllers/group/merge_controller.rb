@@ -23,7 +23,7 @@ class Group::MergeController < ApplicationController
         flash[:notice] = "Die gewählten Gruppen wurden zur neuen Gruppe #{merger.new_group_name} fusioniert."
         redirect_to group_path(merger.new_group)
       else
-        flash[:alert] = merger.errors.join("<br/>").html_safe
+        flash[:alert] = merger.errors.join('<br/>').html_safe
         redirect_to merge_group_path(group)
       end
     else
@@ -44,7 +44,7 @@ class Group::MergeController < ApplicationController
 
   def candidates
     groups = group.sister_groups
-    @candidates = groups.select {|g| can?(:update, g) }
+    @candidates = groups.select { |g| can?(:update, g) }
     if @candidates.empty?
       flash[:alert] = 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder ' +
                       'Du verfügst dort nicht über die nötigen Berechtigungen.'

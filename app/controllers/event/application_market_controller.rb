@@ -69,18 +69,18 @@ class Event::ApplicationMarketController < ApplicationController
     conditions = []
     args = []
     if params[:prio]
-      ([1,2,3] & params[:prio].collect(&:to_i)).each do |i|
+      ([1, 2, 3] & params[:prio].collect(&:to_i)).each do |i|
         conditions << "event_applications.priority_#{i}_id = ?"
         args << event.id
       end
     end
     if params[:waiting_list]
-      conditions << "(event_applications.waiting_list = ? AND events.kind_id = ?)"
+      conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
       args << true << event.kind_id
     end
 
     if conditions.present?
-      [conditions.join(" OR "), *args]
+      [conditions.join(' OR '), *args]
     end
   end
 

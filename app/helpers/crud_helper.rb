@@ -13,9 +13,9 @@ module CrudHelper
   # Render a generic form for the current entry
   def entry_form(*attrs, &block)
     options = attrs.extract_options!
-    options[:buttons_bottom] = true unless options.has_key?(:buttons_bottom)
+    options[:buttons_bottom] = true unless options.key?(:buttons_bottom)
     options[:cancel_url] ||= controller.is_a?(SimpleCrudController) ?
-        polymorphic_path(path_args(model_class), :returning => true) :
+        polymorphic_path(path_args(model_class), returning: true) :
         polymorphic_path(path_args(entry))
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     crud_form(path_args(entry), *attrs, options, &block)
@@ -59,12 +59,12 @@ module CrudHelper
 
   def submit_button(form, label)
     content_tag(:div, class: 'btn-group') do
-      form.button(label, :class => 'btn btn-primary', :data => { :disable_with => label })
+      form.button(label, class: 'btn btn-primary', data: { disable_with: label })
     end
   end
 
   def cancel_link(url)
-    link_to(ti(:"button.cancel"), url, :class => 'link')
+    link_to(ti(:"button.cancel"), url, class: 'link')
   end
 
   # Create a table of the entries with the default or
@@ -107,7 +107,7 @@ module CrudHelper
 
   # Defines a column with an action link.
   def action_col(table, &block)
-    table.col('', :class => 'action', &block)
+    table.col('', class: 'action', &block)
   end
 
   ######## ACTION LINKS ###################################################### :nodoc:
@@ -133,14 +133,14 @@ module CrudHelper
   # Uses the current record if none is given.
   def button_action_destroy(path = nil, options = {})
     path ||= path_args(entry)
-    options[:data] = { :confirm => ti(:confirm_delete),
-                        :method => :delete }
+    options[:data] = { confirm: ti(:confirm_delete),
+                       method: :delete }
     action_button ti(:"link.delete"), path, 'trash', options
   end
 
   # Standard button action to the list page.
   # Links to the current model_class if no path is given.
-  def button_action_index(path = nil, url_options = {:returning => true}, options = {})
+  def button_action_index(path = nil, url_options = { returning: true }, options = {})
     path ||= path_args(model_class)
     action_button ti(:"link.list"),
                   path.is_a?(String) ? path : polymorphic_path(path, url_options),
@@ -174,11 +174,11 @@ module CrudHelper
     path ||= path_args(entry)
     link_to label,
             path,
-            :class => 'action',
-            :title => 'Löschen',
-            :alt => 'Löschen',
-            :data => { :confirm => ti(:confirm_delete),
-                       :method => :delete }
+            class: 'action',
+            title: 'Löschen',
+            alt: 'Löschen',
+            data: { confirm: ti(:confirm_delete),
+                    method: :delete }
   end
 
   private

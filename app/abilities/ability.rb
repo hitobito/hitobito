@@ -46,7 +46,7 @@ class Ability
         can c.action, c.subject_class do |subject|
           all_constraints(c).all? do |ability_class, constraints|
             ability = ability_class.new(user_context, subject, c.permission)
-            constraints.all? {|constraint| ability.send(constraint) }
+            constraints.all? { |constraint| ability.send(constraint) }
           end
         end
       end
@@ -55,7 +55,7 @@ class Ability
 
   def all_constraints(config)
     general_constraints = store.general_constraints(config.subject_class, config.action)
-    permission_constraint = {config.ability_class => [config.constraint]}
+    permission_constraint = { config.ability_class => [config.constraint] }
     general_constraints.each_with_object(permission_constraint).each do |g, constraints|
       constraints[g.ability_class] ||= []
       constraints[g.ability_class] << g.constraint
@@ -63,5 +63,3 @@ class Ability
   end
 
 end
-
-

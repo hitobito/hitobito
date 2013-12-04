@@ -50,12 +50,12 @@ module Export
       end
 
       def values(row)
-        labels.keys.map {|key| row.hash.fetch(key) }
+        labels.keys.map { |key| row.hash.fetch(key) }
       end
 
 
       def course_labels
-        { group_names: "Organisatoren",
+        { group_names: 'Organisatoren',
           number: human(:number),
           kind: Event::Kind.model_name.human,
           description: human(:description),

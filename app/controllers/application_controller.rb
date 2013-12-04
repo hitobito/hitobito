@@ -16,11 +16,11 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :person_home_path
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => "Sie sind nicht berechtigt, diese Seite anzuzeigen"
+    redirect_to root_url, alert: 'Sie sind nicht berechtigt, diese Seite anzuzeigen'
   end if Rails.env.production?
 
   before_filter :authenticate_person!
-  check_authorization :unless => :devise_controller?
+  check_authorization unless: :devise_controller?
 
 
   private

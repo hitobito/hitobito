@@ -49,7 +49,7 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def unless_external
-    user.roles.any? {|r| !r.class.external? }
+    user.roles.any? { |r| !r.class.external? }
   end
 
   private

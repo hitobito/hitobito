@@ -32,7 +32,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   def errors_text
     text = []
     if errors.present?
-      text << "<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>"
+      text << '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
       text << birthday_error_text if errors.delete(:birthday)
       text << qualifications_error_text  if errors.present?
     end
@@ -78,4 +78,3 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
 end
-

@@ -1,4 +1,5 @@
 # encoding: utf-8
+# rubocop:disable Attr
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -18,7 +19,7 @@ class StandardTableBuilder
   # Delegate called methods to template.
   # including StandardHelper would lead to problems with indirectly called methods.
   delegate :content_tag, :format_attr, :column_type, :association, :dom_id,
-           :captionize, :add_css_class, :content_tag_nested, :to => :template
+           :captionize, :add_css_class, :content_tag_nested, to: :template
 
   def initialize(entries, template, options = {})
     @entries = entries
@@ -57,7 +58,7 @@ class StandardTableBuilder
   # contain the formatted attribute value for the current entry.
   def attr(a, header = nil)
     header ||= attr_header(a)
-    col(header, :class => align_class(a)) { |e| format_attr(e, a) }
+    col(header, class: align_class(a)) { |e| format_attr(e, a) }
   end
 
   # Renders the table as HTML.
@@ -99,7 +100,7 @@ class StandardTableBuilder
   def entry_class
     if entries.respond_to?(:klass)
       entries.klass
-    else 
+    else
       entries.first.class
     end
   end
@@ -107,7 +108,7 @@ class StandardTableBuilder
   # Helper class to store column information.
   class Col < Struct.new(:header, :html_options, :template, :block) #:nodoc:
 
-    delegate :content_tag, :to => :template
+    delegate :content_tag, to: :template
 
     def content(entry)
       entry.nil? ? '' : template.capture(entry, &block)
@@ -150,7 +151,7 @@ class StandardTableBuilder
 
     # Request params for the sort link.
     def sort_params(attr)
-      params.merge({:sort => attr, :sort_dir => sort_dir(attr)})
+      params.merge({ sort: attr, sort_dir: sort_dir(attr) })
     end
 
     # The sort mark, if any, for the given attribute.

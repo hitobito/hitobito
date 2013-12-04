@@ -70,15 +70,15 @@ class Event::Course < Event
       last.finish_at || last.start_at
     end.to_date
   end
-  
+
   def start_date
     @start_date ||= dates.first.start_at.to_date
   end
-  
+
   def init_questions
     if questions.blank?
       Event::Question.global.each do |q|
-        self.questions << q.dup
+        questions << q.dup
       end
     end
   end

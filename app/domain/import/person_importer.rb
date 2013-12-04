@@ -11,16 +11,16 @@ module Import
                   :failure_count, :new_count, :doublette_count
 
 
-    def initialize(hash={})
+    def initialize(hash = {})
       @errors = []
       @failure_count = 0
       @new_count = 0
       @doublettes = {}
-      hash.each { |key, value| self.send("#{key}=", value) }
+      hash.each { |key, value| send("#{key}=", value) }
     end
 
     def people
-      @people ||= data.each_with_index.map { |hash,index|  populate_people(hash,index) }
+      @people ||= data.each_with_index.map { |hash, index|  populate_people(hash, index) }
     end
 
     def import
@@ -28,7 +28,7 @@ module Import
       save_results.all? { |result| result }
     end
 
-    def human_name(args={})
+    def human_name(args = {})
       "#{::Person.model_name.human(args)} (#{human_role_name})"
     end
 
@@ -41,7 +41,7 @@ module Import
     end
 
     private
-    def populate_people(hash,index)
+    def populate_people(hash, index)
       person = Import::Person.new(hash, unique_emails)
       person.add_role(group, role_type)
 
@@ -61,7 +61,7 @@ module Import
     end
 
     def handle_persisted(import_person)
-      if !doublettes.has_key?(import_person.id)
+      if !doublettes.key?(import_person.id)
         doublettes[import_person.id] = import_person
       else
         consolidate_doublette(import_person)
@@ -72,7 +72,7 @@ module Import
       unified_import_person = doublettes[import_person.id]
       person = unified_import_person.person
 
-      blank_attrs = import_person.hash.select {|key, value| person.attributes[key].blank? }
+      blank_attrs = import_person.hash.select { |key, value| person.attributes[key].blank? }
       person.attributes = blank_attrs
 
       person.phone_numbers << import_person.person.phone_numbers

@@ -33,8 +33,8 @@ class Event::ParticipationConfirmationJob < BaseJob
                                             uniq
     Person.only_public_data.
            joins(roles: :group).
-           where(roles: {type: approver_types, deleted_at: nil},
-                 groups: {layer_group_id: layer_ids}).
+           where(roles: { type: approver_types, deleted_at: nil },
+                 groups: { layer_group_id: layer_ids }).
            uniq
   end
 

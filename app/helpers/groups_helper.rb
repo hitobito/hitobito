@@ -15,7 +15,7 @@ module GroupsHelper
 
       if @group.event_types.include?(event_type)
         action_button("#{event_type.model_name.human} erstellen" ,
-                      new_group_event_path(@group, event: { type: event_type.sti_name}),
+                      new_group_event_path(@group, event: { type: event_type.sti_name }),
                       :plus)
       end
     end

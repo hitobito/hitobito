@@ -30,7 +30,7 @@ class CsvImportsController < ApplicationController
   def preview
     valid_for_import? do
       @entries = importer.people.map(&:person)
-      set_importer_flash_info("neu importiert.", "aktualisiert.", "nicht importiert.")
+      set_importer_flash_info('neu importiert.', 'aktualisiert.', 'nicht importiert.')
     end
   end
 
@@ -43,7 +43,7 @@ class CsvImportsController < ApplicationController
         importer.import
         @entries = importer.people.map(&:person)
 
-        set_importer_flash_info("erfolgreich importiert.", "erfolgreich aktualisiert." , "nicht importiert.")
+        set_importer_flash_info('erfolgreich importiert.', 'erfolgreich aktualisiert.' , 'nicht importiert.')
         redirect_to group_people_path(redirect_params)
       end
     end
@@ -55,13 +55,13 @@ class CsvImportsController < ApplicationController
    reversed = suffixes.reverse
 
    add_to_flash(:notice, pluralized(importer.new_count, reversed.pop))
-   add_to_flash(:notice, pluralized(importer.doublette_count,reversed.pop))
+   add_to_flash(:notice, pluralized(importer.doublette_count, reversed.pop))
    add_to_flash(:alert, pluralized(importer.failure_count, reversed.pop))
    importer.errors.each { |error| add_to_flash(:alert, error) }
  end
 
   def add_to_flash(key, text)
-    flash_hash = action_name == "preview" ? flash.now : flash
+    flash_hash = action_name == 'preview' ? flash.now : flash
     flash_hash[key] ||= []
     flash_hash[key] << text if text.present?
   end
@@ -76,7 +76,7 @@ class CsvImportsController < ApplicationController
   end
 
   def custom_authorization
-    if action_name == "create" && role_type
+    if action_name == 'create' && role_type
       role = group.class.find_role_type!(role_type).new
       role.group_id = group.id
       authorize! :create, role
@@ -105,7 +105,7 @@ class CsvImportsController < ApplicationController
 
     unless parser.parse
       filename = file_param && file_param.original_filename
-      filename ||= "csv formular daten"
+      filename ||= 'csv formular daten'
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(group)
       false
@@ -117,8 +117,8 @@ class CsvImportsController < ApplicationController
   def sane_mapping?
     duplicates = find_duplicate_mappings
     if duplicates.present?
-      fields = Import::Person.fields.each_with_object({}) {|f, o| o[f[:key]] = f[:value]}
-      list = duplicates.collect {|d| fields[d.to_s] }.join(", ")
+      fields = Import::Person.fields.each_with_object({}) { |f, o| o[f[:key]] = f[:value] }
+      list = duplicates.collect { |d| fields[d.to_s] }.join(', ')
       if duplicates.size == 1
         flash.now[:alert] = "#{list} wurde mehrfach zugewiesen"
       else
@@ -168,7 +168,7 @@ class CsvImportsController < ApplicationController
            when /External/ then 'Externe'
            else importer.human_role_name
            end
-    {role_types: role_type, name: name}
+    { role_types: role_type, name: name }
   end
 
   def role_type

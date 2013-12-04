@@ -9,11 +9,11 @@ module Subscriber
   class PersonController < BaseController
 
     skip_authorize_resource # must be in leaf class
-    
+
     before_render_form :replace_validation_errors
 
     private
-    
+
     def subscriber
       Person.find(subscriber_id)
     end

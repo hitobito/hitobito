@@ -68,7 +68,7 @@ class QualificationKind < ActiveRecord::Base
   def assert_validity_when_reactivateable
     if reactivateable.present? && (validity.to_i <= 0)
       errors.add(:validity,
-                 "muss einen positive Zahl sein um die " +
+                 'muss einen positive Zahl sein um die ' +
                  "#{self.class.model_name.human} reaktivierbar zu machen.")
     end
   end

@@ -11,11 +11,11 @@ class PersonDecorator < ApplicationDecorator
   include ContactableDecorator
 
   def as_typeahead
-    {id: id, label: h.h(full_label)}
+    { id: id, label: h.h(full_label) }
   end
 
   def as_quicksearch
-    {id: id, label: h.h(full_label), type: :person}
+    { id: id, label: h.h(full_label), type: :person }
   end
 
   def full_label
@@ -64,7 +64,7 @@ class PersonDecorator < ApplicationDecorator
 
   # returns roles grouped by their group
   def roles_grouped
-    roles.each_with_object(Hash.new {|h,k| h[k] = []}) do |role, memo|
+    roles.each_with_object(Hash.new { |h, k| h[k] = [] }) do |role, memo|
       memo[role.group] << role
     end
   end
@@ -72,7 +72,7 @@ class PersonDecorator < ApplicationDecorator
   private
 
   def functions_short(functions, scope_method, scope = nil)
-    functions.select!{|r| r.send("#{scope_method}_id") == scope.id } if scope
+    functions.select! { |r| r.send("#{scope_method}_id") == scope.id } if scope
     h.safe_join(functions) do |f|
       content_tag(:p, function_short(f, scope_method, scope))
     end

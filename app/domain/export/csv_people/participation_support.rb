@@ -10,7 +10,7 @@ module Export
     module ParticipationSupport
       extend ActiveSupport::Concern
 
-      included do 
+      included do
         attr_reader :participations
       end
 

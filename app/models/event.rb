@@ -91,8 +91,8 @@ class Event < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates :dates, presence: {message: 'müssen ausgefüllt werden'}
-  validates :group_ids, presence: {message: 'müssen vorhanden sein'}
+  validates :dates, presence: { message: 'müssen ausgefüllt werden' }
+  validates :group_ids, presence: { message: 'müssen vorhanden sein' }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
 
@@ -117,7 +117,7 @@ class Event < ActiveRecord::Base
       year = ::Date.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates).where(event_dates: { start_at: [start_at...finish_at] } )
+      joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
     end
 
     # Events with a start_at greater than argument
@@ -132,24 +132,24 @@ class Event < ActiveRecord::Base
 
     # Events belonging to the given group ids
     def with_group_id(group_ids)
-      joins(:groups).where(groups: {id: group_ids})
+      joins(:groups).where(groups: { id: group_ids })
     end
 
     # Events running now or in the future.
     def upcoming
       midnight = Time.zone.now.midnight
       joins(:dates).
-      where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
+      where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = ::Date.today
-      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today).
-      where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today).
-      where("events.maximum_participants IS NULL OR " +
-            "events.maximum_participants <= 0 OR " +
-            "events.participant_count < events.maximum_participants")
+      where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
+      where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
+      where('events.maximum_participants IS NULL OR ' +
+            'events.maximum_participants <= 0 OR ' +
+            'events.participant_count < events.maximum_participants')
     end
 
     # Default scope for event lists
@@ -185,14 +185,14 @@ class Event < ActiveRecord::Base
     def find_event_type!(sti_name)
       types = [Event] + Event.subclasses
       type = types.detect { |t| t.sti_name == sti_name }
-      raise ActiveRecord::RecordNotFound, "No event '#{sti_name}' found" if type.nil?
+      fail ActiveRecord::RecordNotFound, "No event '#{sti_name}' found" if type.nil?
       type
     end
 
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
-      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      fail ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
       type
     end
   end
@@ -226,7 +226,7 @@ class Event < ActiveRecord::Base
   # Sum the participations with the participant role and store in :participant_count
   def refresh_participant_count!
     count = participations.joins(:roles).
-                           where(event_roles: {type: participant_type.sti_name}).
+                           where(event_roles: { type: participant_type.sti_name }).
                            count(distinct: true)
     update_column(:participant_count, count)
   end
@@ -237,7 +237,7 @@ class Event < ActiveRecord::Base
 
   def participations_for(*role_types)
     participations.joins(:roles).
-                   where(event_roles: {type: role_types.map(&:sti_name)}).
+                   where(event_roles: { type: role_types.map(&:sti_name) }).
                    includes(:person).
                    order_by_role(self.class).
                    merge(Person.order_by_name).
@@ -263,7 +263,7 @@ class Event < ActiveRecord::Base
   def assert_type_is_allowed_for_groups
     if groups.present?
       master = groups.first
-      if groups.any? {|g| g.class != master.class }
+      if groups.any? { |g| g.class != master.class }
         errors.add(:group_ids, :must_have_same_type)
       elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
         errors.add(:type, :type_not_allowed)
@@ -279,7 +279,7 @@ class Event < ActiveRecord::Base
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    (dates + questions).each {|e| e.event = self unless e.frozen? }
+    (dates + questions).each { |e| e.event = self unless e.frozen? }
   end
 
 end

@@ -51,7 +51,7 @@ class PeopleController < CrudController
   # GET ajax, without @group
   def query
     people = []
-    if params.has_key?(:q) && params[:q].size >= 3
+    if params.key?(:q) && params[:q].size >= 3
       people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
                        only_public_data.
                        order_by_name.
@@ -75,7 +75,7 @@ class PeopleController < CrudController
                                             end
 
     @participations_by_event_type.each do |kind, entries|
-      entries.collect! {|e| Event::ParticipationDecorator.new(e) }
+      entries.collect! { |e| Event::ParticipationDecorator.new(e) }
     end
 
   end
@@ -165,7 +165,7 @@ class PeopleController < CrudController
 
   def filter_entries
     if params[:role_types]
-      list_entries(params[:kind]).where(roles: {type: params[:role_types]})
+      list_entries(params[:kind]).where(roles: { type: params[:role_types] })
     else
       list_entries.members
     end

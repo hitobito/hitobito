@@ -14,23 +14,23 @@ module Subscriber
       subscription.excluded = false
       if subscription.save
         redirect_to(mailing_list_path,
-                    notice: "Du wurdest dem Abo erfolgreich hinzugefügt")
+                    notice: 'Du wurdest dem Abo erfolgreich hinzugefügt')
       else
         redirect_to(mailing_list_path,
-                    alert: "Du konntest dem Abo nicht hinzugefügt werden: " <<
-                            subscription.errors.full_messages.join(", "))
+                    alert: 'Du konntest dem Abo nicht hinzugefügt werden: ' <<
+                            subscription.errors.full_messages.join(', '))
       end
     end
 
     def destroy
       mailing_list.exclude_person(current_user)
-      redirect_to(mailing_list_path, notice: "Du wurdest erfolgreich vom Abo entfernt")
+      redirect_to(mailing_list_path, notice: 'Du wurdest erfolgreich vom Abo entfernt')
     end
 
     private
 
     def authorize
-      raise CanCan::AccessDenied unless mailing_list.subscribable?
+      fail CanCan::AccessDenied unless mailing_list.subscribable?
       authorize!(:update, subscription)
     end
 

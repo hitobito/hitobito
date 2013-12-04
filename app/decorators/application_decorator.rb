@@ -30,7 +30,7 @@ class ApplicationDecorator < Draper::Base
   def created_info
     modification_info(created_at, creator)
   end
-  
+
   def deleted_info
     modification_info(deleted_at, deleter)
   end
@@ -39,10 +39,10 @@ class ApplicationDecorator < Draper::Base
 
   def modification_info(at, person)
     return '' if at.nil?
-    
+
     html = l(at, format: :date_time)
     if person.present?
-      html << " "
+      html << ' '
       html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
     end
     html.html_safe

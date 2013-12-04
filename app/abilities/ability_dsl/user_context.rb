@@ -62,7 +62,7 @@ module AbilityDsl
 
     def find_events_with_permission(permission)
       @participations ||= user.event_participations.includes(:roles).to_a
-      @participations.select {|p| p.roles.any? {|r| r.class.permissions.include?(permission) }}.
+      @participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }.
                       collect(&:event_id)
     end
 

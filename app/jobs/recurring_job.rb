@@ -7,26 +7,26 @@
 
 # A job that is run regularly after a certain interval.
 class RecurringJob < BaseJob
-  
+
   # The interval to run this job.
   class_attribute :interval
-  
+
   class << self
     # Define the interval to run this job. Default is 15 minutes.
     def run_every(seconds)
       self.interval = seconds
     end
   end
-  
+
   run_every 15.minutes
-  
-  
+
+
   def perform
     perform_internal
   ensure
     reschedule
   end
-  
+
   # Enqueue delayed job if it is not enqueued already
   def schedule
     reschedule unless scheduled?
@@ -36,18 +36,18 @@ class RecurringJob < BaseJob
   def scheduled?
     delayed_jobs.present?
   end
-  
+
   # set max attempts to 1 to avoid rescheduling by delayed job
   def max_attempts
     1
   end
-  
+
   private
-  
+
   def reschedule
     enqueue!(run_at: next_run, priority: 5)
   end
-  
+
   def next_run
     if job = delayed_jobs.first
       [Time.zone.now, job.run_at + interval].max

@@ -7,7 +7,7 @@
 
 module Export::CsvPeople
   class Participation < Export::CsvPeople::Person
-    
+
     def initialize(participation)
       super(participation.person)
       merge!(roles: map_roles(participation.roles))

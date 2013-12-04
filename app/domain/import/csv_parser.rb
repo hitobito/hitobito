@@ -13,7 +13,7 @@ module Import
     extend Forwardable
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
-    POSSIBLE_SEPARATORS = [",", "\t", ':', ';']
+    POSSIBLE_SEPARATORS = [',', "\t", ':', ';']
 
     def initialize(input)
       @input = input
@@ -34,7 +34,7 @@ module Import
 
     def map_data(header_mapping)
       header_mapping = header_mapping.with_indifferent_access
-      header_mapping.reject! {|key, value| value.blank? }
+      header_mapping.reject! { |key, value| value.blank? }
       csv.map do |row|
         csv.headers.each_with_object({}) do |name, object|
           key = header_mapping[name]
@@ -49,20 +49,20 @@ module Import
 
     def flash_notice
       text = size > 1 ? "#{size} Datensätze"  : "#{size} Datensatz"
-      text += " erfolgreich gelesen."
+      text += ' erfolgreich gelesen.'
     end
 
-    def flash_alert(filename="csv formular daten")
+    def flash_alert(filename = 'csv formular daten')
       "Fehler beim Lesen von #{filename}: #{error}"
     end
 
     private
     def encode_as_utf8(input)
-      raise "Enthält keine Daten" if input.nil?
+      fail 'Enthält keine Daten' if input.nil?
       charset = CMess::GuessEncoding::Automatic.guess(input)
-      raise "Enthält keine Daten" if charset == "UNKNOWN"
-      charset = Encoding::ISO8859_1 if charset == "MACINTOSH"
-      input.force_encoding(charset).encode("UTF-8")
+      fail 'Enthält keine Daten' if charset == 'UNKNOWN'
+      charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
+      input.force_encoding(charset).encode('UTF-8')
     end
 
     # removes empty lines (",,,,,\n"), happens when data is not on first line in spreadsheet
@@ -72,13 +72,13 @@ module Import
 
     def find_separator(input)
       start = input[0..500]
-      POSSIBLE_SEPARATORS.inject do |most_seen,char|
+      POSSIBLE_SEPARATORS.inject do |most_seen, char|
         start.count(char) > start.count(most_seen) ? char : most_seen
       end
     end
 
     def strip_spaces
-      csv.headers.each {|header| header && header.strip! }
+      csv.headers.each { |header| header && header.strip! }
       each do |row|
         row.fields.each do |field|
           field && field.strip!

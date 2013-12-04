@@ -17,7 +17,7 @@ module Import
     end
 
     def fields
-      map {|key, value|  { key: key, value: value }  } 
+      map { |key, value|  { key: key, value: value }  }
     end
 
     def key_for(label)
@@ -26,8 +26,8 @@ module Import
 
     private
     def map_prefined_fields
-      predefined_labels.each_with_object({}) do |label, hash| 
-        hash[key_for(label).downcase] = "#{human} #{label}" 
+      predefined_labels.each_with_object({}) do |label, hash|
+        hash[key_for(label).downcase] = "#{human} #{label}"
       end
     end
 

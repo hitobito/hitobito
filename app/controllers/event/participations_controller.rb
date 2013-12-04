@@ -77,7 +77,7 @@ class Event::ParticipationsController < CrudController
 
   def list_entries
     records = event.participations.
-                    where(event_participations: {active: true}).
+                    where(event_participations: { active: true }).
                     includes(:person, :roles, :event).
                     participating(event).
                     order_by_role(event.class).
@@ -87,7 +87,7 @@ class Event::ParticipationsController < CrudController
 
     # default event filters
     valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS.keys
-    if scope = valid_scopes.detect {|k| k.to_s == params[:filter] }
+    if scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event) unless scope.to_s == 'all'
 
@@ -110,7 +110,7 @@ class Event::ParticipationsController < CrudController
     if event.supports_applications
       appl = participation.build_application
       appl.priority_1 = event
-      if model_params && model_params.has_key?(:person_id)
+      if model_params && model_params.key?(:person_id)
         model_params.delete(:person)
         participation.person_id = model_params.delete(:person_id)
         params[:for_someone_else] = true
@@ -167,10 +167,10 @@ class Event::ParticipationsController < CrudController
   def set_success_notice
     if action_name.to_s == 'create'
       notice = "#{full_entry_label} wurde erfolgreich erstellt. " +
-               "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+               'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       if user_course_application?
-        notice += "<br />Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, " +
-                  "unterzeichnen und per Post an die entsprechende Adresse schicken."
+        notice += '<br />Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, ' +
+                  'unterzeichnen und per Post an die entsprechende Adresse schicken.'
       end
       flash[:notice] ||= notice
     else

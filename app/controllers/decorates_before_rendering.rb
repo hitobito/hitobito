@@ -49,9 +49,9 @@ private
     decorator_name = "#{__model_name_for__(ivar)}Decorator"
     while (decorator_name.constantize rescue nil) == nil
       superclass = ivar.respond_to?(:model_name) ? ivar.superclass : ivar.class.superclass
-      raise ArgumentError, "#{org_ivar} does not have an associated decorator" if superclass == Module
-      superclass_decorator_name = (superclass == Object ? "Object" : superclass.model_name)
-      superclass_decorator_name += "Decorator"
+      fail ArgumentError, "#{org_ivar} does not have an associated decorator" if superclass == Module
+      superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name)
+      superclass_decorator_name += 'Decorator'
       ivar = superclass
       decorator_name = superclass_decorator_name
     end
@@ -64,12 +64,12 @@ private
     elsif ivar.class.respond_to?(:model_name)
       ivar.class
     else
-      raise ArgumentError, "#{ivar} does not have an associated model"
+      fail ArgumentError, "#{ivar} does not have an associated model"
     end.model_name
   end
 
   def self.included(base)
-    base.class_attribute :__ivars_to_decorate__, :instance_accessor => false
+    base.class_attribute :__ivars_to_decorate__, instance_accessor: false
     base.extend ClassMethods
   end
 end

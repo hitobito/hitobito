@@ -111,7 +111,7 @@ class Person < ActiveRecord::Base
 
   ### SCOPES
 
-  scope :only_public_data, select(PUBLIC_ATTRS.collect {|a| "people.#{a}" })
+  scope :only_public_data, select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
 
@@ -151,7 +151,7 @@ class Person < ActiveRecord::Base
     if company?
       company_name
     else
-      name = ""
+      name = ''
       if format == :list
         name << "#{last_name} #{first_name}".strip
       else
@@ -242,9 +242,9 @@ class Person < ActiveRecord::Base
     result = if encrypted_password.nil? || valid_password?(current_password)
                update_attributes(params, *options)
              else
-               self.assign_attributes(params, *options)
+               assign_attributes(params, *options)
                self.valid?
-               self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+               errors.add(:current_password, current_password.blank? ? :blank : :invalid)
                false
              end
 
@@ -272,7 +272,7 @@ class Person < ActiveRecord::Base
 
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
-      errors.add(:base, "Bitte geben Sie einen Namen ein")
+      errors.add(:base, 'Bitte geben Sie einen Namen ein')
     end
   end
 

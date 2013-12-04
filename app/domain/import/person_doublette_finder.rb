@@ -26,7 +26,7 @@ module Import
 
       conditions = ['']
       criteria.each do |key, value|
-        conditions.first << " AND " if conditions.first.present?
+        conditions.first << ' AND ' if conditions.first.present?
         conditions.first << "#{key} = ?"
         value = parse_date(value) if key.to_sym == :birthday
         conditions << value
@@ -36,7 +36,7 @@ module Import
         if conditions.first.present?
           conditions[0] = "(#{conditions[0]}) OR "
         end
-        conditions.first << "email = ?"
+        conditions.first << 'email = ?'
         conditions << attrs[:email]
       end
       conditions
@@ -50,7 +50,7 @@ module Import
       if people.present?
         person = people.first
         if people.size == 1
-          blank_attrs = attrs.select {|key, value| person.attributes[key].blank? }
+          blank_attrs = attrs.select { |key, value| person.attributes[key].blank? }
           person.attributes = blank_attrs
         else
           person.errors.add(:base, "#{people.size} Treffer in Duplikatserkennung.")

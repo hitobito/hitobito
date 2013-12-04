@@ -18,17 +18,17 @@
 #
 
 class Event::Date < ActiveRecord::Base
-  
+
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
-  
+
   attr_accessible :label, :location
-  
+
   belongs_to :event
-  
+
   validates :start_at, presence: true
   validate  :assert_meaningful
-  
+
 
   def duration
     @duration ||= Duration.new(start_at, finish_at)
@@ -39,10 +39,10 @@ class Event::Date < ActiveRecord::Base
   end
 
   private
-  
+
   def assert_meaningful
     unless duration.meaningful?
-      errors.add(:finish_at, "muss nach Von liegen")
+      errors.add(:finish_at, 'muss nach Von liegen')
     end
   end
 end

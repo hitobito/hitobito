@@ -27,7 +27,7 @@ module AbilityDsl
 
     def permission(permission)
       unless (Role::Permissions + [:any]).include?(permission)
-        raise "Unknown permission #{permission.inspect}"
+        fail "Unknown permission #{permission.inspect}"
       end
       Permission.new(@store, @ability_class, @subject_class, permission)
     end
@@ -49,7 +49,7 @@ module AbilityDsl
           constraint(name)
           nil
         else
-          raise "No constraint #{name} defined in #{@ability_class}"
+          fail "No constraint #{name} defined in #{@ability_class}"
         end
       end
 

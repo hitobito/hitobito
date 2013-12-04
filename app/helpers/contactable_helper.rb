@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module ContactableHelper
-  def info_field_set_tag(legend=nil, options={}, &block)
+  def info_field_set_tag(legend = nil, options = {}, &block)
     if entry.is_a?(Group)
       opts = { class: 'info' }
       opts.merge!(entry.contact ? { style: 'display: none' } : {})

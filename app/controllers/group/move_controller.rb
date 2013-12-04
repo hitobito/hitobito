@@ -24,7 +24,7 @@ class Group::MoveController < ApplicationController
       if mover.perform(target)
         flash[:notice] = "#{group} wurde nach #{target} verschoben."
       else
-        flash[:alert] = group.errors.full_messages.join(", ")
+        flash[:alert] = group.errors.full_messages.join(', ')
       end
       redirect_to(group)
     else
@@ -42,7 +42,7 @@ class Group::MoveController < ApplicationController
   def candidates
     @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
                                    group_by { |candidate| candidate.class.label }
-    @candidates.each {|type, groups| groups.sort_by(&:name) }
+    @candidates.each { |type, groups| groups.sort_by(&:name) }
 
     if @candidates.empty?
       flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder ' +

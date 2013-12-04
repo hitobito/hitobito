@@ -17,17 +17,17 @@
 
 # Teilnehmer
 class Event::Role::Participant < Event::Role
-  
+
   self.permissions = [:contact_data]
-  
+
   after_save :update_count
   after_destroy :update_count
-  
-  
+
+
   private
-  
+
   def update_count
     event.refresh_participant_count! if event
   end
-  
+
 end

@@ -10,17 +10,17 @@
 # ApplicationController.
 module StandardHelper
 
-  EMPTY_STRING = "&nbsp;".html_safe   # non-breaking space asserts better css styling.
+  EMPTY_STRING = '&nbsp;'.html_safe   # non-breaking space asserts better css styling.
 
   ################  FORMATTING HELPERS  ##################################
 
   # Formats a single value
   def f(value)
     case value
-      when Float, BigDecimal then number_with_precision(value, :precision => t('number.format.precision'), 
-                                                               :delimiter => t('number.format.delimiter'))
+      when Float, BigDecimal then number_with_precision(value, precision: t('number.format.precision'),
+                                                               delimiter: t('number.format.delimiter'))
       when Date   then l(value)
-      when Time   then l(value, :format => :time)
+      when Time   then l(value, format: :time)
       when true   then t(:"global.yes")
       when false  then t(:"global.no")
       when nil    then EMPTY_STRING
@@ -34,10 +34,10 @@ module StandardHelper
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
   def format_attr(obj, attr)
-    format_type_attr_method = obj.class.respond_to?(:model_name) ? 
-        :"format_#{obj.class.base_class.model_name.underscore}_#{attr.to_s}" : 
+    format_type_attr_method = obj.class.respond_to?(:model_name) ?
+        :"format_#{obj.class.base_class.model_name.underscore}_#{attr.to_s}" :
         :"format_#{obj.class.name.underscore}_#{attr.to_s}"
-    format_type_attr_method = format_type_attr_method.to_s.gsub(%r{/},'_')  # deal with nested models
+    format_type_attr_method = format_type_attr_method.to_s.gsub(%r{/}, '_')  # deal with nested models
 
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
@@ -60,7 +60,7 @@ module StandardHelper
   # Renders an arbitrary content with the given label. Used for uniform presentation.
   def labeled(label, content = nil, &block)
     content = capture(&block) if block_given?
-    render 'shared/labeled', :label => label, :content => content
+    render 'shared/labeled', label: label, content: content
   end
 
   # Transform the given text into a form as used by labels or table headers.
@@ -76,13 +76,13 @@ module StandardHelper
   # Renders a list of attributes with label and value for a given object.
   # If the optional block returns false for a given attribute, it will not be rendered.
   def render_attrs(obj, *attrs, &block)
-    content_tag(:dl, class: "dl-horizontal") do 
-      safe_join(attrs) do |a| 
+    content_tag(:dl, class: 'dl-horizontal') do
+      safe_join(attrs) do |a|
         labeled_attr(obj, a) if !block_given? || yield(a)
       end
     end if attrs.present?
   end
-  
+
   # Like #render_attrs, but only for attributes with a present value.
   def render_present_attrs(obj, *attrs)
     render_attrs(obj, *attrs) do |a|
@@ -107,10 +107,10 @@ module StandardHelper
         yield t if block_given?
       end
     else
-      content_tag(:div, ti(:no_list_entries), :class => 'table')
+      content_tag(:div, ti(:no_list_entries), class: 'table')
     end
   end
-  
+
   # Renders a generic form for the given object using StandardFormBuilder.
   def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
@@ -120,24 +120,24 @@ module StandardHelper
 
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end
-  
+
   def toggle_link(active, url, active_title = nil, inactive_title = nil, label = nil)
     icon, method = active ? ['ok', :delete] : ['minus', :put]
     title = active ? active_title : inactive_title
-    
+
     caption = icon(icon)
-    caption << "&nbsp; ".html_safe << label if label
+    caption << '&nbsp; '.html_safe << label if label
     link_to(caption,
-            url, 
-            title: title, 
-            remote: true, 
+            url,
+            title: title,
+            remote: true,
             method: method)
   end
 
   # Renders a simple unordered list, which will
   # simply render all passed items or yield them
   # to your block.
-  def simple_list(items,ul_options={},&blk)
+  def simple_list(items, ul_options = {}, &blk)
     content_tag_nested(:ul, items, ul_options) do |item|
       content_tag(:li, block_given? ? yield(item) : f(item))
     end
@@ -151,7 +151,7 @@ module StandardHelper
 
   # Overridden method that takes a block that is executed for each item in array
   # before appending the results.
-  def safe_join(array, sep = $,, &block)
+  def safe_join(array, sep = $OUTPUT_FIELD_SEPARATOR, &block)
     super(block_given? ? array.collect(&block) : array, sep)
   end
 
@@ -168,7 +168,7 @@ module StandardHelper
   #  - global.{key}
   def translate_inheritable(key, variables = {})
     defaults = []
-    partial = @virtual_path ? @virtual_path.gsub(%r{.*/_?}, "") : nil
+    partial = @virtual_path ? @virtual_path.gsub(%r{.*/_?}, '') : nil
     current = controller.class
     while current < ActionController::Base
       folder = current.controller_path
@@ -225,13 +225,13 @@ module StandardHelper
       options[:class] = classes
     end
   end
-  
+
   def model_class_label(entry)
     object_class(entry).model_name.human
   end
 
   def include_wysiwyg_assets
-    content_for(:head)        { stylesheet_link_tag 'wysiwyg.css', :media => 'all' }
+    content_for(:head)        { stylesheet_link_tag 'wysiwyg.css', media: 'all' }
     content_for(:js_includes) { javascript_include_tag 'wysiwyg' }
   end
 
@@ -299,9 +299,9 @@ module StandardHelper
   def assoc_link?(val)
     respond_to?("#{val.class.base_class.model_name.underscore}_path".to_sym) && can?(:show, val)
   end
-  
+
   def model_link(val)
-    
+
   end
 
   # Returns the association proxy for the given attribute. The attr parameter
@@ -329,7 +329,7 @@ module StandardHelper
       [attr, "#{attr}_id"]
     end
   end
-  
+
   def object_class(obj)
     obj.respond_to?(:klass) ? obj.klass : obj.class
   end

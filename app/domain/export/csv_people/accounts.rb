@@ -11,11 +11,11 @@ module Export::CsvPeople
 
     class << self
       def phone_numbers
-        @phone_numbers ||= self.new(PhoneNumber)
+        @phone_numbers ||= new(PhoneNumber)
       end
 
       def social_accounts
-        @social_accounts ||= self.new(SocialAccount)
+        @social_accounts ||= new(SocialAccount)
       end
     end
 

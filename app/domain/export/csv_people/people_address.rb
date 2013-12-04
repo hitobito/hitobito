@@ -14,7 +14,7 @@ module Export::CsvPeople
 
     def initialize(people)
       @people = people
-      @hash = Hash.new
+      @hash = {}
 
       attributes.each { |attr| merge!(attr => translate(attr)) }
       merge!(roles: 'Rollen')

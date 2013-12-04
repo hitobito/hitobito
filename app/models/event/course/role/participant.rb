@@ -18,8 +18,8 @@
 # Kursteilnehmer
 module Event::Course::Role
   class Participant < ::Event::Role::Participant
-  
+
     self.restricted = true
-    
+
   end
 end

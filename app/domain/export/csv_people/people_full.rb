@@ -8,7 +8,7 @@
 module Export::CsvPeople
   # adds social_accounts and company related attributes
   class PeopleFull < PeopleAddress
-    
+
     EXCLUDED_ATTRS = %w(id
                         contact_data_visible
                         created_at
@@ -27,7 +27,7 @@ module Export::CsvPeople
                         picture
                         primary_group_id
                         last_label_format_id)
-    
+
     def attributes
       (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)
     end

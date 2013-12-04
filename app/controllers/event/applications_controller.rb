@@ -6,20 +6,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationsController < ApplicationController
-  
+
   before_filter :application
   authorize_resource
-      
+
   def approve
     toggle_approval(true, 'freigegeben')
   end
-  
+
   def reject
     toggle_approval(false, 'abgelehnt')
   end
-  
+
   private
-  
+
   def toggle_approval(approved, verb)
     application.approved = approved
     application.rejected = !approved
@@ -27,15 +27,15 @@ class Event::ApplicationsController < ApplicationController
     flash[:notice] = "Die Anmeldung wurde #{verb}"
     redirect_to group_event_participation_path(group, participation.event_id, participation)
   end
-  
+
   def application
     @application ||= Event::Application.find(params[:id])
   end
-  
+
   def group
     @group ||= Group.find(params[:group_id])
   end
-  
+
   def participation
     application.participation
   end

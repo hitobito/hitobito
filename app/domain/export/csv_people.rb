@@ -14,15 +14,15 @@ module Export
     end
 
     def self.export_full(people)
-      export(PeopleFull,people)
+      export(PeopleFull, people)
     end
 
     def self.export_participations_address(participations)
-      export(ParticipationsAddress,participations)
+      export(ParticipationsAddress, participations)
     end
 
     def self.export_participations_full(participations)
-      export(ParticipationsFull,participations)
+      export(ParticipationsFull, participations)
     end
 
     private

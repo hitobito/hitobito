@@ -9,7 +9,7 @@ module Import
   class PersonColumnGuesser
     attr_reader :columns, :headers, :mapping, :params
 
-    def initialize(headers, params={})
+    def initialize(headers, params = {})
       @headers = headers
       @params = params
 

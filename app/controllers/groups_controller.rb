@@ -8,7 +8,7 @@
 class GroupsController < CrudController
 
   decorates :group, :groups, :contact
-  
+
   before_render_show :load_sub_groups
   before_render_form :load_contacts
 
@@ -35,7 +35,7 @@ class GroupsController < CrudController
 
 
   private
-  
+
   def build_entry
     type = model_params && model_params.delete(:type)
     group = Group.find_group_type!(type).new
@@ -51,9 +51,9 @@ class GroupsController < CrudController
   def load_contacts
     @contacts = entry.people.members.only_public_data.order_by_name
   end
-  
+
   def load_sub_groups(scope = entry.children.without_deleted)
-    @sub_groups = Hash.new {|h, k| h[k] = [] }
+    @sub_groups = Hash.new { |h, k| h[k] = [] }
     scope.order_by_type(entry).each do |group|
       label = group.layer ? group.class.label_plural : 'Untergruppen'
       @sub_groups[label] << group

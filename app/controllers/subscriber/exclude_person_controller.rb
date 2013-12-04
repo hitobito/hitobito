@@ -7,9 +7,9 @@
 
 module Subscriber
   class ExcludePersonController < PersonController
-    
+
     skip_authorize_resource # must be in leaf class
-    
+
     before_create :assert_subscribed
 
     private
@@ -18,7 +18,7 @@ module Subscriber
       super
       entry.excluded = true
     end
-    
+
     def assert_subscribed
       if subscriber_id
         unless mailing_list.subscribed?(subscriber)
@@ -27,7 +27,7 @@ module Subscriber
         end
       end
     end
-    
+
     def save_entry
       if subscriber_id
         @mailing_list.exclude_person(subscriber)
@@ -35,11 +35,11 @@ module Subscriber
         super
       end
     end
-    
+
     def flash_message(state)
       if state == :success
         "Abonnent #{subscriber} wurde erfolgreich ausgeschlossen"
-      else 
+      else
         super
       end
     end

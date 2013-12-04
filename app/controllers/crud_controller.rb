@@ -15,7 +15,7 @@ class CrudController < ListController
 
   prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy]
 
-  delegate :model_identifier, :to => 'self.class'
+  delegate :model_identifier, to: 'self.class'
 
   # Defines before and after callback hooks for create, update, save and destroy actions.
   define_model_callbacks :create, :update, :save, :destroy
@@ -92,8 +92,8 @@ class CrudController < ListController
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
     flash[:alert] ||= error_messages.presence || flash_message(:failure) if !destroyed && request.format == :html
-    location = (!destroyed && request.env["HTTP_REFERER"].presence) || (options[:location] || index_path)
-    respond_with(entry, options.reverse_merge(:success => destroyed, :location => location), &block)
+    location = (!destroyed && request.env['HTTP_REFERER'].presence) || (options[:location] || index_path)
+    respond_with(entry, options.reverse_merge(success: destroyed, location: location), &block)
   end
 
   private
@@ -132,7 +132,7 @@ class CrudController < ListController
 
   # Url of the index page to return to
   def index_path
-    polymorphic_path(path_args(model_class), :returning => true)
+    polymorphic_path(path_args(model_class), returning: true)
   end
 
   # Access params for model
@@ -156,7 +156,7 @@ class CrudController < ListController
             :"#{controller_name}.#{scope}",
             :"crud.#{scope}_html",
             :"crud.#{scope}"]
-    @@helper.t(keys.shift, :model => full_entry_label, :default => keys)
+    @@helper.t(keys.shift, model: full_entry_label, default: keys)
   end
 
   # Html safe error messages of the current entry.

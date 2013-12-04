@@ -10,7 +10,7 @@
 # So it is possible to change the assigned Person like a regular group attribute.
 module Event::RestrictedRole
   extend ActiveSupport::Concern
-  
+
   include ::RestrictedRole
 
   private
@@ -19,9 +19,9 @@ module Event::RestrictedRole
     role.participation = participations.where(person_id: id).first_or_create
     role
   end
-  
+
   def restricted_role_scope(type)
-    participations.joins(:roles).where(event_roles: {type: type.sti_name})
+    participations.joins(:roles).where(event_roles: { type: type.sti_name })
   end
 
 end

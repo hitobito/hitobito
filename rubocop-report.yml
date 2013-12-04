@@ -6,6 +6,7 @@ AllCops:
     - config/**
     - script/**
     - tmp/**
+    - app/assets/config.rb
 
 ClassLength:
   Max: 150
@@ -18,3 +19,45 @@ CyclomaticComplexity:
 
 LineLength:
   Max: 100
+  
+
+
+
+# Use attr_reader instead of attr.
+# We have methods called attr, so that's ok.
+#Attr:
+#  Enabled: false
+
+# map instead of collect, reduce instead of inject.
+# Probably later
+CollectionMethods:
+  Enabled: false
+
+# Well, well, well
+Documentation:
+  Enabled: false
+
+# Probably later
+DotPosition:
+  Enabled: false
+
+# That's no huge stopper
+EmptyLines:
+  Enabled: false
+
+# We thinks that's fine.
+EmptyLinesAroundBody:
+  Enabled: false
+
+# Keep it like that
+#EndAlignment:
+#  Enabled: false
+
+# Keep it like that
+IfUnlessModifier:
+  Enabled: false
+  
+# Argument names in collection functions (inject/reduce)
+# Keep it like that
+ReduceArguments:
+  Enabled: false

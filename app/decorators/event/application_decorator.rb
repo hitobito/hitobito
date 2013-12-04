@@ -7,7 +7,7 @@
 
 class Event::ApplicationDecorator < ::ApplicationDecorator
   decorates 'event/application'
-  
+
   decorates_association :event
   decorates_association :priority_1
   decorates_association :priority_2
@@ -20,12 +20,12 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     event.labeled_link(h.group_event_participation_path(group, event, participation),
                        can?(:show, participation))
   end
-  
+
   def contact
     c = model.contact
     c ? "#{c.class.base_class.name}Decorator".constantize.decorate(c) : nil
   end
-  
+
   def priority(event)
     prio = model.priority(event)
     if prio
@@ -35,25 +35,25 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     end
     content_tag(:span, prio, class: 'badge') if prio
   end
-  
+
   def confirmation
     confirmation_badge(*confirmation_fields)
   end
-  
+
   def confirmation_label
     label, css, desc = confirmation_fields
     confirmation_badge(label, css, desc) +
     " Kursfreigabe #{desc}"
   end
-  
+
   def confirmation_badge(label, css, desc)
     content_tag(:span, label.html_safe, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
   end
-  
+
   private
-  
-  
-  
+
+
+
   def confirmation_fields
     if approved?
       %w(&#x2713; success bestätigt)
@@ -65,4 +65,3 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   end
 
 end
-  

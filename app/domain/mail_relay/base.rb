@@ -42,7 +42,7 @@ module MailRelay
           end
         end
 
-        raise(last_exception) if last_exception.present?
+        fail(last_exception) if last_exception.present?
 
       end while mails.size >= retrieve_count
     end
@@ -100,7 +100,7 @@ module MailRelay
     def envelope_receiver_name
       receiver_from_x_header ||
       receiver_from_received_header ||
-      raise("Could not determine original receiver for email:\n#{message.header}")
+      fail("Could not determine original receiver for email:\n#{message.header}")
     end
 
     def sender_email

@@ -24,7 +24,7 @@ module Devise
         success = validate(resource) do
           resource.reset_password_period_valid?
         end
-        
+
         if success
           resource.clear_reset_password_token!
           success!(resource)
@@ -40,4 +40,3 @@ module Devise
     end
   end
 end
-

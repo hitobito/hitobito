@@ -27,7 +27,7 @@ class Event::ListsController < ApplicationController
       if entry.dates.present?
         l(entry.dates.first.start_at, format: :month_year)
       else
-        "Ohne Datumsangabe"
+        'Ohne Datumsangabe'
       end
     end
   end
@@ -39,8 +39,8 @@ class Event::ListsController < ApplicationController
     courses = EventDecorator.decorate(limit_scope_for_user)
     @courses_by_kind = courses.group_by { |entry| entry.kind.label }
     @courses_by_kind.each do |kind, entries|
-      entries.sort_by! {|e| e.dates.first.try(:start_at) || Time.zone.now }.
-              collect! {|e| EventDecorator.new(e) }
+      entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }.
+              collect! { |e| EventDecorator.new(e) }
     end
 
     respond_to do |format|
@@ -64,7 +64,7 @@ class Event::ListsController < ApplicationController
       unless params[:year].present?
         params[:group_id] = Group.course_offerers.
                                   where(id: current_user.groups_hierarchy_ids).
-                                  where("groups.id <> ?", Group.root.id).
+                                  where('groups.id <> ?', Group.root.id).
                                   select(:id).
                                   first.
                                   try(:id)

@@ -27,7 +27,7 @@ class BaseJob
   end
 
   def delayed_jobs
-    Delayed::Job.where(handler: self.to_yaml)
+    Delayed::Job.where(handler: to_yaml)
   end
 
   def logger

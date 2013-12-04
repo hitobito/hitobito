@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListDecorator < ApplicationDecorator
-  
+
   decorates :mailing_list
 
   def subscribable_info
@@ -28,5 +28,5 @@ class MailingListDecorator < ApplicationDecorator
     html << ' auf die Mailingliste schreiben'
     html << h.tag(:br)
   end
-  
+
 end

@@ -30,11 +30,11 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def as_typeahead
-    {id: id, label: label_with_parent}
+    { id: id, label: label_with_parent }
   end
 
   def as_quicksearch
-    {id: id, label: label_with_parent, type: :group}
+    { id: id, label: label_with_parent, type: :group }
   end
 
   def label_with_parent

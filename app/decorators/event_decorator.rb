@@ -38,7 +38,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def state_collection
-    possible_states.collect {|s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
+    possible_states.collect { |s| Struct.new(:id, :to_s).new(s, state_translated(s)) }
   end
 
   def description_short
@@ -65,9 +65,9 @@ class EventDecorator < ApplicationDecorator
 
   def issued_qualifications_info_for_leaders
     prolongs = kind.qualification_kinds.order(:label).to_a
-    info = ""
+    info = ''
     if prolongs.present?
-      info << "Verlängert"
+      info << 'Verlängert'
       info << issued_prolongations_info(prolongs)
       info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
     end
@@ -77,13 +77,13 @@ class EventDecorator < ApplicationDecorator
   def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds.order(:label).to_a
     prolongs = kind.prolongations.order(:label).to_a
-    info = ""
+    info = ''
     info << issued_qualifications_info(qualis)
     if prolongs.present?
       if qualis.present?
-        info << " und verlängert"
+        info << ' und verlängert'
       else
-        info << "Verlängert"
+        info << 'Verlängert'
       end
     end
     info << issued_prolongations_info(prolongs)
@@ -98,7 +98,7 @@ class EventDecorator < ApplicationDecorator
     if groups.size > 1
       groups_label = h.truncate(groups.join(', '), count: 50, separator: ',')
     end
-    {id: id, label: "#{model.to_s} (#{groups_label})"}
+    { id: id, label: "#{model.to_s} (#{groups_label})" }
   end
 
   private
@@ -108,20 +108,20 @@ class EventDecorator < ApplicationDecorator
   end
 
   def issued_qualifications_info(qualification_kinds)
-    info = ""
+    info = ''
     if qualification_kinds.present?
-      info << "Vergibt die Qualifikation"
-      info << "en" if qualification_kinds.size > 1
-      info << " "
+      info << 'Vergibt die Qualifikation'
+      info << 'en' if qualification_kinds.size > 1
+      info << ' '
       info << qualification_kinds.join(', ')
     end
     info
   end
 
   def issued_prolongations_info(qualification_kinds)
-    info = ""
+    info = ''
     if qualification_kinds.present?
-      info << " existierende Qualifikationen "
+      info << ' existierende Qualifikationen '
       info << qualification_kinds.join(', ')
     end
     info

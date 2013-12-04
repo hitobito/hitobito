@@ -99,7 +99,7 @@ module Import
 
     def assign_accounts(accounts, association, &block)
       accounts.each do |imported|
-        unless association.any? {|a| yield a, imported }
+        unless association.any? { |a| yield a, imported }
           association.build(imported)
         end
       end
@@ -107,7 +107,7 @@ module Import
 
     def extract_settings_fields(model, value_key)
       keys = AccountFields.new(model).keys
-      numbers = keys.select { |key| hash.has_key?(key) }
+      numbers = keys.select { |key| hash.key?(key) }
       numbers.map do |key|
         label = key.split('_').last.capitalize
         value = hash.delete(key)

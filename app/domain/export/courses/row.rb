@@ -11,7 +11,7 @@ module Export
       attr_reader :course, :hash, :max_dates, :contactable_keys
 
       delegate :number, :group_names, :description, :location, :contact, :application_closing_at,
-        :participations_for, to: :course
+               :participations_for, to: :course
 
 
       def initialize(course, list)
@@ -76,7 +76,7 @@ module Export
           attributes[:phone_numbers] = contactable.phone_numbers.map(&:to_s).join(', ')
           attributes.merge!(additional_contactable_attributes(contactable))
         end
-        Hash[attributes.map {|k, v| [:"#{prefix}_#{k}", v] }]
+        Hash[attributes.map { |k, v| [:"#{prefix}_#{k}", v] }]
       end
 
       def additional_attributes

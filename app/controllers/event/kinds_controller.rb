@@ -8,10 +8,10 @@
 class Event::KindsController < SimpleCrudController
 
   before_render_form :load_assocations
-  
+
 
   private
-  
+
   def list_entries
     super.order(:deleted_at, :label)
   end
@@ -36,5 +36,5 @@ class Event::KindsController < SimpleCrudController
       Event::Kind
     end
   end
-  
+
 end

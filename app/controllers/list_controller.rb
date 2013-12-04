@@ -19,7 +19,7 @@ class ListController < ApplicationController
 
   helper_method :model_class, :models_label, :entries, :path_args
 
-  delegate :model_class, :models_label, :to => 'self.class'
+  delegate :model_class, :models_label, to: 'self.class'
 
   hide_action :model_class, :models_label, :inheritable_root_controller
 
@@ -99,7 +99,7 @@ class ListController < ApplicationController
 
     # A human readable plural name of the model.
     def models_label(plural = true)
-      opts = {:count => (plural ? 3 : 1)}
+      opts = { count: (plural ? 3 : 1) }
       opts[:default] = model_class.model_name.human.titleize
       opts[:default] = opts[:default].pluralize if plural
 
@@ -142,9 +142,9 @@ class ListController < ApplicationController
     module ClassMethods
       # Defines before callbacks for the render actions.
       def define_render_callbacks(*actions)
-        args = actions.collect {|a| :"render_#{a}" }
-        args << {:only => :before,
-                 :terminator => "result == false || performed?"}
+        args = actions.collect { |a| :"render_#{a}" }
+        args << { only: :before,
+                  terminator: 'result == false || performed?' }
         define_model_callbacks *args
       end
     end
@@ -179,10 +179,10 @@ class ListController < ApplicationController
         clause = columns.collect do |f|
           col = f.to_s.include?('.') ? f : "#{model_class.table_name}.#{f}"
           "#{col} LIKE ?"
-        end.join(" OR ")
-        clause = terms.collect {|t| "(#{clause})" }.join(" AND ")
+        end.join(' OR ')
+        clause = terms.collect { |t| "(#{clause})" }.join(' AND ')
 
-         ["(#{clause})"] + terms.collect {|t| [t] * columns.size }.flatten
+         ["(#{clause})"] + terms.collect { |t| [t] * columns.size }.flatten
       end
     end
 
@@ -204,7 +204,7 @@ class ListController < ApplicationController
     included do
       # Define a map of (virtual) attributes to SQL order expressions.
       # May be used for sorting table columns that do not appear directly
-      # in the database table. E.g., map :city_id => 'cities.name' to
+      #  in the database table. E.g., map :city_id => 'cities.name' to
       # sort the displayed city names.
       class_attribute :sort_mappings_with_indifferent_access
       self.sort_mappings = {}
@@ -235,7 +235,7 @@ class ListController < ApplicationController
     def sort_expression
       col = sort_mappings_with_indifferent_access[params[:sort]] ||
             "#{model_class.table_name}.#{params[:sort]}"
-      Array(col).collect {|c| "#{c} #{sort_dir}" }.join(", ")
+      Array(col).collect { |c| "#{c} #{sort_dir}" }.join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.
@@ -265,7 +265,7 @@ class ListController < ApplicationController
       controller.class_attribute :remember_params
       controller.remember_params = [:q, :sort, :sort_dir, :page]
 
-      controller.prepend_before_filter :handle_remember_params, :only => [:index]
+      controller.prepend_before_filter :handle_remember_params, only: [:index]
     end
 
     private
@@ -281,7 +281,7 @@ class ListController < ApplicationController
 
     def restore_params_on_return(remembered)
       if params[:returning]
-        remember_params.each {|p| params[p] ||= remembered[p] }
+        remember_params.each { |p| params[p] ||= remembered[p] }
       end
     end
 
@@ -336,7 +336,7 @@ class ListController < ApplicationController
 
     # Returns the direct parent ActiveRecord of the current request, if any.
     def parent
-      parents.select {|p| p.kind_of?(ActiveRecord::Base) }.last
+      parents.select { |p| p.kind_of?(ActiveRecord::Base) }.last
     end
 
     # Returns the parent entries of the current request, if any.

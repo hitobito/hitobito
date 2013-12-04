@@ -16,14 +16,14 @@
 #
 
 class Event::Answer < ActiveRecord::Base
-  
+
   attr_accessible :answer, :question_id
-  
+
   belongs_to :participation
   belongs_to :question
 
 
-  validates :question_id, uniqueness: {scope: :participation_id}
+  validates :question_id, uniqueness: { scope: :participation_id }
 
   validate :assert_answer_is_in_choice_items
 
@@ -33,14 +33,14 @@ class Event::Answer < ActiveRecord::Base
       valid_range = (0...question.choice_items.size)
       index_array = text.map(&:to_i).map { |i| i - 1 } # have submit index + 1 and handle reset via index 0
 
-      super(valid_index_based_values(index_array,valid_range) || nil)
+      super(valid_index_based_values(index_array, valid_range) || nil)
     else
       super
     end
   end
 
   private
-  
+
   def assert_answer_is_in_choice_items
     # still allow answer to be nil because otherwise participations could not
     # be created without answering all questions (required to create roles for other people)

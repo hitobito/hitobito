@@ -13,7 +13,7 @@ module AutoLinkHelper
     elsif url_with_protocol?(str)
       link_to(str, str, target: '_blank')
     elsif url_without_protocol?(str)
-      url = "http://" + str
+      url = 'http://' + str
       link_to(str, url, target: '_blank')
     else
       str

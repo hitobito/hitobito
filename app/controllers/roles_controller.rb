@@ -66,7 +66,7 @@ class RolesController < CrudController
   end
 
   # A label for the current entry, including the model name, used for flash
-  def full_entry_label(role=entry)
+  def full_entry_label(role = entry)
     "#{models_label(false)} #{RoleDecorator.decorate(role).flash_info}".html_safe
   end
 end

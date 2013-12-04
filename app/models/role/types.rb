@@ -13,8 +13,8 @@ module Role::Types
                  :contact_data, :approve_applications]
 
   # If a role contains the first permission, the second one is automatically active as well
-  PermissionImplications = {:layer_full => :layer_read,
-                            :group_full => :group_read}
+  PermissionImplications = { layer_full: :layer_read,
+                             group_full: :group_read }
 
   included do
     class_attribute :permissions, :visible_from_above, :affiliate, :restricted
@@ -51,7 +51,7 @@ module Role::Types
 
     # Role types that contain all of the given permissions
     def types_with_permission(*permissions)
-      all_types.select {|r| (permissions - r.permissions).blank? }
+      all_types.select { |r| (permissions - r.permissions).blank? }
     end
 
     # Role types with affiliate = true
@@ -85,7 +85,7 @@ module Role::Types
 
     def label_with_group
       group_key = "activerecord.models.#{group.model_name.deconstantize.constantize.model_name.i18n_key}"
-      [label, I18n.translate("#{group_key}.long",count: 1, default: I18n.translate("#{group_key}"))].join(' ')
+      [label, I18n.translate("#{group_key}.long", count: 1, default: I18n.translate("#{group_key}"))].join(' ')
     end
 
   end

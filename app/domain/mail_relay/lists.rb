@@ -40,7 +40,7 @@ module MailRelay
       if sender_email.present?
         sender = "#{envelope_receiver_name}@#{mail_domain}"
         reply = message.reply do
-          body "Du bist nicht berechtigt, auf diese Liste zu schreiben."
+          body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
           from sender
         end
         deliver(reply)
@@ -129,7 +129,7 @@ module MailRelay
 
     # strip spam headers because they might produce encoding issues (Encoding::UndefinedConversionError)
     def strip_spam_headers(message)
-      spam_headers = message.header.select {|field| field.name =~ /^X-DSPAM/i }
+      spam_headers = message.header.select { |field| field.name =~ /^X-DSPAM/i }
       spam_headers.each do |field|
         message.header[field.name] = nil
       end

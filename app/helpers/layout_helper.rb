@@ -34,7 +34,7 @@ module LayoutHelper
   def pill_dropdown_button(dropdown, ul_classes = 'pull-right')
     dropdown.button_class = nil
     content_tag(:ul, class: "nav nav-pills #{ul_classes}") do
-      content_tag(:li, class: "dropdown") do
+      content_tag(:li, class: 'dropdown') do
         in_button_group { dropdown.to_s }
       end
     end
@@ -45,7 +45,7 @@ module LayoutHelper
   end
 
   def section(title, &block)
-    render(layout: 'shared/section', locals: {title: title}, &block)
+    render(layout: 'shared/section', locals: { title: title }, &block)
   end
 
   def section_table(title, collection, add_path = nil, &block)
@@ -58,7 +58,7 @@ module LayoutHelper
                                        class: 'pull-right')])
       end
       render(layout: 'shared/section_table',
-             locals: {title: title, collection: collection, add_path: add_path},
+             locals: { title: title, collection: collection, add_path: add_path },
              &block)
     end
   end
@@ -66,10 +66,10 @@ module LayoutHelper
   def grouped_table(grouped_lists, column_count, &block)
     if grouped_lists.present?
       render(layout: 'shared/grouped_table',
-             locals: {grouped_lists: grouped_lists, column_count: column_count},
+             locals: { grouped_lists: grouped_lists, column_count: column_count },
              &block)
     else
-      content_tag(:div, ti(:no_list_entries), :class => 'table')
+      content_tag(:div, ti(:no_list_entries), class: 'table')
     end
   end
 

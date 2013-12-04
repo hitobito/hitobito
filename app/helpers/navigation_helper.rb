@@ -8,15 +8,15 @@
 module NavigationHelper
 
   MAIN = {
-          'Gruppen' => {url: :groups_path,
-                        active_for: %w(groups people)},
-          'Anlässe' => {url: :list_events_path,
-                        active_for: %w(list_events)},
-            'Kurse' => {url: :list_courses_path,
-                        active_for: %w(list_courses)},
-            'Admin' => {url: :event_kinds_path,
-                        active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
-                        if: lambda {|_| can?(:manage, Event::Kind) } }
+          'Gruppen' => { url: :groups_path,
+                         active_for: %w(groups people) },
+          'Anlässe' => { url: :list_events_path,
+                         active_for: %w(list_events) },
+          'Kurse' => { url: :list_courses_path,
+                       active_for: %w(list_courses) },
+          'Admin' => { url: :event_kinds_path,
+                       active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
+                       if: lambda { |_| can?(:manage, Event::Kind) } }
   }
 
 
@@ -25,7 +25,7 @@ module NavigationHelper
       if options[:url].kind_of?(Symbol)
         options[:url] = send(options[:url])
       end
-      if !options.has_key?(:if) || instance_eval(&options[:if])
+      if !options.key?(:if) || instance_eval(&options[:if])
         nav(label, options[:url], options[:active_for])
       end
     end
@@ -38,7 +38,7 @@ module NavigationHelper
   def nav(label, url, active_for = [])
     options = {}
     if current_page?(url) ||
-       active_for.any? {|p| request.path =~ /\/?#{p}\/?/ }
+       active_for.any? { |p| request.path =~ /\/?#{p}\/?/ }
       options[:class] = 'active'
     end
     content_tag(:li, link_to(label, url), options)
@@ -91,10 +91,10 @@ class TabBar
   # if alt_paths matches, this tab is active
   # if nothing matches, first tab is active
   def find_active_tab
-    active = @tabs.detect {|_, url, _| current_page?(url) }
+    active = @tabs.detect { |_, url, _| current_page?(url) }
     if active.nil?
       active = @tabs.detect do |_, _, alt_paths|
-        alt_paths.any? {|p| current_path =~ /\/?#{p}\/?/ }
+        alt_paths.any? { |p| current_path =~ /\/?#{p}\/?/ }
       end
     end
     active ? active.second : @tabs.first.second

@@ -61,11 +61,11 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      statement = "CASE event_roles.type "
+      statement = 'CASE event_roles.type '
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
-      statement << "END"
+      statement << 'END'
       joins(:roles).order(statement)
     end
 
@@ -89,7 +89,7 @@ class Event::Participation < ActiveRecord::Base
     def participating(event)
       affiliate_types = event.role_types.select(&:affiliate).collect(&:sti_name)
       if affiliate_types.present?
-        joins(:roles).where("event_roles.type NOT IN (?)", affiliate_types)
+        joins(:roles).where('event_roles.type NOT IN (?)', affiliate_types)
       else
         scoped
       end
@@ -104,7 +104,7 @@ class Event::Participation < ActiveRecord::Base
       event.questions.each do |q|
         a = q.answers.new
         a.question = q # without this, only the id is set
-        self.answers << a
+        answers << a
       end
     end
   end
@@ -113,7 +113,7 @@ class Event::Participation < ActiveRecord::Base
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    answers.each {|e| e.participation = self unless e.frozen? }
+    answers.each { |e| e.participation = self unless e.frozen? }
   end
 
 end

@@ -7,11 +7,11 @@
 
 # Require any additional compass plugins here.
 
-http_path = "/"
-css_dir = "stylesheets_generated"
-sass_dir = "stylesheets"
-images_dir = "images"
-javascripts_dir = "javascripts"
+http_path = '/'
+css_dir = 'stylesheets_generated'
+sass_dir = 'stylesheets'
+images_dir = 'images'
+javascripts_dir = 'javascripts'
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

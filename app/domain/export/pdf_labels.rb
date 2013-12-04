@@ -34,7 +34,7 @@ module Export
       pdf.bounding_box(pos,
                        width: format.width.mm - min_border,
                        height: format.height.mm - min_border) do
-        #pdf.stroke_bounds
+        # pdf.stroke_bounds
         pdf.text_box(address, at: [format.padding_left.mm,
                                    format.height.mm - format.padding_top.mm - min_border])
       end
@@ -47,12 +47,12 @@ module Export
     end
 
     def address(contactable)
-      address = ""
+      address = ''
       address << contactable.company_name << "\n" if print_company?(contactable)
       address << contactable.full_name << "\n" if contactable.full_name.present?
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
-      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
+      address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
       address << contactable.country unless contactable.ignored_country?
       address
     end

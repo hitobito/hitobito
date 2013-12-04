@@ -19,7 +19,7 @@ class PersonAccessibles
     @group = group
 
     if @group.nil?
-      can :index, Person, accessible_people do |p| true end
+      can :index, Person, accessible_people { |p| true }
 
     else # optimized queries for a given group
 
@@ -27,16 +27,16 @@ class PersonAccessibles
       # user has layer read of the same layer as the group
       if group_read_in_this_group? || layer_read_in_same_layer? || user.root?
         can :index, Person,
-            group.people.only_public_data do |p| true end
+            group.people.only_public_data { |p| true }
 
       # user has layer read in a above layer of the group
       elsif layer_read_in_above_layer?
         can :index, Person,
-            group.people.only_public_data.visible_from_above(group) do |p| true end
+            group.people.only_public_data.visible_from_above(group) { |p| true }
 
       elsif user.contact_data_visible?
         can :index, Person,
-            group.people.only_public_data.contact_data_visible do |p| true end
+            group.people.only_public_data.contact_data_visible { |p| true }
       end
     end
   end
@@ -49,7 +49,7 @@ class PersonAccessibles
     else
       Person.only_public_data.
              joins(roles: :group).
-             where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
+             where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
              where(accessible_conditions.to_a).
              uniq
     end
@@ -83,7 +83,7 @@ class PersonAccessibles
   end
 
   def in_same_layer_condition(layer_groups)
-    ["groups.layer_group_id IN (?)", layer_groups.collect(&:id)]
+    ['groups.layer_group_id IN (?)', layer_groups.collect(&:id)]
   end
 
   def visible_from_above_condition(layer_groups)
@@ -103,7 +103,7 @@ class PersonAccessibles
   # e.g. input [A,B] -> output A
   def collapse_groups_to_highest(layer_groups)
     layer_groups.each do |group|
-      unless layer_groups.any? {|g| g.is_ancestor_of?(group) }
+      unless layer_groups.any? { |g| g.is_ancestor_of?(group) }
         yield group
       end
     end

@@ -13,13 +13,13 @@ module Event::Qualifier
     def qualified?
       obtained_qualifications.present? && has_all_prolongations?(qualification_kind_ids)
     end
-      
+
     def issue
       Qualification.transaction do
         create_prolongations(qualification_kind_ids)
       end
     end
-  
+
     def revoke
       Qualification.transaction do
         remove_qualifications(qualification_kind_ids)

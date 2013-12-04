@@ -17,6 +17,6 @@
 
 # Referent
 class Event::Role::Speaker < Event::Role
-  
+
   self.permissions = [:contact_data]
 end

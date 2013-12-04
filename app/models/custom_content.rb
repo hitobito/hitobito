@@ -26,7 +26,7 @@ class CustomContent < ActiveRecord::Base
   class << self
     def get(key)
       find_by_key(key) ||
-      raise(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
+      fail(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
     end
   end
 
@@ -53,9 +53,9 @@ class CustomContent < ActiveRecord::Base
   def body_with_values(placeholders = {})
     available = placeholders_list
     if non_existing = (placeholders.keys - available).presence
-      raise(ArgumentError,
-            "Placeholder(s) #{non_existing.join(', ')} given, " <<
-            "but not defined for this custom content")
+      fail(ArgumentError,
+           "Placeholder(s) #{non_existing.join(', ')} given, " <<
+           'but not defined for this custom content')
     end
 
     available.each_with_object(body.dup) do |placeholder, output|
@@ -64,7 +64,7 @@ class CustomContent < ActiveRecord::Base
         if placeholders.key?(placeholder)
           output.gsub!(token, placeholders[placeholder])
         else
-          raise ArgumentError, "Body contains placeholder #{token}, not given"
+          fail ArgumentError, "Body contains placeholder #{token}, not given"
         end
       end
     end

@@ -23,11 +23,11 @@ class FullTextController < ApplicationController
   end
 
   def query
-    people = query_people.collect{|i| PersonDecorator.new(i).as_quicksearch }
-    groups = query_groups.collect{|i| GroupDecorator.new(i).as_quicksearch }
+    people = query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
+    groups = query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
 
     result = if people.present? && groups.present?
-      people + [{label: '—' * 20}] + groups
+      people + [{ label: '—' * 20 }] + groups
     else
       people + groups
     end
@@ -40,7 +40,7 @@ class FullTextController < ApplicationController
     entries = Person.search(params[:q],
                             page: params[:page],
                             order: 'last_name asc, first_name asc, @relevance desc',
-                            with: {sphinx_internal_id: accessible_people_ids})
+                            with: { sphinx_internal_id: accessible_people_ids })
     entries = Person::PreloadGroups.for(entries)
     entries = Person::PreloadPublicAccounts.for(entries)
     entries
@@ -49,7 +49,7 @@ class FullTextController < ApplicationController
   def query_people
     Person.search(params[:q],
                   per_page: 10,
-                  with: {sphinx_internal_id: accessible_people_ids})
+                  with: { sphinx_internal_id: accessible_people_ids })
   end
 
   def query_groups
@@ -73,7 +73,7 @@ class FullTextController < ApplicationController
     # rewrite query to only include id column
     sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
     result = Person.connection.execute(sql)
-    result.collect {|row| row[0] }
+    result.collect { |row| row[0] }
   end
 
   def entries

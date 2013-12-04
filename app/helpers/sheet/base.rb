@@ -82,8 +82,8 @@ module Sheet
     private
 
     def render_as_current(&block)
-      content_tag(:div, class: "container-shadow") do
-        content_tag(:div, id: "content") do
+      content_tag(:div, class: 'container-shadow') do
+        content_tag(:div, id: 'content') do
           render_breadcrumbs +
           capture(&block)
         end

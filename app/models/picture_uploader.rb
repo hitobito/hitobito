@@ -17,11 +17,11 @@ class PictureUploader < CarrierWave::Uploader::Base
   storage :file
 
   # Process files as they are uploaded:
-  process :resize_to_fill => [72, 72]
+  process resize_to_fill: [72, 72]
 
   # Create different versions of your uploaded files:
   version :thumb do
-    process :resize_to_fill => [32, 32]
+    process resize_to_fill: [32, 32]
   end
 
   # Override the directory where uploaded files will be stored.
@@ -34,7 +34,7 @@ class PictureUploader < CarrierWave::Uploader::Base
   def default_url
     asset_path(['profil', version_name].compact.join('_') + '.png')
   end
-  
+
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_white_list

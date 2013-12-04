@@ -21,13 +21,6 @@ LineLength:
   Max: 100
   
 
-
-
-# Use attr_reader instead of attr.
-# We have methods called attr, so that's ok.
-#Attr:
-#  Enabled: false
-
 # map instead of collect, reduce instead of inject.
 # Probably later
 CollectionMethods:
@@ -49,15 +42,10 @@ EmptyLines:
 EmptyLinesAroundBody:
   Enabled: false
 
-# Keep it like that
-#EndAlignment:
-#  Enabled: false
-
-# Keep it like that
+# Keep single line bodys for if and unless
 IfUnlessModifier:
   Enabled: false
   
-# Argument names in collection functions (inject/reduce)
-# Keep it like that
+# Keep semantic argument names in collection functions (inject/reduce)
 ReduceArguments:
   Enabled: false

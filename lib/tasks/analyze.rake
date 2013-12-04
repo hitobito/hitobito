@@ -22,15 +22,14 @@ task :qa do
   true
 end
 
-begin
-  require 'rubocop/rake_task'
 
-  desc 'Run rubocop.yml and fail if any issues are detected'
-  Rubocop::RakeTask.new(:rubocop) do |task|
-    task.fail_on_error = true
+desc 'Run rubocop-must.yml and fail if there are issues'
+task :rubocop do
+  begin
+    sh "rubocop --config rubocop-must.yml"
+  rescue
+    abort('RuboCop failed!')
   end
-rescue LoadError
-  # no rubocop available, no problem
 end
 
 namespace :rubocop do

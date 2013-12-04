@@ -15,10 +15,10 @@ describe Subscriber::EventController do
   let(:person) { people(:top_leader) }
   let(:list) { Fabricate(:mailing_list, group: group) }
 
-  context "GET query" do
+  context 'GET query' do
     subject { response.body }
 
-    context "returns event and group name" do
+    context 'returns event and group name' do
       before do
         create_event('event', now)
 
@@ -28,7 +28,7 @@ describe Subscriber::EventController do
       it { should =~ /event \(TopGroup\)/ }
     end
 
-    context "lists events from previous year onwards" do
+    context 'lists events from previous year onwards' do
       before do
         create_event('event now', now)
         create_event('event later', now + 5.minutes)
@@ -44,7 +44,7 @@ describe Subscriber::EventController do
       it { should_not =~ /two_years_ago/ }
     end
 
-    context "list only events from self, sister and descendants" do
+    context 'list only events from self, sister and descendants' do
       let(:group) { groups(:bottom_layer_one) }
       let(:person) { Fabricate(Group::BottomLayer::Leader.name.to_s, group: group).person }
 
@@ -64,7 +64,7 @@ describe Subscriber::EventController do
       it { should_not =~ %r{#{groups(:top_group).name}} }
     end
 
-    context "finds by group name" do
+    context 'finds by group name' do
       before do
         create_event('foobar', now)
 
@@ -74,7 +74,7 @@ describe Subscriber::EventController do
       it { should =~ /foobar/ }
     end
 
-    context "finds by event kind" do
+    context 'finds by event kind' do
       before do
         course = Fabricate(:course, name: 'foobar', groups: [group])
         Fabricate(:event_date, event: course, start_at: now)
@@ -86,50 +86,49 @@ describe Subscriber::EventController do
     end
   end
 
-  context "POST create" do
+  context 'POST create' do
 
     let(:event) { Fabricate(:event, groups: [group]) }
 
-    it "adds subscription" do
+    it 'adds subscription' do
       expect do
-        post :create, group_id: group.id, 
+        post :create, group_id: group.id,
                       mailing_list_id: list.id,
                       subscription: { subscriber_id: event.id }
       end.to change(Subscription, :count).by(1)
 
       should redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
     end
-    
-    it "without subscriber_id replaces error" do
+
+    it 'without subscriber_id replaces error' do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
 
       should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ["Anlass muss ausgewählt werden"]
+      assigns(:subscription).errors[:base].should eq ['Anlass muss ausgewählt werden']
     end
 
-    it "duplicated subscription replaces error" do
+    it 'duplicated subscription replaces error' do
       subscription = list.subscriptions.build
       subscription.update_attribute(:subscriber, event)
 
       expect do
-        post :create, group_id: group.id, 
+        post :create, group_id: group.id,
                       mailing_list_id: list.id,
                       subscription: { subscriber_id: event.id }
       end.not_to change(Subscription, :count)
 
       should render_template('crud/new')
       assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ["Anlass wurde bereits hinzugefügt"]
+      assigns(:subscription).errors[:base].should eq ['Anlass wurde bereits hinzugefügt']
     end
   end
 
 
-  def create_event(name, start_at, event_group=group)
+  def create_event(name, start_at, event_group = group)
     event = Fabricate(:event, name: name, groups: [event_group])
     event.dates.first.update_attribute(:start_at, start_at)
   end
 
 end
-

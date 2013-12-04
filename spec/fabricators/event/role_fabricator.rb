@@ -21,6 +21,6 @@ Fabricator(:event_role, class_name: 'Event::Role') do
 end
 
 types = Event.role_types + [Event::Course::Role::Participant]
-types.collect {|t| t.name.to_sym }.each do |t|
+types.collect { |t| t.name.to_sym }.each do |t|
   Fabricator(t, from: :event_role, class_name: t)
 end

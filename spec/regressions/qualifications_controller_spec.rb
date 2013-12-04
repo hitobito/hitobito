@@ -43,9 +43,9 @@ describe QualificationsController, type: :controller do
   include_examples 'crud controller', skip: [%w(show), %w(edit), %w(index), %w(update)]
 
   describe_action :get, :new do
-    context ".html", :format => :html do
+    context '.html', format: :html do
       let(:page) { Capybara::Node::Simple.new(response.body).find('#page') }
-      it "renders sheets and form" do
+      it 'renders sheets and form' do
         perform_request
         page.should have_css('.sheet', count: 3)
         page.find_link('Top')[:href].should eq group_path(groups(:top_layer))

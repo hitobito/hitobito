@@ -10,28 +10,28 @@ require 'spec_helper'
 describe Duration do
 
 
-  context "#cover?" do
-    let(:start) { Time.zone.parse("2013-10-10 10:30") }
-    let(:finish) { Time.zone.parse("2013-10-12 10:30") }
-    let(:now) { Time.zone.parse("2013-10-11 10:30") }
+  context '#cover?' do
+    let(:start) { Time.zone.parse('2013-10-10 10:30') }
+    let(:finish) { Time.zone.parse('2013-10-12 10:30') }
+    let(:now) { Time.zone.parse('2013-10-11 10:30') }
 
     subject { Duration.new(start, finish) }
 
-    context "between start finish" do
+    context 'between start finish' do
       it { should be_cover(now) }
     end
 
-    context "without finish" do
+    context 'without finish' do
       let(:finish) { nil }
       it { should be_cover(now) }
     end
 
-    context "without start" do
+    context 'without start' do
       let(:start) { nil }
       it { should be_cover(now) }
     end
 
-    context "without start or finish" do
+    context 'without start or finish' do
       let(:start) { nil }
       let(:finish) { nil }
       it { should_not be_cover(now) }
@@ -40,4 +40,3 @@ describe Duration do
   end
 
 end
-

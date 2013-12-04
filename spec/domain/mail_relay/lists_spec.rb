@@ -30,14 +30,14 @@ describe MailRelay::Lists do
 
   subject { MailRelay::Lists.new(message) }
 
-  context "#mailing_list" do
+  context '#mailing_list' do
     let(:from) { people(:top_leader).email }
     its(:envelope_receiver_name) { should == list.mail_name }
     its(:mailing_list) { should == list }
     it { should be_relay_address }
   end
 
-  context "receivers with empty email" do
+  context 'receivers with empty email' do
     let(:from) { people(:top_leader).email }
     before do
       ind.email = ''
@@ -52,7 +52,7 @@ describe MailRelay::Lists do
     its(:receivers) { should =~ [bll, bgl1].collect(&:email) }
   end
 
-  context "list admin" do
+  context 'list admin' do
     let(:from) { people(:top_leader).email }
 
     before { create_individual_subscribers }
@@ -62,14 +62,14 @@ describe MailRelay::Lists do
     its(:sender) { should == people(:top_leader) }
     its(:receivers) { should =~ subscribers.collect(&:email) }
 
-    it "relays" do
+    it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
     end
   end
 
-  context "additional sender" do
+  context 'additional sender' do
     let(:from) { 'news@example.com' }
 
     before { create_individual_subscribers }
@@ -80,7 +80,7 @@ describe MailRelay::Lists do
     its(:sender) { should be_nil }
     its(:receivers) { should =~ subscribers.collect(&:email) }
 
-    it "relays" do
+    it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
@@ -88,10 +88,10 @@ describe MailRelay::Lists do
   end
 
 
-  context "list member" do
+  context 'list member' do
     let(:from) { bgl1.email }
 
-    context "may post" do
+    context 'may post' do
       before { create_individual_subscribers }
       before { list.update_column(:subscribers_may_post, true) }
 
@@ -100,14 +100,14 @@ describe MailRelay::Lists do
       its(:sender) { should == bgl1 }
       its(:receivers) { should =~ subscribers.collect(&:email) }
 
-      it "relays" do
+      it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
       end
     end
 
-    context "may not post" do
+    context 'may not post' do
       before { create_individual_subscribers }
       before { list.update_column(:subscribers_may_post, false) }
 
@@ -115,7 +115,7 @@ describe MailRelay::Lists do
       its(:sender_email) { should == from }
       its(:sender) { should == bgl1 }
 
-      it "rejects" do
+      it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         last_email.smtp_envelope_to.should == [from]
@@ -125,7 +125,7 @@ describe MailRelay::Lists do
     end
   end
 
-  context "excluded person" do
+  context 'excluded person' do
     let(:from) { bgl2.email }
 
     before { create_individual_subscribers }
@@ -135,7 +135,7 @@ describe MailRelay::Lists do
     its(:sender_email) { should == from }
     its(:sender) { should == bgl2 }
 
-    it "rejects" do
+    it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
@@ -144,14 +144,14 @@ describe MailRelay::Lists do
     end
   end
 
-  context "anybody" do
+  context 'anybody' do
     let(:from) { people(:bottom_member).email }
 
     it { should_not be_sender_allowed }
     its(:sender_email) { should == from }
     its(:sender) { should == people(:bottom_member) }
 
-    it "rejects" do
+    it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
@@ -160,13 +160,13 @@ describe MailRelay::Lists do
     end
   end
 
-  context "foreign" do
+  context 'foreign' do
     let(:from) { 'anybody@example.com' }
 
     it { should_not be_sender_allowed }
     its(:sender_email) { should == from }
 
-    it "rejects" do
+    it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == [from]
@@ -175,25 +175,25 @@ describe MailRelay::Lists do
     end
   end
 
-  context "anonymous" do
+  context 'anonymous' do
     let(:from) { nil }
 
     it { should_not be_sender_allowed }
     its(:sender_email) { should == from }
 
-    it "does not relay" do
+    it 'does not relay' do
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
     end
   end
 
-  context "bounce" do
+  context 'bounce' do
     let(:from) { 'deamon@example.com' }
 
     let(:envelope_to) { "#{list.mail_name}-bounces+test=example.com" }
 
     its(:sender_email) { should == from }
 
-    it "forwards bounce message" do
+    it 'forwards bounce message' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       last_email.smtp_envelope_to.should == ['test@example.com']
@@ -202,13 +202,13 @@ describe MailRelay::Lists do
     end
   end
 
-  context "non existing list" do
+  context 'non existing list' do
     let(:from) { people(:top_leader).email }
     let(:envelope_to) { 'foo' }
 
     it { should_not be_relay_address }
 
-    it "does not relay" do
+    it 'does not relay' do
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
     end
   end

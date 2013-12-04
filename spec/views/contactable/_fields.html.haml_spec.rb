@@ -16,8 +16,8 @@ describe 'contactable/_fields.html.haml' do
   subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info', visible: false) }
 
   before do
-    controller.controller_path = "groups"
-    controller.request.path_parameters[:controller] = "groups"
+    controller.controller_path = 'groups'
+    controller.request.path_parameters[:controller] = 'groups'
     view.extend StandardHelper
     view.stub(entry: GroupDecorator.decorate(group), f: form_builder)
 
@@ -32,14 +32,14 @@ describe 'contactable/_fields.html.haml' do
     end.twice
   end
 
-  context "standard" do
+  context 'standard' do
     before { render }
 
     its([:style]) { should be_blank }
   end
 
 
-  context "when contact is set" do
+  context 'when contact is set' do
     before do
       group.contact = current_user
       render
@@ -48,4 +48,3 @@ describe 'contactable/_fields.html.haml' do
     its([:style]) { should eq 'display: none' }
   end
 end
-

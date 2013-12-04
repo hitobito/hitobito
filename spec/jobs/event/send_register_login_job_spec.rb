@@ -22,12 +22,12 @@ describe Event::SendRegisterLoginJob do
     SeedFu.seed [Rails.root.join('db', 'seeds')]
   end
 
-  it "creates reset password token" do
+  it 'creates reset password token' do
     subject.perform
     person.reload.reset_password_token.should be_present
   end
 
-  it "sends email" do
+  it 'sends email' do
     subject.perform
 
     ActionMailer::Base.deliveries.should have(1).item

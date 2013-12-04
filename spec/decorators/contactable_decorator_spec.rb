@@ -20,34 +20,34 @@ describe ContactableDecorator do
     @group = GroupDecorator.decorate(group)
   end
 
-  it "#complete_address" do
+  it '#complete_address' do
     @group.complete_address.should eq '<p>foostreet 3<br />4242 footown</p>'
   end
-  
-  it "#primary_email" do
+
+  it '#primary_email' do
     @group.primary_email.should eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
   end
 
-  describe "#all_phone_numbers" do
-    context "only public" do
+  describe '#all_phone_numbers' do
+    context 'only public' do
       subject { @group.all_phone_numbers }
-      
+
       it { should =~ /031.*Home/ }
       it { should =~ /041.*Work/ }
       it { should_not =~ /079.*Mobile/ }
     end
-        
-    context "all" do
+
+    context 'all' do
       subject { @group.all_phone_numbers(false) }
-      
+
       it { should =~ /031.*Home/ }
       it { should =~ /041.*Work/ }
       it { should =~ /079.*Mobile/ }
     end
   end
 
-  describe "#all_social_accounts" do
-    context "web links" do
+  describe '#all_social_accounts' do
+    context 'web links' do
       subject { @group.all_social_accounts }
 
       it { should =~ /www.puzzle.ch<\/a>/ }
@@ -58,14 +58,14 @@ describe ContactableDecorator do
     end
   end
 
-  describe "addresses" do
-    context "country" do
+  describe 'addresses' do
+    context 'country' do
       it "shouldn't print country ch/schweiz" do
         @group.complete_address.should_not =~ /Schweiz/
       end
 
-      it "should print country" do
-        @group.country = "the ultimate country"
+      it 'should print country' do
+        @group.country = 'the ultimate country'
         @group.complete_address.should =~ /the ultimate country/
       end
     end

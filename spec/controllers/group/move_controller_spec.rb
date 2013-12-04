@@ -16,15 +16,15 @@ describe Group::MoveController do
 
   before { sign_in(user) }
 
-  context "GET :select" do
-    it "assigns candidates" do
+  context 'GET :select' do
+    it 'assigns candidates' do
       get :select, id: group.id
       assigns(:candidates)['Bottom Layer'].should include target
     end
   end
 
-  context "POST :perform" do
-    it "performs moving" do
+  context 'POST :perform' do
+    it 'performs moving' do
       post :perform, id: group.id, move: { target_group_id: target.id }
       flash[:notice].should eq "#{group} wurde nach #{target} verschoben."
       should redirect_to(group)
@@ -32,4 +32,3 @@ describe Group::MoveController do
   end
 
 end
-

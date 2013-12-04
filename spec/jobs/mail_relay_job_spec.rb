@@ -11,7 +11,7 @@ describe MailRelayJob do
 
   subject { MailRelayJob.new }
 
-  it "relays mails and gets rescheduled" do
+  it 'relays mails and gets rescheduled' do
     Settings.email.retriever.config.address = 'localhost'
     MailRelay::Lists.should_receive(:relay_current)
     subject.perform

@@ -8,12 +8,12 @@
 require 'spec_helper'
 
 describe ApplicationDecorator do
-  it "#klass returns model class"  do
+  it '#klass returns model class'  do
     dec = GroupDecorator.new(Group.new)
     dec.klass.should eq Group
   end
 
-  context "userstamp" do
+  context 'userstamp' do
     before do
       Person.reset_stamper
       @person = Fabricate(:person)
@@ -24,7 +24,7 @@ describe ApplicationDecorator do
       @person.save!
     end
 
-    it "should return date and time with updater/creator" do
+    it 'should return date and time with updater/creator' do
       dec = PersonDecorator.new(@person)
       @person.creator.should == @creator
       @person.updater.should == @updater
@@ -44,7 +44,7 @@ describe ApplicationDecorator do
         p @creator
         puts 'Updater:'
         p @updater
-        puts "Other person ids:"
+        puts 'Other person ids:'
         p Person.pluck(:id)
       end
     end

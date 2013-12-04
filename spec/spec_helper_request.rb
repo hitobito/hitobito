@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-ENV['RAILS_GROUPS'] = "assets"
+ENV['RAILS_GROUPS'] = 'assets'
 
 require 'spec_helper_base'
 require 'capybara/poltergeist'

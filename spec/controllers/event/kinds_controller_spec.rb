@@ -8,40 +8,40 @@
 require 'spec_helper'
 
 describe Event::KindsController do
-   
+
   let(:destroyed) { Event::Kind.with_deleted.find(ActiveRecord::Fixtures.identify(:old)) }
-   
+
   before { sign_in(people(:top_leader)) }
-   
-  it "POST update resets destroy flag when updating deleted kinds" do
+
+  it 'POST update resets destroy flag when updating deleted kinds' do
     destroyed.should be_destroyed
     post :update, id: destroyed.id
     destroyed.reload.should_not be_destroyed
   end
-  
-  it "GET index lists destroyed entries last" do
+
+  it 'GET index lists destroyed entries last' do
     get :index
     assigns(:kinds).last.should == destroyed
   end
 
-  context "destroyed associations" do
+  context 'destroyed associations' do
     let(:old) { qualification_kinds(:old) }
-    let(:kind) { event_kinds(:glk) } 
+    let(:kind) { event_kinds(:glk) }
 
-    context "GET new" do
-      before { get :new } 
+    context 'GET new' do
+      before { get :new }
 
-      it "does not include deleted for when creating new" do
+      it 'does not include deleted for when creating new' do
         [:qualification_kinds, :preconditions, :prolongations].each do |list|
           assigns(list).should_not include old
         end
       end
     end
 
-    context "GET edit" do
+    context 'GET edit' do
       before { kind.qualification_kinds << old }
 
-      it "includes deleted qualification_kind where it has been selected" do
+      it 'includes deleted qualification_kind where it has been selected' do
         get :edit, id: kind.id
         assigns(:qualification_kinds).should include old
         assigns(:preconditions).should_not include old
@@ -50,5 +50,5 @@ describe Event::KindsController do
     end
   end
 
-  
+
 end

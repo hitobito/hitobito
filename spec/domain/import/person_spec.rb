@@ -8,31 +8,31 @@
 require 'spec_helper'
 describe Import::Person do
 
-  context "keys" do
-    subject { Import::Person.fields.map {|entry| entry[:key] }  }
-    it "contains social media" do
-      should include("social_account_skype")
+  context 'keys' do
+    subject { Import::Person.fields.map { |entry| entry[:key] }  }
+    it 'contains social media' do
+      should include('social_account_skype')
     end
 
-    it "contains phone number" do
-      should include("phone_number_vater")
-    end
-  end
-
-  context "labels" do
-    subject { Import::Person.fields.map {|entry| entry[:value] }  }
-
-    it "contains social media" do
-      should include("Social Media Adresse Skype")
-    end
-
-    it "contains phone number" do
-      should include("Telefonnummer Mutter")
+    it 'contains phone number' do
+      should include('phone_number_vater')
     end
   end
 
-  context "extract phone numbers" do
-    let(:data) { {first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' } }
+  context 'labels' do
+    subject { Import::Person.fields.map { |entry| entry[:value] }  }
+
+    it 'contains social media' do
+      should include('Social Media Adresse Skype')
+    end
+
+    it 'contains phone number' do
+      should include('Telefonnummer Mutter')
+    end
+  end
+
+  context 'extract phone numbers' do
+    let(:data) { { first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' } }
     subject { Import::Person.new(data, []).person }
 
     its(:first_name) { should eq 'foo' }
@@ -45,7 +45,7 @@ describe Import::Person do
     its('social_accounts.first.name') { should eq 'foobar' }
   end
 
-  context "keep existing phone numbers" do
+  context 'keep existing phone numbers' do
     before do
       p = Fabricate(:person, email: 'foo@example.com')
       p.phone_numbers.create!(number: '123', label: 'Privat')
@@ -55,11 +55,11 @@ describe Import::Person do
     end
 
     let(:data) do
-       {first_name: 'foo',
-        email: 'foo@example.com',
-        social_account_skype: 'foo',
-        social_account_msn: 'bar',
-        phone_number_mobil: '123' }
+       { first_name: 'foo',
+         email: 'foo@example.com',
+         social_account_skype: 'foo',
+         social_account_msn: 'bar',
+         phone_number_mobil: '123' }
     end
 
     subject { Import::Person.new(data, []).person }
@@ -80,10 +80,10 @@ describe Import::Person do
   end
 
 
-  context "can assign mass assigned attributes" do
-    let(:data) { "all attributes - blacklist" }
+  context 'can assign mass assigned attributes' do
+    let(:data) { 'all attributes - blacklist' }
     let(:person) { Fabricate(:person) }
-    it "all protected attributes are filtered via blacklist" do
+    it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| Import::Person::BLACKLIST.include?(key.to_sym) }
       public_attributes.size.should eq 13
       expect { Import::Person.new(public_attributes, []).person }.not_to raise_error
@@ -91,18 +91,18 @@ describe Import::Person do
   end
 
 
-  context "tracks emails" do
-    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com','foo@bar.com'] }
+  context 'tracks emails' do
+    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com', 'foo@bar.com'] }
 
     let!(:people) do
       emails_tracker = []
       emails.map do |email|
-        person = Fabricate.build(:person, email: email).attributes.select {|attr| attr =~ /name|email/ }
+        person = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
         Import::Person.new(person, emails_tracker)
       end
     end
 
-    it "validates uniquness of emails in currently imported person set" do
+    it 'validates uniquness of emails in currently imported person set' do
       people.first.should be_valid
       people.second.should be_valid
       people.third.should be_valid
@@ -114,4 +114,3 @@ describe Import::Person do
 
 
 end
-

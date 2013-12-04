@@ -13,12 +13,12 @@ describe EventsController do
   let(:group2) { Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer)) }
   let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: 'AAA', parent: groups(:top_layer)) }
 
-  context "event_course" do
+  context 'event_course' do
 
     before { group2 }
 
-    context "GET new" do
-      it "loads sister groups" do
+    context 'GET new' do
+      it 'loads sister groups' do
         sign_in(people(:top_leader))
         group3
 
@@ -27,7 +27,7 @@ describe EventsController do
         assigns(:groups).should == [group3, group2]
       end
 
-      it "does not load deleted kinds" do
+      it 'does not load deleted kinds' do
         sign_in(people(:top_leader))
 
         get :new, group_id: group.id, event: { type: 'Event::Course' }
@@ -35,18 +35,18 @@ describe EventsController do
       end
     end
 
-    context "POST create" do
+    context 'POST create' do
       let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
       let(:question)  {{ question: 'foo?', choices: '1,2,3,4' }}
 
-      it "creates new event course with dates" do
+      it 'creates new event course with dates' do
         sign_in(people(:top_leader))
 
         post :create, event: {  group_ids: [group.id, group2.id],
                                 name: 'foo',
                                 kind_id: event_kinds(:slk).id,
-                                dates_attributes: [ date ],
-                                questions_attributes: [ question ],
+                                dates_attributes: [date],
+                                questions_attributes: [question],
                                 contact_id: people(:top_leader).id,
                                 type: 'Event::Course' },
                       group_id: group.id
@@ -77,7 +77,7 @@ describe EventsController do
 
   end
 
-  context "destroyed associations" do
+  context 'destroyed associations' do
     let(:course) { Fabricate(:course, groups: [group, group2, group3]) }
 
     before do
@@ -85,30 +85,30 @@ describe EventsController do
       sign_in(people(:top_leader))
     end
 
-    context "kind" do
+    context 'kind' do
       before { course.kind.destroy }
 
-      it "new does not include delted kind" do
+      it 'new does not include delted kind' do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
         assigns(:kinds).should_not include(course.reload.kind)
       end
 
-      it "edit does include deleted kind" do
+      it 'edit does include deleted kind' do
         get :edit, group_id: group.id, id: course.id
         assigns(:kinds).should include(course.reload.kind)
       end
 
     end
 
-    context "groups" do
+    context 'groups' do
       before { group3.destroy }
 
-      it "new does not include delete" do
+      it 'new does not include delete' do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
         assigns(:groups).should_not include(group3)
       end
 
-      it "edit does include delete" do
+      it 'edit does include delete' do
         get :edit, group_id: group.id, id: course.id
         assigns(:groups).should include(group3)
       end

@@ -12,9 +12,9 @@ describe Subscriber::GroupController, js: true do
   let(:list)  { mailing_lists(:leaders) }
   let(:group) { list.group }
 
-  it "selects group and loads roles" do
+  it 'selects group and loads roles' do
     obsolete_node_safe do
-      subscriber_id = groups(:bottom_layer_one).id #preload
+      subscriber_id = groups(:bottom_layer_one).id # preload
 
       sign_in
       visit new_group_mailing_list_group_path(group.id, list.id)
@@ -22,13 +22,13 @@ describe Subscriber::GroupController, js: true do
       find('#roles').should_not have_selector('input[type=checkbox]')
 
       # trigger typeahead
-      fill_in "subscription_subscriber", with: "Bottom"
+      fill_in 'subscription_subscriber', with: 'Bottom'
 
       find('.typeahead.dropdown-menu').should have_content('Top > Bottom One')
       find('.typeahead.dropdown-menu').should have_content('Bottom One > Group 11')
 
       # select entry from typeahead
-      find(".typeahead.dropdown-menu li a", text: 'Top > Bottom One').click
+      find('.typeahead.dropdown-menu li a', text: 'Top > Bottom One').click
       sleep(0.5)
 
       find('#subscription_subscriber_id').value.should == subscriber_id.to_s

@@ -10,11 +10,11 @@ describe Export::CsvPeople do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:simple_headers) { ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "E-Mail",
-                          "Adresse", "PLZ", "Ort", "Land", "Geburtstag", "Rollen" ] }
-  let(:full_headers) { ["Vorname", "Nachname", "Firmenname", "Übername", "Firma", "E-Mail",
-                        "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag",
-                        "Zusätzliche Angaben", "Rollen"] }
+  let(:simple_headers) do ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'E-Mail',
+                           'Adresse', 'PLZ', 'Ort', 'Land', 'Geburtstag', 'Rollen'] end
+  let(:full_headers) do ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'E-Mail',
+                         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+                         'Zusätzliche Angaben', 'Rollen'] end
 
   describe Export::CsvPeople do
 
@@ -24,10 +24,10 @@ describe Export::CsvPeople do
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
 
-    context "export" do
+    context 'export' do
       its(:headers) { should == simple_headers }
 
-      context "first row" do
+      context 'first row' do
 
         subject { csv[0] }
 
@@ -35,10 +35,10 @@ describe Export::CsvPeople do
         its(['Nachname']) { should eq person.last_name }
         its(['E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
-        its(['Rollen']) { should eq "Leader TopGroup" }
+        its(['Rollen']) { should eq 'Leader TopGroup' }
         its(['Geschlecht']) { should be_blank }
 
-        context "roles and phone number" do
+        context 'roles and phone number' do
           before do
             Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
             person.phone_numbers.create(label: 'vater', number: 123)
@@ -46,18 +46,18 @@ describe Export::CsvPeople do
 
           its(['Telefonnummer Vater']) { should eq '123' }
 
-          it "roles should be complete" do
+          it 'roles should be complete' do
             subject['Rollen'].split(', ').should =~ ['Member Group 11', 'Leader TopGroup']
           end
         end
       end
     end
 
-    context "export_full" do
+    context 'export_full' do
       its(:headers) { should == full_headers }
       let(:data) { Export::CsvPeople.export_full(list) }
 
-      context "first row" do
+      context 'first row' do
         before do
           person.update_attribute(:gender, 'm')
           person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
@@ -66,26 +66,26 @@ describe Export::CsvPeople do
 
         subject { csv[0] }
 
-        its(['Rollen']) { should eq "Leader TopGroup" }
+        its(['Rollen']) { should eq 'Leader TopGroup' }
         its(['Telefonnummer Vater']) { should eq '123' }
         its(['Social Media Adresse Skype']) { should eq 'foobar' }
         its(['Geschlecht']) { should eq 'm' }
       end
     end
 
-    context "export_participations_address" do
+    context 'export_participations_address' do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_address(list) }
 
       its(:headers) { should == simple_headers }
 
-      context "first row" do
+      context 'first row' do
         subject { csv[0] }
 
         its(['Vorname']) { should eq person.first_name }
         its(['Rollen']) { should be_blank }
 
-        context "with roles" do
+        context 'with roles' do
           before do
             Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
             Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
@@ -96,24 +96,24 @@ describe Export::CsvPeople do
     end
 
 
-    context "export_participations_full" do
+    context 'export_participations_full' do
       let(:list) { [participation] }
       let(:data) { Export::CsvPeople.export_participations_full(list) }
 
       its(:headers) { should == full_headers }
 
-      context "first row" do
+      context 'first row' do
         subject { csv[0] }
 
         its(['Vorname']) { should eq person.first_name }
         its(['Rollen']) { should be_blank }
 
-        context "with additional information" do
+        context 'with additional information' do
           before { participation.update_attribute(:additional_information, 'foobar') }
           its(['Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)']) { should eq 'foobar' }
         end
 
-        context "with roles" do
+        context 'with roles' do
           before do
             Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
             Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
@@ -121,7 +121,7 @@ describe Export::CsvPeople do
           its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
         end
 
-        context "with answers" do
+        context 'with answers' do
           let(:first_question) { event_questions(:top_ov) }
           let(:first_answer)  { participation.answers.find_by_question_id(first_question.id) }
 
@@ -135,7 +135,7 @@ describe Export::CsvPeople do
             participation.reload
           end
 
-          it "has answer for first question" do
+          it 'has answer for first question' do
             subject["#{first_question.question}"].should eq 'GA'
             subject["#{second_question.question}"].should eq 'ja'
           end

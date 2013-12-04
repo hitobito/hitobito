@@ -9,14 +9,14 @@ require 'spec_helper'
 describe 'people/_attrs.html.haml' do
 
   let(:top_group) { groups(:top_group) }
-  let(:group) { groups(:bottom_layer_one) } 
+  let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
 
   subject do
     view.stub(current_user: current_user)
     controller.stub(current_user: current_user)
-    render 
-    Capybara::Node::Simple.new(@rendered) 
+    render
+    Capybara::Node::Simple.new(@rendered)
   end
 
   before do
@@ -27,41 +27,40 @@ describe 'people/_attrs.html.haml' do
     view.stub(entry: PersonDecorator.decorate(person))
   end
 
-  context "viewed by top leader" do
-    let(:current_user) { people(:top_leader) } 
+  context 'viewed by top leader' do
+    let(:current_user) { people(:top_leader) }
 
-    it "shows roles" do
+    it 'shows roles' do
       should have_content 'Aktive Rollen'
     end
-    it "does show detailed contact info" do
+    it 'does show detailed contact info' do
       should have_content 'private phone'
     end
   end
-  
-  context "viewed by person in same group" do
-    let(:person) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload }
-    let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload } 
 
-    it "does not show roles" do
+  context 'viewed by person in same group' do
+    let(:person) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload }
+    let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person.reload }
+
+    it 'does not show roles' do
       a = Ability.new(current_user)
       a.can?(:show_full, person).should be_false
       should_not have_content 'Aktive Rollen'
     end
 
-    it "does show detailed contact info" do
+    it 'does show detailed contact info' do
       a = Ability.new(current_user)
       a.can?(:show_details, person).should be_true
       should have_content 'private phone'
     end
   end
 
-  context "viewed by person from other group, no layer full" do
-    let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person } 
+  context 'viewed by person from other group, no layer full' do
+    let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person }
 
-    it "does not show detailed contact info" do
+    it 'does not show detailed contact info' do
       person.phone_numbers.first.public?.should be_false
       should_not have_content 'private phone'
     end
   end
 end
-

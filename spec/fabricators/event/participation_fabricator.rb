@@ -24,4 +24,3 @@ Fabricator(:event_participation, class_name: 'Event::Participation') do
   person
   event
 end
-

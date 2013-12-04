@@ -17,8 +17,8 @@ describe CsvImportsController, type: :controller do
   subject { Capybara::Node::Simple.new(response.body) }
 
 
-  describe "GET :new" do
-    it "renders template" do
+  describe 'GET :new' do
+    it 'renders template' do
       get :new, group_id: group.id
       should render_template(:new)
       should have_content 'Personen über CSV importieren'
@@ -26,9 +26,9 @@ describe CsvImportsController, type: :controller do
   end
 
 
-  describe "POST :define_mapping" do
-    it "renders template and flash" do
-      file = Rack::Test::UploadedFile.new(path(:utf8), "text/csv")
+  describe 'POST :define_mapping' do
+    it 'renders template and flash' do
+      file = Rack::Test::UploadedFile.new(path(:utf8), 'text/csv')
       post :define_mapping, group_id: group.id, csv_import: { file: file }
       should render_template(:define_mapping)
       should have_content '1 Datensatz erfolgreich gelesen.'
@@ -38,26 +38,26 @@ describe CsvImportsController, type: :controller do
     end
   end
 
-  describe "POST :create imports single person" do
+  describe 'POST :create imports single person' do
     let(:data) { File.read(path(:list)) }
-    let(:role_type) { "Group::TopGroup::Leader" }
+    let(:role_type) { 'Group::TopGroup::Leader' }
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true))  }
 
-    it "imports single person only" do
-      expect { post :create, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.to change(Person,:count).by(1)
+    it 'imports single person only' do
+      expect { post :create, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.to change(Person, :count).by(1)
       should redirect_to group_people_path(group, name: 'Leader', role_types: role_type)
     end
   end
 
 
 
-  describe "POST :preview renders preview" do
+  describe 'POST :preview renders preview' do
     let(:data) { File.read(path(:list)) }
-    let(:role_type) { "Group::TopGroup::Leader" }
+    let(:role_type) { 'Group::TopGroup::Leader' }
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true)).merge(role: role_type)  }
 
-    it "imports single person only" do
-      expect { post :preview, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.not_to change(Person,:count).by(1)
+    it 'imports single person only' do
+      expect { post :preview, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.not_to change(Person, :count).by(1)
       should have_css 'table'
       should have_button 'Personen jetzt importieren'
       should have_button 'Zurück'

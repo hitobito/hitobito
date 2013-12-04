@@ -23,7 +23,7 @@ describe Event::ApplicationsController do
     participation.application
   end
 
-  context "group leader" do
+  context 'group leader' do
     before { sign_in(group_leader) }
 
     describe 'PUT approve' do
@@ -31,11 +31,11 @@ describe Event::ApplicationsController do
 
       it { should redirect_to(group_event_participation_path(group, event, participation)) }
 
-      it "sets flash" do
+      it 'sets flash' do
         flash[:notice].should =~ /freigegeben/
       end
 
-      it "approves application" do
+      it 'approves application' do
         application.reload.should be_approved
         application.reload.should_not be_rejected
       end
@@ -46,11 +46,11 @@ describe Event::ApplicationsController do
 
       it { should redirect_to(group_event_participation_path(group, event, participation)) }
 
-      it "sets flash" do
+      it 'sets flash' do
         flash[:notice].should =~ /abgelehnt/
       end
 
-      it "rejects application" do
+      it 'rejects application' do
         application.reload.should be_rejected
         application.reload.should_not be_approved
       end
@@ -58,7 +58,7 @@ describe Event::ApplicationsController do
   end
 
 
-  context "as top leader" do
+  context 'as top leader' do
     let(:user) { people(:top_leader) }
 
     before { sign_in(user) }

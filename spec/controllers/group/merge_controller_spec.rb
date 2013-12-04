@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Group::MergeController do
 
-  context "GET :select" do
+  context 'GET :select' do
 
     it "should redirect to group show if it's not possible to merge" do
       group = groups(:top_layer) # top_layer group has no sister groups
@@ -24,8 +24,8 @@ describe Group::MergeController do
 
   end
 
-  context "POST :perform" do
-    it "should redirect to form if params are missing" do
+  context 'POST :perform' do
+    it 'should redirect to form if params are missing' do
       group = groups(:bottom_layer_one)
 
       sign_in(people(:top_leader))

@@ -7,13 +7,13 @@
 
 require 'spec_helper'
 
-describe "event/participations/_form.html.haml" do
+describe 'event/participations/_form.html.haml' do
 
-  let(:participant) { people(:top_leader )}
+  let(:participant) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: participant, event: event) }
   let(:user) { participant }
   let(:event) { events(:top_event) }
-  let(:group) { event.groups.first}
+  let(:group) { event.groups.first }
   let(:question) { event_questions(:top_ov) }
   let(:dom) { Capybara::Node::Simple.new(rendered) }
   let(:answer_text) { nil }
@@ -30,20 +30,20 @@ describe "event/participations/_form.html.haml" do
     view.stub(path_args: [group, event, decorated])
     view.stub(entry: decorated)
     view.stub(model_class: Event::Participation)
-    view.stub(:current_user) {user}
+    view.stub(:current_user) { user }
 
     controller.stub(current_user: user)
     assign(:event, event)
     assign(:group, group)
   end
 
-  context "checkboxes" do
+  context 'checkboxes' do
     let(:ga) { dom.find_field('GA') }
     let(:halbtax) { dom.find_field('Halbtax') }
 
-    context "unchecked" do
+    context 'unchecked' do
 
-      shared_examples "unchecked_multichoice_checkbox" do
+      shared_examples 'unchecked_multichoice_checkbox' do
         before { render }
 
         it { should_not be_checked }
@@ -52,23 +52,23 @@ describe "event/participations/_form.html.haml" do
         its([:value]) { should eq value }
       end
 
-      describe "Choice GA" do
+      describe 'Choice GA' do
         subject { ga }
-        let(:value) { "1" }
+        let(:value) { '1' }
 
-        it_behaves_like "unchecked_multichoice_checkbox"
+        it_behaves_like 'unchecked_multichoice_checkbox'
       end
 
-      describe "Choice Halbtax" do
+      describe 'Choice Halbtax' do
         subject { halbtax }
-        let(:value) { "2" }
+        let(:value) { '2' }
 
-        it_behaves_like "unchecked_multichoice_checkbox"
+        it_behaves_like 'unchecked_multichoice_checkbox'
       end
     end
 
-    describe "Halbtax checked" do
-      let(:answer_text) { "Halbtax" }
+    describe 'Halbtax checked' do
+      let(:answer_text) { 'Halbtax' }
       before { render }
 
       it { ga.should_not be_checked }
@@ -76,8 +76,8 @@ describe "event/participations/_form.html.haml" do
     end
 
 
-    describe "GA, Halbtax checked" do
-      let(:answer_text) { "GA, Halbtax" }
+    describe 'GA, Halbtax checked' do
+      let(:answer_text) { 'GA, Halbtax' }
       before { render }
 
       it { ga.should be_checked }

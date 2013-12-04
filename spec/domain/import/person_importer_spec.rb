@@ -10,69 +10,69 @@ describe Import::PersonImporter do
   include CsvImportMacros
 
   let(:group) { groups(:top_group) }
-  let(:role_type) { "Group::TopGroup::Leader" }
+  let(:role_type) { 'Group::TopGroup::Leader' }
   let(:importer)  { Import::PersonImporter.new(group: group, role_type: role_type, data: data)  }
   subject { importer }
 
-  context "minimal" do
-    let(:data) { [ {first_name: 'foo'} ] }
+  context 'minimal' do
+    let(:data) { [{ first_name: 'foo' }] }
 
-    it "creates person" do
-      expect { subject.import }.to change(Person,:count).by(1)
+    it 'creates person' do
+      expect { subject.import }.to change(Person, :count).by(1)
     end
 
-    it "creates role" do
-      expect { subject.import }.to change(Role,:count).by(1)
-    end
-  end
-
-  context "creates associations" do
-    let(:data) { [ {first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' } ] }
-
-    it "creates person" do
-      expect { subject.import }.to change(SocialAccount,:count).by(1)
-    end
-
-    it "creates role" do
-      expect { subject.import }.to change(PhoneNumber,:count).by(1)
+    it 'creates role' do
+      expect { subject.import }.to change(Role, :count).by(1)
     end
   end
 
-  context "records successful and failed imports" do
-    let(:data) { [ {first_name: 'foobar', email: 'foo@bar.net' },  {first_name: 'foobar', zip_code: 'asdf' }] }
+  context 'creates associations' do
+    let(:data) { [{ first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' }] }
 
-    it "creates only first record" do
-      expect { subject.import }.to change(Person,:count).by(1)
+    it 'creates person' do
+      expect { subject.import }.to change(SocialAccount, :count).by(1)
     end
 
-    context "result" do
+    it 'creates role' do
+      expect { subject.import }.to change(PhoneNumber, :count).by(1)
+    end
+  end
+
+  context 'records successful and failed imports' do
+    let(:data) { [{ first_name: 'foobar', email: 'foo@bar.net' },  { first_name: 'foobar', zip_code: 'asdf' }] }
+
+    it 'creates only first record' do
+      expect { subject.import }.to change(Person, :count).by(1)
+    end
+
+    context 'result' do
       before { importer.import }
       its(:new_count)  { should eq 1 }
       its(:failure_count)  { should eq 1 }
     end
 
-    context "base error" do
-      let(:data) { [ {} ] }
+    context 'base error' do
+      let(:data) { [{}] }
       before { importer.import }
-      its('errors.first') { should eq "Zeile 1: Bitte geben Sie einen Namen ein" }
+      its('errors.first') { should eq 'Zeile 1: Bitte geben Sie einen Namen ein' }
     end
 
-    context "zip_code validation" do
+    context 'zip_code validation' do
       before { importer.import }
-      its('errors.first') { should eq "Zeile 2: PLZ ist keine Zahl" }
+      its('errors.first') { should eq 'Zeile 2: PLZ ist keine Zahl' }
     end
   end
 
-  context "duplicate emails" do
-    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com','foo@bar.com'] }
-    let(:data) { emails.map { |email| Fabricate.build(:person, email: email).attributes.select {|attr| attr =~ /name|email/ } } }
+  context 'duplicate emails' do
+    let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com', 'foo@bar.com'] }
+    let(:data) { emails.map { |email| Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ } } }
     before { importer.import }
     its(:errors) { should have(1).item }
-    its('errors.last') { should eq "Zeile 5: E-Mail ist bereits vergeben" }
+    its('errors.last') { should eq 'Zeile 5: E-Mail ist bereits vergeben' }
   end
 
-  context "doublettes" do
-    let(:attrs) { {first_name: 'foobar', email: 'foo@bar.net' } }
+  context 'doublettes' do
+    let(:attrs) { { first_name: 'foobar', email: 'foo@bar.net' } }
     let(:data) { [attrs.merge(email: 'bar@foo.net')] }
     let(:person) { @person.reload }
 
@@ -80,17 +80,17 @@ describe Import::PersonImporter do
     subject { person }
 
 
-    context "adds role, does not update email" do
+    context 'adds role, does not update email' do
       before { importer.import }
       its(:email) { should eq 'foo@bar.net' }
       its('roles.size') { should eq 1 }
-      it "updates double and success count" do
+      it 'updates double and success count' do
         importer.doublette_count.should eq 1
         importer.new_count.should eq 0
       end
     end
 
-    context "does not duplicate role" do
+    context 'does not duplicate role' do
       before do
         role = person.roles.new
         role.group = group
@@ -103,16 +103,16 @@ describe Import::PersonImporter do
       its('roles.size') { should eq 1 }
     end
 
-    context "marks multiple" do
+    context 'marks multiple' do
       before { Fabricate(:person, attrs.merge(email: 'asdf@asdf.net')); importer.import }
       subject { importer }
       its(:errors) { should eq ['Zeile 1: 2 Treffer in Duplikatserkennung.'] }
     end
 
-    context "person loaded multiple times via doublette finder" do
+    context 'person loaded multiple times via doublette finder' do
       let(:attrs) { { email: 'foo@bar.net', nickname: '', last_name: '' } }
-      let(:data) { [{email: 'foo@bar.net', nickname: 'nickname', social_account_msn: 'msn' },
-                    {email: 'foo@bar.net', last_name: 'last_name', social_account_skype: 'skype' }] }
+      let(:data) do [{ email: 'foo@bar.net', nickname: 'nickname', social_account_msn: 'msn' },
+                     { email: 'foo@bar.net', last_name: 'last_name', social_account_skype: 'skype' }] end
 
       before { importer.import }
       its('roles.size') { should eq 1 }
@@ -122,22 +122,22 @@ describe Import::PersonImporter do
     end
   end
 
-  context "list file" do
+  context 'list file' do
     let(:parser) { Import::CsvParser.new(File.read(path(:list))) }
     let(:mapping) { headers_mapping(parser) }
     let(:data) { parser.map_data(mapping) }
     before { parser.parse }
 
-    context "importer reports errors" do
+    context 'importer reports errors' do
       before { importer.import }
       subject { importer }
 
-      its(:errors) { should include "Zeile 1: Firma muss ausgefüllt werden" }
-      its(:errors) { should include "Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl" }
-      its(:errors) { should include "Zeile 4: PLZ ist keine Zahl" }
+      its(:errors) { should include 'Zeile 1: Firma muss ausgefüllt werden' }
+      its(:errors) { should include 'Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl' }
+      its(:errors) { should include 'Zeile 4: PLZ ist keine Zahl' }
     end
 
-    context "imported person" do
+    context 'imported person' do
       before { importer.import }
       subject { Person.last }
 
@@ -153,7 +153,7 @@ describe Import::PersonImporter do
       its(:gender) { should eq 'm' }
       its(:additional_information) { should be_present }
 
-      context "phone numbers" do
+      context 'phone numbers' do
         subject { Person.last.phone_numbers }
         its(:size) { should eq 4 }
         its('first.label') { should eq 'Privat' }
@@ -169,7 +169,7 @@ describe Import::PersonImporter do
         its('fourth.number') { should eq '908.647.4334' }
       end
 
-      context "social accounts" do
+      context 'social accounts' do
         subject { Person.last.social_accounts.order(:label) }
         its(:size) { should eq 3 }
         its('first.label') { should eq 'MSN' }
@@ -186,6 +186,3 @@ describe Import::PersonImporter do
 
 
 end
-
-
-

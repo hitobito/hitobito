@@ -7,17 +7,17 @@
 
 require 'spec_helper_request'
 
-describe "Person Autocomplete" do
+describe 'Person Autocomplete' do
 
   subject { page }
   let(:group) { groups(:top_group) }
 
-  it "knows about visibility of dropdown menu", js: true do
+  it 'knows about visibility of dropdown menu', js: true do
     obsolete_node_safe do
       sign_in
       visit root_path
-      page.should have_content("TopGroup")
-      page.should have_content("Personen")
+      page.should have_content('TopGroup')
+      page.should have_content('Personen')
       click_link 'Personen'
       should have_content ' Person hinzufügen'
       find('.dropdown-menu').should_not be_visible
@@ -30,29 +30,29 @@ describe "Person Autocomplete" do
     end
   end
 
-  context "highlights content in typeahead", js: true do
-    it "for regular queries" do
+  context 'highlights content in typeahead', js: true do
+    it 'for regular queries' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
-        page.should have_content("Leader erstellen")
+        page.should have_content('Leader erstellen')
 
-        fill_in "Person", with: "gibberish"
+        fill_in 'Person', with: 'gibberish'
         page.should_not have_selector('.typeahead.dropdown-menu')
 
-        fill_in "Person", with: "Top"
+        fill_in 'Person', with: 'Top'
         find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
       end
     end
 
-    it "for two word queries" do
+    it 'for two word queries' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
-        fill_in "Person", with: "Top Super"
+        fill_in 'Person', with: 'Top Super'
         sleep(0.5)
         find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
@@ -60,12 +60,12 @@ describe "Person Autocomplete" do
       end
     end
 
-    it "for queries with weird spaces" do
+    it 'for queries with weird spaces' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
-        fill_in "Person", with: "Top  Super "
+        fill_in 'Person', with: 'Top  Super '
         sleep(0.5)
         find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
@@ -73,13 +73,13 @@ describe "Person Autocomplete" do
       end
     end
 
-    it "saves content from typeahead" do
+    it 'saves content from typeahead' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         # search name only
-        fill_in "Person", with: "Top"
+        fill_in 'Person', with: 'Top'
         find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
         find('.typeahead.dropdown-menu li').click
 

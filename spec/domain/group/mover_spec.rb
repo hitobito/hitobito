@@ -10,40 +10,40 @@ describe Group::Mover do
 
   let(:move) { Group::Mover.new(group) }
 
-  describe "#candidates" do
+  describe '#candidates' do
     subject { Group::Mover.new(group) }
 
-    context "top_group" do
+    context 'top_group' do
       let(:group) { groups(:top_group) }
       its(:candidates) { should be_blank }
     end
 
-    context "bottom_layer_one" do
+    context 'bottom_layer_one' do
       let(:group) { groups(:bottom_layer_one) }
       its(:candidates) { should be_blank }
     end
 
-    context "bottom_layer_two" do
+    context 'bottom_layer_two' do
       let(:group) { groups(:bottom_layer_two) }
       its(:candidates) { should be_blank }
     end
 
-    context "bottom_group_one_one" do
+    context 'bottom_group_one_one' do
       let(:group) { groups(:bottom_group_one_one) }
       its(:candidates) { should =~ groups_for(:bottom_layer_two, :bottom_group_one_two) }
     end
 
-    context "bottom_group_one_two" do
+    context 'bottom_group_one_two' do
       let(:group) { groups(:bottom_group_one_two) }
       its(:candidates) { should =~ groups_for(:bottom_layer_two, :bottom_group_one_one) }
     end
 
-    context "bottom_group_two_one" do
+    context 'bottom_group_two_one' do
       let(:group) { groups(:bottom_group_two_one) }
       its(:candidates) { should =~ groups_for(:bottom_layer_one) }
     end
 
-    context "bottom_group_one_one_one" do
+    context 'bottom_group_one_one_one' do
       let(:group) { groups(:bottom_group_one_one_one) }
       its(:candidates) { should =~ groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
     end
@@ -53,22 +53,22 @@ describe Group::Mover do
     end
   end
 
-  context "#perform" do
+  context '#perform' do
     let(:group) { groups(:bottom_group_one_one) }
     let(:target) { groups(:bottom_layer_two) }
 
-    context "moved group" do
+    context 'moved group' do
       subject { group.reload }
       before { move.perform(target); }
 
       its(:parent) { should eq target }
 
-      it "nested set should still be valid" do
+      it 'nested set should still be valid' do
         Group.should be_valid
       end
     end
 
-    context "association count" do
+    context 'association count' do
       before do
         event = Fabricate(:event, groups: [group])
         Fabricate(:event_participation, event: event)
@@ -77,11 +77,10 @@ describe Group::Mover do
 
       [Group, Role, Person, Event, Event::Participation].each do |model|
         it "does not change #{model} count" do
-          expect { move.perform(target) }.not_to change(model,:count)
+          expect { move.perform(target) }.not_to change(model, :count)
         end
       end
     end
   end
 
 end
-

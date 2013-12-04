@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require Rails.root.join("spec/support/group/top_group.rb")
-require Rails.root.join("spec/support/group/bottom_layer.rb")
+require Rails.root.join('spec/support/group/top_group.rb')
+require Rails.root.join('spec/support/group/bottom_layer.rb')
 
 class Group::TopLayer < Group
 
@@ -15,6 +15,5 @@ class Group::TopLayer < Group
   self.event_types = [Event, Event::Course]
 
   children Group::TopGroup, Group::BottomLayer
-  
-end
 
+end

@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_jubla
+  specs:
+    hitobito_jubla (1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -465,6 +470,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_jubla!
   jquery-rails (= 2.1.3)
   kaminari
   launchy

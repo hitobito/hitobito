@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe FilterNavigation::People, type: :model do
-    
+
   let(:template) do
     double('template').tap do |t|
       t.stub(can?: true)
@@ -22,44 +22,44 @@ describe FilterNavigation::People, type: :model do
       t.stub(content_tag: '<content>')
     end
   end
-  
+
   let(:group) { groups(:top_layer) }
-  
-  let(:role_types) { [Group::TopGroup::Leader.sti_name, 
-                      Group::BottomLayer::Leader.sti_name] }
-                        
-  context "without params" do
-    subject { FilterNavigation::People.new(template, group, nil, nil, nil)}
-    
+
+  let(:role_types) do [Group::TopGroup::Leader.sti_name,
+                       Group::BottomLayer::Leader.sti_name] end
+
+  context 'without params' do
+    subject { FilterNavigation::People.new(template, group, nil, nil, nil) }
+
     its(:main_items)      { should have(2).items }
     its(:active_label)    { should == 'Mitglieder' }
     its('dropdown.active') { should be_false }
     its('dropdown.label')  { should == 'Weitere Ansichten' }
     its('dropdown.items')  { should have(1).item }
-    
-    context "with custom filters" do
-      
+
+    context 'with custom filters' do
+
       before do
-        group.people_filters.create!(name: 'Leaders', 
+        group.people_filters.create!(name: 'Leaders',
                                      role_types: role_types)
       end
-          
+
       its('dropdown.active') { should be_false }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
       its('dropdown.items')  { should have(3).items }
-      
+
     end
   end
-  
-  context "with selected filter" do
-    
+
+  context 'with selected filter' do
+
     before do
-      group.people_filters.create!(name: 'Leaders', 
+      group.people_filters.create!(name: 'Leaders',
                                    role_types: role_types)
     end
-      
-    subject { FilterNavigation::People.new(template, group, 'Leaders', role_types, nil)}
-    
+
+    subject { FilterNavigation::People.new(template, group, 'Leaders', role_types, nil) }
+
     its(:main_items)      { should have(2).items }
     its(:active_label)    { should == nil }
     its('dropdown.active') { should be_true }

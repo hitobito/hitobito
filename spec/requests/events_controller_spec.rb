@@ -16,13 +16,13 @@ describe EventsController, js: true do
   end
 
 
-  it "may set and remove contact from event" do
+  it 'may set and remove contact from event' do
     obsolete_node_safe do
       sign_in
       visit edit_group_event_path(event.group_ids.first, event.id)
 
       # set contact
-      fill_in "Kontaktperson", with: "Top"
+      fill_in 'Kontaktperson', with: 'Top'
       find('.typeahead.dropdown-menu').should have_content 'Top Leader'
       find('.typeahead.dropdown-menu').click
       click_button 'Speichern'
@@ -34,7 +34,7 @@ describe EventsController, js: true do
 
       # remove contact
       find('#event_contact').value.should == 'Top Leader'
-      fill_in "Kontaktperson", with: ""
+      fill_in 'Kontaktperson', with: ''
       click_button 'Speichern'
 
       # show event again

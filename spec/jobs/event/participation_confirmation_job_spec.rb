@@ -36,11 +36,11 @@ describe Event::ParticipationConfirmationJob do
   subject { Event::ParticipationConfirmationJob.new(participation) }
 
 
-  context "without approvers" do
+  context 'without approvers' do
     let(:participant) { people(:top_leader) }
 
-    context "without requiring approval" do
-      it "sends confirmation email" do
+    context 'without requiring approval' do
+      it 'sends confirmation email' do
         course.update_column(:requires_approval, false)
         subject.perform
 
@@ -49,8 +49,8 @@ describe Event::ParticipationConfirmationJob do
       end
     end
 
-    context "with event requiring approval" do
-      it "sends confirmation email" do
+    context 'with event requiring approval' do
+      it 'sends confirmation email' do
         course.update_column(:requires_approval, true)
         subject.perform
 
@@ -60,11 +60,11 @@ describe Event::ParticipationConfirmationJob do
     end
   end
 
-  context "with approvers" do
+  context 'with approvers' do
     let(:participant) { person }
 
-    context "without requiring approval" do
-      it "does not send approval if not required" do
+    context 'without requiring approval' do
+      it 'does not send approval if not required' do
         course.update_column(:requires_approval, false)
         subject.perform
 
@@ -73,8 +73,8 @@ describe Event::ParticipationConfirmationJob do
       end
     end
 
-    context "with event requiring approval" do
-      it "sends confirmation and approvals to approvers" do
+    context 'with event requiring approval' do
+      it 'sends confirmation and approvals to approvers' do
         course.update_column(:requires_approval, true)
         subject.perform
 
@@ -86,9 +86,9 @@ describe Event::ParticipationConfirmationJob do
         first_email.subject.should == 'Bestätigung der Anmeldung'
       end
 
-      context "with affiliate role in different group with own approvers" do
-        it "only sends to group approvers where role is non-affiliate" do
-          Fabricate(Group::BottomLayer::Leader.name.to_sym,group: groups(:bottom_layer_two))
+      context 'with affiliate role in different group with own approvers' do
+        it 'only sends to group approvers where role is non-affiliate' do
+          Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
           Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), deleted_at: 1.year.ago)
           Fabricate(Role::External.name.to_sym, person: person, group: groups(:bottom_group_two_one))
 

@@ -9,39 +9,41 @@ require 'spec_helper'
 describe GroupDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
-  let(:model) { double("model")}
+  let(:model) { double('model') }
   let(:decorator) { GroupDecorator.new(model) }
-  let(:context) { double("context")}
+  let(:context) { double('context') }
   subject { decorator }
 
-  describe "possible roles" do
+  describe 'possible roles' do
     let(:model) { groups(:top_group) }
-    its(:possible_roles) { should eq [{:sti_name=>"Group::TopGroup::Leader", :human=>"Leader"},
-                                      {:sti_name=>"Group::TopGroup::Secretary", :human=>"Secretary"},
-                                      {:sti_name=>"Group::TopGroup::Member", :human=>"Member"},
-                                      {:sti_name=>"Role::External", :human=>"External"}]}
+    its(:possible_roles) do 
+      should eq [{ :sti_name => 'Group::TopGroup::Leader', :human => 'Leader' },
+                 { :sti_name => 'Group::TopGroup::Secretary', :human => 'Secretary' },
+                 { :sti_name => 'Group::TopGroup::Member', :human => 'Member' },
+                 { :sti_name => 'Role::External', :human => 'External' }]
+    end
   end
 
-  describe "selecting attributes" do
+  describe 'selecting attributes' do
     before do
       subject.stub(h: context)
-      model.stub_chain(:class, :attr_used?) {|val| val }
+      model.stub_chain(:class, :attr_used?) { |val| val }
     end
 
-    it "#used_attributes selects via .attr_used?" do
+    it '#used_attributes selects via .attr_used?' do
       model.class.should_receive(:attr_used?).twice
-      subject.used_attributes(:foo,:bar).should eq %w(foo bar)
+      subject.used_attributes(:foo, :bar).should eq %w(foo bar)
     end
 
-    it "#modifiable_attributes we can :modify_superior" do
+    it '#modifiable_attributes we can :modify_superior' do
       context.should_receive(:can?).with(:modify_superior, subject).and_return(true)
-      subject.modifiable_attributes(:foo,:bar).should eq %w(foo bar)
+      subject.modifiable_attributes(:foo, :bar).should eq %w(foo bar)
     end
 
-    it "#modifiable_attributes filters attributes if we cannot :modify_superior" do
+    it '#modifiable_attributes filters attributes if we cannot :modify_superior' do
       model.class.stub(superior_attributes: %w(foo))
       context.should_receive(:can?).with(:modify_superior, subject).and_return(false)
-      subject.modifiable_attributes(:foo,:bar).should eq %w(bar)
+      subject.modifiable_attributes(:foo, :bar).should eq %w(bar)
     end
   end
 

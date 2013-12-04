@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe "qualifications/_form.html.haml" do
+describe 'qualifications/_form.html.haml' do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
@@ -18,11 +18,10 @@ describe "qualifications/_form.html.haml" do
     view.stub(parents: [group, person], entry: qualification, path_args: path_args)
   end
   subject { Capybara::Node::Simple.new(rendered) }
-  it "translates form fields" do
+  it 'translates form fields' do
     render
-    should have_content "Qualifikation"
-    should have_content "Seit"
+    should have_content 'Qualifikation'
+    should have_content 'Seit'
   end
-  
-end
 
+end

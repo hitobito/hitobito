@@ -35,7 +35,7 @@ describe Event::QualificationsController do
     participant_2
   end
 
-  it "qualification requests are mutually undoable", js: true do
+  it 'qualification requests are mutually undoable', js: true do
     obsolete_node_safe do
       sign_in
       visit group_event_qualifications_path(group.id, event.id)

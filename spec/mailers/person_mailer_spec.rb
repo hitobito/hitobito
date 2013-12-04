@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require "spec_helper"
+require 'spec_helper'
 
 describe Event::ParticipationMailer do
 
@@ -23,6 +23,6 @@ describe Event::ParticipationMailer do
   its(:to)       { should == [recipient.email] }
   its(:reply_to) { should == [sender.email] }
   its(:subject)  { should == "Willkommen bei #{Settings.application.name}" }
-  its(:body)     { should =~ /Hallo Bottom<br\/>/}
+  its(:body)     { should =~ /Hallo Bottom<br\/>/ }
 
 end

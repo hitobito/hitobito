@@ -39,33 +39,33 @@ describe Event::ParticipationsController do
 
   before do
     user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl),
-                                    start_at: course.dates.first.start_at)
+                                                     start_at: course.dates.first.start_at)
     sign_in(user)
     other_course
   end
 
 
-  context "GET show" do
+  context 'GET show' do
 
     before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
 
-    it "has two answers" do
+    it 'has two answers' do
       assigns(:answers).should have(2).items
     end
 
-    it "has application" do
+    it 'has application' do
       assigns(:application).should be_present
     end
   end
 
 
-  context "GET new" do
+  context 'GET new' do
     before { get :new, group_id: group.id, event_id: event.id }
 
-    context "for course with priorization" do
+    context 'for course with priorization' do
       let(:event) { course }
 
-      it "builds participation with answers" do
+      it 'builds participation with answers' do
         participation = assigns(:participation)
         participation.application.should be_present
         participation.application.priority_1.should == course
@@ -76,7 +76,7 @@ describe Event::ParticipationsController do
       end
     end
 
-    context "for event without application" do
+    context 'for event without application' do
       let(:event) do
         event = Fabricate(:event, groups: [group])
         event.questions << Fabricate(:event_question, event: event)
@@ -85,7 +85,7 @@ describe Event::ParticipationsController do
         event
       end
 
-      it "builds participation with answers" do
+      it 'builds participation with answers' do
         participation = assigns(:participation)
         participation.application.should be_blank
         participation.answers.should have(2).items
@@ -96,32 +96,32 @@ describe Event::ParticipationsController do
 
   end
 
-  context "GET index" do
+  context 'GET index' do
     before { @leader, @participant = *create(Event::Role::Leader, course.participant_type) }
 
-    it "lists particpant and leader group by default" do
+    it 'lists particpant and leader group by default' do
       get :index, group_id: group.id, event_id: course.id
       assigns(:participations).should eq [@leader, @participant]
     end
 
-    it "lists only leader_group" do
+    it 'lists only leader_group' do
       get :index, group_id: group.id, event_id: course.id, filter: :teamers
       assigns(:participations).should eq [@leader]
     end
 
-    it "lists only participant_group" do
+    it 'lists only participant_group' do
       get :index, group_id: group.id, event_id: course.id, filter: :participants
       assigns(:participations).should eq [@participant]
     end
 
-    it "generates pdf labels" do
+    it 'generates pdf labels' do
       get :index, group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id, format: :pdf
 
       @response.content_type.should == 'application/pdf'
       people(:top_leader).reload.last_label_format.should == label_formats(:standard)
     end
 
-    it "exports csv files" do
+    it 'exports csv files' do
       get :index, group_id: group, event_id: course.id, format: :csv
 
       @response.content_type.should == 'text/csv'
@@ -139,9 +139,9 @@ describe Event::ParticipationsController do
   end
 
 
-  context "POST create" do
+  context 'POST create' do
 
-    context "for current user" do
+    context 'for current user' do
       let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
       let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
       let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
@@ -155,11 +155,11 @@ describe Event::ParticipationsController do
         person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl))
       end
 
-      it "creates confirmation job" do
+      it 'creates confirmation job' do
         expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
       end
 
-      it "creates participant role for non course events" do
+      it 'creates participant role for non course events' do
         post :create, group_id: group.id, event_id: Fabricate(:event).id
         participation = assigns(:participation)
         participation.roles.should have(1).item
@@ -169,11 +169,11 @@ describe Event::ParticipationsController do
 
     end
 
-    context "other user" do
+    context 'other user' do
       let(:bottom_member) { people(:bottom_member) }
       let(:participation) { assigns(:participation) }
 
-      it "top leader can create participation for bottom member" do
+      it 'top leader can create participation for bottom member' do
         post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
         participation.should be_present
         participation.persisted?.should be_true
@@ -182,7 +182,7 @@ describe Event::ParticipationsController do
         should redirect_to group_event_participation_path(group, course, participation)
       end
 
-      it "bottom member can not create participation for top leader" do
+      it 'bottom member can not create participation for top leader' do
         sign_in(bottom_member)
         expect do
           post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: user.id }
@@ -191,17 +191,17 @@ describe Event::ParticipationsController do
     end
   end
 
-  context "preconditions" do
+  context 'preconditions' do
     before { user.qualifications.first.destroy }
 
-    {new: :get, create: :post}.each do |action, method|
+    { new: :get, create: :post }.each do |action, method|
       before { send(method, action, group_id: group.id, event_id: course.id) }
 
       context "#{method.upcase} #{action}"  do
-        it "redirects to event#show" do
+        it 'redirects to event#show' do
           should redirect_to group_event_path(group, course)
         end
-        it "sets flash message" do
+        it 'sets flash message' do
           flash[:alert].last.should =~ /Folgende Qualifikationen fehlen: Group Lead/
         end
       end
@@ -210,7 +210,7 @@ describe Event::ParticipationsController do
   end
 
 
-  context "multiple choice answers" do
+  context 'multiple choice answers' do
     let(:event) { events(:top_event) }
     let(:question) { event_questions(:top_ov) }
 
@@ -219,29 +219,29 @@ describe Event::ParticipationsController do
       event.questions << question
     end
 
-    context "POST #create" do
-      let(:answers_attributes) { {"0"=>{"question_id"=>question.id, "answer"=> ["1", "2"] } } }
+    context 'POST #create' do
+      let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['1', '2'] } } }
 
-      it "handles multiple choice answers" do
+      it 'handles multiple choice answers' do
         post :create, group_id: event.groups.first.id, event_id: event.id, event_participation: { answers_attributes: answers_attributes }
-        assigns(:participation).answers.first.answer.should eq "GA, Halbtax"
+        assigns(:participation).answers.first.answer.should eq 'GA, Halbtax'
       end
     end
 
-    context "PUT #update" do
+    context 'PUT #update' do
       let!(:participation) { Fabricate(:event_participation, event: event, person: user) }
-      let(:values) { ["0"] }
+      let(:values) { ['0'] }
       let(:answer) { participation.answers.build }
-      let(:answers_attributes) { {"0"=>{"question_id"=>question.id, "answer"=> ["0"], id: answer.id } } }
+      let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['0'], id: answer.id } } }
 
       before do
-        answer.answer = "GA, Halbtax"
+        answer.answer = 'GA, Halbtax'
         answer.question = question
         answer.save
       end
 
-      it "handles resetting of multiple choice answers" do
-        participation.answers.first.answer.should eq "GA, Halbtax"
+      it 'handles resetting of multiple choice answers' do
+        participation.answers.first.answer.should eq 'GA, Halbtax'
         put :update, group_id: event.groups.first.id, event_id: event.id, id: participation.id, event_participation: { answers_attributes: answers_attributes }
         participation.reload.answers.first.answer.should be_nil
       end

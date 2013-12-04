@@ -23,6 +23,6 @@ Fabricator(:role) do
   person
 end
 
-Role.all_types.collect {|r| r.name.to_sym }.each do |t|
+Role.all_types.collect { |r| r.name.to_sym }.each do |t|
   Fabricator(t, from: :role, class_name: t)
 end

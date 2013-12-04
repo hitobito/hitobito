@@ -13,44 +13,44 @@ describe Event::PreconditionChecker do
   let(:course_start_at) { course.dates.first.start_at }
   let(:preconditions) { course.kind.preconditions }
 
-  subject { Event::PreconditionChecker.new(course, person)}
+  subject { Event::PreconditionChecker.new(course, person) }
   before { preconditions.clear }
 
-  describe "defaults" do
+  describe 'defaults' do
     its(:course_start_at) { should be_present }
     its(:course_minimum_age) { should be_blank }
     its(:valid?) { should be_true }
   end
 
-  describe "minimum age person" do
+  describe 'minimum age person' do
     before { course.kind.minimum_age = 16 }
-    let(:too_young_error) { "Altersgrenze von 16 unterschritten." }
+    let(:too_young_error) { 'Altersgrenze von 16 unterschritten.' }
 
-    context "has no birthday" do
+    context 'has no birthday' do
       its(:valid?) { should be_false }
-      its("errors_text.last") { should eq too_young_error }
+      its('errors_text.last') { should eq too_young_error }
     end
 
-    context "is younger than 16" do
+    context 'is younger than 16' do
       before { person.birthday = (course_start_at.beginning_of_year - 15.years) }
       its(:valid?) { should be_false }
-      its("errors_text.last") { should eq too_young_error }
+      its('errors_text.last') { should eq too_young_error }
     end
 
-    context "is 16 years during course" do
+    context 'is 16 years during course' do
       before { person.birthday = course_start_at - 16.years }
       its(:valid?) { should be_true }
-      its("errors") { should be_empty }
+      its('errors') { should be_empty }
     end
 
-    context "is 16 years end of year" do
+    context 'is 16 years end of year' do
       before { person.birthday = course_start_at.end_of_year - 16.years }
       its(:valid?) { should be_true }
-      its("errors") { should be_empty }
+      its('errors') { should be_empty }
     end
   end
 
-  describe "qualification" do
+  describe 'qualification' do
     let(:sl) { qualification_kinds(:sl) }
     let(:qualifications) { person.qualifications }
 
@@ -58,7 +58,7 @@ describe Event::PreconditionChecker do
 
     context "person without 'super lead'" do
       its(:valid?) { should be_false }
-      its("errors_text.last") { should =~ /Super Lead/ }
+      its('errors_text.last') { should =~ /Super Lead/ }
     end
 
     context "person with expired 'super lead'" do
@@ -96,9 +96,9 @@ describe Event::PreconditionChecker do
     end
 
 
-    context "multiple preconditions" do
+    context 'multiple preconditions' do
       before { preconditions << qualification_kinds(:gl) }
-      its("errors_text.last") { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
     end
 
     def valid_date
@@ -110,4 +110,3 @@ describe Event::PreconditionChecker do
     end
   end
 end
-

@@ -1,6 +1,7 @@
 # Rubocop configuration to generate a violation report
 
 AllCops:
+  RunRailsCops: true
   Excludes:
     - db/**
     - config/**

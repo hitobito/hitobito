@@ -30,7 +30,7 @@ describe Subscriber::PersonController, type: :controller do
     { subscriber_id: people(:top_leader).id }
   end
 
-  it "does not duplicate subscription" do
+  it 'does not duplicate subscription' do
     expect do
       2.times {  post :create, scope_params.merge(subscription: test_entry_attrs) }
     end.to change(Subscription, :count).by(1)

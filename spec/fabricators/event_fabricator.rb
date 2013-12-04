@@ -36,12 +36,12 @@
 Fabricator(:event) do
   name { 'Eventus' }
   groups { [Group.all_types.first.first] }
-  before_validation { |event| event.dates.build(start_at: Time.zone.local(2012,05,11)) } 
+  before_validation { |event| event.dates.build(start_at: Time.zone.local(2012, 05, 11)) }
 end
 
 
 Fabricator(:course, from: :event, class_name: :'Event::Course') do
-  groups { [Group.all_types.detect {|t| t.event_types.include?(Event::Course) }.first] }
+  groups { [Group.all_types.detect { |t| t.event_types.include?(Event::Course) }.first] }
   kind { Event::Kind.find_by_short_name('SLK') }
   priorization { true }
   requires_approval { true }

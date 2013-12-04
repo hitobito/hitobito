@@ -71,10 +71,10 @@ describe Event::ApplicationMarketController do
   end
 
 
-  describe "requests are mutually undoable", js: true do
+  describe 'requests are mutually undoable', js: true do
 
-    context "waiting_list" do
-      it "starting from application" do
+    context 'waiting_list' do
+      it 'starting from application' do
         obsolete_node_safe do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
@@ -98,7 +98,7 @@ describe Event::ApplicationMarketController do
         end
       end
 
-      it "starting from application on waiting list" do
+      it 'starting from application on waiting list' do
         obsolete_node_safe do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
@@ -130,8 +130,8 @@ describe Event::ApplicationMarketController do
       end
     end
 
-    context "participant" do
-      it "starting from application" do
+    context 'participant' do
+      it 'starting from application' do
         obsolete_node_safe do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
@@ -144,11 +144,11 @@ describe Event::ApplicationMarketController do
           find("#applications ##{appl_id} td:first a").click
           should_not have_selector("#applications ##{appl_id}")
 
-          find("#participants tr:last").should have_content(appl_prio_1.person.to_s(:list))
+          find('#participants tr:last').should have_content(appl_prio_1.person.to_s(:list))
 
           find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
-          find("#applications tr:last").should have_content(appl_prio_1.person.to_s(:list))
+          find('#applications tr:last').should have_content(appl_prio_1.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -157,7 +157,7 @@ describe Event::ApplicationMarketController do
         end
       end
 
-      it "starting from application on waiting list" do
+      it 'starting from application on waiting list' do
         obsolete_node_safe do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
@@ -174,12 +174,12 @@ describe Event::ApplicationMarketController do
           appl_id = "event_participation_#{appl_waiting.id}"
 
           find("#applications ##{appl_id} td:first a").click
-          find("#participants tr:last").should have_content(appl_waiting.person.to_s(:list))
+          find('#participants tr:last').should have_content(appl_waiting.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 
           find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
-          find("#applications tr:last").should have_content(appl_waiting.person.to_s(:list))
+          find('#applications tr:last').should have_content(appl_waiting.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -188,7 +188,7 @@ describe Event::ApplicationMarketController do
         end
       end
 
-      it "starting from participant" do
+      it 'starting from participant' do
         obsolete_node_safe do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
@@ -201,9 +201,9 @@ describe Event::ApplicationMarketController do
           find("#participants ##{appl_id} td:last a").click
           should_not have_selector("#participants ##{appl_id}")
 
-          find("#applications tr:last").should have_content(appl_participant.person.to_s(:list))
+          find('#applications tr:last').should have_content(appl_participant.person.to_s(:list))
           find("#applications ##{appl_id} td:first a").click
-          find("#participants tr:last").should have_content(appl_participant.person.to_s(:list))
+          find('#participants tr:last').should have_content(appl_participant.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 
 

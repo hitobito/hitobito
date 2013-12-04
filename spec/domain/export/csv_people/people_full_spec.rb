@@ -15,15 +15,15 @@ describe Export::CsvPeople::PeopleFull do
   subject { people_list }
 
   its([:roles]) { should eq 'Rollen' }
-  its(:attributes) { should eq [:first_name, :last_name, :company_name, :nickname, :company, :email, :address,
-                                :zip_code, :town, :country, :gender, :birthday, :additional_information] }
+  its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company, :email, :address,
+                                 :zip_code, :town, :country, :gender, :birthday, :additional_information] end
 
   its([:social_account_website]) { should be_blank }
 
   its([:company]) { should eq 'Firma' }
   its([:company_name]) { should eq 'Firmenname' }
 
-  context "social accounts" do
+  context 'social accounts' do
     before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
     its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
   end

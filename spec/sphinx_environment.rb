@@ -10,7 +10,7 @@ require 'thinking_sphinx/test'
 # Use this block to run a set of examples inside sphinx.
 # Call #index_sphinx once your test data is set up.
 def sphinx_environment(*tables, &block)
-  transactional = self.use_transactional_fixtures
+  transactional = use_transactional_fixtures
   begin
     init_sphinx_before_all(tables)
     run_sphinx_around_example

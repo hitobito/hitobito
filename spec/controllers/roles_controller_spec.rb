@@ -12,18 +12,18 @@ describe RolesController do
   before { sign_in(people(:top_leader)) }
 
   let(:group)  { groups(:top_group) }
-  let(:person) { Fabricate(:person)}
+  let(:person) { Fabricate(:person) }
   let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) }
 
-  it "GET new sets a role of the correct type" do
-    get :new, {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+  it 'GET new sets a role of the correct type' do
+    get :new, { group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name } }
 
     assigns(:role).should be_kind_of(Group::TopGroup::Member)
     assigns(:role).group_id.should == group.id
   end
 
-  it "POST create redirects to people after create" do
-    post :create, group_id: group.id, role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name}
+  it 'POST create redirects to people after create' do
+    post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name }
 
     should redirect_to(group_people_path(group))
 
@@ -33,27 +33,27 @@ describe RolesController do
     role.should be_kind_of(Group::TopGroup::Member)
   end
 
-  describe "PUT update" do
+  describe 'PUT update' do
     let(:notice) { "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  }
 
 
-    it "redirects to person after update" do
-      put :update, {group_id: group.id, id: role.id, role: {label: 'bla', type: role.type}}
+    it 'redirects to person after update' do
+      put :update, { group_id: group.id, id: role.id, role: { label: 'bla', type: role.type } }
 
       flash[:notice].should eq notice
       role.reload.label.should eq 'bla'
       should redirect_to(group_person_path(group, person))
     end
 
-    it "can handle type passed as param" do
-      put :update, {group_id: group.id, id: role.id, role: {label: 'foo', type: role.type}}
+    it 'can handle type passed as param' do
+      put :update, { group_id: group.id, id: role.id, role: { label: 'foo', type: role.type } }
       role.reload.type.should eq Group::TopGroup::Member.model_name
       role.reload.label.should eq 'foo'
     end
 
 
-    it "terminates and creates new role if type changes" do
-      put :update, {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader}}
+    it 'terminates and creates new role if type changes' do
+      put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader } }
       should redirect_to(group_person_path(group, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
       notice = "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
@@ -62,20 +62,20 @@ describe RolesController do
 
   end
 
-  describe "POST destroy" do
+  describe 'POST destroy' do
     let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 
 
-    it "redirects to group" do
-      post :destroy, {group_id: group.id, id: role.id }
+    it 'redirects to group' do
+      post :destroy, { group_id: group.id, id: role.id }
 
       flash[:notice].should eq notice
       should redirect_to(group_path(group))
     end
 
-    it "redirects to person if user can still view person" do
+    it 'redirects to person if user can still view person' do
       Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
-      post :destroy, {group_id: group.id, id: role.id }
+      post :destroy, { group_id: group.id, id: role.id }
 
       flash[:notice].should eq notice
       should redirect_to(person_path(person))
@@ -84,10 +84,10 @@ describe RolesController do
   end
 
 
-  describe "handling return_url param" do
-    it "POST create redirects to people after create" do
+  describe 'handling return_url param' do
+    it 'POST create redirects to people after create' do
       post :create, group_id: group.id,
-                    role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name},
+                    role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name },
                     return_url: group_person_path(group, person)
       should redirect_to group_person_path(group, person)
     end

@@ -367,7 +367,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def errors_on?(attr)
     attr_plain, attr_id = assoc_and_id_attr(attr)
-    @object.errors.has_key?(attr_plain.to_sym) || @object.errors.has_key?(attr_id.to_sym) # rubocop:disable HashMethods
+    # rubocop:disable HashMethods
+    @object.errors.has_key?(attr_plain.to_sym) ||
+    @object.errors.has_key?(attr_id.to_sym)
+    # rubocop:enable HashMethods
   end
 
   # Returns true if the given attribute must be present.

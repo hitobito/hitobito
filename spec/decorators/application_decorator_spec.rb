@@ -15,6 +15,7 @@ describe ApplicationDecorator do
 
   context "userstamp" do
     before do
+      Person.reset_stamper
       @person = Fabricate(:person)
       @creator = Fabricate(:person)
       @updater = Fabricate(:person)

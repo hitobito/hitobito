@@ -26,6 +26,7 @@ C\:\\*
 coverage
 brakeman-output.tabs
 rails_best_practices_output.html
+rubocop-results.xml
 doc/models.png
 doc/app
 spec/reports

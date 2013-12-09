@@ -42,7 +42,7 @@ namespace :rubocop do
           --format Rubocop::Formatter::CheckstyleFormatter
           --no-color
           --rails
-          --out tmp/rubocop.xml).join(' ') rescue nil
+          --out rubocop-results.xml).join(' ') rescue nil
     true
   end
 end

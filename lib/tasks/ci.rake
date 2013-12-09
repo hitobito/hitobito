@@ -12,7 +12,6 @@ task :ci => ['log:clear',
              'ci:setup:rspec',
              'spec:requests', # run request specs first to get coverage from spec
              'spec',
-             'wagon:test',
              'rubocop']
 
 namespace :ci do
@@ -25,8 +24,32 @@ namespace :ci do
                     'spec:requests', # run request specs first to get coverage from spec
                     'spec',
                     'wagon:test',
-                    'brakeman',
                     'rubocop:report',
-                    #'qa' # stack level too deep on jenkins :(
+                    'brakeman',
                     ]
+
+  desc "Run the tasks for a wagon commit build"
+  task :wagon do
+    Rake::Task['log:clear'].invoke
+    Rake::Task['db:migrate'].invoke
+    Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
+    ENV['CMD'] = 'bundle exec rake app:ci:setup:rspec spec app:rubocop'
+    Rake::Task['wagon:exec'].invoke
+  end
+
+  namespace :wagon do
+
+    desc "Run the tasks for a wagon nightly build"
+    task :nightly do
+      Rake::Task['log:clear'].invoke
+      Rake::Task['db:migrate'].invoke
+      Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
+      Rake::Task['erd'].invoke
+      ENV['CMD'] = 'bundle exec rake app:ci:setup:rspec spec app:rubocop:report app:brakeman'
+      Rake::Task['wagon:exec'].invoke
+    end
+
+  end
 end
+
+

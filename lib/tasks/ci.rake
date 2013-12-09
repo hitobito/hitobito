@@ -7,12 +7,12 @@
 
 desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
+             'rubocop',
              'wagon:bundle:update',
              'db:migrate',
              'ci:setup:rspec',
              'spec:requests', # run request specs first to get coverage from spec
-             'spec',
-             'rubocop']
+             'spec']
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"
@@ -33,7 +33,7 @@ namespace :ci do
     Rake::Task['log:clear'].invoke
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
-    ENV['CMD'] = 'bundle exec rake app:ci:setup:rspec spec app:rubocop'
+    ENV['CMD'] = 'bundle exec rake app:rubocop app:ci:setup:rspec spec'
     Rake::Task['wagon:exec'].invoke
   end
 

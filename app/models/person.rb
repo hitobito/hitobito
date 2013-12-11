@@ -111,7 +111,7 @@ class Person < ActiveRecord::Base
 
   ### SCOPES
 
-  scope :only_public_data, select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
+  scope :only_public_data, ->() { select(PUBLIC_ATTRS.collect { |a| "people.#{a}" }) }
   scope :contact_data_visible, where(contact_data_visible: true)
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
 

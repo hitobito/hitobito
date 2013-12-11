@@ -45,7 +45,7 @@ module Export::CsvPeople
 
     def attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
-       :address, :zip_code, :town, :country, :birthday]
+       :address, :zip_code, :town, :country, :gender, :birthday]
     end
 
     def translate(attr)

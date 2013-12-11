@@ -15,7 +15,7 @@ describe Export::CsvPeople::PeopleAddress do
   subject { people_list }
 
   its(:attributes) do should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                                 :zip_code, :town, :country, :birthday] end
+                                 :zip_code, :town, :country, :gender, :birthday] end
 
   context 'standard attributes' do
     its([:id]) { should be_blank }

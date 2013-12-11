@@ -344,7 +344,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def honeypot(name = :name)
-    content_tag(:div, class: 'control-group', style: 'position:absolute;left:-9999px;') do
+    content_tag(:div, class: 'control-group hp') do
       label(name, name, class: 'control-label') +
       content_tag(:div, class: 'controls') do
         text_field(name, value: nil, placeholder: 'Bitte dieses Feld nicht ausfüllen')

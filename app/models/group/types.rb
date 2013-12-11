@@ -35,7 +35,7 @@ module Group::Types
 
     # All group types available in the application
     def all_types
-      @@all_types ||= collect_types([], root_types)
+      @@all_types ||= tsort(collect_types([], root_types))
     end
 
     # All root group types in the application.
@@ -59,7 +59,7 @@ module Group::Types
 
     # All the group types underneath the current group type.
     def child_types
-      collect_types([], [self])
+      tsort(collect_types([], [self]))
     end
 
     # Return the group type with the given sti_name or raise an exception if not found
@@ -89,12 +89,40 @@ module Group::Types
     def collect_types(all, types)
       types.each do |type|
         # if a type appears more than once, put it at the end of the list
-        previous = all.delete(type)
-        all << type
-        collect_types(all, type.possible_children) if previous.nil?
+        #previous = all.delete(type)
+        unless all.include?(type)
+          all << type
+          collect_types(all, type.possible_children)
+        end
       end
+
       all
     end
 
+    def tsort(types)
+      TypeSorter.new(types).sort
+    end
+
+  end
+
+  # Sorts a list of types according to the defined hierarchy
+  class TypeSorter
+    include TSort
+
+    def initialize(types)
+      @types = types
+    end
+
+    def tsort_each_node(&block)
+      @types.each(&block)
+    end
+
+    def tsort_each_child(type, &block)
+      type.possible_children.reverse.each(&block)
+    end
+
+    def sort
+      tsort.reverse
+    end
   end
 end

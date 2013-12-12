@@ -113,17 +113,17 @@ describe Event::Date do
     event_date.start_at.should be_nil
   end
 
-  it 'is invalid on plain numbers input' do
+  it 'is invalid on partial date input' do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '15.12'
     date.should_not be_valid
-    date.should have(1).error_on(:start_at)
+    date.should have(2).errors_on(:start_at)
   end
 
   it 'is invalid on plain numbers input' do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '77'
     date.should_not be_valid
-    date.should have(1).error_on(:start_at)
+    date.should have(2).errors_on(:start_at)
   end
 end

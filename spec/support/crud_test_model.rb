@@ -21,6 +21,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   before_destroy :protect_if_companion
 
   validates :name, presence: true
+  validates :birthdate, timeliness: { type: :date, allow_blank: true }
   validates :rating, inclusion: { in: 1..10 }
 
   default_scope order('name')

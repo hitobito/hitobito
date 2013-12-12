@@ -89,7 +89,7 @@ module Group::Types
     def collect_types(all, types)
       types.each do |type|
         # if a type appears more than once, put it at the end of the list
-        #previous = all.delete(type)
+        # previous = all.delete(type)
         unless all.include?(type)
           all << type
           collect_types(all, type.possible_children)

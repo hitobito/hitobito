@@ -97,12 +97,21 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
-    val = @object.send(attr)
-    html_options[:value] ||= val ? f(val) : nil
+    html_options[:value] ||= date_value(attr)
     html_options[:class] ||= 'span2 date'
     content_tag(:div, class: 'input-prepend') do
       content_tag(:span, icon(:calendar), class: 'add-on') +
       text_field(attr, html_options)
+    end
+  end
+
+  def date_value(attr)
+    raw = @object._timeliness_raw_value_for(attr.to_s)
+    if raw
+      raw
+    else
+      val = @object.send(attr)
+      val.is_a?(Date) ? template.l(@object.send(attr)) : val
     end
   end
 
@@ -126,7 +135,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     select(attr, ma, {}, html_options)
   end
 
-  # Render a field to enter a date and time. You might want to customize this.
+  # Render a field to enter a date and time.
+  # Include DatetimeAttribute in the model to use this.
   def datetime_field(attr, html_options = {})
     html_options[:class] ||= 'span6'
 

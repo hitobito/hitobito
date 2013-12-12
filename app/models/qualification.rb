@@ -28,6 +28,9 @@ class Qualification < ActiveRecord::Base
 
   validates :qualification_kind_id, uniqueness: { scope: [:person_id, :finish_at],
                                                   message: 'existiert in dieser Zeitspanne bereits' }
+  validates :start_at, :finish_at,
+            timeliness: { type: :date, allow_blank: true }
+
 
   delegate :cover?, :active?, to: :duration
 

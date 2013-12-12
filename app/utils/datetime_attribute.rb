@@ -29,7 +29,7 @@ module DatetimeAttribute
           date = date.to_date
           send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
         rescue Exception
-          errors.add("#{attr}_date", 'ist nicht gültig')
+          errors.add(attr, 'ist nicht gültig')
         end
       else
         send("#{attr}=", nil)

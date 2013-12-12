@@ -16,7 +16,7 @@
       = f.inline_radio_button(:gender, key, gender_label(key))
 
   = f.labeled_string_field(:birthday,
-                           value: entry.birthday? ? l(entry.birthday) : nil,
+                           value: f.date_value(:birthday),
                            help_inline: '(dd.mm.yyyy)',
                            class: 'span2')
 

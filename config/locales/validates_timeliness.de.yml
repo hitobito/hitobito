@@ -1,0 +1,16 @@
+de:
+  errors:
+    messages:
+      invalid_date: "ist kein gültiges Datum"
+      invalid_time: "ist keine gültige Zeit"
+      invalid_datetime: "ist kein gültiges Datum"
+      is_at: "muss %{restriction} sein"
+      before: "muss vor %{restriction} sein"
+      on_or_before: "muss %{restriction} oder davor sein"
+      after: "muss  nach %{restriction} sein"
+      on_or_after: "muss %{restriction} oder danach sein"
+  validates_timeliness:
+    error_value_formats:
+      date: "%d.%m.%Y"
+      time: '%H:%M'
+      datetime: "%d.%m.%Y %H:%M"

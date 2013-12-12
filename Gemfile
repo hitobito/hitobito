@@ -30,6 +30,7 @@ gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
 gem 'thinking-sphinx', '~> 2.1'
+gem 'validates_timeliness'
 gem 'wagons'
 
 # Gems used only for assets and not required

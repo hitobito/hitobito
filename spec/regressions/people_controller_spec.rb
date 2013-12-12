@@ -75,6 +75,15 @@ describe PeopleController, type: :controller do
     end
   end
 
+  describe_action :put, :update, id: true do
+    let(:params) { { person: { birthday: '33.33.33' } } }
+
+    it 'displays old value again' do
+      should render_template('edit')
+      dom.should have_selector('.error input[value="33.33.33"]')
+    end
+  end
+
   describe 'role section' do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
     let(:section) { dom.all('aside section')[0] }

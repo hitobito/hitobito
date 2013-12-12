@@ -93,6 +93,8 @@ class Event < ActiveRecord::Base
 
   validates :dates, presence: { message: 'müssen ausgefüllt werden' }
   validates :group_ids, presence: { message: 'müssen vorhanden sein' }
+  validates :application_opening_at, :application_closing_at,
+            timeliness: { type: :date, allow_blank: true }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
 

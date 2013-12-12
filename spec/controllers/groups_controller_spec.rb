@@ -36,7 +36,7 @@ describe GroupsController do
         before { get :show, id: group.id }
 
         its(:keys) { should == ['Bottom Layer', 'Untergruppen'] }
-        its(:values) do 
+        its(:values) do
           should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
                      [groups(:top_group), groups(:toppers)]]
         end

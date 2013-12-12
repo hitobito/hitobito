@@ -29,7 +29,11 @@ module Export
 
       # convert to 8859 for excel which is too stupid to handle utf-8
       def convert(data)
-        Settings.csv.encoding.present? ? Iconv.conv(Settings.csv.encoding, 'UTF-8', data) : data
+        if Settings.csv.encoding.present?
+          data.encode(Settings.csv.encoding, undef: :replace, invalid: :replace)
+        else
+          data
+        end
       end
 
       def options

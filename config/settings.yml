@@ -31,7 +31,7 @@ email:
   retriever:
     # interval to check for new mails in minutes
     interval: 1
-    type: <%= ENV['RAILS_MAIL_RETRIEVER_TYPE'].presence || 'pop3' %>   
+    type: <%= ENV['RAILS_MAIL_RETRIEVER_TYPE'].presence || 'pop3' %>
     config:
       <% if ENV['RAILS_MAIL_RETRIEVER_CONFIG'].present? %>
         <%= "{ #{ENV['RAILS_MAIL_RETRIEVER_CONFIG']} }" %>
@@ -86,7 +86,7 @@ address:
 csv:
   # optimized for M$ Excel
   separator: ;
-  encoding: ISO-8859-1//TRANSLIT//IGNORE
+  encoding: ISO-8859-1
 
 role:
   # If a role last less than this number of days, it is not archived

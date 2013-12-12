@@ -26,6 +26,8 @@ Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 # Add test locales
 Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
+Faker::Config.locale = I18n.locale
+
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

@@ -1,4 +1,6 @@
 
+Faker::Config.locale = I18n.locale
+
 module GroupSeeder
 
   module_function

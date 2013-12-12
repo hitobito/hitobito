@@ -46,5 +46,5 @@ Hitobito::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
-  config.i18n.enforce_available_locales = false
+
 end

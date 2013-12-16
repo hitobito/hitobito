@@ -65,7 +65,9 @@ class Role
 
       group.possible_children.each do |child|
         if seen_types.include?(child)
-          global << child unless child.layer
+          unless child.layer || child == group
+            global << child
+          end
         else
           seen_types << child
           global.concat(find_global_group_types(seen_types, child))

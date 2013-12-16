@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 Airbrake.configure do |config|
+  # if no host is given, use airbrake only in test mode
+  config.test_mode   = ENV['RAILS_AIRBRAKE_HOST'].blank?
+
   config.api_key     = ENV['RAILS_AIRBRAKE_API_KEY']
   config.host        = ENV['RAILS_AIRBRAKE_HOST']
   config.port        = (ENV['RAILS_AIRBRAKE_PORT'] || 443).to_i

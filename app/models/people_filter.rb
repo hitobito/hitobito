@@ -19,7 +19,7 @@ class PeopleFilter < ActiveRecord::Base
 
   include RelatedRoleType::Assigners
 
-  attr_accessible :name, :role_types
+  attr_accessible :name, :role_types, :role_type_ids
 
 
   belongs_to :group

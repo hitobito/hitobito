@@ -39,13 +39,13 @@ describe PeopleController do
       end
 
       it 'loads externs of a group when type given' do
-        get :index, group_id: group, role_types: [Role::External.sti_name]
+        get :index, group_id: group, role_type_ids: [Role::External.id].join('-')
 
         assigns(:people).collect(&:id).should =~ [@tg_extern].collect(&:id)
       end
 
       it 'loads selected roles of a group when types given' do
-        get :index, group_id: group, role_types: [Role::External.sti_name, Group::TopGroup::Member.sti_name]
+        get :index, group_id: group, role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join('-')
 
         assigns(:people).collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
       end
@@ -99,7 +99,7 @@ describe PeopleController do
 
         it 'loads selected roles of a group when types given' do
           get :index, group_id: group,
-                      role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name],
+                      role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-'),
                       kind: 'layer'
 
           assigns(:people).collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
@@ -107,7 +107,7 @@ describe PeopleController do
 
         it 'exports full csv when types given and ability exists' do
           get :index, group_id: group,
-                      role_types: [Group::BottomGroup::Member.sti_name, Role::External.sti_name],
+                      role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-'),
                       kind: 'layer',
                       details: true,
                       format: :csv
@@ -122,7 +122,7 @@ describe PeopleController do
 
         it 'exports only address csv when types given and no ability exists' do
           get :index, group_id: group,
-                      role_types: [Group::BottomLayer::Leader.sti_name, Group::BottomLayer::Member.sti_name],
+                      role_type_ids: [Group::BottomLayer::Leader.id, Group::BottomLayer::Member.id].join('-'),
                       kind: 'layer',
                       details: true,
                       format: :csv
@@ -146,7 +146,7 @@ describe PeopleController do
 
       it 'loads selected roles of a group when types given' do
         get :index, group_id: group,
-                    role_types: [Group::BottomGroup::Leader.sti_name, Role::External.sti_name],
+                    role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
                     kind: 'deep'
 
         assigns(:people).collect(&:id).should =~ [@bg_leader, @tg_extern].collect(&:id)

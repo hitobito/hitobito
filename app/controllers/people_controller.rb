@@ -12,7 +12,7 @@ class PeopleController < CrudController
   self.nesting = Group
   self.nesting_optional = true
 
-  self.remember_params += [:name, :kind, :role_types]
+  self.remember_params += [:name, :kind, :role_type_ids]
 
   decorates :group, :person, :people
 
@@ -27,11 +27,15 @@ class PeopleController < CrudController
   before_render_show :load_asides
 
   def index
+    filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
+    entries = filter.filter_entries
+    @multiple_groups = filter.multiple_groups
+
     respond_to do |format|
-      format.html { set_entries }
-      format.pdf  { render_pdf(filter_entries) }
-      format.csv  { render_entries_csv }
-      format.email { render_emails(filter_entries) }
+      format.html { set_entries(entries) }
+      format.pdf  { render_pdf(entries) }
+      format.csv  { render_entries_csv(entries) }
+      format.email { render_emails(entries) }
     end
   end
 
@@ -154,8 +158,8 @@ class PeopleController < CrudController
     super
   end
 
-  def set_entries
-    @people = filter_entries.page(params[:page])
+  def set_entries(entries)
+    @people = entries.page(params[:page])
     if index_full_ability?
       @people = @people.includes(:phone_numbers)
     else
@@ -163,48 +167,14 @@ class PeopleController < CrudController
     end
   end
 
-  def filter_entries
-    if params[:role_types]
-      list_entries(params[:kind]).where(roles: { type: params[:role_types] })
-    else
-      list_entries.members
-    end
-  end
-
-  def list_entries(kind = nil)
-    list_scope(kind).
-          preload_groups.
-          uniq.
-          order_by_role.
-          order_by_name
-  end
-
-  def list_scope(kind = nil)
-    case kind
-    when 'deep'
-      @multiple_groups = true
-      accessibles.in_or_below(@group)
-    when 'layer'
-      @multiple_groups = true
-      accessibles.in_layer(@group)
-    else
-      accessibles(@group)
-    end
-  end
-
-  def accessibles(group = nil)
-    ability = PersonAccessibles.new(current_user, group)
-    Person.accessible_by(ability)
-  end
-
-  def render_entries_csv
+  def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
-    entries = if full
-      filter_entries.select('people.*').includes(:phone_numbers, :social_accounts)
+    csv_entries = if full
+      entries.select('people.*').includes(:phone_numbers, :social_accounts)
     else
-      filter_entries.preload_public_accounts
+      entries.preload_public_accounts
     end
-    render_csv(entries, full)
+    render_csv(csv_entries, full)
   end
 
   def render_entry_csv

@@ -10,15 +10,15 @@ module FilterNavigation
 
     PREDEFINED_FILTERS = %w(Mitglieder Externe)
 
-    attr_reader :group, :name, :role_types, :deep
+    attr_reader :group, :name, :role_type_ids, :deep
 
     delegate :can?, to: :template
 
-    def initialize(template, group, name, role_types, deep = false)
+    def initialize(template, group, name, role_type_ids, deep = false)
       super(template)
       @group = group
       @name = name
-      @role_types = role_types
+      @role_type_ids = role_type_ids
       @deep = deep
       init_labels
       init_items
@@ -35,7 +35,7 @@ module FilterNavigation
           dropdown.label = name
           dropdown.active = true
         end
-      elsif role_types.present?
+      elsif role_type_ids.present?
         dropdown.label = 'Eigener Filter'
         dropdown.active = true
       else
@@ -46,9 +46,7 @@ module FilterNavigation
     def init_items
       item('Mitglieder', filter_path)
       if can?(:index_local_people, group)
-        item('Externe',
-             filter_path(role_types: Role.external_types.collect(&:sti_name),
-                         name: 'Externe'))
+        item('Externe', filter_path(external_people_filter))
       end
     end
 
@@ -66,14 +64,14 @@ module FilterNavigation
 
     def add_define_custom_people_filter_link
       if can?(:new, group.people_filters.new)
-        link = template.new_group_people_filter_path(group.id, people_filter: { role_types: role_types })
+        link = template.new_group_people_filter_path(group.id, people_filter: { role_type_ids: role_type_ids })
         dropdown.divider if dropdown.items.present?
         dropdown.item('Neuer Filter...', link)
       end
     end
 
     def people_filter_link(filter)
-       link = filter_path(kind: 'deep', role_types: filter.role_types, name: filter.name)
+       link = filter_path(filter, kind: 'deep')
 
        if can?(:destroy, filter)
          sub_item = [template.icon(:trash),
@@ -86,7 +84,15 @@ module FilterNavigation
        end
     end
 
-    def filter_path(options = {})
+    def external_people_filter
+      PeopleFilter.new(role_type_ids: Role.external_types.collect(&:id), name: 'Externe')
+    end
+
+    def filter_path(filter = nil, options = {})
+      if filter
+        options[:role_type_ids] ||= filter.role_type_ids_string
+        options[:name] ||= filter.name
+      end
       template.group_people_path(group, options)
     end
 

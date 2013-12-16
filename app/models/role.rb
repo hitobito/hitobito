@@ -25,6 +25,7 @@ class Role < ActiveRecord::Base
 
   include Role::Types
   include NormalizedLabels
+  include TypeId
 
   attr_accessible :label
 

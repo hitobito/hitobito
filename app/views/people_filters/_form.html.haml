@@ -12,25 +12,25 @@
       .btn-group
         = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
     = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'link')
-      
-      
+
+
   = f.error_messages
-  
+
   = field_set_tag('Welche Rollen sollen angezeigt werden?') do
     - @role_types.each do |layer, groups|
       %h5= layer
       - groups.each do |group, role_types|
-        = f.labeled nil, group do 
+        = f.labeled nil, group do
           - role_types.each do |role_type|
-            = f.inline_check_box(:role_types, 
-                                 role_type.sti_name, 
-                                 role_type.label, 
+            = f.inline_check_box(:role_type_ids,
+                                 role_type.id,
+                                 role_type.label,
                                  checked: entry.role_types.include?(role_type.sti_name))
-    
+
   - if can?(:create, entry)
     = field_set_tag('Filtern speichern') do
       = f.labeled_input_field :name, placeholder: 'Geben Sie einen Namen an, um diesen Filter zu speichern'
-    
+
   .btn-toolbar
     .btn-group
       = f.button('Suchen', class: 'btn btn-primary', value: 'search')
@@ -38,4 +38,3 @@
       .btn-group
         = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
     = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'link')
-      

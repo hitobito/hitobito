@@ -23,11 +23,10 @@ class PeopleFiltersController < CrudController
   def create
     if params[:button] == 'save'
       authorize!(:create, entry)
-      super(location: group_people_path(group, model_params.merge(kind: :deep)))
+      super(location: result_path)
     else
       authorize!(:new, entry)
-      types = (model_params && model_params[:role_types]) || {}
-      redirect_to group_people_path(group, role_types: types, kind: :deep)
+      redirect_to result_path
     end
   end
 
@@ -43,6 +42,15 @@ class PeopleFiltersController < CrudController
     filter = super
     filter.group_id = group.id
     filter
+  end
+
+  def result_path
+    assign_attributes
+    params = {}
+    if entry.role_types.present?
+      params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
+    end
+    group_people_path(group, params)
   end
 
   def compose_role_lists

@@ -16,11 +16,11 @@ h1 {
   line-height: 1.25em;
 }
 
-h2 { 
+h2 {
   font-size: 1.5em !important;
 }
 
-h3 { 
+h3 {
   font-size: 1.25em !important;
 }
 
@@ -51,7 +51,12 @@ td p, address {
 
 .btn-group + .link {
   margin-left: $vSpace;
-} 
+}
+
+h1 .btn, h2 .btn, h3 .btn, h4 .btn {
+  font-weight: normal;
+  font-family: $baseFontFamily;
+}
 
 // Definition list
 dl {
@@ -62,7 +67,7 @@ dl {
   border-top: 1px solid $borderColor;
   margin: 0;
 
-  dd { 
+  dd {
     margin-bottom: $vSpace*0.5;
     &:last-child { margin-bottom: 0; }
   }
@@ -86,7 +91,7 @@ dl {
 .table, .table-basic {
   td, th {
     padding-left: 0;
-    &:last-child { padding-right: 0; } 
+    &:last-child { padding-right: 0; }
   }
 }
 
@@ -100,10 +105,10 @@ dl {
   thead:first-child th {
     padding-top: 0px;
   }
-  
+
   th {
     padding-top: 30px;
-    
+
     h2 {
       margin-bottom: 0;
     }

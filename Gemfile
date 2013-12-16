@@ -22,7 +22,7 @@ gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
 gem 'paranoia'
-gem 'prawn'
+gem 'prawn', '~> 0.12.0'
 gem 'protective'
 gem 'rack'
 gem 'rails_config'
@@ -36,7 +36,7 @@ gem 'wagons'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 2.3'
   gem 'bootstrap-wysihtml5-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'compass', '>= 0.13.alpha.0'

@@ -52,10 +52,6 @@ class Group < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :event_types
-  # All possible Event types that may be created for this group
-  self.event_types = [Event]
-
   attr_accessible :name, :short_name, :email, :contact_id
 
   attr_readonly :type
@@ -139,12 +135,6 @@ class Group < ActiveRecord::Base
         statement << 'END, '
       end
       reorder("#{statement} name") # acts_as_nested_set default to new order
-    end
-
-    # All groups that may offer courses
-    def course_offerers
-      sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
-      scoped.where(type: sti_names).order(:parent_id, :name)
     end
 
   end

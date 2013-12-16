@@ -446,7 +446,7 @@ DEPENDENCIES
   bcrypt-ruby
   better_errors
   binding_of_caller
-  bootstrap-sass
+  bootstrap-sass (~> 2.3)
   bootstrap-wysihtml5-rails
   brakeman
   bullet
@@ -484,7 +484,7 @@ DEPENDENCIES
   nested_form
   paranoia
   poltergeist
-  prawn
+  prawn (~> 0.12.0)
   protective
   pry
   pry-doc

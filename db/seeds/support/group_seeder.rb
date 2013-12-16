@@ -1,9 +1,7 @@
 
 Faker::Config.locale = I18n.locale
 
-module GroupSeeder
-
-  module_function
+class GroupSeeder
 
   def group_attributes
     { short_name: ('A'..'Z').to_a.sample(2).join,

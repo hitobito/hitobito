@@ -1,7 +1,13 @@
 
 Faker::Config.locale = I18n.locale
 
-module PersonSeeder
+class PersonSeeder
+
+  attr_accessor :encrypted_password
+
+  def initialize
+    @encrypted_password = BCrypt::Password.create("hito42bito", cost: 1)
+  end
 
   def seed_all_roles
     Group.root.self_and_descendants.each do |group|
@@ -52,7 +58,7 @@ module PersonSeeder
       town: Faker::Address.city,
       gender: %w(m w).shuffle.first,
       birthday: random_date,
-      encrypted_password: @encrypted_password
+      encrypted_password: encrypted_password
     }
   end
 
@@ -61,7 +67,7 @@ module PersonSeeder
     attrs = { email: email,
               first_name: first,
               last_name: last,
-              encrypted_password: @encrypted_password }
+              encrypted_password: encrypted_password }
     Person.seed_once(:email, attrs)
     person = Person.find_by_email(attrs[:email])
 

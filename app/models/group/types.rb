@@ -10,7 +10,7 @@ module Group::Types
 
 
   included do
-    class_attribute :layer, :role_types, :possible_children, :default_children
+    class_attribute :layer, :role_types, :possible_children, :default_children, :event_types
 
     # Whether this group type builds a layer or is a regular group. Layers influence some permissions.
     self.layer = false
@@ -20,6 +20,8 @@ module Group::Types
     self.possible_children = []
     # Child groups that are automatically created with a group of this type.
     self.default_children = []
+    # All possible Event types that may be created for this group
+    self.event_types = [Event]
   end
 
   module ClassMethods
@@ -60,6 +62,12 @@ module Group::Types
     # All the group types underneath the current group type.
     def child_types
       tsort(collect_types([], [self]))
+    end
+
+    # All groups that may offer courses
+    def course_offerers
+      sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
+      scoped.where(type: sti_names).order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found

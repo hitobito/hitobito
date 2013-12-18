@@ -88,7 +88,7 @@ describe MailRelay::Base do
         msgs
       end.twice
 
-      m = mock
+      m = double
       m.stub(:relay)
       MailRelay::Base.stub(:new).and_return(m)
       MailRelay::Base.should_receive(:new).exactly(8).times
@@ -101,8 +101,8 @@ describe MailRelay::Base do
 
       first = true
 
-      msgs1 = (1..5).collect { |i| m = mock; m.stub(:mark_for_delete=); m }
-      msgs2 = (6..8).collect { |i| m = mock; m.stub(:mark_for_delete=); m }
+      msgs1 = (1..5).collect { |i| m = double; m.stub(:mark_for_delete=); m }
+      msgs2 = (6..8).collect { |i| m = double; m.stub(:mark_for_delete=); m }
 
       Mail.should_receive(:find_and_delete) do |options, &block|
         msgs = first ? msgs1 : msgs2
@@ -111,8 +111,8 @@ describe MailRelay::Base do
         msgs
       end
 
-      m = mock
-      mock.stub(:relay)
+      m = double
+      m.stub(:relay)
       MailRelay::Base.stub(:new).with(anything).and_return(m)
       MailRelay::Base.stub(:new).with(msgs1[2]).and_raise('failure!')
       MailRelay::Base.should_receive(:new).exactly(5).times

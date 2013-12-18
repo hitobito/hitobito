@@ -91,7 +91,7 @@ describe PeopleController, type: :controller do
     it 'contains roles' do
       get :show, params
       section.find('h2').text.should eq 'Aktive Rollen'
-      section.find('tr:eq(1)').text.should include('TopGroup')
+      section.all('tr').first.text.should include('TopGroup')
       section.should have_css('.btn-small.dropdown-toggle')
       section.find('tr:eq(1) table tr:eq(1)').text.should include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)

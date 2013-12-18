@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper_request'
+require 'spec_helper_feature'
 
 describe Subscriber::GroupController, js: true do
 
@@ -39,7 +39,7 @@ describe Subscriber::GroupController, js: true do
       # check role and submit
       check('subscription_role_types_group::bottomgroup::leader')
 
-      click_button 'Speichern'
+      all('form .btn-toolbar').first.click_button 'Speichern'
 
       page.should have_content('Abonnent Bottom One (Leader Bottom Group) wurde erfolgreich')
     end

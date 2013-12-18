@@ -11,7 +11,7 @@ task :ci => ['log:clear',
              'wagon:bundle:update',
              'db:migrate',
              'ci:setup:rspec',
-             'spec:requests', # run request specs first to get coverage from spec
+             'spec:features', # run feature specs first to get coverage from spec
              'spec']
 
 namespace :ci do
@@ -21,7 +21,7 @@ namespace :ci do
                     'db:migrate',
                     'erd',
                     'ci:setup:rspec',
-                    'spec:requests', # run request specs first to get coverage from spec
+                    'spec:features', # run feature specs first to get coverage from spec
                     'spec',
                     'wagon:test',
                     'rubocop:report',

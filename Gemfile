@@ -11,8 +11,7 @@ gem 'cmess'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
-#gem 'decorates_before_rendering', '0.0.3'
-gem 'devise'
+gem 'devise', '~> 2.2'
 gem 'draper', '< 1.0'
 gem 'faker'
 gem 'haml'
@@ -21,7 +20,7 @@ gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
-gem 'paranoia'
+gem 'paranoia', '~> 1.2'
 gem 'prawn', '~> 0.12.0'
 gem 'protective'
 gem 'rack'
@@ -38,11 +37,11 @@ gem 'wagons'
 group :assets do
   gem 'bootstrap-sass', '~> 2.3'
   gem 'bootstrap-wysihtml5-rails'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'compass', '>= 0.13.alpha.0'
+  gem 'coffee-rails', '~> 3.2'
+  gem 'compass', '0.13.alpha.0'
   gem 'compass-rails'
-  gem 'jquery-rails', '2.1.3'
-  gem 'sass-rails', '~> 3.2.3'
+  gem 'jquery-rails', '~> 2.1.3'
+  gem 'sass-rails', '~> 3.2.6'
   gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'
 end
@@ -62,7 +61,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 1.1'
+  gem 'capybara'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
@@ -90,7 +89,7 @@ end
 group :guard_support do
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'spork', '1.0.0rc3'
+  gem 'spork', '~> 1.0.0rc3'
   gem 'rb-inotify'
 end
 

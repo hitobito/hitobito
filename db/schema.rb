@@ -114,8 +114,8 @@ ActiveRecord::Schema.define(:version => 20130710080936) do
     t.string  "type",             :null => false
     t.integer "participation_id", :null => false
     t.string  "label"
-    t.index ["type"], :name => "index_event_roles_on_type"
     t.index ["participation_id"], :name => "index_event_roles_on_participation_id"
+    t.index ["type"], :name => "index_event_roles_on_type"
   end
 
   create_table "events", :force => true do |t|
@@ -169,9 +169,9 @@ ActiveRecord::Schema.define(:version => 20130710080936) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "deleter_id"
+    t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], :name => "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], :name => "index_groups_on_parent_id"
-    t.index ["layer_group_id"], :name => "index_groups_on_layer_group_id"
   end
 
   create_table "label_formats", :force => true do |t|

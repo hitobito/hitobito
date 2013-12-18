@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper_request'
+require 'spec_helper_feature'
 
 describe Event::ApplicationMarketController do
 
@@ -83,13 +83,13 @@ describe Event::ApplicationMarketController do
           @applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_prio_1.id}"
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -113,14 +113,13 @@ describe Event::ApplicationMarketController do
           @applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_waiting.id}"
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-minus')
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          find("#applications ##{appl_id} td:last").should have_selector('.icon-ok')
-
+          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -141,14 +140,14 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_prio_1.id}"
 
-          find("#applications ##{appl_id} td:first a").click
+          all("#applications ##{appl_id} td").first.find("a").click
           should_not have_selector("#applications ##{appl_id}")
 
-          find('#participants tr:last').should have_content(appl_prio_1.person.to_s(:list))
+          all('#participants tr').last.should have_content(appl_prio_1.person.to_s(:list))
 
-          find("#participants ##{appl_id} td:last a").click
+          all("#participants ##{appl_id} td").last.find("a").click
           should_not have_selector("#participants ##{appl_id}")
-          find('#applications tr:last').should have_content(appl_prio_1.person.to_s(:list))
+          all('#applications tr').last.should have_content(appl_prio_1.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -173,13 +172,13 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_waiting.id}"
 
-          find("#applications ##{appl_id} td:first a").click
-          find('#participants tr:last').should have_content(appl_waiting.person.to_s(:list))
+          all("#applications ##{appl_id} td").first.find("a").click
+          all('#participants tr').last.should have_content(appl_waiting.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 
-          find("#participants ##{appl_id} td:last a").click
+          all("#participants ##{appl_id} td").last("a").click
           should_not have_selector("#participants ##{appl_id}")
-          find('#applications tr:last').should have_content(appl_waiting.person.to_s(:list))
+          all('#applications tr').last.should have_content(appl_waiting.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -198,14 +197,14 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_participant.id}"
 
-          find("#participants ##{appl_id} td:last a").click
+ puts all("#participants ##{appl_id} td").collect(&:text)
+          all("#participants ##{appl_id} td").last.find("a").click
           should_not have_selector("#participants ##{appl_id}")
-
-          find('#applications tr:last').should have_content(appl_participant.person.to_s(:list))
-          find("#applications ##{appl_id} td:first a").click
-          find('#participants tr:last').should have_content(appl_participant.person.to_s(:list))
+  puts all('#applications tr').collect(&:text)
+          all('#applications tr').last.should have_content(appl_participant.person.to_s(:list))
+          all("#applications ##{appl_id} td").first.find("a").click
+          all('#participants tr').last.should have_content(appl_participant.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
-
 
           visit group_event_application_market_index_path(group.id, event.id)
 

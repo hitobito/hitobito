@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper_request'
+require 'spec_helper_feature'
 
 describe Event::QualificationsController do
 
@@ -42,13 +42,13 @@ describe Event::QualificationsController do
 
       appl_id = "#event_participation_#{participant_1.id}"
 
-      find("#{appl_id} td:first").should have_selector('.icon-minus')
+      all("#{appl_id} td").first.should have_selector('.icon-minus')
 
-      find("#{appl_id} td:first a").click
-      find("#{appl_id} td:first").should have_selector('.icon-ok')
+      all("#{appl_id} td").first.find("a").click
+      all("#{appl_id} td").first.should have_selector('.icon-ok')
 
-      find("#{appl_id} td:first a").click
-      find("#{appl_id} td:first").should have_selector('.icon-minus')
+      all("#{appl_id} td").first.find("a").click
+      all("#{appl_id} td").first.should have_selector('.icon-minus')
     end
   end
 

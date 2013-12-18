@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper_request'
+require 'spec_helper_feature'
 
 describe EventsController, js: true do
 
@@ -25,7 +25,7 @@ describe EventsController, js: true do
       fill_in 'Kontaktperson', with: 'Top'
       find('.typeahead.dropdown-menu').should have_content 'Top Leader'
       find('.typeahead.dropdown-menu').click
-      click_button 'Speichern'
+      all('form .btn-toolbar').first.click_button 'Speichern'
 
       # show event
       find('aside').should have_content 'Kontakt'
@@ -35,7 +35,7 @@ describe EventsController, js: true do
       # remove contact
       find('#event_contact').value.should == 'Top Leader'
       fill_in 'Kontaktperson', with: ''
-      click_button 'Speichern'
+      all('form .btn-toolbar').first.click_button 'Speichern'
 
       # show event again
       should_not have_selector('.contactable')

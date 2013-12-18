@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module RequestHelpers
+module FeatureHelpers
 
   def sign_in(user = nil)
     user ||= people(:top_leader)
@@ -23,7 +23,7 @@ module RequestHelpers
       yield
     rescue Errno::ECONNREFUSED,
            Timeout::Error,
-           Capybara::TimeoutError,
+           Capybara::FrozenInTime,
            Capybara::ElementNotFound,
            Capybara::Poltergeist::ObsoleteNode,
            Capybara::Poltergeist::TimeoutError => e

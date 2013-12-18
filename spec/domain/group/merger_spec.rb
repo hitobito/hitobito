@@ -70,7 +70,7 @@ describe Group::Merger do
       merge.merge!
 
       e.reload
-      e.groups.should =~ [group1, group2, merge.new_group]
+      e.group_ids.should =~ [group1, group2, merge.new_group].collect(&:id)
     end
 
     it 'updates layer_group_id for children' do

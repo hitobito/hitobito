@@ -1,5 +1,5 @@
 
-require 'spec_helper_request'
+require 'spec_helper_feature'
 
 describe PeopleController, js: true do
 
@@ -23,7 +23,7 @@ describe PeopleController, js: true do
       find("#people_filter_role_type_ids_#{Group::BottomLayer::Leader.id}").set(true)
       find("#people_filter_role_type_ids_#{Group::BottomLayer::Member.id}").set(true)
       fill_in('people_filter_name', with: 'Bottom Layer')
-      click_button 'Suche speichern'
+      all('form .btn-toolbar').first.click_button('Suche speichern')
 
       page.should have_selector('.table tbody tr', count: 2)
       page.should have_selector("#person_#{leader.id}")
@@ -37,7 +37,7 @@ describe PeopleController, js: true do
       page.should have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Member.id}")
 
       find("#people_filter_role_type_ids_#{Group::BottomLayer::Member.id}").set(false)
-      click_button 'Suchen'
+      all('form .btn-toolbar').first.click_button('Suchen')
 
       page.should have_selector('.table tbody tr', count: 1)
       page.should have_selector("tr#person_#{leader.id}")

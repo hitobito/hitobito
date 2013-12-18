@@ -67,9 +67,9 @@ RSpec.configure do |config|
   config.include(MailerMacros)
   config.include(EventMacros)
   config.include Devise::TestHelpers, type: :controller
-  config.include RequestHelpers, type: :request
+  config.include FeatureHelpers, type: :feature
 
-  config.filter_run_excluding type: 'request', performance: true
+  config.filter_run_excluding type: 'feature', performance: true
 
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql

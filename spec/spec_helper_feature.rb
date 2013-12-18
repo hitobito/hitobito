@@ -14,21 +14,25 @@ require 'capybara/poltergeist'
 DB_CLEANER_STRATEGY = :truncation
 
 RSpec.configure do |config|
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  config.use_transactional_fixtures = false
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = DB_CLEANER_STRATEGY
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
+  
+  unless config.exclusion_filter[:type] == 'feature'
+    
+    # If you're not using ActiveRecord, or you'd prefer not to run each of your
+    # examples within a transaction, remove the following line or assign false
+    # instead of true.
+    config.use_transactional_fixtures = false
+  
+    config.before(:suite) do
+      DatabaseCleaner.strategy = DB_CLEANER_STRATEGY
+    end
+  
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+  
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 end
 

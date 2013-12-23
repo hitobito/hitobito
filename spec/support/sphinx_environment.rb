@@ -39,7 +39,7 @@ end
 def run_sphinx_around_example
   around(:each) do |example|
     ThinkingSphinx::Test.run do
-      if ThinkingSphinx.sphinx_running?
+      if ThinkingSphinx::Configuration.instance.controller.running?
         DatabaseCleaner.start
         example.call
         DatabaseCleaner.clean

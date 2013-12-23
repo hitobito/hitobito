@@ -28,7 +28,7 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
-gem 'thinking-sphinx', '~> 2.1'
+gem 'thinking-sphinx'
 gem 'validates_timeliness'
 gem 'wagons'
 

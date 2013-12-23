@@ -16,13 +16,13 @@ base: &generic
 
 development:
   <<: *generic
-  port: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>
+  mysql41: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>
 
 test:
   <<: *generic
-  port: 9313
+  mysql41: 9313
   sql_range_step: 10000000
 
 production:
   <<: *generic
-  port: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>
+  mysql41: <%= ENV['RAILS_SPHINX_PORT'] || 9312 %>

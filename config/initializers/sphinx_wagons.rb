@@ -5,33 +5,32 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module ActiveRecord
-  class Base
-    
-    class_attribute :sphinx_partial_indizes
-    
+module ThinkingSphinx
+  class Index
+
+    class_attribute :partial_indices
+
     class << self
-      def define_partial_index(&block)
-        ThinkingSphinx.context.add_indexed_model self
-        
-        self.sphinx_partial_indizes ||= []
-        self.sphinx_partial_indizes << block
-        
-        include ThinkingSphinx::ActiveRecord::Scopes
-        include ThinkingSphinx::SearchMethods
+      def define_partial(reference, &block)
+        self.partial_indices ||= Hash.new { |h, k| h[k] = [] }
+        self.partial_indices[reference] << block
       end
-      
+
       def define_partial_indizes!
-        if sphinx_partial_indizes.present? && connection.adapter_name.downcase != 'sqlite'
-          indizes = sphinx_partial_indizes
-          #puts "defining #{indizes.size} indizes for #{name}"
-          define_index do
-            indizes.each {|i| self.instance_eval(&i) }
+        ThinkingSphinx::Configuration.instance.preload_indices
+
+        if partial_indices.present? && ::ActiveRecord::Base.connection.adapter_name.downcase != 'sqlite'
+
+          partial_indices.each do |reference, blocks|
+            #puts "defining #{blocks.size} indizes for #{reference}"
+            define(reference, with: :active_record) do
+              blocks.each {|i| self.instance_eval(&i) }
+            end
           end
         end
       end
     end
-    
+
   end
 end
 

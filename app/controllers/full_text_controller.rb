@@ -39,7 +39,7 @@ class FullTextController < ApplicationController
   def list_people
     entries = Person.search(params[:q],
                             page: params[:page],
-                            order: 'last_name asc, first_name asc, @relevance desc',
+                            order: 'last_name asc, first_name asc, @weight desc',
                             with: { sphinx_internal_id: accessible_people_ids })
     entries = Person::PreloadGroups.for(entries)
     entries = Person::PreloadPublicAccounts.for(entries)

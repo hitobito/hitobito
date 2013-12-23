@@ -87,23 +87,9 @@ class Group < ActiveRecord::Base
 
 
   ### VALIDATIONS
+
   validates :email, format: Devise.email_regexp, allow_blank: true
   validate :assert_type_is_allowed_for_parent, on: :create
-
-
-  ### INDEX
-
-  define_partial_index do
-    indexes name, short_name, sortable: true
-    indexes email, address, zip_code, town, country
-
-    indexes parent.name, as: :parent_name
-    indexes parent.short_name, as: :parent_short_name
-    indexes phone_numbers.number, as: :phone_number
-    indexes social_accounts.name, as: :social_account
-
-    where 'groups.deleted_at IS NULL'
-  end
 
 
   ### CLASS METHODS

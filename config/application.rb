@@ -111,9 +111,7 @@ module Hitobito
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|
       # only add here to be the last one
       app.config.to_prepare do
-        ThinkingSphinx.context.indexed_models.each do |model|
-          model.constantize.define_partial_indizes!
-        end
+        ThinkingSphinx::Index.define_partial_indizes!
       end
     end
   end

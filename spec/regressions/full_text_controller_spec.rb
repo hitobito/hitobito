@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-require 'sphinx_environment'
 
 describe FullTextController, :mysql, type: :controller do
 

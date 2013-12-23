@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-require 'sphinx_environment'
 
 describe 'Quicksearch', :mysql do
 

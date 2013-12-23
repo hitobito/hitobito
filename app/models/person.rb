@@ -121,17 +121,6 @@ class Person < ActiveRecord::Base
   scope :preload_groups, scoped.extending(Person::PreloadGroups)
 
 
-  ### INDEXED FIELDS
-
-  define_partial_index do
-    indexes first_name, last_name, company_name, nickname, company, email, sortable: true
-    indexes address, zip_code, town, country, birthday, additional_information
-
-    indexes phone_numbers.number, as: :phone_number
-    indexes social_accounts.name, as: :social_account
-  end
-
-
   ### CLASS METHODS
 
   class << self

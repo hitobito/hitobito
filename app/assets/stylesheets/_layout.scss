@@ -230,3 +230,21 @@ table.roles {
   }
 }
 
+.table-responsive {
+  .table {
+    background-color: #fff;
+  }
+
+  @media screen and (max-width: $mediaDesktop) {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+
+    .table {
+      margin-bottom: 0;
+    }
+  }
+}

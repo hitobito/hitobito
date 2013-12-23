@@ -58,7 +58,7 @@ describe Event::ApplicationMarketController do
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
   end
 
-  let(:animation_time) { 0.5 }
+  let(:animation_time) { 0.75 }
 
   before do
     # init required data

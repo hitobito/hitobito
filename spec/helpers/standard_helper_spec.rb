@@ -272,7 +272,7 @@ describe StandardHelper do
       it { should be_html_safe }
 
       it 'should render table' do
-        should match(/^\<table.*\<\/table\>$/)
+        should match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
       end
 
       it 'should contain attrs' do

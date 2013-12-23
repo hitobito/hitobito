@@ -102,9 +102,11 @@ module StandardHelper
   def table(entries, *attrs, &block)
     entries.inspect
     if entries.present?
-      StandardTableBuilder.table(entries, self, attrs.extract_options!) do |t|
-        t.attrs(*attrs)
-        yield t if block_given?
+      content_tag(:div, class: 'table-responsive') do
+        StandardTableBuilder.table(entries, self, attrs.extract_options!) do |t|
+          t.attrs(*attrs)
+          yield t if block_given?
+        end
       end
     else
       content_tag(:div, ti(:no_list_entries), class: 'table')

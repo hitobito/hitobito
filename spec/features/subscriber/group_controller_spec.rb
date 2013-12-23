@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper_feature'
+require 'spec_helper'
 
 describe Subscriber::GroupController, js: true do
 

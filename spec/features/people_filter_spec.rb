@@ -1,5 +1,5 @@
 
-require 'spec_helper_feature'
+require 'spec_helper'
 
 describe PeopleController, js: true do
 

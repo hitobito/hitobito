@@ -40,7 +40,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2'
   gem 'compass', '0.13.alpha.0'
   gem 'compass-rails'
-  gem 'jquery-rails', '~> 2.1.3'
+  gem 'jquery-rails', '2.1.3'
   gem 'sass-rails', '~> 3.2.6'
   gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'

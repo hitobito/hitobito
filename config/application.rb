@@ -8,7 +8,11 @@
 require File.expand_path('../boot', __FILE__)
 require 'benchmark'
 
-puts "require rails:  #{Benchmark.measure { require 'rails/all' }}"
+b = -> do
+  require 'rails/all'
+  require 'jquery/rails'
+end
+puts "require rails:  #{Benchmark.measure(&b)}"
 
 if defined?(Bundler)
   # see also scripts/commands.rb

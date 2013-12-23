@@ -37,11 +37,12 @@ gem 'wagons'
 group :assets do
   gem 'bootstrap-sass', '~> 2.3'
   gem 'bootstrap-wysihtml5-rails'
-  gem 'coffee-rails', '~> 3.2'
+  gem 'coffee-rails'
   gem 'compass', '0.13.alpha.0'
   gem 'compass-rails'
-  gem 'jquery-rails', '2.1.3'
-  gem 'sass-rails', '~> 3.2.6'
+  gem 'jquery-rails'
+  gem 'jquery-ui-rails'
+  gem 'sass-rails'
   gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'
 end

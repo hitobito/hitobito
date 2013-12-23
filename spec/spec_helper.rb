@@ -5,11 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+DB_CLEANER_STRATEGY = :truncation
+
 def init
   init_simplecov
   init_environment
   init_rspec
-  init_capybara
+  # Use DatabaseCleaner only if features are not excluded
+  unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+    init_db_cleaner(RSpec.configuration)
+    init_capybara
+  end
 end
 
 def init_simplecov
@@ -28,7 +34,6 @@ def init_environment
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'cancan/matchers'
-  require 'capybara/poltergeist'
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
@@ -43,26 +48,12 @@ def init_rspec
   RSpec.configure do |config|
     config.treat_symbols_as_metadata_keys_with_true_values = true
 
-    # ## Mock Framework
-    #
-    # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-    #
-    # config.mock_with :mocha
-    # config.mock_with :flexmock
-    # config.mock_with :rr
-
-    # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
     config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
-
-    # This will pick up all of the fixtures defined in spec/fixtures into your
-    # database and you'll be able to test with some sample data
-    # (eg. Countries, States, etc.)
-    # config.global_fixtures = :all
 
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of
@@ -102,10 +93,6 @@ def init_rspec
       Draper::ViewContext.current = c.view_context
     end
 
-    # Use DatabaseCleaner only if features are not excluded
-    unless config.exclusion_filter[:type] == 'feature'
-      init_db_cleaner(config)
-    end
   end
 end
 
@@ -113,7 +100,7 @@ def init_db_cleaner(config)
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = DB_CLEANER_STRATEGY
   end
 
   config.before(:each) do
@@ -142,6 +129,7 @@ def init_capybara
   elsif ENV['HEADLESS'] == 'false'
     # use selenium-webkit driver
   else
+    require 'capybara/poltergeist'
     Capybara.register_driver :poltergeist do |app|
       options = { debug: false, inspector: true, timeout: 30 }
       driver = Capybara::Poltergeist::Driver.new(app, options)

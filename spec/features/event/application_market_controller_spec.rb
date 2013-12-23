@@ -58,8 +58,6 @@ describe Event::ApplicationMarketController do
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
   end
 
-  let(:animation_time) { 0.75 }
-
   before do
     # init required data
     appl_prio_1
@@ -144,14 +142,16 @@ describe Event::ApplicationMarketController do
 
           all("#applications ##{appl_id} td").first.find("a").click
           should_not have_selector("#applications ##{appl_id}")
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#participants').should have_content(appl_prio_1.person.to_s(:list))
           all('#participants tr').last.should have_content(appl_prio_1.person.to_s(:list))
 
           all("#participants ##{appl_id} td").last.find("a").click
           should_not have_selector("#participants ##{appl_id}")
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#applications').should have_content(appl_prio_1.person.to_s(:list))
           all('#applications tr').last.should have_content(appl_prio_1.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
@@ -178,15 +178,17 @@ describe Event::ApplicationMarketController do
           appl_id = "event_participation_#{appl_waiting.id}"
 
           all("#applications ##{appl_id} td").first.find("a").click
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#participants').should have_content(appl_waiting.person.to_s(:list))
           all('#participants tr').last.should have_content(appl_waiting.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 
           all("#participants ##{appl_id} td").last.find("a").click
           should_not have_selector("#participants ##{appl_id}")
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#applications').should have_content(appl_waiting.person.to_s(:list))
           all('#applications tr').last.should have_content(appl_waiting.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
@@ -208,12 +210,14 @@ describe Event::ApplicationMarketController do
 
           all("#participants ##{appl_id} td").last.find("a").click
           should_not have_selector("#participants ##{appl_id}")
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#applications').should have_content(appl_participant.person.to_s(:list))
           all('#applications tr').last.should have_content(appl_participant.person.to_s(:list))
           all("#applications ##{appl_id} td").first.find("a").click
-          sleep(animation_time)
 
+          # first do find().should have_content to make capybara wait for animation, then all().last
+          find('#participants tr').should have_content(appl_participant.person.to_s(:list))
           all('#participants tr').last.should have_content(appl_participant.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 

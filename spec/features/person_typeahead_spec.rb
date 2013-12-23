@@ -20,7 +20,6 @@ describe 'Person Autocomplete' do
       page.should have_content('Personen')
       click_link 'Personen'
       should have_content ' Person hinzufügen'
-      find('.dropdown-menu').should_not be_visible
       click_link 'Person hinzufügen'
       find('.dropdown-menu').should be_visible
       within(:css, '.dropdown-menu') do

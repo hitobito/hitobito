@@ -18,18 +18,11 @@ describe 'Quicksearch', :mysql do
         visit root_path
 
         fill_in 'quicksearch', with: 'top'
-        sleep(1)
 
         dropdown = find('.typeahead.dropdown-menu')
-
-        if dropdown.text.present?
-          dropdown.should have_content('Top Leader, Supertown')
-          dropdown.should have_content('Top > TopGroup')
-          dropdown.should have_content('Top')
-        else
-          # stupid poltergeist, not stable enough
-          pending 'dropdown did not appear'
-        end
+        dropdown.should have_content('Top Leader, Supertown')
+        dropdown.should have_content('Top > TopGroup')
+        dropdown.should have_content('Top')
       end
     end
   end

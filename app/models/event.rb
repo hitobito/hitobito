@@ -95,6 +95,7 @@ class Event < ActiveRecord::Base
   validates :group_ids, presence: { message: 'müssen vorhanden sein' }
   validates :application_opening_at, :application_closing_at,
             timeliness: { type: :date, allow_blank: true }
+  validates :description, :location, :application_conditions, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
 

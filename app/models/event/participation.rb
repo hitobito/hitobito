@@ -48,6 +48,7 @@ class Event::Participation < ActiveRecord::Base
 
   validates :person_id, uniqueness: { scope: :event_id,
                                       message: 'Du hast dich für diesen Anlass bereits angemeldet.' }
+  validates :additional_information, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
 
 
   ### CALLBACKS

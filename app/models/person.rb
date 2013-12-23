@@ -102,6 +102,7 @@ class Person < ActiveRecord::Base
   validates :gender, inclusion: %w(m w), allow_blank: true
   validates :company_name, presence: { if: :company? }
   validates :birthday, timeliness: { type: :date, allow_blank: true }
+  validates :additional_information, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
   validate :assert_has_any_name
   # more validations defined by devise
 

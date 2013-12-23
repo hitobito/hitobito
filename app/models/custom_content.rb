@@ -21,6 +21,7 @@
 class CustomContent < ActiveRecord::Base
   attr_accessible :body, :subject
 
+  validates :body, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
   validate :assert_required_placeholders_are_used
 
   class << self

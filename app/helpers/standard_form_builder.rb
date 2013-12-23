@@ -291,7 +291,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def collection_prompt(attr, html_options)
+  def collection_prompt(attr, html_options = {})
     if html_options[:prompt]
       { prompt: html_options[:prompt] }
     elsif html_options[:include_blank]

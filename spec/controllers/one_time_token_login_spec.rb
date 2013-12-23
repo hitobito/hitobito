@@ -7,32 +7,38 @@
 
 require 'spec_helper'
 
-describe PeopleController do
+describe EventsController do
 
   let(:user) { people(:top_leader) }
 
-  it 'signs in with valid token' do
-    user.generate_reset_password_token!
-    get :show, group_id: user.groups.first.id, id: user.id, onetime_token: user.reset_password_token
+  let(:event) { Fabricate(:course) }
+  let(:group) { event.groups.first }
 
-    assigns(:current_person).should be_present
+  it 'signs in with valid token' do
+    token = user.generate_reset_password_token!
+    get :show, group_id: group.id, id: event.id, onetime_token: token
+
+    assigns(:current_person).should == user
+    user.reload.reset_password_token.should be_blank
     should render_template('crud/show')
   end
 
   it 'cannot sign in with expired token' do
-    user.generate_reset_password_token!
+    token = user.generate_reset_password_token!
     user.update_column(:reset_password_sent_at, 50.days.ago)
-    get :show, id: user.id, onetime_token: user.reset_password_token
+    get :show, group_id: group.id, id: event.id, onetime_token: token
 
     should redirect_to(new_person_session_path)
+    user.reload.reset_password_token.should be_present
     assigns(:current_person).should_not be_present
   end
 
   it 'cannot sign in with wrong token' do
-    user.generate_reset_password_token!
-    get :show, id: user.id, onetime_token: 'yadayada'
+    token = user.generate_reset_password_token!
+    get :show, group_id: group.id, id: event.id, onetime_token: 'yadayada'
 
     should redirect_to(new_person_session_path)
+    user.reload.reset_password_token.should be_present
     assigns(:current_person).should_not be_present
   end
 end

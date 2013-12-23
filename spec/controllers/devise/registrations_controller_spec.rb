@@ -43,7 +43,7 @@ describe Devise::RegistrationsController do
       before { put :update, person: data.merge(current_password: 'foobar') }
 
       it { should redirect_to(root_path) }
-      it { flash[:notice].should eq 'Deine Daten wurden aktualisiert.' }
+      it { flash[:notice].should eq 'Dein Passwort wurde aktualisiert.' }
     end
 
     context 'with wrong old password' do
@@ -66,7 +66,7 @@ describe Devise::RegistrationsController do
       before { put :update, person: data }
 
       it { should redirect_to(root_path) }
-      it { flash[:notice].should eq 'Deine Daten wurden aktualisiert.' }
+      it { flash[:notice].should eq 'Dein Passwort wurde aktualisiert.' }
     end
 
     context 'with wrong confirmation' do

@@ -213,7 +213,7 @@ describe Person do
     let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person.reload }
 
     it 'can reset password' do
-      person.send_reset_password_instructions.should be_kind_of(Mail::Message)
+      expect { person.send_reset_password_instructions }.to change { ActionMailer::Base.deliveries.size }.by(1)
     end
   end
 
@@ -288,6 +288,22 @@ describe Person do
       person.email = people(:top_leader).email
       person.save(validate: false).should be_false
       person.errors[:email].should == ['ist bereits vergeben']
+    end
+  end
+
+  context '#generate_reset_password_token!' do
+    it 'generates the same token as #send_reset_password_instructions' do
+      person = people(:top_leader)
+
+      token = person.generate_reset_password_token!
+      enc = person.reload.reset_password_token
+      enc.should be_present
+      person.clear_reset_password_token!
+      person.reload.reset_password_token.should be_nil
+
+      # as we cannot seed the token generator, we just compare the sizes..
+      person.send_reset_password_instructions.size.should == token.size
+      person.reset_password_token.size.should == enc.size
     end
   end
 

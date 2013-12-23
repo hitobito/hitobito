@@ -15,8 +15,8 @@ class SendLoginJob < BaseJob
   end
 
   def perform
-    recipient.generate_reset_password_token!
-    PersonMailer.login(recipient, sender).deliver
+    token = recipient.generate_reset_password_token!
+    PersonMailer.login(recipient, sender, token).deliver
   end
 
   def sender

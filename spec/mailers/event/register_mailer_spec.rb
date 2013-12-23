@@ -18,7 +18,7 @@ describe Event::RegisterMailer do
   let(:event) { events(:top_event) }
 
   let(:person) { Fabricate(:person, email: 'fooo@example.com', reset_password_token: 'abc') }
-  let(:mail) { Event::RegisterMailer.register_login(person, group, event) }
+  let(:mail) { Event::RegisterMailer.register_login(person, group, event, 'abcdef') }
 
   context 'headers' do
     subject { mail }
@@ -36,7 +36,7 @@ describe Event::RegisterMailer do
     end
 
     it 'renders link' do
-      should =~ /<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=#{person.reset_password_token}">/
+      should =~ /<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/
     end
   end
 end

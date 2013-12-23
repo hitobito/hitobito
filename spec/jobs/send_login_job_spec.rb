@@ -28,7 +28,7 @@ describe Event::ParticipationConfirmationJob do
   it 'sends email' do
     subject.perform
     last_email.should be_present
-    last_email.body.should =~ /#{recipient.reload.reset_password_token}/
+    last_email.body.should_not =~ /#{recipient.reload.reset_password_token}/
   end
 
   its(:parameters) { should == { recipient_id: recipient.id, sender_id: sender.id } }

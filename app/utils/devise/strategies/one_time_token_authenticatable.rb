@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'devise/strategies/token_authenticatable'
+#require 'devise/strategies/token_authenticatable'
 
 module Devise
   module Strategies
@@ -14,7 +14,7 @@ module Devise
     #
     #   http://myapp.example.com/?ontime_token=SECRET
     #
-    class OneTimeTokenAuthenticatable < TokenAuthenticatable
+    class OneTimeTokenAuthenticatable# < TokenAuthenticatable
 
       def authenticate!
         token = authentication_hash[authentication_keys.first]

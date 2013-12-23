@@ -54,14 +54,16 @@ class Person < ActiveRecord::Base
                   :password, :password_confirmation, :remember_me,
                   :picture, :remove_picture
 
-  include Groups
-  include Contactable
-
+  # define devise before other modules
   devise :database_authenticatable,
          :recoverable,
          :rememberable,
          :trackable,
          :validatable
+
+  include Groups
+  include Contactable
+  include DeviseOverrides
 
   mount_uploader :picture, PictureUploader
 
@@ -224,50 +226,7 @@ class Person < ActiveRecord::Base
     false
   end
 
-  def send_reset_password_instructions # from lib/devise/models/recoverable.rb
-    persisted? && super
-  end
-
-  def clear_reset_password_token!
-    clear_reset_password_token && save(validate: false)
-  end
-
-  # Owner: Devise::Models::DatabaseAuthenticatable
-  # We override this to allow users updating passwords when no password has been set
-  def update_with_password(params, *options)
-    current_password = params.delete(:current_password)
-
-    if params[:password].blank?
-      params.delete(:password)
-      params.delete(:password_confirmation) if params[:password_confirmation].blank?
-    end
-
-    result = if encrypted_password.nil? || valid_password?(current_password)
-               update_attributes(params, *options)
-             else
-               assign_attributes(params, *options)
-               self.valid?
-               errors.add(:current_password, current_password.blank? ? :blank : :invalid)
-               false
-             end
-
-    clean_up_passwords
-    result
-  end
-
-  public :generate_reset_password_token!
-
   private
-
-  def email_required?
-    false
-  end
-
-  # Checks whether a password is needed or not. For validations only.
-  # Passwords are required if the password or confirmation are being set somewhere.
-  def password_required?
-    !password.nil? || !password_confirmation.nil?
-  end
 
   def override_blank_email
     self.email = nil if email.blank?

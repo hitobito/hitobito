@@ -9,12 +9,13 @@ class PersonMailer < ActionMailer::Base
 
   CONTENT_LOGIN = 'send_login'
 
-  def login(recipient, sender)
+  def login(recipient, sender, token)
     content = CustomContent.get(CONTENT_LOGIN)
+    url = login_url(recipient, token)
     values = {
       'recipient-name' => recipient.greeting_name,
       'sender-name'    => sender.to_s,
-      'login-url'      => "<a href=\"#{login_url(recipient)}\">#{login_url(recipient)}</a>"
+      'login-url'      => "<a href=\"#{url}\">#{url}</a>"
     }
 
     mail(to: recipient.email,
@@ -28,8 +29,8 @@ class PersonMailer < ActionMailer::Base
 
   private
 
-  def login_url(person)
-    edit_person_password_url(person, reset_password_token: person.reset_password_token)
+  def login_url(person, token)
+    edit_person_password_url(person, reset_password_token: token)
   end
 
   def return_path(sender)

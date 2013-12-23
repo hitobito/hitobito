@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Event::ParticipationMailer do
+describe PersonMailer do
 
   before do
     SeedFu.quiet = true
@@ -16,7 +16,7 @@ describe Event::ParticipationMailer do
 
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
-  let(:mail) { PersonMailer.login(recipient, sender) }
+  let(:mail) { PersonMailer.login(recipient, sender, 'abcdef') }
 
   subject { mail }
 

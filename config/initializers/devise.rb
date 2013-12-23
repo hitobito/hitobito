@@ -84,6 +84,8 @@ Devise.setup do |config|
   # Setup a pepper to generate the encrypted password.
   # config.pepper = "c97d9468de2d5c67e687479f33366d9f945381c57a6a2b1f8fab9b3f132c5f9d39604ed29c1b5ec0a89065b9839b058fed11df6e93317a672cecc223cac86fac"
 
+  config.secret_key = ENV['RAILS_SECRET_TOKEN'] || 'fd3ad47214a1ee27f354909b797e4212798cf58b328ad14b744ffb4010506b6194fe907ebf6f39e7d022ba5a8afb91fbd7dd008a6c5d3665e465cbfaa9390c31'
+
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
   # confirming his account. For instance, if set to 2.days, the user will be
@@ -214,7 +216,7 @@ Devise.setup do |config|
   #
   config.warden do |manager|
   #   manager.intercept_401 = false
-     manager.default_strategies(:scope => :person).unshift :one_time_token_authenticatable
+    # manager.default_strategies(:scope => :person).unshift :one_time_token_authenticatable
    end
 
   # ==> Mountable engine configurations

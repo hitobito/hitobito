@@ -9,9 +9,9 @@ class Event::RegisterMailer < ActionMailer::Base
 
   CONTENT_REGISTER_LOGIN = 'event_register_login'
 
-  def register_login(recipient, group, event)
+  def register_login(recipient, group, event, token)
     content = CustomContent.get(CONTENT_REGISTER_LOGIN)
-    url = event_url(recipient, group, event)
+    url = event_url(group, event, token)
     values = {
       'recipient-name' => recipient.greeting_name,
       'event-name'     => event.to_s,
@@ -23,8 +23,10 @@ class Event::RegisterMailer < ActionMailer::Base
     end
   end
 
-  def event_url(person, group, event)
-    group_event_url(group, event, onetime_token: person.reset_password_token)
+  private
+
+  def event_url(group, event, token)
+    group_event_url(group, event, onetime_token: token)
   end
 
 end

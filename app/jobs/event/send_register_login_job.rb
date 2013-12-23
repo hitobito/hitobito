@@ -16,8 +16,8 @@ class Event::SendRegisterLoginJob < BaseJob
   end
 
   def perform
-    recipient.generate_reset_password_token!
-    Event::RegisterMailer.register_login(recipient, group, event).deliver
+    token = recipient.generate_reset_password_token!
+    Event::RegisterMailer.register_login(recipient, group, event, token).deliver
   end
 
   def recipient

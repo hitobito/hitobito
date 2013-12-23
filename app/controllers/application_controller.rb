@@ -25,14 +25,14 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def current_user
-    current_person
-  end
-
   def current_person
     @current_person ||= super.tap do |user|
       Person::PreloadGroups.for(user)
     end
+  end
+
+  def current_user
+    current_person
   end
 
   def person_home_path(person)
@@ -45,6 +45,16 @@ class ApplicationController < ActionController::Base
 
   def reset_stamper
     Person.reset_stamper
+  end
+
+  def authenticate_person_from_token!
+    token = Devise.token_generator.digest(Person, :reset_password_token, params[:onetime_token])
+    user = Person.find_or_initialize_with_error_by(:reset_password_token, token)
+
+    if user.persisted? && user.reset_password_period_valid?
+      user.clear_reset_password_token!
+      sign_in user
+    end
   end
 
 end

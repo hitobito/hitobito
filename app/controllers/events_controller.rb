@@ -14,6 +14,7 @@ class EventsController < CrudController
 
   decorates :event, :events, :group
 
+  prepend_before_filter :authenticate_person_from_token!
   # load group before authorization
   prepend_before_filter :parent
 

@@ -8,7 +8,11 @@ task :brakeman do
                app/models/mailing_list.rb)
   begin
     Timeout.timeout(300) do
-      sh "brakeman -o brakeman-output.tabs --skip-files #{ignores.join(',')} --no-progress"
+      sh %W(brakeman -o brakeman-output.tabs
+                     --skip-files #{ignores.join(',')}
+                     -x ModelAttrAccessible
+                     -q
+                     --no-progress).join(' ')
     end
   rescue Timeout::Error => e
     puts "\nBrakeman took too long. Aborting."

@@ -77,7 +77,7 @@ class EventSeeder
      {event_id: event.id,
       label: label,
       start_at: date += rand(20).days,
-      finish_at: date += 7 + rand(5).days}
+      finish_at: date += (7 + rand(5)).days}
     )
     date
   end

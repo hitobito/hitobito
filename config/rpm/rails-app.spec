@@ -3,7 +3,7 @@
 
 %define app_name     RPM_NAME
 
-%define app_version  1.2
+%define app_version  1.3
 %define ruby_version 1.9.3
 
 ### optional libs
@@ -17,7 +17,7 @@
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci db/production.sqlite3 script/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/production.sqlite3 script/phantomjs'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
@@ -57,6 +57,7 @@ BuildRequires:  opt-ruby-%{ruby_version}-rubygem-bundler
 BuildRequires:  libxml2-devel
 BuildRequires:  libxslt-devel
 BuildRequires:  sqlite-devel
+BuildRequires:  transifex-client
 %if %{use_mysql}
 BuildRequires:	mysql-devel
 %endif
@@ -174,9 +175,19 @@ RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails
 RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_page 500
 RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_page 503
 
-# cleanup log and tmp and db we don't want them in
-# the rpm
-rm -rf log tmp
+echo "[%{?RAILS_TRANSIFEX_HOST}]
+hostname = %{?RAILS_TRANSIFEX_HOST}
+password = %{?RAILS_TRANSIFEX_PASSWORD}
+token = 
+username = %{?RAILS_TRANSIFEX_USERNAME}
+" > ~/.transifexrc
+
+RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake tx:pull
+RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake wagon:exec CMD='%{bundle_cmd} exec rake app:tx:pull'
+
+# cleanup log and tmp we don't want them in the rpm
+rm -rf log tmp 
+rm -f ~/.transifexrc
 chmod -R o-rwx .
 
 install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www

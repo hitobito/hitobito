@@ -32,6 +32,9 @@ gem 'thinking-sphinx'
 gem 'validates_timeliness'
 gem 'wagons'
 
+# include for wagon tasks in rpm build
+gem 'bundler'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

@@ -1,13 +1,91 @@
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 de:
-  errors:
-    messages:
-      expired: "ist abgelaufen, bitte neu anfordern"
-      not_found: "nicht gefunden"
-      already_confirmed: "wurde bereits bestätigt"
-      not_locked: "ist nicht gesperrt"
-      not_saved:
-        one: "Konnte %{resource} nicht speichern: ein Fehler."
-        other: "Konnte %{resource} nicht speichern: %{count} Fehler."
+
+  # global scope
+  global:
+    "yes": "ja"
+    "no": "nein"
+    no_list_entries: Keine Einträge gefunden.
+    confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
+
+    associations:
+      # association keys may be customized per model with the prefix
+      # 'activerecord.associations.{model}.' or even per actual association with
+      # 'activerecord.associations.models.{holder_model}.{assoc_name}.'
+      no_entry: (keine)
+      none_available: (keine verfügbar)
+      please_select: Bitte auswählen
+
+    button:
+      save: Speichern
+      cancel: Abbrechen
+      search: Suchen
+
+    link:
+      show: Anzeigen
+      edit: Bearbeiten
+      add: "%{model} erstellen"
+      delete: Löschen
+      list: Liste
+
+    errors:
+      header:
+         one: "Ein Fehler verhinderte das Speichern dieses Eintrages:"
+            other: "%{count} Fehler verhinderten das Speichern dieses Eintrages:"
+   list:
+    index:
+      title: "%{models}"
+
+  crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
+
+  participations:
+    destroy:
+      flash:
+        success: "Anmeldung wurde erfolgreich gelöscht."
+
+  csv_imports:
+    create:
+      flash:
+        success: "Datei wurde erfolgreich gelesen."
+    update:
+      flash:
+        success: "Personen wurden erfolgreich importiert."
+
+  roles:
+    role_changed: "%{old_role} zu <i>%{new_role}</i> geändert."
+
+  people:
+    send_password_instructions: "Login Informationen wurden verschickt."
+
+  people_filters:
+    new:
+      title: Personen filtern
+
+  event/participations:
+    show:
+      link:
+        delete: 'Anmeldung löschen'
 
   devise:
     failure:
@@ -54,3 +132,11 @@ de:
         subject: 'Anleitung für das Setzen Deines Passworts'
       unlock_instructions:
         subject: 'Anleitung um Deinen Account freizuschalten'
+
+  views:
+    pagination:
+      next: '>>'
+      previous: '<<'
+      first: Erste
+      last: Letzte
+      truncate: '...'

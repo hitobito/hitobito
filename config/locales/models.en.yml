@@ -1,4 +1,8 @@
 en:
+  time:
+    formats:
+      time: "%H:%M"
+
   errors:
     messages:
       invalid_date: "is not a valid date"

@@ -32,11 +32,7 @@ namespace :tx do
 
   desc 'Push source files (=german locales) to transifex'
   task :push do
-    if Dir.glob('.tx/config').size > 0
-      sh "tx push -s"
-    else
-      puts 'Transifex not configured'
-    end
+    sh "tx push -s"
   end
 
   desc 'Pull the configured languages from transifex'

@@ -1,42 +1,26 @@
 en:
-  # global scope
   global:
-    "yes": "yes"
-    "no": "no"
+    'yes': "yes"
+    'no': "no"
     no_list_entries: No entries found.
     confirm_delete: Do you really want to delete this entry?
-
     associations:
-      # association keys may be customized per model with the prefix
-      # 'activerecord.associations.{model}.' or even per actual association with
-      # 'activerecord.associations.models.{holder_model}.{assoc_name}.'
       no_entry: (none)
       none_available: (none available)
       please_select: Please select
-
     button:
       save: Save
       cancel: Cancel
       search: Search
-
     link:
       show: Show
       edit: Edit
-      add: Add
+      add: "Add"
       delete: Delete
       list: List
-
-    errors:
-      header:
-        one: "1 error prohibited this entry from being saved:"
-        other: "%{count} errors prohibited this entry from being saved:"
-
-  # list controller
   list:
     index:
-      title: Listing %{models}
-
-  # crud controller
+      title: 'Listing %{models}'
   crud:
     show:
       title: "%{model}"

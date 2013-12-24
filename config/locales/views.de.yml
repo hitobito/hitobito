@@ -35,12 +35,12 @@ de:
 
     errors:
       header:
-        one: "Ein Fehler verhinderte das Speichern dieses Eintrages:"
-        other: "%{count} Fehler verhinderten das Speichern dieses Eintrages:"
+        one: 'Ein Fehler verhinderte das Speichern dieses Eintrages:'
+        other: '%{count} Fehler verhinderten das Speichern dieses Eintrages:'
 
   list:
     index:
-      title: "%{models}"
+      title: '%{models}'
 
   crud:
     show:

@@ -42,8 +42,9 @@ namespace :tx do
   desc 'Pull the configured languages from transifex'
   task :pull => :environment do
     if Dir.glob('.tx/config').size > 0
-      langs = Settings.application.languages.to_hash.keys.join(',')
-      sh "tx pull -l #{langs}"
+      langs = Settings.application.languages.to_hash.keys.collect(&:to_s)
+      langs.delete('de')
+      sh "tx pull -l #{langs.join(',')}"
     else
       puts 'Transifex not configured'
     end

@@ -1,1 +1,8 @@
-fr: {}
+fr:
+  global:
+    errors:
+      header:
+        one: 'Un erreur est apparu'
+        other: '%{count} erreurs on apparu'
+    'yes': "Oui"
+    'no': "Non"

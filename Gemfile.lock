@@ -468,7 +468,6 @@ DEPENDENCIES
   bootstrap-wysihtml5-rails
   brakeman
   bullet
-  bundler
   cancan
   capybara
   carrierwave

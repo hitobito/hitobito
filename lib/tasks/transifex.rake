@@ -35,9 +35,9 @@ namespace :tx do
     sh "tx push -s"
   end
 
-  desc 'Pull the configured languages from transifex'
-  task :pull => :environment do
-    sh tx_pull_command
+  desc 'Pull translations from transifex'
+  task :pull  do
+    sh 'tx pull'
   end
 
   #desc 'Save transifex credentials from env into .transifexrc'
@@ -54,15 +54,9 @@ namespace :tx do
   end
 
   namespace :wagon do
-    task :pull => :environment do
-      ENV['CMD'] = "if [ -f .tx/config ]; then #{tx_pull_command}; fi"
+    task :pull do
+      ENV['CMD'] = "if [ -f .tx/config ]; then tx pull; fi"
       Rake::Task['wagon:exec'].invoke
     end
-  end
-
-  def tx_pull_command
-    langs = Settings.application.languages.to_hash.keys.collect(&:to_s)
-    langs.delete('de')
-    "tx pull -l #{langs.join(',')}"
   end
 end

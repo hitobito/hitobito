@@ -49,4 +49,17 @@ namespace :tx do
       puts 'Transifex not configured'
     end
   end
+
+  #desc 'Save transifex credentials from env into .transifexrc'
+  task :auth do
+    username = ENV['RAILS_TRANSIFEX_USERNAME']
+    password = ENV['RAILS_TRANSIFEX_PASSWORD']
+    if username && password
+      host = ENV['RAILS_TRANSIFEX_HOST'] || 'https://www.transifex.com'
+      rc = "[#{host}]\nhostname = #{host}\npassword = #{password}\ntoken =\nusername = #{username}\n"
+      File.open('.transifexrc', 'w') { |f| f.puts rc }
+    else
+      puts 'No username and password given'
+    end
+  end
 end

@@ -183,7 +183,7 @@ username = %{?RAILS_TRANSIFEX_USERNAME}
 " > ~/.transifexrc
 
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake tx:pull
-RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake wagon:exec CMD='%{ruby_bindir}/bundle exec rake app:tx:pull'
+RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake wagon:exec CMD='rake app:tx:pull'
 
 # cleanup log and tmp we don't want them in the rpm
 rm -rf log tmp 

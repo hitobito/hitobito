@@ -5,7 +5,7 @@
 
 = info_field_set_tag do
   = f.labeled_text_area(:address, rows: 2)
-  = f.labeled(:zip_code, 'PLZ/Ort', nil, class: 'controls-row') do
+  = f.labeled(:zip_code, t('.zip_town'), nil, class: 'controls-row') do
     = f.string_field(:zip_code, class: 'span2')
     = f.string_field(:town, class: 'span4')
   = f.labeled_input_field(:country)

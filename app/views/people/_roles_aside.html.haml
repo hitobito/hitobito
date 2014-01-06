@@ -36,5 +36,10 @@
             %td
               - if can?(:new, group.roles.new)
                 %span.pull-right
-                  = Dropdown::RoleAddForPerson.new(self, group, entry)
+                  = action_button('Rolle hinzufügen',
+                                  new_group_role_path(group,
+                                                      role: { person_id: entry.id },
+                                                      return_url: group_person_path(group.id, entry.id)),
+                                  :plus,
+                                  class: 'btn btn-small')
 

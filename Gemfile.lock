@@ -89,6 +89,11 @@ GEM
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.1.6)
+    chosen-rails (1.0.2)
+      coffee-rails (>= 3.2)
+      compass-rails (>= 1.1.2)
+      railties (>= 3.0)
+      sass-rails (>= 3.2)
     chunky_png (1.2.9)
     ci_reporter (1.9.0)
       builder (>= 2.1.2)
@@ -471,6 +476,7 @@ DEPENDENCIES
   cancan
   capybara
   carrierwave
+  chosen-rails
   ci_reporter
   cmess
   codez-tarantula

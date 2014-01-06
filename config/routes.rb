@@ -33,7 +33,7 @@ Hitobito::Application.routes.draw do
       post 'move' => 'group/move#perform'
     end
 
-    resources :people do
+    resources :people, except: [:new, :create] do
       member do
         get :history
         post :send_password_instructions
@@ -42,7 +42,11 @@ Hitobito::Application.routes.draw do
       resources :qualifications, only: [:new, :create, :destroy]
     end
 
-    resources :roles, except: [:index, :show]
+    resources :roles, except: [:index, :show] do
+      collection do
+        get :details
+      end
+    end
 
     resources :people_filters, only: [:new, :create, :destroy]
 

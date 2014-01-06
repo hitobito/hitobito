@@ -166,34 +166,6 @@ describe PeopleController do
     end
   end
 
-  context 'POST create' do
-    it 'creates new person with role' do
-      post :create, group_id: group.id,
-                    role: { type: 'Group::TopGroup::Member', group_id: group.id },
-                    person: { last_name: 'Foo', email: 'foo@example.com' }
-
-      person = assigns(:person)
-      should redirect_to(group_person_path(group, person))
-      person.should be_persisted
-      person.email.should == 'foo@example.com'
-      person.roles.should have(1).item
-      person.roles.first.should be_persisted
-      last_email.should_not be_present
-    end
-
-
-    it 'does not create person with not allowed role' do
-      user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
-      sign_in(user.person)
-
-      expect do
-        post :create, group_id: group.id,
-                      role: { type: 'Group::TopGroup::Member', group_id: group.id },
-                      person: { last_name: 'Foo', email: 'foo@example.com' }
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
-
   context 'PUT update' do
     let(:person) { people(:bottom_member) }
     let(:group) { person.groups.first }

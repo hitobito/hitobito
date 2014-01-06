@@ -67,8 +67,16 @@ describe RolesController, type: :controller do
 
   describe_action :get, :new do
     context '.html', format: :html do
-      it 'should raise exception if no type is given', perform_request: false do
-        expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
+      it 'does not raise exception if no type is given' do
+        test_entry.should be_kind_of(Role)
+      end
+
+      context 'with invalid type' do
+        let(:params) { { role: { type: 'foo' } } }
+
+        it 'raises exception', perform_request: false do
+          expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
     end
   end

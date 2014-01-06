@@ -5,31 +5,23 @@
 
 #main.row-fluid
   .span7
-    = entry_form(buttons_bottom: false, cancel_url: role_cancel_url) do |f|
+    = entry_form(cancel_url: role_cancel_url) do |f|
       = hidden_field_tag('return_url', params[:return_url])
-      - if entry.new_record?
-        = f.hidden_field :group_id
-        = f.hidden_field :type
-        - if entry.person
-          = f.hidden_field :person_id
-          = f.labeled(:person_id) do
-            .text= entry.person
-        - else
-          = f.labeled_person_field(:person,
-                                   help_inline: link_to('Neue Person erfassen',
-                                                        new_group_person_path(@group, role: {type: entry.type, group_id: entry.group_id})))
+      = f.hidden_field :group_id
+
+      - if entry.person.persisted?
+        - title("Rolle für #{entry.person} #{entry.persisted? ? 'bearbeiten' : 'erstellen'}")
+        = f.hidden_field :person_id
+        = render 'fields', f: f
+
       - else
-        = f.labeled(:person_id) do
-          .text= entry.person
-        = f.labeled(:type, entry.possible_role_collection_select)
-
-      = f.labeled_input_field(:label,
-                              data: {provide: :typeahead, source: entry.klass.available_labels},
-                              help: 'Optionale Bezeichnung der Rolle dieser Person, z.B. Materialverantwortlicher, Webmaster, ..')
-
-      = render_extensions :fields, locals: { f: f }
+        - title("Person hinzufügen")
+        = render 'person_fields', f: f
+        = field_set_tag 'Rolle'.html_safe do
+          = render 'fields', f: f
 
   .span5
     %br/
     %br/
-    = render 'info'
+    #role_info
+      = render 'info' if @type

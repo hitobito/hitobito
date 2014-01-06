@@ -17,10 +17,10 @@ describe GroupDecorator, :draper_with_helpers do
   describe 'possible roles' do
     let(:model) { groups(:top_group) }
     its(:possible_roles) do
-      should eq [{ sti_name: 'Group::TopGroup::Leader', human: 'Leader' },
-                 { sti_name: 'Group::TopGroup::Secretary', human: 'Secretary' },
-                 { sti_name: 'Group::TopGroup::Member', human: 'Member' },
-                 { sti_name: 'Role::External', human: 'External' }]
+      should eq [Group::TopGroup::Leader,
+                 Group::TopGroup::Secretary,
+                 Group::TopGroup::Member,
+                 Role::External]
     end
   end
 

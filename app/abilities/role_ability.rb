@@ -10,8 +10,8 @@ class RoleAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(Role) do
-    permission(:group_full).may(:create, :update, :destroy).in_same_group
-    permission(:layer_full).may(:create).in_same_layer_or_below
+    permission(:group_full).may(:create, :update, :destroy, :details).in_same_group
+    permission(:layer_full).may(:create, :details).in_same_layer_or_below
     permission(:layer_full).may(:update, :destroy).in_same_layer_or_visible_below
 
     general.non_restricted

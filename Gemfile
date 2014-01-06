@@ -37,6 +37,7 @@ gem 'wagons'
 group :assets do
   gem 'bootstrap-sass', '~> 2.3'
   gem 'bootstrap-wysihtml5-rails'
+  gem 'chosen-rails'
   gem 'coffee-rails'
   gem 'compass', '0.13.alpha.0'
   gem 'compass-rails'

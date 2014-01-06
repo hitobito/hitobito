@@ -22,7 +22,14 @@ describe RolesController do
     assigns(:role).group_id.should == group.id
   end
 
-  it 'POST create redirects to people after create' do
+  it 'POST create without type displays error' do
+    post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id }
+
+    should render_template('new')
+    assigns(:role).should have(1).error_on(:type)
+  end
+
+  it 'POST creates new role for existing person and redirects to people' do
     post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name }
 
     should redirect_to(group_people_path(group))
@@ -31,6 +38,37 @@ describe RolesController do
     role.group_id.should == group.id
     flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
     role.should be_kind_of(Group::TopGroup::Member)
+  end
+
+  it 'POST creates new role and new person and redirects to people' do
+    post :create, group_id: group.id,
+                  role: { group_id: group.id,
+                          person_id: nil,
+                          type: Group::TopGroup::Member.sti_name,
+                          new_person: { first_name: 'Hans',
+                                        last_name: 'Beispiel' } }
+
+    should redirect_to(group_people_path(group))
+
+    role = assigns(:role)
+    role.group_id.should == group.id
+    flash[:notice].should == "Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+    role.should be_kind_of(Group::TopGroup::Member)
+    person = role.person
+    person.first_name.should == 'Hans'
+  end
+
+  it 'POST create without name renders form again' do
+    post :create, group_id: group.id,
+                  role: { group_id: group.id,
+                          person_id: nil,
+                          type: Group::TopGroup::Member.sti_name,
+                          new_person: { } }
+
+    should render_template('new')
+
+    role = assigns(:role)
+    role.person.should have(1).error_on(:base)
   end
 
   describe 'PUT update' do
@@ -80,9 +118,16 @@ describe RolesController do
       flash[:notice].should eq notice
       should redirect_to(person_path(person))
     end
-
   end
 
+  describe 'GET details' do
+     it 'renders template' do
+       get :details, format: :js, role: { type: Group::TopGroup::Member.sti_name }, group_id: group.id
+
+       should render_template('details')
+       assigns(:type).should == Group::TopGroup::Member
+     end
+  end
 
   describe 'handling return_url param' do
     it 'POST create redirects to people after create' do

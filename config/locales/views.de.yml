@@ -60,6 +60,10 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
+  contactable:
+    fields:
+      zip_town: PLZ/Ort
+
   participations:
     destroy:
       flash:
@@ -141,3 +145,4 @@ de:
       first: Erste
       last: Letzte
       truncate: '...'
+

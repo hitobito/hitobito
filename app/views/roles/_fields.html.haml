@@ -1,0 +1,16 @@
+= f.labeled(:type) do
+  = f.collection_select(:type,
+                        GroupDecorator.decorate(@group).possible_roles,
+                        :sti_name,
+                        :label,
+                        f.collection_prompt(:type),
+                        { class: 'span6 chosen-select',
+                          data: { 'chosen-no-results' => 'Keine Einträge gefunden mit',
+                                  remote: true,
+                                  url: details_group_roles_path(@group) }})
+
+= f.labeled_input_field(:label,
+                        data: {provide: :typeahead, source: entry.klass.available_labels},
+                        help: 'Optionale Bezeichnung der Rolle dieser Person')
+
+= render_extensions :fields, locals: { f: f }

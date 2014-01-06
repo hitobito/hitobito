@@ -21,7 +21,7 @@ class PeopleController < CrudController
   # load group before authorization
   prepend_before_filter :parent
 
-  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy,
+  prepend_before_filter :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
   before_render_show :load_asides
@@ -110,15 +110,6 @@ class PeopleController < CrudController
 
   alias_method :group, :parent
 
-  def create_role
-    type = params[:role] && params[:role][:type]
-    role = group.class.find_role_type!(type).new
-    role.group_id = params[:role][:group_id]
-    authorize! :create, role
-
-    role
-  end
-
   def load_asides
     applications = entry.pending_applications.
                          includes(event: [:groups]).
@@ -142,12 +133,6 @@ class PeopleController < CrudController
     else
       super
     end
-  end
-
-  def build_entry
-    person = super
-    person.roles << create_role
-    person
   end
 
   def assign_attributes

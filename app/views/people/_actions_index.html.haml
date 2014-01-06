@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= Dropdown::RoleAdd.new(self, @group) if can?(:new, @group.roles.new)
+= action_button('Person hinzufügen', new_group_role_path(@group), :plus) if can?(:new, @group.roles.new)
 
 = action_button('Liste importieren', new_group_csv_imports_path, :upload) if can?(:new, @group.roles.new)
 

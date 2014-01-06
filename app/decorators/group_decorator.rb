@@ -20,13 +20,11 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def possible_roles
-    klass.role_types.map do |type|
-        # users from above cannot create external roles
-      if !type.restricted &&
-        (type.visible_from_above? || can?(:index_local_people, model))
-        { sti_name: type.sti_name, human: type.label }
-      end
-    end.compact
+    klass.role_types.select do |type|
+      # users from above cannot create external roles
+      !type.restricted &&
+      (type.visible_from_above? || can?(:index_local_people, model))
+    end
   end
 
   def as_typeahead

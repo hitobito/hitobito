@@ -28,7 +28,7 @@ describe PeopleController, type: :controller do
   end
 
 
-  include_examples 'crud controller', skip: [%w(create), %w(destroy)]
+  include_examples 'crud controller', skip: [%w(new), %w(create), %w(destroy)]
 
   describe '#show' do
     let(:page_content) { ['Bearbeiten', 'Info', 'Verlauf', 'Aktive Rollen', 'Passwort ändern'] }
@@ -92,7 +92,7 @@ describe PeopleController, type: :controller do
       get :show, params
       section.find('h2').text.should eq 'Aktive Rollen'
       section.all('tr').first.text.should include('TopGroup')
-      section.should have_css('.btn-small.dropdown-toggle')
+      section.should have_css('.btn-small')
       section.find('tr:eq(1) table tr:eq(1)').text.should include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
       section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
@@ -227,21 +227,18 @@ describe PeopleController, type: :controller do
 
       events.all('tr td a').size.should eq 3
     end
-
   end
-
 
   describe 'redirect_url' do
     it 'should adjust url if param redirect_url is given' do
-      get :new, group_id: top_group.id,
-                role: { type: 'Group::TopGroup::Member', group_id: top_group.id },
-                return_url: 'foo'
+      get :edit, group_id: top_group.id,
+                 id: top_leader.id,
+                 return_url: 'foo'
 
       dom.all('a', text: 'Abbrechen').first[:href].should eq 'foo'
       dom.find('input#return_url').value.should eq 'foo'
 
     end
-
   end
 
 end

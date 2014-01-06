@@ -18,22 +18,29 @@ describe Subscriber::EventController, type: :controller do
 
   let(:list) { mailing_lists(:leaders) }
   let(:group) { list.group }
+  let(:event) { setup_event }
 
   let(:test_entry) { subscriptions(:leaders_group) }
-  let(:test_entry_attrs) { { subscriber_id: events(:top_event).id } }
+  let(:test_entry_attrs) { { subscriber_id: event.id } }
 
   before { sign_in(people(:top_leader)) }
 
   include_examples 'crud controller', skip: [%w(index), %w(show), %w(edit), %w(update), %w(destroy)]
 
   def deep_attributes(*args)
-    { subscriber_id: events(:top_event).id }
+    { subscriber_id: event.id }
   end
 
   it 'does not duplicate subscription' do
     expect do
       2.times { post :create, scope_params.merge(subscription: test_entry_attrs) }
     end.to change(Subscription, :count).by(1)
+  end
+
+  def setup_event
+    event = events(:top_event)
+    event.dates.first.update_attribute(:start_at, Time.zone.local(Time.zone.now.year, 3, 1))
+    event
   end
 
 end

@@ -1,0 +1,6 @@
+= Hitobito Changelog
+
+== Version 1.3
+
+* Multi-language support
+*

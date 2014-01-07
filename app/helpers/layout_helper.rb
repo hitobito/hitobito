@@ -81,6 +81,10 @@ module LayoutHelper
     safe_join([f(value), muted(mute)], ' ')
   end
 
+  def element_visible(visible)
+    "display: #{visible ? 'block' : 'none'};"
+  end
+
   private
 
   def button(label, url, icon_name = nil, options = {})

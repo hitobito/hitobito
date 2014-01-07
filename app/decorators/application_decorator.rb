@@ -16,7 +16,7 @@ class ApplicationDecorator < Draper::Base
   end
 
   def used_attributes(*attributes)
-    attributes.select { |name| model.class.attr_used?(name) }.map(&:to_s)
+    attributes.select { |name| klass.attr_used?(name) }.map(&:to_s)
   end
 
   def used?(attribute)

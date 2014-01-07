@@ -52,7 +52,7 @@ class RolesController < CrudController
   def save_entry
     success = false
     Role.transaction do
-      success = entry.person.save && entry.save
+      success = entry.person && entry.person.save && entry.save
       raise ActiveRecord::Rollback unless success
     end
     success
@@ -60,7 +60,7 @@ class RolesController < CrudController
 
   def handle_type_change(type)
     role = parent.class.find_role_type!(type).new
-    assign_attributes
+    role.attributes = model_params
     role.person_id = entry.person_id
     role.group_id = entry.group_id
     role.save!
@@ -79,6 +79,12 @@ class RolesController < CrudController
     role = build_role
     build_person(role)
     role.group_id = parent.id
+    role
+  end
+
+  def find_entry
+    role = super
+    @type = role.class
     role
   end
 

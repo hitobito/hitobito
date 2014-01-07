@@ -1,4 +1,4 @@
-.person-fields{style: "display: #{entry.person.changed? ? 'none' : 'block'};"}
+.person-fields{style: element_visible(!entry.person.changed?)}
   - title = capture do
     Bestehende Person
     %small
@@ -8,7 +8,7 @@
   = field_set_tag title do
     = f.labeled_person_field(:person)
 
-.person-fields{style: "display: #{entry.person.changed? ? 'block' : 'none'};"}
+.person-fields{style: element_visible(entry.person.changed?)}
   - title = capture do
     Neue Person erfassen
     %small

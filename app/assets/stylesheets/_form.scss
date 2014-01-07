@@ -10,30 +10,61 @@
   margin-bottom: $vSpace;
 }
 .btn {
-  color: $green;
-  &:hover {
-    color: darken($green, 10%);
+  color: $blueDark;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    background: $purple;
+    @include single-text-shadow($purpleDark, 0, -1px, 1px);
+    border-color: $purpleDark;
+
     .icon,
     [class^="icon-"],
     [class*=" icon-"] {
-      background-image: image-url("glyphicons-halflings-green.png");
+      background-image: image-url("glyphicons-halflings-white.png");
+    }
+
+    .caret {
+      border-top-color: $white;
     }
   }
+
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
-    background-image: image-url("glyphicons-halflings-green-hover.png");
+    background-image: image-url("glyphicons-halflings-green.png");
   }
 
   .caret {
-    border-top-color: $green;
+    border-top-color: $blueDark;
   }
-  &.btn-primary, &.btn-primary:hover, &.btn-warning, &.btn-warning:hover, &.btn-danger, &.btn-danger:hover, &.btn-success, &.btn-success:hover, &.btn-info, &.btn-info:hover, &.btn-inverse, &.btn-inverse:hover {
+
+  &.btn-primary, &.btn-primary:hover,
+  &.btn-warning, &.btn-warning:hover,
+  &.btn-danger, &.btn-danger:hover,
+  &.btn-success, &.btn-success:hover,
+  &.btn-info, &.btn-info:hover,
+  &.btn-inverse, &.btn-inverse:hover {
     color: $white;
   }
 }
 
-// from bootstrap 2.1.1 << to remove after bootstrap-sass update
+.btn-primary {
+  color: $white;
+  background: $blue;
+  border-color: $blue;
+  @include single-text-shadow($blueDark, 0, -1px, 1px);
+}
+
+.btn-group.open .btn.dropdown-toggle {
+  background: $purpleDark;
+  color: $white;
+  border-color: $purpleDark;
+}
+
+// TODO from bootstrap 2.1.1 << to remove after bootstrap-sass update
 .controls-row [class*="span"] + [class*="span"] {
   @include responsive(mediaTablet) {
     margin-left: 20px;
@@ -107,7 +138,12 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDark;
+  color: $grayDarker;
+
+  &:focus {
+    border-color: $focusColor;
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $focusColor);
+  }
 }
 
 select.time {

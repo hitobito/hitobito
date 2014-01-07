@@ -6,24 +6,57 @@
 /* Layout */
 // -------------------------
 
+body {
+  padding: 0; // new
+}
+
 /* Header */
 #page-header {
   @include clearfix;
-  margin: 10px 0 0;
+  margin: 0;
+  padding: 10px 10px 0;
+  background: $pageBackground;
 
   @include responsive(mediaTablet) {
-    margin: 10px 20px 0;
+    padding: 10px 20px 0;
+  }
+
+  .options > ul > li > a { // header links on the right side
+    color: lighten($pageBackground, 35%);
+    &:hover {
+      color: $white;
+    }
   }
 }
+
 .brand {
+  display: block;
   float: left;
+  width: 230px;
+  height: 30px;
+  padding: 10px 0;
   margin-right: 40px;
+
+  // Hide text
+  text-indent: -9999px;
+  white-space: nowrap;
   font-family: $headingFontFamily;
   font-weight: bold;
   font-size: 2.462em; // 32px
   line-height: 1.250em; // 40px
   @include single-text-shadow(white, 0, 1px, 0);
+
+  background: image-url("logo.png") transparent no-repeat 0px 10px;
+
+  // Retina version
+  @media
+    only screen and (-webkit-min-device-pixel-ratio : 2),
+    only screen and (min-device-pixel-ratio : 2) {
+      background: image-url("logo@2x.png") transparent no-repeat 0px 10px;
+      background-size: 230px 30px;
+  }
 }
+
 .options {
   float: right;
   margin-top: 10px;
@@ -71,27 +104,36 @@
 
 /* Content */
 #page {
-  padding-bottom: 30px;
-  margin: 20px 0 20px;
+  padding: 20px 10px 90px;
+  margin: 0;
+  background: $pageBackground;
 
   @include responsive(mediaTablet) {
-    margin: 20px 20px;
+    margin: 0;
+    padding: 20px 20px 90px;
   }
 
-  & > .sheet { margin: 0 20px;}
+  & > .sheet { margin: 0 20px; }
 }
+
+.sheet,
+#content {
+  @include border-radius($borderRadius);
+}
+
 .sheet.parent {
   padding-bottom: 1px;
-  background: lighten($grayLighter, 1%);
-  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  background: lighten($contentBackground, 3%);
+  @include single-box-shadow($shadowColor, 0, 2px, 8px);
   .sheet {
-    margin:0 -10px -30px 10px;
+    margin: 0 -10px -30px 10px;
     &.parent {
-      background: lighten($grayLighter, 3%);
+      background: lighten($contentBackground, 6%);
     }
   }
   .level { color: $gray; }
 }
+
 .sheet.current {
   background: image-url("shadow_left.png") transparent no-repeat bottom left;
   padding-bottom: 28px;
@@ -102,8 +144,9 @@
     margin-bottom:-28px;
   }
 }
+
 #content {
-  @include single-box-shadow($grayLight, 0, 2px, 8px);
+  @include single-box-shadow($shadowColor, 0, 2px, 8px);
   background: white;
   padding: 16px 20px 20px;
 
@@ -126,18 +169,21 @@
     padding: 5px 0 5px 15px;
   }
 }
+
 .contactable {
   @include clearfix;
   .profil-big {
     margin: 0 0 0 10px;
   }
 }
+
 #main {
   clear: both;
 }
+
 /* Footer */
 #page-footer {
-  padding-top: $vSpace*2;
+  padding-top: 0;
   clear: both;
 
   color: $white;
@@ -154,11 +200,10 @@
   }
 
   & > .container-fluid {
-    @include single-box-shadow($grayDarker, 0, 2px, 8px, 0, true);
-    background: $grayDark;
+    @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
+    background: $bodyBackground;
   }
 }
-
 
 
 /* Shared */
@@ -207,16 +252,6 @@
   overflow: visible;
 }
 
-table.roles {
-  width: 100%;
-  td {
-    border: none;
-    padding: 0px;
-  }
-  td:first-child { padding-left: 10px; width: 100%; }
-  td { min-width: 20px; }
-}
-
 .icon-muted { opacity: 0.7; }
 .contactable.well .contact {
   address { margin-left: 1em; }
@@ -228,6 +263,26 @@ table.roles {
   &:hover {
     opacity: 1;
   }
+}
+
+// well
+.well {
+  border: none;
+  background: $grayLighter;
+}
+
+.ui-datepicker td .ui-state-default:hover {
+  background-color: $purple !important;
+}
+
+table.roles {
+  width: 100%;
+  td {
+    border: none;
+    padding: 0px;
+  }
+  td:first-child { padding-left: 10px; width: 100%; }
+  td { min-width: 20px; }
 }
 
 .table-responsive {

@@ -1,7 +1,7 @@
-//  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-//  hitobito and licensed under the Affero General Public License version 3
+//  Copyright (c) 2012-2014, Puzzle ITC GmbH. This file is part of
+//  hitobito_generic and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
-//  https://github.com/hitobito/hitobito.
+//  https://github.com/hitobito/hitobito_generic.
 
 /* Bootstrap variable definition here */
 
@@ -10,39 +10,51 @@
 
 // Grays
 // -------------------------
-$black:                 #000 !default;
-$grayDarker:            #34363C !default;
-$grayDark:              #5E6066 !default;
-$gray:                  #92959C !default;
-$grayLight:             #D1D3D9 !default;
-$grayLighter:           #F1F2F5 !default;
+$black:                 #474E5D !default;
+$grayDarker:            #797E89 !default;
+$grayDark:              #9B9B9B !default;
+$gray:                  #979CA6 !default;
+$grayLight:             #E8EBF0 !default;
+$grayLighter:           #F8F9FA !default;
 $white:                 #fff !default;
 
-// Accent colors
+// Colors
 // ----------------------------
-$blue:                  #014CBC !default;
-$blueDark:              #013888 !default; //#00173C
-$green:                 #026829 !default;
-$red:                   #A1090F !default;
+$blue:                  #329897 !default;
+$blueDark:              darken($blue, 10%) !default;
+$green:                 #8DB850 !default;
+$greenDark:             darken($green, 10%) !default;
 
-$borderColor:           darken(#F1F2F5, 5%) !default;
+$orange:                #DC795B;
+$orangeDark:            #C75B3B;
+$purple:                #925D97;
+$purpleDark:            #6A396F;
 
-// Scaffolding
-// -------------------------
-$bodyBackground:        darken($grayLighter, 1.5%) !default; // $grayLighter ;
-$textColor:             $grayDarker !default;
+$red:                   $orange !default;
 
-// Links
-// -------------------------
+$textColor:             $black !default;
+$borderColor:           $grayLight !default;
+
+$pageBackground:        lighten($green, 5%);
+$contentBackground:     $grayLight;
+$footerBackground:      $blue;
+$bodyBackground:        $footerBackground !default;
+
+$focusColor:            $purple;
+$shadowColor:           darken($pageBackground, 10%);
 $linkColor:             $blue !default;
-$linkColorHover:        $blueDark !default;
+$linkColorHover:        $purpleDark !default;
 
 // Typography
 // -------------------------
 $sansFontFamily:        Helvetica, Arial, sans-serif !default;
-$headingFontFamily:     "Century Gothic", $sansFontFamily;
-$baseFontFamily:        $sansFontFamily !default;
-$headingsFontWeight:    normal !default;    // instead of browser default, bold
+$headingFontFamily:     'Quicksand', $sansFontFamily !default;
+$baseFontFamily:        'Varela Round', $sansFontFamily !default;
+$headingsFontWeight:    normal !default; // instead of browser default, bold
+
+// Decoration
+// -------------------------
+$borderRadius:           6px;
 
 // Rhythm
 // -------------------------

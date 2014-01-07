@@ -5,19 +5,20 @@
 
 /* Typo */
 // -------------------------
-#{headings(all)} {
+#{headings(2)} {
   font-family: $headingFontFamily;
   margin-top: 0;
 }
 
 h1 {
   font-size: 1.5em !important;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 1.25em;
 }
 
 h2 {
   font-size: 1.5em !important;
+  font-weight: 700;
 }
 
 h3 {
@@ -47,6 +48,7 @@ td p, address {
 
 .btn-toolbar .dropdown, .btn-toolbar .link {
   font-size: 14px;
+  vertical-align: middle;
 }
 
 .btn-group + .link {
@@ -91,6 +93,7 @@ dl {
 .table, .table-basic {
   td, th {
     padding-left: 0;
+    border-color: $borderColor; // new
     &:last-child { padding-right: 0; }
   }
 }
@@ -99,6 +102,11 @@ dl {
   td:first-child {
     padding-left: 8px;
   }
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+  background-color: lighten($purple, 50%);
 }
 
 .table-grouped {
@@ -131,8 +139,8 @@ select[class*="span"] {
 }
 
 legend {
-  font-size: 1.1em;
-  line-height: normal;
+  font-size: 1.2em;
+  line-height: 180%;
 
   small {
     font-size: 85%;

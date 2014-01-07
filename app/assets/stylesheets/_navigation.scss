@@ -7,7 +7,7 @@
 // -------------------------
 
 /* Navigation */
-#page-navigation { 
+#page-navigation {
   margin-top: 13px;
   float: left;
 
@@ -18,30 +18,32 @@
 
   .nav {
     @include horizontal-list(15px);
-    font-family: $headingFontFamily;
+    font-family: $baseFontFamily;
     li {
       @include responsive(phone, $mediaTablet) {
         float: none;
         display:block;
         padding:0; margin:0;
       }
-      &.active a { background-color: white; }
-      a { 
-        @include single-text-shadow(white, 0, 1px, 0);
+      &.active a {
+        color: $white;
+        background-color: $blue;
+      }
+      a {
         @include border-radius(4px);
         font-size: 1.077em;
         text-transform: uppercase;
-        color: $grayDark;
+        color: $white;
         padding: 2px 5px;
 
-        &:hover { 
-          @include single-text-shadow($blueDark, 0, -1px, 0);
-          background-color: $blue; 
+        &:hover {
+          @include single-text-shadow($purpleDark, 0, -1px, 0);
+          background-color: $purple;
           color: white;
-        }        
+        }
       }
     }
-  }  
+  }
 }
 
 .nav-sub {
@@ -59,18 +61,21 @@
       margin-right: 30px;
       line-height: 14px;
       border-bottom: 2px solid $white;
-      &:hover { 
-        background: none; 
-        border-color: $grayLight; 
+      &:hover {
+        background: none;
+        border-color: $grayLight;
       }
     }
   }
-  & > .active > a, & > .active > a:hover {
+  & > .active > a {
     border-color: $blue;
+  }
+  & > .active > a:hover {
+    border-color: $purple;
   }
 }
 
-.level { 
+.level {
   display: block;
   font-family: $headingFontFamily;
   font-size: 1.5em !important;
@@ -83,9 +88,9 @@
   padding: 0 20px 0 20px;
   margin-bottom: 0;
   border-bottom: none;
-  a { 
+  a {
     color: $gray;
-    border: none; 
+    border: none;
   }
   .active a {
     color: $grayDark;
@@ -102,7 +107,7 @@
   border: none;
   font-family: $headingFontFamily;
 
-  ul { 
+  ul {
     margin: 0;
     li {
       color: $gray;
@@ -123,7 +128,7 @@
   @include clearfix;
   margin-top: 0;
 }
-.pagination ul > .active > a, 
+.pagination ul > .active > a,
 .pagination ul > .active > span {
   color: $grayDark;
 }
@@ -136,19 +141,30 @@
   border: 1px solid $grayLight;
   margin-top: 0;
   margin-bottom: 0;
+  margin-right: 0;
 }
-.nav-pills .open .dropdown-toggle {
-  background-color: $blue;
+
+.nav-pills > .active > a {
   border-color: $blue;
+}
+.nav-pills > .active > a:hover,
+.nav-pills > .active > a:focus {
+  background-color: $purple;
+  border-color: $purple !important;
+}
+
+.nav-pills .open .dropdown-toggle {
+  background-color: $purple;
+  border-color: $purple;
 }
 .toolbar-pills {
   float: left;
   margin-right: 15px;
-  .nav-pills { 
-    float: left; 
+  .nav-pills {
+    float: left;
   }
   li > a {
-    margin-right: 5px;
+    margin-right: 0px;
   }
   & + .btn-toolbar {
     float: left;
@@ -174,6 +190,13 @@
 .dropdown-menu .dropdown-menu {
   min-width: 0;
 }
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  background: $purple;
+}
+
 .pull-right > .btn-group > .dropdown-menu,
 .pull-right > .dropdown > .dropdown-menu {
   right: 0;

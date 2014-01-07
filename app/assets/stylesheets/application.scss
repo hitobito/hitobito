@@ -30,12 +30,13 @@
 @import "compass/css3/transition";
 @import "compass/css3/opacity";
 
+@import "chosen-bootstrap";
+
 /* Imports Partials */
 @import "typography";
 @import "navigation";
 @import "form";
 @import "layout";
-
-@import "chosen-bootstrap";
+@import "fonts";
 
 @import "wagon";

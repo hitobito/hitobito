@@ -18,14 +18,9 @@ class RolesController < CrudController
 
   def create
     assign_attributes
+
     new_person = entry.person && entry.person.new_record?
-    created = false
-    Role.transaction do
-      created = with_callbacks(:create, :save) do
-        entry.valid? && entry.person.save && entry.save
-      end
-      raise ActiveRecord::Rollback unless created
-    end
+    created = create_entry_and_person
     respond_with(entry, success: created, location: after_create_location(new_person))
   end
 
@@ -58,13 +53,15 @@ class RolesController < CrudController
 
   private
 
-  def save_entry
-    success = false
+  def create_entry_and_person
+    created = false
     Role.transaction do
-      success = entry.person && entry.person.save && entry.save
-      raise ActiveRecord::Rollback unless success
+      created = with_callbacks(:create, :save) do
+        entry.valid? && entry.person.save && entry.save
+      end
+      raise ActiveRecord::Rollback unless created
     end
-    success
+    created
   end
 
   def handle_type_change(type)
@@ -92,9 +89,7 @@ class RolesController < CrudController
   end
 
   def find_entry
-    role = super
-    @type = role.class
-    role
+    super.tap { |role| @type = role.class }
   end
 
   def build_role

@@ -114,6 +114,7 @@ end
 
 def init_capybara
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+  require 'capybara/poltergeist'
 
   if ENV['HEADLESS'] == 'true'
     require 'headless'
@@ -129,7 +130,6 @@ def init_capybara
   elsif ENV['HEADLESS'] == 'false'
     # use selenium-webkit driver
   else
-    require 'capybara/poltergeist'
     Capybara.register_driver :poltergeist do |app|
       options = { debug: false, inspector: true, timeout: 30 }
       driver = Capybara::Poltergeist::Driver.new(app, options)

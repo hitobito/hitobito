@@ -17,7 +17,16 @@ class RolesController < CrudController
   hide_action :index, :show
 
   def create
-    super(location: return_path || group_people_path(entry.group_id))
+    assign_attributes
+    new_person = entry.person && entry.person.new_record?
+    created = false
+    Role.transaction do
+      created = with_callbacks(:create, :save) do
+        entry.valid? && entry.person.save && entry.save
+      end
+      raise ActiveRecord::Rollback unless created
+    end
+    respond_with(entry, success: created, location: after_create_location(new_person))
   end
 
   def update
@@ -111,5 +120,14 @@ class RolesController < CrudController
   # A label for the current entry, including the model name, used for flash
   def full_entry_label(role = entry)
     "#{models_label(false)} #{RoleDecorator.decorate(role).flash_info}".html_safe
+  end
+
+  def after_create_location(new_person)
+    return_path ||
+      if new_person && entry.person && entry.person.persisted?
+        group_person_path(entry.group_id, entry.person_id)
+      else
+        group_people_path(entry.group_id)
+      end
   end
 end

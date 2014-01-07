@@ -22,53 +22,63 @@ describe RolesController do
     assigns(:role).group_id.should == group.id
   end
 
-  it 'POST create without type displays error' do
-    post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id }
+  describe 'POST create' do
+    it 'new role for existing person and redirects to people' do
+      post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name }
 
-    should render_template('new')
-    assigns(:role).should have(1).error_on(:type)
-  end
+      should redirect_to(group_people_path(group))
 
-  it 'POST creates new role for existing person and redirects to people' do
-    post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name }
+      role = person.reload.roles.first
+      role.group_id.should == group.id
+      flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+      role.should be_kind_of(Group::TopGroup::Member)
+    end
 
-    should redirect_to(group_people_path(group))
+    it 'new role and new person and redirects to person' do
+      post :create, group_id: group.id,
+                    role: { group_id: group.id,
+                            person_id: nil,
+                            type: Group::TopGroup::Member.sti_name,
+                            new_person: { first_name: 'Hans',
+                                          last_name: 'Beispiel' } }
 
-    role = person.reload.roles.first
-    role.group_id.should == group.id
-    flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
-    role.should be_kind_of(Group::TopGroup::Member)
-  end
+      role = assigns(:role)
+      should redirect_to(group_person_path(group, role.person))
 
-  it 'POST creates new role and new person and redirects to people' do
-    post :create, group_id: group.id,
-                  role: { group_id: group.id,
-                          person_id: nil,
-                          type: Group::TopGroup::Member.sti_name,
-                          new_person: { first_name: 'Hans',
-                                        last_name: 'Beispiel' } }
+      role.group_id.should == group.id
+      flash[:notice].should == "Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+      role.should be_kind_of(Group::TopGroup::Member)
+      person = role.person
+      person.first_name.should == 'Hans'
+    end
 
-    should redirect_to(group_people_path(group))
+    it 'without name renders form again' do
+      post :create, group_id: group.id,
+                    role: { group_id: group.id,
+                            person_id: nil,
+                            type: Group::TopGroup::Member.sti_name,
+                            new_person: { } }
 
-    role = assigns(:role)
-    role.group_id.should == group.id
-    flash[:notice].should == "Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
-    role.should be_kind_of(Group::TopGroup::Member)
-    person = role.person
-    person.first_name.should == 'Hans'
-  end
+      should render_template('new')
 
-  it 'POST create without name renders form again' do
-    post :create, group_id: group.id,
-                  role: { group_id: group.id,
-                          person_id: nil,
-                          type: Group::TopGroup::Member.sti_name,
-                          new_person: { } }
+      role = assigns(:role)
+      role.person.should have(1).error_on(:base)
+    end
 
-    should render_template('new')
+    it 'without type displays error' do
+      post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id }
 
-    role = assigns(:role)
-    role.person.should have(1).error_on(:base)
+      should render_template('new')
+      assigns(:role).should have(1).error_on(:type)
+    end
+
+    it 'with invalid person_id displays error' do
+      post :create, group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99 }
+
+      should render_template('new')
+      assigns(:role).should have(1).error_on(:person)
+    end
+
   end
 
   describe 'PUT update' do

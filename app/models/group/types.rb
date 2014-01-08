@@ -67,7 +67,7 @@ module Group::Types
     # All groups that may offer courses
     def course_offerers
       sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
-      scoped.where(type: sti_names).order(:parent_id, :name)
+      where(type: sti_names).order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found

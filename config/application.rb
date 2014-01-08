@@ -18,14 +18,8 @@ if defined?(Bundler)
   # see also scripts/commands.rb
   # http://yehudakatz.com/2010/05/09/the-how-and-why-of-bundler-groups/
   # http://iain.nl/getting-the-most-out-of-bundler-groups
-  b = -> { Bundler.require(*Rails.groups) }
+  b = -> { Bundler.require(:default, Rails.env) }
   puts "require gems:   #{Benchmark.measure(&b)}"
-
-  # If you precompile assets before deploying to production, use this line
-  # Bundler.require(*Rails.groups(assets: %w(development test)))
-
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
 end
 
 module Hitobito
@@ -77,7 +71,8 @@ module Hitobito
     # This will create an empty whitelist of attributes available for mass-assignment for all models
     # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
     # parameters by using an attr_accessible or attr_protected declaration.
-    config.active_record.whitelist_attributes = true
+    # TODO: remove for rails 4
+    config.active_record.whitelist_attributes = false
 
     config.log_tags = [:uuid]
 

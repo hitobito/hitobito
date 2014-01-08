@@ -49,7 +49,7 @@ module LayoutHelper
   end
 
   def section_table(title, collection, add_path = nil, &block)
-    collection.inspect # force relation evaluation
+    collection.to_a # force relation evaluation
     if add_path || collection.present?
       if add_path
         button = action_button(ti(:'link.add_without_model'), add_path, 'plus', class: 'btn-small')

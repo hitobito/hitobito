@@ -91,7 +91,7 @@ module Person::Groups
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << 'END'
-      order(statement)
+      joins(:roles).order(statement)
     end
   end
 end

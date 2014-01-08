@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Event::KindsController do
 
-  let(:destroyed) { Event::Kind.with_deleted.find(ActiveRecord::Fixtures.identify(:old)) }
+  let(:destroyed) { Event::Kind.with_deleted.find(ActiveRecord::FixtureSet.identify(:old)) }
 
   before { sign_in(people(:top_leader)) }
 

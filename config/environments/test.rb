@@ -16,12 +16,11 @@ Hitobito::Application.configure do
 
   config.cache_store = :memory_store
 
+  config.eager_load = false
+
   # Configure static asset server for tests with Cache-Control for performance
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
-
-  # Log error messages when you accidentally call methods on nil
-  config.whiny_nils = true
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -40,6 +39,7 @@ Hitobito::Application.configure do
   config.action_mailer.default_url_options = { :host => "test.host" }
 
   # Raise exception on mass assignment protection for Active Record models
+  # TODO: remove for rails 4
   config.active_record.mass_assignment_sanitizer = :strict
 
   # Print deprecation notices to the stderr

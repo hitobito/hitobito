@@ -1,7 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.16'
+gem 'rails', '4.0.2'
 
+# backward compatibility, remove soon
+gem 'protected_attributes'
+
+gem 'activerecord-session_store'
 gem 'airbrake'
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
@@ -23,7 +27,7 @@ gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
 gem 'paper_trail'
-gem 'paranoia', '~> 1.2'
+gem 'paranoia'
 gem 'prawn', '~> 0.12.0'
 gem 'protective'
 gem 'rack'
@@ -35,21 +39,18 @@ gem 'thinking-sphinx'
 gem 'validates_timeliness'
 gem 'wagons'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'bootstrap-sass', '~> 2.3'
-  gem 'bootstrap-wysihtml5-rails'
-  gem 'chosen-rails'
-  gem 'coffee-rails'
-  gem 'compass', '0.13.alpha.0'
-  gem 'compass-rails'
-  gem 'jquery-rails'
-  gem 'jquery-ui-rails'
-  gem 'sass-rails'
-  gem 'therubyracer', :platforms => :ruby
-  gem 'uglifier'
-end
+# Gems used only for assets
+gem 'bootstrap-sass', '~> 2.3'
+gem 'bootstrap-wysihtml5-rails'
+gem 'chosen-rails'
+gem 'coffee-rails'
+gem 'compass', '0.13.alpha.0'
+gem 'compass-rails'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'sass-rails'
+gem 'therubyracer', :platforms => :ruby
+gem 'uglifier'
 
 group :development, :test do
   gem 'binding_of_caller'

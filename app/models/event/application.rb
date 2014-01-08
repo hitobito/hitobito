@@ -36,7 +36,14 @@ class Event::Application < ActiveRecord::Base
 
 
   ## CLASS METHODS
-  scope :pending, joins(:participation).where(event_participations: { active: false }, rejected: false)
+
+  class << self
+    def pending
+      joins(:participation).
+      where(event_participations: { active: false },
+            rejected: false)
+    end
+  end
 
 
   def contact

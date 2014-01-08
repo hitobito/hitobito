@@ -80,7 +80,7 @@ class Event < ActiveRecord::Base
 
   belongs_to :contact, class_name: 'Person'
 
-  has_many :dates, dependent: :destroy, validate: true, order: :start_at
+  has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
   has_many :questions, dependent: :destroy, validate: true
 
   has_many :participations, dependent: :destroy
@@ -102,11 +102,6 @@ class Event < ActiveRecord::Base
   ### CALLBACKS
 
   before_validation :set_self_in_nested
-
-  ### SCOPES
-
-  scope :order_by_date, joins(:dates).order('event_dates.start_at')
-  scope :preload_all_dates, scoped.extending(Event::PreloadAllDates)
 
 
   accepts_nested_attributes_for :dates, :questions, allow_destroy: true
@@ -152,6 +147,14 @@ class Event < ActiveRecord::Base
       where('events.maximum_participants IS NULL OR ' +
             'events.maximum_participants <= 0 OR ' +
             'events.participant_count < events.maximum_participants')
+    end
+
+    def preload_all_dates
+      all.extending(Event::PreloadAllDates)
+    end
+
+    def order_by_date
+      joins(:dates).order('event_dates.start_at')
     end
 
     # Default scope for event lists

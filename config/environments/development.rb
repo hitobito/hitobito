@@ -13,8 +13,7 @@ Hitobito::Application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  config.eager_load = false
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -28,13 +27,13 @@ Hitobito::Application.configure do
   config.action_mailer.delivery_method = (ENV['RAILS_MAIL_DELIVERY_METHOD'].presence || :smtp).to_sym
 
   if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
-    case config.action_mailer.delivery_method.to_s 
-    when 'smtp' 
-      config.action_mailer.smtp_settings = 
-        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+    case config.action_mailer.delivery_method.to_s
+    when 'smtp'
+      config.action_mailer.smtp_settings =
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
     when 'sendmail'
-      config.action_mailer.sendmail_settings = 
-        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+      config.action_mailer.sendmail_settings =
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
     end
   else
     # mailcatcher
@@ -49,10 +48,6 @@ Hitobito::Application.configure do
 
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
-
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Do not compress assets
   config.assets.compress = false

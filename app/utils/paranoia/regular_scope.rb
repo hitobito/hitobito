@@ -14,11 +14,11 @@ module Paranoia
     # Tradeoff: When choosing an associated entry, the scope
     # :without_deleted has to specified explicitly.
     def default_scope
-      scoped.with_deleted
+      with_deleted
     end
 
     def without_deleted
-      scoped.where(deleted_at: nil)
+      where(deleted_at: nil)
     end
 
   end

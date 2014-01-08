@@ -122,13 +122,6 @@ class Person < ActiveRecord::Base
   before_destroy :destroy_roles
 
 
-  ### SCOPES
-
-  scope :only_public_data, ->() { select(PUBLIC_ATTRS.collect { |a| "people.#{a}" }) }
-  scope :contact_data_visible, where(contact_data_visible: true)
-  scope :preload_groups, scoped.extending(Person::PreloadGroups)
-
-
   ### CLASS METHODS
 
   class << self
@@ -136,6 +129,18 @@ class Person < ActiveRecord::Base
       order(company_case_column(:company_name, :last_name),
             company_case_column(:last_name, :first_name),
             company_case_column(:first_name, :nickname))
+    end
+
+    def only_public_data
+      select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
+    end
+
+    def contact_data_visible
+      where(contact_data_visible: true)
+    end
+
+    def preload_groups
+      all.extending(Person::PreloadGroups)
     end
 
     private

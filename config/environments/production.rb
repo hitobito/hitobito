@@ -11,6 +11,8 @@ Hitobito::Application.configure do
   # Code is not reloaded between requests
   config.cache_classes = true
 
+  config.eager_load = true
+
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
@@ -19,7 +21,7 @@ Hitobito::Application.configure do
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
-  config.assets.compress = true
+  config.assets.js_compressor = :uglifier
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
@@ -59,18 +61,18 @@ Hitobito::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_deliveries = ENV['RAILS_MAIL_PERFORM_DELIVERIES'] != 'false'
-  
+
   # Mail sender
   config.action_mailer.delivery_method = (ENV['RAILS_MAIL_DELIVERY_METHOD'].presence || :smtp).to_sym
 
   if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
-    case config.action_mailer.delivery_method 
-    when :smtp 
-      config.action_mailer.smtp_settings = 
-        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+    case config.action_mailer.delivery_method
+    when :smtp
+      config.action_mailer.smtp_settings =
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
     when :sendmail
-      config.action_mailer.sendmail_settings = 
-        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys 
+      config.action_mailer.sendmail_settings =
+        YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
     end
   end
 
@@ -90,7 +92,4 @@ Hitobito::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 1.0
 end

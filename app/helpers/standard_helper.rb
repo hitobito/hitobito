@@ -34,10 +34,10 @@ module StandardHelper
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
   def format_attr(obj, attr)
-    format_type_attr_method = obj.class.respond_to?(:model_name) ?
-        :"format_#{obj.class.base_class.model_name.underscore}_#{attr.to_s}" :
-        :"format_#{obj.class.name.underscore}_#{attr.to_s}"
-    format_type_attr_method = format_type_attr_method.to_s.gsub(%r{/}, '_')  # deal with nested models
+    format_type_attr_method = obj.class.respond_to?(:base_class) ?
+        "format_#{obj.class.base_class.name.underscore}_#{attr.to_s}" :
+        "format_#{obj.class.name.underscore}_#{attr.to_s}"
+    format_type_attr_method = format_type_attr_method.gsub(%r{/}, '_')  # deal with nested models
 
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
@@ -100,7 +100,7 @@ module StandardHelper
   # If entries is empty, an appropriate message is rendered.
   # An options hash may be given as the last argument.
   def table(entries, *attrs, &block)
-    entries.inspect
+    entries.to_a # force evaluation of relation
     if entries.present?
       content_tag(:div, class: 'table-responsive') do
         StandardTableBuilder.table(entries, self, attrs.extract_options!) do |t|
@@ -237,6 +237,45 @@ module StandardHelper
     content_for(:js_includes) { javascript_include_tag 'wysiwyg' }
   end
 
+  # Returns the ActiveRecord column type or nil.
+  def column_type(obj, attr)
+    column_property(obj, attr, :type)
+  end
+
+  # Returns an ActiveRecord column property for the passed attr or nil
+  def column_property(obj, attr, property)
+    if obj.respond_to?(:column_for_attribute)
+      column = obj.column_for_attribute(attr)
+      column.try(property)
+    end
+  end
+
+  # Returns the association proxy for the given attribute. The attr parameter
+  # may be the _id column or the association name. If a macro (e.g. :belongs_to)
+  # is given, the association must be of this type, otherwise, any association
+  # is returned. Returns nil if no association (or not of the given macro) was
+  # found.
+  def association(obj, attr, *macros)
+    klass = object_class(obj)
+    if klass.respond_to?(:reflect_on_association)
+      name = assoc_and_id_attr(attr).first.to_sym
+      assoc = klass.reflect_on_association(name)
+      assoc if assoc && (macros.blank? || macros.include?(assoc.macro))
+    end
+  end
+
+  # Returns the name of the attr and it's corresponding field
+  def assoc_and_id_attr(attr)
+    attr = attr.to_s
+    attr, attr_id = if attr.end_with?('_id')
+      [attr[0..-4], attr]
+    elsif attr.end_with?('_ids')
+      [attr[0..-5].pluralize, attr]
+    else
+      [attr, "#{attr}_id"]
+    end
+  end
+
   private
 
   # Helper methods that are not directly called from templates.
@@ -254,19 +293,6 @@ module StandardHelper
       when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
       when :decimal then f(val.to_s.to_f)
       else f(val)
-    end
-  end
-
-  # Returns the ActiveRecord column type or nil.
-  def column_type(obj, attr)
-    column_property(obj, attr, :type)
-  end
-
-  # Returns an ActiveRecord column property for the passed attr or nil
-  def column_property(obj, attr, property)
-    if obj.respond_to?(:column_for_attribute)
-      column = obj.column_for_attribute(attr)
-      column.try(property)
     end
   end
 
@@ -304,32 +330,6 @@ module StandardHelper
 
   def model_link(val)
 
-  end
-
-  # Returns the association proxy for the given attribute. The attr parameter
-  # may be the _id column or the association name. If a macro (e.g. :belongs_to)
-  # is given, the association must be of this type, otherwise, any association
-  # is returned. Returns nil if no association (or not of the given macro) was
-  # found.
-  def association(obj, attr, *macros)
-    klass = object_class(obj)
-    if klass.respond_to?(:reflect_on_association)
-      name = assoc_and_id_attr(attr).first.to_sym
-      assoc = klass.reflect_on_association(name)
-      assoc if assoc && (macros.blank? || macros.include?(assoc.macro))
-    end
-  end
-
-  # Returns the name of the attr and it's corresponding field
-  def assoc_and_id_attr(attr)
-    attr = attr.to_s
-    attr, attr_id = if attr.end_with?('_id')
-      [attr[0..-4], attr]
-    elsif attr.end_with?('_ids')
-      [attr[0..-5].pluralize, attr]
-    else
-      [attr, "#{attr}_id"]
-    end
   end
 
   def object_class(obj)

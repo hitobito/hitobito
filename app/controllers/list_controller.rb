@@ -51,7 +51,7 @@ class ListController < ApplicationController
   # This is mainly used for nested models to provide the
   # required context.
   def model_scope
-    model_class.scoped
+    model_class.all
   end
 
   # The path arguments to link to the given entry.
@@ -124,7 +124,7 @@ class ListController < ApplicationController
     def render_with_callbacks(*args, &block)
       options = _normalize_render(*args, &block)
       callback = "render_#{options[:template]}"
-      run_callbacks(callback) if respond_to?(:"_run_#{callback}_callbacks", true)
+      run_callbacks(callback) if respond_to?(:"_#{callback}_callbacks", true)
 
       render_without_callbacks(*args, &block) unless performed?
     end
@@ -145,7 +145,7 @@ class ListController < ApplicationController
         args = actions.collect { |a| :"render_#{a}" }
         args << { only: :before,
                   terminator: 'result == false || performed?' }
-        define_model_callbacks *args
+        define_model_callbacks(*args)
       end
     end
   end

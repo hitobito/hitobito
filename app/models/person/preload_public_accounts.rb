@@ -18,7 +18,7 @@ module Person::PreloadPublicAccounts
     ActiveRecord::Associations::Preloader.new(
       records,
       :phone_numbers,
-      conditions: { public: true }).run
+      PhoneNumber.where(public: true)).run
 
     records
   end

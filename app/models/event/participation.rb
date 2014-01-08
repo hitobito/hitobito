@@ -56,9 +56,8 @@ class Event::Participation < ActiveRecord::Base
 
   before_validation :set_self_in_nested
 
-  ### SCOPES
-  scope :active, where(active: true)
-  scope :pending, where(active: false)
+
+  ### CLASS METHODS
 
   class << self
     # Order people by the order participation types are listed in their event types.
@@ -69,6 +68,14 @@ class Event::Participation < ActiveRecord::Base
       end
       statement << 'END'
       joins(:roles).order(statement)
+    end
+
+    def active
+      where(active: true)
+    end
+
+    def pending
+      where(active: false)
     end
 
     def upcoming
@@ -93,7 +100,7 @@ class Event::Participation < ActiveRecord::Base
       if affiliate_types.present?
         joins(:roles).where('event_roles.type NOT IN (?)', affiliate_types)
       else
-        scoped
+        all
       end
     end
   end

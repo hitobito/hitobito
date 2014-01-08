@@ -43,7 +43,7 @@ class ApplicationDecorator < Draper::Decorator
   def modification_info(at, person)
     return '' if at.nil?
 
-    html = l(at, format: :date_time)
+    html = I18n.localize(at, format: :date_time)
     if person.present?
       html << ' '
       html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))

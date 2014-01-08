@@ -25,7 +25,7 @@ class PhoneNumber < ActiveRecord::Base
 
   belongs_to :contactable, polymorphic: true
 
-  scope :public, where(public: true)
+  scope :public, -> { where(public: true) }
 
   validates :label, presence: true
 

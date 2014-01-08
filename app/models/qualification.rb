@@ -40,14 +40,15 @@ class Qualification < ActiveRecord::Base
 
   delegate :cover?, :active?, to: :duration
 
-  scope :order_by_date, order('start_at DESC')
-
-
   class << self
     def active(date = nil)
       date ||= Date.today
       where('qualifications.start_at <= ?', date).
         where('qualifications.finish_at >= ? OR qualifications.finish_at IS NULL', date)
+    end
+
+    def order_by_date
+      order('finish_at DESC')
     end
   end
 

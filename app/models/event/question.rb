@@ -29,7 +29,7 @@ class Event::Question < ActiveRecord::Base
   validate :assert_zero_or_more_than_one_choice
 
 
-  scope :global, where(event_id: nil)
+  scope :global, -> { where(event_id: nil) }
 
 
   def choice_items

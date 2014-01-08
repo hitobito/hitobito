@@ -29,7 +29,7 @@ class PeopleFilter < ActiveRecord::Base
   validates :name, uniqueness: { scope: [:group_id, :group_type] }
 
 
-  default_scope order(:name).includes(:related_role_types)
+  default_scope -> { order(:name).includes(:related_role_types) }
 
   def to_s
     name

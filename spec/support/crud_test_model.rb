@@ -24,7 +24,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   validates :birthdate, timeliness: { type: :date, allow_blank: true }
   validates :rating, inclusion: { in: 1..10 }
 
-  default_scope order('name')
+  default_scope -> { order('name') }
 
   def to_s
     name

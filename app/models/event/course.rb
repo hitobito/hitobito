@@ -55,6 +55,7 @@ class Event::Course < Event
 
   validates :kind_id, presence: true
 
+
   def label_detail
     "#{kind.short_name} #{number} #{group_names}"
   end

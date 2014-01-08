@@ -18,8 +18,7 @@ class RolesController < CrudController
 
   def create
     assign_attributes
-
-    new_person = entry.person && entry.person.new_record?
+    new_person = entry.person.new_record?
     created = create_entry_and_person
     respond_with(entry, success: created, location: after_create_location(new_person))
   end
@@ -57,7 +56,7 @@ class RolesController < CrudController
     created = false
     Role.transaction do
       created = with_callbacks(:create, :save) do
-        entry.valid? && entry.person.save && entry.save
+        entry.person.save && entry.save
       end
       raise ActiveRecord::Rollback unless created
     end
@@ -107,6 +106,7 @@ class RolesController < CrudController
     person_id = model_params && model_params.delete(:person_id)
     if person_id.present?
       role.person_id = person_id
+      role.person = Person.new unless role.person
     else
       role.person = Person.new(person_attrs)
     end

@@ -16,19 +16,11 @@
 #
 #= require jquery
 #= require jquery_ujs
-#= require jquery.ui.all
-# require bootstrap-transition
-# require bootstrap-affix
+#= require jquery.ui.datepicker
 #= require bootstrap-alert
 #= require bootstrap-button
-# require bootstrap-carousel
-# require bootstrap-collapse
 #= require bootstrap-dropdown
-# require bootstrap-modal
-# require bootstrap-scrollspy
-# require bootstrap-tab
 #= require bootstrap-tooltip
-# require bootstrap-popover
 #= require bootstrap-typeahead
 #= require jquery_nested_form
 #= require jquery-ui-datepicker-i18n
@@ -61,7 +53,6 @@ datepicker = do ->
 
   show: ->
     field = $(this)
-    console.log(field)
     if field.is('.icon-calendar')
       field = field.parent().siblings('.date')
     field.datepicker(onSelect: track)
@@ -71,12 +62,22 @@ datepicker = do ->
       field.datepicker('setDate', lastDate)
       field.val('') # user must confirm selection
 
-toggleGroupContact = do ->
+toggleGroupContact = ->
   open = !$('#group_contact_id').val()
-  ->
-    state = !$(this).val()
-    $('fieldset.info').slideToggle() if open != state
-    open = state
+  fields = $('fieldset.info')
+  if !open && fields.is(':visible')
+    fields.slideUp()
+  else if open && !fields.is(':visible')
+    fields.slideDown()
+
+swapElements = (event) ->
+  css = $(this).data('swap')
+  $('.' + css).slideToggle()
+  event.preventDefault()
+
+resetRolePersonId = (event) ->
+  $('#role_person_id').val(null).change()
+  $('#role_person').val(null).change()
 
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)
@@ -125,7 +126,7 @@ $ ->
   $('body').on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
 
   # control visibilty of group contact fields in relation to contact
-  $('#group_contact_id').on('change', toggleGroupContact)
+  $('body').on('change', '#group_contact_id', toggleGroupContact)
 
   # enable chosen js
   $('.chosen-select').each((i, e) ->
@@ -135,15 +136,8 @@ $ ->
              search_contains: true)
     )
 
-  # wire up data toggle links
-  $('body').on('click', 'a[data-toggle]', (event) ->
-    css = $(this).data('toggle')
-    $('.' + css).slideToggle()
-    event.preventDefault()
-    )
+  # wire up data swap links
+  $('body').on('click', 'a[data-swap]', swapElements)
 
-  $('body').on('click', 'a[data-toggle="person-fields"]', (event) ->
-    $('#role_person_id').val(null).change()
-    $('#role_person').val(null).change()
-    )
+  $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 

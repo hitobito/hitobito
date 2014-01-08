@@ -1,24 +1,23 @@
-.person-fields{style: element_visible(!entry.person.changed?)}
-  - title = capture do
-    Bestehende Person
-    %small
-      oder
-      = link_to('Neue Person erfassen', '#', data: { toggle: 'person-fields' })
+- title = capture do
+  Bestehende Person
+  %small
+    oder
+    = link_to('Neue Person erfassen', '#', data: { swap: 'person-fields' })
 
-  = field_set_tag title do
-    = f.labeled_person_field(:person)
+= field_set_tag(title, class: 'person-fields', style: element_visible(!entry.person.changed?))do
+  = f.labeled_person_field(:person)
 
-.person-fields{style: element_visible(entry.person.changed?)}
-  - title = capture do
-    Neue Person erfassen
-    %small
-      oder
-      = link_to('Bestehende Person suchen', '#', data: { toggle: 'person-fields' })
 
-  = field_set_tag title do
+- title = capture do
+  Neue Person erfassen
+  %small
+    oder
+    = link_to('Bestehende Person suchen', '#', data: { swap: 'person-fields' })
 
-    = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
+= field_set_tag(title, class: 'person-fields', style: element_visible(entry.person.changed?)) do
 
-    = f.fields_for(:new_person, entry.person) do |fields|
-      = field_set_tag do
-        = fields.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company, :email
+  = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
+
+  = f.fields_for(:new_person, entry.person) do |fields|
+    = field_set_tag do
+      = fields.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company, :email

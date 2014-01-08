@@ -76,7 +76,7 @@ describe RolesController do
       post :create, group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99 }
 
       should render_template('new')
-      assigns(:role).should have(1).error_on(:person)
+      assigns(:role).person.should have(1).error_on(:base)
     end
 
   end

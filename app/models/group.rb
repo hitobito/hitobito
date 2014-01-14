@@ -112,7 +112,7 @@ class Group < ActiveRecord::Base
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
-      types = parent_group ? parent_group.possible_children : Group.all_types
+      types = parent_group ? [parent_group.class] + parent_group.possible_children : Group.all_types
       if types.present?
         statement = 'CASE groups.type '
         types.each_with_index do |t, i|
@@ -120,7 +120,7 @@ class Group < ActiveRecord::Base
         end
         statement << 'END, '
       end
-      reorder("#{statement} name") # acts_as_nested_set default to new order
+      reorder("#{statement} lft") # acts_as_nested_set default to new order
     end
 
   end

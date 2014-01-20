@@ -10,7 +10,7 @@ AllCops:
     - app/assets/config.rb
 
 ClassLength:
-  Max: 150
+  Max: 200
 
 MethodLength:
   Max: 10
@@ -20,7 +20,7 @@ CyclomaticComplexity:
 
 LineLength:
   Max: 100
-  
+
 
 # map instead of collect, reduce instead of inject.
 # Probably later
@@ -46,7 +46,7 @@ EmptyLinesAroundBody:
 # Keep single line bodys for if and unless
 IfUnlessModifier:
   Enabled: false
-  
+
 # Keep semantic argument names in collection functions (inject/reduce)
 ReduceArguments:
   Enabled: false

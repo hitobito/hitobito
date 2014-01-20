@@ -216,7 +216,6 @@ Devise.setup do |config|
   #
   config.warden do |manager|
   #   manager.intercept_401 = false
-    # manager.default_strategies(:scope => :person).unshift :one_time_token_authenticatable
    end
 
   # ==> Mountable engine configurations

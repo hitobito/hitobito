@@ -8,10 +8,10 @@
 class Role
   class TypeList
 
-    attr_reader :layer
+    attr_reader :root
 
-    def initialize(layer_type)
-      @layer = layer_type
+    def initialize(root_type)
+      @root = root_type
       compose
     end
 
@@ -23,13 +23,13 @@ class Role
 
     # hash with the form {layer: {group: [roles]}}
     def compose
-      @global_group_types = find_global_group_types([], layer).uniq
-      @global_role_types = find_global_role_types(layer).uniq
+      @global_group_types = find_global_group_types([], root).uniq
+      @global_role_types = find_global_role_types(root).uniq
       @role_types = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] } }
 
       # layers
-      unless @global_group_types.include?(layer)
-        compose_role_list_by_layer(layer)
+      unless @global_group_types.include?(root)
+        compose_role_list_by_layer(root)
       end
 
       # global groups

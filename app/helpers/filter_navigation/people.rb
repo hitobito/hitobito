@@ -46,15 +46,30 @@ module FilterNavigation
     def init_items
       item('Mitglieder', filter_path)
       if can?(:index_local_people, group)
-        item('Externe', filter_path(external_people_filter))
+        item('Externe', fixed_types_path('Externe', Role.external_types))
       end
     end
 
     def init_dropdown_links
       if group.layer?
-        add_custom_people_filter_links
-        add_define_custom_people_filter_link
+        add_entire_layer_filter_link
+      else
+        add_entire_subgroup_filter_link
       end
+      add_custom_people_filter_links
+      add_define_custom_people_filter_link
+    end
+
+    def add_entire_layer_filter_link
+      name = 'Gesamte Ebene'
+      link = fixed_types_path(name, sub_groups_role_types, kind: 'layer')
+      dropdown.item(name, link)
+    end
+
+    def add_entire_subgroup_filter_link
+      name = 'Gesamte Gruppe'
+      link = fixed_types_path(name, sub_groups_role_types, kind: 'deep')
+      dropdown.item(name, link)
     end
 
     def add_custom_people_filter_links
@@ -84,8 +99,8 @@ module FilterNavigation
        end
     end
 
-    def external_people_filter
-      PeopleFilter.new(role_type_ids: Role.external_types.collect(&:id), name: 'Externe')
+    def fixed_types_path(name, types, options = {})
+      filter_path(PeopleFilter.new(role_type_ids: types.collect(&:id), name: name), options)
     end
 
     def filter_path(filter = nil, options = {})
@@ -94,6 +109,24 @@ module FilterNavigation
         options[:name] ||= filter.name
       end
       template.group_people_path(group, options)
+    end
+
+    def sub_groups_role_types
+      type = group.klass
+      group_types = collect_sub_group_types([type], type.possible_children)
+      role_types = group_types.collect(&:role_types).flatten.uniq
+      role_types.reject(&:affiliate)
+    end
+
+    def collect_sub_group_types(all, types)
+      types.each do |type|
+        unless all.include?(type) || type.layer?
+          all << type
+          collect_sub_group_types(all, type.possible_children)
+        end
+      end
+
+      all
     end
 
   end

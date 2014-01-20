@@ -37,7 +37,7 @@ describe Subscriber::GroupController do
                   subscription: { subscriber_id: groups(:bottom_layer_one) },
                   format: :js
 
-      assigns(:role_types).layer.should == Group::BottomLayer
+      assigns(:role_types).root.should == Group::BottomLayer
     end
 
     it 'does not load role types for nil group' do

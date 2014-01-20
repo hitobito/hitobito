@@ -153,7 +153,8 @@
   border-color: $purple !important;
 }
 
-.nav-pills .open .dropdown-toggle {
+.nav-pills .open .dropdown-toggle,
+.nav.nav-pills > li.dropdown.open.active > .dropdown-toggle {
   background-color: $purple;
   border-color: $purple;
 }

@@ -54,6 +54,6 @@ class PeopleFiltersController < CrudController
   end
 
   def compose_role_lists
-    @role_types = Role::TypeList.new(group.layer_group.class)
+    @role_types = Role::TypeList.new(group.class)
   end
 end

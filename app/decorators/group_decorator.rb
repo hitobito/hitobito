@@ -21,8 +21,8 @@ class GroupDecorator < ApplicationDecorator
 
   def possible_roles
     klass.role_types.select do |type|
-      # users from above cannot create external roles
-      !type.restricted &&
+      # users from above cannot create non visible roles
+      !type.restricted? &&
       (type.visible_from_above? || can?(:index_local_people, model))
     end
   end

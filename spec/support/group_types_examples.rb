@@ -61,6 +61,11 @@ shared_examples 'group types' do |options|
             Role::Permissions.should include(*role.permissions)
           end
 
+          it 'must have valid kind' do
+            # although it looks like, this example is about role.permissions and not about Role::Permissions
+            (Role::Kinds + [nil]).should include(role.kind)
+          end
+
           it 'has an own label' do
             role.label.should_not eq(Role.label)
           end

@@ -80,7 +80,7 @@ class PersonAbility < AbilityDsl::Base
   def capable_roles
     # restricted roles are not included because the may not be modified
     # in their group (and thus are not vulnerable to email updates)
-    subject.roles.reject { |r| r.class.restricted || r.class.permissions.blank? }
+    subject.roles.reject { |r| r.class.restricted? || r.class.permissions.blank? }
   end
 
 end

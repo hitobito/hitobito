@@ -11,11 +11,12 @@ class GroupAbility < AbilityDsl::Base
 
   on(Group) do
     permission(:any).may(:read, :index_events, :index_mailing_lists).all
-    permission(:any).may(:deleted_subgroups).unless_external
+    permission(:any).may(:deleted_subgroups).if_member
 
     permission(:contact_data).may(:index_people).all
 
     permission(:group_read).may(:show_details).in_same_group
+    # local people are the ones not visible from above
     permission(:group_read).may(:index_people, :index_local_people).in_same_group
 
     permission(:group_full).may(:index_full_people).in_same_group
@@ -48,8 +49,8 @@ class GroupAbility < AbilityDsl::Base
     permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
   end
 
-  def unless_external
-    user.roles.any? { |r| !r.class.external? }
+  def if_member
+    user.roles.any? { |r| r.class.member? }
   end
 
   private

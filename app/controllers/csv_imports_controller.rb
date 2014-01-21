@@ -163,6 +163,7 @@ class CsvImportsController < ApplicationController
   end
 
   def redirect_params
+    # TODO: no role_types param anymore for groups_people, do not hard code External
     name = case role_type
            when /Member/ then 'Mitglieder'
            when /External/ then 'Externe'

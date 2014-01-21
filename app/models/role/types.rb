@@ -16,8 +16,10 @@ module Role::Types
   PermissionImplications = { layer_full: :layer_read,
                              group_full: :group_read }
 
+  Kinds = [:member, :passive, :external]
+
   included do
-    class_attribute :permissions, :visible_from_above, :affiliate, :restricted
+    class_attribute :permissions, :visible_from_above, :kind
 
     # All permission a person with this role has on the corresponding group.
     self.permissions = []
@@ -25,16 +27,13 @@ module Role::Types
     # Whether a person with this role is visible for somebody with layer_read permission above the current layer.
     self.visible_from_above = true
 
-    # Whether this role is an active member or an affiliate person of the corresponding group.
-    self.affiliate = false
-
-    # Whether this kind of role is specially managed or open for general modifications.
-    # Restricted roles do not actually belong to the group like members or affiliates,
-    # but are rather external controllers/supervisors/... that need access to the group's
+    # The kind of a role mainly determines in which pill it will be displayed.
+    #
+    # A value of nil means a that the role does not actually belong to the group like members or affiliates,
+    # but is rather an external controller/supervisor/... that needs access to the group's
     # information. So they do not appear in the people lists of the group, but rather
     # in the group attributes.
-    # A restricted role should always be an affiliate as well.
-    self.restricted = false
+    self.kind = :member
   end
 
   module ClassMethods
@@ -54,19 +53,24 @@ module Role::Types
       all_types.select { |r| (permissions - r.permissions).blank? }
     end
 
-    # Role types with affiliate = true
-    def affiliate_types
-      all_types.select(&:affiliate)
+    # An role that is a main member of a group.
+    def member?
+      kind == :member
     end
 
-    # Role types that are external.
-    def external_types
-      all_types.select(&:external?)
+    # An role that is a passive member of a group.
+    def passive?
+      kind == :passive
     end
 
-    # An role external to a group, i.e. affiliate but not restricted
+    # An role external to a group, i.e. affiliate but not restricted.
     def external?
-      affiliate && !restricted
+      kind == :external
+    end
+
+    # Whether this kind of role is specially managed or open for general modifications.
+    def restricted?
+      kind.nil?
     end
 
     # Helper method to clear the cached role types.
@@ -92,5 +96,9 @@ module Role::Types
       I18n.translate("activerecord.models.#{model_name.i18n_key}.description",
                      default: '')
     end
+  end
+
+  def restricted?
+    self.class.restricted?
   end
 end

@@ -26,7 +26,7 @@ module Person::Groups
 
   # All groups where this person has a non-restricted role.
   def non_restricted_groups
-    roles.to_a.reject { |r| r.class.restricted }.collect(&:group)
+    roles.to_a.reject { |r| r.class.restricted? }.collect(&:group)
   end
 
   # All groups where this person has the given permission(s).
@@ -81,7 +81,7 @@ module Person::Groups
 
     # Load people without affiliate roles.
     def members
-      where('roles.type NOT IN (?)', Role.affiliate_types.collect(&:sti_name))
+      where(roles: { type: Role.all_types.select(&:member?).collect(&:sti_name) })
     end
 
     # Order people by the order role types are listed in their group types.

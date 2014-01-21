@@ -57,9 +57,9 @@ class PeopleController < CrudController
     people = []
     if params.key?(:q) && params[:q].size >= 3
       people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
-                       only_public_data.
-                       order_by_name.
-                       limit(10)
+                      only_public_data.
+                      order_by_name.
+                      limit(10)
       people = decorate(people)
     end
 
@@ -70,13 +70,13 @@ class PeopleController < CrudController
     @roles = entry.all_roles
 
     @participations_by_event_type = entry.event_participations.
-                                            active.
-                                            includes(:roles, event: [:dates, :groups]).
-                                            uniq.
-                                            order('event_dates.start_at DESC').
-                                            group_by do |p|
-                                              p.event.class.label_plural
-                                            end
+                                          active.
+                                          includes(:roles, event: [:dates, :groups]).
+                                          uniq.
+                                          order('event_dates.start_at DESC').
+                                          group_by do |p|
+                                            p.event.class.label_plural
+                                          end
 
     @participations_by_event_type.each do |kind, entries|
       entries.collect! { |e| Event::ParticipationDecorator.new(e) }

@@ -92,7 +92,7 @@ class Role
     end
 
     def local_role_types(group)
-      group.role_types.select { |r| !r.restricted && local_role_type?(r) }
+      group.role_types.select { |r| !r.restricted? && local_role_type?(r) }
     end
 
     def local_role_type?(type)

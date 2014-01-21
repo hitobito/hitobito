@@ -11,7 +11,7 @@ class PersonSeeder
 
   def seed_all_roles
     Group.root.self_and_descendants.each do |group|
-      group.role_types.reject(&:restricted).each do |role_type|
+      group.role_types.reject(&:restricted?).each do |role_type|
         seed_role_type(group, role_type)
       end
     end
@@ -38,7 +38,7 @@ class PersonSeeder
     attrs = standard_attributes(Faker::Name.first_name,
                                 Faker::Name.last_name)
 
-    if role_type.affiliate
+    if role_type.external?
       attrs[:company] = true
       attrs[:company_name] = Faker::Company.name
     else

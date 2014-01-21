@@ -44,9 +44,10 @@ module FilterNavigation
     end
 
     def init_items
+      # TODO: add one item per kind
       item('Mitglieder', filter_path)
       if can?(:index_local_people, group)
-        item('Externe', fixed_types_path('Externe', Role.external_types))
+        item('Externe', fixed_types_path('Externe', Role.all_types.select(&:external?)))
       end
     end
 
@@ -115,7 +116,7 @@ module FilterNavigation
       type = group.klass
       group_types = collect_sub_group_types([type], type.possible_children)
       role_types = group_types.collect(&:role_types).flatten.uniq
-      role_types.reject(&:affiliate)
+      role_types.select(&:member?)
     end
 
     def collect_sub_group_types(all, types)

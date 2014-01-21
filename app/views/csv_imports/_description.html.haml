@@ -1,0 +1,34 @@
+%h2 CSV Dateien
+
+%p
+  Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
+  Die erste Zeile enthält die Feldnamen.
+  Die einzelnen Felder sind mit einem Komma getrennt.
+  Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
+  Beispiel:
+
+%pre
+  :preserve
+      Vorname,Nachname,Email,Ort,Geschlecht
+      Hans,Muster,hans@beispiel.ch,Bern,m
+      Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+
+%p
+  Es können beliebige Feldnamen verwendet werden.
+  Die Felder in der CSV Datei können im nächsten Schritt
+  den Feldern in der Applikation zugeordnet werden.
+
+%p
+  Allen Personen einer Datei wird die gleiche Rolle vergeben,
+  welche ebenfalls im nächsten Schritt ausgewählt werden kann.
+
+%h3 Spezielle Feldwerte
+
+Die folgenden Felder müssen einen der
+%em kursiven
+Werte beinhalten.
+%dl.dl-horizontal
+  = csv_field_documentation(:company, 0 => 'nein', 1 => 'ja')
+  = csv_field_documentation(:gender, 'm' => 'männlich', 'w' => 'weiblich')
+
+  = render_extensions 'special_fields'

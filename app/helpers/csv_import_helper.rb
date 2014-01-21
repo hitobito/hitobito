@@ -7,8 +7,19 @@
 
 module CsvImportHelper
 
-  def fields
+  def application_person_fields
     Import::Person.fields.map { |field| OpenStruct.new(field) }
+  end
+
+  def csv_field_documentation(field, values)
+    if values.is_a?(Hash)
+      values = safe_join(values, tag(:br)) do |value, description|
+        content_tag(:em, value) + h(" - #{description}")
+      end
+    end
+
+    content_tag(:dt, t("activerecord.attributes.person.#{field}")) +
+    content_tag(:dd, values)
   end
 
 end

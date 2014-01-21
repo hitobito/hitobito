@@ -8,7 +8,9 @@
 
   = field_set_tag "Rolle auswählen" do
     = f.labeled :role_type, 'Rolle' do
-      = select_tag(:role_type, options_from_collection_for_select(@group.possible_roles, :sti_name, :label, params[:role_type]), {class: 'span4'})
+      = select_tag(:role_type,
+                   options_from_collection_for_select(@group.possible_roles, :sti_name, :label, params[:role_type]),
+                   { class: 'span4' })
       = f.help_block 'Allen importierten Personen wird diese Rolle zugewiesen'
 
   = field_set_tag "Spalten zu Feldern zuordnen" do
@@ -17,6 +19,11 @@
     %br/
     - parser.headers.each do |column_name|
       = f.labeled(column_name, column_name) do
-        = f.collection_select(column_name, fields, :key, :value, {include_blank: true, selected: guess(column_name)}, {class: 'span4'})
+        = f.collection_select(column_name,
+                              application_person_fields,
+                              :key,
+                              :value,
+                              { include_blank: true, selected: guess(column_name) },
+                              { class: 'span4' })
 
   = save_form_buttons(f, 'Vorschau', group_people_path(group))

@@ -51,14 +51,14 @@ class CsvImportsController < ApplicationController
 
   private
 
- def set_importer_flash_info(*suffixes)
-   reversed = suffixes.reverse
+  def set_importer_flash_info(*suffixes)
+    reversed = suffixes.reverse
 
-   add_to_flash(:notice, pluralized(importer.new_count, reversed.pop))
-   add_to_flash(:notice, pluralized(importer.doublette_count, reversed.pop))
-   add_to_flash(:alert, pluralized(importer.failure_count, reversed.pop))
-   importer.errors.each { |error| add_to_flash(:alert, error) }
- end
+    add_to_flash(:notice, pluralized(importer.new_count, reversed.pop))
+    add_to_flash(:notice, pluralized(importer.doublette_count, reversed.pop))
+    add_to_flash(:alert, pluralized(importer.failure_count, reversed.pop))
+    importer.errors.each { |error| add_to_flash(:alert, error) }
+  end
 
   def add_to_flash(key, text)
     flash_hash = action_name == 'preview' ? flash.now : flash
@@ -67,17 +67,15 @@ class CsvImportsController < ApplicationController
   end
 
   def valid_for_import?
-    if role_type.blank? || !group.class.role_types.collect(&:sti_name).include?(role_type)
-      redirect_to new_group_csv_imports_path(group)
-    elsif parse_or_redirect && sane_mapping?
+    if parse_or_redirect && sane_mapping?
       map_headers_and_import
       yield
     end
   end
 
   def custom_authorization
-    if action_name == 'create' && role_type
-      role = group.class.find_role_type!(role_type).new
+    if action_name == 'create'
+      role = role_type.new
       role.group_id = group.id
       authorize! :create, role
     else
@@ -163,17 +161,12 @@ class CsvImportsController < ApplicationController
   end
 
   def redirect_params
-    # TODO: no role_types param anymore for groups_people, do not hard code External
-    name = case role_type
-           when /Member/ then 'Mitglieder'
-           when /External/ then 'Externe'
-           else importer.human_role_name
-           end
-    { role_types: role_type, name: name }
+    filter = PeopleFilter.new(role_type_ids: [role_type.id])
+    { role_type_ids: filter.role_type_ids_string, name: importer.human_role_name }
   end
 
   def role_type
-    params[:role_type]
+    @role_type ||= group.class.find_role_type!(params[:role_type])
   end
 
   def file_param
@@ -185,7 +178,7 @@ class CsvImportsController < ApplicationController
   end
 
   def role_name
-    role_type.constantize.model_name.human
+    role_type.model_name.human
   end
 
   def model_class

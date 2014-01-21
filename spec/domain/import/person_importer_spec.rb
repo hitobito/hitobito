@@ -10,7 +10,7 @@ describe Import::PersonImporter do
   include CsvImportMacros
 
   let(:group) { groups(:top_group) }
-  let(:role_type) { 'Group::TopGroup::Leader' }
+  let(:role_type) { Group::TopGroup::Leader }
   let(:importer)  { Import::PersonImporter.new(group: group, role_type: role_type, data: data)  }
   subject { importer }
 
@@ -94,8 +94,8 @@ describe Import::PersonImporter do
       before do
         role = person.roles.new
         role.group = group
-        role.type = role_type
-        role.save
+        role.type = role_type.sti_name
+        role.save!
         importer.import
         person.reload
       end

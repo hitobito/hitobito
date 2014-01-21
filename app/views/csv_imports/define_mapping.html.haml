@@ -8,7 +8,7 @@
 
   = field_set_tag "Rolle auswählen" do
     = f.labeled :role_type, 'Rolle' do
-      = select_tag(:role_type, options_from_collection_for_select(@group.possible_roles, :sti_name, :label, params[:role_type]), {class: 'span3'})
+      = select_tag(:role_type, options_from_collection_for_select(@group.possible_roles, :sti_name, :label, params[:role_type]), {class: 'span4'})
       = f.help_block 'Allen importierten Personen wird diese Rolle zugewiesen'
 
   = field_set_tag "Spalten zu Feldern zuordnen" do

@@ -40,12 +40,12 @@ describe CsvImportsController, type: :controller do
 
   describe 'POST :create imports single person' do
     let(:data) { File.read(path(:list)) }
-    let(:role_type) { 'Group::TopGroup::Leader' }
+    let(:role_type) { Group::TopGroup::Leader }
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true))  }
 
     it 'imports single person only' do
-      expect { post :create, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.to change(Person, :count).by(1)
-      should redirect_to group_people_path(group, name: 'Leader', role_types: role_type)
+      expect { post :create, group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping }.to change(Person, :count).by(1)
+      should redirect_to group_people_path(group, name: 'Leader', role_type_ids: role_type.id)
     end
   end
 

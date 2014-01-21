@@ -33,7 +33,7 @@ module Import
     end
 
     def human_role_name
-      @role_name ||= @role_type.constantize.label
+      @role_name ||= @role_type.label
     end
 
     def doublette_count

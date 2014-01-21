@@ -57,10 +57,11 @@ module Import
     end
 
     def add_role(group, role_type)
-      return if person.roles.any? { |role| role.group == group && role.type == role_type }
+      return if person.roles.any? { |role| role.group == group && role.is_a?(role_type) }
       role = person.roles.build
       role.group = group
-      role.type = role_type
+      role.type = role_type.sti_name
+      role
     end
 
     def human_errors

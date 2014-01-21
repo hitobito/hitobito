@@ -62,13 +62,14 @@ describe CsvImportsController do
 
   describe 'POST #create' do
     let(:data) { File.read(path(:utf8)) }
-    let(:role_type) { 'Group::TopGroup::Leader' }
+    let(:role_type) { Group::TopGroup::Leader }
     let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' } }
-    let(:required_params) { { group_id: group.id, data: data, role_type: role_type, field_mappings: mapping } }
+    let(:required_params) { { group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping } }
 
-    it 'redirects if role_type is missing' do
-      post :create, group_id: group.id, data: data, field_mappings: { first_name: 'first_name' }
-      should redirect_to new_group_csv_imports_path(group)
+    it 'fails if role_type is missing' do
+      expect do
+        post :create, group_id: group.id, data: data, field_mappings: { first_name: 'first_name' }
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'renders define_mapping if button is pressed' do
@@ -80,29 +81,29 @@ describe CsvImportsController do
       expect { post :create, required_params }.to change(Person, :count).by(1)
       flash[:notice].should eq ['1 Person (Leader) wurde erfolgreich importiert.']
       flash[:alert].should_not be_present
-      should redirect_to group_people_path(group, role_types: role_type, name: 'Leader')
+      should redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Leader')
     end
 
     context 'mapping misses attribute' do
-      let(:mapping) { { email: :email, role: role_type } }
+      let(:mapping) { { email: :email, role: role_type.sti_name } }
       let(:data) { generate_csv(%w{name email}, %w{foo foo@bar.net}) }
 
       it 'imports first person and displays errors for second person' do
         expect { post :create, required_params }.to change(Person, :count).by(0)
         flash[:alert].should eq ['1 Person (Leader) wurde nicht importiert.',
                                  'Zeile 1: Bitte geben Sie einen Namen ein']
-        should redirect_to group_people_path(group, role_types: role_type, name: 'Leader')
+        should redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Leader')
       end
     end
 
     context 'invalid phone number value' do
-      let(:mapping) { { Vorname: 'first_name', Telefon: 'phone_number_vater', role: role_type } }
+      let(:mapping) { { Vorname: 'first_name', Telefon: 'phone_number_vater', role: role_type.sti_name } }
       let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo }) }
 
       it 'is ignored' do
         expect { post :create, required_params }.to change(Person, :count).by(1)
         flash[:alert].should be_blank
-        should redirect_to group_people_path(group, role_types: role_type, name: 'Leader')
+        should redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Leader')
       end
     end
 
@@ -155,7 +156,7 @@ describe CsvImportsController do
       end
 
       context 'csv data matches multiple people' do
-        let(:mapping) { { vorname: :first_name, email: :email, role: role_type } }
+        let(:mapping) { { vorname: :first_name, email: :email, role: role_type.sti_name } }
         let(:data) { generate_csv(%w{vorname email}, %w{foo foo@bar.net}) }
 
         it 'reports error if multiple candidates for doublettes are found' do

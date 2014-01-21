@@ -20,6 +20,6 @@ class Event::Role::AssistantLeader < Event::Role
 
   self.permissions = [:full, :contact_data]
 
-  self.leader = true
+  self.kind = :leader
 
 end

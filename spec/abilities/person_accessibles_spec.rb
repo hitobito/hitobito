@@ -49,7 +49,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people in his group' do
+          it 'may get external people in his group' do
             other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
             should include(other.person)
           end
@@ -63,7 +63,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
             should_not include(other.person)
           end
@@ -90,7 +90,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people in his group' do
+          it 'may get external people in his group' do
             other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
             should include(other.person)
           end
@@ -104,7 +104,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people' do
+          it 'may get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should include(other.person)
           end
@@ -118,7 +118,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -154,7 +154,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people in his group' do
+          it 'may get external people in his group' do
             other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one))
             should include(other.person)
           end
@@ -168,7 +168,7 @@ describe PersonAccessibles do
             should_not include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -195,7 +195,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people in his group' do
+          it 'may get external people in his group' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should include(other.person)
           end
@@ -209,7 +209,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -228,7 +228,7 @@ describe PersonAccessibles do
             should_not include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -270,7 +270,7 @@ describe PersonAccessibles do
             should_not include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -284,7 +284,7 @@ describe PersonAccessibles do
             should_not include(other.person)
           end
 
-          it 'may not get affiliate people' do
+          it 'may not get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should_not include(other.person)
           end
@@ -355,7 +355,7 @@ describe PersonAccessibles do
             should include(other.person)
           end
 
-          it 'may get affiliate people' do
+          it 'may get external people' do
             other = Fabricate(Role::External.name.to_sym, group: group)
             should include(other.person)
           end

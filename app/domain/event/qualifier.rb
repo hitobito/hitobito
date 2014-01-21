@@ -12,7 +12,7 @@ module Event::Qualifier
   end
 
   def self.leader_types(event)
-    event.class.role_types.select(&:leader)
+    event.class.role_types.select(&:leader?)
   end
 
   private

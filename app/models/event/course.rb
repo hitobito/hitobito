@@ -44,8 +44,9 @@ class Event::Course < Event
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Course::Role::Participant]
-  self.participant_type = Event::Course::Role::Participant
+
   self.supports_applications = true
+
   self.kind_class = Event::Kind
 
   attr_accessible :number, :kind_id, :state, :priorization, :requires_approval

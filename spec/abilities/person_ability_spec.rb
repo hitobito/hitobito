@@ -34,7 +34,7 @@ describe PersonAbility do
       should_not be_able_to(:destroy, role)
     end
 
-    it 'may modify affiliates in the same layer' do
+    it 'may modify externals in the same layer' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:top_layer))
       Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one), person: other.person)
       should be_able_to(:update, other.person.reload)
@@ -48,7 +48,7 @@ describe PersonAbility do
       should_not be_able_to(:update, other)
     end
 
-    it 'may not view any affiliates in lower layers' do
+    it 'may not view any externals in lower layers' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
       should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
@@ -164,7 +164,7 @@ describe PersonAbility do
       should_not be_able_to(:update_email, other.person)
     end
 
-    it 'may modify affiliates in his layer' do
+    it 'may modify externals in his layer' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
       should be_able_to(:update, other.person.reload)
       should be_able_to(:update, other)
@@ -181,7 +181,7 @@ describe PersonAbility do
       should be_able_to(:destroy, other)
     end
 
-    it 'may not view any affiliates in upper layers' do
+    it 'may not view any externals in upper layers' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
       should_not be_able_to(:show_full, other.person.reload)
       should_not be_able_to(:update, other)
@@ -236,7 +236,7 @@ describe PersonAbility do
       should_not be_able_to(:update, other)
     end
 
-    it 'may view any affiliates in same layer' do
+    it 'may view any externals in same layer' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:toppers))
       should be_able_to(:show_full, other.person.reload)
     end
@@ -258,7 +258,7 @@ describe PersonAbility do
       should_not be_able_to(:update, other)
     end
 
-    it 'may not view any affiliates in groups below' do
+    it 'may not view any externals in groups below' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
       should_not be_able_to(:show, other.person.reload)
     end
@@ -331,7 +331,7 @@ describe PersonAbility do
       should_not be_able_to(:update, other)
     end
 
-    it 'may not view affiliates in other group of same layer' do
+    it 'may not view externals in other group of same layer' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:toppers))
       should_not be_able_to(:show, other.person.reload)
     end
@@ -347,7 +347,7 @@ describe PersonAbility do
       should_not be_able_to(:update, other)
     end
 
-    it 'may not view any affiliates in groups below' do
+    it 'may not view any externals in groups below' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
       should_not be_able_to(:show, other.person.reload)
     end

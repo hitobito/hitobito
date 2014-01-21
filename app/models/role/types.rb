@@ -29,7 +29,7 @@ module Role::Types
 
     # The kind of a role mainly determines in which pill it will be displayed.
     #
-    # A value of nil means a that the role does not actually belong to the group like members or affiliates,
+    # A value of nil means a that the role does not actually belong to the group like members or passives,
     # but is rather an external controller/supervisor/... that needs access to the group's
     # information. So they do not appear in the people lists of the group, but rather
     # in the group attributes.

@@ -20,6 +20,8 @@ class Event::Role::Participant < Event::Role
 
   self.permissions = [:contact_data]
 
+  self.kind = :participant
+
   after_save :update_count
   after_destroy :update_count
 

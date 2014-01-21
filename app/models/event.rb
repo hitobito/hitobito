@@ -47,8 +47,6 @@ class Event < ActiveRecord::Base
   ### ATTRIBUTES
 
   class_attribute :role_types,
-                  :participant_type,
-                  :leader_types,
                   :supports_applications,
                   :possible_states,
                   :kind_class
@@ -60,12 +58,13 @@ class Event < ActiveRecord::Base
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]
-  # The role of the participant
-  self.participant_type = Event::Role::Participant
+
   # Are Event::Applications possible for this event type
   self.supports_applications = false
+
   # List of possible values for the state attribute.
   self.possible_states = []
+
   # The class used for the kind_id
   self.kind_class = nil
 
@@ -192,6 +191,10 @@ class Event < ActiveRecord::Base
       type
     end
 
+    def participant_type
+      @participant_type ||= role_types.detect { |t| t.kind == :participant }
+    end
+
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
@@ -259,6 +262,10 @@ class Event < ActiveRecord::Base
 
   def course_kind?
     kind_class == Event::Kind && kind.present?
+  end
+
+  def participant_type
+    self.class.participant_type
   end
 
   private

@@ -79,7 +79,7 @@ module Person::Groups
       uniq
     end
 
-    # Load people without affiliate roles.
+    # Load people with member roles.
     def members
       where(roles: { type: Role.all_types.select(&:member?).collect(&:sti_name) })
     end

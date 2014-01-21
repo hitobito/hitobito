@@ -19,19 +19,22 @@ class Event::Role < ActiveRecord::Base
 
   Permissions = [:full, :qualify, :contact_data]
 
+  Kinds = [:leader, :helper, :participant]
+
   include NormalizedLabels
 
   ### ATTRIBUTES
 
-  class_attribute :permissions, :affiliate, :restricted, :leader
+  class_attribute :permissions, :kind
 
+  # The permissions this role has in the corresponding event.
   self.permissions = []
-  # Whether this role is an active member or an affiliate person of the corresponding event.
-  self.affiliate = false
-  # Whether this role is specially managed or open for general modifications.
-  self.restricted = false
-  # Whether this role is a leader type.
-  self.leader = false
+
+  # The kind of this role.
+  #
+  # If the value is nil, the role does not actually participate in the event,
+  # but is an external supervisor.
+  self.kind = :helper
 
   self.demodulized_route_keys = true
 
@@ -56,6 +59,16 @@ class Event::Role < ActiveRecord::Base
     def label
       model_name.human
     end
+
+    # Whether this role is a leader type.
+    def leader?
+      kind == :leader
+    end
+
+    # Whether this role is specially managed or open for general modifications.
+    def restricted?
+      kind.nil?
+    end
   end
 
 
@@ -68,6 +81,10 @@ class Event::Role < ActiveRecord::Base
 
   def person_id
     person.try(:id)
+  end
+
+  def restricted?
+    self.class.restricted?
   end
 
   private

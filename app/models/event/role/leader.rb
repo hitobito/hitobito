@@ -20,6 +20,6 @@ class Event::Role::Leader < Event::Role
 
   self.permissions = [:full, :qualify, :contact_data]
 
-  self.leader = true
+  self.kind = :leader
 
 end

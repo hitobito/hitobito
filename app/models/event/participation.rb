@@ -86,9 +86,9 @@ class Event::Participation < ActiveRecord::Base
       joins(:roles).where('event_roles.label = ?', label)
     end
 
-    # load participations without affiliate roles
+    # load participations roles
     def participating(event)
-      affiliate_types = event.role_types.select(&:affiliate).collect(&:sti_name)
+      affiliate_types = event.role_types.reject(&:kind).collect(&:sti_name)
       if affiliate_types.present?
         joins(:roles).where('event_roles.type NOT IN (?)', affiliate_types)
       else

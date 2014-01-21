@@ -21,11 +21,9 @@ module Dropdown
       private
 
       def init_items
-        event.klass.role_types.each do |type|
-          unless type.restricted?
-            link = template.new_group_event_role_path(group, event, event_role: { type: type.sti_name })
-            item(type.label, link)
-          end
+        event.klass.role_types.reject(&:restricted?).each do |type|
+          link = template.new_group_event_role_path(group, event, event_role: { type: type.sti_name })
+          item(type.label, link)
         end
       end
     end

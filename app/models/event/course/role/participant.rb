@@ -19,7 +19,15 @@
 module Event::Course::Role
   class Participant < ::Event::Role::Participant
 
-    self.restricted = true
+    self.kind = :participant
+
+    class << self
+      # A course participant is restricted because it may not just be added by
+      # a course leader, but only over the special application market view.
+      def restricted?
+        true
+      end
+    end
 
   end
 end

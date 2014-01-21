@@ -38,7 +38,7 @@ class PersonSeeder
     attrs = standard_attributes(Faker::Name.first_name,
                                 Faker::Name.last_name)
 
-    if role_type.external?
+    if role_type.kind == :external
       attrs[:company] = true
       attrs[:company_name] = Faker::Company.name
     else

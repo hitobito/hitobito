@@ -58,16 +58,6 @@ module Role::Types
       kind == :member
     end
 
-    # An role that is a passive member of a group.
-    def passive?
-      kind == :passive
-    end
-
-    # An role external to a group, i.e. affiliate but not restricted.
-    def external?
-      kind == :external
-    end
-
     # Whether this kind of role is specially managed or open for general modifications.
     def restricted?
       kind.nil?

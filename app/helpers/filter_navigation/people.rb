@@ -8,8 +8,6 @@
 module FilterNavigation
   class People < Base
 
-    PREDEFINED_FILTERS = %w(Mitglieder Externe)
-
     attr_reader :group, :name, :role_type_ids, :deep
 
     delegate :can?, to: :template
@@ -20,6 +18,7 @@ module FilterNavigation
       @name = name
       @role_type_ids = role_type_ids
       @deep = deep
+      init_kind_filter_names
       init_labels
       init_items
       init_dropdown_links
@@ -27,9 +26,16 @@ module FilterNavigation
 
     private
 
+    def init_kind_filter_names
+      @kind_filter_names = {}
+      Role::Kinds.each do |kind|
+        @kind_filter_names[kind] = I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
+      end
+    end
+
     def init_labels
       if name.present?
-        if PREDEFINED_FILTERS.include?(name)
+        if @kind_filter_names.values.include?(name)
           @active_label = name
         else
           dropdown.label = name
@@ -39,16 +45,32 @@ module FilterNavigation
         dropdown.label = 'Eigener Filter'
         dropdown.active = true
       else
-        @active_label = PREDEFINED_FILTERS.first
+        @active_label = main_filter_name
       end
     end
 
     def init_items
-      # TODO: add one item per kind
-      item('Mitglieder', filter_path)
-      if can?(:index_local_people, group)
-        item('Externe', fixed_types_path('Externe', Role.all_types.select(&:external?)))
+      item(main_filter_name, filter_path)
+      init_kind_items
+    end
+
+    def init_kind_items
+      @kind_filter_names.to_a[1..-1].each do |kind, name|
+        types = group.role_types.select { |t| t.kind == kind }
+        if visible_role_types?(types)
+          item(name, fixed_types_path(name, types))
+        end
       end
+    end
+
+    def visible_role_types?(role_types)
+      role_types.present? &&
+        (role_types.any? { |t| t.visible_from_above } ||
+         can?(:index_local_people, group))
+    end
+
+    def main_filter_name
+      @kind_filter_names.values.first
     end
 
     def init_dropdown_links

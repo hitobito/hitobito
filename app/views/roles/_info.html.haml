@@ -17,7 +17,7 @@
       %br/
       %ul
         - @type.permissions.each do |perm|
-          %li= t("permission.description.#{perm}")
+          %li= t("activerecord.attributes.role.class.permission.description.#{perm}")
     - else
       kann nur öffentliche Daten (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
 

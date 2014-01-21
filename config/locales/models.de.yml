@@ -240,6 +240,27 @@ de:
         type: Rolle
         group_id: Gruppe
         person_id: Person
+        class:
+          permission:
+            description:
+              admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
+              layer_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
+              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
+              group_read: Lesen auf der Gruppe.
+              contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
+              qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
+              approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+          kind:
+            member:
+              one: Mitglied
+              other: Mitglieder
+            passive:
+              one: Passiv
+              other: Passive
+            external:
+              one: Extern
+              other: Externe
 
       social_account:
         name: Name
@@ -282,17 +303,6 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
-
-  permission:
-    description:
-      admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
-      layer_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
-      layer_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
-      group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
-      group_read: Lesen auf der Gruppe.
-      contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
-      qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
-      approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 
   errors:
     messages:

@@ -22,6 +22,13 @@ describe PersonAbility do
       should be_able_to(:update, other)
     end
 
+    it 'may not update root email if in same group' do
+      root = people(:root)
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: root)
+      should be_able_to(:update, root.reload)
+      should_not be_able_to(:update_email, root)
+    end
+
     it 'may modify its role' do
       should be_able_to(:update, role)
     end
@@ -436,6 +443,13 @@ describe PersonAbility do
       should_not be_able_to(:update_email, other.person)
     end
 
+    it 'may not update root email if in same group' do
+      root = people(:root)
+      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: root)
+      should be_able_to(:update, root.reload)
+      should_not be_able_to(:update_email, root)
+    end
+
     it 'may view and update externals in same group' do
       other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one))
       should be_able_to(:show, other.person.reload)
@@ -584,6 +598,16 @@ describe PersonAbility do
       should_not be_able_to(:index_people, groups(:top_layer))
       should_not be_able_to(:index_full_people, groups(:top_layer))
       should_not be_able_to(:index_local_people, groups(:top_layer))
+    end
+  end
+
+  describe 'root' do
+    let(:user) { people(:root) }
+    let(:ability) { Ability.new(user) }
+
+
+    it 'may not change her email' do
+      should_not be_able_to(:update_email, user)
     end
   end
 

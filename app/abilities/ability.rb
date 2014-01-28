@@ -31,6 +31,11 @@ class Ability
 
     if user.root?
       can :manage, :all
+
+      # root cannot change her email, because this is what makes her root.
+      cannot :update_email, Person do |p|
+        p.root?
+      end
     else
       define(AbilityDsl::UserContext.new(user))
     end

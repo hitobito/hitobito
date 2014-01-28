@@ -62,6 +62,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def if_permissions_in_all_capable_groups
+    !subject.root? &&
     # true if capable roles is empty.
     capable_roles.all? do |role|
       permission_in_group?(role.group_id)
@@ -69,6 +70,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def if_permissions_in_all_capable_groups_or_above
+    !subject.root? &&
     # true if capable roles is empty.
     capable_roles.all? do |role|
       permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
@@ -76,7 +78,7 @@ class PersonAbility < AbilityDsl::Base
     end
   end
 
-  # Roles that are capable of doing anything a their group
+  # Roles of the subject that are capable of doing at least something a their group
   def capable_roles
     # restricted roles are not included because the may not be modified
     # in their group (and thus are not vulnerable to email updates)

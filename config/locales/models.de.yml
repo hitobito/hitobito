@@ -10,6 +10,18 @@ de:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+  number:
+    currency:
+      format:
+        delimiter: ! ''''
+        format: ! '%u %n'
+        separator: .
+        precision: 2
+        unit: CHF
+    format:
+      delimiter: ! ''''
+      precision: 2
+      separator: .
 
   attributes:
     created_info: Erstellt
@@ -19,9 +31,12 @@ de:
   activerecord:
     errors:
       messages:
-        type_not_allowed: kann hier nicht erstellt werden.
-        must_be_after_opening: muss nach dem Anmeldebeginn sein.
-        must_have_same_type: müssen von denselbem Typ sein.
+        type_not_allowed: kann hier nicht erstellt werden
+        must_be_after_opening: muss nach dem Anmeldebeginn sein
+        must_have_same_type: müssen von denselbem Typ sein
+        greater_than: muss grösser als %{count} sein
+        greater_than_or_equal_to: muss grösser oder gleich %{count} sein
+
 
     models:
       custom_content:

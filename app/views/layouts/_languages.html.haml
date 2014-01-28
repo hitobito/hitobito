@@ -1,0 +1,5 @@
+- languages = Settings.application.languages.to_hash
+- if languages.size > 1
+  %li.lang
+    - languages.each do |lang, label|
+      = link_to lang.upcase, url_for(locale: lang), title: label, class: (lang == I18n.locale ? 'active' : nil)

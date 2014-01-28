@@ -5,19 +5,20 @@
 
 %nav#page-navigation
   = render_main_nav
-  
+
 .options
   %ul
+    = render 'layouts/languages'
     %li= link_to current_user, person_home_path(current_user)
     %li= link_to "Ausloggen", destroy_person_session_path, method: "delete"
     %li
       = form_tag full_path, class: 'form-inline', method: :get do
         .input-append
-          = search_field_tag :q, params[:q], 
+          = search_field_tag :q, params[:q],
                              class: 'span4',
                              id: 'quicksearch',
                              placeholder: 'Suchen...',
                              data: { url: query_path,
-                                     person_url: person_path(1).gsub(/\/1$/, ''), 
-                                     group_url: groups_path } 
+                                     person_url: person_path(1).gsub(/\/1$/, ''),
+                                     group_url: groups_path }
           = button_tag icon(:search), class: 'btn'

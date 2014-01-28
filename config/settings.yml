@@ -12,6 +12,10 @@ application:
     logo_url: http://puzzle.ch
     links: {}
 
+  # The languages available in the menu
+  languages:
+    de: Deutsch
+
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
                  'localhost' %>

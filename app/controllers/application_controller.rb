@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, alert: 'Sie sind nicht berechtigt, diese Seite anzuzeigen'
   end if Rails.env.production?
 
+  before_filter :set_locale
   before_filter :authenticate_person!
   check_authorization unless: :devise_controller?
 
@@ -37,6 +38,23 @@ class ApplicationController < ActionController::Base
 
   def person_home_path(person)
     group_person_path(person.default_group_id, person)
+  end
+
+  def set_locale
+   I18n.locale = params[:locale] || cookies[:locale] || guess_locale || I18n.default_locale
+   cookies[:locale] = { value: I18n.locale, expires: 1.year.from_now }
+  end
+
+  def default_url_options(options = {})
+    if Settings.application.languages.to_hash.size > 1
+      { locale: I18n.locale }
+    else
+      {}
+    end
+  end
+
+  def guess_locale
+    http_accept_language.compatible_language_from(I18n.available_locales)
   end
 
   def set_stamper

@@ -185,6 +185,7 @@ GEM
     hirb (0.7.1)
     hpricot (0.8.6)
     htmlentities (4.3.1)
+    http_accept_language (2.0.1)
     i18n (0.6.9)
     innertube (1.1.0)
     journey (1.0.4)
@@ -498,6 +499,7 @@ DEPENDENCIES
   headless
   hirb
   hitobito_pbs!
+  http_accept_language
   jquery-rails
   jquery-ui-rails
   kaminari

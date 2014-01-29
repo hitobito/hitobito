@@ -42,7 +42,7 @@ class EventsController < CrudController
 
 
   def build_entry
-    type = model_params && model_params.delete(:type).presence
+    type = model_params && model_params[:type].presence
     type ||= 'Event'
     event = Event.find_event_type!(type).new
     event.groups << parent
@@ -50,8 +50,7 @@ class EventsController < CrudController
   end
 
   def assign_attributes
-    model_params.delete(:contact)
-    super
+    entry.attributes = model_params.except(:type, :contact)
   end
 
   def group

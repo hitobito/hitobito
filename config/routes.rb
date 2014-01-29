@@ -11,11 +11,11 @@ Hitobito::Application.routes.draw do
 
   root :to => 'dashboard#index'
 
-  match '/404', to: 'errors#404'
-  match '/500', to: 'errors#500'
-  match '/503', to: 'errors#503'
-
   language_scope do
+
+    match '/404', to: 'errors#404'
+    match '/500', to: 'errors#500'
+    match '/503', to: 'errors#503'
 
     resources :people, only: :show do
       collection do
@@ -139,6 +139,7 @@ Hitobito::Application.routes.draw do
     as :person do
       get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
       put 'users' => 'devise/registrations#update', :as => 'person_registration'
+      get 'users' => 'devise/registrations#edit' # route required for language switch
     end
 
   end # scope locale

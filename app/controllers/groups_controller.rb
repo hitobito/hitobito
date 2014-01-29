@@ -37,15 +37,15 @@ class GroupsController < CrudController
   private
 
   def build_entry
-    type = model_params && model_params.delete(:type)
+    type = model_params && model_params[:type]
     group = Group.find_group_type!(type).new
-    group.parent_id = model_params.delete(:parent_id)
+    group.parent_id = model_params[:parent_id]
     group
   end
 
   def assign_attributes
     role = entry.class.superior_attributes.present? && can?(:modify_superior, entry) ? :superior : :default
-    entry.assign_attributes(model_params, as: role)
+    entry.assign_attributes(model_params.except(:type, :parent_id), as: role)
   end
 
   def load_contacts

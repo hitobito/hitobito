@@ -27,7 +27,7 @@ class Event::KindsController < SimpleCrudController
   end
 
   def possible_qualification_kinds
-    @possible_qualification_kinds ||= QualificationKind.without_deleted
+    @possible_qualification_kinds ||= QualificationKind.without_deleted.list
   end
 
   def unlimited_qualifications

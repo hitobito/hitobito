@@ -119,9 +119,9 @@ class PeopleController < CrudController
 
     @pending_applications = Event::ApplicationDecorator.decorate(applications)
     @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
-                                                    includes(:groups).
-                                                    preload_all_dates.
-                                                    order_by_date)
+                                                          includes(:groups).
+                                                          preload_all_dates.
+                                                          order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
 

@@ -12,5 +12,8 @@ if defined? Bullet
   Bullet.rails_logger  = true
 
   # groups loaded for current user
-  Bullet.add_whitelist type: :unused_eager_loading, class_name: "Person", association: :groups
+  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :groups
+
+  # EventKind may not be eager loaded if some event types have kind and others not.
+  Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event::Course', association: :kind
 end

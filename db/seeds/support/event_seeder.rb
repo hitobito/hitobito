@@ -1,6 +1,6 @@
 class EventSeeder
 
-  @@kinds = Event::Kind.order(:label)
+  @@kinds = Event::Kind.list
   @@people_count = Person.count
 
   def seed_event(group_id, type)

@@ -163,6 +163,9 @@ GEM
       sexp_processor (~> 4.0)
     formatador (0.2.4)
     fssm (0.2.10)
+    globalize (3.1.0)
+      activemodel (>= 3.1.0, < 4.0.0)
+      activerecord (>= 3.1.0, < 4.0.0)
     guard (2.2.5)
       formatador (>= 0.2.4)
       listen (~> 2.1)
@@ -493,6 +496,7 @@ DEPENDENCIES
   draper (< 1.0)
   fabrication
   faker
+  globalize (~> 3.1.0)
   guard-rspec
   guard-spork
   haml

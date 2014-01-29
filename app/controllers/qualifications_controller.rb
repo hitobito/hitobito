@@ -31,7 +31,7 @@ class QualificationsController < CrudController
   end
 
   def load_qualification_kinds
-    @qualification_kinds = QualificationKind.without_deleted.order(:label)
+    @qualification_kinds = QualificationKind.without_deleted.list
   end
 
 end

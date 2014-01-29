@@ -25,6 +25,10 @@ class QualificationKind < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
+
+  before_destroy :remember_translated_label
+  translates :label, :description, fallbacks_for_empty_translations: true
+
   attr_accessible :label, :validity, :description, :reactivateable
 
 
@@ -45,7 +49,19 @@ class QualificationKind < ActiveRecord::Base
 
   ### VALIDATES
 
+  validates :label, presence: true, length: { maximum: 255, allow_nil: true }
+  validates :description, length: { maximum: 1023, allow_nil: true }
+
   validate :assert_validity_when_reactivateable
+
+
+  ### CLASS METHODS
+
+  class << self
+    def list
+      with_translations.order(:deleted_at, 'qualification_kind_translations.label')
+    end
+  end
 
   ### INSTANCE METHODS
 
@@ -71,6 +87,10 @@ class QualificationKind < ActiveRecord::Base
                  'muss einen positive Zahl sein um die ' +
                  "#{self.class.model_name.human} reaktivierbar zu machen.")
     end
+  end
+
+  def remember_translated_label
+    to_s # fetches the required translations and keeps them around
   end
 
 end

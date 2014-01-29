@@ -7,13 +7,16 @@
 
 class Event::KindsController < SimpleCrudController
 
+  self.sort_mappings = { label:      'event_kind_translations.label',
+                         short_name: 'event_kind_translations.short_name',}
+
   before_render_form :load_assocations
 
 
   private
 
   def list_entries
-    super.order(:deleted_at, :label)
+    super.list
   end
 
   def load_assocations

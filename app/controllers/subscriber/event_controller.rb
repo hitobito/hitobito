@@ -1,3 +1,4 @@
+
 # encoding: utf-8
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -16,17 +17,7 @@ module Subscriber
     def query
       events = []
       if params.key?(:q) && params[:q].size >= 3
-        events = possible_events.joins('LEFT OUTER JOIN event_kinds ' +
-                                       'ON events.kind_id = event_kinds.id ' +
-                                       "AND events.type = '#{Event::Course.sti_name}'").
-                                 where(search_condition('events.name',
-                                                        'events.number',
-                                                        'groups.name',
-                                                        'event_kinds.label',
-                                                        'event_kinds.short_name')).
-                                 order_by_date.
-                                 uniq.
-                                 limit(10)
+        events = matching_events.limit(10)
         events = decorate(events)
       end
 
@@ -43,6 +34,21 @@ module Subscriber
       Event.joins(:groups).
             since(start_of_last_year).
             where(groups: { id: @group.sister_groups_with_descendants })
+    end
+
+    def matching_events
+       possible_events.joins('LEFT JOIN event_kinds ' +
+                             'ON events.kind_id = event_kinds.id ' +
+                             "AND events.type = '#{Event::Course.sti_name}' " +
+                             'LEFT JOIN event_kind_translations ' +
+                             'ON event_kinds.id  = event_kind_translations.event_kind_id').
+                       where(search_condition('events.name',
+                                              'events.number',
+                                              'groups.name',
+                                              'event_kind_translations.label',
+                                              'event_kind_translations.short_name')).
+                       order_by_date.
+                       uniq
     end
 
     def start_of_last_year

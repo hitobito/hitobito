@@ -1,0 +1,18 @@
+login_de:
+  custom_content_id: <%= ActiveRecord::Fixtures.identify(:login) %>
+  locale: de
+  label: Login E-Mail
+  subject: Your Login Data
+  body: "Hello {user}, here is your site to login: {login-url}"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+notes:
+  custom_content_id: <%= ActiveRecord::Fixtures.identify(:notes) %>
+  locale: de
+  label: Any Notes
+  body: Bla bla bla bla
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+

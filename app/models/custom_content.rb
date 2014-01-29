@@ -19,15 +19,26 @@
 #
 
 class CustomContent < ActiveRecord::Base
+
+  translates :label, :subject, :body, fallbacks_for_empty_translations: true
+
   attr_accessible :body, :subject
 
+  # specify validations for translated attributes explicitly
+  validates :label, presence: true
+  validates :label, :subject, length: { maximum: 255, allow_nil: true}
   validates :body, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
+
   validate :assert_required_placeholders_are_used
 
   class << self
     def get(key)
       find_by_key(key) ||
       fail(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
+    end
+
+    def list
+      with_translations.order('custom_content_translations.label')
     end
   end
 

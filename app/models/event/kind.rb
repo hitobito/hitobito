@@ -23,6 +23,9 @@ class Event::Kind < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
+  before_destroy :remember_translated_label
+  translates :label, :short_name, fallbacks_for_empty_translations: true
+
   attr_accessible :label, :short_name, :minimum_age, :qualification_kind_ids, :precondition_ids, :prolongation_ids
 
 
@@ -43,6 +46,22 @@ class Event::Kind < ActiveRecord::Base
                                           foreign_key: :event_kind_id
 
 
+  ### VALIDATIONS
+
+  # explicitly define validations for translated attributes
+  validates :label, presence: true
+  validates :label, :short_name, length: { allow_nil: true, maximum: 255}
+
+
+  ### CLASS METHODS
+
+  class << self
+    def list
+      with_translations.order(:deleted_at, 'event_kind_translations.label')
+    end
+  end
+
+
   ### INSTANCE METHODS
 
   def to_s(format = :default)
@@ -61,6 +80,12 @@ class Event::Kind < ActiveRecord::Base
     else
       destroy!
     end
+  end
+
+  private
+
+  def remember_translated_label
+    to_s # fetches the required translations and keeps them around
   end
 
 end

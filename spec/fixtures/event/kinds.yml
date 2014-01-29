@@ -4,23 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 slk:
-  label: Scharleiterkurs
-  short_name: SLK
   preconditions: [gl]
   qualification_kinds: [sl]
   prolongations: [gl]
- 
+
 glk:
-  label: Gruppenleiterkurs
-  short_name: GLK
   qualification_kinds: [gl]
- 
+
 fk:
-  label: Fortbildungskurs
-  short_name: FK
   prolongations: [gl,sl]
-   
+
 old:
-  label: Alte Kursart
-  short_name: AK
   deleted_at: 2010-06-01

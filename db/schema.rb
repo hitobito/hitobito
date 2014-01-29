@@ -11,13 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710080936) do
+ActiveRecord::Schema.define(:version => 20140128145128) do
+
+  create_table "custom_content_translations", :force => true do |t|
+    t.integer  "custom_content_id"
+    t.string   "locale",            :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "label",             :null => false
+    t.string   "subject"
+    t.text     "body"
+    t.index ["custom_content_id"], :name => "index_custom_content_translations_on_custom_content_id"
+    t.index ["locale"], :name => "index_custom_content_translations_on_locale"
+  end
 
   create_table "custom_contents", :force => true do |t|
     t.string "key",                   :null => false
-    t.string "label",                 :null => false
-    t.string "subject"
-    t.text   "body"
     t.string "placeholders_required"
     t.string "placeholders_optional"
   end
@@ -62,9 +71,18 @@ ActiveRecord::Schema.define(:version => 20130710080936) do
     t.index ["event_id"], :name => "index_event_dates_on_event_id"
   end
 
-  create_table "event_kinds", :force => true do |t|
-    t.string   "label",       :null => false
+  create_table "event_kind_translations", :force => true do |t|
+    t.integer  "event_kind_id"
+    t.string   "locale",        :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "label",         :null => false
     t.string   "short_name"
+    t.index ["event_kind_id"], :name => "index_event_kind_translations_on_event_kind_id"
+    t.index ["locale"], :name => "index_event_kind_translations_on_locale"
+  end
+
+  create_table "event_kinds", :force => true do |t|
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.datetime "deleted_at"
@@ -174,8 +192,17 @@ ActiveRecord::Schema.define(:version => 20130710080936) do
     t.index ["parent_id"], :name => "index_groups_on_parent_id"
   end
 
+  create_table "label_format_translations", :force => true do |t|
+    t.integer  "label_format_id"
+    t.string   "locale",          :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "name",            :null => false
+    t.index ["label_format_id"], :name => "index_label_format_translations_on_label_format_id"
+    t.index ["locale"], :name => "index_label_format_translations_on_locale"
+  end
+
   create_table "label_formats", :force => true do |t|
-    t.string  "name",                                :null => false
     t.string  "page_size",        :default => "A4",  :null => false
     t.boolean "landscape",        :default => false, :null => false
     t.float   "font_size",        :default => 11.0,  :null => false
@@ -250,12 +277,21 @@ ActiveRecord::Schema.define(:version => 20130710080936) do
     t.index ["contactable_id", "contactable_type"], :name => "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
 
+  create_table "qualification_kind_translations", :force => true do |t|
+    t.integer  "qualification_kind_id"
+    t.string   "locale",                                :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.string   "label",                                 :null => false
+    t.string   "description",           :limit => 1023
+    t.index ["locale"], :name => "index_qualification_kind_translations_on_locale"
+    t.index ["qualification_kind_id"], :name => "index_qualification_kind_translations_on_qualification_kind_id"
+  end
+
   create_table "qualification_kinds", :force => true do |t|
-    t.string   "label",                          :null => false
     t.integer  "validity"
-    t.string   "description",    :limit => 1023
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.datetime "deleted_at"
     t.integer  "reactivateable"
   end

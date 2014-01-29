@@ -18,15 +18,11 @@
 #
 
 sl:
-  label: Super Lead
-  description: Blah
   validity: 2
-  
+
 gl:
-  label: Group Lead
   validity: 1
 
-old: 
-  label: Old Qualification
+old:
   validity: 1
   deleted_at: 2010-10-3

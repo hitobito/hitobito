@@ -6,11 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+
 describe QualificationKind do
 
+  subject { quali_kind }
+  let(:quali_kind) { qualification_kinds(:sl) }
+
   context 'validity is required for reactivateable' do
-    subject { quali_kind }
-    let(:quali_kind) { qualification_kinds(:sl) }
 
     before do
       quali_kind.reactivateable = 1
@@ -31,5 +33,10 @@ describe QualificationKind do
       let(:validity) { nil }
       it { should have(1).error_on(:validity) }
     end
+  end
+
+  it 'remembers label when destroying entry' do
+    subject.destroy
+    subject.to_s.should == 'Super Lead'
   end
 end

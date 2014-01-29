@@ -24,6 +24,9 @@
 
 class LabelFormat < ActiveRecord::Base
 
+  before_destroy :remember_translated_name
+  translates :name, fallbacks_for_empty_translations: true
+
   attr_accessible :name, :page_size, :landscape, :font_size, :width, :height,
                   :padding_top, :padding_left, :count_horizontal, :count_vertical
 
@@ -34,6 +37,7 @@ class LabelFormat < ActiveRecord::Base
   end
 
 
+  validates :name, presence: true, length: { maximum: 255, allow_nil: true }
   validates :page_size, inclusion: available_page_sizes
 
   validates :width, :height, :font_size, :count_horizontal, :count_vertical,
@@ -47,9 +51,13 @@ class LabelFormat < ActiveRecord::Base
 
   class << self
     def all_as_hash
-      Rails.cache.fetch('label_formats') do
-        LabelFormat.order(:name).each_with_object({}) { |f, result| result[f.id] = f.to_s }
+      Rails.cache.fetch("label_formats_#{I18n.locale}") do
+        LabelFormat.list.each_with_object({}) { |f, result| result[f.id] = f.to_s }
       end
+    end
+
+    def list
+      with_translations.order('label_format_translations.name')
     end
   end
 
@@ -68,6 +76,13 @@ class LabelFormat < ActiveRecord::Base
   private
 
   def sweep_cache
-    Rails.cache.delete('label_formats')
+    Settings.application.languages.to_hash.keys.each do |lang|
+      Rails.cache.delete("label_formats_#{lang}")
+    end
   end
+
+  def remember_translated_name
+    to_s # fetches the required translations and keeps them around
+  end
+
 end

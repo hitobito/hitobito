@@ -7,7 +7,10 @@
 
 if defined? Bullet
   Bullet.enable = true
-  # Bullet.alert = true
+  Bullet.alert = true
   Bullet.bullet_logger = true
   Bullet.rails_logger  = true
+
+  # groups loaded for current user
+  Bullet.add_whitelist type: :unused_eager_loading, class_name: "Person", association: :groups
 end

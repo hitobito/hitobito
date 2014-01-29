@@ -64,7 +64,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def issued_qualifications_info_for_leaders
-    prolongs = kind.qualification_kinds.order(:label).to_a
+    prolongs = kind.qualification_kinds.list.to_a
     info = ''
     if prolongs.present?
       info << 'Verlängert'
@@ -75,8 +75,8 @@ class EventDecorator < ApplicationDecorator
   end
 
   def issued_qualifications_info_for_participants
-    qualis = kind.qualification_kinds.order(:label).to_a
-    prolongs = kind.prolongations.order(:label).to_a
+    qualis = kind.qualification_kinds.list.to_a
+    prolongs = kind.prolongations.list.to_a
     info = ''
     info << issued_qualifications_info(qualis)
     if prolongs.present?

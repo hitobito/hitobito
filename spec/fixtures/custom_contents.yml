@@ -18,15 +18,10 @@
 
 login:
   key: login
-  label: Login E-Mail
-  subject: Your Login Data
-  body: "Hello {user}, here is your site to login: {login-url}"
   placeholders_required: login-url
   placeholders_optional: user
-  
+
 notes:
   key: notes
-  label: Any Notes
-  body: Bla bla bla bla
 
 

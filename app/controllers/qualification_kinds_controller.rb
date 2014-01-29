@@ -7,10 +7,13 @@
 
 class QualificationKindsController < SimpleCrudController
 
+  self.sort_mappings = { label:       'qualification_kind_translations.label',
+                         description: 'qualification_kind_translations.description' }
+
   private
 
   def list_entries
-    super.order(:deleted_at, :label)
+    super.list
   end
 
 end

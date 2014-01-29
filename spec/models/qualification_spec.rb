@@ -30,6 +30,28 @@ describe Qualification do
     quali.to_s.should eq 'Super Lead (bis 31.12.2013)'
   end
 
+  describe 'creating a second qualification of identical kind with validity' do
+    before     { Fabricate(:qualification, args.merge(start_at: Date.parse('2011-3-3').to_date)) }
+    subject    { Fabricate.build(:qualification, args.merge(start_at: date.to_date)) }
+    let(:args) { { person: person, qualification_kind: qualification_kinds(:sl), start_at: date } }
+
+    context 'on same day' do
+      let(:date) { Date.parse('2011-3-3') }
+      it { should_not be_valid  }
+    end
+
+    context 'later in same year' do
+      let(:date) { Date.parse('2011-5-5') }
+      it { should be_valid  }
+    end
+
+    context 'in next year' do
+      let(:date) { Date.parse('2012-5-5') }
+      it { should be_valid  }
+    end
+  end
+
+
   describe '#set_finish_at' do
     let(:date) { Date.today }
 

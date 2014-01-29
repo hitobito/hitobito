@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20140211092343) do
     t.datetime "updated_at",                                :null => false
     t.boolean  "active",                 :default => false, :null => false
     t.integer  "application_id"
+    t.boolean  "qualified"
     t.index ["event_id", "person_id"], :name => "index_event_participations_on_event_id_and_person_id", :unique => true
     t.index ["event_id"], :name => "index_event_participations_on_event_id"
     t.index ["person_id"], :name => "index_event_participations_on_person_id"

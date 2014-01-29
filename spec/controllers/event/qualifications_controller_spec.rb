@@ -51,17 +51,32 @@ describe Event::QualificationsController do
   end
 
   describe 'PUT update' do
-    subject { Event::Qualifier.for(participant_1).qualifications }
+    subject { obtained_qualifications }
 
     context 'with one existing qualifications' do
       before do
         participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
-                                                    start_at: event.qualification_date)
-        put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+                                                    start_at: start_at)
       end
 
-      it { should have(1).item }
-      it { should render_template('qualification') }
+      context 'issued before qualification date' do
+        let(:start_at) { event.qualification_date - 1.day }
+
+        it 'issues qualification' do
+          put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+          should have(1).items
+          should render_template('qualifications')
+        end
+      end
+
+      context 'issued on qualification date' do
+        let(:start_at) { event.qualification_date }
+
+        it 'raise error' do
+          expect { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }.to raise_error ActiveRecord::RecordInvalid
+        end
+      end
+
     end
 
     context 'without existing qualifications' do
@@ -74,14 +89,14 @@ describe Event::QualificationsController do
      context 'without existing qualifications for leader' do
        before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
 
-       it { assigns(:failed).should be_true }
+       it { assigns(:nothing_changed).should be_true }
      end
   end
 
 
   describe 'DELETE destroy' do
 
-    subject { Event::Qualifier.for(participant_1).qualifications }
+    subject { obtained_qualifications }
 
     context 'without existing qualifications' do
       before do
@@ -102,5 +117,10 @@ describe Event::QualificationsController do
       it { should have(0).items }
       it { should render_template('qualification') }
     end
+  end
+
+  def obtained_qualifications
+    q = Event::Qualifier.for(participant_1)
+    q.send(:obtained, q.send(:qualification_kinds))
   end
 end

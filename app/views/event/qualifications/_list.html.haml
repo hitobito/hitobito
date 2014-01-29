@@ -7,7 +7,7 @@
   %tbody
     - entries.each do |p|
       %tr{id: dom_id(p)}
-        %td.center= p.qualification_link(@group)
+        = render 'action_link_columns', p: p, group: @group
         %td
           %strong= link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
         %td= p.roles_short(@event)

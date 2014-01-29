@@ -142,7 +142,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_qualifications
-    @qualifications = entry.person.qualifications.includes(:qualification_kind).order_by_date
+    @qualifications = entry.person.latest_qualifications_uniq_by_kind
   end
 
   # A label for the current entry, including the model name, used for flash

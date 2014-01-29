@@ -19,7 +19,8 @@ class Event::QualificationsController < ApplicationController
 
   def update
     qualifier.issue
-    @failed = !qualifier.qualified?
+
+    @nothing_changed = qualifier.nothing_changed?
 
     respond_to do |format|
       format.html { redirect_to group_event_qualifications_path(group, event) }
@@ -44,7 +45,7 @@ class Event::QualificationsController < ApplicationController
   end
 
   def qualifier
-    Event::Qualifier.for(participation)
+    @qualifier ||= Event::Qualifier.for(participation)
   end
 
   def event
@@ -60,7 +61,7 @@ class Event::QualificationsController < ApplicationController
   end
 
   def participations(*role_types)
-    event.participations_for(*role_types).includes(:event)
+    event.participations_for(*role_types).includes(:roles, :event)
   end
 
   def authorize

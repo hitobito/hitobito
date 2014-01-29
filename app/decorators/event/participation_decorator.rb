@@ -24,8 +24,22 @@ class Event::ParticipationDecorator < ApplicationDecorator
     end
   end
 
-  def qualification_link(group)
-    h.toggle_link(qualified?, h.group_event_qualification_path(group, event_id, model))
+  def flash_info
+    "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
+  end
+
+  def issue_action(group)
+    (qualified.nil? || !qualified?) ? qualify_action_link(group, :put, :ok) : h.icon(:ok)
+  end
+
+  def revoke_action(group)
+    (qualified.nil? || qualified?) ? qualify_action_link(group, :delete, :remove) : h.icon(:remove)
+  end
+
+  def qualify_action_link(group, method, icon)
+    h.link_to(h.group_event_qualification_path(group, event_id, model), method: method, remote: true, title: tooltips[icon]) do
+      h.content_tag(:i, '', class: "icon icon-#{icon} disabled")
+    end
   end
 
   def waiting_list_link(group, event)
@@ -48,6 +62,13 @@ class Event::ParticipationDecorator < ApplicationDecorator
 
   def originating_group
     person.primary_group
+  end
+
+  def tooltips
+    @tooltips ||= {
+      ok: 'Markiert Kurs als bestanden und vergibt Qualifikationen.',
+      remove: 'Markiert Kurs als nicht bestanden und entfernt Qualifikationen.'
+    }
   end
 
 end

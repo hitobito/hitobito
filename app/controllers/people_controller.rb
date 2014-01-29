@@ -128,7 +128,7 @@ class PeopleController < CrudController
                                                                 includes(:groups).
                                                                 preload_all_dates.
                                                                 order_by_date)
-    @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
+    @qualifications = entry.latest_qualifications_uniq_by_kind
   end
 
   def find_entry

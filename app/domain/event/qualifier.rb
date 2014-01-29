@@ -27,7 +27,8 @@ module Event::Qualifier
 
 
   def self.leader?(participation)
-    participation.roles.where(type: leader_types(participation.event).map(&:sti_name)).exists?
+    leader_types_names = leader_types(participation.event).map(&:sti_name)
+    participation.roles.any? { |role| leader_types_names.include?(role.type) }
   end
 
 end

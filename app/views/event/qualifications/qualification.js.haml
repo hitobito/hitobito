@@ -3,7 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if @failed
+- if @nothing_changed
   alert("#{escape_javascript(participation.person.to_s)} hat keine Qualifikationen, die verlängert werden können.");
 
-$('##{dom_id(participation)} td:first').html('#{escape_javascript(participation.qualification_link(@group))}')
+$('##{dom_id(participation)} td.issue').html('#{escape_javascript(participation.issue_action(@group))}')
+$('##{dom_id(participation)} td.revoke').html('#{escape_javascript(participation.revoke_action(@group))}')

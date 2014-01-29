@@ -8,25 +8,21 @@
 module Event::Qualifier
   class Participant < Base
 
-    # Does the person have all qualifications from the event?
-    # required for view to display checksign
-    def qualified?
-      obtained_qualifications.present? &&
-      has_all_qualifications? &&
-      has_all_prolongations?(prolongation_kind_ids)
-    end
-
-    def issue
+    def issue_qualifications
       Qualification.transaction do
         create_qualifications
-        create_prolongations(prolongation_kind_ids)
+        prolong_existing(prolongation_kinds)
       end
     end
 
-    def revoke
+    def revoke_qualifications
       Qualification.transaction do
-        remove_qualifications(qualification_kind_ids + prolongation_kind_ids)
+        remove(qualification_kinds + prolongation_kinds)
       end
+    end
+
+    def nothing_changed?
+      qualification_kinds.blank? && (prolongation_kinds.present? && prolonged.blank?)
     end
 
   end

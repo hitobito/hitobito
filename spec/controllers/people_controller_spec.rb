@@ -203,7 +203,7 @@ describe PeopleController do
 
     it 'preloads data for asides, ordered by finish_at' do
       get :show, group_id: group.id, id: people(:top_leader).id
-      assigns(:qualifications).should eq [@ql_sl, @ql_gl]
+      assigns(:qualifications).should eq [@ql_gl, @ql_sl]
     end
   end
 

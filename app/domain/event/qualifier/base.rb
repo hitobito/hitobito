@@ -7,83 +7,71 @@
 
 module Event::Qualifier
 
-  class Base < Struct.new(:participation)
+  class Base
+    attr_reader :created, :prolonged, :participation
 
-    def qualifications
-      obtained_qualifications_for(qualification_kind_ids)
+    delegate :qualified?, :person, :event, to: :participation
+    delegate :qualification_date, to: :event
+
+    def initialize(participation)
+      @participation = participation
+
+      @created = []
+      @prolonged = []
+    end
+
+    def issue
+      issue_qualifications
+      participation.update_column(:qualified, true)
+    end
+
+    def revoke
+      revoke_qualifications
+      participation.update_column(:qualified, false)
     end
 
     private
 
-    def has_all_qualifications?
-      qualification_kind_ids.size == obtained_qualifications_for(qualification_kind_ids).size
-    end
-
-    def has_all_prolongations?(kind_ids)
-      obtained_qualifications_for(kind_ids).size ==
-      prolongable_qualifications(kind_ids).map(&:qualification_kind_id).uniq.size
-    end
-
     def create_qualifications
-      event.kind.qualification_kinds.each do |k|
-        create_qualification(k)
-      end
+      @created = qualification_kinds.map { |kind| create(kind) }
     end
 
-    # creates new qualification for existing qualifications (prologation mechanism)
-    def create_prolongations(kind_ids)
-      if kind_ids.present?
-        prolongable_qualifications(kind_ids).each do |q|
-          create_qualification(q.qualification_kind)
-        end
-      end
+    # Creates new qualification for prolongable qualifications, tracks what could and could not be prolonged
+    def prolong_existing(kinds)
+      @prolonged = prolongable_qualification_kinds(kinds)
+      @prolonged.each { |kind| create(kind) }
     end
 
-    # The qualifications a participant had before this event
-    def prolongable_qualifications(kind_ids)
+    def create(kind)
+      person.qualifications
+        .where(qualification_kind_id: kind.id, origin: event.to_s)
+        .first_or_create!(start_at: qualification_date)
+    end
+
+    def prolongable_qualification_kinds(kinds)
       person.qualifications
          .includes(:qualification_kind)
-         .where(qualification_kind_id: kind_ids)
+         .where(qualification_kind_id: kinds.map(&:id))
          .select { |quali| quali.reactivateable?(event.start_date) }
+         .map(&:qualification_kind)
     end
 
-    def create_qualification(kind)
-      person.qualifications.create(qualification_kind: kind,
-                                   origin: event.to_s,
-                                   start_at: qualification_date)
+    def remove(kinds)
+      obtained(kinds).each { |q| q.destroy }
     end
 
-    def remove_qualifications(kind_ids)
-      obtained_qualifications_for(kind_ids).each { |q| q.destroy }
+    # Qualifications set for this qualification_date (via preceeding #issue call in controller)
+    def obtained(kinds=[])
+      @obtained ||= person.qualifications.where(start_at: qualification_date,
+                                                qualification_kind_id: kinds.map(&:id)).to_a
     end
 
-    def qualification_kind_ids
-      @qualification_kind_ids ||= event.kind_id? ? event.kind.qualification_kind_ids.to_a : []
+    def qualification_kinds
+      event.kind.qualification_kinds
     end
 
-    def prolongation_kind_ids
-      @prolongation_kind_ids ||= event.kind.prolongation_ids.to_a
+    def prolongation_kinds
+      event.kind.prolongations
     end
-
-    def obtained_qualifications_for(kind_ids)
-      obtained_qualifications.select { |q| kind_ids.include?(q.qualification_kind_id) }
-    end
-
-    def obtained_qualifications
-      @event_qualifications ||= person.qualifications.where(start_at: qualification_date).to_a
-    end
-
-    def qualification_date
-      event.qualification_date
-    end
-
-    def person
-      participation.person
-    end
-
-    def event
-      participation.event
-    end
-
   end
 end

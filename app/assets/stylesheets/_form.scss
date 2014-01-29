@@ -211,3 +211,14 @@ textarea {
   position: absolute;
   left: -9999px;
 }
+
+td.issue, td.revoke {
+  width: 25px;
+
+}
+.disabled {
+  opacity: 0.3;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  filter: alpha(opacity=30);
+}
+

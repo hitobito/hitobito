@@ -8,22 +8,20 @@
 module Event::Qualifier
   class Leader < Base
 
-    # Does the person have all qualifications from the event?
-    # required for view to display checksign
-    def qualified?
-      obtained_qualifications.present? && has_all_prolongations?(qualification_kind_ids)
-    end
-
-    def issue
+    def issue_qualifications
       Qualification.transaction do
-        create_prolongations(qualification_kind_ids)
+        prolong_existing(qualification_kinds)
       end
     end
 
-    def revoke
+    def revoke_qualifications
       Qualification.transaction do
-        remove_qualifications(qualification_kind_ids)
+        remove(qualification_kinds)
       end
+    end
+
+    def nothing_changed?
+      qualification_kinds.present? && prolonged.blank?
     end
   end
 end

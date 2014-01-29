@@ -17,6 +17,7 @@
 #  updated_at             :datetime         not null
 #  active                 :boolean          default(FALSE), not null
 #  application_id         :integer
+#  qualified              :boolean
 #
 
 class Event::Participation < ActiveRecord::Base

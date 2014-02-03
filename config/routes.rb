@@ -43,15 +43,19 @@ Hitobito::Application.routes.draw do
           put :primary_group
         end
         resources :qualifications, only: [:new, :create, :destroy]
+        get 'qualifications' => 'qualifications#new' # route required for language switch
       end
 
       resources :roles, except: [:index, :show] do
         collection do
           get :details
+          get :role_types
         end
       end
+      get 'roles' => 'roles#new' # route required for language switch
 
       resources :people_filters, only: [:new, :create, :destroy]
+      get 'people_filters' => 'people_filters#new' # route required for language switch
 
       resources :events do
         collection do
@@ -134,6 +138,7 @@ Hitobito::Application.routes.draw do
     resources :label_formats
 
     resources :custom_contents, only: [:index, :edit, :update]
+    get 'custom_contents/:id' => 'custom_contents#edit'
 
     devise_for :people, skip: [:registrations], path: "users"
     as :person do

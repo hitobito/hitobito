@@ -92,6 +92,11 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
   $element.css('position', 'absolute')
   $element.animate({left: left, top: top}, 300, callback)
 
+Application.activateChosen = (i, element) ->
+  element = $(element)
+  text = element.data('chosen-no-results') || 'Keine Einträge gefunden mit'
+  element.chosen(no_results_text: text,
+                 search_contains: true)
 
 $ ->
   # wire up quick search
@@ -129,12 +134,7 @@ $ ->
   $('body').on('change', '#group_contact_id', toggleGroupContact)
 
   # enable chosen js
-  $('.chosen-select').each((i, e) ->
-    e = $(e)
-    text = e.data('chosen-no-results') || 'Keine Einträge gefunden'
-    e.chosen(no_results_text: text,
-             search_contains: true)
-    )
+  $('.chosen-select').each(Application.activateChosen)
 
   # wire up data swap links
   $('body').on('click', 'a[data-swap]', swapElements)

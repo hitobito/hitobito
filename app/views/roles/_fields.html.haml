@@ -1,13 +1,17 @@
+- if @group_selection.present? && @group_selection.size > 1
+  = f.labeled(:group_id) do
+    = f.select(:group_id,
+               group_options_with_level,
+               f.collection_prompt(:group_id),
+               { class: 'span6 chosen-select',
+                 data: { remote: true,
+                         url: role_types_group_roles_path(@group) }})
+- else
+  = f.hidden_field :group_id
+
 = f.labeled(:type) do
-  = f.collection_select(:type,
-                        GroupDecorator.decorate(@group).possible_roles,
-                        :sti_name,
-                        :label,
-                        f.collection_prompt(:type),
-                        { class: 'span6 chosen-select',
-                          data: { 'chosen-no-results' => 'Keine Einträge gefunden mit',
-                                  remote: true,
-                                  url: details_group_roles_path(@group) }})
+  #role_type_select
+    = render 'type_select'
 
 = f.labeled_input_field(:label,
                         data: {provide: :typeahead, source: entry.klass.available_labels},

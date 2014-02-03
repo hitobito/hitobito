@@ -78,7 +78,7 @@ de:
         success: "Personen wurden erfolgreich importiert."
 
   roles:
-    role_changed: "%{old_role} zu <i>%{new_role}</i> geändert."
+    role_changed: "%{old_role} zu %{new_role} geändert."
 
   people:
     send_password_instructions: "Login Informationen wurden verschickt."

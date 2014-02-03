@@ -23,8 +23,11 @@ describe RolesController do
   end
 
   describe 'POST create' do
-    it 'new role for existing person and redirects to people' do
-      post :create, group_id: group.id, role: { group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name }
+    it 'new role for existing person redirects to people list' do
+      post :create, group_id: group.id,
+                    role: { group_id: group.id,
+                            person_id: person.id,
+                            type: Group::TopGroup::Member.sti_name }
 
       should redirect_to(group_people_path(group))
 
@@ -34,7 +37,7 @@ describe RolesController do
       role.should be_kind_of(Group::TopGroup::Member)
     end
 
-    it 'new role and new person and redirects to person' do
+    it 'new role for new person redirects to person show' do
       post :create, group_id: group.id,
                     role: { group_id: group.id,
                             person_id: nil,
@@ -50,6 +53,21 @@ describe RolesController do
       role.should be_kind_of(Group::TopGroup::Member)
       person = role.person
       person.first_name.should == 'Hans'
+    end
+
+    it 'new role for different group redirects to groups peope list' do
+      g = groups(:toppers)
+      post :create, group_id: group.id,
+                    role: { group_id: g.id,
+                            person_id: person.id,
+                            type: Group::GlobalGroup::Member.sti_name }
+
+      should redirect_to(group_people_path(g))
+
+      role = person.reload.roles.first
+      role.group_id.should == g.id
+      flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt."
+      role.should be_kind_of(Group::GlobalGroup::Member)
     end
 
     it 'without name renders form again' do
@@ -79,35 +97,90 @@ describe RolesController do
       assigns(:role).person.should have(1).error_on(:base)
     end
 
+    context 'as group_full' do
+      before { sign_in(Fabricate(Group::TopGroup::Secretary.name.to_sym, group: group).person) }
+
+      it 'new role for existing person redirects to people list' do
+        post :create, group_id: group.id,
+                      role: { group_id: group.id,
+                              person_id: person.id,
+                              type: Group::TopGroup::Member.sti_name }
+
+        should redirect_to(group_people_path(group))
+
+        role = person.reload.roles.first
+        role.group_id.should == group.id
+        flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+        role.should be_kind_of(Group::TopGroup::Member)
+      end
+
+      it 'new role for different group is not allowed' do
+        g = groups(:toppers)
+        expect do
+          post :create, group_id: group.id,
+                        role: { group_id: g.id,
+                                person_id: person.id,
+                                type: Group::GlobalGroup::Member.sti_name }
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
   end
 
   describe 'PUT update' do
-    let(:notice) { "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."  }
 
+    before { role } # create it
 
     it 'redirects to person after update' do
-      put :update, { group_id: group.id, id: role.id, role: { label: 'bla', type: role.type } }
+      expect do
+        put :update, { group_id: group.id, id: role.id, role: { label: 'bla', type: role.type, group_id: role.group_id } }
+      end.not_to change { Role.with_deleted.count }
 
-      flash[:notice].should eq notice
+      flash[:notice].should eq "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
       role.reload.label.should eq 'bla'
+      role.type.should eq Group::TopGroup::Member.model_name
       should redirect_to(group_person_path(group, person))
     end
-
-    it 'can handle type passed as param' do
-      put :update, { group_id: group.id, id: role.id, role: { label: 'foo', type: role.type } }
-      role.reload.type.should eq Group::TopGroup::Member.model_name
-      role.reload.label.should eq 'foo'
-    end
-
 
     it 'terminates and creates new role if type changes' do
-      put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader } }
+      expect do
+        put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name } }
+      end.not_to change { Role.with_deleted.count }
       should redirect_to(group_person_path(group, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
-      notice = "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
-      flash[:notice].should eq notice
+      flash[:notice].should eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
     end
 
+    it 'terminates and creates new role if type and group changes' do
+      g = groups(:toppers)
+      expect do
+        put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Member.sti_name, group_id: g.id } }
+      end.not_to change { Role.with_deleted.count }
+      should redirect_to(group_person_path(g, person))
+      Role.with_deleted.where(id: role.id).should_not be_exists
+      flash[:notice].should eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Rolle</i> in <i>Toppers</i> geändert."
+    end
+
+    context 'as group_full' do
+      before { sign_in(Fabricate(Group::TopGroup::Secretary.name.to_sym, group: group).person) }
+
+      it 'terminates and creates new role if type changes' do
+        expect do
+          put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name } }
+        end.not_to change { Role.with_deleted.count }
+        should redirect_to(group_person_path(group, person))
+        Role.with_deleted.where(id: role.id).should_not be_exists
+        flash[:notice].should eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+      end
+
+      it 'is not allowed if group changes' do
+        g = groups(:toppers)
+        expect do
+          put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Member.sti_name, group_id: g.id } }
+        end.to raise_error(CanCan::AccessDenied)
+        Role.with_deleted.where(id: role.id).should be_exists
+      end
+    end
   end
 
   describe 'POST destroy' do

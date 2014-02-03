@@ -72,7 +72,6 @@ class Group < ActiveRecord::Base
 
   acts_as_nested_set dependent: :destroy
 
-
   belongs_to :contact, class_name: 'Person'
 
   has_many :roles, dependent: :destroy, inverse_of: :group
@@ -178,6 +177,12 @@ class Group < ActiveRecord::Base
     else
       layer_hierarchy - [layer_group]
     end
+  end
+
+  def groups_in_same_layer
+    Group.where(layer_group_id: layer_group_id).
+          without_deleted.
+          order(:lft)
   end
 
   def to_s(format = :default)

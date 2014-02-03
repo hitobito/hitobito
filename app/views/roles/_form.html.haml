@@ -7,7 +7,6 @@
   .span7
     = entry_form(cancel_url: role_cancel_url) do |f|
       = hidden_field_tag('return_url', params[:return_url])
-      = f.hidden_field :group_id
 
       - if entry.person.persisted?
         - title("Rolle für #{entry.person} #{entry.persisted? ? 'bearbeiten' : 'erstellen'}")

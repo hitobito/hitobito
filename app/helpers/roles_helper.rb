@@ -31,4 +31,13 @@ module RolesHelper
       group.to_s + ' (Gelöscht)'
     end
   end
+
+  def group_options_with_level
+    options = []
+    Group.each_with_level(@group_selection) do |group, level|
+      label = ('&nbsp; ' * (level - 1)).html_safe + h(group.to_s)
+      options << [label, group.id]
+    end
+    options
+  end
 end

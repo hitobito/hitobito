@@ -1,0 +1,9 @@
+= collection_select(:role,
+                    :type,
+                    GroupDecorator.decorate(@group).possible_roles,
+                    :sti_name,
+                    :label,
+                    { prompt: ta(:please_select) },
+                    { class: 'span6 chosen-select',
+                      data: { remote: true,
+                              url: details_group_roles_path(@group) }})

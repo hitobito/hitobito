@@ -11,7 +11,7 @@ class RoleAbility < AbilityDsl::Base
 
   on(Role) do
     permission(:group_full).may(:create, :update, :destroy, :details).in_same_group
-    permission(:layer_full).may(:create, :details).in_same_layer_or_below
+    permission(:layer_full).may(:create, :details, :create_in_subgroup, :role_types).in_same_layer_or_below
     permission(:layer_full).may(:update, :destroy).in_same_layer_or_visible_below
 
     general.non_restricted
@@ -28,6 +28,8 @@ class RoleAbility < AbilityDsl::Base
     !subject.restricted?
   end
 
+  # A role giving the current user the permission required to edit/destroy this very role.
+  # Should not be removed because this cannot be undone by the user.
   def not_permission_giving
     subject.person_id != user.id ||
     ([:layer_full, :group_full] & subject.permissions).blank?

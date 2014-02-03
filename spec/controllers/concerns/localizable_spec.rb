@@ -23,6 +23,7 @@ describe Concerns::Localizable do
   after do
     I18n.available_locales = @cached_locales
     Settings.application.languages = @cached_languages
+    I18n.locale = I18n.default_locale
   end
 
   it 'uses locale from params if given' do

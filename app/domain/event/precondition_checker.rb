@@ -7,7 +7,6 @@
 
 class Event::PreconditionChecker < Struct.new(:course, :person)
   extend Forwardable
-  def_delegator 'course.dates.first', :start_at, :course_start_at
   def_delegator 'course.kind', :minimum_age, :course_minimum_age
   def_delegator 'course.kind', :preconditions, :course_preconditions
   def_delegator 'errors', :empty?, :valid?
@@ -23,7 +22,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     validate_minimum_age if course_minimum_age
 
     course_preconditions.each do |qualification_kind|
-      if !(active?(qualification_kind) || reactivateable?(qualification_kind))
+      if !reactivateable?(qualification_kind)
         errors << qualification_kind.label
       end
     end
@@ -45,28 +44,18 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     errors << :birthday unless person.birthday && old_enough?
   end
 
-  def validate_precondition(qualification_kind)
-    errors << qualification_kind.label unless person_qualified_for(qualification_kind)
-  end
-
   def person_qualifications
     @person_qualifications ||= person.qualifications.where(qualification_kind_id: course_preconditions.map(&:id))
   end
 
-  def active?(qualification_kind)
-    person_qualifications.active(course.start_date).find do |qualification|
-      qualification.cover?(course_start_at.to_date)
-    end
-  end
-
   def reactivateable?(qualification_kind)
-    person_qualifications.find do |qualification|
-      qualification.reactivateable?(course_start_at.to_date)
-    end
+    person_qualifications.
+      select {|q| q.qualification_kind_id == qualification_kind.id }.
+      any? { |qualification| qualification.reactivateable?(course.start_date) }
   end
 
   def old_enough?
-    (course_start_at.end_of_year - course_minimum_age.years) >= person.birthday
+    (course.start_date.end_of_year - course_minimum_age.years) >= person.birthday.to_date
   end
 
   def birthday_error_text

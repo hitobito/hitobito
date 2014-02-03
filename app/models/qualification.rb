@@ -51,9 +51,7 @@ class Qualification < ActiveRecord::Base
 
   def reactivateable?(date = nil)
     date ||= Date.today
-    if finish_at? && qualification_kind.reactivateable? && !cover?(date)
-      (finish_at + qualification_kind.reactivateable.years) >= date
-    end
+    finish_at.nil? || (finish_at + qualification_kind.reactivateable.to_i.years) >= date
   end
 
   def to_s

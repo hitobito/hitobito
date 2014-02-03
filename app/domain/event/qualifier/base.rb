@@ -44,7 +44,7 @@ module Event::Qualifier
       person.qualifications
          .includes(:qualification_kind)
          .where(qualification_kind_id: kind_ids)
-         .select { |quali| quali.cover?(event.start_date) || quali.reactivateable?(event.start_date) }
+         .select { |quali| quali.reactivateable?(event.start_date) }
     end
 
     def create_qualification(kind)

@@ -109,8 +109,17 @@ describe Qualification do
     let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
 
     context 'missing' do
-      it { q.should be_active }
-      it { q.should_not be_reactivateable }
+      context 'active qualification' do
+        it { q.should be_active }
+        it { q.should be_reactivateable }
+      end
+
+      context 'expired qualification' do
+        let(:start_date) { today - 3.years }
+
+        it { q.should_not be_active }
+        it { q.should_not be_reactivateable }
+      end
     end
 
     context 'when present' do
@@ -118,7 +127,7 @@ describe Qualification do
 
       context 'active qualification' do
         it { q.should be_active }
-        it { q.should_not be_reactivateable }
+        it { q.should be_reactivateable }
       end
 
       context 'expired qualification within reactivateable limit' do

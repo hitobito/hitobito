@@ -10,14 +10,13 @@ describe Event::PreconditionChecker do
   let(:course) { events(:top_course) }
   let(:person) { people(:top_leader) }
 
-  let(:course_start_at) { course.dates.first.start_at }
+  let(:course_start_at) { course.start_date }
   let(:preconditions) { course.kind.preconditions }
 
   subject { Event::PreconditionChecker.new(course, person) }
   before { preconditions.clear }
 
   describe 'defaults' do
-    its(:course_start_at) { should be_present }
     its(:course_minimum_age) { should be_blank }
     its(:valid?) { should be_true }
   end
@@ -95,10 +94,16 @@ describe Event::PreconditionChecker do
       its(:valid?) { should be_true }
     end
 
-
     context 'multiple preconditions' do
       before { preconditions << qualification_kinds(:gl) }
-      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead$/ }
+
+      context 'missing only one' do
+        before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
+
+        its(:valid?) { should be_false }
+        its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead$/ }
+      end
     end
 
     def valid_date

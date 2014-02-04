@@ -37,8 +37,8 @@ describe RolesController, js: true do
       sign_in
       visit new_group_role_path(group_id: group.id)
 
-      find('a.chosen-single').click
-      find('ul.chosen-results').find('li', text: 'Leader').click
+      find('#role_type_select a.chosen-single').click
+      find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
       # test user clicking around first
       click_link('Neue Person erfassen')
@@ -61,8 +61,8 @@ describe RolesController, js: true do
       sign_in
       visit new_group_role_path(group_id: group.id)
 
-      find('a.chosen-single').click
-      find('ul.chosen-results').find('li', text: 'Leader').click
+      find('#role_type_select a.chosen-single').click
+      find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
       # test user clicking around first
       fill_in 'Person', with: 'Top'
@@ -85,13 +85,13 @@ describe RolesController, js: true do
       sign_in
       visit new_group_role_path(group_id: group.id)
 
-      find('a.chosen-single').click
-      find('ul.chosen-results').find('li', text: 'Leader').click
+      find('#role_type_select a.chosen-single').click
+      find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
       find('#role_info').should have_content('Die Rolle Leader in der Gruppe TopGroup')
 
-      find('a.chosen-single').click
-      find('ul.chosen-results').find('li', text: 'Member').click
+      find('#role_type_select a.chosen-single').click
+      find('#role_type_select ul.chosen-results').find('li', text: 'Member').click
 
       find('#role_info').should have_content('Die Rolle Member in der Gruppe TopGroup')
     end

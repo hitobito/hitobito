@@ -14,31 +14,12 @@ module Person::PreloadGroups
   def self.for(records)
     records = Array(records)
 
-    # preload roles
-    ActiveRecord::Associations::Preloader.new(
-      records,
-      :roles).run
+    preload_association(records, :roles)
 
-    # preload roles -> group
-    ActiveRecord::Associations::Preloader.new(
-      records.collect { |record| record.roles }.flatten,
-      :group,
-      select: Group::MINIMAL_SELECT).run
+    roles = records.collect { |record| record.roles }.flatten
+    preload_association(roles, :group, select: Group::MINIMAL_SELECT)
 
-    # preload groups manually because rails would
-    # empty the through association (=roles) again.
-    if records.present? && !records.first.association(:groups).loaded?
-      records.each do |person|
-         groups = person.roles.collect(&:group)
-         groups.flatten!
-         groups.compact!
-
-         association = person.association(:groups)
-         association.loaded!
-         association.target.concat(groups)
-         groups.each { |g| association.set_inverse_instance(g) }
-      end
-    end
+    preload_groups_manually(records)
 
     records
   end
@@ -48,6 +29,26 @@ module Person::PreloadGroups
   end
 
   private
+
+  def self.preload_association(records, association, options = {})
+    ActiveRecord::Associations::Preloader.new(
+      records, association, options).run
+  end
+
+  def self.preload_groups_manually(records)
+    # preload groups manually because rails would
+    # empty the through association (=roles) again.
+    if records.present? && !records.first.association(:groups).loaded?
+      records.each do |person|
+         groups = person.roles.collect(&:group).flatten.compact
+
+         association = person.association(:groups)
+         association.loaded!
+         association.target.concat(groups)
+         groups.each { |g| association.set_inverse_instance(g) }
+      end
+    end
+  end
 
   def exec_queries
     records = super

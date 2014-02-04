@@ -66,7 +66,7 @@ describe RolesController do
 
       role = person.reload.roles.first
       role.group_id.should == g.id
-      flash[:notice].should == "Rolle <i>Rolle</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt."
+      flash[:notice].should == "Rolle <i>Member</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt."
       role.should be_kind_of(Group::GlobalGroup::Member)
     end
 
@@ -154,11 +154,11 @@ describe RolesController do
     it 'terminates and creates new role if type and group changes' do
       g = groups(:toppers)
       expect do
-        put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Member.sti_name, group_id: g.id } }
+        put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id } }
       end.not_to change { Role.with_deleted.count }
       should redirect_to(group_person_path(g, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
-      flash[:notice].should eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Rolle</i> in <i>Toppers</i> geändert."
+      flash[:notice].should eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
     end
 
     context 'as group_full' do

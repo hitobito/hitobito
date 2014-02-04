@@ -24,4 +24,6 @@ de:
       group/bottom_layer/member: Member
       group/bottom_group/leader: Leader
       group/bottom_group/member: Member
+      group/global_group/leader: Leader
+      group/global_group/member: Member
       role/external: External

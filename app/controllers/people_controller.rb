@@ -117,11 +117,11 @@ class PeopleController < CrudController
                          order('event_dates.start_at').uniq
     Event::PreloadAllDates.for(applications.collect(&:event))
 
-    @pending_applications = Event::ApplicationDecorator.decorate(applications)
-    @upcoming_events      = EventDecorator.decorate(entry.upcoming_events.
-                                                          includes(:groups).
-                                                          preload_all_dates.
-                                                          order_by_date)
+    @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
+    @upcoming_events      = EventDecorator.decorate_collection(entry.upcoming_events.
+                                                                includes(:groups).
+                                                                preload_all_dates.
+                                                                order_by_date)
     @qualifications = entry.qualifications.includes(:person, :qualification_kind).order_by_date
   end
 

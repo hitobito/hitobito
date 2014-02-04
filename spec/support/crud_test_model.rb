@@ -49,7 +49,8 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
 end
 
-class CrudTestModelDecorator < Draper::Base
+class CrudTestModelDecorator < Draper::Decorator
+  delegate_all
   decorates :crud_test_model
 end
 

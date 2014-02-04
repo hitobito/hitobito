@@ -9,7 +9,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates 'event/participation'
 
   decorates_association :person
-  decorates_association :event
+  decorates_association :event, with: EventDecorator
   decorates_association :application
 
   delegate :to_s, :email, :all_phone_numbers, :complete_address,
@@ -22,10 +22,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
     h.safe_join(roles) do |r|
       content_tag(:p, r)
     end
-  end
-
-  def flash_info
-    "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
   end
 
   def qualification_link(group)

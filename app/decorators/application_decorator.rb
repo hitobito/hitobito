@@ -5,7 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ApplicationDecorator < Draper::Base
+class ApplicationDecorator < Draper::Decorator
+  delegate_all
   delegate :to_s, to: :model
   delegate :can?, :content_tag, :safe_join, :current_user, to: :h
 

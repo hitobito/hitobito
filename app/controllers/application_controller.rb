@@ -7,10 +7,12 @@
 
 class ApplicationController < ActionController::Base
 
-  include DecoratesBeforeRendering
+  include Concerns::DecoratesBeforeRendering
+  include Userstamp
   include Concerns::Stampable
   include Concerns::Localizable
   include Concerns::Authenticatable
+  include ERB::Util
 
   alias_method :decorate, :__decorator_for__
 

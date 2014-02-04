@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDecorator < ApplicationDecorator
+
   decorates :person
 
   include ContactableDecorator

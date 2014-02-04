@@ -100,6 +100,8 @@ class StandardTableBuilder
   def entry_class
     if entries.respond_to?(:klass)
       entries.klass
+    elsif entries.respond_to?(:decorator_class)
+      entries.decorator_class.object_class
     else
       entries.first.class
     end

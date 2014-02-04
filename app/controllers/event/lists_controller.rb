@@ -23,7 +23,7 @@ class Event::ListsController < ApplicationController
                    where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
                    order('event_dates.start_at ASC')
 
-    @events_by_month = EventDecorator.decorate(events).group_by do |entry|
+    @events_by_month = EventDecorator.decorate_collection(events).group_by do |entry|
       if entry.dates.present?
         l(entry.dates.first.start_at, format: :month_year)
       else
@@ -36,7 +36,7 @@ class Event::ListsController < ApplicationController
     authorize!(:index, Event::Course)
     set_group_vars
 
-    courses = EventDecorator.decorate(limit_scope_for_user)
+    courses = EventDecorator.decorate_collection(limit_scope_for_user)
     @courses_by_kind = courses.group_by { |entry| entry.kind.label }
     @courses_by_kind.each do |kind, entries|
       entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }.

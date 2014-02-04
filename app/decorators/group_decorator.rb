@@ -8,7 +8,7 @@
 class GroupDecorator < ApplicationDecorator
   decorates :group
   decorates_association :contact
-  decorates_association :parent
+  decorates_association :parent, with: GroupDecorator
 
   include ContactableDecorator
 

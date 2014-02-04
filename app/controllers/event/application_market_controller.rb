@@ -59,7 +59,7 @@ class Event::ApplicationMarketController < ApplicationController
        p.person.last_name || '',
        p.person.first_name || '']
     end
-    @applications = Event::ParticipationDecorator.decorate(applications)
+    @applications = Event::ParticipationDecorator.decorate_collection(applications)
   end
 
   def filter_applications

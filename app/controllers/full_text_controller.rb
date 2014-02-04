@@ -15,7 +15,7 @@ class FullTextController < ApplicationController
 
   def index
     @people = if params[:q].to_s.size >= 2
-      PersonDecorator.decorate(list_people)
+      PaginatingDecorator.decorate(list_people)
     else
       Kaminari.paginate_array([]).page(1)
     end

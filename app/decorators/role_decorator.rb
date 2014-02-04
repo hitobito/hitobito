@@ -7,5 +7,4 @@
 
 class RoleDecorator < ApplicationDecorator
   decorates :role
-
 end

@@ -8,10 +8,10 @@
 class Event::ApplicationDecorator < ::ApplicationDecorator
   decorates 'event/application'
 
-  decorates_association :event
-  decorates_association :priority_1
-  decorates_association :priority_2
-  decorates_association :priority_3
+  decorates_association :event, with: EventDecorator
+  decorates_association :priority_1, with: EventDecorator
+  decorates_association :priority_2, with: EventDecorator
+  decorates_association :priority_3, with: EventDecorator
 
   delegate :dates_info, :dates_full, :kind, :group, to: :event
 

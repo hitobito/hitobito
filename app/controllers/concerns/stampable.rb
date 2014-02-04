@@ -7,11 +7,6 @@
 
 module Concerns
   module Stampable
-    extend ActiveSupport::Concern
-
-    include Userstamp
-
-
     private
 
     def set_stamper
@@ -21,6 +16,5 @@ module Concerns
     def reset_stamper
       Person.reset_stamper
     end
-
   end
 end

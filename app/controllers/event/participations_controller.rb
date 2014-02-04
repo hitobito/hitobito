@@ -147,7 +147,9 @@ class Event::ParticipationsController < CrudController
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
-    "#{models_label(false)} #{Event::ParticipationDecorator.decorate(entry).flash_info}".html_safe
+    "#{models_label(false)} von " <<
+    "<i>#{h(entry.person)}</i> in " <<
+    "<i>#{h(entry.event)}</i>".html_safe
   end
 
   def create_participant_role

@@ -159,8 +159,4 @@ class RolesController < CrudController
       @group_selection = @group.groups_in_same_layer.to_a
     end
   end
-
-  def h(string)
-    ERB::Util.h(string)
-  end
 end

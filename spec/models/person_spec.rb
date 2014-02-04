@@ -145,7 +145,14 @@ describe Person do
 
     it 'preloads groups with the given scope' do
       p = Person.preload_groups.find(person.id)
+      p.groups.should be_loaded
       p.groups.to_set.should == [groups(:bottom_group_one_one), groups(:bottom_layer_one)].to_set
+    end
+
+    it 'preloads roles with the given scope' do
+      p = Person.preload_groups.find(person.id)
+      p.roles.should be_loaded
+      p.roles.first.association(:group).should be_loaded
     end
 
     it 'in_layer returns person for this layer' do

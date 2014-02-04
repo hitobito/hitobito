@@ -25,11 +25,20 @@ module Person::PreloadGroups
       :group,
       select: Group::MINIMAL_SELECT).run
 
-    # preload groups
-    ActiveRecord::Associations::Preloader.new(
-      records,
-      :groups,
-      select: Group::MINIMAL_SELECT).run
+    # preload groups manually because rails would
+    # empty the through association (=roles) again.
+    if records.present? && !records.first.association(:groups).loaded?
+      records.each do |person|
+         groups = person.roles.collect(&:group)
+         groups.flatten!
+         groups.compact!
+
+         association = person.association(:groups)
+         association.loaded!
+         association.target.concat(groups)
+         groups.each { |g| association.set_inverse_instance(g) }
+      end
+    end
 
     records
   end
@@ -47,4 +56,5 @@ module Person::PreloadGroups
 
     records
   end
+
 end

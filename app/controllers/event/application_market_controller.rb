@@ -53,10 +53,11 @@ class Event::ApplicationMarketController < ApplicationController
                        where(filter_applications).
                        merge(Event::Participation.pending).
                        uniq
+    # do not include nil values in arrays returned by #sort_by
     applications.sort_by! do |p|
       [p.application.priority(event) || 99,
-       p.person.last_name,
-       p.person.first_name]
+       p.person.last_name || '',
+       p.person.first_name || '']
     end
     @applications = Event::ParticipationDecorator.decorate(applications)
   end

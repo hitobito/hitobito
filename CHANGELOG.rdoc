@@ -4,3 +4,4 @@
 
 * Mehrsprachigkeit
 * Rollenauswahl auf Formular, nicht mehr im Dropdown
+* Gruppenauswahl beim Erstellen von Rollen.

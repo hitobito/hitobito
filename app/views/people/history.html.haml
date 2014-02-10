@@ -16,6 +16,7 @@
   = render(layout: 'shared/grouped_table',
            locals: {grouped_lists: @participations_by_event_type,
                     column_count: 3}) do |participation|
-    %td= participation.event.labeled_link
+    %td
+      %strong= participation.event.labeled_link
     %td= participation.list_roles
     %td= participation.event.dates_full

@@ -15,7 +15,7 @@ describe Export::Csv::People::ParticipationsFull do
   let(:list) { [participation] }
   let(:people_list) { Export::Csv::People::ParticipationsFull.new(list) }
 
-  subject { people_list }
+  subject { people_list.attribute_labels }
 
   context 'additional_information' do
     before { participation.additional_information = 'asdf' }

@@ -8,58 +8,41 @@
 module Export::Csv::People
 
   # Attributes of people we want to include
-  class PeopleAddress
-    attr_reader :people, :hash
-    delegate :[], :merge!, :keys, :values, to: :hash
+  class PeopleAddress < Export::Csv::Base
 
-    def initialize(people)
-      @people = people
-      @hash = {}
+    self.model_class = ::Person
+    self.row_class = PersonRow
 
-      attributes.each { |attr| merge!(attr => translate(attr)) }
-      merge!(roles: 'Rollen')
-      add_associations
-    end
-
-    def to_csv(csv)
-      csv << values
-      list.each do |person|
-        hash = create(person)
-        csv << keys.map { |key| hash[key] }
-      end
-    end
 
     private
 
-    def model_class
-      ::Person
+    def build_attribute_labels
+      person_attribute_labels.merge(association_attributes)
     end
 
-    def list
-      people
+    def person_attribute_labels
+      person_attributes.each_with_object({}) do |attr, hash|
+        hash[attr] = attribute_label(attr)
+      end
     end
 
-    def create(person)
-      Export::Csv::People::Person.new(person)
-    end
-
-    def attributes
+    def person_attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
-       :address, :zip_code, :town, :country, :gender, :birthday]
+       :address, :zip_code, :town, :country, :gender, :birthday, :roles]
     end
 
-    def translate(attr)
-      model_class.human_attribute_name(attr)
+    def association_attributes
+      account_labels(people.map(&:phone_numbers).flatten.select(&:public?), Accounts.phone_numbers)
     end
 
-    def add_associations
-      merge!(labels(people.map(&:phone_numbers).flatten.select(&:public?), Accounts.phone_numbers))
-    end
-
-    def labels(collection, mapper)
+    def account_labels(collection, mapper)
       collection.map(&:label).uniq.each_with_object({}) do |label, obj|
         obj[mapper.key(label)] = mapper.human(label) if label.present? # label should always be present
       end
+    end
+
+    def people
+      list
     end
   end
 end

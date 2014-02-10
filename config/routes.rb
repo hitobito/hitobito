@@ -27,6 +27,7 @@ Hitobito::Application.routes.draw do
 
       member do
         get :deleted_subgroups
+        get :export_subgroups
         post :reactivate
 
         get 'merge' => 'group/merge#select'

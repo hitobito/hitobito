@@ -102,6 +102,11 @@ describe Export::Csv::People do
 
     context 'export_participations_full' do
       let(:list) { [participation] }
+      let(:full_headers) do
+        ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'E-Mail',
+         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+         'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)', 'Rollen']
+      end
       let(:data) { Export::Csv::People.export_participations_full(list) }
 
       its(:headers) { should == full_headers }

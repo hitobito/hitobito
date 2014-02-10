@@ -5,14 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::People
-  # handles participations
-  class ParticipationsAddress < PeopleAddress
+module Export::Csv
+  module Groups
 
-    self.row_class = Export::Csv::People::ParticipationRow
-
-    def people
-      list.map(&:person)
+    def self.export_subgroups(group)
+      Export::Csv::Generator.new(Subgroups.new(group)).csv
     end
 
   end

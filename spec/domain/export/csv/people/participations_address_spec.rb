@@ -14,7 +14,7 @@ describe Export::Csv::People::ParticipationsAddress do
   let(:list) { [participation] }
   let(:people_list) { Export::Csv::People::ParticipationsAddress.new(list) }
 
-  subject { people_list }
+  subject { people_list.attribute_labels }
 
   context 'address data' do
     its([:first_name]) { should eq 'Vorname' }

@@ -12,19 +12,24 @@ describe Export::Csv::People::PeopleFull do
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:people_list) { Export::Csv::People::PeopleFull.new(list) }
+
   subject { people_list }
 
-  its([:roles]) { should eq 'Rollen' }
   its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company, :email, :address,
-                                 :zip_code, :town, :country, :gender, :birthday, :additional_information] end
+                                 :zip_code, :town, :country, :gender, :birthday, :additional_information, :roles] end
 
-  its([:social_account_website]) { should be_blank }
+  context '#attribute_labels' do
+    subject { people_list.attribute_labels }
 
-  its([:company]) { should eq 'Firma' }
-  its([:company_name]) { should eq 'Firmenname' }
+    its([:roles]) { should eq 'Rollen' }
+    its([:social_account_website]) { should be_blank }
 
-  context 'social accounts' do
-    before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
-    its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
+    its([:company]) { should eq 'Firma' }
+    its([:company_name]) { should eq 'Firmenname' }
+
+    context 'social accounts' do
+      before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
+      its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
+    end
   end
 end

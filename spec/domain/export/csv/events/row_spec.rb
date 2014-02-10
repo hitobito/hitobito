@@ -14,20 +14,18 @@ describe Export::Csv::Events::Row do
   let(:course) do Fabricate(:course, state: :application_closed, groups: [groups(:top_group)],
                                      description: 'some description', number: 123, location: 'somewhere') end
 
-  let(:list)  { OpenStruct.new(max_dates: 3, contactable_keys: contactable_keys) }
+  let(:row) { Export::Csv::Events::Row.new(course) }
 
-  let(:row) { Export::Csv::Events::Row.new(course, list) }
-
-  subject { OpenStruct.new(row.hash) }
+  subject { row }
 
   shared_context 'contactable' do
     def value(key)
-      row.hash.fetch(:"#{prefix}_#{key}")
+      row.fetch(:"#{prefix}_#{key}")
     end
 
     describe 'without value' do
       specify 'keys' do
-        contactable_keys.each { |key| row.hash.should have_key(:"#{prefix}_#{key}") }
+        contactable_keys.each { |key| value(key).should be_nil }
       end
     end
   end
@@ -44,12 +42,12 @@ describe Export::Csv::Events::Row do
   end
 
   context 'event attributes' do
-    its(:kind)   { should eq 'Scharleiterkurs' }
-    its(:state)   { should =~  /translation missing/ }
-    its(:number) { should eq 123 }
-    its(:location)   { should eq 'somewhere' }
-    its(:description)   { should eq 'some description' }
-    its(:group_names) { should eq 'TopGroup' }
+    it { row.fetch(:kind).should eq 'Scharleiterkurs' }
+    it { row.fetch(:state).should =~  /translation missing/ }
+    it { row.fetch(:number).should eq 123 }
+    it { row.fetch(:location).should eq 'somewhere' }
+    it { row.fetch(:description).should eq 'some description' }
+    it { row.fetch(:group_names).should eq 'TopGroup' }
   end
 
   context 'contact person' do
@@ -83,12 +81,12 @@ describe Export::Csv::Events::Row do
 
     before { course.stub(dates: [date]) }
 
-    its(:date_0_label) { should eq 'Hauptanlass' }
-    its(:date_0_duration) { should eq '09.06.2013 - 12.06.2013' }
+    it { row.fetch(:date_0_label).should eq 'Hauptanlass' }
+    it { row.fetch(:date_0_duration).should eq '09.06.2013 - 12.06.2013' }
 
     it 'has keys for two more dates' do
-      row.hash.should have_key(:date_1_label)
-      row.hash.should have_key(:date_2_label)
+      row.fetch(:date_1_label).should eq nil
+      row.fetch(:date_2_label).should eq nil
     end
   end
 

@@ -12,19 +12,18 @@ describe Export::Csv::Events::List do
   let(:list)  { Export::Csv::Events::List.new(courses) }
   subject { list }
 
-  its(:max_dates) { should eq 3 }
   its(:contactable_keys) { should eq [:name, :address, :zip_code, :town, :email, :phone_numbers] }
 
   context 'used labels' do
-    subject { list.labels }
+    subject { list }
 
-    its(:keys) do should =~ [:group_names, :number, :kind, :description, :state, :location,
-                             :date_0_label, :date_0_location, :date_0_duration, :date_1_label, :date_1_location, :date_1_duration, :date_2_label, :date_2_location, :date_2_duration,
-                             :contact_name, :contact_address, :contact_zip_code, :contact_town, :contact_email, :contact_phone_numbers,
-                             :leader_name, :leader_address, :leader_zip_code, :leader_town, :leader_email, :leader_phone_numbers] end
+    its(:attributes) do should =~ [:group_names, :number, :kind, :description, :state, :location,
+                                   :date_0_label, :date_0_location, :date_0_duration, :date_1_label, :date_1_location, :date_1_duration, :date_2_label, :date_2_location, :date_2_duration,
+                                   :contact_name, :contact_address, :contact_zip_code, :contact_town, :contact_email, :contact_phone_numbers,
+                                   :leader_name, :leader_address, :leader_zip_code, :leader_town, :leader_email, :leader_phone_numbers] end
 
 
-    its(:values) do should =~ ['Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
+    its(:labels) do should =~ ['Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
                                'Datum 1 Beschreibung', 'Datum 1 Ort', 'Datum 1 Zeitraum', 'Datum 2 Beschreibung', 'Datum 2 Ort', 'Datum 2 Zeitraum', 'Datum 3 Beschreibung', 'Datum 3 Ort', 'Datum 3 Zeitraum',
                                'Kontaktperson Name', 'Kontaktperson Adresse', 'Kontaktperson PLZ', 'Kontaktperson Ort', 'Kontaktperson E-Mail', 'Kontaktperson Telefonnummern',
                                'Hauptleitung Name', 'Hauptleitung Adresse', 'Hauptleitung PLZ', 'Hauptleitung Ort', 'Hauptleitung E-Mail', 'Hauptleitung Telefonnummern'] end
@@ -57,7 +56,7 @@ describe Export::Csv::Events::List do
         its([6]) { should eq 'Hauptanlass' }
         its([7]) { should eq 'somewhere' }
         its([8]) { should eq '09.06.2013 - 12.06.2013' }
-        its([9]) { should eq '' }
+        its([9]) { should eq nil }
       end
 
       context 'contact' do

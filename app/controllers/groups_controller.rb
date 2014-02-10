@@ -33,6 +33,10 @@ class GroupsController < CrudController
     redirect_to entry
   end
 
+  def export_subgroups
+    csv = Export::Csv::Groups.export_subgroups(entry)
+    send_data csv, type: :csv
+  end
 
   private
 

@@ -7,35 +7,36 @@
 
 require 'spec_helper'
 
-describe Export::Csv::People::Person do
+describe Export::Csv::People::PersonRow do
 
   let(:person) { people(:top_leader) }
+  let(:row) { Export::Csv::People::PersonRow.new(person) }
 
-  subject { Export::Csv::People::Person.new(person) }
+  subject { row }
 
   context 'standard attributes' do
-    its([:id]) { should eq person.id }
-    its([:first_name]) { should eq 'Top' }
+    it { row.fetch(:id).should eq person.id }
+    it { row.fetch(:first_name).should eq 'Top' }
   end
 
   context 'roles' do
-    its([:roles]) { should eq 'Leader TopGroup' }
+    it { row.fetch(:roles).should eq 'Leader TopGroup' }
 
     context 'multiple roles' do
       let(:group) { groups(:bottom_group_one_one) }
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
-      its([:roles]) { should eq 'Member Group 11, Leader TopGroup' }
+      it { row.fetch(:roles).should eq 'Member Group 11, Leader TopGroup' }
     end
   end
 
   context 'phone numbers' do
     before { person.phone_numbers << PhoneNumber.new(label: 'foobar', number: 321) }
-    its([:phone_number_foobar]) { should eq '321' }
+    it { row.fetch(:phone_number_foobar).should eq '321' }
   end
 
-  context 'social accounts ' do
-    before { person.social_accounts << SocialAccount.new(label: 'foobar', name: 'asdf') }
-    its([:social_account_foobar]) { should eq 'asdf' }
+  context 'social accounts' do
+    before { person.social_accounts << SocialAccount.new(label: 'foo oder bar!', name: 'asdf') }
+    it { row.fetch(:'social_account_foo oder bar!').should eq 'asdf' }
   end
 end

@@ -28,13 +28,13 @@ module Export::Csv::People
                         primary_group_id
                         last_label_format_id)
 
-    def attributes
-      (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)
+    def person_attributes
+      (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym) + [:roles]
     end
 
-    def add_associations
-      merge!(labels(people.map(&:phone_numbers).flatten, Accounts.phone_numbers))
-      merge!(labels(people.map(&:social_accounts).flatten, Accounts.social_accounts))
+    def association_attributes
+      account_labels(people.map(&:phone_numbers).flatten, Accounts.phone_numbers).merge(
+        account_labels(people.map(&:social_accounts).flatten, Accounts.social_accounts))
     end
   end
 end

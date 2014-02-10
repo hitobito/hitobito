@@ -6,68 +6,33 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Csv::Events
-  class List
-    attr_reader :courses, :row_class
+  class List < Export::Csv::Base
 
-    def initialize(courses)
-      @courses = courses
-    end
+    MAX_DATES = 3
 
-    def rows
-      @rows ||= courses.map { |course| new_row(course) }
-    end
-
-    def to_csv(generator)
-      generator << labels.values
-      rows.each do |row|
-        generator << values(row)
-      end
-    end
-
-    def labels
-      course_labels
-        .merge(date_labels)
-        .merge(prefixed_contactable_labels(:contact))
-        .merge(prefixed_contactable_labels(:leader))
-    end
-
-    def contactable_keys
-      [:name, :address, :zip_code, :town, :email, :phone_numbers]
-    end
-
-    def max_dates
-      3
-    end
+    self.model_class = Event::Course
+    self.row_class = Export::Csv::Events::Row
 
     private
-    def new_row(course)
-      Row.new(course, self)
-    end
 
-    def options
-      { col_sep: Settings.csv.separator.strip }
+    def build_attribute_labels
+      course_labels
+          .merge(date_labels)
+          .merge(prefixed_contactable_labels(:contact))
+          .merge(prefixed_contactable_labels(:leader))
     end
-
-    def values(row)
-      labels.keys.map { |key| row.hash.fetch(key) }
-    end
-
 
     def course_labels
       { group_names: 'Organisatoren',
-        number: human(:number),
+        number: human_attribute(:number),
         kind: Event::Kind.model_name.human,
-        description: human(:description),
-        state: human(:state),
-        location: human(:location) }
-    end
-
-    def human(key)
-      Event::Course.human_attribute_name(key)
+        description: human_attribute(:description),
+        state: human_attribute(:state),
+        location: human_attribute(:location) }
     end
 
     def date_labels
-      max_dates.times.each_with_object({}) do |i, hash|
+      MAX_DATES.times.each_with_object({}) do |i, hash|
         hash[:"date_#{i}_label"] = "Datum #{i + 1} #{Event::Date.human_attribute_name(:label)}"
         hash[:"date_#{i}_location"] = "Datum #{i + 1} #{Event::Date.human_attribute_name(:location)}"
         hash[:"date_#{i}_duration"] = "Datum #{i + 1} Zeitraum"
@@ -80,10 +45,14 @@ module Export::Csv::Events
       end
     end
 
+    def contactable_keys
+      [:name, :address, :zip_code, :town, :email, :phone_numbers]
+    end
+
     def translated_prefix(prefix)
       case prefix
       when :leader then Event::Role::Leader.model_name.human
-      when :contact then Event::Course.human_attribute_name(:contact)
+      when :contact then human_attribute(:contact)
       else prefix
       end
     end

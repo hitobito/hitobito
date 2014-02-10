@@ -6,84 +6,59 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Csv::Events
-  class Row
-    attr_reader :course, :hash, :max_dates, :contactable_keys
+  class Row < Export::Csv::Base::Row
 
-    delegate :number, :group_names, :description, :location, :contact, :application_closing_at,
-             :participations_for, to: :course
+    self.dynamic_attributes = {
+       /^contact_/  => :contactable_attribute,
+       /^leader_/   => :contactable_attribute,
+       /^date_\d+_/ => :date_attribute
+    }
 
+    def kind
+      entry.kind.label
+    end
 
-    def initialize(course, list)
-      @course = course
-      @max_dates = list.max_dates
-      @contactable_keys = list.contactable_keys
-
-      @hash = populate
+    def state
+      I18n.t("activerecord.attributes.event/course.states.#{entry.state}") if entry.state
     end
 
     private
 
-    def populate
-      attributes
-        .merge(dates)
-        .merge(contactable_attributes(:contact, contact))
-        .merge(contactable_attributes(:leader, leader && leader.person))
-    end
-
-
-    def attributes
-      { group_names: group_names,
-        number: number,
-        kind: course.kind.label,
-        description: description,
-        state: state,
-        location: location }.merge(additional_attributes)
-    end
-
-    def state
-      I18n.t("activerecord.attributes.event/course.states.#{course.state}") if course.state
-    end
-
-    # Vorweekend, Kurs .. (ort wird noch in eine seperate spalte kommen)
-    # am besten wahrscheinlich zusammenfassen und nicht als eigene spalten (label / duration)
-    def dates
-      dates_with_nulls.to_enum.with_index.each_with_object({}) do |(date, index), dates|
-        dates[:"date_#{index}_label"] = date.label
-        dates[:"date_#{index}_location"] = date.location
-        dates[:"date_#{index}_duration"] = date.duration.to_s
-      end
-    end
-
-    def dates_with_nulls
-      Array.new(max_dates, OpenStruct.new(label: nil, duration: nil))
-        .unshift(course.dates).flatten
+    def date_attribute(date_attr)
+      _, index, attr = date_attr.to_s.split('_', 3)
+      date = entry.dates[index.to_i]
+      date.try(attr).try(:to_s)
     end
 
     # only the first leader is taken into account
     def leader
-      @participation ||= participations_for(Event::Role::Leader).first
+      @leader ||= entry.participations_for(Event::Role::Leader).first.try(:person)
     end
 
-    def contactable_attributes(prefix, contactable)
-      attributes = contactable_keys.each_with_object({}) { |key, hash| hash[key] = nil }
+    def contact
+      entry.contact
+    end
+
+    def contactable_attribute(contactable_attr)
+      subject, attr = contactable_attr.to_s.split('_', 2)
+      contactable = send(subject)
       if contactable
-        attributes[:name] = contactable.to_s
-        attributes[:email] = contactable.email
-        attributes[:address] = contactable.address
-        attributes[:zip_code] = contactable.zip_code
-        attributes[:town] = contactable.town
-        attributes[:phone_numbers] = contactable.phone_numbers.map(&:to_s).join(', ')
-        attributes.merge!(additional_contactable_attributes(contactable))
+        contact_attr = :"contact_#{attr}"
+        if respond_to?(contact_attr, true)
+          send(contact_attr, contactable)
+        else
+          contactable.send(attr)
+        end
       end
-      Hash[attributes.map { |k, v| [:"#{prefix}_#{k}", v] }]
     end
 
-    def additional_attributes
-      {}
+    def contact_name(contactable)
+      contactable.to_s
     end
 
-    def additional_contactable_attributes(contactable)
-      {}
+    def contact_phone_numbers(contactable)
+      contactable.phone_numbers.map(&:to_s).join(', ')
     end
+
   end
 end

@@ -14,16 +14,23 @@ describe Export::Csv::People::PeopleAddress do
   let(:people_list) { Export::Csv::People::PeopleAddress.new(list) }
   subject { people_list }
 
-  its(:attributes) do should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                                 :zip_code, :town, :country, :gender, :birthday] end
+  its(:attributes) do
+    should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
+               :zip_code, :town, :country, :gender, :birthday, :roles]
+  end
 
   context 'standard attributes' do
-    its([:id]) { should be_blank }
-    its([:roles]) { should eq 'Rollen' }
-    its([:first_name]) { should eq 'Vorname' }
+
+    context '#attribute_labels' do
+      subject { people_list.attribute_labels }
+
+      its([:id]) { should be_blank }
+      its([:roles]) { should eq 'Rollen' }
+      its([:first_name]) { should eq 'Vorname' }
+    end
 
     context 'key list' do
-      subject { people_list.keys.join(' ') }
+      subject { people_list.attribute_labels.keys.join(' ') }
       it { should_not =~ /phone/ }
       it { should_not =~ /social_account/ }
     end
@@ -31,6 +38,8 @@ describe Export::Csv::People::PeopleAddress do
 
   context 'phone_numbers' do
     before { person.phone_numbers << PhoneNumber.new(label: 'Privat', number: 321) }
+
+    subject { people_list.attribute_labels }
 
     its([:phone_number_privat]) { should eq 'Telefonnummer Privat' }
     its([:phone_number_mobil]) { should be_nil }
@@ -53,6 +62,5 @@ describe Export::Csv::People::PeopleAddress do
       its(:keys) { should_not include :phone_number_ }
     end
   end
-
 
 end

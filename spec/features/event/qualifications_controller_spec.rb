@@ -42,13 +42,22 @@ describe Event::QualificationsController do
 
       appl_id = "#event_participation_#{participant_1.id}"
 
-      all("#{appl_id} td").first.should have_selector('.icon-minus')
+      # both links are active at begin
+      find("#{appl_id} td.issue").should have_selector('a i.icon-ok.disabled')
+      find("#{appl_id} td.revoke").should have_selector('a i.icon-remove.disabled')
 
-      all("#{appl_id} td").first.find("a").click
-      all("#{appl_id} td").first.should have_selector('.icon-ok')
+      find("#{appl_id} td.issue a").click
+      find("#{appl_id} td.issue").should_not have_selector('a')
+      find("#{appl_id} td.issue").should_not have_selector('i.disabled')
 
-      all("#{appl_id} td").first.find("a").click
-      all("#{appl_id} td").first.should have_selector('.icon-minus')
+      find("#{appl_id} td.revoke").should have_selector('a')
+      find("#{appl_id} td.revoke").should have_selector('i.disabled')
+
+      find("#{appl_id} td.revoke a").click
+      find("#{appl_id} td.revoke").should_not have_selector('a')
+      find("#{appl_id} td.revoke").should_not have_selector('i.disabled')
+      find("#{appl_id} td.issue").should have_selector('a')
+      find("#{appl_id} td.issue").should have_selector('i.disabled')
     end
   end
 

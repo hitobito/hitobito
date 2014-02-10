@@ -1,23 +1,19 @@
 # encoding: utf-8
-
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
 #  key                   :string(255)      not null
-#  label                 :string(255)      not null
-#  subject               :string(255)
-#  body                  :text
 #  placeholders_required :string(255)
 #  placeholders_optional :string(255)
 #
 
+
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 require 'spec_helper'
 
 describe CustomContent do

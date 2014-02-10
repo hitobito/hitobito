@@ -56,7 +56,7 @@ describe Event::RegisterController do
         it 'displays external login forms' do
           get :index, group_id: group.id, id: event.id
           should render_template('index')
-          flash[:notice].should be_present
+          flash[:notice].should eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
         end
       end
     end
@@ -71,7 +71,7 @@ describe Event::RegisterController do
         it 'displays event page' do
           get :index, group_id: group.id, id: event.id
           should redirect_to(group_event_path(group, event))
-          flash[:alert].should be_present
+          flash[:alert].should eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
         end
       end
 
@@ -79,7 +79,7 @@ describe Event::RegisterController do
         it 'displays standard login forms' do
           get :index, group_id: group.id, id: event.id
           should redirect_to(new_person_session_path)
-          flash[:alert].should be_present
+          flash[:alert].should eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
         end
       end
     end
@@ -90,7 +90,7 @@ describe Event::RegisterController do
       it 'displays form again' do
         post :check, group_id: group.id, id: event.id, person: { email: '' }
         should render_template('index')
-        flash[:alert].should be_present
+        flash[:alert].should eq 'Bitte gib eine Emailadresse ein'
       end
     end
 
@@ -107,7 +107,8 @@ describe Event::RegisterController do
           post :check, group_id: group.id, id: event.id, person: { email: people(:top_leader).email }
         end.to change { Delayed::Job.count }.by(1)
         should render_template('index')
-        flash[:notice].should be_present
+        flash[:notice].should include 'Wir haben dich in unserer Datenbank gefunden.'
+        flash[:notice].should include 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du'
       end
     end
 
@@ -115,7 +116,7 @@ describe Event::RegisterController do
       it 'displays person form' do
         post :check, group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' }
         should render_template('register')
-        flash[:notice].should be_present
+        flash[:notice].should eq 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
       end
     end
   end
@@ -128,7 +129,7 @@ describe Event::RegisterController do
         end.to change { Person.count }.by(1)
 
         should redirect_to(new_group_event_participation_path(group, event))
-        flash[:notice].should be_present
+        flash[:notice].should include 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben'
       end
     end
 

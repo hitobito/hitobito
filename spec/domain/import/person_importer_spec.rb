@@ -54,7 +54,7 @@ describe Import::PersonImporter do
     context 'base error' do
       let(:data) { [{}] }
       before { importer.import }
-      its('errors.first') { should eq 'Zeile 1: Bitte geben Sie einen Namen ein' }
+      its('errors.first') { should eq 'Zeile 1: Bitte geben Sie einen Namen ein.' }
     end
 
     context 'zip_code validation' do

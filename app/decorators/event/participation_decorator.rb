@@ -24,10 +24,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
     end
   end
 
-  def flash_info
-    "von <i>#{h.h(person)}</i> in <i>#{h.h(event)}</i>".html_safe
-  end
-
   def issue_action(group)
     (qualified.nil? || !qualified?) ? qualify_action_link(group, :put, :ok) : h.icon(:ok)
   end
@@ -47,9 +43,9 @@ class Event::ParticipationDecorator < ApplicationDecorator
     if application
       h.toggle_link(application.waiting_list?,
                     h.waiting_list_group_event_application_market_path(group, event, id),
-                    'Entfernen von der nationalen Warteliste',
-                    'Hinzufügen zu der nationalen Warteliste',
-                    'Warteliste')
+                    translate('waiting_list_link.title_active'),
+                    translate('waiting_list_link.title_inactive'),
+                    translate('waiting_list_link.label'))
     end
   end
 
@@ -67,8 +63,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
 
   def tooltips
     @tooltips ||= {
-      ok: 'Markiert Kurs als bestanden und vergibt Qualifikationen.',
-      remove: 'Markiert Kurs als nicht bestanden und entfernt Qualifikationen.'
+      ok: translate('tooltips.ok'),
+      remove: translate('tooltips.remove')
     }
   end
 

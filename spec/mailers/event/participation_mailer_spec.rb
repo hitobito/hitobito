@@ -51,6 +51,20 @@ describe Event::ParticipationMailer do
       event.dates.build(label: 'Kurs', start_at: Date.parse('2012-10-21'))
       should =~ /Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012<br\/>Kurs: 21.10.2012/
     end
+
+    it 'renders participant info' do
+      should =~ %r{Teilnehmer/-in:<br/>}
+      should =~ %r{<strong>Top Leader</strong><p> Supertown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>}
+    end
+
+    it 'renders questions if present' do
+      question = event_questions(:top_ov)
+      event.questions << event_questions(:top_ov)
+      participation.answers.create!(question_id: question.id, answer: 'GA')
+
+      should =~ %r{Fragen:.*GA}
+    end
+
   end
 
   describe '#confirmation' do

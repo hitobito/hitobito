@@ -3,10 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title "Entschuldigung, die Seite ist momentan nicht verfügbar (503)"
+- title t('.title')
 
-%p
-  Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verf&uuml;bar.
-  Das sollte nicht all zu lange dauern.
-%p
-  Bitte versuchen Sie es sp&auml;ter nochmals.
+%p= t('.explanation')
+%p= t('.instruction')
+

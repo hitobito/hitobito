@@ -14,17 +14,16 @@ module Subscriber
       subscription.excluded = false
       if subscription.save
         redirect_to(mailing_list_path,
-                    notice: 'Du wurdest dem Abo erfolgreich hinzugefügt')
+                    notice: translate(:success))
       else
         redirect_to(mailing_list_path,
-                    alert: 'Du konntest dem Abo nicht hinzugefügt werden: ' <<
-                            subscription.errors.full_messages.join(', '))
+                    alert: translate(:failure, errors: subscription.errors.full_messages.join(', ')))
       end
     end
 
     def destroy
       mailing_list.exclude_person(current_user)
-      redirect_to(mailing_list_path, notice: 'Du wurdest erfolgreich vom Abo entfernt')
+      redirect_to(mailing_list_path, notice: translate(:unsubscribed))
     end
 
     private

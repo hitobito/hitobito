@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   include Concerns::DecoratesBeforeRendering
   include Userstamp
+  include Translatable
   include Concerns::Stampable
   include Concerns::Localizable
   include Concerns::Authenticatable
@@ -20,7 +21,7 @@ class ApplicationController < ActionController::Base
   helper_method :person_home_path
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, alert: 'Sie sind nicht berechtigt, diese Seite anzuzeigen'
+    redirect_to root_url, alert: I18n.t('devise.failure.not_permitted_to_view_page')
   end if Rails.env.production?
 
 

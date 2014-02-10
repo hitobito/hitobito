@@ -4,22 +4,21 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(url: group_mailing_list_group_index_path(@group, @mailing_list), noindent: true) do |f|
-  
-  = field_set_tag('Gruppe') do
-    = f.string_field(:subscriber, 
-                     placeholder: 'Gruppe suchen...',
-                     data: {provide: 'entity', 
-                            id_field: "subscription_subscriber_id", 
-                            url: query_group_mailing_list_group_index_path(@group, @mailing_list)})
 
-    - help = "Es können nur Gruppen unterhalb der Abogruppe "
-    - help << "oder unterhalb der benachbarten Gruppen vom Typ #{@group.klass.label} " if @group.sister_groups.exists?
-    - help << "ausgewählt werden"
-    = f.help_block(help)
-    
-    = f.hidden_field(:subscriber_id, 
-                     data: { remote: true, 
+  = field_set_tag Group.model_name.human do
+    = f.string_field(:subscriber,
+                     placeholder: t('global.search.placeholder_with_model', model: Group.model_name.human),
+                     data: {provide: 'entity',
+                            id_field: "subscription_subscriber_id",
+                            url: query_group_mailing_list_group_index_path(@group, @mailing_list)})
+    - if @group.sister_groups.exists?
+      = f.help_block(t('.subgroups_and_siblings_selectable', type: @group.klass.label))
+    - else
+      = f.help_block(t('.subgroups_selectable'))
+
+    = f.hidden_field(:subscriber_id,
+                     data: { remote: true,
                              url: roles_group_mailing_list_group_index_path(@group, @mailing_list)})
-  
-  = field_set_tag('Rollen') do
+
+  = field_set_tag Role.model_name.human(count: 2) do
     #roles= render 'roles'

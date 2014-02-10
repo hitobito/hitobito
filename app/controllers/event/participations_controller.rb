@@ -147,9 +147,8 @@ class Event::ParticipationsController < CrudController
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
-    "#{models_label(false)} von " <<
-    "<i>#{h(entry.person)}</i> in " <<
-    "<i>#{h(entry.event)}</i>".html_safe
+    translate(:full_entry_label, model_label: models_label(false),
+                                 person: h(entry.person), event: h(entry.event)).html_safe
   end
 
   def create_participant_role
@@ -168,12 +167,8 @@ class Event::ParticipationsController < CrudController
 
   def set_success_notice
     if action_name.to_s == 'create'
-      notice = "#{full_entry_label} wurde erfolgreich erstellt. " +
-               'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-      if user_course_application?
-        notice += '<br />Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, ' +
-                  'unterzeichnen und per Post an die entsprechende Adresse schicken.'
-      end
+      notice = translate(:success, full_entry_label: full_entry_label)
+      notice += '<br />' + translate(:instructions) if user_course_application?
       flash[:notice] ||= notice
     else
       super

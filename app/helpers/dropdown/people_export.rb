@@ -11,7 +11,7 @@ module Dropdown
     attr_reader :user, :params
 
     def initialize(template, user, params, details, email_addresses)
-      super(template, 'Export', :download)
+      super(template, translate(:button), :download)
       @user = user
       @params = params
       @details = details
@@ -32,15 +32,16 @@ module Dropdown
       csv_path = params.merge({ format: :csv })
 
       if @details
-        item('CSV', '#', ['Adressliste', csv_path], ['Alle Angaben', csv_path.merge(details: true)])
+        item(translate(:csv), '#', [translate(:addresses), csv_path],
+                                   [translate(:everything), csv_path.merge(details: true)])
       else
-        item('CSV', csv_path)
+        item(translate(:csv), csv_path)
       end
     end
 
     def email_addresses_link
       if @email_addresses
-        item('Email Addressen', params.merge({ format: :email }), target: :new)
+        item(translate(:emails), params.merge({ format: :email }), target: :new)
       end
     end
 
@@ -49,7 +50,7 @@ module Dropdown
         main_link = user.last_label_format_id ?
                     export_label_format_path(user.last_label_format_id) :
                     '#'
-        item('Etiketten', main_link, *export_label_format_items)
+        item(translate(:labels), main_link, *export_label_format_items)
       end
     end
 

@@ -7,26 +7,27 @@
 
 - content_for :toolbar do
   .btn-toolbar
-    = action_button('TeilnehmerIn hinzufügen', new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)
+    = action_button(t('global.associations.add_with_model', model: Event::Role::Participant.model_name.human),
+                    new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)
 
 #main.row-fluid
   %article.span6
-    %h2 Zugeteilte Teilnehmende
+    %h2= t('.assigned_participants')
     %p{style: 'padding-top: 7px; margin-bottom: 20px;'}
       %span#booking_info= event.booking_info
-      zugeteilt
-    
+      = t('.assigned')
+
     %div{style: "max-width: 550px;"}
       %table.table.table-striped.table-hover
         %tbody#participants
           - @participants.each do |p|
             = render 'participant', p: p
-    
+
 
   %article.span6
-    %h2 Anmeldungen
+    %h2= Event::Application.model_name.human(count: 2)
     = render 'prio_buttons'
-    
+
     %div{style: "max-width: 600px;"}
       %table.table.table-striped.table-hover
         %tbody#applications

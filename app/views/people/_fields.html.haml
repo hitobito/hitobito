@@ -17,7 +17,7 @@
 
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),
-                           help_inline: '(dd.mm.yyyy)',
+                           help_inline: t('.format_birthday'),
                            class: 'span2')
 
 = render_extensions :fields, locals: { f: f }

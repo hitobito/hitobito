@@ -20,15 +20,13 @@ module Sheet
             content_tag(:li, crumb)
           end
 
-          content_tag(:li, 'geh&ouml;rt zu&nbsp;'.html_safe) +
-          StandardHelper::EMPTY_STRING +
-          safe_join(crumbs, divider)
+          content_tag(:li, belongs_to) + safe_join(crumbs, divider)
         end
       end
     end
 
     def title
-      entry.deleted? ? "#{super} (gelöscht)" : super
+      entry.deleted? ? "#{super} #{translate(:deleted)}" : super
     end
 
     private
@@ -49,6 +47,10 @@ module Sheet
 
     def breadcrumbs?
       entry.parent_id?
+    end
+
+    def belongs_to
+      translate(:belongs_to).html_safe + StandardHelper::EMPTY_STRING + StandardHelper::EMPTY_STRING
     end
 
   end

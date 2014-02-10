@@ -11,7 +11,7 @@ module Dropdown
     attr_reader :group
 
     def initialize(template, group)
-      super(template, 'Anlass erstellen', :plus)
+      super(template, template.ti('link.add', model: Event.model_name.human), :plus)
       @group = group
       init_items
     end
@@ -19,7 +19,7 @@ module Dropdown
     def to_s
       if items.size == 1
         item = items.first
-        template.action_button("#{item.label} erstellen", item.url, icon)
+        template.action_button(template.ti('link.add', model: item.label), item.url, icon)
       else
         super
       end

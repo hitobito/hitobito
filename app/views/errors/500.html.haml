@@ -3,10 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title "Entschuldigung, da ging etwas schief (500)"
+- title t('.title')
 
-%p
-  Wir haben eine Meldung erhalten und werden das Problem so rasch als m&ouml;glich anschauen.
+%p= t('.explanation')
 %br/
 %p
-  %a{href: '/'} Hauptseite
+  = link_to t('errors.link_to_main'), :root

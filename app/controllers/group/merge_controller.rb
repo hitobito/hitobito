@@ -20,14 +20,14 @@ class Group::MergeController < ApplicationController
     merger = Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
     if merger.group2_valid?
       if merger.merge!
-        flash[:notice] = "Die gewählten Gruppen wurden zur neuen Gruppe #{merger.new_group_name} fusioniert."
+        flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
         redirect_to group_path(merger.new_group)
       else
         flash[:alert] = merger.errors.join('<br/>').html_safe
         redirect_to merge_group_path(group)
       end
     else
-      flash[:alert] = 'Die gewählten Gruppen können nicht fusioniert werden.'
+      flash[:alert] = translate(:failure)
       redirect_to merge_group_path(group)
     end
   end
@@ -46,18 +46,17 @@ class Group::MergeController < ApplicationController
     groups = group.sister_groups
     @candidates = groups.select { |g| can?(:update, g) }
     if @candidates.empty?
-      flash[:alert] = 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder ' +
-                      'Du verfügst dort nicht über die nötigen Berechtigungen.'
+      flash[:alert] = translate(:no_candidates)
       redirect_to group_path(group)
     end
   end
 
   def check_params
     if params[:merger][:new_group_name].blank?
-      flash[:alert] = 'Name für neue Gruppe muss definiert werden.'
+      flash[:alert] = translate(:group_name_missing)
       redirect_to merge_group_path(group)
     elsif params[:merger][:merge_group_id].blank?
-      flash[:alert] = 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
+      flash[:alert] = translate(:no_group_selected)
       redirect_to merge_group_path(group)
     end
   end
@@ -66,7 +65,7 @@ class Group::MergeController < ApplicationController
     @merge_group ||= Group.find(params[:merger][:merge_group_id])
 
     if !can?(:update, @merge_group) || !can?(:update, group)
-      flash[:alert] = 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
+      flash[:alert] = translate(:not_allowed)
       redirect_to merge_group_path(group)
     end
   end

@@ -3,13 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.input_field(:name, 
-                class: 'span4', 
-                placeholder: 'Website, Skypename, Profillink...')
-                
-= f.input_field(:label, 
-                class: 'span2', 
-                placeholder: 'Art (Skype, Facebook...)', 
+= f.input_field(:name,
+                class: 'span4',
+                placeholder: t('.placeholder_value'))
+
+= f.input_field(:label,
+                class: 'span2',
+                placeholder: t('.placeholder_type'),
                 data: {provide: :typeahead, source: SocialAccount.available_labels})
-                
+
 = render 'contactable/public_check_box', f: f

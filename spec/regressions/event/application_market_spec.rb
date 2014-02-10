@@ -54,7 +54,7 @@ describe Event::ApplicationMarketController, type: :controller do
 
     it 'has add button' do
       button = dom.find('.btn-group a')
-      button.text.should eq ' TeilnehmerIn hinzufügen'
+      button.text.should eq ' Teilnehmer/-in hinzufügen'
       button.should have_css('i.icon-plus')
       button[:href].should eq new_group_event_participation_path(group, course, for_someone_else: true)
     end

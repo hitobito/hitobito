@@ -22,7 +22,7 @@ module Subscriber
     def assert_subscribed
       if subscriber_id
         unless mailing_list.subscribed?(subscriber)
-          entry.errors.add(:base, "#{subscriber.to_s} ist kein Abonnent")
+          entry.errors.add(:base, translate(:failure, subscriber: subscriber))
           false
         end
       end
@@ -38,7 +38,7 @@ module Subscriber
 
     def flash_message(state)
       if state == :success
-        "Abonnent #{subscriber} wurde erfolgreich ausgeschlossen"
+        translate(:success, subscriber: subscriber)
       else
         super
       end

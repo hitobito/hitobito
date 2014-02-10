@@ -127,7 +127,7 @@ class MailingList < ActiveRecord::Base
   def assert_mail_name_is_not_protected
     if mail_name? && main = Settings.email.retriever.config.user_name.presence
       if mail_name.downcase == main.split('@', 2).first.downcase
-        errors.add(:mail_name, "'#{mail_name}' darf nicht verwendet werden")
+        errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end
   end

@@ -7,16 +7,16 @@
 
   .btn-toolbar
     .btn-group
-      = f.button('Suchen', class: 'btn btn-primary', value: 'search')
+      = f.button(t('global.button.search'), class: 'btn btn-primary', value: 'search')
     - if can?(:create, entry)
       .btn-group
-        = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
-    = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'link')
+        = f.button(t('.save_search'), class: 'btn btn-primary', value: 'save')
+    = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')
 
 
   = f.error_messages
 
-  = field_set_tag('Welche Rollen sollen angezeigt werden?') do
+  = field_set_tag(t('.prompt_role_selection')) do
     - @role_types.each do |layer, groups|
       %h5= layer
       - groups.each do |group, role_types|
@@ -28,13 +28,13 @@
                                  checked: entry.role_types.include?(role_type.sti_name))
 
   - if can?(:create, entry)
-    = field_set_tag('Filtern speichern') do
-      = f.labeled_input_field :name, placeholder: 'Geben Sie einen Namen an, um diesen Filter zu speichern'
+    = field_set_tag(t('.save_filter')) do
+      = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')
 
   .btn-toolbar
     .btn-group
-      = f.button('Suchen', class: 'btn btn-primary', value: 'search')
+      = f.button(t('global.button.search'), class: 'btn btn-primary', value: 'search')
     - if can?(:create, entry)
       .btn-group
-        = f.button('Suche speichern', class: 'btn btn-primary', value: 'save')
-    = link_to(ti(:"button.cancel"), group_people_path(@group), class: 'link')
+        = f.button(t('.save_search'), class: 'btn btn-primary', value: 'save')
+    = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')

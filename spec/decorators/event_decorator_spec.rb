@@ -100,7 +100,7 @@ describe EventDecorator, :draper_with_helpers do
   context 'qualification infos' do
     context 'with qualifications and prolongations' do
       its(:issued_qualifications_info_for_leaders) do
-        should == 'Verlängert existierende Qualifikationen Super Lead auf den 01.03.2012 (letztes Kursdatum).'
+        should == 'Verlängert existierende Qualifikation Super Lead auf den 01.03.2012 (letztes Kursdatum).'
       end
 
       its(:issued_qualifications_info_for_participants) do
@@ -112,7 +112,7 @@ describe EventDecorator, :draper_with_helpers do
       before { event.kind = event_kinds(:glk) }
 
       its(:issued_qualifications_info_for_leaders) do
-        should == 'Verlängert existierende Qualifikationen Group Lead auf den 01.03.2012 (letztes Kursdatum).'
+        should == 'Verlängert existierende Qualifikation Group Lead auf den 01.03.2012 (letztes Kursdatum).'
       end
 
       its(:issued_qualifications_info_for_participants) do
@@ -143,6 +143,25 @@ describe EventDecorator, :draper_with_helpers do
         should == ''
       end
     end
+  end
+
+  context 'external_application_link' do
+    let(:group) { groups(:top_group) }
+    subject { EventDecorator.new(event).external_application_link(group) }
+
+
+    context 'event does not support external applications' do
+      before { event.update_column(:external_applications, false) }
+
+      it { should eq 'nicht möglich' }
+    end
+
+    context 'event supports external applications' do
+      before { event.update_column(:external_applications, true) }
+
+      it { should =~ /register/ }
+    end
+
   end
 
 end

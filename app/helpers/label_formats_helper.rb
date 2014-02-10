@@ -8,7 +8,7 @@
 module LabelFormatsHelper
 
   def format_landscape(format)
-    format.landscape ? 'Querformat' : 'Hochformat'
+    t(:"label_formats.form.#{format.landscape ? :landscape : :portrait}")
   end
 
 end

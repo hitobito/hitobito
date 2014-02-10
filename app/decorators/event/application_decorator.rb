@@ -43,11 +43,11 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   def confirmation_label
     label, css, desc = confirmation_fields
     confirmation_badge(label, css, desc) +
-    " Kursfreigabe #{desc}"
+    " #{translate('.course_acceptance')} #{desc}"
   end
 
   def confirmation_badge(label, css, desc)
-    content_tag(:span, label.html_safe, class: "badge badge-#{css}", title: "Kursfreigabe #{desc}")
+    content_tag(:span, label.html_safe, class: "badge badge-#{css}", title: "#{translate('.course_acceptance')} #{desc}")
   end
 
   private
@@ -56,11 +56,11 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def confirmation_fields
     if approved?
-      %w(&#x2713; success bestätigt)
+      %W(&#x2713; success #{translate('confirmation.approved')})
     elsif rejected?
-      %w(&#x00D7; important abgelehnt)
+      %W(&#x00D7; important #{translate('confirmation.rejected')})
     else
-      %w(? warning ausstehend)
+      %W(? warning #{translate('confirmation.missing')})
     end
   end
 

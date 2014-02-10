@@ -3,11 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- bar.tab "Info",
+- bar.tab t('global.tabs.info'),
           group_path(group)
 
 - if can?(:index_people, group)
-  - bar.tab "Personen",
+  - bar.tab Person.model_name.human(count: 2),
             group_people_path(group, returning: true),
             [group_people_path(group),
              group_roles_path(group),
@@ -20,11 +20,11 @@
               [typed_group_events_path(group, type)])
 
 - if can?(:index_mailing_lists, group)
-  - bar.tab "Abos",
+  - bar.tab MailingList.model_name.human(count: 2),
             group_mailing_lists_path(group, returning: true),
             [group_mailing_lists_path(group)]
 
 = render_extensions :tabs, locals: { group: group, bar: bar }
 
 - if can?(:deleted_subgroups, group)
-  - bar.tab "Gelöscht", deleted_subgroups_group_path(group)
+  - bar.tab t('.deleted'), deleted_subgroups_group_path(group)

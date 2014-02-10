@@ -36,6 +36,7 @@ describe CsvImportsController do
 
     it 'renders form when submitted without file' do
       post :define_mapping, group_id: group.id
+      flash[:alert].should eq 'Bitte wählen Sie eine gültige CSV Datei aus.'
       should redirect_to new_group_csv_imports_path(group)
     end
   end
@@ -44,20 +45,40 @@ describe CsvImportsController do
     let(:data) { File.read(path(:utf8)) }
     let(:role_type) { 'Group::TopGroup::Leader' }
     let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday' } }
-    let(:required_params) { { group_id: group.id, data: data, role_type: role_type, csv_import: mapping } }
+    let(:required_params) { { group_id: group.id, data: data, role_type: role_type } }
 
-    it 'renders preview' do
-      post :preview, required_params
+    it 'informs about newly imported person' do
+      post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'last_name' })
+      flash[:notice].should eq ["1 Person (Leader) wird neu importiert."]
       should render_template(:preview)
     end
 
-    it 'renders define mapping if mapping has duplicates' do
-      params = required_params.clone
-      params[:field_mappings] = { Vorname: 'first_name', Nachname: 'first_name', Geburtsdatum: 'birthday',  }
-      post :preview, params
-      should render_template(:define_mapping)
-      flash[:alert].should =~ /Vorname/
+
+    it 'renders preview even when field_mapping is missing' do
+      post :preview, required_params
+      flash[:alert].should eq ["1 Person (Leader) wird nicht importiert.",
+                               "Zeile 1: Bitte geben Sie einen Namen ein."]
+      should render_template(:preview)
     end
+
+    it 'informs about duplicates in assignment' do
+      post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'first_name' })
+      flash[:alert].should eq 'Vorname wurde mehrfach zugewiesen.'
+      should render_template(:define_mapping)
+    end
+
+    context 'csv data matches multiple people' do
+      let(:data) { generate_csv(%w{Vorname Email}, %w{foo foo@bar.net}) }
+
+      it 'reports error if multiple candidates for doublettes are found' do
+        Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
+        Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
+        post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Email: 'email' })
+        flash[:alert].should eq ['1 Person (Leader) wird nicht importiert.',
+                                 "Zeile 1: 2 Treffer in Duplikatserkennung."]
+      end
+    end
+
   end
 
   describe 'POST #create' do
@@ -90,8 +111,7 @@ describe CsvImportsController do
 
       it 'imports first person and displays errors for second person' do
         expect { post :create, required_params }.to change(Person, :count).by(0)
-        flash[:alert].should eq ['1 Person (Leader) wurde nicht importiert.',
-                                 'Zeile 1: Bitte geben Sie einen Namen ein']
+        flash[:alert].should eq ['1 Person (Leader) wurde nicht importiert.']
         should redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Leader')
       end
     end
@@ -163,8 +183,7 @@ describe CsvImportsController do
           Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
           Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
           post :create, required_params
-          flash[:alert].should eq ['1 Person (Leader) wurde nicht importiert.',
-                                   'Zeile 1: 2 Treffer in Duplikatserkennung.']
+          flash[:alert].should eq ['1 Person (Leader) wurde nicht importiert.']
         end
       end
     end

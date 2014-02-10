@@ -49,7 +49,7 @@ describe Subscriber::UserController do
       end
 
       after do
-        flash[:notice].should eq 'Du wurdest dem Abo erfolgreich hinzugefügt'
+        flash[:notice].should eq 'Du wurdest dem Abo erfolgreich hinzugefügt.'
         should redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
       end
     end
@@ -87,7 +87,7 @@ describe Subscriber::UserController do
     end
 
     after do
-      flash[:notice].should eq 'Du wurdest erfolgreich vom Abo entfernt'
+      flash[:notice].should eq 'Du wurdest erfolgreich vom Abo entfernt.'
       should redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
     end
   end

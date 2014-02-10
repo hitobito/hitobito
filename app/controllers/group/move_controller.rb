@@ -22,13 +22,13 @@ class Group::MoveController < ApplicationController
       authorize!(:create, target)
 
       if mover.perform(target)
-        flash[:notice] = "#{group} wurde nach #{target} verschoben."
+        flash[:notice] = translate(:success, group: group, target: target)
       else
         flash[:alert] = group.errors.full_messages.join(', ')
       end
       redirect_to(group)
     else
-      flash[:alert] = 'Bitte wähle eine Gruppe aus.'
+      flash[:alert] = translate(:choose_group)
       redirect_to move_group_path(group)
     end
   end
@@ -45,8 +45,7 @@ class Group::MoveController < ApplicationController
     @candidates.each { |type, groups| groups.sort_by(&:name) }
 
     if @candidates.empty?
-      flash[:alert] = 'Diese Gruppe kann nicht verschoben werden oder ' +
-                      'Du verfügst nicht über die nötigen Berechtigungen.'
+      flash[:alert] = translate(:failure)
       redirect_to group_path(group)
     end
   end

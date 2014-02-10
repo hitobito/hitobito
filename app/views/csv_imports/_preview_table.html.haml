@@ -2,11 +2,11 @@
   = list_table do |t|
     - t.col("") do |p|
       - if p.errors.present?
-        %i.icon.icon-warning-sign{title: 'Ungültige Werte'}
+        %i.icon.icon-warning-sign{title: t('.icon_tooltip_invalid')}
       - elsif p.persisted?
-        %i.icon.icon-refresh{title: 'Wird aktualisiert'}
+        %i.icon.icon-refresh{title: t('.icon_tooltip_updated')}
       - else
-        %i.icon.icon-plus{title: 'Wird neu erfasst'}
+        %i.icon.icon-plus{title: t('.icon_tooltip_created')}
 
     - t.attrs *relevant_attrs
 

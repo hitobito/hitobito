@@ -23,7 +23,7 @@
     = render_extensions 'fields', locals: { f: f }
 
   - if @groups.present?
-    = field_set_tag 'Durchgeführt von' do
+    = field_set_tag t('event.run_by') do
       = f.labeled(:group_ids, '&nbsp;'.html_safe) do
         = hidden_field_tag('event[group_ids][]', @group.id)
         = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
@@ -31,26 +31,24 @@
           = f.inline_check_box(:group_ids, group.id, group.to_s)
 
 
-  = field_set_tag 'Daten' do
+  = field_set_tag Event.human_attribute_name(:dates) do
     %p Uhrzeiten sind optional
     = f.nested_fields_for :dates, 'event/dates/fields'
 
-  = field_set_tag 'Anmeldung' do
+  = field_set_tag Event::Application.model_name.human do
     = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
-    = f.labeled_boolean_field(:external_applications, caption: 'Externe können sich für diesen Anlass anmelden')
+    = f.labeled_boolean_field(:external_applications, caption: t('.caption_external_applications'))
 
     - entry.used?(:priorization) do
-      = f.labeled_boolean_field(:priorization, caption: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben')
+      = f.labeled_boolean_field(:priorization, caption: t('.caption_prioritization'))
     - entry.used?(:requires_approval) do
-      = f.labeled_boolean_field(:requires_approval, caption: 'Scharleiter wird informiert und muss die Anmeldung bestätigen')
+      = f.labeled_boolean_field(:requires_approval, caption: t('.caption_requires_approval'))
 
     = f.labeled_input_field(:maximum_participants)
 
     = render_extensions 'application_fields', locals: { f: f }
 
-  = field_set_tag 'Angaben für Anmeldung' do
-    %p
-      Hier kannst du weitere Angaben für die Anmeldung verlangen.
-      Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
-      um beliebige Antworten zu ermöglichen.
+  = field_set_tag t('.additional_information') do
+    %p= t('.explain_application_questions')
+
     = f.nested_fields_for :questions, 'event/questions/fields'

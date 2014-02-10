@@ -57,7 +57,7 @@ class Event::ParticipationMailer < ActionMailer::Base
     infos << labeled(:contact)  { "#{@event.contact}<br/>#{@event.contact.email}" }
     infos << answers_details
     infos << additional_information_details
-    infos << "TeilnehmerIn:<br/>#{@participation.person.decorate.complete_contact}"
+    infos << participation_details
     infos.compact.join('<br/><br/>')
   end
 
@@ -71,7 +71,7 @@ class Event::ParticipationMailer < ActionMailer::Base
 
   def answers_details
     if @participation.answers.present?
-      text = ['Fragen:']
+      text = ["#{Event::Participation.human_attribute_name(:answers)}:"]
       @participation.answers.each do |a|
         text << "#{a.question.question}: #{a.answer}"
       end
@@ -85,6 +85,11 @@ class Event::ParticipationMailer < ActionMailer::Base
       ':<br/>' +
       @participation.additional_information.gsub("\n", '<br/>')
     end
+  end
+
+  def participation_details
+    ["#{Event::Role::Participant.model_name.human}:",
+     @participation.person.decorate.complete_contact].join('<br/>')
   end
 
 end

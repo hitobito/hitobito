@@ -44,5 +44,6 @@ module Concerns
     def application_languages
       Settings.application.languages.to_hash
     end
+
   end
 end

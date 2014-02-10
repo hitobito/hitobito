@@ -41,7 +41,7 @@ class Event::Question < ActiveRecord::Base
 
   def assert_zero_or_more_than_one_choice
     if choice_items.size == 1
-      errors.add(:choices, 'Bitte geben Sie mehrere mögliche Antworten an oder lassen Sie sie ganz leer.')
+      errors.add(:choices, :requires_more_than_one_choice)
     end
   end
 

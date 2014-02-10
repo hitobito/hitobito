@@ -15,6 +15,6 @@
 
 = f.labeled_input_field(:label,
                         data: {provide: :typeahead, source: entry.klass.available_labels},
-                        help: 'Optionale Bezeichnung der Rolle dieser Person')
+                        help: t('.help_optional_label'))
 
 = render_extensions :fields, locals: { f: f }

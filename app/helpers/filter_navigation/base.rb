@@ -7,6 +7,7 @@
 
 module FilterNavigation
   class Base
+    include Translatable
 
     attr_reader :template, :main_items, :dropdown, :active_label
 
@@ -47,7 +48,7 @@ module FilterNavigation
     attr_accessor :active
 
     def initialize(template)
-      super(template, 'Weitere Ansichten')
+      super(template, translate(:additional_views))
       @active = false
       @button_class = nil
     end

@@ -4,15 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 %h3
-  Folgende Personen werden mit der
-  %strong
-    Rolle
-    =role_name
-  in die
-  %strong
-    Gruppe
-    =group
-  importiert.
+  =t('.import_details_html', role: role_name, group: group)
 
 = render 'preview_table'
 
@@ -20,8 +12,8 @@
   = render 'hidden_form_fields'
   .btn-toolbar
     .btn-group
-      = f.submit('Personen jetzt importieren', class: 'btn btn-primary')
+      = f.submit(t('.import_now_button'), class: 'btn btn-primary')
     .btn-group
-      = f.button('Zurück', class: 'btn btn-secondary', value: 'back')
-    = link_to('Abbrechen', group_people_path(group), class: 'link')
+      = f.button(t('global.button.back'), class: 'btn btn-secondary', value: 'back')
+    = link_to(t('global.button.cancel'), group_people_path(group), class: 'link')
 

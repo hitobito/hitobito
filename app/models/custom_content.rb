@@ -87,7 +87,7 @@ class CustomContent < ActiveRecord::Base
   def assert_required_placeholders_are_used
     placeholders_required_list.each do |placeholder|
       unless body.to_s.include?(placeholder_token(placeholder))
-        errors.add(:body, "muss den Platzhalter #{placeholder_token(placeholder)} enthalten")
+        errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
       end
     end
   end

@@ -12,7 +12,7 @@ module Dropdown
       attr_reader :year
 
       def initialize(template, year, group_id)
-        super(template, group_id.to_i > 0  ? Group.find(group_id).name : 'Alle Gruppen')
+        super(template, group_id.to_i > 0  ? Group.find(group_id).name : translate(:all_groups))
         @year = year
         init_items
       end

@@ -10,7 +10,9 @@ require 'cmess/guess_encoding'
 
 module Import
   class CsvParser
+    include Translatable
     extend Forwardable
+
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
     POSSIBLE_SEPARATORS = [',', "\t", ':', ';']
@@ -48,19 +50,19 @@ module Import
     end
 
     def flash_notice
-      text = size > 1 ? "#{size} Datensätze"  : "#{size} Datensatz"
-      text += ' erfolgreich gelesen.'
+      translate(:read_success, count: size)
     end
 
     def flash_alert(filename = 'csv formular daten')
-      "Fehler beim Lesen von #{filename}: #{error}"
+      translate(:read_error, filename: filename, error: error)
     end
 
     private
+
     def encode_as_utf8(input)
-      fail 'Enthält keine Daten' if input.nil?
+      fail translate(:contains_no_data) if input.nil?
       charset = CMess::GuessEncoding::Automatic.guess(input)
-      fail 'Enthält keine Daten' if charset == 'UNKNOWN'
+      fail translate(:contains_no_data) if charset == 'UNKNOWN'
       charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
       input.force_encoding(charset).encode('UTF-8')
     end

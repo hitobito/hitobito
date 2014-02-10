@@ -28,7 +28,7 @@ module RolesHelper
       link_to(group, group)
     else
       group = Group.with_deleted.where(id: role.group_id).first
-      group.to_s + ' (Gelöscht)'
+      group.to_s + " (#{t('attributes.deleted_info')})"
     end
   end
 

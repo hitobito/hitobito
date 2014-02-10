@@ -3,35 +3,35 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title "Anmeldung für #{@event}"
+- title t('.title', event: @event)
 
-= entry_form(stacked: true, 
-             submit_label: entry.new_record? ? 'Anmelden' : 'Speichern', 
+= entry_form(stacked: true,
+             submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
 
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)
-             
+
   = f.fields_for(:answers) do |fans|
     = render 'event/answers/fields', f: fans
-    
+
   = f.labeled_text_area(:additional_information)
-    
+
   -if entry.application && entry.new_record?
-    -# once given, priorities may not be changed anymore 
+    -# once given, priorities may not be changed anymore
     -# (@alternatives might not be in state application_open anymore in the future,
     -#  causing missing choices for the dropdown)
     = f.fields_for(:application) do |fap|
       - if @event.priorization? && @priority_2s.present?
-        = field_set_tag 'Ausweichdaten' do
-          %p Bitte gib weitere Kurse an, welche dir gehen würden.
+        = field_set_tag t('event.alternative_dates') do
+          %p= t('.alternative_dates_info')
           = fap.labeled_belongs_to_field(:priority_2_id)
           = fap.labeled_belongs_to_field(:priority_3_id)
-          
-          %h4 Informationen zu den Kursen
+
+          %h4= t('.course_information')
           %table.table
-            - @alternatives.each do |event| 
+            - @alternatives.each do |event|
               %tr{class: "#{'highlight' if event == @event}"}
                 %td= event.label
                 %td= event.dates_full

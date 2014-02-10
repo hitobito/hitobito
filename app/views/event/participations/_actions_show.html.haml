@@ -5,25 +5,26 @@
 
 - if can?(:edit, entry)
   = button_action_edit
-   
-- if entry.person_id == current_user.id
-  = action_button('Drucken', print_group_event_participation_path(@group, @event, entry), :print, { target: 'new'})
-  
-- if can?(:edit, entry.person)
-  = action_button('Kontaktdaten ändern', edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for), :edit)
 
-- if @application.present? 
+- if entry.person_id == current_user.id
+  = action_button(t('global.button.print'),
+                  print_group_event_participation_path(@group, @event, entry), :print, { target: 'new'})
+
+- if can?(:edit, entry.person)
+  = action_button(t('.change_contact_data_button'), edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for), :edit)
+
+- if @application.present?
   - if can?(:destroy, entry)
     = button_action_destroy
-  
+
   - if @event.requires_approval? && can?(:approve, @application)
     - unless @application.approved?
-      = action_button('<strong>&#x2713;</strong>&nbsp; Freigeben'.html_safe, 
+      = action_button("<strong>&#x2713;</strong>&nbsp; #{t('.approve_button')}".html_safe,
                       approve_group_event_application_path(@group, @event, @application),
-                      nil, 
+                      nil,
                       method: :put)
     - unless @application.rejected?
-      = action_button('<strong>&#x00D7;</strong>&nbsp; Ablehnen'.html_safe, 
-                      reject_group_event_application_path(@group, @event, @application), 
-                      nil, 
+      = action_button("<strong>&#x00D7;</strong>&nbsp; #{t('.reject_button')}".html_safe,
+                      reject_group_event_application_path(@group, @event, @application),
+                      nil,
                       method: :delete)

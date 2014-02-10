@@ -7,7 +7,7 @@
   %article.span7
     %div
       %dl.dl-horizontal
-        = labeled('Daten', entry.dates_full)
+        = labeled_attr(entry, :dates_full)
         = labeled_attr(entry, :motto)
         = labeled_attr(entry, :cost)
 
@@ -20,7 +20,7 @@
     = render_extensions :show
 
   %aside.span5
-    = section 'Kontakt' do
+    = section Event.human_attribute_name(:contact) do
       %dl.dl-horizontal
         - entry.used?(:kind_id) do
           = labeled_attr(entry, :kind_id)
@@ -29,7 +29,7 @@
         - entry.used?(:number) do
           = labeled_attr(entry, :number)
 
-        = labeled('Durchgeführt von', entry.group_names)
+        = labeled(t('event.run_by'), entry.group_names)
 
         - entry.used?(:state) do
           = labeled_attr(entry, :state_translated)
@@ -39,26 +39,27 @@
 
       - if entry.contact_id?
         %dl.dl-horizontal
-          = labeled('Kontakt', entry.contact.complete_contact)
+          = labeled(Event.human_attribute_name(:contact), entry.contact.complete_contact)
 
 
-    = section 'Anmeldung' do
+    = section Event::Application.model_name.human do
       %dl.dl-horizontal
         = labeled_attr(entry, :application_opening_at)
         = labeled_attr(entry, :application_closing_at)
         = labeled_attr(entry, :booking_info)
-        = labeled('Externe Anmeldung', entry.external_application_link(@group))
+        = labeled(Event.human_attribute_name(:external_applications), entry.external_application_link(@group))
 
       %dl.dl-horizontal
-        = labeled('Aufnahmebedingungen', format_attr(entry, :application_conditions))
+        = labeled(Event.human_attribute_name(:application_conditions), format_attr(entry, :application_conditions))
         - if entry.course_kind?
-          = labeled('Mindestalter', entry.kind.minimum_age? ? "#{entry.kind.minimum_age} Jahre (Jahrgang)" : '')
-          = labeled('Erforderliche Qualifikationen', entry.kind.preconditions.join(', '))
+          = labeled(Event::Kind.human_attribute_name(:minimum_age),
+                    entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+          = labeled(t('events.preconditions'), entry.kind.preconditions.join(', '))
 
       - if entry.course_kind?
         %dl.dl-horizontal
-          = labeled('Qualifiziert für', entry.kind.qualification_kinds.join(', '))
-          = labeled('Verlängert', entry.kind.prolongations.join(', '))
+          = labeled(Event::Kind.human_attribute_name(:qualification_kinds), entry.kind.qualification_kinds.join(', '))
+          = labeled(Event::Kind.human_attribute_name(:prolongations), entry.kind.prolongations.join(', '))
 
       = render_extensions 'application_attrs', folder: 'events'
 

@@ -52,10 +52,8 @@ module LayoutHelper
     collection.inspect # force relation evaluation
     if add_path || collection.present?
       if add_path
-        title = safe_join([title,
-                           content_tag(:span,
-                                       action_button('Erstellen', add_path, 'plus', class: 'btn-small'),
-                                       class: 'pull-right')])
+        button = action_button(ti(:'link.add_without_model'), add_path, 'plus', class: 'btn-small')
+        title = safe_join([title, content_tag(:span, button, class: 'pull-right')])
       end
       render(layout: 'shared/section_table',
              locals: { title: title, collection: collection, add_path: add_path },

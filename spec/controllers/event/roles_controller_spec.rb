@@ -48,6 +48,7 @@ describe Event::RolesController do
         participation.event_id.should == course.id
         participation.person_id.should == user.id
         participation.answers.should have(2).items
+        flash[:notice].should eq 'Rolle <i>Hauptleitung</i> für <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
         should redirect_to(edit_group_event_participation_path(group, course, participation))
       end
     end

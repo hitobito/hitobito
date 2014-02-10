@@ -3,12 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
--title "Passwort #{@old_password ? 'ändern' : 'setzen'}"
+- title @old_password ? t('.change_password') : t('.set_password')
 
 = standard_form(resource, {url: person_registration_path,  method: :put}) do |f|
   = f.error_messages
   - if @old_password
-    = f.labeled(:current_password, 'Altes Passwort') { f.input_field(:current_password) }
-  = f.labeled(:password, 'Neues Passwort') { f.input_field(:password) }
-  = f.labeled(:password_confirmation, 'Neues Passwort bestätigen') { f.input_field(:password_confirmation) }
+    = f.labeled(:current_password, t('.old_password')) { f.input_field(:current_password) }
+  = f.labeled(:password, t('.new_password')) { f.input_field(:password) }
+  = f.labeled(:password_confirmation, t('.new_password_confirmation')) { f.input_field(:password_confirmation) }
   = save_form_buttons(f, title, person_path(resource))

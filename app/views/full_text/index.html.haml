@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title 'Gefundene Personen'
+- title t('.title')
 
 = paginate(entries)
 
@@ -11,16 +11,16 @@
   = crud_table do |t|
     - t.col('') do |p|
       .profil= image_tag(p.picture.thumb.url, size: '32x32')
-    - t.col('Name')    do |p|
+    - t.col(Person.human_attribute_name(:name))    do |p|
       %strong
         -# Any person listed can be shown
         = link_to(p.to_s(:list), group_person_path(p.default_group_id, p))
-    - t.col('Rolle')   {|p| p.roles_short(nil) }
-    - t.col('E-Mail')   {|p| p.primary_email }
-    - t.col('Telefon') {|p| p.all_phone_numbers(true) }
-    - t.col('Adresse') {|p| p.complete_address }
+    - t.col(Role.model_name.human(count: 2))        { |p| p.roles_short(nil) }
+    - t.col(Person.human_attribute_name(:email))    { |p| p.primary_email }
+    - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(true) }
+    - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
 
 - if params[:q].to_s.size < 2
-  %p Bitte geben Sie mindestens zwei Zeichen ein.
+  %p= t('.incomplete_search_request')
 
 = paginate(entries)

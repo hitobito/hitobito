@@ -14,24 +14,22 @@ class Event::RegisterController < ApplicationController
 
   def index
     session[:person_return_to] = show_event_path
-    flash.now[:notice] = "Du musst dich einloggen um dich für den Anlass '#{event.to_s}' anzumelden."
+    flash.now[:notice] = translate(:not_logged_in, event: event)
   end
 
   def check
     if params[:person][:email].present?
       if user = Person.find_by_email(params[:person][:email])
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
-        flash.now[:notice] = "Wir haben dich in unserer Datenbank gefunden.\n\n" +
-                             'Wir haben dir ein E-Mail mit einem Link geschickt, ' +
-                             'wo du dich direkt für den Anlass anmelden kannst.'
+        flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
         render 'index'
       else
         @person = Person.new(email: params[:person][:email])
-        flash.now[:notice] = 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
+        flash.now[:notice] = translate(:form_data_missing)
         render 'register'
       end
     else
-      flash.now[:alert] = 'Bitte gib eine Emailadresse ein'
+      flash.now[:alert] = translate(:email_missing)
       render 'index'
     end
   end
@@ -39,8 +37,7 @@ class Event::RegisterController < ApplicationController
   def register
     if create_person
       sign_in(:person, person)
-      flash[:notice] = 'Deine persönlichen Daten wurden aufgenommen. ' +
-                       'Bitte ergänze nun noch die Angaben für die Anmeldung.'
+      flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
       render 'register'
@@ -56,7 +53,7 @@ class Event::RegisterController < ApplicationController
           redirect_to show_event_path
         end
       else
-        flash[:alert] = 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
+        flash[:alert] = translate(:application_window_closed)
         application_not_possible
       end
     else

@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationDecorator < Draper::Decorator
+  include Translatable
+
   delegate_all
   delegate :to_s, to: :model
   delegate :can?, :content_tag, :safe_join, :current_user, to: :h

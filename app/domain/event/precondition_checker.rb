@@ -7,6 +7,8 @@
 
 class Event::PreconditionChecker < Struct.new(:course, :person)
   extend Forwardable
+  include Translatable
+
   def_delegator 'course.kind', :minimum_age, :course_minimum_age
   def_delegator 'course.kind', :preconditions, :course_preconditions
   def_delegator 'errors', :empty?, :valid?
@@ -31,7 +33,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   def errors_text
     text = []
     if errors.present?
-      text << '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
+      text << translate(:preconditions_not_fulfilled)
       text << birthday_error_text if errors.delete(:birthday)
       text << qualifications_error_text  if errors.present?
     end
@@ -59,11 +61,11 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def birthday_error_text
-    "Altersgrenze von #{course_minimum_age} unterschritten."
+    translate(:below_minimum_age, course_minimum_age: course_minimum_age)
   end
 
   def qualifications_error_text
-    "Folgende Qualifikationen fehlen: #{errors.join(", ")}"
+    translate(:qualifications_missing, missing: errors.join(", "))
   end
 
 end

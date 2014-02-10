@@ -54,9 +54,9 @@ class Event::RolesController < CrudController
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
-    ("Rolle <i>#{h(entry)}</i> für " <<
-     "<i>#{h(entry.participation.person)}</i> in " <<
-     "<i>#{h(entry.participation.event)}</i>").html_safe
+    translate(:full_entry_label, role: h(entry),
+                                 person: h(entry.participation.person),
+                                 event: h(entry.participation.event)).html_safe
   end
 
   def event

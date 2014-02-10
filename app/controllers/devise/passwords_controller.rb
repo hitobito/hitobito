@@ -13,7 +13,7 @@ class Devise::PasswordsController < DeviseController
     if resource.login?
       super
     else
-      flash[:alert] = 'Du bist nicht berechtigt, Dich hier anzumelden.'
+      flash[:alert] = I18n.translate('devise.failure.signin_not_allowed')
     end
   end
 

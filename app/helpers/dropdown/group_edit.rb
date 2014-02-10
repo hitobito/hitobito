@@ -11,7 +11,7 @@ module Dropdown
     attr_reader :group
 
     def initialize(template, group)
-      super(template, 'Bearbeiten', :edit)
+      super(template, template.ti('link.edit'), :edit)
       @group = group
       @main_link = template.edit_group_path(group)
       init_items
@@ -20,12 +20,12 @@ module Dropdown
     private
 
     def init_items
-      item('Fusionieren', template.merge_group_path(group))
-      item('Verschieben', template.move_group_path(group))
+      item(translate(:merge), template.merge_group_path(group))
+      item(translate(:move), template.move_group_path(group))
 
       if !group.protected? && template.can?(:destroy, group)
         divider
-        item('Löschen',
+        item(template.ti('link.delete'),
              template.group_path(group),
              data: { confirm: template.ti(:confirm_delete),
                      method: :delete })

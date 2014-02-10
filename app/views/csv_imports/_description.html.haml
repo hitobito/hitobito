@@ -1,34 +1,20 @@
-%h2 CSV Dateien
+%h2=t('.header')
 
-%p
-  Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
-  Die erste Zeile enthält die Feldnamen.
-  Die einzelnen Felder sind mit einem Komma getrennt.
-  Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
-  Beispiel:
+%p=t('.explain_csv_format')
 
-%pre
+%pre{style: 'padding-left: 1em;'}
   :preserve
-      Vorname,Nachname,Email,Ort,Geschlecht
-      Hans,Muster,hans@beispiel.ch,Bern,m
-      Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+    #{t('.example')}
 
-%p
-  Es können beliebige Feldnamen verwendet werden.
-  Die Felder in der CSV Datei können im nächsten Schritt
-  den Feldern in der Applikation zugeordnet werden.
+%p=t('.explain_field_names')
 
-%p
-  Allen Personen einer Datei wird die gleiche Rolle vergeben,
-  welche ebenfalls im nächsten Schritt ausgewählt werden kann.
+%p=t('.explain_role')
 
-%h3 Spezielle Feldwerte
+%h3=t('.special_fields')
 
-Die folgenden Felder müssen einen der
-%em kursiven
-Werte beinhalten.
+=t('.explain_special_fields_html')
 %dl.dl-horizontal
-  = csv_field_documentation(:company, 0 => 'nein', 1 => 'ja')
-  = csv_field_documentation(:gender, 'm' => 'männlich', 'w' => 'weiblich')
+  = csv_field_documentation(:company, 0 => t('global.no'), 1 => t('global.yes'))
+  = csv_field_documentation(:gender, 'm' => t('global.gender.male'), 'w' => t('global.gender.female'))
 
   = render_extensions 'special_fields'

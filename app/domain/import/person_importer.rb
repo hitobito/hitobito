@@ -7,6 +7,8 @@
 
 module Import
   class PersonImporter
+    include Translatable
+
     attr_accessor :data, :role_type, :group, :errors, :doublettes,
                   :failure_count, :new_count, :doublette_count
 
@@ -55,7 +57,7 @@ module Import
         end
       else
         @failure_count += 1
-        errors << "Zeile #{index + 1}: #{person.human_errors}"
+        errors << translate(:row_with_error, row: index + 1, errors: person.human_errors)
       end
       person
     end

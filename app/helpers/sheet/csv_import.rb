@@ -10,7 +10,7 @@ module Sheet
     self.parent_sheet = Sheet::Group
 
     def title
-      'Personen über CSV importieren'
+      translate(:title)
     end
   end
 end

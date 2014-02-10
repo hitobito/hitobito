@@ -28,9 +28,12 @@ class EventDecorator < ApplicationDecorator
   end
 
   def booking_info
-    info = "#{participant_count.to_s} Anmeldungen"
-    info << " für #{maximum_participants} Plätze" if maximum_participants.to_i > 0
-    info
+    if maximum_participants.to_i > 0
+      translate(:participants_info_with_limit, count: participant_count.to_s,
+                                               limit: maximum_participants.to_i)
+    else
+      translate(:participants_info, count: participant_count.to_s)
+    end
   end
 
   def state_translated(state = model.state)
@@ -52,7 +55,7 @@ class EventDecorator < ApplicationDecorator
       url = h.register_group_event_url(group, id)
       h.link_to(url, url)
     else
-      'nicht möglich'
+      translate(:not_possible)
     end
   end
 
@@ -65,32 +68,29 @@ class EventDecorator < ApplicationDecorator
 
   def issued_qualifications_info_for_leaders
     prolongs = kind.qualification_kinds.list.to_a
-    info = ''
     if prolongs.present?
-      info << 'Verlängert'
-      info << issued_prolongations_info(prolongs)
-      info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
+      translate(:prolong_only, count: prolongs.size, prolonged: joined(prolongs),  until: quali_date)
+    else
+      ''
     end
-    info
   end
 
   def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds.list.to_a
     prolongs = kind.prolongations.list.to_a
-    info = ''
-    info << issued_qualifications_info(qualis)
-    if prolongs.present?
-      if qualis.present?
-        info << ' und verlängert'
-      else
-        info << 'Verlängert'
-      end
+
+    if qualis.present? && prolongs.present?
+      translate(:issue_and_prolong, model: quali_model_name(qualis),
+                                    issued: joined(qualis),
+                                    prolonged: joined(prolongs),
+                                    until: quali_date)
+    elsif qualis.present?
+      translate(:issue_only, model: quali_model_name(qualis), issued: joined(qualis), until: quali_date)
+    elsif prolongs.present?
+      translate(:prolong_only, count: prolongs.size, prolonged: joined(prolongs), until: quali_date)
+    else
+      ''
     end
-    info << issued_prolongations_info(prolongs)
-    if prolongs.present? || qualis.present?
-      info << " auf den #{h.f(qualification_date)} (letztes Kursdatum)."
-    end
-    info
   end
 
   def as_typeahead
@@ -107,24 +107,16 @@ class EventDecorator < ApplicationDecorator
     [date.label, date.location].compact.reject(&:empty?).join(', ')
   end
 
-  def issued_qualifications_info(qualification_kinds)
-    info = ''
-    if qualification_kinds.present?
-      info << 'Vergibt die Qualifikation'
-      info << 'en' if qualification_kinds.size > 1
-      info << ' '
-      info << qualification_kinds.join(', ')
-    end
-    info
+  def quali_model_name(list)
+    Qualification.model_name.human(count: list.size)
   end
 
-  def issued_prolongations_info(qualification_kinds)
-    info = ''
-    if qualification_kinds.present?
-      info << ' existierende Qualifikationen '
-      info << qualification_kinds.join(', ')
-    end
-    info
+  def quali_date
+    h.f(qualification_date)
+  end
+
+  def joined(list)
+    list.join(', ')
   end
 
 end

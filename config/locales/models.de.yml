@@ -36,7 +36,34 @@ de:
         must_have_same_type: müssen von denselbem Typ sein
         greater_than: muss grösser als %{count} sein
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
-
+      models:
+        custom_content:
+          attributes:
+            body:
+              placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
+        event/date:
+          attributes:
+            finish_at:
+              not_after_start: 'muss nach Von liegen'
+        event/question:
+          attributes:
+            choices:
+              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten.'
+        mailing_list:
+          attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' darf nicht verwendet werden"
+            mail_name_not_allowed: 
+        person:
+          name_missing: 'Bitte geben Sie einen Namen ein.'
+        qualification:
+          attributes:
+            qualification_kind_id:
+              exists_for_timeframe: 'existiert in dieser Zeitspanne bereits'
+        qualification_kind:
+          attributes:
+            validity: 
+              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen.'
 
     models:
       custom_content:
@@ -211,6 +238,11 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
 
+      questions:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+
       event/answer:
         answer: Antwort
 
@@ -349,3 +381,4 @@ de:
       date: "%d.%m.%Y"
       time: '%H:%M'
       datetime: "%d.%m.%Y %H:%M"
+

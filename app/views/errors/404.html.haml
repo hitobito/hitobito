@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title "Diese Seite gibt es leider nicht (404)"
+- title t('.title')
 
-%p
-  Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gel&ouml;scht worden.
+%p= t('.explanation')
+
 %br/
 %p
-  %a{href: '/'} Hauptseite
+  = link_to t('errors.link_to_main'), :root

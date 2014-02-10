@@ -24,11 +24,7 @@ class Event::ListsController < ApplicationController
                    order('event_dates.start_at ASC')
 
     @events_by_month = EventDecorator.decorate_collection(events).group_by do |entry|
-      if entry.dates.present?
-        l(entry.dates.first.start_at, format: :month_year)
-      else
-        'Ohne Datumsangabe'
-      end
+      l(entry.dates.first.start_at, format: :month_year)
     end
   end
 

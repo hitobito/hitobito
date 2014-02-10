@@ -42,7 +42,7 @@ module FilterNavigation
           dropdown.active = true
         end
       elsif role_type_ids.present?
-        dropdown.label = 'Eigener Filter'
+        dropdown.label = translate(:custom_filter)
         dropdown.active = true
       else
         @active_label = main_filter_name
@@ -84,13 +84,13 @@ module FilterNavigation
     end
 
     def add_entire_layer_filter_link
-      name = 'Gesamte Ebene'
+      name = translate(:entire_layer)
       link = fixed_types_path(name, sub_groups_role_types, kind: 'layer')
       dropdown.item(name, link)
     end
 
     def add_entire_subgroup_filter_link
-      name = 'Gesamte Gruppe'
+      name = translate(:entire_group)
       link = fixed_types_path(name, sub_groups_role_types, kind: 'deep')
       dropdown.item(name, link)
     end
@@ -104,7 +104,7 @@ module FilterNavigation
       if can?(:new, group.people_filters.new)
         link = template.new_group_people_filter_path(group.id, people_filter: { role_type_ids: role_type_ids })
         dropdown.divider if dropdown.items.present?
-        dropdown.item('Neuer Filter...', link)
+        dropdown.item(translate(:new_filter), link)
       end
     end
 

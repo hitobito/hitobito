@@ -136,13 +136,16 @@ class RolesController < CrudController
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label(role = entry)
-    "#{models_label(false)} <i>#{h(role)}</i> für <i>#{h(role.person)}</i> in <i>#{h(role.group)}</i>".html_safe
+    translate(:full_entry_label, model_label: models_label(false),
+                                 role: h(role),
+                                 person: h(role.person),
+                                 group: h(role.group)).html_safe
   end
 
   def role_change_message(new_role)
-    new_role_label = "<i>#{h(new_role)}</i>"
-    new_role_label << " in <i>#{h(@group)}</i>" if @group.id != @role.group_id
-    I18n.t('roles.role_changed', old_role: full_entry_label, new_role: new_role_label).html_safe
+    key = @group.id == @role.group.id ? :role_changed : :role_changed_to_group
+    translate(key, full_entry_label: full_entry_label, new_role: h(new_role),
+                   new_group: h(@group))
   end
 
   def after_create_location(new_person)

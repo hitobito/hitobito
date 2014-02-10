@@ -45,7 +45,7 @@ class Event::Answer < ActiveRecord::Base
     # still allow answer to be nil because otherwise participations could not
     # be created without answering all questions (required to create roles for other people)
     if question_with_choices? && answer && !question.multiple_choices? && !question.choice_items.include?(answer)
-      errors.add(:answer, 'ist keine gültige Auswahl')
+      errors.add(:answer, :inclusion)
     end
   end
 

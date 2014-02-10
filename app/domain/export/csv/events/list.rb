@@ -7,6 +7,7 @@
 
 module Export::Csv::Events
   class List < Export::Csv::Base
+    include Translatable
 
     MAX_DATES = 3
 
@@ -23,7 +24,7 @@ module Export::Csv::Events
     end
 
     def course_labels
-      { group_names: 'Organisatoren',
+      { group_names: translate(:group_names),
         number: human_attribute(:number),
         kind: Event::Kind.model_name.human,
         description: human_attribute(:description),

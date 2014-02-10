@@ -9,11 +9,15 @@
 = dropdown_people_export(can?(:show_full, entry), false)
 
 - if entry.email? && can?(:send_password_instructions, entry)
-  = action_button('Login schicken',
+  = action_button(t('.send_login'),
                   send_password_instructions_group_person_path(parent, entry),
                   :envelope,
                   remote: true,
                   method: :post)
 
 - if entry == current_user
-  = action_button "Passwort #{entry.encrypted_password? ? "ändern" : "setzen"}", edit_person_registration_path
+  - if entry.encrypted_password?
+    = action_button t('devise.registrations.edit.change_password'), edit_person_registration_path
+  - else
+    = action_button t('devise.registrations.edit.set_password'), edit_person_registration_path
+

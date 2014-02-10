@@ -3,14 +3,14 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title "Gruppe verschieben"
+- title t('.title')
 
-%p= "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
+%p= t('.select_group')
 
 = standard_form(:move, url: move_group_path(@group), builder: PlainObjectFormBuilder) do |f|
   - @candidates.each do |label, values|
     = field_set_tag label do
-      - values.each do |candidate| 
+      - values.each do |candidate|
         = f.inline_radio_button(:target_group_id, candidate.id, candidate.to_s, false)
 
-  = save_form_buttons(f, 'Gruppe verschieben', group_path(@group))
+  = save_form_buttons(f, t('.title'), group_path(@group))

@@ -8,20 +8,20 @@
 module QualificationsHelper
 
   def format_qualification_kind_validity(kind)
-    format_unbounded_value(kind.validity) { |d| "#{d} Jahre" }
+    format_unbounded_value(kind.validity) { |d| t('qualifications.in_years', years: d) }
   end
 
   def format_qualification_kind_reactivateable(kind)
-    format_unbounded_value(kind.reactivateable, '') { |d| "#{d} Jahre" }
+    format_unbounded_value(kind.reactivateable, '') { |d| t('qualifications.in_years', years: d) }
   end
 
   def format_qualification_finish_at(quali)
-    format_unbounded_value(quali.finish_at, '') { |d| "bis #{d}" }
+    format_unbounded_value(quali.finish_at, '') { |d| t('qualifications.valid_until', date: d) }
   end
 
   private
 
-  def format_unbounded_value(value, text = 'unbeschränkt')
+  def format_unbounded_value(value, text = t('qualifications.unlimited'))
     if value.present?
       yield f(value)
     else

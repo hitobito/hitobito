@@ -28,7 +28,7 @@
 
   %aside.span5.offset1
     - if entry.person == current_user && @application.present? && @application.contact.present?
-      = section 'Anmeldung an' do
+      = section t('event.applied_to') do
         = render 'contactable/show', contactable: @application.contact, only_public: true
 
     = render 'roles'

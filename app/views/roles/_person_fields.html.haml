@@ -2,7 +2,7 @@
   Bestehende Person
   %small
     oder
-    = link_to('Neue Person erfassen', '#', data: { swap: 'person-fields' })
+    = link_to(t('.create_new_person'), '#', data: { swap: 'person-fields' })
 
 = field_set_tag(title, class: 'person-fields', style: element_visible(!entry.person.changed?))do
   = f.labeled_person_field(:person)
@@ -12,7 +12,7 @@
   Neue Person erfassen
   %small
     oder
-    = link_to('Bestehende Person suchen', '#', data: { swap: 'person-fields' })
+    = link_to(t('.search_existing_person'), '#', data: { swap: 'person-fields' })
 
 = field_set_tag(title, class: 'person-fields', style: element_visible(entry.person.changed?)) do
 

@@ -5,14 +5,14 @@
 
 #main.row-fluid
   %article.span6
-    %h2 Kontaktangaben
+    %h2= t('.contact_details')
     - if !entry.contact
       = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
     - else
       = render 'contactable/show_group_with_contact', group: entry, contact: entry.contact, only_public: cannot?(:show_details, @group)
 
-    
-    %h2 Weitere Angaben
+
+    %h2= t('.additional_information')
     = render_attrs(entry, :type_name)
     = render_extensions :attrs
     = render_present_attrs(entry, :created_info, :updated_info, :deleted_info) if can?(:show_details, @group)

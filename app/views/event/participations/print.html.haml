@@ -15,12 +15,12 @@
 
   %body.application
     .row-fluid
-      %h1 Anmeldung für #{@event.to_s}
+      %h1= t('event.participations.form.title', event: @event)
 
       %article.span7
         %section
           %dl.dl-horizontal
-            = labeled('Daten', @event.dates_full)
+            = labeled_attr(@event, :dates_full)
             = labeled_attr(@event, :motto)
             = labeled_attr(@event, :cost)
 
@@ -37,11 +37,11 @@
             - @event.used?(:number) do
               = labeled_attr(@event, :number)
 
-            = labeled('Durchgeführt von', @event.group_names)
+            = labeled(t('event.run_by'), @event.group_names)
 
 
         -if @answers.present?
-          = section 'Spezifische Angaben' do
+          = section t('event.participations.specific_information') do
             %ul
             - @answers.each do |answer|
               %li= "#{answer.question.question}: #{answer.answer}"
@@ -55,14 +55,14 @@
 
       %aside.span5
         - if @application.present? && @application.contact.present?
-          = section 'Anmeldung an' do
+          = section t('event.applied_to') do
             = @application.contact.decorate.complete_contact
 
         - if @event.contact_id?
-          = section 'Kontakt' do
+          = section Event.human_attribute_name(:contact) do
             = @event.contact.complete_contact
 
-        = section 'TeilnehmerIn' do
+        = section Event::Role::Participant.model_name.human do
           = render 'contactable/show', contactable: entry.person, only_public: true
 
 

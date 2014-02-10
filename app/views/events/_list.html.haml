@@ -8,7 +8,7 @@
 = render 'shared/page_per_year'
 
 = crud_table do |t|
-  -t.col('Name') do |e|
+  -t.col(Event.human_attribute_name(:name)) do |e|
     %strong= link_to e.name, group_event_path(@group, e)
   -t.attrs(:dates_full, :booking_info)
 

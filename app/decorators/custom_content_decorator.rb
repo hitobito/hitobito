@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class CustomContentDecorator < ApplicationDecorator
-
   decorates :custom_content
 
 
@@ -15,10 +14,9 @@ class CustomContentDecorator < ApplicationDecorator
       list = placeholders_list.collect do |ph|
         placeholder_token(ph)
       end
-
-      "Verfügbare Platzhalter: #{list.join(", ")}"
+      translate(:available_placeholders, placeholders: list.join(", "))
     else
-      'Keine Platzhalter vorhanden'
+      translate(:available_placeholders_empty)
     end
   end
 

@@ -9,14 +9,14 @@
       = hidden_field_tag('return_url', params[:return_url])
 
       - if entry.person.persisted?
-        - title("Rolle für #{entry.person} #{entry.persisted? ? 'bearbeiten' : 'erstellen'}")
+        - title(t(".#{entry.persisted? ? 'edit' : 'add'}_role_for_person", person: entry.person))
         = f.hidden_field :person_id
         = render 'fields', f: f
 
       - else
-        - title("Person hinzufügen")
+        - title(t('global.associations.add_with_model', model: Person.model_name.human))
         = render 'person_fields', f: f
-        = field_set_tag 'Rolle'.html_safe do
+        = field_set_tag Role.model_name.human do
           = render 'fields', f: f
 
   .span5

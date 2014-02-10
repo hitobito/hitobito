@@ -12,7 +12,7 @@ module Dropdown
       attr_reader :group, :event
 
       def initialize(template, group, event)
-        super(template, 'Person hinzufügen', :plus)
+        super(template, translate(:add), :plus)
         @group = group
         @event = event
         init_items

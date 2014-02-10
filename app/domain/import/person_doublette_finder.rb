@@ -7,6 +7,8 @@
 
 module Import
   class PersonDoubletteFinder
+    include Translatable
+
     attr_reader :attrs
 
     DOUBLETTE_ATTRIBUTES = [
@@ -53,7 +55,7 @@ module Import
           blank_attrs = attrs.select { |key, value| person.attributes[key].blank? }
           person.attributes = blank_attrs
         else
-          person.errors.add(:base, "#{people.size} Treffer in Duplikatserkennung.")
+          person.errors.add(:base, translate(:duplicates, count: people.size))
         end
         person
       end

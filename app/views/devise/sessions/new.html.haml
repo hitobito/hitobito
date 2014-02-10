@@ -3,11 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
--title 'Anmelden'
+-title t('.sign_in')
 
 = standard_form(resource, {url: person_session_path}) do |f|
   = f.error_messages
   = f.labeled_input_field(:email, autofocus: true)
   = f.labeled_input_field(:password)
   = f.labeled_boolean_field(:remember_me)
-  = f.indented(submit_button(f, 'Anmelden'))
+  = f.indented(submit_button(f, t('.sign_in')))

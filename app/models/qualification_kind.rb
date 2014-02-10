@@ -48,6 +48,7 @@ class QualificationKind < ActiveRecord::Base
 
   validates :label, presence: true, length: { maximum: 255, allow_nil: true }
   validates :description, length: { maximum: 1023, allow_nil: true }
+  validates :reactivateable, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
 
   validate :assert_validity_when_reactivateable
 
@@ -80,9 +81,7 @@ class QualificationKind < ActiveRecord::Base
 
   def assert_validity_when_reactivateable
     if reactivateable.present? && (validity.to_i <= 0)
-      errors.add(:validity,
-                 'muss einen positive Zahl sein um die ' +
-                 "#{self.class.model_name.human} reaktivierbar zu machen.")
+      errors.add(:validity, :not_a_positive_number)
     end
   end
 

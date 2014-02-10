@@ -22,7 +22,7 @@ class CsvImportsController < ApplicationController
         flash.now[:notice] = parser.flash_notice
       end
     else
-      flash[:alert] = 'Bitte wählen Sie eine gültige CSV Datei aus'
+      flash[:alert] = translate(:invalid_file)
       redirect_to new_group_csv_imports_path(group)
     end
   end
@@ -30,7 +30,7 @@ class CsvImportsController < ApplicationController
   def preview
     valid_for_import? do
       @entries = importer.people.map(&:person)
-      set_importer_flash_info('neu importiert.', 'aktualisiert.', 'nicht importiert.')
+      set_importer_flash_info
     end
   end
 
@@ -43,7 +43,7 @@ class CsvImportsController < ApplicationController
         importer.import
         @entries = importer.people.map(&:person)
 
-        set_importer_flash_info('erfolgreich importiert.', 'erfolgreich aktualisiert.' , 'nicht importiert.')
+        set_importer_flash_info
         redirect_to group_people_path(redirect_params)
       end
     end
@@ -51,13 +51,16 @@ class CsvImportsController < ApplicationController
 
   private
 
-  def set_importer_flash_info(*suffixes)
-    reversed = suffixes.reverse
+  def set_importer_flash_info
+    add_to_flash(:notice, importer_info(:new, importer.new_count)) if importer.new_count > 0
+    add_to_flash(:notice, importer_info(:updated, importer.doublette_count)) if importer.doublette_count > 0
+    add_to_flash(:alert, importer_info(:failed, importer.failure_count)) if importer.failure_count > 0
 
-    add_to_flash(:notice, pluralized(importer.new_count, reversed.pop))
-    add_to_flash(:notice, pluralized(importer.doublette_count, reversed.pop))
-    add_to_flash(:alert, pluralized(importer.failure_count, reversed.pop))
-    importer.errors.each { |error| add_to_flash(:alert, error) }
+    importer.errors.each { |error| add_to_flash(:alert, error) } if action_name == 'preview'
+  end
+
+  def importer_info(key, count)
+    translate([action_name, key].join('.').to_sym, count: count, role: importer.human_name(count: count))
   end
 
   def add_to_flash(key, text)
@@ -114,14 +117,11 @@ class CsvImportsController < ApplicationController
 
   def sane_mapping?
     duplicates = find_duplicate_mappings
+
     if duplicates.present?
       fields = Import::Person.fields.each_with_object({}) { |f, o| o[f[:key]] = f[:value] }
       list = duplicates.collect { |d| fields[d.to_s] }.join(', ')
-      if duplicates.size == 1
-        flash.now[:alert] = "#{list} wurde mehrfach zugewiesen"
-      else
-        flash.now[:alert] = "#{list} wurden mehrfach zugewiesen"
-      end
+      flash.now[:alert] = translate(:duplicate_keys, count: duplicates.size, list: list)
       render :define_mapping
       false
     else
@@ -149,15 +149,6 @@ class CsvImportsController < ApplicationController
     @importer = Import::PersonImporter.new(group: group,
                                            data: data,
                                            role_type: role_type)
-  end
-
-  def pluralized(count, suffix)
-    words = wording[action_name.to_sym][count > 1 ? 0 : 1]
-    [count, importer.human_name(count: count), words, suffix].join(' ') if count > 0
-  end
-
-  def wording
-    @wording ||= { preview: %w(werden wird), create: %w(wurden wurde) }
   end
 
   def redirect_params

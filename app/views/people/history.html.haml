@@ -6,11 +6,11 @@
 %h2 Rollen
 
 = table(@roles, class: 'table table-striped') do |t|
-  - t.attr(:group_id, 'Gruppe')
-  - t.col('Rolle') do |r|
+  - t.attr(:group_id, Group.model_name.human)
+  - t.col(Role.model_name.human) do |r|
     = r.to_s
-  - t.attr(:created_at, 'Von')
-  - t.attr(:deleted_at, 'Bis')
+  - t.attr(:created_at, t('global.from'))
+  - t.attr(:deleted_at, t('global.until'))
 
 %events
   = render(layout: 'shared/grouped_table',

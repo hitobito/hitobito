@@ -5,11 +5,11 @@
 
 #main.row-fluid
   %article.span6
-    %h3 Login
+    %h3= t('.login')
     = render template: 'devise/sessions/new'
-    
+
   %article.span6
-    %h3 Du hast noch kein Login?
+    %h3= t('.no_login')
     = render 'email_check'
 
 

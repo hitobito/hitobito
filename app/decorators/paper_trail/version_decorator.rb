@@ -9,13 +9,7 @@ module PaperTrail
   class VersionDecorator < ApplicationDecorator
 
     def header
-      header = created_at
-      auth = author
-      if auth
-        header << ' von '
-        header << auth
-      end
-      header.html_safe
+      (author ? [created_at, translate(:by, author: author)].join(' ') : created_at).html_safe
     end
 
     def created_at

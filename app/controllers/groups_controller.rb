@@ -29,7 +29,7 @@ class GroupsController < CrudController
   def reactivate
     entry.update_column(:deleted_at, nil)
 
-    flash[:notice] = "Gruppe <i>#{entry}</i> wurde erfolgreich reaktiviert."
+    flash[:notice] = translate(:reactivated, group: entry)
     redirect_to entry
   end
 
@@ -60,11 +60,16 @@ class GroupsController < CrudController
   def load_sub_groups(scope = entry.children.without_deleted)
     @sub_groups = Hash.new { |h, k| h[k] = [] }
     scope.order_by_type(entry).each do |group|
-      label = group.layer ? group.class.label_plural : 'Untergruppen'
+      label = group.layer ? group.class.label_plural : sub_groups_label
       @sub_groups[label] << group
     end
     # move this entry to the end
-    @sub_groups['Untergruppen'] = @sub_groups.delete('Untergruppen')
+    @sub_groups[sub_groups_label] = @sub_groups.delete(sub_groups_label)
+  end
+
+
+  def sub_groups_label
+    @sub_groups_label ||= translate(:subgroups)
   end
 
 

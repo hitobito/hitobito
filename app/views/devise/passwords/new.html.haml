@@ -3,9 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
--title 'Passwort vergessen?'
+-title t('layout.unauthorized.forgot_password')
 
 = standard_form(resource, {url: password_path(resource_name)}) do |f|
   = f.error_messages
-  = f.labeled(:email) { f.input_field(:email) } 
-  = f.indented submit_button(f,'Passwort zurücksetzen')
+  = f.labeled(:email) { f.input_field(:email) }
+  = f.indented submit_button(f,t('.reset_password_button'))

@@ -24,6 +24,7 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
           case state
           when :active then
             link.should be_present
+            link[:title].should =~ /^Markiert Kurs/
             icon.should be_present
             icon[:class].should =~ /disabled/
           when :inactive then
@@ -34,6 +35,5 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
         end
       end
     end
-
   end
 end

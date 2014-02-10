@@ -7,6 +7,8 @@
 
 module Sheet
   class Base
+    include Translatable
+
     class_attribute :parent_sheet, :has_tabs
     self.has_tabs = false
 

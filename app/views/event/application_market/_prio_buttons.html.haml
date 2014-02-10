@@ -10,6 +10,6 @@
     = render 'prio_check', prio: 3
     %label.checkbox
       = check_box_tag :waiting_list, true, params[:waiting_list]
-      nationale Warteliste
-  
-  = submit_tag 'Aktualisieren', class: 'btn btn-small'
+      = t('.national_waitinglist')
+
+  = submit_tag t('global.button.refresh'), class: 'btn btn-small'

@@ -106,6 +106,7 @@ describe GroupsController do
         post :reactivate, id: group.id
 
         Group.find(group.id).should be_present
+        flash[:notice].should eq 'Gruppe <i>Group 111</i> wurde erfolgreich reaktiviert.'
         should redirect_to group
       end
     end

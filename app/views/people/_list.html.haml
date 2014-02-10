@@ -12,15 +12,15 @@
 = crud_table do |t|
   - t.col('') do |p|
     .profil= image_tag(p.picture.thumb.url, size: '32x32')
-  - t.col('Name') do |p|
+  - t.col(Person.human_attribute_name(:name)) do |p|
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s(:list), @multiple_groups ? group_person_path(p.default_group_id, p) : group_person_path(@group, p))
       %br/
       = muted p.additional_name
-  - t.col('Rolle')   {|p| p.roles_short(@multiple_groups ? nil : @group) }
-  - t.col('E-Mail')  {|p| p.primary_email }
-  - t.col('Telefon') {|p| p.all_phone_numbers(!index_full_ability?) }
-  - t.col('Adresse') {|p| p.complete_address }
+  - t.col(Role.model_name.human(count: 2))        { |p| p.roles_short(@multiple_groups ? nil : @group) }
+  - t.col(Person.human_attribute_name(:email))    { |p| p.primary_email }
+  - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(!index_full_ability?) }
+  - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
 
 = paginate @people

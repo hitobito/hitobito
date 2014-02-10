@@ -11,21 +11,21 @@ class MailingListDecorator < ApplicationDecorator
 
   def subscribable_info
     html = ''.html_safe
-    html << 'Abonnenten dürfen sich'
     if !subscribable
-      html << content_tag(:strong, ' nicht')
+      html << translate(:may_not_subscribe).html_safe
+    else
+      html << translate(:may_subscribe).html_safe
     end
-    html << ' selbst an/abmelden'
     html << h.tag(:br)
   end
 
   def subscribers_may_post_info
     html = ''.html_safe
-    html << 'Abonnenten dürfen'
     if !subscribers_may_post
-      html << content_tag(:strong, ' nicht')
+      html << translate(:may_not_post).html_safe
+    else
+      html << translate(:may_post).html_safe
     end
-    html << ' auf die Mailingliste schreiben'
     html << h.tag(:br)
   end
 

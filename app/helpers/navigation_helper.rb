@@ -8,15 +8,18 @@
 module NavigationHelper
 
   MAIN = {
-          'Gruppen' => { url: :groups_path,
-                         active_for: %w(groups people) },
-          'Anlässe' => { url: :list_events_path,
-                         active_for: %w(list_events) },
-          'Kurse' => { url: :list_courses_path,
-                       active_for: %w(list_courses) },
-          'Admin' => { url: :event_kinds_path,
-                       active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
-                       if: lambda { |_| can?(:manage, Event::Kind) } }
+          I18n.t('navigation.groups')  => { url: :groups_path,
+                                            active_for: %w(groups people) },
+          I18n.t('navigation.events')  => { url: :list_events_path,
+                                            active_for: %w(list_events) },
+          I18n.t('navigation.courses') => { url: :list_courses_path,
+                                            active_for: %w(list_courses) },
+          I18n.t('navigation.admin')   => { url: :event_kinds_path,
+                                            active_for: %w(event_kinds
+                                                           qualification_kinds
+                                                           custom_contents
+                                                           label_formats),
+                                            if: lambda { |_| can?(:manage, Event::Kind) } }
   }
 
 

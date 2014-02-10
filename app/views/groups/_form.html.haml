@@ -7,11 +7,11 @@
   - if entry.new_record?
     = f.hidden_field :parent_id
     = f.hidden_field :type
-    
+
   = field_set_tag do
     = f.labeled_input_fields(:name, :short_name)
-    = f.labeled_input_field(:contact_id, help_inline: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.')
-    
-  = render 'contactable/fields', f: f 
-  
+    = f.labeled_input_field(:contact_id, help_inline: t('.help_contact'))
+
+  = render 'contactable/fields', f: f
+
   = render_extensions :fields, locals: { f: f }

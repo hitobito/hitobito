@@ -4,14 +4,14 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(buttons_bottom: false) do |f|
-             
+
   #main.row-fluid
     %article.span6
       = f.labeled_input_fields :name
       = f.labeled_collection_select(:page_size, LabelFormat.available_page_sizes, :to_s, :to_s, {}, class: 'span4')
       = f.labeled(:landscape) do
-        = f.inline_radio_button(:landscape, false, 'Hochformat')
-        = f.inline_radio_button(:landscape, true, 'Querformat')
+        = f.inline_radio_button(:landscape, false, t('.portrait'))
+        = f.inline_radio_button(:landscape, true, t('.landscape'))
       = f.labeled_input_fields :font_size, :count_horizontal, :count_vertical
       = f.labeled_input_field :width, help_inline: 'mm'
       = f.labeled_input_field :height, help_inline: 'mm'

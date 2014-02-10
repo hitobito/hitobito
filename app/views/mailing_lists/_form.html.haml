@@ -4,16 +4,16 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form do |f|
-  = f.labeled_input_fields :name, :description, :publisher
-  
+  = f.labeled_input_fields(:name, :description, :publisher)
+
   = f.labeled(:mail_name) do
     .input-append
-      = f.input_field :mail_name, class: 'span3'
+      = f.input_field(:mail_name, class: 'span3')
       %span.add-on= "@#{entry.mail_domain}"
-      
-  = f.labeled_input_field :additional_sender, help: 'Neben den Administratoren darf diese Emailadresse ebenfalls Nachrichten an die Mailing Liste senden.'
- 
+
+  = f.labeled_input_field(:additional_sender, help: t('.help_additional_sender'))
+
   = f.indented do
-    = f.boolean_field(:subscribable, caption: 'Abonnenten dürfen sich selbst an-/abmelden')
+    = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
   = f.indented do
-    = f.boolean_field(:subscribers_may_post, caption: 'Abonnenten dürfen auf die Mailingliste schreiben')
+    = f.boolean_field(:subscribers_may_post, caption: t('.caption_subscribers_may_post'))

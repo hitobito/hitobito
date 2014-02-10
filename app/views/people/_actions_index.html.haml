@@ -2,12 +2,13 @@
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
+- if can?(:new, @group.roles.new)
+  = action_button(t('global.associations.add_with_model', model: Person.model_name.human), new_group_role_path(@group), :plus)
 
-= action_button('Person hinzufügen', new_group_role_path(@group), :plus) if can?(:new, @group.roles.new)
-
-= action_button('Liste importieren', new_group_csv_imports_path, :upload) if can?(:new, @group.roles.new)
+- if can?(:new, @group.roles.new)
+  = action_button(t('.import_list'), new_group_csv_imports_path, :upload)
 
 = dropdown_people_export(index_full_ability?)
 
-= action_button('Drucken', 'javascript:window.print();', :print)
+= action_button(t('global.button.print'), 'javascript:window.print();', :print)
 

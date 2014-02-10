@@ -235,7 +235,7 @@ class Person < ActiveRecord::Base
 
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
-      errors.add(:base, 'Bitte geben Sie einen Namen ein')
+      errors.add(:base, :name_missing)
     end
   end
 

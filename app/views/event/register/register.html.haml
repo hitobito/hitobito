@@ -3,13 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title 'Kontaktdaten erfassen'
+- title t('.title')
 
-= crud_form(entry, 
-            url: register_group_event_path(group, event), 
-            method: :put, 
+= crud_form(entry,
+            url: register_group_event_path(group, event),
+            method: :put,
             cancel_url: register_group_event_path(group, event),
             buttons_bottom: true) do |f|
   = render 'people/fields', f: f
-  
+
   = f.honeypot

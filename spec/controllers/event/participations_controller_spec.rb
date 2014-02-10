@@ -157,6 +157,8 @@ describe Event::ParticipationsController do
 
       it 'creates confirmation job' do
         expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
+        flash[:notice].should include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
+        flash[:notice].should include 'unterzeichnen und per Post an die entsprechende Adresse schicken.'
       end
 
       it 'creates participant role for non course events' do
@@ -164,6 +166,8 @@ describe Event::ParticipationsController do
         participation = assigns(:participation)
         participation.roles.should have(1).item
         role = participation.roles.first
+        flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        flash[:notice].should include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         role.participation.should eq participation.model
       end
 

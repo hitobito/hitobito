@@ -224,7 +224,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
     string_field(attr,
-                 placeholder: 'Person suchen...',
+                 placeholder: I18n.t('global.search.placeholder_with_model',
+                                     model: Person.model_name.human),
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: @template.query_people_path })
@@ -235,7 +236,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       label(assoc, class: 'control-label') +
       nested_fields_for(assoc, partial_name, 'controls controls-row') do |fields|
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
-        content << help_inline(fields.link_to_remove('Entfernen'))
+
+        content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
         content_tag(:div, content, class: 'controls controls-row')
       end
     end
@@ -248,7 +250,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         end
       end +
       content_tag(:div, class: 'controls') do
-        help_inline(link_to_add 'Eintrag hinzufügen', assoc)
+        help_inline(link_to_add I18n.t('global.associations.add'), assoc)
       end
   end
 

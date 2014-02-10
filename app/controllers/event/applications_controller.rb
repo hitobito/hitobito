@@ -11,20 +11,20 @@ class Event::ApplicationsController < ApplicationController
   authorize_resource
 
   def approve
-    toggle_approval(true, 'freigegeben')
+    toggle_approval(true, translate(:approved))
   end
 
   def reject
-    toggle_approval(false, 'abgelehnt')
+    toggle_approval(false, translate(:rejected))
   end
 
   private
 
-  def toggle_approval(approved, verb)
+  def toggle_approval(approved, message)
     application.approved = approved
     application.rejected = !approved
     application.save!
-    flash[:notice] = "Die Anmeldung wurde #{verb}"
+    flash[:notice] = message
     redirect_to group_event_participation_path(group, participation.event_id, participation)
   end
 

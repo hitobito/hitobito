@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= section 'Spezifische Angaben' do
+= section t('event.participations.specific_information') do
   %dl
     - @answers.each do |answer|
       %dt= answer.question.question
-      %dd= answer.answer || '(nicht beantwortet)'
+      %dd= answer.answer || t('event.participations.no_answer_given')

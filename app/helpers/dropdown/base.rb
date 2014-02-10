@@ -7,6 +7,7 @@
 
 module Dropdown
   class Base
+    include Translatable
     attr_accessor :template, :label, :main_link, :icon, :button_class
     attr_reader :items
 

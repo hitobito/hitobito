@@ -15,8 +15,8 @@
               - if can?(:primary_group, entry)
                 = link_to(icon(entry.primary_group_id == group.id ? 'star' : 'star-empty'),
                           primary_group_group_person_path(@group, entry, primary_group_id: group.id),
-                          title: 'Hauptgruppe setzen',
-                          alt: 'Hauptgruppe setzen',
+                          title: t('.set_main_group'),
+                          alt: t('.set_main_group'),
                           class: "group-#{group.id}",
                           data: {method: :put, remote: true})
 
@@ -36,7 +36,7 @@
             %td
               - if can?(:new, group.roles.new)
                 %span.pull-right
-                  = action_button('Rolle hinzufügen',
+                  = action_button(t('global.associations.add_with_model', model: Role.model_name.human),
                                   new_group_role_path(group,
                                                       role: { person_id: entry.id },
                                                       return_url: group_person_path(group.id, entry.id)),

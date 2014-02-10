@@ -164,8 +164,8 @@ module CrudHelper
     path ||= path_args(entry)
     link_to(icon(:edit),
             path.is_a?(String) ? path : edit_polymorphic_path(path),
-            title: 'Bearbeiten',
-            alt: 'Bearbeiten')
+            title: ti(:"link.edit"),
+            alt: ti(:"link.edit"))
   end
 
   # Standard link action to the destroy action of a given record.
@@ -175,8 +175,8 @@ module CrudHelper
     link_to label,
             path,
             class: 'action',
-            title: 'Löschen',
-            alt: 'Löschen',
+            title: ti(:"link.delete"),
+            alt: ti(:"link.delete"),
             data: { confirm: ti(:confirm_delete),
                     method: :delete }
   end

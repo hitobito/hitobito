@@ -13,7 +13,7 @@ module RenderPeopleExports
       current_user.update_column(:last_label_format_id, label_format.id)
     end
 
-    pdf = Export::PdfLabels.new(label_format).generate(people)
+    pdf = Export::Pdf::Labels.new(label_format).generate(people)
     send_data pdf, type: :pdf, disposition: 'inline'
   end
 

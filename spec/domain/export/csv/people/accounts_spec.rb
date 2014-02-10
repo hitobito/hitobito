@@ -8,9 +8,9 @@
 require 'spec_helper'
 
 
-describe 'Export::CsvPeople::Accounts' do
+describe Export::Csv::People::Accounts do
 
-  subject { Export::CsvPeople::Accounts }
+  subject { Export::Csv::People::Accounts }
 
   context 'phone_numbers' do
     it 'creates standard key and human translations' do

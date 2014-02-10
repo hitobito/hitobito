@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe Export::CsvPeople::Person do
+describe Export::Csv::People::Person do
 
   let(:person) { people(:top_leader) }
 
-  subject { Export::CsvPeople::Person.new(person) }
+  subject { Export::Csv::People::Person.new(person) }
 
   context 'standard attributes' do
     its([:id]) { should eq person.id }

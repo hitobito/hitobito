@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv'
-module Export
-  module CsvPeople
+
+module Export::Csv
+  module People
 
     def self.export_address(people)
       export(PeopleAddress, people)
@@ -31,5 +31,4 @@ module Export
       Export::Csv::Generator.new(exporter.new(people)).csv
     end
   end
-
 end

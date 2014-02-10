@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe Export::CsvPeople::PeopleAddress do
+describe Export::Csv::People::PeopleAddress do
 
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
-  let(:people_list) { Export::CsvPeople::PeopleAddress.new(list) }
+  let(:people_list) { Export::Csv::People::PeopleAddress.new(list) }
   subject { people_list }
 
   its(:attributes) do should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,

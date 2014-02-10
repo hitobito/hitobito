@@ -61,8 +61,8 @@ class Event::ParticipationsController < CrudController
 
   def render_csv
     csv = params[:details] && can?(:show_details, entries.first) ?
-      Export::CsvPeople.export_participations_full(entries) :
-      Export::CsvPeople.export_participations_address(entries)
+      Export::Csv::People.export_participations_full(entries) :
+      Export::Csv::People.export_participations_address(entries)
 
     send_data csv, type: :csv
   end

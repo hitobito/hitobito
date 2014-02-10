@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::CsvPeople
+module Export::Csv::People
   # handles participations
   class ParticipationsAddress < PeopleAddress
     include ParticipationSupport

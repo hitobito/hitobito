@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe Export::Courses::Row do
+describe Export::Csv::Events::Row do
 
   let(:max_dates) { 3 }
   let(:contactable_keys) { [:name, :address, :zip_code, :town, :email, :phone_numbers] }
@@ -16,7 +16,7 @@ describe Export::Courses::Row do
 
   let(:list)  { OpenStruct.new(max_dates: 3, contactable_keys: contactable_keys) }
 
-  let(:row) { Export::Courses::Row.new(course, list) }
+  let(:row) { Export::Csv::Events::Row.new(course, list) }
 
   subject { OpenStruct.new(row.hash) }
 

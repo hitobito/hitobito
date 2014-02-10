@@ -168,9 +168,9 @@ class PeopleController < CrudController
 
   def render_csv(entries, full)
     csv = if full
-      Export::CsvPeople.export_full(entries)
+      Export::Csv::People.export_full(entries)
     else
-      Export::CsvPeople.export_address(entries)
+      Export::Csv::People.export_address(entries)
     end
     send_data csv, type: :csv
   end

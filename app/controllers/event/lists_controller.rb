@@ -53,7 +53,7 @@ class Event::ListsController < ApplicationController
 
   def render_courses_csv(courses)
     if can?(:export, Event)
-      csv = Export::Courses.export_list(courses)
+      csv = Export::Csv::Events.export_list(courses)
       send_data csv, type: :csv
     end
   end

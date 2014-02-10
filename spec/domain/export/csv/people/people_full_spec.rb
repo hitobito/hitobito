@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe Export::CsvPeople::PeopleFull do
+describe Export::Csv::People::PeopleFull do
 
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
-  let(:people_list) { Export::CsvPeople::PeopleFull.new(list) }
+  let(:people_list) { Export::Csv::People::PeopleFull.new(list) }
   subject { people_list }
 
   its([:roles]) { should eq 'Rollen' }

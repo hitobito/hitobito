@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::CsvPeople
+module Export::Csv::People
   # adds social_accounts and company related attributes
   class PeopleFull < PeopleAddress
 

@@ -7,12 +7,12 @@
 
 require 'spec_helper'
 
-describe Export::CsvPeople::Participation do
+describe Export::Csv::People::Participation do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
 
-  subject { Export::CsvPeople::Participation.new(participation) }
+  subject { Export::Csv::People::Participation.new(participation) }
 
   its([:first_name]) { should eq 'Top' }
   its([:roles]) { should be_blank }

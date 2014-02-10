@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export
-  module Courses
+module Export::Csv
+  module Events
 
     def self.export_list(courses)
-      Export::Csv::Generator.new(Export::Courses::List.new(courses)).csv
+      Export::Csv::Generator.new(List.new(courses)).csv
     end
 
   end

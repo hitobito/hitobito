@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe Export::CsvPeople do
+describe Export::Csv::People do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
@@ -20,11 +20,11 @@ describe Export::CsvPeople do
      'Zusätzliche Angaben', 'Rollen']
   end
 
-  describe Export::CsvPeople do
+  describe Export::Csv::People do
 
     subject { csv }
     let(:list) { [person] }
-    let(:data) { Export::CsvPeople.export_address(list) }
+    let(:data) { Export::Csv::People.export_address(list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
 
@@ -59,7 +59,7 @@ describe Export::CsvPeople do
 
     context 'export_full' do
       its(:headers) { should == full_headers }
-      let(:data) { Export::CsvPeople.export_full(list) }
+      let(:data) { Export::Csv::People.export_full(list) }
 
       context 'first row' do
         before do
@@ -79,7 +79,7 @@ describe Export::CsvPeople do
 
     context 'export_participations_address' do
       let(:list) { [participation] }
-      let(:data) { Export::CsvPeople.export_participations_address(list) }
+      let(:data) { Export::Csv::People.export_participations_address(list) }
 
       its(:headers) { should == simple_headers }
 
@@ -102,7 +102,7 @@ describe Export::CsvPeople do
 
     context 'export_participations_full' do
       let(:list) { [participation] }
-      let(:data) { Export::CsvPeople.export_participations_full(list) }
+      let(:data) { Export::Csv::People.export_participations_full(list) }
 
       its(:headers) { should == full_headers }
 

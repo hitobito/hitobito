@@ -6,10 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe Export::Courses::List do
+describe Export::Csv::Events::List do
 
   let(:courses) { double('courses', map: []) }
-  let(:list)  { Export::Courses::List.new(courses) }
+  let(:list)  { Export::Csv::Events::List.new(courses) }
   subject { list }
 
   its(:max_dates) { should eq 3 }

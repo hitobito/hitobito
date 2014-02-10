@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::CsvPeople
+module Export::Csv::People
 
   # Attributes of people we want to include
   class PeopleAddress
@@ -40,7 +40,7 @@ module Export::CsvPeople
     end
 
     def create(person)
-      Export::CsvPeople::Person.new(person)
+      Export::Csv::People::Person.new(person)
     end
 
     def attributes

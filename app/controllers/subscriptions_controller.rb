@@ -41,7 +41,7 @@ class SubscriptionsController < CrudController
   end
 
   def render_csv(people)
-    csv = Export::CsvPeople.export_address(people)
+    csv = Export::Csv::People.export_address(people)
     send_data csv, type: :csv
   end
 

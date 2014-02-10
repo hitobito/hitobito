@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::CsvPeople
-  class Participation < Export::CsvPeople::Person
+module Export::Csv::People
+  class Participation < Export::Csv::People::Person
 
     def initialize(participation)
       super(participation.person)

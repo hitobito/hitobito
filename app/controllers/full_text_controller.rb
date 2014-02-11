@@ -37,7 +37,7 @@ class FullTextController < ApplicationController
   private
 
   def list_people
-    entries = Person.search(params[:q],
+    entries = Person.search(Riddle::Query.escape(params[:q]),
                             page: params[:page],
                             order: 'last_name asc, first_name asc, @weight desc',
                             with: { sphinx_internal_id: accessible_people_ids })
@@ -47,13 +47,13 @@ class FullTextController < ApplicationController
   end
 
   def query_people
-    Person.search(params[:q],
+    Person.search(Riddle::Query.escape(params[:q]),
                   per_page: 10,
                   with: { sphinx_internal_id: accessible_people_ids })
   end
 
   def query_groups
-    Group.search(params[:q],
+    Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
                  include: :parent)
   end

@@ -63,4 +63,42 @@ describe Export::Csv::People::PeopleAddress do
     end
   end
 
+  context 'integration' do
+      let(:simple_headers) do
+        ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'E-Mail',
+         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
+      end
+      let(:data) { Export::Csv::People::PeopleAddress.export(list) }
+      let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+
+      subject { csv }
+
+      its(:headers) { should == simple_headers }
+
+      context 'first row' do
+
+        subject { csv[0] }
+
+        its(['Vorname']) { should eq person.first_name }
+        its(['Nachname']) { should eq person.last_name }
+        its(['E-Mail']) { should eq person.email }
+        its(['Ort']) { should eq person.town }
+        its(['Rollen']) { should eq 'Leader TopGroup' }
+        its(['Geschlecht']) { should be_blank }
+
+        context 'roles and phone number' do
+          before do
+            Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
+            person.phone_numbers.create(label: 'vater', number: 123)
+          end
+
+          its(['Telefonnummer Vater']) { should eq '123' }
+
+          it 'roles should be complete' do
+            subject['Rollen'].split(', ').should =~ ['Member Group 11', 'Leader TopGroup']
+          end
+        end
+      end
+  end
+
 end

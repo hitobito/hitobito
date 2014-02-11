@@ -47,12 +47,16 @@ top_leader:
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
   town: Supertown
   additional_information: bla bla
-  
+
 bottom_member:
   first_name: Bottom
   last_name: Member
   email: bottom_member@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
+  address: Greatstreet 345
+  zip_code: 3456
+  town: Greattown
+  country: Switzerland
 
 root:
   company_name: 'Puzzle ITC'

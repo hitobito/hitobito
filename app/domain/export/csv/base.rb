@@ -1,3 +1,11 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
+#  This file is part of hitobito and licensed under the Affero General Public
+#  License version 3 or later. See the COPYING file at the top-level directory
+#  or at https://github.com/hitobito/hitobito.
+
+
 module Export::Csv
   # The base class for all the different csv export files.
   class Base
@@ -6,14 +14,20 @@ module Export::Csv
 
     attr_reader :list
 
+    class << self
+      def export(*args)
+        Export::Csv::Generator.new(new(*args)).csv
+      end
+    end
+
     def initialize(list)
       @list = list
     end
 
     def to_csv(generator)
       generator << labels
-      rows.each do |row|
-        generator << values(row)
+      list.each do |entry|
+        generator << values(entry)
       end
     end
 
@@ -50,12 +64,19 @@ module Export::Csv
       model_class.human_attribute_name(attr)
     end
 
-    def rows
-      list.collect { |e| row_class.new(e) }
+    def values(entry)
+      row = row_class.new(entry)
+      attributes.collect { |attr| normalize(row.fetch(attr)) }
     end
 
-    def values(row)
-      attributes.collect { |attr| row.fetch(attr) }
+    def normalize(value)
+      if value == true
+        I18n.t('global.yes')
+      elsif value == false
+        I18n.t('global.no')
+      else
+        value
+      end
     end
 
     # Decorator for a row entry.

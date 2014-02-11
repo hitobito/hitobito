@@ -34,7 +34,8 @@ class GroupsController < CrudController
   end
 
   def export_subgroups
-    csv = Export::Csv::Groups.export_subgroups(entry)
+    list = entry.self_and_descendants.without_deleted.includes(:contact)
+    csv = Export::Csv::Groups::List.export(list)
     send_data csv, type: :csv
   end
 

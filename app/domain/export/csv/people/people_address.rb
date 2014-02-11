@@ -37,7 +37,7 @@ module Export::Csv::People
 
     def account_labels(collection, mapper)
       collection.map(&:label).uniq.each_with_object({}) do |label, obj|
-        obj[mapper.key(label)] = mapper.human(label) if label.present? # label should always be present
+        obj[mapper.key(label)] = mapper.human(label) if label.present?
       end
     end
 

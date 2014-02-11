@@ -32,4 +32,35 @@ describe Export::Csv::People::PeopleFull do
       its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
     end
   end
+
+  context 'integration' do
+
+    let(:full_headers) do
+      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'E-Mail',
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+       'Zusätzliche Angaben', 'Rollen']
+    end
+    let(:data) { Export::Csv::People::PeopleFull.export(list) }
+    let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+
+    subject { csv }
+
+    its(:headers) { should == full_headers }
+
+    context 'first row' do
+      before do
+        person.update_attribute(:gender, 'm')
+        person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
+        person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
+      end
+
+      subject { csv[0] }
+
+      its(['Rollen']) { should eq 'Leader TopGroup' }
+      its(['Telefonnummer Vater']) { should eq '123' }
+      its(['Social Media Adresse Skype']) { should eq 'foobar' }
+      its(['Geschlecht']) { should eq 'm' }
+    end
+
+  end
 end

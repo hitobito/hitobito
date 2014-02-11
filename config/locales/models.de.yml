@@ -146,6 +146,9 @@ de:
         contact: Kontaktperson
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+        parent_id: Elterngruppe
+        layer_group_id: Ebene
+        type: Gruppentyp
         type_name: Gruppentyp
 
       event:

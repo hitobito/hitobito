@@ -5,3 +5,4 @@
 * Mehrsprachigkeit
 * Rollenauswahl auf Formular, nicht mehr im Dropdown
 * Gruppenauswahl beim Erstellen von Rollen.
+* CSV Export aller Untergruppen einer Gruppe.

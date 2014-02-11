@@ -59,19 +59,28 @@ toppers:
 
 bottom_layer_one:
   name: Bottom One
+  short_name: One
   type: Group::BottomLayer
   parent: top_layer
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 4
   rgt: 11
+  email: bottom_layer@hitobito.example.ch
+  zip_code: 3000
+  town: Bern
+  country: Yours
 
 bottom_group_one_one:
   name: Group 11
   type: Group::BottomGroup
   parent: bottom_layer_one
+  contact: bottom_member
   layer_group_id: <%= ActiveRecord::Fixtures.identify(:bottom_layer_one) %>
   lft: 5
   rgt: 8
+  zip_code: 0020
+  town: Churchfield
+  email: bottom_one@hitobito.example.ch
 
 bottom_group_one_one_one:
   name: Group 111

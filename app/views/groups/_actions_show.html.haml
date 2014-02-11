@@ -7,5 +7,7 @@
   = Dropdown::GroupEdit.new(self, entry)
 - if entry.possible_children.present? && can?(:new, entry.children.new)
   = Dropdown::GroupAdd.new(self, entry)
+- if can?(:export_subgroups, entry)
+  = action_button('CSV Untergruppen', export_subgroups_group_path(@group, format: :csv), :download)
 - if entry.deleted? && can?(:reactivate, entry)
   = action_button('Reaktivieren', reactivate_group_path(@group), :retweet, method: :post)

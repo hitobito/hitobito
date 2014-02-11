@@ -33,15 +33,17 @@ module Export::Csv::Events
 
     def date_labels
       MAX_DATES.times.each_with_object({}) do |i, hash|
-        hash[:"date_#{i}_label"] = "Datum #{i + 1} #{Event::Date.human_attribute_name(:label)}"
-        hash[:"date_#{i}_location"] = "Datum #{i + 1} #{Event::Date.human_attribute_name(:location)}"
-        hash[:"date_#{i}_duration"] = "Datum #{i + 1} Zeitraum"
+        prefix = "Datum #{i + 1} "
+        hash[:"date_#{i}_label"] = "#{prefix}#{Event::Date.human_attribute_name(:label)}"
+        hash[:"date_#{i}_location"] = "#{prefix}#{Event::Date.human_attribute_name(:location)}"
+        hash[:"date_#{i}_duration"] = "#{prefix}Zeitraum"
       end
     end
 
     def prefixed_contactable_labels(prefix)
       contactable_keys.each_with_object({}) do |key, hash|
-        hash[:"#{prefix}_#{key}"] = "#{translated_prefix(prefix)} #{Person.human_attribute_name(key)}"
+        hash[:"#{prefix}_#{key}"] =
+          "#{translated_prefix(prefix)} #{Person.human_attribute_name(key)}"
       end
     end
 

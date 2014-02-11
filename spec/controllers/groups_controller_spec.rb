@@ -109,5 +109,20 @@ describe GroupsController do
         should redirect_to group
       end
     end
+
+    describe '#export_subgroups' do
+      let(:group) { groups(:top_layer) }
+
+      it 'creates csv' do
+        get :export_subgroups, id: group.id
+
+        @response.content_type.should == 'text/csv'
+        lines = @response.body.split("\n")
+        lines.should have(10).items
+        lines[0].should =~ /^Id;Elterngruppe;Name;.*/
+        lines[1].should =~ /^#{group.id};;Top;.*/
+        lines[2].should =~ /^#{groups(:top_group).id};#{group.id};TopGroup;.*/
+      end
+    end
   end
 end

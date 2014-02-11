@@ -20,4 +20,33 @@ describe Export::Csv::People::ParticipationsAddress do
     its([:first_name]) { should eq 'Vorname' }
     its([:town]) { should eq 'Ort' }
   end
+
+  context 'integration' do
+    let(:simple_headers) do
+      ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'E-Mail',
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
+    end
+
+    let(:data) { Export::Csv::People::ParticipationsAddress.export(list) }
+    let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+
+    subject { csv }
+
+    its(:headers) { should == simple_headers }
+
+    context 'first row' do
+      subject { csv[0] }
+
+      its(['Vorname']) { should eq person.first_name }
+      its(['Rollen']) { should be_blank }
+
+      context 'with roles' do
+        before do
+          Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
+          Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
+        end
+        its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
+      end
+    end
+  end
 end

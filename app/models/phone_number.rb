@@ -19,6 +19,8 @@
 
 class PhoneNumber < ActiveRecord::Base
 
+  has_paper_trail meta: { main: :contactable }
+
   attr_accessible :number, :label, :public, as: [:default, :superior]
 
   belongs_to :contactable, polymorphic: true
@@ -26,7 +28,6 @@ class PhoneNumber < ActiveRecord::Base
   scope :public, where(public: true)
 
   validates :label, presence: true
-
 
   def to_s
     "#{number} (#{label})"

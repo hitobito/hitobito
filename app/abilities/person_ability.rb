@@ -9,21 +9,23 @@ class PersonAbility < AbilityDsl::Base
 
   on(Person) do
     permission(:any).may(:index, :query).all
-    permission(:any).may(:show, :show_full, :history, :update, :update_email, :primary_group).herself
+    permission(:any).may(:show, :show_full, :history, :update, :update_email, :primary_group, :log).herself
 
     permission(:contact_data).may(:show).other_with_contact_data
 
     permission(:group_read).may(:show, :show_details).in_same_group
 
     permission(:group_full).may(:show_full, :history).in_same_group
-    permission(:group_full).may(:update, :primary_group, :send_password_instructions).non_restricted_in_same_group
+    permission(:group_full).
+      may(:update, :primary_group, :send_password_instructions, :log).
+      non_restricted_in_same_group
     permission(:group_full).may(:update_email).if_permissions_in_all_capable_groups
     permission(:group_full).may(:create).all  # restrictions are on Roles
 
     permission(:layer_read).may(:show, :show_full, :show_details, :history).in_same_layer_or_visible_below
 
     permission(:layer_full).
-      may(:update, :primary_group, :send_password_instructions).
+      may(:update, :primary_group, :send_password_instructions, :log).
       non_restricted_in_same_layer_or_visible_below
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_above
     permission(:layer_full).may(:create).all # restrictions are on Roles

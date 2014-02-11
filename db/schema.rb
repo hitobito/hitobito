@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140128145128) do
+ActiveRecord::Schema.define(:version => 20140211092343) do
 
   create_table "custom_content_translations", :force => true do |t|
     t.integer  "custom_content_id"
@@ -351,6 +351,20 @@ ActiveRecord::Schema.define(:version => 20140128145128) do
     t.boolean "excluded",        :default => false, :null => false
     t.index ["mailing_list_id"], :name => "index_subscriptions_on_mailing_list_id"
     t.index ["subscriber_id", "subscriber_type"], :name => "index_subscriptions_on_subscriber_id_and_subscriber_type"
+  end
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.string   "main_type"
+    t.integer  "main_id"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+    t.index ["main_type", "main_id"], :name => "index_versions_on_main_type_and_main_id"
   end
 
 end

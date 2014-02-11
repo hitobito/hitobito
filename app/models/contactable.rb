@@ -31,6 +31,7 @@ module Contactable
   end
 
   private
+
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     (phone_numbers + social_accounts).each { |e| e.contactable = self unless e.frozen? }

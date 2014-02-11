@@ -314,4 +314,19 @@ describe Person do
     end
   end
 
+  context 'paper trail', versioning: true do
+    context 'stores person id in main id' do
+      it 'on create' do
+        p = nil
+        expect do
+          p = Person.new(first_name: 'Foo')
+          p.save!
+        end.to change { PaperTrail::Version.count }.by(1)
+
+        v = PaperTrail::Version.order(:created_at).last
+        v.event.should == 'create'
+        v.main_id.should == p.id
+      end
+    end
+  end
 end

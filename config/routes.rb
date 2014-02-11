@@ -40,6 +40,7 @@ Hitobito::Application.routes.draw do
       resources :people, except: [:new, :create] do
         member do
           get :history
+          get :log
           post :send_password_instructions
           put :primary_group
         end

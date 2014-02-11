@@ -229,6 +229,29 @@ describe PeopleController, type: :controller do
     end
   end
 
+  describe 'GET log', versioning: true do
+
+    it 'renders empty log' do
+      get :log, id: test_entry.id, group_id: top_group.id
+
+      response.body.should =~ /keine Änderungen/
+    end
+
+    it 'renders log in correct order' do
+      Fabricate(:social_account, contactable: test_entry, label: 'Foo', name: 'Bar')
+      test_entry.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
+      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '23425 1341 12')
+      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '43 3453 45 254')
+
+      get :log, id: test_entry.id, group_id: top_group.id
+
+      dom.all('h4').should have(1).item
+      dom.all('#content div').should have(8).items
+
+    end
+
+  end
+
   describe 'redirect_url' do
     it 'should adjust url if param redirect_url is given' do
       get :edit, group_id: top_group.id,

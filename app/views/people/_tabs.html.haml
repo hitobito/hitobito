@@ -6,6 +6,8 @@
 - if can?(:show, @person)
   - bar.tab "Info", group_person_path(@group, @person), [group_person_path(@group, @person)]
 - if can?(:history, @person)
-  - bar.tab "Verlauf", history_group_person_path(@group, @person) 
+  - bar.tab "Verlauf", history_group_person_path(@group, @person)
+- if can?(:log, @person)
+  - bar.tab "Log", log_group_person_path(@group, @person)
 
 = render_extensions :tabs, locals: {bar: bar}

@@ -21,6 +21,8 @@ class SocialAccount < ActiveRecord::Base
 
   include NormalizedLabels
 
+  has_paper_trail meta: { main: :contactable }
+
   attr_accessible :name, :label, :public, as: [:default, :superior]
 
   belongs_to :contactable, polymorphic: true

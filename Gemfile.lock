@@ -236,6 +236,9 @@ GEM
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
+    paper_trail (3.0.0)
+      activerecord (>= 3.0, < 5.0)
+      activesupport (>= 3.0, < 5.0)
     paranoia (1.3.2)
       activerecord (~> 3.2)
     parser (2.0.0)
@@ -516,6 +519,7 @@ DEPENDENCIES
   mini_magick
   mysql2
   nested_form
+  paper_trail
   paranoia (~> 1.2)
   poltergeist
   prawn (~> 0.12.0)

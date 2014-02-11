@@ -45,4 +45,40 @@ describe SocialAccount do
       subject.count(predef).should == 1
     end
   end
+
+  describe 'paper trails', versioning: true do
+    let(:person) { people(:top_leader) }
+
+    it 'sets main on create' do
+      expect do
+        person.social_accounts.create!(label: 'Foo', name: 'Bar')
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at).last
+      version.event.should == 'create'
+      version.main.should == person
+    end
+
+    it 'sets main on update' do
+      account = person.social_accounts.create(label: 'Foo', name: 'Bar')
+      expect do
+        account.update_attributes!(name: 'Bur')
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at).last
+      version.event.should == 'update'
+      version.main.should == person
+    end
+
+    it 'sets main on destroy' do
+      account = person.social_accounts.create(label: 'Foo', name: 'Bar')
+      expect do
+        account.destroy!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at).last
+      version.event.should == 'destroy'
+      version.main.should == person
+    end
+  end
 end

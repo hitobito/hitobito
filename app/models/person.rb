@@ -71,6 +71,12 @@ class Person < ActiveRecord::Base
   stampable stamper_class_name: :person,
             deleter: false
 
+  has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
+                  skip: [:id, :encrypted_password, :reset_password_token, :reset_password_sent_at,
+                         :remember_created_at, :sign_in_count, :current_sign_in_at, :current_sign_in_ip,
+                         :last_sign_in_at, :last_sign_in_ip, :contact_data_visible, :last_label_format_id,
+                         :created_at, :creator_id, :updated_at, :updater_id]
+
 
   ### ASSOCIATIONS
 

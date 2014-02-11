@@ -14,7 +14,7 @@ class PeopleController < CrudController
 
   self.remember_params += [:name, :kind, :role_type_ids]
 
-  decorates :group, :person, :people
+  decorates :group, :person, :people, :versions
 
   helper_method :index_full_ability?
 
@@ -81,7 +81,13 @@ class PeopleController < CrudController
     @participations_by_event_type.each do |kind, entries|
       entries.collect! { |e| Event::ParticipationDecorator.new(e) }
     end
+  end
 
+  def log
+    @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name).
+                                    reorder('created_at DESC').
+                                    includes(:item).
+                                    page(params[:page])
   end
 
   # POST button, send password instructions

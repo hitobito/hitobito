@@ -16,7 +16,7 @@ describe SubscriptionsController do
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
 
   context 'GET index' do
-    it 'should group subscriptions by type' do
+    it 'groups subscriptions by type' do
       create_group_subscription(mailing_list)
       create_person_subscription(mailing_list)
       create_event_subscription(mailing_list)
@@ -28,7 +28,19 @@ describe SubscriptionsController do
       assigns(:person_subs).count.should eq 1
       assigns(:event_subs).count.should eq 1
       assigns(:excluded_person_subs).count.should eq 1
+    end
 
+    it 'renders csv' do
+      create_group_subscription(mailing_list)
+      create_person_subscription(mailing_list)
+      create_event_subscription(mailing_list)
+      create_person_subscription(mailing_list, true)
+
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
+
+      lines = response.body.split("\n")
+      lines.should have(2).items
+      lines[0].should =~ /Vorname;Nachname;.*/
     end
   end
 

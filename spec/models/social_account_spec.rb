@@ -54,7 +54,7 @@ describe SocialAccount do
         person.social_accounts.create!(label: 'Foo', name: 'Bar')
       end.to change { PaperTrail::Version.count }.by(1)
 
-      version = PaperTrail::Version.order(:created_at).last
+      version = PaperTrail::Version.order(:created_at, :id).last
       version.event.should == 'create'
       version.main.should == person
     end
@@ -65,7 +65,7 @@ describe SocialAccount do
         account.update_attributes!(name: 'Bur')
       end.to change { PaperTrail::Version.count }.by(1)
 
-      version = PaperTrail::Version.order(:created_at).last
+      version = PaperTrail::Version.order(:created_at, :id).last
       version.event.should == 'update'
       version.main.should == person
     end
@@ -76,7 +76,7 @@ describe SocialAccount do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)
 
-      version = PaperTrail::Version.order(:created_at).last
+      version = PaperTrail::Version.order(:created_at, :id).last
       version.event.should == 'destroy'
       version.main.should == person
     end

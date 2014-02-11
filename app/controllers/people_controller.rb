@@ -85,7 +85,7 @@ class PeopleController < CrudController
 
   def log
     @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name).
-                                    reorder('created_at DESC').
+                                    reorder('created_at DESC, id DESC').
                                     includes(:item).
                                     page(params[:page])
   end

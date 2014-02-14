@@ -1,5 +1,10 @@
 class AddQualifiedToParticipation < ActiveRecord::Migration
 
+  # Required to allow including kinds in query
+  class ::Event < ActiveRecord::Base
+    belongs_to :kind
+  end
+
   def up
     data = Hash.new {|k,v| k[v] = []}
 
@@ -28,10 +33,6 @@ class AddQualifiedToParticipation < ActiveRecord::Migration
       .where('event_dates.finish_at < ?', Date.today)
   end
 
-  # Required to allow including kinds in query
-  class ::Event < ActiveRecord::Base
-    belongs_to :kind
-  end
 
   # extracted from old Base, Leader and Participation qualifiers
   class OldQualifier < Struct.new(:participation,:leader_types)

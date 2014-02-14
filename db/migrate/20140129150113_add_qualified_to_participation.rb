@@ -1,10 +1,5 @@
 class AddQualifiedToParticipation < ActiveRecord::Migration
 
-  # Required to allow including kinds in query
-  class ::Event < ActiveRecord::Base
-    belongs_to :kind
-  end
-
   def up
     data = Hash.new {|k,v| k[v] = []}
 
@@ -28,7 +23,7 @@ class AddQualifiedToParticipation < ActiveRecord::Migration
   end
 
   def load_participations
-    Event::Participation.includes(:roles, event: [:dates, kind: [:qualification_kinds, :prolongations]], person: [qualifications: [:qualification_kind]])
+    Event::Participation.includes(:roles, :event, person: [qualifications: [:qualification_kind]])
       .where('events.type = "Event::Course"')
       .where('event_dates.finish_at < ?', Date.today)
   end

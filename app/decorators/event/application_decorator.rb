@@ -47,12 +47,11 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   end
 
   def confirmation_badge(label, css, desc)
-    content_tag(:span, label.html_safe, class: "badge badge-#{css}", title: "#{translate('.course_acceptance')} #{desc}")
+    content_tag(:span, label.html_safe, class: "badge badge-#{css}",
+                                        title: "#{translate('.course_acceptance')} #{desc}")
   end
 
   private
-
-
 
   def confirmation_fields
     if approved?

@@ -22,7 +22,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'without current user' do
       before { update_attributes }
-      it { should =~ /^\w+, \d+\. \w+ \d{4}, \d{2}:\d{2} Uhr$/}
+      it { should =~ /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/}
     end
 
     context 'with current user' do
@@ -31,7 +31,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         update_attributes
       end
 
-      it { should =~ /^\w+, \d+\. \w+ \d{4}, \d{2}:\d{2} Uhr von <a href=".+">#{person.to_s}<\/a>$/}
+      it { should =~ /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr von <a href=".+">#{person.to_s}<\/a>$/}
     end
   end
 

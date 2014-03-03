@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140211092343) do
+ActiveRecord::Schema.define(:version => 20140303120546) do
 
   create_table "custom_content_translations", :force => true do |t|
     t.integer  "custom_content_id"
@@ -258,6 +258,8 @@ ActiveRecord::Schema.define(:version => 20140211092343) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "primary_group_id"
+    t.integer  "failed_attempts",                        :default => 0
+    t.datetime "locked_at"
     t.index ["email"], :name => "index_people_on_email", :unique => true
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
   end
@@ -365,7 +367,7 @@ ActiveRecord::Schema.define(:version => 20140211092343) do
     t.integer  "main_id"
     t.datetime "created_at"
     t.index ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
-    t.index ["main_type", "main_id"], :name => "index_versions_on_main_type_and_main_id"
+    t.index ["main_id", "main_type"], :name => "index_versions_on_main_id_and_main_type"
   end
 
 end

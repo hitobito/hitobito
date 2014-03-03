@@ -29,7 +29,7 @@ class PhoneNumber < ActiveRecord::Base
 
   validates :label, presence: true
 
-  def to_s
+  def to_s(format = :default)
     "#{number} (#{label})"
   end
 

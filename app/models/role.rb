@@ -21,6 +21,8 @@
 
 class Role < ActiveRecord::Base
 
+  has_paper_trail meta: { main_id: ->(r) { r.person_id }, main_type: Person.sti_name }
+
   acts_as_paranoid
 
   include Role::Types
@@ -43,15 +45,12 @@ class Role < ActiveRecord::Base
   validate :assert_type_is_allowed_for_group, on: :create
   validators # eager generate schema validators before sti classes are loaded
 
-
   ### CALLBACKS
 
   after_create :set_contact_data_visible
   after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
-
-
 
   ### CLASS METHODS
 
@@ -65,12 +64,16 @@ class Role < ActiveRecord::Base
     end
   end
 
-
   ### INSTANCE METHODS
 
-  def to_s
+  def to_s(format = :default)
     model_name = self.class.label
     string = label? ? "#{label} (#{model_name})" : model_name
+    if format == :long
+      I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
+    else
+      string
+    end
   end
 
   # Soft destroy if older than certain amount of days, hard if younger

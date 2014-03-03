@@ -21,8 +21,14 @@ class Qualification < ActiveRecord::Base
 
   attr_accessible :qualification_kind_id, :qualification_kind, :start_at, :origin
 
+  ### ASSOCIATIONS
+
   belongs_to :person
   belongs_to :qualification_kind
+
+  has_paper_trail meta: { main_id: ->(q) { q.person_id }, main_type: Person.sti_name }
+
+  ### VALIDATIONS
 
   before_validation :set_finish_at
 
@@ -54,12 +60,11 @@ class Qualification < ActiveRecord::Base
     finish_at.nil? || (finish_at + qualification_kind.reactivateable.to_i.years) >= date
   end
 
-  def to_s
-    if finish_at?
-      "#{qualification_kind} (bis #{I18n.l(finish_at)})"
-    else
-      qualification_kind.to_s
-    end
+  def to_s(format = :default)
+    I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
+           kind: qualification_kind.to_s,
+           finish_at: finish_at? ? I18n.l(finish_at) : nil,
+           origin: origin)
   end
 
   private
@@ -67,6 +72,20 @@ class Qualification < ActiveRecord::Base
   def set_finish_at
     if start_at? && qualification_kind && !qualification_kind.validity.nil?
       self.finish_at = (start_at + qualification_kind.validity.years).end_of_year
+    end
+  end
+
+  def to_s_key(format = :default)
+    if format == :long && origin?
+      if finish_at?
+        'string_with_finish_at_and_origin'
+      else
+        'string_with_origin'
+      end
+    elsif finish_at?
+      'string_with_finish_at'
+    else
+      'string'
     end
   end
 

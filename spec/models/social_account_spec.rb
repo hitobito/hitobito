@@ -21,7 +21,7 @@ require 'spec_helper'
 
 describe SocialAccount do
 
-  describe '.normalize_label' do
+  context '.normalize_label' do
 
     it 'reuses existing label' do
       a1 = Fabricate(:social_account, label: 'Foo')
@@ -30,7 +30,7 @@ describe SocialAccount do
     end
   end
 
-  describe '#available_labels' do
+  context '#available_labels' do
     subject { SocialAccount.available_labels }
     it { should include(Settings.social_account.predefined_labels.first) }
 
@@ -46,7 +46,7 @@ describe SocialAccount do
     end
   end
 
-  describe 'paper trails', versioning: true do
+  context 'paper trails', versioning: true do
     let(:person) { people(:top_leader) }
 
     it 'sets main on create' do

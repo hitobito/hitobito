@@ -78,6 +78,7 @@ module Import
     end
 
     private
+
     def prepare(hash)
       @hash = hash.with_indifferent_access
       @phone_numbers = extract_settings_fields(PhoneNumber, :number)

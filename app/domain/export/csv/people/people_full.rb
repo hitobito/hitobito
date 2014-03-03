@@ -24,6 +24,8 @@ module Export::Csv::People
                         last_sign_in_at
                         current_sign_in_ip
                         last_sign_in_ip
+                        failed_attempts
+                        locked_at
                         picture
                         primary_group_id
                         last_label_format_id)

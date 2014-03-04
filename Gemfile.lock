@@ -470,7 +470,7 @@ GEM
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
     valuable (0.9.8)
-    wagons (0.2.1)
+    wagons (0.2.2)
       bundler (>= 1.1)
       rails (>= 3.2)
       seed-fu-ndo (>= 0.0.2)

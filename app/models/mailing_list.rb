@@ -82,9 +82,7 @@ class MailingList < ActiveRecord::Base
                  "ON related_role_types.relation_type = 'Subscription' " <<
                  'AND related_role_types.relation_id = subscriptions.id').
            where(subscriptions: { mailing_list_id: id }).
-           where("people.id NOT IN (#{subscriptions.select(:subscriber_id).
-                                                    where(excluded: true, subscriber_type: Person.sti_name).
-                                                    to_sql})").
+           where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
            where(suscriber_conditions).
            uniq
   end
@@ -105,6 +103,13 @@ class MailingList < ActiveRecord::Base
                  'subscriptions.subscriber_id = people.id',
                  Person.sti_name,
                  false)
+  end
+
+  def excluded_person_subscribers
+    Subscription.select(:subscriber_id).
+                 where(mailing_list_id: id,
+                       excluded: true,
+                       subscriber_type: Person.sti_name)
   end
 
   def group_subscribers(condition)

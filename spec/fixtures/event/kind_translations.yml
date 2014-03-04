@@ -1,5 +1,5 @@
 slk_de:
-  event_kind_id: <%= ActiveRecord::Fixtures.identify(:slk) %>
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:slk) %>
   locale: de
   label: Scharleiterkurs
   short_name: SLK
@@ -7,7 +7,7 @@ slk_de:
   updated_at: <%= Time.zone.now %>
 
 glk_de:
-  event_kind_id: <%= ActiveRecord::Fixtures.identify(:glk) %>
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:glk) %>
   locale: de
   label: Gruppenleiterkurs
   short_name: GLK
@@ -15,7 +15,7 @@ glk_de:
   updated_at: <%= Time.zone.now %>
 
 fk_de:
-  event_kind_id: <%= ActiveRecord::Fixtures.identify(:fk) %>
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:fk) %>
   locale: de
   label: Fortbildungskurs
   short_name: FK
@@ -23,7 +23,7 @@ fk_de:
   updated_at: <%= Time.zone.now %>
 
 old_de:
-  event_kind_id: <%= ActiveRecord::Fixtures.identify(:old) %>
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:old) %>
   locale: de
   label: Alte Kursart
   short_name: AK

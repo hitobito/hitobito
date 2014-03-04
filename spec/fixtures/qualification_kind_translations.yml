@@ -1,5 +1,5 @@
 sl_de:
-  qualification_kind_id: <%= ActiveRecord::Fixtures.identify(:sl) %>
+  qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:sl) %>
   locale: de
   label: Super Lead
   description: Blah
@@ -7,14 +7,14 @@ sl_de:
   updated_at: <%= Time.zone.now %>
 
 gl_de:
-  qualification_kind_id: <%= ActiveRecord::Fixtures.identify(:gl) %>
+  qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:gl) %>
   locale: de
   label: Group Lead
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 old_de:
-  qualification_kind_id: <%= ActiveRecord::Fixtures.identify(:old) %>
+  qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:old) %>
   locale: de
   label: Old Qualification
   created_at: <%= Time.zone.now %>

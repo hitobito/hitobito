@@ -64,7 +64,7 @@ module Concerns
       while (decorator_name.constantize rescue nil) == nil
         superclass = ivar.respond_to?(:model_name) ? ivar.superclass : ivar.class.superclass
         fail ArgumentError, "#{org_ivar} does not have an associated decorator" if superclass == Module
-        superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name)
+        superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
         superclass_decorator_name += 'Decorator'
         ivar = superclass
         decorator_name = superclass_decorator_name

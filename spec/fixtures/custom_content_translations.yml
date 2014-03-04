@@ -1,5 +1,5 @@
 login_de:
-  custom_content_id: <%= ActiveRecord::Fixtures.identify(:login) %>
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
   locale: de
   label: Login E-Mail
   subject: Your Login Data
@@ -8,7 +8,7 @@ login_de:
   updated_at: <%= Time.zone.now %>
 
 notes:
-  custom_content_id: <%= ActiveRecord::Fixtures.identify(:notes) %>
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:notes) %>
   locale: de
   label: Any Notes
   body: Bla bla bla bla

@@ -198,9 +198,9 @@ module StandardHelper
   #  - global.associations.{key}
   def translate_association(key, assoc = nil, variables = {})
     primary = if assoc
-      variables[:default] ||= [:"activerecord.associations.#{assoc.klass.model_name.underscore}.#{key}",
+      variables[:default] ||= [:"activerecord.associations.#{assoc.klass.model_name.to_s.underscore}.#{key}",
                                :"global.associations.#{key}"]
-      :"activerecord.associations.models.#{assoc.active_record.model_name.underscore}.#{assoc.name}.#{key}"
+      :"activerecord.associations.models.#{assoc.active_record.model_name.to_s.underscore}.#{assoc.name}.#{key}"
     else
       :"global.associations.#{key}"
     end

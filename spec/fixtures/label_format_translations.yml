@@ -1,20 +1,20 @@
 
 standard_de:
-  label_format_id: <%= ActiveRecord::Fixtures.identify(:standard) %>
+  label_format_id: <%= ActiveRecord::FixtureSet.identify(:standard) %>
   locale: de
   name: 'Standard'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 large_de:
-  label_format_id: <%= ActiveRecord::Fixtures.identify(:large) %>
+  label_format_id: <%= ActiveRecord::FixtureSet.identify(:large) %>
   locale: de
   name: 'Large'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 envelope_de:
-  label_format_id: <%= ActiveRecord::Fixtures.identify(:envelope) %>
+  label_format_id: <%= ActiveRecord::FixtureSet.identify(:envelope) %>
   locale: de
   name: 'Envelope'
   created_at: <%= Time.zone.now %>

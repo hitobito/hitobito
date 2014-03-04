@@ -236,7 +236,8 @@ class Event < ActiveRecord::Base
   def refresh_participant_count!
     count = participations.joins(:roles).
                            where(event_roles: { type: participant_type.sti_name }).
-                           count(distinct: true)
+                           distinct.
+                           count
     update_column(:participant_count, count)
   end
 

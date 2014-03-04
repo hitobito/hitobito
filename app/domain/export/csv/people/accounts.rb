@@ -24,7 +24,7 @@ module Export::Csv::People
     end
 
     def key(label)
-      :"#{model.model_name.underscore}_#{label.downcase}"
+      :"#{model.model_name.to_s.underscore}_#{label.downcase}"
     end
 
     def human(label)

@@ -112,7 +112,7 @@ class Person < ActiveRecord::Base
   validates :gender, inclusion: %w(m w), allow_blank: true
   validates :company_name, presence: { if: :company? }
   validates :birthday, timeliness: { type: :date, allow_blank: true }
-  validates :additional_information, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
+  validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
   # more validations defined by devise
 
@@ -193,6 +193,13 @@ class Person < ActiveRecord::Base
     event_applications.merge(Event::Participation.pending)
   end
 
+  def latest_qualifications_uniq_by_kind
+    qualifications.
+      includes(:person, :qualification_kind).
+      order_by_date.
+      group_by(&:qualification_kind).values.map(&:first)
+  end
+
   # All time roles of this person, including deleted.
   def all_roles
     records = Role.with_deleted.
@@ -226,12 +233,6 @@ class Person < ActiveRecord::Base
   rescue ActiveRecord::RecordNotUnique => e
     errors.add(:email, :taken)
     false
-  end
-
-  def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, :qualification_kind).order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
   end
 
   private

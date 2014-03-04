@@ -158,7 +158,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   end
 
   def set_companions
-    @companions = CrudTestModel.all conditions: { human: true }
+    @companions = CrudTestModel.where(human: true)
   end
 
   # records a callback
@@ -176,7 +176,7 @@ end
 REGEXP_ROWS = /<tr.+?<\/tr>/m
 REGEXP_HEADERS = /<th.+?<\/th>/m
 REGEXP_SORT_HEADERS = /<th.*?><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
-REGEXP_ACTION_CELL = /<td class=\"action\"><a href.+?<\/a><\/td>/m
+REGEXP_ACTION_CELL = /<td class=\"action\"><a .*?href.+?<\/a><\/td>/m
 
 
 # A simple test helper to prepare the test database with a CrudTestModel model.

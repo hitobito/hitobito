@@ -82,7 +82,7 @@ describe StandardHelper do
       end
 
       it 'should add delimiters' do
-        f(12345.6789).should == "12'345.68"
+        f(12345.6789).should == "12&#39;345.68"
       end
     end
 
@@ -174,7 +174,7 @@ describe StandardHelper do
     end
 
     it 'should format decimals' do
-      format_type(model, :income).should == "10'000'000.10"
+      format_type(model, :income).should == "10&#39;000&#39;000.10"
     end
 
     it 'should format dates' do

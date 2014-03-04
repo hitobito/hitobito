@@ -94,7 +94,7 @@ class Event < ActiveRecord::Base
   validates :group_ids, presence: { message: 'müssen vorhanden sein' }
   validates :application_opening_at, :application_closing_at,
             timeliness: { type: :date, allow_blank: true }
-  validates :description, :location, :application_conditions, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
+  validates :description, :location, :application_conditions, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
 
@@ -144,7 +144,7 @@ class Event < ActiveRecord::Base
       today = ::Date.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-      where('events.maximum_participants IS NULL OR ' +
+      where('events.maximum_participants IS NULL OR ' \
             'events.maximum_participants <= 0 OR ' +
             'events.participant_count < events.maximum_participants')
     end
@@ -249,6 +249,7 @@ class Event < ActiveRecord::Base
     participations.joins(:roles).
                    where(event_roles: { type: role_types.map(&:sti_name) }).
                    includes(:person).
+                   references(:person).
                    order_by_role(self.class).
                    merge(Person.order_by_name).
                    uniq

@@ -20,6 +20,7 @@ module Subscriber
         groups = @group.sister_groups_with_descendants.
                         where(search_condition('groups.name', 'parents_groups.name')).
                         includes(:parent).
+                        references(:parent).
                         order('groups.lft').
                         limit(10)
         groups = decorate(groups)

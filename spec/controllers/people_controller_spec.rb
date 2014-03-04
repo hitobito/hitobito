@@ -197,13 +197,13 @@ describe PeopleController do
     let(:gl) { qualification_kinds(:gl) }
     let(:sl) { qualification_kinds(:sl) }
     before do
-      @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, finish_at: 1.year.from_now)
-      @ql_sl = Fabricate(:qualification, person: top_leader, qualification_kind: sl, finish_at: Time.zone.now)
+      @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)
+      @ql_sl = Fabricate(:qualification, person: top_leader, qualification_kind: sl, start_at: Time.zone.now)
     end
 
     it 'preloads data for asides, ordered by finish_at' do
       get :show, group_id: group.id, id: people(:top_leader).id
-      assigns(:qualifications).should eq [@ql_gl, @ql_sl]
+      assigns(:qualifications).should eq [@ql_sl, @ql_gl]
     end
   end
 

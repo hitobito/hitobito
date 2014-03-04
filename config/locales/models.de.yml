@@ -139,6 +139,7 @@ de:
         nickname: Übername
         email: E-Mail
         password: Passwort
+        password_confirmation: Passwort
         current_password: Altes Passwort
         address: Adresse
         zip_code: PLZ

@@ -78,7 +78,7 @@ module Role::Types
     end
 
     def label_with_group
-      group_key = "activerecord.models.#{group.model_name.deconstantize.constantize.model_name.i18n_key}"
+      group_key = "activerecord.models.#{model_name.to_s.deconstantize.constantize.model_name.i18n_key}"
       [label, I18n.translate("#{group_key}.long", count: 1, default: I18n.translate("#{group_key}"))].join(' ')
     end
 

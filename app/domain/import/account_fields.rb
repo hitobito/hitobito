@@ -10,7 +10,7 @@ module Import
     attr_reader :prefix, :human
 
     def initialize(model)
-      @prefix = model.model_name.underscore
+      @prefix = model.model_name.to_s.underscore
       @human = model.model_name.human
 
       super(map_prefined_fields.with_indifferent_access)

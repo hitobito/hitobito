@@ -146,7 +146,7 @@ class Group < ActiveRecord::Base
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
     Group.without_deleted.
-          joins('LEFT JOIN groups AS sister_groups ' +
+          joins('LEFT JOIN groups AS sister_groups ' \
                 'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt').
           where('sister_groups.type = ?', type).
           where(parent_id? ? ['sister_groups.parent_id = ?', parent_id] : 'sister_groups.parent_id IS NULL')
@@ -197,6 +197,8 @@ class Group < ActiveRecord::Base
   def destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
+    # load events to destroy orphaned later
+    events.to_a
     hard_destroy
     destroy_orphaned_events
   end

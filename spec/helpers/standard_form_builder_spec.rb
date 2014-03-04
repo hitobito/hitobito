@@ -18,7 +18,7 @@ describe 'StandardFormBuilder' do
   after(:all) { reset_db }
 
   let(:entry) { CrudTestModel.first }
-  let(:form)  { StandardFormBuilder.new(:entry, entry, self) }
+  let(:form)  { StandardFormBuilder.new(:entry, entry, self, {}) }
 
   describe '#input_field' do
 

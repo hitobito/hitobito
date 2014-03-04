@@ -14,13 +14,9 @@ b = -> do
 end
 puts "require rails:  #{Benchmark.measure(&b)}"
 
-if defined?(Bundler)
-  # see also scripts/commands.rb
-  # http://yehudakatz.com/2010/05/09/the-how-and-why-of-bundler-groups/
-  # http://iain.nl/getting-the-most-out-of-bundler-groups
-  b = -> { Bundler.require(:default, Rails.env) }
-  puts "require gems:   #{Benchmark.measure(&b)}"
-end
+b = -> { Bundler.require(:default, Rails.env) }
+puts "require gems:   #{Benchmark.measure(&b)}"
+
 
 module Hitobito
   class Application < Rails::Application

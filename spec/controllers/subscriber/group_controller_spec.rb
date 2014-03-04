@@ -22,12 +22,12 @@ describe Subscriber::GroupController do
 
     subject { response.body }
 
-    it { should =~ /Top &gt; Bottom One/ }
-    it { should =~ /Bottom One &gt; Group 11/ }
-    it { should =~ /Bottom One &gt; Group 12/ }
-    it { should =~ /Top &gt; Bottom Two/ }
-    it { should =~ /Bottom Two &gt; Group 21/ }
-    it { should_not =~ /Bottom One &gt; Group 111/ }
+    it { should =~ /Top \\u0026gt; Bottom One/ }
+    it { should =~ /Bottom One \\u0026gt; Group 11/ }
+    it { should =~ /Bottom One \\u0026gt; Group 12/ }
+    it { should =~ /Top \\u0026gt; Bottom Two/ }
+    it { should =~ /Bottom Two \\u0026gt; Group 21/ }
+    it { should_not =~ /Bottom One \\u0026gt; Group 111/ }
   end
 
   context 'GET roles.js' do

@@ -65,7 +65,7 @@ describe Event::QualificationsController do
         it 'issues qualification' do
           put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
           should have(1).items
-          should render_template('qualifications')
+          should render_template('qualification')
         end
       end
 

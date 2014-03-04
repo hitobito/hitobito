@@ -22,6 +22,7 @@ class Event::Kind < ActiveRecord::Base
 
   before_destroy :remember_translated_label
   translates :label, :short_name, fallbacks_for_empty_translations: true
+  Translation.schema_validations_config.auto_create = false
 
   attr_accessible :label, :short_name, :minimum_age, :qualification_kind_ids, :precondition_ids, :prolongation_ids
 
@@ -47,7 +48,7 @@ class Event::Kind < ActiveRecord::Base
 
   # explicitly define validations for translated attributes
   validates :label, presence: true
-  validates :label, :short_name, length: { allow_nil: true, maximum: 255}
+  validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
 
 
   ### CLASS METHODS

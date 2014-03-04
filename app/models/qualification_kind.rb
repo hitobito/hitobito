@@ -25,6 +25,7 @@ class QualificationKind < ActiveRecord::Base
 
   before_destroy :remember_translated_label
   translates :label, :description, fallbacks_for_empty_translations: true
+  Translation.schema_validations_config.auto_create = false
 
   attr_accessible :label, :validity, :description, :reactivateable
 

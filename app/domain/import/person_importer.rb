@@ -43,6 +43,7 @@ module Import
     end
 
     private
+
     def populate_people(hash, index)
       person = Import::Person.new(hash, unique_emails)
       person.add_role(group, role_type)

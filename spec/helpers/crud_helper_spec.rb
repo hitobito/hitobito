@@ -166,7 +166,7 @@ describe CrudHelper do
       let(:entry) { crud_test_models(:AAAAA) }
 
       it { should match(/form [^>]*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" [^>]*?method="post"/) }
-      it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="put"/) }
+      it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="patch"/) }
       it { should match(/input [^>]*?name="crud_test_model\[name\]" [^>]*?type="text" [^>]*?value="AAAAA"/) }
       it { should match(/input [^>]*?name="crud_test_model\[birthdate\]" [^>]*?type="text" [^>]*?value="01.01.1910"/) }
       it { should match(/input [^>]*?name="crud_test_model\[children\]" [^>]*?type="text" [^>]*?value=\"9\"/) }
@@ -196,7 +196,7 @@ describe CrudHelper do
 
       it { should match(/div[^>]* id='error_explanation'/) }
       it { should match(/div class="control-group error"\>.*?\<input .*?name="crud_test_model\[name\]" .*?type="text"/) }
-      it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="put"/) }
+      it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="patch"/) }
     end
   end
 

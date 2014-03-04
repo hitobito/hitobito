@@ -1,4 +1,11 @@
 # encoding: utf-8
+#
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 # == Schema Information
 #
 # Table name: label_formats
@@ -14,16 +21,12 @@
 #  padding_top      :float            not null
 #  padding_left     :float            not null
 #
-
-
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 class LabelFormat < ActiveRecord::Base
 
   before_destroy :remember_translated_name
+
   translates :name, fallbacks_for_empty_translations: true
+  Translation.schema_validations_config.auto_create = false
 
   attr_accessible :name, :page_size, :landscape, :font_size, :width, :height,
                   :padding_top, :padding_left, :count_horizontal, :count_vertical
@@ -33,7 +36,6 @@ class LabelFormat < ActiveRecord::Base
       Prawn::Document::PageGeometry::SIZES.keys
     end
   end
-
 
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
   validates :page_size, inclusion: available_page_sizes

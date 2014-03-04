@@ -47,7 +47,7 @@ module Import
     def find_and_update
       conditions = query
       return if conditions.first.blank?
-      people = ::Person.includes(:roles).where(conditions).to_a
+      people = ::Person.includes(:roles).references(:roles).where(conditions).to_a
 
       if people.present?
         person = people.first
@@ -62,6 +62,7 @@ module Import
     end
 
     private
+
     def parse_date(date_string)
       if date_string.present?
         begin

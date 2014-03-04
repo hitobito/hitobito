@@ -27,7 +27,7 @@ module CrudControllerTestHelper
       @@current_stack ||= nil
       if stack == @@current_stack && described_class == @@current_controller.class
         @response = @@current_response
-        @templates = @@current_templates
+        @_templates = @@current_templates
         @controller = @@current_controller
         @request = @@current_request
         return
@@ -39,7 +39,7 @@ module CrudControllerTestHelper
       @@current_response = @response
       @@current_request = @request
       @@current_controller = @controller
-      @@current_templates = @templates
+      @@current_templates = @_templates
     else
       perform_request
     end

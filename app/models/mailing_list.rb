@@ -34,7 +34,7 @@ class MailingList < ActiveRecord::Base
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2 ** 16 - 1 }
+  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
 
 

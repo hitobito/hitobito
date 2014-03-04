@@ -16,7 +16,7 @@ module TypeId
     @@types_by_id = {}
 
     def inherited(subclass)
-      super(subclass)
+      super
       next_id = @@types_by_id.present? ? @@types_by_id.keys.max + 1 : 1
       subclass.id = next_id
       @@types_by_id[next_id] = subclass

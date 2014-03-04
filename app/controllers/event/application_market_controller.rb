@@ -50,6 +50,7 @@ class Event::ApplicationMarketController < ApplicationController
     applications = Event::Participation.
                        joins(:event).
                        includes(:application, :person).
+                       references(:application).
                        where(filter_applications).
                        merge(Event::Participation.pending).
                        uniq

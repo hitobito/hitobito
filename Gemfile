@@ -21,7 +21,6 @@ gem 'faker'
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
-gem 'kaminari'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mini_magick'
 gem 'mysql2'
@@ -38,6 +37,9 @@ gem 'seed-fu'
 gem 'thinking-sphinx'
 gem 'validates_timeliness'
 gem 'wagons'
+
+# load after others because of active record inherited alias chain.
+gem 'kaminari'
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'

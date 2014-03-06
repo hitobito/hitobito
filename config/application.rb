@@ -50,6 +50,12 @@ module Hitobito
     config.i18n.default_locale = :de
     config.i18n.fallbacks = [:de]
     I18n.config.enforce_available_locales = true
+    # All languages should fall back on each other to avoid empty attributes
+    # if an entry is created in a different language.
+    Globalize.fallbacks = { de: [:de, :fr, :it, :en],
+                            fr: [:fr, :it, :en, :de],
+                            it: [:it, :fr, :en, :de],
+                            en: [:en, :de, :fr, :it]}
 
     # Route errors over the Rails application.
     config.exceptions_app = self.routes

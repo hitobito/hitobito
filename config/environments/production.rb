@@ -83,7 +83,7 @@ Hitobito::Application.configure do
 
   # Enable threaded mode
   # Unless for rake tasks (especially for db:seed)
-  config.threadsafe! unless $rails_rake_task
+  #config.threadsafe! unless $rails_rake_task
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)

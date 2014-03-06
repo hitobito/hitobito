@@ -27,7 +27,7 @@ class PersonAccessibles
       # user has layer read of the same layer as the group
       if group_read_in_this_group? || layer_read_in_same_layer? || user.root?
         can :index, Person,
-            group.people.only_public_data.joins(:roles) { |p| true }
+            group.people.only_public_data { |p| true }
 
       # user has layer read in a above layer of the group
       elsif layer_read_in_above_layer?

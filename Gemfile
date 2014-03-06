@@ -57,6 +57,7 @@ gem 'uglifier'
 group :development, :test do
   gem 'binding_of_caller'
   gem 'rspec-rails'
+  gem 'rspec-core'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
 end
@@ -71,6 +72,7 @@ end
 group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'websocket-driver'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

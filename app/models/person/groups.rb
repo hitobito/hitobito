@@ -81,7 +81,8 @@ module Person::Groups
 
     # Load people with member roles.
     def members
-      where(roles: { type: Role.all_types.select(&:member?).collect(&:sti_name) })
+      member_types = Role.all_types.select(&:member?).collect(&:sti_name)
+      where(roles: { type: member_types })
     end
 
     # Order people by the order role types are listed in their group types.
@@ -91,7 +92,7 @@ module Person::Groups
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << 'END'
-      joins(:roles).order(statement)
+      order(statement)
     end
   end
 end

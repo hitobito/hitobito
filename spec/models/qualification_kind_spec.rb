@@ -51,4 +51,5 @@ describe QualificationKind do
     subject.destroy
     subject.to_s.should == 'Super Lead'
   end
+
 end

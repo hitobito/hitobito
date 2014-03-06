@@ -6,8 +6,7 @@
 @charset "utf-8";
 
 @import "variables";
-@import "compass/css3/font-face";
-@include font-face("Century Gothic", font-files(asset-path("century-gothic.ttf", font), asset-path("century-gothic.eot", font)));
+@import "fonts";
 
 /*
 Version     :  0.1

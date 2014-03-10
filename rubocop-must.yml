@@ -24,6 +24,9 @@ LineLength:
 
 # Disable all other cops
 
+AccessorMethodName:
+  Enabled: false
+  
 AccessModifierIndentation:
   Enabled: false
 
@@ -37,6 +40,9 @@ AlignHash:
   Enabled: false
 
 AlignParameters:
+  Enabled: false
+
+AmbiguousOperator:
   Enabled: false
 
 AsciiComments:
@@ -74,7 +80,10 @@ CommentAnnotation:
 
 ConstantName:
   Enabled: false
-
+  
+DefaultScope:
+  Enabled: false
+  
 Documentation:
   Enabled: false
 
@@ -131,6 +140,9 @@ HashSyntax:
 
 IfUnlessModifier:
   Enabled: false
+  
+IndentationConsistency:
+  Enabled: false
 
 IndentationWidth:
   Enabled: false
@@ -140,7 +152,10 @@ Lambda:
 
 LeadingCommentSpace:
   Enabled: false
-
+  
+LineEndConcatenation:
+  Enabled: false
+  
 Loop:
   Enabled: false
 
@@ -164,11 +179,11 @@ ParenthesesAsGroupedExpression:
 
 PerlBackrefs:
   Enabled: false
-
-Proc:
+  
+PredicateName:
   Enabled: false
-
-ReduceArguments:
+  
+Proc:
   Enabled: false
 
 RedundantBegin:
@@ -222,18 +237,15 @@ SpecialGlobalVars:
 StringLiterals:
   Enabled: false
 
-SymbolName:
-  Enabled: false
-
-Syntax:
-  Enabled: false
-
 Tab:
   Enabled: false
 
 TrailingBlankLines:
   Enabled: false
-
+  
+TrailingComma:
+  Enabled: false
+  
 TrailingWhitespace:
   Enabled: false
 

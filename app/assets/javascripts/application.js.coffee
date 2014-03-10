@@ -26,6 +26,7 @@
 #= require jquery-ui-datepicker-i18n
 #= require chosen-jquery
 #= require remote-typeahead
+#= require modernizr.custom.min
 #= require_self
 #
 

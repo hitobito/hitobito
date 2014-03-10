@@ -146,7 +146,42 @@ label.radio {
   margin-right: 10px;
 }
 
-.controls div.inline, .controls p.inline {
+.label-columns .controls {
+  label {
+    overflow: hidden;
+
+    &:hover {
+      background: $grayLighter;
+    }
+  }
+}
+
+.label-columns .control-group + .control-group {
+  margin-top: 2em;
+}
+.no-csscolumns .label-columns .controls {
+  @include clearfix;
+  label {
+    float: left;
+    width: 200px;
+    margin-left: 0 !important;
+  }
+}
+.csscolumns .label-columns .controls {
+  -moz-columns: 200px 4;
+  -webkit-columns: 200px 4;
+  columns: 200px 4;
+
+  label {
+    width: 80%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: 0 !important;
+  }
+}
+
+.controls div.inline,
+.controls p.inline {
   padding-top: 5px;
 }
 

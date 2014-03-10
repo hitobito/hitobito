@@ -16,16 +16,17 @@
 
   = f.error_messages
 
-  = field_set_tag(t('.prompt_role_selection')) do
-    - @role_types.each do |layer, groups|
-      %h5= layer
-      - groups.each do |group, role_types|
-        = f.labeled nil, group do
-          - role_types.each do |role_type|
-            = f.inline_check_box(:role_type_ids,
-                                 role_type.id,
-                                 role_type.label,
-                                 checked: entry.role_types.include?(role_type.sti_name))
+  .label-columns
+    = field_set_tag(t('.prompt_role_selection')) do
+      - @role_types.each do |layer, groups|
+        %h4= layer
+        - groups.each do |group, role_types|
+          = f.labeled nil, group do
+            - role_types.each do |role_type|
+              = f.inline_check_box(:role_type_ids,
+                                   role_type.id,
+                                   role_type.label,
+                                   checked: entry.role_types.include?(role_type.sti_name))
 
   - if can?(:create, entry)
     = field_set_tag(t('.save_filter')) do

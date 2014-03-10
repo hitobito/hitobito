@@ -9,6 +9,101 @@
 
 = paginate @people
 
+/ pf 10.03.14
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th
+      %th Name
+      %th Rollen
+      %th E-Mail
+      %th Telefonnummern
+      %th Adresse
+  %tbody
+    %tr#person_774
+      %td
+        .profil
+          %img{alt: "Profil_thumb", height: "32", src: "/assets/profil_thumb.png", width: "32"}/
+      %td
+        %strong
+          %a{href: "/de/groups/1/people/774"} Bruce Wayne
+          %br/
+          %span.muted
+      %td
+        %p
+          Mitarbeiter Justice Ligue
+          = link_to(icon(:edit), '#', title: ti(:"link.edit"))
+      %td
+        %p
+          %a{href: "mailto:olivier.brian@bfh.ch"} bruce@wayne.us
+      %td
+      %td
+        %p
+    %tr#person_776
+      %td
+        .profil
+          %img{alt: "Profil_thumb", height: "32", src: "/assets/profil_thumb.png", width: "32"}/
+      %td
+        %strong
+          %a{href: "/de/groups/1/people/776"} Clark Kent
+          %br/
+          %span.muted
+      %td
+        %p Team
+        %p Arbeitsgruppe
+
+        %form.in-context
+          %fieldset
+            .control-group
+              %label.control-label{for: "role_group_id"} Gruppe
+              .controls
+                #role_type_select
+                  %select#role_type.chosen-select
+                    %option{value: ""} Bitte auswählen
+                    %option{value: "Group::TopLayer::Administrator"} PBS
+                    %option{value: "Group::TopLayer::Leader"} Team
+                    %option{value: "Group::TopLayer::Member"} Leitung
+
+            .control-group
+              %label.control-label{for: "role_type"} Rolle
+              .controls
+                #role_type_select
+                  %select#role_type.chosen-select
+                    %option{value: ""} Bitte auswählen
+                    %option{value: "Group::TopLayer::Administrator"} Administrator
+                    %option{value: "Group::TopLayer::Leader"} Leitung
+                    %option{value: "Group::TopLayer::Member"} Mitglied
+                    %option{value: "Role::AddressAdmin"} Leitung Kernaufgabe Kommunikation
+                    %option{value: "Role::DispatchAddress"} Versandadresse
+                    %option{value: "Role::External"} Extern
+
+            .control-group
+              %label.control-label{for: "role_label"} Bezeichnung
+              .controls
+                %input#role_label.span6{autocomplete: "off", "data-provide" => "typeahead", "data-source" => "[\"\",\"Mitglied einer Verbandsleitung\",\"Other role\"]", maxlength: "255", name: "role[label]", size: "255", type: "text", placeholder: "Optionale Bezeichnung der Rolle dieser Person"}/
+            .btn-toolbar
+              .btn-group
+                %button.btn.btn-primary{"data-disable-with" => "Speichern", name: "button", type: "submit"} Speichern
+              %a.link{href: "/de/groups/1"} Abbrechen
+        %p Team
+        %p Arbeitsgruppe
+
+      %td
+        %p
+          %a{href: "mailto:fritsch@puzzle.ch"} kent@dailyplanet.us
+      %td
+        %p
+          +49-8384-92699055
+          %span.muted Privat
+          = succeed "(01912)" do
+            %br/
+          %span.muted Andere
+      %td
+        %p> Central place 112
+        86704 Metropolis
+//
+
+
 = crud_table do |t|
   - t.col('') do |p|
     .profil= image_tag(p.picture.thumb.url, size: '32x32')
@@ -22,5 +117,6 @@
   - t.col(Person.human_attribute_name(:email))    { |p| p.primary_email }
   - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(!index_full_ability?) }
   - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
+
 
 = paginate @people

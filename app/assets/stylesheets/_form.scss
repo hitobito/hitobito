@@ -257,3 +257,30 @@ td.issue, td.revoke {
   filter: alpha(opacity=30);
 }
 
+.in-context {
+  margin-top: 10px;
+  padding: 1em;
+  background-color: $grayLight;
+  @include border-radius($borderRadius);
+  fieldset {
+    margin: 0;
+  }
+  .control-group {
+    margin-bottom: 0;
+  }
+  label {
+    font-size: 0.75em;
+    margin: 0;
+  }
+  select,
+  input {
+    @include box-sizing(border-box);
+    max-width: 300px;
+    height: 30px;
+  }
+  .btn-toolbar {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+}
+

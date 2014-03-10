@@ -5,7 +5,7 @@ AllCops:
   Excludes:
     - db/**
     - config/**
-    - script/**
+    - bin/**
     - tmp/**
     - app/assets/config.rb
 

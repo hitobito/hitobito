@@ -4,7 +4,7 @@ AllCops:
   Excludes:
     - db/**
     - config/**
-    - script/**
+    - bin/**
     - spec/**
     - vendor/**
 

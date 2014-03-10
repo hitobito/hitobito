@@ -31,4 +31,14 @@ module FeatureHelpers
     end
   end
 
+  # due to concurrent requests in js specs, it happens that
+  # stdout is not reset after silencing and thus completely disappears.
+  # This method asserts the stdout is reset again after every test.
+  def keeping_stdout
+    old_stream = STDOUT.dup
+    yield
+  ensure
+    STDOUT.reopen(old_stream)
+  end
+
 end

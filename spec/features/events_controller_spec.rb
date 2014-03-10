@@ -17,29 +17,27 @@ describe EventsController, js: true do
 
 
   it 'may set and remove contact from event' do
-    obsolete_node_safe do
-      sign_in
-      visit edit_group_event_path(event.group_ids.first, event.id)
+    sign_in
+    visit edit_group_event_path(event.group_ids.first, event.id)
 
-      # set contact
-      fill_in 'Kontaktperson', with: 'Top'
-      find('.typeahead.dropdown-menu').should have_content 'Top Leader'
-      find('.typeahead.dropdown-menu').click
-      all('form .btn-toolbar').first.click_button 'Speichern'
+    # set contact
+    fill_in 'Kontaktperson', with: 'Top'
+    find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+    find('.typeahead.dropdown-menu').click
+    all('form .btn-toolbar').first.click_button 'Speichern'
 
-      # show event
-      find('aside').should have_content 'Kontakt'
-      find('aside').should have_content 'Top Leader'
-      click_link 'Bearbeiten'
+    # show event
+    find('aside').should have_content 'Kontakt'
+    find('aside').should have_content 'Top Leader'
+    click_link 'Bearbeiten'
 
-      # remove contact
-      find('#event_contact').value.should == 'Top Leader'
-      fill_in 'Kontaktperson', with: ''
-      all('form .btn-toolbar').first.click_button 'Speichern'
+    # remove contact
+    find('#event_contact').value.should == 'Top Leader'
+    fill_in 'Kontaktperson', with: ''
+    all('form .btn-toolbar').first.click_button 'Speichern'
 
-      # show event again
-      should_not have_selector('.contactable')
-    end
+    # show event again
+    should_not have_selector('.contactable')
   end
 
 end

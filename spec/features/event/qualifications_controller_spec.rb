@@ -36,28 +36,26 @@ describe Event::QualificationsController do
   end
 
   it 'qualification requests are mutually undoable', js: true do
-    obsolete_node_safe do
-      sign_in
-      visit group_event_qualifications_path(group.id, event.id)
+    sign_in
+    visit group_event_qualifications_path(group.id, event.id)
 
-      appl_id = "#event_participation_#{participant_1.id}"
+    appl_id = "#event_participation_#{participant_1.id}"
 
-      # both links are active at begin
-      find("#{appl_id} td.issue").should have_selector('a i.icon-ok.disabled')
-      find("#{appl_id} td.revoke").should have_selector('a i.icon-remove.disabled')
+    # both links are active at begin
+    find("#{appl_id} td.issue").should have_selector('a i.icon-ok.disabled')
+    find("#{appl_id} td.revoke").should have_selector('a i.icon-remove.disabled')
 
-      find("#{appl_id} td.issue a").click
-      find("#{appl_id} td.issue").should_not have_selector('a')
-      find("#{appl_id} td.issue").should_not have_selector('i.disabled')
-      find("#{appl_id} td.revoke").should have_selector('a')
-      find("#{appl_id} td.revoke").should have_selector('i.disabled')
+    find("#{appl_id} td.issue a").click
+    find("#{appl_id} td.issue").should_not have_selector('a')
+    find("#{appl_id} td.issue").should_not have_selector('i.disabled')
+    find("#{appl_id} td.revoke").should have_selector('a')
+    find("#{appl_id} td.revoke").should have_selector('i.disabled')
 
-      find("#{appl_id} td.revoke a").click
-      find("#{appl_id} td.revoke").should_not have_selector('a')
-      find("#{appl_id} td.revoke").should_not have_selector('i.disabled')
-      find("#{appl_id} td.issue").should have_selector('a')
-      find("#{appl_id} td.issue").should have_selector('i.disabled')
-    end
+    find("#{appl_id} td.revoke a").click
+    find("#{appl_id} td.revoke").should_not have_selector('a')
+    find("#{appl_id} td.revoke").should_not have_selector('i.disabled')
+    find("#{appl_id} td.issue").should have_selector('a')
+    find("#{appl_id} td.issue").should have_selector('i.disabled')
   end
 
 end

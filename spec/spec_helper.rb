@@ -93,6 +93,14 @@ def init_rspec
       Draper::ViewContext.current = c.view_context
     end
 
+    config.around(:each, js: true) do |example|
+      keeping_stdout do
+        obsolete_node_safe do
+          example.run
+        end
+      end
+    end
+
   end
 end
 

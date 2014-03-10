@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   alias_method :decorate, :__decorator_for__
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
   helper_method :person_home_path
 
   rescue_from CanCan::AccessDenied do |exception|

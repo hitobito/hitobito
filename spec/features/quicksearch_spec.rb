@@ -11,16 +11,18 @@ describe 'Quicksearch', :mysql do
 
   sphinx_environment(:people, :groups) do
     it 'finds people and groups', js: true do
-      index_sphinx
-      sign_in
-      visit root_path
+      obsolete_node_safe do
+        index_sphinx
+        sign_in
+        visit root_path
 
-      fill_in 'quicksearch', with: 'top'
+        fill_in 'quicksearch', with: 'top'
 
-      dropdown = find('.typeahead.dropdown-menu')
-      dropdown.should have_content('Top Leader, Supertown')
-      dropdown.should have_content('Top > TopGroup')
-      dropdown.should have_content('Top')
+        dropdown = find('.typeahead.dropdown-menu')
+        dropdown.should have_content('Top Leader, Supertown')
+        dropdown.should have_content('Top > TopGroup')
+        dropdown.should have_content('Top')
+      end
     end
   end
 end

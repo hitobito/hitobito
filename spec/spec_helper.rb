@@ -95,9 +95,7 @@ def init_rspec
 
     config.around(:each, js: true) do |example|
       keeping_stdout do
-        obsolete_node_safe do
-          example.run
-        end
+        example.run
       end
     end
 

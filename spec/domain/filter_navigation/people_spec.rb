@@ -39,7 +39,7 @@ describe FilterNavigation::People, type: :model do
       its(:active_label)    { should == 'Mitglieder' }
       its('dropdown.active') { should be_false }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
-      its('dropdown.items')  { should have(3).item }
+      its('dropdown.items')  { should have(3).items }
 
       it 'entire layer contains only layer role types' do
         subject.dropdown.items.first.url =~ /#{[Role::External,

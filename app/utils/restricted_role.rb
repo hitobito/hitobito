@@ -25,7 +25,7 @@ module RestrictedRole
       if role.try(:person_id) != send("#{attr}_id")
         if role
           # be on the save side with destroy_all
-          restricted_role_scope(type).destroy_all
+          restricted_role_scope(type).readonly(false).destroy_all
           @restricted_role[attr] = nil # clear cache
         end
         if id = restricted_role_id(attr, type).presence

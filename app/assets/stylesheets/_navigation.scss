@@ -203,3 +203,41 @@
   right: 0;
   left: auto;
 }
+
+
+// Left navigation
+.nav-left {
+  position: absolute;
+  width: 160px;
+  background: $grayLighter;
+  border-right: 2px solid $grayLight;
+  @include border-left-radius($borderRadius);
+  padding: 20px 18px 20px 20px;
+
+  @include responsive(phone, $mediaTablet) {
+    display: none;
+  }
+}
+.has-left-nav #page .container-fluid  {
+  @include responsive(mediaTablet) {
+    margin-left: 180px;
+
+    .sheet, #content {
+      @include border-top-left-radius(0);
+    }
+  }
+}
+.nav-left-list {
+  list-style: none;
+  margin: 0;
+  ul {
+    list-style: none;
+    margin-left: 10px;
+  }
+  li {
+    margin-top: 5px;
+  }
+}
+.nav-left-back {
+  font-size: 0.85em;
+}

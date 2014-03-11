@@ -5,15 +5,17 @@
 
 
 = paginate @versions
-
+/ pf 10.03.14
 - if @versions.present?
-
   - @versions.group_by(&:created_at).each do |created_at, versions|
-    %h4
-      = versions.first.header
-    - versions.each do |v|
-      = v.changes
-
+    .row.log-item
+      .span4
+        %h4
+          = versions.first.header
+      - versions.each do |v|
+        .log-infos.span7
+          = v.changes
+  //
 - else
   %div
     Bisher wurden keine Änderungen aufgezeichnet.

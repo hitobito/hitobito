@@ -71,7 +71,7 @@ class Person < ActiveRecord::Base
                          :remember_created_at, :sign_in_count, :current_sign_in_at,
                          :current_sign_in_ip, :failed_attempts, :locked_at, :last_sign_in_at,
                          :last_sign_in_ip, :contact_data_visible, :last_label_format_id,
-                         :created_at, :creator_id, :updated_at, :updater_id]
+                         :picture, :created_at, :creator_id, :updated_at, :updater_id]
 
 
   ### ASSOCIATIONS

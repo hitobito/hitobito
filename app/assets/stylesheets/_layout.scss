@@ -307,3 +307,14 @@ table.roles {
     }
   }
 }
+
+//  Logs
+.log-item {
+  margin-top: 2em;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+.log-infos {
+  padding-top: 11px;
+}

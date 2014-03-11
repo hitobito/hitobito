@@ -29,9 +29,8 @@
 
     = yield :head
 
-  / pf 10.03.14
-  %body{:class => ('has-left-nav' if content_for?(:nav_left))}
-    //
+  %body
+
     %header#page-header
       .container-fluid
         = link_to Settings.application.name, root_path, :class => 'brand'
@@ -42,13 +41,6 @@
           = render 'layouts/unauthorized'
 
     #page
-
-      / pf 10.03.14
-      - if content_for?(:nav_left)
-        %nav.nav-left
-          = yield :nav_left
-      //
-
       .container-fluid
         = render_sheets do
           .content-header

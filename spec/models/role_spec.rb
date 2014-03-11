@@ -47,7 +47,8 @@ describe Role do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
     subject do
-      r = Role.new
+      r = Role.new #Group::BottomLayer::Leader.new
+      r.type = 'Group::BottomLayer::Leader'
       r.person = person
       r.group = group
       r
@@ -55,6 +56,7 @@ describe Role do
 
     context 'type' do
       it 'is invalid without type' do
+        subject.type = nil
         should have(1).errors_on(:type)
       end
 
@@ -75,7 +77,7 @@ describe Role do
     end
 
     context 'primary group' do
-      before { subject.type = 'Group::BottomLayer::Leader' }
+      #before { subject.type = 'Group::BottomLayer::Leader' }
 
       it 'is set for first role' do
         subject.save.should be_true
@@ -148,7 +150,7 @@ describe Role do
     end
   end
 
-  describe '.normalize_label' do
+  context '.normalize_label' do
     it 'reuses existing label' do
       a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO', group: groups(:bottom_layer_one))
@@ -156,7 +158,7 @@ describe Role do
     end
   end
 
-  describe '#available_labels' do
+  context '#available_labels' do
     before { Role.sweep_available_labels }
     subject { Group::BottomLayer::Leader.available_labels }
 
@@ -199,6 +201,45 @@ describe Role do
     context 'group without long key' do
       let(:role) { Group::BottomGroup::Leader }
       it { should eq 'Leader Bottom Group' }
+    end
+  end
+
+  context 'paper trails', versioning: true do
+    let(:person) { people(:top_leader) }
+
+    it 'sets main on create' do
+      expect do
+        role = person.roles.build
+        role.group = groups(:top_group)
+        role.type = Group::TopGroup::Leader.sti_name
+        role.save!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'create'
+      version.main.should == person
+    end
+
+    it 'sets main on update' do
+      role = person.roles.first
+      expect do
+        role.update_attributes!(label: 'Foo')
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'update'
+      version.main.should == person
+    end
+
+    it 'sets main on destroy' do
+      role = person.roles.first
+      expect do
+        role.destroy!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'destroy'
+      version.main.should == person
     end
   end
 end

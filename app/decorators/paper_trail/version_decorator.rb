@@ -63,7 +63,7 @@ module PaperTrail
 
       I18n.t("version.association_change.#{model.event}",
              model: item_class.model_name.human,
-             label: reifyed_item.to_s,
+             label: reifyed_item.to_s(:long),
              changeset: changeset).html_safe
     end
 

@@ -31,4 +31,29 @@ describe Event::Role do
       end
     end
   end
+
+  describe 'destroying roles' do
+    before do
+      @role = Event::Role::Participant.new
+      @role.participation = participation
+      @role.save!
+    end
+
+    let(:event) { events(:top_event) }
+    let(:role)  { @role.reload }
+    let(:participation) { Fabricate(:event_participation, event: event) }
+
+    it 'decrements event#participant_count' do
+      expect { role.destroy }.to change {  event.reload.participant_count }.by(-1)
+    end
+
+    it 'decrements event#participant_count if participations has other non participant roles' do
+      treasurer = Event::Role::Treasurer.new
+      treasurer.participation = Fabricate(:event_participation, event: event)
+      treasurer.save!
+
+      expect { role.destroy }.to change {  event.reload.participant_count }.by(-1)
+    end
+
+  end
 end

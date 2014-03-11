@@ -8,18 +8,15 @@
 module NavigationHelper
 
   MAIN = {
-          I18n.t('navigation.groups')  => { url: :groups_path,
-                                            active_for: %w(groups people) },
-          I18n.t('navigation.events')  => { url: :list_events_path,
-                                            active_for: %w(list_events) },
-          I18n.t('navigation.courses') => { url: :list_courses_path,
-                                            active_for: %w(list_courses) },
-          I18n.t('navigation.admin')   => { url: :event_kinds_path,
-                                            active_for: %w(event_kinds
-                                                           qualification_kinds
-                                                           custom_contents
-                                                           label_formats),
-                                            if: lambda { |_| can?(:manage, Event::Kind) } }
+    groups:  { url: :groups_path,
+               active_for: %w(groups people) },
+    events:  { url: :list_events_path,
+               active_for: %w(list_events) },
+    courses: { url: :list_courses_path,
+               active_for: %w(list_courses) },
+    admin:   { url: :event_kinds_path,
+               active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
+               if: lambda { |_| can?(:manage, Event::Kind) } }
   }
 
 
@@ -29,7 +26,7 @@ module NavigationHelper
         options[:url] = send(options[:url])
       end
       if !options.key?(:if) || instance_eval(&options[:if])
-        nav(label, options[:url], options[:active_for])
+        nav(I18n.t("navigation.#{label}"), options[:url], options[:active_for])
       end
     end
   end

@@ -1,10 +1,4 @@
 # encoding: utf-8
-
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people
@@ -40,8 +34,14 @@
 #  creator_id             :integer
 #  updater_id             :integer
 #  primary_group_id       :integer
+#  failed_attempts        :integer          default(0)
+#  locked_at              :datetime
 #
 
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 class Person < ActiveRecord::Base
 
   PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
@@ -56,6 +56,7 @@ class Person < ActiveRecord::Base
 
   # define devise before other modules
   devise :database_authenticatable,
+         :lockable,
          :recoverable,
          :rememberable,
          :trackable,
@@ -74,7 +75,8 @@ class Person < ActiveRecord::Base
   has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
                   skip: [:id, :encrypted_password, :reset_password_token, :reset_password_sent_at,
                          :remember_created_at, :sign_in_count, :current_sign_in_at, :current_sign_in_ip,
-                         :last_sign_in_at, :last_sign_in_ip, :contact_data_visible, :last_label_format_id,
+                         :failed_attempts, :locked_at, :last_sign_in_at, :last_sign_in_ip,
+                         :contact_data_visible, :last_label_format_id,
                          :created_at, :creator_id, :updated_at, :updater_id]
 
 

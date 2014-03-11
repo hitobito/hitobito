@@ -53,7 +53,7 @@ de:
           attributes:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
-            mail_name_not_allowed: 
+            mail_name_not_allowed:
         person:
           name_missing: 'Bitte geben Sie einen Namen ein.'
         qualification:
@@ -62,7 +62,7 @@ de:
               exists_for_timeframe: 'existiert in dieser Zeitspanne bereits'
         qualification_kind:
           attributes:
-            validity: 
+            validity:
               not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen.'
 
     models:
@@ -129,8 +129,8 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
-    attributes:
 
+    attributes:
       person:
         first_name: Vorname
         last_name: Nachname
@@ -265,6 +265,10 @@ de:
         qualification_kind_id: Qualifikation
         start_at: Seit
         origin: Ursprung
+        string: '%{kind}'
+        string_with_origin: '%{kind} (von %{origin})'
+        string_with_finish_at: '%{kind} (bis %{finish_at})'
+        string_with_finish_at_and_origin: '%{kind} (bis %{finish_at}, von %{origin})'
 
       qualification_kind:
         label: Bezeichnung
@@ -291,6 +295,7 @@ de:
         type: Rolle
         group_id: Gruppe
         person_id: Person
+        string_long: '%{role} in %{group}'
         class:
           permission:
             description:
@@ -376,6 +381,7 @@ de:
       not_saved:
         one: "Konnte %{resource} nicht speichern: ein Fehler."
         other: "Konnte %{resource} nicht speichern: %{count} Fehler."
+
   validates_timeliness:
     error_value_formats:
       date: "%d.%m.%Y"

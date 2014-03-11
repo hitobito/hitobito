@@ -24,13 +24,44 @@ describe Qualification do
   let(:qualification) { Fabricate(:qualification) }
   let(:person) { qualification.person }
 
-  it 'includes qualification kind and finish_at in to_s' do
-    quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
-                                      start_at: Date.parse('2011-3-3').to_date)
-    quali.to_s.should eq 'Super Lead (bis 31.12.2013)'
+  context '#to_s' do
+    it 'includes qualification kind and finish_at' do
+      quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
+                                        start_at: Date.parse('2011-3-3').to_date,
+                                        origin: 'SLK 11')
+      quali.to_s.should eq 'Super Lead (bis 31.12.2013)'
+    end
+
+    context :long do
+      it 'includes origin and finish_at' do
+        quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
+                                          start_at: Date.parse('2011-3-3').to_date,
+                                          origin: 'SLK 11')
+        quali.to_s(:long).should eq 'Super Lead (bis 31.12.2013, von SLK 11)'
+      end
+
+      it 'includes origin and no finish_at' do
+        quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: 'Super Lead'),
+                                          start_at: Date.parse('2011-3-3').to_date,
+                                          origin: 'SLK 11')
+        quali.to_s(:long).should eq 'Super Lead (von SLK 11)'
+      end
+
+      it 'includes only finish_at' do
+        quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
+                                          start_at: Date.parse('2011-3-3').to_date)
+        quali.to_s(:long).should eq 'Super Lead (bis 31.12.2013)'
+      end
+
+      it 'includes only kind' do
+        quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: 'Super Lead'),
+                                          start_at: Date.parse('2011-3-3').to_date)
+        quali.to_s(:long).should eq 'Super Lead'
+      end
+    end
   end
 
-  describe 'creating a second qualification of identical kind with validity' do
+  context 'creating a second qualification of identical kind with validity' do
     before     { Fabricate(:qualification, args.merge(start_at: Date.parse('2011-3-3').to_date)) }
     subject    { Fabricate.build(:qualification, args.merge(start_at: date.to_date)) }
     let(:args) { { person: person, qualification_kind: qualification_kinds(:sl), start_at: date } }
@@ -52,7 +83,7 @@ describe Qualification do
   end
 
 
-  describe '#set_finish_at' do
+  context '#set_finish_at' do
     let(:date) { Date.today }
 
     it 'set current end of year if validity is 0' do
@@ -89,12 +120,12 @@ describe Qualification do
     end
   end
 
-  describe '#active' do
+  context '#active' do
     subject { qualification }
     it { should be_active }
   end
 
-  describe '.active' do
+  context '.active' do
     subject { person.reload.qualifications.active }
 
     it 'contains from today' do
@@ -122,7 +153,7 @@ describe Qualification do
     end
   end
 
-  describe 'reactivateable qualification kind' do
+  context 'reactivateable qualification kind' do
     subject { person.reload.qualifications }
 
     let(:today) { Date.today }
@@ -176,4 +207,45 @@ describe Qualification do
     end
   end
 
+  context 'paper trails', versioning: true do
+    let(:person) { people(:top_leader) }
+
+    it 'sets main on create' do
+      expect do
+        person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
+                                      origin: 'Bar',
+                                      start_at: Date.today)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'create'
+      version.main.should == person
+    end
+
+    it 'sets main on update' do
+      quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
+                                            origin: 'Bar',
+                                            start_at: Date.today)
+      expect do
+        quali.update_attributes!(origin: 'Bur')
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'update'
+      version.main.should == person
+    end
+
+    it 'sets main on destroy' do
+      quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
+                                            origin: 'Bar',
+                                            start_at: Date.today)
+      expect do
+        quali.destroy!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      version.event.should == 'destroy'
+      version.main.should == person
+    end
+  end
 end

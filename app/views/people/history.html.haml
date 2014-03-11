@@ -11,6 +11,7 @@
     = r.to_s
   - t.attr(:created_at, t('global.from'))
   - t.attr(:deleted_at, t('global.until'))
+  - render_extensions :history_columns, locals: { t: t }
 
 %events
   = render(layout: 'shared/grouped_table',

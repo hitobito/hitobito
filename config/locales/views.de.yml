@@ -53,7 +53,7 @@ de:
         one: 'Ein Fehler verhinderte das Speichern dieses Eintrages:'
         other: '%{count} Fehler verhinderten das Speichern dieses Eintrages:'
 
-    tabs: 
+    tabs:
       info: Info
 
     search:
@@ -87,8 +87,8 @@ de:
       zip_town: PLZ/Ort
 
     public_check_box:
-      tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar. 
-        Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen 
+      tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.
+        Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen
         sichtbar, wenn du selbst eine Leitungsperson bist.
 
     social_account_fields:
@@ -108,7 +108,7 @@ de:
         Die einzelnen Felder sind mit einem Komma getrennt.
         Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
         Beispiel:'
-      example: | 
+      example: |
         Vorname,Nachname,Email,Ort,Geschlecht
         Hans,Muster,hans@beispiel.ch,Bern,m
         Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
@@ -120,7 +120,7 @@ de:
       special_fields: Spezielle Feldwerte
       explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
 
-    preview_table: 
+    preview_table:
       icon_tooltip_invalid: 'Ungültige Werte'
       icon_tooltip_updated: 'Wird aktualisiert'
       icon_tooltip_created: 'Wird neu erfasst'
@@ -132,20 +132,20 @@ de:
       column_from_csv: 'Spalte aus CSV'
       field_in_database: 'Feld in der Datenbank'
       preview: 'Vorschau'
-        
-    new: 
+
+    new:
       upload_button: 'Hochladen'
       csv_file: 'CSV Datei'
 
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
-    duplicate_keys: 
+    duplicate_keys:
       one: '%{list} wurde mehrfach zugewiesen.'
       other: '%{list} wurden mehrfach zugewiesen.'
 
     preview:
       import_now_button: Personen jetzt importieren
-      import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong> 
+      import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
         in die <strong>Gruppe %{group}</strong> importiert.
       new:
         one: '%{count} %{role} wird neu importiert.'
@@ -175,7 +175,7 @@ de:
 
     form:
       add_role_for_person: Rolle für %{person} erstellen
-      edit_role_for_person: Rolle für %{person} bearbeiten 
+      edit_role_for_person: Rolle für %{person} bearbeiten
 
     fields:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person
@@ -220,8 +220,8 @@ de:
   group:
     merge:
       select:
-        title: '%{group} fusionieren' 
-        explanation: Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen 
+        title: '%{group} fusionieren'
+        explanation: Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen
           samt Rollen beider Gruppen zusammengeführt.  Abos werden nicht übernommen.
           Die bisherigen Gruppen werden danach unter 'Gelöscht' weiterhin einsehbar sein.
         merge_is_irreversible:  Dieser Vorgang kann nicht mehr rückgängig gemacht werden!
@@ -279,7 +279,7 @@ de:
 
   subscriber:
     group:
-      form: 
+      form:
         subgroups_selectable: 'Es können nur Gruppen unterhalb der Abogruppe ausgewählt werden'
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'
 
@@ -346,7 +346,8 @@ de:
       already_authenticated: 'Du bist bereits angemeldet.'
       unauthenticated: 'Du musst Dich anmelden oder registrieren, bevor Du fortfahren kannst.'
       unconfirmed: 'Du musst Deinen Account bestätigen, bevor Du fortfahren kannst.'
-      locked: 'Dein Account ist gesperrt.'
+      last_attempt: 'Du hast noch einen Versuch bevor Dein Account gesperrt wird.'
+      locked: 'Dein Account ist für 10 Minuten gesperrt.'
       invalid: 'Ungültige Anmeldedaten.'
       invalid_token: 'Der Anmelde-Token ist ungültig.'
       timeout: 'Deine Sitzung ist abgelaufen, bitte melde Dich erneut an.'
@@ -419,7 +420,7 @@ de:
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"
     contains_no_data: "Enthält keine Daten"
-    read_success: 
+    read_success:
       one: "%{count} Datensatz erfolgreich gelesen."
       other: "%{count} Datensätze erfolgreich gelesen."
   import/person_importer:
@@ -483,13 +484,13 @@ de:
 
   events:
     preconditions: 'Erforderliche Qualifikationen'
-    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)' 
+    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     tabs:
       participants: 'Teilnehmende'
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
-      caption_requires_approval: 'Der Scharleiter wird informiert und muss die Anmeldung bestätigen' 
+      caption_requires_approval: 'Der Scharleiter wird informiert und muss die Anmeldung bestätigen'
       additional_information: 'Angaben für Anmeldung'
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
@@ -611,7 +612,7 @@ de:
       exclude_person: 'Person ausschliessen'
     list:
       excluded_people: 'Ausgeschlossene Personen'
-    
+
   views:
     pagination:
       next: '>>'

@@ -15,6 +15,7 @@ module Import
     BLACKLIST = [:contact_data_visible,
                  :created_at,
                  :creator_id,
+                 :updated_at,
                  :updater_id,
                  :current_sign_in_at,
                  :current_sign_in_ip,
@@ -27,9 +28,10 @@ module Import
                  :reset_password_sent_at,
                  :reset_password_token,
                  :sign_in_count,
+                 :failed_attempts,
+                 :locked_at,
                  :last_label_format_id,
-                 :primary_group_id,
-                 :updated_at]
+                 :primary_group_id]
 
 
     def self.fields
@@ -76,6 +78,7 @@ module Import
     end
 
     private
+
     def prepare(hash)
       @hash = hash.with_indifferent_access
       @phone_numbers = extract_settings_fields(PhoneNumber, :number)

@@ -28,7 +28,10 @@ class Event::Role::Participant < Event::Role
 
   private
 
+  # if participation was removed, we must retrieve event
+  # participation we still have in memory
   def update_count
+    event = event || participation.event
     event.refresh_participant_count! if event
   end
 

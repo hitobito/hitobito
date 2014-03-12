@@ -64,23 +64,6 @@
   border-color: $purpleDark;
 }
 
-// TODO from bootstrap 2.1.1 << to remove after bootstrap-sass update
-.controls-row [class*="span"] + [class*="span"] {
-  @include responsive(mediaTablet) {
-    margin-left: 20px;
-  }
-}
-.controls-row {
-  @include clearfix;
-  *zoom: 1;
-  label.checkbox, label.radio {
-    padding-top: 6px;
-  }
-}
-.controls-row [class*="span"] {
-  float: left;
-}
-
 .form-horizontal .control-group {
   margin-bottom: 0;
 }

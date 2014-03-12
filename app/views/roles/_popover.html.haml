@@ -1,0 +1,30 @@
+= standard_form entry, url: group_role_path(group_id: entry.group.id, id: entry.id), remote: true  do |f|
+  = f.error_messages
+  - if @group_selection.present? && @group_selection.size > 1
+    = f.labeled(:group_id) do
+      = f.select(:group_id,
+                 group_options_with_level,
+                 f.collection_prompt(:group_id),
+                 { class: 'span3 chosen-select',
+                   data: { remote: true,
+                           url: role_types_group_roles_path(@group) }})
+  - else
+    = f.hidden_field :group_id
+
+  = f.labeled(:type) do
+    #role_type_select
+      = collection_select(:role,
+                          :type,
+                          GroupDecorator.decorate(@group).possible_roles,
+                          :sti_name,
+                          :label,
+                          { prompt: ta(:please_select) },
+                          { class: 'span3 chosen-select',
+                            data: { remote: true,
+                                    url: details_group_roles_path(@group) }})
+
+  = f.labeled(:label) do
+    = f.input_field(:label, data: { provide: :typeahead, source: entry.klass.available_labels },
+                            class: 'span3', style: 'width: 220px;', help: t('roles.fields.help_optional_label'))
+
+  = save_form_buttons(f, ti(:"button.save"), '#')

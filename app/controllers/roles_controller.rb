@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
+  respond_to :js
 
   self.nesting = Group
 
@@ -26,11 +27,18 @@ class RolesController < CrudController
   end
 
   def update
-    @group = find_group
+    @old_dom_id = dom_id(entry)
     type = changed_type
+
     if type
-      change_type(type)
-      redirect_to(group_person_path(entry.group_id, entry.person_id))
+      if change_type(type)
+        respond_to do |format|
+          format.html { redirect_to(group_person_path(entry.group_id, entry.person_id)) }
+          format.js   { flash.clear }
+        end
+      else
+        render :edit
+      end
     else
       super(location: group_person_path(entry.group_id, entry.person_id))
     end
@@ -67,24 +75,32 @@ class RolesController < CrudController
 
   def changed_type
     extract_model_attr(:person_id)
-    type = extract_model_attr(:type)
+    type = model_params && model_params[:type]
 
     type if @group.id != entry.group_id || (type && type != entry.type)
   end
 
   def change_type(type)
-    @type = @group.class.find_role_type!(type)
-    new_role = @type.new
+    new_role = build_role
     new_role.attributes = permitted_params(@type)
     new_role.person_id = entry.person_id
     new_role.group_id = @group.id
     authorize!(:create, new_role)
-    Role.transaction do
-      new_role.save!
-      entry.destroy
+
+    success = Role.transaction do
+      new_role.save && entry.destroy
     end
-    flash[:notice] = role_change_message(new_role)
-    @role = new_role
+
+    if success
+      flash[:notice] = role_change_message(new_role)
+      @role = new_role
+    else
+      entry.attributes = new_role.attributes.except('id')
+      new_role.errors.each do |key, value|
+        entry.errors.add(key, value)
+      end
+    end
+    success
   end
 
   def build_entry

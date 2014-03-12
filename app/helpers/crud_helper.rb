@@ -64,7 +64,7 @@ module CrudHelper
   end
 
   def cancel_link(url)
-    link_to(ti(:"button.cancel"), url, class: 'link')
+    link_to(ti(:"button.cancel"), url, class: 'link cancel')
   end
 
   # Create a table of the entries with the default or

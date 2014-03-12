@@ -17,10 +17,12 @@
 #= require jquery
 #= require jquery_ujs
 #= require jquery.ui.datepicker
+#= require jquery.ui.effect-highlight
 #= require bootstrap-alert
 #= require bootstrap-button
 #= require bootstrap-dropdown
 #= require bootstrap-tooltip
+#= require bootstrap-popover
 #= require bootstrap-typeahead
 #= require jquery_nested_form
 #= require jquery-ui-datepicker-i18n
@@ -80,6 +82,10 @@ resetRolePersonId = (event) ->
   $('#role_person_id').val(null).change()
   $('#role_person').val(null).change()
 
+closePopover = (event) ->
+  event.preventDefault()
+  $($('body').data('popover')).popover('destroy')
+
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)
   left = $target.offset().left
@@ -98,6 +104,7 @@ Application.activateChosen = (i, element) ->
   text = element.data('chosen-no-results') || 'Keine Einträge gefunden mit'
   element.chosen(no_results_text: text,
                  search_contains: true)
+
 
 $ ->
   # wire up quick search
@@ -141,4 +148,6 @@ $ ->
   $('body').on('click', 'a[data-swap]', swapElements)
 
   $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
+
+  $('body').on('click', '.popover a.cancel', closePopover)
 

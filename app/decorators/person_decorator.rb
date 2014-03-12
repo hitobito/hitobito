@@ -83,15 +83,23 @@ class PersonDecorator < ApplicationDecorator
   def functions_short(functions, scope_method, scope = nil)
     functions.select! { |r| r.send("#{scope_method}_id") == scope.id } if scope
     h.safe_join(functions) do |f|
-      content_tag(:p, function_short(f, scope_method, scope))
+      content_tag(:p, function_short(f, scope_method, scope), id: h.dom_id(f))
     end
   end
 
   def function_short(function, scope_method, scope = nil)
     html = [function.to_s]
     html << h.muted(function.send(scope_method).to_s) if scope.nil?
+    html << popover_edit_link(function) if h.can?(:update, function)
     h.safe_join(html, ' ')
   end
 
+  def popover_edit_link(function)
+    content_tag(:span, style: 'padding-left: 10px') do
+      h.link_to(h.icon(:edit), h.edit_group_role_path(function.group, function),
+                title: h.t("global.link.edit"), remote: true)
+    end
+
+  end
 
 end

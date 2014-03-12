@@ -131,6 +131,13 @@ describe RolesController do
 
     before { role } # create it
 
+    it 'without type displays error' do
+      put :update, group_id: group.id, id: role.id, role: { group_id: group.id, person_id: person.id, type: "" }
+
+      assigns(:role).should have(1).error_on(:type)
+      should render_template('edit')
+    end
+
     it 'redirects to person after update' do
       expect do
         put :update,  group_id: group.id, id: role.id, role: { label: 'bla', type: role.type, group_id: role.group_id }

@@ -239,4 +239,7 @@ td.issue, td.revoke {
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
   filter: alpha(opacity=30);
 }
-
+.popover {
+  max-width: 650px;
+  width: 650px;
+}

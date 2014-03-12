@@ -75,7 +75,7 @@ class RolesController < CrudController
   def change_type(type)
     @type = @group.class.find_role_type!(type)
     new_role = @type.new
-    new_role.attributes = permitted_params
+    new_role.attributes = permitted_params(@type)
     new_role.person_id = entry.person_id
     new_role.group_id = @group.id
     authorize!(:create, new_role)
@@ -124,8 +124,8 @@ class RolesController < CrudController
     end
   end
 
-  def permitted_params
-    model_params.permit(entry.class.used_attributes)
+  def permitted_params(role_type = entry.class)
+    model_params.permit(role_type.used_attributes)
   end
 
   def find_group

@@ -36,6 +36,6 @@ class AddMissingIndexes < ActiveRecord::Migration
     add_index(:event_kinds_preconditions, [:event_kind_id, :qualification_kind_id], unique: true, name: 'index_event_kinds_preconditions')
     add_index(:event_kinds_qualification_kinds, [:event_kind_id, :qualification_kind_id], unique: true, name: 'index_event_kinds_qualification_kinds')
 
-    add_index(:event_answers, [:participation_id, :question_id], uniq: true)
+    add_index(:event_answers, [:participation_id, :question_id], unique: true)
   end
 end

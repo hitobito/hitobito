@@ -41,7 +41,7 @@ describe GroupDecorator, :draper_with_helpers do
     end
 
     it '#modifiable_attributes filters attributes if we cannot :modify_superior' do
-      model.class.stub(superior_attributes: %w(foo))
+      model.class.stub(superior_attributes: [:foo])
       context.should_receive(:can?).with(:modify_superior, subject).and_return(false)
       subject.modifiable_attributes(:foo, :bar).should eq %w(bar)
     end

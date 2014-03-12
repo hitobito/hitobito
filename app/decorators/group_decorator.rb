@@ -49,7 +49,7 @@ class GroupDecorator < ApplicationDecorator
 
   def modifiable_attributes(*attributes)
     attributes = used_attributes(*attributes)
-    attributes -= model.class.superior_attributes unless can?(:modify_superior, model)
+    attributes -= model.class.superior_attributes.map(&:to_s) unless can?(:modify_superior, model)
     attributes
   end
 

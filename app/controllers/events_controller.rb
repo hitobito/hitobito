@@ -83,12 +83,4 @@ class EventsController < CrudController
     send(path, group, options)
   end
 
-  # TODO: dead code?
-  def type_name(event_type)
-    if event_type == Event
-      'simple'
-    else
-      event_type.name.demodulize.underscore
-    end
-  end
 end

@@ -29,7 +29,15 @@ class Role < ActiveRecord::Base
   include NormalizedLabels
   include TypeId
 
-  attr_accessible :label
+  ### ATTRIBUTES
+
+  # All attributes actually used (and mass-assignable) by the respective STI type.
+  class_attribute :used_attributes
+  self.used_attributes = [:label]
+
+  # Attributes that may only be modified by people from superior layers.
+  class_attribute :superior_attributes
+  self.superior_attributes = []
 
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
@@ -55,12 +63,9 @@ class Role < ActiveRecord::Base
   ### CLASS METHODS
 
   class << self
-
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
-      [:default, :superior].any? do |role|
-        accessible_attributes(role).include?(attr)
-      end
+      used_attributes.include?(attr)
     end
   end
 

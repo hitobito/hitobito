@@ -46,10 +46,16 @@ class Event < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :role_types,
+  class_attribute :used_attributes,
+                  :role_types,
                   :supports_applications,
                   :possible_states,
                   :kind_class
+
+  # All attributes actually used (and mass-assignable) by the respective STI type.
+  self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
+                          :description, :location, :application_opening_at, :application_closing_at,
+                          :application_conditions, :external_applications,]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -67,11 +73,6 @@ class Event < ActiveRecord::Base
 
   # The class used for the kind_id
   self.kind_class = nil
-
-  attr_accessible :name, :motto, :cost, :maximum_participants, :contact_id,
-                  :description, :location, :application_opening_at, :application_closing_at,
-                  :application_conditions, :dates_attributes, :questions_attributes, :group_ids,
-                  :external_applications
 
 
   ### ASSOCIATIONS
@@ -167,7 +168,7 @@ class Event < ActiveRecord::Base
 
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
-      accessible_attributes.include?(attr)
+      used_attributes.include?(attr)
     end
 
     def label

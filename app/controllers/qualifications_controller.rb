@@ -9,6 +9,8 @@ class QualificationsController < CrudController
 
   self.nesting = Group, Person
 
+  self.permitted_attrs = [:qualification_kind_id, :qualification_kind, :start_at, :origin]
+
   decorates :group, :person
 
   # load parents before authorization

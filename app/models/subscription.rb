@@ -18,8 +18,6 @@
 
 class Subscription < ActiveRecord::Base
 
-  attr_accessible :subscriber_id
-
   include RelatedRoleType::Assigners
 
 

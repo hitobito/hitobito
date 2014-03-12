@@ -9,6 +9,8 @@ class PeopleFiltersController < CrudController
 
   self.nesting = Group
 
+  self.permitted_attrs = [:name, :role_type_ids, role_types: [], role_type_ids: []]
+
   decorates :group
 
   hide_action :index, :show, :edit, :update
@@ -55,5 +57,9 @@ class PeopleFiltersController < CrudController
 
   def compose_role_lists
     @role_types = Role::TypeList.new(group.class)
+  end
+
+  def permitted_params
+    model_params.permit(permitted_attrs)
   end
 end

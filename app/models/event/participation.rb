@@ -26,9 +26,6 @@ class Event::Participation < ActiveRecord::Base
 
   self.demodulized_route_keys = true
 
-  attr_accessible :additional_information, :answers_attributes, :application_attributes
-
-
   ### ASSOCIATIONS
 
   belongs_to :event
@@ -39,7 +36,6 @@ class Event::Participation < ActiveRecord::Base
   has_many :roles, dependent: :destroy
 
   has_many :answers, dependent: :destroy, validate: true
-
 
 
   accepts_nested_attributes_for :answers, :application

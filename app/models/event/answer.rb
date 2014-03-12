@@ -17,8 +17,6 @@
 
 class Event::Answer < ActiveRecord::Base
 
-  attr_accessible :answer, :question_id
-
   belongs_to :participation
   belongs_to :question
 

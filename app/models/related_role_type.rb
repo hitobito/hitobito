@@ -19,8 +19,6 @@ class RelatedRoleType < ActiveRecord::Base
 
   belongs_to :relation, polymorphic: true
 
-  attr_accessible :role_type
-
   validates :role_type, inclusion: { in: lambda { |i| Role.all_types.collect(&:sti_name) } }
 
   def to_s

@@ -62,7 +62,7 @@ describe Event::ParticipationsController, type: :controller do
     [:event_base, :course].each do |event_sym|
       it "prompts to change contact data for #{event_sym}" do
         event = send(event_sym)
-        post :create, group_id: group.id, event_id: event.id, participation: test_entry_attrs
+        post :create, group_id: group.id, event_id: event.id, event_participation: test_entry_attrs
         flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
         should redirect_to group_event_participation_path(group, event, assigns(:participation))
       end

@@ -19,12 +19,11 @@ class PeopleFilter < ActiveRecord::Base
 
   include RelatedRoleType::Assigners
 
-  attr_accessible :name, :role_types, :role_type_ids
-
 
   belongs_to :group
 
   has_many :related_role_types, as: :relation, dependent: :destroy
+
 
   validates :name, uniqueness: { scope: [:group_id, :group_type] }
 

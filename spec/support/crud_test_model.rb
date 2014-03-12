@@ -11,9 +11,6 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   include DatetimeAttribute
   datetime_attr :last_seen
 
-  attr_protected nil
-
-
   belongs_to :companion, class_name: 'CrudTestModel'
   has_and_belongs_to_many :others, class_name: 'OtherCrudTestModel'
   has_many :mores, class_name: 'OtherCrudTestModel', foreign_key: :more_id
@@ -55,9 +52,6 @@ class CrudTestModelDecorator < Draper::Decorator
 end
 
 class OtherCrudTestModel < ActiveRecord::Base #:nodoc:
-
-  attr_protected nil
-
   has_and_belongs_to_many :others, class_name: 'CrudTestModel'
   belongs_to :more, foreign_key: :more_id, class_name: 'CrudTestModel'
 
@@ -72,6 +66,9 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   self.search_columns = [:name, :whatever, :remarks]
   self.sort_mappings = { chatty: 'length(remarks)' }
+  self.permitted_attrs = [:name, :email, :password, :whatever, :children,
+                          :companion_id, :rating, :income, :birthdate,
+                          :gets_up_at, :last_seen, :human, :remarks]
 
   skip_authorize_resource
   skip_authorization_check

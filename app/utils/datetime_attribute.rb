@@ -64,8 +64,6 @@ module DatetimeAttribute
       attrs.each do |attr|
         datetime_attributes << attr
 
-        attr_accessible attr, :"#{attr}_date", :"#{attr}_hour", :"#{attr}_min"
-
         # define field accessors
         [:date, :hour, :min].each do |field|
           accessor = :"#{attr}_#{field}"

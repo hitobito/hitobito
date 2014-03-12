@@ -21,8 +21,6 @@ class PhoneNumber < ActiveRecord::Base
 
   has_paper_trail meta: { main: :contactable }
 
-  attr_accessible :number, :label, :public, as: [:default, :superior]
-
   belongs_to :contactable, polymorphic: true
 
   scope :public, -> { where(public: true) }

@@ -10,6 +10,8 @@ class Event::RolesController < CrudController
 
   self.nesting = Group, Event
 
+  self.permitted_attrs = [:label]
+
   decorates :event_role, :event, :group
 
   # load group before authorization
@@ -39,13 +41,14 @@ class Event::RolesController < CrudController
   private
 
   def build_entry
-    role = parent.class.find_role_type!(model_params && model_params.delete(:type)).new
+    attrs = params[:event_role]
+    role = parent.class.find_role_type!(attrs && attrs.delete(:type)).new
 
     # delete unused attributes
-    model_params.delete(:event_id)
-    model_params.delete(:person)
+    attrs.delete(:event_id)
+    attrs.delete(:person)
 
-    role.participation = parent.participations.where(person_id: model_params.delete(:person_id)).
+    role.participation = parent.participations.where(person_id: attrs.delete(:person_id)).
                                                first_or_initialize
     role.participation.init_answers if role.participation.new_record?
 
@@ -69,6 +72,11 @@ class Event::RolesController < CrudController
 
   def parent_scope
     model_class
+  end
+
+  # model_params may be empty
+  def permitted_params
+    model_params.permit(permitted_attrs)
   end
 
   class << self

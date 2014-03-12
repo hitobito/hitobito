@@ -22,8 +22,6 @@ class Event::Application < ActiveRecord::Base
 
   self.demodulized_route_keys = true
 
-  attr_accessible :priority_2_id, :priority_3_id
-
   ### ASSOCIATION
 
   has_one :participation
@@ -35,7 +33,7 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_3, class_name: 'Event' #::Course
 
 
-  ## CLASS METHODS
+  ### CLASS METHODS
 
   class << self
     def pending
@@ -45,6 +43,7 @@ class Event::Application < ActiveRecord::Base
     end
   end
 
+  ### INSTANCE METHODS
 
   def contact
     event.contact

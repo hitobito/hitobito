@@ -19,8 +19,6 @@ class CustomContent < ActiveRecord::Base
   translates :label, :subject, :body, fallbacks_for_empty_translations: true
   Translation.schema_validations_config.auto_create = false
 
-  attr_accessible :body, :subject
-
   # specify validations for translated attributes explicitly
   validates :label, presence: true
   validates :label, :subject, length: { maximum: 255, allow_nil: true }

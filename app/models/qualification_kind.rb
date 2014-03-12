@@ -27,8 +27,6 @@ class QualificationKind < ActiveRecord::Base
   translates :label, :description, fallbacks_for_empty_translations: true
   Translation.schema_validations_config.auto_create = false
 
-  attr_accessible :label, :validity, :description, :reactivateable
-
 
   ### ASSOCIATIONS
 

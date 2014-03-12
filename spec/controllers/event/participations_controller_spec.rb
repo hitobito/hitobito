@@ -132,7 +132,7 @@ describe Event::ParticipationsController do
 
     def create(*roles)
       roles.map do |role_class|
-        role = Fabricate(:event_role, type: role_class.name.to_sym)
+        role = Fabricate(:event_role, type: role_class.sti_name)
         Fabricate(:event_participation, event: course, roles: [role], active: true)
       end
     end
@@ -156,13 +156,15 @@ describe Event::ParticipationsController do
       end
 
       it 'creates confirmation job' do
-        expect { post :create, group_id: group.id, event_id: course.id }.to change { Delayed::Job.count }.by(1)
+        expect do
+          post :create, group_id: group.id, event_id: course.id, event_participation: {}
+        end.to change { Delayed::Job.count }.by(1)
         flash[:notice].should include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
         flash[:notice].should include 'unterzeichnen und per Post an die entsprechende Adresse schicken.'
       end
 
       it 'creates participant role for non course events' do
-        post :create, group_id: group.id, event_id: Fabricate(:event).id
+        post :create, group_id: group.id, event_id: Fabricate(:event).id, event_participation: {}
         participation = assigns(:participation)
         participation.roles.should have(1).item
         role = participation.roles.first
@@ -227,7 +229,9 @@ describe Event::ParticipationsController do
       let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['1', '2'] } } }
 
       it 'handles multiple choice answers' do
-        post :create, group_id: event.groups.first.id, event_id: event.id, event_participation: { answers_attributes: answers_attributes }
+        post :create, group_id: event.groups.first.id,
+                      event_id: event.id,
+                      event_participation: { answers_attributes: answers_attributes }
         assigns(:participation).answers.first.answer.should eq 'GA, Halbtax'
       end
     end
@@ -246,7 +250,9 @@ describe Event::ParticipationsController do
 
       it 'handles resetting of multiple choice answers' do
         participation.answers.first.answer.should eq 'GA, Halbtax'
-        put :update, group_id: event.groups.first.id, event_id: event.id, id: participation.id, event_participation: { answers_attributes: answers_attributes }
+        put :update, group_id: event.groups.first.id,
+                     event_id: event.id, id: participation.id,
+                     event_participation: { answers_attributes: answers_attributes }
         participation.reload.answers.first.answer.should be_nil
       end
     end

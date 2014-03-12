@@ -7,6 +7,10 @@
 
 class GroupsController < CrudController
 
+  # Respective group attrs are added in corresponding instance method.
+  self.permitted_attrs = [ phone_numbers_attributes: [:number, :label, :public],
+                           social_accounts_attributes: [:name, :label, :public] ]
+
   decorates :group, :groups, :contact
 
   before_render_show :load_sub_groups
@@ -48,9 +52,19 @@ class GroupsController < CrudController
     group
   end
 
-  def assign_attributes
-    role = entry.class.superior_attributes.present? && can?(:modify_superior, entry) ? :superior : :default
-    entry.assign_attributes(model_params.except(:type, :parent_id), as: role)
+  def permitted_attrs
+    attrs = entry.class.used_attributes.dup
+    attrs += self.class.permitted_attrs
+    if entry.class.superior_attributes.present? && !can?(:modify_superior, entry)
+      attrs -= entry.class.superior_attributes
+    end
+    attrs
+  end
+
+  def permitted_params
+    model_params.delete(:type)
+    model_params.delete(:parent_id)
+    model_params.permit(permitted_attrs)
   end
 
   def load_contacts

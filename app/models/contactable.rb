@@ -9,10 +9,11 @@ module Contactable
 
   extend ActiveSupport::Concern
 
-  included do
+  ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country,
+                      phone_numbers_attributes: [:number, :label, :public],
+                      social_accounts_attributes: [:name, :label, :public]]
 
-    attr_accessible :email, :address, :zip_code, :town, :country,
-                    :phone_numbers_attributes, :social_accounts_attributes
+  included do
 
     has_many :phone_numbers, as: :contactable, dependent: :destroy
     has_many :social_accounts, as: :contactable, dependent: :destroy
@@ -42,7 +43,6 @@ module Contactable
     def preload_public_accounts
       all.extending(Person::PreloadPublicAccounts)
     end
-
   end
 
 end

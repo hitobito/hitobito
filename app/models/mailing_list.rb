@@ -22,10 +22,6 @@
 
 class MailingList < ActiveRecord::Base
 
-  attr_accessible :name, :description, :publisher, :mail_name,
-                  :additional_sender, :subscribable, :subscribers_may_post
-
-
   belongs_to :group
 
   has_many :subscriptions, dependent: :destroy
@@ -36,7 +32,6 @@ class MailingList < ActiveRecord::Base
                         allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
-
 
 
   def to_s

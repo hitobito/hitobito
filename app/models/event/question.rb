@@ -18,10 +18,6 @@
 
 class Event::Question < ActiveRecord::Base
 
-
-  attr_accessible :question, :choices, :multiple_choices
-
-
   belongs_to :event
 
   has_many :answers, dependent: :destroy
@@ -35,7 +31,6 @@ class Event::Question < ActiveRecord::Base
   def choice_items
     choices.to_s.split(',').collect(&:strip)
   end
-
 
   private
 

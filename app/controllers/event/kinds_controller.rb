@@ -7,6 +7,11 @@
 
 class Event::KindsController < SimpleCrudController
 
+  self.permitted_attrs = [:label, :short_name, :minimum_age,
+                          qualification_kind_ids: [],
+                          precondition_ids: [],
+                          prolongation_ids: []]
+
   self.sort_mappings = { label:      'event_kind_translations.label',
                          short_name: 'event_kind_translations.short_name',}
 

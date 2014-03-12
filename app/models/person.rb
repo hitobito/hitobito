@@ -48,12 +48,6 @@ class Person < ActiveRecord::Base
                   :email, :address, :zip_code, :town, :country, :gender, :birthday,
                   :picture, :primary_group_id]
 
-  attr_accessible :first_name, :last_name, :company_name, :nickname, :company,
-                  :address, :zip_code, :town, :country,
-                  :gender, :birthday, :additional_information,
-                  :password, :password_confirmation, :remember_me,
-                  :picture, :remove_picture
-
   # define devise before other modules
   devise :database_authenticatable,
          :lockable,

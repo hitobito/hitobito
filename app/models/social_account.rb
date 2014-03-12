@@ -23,8 +23,6 @@ class SocialAccount < ActiveRecord::Base
 
   has_paper_trail meta: { main: :contactable }
 
-  attr_accessible :name, :label, :public, as: [:default, :superior]
-
   belongs_to :contactable, polymorphic: true
 
   validates :label, presence: true

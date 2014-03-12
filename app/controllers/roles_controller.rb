@@ -66,11 +66,8 @@ class RolesController < CrudController
   end
 
   def changed_type
-    type = nil
-    if model_params
-      model_params.delete(:person_id)
-      type = model_params.delete(:type)
-    end
+    extract_model_attr(:person_id)
+    type = extract_model_attr(:type)
 
     type if @group.id != entry.group_id || (type && type != entry.type)
   end
@@ -78,7 +75,7 @@ class RolesController < CrudController
   def change_type(type)
     @type = @group.class.find_role_type!(type)
     new_role = @type.new
-    new_role.attributes = model_params
+    new_role.attributes = permitted_params
     new_role.person_id = entry.person_id
     new_role.group_id = @group.id
     authorize!(:create, new_role)
@@ -92,9 +89,7 @@ class RolesController < CrudController
 
   def build_entry
     # delete unused attributes
-    if model_params
-      model_params.delete(:person)
-    end
+    extract_model_attr(:person)
 
     role = build_role
     role.group_id = @group.id
@@ -109,7 +104,7 @@ class RolesController < CrudController
 
   def build_role
     @group = find_group
-    type = model_params && model_params.delete(:type)
+    type = extract_model_attr(:type)
     if type.present?
       @type = @group.class.find_role_type!(type)
       @type.new
@@ -119,8 +114,8 @@ class RolesController < CrudController
   end
 
   def build_person(role)
-    person_attrs = (model_params && model_params.delete(:new_person)) || {}
-    person_id = model_params && model_params.delete(:person_id)
+    person_attrs = extract_model_attr(:new_person) || {}
+    person_id = extract_model_attr(:person_id)
     if person_id.present?
       role.person_id = person_id
       role.person = Person.new unless role.person
@@ -129,9 +124,17 @@ class RolesController < CrudController
     end
   end
 
+  def permitted_params
+    model_params.permit(entry.class.used_attributes)
+  end
+
   def find_group
-    id = model_params && model_params.delete(:group_id)
+    id = extract_model_attr(:group_id)
     id ? Group.find(id) : parent
+  end
+
+  def extract_model_attr(attr)
+    model_params && model_params.delete(attr)
   end
 
   # A label for the current entry, including the model name, used for flash

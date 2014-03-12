@@ -10,6 +10,11 @@ class Event::ParticipationsController < CrudController
   include RenderPeopleExports
 
   self.nesting = Group, Event
+
+  self.permitted_attrs = [:additional_information,
+                          answers_attributes: [:id, :question_id, :answer, answer: []],
+                          application_attributes: [:priority_2_id, :priority_3_id]]
+
   self.remember_params += [:filter]
 
   decorates :group, :event, :participation, :participations, :alternatives
@@ -29,7 +34,7 @@ class Event::ParticipationsController < CrudController
 
 
   def new
-    assign_attributes
+    assign_attributes if params[:event_participation]
     entry.init_answers
     respond_with(entry)
   end
@@ -185,6 +190,11 @@ class Event::ParticipationsController < CrudController
 
   def group
     @group ||= parents.first
+  end
+
+  # model_params may be empty
+  def permitted_params
+    model_params.permit(permitted_attrs)
   end
 
   class << self

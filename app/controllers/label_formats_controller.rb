@@ -7,9 +7,11 @@
 
 class LabelFormatsController < SimpleCrudController
 
+  self.permitted_attrs = [:name, :page_size, :landscape, :font_size, :width, :height,
+                          :padding_top, :padding_left, :count_horizontal, :count_vertical]
+
   self.sort_mappings = { name: 'label_format_translations.name',
                          dimensions: %w(count_horizontal count_vertical) }
-
 
   private
 

@@ -10,6 +10,13 @@ class EventsController < CrudController
 
   self.nesting = Group
 
+  # Respective event attrs are added in corresponding instance method.
+  self.permitted_attrs = [group_ids: [],
+                          dates_attributes: [:label, :location,
+                                             :start_at, :start_at_date, :start_at_hour, :start_at_min,
+                                             :finish_at, :finish_at_date, :finish_at_hour, :finish_at_min],
+                          questions_attributes: [:question, :choices, :multiple_choices]]
+
   self.remember_params += [:year]
 
   decorates :event, :events, :group
@@ -49,8 +56,10 @@ class EventsController < CrudController
     event
   end
 
-  def assign_attributes
-    entry.attributes = model_params.except(:type, :contact)
+  def permitted_params
+    model_params.delete(:type)
+    model_params.delete(:contact)
+    model_params.permit(permitted_attrs)
   end
 
   def group
@@ -81,6 +90,11 @@ class EventsController < CrudController
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
+  end
+
+  def permitted_attrs
+    attrs = entry.class.used_attributes
+    attrs + self.class.permitted_attrs
   end
 
 end

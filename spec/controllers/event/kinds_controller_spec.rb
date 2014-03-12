@@ -15,7 +15,7 @@ describe Event::KindsController do
 
   it 'POST update resets destroy flag when updating deleted kinds' do
     destroyed.should be_destroyed
-    post :update, id: destroyed.id
+    post :update, id: destroyed.id, event_kind: { label: destroyed.label }
     destroyed.reload.should_not be_destroyed
   end
 

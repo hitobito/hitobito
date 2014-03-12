@@ -13,7 +13,9 @@
 # overriding the entire method.
 class CrudController < ListController
 
-  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy]
+  class_attribute :permitted_attrs
+
+  prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy]
 
   delegate :model_identifier, to: 'self.class'
 
@@ -49,7 +51,7 @@ class CrudController < ListController
   #   GET /entries/new
   #   GET /entries/new.json
   def new(&block)
-    assign_attributes
+    assign_attributes if params[model_identifier]
     respond_with(entry, &block)
   end
 
@@ -117,7 +119,7 @@ class CrudController < ListController
 
   # Assigns the attributes from the params to the model entry.
   def assign_attributes
-    entry.attributes = model_params
+    entry.attributes = permitted_params
   end
 
   # perform the save operation
@@ -136,6 +138,10 @@ class CrudController < ListController
   end
 
   # Access params for model
+  def permitted_params
+    params.require(model_identifier).permit(permitted_attrs)
+  end
+
   def model_params
     params[model_identifier]
   end

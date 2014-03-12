@@ -22,8 +22,6 @@ class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 
-  attr_accessible :label, :location
-
   belongs_to :event
 
   validates :start_at, presence: true

@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.3'
 
 # backward compatibility, remove soon
-gem 'protected_attributes'
+#gem 'protected_attributes'
 
 gem 'activerecord-session_store'
 gem 'airbrake'

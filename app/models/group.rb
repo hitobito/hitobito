@@ -33,7 +33,6 @@ class Group < ActiveRecord::Base
 
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect { |a| "groups.#{a}" }
 
-
   include Group::Types
   include Contactable
 
@@ -42,7 +41,15 @@ class Group < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  attr_accessible :name, :short_name, :email, :contact_id
+  # All attributes actually used (and mass-assignable) by the respective STI type.
+  # This must contain the superior attributes as well.
+  class_attribute :used_attributes
+  self.used_attributes = [:name, :short_name, :email, :contact_id,
+                          :email, :address, :zip_code, :town, :country]
+
+  # Attributes that may only be modified by people from superior layers.
+  class_attribute :superior_attributes
+  self.superior_attributes = []
 
   attr_readonly :type
 
@@ -87,14 +94,7 @@ class Group < ActiveRecord::Base
 
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
-      [:default, :superior].any? do |role|
-        accessible_attributes(role).include?(attr)
-      end
-    end
-
-    # Attributes that may only be modified by people from superior layers
-    def superior_attributes
-      accessible_attributes(:superior).to_a - accessible_attributes(:default).to_a
+      used_attributes.include?(attr)
     end
 
     # order groups by type. If a parent group is given, order the types

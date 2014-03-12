@@ -23,8 +23,8 @@ module Subscriber
     end
 
     def find_excluded_subscription
-      if model_params && model_params[:subscriber_id].present?
-        mailing_list.subscriptions.where(subscriber_id: model_params[:subscriber_id],
+      if subscriber_id
+        mailing_list.subscriptions.where(subscriber_id: subscriber_id,
                                          subscriber_type: Person.sti_name, excluded: true).first
       end
     end

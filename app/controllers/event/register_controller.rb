@@ -76,7 +76,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def create_person
-    person.attributes = params[:person]
+    person.attributes = params.require(:person).permit(PeopleController.permitted_attrs)
     person.save
   end
 

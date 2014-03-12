@@ -39,7 +39,7 @@ describe PeopleFiltersController do
 
     it 'redirects to show for empty search' do
       expect do
-        post :create, group_id: group.id, button: 'search'
+        post :create, group_id: group.id, button: 'search', people_filter: {}
       end.not_to change { PeopleFilter.count }
 
       should redirect_to(group_people_path(group))

@@ -9,8 +9,6 @@ module PaperTrail
   class Version < ActiveRecord::Base
     schema_validations auto_create: false
 
-    attr_accessible :main_id, :main_type, :main
-
     belongs_to :main, polymorphic: true
   end
 end

@@ -39,9 +39,6 @@ class Event::Role < ActiveRecord::Base
   self.demodulized_route_keys = true
 
 
-  attr_accessible :label
-
-
   ### ASSOCIATIONS
 
   belongs_to :participation, validate: true

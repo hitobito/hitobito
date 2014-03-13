@@ -84,8 +84,8 @@ class Event::RegisterController < ApplicationController
     @person ||= Person.new
   end
 
-  alias entry person
-  alias resource person
+  alias_method :entry, :person
+  alias_method :resource, :person
 
   def event
     @event ||= group.events.find(params[:id])

@@ -52,7 +52,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
 
   def reactivateable?(qualification_kind)
     person_qualifications.
-      select {|q| q.qualification_kind_id == qualification_kind.id }.
+      select { |q| q.qualification_kind_id == qualification_kind.id }.
       any? { |qualification| qualification.reactivateable?(course.start_date) }
   end
 
@@ -65,7 +65,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def qualifications_error_text
-    translate(:qualifications_missing, missing: errors.join(", "))
+    translate(:qualifications_missing, missing: errors.join(', '))
   end
 
 end

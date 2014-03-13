@@ -60,7 +60,7 @@ class RolesController < CrudController
       created = with_callbacks(:create, :save) do
         entry.person.save && entry.save
       end
-      raise ActiveRecord::Rollback unless created
+      fail ActiveRecord::Rollback unless created
     end
     created
   end

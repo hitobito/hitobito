@@ -12,7 +12,7 @@ describe EventsController, type: :controller do
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { ev = events(:top_course); ev.dates.clear; ev }
   let(:group) { test_entry.groups.first }
-  let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
+  let(:date)  { { label: 'foo', start_at_date: Date.today, finish_at_date: Date.today } }
   let(:test_entry_attrs) { { name: 'Chief Leader Course', group_ids: [group.id], dates_attributes: [date] } }
 
   def scope_params

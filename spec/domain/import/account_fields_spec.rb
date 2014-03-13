@@ -22,8 +22,8 @@ describe Import::AccountFields do
     its(:keys) { should eq Settings.social_account.predefined_labels.collect { |l| "social_account_#{l.downcase}" } }
     its(:values) { should eq Settings.social_account.predefined_labels.collect { |l| "Social Media Adresse #{l}" } }
     its('fields.first') do
-       should eq({ key: "social_account_#{Settings.social_account.predefined_labels.first.downcase}",
-                   value: "Social Media Adresse #{Settings.social_account.predefined_labels.first}" })
+       should eq(key: "social_account_#{Settings.social_account.predefined_labels.first.downcase}",
+                 value: "Social Media Adresse #{Settings.social_account.predefined_labels.first}")
     end
   end
 

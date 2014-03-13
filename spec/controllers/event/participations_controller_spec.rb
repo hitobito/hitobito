@@ -226,7 +226,7 @@ describe Event::ParticipationsController do
     end
 
     context 'POST #create' do
-      let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['1', '2'] } } }
+      let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => %w(1 2) } } }
 
       it 'handles multiple choice answers' do
         post :create, group_id: event.groups.first.id,

@@ -63,7 +63,7 @@ describe PeopleFilter do
   it 'creates RoleTypes with invalid id String List assignment' do
     group = groups(:top_layer)
     filter = group.people_filters.new(name: 'Test')
-    filter.role_type_ids = [33256, Group::TopGroup::Member.id].join('-')
+    filter.role_type_ids = [33_256, Group::TopGroup::Member.id].join('-')
     types = filter.related_role_types
 
     types.should have(1).items

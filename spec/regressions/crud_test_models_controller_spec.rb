@@ -156,7 +156,7 @@ describe CrudTestModelsController, type: :controller do
           it_should_respond
 
           it 'entries should be in correct order' do
-            entries.collect(&:name).should == ['CCCCC', 'DDDDD', 'BBBBB']
+            entries.collect(&:name).should == %w(CCCCC DDDDD BBBBB)
           end
 
           it 'session should have sort list param' do
@@ -188,7 +188,7 @@ describe CrudTestModelsController, type: :controller do
         it_should_respond
 
         it 'entries should be in correct order' do
-          entries.collect(&:name).should == ['BBBBB', 'DDDDD', 'CCCCC']
+          entries.collect(&:name).should == %w(BBBBB DDDDD CCCCC)
         end
 
         it 'params should be set' do

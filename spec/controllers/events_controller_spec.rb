@@ -36,8 +36,8 @@ describe EventsController do
     end
 
     context 'POST create' do
-      let(:date)  {{ label: 'foo', start_at_date: Date.today, finish_at_date: Date.today }}
-      let(:question)  {{ question: 'foo?', choices: '1,2,3,4' }}
+      let(:date)  { { label: 'foo', start_at_date: Date.today, finish_at_date: Date.today } }
+      let(:question)  { { question: 'foo?', choices: '1,2,3,4' } }
 
       it 'creates new event course with dates' do
         sign_in(people(:top_leader))

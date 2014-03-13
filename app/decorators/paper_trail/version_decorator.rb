@@ -48,11 +48,11 @@ module PaperTrail
     def attribute_change(attr, from, to)
       attr_label = item_class.human_attribute_name(attr)
       if from.present? && to.present?
-        I18n.t("version.attribute_change.from_to", attr: attr_label, from: normalize(from), to: normalize(to))
+        I18n.t('version.attribute_change.from_to', attr: attr_label, from: normalize(from), to: normalize(to))
       elsif from.present?
-        I18n.t("version.attribute_change.from", attr: attr_label, from: normalize(from))
+        I18n.t('version.attribute_change.from', attr: attr_label, from: normalize(from))
       elsif to.present?
-        I18n.t("version.attribute_change.to", attr: attr_label, to: normalize(to))
+        I18n.t('version.attribute_change.to', attr: attr_label, to: normalize(to))
       else
         ''
       end.html_safe

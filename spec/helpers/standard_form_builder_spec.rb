@@ -23,15 +23,15 @@ describe 'StandardFormBuilder' do
   describe '#input_field' do
 
     { name: :string_field,
-     password: :password_field,
-     remarks: :text_area,
-     children: :integer_field,
-     human: :boolean_field,
-     birthdate: :date_field,
-     gets_up_at: :time_field,
-     companion_id: :belongs_to_field,
-     other_ids: :has_many_field,
-     more_ids: :has_many_field,
+      password: :password_field,
+      remarks: :text_area,
+      children: :integer_field,
+      human: :boolean_field,
+      birthdate: :date_field,
+      gets_up_at: :time_field,
+      companion_id: :belongs_to_field,
+      other_ids: :has_many_field,
+      more_ids: :has_many_field,
     }.each do |attr, method|
       it "dispatches #{attr} attr to #{method}" do
         form.should_receive(method).with(attr, {})

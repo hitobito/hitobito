@@ -8,7 +8,7 @@
 module Export::Csv::People
   class ParticipationRow < Export::Csv::People::PersonRow
 
-    self.dynamic_attributes[/^question_\d+$/] = :question_attribute
+    dynamic_attributes[/^question_\d+$/] = :question_attribute
 
     def initialize(participation)
       @participation = participation

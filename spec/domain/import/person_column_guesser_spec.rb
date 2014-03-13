@@ -8,7 +8,7 @@
 require 'spec_helper'
 describe  Import::PersonColumnGuesser do
 
-  let(:headers) { ['Geschlecht', 'vorname', 'Name', 'skype'] }
+  let(:headers) { %w(Geschlecht vorname Name skype) }
   let(:guesser) { Import::PersonColumnGuesser.new(headers, params) }
   let(:nil_key) { { key: nil } }
   let(:params) { {} }
@@ -25,7 +25,7 @@ describe  Import::PersonColumnGuesser do
     end
 
     context 'handles noexisting headers' do
-      let(:headers) { ['Geburtsdatum', 'Email'] }
+      let(:headers) { %w(Geburtsdatum Email) }
 
       its(['Geburtsdatum']) { should eq nil_key }
       its(['Email']) { should eq nil_key }

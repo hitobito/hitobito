@@ -16,7 +16,7 @@ describe Import::CsvParser do
   [:utf8, :iso88591].each do |file|
     describe "parse #{file}" do
       let(:data) { File.read(path(file)) }
-      its(:headers) { should eq ['Vorname', 'Nachname', 'Geburtsdatum']  }
+      its(:headers) { should eq %w(Vorname Nachname Geburtsdatum)  }
       its([0]) { should eq CSV::Row.new(subject.headers, ['Ésaïe', 'Gärber', '25.08.1992']) }
       its(:size) { should eq 1 }
       its(:to_csv) { should eq "Vorname,Nachname,Geburtsdatum\nÉsaïe,Gärber,25.08.1992\n" }
@@ -55,14 +55,14 @@ describe Import::CsvParser do
 
   context 'two rows with empty field' do
     let(:data) { File.read(path(:two_rows)) }
-    its(:headers) { should eq ['Vorname', 'Nachname', 'Geburtsdatum', 'Ort', 'Email']  }
+    its(:headers) { should eq %w(Vorname Nachname Geburtsdatum Ort Email)  }
     its([1]) { should eq CSV::Row.new(subject.headers, ['Helin', 'Fietz', '', 'Bern', 'fietz.helin@hitobito.example.com']) }
   end
 
   context 'empty header' do
     let(:data) { File.read(path(:empty_header)) }
     its('csv.headers') { should eq ['first', '', 'last']  }
-    its(:headers) { should eq ['first', 'last']  }
+    its(:headers) { should eq %w(first last)  }
     its([0]) { should eq CSV::Row.new(subject.csv.headers, ['foo', nil, 'bar']) }
     its([1]) { should eq CSV::Row.new(subject.csv.headers, [nil, 'foobar', nil]) }
 

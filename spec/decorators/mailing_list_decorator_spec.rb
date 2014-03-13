@@ -39,4 +39,3 @@ describe MailingListDecorator  do
   end
 
 end
-

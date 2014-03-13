@@ -68,7 +68,7 @@ describe StandardHelper do
       end
 
       it 'should print large values without delimiters' do
-        f(10000000).should == '10000000'
+        f(10_000_000).should == '10000000'
       end
     end
 
@@ -82,7 +82,7 @@ describe StandardHelper do
       end
 
       it 'should add delimiters' do
-        f(12345.6789).should == "12&#39;345.68"
+        f(12345.6789).should == '12&#39;345.68'
       end
     end
 
@@ -165,7 +165,7 @@ describe StandardHelper do
     let(:model) { crud_test_models(:AAAAA) }
 
     it 'should format integers' do
-      model.children = 10000
+      model.children = 10_000
       format_type(model, :children).should == '10000'
     end
 
@@ -174,7 +174,7 @@ describe StandardHelper do
     end
 
     it 'should format decimals' do
-      format_type(model, :income).should == "10&#39;000&#39;000.10"
+      format_type(model, :income).should == '10&#39;000&#39;000.10'
     end
 
     it 'should format dates' do
@@ -213,18 +213,18 @@ describe StandardHelper do
   describe '#content_tag_nested' do
 
     it 'should escape safe content' do
-      html = content_tag_nested(:div, ['a', 'b']) { |e| content_tag(:span, e) }
+      html = content_tag_nested(:div, %w(a b)) { |e| content_tag(:span, e) }
       html.should be_html_safe
       html.should == '<div><span>a</span><span>b</span></div>'
     end
 
     it 'should escape unsafe content' do
-      html = content_tag_nested(:div, ['a', 'b']) { |e| "<#{e}>" }
+      html = content_tag_nested(:div, %w(a b)) { |e| "<#{e}>" }
       html.should == '<div>&lt;a&gt;&lt;b&gt;</div>'
     end
 
     it 'should simply join without block' do
-      html = content_tag_nested(:div, ['a', 'b'])
+      html = content_tag_nested(:div, %w(a b))
       html.should == '<div>ab</div>'
     end
   end
@@ -236,7 +236,7 @@ describe StandardHelper do
     end
 
     it 'should collect contents for array' do
-      html = safe_join(['a', 'b']) { |e| content_tag(:span, e) }
+      html = safe_join(%w(a b)) { |e| content_tag(:span, e) }
       html.should == '<span>a</span><span>b</span>'
     end
   end
@@ -267,7 +267,7 @@ describe StandardHelper do
     end
 
     context 'with data' do
-      subject { table(['foo', 'bar'], :size) { |t| t.attrs :upcase } }
+      subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
 
       it { should be_html_safe }
 

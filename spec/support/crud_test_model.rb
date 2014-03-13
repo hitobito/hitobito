@@ -93,7 +93,7 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   def index
     super do |format|
-      format.js { render text: 'index js'}
+      format.js { render text: 'index js' }
     end
   end
 
@@ -308,7 +308,7 @@ module CrudTestHelper
                           children: 10 - index,
                           companion: companion,
                           rating: "#{index}.#{index}".to_f,
-                          income: 10000000 * index + 0.1 * index,
+                          income: 10_000_000 * index + 0.1 * index,
                           birthdate: "#{1900 + 10 * index}-#{index}-#{index}",
                           # store entire date to avoid time zone issues
                           gets_up_at: RUBY_VERSION.include?('1.9.') ?

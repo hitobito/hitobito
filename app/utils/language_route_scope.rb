@@ -12,7 +12,7 @@ module LanguageRouteScope
     get '/:locale' => 'dashboard#index', locale: /#{languages.join('|')}/
 
     if languages.size > 1
-      scope "(:locale)", locale: /#{languages.join('|')}/, &block
+      scope '(:locale)', locale: /#{languages.join('|')}/, &block
     else
       block.call
     end

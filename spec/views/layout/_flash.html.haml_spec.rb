@@ -16,7 +16,7 @@ describe 'layouts/_flash.html.haml' do
   end
 
   context 'splits array into lines' do
-    let(:info) { ['foo', 'bar'] }
+    let(:info) { %w(foo bar) }
     its('native.to_xml') { should =~ %r{<br/>} }
     its(:text) { should eq "foo\nbar" }
   end

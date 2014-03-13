@@ -55,7 +55,7 @@ class Event < ActiveRecord::Base
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at, :application_closing_at,
-                          :application_conditions, :external_applications,]
+                          :application_conditions, :external_applications, ]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,

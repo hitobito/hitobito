@@ -24,7 +24,7 @@ describe Import::PersonDoubletteFinder do
   end
 
   context 'email only' do
-    before { Person.create!(attrs.merge({ first_name: 'foo' })) }
+    before { Person.create!(attrs.merge(first_name: 'foo')) }
     let(:attrs) { { email: 'foo@bar.com' } }
     its(:query) { should eq ['email = ?', 'foo@bar.com'] }
     its('find_and_update.first_name') { should eq 'foo' }
@@ -57,7 +57,7 @@ describe Import::PersonDoubletteFinder do
   end
 
   context 'multiple updates to the same person' do
-    before { Person.create!(attrs.merge({ first_name: 'foo' })) }
+    before { Person.create!(attrs.merge(first_name: 'foo')) }
     let(:attrs) { { email: 'foo@bar.com' } }
     its('find_and_update.first_name') { should eq 'foo' }
   end

@@ -29,11 +29,11 @@ module Dropdown
     end
 
     def csv_links
-      csv_path = params.merge({ format: :csv })
+      csv_path = params.merge(format: :csv)
 
       if @details
         item(translate(:csv), '#', [translate(:addresses), csv_path],
-                                   [translate(:everything), csv_path.merge(details: true)])
+             [translate(:everything), csv_path.merge(details: true)])
       else
         item(translate(:csv), csv_path)
       end
@@ -41,7 +41,7 @@ module Dropdown
 
     def email_addresses_link
       if @email_addresses
-        item(translate(:emails), params.merge({ format: :email }), target: :new)
+        item(translate(:emails), params.merge(format: :email), target: :new)
       end
     end
 

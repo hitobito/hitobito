@@ -45,7 +45,7 @@ describe Role::TypeList do
     list.to_enum.to_a.should == [
       ['Top Group',
        { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::Secretary, Group::TopGroup::Member],
-         'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member]}],
+         'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member] }],
       ['Global',
        { 'Global' => [Role::External] }],
     ]
@@ -56,10 +56,10 @@ describe Role::TypeList do
     list.to_enum.to_a.should == [
 
       ['Bottom Group',
-       {'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member] }],
+       { 'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member] }],
       ['Global',
-       {'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member],
-        'Global' => [Role::External] }],
+       { 'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member],
+         'Global' => [Role::External] }],
     ]
   end
 end

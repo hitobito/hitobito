@@ -134,4 +134,3 @@ describe RolesController, js: true do
     end
   end
 end
-

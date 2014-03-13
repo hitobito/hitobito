@@ -80,7 +80,7 @@ class Event::ListsController < ApplicationController
 
   def scope
     Event::Course
-      .includes(:groups, { kind: :translations })
+      .includes(:groups,  kind: :translations)
       .order('event_kind_translations.label')
       .in_year(year)
       .list

@@ -141,14 +141,14 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_prio_1.id}"
 
-          all("#applications ##{appl_id} td").first.find("a").click
+          all("#applications ##{appl_id} td").first.find('a').click
           should_not have_selector("#applications ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           find('#participants').should have_content(appl_prio_1.person.to_s(:list))
           all('#participants tr').last.should have_content(appl_prio_1.person.to_s(:list))
 
-          all("#participants ##{appl_id} td").last.find("a").click
+          all("#participants ##{appl_id} td").last.find('a').click
           should_not have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
@@ -178,14 +178,14 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_waiting.id}"
 
-          all("#applications ##{appl_id} td").first.find("a").click
+          all("#applications ##{appl_id} td").first.find('a').click
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           find('#participants').should have_content(appl_waiting.person.to_s(:list))
           all('#participants tr').last.should have_content(appl_waiting.person.to_s(:list))
           should_not have_selector("#applications ##{appl_id}")
 
-          all("#participants ##{appl_id} td").last.find("a").click
+          all("#participants ##{appl_id} td").last.find('a').click
           should_not have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
@@ -209,13 +209,13 @@ describe Event::ApplicationMarketController do
 
           appl_id = "event_participation_#{appl_participant.id}"
 
-          all("#participants ##{appl_id} td").last.find("a").click
+          all("#participants ##{appl_id} td").last.find('a').click
           should_not have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           find('#applications').should have_content(appl_participant.person.to_s(:list))
           all('#applications tr').last.should have_content(appl_participant.person.to_s(:list))
-          all("#applications ##{appl_id} td").first.find("a").click
+          all("#applications ##{appl_id} td").first.find('a').click
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           find('#participants tr').should have_content(appl_participant.person.to_s(:list))

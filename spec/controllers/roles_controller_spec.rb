@@ -16,7 +16,7 @@ describe RolesController do
   let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) }
 
   it 'GET new sets a role of the correct type' do
-    get :new, { group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name } }
+    get :new,  group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name }
 
     assigns(:role).should be_kind_of(Group::TopGroup::Member)
     assigns(:role).group_id.should == group.id
@@ -49,7 +49,7 @@ describe RolesController do
       should redirect_to(group_person_path(group, role.person))
 
       role.group_id.should == group.id
-      flash[:notice].should == "Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt."
+      flash[:notice].should == 'Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt.'
       role.should be_kind_of(Group::TopGroup::Member)
       person = role.person
       person.first_name.should == 'Hans'
@@ -75,7 +75,7 @@ describe RolesController do
                     role: { group_id: group.id,
                             person_id: nil,
                             type: Group::TopGroup::Member.sti_name,
-                            new_person: { } }
+                            new_person: {} }
 
       should render_template('new')
 
@@ -133,7 +133,7 @@ describe RolesController do
 
     it 'redirects to person after update' do
       expect do
-        put :update, { group_id: group.id, id: role.id, role: { label: 'bla', type: role.type, group_id: role.group_id } }
+        put :update,  group_id: group.id, id: role.id, role: { label: 'bla', type: role.type, group_id: role.group_id }
       end.not_to change { Role.with_deleted.count }
 
       flash[:notice].should eq "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
@@ -144,7 +144,7 @@ describe RolesController do
 
     it 'terminates and creates new role if type changes' do
       expect do
-        put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name } }
+        put :update,  group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name }
       end.not_to change { Role.with_deleted.count }
       should redirect_to(group_person_path(group, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
@@ -154,7 +154,7 @@ describe RolesController do
     it 'terminates and creates new role if type and group changes' do
       g = groups(:toppers)
       expect do
-        put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id } }
+        put :update,  group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id }
       end.not_to change { Role.with_deleted.count }
       should redirect_to(group_person_path(g, person))
       Role.with_deleted.where(id: role.id).should_not be_exists
@@ -166,7 +166,7 @@ describe RolesController do
 
       it 'terminates and creates new role if type changes' do
         expect do
-          put :update, { group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name } }
+          put :update,  group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name }
         end.not_to change { Role.with_deleted.count }
         should redirect_to(group_person_path(group, person))
         Role.with_deleted.where(id: role.id).should_not be_exists
@@ -176,7 +176,7 @@ describe RolesController do
       it 'is not allowed if group changes' do
         g = groups(:toppers)
         expect do
-          put :update, { group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Member.sti_name, group_id: g.id } }
+          put :update,  group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Member.sti_name, group_id: g.id }
         end.to raise_error(CanCan::AccessDenied)
         Role.with_deleted.where(id: role.id).should be_exists
       end
@@ -188,7 +188,7 @@ describe RolesController do
 
 
     it 'redirects to group' do
-      post :destroy, { group_id: group.id, id: role.id }
+      post :destroy,  group_id: group.id, id: role.id
 
       flash[:notice].should eq notice
       should redirect_to(group_path(group))
@@ -196,7 +196,7 @@ describe RolesController do
 
     it 'redirects to person if user can still view person' do
       Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
-      post :destroy, { group_id: group.id, id: role.id }
+      post :destroy,  group_id: group.id, id: role.id
 
       flash[:notice].should eq notice
       should redirect_to(person_path(person))

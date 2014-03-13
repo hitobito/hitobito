@@ -61,7 +61,7 @@ module Event::Qualifier
     end
 
     # Qualifications set for this qualification_date (via preceeding #issue call in controller)
-    def obtained(kinds=[])
+    def obtained(kinds = [])
       @obtained ||= person.qualifications.where(start_at: qualification_date,
                                                 qualification_kind_id: kinds.map(&:id)).to_a
     end

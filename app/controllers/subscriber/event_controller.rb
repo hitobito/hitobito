@@ -37,7 +37,7 @@ module Subscriber
     end
 
     def matching_events
-       possible_events.joins('LEFT JOIN event_kinds ' +
+       possible_events.joins('LEFT JOIN event_kinds ' \
                              'ON events.kind_id = event_kinds.id ' +
                              "AND events.type = '#{Event::Course.sti_name}' " +
                              'LEFT JOIN event_kind_translations ' +

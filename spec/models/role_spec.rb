@@ -47,7 +47,7 @@ describe Role do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
     subject do
-      r = Role.new #Group::BottomLayer::Leader.new
+      r = Role.new # Group::BottomLayer::Leader.new
       r.type = 'Group::BottomLayer::Leader'
       r.person = person
       r.group = group
@@ -77,7 +77,7 @@ describe Role do
     end
 
     context 'primary group' do
-      #before { subject.type = 'Group::BottomLayer::Leader' }
+      # before { subject.type = 'Group::BottomLayer::Leader' }
 
       it 'is set for first role' do
         subject.save.should be_true
@@ -171,7 +171,7 @@ describe Role do
     it 'includes labels from all types' do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', group: groups(:bottom_layer_one))
-      should == ['Bar', 'foo']
+      should == %w(Bar foo)
     end
   end
 

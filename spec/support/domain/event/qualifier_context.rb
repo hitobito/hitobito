@@ -1,4 +1,4 @@
-shared_context "qualifier context"  do
+shared_context 'qualifier context'  do
 
   let(:course) do
     event = Fabricate(:course, kind: event_kind)

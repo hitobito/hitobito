@@ -11,8 +11,7 @@ describe Export::Csv::Groups::List do
   subject { csv }
 
    its(:headers) do
-     should == ['Id', 'Elterngruppe', 'Name', 'Kurzname', 'Gruppentyp', 'E-Mail',
-                'Adresse', 'PLZ', 'Ort', 'Land', 'Ebene']
+     should == %w(Id Elterngruppe Name Kurzname Gruppentyp E-Mail Adresse PLZ Ort Land Ebene)
    end
 
    it { should have(4).items }

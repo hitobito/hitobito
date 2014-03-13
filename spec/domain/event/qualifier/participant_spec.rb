@@ -84,7 +84,7 @@ describe 'Event::Qualifier for participant' do
     it 'removes qualifications and prolongations obtained on quali_date' do
       create_qualification(quali_date, :gl)
       create_qualification(quali_date, :sl)
-      create_qualification(Date.new(2010,3,10), :gl)
+      create_qualification(Date.new(2010, 3, 10), :gl)
 
       expect { qualifier.revoke }.to change { person.qualifications.count }.by(-2)
       person.qualifications.map(&:qualification_kind).should_not include qualification_kinds(:sl)

@@ -49,15 +49,15 @@ describe CsvImportsController do
 
     it 'informs about newly imported person' do
       post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'last_name' })
-      flash[:notice].should eq ["1 Person (Leader) wird neu importiert."]
+      flash[:notice].should eq ['1 Person (Leader) wird neu importiert.']
       should render_template(:preview)
     end
 
 
     it 'renders preview even when field_mapping is missing' do
       post :preview, required_params
-      flash[:alert].should eq ["1 Person (Leader) wird nicht importiert.",
-                               "Zeile 1: Bitte geben Sie einen Namen ein."]
+      flash[:alert].should eq ['1 Person (Leader) wird nicht importiert.',
+                               'Zeile 1: Bitte geben Sie einen Namen ein.']
       should render_template(:preview)
     end
 
@@ -75,7 +75,7 @@ describe CsvImportsController do
         Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
         post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Email: 'email' })
         flash[:alert].should eq ['1 Person (Leader) wird nicht importiert.',
-                                 "Zeile 1: 2 Treffer in Duplikatserkennung."]
+                                 'Zeile 1: 2 Treffer in Duplikatserkennung.']
       end
     end
 

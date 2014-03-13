@@ -32,7 +32,7 @@ describe CustomContent do
 
     it 'creates list with several elements' do
       subject.placeholders_required = 'login-url, foo ,bar'
-      subject.placeholders_required_list.should == ['login-url', 'foo', 'bar']
+      subject.placeholders_required_list.should == %w(login-url foo bar)
     end
   end
 

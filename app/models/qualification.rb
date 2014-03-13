@@ -76,17 +76,11 @@ class Qualification < ActiveRecord::Base
   end
 
   def to_s_key(format = :default)
-    if format == :long && origin?
-      if finish_at?
-        'string_with_finish_at_and_origin'
-      else
-        'string_with_origin'
-      end
-    elsif finish_at?
-      'string_with_finish_at'
-    else
-      'string'
-    end
+    cols = []
+    cols << :finish_at if finish_at?
+    cols << :origin if format == :long && origin?
+
+    ['string', cols.join('_and_').presence].compact.join('_with_')
   end
 
 end

@@ -36,15 +36,7 @@ module Person::DeviseOverrides
       params.delete(:password_confirmation) if params[:password_confirmation].blank?
     end
 
-    result = if encrypted_password.nil? || valid_password?(current_password)
-               update_attributes(params, *options)
-             else
-               assign_attributes(params, *options)
-               self.valid?
-               errors.add(:current_password, current_password.blank? ? :blank : :invalid)
-               false
-             end
-
+    result = update_password_if_valid(params, current_password, *options)
     clean_up_passwords
     result
   end
@@ -59,5 +51,16 @@ module Person::DeviseOverrides
   # Passwords are required if the password or confirmation are being set somewhere.
   def password_required?
     !password.nil? || !password_confirmation.nil?
+  end
+
+  def update_password_if_valid(params, current_password, *options)
+    if encrypted_password.nil? || valid_password?(current_password)
+      update_attributes(params, *options)
+    else
+      assign_attributes(params, *options)
+      self.valid?
+      errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+      false
+    end
   end
 end

@@ -29,7 +29,8 @@ class Event::Answer < ActiveRecord::Base
   def answer=(text)
     if question_with_choices? && question.multiple_choices? && text.is_a?(Array)
       valid_range = (0...question.choice_items.size)
-      index_array = text.map(&:to_i).map { |i| i - 1 } # have submit index + 1 and handle reset via index 0
+      # have submit index + 1 and handle reset via index 0
+      index_array = text.map(&:to_i).map { |i| i - 1 }
 
       super(valid_index_based_values(index_array, valid_range) || nil)
     else
@@ -42,7 +43,10 @@ class Event::Answer < ActiveRecord::Base
   def assert_answer_is_in_choice_items
     # still allow answer to be nil because otherwise participations could not
     # be created without answering all questions (required to create roles for other people)
-    if question_with_choices? && answer && !question.multiple_choices? && !question.choice_items.include?(answer)
+    if question_with_choices? &&
+       answer &&
+       !question.multiple_choices? &&
+       !question.choice_items.include?(answer)
       errors.add(:answer, :inclusion)
     end
   end

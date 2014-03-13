@@ -64,6 +64,7 @@ class MailingList < ActiveRecord::Base
     end
   end
 
+  # rubocop:disable MethodLength
   def people
     Person.only_public_data.
            joins('LEFT JOIN roles ON people.id = roles.person_id').
@@ -81,6 +82,7 @@ class MailingList < ActiveRecord::Base
            where(suscriber_conditions).
            uniq
   end
+  # rubocop:enable MethodLength
 
   private
 
@@ -125,10 +127,14 @@ class MailingList < ActiveRecord::Base
   end
 
   def assert_mail_name_is_not_protected
-    if mail_name? && main = Settings.email.retriever.config.user_name.presence
-      if mail_name.downcase == main.split('@', 2).first.downcase
+    if mail_name? && application_retriever_name
+      if mail_name.downcase == application_retriever_name.split('@', 2).first.downcase
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end
+  end
+
+  def application_retriever_name
+    Settings.email.retriever.config.user_name.presence
   end
 end

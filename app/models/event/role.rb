@@ -17,9 +17,13 @@
 
 class Event::Role < ActiveRecord::Base
 
+  # rubocop:disable ConstantName
+
   Permissions = [:full, :qualify, :contact_data]
 
   Kinds = [:leader, :helper, :participant]
+
+  # rubocop:enable ConstantName
 
   include NormalizedLabels
 
@@ -73,7 +77,7 @@ class Event::Role < ActiveRecord::Base
 
   def to_s
     model_name = self.class.label
-    string = label? ? "#{label} (#{model_name})" : model_name
+    label? ? "#{label} (#{model_name})" : model_name
   end
 
   def person_id

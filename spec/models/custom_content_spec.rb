@@ -69,7 +69,7 @@ describe CustomContent do
     end
 
     it 'raises an error if placeholder is missing' do
-      expect { subject.body_with_values('login-url' => 'example.com/login') }.to raise_error(ArgumentError)
+      expect { subject.body_with_values('login-url' => 'example.com/login') }.to raise_error(KeyError)
     end
 
     it 'raises an error if non-defined placeholder is given' do

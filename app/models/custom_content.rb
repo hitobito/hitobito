@@ -42,7 +42,7 @@ class CustomContent < ActiveRecord::Base
   end
 
   def placeholders_list
-    placeholders_required_list + placeholders_optional_list
+    @placeholders_list ||= placeholders_required_list + placeholders_optional_list
   end
 
   def placeholders_required_list
@@ -58,21 +58,12 @@ class CustomContent < ActiveRecord::Base
   end
 
   def body_with_values(placeholders = {})
-    available = placeholders_list
-    if non_existing = (placeholders.keys - available).presence
-      fail(ArgumentError,
-           "Placeholder(s) #{non_existing.join(', ')} given, " <<
-           'but not defined for this custom content')
-    end
+    check_placeholders_exist(placeholders)
 
-    available.each_with_object(body.dup) do |placeholder, output|
+    placeholders_list.each_with_object(body.dup) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
-        if placeholders.key?(placeholder)
-          output.gsub!(token, placeholders[placeholder])
-        else
-          fail ArgumentError, "Body contains placeholder #{token}, not given"
-        end
+        output.gsub!(token, placeholders.fetch(placeholder))
       end
     end
   end
@@ -88,6 +79,15 @@ class CustomContent < ActiveRecord::Base
       unless body.to_s.include?(placeholder_token(placeholder))
         errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
       end
+    end
+  end
+
+  def check_placeholders_exist(placeholders)
+    non_existing = (placeholders.keys - placeholders_list).presence
+    if non_existing
+      fail(ArgumentError,
+           "Placeholder(s) #{non_existing.join(', ')} given, " <<
+           'but not defined for this custom content')
     end
   end
 end

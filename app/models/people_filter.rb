@@ -28,7 +28,7 @@ class PeopleFilter < ActiveRecord::Base
   validates :name, uniqueness: { scope: [:group_id, :group_type] }
 
 
-  default_scope -> { order(:name).includes(:related_role_types) }
+  default_scope { order(:name).includes(:related_role_types) }
 
   def to_s
     name
@@ -36,7 +36,10 @@ class PeopleFilter < ActiveRecord::Base
 
   class << self
     def for_group(group)
-      where('group_id = ? OR group_type = ? OR (group_id IS NULL AND group_type IS NULL)', group.id, group.type)
+      where('group_id = ? OR group_type = ? OR ' \
+            '(group_id IS NULL AND group_type IS NULL)',
+            group.id,
+            group.type)
     end
   end
 

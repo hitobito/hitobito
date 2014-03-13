@@ -40,12 +40,12 @@ module Person::PreloadGroups
     # empty the through association (=roles) again.
     if records.present? && !records.first.association(:groups).loaded?
       records.each do |person|
-         groups = person.roles.collect(&:group).flatten.compact
+        groups = person.roles.collect(&:group).flatten.compact
 
-         association = person.association(:groups)
-         association.loaded!
-         association.target.concat(groups)
-         groups.each { |g| association.set_inverse_instance(g) }
+        association = person.association(:groups)
+        association.loaded!
+        association.target.concat(groups)
+        groups.each { |g| association.set_inverse_instance(g) }
       end
     end
   end

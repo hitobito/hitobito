@@ -12,15 +12,19 @@ AllCops:
 
 ClassLength:
   Max: 200
+  Severity: error
 
 MethodLength:
   Max: 10
+  Severity: error
 
 CyclomaticComplexity:
   Max: 6
+  Severity: error
 
 LineLength:
   Max: 100
+  Severity: warning
 
 
 # map instead of collect, reduce instead of inject.
@@ -40,11 +44,17 @@ DotPosition:
 EmptyLines:
   Enabled: false
 
-# We thinks that's fine.
+# We thinks that's fine
 EmptyLinesAroundBody:
   Enabled: false
+
+Encoding:
+  Severity: warning
 
 # Keep single line bodys for if and unless
 IfUnlessModifier:
   Enabled: false
 
+# We thinks that's fine
+HasAndBelongsToMany:
+  Enabled: false

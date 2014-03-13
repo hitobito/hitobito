@@ -31,7 +31,8 @@
 #  https://github.com/hitobito/hitobito.
 class Group < ActiveRecord::Base
 
-  MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).collect { |a| "groups.#{a}" }
+  MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).
+                   collect { |a| "groups.#{a}" }
 
   include Group::Types
   include Contactable
@@ -101,7 +102,7 @@ class Group < ActiveRecord::Base
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
-      types = parent_group ? [parent_group.class] + parent_group.possible_children : Group.all_types
+      types = with_child_types(parent_group)
       if types.present?
         statement = 'CASE groups.type '
         types.each_with_index do |t, i|
@@ -110,6 +111,16 @@ class Group < ActiveRecord::Base
         statement << 'END, '
       end
       reorder("#{statement} lft") # acts_as_nested_set default to new order
+    end
+
+    private
+
+    def with_child_types(parent_group = nil)
+      if parent_group
+        [parent_group.class] + parent_group.possible_children
+      else
+        all_types
+      end
     end
 
   end
@@ -148,21 +159,17 @@ class Group < ActiveRecord::Base
     Group.without_deleted.
           joins('LEFT JOIN groups AS sister_groups ' \
                 'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt').
-          where('sister_groups.type = ?', type).
-          where(parent_id? ? ['sister_groups.parent_id = ?', parent_id] : 'sister_groups.parent_id IS NULL')
+          where(sister_groups: { type: type, parent_id: parent_id })
   end
 
   # The layer hierarchy without the layer of this group.
   def upper_layer_hierarchy
+    return [] unless parent
     if new_record?
-      if parent
-        if layer?
-          parent.layer_hierarchy
-        else
-          parent.layer_hierarchy - [parent.layer_group]
-        end
+      if layer?
+        parent.layer_hierarchy
       else
-        []
+        parent.layer_hierarchy - [parent.layer_group]
       end
     else
       layer_hierarchy - [layer_group]

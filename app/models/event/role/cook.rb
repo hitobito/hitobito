@@ -15,7 +15,7 @@
 #  label            :string(255)
 #
 
-# Küche
+# Kueche
 class Event::Role::Cook < Event::Role
   self.permissions = [:contact_data]
 end

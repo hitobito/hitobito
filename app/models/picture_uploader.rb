@@ -28,7 +28,11 @@ class PictureUploader < CarrierWave::Uploader::Base
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
-    ActionController::Base.helpers.asset_path(['profil', version_name].compact.join('_') + '.png')
+    ActionController::Base.helpers.asset_path(png_name)
+  end
+
+  def png_name
+    ['profil', version_name].compact.join('_') + '.png'
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

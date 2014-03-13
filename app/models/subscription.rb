@@ -32,9 +32,9 @@ class Subscription < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates :related_role_types, presence: { if: lambda { |s| s.subscriber.is_a?(Group) } }
+  validates :related_role_types, presence: { if: ->(s) { s.subscriber.is_a?(Group) } }
 
-  validates :subscriber_id, uniqueness: { unless: lambda { |s| s.subscriber.is_a?(Group) },
+  validates :subscriber_id, uniqueness: { unless: ->(s) { s.subscriber.is_a?(Group) },
                                           scope: [:mailing_list_id, :subscriber_type, :excluded] }
 
 

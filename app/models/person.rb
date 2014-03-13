@@ -68,9 +68,9 @@ class Person < ActiveRecord::Base
 
   has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
                   skip: [:id, :encrypted_password, :reset_password_token, :reset_password_sent_at,
-                         :remember_created_at, :sign_in_count, :current_sign_in_at, :current_sign_in_ip,
-                         :failed_attempts, :locked_at, :last_sign_in_at, :last_sign_in_ip,
-                         :contact_data_visible, :last_label_format_id,
+                         :remember_created_at, :sign_in_count, :current_sign_in_at,
+                         :current_sign_in_ip, :failed_attempts, :locked_at, :last_sign_in_at,
+                         :last_sign_in_ip, :contact_data_visible, :last_label_format_id,
                          :created_at, :creator_id, :updated_at, :updater_id]
 
 
@@ -140,7 +140,7 @@ class Person < ActiveRecord::Base
     private
 
     def company_case_column(if_company, otherwise)
-      "CASE WHEN people.company = #{connection.quoted_true} " +
+      "CASE WHEN people.company = #{connection.quoted_true} " \
       "THEN people.#{if_company} ELSE people.#{otherwise} END"
     end
   end
@@ -152,15 +152,18 @@ class Person < ActiveRecord::Base
     if company?
       company_name
     else
-      name = ''
-      if format == :list
-        name << "#{last_name} #{first_name}".strip
-      else
-        name << full_name
-      end
-      name << " / #{nickname}" if nickname?
-      name
+      person_name(format)
     end
+  end
+
+  def person_name(format = :default)
+    name = if format == :list
+             "#{last_name} #{first_name}".strip
+           else
+             full_name
+           end
+    name << " / #{nickname}" if nickname?
+    name
   end
 
   def full_name
@@ -196,10 +199,10 @@ class Person < ActiveRecord::Base
 
   # All time roles of this person, including deleted.
   def all_roles
-    records = Role.with_deleted.
-                   where(person_id: id).
-                   includes(:group).
-                   order('groups.name', 'roles.deleted_at')
+    Role.with_deleted.
+         where(person_id: id).
+         includes(:group).
+         order('groups.name', 'roles.deleted_at')
   end
 
   def default_group_id
@@ -224,7 +227,7 @@ class Person < ActiveRecord::Base
   # Overwrite to handle uniquness validation race conditions
   def save(*args)
     super
-  rescue ActiveRecord::RecordNotUnique => e
+  rescue ActiveRecord::RecordNotUnique
     errors.add(:email, :taken)
     false
   end

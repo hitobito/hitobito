@@ -8,6 +8,8 @@
 module Role::Types
   extend ActiveSupport::Concern
 
+  # rubocop:disable ConstantName
+
   # All possible permissions
   Permissions = [:admin, :layer_full, :layer_read, :group_full, :group_read,
                  :contact_data, :approve_applications]
@@ -18,28 +20,34 @@ module Role::Types
 
   Kinds = [:member, :passive, :external]
 
+  # rubocop:enable ConstantName
+
   included do
     class_attribute :permissions, :visible_from_above, :kind
 
     # All permission a person with this role has on the corresponding group.
     self.permissions = []
 
-    # Whether a person with this role is visible for somebody with layer_read permission above the current layer.
+    # Whether a person with this role is visible for somebody
+    # with layer_read permission above the current layer.
     self.visible_from_above = true
 
     # The kind of a role mainly determines in which pill it will be displayed.
     #
-    # A value of nil means a that the role does not actually belong to the group like members or passives,
-    # but is rather an external controller/supervisor/... that needs access to the group's
-    # information. So they do not appear in the people lists of the group, but rather
-    # in the group attributes.
+    # A value of nil means a that the role does not actually belong to the group
+    # like members or passives, but is rather an external controller/supervisor/...
+    # that needs access to the group's information. So they do not appear in the
+    # people lists of the group, but rather in the group attributes.
     self.kind = :member
   end
 
   module ClassMethods
+    # rubocop:disable ClassVars
+
     # All role types defined in the application.
     def all_types
-      # do a double reverse to get roles appearing more than once at the end (uniq keeps the first..)
+      # do a double reverse to get roles appearing more than once at the end
+      # (uniq keeps the first..)
       @@all_types ||= Group.all_types.collect(&:role_types).flatten.reverse.uniq.reverse
     end
 
@@ -78,8 +86,13 @@ module Role::Types
     end
 
     def label_with_group
-      group_key = "activerecord.models.#{model_name.to_s.deconstantize.constantize.model_name.i18n_key}"
-      [label, I18n.translate("#{group_key}.long", count: 1, default: I18n.translate("#{group_key}"))].join(' ')
+      group_type = model_name.to_s.deconstantize.constantize
+      group_key = "activerecord.models.#{group_type.model_name.i18n_key}"
+      [label,
+       I18n.translate("#{group_key}.long",
+                      count: 1,
+                      default: I18n.translate("#{group_key}"))
+      ].join(' ')
     end
 
     def description

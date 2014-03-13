@@ -54,8 +54,9 @@ class Event < ActiveRecord::Base
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-                          :description, :location, :application_opening_at, :application_closing_at,
-                          :application_conditions, :external_applications, ]
+                          :description, :location, :application_opening_at,
+                          :application_closing_at, :application_conditions,
+                          :external_applications]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -95,7 +96,8 @@ class Event < ActiveRecord::Base
   validates :group_ids, presence: { message: 'müssen vorhanden sein' }
   validates :application_opening_at, :application_closing_at,
             timeliness: { type: :date, allow_blank: true }
-  validates :description, :location, :application_conditions, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :description, :location, :application_conditions,
+            length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
 
@@ -146,7 +148,7 @@ class Event < ActiveRecord::Base
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
       where('events.maximum_participants IS NULL OR ' \
-            'events.maximum_participants <= 0 OR ' +
+            'events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
     end
 

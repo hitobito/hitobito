@@ -8,11 +8,11 @@
 module Group::Types
   extend ActiveSupport::Concern
 
-
   included do
     class_attribute :layer, :role_types, :possible_children, :default_children, :event_types
 
-    # Whether this group type builds a layer or is a regular group. Layers influence some permissions.
+    # Whether this group type builds a layer or is a regular group.
+    # Layers influence some permissions.
     self.layer = false
     # List of the role types that are available for this group type.
     self.role_types = []
@@ -25,6 +25,8 @@ module Group::Types
   end
 
   module ClassMethods
+    # rubocop:disable ClassVars
+
     # DSL method to define children
     def children(*group_types)
       self.possible_children = group_types + possible_children
@@ -64,10 +66,17 @@ module Group::Types
       tsort(collect_types([], [self]))
     end
 
+    # All group types the may provide courses
+    def course_types
+      all_types.select do |type|
+        type.event_types.include?(Event::Course)
+      end
+    end
+
     # All groups that may offer courses
     def course_offerers
-      sti_names = all_types.select { |group| group.event_types.include?(Event::Course) }.map(&:sti_name)
-      where(type: sti_names).order(:parent_id, :name)
+      where(type: course_types.map(&:sti_name)).
+      order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found

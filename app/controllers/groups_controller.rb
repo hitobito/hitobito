@@ -62,9 +62,10 @@ class GroupsController < CrudController
   end
 
   def permitted_params
-    model_params.delete(:type)
-    model_params.delete(:parent_id)
-    model_params.permit(permitted_attrs)
+    p = model_params.dup
+    p.delete(:type)
+    p.delete(:parent_id)
+    p.permit(permitted_attrs)
   end
 
   def load_contacts

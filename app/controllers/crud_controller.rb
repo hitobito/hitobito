@@ -51,7 +51,7 @@ class CrudController < ListController
   #   GET /entries/new
   #   GET /entries/new.json
   def new(&block)
-    assign_attributes if params[model_identifier]
+    assign_attributes if model_params
     respond_with(entry, &block)
   end
 

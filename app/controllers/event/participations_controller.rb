@@ -34,7 +34,7 @@ class Event::ParticipationsController < CrudController
 
 
   def new
-    assign_attributes if params[:event_participation]
+    assign_attributes if model_params
     entry.init_answers
     respond_with(entry)
   end

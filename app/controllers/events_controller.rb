@@ -29,7 +29,7 @@ class EventsController < CrudController
   before_render_form :load_kinds
 
   def new
-    assign_attributes
+    assign_attributes if model_params
     entry.dates.build
     entry.init_questions
     respond_with(entry)
@@ -47,7 +47,6 @@ class EventsController < CrudController
 
   private
 
-
   def build_entry
     type = model_params && model_params[:type].presence
     type ||= 'Event'
@@ -57,9 +56,10 @@ class EventsController < CrudController
   end
 
   def permitted_params
-    model_params.delete(:type)
-    model_params.delete(:contact)
-    model_params.permit(permitted_attrs)
+    p = model_params.dup
+    p.delete(:type)
+    p.delete(:contact)
+    p.permit(permitted_attrs)
   end
 
   def group
@@ -69,9 +69,6 @@ class EventsController < CrudController
   def index_path
     typed_group_events_path(group, @event.class, returning: true)
   end
-
-
-  private
 
   def load_sister_groups
     master = @event.groups.first

@@ -26,7 +26,7 @@ LineLength:
 
 AccessorMethodName:
   Enabled: false
-  
+
 AccessModifierIndentation:
   Enabled: false
 
@@ -66,6 +66,9 @@ Blocks:
 BracesAroundHashParameters:
   Enabled: false
 
+ClassAndModuleChildren:
+  Enabled: false
+
 CaseIndentation:
   Enabled: false
 
@@ -80,10 +83,10 @@ CommentAnnotation:
 
 ConstantName:
   Enabled: false
-  
+
 DefaultScope:
   Enabled: false
-  
+
 Documentation:
   Enabled: false
 
@@ -114,13 +117,13 @@ EndAlignment:
 EvenOdd:
   Enabled: false
 
-FavorSprintf:
-  Enabled: false
-
 FavorUnlessOverNegatedIf:
   Enabled: false
 
 FinalNewline:
+  Enabled: false
+
+FormatString:
   Enabled: false
 
 GlobalVars:
@@ -140,11 +143,14 @@ HashSyntax:
 
 IfUnlessModifier:
   Enabled: false
-  
+
 IndentationConsistency:
   Enabled: false
 
 IndentationWidth:
+  Enabled: false
+
+IndentHash:
   Enabled: false
 
 Lambda:
@@ -152,10 +158,10 @@ Lambda:
 
 LeadingCommentSpace:
   Enabled: false
-  
+
 LineEndConcatenation:
   Enabled: false
-  
+
 Loop:
   Enabled: false
 
@@ -179,10 +185,10 @@ ParenthesesAsGroupedExpression:
 
 PerlBackrefs:
   Enabled: false
-  
+
 PredicateName:
   Enabled: false
-  
+
 Proc:
   Enabled: false
 
@@ -213,9 +219,6 @@ SignalException:
 SpaceAfterComma:
   Enabled: false
 
-SpaceAroundBlockBraces:
-  Enabled: false
-
 SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
@@ -234,6 +237,9 @@ SpaceInsideParens:
 SpecialGlobalVars:
   Enabled: false
 
+StringConversionInInterpolation:
+  Enabled: false
+
 StringLiterals:
   Enabled: false
 
@@ -242,10 +248,10 @@ Tab:
 
 TrailingBlankLines:
   Enabled: false
-  
+
 TrailingComma:
   Enabled: false
-  
+
 TrailingWhitespace:
   Enabled: false
 

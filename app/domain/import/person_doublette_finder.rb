@@ -22,35 +22,8 @@ module Import
       @attrs = attrs
     end
 
-    def query
-      criteria = attrs.select do |key, value|
-        value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym)
-      end
-      criteria.delete(:birthday) unless parse_date(criteria[:birthday])
-
-      conditions = ['']
-      criteria.each do |key, value|
-        conditions.first << ' AND ' if conditions.first.present?
-        conditions.first << "#{key} = ?"
-        value = parse_date(value) if key.to_sym == :birthday
-        conditions << value
-      end
-
-      if attrs[:email].present?
-        if conditions.first.present?
-          conditions[0] = "(#{conditions[0]}) OR "
-        end
-        conditions.first << 'email = ?'
-        conditions << attrs[:email]
-      end
-      conditions
-    end
-
     def find_and_update
-      conditions = query
-      return if conditions.first.blank?
-      people = ::Person.includes(:roles).references(:roles).where(conditions).to_a
-
+      people = duplicates
       if people.present?
         person = people.first
         if people.size == 1
@@ -63,7 +36,50 @@ module Import
       end
     end
 
+    def duplicate_conditions
+      [''].tap do |conditions|
+        append_doublette_conditions(conditions)
+        append_email_condition(conditions)
+      end
+    end
+
     private
+
+    def duplicates
+      conditions = duplicate_conditions
+      if conditions.first.present?
+        ::Person.includes(:roles).references(:roles).where(conditions).to_a
+      else
+        []
+      end
+    end
+
+    def append_doublette_conditions(conditions)
+      exisiting_doublette_attrs.each do |key, value|
+        conditions.first << ' AND ' if conditions.first.present?
+        conditions.first << "#{key} = ?"
+        value = parse_date(value) if key.to_sym == :birthday
+        conditions << value
+      end
+    end
+
+    def append_email_condition(conditions)
+      if attrs[:email].present?
+        if conditions.first.present?
+          conditions[0] = "(#{conditions[0]}) OR "
+        end
+        conditions.first << 'email = ?'
+        conditions << attrs[:email]
+      end
+    end
+
+    def exisiting_doublette_attrs
+      existing = attrs.select do |key, value|
+        value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym)
+      end
+      existing.delete(:birthday) unless parse_date(existing[:birthday])
+      existing
+    end
 
     def parse_date(date_string)
       if date_string.present?

@@ -73,7 +73,7 @@ class EventDecorator < ApplicationDecorator
     if prolongs.present?
       translate(:prolong_only,
                 count: prolongs.size,
-                prolonged: joined(prolongs),
+                prolonged: prolongs.join(', '),
                 until: quali_date)
     else
       ''
@@ -83,22 +83,18 @@ class EventDecorator < ApplicationDecorator
   def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds.list.to_a
     prolongs = kind.prolongations.list.to_a
+    variables = { until: h.f(qualification_date),
+                  model: quali_model_name(qualis),
+                  issued: qualis.joins(', '),
+                  prolonged: prolongs.joins(', '),
+                  count: prolongs.size }
 
     if qualis.present? && prolongs.present?
-      translate(:issue_and_prolong, model: quali_model_name(qualis),
-                                    issued: joined(qualis),
-                                    prolonged: joined(prolongs),
-                                    until: quali_date)
+      translate(:issue_and_prolong, variables)
     elsif qualis.present?
-      translate(:issue_only,
-                model: quali_model_name(qualis),
-                issued: joined(qualis),
-                until: quali_date)
+      translate(:issue_only, variables)
     elsif prolongs.present?
-      translate(:prolong_only,
-                count: prolongs.size,
-                prolonged: joined(prolongs),
-                until: quali_date)
+      translate(:prolong_only, variables)
     else
       ''
     end
@@ -120,14 +116,6 @@ class EventDecorator < ApplicationDecorator
 
   def quali_model_name(list)
     Qualification.model_name.human(count: list.size)
-  end
-
-  def quali_date
-    h.f(qualification_date)
-  end
-
-  def joined(list)
-    list.join(', ')
   end
 
 end

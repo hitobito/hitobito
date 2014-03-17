@@ -7,7 +7,7 @@
 
 class SubscriptionsController < CrudController
 
-  include RenderPeopleExports
+  include Concerns::RenderPeopleExports
 
   self.nesting = Group, MailingList
 
@@ -64,7 +64,8 @@ class SubscriptionsController < CrudController
   def subscriptions_for_type(klass)
     mailing_list.subscriptions.
       where(subscriber_type: klass.name).
-      joins("INNER JOIN #{klass.table_name} ON #{klass.table_name}.id = subscriptions.subscriber_id").
+      joins("INNER JOIN #{klass.table_name} " \
+            "ON #{klass.table_name}.id = subscriptions.subscriber_id").
       includes(:subscriber, :mailing_list)
   end
 

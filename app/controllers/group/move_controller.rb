@@ -55,7 +55,8 @@ class Group::MoveController < ApplicationController
   end
 
   def target
-    @target ||= (params[:move] && params[:move][:target_group_id]) && Group.find(params[:move][:target_group_id])
+    @target ||= (params[:move] && params[:move][:target_group_id]) &&
+                Group.find(params[:move][:target_group_id])
   end
 
   def authorize

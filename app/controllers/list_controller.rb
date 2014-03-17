@@ -36,7 +36,8 @@ class ListController < ApplicationController
 
   private
 
-  # Helper method to access the entries to be displayed in the current index page in an uniform way.
+  # Helper method to access the entries to be displayed in the
+  # current index page in an uniform way.
   def entries
     get_model_ivar(true) || set_model_ivar(list_entries)
   end

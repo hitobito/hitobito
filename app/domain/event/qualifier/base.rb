@@ -36,7 +36,8 @@ module Event::Qualifier
       @created = qualification_kinds.map { |kind| create(kind) }
     end
 
-    # Creates new qualification for prolongable qualifications, tracks what could and could not be prolonged
+    # Creates new qualification for prolongable qualifications,
+    # tracks what could and could not be prolonged
     def prolong_existing(kinds)
       @prolonged = prolongable_qualification_kinds(kinds)
       @prolonged.each { |kind| create(kind) }

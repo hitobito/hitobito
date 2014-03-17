@@ -52,15 +52,25 @@ class CsvImportsController < ApplicationController
   private
 
   def set_importer_flash_info
-    add_to_flash(:notice, importer_info(:new, importer.new_count)) if importer.new_count > 0
-    add_to_flash(:notice, importer_info(:updated, importer.doublette_count)) if importer.doublette_count > 0
-    add_to_flash(:alert, importer_info(:failed, importer.failure_count)) if importer.failure_count > 0
+    if importer.new_count > 0
+      add_to_flash(:notice, importer_info(:new, importer.new_count))
+    end
+    if importer.doublette_count > 0
+      add_to_flash(:notice, importer_info(:updated, importer.doublette_count))
+    end
+    if importer.failure_count > 0
+      add_to_flash(:alert, importer_info(:failed, importer.failure_count))
+    end
 
-    importer.errors.each { |error| add_to_flash(:alert, error) } if action_name == 'preview'
+    if action_name == 'preview'
+      importer.errors.each { |error| add_to_flash(:alert, error) }
+    end
   end
 
   def importer_info(key, count)
-    translate([action_name, key].join('.').to_sym, count: count, role: importer.human_name(count: count))
+    translate([action_name, key].join('.').to_sym,
+              count: count,
+              role: importer.human_name(count: count))
   end
 
   def add_to_flash(key, text)

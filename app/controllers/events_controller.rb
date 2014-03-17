@@ -12,9 +12,9 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [group_ids: [],
-                          dates_attributes: [:label, :location,
-                                             :start_at, :start_at_date, :start_at_hour, :start_at_min,
-                                             :finish_at, :finish_at_date, :finish_at_hour, :finish_at_min],
+                          dates_attributes: [:label, :location, :start_at, :start_at_date,
+                                             :start_at_hour, :start_at_min, :finish_at,
+                                             :finish_at_date, :finish_at_hour, :finish_at_min],
                           questions_attributes: [:question, :choices, :multiple_choices]]
 
   self.remember_params += [:year]

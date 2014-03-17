@@ -38,7 +38,9 @@ module FilterNavigation
     private
 
     def item(label, url)
-      @main_items << content_tag(:li, link_to(label, url), class: ('active' if active_label == label))
+      @main_items << content_tag(:li,
+                                 link_to(label, url),
+                                 class: ('active' if active_label == label))
     end
 
   end

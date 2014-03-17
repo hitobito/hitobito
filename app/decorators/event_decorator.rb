@@ -24,7 +24,9 @@ class EventDecorator < ApplicationDecorator
   end
 
   def dates_full
-    safe_join(dates, h.tag(:br)) { |date| safe_join([date.duration, h.muted(label_and_location(date))], ' ') }
+    safe_join(dates, h.tag(:br)) do |date|
+      safe_join([date.duration, h.muted(label_and_location(date))], ' ')
+    end
   end
 
   def booking_info
@@ -69,7 +71,10 @@ class EventDecorator < ApplicationDecorator
   def issued_qualifications_info_for_leaders
     prolongs = kind.qualification_kinds.list.to_a
     if prolongs.present?
-      translate(:prolong_only, count: prolongs.size, prolonged: joined(prolongs),  until: quali_date)
+      translate(:prolong_only,
+                count: prolongs.size,
+                prolonged: joined(prolongs),
+                until: quali_date)
     else
       ''
     end
@@ -85,9 +90,15 @@ class EventDecorator < ApplicationDecorator
                                     prolonged: joined(prolongs),
                                     until: quali_date)
     elsif qualis.present?
-      translate(:issue_only, model: quali_model_name(qualis), issued: joined(qualis), until: quali_date)
+      translate(:issue_only,
+                model: quali_model_name(qualis),
+                issued: joined(qualis),
+                until: quali_date)
     elsif prolongs.present?
-      translate(:prolong_only, count: prolongs.size, prolonged: joined(prolongs), until: quali_date)
+      translate(:prolong_only,
+                count: prolongs.size,
+                prolonged: joined(prolongs),
+                until: quali_date)
     else
       ''
     end

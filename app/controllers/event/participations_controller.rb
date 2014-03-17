@@ -7,7 +7,7 @@
 
 class Event::ParticipationsController < CrudController
 
-  include RenderPeopleExports
+  include Concerns::RenderPeopleExports
 
   self.nesting = Group, Event
 
@@ -127,7 +127,8 @@ class Event::ParticipationsController < CrudController
 
   def assign_attributes
     super
-    # Set these attrs again as a new application instance might have been created by the mass assignment.
+    # Set these attrs again as a new application instance might have been
+    # created by the mass assignment.
     entry.application.priority_1 ||= event if entry.application
   end
 

@@ -10,8 +10,10 @@ module RolesHelper
   def role_cancel_url
     if flash[:redirect_to]
       flash[:redirect_to]
+    elsif entry.new_record?
+      group_people_path(entry.group_id)
     else
-      entry.new_record? ? group_people_path(entry.group_id) : group_person_path(entry.group_id, entry.person_id)
+      group_person_path(entry.group_id, entry.person_id)
     end
   end
 

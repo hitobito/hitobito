@@ -60,7 +60,11 @@ module AbilityDsl
       end
 
       def add_config(permission, action, constraint)
-        @store.add(AbilityDsl::Config.new(permission, @subject_class, action, @ability_class, constraint))
+        @store.add(AbilityDsl::Config.new(permission,
+                                          @subject_class,
+                                          action,
+                                          @ability_class,
+                                          constraint))
       end
 
     end

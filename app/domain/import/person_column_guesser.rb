@@ -33,7 +33,9 @@ module Import
     end
 
     def params_field(header)
-      params[header] && (person_fields.find { |field| field[:key] == params[header] } || null_field)
+      params[header] &&
+        (person_fields.find { |field| field[:key] == params[header] } ||
+         null_field)
     end
 
     def import_person_field(header)

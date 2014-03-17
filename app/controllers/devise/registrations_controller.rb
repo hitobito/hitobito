@@ -5,7 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_dependency Devise::Engine.root.join('app', 'controllers', 'devise', 'registrations_controller').to_s
+require_dependency Devise::Engine.root.
+                                  join('app', 'controllers', 'devise', 'registrations_controller').
+                                  to_s
 
 class Devise::RegistrationsController < DeviseController
 

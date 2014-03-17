@@ -32,7 +32,8 @@ module Export::Csv::People
     end
 
     def association_attributes
-      account_labels(people.map(&:phone_numbers).flatten.select(&:public?), Accounts.phone_numbers)
+      account_labels(people.map(&:phone_numbers).flatten.select(&:public?),
+                     Accounts.phone_numbers)
     end
 
     def account_labels(collection, mapper)

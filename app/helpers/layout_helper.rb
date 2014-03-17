@@ -52,7 +52,10 @@ module LayoutHelper
     collection.to_a # force relation evaluation
     if add_path || collection.present?
       if add_path
-        button = action_button(ti(:'link.add_without_model'), add_path, 'plus', class: 'btn-small')
+        button = action_button(ti(:'link.add_without_model'),
+                               add_path,
+                               'plus',
+                               class: 'btn-small')
         title = safe_join([title, content_tag(:span, button, class: 'pull-right')])
       end
       render(layout: 'shared/section_table',

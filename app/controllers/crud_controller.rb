@@ -7,10 +7,11 @@
 
 # Abstract controller providing basic CRUD actions.
 # This implementation mainly follows the one of the Rails scaffolding
-# controller and responses to HTML and JSON requests. Some enhancements were made to ease extendability.
+# controller and responses to HTML and JSON requests. Some enhancements
+# were made to ease extendability.
 # Several protected helper methods are there to be (optionally) overriden by subclasses.
-# With the help of additional callbacks, it is possible to hook into the action procedures without
-# overriding the entire method.
+# With the help of additional callbacks, it is possible to hook into the action
+# procedures without overriding the entire method.
 class CrudController < ListController
 
   class_attribute :permitted_attrs
@@ -93,8 +94,11 @@ class CrudController < ListController
   #   DELETE /entries/1.json
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
-    flash[:alert] ||= error_messages.presence || flash_message(:failure) if !destroyed && request.format == :html
-    location = (!destroyed && request.env['HTTP_REFERER'].presence) || (options[:location] || index_path)
+    if !destroyed && request.format == :html
+      flash[:alert] ||= error_messages.presence || flash_message(:failure)
+    end
+    location = (!destroyed && request.env['HTTP_REFERER'].presence) ||
+               (options[:location] || index_path)
     respond_with(entry, options.reverse_merge(success: destroyed, location: location), &block)
   end
 

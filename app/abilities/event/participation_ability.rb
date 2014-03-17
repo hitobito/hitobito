@@ -16,7 +16,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:create).her_own_if_application_possible
     permission(:any).may(:update).for_leaded_events
 
-    permission(:group_full).may(:show, :show_details, :print, :create, :update, :destroy).in_same_group
+    permission(:group_full).may(:show, :show_details, :print, :create, :update, :destroy).
+                            in_same_group
 
     permission(:layer_full).may(:show, :show_details, :print, :update).in_same_layer_or_below
     permission(:layer_full).may(:create, :destroy).in_same_layer

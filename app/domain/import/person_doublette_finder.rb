@@ -23,7 +23,9 @@ module Import
     end
 
     def query
-      criteria = attrs.select { |key, value| value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym) }
+      criteria = attrs.select do |key, value|
+        value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym)
+      end
       criteria.delete(:birthday) unless parse_date(criteria[:birthday])
 
       conditions = ['']

@@ -102,7 +102,9 @@ module FilterNavigation
 
     def add_define_custom_people_filter_link
       if can?(:new, group.people_filters.new)
-        link = template.new_group_people_filter_path(group.id, people_filter: { role_type_ids: role_type_ids })
+        link = template.new_group_people_filter_path(
+                group.id,
+                people_filter: { role_type_ids: role_type_ids })
         dropdown.divider if dropdown.items.present?
         dropdown.item(translate(:new_filter), link)
       end

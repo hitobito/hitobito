@@ -17,8 +17,10 @@ module StandardHelper
   # Formats a single value
   def f(value)
     case value
-      when Float, BigDecimal then number_with_precision(value, precision: t('number.format.precision'),
-                                                               delimiter: t('number.format.delimiter'))
+      when Float, BigDecimal then
+        number_with_precision(value,
+                              precision: t('number.format.precision'),
+                              delimiter: t('number.format.delimiter'))
       when Date   then l(value)
       when Time   then l(value, format: :time)
       when true   then t(:"global.yes")
@@ -197,13 +199,16 @@ module StandardHelper
   #  - activerecord.associations.{association_model_name}.{key}
   #  - global.associations.{key}
   def translate_association(key, assoc = nil, variables = {})
-    primary = if assoc
-      variables[:default] ||= [:"activerecord.associations.#{assoc.klass.model_name.to_s.underscore}.#{key}",
-                               :"global.associations.#{key}"]
-      :"activerecord.associations.models.#{assoc.active_record.model_name.to_s.underscore}.#{assoc.name}.#{key}"
-    else
-      :"global.associations.#{key}"
-    end
+    primary =
+      if assoc
+        assoc_class_key = assoc.klass.model_name.to_s.underscore
+        variables[:default] ||= [:"activerecord.associations.#{assoc_class_key}.#{key}",
+                                 :"global.associations.#{key}"]
+        owner_class_key = assoc.active_record.model_name.to_s.underscore
+        "activerecord.associations.models.#{owner_class_key}.#{assoc.name}.#{key}"
+      else
+        "global.associations.#{key}"
+      end
     t(primary, variables)
   end
 
@@ -325,7 +330,8 @@ module StandardHelper
 
   # Returns true if no link should be created when formatting the given association.
   def assoc_link?(val)
-    respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) && can?(:show, val)
+    respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) &&
+    can?(:show, val)
   end
 
   def model_link(val)

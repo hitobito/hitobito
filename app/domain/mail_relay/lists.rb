@@ -127,7 +127,8 @@ module MailRelay
       mailing_list.people.where(id: sender.id).exists?
     end
 
-    # strip spam headers because they might produce encoding issues (Encoding::UndefinedConversionError)
+    # strip spam headers because they might produce encoding issues
+    # (Encoding::UndefinedConversionError)
     def strip_spam_headers(message)
       spam_headers = message.header.select { |field| field.name =~ /^X-DSPAM/i }
       spam_headers.each do |field|

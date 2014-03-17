@@ -25,11 +25,19 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def issue_action(group)
-    (qualified.nil? || !qualified?) ? qualify_action_link(group, :put, :ok) : h.icon(:ok)
+    if qualified.nil? || !qualified?
+      qualify_action_link(group, :put, :ok)
+    else
+      h.icon(:ok)
+    end
   end
 
   def revoke_action(group)
-    (qualified.nil? || qualified?) ? qualify_action_link(group, :delete, :remove) : h.icon(:remove)
+    if qualified.nil? || qualified?
+      qualify_action_link(group, :delete, :remove)
+    else
+      h.icon(:remove)
+    end
   end
 
   def qualify_action_link(group, method, icon)

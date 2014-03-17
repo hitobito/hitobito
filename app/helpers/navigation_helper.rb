@@ -34,7 +34,8 @@ module NavigationHelper
   # Create a list item for navigations.
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
-  # If not alternative paths are given, the item is only active if the link url equals the request url.
+  # If not alternative paths are given, the item is only active if the
+  # link url equals the request url.
   def nav(label, url, active_for = [])
     options = {}
     if current_page?(url) ||
@@ -66,7 +67,8 @@ class TabBar
     # Create a list item for navigations.
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
-  # If not alternative paths are given, the item is only active if the link url equals the request url.
+  # If not alternative paths are given, the item is only active if the
+  # link url equals the request url.
   def tab(label, url, alt_paths = [])
     @tabs ||= []
     @tabs << [label, url, alt_paths]

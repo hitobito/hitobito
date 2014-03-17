@@ -13,7 +13,8 @@ module AbilityDsl::Constraints::Event
     end
 
     def for_applicant_in_same_layer
-      confirm_layer_ids = user_context.layer_ids(user.groups_with_permission(:approve_applications))
+      approval_groups = user.groups_with_permission(:approve_applications)
+      confirm_layer_ids = user_context.layer_ids(approval_groups)
       participation.application_id? &&
         confirm_layer_ids.present? &&
         contains_any?(confirm_layer_ids, participation.person.groups_hierarchy_ids)

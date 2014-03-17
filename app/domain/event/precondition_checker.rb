@@ -47,7 +47,8 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   end
 
   def person_qualifications
-    @person_qualifications ||= person.qualifications.where(qualification_kind_id: course_preconditions.map(&:id))
+    @person_qualifications ||=
+      person.qualifications.where(qualification_kind_id: course_preconditions.map(&:id))
   end
 
   def reactivateable?(qualification_kind)

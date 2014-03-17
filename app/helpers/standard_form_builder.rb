@@ -155,8 +155,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # custom build tags (check_box includes "0" for every value)
-  # - custom param name to allow array values without sending "0" for not selected boxes (like check_box helper)
-  # - sanitized id copied from private ActionView::Helpers::FormTagHelper#sanitized_to_id  (used in label_tag)
+  # - custom param name to allow array values without sending "0" for
+  #   not selected boxes (like check_box helper)
+  # - sanitized id copied from private ActionView::Helpers::FormTagHelper#sanitized_to_id
+  #   (used in label_tag)
   def inline_nested_form_custom_checkbox(attr, value, index)
     name = object_name + "[#{attr}][]"
     sanitized_id = "#{object_name}_#{index}".gsub(']', '').gsub(/[^-a-zA-Z0-9:.]/, '_')
@@ -164,7 +166,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     hidden_field = index == 0 ? @template.hidden_field_tag(name, index) : ''
 
     @template.label_tag(sanitized_id, class: 'checkbox') do
-      hidden_field.html_safe + @template.check_box_tag(name, index + 1, checked, id: sanitized_id) + ' ' + value
+      hidden_field.html_safe +
+      @template.check_box_tag(name, index + 1, checked, id: sanitized_id) +
+      ' ' +
+      value
     end
   end
 

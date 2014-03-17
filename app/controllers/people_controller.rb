@@ -7,7 +7,7 @@
 
 class PeopleController < CrudController
 
-  include RenderPeopleExports
+  include Concerns::RenderPeopleExports
 
   self.nesting = Group
   self.nesting_optional = true
@@ -62,7 +62,8 @@ class PeopleController < CrudController
   def query
     people = []
     if params.key?(:q) && params[:q].size >= 3
-      people = Person.where(search_condition(:first_name, :last_name, :company_name, :nickname, :town)).
+      search_clause = search_condition(:first_name, :last_name, :company_name, :nickname, :town)
+      people = Person.where(search_clause).
                       only_public_data.
                       order_by_name.
                       limit(10)

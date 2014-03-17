@@ -50,7 +50,9 @@ module Sheet
     end
 
     def belongs_to
-      translate(:belongs_to).html_safe + StandardHelper::EMPTY_STRING + StandardHelper::EMPTY_STRING
+      translate(:belongs_to).html_safe +
+        StandardHelper::EMPTY_STRING +
+        StandardHelper::EMPTY_STRING
     end
 
   end

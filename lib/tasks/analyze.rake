@@ -43,11 +43,9 @@ namespace :rubocop do
   task :report do
     # do not fail if we find issues
     sh %w(rubocop
-          --config rubocop-report.yml
           --require rubocop/formatter/checkstyle_formatter
           --format Rubocop::Formatter::CheckstyleFormatter
           --no-color
-          --rails
           --out rubocop-results.xml).join(' ') rescue nil
     true
   end

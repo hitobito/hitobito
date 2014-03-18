@@ -27,6 +27,7 @@ module AbilityDsl
   class Base
 
     private
+
     attr_reader :user_context, :subject, :permission
 
     public
@@ -93,21 +94,23 @@ module AbilityDsl
     end
 
     def user_groups
-      @user_groups ||= case permission
-      when :group_full then user_context.groups_group_full
-      when :layer_full then user_context.groups_layer_full
-      when :group_read then user_context.groups_group_read
-      when :layer_read then user_context.groups_layer_read
-      else []
-      end
+      @user_groups ||=
+        case permission
+        when :group_full then user_context.groups_group_full
+        when :layer_full then user_context.groups_layer_full
+        when :group_read then user_context.groups_group_read
+        when :layer_read then user_context.groups_layer_read
+        else []
+        end
     end
 
     def user_layers
-      @user_layers ||= case permission
-      when :layer_full then user_context.layers_full
-      when :layer_read then user_context.layers_read
-      else []
-      end
+      @user_layers ||=
+        case permission
+        when :layer_full then user_context.layers_full
+        when :layer_read then user_context.layers_read
+        else []
+        end
     end
 
     # Are any items of the existing list present in the list of required items?

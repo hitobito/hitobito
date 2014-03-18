@@ -29,24 +29,24 @@ describe AbilityDsl::Store do
 
   context '#general_constraints' do
     it 'retrieves general constraint for all and specific action' do
-      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, AbilityDsl::Recorder::General::AllAction, :ability1, :constraint1)
-      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, :action, :ability1, :constraint2)
+      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
+      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action, :ability1, :constraint2)
       subject.add(c1)
       subject.add(c2)
       subject.general_constraints(:subj, :action).should =~ [c1, c2]
     end
 
     it 'retrieves general constraint for all action' do
-      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, AbilityDsl::Recorder::General::AllAction, :ability1, :constraint1)
-      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, :action2, :ability1, :constraint2)
+      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
+      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action2, :ability1, :constraint2)
       subject.add(c1)
       subject.add(c2)
       subject.general_constraints(:subj, :action).should =~ [c1]
     end
 
     it 'retrieves general constraint for specific action' do
-      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, :action, :ability1, :constraint1)
-      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::Permission, :subj, :action2, :ability1, :constraint2)
+      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action, :ability1, :constraint1)
+      c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action2, :ability1, :constraint2)
       subject.add(c1)
       subject.add(c2)
       subject.general_constraints(:subj, :action).should =~ [c1]

@@ -9,8 +9,10 @@ class Ability
 
   include CanCan::Ability
 
+  # rubocop:disable ClassVars
   cattr_reader :store
   @@store = AbilityDsl::Store.new
+  # rubocop:enable ClassVars
 
   store.register EventAbility,
                  Event::ApplicationAbility,
@@ -31,7 +33,6 @@ class Ability
 
     if user.root?
       can :manage, :all
-
       # root cannot change her email, because this is what makes her root.
       cannot :update_email, Person do |p|
         p.root?
@@ -49,12 +50,16 @@ class Ability
         can c.action, c.subject_class
       elsif c.constraint != :none
         can c.action, c.subject_class do |subject|
-          all_constraints(c).all? do |ability_class, constraints|
-            ability = ability_class.new(user_context, subject, c.permission)
-            constraints.all? { |constraint| ability.send(constraint) }
-          end
+          action_allowed?(user_context, c, subject)
         end
       end
+    end
+  end
+
+  def action_allowed?(user_context, c, subject)
+    all_constraints(c).all? do |ability_class, constraints|
+      ability = ability_class.new(user_context, subject, c.permission)
+      constraints.all? { |constraint| ability.send(constraint) }
     end
   end
 

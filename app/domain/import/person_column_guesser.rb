@@ -20,8 +20,8 @@ module Import
       mapping[key]
     end
 
-
     private
+
     def population_mapping
       @mapping = headers.each_with_object({}) do |header, memo|
         memo[header] = find_field(header)
@@ -29,7 +29,7 @@ module Import
     end
 
     def find_field(header)
-       params_field(header) || import_person_field(header) || null_field
+      params_field(header) || import_person_field(header) || null_field
     end
 
     def params_field(header)
@@ -39,7 +39,7 @@ module Import
     end
 
     def import_person_field(header)
-     person_fields.find { |field| field[:value].downcase[header.downcase] }
+      person_fields.find { |field| field[:value].downcase[header.downcase] }
     end
 
     def null_field

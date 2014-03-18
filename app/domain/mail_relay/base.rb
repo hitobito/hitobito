@@ -30,9 +30,17 @@ module MailRelay
 
     attr_reader :message
 
-    # Retrieve, process and delete all mails from the mail server.
-    def self.relay_current
-      begin
+    class << self
+
+      # Retrieve, process and delete all mails from the mail server.
+      def relay_current
+        begin
+          mails, last_exception = relay_batch
+          fail(last_exception) if last_exception.present?
+        end while mails.size >= retrieve_count
+      end
+
+      def relay_batch
         last_exception = nil
 
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
@@ -44,9 +52,9 @@ module MailRelay
           end
         end
 
-        fail(last_exception) if last_exception.present?
+        [mails, last_exception]
+      end
 
-      end while mails.size >= retrieve_count
     end
 
     def initialize(message)
@@ -113,7 +121,7 @@ module MailRelay
     # Heuristic method to find actual receiver of the message.
     # May return nil if could not determine.
     def receiver_from_received_header
-      if received = message.received
+      if (received = message.received)
         received = received.first if received.respond_to?(:first)
         received.info[/ for .*?([^\s<>]+)@[^\s<>]+/, 1]
       end
@@ -121,9 +129,8 @@ module MailRelay
 
     # Try to read the envelope receiver from the given x header
     def receiver_from_x_header
-      if field = message.header[receiver_header]
-        field.to_s.split('@', 2).first
-      end
+      field = message.header[receiver_header]
+      field.to_s.split('@', 2).first if field
     end
 
     # Is the mail sent to a valid relay address?

@@ -9,9 +9,9 @@ module Export::Csv::Events
   class Row < Export::Csv::Base::Row
 
     self.dynamic_attributes = {
-       /^contact_/  => :contactable_attribute,
-       /^leader_/   => :contactable_attribute,
-       /^date_\d+_/ => :date_attribute
+      /^contact_/  => :contactable_attribute,
+      /^leader_/   => :contactable_attribute,
+      /^date_\d+_/ => :date_attribute
     }
 
     def kind

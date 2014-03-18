@@ -30,17 +30,22 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   private
 
   def create_new_group
+    new_group = build_new_group
+    if new_group.save
+      new_group.reload
+      @new_group = new_group
+      true
+    else
+      @errors = new_group.errors.full_messages
+      false
+    end
+  end
+
+  def build_new_group
     new_group = group1.class.new
     new_group.name = new_group_name
     new_group.parent_id = group1.parent_id
-    success = new_group.save
-    if success
-      new_group.reload
-      @new_group = new_group
-    else
-      @errors = new_group.errors.full_messages
-    end
-    success
+    new_group
   end
 
   def update_events

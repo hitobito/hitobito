@@ -52,18 +52,21 @@ module MailRelay
     def reject_not_existing
       data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
       if data && valid_address?(data[1])
-        message.to = data[2].gsub('=', '@')
-
-        env_sender = "#{data[1]}#{SENDER_SUFFIX}@#{mail_domain}"
-        message.sender = env_sender
-        message.smtp_envelope_from = env_sender
-
+        prepare_reject_message(data[1], data[2])
         deliver(message)
       else
         logger.info("#{Time.now.strftime('%FT%T%z')}: " <<
                     "Ignored email from #{sender_email} " <<
                     "for list #{envelope_receiver_name}")
       end
+    end
+
+    def prepare_reject_message(list_address, sender_address)
+      message.to = sender_address.gsub('=', '@')
+
+      env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
+      message.sender = env_sender
+      message.smtp_envelope_from = env_sender
     end
 
     def valid_address?(mail_name)
@@ -89,9 +92,8 @@ module MailRelay
 
     def mailing_list
       @mailing_list ||= begin
-        if mail_name = envelope_receiver_name
-          MailingList.where(mail_name: mail_name).first
-        end
+        mail_name = envelope_receiver_name
+        MailingList.where(mail_name: mail_name).first if mail_name
       end
     end
 

@@ -25,21 +25,14 @@ class Role
     def compose
       @global_group_types = find_global_group_types([], root).uniq
       @global_role_types = find_global_role_types(root).uniq
-      @role_types = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] } }
+      @role_types = Hash.new { |h0, k0| h0[k0] = Hash.new { |h1, k1| h1[k1] = [] } }
 
       # layers
       unless @global_group_types.include?(root)
         compose_role_list_by_layer(root)
       end
 
-      # global groups
-      @global_group_types.each do |group|
-        types = local_role_types(group)
-        @role_types['Global'][group.label] = types if types.present?
-      end
-
-      # global roles
-      @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
+      compose_global_role_list
     end
 
     def compose_role_list_by_layer(layer, seen_layers = [])
@@ -59,21 +52,34 @@ class Role
       @role_types[layer.label][group.label] = types if types.present?
     end
 
-    # groups appearing in the possible children of more than one group
-    def find_global_group_types(seen_types, group)
-      global = []
+    def compose_global_role_list
+       # global groups
+      @global_group_types.each do |group|
+        types = local_role_types(group)
+        @role_types['Global'][group.label] = types if types.present?
+      end
 
+      # global roles
+      @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
+    end
+
+    # groups appearing in the possible children of more than one group
+    def find_global_group_types(seen_types, group, global = [])
       group.possible_children.each do |child|
-        if seen_types.include?(child)
-          unless child.layer || child == group
-            global << child
-          end
-        else
-          seen_types << child
-          global.concat(find_global_group_types(seen_types, child))
-        end
+        process_gobal_group(seen_types, group, child, global)
       end
       global
+    end
+
+    def process_gobal_group(seen_types, group, child, global)
+      if seen_types.include?(child)
+        unless child.layer || child == group
+          global << child
+        end
+      else
+        seen_types << child
+        find_global_group_types(seen_types, child, global)
+      end
     end
 
     # role types appearing in more than one group
@@ -82,13 +88,17 @@ class Role
       seen_types = []
       group.child_types.each do |child|
         child.role_types.each do |role|
-          if seen_types.include?(role)
-            global << role
-          end
-          seen_types << role
+          process_global_role(seen_types, role, global)
         end
       end
       global
+    end
+
+    def process_global_role(seen_types, role, global)
+      if seen_types.include?(role)
+        global << role
+      end
+      seen_types << role
     end
 
     def local_role_types(group)

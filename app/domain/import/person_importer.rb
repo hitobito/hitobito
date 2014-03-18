@@ -48,19 +48,27 @@ module Import
       person = Import::Person.new(hash, unique_emails)
       person.add_role(group, role_type)
 
-      # DoubletteFinder in Person populates errors, still check if initialized person is valid
-      if person.errors.empty? && valid?(person)
-        if person.persisted?
-          handle_persisted(person)
-          person = doublettes[person.id]
-        else
-          @new_count += 1
-        end
+      handle_person(person, index)
+    end
+
+    def handle_person(person, index)
+      if valid?(person)
+        handle_imported_person(person)
       else
         @failure_count += 1
         errors << translate(:row_with_error, row: index + 1, errors: person.human_errors)
+        person
       end
-      person
+    end
+
+    def handle_imported_person(person)
+      if person.persisted?
+        handle_persisted(person)
+        doublettes[person.id]
+      else
+        @new_count += 1
+        person
+      end
     end
 
     def handle_persisted(import_person)
@@ -84,7 +92,11 @@ module Import
 
     # we ignore duplicate emails for persisted people, they are handle by doublettes
     def valid?(person)
-      (person.persisted? && person.person.valid?) || person.valid?
+      # DoubletteFinder in Person populates errors,
+      # still check if initialized person is valid
+       person.errors.empty? &&
+       ((person.persisted? && person.person.valid?) ||
+        person.valid?)
     end
 
     # used by Import::Person to check if emails are unique

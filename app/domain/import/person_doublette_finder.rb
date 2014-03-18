@@ -25,15 +25,19 @@ module Import
     def find_and_update
       people = duplicates
       if people.present?
-        person = people.first
-        if people.size == 1
-          blank_attrs = attrs.select { |key, value| person.attributes[key].blank? }
-          person.attributes = blank_attrs
-        else
-          person.errors.add(:base, translate(:duplicates, count: people.size))
+        people.first.tap do |person|
+          if people.size == 1
+            assign_blank_attrs(person)
+          else
+            person.errors.add(:base, translate(:duplicates, count: people.size))
+          end
         end
-        person
       end
+    end
+
+    def assign_blank_attrs(person)
+      blank_attrs = attrs.select { |key, value| person.attributes[key].blank? }
+      person.attributes = blank_attrs
     end
 
     def duplicate_conditions
@@ -83,10 +87,7 @@ module Import
 
     def parse_date(date_string)
       if date_string.present?
-        begin
-          Time.zone.parse(date_string).to_date
-        rescue
-        end
+        Time.zone.parse(date_string).to_date rescue nil
       end
     end
   end

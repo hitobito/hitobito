@@ -54,10 +54,16 @@ module AbilityDsl
       @layers_full = layer_ids(@groups_layer_full)
       @layers_read = layer_ids(@groups_layer_read)
 
-      @groups_group_full.collect!(&:id)
-      @groups_group_read.collect!(&:id)
-      @groups_layer_full.collect!(&:id)
-      @groups_layer_read.collect!(&:id)
+      collect_group_ids!
+    end
+
+    def collect_group_ids!
+      [@groups_group_full,
+       @groups_group_read,
+       @groups_layer_full,
+       @groups_layer_read].each do |list|
+        list.collect!(&:id)
+      end
     end
 
     def find_events_with_permission(permission)

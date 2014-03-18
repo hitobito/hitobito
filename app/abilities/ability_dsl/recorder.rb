@@ -93,8 +93,8 @@ module AbilityDsl
 
     class General < Base
 
-      AllAction = :_all
-      Permission = :_general
+      ALL_ACTION = :_all
+      PERMISSION = :_general
 
       def initialize(store, ability_class, subject_class, actions)
         super(store, ability_class, subject_class)
@@ -104,8 +104,8 @@ module AbilityDsl
       private
 
       def constraint(constraint)
-        (@actions.presence || [AllAction]).each do |action|
-          add_config(Permission, action, constraint)
+        (@actions.presence || [ALL_ACTION]).each do |action|
+          add_config(PERMISSION, action, constraint)
         end
       end
 

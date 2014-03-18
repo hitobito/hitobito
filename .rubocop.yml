@@ -31,6 +31,10 @@ LineLength:
 ClassAndModuleChildren:
   Enabled: false
 
+# The ones we use must exist for the entire class hierarchy.
+ClassVars:
+  Enabled: false
+
 # map instead of collect, reduce instead of inject.
 # Probably later
 CollectionMethods:

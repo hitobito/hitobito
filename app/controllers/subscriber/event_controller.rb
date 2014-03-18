@@ -1,4 +1,3 @@
-
 # encoding: utf-8
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -12,6 +11,12 @@ module Subscriber
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
+
+    SEARCH_COLUMNS = %w(events.name
+                        events.number
+                        groups.name
+                        event_kind_translations.label
+                        event_kind_translations.short_name)
 
     # GET query queries available events via ajax
     def query
@@ -42,11 +47,7 @@ module Subscriber
                              "AND events.type = '#{Event::Course.sti_name}' " +
                              'LEFT JOIN event_kind_translations ' +
                              'ON event_kinds.id  = event_kind_translations.event_kind_id').
-                       where(search_condition('events.name',
-                                              'events.number',
-                                              'groups.name',
-                                              'event_kind_translations.label',
-                                              'event_kind_translations.short_name')).
+                       where(search_condition(*SEARCH_COLUMNS)).
                        order_by_date.
                        uniq
     end

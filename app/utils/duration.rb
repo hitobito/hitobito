@@ -50,12 +50,10 @@ class Duration < Struct.new(:start_at, :finish_at)
       format_datetime(start_at)
     elsif start_at.to_date == finish_at.to_date
       "#{format_date(start_at)} #{format_time(start_at)} - #{format_time(finish_at)}"
+    elsif format == :short
+      "#{format_date(start_at)} - #{format_date(finish_at)}"
     else
-      if format == :short
-        "#{format_date(start_at)} - #{format_date(finish_at)}"
-      else
-        "#{format_datetime(start_at)} - #{format_datetime(finish_at)}"
-      end
+      "#{format_datetime(start_at)} - #{format_datetime(finish_at)}"
     end
   end
 

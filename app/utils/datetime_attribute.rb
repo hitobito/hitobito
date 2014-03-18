@@ -24,17 +24,19 @@ module DatetimeAttribute
       if date.present?
         hour = send("#{attr}_hour").presence || 0
         min = send("#{attr}_min").presence || 0
-        begin
-          date = ActiveRecord::ConnectionAdapters::Column.date_string_to_long_year(date)
-          date = date.to_date
-          send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
-        rescue Exception
-          errors.add(attr, :invalid)
-        end
+        assign_datetime(attr, date, hour, min)
       else
         send("#{attr}=", nil)
       end
     end
+  end
+
+  def assign_datetime(attr, date, hour, min)
+    date = ActiveRecord::ConnectionAdapters::Column.date_string_to_long_year(date)
+    date = date.to_date
+    send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
+  rescue Exception
+    errors.add(attr, :invalid)
   end
 
   def datetime_to(value, field)
@@ -66,19 +68,30 @@ module DatetimeAttribute
 
         # define field accessors
         [:date, :hour, :min].each do |field|
-          accessor = :"#{attr}_#{field}"
-          # getter
-          define_method(accessor) do
-            datetime_fields(attr)[field] ||= datetime_to(send(attr), field)
-          end
-
-          # setter
-          define_method("#{accessor}=") do |value|
-            send("#{attr}_will_change!") unless value == send(accessor)
-            datetime_fields(attr)[field] = value
-          end
+          define_datetime_getter(attr, field)
+          define_datetime_setter(attr, field)
         end
       end
+    end
+
+    private
+
+    def define_datetime_getter(attr, field)
+      define_method(datetime_accessor(attr, field)) do
+        datetime_fields(attr)[field] ||= datetime_to(send(attr), field)
+      end
+    end
+
+    def define_datetime_setter(attr, field)
+      accessor = datetime_accessor(attr, field)
+      define_method("#{accessor}=") do |value|
+        send("#{attr}_will_change!") unless value == send(accessor)
+        datetime_fields(attr)[field] = value
+      end
+    end
+
+    def datetime_accessor(attr, field)
+      :"#{attr}_#{field}"
     end
 
   end

@@ -42,7 +42,6 @@ module Role::Types
   end
 
   module ClassMethods
-    # rubocop:disable ClassVars
 
     # All role types defined in the application.
     def all_types

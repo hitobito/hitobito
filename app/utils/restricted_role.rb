@@ -23,16 +23,17 @@ module RestrictedRole
     restricted_roles.each do |attr, type|
       role = restricted_role(attr, type)
       if role.try(:person_id) != send("#{attr}_id")
-        if role
-          # be on the save side with destroy_all
-          restricted_role_scope(type).readonly(false).destroy_all
-          @restricted_role[attr] = nil # clear cache
-        end
-        if id = restricted_role_id(attr, type).presence
-          build_restricted_role(type.new, id).save!
-        end
+        destroy_previous_role(attr, type) if role
+        id = restricted_role_id(attr, type).presence
+        build_restricted_role(type.new, id).save! if id
       end
     end
+  end
+
+  def destroy_previous_role(attr, type)
+    # be on the save side with destroy_all
+    restricted_role_scope(type).readonly(false).destroy_all
+    @restricted_role[attr] = nil # clear cache
   end
 
   def build_restricted_role(role, id)
@@ -66,7 +67,14 @@ module RestrictedRole
       restricted_roles[attr] = type
       self.role_types += [type]
 
-      # getter for the person
+      define_restricted_person_getter(attr, type)
+      define_restricted_person_id_getter(attr, type)
+      define_restricted_person_id_setter(attr)
+    end
+
+    private
+
+    def define_restricted_person_getter(attr, type)
       define_method attr do
         if new_record?
           id = restricted_role_id(attr, type).presence
@@ -75,13 +83,15 @@ module RestrictedRole
           restricted_role(attr, type).try(:person)
         end
       end
+    end
 
-      # getter for the person id
+    def define_restricted_person_id_getter(attr, type)
       define_method "#{attr}_id" do
         restricted_role_id(attr, type)
       end
+    end
 
-      # setter for the person id
+    def define_restricted_person_id_setter(attr)
       define_method "#{attr}_id=" do |value|
         set_restricted_role_id(attr, value)
       end

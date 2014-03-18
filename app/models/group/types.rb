@@ -25,7 +25,6 @@ module Group::Types
   end
 
   module ClassMethods
-    # rubocop:disable ClassVars
 
     # DSL method to define children
     def children(*group_types)

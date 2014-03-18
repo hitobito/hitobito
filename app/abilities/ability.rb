@@ -9,10 +9,8 @@ class Ability
 
   include CanCan::Ability
 
-  # rubocop:disable ClassVars
   cattr_reader :store
   @@store = AbilityDsl::Store.new
-  # rubocop:enable ClassVars
 
   store.register EventAbility,
                  Event::ApplicationAbility,

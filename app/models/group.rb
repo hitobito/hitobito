@@ -188,14 +188,10 @@ class Group < ActiveRecord::Base
 
   ## readers and query methods for contact info
   [:address, :town, :zip_code, :country].each do |attribute|
-    define_method(attribute) do
-      (contact && contact.public_send(attribute)) || super()
-    end
-
-    query_method = :"#{attribute}?"
-
-    define_method(query_method) do
-      (contact && contact.public_send(query_method)) || super()
+    [attribute, :"#{attribute}?"].each do |method|
+      define_method(method) do
+        (contact && contact.public_send(method)) || super()
+      end
     end
   end
 

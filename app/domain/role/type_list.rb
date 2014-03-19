@@ -23,7 +23,7 @@ class Role
 
     # hash with the form {layer: {group: [roles]}}
     def compose
-      @global_group_types = find_global_group_types([], root).uniq
+      @global_group_types = find_global_group_types(root, root)
       @global_role_types = find_global_role_types(root).uniq
       @role_types = Hash.new { |h0, k0| h0[k0] = Hash.new { |h1, k1| h1[k1] = [] } }
 
@@ -63,22 +63,22 @@ class Role
       @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
     end
 
-    # groups appearing in the possible children of more than one group
-    def find_global_group_types(seen_types, group, global = [])
-      group.possible_children.each do |child|
-        process_gobal_group(seen_types, group, child, global)
-      end
-      global
+    # groups appearing in the possible (sub) children of more than one layer
+    def find_global_group_types(group, layer, group_layers = {})
+      group_layers = {}
+      find_group_layers(group, layer, group_layers)
+      group_layers.select { |_, layers| layers.uniq.size > 1 }
+                  .collect(&:first)
     end
 
-    def process_gobal_group(seen_types, group, child, global)
-      if seen_types.include?(child)
-        unless child.layer || child == group
-          global << child
+    def find_group_layers(group, layer, group_layers)
+      group_layers[group] = [layer]
+      group.possible_children.each do |child|
+        if group_layers.key?(child)
+          group_layers[child] << layer unless child.layer
+        else
+          find_group_layers(child, child.layer ? child : layer, group_layers)
         end
-      else
-        seen_types << child
-        find_global_group_types(seen_types, child, global)
       end
     end
 

@@ -17,7 +17,7 @@
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/production.sqlite3 script/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/production.sqlite3 bin/phantomjs'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
@@ -219,7 +219,7 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:config" || exit 1
+su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:configure" || exit 1
 ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :

@@ -41,7 +41,7 @@ start()
 {
   echo -n $"Starting $prog: "
   daemon --user ${APP_USER} "bash -e -c '
-    ${APP_RUBY} ${APP_HOME}/script/delayed_job -p APP_NAME -n ${CPUS:-2} -m start;'"
+    ${APP_RUBY} ${APP_HOME}/bin/delayed_job -p APP_NAME -n ${CPUS:-2} -m start;'"
   RETVAL=$?
   [ $RETVAL -eq 0 ] && touch $lockfile
   echo
@@ -52,7 +52,7 @@ stop()
 {
   echo -n $"Stopping $prog: "
   bash -e -c "
-    ${APP_RUBY} ${APP_HOME}/script/delayed_job -p APP_NAME -n ${CPUS:-2} -m stop;"
+    ${APP_RUBY} ${APP_HOME}/bin/delayed_job -p APP_NAME -n ${CPUS:-2} -m stop;"
   RETVAL=$?
   [ $RETVAL -eq 0 ] && (rm -f $lockfile; echo_success) || echo_failure
   echo

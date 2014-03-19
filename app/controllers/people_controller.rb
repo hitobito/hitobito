@@ -16,7 +16,6 @@ class PeopleController < CrudController
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
-                          :password, :password_confirmation, :remember_me,
                           :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS
 

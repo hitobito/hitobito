@@ -13,7 +13,7 @@ class Event::ParticipationsController < CrudController
 
   self.permitted_attrs = [:additional_information,
                           answers_attributes: [:id, :question_id, :answer, answer: []],
-                          application_attributes: [:priority_2_id, :priority_3_id]]
+                          application_attributes: [:id, :priority_2_id, :priority_3_id]]
 
   self.remember_params += [:filter]
 

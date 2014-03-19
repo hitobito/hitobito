@@ -75,6 +75,73 @@ describe EventsController do
       end
     end
 
+    context 'PUT update' do
+      let(:group) { groups(:top_layer) }
+      let(:event) { events(:top_event) }
+
+      before { sign_in(people(:top_leader)) }
+
+      it 'creates, updates and destroys dates' do
+        d1 = event.dates.create!(label: 'Pre', start_at_date: '1.1.2014', finish_at_date: '3.1.2014')
+        d2 = event.dates.create!(label: 'Main', start_at_date: '1.2.2014', finish_at_date: '7.2.2014')
+
+        expect do
+          put :update, group_id: group.id,
+                       id: event.id,
+                       event: { name: 'testevent',
+                                dates_attributes: {
+                                   d1.id.to_s => { id: d1.id,
+                                                   label: 'Vorweek',
+                                                   start_at_date: '3.1.2014',
+                                                   finish_at_date: '4.1.2014' },
+                                   d2.id.to_s => { id: d2.id, _destroy: true },
+                                   '999' => { label: 'Nachweek',
+                                              start_at_date: '3.2.2014',
+                                              finish_at_date: '5.2.2014' } } }
+          assigns(:event).should be_valid
+        end.not_to change { Event::Date.count }
+
+        event.reload.name.should eq 'testevent'
+        dates = event.dates.order(:start_at)
+        dates.should have(3).items
+        first = dates.second
+        first.label.should eq 'Vorweek'
+        first.start_at_date.should eq Date.new(2014, 1, 3)
+        first.finish_at_date.should eq Date.new(2014, 1, 4)
+        second = dates.third
+        second.label.should eq 'Nachweek'
+        second.start_at_date.should eq Date.new(2014, 2, 3)
+        second.finish_at_date.should eq Date.new(2014, 2, 5)
+      end
+
+      it 'creates, updates and destroys questions' do
+        q1 = event.questions.create!(question: 'Who?')
+        q2 = event.questions.create!(question: 'What?')
+
+        expect do
+          put :update, group_id: group.id,
+                       id: event.id,
+                       event: { name: 'testevent',
+                                questions_attributes: {
+                                   q1.id.to_s => { id: q1.id,
+                                                   question: 'Whoo?' },
+                                   q2.id.to_s => { id: q2.id, _destroy: true },
+                                   '999' => { question: 'How much?',
+                                              choices: '1,2,3' } } }
+          assigns(:event).should be_valid
+        end.not_to change { Event::Question.count }
+
+        event.reload.name.should eq 'testevent'
+        questions = event.questions.order(:question)
+        questions.should have(2).items
+        first = questions.first
+        first.question.should eq 'How much?'
+        first.choices.should eq '1,2,3'
+        second = questions.second
+        second.question.should eq 'Whoo?'
+      end
+    end
+
   end
 
   context 'destroyed associations' do

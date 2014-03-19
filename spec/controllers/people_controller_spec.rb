@@ -190,6 +190,86 @@ describe PeopleController do
         assigns(:person).email.should == 'bottom_member@example.com'
       end
 
+      it 'does not update password for other person' do
+        encrypted = person.encrypted_password
+        put :update, group_id: group.id,
+                     id: person.id,
+                     person: { password: 'yadayada', password_confirmation: 'yadayada' }
+        person.reload.encrypted_password.should eq encrypted
+      end
+
+      it 'create new phone numbers' do
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 phone_numbers_attributes: { '111' =>
+                                   { number: '031 111 1111', label: 'Privat', public: 1 } } }
+          assigns(:person).should be_valid
+        end.to change { PhoneNumber.count }.by(1)
+        person.reload.phone_numbers.should have(1).item
+        number = person.phone_numbers.first
+        number.number.should eq '031 111 1111'
+        number.label.should eq 'Privat'
+        number.public.should be_true
+      end
+
+      it 'updates existing phone numbers' do
+        n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 phone_numbers_attributes: { n.id.to_s =>
+                                   { number: '031 111 2222', label: 'Privat', public: 0, id: n.id } } }
+        end.not_to change { PhoneNumber.count }
+        number = person.reload.phone_numbers.first
+        number.number.should eq '031 111 2222'
+        number.public.should be_false
+      end
+
+      it 'destroys existing phone numbers' do
+        n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 phone_numbers_attributes: { n.id.to_s =>
+                                   { number: '031 111 1111', label: 'Privat', public: 0, id: n.id, _destroy: true } } }
+        end.to change { PhoneNumber.count }.by(-1)
+        person.reload.phone_numbers.should be_blank
+      end
+
+      it 'create, update and destroys social accounts' do
+        a1 = person.social_accounts.create!(name: 'Housi', label: 'Facebook', public: 0)
+        a2 = person.social_accounts.create!(name: 'Hans', label: 'Skype', public: 1)
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 social_accounts_attributes: {
+                                   a1.id.to_s => { id: a1.id,
+                                                   name: 'Housi1',
+                                                   label: 'Facebook',
+                                                   public: 1 },
+                                   a2.id.to_s => { id: a2.id, _destroy: true },
+                                   '999' => { name: 'John',
+                                              label: 'Twitter',
+                                              public: 0 }, } }
+          assigns(:person).should be_valid
+        end.not_to change { SocialAccount.count }
+
+        person.reload.social_accounts.should have(2).items
+        fb = person.social_accounts.order(:label).first
+        fb.label.should eq 'Facebook'
+        fb.name.should eq 'Housi1'
+        fb.public.should be_true
+        tw = person.social_accounts.order(:label).second
+        tw.label.should eq 'Twitter'
+        tw.name.should eq 'John'
+        tw.public.should be_false
+      end
+
     end
   end
 

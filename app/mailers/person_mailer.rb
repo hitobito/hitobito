@@ -11,23 +11,25 @@ class PersonMailer < ActionMailer::Base
 
   def login(recipient, sender, token)
     content = CustomContent.get(CONTENT_LOGIN)
-    url = login_url(recipient, token)
-    values = {
-      'recipient-name' => recipient.greeting_name,
-      'sender-name'    => sender.to_s,
-      'login-url'      => "<a href=\"#{url}\">#{url}</a>"
-    }
 
     mail(to: recipient.email,
          return_path: return_path(sender),
          sender: return_path(sender),
          reply_to: sender.email,
          subject: content.subject) do |format|
-      format.html { render text: content.body_with_values(values) }
+      format.html { render text: content_body(content, recipient, sender, token) }
     end
   end
 
   private
+
+  def content_body(content, recipient, sender, token)
+    url = login_url(recipient, token)
+    content.body_with_values(
+      'recipient-name' => recipient.greeting_name,
+      'sender-name'    => sender.to_s,
+      'login-url'      => "<a href=\"#{url}\">#{url}</a>")
+  end
 
   def login_url(person, token)
     edit_person_password_url(person, reset_password_token: token)

@@ -46,6 +46,7 @@ class Event::ParticipationMailer < ActionMailer::Base
     group_event_participation_url(@event.groups.first, @event, @participation)
   end
 
+  # rubocop:disable MethodLength
   def event_details
     infos = []
     infos << @event.name
@@ -60,9 +61,11 @@ class Event::ParticipationMailer < ActionMailer::Base
     infos << participation_details
     infos.compact.join('<br/><br/>')
   end
+  # rubocop:enable MethodLength
 
   def labeled(key)
-    if value = @event.send(key).presence
+    value = @event.send(key).presence
+    if value
       label = @event.class.human_attribute_name(key)
       formatted = block_given? ? yield : value
       "#{label}:<br/>#{formatted}"

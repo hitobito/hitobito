@@ -37,7 +37,9 @@ namespace :tx do
 
   desc 'Pull translations from transifex'
   task :pull  do
-    sh 'tx pull'
+    # force pull because git locale file timestamps
+    # will be newer than transifex files during rpm build.
+    sh 'tx pull -f'
   end
 
   #desc 'Save transifex credentials from env into .transifexrc'
@@ -55,7 +57,7 @@ namespace :tx do
 
   namespace :wagon do
     task :pull do
-      ENV['CMD'] = "if [ -f .tx/config ]; then tx pull; fi"
+      ENV['CMD'] = "if [ -f .tx/config ]; then tx pull -f; fi"
       Rake::Task['wagon:exec'].invoke
     end
   end

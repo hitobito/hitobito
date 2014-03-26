@@ -1,3 +1,3 @@
-$("##{@old_dom_id}").parent().hide()
-$('##{@old_dom_id}').popover('destroy').replaceWith('#{j(PersonDecorator.new(entry.person).roles_short)}')
+$('##{dom_id(@old_role || @role)}').parent().hide()
+$('##{dom_id(@old_role || @role)}').popover('destroy').replaceWith('#{j(PersonDecorator.new(entry.person).roles_short)}')
 $('##{dom_id(entry)}').parent().toggle('highlight', {duration: 1000})

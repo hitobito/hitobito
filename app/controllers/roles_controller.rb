@@ -27,7 +27,6 @@ class RolesController < CrudController
   end
 
   def update
-    @old_dom_id = dom_id(entry)
     type = changed_type
 
     if type
@@ -93,6 +92,7 @@ class RolesController < CrudController
 
     if success
       flash[:notice] = role_change_message(new_role)
+      @old_role = @role
       @role = new_role
     else
       entry.attributes = new_role.attributes.except('id')

@@ -296,7 +296,7 @@ describe PeopleController do
       role = roles(:bottom_member)
       role.destroy
 
-      get :show, group_id: role.group, id: role.id
+      get :show, group_id: role.group_id, id: role.person_id
       should redirect_to group_person_path(group_id: groups(:top_layer).id, id: role.person.id)
     end
 

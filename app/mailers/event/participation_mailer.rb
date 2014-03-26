@@ -15,14 +15,14 @@ class Event::ParticipationMailer < ActionMailer::Base
 
     compose(participation,
             CONTENT_CONFIRMATION,
-            person.email,
+            [person],
             'recipient-name' => person.greeting_name)
   end
 
   def approval(participation, recipients)
     compose(participation,
             CONTENT_APPROVAL,
-            recipients.collect(&:email).compact,
+            recipients,
             'participant-name' => participation.person.to_s,
             'recipient-names'  => recipients.collect(&:greeting_name).join(', '))
   end
@@ -37,7 +37,7 @@ class Event::ParticipationMailer < ActionMailer::Base
     values['event-details']   = event_details
     values['application-url'] = "<a href=\"#{participation_url}\">#{participation_url}</a>"
 
-    mail to: recipients, subject: content.subject do |format|
+    mail(to: Person.mailing_emails_for(recipients), subject: content.subject) do |format|
       format.html { render text: content.body_with_values(values) }
     end
   end

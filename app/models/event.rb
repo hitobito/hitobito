@@ -4,6 +4,8 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
+
 # == Schema Information
 #
 # Table name: events
@@ -31,7 +33,6 @@
 #  application_contact_id :integer
 #  external_applications  :boolean          default(FALSE)
 #
-
 class Event < ActiveRecord::Base
 
   # This statement is required because these classes would not be loaded correctly otherwise.

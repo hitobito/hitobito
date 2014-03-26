@@ -103,7 +103,6 @@ describe MailRelay::Lists do
     end
   end
 
-
   context 'list member' do
     let(:from) { bgl1.email }
 

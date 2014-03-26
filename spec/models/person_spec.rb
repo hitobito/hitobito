@@ -329,4 +329,25 @@ describe Person do
       end
     end
   end
+
+  context '.mailing_emails_for' do
+    it 'contains main and additional mailing emails' do
+      e1 = Fabricate(:additional_email, contactable: people(:top_leader), mailings: true)
+      Fabricate(:additional_email, contactable: people(:bottom_member), mailings: false)
+      Person.mailing_emails_for(Person.all).should =~ [
+        'bottom_member@example.com',
+        'hitobito@puzzle.ch',
+        'top_leader@example.com',
+        e1.email
+      ]
+    end
+
+    it 'does not contain blank emails' do
+      people(:bottom_member).update_attributes!(email: ' ')
+      Person.mailing_emails_for(Person.all).should =~ [
+        'hitobito@puzzle.ch',
+        'top_leader@example.com'
+      ]
+    end
+  end
 end

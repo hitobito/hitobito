@@ -25,4 +25,11 @@ describe PersonMailer do
   its(:subject)  { should == "Willkommen bei #{Settings.application.name}" }
   its(:body)     { should =~ /Hallo Bottom<br\/>/ }
 
+  context 'with additional emails' do
+    it 'does not send to them' do
+      Fabricate(:additional_email, contactable: recipient)
+      mail.to.should eq [recipient.email]
+    end
+  end
+
 end

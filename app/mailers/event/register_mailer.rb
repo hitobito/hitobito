@@ -18,7 +18,9 @@ class Event::RegisterMailer < ActionMailer::Base
       'event-url'      => "<a href=\"#{url}\">#{url}</a>"
     }
 
-    mail to: recipient.email, subject: content.subject do |format|
+    # This email contains sensitive information and thus
+    # is only sent to the main email address.
+    mail(to: recipient.email, subject: content.subject) do |format|
       format.html { render text: content.body_with_values(values) }
     end
   end

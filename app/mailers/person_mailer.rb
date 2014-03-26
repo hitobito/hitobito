@@ -12,6 +12,8 @@ class PersonMailer < ActionMailer::Base
   def login(recipient, sender, token)
     content = CustomContent.get(CONTENT_LOGIN)
 
+    # This email contains sensitive information and thus
+    # is only sent to the main email address.
     mail(to: recipient.email,
          return_path: return_path(sender),
          sender: return_path(sender),

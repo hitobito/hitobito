@@ -4,6 +4,8 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
+
 # == Schema Information
 #
 # Table name: roles
@@ -17,7 +19,6 @@
 #  updated_at :datetime
 #  deleted_at :datetime
 #
-
 class Role < ActiveRecord::Base
 
   has_paper_trail meta: { main_id: ->(r) { r.person_id },

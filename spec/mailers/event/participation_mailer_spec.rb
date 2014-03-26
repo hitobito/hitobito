@@ -21,12 +21,6 @@ describe Event::ParticipationMailer do
 
   subject { mail.body }
 
-  it 'renders the headers' do
-    mail.subject.should eq 'Bestätigung der Anmeldung'
-    mail.to.should eq(['top_leader@example.com'])
-    mail.from.should eq(['noreply@localhost'])
-  end
-
   describe 'event data' do
     it 'renders set attributes only' do
       should =~ /Eventus/
@@ -68,19 +62,37 @@ describe Event::ParticipationMailer do
   end
 
   describe '#confirmation' do
+
+    it 'renders the headers' do
+      mail.subject.should eq 'Bestätigung der Anmeldung'
+      mail.to.should eq(['top_leader@example.com'])
+      mail.from.should eq(['noreply@localhost'])
+    end
+
     it { should =~ /Hallo Top/ }
+
+    it 'sends to all email addresses of participant' do
+      person.update_attributes!(email: nil)
+      e1 = Fabricate(:additional_email, contactable: person, mailings: true)
+      mail.to.should eq [e1.email]
+    end
+
   end
 
   describe '#approval' do
     let(:approvers) do
-      [Fabricate.build(:person, email: 'approver0@example.com', first_name: 'firsty'),
-       Fabricate.build(:person, email: 'approver1@example.com', first_name: 'lasty')]
+      [Fabricate(:person, email: 'approver0@example.com', first_name: 'firsty'),
+       Fabricate(:person, email: 'approver1@example.com', first_name: 'lasty')]
     end
     let(:mail) { Event::ParticipationMailer.approval(participation, approvers) }
 
-    it 'should send to approvers' do
-      mail.to.should == ['approver0@example.com', 'approver1@example.com']
-      mail.subject.should == 'Freigabe einer Kursanmeldung'
+    it 'sends to all email addresses of approvers' do
+      e1 = Fabricate(:additional_email, contactable: approvers[0], mailings: true)
+      e2 = Fabricate(:additional_email, contactable: approvers[0], mailings: true)
+      Fabricate(:additional_email, contactable: approvers[1], mailings: false)
+
+      mail.to.should eq ['approver0@example.com', 'approver1@example.com', e1.email, e2.email]
+      mail.subject.should eq 'Freigabe einer Kursanmeldung'
     end
 
     it { should =~ /Hallo firsty, lasty/ }

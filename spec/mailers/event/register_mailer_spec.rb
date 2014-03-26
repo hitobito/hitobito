@@ -39,4 +39,11 @@ describe Event::RegisterMailer do
       should =~ /<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/
     end
   end
+
+  context 'with additional emails' do
+    it 'does not send to them' do
+      Fabricate(:additional_email, contactable: person)
+      mail.to.should eq [person.email]
+    end
+  end
 end

@@ -87,12 +87,7 @@ module MailRelay
 
     # List of receiver email addresses for the resent email.
     def receivers
-      people = mailing_list.people.to_a
-      people.collect(&:email).select(&:present?) +
-      AdditionalEmail.where(contactable_id: people.collect(&:id),
-                            contactable_type: Person.sti_name,
-                            mailings: true).
-                      pluck(:email)
+      Person.mailing_emails_for(mailing_list.people.to_a)
     end
 
     def mailing_list

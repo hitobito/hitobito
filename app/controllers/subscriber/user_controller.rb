@@ -8,7 +8,7 @@
 module Subscriber
   class UserController < ApplicationController
 
-    before_filter :authorize
+    before_action :authorize
 
     def create
       subscription.excluded = false

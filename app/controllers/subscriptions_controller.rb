@@ -13,7 +13,7 @@ class SubscriptionsController < CrudController
 
   decorates :group
 
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
   alias_method :mailing_list, :parent
 

@@ -14,7 +14,7 @@ class MailingListsController < CrudController
 
   decorates :group, :mailing_list
 
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
 
   def show

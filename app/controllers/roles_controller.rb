@@ -13,7 +13,7 @@ class RolesController < CrudController
   decorates :role, :group
 
   # load group before authorization
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
   before_render_form :set_group_selection
 

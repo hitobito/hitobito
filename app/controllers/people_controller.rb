@@ -24,9 +24,9 @@ class PeopleController < CrudController
   helper_method :index_full_ability?
 
   # load group before authorization
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
-  prepend_before_filter :entry, only: [:show, :edit, :update, :destroy,
+  prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
   before_render_show :load_asides

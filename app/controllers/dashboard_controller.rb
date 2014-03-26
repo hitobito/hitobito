@@ -7,7 +7,7 @@
 
 class DashboardController < ApplicationController
 
-  skip_before_filter :authenticate_person!, only: :index
+  skip_before_action :authenticate_person!, only: :index
   skip_authorization_check only: :index
 
   def index

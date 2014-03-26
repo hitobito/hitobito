@@ -15,7 +15,7 @@ class ListController < ApplicationController
 
   # customized cancan code to authorize with #model_class
   authorize_resource except: :index
-  before_filter :authorize_class, only: :index
+  before_action :authorize_class, only: :index
 
   helper_method :model_class, :models_label, :entries, :path_args
 
@@ -266,7 +266,7 @@ class ListController < ApplicationController
       controller.class_attribute :remember_params
       controller.remember_params = [:q, :sort, :sort_dir, :page]
 
-      controller.prepend_before_filter :handle_remember_params, only: [:index]
+      controller.prepend_before_action :handle_remember_params, only: [:index]
     end
 
     private

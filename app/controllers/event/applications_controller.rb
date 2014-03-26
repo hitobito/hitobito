@@ -7,7 +7,7 @@
 
 class Event::ApplicationsController < ApplicationController
 
-  before_filter :application
+  before_action :application
   authorize_resource
 
   def approve

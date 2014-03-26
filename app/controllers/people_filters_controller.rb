@@ -18,7 +18,7 @@ class PeopleFiltersController < CrudController
   skip_authorize_resource only: :create
 
   # load group before authorization
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
   before_render_form :compose_role_lists
 

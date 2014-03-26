@@ -7,7 +7,7 @@
 
 class Event::ApplicationMarketController < ApplicationController
 
-  before_filter :authorize
+  before_action :authorize
 
   decorates :event, :participants, :participation, :group
 

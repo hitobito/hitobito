@@ -12,7 +12,7 @@ module Concerns
     included do
       helper_method :current_user
 
-      before_filter :authenticate_person!
+      before_action :authenticate_person!
       check_authorization unless: :devise_controller?
     end
 

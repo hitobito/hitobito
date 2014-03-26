@@ -10,8 +10,8 @@ class Group::MoveController < ApplicationController
   decorates :group
   helper_method :group
 
-  before_filter :group
-  before_filter :authorize
+  before_action :group
+  before_action :authorize
 
   def select
     candidates

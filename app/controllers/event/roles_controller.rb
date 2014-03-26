@@ -15,7 +15,7 @@ class Event::RolesController < CrudController
   decorates :event_role, :event, :group
 
   # load group before authorization
-  prepend_before_filter :parent, :group
+  prepend_before_action :parent, :group
 
   hide_action :index, :show
 

@@ -9,8 +9,8 @@ class Event::RegisterController < ApplicationController
 
   helper_method :resource, :entry, :group, :event
 
-  before_filter :assert_external_application_possible
-  before_filter :assert_honeypot_is_empty, only: [:check, :register]
+  before_action :assert_external_application_possible
+  before_action :assert_honeypot_is_empty, only: [:check, :register]
 
   def index
     session[:person_return_to] = show_event_path

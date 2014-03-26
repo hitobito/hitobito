@@ -9,8 +9,8 @@ class Group::MergeController < ApplicationController
 
   decorates :group
 
-  before_filter :authorize
-  before_filter :check_params, :check_merge_group, only: :perform
+  before_action :authorize
+  before_action :check_params, :check_merge_group, only: :perform
 
   def select
     candidates

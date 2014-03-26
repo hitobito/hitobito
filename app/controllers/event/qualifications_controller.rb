@@ -7,7 +7,7 @@
 
 class Event::QualificationsController < ApplicationController
 
-  before_filter :authorize
+  before_action :authorize
 
   decorates :event, :leaders, :participants, :participation, :group
 

@@ -12,8 +12,8 @@ class CsvImportsController < ApplicationController
   helper_method :group, :parser, :guess, :model_class, :entries, :role_name,
                 :relevant_attrs, :relevant_contacts, :contact_value, :field_mappings
 
-  before_filter :load_group
-  before_filter :custom_authorization
+  before_action :load_group
+  before_action :custom_authorization
   decorates :group
 
   def define_mapping

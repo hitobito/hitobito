@@ -14,7 +14,7 @@ class QualificationsController < CrudController
   decorates :group, :person
 
   # load parents before authorization
-  prepend_before_filter :parent
+  prepend_before_action :parent
 
   before_render_form :load_qualification_kinds
 

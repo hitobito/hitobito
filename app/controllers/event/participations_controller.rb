@@ -20,10 +20,10 @@ class Event::ParticipationsController < CrudController
   decorates :group, :event, :participation, :participations, :alternatives
 
   # load before authorization
-  prepend_before_filter :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
-  prepend_before_filter :parent, :group
+  prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
+  prepend_before_action :parent, :group
 
-  before_filter :check_preconditions, only: [:create, :new]
+  before_action :check_preconditions, only: [:create, :new]
 
   before_render_form :load_priorities
   before_render_show :load_answers

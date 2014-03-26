@@ -21,7 +21,9 @@
 
 class Role < ActiveRecord::Base
 
-  has_paper_trail meta: { main_id: ->(r) { r.person_id }, main_type: Person.sti_name }
+  has_paper_trail meta: { main_id: ->(r) { r.person_id },
+                          main_type: Person.sti_name },
+                  skip: [:updated_at]
 
   acts_as_paranoid
 

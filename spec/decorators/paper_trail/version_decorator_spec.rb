@@ -105,13 +105,18 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     it 'is empty without from and to ' do
       string = decorator.attribute_change(:first_name, nil, '')
-      string.should be_html_safe
       string.should be_blank
     end
 
     it 'escapes html' do
       string = decorator.attribute_change(:first_name, nil, '<b>Fritz</b>')
       string.should == 'Vorname wurde auf <i>&lt;b&gt;Fritz&lt;/b&gt;</i> gesetzt.'
+    end
+
+    it 'formats according to column info' do
+      now = Time.local(2014, 6, 21, 18)
+      string = decorator.attribute_change(:updated_at, nil, now)
+      string.should eq 'Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt.'
     end
   end
 

@@ -19,11 +19,7 @@ module ContactableDecorator
     html << safe_join(address.split("\n"), br) << br if address?
     html << zip_code.to_s if zip_code?
     html << ' ' << town if town?
-
-    if !ignored_country?
-      html << br if zip_code? || town?
-      html << country
-    end
+    html << country_unless_ignored
 
     content_tag(:p, html)
   end
@@ -68,6 +64,15 @@ module ContactableDecorator
 
   def br
     h.tag(:br)
+  end
+
+  def country_unless_ignored
+    html = ''.html_safe
+    unless ignored_country?
+      html << br if zip_code? || town?
+      html << country
+    end
+    html
   end
 
   def prepend_complete_address(html)

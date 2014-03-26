@@ -75,7 +75,7 @@ class Event::Role < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s
+  def to_s(format = :default)
     model_name = self.class.label
     label? ? "#{label} (#{model_name})" : model_name
   end

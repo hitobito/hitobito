@@ -37,7 +37,7 @@ class CustomContent < ActiveRecord::Base
     end
   end
 
-  def to_s
+  def to_s(format = :default)
     label
   end
 

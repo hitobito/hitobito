@@ -89,6 +89,20 @@ class EventDecorator < ApplicationDecorator
                   prolonged: prolongs.join(', '),
                   count: prolongs.size }
 
+    translate_issued_qualifications_info_for_participants(qualis, prolongs, variables)
+  end
+
+  def as_typeahead
+    groups_label = groups.first.to_s
+    if groups.size > 1
+      groups_label = h.truncate(groups.join(', '), count: 50, separator: ',')
+    end
+    { id: id, label: "#{model} (#{groups_label})" }
+  end
+
+  private
+
+  def translate_issued_qualifications_info_for_participants(qualis, prolongs, variables)
     if qualis.present? && prolongs.present?
       translate(:issue_and_prolong, variables)
     elsif qualis.present?
@@ -99,16 +113,6 @@ class EventDecorator < ApplicationDecorator
       ''
     end
   end
-
-  def as_typeahead
-    groups_label = groups.first.to_s
-    if groups.size > 1
-      groups_label = h.truncate(groups.join(', '), count: 50, separator: ',')
-    end
-    { id: id, label: "#{model.to_s} (#{groups_label})" }
-  end
-
-  private
 
   def label_and_location(date)
     [date.label, date.location].compact.reject(&:empty?).join(', ')

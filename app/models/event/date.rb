@@ -32,7 +32,7 @@ class Event::Date < ActiveRecord::Base
     @duration ||= Duration.new(start_at, finish_at)
   end
 
-  def to_s
+  def to_s(format = :default)
     label? ? "#{label}: #{duration}" : duration
   end
 

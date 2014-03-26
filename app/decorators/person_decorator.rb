@@ -32,21 +32,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def address_name
-    html = ''.html_safe
     if company?
-      html << content_tag(:strong, company_name)
-      if full_name.present?
-        html << br
-        html << full_name
-      end
+      company_address_name
     else
-      if company_name.present?
-        html << company_name
-        html << br
-      end
-      html << content_tag(:strong, to_s)
+      private_address_name
     end
-    html
   end
 
   def additional_name
@@ -71,6 +61,24 @@ class PersonDecorator < ApplicationDecorator
   end
 
   private
+
+  def company_address_name
+    html = content_tag(:strong, company_name)
+    if full_name.present?
+      html << br
+      html << full_name
+    end
+    html
+  end
+
+  def private_address_name
+    html = ''.html_safe
+    if company_name.present?
+      html << company_name
+      html << br
+    end
+    html << content_tag(:strong, to_s)
+  end
 
   def functions_short(functions, scope_method, scope = nil)
     functions.select! { |r| r.send("#{scope_method}_id") == scope.id } if scope

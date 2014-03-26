@@ -34,7 +34,7 @@ class MailingList < ActiveRecord::Base
   validate :assert_mail_name_is_not_protected
 
 
-  def to_s
+  def to_s(format = :default)
     name
   end
 

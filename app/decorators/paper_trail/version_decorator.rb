@@ -46,31 +46,23 @@ module PaperTrail
     end
 
     def attribute_change(attr, from, to)
-      attr_label = item_class.human_attribute_name(attr)
-      if from.present? && to.present?
-        I18n.t('version.attribute_change.from_to',
-               attr: attr_label,
-               from: normalize(from),
-               to: normalize(to))
-      elsif from.present?
-        I18n.t('version.attribute_change.from',
-               attr: attr_label,
-               from: normalize(from))
-      elsif to.present?
-        I18n.t('version.attribute_change.to',
-               attr: attr_label,
-               to: normalize(to))
+      key = attribute_change_key(from, to)
+      if key
+        I18n.t("version.attribute_change.#{key}",
+               attribute_change_args(attr, from, to)).
+             html_safe
       else
         ''
-      end.html_safe
+      end
     end
 
     def association_change
       changeset = model.event == 'update' ? changeset_list : nil
+      item = reifyed_item
 
       I18n.t("version.association_change.#{model.event}",
              model: item_class.model_name.human,
-             label: reifyed_item.to_s(:long),
+             label: item ? item.to_s(:long) : '',
              changeset: changeset).html_safe
     end
 
@@ -93,8 +85,25 @@ module PaperTrail
       end
     end
 
-    def normalize(value)
-      h.h(h.f(value))
+    def attribute_change_key(from, to)
+      if from.present? && to.present?
+        'from_to'
+      elsif from.present?
+        'from'
+      elsif to.present?
+        'to'
+      end
+    end
+
+    def attribute_change_args(attr, from, to)
+      { attr: item_class.human_attribute_name(attr),
+        from: normalize(attr, from),
+        to: normalize(attr, to) }
+    end
+
+    def normalize(attr, value)
+      col = item_class.columns_hash[attr.to_s]
+      h.h(h.format_column(col.try(:type), value))
     end
   end
 end

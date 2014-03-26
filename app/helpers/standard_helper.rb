@@ -281,6 +281,18 @@ module StandardHelper
     end
   end
 
+  def format_column(type, val)
+    return EMPTY_STRING if val.nil?
+    case type
+      when :time    then f(val.to_time)
+      when :date    then f(val.to_date)
+      when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
+      when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
+      when :decimal then f(val.to_s.to_f)
+      else f(val)
+    end
+  end
+
   private
 
   # Helper methods that are not directly called from templates.
@@ -290,15 +302,8 @@ module StandardHelper
   # that have no own object class.
   def format_type(obj, attr)
     val = obj.send(attr)
-    return EMPTY_STRING if val.nil?
-    case column_type(obj, attr)
-      when :time    then f(val.to_time)
-      when :date    then f(val.to_date)
-      when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.time)}"
-      when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
-      when :decimal then f(val.to_s.to_f)
-      else f(val)
-    end
+    type = column_type(obj, attr)
+    format_column(type, val)
   end
 
   # Formats an active record belongs_to association

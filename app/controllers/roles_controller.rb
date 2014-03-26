@@ -33,14 +33,14 @@ class RolesController < CrudController
     if type
       if change_type(type)
         respond_to do |format|
-          format.html { redirect_to(group_person_path(entry.group_id, entry.person_id)) }
+          format.html { redirect_to(after_update_location) }
           format.js   { flash.clear }
         end
       else
         render :edit
       end
     else
-      super(location: group_person_path(entry.group_id, entry.person_id))
+      super(location: after_update_location)
     end
   end
 
@@ -174,6 +174,10 @@ class RolesController < CrudController
       else
         group_people_path(entry.group_id)
       end
+  end
+
+  def after_update_location
+    group_person_path(entry.group_id, entry.person_id)
   end
 
   def set_group_selection

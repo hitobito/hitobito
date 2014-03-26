@@ -1,0 +1,22 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.input_field(:email,
+                class: 'span4',
+                placeholder: t('.placeholder_value'))
+
+= f.input_field(:label,
+                class: 'span2',
+                placeholder: t('.placeholder_type'),
+                data: {provide: :typeahead, source: AdditionalEmail.available_labels})
+
+- if entry.is_a?(Person)
+  = f.label(:mailings, class: 'checkbox span2') do
+    = f.check_box(:mailings)
+    %span{rel: 'tooltip', title: t('.tooltip_mailings')}
+      = t(:"activerecord.attributes.additional_emails.mailings")
+      %i.icon.icon-info-sign
+
+= render 'contactable/public_check_box', f: f

@@ -66,6 +66,9 @@ de:
               not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen.'
 
     models:
+      additional_email:
+        one: Weiter E-Mail
+        other: Weiter E-Mails
       custom_content:
         one: Text
         other: Texte
@@ -137,7 +140,7 @@ de:
         company_name: Firmenname
         company: Firma
         nickname: Übername
-        email: E-Mail
+        email: Haupt-E-Mail
         password: Passwort
         password_confirmation: Passwort
         current_password: Altes Passwort
@@ -155,6 +158,7 @@ de:
         remember_me: Angemeldet bleiben
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+        additional_emails: Weitere E-Mails
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
@@ -164,7 +168,7 @@ de:
       group:
         name: Name
         short_name: Kurzname
-        email: E-Mail
+        email: Haupt-E-Mail
         password: Password
         address: Adresse
         zip_code: PLZ
@@ -174,6 +178,7 @@ de:
         contact: Kontaktperson
         phone_numbers: Telefonnummern
         social_accounts: Social Media
+        additional_emails: Weitere E-Mails
         parent_id: Elterngruppe
         layer_group_id: Ebene
         type: Gruppentyp
@@ -329,6 +334,21 @@ de:
         name: Social Media Name
         label: Social Media Typ
         public: Öffentlich
+
+      additional_email:
+        email: E-Mail
+        name: Weiter E-Mail
+        label: Weiter E-Mail Typ
+        label: Typ
+        public: Öffentlich
+        mailings: Versand
+
+      additional_emails:
+        email: E-Mail
+        name: Weiter E-Mail
+        label: Weiter E-Mail Typ
+        public: Öffentlich
+        mailings: Versand
 
       mailing_list:
         name: Name

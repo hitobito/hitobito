@@ -14,6 +14,9 @@
   = render 'email_field', f: f
 
 = field_set_tag do
+  = f.labeled_inline_fields_for :additional_emails, 'contactable/additional_email_fields'
+
+= field_set_tag do
   = f.labeled_inline_fields_for :phone_numbers, 'contactable/phone_number_fields'
 
 = field_set_tag do

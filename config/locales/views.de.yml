@@ -95,6 +95,11 @@ de:
       placeholder_value: Website, Skypename, Profillink...
       placeholder_type: Art (Skype, Facebook...)
 
+    additional_email_fields:
+      placeholder_value: E-Mail
+      placeholder_type: Bezeichnung (Privat, Arbeit ..)
+      tooltip_mailings: Versände von Abos, Bestätigungen per Email usw. werden zusätzlich an alle Versandemailadressen verschickt.
+
   participations:
     destroy:
       flash:

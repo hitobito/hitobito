@@ -27,10 +27,8 @@ class RolesController < CrudController
   end
 
   def update
-    type = changed_type
-
-    if type
-      if change_type(type)
+    if type_changed?
+      if change_type
         respond_to do |format|
           format.html { redirect_to(after_update_location) }
           format.js   { flash.clear }
@@ -72,18 +70,15 @@ class RolesController < CrudController
     created
   end
 
-  def changed_type
+  def type_changed?
     extract_model_attr(:person_id)
     type = model_params && model_params[:type]
 
-    type if @group.id != entry.group_id || (type && type != entry.type)
+    @group.id != entry.group_id || (type && type != entry.type)
   end
 
-  def change_type(type)
-    new_role = build_role
-    new_role.attributes = permitted_params(@type)
-    new_role.person_id = entry.person_id
-    new_role.group_id = @group.id
+  def change_type
+    new_role = build_new_type
     authorize!(:create, new_role)
 
     success = Role.transaction do
@@ -92,15 +87,27 @@ class RolesController < CrudController
 
     if success
       flash[:notice] = role_change_message(new_role)
-      @old_role = @role
-      @role = new_role
+      @role, @old_role = new_role, @role
     else
-      entry.attributes = new_role.attributes.except('id')
-      new_role.errors.each do |key, value|
-        entry.errors.add(key, value)
-      end
+      copy_errors(new_role)
     end
+
     success
+  end
+
+  def build_new_type
+    new_role = build_role
+    new_role.attributes = permitted_params(@type)
+    new_role.person_id = entry.person_id
+    new_role.group_id = @group.id
+    new_role
+  end
+
+  def copy_errors(new_role)
+    entry.attributes = new_role.attributes.except('id')
+    new_role.errors.each do |key, value|
+      entry.errors.add(key, value)
+    end
   end
 
   def build_entry

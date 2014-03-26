@@ -9,10 +9,10 @@
       = image_tag(contactable.picture_url, size: '72x72')
 
   %address
-    =contactable.address_name
-    =contactable.complete_address
-    =contactable.primary_email
-    =contactable.all_phone_numbers(only_public)
+    = contactable.address_name
+    = contactable.complete_address
+    = contactable.primary_email
+    = contactable.all_phone_numbers(only_public)
 
   .social
-    =contactable.all_social_accounts(only_public)
+    = contactable.all_social_accounts(only_public)

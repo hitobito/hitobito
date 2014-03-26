@@ -96,8 +96,10 @@ class PersonDecorator < ApplicationDecorator
 
   def popover_edit_link(function)
     content_tag(:span, style: 'padding-left: 10px') do
-      h.link_to(h.icon(:edit), h.edit_group_role_path(function.group, function),
-                title: h.t("global.link.edit"), remote: true)
+      h.link_to(h.icon(:edit),
+                h.edit_group_role_path(function.group, function),
+                title: h.t('global.link.edit'),
+                remote: true)
     end
 
   end

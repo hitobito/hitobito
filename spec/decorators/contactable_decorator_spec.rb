@@ -17,6 +17,8 @@ describe ContactableDecorator do
     group.social_accounts.new(name: 'http://puzzle.ch', label: 'link2')
     group.social_accounts.new(name: 'bad.website.link', label: 'bad link1')
     group.social_accounts.new(name: 'www.', label: 'bad link2')
+    group.additional_emails.new(email: 'additional@foobar.com', label: 'Work', public: true, mailings: true)
+    group.additional_emails.new(email: 'private@foobar.com', label: 'Mobile', public: false)
     @group = GroupDecorator.decorate(group)
   end
 
@@ -28,7 +30,31 @@ describe ContactableDecorator do
     @group.primary_email.should eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
   end
 
-  describe '#all_phone_numbers' do
+  context '#all_emails' do
+    subject { @group.all_emails }
+
+    it { should =~ /foo@foobar.com/ }
+    it { should =~ /additional@foobar.com.+Work/ }
+    it { should_not =~ /private@foobar.com.+Mobile/ }
+  end
+
+  context '#all_additional_emails' do
+    context 'only public' do
+      subject { @group.all_additional_emails }
+
+      it { should =~ /additional@foobar.com.+Work/ }
+      it { should_not =~ /private@foobar.com.+Mobile/ }
+    end
+
+    context 'all' do
+      subject { @group.all_additional_emails(false) }
+
+      it { should =~ /additional@foobar.com.+Work/ }
+      it { should =~ /private@foobar.com.+Mobile/ }
+    end
+  end
+
+  context '#all_phone_numbers' do
     context 'only public' do
       subject { @group.all_phone_numbers }
 
@@ -46,7 +72,7 @@ describe ContactableDecorator do
     end
   end
 
-  describe '#all_social_accounts' do
+  context '#all_social_accounts' do
     context 'web links' do
       subject { @group.all_social_accounts }
 
@@ -58,7 +84,7 @@ describe ContactableDecorator do
     end
   end
 
-  describe 'addresses' do
+  context 'addresses' do
     context 'country' do
       it "shouldn't print country ch/schweiz" do
         @group.complete_address.should_not =~ /Schweiz/

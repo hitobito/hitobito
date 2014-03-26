@@ -19,7 +19,7 @@
       %br/
       = muted p.additional_name
   - t.col(Role.model_name.human(count: 2))        { |p| p.roles_short(@multiple_groups ? nil : @group) }
-  - t.col(Person.human_attribute_name(:email))    { |p| p.primary_email }
+  - t.col(Person.human_attribute_name(:emails))   { |p| p.all_emails(!index_full_ability?) }
   - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(!index_full_ability?) }
   - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
 

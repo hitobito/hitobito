@@ -42,7 +42,7 @@ module Contactable
 
   module ClassMethods
     def preload_accounts
-      includes(:phone_numbers, :social_accounts, :additional_emails)
+      includes(:additional_emails, :phone_numbers, :social_accounts)
     end
 
     def preload_public_accounts

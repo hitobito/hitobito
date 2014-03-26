@@ -16,7 +16,7 @@
         -# Any person listed can be shown
         = link_to(p.to_s(:list), group_person_path(p.default_group_id, p))
     - t.col(Role.model_name.human(count: 2))        { |p| p.roles_short(nil) }
-    - t.col(Person.human_attribute_name(:email))    { |p| p.primary_email }
+    - t.col(Person.human_attribute_name(:emails))   { |p| p.all_emails(true) }
     - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(true) }
     - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
 

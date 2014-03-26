@@ -46,4 +46,8 @@ class AdditionalEmail < ActiveRecord::Base
     "#{email} (#{label})"
   end
 
+  def value
+    email
+  end
+
 end

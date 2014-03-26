@@ -158,7 +158,7 @@ class PeopleController < CrudController
   def set_entries(entries)
     @people = entries.page(params[:page])
     if index_full_ability?
-      @people = @people.includes(:phone_numbers)
+      @people = @people.includes(:additional_emails, :phone_numbers)
     else
       @people = @people.preload_public_accounts
     end
@@ -167,7 +167,7 @@ class PeopleController < CrudController
   def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
     csv_entries = if full
-      entries.select('people.*').includes(:phone_numbers, :social_accounts)
+      entries.select('people.*').preload_accounts
     else
       entries.preload_public_accounts
     end

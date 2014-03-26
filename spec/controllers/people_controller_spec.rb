@@ -292,14 +292,6 @@ describe PeopleController do
       @response.body.should =~ /^Top;Leader/
     end
 
-    it 'redirects to root group if person role in group no longer exists' do
-      role = roles(:bottom_member)
-      role.destroy
-
-      get :show, group_id: role.group, id: role.id
-      should redirect_to group_person_path(group_id: groups(:top_layer).id, id: role.person.id)
-    end
-
     context 'qualifications' do
       before do
         @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)

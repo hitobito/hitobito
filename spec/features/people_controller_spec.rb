@@ -38,40 +38,48 @@ describe PeopleController, js: true do
       before { within(cell) { click_link 'Bearbeiten' } }
 
       it 'cancel closes popover' do
-        find('#role_type_select a.chosen-single').click
-        click_link 'Abbrechen'
-        should_not have_css('.popover')
+        obsolete_node_safe do
+          find('#role_type_select a.chosen-single').click
+          click_link 'Abbrechen'
+          should_not have_css('.popover')
+        end
       end
 
       it 'changes role' do
-        find('#role_type_select a.chosen-single').click
-        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+        obsolete_node_safe do
+          find('#role_type_select a.chosen-single').click
+          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
-        click_button 'Speichern'
-        cell.should have_text 'Leader'
+          click_button 'Speichern'
+          cell.should have_text 'Leader'
+        end
       end
 
       it 'changes role and group' do
-        find('#role_group_id_chosen a.chosen-single').click
-        find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+        obsolete_node_safe do
+          find('#role_group_id_chosen a.chosen-single').click
+          find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
 
-        find('#role_type_select a.chosen-single').click
-        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
-        click_button 'Speichern'
-        cell.should have_text 'Group 111'
+          find('#role_type_select a.chosen-single').click
+          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+          click_button 'Speichern'
+          cell.should have_text 'Group 111'
+        end
       end
 
       it 'informs about missing type selection' do
-        find('#role_group_id_chosen a.chosen-single').click
-        find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+        obsolete_node_safe do
+          find('#role_group_id_chosen a.chosen-single').click
+          find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
 
-        click_button 'Speichern'
-        should have_content 'Rolle muss ausgefüllt werden'
+          click_button 'Speichern'
+          should have_content 'Rolle muss ausgefüllt werden'
 
-        find('#role_type_select a.chosen-single').click
-        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
-        click_button 'Speichern'
-        cell.should have_text 'Group 111'
+          find('#role_type_select a.chosen-single').click
+          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+          click_button 'Speichern'
+          cell.should have_text 'Group 111'
+        end
       end
     end
   end

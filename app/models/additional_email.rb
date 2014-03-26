@@ -29,7 +29,7 @@ class AdditionalEmail < ActiveRecord::Base
   end
 
   def to_s(format = :default)
-    "#{name} (#{label})"
+    "#{email} (#{label})"
   end
 
 end

@@ -99,6 +99,20 @@ def init_rspec
       end
     end
 
+    config.around(:each, profile: true) do |example|
+      require 'ruby-prof'
+
+      # Profile the code
+      result = RubyProf.profile { example.run }
+
+      # Print a graph profile to text
+      dir = Rails.root.join('tmp', 'performance')
+      filename = File.join(dir, "#{example.metadata[:full_description]} stack.html")
+      FileUtils.mkdir_p(dir)
+      printer = RubyProf::CallStackPrinter.new(result)
+      printer.print(File.open(filename, 'w'))
+    end
+
   end
 end
 

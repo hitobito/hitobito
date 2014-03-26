@@ -16,12 +16,14 @@ describe SubscriptionsController do
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
 
   context 'GET index' do
-    it 'groups subscriptions by type' do
+    before do
       create_group_subscription(mailing_list)
-      create_person_subscription(mailing_list)
+      @person_subscription = create_person_subscription(mailing_list)
       create_event_subscription(mailing_list)
-      create_person_subscription(mailing_list, true)
+      @excluded_person_subscription = create_person_subscription(mailing_list, true)
+    end
 
+    it 'groups subscriptions by type' do
       get :index, group_id: group.id, mailing_list_id: mailing_list.id
 
       assigns(:group_subs).count.should eq 1
@@ -31,26 +33,26 @@ describe SubscriptionsController do
     end
 
     it 'renders csv' do
-      create_group_subscription(mailing_list)
-      create_person_subscription(mailing_list)
-      create_event_subscription(mailing_list)
-      create_person_subscription(mailing_list, true)
-
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
       lines = response.body.split("\n")
-      # NOTE: bottom member is sometimes present, depending on group subscription created
-      lines.should have_at_most(3).items
+      lines.should have(3).items
       lines[0].should =~ /Vorname;Nachname;.*/
+    end
+
+    it 'renders email addresses with additional ones' do
+      e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
+      Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
+      @response.body.should == "#{people(:bottom_member).email},#{@person_subscription.subscriber.email},#{e1.email}"
     end
   end
 
   def create_group_subscription(mailing_list)
-    group = Group.all.sample
+    group = groups(:bottom_layer_one)
     Fabricate(:subscription,
               mailing_list: mailing_list,
               subscriber: group,
-              related_role_types: [RelatedRoleType.new(role_type: group.role_types.sample.sti_name)]
-              )
+              related_role_types: [RelatedRoleType.new(role_type: Group::BottomLayer::Member.sti_name)])
   end
 
   def create_person_subscription(mailing_list, excluded = false)

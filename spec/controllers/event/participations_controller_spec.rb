@@ -130,6 +130,13 @@ describe Event::ParticipationsController do
       @response.body.should =~ %r{^#{@participant.person.first_name};#{@participant.person.last_name}}
     end
 
+    it 'renders email addresses with additional ones' do
+      e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
+      Fabricate(:additional_email, contactable: @leader.person, mailings: false)
+      get :index, group_id: group, event_id: course.id, format: :email
+      @response.body.should == "#{@leader.person.email},#{@participant.person.email},#{e1.email}"
+    end
+
     def create(*roles)
       roles.map do |role_class|
         role = Fabricate(:event_role, type: role_class.sti_name)

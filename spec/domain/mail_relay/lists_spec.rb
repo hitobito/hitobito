@@ -28,7 +28,8 @@ describe MailRelay::Lists do
 
   let(:subscribers) { [ind, bll, bgl1] }
 
-  subject { MailRelay::Lists.new(message) }
+  let(:relay) { MailRelay::Lists.new(message) }
+  subject { relay }
 
   context '#mailing_list' do
     let(:from) { people(:top_leader).email }
@@ -37,11 +38,11 @@ describe MailRelay::Lists do
     it { should be_relay_address }
   end
 
-  context 'receivers with empty email' do
+  context '#receivers' do
     let(:from) { people(:top_leader).email }
+    subject { relay.receivers }
+
     before do
-      ind.email = ''
-      ind.save!
       sub = list.subscriptions.new
       sub.subscriber = ind
       sub.save!
@@ -49,7 +50,22 @@ describe MailRelay::Lists do
       subscribers
     end
 
-    its(:receivers) { should =~ [bll, bgl1].collect(&:email) }
+    context 'with empty email' do
+      before do
+        ind.email = ''
+        ind.save!
+      end
+
+      it { should =~ [bll, bgl1].collect(&:email) }
+    end
+
+    context 'with additional emails' do
+
+      let!(:e1) { Fabricate(:additional_email, contactable: ind, mailings: true) }
+      let!(:e2) { Fabricate(:additional_email, contactable: ind, mailings: false) }
+
+      it { should =~ [ind,bll, bgl1].collect(&:email) + [e1.email]}
+    end
   end
 
   context 'list admin' do

@@ -19,8 +19,12 @@ module Concerns
     end
 
     def render_emails(people)
-      text = people.collect(&:email).compact.join(',')
-      render text: text
+      emails = people.collect(&:email).select(&:present?)
+      emails += AdditionalEmail.where(contactable_id: people.collect(&:id),
+                                      contactable_type: Person.sti_name,
+                                      mailings: true).
+                                pluck(:email)
+      render text: emails.join(',')
     end
 
   end

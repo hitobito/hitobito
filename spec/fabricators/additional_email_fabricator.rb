@@ -20,4 +20,5 @@
 Fabricator(:additional_email) do
   contactable { Fabricate(:person) }
   email { "#{Faker::Internet.user_name}@hitobito.example.com" }
+  label { 'Privat' }
 end

@@ -16,7 +16,6 @@ module Contactable
                                                      :_destroy]]
 
   included do
-
     has_many :phone_numbers, as: :contactable, dependent: :destroy
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy

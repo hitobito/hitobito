@@ -83,6 +83,13 @@ describe PeopleController do
         @response.content_type.should == 'text/plain'
         @response.body.should == "top_leader@example.com,#{@tg_member.email}"
       end
+
+      it 'renders email addresses with additional ones' do
+        e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
+        Fabricate(:additional_email, contactable: @tg_member, mailings: false)
+        get :index, group_id: group, format: :email
+        @response.body.should == "top_leader@example.com,#{@tg_member.email},#{e1.email}"
+      end
     end
 
     context 'layer' do

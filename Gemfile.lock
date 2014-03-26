@@ -370,6 +370,7 @@ GEM
       rubocop (>= 0.9.0)
     ruby-graphviz (1.0.9)
     ruby-nuggets (0.9.6)
+    ruby-prof (0.14.2)
     ruby-progressbar (1.4.2)
     ruby-rc4 (0.1.5)
     ruby2ruby (2.0.7)
@@ -561,6 +562,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-checkstyle_formatter
+  ruby-prof
   sass-rails
   schema_validations
   seed-fu

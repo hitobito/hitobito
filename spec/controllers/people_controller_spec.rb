@@ -276,15 +276,42 @@ describe PeopleController do
   describe 'GET #show' do
     let(:gl) { qualification_kinds(:gl) }
     let(:sl) { qualification_kinds(:sl) }
-    before do
-      @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)
-      @ql_sl = Fabricate(:qualification, person: top_leader, qualification_kind: sl, start_at: Time.zone.now)
+
+    it 'generates pdf labels' do
+      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :pdf
+
+      @response.content_type.should == 'application/pdf'
+      people(:top_leader).reload.last_label_format.should == label_formats(:standard)
     end
 
-    it 'preloads data for asides, ordered by finish_at' do
-      get :show, group_id: group.id, id: people(:top_leader).id
-      assigns(:qualifications).should eq [@ql_sl, @ql_gl]
+    it 'exports csv file' do
+      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :csv
+
+      @response.content_type.should == 'text/csv'
+      @response.body.should =~ /^Vorname;Nachname/
+      @response.body.should =~ /^Top;Leader/
     end
+
+    it 'redirects to root group if person role in group no longer exists' do
+      role = roles(:bottom_member)
+      role.destroy
+
+      get :show, group_id: role.group, id: role.id
+      should redirect_to group_person_path(group_id: groups(:top_layer).id, id: role.person.id)
+    end
+
+    context 'qualifications' do
+      before do
+        @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)
+        @ql_sl = Fabricate(:qualification, person: top_leader, qualification_kind: sl, start_at: Time.zone.now)
+      end
+
+      it 'preloads data for asides, ordered by finish_at' do
+        get :show, group_id: group.id, id: people(:top_leader).id
+        assigns(:qualifications).should eq [@ql_sl, @ql_gl]
+      end
+    end
+
   end
 
   describe 'POST #send_password_instructions' do
@@ -304,25 +331,6 @@ describe PeopleController do
       end.to change { Delayed::Job.count }.by(1)
       flash[:notice].should eq  'Login Informationen wurden verschickt.'
     end
-  end
-
-  describe 'GET show' do
-
-    it 'generates pdf labels' do
-      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :pdf
-
-      @response.content_type.should == 'application/pdf'
-      people(:top_leader).reload.last_label_format.should == label_formats(:standard)
-    end
-
-    it 'exports csv file' do
-      get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :csv
-
-      @response.content_type.should == 'text/csv'
-      @response.body.should =~ /^Vorname;Nachname/
-      @response.body.should =~ /^Top;Leader/
-    end
-
   end
 
   describe 'PUT primary_group' do

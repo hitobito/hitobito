@@ -61,6 +61,18 @@ describe PeopleController, js: true do
         cell.should have_text 'Group 111'
       end
 
+      it 'informs about missing type selection' do
+        find('#role_group_id_chosen a.chosen-single').click
+        find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+
+        click_button 'Speichern'
+        should have_content 'Rolle muss ausgefüllt werden'
+
+        find('#role_type_select a.chosen-single').click
+        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+        click_button 'Speichern'
+        cell.should have_text 'Group 111'
+      end
     end
   end
 end

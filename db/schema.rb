@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140303120546) do
+ActiveRecord::Schema.define(version: 20140326103939) do
+
+  create_table "additional_emails", force: true do |t|
+    t.integer "contactable_id",                  null: false
+    t.string  "contactable_type",                null: false
+    t.string  "email",                           null: false
+    t.string  "label"
+    t.boolean "public",           default: true, null: false
+    t.boolean "mailings",         default: true, null: false
+    t.index ["contactable_id", "contactable_type"], :name => "index_additional_emails_on_contactable_id_and_contactable_type"
+  end
 
   create_table "custom_content_translations", force: true do |t|
     t.integer  "custom_content_id", null: false

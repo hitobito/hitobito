@@ -1,16 +1,12 @@
 # encoding: utf-8
 # == Schema Information
 #
-# Table name: roles
+# Table name: event_roles
 #
-#  id         :integer          not null, primary key
-#  person_id  :integer          not null
-#  group_id   :integer          not null
-#  type       :string(255)      not null
-#  label      :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  deleted_at :datetime
+#  id               :integer          not null, primary key
+#  type             :string(255)      not null
+#  participation_id :integer          not null
+#  label            :string(255)
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

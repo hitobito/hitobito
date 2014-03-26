@@ -7,13 +7,12 @@
 #  event_id               :integer          not null
 #  person_id              :integer          not null
 #  additional_information :text
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  created_at             :datetime
+#  updated_at             :datetime
 #  active                 :boolean          default(FALSE), not null
 #  application_id         :integer
 #  qualified              :boolean
 #
-
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

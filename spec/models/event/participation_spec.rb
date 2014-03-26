@@ -7,8 +7,8 @@
 #  event_id               :integer          not null
 #  person_id              :integer          not null
 #  additional_information :text
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  created_at             :datetime
+#  updated_at             :datetime
 #  active                 :boolean          default(FALSE), not null
 #  application_id         :integer
 #  qualified              :boolean

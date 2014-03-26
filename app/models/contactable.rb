@@ -11,14 +11,18 @@ module Contactable
 
   ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country,
                       phone_numbers_attributes:   [:id, :number, :label, :public, :_destroy],
-                      social_accounts_attributes: [:id, :name, :label, :public, :_destroy]]
+                      social_accounts_attributes: [:id, :name, :label, :public, :_destroy],
+                      additional_emails_attributes: [:id, :email, :label, :public, :mailings,
+                                                     :_destroy]]
 
   included do
 
     has_many :phone_numbers, as: :contactable, dependent: :destroy
     has_many :social_accounts, as: :contactable, dependent: :destroy
+    has_many :additional_emails, as: :contactable, dependent: :destroy
 
-    accepts_nested_attributes_for :phone_numbers, :social_accounts, allow_destroy: true
+    accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
+                                  allow_destroy: true
 
     before_validation :set_self_in_nested
   end
@@ -32,12 +36,14 @@ module Contactable
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    (phone_numbers + social_accounts).each { |e| e.contactable = self unless e.frozen? }
+    (phone_numbers +
+     social_accounts +
+     additional_emails).each { |e| e.contactable = self unless e.frozen? }
   end
 
   module ClassMethods
     def preload_accounts
-      includes(:phone_numbers, :social_accounts)
+      includes(:phone_numbers, :social_accounts, :additional_emails)
     end
 
     def preload_public_accounts

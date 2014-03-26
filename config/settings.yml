@@ -65,12 +65,19 @@ phone_number:
 
 social_account:
   predefined_labels:
-    - E-Mail
     - Facebook
     - MSN
     - Skype
     - Twitter
     - Webseite
+    - Andere
+
+additional_email:
+  predefined_labels:
+    - Privat
+    - Arbeit
+    - Vater
+    - Mutter
     - Andere
 
 # Presets for PDF labels

@@ -17,8 +17,8 @@
 #  birthday               :date
 #  additional_information :text
 #  contact_data_visible   :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  created_at             :datetime
+#  updated_at             :datetime
 #  encrypted_password     :string(255)
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime

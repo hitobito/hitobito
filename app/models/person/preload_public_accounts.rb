@@ -20,6 +20,11 @@ module Person::PreloadPublicAccounts
       :phone_numbers,
       PhoneNumber.where(public: true)).run
 
+    ActiveRecord::Associations::Preloader.new(
+      records,
+      :additional_emails,
+      AdditionalEmail.where(public: true)).run
+
     records
   end
 

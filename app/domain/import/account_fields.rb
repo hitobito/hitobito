@@ -25,6 +25,7 @@ module Import
     end
 
     private
+
     def map_prefined_fields
       predefined_labels.each_with_object({}) do |label, hash|
         hash[key_for(label).downcase] = "#{human} #{label}"

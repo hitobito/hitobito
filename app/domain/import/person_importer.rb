@@ -94,9 +94,9 @@ module Import
     def valid?(person)
       # DoubletteFinder in Person populates errors,
       # still check if initialized person is valid
-       person.errors.empty? &&
-       ((person.persisted? && person.person.valid?) ||
-        person.valid?)
+      person.errors.empty? &&
+      ((person.persisted? && person.person.valid?) ||
+       person.valid?)
     end
 
     # used by Import::Person to check if emails are unique

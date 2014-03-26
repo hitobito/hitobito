@@ -24,7 +24,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     validate_minimum_age if course_minimum_age
 
     course_preconditions.each do |qualification_kind|
-      if !reactivateable?(qualification_kind)
+      unless reactivateable?(qualification_kind)
         errors << qualification_kind.label
       end
     end

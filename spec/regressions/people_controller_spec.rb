@@ -246,8 +246,7 @@ describe PeopleController, type: :controller do
       get :log, id: test_entry.id, group_id: top_group.id
 
       dom.all('h4').should have(1).item
-      dom.all('#content div').should have(8).items
-
+      dom.all('#content div').should have(11).items
     end
 
   end
@@ -260,7 +259,6 @@ describe PeopleController, type: :controller do
 
       dom.all('a', text: 'Abbrechen').first[:href].should eq 'foo'
       dom.find('input#return_url').value.should eq 'foo'
-
     end
   end
 

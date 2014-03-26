@@ -63,7 +63,7 @@
             = @event.contact.complete_contact
 
         = section Event::Role::Participant.model_name.human do
-          = render 'contactable/show', contactable: entry.person, only_public: true
+          = render 'people/contact_data', person: entry.person, only_public: true
 
 
     .row-fluid

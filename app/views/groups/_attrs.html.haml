@@ -6,10 +6,7 @@
 #main.row-fluid
   %article.span6
     %h2= t('.contact_details')
-    - if !entry.contact
-      = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, @group)
-    - else
-      = render 'contactable/show_group_with_contact', group: entry, contact: entry.contact, only_public: cannot?(:show_details, @group)
+    = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
 
 
     %h2= t('.additional_information')

@@ -11,7 +11,7 @@ describe Export::Csv::Groups::List do
   subject { csv }
 
    its(:headers) do
-     should == %w(Id Elterngruppe Name Kurzname Gruppentyp E-Mail Adresse PLZ Ort Land Ebene)
+     should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene)
    end
 
    it { should have(4).items }
@@ -25,7 +25,7 @@ describe Export::Csv::Groups::List do
      its(['Name']) { should == group.name }
      its(['Kurzname']) { should == group.short_name }
      its(['Gruppentyp']) { should == 'Bottom Layer' }
-     its(['E-Mail']) { should == group.email }
+     its(['Haupt-E-Mail']) { should == group.email }
      its(['Adresse']) { should == group.address }
      its(['PLZ']) { should == group.zip_code.to_s }
      its(['Ort']) { should == group.town }
@@ -42,7 +42,7 @@ describe Export::Csv::Groups::List do
 
      its(['Elterngruppe']) { should == group.id.to_s }
      its(['Ebene']) { should == group.id.to_s }
-     its(['E-Mail']) { should == groups(:bottom_group_one_one).email }
+     its(['Haupt-E-Mail']) { should == groups(:bottom_group_one_one).email }
      its(['Adresse']) { should == contact.address }
      its(['PLZ']) { should == contact.zip_code.to_s }
      its(['Ort']) { should == contact.town }

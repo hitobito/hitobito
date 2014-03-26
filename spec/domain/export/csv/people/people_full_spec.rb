@@ -36,7 +36,7 @@ describe Export::Csv::People::PeopleFull do
   context 'integration' do
 
     let(:full_headers) do
-      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'E-Mail',
+      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
        'Zusätzliche Angaben', 'Rollen']
     end

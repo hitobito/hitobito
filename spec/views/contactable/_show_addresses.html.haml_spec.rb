@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe 'contactable/_show.html.haml' do
+describe 'contactable/_show_addresses.html.haml' do
 
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
@@ -14,7 +14,7 @@ describe 'contactable/_show.html.haml' do
 
   before do
     group.assign_attributes(address: 'foo', town: 'bar', zip_code: 123, country: 'ch')
-    view.stub(contactable: GroupDecorator.decorate(group), only_public: false)
+    view.stub(contactable: GroupDecorator.decorate(group), only_public: false, postal: true)
   end
 
   context 'group' do

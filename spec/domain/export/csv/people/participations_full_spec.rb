@@ -38,7 +38,7 @@ describe Export::Csv::People::ParticipationsFull do
     let(:data) { Export::Csv::People::ParticipationsFull.export(list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
-      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'E-Mail',
+      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
        'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)', 'Rollen']
     end

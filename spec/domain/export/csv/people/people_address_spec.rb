@@ -65,7 +65,7 @@ describe Export::Csv::People::PeopleAddress do
 
   context 'integration' do
       let(:simple_headers) do
-        ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'E-Mail',
+        ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
          'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
       end
       let(:data) { Export::Csv::People::PeopleAddress.export(list) }
@@ -81,7 +81,7 @@ describe Export::Csv::People::PeopleAddress do
 
         its(['Vorname']) { should eq person.first_name }
         its(['Nachname']) { should eq person.last_name }
-        its(['E-Mail']) { should eq person.email }
+        its(['Haupt-E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
         its(['Rollen']) { should eq 'Leader TopGroup' }
         its(['Geschlecht']) { should be_blank }

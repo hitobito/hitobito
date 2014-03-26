@@ -17,16 +17,27 @@ describe Export::Csv::Events::List do
   context 'used labels' do
     subject { list }
 
-    its(:attributes) do should =~ [:group_names, :number, :kind, :description, :state, :location,
-                                   :date_0_label, :date_0_location, :date_0_duration, :date_1_label, :date_1_location, :date_1_duration, :date_2_label, :date_2_location, :date_2_duration,
-                                   :contact_name, :contact_address, :contact_zip_code, :contact_town, :contact_email, :contact_phone_numbers,
-                                   :leader_name, :leader_address, :leader_zip_code, :leader_town, :leader_email, :leader_phone_numbers] end
+    its(:attributes) do
+      should =~ [:group_names, :number, :kind, :description, :state, :location,
+                 :date_0_label, :date_0_location, :date_0_duration,
+                 :date_1_label, :date_1_location, :date_1_duration,
+                 :date_2_label, :date_2_location, :date_2_duration,
+                 :contact_name, :contact_address, :contact_zip_code, :contact_town,
+                 :contact_email, :contact_phone_numbers,
+                 :leader_name, :leader_address, :leader_zip_code, :leader_town,
+                 :leader_email, :leader_phone_numbers]
+    end
 
-
-    its(:labels) do should =~ ['Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
-                               'Datum 1 Beschreibung', 'Datum 1 Ort', 'Datum 1 Zeitraum', 'Datum 2 Beschreibung', 'Datum 2 Ort', 'Datum 2 Zeitraum', 'Datum 3 Beschreibung', 'Datum 3 Ort', 'Datum 3 Zeitraum',
-                               'Kontaktperson Name', 'Kontaktperson Adresse', 'Kontaktperson PLZ', 'Kontaktperson Ort', 'Kontaktperson E-Mail', 'Kontaktperson Telefonnummern',
-                               'Hauptleitung Name', 'Hauptleitung Adresse', 'Hauptleitung PLZ', 'Hauptleitung Ort', 'Hauptleitung E-Mail', 'Hauptleitung Telefonnummern'] end
+    its(:labels) do
+      should =~ ['Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
+                 'Datum 1 Beschreibung', 'Datum 1 Ort', 'Datum 1 Zeitraum',
+                 'Datum 2 Beschreibung', 'Datum 2 Ort', 'Datum 2 Zeitraum',
+                 'Datum 3 Beschreibung', 'Datum 3 Ort', 'Datum 3 Zeitraum',
+                 'Kontaktperson Name', 'Kontaktperson Adresse', 'Kontaktperson PLZ',
+                 'Kontaktperson Ort', 'Kontaktperson Haupt-E-Mail', 'Kontaktperson Telefonnummern',
+                 'Hauptleitung Name', 'Hauptleitung Adresse', 'Hauptleitung PLZ', 'Hauptleitung Ort',
+                 'Hauptleitung Haupt-E-Mail', 'Hauptleitung Telefonnummern']
+    end
   end
 
 

@@ -1,0 +1,11 @@
+- contact ||= contactable
+
+%address
+  = contactable.address_name
+  = contactable.complete_address if postal
+  = contact.primary_email
+  = contact.all_additional_emails(only_public)
+  = contact.all_phone_numbers(only_public)
+
+.social
+  = contact.all_social_accounts(only_public)

@@ -10,7 +10,7 @@
       %p= @application.confirmation_label
       %br/
 
-    = render 'contactable/show', contactable: entry.person, only_public: cannot?(:show_details, entry)
+    = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
     = render_attrs(entry.person, :birthday, :gender)
 
@@ -29,7 +29,9 @@
   %aside.span5.offset1
     - if entry.person == current_user && @application.present? && @application.contact.present?
       = section t('event.applied_to') do
-        = render 'contactable/show', contactable: @application.contact, only_public: true
+        = render "#{@application.contact.class.base_class.name.underscore.pluralize}/contact_data",
+                 contactable: @application.contact,
+                 only_public: true
 
     = render 'roles'
 

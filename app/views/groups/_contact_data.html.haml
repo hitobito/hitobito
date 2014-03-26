@@ -1,0 +1,22 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.contactable.well
+  = render 'contactable/show_addresses',
+           contactable: group,
+           postal: group.contact.blank?,
+           only_public: only_public
+
+  - if group.contact
+    %div.contact
+      %br
+      .muted
+        %i.icon-user.icon-muted
+        %strong Kontaktperson
+      = render 'contactable/show_addresses',
+               contactable: group,
+               contact: group.contact,
+               postal: true,
+               only_public: true

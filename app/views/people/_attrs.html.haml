@@ -5,17 +5,17 @@
 
 #main.row-fluid
   %article.span5
-    = render 'contactable/show', contactable: entry, only_public: cannot?(:show_details, entry)
-    
+    = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
+
     - if can?(:show_details, entry)
       %h2 Weitere Angaben
       %div
         = render_attrs(entry, :birthday, :gender)
-        
+
         = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
-    
+
         = render_attrs(entry, :created_info, :updated_info)
-        
+
       - if entry.additional_information?
         %h2 Bemerkungen
         = simple_format(entry.additional_information)

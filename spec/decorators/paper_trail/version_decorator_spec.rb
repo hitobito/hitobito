@@ -72,7 +72,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     context 'with attribute changes' do
       before { update_attributes }
 
-      it { should =~ /<div>Ort wurde.+<div>PLZ wurde.+<div>E-Mail wurde/ }
+      it { should =~ /<div>Ort wurde.+<div>PLZ wurde.+<div>Haupt-E-Mail wurde/ }
     end
 
     context 'with association changes' do

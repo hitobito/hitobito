@@ -24,6 +24,7 @@ describe Group::MergeController do
 
   end
 
+  # TODO test paths inside perform action
   context 'POST :perform' do
     it 'should redirect to form if params are missing' do
       group = groups(:bottom_layer_one)

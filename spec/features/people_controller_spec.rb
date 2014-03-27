@@ -41,7 +41,7 @@ describe PeopleController, js: true do
         obsolete_node_safe do
           find('#role_type_select a.chosen-single').click
           click_link 'Abbrechen'
-          should_not have_css('.popover')
+          page.should_not have_css('.popover')
         end
       end
 
@@ -73,7 +73,7 @@ describe PeopleController, js: true do
           find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
 
           click_button 'Speichern'
-          should have_content 'Rolle muss ausgefüllt werden'
+          page.should have_content 'Rolle muss ausgefüllt werden'
 
           find('#role_type_select a.chosen-single').click
           find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click

@@ -50,7 +50,7 @@ describe PeopleController, js: true do
 
       # open other tab
       click_link 'Externe'
-      should_not have_selector('.table-striped tbody tr')
+      page.should_not have_selector('.table-striped tbody tr')
     end
   end
 end

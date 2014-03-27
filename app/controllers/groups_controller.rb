@@ -8,8 +8,7 @@
 class GroupsController < CrudController
 
   # Respective group attrs are added in corresponding instance method.
-  self.permitted_attrs = [phone_numbers_attributes: [:number, :label, :public],
-                          social_accounts_attributes: [:name, :label, :public]]
+  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup
 
   decorates :group, :groups, :contact
 

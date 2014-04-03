@@ -60,45 +60,44 @@ group :development, :test do
 end
 
 group :development do
+  gem 'better_errors'
   gem 'bullet'
   gem 'quiet_assets'
-  gem 'sextant'
-  gem 'better_errors'
 end
 
 group :test do
   gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'websocket-driver'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
   gem 'poltergeist'
   gem 'rspec-notify-osd'
+  gem 'selenium-webdriver'
+  gem 'websocket-driver'
 end
 
 group :console do
-  gem 'debugger'
   gem 'awesome_print'
+  gem 'debugger'
   gem 'hirb'
-  gem 'wirble'
-  gem 'pry-rails'
+  gem 'mailcatcher'
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
+  gem 'pry-rails'
   #gem 'pry-stack_explorer'
-  gem 'mailcatcher'
   gem 'rdoc-tags'
-  gem 'zeus'
   gem 'spring-commands-rspec'
+  gem 'wirble'
+  gem 'zeus'
 end
 
 group :guard_support do
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'spork', '~> 1.0.0rc3'
   gem 'rb-inotify'
+  gem 'spork', '~> 1.0.0rc3'
 end
 
 group :metrics do
@@ -108,10 +107,10 @@ group :metrics do
   gem 'rails_code_qa'
   gem 'rails_best_practices'
   gem 'rails-erd'
-  gem 'simplecov-rcov'
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
   gem 'ruby-prof'
+  gem 'simplecov-rcov'
 end
 
 # Include the wagon gems you want attached in Wagonfile.

@@ -401,8 +401,6 @@ GEM
       rubyzip (~> 1.0)
       websocket (~> 1.0.4)
     sexp_processor (4.4.1)
-    sextant (0.2.4)
-      rails (>= 3.2)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
@@ -567,7 +565,6 @@ DEPENDENCIES
   schema_validations
   seed-fu
   selenium-webdriver
-  sextant
   simplecov-rcov
   spork (~> 1.0.0rc3)
   spring-commands-rspec

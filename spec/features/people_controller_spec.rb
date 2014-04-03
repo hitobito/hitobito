@@ -39,7 +39,7 @@ describe PeopleController, js: true do
 
       it 'cancel closes popover' do
         obsolete_node_safe do
-          find('#role_type_select a.chosen-single').click
+          #find('#role_type_select a.chosen-single').click
           click_link 'Abbrechen'
           page.should_not have_css('.popover')
         end
@@ -51,6 +51,7 @@ describe PeopleController, js: true do
           find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
           click_button 'Speichern'
+          page.should_not have_css('.popover')
           cell.should have_text 'Leader'
         end
       end

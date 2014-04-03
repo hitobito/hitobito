@@ -7,7 +7,7 @@
   .profil-big.pull-right
     = image_tag(person.picture_url, size: '72x72')
 
-  = render 'contactable/show_addresses',
+  = render 'contactable/contact_data',
            contactable: person,
            postal: true,
            only_public: only_public

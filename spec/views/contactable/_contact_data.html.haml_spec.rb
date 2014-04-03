@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe 'contactable/_show_addresses.html.haml' do
+describe 'contactable/_contact_data.html.haml' do
 
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }

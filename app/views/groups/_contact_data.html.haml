@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 .contactable.well
-  = render 'contactable/show_addresses',
+  = render 'contactable/contact_data',
            contactable: group,
            postal: group.contact.blank?,
            only_public: only_public
@@ -15,7 +15,7 @@
       .muted
         %i.icon-user.icon-muted
         %strong Kontaktperson
-      = render 'contactable/show_addresses',
+      = render 'contactable/contact_data',
                contactable: group,
                contact: group.contact,
                postal: true,

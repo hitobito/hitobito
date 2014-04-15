@@ -1,1 +1,500 @@
-it: {}
+it:
+  global:
+    'yes': "sì"
+    'no': "no"
+    from: da
+    until: a
+    no_list_entries: nessuna voce relativa è stata trovata
+    confirm_delete: vuole veramente cancellare questa voce?
+    gender:
+      male: maschile
+      female: femminile
+      male_short: m
+      female_short: f
+    associations:
+      no_entry: (nessuna)
+      none_available: (nessuna disponibile)
+      please_select: prego scegliere
+      add: aggiungere annotazione
+      add_with_model: 'aggiungere %{model}'
+      remove: eliminare
+    button:
+      save: salvare
+      cancel: interrompere
+      search: cercare
+      back: indietro
+      refresh: attualizzare
+      print: stampare
+    link:
+      show: 'mostrare
+
+        visualizzare'
+      edit: 'elaborare
+
+        modificare'
+      add: "creare %{model}"
+      add_without_model: creare
+      delete: cancellare
+      list: lista
+    errors:
+      header:
+        one: 'Un errore impediscono il salvataggio della tua registrazione'
+        other: "%{count} errori impediscono il salvataggio della tua registrazione\n "
+    tabs:
+      info: informazioni
+    search:
+      placeholder: 'cercare...'
+      placeholder_with_model: 'cercare %{model} ...'
+  list:
+    index:
+      title: '%{models}'
+  crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "creare %{model}"
+    edit:
+      title: "modificare %{model}"
+    create:
+      flash:
+        success: "%{model} è stato creato con successo."
+    update:
+      flash:
+        success: "%{model} è stato attualizzato con successo."
+    destroy:
+      flash:
+        success: "%{model} è stato cancellato con successo"
+        failure: "%{model} non può essere cancellato"
+  contactable:
+    fields:
+      zip_town: CAP/luogo
+    public_check_box:
+      tooltip: Annotazioni private sono visibili solo al proprio gruppo. Annotazione marcate come pubbliche sono visibili anche agli animatori di altri gruppi, se tu stesso sei un animatore.
+    social_account_fields:
+      placeholder_value: sito internet, nome Skype, profilo...
+      placeholder_type: tipo (Skype, Facebook...)
+  participations:
+    destroy:
+      flash:
+        success: l'iscrizione è stata cancellata con successo.
+  csv_imports:
+    description:
+      header: files CSV
+      explain_csv_format: 'un file CSV contiene in ogni sua riga i dati di una persona. La prima riga contiene i campi per i nomi. I singoli campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere completato con le virgolette ("). Esempio:'
+      example: |
+        nome, cognome, email, luogo, genere
+        Hans, Muster, hans@beispiel.ch, Berna, m
+        Vreni,Bischofsberger,vreni@beispiel.net, "Zurigo, New York", f
+      explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
+      explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo
+      special_fields: Valori speciali per i campi
+      explain_special_fields_html: 'I campi seguenti devono contenere uno dei valori <em>corsivo</em> '
+    preview_table:
+      icon_tooltip_invalid: 'valori non validi'
+      icon_tooltip_updated: 'viene attualizzato'
+      icon_tooltip_created: 'viene registrato nuovamente'
+    define_mapping:
+      choose_role: 'scegliere un ruolo'
+      choose_role_help: 'a tutte le persone importate viene assegnato questo ruolo'
+      assign_columns_to_fields: 'assegnare le colonne ai campi'
+      column_from_csv: 'colonna dal CSV'
+      field_in_database: 'campo in un banca dati'
+      preview: 'anteprima'
+    new:
+      upload_button: 'caricare'
+      csv_file: 'file CSV'
+    invalid_file: selezionare un file CSV valido.
+    duplicate_keys:
+      one: '%{list} è stato assegnato più volte.'
+      other: '%{list} sono stati assegnati più volte.'
+    preview:
+      import_now_button: importare ora le persone
+      import_details_html: le persone seguenti vengono importate con il ruolo<strong>%{role}</strong> nel gruppo<strong> %{group}</strong>.
+      new:
+        one: '%{count} %{role} viene nuovamente importato.'
+        other: '%{count} %{role} vengono nuovamente importati.'
+      updated:
+        one: '%{count} %{role} viene attualizzato.'
+        other: '%{count} %{role} vengono attualizzati.'
+      failed:
+        one: '%{count} %{role} non viene importato.'
+        other: '%{count} %{role} non vengono importati.'
+    create:
+      new:
+        one: '%{count} %{role} è stato importato con successo.'
+        other: '%{count} %{role} sono stati importati con successo.'
+      updated:
+        one: '%{count} %{role} è stato attualizzato con successo.'
+        other: '%{count} %{role} sono stati attualizzati con successo.'
+      failed:
+        one: '%{count} %{role} non è stato importato.'
+        other: '%{count} %{role} non sono stati importati.'
+  roles:
+    full_entry_label: '%{model_label} <i>%{role}</i> per <i>%{person}</i> in <i>%{group}</i>'
+    role_changed: '%{full_entry_label} cambiato in <i>%{new_role}</i>.'
+    role_changed_to_group: '%{full_entry_label} in <i>%{new_role}</i> in <i>%{new_group}</i> modificato.'
+    form:
+      add_role_for_person: 'creare un ruolo per %{person} '
+      edit_role_for_person: 'modificare il ruolo per %{person} '
+    fields:
+      help_optional_label: designazione opzionale delruolo di questa persona
+    person_fields:
+      create_new_person: registrare una nuova persona
+      search_existing_person: cercare persona esistente
+  people:
+    send_password_instructions: le informazioni per il login sono state spedite.
+    tabs:
+      history: svolgimento
+      log: log
+    actions_show:
+      send_login: inviare login
+    actions_index:
+      import_list: importare lista
+    fields:
+      format_birthday: (dd.mm.yy)
+    roles:
+      title: ruoli attivi
+    roles_aside:
+      set_main_group: collocare il gruppo principale
+  people_filters:
+    form:
+      save_search: salvare la ricerca
+      save_filter: salvare il filtro
+      save_filter_placeholder: indicare un nome per salvare questo filtro
+      prompt_role_selection: quali ruolo devono essere visualizzati?
+    new:
+      title: filtro per le persone
+  group:
+    merge:
+      select:
+        title: 'raggruppare %{group} '
+        explanation: Raggruppando due gruppi, tutti i sottogruppi, gli eventi e le persone unitamente ai ruoli di entrambii gruppo vengono uniti. Gli abbonamenti non vengono rilevati. I gruppi distinti esistenti fino a questo momento potranno essere ancora visualizzati sotto "cancellati".
+        merge_is_irreversible: questo processo non può essere annullato!
+        new_group_name: 'nome del nuovo gruppo'
+        merge_group_with: 'raggruppare %{group} con'
+        merge_button: 'raggruppare gruppo'
+    move:
+      select:
+        title: "spostare gruppo"
+        select_group: "prego scegliere il gruppo che deve essere spostato."
+  groups:
+    reactivated: "il gruppo <i>%{group}</i> è stato riattivato con successo."
+    subgroups: 'sottogruppi'
+    form:
+      help_contact: 'utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
+    actions_show:
+      export_subgroups: 'sottogruppi CSV'
+      reactivate: 'riattivare'
+    attrs:
+      contact_details: 'dati di contatto'
+      additional_information: 'altri dati'
+    tabs:
+      deleted: 'cancellato'
+  group/merge:
+    success: 'I gruppi selezionati sono stati raggruppati nel nuovo gruppo %{new_group_name}.'
+    failure: 'I gruppi selezionati non possono venir raggruppati.'
+    no_candidates: 'Non esiste nessun gruppo uguale da raggruppare oppure non hai l''autorizzazione necessaria per farlo.'
+    group_name_missing: 'il nome per il nuovo gruppo deve essere definito'
+    no_group_selected: 'scegliere un gruppo che deve essere raggruppato.'
+    not_allowed: 'purtroppo manca l''autorizzazione per raggruppare questo gruppo.'
+  group/move:
+    success: '%{group} è stato spostato in %{target}.'
+    failure: 'questo gruppo non può venir spostato oppure tu non hai l''autorizzazione necessaria per farlo.'
+    choose_group: 'prego selezionare un gruppo'
+  layouts:
+    nav:
+      sign_out: 'scollegarsi'
+    unauthorized:
+      forgot_password: 'password dimenticata?'
+    application:
+      available_under_license: 'disponibile in'
+      developed_by: 'sviluppato da'
+      source_code: 'codice sorgente'
+  subscriber:
+    group:
+      form:
+        subgroups_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato'
+        subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
+    exclude_person:
+      form:
+        exclude_subscriber: 'escludere abbonato'
+  subscriber/base:
+    blank: '%{model_label} deve venir selezionato'
+    taken: '%{model_label} è appena stato aggiunto'
+  subscriber/user:
+    success: 'sei stato aggiunto all''abbonamento con successo'
+    failure: 'non puoi essere aggiunto all''abbonamento: %{errors}'
+    unsubscribed: 'sei stato eliminato con successo dall''abbonamento'
+  subscriber/exclude_person:
+    success: 'l''abbonato %{subscriber} è stato escluso con successo'
+    failure: '%{subscriber} non è un abbonato'
+  event/applications:
+    approved: 'l''iscrizione è stata sbloccata'
+    rejected: 'l''iscrizione è stata respinta'
+  event/participations:
+    full_entry_label: '%{model_label} da <i>%{person}</i> a <i>%{event}</i>'
+    success: '%{full_entry_label} è stato creato con successo. Verifica i dati di contatto e eventualmente aggiornali'
+    instructions: 'per l''iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all''indirizzo corrispondente'
+    show:
+      link:
+        delete: 'cancellare iscrizione'
+  event/precondition_checker:
+    preconditions_not_fulfilled: '<b>le condizioni per iscriversi non sono soddisfatte.</b>'
+    below_minimum_age: "il limite di età di %{course_minimum_age} non è raggiunto"
+    qualifications_missing: "mancano le qualifiche seguenti: %{missing}"
+  event/register:
+    not_logged_in: "devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
+    person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
+    email_sent: 'ti abbiamo inviato un''email con un link, da cui potrai iscriverti direttamente all''evento'
+    email_missing: 'digitare l''indirzzo email'
+    form_data_missing: 'compila per favore il formulario seguente prima di iscriverti all''evento.'
+    registered: 'i tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
+    application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'
+  event/roles:
+    full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i> a <i>%{event}</i>"
+  version:
+    attribute_change:
+      from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."
+      from: "%{attr} <i>%{from}</i> è stato cancellato"
+      to: "%{attr} è stato collocato in <i>%{to}</i>."
+    association_change:
+      create: "%{model} <i>%{label}</i> è stato aggiunto."
+      update: "%{model} <i>%{label}</i> è stato aggiornato: %{changeset}"
+      destroy: "%{model} <i>%{label}</i> è stato cancellato."
+  devise:
+    failure:
+      already_authenticated: 'sei già iscritto.'
+      unauthenticated: 'devi iscriverti o registrarti prima di poter continuare.'
+      unconfirmed: 'devi confermare il tuo account prima di poter continuare.'
+      last_attempt: 'hai ancora un tentativo prima che il tuo account venga bloccato.'
+      locked: 'il tuo account è bloccato per 10 minuti.'
+      invalid: 'dati d''accesso non validi.'
+      invalid_token: 'token per l''autenticazione non è valido'
+      timeout: 'questa sessione è scaduto, per favore registrati nuovamente.'
+      inactive: 'il tuo account non è attivo'
+      not_found_in_database: 'dati di registrazione non validi.'
+      signin_not_allowed: 'non sei autorizzato ad iscriverti qui.'
+      not_permitted_to_view_page: 'non è autorizzato a visitare questa pagina'
+    sessions:
+      signed_out: 'ora sei registrato.'
+      new:
+        sign_in: 'iscriversi'
+    passwords:
+      send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
+      updated: 'la tua passwort è stata cambiata. Sei ora registrato.'
+      updated_not_active: 'la tua passwort è stata cambiata.'
+      send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come reimpostare la tua password."
+      new:
+        reset_password_button: 'reimpostare la password'
+    confirmations:
+      send_instructions: 'riceverai tra pochi minuti un''e-mail con la quale potrai confermare la tua registrazione.'
+      send_paranoid_instructions: 'se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u''e-mail con la quale potrai confermare la tua registrazione.'
+      confirmed: 'grazie per la tua registrazione. Ora sei registrato.'
+    unlocks:
+      send_instructions: 'riceverai tra pochi minuti un''email con le istruzioni su come puoi sbloccare il tuo account.'
+      unlocked: 'il tuo account è stato sbloccato. Ora sei registrato.'
+      send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come puoi sbloccare il tuo account."
+    omniauth_callbacks:
+      success: 'ti sei registrato con successo con il tuo %{kind}-account.'
+      failure: 'non puoi essere registrato con il tuo %{kind}-account a causa di "%{reason}".'
+    registrations:
+      edit:
+        change_password: "cambiare la password"
+        set_password: "mettere la password"
+        old_password: 'vecchia password'
+        new_password: 'nuova password'
+        new_password_confirmation: 'confermare la nuova password'
+      person:
+        updated: 'la tua password è stata attualizzata.'
+    mailer:
+      confirmation_instructions:
+        subject: 'istruzioni per confermare il tuo account'
+      reset_password_instructions:
+        subject: 'istruzioni per impostare la tua password'
+      unlock_instructions:
+        subject: 'istruzioni per attivare il tuo account'
+  errors:
+    link_to_main: 'pagina principale'
+    '404':
+      title: 'questa pagina purtroppo non esiste (404)'
+      explanation: 'forse ha inserito l''indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo.'
+    '500':
+      title: 'siamo spiacenti, qualcosa è andato storto (500)'
+      explanation: 'abbiamo ricevuto una segnalazione e studieremo il problema il più presto possibile'
+    '503':
+      title: 'siamo spiacenti, questa pagina non è disponibile al momento (503)'
+      explanation: 'al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo.'
+      instruction: 'vi preghiamo di riprovare nuovamente più tardi.'
+  import/csv_parser:
+    read_error: "errore nella lettura di %{filename}: %{error}"
+    contains_no_data: "non contiene nessun dato"
+    read_success:
+      one: "%{count} record è stato letto con successo."
+      other: "%{count} record sono stati letti con successo."
+  import/person_importer:
+    row_with_error: "riga %{row}: %{errors}"
+  import/person_doublette_finder:
+    duplicates: "%{count} risultati nel riconoscimento di duplicati."
+  export/csv/events/list:
+    group_names: 'organizzatori'
+  event:
+    run_by: 'eseguito da'
+    applied_to: 'iscrizioni a'
+    alternative_dates: 'dati alternativi'
+    no_qualifications_could_be_prolonged: "%{person} non ha nessuna qualifica che può essere prolungata."
+    lists:
+      courses:
+        title: 'corsi disponibili'
+        csv_export_button: 'esportazione CSV'
+      events:
+        title: 'eventi che si terranno prossimamente'
+    application_market:
+      already_assigned: 'questa persona è già assegnata ad un evento in un altro modo'
+      participation:
+        registered_at: 'iscrizione il %{date}'
+      prio_buttons:
+        national_waitinglist: 'lista d''attesa nazionale'
+      index:
+        assigned: 'assegnato'
+        assigned_participants: 'partecipanti assegnati'
+    kinds:
+      form:
+        help_minimum_age: 'anni (età alla prima data del corso è determinante)'
+        help_select_prolongations: 'tramite <Ctrl> + click possono essere selezionati più tipi di qualifiche.'
+    participations:
+      specific_information: 'dati specifici'
+      no_answer_given: '(non risponde)'
+      actions_show:
+        change_contact_data_button: 'modificare i dati di contatto'
+        approve_button: 'sbloccare'
+        reject_button: 'rifiutare'
+      form:
+        title: "iscrizione per %{event}"
+        apply: 'iscrivere'
+        alternative_dates_info: 'per favore indica altri corsi che potrebbero andarti bene.'
+        course_information: 'informazioni sui corsi'
+      priorities:
+        alternative_course: '%{number} corsi alternativi'
+    register:
+      register:
+        title: 'registrare i dati di contatto'
+      index:
+        login: 'login'
+        no_login: 'non hai ancora nessun login?'
+      email_check:
+        next: 'avanti'
+  events:
+    preconditions: 'qualifiche necessarie'
+    minimum_age_with_years: '%{minimum_age} anni (anno di nascita)'
+    tabs:
+      participants: 'partecipanti'
+    form:
+      caption_external_applications: 'esterni possono iscriversi a questo evento'
+      caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
+      caption_requires_approval: 'il responsabile verrà informato e dovrà confermare l''iscrizione'
+      additional_information: 'dati per l''iscrizione'
+      explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
+  custom_content_decorator:
+    available_placeholders: "caratteri a disposizione: %{placeholders}"
+    available_placeholders_empty: 'nessun carattere a disposizione'
+  event_decorator:
+    apply: 'iscriversi'
+    not_possible: 'impossibile'
+    participants_info: '%{count} iscrizioni'
+    participants_info_with_limit: '%{count} iscrizioni per %{limit} posti'
+    issue_only: 'assegna %{model} %{issued} a %{until} (ultima data del corso).'
+    prolong_only:
+      one: 'prolunga la qualifica esistente %{prolonged} fino al  %{until} (ultima data del corso).'
+      other: 'prolunga le qualifiche esistenti %{prolonged} fino al  %{until} (ultima data del corso).'
+    issue_and_prolong: 'assegna %{model} %{issued} e prolunga le qualifiche esistenti %{prolonged} al %{until} (ultima data del corso).'
+  event/application_decorator:
+    course_acceptance: 'attivazione del corso
+
+      sblocco del corso'
+    confirmation:
+      approved: 'confermato'
+      rejected: 'rifiutato'
+      missing: 'arretrato'
+  event/participation_decorator:
+    waiting_list_link:
+      title_active: 'eliminare dalla lista d''attesa nazionale'
+      title_inactive: 'inserire nella lista d''attesa nazionale'
+      label: 'lista d''attesa'
+    tooltips:
+      ok: 'contrassegna il corso come superato e dà le qualifiche.'
+      remove: 'contrassegna il corso come non superato e cancella le qualifiche.'
+  mailing_lists:
+    form:
+      help_additional_sender: 'accanto agli amministratori anche questo indirizzo email può inviare messaggi alla mailing list.'
+      caption_subscribable: 'abbonati possono iscriverei/disiscrivere sé stessi'
+      caption_subscribers_may_post: 'abbonati posso scrivere alla mailing list'
+  mailing_list_decorator:
+    may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
+    may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
+    may_post: 'abbonati possono scrivere alla mailing list'
+    may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
+    subscribe: 'collegarsi'
+    unsubscribe: 'scollegarsi'
+  paper_trail/version_decorator:
+    by: 'da %{author}'
+  dropdown/event/group_filter:
+    all_groups: 'tutti i gruppi'
+  dropdown/event/role_add:
+    add: 'aggiungere una persona'
+  dropdown/group_edit:
+    move: 'spostare'
+    merge: 'raggruppare'
+  dropdown/people_export:
+    button: 'esportare'
+    csv: 'CSV'
+    labels: 'etichette'
+    emails: 'indirizzi email'
+    addresses: 'lista di indirizzi'
+    everything: 'tutti i dati'
+  filter_navigation/dropdown:
+    additional_views: 'altre opinioni'
+  filter_navigation/people:
+    custom_filter: 'filtro personale'
+    entire_layer: 'livello intero'
+    entire_group: 'tutto il gruppo'
+    new_filter: 'nuovo filtro...'
+  sheet/csv_import:
+    title: 'importare persone tramite CSV'
+  sheet/group:
+    belongs_to: 'appartiene a'
+    deleted: '(eliminato)'
+  label_formats:
+    form:
+      portrait: 'formato verticale'
+      landscape: 'formato orizzontale'
+  qualifications:
+    in_years: '%{years} anni'
+    valid_until: 'fino a %{date}'
+    unlimited: 'illimitato'
+  navigation:
+    groups: 'gruppi'
+    events: 'eventi'
+    courses: 'corsi'
+    admin: 'amministrazione
+
+      admin'
+  full_text:
+    index:
+      title: 'persone trovate'
+      incomplete_search_request: 'prego digitare almeno due caratteri'
+  qualification_kinds:
+    form:
+      help_validity_in_years: 'anni dalla data della qualifica; fino alla fine dell''anno corrispondente'
+      help_reactivateable_in_years: 'anni dalla fine della validità'
+  subscriptions:
+    actions_index:
+      exclude_person: 'escludere persone'
+    list:
+      excluded_people: 'persone escluse'
+  views:
+    pagination:
+      next: '>>'
+      previous: '<<'
+      first: primo
+      last: ultimo
+      truncate: '...'

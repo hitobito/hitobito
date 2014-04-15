@@ -4,3 +4,340 @@ fr:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+  number:
+    currency:
+      format:
+        delimiter: ''''
+        format: '%u %n'
+        separator: .
+        unit: CHF
+    format:
+      delimiter: ''''
+      separator: .
+  attributes:
+    created_info: créé
+    updated_info: modifié
+    deleted_info: supprimé
+  activerecord:
+    errors:
+      messages:
+        type_not_allowed: ne peut pas être créé ici
+        must_be_after_opening: doit être postérieur à l'inscription
+        must_have_same_type: doivent être de type identique
+        greater_than: doit être plus grand que %{count}.
+        greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
+      models:
+        custom_content:
+          attributes:
+            body:
+              placeholder_missing: 'doit contenir la variable %{placeholder}'
+        event/date:
+          attributes:
+            finish_at:
+              not_after_start: 'doit être postérieur à la date indiquée sous "depuis"'
+        event/question:
+          attributes:
+            choices:
+              requires_more_than_one_choice: 'doit comporter au moins deux réponses'
+        mailing_list:
+          attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' ne peut pas être utilisé"
+        person:
+          name_missing: 'Prière de saisir un nom.'
+        qualification:
+          attributes:
+            qualification_kind_id:
+              exists_for_timeframe: 'existe déjà dans cette période'
+        qualification_kind:
+          attributes:
+            validity:
+              not_a_positive_number: 'doit être un nombre positif pour rendre les %{model} réactivables.'
+    models:
+      custom_content:
+        one: texte
+        other: textes
+      event:
+        one: activité
+        other: activités
+      event/course:
+        one: cours
+        other: cours
+      event/participation:
+        one: participation
+        other: participations
+      event/application:
+        one: inscription
+        other: inscriptions
+      event/kind:
+        one: type de cours
+        other: types de cours
+      event/role/assistant_leader:
+        one: responsable
+      event/role/leader:
+        one: responsable principal(e)
+      event/role/cook:
+        one: cuisine
+      event/role/participant:
+        one: participant/-e
+      event/role/treasurer:
+        one: trésorier
+      event/role/speaker:
+        one: intervenant/e
+      group:
+        one: groupe
+        other: groupes
+      label_format:
+        one: format étiquette
+        other: formats étiquettes
+      mailing_list:
+        one: abonnement
+        other: abonnements
+      person:
+        one: personne
+        other: personnes
+      people_filter:
+        one: filtre
+        other: filtres
+      phone_number:
+        one: numéro de téléphone
+        other: numéros de téléphone
+      qualification:
+        one: qualification
+        other: qualifications
+      qualification_kind:
+        one: type de qualification
+        other: types de qualification
+      role:
+        one: rôle
+        other: ' rôles '
+      social_account:
+        one: adresse d'un média social
+        other: adresses de médias sociaux
+      subscription:
+        one: abonné
+        other: abonnés
+    attributes:
+      person:
+        first_name: prénom
+        last_name: nom
+        company_name: nom de l'entreprise
+        company: entreprise
+        nickname: surnom
+        password: mot de passe
+        password_confirmation: mot de passe
+        current_password: ancien mot de passe
+        address: adresse
+        zip_code: code postal
+        town: lieu
+        country: pays
+        gender: sexe
+        genders:
+          m: masculin
+          w: féminin
+          default: inconnu
+        birthday: anniversaire
+        additional_information: données supplémentaires
+        remember_me: rester inscrit
+        phone_numbers: numéros de téléphone
+        social_accounts: médias sociaux
+        picture: télécharger nouvelle photo
+        remove_picture: supprimer la photo actuelle
+        roles: ' rôles '
+        created_at: créé
+        updated_at: modifié
+      group:
+        name: Nom
+        short_name: Abbréviation
+        password: mot de passe
+        address: adresse
+        zip_code: code postal
+        town: Lieu
+        country: pays
+        contact_id: personne de contact
+        contact: ' personne de contact'
+        phone_numbers: numéros de téléphone
+        social_accounts: médias sociaux
+        parent_id: groupe de parents
+        layer_group_id: niveau
+        type: type de groupe
+        type_name: type de groupe
+      event:
+        group_ids: groupes
+        name: Nom
+        number: numéro
+        motto: devise
+        cost: coûts
+        contact: ' personne de contact '
+        maximum_participants: nombre maximal de participants
+        contact_id: ' personne de contact '
+        description: description
+        location: lieu/adresse
+        application_opening_at: début des inscriptions
+        application_closing_at: fin des inscriptions
+        application_conditions: conditions d'admission
+        external_applications: inscriptions externes
+        dates: dates
+        dates_full: dates
+        booking_info: inscriptions
+        questions: questions
+        kind_id: type
+      event/course:
+        kind_id: type de cours
+        state: statut
+        number: numéro du cours
+        state_translated: statut
+        priorization: préférence
+        requires_approval: validation
+      event/role:
+        label: désignation
+        participation: personne
+      event/participation:
+        event_id: événement
+        additional_information: commentaires (généralités, informations en lien avec la santé, allergies, etc.)
+        answers: questions
+      event/application:
+        priority_1_id: "cours"
+        priority_2_id: "cours alternatif (1)"
+        priority_3_id: "cours alternatif (2)"
+      event/date:
+        label: description
+        location: lieu
+        start_at: du
+        finish_at: au
+      dates:
+        label: description / lieu
+        start_at: du (date)
+        finish_at: au (date)
+      event/question:
+        question: question
+        choices: réponses possibles
+        multiple_choices: sélection multiple
+      questions:
+        question: question
+        choices: réponses possibles
+        multiple_choices: sélection multiple
+      event/answer:
+        answer: réponse
+      answers:
+        answer: réponse
+      event/kind:
+        label: dénomination de l'association
+        short_name: abbréviation
+        minimum_age: âge minimum requis
+        preconditions: conditions préalables
+        prolongations: prolongé
+        qualification_kinds: qualifié pour
+        created_at: créé
+        updated_at: modifié
+        deleted_at: supprimé
+      qualification:
+        qualification_kind: qualification
+        qualification_kind_id: qualification
+        start_at: depuis
+        origin: origine
+        string: '%{kind}'
+        string_with_origin: '%{kind} (de %{origin})'
+        string_with_finish_at: '%{kind} (jusque %{finish_at})'
+        string_with_finish_at_and_origin: '%{kind} (jusque %{finish_at}, de %{origin})'
+      qualification_kind:
+        label: désignation
+        description: description
+        validity: validité
+        created_at: créé
+        updated_at: modifié
+        deleted_at: supprimé
+        reactivateable: pouvant être réactivé
+      phone_number:
+        number: numéro
+        label: type
+        public: public
+      phone_numbers:
+        number: numéro de téléphone
+        label: type de numéro de téléphone
+        public: public
+      role:
+        label: désignation
+        type: ' rôle'
+        group_id: groupe
+        person_id: personne
+        string_long: '%{role} dans %{group}'
+        class:
+          permission:
+            description:
+              admin: Gestion des paramètres valables dans toute l'application (p.ex. types de cours, format des étiquettes).
+              layer_full: Ecriture / lecture à ce niveau et aux niveaux subordonnés. Création d'évènements et d'abonnements à ce niveau.
+              layer_read: 'Lecture à ce niveau et aux niveaux subordonnés. '
+              group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
+              group_read: Lecture au niveau du groupe.
+              contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
+              qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux subordonnés.
+              approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
+          kind:
+            member:
+              one: membre
+              other: membres
+            passive:
+              one: membre passif
+              other: membres passifs
+            external:
+              one: contact externe
+              other: contacts externes
+      social_account:
+        name: nom
+        label: type
+        public: public
+      social_accounts:
+        name: nom du média social
+        label: type de média social
+        public: public
+      mailing_list:
+        name: Nom
+        description: description
+        publisher: éditeur
+        subscribable: les abonnés peuvent s'inscrire / se désinscrire eux-même
+        mail_name: adresse listes de distribution
+        mail_address: liste de distribution
+        subscribers_may_post: les abonnés peuvent éditer la liste de distribution
+        additional_sender: expéditeur supplémentaire
+      subscription:
+        related_role_types: ' rôles '
+      custom_content:
+        label: texte
+        subject: objet
+        body: contenu
+      label_format:
+        name: désignation
+        page_size: taille de page
+        landscape: format
+        font_size: ' taille des caractères  '
+        width: largeur des étiquettes
+        height: hauteur des étiquettes
+        count_horizontal: nombre (dans le sens de la largeur)
+        count_vertical: nombre (dans le sens de la hauteur)
+        padding_top: marge (en haut)
+        padding_left: marge (à gauche)
+        dimensions: nombre
+  errors:
+    messages:
+      invalid_date: "n'est pas une date valable"
+      invalid_time: "n'est pas une heure valable"
+      invalid_datetime: "n'est pas une date valable"
+      is_at: "doit être %{restriction}"
+      before: "doit être antérieur à %{restriction}"
+      on_or_before: "doit être %{restriction} ou antérieur"
+      after: "doit être postérieur à %{restriction}"
+      on_or_after: "doit être %{restriction} ou postérieur"
+      extension_white_list_error: "ne peut traiter que des fichiers de type %{allowed_types}."
+      expired: "est périmé, prière d'en refaire demande"
+      not_found: "pas trouvé"
+      already_confirmed: "a déjà été confirmé"
+      not_locked: "n'est pas verrouillé"
+      not_saved:
+        one: "%{resource} n'a pas pu être sauvegardé: une erreur."
+        other: "%{resource} n'a pas pu être sauvegardé: %{count} erreurs."
+  validates_timeliness:
+    error_value_formats:
+      date: "%d.%m.%Y"
+      time: '%H:%M'
+      datetime: "%d.%m.%Y %H:%M"

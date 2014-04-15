@@ -20,4 +20,5 @@
 
   = f.fields_for(:new_person, entry.person) do |fields|
     = field_set_tag do
-      = fields.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company, :email
+      = fields.labeled_input_fields :first_name, :last_name, :nickname, :company_name, :company
+      = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')

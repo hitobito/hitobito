@@ -56,6 +56,14 @@ de:
             mail_name_not_allowed:
         person:
           name_missing: 'Bitte geben Sie einen Namen ein.'
+          attributes:
+            email:
+              taken: >
+                        ist bereits vergeben. Diese Adresse muss für alle Personen
+                        eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
+                        'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
+                        als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
+                        kann leer gelassen werden).
         qualification:
           attributes:
             qualification_kind_id:

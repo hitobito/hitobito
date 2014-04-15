@@ -68,7 +68,7 @@ describe Import::PersonImporter do
     let(:data) { emails.map { |email| Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ } } }
     before { importer.import }
     its(:errors) { should have(1).item }
-    its('errors.last') { should eq 'Zeile 5: Haupt-E-Mail ist bereits vergeben' }
+    its('errors.last') { should start_with 'Zeile 5: Haupt-E-Mail ist bereits vergeben' }
   end
 
   context 'doublettes' do

@@ -1,8 +1,6 @@
 - if can?(:update_email, entry)
-  = f.labeled_input_field :email
+  = f.labeled_input_field :email, help_inline: t('.used_as_login')
 - else
   = f.labeled(:email) do
     %p.inline= entry.email
-    = f.help_block do
-      Die E-Mail Adresse einer Person mit mehreren Rollen kann nur
-      von einem über alle diese Rollen übergeordneten Benutzer geändert werden.
+    = f.help_block(t('.only_changeable_by_superior'))

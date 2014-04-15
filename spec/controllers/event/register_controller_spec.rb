@@ -90,7 +90,7 @@ describe Event::RegisterController do
       it 'displays form again' do
         post :check, group_id: group.id, id: event.id, person: { email: '' }
         should render_template('index')
-        flash[:alert].should eq 'Bitte gib eine Emailadresse ein'
+        flash[:alert].should eq 'Bitte gib eine E-Mail ein'
       end
     end
 

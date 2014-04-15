@@ -108,7 +108,7 @@ describe Import::Person do
       people.third.should be_valid
       people.fourth.should be_valid
       people.fifth.should_not be_valid
-      people.fifth.human_errors.should eq 'Haupt-E-Mail ist bereits vergeben'
+      people.fifth.human_errors.should start_with 'Haupt-E-Mail ist bereits vergeben'
     end
   end
 

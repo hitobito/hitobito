@@ -294,7 +294,12 @@ describe Person do
       person.first_name = 'Foo'
       person.email = people(:top_leader).email
       person.save(validate: false).should be_false
-      person.errors[:email].should == ['ist bereits vergeben']
+      person.errors[:email].should == ["ist bereits vergeben. Diese Adresse muss für alle " \
+                                        "Personen eindeutig sein, da sie beim Login verwendet " \
+                                        "wird. Du kannst jedoch unter 'Weitere E-Mails' " \
+                                        "Adressen eintragen, welche bei anderen Personen als " \
+                                        "Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer " \
+                                        "gelassen werden).\n"]
     end
   end
 

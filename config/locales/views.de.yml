@@ -203,8 +203,14 @@ de:
     actions_index:
       import_list: Liste importieren
 
+    attrs:
+      additional_data: Weitere Angaben
+
     fields:
       format_birthday: (dd.mm.yy)
+
+    log:
+      no_changes: Bisher wurden keine Änderungen aufgezeichnet.
 
     roles:
       title: Aktive Rollen

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%h2 Rollen
+%h2= Role.model_name.human(count: 2)
 
 = table(@roles, class: 'table table-striped') do |t|
   - t.attr(:group_id, Group.model_name.human)

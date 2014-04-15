@@ -121,6 +121,7 @@ fr:
       person:
         first_name: prénom
         last_name: nom
+        name: nom
         company_name: nom de l'entreprise
         company: entreprise
         nickname: surnom

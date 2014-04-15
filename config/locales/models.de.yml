@@ -145,6 +145,7 @@ de:
       person:
         first_name: Vorname
         last_name: Nachname
+        name: Name
         company_name: Firmenname
         company: Firma
         nickname: Übername
@@ -346,16 +347,16 @@ de:
 
       additional_email:
         email: E-Mail
-        name: Weiter E-Mail
-        label: Weiter E-Mail Typ
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
         label: Typ
         public: Öffentlich
         mailings: Versand
 
       additional_emails:
         email: E-Mail
-        name: Weiter E-Mail
-        label: Weiter E-Mail Typ
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
 

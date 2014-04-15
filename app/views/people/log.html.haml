@@ -17,7 +17,6 @@
           = v.changes
 
 - else
-  %div
-    Bisher wurden keine Änderungen aufgezeichnet.
+  %div= t('.no_changes')
 
 = paginate @versions

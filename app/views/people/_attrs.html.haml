@@ -8,7 +8,7 @@
     = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
 
     - if can?(:show_details, entry)
-      %h2 Weitere Angaben
+      %h2= t('.additional_data')
       %div
         = render_attrs(entry, :birthday, :gender)
 
@@ -17,14 +17,14 @@
         = render_attrs(entry, :created_info, :updated_info)
 
       - if entry.additional_information?
-        %h2 Bemerkungen
+        %h2= Person.human_attribute_name(:additional_information)
         = simple_format(entry.additional_information)
 
   -if can?(:show_full, entry)
     %aside.span6.offset1
       = render 'roles'
-      = render 'event_aside', title: 'Anmeldungen', collection: @pending_applications
-      = render 'event_aside', title: 'Anlässe', collection: @upcoming_events
+      = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: @pending_applications
+      = render 'event_aside', title: Event.model_name.human(count: 2), collection: @upcoming_events
       = render 'qualifications', show_buttons: true
 
 

@@ -13,6 +13,7 @@ ThinkingSphinx::Index.define_partial :group do
   indexes parent.short_name, as: :parent_short_name
   indexes phone_numbers.number, as: :phone_number
   indexes social_accounts.name, as: :social_account
+  indexes additional_emails.email, as: :additional_email
 
   where 'groups.deleted_at IS NULL'
 end

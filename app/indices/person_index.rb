@@ -11,4 +11,5 @@ ThinkingSphinx::Index.define_partial :person do
 
   indexes phone_numbers.number, as: :phone_number
   indexes social_accounts.name, as: :social_account
+  indexes additional_emails.email, as: :additional_email
 end

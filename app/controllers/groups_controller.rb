@@ -86,6 +86,4 @@ class GroupsController < CrudController
     @sub_groups_label ||= translate(:subgroups)
   end
 
-
-
 end

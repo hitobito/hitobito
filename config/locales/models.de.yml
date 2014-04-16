@@ -10,6 +10,11 @@ de:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+  date:
+    formats:
+      default: ! '%d.%m.%Y'
+      long: ! '%e %B %Y'
+      short: ! '%e %b'
   number:
     currency:
       format:

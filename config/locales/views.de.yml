@@ -189,6 +189,12 @@ de:
       create_new_person: Neue Person erfassen
       search_existing_person: Bestehende Person suchen
 
+    info:
+      role_has_permissions: "Die Rolle %{role} in der Gruppe %{group} hat folgende Berechtigungen:"
+      role_only_public: >
+        Die Rolle %{role} in der Gruppe %{group} kann nur öffentliche Daten
+        (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
+      only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.

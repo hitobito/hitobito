@@ -8,18 +8,14 @@
     %p= @type.description
 
   %p
-    Die Rolle
-    = @type.label
-    in der Gruppe
-    = @group
     - if @type.permissions.present?
-      hat folgende Berechtigungen:
+      = t('.role_has_permissions', role: @type.label, group: @group)
       %br/
       %ul
         - @type.permissions.each do |perm|
           %li= t("activerecord.attributes.role.class.permission.description.#{perm}")
     - else
-      kann nur öffentliche Daten (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
+      = t('.role_only_public', role: @type.label, group: @group)
 
   - unless @type.visible_from_above
-    %p Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
+    %p = t('.only_visible_from_above')

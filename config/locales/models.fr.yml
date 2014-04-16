@@ -1,4 +1,9 @@
 fr:
+  date:
+    formats:
+      default: ! '%d.%m.%Y'
+      long: ! '%e %B %Y'
+      short: ! '%e %b'
   time:
     formats:
       time: "%H:%M"

@@ -111,7 +111,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       raw
     else
       val = @object.send(attr)
-      val.is_a?(Date) ? template.l(@object.send(attr)) : val
+      val.is_a?(Date) ? template.l(val) : val
     end
   end
 

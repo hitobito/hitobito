@@ -58,7 +58,8 @@ datepicker = do ->
     field = $(this)
     if field.is('.icon-calendar')
       field = field.parent().siblings('.date')
-    field.datepicker(onSelect: track)
+    options = $.extend({onSelect: track}, $.datepicker.regional[$('html').attr('lang')])
+    field.datepicker(options)
     field.datepicker('show')
 
     if lastDate && field.val() is ""

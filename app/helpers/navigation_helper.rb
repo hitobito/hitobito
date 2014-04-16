@@ -13,10 +13,11 @@ module NavigationHelper
     events:  { url: :list_events_path,
                active_for: %w(list_events) },
     courses: { url: :list_courses_path,
-               active_for: %w(list_courses) },
-    admin:   { url: :event_kinds_path,
-               active_for: %w(event_kinds qualification_kinds custom_contents label_formats),
-               if: lambda { |_| can?(:manage, Event::Kind) } }
+               active_for: %w(list_courses),
+               if: ->(e) { Group.course_types.present? } },
+    admin:   { url: :label_formats_path,
+               active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
+               if: ->(e) { can?(:manage, LabelFormat) } }
   }
 
 

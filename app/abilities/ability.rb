@@ -45,28 +45,45 @@ class Ability
   def define(user_context)
     store.configs_for_permissions(user_context.all_permissions) do |c|
       if c.constraint == :all
-        can c.action, c.subject_class
-      elsif c.constraint != :none
-        can c.action, c.subject_class do |subject|
-          action_allowed?(user_context, c, subject)
+        general_constraints = general_constraints(c)
+        if general_constraints.present?
+          can_with_block(general_constraints, c, user_context)
+        else
+          can c.action, c.subject_class
         end
+      elsif c.constraint != :none
+        can_with_block(all_constraints(c), c, user_context)
       end
     end
   end
 
-  def action_allowed?(user_context, c, subject)
-    all_constraints(c).all? do |ability_class, constraints|
-      ability = ability_class.new(user_context, subject, c.permission)
-      constraints.all? { |constraint| ability.send(constraint) }
+  def can_with_block(constraints, c, user_context)
+    can c.action, c.subject_class do |subject|
+      action_allowed?(constraints, user_context, c, subject)
+    end
+  end
+
+  def general_constraints(config)
+    general_constraints = store.general_constraints(config.subject_class, config.action)
+    general_constraints.each_with_object({}).each do |g, constraints|
+      append_constraint(constraints, g)
     end
   end
 
   def all_constraints(config)
-    general_constraints = store.general_constraints(config.subject_class, config.action)
-    permission_constraint = { config.ability_class => [config.constraint] }
-    general_constraints.each_with_object(permission_constraint).each do |g, constraints|
-      constraints[g.ability_class] ||= []
-      constraints[g.ability_class] << g.constraint
+    append_constraint(general_constraints(config), config)
+  end
+
+  def append_constraint(constraints, config)
+    constraints[config.ability_class] ||= []
+    constraints[config.ability_class] << config.constraint
+    constraints
+  end
+
+  def action_allowed?(constraint_hash, user_context, c, subject)
+    constraint_hash.all? do |ability_class, constraints|
+      ability = ability_class.new(user_context, subject, c.permission)
+      constraints.all? { |constraint| ability.send(constraint) }
     end
   end
 

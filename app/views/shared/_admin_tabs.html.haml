@@ -3,13 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- bar.tab Event::Kind.model_name.human(count: 2), event_kinds_path, %w(event_kinds) if can?(:index, Event::Kind)
-- bar.tab QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds) if can?(:index, QualificationKind)
+- if can?(:index, LabelFormat)
+  - bar.tab LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
+- if can?(:index, CustomContent)
+  - bar.tab CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)
+
+= render_extensions(:admin_tabs_main, locals: { bar: bar })
+
+- if can?(:index, Event::Kind)
+  - bar.tab Event::Kind.model_name.human(count: 2), event_kinds_path, %w(event_kinds)
+- if can?(:index, QualificationKind)
+  - bar.tab QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
 
 = render_extensions(:admin_tabs_kinds, locals: { bar: bar })
 
-- bar.tab CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents) if can?(:index, CustomContent)
-- bar.tab LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats) if can?(:index, LabelFormat)
-
-= render_extensions(:admin_tabs_end, locals: { bar: bar })
 

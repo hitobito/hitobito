@@ -11,16 +11,18 @@ class VariousAbility < AbilityDsl::Base
     permission(:admin).may(:index, :update).all
   end
 
-  on(Event::Kind) do
-    permission(:admin).may(:manage).all
-  end
-
   on(LabelFormat) do
     permission(:admin).may(:manage).all
   end
 
-  on(QualificationKind) do
-    permission(:admin).may(:manage).all
+  if Group.course_types.present?
+   on(Event::Kind) do
+      permission(:admin).may(:manage).all
+    end
+
+    on(QualificationKind) do
+      permission(:admin).may(:manage).all
+    end
   end
 
 end

@@ -24,6 +24,12 @@ module AbilityDsl
   #
   # With a +general+ constraint an additional requirement for certain actions
   # may be defined, indifferent of the user's permissions.
+  #
+  # Every permission tuple (Role::Permission, Action), including :general,
+  # only has one corresponding constraint method. This may be overriden by wagons.
+  #
+  # BEWARE: The constraint methods only apply if you pass an instance to the #can?
+  # method. If you pass a class, no constraints will be checked at all!
   class Base
 
     private

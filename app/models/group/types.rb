@@ -67,9 +67,10 @@ module Group::Types
 
     # All group types the may provide courses
     def course_types
-      all_types.select do |type|
-        type.event_types.include?(Event::Course)
-      end
+      @@course_types ||=
+        all_types.select do |type|
+          type.event_types.include?(Event::Course)
+        end
     end
 
     # All groups that may offer courses

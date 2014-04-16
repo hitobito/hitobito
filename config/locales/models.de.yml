@@ -230,6 +230,7 @@ de:
 
       event/role:
         label: Bezeichnung
+        person: Person
         participation: Person
 
       event/participation:
@@ -377,6 +378,9 @@ de:
 
       subscription:
         related_role_types: Rollen
+
+      people_filter:
+        name: Name
 
       custom_content:
         label: Text

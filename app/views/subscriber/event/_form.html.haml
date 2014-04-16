@@ -6,7 +6,7 @@
 = entry_form(buttons_bottom: false,
              url: group_mailing_list_event_index_path(@group, @mailing_list)) do |f|
 
-  = f.labeled(:subscriber, 'Anlass') do
+  = f.labeled(:subscriber, Event.model_name.human) do
     = f.string_field(:subscriber,
                      placeholder: t('global.search.placeholder_with_model', model: Event.model_name.human),
                      data: {provide: 'entity',

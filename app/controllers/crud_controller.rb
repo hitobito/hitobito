@@ -82,7 +82,6 @@ class CrudController < ListController
   #   PUT /entries/1.json
   def update(options = {}, &block)
     assign_attributes
-
     updated = with_callbacks(:update, :save) { save_entry }
     respond_with(entry, options.reverse_merge(success: updated, location: return_path), &block)
   end

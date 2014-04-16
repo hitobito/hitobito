@@ -210,8 +210,11 @@ describe PeopleController do
           put :update, group_id: group.id,
                        id: person.id,
                        person: { town: 'testtown',
-                                 phone_numbers_attributes: { '111' =>
-                                   { number: '031 111 1111', label: 'Privat', public: 1 } } }
+                                 phone_numbers_attributes: {
+                                   '111' =>
+                                     { number: '031 111 1111', label: 'Privat', public: 1 },
+                                   '222' =>
+                                     { number: '', label: 'Arbeit', public: 1 }  } }
           assigns(:person).should be_valid
         end.to change { PhoneNumber.count }.by(1)
         person.reload.phone_numbers.should have(1).item
@@ -247,6 +250,18 @@ describe PeopleController do
         person.reload.phone_numbers.should be_blank
       end
 
+      it 'destroys existing phone numbers when number is empty' do
+        n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 phone_numbers_attributes: { n.id.to_s =>
+                                   { number: '   ', label: 'Privat', public: 0, id: n.id } } }
+        end.to change { PhoneNumber.count }.by(-1)
+        person.reload.phone_numbers.should be_blank
+      end
+
       it 'create, update and destroys social accounts' do
         a1 = person.social_accounts.create!(name: 'Housi', label: 'Facebook', public: 0)
         a2 = person.social_accounts.create!(name: 'Hans', label: 'Skype', public: 1)
@@ -277,6 +292,38 @@ describe PeopleController do
         tw.public.should be_false
       end
 
+      it 'create, update and destroys additional emails' do
+        a1 = person.additional_emails.create!(email: 'Housi@example.com', label: 'Arbeit', public: 0)
+        a2 = person.additional_emails.create!(email: 'Hans@example.com', label: 'Privat', public: 1)
+        expect do
+          put :update, group_id: group.id,
+                       id: person.id,
+                       person: { town: 'testtown',
+                                 additional_emails_attributes: {
+                                   a1.id.to_s => { id: a1.id,
+                                                   email: 'Housi1@example.com',
+                                                   label: 'Arbeit',
+                                                   public: 1 },
+                                   a2.id.to_s => { id: a2.id, _destroy: true },
+                                   '998' => { email: ' ',
+                                              label: 'Vater',
+                                              public: 1 },
+                                   '999' => { email: 'John@example.com',
+                                              label: 'Mutter',
+                                              public: 0 }, } }
+          assigns(:person).should be_valid
+        end.not_to change { AdditionalEmail.count }
+
+        person.reload.additional_emails.should have(2).items
+        a = person.additional_emails.order(:label).first
+        a.label.should eq 'Arbeit'
+        a.email.should eq 'Housi1@example.com'
+        a.public.should be_true
+        tw = person.additional_emails.order(:label).second
+        tw.label.should eq 'Mutter'
+        tw.email.should eq 'John@example.com'
+        tw.public.should be_false
+      end
     end
   end
 

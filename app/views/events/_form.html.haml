@@ -32,7 +32,7 @@
 
 
   = field_set_tag Event.human_attribute_name(:dates) do
-    %p Uhrzeiten sind optional
+    %p= t('.times_are_optional')
     = f.nested_fields_for :dates, 'event/dates/fields'
 
   = field_set_tag Event::Application.model_name.human do

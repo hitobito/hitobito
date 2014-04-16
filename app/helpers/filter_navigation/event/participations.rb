@@ -9,9 +9,7 @@ module FilterNavigation
   module Event
     class Participations < FilterNavigation::Base
 
-      PREDEFINED_FILTERS = { all: 'Alle Personen',
-                             teamers: 'Leitungsteam',
-                             participants: 'Teilnehmende' }.with_indifferent_access
+      PREDEFINED_FILTERS = %w(all teamers participants)
 
       attr_reader :group, :event, :filter
 
@@ -21,7 +19,7 @@ module FilterNavigation
         super(template)
         @group = group
         @event = event
-        @filter = filter
+        @filter = filter.to_s
         init_labels
         init_items
         init_dropdown_items
@@ -33,17 +31,21 @@ module FilterNavigation
         if role_labels.include?(filter)
           dropdown.label = filter
           dropdown.active = true
-        elsif PREDEFINED_FILTERS.key?(filter)
-          @active_label = PREDEFINED_FILTERS[filter]
+        elsif PREDEFINED_FILTERS.include?(filter)
+          @active_label = predefined_filter_label(filter)
         elsif filter.blank?
-          @active_label = PREDEFINED_FILTERS.values.first
+          @active_label = predefined_filter_label(PREDEFINED_FILTERS.first)
         end
       end
 
       def init_items
-        PREDEFINED_FILTERS.each do |key, value|
-          item(value, event_participation_filter_link(key))
+        PREDEFINED_FILTERS.each do |key|
+          item(predefined_filter_label(key), event_participation_filter_link(key))
         end
+      end
+
+      def predefined_filter_label(key)
+        translate("predefined_filters.#{key}")
       end
 
       def init_dropdown_items

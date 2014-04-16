@@ -88,10 +88,9 @@ class Event::ParticipationsController < CrudController
                     order_by_role(event.class).
                     merge(Person.order_by_name).
                     uniq
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
 
     # default event filters
-    valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS.keys
+    valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
     if scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event) unless scope.to_s == 'all'
@@ -101,6 +100,7 @@ class Event::ParticipationsController < CrudController
       records = records.with_role_label(params[:filter])
     end
 
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
 

@@ -9,9 +9,7 @@
     = f.hidden_field :type
     = f.labeled_person_field :person
   - else
-    = f.labeled(:event_id) do
-      .text= entry.event
-    = f.labeled(:person_id) do
+    = f.labeled(:person) do
       .text= entry.person
 
   = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})

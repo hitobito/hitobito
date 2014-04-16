@@ -14,7 +14,7 @@
       %br
       .muted
         %i.icon-user.icon-muted
-        %strong Kontaktperson
+        %strong= Group.human_attribute_name(:contact)
       = render 'contactable/contact_data',
                contactable: group,
                contact: group.contact,

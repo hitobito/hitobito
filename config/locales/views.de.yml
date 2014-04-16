@@ -305,6 +305,8 @@ de:
       form:
         subgroups_selectable: 'Es können nur Gruppen unterhalb der Abogruppe ausgewählt werden'
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'
+      roles:
+        please_choose_group: Bitte wähle eine Gruppe aus
 
     exclude_person:
       form:
@@ -516,6 +518,7 @@ de:
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
       caption_requires_approval: 'Der Scharleiter wird informiert und muss die Anmeldung bestätigen'
       additional_information: 'Angaben für Anmeldung'
+      times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
@@ -596,6 +599,13 @@ de:
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
     new_filter: 'Neuer Filter...'
+
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: Alle Personen
+      teamers: Leitungsteam
+      participants: Teilnehmende
+
 
   sheet/csv_import:
     title: 'Personen über CSV importieren'

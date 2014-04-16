@@ -11,13 +11,13 @@
         = label_tag(nil, group, class: 'control-label')
         .controls
           - role_types.each do |role_type|
-            = label_tag("subscription_role_types_#{role_type.sti_name.downcase}", 
+            = label_tag("subscription_role_types_#{role_type.sti_name.downcase}",
                         class: 'checkbox inline') do
-              = check_box_tag("subscription[role_types][]", 
-                              role_type.sti_name, 
-                              false, 
+              = check_box_tag("subscription[role_types][]",
+                              role_type.sti_name,
+                              false,
                               id: "subscription_role_types_#{role_type.sti_name.downcase}")
               = role_type.label
 
 - else
-  %p Bitte wähle eine Gruppe aus
+  %p= t('.please_choose_group')

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Import
-  class AccountFields < SimpleDelegator
+  class ContactAccountFields < SimpleDelegator
     attr_reader :prefix, :human
 
     def initialize(model)

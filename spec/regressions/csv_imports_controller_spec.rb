@@ -49,8 +49,6 @@ describe CsvImportsController, type: :controller do
     end
   end
 
-
-
   describe 'POST :preview renders preview' do
     let(:data) { File.read(path(:list)) }
     let(:role_type) { 'Group::TopGroup::Leader' }

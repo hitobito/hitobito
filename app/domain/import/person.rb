@@ -10,7 +10,7 @@ module Import
     extend Forwardable
     def_delegators :person, :persisted?, :save, :id, :errors
 
-    attr_reader :person, :hash, :phone_numbers, :social_accounts, :emails
+    attr_reader :person, :hash, :phone_numbers, :social_accounts, :additional_emails, :emails
 
     BLACKLIST = [:contact_data_visible,
                  :created_at,
@@ -36,8 +36,9 @@ module Import
 
     def self.fields
       all = person_attributes +
-        AccountFields.new(PhoneNumber).fields +
-        AccountFields.new(SocialAccount).fields
+        ContactAccountFields.new(AdditionalEmail).fields +
+        ContactAccountFields.new(PhoneNumber).fields +
+        ContactAccountFields.new(SocialAccount).fields
 
       all.sort_by { |entry| entry[:value] }
     end
@@ -54,6 +55,7 @@ module Import
       prepare(hash)
 
       find_or_initialize_person
+      assign_additional_emails
       assign_phone_numbers
       assign_social_accounts
     end
@@ -81,12 +83,19 @@ module Import
 
     def prepare(hash)
       @hash = hash.with_indifferent_access
-      @phone_numbers = extract_settings_fields(PhoneNumber, :number)
-      @social_accounts = extract_settings_fields(SocialAccount, :name)
+      @additional_emails = extract_settings_fields(AdditionalEmail)
+      @phone_numbers = extract_settings_fields(PhoneNumber)
+      @social_accounts = extract_settings_fields(SocialAccount)
     end
 
     def find_or_initialize_person
       @person = PersonDoubletteFinder.new(hash).find_and_update || ::Person.new(hash)
+    end
+
+    def assign_additional_emails
+      assign_accounts(additional_emails, person.additional_emails) do |existing, imported|
+        existing.email == imported[:email]
+      end
     end
 
     def assign_phone_numbers
@@ -109,13 +118,13 @@ module Import
       end
     end
 
-    def extract_settings_fields(model, value_key)
-      keys = AccountFields.new(model).keys
+    def extract_settings_fields(model)
+      keys = ContactAccountFields.new(model).keys
       numbers = keys.select { |key| hash.key?(key) }
       numbers.map do |key|
         label = key.split('_').last.capitalize
         value = hash.delete(key)
-        { value_key => value, :label => label } if value.present?
+        { model.value_attr => value, :label => label } if value.present?
       end.compact
     end
 

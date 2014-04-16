@@ -8,8 +8,8 @@
       - else
         %i.icon.icon-plus{title: t('.icon_tooltip_created')}
 
-    - t.attrs *relevant_attrs
+    - t.attrs *csv_import_attrs
 
-    - [:phone_numbers, :social_accounts].each do |contact_type|
-      - relevant_contacts(contact_type) do |account|
-        - t.col(account[:value]) { |p| contact_value(account[:key], p.phone_numbers) }
+    - csv_import_contact_account_attrs do |account_attr|
+      - t.col(account_attr[:value]) do |p|
+        = csv_import_contact_account_value(p, account_attr[:key])

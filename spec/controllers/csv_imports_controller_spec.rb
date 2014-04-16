@@ -53,7 +53,6 @@ describe CsvImportsController do
       should render_template(:preview)
     end
 
-
     it 'renders preview even when field_mapping is missing' do
       post :preview, required_params
       flash[:alert].should eq ['1 Person (Leader) wird nicht importiert.',

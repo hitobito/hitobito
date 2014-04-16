@@ -22,4 +22,29 @@ module CsvImportHelper
     content_tag(:dd, values)
   end
 
+  def csv_import_attrs
+    Import::Person.person_attributes.
+      select { |f| field_mappings.values.include?(f[:key].to_s) }.
+      map { |f| f[:key]  }
+  end
+
+  def csv_import_contact_account_attrs(&block)
+    {
+      additional_emails: Import::ContactAccountFields.new(AdditionalEmail),
+      phone_numbers: Import::ContactAccountFields.new(PhoneNumber),
+      social_accounts: Import::ContactAccountFields.new(SocialAccount),
+    }.each do |assoc, caf|
+        caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
+                   each(&block)
+    end
+  end
+
+  def csv_import_contact_account_value(p, key)
+    parts = key.split('_')
+    key = parts.last
+    assoc = parts[0..-2].join('_').pluralize
+    contact = p.send(assoc).find { |c| c.label.downcase == key }
+    contact && contact.value
+  end
+
 end

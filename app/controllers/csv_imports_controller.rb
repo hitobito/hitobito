@@ -9,8 +9,7 @@ class CsvImportsController < ApplicationController
   attr_accessor :group
   attr_reader :importer, :parser, :entries
 
-  helper_method :group, :parser, :guess, :model_class, :entries, :role_name,
-                :relevant_attrs, :relevant_contacts, :contact_value, :field_mappings
+  helper_method :group, :parser, :guess, :model_class, :entries, :role_name, :field_mappings
 
   before_action :load_group
   before_action :custom_authorization
@@ -192,26 +191,6 @@ class CsvImportsController < ApplicationController
 
   def read_file_or_data
     (file_param && file_param.read) || params[:data]
-  end
-
-  def relevant_attrs
-    Import::Person.person_attributes.
-      select { |f| field_mappings.values.include?(f[:key].to_s) }.
-      map { |f| f[:key]  }
-  end
-
-  def relevant_contacts(key)
-    @account_types ||= { phone_numbers: Import::AccountFields.new(PhoneNumber),
-                         social_accounts: Import::AccountFields.new(SocialAccount) }
-    @account_types[key].fields.
-      select { |f| field_mappings.values.include?(f[:key].to_s) }.
-      each { |contact| yield(contact) }
-  end
-
-  def contact_value(key, contacts)
-    key = key.split('_').last
-    contact = contacts.find { |c| c.label.downcase == key }
-    contact && contact.value
   end
 
 end

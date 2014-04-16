@@ -20,13 +20,11 @@
 
 class AdditionalEmail < ActiveRecord::Base
 
+  include ContactAccount
   include NormalizedLabels
 
-  has_paper_trail meta: { main: :contactable }
+  self.value_attr = :email
 
-  belongs_to :contactable, polymorphic: true
-
-  validates :label, presence: true
   validates :email, format: Devise.email_regexp
 
   class << self
@@ -40,14 +38,6 @@ class AdditionalEmail < ActiveRecord::Base
             mailings: true).
       pluck(:email)
     end
-  end
-
-  def to_s(format = :default)
-    "#{email} (#{label})"
-  end
-
-  def value
-    email
   end
 
 end

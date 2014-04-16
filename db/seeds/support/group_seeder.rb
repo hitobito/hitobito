@@ -28,5 +28,13 @@ class GroupSeeder
         label:            Settings.phone_number.predefined_labels.first,
         public:           true }
     )
+
+    AdditionalEmail.seed(:contactable_id, :contactable_type, :email,
+      { contactable_id:   group.id,
+        contactable_type: 'Group',
+        email:            Faker::Internet.safe_email,
+        label:            Settings.additional_email.predefined_labels.first,
+        public:           true }
+    )
   end
 end

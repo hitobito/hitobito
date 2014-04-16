@@ -19,19 +19,8 @@
 
 class PhoneNumber < ActiveRecord::Base
 
-  has_paper_trail meta: { main: :contactable }
+  include ContactAccount
 
-  belongs_to :contactable, polymorphic: true
+  self.value_attr = :number
 
-  scope :public, -> { where(public: true) }
-
-  validates :label, presence: true
-
-  def to_s(format = :default)
-    "#{number} (#{label})"
-  end
-
-  def value
-    number
-  end
 end

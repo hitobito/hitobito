@@ -18,12 +18,12 @@ module Person::PreloadPublicAccounts
     ActiveRecord::Associations::Preloader.new(
       records,
       :phone_numbers,
-      PhoneNumber.where(public: true)).run
+      PhoneNumber.public).run
 
     ActiveRecord::Associations::Preloader.new(
       records,
       :additional_emails,
-      AdditionalEmail.where(public: true)).run
+      AdditionalEmail.public).run
 
     records
   end

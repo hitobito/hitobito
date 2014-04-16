@@ -78,9 +78,19 @@ class PersonSeeder
   def seed_accounts(person, several = false)
     seed_phone_number(person)
     if several
+      seed_additional_emails(person, true)
       seed_phone_number(person, true)
       seed_social_account(person, true)
     end
+  end
+
+  def seed_additional_emails(person, shuffle = false)
+    seed_account(person,
+                 AdditionalEmail,
+                 { email: Faker::Internet.safe_email,
+                   mailings: [true, false].shuffle.first },
+                 Settings.additional_email.predefined_labels,
+                 shuffle)
   end
 
   def seed_phone_number(person, shuffle = false)

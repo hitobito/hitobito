@@ -19,26 +19,15 @@
 
 class SocialAccount < ActiveRecord::Base
 
+  include ContactAccount
   include NormalizedLabels
 
-  has_paper_trail meta: { main: :contactable }
-
-  belongs_to :contactable, polymorphic: true
-
-  validates :label, presence: true
+  self.value_attr = :name
 
   class << self
     def load_available_labels
       Settings.social_account.predefined_labels | super
     end
-  end
-
-  def to_s(format = :default)
-    "#{name} (#{label})"
-  end
-
-  def value
-    name
   end
 
 end

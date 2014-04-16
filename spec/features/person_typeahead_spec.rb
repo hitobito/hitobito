@@ -7,12 +7,12 @@
 
 require 'spec_helper'
 
-describe 'Person Autocomplete' do
+describe 'Person Autocomplete', js: true do
 
   subject { page }
   let(:group) { groups(:top_group) }
 
-  it 'knows about visibility of dropdown menu', js: true do
+  it 'knows about visibility of dropdown menu' do
     obsolete_node_safe do
       sign_in
       visit root_path
@@ -25,7 +25,7 @@ describe 'Person Autocomplete' do
     end
   end
 
-  context 'highlights content in typeahead', js: true do
+  context 'highlights content in typeahead' do
     it 'for regular queries' do
       obsolete_node_safe do
         sign_in
@@ -35,7 +35,7 @@ describe 'Person Autocomplete' do
         page.should_not have_selector('.typeahead.dropdown-menu')
 
         fill_in 'Person', with: 'Top'
-        find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
       end
     end
@@ -46,8 +46,8 @@ describe 'Person Autocomplete' do
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         fill_in 'Person', with: 'Top Super'
-        sleep(0.5)
-        find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+        #sleep(0.5)
+        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
       end
@@ -59,8 +59,8 @@ describe 'Person Autocomplete' do
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         fill_in 'Person', with: 'Top  Super '
-        sleep(0.5)
-        find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+        #sleep(0.5)
+        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
         find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
       end

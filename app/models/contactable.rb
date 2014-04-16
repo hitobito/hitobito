@@ -35,9 +35,12 @@ module Contactable
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    (phone_numbers +
-     social_accounts +
-     additional_emails).each { |e| e.contactable = self unless e.frozen? }
+    (phone_numbers + social_accounts + additional_emails).each do |e|
+      unless e.frozen?
+        e.contactable = self
+        e.mark_for_destruction if e.value.blank?
+      end
+    end
   end
 
   module ClassMethods

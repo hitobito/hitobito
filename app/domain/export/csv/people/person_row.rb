@@ -10,7 +10,8 @@ module Export::Csv::People
   class PersonRow < Export::Csv::Base::Row
 
     self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
-                                /^social_account_/ => :social_account_attribute }
+                                /^social_account_/ => :social_account_attribute,
+                                /^additional_email_/ => :additional_email_attribute }
 
     def roles
       entry.roles.map { |role| "#{role} #{role.group}"  }.join(', ')
@@ -19,13 +20,20 @@ module Export::Csv::People
     private
 
     def phone_number_attribute(attr)
-      phone = entry.phone_numbers.find { |e| Accounts.phone_numbers.key(e.label) == attr }
-      phone.try(:value)
+      contact_account_attribute(entry.phone_numbers, attr)
     end
 
     def social_account_attribute(attr)
-      account = entry.social_accounts.find { |e| Accounts.social_accounts.key(e.label) == attr }
-      account.try(:name)
+      contact_account_attribute(entry.social_accounts, attr)
+    end
+
+    def additional_email_attribute(attr)
+      contact_account_attribute(entry.additional_emails, attr)
+    end
+
+    def contact_account_attribute(accounts, attr)
+      account = accounts.find { |e| ContactAccounts.key(e.class, e.label) == attr }
+      account.value if account
     end
 
   end

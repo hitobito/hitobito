@@ -89,10 +89,14 @@ describe Export::Csv::People::PeopleAddress do
         context 'roles and phone number' do
           before do
             Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
-            person.phone_numbers.create(label: 'vater', number: 123)
+            person.phone_numbers.create!(label: 'vater', number: 123)
+            person.additional_emails.create!(label: 'Vater', email: 'vater@example.com')
+            person.additional_emails.create!(label: 'Mutter', email: 'mutter@example.com', public: false)
           end
 
           its(['Telefonnummer Vater']) { should eq '123' }
+          its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
+          its(['Weitere E-Mail Mutter']) { should be_nil }
 
           it 'roles should be complete' do
             subject['Rollen'].split(', ').should =~ ['Member Group 11', 'Leader TopGroup']

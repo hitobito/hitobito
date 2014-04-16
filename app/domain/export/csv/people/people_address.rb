@@ -32,13 +32,14 @@ module Export::Csv::People
     end
 
     def association_attributes
+      account_labels(people.map(&:additional_emails).flatten.select(&:public?), AdditionalEmail).merge(
       account_labels(people.map(&:phone_numbers).flatten.select(&:public?),
-                     Accounts.phone_numbers)
+                     PhoneNumber))
     end
 
-    def account_labels(collection, mapper)
+    def account_labels(collection, model)
       collection.map(&:label).uniq.each_with_object({}) do |label, obj|
-        obj[mapper.key(label)] = mapper.human(label) if label.present?
+        obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label) if label.present?
       end
     end
 

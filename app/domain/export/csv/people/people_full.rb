@@ -35,8 +35,9 @@ module Export::Csv::People
     end
 
     def association_attributes
-      account_labels(people.map(&:phone_numbers).flatten, Accounts.phone_numbers).merge(
-        account_labels(people.map(&:social_accounts).flatten, Accounts.social_accounts))
+      account_labels(people.map(&:additional_emails).flatten, AdditionalEmail).merge(
+        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber).merge(
+          account_labels(people.map(&:social_accounts).flatten, SocialAccount)))
     end
   end
 end

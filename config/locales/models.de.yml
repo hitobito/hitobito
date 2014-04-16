@@ -80,8 +80,8 @@ de:
 
     models:
       additional_email:
-        one: Weiter E-Mail
-        other: Weiter E-Mails
+        one: Weitere E-Mail
+        other: Weitere E-Mails
       custom_content:
         one: Text
         other: Texte

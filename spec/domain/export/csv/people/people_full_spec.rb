@@ -52,12 +52,14 @@ describe Export::Csv::People::PeopleFull do
         person.update_attribute(:gender, 'm')
         person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
         person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
+        person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
       end
 
       subject { csv[0] }
 
       its(['Rollen']) { should eq 'Leader TopGroup' }
       its(['Telefonnummer Vater']) { should eq '123' }
+      its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Social Media Adresse Skype']) { should eq 'foobar' }
       its(['Geschlecht']) { should eq 'm' }
     end

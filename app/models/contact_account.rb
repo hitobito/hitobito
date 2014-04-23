@@ -9,8 +9,6 @@ module ContactAccount
     belongs_to :contactable, polymorphic: true
 
     validates :label, presence: true
-
-    scope :public, -> { where(public: true) }
   end
 
   def to_s(format = :default)

@@ -34,7 +34,7 @@ class PersonMailer < ActionMailer::Base
   end
 
   def login_url(person, token)
-    edit_person_password_url(person, reset_password_token: token)
+    edit_person_password_url(reset_password_token: token)
   end
 
   def return_path(sender)

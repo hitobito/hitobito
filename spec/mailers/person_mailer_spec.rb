@@ -23,7 +23,7 @@ describe PersonMailer do
   its(:to)       { should == [recipient.email] }
   its(:reply_to) { should == [sender.email] }
   its(:subject)  { should == "Willkommen bei #{Settings.application.name}" }
-  its(:body)     { should =~ /Hallo Bottom<br\/>/ }
+  its(:body)     { should =~ /Hallo Bottom<br\/>.*test.host\/users\/password\/edit\?reset_password_token=/ }
 
   context 'with additional emails' do
     it 'does not send to them' do

@@ -23,7 +23,7 @@ class BaseJob
   def error(job, exception, payload = parameters)
     logger.error(exception.message)
     logger.error(exception.backtrace.join("\n"))
-    Airbrake.notify(exception, cgi_data: ENV, parameters: payload)
+    Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
   end
 
   def delayed_jobs

@@ -20,13 +20,12 @@
 class SocialAccount < ActiveRecord::Base
 
   include ContactAccount
-  include NormalizedLabels
 
   self.value_attr = :name
 
   class << self
-    def load_available_labels
-      Settings.social_account.predefined_labels | super
+    def predefined_labels
+      Settings.social_account.predefined_labels
     end
   end
 

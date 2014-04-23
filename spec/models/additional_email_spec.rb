@@ -22,6 +22,10 @@ require 'spec_helper'
 
 describe AdditionalEmail do
 
+  after do
+    I18n.locale = I18n.default_locale
+  end
+
   context 'validation' do
     it 'uses devise regexp for email' do
       a1 = Fabricate(:additional_email, label: 'Foo')
@@ -32,16 +36,55 @@ describe AdditionalEmail do
     end
   end
 
+  context '#translated_label' do
+    it 'should return untranslated label as-is' do
+      I18n.locale = :fr
+
+      a1 = Fabricate(:additional_email, label: 'Foo')
+      a1.label.should eq 'Foo'
+      a1.translated_label.should eq 'Foo'
+    end
+
+    it 'should return translated label' do
+      I18n.locale = :fr
+
+      a2 = Fabricate(:additional_email, label: 'Privat')
+      a2.label.should eq 'Privat'
+      a2.translated_label.should eq 'Privé'
+    end
+  end
+
   context '.normalize_label' do
     it 'reuses existing label' do
       a1 = Fabricate(:additional_email, label: 'Foo')
       a2 = Fabricate(:additional_email, label: 'fOO')
       a2.label.should == 'Foo'
     end
+
+    it 'should preserve untranslated label as-is' do
+      I18n.locale = :fr
+
+      a1 = Fabricate(:additional_email, label: 'Foo')
+      a1.label.should eq 'Foo'
+    end
+
+    it 'should map label back to default language' do
+      I18n.locale = :fr
+
+      a2 = Fabricate(:additional_email, label: 'Privé')
+      a2.label.should eq 'Privat'
+    end
   end
 
   context '#available_labels' do
     subject { AdditionalEmail.available_labels }
+    before do
+      @settings_langs = Settings.application.languages
+      Settings.application.languages = { de: 'Deutsch', fr: 'Français' }
+    end
+    after do
+      Settings.application.languages = @settings_langs
+    end
     it { should include(Settings.additional_email.predefined_labels.first) }
 
     it 'includes labels from database' do
@@ -53,6 +96,33 @@ describe AdditionalEmail do
       predef = Settings.additional_email.predefined_labels.first
       a = Fabricate(:additional_email, label: predef)
       subject.count(predef).should == 1
+    end
+
+    it 'includes translated labels where available' do
+      I18n.locale = :fr
+
+      a1 = Fabricate(:additional_email, label: 'Foo')
+      a2 = Fabricate(:additional_email, label: 'Privat')
+
+      should include('Foo', 'Privé')
+    end
+
+    it 'is sweeped for all languages if new label is added' do
+      Rails.cache.clear
+
+      I18n.locale.should eq :de
+      labels_de = AdditionalEmail.available_labels
+
+      I18n.locale = :fr
+      labels_fr = AdditionalEmail.available_labels
+
+      labels_de.should_not eq labels_fr
+
+      a1 = Fabricate(:additional_email, label: 'A new label')
+      AdditionalEmail.available_labels.should eq labels_fr + ['A new label']
+
+      I18n.locale = :de
+      AdditionalEmail.available_labels.should eq labels_de + ['A new label']
     end
   end
 

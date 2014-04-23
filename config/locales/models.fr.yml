@@ -289,6 +289,9 @@ fr:
             external:
               one: contact externe
               other: contacts externes
+      contact_account:
+        predefined_labels:
+          privat: Privé
       social_account:
         name: nom
         label: type

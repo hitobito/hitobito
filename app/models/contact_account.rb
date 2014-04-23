@@ -1,5 +1,6 @@
 module ContactAccount
   extend ActiveSupport::Concern
+  include NormalizedI18nLabels
 
   included do
     class_attribute :value_attr
@@ -11,6 +12,8 @@ module ContactAccount
     validates :label, presence: true
 
     scope :public, -> { where(public: true) }
+
+    self.labels_translations_key = 'activerecord.attributes.contact_account.predefined_labels'
   end
 
   def to_s(format = :default)
@@ -20,5 +23,4 @@ module ContactAccount
   def value
     send(value_attr)
   end
-
 end

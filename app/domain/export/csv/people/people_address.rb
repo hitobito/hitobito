@@ -38,7 +38,7 @@ module Export::Csv::People
     end
 
     def account_labels(collection, model)
-      collection.map(&:label).uniq.each_with_object({}) do |label, obj|
+      collection.map(&:translated_label).uniq.each_with_object({}) do |label, obj|
         obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label) if label.present?
       end
     end

@@ -67,7 +67,7 @@ module ContactableDecorator
     html = values.collect do |v|
       if !only_public || v.public?
         val = block_given? ? yield(v.value) : v.value
-        h.value_with_muted(val, v.label)
+        h.value_with_muted(val, v.translated_label)
       end
     end.compact
 

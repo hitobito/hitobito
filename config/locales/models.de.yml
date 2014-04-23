@@ -340,6 +340,17 @@ de:
               one: Extern
               other: Externe
 
+      contact_account:
+        predefined_labels:
+          privat: Privat
+          mobil: Mobil
+          arbeit: Arbeit
+          vater: Vater
+          mutter: Mutter
+          fax: Fax
+          andere: Andere
+          webseite: Webseite
+
       social_account:
         name: Name
         label: Typ

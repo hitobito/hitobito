@@ -21,15 +21,14 @@
 class AdditionalEmail < ActiveRecord::Base
 
   include ContactAccount
-  include NormalizedLabels
 
   self.value_attr = :email
 
   validates :email, format: Devise.email_regexp
 
   class << self
-    def load_available_labels
-      Settings.additional_email.predefined_labels | super
+    def predefined_labels
+      Settings.additional_email.predefined_labels
     end
 
     def mailing_emails_for(people)

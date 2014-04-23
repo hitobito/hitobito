@@ -40,7 +40,12 @@ module NormalizedLabels
     private
 
     def load_available_labels
+      predefined_labels |
       base_class.order(:label).uniq.pluck(:label).compact
+    end
+
+    def predefined_labels
+      []
     end
 
     def labels_cache_key

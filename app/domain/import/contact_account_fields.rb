@@ -12,6 +12,7 @@ module Import
     def initialize(model)
       @prefix = model.model_name.to_s.underscore
       @human = model.model_name.human
+      @model = model
 
       super(map_prefined_fields.with_indifferent_access)
     end
@@ -28,7 +29,7 @@ module Import
 
     def map_prefined_fields
       predefined_labels.each_with_object({}) do |label, hash|
-        hash[key_for(label).downcase] = "#{human} #{label}"
+        hash[key_for(label).downcase] = "#{human} #{@model.translate_label(label)}"
       end
     end
 

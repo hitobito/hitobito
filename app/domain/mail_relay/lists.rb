@@ -116,7 +116,7 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      mailing_list.additional_sender.to_s.split(',').collect(&:strip).include?(sender_email)
+      mailing_list.additional_sender.to_s.split(/[,;]/).collect(&:strip).include?(sender_email)
     end
 
     def sender_is_list_administrator?

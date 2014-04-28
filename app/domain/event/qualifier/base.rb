@@ -45,8 +45,8 @@ module Event::Qualifier
 
     def create(kind)
       person.qualifications
-        .where(qualification_kind_id: kind.id, origin: event.to_s)
-        .first_or_create!(start_at: qualification_date)
+        .where(qualification_kind_id: kind.id, start_at: qualification_date)
+        .first_or_create!(origin: event.to_s)
     end
 
     def prolongable_qualification_kinds(kinds)

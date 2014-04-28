@@ -63,7 +63,9 @@ describe Event::QualificationsController do
         let(:start_at) { event.qualification_date - 1.day }
 
         it 'issues qualification' do
-          put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+          expect do
+            put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+          end.to change { Qualification.count }.by(1)
           should have(1).items
           should render_template('qualification')
         end
@@ -72,8 +74,12 @@ describe Event::QualificationsController do
       context 'issued on qualification date' do
         let(:start_at) { event.qualification_date }
 
-        it 'raise error' do
-          expect { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }.to raise_error ActiveRecord::RecordInvalid
+        it 'keeps existing qualification' do
+          expect do
+            put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+          end.not_to change { Qualification.count }
+          should have(1).items
+          should render_template('qualification')
         end
       end
 

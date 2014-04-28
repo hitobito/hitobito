@@ -1,4 +1,6 @@
 require 'spec_helper'
+require File.join(File.dirname(__FILE__), 'qualifier_context.rb')
+
 
 describe 'Event::Qualifier for participant' do
   include_context 'qualifier context'
@@ -41,9 +43,7 @@ describe 'Event::Qualifier for participant' do
       context 'that was create on same quali_date ' do
         let(:date) { quali_date }
 
-        it 'raises exeception' do
-          expect { qualifier.issue }.to raise_error ActiveRecord::RecordInvalid
-        end
+        it_does_not_create_any_qualifications
       end
     end
 
@@ -73,9 +73,7 @@ describe 'Event::Qualifier for participant' do
       context 'does not prolong qualification issued on same date as qualification' do
         let(:date) { quali_date }
 
-        it 'raises exeception' do
-          expect { qualifier.issue }.to raise_error ActiveRecord::RecordInvalid
-        end
+        it_creates_qualifications_of_kinds(:sl)
       end
     end
   end

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require File.join(File.dirname(__FILE__), 'qualifier_context.rb')
 
 describe 'Event::Qualifier for leader' do
   include_context 'qualifier context'
@@ -49,9 +50,7 @@ describe 'Event::Qualifier for leader' do
       context 'does not prolong qualification issued on date as qualification' do
         let(:date) { quali_date }
 
-        it 'raises exeception' do
-          expect { qualifier.issue }.to raise_error ActiveRecord::RecordInvalid
-        end
+        it_does_not_create_any_qualifications
       end
     end
 

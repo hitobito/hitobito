@@ -2,8 +2,17 @@ require 'spec_helper'
 describe Event::ParticipationDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
-  include_context 'qualifier context'
+  let(:course) do
+    event = Fabricate(:course, kind: event_kind)
+    event.dates.create!(start_at: quali_date, finish_at: quali_date)
+    event
+  end
 
+  let(:participation) do
+    participation = Fabricate(:event_participation, event: course)
+    Fabricate(participant_role.name.to_sym, participation: participation)
+    participation
+  end
   let(:quali_date)       { Date.new(2012, 10, 20) }
   let(:event_kind)       { event_kinds(:slk) }
   let(:decorator)        { Event::ParticipationDecorator.new(participation) }

@@ -293,7 +293,7 @@ de:
       sign_out: 'Ausloggen'
 
     unauthorized:
-      forgot_password: 'Password vergessen?'
+      forgot_password: 'Passwort vergessen?'
 
     application:
       available_under_license: 'verfügbar unter der'

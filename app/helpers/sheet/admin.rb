@@ -7,10 +7,13 @@
 
 module Sheet
   class Admin < Base
-    def render_main_tabs
-      view.tab_bar(current_nav_path) do |bar|
-        view.render('shared/admin_tabs', bar: bar)
-      end
+
+    def has_left_nav
+      true
+    end
+
+    def render_left_nav
+      view.render('shared/admin_left_nav')
     end
   end
 end

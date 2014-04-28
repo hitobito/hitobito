@@ -48,9 +48,10 @@ describe QualificationsController, type: :controller do
       it 'renders sheets and form' do
         perform_request
         page.should have_css('.sheet', count: 3)
-        page.find_link('Top')[:href].should eq group_path(groups(:top_layer))
-        page.find_link('TopGroup')[:href].should eq group_path(top_group)
-        page.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
+        sheet = page.find('.container-fluid > .sheet.parent')
+        sheet.find_link('Top')[:href].should eq group_path(groups(:top_layer))
+        sheet.find_link('TopGroup')[:href].should eq group_path(top_group)
+        sheet.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
         page.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
       end
     end

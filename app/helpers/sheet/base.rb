@@ -53,6 +53,14 @@ module Sheet
       end
     end
 
+    def render_left_nav
+      root.render_left_nav if parent_sheet
+    end
+
+    def has_left_nav
+      !!parent_sheet
+    end
+
     def root
       if parent_sheet
         parent_sheet.root

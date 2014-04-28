@@ -184,7 +184,6 @@ de:
         name: Name
         short_name: Kurzname
         email: Haupt-E-Mail
-        password: Password
         address: Adresse
         zip_code: PLZ
         town: Ort

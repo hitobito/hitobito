@@ -38,7 +38,7 @@ describe Event::ListsController, type: :controller do
 
     it 'renders event label with link' do
       get :events
-      dom.all('table tr a').first[:href].should eq group_event_path(top_group.id, event.id)
+      dom.all('table tr a[href]').first[:href].should eq group_event_path(top_group.id, event.id)
       dom.should have_content 'Eventus'
       dom.should have_content 'TopGroup'
       dom.should have_content I18n.l(tomorrow, format: :time)
@@ -110,7 +110,7 @@ describe Event::ListsController, type: :controller do
 
       it 'renders course info within table' do
         get :courses, year: 2010
-        main.find('h2').text.should eq 'Scharleiterkurs'
+        main.find('h2').text.strip.should eq 'Scharleiterkurs'
         main.find('table tr:eq(1) td:eq(1) a').text.should eq 'Eventus'
         main.find('table tr:eq(1) td:eq(1)').text.strip.should eq 'EventusSLK  Top'
         main.find('table tr:eq(1) td:eq(1) a')[:href].should eq group_event_path(slk_ev.groups.first, slk_ev)
@@ -132,8 +132,8 @@ describe Event::ListsController, type: :controller do
 
       it 'groups courses by course type' do
         get :courses, year: 2011
-        main.all('h2')[0].text.should eq 'Gruppenleiterkurs'
-        main.all('h2')[1].text.should eq 'Scharleiterkurs'
+        main.all('h2')[0].text.strip.should eq 'Gruppenleiterkurs'
+        main.all('h2')[1].text.strip.should eq 'Scharleiterkurs'
       end
 
       it 'filters with group param' do

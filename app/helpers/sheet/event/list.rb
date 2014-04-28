@@ -9,6 +9,14 @@ module Sheet
   class Event
     class List < Sheet::Base
 
+      def has_left_nav
+        true
+      end
+
+      def render_left_nav
+        view.render "nav_left_#{view.params[:action]}"
+      end
+
     end
   end
 end

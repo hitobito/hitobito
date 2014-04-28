@@ -40,7 +40,11 @@
         - elsif current_user.nil? # nil without login, false on error
           = render 'layouts/unauthorized'
 
-    #page
+    #page{class: ('with-left-nav' if sheet.has_left_nav)}
+      - if sheet.has_left_nav
+        %nav.nav-left
+          = sheet.render_left_nav
+
       .container-fluid
         = render_sheets do
           .content-header

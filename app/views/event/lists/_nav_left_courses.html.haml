@@ -1,0 +1,3 @@
+%ul.nav-left-list
+  - @courses_by_kind.keys.each do |kind|
+    %li= link_to(kind, "##{CGI.escape(kind)}")

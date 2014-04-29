@@ -32,12 +32,18 @@ module SheetHelper
   private
 
   def sheet_for_controller
-    sheet_class_name = controller.class.name.gsub(/Controller/, '').singularize
-    sheet_class = "Sheet::#{sheet_class_name}".constantize rescue Sheet::Base
+    sheet_class = controller_sheet_class
     if action_name == 'index' && sheet_class.parent_sheet
       sheet_class = sheet_class.parent_sheet
     end
     sheet_class.new(self)
+  end
+
+  def controller_sheet_class
+    sheet_class_name = controller.class.name.gsub(/Controller/, '').singularize
+    "Sheet::#{sheet_class_name}".constantize
+  rescue NameError
+    Sheet::Base
   end
 
 end

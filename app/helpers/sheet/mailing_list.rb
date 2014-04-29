@@ -8,6 +8,15 @@
 module Sheet
   class MailingList < Base
     self.parent_sheet = Sheet::Group
-    self.has_tabs = true
+
+    tab 'global.tabs.info',
+        :group_mailing_list_path,
+        no_alt: true
+
+    tab 'activerecord.models.subscription.other',
+        :group_mailing_list_subscriptions_path,
+        if: :index_subscriptions,
+        params: { returning: true }
+
   end
 end

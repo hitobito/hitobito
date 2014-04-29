@@ -9,8 +9,7 @@ module Sheet
   class Base
     include Translatable
 
-    class_attribute :parent_sheet, :has_tabs
-    self.has_tabs = false
+    class_attribute :parent_sheet, :tabs
 
     attr_accessor :title
     attr_reader :view, :child, :entry
@@ -23,6 +22,11 @@ module Sheet
         sheet = new(view)
         sheet.create_parent(parent, parent_entry)
         sheet
+      end
+
+      def tab(label_key, path_method, options = {})
+        self.tabs ||= []
+        self.tabs << Sheet::Tab.new(label_key, path_method, options)
       end
     end
 
@@ -45,19 +49,38 @@ module Sheet
       end
     end
 
-    def render_tabs
-      if has_tabs
+    def render_tabs_old
+      if tabs?
         view.tab_bar(current_nav_path) do |bar|
           view.render("#{model_name.pluralize}/tabs", model_name.to_sym => entry, bar: bar)
         end
       end
     end
 
+    def render_tabs
+      if tabs?
+        content_tag(:ul, class: 'nav nav-sub') do
+          safe_join(tabs) do |tab|
+            tab.render(view, path_args, tab == active_tab)
+          end
+        end
+      end
+    end
+
+    def path_args
+      @path_args ||=
+        if parent_sheet
+          parent_sheet.path_args + [entry]
+        else
+          [entry]
+        end
+    end
+
     def render_left_nav
       root.render_left_nav if parent_sheet
     end
 
-    def has_left_nav
+    def left_nav?
       !!parent_sheet
     end
 
@@ -77,6 +100,10 @@ module Sheet
       @parent_sheet = clazz.new(view, self, entry).tap do |p|
         p.title = p.entry.to_s
       end
+    end
+
+    def active_tab
+      @active_tab ||= find_active_tab
     end
 
     protected
@@ -139,6 +166,20 @@ module Sheet
 
     def model_name
       self.class.name.demodulize.underscore
+    end
+
+    # if current_page matches, this tab is active
+    # if alt_paths matches, this tab is active
+    # if nothing matches, first tab is active
+    def find_active_tab
+      active = tabs.detect { |tab| view.current_page?(view.send(tab.path_method, *path_args)) }
+      if active.nil?
+        current_path = current_nav_path
+        active = tabs.detect do |tab|
+          tab.alt_paths.any? { |p| current_path =~ /\/?#{view.send(p, *path_args)}\/?/ }
+        end
+      end
+      active || tabs.first
     end
   end
 end

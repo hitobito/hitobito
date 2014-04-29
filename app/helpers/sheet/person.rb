@@ -9,7 +9,18 @@ module Sheet
   class Person < Base
 
     self.parent_sheet = Sheet::Group
-    self.has_tabs = true
+
+    tab 'global.tabs.info',
+        :group_person_path,
+        if: :show
+
+    tab 'people.tabs.history',
+        :history_group_person_path,
+        if: :history
+
+    tab 'people.tabs.log',
+        :log_group_person_path,
+        if: :log
 
     def link_url
       view.group_person_path(parent_sheet.entry.id, entry.id)

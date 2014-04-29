@@ -613,6 +613,7 @@ de:
   sheet/group:
     belongs_to: 'gehört zu'
     deleted: '(gelöscht)'
+    layer_upwards: '< zu übergeordneter Ebene'
 
   label_formats:
     form:

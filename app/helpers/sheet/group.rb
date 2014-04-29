@@ -29,8 +29,6 @@ module Sheet
         if: :index_mailing_lists,
         params: { returning: true }
 
-      #= render_extensions :tabs, locals: { group: group, bar: bar }
-
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
         if: :deleted_subgroups

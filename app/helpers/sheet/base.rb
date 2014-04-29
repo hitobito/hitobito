@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+
 module Sheet
   class Base
     include Translatable
@@ -46,14 +47,6 @@ module Sheet
     def render_main_tabs
       unless %w(new edit create update).include?(view.action_name)
         render_tabs
-      end
-    end
-
-    def render_tabs_old
-      if tabs?
-        view.tab_bar(current_nav_path) do |bar|
-          view.render("#{model_name.pluralize}/tabs", model_name.to_sym => entry, bar: bar)
-        end
       end
     end
 
@@ -172,14 +165,15 @@ module Sheet
     # if alt_paths matches, this tab is active
     # if nothing matches, first tab is active
     def find_active_tab
-      active = tabs.detect { |tab| view.current_page?(view.send(tab.path_method, *path_args)) }
+      visible = tabs.select { |tab| tab.renderer(view, path_args).show? }
+      active = visible.detect { |tab| view.current_page?(view.send(tab.path_method, *path_args)) }
       if active.nil?
         current_path = current_nav_path
-        active = tabs.detect do |tab|
+        active = visible.detect do |tab|
           tab.alt_paths.any? { |p| current_path =~ /\/?#{view.send(p, *path_args)}\/?/ }
         end
       end
-      active || tabs.first
+      active || visible.first
     end
   end
 end

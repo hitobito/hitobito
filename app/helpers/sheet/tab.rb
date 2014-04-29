@@ -1,4 +1,29 @@
+# encoding: utf-8
+
+#  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module Sheet
+
+  # Contains the information for a tab in a specific sheet.
+  # This includes:
+  #  * label_key: The I18n String key to use for the label. If this value is a symbol,
+  #               the helper method with this name will be called, getting the sheet
+  #               entry as only argument.
+  #  * path_method: A symbol for the method returning the url of the tab. The method gets
+  #                 the path_args (entries of the entire sheet stack) as arguments.
+  #  * options: Possible options are
+  #              * :if - A symbol that corresponds to a CanCan action for the sheet entry
+  #                      that must be permitted or a lambda returning true or false.
+  #              * :alt - An array of symbols corresponding to path methods that contain
+  #                       the beginning of path names for which the tab entry is considered active.
+  #              * :no_alt - true if the main path_method argument should only be used as exact
+  #                          path match but not as the beginning of the current path to consider
+  #                          the tab as active. Set this for example if one tab is a main path
+  #                          and other tabs are sub paths.
+  #              * :params - A hash of additional params that will be passed to the path_method.
   class Tab
 
     attr_reader :label_key, :path_method, :options

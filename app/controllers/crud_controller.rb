@@ -189,8 +189,8 @@ class CrudController < ListController
 
     # Convenience callback to apply a callback on both form actions (new and edit).
     def before_render_form(*methods)
-      before_render_new *methods
-      before_render_edit *methods
+      before_render_new(*methods)
+      before_render_edit(*methods)
     end
   end
 

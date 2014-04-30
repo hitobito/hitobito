@@ -19,7 +19,8 @@ class Event::RegisterController < ApplicationController
 
   def check
     if params[:person][:email].present?
-      if user = Person.find_by_email(params[:person][:email])
+      user = Person.find_by_email(params[:person][:email])
+      if user
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
         render 'index'
@@ -49,9 +50,7 @@ class Event::RegisterController < ApplicationController
   def assert_external_application_possible
     if event.external_applications?
       if event.application_possible?
-        if current_user
-          redirect_to show_event_path
-        end
+        redirect_to show_event_path if current_user
       else
         flash[:alert] = translate(:application_window_closed)
         application_not_possible

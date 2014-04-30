@@ -17,13 +17,7 @@ module Subscriber
     def query
       groups = []
       if params.key?(:q) && params[:q].size >= 3
-        groups = @group.sister_groups_with_descendants.
-                        where(search_condition('groups.name', 'parents_groups.name')).
-                        includes(:parent).
-                        references(:parent).
-                        order('groups.lft').
-                        limit(10)
-        groups = decorate(groups)
+        groups = decorate(groups_query)
       end
 
       render json: groups.collect(&:as_typeahead)
@@ -35,6 +29,15 @@ module Subscriber
     end
 
     private
+
+    def groups_query
+      @group.sister_groups_with_descendants.
+             where(search_condition('groups.name', 'parents_groups.name')).
+             includes(:parent).
+             references(:parent).
+             order('groups.lft').
+             limit(10)
+    end
 
     def assign_attributes
       super

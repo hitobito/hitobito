@@ -7,3 +7,5 @@
 * Gruppenauswahl beim Erstellen von Rollen.
 * CSV Export aller Untergruppen einer Gruppe.
 * Logging aller Änderungen von Personenattributen.
+* Weitere E-Mail Adressen (analog Telefonnummern) bei Personen und Gruppen.
+* Prominente Gruppennavigation.

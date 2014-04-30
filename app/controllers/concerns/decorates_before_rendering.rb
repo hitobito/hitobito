@@ -59,19 +59,29 @@ module Concerns
     end
 
     def __decorator_name_for__(ivar)
-      org_ivar = ivar
+      orig_ivar = ivar
       decorator_name = "#{__model_name_for__(ivar)}Decorator"
-      while (decorator_name.constantize rescue nil) == nil
-        superclass = ivar.respond_to?(:model_name) ? ivar.superclass : ivar.class.superclass
-        if superclass == Module
-          fail ArgumentError, "#{org_ivar} does not have an associated decorator"
-        end
-        superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
-        superclass_decorator_name += 'Decorator'
-        ivar = superclass
-        decorator_name = superclass_decorator_name
+      until __decorator_class_exists?(decorator_name)
+        ivar, decorator_name = __superclass_decorator_name(orig_ivar, ivar)
       end
       decorator_name
+    end
+
+    def __decorator_class_exists?(decorator_name)
+      decorator_name.constantize
+      true
+    rescue NameError
+      false
+    end
+
+    def __superclass_decorator_name(orig_ivar, ivar)
+      superclass = ivar.respond_to?(:model_name) ? ivar.superclass : ivar.class.superclass
+      if superclass == Module
+        fail ArgumentError, "#{orig_ivar} does not have an associated decorator"
+      end
+      superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
+      superclass_decorator_name += 'Decorator'
+      [superclass, superclass_decorator_name]
     end
 
     def __model_name_for__(ivar)

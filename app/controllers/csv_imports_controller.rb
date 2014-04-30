@@ -40,8 +40,6 @@ class CsvImportsController < ApplicationController
         render :define_mapping
       else
         importer.import
-        @entries = importer.people.map(&:person)
-
         set_importer_flash_info
         redirect_to group_people_path(redirect_params)
       end
@@ -51,25 +49,22 @@ class CsvImportsController < ApplicationController
   private
 
   def set_importer_flash_info
-    if importer.new_count > 0
-      add_to_flash(:notice, importer_info(:new, importer.new_count))
-    end
-    if importer.doublette_count > 0
-      add_to_flash(:notice, importer_info(:updated, importer.doublette_count))
-    end
-    if importer.failure_count > 0
-      add_to_flash(:alert, importer_info(:failed, importer.failure_count))
-    end
+    add_importer_info_to_flash(:notice, :new, importer.new_count)
+    add_importer_info_to_flash(:notice, :updated, importer.doublette_count)
+    add_importer_info_to_flash(:alert, :failed, importer.failure_count)
 
     if action_name == 'preview'
       importer.errors.each { |error| add_to_flash(:alert, error) }
     end
   end
 
-  def importer_info(key, count)
-    translate([action_name, key].join('.').to_sym,
-              count: count,
-              role: importer.human_name(count: count))
+  def add_importer_info_to_flash(flash, key, count)
+    if count > 0
+      add_to_flash(flash,
+                   translate([action_name, key].join('.').to_sym,
+                             count: count,
+                             role: importer.human_name(count: count)))
+    end
   end
 
   def add_to_flash(key, text)
@@ -113,15 +108,14 @@ class CsvImportsController < ApplicationController
   def parse_or_redirect
     @parser = Import::CsvParser.new(read_file_or_data.strip)
 
-    unless parser.parse
+    success = parser.parse
+    unless success
       filename = file_param && file_param.original_filename
       filename ||= 'csv formular daten'
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(group)
-      false
-    else
-      true
     end
+    success
   end
 
   def sane_mapping?
@@ -139,18 +133,10 @@ class CsvImportsController < ApplicationController
   end
 
   def find_duplicate_mappings
-    duplicates = []
-    seen = []
-    field_mappings.each do |header, attr|
-      if attr.present?
-        if seen.include?(attr)
-          duplicates << attr
-        else
-          seen << attr
-        end
-      end
-    end
-    duplicates.uniq
+    attrs = field_mappings.values
+    attrs.select do |attr|
+      attr.present? && attrs.count(attr) > 1
+    end.uniq
   end
 
   def map_headers_and_import

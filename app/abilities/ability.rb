@@ -45,16 +45,24 @@ class Ability
   def define(user_context)
     store.configs_for_permissions(user_context.all_permissions) do |c|
       if c.constraint == :all
-        general_constraints = general_constraints(c)
-        if general_constraints.present?
-          can_with_block(general_constraints, c, user_context)
-        else
-          can c.action, c.subject_class
-        end
+        general_can(c, user_context)
       elsif c.constraint != :none
-        can_with_block(all_constraints(c), c, user_context)
+        constrained_can(c, user_context)
       end
     end
+  end
+
+  def general_can(c, user_context)
+    general_constraints = general_constraints(c)
+    if general_constraints.present?
+      can_with_block(general_constraints, c, user_context)
+    else
+      can c.action, c.subject_class
+    end
+  end
+
+  def constrained_can(c, user_context)
+    can_with_block(all_constraints(c), c, user_context)
   end
 
   def can_with_block(constraints, c, user_context)

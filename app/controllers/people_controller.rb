@@ -37,7 +37,7 @@ class PeopleController < CrudController
     @multiple_groups = filter.multiple_groups
 
     respond_to do |format|
-      format.html { set_entries(entries) }
+      format.html { prepare_entries(entries) }
       format.pdf  { render_pdf(entries) }
       format.csv  { render_entries_csv(entries) }
       format.email { render_emails(entries) }
@@ -75,14 +75,9 @@ class PeopleController < CrudController
   def history
     @roles = entry.all_roles
 
-    @participations_by_event_type = entry.event_participations.
-                                          active.
-                                          includes(:roles, event: [:dates, :groups]).
-                                          uniq.
-                                          order('event_dates.start_at DESC').
-                                          group_by do |p|
-                                            p.event.class.label_plural
-                                          end
+    @participations_by_event_type = alltime_person_participations.group_by do |p|
+      p.event.class.label_plural
+    end
 
     @participations_by_event_type.each do |kind, entries|
       entries.collect! { |e| Event::ParticipationDecorator.new(e) }
@@ -123,18 +118,33 @@ class PeopleController < CrudController
   alias_method :group, :parent
 
   def load_asides
-    applications = entry.pending_applications.
-                         includes(event: [:groups]).
-                         joins(event: :dates).
-                         order('event_dates.start_at').uniq
+    applications = pending_person_applications
     Event::PreloadAllDates.for(applications.collect(&:event))
-
     @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
-    @upcoming_events      = EventDecorator.decorate_collection(entry.upcoming_events.
-                                                                includes(:groups).
-                                                                preload_all_dates.
-                                                                order_by_date)
-    @qualifications = entry.latest_qualifications_uniq_by_kind
+    @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
+    @qualifications       = entry.latest_qualifications_uniq_by_kind
+  end
+
+  def pending_person_applications
+    entry.pending_applications.
+          includes(event: [:groups]).
+          joins(event: :dates).
+          order('event_dates.start_at').uniq
+  end
+
+  def upcoming_person_events
+    entry.upcoming_events.
+          includes(:groups).
+          preload_all_dates.
+          order_by_date
+  end
+
+  def alltime_person_participations
+    entry.event_participations.
+          active.
+          includes(:roles, event: [:dates, :groups]).
+          uniq.
+          order('event_dates.start_at DESC')
   end
 
   def find_entry
@@ -155,7 +165,7 @@ class PeopleController < CrudController
     super
   end
 
-  def set_entries(entries)
+  def prepare_entries(entries)
     @people = entries.page(params[:page])
     if index_full_ability?
       @people = @people.includes(:additional_emails, :phone_numbers)
@@ -167,10 +177,10 @@ class PeopleController < CrudController
   def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
     csv_entries = if full
-      entries.select('people.*').preload_accounts
-    else
-      entries.preload_public_accounts
-    end
+                    entries.select('people.*').preload_accounts
+                  else
+                    entries.preload_public_accounts
+                  end
     render_csv(csv_entries, full)
   end
 
@@ -180,10 +190,10 @@ class PeopleController < CrudController
 
   def render_csv(entries, full)
     csv = if full
-      Export::Csv::People::PeopleFull.export(entries)
-    else
-      Export::Csv::People::PeopleAddress.export(entries)
-    end
+            Export::Csv::People::PeopleFull.export(entries)
+          else
+            Export::Csv::People::PeopleAddress.export(entries)
+          end
     send_data csv, type: :csv
   end
 

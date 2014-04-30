@@ -14,8 +14,8 @@ class Event::ApplicationMarketController < ApplicationController
   helper_method :event
 
   def index
-    load_participants
-    load_applications
+    @participants = load_participants
+    @applications = load_applications
   end
 
   def add_participant
@@ -43,7 +43,7 @@ class Event::ApplicationMarketController < ApplicationController
   private
 
   def load_participants
-    @participants = event.participations_for(event.participant_type).includes(:application)
+    event.participations_for(event.participant_type).includes(:application)
   end
 
   def load_applications
@@ -54,13 +54,17 @@ class Event::ApplicationMarketController < ApplicationController
                        where(filter_applications).
                        merge(Event::Participation.pending).
                        uniq
+    sort_applications(applications)
+    Event::ParticipationDecorator.decorate_collection(applications)
+  end
+
+  def sort_applications(applications)
     # do not include nil values in arrays returned by #sort_by
     applications.sort_by! do |p|
       [p.application.priority(event) || 99,
        p.person.last_name || '',
        p.person.first_name || '']
     end
-    @applications = Event::ParticipationDecorator.decorate_collection(applications)
   end
 
   def filter_applications
@@ -68,22 +72,23 @@ class Event::ApplicationMarketController < ApplicationController
       params[:prio] = %w(1 2 3)  # default filter
     end
 
-    conditions = []
-    args = []
-    if params[:prio]
-      ([1, 2, 3] & params[:prio].collect(&:to_i)).each do |i|
-        conditions << "event_applications.priority_#{i}_id = ?"
-        args << event.id
-      end
-    end
-    if params[:waiting_list]
-      conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
-      args << true << event.kind_id
-    end
+    conditions, args = [], []
+    filter_by_prio(conditions, args) if params[:prio]
+    filter_by_waiting_list(conditions, args) if params[:waiting_list]
 
-    if conditions.present?
-      [conditions.join(' OR '), *args]
+    [conditions.join(' OR '), *args] if conditions.present?
+  end
+
+  def filter_by_prio(conditions, args)
+    ([1, 2, 3] & params[:prio].collect(&:to_i)).each do |i|
+      conditions << "event_applications.priority_#{i}_id = ?"
+      args << event.id
     end
+  end
+
+  def filter_by_waiting_list(conditions, args)
+    conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
+    args << true << event.kind_id
   end
 
   def assigner

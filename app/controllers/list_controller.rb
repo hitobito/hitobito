@@ -73,13 +73,12 @@ class ListController < ApplicationController
   # If the value is a collection, sets the plural name.
   def set_model_ivar(value)
     name = if value.is_a?(ActiveRecord::Relation)
-      ivar_name(value.klass).pluralize
-    elsif value.respond_to?(:each) # Array
-      ivar_name(value.first.class).pluralize
-    else
-      ivar_name(value.class)
-    end
-
+             ivar_name(value.klass).pluralize
+           elsif value.respond_to?(:each) # Array
+             ivar_name(value.first.class).pluralize
+           else
+             ivar_name(value.class)
+           end
     instance_variable_set(:"@#{name}", value)
   end
 
@@ -136,7 +135,7 @@ class ListController < ApplicationController
     # callbacks of the given kinds.
     def with_callbacks(*kinds, &block)
       kinds.reverse.inject(block) do |b, kind|
-        lambda { run_callbacks(kind, &b) }
+        -> { run_callbacks(kind, &b) }
       end.call
     end
 
@@ -183,7 +182,7 @@ class ListController < ApplicationController
         end.join(' OR ')
         clause = terms.collect { |t| "(#{clause})" }.join(' AND ')
 
-         ["(#{clause})"] + terms.collect { |t| [t] * columns.size }.flatten
+        ["(#{clause})"] + terms.collect { |t| [t] * columns.size }.flatten
       end
     end
 
@@ -205,7 +204,7 @@ class ListController < ApplicationController
     included do
       # Define a map of (virtual) attributes to SQL order expressions.
       # May be used for sorting table columns that do not appear directly
-      #  in the database table. E.g., map :city_id => 'cities.name' to
+      # in the database table. E.g., map :city_id => 'cities.name' to
       # sort the displayed city names.
       class_attribute :sort_mappings_with_indifferent_access
       self.sort_mappings = {}

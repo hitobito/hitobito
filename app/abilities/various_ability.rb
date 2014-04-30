@@ -16,7 +16,7 @@ class VariousAbility < AbilityDsl::Base
   end
 
   if Group.course_types.present?
-   on(Event::Kind) do
+    on(Event::Kind) do
       permission(:admin).may(:manage).all
     end
 

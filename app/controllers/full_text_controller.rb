@@ -15,10 +15,10 @@ class FullTextController < ApplicationController
 
   def index
     @people = if params[:q].to_s.size >= 2
-      PaginatingDecorator.decorate(list_people)
-    else
-      Kaminari.paginate_array([]).page(1)
-    end
+                PaginatingDecorator.decorate(list_people)
+              else
+                Kaminari.paginate_array([]).page(1)
+              end
     respond_with(@people)
   end
 
@@ -26,12 +26,7 @@ class FullTextController < ApplicationController
     people = query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
     groups = query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
 
-    result = if people.present? && groups.present?
-      people + [{ label: '—' * 20 }] + groups
-    else
-      people + groups
-    end
-    render json: result
+    render json: result_with_separator(people, groups)
   end
 
   private
@@ -74,6 +69,14 @@ class FullTextController < ApplicationController
     sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
     result = Person.connection.execute(sql)
     result.collect { |row| row[0] }
+  end
+
+  def result_with_separator(people, groups)
+    if people.present? && groups.present?
+      people + [{ label: '—' * 20 }] + groups
+    else
+      people + groups
+    end
   end
 
   def entries

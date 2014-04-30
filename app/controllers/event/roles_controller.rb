@@ -24,9 +24,11 @@ class Event::RolesController < CrudController
     assign_attributes
     new_participation = entry.participation.new_record?
     created = with_callbacks(:create, :save) { save_entry }
-    url = new_participation && created ?
-      edit_group_event_participation_path(group, event, entry.participation) :
-      group_event_participations_path(group, event)
+    url = if new_participation && created
+            edit_group_event_participation_path(group, event, entry.participation)
+          else
+            group_event_participations_path(group, event)
+          end
     respond_with(entry, success: created, location: url)
   end
 

@@ -65,10 +65,11 @@ class Event::ParticipationsController < CrudController
   end
 
   def render_csv
-    csv = params[:details] && can?(:show_details, entries.first) ?
-      Export::Csv::People::ParticipationsFull.export(entries) :
-      Export::Csv::People::ParticipationsAddress.export(entries)
-
+    csv = if params[:details] && can?(:show_details, entries.first)
+            Export::Csv::People::ParticipationsFull.export(entries)
+          else
+            Export::Csv::People::ParticipationsAddress.export(entries)
+          end
     send_data csv, type: :csv
   end
 
@@ -81,26 +82,32 @@ class Event::ParticipationsController < CrudController
   end
 
   def list_entries
-    records = event.participations.
-                    where(event_participations: { active: true }).
-                    includes(:person, :roles, :event).
-                    participating(event).
-                    order_by_role(event.class).
-                    merge(Person.order_by_name).
-                    uniq
+    records = apply_filter_scope(load_entries)
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    records
+  end
 
+  def load_entries
+    event.participations.
+          where(event_participations: { active: true }).
+          includes(:person, :roles, :event).
+          participating(event).
+          order_by_role(event.class).
+          merge(Person.order_by_name).
+          uniq
+  end
+
+  def apply_filter_scope(records)
     # default event filters
     valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
-    if scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
+    scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
+    if scope
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event) unless scope.to_s == 'all'
-
     # event specific filters (filter by role label)
     elsif event.participation_role_labels.include?(params[:filter])
       records = records.with_role_label(params[:filter])
     end
-
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
 
@@ -113,16 +120,20 @@ class Event::ParticipationsController < CrudController
     participation.person = current_user unless params[:for_someone_else]
 
     if event.supports_applications
-      appl = participation.build_application
-      appl.priority_1 = event
-      if model_params && model_params.key?(:person_id)
-        model_params.delete(:person)
-        participation.person_id = model_params.delete(:person_id)
-        params[:for_someone_else] = true
-      end
+      build_application(participation)
     end
 
     participation
+  end
+
+  def build_application(participation)
+    appl = participation.build_application
+    appl.priority_1 = event
+    if model_params && model_params.key?(:person_id)
+      model_params.delete(:person)
+      participation.person_id = model_params.delete(:person_id)
+      params[:for_someone_else] = true
+    end
   end
 
   def assign_attributes

@@ -23,11 +23,10 @@ module NavigationHelper
 
   def render_main_nav
     content_tag_nested(:ul, MAIN, class: 'nav') do |label, options|
-      if options[:url].kind_of?(Symbol)
-        options[:url] = send(options[:url])
-      end
       if !options.key?(:if) || instance_eval(&options[:if])
-        nav(I18n.t("navigation.#{label}"), options[:url], options[:active_for])
+        url = options[:url]
+        url = send(url) if url.kind_of?(Symbol)
+        nav(I18n.t("navigation.#{label}"), url, options[:active_for])
       end
     end
   end
@@ -40,7 +39,7 @@ module NavigationHelper
   def nav(label, url, active_for = [])
     options = {}
     if current_page?(url) ||
-       active_for.any? { |p| request.path =~ /\/?#{p}\/?/ }
+       active_for.any? { |p| request.path =~ %r{/?#{p}/?} }
       options[:class] = 'active'
     end
     content_tag(:li, link_to(label, url), options)

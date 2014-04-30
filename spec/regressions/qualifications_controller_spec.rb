@@ -45,11 +45,11 @@ describe QualificationsController, type: :controller do
   describe_action :get, :new do
     context '.html', format: :html do
       let(:page) { Capybara::Node::Simple.new(response.body).find('#page') }
+
       it 'renders sheets and form' do
-        perform_request
         page.should have_css('.sheet', count: 3)
         sheet = page.find('.container-fluid > .sheet.parent')
-        sheet.find_link('Top')[:href].should eq group_path(groups(:top_layer))
+        sheet.find('.breadcrumb').find_link('Top')[:href].should eq group_path(groups(:top_layer))
         sheet.find_link('TopGroup')[:href].should eq group_path(top_group)
         sheet.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
         page.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)

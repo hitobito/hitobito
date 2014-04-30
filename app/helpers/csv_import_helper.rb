@@ -32,7 +32,7 @@ module CsvImportHelper
     {
       additional_emails: Import::ContactAccountFields.new(AdditionalEmail),
       phone_numbers: Import::ContactAccountFields.new(PhoneNumber),
-      social_accounts: Import::ContactAccountFields.new(SocialAccount),
+      social_accounts: Import::ContactAccountFields.new(SocialAccount)
     }.each do |assoc, caf|
       caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
                  each(&block)

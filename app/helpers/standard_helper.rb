@@ -17,16 +17,16 @@ module StandardHelper
   # Formats a single value
   def f(value)
     case value
-      when Float, BigDecimal then
-        number_with_precision(value,
-                              precision: t('number.format.precision'),
-                              delimiter: t('number.format.delimiter'))
-      when Date   then l(value)
-      when Time   then l(value, format: :time)
-      when true   then t(:"global.yes")
-      when false  then t(:"global.no")
-      when nil    then EMPTY_STRING
-      else value.to_s
+    when Float, BigDecimal then
+      number_with_precision(value,
+                            precision: t('number.format.precision'),
+                            delimiter: t('number.format.delimiter'))
+    when Date   then l(value)
+    when Time   then l(value, format: :time)
+    when true   then t(:"global.yes")
+    when false  then t(:"global.no")
+    when nil    then EMPTY_STRING
+    else value.to_s
     end
   end
 
@@ -36,11 +36,7 @@ module StandardHelper
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
   def format_attr(obj, attr)
-    format_type_attr_method = obj.class.respond_to?(:base_class) ?
-        "format_#{obj.class.base_class.name.underscore}_#{attr.to_s}" :
-        "format_#{obj.class.name.underscore}_#{attr.to_s}"
-    format_type_attr_method = format_type_attr_method.gsub(%r{/}, '_')  # deal with nested models
-
+    format_type_attr_method = format_type_attr_method(obj, attr)
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)
@@ -53,6 +49,14 @@ module StandardHelper
     else
       format_type(obj, attr)
     end
+  end
+
+  def format_type_attr_method(obj, attr)
+    if obj.class.respond_to?(:base_class)
+      "format_#{obj.class.base_class.name.underscore}_#{attr}"
+    else
+      "format_#{obj.class.name.underscore}_#{attr}"
+    end.gsub(/\//, '_')  # deal with nested models
   end
 
 
@@ -172,7 +176,7 @@ module StandardHelper
   #  - global.{key}
   def translate_inheritable(key, variables = {})
     defaults = []
-    partial = @virtual_path ? @virtual_path.gsub(%r{.*/_?}, '') : nil
+    partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, '') : nil
     current = controller.class
     while current < ActionController::Base
       folder = current.controller_path
@@ -272,10 +276,10 @@ module StandardHelper
   # Returns the name of the attr and it's corresponding field
   def assoc_and_id_attr(attr)
     attr = attr.to_s
-    attr, attr_id = if attr.end_with?('_id')
-                      [attr[0..-4], attr]
+    if attr.end_with?('_id')
+      [attr[0..-4], attr]
     elsif attr.end_with?('_ids')
-                      [attr[0..-5].pluralize, attr]
+      [attr[0..-5].pluralize, attr]
     else
       [attr, "#{attr}_id"]
     end
@@ -284,12 +288,12 @@ module StandardHelper
   def format_column(type, val)
     return EMPTY_STRING if val.nil?
     case type
-      when :time    then f(val.to_time)
-      when :date    then f(val.to_date)
-      when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
-      when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
-      when :decimal then f(val.to_s.to_f)
-      else f(val)
+    when :time    then f(val.to_time)
+    when :date    then f(val.to_date)
+    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
+    when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
+    when :decimal then f(val.to_s.to_f)
+    else f(val)
     end
   end
 
@@ -308,7 +312,8 @@ module StandardHelper
 
   # Formats an active record belongs_to association
   def format_assoc(obj, assoc)
-    if val = obj.send(assoc.name)
+    val = obj.send(assoc.name)
+    if val
       assoc_link(val)
     else
       ta(:no_entry, assoc)

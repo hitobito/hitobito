@@ -17,7 +17,7 @@ module Sheet
         alt: [:group_roles_path, :new_group_csv_imports_path],
         params: { returning: true }
 
-    Event.all_types.each do |type|
+    ::Event.all_types.each do |type|
       tab "activerecord.models.#{type.model_name.i18n_key}.other",
           "#{type.type_name}_group_events_path",
           params: { returning: true },

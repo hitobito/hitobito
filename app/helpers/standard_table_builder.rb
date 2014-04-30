@@ -74,10 +74,10 @@ class StandardTableBuilder
   def align_class(attr)
     entry = entry_class.respond_to?(:new) ? entry_class.new : nil
     case column_type(entry, attr)
-      when :integer, :float, :decimal
-        'right' unless association(entry, attr, :belongs_to)
-      when :boolean
-        'center'
+    when :integer, :float, :decimal
+      'right' unless association(entry, attr, :belongs_to)
+    when :boolean
+      'center'
     end
   end
 

@@ -124,14 +124,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a select with minutes
   def minutes_select(attr, html_options = {})
     html_options[:class] ||= 'time'
-    ma = (0..59).collect { |n| ['%02d' % n, n] }
+    ma = (0..59).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
 
   # Render a select with hours
   def hours_select(attr, html_options = {})
     html_options[:class] ||= 'time'
-    ma = (0..23).collect { |n| ['%02d' % n, n] }
+    ma = (0..23).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
 
@@ -201,10 +201,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span6'
     list = association_entries(attr, html_options)
     if list.present?
-      collection_select(attr,
-                        list,
-                        :id,
-                        :to_s,
+      collection_select(attr, list, :id, :to_s,
                         collection_prompt(attr, html_options),
                         html_options)
     else
@@ -323,7 +320,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To add an additional help text, use the help option.
   # E.g. labeled_boolean_field(:checked, :help => 'Some Help')
   def method_missing(name, *args)
-    if field_method = labeled_field_method?(name)
+    field_method = labeled_field_method?(name)
+    if field_method
       build_labeled_field(field_method, *args)
     else
       super(name, *args)
@@ -420,7 +418,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
     labeled(args.first, text)
-   end
+  end
 
   def klass
     @klass ||= @object.respond_to?(:klass) ? @object.klass : @object.class

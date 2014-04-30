@@ -30,7 +30,6 @@ module Sheet
       private
 
       def groups
-        # TODO: set hierarchy in all groups to avoid queries
         @groups ||= entry.groups_in_same_layer.without_deleted.to_a
       end
 
@@ -40,8 +39,10 @@ module Sheet
 
       def render_upwards
         if layer.parent_id
+          parent = layer.hierarchy[-2]
+          parent.use_hierarchy_from_parent(layer.hierarchy[0..-3])
           link_to(I18n.t('sheet/group.layer_upwards'),
-                  active_path(layer.parent),
+                  active_path(parent),
                   class: 'nav-left-back')
         else
           ''.html_safe
@@ -69,6 +70,7 @@ module Sheet
       def render_stacked_group(group, stack, out)
         last = stack.last
         if last.nil? || (last.lft < group.lft && group.lft < last.rgt)
+          group.use_hierarchy_from_parent(last || layer)
           render_group_item(group, stack, out)
         else
           out << "</ul>\n</li>\n".html_safe
@@ -96,6 +98,7 @@ module Sheet
         safe_join(sub_layers) do |type, layers|
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
           safe_join(layers) do |l|
+            l.use_hierarchy_from_parent(layer)
             content_tag(:li, link_to(l, active_path(l)))
           end
         end

@@ -179,7 +179,8 @@ class Group < ActiveRecord::Base
   end
 
   def use_hierarchy_from_parent(parent)
-    @hierarchy = parent.hierarchy + [self]
+    parent_hierarchy = parent.kind_of?(Group) ? parent.hierarchy : parent
+    @hierarchy = parent_hierarchy + [self]
   end
 
   def groups_in_same_layer

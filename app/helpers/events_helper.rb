@@ -16,7 +16,7 @@ module EventsHelper
       action_button(t('event_decorator.apply'),
                     new_group_event_participation_path(group, event),
                     :check)
-     end
+    end
   end
 
   def typed_group_events_path(group, event_type, options = {})

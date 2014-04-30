@@ -34,8 +34,8 @@ module CsvImportHelper
       phone_numbers: Import::ContactAccountFields.new(PhoneNumber),
       social_accounts: Import::ContactAccountFields.new(SocialAccount),
     }.each do |assoc, caf|
-        caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
-                   each(&block)
+      caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
+                 each(&block)
     end
   end
 

@@ -24,18 +24,20 @@ module FilterNavigation
     def to_s
       content_tag(:div, class: 'toolbar-pills') do
         content_tag(:ul, class: 'nav nav-pills group-pills') do
-          items = main_items
-          if dropdown.items.present?
-            items << content_tag(:li, class: "dropdown #{'active' if dropdown.active}") do
-              template.in_button_group { dropdown.to_s }
-            end
-          end
-          template.safe_join(items)
+          template.safe_join([*main_items, dropdown_item])
         end
       end
     end
 
     private
+
+    def dropdown_item
+      if dropdown.items.present?
+        content_tag(:li, class: "dropdown #{'active' if dropdown.active}") do
+          template.in_button_group { dropdown.to_s }
+        end
+      end
+    end
 
     def item(label, url)
       @main_items << content_tag(:li,
@@ -53,6 +55,11 @@ module FilterNavigation
       super(template, translate(:additional_views))
       @active = false
       @button_class = nil
+    end
+
+    def activate(label)
+      self.label = label
+      self.active = true
     end
   end
 end

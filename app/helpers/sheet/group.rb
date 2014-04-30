@@ -20,8 +20,10 @@ module Sheet
     Event.all_types.each do |type|
       tab "activerecord.models.#{type.model_name.i18n_key}.other",
           "#{type.type_name}_group_events_path",
-          if: ->(view, group) { group.event_types.include?(type) && view.can?(:index_events, group) },
-          params: { returning: true }
+          params: { returning: true },
+          if: lambda { |view, group|
+            group.event_types.include?(type) && view.can?(:index_events, group)
+          }
     end
 
     tab 'activerecord.models.mailing_list.other',

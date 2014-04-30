@@ -26,7 +26,8 @@ module RolesHelper
   end
 
   def format_role_group_id(role)
-    if group = role.group
+    group = role.group
+    if group
       link_to(group, group)
     else
       group = Group.with_deleted.where(id: role.group_id).first

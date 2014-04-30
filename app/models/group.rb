@@ -178,6 +178,10 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def use_hierarchy_from_parent(parent)
+    @hierarchy = parent.hierarchy + [self]
+  end
+
   def groups_in_same_layer
     Group.where(layer_group_id: layer_group_id).
           without_deleted.

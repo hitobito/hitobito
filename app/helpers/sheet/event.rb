@@ -22,15 +22,15 @@ module Sheet
 
     tab 'activerecord.models.event/application.other',
         :group_event_application_market_index_path,
-        if: ->(view, group, event) do
+        if: lambda { |view, group, event|
           event.supports_applications && view.can?(:application_market, event)
-        end
+        }
 
     tab 'activerecord.models.qualification.other',
         :group_event_qualifications_path,
-        if: ->(view, group, event) do
+        if: lambda { |view, group, event|
           event.course_kind? && event.qualifying? && view.can?(:qualify, event)
-        end
+        }
 
     def link_url
       view.group_event_path(parent_sheet.entry.id, entry.id)

@@ -53,7 +53,7 @@ module Sheet
     def render_tabs
       if tabs?
         content_tag(:ul, class: 'nav nav-sub') do
-          safe_join(tabs) do |tab|
+          safe_join(visible_tabs) do |tab|
             tab.render(view, path_args, tab == active_tab)
           end
         end
@@ -165,15 +165,20 @@ module Sheet
     # if alt_paths matches, this tab is active
     # if nothing matches, first tab is active
     def find_active_tab
-      visible = tabs.select { |tab| tab.renderer(view, path_args).show? }
-      active = visible.detect { |tab| view.current_page?(view.send(tab.path_method, *path_args)) }
+      active = visible_tabs.detect do |tab|
+        view.current_page?(view.send(tab.path_method, *path_args))
+      end
       if active.nil?
         current_path = current_nav_path
-        active = visible.detect do |tab|
-          tab.alt_paths.any? { |p| current_path =~ /\/?#{view.send(p, *path_args)}\/?/ }
+        active = visible_tabs.detect do |tab|
+          tab.alt_paths.any? { |p| current_path =~ %r{/?#{view.send(p, *path_args)}/?} }
         end
       end
-      active || visible.first
+      active || visible_tabs.first
+    end
+
+    def visible_tabs
+      @visible_tabs ||= tabs.select { |tab| tab.renderer(view, path_args).show? }
     end
   end
 end

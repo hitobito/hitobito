@@ -273,9 +273,9 @@ module StandardHelper
   def assoc_and_id_attr(attr)
     attr = attr.to_s
     attr, attr_id = if attr.end_with?('_id')
-      [attr[0..-4], attr]
+                      [attr[0..-4], attr]
     elsif attr.end_with?('_ids')
-      [attr[0..-5].pluralize, attr]
+                      [attr[0..-5].pluralize, attr]
     else
       [attr, "#{attr}_id"]
     end

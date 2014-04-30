@@ -53,6 +53,11 @@ describe QualificationsController, type: :controller do
         sheet.find_link('TopGroup')[:href].should eq group_path(top_group)
         sheet.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
         page.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
+        nav = page.find('.nav-left')
+        nav.find_link('Top')[:href].should eq group_people_path(groups(:top_layer), returning: true)
+        nav.find_link('TopGroup')[:href].should eq group_people_path(top_group, returning: true)
+        nav.find_link('Bottom One')[:href].should eq group_people_path(groups(:bottom_layer_one), returning: true)
+        nav.find_link('Bottom Two')[:href].should eq group_people_path(groups(:bottom_layer_two), returning: true)
       end
     end
   end

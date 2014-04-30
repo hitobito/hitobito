@@ -51,13 +51,7 @@ module LayoutHelper
   def section_table(title, collection, add_path = nil, &block)
     collection.to_a # force relation evaluation
     if add_path || collection.present?
-      if add_path
-        button = action_button(ti(:'link.add_without_model'),
-                               add_path,
-                               'plus',
-                               class: 'btn-small')
-        title = safe_join([title, content_tag(:span, button, class: 'pull-right')])
-      end
+      title = include_add_button(title, add_path) if add_path
       render(layout: 'shared/section_table',
              locals: { title: title, collection: collection, add_path: add_path },
              &block)
@@ -87,6 +81,14 @@ module LayoutHelper
   end
 
   private
+
+  def include_add_button(title, add_path)
+    button = action_button(ti(:'link.add_without_model'),
+                           add_path,
+                           'plus',
+                           class: 'btn-small')
+    safe_join([title, content_tag(:span, button, class: 'pull-right')])
+  end
 
   def button(label, url, icon_name = nil, options = {})
     add_css_class options, 'btn'

@@ -249,14 +249,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def nested_fields_for(assoc, partial_name = nil, control_class = nil, &block)
-      content_tag(:div, id: "#{assoc}_fields") do
-        fields_for(assoc) do |fields|
-          block_given? ? capture(fields, &block) : render(partial_name, f: fields)
-        end
-      end +
-      content_tag(:div, class: 'controls') do
-        help_inline(link_to_add I18n.t('global.associations.add'), assoc)
+    content_tag(:div, id: "#{assoc}_fields") do
+      fields_for(assoc) do |fields|
+        block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
+    end +
+    content_tag(:div, class: 'controls') do
+      help_inline(link_to_add I18n.t('global.associations.add'), assoc)
+    end
   end
 
   def error_messages
@@ -412,7 +412,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
- def build_labeled_field(field_method, *args)
+  def build_labeled_field(field_method, *args)
     options = args.extract_options!
     help = options.delete(:help)
     help_inline = options.delete(:help_inline)
@@ -420,7 +420,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
     labeled(args.first, text)
-  end
+   end
 
   def klass
     @klass ||= @object.respond_to?(:klass) ? @object.klass : @object.class

@@ -9,7 +9,7 @@ module Sheet
   class Group
     class NavLeft
 
-      attr_reader :entry, :layer, :sheet, :view
+      attr_reader :entry, :sheet, :view
       delegate :content_tag, :link_to, :safe_join, to: :view
 
       def initialize(sheet)
@@ -19,10 +19,6 @@ module Sheet
       end
 
       def render
-        # TODO set hierarchy in all groups to avoid queries
-        groups = entry.groups_in_same_layer.without_deleted.includes(:parent).to_a
-        @layer = groups.first
-
         render_upwards +
         render_header +
         content_tag(:ul, class: 'nav-left-list') do
@@ -32,6 +28,15 @@ module Sheet
       end
 
       private
+
+      def groups
+        # TODO: set hierarchy in all groups to avoid queries
+        @groups ||= entry.groups_in_same_layer.without_deleted.to_a
+      end
+
+      def layer
+        @layer ||= groups.first
+      end
 
       def render_upwards
         if layer.parent_id
@@ -64,16 +69,20 @@ module Sheet
       def render_stacked_group(group, stack, out)
         last = stack.last
         if last.nil? || (last.lft < group.lft && group.lft < last.rgt)
-          if group.leaf?
-            out << group_link(group) << "</li>\n".html_safe
-          else
-            out << group_link(group) << "\n<ul>\n".html_safe
-            stack.push(group)
-          end
+          render_group_item(group, stack, out)
         else
           out << "</ul>\n</li>\n".html_safe
           stack.pop
           render_stacked_group(group, stack, out)
+        end
+      end
+
+      def render_group_item(group, stack, out)
+        if group.leaf?
+          out << group_link(group) << "</li>\n".html_safe
+        else
+          out << group_link(group) << "\n<ul>\n".html_safe
+          stack.push(group)
         end
       end
 

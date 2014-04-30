@@ -9,7 +9,7 @@ module Sheet
   class Event
     class List < Sheet::Base
 
-      def has_left_nav
+      def left_nav?
         true
       end
 

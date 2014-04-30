@@ -47,10 +47,15 @@ module Dropdown
 
     def label_links
       if LabelFormat.all_as_hash.present?
-        main_link = user.last_label_format_id ?
-                    export_label_format_path(user.last_label_format_id) :
-                    '#'
-        item(translate(:labels), main_link, *export_label_format_items)
+        item(translate(:labels), main_label_link, *export_label_format_items)
+      end
+    end
+
+    def main_label_link
+      if user.last_label_format_id
+        export_label_format_path(user.last_label_format_id)
+      else
+        '#'
       end
     end
 

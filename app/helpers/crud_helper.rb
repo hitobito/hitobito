@@ -38,7 +38,7 @@ module CrudHelper
       content << save_form_buttons(form, submit_label, cancel_url)
 
       content << if block_given?
-        capture(form, &block)
+                   capture(form, &block)
       else
         form.labeled_input_fields(*attrs)
       end
@@ -76,7 +76,7 @@ module CrudHelper
     else
       attrs = attrs_or_default(attrs) { default_attrs }
       list_table(*attrs) do |t|
-         add_table_actions(t)
+        add_table_actions(t)
       end
     end
   end

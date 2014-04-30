@@ -68,7 +68,7 @@ module Sheet
       end
 
       def render
-        content_tag(:li, link_to(label, path), class: css_class) if show?
+        content_tag(:li, link_to(label, path), class: css_class)
       end
 
       def show?

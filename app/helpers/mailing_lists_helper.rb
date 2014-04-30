@@ -10,15 +10,27 @@ module MailingListsHelper
   def button_toggle_subscription
     if entry.subscribable?
       if entry.subscribed?(current_user)
-        action_button(t('mailing_list_decorator.unsubscribe'),
-                      group_mailing_list_user_path(@group, entry),
-                      :minus, method: 'delete')
+        button_subscribe
       else
-        action_button(t('mailing_list_decorator.subscribe'),
-                      group_mailing_list_user_path(@group, entry),
-                      :plus, method: 'post')
+        button_unsubscribe
       end
     end
+  end
+
+  private
+
+  def button_subscribe
+    action_button(t('mailing_list_decorator.unsubscribe'),
+                  group_mailing_list_user_path(@group, entry),
+                  :minus,
+                  method: 'delete')
+  end
+
+  def button_unsubscribe
+    action_button(t('mailing_list_decorator.subscribe'),
+                  group_mailing_list_user_path(@group, entry),
+                  :plus,
+                  method: 'post')
   end
 
 end

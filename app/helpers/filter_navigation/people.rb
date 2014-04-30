@@ -34,16 +34,12 @@ module FilterNavigation
     end
 
     def init_labels
-      if name.present?
-        if @kind_filter_names.values.include?(name)
-          @active_label = name
-        else
-          dropdown.label = name
-          dropdown.active = true
-        end
+      if name.present? && @kind_filter_names.values.include?(name)
+        @active_label = name
+      elsif name.present?
+        dropdown.activate(name)
       elsif role_type_ids.present?
-        dropdown.label = translate(:custom_filter)
-        dropdown.active = true
+        dropdown.activate(translate(:custom_filter))
       else
         @active_label = main_filter_name
       end
@@ -111,17 +107,17 @@ module FilterNavigation
     end
 
     def people_filter_link(filter)
-       link = filter_path(filter, kind: 'deep')
+      link = filter_path(filter, kind: 'deep')
 
-       if can?(:destroy, filter)
-         sub_item = [template.icon(:trash),
-                     template.group_people_filter_path(group, filter),
-                     data: { confirm: template.ti(:confirm_delete),
-                             method:  :delete }]
-         dropdown.item(filter.name, link, sub_item)
-       else
-         dropdown.item(filter.name, link)
-       end
+      if can?(:destroy, filter)
+        sub_item = [template.icon(:trash),
+                    template.group_people_filter_path(group, filter),
+                    data: { confirm: template.ti(:confirm_delete),
+                            method:  :delete }]
+        dropdown.item(filter.name, link, sub_item)
+      else
+        dropdown.item(filter.name, link)
+      end
     end
 
     def fixed_types_path(name, types, options = {})

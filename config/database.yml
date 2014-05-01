@@ -3,11 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# PostgreSQL. Versions 8.2 and up are supported.
-#
 base: &generic
   adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
-  pool: 5
+  pool: 20
   timeout: 5000
   encoding: utf8
 <% %w(host port username password socket).each do |option| %>

@@ -82,7 +82,7 @@ module Sheet
         if label_key.kind_of?(Symbol)
           view.send(label_key, entry)
         else
-          I18n.t(label_key)
+          I18n.t(label_key, default: label_key)
         end
       end
 

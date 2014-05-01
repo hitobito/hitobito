@@ -6,7 +6,7 @@
 .contactable.well
   = render 'contactable/contact_data',
            contactable: group,
-           postal: group.contact.blank?,
+           postal: (group.contact.blank?),
            only_public: only_public
 
   - if group.contact

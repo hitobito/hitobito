@@ -143,7 +143,9 @@ class RolesController < CrudController
       role.person_id = person_id
       role.person = Person.new unless role.person
     else
-      role.person = Person.new(person_attrs)
+      attrs = ActionController::Parameters.new(person_attrs).
+               permit(*PeopleController.permitted_attrs)
+      role.person = Person.new(attrs)
     end
   end
 

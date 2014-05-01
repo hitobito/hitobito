@@ -18,14 +18,15 @@ class Event::RegisterController < ApplicationController
   end
 
   def check
-    if params[:person][:email].present?
-      user = Person.find_by_email(params[:person][:email])
+    email = params[:person][:email].to_s
+    if email.present?
+      user = Person.find_by_email(email)
       if user
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
         render 'index'
       else
-        @person = Person.new(email: params[:person][:email])
+        @person = Person.new(email: email)
         flash.now[:notice] = translate(:form_data_missing)
         render 'register'
       end

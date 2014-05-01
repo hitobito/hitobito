@@ -1,12 +1,12 @@
 # Rubocop configuration that MUST hold for every build.
 
 AllCops:
-  Excludes:
-    - db/**
-    - config/**
-    - bin/**
-    - spec/**
-    - vendor/**
+  Exclude:
+    - db/**/*
+    - config/**/*
+    - bin/**/*
+    - spec/**/*
+    - vendor/**/*
 
 ClassLength:
   Max: 185  # Try to reduce this value

@@ -188,7 +188,7 @@ module CrudHelper
 
   # If a block is given, call it to get the path for the current row entry.
   # Otherwise, return the standard path args.
-  def action_path(e, &block)
+  def action_path(e)
     block_given? ? yield(e) : path_args(e)
   end
 

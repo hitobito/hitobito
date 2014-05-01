@@ -14,7 +14,7 @@ module AbilityDsl
 
     def configs_for_permissions(permissions)
       permissions_with_any = permissions + [:any]
-      configs.each do |key, c|
+      configs.values.each do |c|
         yield c if permissions_with_any.include?(c.permission)
       end
     end

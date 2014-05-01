@@ -34,10 +34,11 @@ module MailRelay
 
       # Retrieve, process and delete all mails from the mail server.
       def relay_current
-        begin
+        loop do
           mails, last_exception = relay_batch
           fail(last_exception) if last_exception.present?
-        end while mails.size >= retrieve_count
+          break if mails.size < retrieve_count
+        end
       end
 
       def relay_batch
@@ -46,7 +47,7 @@ module MailRelay
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
             new(message).relay
-          rescue Exception => e
+          rescue => e
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
           end

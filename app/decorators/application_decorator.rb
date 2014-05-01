@@ -23,7 +23,7 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def used?(attribute)
-    used_attributes(attribute).each { |a| yield }
+    used_attributes(attribute).each { |_| yield }
   end
 
   def updated_info

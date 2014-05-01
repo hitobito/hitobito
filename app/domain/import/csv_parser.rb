@@ -28,7 +28,7 @@ module Import
         sanitized = remove_empty_lines(data, separator)
         @csv = CSV.parse(sanitized, col_sep: separator, headers: true, skip_blanks: true)
         strip_spaces
-      rescue Exception => e
+      rescue => e
         @error = e.to_s
       end
       error.blank?
@@ -36,7 +36,7 @@ module Import
 
     def map_data(header_mapping)
       header_mapping = header_mapping.with_indifferent_access
-      header_mapping.reject! { |key, value| value.blank? }
+      header_mapping.reject! { |_key, value| value.blank? }
       csv.map do |row|
         csv.headers.each_with_object({}) do |name, object|
           key = header_mapping[name]

@@ -21,7 +21,7 @@ module ContactAccount
     validates :label, presence: true
   end
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     "#{value} (#{label})"
   end
 

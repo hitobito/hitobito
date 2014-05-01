@@ -79,7 +79,7 @@ class PeopleController < CrudController
       p.event.class.label_plural
     end
 
-    @participations_by_event_type.each do |kind, entries|
+    @participations_by_event_type.each do |_kind, entries|
       entries.collect! { |e| Event::ParticipationDecorator.new(e) }
     end
   end

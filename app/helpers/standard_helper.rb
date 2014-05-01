@@ -81,7 +81,7 @@ module StandardHelper
 
   # Renders a list of attributes with label and value for a given object.
   # If the optional block returns false for a given attribute, it will not be rendered.
-  def render_attrs(obj, *attrs, &block)
+  def render_attrs(obj, *attrs)
     content_tag(:dl, class: 'dl-horizontal') do
       safe_join(attrs) do |a|
         labeled_attr(obj, a) if !block_given? || yield(a)
@@ -105,7 +105,7 @@ module StandardHelper
   # If a block is given, the columns defined therein are appended to the attribute columns.
   # If entries is empty, an appropriate message is rendered.
   # An options hash may be given as the last argument.
-  def table(entries, *attrs, &block)
+  def table(entries, *attrs)
     entries.to_a # force evaluation of relation
     if entries.present?
       content_tag(:div, class: 'table-responsive') do
@@ -145,7 +145,7 @@ module StandardHelper
   # Renders a simple unordered list, which will
   # simply render all passed items or yield them
   # to your block.
-  def simple_list(items, ul_options = {}, &blk)
+  def simple_list(items, ul_options = {})
     content_tag_nested(:ul, items, ul_options) do |item|
       content_tag(:li, block_given? ? yield(item) : f(item))
     end
@@ -342,10 +342,6 @@ module StandardHelper
   def assoc_link?(val)
     respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) &&
     can?(:show, val)
-  end
-
-  def model_link(val)
-
   end
 
   def object_class(obj)

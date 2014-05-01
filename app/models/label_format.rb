@@ -63,7 +63,7 @@ class LabelFormat < ActiveRecord::Base
     end
   end
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"
   end
 

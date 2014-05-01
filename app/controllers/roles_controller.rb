@@ -27,15 +27,8 @@ class RolesController < CrudController
   end
 
   def update
-    if type_changed?
-      if change_type
-        respond_to do |format|
-          format.html { redirect_to(after_update_location) }
-          format.js   { flash.clear }
-        end
-      else
-        render :edit
-      end
+    if change_type?
+      change_type
     else
       super(location: after_update_location)
     end
@@ -70,7 +63,7 @@ class RolesController < CrudController
     created
   end
 
-  def type_changed?
+  def change_type?
     extract_model_attr(:person_id)
     type = model_params && model_params[:type]
 
@@ -78,21 +71,25 @@ class RolesController < CrudController
   end
 
   def change_type
-    new_role = build_new_type
-    authorize!(:create, new_role)
-
-    success = Role.transaction do
-      new_role.save && entry.destroy
-    end
-
-    if success
-      flash[:notice] = role_change_message(new_role)
-      @role, @old_role = new_role, @role
+    if create_new_role_and_destroy_old_role
+      @role, @old_role = @new_role, @role
+      respond_to do |format|
+        format.html { redirect_to(after_update_location, notice: role_change_message) }
+        format.js
+      end
     else
-      copy_errors(new_role)
+      copy_errors(@new_role)
+      render :edit
     end
+  end
 
-    success
+  def create_new_role_and_destroy_old_role
+    @new_role = build_new_type
+    authorize!(:create, @new_role)
+
+    Role.transaction do
+      @new_role.save && entry.destroy
+    end
   end
 
   def build_new_type
@@ -170,9 +167,9 @@ class RolesController < CrudController
                                  group: h(role.group)).html_safe
   end
 
-  def role_change_message(new_role)
-    key = @group.id == @role.group.id ? :role_changed : :role_changed_to_group
-    translate(key, full_entry_label: full_entry_label, new_role: h(new_role),
+  def role_change_message
+    key = @group.id == @old_role.group.id ? :role_changed : :role_changed_to_group
+    translate(key, full_entry_label: full_entry_label(@old_role), new_role: h(@role),
                    new_group: h(@group))
   end
 

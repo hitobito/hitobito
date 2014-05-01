@@ -22,13 +22,13 @@ module Sheet
 
     tab 'activerecord.models.event/application.other',
         :group_event_application_market_index_path,
-        if: lambda { |view, group, event|
+        if: lambda { |view, _group, event|
           event.supports_applications && view.can?(:application_market, event)
         }
 
     tab 'activerecord.models.qualification.other',
         :group_event_qualifications_path,
-        if: lambda { |view, group, event|
+        if: lambda { |view, _group, event|
           event.course_kind? && event.qualifying? && view.can?(:qualify, event)
         }
 

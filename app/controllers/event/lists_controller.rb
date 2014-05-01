@@ -55,7 +55,7 @@ class Event::ListsController < ApplicationController
   def load_courses_by_kind
     courses = EventDecorator.decorate_collection(limit_scope_for_user)
     @courses_by_kind = courses.group_by { |entry| entry.kind.label }
-    @courses_by_kind.each do |kind, entries|
+    @courses_by_kind.values.each do |entries|
       entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }.
               collect! { |e| EventDecorator.new(e) }
     end

@@ -36,7 +36,7 @@ module Import
     end
 
     def assign_blank_attrs(person)
-      blank_attrs = attrs.select { |key, value| person.attributes[key].blank? }
+      blank_attrs = attrs.select { |key, _value| person.attributes[key].blank? }
       person.attributes = blank_attrs
     end
 
@@ -87,7 +87,11 @@ module Import
 
     def parse_date(date_string)
       if date_string.present?
-        Time.zone.parse(date_string).to_date rescue nil
+        begin
+          Time.zone.parse(date_string).to_date
+        rescue ArgumentError
+          nil
+        end
       end
     end
   end

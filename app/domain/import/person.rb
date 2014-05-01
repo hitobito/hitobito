@@ -110,7 +110,7 @@ module Import
       end
     end
 
-    def assign_accounts(accounts, association, &block)
+    def assign_accounts(accounts, association)
       accounts.each do |imported|
         unless association.any? { |a| yield a, imported }
           association.build(imported)

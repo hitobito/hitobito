@@ -19,7 +19,7 @@ class PersonAccessibles
     @group = group
 
     if @group.nil?
-      can :index, Person, accessible_people { |p| true }
+      can :index, Person, accessible_people { |_| true }
     else # optimized queries for a given group
       group_accessible_people(user)
     end
@@ -32,16 +32,16 @@ class PersonAccessibles
     # user has layer read of the same layer as the group
     if group_read_in_this_group? || layer_read_in_same_layer? || user.root?
       can :index, Person,
-          group.people.only_public_data { |p| true }
+          group.people.only_public_data { |_| true }
 
     # user has layer read in a above layer of the group
     elsif layer_read_in_above_layer?
       can :index, Person,
-          group.people.only_public_data.visible_from_above(group) { |p| true }
+          group.people.only_public_data.visible_from_above(group) { |_| true }
 
     elsif user.contact_data_visible?
       can :index, Person,
-          group.people.only_public_data.contact_data_visible { |p| true }
+          group.people.only_public_data.contact_data_visible { |_| true }
     end
   end
 

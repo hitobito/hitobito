@@ -108,7 +108,7 @@ class CrudController < ListController
 
   # Main accessor method for the handled model entry.
   def entry
-    get_model_ivar || set_model_ivar(params[:id] ? find_entry : build_entry)
+    model_ivar_get || model_ivar_set(params[:id] ? find_entry : build_entry)
   end
 
   # Creates a new model entry.
@@ -176,7 +176,11 @@ class CrudController < ListController
 
   def return_path
     if params[:return_url].present?
-      URI.parse(params[:return_url]).path rescue nil
+      begin
+        URI.parse(params[:return_url]).path
+      rescue URI::Error
+        nil
+      end
     end
   end
 
@@ -203,6 +207,8 @@ class CrudController < ListController
     end
 
     private
+
+    # rubocop:disable PredicateName
 
     # Check whether the resource has errors. Additionally checks the :success option.
     def has_errors?

@@ -19,9 +19,9 @@ class RelatedRoleType < ActiveRecord::Base
 
   belongs_to :relation, polymorphic: true
 
-  validates :role_type, inclusion: { in: ->(i) { Role.all_types.collect(&:sti_name) } }
+  validates :role_type, inclusion: { in: ->(_) { Role.all_types.collect(&:sti_name) } }
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     role_class.label_long
   end
 

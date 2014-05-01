@@ -21,11 +21,8 @@ class Group::MoveController < ApplicationController
     if target && mover.candidates.include?(target)
       authorize!(:create, target)
 
-      if mover.perform(target)
-        flash[:notice] = translate(:success, group: group, target: target)
-      else
-        flash[:alert] = group.errors.full_messages.join(', ')
-      end
+      success = mover.perform(target)
+      build_flash_messages(success)
       redirect_to(group)
     else
       flash[:alert] = translate(:choose_group)
@@ -42,7 +39,7 @@ class Group::MoveController < ApplicationController
   def candidates
     @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
                                    group_by { |candidate| candidate.class.label }
-    @candidates.each { |type, groups| groups.sort_by(&:name) }
+    @candidates.values.each { |groups| groups.sort_by(&:name) }
 
     if @candidates.empty?
       flash[:alert] = translate(:failure)
@@ -57,6 +54,14 @@ class Group::MoveController < ApplicationController
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) &&
                 Group.find(params[:move][:target_group_id])
+  end
+
+  def build_flash_messages(success)
+    if success
+      flash[:notice] = translate(:success, group: group, target: target)
+    else
+      flash[:alert] = group.errors.full_messages.join(', ')
+    end
   end
 
   def authorize

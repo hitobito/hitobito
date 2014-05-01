@@ -17,7 +17,7 @@
       = link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
       %br/
       = muted p.person.additional_name
-  - t.col(Role.model_name.human)                  { |p| p.roles_short(@event) }
+  - t.col(Role.model_name.human)                  { |p| p.roles_short }
   - t.col(Person.human_attribute_name(:emails))   { |p| p.all_emails(cannot?(:show_details, p)) }
   - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
   - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }

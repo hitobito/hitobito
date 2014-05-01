@@ -26,14 +26,14 @@ class PersonMailer < ActionMailer::Base
   private
 
   def content_body(content, recipient, sender, token)
-    url = login_url(recipient, token)
+    url = login_url(token)
     content.body_with_values(
       'recipient-name' => recipient.greeting_name,
       'sender-name'    => sender.to_s,
       'login-url'      => "<a href=\"#{url}\">#{url}</a>")
   end
 
-  def login_url(person, token)
+  def login_url(token)
     edit_person_password_url(reset_password_token: token)
   end
 

@@ -18,16 +18,11 @@ class Group::MergeController < ApplicationController
 
   def perform
     merger = Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
-    if merger.group2_valid?
-      if merger.merge!
-        flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
-        redirect_to group_path(merger.new_group)
-      else
-        flash[:alert] = merger.errors.join('<br/>').html_safe
-        redirect_to merge_group_path(group)
-      end
+    if merger.group2_valid? && merger.merge!
+      flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
+      redirect_to group_path(merger.new_group)
     else
-      flash[:alert] = translate(:failure)
+      flash[:alert] = merger.errors ? merger.errors.join('<br/>').html_safe : translate(:failure)
       redirect_to merge_group_path(group)
     end
   end

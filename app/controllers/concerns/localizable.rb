@@ -23,7 +23,7 @@ module Concerns
       cookies[:locale] = { value: I18n.locale, expires: 1.year.from_now }
     end
 
-    def default_url_options(options = {})
+    def default_url_options(_options = {})
       if application_languages.size > 1
         { locale: I18n.locale }
       else

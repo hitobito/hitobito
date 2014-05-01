@@ -60,7 +60,7 @@ class Event::Kind < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     "#{short_name} (#{label})"
   end
 

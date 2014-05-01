@@ -14,10 +14,10 @@ module NavigationHelper
                active_for: %w(list_events) },
     courses: { url: :list_courses_path,
                active_for: %w(list_courses),
-               if: ->(e) { Group.course_types.present? } },
+               if: ->(_) { Group.course_types.present? } },
     admin:   { url: :label_formats_path,
                active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
-               if: ->(e) { can?(:manage, LabelFormat) } }
+               if: ->(_) { can?(:manage, LabelFormat) } }
   }
 
 

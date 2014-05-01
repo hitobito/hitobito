@@ -55,7 +55,7 @@ module AbilityDsl
 
       private
 
-      def constraint(constraint)
+      def constraint(_constraint)
         # implement in subclass
       end
 

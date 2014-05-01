@@ -37,7 +37,7 @@ class CustomContent < ActiveRecord::Base
     end
   end
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     label
   end
 
@@ -86,7 +86,7 @@ class CustomContent < ActiveRecord::Base
     non_existing = (placeholders.keys - placeholders_list).presence
     if non_existing
       fail(ArgumentError,
-           "Placeholder(s) #{non_existing.join(', ')} given, " <<
+           "Placeholder(s) #{non_existing.join(', ')} given, " \
            'but not defined for this custom content')
     end
   end

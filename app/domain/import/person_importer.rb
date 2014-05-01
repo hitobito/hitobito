@@ -83,7 +83,7 @@ module Import
       unified_import_person = doublettes[import_person.id]
       person = unified_import_person.person
 
-      blank_attrs = import_person.hash.select { |key, value| person.attributes[key].blank? }
+      blank_attrs = import_person.hash.select { |key, _value| person.attributes[key].blank? }
       person.attributes = blank_attrs
 
       person.phone_numbers << import_person.person.phone_numbers

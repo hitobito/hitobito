@@ -39,7 +39,7 @@ class ListController < ApplicationController
   # Helper method to access the entries to be displayed in the
   # current index page in an uniform way.
   def entries
-    get_model_ivar(true) || set_model_ivar(list_entries)
+    model_ivar_get(true) || model_ivar_set(list_entries)
   end
 
   # The base relation used to filter the entries.
@@ -63,7 +63,7 @@ class ListController < ApplicationController
 
   # Get the instance variable named after the model_class.
   # If the collection variable is required, pass true as the second argument.
-  def get_model_ivar(plural = false)
+  def model_ivar_get(plural = false)
     name = ivar_name(model_class)
     name = name.pluralize if plural
     instance_variable_get(:"@#{name}")
@@ -71,7 +71,7 @@ class ListController < ApplicationController
 
   # Sets an instance variable with the underscored class name if the given value.
   # If the value is a collection, sets the plural name.
-  def set_model_ivar(value)
+  def model_ivar_set(value)
     name = if value.is_a?(ActiveRecord::Relation)
              ivar_name(value.klass).pluralize
            elsif value.respond_to?(:each) # Array
@@ -180,7 +180,7 @@ class ListController < ApplicationController
           col = f.to_s.include?('.') ? f : "#{model_class.table_name}.#{f}"
           "#{col} LIKE ?"
         end.join(' OR ')
-        clause = terms.collect { |t| "(#{clause})" }.join(' AND ')
+        clause = terms.collect { |_| "(#{clause})" }.join(' AND ')
 
         ["(#{clause})"] + terms.collect { |t| [t] * columns.size }.flatten
       end
@@ -360,7 +360,7 @@ class ListController < ApplicationController
       if nesting_optional && id.blank?
         nil
       else
-        set_model_ivar(clazz.find(id))
+        model_ivar_set(clazz.find(id))
       end
     end
 

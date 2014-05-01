@@ -13,7 +13,7 @@ module ListHelper
   # Create a table of the entries with the default or
   # the passed attributes in its columns. An options hash may be given
   # as the last argument.
-  def list_table(*attrs, &block)
+  def list_table(*attrs)
     options = attrs.extract_options!
     add_css_class(options, 'table table-striped table-hover')
     # only use default attrs if no attrs and no block are given

@@ -209,6 +209,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # rubocop:disable PredicateName
 
   # Render a multi select element for a :has_many or :has_and_belongs_to_many
   # association defined by attr.
@@ -222,7 +223,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     belongs_to_field(attr, html_options)
   end
 
-  def person_field(attr, html_options = {})
+  # rubocop:enable PredicateName
+
+  def person_field(attr, _html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
     string_field(attr,
@@ -236,7 +239,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def labeled_inline_fields_for(assoc, partial_name = nil, &block)
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
-      nested_fields_for(assoc, partial_name, 'controls controls-row') do |fields|
+      nested_fields_for(assoc, partial_name) do |fields|
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
         content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
@@ -245,7 +248,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, control_class = nil, &block)
+  def nested_fields_for(assoc, partial_name = nil, &block)
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc) do |fields|
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
@@ -382,10 +385,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def errors_on?(attr)
     attr_plain, attr_id = assoc_and_id_attr(attr)
-    # rubocop:disable HashMethods
+    # rubocop:disable DeprecatedHashMethods
     @object.errors.has_key?(attr_plain.to_sym) ||
     @object.errors.has_key?(attr_id.to_sym)
-    # rubocop:enable HashMethods
+    # rubocop:enable DeprecatedHashMethods
   end
 
   # Returns true if the given attribute must be present.
@@ -425,7 +428,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def id_from_value(attr, value)
-    "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
+    "#{attr}_#{value.to_s.gsub(/\s/, '_').gsub(/[^-\w]/, '').downcase}"
   end
 
 end

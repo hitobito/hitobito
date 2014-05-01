@@ -29,11 +29,11 @@ module CsvImportHelper
   end
 
   def csv_import_contact_account_attrs(&block)
-    {
-      additional_emails: Import::ContactAccountFields.new(AdditionalEmail),
-      phone_numbers: Import::ContactAccountFields.new(PhoneNumber),
-      social_accounts: Import::ContactAccountFields.new(SocialAccount)
-    }.each do |assoc, caf|
+    [
+      Import::ContactAccountFields.new(AdditionalEmail),
+      Import::ContactAccountFields.new(PhoneNumber),
+      Import::ContactAccountFields.new(SocialAccount)
+    ].each do |caf|
       caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
                  each(&block)
     end

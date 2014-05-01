@@ -35,7 +35,7 @@ module DatetimeAttribute
     date = ActiveRecord::ConnectionAdapters::Column.date_string_to_long_year(date)
     date = date.to_date
     send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
-  rescue Exception
+  rescue
     errors.add(attr, :invalid)
   end
 

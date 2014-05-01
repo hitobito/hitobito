@@ -25,14 +25,14 @@ class Event::Date < ActiveRecord::Base
   belongs_to :event
 
   validates :start_at, presence: true
-  validate  :assert_meaningful
+  validate :assert_meaningful
 
 
   def duration
     @duration ||= Duration.new(start_at, finish_at)
   end
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     label? ? "#{label}: #{duration}" : duration
   end
 

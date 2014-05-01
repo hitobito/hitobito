@@ -24,7 +24,7 @@ module LayoutHelper
     end
   end
 
-  def in_button_group(&block)
+  def in_button_group
     @in_button_group = true
     yield
   ensure

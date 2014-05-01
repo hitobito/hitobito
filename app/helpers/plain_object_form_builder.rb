@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class PlainObjectFormBuilder < StandardFormBuilder
-  def required?(attr)
+  def required?(_attr)
     false
   end
 
-  def errors_on?(attr)
+  def errors_on?(_attr)
     false
   end
 end

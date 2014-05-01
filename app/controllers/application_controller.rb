@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :person_home_path
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
   end if Rails.env.production?
 

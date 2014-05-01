@@ -18,7 +18,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   delegate :qualified?, to: :qualifier
 
   # render a list of all participations
-  def roles_short(event)
+  def roles_short
     h.safe_join(roles) do |r|
       content_tag(:p, r)
     end

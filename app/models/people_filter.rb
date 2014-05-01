@@ -30,7 +30,7 @@ class PeopleFilter < ActiveRecord::Base
 
   default_scope { order(:name).includes(:related_role_types) }
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     name
   end
 

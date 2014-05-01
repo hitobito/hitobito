@@ -1,6 +1,7 @@
 AllCops:
   RunRailsCops: true
   Exclude:
+    - Rakefile
     - db/**/*
     - config/**/*
     - bin/**/*
@@ -9,6 +10,7 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
 
+# This cop is currently buggy (0.21.0)
 Delegate:
   Enabled: false
 

@@ -88,7 +88,7 @@ module ContactableDecorator
     html
   end
 
-  def prepend_complete_address(html)
+  def prepend_complete_address(_html)
   end
 
 end

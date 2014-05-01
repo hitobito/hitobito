@@ -215,7 +215,7 @@ class Event < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     name
   end
 

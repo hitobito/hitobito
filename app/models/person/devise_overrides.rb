@@ -50,7 +50,7 @@ module Person::DeviseOverrides
   # Checks whether a password is needed or not. For validations only.
   # Passwords are required if the password or confirmation are being set somewhere.
   def password_required?
-    !password.nil? || !password_confirmation.nil?
+    password || password_confirmation
   end
 
   def update_password_if_valid(params, current_password, *options)

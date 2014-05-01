@@ -62,6 +62,7 @@ describe Group::Mover do
       before { move.perform(target); }
 
       its(:parent) { should eq target }
+      its(:layer_group_id) { should eq target.id }
 
       it 'nested set should still be valid' do
         Group.should be_valid

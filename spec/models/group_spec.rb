@@ -41,6 +41,15 @@ describe Group do
     Group.should be_valid
   end
 
+  it 'inserts children alphabetically' do
+    parent = groups(:top_layer)
+    group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
+    group.save!
+    Group.find(parent.id).children.order(:lft).collect(&:name).should eq [
+      'AAA', 'TopGroup', 'Bottom One', 'Bottom Two', 'Toppers']
+  end
+
+
   context '#hierachy' do
     it 'is itself for root group' do
       groups(:top_layer).hierarchy.should == [groups(:top_layer)]

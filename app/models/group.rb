@@ -58,6 +58,7 @@ class Group < ActiveRecord::Base
 
   ### CALLBACKS
 
+  after_create :move_to_alphabetic_position
   after_create :set_layer_group_id
   after_create :create_default_children
   before_save :reset_contact_info
@@ -222,6 +223,16 @@ class Group < ActiveRecord::Base
   def assert_type_is_allowed_for_parent
     if type && parent && !parent.possible_children.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
+    end
+  end
+
+  def move_to_alphabetic_position
+    return if parent.nil? || parent.children.count < 2
+    left_neighbor = find_left_neighbor(parent, :name, true)
+    if left_neighbor
+      move_to_right_of(left_neighbor)
+    else # Self is the left most node.
+      move_to_left_of(parent.children[0])
     end
   end
 

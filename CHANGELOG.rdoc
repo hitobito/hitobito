@@ -3,8 +3,9 @@
 == Version 1.3
 
 * Mehrsprachigkeit
-* Rollenauswahl auf Formular, nicht mehr im Dropdown
-* Gruppenauswahl beim Erstellen von Rollen.
+* Rollenauswahl erfolgt nun auf dem Formular, nicht mehr im Dropdown.
+* Gruppenauswahl der jeweiligen Ebene beim Erstellen von Rollen.
+* Direktes Ändern von Rollen auf Personenlisten.
 * CSV Export aller Untergruppen einer Gruppe.
 * Logging aller Änderungen von Personenattributen.
 * Weitere E-Mail Adressen (analog Telefonnummern) bei Personen und Gruppen.

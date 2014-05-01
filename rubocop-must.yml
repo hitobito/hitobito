@@ -117,12 +117,6 @@ EndAlignment:
 EvenOdd:
   Enabled: false
 
-FavorUnlessOverNegatedIf:
-  Enabled: false
-
-FinalNewline:
-  Enabled: false
-
 FormatString:
   Enabled: false
 
@@ -135,7 +129,7 @@ HandleExceptions:
 HasAndBelongsToMany:
   Enabled: false
 
-HashMethods:
+DeprecatedHashMethods:
   Enabled: false
 
 HashSyntax:
@@ -214,6 +208,9 @@ ShadowingOuterLocalVariable:
   Enabled: false
 
 SignalException:
+  Enabled: false
+
+SingleSpaceBeforeFirstArg:
   Enabled: false
 
 SpaceAfterComma:

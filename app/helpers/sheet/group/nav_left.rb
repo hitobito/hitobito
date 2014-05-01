@@ -30,11 +30,11 @@ module Sheet
       private
 
       def groups
-        @groups ||= entry.groups_in_same_layer.without_deleted.to_a
+        @groups ||= entry.groups_in_same_layer.without_deleted.order(:lft).to_a
       end
 
       def layer
-        @layer ||= groups.first
+        @layer ||= entry.layer_group
       end
 
       def render_upwards

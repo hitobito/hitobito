@@ -31,6 +31,7 @@
 #  updater_id     :integer
 #  deleter_id     :integer
 #
+
 class Group < ActiveRecord::Base
 
   MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).
@@ -58,7 +59,6 @@ class Group < ActiveRecord::Base
 
   ### CALLBACKS
 
-  after_create :move_to_alphabetic_position
   after_create :set_layer_group_id
   after_create :create_default_children
   before_save :reset_contact_info
@@ -72,6 +72,8 @@ class Group < ActiveRecord::Base
   ### ASSOCIATIONS
 
   acts_as_nested_set dependent: :destroy
+  after_save :move_to_alphabetic_position
+
 
   belongs_to :contact, class_name: 'Person'
 
@@ -227,12 +229,14 @@ class Group < ActiveRecord::Base
   end
 
   def move_to_alphabetic_position
-    return if parent.nil? || parent.children.count < 2
+    return if parent_id.nil? || parent.children.count < 2
+
     left_neighbor = find_left_neighbor(parent, :name, true)
     if left_neighbor
       move_to_right_of(left_neighbor)
-    else # Self is the left most node.
-      move_to_left_of(parent.children[0])
+    else # Self is the new left most node.
+      first = parent.children[0]
+      move_to_left_of(first) unless first == self
     end
   end
 

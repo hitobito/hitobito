@@ -46,7 +46,7 @@ describe Group do
     group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
     group.save!
     Group.find(parent.id).children.order(:lft).collect(&:name).should eq [
-      'AAA', 'TopGroup', 'Bottom One', 'Bottom Two', 'Toppers']
+      'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
   end
 
 

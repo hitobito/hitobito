@@ -37,7 +37,10 @@ class GroupsController < CrudController
   end
 
   def export_subgroups
-    list = entry.self_and_descendants.without_deleted.includes(:contact)
+    list = entry.self_and_descendants.
+                 without_deleted.
+                 order(:lft).
+                 includes(:contact)
     csv = Export::Csv::Groups::List.export(list)
     send_data csv, type: :csv
   end
@@ -73,7 +76,7 @@ class GroupsController < CrudController
 
   def load_sub_groups(scope = entry.children.without_deleted)
     @sub_groups = Hash.new { |h, k| h[k] = [] }
-    scope.order_by_type(entry).each do |group|
+    scope.order(:lft).each do |group|
       label = group.layer ? group.class.label_plural : sub_groups_label
       @sub_groups[label] << group
     end

@@ -40,8 +40,8 @@ top_group:
   type: Group::TopGroup
   parent: top_layer
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:top_layer) %>
-  lft: 2
-  rgt: 3
+  lft: 14
+  rgt: 15
 
 toppers:
   name: Toppers
@@ -57,8 +57,8 @@ bottom_layer_one:
   type: Group::BottomLayer
   parent: top_layer
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
-  lft: 4
-  rgt: 11
+  lft: 2
+  rgt: 9
   email: bottom_layer@hitobito.example.ch
   zip_code: 3000
   town: Bern
@@ -70,8 +70,8 @@ bottom_group_one_one:
   parent: bottom_layer_one
   contact: bottom_member
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
-  lft: 5
-  rgt: 8
+  lft: 3
+  rgt: 6
   zip_code: 0020
   town: Churchfield
   email: bottom_one@hitobito.example.ch
@@ -81,30 +81,30 @@ bottom_group_one_one_one:
   type: Group::BottomGroup
   parent: bottom_group_one_one
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
-  lft: 6
-  rgt: 7
+  lft: 4
+  rgt: 5
 
 bottom_group_one_two:
   name: Group 12
   type: Group::BottomGroup
   parent: bottom_layer_one
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
-  lft: 9
-  rgt: 10
+  lft: 7
+  rgt: 8
 
 bottom_layer_two:
   name: Bottom Two
   type: Group::BottomLayer
   parent: top_layer
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_two) %>
-  lft: 12
-  rgt: 15
+  lft: 10
+  rgt: 13
 
 bottom_group_two_one:
   name: Group 21
   type: Group::BottomGroup
   parent: bottom_layer_two
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_two) %>
-  lft: 13
-  rgt: 14
+  lft: 11
+  rgt: 12
 

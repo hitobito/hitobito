@@ -122,7 +122,7 @@ describe GroupsController do
         lines.should have(10).items
         lines[0].should =~ /^Id;Elterngruppe;Name;.*/
         lines[1].should =~ /^#{group.id};;Top;.*/
-        lines[2].should =~ /^#{groups(:top_group).id};#{group.id};TopGroup;.*/
+        lines[2].should =~ /^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/
       end
     end
   end

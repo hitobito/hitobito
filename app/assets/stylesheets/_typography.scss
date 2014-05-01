@@ -101,6 +101,7 @@ div.table {
 
 .table, .table-basic {
   td, th {
+    padding: 4px;
     padding-left: 0;
     border-color: $borderColor; // new
     &:last-child { padding-right: 0; }

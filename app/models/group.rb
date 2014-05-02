@@ -228,18 +228,6 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def move_to_alphabetic_position
-    return if parent_id.nil? || parent.children.count < 2
-
-    left_neighbor = find_left_neighbor(parent, :name, true)
-    if left_neighbor
-      move_to_right_of(left_neighbor)
-    else # Self is the new left most node.
-      first = parent.children[0]
-      move_to_left_of(first) unless first == self
-    end
-  end
-
   def set_layer_group_id
     layer_group_id = self.class.layer ? id : parent.layer_group_id
     update_column(:layer_group_id, layer_group_id)
@@ -270,6 +258,28 @@ class Group < ActiveRecord::Base
       clear_contacts = { address: nil, town: nil, zip_code: nil, country: nil }
       assign_attributes(clear_contacts)
     end
+  end
+
+  def move_to_alphabetic_position
+    return if parent_id.nil? || parent.children.count < 2
+
+    left_neighbor = find_left_neighbor(parent, :name, true)
+    if left_neighbor
+      move_to_right_of_if_change(left_neighbor)
+    else
+      move_to_most_left_if_change
+    end
+  end
+
+  def move_to_right_of_if_change(node)
+    if node.name != name && node.rgt != lft - 1
+      move_to_right_of(node)
+    end
+  end
+
+  def move_to_most_left_if_change
+    first = parent.children[0]
+    move_to_left_of(first) unless first == self
   end
 
   def children_without_deleted

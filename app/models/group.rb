@@ -59,9 +59,10 @@ class Group < ActiveRecord::Base
 
   ### CALLBACKS
 
-  after_create :set_layer_group_id
-  after_create :create_default_children
   before_save :reset_contact_info
+  after_create :set_layer_group_id
+  after_update :set_layer_group_id
+  after_create :create_default_children
 
   # Root group may not be destroyed
   protect_if :root?
@@ -229,8 +230,10 @@ class Group < ActiveRecord::Base
   end
 
   def set_layer_group_id
-    layer_group_id = self.class.layer ? id : parent.layer_group_id
-    update_column(:layer_group_id, layer_group_id)
+    layer_id = self.class.layer ? id : parent.layer_group_id
+    unless layer_id == layer_group_id
+      update_column(:layer_group_id, layer_id)
+    end
   end
 
   def create_default_children

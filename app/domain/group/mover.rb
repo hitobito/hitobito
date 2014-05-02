@@ -13,7 +13,6 @@ class Group::Mover < Struct.new(:group)
 
   def perform(target)
     group.parent_id = target.id
-    group.layer_group_id = target.layer_group_id
     group.save
   end
 

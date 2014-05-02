@@ -178,14 +178,14 @@ RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails
 echo "[%{?RAILS_TRANSIFEX_HOST}]
 hostname = %{?RAILS_TRANSIFEX_HOST}
 password = %{?RAILS_TRANSIFEX_PASSWORD}
-token = 
+token =
 username = %{?RAILS_TRANSIFEX_USERNAME}
 " > ~/.transifexrc
 
-RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake tx:pull tx:wagon:pull
+RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake tx:pull tx:wagon:pull -t
 
 # cleanup log and tmp we don't want them in the rpm
-rm -rf log tmp 
+rm -rf log tmp
 rm -f ~/.transifexrc
 chmod -R o-rwx .
 

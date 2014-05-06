@@ -495,7 +495,7 @@ de:
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
       priorities:
-        alternative_course: '%{number} Ausweichkurs'
+        alternative_course: "%{number}. Ausweichkurs"
 
     register:
       register:

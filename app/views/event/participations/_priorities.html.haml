@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= section t('event.participations.form.alternative_dates') do
+= section t('event.alternative_dates') do
   %table.table
     - [@application.priority_2, @application.priority_3].each_with_index do |prio, i|
       %tr
-        %td= t('.alternative_course', number: i+1)
+        %td= t('event.participations.priorities.alternative_course', number: i+1)
         %td= prio.try :labeled_link
         %td= prio.try :dates_full

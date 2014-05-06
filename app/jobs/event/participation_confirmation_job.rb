@@ -14,9 +14,19 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def perform
+    return unless participation # may have been deleted again
+
+    send_confirmation
+    send_approval
+  end
+
+  def send_confirmation
     if participation.person.email.present?
       Event::ParticipationMailer.confirmation(participation).deliver
     end
+  end
+
+  def send_approval
     if participation.event.requires_approval?
       recipients = approvers
       if recipients.present?
@@ -39,7 +49,7 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def participation
-    @participation ||= Event::Participation.find(@participation_id)
+    @participation ||= Event::Participation.where(id: @participation_id).first
   end
 
 end

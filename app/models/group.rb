@@ -60,6 +60,7 @@ class Group < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :reset_contact_info
+  before_save :store_new_name
   after_create :set_layer_group_id
   after_update :set_layer_group_id
   after_create :create_default_children
@@ -263,8 +264,13 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def store_new_name
+    @move_to_new_name = name_changed? ? name : false
+    true # force callback to return true
+  end
+
   def move_to_alphabetic_position
-    return if parent_id.nil? || parent.children.count < 2
+    return unless move_required?
 
     left_neighbor = find_left_neighbor(parent, :name, true)
     if left_neighbor
@@ -272,6 +278,12 @@ class Group < ActiveRecord::Base
     else
       move_to_most_left_if_change
     end
+  end
+
+  def move_required?
+    (@move_to_new_parent_id != false || @move_to_new_name != false) &&
+    parent_id &&
+    parent.children.count > 1
   end
 
   def move_to_right_of_if_change(node)

@@ -59,7 +59,7 @@ class LabelFormat < ActiveRecord::Base
     end
 
     def list
-      with_translations.order('label_format_translations.name')
+      with_translations.order('label_format_translations.name').uniq
     end
   end
 

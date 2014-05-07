@@ -22,7 +22,6 @@ class CustomContent < ActiveRecord::Base
   # specify validations for translated attributes explicitly
   validates :label, presence: true
   validates :label, :subject, length: { maximum: 255, allow_nil: true }
-  validates :key, uniqueness: true
   validates :body, length: { allow_nil: true, maximum: 2**16 - 1 }
 
   validate :assert_required_placeholders_are_used
@@ -34,7 +33,7 @@ class CustomContent < ActiveRecord::Base
     end
 
     def list
-      with_translations.order('custom_content_translations.label')
+      with_translations.order('custom_content_translations.label').uniq
     end
   end
 

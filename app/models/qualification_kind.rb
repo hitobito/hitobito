@@ -57,7 +57,7 @@ class QualificationKind < ActiveRecord::Base
 
   class << self
     def list
-      with_translations.order(:deleted_at, 'qualification_kind_translations.label')
+      with_translations.order(:deleted_at, 'qualification_kind_translations.label').uniq
     end
   end
 

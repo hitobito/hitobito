@@ -38,6 +38,7 @@ class Group < ActiveRecord::Base
                    collect { |a| "groups.#{a}" }
 
   include Group::Types
+  include Group::NestedSet
   include Contactable
 
   acts_as_paranoid
@@ -60,10 +61,6 @@ class Group < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :reset_contact_info
-  before_save :store_new_name
-  after_create :set_layer_group_id
-  after_update :set_layer_group_id
-  after_create :create_default_children
 
   # Root group may not be destroyed
   protect_if :root?
@@ -72,10 +69,6 @@ class Group < ActiveRecord::Base
   stampable stamper_class_name: :person, deleter: true
 
   ### ASSOCIATIONS
-
-  acts_as_nested_set dependent: :destroy
-  after_save :move_to_alphabetic_position
-
 
   belongs_to :contact, class_name: 'Person'
 
@@ -93,7 +86,6 @@ class Group < ActiveRecord::Base
   ### VALIDATIONS
 
   validates :email, format: Devise.email_regexp, allow_blank: true
-  validate :assert_type_is_allowed_for_parent, on: :create
 
 
   ### CLASS METHODS
@@ -136,64 +128,6 @@ class Group < ActiveRecord::Base
   ### INSTANCE METHODS
 
 
-  # The hierarchy from top to bottom of and including this group.
-  def hierarchy
-    @hierarchy ||= self_and_ancestors
-  end
-
-  # The layer of this group.
-  def layer_group
-    layer ? self : layer_hierarchy.last
-  end
-
-  # The layer hierarchy from top to bottom of this group.
-  def layer_hierarchy
-    hierarchy.select { |g| g.class.layer }
-  end
-
-  # siblings with the same type
-  def sister_groups
-    self_and_sister_groups.where('id <> ?', id)
-  end
-
-  def self_and_sister_groups
-    Group.without_deleted.
-          where(parent_id: parent_id, type: type)
-  end
-
-  # siblings with the same type and all their descendant groups, including self
-  def sister_groups_with_descendants
-    Group.without_deleted.
-          joins('LEFT JOIN groups AS sister_groups ' \
-                'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt').
-          where(sister_groups: { type: type, parent_id: parent_id })
-  end
-
-  # The layer hierarchy without the layer of this group.
-  def upper_layer_hierarchy
-    return [] unless parent
-    if new_record?
-      if layer?
-        parent.layer_hierarchy
-      else
-        parent.layer_hierarchy - [parent.layer_group]
-      end
-    else
-      layer_hierarchy - [layer_group]
-    end
-  end
-
-  def use_hierarchy_from_parent(parent)
-    parent_hierarchy = parent.kind_of?(Group) ? parent.hierarchy : parent
-    @hierarchy = parent_hierarchy + [self]
-  end
-
-  def groups_in_same_layer
-    Group.where(layer_group_id: layer_group_id).
-          without_deleted.
-          order(:lft)
-  end
-
   def to_s(_format = :default)
     name
   end
@@ -224,27 +158,6 @@ class Group < ActiveRecord::Base
 
   private
 
-  def assert_type_is_allowed_for_parent
-    if type && parent && !parent.possible_children.collect(&:sti_name).include?(type)
-      errors.add(:type, :type_not_allowed)
-    end
-  end
-
-  def set_layer_group_id
-    layer_id = self.class.layer ? id : parent.layer_group_id
-    unless layer_id == layer_group_id
-      update_column(:layer_group_id, layer_id)
-    end
-  end
-
-  def create_default_children
-    default_children.each do |group_type|
-      child = group_type.new(name: group_type.label)
-      child.parent = self
-      child.save!
-    end
-  end
-
   def destroy_orphaned_events
     events.includes(:groups).each do |e|
       destroy_orphaned_event(e)
@@ -262,39 +175,6 @@ class Group < ActiveRecord::Base
       clear_contacts = { address: nil, town: nil, zip_code: nil, country: nil }
       assign_attributes(clear_contacts)
     end
-  end
-
-  def store_new_name
-    @move_to_new_name = name_changed? ? name : false
-    true # force callback to return true
-  end
-
-  def move_to_alphabetic_position
-    return unless move_required?
-
-    left_neighbor = find_left_neighbor(parent, :name, true)
-    if left_neighbor
-      move_to_right_of_if_change(left_neighbor)
-    else
-      move_to_most_left_if_change
-    end
-  end
-
-  def move_required?
-    (@move_to_new_parent_id != false || @move_to_new_name != false) &&
-    parent_id &&
-    parent.children.count > 1
-  end
-
-  def move_to_right_of_if_change(node)
-    if node.name != name && node.rgt != lft - 1
-      move_to_right_of(node)
-    end
-  end
-
-  def move_to_most_left_if_change
-    first = parent.children[0]
-    move_to_left_of(first) unless first == self
   end
 
   def children_without_deleted

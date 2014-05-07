@@ -22,6 +22,36 @@ module Group::Types
     self.default_children = []
     # All possible Event types that may be created for this group
     self.event_types = [Event]
+
+
+    after_create :set_layer_group_id
+    after_update :set_layer_group_id
+    after_create :create_default_children
+
+    validate :assert_type_is_allowed_for_parent, on: :create
+  end
+
+  private
+
+  def create_default_children
+    default_children.each do |group_type|
+      child = group_type.new(name: group_type.label)
+      child.parent = self
+      child.save!
+    end
+  end
+
+  def assert_type_is_allowed_for_parent
+    if type && parent && !parent.possible_children.collect(&:sti_name).include?(type)
+      errors.add(:type, :type_not_allowed)
+    end
+  end
+
+  def set_layer_group_id
+    layer_id = self.class.layer ? id : parent.layer_group_id
+    unless layer_id == layer_group_id
+      update_column(:layer_group_id, layer_id)
+    end
   end
 
   module ClassMethods

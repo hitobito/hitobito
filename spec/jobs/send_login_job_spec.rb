@@ -19,6 +19,12 @@ describe Event::ParticipationConfirmationJob do
 
   subject { SendLoginJob.new(recipient, sender) }
 
+  its(:parameters) do
+    should == { recipient_id: recipient.id,
+                sender_id: sender.id,
+                locale: I18n.locale.to_s }
+  end
+
   it 'generates reset token' do
     recipient.reset_password_token.should be_nil
     subject.perform
@@ -28,8 +34,24 @@ describe Event::ParticipationConfirmationJob do
   it 'sends email' do
     subject.perform
     last_email.should be_present
+    last_email.body.should =~ /Hallo #{recipient.greeting_name}/
     last_email.body.should_not =~ /#{recipient.reload.reset_password_token}/
   end
 
-  its(:parameters) { should == { recipient_id: recipient.id, sender_id: sender.id } }
+  context 'with locale' do
+    after { I18n.locale = I18n.default_locale }
+
+    subject do
+      I18n.locale = :fr
+      SendLoginJob.new(recipient, sender)
+    end
+
+    it 'sends localized email' do
+      I18n.locale = :de
+      subject.perform
+      last_email.should be_present
+      last_email.body.should =~ /Salut #{recipient.greeting_name}/
+    end
+  end
+
 end

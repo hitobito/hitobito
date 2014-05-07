@@ -7,14 +7,16 @@
 
 class SendLoginJob < BaseJob
 
-  self.parameters = [:recipient_id, :sender_id]
+  self.parameters = [:recipient_id, :sender_id, :locale]
 
   def initialize(recipient, sender)
+    super()
     @recipient_id = recipient.id
     @sender_id = sender.id
   end
 
   def perform
+    set_locale
     token = recipient.generate_reset_password_token!
     PersonMailer.login(recipient, sender, token).deliver
   end

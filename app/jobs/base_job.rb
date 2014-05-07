@@ -12,6 +12,10 @@ class BaseJob
   # Used as airbrake information when the job fails.
   class_attribute :parameters
 
+  def initialize
+    store_locale
+  end
+
   def perform
     # override in subclass
   end
@@ -32,6 +36,14 @@ class BaseJob
 
   def logger
     Delayed::Worker.logger || Rails.logger
+  end
+
+  def store_locale
+    @locale = I18n.locale.to_s
+  end
+
+  def set_locale
+    I18n.locale = @locale || I18n.default_locale
   end
 
   def parameters

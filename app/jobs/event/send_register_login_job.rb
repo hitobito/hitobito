@@ -7,15 +7,17 @@
 
 class Event::SendRegisterLoginJob < BaseJob
 
-  self.parameters = [:recipient_id, :group_id, :event_id]
+  self.parameters = [:recipient_id, :group_id, :event_id, :locale]
 
   def initialize(recipient, group, event)
+    super()
     @recipient_id = recipient.id
     @group_id = group.id
     @event_id = event.id
   end
 
   def perform
+    set_locale
     token = recipient.generate_reset_password_token!
     Event::RegisterMailer.register_login(recipient, group, event, token).deliver
   end

@@ -7,15 +7,17 @@
 
 class Event::ParticipationConfirmationJob < BaseJob
 
-  self.parameters = [:participation_id]
+  self.parameters = [:participation_id, :locale]
 
   def initialize(participation)
+    super()
     @participation_id = participation.id
   end
 
   def perform
     return unless participation # may have been deleted again
 
+    set_locale
     send_confirmation
     send_approval
   end

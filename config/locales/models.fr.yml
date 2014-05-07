@@ -1,14 +1,14 @@
 fr:
-  date:
-    formats:
-      default: ! '%d.%m.%Y'
-      long: ! '%e %B %Y'
-      short: ! '%e %b'
   time:
     formats:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+  date:
+    formats:
+      default: '%d.%m.%Y'
+      long: '%e %B %Y'
+      short: '%e %b'
   number:
     currency:
       format:
@@ -50,6 +50,14 @@ fr:
               not_allowed: "'%{mail_name}' ne peut pas être utilisé"
         person:
           name_missing: 'Prière de saisir un nom.'
+          attributes:
+            email:
+              taken: >
+                a déjà été attribué. Cette adresse doit être unique pour chaque personne,
+                car elle est utilisée pour l'authentification. Néanmoins, sous "adresses
+                e-mail supplémentaires", tu peux fournir des adresses mêmes si elles
+                sont déjà attribuées en tant qu'adresse principale d'un autre utilisateur.
+                (Dans ce cas, tu peux laisser "adresse e-mail principale" vide.)
         qualification:
           attributes:
             qualification_kind_id:
@@ -59,6 +67,9 @@ fr:
             validity:
               not_a_positive_number: 'doit être un nombre positif pour rendre les %{model} réactivables.'
     models:
+      additional_email:
+        one: adresse e-mail supplémentaire
+        other: adresses e-mail supplémentaires
       custom_content:
         one: texte
         other: textes
@@ -130,6 +141,8 @@ fr:
         company_name: nom de l'entreprise
         company: entreprise
         nickname: surnom
+        email: adresse e-mail principale
+        emails: e-mails
         password: mot de passe
         password_confirmation: mot de passe
         current_password: ancien mot de passe
@@ -147,6 +160,7 @@ fr:
         remember_me: rester inscrit
         phone_numbers: numéros de téléphone
         social_accounts: médias sociaux
+        additional_emails: adresses e-mail supplémentaires
         picture: télécharger nouvelle photo
         remove_picture: supprimer la photo actuelle
         roles: ' rôles '
@@ -155,7 +169,7 @@ fr:
       group:
         name: Nom
         short_name: Abbréviation
-        password: mot de passe
+        email: adresse e-mail principale
         address: adresse
         zip_code: code postal
         town: Lieu
@@ -164,6 +178,7 @@ fr:
         contact: ' personne de contact'
         phone_numbers: numéros de téléphone
         social_accounts: médias sociaux
+        additional_emails: adresses e-mail supplémentaires
         parent_id: groupe de parents
         layer_group_id: niveau
         type: type de groupe
@@ -197,6 +212,7 @@ fr:
         requires_approval: validation
       event/role:
         label: désignation
+        person: personne
         participation: personne
       event/participation:
         event_id: événement
@@ -291,7 +307,14 @@ fr:
               other: contacts externes
       contact_account:
         predefined_labels:
-          privat: Privé
+          privat: privé
+          mobil: mobile
+          arbeit: professionnel
+          vater: père
+          mutter: mère
+          fax: fax
+          andere: autre
+          webseite: site web
       social_account:
         name: nom
         label: type
@@ -300,6 +323,18 @@ fr:
         name: nom du média social
         label: type de média social
         public: public
+      additional_email:
+        email: adresse e-mail
+        name: adresse e-mail supplémentaire
+        label: type
+        public: public
+        mailings: envoi
+      additional_emails:
+        email: adresse e-mail
+        name: adresse e-mail supplémentaire
+        label: type d'adresse e-mail supplémentaire
+        public: public
+        mailings: envoi
       mailing_list:
         name: Nom
         description: description
@@ -311,6 +346,8 @@ fr:
         additional_sender: expéditeur supplémentaire
       subscription:
         related_role_types: ' rôles '
+      people_filter:
+        name: nom
       custom_content:
         label: texte
         subject: objet

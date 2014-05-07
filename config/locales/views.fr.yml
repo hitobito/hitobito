@@ -69,6 +69,10 @@ fr:
     social_account_fields:
       placeholder_value: site internet, identifiant Skype, lien vers un profil...
       placeholder_type: type (Skype, Facebook...)
+    additional_email_fields:
+      placeholder_value: courriel
+      placeholder_type: type (privé, professionnel, …)
+      tooltip_mailings: Les distributions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
   participations:
     destroy:
       flash:
@@ -78,9 +82,9 @@ fr:
       header: fichiers CSV
       explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
       example: |
-        Vorname,Nachname,Email,Ort,Geschlecht
-        Hans,Muster,hans@beispiel.ch,Bern,m
-        Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+        prénom,nom,e-mail,lieu,sexe
+        Jean,Dupont,jean@exemple.ch,Fribourg,m
+        Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
       explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
       explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux choisir ce rôle lors de la prochaine étappe également.
       special_fields: valeurs de champs spéciales
@@ -137,6 +141,12 @@ fr:
     person_fields:
       create_new_person: saisir une nouvelle personne
       search_existing_person: rechercher une personne existante
+    info:
+      role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
+      role_only_public: >
+        Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
+        (groupes, événements et abonnements; pas d'autres personnes).
+      only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
     tabs:
@@ -146,12 +156,22 @@ fr:
       send_login: envoyer données d'identification
     actions_index:
       import_list: importer une liste
+    attrs:
+      additional_data: Indications supplémentaires
     fields:
       format_birthday: (dd.mm.yy)
+    log:
+      no_changes: Aucun changement enregistré jusqu'à présent.
     roles:
       title: rôles actifs
     roles_aside:
       set_main_group: Déterminer le groupe principal
+    email_field:
+      used_as_login: Utilisé en tant qu'authentifiant.
+      only_changeable_by_superior: >
+        L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
+        modifiée que par une personne hiérarchiquement supérieure à chacun de ces
+        rôles.
   people_filters:
     form:
       save_search: Sauvegarder cette recherche
@@ -201,7 +221,7 @@ fr:
     nav:
       sign_out: 'Déconnexion'
     unauthorized:
-      forgot_password: 'Mot de passe oublié ?'
+      forgot_password: 'mot de passe oublié?'
     application:
       available_under_license: 'disponible au numéro '
       developed_by: 'développé par'
@@ -211,6 +231,8 @@ fr:
       form:
         subgroups_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement peuvent être sélectionnés.'
         subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
+      roles:
+        please_choose_group: S'il te plaît, choisis un groupe.
     exclude_person:
       form:
         exclude_subscriber: 'exclure un abonnement'
@@ -242,7 +264,7 @@ fr:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
     person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
     email_sent: 'Nous t''avons envoyer un courriel avec un lien avec lequel tu pourras t''inscrire directement à cet événement.'
-    email_missing: 'Prière d''adresse une adresse électronique.'
+    email_missing: 'Indique une adresse e-mail, s''il te plaît.'
     form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
     registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
     application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
@@ -370,15 +392,16 @@ fr:
         alternative_dates_info: 'S''il-te-plaît, indique d''autres cours qui pourraient te convenir.'
         course_information: 'Informations au sujet des cours'
       priorities:
-        alternative_course: '%{number} cours alternatif'
+        alternative_course: "cours alternatif (%{number})"
     register:
       register:
-        title: 'Saisir les données de contact'
+        title: Saisir les données de contact
       index:
-        login: 'Login'
-        no_login: 'Tu n''as pas encore d''identifiant?'
+        login: Login
+        no_login: Tu n'as pas encore d'identifiant?
       email_check:
-        next: 'continuer'
+        next: continuer
+        enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
   events:
     preconditions: 'qualifications requises'
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
@@ -389,6 +412,7 @@ fr:
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
       caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
       additional_information: 'Données pour l''inscription'
+      times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
   custom_content_decorator:
     available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
@@ -452,11 +476,17 @@ fr:
     entire_layer: 'tout le niveau'
     entire_group: 'tout le groupe'
     new_filter: 'nouveau filtre…'
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: Toutes les personnes
+      teamers: Maîtrise
+      participants: Participants
   sheet/csv_import:
     title: 'importer les personnes par CSV'
   sheet/group:
     belongs_to: 'appartient à'
     deleted: '(effacé)'
+    layer_upwards: '< vers le niveau supérieur'
   label_formats:
     form:
       portrait: 'format portrait'

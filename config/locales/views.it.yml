@@ -73,6 +73,10 @@ it:
     social_account_fields:
       placeholder_value: sito internet, nome Skype, profilo...
       placeholder_type: tipo (Skype, Facebook...)
+    additional_email_fields:
+      placeholder_value: e-mail
+      placeholder_type: Denominazione (privato, lavoro, ...)
+      tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
   participations:
     destroy:
       flash:
@@ -83,8 +87,8 @@ it:
       explain_csv_format: 'un file CSV contiene in ogni sua riga i dati di una persona. La prima riga contiene i campi per i nomi. I singoli campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere completato con le virgolette ("). Esempio:'
       example: |
         nome, cognome, email, luogo, genere
-        Hans, Muster, hans@beispiel.ch, Berna, m
-        Vreni,Bischofsberger,vreni@beispiel.net, "Zurigo, New York", f
+        Gianni, Modello, gianni@modello.ch, Berna, m
+        Maria, Bernasconi, maria@esempio.net, "Zurigo, New York", f
       explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
       explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo
       special_fields: Valori speciali per i campi
@@ -141,6 +145,12 @@ it:
     person_fields:
       create_new_person: registrare una nuova persona
       search_existing_person: cercare persona esistente
+    info:
+      role_has_permissions: "Il ruolo %{role} nel gruppo %{group} prevede le seguenti autorizzazioni:"
+      role_only_public: >
+        l ruolo %{role} nel gruppo %{group} può vedere solo i dati pubblici (gruppi,
+        eventi e abbonamenti; nessuna altra persona ).
+      only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   people:
     send_password_instructions: le informazioni per il login sono state spedite.
     tabs:
@@ -150,12 +160,21 @@ it:
       send_login: inviare login
     actions_index:
       import_list: importare lista
+    attrs:
+      additional_data: Ulteriori informazioni
     fields:
       format_birthday: (dd.mm.yy)
+    log:
+      no_changes: Fino ad ora non è stata registrata nessuna modifica.
     roles:
       title: ruoli attivi
     roles_aside:
       set_main_group: collocare il gruppo principale
+    email_field:
+      used_as_login: Verrà utilizzato come login
+      only_changeable_by_superior: >
+        L'indirizzo email principale di una persona con più ruoli può essere cambiato
+        unicamente da un utente che è superiore a tutti questi ruoli.
   people_filters:
     form:
       save_search: salvare la ricerca
@@ -215,6 +234,8 @@ it:
       form:
         subgroups_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato'
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
+      roles:
+        please_choose_group: prego selezionare un gruppo
     exclude_person:
       form:
         exclude_subscriber: 'escludere abbonato'
@@ -374,15 +395,16 @@ it:
         alternative_dates_info: 'per favore indica altri corsi che potrebbero andarti bene.'
         course_information: 'informazioni sui corsi'
       priorities:
-        alternative_course: '%{number} corsi alternativi'
+        alternative_course: "%{number}° corso alternativo"
     register:
       register:
-        title: 'registrare i dati di contatto'
+        title: registrare i dati di contatto
       index:
-        login: 'login'
-        no_login: 'non hai ancora nessun login?'
+        login: login
+        no_login: non hai ancora nessun login?
       email_check:
-        next: 'avanti'
+        next: avanti
+        enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
   events:
     preconditions: 'qualifiche necessarie'
     minimum_age_with_years: '%{minimum_age} anni (anno di nascita)'
@@ -393,6 +415,7 @@ it:
       caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
       caption_requires_approval: 'il responsabile verrà informato e dovrà confermare l''iscrizione'
       additional_information: 'dati per l''iscrizione'
+      times_are_optional: Gli orari sono opzionali
       explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
   custom_content_decorator:
     available_placeholders: "caratteri a disposizione: %{placeholders}"
@@ -458,11 +481,17 @@ it:
     entire_layer: 'livello intero'
     entire_group: 'tutto il gruppo'
     new_filter: 'nuovo filtro...'
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: tutte le persone
+      teamers: direzione
+      participants: partecipanti
   sheet/csv_import:
     title: 'importare persone tramite CSV'
   sheet/group:
     belongs_to: 'appartiene a'
     deleted: '(eliminato)'
+    layer_upwards: '< rispetto al livello superiore'
   label_formats:
     form:
       portrait: 'formato verticale'

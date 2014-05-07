@@ -10,7 +10,6 @@ class MailRelayJob < RecurringJob
   run_every Settings.email.retriever.interval.minutes
 
   def perform_internal
-    I18n.locale = I18n.default_locale
     # only run if a retriever address is defined
     if Settings.email.retriever.config.address
       MailRelay::Lists.relay_current

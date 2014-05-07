@@ -22,7 +22,7 @@ describe CustomContent do
 
   context '.list' do
     it 'contains one entry per main item' do
-    CustomContent.list.should have(2).items
+      CustomContent.list.should have(2).items
     end
   end
 

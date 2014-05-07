@@ -22,6 +22,7 @@ class RecurringJob < BaseJob
 
 
   def perform
+    I18n.locale = I18n.default_locale
     perform_internal
   ensure
     reschedule

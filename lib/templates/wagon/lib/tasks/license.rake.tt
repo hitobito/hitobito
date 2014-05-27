@@ -1,0 +1,11 @@
+# encoding: utf-8
+
+namespace :app do
+  namespace :license do
+    task :config do
+      @licenser = Licenser.new('<%= singular_name %>',
+                               'TODO: Customer Name',
+                               'https://github.com/hitobito/<%= singular_name %>')
+    end
+  end
+end

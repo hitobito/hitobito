@@ -1,0 +1,13 @@
+root:
+  parent:
+  lft: 1
+  rgt: 2
+  name: Hauptgruppe
+  type: Group::Root
+  email: root@example.net
+  address: Ophovener Str. 79a
+  zip_code: 2843
+  town: Neu Carlscheid
+  layer_group_id: <%%= ActiveRecord::FixtureSet.identify(:root) %>
+
+# TODO add more groups

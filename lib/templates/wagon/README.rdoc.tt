@@ -1,0 +1,10 @@
+=== Hitobito <%= wagon_name.titleize %>
+
+This hitobito wagon defines the organization hierarchy with groups and roles
+of <%= wagon_name.humanize %>.
+
+
+=== Organization Hierarchy
+
+
+(Output of rake app:hitobito:roles)

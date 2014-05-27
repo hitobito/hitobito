@@ -1,0 +1,18 @@
+.bundle/
+log/*.log
+tmp/
+pkg/
+doc/rdoc
+db/*.sqlite3
+zeus.json
+.sass-cache
+.project
+
+# ignore Gemfile.lock for wagons
+Gemfile.lock
+
+# reports
+spec/coverage
+spec/reports
+brakeman-output.tabs
+rubocop-results.xml

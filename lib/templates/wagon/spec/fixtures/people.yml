@@ -1,0 +1,17 @@
+admin:
+  first_name: Chief
+  last_name: Admin
+  email: admin@hitobito.example.com
+  contact_data_visible: true
+  gender: m
+
+leader:
+  first_name: A
+  last_name: Leader
+  email: a.leader@hitobito.example.com
+  contact_data_visible: true
+
+member:
+  first_name: My
+  last_name: Member
+  email: member0@hitobito.example.com

@@ -1,0 +1,12 @@
+
+# Rubocop configuration that MUST hold for every build.
+
+inherit_from: ../hitobito/rubocop-must.yml
+
+AllCops:
+  Exclude:
+    - db/**/*
+    - config/**/*
+    - bin/**/*
+    - spec/**/*
+    - test/**/*

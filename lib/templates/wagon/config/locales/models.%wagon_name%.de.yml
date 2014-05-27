@@ -1,0 +1,19 @@
+de:
+  activerecord:
+    models:
+
+      ### GROUPS
+
+      group/root:
+        one: Hauptgruppe
+        other: Hauptgruppen
+
+
+      ### ROLES
+
+      group/root/leader:
+        one: Leitung
+        description: Leitungspersonen verwalten die Applikation
+      group/root/member:
+        one: Mitglied
+        description: Mitglieder sind alle anderen

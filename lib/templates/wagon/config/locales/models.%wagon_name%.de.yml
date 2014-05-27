@@ -13,7 +13,7 @@ de:
 
       group/root/leader:
         one: Leitung
-        description: Leitungspersonen verwalten die Applikation
+        description: Leitungspersonen verwalten die Applikation.
       group/root/member:
         one: Mitglied
-        description: Mitglieder sind alle anderen
+        description: Mitglieder sind alle anderen.

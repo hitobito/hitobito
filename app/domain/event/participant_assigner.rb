@@ -26,14 +26,15 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
 
   def remove_role
     participation.roles.where(type: event.participant_type.sti_name).destroy_all
+    update_participation_event(participation.application.priority_1)
     event.reload
   end
 
   private
 
-  def update_participation_event
-    participation.event = event
-    participation.update_column(:event_id, event.id)
+  def update_participation_event(e = event)
+    participation.event = e
+    participation.update_column(:event_id, e.id)
   end
 
   def create_participant_role

@@ -3,7 +3,7 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-@import "variables";
+@import "hitobito/variables";
 
 /* Imports Compass */
 @import "compass/support";
@@ -20,6 +20,6 @@ body header {
   padding-right:0;
 }
 
-#page .sheet.parent, #page #content { 
+#page .sheet.parent, #page #content {
   border: 1px solid $grayLight;
 }

@@ -7,16 +7,28 @@
 
 class Event::ParticipationConfirmationJob < BaseJob
 
-  self.parameters = [:participation_id]
+  self.parameters = [:participation_id, :locale]
 
   def initialize(participation)
+    super()
     @participation_id = participation.id
   end
 
   def perform
+    return unless participation # may have been deleted again
+
+    set_locale
+    send_confirmation
+    send_approval
+  end
+
+  def send_confirmation
     if participation.person.email.present?
       Event::ParticipationMailer.confirmation(participation).deliver
     end
+  end
+
+  def send_approval
     if participation.event.requires_approval?
       recipients = approvers
       if recipients.present?
@@ -39,7 +51,7 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def participation
-    @participation ||= Event::Participation.find(@participation_id)
+    @participation ||= Event::Participation.where(id: @participation_id).first
   end
 
 end

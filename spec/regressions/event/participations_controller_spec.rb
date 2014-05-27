@@ -43,6 +43,25 @@ describe Event::ParticipationsController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(destroy)]
 
+  describe_action :get, :show, id: true, perform_request: false do
+    let(:user) { test_entry.person }
+    let(:contact) { Fabricate(:person_with_address) }
+    let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) }
+
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before do
+      test_entry.event.update_attribute(:contact, contact)
+      test_entry.update_attribute(:application, application)
+    end
+
+    it 'contains application contact' do
+      perform_request
+      dom.should have_content(contact.to_s)
+    end
+
+  end
+
   describe_action :put, :update, id: true do
     let(:params) { { model_identifier => test_attrs } }
 

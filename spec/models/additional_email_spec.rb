@@ -50,7 +50,7 @@ describe AdditionalEmail do
 
       a2 = Fabricate(:additional_email, label: 'Privat')
       a2.label.should eq 'Privat'
-      a2.translated_label.should eq 'Privé'
+      a2.translated_label.should eq 'privé'
     end
   end
 
@@ -71,7 +71,7 @@ describe AdditionalEmail do
     it 'should map label back to default language' do
       I18n.locale = :fr
 
-      a2 = Fabricate(:additional_email, label: 'Privé')
+      a2 = Fabricate(:additional_email, label: 'privé')
       a2.label.should eq 'Privat'
     end
   end
@@ -104,7 +104,7 @@ describe AdditionalEmail do
       a1 = Fabricate(:additional_email, label: 'Foo')
       a2 = Fabricate(:additional_email, label: 'Privat')
 
-      should include('Foo', 'Privé')
+      should include('Foo', 'privé')
     end
 
     it 'is sweeped for all languages if new label is added' do

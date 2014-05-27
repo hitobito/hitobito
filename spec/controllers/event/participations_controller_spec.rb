@@ -47,15 +47,26 @@ describe Event::ParticipationsController do
 
   context 'GET show' do
 
-    before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+    context 'for same event' do
+      before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
 
-    it 'has two answers' do
-      assigns(:answers).should have(2).items
+      it 'has two answers' do
+        assigns(:answers).should have(2).items
+      end
+
+      it 'has application' do
+        assigns(:application).should be_present
+      end
     end
 
-    it 'has application' do
-      assigns(:application).should be_present
+    context 'for other event' do
+      before { get :show, group_id: group.id, event_id: other_course.id, id: participation.id }
+
+      it 'has participation' do
+        assigns(:participation).should eq(participation)
+      end
     end
+
   end
 
 

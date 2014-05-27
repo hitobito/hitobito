@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.4'
+gem 'rails', '4.0.5'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -24,7 +24,7 @@ gem 'mysql2'
 gem 'nested_form'
 gem 'paper_trail'
 gem 'paranoia'
-gem 'prawn', '~> 0.12.0'
+gem 'prawn'
 gem 'protective'
 gem 'rack'
 gem 'rails_config'

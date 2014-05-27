@@ -41,7 +41,11 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: send_login_id,
    locale: 'fr',
-   label: 'Envoyer le login'},
+   label: 'Envoyer le login',
+   body: "Salut {recipient-name}<br/><br/>" \
+         "Bonjour chez #{Settings.application.name}! Voici le link pour mettre ton mot de passe:" \
+         "<br/><br/>{login-url}<br/><br/>" \
+         "A bientôt!<br/><br/>{sender-name}"},
 
   {custom_content_id: send_login_id,
    locale: 'en',

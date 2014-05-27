@@ -25,7 +25,7 @@ class LabelFormat < ActiveRecord::Base
 
   class << self
     def available_page_sizes
-      Prawn::Document::PageGeometry::SIZES.keys
+      PDF::Core::PageGeometry::SIZES.keys
     end
   end
 
@@ -59,7 +59,7 @@ class LabelFormat < ActiveRecord::Base
     end
 
     def list
-      with_translations.order('label_format_translations.name')
+      with_translations.order('label_format_translations.name').uniq
     end
   end
 

@@ -6,9 +6,9 @@ it:
       month_year: '%B %Y'
   date:
     formats:
-      default: ! '%d.%m.%Y'
-      long: ! '%e %B %Y'
-      short: ! '%e %b'
+      default: '%d.%m.%Y'
+      long: '%e %B %Y'
+      short: '%e %b'
   number:
     currency:
       format:
@@ -54,6 +54,13 @@ it:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'per favore digitare un nome'
+          attributes:
+            email:
+              taken: >
+                è già stato assegnato. Questo indirizzo deve essere univoco, visto
+                che è utilizzato per il login. Puoi però registrare sotto "altri email"
+                tutti gli indirizzi che sono assegnati come email principale ad altre
+                persone (il campo per l'email principale può essere lasciato vuoto).
         qualification:
           attributes:
             qualification_kind_id:
@@ -63,6 +70,9 @@ it:
             validity:
               not_a_positive_number: 'deve essere un numero positivo affinché %{model} sia reso riattivabile.'
     models:
+      additional_email:
+        one: altro email
+        other: altri email
       custom_content:
         one: testo
         other: testi
@@ -132,6 +142,7 @@ it:
       person:
         first_name: nome
         last_name: cognome
+        name: cognome
         company_name: 'nome della ditta
 
           nome dell''ufficio'
@@ -139,6 +150,8 @@ it:
 
           ufficio'
         nickname: soprannome
+        email: email principale
+        emails: email
         password: password
         password_confirmation: password
         current_password: vecchia password
@@ -158,6 +171,7 @@ it:
         remember_me: rimanere connessi
         phone_numbers: numeri di telefono
         social_accounts: social media
+        additional_emails: altri email
         picture: caricare una nuova foto
         remove_picture: eliminare la foto attuale
         roles: ruoli
@@ -170,7 +184,7 @@ it:
       group:
         name: cognome
         short_name: soprannome
-        password: password
+        email: email principale
         address: indirizzo
         zip_code: CAP
         town: luogo
@@ -185,6 +199,7 @@ it:
           persona di contatto'
         phone_numbers: numeri di telefono
         social_accounts: social media
+        additional_emails: altri email
         parent_id: gruppo genitori
         layer_group_id: livello
         type: tipo di gruppo
@@ -224,6 +239,7 @@ it:
         label: 'qualifica
 
           definizione'
+        person: persona
         participation: persona
       event/participation:
         event_id: evento
@@ -330,6 +346,16 @@ it:
             external:
               one: esterno
               other: esterni
+      contact_account:
+        predefined_labels:
+          privat: privato
+          mobil: cellulare
+          arbeit: lavoro
+          vater: padre
+          mutter: madre
+          fax: fax
+          andere: altri
+          webseite: sito web
       social_account:
         name: cognome
         label: tipo
@@ -338,6 +364,22 @@ it:
         name: nome dei social media
         label: tipo di social media
         public: pubblico
+      additional_email:
+        email: email
+        name: altro email
+        label: tipo
+        public: pubblico
+        mailings: 'invio
+
+          spedizione'
+      additional_emails:
+        email: email
+        name: altro email
+        label: altro tipo di email
+        public: pubblico
+        mailings: 'invio
+
+          spedizione'
       mailing_list:
         name: cognome
         description: descrizione
@@ -349,6 +391,8 @@ it:
         additional_sender: mittente supplementare
       subscription:
         related_role_types: ruoli
+      people_filter:
+        name: cognome
       custom_content:
         label: testo
         subject: oggetto

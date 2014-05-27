@@ -111,6 +111,17 @@ class Event::ParticipationsController < CrudController
     records
   end
 
+  def find_entry
+    if event.supports_applications
+      # Every participation may be displayed underneath any event,
+      # even if it does not directly belong to it.
+      # This is to enable the display of entries on the waiting list.
+      Event::Participation.find(params[:id])
+    else
+      super
+    end
+  end
+
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
   # else is created through event roles.

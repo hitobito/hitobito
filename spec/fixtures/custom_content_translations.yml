@@ -2,8 +2,17 @@ login_de:
   custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
   locale: de
   label: Login E-Mail
-  subject: Your Login Data
-  body: "Hello {user}, here is your site to login: {login-url}"
+  subject: Deine Login Daten
+  body: "Hallo {user}, hier kannst du dich einloggen: {login-url}"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+login_fr:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
+  locale: fr
+  label: Login E-Mail
+  subject: Tes informations login
+  body: "Salut {user}, voici ta site login: {login-url}"
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

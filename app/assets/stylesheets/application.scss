@@ -21,8 +21,8 @@
  */
 
 /* Imports Compass */
-@import "variables";
-@import "media-queries";
+@import "hitobito/variables";
+@import "hitobito/media-queries";
 @import "compass/typography/lists/horizontal-list";
 @import "compass/css3/text-shadow";
 @import "compass/css3/box-shadow";
@@ -32,11 +32,4 @@
 
 @import "chosen-bootstrap";
 
-/* Imports Partials */
-@import "typography";
-@import "navigation";
-@import "form";
-@import "layout";
-@import "fonts";
-
-@import "wagon";
+@import "hitobito/main";

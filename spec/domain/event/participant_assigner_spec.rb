@@ -9,7 +9,6 @@ require 'spec_helper'
 
 describe Event::ParticipantAssigner do
 
-
   let(:course) do
     course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course)
@@ -70,6 +69,19 @@ describe Event::ParticipantAssigner do
     it 'does not touch participation' do
       subject.remove_role
       Event::Participation.where(id: participation.id).exists?.should be_true
+    end
+
+    context 'roundtrip' do
+      let(:event) { Fabricate(:course, groups: [groups(:top_layer)]) }
+
+      it 'resets the event to priority_1' do
+        participation.application.priority_1 = participation.event
+        participation.application.save!
+        subject.create_role
+        participation.reload.event.should eq(event)
+        subject.remove_role
+        participation.reload.event.should eq(course)
+      end
     end
   end
 end

@@ -3,7 +3,7 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-@import "variables";
+@import "hitobito/variables";
 
 /* Imports Compass */
 @import "compass/support";
@@ -12,7 +12,7 @@ $legacy-support-for-ie7 : true;
 #page .sheet {
   zoom:1;
 }
-body #page .sheet.current { 
+body #page .sheet.current {
   background: white;
   border: 1px solid $grayLight;
   z-index:1000;

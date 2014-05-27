@@ -18,8 +18,13 @@ require 'spec_helper'
 
 describe CustomContent do
 
-
   subject { custom_contents(:login) }
+
+  context '.list' do
+    it 'contains one entry per main item' do
+      CustomContent.list.should have(2).items
+    end
+  end
 
   context 'lists' do
     it 'creates empty list for nil' do

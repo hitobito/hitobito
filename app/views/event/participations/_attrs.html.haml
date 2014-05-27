@@ -29,8 +29,9 @@
   %aside.span5.offset1
     - if entry.person == current_user && @application.present? && @application.contact.present?
       = section t('event.applied_to') do
-        = render "#{@application.contact.class.base_class.name.underscore.pluralize}/contact_data",
-                 contactable: @application.contact,
+        - contact_type = @application.contact.class.base_class.name.underscore
+        = render "#{contact_type.pluralize}/contact_data",
+                 contact_type.to_sym => @application.contact,
                  only_public: true
 
     = render 'roles'

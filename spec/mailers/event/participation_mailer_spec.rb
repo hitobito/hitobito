@@ -19,6 +19,10 @@ describe Event::ParticipationMailer do
   let(:participation) { Fabricate(:event_participation, event: event, person: person) }
   let(:mail) { Event::ParticipationMailer.confirmation(participation) }
 
+  before do
+    Fabricate(:phone_number, contactable: person, public: true)
+  end
+
   subject { mail.body }
 
   describe 'event data' do
@@ -71,10 +75,16 @@ describe Event::ParticipationMailer do
 
     it { should =~ /Hallo Top/ }
 
+    it 'contains participation url' do
+      should =~ %r{test.host/groups/#{event.groups.first.id}/events/#{event.id}/participations/#{participation.id}}
+    end
+
     it 'sends to all email addresses of participant' do
       person.update_attributes!(email: nil)
-      e1 = Fabricate(:additional_email, contactable: person, mailings: true)
+      e1 = Fabricate(:additional_email, contactable: person, mailings: true, public: true)
+      participation.person.reload
       mail.to.should eq [e1.email]
+      should =~ /a href="mailto:#{e1.email}"/
     end
 
   end

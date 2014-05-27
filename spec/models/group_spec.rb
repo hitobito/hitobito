@@ -41,14 +41,113 @@ describe Group do
     Group.should be_valid
   end
 
-  it 'inserts children alphabetically' do
-    parent = groups(:top_layer)
-    group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
-    group.save!
-    Group.find(parent.id).children.order(:lft).collect(&:name).should eq [
-      'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
-  end
+  context 'alphabetic order' do
+    context 'on insert' do
+      it 'at the beginning' do
+        parent = groups(:top_layer)
+        group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+          'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
+      end
 
+      it 'at the beginning with same name' do
+        parent = groups(:top_layer)
+        group = Group::BottomLayer.new(name: 'Bottom One', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+          'Bottom One', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
+      end
+
+      it 'in the middle' do
+        parent = groups(:top_layer)
+        group = Group::BottomLayer.new(name: 'Frosch', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom Two', 'Frosch', 'TopGroup', 'Toppers']
+      end
+
+      it 'in the middle with same name' do
+        parent = groups(:top_layer)
+        group = Group::BottomLayer.new(name: 'Bottom Two', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom Two', 'Bottom Two', 'TopGroup', 'Toppers']
+      end
+
+      it 'at the end' do
+        parent = groups(:top_layer)
+        group = Group::TopGroup.new(name: 'ZZ Top', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'ZZ Top']
+      end
+
+      it 'at the end with same name' do
+        parent = groups(:top_layer)
+        group = Group::TopGroup.new(name: 'Toppers', parent_id: parent.id)
+        group.save!
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'Toppers']
+      end
+    end
+
+    context 'on update' do
+      it 'at the beginning' do
+        groups(:bottom_layer_two).update_attributes!(name: 'AAA')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+          'AAA', 'Bottom One', 'TopGroup', 'Toppers']
+      end
+
+      it 'at the beginning with same name' do
+        groups(:bottom_layer_two).update_attributes!(name: 'Bottom One')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+          'Bottom One', 'Bottom One', 'TopGroup', 'Toppers']
+      end
+
+      it 'in the middle keeping position right' do
+        groups(:bottom_layer_two).update_attributes!(name: 'Frosch')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Frosch', 'TopGroup', 'Toppers']
+      end
+
+      it 'in the middle keeping position left' do
+        groups(:bottom_layer_two).update_attributes!(name: 'Bottom P')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom P', 'TopGroup', 'Toppers']
+      end
+
+      it 'in the middle moving right' do
+        groups(:bottom_layer_two).update_attributes!(name: 'TopGzzz')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'TopGroup', 'TopGzzz', 'Toppers']
+      end
+
+      it 'in the middle moving left' do
+        groups(:top_group).update_attributes!(name: 'Bottom P')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'Bottom P', 'Bottom Two', 'Toppers']
+      end
+
+      it 'in the middle with same name' do
+        groups(:bottom_layer_two).update_attributes!(name: 'TopGroup')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'TopGroup', 'TopGroup', 'Toppers']
+      end
+
+      it 'at the end' do
+        groups(:bottom_layer_two).update_attributes!(name: 'ZZ Top')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'TopGroup', 'Toppers', 'ZZ Top']
+      end
+
+      it 'at the end with same name' do
+        groups(:bottom_layer_two).update_attributes!(name: 'Toppers')
+        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+         'Bottom One', 'TopGroup', 'Toppers', 'Toppers']
+      end
+    end
+  end
 
   context '#hierachy' do
     it 'is itself for root group' do

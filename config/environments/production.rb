@@ -78,7 +78,8 @@ Hitobito::Application.configure do
 
   config.action_mailer.default_url_options = {
       host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
-      protocol: (ssl ? 'https' : 'http')
+      protocol: (ssl ? 'https' : 'http'),
+      locale: nil
     }
 
   # Enable threaded mode

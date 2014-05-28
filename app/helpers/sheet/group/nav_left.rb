@@ -22,8 +22,7 @@ module Sheet
         render_upwards +
         render_header +
         content_tag(:ul, class: 'nav-left-list') do
-          render_layer_groups(groups[1..-1]) +
-          render_sub_layers
+          render_layer_groups + render_sub_layers
         end
       end
 
@@ -55,10 +54,10 @@ module Sheet
         end
       end
 
-      def render_layer_groups(groups)
+      def render_layer_groups
         out = ''.html_safe
         stack = []
-        groups.each do |group|
+        Array(groups[1..-1]).each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do

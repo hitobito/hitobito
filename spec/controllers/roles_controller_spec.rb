@@ -143,7 +143,7 @@ describe RolesController do
         put :update,  group_id: group.id, id: role.id, role: { label: 'bla', type: role.type, group_id: role.group_id }
       end.not_to change { Role.with_deleted.count }
 
-      flash[:notice].should eq "Rolle <i>bla (Member)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+      flash[:notice].should eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
       role.reload.label.should eq 'bla'
       role.type.should eq Group::TopGroup::Member.model_name
       should redirect_to(group_person_path(group, person))

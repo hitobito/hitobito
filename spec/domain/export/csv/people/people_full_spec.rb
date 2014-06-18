@@ -57,7 +57,7 @@ describe Export::Csv::People::PeopleFull do
 
       subject { csv[0] }
 
-      its(['Rollen']) { should eq 'Leader TopGroup' }
+      its(['Rollen']) { should eq 'Leader Top / TopGroup' }
       its(['Telefonnummer Vater']) { should eq '123' }
       its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Social Media Adresse Skype']) { should eq 'foobar' }

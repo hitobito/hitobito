@@ -20,13 +20,13 @@ describe Export::Csv::People::PersonRow do
   end
 
   context 'roles' do
-    it { row.fetch(:roles).should eq 'Leader TopGroup' }
+    it { row.fetch(:roles).should eq 'Leader Top / TopGroup' }
 
     context 'multiple roles' do
       let(:group) { groups(:bottom_group_one_one) }
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
-      it { row.fetch(:roles).should eq 'Member Group 11, Leader TopGroup' }
+      it { row.fetch(:roles).should eq 'Member Bottom One / Group 11, Leader Top / TopGroup' }
     end
   end
 

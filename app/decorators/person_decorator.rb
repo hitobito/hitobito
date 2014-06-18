@@ -89,7 +89,7 @@ class PersonDecorator < ApplicationDecorator
 
   def function_short(function, scope_method, scope = nil)
     html = [function.to_s]
-    html << h.muted(function.send(scope_method).to_s) if scope.nil?
+    html << h.muted(h.safe_join(function.group.label_with_layer, ' / ')) if scope.nil?
     html << popover_edit_link(function) if h.can?(:update, function)
     h.safe_join(html, ' ')
   end

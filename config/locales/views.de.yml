@@ -198,6 +198,7 @@ de:
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.
+    years_old: (%{years} Jahre alt)
 
     tabs:
       history: Verlauf

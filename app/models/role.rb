@@ -75,7 +75,7 @@ class Role < ActiveRecord::Base
 
   def to_s(format = :default)
     model_name = self.class.label
-    string = label? ? "#{label} (#{model_name})" : model_name
+    string = label? ? "#{model_name} (#{label})" : model_name
     if format == :long
       I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
     else

@@ -132,6 +132,10 @@ class Group < ActiveRecord::Base
     name
   end
 
+  def label_with_layer
+    layer? ? [to_s] : [layer_group.to_s, to_s]
+  end
+
   ## readers and query methods for contact info
   [:address, :town, :zip_code, :country].each do |attribute|
     [attribute, :"#{attribute}?"].each do |method|

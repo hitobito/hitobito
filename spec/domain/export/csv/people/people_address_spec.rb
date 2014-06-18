@@ -84,7 +84,6 @@ describe Export::Csv::People::PeopleAddress do
         its(['Nachname']) { should eq person.last_name }
         its(['Haupt-E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
-        its(['Rollen']) { should eq 'Leader TopGroup' }
         its(['Geschlecht']) { should be_blank }
 
         context 'roles and phone number' do
@@ -100,7 +99,7 @@ describe Export::Csv::People::PeopleAddress do
           its(['Weitere E-Mail Mutter']) { should be_nil }
 
           it 'roles should be complete' do
-            subject['Rollen'].split(', ').should =~ ['Member Group 11', 'Leader TopGroup']
+            subject['Rollen'].split(', ').should =~ ['Member Bottom One / Group 11', 'Leader Top / TopGroup']
           end
         end
       end

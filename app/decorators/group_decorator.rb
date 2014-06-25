@@ -40,7 +40,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def link_with_layer
-    h.safe_join(label_with_layer.map { |g| h.link_to(g, g) }, ' / ')
+    h.safe_join(with_layer.map { |g| h.link_to(g, g) }, ' / ')
   end
 
   def possible_events

@@ -24,4 +24,8 @@ module EventsHelper
     send(path, group, options)
   end
 
+  def application_approve_role_exists?
+    Role.types_with_permission(:approve_applications).present?
+  end
+
 end

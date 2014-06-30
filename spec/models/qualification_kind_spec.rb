@@ -52,4 +52,13 @@ describe QualificationKind do
     subject.to_s.should == 'Super Lead'
   end
 
+  it 'does not destroy translations on soft destroy' do
+    Fabricate(:qualification, qualification_kind: subject)
+    expect { subject.destroy }.not_to change { QualificationKind::Translation.count }
+  end
+
+  it 'does destroy translations on hard destroy' do
+    expect { subject.destroy! }.to change { QualificationKind::Translation.count }.by(-1)
+  end
+
 end

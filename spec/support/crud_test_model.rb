@@ -311,9 +311,7 @@ module CrudTestHelper
                           income: 10_000_000 * index + 0.1 * index,
                           birthdate: "#{1900 + 10 * index}-#{index}-#{index}",
                           # store entire date to avoid time zone issues
-                          gets_up_at: RUBY_VERSION.include?('1.9.') ?
-                                            Time.local(2000, 1, 1, index, index) :
-                                            Time.utc(2000, 1, 1, index, index),
+                          gets_up_at: Time.local(2000, 1, 1, index, index),
                           last_seen: "#{2000 + 10 * index}-#{index}-#{index} 1#{index}:2#{index}",
                           human: index % 2 == 0,
                           remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))

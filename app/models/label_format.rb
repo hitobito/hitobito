@@ -29,11 +29,8 @@ class LabelFormat < ActiveRecord::Base
     end
   end
 
-
-  before_destroy :remember_translated_name
-
-  translates :name, fallbacks_for_empty_translations: true
-  Translation.schema_validations_config.auto_create = false
+  include Globalized
+  translates :name
 
 
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
@@ -57,10 +54,6 @@ class LabelFormat < ActiveRecord::Base
         LabelFormat.list.each_with_object({}) { |f, result| result[f.id] = f.to_s }
       end
     end
-
-    def list
-      with_translations.order('label_format_translations.name').uniq
-    end
   end
 
   def to_s(_format = :default)
@@ -81,10 +74,6 @@ class LabelFormat < ActiveRecord::Base
     Settings.application.languages.to_hash.keys.each do |lang|
       Rails.cache.delete("label_formats_#{lang}")
     end
-  end
-
-  def remember_translated_name
-    to_s # fetches the required translations and keeps them around
   end
 
 end

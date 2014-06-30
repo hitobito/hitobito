@@ -39,7 +39,7 @@ task :rubocop do
 end
 
 namespace :rubocop do
-  desc 'Run rubocop-reports.yml and generate report'
+  desc 'Run .rubocop.yml and generate checkstyle report'
   task :report do
     # do not fail if we find issues
     sh %w(rubocop

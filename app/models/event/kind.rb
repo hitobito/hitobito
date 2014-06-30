@@ -17,13 +17,8 @@
 #  https://github.com/hitobito/hitobito.
 class Event::Kind < ActiveRecord::Base
 
-  acts_as_paranoid
-  extend Paranoia::RegularScope
-
-  before_destroy :remember_translated_label
-  translates :label, :short_name, fallbacks_for_empty_translations: true
-  Translation.schema_validations_config.auto_create = false
-
+  include Paranoia::Globalized
+  translates :label, :short_name
 
   ### ASSOCIATIONS
 
@@ -49,14 +44,6 @@ class Event::Kind < ActiveRecord::Base
   validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
 
 
-  ### CLASS METHODS
-
-  class << self
-    def list
-      with_translations.order(:deleted_at, 'event_kind_translations.label').uniq
-    end
-  end
-
 
   ### INSTANCE METHODS
 
@@ -76,12 +63,6 @@ class Event::Kind < ActiveRecord::Base
     else
       destroy!
     end
-  end
-
-  private
-
-  def remember_translated_label
-    to_s # fetches the required translations and keeps them around
   end
 
 end

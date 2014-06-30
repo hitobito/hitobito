@@ -16,8 +16,8 @@
 #
 class CustomContent < ActiveRecord::Base
 
-  translates :label, :subject, :body, fallbacks_for_empty_translations: true
-  Translation.schema_validations_config.auto_create = false
+  include Globalized
+  translates :label, :subject, :body
 
   # specify validations for translated attributes explicitly
   validates :label, presence: true
@@ -30,10 +30,6 @@ class CustomContent < ActiveRecord::Base
     def get(key)
       find_by_key(key) ||
       fail(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
-    end
-
-    def list
-      with_translations.order('custom_content_translations.label').uniq
     end
   end
 

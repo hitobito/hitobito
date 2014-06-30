@@ -20,14 +20,8 @@
 #
 class QualificationKind < ActiveRecord::Base
 
-  acts_as_paranoid
-  extend Paranoia::RegularScope
-
-
-  before_destroy :remember_translated_label
-  translates :label, :description, fallbacks_for_empty_translations: true
-  Translation.schema_validations_config.auto_create = false
-
+  include Paranoia::Globalized
+  translates :label, :description
 
   ### ASSOCIATIONS
 
@@ -53,14 +47,6 @@ class QualificationKind < ActiveRecord::Base
   validate :assert_validity_when_reactivateable
 
 
-  ### CLASS METHODS
-
-  class << self
-    def list
-      with_translations.order(:deleted_at, 'qualification_kind_translations.label').uniq
-    end
-  end
-
   ### INSTANCE METHODS
 
   def to_s(_format = :default)
@@ -76,17 +62,12 @@ class QualificationKind < ActiveRecord::Base
     end
   end
 
-
   private
 
   def assert_validity_when_reactivateable
     if reactivateable.present? && (validity.to_i <= 0)
       errors.add(:validity, :not_a_positive_number)
     end
-  end
-
-  def remember_translated_label
-    to_s # fetches the required translations and keeps them around
   end
 
 end

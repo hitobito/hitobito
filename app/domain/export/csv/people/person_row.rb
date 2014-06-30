@@ -14,7 +14,7 @@ module Export::Csv::People
                                 /^additional_email_/ => :additional_email_attribute }
 
     def roles
-      entry.roles.map { |role| "#{role} #{role.group}"  }.join(', ')
+      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}"  }.join(', ')
     end
 
     private

@@ -21,7 +21,7 @@
                           data: {method: :put, remote: true})
 
             %td
-              %strong= link_to(group, group)
+              %strong= GroupDecorator.new(group).link_with_layer
               %br/
               %table.roles
                 %tbody

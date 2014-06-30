@@ -355,4 +355,21 @@ describe Person do
       ]
     end
   end
+
+  context '#years' do
+    before { Time.zone.stub(now: Time.zone.parse('2014-03-01 11:19:50')) }
+
+    it 'is nil if person has no birthday' do
+      Person.new.years.should be_nil
+    end
+
+    [ ['2006-02-12', 8],
+      ['2005-03-15', 8],
+      ['2004-02-29', 10] ].each do |birthday, years|
+       it "is #{years} years old if born on #{birthday}" do
+         Person.new(birthday: birthday).years.should eq years
+       end
+     end
+
+  end
 end

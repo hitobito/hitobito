@@ -239,6 +239,14 @@ class Person < ActiveRecord::Base
     false
   end
 
+  def years
+    if birthday?
+      now = Time.zone.now.to_date
+      extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
+      now.year - birthday.year - (extra ? 0 : 1)
+    end
+  end
+
   private
 
   def override_blank_email

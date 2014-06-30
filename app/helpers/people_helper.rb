@@ -19,4 +19,10 @@ module PeopleHelper
     Dropdown::PeopleExport.new(self, current_user, params, details, emails).to_s
   end
 
+  def format_birthday(person)
+    if person.birthday?
+      f(person.birthday) << ' ' <<  t('people.years_old', years: person.years)
+    end
+  end
+
 end

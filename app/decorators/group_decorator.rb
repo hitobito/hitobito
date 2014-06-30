@@ -39,6 +39,10 @@ class GroupDecorator < ApplicationDecorator
     h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
   end
 
+  def link_with_layer
+    h.safe_join(with_layer.map { |g| h.link_to(g, g) }, ' / ')
+  end
+
   def possible_events
     klass.event_types
   end

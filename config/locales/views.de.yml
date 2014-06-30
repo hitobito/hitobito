@@ -198,6 +198,7 @@ de:
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.
+    years_old: (%{years} Jahre alt)
 
     tabs:
       history: Verlauf
@@ -516,7 +517,7 @@ de:
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
-      caption_requires_approval: 'Der Scharleiter wird informiert und muss die Anmeldung bestätigen'
+      caption_requires_approval: 'Der Gruppenleiter wird informiert und muss die Anmeldung bestätigen'
       additional_information: 'Angaben für Anmeldung'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
@@ -655,4 +656,3 @@ de:
       first: Erste
       last: Letzte
       truncate: '...'
-

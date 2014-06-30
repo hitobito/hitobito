@@ -65,12 +65,15 @@ class Event::ParticipationsController < CrudController
   end
 
   def render_csv
-    csv = if params[:details] && can?(:show_details, entries.first)
-            Export::Csv::People::ParticipationsFull.export(entries)
-          else
-            Export::Csv::People::ParticipationsAddress.export(entries)
-          end
-    send_data csv, type: :csv
+    send_data(exporter.export(entries), type: :csv)
+  end
+
+  def exporter
+    if params[:details] && can?(:show_details, entries.first)
+      Export::Csv::People::ParticipationsFull
+    else
+      Export::Csv::People::ParticipationsAddress
+    end
   end
 
   def check_preconditions

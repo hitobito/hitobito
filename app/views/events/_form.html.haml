@@ -41,9 +41,8 @@
 
     - entry.used?(:priorization) do
       = f.labeled_boolean_field(:priorization, caption: t('.caption_prioritization'))
-    - entry.used?(:requires_approval) do
+    - application_approve_role_exists? && entry.used?(:requires_approval) do
       = f.labeled_boolean_field(:requires_approval, caption: t('.caption_requires_approval'))
-
     = f.labeled_input_field(:maximum_participants)
 
     = render_extensions 'application_fields', locals: { f: f }

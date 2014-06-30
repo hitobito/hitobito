@@ -43,6 +43,7 @@ class Subscription < ActiveRecord::Base
   def to_s(format = :default)
     string = subscriber.to_s(format).dup
     if subscriber.is_a?(Group) && related_role_types.present?
+      string = subscriber.with_layer.join(' / ')
       string << ' (' << related_role_types.join(', ') << ')'
     end
     string

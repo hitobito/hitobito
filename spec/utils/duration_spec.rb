@@ -9,7 +9,6 @@ require 'spec_helper'
 
 describe Duration do
 
-
   context '#cover?' do
     let(:start) { Time.zone.parse('2013-10-10 10:30') }
     let(:finish) { Time.zone.parse('2013-10-12 10:30') }

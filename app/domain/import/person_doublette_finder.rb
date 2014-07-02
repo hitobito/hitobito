@@ -88,7 +88,7 @@ module Import
     def parse_date(date_string)
       if date_string.present?
         begin
-          Time.zone.parse(date_string).to_date
+          Time.zone.parse(date_string).try(:to_date)
         rescue ArgumentError
           nil
         end

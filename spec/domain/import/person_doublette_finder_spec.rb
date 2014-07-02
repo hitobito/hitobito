@@ -62,4 +62,10 @@ describe Import::PersonDoubletteFinder do
     its('find_and_update.first_name') { should eq 'foo' }
   end
 
+  context 'invalid date string' do
+    before { Person.create!(first_name: 'foo', email: 'foo@bar.com') }
+    let(:attrs) { { first_name: 'foo', email: 'foo@bar.com', birthday: '-' } }
+    its('find_and_update.birthday') { should be_blank }
+  end
+
 end

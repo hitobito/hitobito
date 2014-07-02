@@ -23,7 +23,7 @@ class EventsController < CrudController
 
   decorates :event, :events, :group
 
-  prepend_before_action :authenticate_person_from_token!
+  prepend_before_action :authenticate_person_from_onetime_token!
   # load group before authorization
   prepend_before_action :parent
 

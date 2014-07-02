@@ -57,7 +57,7 @@
 
           -# div must always exist to insert flash messages with ajax
           #flash
-            = render :partial => 'layouts/flash', :collection => [:notice, :alert], :as => :level
+            = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
 
           = content_for?(:content) ? yield(:content) : yield
 

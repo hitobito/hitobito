@@ -17,18 +17,17 @@ class ApplicationController < ActionController::Base
 
   alias_method :decorate, :__decorator_for__
 
-  protect_from_forgery with: :exception
+  protect_from_forgery
   helper_method :person_home_path
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
   end if Rails.env.production?
 
-
   private
 
-  def person_home_path(person)
-    group_person_path(person.default_group_id, person)
+  def person_home_path(person, options = {})
+    group_person_path(person.default_group_id, person, options)
   end
 
 end

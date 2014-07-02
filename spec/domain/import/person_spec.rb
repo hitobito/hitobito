@@ -109,9 +109,10 @@ describe Import::Person do
   context 'can assign mass assigned attributes' do
     let(:data) { 'all attributes - blacklist' }
     let(:person) { Fabricate(:person) }
+
     it 'all protected attributes are filtered via blacklist' do
-      public_attributes = person.attributes.reject { |key, value| Import::Person::BLACKLIST.include?(key.to_sym) }
-      public_attributes.size.should eq 13
+      public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
+      public_attributes.size.should eq 15
       expect { Import::Person.new(public_attributes, []).person }.not_to raise_error
     end
   end

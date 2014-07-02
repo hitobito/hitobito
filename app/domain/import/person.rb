@@ -12,41 +12,27 @@ module Import
 
     attr_reader :person, :hash, :phone_numbers, :social_accounts, :additional_emails, :emails
 
-    BLACKLIST = [:contact_data_visible,
-                 :created_at,
-                 :creator_id,
-                 :updated_at,
-                 :updater_id,
-                 :current_sign_in_at,
-                 :current_sign_in_ip,
-                 :encrypted_password,
-                 :id,
-                 :last_sign_in_at,
-                 :last_sign_in_ip,
-                 :picture,
-                 :remember_created_at,
-                 :reset_password_sent_at,
-                 :reset_password_token,
-                 :sign_in_count,
-                 :failed_attempts,
-                 :locked_at,
-                 :last_label_format_id,
-                 :primary_group_id]
+    class << self
+      def fields
+        all = person_attributes +
+          Import::ContactAccountFields.new(AdditionalEmail).fields +
+          Import::ContactAccountFields.new(PhoneNumber).fields +
+          Import::ContactAccountFields.new(SocialAccount).fields
 
+        all.sort_by { |entry| entry[:value] }
+      end
 
-    def self.fields
-      all = person_attributes +
-        ContactAccountFields.new(AdditionalEmail).fields +
-        ContactAccountFields.new(PhoneNumber).fields +
-        ContactAccountFields.new(SocialAccount).fields
+      def person_attributes
+        relevant_attributes.map! do |name|
+          { key: name, value: ::Person.human_attribute_name(name, default: '') }
+        end
+      end
 
-      all.sort_by { |entry| entry[:value] }
-    end
-
-    def self.person_attributes
       # alle attributes - technische attributes
-      [::Person.column_names - BLACKLIST.map(&:to_s)].flatten.map! do |name|
-        { key: name, value: ::Person.human_attribute_name(name, default: '') }
+      def relevant_attributes
+        ::Person.column_names -
+          ::Person::INTERNAL_ATTRS.map(&:to_s) -
+          %w(picture primary_group_id)
       end
     end
 

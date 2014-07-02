@@ -29,7 +29,8 @@ module Concerns
       current_person
     end
 
-    def authenticate_person_from_token!
+    # invoke this method where required with prepend_before_action
+    def authenticate_person_from_onetime_token!
       token = Devise.token_generator.digest(Person, :reset_password_token, params[:onetime_token])
       user = Person.find_or_initialize_with_error_by(:reset_password_token, token)
 
@@ -39,5 +40,29 @@ module Concerns
       end
     end
 
+    def authenticate_person!
+      # Set the authentication token params if not already present,
+      params[:user_token] = params[:user_token].presence || request.headers['X-User-Token'].presence
+      params[:user_email] = params[:user_email].presence || request.headers['X-User-Email'].presence
+
+      user = params[:user_email] && Person.find_by_email(params[:user_email])
+
+      # Notice how we use Devise.secure_compare to compare the token
+      # in the database with the token given in the params, mitigating
+      # timing attacks.
+      if user && Devise.secure_compare(user.authentication_token, params[:user_token])
+        # Sign in using token should not be tracked by Devise trackable
+        # See https://github.com/plataformatec/devise/issues/953
+        env["devise.skip_trackable"] = true
+
+        # Notice the store option defaults to false, so the entity
+        # is not actually stored in the session and a token is needed
+        # for every request. That behaviour can be configured through
+        # the sign_in_token option.
+        sign_in user, store: false
+      else
+        super
+      end
+    end
   end
 end

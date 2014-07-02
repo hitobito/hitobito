@@ -21,9 +21,25 @@ module Person::DeviseOverrides
 
     self.reset_password_token   = enc
     self.reset_password_sent_at = Time.now.utc
-    save(validate: false)
+    save!(validate: false)
 
     raw
+  end
+
+  def generate_authentication_token!
+    token = generate_authentication_token
+    save!(validate: false)
+    token
+  end
+
+  def generate_authentication_token
+    loop do
+      token = Devise.friendly_token
+      unless self.class.exists?(authentication_token: token)
+        self.authentication_token = token
+        break token
+      end
+    end
   end
 
   # Owner: Devise::Models::DatabaseAuthenticatable

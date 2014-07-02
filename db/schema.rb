@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326103939) do
+ActiveRecord::Schema.define(version: 20140702083911) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -270,6 +270,8 @@ ActiveRecord::Schema.define(version: 20140326103939) do
     t.integer  "primary_group_id"
     t.integer  "failed_attempts",                     default: 0
     t.datetime "locked_at"
+    t.string   "authentication_token"
+    t.index ["authentication_token"], :name => "index_people_on_authentication_token"
     t.index ["email"], :name => "index_people_on_email", :unique => true
     t.index ["reset_password_token"], :name => "index_people_on_reset_password_token", :unique => true
   end

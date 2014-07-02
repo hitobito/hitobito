@@ -11,16 +11,16 @@
   - t.col('') do |p|
     .profil
       = image_tag(p.person.picture.thumb.url, size: '32x32')
-  - t.col(Person.human_attribute_name(:name)) do |p|
+  - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
       %br/
       = muted p.person.additional_name
-  - t.col(Role.model_name.human)                  { |p| p.roles_short }
-  - t.col(Person.human_attribute_name(:emails))   { |p| p.all_emails(cannot?(:show_details, p)) }
-  - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
-  - t.col(Person.human_attribute_name(:address))  { |p| p.complete_address }
+  - t.col(t.sort_header(:roles, Role.model_name.human(count: 2)))         { |p| p.roles_short }
+  - t.col(Person.human_attribute_name(:emails))                           { |p| p.all_emails(cannot?(:show_details, p)) }
+  - t.col(PhoneNumber.model_name.human(count: 2))                         { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
+  - sortable_grouped_person_attr(t, %w(zip_code town), :address)  { |p| p.complete_address }
 
   = render_extensions :list, locals: { table: t }
 

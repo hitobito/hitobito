@@ -87,12 +87,15 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
+      order(order_by_role_statement)
+    end
+
+    def order_by_role_statement
       statement = 'CASE roles.type '
       Role.all_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << 'END'
-      order(statement)
     end
   end
 end

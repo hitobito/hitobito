@@ -218,6 +218,16 @@ class ListController < ApplicationController
       def sort_mappings=(hash)
         self.sort_mappings_with_indifferent_access = hash.with_indifferent_access
       end
+
+      # Puts null and empty strings last
+      def null_safe_sort(sort_expression)
+        table_attr, direction = sort_expression.split
+        null_safe = "CASE"
+        null_safe << " WHEN #{table_attr} IS NULL THEN 1"
+        null_safe << " WHEN #{table_attr} IS '' THEN 1"
+        null_safe << " ELSE 0 END #{direction}"
+        [null_safe, sort_expression]
+      end
     end
 
     private
@@ -231,11 +241,15 @@ class ListController < ApplicationController
       end
     end
 
+    # Return sort columns from defined mappings or as null_safe_sort from parameter.
+    def sort_columns
+      sort_mappings_with_indifferent_access[params[:sort]] ||
+        self.class.null_safe_sort("#{model_class.table_name}.#{params[:sort]}")
+    end
+
     # Return the sort expression to be used in the list query.
     def sort_expression
-      col = sort_mappings_with_indifferent_access[params[:sort]] ||
-            "#{model_class.table_name}.#{params[:sort]}"
-      Array(col).collect { |c| "#{c} #{sort_dir}" }.join(', ')
+      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.

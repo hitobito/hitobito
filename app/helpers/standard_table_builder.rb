@@ -165,6 +165,7 @@ class StandardTableBuilder
       end
     end
 
+
     # Returns true if the given attribute is the current sort column.
     def current_sort?(attr)
       params[:sort] == attr.to_s

@@ -124,9 +124,13 @@ class Person < ActiveRecord::Base
 
   class << self
     def order_by_name
-      order(company_case_column(:company_name, :last_name),
-            company_case_column(:last_name, :first_name),
-            company_case_column(:first_name, :nickname))
+      order(order_by_name_statement)
+    end
+
+    def order_by_name_statement
+      [company_case_column(:company_name, :last_name),
+       company_case_column(:last_name, :first_name),
+       company_case_column(:first_name, :nickname)]
     end
 
     def only_public_data

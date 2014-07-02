@@ -17,6 +17,15 @@ class Event::ParticipationsController < CrudController
 
   self.remember_params += [:filter]
 
+  self.sort_mappings = { last_name:  'people.last_name',
+                         first_name: 'people.first_name',
+                         roles: ->(event) { Person.order_by_name_statement.unshift(
+                                              Event::Participation.order_by_role_statement(event)) },
+                         nickname:   'people.nickname',
+                         zip_code:   'people.zip_code',
+                         town:       'people.town' }
+
+
   decorates :group, :event, :participation, :participations, :alternatives
 
   # load before authorization
@@ -40,7 +49,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def index
-    @participations = entries
+    entries
+
     respond_to do |format|
       format.html
       format.pdf  { render_pdf(@participations.collect(&:person)) }
@@ -86,18 +96,29 @@ class Event::ParticipationsController < CrudController
 
   def list_entries
     records = apply_filter_scope(load_entries)
+    records = apply_default_sort(records)
+    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
 
+
   def load_entries
     event.participations.
           where(event_participations: { active: true }).
-          includes(:person, :roles, :event).
+          joins(:roles).
+          includes(:roles, :event, person: [:additional_emails, :phone_numbers]).
           participating(event).
-          order_by_role(event.class).
-          merge(Person.order_by_name).
           uniq
+  end
+
+  def apply_default_sort(records)
+    records = records.order_by_role(event.class) if Settings.people.default_sort == 'role'
+    records.merge(Person.order_by_name)
+  end
+
+  def sort_columns
+    params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
   end
 
   def apply_filter_scope(records)

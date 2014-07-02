@@ -16,4 +16,9 @@ if defined? Bullet
 
   # EventKind may not be eager loaded if some event types have kind and others not.
   Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event::Course', association: :kind
+
+  # event, :person and roles for participation list
+  [:event, :person, :roles].each do |assoc|
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Participation', association: assoc
+  end
 end

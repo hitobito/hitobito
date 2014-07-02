@@ -19,6 +19,8 @@ class PeopleController < CrudController
                           :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS
 
+  self.sort_mappings = { roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement) }
+
   decorates :group, :person, :people, :versions
 
   helper_method :index_full_ability?
@@ -35,6 +37,10 @@ class PeopleController < CrudController
     filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
     entries = filter.filter_entries
     @multiple_groups = filter.multiple_groups
+
+    if params[:sort].present? && sortable?(params[:sort])
+      entries = entries.reorder(sort_expression)
+    end
 
     respond_to do |format|
       format.html  { @people = prepare_entries(entries).page(params[:page]) }
@@ -205,6 +211,7 @@ class PeopleController < CrudController
       can?(:index_deep_full_people, @group)
     end
   end
+
 
   def authorize_class
     authorize!(:index_people, group)

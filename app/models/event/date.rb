@@ -36,6 +36,10 @@ class Event::Date < ActiveRecord::Base
     label? ? "#{label}: #{duration}" : duration
   end
 
+  def label_and_location
+    [label, location].compact.reject(&:empty?).join(', ')
+  end
+
   private
 
   def assert_meaningful

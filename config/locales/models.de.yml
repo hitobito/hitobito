@@ -112,6 +112,9 @@ de:
         one: Kassier
       event/role/speaker:
         one: Referent/-in
+      event/date:
+        one: Datum
+        other: Daten
       group:
         one: Gruppe
         other: Gruppen

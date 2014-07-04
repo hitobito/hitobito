@@ -1,0 +1,84 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+module Export::Pdf::Participation
+  class EventDetails < Section
+    attr_reader :count
+
+    def self.image_path
+      Rails.root.join('app/assets/images/logo.png')
+    end
+
+    def render
+      pdf.start_new_page
+
+      render_description if event.description.present?
+      render_requirements if requirements?
+    end
+
+    private
+
+    def render_description
+      with_count(description_title) do
+        text event.description
+        2.times { move_down_line }
+      end
+    end
+
+    def render_requirements
+      with_count(t(requirements_key)) do
+        boxed_attr(:application_conditions, event)
+
+        if course?
+          boxed_attr(:minimum_age, event_kind)
+          boxed_attr(:preconditions, event_kind)
+        end
+      end
+    end
+
+    def with_count(content)
+      @count ||= 0
+      heading { text "#{@count += 1}.", content, style: :bold }
+      move_down_line
+      yield
+    end
+
+    def description_title
+      [human_event_name,
+       human_attribute_name(:description, event).downcase].join
+    end
+
+    def requirements_key
+      postfix = event.class.to_s.underscore.gsub('/', '_')
+      ".requirements_for_#{postfix}"
+    end
+
+    def course?
+      event.class == Event::Course
+    end
+
+    def event_kind
+      (event_with_kind? && event.kind) || OpenStruct.new
+    end
+
+    def requirements?
+      [event.application_conditions,
+       event_kind.minimum_age,
+       event_kind.preconditions].any?(&:present?)
+    end
+
+    def boxed_attr(attr, model)
+      values = Array(model.send(attr)).reject(&:blank?)
+
+      if values.present?
+        render_boxed(-> { text human_attribute_name(attr, model) },
+                     -> { text values.map(&:to_s).join("\n") })
+      end
+    end
+  end
+
+end

@@ -69,6 +69,14 @@ describe Event::ParticipationsController do
 
   end
 
+  context 'GET print' do
+    render_views
+
+    it 'renders participation as pdf' do
+      get :print, group_id: group.id, event_id: course.id, id: participation.id, format: :pdf
+      response.should be_ok
+    end
+  end
 
   context 'GET new' do
     before { get :new, group_id: group.id, event_id: event.id }

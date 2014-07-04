@@ -61,7 +61,9 @@ class Event::ParticipationsController < CrudController
 
   def print
     load_answers
-    render :print, layout: false
+    respond_to do |format|
+      format.pdf { render_participation(entry) }
+    end
   end
 
   def destroy

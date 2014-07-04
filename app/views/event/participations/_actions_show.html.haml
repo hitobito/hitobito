@@ -8,7 +8,7 @@
 
 - if entry.person_id == current_user.id
   = action_button(t('global.button.print'),
-                  print_group_event_participation_path(@group, @event, entry), :print, { target: 'new'})
+                  print_group_event_participation_path(@group, @event, entry, format: :pdf), :print, { target: 'new'})
 
 - if can?(:edit, entry.person)
   = action_button(t('.change_contact_data_button'), edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for), :edit)

@@ -25,7 +25,7 @@ class EventDecorator < ApplicationDecorator
 
   def dates_full
     safe_join(dates, h.tag(:br)) do |date|
-      safe_join([date.duration, h.muted(label_and_location(date))], ' ')
+      safe_join([date.duration, h.muted(date.label_and_location)], ' ')
     end
   end
 
@@ -114,9 +114,6 @@ class EventDecorator < ApplicationDecorator
     end
   end
 
-  def label_and_location(date)
-    [date.label, date.location].compact.reject(&:empty?).join(', ')
-  end
 
   def quali_model_name(list)
     Qualification.model_name.human(count: list.size)

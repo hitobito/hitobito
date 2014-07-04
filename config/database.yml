@@ -38,7 +38,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *generic
-  database: <%= ENV['RAILS_DB_NAME'] || ENV['RAILS_TEST_DB_NAME'] || "#{Rails.root}/db/test.sqlite3" %>
+  database: <%= ENV['RAILS_TEST_DB_NAME'] || ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/test.sqlite3" %>
 
 production:
   <<: *generic

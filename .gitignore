@@ -52,3 +52,4 @@ TAGS
 /.vimrc
 /todo.tasks
 /tags
+.envrc

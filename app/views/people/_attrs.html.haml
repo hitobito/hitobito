@@ -20,7 +20,7 @@
         %h2= Person.human_attribute_name(:additional_information)
         = simple_format(entry.additional_information)
 
-  -if can?(:show_full, entry)
+  - if can?(:show_full, entry)
     %aside.span6.offset1
       = render 'roles'
       = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: @pending_applications

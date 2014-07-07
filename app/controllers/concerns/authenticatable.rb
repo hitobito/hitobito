@@ -40,7 +40,7 @@ module Concerns
       end
     end
 
-    def authenticate_person!
+    def authenticate_person!(*args)
       # Set the authentication token params if not already present,
       params[:user_token] = params[:user_token].presence || request.headers['X-User-Token'].presence
       params[:user_email] = params[:user_email].presence || request.headers['X-User-Email'].presence
@@ -61,7 +61,7 @@ module Concerns
         # the sign_in_token option.
         sign_in user, store: false
       else
-        super
+        super(*args)
       end
     end
   end

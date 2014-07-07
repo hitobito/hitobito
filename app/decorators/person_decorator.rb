@@ -47,10 +47,18 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
+  def picture_full_url
+    h.request.protocol + h.request.host_with_port + picture.url
+  end
+
   # render a list of all roles
   # if a group is given, only render the roles of this group
   def roles_short(group = nil)
-    functions_short(roles.to_a, :group, group)
+    functions_short(filtered_roles(group), group)
+  end
+
+  def filtered_roles(group = nil)
+    filtered_functions(roles.to_a, :group, group)
   end
 
   # returns roles grouped by their group
@@ -80,8 +88,15 @@ class PersonDecorator < ApplicationDecorator
     html << content_tag(:strong, to_s)
   end
 
-  def functions_short(functions, scope_method, scope = nil)
-    functions.select! { |r| r.send("#{scope_method}_id") == scope.id } if scope
+  def filtered_functions(functions, scope_method, scope = nil)
+    if scope
+      functions.select { |r| r.send("#{scope_method}_id") == scope.id }
+    else
+      functions
+    end
+  end
+
+  def functions_short(functions, scope = nil)
     h.safe_join(functions) do |f|
       content_tag(:p, function_short(f, scope), id: h.dom_id(f))
     end

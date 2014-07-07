@@ -37,22 +37,24 @@ class PeopleController < CrudController
     @multiple_groups = filter.multiple_groups
 
     respond_to do |format|
-      format.html { prepare_entries(entries) }
-      format.pdf  { render_pdf(entries) }
-      format.csv  { render_entries_csv(entries) }
+      format.html  { @people = prepare_entries(entries).page(params[:page]) }
+      format.pdf   { render_pdf(entries) }
+      format.csv   { render_entries_csv(entries) }
       format.email { render_emails(entries) }
+      format.json  { @people = prepare_entries(entries).includes(:social_accounts) }
     end
   end
 
   def show
     if group.nil?
-      flash.keep
-      redirect_to person_home_path(entry)
+      flash.keep if request.format.html?
+      redirect_to person_home_path(entry, format: request.format.to_sym)
     else
       respond_to do |format|
-        format.html { entry }
+        format.html
         format.pdf  { render_pdf([entry]) }
         format.csv  { render_entry_csv }
+        format.json
       end
     end
   end
@@ -166,11 +168,10 @@ class PeopleController < CrudController
   end
 
   def prepare_entries(entries)
-    @people = entries.page(params[:page])
     if index_full_ability?
-      @people = @people.includes(:additional_emails, :phone_numbers)
+      entries.includes(:additional_emails, :phone_numbers)
     else
-      @people = @people.preload_public_accounts
+      entries.preload_public_accounts
     end
   end
 

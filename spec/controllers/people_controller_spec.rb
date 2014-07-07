@@ -24,6 +24,7 @@ describe PeopleController do
         Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
         Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
         Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @tg_member)
         @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
 
         @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -92,6 +93,17 @@ describe PeopleController do
           get :index, group_id: group, format: :email
           @response.body.should == "top_leader@example.com,#{@tg_member.email},#{e1.email}"
         end
+
+        context :json do
+          render_views
+
+          it 'renders json with only the one role in this group' do
+            get :index, group_id: group, format: :json
+            json = JSON.parse(@response.body)
+            person = json['people'].find { |p| p['id'] == @tg_member.id }
+            person['roles'].should have(1).item
+          end
+        end
       end
 
       context 'layer' do
@@ -103,7 +115,8 @@ describe PeopleController do
           it 'loads group members when no types given' do
             get :index, group_id: group, kind: 'layer'
 
-            assigns(:people).collect(&:id).should =~ [people(:bottom_member), @bl_leader].collect(&:id)
+            assigns(:people).collect(&:id).should =~
+              [people(:bottom_member), @bl_leader].collect(&:id)
           end
 
           it 'loads selected roles of a group when types given' do
@@ -123,6 +136,20 @@ describe PeopleController do
 
             @response.content_type.should == 'text/csv'
             @response.body.should =~ /^Vorname;Nachname;.*Zusätzliche Angaben/
+          end
+
+          context :json do
+            render_views
+
+            it 'renders json with only the one role in this group' do
+              get :index, group_id: group,
+                          kind: 'layer',
+                          role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
+                          format: :json
+              json = JSON.parse(@response.body)
+              person = json['people'].find { |p| p['id'] == @tg_member.id }
+              person['roles'].should have(2).item
+            end
           end
         end
 
@@ -158,7 +185,21 @@ describe PeopleController do
                       role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
                       kind: 'deep'
 
-          assigns(:people).collect(&:id).should =~ [@bg_leader, @tg_extern].collect(&:id)
+          assigns(:people).collect(&:id).should =~ [@bg_leader, @tg_member, @tg_extern].collect(&:id)
+        end
+
+        context :json do
+          render_views
+
+          it 'renders json with only the one role in this group' do
+            get :index, group_id: group,
+                        kind: 'deep',
+                        role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
+                        format: :json
+            json = JSON.parse(@response.body)
+            person = json['people'].find { |p| p['id'] == @tg_member.id }
+            person['roles'].should have(2).item
+          end
         end
       end
     end
@@ -358,8 +399,19 @@ describe PeopleController do
           get :show, group_id: group.id, id: people(:top_leader).id
           assigns(:qualifications).should eq [@ql_sl, @ql_gl]
         end
-      end
 
+        context :json do
+          render_views
+
+          it 'contains qualifications and roles' do
+            get :show, group_id: group.id, id: people(:top_leader).id, format: :json
+            json = JSON.parse(response.body)
+            person = json['people'].first
+            person['roles'].should have(1).item
+            person['qualifications'].should have(2).items
+          end
+        end
+      end
     end
 
     describe 'POST #send_password_instructions' do

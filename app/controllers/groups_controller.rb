@@ -10,6 +10,8 @@ class GroupsController < CrudController
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup
 
+  respond_to :json, only: [:show]
+
   decorates :group, :groups, :contact
 
   before_render_show :load_sub_groups

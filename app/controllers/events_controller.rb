@@ -81,7 +81,7 @@ class EventsController < CrudController
 
   def load_kinds
     if entry.kind_class
-      @kinds = entry.kind_class.without_deleted.includes(:translations)
+      @kinds = entry.kind_class.list.without_deleted
       @kinds << entry.kind if entry.kind && entry.kind.deleted?
     end
   end

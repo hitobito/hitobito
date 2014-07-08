@@ -45,7 +45,7 @@ describe Devise::SessionsController do
 
       render_views
 
-      it 'responds with user and new token' do
+      it 'responds with unauthorized for wrong password' do
         post :create, person: { email: person.email, password: 'foobar' }, format: :json
         response.status.should be(401)
         person.reload.authentication_token.should be_blank

@@ -152,6 +152,9 @@ Hitobito::Application.routes.draw do
       get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
       put 'users' => 'devise/registrations#update', :as => 'person_registration'
       get 'users' => 'devise/registrations#edit' # route required for language switch
+
+      post 'users/token' => 'devise/tokens#create'
+      delete 'users/token' => 'devise/tokens#destroy'
     end
 
   end # scope locale

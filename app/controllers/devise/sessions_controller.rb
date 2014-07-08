@@ -11,7 +11,8 @@ require_dependency Devise::Engine.root.
 
 class Devise::SessionsController < DeviseController
 
-  respond_to :html, :json
+  respond_to :html
+  respond_to :json, only: [:new, :create]
 
   def create_with_json
     create_without_json do |resource|

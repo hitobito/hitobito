@@ -11,16 +11,34 @@ describe DashboardController do
 
   describe 'GET index' do
 
-    it 'redirects to login if no user' do
-      get :index
-      should redirect_to(new_person_session_path)
+    context :html do
+      it 'redirects to login if no user' do
+        get :index
+        should redirect_to(new_person_session_path)
+      end
+
+      it 'redirects to user home if logged in' do
+        person = people(:top_leader)
+        sign_in(person)
+        get :index
+        should redirect_to(group_person_path(person.groups.first, person, format: :html))
+      end
     end
 
-    it 'redirects to user home if logged in' do
-      person = people(:top_leader)
-      sign_in(person)
-      get :index
-      should redirect_to(group_person_path(person.groups.first, person))
+    context :json do
+      it 'shows error if no user' do
+        get :index, format: :json
+        response.status.should be(401)
+        json = JSON.parse(response.body)
+        json['error'].should be_present
+      end
+
+      it 'redirects to user home if logged in' do
+        person = people(:top_leader)
+        person.generate_authentication_token!
+        get :index, user_email: person.email, user_token: person.authentication_token, format: :json
+        should redirect_to(group_person_path(person.groups.first, person, format: :json))
+      end
     end
 
   end

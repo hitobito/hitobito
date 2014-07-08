@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702083911) do
+ActiveRecord::Schema.define(version: 20140707084827) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -81,6 +81,15 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.index ["event_id"], :name => "index_event_dates_on_event_id"
   end
 
+  create_table "event_kind_qualification_kinds", force: true do |t|
+    t.integer "event_kind_id",         null: false
+    t.integer "qualification_kind_id", null: false
+    t.string  "category",              null: false
+    t.string  "role",                  null: false
+    t.index ["category"], :name => "index_event_kind_qualification_kinds_on_category"
+    t.index ["role"], :name => "index_event_kind_qualification_kinds_on_role"
+  end
+
   create_table "event_kind_translations", force: true do |t|
     t.integer  "event_kind_id", null: false
     t.string   "locale",        null: false
@@ -97,24 +106,6 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "minimum_age"
-  end
-
-  create_table "event_kinds_preconditions", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_preconditions", :unique => true
-  end
-
-  create_table "event_kinds_prolongations", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_prolongations", :unique => true
-  end
-
-  create_table "event_kinds_qualification_kinds", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_qualification_kinds", :unique => true
   end
 
   create_table "event_participations", force: true do |t|

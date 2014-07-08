@@ -10,7 +10,6 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   include Translatable
 
   def_delegator 'course.kind', :minimum_age, :course_minimum_age
-  def_delegator 'course.kind', :preconditions, :course_preconditions
   def_delegator 'errors', :empty?, :valid?
   attr_reader :errors
 
@@ -49,6 +48,10 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
   def person_qualifications
     @person_qualifications ||=
       person.qualifications.where(qualification_kind_id: course_preconditions.map(&:id))
+  end
+
+  def course_preconditions
+    course.kind.qualification_kinds('precondition', 'participant')
   end
 
   def reactivateable?(qualification_kind)

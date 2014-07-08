@@ -19,7 +19,8 @@ class PeopleController < CrudController
                           :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS
 
-  self.sort_mappings = { roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement) }
+  self.sort_mappings = { roles: [Person.order_by_role_statement].
+                                  concat(Person.order_by_name_statement) }
 
   decorates :group, :person, :people, :versions
 

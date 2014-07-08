@@ -3,16 +3,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-slk:
-  preconditions: [gl]
-  qualification_kinds: [sl]
-  prolongations: [gl]
+slk: {}
 
-glk:
-  qualification_kinds: [gl]
+glk: {}
 
-fk:
-  prolongations: [gl,sl]
+fk: {}
 
 old:
   deleted_at: 2010-06-01

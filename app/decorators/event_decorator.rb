@@ -69,27 +69,27 @@ class EventDecorator < ApplicationDecorator
   end
 
   def issued_qualifications_info_for_leaders
-    prolongs = kind.qualification_kinds.list.to_a
-    if prolongs.present?
-      translate(:prolong_only,
-                until: quali_date,
-                prolonged: prolongs.join(', '),
-                count: prolongs.size)
-    else
-      ''
-    end
-  end
-
-  def issued_qualifications_info_for_participants
-    qualis = kind.qualification_kinds.list.to_a
-    prolongs = kind.prolongations.list.to_a
+    qualis = kind.qualification_kinds('qualification', 'leader').list.to_a
+    prolongs = kind.qualification_kinds('prolongation', 'leader').list.to_a
     variables = { until: quali_date,
                   model: quali_model_name(qualis),
                   issued: qualis.join(', '),
                   prolonged: prolongs.join(', '),
                   count: prolongs.size }
 
-    translate_issued_qualifications_info_for_participants(qualis, prolongs, variables)
+    translate_issued_qualifications_info(qualis, prolongs, variables)
+  end
+
+  def issued_qualifications_info_for_participants
+    qualis = kind.qualification_kinds('qualification', 'participant').list.to_a
+    prolongs = kind.qualification_kinds('prolongation', 'participant').list.to_a
+    variables = { until: quali_date,
+                  model: quali_model_name(qualis),
+                  issued: qualis.join(', '),
+                  prolonged: prolongs.join(', '),
+                  count: prolongs.size }
+
+    translate_issued_qualifications_info(qualis, prolongs, variables)
   end
 
   def as_typeahead
@@ -102,7 +102,7 @@ class EventDecorator < ApplicationDecorator
 
   private
 
-  def translate_issued_qualifications_info_for_participants(qualis, prolongs, variables)
+  def translate_issued_qualifications_info(qualis, prolongs, variables)
     if qualis.present? && prolongs.present?
       translate(:issue_and_prolong, variables)
     elsif qualis.present?

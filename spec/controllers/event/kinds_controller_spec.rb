@@ -24,30 +24,84 @@ describe Event::KindsController do
     assigns(:kinds).last.should == destroyed
   end
 
-  context 'destroyed associations' do
-    let(:old) { qualification_kinds(:old) }
-    let(:kind) { event_kinds(:glk) }
+  context 'qualification kinds' do
+    let(:sl) { qualification_kinds(:sl) }
+    let(:gl) { qualification_kinds(:gl) }
+    let(:ql) { qualification_kinds(:ql) }
+    let(:kind) { event_kinds(:fk) }
 
-    context 'GET new' do
-      before { get :new }
+    it 'creates event kind without associations' do
+      post :create, event_kind: { label: 'Foo' }
 
-      it 'does not include deleted for when creating new' do
-        [:qualification_kinds, :preconditions, :prolongations].each do |list|
-          assigns(list).should_not include old
-        end
-      end
+      assigns(:kind).errors.full_messages.should eq []
+
+      assocs = assigns(:kind).event_kind_qualification_kinds
+      assocs.count.should eq 0
     end
 
-    context 'GET edit' do
-      before { kind.qualification_kinds << old }
+    it 'adds associations to new event kind' do
+      post :create, event_kind: { label: 'Foo',
+                                  qualification_kinds: {
+                                    participant: {
+                                      precondition: { qualification_kind_ids: [sl.id, gl.id] },
+                                      qualification: { qualification_kind_ids: [sl.id, gl.id] },
+                                      prolongation: { qualification_kind_ids: [sl.id] }
+                                    },
+                                    leader: {
+                                      qualification: { qualification_kind_ids: [sl.id, gl.id] },
+                                      prolongation: { qualification_kind_ids: [sl.id, gl.id] }
+                                    }
+                                  }
+                                }
 
-      it 'includes deleted qualification_kind where it has been selected' do
-        get :edit, id: kind.id
-        assigns(:qualification_kinds).should include old
-        assigns(:preconditions).should_not include old
-        assigns(:prolongations).should_not include old
-      end
+      assigns(:kind).errors.full_messages.should eq []
+
+      assocs = assigns(:kind).event_kind_qualification_kinds
+      assocs.count.should eq 9
+      assocs.where(role: :participant, category: :precondition).count.should eq 2
+      assocs.where(role: :participant, category: :qualification).count.should eq 2
+      assocs.where(role: :participant, category: :prolongation).count.should eq 1
+      assocs.where(role: :leader, category: :qualification).count.should eq 2
+      assocs.where(role: :leader, category: :prolongation).count.should eq 2
     end
+
+    it 'adds association to existing event kind' do
+      kind.event_kind_qualification_kinds.count.should eq 4
+      ids = kind.event_kind_qualification_kinds.pluck(:qualification_kind_id)
+      ids << ql.id
+
+      put :update, id: kind.id, event_kind: { label: kind.label,
+                                              qualification_kinds: { participant: { prolongation: {
+                                                qualification_kind_ids: ids } } } }
+
+      assocs = assigns(:kind).event_kind_qualification_kinds
+      assocs.count.should eq 5
+      assocs.pluck(:qualification_kind_id).should match_array(ids)
+    end
+
+    it 'removes association from existing event kind' do
+      kind.event_kind_qualification_kinds.count.should eq 4
+
+      put :update, id: kind.id, event_kind: { label: kind.label,
+                                              qualification_kinds: { participant: { prolongation: {
+                                                qualification_kind_ids: [gl.id] } } } }
+
+      assocs = assigns(:kind).event_kind_qualification_kinds
+      assocs.count.should eq 1
+      assocs.pluck(:qualification_kind_id).should match_array([gl.id])
+    end
+
+    it 'removes all associations from existing event kind' do
+      kind.event_kind_qualification_kinds.count.should eq 4
+
+      put :update, id: kind.id, event_kind: { label: kind.label,
+                                              qualification_kinds: { participant: { prolongation: {
+                                                qualification_kind_ids: [] } } } }
+
+      assocs = assigns(:kind).event_kind_qualification_kinds
+      assocs.count.should eq 0
+    end
+
   end
 
 

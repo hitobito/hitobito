@@ -19,8 +19,10 @@ class Event::ParticipationsController < CrudController
 
   self.sort_mappings = { last_name:  'people.last_name',
                          first_name: 'people.first_name',
-                         roles: ->(event) { Person.order_by_name_statement.unshift(
-                                              Event::Participation.order_by_role_statement(event)) },
+                         roles: lambda do |event|
+                                  Person.order_by_name_statement.unshift(
+                                  Event::Participation.order_by_role_statement(event))
+                                end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
                          town:       'people.town' }

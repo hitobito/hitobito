@@ -221,6 +221,7 @@ de:
         booking_info: Anmeldungen
         questions: Fragen
         kind_id: Art
+        qualification_kinds:
 
       event/course:
         kind_id: Kursart
@@ -440,4 +441,3 @@ de:
       date: "%d.%m.%Y"
       time: '%H:%M'
       datetime: "%d.%m.%Y %H:%M"
-

@@ -48,6 +48,8 @@ top_leader:
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
   town: Supertown
   additional_information: bla bla
+  primary_group: top_group
+  contact_data_visible: true
 
 bottom_member:
   first_name: Bottom
@@ -58,6 +60,7 @@ bottom_member:
   zip_code: 3456
   town: Greattown
   country: Switzerland
+  primary_group: bottom_layer_one
 
 root:
   company_name: 'Puzzle ITC'

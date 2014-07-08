@@ -2,7 +2,7 @@
 
 == Version 1.3
 
-* Mehrsprachigkeit
+* Mehrsprachigkeit.
 * Rollenauswahl erfolgt nun auf dem Formular, nicht mehr im Dropdown.
 * Gruppenauswahl der jeweiligen Ebene beim Erstellen von Rollen.
 * Direktes Ändern von Rollen auf Personenlisten.
@@ -10,3 +10,5 @@
 * Logging aller Änderungen von Personenattributen.
 * Weitere E-Mail Adressen (analog Telefonnummern) bei Personen und Gruppen.
 * Prominente Gruppennavigation.
+* Anzeige von Gruppe und Ebene bei Rollen.
+* JSON API für Gruppen und Personen.

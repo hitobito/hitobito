@@ -1,7 +1,15 @@
-# follow conventions of http://jsonapi.org/
+#  Copyright (c) 2014, CEVI ZH SH GL. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
+# follow conventions of http://jsonapi.org/
 api_response(json, @people) do |person|
-  json.href group_person_url(@group, person, format: :json)
+  if @multiple_groups
+    json.href group_person_path(person.default_group_id, person, format: :json)
+  else
+    json.href group_person_path(@group, person, format: :json)
+  end
 
   json.extract!(person, :first_name,
                         :last_name,

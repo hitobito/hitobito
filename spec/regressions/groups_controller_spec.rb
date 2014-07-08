@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# encoding:  utf-8
-
 require 'spec_helper'
 
 describe GroupsController, type: :controller do
@@ -29,7 +27,7 @@ describe GroupsController, type: :controller do
 
     it '#index' do
       get :index
-      should redirect_to Group.root
+      should redirect_to(group_path(Group.root, format: :html))
     end
 
     describe '#show' do

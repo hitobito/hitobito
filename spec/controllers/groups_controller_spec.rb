@@ -29,7 +29,23 @@ describe GroupsController do
     before { sign_in(person) }
     let(:group) { groups(:top_layer) }
 
-    describe 'show' do
+    describe 'GET index' do
+      context :html do
+        it 'keeps flash' do
+          get :index
+          should redirect_to(group_path(Group.root, format: :html))
+        end
+      end
+
+      context :json do
+        it 'redirects to json' do
+          get :index, format: :json
+          should redirect_to(group_path(Group.root, format: :json))
+        end
+      end
+    end
+
+    describe 'GET show' do
       subject { assigns(:sub_groups) }
 
       context 'sub_groups' do

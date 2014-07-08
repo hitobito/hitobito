@@ -29,7 +29,7 @@ class PeopleController < CrudController
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
-  before_render_show :load_asides
+  before_render_show :load_asides, if: -> { request.format.html? }
 
   def index
     filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])

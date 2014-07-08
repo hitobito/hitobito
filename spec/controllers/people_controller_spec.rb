@@ -399,16 +399,20 @@ describe PeopleController do
           get :show, group_id: group.id, id: people(:top_leader).id
           assigns(:qualifications).should eq [@ql_sl, @ql_gl]
         end
+      end
+
+      context 'without group' do
+        context :html do
+          it 'keeps flash' do
+            get :show, id: top_leader.id
+            should redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
+          end
+        end
 
         context :json do
-          render_views
-
-          it 'contains qualifications and roles' do
-            get :show, group_id: group.id, id: people(:top_leader).id, format: :json
-            json = JSON.parse(response.body)
-            person = json['people'].first
-            person['roles'].should have(1).item
-            person['qualifications'].should have(2).items
+          it 'redirects to json' do
+            get :show, id: top_leader.id, format: :json
+            should redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
           end
         end
       end
@@ -444,6 +448,59 @@ describe PeopleController do
 
   end
 
+  context :json do
+    render_views
+
+    before do
+      @public_number = Fabricate(:phone_number, contactable: top_leader, public: true)
+      @private_number = Fabricate(:phone_number, contactable: top_leader, public: false)
+      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: top_leader)
+    end
+
+    context 'as self' do
+      before { sign_in(top_leader) }
+
+      it 'GET index contains current role and all data' do
+        get :index, group_id: group.id, format: :json
+        json = JSON.parse(response.body)
+        person = json['people'].first
+        person['phone_numbers'].should have(2).items
+        person['roles'].should have(1).item
+      end
+
+      it 'GET show contains all roles and all data' do
+        get :show, group_id: group.id, id: top_leader.id, format: :json
+        json = JSON.parse(response.body)
+        person = json['people'].first
+        person['phone_numbers'].should have(2).items
+        person['roles'].should have(2).items
+      end
+    end
+
+    context 'with contact data' do
+
+      let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+      before { sign_in(user) }
+
+      it 'GET index contains only current roles and public data' do
+        get :index, group_id: group.id, format: :json
+        json = JSON.parse(response.body)
+        person = json['people'].first
+        person['phone_numbers'].should have(1).item
+        person['phone_numbers'].first['id'].should eq(@public_number.id)
+        person['roles'].should have(1).item
+      end
+
+      it 'GET show contains only current roles and public data' do
+        get :show, group_id: group.id, id: top_leader.id, format: :json
+        json = JSON.parse(response.body)
+        person = json['people'].first
+        person['phone_numbers'].should have(1).item
+        person['phone_numbers'].first['id'].should eq(@public_number.id)
+        person['roles'].should have(1).item
+      end
+    end
+  end
   context 'as api user' do
 
     describe 'GET #show' do

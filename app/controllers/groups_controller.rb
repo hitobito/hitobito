@@ -14,13 +14,13 @@ class GroupsController < CrudController
 
   decorates :group, :groups, :contact
 
-  before_render_show :load_sub_groups
+  before_render_show :load_sub_groups, if: -> { request.format.html? }
   before_render_form :load_contacts
 
 
   def index
-    flash.keep
-    redirect_to group_path(Group.root.id)
+    flash.keep if request.format.html?
+    redirect_to group_path(Group.root.id, format: request.format.to_sym)
   end
 
   def destroy

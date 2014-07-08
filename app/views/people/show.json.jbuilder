@@ -1,5 +1,9 @@
-# follow conventions of http://jsonapi.org/
+#  Copyright (c) 2014, CEVI ZH SH GL. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
+# follow conventions of http://jsonapi.org/
 api_response(json, entry) do |person|
   json.href group_person_url(@group, person, format: :json)
 
@@ -36,13 +40,8 @@ api_response(json, entry) do |person|
     json.partial! 'groups/link', group: person.primary_group
   end
 
-  if can?(:show_full, person)
-    json.roles person.roles, partial: 'roles/attrs', as: :role
-    json.qualifications person.qualifications, partial: 'qualifications/attrs', as: :qualification
-  else
-    json.roles person.filtered_roles(@group),
-               partial: 'roles/attrs',
-               as: :role
-  end
+  json.roles person.filtered_roles(can?(:show_full, person) ? nil : @group),
+             partial: 'roles/attrs',
+             as: :role
 
 end

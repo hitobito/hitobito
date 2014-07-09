@@ -32,6 +32,8 @@ class PeopleSerializer < ApplicationSerializer
 
     contact_accounts(!h.index_full_ability?)
 
-    entities :roles, item.filtered_roles(context[:multiple_groups] ? nil : context[:group]), RoleSerializer
+    entities :roles,
+             item.filtered_roles(context[:multiple_groups] ? nil : context[:group]),
+             RoleSerializer
   end
 end

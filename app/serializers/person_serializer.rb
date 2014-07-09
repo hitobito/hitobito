@@ -42,7 +42,7 @@ class PersonSerializer < ApplicationSerializer
     end
 
     entity :primary_group, item.primary_group, GroupLinkSerializer
-    template_link 'people.primary_group', :groups, h.group_url('{people.primary_group}', format: :json)
+    group_template_link 'people.primary_group'
 
     entities :roles, item.filtered_roles(full ? nil : context[:group]), RoleSerializer
   end

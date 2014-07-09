@@ -46,6 +46,10 @@ class ApplicationSerializer < Oat::Serializer
     template_link key, :groups, h.group_url("{#{key}}", format: :json)
   end
 
+  def person_template_link(key)
+    template_link(key, :people, h.person_url("{#{key}}", format: :json))
+  end
+
   # include schema extensions for a given key from wagons
   def apply_extensions(key, options = {})
     self.class.extension(key).each do |block|
@@ -67,13 +71,13 @@ class ApplicationSerializer < Oat::Serializer
     entity :creator, item.creator_id, PersonIdSerializer
     entity :updater, item.updater_id, PersonIdSerializer
 
-    template_link("#{type_name}.creator", :people, h.person_url("{#{type_name}.creator}", format: :json))
-    template_link("#{type_name}.updater", :people, h.person_url("{#{type_name}.updater}", format: :json))
+    person_template_link "#{type_name}.creator"
+    person_template_link "#{type_name}.updater"
 
     if item.respond_to?(:deleted_at)
       map_properties :deleted_at
       entity :deleter, item.deleter_id, PersonIdSerializer
-      template_link("#{type_name}.deleter", :people, h.person_url("{#{type_name}.deleter}", format: :json))
+      person_template_link "#{type_name}.deleter"
     end
   end
 
@@ -96,10 +100,10 @@ class ApplicationSerializer < Oat::Serializer
     hash[:linked] = Hash.new { |h, k| h[k] = [] }
     linked_full.each do |link, objects|
       objects.each do |attrs|
+        type = attrs.delete(:type)
         # do not add attrs consisting only of an :id
-        unless attrs.keys == [:id]
+        unless attrs.keys.collect(&:to_s) == %w(id)
           # combine linked entries by type
-          type = attrs.delete(:type)
           list = hash[:linked][type || link]
           unless list.include?(attrs)
             list << attrs

@@ -9,8 +9,8 @@ class RoleSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
-    template_link 'roles.group', :groups, h.group_url('{roles.group}', format: :json)
-    template_link 'roles.layer_group', :groups, h.group_url('{roles.layer_group}', format: :json)
+    group_template_link 'roles.group'
+    group_template_link 'roles.layer_group'
 
     property :role_type, item.class.label
     map_properties :label, :created_at, :updated_at, :deleted_at

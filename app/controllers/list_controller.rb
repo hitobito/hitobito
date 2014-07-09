@@ -234,11 +234,15 @@ class ListController < ApplicationController
 
     # Enhance the list entries with an optional sort order.
     def list_entries_with_sort
-      if params[:sort].present? && sortable?(params[:sort])
+      if sorting?
         list_entries_without_sort.reorder(sort_expression)
       else
         list_entries_without_sort
       end
+    end
+
+    def sorting?
+       params[:sort].present? && sortable?(params[:sort])
     end
 
     # Return sort columns from defined mappings or as null_safe_sort from parameter.

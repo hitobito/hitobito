@@ -36,26 +36,15 @@ class PeopleController < CrudController
   def index
     filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
     entries = filter.filter_entries
+    entries = entries.reorder(sort_expression) if sorting?
     @multiple_groups = filter.multiple_groups
-
-    if params[:sort].present? && sortable?(params[:sort])
-      entries = entries.reorder(sort_expression)
-    end
 
     respond_to do |format|
       format.html  { @people = prepare_entries(entries).page(params[:page]) }
       format.pdf   { render_pdf(entries) }
       format.csv   { render_entries_csv(entries) }
       format.email { render_emails(entries) }
-      format.json  do
-        render json: ListSerializer.new(prepare_entries(entries).
-                                          includes(:social_accounts).
-                                          decorate,
-                                        group: @group,
-                                        multiple_groups: @multiple_groups,
-                                        serializer: PeopleSerializer,
-                                        controller: self)
-      end
+      format.json  { render_entries_json(entries) }
     end
   end
 
@@ -68,9 +57,7 @@ class PeopleController < CrudController
         format.html
         format.pdf  { render_pdf([entry]) }
         format.csv  { render_entry_csv }
-        format.json do
-          render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
-        end
+        format.json { render_entry_json }
       end
     end
   end
@@ -214,6 +201,20 @@ class PeopleController < CrudController
     send_data csv, type: :csv
   end
 
+  def render_entries_json(entries)
+    render json: ListSerializer.new(prepare_entries(entries).
+                                      includes(:social_accounts).
+                                      decorate,
+                                    group: @group,
+                                    multiple_groups: @multiple_groups,
+                                    serializer: PeopleSerializer,
+                                    controller: self)
+  end
+
+  def render_entry_json
+    render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
+  end
+
   def index_full_ability?
     if params[:kind].blank?
       can?(:index_full_people, @group)
@@ -223,7 +224,6 @@ class PeopleController < CrudController
   end
   public :index_full_ability? # for serializer
   hide_action :index_full_ability?
-
 
   def authorize_class
     authorize!(:index_people, group)

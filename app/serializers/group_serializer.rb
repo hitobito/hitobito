@@ -21,7 +21,9 @@ class GroupSerializer < ApplicationSerializer
 
     if item.contact
       entity :contact, item.contact, ContactSerializer
-      template_link 'groups.contact', :people, h.group_person_url('{groups.id}', '{groups.contact}', format: :json)
+      template_link 'groups.contact',
+                    :people,
+                    h.group_person_url('{groups.id}', '{groups.contact}', format: :json)
     else
       map_properties :address, :zip_code, :town, :country
     end

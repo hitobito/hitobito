@@ -108,9 +108,20 @@ describe Event::ParticipationsController do
   end
 
   context 'GET index' do
-    before { @leader, @participant = *create(Event::Role::Leader, course.participant_type) }
+    before do
+      @leader, @participant = *create(Event::Role::Leader, course.participant_type)
 
-    it 'lists particpant and leader group by default' do
+      update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al', town: 'Eye', address: 'Spring Road', zip_code: '3000')
+      update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '8000')
+    end
+
+    it 'lists participant and leader group by default' do
+      get :index, group_id: group.id, event_id: course.id
+      assigns(:participations).should eq [@participant, @leader]
+    end
+
+    it 'lists particpant and leader group by default order by role if specific in settings' do
+      Settings.people.stub(default_sort: 'role')
       get :index, group_id: group.id, event_id: course.id
       assigns(:participations).should eq [@leader, @participant]
     end
@@ -137,22 +148,42 @@ describe Event::ParticipationsController do
 
       @response.content_type.should == 'text/csv'
       @response.body.should =~ /^Vorname;Nachname/
-      @response.body.should =~ %r{^#{@leader.person.first_name};#{@leader.person.last_name}}
       @response.body.should =~ %r{^#{@participant.person.first_name};#{@participant.person.last_name}}
+      @response.body.should =~ %r{^#{@leader.person.first_name};#{@leader.person.last_name}}
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      @response.body.should == "#{@leader.person.email},#{@participant.person.email},#{e1.email}"
+      @response.body.should == "#{@participant.person.email},#{@leader.person.email},#{e1.email}"
     end
+
+
+    context 'sorting' do
+      %w(first_name last_name nickname zip_code town).each do |attr|
+        it "sorts based on #{attr}" do
+          get :index, group_id: group, event_id: course.id, sort: attr, sort_dir: :asc
+          assigns(:participations).should == [@participant, @leader]
+        end
+      end
+
+      it "sorts based on role" do
+        get :index, group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc
+        assigns(:participations).should == [@leader, @participant]
+      end
+    end
+
 
     def create(*roles)
       roles.map do |role_class|
         role = Fabricate(:event_role, type: role_class.sti_name)
         Fabricate(:event_participation, event: course, roles: [role], active: true)
       end
+    end
+
+    def update_person(participation, attrs)
+      participation.person.update_attributes!(attrs)
     end
   end
 

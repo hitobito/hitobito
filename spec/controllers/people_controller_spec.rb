@@ -32,6 +32,47 @@ describe PeopleController do
 
         @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+        @tg_member.update_attributes(first_name: 'Al', last_name: 'Zoe', nickname: 'al', town: 'Eye', zip_code: '8000')
+      end
+
+      context 'sorting' do
+        before do
+          top_leader.update_attributes(first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '9000')
+          @tg_extern.update_attributes(first_name: '', last_name: 'Bundy', nickname: '', town: '', address: '', zip_code: '')
+        end
+
+        let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join('-') }
+
+
+        context 'default sort' do
+          it "sorts by name" do
+            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
+            assigns(:people).collect(&:id).should == [@tg_extern, top_leader,  @tg_member].collect(&:id)
+          end
+
+          it "people.default_sort setting can override it to sort by role" do
+            Settings.people.stub(default_sort: 'role')
+            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
+            assigns(:people).collect(&:id).should == [top_leader,  @tg_member, @tg_extern].collect(&:id)
+          end
+        end
+
+        it "sorts based on last_name" do
+          get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :last_name, sort_dir: :asc
+          assigns(:people).collect(&:id).should == [@tg_extern, top_leader,  @tg_member].collect(&:id)
+        end
+
+        it "sorts based on roles" do
+          get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :roles, sort_dir: :asc
+          assigns(:people).should == [top_leader,  @tg_member, @tg_extern]
+        end
+
+        %w(first_name nickname zip_code town).each do |attr|
+          it "sorts based on #{attr}" do
+            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: attr, sort_dir: :asc
+            assigns(:people).should == [@tg_member, top_leader,  @tg_extern]
+          end
+        end
       end
 
       context 'group' do

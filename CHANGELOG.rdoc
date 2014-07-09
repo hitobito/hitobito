@@ -12,3 +12,4 @@
 * Prominente Gruppennavigation.
 * Anzeige von Gruppe und Ebene bei Rollen.
 * JSON API für Gruppen und Personen.
+* Sortierbare Personen und Teilnehmer Listen.

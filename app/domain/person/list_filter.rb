@@ -25,11 +25,15 @@ class Person::ListFilter
   end
 
   def list_entries(scope_kind = nil)
-    list_scope(scope_kind).
-      preload_groups.
-      uniq.
-      order_by_role.
-      order_by_name
+    apply_default_sort(list_scope(scope_kind).
+                       preload_groups.
+                       uniq)
+
+  end
+
+  def apply_default_sort(scope)
+    scope = scope.order_by_role if Settings.people.default_sort == 'role'
+    scope.order_by_name
   end
 
   def list_scope(scope_kind = nil)

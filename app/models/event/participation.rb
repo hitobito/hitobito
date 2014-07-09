@@ -59,12 +59,15 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
+      joins(:roles).order(order_by_role_statement(event_type))
+    end
+
+    def order_by_role_statement(event_type)
       statement = 'CASE event_roles.type '
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
       statement << 'END'
-      joins(:roles).order(statement)
     end
 
     def active

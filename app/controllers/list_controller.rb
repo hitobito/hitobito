@@ -224,7 +224,7 @@ class ListController < ApplicationController
         table_attr, direction = sort_expression.split
         null_safe = "CASE"
         null_safe << " WHEN #{table_attr} IS NULL THEN 1"
-        null_safe << " WHEN #{table_attr} IS '' THEN 1"
+        null_safe << " WHEN #{table_attr} = '' THEN 1"
         null_safe << " ELSE 0 END #{direction}"
         [null_safe, sort_expression]
       end

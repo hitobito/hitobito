@@ -100,8 +100,8 @@ describe PeopleController do
           it 'renders json with only the one role in this group' do
             get :index, group_id: group, format: :json
             json = JSON.parse(@response.body)
-            person = json['people'].find { |p| p['id'] == @tg_member.id }
-            person['roles'].should have(1).item
+            person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
+            person['links']['roles'].should have(1).item
           end
         end
       end
@@ -147,8 +147,8 @@ describe PeopleController do
                           role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
                           format: :json
               json = JSON.parse(@response.body)
-              person = json['people'].find { |p| p['id'] == @tg_member.id }
-              person['roles'].should have(2).item
+              person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
+              person['links']['roles'].should have(2).item
             end
           end
         end
@@ -197,8 +197,8 @@ describe PeopleController do
                         role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
                         format: :json
             json = JSON.parse(@response.body)
-            person = json['people'].find { |p| p['id'] == @tg_member.id }
-            person['roles'].should have(2).item
+            person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
+            person['links']['roles'].should have(2).item
           end
         end
       end
@@ -464,16 +464,16 @@ describe PeopleController do
         get :index, group_id: group.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['phone_numbers'].should have(2).items
-        person['roles'].should have(1).item
+        person['links']['phone_numbers'].should have(2).items
+        person['links']['roles'].should have(1).item
       end
 
       it 'GET show contains all roles and all data' do
         get :show, group_id: group.id, id: top_leader.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['phone_numbers'].should have(2).items
-        person['roles'].should have(2).items
+        person['links']['phone_numbers'].should have(2).items
+        person['links']['roles'].should have(2).items
       end
     end
 
@@ -486,18 +486,18 @@ describe PeopleController do
         get :index, group_id: group.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['phone_numbers'].should have(1).item
-        person['phone_numbers'].first['id'].should eq(@public_number.id)
-        person['roles'].should have(1).item
+        person['links']['phone_numbers'].should have(1).item
+        person['links']['phone_numbers'].first.should eq(@public_number.id.to_s)
+        person['links']['roles'].should have(1).item
       end
 
       it 'GET show contains only current roles and public data' do
         get :show, group_id: group.id, id: top_leader.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['phone_numbers'].should have(1).item
-        person['phone_numbers'].first['id'].should eq(@public_number.id)
-        person['roles'].should have(1).item
+        person['links']['phone_numbers'].should have(1).item
+        person['links']['phone_numbers'].first.should eq(@public_number.id.to_s)
+        person['links']['roles'].should have(1).item
       end
     end
   end

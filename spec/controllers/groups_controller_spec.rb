@@ -74,7 +74,7 @@ describe GroupsController do
           get :show, id: group.id, format: :json
           json = JSON.parse(response.body)
           group = json['groups'].first
-          group['children'].should have(4).items
+          group['links']['children'].should have(4).items
         end
       end
 

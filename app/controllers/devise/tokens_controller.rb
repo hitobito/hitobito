@@ -21,7 +21,7 @@ class Devise::TokensController < DeviseController
     self.resource = warden.authenticate!(auth_options)
     sign_in resource, store: false
     resource.generate_authentication_token!
-    render :create
+    render json: UserSerializer.new(resource, controller: self)
   end
 
   # DELETE /resource/token
@@ -29,7 +29,7 @@ class Devise::TokensController < DeviseController
     self.resource = warden.authenticate!(auth_options)
     sign_in resource, store: false
     resource.update_column(:authentication_token, nil)
-    render :create
+    render json: UserSerializer.new(resource, controller: self)
   end
 
   private

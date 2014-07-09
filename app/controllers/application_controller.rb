@@ -24,10 +24,9 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
   end if Rails.env.production?
 
-  private
-
   def person_home_path(person, options = {})
     group_person_path(person.default_group_id, person, options)
   end
+  hide_action :person_home_path
 
 end

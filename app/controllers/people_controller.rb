@@ -41,7 +41,15 @@ class PeopleController < CrudController
       format.pdf   { render_pdf(entries) }
       format.csv   { render_entries_csv(entries) }
       format.email { render_emails(entries) }
-      format.json  { @people = prepare_entries(entries).includes(:social_accounts) }
+      format.json  do
+        render json: ListSerializer.new(prepare_entries(entries).
+                                          includes(:social_accounts).
+                                          decorate,
+                                        group: @group,
+                                        multiple_groups: @multiple_groups,
+                                        serializer: PeopleSerializer,
+                                        controller: self)
+      end
     end
   end
 
@@ -54,7 +62,9 @@ class PeopleController < CrudController
         format.html
         format.pdf  { render_pdf([entry]) }
         format.csv  { render_entry_csv }
-        format.json
+        format.json do
+          render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
+        end
       end
     end
   end
@@ -205,6 +215,8 @@ class PeopleController < CrudController
       can?(:index_deep_full_people, @group)
     end
   end
+  public :index_full_ability? # for serializer
+  hide_action :index_full_ability?
 
   def authorize_class
     authorize!(:index_people, group)

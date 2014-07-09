@@ -28,6 +28,7 @@ module Hitobito
     config.autoload_paths += %W( #{config.root}/app/abilities
                                  #{config.root}/app/domain
                                  #{config.root}/app/jobs
+                                 #{config.root}/app/serializers
                                  #{config.root}/app/utils
                                )
 

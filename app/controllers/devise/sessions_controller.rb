@@ -18,6 +18,8 @@ class Devise::SessionsController < DeviseController
     create_without_json do |resource|
       if request.format == :json
         resource.generate_authentication_token! unless resource.authentication_token?
+        render json: UserSerializer.new(resource, controller: self)
+        return
       end
     end
   end

@@ -197,9 +197,6 @@ GEM
     http_accept_language (2.0.1)
     i18n (0.6.9)
     innertube (1.1.0)
-    jbuilder (2.0.7)
-      activesupport (>= 3.0.0, < 5)
-      multi_json (~> 1.2)
     joiner (0.2.0)
       activerecord (>= 3.1.0, < 4.1.0)
     jquery-rails (3.1.0)
@@ -247,6 +244,8 @@ GEM
     nio4r (1.0.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    oat (0.4.4)
+      activesupport
     orm_adapter (0.5.0)
     paper_trail (3.0.1)
       activerecord (>= 3.0, < 5.0)
@@ -520,7 +519,6 @@ DEPENDENCIES
   hirb
   hitobito_cevi!
   http_accept_language
-  jbuilder
   jquery-rails
   jquery-ui-rails
   kaminari
@@ -530,6 +528,7 @@ DEPENDENCIES
   mini_magick
   mysql2
   nested_form
+  oat
   paper_trail
   paranoia
   poltergeist

@@ -240,6 +240,9 @@
   display: block;
   padding: 4px 20px;
   margin: 2px -18px 0 -20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .nav-left-list ul li > a {
   padding-left: 32px;

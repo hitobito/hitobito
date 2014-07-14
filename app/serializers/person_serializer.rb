@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Serializes a single person. Expects the following context arguments:
+#  * group - The group this person is showed for
 class PersonSerializer < ApplicationSerializer
   include ContactableSerializer
 

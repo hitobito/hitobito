@@ -19,37 +19,6 @@ class ApplicationSerializer < Oat::Serializer
     end
   end
 
-  # accessor for controller methods such as url helpers
-  # or can? calls.
-  def h
-    context[:controller]
-  end
-
-  # properties used for a json api resource
-  def json_api_properties
-    type type_name
-    property :id, item.id.to_s
-    property :type, type_name
-  end
-
-  def type_name
-    @type_name ||= item.class.base_class.model_name.plural
-  end
-
-  # alternative to store custom link templates
-  def template_link(key, type, href, options = {})
-    template_links[key] = options.merge(href: href.gsub('%7B', '{').gsub('%7D', '}'),
-                                        type: type.to_s.pluralize)
-  end
-
-  def group_template_link(key)
-    template_link key, :groups, h.group_url("{#{key}}", format: :json)
-  end
-
-  def person_template_link(key)
-    template_link(key, :people, h.person_url("{#{key}}", format: :json))
-  end
-
   # include schema extensions for a given key from wagons
   def apply_extensions(key, options = {})
     self.class.extension(key).each do |block|
@@ -57,12 +26,11 @@ class ApplicationSerializer < Oat::Serializer
     end
   end
 
-  # fix some issues from oat
-  def to_hash
-    super.tap do |hash|
-      unify_linked_entries(hash)
-      add_template_links(hash)
-    end
+  # properties used for a json api resource
+  def json_api_properties
+    type type_name
+    property :id, item.id.to_s
+    property :type, type_name
   end
 
   def modification_properties
@@ -79,6 +47,38 @@ class ApplicationSerializer < Oat::Serializer
       entity :deleter, item.deleter_id, PersonIdSerializer
       person_template_link "#{type_name}.deleter"
     end
+  end
+
+  # accessor for controller methods such as url helpers
+  # or can? calls.
+  def h
+    context[:controller]
+  end
+
+  # alternative to store custom link templates
+  def template_link(key, type, href, options = {})
+    template_links[key] = options.merge(href: href.gsub('%7B', '{').gsub('%7D', '}'),
+                                        type: type.to_s.pluralize)
+  end
+
+  def group_template_link(key)
+    template_link(key, :groups, h.group_url("{#{key}}", format: :json))
+  end
+
+  def person_template_link(key)
+    template_link(key, :people, h.person_url("{#{key}}", format: :json))
+  end
+
+  # fix some issues from oat
+  def to_hash
+    super.tap do |hash|
+      unify_linked_entries(hash)
+      add_template_links(hash)
+    end
+  end
+
+  def type_name
+    @type_name ||= item.class.base_class.model_name.plural
   end
 
   protected

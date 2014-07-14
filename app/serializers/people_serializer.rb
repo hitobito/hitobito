@@ -5,6 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Serializes a list of people. Expects the following context arguments:
+#  * group - The group these people are listed in.
+#  * multiple_groups - Whether this list contains people from multiple groups or just from one.
 class PeopleSerializer < ApplicationSerializer
   include ContactableSerializer
 

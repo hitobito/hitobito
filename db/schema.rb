@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140707084827) do
+ActiveRecord::Schema.define(version: 20140715093651) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20140707084827) do
     t.string  "question"
     t.string  "choices"
     t.boolean "multiple_choices", default: false
+    t.boolean "required"
     t.index ["event_id"], :name => "index_event_questions_on_event_id"
   end
 

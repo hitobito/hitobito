@@ -262,11 +262,13 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
 
       questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
 
       event/answer:
         answer: Antwort

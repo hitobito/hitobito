@@ -508,6 +508,8 @@ de:
         read_and_agreed: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass
         requirements_for_event_course: Voraussetzungen für den Kurs
+      list:
+        incomplete: Pflichtangaben fehlen
 
     register:
       register:

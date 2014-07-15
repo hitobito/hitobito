@@ -17,6 +17,16 @@ class Event::ParticipationDecorator < ApplicationDecorator
   delegate :priority, :confirmation, to: :application
   delegate :qualified?, to: :qualifier
 
+  def person_additional_information
+    h.tag(:br) + h.muted(person.additional_name) + incomplete_label
+  end
+
+  def incomplete_label
+    if answers.any? { |answer| answer.question.required? && answer.answer.blank? }
+      content_tag(:div, h.t('.incomplete'), class: 'text-warning')
+    end
+  end
+
   # render a list of all participations
   def roles_short
     h.safe_join(roles) do |r|

@@ -25,6 +25,8 @@ class Event::Participation < ActiveRecord::Base
 
   self.demodulized_route_keys = true
 
+  attr_accessor :enforce_required_answers
+
   ### ASSOCIATIONS
 
   belongs_to :event

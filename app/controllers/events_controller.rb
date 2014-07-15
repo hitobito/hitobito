@@ -17,6 +17,7 @@ class EventsController < CrudController
                                              :finish_at_date, :finish_at_hour, :finish_at_min,
                                              :_destroy],
                           questions_attributes: [:id, :question, :choices, :multiple_choices,
+                                                 :required,
                                                  :_destroy]]
 
   self.remember_params += [:year]

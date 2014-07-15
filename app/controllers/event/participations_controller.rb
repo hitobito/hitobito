@@ -111,7 +111,7 @@ class Event::ParticipationsController < CrudController
     event.participations.
           where(event_participations: { active: true }).
           joins(:roles).
-          includes(:roles, :event, person: [:additional_emails, :phone_numbers]).
+          includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
           participating(event).
           uniq
   end
@@ -157,9 +157,7 @@ class Event::ParticipationsController < CrudController
   def build_entry
     participation = event.participations.new
     participation.person = current_user unless params[:for_someone_else]
-
     build_application(participation) if event.supports_applications
-
     participation
   end
 
@@ -178,6 +176,9 @@ class Event::ParticipationsController < CrudController
     # Set these attrs again as a new application instance might have been
     # created by the mass assignment.
     entry.application.priority_1 ||= event if entry.application
+
+    # Required questions are enforced only for users that are not allowed to add others
+    entry.enforce_required_answers = true unless can?(:update, entry)
   end
 
   def load_priorities
@@ -214,9 +215,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def send_confirmation_email
-    if entry.person_id == current_user.id
-      Event::ParticipationConfirmationJob.new(entry).enqueue!
-    end
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if entry.person_id == current_user.id
   end
 
   def set_success_notice

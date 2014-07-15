@@ -158,9 +158,7 @@ class Event::ParticipationsController < CrudController
     participation = event.participations.new
     participation.person = current_user unless params[:for_someone_else]
 
-    if event.supports_applications
-      build_application(participation)
-    end
+    build_application(participation) if event.supports_applications
 
     participation
   end

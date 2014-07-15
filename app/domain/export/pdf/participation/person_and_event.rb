@@ -44,6 +44,12 @@ module Export::Pdf::Participation
         originating_groups.each { |group| text group.to_s }
       end
 
+      private
+
+      def person_attributes
+        [:birthday]
+      end
+
       # TODO see 7304
       def originating_groups
         ['Schar: Jubla Ratatouille', 'Jubla-Kanton: SGAIARGL']

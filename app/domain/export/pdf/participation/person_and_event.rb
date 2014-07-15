@@ -38,7 +38,7 @@ module Export::Pdf::Participation
         text person.email
         move_down_line
 
-        [:birthday, :j_s_number].each { |attr| labeled_attr(attr) }
+        person_attributes.each { |attr| labeled_attr(attr) }
         move_down_line
 
         originating_groups.each { |group| text group.to_s }

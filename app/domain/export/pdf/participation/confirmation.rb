@@ -11,7 +11,6 @@ module Export::Pdf::Participation
     def render
       first_page_section do
         render_heading
-        render_remarks if event.remarks?
         render_contact_address if contact
       end
     end
@@ -31,19 +30,6 @@ module Export::Pdf::Participation
       move_down_line
     end
 
-    def render_remarks
-      y = cursor
-
-      with_settings(line_width: 0.9, fill_color: 'cccccc') do
-        fill_and_stroke_rectangle [0, y], bounds.width, 70
-      end
-
-      pdf.bounding_box([0 + 5, y - 5], width: bounds.width, height: 65) do
-        shrinking_text_box event.remarks
-      end
-      move_down_line
-    end
-
     def render_contact_address
       text t('event.applied_to'), style: :bold
 
@@ -54,10 +40,5 @@ module Export::Pdf::Participation
       end
     end
 
-    def label_with_dots(content)
-      text content
-      move_down_line
-      text '.' * 55
-    end
   end
 end

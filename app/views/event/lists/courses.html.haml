@@ -6,6 +6,8 @@
 - title t('.title')
 - manager = can?(:manage_courses, Event)
 
+%p= t('.explanation')
+
 - content_for :toolbar do
   - if manager
     = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, year, group_id))

@@ -489,9 +489,6 @@ de:
         qualifications:
           for_participants: 'Qualifikationen für Teilnehmende'
           for_leaders: 'Qualifikationen für Leitende'
-          category_precondition: 'Vorbedingungen'
-          category_prolongation: 'Verlängert'
-          category_qualification: 'Qualifiziert für'
 
     participations:
       specific_information: 'Spezifische Angaben'

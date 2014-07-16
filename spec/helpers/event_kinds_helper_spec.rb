@@ -29,7 +29,9 @@ describe EventKindsHelper do
                                                    category: 'prolongation')
 
 
-      html = helper.labeled_qualification_kinds_field(form, collection, 'qualification', 'participant')
+      html = helper.labeled_qualification_kinds_field(form, collection,
+                                                      'qualification', 'participant',
+                                                      Event::Kind.human_attribute_name(:qualification_kinds))
       node = Capybara::Node::Simple.new(html)
 
       options = node.find('select').all('option')
@@ -49,7 +51,9 @@ describe EventKindsHelper do
                                                    role: 'participant',
                                                    category: 'prolongation')
 
-      html = helper.labeled_qualification_kinds_field(form, collection, 'qualification', 'participant')
+      html = helper.labeled_qualification_kinds_field(form, collection,
+                                                      'qualification', 'participant',
+                                                      Event::Kind.human_attribute_name(:qualification_kinds))
       node = Capybara::Node::Simple.new(html)
 
       options = node.find('select').all('option')

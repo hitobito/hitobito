@@ -10,11 +10,16 @@
 
   = field_set_tag(t('.qualifications.for_participants')) do
     %p= t('.help_select_qualifications')
-    = labeled_qualification_kinds_field(f, @preconditions, :precondition, :participant)
-    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :participant)
-    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :participant)
+    = labeled_qualification_kinds_field(f, @preconditions, :precondition, :participant,
+                                        Event::Kind.human_attribute_name(:preconditions))
+    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :participant,
+                                        Event::Kind.human_attribute_name(:qualification_kinds))
+    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :participant,
+                                        Event::Kind.human_attribute_name(:prolongations))
 
   = field_set_tag(t('.qualifications.for_leaders')) do
     %p= t('.help_select_qualifications')
-    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :leader)
-    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :leader)
+    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :leader,
+                                        Event::Kind.human_attribute_name(:qualification_kinds))
+    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :leader,
+                                        Event::Kind.human_attribute_name(:prolongations))

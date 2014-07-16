@@ -206,7 +206,7 @@ class Person < ActiveRecord::Base
 
   def latest_qualifications_uniq_by_kind
     qualifications.
-      includes(:person, :qualification_kind).
+      includes(:person, qualification_kind: :translations).
       order_by_date.
       group_by(&:qualification_kind).values.map(&:first)
   end

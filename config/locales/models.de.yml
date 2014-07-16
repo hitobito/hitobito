@@ -221,7 +221,6 @@ de:
         booking_info: Anmeldungen
         questions: Fragen
         kind_id: Art
-        qualification_kinds:
 
       event/course:
         kind_id: Kursart

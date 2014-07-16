@@ -52,7 +52,8 @@ class Event::Kind < ActiveRecord::Base
   end
 
   def qualification_kinds(category, role)
-    QualificationKind.joins(:event_kind_qualification_kinds).
+    QualificationKind.includes(:translations).
+                      joins(:event_kind_qualification_kinds).
                       where(event_kind_qualification_kinds: { event_kind_id: id,
                                                               category: category,
                                                               role: role })

@@ -64,7 +64,7 @@ module Export::Pdf::Participation
     end
 
     def event_kind
-      (event_with_kind? && event.kind) || OpenStruct.new
+      (event_with_kind? && event.kind) || NullEventKind.new
     end
 
     def requirements?
@@ -79,6 +79,12 @@ module Export::Pdf::Participation
       if values.present?
         render_boxed(-> { text title || human_attribute_name(attr, model) },
                      -> { text values.map(&:to_s).join("\n") })
+      end
+    end
+
+    class NullEventKind < OpenStruct
+      def qualification_kinds(*)
+        []
       end
     end
   end

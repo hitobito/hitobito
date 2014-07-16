@@ -9,22 +9,20 @@ module Export::Pdf
   module Participation
 
     class Runner
-      class_attribute :sections, :font, :font_size, :stroke_bounds
-
-      self.font = 'Helvetica'
-      self.font_size = 9
-      self.stroke_bounds = false
-
-
       def render(participation)
         pdf = Prawn::Document.new(page_size: 'A4',
                                   page_layout: :portrait,
                                   margin: 2.cm)
-        pdf.font font
-        pdf.font_size font_size
-
+        customize(pdf)
         sections.each { |section| section.new(pdf, participation).render }
         pdf.render
+      end
+
+      private
+
+      def customize(pdf)
+        pdf.font_size 9
+        pdf
       end
 
       def sections

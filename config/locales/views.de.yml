@@ -543,6 +543,7 @@ de:
 
   event_decorator:
     apply: 'Anmelden'
+    applied: 'Angemeldet'
     not_possible: 'nicht möglich'
     participants_info: '%{count} Anmeldungen'
     participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'

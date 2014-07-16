@@ -19,6 +19,7 @@ module Export::Pdf::Participation
         end
 
         heading { text additional_information_label, style: :bold }
+        text participation.additional_information
       end
     end
 

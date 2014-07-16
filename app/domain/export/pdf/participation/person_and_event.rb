@@ -85,9 +85,7 @@ module Export::Pdf::Participation
         height = 80 / count
         event.dates.limit(count).each_with_index do |date, index|
           bounding_box([0, cursor], width: bounds.width, height: height)  do
-            date_with_index = [dates_label, index + 1].join(' ')
-
-            shrinking_text_box "#{date_with_index} #{date.label_and_location}\n#{date.duration}"
+            shrinking_text_box "#{date.label_and_location}\n#{date.duration}"
           end
         end
       end

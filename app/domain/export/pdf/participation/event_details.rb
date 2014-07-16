@@ -31,11 +31,13 @@ module Export::Pdf::Participation
 
     def render_requirements
       with_count(t(requirements_key)) do
-        boxed_attr(:application_conditions, event)
+        boxed_attr(event, :application_conditions)
 
         if course?
-          boxed_attr(:minimum_age, event_kind)
-          boxed_attr(:preconditions, event_kind)
+          boxed_attr(event_kind, :minimum_age)
+          boxed_attr(event_kind, :qualification_kinds,
+                     human_attribute_name(:preconditions, event_kind),
+                     %w(precondition participant))
         end
       end
     end
@@ -68,14 +70,14 @@ module Export::Pdf::Participation
     def requirements?
       [event.application_conditions,
        event_kind.minimum_age,
-       event_kind.preconditions].any?(&:present?)
+       event_kind.qualification_kinds('precondition', 'participant')].any?(&:present?)
     end
 
-    def boxed_attr(attr, model)
-      values = Array(model.send(attr)).reject(&:blank?)
+    def boxed_attr(model, attr, title = nil, args = nil)
+      values = Array(model.send(attr, *args)).reject(&:blank?)
 
       if values.present?
-        render_boxed(-> { text human_attribute_name(attr, model) },
+        render_boxed(-> { text title || human_attribute_name(attr, model) },
                      -> { text values.map(&:to_s).join("\n") })
       end
     end

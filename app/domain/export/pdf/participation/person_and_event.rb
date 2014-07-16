@@ -83,7 +83,7 @@ module Export::Pdf::Participation
 
       def render_dates(count = 3)
         height = 80 / count
-        event.dates.limit(count).each_with_index do |date, index|
+        event.dates.limit(count).each do |date|
           bounding_box([0, cursor], width: bounds.width, height: height)  do
             shrinking_text_box "#{date.label_and_location}\n#{date.duration}"
           end

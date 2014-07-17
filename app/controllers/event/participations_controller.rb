@@ -99,13 +99,16 @@ class Event::ParticipationsController < CrudController
   end
 
   def list_entries
-    records = apply_filter_scope(load_entries)
+    records = apply_filter_scope(load_entries_and_populate_counts)
     records = apply_default_sort(records)
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
 
+  def load_entries_and_populate_counts
+    populate_counts(load_entries)
+  end
 
   def load_entries
     event.participations.
@@ -114,6 +117,14 @@ class Event::ParticipationsController < CrudController
           includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
           participating(event).
           uniq
+  end
+
+  def populate_counts(records)
+    @counts = FilterNavigation::Event::Participations::PREDEFINED_FILTERS.
+      each_with_object({}) do |filter, memo|
+        memo[filter] = apply_filter_scope(records, filter).count
+    end
+    records
   end
 
   def apply_default_sort(records)
@@ -125,16 +136,16 @@ class Event::ParticipationsController < CrudController
     params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
   end
 
-  def apply_filter_scope(records)
+  def apply_filter_scope(records, kind = params[:filter])
     # default event filters
     valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
-    scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
+    scope = valid_scopes.detect { |k| k.to_s == kind }
     if scope
       # do not use params[:filter] in send to satisfy brakeman
       records = records.send(scope, event) unless scope.to_s == 'all'
     # event specific filters (filter by role label)
-    elsif event.participation_role_labels.include?(params[:filter])
-      records = records.with_role_label(params[:filter])
+    elsif event.participation_role_labels.include?(kind)
+      records = records.with_role_label(kind)
     end
     records
   end

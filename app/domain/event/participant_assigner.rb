@@ -33,8 +33,15 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
   private
 
   def update_participation_event(e = event)
+    old_event = participation.event
+
     participation.event = e
     participation.update_column(:event_id, e.id)
+
+    if e != old_event.id
+      old_event.refresh_representative_participant_count!
+    end
+    e.refresh_representative_participant_count!
   end
 
   def create_participant_role

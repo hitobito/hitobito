@@ -6,7 +6,7 @@
 %tr{id: dom_id(p)}
   %td
     = link_to(icon('arrow-left'),
-              participant_group_event_application_market_path(@group, @event, p),
+              participant_group_event_application_market_path(@group, @event, p, params),
               remote: true,
               method: :put)
 

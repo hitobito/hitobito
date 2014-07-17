@@ -238,13 +238,23 @@ class Event < ActiveRecord::Base
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 
-  # Sum the participations with the participant role and store in :participant_count
+  # Sum all assigned participations (no leaders) and store it in :participant_count
   def refresh_participant_count!
     count = participations.joins(:roles).
                            where(event_roles: { type: participant_type.sti_name }).
                            distinct.
                            count
     update_column(:participant_count, count)
+  end
+
+  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1 and
+  # store it in :representative_participant_count
+  def refresh_representative_participant_count!
+    count = participations.
+      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
+      where('event_roles.participation_id IS NULL OR event_roles.type = ?', participant_type.sti_name).
+      count
+    update_column(:representative_participant_count, count)
   end
 
   def init_questions

@@ -22,7 +22,7 @@ class Event::Role::Participant < Event::Role
 
   self.kind = :participant
 
-  after_save :update_count
+  after_create :update_count
   after_destroy :update_count
 
 
@@ -32,7 +32,10 @@ class Event::Role::Participant < Event::Role
   # participation we still have in memory
   def update_count
     event ||= participation.event
-    event.refresh_participant_count! if event
+    if event
+      event.refresh_participant_count!
+      event.refresh_representative_participant_count!
+    end
   end
 
 end

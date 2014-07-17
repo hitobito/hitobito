@@ -5,9 +5,9 @@
 
 %tr{id: dom_id(p)}
   = render 'participation', p: p
-  
+
   %td
-    = link_to(icon('arrow-right'), 
-              participant_group_event_application_market_path(@group, @event, p), 
-              remote: true, 
+    = link_to(icon('arrow-right'),
+              participant_group_event_application_market_path(@group, @event, p, params),
+              remote: true,
               method: :delete)

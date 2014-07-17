@@ -84,4 +84,5 @@ class Event::Course < Event
       end
     end
   end
+
 end

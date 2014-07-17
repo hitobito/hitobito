@@ -14,11 +14,13 @@ if defined? Bullet
   # groups loaded for current user
   Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :groups
 
+  # answers for event::participations
+
   # EventKind may not be eager loaded if some event types have kind and others not.
   Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event::Course', association: :kind
 
   # event, :person and roles for participation list
-  [:event, :person, :roles].each do |assoc|
+  [:application, :answers, :event, :person, :roles].each do |assoc|
     Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Participation', association: assoc
   end
 end

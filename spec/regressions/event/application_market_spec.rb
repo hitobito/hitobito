@@ -45,7 +45,7 @@ describe Event::ApplicationMarketController, type: :controller do
     end
 
     it 'has applications' do
-      assigns(:applications).should have(3).items
+      assigns(:applications).should have(1).items
     end
 
     it 'has event' do

@@ -39,8 +39,14 @@ describe Event::Role do
     let(:role)  { @role.reload }
     let(:participation) { Fabricate(:event_participation, event: event) }
 
-    it 'decrements event#participant_count' do
-      expect { role.destroy }.to change {  event.reload.participant_count }.by(-1)
+    it 'decrements event#(representative_)participant_count' do
+      participant_count = event.reload.participant_count
+      representative_participant_count = event.reload.representative_participant_count
+
+      role.destroy
+
+      event.reload.participant_count.should eq participant_count - 1
+      event.reload.representative_participant_count.should eq representative_participant_count - 1
     end
 
     it 'decrements event#participant_count if participations has other non participant roles' do
@@ -48,7 +54,13 @@ describe Event::Role do
       treasurer.participation = Fabricate(:event_participation, event: event)
       treasurer.save!
 
-      expect { role.destroy }.to change {  event.reload.participant_count }.by(-1)
+      participant_count = event.reload.participant_count
+      representative_participant_count = event.reload.representative_participant_count
+
+      role.destroy
+
+      event.reload.participant_count.should eq participant_count - 1
+      event.reload.representative_participant_count.should eq representative_participant_count - 1
     end
 
   end

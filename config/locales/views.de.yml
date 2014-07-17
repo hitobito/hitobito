@@ -480,7 +480,6 @@ de:
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:
-        assigned: 'zugeteilt'
         assigned_participants: 'Zugeteilte Teilnehmende'
     kinds:
       form:
@@ -547,6 +546,7 @@ de:
     not_possible: 'nicht möglich'
     participants_info: '%{count} Anmeldungen'
     participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'
+    active_participants_info: '%{count} Anmeldungen zugeteilt'
     issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
     prolong_only:
       one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
@@ -617,9 +617,9 @@ de:
 
   filter_navigation/event/participations:
     predefined_filters:
-      all: Alle Personen
-      teamers: Leitungsteam
-      participants: Teilnehmende
+      all: Alle Personen (%{count})
+      teamers: Leitungsteam (%{count})
+      participants: Teilnehmende (%{count})
 
 
   sheet/csv_import:

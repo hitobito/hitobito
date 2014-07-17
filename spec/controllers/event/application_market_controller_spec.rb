@@ -98,11 +98,11 @@ describe Event::ApplicationMarketController do
       context 'applications' do
         subject { assigns(:applications) }
 
-        it { should have(3).items }
+        it { should have(1).items }
 
         it { should include(appl_prio_1) }
-        it { should include(appl_prio_2) }
-        it { should include(appl_prio_3) }
+        it { should_not include(appl_prio_2) }
+        it { should_not include(appl_prio_3) }
         it { should_not include(appl_waiting) }
 
         it { should_not include(appl_participant) }

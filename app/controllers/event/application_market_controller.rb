@@ -73,7 +73,7 @@ class Event::ApplicationMarketController < ApplicationController
 
   def filter_applications
     if params[:prio].nil? && params[:waiting_list].nil?
-      params[:prio] = %w(1 2 3)  # default filter
+      params[:prio] = %w(1)  # default filter
     end
 
     conditions, args = [], []

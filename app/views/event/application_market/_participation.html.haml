@@ -6,7 +6,7 @@
 %td
   %strong= link_to(p.person.to_s(:list), group_event_participation_path(@group, @event, p.id))
   %br/
-  = [p.person.town, p.originating_group].compact.join(', ')
+  = p.person_location_information
   %br/
   .muted
     = t('.registered_at', date: f(p.created_at.to_date))

@@ -15,7 +15,7 @@ class Event::ApplicationMarketController < ApplicationController
 
   def index
     @participants = load_participants
-    @applications = load_applications
+    @applications = sort_and_decorate(load_applications)
   end
 
   def add_participant
@@ -43,17 +43,21 @@ class Event::ApplicationMarketController < ApplicationController
   private
 
   def load_participants
-    event.participations_for(event.participant_type).includes(:application)
+    event.participations_for(event.participant_type).
+      includes(:application, person: [:primary_group])
   end
 
   def load_applications
-    applications = Event::Participation.
-                       joins(:event).
-                       includes(:application, :person).
-                       references(:application).
-                       where(filter_applications).
-                       merge(Event::Participation.pending).
-                       uniq
+    Event::Participation.
+      joins(:event).
+      includes(:application, person: [:primary_group]).
+      references(:application).
+      where(filter_applications).
+      merge(Event::Participation.pending).
+      uniq
+  end
+
+  def sort_and_decorate(applications)
     sort_applications(applications)
     Event::ParticipationDecorator.decorate_collection(applications)
   end

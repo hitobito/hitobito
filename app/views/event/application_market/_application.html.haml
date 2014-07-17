@@ -5,11 +5,11 @@
 
 %tr{id: dom_id(p)}
   %td
-    = link_to(icon('arrow-left'), 
-              participant_group_event_application_market_path(@group, @event, p), 
-              remote: true, 
+    = link_to(icon('arrow-left'),
+              participant_group_event_application_market_path(@group, @event, p),
+              remote: true,
               method: :put)
-               
+
   = render 'participation', p: p
-  
+
   %td= p.waiting_list_link(@group, @event)

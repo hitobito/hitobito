@@ -21,6 +21,10 @@ class Event::ParticipationDecorator < ApplicationDecorator
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
   end
 
+  def person_location_information
+    [person.town, originating_group].compact.join(', ')
+  end
+
   def incomplete_label
     if answers.any? { |answer| answer.question.required? && answer.answer.blank? }
       content_tag(:div, h.t('.incomplete'), class: 'text-warning')

@@ -107,7 +107,9 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_entries_and_populate_counts
-    populate_counts(load_entries)
+    records = load_entries
+    @counts = populate_counts(records)
+    records
   end
 
   def load_entries
@@ -120,11 +122,9 @@ class Event::ParticipationsController < CrudController
   end
 
   def populate_counts(records)
-    @counts = FilterNavigation::Event::Participations::PREDEFINED_FILTERS.
-      each_with_object({}) do |filter, memo|
-        memo[filter] = apply_filter_scope(records, filter).count
+    FilterNavigation::Event::Participations::PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
+      memo[name] = apply_filter_scope(records, name).count
     end
-    records
   end
 
   def apply_default_sort(records)

@@ -252,8 +252,8 @@ class Event < ActiveRecord::Base
   def refresh_representative_participant_count!
     count = participations.
       joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
-      where('event_roles.participation_id IS NULL OR event_roles.type = ?', participant_type.sti_name).
-      count
+      where('event_roles.participation_id IS NULL OR event_roles.type = ?',
+            participant_type.sti_name).count
     update_column(:representative_participant_count, count)
   end
 

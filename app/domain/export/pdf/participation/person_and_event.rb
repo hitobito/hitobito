@@ -7,27 +7,9 @@
 
 module Export::Pdf::Participation
   class PersonAndEvent < Section
-    def render
-      first_page_section do
-        heading do
-          render_boxed(-> { text human_participant_name, style: :bold },
-                       -> { text human_event_name, style: :bold })
-        end
-
-        move_down_line
-        render_boxed(-> { render_section(Person) },
-                     -> { render_section(Event) }, 10)
-      end
-    end
-
-    private
-
-    # decrease size of section by 10
-    def section_size
-      super - 10
-    end
 
     class Person < Section
+
       def render
         text person.first_name, person.last_name, style: :bold
         text person.address
@@ -50,9 +32,8 @@ module Export::Pdf::Participation
         [:birthday]
       end
 
-      # TODO see 7304
       def originating_groups
-        ['Schar: Jubla Ratatouille', 'Jubla-Kanton: SGAIARGL']
+        []
       end
 
       def phone_numbers
@@ -89,6 +70,30 @@ module Export::Pdf::Participation
           end
         end
       end
+    end
+
+    class_attribute :person_section
+
+    self.person_section = Person
+
+    def render
+      first_page_section do
+        heading do
+          render_boxed(-> { text human_participant_name, style: :bold },
+                       -> { text human_event_name, style: :bold })
+        end
+
+        move_down_line
+        render_boxed(-> { render_section(person_section) },
+                     -> { render_section(Event) }, 10)
+      end
+    end
+
+    private
+
+    # decrease size of section by 10
+    def section_size
+      super - 10
     end
 
   end

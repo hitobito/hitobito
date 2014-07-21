@@ -9,12 +9,11 @@ module Export::Pdf::Participation
   class Header < Section
 
     def render
-      bounding_box([0, cursor], width: bounds.width) do
-        font_size(22) do
-          shrinking_text_box heading, style: :bold, at: [0, cursor - 15], width: bounds.width - 80
+      bounding_box([0, cursor], width: bounds.width, height: 40) do
+        font_size(20) do
+          shrinking_text_box heading, style: :bold, width: bounds.width - 80
         end
-        image image_path, position: :right, width: 60, height: 50
-        stroke_bounds
+        render_image
       end
     end
 
@@ -36,8 +35,7 @@ module Export::Pdf::Participation
       event.dates.map(&:start_at).map(&:year).min
     end
 
-    def image_path
-      Rails.root.join('app/assets/images/logo.png')
+    def render_image
     end
 
   end

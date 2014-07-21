@@ -74,6 +74,17 @@ class Event::ParticipationsController < CrudController
 
   private
 
+  def list_entries
+    filter = Event::ParticipationFilter.new(event, current_user, params)
+    records = filter.list_entries
+    @counts = filter.counts
+
+    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    records
+  end
+
+
   def authorize_class
     authorize!(:index_participations, event)
   end
@@ -98,56 +109,8 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def list_entries
-    records = apply_filter_scope(load_entries_and_populate_counts)
-    records = apply_default_sort(records)
-    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
-    records
-  end
-
-  def load_entries_and_populate_counts
-    records = load_entries
-    @counts = populate_counts(records)
-    records
-  end
-
-  def load_entries
-    event.participations.
-          where(event_participations: { active: true }).
-          joins(:roles).
-          includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
-          participating(event).
-          uniq
-  end
-
-  def populate_counts(records)
-    FilterNavigation::Event::Participations::PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
-      memo[name] = apply_filter_scope(records, name).count
-    end
-  end
-
-  def apply_default_sort(records)
-    records = records.order_by_role(event.class) if Settings.people.default_sort == 'role'
-    records.merge(Person.order_by_name)
-  end
-
   def sort_columns
     params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
-  end
-
-  def apply_filter_scope(records, kind = params[:filter])
-    # default event filters
-    valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
-    scope = valid_scopes.detect { |k| k.to_s == kind }
-    if scope
-      # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(scope, event) unless scope.to_s == 'all'
-    # event specific filters (filter by role label)
-    elsif event.participation_role_labels.include?(kind)
-      records = records.with_role_label(kind)
-    end
-    records
   end
 
   def find_entry
@@ -256,9 +219,7 @@ class Event::ParticipationsController < CrudController
     model_params.permit(permitted_attrs)
   end
 
-  class << self
-    def model_class
-      Event::Participation
-    end
+  def self.model_class
+    Event::Participation
   end
 end

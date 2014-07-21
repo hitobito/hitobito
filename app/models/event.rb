@@ -147,8 +147,7 @@ class Event < ActiveRecord::Base
       today = ::Date.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-      where('events.maximum_participants IS NULL OR ' \
-            'events.maximum_participants <= 0 OR ' \
+      where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
     end
 
@@ -182,11 +181,7 @@ class Event < ActiveRecord::Base
     end
 
     def type_name
-      if self == base_class
-        'simple'
-      else
-        name.demodulize.underscore
-      end
+      self == base_class ? 'simple' : name.demodulize.underscore
     end
 
     def all_types
@@ -242,8 +237,7 @@ class Event < ActiveRecord::Base
   def refresh_participant_count!
     count = participations.joins(:roles).
                            where(event_roles: { type: participant_type.sti_name }).
-                           distinct.
-                           count
+                           distinct.count
     update_column(:participant_count, count)
   end
 

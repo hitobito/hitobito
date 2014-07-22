@@ -9,10 +9,6 @@ module Export::Pdf::Participation
   class EventDetails < Section
     attr_reader :count
 
-    def self.image_path
-      Rails.root.join('app/assets/images/logo.png')
-    end
-
     def render
       pdf.start_new_page
 

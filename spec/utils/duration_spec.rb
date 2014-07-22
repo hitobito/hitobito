@@ -9,12 +9,15 @@ require 'spec_helper'
 
 describe Duration do
 
+  let(:duration) { Duration.new(start, finish) }
+
   context '#cover?' do
     let(:start) { Time.zone.parse('2013-10-10 10:30') }
     let(:finish) { Time.zone.parse('2013-10-12 10:30') }
     let(:now) { Time.zone.parse('2013-10-11 10:30') }
 
-    subject { Duration.new(start, finish) }
+    subject { duration }
+
 
     context 'between start finish' do
       it { should be_cover(now) }
@@ -35,7 +38,28 @@ describe Duration do
       let(:finish) { nil }
       it { should_not be_cover(now) }
     end
+  end
 
+  context '#days' do
+    subject { duration.days }
+
+    context 'with finish_at' do
+      let(:start)  { Time.zone.parse('2013-10-10 10:30') }
+      let(:finish) { Time.zone.parse('2013-10-12 10:30') }
+
+      it 'calculuated form start to finish' do
+        should eq 2
+      end
+    end
+
+    context 'without finish_at' do
+      let(:start)  { Time.zone.parse('2013-10-10 10:30') }
+      let(:finish) { nil }
+
+      it 'defaults to 1' do
+        should eq 1
+      end
+    end
   end
 
 end

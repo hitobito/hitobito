@@ -30,17 +30,14 @@ class Event::ListsController < ApplicationController
 
     respond_to do |format|
       format.html { @courses_by_kind }
-      format.csv  { render_courses_csv(@courses_by_kind.values.flatten) }
+      format.csv  { render_courses_csv(@courses_by_kind.values.flatten) if can?(:export, Event) }
     end
   end
 
   private
 
   def render_courses_csv(courses)
-    if can?(:export, Event)
-      csv = Export::Csv::Events::List.export(courses)
-      send_data csv, type: :csv
-    end
+    send_data Export::Csv::Events::List.export(courses), type: :csv
   end
 
   def set_group_vars

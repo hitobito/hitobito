@@ -23,4 +23,6 @@ if defined? Bullet
   [:application, :answers, :event, :person, :roles].each do |assoc|
     Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Participation', association: assoc
   end
+
+  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Kind', association: :translations
 end

@@ -9,9 +9,9 @@ class Event::ParticipationFilter
   end
 
   def list_entries
-    records = apply_filter_scope(load_entries)
+    records = load_entries
     @counts = populate_counts(records)
-    apply_default_sort(records)
+    apply_default_sort(apply_filter_scope(records))
   end
 
   private

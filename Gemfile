@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.6'
+gem 'rails', '4.0.8'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -61,7 +61,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'better_errors'
   gem 'bullet'
   gem 'quiet_assets'
 end
@@ -87,7 +86,7 @@ group :console do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'pry-rails'
-  #gem 'pry-stack_explorer'
+  gem 'pry-stack_explorer'
   gem 'rdoc-tags'
   gem 'spring-commands-rspec'
   gem 'wirble'

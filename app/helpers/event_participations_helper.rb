@@ -11,7 +11,7 @@ module EventParticipationsHelper
     f(participation.created_at.to_date)
   end
 
-  def event_participations_roles_header(t, p)
+  def event_participations_roles_header(t)
     header = t.sort_header(:roles, Role.model_name.human(count: 2))
 
     if can?(:update, entries.first)

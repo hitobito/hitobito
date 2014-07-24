@@ -22,7 +22,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def person_location_information
-    [person.town, originating_group].compact.join(', ')
+    [person.town, originating_group].reject(&:blank?).join(', ')
   end
 
   def incomplete_label

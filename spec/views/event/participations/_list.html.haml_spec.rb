@@ -10,7 +10,7 @@ require 'spec_helper'
 describe 'event/participations/_list.html.haml' do
 
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
-  let(:participation) { Event::ParticipationDecorator.new(Fabricate(:event_participation, event: event)) }
+  let(:participation) { Fabricate(:event_participation, event: event) }
   let(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
@@ -25,8 +25,9 @@ describe 'event/participations/_list.html.haml' do
     assign(:event, event)
     assign(:group, event.groups.first)
     view.stub(parent: event)
-    view.stub(entries: [participation])
+    view.stub(entries: Event::ParticipationDecorator.decorate_collection([participation]))
     view.stub(params: params)
+    Fabricate(event.participant_type.name, participation: participation)
   end
 
   it 'marks participations where required questions are unanswered' do
@@ -35,6 +36,22 @@ describe 'event/participations/_list.html.haml' do
     question = event.questions.create!(question: 'dummy', required: true)
     participation.answers.create!(question: question, answer: '')
     dom.should have_text 'Pflichtangaben fehlen'
+  end
+
+  context 'created_at' do
+
+    it 'can be viewed by someone how can show participation details' do
+      login_as(people(:top_leader))
+      dom.should have_text 'Rollen | Anmeldedatum'
+      dom.should have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
+    end
+
+    it 'is not seen by participants' do
+      login_as(participation.person)
+      dom.should_not have_text 'Rollen | Anmeldedatum'
+      dom.should_not have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
+    end
+
   end
 
   def login_as(user)

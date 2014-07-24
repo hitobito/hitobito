@@ -240,6 +240,7 @@ de:
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
+        created_at: Anmeldedatum
 
       event/application:
         priority_1_id: "Kurs"

@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+require 'csv'
 
 
 describe Export::Csv::People::ParticipationsFull do
@@ -40,7 +41,8 @@ describe Export::Csv::People::ParticipationsFull do
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)', 'Rollen']
+       'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)',
+       'Rollen', 'Anmeldedatum']
     end
 
     subject { csv }
@@ -50,8 +52,9 @@ describe Export::Csv::People::ParticipationsFull do
     context 'first row' do
       subject { csv[0] }
 
-      its(['Vorname']) { should eq person.first_name }
-      its(['Rollen']) { should be_blank }
+      its(['Vorname'])      { should eq person.first_name }
+      its(['Rollen'])       { should be_blank }
+      its(['Anmeldedatum']) { should eq I18n.l(Time.zone.now.to_date) }
 
       context 'with additional information' do
         before { participation.update_attribute(:additional_information, 'foobar') }

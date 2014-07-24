@@ -32,7 +32,7 @@ module CrudHelper
     options = attrs.extract_options!
 
     buttons_bottom = options.delete(:buttons_bottom)
-    buttons_top = options.delete(:buttons_top)
+    buttons_top = options.delete(:buttons_top) { true }
     submit_label = options.delete(:submit_label)
     cancel_url = get_cancel_url(object, options)
 

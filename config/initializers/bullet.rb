@@ -25,4 +25,7 @@ if defined? Bullet
   end
 
   Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Kind', association: :translations
+
+  # Event::Participation decorator informs marks participants with incomplete answers on participations lists
+  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Answer', association: :question
 end

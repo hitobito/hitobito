@@ -10,12 +10,7 @@
         = labeled_attr(entry, :dates_full)
         = labeled_attr(entry, :motto)
         = labeled_attr(entry, :cost)
-
-      - if entry.description?
-        = render_attrs(entry, :description)
-
-      - if entry.location?
-        = render_attrs(entry, :location)
+        = render_present_attrs(entry, :description, :location)
 
     = render_extensions :show
 

@@ -21,7 +21,6 @@ module Export::Pdf::Participation
     def render_description
       with_count(description_title) do
         text event.description
-        2.times { move_down_line }
       end
     end
 
@@ -43,6 +42,7 @@ module Export::Pdf::Participation
       heading { text "#{@count += 1}.", content, style: :bold }
       move_down_line
       yield
+      2.times { move_down_line }
     end
 
     def description_title

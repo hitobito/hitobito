@@ -213,7 +213,7 @@ de:
 
     attrs:
       additional_data: Weitere Angaben
-      events: Meine Anlässe
+      events: Meine nächsten Anlässe
 
     fields:
       format_birthday: (dd.mm.yy)

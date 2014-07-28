@@ -60,8 +60,7 @@ class Event::KindsController < SimpleCrudController
   def flatten_nested_qualification_kinds(kinds_attrs, existing_kinds)
     kinds_attrs.flat_map do |role, categories|
       categories.flat_map do |category, ids|
-        ids[:qualification_kind_ids].collect do |id|
-
+        ids.fetch(:qualification_kind_ids, []).collect do |id|
           { id: qualification_kind_assoc_id(id, role, category, existing_kinds),
             role: role,
             category: category,

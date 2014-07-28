@@ -206,11 +206,12 @@
 
 // Left navigation
 .nav-left {
+  min-width: 160px;
   max-width: 160px;
   background: $grayLighter;
   border-right: 2px solid $grayLight;
   @include border-left-radius($borderRadius);
-  padding: 0px 18px 18px 20px;
+  padding: 18px 18px 18px 20px;
 
   @include responsive(phone, $mediaTablet) {
     display: none;
@@ -271,7 +272,7 @@
   line-height: 20px;
   display: block;
   padding: 6px 20px;
-  margin: 24px -18px 0 -20px;
+  margin: 0px -18px 0 -20px;
 }
 .nav-left-title.active {
   background: $grayLight;

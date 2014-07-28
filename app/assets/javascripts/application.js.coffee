@@ -87,6 +87,15 @@ closePopover = (event) ->
   event.preventDefault()
   $($('body').data('popover')).popover('destroy')
 
+toggleFilterRoles = (event) ->
+  event.preventDefault()
+  target = $(event.target)
+  checked = target.data('checked')
+  layer = target.data('layer')
+  $(":checkbox[data-layer=#{layer}]").prop('checked', !!!checked)
+  target.data('checked', !checked)
+
+
 Application.moveElementToBottom = (elementId, targetId, callback) ->
   $target = $('#' + targetId)
   left = $target.offset().left
@@ -113,6 +122,7 @@ Application.updateApplicationMarketCount = ->
   text = "#{applications} "
   text += $(".pending_applications_info .#{selector}").text()
   $('.pending_applications_info span:eq(0)').html(text)
+
 
 $ ->
   # wire up quick search
@@ -158,4 +168,6 @@ $ ->
   $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 
   $('body').on('click', '.popover a.cancel', closePopover)
+
+  $('body').on('click', 'a[data-action=filter-toggle]', toggleFilterRoles)
 

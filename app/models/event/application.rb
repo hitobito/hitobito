@@ -41,6 +41,14 @@ class Event::Application < ActiveRecord::Base
       where(event_participations: { active: false },
             rejected: false)
     end
+
+    def label(args = {})
+      model_name.human(args)
+    end
+
+    def label_plural
+      model_name.human(count: 2)
+    end
   end
 
   ### INSTANCE METHODS

@@ -19,8 +19,10 @@ class Event::ParticipationsController < CrudController
 
   self.sort_mappings = { last_name:  'people.last_name',
                          first_name: 'people.first_name',
-                         roles: ->(event) { Person.order_by_name_statement.unshift(
-                                              Event::Participation.order_by_role_statement(event)) },
+                         roles: lambda do |event|
+                                  Person.order_by_name_statement.unshift(
+                                  Event::Participation.order_by_role_statement(event))
+                                end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
                          town:       'people.town' }
@@ -61,7 +63,9 @@ class Event::ParticipationsController < CrudController
 
   def print
     load_answers
-    render :print, layout: false
+    respond_to do |format|
+      format.pdf { render_participation(entry) }
+    end
   end
 
   def destroy
@@ -69,6 +73,17 @@ class Event::ParticipationsController < CrudController
   end
 
   private
+
+  def list_entries
+    filter = Event::ParticipationFilter.new(event, current_user, params)
+    records = filter.list_entries
+    @counts = filter.counts
+
+    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    records
+  end
+
 
   def authorize_class
     authorize!(:index_participations, event)
@@ -94,45 +109,8 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def list_entries
-    records = apply_filter_scope(load_entries)
-    records = apply_default_sort(records)
-    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
-    records
-  end
-
-
-  def load_entries
-    event.participations.
-          where(event_participations: { active: true }).
-          joins(:roles).
-          includes(:roles, :event, person: [:additional_emails, :phone_numbers]).
-          participating(event).
-          uniq
-  end
-
-  def apply_default_sort(records)
-    records = records.order_by_role(event.class) if Settings.people.default_sort == 'role'
-    records.merge(Person.order_by_name)
-  end
-
   def sort_columns
     params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
-  end
-
-  def apply_filter_scope(records)
-    # default event filters
-    valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
-    scope = valid_scopes.detect { |k| k.to_s == params[:filter] }
-    if scope
-      # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(scope, event) unless scope.to_s == 'all'
-    # event specific filters (filter by role label)
-    elsif event.participation_role_labels.include?(params[:filter])
-      records = records.with_role_label(params[:filter])
-    end
-    records
   end
 
   def find_entry
@@ -153,11 +131,7 @@ class Event::ParticipationsController < CrudController
   def build_entry
     participation = event.participations.new
     participation.person = current_user unless params[:for_someone_else]
-
-    if event.supports_applications
-      build_application(participation)
-    end
-
+    build_application(participation) if event.supports_applications
     participation
   end
 
@@ -176,6 +150,9 @@ class Event::ParticipationsController < CrudController
     # Set these attrs again as a new application instance might have been
     # created by the mass assignment.
     entry.application.priority_1 ||= event if entry.application
+
+    # Required questions are enforced only for users that are not allowed to add others
+    entry.enforce_required_answers = true unless can?(:update, entry)
   end
 
   def load_priorities
@@ -212,9 +189,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def send_confirmation_email
-    if entry.person_id == current_user.id
-      Event::ParticipationConfirmationJob.new(entry).enqueue!
-    end
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if entry.person_id == current_user.id
   end
 
   def set_success_notice
@@ -244,9 +219,7 @@ class Event::ParticipationsController < CrudController
     model_params.permit(permitted_attrs)
   end
 
-  class << self
-    def model_class
-      Event::Participation
-    end
+  def self.model_class
+    Event::Participation
   end
 end

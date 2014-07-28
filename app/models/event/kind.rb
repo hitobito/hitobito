@@ -24,17 +24,8 @@ class Event::Kind < ActiveRecord::Base
 
   has_many :events
 
-  # The qualifications to gain for this event kind
-  has_and_belongs_to_many :qualification_kinds, join_table: 'event_kinds_qualification_kinds',
-                                                foreign_key: :event_kind_id
-  # The qualifications required to visit this event kind
-  has_and_belongs_to_many :preconditions, join_table: 'event_kinds_preconditions',
-                                          class_name: 'QualificationKind',
-                                          foreign_key: :event_kind_id
-  # The qualifications that are prolonged when visiting this event kind
-  has_and_belongs_to_many :prolongations, join_table: 'event_kinds_prolongations',
-                                          class_name: 'QualificationKind',
-                                          foreign_key: :event_kind_id
+  has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind',
+                                            foreign_key: 'event_kind_id'
 
 
   ### VALIDATIONS
@@ -44,6 +35,10 @@ class Event::Kind < ActiveRecord::Base
   validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
 
 
+  accepts_nested_attributes_for :event_kind_qualification_kinds, allow_destroy: true
+
+
+  before_validation :set_self_in_nested
 
   ### INSTANCE METHODS
 
@@ -53,7 +48,15 @@ class Event::Kind < ActiveRecord::Base
 
   # is this event type qualifying
   def qualifying?
-    qualification_kinds.exists? || prolongations.exists?
+    event_kind_qualification_kinds.where('category IN (?)', %w(qualification prolongation)).exists?
+  end
+
+  def qualification_kinds(category, role)
+    QualificationKind.includes(:translations).
+                      joins(:event_kind_qualification_kinds).
+                      where(event_kind_qualification_kinds: { event_kind_id: id,
+                                                              category: category,
+                                                              role: role })
   end
 
   # Soft destroy if events exist, otherwise hard destroy
@@ -62,6 +65,17 @@ class Event::Kind < ActiveRecord::Base
       super
     else
       destroy!
+    end
+  end
+
+  private
+
+  def set_self_in_nested
+    # don't try to set self in frozen nested attributes (-> marked for destroy)
+    event_kind_qualification_kinds.each do |e|
+      unless e.frozen?
+        e.event_kind = self
+      end
     end
   end
 

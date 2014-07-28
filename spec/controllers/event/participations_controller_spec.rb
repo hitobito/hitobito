@@ -69,6 +69,14 @@ describe Event::ParticipationsController do
 
   end
 
+  context 'GET print' do
+    render_views
+
+    it 'renders participation as pdf' do
+      get :print, group_id: group.id, event_id: course.id, id: participation.id, format: :pdf
+      response.should be_ok
+    end
+  end
 
   context 'GET new' do
     before { get :new, group_id: group.id, event_id: event.id }
@@ -264,6 +272,31 @@ describe Event::ParticipationsController do
 
   end
 
+  context 'required answers' do
+    let(:event) { events(:top_event) }
+
+    def make_request(person, answer)
+      question = event.questions.create!(question: 'dummy', required: true)
+      sign_in(person)
+
+      post :create, group_id: event.groups.first.id, event_id: event.id, event_participation:
+        { answers_attributes: { '0' => { 'question_id' => question.id, 'answer' => answer } } }
+      assigns(:participation)
+    end
+
+    it 'top_leader can create without supplying required answer' do
+      make_request(people(:top_leader), '').should be_valid
+    end
+
+    it 'bottom_member cannot create without supplying required answer' do
+      make_request(people(:bottom_member), '').should_not be_valid
+    end
+
+    it 'bottom_member can create when supplying required answer' do
+      make_request(people(:bottom_member), 'dummy').should be_valid
+    end
+  end
+
 
   context 'multiple choice answers' do
     let(:event) { events(:top_event) }
@@ -287,7 +320,6 @@ describe Event::ParticipationsController do
 
     context 'PUT #update' do
       let!(:participation) { Fabricate(:event_participation, event: event, person: user) }
-      let(:values) { ['0'] }
       let(:answer) { participation.answers.build }
       let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['0'], id: answer.id } } }
 

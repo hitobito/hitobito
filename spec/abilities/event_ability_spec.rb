@@ -198,6 +198,13 @@ describe EventAbility do
         should_not be_able_to(:index_participations, other)
       end
 
+      context 'AssistantLeader' do
+        before { Fabricate(Event::Role::AssistantLeader.name.to_sym, participation: participation) }
+
+        it 'may not update event' do
+          should be_able_to(:update, event)
+        end
+      end
     end
 
     context Event::Participation do

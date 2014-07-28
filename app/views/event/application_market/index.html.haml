@@ -5,17 +5,18 @@
 
 -title event.to_s
 
-- content_for :toolbar do
-  .btn-toolbar
+.row-fluid
+  .btn-toolbar.span9
     = action_button(t('global.associations.add_with_model', model: Event::Role::Participant.model_name.human),
                     new_group_event_participation_path(@group, @event, for_someone_else: true), :plus)
+  .span3
+    %span#booking_info= event.booking_info
 
 #main.row-fluid
   %article.span6
     %h2= t('.assigned_participants')
-    %p{style: 'padding-top: 7px; margin-bottom: 20px;'}
-      %span#booking_info= event.booking_info
-      = t('.assigned')
+    %p{style: 'padding-top: 7px; margin-bottom: 25px;'}
+      %span#active_participants_info= event.active_participants_info
 
     %div{style: "max-width: 550px;"}
       %table.table.table-striped.table-hover
@@ -25,7 +26,12 @@
 
 
   %article.span6
-    %h2= Event::Application.model_name.human(count: 2)
+    %h2= Event::Application.label_plural
+    .pending_applications_info
+      %span= "#{@applications.count} #{Event::Application.label(count: @applications.count)}"
+      %span.hidden.one=Event::Application.label
+      %span.hidden.other=Event::Application.label_plural
+
     = render 'prio_buttons'
 
     %div{style: "max-width: 600px;"}

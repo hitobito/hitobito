@@ -83,6 +83,7 @@ de:
         failure: "%{model} konnte nicht gelöscht werden."
 
   contactable:
+    address_or_email: "%{address} oder %{email}"
     fields:
       zip_town: PLZ/Ort
 
@@ -212,6 +213,7 @@ de:
 
     attrs:
       additional_data: Weitere Angaben
+      events: Meine nächsten Anlässe
 
     fields:
       format_birthday: (dd.mm.yy)
@@ -465,9 +467,11 @@ de:
     lists:
       courses:
         title: 'Verfügbare Kurse'
+        explanation: 'Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe.'
         csv_export_button: 'CSV Export'
       events:
         title: 'Demnächst stattfindende Anlässe'
+        explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
 
     application_market:
       already_assigned: 'Diese Person ist bereits anderweitig dem Anlass zugeteilt.'
@@ -476,12 +480,14 @@ de:
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:
-        assigned: 'zugeteilt'
         assigned_participants: 'Zugeteilte Teilnehmende'
     kinds:
       form:
         help_minimum_age: 'Jahre (Jahrgang am ersten Kursdatum massgebend)'
-        help_select_prolongations: 'Mit <Ctrl> + Klick können mehrere Qualifikationsarten ausgewählt werden.'
+        help_select_qualifications: 'Mit <Ctrl> + Klick können mehrere Qualifikationsarten ausgewählt werden.'
+        qualifications:
+          for_participants: 'Qualifikationen für Teilnehmende'
+          for_leaders: 'Qualifikationen für Leitende'
 
     participations:
       specific_information: 'Spezifische Angaben'
@@ -497,6 +503,12 @@ de:
         course_information: 'Informationen zu den Kursen'
       priorities:
         alternative_course: "%{number}. Ausweichkurs"
+      print:
+        read_and_agreed: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
+        requirements_for_event: Voraussetzungen für den Anlass
+        requirements_for_event_course: Voraussetzungen für den Kurs
+      list:
+        incomplete: Pflichtangaben fehlen
 
     register:
       register:
@@ -530,9 +542,11 @@ de:
 
   event_decorator:
     apply: 'Anmelden'
+    applied: 'Angemeldet'
     not_possible: 'nicht möglich'
     participants_info: '%{count} Anmeldungen'
     participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'
+    active_participants_info: '%{count} Anmeldungen zugeteilt'
     issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
     prolong_only:
       one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
@@ -603,9 +617,9 @@ de:
 
   filter_navigation/event/participations:
     predefined_filters:
-      all: Alle Personen
-      teamers: Leitungsteam
-      participants: Teilnehmende
+      all: Alle Personen (%{count})
+      teamers: Leitungsteam (%{count})
+      participants: Teilnehmende (%{count})
 
 
   sheet/csv_import:

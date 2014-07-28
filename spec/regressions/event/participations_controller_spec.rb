@@ -136,9 +136,8 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it 'renders participant and course contact' do
-      get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
-      response.body.should include person.address
-      response.body.should include 'bottom_member@example.com'
+      get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id, format: :pdf
+      response.should be_ok
     end
 
     it 'redirects users without permission' do

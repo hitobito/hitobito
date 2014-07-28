@@ -5,6 +5,8 @@
 
 - title t('.title')
 
+%p= t('.explanation')
+
 #main
   %section
     = grouped_table(@events_by_month, 4) do |event|

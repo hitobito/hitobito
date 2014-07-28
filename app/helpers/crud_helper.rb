@@ -14,6 +14,7 @@ module CrudHelper
   def entry_form(*attrs, &block)
     options = attrs.extract_options!
     options[:buttons_bottom] = true unless options.key?(:buttons_bottom)
+    options[:buttons_top] = true unless options.key?(:buttons_top)
     options[:cancel_url] ||= if controller.is_a?(SimpleCrudController)
                                polymorphic_path(path_args(model_class), returning: true)
                              else
@@ -31,13 +32,14 @@ module CrudHelper
     options = attrs.extract_options!
 
     buttons_bottom = options.delete(:buttons_bottom)
+    buttons_top = options.delete(:buttons_top) { true }
     submit_label = options.delete(:submit_label)
     cancel_url = get_cancel_url(object, options)
 
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << save_form_buttons(form, submit_label, cancel_url)
+      content << save_form_buttons(form, submit_label, cancel_url) if buttons_top
 
       content << if block_given?
                    capture(form, &block)

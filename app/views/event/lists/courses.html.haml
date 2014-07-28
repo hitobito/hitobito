@@ -6,6 +6,8 @@
 - title t('.title')
 - manager = can?(:manage_courses, Event)
 
+%p= t('.explanation')
+
 - content_for :toolbar do
   - if manager
     = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, year, group_id))
@@ -13,7 +15,7 @@
 = render 'shared/page_per_year', paging_params: group_id.to_i > 0 ? { group_id: group_id } : {}
 
 - if can?(:export, Event)
-  %p= action_button(t('.csv_export_button'), params.merge(format: :csv), :download)
+  = render 'export_button'
 
 
 #main

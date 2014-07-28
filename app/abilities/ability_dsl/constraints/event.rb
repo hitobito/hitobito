@@ -11,6 +11,10 @@ module AbilityDsl::Constraints
       permission_in_event?(:full)
     end
 
+    def for_managed_events
+      permission_in_event?(:full) && permission_in_event?(:qualify)
+    end
+
     def for_event_contacts
       permission_in_event?(:contact_data)
     end

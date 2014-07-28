@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702083911) do
+ActiveRecord::Schema.define(version: 20140717080643) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -81,6 +81,15 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.index ["event_id"], :name => "index_event_dates_on_event_id"
   end
 
+  create_table "event_kind_qualification_kinds", force: true do |t|
+    t.integer "event_kind_id",         null: false
+    t.integer "qualification_kind_id", null: false
+    t.string  "category",              null: false
+    t.string  "role",                  null: false
+    t.index ["category"], :name => "index_event_kind_qualification_kinds_on_category"
+    t.index ["role"], :name => "index_event_kind_qualification_kinds_on_role"
+  end
+
   create_table "event_kind_translations", force: true do |t|
     t.integer  "event_kind_id", null: false
     t.string   "locale",        null: false
@@ -97,24 +106,6 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "minimum_age"
-  end
-
-  create_table "event_kinds_preconditions", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_preconditions", :unique => true
-  end
-
-  create_table "event_kinds_prolongations", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_prolongations", :unique => true
-  end
-
-  create_table "event_kinds_qualification_kinds", force: true do |t|
-    t.integer "event_kind_id",         null: false
-    t.integer "qualification_kind_id", null: false
-    t.index ["event_kind_id", "qualification_kind_id"], :name => "index_event_kinds_qualification_kinds", :unique => true
   end
 
   create_table "event_participations", force: true do |t|
@@ -136,6 +127,7 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.string  "question"
     t.string  "choices"
     t.boolean "multiple_choices", default: false
+    t.boolean "required"
     t.index ["event_id"], :name => "index_event_questions_on_event_id"
   end
 
@@ -149,7 +141,7 @@ ActiveRecord::Schema.define(version: 20140702083911) do
 
   create_table "events", force: true do |t|
     t.string   "type"
-    t.string   "name",                                              null: false
+    t.string   "name",                                                        null: false
     t.string   "number"
     t.string   "motto"
     t.string   "cost"
@@ -161,14 +153,15 @@ ActiveRecord::Schema.define(version: 20140702083911) do
     t.date     "application_closing_at"
     t.text     "application_conditions"
     t.integer  "kind_id"
-    t.string   "state",                  limit: 60
-    t.boolean  "priorization",                      default: false, null: false
-    t.boolean  "requires_approval",                 default: false, null: false
+    t.string   "state",                            limit: 60
+    t.boolean  "priorization",                                default: false, null: false
+    t.boolean  "requires_approval",                           default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "participant_count",                 default: 0
+    t.integer  "participant_count",                           default: 0
     t.integer  "application_contact_id"
-    t.boolean  "external_applications",             default: false
+    t.boolean  "external_applications",                       default: false
+    t.integer  "representative_participant_count",            default: 0
     t.index ["kind_id"], :name => "index_events_on_kind_id"
   end
 

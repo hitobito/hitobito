@@ -7,7 +7,7 @@
 
 = render_extensions(:index)
 
-- if @event.kind.qualification_kinds.to_a.present?
+- if @event.kind.qualification_kinds('qualification', 'participant').to_a.present?
   %p= event.issued_qualifications_info_for_leaders
 
   = render 'list', entries: @leaders

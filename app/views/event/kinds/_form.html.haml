@@ -4,8 +4,22 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(buttons_bottom: false) do |f|
-   = f.labeled_input_fields :label, :short_name
-   = render_extensions 'fields', locals: { f: f }
-   = f.labeled_input_field :minimum_age, help_inline: t('.help_minimum_age')
-   = f.labeled_input_fields :precondition_ids, :qualification_kind_ids
-   = f.labeled_input_field :prolongation_ids, help: t('.help_select_prolongations')
+  = f.labeled_input_fields :label, :short_name
+  = render_extensions 'fields', locals: { f: f }
+  = f.labeled_input_field :minimum_age, help_inline: t('.help_minimum_age')
+
+  = field_set_tag(t('.qualifications.for_participants')) do
+    %p= t('.help_select_qualifications')
+    = labeled_qualification_kinds_field(f, @preconditions, :precondition, :participant,
+                                        Event::Kind.human_attribute_name(:preconditions))
+    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :participant,
+                                        Event::Kind.human_attribute_name(:qualification_kinds))
+    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :participant,
+                                        Event::Kind.human_attribute_name(:prolongations))
+
+  = field_set_tag(t('.qualifications.for_leaders')) do
+    %p= t('.help_select_qualifications')
+    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :leader,
+                                        Event::Kind.human_attribute_name(:qualification_kinds))
+    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :leader,
+                                        Event::Kind.human_attribute_name(:prolongations))

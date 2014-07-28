@@ -146,7 +146,7 @@ describe PeopleController, type: :controller do
       it 'lists event label, link and dates' do
         create_participation(date, true)
         get :show, params
-        header.should eq 'Anlässe'
+        header.should eq 'Meine nächsten Anlässe'
         label_link[:href].should eq group_event_path(course.groups.first, course)
         label_link.text.should eq 'Eventus'
         label.text.should =~ /Top/

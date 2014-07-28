@@ -107,6 +107,13 @@ Application.activateChosen = (i, element) ->
                  search_contains: true)
 
 
+Application.updateApplicationMarketCount = ->
+  applications = $('tbody#applications tr').size()
+  selector = if applications == 1 then 'one' else 'other'
+  text = "#{applications} "
+  text += $(".pending_applications_info .#{selector}").text()
+  $('.pending_applications_info span:eq(0)').html(text)
+
 $ ->
   # wire up quick search
   Application.setupQuicksearch()

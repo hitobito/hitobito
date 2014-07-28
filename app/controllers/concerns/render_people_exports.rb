@@ -23,5 +23,11 @@ module Concerns
       render text: emails.join(',')
     end
 
+    def render_participation(participation)
+      pdf = Export::Pdf::Participation.render(participation)
+      filename = "#{participation.event.id}_#{participation.id}.pdf"
+      send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+    end
+
   end
 end

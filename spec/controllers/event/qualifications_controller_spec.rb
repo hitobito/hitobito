@@ -30,7 +30,7 @@ describe Event::QualificationsController do
   before { sign_in(people(:top_leader)) }
 
   it 'event kind has one qualification kind' do
-    event.kind.qualification_kinds.should == [qualification_kinds(:sl)]
+    event.kind.qualification_kinds('qualification', 'participant').should eq [qualification_kinds(:sl)]
   end
 
 
@@ -55,7 +55,8 @@ describe Event::QualificationsController do
 
     context 'with one existing qualifications' do
       before do
-        participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
+        qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
+        participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
                                                     start_at: start_at)
       end
 
@@ -85,18 +86,22 @@ describe Event::QualificationsController do
 
     end
 
-    context 'without existing qualifications' do
+    context 'without existing qualifications for participant' do
       before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
 
       it { should have(1).item }
       it { should render_template('qualification') }
     end
 
-     context 'without existing qualifications for leader' do
-       before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
+    context 'without existing qualifications for leader' do
+      before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
 
-       it { assigns(:nothing_changed).should be_true }
-     end
+      it 'should obtain a qualification' do
+        obtained = obtained_qualifications(leader_1)
+        obtained.should have(1).item
+        obtained.should render_template('qualification')
+      end
+    end
   end
 
 
@@ -115,7 +120,8 @@ describe Event::QualificationsController do
 
     context 'with one existing qualification' do
       before do
-        participant_1.person.qualifications.create!(qualification_kind_id: event.kind.qualification_kind_ids.first,
+        qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
+        participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
                                                     start_at: event.qualification_date)
         delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
@@ -125,8 +131,8 @@ describe Event::QualificationsController do
     end
   end
 
-  def obtained_qualifications
-    q = Event::Qualifier.for(participant_1)
+  def obtained_qualifications(person = participant_1)
+    q = Event::Qualifier.for(person)
     q.send(:obtained, q.send(:qualification_kinds))
   end
 end

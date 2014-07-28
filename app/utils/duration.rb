@@ -39,6 +39,10 @@ class Duration < Struct.new(:start_at, :finish_at)
     end
   end
 
+  def days
+    finish_at ? (finish_at.to_date - start_at.to_date).to_i : start_at && 1
+  end
+
   def meaningful?
     start_at.blank? || finish_at.blank? || start_at <= finish_at
   end

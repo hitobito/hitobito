@@ -25,6 +25,8 @@ class Event::Participation < ActiveRecord::Base
 
   self.demodulized_route_keys = true
 
+  attr_accessor :enforce_required_answers
+
   ### ASSOCIATIONS
 
   belongs_to :event
@@ -43,8 +45,7 @@ class Event::Participation < ActiveRecord::Base
   ### VALIDATIONS
 
   validates :person_id,
-            uniqueness: { scope: :event_id,
-                          message: 'Du hast dich für diesen Anlass bereits angemeldet.' }
+            uniqueness: { scope: :event_id }
   validates :additional_information,
             length: { allow_nil: true, maximum: 2**16 - 1 }
 

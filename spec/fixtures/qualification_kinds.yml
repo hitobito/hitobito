@@ -17,8 +17,17 @@
 sl:
   validity: 2
 
+sl_leader:
+  validity: 2
+
 gl:
   validity: 1
+
+gl_leader:
+  validity: 1
+
+ql:
+  validity: 2
 
 old:
   validity: 1

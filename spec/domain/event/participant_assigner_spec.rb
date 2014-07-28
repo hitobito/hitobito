@@ -84,4 +84,43 @@ describe Event::ParticipantAssigner do
       end
     end
   end
+
+  describe 'event#representative_participant_count' do
+    let(:event1) { events(:top_event) }
+    let(:event2) { Event::Course.create!(name: 'Event 2', group_ids: event1.group_ids,
+                                                dates: event1.dates, kind: event_kinds(:slk)) }
+    let(:participation) { Fabricate(:event_participation, event: event1, active: false) }
+    let(:assigner1) { Event::ParticipantAssigner.new(event1, participation) }
+    let(:assigner2) { Event::ParticipantAssigner.new(event2, participation) }
+
+    before do
+      participation.create_application!(priority_1: event1, priority_2: event2)
+      participation.save!
+      participation.reload
+
+      [event1,event2].each(&:refresh_representative_participant_count!)
+      assert_representative_participant_count(1, 0)
+    end
+
+    def assert_representative_participant_count(count1, count2)
+      event1.reload.representative_participant_count.should eq count1
+      event2.reload.representative_participant_count.should eq count2
+    end
+
+    it 'changes when participant role is created and destroyed in priority_2 event' do
+      assigner2.create_role
+      assert_representative_participant_count(0, 1)
+
+      assigner2.remove_role
+      assert_representative_participant_count(1, 0)
+    end
+
+    it 'does not change when participant role is created and destroyed in priority_1 event' do
+      assigner1.create_role
+      assert_representative_participant_count(1, 0)
+
+      assigner1.remove_role
+      assert_representative_participant_count(1, 0)
+    end
+  end
 end

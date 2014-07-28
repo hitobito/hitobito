@@ -45,7 +45,11 @@ module FilterNavigation
       end
 
       def predefined_filter_label(key)
-        translate("predefined_filters.#{key}")
+        translate("predefined_filters.#{key}",  count: counts[key])
+      end
+
+      def counts
+        @counts ||= template.instance_variable_get('@counts') || {}
       end
 
       def init_dropdown_items

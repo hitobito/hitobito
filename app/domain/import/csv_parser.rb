@@ -26,8 +26,7 @@ module Import
         data = encode_as_utf8(@input)
         separator = find_separator(data)
         sanitized = remove_empty_lines(data, separator)
-        @csv = CSV.parse(sanitized, col_sep: separator, headers: true, skip_blanks: true)
-        strip_spaces
+        @csv = CSV.parse(sanitized, options.merge(col_sep: separator))
       rescue => e
         @error = e.to_s
       end
@@ -59,6 +58,12 @@ module Import
 
     private
 
+    def options
+      { converters: ->(field, _info) { field && field.strip },
+        header_converters: ->(header, _info) { header.to_s.strip },
+        headers: true, skip_blanks: true }
+    end
+
     def encode_as_utf8(input)
       fail translate(:contains_no_data) if input.nil?
       charset = CMess::GuessEncoding::Automatic.guess(input)
@@ -79,13 +84,5 @@ module Import
       end
     end
 
-    def strip_spaces
-      csv.headers.each { |header| header && header.strip! }
-      each do |row|
-        row.fields.each do |field|
-          field && field.strip!
-        end
-      end
-    end
   end
 end

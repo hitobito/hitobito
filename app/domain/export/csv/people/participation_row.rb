@@ -7,7 +7,6 @@
 
 module Export::Csv::People
   class ParticipationRow < Export::Csv::People::PersonRow
-
     dynamic_attributes[/^question_\d+$/] = :question_attribute
 
     def initialize(participation)
@@ -21,6 +20,10 @@ module Export::Csv::People
 
     def additional_information
       @participation.additional_information
+    end
+
+    def created_at
+      I18n.l(@participation.created_at.to_date)
     end
 
     def question_attribute(attr)

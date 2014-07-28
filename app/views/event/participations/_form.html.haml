@@ -6,6 +6,7 @@
 - title t('.title', event: @event)
 
 = entry_form(stacked: true,
+             buttons_top: false,
              submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
              cancel_url_new: group_event_path(@group, @event)) do |f|
 

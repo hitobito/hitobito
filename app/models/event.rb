@@ -147,8 +147,7 @@ class Event < ActiveRecord::Base
       today = ::Date.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-      where('events.maximum_participants IS NULL OR ' \
-            'events.maximum_participants <= 0 OR ' \
+      where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
     end
 
@@ -182,11 +181,7 @@ class Event < ActiveRecord::Base
     end
 
     def type_name
-      if self == base_class
-        'simple'
-      else
-        name.demodulize.underscore
-      end
+      self == base_class ? 'simple' : name.demodulize.underscore
     end
 
     def all_types
@@ -238,13 +233,22 @@ class Event < ActiveRecord::Base
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 
-  # Sum the participations with the participant role and store in :participant_count
+  # Sum all assigned participations (no leaders) and store it in :participant_count
   def refresh_participant_count!
     count = participations.joins(:roles).
                            where(event_roles: { type: participant_type.sti_name }).
-                           distinct.
-                           count
+                           distinct.count
     update_column(:participant_count, count)
+  end
+
+  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1 and
+  # store it in :representative_participant_count
+  def refresh_representative_participant_count!
+    count = participations.
+      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
+      where('event_roles.participation_id IS NULL OR event_roles.type = ?',
+            participant_type.sti_name).count
+    update_column(:representative_participant_count, count)
   end
 
   def init_questions

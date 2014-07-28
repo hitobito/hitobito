@@ -112,6 +112,9 @@ de:
         one: Kassier
       event/role/speaker:
         one: Referent/-in
+      event/date:
+        one: Datum
+        other: Daten
       group:
         one: Gruppe
         other: Gruppen
@@ -237,6 +240,7 @@ de:
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
+        created_at: Anmeldedatum
 
       event/application:
         priority_1_id: "Kurs"
@@ -258,11 +262,13 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
 
       questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
 
       event/answer:
         answer: Antwort
@@ -437,4 +443,3 @@ de:
       date: "%d.%m.%Y"
       time: '%H:%M'
       datetime: "%d.%m.%Y %H:%M"
-

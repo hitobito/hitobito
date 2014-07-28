@@ -20,6 +20,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :person_home_path
 
+  before_filter :set_no_cache
+
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
   end if Rails.env.production?
@@ -27,6 +29,15 @@ class ApplicationController < ActionController::Base
   def person_home_path(person, options = {})
     group_person_path(person.default_group_id, person, options)
   end
+
+
   hide_action :person_home_path
 
+  private
+
+  def set_no_cache
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 end

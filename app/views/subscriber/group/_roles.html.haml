@@ -5,7 +5,7 @@
 
 - if @role_types
   - @role_types.each do |layer, groups|
-    %h5= layer
+    %h4= link_to layer, '#', { data: { action: 'filter-toggle', layer: layer } }
     - groups.each do |group, role_types|
       .control-group
         = label_tag(nil, group, class: 'control-label')
@@ -16,7 +16,8 @@
               = check_box_tag("subscription[role_types][]",
                               role_type.sti_name,
                               false,
-                              id: "subscription_role_types_#{role_type.sti_name.downcase}")
+                              id: "subscription_role_types_#{role_type.sti_name.downcase}",
+                              data: { layer: layer })
               = role_type.label
 
 - else

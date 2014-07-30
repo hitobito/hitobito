@@ -86,6 +86,7 @@ group :console do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'pry-rails'
+  gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'
   gem 'spring-commands-rspec'

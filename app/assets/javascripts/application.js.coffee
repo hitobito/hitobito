@@ -92,7 +92,7 @@ toggleFilterRoles = (event) ->
   target = $(event.target)
   checked = target.data('checked')
   layer = target.data('layer')
-  $(":checkbox[data-layer=#{layer}]").prop('checked', !!!checked)
+  $(":checkbox[data-layer='#{layer}']").prop('checked', !!!checked)
   target.data('checked', !checked)
 
 

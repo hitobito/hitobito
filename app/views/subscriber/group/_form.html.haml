@@ -20,5 +20,6 @@
                      data: { remote: true,
                              url: roles_group_mailing_list_group_index_path(@group, @mailing_list)})
 
+
   = field_set_tag Role.model_name.human(count: 2) do
-    #roles= render 'roles'
+    #roles.label-columns= render 'roles'

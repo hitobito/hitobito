@@ -11,27 +11,28 @@ describe Subscriber::GroupController, js: true do
 
   let(:list)  { mailing_lists(:leaders) }
   let(:group) { list.group }
+  let!(:subscriber_id) { groups(:bottom_layer_one).id } # preload
+
+  before do
+    sign_in
+    visit new_group_mailing_list_group_path(group.id, list.id)
+
+    find('#roles').should_not have_selector('input[type=checkbox]')
+
+    # trigger typeahead
+    fill_in 'subscription_subscriber', with: 'Bottom'
+
+    find('.typeahead.dropdown-menu').should have_content('Top > Bottom One')
+    find('.typeahead.dropdown-menu').should have_content('Bottom One > Group 11')
+
+    # select entry from typeahead
+    sleep 0.1 # to avoid race condition in remote-typeahead
+    find('.typeahead.dropdown-menu li a', text: 'Top > Bottom One').click
+  end
 
   it 'selects group and loads roles' do
     obsolete_node_safe do
-      subscriber_id = groups(:bottom_layer_one).id # preload
-
-      sign_in
-      visit new_group_mailing_list_group_path(group.id, list.id)
-
-      find('#roles').should_not have_selector('input[type=checkbox]')
-
-      # trigger typeahead
-      fill_in 'subscription_subscriber', with: 'Bottom'
-
-      find('.typeahead.dropdown-menu').should have_content('Top > Bottom One')
-      find('.typeahead.dropdown-menu').should have_content('Bottom One > Group 11')
-
-      # select entry from typeahead
-      find('.typeahead.dropdown-menu li a', text: 'Top > Bottom One').click
-
-      page.should have_selector("input[value='#{subscriber_id}']")
-      find('#subscription_subscriber_id').value.should == subscriber_id.to_s
+      find('#subscription_subscriber_id', visible: false).value.should eq subscriber_id.to_s
 
       find('#roles').should have_selector('input[type=checkbox]', count: 7) # roles
       find('#roles').should have_selector('h5', count: 2) # layers
@@ -42,6 +43,22 @@ describe Subscriber::GroupController, js: true do
       all('form .btn-toolbar').first.click_button 'Speichern'
 
       page.should have_content('Abonnent Bottom One (Leader Bottom Group) wurde erfolgreich')
+    end
+  end
+
+  it 'toggles roles when clicking group' do
+    obsolete_node_safe do
+      should have_selector('input[data-layer="Bottom Layer"]', count: 0)
+
+      within('#roles') do
+        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 0)
+
+        click_link 'Bottom Layer'
+        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 6)
+
+        click_link 'Bottom Layer'
+        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 0)
+      end
     end
   end
 end

@@ -53,4 +53,23 @@ describe PeopleController, js: true do
       page.should_not have_selector('.table-striped tbody tr')
     end
   end
+
+  it 'toggles roles when clicking group' do
+    obsolete_node_safe do
+      sign_in
+      visit group_people_path(group)
+
+      # create a new filter
+      click_link 'Weitere Ansichten'
+      click_link 'Neuer Filter...'
+
+      page.should have_css('input[data-layer="Top Layer"]:checked', count: 0)
+
+      click_link 'Top Layer'
+      page.should have_css('input[data-layer="Top Layer"]:checked', count: 3)
+
+      click_link 'Top Layer'
+      page.should have_css('input[data-layer="Top Layer"]:checked', count: 0)
+    end
+  end
 end

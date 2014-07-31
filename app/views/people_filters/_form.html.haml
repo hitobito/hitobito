@@ -19,7 +19,7 @@
   .label-columns
     = field_set_tag(t('.prompt_role_selection')) do
       - @role_types.each do |layer, groups|
-        %h4= link_to layer, '#', { data: { action: 'filter-toggle', layer: layer } }
+        %h4= link_to layer, '#', { data: { action: 'filter-toggle', layer: layer, checked: all_roles_checked?(groups) } }
         - groups.each do |group, role_types|
           = f.labeled nil, group do
             - role_types.each do |role_type|

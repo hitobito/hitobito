@@ -35,5 +35,12 @@ module PeopleHelper
     t.col(safe_join(list, ' | '), &block)
   end
 
+  def all_roles_checked?(groups_with_role_types)
+    role_types = groups_with_role_types.map(&:second).flatten
+    role_types.all? do |role_type|
+      entry.role_types.include?(role_type.sti_name)
+    end
+  end
+
 
 end

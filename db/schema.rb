@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717080643) do
+ActiveRecord::Schema.define(version: 20140731181038) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140717080643) do
     t.datetime "start_at"
     t.datetime "finish_at"
     t.string   "location"
+    t.index ["event_id", "start_at"], :name => "index_event_dates_on_event_id_and_start_at"
     t.index ["event_id"], :name => "index_event_dates_on_event_id"
   end
 

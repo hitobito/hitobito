@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   private
 
   def not_found
-    raise ActionController::RoutingError.new('Not Found')
+    fail ActionController::RoutingError, 'Not Found'
   end
 
   def set_no_cache

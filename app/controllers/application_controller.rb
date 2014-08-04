@@ -15,25 +15,33 @@ class ApplicationController < ActionController::Base
   include Concerns::Authenticatable
   include ERB::Util
 
-  alias_method :decorate, :__decorator_for__
-
   protect_from_forgery
+
   helper_method :person_home_path
+  hide_action :person_home_path
 
   before_filter :set_no_cache
 
-  rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
-  end if Rails.env.production?
+  alias_method :decorate, :__decorator_for__
+
+  if Rails.env.production?
+    rescue_from CanCan::AccessDenied do |_exception|
+      redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+    end
+
+    rescue_from Actio​nCont​rolle​r::Un​known​Forma​t, with: :not_found
+  end
+
 
   def person_home_path(person, options = {})
     group_person_path(person.default_group_id, person, options)
   end
 
-
-  hide_action :person_home_path
-
   private
+
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
 
   def set_no_cache
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"

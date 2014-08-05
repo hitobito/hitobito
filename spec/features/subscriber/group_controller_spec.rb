@@ -35,7 +35,7 @@ describe Subscriber::GroupController, js: true do
       find('#subscription_subscriber_id', visible: false).value.should eq subscriber_id.to_s
 
       find('#roles').should have_selector('input[type=checkbox]', count: 7) # roles
-      find('#roles').should have_selector('h5', count: 2) # layers
+      find('#roles').should have_selector('h4', count: 2) # layers
 
       # check role and submit
       check('subscription_role_types_group::bottomgroup::leader')
@@ -46,19 +46,30 @@ describe Subscriber::GroupController, js: true do
     end
   end
 
-  it 'toggles roles when clicking group' do
-    obsolete_node_safe do
-      should have_selector('input[data-layer="Bottom Layer"]', count: 0)
+  context 'toggling roles' do
+    it 'toggles roles when clicking layer' do
+      obsolete_node_safe do
+        should have_selector('input[data-layer="Bottom Layer"]', count: 0)
 
-      within('#roles') do
-        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 0)
+        find('h4.filter-toggle', text: 'Bottom Layer').click
+        page.should have_css('input:checked', count: 6)
 
-        click_link 'Bottom Layer'
-        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 6)
+        find('h4.filter-toggle', text: 'Bottom Layer').click
+        page.should have_css('input:checked', count: 0)
+      end
+    end
 
-        click_link 'Bottom Layer'
-        page.should have_css('input[data-layer="Bottom Layer"]:checked', count: 0)
+    it 'toggles roles when clicking group' do
+      obsolete_node_safe do
+        should have_selector('input[data-layer="Bottom Layer"]', count: 0)
+
+        find('label.filter-toggle', text: 'Bottom Group').click
+        page.should have_css('input:checked', count: 2)
+
+        find('label.filter-toggle', text: 'Bottom Group').click
+        page.should have_css('input:checked', count: 0)
       end
     end
   end
+
 end

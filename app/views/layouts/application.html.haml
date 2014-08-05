@@ -43,7 +43,8 @@
     #page{class: ('with-left-nav' if sheet.left_nav?)}
       - if sheet.left_nav?
         %nav.nav-left
-          = sheet.render_left_nav
+          .inner
+            = sheet.render_left_nav
 
       .container-fluid
         = render_sheets do

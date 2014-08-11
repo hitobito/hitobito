@@ -4,7 +4,7 @@ hitobito is an open source web application to manage complex group hierarchies w
 
 === Development
 
-Hitobito is a Ruby on Rails application that runs on Ruby 1.9.3 and Rails 3.2.
+Hitobito is a Ruby on Rails application that runs on Ruby 1.9.3 and Rails 4.
 To get going, after you got a copy of hitobito and at least one wagon with an organization
 structure setup as described below, issue the following commands in the main directory:
 
@@ -144,7 +144,7 @@ RAILS_AIRBRAKE_PORT::           Port of the airbrake instance. Defaults to 443
 === License
 
 hitobito is released under the GNU Affero General Public License. 
-Copyright 2012-2013 by Jungwacht Blauring Schweiz. 
+Copyright 2012-2014 by Jungwacht Blauring Schweiz. 
 See COPYING for more details.
 
 hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].

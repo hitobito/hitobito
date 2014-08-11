@@ -1,21 +1,9 @@
-- title = capture do
-  Bestehende Person
-  %small
-    oder
-    = link_to(t('.create_new_person'), '#', data: { swap: 'person-fields' })
 
-= field_set_tag(title, class: 'person-fields', style: element_visible(!entry.person.changed?))do
+= swappable_role_add_fieldset(:create_new, :search_existing) do
   = f.labeled_person_field(:person)
 
 
-- title = capture do
-  Neue Person erfassen
-  %small
-    oder
-    = link_to(t('.search_existing_person'), '#', data: { swap: 'person-fields' })
-
-= field_set_tag(title, class: 'person-fields', style: element_visible(entry.person.changed?)) do
-
+= swappable_role_add_fieldset(:search_existing, :create_new) do
   = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
 
   = f.fields_for(:new_person, entry.person) do |fields|

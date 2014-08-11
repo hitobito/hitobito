@@ -189,6 +189,7 @@ de:
     person_fields:
       create_new_person: Neue Person erfassen
       search_existing_person: Bestehende Person suchen
+      text_with_alternative_link_html: "%{text} <small>oder %{link}</small>"
 
     info:
       role_has_permissions: "Die Rolle %{role} in der Gruppe %{group} hat folgende Berechtigungen:"

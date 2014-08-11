@@ -17,6 +17,16 @@ module RolesHelper
     end
   end
 
+  def swappable_role_add_fieldset(*keys)
+    title = t('roles.person_fields.text_with_alternative_link_html',
+              text: t(".#{keys.last}_person"),
+              link: link_to(t(".#{keys.first}_person"), '#', data: { swap: 'person-fields' }))
+
+    visible = keys.first == :create_new ? !entry.person.changed? : entry.person.changed?
+    field_set_tag(title,  class: 'person-fields', style: element_visible(visible)) { yield }
+  end
+
+
   def format_role_created_at(role)
     f(role.created_at.to_date)
   end

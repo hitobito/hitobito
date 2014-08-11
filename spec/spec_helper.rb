@@ -84,6 +84,7 @@ def init_rspec
 
     config.before(:each) do
       ActionMailer::Base.deliveries = []
+      Person.stamper = nil
     end
 
     config.before(:each, :draper_with_helpers) do

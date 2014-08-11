@@ -23,4 +23,4 @@
 = render_extensions :fields, locals: { f: f }
 
 = field_set_tag do
-  = f.labeled_input_fields(:additional_information)
+  = f.labeled_input_field(:additional_information, help: t('.no_sensitive_information'))

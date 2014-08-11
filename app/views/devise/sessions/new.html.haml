@@ -5,9 +5,13 @@
 
 -title t('.sign_in')
 
+%p= t('.usage_advise')
+%br
+
 = standard_form(resource, {url: person_session_path}) do |f|
   = f.error_messages
   = f.labeled_input_field(:email, autofocus: true)
   = f.labeled_input_field(:password)
   = f.labeled_boolean_field(:remember_me)
   = f.indented(submit_button(f, t('.sign_in')))
+

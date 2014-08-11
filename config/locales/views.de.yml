@@ -295,7 +295,7 @@ de:
 
   layouts:
     nav:
-      sign_out: 'Ausloggen'
+      sign_out: 'Abmelden'
 
     unauthorized:
       forgot_password: 'Passwort vergessen?'

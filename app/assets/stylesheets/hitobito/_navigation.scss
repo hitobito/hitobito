@@ -218,6 +218,7 @@
 }
 #page.with-left-nav {
   display: table;
+  table-layout: fixed;
   width: 100%;
 
   &, &:before, &:after {
@@ -253,6 +254,7 @@
 .nav-left-list ul {
   list-style: none;
   margin: 0;
+  width: 100%;
 }
 .nav-left-list li {
   line-height: 1.2em;
@@ -292,4 +294,7 @@
   font-size: 0.85em;
   color: $gray;
   margin: 20px 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

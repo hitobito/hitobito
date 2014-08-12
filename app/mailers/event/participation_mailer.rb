@@ -10,7 +10,8 @@ class Event::ParticipationMailer < ActionMailer::Base
   CONTENT_CONFIRMATION = 'event_application_confirmation'
   CONTENT_APPROVAL     = 'event_application_approval'
 
-  helper :standard, :layout
+  # Include all helpers that are required directly or indirectly (in decorators)
+  helper :standard, :layout, :auto_link
 
   def confirmation(participation)
     person = participation.person

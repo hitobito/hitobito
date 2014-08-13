@@ -130,6 +130,9 @@ de:
       people_filter:
         one: Filter
         other: Filter
+      people_relation:
+        one: Beziehung
+        other: Beziehungen
       phone_number:
         one: Telefonnummer
         other: Telefonnummern

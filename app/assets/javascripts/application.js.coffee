@@ -147,7 +147,8 @@ $ ->
 
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->
-    $(link).closest('form').find("##{assoc}_fields").append($(content))
+    el = $(link).closest('form').find("##{assoc}_fields")
+    el.append($(content)).find('[data-provide=entity]').each(Application.setupEntityTypeahead)
 
   # show alert if ajax requests fail
   $(document).on('ajax:error', (event, xhr, status, error) ->

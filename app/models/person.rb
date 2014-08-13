@@ -103,6 +103,7 @@ class Person < ActiveRecord::Base
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
 
+  accepts_nested_attributes_for :people_relations
 
   ### VALIDATIONS
 

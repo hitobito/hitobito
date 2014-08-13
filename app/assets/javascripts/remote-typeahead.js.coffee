@@ -11,17 +11,19 @@ Application.setupEntityTypeahead = (index, field) ->
   setupRemoteTypeahead(input, 10, setEntityId)
   input.keydown((event) ->
     if isModifyingKey(event.which)
-      findIdField(input).val(null).change())
+      $('#' + adjustSelector(input.data('id-field'))).val(null).change())
 
-findIdField = (source) ->
-  selector = source.data('id-field')
-  field = $('#' + selector) unless selector.match(/\[\]/)
-  field ||= source.siblings().filter('input:hidden')
+# supports using typeahead for nested fields:
+# changes person[people_relations_attributes][1407938119241]_tail_id
+# to person_people_relations_attributes_1407938119241_tail_id
+adjustSelector = (selector) ->
+  selector.replace(/\]_|\]\[|\[|\]/g, '_')
 
 setEntityId = (item) ->
   typeahead = this
   item = JSON.parse(item)
-  findIdField(typeahead.$element).val(item.id).change()
+  idField = $('#' + adjustSelector(typeahead.$element.data('id-field')))
+  idField.val(item.id).change()
   $('<div/>').html(item.label).text()
 
 openQuicksearchResult = (item) ->

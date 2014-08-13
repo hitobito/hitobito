@@ -17,7 +17,8 @@ class PeopleController < CrudController
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
                           :picture, :remove_picture] +
-                          Contactable::ACCESSIBLE_ATTRS
+                          Contactable::ACCESSIBLE_ATTRS +
+                          [people_relations_attributes: [:id, :tail_id, :kind,  :_destroy]]
 
   self.sort_mappings = { roles: [Person.order_by_role_statement].
                                   concat(Person.order_by_name_statement) }

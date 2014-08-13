@@ -84,5 +84,42 @@ describe PeopleController, js: true do
       end
     end
   end
+
+
+  context 'people relations' do
+    let(:user) { people(:top_leader) }
+
+    it 'is not disabled if no predefined_labels are set' do
+      sign_in(user)
+      visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
+
+      should_not have_content 'Beziehungen'
+    end
+
+    context 'with predefined labels' do
+
+      before do
+        Settings.people_relations = OpenStruct.new(predefined_labels: ['test'])
+
+        sign_in(user)
+        visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
+      end
+
+      it 'can define a new relation to himself' do
+        obsolete_node_safe do
+          should have_content 'Beziehungen'
+
+          find('a[data-association="people_relations"]', text: 'Eintrag hinzufügen').click
+          find('input[data-provide=entity]').set('Top')
+          find('ul.typeahead li').click
+
+          all('button', text: 'Speichern').first.click
+          user.people_relations.should have(1).item
+        end
+      end
+
+      pending 'remove existing relation'
+    end
+  end
 end
 

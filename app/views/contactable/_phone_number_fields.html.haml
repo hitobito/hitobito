@@ -4,5 +4,5 @@
 -#  https://github.com/hitobito/hitobito.
 
 = f.input_field(:number, class: 'span4', placeholder: PhoneNumber.human_attribute_name(:number))
-= f.collection_select(:label, Settings.phone_number.predefined_labels, :to_s, :to_s, {}, class: 'span2')
+= f.collection_select(:label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'span2')
 = render 'contactable/public_check_box', f: f

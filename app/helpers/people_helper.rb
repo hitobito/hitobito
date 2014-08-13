@@ -35,4 +35,14 @@ module PeopleHelper
     t.col(safe_join(list, ' | '), &block)
   end
 
+  def people_relation_fields_blueprint
+    fields_for('people_relations[]', @person.people_relations.build,
+               builder: StandardFormBuilder) do |f|
+      content_tag(:tr) do
+        content_tag(:td, f.person_field(:tail, class: 'span1'))
+      end
+    end
+  end
+
+
 end

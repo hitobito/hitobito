@@ -11,13 +11,17 @@ Application.setupEntityTypeahead = (index, field) ->
   setupRemoteTypeahead(input, 10, setEntityId)
   input.keydown((event) ->
     if isModifyingKey(event.which)
-      $('#' + input.data('id-field')).val(null).change())
+      findIdField(input).val(null).change())
+
+findIdField = (source) ->
+  selector = source.data('id-field')
+  field = $('#' + selector) unless selector.match(/\[\]/)
+  field ||= source.siblings().filter('input:hidden')
 
 setEntityId = (item) ->
   typeahead = this
   item = JSON.parse(item)
-  idField = $('#' + typeahead.$element.data('id-field'))
-  idField.val(item.id).change()
+  findIdField(typeahead.$element).val(item.id).change()
   $('<div/>').html(item.label).text()
 
 openQuicksearchResult = (item) ->

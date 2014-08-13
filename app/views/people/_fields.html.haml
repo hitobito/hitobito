@@ -10,6 +10,13 @@
 
 = render 'contactable/fields', f: f
 
+= f.labeled(:people_relations) do
+  #people_relations_fields_blueprint{style: 'display: none', data: { blueprint: people_relation_fields_blueprint } }
+
+  #people_relations_fields
+    = link_to 'Eintrag hinzufügen', 'javascript:$("#people_relations__tail").each(Application.setupEntityTypeahead);',
+        class: 'add_nested_fields', data: { association: 'people_relations', 'blueprint-id' => 'people_relations_fields_blueprint' }
+
 = field_set_tag do
   = f.labeled(:gender) do
     - [:m, :w, ''].each do |key|

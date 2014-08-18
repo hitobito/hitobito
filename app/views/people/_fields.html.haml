@@ -10,7 +10,6 @@
 
 = render 'contactable/fields', f: f
 
-
 - if Settings.people_relations.present?
   = field_set_tag do
     = f.labeled_inline_fields_for :people_relations, 'people_relation_fields'

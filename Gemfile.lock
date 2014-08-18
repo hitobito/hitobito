@@ -519,7 +519,11 @@ DEPENDENCIES
   haml
   headless
   hirb
+<<<<<<< HEAD
   hitobito_pbs!
+=======
+  hitobito_generic!
+>>>>>>> update schema and annotations
   http_accept_language
   jquery-rails
   jquery-ui-rails

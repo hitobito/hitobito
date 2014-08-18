@@ -6,6 +6,7 @@ class PeopleRelations < ActiveRecord::Migration
       t.string :kind, null: false
     end
 
-    add_index :people_relations, [:head_id, :tail_id]
+    add_index :people_relations, :head_id
+    add_index :people_relations, :tail_id
   end
 end

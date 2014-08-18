@@ -6,15 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 
-
 # == Schema Information
 #
 # Table name: qualification_kinds
 #
 #  id             :integer          not null, primary key
 #  validity       :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  created_at     :datetime
+#  updated_at     :datetime
 #  deleted_at     :datetime
 #  reactivateable :integer
 #

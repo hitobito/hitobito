@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+
 # == Schema Information
 #
 # Table name: people
@@ -42,7 +43,7 @@
 #  primary_group_id       :integer
 #  failed_attempts        :integer          default(0)
 #  locked_at              :datetime
-#  authentication_token   :string
+#  authentication_token   :string(255)
 #
 class Person < ActiveRecord::Base
 

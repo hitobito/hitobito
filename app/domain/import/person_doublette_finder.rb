@@ -14,6 +14,7 @@ module Import
     DOUBLETTE_ATTRIBUTES = [
       :first_name,
       :last_name,
+      :company_name,
       :zip_code,
       :birthday
     ]
@@ -52,7 +53,7 @@ module Import
     def duplicates
       conditions = duplicate_conditions
       if conditions.first.present?
-        ::Person.includes(:roles).references(:roles).where(conditions).to_a
+        ::Person.where(conditions).to_a
       else
         []
       end
@@ -61,7 +62,11 @@ module Import
     def append_doublette_conditions(conditions)
       exisiting_doublette_attrs.each do |key, value|
         conditions.first << ' AND ' if conditions.first.present?
-        conditions.first << "#{key} = ?"
+        if %w(first_name last_name company_name).include?(key.to_s)
+          conditions.first << "#{key} = ?"
+        else
+          conditions.first << "(#{key} = ? OR #{key} IS NULL)"
+        end
         value = parse_date(value) if key.to_sym == :birthday
         conditions << value
       end

@@ -30,6 +30,13 @@ describe Import::PersonDoubletteFinder do
     its('find_and_update.first_name') { should eq 'foo' }
   end
 
+  context 'adding new doublette attrs' do
+    before { Person.create!(first_name: 'foo', last_name: 'Bar') }
+    let(:attrs) { { first_name: 'foo', last_name: 'Bar', zip_code: '3000' } }
+    its('find_and_update.errors.full_messages') { should eq [] }
+    its('find_and_update.zip_code') { should eq 3000 }
+  end
+
   context 'joins with or clause, does not change first_name, adds nickname' do
     before { Person.create!(attrs.merge(first_name: 'foo', nickname: 'foobar')) }
     let(:attrs) { { email: 'foo@bar.com', first_name: 'bla' } }
@@ -42,8 +49,11 @@ describe Import::PersonDoubletteFinder do
     context 'includes valid birthday' do
       before { Person.create!(attrs) }
       let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '1991-05-06' } }
-      its(:duplicate_conditions) do should eq ['last_name = ? AND first_name = ? AND zip_code = ? AND birthday = ?',
-                                'bar', 'foo', '213', Time.zone.parse('1991-05-06').to_date] end
+      its(:duplicate_conditions) do
+         should eq ['last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) ' \
+                    'AND (birthday = ? OR birthday IS NULL)',
+                    'bar', 'foo', '213', Time.zone.parse('1991-05-06').to_date]
+      end
       its(:find_and_update) { should be_present }
     end
 
@@ -51,7 +61,10 @@ describe Import::PersonDoubletteFinder do
       before { Person.create!(attrs.merge(birthday: '2000-01-01')) }
       let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '33.33.33' } }
 
-      its(:duplicate_conditions) { should eq ['last_name = ? AND first_name = ? AND zip_code = ?', 'bar', 'foo', '213'] }
+      its(:duplicate_conditions) do
+        should eq ['last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL)',
+                   'bar', 'foo', '213']
+      end
       its(:find_and_update) { should be_present }
     end
   end

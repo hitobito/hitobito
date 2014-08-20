@@ -11,11 +11,11 @@ require 'csv'
 
 
 namespace :csv do
-  desc "Generates dummy csv file" 
+  desc "Generates dummy csv file"
   task :generate do
     csv_string = CSV.generate do |csv|
       csv << person_attributes.keys
-      5.times do 
+      5.times do
         csv << enhance(person_attributes).values
       end
     end
@@ -29,14 +29,15 @@ namespace :csv do
     Time.at(from + rand * (to.to_f - from.to_f)).to_date
   end
 
+  # rubocop:disable MethodLength
   def person_attributes
     first_name = Faker::Name.first_name
     last_name = Faker::Name.last_name
-    { 
+    {
       first_name: first_name,
       last_name: last_name,
       company: Faker::Name.name,
-      company_name: Faker::Name.name, 
+      company_name: Faker::Name.name,
       email: "#{Faker::Internet.user_name("#{first_name} #{last_name}")}@example.com",
       address: Faker::Address.street_address,
       zip_code:  Faker::Address.zip_code,
@@ -56,6 +57,7 @@ namespace :csv do
       additional_information: Faker::Lorem.paragraph
     }
   end
+  # rubocop:enable MethodLength
 
   def enhance(person_attributes)
     person_attributes.inject({}) do |hash, (k, v)|

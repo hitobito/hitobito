@@ -104,7 +104,7 @@ END
           content = yield File.read(file), format
           if content
             puts file
-            File.open(file, 'w') {|f| f.print content }
+            File.open(file, 'w') { |f| f.print content }
           end
         end
       end
@@ -117,7 +117,7 @@ END
     def initialize(extension, prefix, preamble_text)
       @extension = extension
       @prefix = prefix
-      @preamble = preamble_text.each_line.collect {|l| prefix + l }.join + "\n\n"
+      @preamble = preamble_text.each_line.collect { |l| prefix + l }.join + "\n\n"
       @copyright_pattern = /#{prefix.strip}\s+Copyright/
       if file_with_encoding?
         @preamble = "#{ENCODING_STRING}\n\n" + @preamble

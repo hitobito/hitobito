@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.8'
+gem 'rails', '4.0.9'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
-gem 'awesome_nested_set', '>= 3.0.0.rc.3'
+gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancancan'
 gem 'carrierwave'
@@ -26,6 +26,7 @@ gem 'oat'
 gem 'paper_trail'
 gem 'paranoia'
 gem 'prawn'
+gem 'prawn-table'
 gem 'protective'
 gem 'rack'
 gem 'rails_config'
@@ -54,8 +55,7 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'binding_of_caller'
-  gem 'rspec-rails'
-  gem 'rspec-core'
+  gem 'rspec-rails', '~> 2.14.0'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
 end
@@ -104,7 +104,7 @@ end
 group :metrics do
   gem 'annotate'
   gem 'brakeman', '2.5.0'
-  gem 'ci_reporter'
+  gem 'ci_reporter_rspec'
   gem 'rails_code_qa'
   gem 'rails_best_practices'
   gem 'rails-erd'

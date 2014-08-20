@@ -4,6 +4,7 @@ AllCops:
     - Rakefile
     - db/**/*
     - config/**/*
+    - lib/tasks/**/*
     - bin/**/*
     - spec/**/*
     - vendor/**/*

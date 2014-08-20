@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+PaperTrail::Rails::Engine.eager_load!
+
 module PaperTrail
   class Version < ActiveRecord::Base
     schema_validations auto_create: false

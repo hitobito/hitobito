@@ -7,6 +7,7 @@ AllCops:
     - bin/**/*
     - spec/**/*
     - vendor/**/*
+    - Guardfile
 
 ClassLength:
   Max: 185  # Try to reduce this value
@@ -19,7 +20,6 @@ CyclomaticComplexity:
 
 LineLength:
   Max: 115  # Try to reduce this value
-
 
 
 # Disable all other cops
@@ -156,8 +156,20 @@ LeadingCommentSpace:
 LineEndConcatenation:
   Enabled: false
 
+Lint/Eval:
+  Enabled: false
+
 Loop:
   Enabled: false
+
+Metrics/LineLength:
+  Max: 178
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/PerceivedComplexity:
+  Max: 8
 
 MultilineTernaryOperator:
   Enabled: false
@@ -238,6 +250,33 @@ StringConversionInInterpolation:
   Enabled: false
 
 StringLiterals:
+  Enabled: false
+
+Style/ClassCheck:
+  Enabled: false
+
+Style/CommentIndentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IndentArray:
+  Enabled: false
+
+Style/MethodCallParentheses:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Style/SpaceInsideBlockBraces:
+  Enabled: true
+
+Style/VariableName:
   Enabled: false
 
 Tab:

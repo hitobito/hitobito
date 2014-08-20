@@ -21,10 +21,17 @@ namespace :hitobito do
 
   desc "Print all abilities"
   task :abilities => :environment do
-    puts ['Permission'.ljust(18), "\t", 'Class'.ljust(24), "\t", 'Action'.ljust(25), "\t", 'Constraint'].join()
+    puts ['Permission'.ljust(18), "\t",
+          'Class'.ljust(24), "\t",
+          'Action'.ljust(25), "\t",
+          'Constraint'].join()
     puts '=' * 100
-    Ability.store.configs_for_permissions(Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]) do |c|
-      puts "#{c.permission.to_s.ljust(18)}\t#{c.subject_class.to_s.ljust(24)}\t#{c.action.to_s.ljust(25)}\t#{c.constraint}"
+    all = Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
+    Ability.store.configs_for_permissions(all) do |c|
+      puts "#{c.permission.to_s.ljust(18)}\t" \
+           "#{c.subject_class.to_s.ljust(24)}\t" \
+           "#{c.action.to_s.ljust(25)}\t" \
+           "#{c.constraint}"
     end
   end
 end

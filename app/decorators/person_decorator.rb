@@ -48,7 +48,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def picture_full_url
-    h.request.protocol + h.request.host_with_port + picture.url
+    if h.request
+      h.request.protocol + h.request.host_with_port + picture.url
+    else
+      picture.url
+    end
   end
 
   # render a list of all roles

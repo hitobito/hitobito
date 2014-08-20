@@ -16,8 +16,8 @@
 #
 #= require jquery
 #= require jquery_ujs
-#= require jquery.ui.datepicker
-#= require jquery.ui.effect-highlight
+#= require jquery-ui/datepicker
+#= require jquery-ui/effect-highlight
 #= require bootstrap-alert
 #= require bootstrap-button
 #= require bootstrap-dropdown

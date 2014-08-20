@@ -190,7 +190,7 @@ body {
   padding-top: 0;
   clear: both;
 
-  color: $white;
+  color: $footerColor;
 
   .footer_content {
     padding-top: 20px;
@@ -199,7 +199,11 @@ body {
       padding: 20px;
     }
     a {
-      color: $white;
+      color: $footerColor;
+
+      &:hover {
+        color: $footerColorHover;
+      }
     }
   }
 

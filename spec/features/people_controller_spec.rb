@@ -89,36 +89,60 @@ describe PeopleController, js: true do
   context 'people relations' do
     let(:user) { people(:top_leader) }
 
-    it 'is not disabled if no predefined_labels are set' do
+    it 'is not disabled if no kinds are set' do
       sign_in(user)
       visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
 
       should_not have_content 'Beziehungen'
     end
 
-    context 'with predefined labels' do
+    context 'with kinds' do
 
       before do
-        Settings.people_relation = OpenStruct.new(predefined_labels: ['test'])
+        PeopleRelation.kind_opposites['sibling'] = 'sibling'
 
         sign_in(user)
-        visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
       end
 
-      it 'can define a new relation to himself' do
+      after do
+        PeopleRelation.kind_opposites.clear
+      end
+
+      it 'can define a new relation' do
         obsolete_node_safe do
+          visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
           should have_content 'Beziehungen'
 
-          find('a[data-association="people_relations"]', text: 'Eintrag hinzufügen').click
-          find('input[data-provide=entity]').set('Top')
-          find('ul.typeahead li').click
+          find('a[data-association="relations_to_tails"]', text: 'Eintrag hinzufügen').click
+          find('#relations_to_tails_fields input[data-provide=entity]').set('Bottom')
+          find('#relations_to_tails_fields ul.typeahead li').click
 
           all('button', text: 'Speichern').first.click
-          user.people_relations.should have(1).item
+          page.should have_content('erfolgreich aktualisiert')
+
+          relations = Person.find(user.id).relations_to_tails
+          relations.should have(1).item
+          relations.first.opposite.tail_id.should eq(user.id)
         end
       end
 
-      pending 'remove existing relation'
+      it 'remove existing relation' do
+        obsolete_node_safe do
+          user.relations_to_tails.create!(tail_id: people(:bottom_member).id, kind: 'sibling')
+
+          visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
+          should have_content 'Beziehungen'
+
+          find('#relations_to_tails_fields input[data-provide=entity]').set(' ')
+
+          all('button', text: 'Speichern').first.click
+          page.should have_content('erfolgreich aktualisiert')
+
+          relations = Person.find(user.id).relations_to_tails
+          relations.should have(0).item
+          PeopleRelation.count.should eq(0)
+        end
+      end
     end
   end
 end

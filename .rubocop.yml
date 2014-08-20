@@ -73,3 +73,8 @@ IfUnlessModifier:
 # We thinks that's fine
 HasAndBelongsToMany:
   Enabled: false
+
+# Probably later
+Style/GuardClause:
+  Enabled: false
+

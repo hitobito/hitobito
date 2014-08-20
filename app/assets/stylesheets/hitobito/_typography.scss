@@ -116,7 +116,7 @@ div.table {
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-  background-color: lighten($purple, 50%);
+  background-color: $tableColorHover;
 }
 
 .table-grouped {

@@ -32,6 +32,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
+  # rubocop:disable Metrics/PerceivedComplexity
   def input_field(attr, html_options = {})
     type = column_type(@object, attr)
     custom_field_method = :"#{type}_field"
@@ -51,6 +52,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       text_field(attr, html_options)
     end
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # Render a password field
   def password_field(attr, html_options = {})

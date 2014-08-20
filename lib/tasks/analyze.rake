@@ -50,7 +50,7 @@ namespace :rubocop do
     # do not fail if we find issues
     sh %w(rubocop
           --require rubocop/formatter/checkstyle_formatter
-          --format Rubocop::Formatter::CheckstyleFormatter
+          --format RuboCop::Formatter::CheckstyleFormatter
           --no-color
           --out rubocop-results.xml).join(' ') rescue nil
     true

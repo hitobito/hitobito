@@ -15,6 +15,8 @@
 #  tail_id :integer          not null
 #  kind    :string(255)      not null
 #
+# Relates two people together. Every relation has an opposite that is created, updated and deleted
+# at the same time.
 class PeopleRelation < ActiveRecord::Base
 
   KIND_TRANSLATION_KEY = "activerecord.attributes.people_relation.kinds"

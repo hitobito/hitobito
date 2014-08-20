@@ -183,12 +183,15 @@ class PeopleController < CrudController
 
   def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
-    csv_entries = if full
-                    entries.select('people.*').preload_accounts
-                  else
-                    entries.preload_public_accounts
-                  end
-    render_csv(csv_entries, full)
+    render_csv(prepare_csv_entries(entries, full), full)
+  end
+
+  def prepare_csv_entries(entries, full)
+    if full
+      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+    else
+      entries.preload_public_accounts
+    end
   end
 
   def render_entry_csv
@@ -196,12 +199,11 @@ class PeopleController < CrudController
   end
 
   def render_csv(entries, full)
-    csv = if full
-            Export::Csv::People::PeopleFull.export(entries)
-          else
-            Export::Csv::People::PeopleAddress.export(entries)
-          end
-    send_data csv, type: :csv
+    if full
+      send_data Export::Csv::People::PeopleFull.export(entries), type: :csv
+    else
+      send_data Export::Csv::People::PeopleAddress.export(entries), type: :csv
+    end
   end
 
   def render_entries_json(entries)

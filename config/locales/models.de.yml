@@ -72,7 +72,7 @@ de:
         people_relation:
           attributes:
             tail_id:
-              must_not_be_equal_to_head: darf sich nicht selbst referenzieren
+              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt.
         qualification:
           attributes:
             qualification_kind_id:
@@ -317,6 +317,10 @@ de:
       people_relation:
         head_id: Person
         tail_id: Andere Person
+        kind: Art
+
+      relations_to_tails:
+        tail_id: Beziehung
         kind: Art
 
       phone_number:

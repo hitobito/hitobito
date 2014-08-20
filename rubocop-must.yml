@@ -159,17 +159,14 @@ LineEndConcatenation:
 Lint/Eval:
   Enabled: false
 
-Loop:
+Lint/DefEndAlignment:
   Enabled: false
 
-Metrics/LineLength:
-  Max: 178
+Lint/UnusedBlockArgument:
+  Enabled: false
 
-Metrics/MethodLength:
-  Max: 25
-
-Metrics/PerceivedComplexity:
-  Max: 8
+Loop:
+  Enabled: false
 
 MultilineTernaryOperator:
   Enabled: false
@@ -232,6 +229,9 @@ SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
 SpaceAroundOperators:
+  Enabled: false
+
+SpaceBeforeComma:
   Enabled: false
 
 SpaceInsideBrackets:

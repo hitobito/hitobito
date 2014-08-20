@@ -1,1 +1,1 @@
-Spring.application_root="../hitobito"
+Spring.application_root = '../hitobito'

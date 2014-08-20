@@ -35,4 +35,3 @@ module EventParticipationsHelper
     [:birthday, :gender, (can?(:show_details, entry) ? :created_at : nil)].compact
   end
 end
-

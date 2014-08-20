@@ -222,7 +222,7 @@ class ListController < ApplicationController
       # Puts null and empty strings last
       def null_safe_sort(sort_expression)
         table_attr, direction = sort_expression.split
-        null_safe = "CASE"
+        null_safe = 'CASE'
         null_safe << " WHEN #{table_attr} IS NULL THEN 1"
         null_safe << " WHEN #{table_attr} = '' THEN 1"
         null_safe << " ELSE 0 END #{direction}"
@@ -242,7 +242,7 @@ class ListController < ApplicationController
     end
 
     def sorting?
-       params[:sort].present? && sortable?(params[:sort])
+      params[:sort].present? && sortable?(params[:sort])
     end
 
     # Return sort columns from defined mappings or as null_safe_sort from parameter.
@@ -354,7 +354,7 @@ class ListController < ApplicationController
 
     # Returns the direct parent ActiveRecord of the current request, if any.
     def parent
-      parents.select { |p| p.kind_of?(ActiveRecord::Base) }.last
+      parents.select { |p| p.is_a?(ActiveRecord::Base) }.last
     end
 
     # Returns the parent entries of the current request, if any.

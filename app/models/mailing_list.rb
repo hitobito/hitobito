@@ -112,8 +112,8 @@ class MailingList < ActiveRecord::Base
   def group_subscribers(condition)
     condition.or('subscriptions.subscriber_type = ? AND ' \
                  'subscriptions.subscriber_id = sub_groups.id AND ' <<
-                 'groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND ' <<
-                 'roles.type = related_role_types.role_type AND ' <<
+                 'groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND ' \
+                 'roles.type = related_role_types.role_type AND ' \
                  'roles.deleted_at IS NULL',
                  Group.sti_name)
   end

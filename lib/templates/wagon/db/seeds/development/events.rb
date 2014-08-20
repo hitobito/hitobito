@@ -12,5 +12,3 @@ Group.where(type: layer_types).pluck(:id).each do |group_id|
     seeder.seed_event(group_id, :base)
   end
 end
-
-

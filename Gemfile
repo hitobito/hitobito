@@ -50,7 +50,7 @@ gem 'compass-rails', '>= 1.1.7'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails'
-gem 'therubyracer', :platforms => :ruby
+gem 'therubyracer', platforms: :ruby
 gem 'uglifier'
 
 group :development, :test do

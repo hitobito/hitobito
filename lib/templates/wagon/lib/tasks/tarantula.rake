@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-desc "Crawl app with tarantula"
+desc 'Crawl app with tarantula'
 task :tarantula do
   sh 'rm -rf ../../../tmp/tarantula'
   sh 'rm -rf ../hitobito/tmp/tarantula'

@@ -39,6 +39,6 @@ class Devise::TokensController < DeviseController
   end
 
   def skip_trackable
-    request.env["devise.skip_trackable"] = true
+    request.env['devise.skip_trackable'] = true
   end
 end

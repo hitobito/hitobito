@@ -19,7 +19,7 @@
 # at the same time.
 class PeopleRelation < ActiveRecord::Base
 
-  KIND_TRANSLATION_KEY = "activerecord.attributes.people_relation.kinds"
+  KIND_TRANSLATION_KEY = 'activerecord.attributes.people_relation.kinds'
 
   class_attribute :kind_opposites
   self.kind_opposites = {}
@@ -109,9 +109,9 @@ class PeopleRelation < ActiveRecord::Base
   end
 
   def old_opposite_attrs
-      { head_id: tail_id_change ? tail_id_change.first : tail_id,
-        tail_id: head_id,
-        kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind }
+    { head_id: tail_id_change ? tail_id_change.first : tail_id,
+      tail_id: head_id,
+      kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind }
   end
 
 end

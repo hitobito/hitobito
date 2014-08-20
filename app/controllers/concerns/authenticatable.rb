@@ -53,7 +53,7 @@ module Concerns
       if user && Devise.secure_compare(user.authentication_token, params[:user_token])
         # Sign in using token should not be tracked by Devise trackable
         # See https://github.com/plataformatec/devise/issues/953
-        request.env["devise.skip_trackable"] = true
+        request.env['devise.skip_trackable'] = true
 
         # Notice the store option defaults to false, so the entity
         # is not actually stored in the session and a token is needed

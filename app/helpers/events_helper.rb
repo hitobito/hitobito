@@ -22,7 +22,7 @@ module EventsHelper
       end
 
       action_button(title, new_group_event_participation_path(group, event),
-                    :check, { class: classes })
+                    :check,  class: classes)
     end
   end
 

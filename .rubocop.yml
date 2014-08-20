@@ -2,6 +2,7 @@ AllCops:
   RunRailsCops: true
   Exclude:
     - Rakefile
+    - Guardfile
     - db/**/*
     - config/**/*
     - lib/tasks/**/*

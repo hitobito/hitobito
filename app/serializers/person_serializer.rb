@@ -18,16 +18,16 @@ class PersonSerializer < ApplicationSerializer
 
     property :href, h.group_person_url(context[:group], item, format: :json)
 
-    map_properties  :first_name,
-                    :last_name,
-                    :nickname,
-                    :company_name,
-                    :company,
-                    :email,
-                    :address,
-                    :zip_code,
-                    :town,
-                    :country
+    map_properties :first_name,
+                   :last_name,
+                   :nickname,
+                   :company_name,
+                   :company,
+                   :email,
+                   :address,
+                   :zip_code,
+                   :town,
+                   :country
 
     property :picture, item.picture_full_url
 

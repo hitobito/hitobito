@@ -19,7 +19,7 @@ module JsonHelper
 
   def json_extensions(json, key, options = {})
     find_extension_partials(key, options.delete(:folder)).each do |partial|
-      json.partial! options.merge(:partial => partial)
+      json.partial! options.merge(partial: partial)
     end
   end
 
@@ -27,9 +27,9 @@ module JsonHelper
     json.set! accounts.klass.model_name.plural do
       json.array! accounts.select { |a| a.public? || !only_public } do |account|
         json.extract!(account, :id,
-                              account.value_attr,
-                              :label,
-                              :public)
+                      account.value_attr,
+                      :label,
+                      :public)
         yield account if block_given?
       end
     end

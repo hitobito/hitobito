@@ -53,7 +53,7 @@ class Role
     end
 
     def compose_global_role_list
-       # global groups
+      # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
         @role_types['Global'][group.label] = types if types.present?

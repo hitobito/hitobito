@@ -79,7 +79,7 @@ module Sheet
       end
 
       def label
-        if label_key.kind_of?(Symbol)
+        if label_key.is_a?(Symbol)
           view.send(label_key, entry)
         else
           I18n.t(label_key, default: label_key)

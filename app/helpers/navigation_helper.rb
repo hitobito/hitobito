@@ -25,7 +25,7 @@ module NavigationHelper
     content_tag_nested(:ul, MAIN, class: 'nav') do |label, options|
       if !options.key?(:if) || instance_eval(&options[:if])
         url = options[:url]
-        url = send(url) if url.kind_of?(Symbol)
+        url = send(url) if url.is_a?(Symbol)
         nav(I18n.t("navigation.#{label}"), url, options[:active_for])
       end
     end

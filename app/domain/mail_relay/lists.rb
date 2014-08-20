@@ -110,7 +110,7 @@ module MailRelay
     def deliver(message)
       logger.info("#{Time.now.strftime('%FT%T%z')}: " \
                   "Relaying email from #{sender_email} " <<
-                  "for list #{envelope_receiver_name} " <<
+                  "for list #{envelope_receiver_name} " \
                   "to #{message.smtp_envelope_to.size} people")
       super
     end

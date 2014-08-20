@@ -63,7 +63,7 @@ module Group::NestedSet
   end
 
   def use_hierarchy_from_parent(parent)
-    parent_hierarchy = parent.kind_of?(Group) ? parent.hierarchy : parent
+    parent_hierarchy = parent.is_a?(Group) ? parent.hierarchy : parent
     @hierarchy = parent_hierarchy + [self]
   end
 

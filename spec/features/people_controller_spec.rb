@@ -99,7 +99,7 @@ describe PeopleController, js: true do
     context 'with predefined labels' do
 
       before do
-        Settings.people_relations = OpenStruct.new(predefined_labels: ['test'])
+        Settings.people_relation = OpenStruct.new(predefined_labels: ['test'])
 
         sign_in(user)
         visit edit_group_person_path(group_id: groups(:top_group), id: user.id)

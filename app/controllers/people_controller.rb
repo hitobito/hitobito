@@ -18,7 +18,7 @@ class PeopleController < CrudController
                           :gender, :birthday, :additional_information,
                           :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS +
-                          [people_relations_attributes: [:id, :tail_id, :kind,  :_destroy]]
+                          [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
   self.sort_mappings = { roles: [Person.order_by_role_statement].
                                   concat(Person.order_by_name_statement) }
@@ -130,6 +130,7 @@ class PeopleController < CrudController
     @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
     @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
     @qualifications       = entry.latest_qualifications_uniq_by_kind
+    @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
   def pending_person_applications

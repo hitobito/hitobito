@@ -13,6 +13,7 @@ if defined? Bullet
 
   # groups loaded for current user
   Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :groups
+  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :roles
 
   # answers for event::participations
 

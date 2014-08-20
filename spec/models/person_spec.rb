@@ -373,13 +373,4 @@ describe Person do
      end
   end
 
-  context 'people relations' do
-    let(:person) { people(:top_leader) }
-
-    it 'only valid if tail and kind is set' do
-      person.people_relations.build(kind: 'sibling', tail: people(:bottom_member)).should be_valid
-      person.people_relations.build(tail: people(:bottom_member)).should_not be_valid
-      person.people_relations.build(kind: 'sibling').should_not be_valid
-    end
-  end
 end

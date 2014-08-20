@@ -24,7 +24,8 @@ module Export::Csv::People
     end
 
     def relation_kind_labels
-      people.map(&:relations_to_tails).flatten.collect(&:kind).uniq.each_with_object({}) do |kind, obj|
+      different_kinds = people.map(&:relations_to_tails).flatten.collect(&:kind).uniq
+      different_kinds.each_with_object({}) do |kind, obj|
         if kind.present?
           obj[:"people_relation_#{kind}"] = PeopleRelation.new(kind: kind).translated_kind
         end

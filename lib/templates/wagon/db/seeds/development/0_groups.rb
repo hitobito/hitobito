@@ -14,6 +14,6 @@ unless root.address.present?
   end
 end
 
-# TODO define more groups
+# TODO: define more groups
 
 Group.rebuild!

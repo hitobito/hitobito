@@ -1,3 +1,4 @@
+# encoding: utf-8
 #!/usr/bin/env rake
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

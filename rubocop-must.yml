@@ -21,6 +21,8 @@ CyclomaticComplexity:
 LineLength:
   Max: 115  # Try to reduce this value
 
+Encoding:
+  Enabled: true
 
 # Disable all other cops
 
@@ -106,9 +108,6 @@ EmptyLinesAroundBody:
   Enabled: false
 
 EmptyLiteral:
-  Enabled: false
-
-Encoding:
   Enabled: false
 
 EndAlignment:

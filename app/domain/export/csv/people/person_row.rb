@@ -11,7 +11,8 @@ module Export::Csv::People
 
     self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
-                                /^additional_email_/ => :additional_email_attribute }
+                                /^additional_email_/ => :additional_email_attribute,
+                                /^people_relation_/ => :people_relation_attribute }
 
     def roles
       entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}"  }.join(', ')
@@ -29,6 +30,13 @@ module Export::Csv::People
 
     def additional_email_attribute(attr)
       contact_account_attribute(entry.additional_emails, attr)
+    end
+
+    def people_relation_attribute(attr)
+      entry.relations_to_tails.
+            select { |r| :"people_relation_#{r.kind}" == attr }.
+            map    { |r| r.tail.to_s }.
+            join(', ')
     end
 
     def contact_account_attribute(accounts, attr)

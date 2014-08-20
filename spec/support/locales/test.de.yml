@@ -27,3 +27,9 @@ de:
       group/global_group/leader: Leader
       group/global_group/member: Member
       role/external: External
+
+    attributes:
+      people_relation:
+        kinds:
+          parent: Elternteil
+          child: Kind

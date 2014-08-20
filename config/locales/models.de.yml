@@ -69,6 +69,10 @@ de:
                         'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
                         als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
                         kann leer gelassen werden).
+        people_relation:
+          attributes:
+            tail_id:
+              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt.
         qualification:
           attributes:
             qualification_kind_id:
@@ -130,6 +134,9 @@ de:
       people_filter:
         one: Filter
         other: Filter
+      people_relation:
+        one: Beziehung
+        other: Beziehungen
       phone_number:
         one: Telefonnummer
         other: Telefonnummern
@@ -174,6 +181,7 @@ de:
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
+        relations_to_tails: Beziehungen
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
@@ -305,6 +313,15 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
+
+      people_relation:
+        head_id: Person
+        tail_id: Andere Person
+        kind: Art
+
+      relations_to_tails:
+        tail_id: Beziehung
+        kind: Art
 
       phone_number:
         number: Nummer

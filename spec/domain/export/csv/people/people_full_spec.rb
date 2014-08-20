@@ -9,6 +9,15 @@ require 'spec_helper'
 
 describe Export::Csv::People::PeopleFull do
 
+  before do
+    PeopleRelation.kind_opposites['parent'] = 'child'
+    PeopleRelation.kind_opposites['child'] = 'parent'
+  end
+
+  after do
+    PeopleRelation.kind_opposites.clear
+  end
+
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:people_list) { Export::Csv::People::PeopleFull.new(list) }
@@ -30,6 +39,11 @@ describe Export::Csv::People::PeopleFull do
     context 'social accounts' do
       before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
       its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
+    end
+
+    context 'people relations' do
+      before { person.relations_to_tails << PeopleRelation.new(head_id: person.id, tail_id: people(:bottom_member).id, kind: 'parent') }
+      its([:people_relation_parent]) { should eq 'Elternteil' }
     end
   end
 
@@ -53,6 +67,7 @@ describe Export::Csv::People::PeopleFull do
         person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
         person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
         person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
+        person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: 'parent')
       end
 
       subject { csv[0] }
@@ -61,6 +76,7 @@ describe Export::Csv::People::PeopleFull do
       its(['Telefonnummer Vater']) { should eq '123' }
       its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Social Media Adresse Skype']) { should eq 'foobar' }
+      its(['Elternteil']) { should eq 'Bottom Member' }
       its(['Geschlecht']) { should eq 'm' }
     end
 

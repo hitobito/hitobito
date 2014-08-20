@@ -17,7 +17,8 @@ class PeopleController < CrudController
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
                           :picture, :remove_picture] +
-                          Contactable::ACCESSIBLE_ATTRS
+                          Contactable::ACCESSIBLE_ATTRS +
+                          [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
   self.sort_mappings = { roles: [Person.order_by_role_statement].
                                   concat(Person.order_by_name_statement) }
@@ -129,6 +130,7 @@ class PeopleController < CrudController
     @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
     @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
     @qualifications       = entry.latest_qualifications_uniq_by_kind
+    @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
   def pending_person_applications
@@ -181,12 +183,15 @@ class PeopleController < CrudController
 
   def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
-    csv_entries = if full
-                    entries.select('people.*').preload_accounts
-                  else
-                    entries.preload_public_accounts
-                  end
-    render_csv(csv_entries, full)
+    render_csv(prepare_csv_entries(entries, full), full)
+  end
+
+  def prepare_csv_entries(entries, full)
+    if full
+      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+    else
+      entries.preload_public_accounts
+    end
   end
 
   def render_entry_csv
@@ -194,12 +199,11 @@ class PeopleController < CrudController
   end
 
   def render_csv(entries, full)
-    csv = if full
-            Export::Csv::People::PeopleFull.export(entries)
-          else
-            Export::Csv::People::PeopleAddress.export(entries)
-          end
-    send_data csv, type: :csv
+    if full
+      send_data Export::Csv::People::PeopleFull.export(entries), type: :csv
+    else
+      send_data Export::Csv::People::PeopleAddress.export(entries), type: :csv
+    end
   end
 
   def render_entries_json(entries)

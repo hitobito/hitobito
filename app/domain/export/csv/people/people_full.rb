@@ -18,8 +18,17 @@ module Export::Csv::People
 
     def association_attributes
       account_labels(people.map(&:additional_emails).flatten, AdditionalEmail).merge(
-        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber).merge(
-          account_labels(people.map(&:social_accounts).flatten, SocialAccount)))
+        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber)).merge(
+        account_labels(people.map(&:social_accounts).flatten, SocialAccount)).merge(
+        relation_kind_labels)
+    end
+
+    def relation_kind_labels
+      people.map(&:relations_to_tails).flatten.collect(&:kind).uniq.each_with_object({}) do |kind, obj|
+        if kind.present?
+          obj[:"people_relation_#{kind}"] = PeopleRelation.new(kind: kind).translated_kind
+        end
+      end
     end
   end
 end

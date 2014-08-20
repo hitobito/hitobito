@@ -1,0 +1,6 @@
+- if @relations.present?
+  %h2= Person.human_attribute_name(:relations_to_tails)
+  - @relations.each do |r|
+    %div
+      = link_to_if(can?(:show, r.tail), r.tail.to_s, person_path(r.tail_id))
+      = muted(r.translated_kind) unless PeopleRelation.possible_kinds.size == 1

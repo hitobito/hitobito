@@ -36,6 +36,7 @@
 #  primary_group_id       :integer
 #  failed_attempts        :integer          default(0)
 #  locked_at              :datetime
+#  authentication_token   :string(255)
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -370,6 +371,6 @@ describe Person do
          Person.new(birthday: birthday).years.should eq years
        end
      end
-
   end
+
 end

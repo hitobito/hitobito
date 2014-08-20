@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140731181038) do
+ActiveRecord::Schema.define(version: 20140813074515) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -275,6 +275,14 @@ ActiveRecord::Schema.define(version: 20140731181038) do
     t.integer "group_id"
     t.string  "group_type"
     t.index ["group_id", "group_type"], :name => "index_people_filters_on_group_id_and_group_type"
+  end
+
+  create_table "people_relations", force: true do |t|
+    t.integer "head_id", null: false
+    t.integer "tail_id", null: false
+    t.string  "kind",    null: false
+    t.index ["head_id"], :name => "index_people_relations_on_head_id"
+    t.index ["tail_id"], :name => "index_people_relations_on_tail_id"
   end
 
   create_table "phone_numbers", force: true do |t|

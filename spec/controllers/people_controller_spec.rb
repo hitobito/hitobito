@@ -9,6 +9,15 @@ require 'spec_helper'
 
 describe PeopleController do
 
+  before do
+    PeopleRelation.kind_opposites['parent'] = 'child'
+    PeopleRelation.kind_opposites['child'] = 'parent'
+  end
+
+  after do
+    PeopleRelation.kind_opposites.clear
+  end
+
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
@@ -365,12 +374,13 @@ describe PeopleController do
             assigns(:person).should be_valid
           end.not_to change { SocialAccount.count }
 
-          person.reload.social_accounts.should have(2).items
-          fb = person.social_accounts.order(:label).first
+          accounts = person.reload.social_accounts.order(:label)
+          accounts.should have(2).items
+          fb = accounts.first
           fb.label.should eq 'Facebook'
           fb.name.should eq 'Housi1'
           fb.public.should be_true
-          tw = person.social_accounts.order(:label).second
+          tw = accounts.second
           tw.label.should eq 'Twitter'
           tw.name.should eq 'John'
           tw.public.should be_false
@@ -398,15 +408,50 @@ describe PeopleController do
             assigns(:person).should be_valid
           end.not_to change { AdditionalEmail.count }
 
-          person.reload.additional_emails.should have(2).items
-          a = person.additional_emails.order(:label).first
+          emails = person.reload.additional_emails.order(:label)
+          emails.should have(2).items
+          a = emails.first
           a.label.should eq 'Arbeit'
           a.email.should eq 'Housi1@example.com'
           a.public.should be_true
-          tw = person.additional_emails.order(:label).second
+          tw = emails.second
           tw.label.should eq 'Mutter'
           tw.email.should eq 'John@example.com'
           tw.public.should be_false
+        end
+
+        it 'create, update and destroys people relations' do
+          p1 = Fabricate(:person)
+          p2 = Fabricate(:person)
+          p3 = Fabricate(:person)
+          r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: 'child')
+          r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: 'parent')
+          expect do
+            put :update, group_id: group.id,
+                         id: person.id,
+                         person: { town: 'testtown',
+                                   relations_to_tails_attributes: {
+                                     r1.id.to_s => { id: r1.id,
+                                                     tail_id: p2.id,
+                                                     kind: 'parent' },
+                                     r2.id.to_s => { id: r2.id, _destroy: true },
+                                     '998' => { tail_id: ' ',
+                                                kind: 'child' },
+                                     '999' => { tail_id: p3.id,
+                                                kind: 'child' }, } }
+            assigns(:person).should be_valid
+          end.not_to change { PeopleRelation.count }
+
+          relations = person.reload.relations_to_tails.order(:tail_id)
+          relations.should have(2).items
+          a = relations.first
+          a.tail_id.should eq p2.id
+          a.kind.should eq 'parent'
+          a.opposite.kind.should eq 'child'
+          b = relations.second
+          b.tail_id.should eq p3.id
+          b.kind.should eq 'child'
+          b.opposite.tail_id.should eq person.id
         end
       end
     end

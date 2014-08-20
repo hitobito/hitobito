@@ -16,6 +16,8 @@
 
         = render_attrs(entry, :created_info, :updated_info)
 
+        = render 'people_relations'
+
       - if entry.additional_information?
         %h2= Person.human_attribute_name(:additional_information)
         = simple_format(entry.additional_information)

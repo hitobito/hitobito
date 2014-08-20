@@ -16,3 +16,7 @@
 * Separat definierbare Qualifikationstypen für Kursleiter.
 * Pflichtfelder für Anlass Fragen.
 * Mehrfachauswahl bei Personen Filter und Abo Listen.
+
+== Version 1.4
+
+* Beziehungen zwischen Personen.

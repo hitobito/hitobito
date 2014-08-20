@@ -10,11 +10,13 @@
 
       - if entry.person.persisted?
         - title(t(".#{entry.persisted? ? 'edit' : 'add'}_role_for_person", person: entry.person))
+
         = f.hidden_field :person_id
         = render 'fields', f: f
 
       - else
         - title(t('global.associations.add_with_model', model: Person.model_name.human))
+
         = render 'person_fields', f: f
         = field_set_tag Role.model_name.human do
           = render 'fields', f: f

@@ -321,6 +321,7 @@ de:
         label: Bezeichnung
         type: Rolle
         group_id: Gruppe
+        person: Person
         person_id: Person
         string_long: '%{role} in %{group}'
         class:

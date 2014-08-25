@@ -247,7 +247,9 @@ touch %{wwwdir}/%{name}/www/tmp/restart.txt
 # be explicitly deleted to load the stop script
 rm -f %{wwwdir}/%{name}/www/app/utils/devise/strategies/one_time_token_authenticatable.rb
 rm -f %{wwwdir}/%{name}/www/app/utils/datetime_attribute.rb
-rm -rf %{wwwdir}/%{name}/www/app/domain/event/qualifier
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/base.rb
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/leader.rb
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/participant.rb
 
 %if %{use_delayed_job}
 if [ "$1" = 0 ] ; then

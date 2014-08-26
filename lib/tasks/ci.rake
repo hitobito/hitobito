@@ -30,7 +30,7 @@ namespace :ci do
     Rake::Task['log:clear'].invoke
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
-    ENV['CMD'] = 'bundle exec rake app:rubocop app:ci:setup:rspec spec'
+    ENV['CMD'] = "bundle exec rake app:rubocop app:ci:setup:rspec spec #{'-t' if Rake.application.options.trace}"
     Rake::Task['wagon:exec'].invoke
   end
 
@@ -42,7 +42,7 @@ namespace :ci do
       Rake::Task['db:migrate'].invoke
       Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
       Rake::Task['erd'].invoke
-      ENV['CMD'] = 'bundle exec rake app:ci:setup:rspec spec app:rubocop:report app:brakeman'
+      ENV['CMD'] = "bundle exec rake app:ci:setup:rspec spec app:rubocop:report app:brakeman #{'-t' if Rake.application.options.trace}"
       Rake::Task['wagon:exec'].invoke
     end
 

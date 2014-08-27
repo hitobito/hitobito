@@ -216,6 +216,12 @@ de:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe
 
+    email_field:
+      used_as_login: Wird als Login verwendet
+      only_changeable_by_superior: >
+           Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur
+           von einem über alle diese Rollen übergeordneten Benutzer geändert werden.
+
     fields:
       format_birthday: (dd.mm.yy)
       no_sensitive_information: ''
@@ -223,17 +229,14 @@ de:
     log:
       no_changes: Bisher wurden keine Änderungen aufgezeichnet.
 
+    pdf:
+      cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
+
     roles:
       title: Aktive Rollen
 
     roles_aside:
       set_main_group: Hauptgruppe setzen
-
-    email_field:
-      used_as_login: Wird als Login verwendet
-      only_changeable_by_superior: >
-           Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur
-           von einem über alle diese Rollen übergeordneten Benutzer geändert werden.
 
   people_filters:
     form:

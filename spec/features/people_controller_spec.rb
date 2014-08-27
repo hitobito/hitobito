@@ -74,6 +74,7 @@ describe PeopleController, js: true do
           find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
 
           click_button 'Speichern'
+          sleep 0.2
           page.should have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
 
           find('#role_type_select a.chosen-single').click

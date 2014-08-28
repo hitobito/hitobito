@@ -50,7 +50,7 @@ class QualificationKind < ActiveRecord::Base
     if qualifications.exists?
       super
     else
-      destroy!
+      really_destroy!
     end
   end
 

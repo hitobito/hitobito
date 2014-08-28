@@ -212,7 +212,11 @@ describe RolesController do
 
   describe 'GET details' do
      it 'renders template' do
-       get :details, format: :js, role: { type: Group::TopGroup::Member.sti_name }, group_id: group.id
+       xhr :get,
+          :details,
+          format: :js,
+          role: { type: Group::TopGroup::Member.sti_name },
+          group_id: group.id
 
        should render_template('details')
        assigns(:type).should == Group::TopGroup::Member

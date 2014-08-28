@@ -27,7 +27,7 @@ describe Event::Kind do
   end
 
   it 'does destroy translations on hard destroy' do
-    expect { slk.destroy! }.to change { Event::Kind::Translation.count }.by(-1)
+    expect { slk.really_destroy! }.to change { Event::Kind::Translation.count }.by(-1)
   end
 
 end

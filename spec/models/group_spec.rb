@@ -321,7 +321,7 @@ describe Group do
     end
 
     it 'hard destroys self' do
-      expect { bottom_group.destroy! }.to change { Group.with_deleted.count }.by(-1)
+      expect { bottom_group.really_destroy! }.to change { Group.with_deleted.count }.by(-1)
       Group.should be_valid
     end
 
@@ -352,7 +352,7 @@ describe Group do
 
       it 'destroys exclusive events on hard destroy' do
         Fabricate(:event, groups: [group])
-        expect { group.destroy! }.to change { Event.count }.by(-1)
+        expect { group.really_destroy! }.to change { Event.count }.by(-1)
       end
 
       it 'does not destroy events belonging to other groups as well' do

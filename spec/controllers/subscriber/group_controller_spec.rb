@@ -32,18 +32,18 @@ describe Subscriber::GroupController do
 
   context 'GET roles.js' do
     it 'load role types' do
-      get :roles, group_id: group.id,
-                  mailing_list_id: list.id,
-                  subscription: { subscriber_id: groups(:bottom_layer_one) },
-                  format: :js
+      xhr :get, :roles, group_id: group.id,
+                        mailing_list_id: list.id,
+                        subscription: { subscriber_id: groups(:bottom_layer_one) },
+                        format: :js
 
       assigns(:role_types).root.should == Group::BottomLayer
     end
 
     it 'does not load role types for nil group' do
-      get :roles, group_id: group.id,
-                  mailing_list_id: list.id,
-                  format: :js
+      xhr :get, :roles, group_id: group.id,
+                        mailing_list_id: list.id,
+                        format: :js
 
       assigns(:role_types).should be_nil
     end

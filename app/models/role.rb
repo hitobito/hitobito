@@ -88,7 +88,7 @@ class Role < ActiveRecord::Base
     if old_enough_to_archive?
       super
     else
-      destroy!
+      really_destroy!
     end
   end
 

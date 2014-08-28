@@ -1,3 +1,32 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2014, insieme Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+require 'validates_timeliness/validator'
+
+# Patch method to suppress deprecation warning.
+# May be removed after a newer version than 3.0.14 is released
+module ValidatesTimeliness
+  class Validator < ActiveModel::EachValidator
+    def initialize_with_setup(options)
+      initialize_without_setup(options)
+      model = options[:class]
+      if model.respond_to?(:timeliness_validated_attributes)
+        model.timeliness_validated_attributes ||= []
+        model.timeliness_validated_attributes |= @attributes
+      end
+    end
+
+    alias_method_chain :initialize, :setup
+
+    remove_method :setup
+  end
+end
+
+
 ValidatesTimeliness.setup do |config|
   # Extend ORM/ODMs for full support (:active_record, :mongoid).
   # config.extend_orms = [ :active_record ]

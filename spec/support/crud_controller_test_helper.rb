@@ -19,7 +19,11 @@ module CrudControllerTestHelper
     params.merge!(example_params)
 
     sign_in(user)
-    send(m[:method], m[:action], params)
+    if m[:method] == :get && m[:format] == :js
+      xhr(:get, m[:action], params)
+    else
+      send(m[:method], m[:action], params)
+    end
   end
 
   def perform_combined_request

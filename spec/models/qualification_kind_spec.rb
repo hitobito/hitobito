@@ -57,7 +57,7 @@ describe QualificationKind do
   end
 
   it 'does destroy translations on hard destroy' do
-    expect { subject.destroy! }.to change { QualificationKind::Translation.count }.by(-1)
+    expect { subject.really_destroy! }.to change { QualificationKind::Translation.count }.by(-1)
   end
 
 end

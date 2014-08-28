@@ -64,7 +64,7 @@ class Event::Kind < ActiveRecord::Base
     if events.exists?
       super
     else
-      destroy!
+      really_destroy!
     end
   end
 

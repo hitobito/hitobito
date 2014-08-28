@@ -144,8 +144,8 @@ class Group < ActiveRecord::Base
   end
 
   # create alias to call it again
-  alias_method :hard_destroy, :destroy!
-  def destroy!
+  alias_method :hard_destroy, :really_destroy!
+  def really_destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
     # load events to destroy orphaned later

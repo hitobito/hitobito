@@ -144,7 +144,7 @@ class ListController < ApplicationController
       def define_render_callbacks(*actions)
         args = actions.collect { |a| :"render_#{a}" }
         args << { only: :before,
-                  terminator: 'result == false || performed?' }
+                  terminator: ->(ctrl, result) { result == false || ctrl.performed? } }
         define_model_callbacks(*args)
       end
     end

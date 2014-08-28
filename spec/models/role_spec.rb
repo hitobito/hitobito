@@ -231,7 +231,7 @@ describe Role do
     it 'sets main on destroy' do
       role = person.roles.first
       expect do
-        role.destroy!
+        role.really_destroy!
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

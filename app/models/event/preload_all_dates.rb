@@ -15,9 +15,8 @@ module Event::PreloadAllDates
     records = Array(records)
 
     # preload dates
-    ActiveRecord::Associations::Preloader.new(
-      records,
-      [:dates]).run
+    ActiveRecord::Associations::Preloader.new.
+      preload(records, [:dates])
 
     records
   end

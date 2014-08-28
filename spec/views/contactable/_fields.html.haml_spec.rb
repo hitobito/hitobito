@@ -11,7 +11,7 @@ describe 'contactable/_fields.html.haml' do
 
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
-  let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}, nil) }
+  let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}) }
 
   subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info', visible: false) }
 

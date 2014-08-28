@@ -73,7 +73,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', '~> 2.2.1'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

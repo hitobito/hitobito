@@ -367,7 +367,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content_tag(:div, class: 'control-group hp') do
       label(name, name, class: 'control-label') +
       content_tag(:div, class: 'controls') do
-        text_field(name, value: nil, placeholder: 'Bitte dieses Feld nicht ausfüllen')
+        text_field(name, value: nil, placeholder: I18n.t('global.do_not_fill'))
       end
     end
   end

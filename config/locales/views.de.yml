@@ -14,6 +14,7 @@ de:
     until: Bis
     no_list_entries: Keine Einträge gefunden.
     confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
+    do_not_fill: Bitte dieses Feld nicht ausfüllen
 
     gender:
       male: männlich

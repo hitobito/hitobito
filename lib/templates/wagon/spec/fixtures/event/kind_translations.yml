@@ -1,0 +1,6 @@
+dummy:
+  locale: 'de'
+  label: 'Dummy'
+  short_name: 'DMY'
+  event_kind_id:  <%= ActiveRecord::FixtureSet.identify(:dummy) %>
+

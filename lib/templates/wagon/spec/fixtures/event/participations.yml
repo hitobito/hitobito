@@ -1,0 +1,16 @@
+top_leader:
+  event: top_course
+  person: leader
+  active: true
+
+top_course_applicant:
+  event: top_course
+  person: member
+  active: false
+  application: top_course_applicant
+
+top_participant:
+  event: top_event
+  person: member
+  active: true
+  application: top_participant

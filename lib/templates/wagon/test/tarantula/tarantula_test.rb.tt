@@ -50,6 +50,8 @@ class TarantulaTest < ActionDispatch::IntegrationTest
     t.skip_uri_patterns << /groups\/\d+\/roles\/(#{person.roles.collect(&:id).join("|")})$/
     # no ajax links in application market
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/participant$/
+    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/waiting_list$/
+    t.skip_uri_patterns << /full$/
 
     # The type or merge_group_id tarantula generates is not from the
     # given selection, thus producing 404s.
@@ -81,11 +83,6 @@ class TarantulaTest < ActionDispatch::IntegrationTest
     t.allow_500_for /full$/
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for /groups\/\d+\/people\/\d+\/qualifications\/\d+$/
-    # delete not allowed - not completely clarified - investigate later
-    t.allow_500_for /groups\/\d+\/events\/\d+\/roles\/\d+$/
-    # roles with invalid created_at and deleted_at values may generate 500 :(
-    t.allow_500_for /groups\/\d+\/roles(\/\d+)?$/
-
 
     t.crawl_timeout = 20.minutes
     t.crawl

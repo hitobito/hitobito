@@ -1,0 +1,8 @@
+top_leader:
+  participation: top_leader
+  type: Event::Role::Leader
+
+top_tn:
+  participation: top_participant
+  type: Event::Role::Participant
+

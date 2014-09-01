@@ -78,10 +78,8 @@ group :test do
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
-  gem 'poltergeist'
   gem 'rspec-notify-osd'
   gem 'selenium-webdriver'
-  gem 'websocket-driver'
 end
 
 group :console do
@@ -98,14 +96,6 @@ group :console do
   gem 'rdoc-tags'
   gem 'spring-commands-rspec'
   gem 'wirble'
-  gem 'zeus'
-end
-
-group :guard_support do
-  gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'rb-inotify'
-  gem 'spork', '~> 1.0.0rc3'
 end
 
 group :metrics do

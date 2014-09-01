@@ -43,4 +43,6 @@ Hitobito::Application.configure do
 
   config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
 
+  # Do not maintain test schema when using wagons.
+  config.active_record.maintain_test_schema = false
 end

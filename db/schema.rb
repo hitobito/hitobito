@@ -208,15 +208,15 @@ ActiveRecord::Schema.define(version: 20140813074515) do
   end
 
   create_table "label_formats", force: true do |t|
-    t.string  "page_size",        default: "A4",  null: false
-    t.boolean "landscape",        default: false, null: false
-    t.float   "font_size",        default: 11.0,  null: false
-    t.float   "width",                            null: false
-    t.float   "height",                           null: false
-    t.integer "count_horizontal",                 null: false
-    t.integer "count_vertical",                   null: false
-    t.float   "padding_top",                      null: false
-    t.float   "padding_left",                     null: false
+    t.string  "page_size",                   default: "A4",  null: false
+    t.boolean "landscape",                   default: false, null: false
+    t.float   "font_size",        limit: 24, default: 11.0,  null: false
+    t.float   "width",            limit: 24,                 null: false
+    t.float   "height",           limit: 24,                 null: false
+    t.integer "count_horizontal",                            null: false
+    t.integer "count_vertical",                              null: false
+    t.float   "padding_top",      limit: 24,                 null: false
+    t.float   "padding_left",     limit: 24,                 null: false
   end
 
   create_table "mailing_lists", force: true do |t|

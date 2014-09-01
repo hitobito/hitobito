@@ -40,7 +40,7 @@ namespace :ci do
       Rake::Task['log:clear'].invoke
       Rake::Task['db:migrate'].invoke
       Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
-      Rake::Task['erd'].invoke
+      #Rake::Task['erd'].invoke
       wagon_exec('bundle exec rake app:ci:setup:rspec spec app:rubocop:report app:brakeman')
     end
 

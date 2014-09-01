@@ -27,7 +27,7 @@ gem 'haml'
 gem 'http_accept_language'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mini_magick'
-gem 'mysql2'
+gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
 gem 'nested_form'
 gem 'oat'
 gem 'paper_trail'

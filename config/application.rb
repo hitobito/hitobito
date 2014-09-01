@@ -84,12 +84,10 @@ module Hitobito
     config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
                                    *.png *.gif *.jpg)
 
-
     config.generators do |g|
       g.test_framework      :rspec, fixture: true
       #g.fixture_replacement :fabrication
     end
-
 
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender

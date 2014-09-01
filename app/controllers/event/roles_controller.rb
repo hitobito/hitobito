@@ -17,9 +17,6 @@ class Event::RolesController < CrudController
   # load group before authorization
   prepend_before_action :parent, :group
 
-  hide_action :index, :show
-
-
   def create
     assign_attributes
     new_participation = entry.participation.new_record?
@@ -44,7 +41,8 @@ class Event::RolesController < CrudController
 
   def build_entry
     attrs = params[:event_role]
-    role = parent.class.find_role_type!(attrs && attrs.delete(:type)).new
+    type =  attrs && attrs[:type]
+    role = parent.class.find_role_type!(type).new
 
     # delete unused attributes
     attrs.delete(:event_id)

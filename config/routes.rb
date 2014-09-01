@@ -71,7 +71,9 @@ Hitobito::Application.routes.draw do
             get 'print', on: :member
           end
 
-          resources :roles
+          resources :roles, except: [:index, :show]
+          get 'roles' => 'roles#new' # route required for language switch
+          get 'roles/:id' => 'roles#edit' # route required for language switch
 
           resources :application_market, only: :index do
             member do

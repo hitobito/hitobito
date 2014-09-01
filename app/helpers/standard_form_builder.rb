@@ -419,10 +419,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     options = args.extract_options!
     help = options.delete(:help)
     help_inline = options.delete(:help_inline)
+    caption = options.delete(:caption)
+
+    labeled_args = [args.first]
+    labeled_args << caption if caption.present?
+
     text = send(field_method, *(args << options)) + required_mark(args.first)
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
-    labeled(args.first, text)
+    labeled_args << text
+
+    labeled(*labeled_args)
   end
 
   def klass

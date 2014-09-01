@@ -67,6 +67,11 @@ describe 'StandardFormBuilder' do
       subject { form.labeled_input_field(:name, help: 'Some Help') }
       it { should include(form.help_block('Some Help')) }
     end
+
+    context 'with caption' do
+      subject { form.labeled_input_field(:name, caption: 'Some Caption') }
+      it { should include(form.label(:name, 'Some Caption', class: 'control-label')) }
+    end
   end
 
   describe '#belongs_to_field' do

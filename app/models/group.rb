@@ -149,9 +149,9 @@ class Group < ActiveRecord::Base
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
     # load events to destroy orphaned later
-    events.to_a
+    list = events.to_a
     hard_destroy
-    destroy_orphaned_events
+    list.each { |e| destroy_orphaned_event(e) }
   end
 
   def decorator_class
@@ -160,15 +160,9 @@ class Group < ActiveRecord::Base
 
   private
 
-  def destroy_orphaned_events
-    events.includes(:groups).each do |e|
-      destroy_orphaned_event(e)
-    end
-  end
-
   def destroy_orphaned_event(event)
     if event.group_ids.blank? || event.group_ids == [id]
-      event.destroy
+      event.destroy!
     end
   end
 

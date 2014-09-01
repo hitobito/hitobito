@@ -23,12 +23,6 @@ module Paranoia
     end
 
     module ClassMethods
-      def translates(*columns)
-        super(*columns)
-        # TODO: find a way to skip this callback in rails 4.1
-        skip_callback :destroy, :before, '(has_many_dependent_for_translations)'
-      end
-
       def list
         with_translations.
           order(:deleted_at, translated_label_column).

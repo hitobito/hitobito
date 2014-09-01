@@ -59,12 +59,60 @@ describe Event::ParticipationsController do
       end
     end
 
-    context 'for other event' do
+    context 'for other event of same group' do
       before { get :show, group_id: group.id, event_id: other_course.id, id: participation.id }
 
       it 'has participation' do
         assigns(:participation).should eq(participation)
       end
+    end
+
+    context 'for other event of other group' do
+
+      let(:group) { groups(:bottom_layer_one)}
+      let(:user) { Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: groups(:bottom_layer_one)).person }
+      let(:other_course) do
+        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], kind: course.kind)
+        other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
+        other
+      end
+
+      context 'on prio 2' do
+        let(:participation) do
+          p = Fabricate(:event_participation,
+                        event: other_course,
+                        application: Fabricate(:event_application,
+                                               priority_2: course))
+          p.answers.create!(question_id: course.questions[0].id, answer: 'juhu')
+          p.answers.create!(question_id: course.questions[1].id, answer: 'blabla')
+          p
+        end
+
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+
+        it 'has participation' do
+          response.status.should eq(200)
+          assigns(:participation).should eq(participation)
+        end
+      end
+
+      context 'on waiting list' do
+        let(:participation) do
+          p = Fabricate(:event_participation,
+                        event: other_course,
+                        application: Fabricate(:event_application,
+                                               waiting_list: true))
+          p
+        end
+
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+
+        it 'has participation' do
+          response.status.should eq(200)
+          assigns(:participation).should eq(participation)
+        end
+      end
+
     end
 
   end

@@ -32,11 +32,11 @@ class EventAbility < AbilityDsl::Base
   end
 
   def if_in_course_group
-    in_same_groups(course_offerers)
+    permission_in_groups?(course_offerers)
   end
 
   def if_in_course_layer
-    in_same_layers(course_offerers)
+    permission_in_layers?(course_offerers)
   end
 
   private

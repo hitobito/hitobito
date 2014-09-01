@@ -10,6 +10,9 @@ require Rails.root.join('spec/support/group/bottom_group.rb')
 class Group::BottomLayer < Group
 
   self.layer = true
+
+  self.event_types = [Event, Event::Course]
+
   children Group::BottomGroup
 
 

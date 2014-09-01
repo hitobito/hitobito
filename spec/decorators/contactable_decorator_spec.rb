@@ -9,6 +9,7 @@ require 'spec_helper'
 
 describe ContactableDecorator do
   before do
+    Draper::ViewContext.clear!
     group = Group.new(id: 1, name: 'foo', address: 'foostreet 3', zip_code: '4242', town: 'footown', email: 'foo@foobar.com', country: 'Schweiz')
     group.phone_numbers.new(number: '031 12345', label: 'Home', public: true)
     group.phone_numbers.new(number: '041 12345', label: 'Work', public: true)

@@ -54,9 +54,9 @@ describe QualificationAbility do
     context 'on bottom member' do
       let(:person) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person }
 
-      it 'cannot create and destroy' do
-        should_not be_able_to(:create, qualification)
-        should_not be_able_to(:destroy, qualification)
+      it 'create and destroy' do
+        should be_able_to(:create, qualification)
+        should be_able_to(:destroy, qualification)
       end
     end
   end

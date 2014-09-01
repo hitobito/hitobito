@@ -68,16 +68,22 @@ describe Event::ListsController, type: :controller do
       let(:last) { items.last }
 
       it 'contains links that filter event data' do
-        items.size.should eq 3
+        items.size.should eq 5
 
-        first.text.should eq 'Alle Gruppen'
-        first[:href].should eq list_courses_path(year: year)
+        items[0].text.should eq 'Alle Gruppen'
+        items[0][:href].should eq list_courses_path(year: year)
 
-        middle.text.should eq top_layer.name
-        middle[:href].should eq list_courses_path(year: year, group_id: top_layer.id)
+        items[1].text.should eq top_layer.name
+        items[1][:href].should eq list_courses_path(year: year, group_id: top_layer.id)
 
-        last.text.should eq top_group.name
-        last[:href].should eq list_courses_path(year: year, group_id: top_group.id)
+        items[2].text.should eq groups(:bottom_layer_one).name
+        items[2][:href].should eq list_courses_path(year: year, group_id: groups(:bottom_layer_one).id)
+
+        items[3].text.should eq groups(:bottom_layer_two).name
+        items[3][:href].should eq list_courses_path(year: year, group_id: groups(:bottom_layer_two).id)
+
+        items[4].text.should eq top_group.name
+        items[4][:href].should eq list_courses_path(year: year, group_id: top_group.id)
 
         dom.find('body nav .active').text.should eq 'Kurse'
       end
@@ -144,7 +150,7 @@ describe Event::ListsController, type: :controller do
       it 'filters by year, keeps year in dropdown' do
         get :courses, year: 2010
         main.all('h2').size.should eq 1
-        dropdown.find('li:eq(3) a')[:href].should eq list_courses_path(year: 2010, group_id: top_group.id)
+        dropdown.find('li:eq(5) a')[:href].should eq list_courses_path(year: 2010, group_id: top_group.id)
       end
 
     end

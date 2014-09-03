@@ -64,6 +64,9 @@ module Hitobito
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
+    # Don't let Rails maintain the test schema (old behavior before 4.1)
+    config.active_record.maintain_test_schema = false
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 

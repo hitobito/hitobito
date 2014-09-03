@@ -8,7 +8,7 @@
 require File.expand_path('../boot', __FILE__)
 require 'benchmark'
 
-b = -> do
+b = lambda do
   require 'rails/all'
   require 'jquery/rails'
 end
@@ -30,7 +30,7 @@ module Hitobito
                                  #{config.root}/app/jobs
                                  #{config.root}/app/serializers
                                  #{config.root}/app/utils
-                               )
+                             )
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -56,16 +56,14 @@ module Hitobito
     Globalize.fallbacks = { de: [:de, :fr, :it, :en],
                             fr: [:fr, :it, :en, :de],
                             it: [:it, :fr, :en, :de],
-                            en: [:en, :de, :fr, :it]}
+                            en: [:en, :de, :fr, :it]
+                          }
 
     # Route errors over the Rails application.
     config.exceptions_app = self.routes
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
-
-    # Don't let Rails maintain the test schema (old behavior before 4.1)
-    config.active_record.maintain_test_schema = false
+    config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
@@ -75,8 +73,8 @@ module Hitobito
 
     config.log_tags = [:uuid]
 
-    config.cache_store = :dalli_store, {compress: true,
-                                        namespace: ENV['RAILS_HOST_NAME'] || 'hitobito'}
+    config.cache_store = :dalli_store, { compress: true,
+                                         namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
 
     # Enable the asset pipeline
     config.assets.enabled = true
@@ -88,8 +86,8 @@ module Hitobito
                                    *.png *.gif *.jpg)
 
     config.generators do |g|
-      g.test_framework      :rspec, fixture: true
-      #g.fixture_replacement :fabrication
+      g.test_framework :rspec, fixture: true
+      # g.fixture_replacement :fabrication
     end
 
     config.to_prepare do
@@ -110,4 +108,4 @@ module Hitobito
   end
 end
 
-require "prawn/measurement_extensions"
+require 'prawn/measurement_extensions'

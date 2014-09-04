@@ -481,7 +481,7 @@ de:
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
 
     application_market:
-      already_assigned: 'Diese Person ist bereits anderweitig dem Anlass zugeteilt.'
+      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'
       participation:
         registered_at: 'Anmeldung am %{date}'
       prio_buttons:

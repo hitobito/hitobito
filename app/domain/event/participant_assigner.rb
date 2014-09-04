@@ -8,8 +8,7 @@
 class Event::ParticipantAssigner < Struct.new(:event, :participation)
 
   def createable?
-    participation.event_id == event.id ||
-    !event.participations.where(person_id: participation.person_id).exists?
+    participation.event.id == event.id || (!participating?(event) && !participating?(participation.event))
   end
 
   def create_role
@@ -31,6 +30,10 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
   end
 
   private
+
+  def participating?(event)
+    event.participations_for(event.participant_type).where(person_id: participation.person_id).exists?
+  end
 
   def update_participation_event(e = event)
     old_event = participation.event

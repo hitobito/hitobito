@@ -42,4 +42,4 @@
 
   = render_extensions :fields, locals: { f: f }
 
-  %p= t('.explain_required_checkmark')
+  %p= t('.explain_required_checkmark') if @event.questions.any?(&:required?)

@@ -12,13 +12,13 @@ module EventParticipationsHelper
   end
 
   def event_participations_roles_header(t)
-    header = t.sort_header(:roles, Role.model_name.human(count: 2))
+    headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
 
     if can?(:update, entries.first)
-      header += " | #{Event::Participation.human_attribute_name(:created_at)}"
+      headers << [t.sort_header(:created_at, Event::Participation.human_attribute_name(:created_at))]
     end
 
-    header
+    headers.join(' | ').html_safe
   end
 
   def event_participations_roles_content(p)

@@ -508,6 +508,7 @@ de:
         apply: 'Anmelden'
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
+        explain_required_checkmark: '* = Antwort oblitagorisch'
       priorities:
         alternative_course: "%{number}. Ausweichkurs"
       print:

@@ -4,8 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 - question = f.object.question
+- question_label = h(question.question)
+- question_label += StandardFormBuilder::REQUIRED_MARK if question.required?
+
 = f.hidden_field(:question_id)
-= f.labeled(:answer, question.question) do
+= f.labeled(:answer, question_label) do
   - if question.choices?
     - question.choice_items.each_with_index do |q, index|
       - if question.multiple_choices?

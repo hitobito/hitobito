@@ -44,11 +44,11 @@ describe Duration do
     subject { duration.days }
 
     context 'with finish_at' do
-      let(:start)  { Time.zone.parse('2013-10-10 10:30') }
-      let(:finish) { Time.zone.parse('2013-10-12 10:30') }
+      let(:start)  { Time.zone.parse('2013-10-10 22:30') }
+      let(:finish) { Time.zone.parse('2013-10-12 09:30') }
 
-      it 'calculuated form start to finish' do
-        should eq 2
+      it 'returns number of days including start and finish' do
+        should eq 3
       end
     end
 

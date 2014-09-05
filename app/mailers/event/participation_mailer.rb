@@ -18,6 +18,9 @@ class Event::ParticipationMailer < ActionMailer::Base
   def confirmation(participation)
     @participation = participation
 
+    filename = Export::Pdf::Participation.filename(participation)
+    attachments[filename] = Export::Pdf::Participation.render(participation)
+
     compose(CONTENT_CONFIRMATION,
             [person],
             'recipient-name' => person.greeting_name)

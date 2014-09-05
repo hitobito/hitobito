@@ -15,6 +15,7 @@ module Export::Pdf
                                   margin: 2.cm)
         customize(pdf)
         sections.each { |section| section.new(pdf, participation).render }
+        pdf.number_pages I18n.t('event.participations.print.page_of_pages'), at: [0, 0], align: :right, size: 9
         pdf.render
       end
 
@@ -23,6 +24,7 @@ module Export::Pdf
       def customize(pdf)
         pdf.font_size 9
         pdf
+
       end
 
       def sections
@@ -36,6 +38,10 @@ module Export::Pdf
 
     def self.render(participation)
       runner.new.render(participation)
+    end
+
+    def self.filename(participation)
+      "#{[participation.event.name, participation.person.full_name].join('_')}.pdf"
     end
   end
 end

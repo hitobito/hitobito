@@ -23,7 +23,12 @@ describe Event::ParticipationMailer do
     Fabricate(:phone_number, contactable: person, public: true)
   end
 
-  subject { mail.body }
+  subject { mail.parts.first.body }
+
+  it 'includes an html and a pdf part' do
+    mail.parts.first.content_type.should eq "text/html; charset=UTF-8"
+    mail.parts.second.content_type.should eq "application/pdf; filename=\"Eventus_Top Leader.pdf\""
+  end
 
   describe 'event data' do
     it 'renders set attributes only' do
@@ -62,7 +67,6 @@ describe Event::ParticipationMailer do
 
       should =~ %r{Fragen:.*GA}
     end
-
   end
 
   describe '#confirmation' do
@@ -90,6 +94,8 @@ describe Event::ParticipationMailer do
   end
 
   describe '#approval' do
+    subject { mail.body }
+
     let(:approvers) do
       [Fabricate(:person, email: 'approver0@example.com', first_name: 'firsty'),
        Fabricate(:person, email: 'approver1@example.com', first_name: 'lasty')]

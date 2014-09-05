@@ -22,7 +22,8 @@ module Concerns
 
     def render_participation(participation)
       pdf = Export::Pdf::Participation.render(participation)
-      filename = "#{participation.event.id}_#{participation.id}.pdf"
+      filename = Export::Pdf::Participation.filename(participation)
+
       send_data pdf, type: :pdf, disposition: 'inline', filename: filename
     end
 

@@ -19,7 +19,10 @@ module Export::Pdf::Participation
         end
 
         heading { text additional_information_label, style: :bold }
-        text participation.additional_information
+
+        pdf.bounding_box([0 + 2, cursor - 5], width: bounds.width - 10, height: 65) do
+          shrinking_text_box participation.additional_information
+        end
       end
     end
 

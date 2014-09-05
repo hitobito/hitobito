@@ -64,11 +64,11 @@ module Export::Pdf::Participation
     end
 
     def shrinking_text_box(text, opts = {})
-      pdf.text_box(text, opts.merge(overflow: :shrink_to_fit))
+      pdf.text_box(text, opts.merge(overflow: :shrink_to_fit)) if text.present?
     end
 
     def stroke_bounds
-      # pdf.stroke_bounds if Export::Pdf::Participation::Runner.stroke_bounds
+      # pdf.stroke_bounds
     end
 
     def text(*args)
@@ -104,6 +104,10 @@ module Export::Pdf::Participation
 
     def event_with_kind?
       event.class.used_attributes.include?(:kind_id)
+    end
+
+    def i18n_event_postfix
+      event.class.to_s.underscore.gsub('/', '_')
     end
   end
 end

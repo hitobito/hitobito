@@ -26,7 +26,7 @@ module Export::Pdf::Participation
     end
 
     def render_heading
-      text t('.read_and_agreed'), style: :bold
+      text t(".read_and_agreed_for_#{i18n_event_postfix}"), style: :bold
       move_down_line
     end
 

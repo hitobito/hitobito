@@ -22,18 +22,12 @@ module Export::Pdf::Participation
 
         person_attributes.each { |attr| labeled_attr(attr) }
         move_down_line
-
-        originating_groups.each { |group| text group.to_s }
       end
 
       private
 
       def person_attributes
         [:birthday]
-      end
-
-      def originating_groups
-        []
       end
 
       def phone_numbers

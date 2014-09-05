@@ -512,9 +512,11 @@ de:
       priorities:
         alternative_course: "%{number}. Ausweichkurs"
       print:
-        read_and_agreed: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
+        read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
+        read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass
         requirements_for_event_course: Voraussetzungen für den Kurs
+        page_of_pages: "Seite <page> von <total>"
       list:
         incomplete: Pflichtangaben fehlen
 

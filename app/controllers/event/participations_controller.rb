@@ -195,7 +195,7 @@ class Event::ParticipationsController < CrudController
   def set_success_notice
     if action_name.to_s == 'create'
       notice = translate(:success, full_entry_label: full_entry_label)
-      notice += '<br />' + translate(:instructions) if user_course_application?
+      notice += '<br />' + translate(:instructions) if append_mailing_instructions?
       flash[:notice] ||= notice
     else
       super
@@ -204,6 +204,10 @@ class Event::ParticipationsController < CrudController
 
   def user_course_application?
     entry.person == current_user && event.supports_applications
+  end
+
+  def append_mailing_instructions?
+    user_course_application?
   end
 
   def event

@@ -25,16 +25,20 @@ module Export::Pdf::Participation
     end
 
     def render_requirements
-      with_count(t(requirements_key)) do
+      with_count(t(".requirements_for_#{i18n_event_postfix}")) do
         boxed_attr(event, :application_conditions)
 
         if course?
-          boxed_attr(event_kind, :minimum_age)
+          boxed_attr(event_kind, :minimum_age) { translated_minimum_age }
           boxed_attr(event_kind, :qualification_kinds,
                      human_attribute_name(:preconditions, event_kind),
                      %w(precondition participant))
         end
       end
+    end
+
+    def translated_minimum_age
+      I18n.t('qualifications.in_years', years: event_kind.minimum_age)
     end
 
     def with_count(content)
@@ -48,11 +52,6 @@ module Export::Pdf::Participation
     def description_title
       [human_event_name,
        human_attribute_name(:description, event).downcase].join
-    end
-
-    def requirements_key
-      postfix = event.class.to_s.underscore.gsub('/', '_')
-      ".requirements_for_#{postfix}"
     end
 
     def course?
@@ -70,12 +69,15 @@ module Export::Pdf::Participation
     end
 
     def boxed_attr(model, attr, title = nil, args = nil)
+      title ||= human_attribute_name(attr, model)
+
       values = Array(model.send(attr, *args)).reject(&:blank?)
+      values_text = block_given? ? yield : values.map(&:to_s).join("\n")
 
       if values.present?
-        render_boxed(-> { text title || human_attribute_name(attr, model) },
-                     -> { text values.map(&:to_s).join("\n") })
+        render_boxed(-> { text title }, -> { text values_text })
       end
+      move_down_line
     end
 
     class NullEventKind < OpenStruct

@@ -20,7 +20,7 @@ module Export::Pdf::Participation
     private
 
     def heading
-      [application_type, application_name, year].join(' ')
+      [application_type, year].join(' ')
     end
 
     def application_type

@@ -160,13 +160,20 @@ describe Event::ApplicationMarketController do
       appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
     end
 
-    it 'shows error on existing participation' do
+    it 'shows error on existing participant role' do
       other = Fabricate(:course, groups: [groups(:top_layer)])
-      Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
+      create_participant_role(other)
 
       put :add_participant, group_id: group.id, event_id: other.id, id: appl_prio_1.id, format: :js
 
       should render_template('participation_exists_error')
+    end
+
+    def create_participant_role(other)
+      participation = Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
+      role = other.participant_type.new
+      role.participation = participation
+      role.save!
     end
   end
 

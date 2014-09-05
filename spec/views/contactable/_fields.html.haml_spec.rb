@@ -29,7 +29,7 @@ describe 'contactable/_fields.html.haml' do
       else
         render_method.call(*args)
       end
-    end.twice
+    end.exactly(3).times
   end
 
   context 'standard' do

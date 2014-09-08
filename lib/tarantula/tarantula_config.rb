@@ -1,3 +1,10 @@
+# encoding: utf-8
+
+#  Copyright (c) 2014, insime Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module TarantulaConfig
 
   def crawl_as(person)
@@ -15,8 +22,9 @@ module TarantulaConfig
     t.crawl
   end
 
+  # rubocop:disable MethodLength
   def configure_urls(t, person)
-        # some links use example.com as a domain, allow them
+    # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)
     t.skip_uri_patterns << /^http(?!:\/\/www\.example\.com)/
     t.skip_uri_patterns << /year=#{outside_three_years_window}/
@@ -36,36 +44,36 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
 
-    # The type or merge_group_id tarantula generates is not from the
-    # given selection, thus producing 404s.
-    t.allow_404_for /groups$/
-    t.allow_404_for /groups\/\d+\/roles$/
-    t.allow_404_for /groups\/\d+\/roles\/\d+$/
-    t.allow_404_for /groups\/\d+\/people$/
-    t.allow_404_for /groups\/\d+\/merge$/
-    t.allow_404_for /groups\/\d+\/move$/
-    t.allow_404_for /groups\/\d+\/events$/
-    t.allow_404_for /groups\/\d+\/events\/\d+$/
-    t.allow_404_for /groups\/\d+\/events\/\d+\/roles$/
-    t.allow_404_for /groups\/\d+\/events\/\d+\/roles\/\d+$/
-    t.allow_404_for /groups\/\d+\/events\/\d+\/participations\/\d+$/
-    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/person$/
-    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/
-    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/
-    t.allow_404_for /groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/
-    t.allow_404_for /event_kinds\/\d+$/
-    t.allow_404_for /event_kinds$/
-    t.allow_404_for /groups\/\d+\/member_counts$/
+    # The parent entry may already have been deleted, thus producing 404s.
+    t.allow_404_for(/groups$/)
+    t.allow_404_for(/groups\/\d+\/roles$/)
+    t.allow_404_for(/groups\/\d+\/roles\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/people$/)
+    t.allow_404_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/merge$/)
+    t.allow_404_for(/groups\/\d+\/move$/)
+    t.allow_404_for(/groups\/\d+\/events$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/roles$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/roles\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/participations\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/person$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/)
+    t.allow_404_for(/event_kinds\/\d+$/)
+    t.allow_404_for(/event_kinds$/)
     # kind already deleted in another language
-    t.allow_404_for /qualification_kinds\/\d+$/
+    t.allow_404_for(/qualification_kinds\/\d+$/)
     # groups already deleted in another language
-    t.allow_404_for /it\/groups\/\d+$/
+    t.allow_404_for(/it\/groups\/\d+$/)
     # custom return_urls end up like that.
-    t.allow_404_for /^\-?\d+$/
+    t.allow_404_for(/^\-?\d+$/)
 
     # delete qualification is not allowed after role was removed from person
-    t.allow_500_for /groups\/\d+\/people\/\d+\/qualifications\/\d+$/
+    t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
   end
+  # rubocop:enable MethodLength
 
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window

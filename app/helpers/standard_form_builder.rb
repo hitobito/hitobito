@@ -372,6 +372,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def with_addon(addon, content = nil)
+    content_tag(:div, class: 'input-append') do
+      (block_given? ? yield : content) +
+        content_tag(:span, addon, class: 'add-on')
+    end
+  end
+
   private
 
   # Returns true if attr is a non-polymorphic association.
@@ -420,11 +427,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     help = options.delete(:help)
     help_inline = options.delete(:help_inline)
     caption = options.delete(:caption)
+    addon = options.delete(:addon)
 
     labeled_args = [args.first]
     labeled_args << caption if caption.present?
 
     text = send(field_method, *(args << options)) + required_mark(args.first)
+    text = with_addon(addon, text) if addon.present?
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?
     labeled_args << text

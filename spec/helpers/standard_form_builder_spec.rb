@@ -72,6 +72,13 @@ describe 'StandardFormBuilder' do
       subject { form.labeled_input_field(:name, caption: 'Some Caption') }
       it { should include(form.label(:name, 'Some Caption', class: 'control-label')) }
     end
+
+    context 'with addon' do
+      subject { form.labeled_input_field(:name, addon: 'Some Addon') }
+      it { should match(/class="input-append"/) }
+      it { should match(/class="add-on"/) }
+      it { should match(/Some Addon/) }
+    end
   end
 
   describe '#belongs_to_field' do

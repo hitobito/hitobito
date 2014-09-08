@@ -24,9 +24,7 @@ module FeatureHelpers
     rescue Errno::ECONNREFUSED,
            Timeout::Error,
            Capybara::FrozenInTime,
-           Capybara::ElementNotFound,
-           Capybara::Poltergeist::ObsoleteNode,
-           Capybara::Poltergeist::TimeoutError => e
+           Capybara::ElementNotFound
       pending e.message
     end
   end

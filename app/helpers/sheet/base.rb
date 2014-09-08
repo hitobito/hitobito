@@ -71,7 +71,7 @@ module Sheet
     end
 
     def render_main_tabs
-      unless %w(new edit create update).include?(view.action_name)
+      unless %w(new create).include?(view.action_name)
         render_tabs
       end
     end

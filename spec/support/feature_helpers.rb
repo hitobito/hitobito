@@ -24,7 +24,7 @@ module FeatureHelpers
     rescue Errno::ECONNREFUSED,
            Timeout::Error,
            Capybara::FrozenInTime,
-           Capybara::ElementNotFound
+           Capybara::ElementNotFound => e
       pending e.message
     end
   end

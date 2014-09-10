@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+require 'csv'
 
 describe Export::Csv::People::PeopleFull do
 

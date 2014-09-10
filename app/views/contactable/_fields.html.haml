@@ -6,6 +6,8 @@
 = info_field_set_tag do
   = render 'contactable/address_fields', f: f
 
+= render_extensions :address_fields, locals: { f: f }
+
 = field_set_tag do
   = render 'email_field', f: f
 

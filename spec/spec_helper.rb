@@ -25,6 +25,8 @@ require 'cancan/matchers'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
+ActiveRecord::Migration.maintain_test_schema!
+
 # Add test locales
 Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
 Faker::Config.locale = I18n.locale

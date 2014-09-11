@@ -32,7 +32,9 @@ module PeopleHelper
 
     list.unshift(Person.human_attribute_name(grouping_attr.to_sym)) if grouping_attr
 
-    t.col(safe_join(list, ' | '), &block)
+    header = list[0..-2].collect { |i| content_tag(:span, "#{i} |".html_safe, class: 'nowrap') }
+    header << list.last
+    t.col(safe_join(header, ' '), &block)
   end
 
 end

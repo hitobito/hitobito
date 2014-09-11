@@ -13,7 +13,7 @@ module Export::Pdf::Participation
       def render
         text person.first_name, person.last_name, style: :bold
         text person.address
-        text person.zip_code, person.town
+        text address_details
         move_down_line
 
         phone_numbers.each { |number| text number.to_s }
@@ -25,6 +25,10 @@ module Export::Pdf::Participation
       end
 
       private
+
+      def address_details
+        [person.zip_code, person.town]
+      end
 
       def person_attributes
         [:birthday]

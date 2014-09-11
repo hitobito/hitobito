@@ -11,12 +11,6 @@
         = labeled_attr(entry, :motto)
         = labeled_attr(entry, :cost)
 
-      = render_present_attrs(entry, :description, :location)
-
-    = render_extensions :show
-
-  %aside.span5
-    = section Event.human_attribute_name(:contact) do
       %dl.dl-horizontal
         - entry.used?(:kind_id) do
           = labeled_attr(entry, :kind_id)
@@ -32,10 +26,15 @@
 
         = render_extensions :attrs, folder: 'events'
 
+      = render_present_attrs(entry, :description, :location)
 
-      - if entry.contact_id?
+    = render_extensions :show
+
+  %aside.span5
+    - if entry.contact_id?
+      = section Event.human_attribute_name(:contact) do
         %dl.dl-horizontal
-          = labeled(Event.human_attribute_name(:contact), entry.contact.complete_contact)
+          = entry.contact.complete_contact
 
 
     = section Event::Application.model_name.human do

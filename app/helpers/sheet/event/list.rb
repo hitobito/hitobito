@@ -10,7 +10,7 @@ module Sheet
     class List < Sheet::Base
 
       def left_nav?
-        true
+       ::Event::Course.used_attributes.include?(:kind_id)
       end
 
       def render_left_nav

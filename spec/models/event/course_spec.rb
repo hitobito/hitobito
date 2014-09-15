@@ -64,5 +64,23 @@ describe Event::Course do
     its(:qualification_date) { should == Date.new(2012, 5, 14) }
   end
 
+  context 'without event_kind' do
+    before { Event::Course.used_attributes -= [:kind_id] }
+
+    it 'creates course' do
+      Event::Course.create!(groups: [groups(:top_group)],
+                            name: 'test',
+                            dates_attributes: [{ start_at: Time.zone.now }])
+
+    end
+
+    it 'renders label_detail' do
+      events(:top_course).update_attributes(kind_id: nil, number: 123)
+      events(:top_course).label_detail.should eq '123 Top'
+    end
+
+    after { Event::Course.used_attributes += [:kind_id] }
+  end
+
 
 end

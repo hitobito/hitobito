@@ -23,12 +23,13 @@
     = render_extensions 'fields', locals: { f: f }
 
   - if @groups.present?
-    = field_set_tag t('event.run_by') do
-      = f.labeled(:group_ids, '&nbsp;'.html_safe) do
-        = hidden_field_tag('event[group_ids][]', @group.id)
-        = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
-        - @groups.each do |group|
-          = f.inline_check_box(:group_ids, group.id, group.to_s)
+    - entry.used?(:group_ids) do
+      = field_set_tag t('event.run_by') do
+        = f.labeled(:group_ids, '&nbsp;'.html_safe) do
+          = hidden_field_tag('event[group_ids][]', @group.id)
+          = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
+          - @groups.each do |group|
+            = f.inline_check_box(:group_ids, group.id, group.to_s)
 
 
   = field_set_tag Event.human_attribute_name(:dates) do

@@ -8,6 +8,8 @@
 class Event::ListsController < ApplicationController
   include YearBasedPaging
 
+  DEFAULT_GROUPING = ->(event) { I18n.l(event.dates.first.start_at, format: :month_year) }
+
   attr_reader :group_id
   helper_method :group_id
 
@@ -17,24 +19,36 @@ class Event::ListsController < ApplicationController
   def events
     authorize!(:index, Event)
 
-    @events_by_month = EventDecorator.decorate_collection(upcoming_user_events).
-                                      group_by do |entry|
-      l(entry.dates.first.start_at, format: :month_year)
-    end
+    @events_by_month = grouped(upcoming_user_events)
   end
 
   def courses
     authorize!(:index, Event::Course)
     set_group_vars
-    load_courses_by_kind
+
+    grouped_courses = grouped(limited_courses_scope, course_grouping)
+    @grouped_courses = sorted(grouped_courses)
 
     respond_to do |format|
-      format.html { @courses_by_kind }
-      format.csv  { render_courses_csv(@courses_by_kind.values.flatten) if can?(:export, Event) }
+      format.html { @grouped_courses }
+      format.csv  { render_courses_csv(@grouped_courses.values.flatten) if can?(:export, Event) }
     end
   end
 
   private
+
+  def grouped(scope, grouping = DEFAULT_GROUPING)
+    EventDecorator.
+      decorate_collection(scope).
+      group_by { |event| grouping.call(event) }
+  end
+
+  def sorted(courses)
+    courses.values.each do |entries|
+      entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }
+    end
+    courses
+  end
 
   def render_courses_csv(courses)
     send_data Export::Csv::Events::List.export(courses), type: :csv
@@ -46,15 +60,6 @@ class Event::ListsController < ApplicationController
         params[:group_id] = default_user_course_group.try(:id)
       end
       @group_id = params[:group_id].to_i
-    end
-  end
-
-  def load_courses_by_kind
-    courses = EventDecorator.decorate_collection(limit_scope_for_user)
-    @courses_by_kind = courses.group_by { |entry| entry.kind.label }
-    @courses_by_kind.values.each do |entries|
-      entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }.
-              collect! { |e| EventDecorator.new(e) }
     end
   end
 
@@ -74,20 +79,28 @@ class Event::ListsController < ApplicationController
           first
   end
 
-  def limit_scope_for_user
+  def limited_courses_scope
     if can?(:manage_courses, Event)
-      group_id > 0 ? scope.with_group_id(group_id) : scope
+      group_id > 0 ? course_scope.with_group_id(group_id) : course_scope
     else
-      scope.in_hierarchy(current_user)
+      course_scope.in_hierarchy(current_user)
     end
   end
 
-  def scope
+  def course_scope
     Event::Course
       .includes(:groups,  kind: :translations)
       .order('event_kind_translations.label')
       .in_year(year)
       .list
+  end
+
+  def course_grouping
+    if Event::Course.used_attributes.include?(:kind_id)
+      -> (event) { event.kind.label }
+    else
+      DEFAULT_GROUPING
+    end
   end
 
 end

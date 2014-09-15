@@ -54,11 +54,12 @@ class Event::Course < Event
 
   belongs_to :kind
 
-  validates :kind_id, presence: true
+  validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
 
 
   def label_detail
-    "#{kind.short_name} #{number} #{group_names}"
+    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ""
+    label << "#{number} #{group_names}"
   end
 
   # Does this event provide qualifications

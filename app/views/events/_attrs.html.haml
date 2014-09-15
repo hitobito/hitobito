@@ -16,6 +16,8 @@
           = labeled_attr(entry, :kind_id)
           = render_extensions :kind, folder: 'events'
 
+        = render_extensions :main_attrs
+
         - entry.used?(:number) do
           = labeled_attr(entry, :number)
 

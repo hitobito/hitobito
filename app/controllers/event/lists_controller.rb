@@ -11,7 +11,7 @@ class Event::ListsController < ApplicationController
   DEFAULT_GROUPING = ->(event) { I18n.l(event.dates.first.start_at, format: :month_year) }
 
   attr_reader :group_id
-  helper_method :group_id
+  helper_method :group_id, :kind_used?
 
   skip_authorize_resource only: [:events, :courses]
 
@@ -19,7 +19,7 @@ class Event::ListsController < ApplicationController
   def events
     authorize!(:index, Event)
 
-    @events_by_month = grouped(upcoming_user_events)
+    @grouped_events = grouped(upcoming_user_events)
   end
 
   def courses
@@ -27,11 +27,11 @@ class Event::ListsController < ApplicationController
     set_group_vars
 
     grouped_courses = grouped(limited_courses_scope, course_grouping)
-    @grouped_courses = sorted(grouped_courses)
+    @grouped_events = sorted(grouped_courses)
 
     respond_to do |format|
-      format.html { @grouped_courses }
-      format.csv  { render_courses_csv(@grouped_courses.values.flatten) if can?(:export, Event) }
+      format.html { @grouped_events }
+      format.csv  { render_courses_csv(@grouped_events.values.flatten) if can?(:export, Event) }
     end
   end
 
@@ -89,18 +89,26 @@ class Event::ListsController < ApplicationController
 
   def course_scope
     Event::Course
-      .includes(:groups,  kind: :translations)
-      .order('event_kind_translations.label')
+      .includes(:groups,  additional_course_includes)
+      .order(course_ordering)
       .in_year(year)
       .list
   end
 
   def course_grouping
-    if Event::Course.used_attributes.include?(:kind_id)
-      ->(event) { event.kind.label }
-    else
-      DEFAULT_GROUPING
-    end
+    kind_used? ? ->(event) { event.kind.label } : DEFAULT_GROUPING
+  end
+
+  def course_ordering
+    kind_used? ? 'event_kind_translations.label' : 'event_dates.start_at'
+  end
+
+  def additional_course_includes
+    kind_used? ? { kind: :translations } : {}
+  end
+
+  def kind_used?
+    Event::Course.used_attributes.include?(:kind_id)
   end
 
 end

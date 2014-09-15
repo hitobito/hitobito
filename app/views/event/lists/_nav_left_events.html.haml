@@ -1,5 +1,5 @@
 %ul.nav-left-list
-  - @events_by_month.keys.collect(&:split).group_by(&:last).each do |year, months|
+  - @grouped_events.keys.collect(&:split).group_by(&:last).each do |year, months|
     %li.divider= year
     - months.each do |month, year|
       %li= link_to(month, "##{CGI.escape("#{month} #{year}")}")

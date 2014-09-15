@@ -7,12 +7,13 @@
 
 module FeatureHelpers
 
+  extend ActiveSupport::Concern
+
+  include Warden::Test::Helpers
+
   def sign_in(user = nil)
     user ||= people(:top_leader)
-    visit person_session_path
-    fill_in 'E-Mail', with: user.email
-    fill_in 'Passwort', with: 'foobar'
-    click_button 'Anmelden'
+    login_as(user, :scope => :person)
   end
 
   private

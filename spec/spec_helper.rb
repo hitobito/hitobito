@@ -101,19 +101,14 @@ RSpec.configure do |config|
   end
 
   unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+    Warden.test_mode!
+
     config.use_transactional_fixtures = false
 
-    config.before(:suite) do
-      DatabaseCleaner.strategy = DB_CLEANER_STRATEGY
-    end
-
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
-
-    config.after(:each) do
-      DatabaseCleaner.clean
-    end
+    config.before(:suite) { DatabaseCleaner.strategy = DB_CLEANER_STRATEGY }
+    config.before(:each) { DatabaseCleaner.start }
+    config.after(:each) { DatabaseCleaner.clean }
+    config.after(:each) { Warden.test_reset! }
   end
 end
 

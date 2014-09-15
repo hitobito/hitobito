@@ -101,6 +101,7 @@ RSpec.configure do |config|
   end
 
   unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+    config.include Warden::Test::Helpers
     Warden.test_mode!
 
     config.use_transactional_fixtures = false

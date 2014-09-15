@@ -7,10 +7,6 @@
 
 module FeatureHelpers
 
-  extend ActiveSupport::Concern
-
-  include Warden::Test::Helpers
-
   def sign_in(user = nil)
     user ||= people(:top_leader)
     login_as(user, :scope => :person)

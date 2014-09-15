@@ -97,7 +97,7 @@ class Event::ListsController < ApplicationController
 
   def course_grouping
     if Event::Course.used_attributes.include?(:kind_id)
-      -> (event) { event.kind.label }
+      ->(event) { event.kind.label }
     else
       DEFAULT_GROUPING
     end

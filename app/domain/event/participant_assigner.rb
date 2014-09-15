@@ -24,7 +24,7 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
   end
 
   def remove_role
-    participation.roles.where(type: event.participant_type.sti_name).destroy_all
+    participation.roles.where(type: event.participant_types.collect(&:sti_name)).destroy_all
     update_participation_event(participation.application.priority_1)
     event.reload
   end
@@ -32,7 +32,9 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
   private
 
   def participating?(event)
-    event.participations_for(event.participant_type).where(person_id: participation.person_id).exists?
+    event.participations_for(*event.participant_types).
+          where(person_id: participation.person_id).
+          exists?
   end
 
   def update_participation_event(e = event)
@@ -48,7 +50,8 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
   end
 
   def create_participant_role
-    role = event.participant_type.new
+    # TODO: find desired participant type
+    role = event.participant_types.first.new
     role.participation = participation
     role.save!
   end

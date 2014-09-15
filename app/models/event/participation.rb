@@ -84,22 +84,22 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def teamers(event)
-      joins(:roles).where('event_roles.type <> ?', event.participant_type.sti_name)
+      joins(:roles).where.not('event_roles.type' => event.participant_types.collect(&:sti_name))
     end
 
     def participants(event)
-      joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
+      joins(:roles).where('event_roles.type' => event.participant_types.collect(&:sti_name))
     end
 
     def with_role_label(label)
-      joins(:roles).where('event_roles.label = ?', label)
+      joins(:roles).where('event_roles.label' => label)
     end
 
     # load participations roles
     def participating(event)
       affiliate_types = event.role_types.reject(&:kind).collect(&:sti_name)
       if affiliate_types.present?
-        joins(:roles).where('event_roles.type NOT IN (?)', affiliate_types)
+        joins(:roles).where.not('event_roles.type' => affiliate_types)
       else
         all
       end

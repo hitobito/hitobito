@@ -27,7 +27,7 @@ describe 'event/participations/_list.html.haml' do
     view.stub(parent: event)
     view.stub(entries: Event::ParticipationDecorator.decorate_collection([participation]))
     view.stub(params: params)
-    Fabricate(event.participant_type.name, participation: participation)
+    Fabricate(event.participant_types.first.name, participation: participation)
   end
 
   it 'marks participations where required questions are unanswered' do

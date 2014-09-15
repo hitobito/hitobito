@@ -19,11 +19,11 @@ describe Event::ApplicationMarketController, type: :controller do
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_2: course))
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_3: course))
 
-    Fabricate(course.participant_type.name.to_sym,
+    Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
                                        application: Fabricate(:event_application)))
-    Fabricate(course.participant_type.name.to_sym,
+    Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
                                        application: Fabricate(:event_application)))

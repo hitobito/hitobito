@@ -69,6 +69,11 @@ class Event::Role < ActiveRecord::Base
       kind == :leader
     end
 
+    # Whether this role is a participant type.
+    def participant?
+      kind == :participant
+    end
+
     # Whether this role is specially managed or open for general modifications.
     def restricted?
       kind.nil?

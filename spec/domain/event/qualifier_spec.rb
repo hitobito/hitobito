@@ -45,9 +45,18 @@ describe Event::Qualifier do
                           map(&:qualification_kind)
   end
 
+  def person_qualifier(person)
+    case person
+    when :leader then leader_qualifier
+    when :hybrid then hybrid_qualifier
+    when :participant then participant_qualifier
+    else fail("No Qualifier defined for person #{person}")
+    end
+  end
+
   def self.it_does_not_create_any_qualifications(person)
     it 'does not create any qualifications for #{person}' do
-      qualifier = person == :leader ? leader_qualifier : participant_qualifier
+      qualifier = person_qualifier(person)
       person = send(person)
 
       expect { qualifier.issue }.not_to change { person.reload.qualifications.count }
@@ -57,7 +66,7 @@ describe Event::Qualifier do
 
   def self.it_creates_qualifications_of_kinds(person, *kinds)
     it "creates qualifications for #{person} (#{kinds})" do
-      qualifier = person == :leader ? leader_qualifier : participant_qualifier
+      qualifier = person_qualifier(person)
       person = send(person)
 
       expect { qualifier.issue }.to change { person.reload.qualifications.count }.by(kinds.size)
@@ -67,7 +76,7 @@ describe Event::Qualifier do
 
   def self.it_does_not_create_qualifications_of_kinds(person, *kinds)
     it "does not create qualifications for #{person} (#{kinds})" do
-      qualifier = person == :leader ? leader_qualifier : participant_qualifier
+      qualifier = person_qualifier(person)
       person = send(person)
 
       qualifier.issue
@@ -111,8 +120,8 @@ describe Event::Qualifier do
     end
 
     context 'for leader/participant without qualifications' do
-      it_creates_qualifications_of_kinds(:hybrid, :sl_leader, :sl)
-      it_does_not_create_qualifications_of_kinds(:hybrid, :gl)
+      it_creates_qualifications_of_kinds(:hybrid, :sl_leader)
+      it_does_not_create_qualifications_of_kinds(:hybrid, :gl, :sl)
     end
 
     context 'with existing :sl (qualification) qualification' do

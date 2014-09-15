@@ -165,7 +165,7 @@ describe Event::ParticipationsController do
 
   context 'GET index' do
     before do
-      @leader, @participant = *create(Event::Role::Leader, course.participant_type)
+      @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
       update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al', town: 'Eye', address: 'Spring Road', zip_code: '3000')
       update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '8000')

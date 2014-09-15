@@ -195,8 +195,8 @@ class Event < ActiveRecord::Base
       type
     end
 
-    def participant_type
-      @participant_type ||= role_types.detect { |t| t.kind == :participant }
+    def participant_types
+      role_types.select(&:participant?)
     end
 
     # Return the role type with the given sti_name or raise an exception if not found
@@ -236,7 +236,7 @@ class Event < ActiveRecord::Base
   # Sum all assigned participations (no leaders) and store it in :participant_count
   def refresh_participant_count!
     count = participations.joins(:roles).
-                           where(event_roles: { type: participant_type.sti_name }).
+                           where(event_roles: { type: participant_types.collect(&:sti_name) }).
                            distinct.count
     update_column(:participant_count, count)
   end
@@ -246,8 +246,8 @@ class Event < ActiveRecord::Base
   def refresh_representative_participant_count!
     count = participations.
       joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
-      where('event_roles.participation_id IS NULL OR event_roles.type = ?',
-            participant_type.sti_name).count
+      where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',
+            participant_types.collect(&:sti_name)).count
     update_column(:representative_participant_count, count)
   end
 
@@ -279,8 +279,8 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
-  def participant_type
-    self.class.participant_type
+  def participant_types
+    self.class.participant_types
   end
 
   private

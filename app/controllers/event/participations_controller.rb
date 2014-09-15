@@ -182,7 +182,8 @@ class Event::ParticipationsController < CrudController
 
   def create_participant_role
     if !entry.event.supports_applications || (can?(:create, event) && params[:for_someone_else])
-      role = entry.event.participant_type.new
+      # TODO find participant type
+      role = entry.event.participant_types.first.new
       role.participation = entry
       entry.roles << role
     end

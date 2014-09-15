@@ -39,8 +39,10 @@ class EventSeeder
     seed_dates(event, date + 90.days)
     seed_questions(event) if true?
     seed_leaders(event)
-    5.times do
-      seed_event_role(event, event.class.participant_type)
+    3.times do
+      event.class.participant_types.each do |type|
+        seed_event_role(event, type)
+      end
     end
   end
 
@@ -101,12 +103,14 @@ class EventSeeder
   end
 
   def seed_participants(event)
-    5.times do
-      p = seed_event_role(event, event.class.participant_type)
-      seed_application(p)
+    3.times do
+      event.class.participant_types.each do |type|
+        p = seed_event_role(event, type)
+        seed_application(p)
+      end
     end
 
-    5.times do
+    3.times do
       p = seed_participation(event)
       seed_application(p)
     end

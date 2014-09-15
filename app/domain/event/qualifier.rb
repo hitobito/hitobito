@@ -12,20 +12,14 @@ class Event::Qualifier
       new(participation, qualifier_role(participation))
     end
 
-    def leader_types(event)
-      event.class.role_types.select(&:leader?)
-    end
-
     private
 
     def qualifier_role(participation)
       leader?(participation) ? 'leader' : 'participant'
     end
 
-
     def leader?(participation)
-      leader_types_names = leader_types(participation.event).map(&:sti_name)
-      participation.roles.any? { |role| leader_types_names.include?(role.type) }
+      participation.roles.any? { |role| role.class.leader? }
     end
   end
 

@@ -59,7 +59,7 @@ describe Event::ParticipantAssigner do
 
   describe '#remove_participant_role' do
     before do
-      Fabricate(course.participant_type.name.to_sym, participation: participation)
+      Fabricate(course.participant_types.first.name.to_sym, participation: participation)
     end
 
     it 'removes role for given application' do

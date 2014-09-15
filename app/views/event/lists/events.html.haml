@@ -9,7 +9,7 @@
 
 #main
   %section
-    = grouped_table(@events_by_month, 4) do |event|
+    = grouped_table(@grouped_events, 4) do |event|
       %td
         %strong
           = event.labeled_link

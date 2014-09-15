@@ -11,6 +11,7 @@ describe Event::ListsController do
   before { sign_in(person) }
   let(:person) { people(:bottom_member) }
 
+
   context 'GET #events' do
     it 'populates events in group_hierarchy, order by start_at' do
       a = create_event(:bottom_layer_one)
@@ -18,7 +19,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:events_by_month).values.should eq [[b], [a]]
+      assigns(:grouped_events).values.should eq [[b], [a]]
     end
 
     it 'does not include courses' do
@@ -26,7 +27,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:events_by_month).should be_empty
+      assigns(:grouped_events).should be_empty
     end
 
     it 'groups by month' do
@@ -35,7 +36,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:events_by_month).keys.should == ['Oktober 2012', 'November 2012']
+      assigns(:grouped_events).keys.should == ['Oktober 2012', 'November 2012']
     end
   end
 
@@ -55,6 +56,11 @@ describe Event::ListsController do
         assigns(:year).should eq 2010
         controller.send(:year_range).should eq 2008..2011
       end
+
+      it 'groups by course kind' do
+        get :courses, year: 2012
+        assigns(:grouped_events).keys.should eq ['Scharleiterkurs']
+      end
     end
 
     context 'filter per group' do
@@ -71,7 +77,6 @@ describe Event::ListsController do
       end
     end
 
-
     context 'exports to csv' do
       let(:rows) { response.body.split("\n") }
       let(:course)  { Fabricate(:course) }
@@ -85,6 +90,20 @@ describe Event::ListsController do
         rows.should have(2).rows
       end
     end
+
+
+
+    context 'without kind_id' do
+      before { Event::Course.used_attributes -= [:kind_id] }
+
+      it 'groups by month' do
+        get :courses, year: 2012
+        assigns(:grouped_events).keys.should == ['März 2012']
+      end
+
+      after { Event::Course.used_attributes += [:kind_id] }
+    end
+
 
   end
 

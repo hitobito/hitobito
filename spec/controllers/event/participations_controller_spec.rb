@@ -278,6 +278,18 @@ describe Event::ParticipationsController do
         role.participation.should eq participation.model
       end
 
+      context 'without event kinds' do
+        before { Event::Course.used_attributes -= [:kind_id] }
+
+        it 'does not check preconditions' do
+          expect(controller).to_not receive(:check_preconditions)
+          expect do
+            post :create, group_id: group.id, event_id: course.id, event_participation: {}
+          end.to change { Event::Participation.count }.by(1)
+        end
+
+        after { Event::Course.used_attributes += [:kind_id] }
+      end
     end
 
     context 'other user' do

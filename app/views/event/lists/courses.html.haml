@@ -20,7 +20,7 @@
 
 #main
   %section
-    = grouped_table(@grouped_courses, manager ? 4 : 3) do |event|
+    = grouped_table(@grouped_events, manager ? 4 : 3) do |event|
       %td
         %strong
           = event.labeled_link

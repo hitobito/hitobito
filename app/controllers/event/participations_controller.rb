@@ -34,7 +34,7 @@ class Event::ParticipationsController < CrudController
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_action :parent, :group
 
-  before_action :check_preconditions, only: [:create, :new]
+  before_action :check_preconditions, only: [:create, :new], if: -> { Event::Course.attr_used?(:kind_id) }
 
   before_render_form :load_priorities
   before_render_show :load_answers

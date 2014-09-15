@@ -65,6 +65,7 @@ class Event::QualificationsController < ApplicationController
   end
 
   def authorize
+    not_found unless event.course_kind? && event.qualifying?
     authorize!(:qualify, event)
   end
 end

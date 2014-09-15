@@ -149,6 +149,26 @@ describe Event::ApplicationMarketController do
       it { should_not include(appl_prio_3) }
       it { should include(appl_waiting) }
     end
+
+    context 'for regular event' do
+      let(:event) { events(:top_event) }
+
+      # no required for this test
+      let(:appl_prio_1) {}
+      let(:appl_prio_2) {}
+      let(:appl_prio_3) {}
+      let(:appl_waiting) {}
+      let(:appl_other) {}
+      let(:appl_other_assigned) {}
+      let(:appl_participant) {}
+      let(:leader) {}
+
+      it 'is not possible' do
+        expect do
+          get :index, group_id: group.id, event_id: event.id
+        end.to raise_error(ActionController::RoutingError)
+      end
+    end
   end
 
 

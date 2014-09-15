@@ -21,6 +21,9 @@ class Event::Role < ActiveRecord::Base
 
   Permissions = [:full, :qualify, :contact_data]
 
+  # The different role kinds.
+  # leaders and participants may qualify, helpers not.
+  # kind nil is for restricted roles.
   Kinds = [:leader, :helper, :participant]
 
   # rubocop:enable ConstantName

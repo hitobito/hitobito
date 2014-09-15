@@ -116,6 +116,7 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def authorize
+    not_found unless event.supports_applications?
     authorize!(:application_market, event)
   end
 end

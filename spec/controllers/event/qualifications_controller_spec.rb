@@ -35,19 +35,29 @@ describe Event::QualificationsController do
 
 
   describe 'GET index' do
-    before do
-      participant_1
-      participant_2
-      leader_1
-
-      get :index, group_id: group.id, event_id: event.id
-    end
 
     context 'entries' do
+      before do
+        participant_1
+        participant_2
+        leader_1
+
+        get :index, group_id: group.id, event_id: event.id
+      end
+
       it { assigns(:participants).should have(2).items }
       it { assigns(:leaders).should have(1).items }
     end
 
+    context 'for regular event' do
+      let(:event) { events(:top_event) }
+
+      it 'is not possible' do
+        expect do
+          get :index, group_id: group.id, event_id: event.id
+        end.to raise_error(ActionController::RoutingError)
+      end
+    end
   end
 
   describe 'PUT update' do

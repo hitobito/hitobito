@@ -54,6 +54,10 @@ de:
           attributes:
             choices:
               requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten.'
+        event/participation:
+          attributes:
+            person_id:
+              taken: ist bereits angemeldet.
         mailing_list:
           attributes:
             mail_name:
@@ -244,11 +248,12 @@ de:
         participation: Person
 
       event/participation:
-        person_id: '' # Empty to get a nice message for uniqueness validation
+        person_id: Person
         event_id: Event
         additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
         answers: Fragen
         created_at: Anmeldedatum
+        roles: Rolle
 
       event/application:
         priority_1_id: "Kurs"

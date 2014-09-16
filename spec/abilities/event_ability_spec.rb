@@ -168,8 +168,9 @@ describe EventAbility do
     let(:group)  { groups(:bottom_layer_one) }
     let(:role)   { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+    let(:event_role) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
-    before { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
+    before { event_role }
 
     context Event do
       it 'may not create events' do
@@ -234,6 +235,41 @@ describe EventAbility do
 
       it 'may not update participation in other event' do
         other = Fabricate(:event_participation, event: Fabricate(:event, groups: [group]))
+        should_not be_able_to(:update, other)
+      end
+    end
+
+    context Event::Role do
+      let(:other) { Fabricate(:event_participation, event: event) }
+      let(:other_role) { Fabricate(Event::Role::Leader.name.to_sym, participation: other) }
+      before { other_role }
+
+      it 'may update own role' do
+        should be_able_to(:update, event_role)
+      end
+
+      it 'may update other role' do
+        should be_able_to(:update, other_role)
+      end
+
+      it 'may not destroy own leader role' do
+        should_not be_able_to(:destroy, event_role)
+      end
+
+      it 'may destroy own helper role' do
+        helper = Fabricate(Event::Role::Speaker.name.to_sym,
+                          participation: participation)
+        should be_able_to(:destroy, helper)
+      end
+
+      it 'may destroy other role' do
+        should be_able_to(:destroy, other_role)
+      end
+
+      it 'may not update role in other event' do
+        other = Fabricate(Event::Role::Participant.name.to_sym,
+                          participation: Fabricate(:event_participation,
+                                                   event: Fabricate(:event, groups: [group])))
         should_not be_able_to(:update, other)
       end
     end

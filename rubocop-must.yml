@@ -7,10 +7,9 @@ AllCops:
     - bin/**/*
     - spec/**/*
     - vendor/**/*
-    - Guardfile
 
 ClassLength:
-  Max: 185  # Try to reduce this value
+  Max: 200  # Try to reduce this value
 
 MethodLength:
   Max: 18  # Try to reduce this value
@@ -20,6 +19,9 @@ CyclomaticComplexity:
 
 LineLength:
   Max: 115  # Try to reduce this value
+
+Metrics/ParameterLists:
+  Max: 6
 
 Encoding:
   Enabled: true

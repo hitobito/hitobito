@@ -107,7 +107,7 @@ class Event::Role < ActiveRecord::Base
 
   def destroy_participation_for_last
     update_participant_count if self.class.participant?
-    participation.destroy if !participation.roles.exists?
+    participation.destroy unless participation.roles.exists?
   end
 
   def protect_applying_participant

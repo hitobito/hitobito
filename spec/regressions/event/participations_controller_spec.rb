@@ -94,7 +94,7 @@ describe Event::ParticipationsController, type: :controller do
       it "renders title for #{event_sym}" do
         event = send(event_sym)
         get :new, group_id: group.id, event_id: event.id
-        should have_content "Anmeldung für #{event.name}"
+        should have_content "Anmeldung als Teilnehmer/-in"
       end
     end
     it 'renders person field when passed for_someone_else param' do

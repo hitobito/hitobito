@@ -12,17 +12,15 @@ module EventsHelper
     participation.person = current_user
 
     if event.application_possible? && can?(:new, participation)
-      title = t('event_decorator.apply')
       group ||= event.groups.first
-      classes = ''
 
       if event.participations.where(person: current_user).exists?
-        title = t('event_decorator.applied')
-        classes += 'disabled'
+        Dropdown::Event::ParticipantAdd.new(
+          self, group, event, t('event_decorator.applied'), :check).disabled_button
+      else
+        Dropdown::Event::ParticipantAdd.new(
+          self, group, event, t('event_decorator.apply'), :check).to_s
       end
-
-      action_button(title, new_group_event_participation_path(group, event),
-                    :check,  class: classes)
     end
   end
 

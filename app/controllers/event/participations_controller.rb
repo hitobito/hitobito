@@ -150,11 +150,20 @@ class Event::ParticipationsController < CrudController
   def build_participant_role(participation)
     participation.active = !event.supports_applications ||
                            (can?(:create, event) && params[:for_someone_else].present?)
-    # TODO find participant type
-    type = event.participant_types.first.sti_name
-    role = participation.roles.build(type: type)
+
+    role = participation.roles.build(type: find_participant_role)
     role.participation = participation
     role
+  end
+
+  def find_participant_role
+    attrs = params[:event_role]
+    type_name = (attrs && attrs[:type].presence) || event.class.participant_types.first.sti_name
+    type = event.class.find_role_type!(type_name)
+    unless type.participant?
+      fail ActiveRecord::RecordNotFound, "No participant role '#{type_name}' found"
+    end
+    type_name
   end
 
   def assign_attributes
@@ -214,7 +223,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def append_mailing_instructions?
-    user_course_application?
+    false
   end
 
   def event

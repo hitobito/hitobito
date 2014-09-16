@@ -19,13 +19,15 @@ describe Event::ApplicationMarketController, type: :controller do
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_2: course))
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_3: course))
 
-    Fabricate(course.participant_type.name.to_sym,
+    Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
+                                       active: true,
                                        application: Fabricate(:event_application)))
-    Fabricate(course.participant_type.name.to_sym,
+    Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
+                                       active: true,
                                        application: Fabricate(:event_application)))
 
     sign_in(people(:top_leader))
@@ -56,7 +58,11 @@ describe Event::ApplicationMarketController, type: :controller do
       button = dom.find('.btn-group a')
       button.text.should eq ' Teilnehmer/-in hinzufügen'
       button.should have_css('i.icon-plus')
-      button[:href].should eq new_group_event_participation_path(group, course, for_someone_else: true)
+      button[:href].should eq new_group_event_participation_path(group,
+                                                                 course,
+                                                                 for_someone_else: true,
+                                                                 event_role: {
+                                                                   type: course.class.participant_types.first.sti_name })
     end
   end
 

@@ -504,7 +504,8 @@ de:
         approve_button: 'Freigeben'
         reject_button: 'Ablehnen'
       form:
-        title: "Anmeldung für %{event}"
+        title_new: "Anmeldung als %{role}"
+        title_edit: "Anmeldung von %{person} bearbeiten"
         apply: 'Anmelden'
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
@@ -603,6 +604,9 @@ de:
 
   dropdown/event/role_add:
     add: 'Person hinzufügen'
+
+  dropdown/event/participant_add:
+    as: 'als %{role}'
 
   dropdown/group_edit:
     move: 'Verschieben'

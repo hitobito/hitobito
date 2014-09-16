@@ -54,6 +54,10 @@ class Event::Participation < ActiveRecord::Base
 
   before_validation :set_self_in_nested
 
+  # There may be old participations without roles, so they must
+  # update the count directly.
+  after_destroy :update_participant_count
+
 
   ### CLASS METHODS
 
@@ -83,27 +87,6 @@ class Event::Participation < ActiveRecord::Base
       joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
     end
 
-    def teamers(event)
-      joins(:roles).where('event_roles.type <> ?', event.participant_type.sti_name)
-    end
-
-    def participants(event)
-      joins(:roles).where('event_roles.type = ?', event.participant_type.sti_name)
-    end
-
-    def with_role_label(label)
-      joins(:roles).where('event_roles.label = ?', label)
-    end
-
-    # load participations roles
-    def participating(event)
-      affiliate_types = event.role_types.reject(&:kind).collect(&:sti_name)
-      if affiliate_types.present?
-        joins(:roles).where('event_roles.type NOT IN (?)', affiliate_types)
-      else
-        all
-      end
-    end
   end
 
 
@@ -126,4 +109,7 @@ class Event::Participation < ActiveRecord::Base
     answers.each { |e| e.participation = self unless e.frozen? }
   end
 
+  def update_participant_count
+    event.refresh_participant_counts!
+  end
 end

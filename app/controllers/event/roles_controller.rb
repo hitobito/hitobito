@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RolesController < CrudController
-  require_relative '../../decorators/event/role_decorator'
 
   self.nesting = Group, Event
 
@@ -21,12 +20,7 @@ class Event::RolesController < CrudController
     assign_attributes
     new_participation = entry.participation.new_record?
     created = with_callbacks(:create, :save) { save_entry }
-    url = if new_participation && created
-            edit_group_event_participation_path(group, event, entry.participation)
-          else
-            group_event_participations_path(group, event)
-          end
-    respond_with(entry, success: created, location: url)
+    respond_with(entry, success: created, location: after_create_url(new_participation, created))
   end
 
   def update
@@ -42,13 +36,13 @@ class Event::RolesController < CrudController
   def build_entry
     attrs = params[:event_role]
     type =  attrs && attrs[:type]
-    role = parent.class.find_role_type!(type).new
+    role = event.class.find_role_type!(type).new
 
     # delete unused attributes
     attrs.delete(:event_id)
     attrs.delete(:person)
 
-    role.participation = parent.participations.where(person_id: attrs.delete(:person_id)).
+    role.participation = event.participations.where(person_id: attrs.delete(:person_id)).
                                                first_or_initialize
     role.participation.init_answers if role.participation.new_record?
 
@@ -60,6 +54,14 @@ class Event::RolesController < CrudController
     translate(:full_entry_label, role: h(entry),
                                  person: h(entry.participation.person),
                                  event: h(entry.participation.event)).html_safe
+  end
+
+  def after_create_url(new_participation, created)
+    if new_participation && created
+      edit_group_event_participation_path(group, event, entry.participation)
+    else
+      group_event_participations_path(group, event)
+    end
   end
 
   def event

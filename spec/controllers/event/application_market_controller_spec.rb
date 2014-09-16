@@ -13,30 +13,42 @@ describe Event::ApplicationMarketController do
   let(:group) { event.groups.first }
 
   let(:appl_prio_1) do
-    Fabricate(:event_participation,
-              event: event,
-              application: Fabricate(:event_application, priority_1: event))
+    p = Fabricate(:event_participation,
+                  event: event,
+                  application: Fabricate(:event_application, priority_1: event))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+    p
   end
 
   let(:appl_prio_2) do
-    Fabricate(:event_participation,
-              application: Fabricate(:event_application, priority_2: event))
+    p = Fabricate(:event_participation,
+                  application: Fabricate(:event_application, priority_2: event))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+    p
   end
 
   let(:appl_prio_3) do
-    Fabricate(:event_participation,
-              application: Fabricate(:event_application, priority_3: event))
+    p = Fabricate(:event_participation,
+                  application: Fabricate(:event_application, priority_3: event))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+    p
   end
 
   let(:appl_waiting) do
-    Fabricate(:event_participation,
-              application: Fabricate(:event_application, waiting_list: true),
-              event: Fabricate(:course, kind: event.kind))
+    p = Fabricate(:event_participation,
+                  active: false,
+                  application: Fabricate(:event_application, waiting_list: true),
+                  event: Fabricate(:course, kind: event.kind))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+    p
   end
 
   let(:appl_other) do
-    Fabricate(:event_participation,
-              application: Fabricate(:event_application))
+    p = Fabricate(:event_participation,
+                  active: false,
+                  application: Fabricate(:event_application))
+    Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+    p
   end
 
   let(:appl_other_assigned) do
@@ -47,7 +59,7 @@ describe Event::ApplicationMarketController do
   end
 
   let(:appl_participant)  do
-    participation = Fabricate(:event_participation, event: event)
+    participation = Fabricate(:event_participation, event: event, active: true)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     Fabricate(:event_application, participation: participation, priority_2: event)
     participation
@@ -177,7 +189,8 @@ describe Event::ApplicationMarketController do
     it 'creates role' do
       put :add_participant, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js
 
-      appl_prio_1.reload.roles.collect(&:type).should == [event.participant_type.sti_name]
+      appl_prio_1.reload.roles.collect(&:type).should == [event.participant_types.first.sti_name]
+      appl_prio_1.should be_active
     end
 
     it 'shows error on existing participant role' do
@@ -190,8 +203,12 @@ describe Event::ApplicationMarketController do
     end
 
     def create_participant_role(other)
-      participation = Fabricate(:event_participation, event: other, person: appl_prio_1.person, application: Fabricate(:event_application))
-      role = other.participant_type.new
+      participation = Fabricate(:event_participation,
+                                event: other,
+                                person: appl_prio_1.person,
+                                application: Fabricate(:event_application),
+                                active: true)
+      role = other.participant_types.first.new
       role.participation = participation
       role.save!
     end
@@ -200,8 +217,8 @@ describe Event::ApplicationMarketController do
   describe 'DELETE participant' do
     before { delete :remove_participant, group_id: group.id, event_id: event.id, id: appl_participant.id, format: :js }
 
-    it 'removes role' do
-      appl_participant.reload.roles.should_not be_exists
+    it 'deactivates participation' do
+      appl_participant.reload.should_not be_active
     end
   end
 

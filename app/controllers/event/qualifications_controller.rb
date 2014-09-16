@@ -40,8 +40,9 @@ class Event::QualificationsController < ApplicationController
   private
 
   def entries
-    @leaders ||= participations(*Event::Qualifier.leader_types(event))
-    @participants ||= participations(event.class.participant_type)
+    types = event.class.role_types
+    @leaders ||= participations(*types.select(&:leader?))
+    @participants ||= participations(*types.select(&:participant?))
   end
 
   def qualifier

@@ -3,13 +3,17 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('.title', event: @event)
+- if entry.new_record?
+  - title t('.title_new', role: entry.roles.first.class.model_name.human)
+- else
+  - title t('.title_edit', person: entry.person)
 
 = entry_form(stacked: true,
              buttons_top: false,
              submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
+  = hidden_field_tag('event_role[type]', params[:event_role][:type]) if params[:event_role]
 
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)

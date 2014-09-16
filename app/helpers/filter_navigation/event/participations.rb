@@ -9,8 +9,6 @@ module FilterNavigation
   module Event
     class Participations < FilterNavigation::Base
 
-      PREDEFINED_FILTERS = %w(all teamers participants)
-
       attr_reader :group, :event, :filter
 
       delegate :can?, to: :template
@@ -31,15 +29,15 @@ module FilterNavigation
         if role_labels.include?(filter)
           dropdown.label = filter
           dropdown.active = true
-        elsif PREDEFINED_FILTERS.include?(filter)
+        elsif predefined_filters.include?(filter)
           @active_label = predefined_filter_label(filter)
         elsif filter.blank?
-          @active_label = predefined_filter_label(PREDEFINED_FILTERS.first)
+          @active_label = predefined_filter_label(predefined_filters.first)
         end
       end
 
       def init_items
-        PREDEFINED_FILTERS.each do |key|
+        predefined_filters.each do |key|
           item(predefined_filter_label(key), event_participation_filter_link(key))
         end
       end
@@ -64,6 +62,10 @@ module FilterNavigation
 
       def event_participation_filter_link(filter)
         template.group_event_participations_path(group, event, filter: filter)
+      end
+
+      def predefined_filters
+        ::Event::ParticipationFilter::PREDEFINED_FILTERS
       end
     end
   end

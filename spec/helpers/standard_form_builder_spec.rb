@@ -68,8 +68,8 @@ describe 'StandardFormBuilder' do
       it { should include(form.help_block('Some Help')) }
     end
 
-    context 'with caption' do
-      subject { form.labeled_input_field(:name, caption: 'Some Caption') }
+    context 'with label' do
+      subject { form.labeled_input_field(:name, label: 'Some Caption') }
       it { should include(form.label(:name, 'Some Caption', class: 'control-label')) }
     end
 

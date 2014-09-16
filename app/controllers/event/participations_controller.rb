@@ -34,16 +34,18 @@ class Event::ParticipationsController < CrudController
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_action :parent, :group
 
-  before_action :check_preconditions, only: [:create, :new], if: -> { Event::Course.attr_used?(:kind_id) }
+  before_action :check_preconditions, only: [:create, :new]
 
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_qualifications
 
-  after_create :create_participant_role
   after_create :send_confirmation_email
 
-
+  # new and create are only invoked by people who wish to
+  # apply for an event themselves. A participation for somebody
+  # else is created through event roles.
+  # (Except for course participants, who may be created by special other roles)
   def new
     assign_attributes if model_params
     entry.init_answers
@@ -84,7 +86,6 @@ class Event::ParticipationsController < CrudController
     records
   end
 
-
   def authorize_class
     authorize!(:index_participations, event)
   end
@@ -103,7 +104,7 @@ class Event::ParticipationsController < CrudController
 
   def check_preconditions
     event = entry.event
-    if user_course_application?
+    if user_course_application? && event.course_kind?
       checker = Event::PreconditionChecker.new(event, current_user)
       redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
     end
@@ -132,6 +133,7 @@ class Event::ParticipationsController < CrudController
     participation = event.participations.new
     participation.person = current_user unless params[:for_someone_else]
     build_application(participation) if event.supports_applications
+    build_participant_role(participation)
     participation
   end
 
@@ -143,6 +145,25 @@ class Event::ParticipationsController < CrudController
       participation.person_id = model_params.delete(:person_id)
       params[:for_someone_else] = true
     end
+  end
+
+  def build_participant_role(participation)
+    participation.active = !event.supports_applications ||
+                           (can?(:create, event) && params[:for_someone_else].present?)
+
+    role = participation.roles.build(type: find_participant_role)
+    role.participation = participation
+    role
+  end
+
+  def find_participant_role
+    attrs = params[:event_role]
+    type_name = (attrs && attrs[:type].presence) || event.class.participant_types.first.sti_name
+    type = event.class.find_role_type!(type_name)
+    unless type.participant?
+      fail ActiveRecord::RecordNotFound, "No participant role '#{type_name}' found"
+    end
+    type_name
   end
 
   def assign_attributes
@@ -177,19 +198,14 @@ class Event::ParticipationsController < CrudController
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     translate(:full_entry_label, model_label: models_label(false),
-                                 person: h(entry.person), event: h(entry.event)).html_safe
-  end
-
-  def create_participant_role
-    if !entry.event.supports_applications || (can?(:create, event) && params[:for_someone_else])
-      role = entry.event.participant_type.new
-      role.participation = entry
-      entry.roles << role
-    end
+                                 person: h(entry.person),
+                                 event: h(entry.event)).html_safe
   end
 
   def send_confirmation_email
-    Event::ParticipationConfirmationJob.new(entry).enqueue! if entry.person_id == current_user.id
+    if entry.person_id == current_user.id
+      Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
   end
 
   def set_success_notice
@@ -207,7 +223,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def append_mailing_instructions?
-    user_course_application?
+    false
   end
 
   def event

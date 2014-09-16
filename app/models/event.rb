@@ -195,8 +195,8 @@ class Event < ActiveRecord::Base
       type
     end
 
-    def participant_type
-      @participant_type ||= role_types.detect { |t| t.kind == :participant }
+    def participant_types
+      role_types.select(&:participant?)
     end
 
     # Return the role type with the given sti_name or raise an exception if not found
@@ -233,22 +233,9 @@ class Event < ActiveRecord::Base
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 
-  # Sum all assigned participations (no leaders) and store it in :participant_count
-  def refresh_participant_count!
-    count = participations.joins(:roles).
-                           where(event_roles: { type: participant_type.sti_name }).
-                           distinct.count
-    update_column(:participant_count, count)
-  end
-
-  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1 and
-  # store it in :representative_participant_count
-  def refresh_representative_participant_count!
-    count = participations.
-      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
-      where('event_roles.participation_id IS NULL OR event_roles.type = ?',
-            participant_type.sti_name).count
-    update_column(:representative_participant_count, count)
+  def refresh_participant_counts!
+    update_column(:participant_count, count_active_participants)
+    update_column(:representative_participant_count, count_representative_participants)
   end
 
   def init_questions
@@ -256,7 +243,8 @@ class Event < ActiveRecord::Base
   end
 
   def participations_for(*role_types)
-    participations.joins(:roles).
+    participations.active.
+                   joins(:roles).
                    where(event_roles: { type: role_types.map(&:sti_name) }).
                    includes(:person).
                    references(:person).
@@ -279,11 +267,30 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
-  def participant_type
-    self.class.participant_type
+  def participant_types
+    self.class.participant_types
   end
 
   private
+
+  # Sum all assigned participations (no leaders)
+  def count_active_participants
+    participations.active.
+                   joins(:roles).
+                   where(event_roles: { type: participant_types.collect(&:sti_name) }).
+                   distinct.
+                   count
+  end
+
+  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1
+  def count_representative_participants
+    participations.
+      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
+      where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',
+            participant_types.collect(&:sti_name)).
+      distinct.
+      count
+  end
 
   def assert_type_is_allowed_for_groups
     if groups.present?

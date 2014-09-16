@@ -20,14 +20,14 @@ class Event::ApplicationMarketController < ApplicationController
 
   def add_participant
     if assigner.createable?
-      assigner.create_role
+      assigner.add_participant
     else
       render 'participation_exists_error'
     end
   end
 
   def remove_participant
-    assigner.remove_role
+    assigner.remove_participant
   end
 
   def put_on_waiting_list
@@ -43,8 +43,8 @@ class Event::ApplicationMarketController < ApplicationController
   private
 
   def load_participants
-    event.participations_for(event.participant_type).
-      includes(:application, person: [:primary_group])
+    event.participations_for(*event.participant_types).
+          includes(:application, person: [:primary_group])
   end
 
   def load_applications

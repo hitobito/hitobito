@@ -8,49 +8,62 @@
 class Event::ParticipantAssigner < Struct.new(:event, :participation)
 
   def createable?
-    participation.event.id == event.id || (!participating?(event) && !participating?(participation.event))
+    participation.event.id == event.id ||
+    !(participating?(event) || participating?(participation.event))
   end
 
-  def create_role
+  def add_participant
     Event::Participation.transaction do
       unless participation.event_id == event.id
-        update_participation_event
+        update_participation_event(event)
         update_answers
       end
 
+      participation.update_attribute(:active, true)
       create_participant_role
+      event.refresh_participant_counts!
     end
     event.reload
   end
 
-  def remove_role
-    participation.roles.where(type: event.participant_type.sti_name).destroy_all
-    update_participation_event(participation.application.priority_1)
+  def remove_participant
+    Event::Participation.transaction do
+      participation.update_attribute(:active, false)
+      # destroy all other roles when removing a participant
+      participation.roles.where.not(type: event.participant_types.collect(&:sti_name)).destroy_all
+      original_event = participation.application.priority_1
+      update_participation_event(original_event)
+      original_event.refresh_participant_counts!
+    end
     event.reload
   end
 
   private
 
   def participating?(event)
-    event.participations_for(event.participant_type).where(person_id: participation.person_id).exists?
-  end
-
-  def update_participation_event(e = event)
-    old_event = participation.event
-
-    participation.event = e
-    participation.update_column(:event_id, e.id)
-
-    if e != old_event.id
-      old_event.refresh_representative_participant_count!
-    end
-    e.refresh_representative_participant_count!
+    event.participations.
+          active.
+          joins(:roles).
+          where(event_roles: { type: event.participant_types.map(&:sti_name) }).
+          where(person_id: participation.person_id).
+          exists?
   end
 
   def create_participant_role
-    role = event.participant_type.new
-    role.participation = participation
-    role.save!
+    unless participation.roles.exists?
+      role = event.participant_types.first.new
+      role.participation = participation
+      role.save!
+    end
+  end
+
+  def update_participation_event(new_event)
+    old_event = participation.event
+    unless old_event.id == new_event.id
+      participation.event = new_event
+      participation.update_column(:event_id, new_event.id)
+      old_event.refresh_participant_counts!
+    end
   end
 
   # update the existing set of answers so that one exists for every question of event.

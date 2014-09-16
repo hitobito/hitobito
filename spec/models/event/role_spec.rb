@@ -37,30 +37,34 @@ describe Event::Role do
 
     let(:event) { events(:top_event) }
     let(:role)  { @role.reload }
-    let(:participation) { Fabricate(:event_participation, event: event) }
+    let(:participation) { Fabricate(:event_participation, event: event, active: true) }
 
     it 'decrements event#(representative_)participant_count' do
-      participant_count = event.reload.participant_count
-      representative_participant_count = event.reload.representative_participant_count
+      event.reload
+      participant_count = event.participant_count
+      representative_participant_count = event.representative_participant_count
 
       role.destroy
 
-      event.reload.participant_count.should eq participant_count - 1
-      event.reload.representative_participant_count.should eq representative_participant_count - 1
+      event.reload
+      event.participant_count.should eq participant_count - 1
+      event.representative_participant_count.should eq representative_participant_count - 1
     end
 
     it 'decrements event#participant_count if participations has other non participant roles' do
       treasurer = Event::Role::Treasurer.new
-      treasurer.participation = Fabricate(:event_participation, event: event)
+      treasurer.participation = Fabricate(:event_participation, event: event, active: true)
       treasurer.save!
 
-      participant_count = event.reload.participant_count
-      representative_participant_count = event.reload.representative_participant_count
+      event.reload
+      participant_count = event.participant_count
+      representative_participant_count = event.representative_participant_count
 
       role.destroy
 
-      event.reload.participant_count.should eq participant_count - 1
-      event.reload.representative_participant_count.should eq representative_participant_count - 1
+      event.reload
+      event.participant_count.should eq participant_count - 1
+      event.representative_participant_count.should eq representative_participant_count - 1
     end
 
   end

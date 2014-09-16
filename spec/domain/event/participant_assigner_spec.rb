@@ -16,21 +16,28 @@ describe Event::ParticipantAssigner do
     course
   end
 
-  let(:participation) { Fabricate(:event_participation, event: course, application: Fabricate(:event_application)) }
+  let(:participation) do
+    p = Fabricate(:event_participation, event: course, application: Fabricate(:event_application))
+    Fabricate(course.participant_types.first.name.to_sym, participation: p)
+    p
+  end
 
   let(:event) { course }
 
   subject { Event::ParticipantAssigner.new(event, participation) }
 
-  describe '#create_role' do
+  describe '#add_participant' do
 
     before do
+      participation.active = false
       participation.init_answers
       participation.save!
     end
 
-    it 'creates role for given application' do
-      expect { subject.create_role }.to change { Event::Course::Role::Participant.count }.by(1)
+    it 'sets given participation active' do
+      subject.add_participant
+      participation.reload
+      participation.should be_active
     end
 
     context 'for other event' do
@@ -43,7 +50,7 @@ describe Event::ParticipantAssigner do
       end
 
       it 'updates answers for other event' do
-        expect { subject.create_role }.to change { Event::Answer.count }.by(1)
+        expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
 
         participation.event_id.should == event.id
       end
@@ -51,23 +58,26 @@ describe Event::ParticipantAssigner do
       it 'raises error on existing participation' do
         Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))
 
-        expect { subject.create_role }.to raise_error
+        expect { subject.add_participant }.to raise_error
       end
     end
   end
 
 
-  describe '#remove_participant_role' do
+  describe '#remove_participant' do
     before do
-      Fabricate(course.participant_types.first.name.to_sym, participation: participation)
+      participation.active = true
+      participation.save!
     end
 
     it 'removes role for given application' do
-      expect { subject.remove_role }.to change { Event::Course::Role::Participant.count }.by(-1)
+      subject.remove_participant
+      participation.reload
+      participation.should_not be_active
     end
 
     it 'does not touch participation' do
-      subject.remove_role
+      subject.remove_participant
       Event::Participation.where(id: participation.id).exists?.should be_true
     end
 
@@ -77,26 +87,28 @@ describe Event::ParticipantAssigner do
       it 'resets the event to priority_1' do
         participation.application.priority_1 = participation.event
         participation.application.save!
-        subject.create_role
+        subject.add_participant
         participation.reload.event.should eq(event)
-        subject.remove_role
+        subject.remove_participant
         participation.reload.event.should eq(course)
       end
     end
   end
 
   describe 'participation with different prios' do
-    let(:event1) { events(:top_event) }
+    let(:event1) { events(:top_course) }
     let(:event2) { Event::Course.create!(name: 'Event 2', group_ids: event1.group_ids,
                                          dates: event1.dates, kind: event_kinds(:slk)) }
-    let(:participation) { Fabricate(:event_participation, event: event1, active: false) }
     let(:assigner1) { Event::ParticipantAssigner.new(event1, participation) }
     let(:assigner2) { Event::ParticipantAssigner.new(event2, participation) }
 
-    before do
-      participation.create_application!(priority_1: event1, priority_2: event2)
-      participation.save!
-      participation.reload
+    let(:participation) do
+      p = Fabricate(:event_participation, event: event1, active: false)
+      p.create_application!(priority_1: event1, priority_2: event2)
+      Fabricate(course.participant_types.first.name.to_sym, participation: p)
+      p.save!
+      p.reload
+      p
     end
 
     describe '#createable?' do
@@ -106,12 +118,12 @@ describe Event::ParticipantAssigner do
       end
 
       it 'is false for assigner2 when already assigned to event1' do
-        assigner1.create_role
+        assigner1.add_participant
         assigner2.should_not be_createable
       end
 
       it 'is false for assigner1 when already assigned to event2' do
-        assigner2.create_role
+        assigner2.add_participant
         assigner1.should_not be_createable
       end
     end
@@ -119,23 +131,23 @@ describe Event::ParticipantAssigner do
     describe 'event#representative_participant_count' do
 
       before do
-        [event1,event2].each(&:refresh_representative_participant_count!)
+        participation
         assert_representative_participant_count(1, 0)
       end
 
       it 'changes when participant role is created and destroyed in priority_2 event' do
-        assigner2.create_role
+        assigner2.add_participant
         assert_representative_participant_count(0, 1)
 
-        assigner2.remove_role
+        assigner2.remove_participant
         assert_representative_participant_count(1, 0)
       end
 
       it 'does not change when participant role is created and destroyed in priority_1 event' do
-        assigner1.create_role
+        assigner1.add_participant
         assert_representative_participant_count(1, 0)
 
-        assigner1.remove_role
+        assigner1.remove_participant
         assert_representative_participant_count(1, 0)
       end
 

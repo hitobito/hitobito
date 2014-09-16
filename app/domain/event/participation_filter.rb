@@ -7,6 +7,8 @@
 
 class Event::ParticipationFilter
 
+  PREDEFINED_FILTERS = %w(all teamers participants)
+
   attr_reader :event, :user, :params, :counts
 
   def initialize(event, user, params = {})
@@ -29,32 +31,42 @@ class Event::ParticipationFilter
   end
 
   def populate_counts(records)
-    FilterNavigation::Event::Participations::PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
+    PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
       memo[name] = apply_filter_scope(records, name).count
     end
   end
 
   def load_entries
     event.participations.
-      where(event_participations: { active: true }).
+      active.
       joins(:roles).
+      where(exclude_affiliate_types).
       includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
-      participating(event).
       uniq
   end
 
   def apply_filter_scope(records, kind = params[:filter])
-    # default event filters
-    valid_scopes = FilterNavigation::Event::Participations::PREDEFINED_FILTERS
-    scope = valid_scopes.detect { |k| k.to_s == kind }
-    if scope
-      # do not use params[:filter] in send to satisfy brakeman
-      records = records.send(scope, event) unless scope.to_s == 'all'
-      # event specific filters (filter by role label)
-    elsif event.participation_role_labels.include?(kind)
-      records = records.with_role_label(kind)
+    case kind
+    when 'all'
+      records
+    when 'teamers'
+      records.where.not('event_roles.type' => event.participant_types.collect(&:sti_name))
+    when 'participants'
+      records.where('event_roles.type' => event.participant_types.collect(&:sti_name))
+    else
+      if event.participation_role_labels.include?(kind)
+        records.where('event_roles.label' => kind)
+      else
+        records
+      end
     end
-    records
+  end
+
+  def exclude_affiliate_types
+    affiliate_types = event.role_types.reject(&:kind).collect(&:sti_name)
+    if affiliate_types.present?
+      ['event_roles.type NOT IN (?)', affiliate_types]
+    end
   end
 
 end

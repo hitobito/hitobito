@@ -263,14 +263,29 @@ describe Event::ParticipationsController do
       it 'creates confirmation job' do
         expect do
           post :create, group_id: group.id, event_id: course.id, event_participation: {}
+          assigns(:participation).should be_valid
         end.to change { Delayed::Job.count }.by(1)
         flash[:notice].should include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
         flash[:notice].should include 'unterzeichnen und per Post an die entsprechende Adresse schicken.'
       end
 
-      it 'creates participant role for non course events' do
+      it 'creates active participant role for non course events' do
         post :create, group_id: group.id, event_id: Fabricate(:event).id, event_participation: {}
         participation = assigns(:participation)
+        participation.should be_valid
+        participation.should be_active
+        participation.roles.should have(1).item
+        role = participation.roles.first
+        flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        flash[:notice].should include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        role.participation.should eq participation.model
+      end
+
+      it 'creates non-active participant role for course events' do
+        post :create, group_id: group.id, event_id: course.id, event_participation: {}
+        participation = assigns(:participation)
+        participation.should be_valid
+        participation.should_not be_active
         participation.roles.should have(1).item
         role = participation.roles.first
         flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
@@ -279,16 +294,16 @@ describe Event::ParticipationsController do
       end
 
       context 'without event kinds' do
-        before { Event::Course.used_attributes -= [:kind_id] }
+        before do
+          course.update_column(:kind_id, nil)
+        end
 
         it 'does not check preconditions' do
-          expect(controller).to_not receive(:check_preconditions)
           expect do
             post :create, group_id: group.id, event_id: course.id, event_participation: {}
           end.to change { Event::Participation.count }.by(1)
         end
 
-        after { Event::Course.used_attributes += [:kind_id] }
       end
     end
 

@@ -57,6 +57,7 @@ class Event::Role < ActiveRecord::Base
   ### CALLBACKS
 
   after_create :set_participation_active
+  before_destroy :protect_applying_participant
   after_destroy :destroy_participation_for_last
 
   class << self
@@ -100,17 +101,30 @@ class Event::Role < ActiveRecord::Base
 
   # A participation with at least one role is active
   def set_participation_active
-    participation.update_column(:active, true)
+    participation.update_attribute(:active, true) unless applying_participant?
+    update_participant_count if self.class.participant?
   end
 
   def destroy_participation_for_last
-    unless participation.roles.exists?
-      if participation.application_id?
-        participation.update_column(:active, false)
-      else
-        participation.destroy
-      end
+    update_participant_count if self.class.participant?
+    participation.destroy if !participation.roles.exists?
+  end
+
+  def protect_applying_participant
+    if applying_participant? && participation.roles == [self]
+      participation.update_attribute(:active, false)
+      update_participant_count
+      false # do not destroy
     end
+  end
+
+  def applying_participant?
+    self.class.participant? && participation.application_id?
+  end
+
+  def update_participant_count
+    event ||= participation.event
+    event.refresh_participant_counts! if event
   end
 
 end

@@ -3,6 +3,6 @@ class AddRepresentativeEventParticipantCount < ActiveRecord::Migration
     add_column :events, :representative_participant_count, :integer, default: 0
 
     # Calculate the counts of all events
-    Event.all.each { |e| e.refresh_representative_participant_count! }
+    Event.find_each { |e| e.refresh_participant_counts! }
   end
 end

@@ -22,10 +22,12 @@ describe Event::ApplicationMarketController, type: :controller do
     Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
+                                       active: true,
                                        application: Fabricate(:event_application)))
     Fabricate(course.participant_types.first.name.to_sym,
               participation: Fabricate(:event_participation,
                                        event: course,
+                                       active: true,
                                        application: Fabricate(:event_application)))
 
     sign_in(people(:top_leader))

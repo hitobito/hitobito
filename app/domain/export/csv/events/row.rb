@@ -32,7 +32,8 @@ module Export::Csv::Events
 
     # only the first leader is taken into account
     def leader
-      @leader ||= entry.participations_for(Event::Role::Leader).first.try(:person)
+      leaders = entry.role_types.select(&:leader?)
+      @leader ||= entry.participations_for(*leaders).first.try(:person)
     end
 
     def contact

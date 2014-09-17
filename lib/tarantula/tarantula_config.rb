@@ -63,6 +63,8 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/)
     t.allow_404_for(/event_kinds\/\d+$/)
     t.allow_404_for(/event_kinds$/)
+    # tarantula role type is invalid
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/participations$/)
     # kind already deleted in another language
     t.allow_404_for(/qualification_kinds\/\d+$/)
     # groups already deleted in another language

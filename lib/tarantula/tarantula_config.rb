@@ -49,6 +49,8 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/roles$/)
     t.allow_404_for(/groups\/\d+\/roles\/\d+$/)
     t.allow_404_for(/groups\/\d+\/people$/)
+    t.allow_404_for(/groups\/\d+\/people\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/people\/\d+\/edit/)
     t.allow_404_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
     t.allow_404_for(/groups\/\d+\/merge$/)
     t.allow_404_for(/groups\/\d+\/move$/)

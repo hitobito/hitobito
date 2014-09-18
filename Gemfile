@@ -49,7 +49,7 @@ gem 'kaminari'
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'
-gem 'bootstrap-wysihtml5-rails'
+gem 'bootstrap-wysihtml5-rails', '~> 0.3.1.24'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'compass'

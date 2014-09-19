@@ -38,7 +38,7 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
-  self.used_attributes += [:number, :kind_id, :state, :priorization, :requires_approval]
+  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,

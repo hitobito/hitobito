@@ -10,13 +10,17 @@ module Export::Pdf::Participation
     attr_reader :count
 
     def render
-      pdf.start_new_page
+      pdf.start_new_page if description? || requirements?
 
-      render_description if event.description.present?
+      render_description if description?
       render_requirements if requirements?
     end
 
     private
+
+    def description?
+      event.description.present?
+    end
 
     def render_description
       with_count(description_title) do

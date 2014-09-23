@@ -84,7 +84,6 @@ end
 
 group :console do
   gem 'awesome_print'
-  gem 'debugger'
   gem 'hirb'
   gem 'mailcatcher'
   gem 'pry'

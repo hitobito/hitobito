@@ -116,7 +116,6 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colored (1.2)
-    columnize (0.8.9)
     compass (0.12.7)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -127,12 +126,6 @@ GEM
     dalli (2.7.2)
     database_cleaner (1.3.0)
     debug_inspector (0.0.2)
-    debugger (1.6.8)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.3.5)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.5)
     delayed_job (4.0.2)
       activesupport (>= 3.0, < 4.2)
     delayed_job_active_record (4.0.2)
@@ -477,7 +470,6 @@ DEPENDENCIES
   daemons
   dalli
   database_cleaner
-  debugger
   delayed_job_active_record
   devise
   draper

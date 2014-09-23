@@ -31,7 +31,7 @@ module Export::Csv::Events
                  state: human_attribute(:state),
                  location: human_attribute(:location) }
 
-      labels.delete(:kind) unless Event::Course.attr_used?(:kind)
+      labels.delete(:kind) unless Event::Course.attr_used?(:kind_id)
       labels
     end
 

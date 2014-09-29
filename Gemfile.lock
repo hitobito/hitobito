@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_pbs
+  remote: ../hitobito_insieme
   specs:
-    hitobito_pbs (0.0.1)
+    hitobito_insieme (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -433,7 +433,7 @@ GEM
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
     valuable (0.9.8)
-    wagons (0.4.0)
+    wagons (0.4.1)
       bundler (>= 1.1)
       rails (>= 3.2)
       seed-fu-ndo (>= 0.0.2)
@@ -482,7 +482,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_pbs!
+  hitobito_insieme!
   http_accept_language
   jquery-rails
   jquery-ui-rails

@@ -34,6 +34,7 @@ module CrudControllerTestHelper
         @_templates = @@current_templates
         @controller = @@current_controller
         @request = @@current_request
+
         return
       end
 
@@ -44,6 +45,9 @@ module CrudControllerTestHelper
       @@current_request = @request
       @@current_controller = @controller
       @@current_templates = @_templates
+
+      # hack to get around rollback (#restore_transaction_record_state) of in-memory entry state.
+      entry.committed! if entry
     else
       perform_request
     end
@@ -185,7 +189,7 @@ module CrudControllerTestHelper
 
         if bool
           it { should be_persisted }
-          it { entry.valid?; should(be_valid, entry.errors.full_messages.join("\n")) }
+          it { should be_valid }
         else
           it { should_not be_persisted }
         end

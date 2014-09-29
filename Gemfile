@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.5'
+gem 'rails', '4.1.6'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -65,9 +65,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.0'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
-  gem 'pry-doc'
-  gem 'pry-nav'
   gem 'pry-rails'
+  gem 'pry-debugger'
 end
 
 group :development do
@@ -89,6 +88,7 @@ group :console do
   gem 'awesome_print'
   gem 'hirb'
   gem 'mailcatcher'
+  gem 'pry-doc'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'

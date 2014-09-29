@@ -29,7 +29,10 @@ module Import
     end
 
     def find_field(header)
-      params_field(header) || import_person_field(header) || null_field
+      params_field(header) ||
+        exact_match(header) ||
+        partial_match(header) ||
+        null_field
     end
 
     def params_field(header)
@@ -38,7 +41,11 @@ module Import
          null_field)
     end
 
-    def import_person_field(header)
+    def exact_match(header)
+      person_fields.find { |field| field[:value].downcase == header.downcase }
+    end
+
+    def partial_match(header)
       person_fields.find { |field| field[:value].downcase[header.downcase] }
     end
 

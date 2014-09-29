@@ -305,9 +305,9 @@ describe PeopleController do
                          person: { town: 'testtown',
                                    phone_numbers_attributes: {
                                      '111' =>
-                                       { number: '031 111 1111', label: 'Privat', public: 1 },
+                                       { number: '031 111 1111', translated_label: 'Privat', public: 1 },
                                      '222' =>
-                                       { number: '', label: 'Arbeit', public: 1 }  } }
+                                       { number: '', translated_label: 'Arbeit', public: 1 }  } }
             assigns(:person).should be_valid
           end.to change { PhoneNumber.count }.by(1)
           person.reload.phone_numbers.should have(1).item
@@ -324,10 +324,36 @@ describe PeopleController do
                          id: person.id,
                          person: { town: 'testtown',
                                    phone_numbers_attributes: { n.id.to_s =>
-                                     { number: '031 111 2222', label: 'Privat', public: 0, id: n.id } } }
+                                     { number: '031 111 2222', translated_label: 'Privat', public: 0, id: n.id } } }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
           number.number.should eq '031 111 2222'
+          number.public.should be_false
+        end
+
+        it 'updates existing phone numbers in other language' do
+          @cached_locales = I18n.available_locales
+          @cached_languages = Settings.application.languages
+          Settings.application.languages = { de: 'Deutsch', fr: 'Français' }
+          I18n.available_locales = Settings.application.languages.keys
+
+          n = person.phone_numbers.create!(number: '031 111 1111', label: 'Vater', public: 1)
+          expect do
+            put :update, group_id: group.id,
+                         id: person.id,
+                         locale: :fr,
+                         person: { town: 'testtown',
+                                   phone_numbers_attributes: { n.id.to_s =>
+                                     { number: '031 111 2222', translated_label: 'mère', public: 0, id: n.id } } }
+          end.not_to change { PhoneNumber.count }
+
+          I18n.available_locales = @cached_locales
+          Settings.application.languages = @cached_languages
+          I18n.locale = I18n.default_locale
+
+          number = person.reload.phone_numbers.first
+          number.number.should eq '031 111 2222'
+          number.label.should eq 'Mutter'
           number.public.should be_false
         end
 
@@ -338,7 +364,7 @@ describe PeopleController do
                          id: person.id,
                          person: { town: 'testtown',
                                    phone_numbers_attributes: { n.id.to_s =>
-                                     { number: '031 111 1111', label: 'Privat', public: 0, id: n.id, _destroy: true } } }
+                                     { number: '031 111 1111', translated_label: 'Privat', public: 0, id: n.id, _destroy: true } } }
           end.to change { PhoneNumber.count }.by(-1)
           person.reload.phone_numbers.should be_blank
         end
@@ -350,7 +376,7 @@ describe PeopleController do
                          id: person.id,
                          person: { town: 'testtown',
                                    phone_numbers_attributes: { n.id.to_s =>
-                                     { number: '   ', label: 'Privat', public: 0, id: n.id } } }
+                                     { number: '   ', translated_label: 'Privat', public: 0, id: n.id } } }
           end.to change { PhoneNumber.count }.by(-1)
           person.reload.phone_numbers.should be_blank
         end
@@ -365,11 +391,11 @@ describe PeopleController do
                                    social_accounts_attributes: {
                                      a1.id.to_s => { id: a1.id,
                                                      name: 'Housi1',
-                                                     label: 'Facebook',
+                                                     translated_label: 'Facebook',
                                                      public: 1 },
                                      a2.id.to_s => { id: a2.id, _destroy: true },
                                      '999' => { name: 'John',
-                                                label: 'Twitter',
+                                                translated_label: 'Twitter',
                                                 public: 0 }, } }
             assigns(:person).should be_valid
           end.not_to change { SocialAccount.count }
@@ -387,8 +413,8 @@ describe PeopleController do
         end
 
         it 'create, update and destroys additional emails' do
-          a1 = person.additional_emails.create!(email: 'Housi@example.com', label: 'Arbeit', public: 0)
-          a2 = person.additional_emails.create!(email: 'Hans@example.com', label: 'Privat', public: 1)
+          a1 = person.additional_emails.create!(email: 'Housi@example.com', translated_label: 'Arbeit', public: 0)
+          a2 = person.additional_emails.create!(email: 'Hans@example.com', translated_label: 'Privat', public: 1)
           expect do
             put :update, group_id: group.id,
                          id: person.id,
@@ -396,14 +422,14 @@ describe PeopleController do
                                    additional_emails_attributes: {
                                      a1.id.to_s => { id: a1.id,
                                                      email: 'Housi1@example.com',
-                                                     label: 'Arbeit',
+                                                     translated_label: 'Arbeit',
                                                      public: 1 },
                                      a2.id.to_s => { id: a2.id, _destroy: true },
                                      '998' => { email: ' ',
-                                                label: 'Vater',
+                                                translated_label: 'Vater',
                                                 public: 1 },
                                      '999' => { email: 'John@example.com',
-                                                label: 'Mutter',
+                                                translated_label: 'Mutter',
                                                 public: 0 }, } }
             assigns(:person).should be_valid
           end.not_to change { AdditionalEmail.count }

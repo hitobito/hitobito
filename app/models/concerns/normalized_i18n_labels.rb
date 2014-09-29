@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Extend NormalizedLabels to only store a label in the default language, if available.
 module NormalizedI18nLabels
   extend ActiveSupport::Concern
   include NormalizedLabels
@@ -15,6 +16,10 @@ module NormalizedI18nLabels
 
   def translated_label
     self.class.translate_label(label)
+  end
+
+  def translated_label=(value)
+    self.label = value
   end
 
   private

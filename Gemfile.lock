@@ -496,7 +496,6 @@ DEPENDENCIES
   prawn
   prawn-table
   protective
-  pry
   pry-doc
   pry-nav
   pry-rails

@@ -239,10 +239,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                          url: @template.query_people_path })
   end
 
-  def labeled_inline_fields_for(assoc, partial_name = nil, &block)
+  def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, &block)
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +
-      nested_fields_for(assoc, partial_name) do |fields|
+      nested_fields_for(assoc, partial_name, record_object) do |fields|
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
         content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
@@ -251,14 +251,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, &block)
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, &block)
     content_tag(:div, id: "#{assoc}_fields") do
-      fields_for(assoc) do |fields|
+      fields_for(assoc, record_object) do |fields|
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
     end +
     content_tag(:div, class: 'controls') do
-      help_inline(link_to_add I18n.t('global.associations.add'), assoc)
+      content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc), class: 'text')
     end
   end
 

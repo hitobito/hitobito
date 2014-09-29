@@ -24,7 +24,9 @@
 
 - if PeopleRelation.possible_kinds.present?
   = field_set_tag do
-    = f.labeled_inline_fields_for :relations_to_tails, 'people_relation_fields'
+    = f.labeled_inline_fields_for :relations_to_tails,
+                                  'people_relation_fields',
+                                  entry.relations_to_tails.includes(:tail)
 
 = field_set_tag do
   = f.labeled_input_field(:additional_information, help: t('.no_sensitive_information'))

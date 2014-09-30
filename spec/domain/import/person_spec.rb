@@ -46,7 +46,7 @@ describe Import::Person do
         phone_number_vater: '0123',
         additional_email_mutter: 'mutter@example.com' }
     end
-    subject { Import::Person.new(data, []).person }
+    subject { Import::Person.new(data, {}).person }
 
     its(:first_name) { should eq 'foo' }
     its('phone_numbers.first') { should be_present }
@@ -83,7 +83,7 @@ describe Import::Person do
          additional_email_privat: 'privat@example.com' }
     end
 
-    subject { Import::Person.new(data, []).person }
+    subject { Import::Person.new(data, {}).person }
 
     its('phone_numbers.first.label') { should eq 'Privat' }
     its('phone_numbers.first.number') { should eq '123' }
@@ -113,7 +113,7 @@ describe Import::Person do
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
       public_attributes.size.should eq 15
-      expect { Import::Person.new(public_attributes, []).person }.not_to raise_error
+      expect { Import::Person.new(public_attributes, {}).person }.not_to raise_error
     end
   end
 
@@ -122,7 +122,7 @@ describe Import::Person do
     let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com', 'foo@bar.com'] }
 
     let!(:people) do
-      emails_tracker = []
+      emails_tracker = {}
       emails.map do |email|
         person = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
         Import::Person.new(person, emails_tracker)

@@ -10,7 +10,7 @@ module Import
     extend Forwardable
     def_delegators :person, :persisted?, :save, :id, :errors
 
-    attr_reader :person, :hash, :phone_numbers, :social_accounts, :additional_emails, :emails
+    attr_reader :person, :hash, :phone_numbers, :social_accounts, :additional_emails
 
     class << self
       def fields
@@ -36,8 +36,8 @@ module Import
       end
     end
 
-    def initialize(hash, emails)
-      @emails = emails
+    def initialize(hash, unique_emails)
+      @unique_emails = unique_emails
       prepare(hash)
 
       find_or_initialize_person
@@ -62,7 +62,7 @@ module Import
 
     # comply with db uniq index constraint on email
     def valid?
-      person.email ? (person.valid? && email_valid?) : person.valid?
+      person.valid? && email_valid?
     end
 
     private
@@ -115,11 +115,18 @@ module Import
     end
 
     def email_valid?
-      if emails.include?(person.email)
-        person.errors.add(:email, :taken)
-        false
+      if person.email?
+        case @unique_emails[person.email]
+        when person.object_id
+          true
+        when nil
+          @unique_emails[person.email] = person.object_id
+          true
+        else
+          person.errors.add(:email, :taken)
+          false
+        end
       else
-        (emails << person.email) && true
         true
       end
     end

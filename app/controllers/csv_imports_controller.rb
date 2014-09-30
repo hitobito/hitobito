@@ -30,7 +30,7 @@ class CsvImportsController < ApplicationController
     valid_for_import? do
       @entries = importer.people.map(&:person)
       set_importer_flash_info
-      importer.errors.each { |error| add_to_flash(:alert, error) }
+      set_importer_flash_errors
     end
   end
 
@@ -53,6 +53,14 @@ class CsvImportsController < ApplicationController
     add_importer_info_to_flash(:notice, :new, importer.new_count)
     add_importer_info_to_flash(:notice, :updated, importer.doublette_count)
     add_importer_info_to_flash(:alert, :failed, importer.failure_count)
+  end
+
+  def set_importer_flash_errors
+    errors = importer.errors
+    if errors.size > 10
+      errors = errors.take(10) + ['...']
+    end
+    errors.each { |error| add_to_flash(:alert, error) }
   end
 
   def add_importer_info_to_flash(flash, key, count)

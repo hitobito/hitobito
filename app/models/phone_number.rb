@@ -23,4 +23,10 @@ class PhoneNumber < ActiveRecord::Base
 
   self.value_attr = :number
 
+  class << self
+    def predefined_labels
+      Settings.phone_number.predefined_labels
+    end
+  end
+
 end

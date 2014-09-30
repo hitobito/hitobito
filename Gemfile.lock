@@ -376,6 +376,7 @@ GEM
     simplecov-html (0.7.1)
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
+    simpleidn (0.0.5)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -523,6 +524,7 @@ DEPENDENCIES
   seed-fu
   selenium-webdriver
   simplecov-rcov
+  simpleidn
   spring-commands-rspec
   sqlite3
   therubyracer

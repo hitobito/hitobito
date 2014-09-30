@@ -80,7 +80,7 @@ module MailRelay
       destinations = receivers
       if destinations.present?
         # set destinations
-        message.smtp_envelope_to = destinations
+        message.smtp_envelope_to = sanitize_idns(destinations)
 
         # Set sender to actual server to satisfy SPF:
         # http://www.openspf.org/Best_Practices/Webgenerated
@@ -164,6 +164,17 @@ module MailRelay
         ActionMailer::Base.wrap_delivery_behavior(message)
       end
       message.deliver
+    end
+
+    def sanitize_idns(destinations)
+      destinations.collect do |d|
+        if d =~ /[^\w@\.\-]/ # simple regexp to skip most unaffected addresses
+          parts = d.split('@')
+          "#{parts.first}@#{SimpleIDN.to_ascii(parts.last)}"
+        else
+          d
+        end
+      end
     end
 
   end

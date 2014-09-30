@@ -176,13 +176,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def inline_check_box_button(attr, value, caption, html_options = {})
-    label(id_from_value(attr, value), class: 'checkbox') do
-      check_box(attr, html_options) + ' ' +
-      caption
-    end
-  end
-
   def inline_check_box(attr, value, caption, html_options = {})
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"

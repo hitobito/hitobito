@@ -22,9 +22,9 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_full).may(:index_full_people).in_same_group
     permission(:group_full).may(:update, :reactivate).in_same_group
 
-    permission(:layer_read).may(:show_details).in_same_layer_or_below
     permission(:layer_read).
-      may(:index_people, :index_full_people, :index_deep_full_people, :export_subgroups).
+      may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
+          :export_subgroups).
       in_same_layer_or_below
     permission(:layer_read).may(:index_local_people).in_same_layer
 
@@ -42,7 +42,10 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def in_same_layer_or_below_except_permission_giving
-    in_same_layer_or_below &&
+    in_same_layer_or_below && except_permission_giving
+  end
+
+  def except_permission_giving
     !(user_context.groups_layer_full.include?(group.id) ||
       user_context.layers_full.include?(group.id))
   end

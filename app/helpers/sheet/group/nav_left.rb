@@ -79,11 +79,13 @@ module Sheet
       end
 
       def render_group_item(group, stack, out)
-        if group.leaf?
-          out << group_link(group) << "</li>\n".html_safe
-        else
-          out << group_link(group) << "\n<ul>\n".html_safe
-          stack.push(group)
+        if view.can?(:read, group)
+          if group.leaf?
+            out << group_link(group) << "</li>\n".html_safe
+          else
+            out << group_link(group) << "\n<ul>\n".html_safe
+            stack.push(group)
+          end
         end
       end
 

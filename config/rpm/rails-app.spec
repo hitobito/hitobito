@@ -216,6 +216,14 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 # Runs after the package got installed.
 # Configure here any services etc.
 
+# the following old files would be loaded on startup and must
+# be explicitly deleted to load the stop script
+rm -f %{wwwdir}/%{name}/www/app/utils/devise/strategies/one_time_token_authenticatable.rb
+rm -f %{wwwdir}/%{name}/www/app/utils/datetime_attribute.rb
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/base.rb
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/leader.rb
+rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/participant.rb
+
 su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
@@ -242,14 +250,6 @@ touch %{wwwdir}/%{name}/www/tmp/restart.txt
 # Run before uninstallation
 # $1 will be 1 if the package is upgraded
 # and 0 if the package is deinstalled.
-
-# the following old files would be loaded on startup and must
-# be explicitly deleted to load the stop script
-rm -f %{wwwdir}/%{name}/www/app/utils/devise/strategies/one_time_token_authenticatable.rb
-rm -f %{wwwdir}/%{name}/www/app/utils/datetime_attribute.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/base.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/leader.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/participant.rb
 
 %if %{use_delayed_job}
 if [ "$1" = 0 ] ; then

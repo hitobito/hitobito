@@ -24,12 +24,15 @@ module Export::Csv::Events
     end
 
     def course_labels
-      { group_names: translate(:group_names),
-        number: human_attribute(:number),
-        kind: Event::Kind.model_name.human,
-        description: human_attribute(:description),
-        state: human_attribute(:state),
-        location: human_attribute(:location) }
+      labels = { group_names: translate(:group_names),
+                 number: human_attribute(:number),
+                 kind: Event::Kind.model_name.human,
+                 description: human_attribute(:description),
+                 state: human_attribute(:state),
+                 location: human_attribute(:location) }
+
+      labels.delete(:kind) unless Event::Course.attr_used?(:kind_id)
+      labels
     end
 
     def date_labels

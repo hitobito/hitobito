@@ -10,10 +10,12 @@ module Contactable
   extend ActiveSupport::Concern
 
   ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country,
-                      phone_numbers_attributes:   [:id, :number, :label, :public, :_destroy],
-                      social_accounts_attributes: [:id, :name, :label, :public, :_destroy],
-                      additional_emails_attributes: [:id, :email, :label, :public, :mailings,
-                                                     :_destroy]]
+                      phone_numbers_attributes:
+                        [:id, :number, :translated_label, :public, :_destroy],
+                      social_accounts_attributes:
+                        [:id, :name, :translated_label, :public, :_destroy],
+                      additional_emails_attributes:
+                        [:id, :email, :translated_label, :public, :mailings, :_destroy]]
 
   included do
     has_many :phone_numbers, as: :contactable, dependent: :destroy

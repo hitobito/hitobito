@@ -30,6 +30,7 @@
 #= require remote-typeahead
 #= require modernizr.custom.min
 #= require_self
+#= require wagon
 #
 
 # scope for global functions

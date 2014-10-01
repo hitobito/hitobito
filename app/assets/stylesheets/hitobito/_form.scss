@@ -199,15 +199,17 @@ textarea {
   border-top-color: $grayLight;
 }
 
-.fields .controls-row {
-  border-bottom: 1px solid $grayLight;
-  margin-bottom: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
+.control-group .fields {
+  .controls-row {
+    border-bottom: 1px solid $grayLight;
+    margin-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 
-.fields .help-inline {
-  float: right;
+  .help-inline {
+    float: right;
+  }
 }
 
 .form-horizontal .controls .help-block {

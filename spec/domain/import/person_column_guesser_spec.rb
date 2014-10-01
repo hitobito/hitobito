@@ -13,16 +13,13 @@ describe  Import::PersonColumnGuesser do
   let(:nil_key) { { key: nil } }
   let(:params) { {} }
 
-  context 'maps default values for header' do
-    subject { guesser.mapping }
+  subject { guesser.mapping }
 
+  context 'maps default values for header' do
     its(['Geschlecht']) { should eq field_for(:gender) }
     its(['vorname']) { should eq field_for(:first_name) }
     its(['skype']) { should eq field_for(:social_account_skype) }
 
-    context 'maps first occurance from Import::Person.fields' do
-      its(['Name']) { should eq field_for(:company_name) }
-    end
 
     context 'handles noexisting headers' do
       let(:headers) { %w(Geburtsdatum Email) }
@@ -33,8 +30,26 @@ describe  Import::PersonColumnGuesser do
 
     context 'params override mapping' do
       let(:params) { { 'Name' => 'first_name' } }
-
       its(['Name']) { should eq field_for(:first_name) }
+    end
+  end
+
+  context 'matching' do
+    before do
+      Import::Person.stub(fields: [
+        {key: 'other_name', value: 'Anderer Name'},
+        {key: 'name', value: 'Name'}
+      ])
+    end
+
+    context 'uses first exact matched value' do
+      let(:headers) { %w(Name) }
+      its(['Name']) { should eq field_for(:name) }
+    end
+
+    context 'falls back first partial matched value if no exact match found' do
+      let(:headers) { %w(ame) }
+      its(['ame']) { should eq field_for(:other_name) }
     end
   end
 

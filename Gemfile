@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.5'
+gem 'rails', '4.1.6'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -40,6 +40,7 @@ gem 'rails_config'
 gem 'rails-i18n'
 gem 'schema_validations'
 gem 'seed-fu'
+gem 'simpleidn'
 gem 'thinking-sphinx'
 gem 'validates_timeliness'
 gem 'wagons'
@@ -49,7 +50,7 @@ gem 'kaminari'
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'
-gem 'bootstrap-wysihtml5-rails'
+gem 'bootstrap-wysihtml5-rails', '~> 0.3.1.24'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'compass'
@@ -65,6 +66,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.0'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
+  gem 'pry-rails'
+  gem 'pry-debugger'
 end
 
 group :development do
@@ -84,13 +87,9 @@ end
 
 group :console do
   gem 'awesome_print'
-  gem 'debugger'
   gem 'hirb'
   gem 'mailcatcher'
-  gem 'pry'
   gem 'pry-doc'
-  gem 'pry-nav'
-  gem 'pry-rails'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'

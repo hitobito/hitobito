@@ -35,6 +35,7 @@ class PeopleController < CrudController
 
   before_render_show :load_asides, if: -> { request.format.html? }
 
+
   def index
     filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
     entries = filter.filter_entries

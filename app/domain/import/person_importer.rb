@@ -22,12 +22,12 @@ module Import
     end
 
     def people
-      @people ||= data.each_with_index.map { |hash, index|  populate_people(hash, index) }
+      @people ||= populate_people
     end
 
     def import
-      save_results = people.map(&:save)
-      save_results.all? { |result| result }
+      save_results = people.map { |p| valid?(p) && p.save }
+      !save_results.include?(false)
     end
 
     def human_name(args = {})
@@ -44,16 +44,22 @@ module Import
 
     private
 
-    def populate_people(hash, index)
+    def populate_people
+      data.each_with_index.map { |hash, index| populate_person(hash, index) }
+    end
+
+    def populate_person(hash, index)
       person = Import::Person.new(hash, unique_emails)
       person.add_role(group, role_type)
 
-      handle_person(person, index)
+      validate_person(person, index) do
+        handle_imported_person(person)
+      end
     end
 
-    def handle_person(person, index)
+    def validate_person(person, index)
       if valid?(person)
-        handle_imported_person(person)
+        yield
       else
         @failure_count += 1
         errors << translate(:row_with_error, row: index + 1, errors: person.human_errors)
@@ -63,7 +69,7 @@ module Import
 
     def handle_imported_person(person)
       if person.persisted?
-        handle_persisted(person)
+        handle_potential_dublette(person)
         doublettes[person.id]
       else
         @new_count += 1
@@ -71,7 +77,7 @@ module Import
       end
     end
 
-    def handle_persisted(import_person)
+    def handle_potential_dublette(import_person)
       if !doublettes.key?(import_person.id)
         doublettes[import_person.id] = import_person
       else
@@ -101,7 +107,7 @@ module Import
 
     # used by Import::Person to check if emails are unique
     def unique_emails
-      @unique_emails ||= Set.new
+      @unique_emails ||= {}
     end
 
   end

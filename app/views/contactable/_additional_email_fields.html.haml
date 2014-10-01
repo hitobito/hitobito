@@ -7,7 +7,7 @@
                 class: 'span4',
                 placeholder: t('.placeholder_value'))
 
-= f.input_field(:label,
+= f.input_field(:translated_label,
                 class: 'span2',
                 placeholder: t('.placeholder_type'),
                 data: {provide: :typeahead, source: AdditionalEmail.available_labels})

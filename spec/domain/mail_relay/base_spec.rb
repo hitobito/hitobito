@@ -73,6 +73,12 @@ describe MailRelay::Base do
       its(:smtp_envelope_to) { should == receivers }
       its(:to) { should == ['zumkehr@puzzle.ch'] }
       its(:from) { should == ['animation@jublaluzern.ch'] }
+
+      context 'with internationalized domain names' do
+        let(:receivers) { %w(a@exämple.com b@example.com) }
+
+        its(:smtp_envelope_to) { should == %w(a@xn--exmple-cua.com b@example.com) }
+      end
     end
   end
 

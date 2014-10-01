@@ -5,6 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# For a given label field, assert that always the same value is used for two values that
+# differ only in the letter case. Additionally, cache all the existing labels of the
+# corresponding table.
 module NormalizedLabels
   extend ActiveSupport::Concern
 

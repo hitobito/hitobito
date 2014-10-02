@@ -20,6 +20,11 @@ class Event::ParticipationAbility < AbilityDsl::Base
       may(:show, :show_details, :print, :create, :update, :destroy).
       in_same_group
 
+    permission(:layer_full).
+      may(:show, :show_details, :print, :update).
+      in_same_layer_or_different_prio
+    permission(:layer_full).may(:create, :destroy).in_same_layer
+
     permission(:layer_and_below_full).
       may(:show, :show_details, :print, :update).
       in_same_layer_or_below_or_different_prio
@@ -40,6 +45,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
 
   def her_own_if_application_possible
     her_own && event.application_possible?
+  end
+
+  def in_same_layer_or_different_prio
+    in_same_layer || different_prio
   end
 
   def in_same_layer_or_below_or_different_prio

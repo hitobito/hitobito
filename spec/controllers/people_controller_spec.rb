@@ -159,7 +159,7 @@ describe PeopleController do
       context 'layer' do
         let(:group) { groups(:bottom_layer_one) }
 
-        context 'with layer full' do
+        context 'with layer and below full' do
           before { sign_in(@bl_leader) }
 
           it 'loads group members when no types given' do

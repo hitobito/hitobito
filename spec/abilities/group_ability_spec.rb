@@ -15,7 +15,7 @@ describe GroupAbility do
   let(:ability) { Ability.new(role.person.reload) }
 
 
-  context 'layer full' do
+  context 'layer and below full' do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     context 'without specific group' do
@@ -37,6 +37,15 @@ describe GroupAbility do
 
       it 'may not modify superior' do
         should_not be_able_to(:modify_superior, group)
+      end
+
+      it 'may destroy group' do
+        other = Fabricate(Group::TopGroup.name.to_sym, parent: group.parent)
+        should be_able_to(:destroy, other)
+      end
+
+      it 'may not destroy permission giving group' do
+        should_not be_able_to(:destroy, group)
       end
     end
 
@@ -60,10 +69,14 @@ describe GroupAbility do
         g.parent = group.parent
         should be_able_to(:modify_superior, g)
       end
+
+      it 'may destroy group' do
+        should be_able_to(:destroy, group)
+      end
     end
   end
 
-  context 'layer full in lower layer' do
+  context 'layer and below full in lower layer' do
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
     context 'in own group' do
@@ -79,6 +92,72 @@ describe GroupAbility do
     end
   end
 
+  context 'layer full' do
+    let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+
+    context 'without specific group' do
+      it 'may not create subgroup' do
+        should_not be_able_to(:create, Group.new)
+      end
+    end
+
+    context 'in own group' do
+      let(:group) { role.group }
+
+      it 'may create subgroup' do
+        should be_able_to(:create, group.children.new)
+      end
+
+      it 'may edit group' do
+        should be_able_to(:update, group)
+      end
+
+      it 'may not destroy permission giving group' do
+        should_not be_able_to(:destroy, group)
+      end
+
+      it 'may not modify superior' do
+        should_not be_able_to(:modify_superior, group)
+      end
+
+      it 'may not create sublayer' do
+        should_not be_able_to(:create, Group::BottomLayer.new(parent_id: group.layer_group_id))
+      end
+    end
+
+    context 'in group from same layer' do
+      let(:group) { Fabricate(Group::TopGroup.name.to_sym, parent: groups(:top_layer)) }
+
+      it 'may create subgroup' do
+        should be_able_to(:create, group.children.new)
+      end
+
+      it 'may edit group' do
+        should be_able_to(:update, group)
+      end
+
+      it 'may destroy group' do
+        should be_able_to(:destroy, group)
+      end
+    end
+
+    context 'in group from lower layer' do
+      let(:group) { groups(:bottom_layer_one) }
+
+      it 'may not create subgroup' do
+        should_not be_able_to(:create, group.children.new)
+      end
+
+      it 'may not edit group' do
+        should_not be_able_to(:update, group)
+      end
+
+      it 'may not destroy group' do
+        should_not be_able_to(:destroy, group)
+      end
+    end
+  end
+
   context 'group full' do
     let(:role) { Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers)) }
 
@@ -90,6 +169,10 @@ describe GroupAbility do
 
       it 'may edit group' do
         should be_able_to(:update, group)
+      end
+
+      it 'may not destroy group' do
+        should_not be_able_to(:destroy, group)
       end
 
       it 'may not modify superior' do

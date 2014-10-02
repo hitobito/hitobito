@@ -12,11 +12,12 @@ module Role::Types
 
   # All possible permissions
   Permissions = [:admin, :layer_and_below_full, :layer_and_below_read,
-                 :group_full, :group_read,
+                 :layer_full, :layer_read, :group_full, :group_read,
                  :contact_data, :approve_applications]
 
   # If a role contains the first permission, the second one is automatically active as well
   PermissionImplications = { layer_and_below_full: :layer_and_below_read,
+                             layer_full: :layer_read,
                              group_full: :group_read }
 
   Kinds = [:member, :passive, :external]

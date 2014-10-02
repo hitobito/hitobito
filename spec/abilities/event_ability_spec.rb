@@ -106,6 +106,73 @@ describe EventAbility do
 
   end
 
+
+  context :layer_full do
+    let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+
+    context Event do
+      it 'may create event in his group' do
+        should be_able_to(:create, group.events.new.tap { |e| e.groups << group })
+      end
+
+      it 'may create event in his layer' do
+        should be_able_to(:create, groups(:toppers).events.new.tap { |e| e.groups << group })
+      end
+
+      it 'may update event in his layer' do
+        should be_able_to(:update, event)
+      end
+
+      it 'may index people for event in his layer' do
+        should be_able_to(:index_participations, event)
+      end
+
+      it 'may not update event in lower layer' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+        should_not be_able_to(:update, other)
+      end
+
+      it 'may not index people for event in lower layer' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+        should_not be_able_to(:index_participations, other)
+      end
+
+    end
+
+    context Event::Participation do
+      before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
+
+      it 'may show participation' do
+        should be_able_to(:show, participation)
+      end
+
+      it 'may create participation' do
+        should be_able_to(:create, participation)
+      end
+
+      it 'may update participation' do
+        should be_able_to(:update, participation)
+      end
+
+      it 'may destroy participation' do
+        should be_able_to(:destroy, participation)
+      end
+
+      it 'may not show participation in event from lower layer' do
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
+        should_not be_able_to(:show, other)
+      end
+
+      it 'may still create when application is not possible' do
+        event.stub(application_possible?: false)
+        should be_able_to(:create, participation)
+      end
+
+    end
+
+  end
+
+
   context :group_full do
     let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
 

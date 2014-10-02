@@ -19,4 +19,5 @@
 
 == Version 1.4
 
-* Beziehungen zwischen Personen.
+* Möglichkeit für Beziehungen zwischen Personen.
+* Neue Grundberechtigungen nur für die aktuelle Ebene.

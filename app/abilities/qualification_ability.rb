@@ -8,15 +8,27 @@
 class QualificationAbility < AbilityDsl::Base
 
   on(Qualification) do
+    permission(:layer_full).may(:create, :destroy).in_course_layer
     permission(:layer_and_below_full).may(:create, :destroy).in_course_layer_or_below
   end
 
+  def in_course_layer
+    in_course_layer_with(:layer_full, subject.person.layer_group_ids)
+  end
+
   def in_course_layer_or_below
-    layers_and_below_full = user_context.user.groups_with_permission(:layer_and_below_full).collect(&:layer_group)
-    qualify_layer_ids = layers_and_below_full.select { |g| g.event_types.include?(Event::Course) }.
-                                    collect(&:id)
+    in_course_layer_with(:layer_and_below_full, subject.person.groups_hierarchy_ids)
+  end
+
+  private
+
+  def in_course_layer_with(permission, person_layer_ids)
+    layers = user.groups_with_permission(permission).collect(&:layer_group).uniq
+    qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }.
+                               collect(&:id)
+
     qualify_layer_ids.present? &&
-      contains_any?(qualify_layer_ids, subject.person.groups_hierarchy_ids)
+    contains_any?(qualify_layer_ids, person_layer_ids)
   end
 
 end

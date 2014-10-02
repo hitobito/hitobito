@@ -13,10 +13,13 @@ describe Role::TypeList do
     list = Role::TypeList.new(Group::TopLayer)
     list.to_enum.to_a.should == [
       ['Top Layer',
-       { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::Secretary, Group::TopGroup::Member] }],
+       { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalLeader,
+                         Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
+                         Group::TopGroup::Member] }],
 
       ['Bottom Layer',
-       { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::Member],
+       { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::LocalLeader,
+                            Group::BottomLayer::Member],
          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member] }],
 
       ['Global',
@@ -30,7 +33,8 @@ describe Role::TypeList do
     list = Role::TypeList.new(Group::BottomLayer)
     list.to_enum.to_a.should == [
       ['Bottom Layer',
-       { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::Member],
+       { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::LocalLeader,
+                            Group::BottomLayer::Member],
          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member],
          'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member] }],
 
@@ -43,7 +47,9 @@ describe Role::TypeList do
     list = Role::TypeList.new(Group::TopGroup)
     list.to_enum.to_a.should == [
       ['Top Group',
-       { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::Secretary, Group::TopGroup::Member],
+       { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalLeader,
+                         Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
+                         Group::TopGroup::Member],
          'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member] }],
       ['Global',
        { 'Global' => [Role::External] }],

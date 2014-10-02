@@ -51,7 +51,7 @@ describe Person::ListFilter do
     let(:group) { groups(:bottom_layer_one) }
     let(:kind) { 'layer' }
 
-    context 'with layer full' do
+    context 'with layer and below full' do
       let(:user) { @bl_leader }
 
       it 'loads group members when no types given' do

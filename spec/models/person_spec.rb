@@ -263,7 +263,6 @@ describe Person do
       r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
 
       person.all_roles.should == [r1, r3, r2]
-
     end
   end
 

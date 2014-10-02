@@ -25,9 +25,9 @@ describe Role do
   context 'class' do
     subject { Role }
 
-    its(:all_types) { should have(10).items }
+    its(:all_types) { should have(13).items }
 
-    its(:visible_types) { should have(8).items }
+    its(:visible_types) { should have(11).items }
 
     its(:visible_types) { should_not include(Group::BottomGroup::Member) }
 

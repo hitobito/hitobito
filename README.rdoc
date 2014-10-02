@@ -64,17 +64,20 @@ All specific abilities of a user are derived from the role permissions she has i
 
 The following basic permissions are defined:
 
-:admin::        May administer application wide settings.
-:layer_full::   May read and write everything in this layer and all below layers.
-:layer_read::   May read everything in this layer and all below layers.
-:group_full::   May read and write everything in this group.
-:group_read::   May read everything in this group.
-:contact_data:: May see all other people with the :contact_data permission.
+:admin::                 May administer application wide settings.
+:layer_and_below_full::  May read and write everything in this layer and all below layers.
+:layer_and_below_read::  May read everything in this layer and all below layers.
+:layer_full::            May read and write everything in this layer.
+:layer_read::            May read everything in this layer.
+:group_full::            May read and write everything in this group.
+:group_read::            May read everything in this group.
+:contact_data::          May see all other people with the :contact_data permission.
 
 Beside these basic group and role type features, some more possibilities exist.
 See the source of the Group class for additional details.
 
-See hitobito_generic for a complete example group structure.
+See {hitobito_generic}[https://github.com/hitobito/hitobito_generic] for a complete example group
+structure.
 
 
 === Plugin architecture

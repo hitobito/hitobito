@@ -55,7 +55,7 @@ describe 'people/_attrs.html.haml' do
     end
   end
 
-  context 'viewed by person from other group, no layer full' do
+  context 'viewed by person from other group, no layer and below full' do
     let(:current_user) { Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person }
 
     it 'does not show detailed contact info' do

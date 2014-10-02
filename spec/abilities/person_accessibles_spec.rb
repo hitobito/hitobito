@@ -33,7 +33,7 @@ describe PersonAccessibles do
       describe :layer_and_below_full do
         let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-        it 'has layer full permission' do
+        it 'has layer_and_below_full permission' do
           role.permissions.should include(:layer_and_below_full)
         end
 
@@ -74,7 +74,7 @@ describe PersonAccessibles do
       describe :layer_and_below_read do
         let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
 
-        it 'has layer read permission' do
+        it 'has layer_and_below_read permission' do
           role.permissions.should include(:layer_and_below_read)
         end
 
@@ -135,10 +135,117 @@ describe PersonAccessibles do
 
       end
 
+
+      describe :layer_full do
+        let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+
+        it 'has layer_full permission' do
+          role.permissions.should include(:layer_full)
+        end
+
+        context 'own group' do
+          let(:group) { role.group }
+
+          it 'may get himself' do
+            should include(role.person)
+          end
+
+          it 'may get people in his group' do
+            other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+            should include(other.person)
+          end
+
+          it 'may get external people in his group' do
+            other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+            should include(other.person)
+          end
+        end
+
+        context 'lower group' do
+          let(:group) { groups(:bottom_layer_one) }
+
+          it 'may not get visible people' do
+            other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+            should_not include(other.person)
+          end
+
+          it 'may not get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
+            should_not include(other.person)
+          end
+        end
+      end
+
+
+      describe :layer_read do
+        let(:role) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: groups(:top_group)) }
+
+        it 'has layer_read permission' do
+          role.permissions.should include(:layer_read)
+        end
+
+        context 'own group' do
+          let(:group) { role.group }
+
+          it 'may get himself' do
+            should include(role.person)
+          end
+
+          it 'may get people in his group' do
+            other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+            should include(other.person)
+          end
+
+          it 'may get external people in his group' do
+            other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+            should include(other.person)
+          end
+        end
+
+        context 'group in same layer' do
+          let(:group) { groups(:toppers) }
+
+          it 'may get people' do
+            other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: group)
+            should include(other.person)
+          end
+
+          it 'may get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            should include(other.person)
+          end
+        end
+
+        context 'lower group' do
+          let(:group) { groups(:bottom_layer_one) }
+
+          it 'may not get visible people' do
+            other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group)
+            should_not include(other.person)
+          end
+
+          it 'may not get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            should_not include(other.person)
+          end
+        end
+
+        context 'bottom group' do
+          let(:group) { groups(:bottom_group_one_one) }
+
+          it 'may not get non-visible' do
+            other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: group)
+            should_not include(other.person)
+          end
+        end
+
+      end
+
+
       describe :group_full do
         let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
 
-        it 'has group full permission' do
+        it 'has group_full permission' do
           role.permissions.should include(:group_full)
         end
 

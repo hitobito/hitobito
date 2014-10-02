@@ -19,8 +19,11 @@ de:
       group/top_layer/member: Member
       group/top_group/leader: Leader
       group/top_group/secretary: Secretary
+      group/top_group/local_leader: Local Leader
+      group/top_group/local_secretary: Local Secretary
       group/top_group/member: Member
       group/bottom_layer/leader: Leader
+      group/bottom_layer/local_leader: Local Leader
       group/bottom_layer/member: Member
       group/bottom_group/leader: Leader
       group/bottom_group/member: Member

@@ -11,8 +11,12 @@ module AbilityDsl
     attr_reader :user,
                 :groups_group_full,
                 :groups_group_read,
+                :groups_layer_full,
+                :groups_layer_read,
                 :groups_layer_and_below_full,
                 :groups_layer_and_below_read,
+                :layers_read,
+                :layers_full,
                 :layers_and_below_read,
                 :layers_and_below_full,
                 :admin
@@ -48,9 +52,15 @@ module AbilityDsl
 
       @groups_group_full = user.groups_with_permission(:group_full).to_a
       @groups_group_read = user.groups_with_permission(:group_read).to_a + @groups_group_full
+      @groups_layer_full = user.groups_with_permission(:layer_full).to_a
+      @groups_layer_read = user.groups_with_permission(:layer_read).to_a +
+                                     @groups_layer_full
       @groups_layer_and_below_full = user.groups_with_permission(:layer_and_below_full).to_a
       @groups_layer_and_below_read = user.groups_with_permission(:layer_and_below_read).to_a +
                                      @groups_layer_and_below_full
+
+      @layers_full = layer_ids(@groups_layer_full)
+      @layers_read = layer_ids(@groups_layer_read)
 
       @layers_and_below_full = layer_ids(@groups_layer_and_below_full)
       @layers_and_below_read = layer_ids(@groups_layer_and_below_read)
@@ -61,6 +71,8 @@ module AbilityDsl
     def collect_group_ids!
       [@groups_group_full,
        @groups_group_read,
+       @groups_layer_full,
+       @groups_layer_read,
        @groups_layer_and_below_full,
        @groups_layer_and_below_read].each do |list|
         list.collect!(&:id)

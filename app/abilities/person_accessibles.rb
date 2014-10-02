@@ -12,7 +12,7 @@ class PersonAccessibles
 
   attr_reader :group, :user_context
 
-  delegate :user, :groups_group_read, :layers_read, to: :user_context
+  delegate :user, :groups_group_read, :layers_and_below_read, to: :user_context
 
   def initialize(user, group = nil)
     @user_context = AbilityDsl::UserContext.new(user)
@@ -30,12 +30,12 @@ class PersonAccessibles
   def group_accessible_people(user)
     # user has any role in this group
     # user has layer read of the same layer as the group
-    if group_read_in_this_group? || layer_read_in_same_layer? || user.root?
+    if group_read_in_this_group? || layer_and_below_read_in_same_layer? || user.root?
       can :index, Person,
           group.people.only_public_data { |_| true }
 
     # user has layer read in a above layer of the group
-    elsif layer_read_in_above_layer?
+    elsif layer_and_below_read_in_above_layer?
       can :index, Person,
           group.people.only_public_data.visible_from_above(group) { |_| true }
 
@@ -63,7 +63,7 @@ class PersonAccessibles
     condition.or(*contact_data_condition) if user.contact_data_visible?
     condition.or(*in_same_group_condition) if groups_group_read.present?
 
-    if layers_read.present?
+    if layers_and_below_read.present?
       layer_groups = read_layer_groups
       condition.or(*in_same_layer_condition(layer_groups))
       condition.or(*visible_from_above_condition(layer_groups))
@@ -115,17 +115,19 @@ class PersonAccessibles
     groups_group_read.include?(group.id)
   end
 
-  def layer_read_in_same_layer?
-    layers_read.present? && layers_read.include?(group.layer_group_id)
+  def layer_and_below_read_in_same_layer?
+    layers_and_below_read.present? &&
+    layers_and_below_read.include?(group.layer_group_id)
   end
 
-  def layer_read_in_above_layer?
-    layers_read.present? && (layers_read & group.layer_hierarchy.collect(&:id)).present?
+  def layer_and_below_read_in_above_layer?
+    layers_and_below_read.present? &&
+    (layers_and_below_read & group.layer_hierarchy.collect(&:id)).present?
   end
 
   def read_layer_groups
-    (user.groups_with_permission(:layer_full) +
-     user.groups_with_permission(:layer_read)).
+    (user.groups_with_permission(:layer_and_below_full) +
+     user.groups_with_permission(:layer_and_below_read)).
       collect(&:layer_group).uniq
   end
 

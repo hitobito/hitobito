@@ -10,11 +10,11 @@ class Group::TopGroup < Group
   self.event_types = [Event, Event::Course]
 
   class Leader < ::Role
-    self.permissions = [:admin, :layer_full, :contact_data]
+    self.permissions = [:admin, :layer_and_below_full, :contact_data]
   end
 
   class Secretary < ::Role
-    self.permissions = [:layer_read, :contact_data, :group_full]
+    self.permissions = [:layer_and_below_read, :contact_data, :group_full]
   end
 
   class Member < ::Role

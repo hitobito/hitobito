@@ -22,16 +22,16 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_full).may(:index_full_people).in_same_group
     permission(:group_full).may(:update, :reactivate).in_same_group
 
-    permission(:layer_read).
+    permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
           :export_subgroups).
       in_same_layer_or_below
-    permission(:layer_read).may(:index_local_people).in_same_layer
+    permission(:layer_and_below_read).may(:index_local_people).in_same_layer
 
-    permission(:layer_full).may(:create).with_parent_in_same_layer_or_below
-    permission(:layer_full).may(:destroy).in_same_layer_or_below_except_permission_giving
-    permission(:layer_full).may(:update, :reactivate).in_same_layer_or_below
-    permission(:layer_full).may(:modify_superior).in_below_layers
+    permission(:layer_and_below_full).may(:create).with_parent_in_same_layer_or_below
+    permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
+    permission(:layer_and_below_full).may(:update, :reactivate).in_same_layer_or_below
+    permission(:layer_and_below_full).may(:modify_superior).in_below_layers
 
     general(:update).group_not_deleted
   end
@@ -46,8 +46,8 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def except_permission_giving
-    !(user_context.groups_layer_full.include?(group.id) ||
-      user_context.layers_full.include?(group.id))
+    !(user_context.groups_layer_and_below_full.include?(group.id) ||
+      user_context.layers_and_below_full.include?(group.id))
   end
 
   def in_below_layers

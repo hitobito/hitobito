@@ -20,10 +20,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
       may(:show, :show_details, :print, :create, :update, :destroy).
       in_same_group
 
-    permission(:layer_full).
+    permission(:layer_and_below_full).
       may(:show, :show_details, :print, :update).
       in_same_layer_or_below_or_different_prio
-    permission(:layer_full).may(:create, :destroy).in_same_layer
+    permission(:layer_and_below_full).may(:create, :destroy).in_same_layer
 
     permission(:approve_applications).may(:show).for_applicant_in_same_layer
 

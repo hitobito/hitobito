@@ -12,7 +12,7 @@ describe PersonAbility do
   subject { ability }
   let(:ability) { Ability.new(role.person.reload) }
 
-  describe :layer_full do
+  describe :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     it 'may modify any public role in lower layers' do
@@ -75,7 +75,7 @@ describe PersonAbility do
   end
 
 
-  describe 'layer_full in bottom layer' do
+  describe 'layer_and_below_full in bottom layer' do
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
     it 'may create other users' do
@@ -127,7 +127,7 @@ describe PersonAbility do
       should_not be_able_to(:update_email, other.person)
     end
 
-    it 'may update email for person with role in other layer if layer_full there' do
+    it 'may update email for person with role in other layer if layer_and_below_full there' do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: role.person)
       other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), person: other.person)
@@ -208,7 +208,7 @@ describe PersonAbility do
   end
 
 
-  describe :layer_read do
+  describe :layer_and_below_read do
     # member with additional group_full role
     let(:role)       { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
 

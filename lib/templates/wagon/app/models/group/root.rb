@@ -12,7 +12,7 @@ class Group::Root < ::Group
 
   # TODO: define actual role types
   class Leader < ::Role
-    self.permissions = [:layer_full, :admin]
+    self.permissions = [:layer_and_below_full, :admin]
   end
 
   class Member < ::Role

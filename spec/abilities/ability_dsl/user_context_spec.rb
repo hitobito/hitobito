@@ -16,12 +16,12 @@ describe AbilityDsl::UserContext do
 
     its(:groups_group_full) { should =~ [] }
     its(:groups_group_read) { should =~ [] }
-    its(:groups_layer_full) { should =~ [groups(:top_group).id] }
-    its(:groups_layer_read) { should =~ [groups(:top_group).id] }
-    its(:layers_full)       { should =~ [groups(:top_layer).id] }
-    its(:layers_read)       { should =~ [groups(:top_layer).id] }
+    its(:groups_layer_and_below_full) { should =~ [groups(:top_group).id] }
+    its(:groups_layer_and_below_read) { should =~ [groups(:top_group).id] }
+    its(:layers_and_below_full)       { should =~ [groups(:top_layer).id] }
+    its(:layers_and_below_read)       { should =~ [groups(:top_layer).id] }
     its(:admin)             { should be_true }
-    its(:all_permissions)   { should =~ [:admin, :layer_full, :layer_read, :contact_data] }
+    its(:all_permissions)   { should =~ [:admin, :layer_and_below_full, :layer_and_below_read, :contact_data] }
 
     it 'has no events with permission full' do
       subject.events_with_permission(:full).should be_blank
@@ -33,12 +33,12 @@ describe AbilityDsl::UserContext do
 
     its(:groups_group_full) { should =~ [] }
     its(:groups_group_read) { should =~ [] }
-    its(:groups_layer_full) { should =~ [] }
-    its(:groups_layer_read) { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_full)       { should =~ [] }
-    its(:layers_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_layer_and_below_full) { should =~ [] }
+    its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_and_below_full)       { should =~ [] }
+    its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_false }
-    its(:all_permissions)   { should =~ [:layer_read] }
+    its(:all_permissions)   { should =~ [:layer_and_below_read] }
 
     it 'has events with permission full' do
       subject.events_with_permission(:full).should =~ [events(:top_course).id]
@@ -58,12 +58,12 @@ describe AbilityDsl::UserContext do
 
     its(:groups_group_full) { should =~ [] }
     its(:groups_group_read) { should =~ [groups(:top_group).id, groups(:bottom_group_one_two).id] }
-    its(:groups_layer_full) { should =~ [groups(:bottom_layer_one).id] }
-    its(:groups_layer_read) { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_full)       { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_layer_and_below_full) { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_and_below_full)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_false }
-    its(:all_permissions)   { should =~ [:layer_full, :layer_read, :group_read, :contact_data, :approve_applications] }
+    its(:all_permissions)   { should =~ [:layer_and_below_full, :layer_and_below_read, :group_read, :contact_data, :approve_applications] }
   end
 
 end

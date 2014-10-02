@@ -11,11 +11,12 @@ module Role::Types
   # rubocop:disable ConstantName
 
   # All possible permissions
-  Permissions = [:admin, :layer_full, :layer_read, :group_full, :group_read,
-                 :contact_data, :public, :approve_applications]
+  Permissions = [:admin, :layer_and_below_full, :layer_and_below_read,
+                 :group_full, :group_read,
+                 :contact_data, :approve_applications]
 
   # If a role contains the first permission, the second one is automatically active as well
-  PermissionImplications = { layer_full: :layer_read,
+  PermissionImplications = { layer_and_below_full: :layer_and_below_read,
                              group_full: :group_read }
 
   Kinds = [:member, :passive, :external]
@@ -29,7 +30,7 @@ module Role::Types
     self.permissions = []
 
     # Whether a person with this role is visible for somebody
-    # with layer_read permission above the current layer.
+    # with layer_and_below_read permission above the current layer.
     self.visible_from_above = true
 
     # The kind of a role mainly determines in which pill it will be displayed.

@@ -12,7 +12,7 @@ module AbilityDsl
   #  on(Person) do
   #    permission(:any).may(:index).all
   #    permission(:group_read).may(:show).in_same_group
-  #    permission(:layer_full).may(:update, :destroy).in_same_layer_or_below
+  #    permission(:layer_and_below_full).may(:update, :destroy).in_same_layer_or_below
   #  end
   #
   # All permissions in the given block apply for a Person object.
@@ -103,9 +103,9 @@ module AbilityDsl
       @user_groups ||=
         case permission
         when :group_full then user_context.groups_group_full
-        when :layer_full then user_context.groups_layer_full
+        when :layer_and_below_full then user_context.groups_layer_and_below_full
         when :group_read then user_context.groups_group_read
-        when :layer_read then user_context.groups_layer_read
+        when :layer_and_below_read then user_context.groups_layer_and_below_read
         else []
         end
     end
@@ -113,8 +113,8 @@ module AbilityDsl
     def user_layers
       @user_layers ||=
         case permission
-        when :layer_full then user_context.layers_full
-        when :layer_read then user_context.layers_read
+        when :layer_and_below_full then user_context.layers_and_below_full
+        when :layer_and_below_read then user_context.layers_and_below_read
         else []
         end
     end

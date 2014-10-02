@@ -11,9 +11,9 @@ class RoleAbility < AbilityDsl::Base
 
   on(Role) do
     permission(:group_full).may(:create, :update, :destroy, :details).in_same_group
-    permission(:layer_full).may(:create, :details, :create_in_subgroup, :role_types).
+    permission(:layer_and_below_full).may(:create, :details, :create_in_subgroup, :role_types).
                             in_same_layer_or_below
-    permission(:layer_full).may(:update, :destroy).in_same_layer_or_visible_below
+    permission(:layer_and_below_full).may(:update, :destroy).in_same_layer_or_visible_below
 
     general.non_restricted
     general(:create).group_not_deleted
@@ -33,7 +33,7 @@ class RoleAbility < AbilityDsl::Base
   # Should not be removed because this cannot be undone by the user.
   def not_permission_giving
     subject.person_id != user.id ||
-    ([:layer_full, :group_full] & subject.permissions).blank?
+    ([:layer_and_below_full, :group_full] & subject.permissions).blank?
   end
 
   private

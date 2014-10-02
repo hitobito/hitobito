@@ -30,11 +30,11 @@ describe PersonAccessibles do
 
       subject { all_accessibles }
 
-      describe :layer_full do
+      describe :layer_and_below_full do
         let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
         it 'has layer full permission' do
-          role.permissions.should include(:layer_full)
+          role.permissions.should include(:layer_and_below_full)
         end
 
         context 'own group' do
@@ -71,11 +71,11 @@ describe PersonAccessibles do
       end
 
 
-      describe :layer_read do
+      describe :layer_and_below_read do
         let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
 
         it 'has layer read permission' do
-          role.permissions.should include(:layer_read)
+          role.permissions.should include(:layer_and_below_read)
         end
 
         context 'own group' do

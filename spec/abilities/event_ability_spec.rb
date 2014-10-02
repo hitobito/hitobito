@@ -19,7 +19,7 @@ describe EventAbility do
 
   subject { Ability.new(user.reload) }
 
-  context :layer_full do
+  context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     context Event do
@@ -434,7 +434,7 @@ describe EventAbility do
     context 'for other participants' do
       let(:participant) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two)).person }
 
-      # possible to show it because user has :layer_full on course group
+      # possible to show it because user has :layer_and_below_full on course group
       #it 'may not show participations' do
       #  should_not be_able_to(:show, participation)
       #end

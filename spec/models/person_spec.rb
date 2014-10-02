@@ -108,8 +108,8 @@ describe Person do
 
     its(:layer_groups) { should == [groups(:top_layer)] }
 
-    it 'has layer_full permission in top_group' do
-      person.groups_with_permission(:layer_full).should == [groups(:top_group)]
+    it 'has layer_and_below_full permission in top_group' do
+      person.groups_with_permission(:layer_and_below_full).should == [groups(:top_group)]
     end
   end
 
@@ -122,12 +122,12 @@ describe Person do
 
     its(:layer_groups) { should == [groups(:bottom_layer_one)] }
 
-    it 'has layer_full permission in top_group' do
-      person.groups_with_permission(:layer_full).should == [groups(:bottom_layer_one)]
+    it 'has layer_and_below_full permission in top_group' do
+      person.groups_with_permission(:layer_and_below_full).should == [groups(:bottom_layer_one)]
     end
 
-    it 'has no layer_read permission' do
-      person.groups_with_permission(:layer_read).should be_empty
+    it 'has no layer_and_below_read permission' do
+      person.groups_with_permission(:layer_and_below_read).should be_empty
     end
 
     it 'only layer role is visible from above' do

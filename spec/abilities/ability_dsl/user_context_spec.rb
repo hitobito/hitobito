@@ -24,7 +24,7 @@ describe AbilityDsl::UserContext do
     its(:all_permissions)   { should =~ [:admin, :layer_and_below_full, :layer_and_below_read, :contact_data] }
 
     it 'has no events with permission full' do
-      subject.events_with_permission(:full).should be_blank
+      subject.events_with_permission(:event_full).should be_blank
     end
   end
 
@@ -41,7 +41,7 @@ describe AbilityDsl::UserContext do
     its(:all_permissions)   { should =~ [:layer_and_below_read] }
 
     it 'has events with permission full' do
-      subject.events_with_permission(:full).should =~ [events(:top_course).id]
+      subject.events_with_permission(:event_full).should =~ [events(:top_course).id]
     end
   end
 

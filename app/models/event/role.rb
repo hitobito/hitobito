@@ -19,7 +19,7 @@ class Event::Role < ActiveRecord::Base
 
   # rubocop:disable ConstantName
 
-  Permissions = [:full, :qualify, :contact_data]
+  Permissions = [:event_full, :participations_full, :participations_read, :qualify]
 
   # The different role kinds.
   # leaders and participants may qualify, helpers not.

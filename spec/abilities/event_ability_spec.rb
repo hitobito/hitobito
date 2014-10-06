@@ -343,7 +343,7 @@ describe EventAbility do
 
   end
 
-  context :event_contact_data do
+  context :participations_read do
     let(:role)   { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
     let(:event)  { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }

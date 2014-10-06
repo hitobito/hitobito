@@ -17,5 +17,5 @@
 
 # Kueche
 class Event::Role::Cook < Event::Role
-  self.permissions = [:contact_data]
+  self.permissions = [:participations_read]
 end

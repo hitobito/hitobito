@@ -18,5 +18,5 @@
 # Kassier
 class Event::Role::Treasurer < Event::Role
 
-  self.permissions = [:contact_data]
+  self.permissions = [:participations_read]
 end

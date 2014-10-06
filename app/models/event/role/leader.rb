@@ -18,7 +18,7 @@
 # Hauptsleiter
 class Event::Role::Leader < Event::Role
 
-  self.permissions = [:full, :qualify, :contact_data]
+  self.permissions = [:event_full, :participations_full, :qualify]
 
   self.kind = :leader
 

@@ -18,7 +18,7 @@
 # Hilfsleiter
 class Event::Role::AssistantLeader < Event::Role
 
-  self.permissions = [:full, :contact_data]
+  self.permissions = [:event_full, :participations_full]
 
   self.kind = :leader
 

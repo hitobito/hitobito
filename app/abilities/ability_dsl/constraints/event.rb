@@ -8,15 +8,16 @@
 module AbilityDsl::Constraints
   module Event
     def for_leaded_events
-      permission_in_event?(:full)
+      permission_in_event?(:event_full)
     end
 
-    def for_managed_events
-      permission_in_event?(:full) && permission_in_event?(:qualify)
+    def for_participations_read_events
+      permission_in_event?(:participations_read) ||
+      for_participations_full_events
     end
 
-    def for_event_contacts
-      permission_in_event?(:contact_data)
+    def for_participations_full_events
+      permission_in_event?(:participations_full)
     end
 
     def in_same_group

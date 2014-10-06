@@ -18,6 +18,6 @@
 # Referent
 class Event::Role::Speaker < Event::Role
 
-  self.permissions = [:contact_data]
+  self.permissions = [:participations_read]
 
 end

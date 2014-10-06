@@ -11,10 +11,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event::Participation
 
   on(Event::Participation) do
-    permission(:any).may(:show).her_own_or_for_event_contacts
-    permission(:any).may(:show_details, :print).her_own_or_for_leaded_events
+    permission(:any).may(:show).her_own_or_for_participations_read_events
+    permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
     permission(:any).may(:create).her_own_if_application_possible
-    permission(:any).may(:update).for_leaded_events
+    permission(:any).may(:update).for_participations_full_events
 
     permission(:group_full).
       may(:show, :show_details, :print, :create, :update, :destroy).
@@ -39,8 +39,12 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own || for_leaded_events
   end
 
-  def her_own_or_for_event_contacts
-    her_own_or_for_leaded_events || for_event_contacts
+  def her_own_or_for_participations_read_events
+    her_own || for_participations_read_events
+  end
+
+  def her_own_or_for_participations_full_events
+    her_own || for_participations_full_events
   end
 
   def her_own_if_application_possible

@@ -83,18 +83,26 @@ module AbilityDsl
 
     private
 
+    # Check whether the permission for which the check is made is defined in the given group_id.
     def permission_in_group?(group_id)
       user_groups.include?(group_id)
     end
 
+    # Check whether the permission for which the check is made is defined in the given group_ids.
     def permission_in_groups?(group_ids)
       contains_any?(user_groups, group_ids)
     end
 
+    # Check whether the layer permission for which the check is made
+    # is defined in the given layer_id. Other permissions always return false,
+    # even if they are defined in the given layer id.
     def permission_in_layer?(layer_id)
       user_layers.include?(layer_id)
     end
 
+    # Check whether the layer permission for which the check is made
+    # is defined in the given layer_ids. Other permissions always return false,
+    # even if they are defined in a given layer id.
     def permission_in_layers?(layer_ids)
       contains_any?(user_layers, layer_ids)
     end

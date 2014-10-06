@@ -40,6 +40,10 @@ module AbilityDsl
       groups.collect(&:layer_group_id).uniq
     end
 
+    def participations
+      @participations ||= user.event_participations.includes(:roles).to_a
+    end
+
     def events_with_permission(permission)
       @events_with_permission ||= {}
       @events_with_permission[permission] ||= find_events_with_permission(permission)
@@ -80,9 +84,8 @@ module AbilityDsl
     end
 
     def find_events_with_permission(permission)
-      @participations ||= user.event_participations.includes(:roles).to_a
-      @participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }.
-                      collect(&:event_id)
+      participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }.
+                     collect(&:event_id)
     end
 
   end

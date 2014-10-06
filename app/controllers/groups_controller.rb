@@ -12,7 +12,7 @@ class GroupsController < CrudController
 
   decorates :group, :groups, :contact
 
-  before_render_show :load_sub_groups, if: -> { request.format.html? }
+  before_render_show :active_sub_groups, if: -> { request.format.html? }
   before_render_form :load_contacts
 
 
@@ -82,11 +82,17 @@ class GroupsController < CrudController
     @contacts = entry.people.members.only_public_data.order_by_name
   end
 
-  def load_sub_groups(scope = entry.children.without_deleted)
+  def active_sub_groups
+    load_sub_groups(entry.children.without_deleted)
+  end
+
+  def load_sub_groups(scope)
     @sub_groups = Hash.new { |h, k| h[k] = [] }
     scope.order(:lft).each do |group|
-      label = group.layer ? group.class.label_plural : sub_groups_label
-      @sub_groups[label] << group
+      if can?(:show, group)
+        label = group.layer ? group.class.label_plural : sub_groups_label
+        @sub_groups[label] << group
+      end
     end
     # move this entry to the end
     @sub_groups[sub_groups_label] = @sub_groups.delete(sub_groups_label)

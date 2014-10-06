@@ -58,7 +58,7 @@ class Event::Course < Event
 
 
   def label_detail
-    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ""
+    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
     label << "#{number} #{group_names}"
   end
 

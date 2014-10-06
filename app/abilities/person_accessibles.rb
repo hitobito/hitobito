@@ -21,13 +21,13 @@ class PersonAccessibles
     if @group.nil?
       can :index, Person, accessible_people { |_| true }
     else # optimized queries for a given group
-      group_accessible_people(user)
+      group_accessible_people
     end
   end
 
   private
 
-  def group_accessible_people(user)
+  def group_accessible_people
     if read_permission_for_this_group?
       can :index, Person,
           group.people.only_public_data { |_| true }
@@ -58,6 +58,12 @@ class PersonAccessibles
     condition = OrCondition.new
     condition.or(*herself_condition)
     condition.or(*contact_data_condition) if user.contact_data_visible?
+    append_group_conditions(condition)
+
+    condition
+  end
+
+  def append_group_conditions(condition)
     condition.or(*in_same_group_condition) if groups_group_read.present?
 
     if layers_and_below_read.present? || layers_read.present?
@@ -67,8 +73,6 @@ class PersonAccessibles
     if layers_and_below_read.present?
       condition.or(*visible_from_above_condition(read_layer_and_below_groups))
     end
-
-    condition
   end
 
   def contact_data_condition

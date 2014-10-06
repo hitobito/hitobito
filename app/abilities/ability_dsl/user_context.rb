@@ -54,6 +54,13 @@ module AbilityDsl
     def init_groups
       @admin = user.groups_with_permission(:admin).present?
 
+      init_permission_groups
+      init_permission_layers
+
+      collect_group_ids!
+    end
+
+    def init_permission_groups
       @groups_group_full = user.groups_with_permission(:group_full).to_a
       @groups_group_read = user.groups_with_permission(:group_read).to_a + @groups_group_full
       @groups_layer_full = user.groups_with_permission(:layer_full).to_a
@@ -62,14 +69,14 @@ module AbilityDsl
       @groups_layer_and_below_full = user.groups_with_permission(:layer_and_below_full).to_a
       @groups_layer_and_below_read = user.groups_with_permission(:layer_and_below_read).to_a +
                                      @groups_layer_and_below_full
+    end
 
+    def init_permission_layers
       @layers_full = layer_ids(@groups_layer_full)
       @layers_read = layer_ids(@groups_layer_read)
 
       @layers_and_below_full = layer_ids(@groups_layer_and_below_full)
       @layers_and_below_read = layer_ids(@groups_layer_and_below_read)
-
-      collect_group_ids!
     end
 
     def collect_group_ids!

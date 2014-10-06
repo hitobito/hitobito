@@ -5,7 +5,6 @@
 
 - @sub_groups.each do |label, groups|
   = section_table(label, groups) do |item|
-    - if can?(:read, item)
-      %td
-        = link_to(item.to_s, group_path(item.id))
+    %td
+      = link_to(item.to_s, group_path(item.id))
 

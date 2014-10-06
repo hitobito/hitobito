@@ -79,7 +79,7 @@ module Sheet
       end
 
       def render_group_item(group, stack, out)
-        if view.can?(:read, group)
+        if view.can?(:show, group)
           if group.leaf?
             out << group_link(group) << "</li>\n".html_safe
           else
@@ -96,7 +96,7 @@ module Sheet
       end
 
       def render_sub_layers
-        safe_join(sub_layers) do |type, layers|
+        safe_join(grouped_sub_layers) do |type, layers|
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
@@ -105,13 +105,17 @@ module Sheet
         end
       end
 
+      def grouped_sub_layers
+        sub_layers.select   { |g| view.can?(:show, g) }.
+                   group_by { |g| g.class.label_plural }
+      end
+
       def sub_layers
         sub_layer_types = layer.possible_children.select(&:layer).map(&:sti_name)
         layer.children.
               without_deleted.
               where(type: sub_layer_types).
-              order_by_type(layer).
-              group_by { |g| g.class.label_plural }
+              order_by_type(layer)
       end
 
       def active_path(group)

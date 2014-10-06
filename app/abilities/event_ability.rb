@@ -22,8 +22,10 @@ class EventAbility < AbilityDsl::Base
     permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
     permission(:layer_full).may(:manage_courses).if_in_course_layer
 
-    permission(:layer_and_below_full).may(:index_participations, :update).in_same_layer_or_below
-    permission(:layer_and_below_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
+    permission(:layer_and_below_full).
+      may(:index_participations, :update).in_same_layer_or_below
+    permission(:layer_and_below_full).
+      may(:create, :destroy, :application_market, :qualify).in_same_layer
     permission(:layer_and_below_full).may(:manage_courses).if_in_course_layer
 
     permission(:admin).may(:export).all

@@ -46,11 +46,11 @@
 Name:		%{app_name}
 Version:	%{app_version}.%{build_number}
 Release:	1%{?dist}
-Summary:	This is a rails application
+Summary:	A web application to manage complex group hierarchies with members, events and a lot more.
 
 Group:		Applications/Web
-License:	NonPublic
-URL:		https://www.puzzle.ch
+License:	AGPL
+URL:		https://www.hitobito.ch
 Source0:	%{name}-%{version}.tar.gz
 
 BuildRequires:  opt-ruby-%{ruby_version}-rubygem-bundler
@@ -80,30 +80,26 @@ Requires:	opt-ruby-%{ruby_version}
 Requires:	opt-ruby-%{ruby_version}-rubygem-bundler
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(id -un)
 
+%define appdir  %{wwwdir}/%{name}/www
+
 %description
 
-This is a rails application
+hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
 
-%pre
-# Run before the package is installed.
-# Creates the user and group which will be used to run the
-# application.
-getent group %{name} > /dev/null || groupadd -r %{name}
-getent passwd %{name} > /dev/null || \
-  useradd -r -g %{name} -d %{wwwdir}/%{name} -s /sbin/nologin \
-  -c "Rails Application %{name}" %{name}
-exit 0
 
+# == Build Scripts
 
 %prep
 # prepare the source to install it during the package building
 # process.
 %setup -q -n %{name}-%{version}
 
+
 %build
 # build/compile any code
 # this can be left empty as for most rails applications we won't build
 # any code.
+
 
 %install
 # Install the application code into the build root directory. This directory
@@ -145,7 +141,7 @@ echo "%{app_version}.%{build_number}" > VERSION
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
 echo "# Rotate rails logs for %{name}
 # Created by %{name}.rpm
-%{wwwdir}/%{name}/www/log/*.log {
+%{appdir}/log/*.log {
   daily
   minsize 10M
   missingok
@@ -162,7 +158,7 @@ touch config/production.sphinx.conf
 mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
 echo "# Reindex sphinx for %{name}
 # Created by %{name}.rpm
-*/15 * * * *  %{name}  cd %{wwwdir}/%{name}/www && . %{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
+10,25,40,55 * * * *  %{name}  cd %{appdir} && . %{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
 " > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
@@ -189,28 +185,68 @@ rm -rf log tmp
 rm -f ~/.transifexrc
 chmod -R o-rwx .
 
-install -p -d -m0750 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www
-install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/log
-install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/tmp
+install -p -d -m0750 $RPM_BUILD_ROOT/%{appdir}
+install -p -d -m0770 $RPM_BUILD_ROOT/%{appdir}/log
+install -p -d -m0770 $RPM_BUILD_ROOT/%{appdir}/tmp
 %if "%{?RAILS_DB_ADAPTER}" == "sqlite3"
-install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/db
+install -p -d -m0770 $RPM_BUILD_ROOT/%{appdir}/db
 %endif
 %if "%{?RAILS_DB_ADAPTER}" == ""
-install -p -d -m0770 $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/db
+install -p -d -m0770 $RPM_BUILD_ROOT/%{appdir}/db
 %endif
 # remove unnecessary files
 for dir in %{exclude_dirs}; do
   [ -e $dir ] && rm -rf $dir
 done
-cp -p -r * $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
-cp -p -r .bundle $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/
+cp -p -r * $RPM_BUILD_ROOT/%{appdir}/
+cp -p -r .bundle $RPM_BUILD_ROOT/%{appdir}/
 
 %if %{use_sphinx}
 install -p -d -m0755 $RPM_BUILD_ROOT/etc/sphinx
 %endif
 
 # fix shebangs
-grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vendor/bundle -r | awk -F: '{ print $1 }' | uniq | while read line; do sed -i 's@^#\!/usr/\(local/\)\?bin/ruby@#\!/bin/env ruby@' $line; done
+grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{appdir}/vendor/bundle -r | awk -F: '{ print $1 }' | uniq | while read line; do sed -i 's@^#\!/usr/\(local/\)\?bin/ruby@#\!/bin/env ruby@' $line; done
+
+
+# == Install Scripts
+#
+# On upgrade, the scripts are run in the following order:
+#
+# %pretrans of new package
+# %pre of new package
+# (package install)
+# %post of new package
+# %triggerin of other packages (set off by installing new package)
+# %triggerin of new package (if any are true)
+# %triggerun of old package (if it's set off by uninstalling the old package)
+# %triggerun of other packages (set off by uninstalling old package)
+# %preun of old package
+# (removal of old package)
+# %postun of old package
+# %triggerpostun of old package (if it's set off by uninstalling the old package)
+# %triggerpostun of other packages (if they're setu off by uninstalling the old package)
+# %posttrans of new package
+
+%pre
+# Run before the package is installed.
+# Creates the user and group which will be used to run the
+# application.
+getent group %{name} > /dev/null || groupadd -r %{name}
+getent passwd %{name} > /dev/null || \
+  useradd -r -g %{name} -d %{wwwdir}/%{name} -s /sbin/nologin \
+  -c "Rails Application %{name}" %{name}
+
+if [ -d %{appdir} ] ; then
+  touch %{appdir}/tmp/stop.txt
+fi
+
+%if %{use_delayed_job}
+/sbin/service %{name}-workers stop >/dev/null 2>&1
+%endif
+
+exit 0
+
 
 %post
 # Runs after the package got installed.
@@ -218,17 +254,18 @@ grep -sHE '^#!/usr/(local/)?bin/ruby' $RPM_BUILD_ROOT/%{wwwdir}/%{name}/www/vend
 
 # the following old files would be loaded on startup and must
 # be explicitly deleted to load the stop script
-rm -f %{wwwdir}/%{name}/www/app/utils/devise/strategies/one_time_token_authenticatable.rb
-rm -f %{wwwdir}/%{name}/www/app/utils/datetime_attribute.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/base.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/leader.rb
-rm -f %{wwwdir}/%{name}/www/app/domain/event/qualifier/participant.rb
+rm -f %{appdir}/app/utils/devise/strategies/one_time_token_authenticatable.rb
+rm -f %{appdir}/app/utils/datetime_attribute.rb
+rm -f %{appdir}/app/domain/event/qualifier/base.rb
+rm -f %{appdir}/app/domain/event/qualifier/leader.rb
+rm -f %{appdir}/app/domain/event/qualifier/participant.rb
 
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
+su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
 %if %{use_sphinx}
-su - %{name} -c "cd %{wwwdir}/%{name}/www/; %{bundle_cmd} exec rake ts:configure" || exit 1
-ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
+su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake ts:configure" || exit 1
+
+ln -s %{appdir}/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif
@@ -239,12 +276,6 @@ ln -s %{wwwdir}/%{name}/www/config/production.sphinx.conf /etc/sphinx/%{name}.co
   /sbin/service memcached start >/dev/null 2>&1) && /sbin/service memcached condrestart
 %endif
 
-%if %{use_delayed_job}
-/sbin/chkconfig --add %{name}-workers || :
-/sbin/service %{name}-workers restart >/dev/null 2>&1
-%endif
-
-touch %{wwwdir}/%{name}/www/tmp/restart.txt
 
 %preun
 # Run before uninstallation
@@ -256,15 +287,23 @@ if [ "$1" = 0 ] ; then
   /sbin/service %{name}-workers stop > /dev/null 2>&1
   /sbin/chkconfig --del %{name}-workers || :
 fi
-if [ "$1" = 1 ] ; then
-  /sbin/service %{name}-workers stop >/dev/null 2>&1
-fi
 %endif
+
 
 %postun
 # Run after uninstallation
 # $1 will be 1 if the package is upgraded
 # and 0 if the package is deinstalled.
+
+
+%posttrans
+%if %{use_delayed_job}
+/sbin/chkconfig --add %{name}-workers || :
+/sbin/service %{name}-workers restart >/dev/null 2>&1
+%endif
+
+touch %{appdir}/tmp/restart.txt
+rm -f %{appdir}/tmp/stop.txt
 
 
 %files
@@ -278,21 +317,24 @@ fi
 
 %attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user
-%attr(-,%{name},%{name}) %{wwwdir}/%{name}/www/config.ru
+%attr(-,%{name},%{name}) %{appdir}/config.ru
 # allow write access to special directories
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/log
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/public
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/tmp
-%attr(0770,%{name},%{name}) %{wwwdir}/%{name}/www/db
+%attr(0770,%{name},%{name}) %{appdir}/log
+%attr(0770,%{name},%{name}) %{appdir}/public
+%attr(0770,%{name},%{name}) %{appdir}/tmp
+%attr(0770,%{name},%{name}) %{appdir}/db
 
 %if %{use_delayed_job}
 %{_initddir}/%{name}-workers
 %endif
 
 %if %{use_sphinx}
-%attr(0660,%{name},%{name}) %{wwwdir}/%{name}/www/config/production.sphinx.conf
+%attr(0660,%{name},%{name}) %{appdir}/config/production.sphinx.conf
 %endif
 
 
 %changelog
-# write a changelog!
+# veni 
+# vidi 
+# vici
+

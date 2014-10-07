@@ -93,11 +93,9 @@ class EventSeeder
   end
 
   def seed_leaders(event)
-    seed_event_role(event, Event::Role::Leader)
-    seed_event_role(event, Event::Role::AssistantLeader)
-    seed_event_role(event, Event::Role::Cook)
-    seed_event_role(event, Event::Role::Treasurer)
-    seed_event_role(event, Event::Role::Speaker)
+    event.role_types.each do |type|
+      seed_event_role(event, type) unless type.participant?
+    end
   end
 
   def seed_participants(event)

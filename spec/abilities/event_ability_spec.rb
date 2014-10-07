@@ -108,7 +108,7 @@ describe EventAbility do
 
 
   context :layer_full do
-    let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+    let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
     context Event do
       it 'may create event in his group' do

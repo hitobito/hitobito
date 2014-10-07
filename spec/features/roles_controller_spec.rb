@@ -107,7 +107,7 @@ describe RolesController, js: true do
       page.find('.typeahead.dropdown-menu li').click
 
       all('#role_group_id option', visible: false).should have(3).items
-      all('#role_type option', visible: false).should have(5).items
+      all('#role_type option', visible: false).should have(7).items
 
       # select role that will be discarded
       find('#role_type_select a.chosen-single').click

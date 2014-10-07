@@ -93,7 +93,7 @@ describe GroupAbility do
   end
 
   context 'layer full' do
-    let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+    let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
     context 'without specific group' do
       it 'may not create subgroup' do

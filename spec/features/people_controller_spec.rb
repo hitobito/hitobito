@@ -101,7 +101,6 @@ describe PeopleController, js: true do
 
       before do
         PeopleRelation.kind_opposites['sibling'] = 'sibling'
-
         sign_in(user)
       end
 
@@ -134,7 +133,7 @@ describe PeopleController, js: true do
           visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
           should have_content 'Beziehungen'
 
-          find('#relations_to_tails_fields input[data-provide=entity]').set(' ')
+          find('#relations_to_tails_fields .remove_nested_fields').click
 
           all('button', text: 'Speichern').first.click
           page.should have_content('erfolgreich aktualisiert')

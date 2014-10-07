@@ -18,7 +18,7 @@ describe GroupDecorator, :draper_with_helpers do
     let(:model) { groups(:top_group) }
     its(:possible_roles) do
       should eq [Group::TopGroup::Leader,
-                 Group::TopGroup::LocalLeader,
+                 Group::TopGroup::LocalGuide,
                  Group::TopGroup::Secretary,
                  Group::TopGroup::LocalSecretary,
                  Group::TopGroup::Member,

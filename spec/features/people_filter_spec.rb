@@ -53,7 +53,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        page.should have_css('input:checked', count: 3)
+        page.should have_css('input:checked', count: 5)
 
         find('h4.filter-toggle', text: 'Top Layer').click
         page.should have_css('input:checked', count: 0)
@@ -65,7 +65,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('label.filter-toggle', text: 'Top Group').click
-        page.should have_css('input:checked', count: 3)
+        page.should have_css('input:checked', count: 5)
 
         find('label.filter-toggle', text: 'Top Group').click
         page.should have_css('input:checked', count: 0)

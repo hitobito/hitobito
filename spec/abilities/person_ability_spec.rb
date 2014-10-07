@@ -285,7 +285,7 @@ describe PersonAbility do
 
 
   describe :layer_full do
-    let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+    let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
     it 'may not modify any public role in lower layers' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
@@ -355,7 +355,7 @@ describe PersonAbility do
 
 
   describe 'layer_full in bottom layer' do
-    let(:role) { Fabricate(Group::BottomLayer::LocalLeader.name.to_sym, group: groups(:bottom_layer_one)) }
+    let(:role) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)) }
 
     it 'may create other users' do
       should be_able_to(:create, Person)
@@ -413,7 +413,7 @@ describe PersonAbility do
     end
 
     it 'may update email for person with role in other layer if layer_full there' do
-      Fabricate(Group::BottomLayer::LocalLeader.name.to_sym, group: groups(:bottom_layer_two), person: role.person)
+      Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_two), person: role.person)
       other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), person: other.person)
       should be_able_to(:update, other.person.reload)

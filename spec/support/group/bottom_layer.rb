@@ -20,7 +20,7 @@ class Group::BottomLayer < Group
     self.permissions = [:layer_and_below_full, :contact_data, :approve_applications]
   end
 
-  class LocalLeader < ::Role
+  class LocalGuide < ::Role
     self.permissions = [:layer_full]
   end
 
@@ -28,6 +28,6 @@ class Group::BottomLayer < Group
     self.permissions = [:layer_and_below_read]
   end
 
-  roles Leader, LocalLeader, Member
+  roles Leader, LocalGuide, Member
 
 end

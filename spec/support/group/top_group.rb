@@ -13,7 +13,7 @@ class Group::TopGroup < Group
     self.permissions = [:admin, :layer_and_below_full, :contact_data]
   end
 
-  class LocalLeader < ::Role
+  class LocalGuide < ::Role
     self.permissions = [:layer_full]
   end
 
@@ -29,6 +29,6 @@ class Group::TopGroup < Group
     self.permissions = [:contact_data, :group_read]
   end
 
-  roles Leader, LocalLeader, Secretary, LocalSecretary, Member
+  roles Leader, LocalGuide, Secretary, LocalSecretary, Member
 
 end

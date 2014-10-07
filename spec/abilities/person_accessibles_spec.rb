@@ -137,7 +137,7 @@ describe PersonAccessibles do
 
 
       describe :layer_full do
-        let(:role) { Fabricate(Group::TopGroup::LocalLeader.name.to_sym, group: groups(:top_group)) }
+        let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
         it 'has layer_full permission' do
           role.permissions.should include(:layer_full)

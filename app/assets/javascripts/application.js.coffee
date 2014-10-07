@@ -80,6 +80,13 @@ swapElements = (event) ->
   $('.' + css).slideToggle()
   event.preventDefault()
 
+toggleHideElement = (event) ->
+  selector = $(this).data('hide')
+  if this.checked
+    $("##{selector}").slideUp()
+  else
+    $("##{selector}").slideDown()
+
 resetRolePersonId = (event) ->
   $('#role_person_id').val(null).change()
   $('#role_person').val(null).change()
@@ -167,6 +174,9 @@ $ ->
 
   # wire up data swap links
   $('body').on('click', 'a[data-swap]', swapElements)
+
+  # wire up checkboxes that hide an other element when checked.
+  $('body').on('change', 'input[data-hide]', toggleHideElement)
 
   $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 

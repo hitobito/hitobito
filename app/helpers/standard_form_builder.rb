@@ -254,6 +254,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def readonly_value(attr, html_options = {})
+    html_options[:class] ||= 'inline'
+    value = html_options.delete(:value) || template.format_attr(object, attr)
+    content_tag(:div, value, html_options)
+  end
+
   def error_messages
     template.render('shared/error_messages', errors: @object.errors, object: @object)
   end

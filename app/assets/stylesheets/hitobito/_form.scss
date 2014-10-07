@@ -188,6 +188,16 @@ label.radio {
 .controls div.inline,
 .controls p.inline {
   padding-top: 5px;
+  display: inline-block;
+}
+
+.controls .help-inline {
+  margin-left: 10px;
+  padding-bottom: 8px;
+}
+
+.controls .inline + .help-inline {
+  padding-bottom: 0;
 }
 
 textarea {

@@ -14,7 +14,10 @@
       = f.labeled_input_field(:kind_id)
 
     - entry.used?(:state) do
-      = f.labeled_belongs_to_field(:state, list: entry.state_collection) if entry.possible_states.present?
+      - if entry.possible_states.present?
+        = f.labeled_belongs_to_field(:state, list: entry.state_collection)
+      - else
+        = f.labeled_input_field(:state)
 
     = render_extensions :main_fields, locals: { f: f }
 

@@ -22,7 +22,6 @@ class EventSeeder
       location: event_location,
       motto: Faker::Lorem.sentence,
       description: Faker::Lorem.paragraphs(rand(1..3)).join("\n"),
-      requires_approval: true,
       application_opening_at: date,
       application_closing_at: date + 60.days}
   end
@@ -62,9 +61,8 @@ class EventSeeder
      values.merge({
         name: "#{kind.try(:short_name)} #{values[:number]}".strip,
         kind_id: kind.try(:id),
-        #state: Event::Course.possible_states.shuffle.first,
-        priorization: true,
-        requires_approval: true})
+        #state: Event::Course.possible_states.shuffle.first
+        })
   end
 
   def seed_dates(event, date)

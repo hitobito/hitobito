@@ -7,13 +7,15 @@
 
 .row-fluid
   .btn-toolbar.span9
-    = Dropdown::Event::ParticipantAdd.new(self,
-                                          @group,
-                                          @event,
-                                          t('global.associations.add_with_model',
-                                            model: Event::Role::Participant.model_name.human),
-                                          :plus,
-                                          for_someone_else: true)
+    - if can?(:new, @event.participations.new)
+      = Dropdown::Event::ParticipantAdd.new(self,
+                                            @group,
+                                            @event,
+                                            t('global.associations.add_with_model',
+                                              model: Event::Role::Participant.model_name.human),
+                                            :plus,
+                                            for_someone_else: true)
+
   .span3
     %span#booking_info= event.booking_info
 

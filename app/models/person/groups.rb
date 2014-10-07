@@ -8,7 +8,6 @@
 module Person::Groups
   extend ActiveSupport::Concern
 
-
   # Uniq set of all group ids in hierarchy.
   def groups_hierarchy_ids
     @hierarchy_ids ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
@@ -26,14 +25,14 @@ module Person::Groups
 
   # All groups where this person has a non-restricted role.
   def non_restricted_groups
-    roles.to_a.reject { |r| r.class.restricted? }.collect(&:group)
+    roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group)
   end
 
   # All groups where this person has the given permission(s).
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
-      roles.to_a.select { |r| r.class.permissions.include?(permission) }.collect(&:group).uniq
+      roles_with_groups.to_a.select { |r| r.class.permissions.include?(permission) }.collect(&:group).uniq
     end
     @groups_with_permission[permission].dup
   end
@@ -45,12 +44,21 @@ module Person::Groups
 
   # All groups where this person has a role that is visible from above.
   def groups_where_visible_from_above
-    roles.select { |r| r.class.visible_from_above }.collect(&:group).uniq
+    roles_with_groups.select { |r| r.class.visible_from_above }.collect(&:group).uniq
   end
 
   # All above and actual groups where this person is visible from.
   def above_groups_where_visible_from
     groups_where_visible_from_above.collect(&:hierarchy).flatten.uniq
+  end
+
+  private
+
+  # Helper method to access the roles association,
+  # asserting that groups have been preloaded together with roles.
+  def roles_with_groups
+    Person::PreloadGroups.for([self]) unless roles.loaded?
+    roles
   end
 
 

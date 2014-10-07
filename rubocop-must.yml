@@ -274,6 +274,9 @@ Style/MethodCallParentheses:
 Style/Next:
   Enabled: false
 
+Style/SingleLineBlockParams:
+  Enabled: false
+
 Style/SpaceInsideBlockBraces:
   Enabled: true
 

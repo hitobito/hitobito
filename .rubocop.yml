@@ -77,3 +77,6 @@ HasAndBelongsToMany:
 Style/GuardClause:
   Enabled: false
 
+# We thinks that's fine
+Style/SingleLineBlockParams:
+  Enabled: false

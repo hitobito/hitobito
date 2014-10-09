@@ -91,8 +91,13 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def filter_by_waiting_list(conditions, args)
-    conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
-    args << true << event.kind_id
+    if event.kind_id
+      conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
+      args << true << event.kind_id
+    else
+      conditions << '(event_applications.waiting_list = ? AND events.kind_id IS NULL)'
+      args << true
+    end
   end
 
   def assigner

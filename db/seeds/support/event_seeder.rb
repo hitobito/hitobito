@@ -61,7 +61,7 @@ class EventSeeder
      values.merge({
         name: "#{kind.try(:short_name)} #{values[:number]}".strip,
         kind_id: kind.try(:id),
-        #state: Event::Course.possible_states.shuffle.first
+        state: Event::Course.possible_states.shuffle.first
         })
   end
 

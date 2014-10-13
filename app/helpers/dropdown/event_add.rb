@@ -29,7 +29,7 @@ module Dropdown
 
     def init_items
       group.possible_events.each do |type|
-        item(type.label, event_link(type))
+        add_item(type.label, event_link(type))
       end
     end
 

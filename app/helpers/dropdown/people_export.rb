@@ -32,22 +32,25 @@ module Dropdown
       csv_path = params.merge(format: :csv)
 
       if @details
-        item(translate(:csv), '#', [translate(:addresses), csv_path],
-             [translate(:everything), csv_path.merge(details: true)])
+        csv_item = add_item(translate(:csv), '#')
+        csv_item.sub_items << Item.new(translate(:addresses), csv_path)
+        csv_item.sub_items << Item.new(translate(:everything), csv_path.merge(details: true))
       else
-        item(translate(:csv), csv_path)
+        add_item(translate(:csv), csv_path)
       end
     end
 
     def email_addresses_link
       if @email_addresses
-        item(translate(:emails), params.merge(format: :email), target: :new)
+        add_item(translate(:emails), params.merge(format: :email), target: :new)
       end
     end
 
     def label_links
       if LabelFormat.all_as_hash.present?
-        item(translate(:labels), main_label_link, *export_label_format_items)
+        label_item = add_item(translate(:labels), main_label_link)
+        add_last_used_format_item(label_item)
+        add_label_format_items(label_item)
       end
     end
 
@@ -59,19 +62,20 @@ module Dropdown
       end
     end
 
-    def export_label_format_items
-      format_links = []
+    def add_last_used_format_item(parent)
       if user.last_label_format_id?
         last_format = user.last_label_format
-        format_links << [last_format.to_s, export_label_format_path(last_format.id), target: :new]
-        format_links << nil
+        parent.sub_items << Item.new(last_format.to_s,
+                                     export_label_format_path(last_format.id),
+                                     target: :new)
+        parent.sub_items << Divider.new
       end
+    end
 
+    def add_label_format_items(parent)
       LabelFormat.all_as_hash.each do |id, label|
-        format_links << [label, export_label_format_path(id), target: :new]
+        parent.sub_items << Item.new(label, export_label_format_path(id), target: :new)
       end
-
-      format_links
     end
 
     def export_label_format_path(id)

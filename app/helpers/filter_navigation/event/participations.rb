@@ -52,7 +52,7 @@ module FilterNavigation
 
       def init_dropdown_items
         role_labels.each do |label|
-          dropdown.item(label, event_participation_filter_link(label))
+          dropdown.add_item(label, event_participation_filter_link(label))
         end
       end
 

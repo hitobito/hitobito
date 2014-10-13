@@ -40,7 +40,7 @@ module Dropdown
         participant_roles.each do |type|
           opts = url_options.merge(event_role: { type: type.sti_name })
           link = template.new_group_event_participation_path(group, event, opts)
-          item(translate(:as, role: type.label), link)
+          add_item(translate(:as, role: type.label), link)
         end
       end
 

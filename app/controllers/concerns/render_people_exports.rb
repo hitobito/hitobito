@@ -7,9 +7,10 @@
 
 module Concerns
   module RenderPeopleExports
+    extend ActiveSupport::Concern
 
     def render_pdf(people)
-      pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(people)
+      pdf = generate_pdf(people)
       send_data pdf, type: :pdf, disposition: 'inline'
     rescue Prawn::Errors::CannotFit
       redirect_to :back, alert: t('people.pdf.cannot_fit')
@@ -28,6 +29,10 @@ module Concerns
     end
 
     private
+
+    def generate_pdf(people)
+      Export::Pdf::Labels.new(find_and_remember_label_format).generate(people)
+    end
 
     def find_and_remember_label_format
       LabelFormat.find(params[:label_format_id]).tap do |label_format|

@@ -20,15 +20,15 @@ module Dropdown
     private
 
     def init_items
-      item(translate(:merge), template.merge_group_path(group))
-      item(translate(:move), template.move_group_path(group))
+      add_item(translate(:merge), template.merge_group_path(group))
+      add_item(translate(:move), template.move_group_path(group))
 
       if !group.protected? && template.can?(:destroy, group)
-        divider
-        item(template.ti('link.delete'),
-             template.group_path(group),
-             data: { confirm: template.ti(:confirm_delete),
-                     method: :delete })
+        add_divider
+        add_item(template.ti('link.delete'),
+                 template.group_path(group),
+                 data: { confirm: template.ti(:confirm_delete),
+                         method: :delete })
       end
     end
   end

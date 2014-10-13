@@ -25,7 +25,7 @@ module Dropdown
           link = template.new_group_event_role_path(group,
                                                     event,
                                                     event_role: { type: type.sti_name })
-          item(type.label, link)
+          add_item(type.label, link)
         end
       end
     end

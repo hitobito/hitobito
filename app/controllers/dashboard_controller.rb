@@ -13,7 +13,7 @@ class DashboardController < ApplicationController
   respond_to :json
 
   def index
-    authenticate_person! unless request.format.html?
+    authenticate_person! unless html_request?
 
     flash.keep
     if current_user

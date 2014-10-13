@@ -12,12 +12,12 @@ class GroupsController < CrudController
 
   decorates :group, :groups, :contact
 
-  before_render_show :active_sub_groups, if: -> { request.format.html? }
+  before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
 
 
   def index
-    flash.keep if request.format.html?
+    flash.keep if html_request?
     redirect_to group_path(Group.root.id, format: request.format.to_sym)
   end
 

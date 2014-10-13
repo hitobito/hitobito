@@ -94,7 +94,7 @@ class CrudController < ListController
   #   DELETE /entries/1.json
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
-    if !destroyed && request.format == :html
+    if !destroyed && html_request?
       flash[:alert] ||= error_messages.presence || flash_message(:failure)
     end
     location = (!destroyed && request.env['HTTP_REFERER'].presence) ||
@@ -154,7 +154,7 @@ class CrudController < ListController
 
   # Set a success flash notice when we got a HTML request.
   def set_success_notice
-    flash[:notice] ||= flash_message(:success) if request.format == :html
+    flash[:notice] ||= flash_message(:success) if html_request?
   end
 
   # Get an I18n flash message, considering _html keys as well.

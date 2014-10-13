@@ -33,7 +33,7 @@ class PeopleController < CrudController
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
-  before_render_show :load_asides, if: -> { request.format.html? }
+  before_render_show :load_asides, if: -> { html_request? }
 
 
   def index
@@ -53,7 +53,7 @@ class PeopleController < CrudController
 
   def show
     if group.nil?
-      flash.keep if request.format.html?
+      flash.keep if html_request?
       redirect_to person_home_path(entry, format: request.format.to_sym)
     else
       respond_to do |format|

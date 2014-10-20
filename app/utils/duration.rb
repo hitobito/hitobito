@@ -7,8 +7,6 @@
 
 class Duration < Struct.new(:start_at, :finish_at)
 
-  attr_reader :start, :finish
-
   def to_s(format = :long)
     if start_at && finish_at
       format_start_finish(format)

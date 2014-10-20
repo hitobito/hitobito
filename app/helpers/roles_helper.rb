@@ -38,7 +38,7 @@ module RolesHelper
   def format_role_group_id(role)
     group = role.group
     if group
-      link_to(group, group)
+      link_to_if(can?(:show, group), group, group)
     else
       group = Group.with_deleted.where(id: role.group_id).first
       group.to_s + " (#{t('attributes.deleted_info')})"

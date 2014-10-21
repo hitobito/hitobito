@@ -80,7 +80,15 @@ swapElements = (event) ->
   $('.' + css).slideToggle()
   event.preventDefault()
 
-toggleHideElement = (event) ->
+toggleHideElementByLink = (event) ->
+  selector = $(this).data('hide')
+  if $("##{selector}").is(':visible')
+    $("##{selector}").slideUp()
+  else
+    $("##{selector}").slideDown()
+  event.preventDefault()
+
+toggleHideElementByCheckbox = (event) ->
   selector = $(this).data('hide')
   if this.checked
     $("##{selector}").slideUp()
@@ -175,12 +183,14 @@ $ ->
   # wire up data swap links
   $('body').on('click', 'a[data-swap]', swapElements)
 
+  # wire up links that hide an other element when checked.
+  $('body').on('click', 'a[data-hide]', toggleHideElementByLink)
+
   # wire up checkboxes that hide an other element when checked.
-  $('body').on('change', 'input[data-hide]', toggleHideElement)
+  $('body').on('change', 'input[data-hide]', toggleHideElementByCheckbox)
 
   $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 
   $('body').on('click', '.popover a.cancel', closePopover)
 
   $('body').on('click', '.filter-toggle', toggleFilterRoles)
-

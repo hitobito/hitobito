@@ -7,7 +7,7 @@
 
 module Export::Csv::People
   # Attributes of a person, handles associations
-  class PersonRow < Export::Csv::Base::Row
+  class PersonRow < Export::Csv::Row
 
     self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
@@ -16,6 +16,10 @@ module Export::Csv::People
 
     def roles
       entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}"  }.join(', ')
+    end
+
+    def gender
+      entry.gender_label
     end
 
     private

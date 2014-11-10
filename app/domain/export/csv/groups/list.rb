@@ -18,7 +18,7 @@ module Export::Csv::Groups
       (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)
     end
 
-    class Row < Export::Csv::Base::Row
+    class Row < Export::Csv::Row
 
       def type
         entry.class.label

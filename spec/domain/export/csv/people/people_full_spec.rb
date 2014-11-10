@@ -78,7 +78,7 @@ describe Export::Csv::People::PeopleFull do
       its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Social Media Adresse Skype']) { should eq 'foobar' }
       its(['Elternteil']) { should eq 'Bottom Member' }
-      its(['Geschlecht']) { should eq 'm' }
+      its(['Geschlecht']) { should eq 'männlich' }
     end
 
   end

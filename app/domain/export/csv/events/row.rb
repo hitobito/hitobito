@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Csv::Events
-  class Row < Export::Csv::Base::Row
+  class Row < Export::Csv::Row
 
     self.dynamic_attributes = {
       /^contact_/  => :contactable_attribute,

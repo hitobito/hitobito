@@ -11,7 +11,7 @@ describe Import::PersonImporter do
 
   let(:group) { groups(:top_group) }
   let(:role_type) { Group::TopGroup::Leader }
-  let(:importer)  { Import::PersonImporter.new(group: group, role_type: role_type, data: data)  }
+  let(:importer)  { Import::PersonImporter.new(data, group, role_type)  }
   subject { importer }
 
   context 'minimal' do
@@ -137,10 +137,10 @@ describe Import::PersonImporter do
       before { importer.import }
       subject { importer }
 
-      its(:errors) { should have(3).items }
-      its(:errors) { should include 'Zeile 1: Firma muss ausgefüllt werden' }
-      its(:errors) { should include 'Zeile 2: Firma muss ausgefüllt werden, PLZ ist keine Zahl' }
+      its(:errors) { should include 'Zeile 1: Firmenname muss ausgefüllt werden' }
+      its(:errors) { should include 'Zeile 2: Firmenname muss ausgefüllt werden, PLZ ist keine Zahl' }
       its(:errors) { should include 'Zeile 4: PLZ ist keine Zahl' }
+      its(:errors) { should have(3).items }
     end
 
     context 'imported person' do

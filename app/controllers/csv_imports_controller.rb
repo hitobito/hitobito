@@ -146,9 +146,7 @@ class CsvImportsController < ApplicationController
 
   def map_headers_and_import
     data = parser.map_data(field_mappings)
-    @importer = Import::PersonImporter.new(group: group,
-                                           data: data,
-                                           role_type: role_type)
+    @importer = Import::PersonImporter.new(data, group, role_type)
   end
 
   def redirect_params

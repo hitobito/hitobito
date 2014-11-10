@@ -10,7 +10,7 @@ module Import
     extend Forwardable
     def_delegators :person, :persisted?, :save, :id, :errors
 
-    attr_reader :person, :hash, :phone_numbers, :social_accounts, :additional_emails
+    attr_reader :person, :attributes, :phone_numbers, :social_accounts, :additional_emails
 
     class << self
       def fields
@@ -36,9 +36,9 @@ module Import
       end
     end
 
-    def initialize(hash, unique_emails)
+    def initialize(attributes, unique_emails)
       @unique_emails = unique_emails
-      prepare(hash)
+      prepare(attributes)
 
       find_or_initialize_person
       assign_additional_emails
@@ -67,15 +67,15 @@ module Import
 
     private
 
-    def prepare(hash)
-      @hash = hash.with_indifferent_access
+    def prepare(attributes)
+      @attributes = attributes.with_indifferent_access
       @additional_emails = extract_settings_fields(AdditionalEmail)
       @phone_numbers = extract_settings_fields(PhoneNumber)
       @social_accounts = extract_settings_fields(SocialAccount)
     end
 
     def find_or_initialize_person
-      @person = PersonDoubletteFinder.new(hash).find_and_update || ::Person.new(hash)
+      @person = PersonDoubletteFinder.new(attributes).find_and_update || ::Person.new(attributes)
     end
 
     def assign_additional_emails
@@ -106,10 +106,10 @@ module Import
 
     def extract_settings_fields(model)
       keys = ContactAccountFields.new(model).keys
-      numbers = keys.select { |key| hash.key?(key) }
+      numbers = keys.select { |key| attributes.key?(key) }
       numbers.map do |key|
         label = key.split('_').last.capitalize
-        value = hash.delete(key)
+        value = attributes.delete(key)
         { model.value_attr => value, :label => label } if value.present?
       end.compact
     end

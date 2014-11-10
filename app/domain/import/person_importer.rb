@@ -9,16 +9,18 @@ module Import
   class PersonImporter
     include Translatable
 
-    attr_accessor :data, :role_type, :group, :errors, :doublettes,
-                  :failure_count, :new_count, :doublette_count
+    attr_reader :data, :role_type, :group, :errors, :doublettes,
+                :failure_count, :new_count, :doublette_count
 
 
-    def initialize(hash = {})
+    def initialize(data, group, role_type)
+      @data = data
+      @group = group
+      @role_type = role_type
       @errors = []
       @failure_count = 0
       @new_count = 0
       @doublettes = {}
-      hash.each { |key, value| send("#{key}=", value) }
     end
 
     def people
@@ -45,11 +47,11 @@ module Import
     private
 
     def populate_people
-      data.each_with_index.map { |hash, index| populate_person(hash, index) }
+      data.each_with_index.map { |attributes, index| populate_person(attributes, index) }
     end
 
-    def populate_person(hash, index)
-      person = Import::Person.new(hash, unique_emails)
+    def populate_person(attributes, index)
+      person = Import::Person.new(attributes, unique_emails)
       person.add_role(group, role_type)
 
       validate_person(person, index) do
@@ -89,7 +91,7 @@ module Import
       unified_import_person = doublettes[import_person.id]
       person = unified_import_person.person
 
-      blank_attrs = import_person.hash.select { |key, _value| person.attributes[key].blank? }
+      blank_attrs = import_person.attributes.select { |key, _value| person.attributes[key].blank? }
       person.attributes = blank_attrs
 
       person.phone_numbers << import_person.person.phone_numbers

@@ -11,6 +11,7 @@ module Export::Csv
   class Base
 
     class_attribute :model_class, :row_class
+    self.row_class = Row
 
     attr_reader :list
 
@@ -66,62 +67,9 @@ module Export::Csv
 
     def values(entry)
       row = row_class.new(entry)
-      attributes.collect { |attr| normalize(row.fetch(attr)) }
+      attributes.collect { |attr| row.fetch(attr) }
     end
 
-    def normalize(value)
-      if value == true
-        I18n.t('global.yes')
-      elsif value == false
-        I18n.t('global.no')
-      else
-        value
-      end
-    end
-
-    # Decorator for a row entry.
-    # Attribute values may be accessed with fetch(attr).
-    # If a method named #attr is defined on the decorator class, return its value.
-    # Otherwise, the attr is delegated to the entry.
-    class Row
-
-      # regexp for attribute names which are handled dynamically.
-      class_attribute :dynamic_attributes
-      self.dynamic_attributes = {}
-
-      attr_reader :entry
-
-      def initialize(entry)
-        @entry = entry
-      end
-
-      def fetch(attr)
-        if dynamic_attribute?(attr.to_s)
-          handle_dynamic_attribute(attr)
-        elsif respond_to?(attr, true)
-          send(attr)
-        else
-          entry.send(attr)
-        end
-      end
-
-      private
-
-      def dynamic_attribute?(attr)
-        dynamic_attributes.any? { |regexp, _| attr =~ regexp }
-      end
-
-      def handle_dynamic_attribute(attr)
-        dynamic_attributes.each do |regexp, handler|
-          if attr.to_s =~ regexp
-            return send(handler, attr)
-          end
-        end
-      end
-
-    end
-
-    self.row_class = Row
   end
 
 end

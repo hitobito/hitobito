@@ -84,7 +84,7 @@ describe Export::Csv::People::PeopleAddress do
         its(['Nachname']) { should eq person.last_name }
         its(['Haupt-E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
-        its(['Geschlecht']) { should be_blank }
+        its(['Geschlecht']) { should eq 'unbekannt' }
 
         context 'roles and phone number' do
           before do

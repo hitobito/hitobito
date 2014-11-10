@@ -19,7 +19,11 @@ module Export::Csv::Events
     end
 
     def state
-      I18n.t("activerecord.attributes.event/course.states.#{entry.state}") if entry.state
+      if entry.possible_states.present? && entry.state
+        I18n.t("activerecord.attributes.event/course.states.#{entry.state}")
+      else
+        entry.state
+      end
     end
 
     private

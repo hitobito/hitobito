@@ -39,6 +39,7 @@ describe CsvImportsController do
       flash[:alert].should eq 'Bitte wählen Sie eine gültige CSV Datei aus.'
       should redirect_to new_group_csv_imports_path(group)
     end
+
   end
 
   describe 'POST preview' do
@@ -63,6 +64,12 @@ describe CsvImportsController do
     it 'informs about duplicates in assignment' do
       post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'first_name' })
       flash[:alert].should eq 'Vorname wurde mehrfach zugewiesen.'
+      should render_template(:define_mapping)
+    end
+
+    it 'rerenders form when role_type is missing' do
+      post :preview, { group_id: group.id, data: data }
+      flash.now[:alert].should eq 'Role muss ausgefüllt werden.'
       should render_template(:define_mapping)
     end
 

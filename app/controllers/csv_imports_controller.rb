@@ -79,10 +79,18 @@ class CsvImportsController < ApplicationController
   end
 
   def valid_for_import?
-    if parse_or_redirect && sane_mapping?
+    if parse_or_redirect && sane_mapping? && valid_role?
       map_headers_and_import
       yield
     end
+  end
+
+  def valid_role?
+    return true if params[:role_type].present?
+
+    flash.now[:alert] = "#{Role.model_name} #{I18n.t('errors.messages.blank')}."
+    render :define_mapping
+    false
   end
 
   def custom_authorization

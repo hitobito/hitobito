@@ -54,9 +54,31 @@ describe Export::Csv::Events::List do
     context 'first row' do
       subject { csv.second.split(';') }
       its([0]) { should eq 'TopGroup' }
-      its([4]) { should =~ /translation missing/ }
-      its([4]) { should =~ /somestate/ }
+
+
+      its([4]) { should eq 'somestate' }
+
       its([5]) { should eq 'somewhere' }
+
+      context 'state' do
+        # This tests the case where Event.possible_states is empty,
+        # the case with predefined states is tested in the jubla wagon.
+
+        context 'present' do
+          its([4]) { should eq 'somestate' }
+        end
+
+        context 'empty' do
+          let(:course) do
+            Fabricate(:course, groups: [groups(:top_group)], location: 'somewhere')
+          end
+          let(:list)  { Export::Csv::Events::List.new([course]) }
+          let(:csv) { Export::Csv::Generator.new(list).csv.split("\n")  }
+          subject { csv.second.split(';') }
+
+          its([4]) { should eq '' }
+        end
+      end
 
       context 'dates' do
         let(:start_at) { Date.parse 'Sun, 09 Jun 2013' }

@@ -11,8 +11,10 @@ describe Export::Csv::Events::Row do
   let(:max_dates) { 3 }
   let(:contactable_keys) { [:name, :address, :zip_code, :town, :email, :phone_numbers] }
   let(:person) { Fabricate(:person_with_address_and_phone) }
-  let(:course) do Fabricate(:course, state: :application_closed, groups: [groups(:top_group)],
-                                     description: 'some description', number: 123, location: 'somewhere') end
+  let(:course) do
+    Fabricate(:course, state: 'some state', groups: [groups(:top_group)],
+              description: 'some description', number: 123, location: 'somewhere')
+  end
 
   let(:row) { Export::Csv::Events::Row.new(course) }
 
@@ -43,7 +45,7 @@ describe Export::Csv::Events::Row do
 
   context 'event attributes' do
     it { row.fetch(:kind).should eq 'Scharleiterkurs' }
-    it { row.fetch(:state).should =~  /translation missing/ }
+    it { row.fetch(:state).should eq 'some state' }
     it { row.fetch(:number).should eq 123 }
     it { row.fetch(:location).should eq 'somewhere' }
     it { row.fetch(:description).should eq 'some description' }

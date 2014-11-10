@@ -73,6 +73,7 @@ end
 group :development do
   gem 'bullet'
   gem 'quiet_assets'
+  gem 'request_profiler'
 end
 
 group :test do

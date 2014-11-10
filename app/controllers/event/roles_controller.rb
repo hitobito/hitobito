@@ -43,7 +43,7 @@ class Event::RolesController < CrudController
     attrs.delete(:person)
 
     role.participation = event.participations.where(person_id: attrs.delete(:person_id)).
-                                               first_or_initialize
+                                              first_or_initialize
     role.participation.init_answers if role.participation.new_record?
 
     role

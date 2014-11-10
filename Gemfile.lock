@@ -310,6 +310,8 @@ GEM
     rdoc-tags (1.3)
       rdoc (~> 4)
     ref (1.0.5)
+    request_profiler (0.0.4)
+      ruby-prof
     request_store (1.0.8)
     require_all (1.3.2)
     riddle (1.5.11)
@@ -514,6 +516,7 @@ DEPENDENCIES
   rails_code_qa
   rails_config
   rdoc-tags
+  request_profiler
   rspec-notify-osd
   rspec-rails (~> 2.14.0)
   rubocop

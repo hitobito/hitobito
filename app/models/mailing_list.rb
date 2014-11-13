@@ -65,8 +65,8 @@ class MailingList < ActiveRecord::Base
   end
 
   # rubocop:disable MethodLength
-  def people
-    Person.only_public_data.
+  def people(people_scope = Person.only_public_data)
+    people_scope.
            joins('LEFT JOIN roles ON people.id = roles.person_id').
            joins('LEFT JOIN groups ON roles.group_id = groups.id').
            joins('LEFT JOIN event_participations ON event_participations.person_id = people.id').

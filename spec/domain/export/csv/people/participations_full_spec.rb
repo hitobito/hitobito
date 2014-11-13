@@ -19,8 +19,11 @@ describe Export::Csv::People::ParticipationsFull do
   subject { people_list.attribute_labels }
 
   context 'additional_information' do
-    before { participation.additional_information = 'asdf' }
-    its([:additional_information]) { should eq 'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)' }
+    its([:additional_information]) { should eq 'Zusätzliche Angaben' }
+  end
+
+  context 'participation_additional_information' do
+    its([:participation_additional_information]) { should eq 'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)' }
   end
 
   context 'questions' do
@@ -41,13 +44,12 @@ describe Export::Csv::People::ParticipationsFull do
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)',
-       'Rollen', 'Anmeldedatum']
+       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum']
     end
 
     subject { csv }
 
-    its(:headers) { should == full_headers }
+    its(:headers) { should include(*full_headers) }
 
     context 'first row' do
       subject { csv[0] }

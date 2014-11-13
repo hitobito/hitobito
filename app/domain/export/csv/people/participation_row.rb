@@ -18,7 +18,7 @@ module Export::Csv::People
       @participation.roles.map { |role| role  }.join(', ')
     end
 
-    def additional_information
+    def participation_additional_information
       @participation.additional_information
     end
 

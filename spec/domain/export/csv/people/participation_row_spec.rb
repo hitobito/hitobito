@@ -17,11 +17,11 @@ describe Export::Csv::People::ParticipationRow do
 
   it { row.fetch(:first_name).should eq 'Top' }
   it { row.fetch(:roles).should be_blank }
-  it { row.fetch(:additional_information).should be_blank }
+  it { row.fetch(:participation_additional_information).should be_blank }
 
   context 'with additional information' do
     before { participation.update_attribute(:additional_information, 'foobar') }
-    its([:additional_information]) { row.fetch(:additional_information).should eq 'foobar' }
+    it { row.fetch(:participation_additional_information).should eq 'foobar' }
   end
 
   context 'with roles' do

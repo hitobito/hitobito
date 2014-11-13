@@ -13,7 +13,7 @@ module Export::Csv::People
     def build_attribute_labels
       labels = super
       questions.each { |question| labels[:"question_#{question.id}"] = question.question }
-      labels[:additional_information] = Event::Participation.human_attribute_name(:additional_information)
+      labels[:participation_additional_information] = Event::Participation.human_attribute_name(:additional_information)
       labels[:created_at] = Event::Participation.human_attribute_name(:created_at)
       labels
     end

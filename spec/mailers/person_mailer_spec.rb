@@ -32,4 +32,14 @@ describe PersonMailer do
     end
   end
 
+  context 'with internationalized domain names' do
+    before do
+     recipient.update!(email: 'member@exämple.com')
+     sender.update!(email: 'leader@exämple.com')
+   end
+
+    its(:to) { should == %w(member@xn--exmple-cua.com) }
+    its(:reply_to) { should == %w(leader@xn--exmple-cua.com) }
+  end
+
 end

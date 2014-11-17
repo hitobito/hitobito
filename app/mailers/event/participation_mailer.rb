@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipationMailer < ActionMailer::Base
+class Event::ParticipationMailer < ApplicationMailer
 
   CONTENT_CONFIRMATION = 'event_application_confirmation'
   CONTENT_APPROVAL     = 'event_application_approval'

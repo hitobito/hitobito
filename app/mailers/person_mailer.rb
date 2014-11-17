@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class PersonMailer < ActionMailer::Base
+class PersonMailer < ApplicationMailer
 
   CONTENT_LOGIN = 'send_login'
 

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::RegisterMailer < ActionMailer::Base
+class Event::RegisterMailer < ApplicationMailer
 
   CONTENT_REGISTER_LOGIN = 'event_register_login'
 

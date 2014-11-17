@@ -9,6 +9,8 @@ class PeopleController < CrudController
 
   include Concerns::RenderPeopleExports
 
+  QUERY_FIELDS = [:first_name, :last_name, :company_name, :nickname, :town]
+
   self.nesting = Group
   self.nesting_optional = true
 
@@ -65,12 +67,11 @@ class PeopleController < CrudController
     end
   end
 
-  # GET ajax, without @group
+  # GET ajax, for auto complete fields, without @group
   def query
     people = []
     if params.key?(:q) && params[:q].size >= 3
-      search_clause = search_condition(:first_name, :last_name, :company_name, :nickname, :town)
-      people = Person.where(search_clause).
+      people = Person.where(search_condition(*QUERY_FIELDS)).
                       only_public_data.
                       order_by_name.
                       limit(10)

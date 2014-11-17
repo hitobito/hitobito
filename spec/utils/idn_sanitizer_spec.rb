@@ -13,8 +13,16 @@ describe IdnSanitizer do
     IdnSanitizer.sanitize('foo@exämple.com').should eq('foo@xn--exmple-cua.com')
   end
 
+  it 'sanitizes single email with name' do
+    IdnSanitizer.sanitize('Mr. Foo <foo@exämple.com>').should eq('Mr. Foo <foo@xn--exmple-cua.com>')
+  end
+
   it 'keeps regular email' do
     IdnSanitizer.sanitize('foo@example.com').should eq('foo@example.com')
+  end
+
+  it 'sanitizes regular email with name' do
+    IdnSanitizer.sanitize('Mr. Foo <foo@example.com>').should eq('Mr. Foo <foo@example.com>')
   end
 
   it 'sanitizes multiple emails' do

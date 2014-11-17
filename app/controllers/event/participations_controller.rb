@@ -57,16 +57,16 @@ class Event::ParticipationsController < CrudController
 
     respond_to do |format|
       format.html
-      format.pdf  { render_pdf(@participations.collect(&:person)) }
-      format.csv  { render_csv }
-      format.email  { render_emails(@participations.collect(&:person)) }
+      format.pdf   { render_pdf(@participations.collect(&:person)) }
+      format.csv   { render_csv }
+      format.email { render_emails(@participations.collect(&:person)) }
     end
   end
 
   def print
     load_answers
     respond_to do |format|
-      format.pdf { render_participation(entry) }
+      format.pdf   { render_participation(entry) }
     end
   end
 

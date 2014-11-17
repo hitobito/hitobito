@@ -362,8 +362,7 @@ de:
     application_window_closed: 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
 
   event/roles:
-    full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i> in <i>%{event}</i>"
-
+    full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
 
   version:
     attribute_change:

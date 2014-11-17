@@ -3,13 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- title ti(:title, :model => model_class_label(entry))
+
 = entry_form(buttons_bottom: false,
-             cancel_url: (entry.new_record? ? group_event_participations_path(@group, @event) : group_event_participation_path(@group, @event, entry.participation_id))) do |f|
-  - if entry.new_record?
-    = f.hidden_field :type
-    = f.labeled_person_field :person
-  - else
-    = f.labeled(:person) do
-      .text= entry.person
+             cancel_url: group_event_participations_path(@group, @event)) do |f|
+
+  = f.hidden_field :type
+
+  = f.labeled_person_field :person
 
   = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})

@@ -1,0 +1,19 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title ti(:title, :model => full_entry_label).html_safe
+
+= entry_form(buttons_bottom: false,
+             cancel_url: group_event_participation_path(@group, @event, entry.participation_id)) do |f|
+
+  - if @possible_types.size > 1
+    = f.labeled_collection_select(:type,
+                                  @possible_types,
+                                  :sti_name,
+                                  :label,
+                                  { prompt: ta(:please_select) },
+                                  class: 'span6')
+
+  = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})

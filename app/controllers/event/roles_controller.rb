@@ -16,6 +16,8 @@ class Event::RolesController < CrudController
   # load group before authorization
   prepend_before_action :parent, :group
 
+  before_render_edit :possible_types
+
   def create
     assign_attributes
     new_participation = entry.participation.new_record?
@@ -35,7 +37,7 @@ class Event::RolesController < CrudController
 
   def build_entry
     attrs = params[:event_role]
-    type =  attrs && attrs[:type]
+    type = attrs && attrs[:type]
     role = event.class.find_role_type!(type).new
 
     # delete unused attributes
@@ -49,11 +51,18 @@ class Event::RolesController < CrudController
     role
   end
 
+  def assign_attributes
+    type = model_params && model_params.delete(:type)
+    if type && possible_types.collect(&:sti_name).include?(type)
+      entry.type = type
+    end
+    super
+  end
+
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     translate(:full_entry_label, role: h(entry),
-                                 person: h(entry.participation.person),
-                                 event: h(entry.participation.event)).html_safe
+                                 person: h(entry.participation.person)).html_safe
   end
 
   def after_create_url(new_participation, created)
@@ -79,6 +88,15 @@ class Event::RolesController < CrudController
   # model_params may be empty
   def permitted_params
     model_params.permit(permitted_attrs)
+  end
+
+  def possible_types
+    @possible_types ||=
+      if entry.restricted?
+        event.class.participant_types
+      else
+        event.class.role_types.reject(&:restricted?)
+      end
   end
 
   class << self

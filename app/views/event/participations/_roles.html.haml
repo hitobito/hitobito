@@ -3,7 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= section_table(Role.model_name.human(count: 2), entry.roles) do |role|
+= section_table(Role.model_name.human(count: 2), entry.roles.includes(:participation)) do |role|
+
   %td
     %strong= role.to_s
   %td

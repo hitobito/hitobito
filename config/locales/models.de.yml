@@ -245,6 +245,7 @@ de:
       event/role:
         label: Bezeichnung
         person: Person
+        type: Rolle
         participation: Person
 
       event/participation:

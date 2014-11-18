@@ -7,14 +7,14 @@
 
 module AutoLinkHelper
 
-  def auto_link(str)
+  def auto_link(str, options = {})
     if email?(str)
       mail_to(str)
     elsif url_with_protocol?(str)
-      link_to(str, str, target: '_blank')
+      link_to_blank(str, str, options)
     elsif url_without_protocol?(str)
       url = 'http://' + str
-      link_to(str, url, target: '_blank')
+      link_to_blank(str, url, options)
     else
       str
     end
@@ -36,6 +36,11 @@ module AutoLinkHelper
   def url_without_protocol?(str)
     # includes no white-spaces AND includes www.*
     /(?=^\S*$)(?=(^www\..+$)).*/.match(str)
+  end
+
+  def link_to_blank(label, url, options = {})
+    options[:target] ||= '_blank'
+    link_to(label, url, options)
   end
 
 end

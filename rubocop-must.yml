@@ -278,7 +278,10 @@ Style/SingleLineBlockParams:
   Enabled: false
 
 Style/SpaceInsideBlockBraces:
-  Enabled: true
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
 
 Style/VariableName:
   Enabled: false

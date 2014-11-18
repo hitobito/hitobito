@@ -81,9 +81,18 @@ module Role::Types
       model_name.human
     end
 
+    def label_plural
+      model_name.human(count: 2)
+    end
+
     def label_long
       I18n.translate("activerecord.models.#{model_name.i18n_key}.long",
                      default: label_with_group)
+    end
+
+    def label_short
+      I18n.translate("activerecord.models.#{model_name.i18n_key}.short",
+                     default: label)
     end
 
     def label_with_group

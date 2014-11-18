@@ -269,7 +269,7 @@ fr:
     registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
     application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
   event/roles:
-    full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i> dans <i>%{event}</i>"
+    full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

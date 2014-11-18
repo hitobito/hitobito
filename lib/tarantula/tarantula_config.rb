@@ -43,6 +43,8 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.csv\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
+    # do not change role type for own event roles
+    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{person.event_roles.pluck(:id).join('|')})$/
 
     # The parent entry may already have been deleted, thus producing 404s.
     t.allow_404_for(/groups$/)

@@ -272,7 +272,7 @@ it:
     registered: 'i tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
     application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'
   event/roles:
-    full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i> a <i>%{event}</i>"
+    full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."

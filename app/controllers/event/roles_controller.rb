@@ -52,11 +52,15 @@ class Event::RolesController < CrudController
   end
 
   def assign_attributes
+    set_type if entry.persisted?
+    super
+  end
+
+  def set_type
     type = model_params && model_params.delete(:type)
     if type && possible_types.collect(&:sti_name).include?(type)
       entry.type = type
     end
-    super
   end
 
   # A label for the current entry, including the model name, used for flash

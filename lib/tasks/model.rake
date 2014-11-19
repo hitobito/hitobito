@@ -14,6 +14,7 @@ end
 namespace :erd do
   task :options => :customize
   task :customize do
+    require Rails.root.join('lib', 'tasks', 'rails_erd_patch.rb')
     ENV['attributes']  ||= 'content,inheritance,foreign_keys,timestamps'
     ENV['indirect']    ||= 'false'
     ENV['orientation'] ||= 'vertical'

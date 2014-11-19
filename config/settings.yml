@@ -92,6 +92,9 @@ address:
   ignored_countries:
     - ch
     - schweiz
+    - suisse
+    - switzerland
+    - svizzera
 
 # Presets for CSV export
 csv:

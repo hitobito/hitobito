@@ -9,26 +9,28 @@ module Export::Csv::People
   class ParticipationRow < Export::Csv::People::PersonRow
     dynamic_attributes[/^question_\d+$/] = :question_attribute
 
+    attr_reader :participation
+
     def initialize(participation)
       @participation = participation
       super(participation.person)
     end
 
     def roles
-      @participation.roles.map { |role| role  }.join(', ')
+      participation.roles.map { |role| role  }.join(', ')
     end
 
     def participation_additional_information
-      @participation.additional_information
+      participation.additional_information
     end
 
     def created_at
-      I18n.l(@participation.created_at.to_date)
+      I18n.l(participation.created_at.to_date)
     end
 
     def question_attribute(attr)
       _, id = attr.to_s.split('_', 2)
-      answer = @participation.answers.find { |e| e.question_id == id.to_i }
+      answer = participation.answers.find { |e| e.question_id == id.to_i }
       answer.try(:answer)
     end
   end

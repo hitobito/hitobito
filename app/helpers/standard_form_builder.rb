@@ -218,6 +218,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     belongs_to_field(attr, html_options)
   end
 
+  def i18n_enum_field(attr, labels, html_options = {})
+    html_options[:class] ||= 'span6'
+    collection_select(attr, labels, :first, :last,
+                      collection_prompt(attr, html_options),
+                      html_options)
+  end
+
   # rubocop:enable PredicateName
 
   def person_field(attr, _html_options = {})

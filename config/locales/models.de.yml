@@ -181,7 +181,7 @@ de:
         genders:
           m: männlich
           w: weiblich
-          default: unbekannt
+          _nil: unbekannt
         birthday: Geburtstag
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben

@@ -154,7 +154,7 @@ fr:
         genders:
           m: masculin
           w: féminin
-          default: inconnu
+          _nil: inconnu
         birthday: anniversaire
         additional_information: données supplémentaires
         remember_me: rester inscrit

@@ -12,7 +12,7 @@
 
 = field_set_tag do
   = f.labeled(:gender) do
-    - [:m, :w, ''].each do |key|
+    - (GENDERS + ['']).each do |key|
       = f.inline_radio_button(:gender, key, entry.gender_label(key))
 
   = f.labeled_string_field(:birthday,

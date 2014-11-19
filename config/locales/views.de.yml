@@ -9,6 +9,7 @@ de:
   global:
     "yes": "ja"
     "no": "nein"
+    unknown: unbekannt
 
     from: Von
     until: Bis

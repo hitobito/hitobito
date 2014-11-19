@@ -24,7 +24,7 @@ module I18nSettable
 
         normalized = value.to_s.strip.downcase
         possible_values.each do |v|
-          translated = I18n.t("#{i18n_prefix}.#{v.presence || 'default'}")
+          translated = I18n.t("#{i18n_prefix}.#{v.presence || '_nil'}")
           super(v) if translated.downcase == normalized
         end
 

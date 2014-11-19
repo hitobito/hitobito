@@ -73,8 +73,9 @@ class Person < ActiveRecord::Base
   include Contactable
   include DeviseOverrides
   include I18nSettable
+  include I18nEnums
 
-
+  i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
@@ -121,7 +122,6 @@ class Person < ActiveRecord::Base
 
   schema_validations except: [:email, :picture, :created_at, :updated_at]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
-  validates :gender, inclusion: GENDERS, allow_blank: true
   validates :company_name, presence: { if: :company? }
   validates :birthday, timeliness: { type: :date, allow_blank: true }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
@@ -210,10 +210,6 @@ class Person < ActiveRecord::Base
 
   def female?
     gender == 'w'
-  end
-
-  def gender_label(key = gender)
-    I18n.t("activerecord.attributes.person.genders.#{key.presence || 'default'}")
   end
 
   def default_group_id

@@ -43,7 +43,9 @@ class RolesController < CrudController
 
   def details
     @group = find_group
-    @type = @group.class.find_role_type!(model_params[:type]) if model_params[:type].present?
+    if model_params && model_params[:type].present?
+      @type = @group.class.find_role_type!(model_params[:type])
+    end
   end
 
   def role_types

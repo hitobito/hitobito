@@ -60,6 +60,6 @@ class PeopleFiltersController < CrudController
   end
 
   def permitted_params
-    model_params.permit(permitted_attrs)
+    model_params ? model_params.permit(permitted_attrs) : {}
   end
 end

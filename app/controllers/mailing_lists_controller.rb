@@ -19,6 +19,7 @@ class MailingListsController < CrudController
 
   def show
     @mailing_list = entry
+    respond_with(@mailing_list)
   end
 
   private

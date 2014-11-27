@@ -1,0 +1,25 @@
+# Configuration:
+# 
+# disabled
+#   false if tracking tag should be shown
+# use_async
+#   Set to true if you want to use asynchronous tracking
+# url
+#   The url of your piwik instance (e.g. localhost/piwik/
+# id_site
+#   The id of your website inside Piwik
+#
+production:
+  piwik:
+    id_site: <%= ENV['RAILS_PIWIK_SITE_ID'].to_i %>
+    url: <%= ENV['RAILS_PIWIK_URL'] %>
+    disabled: <%= ENV['RAILS_PIWIK_URL'].blank? %>
+    use_async: false
+
+development:
+  piwik:
+    disabled: true
+
+test:
+  piwik:
+    disabled: true

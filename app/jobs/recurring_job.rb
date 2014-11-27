@@ -30,7 +30,9 @@ class RecurringJob < BaseJob
 
   # Enqueue delayed job if it is not enqueued already
   def schedule
-    reschedule unless scheduled?
+    Delayed::Job.transaction do
+      reschedule unless scheduled?
+    end
   end
 
   # Is this job enqueued in delayed job?

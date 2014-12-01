@@ -138,6 +138,7 @@ describe MailRelay::Lists do
         last_email.body.should =~ /nicht berechtigt/
       end
     end
+
   end
 
   context 'excluded person' do
@@ -197,6 +198,33 @@ describe MailRelay::Lists do
     its(:sender_email) { should == from }
 
     it 'does not relay' do
+      expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+    end
+  end
+
+  context 'empty reply to' do
+
+    let(:message) do
+      message = <<-END
+        Return-Path: <d.k@autoreply.example.com>
+        From: d.k@autoreply.example.com
+        Reply-To: <>
+        To: \"hitobito\" <noreply@hitobito.ch>
+
+        Hallo
+        Vielen Dank f=FCr ihre Interesse.
+      END
+
+      mail = Mail.new(message)
+      mail.header['X-Envelope-To'] = envelope_to
+      mail
+    end
+
+    let(:from) { '<>' }
+
+    it { should_not be_sender_allowed }
+
+    it 'rejects without email' do
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
     end
   end

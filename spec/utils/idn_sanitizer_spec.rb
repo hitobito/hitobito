@@ -21,6 +21,10 @@ describe IdnSanitizer do
     IdnSanitizer.sanitize('foo@example.com').should eq('foo@example.com')
   end
 
+  it 'sanitizes empty email' do
+    IdnSanitizer.sanitize(' ').should eq(' ')
+  end
+
   it 'sanitizes regular email with name' do
     IdnSanitizer.sanitize('Mr. Foo <foo@example.com>').should eq('Mr. Foo <foo@example.com>')
   end

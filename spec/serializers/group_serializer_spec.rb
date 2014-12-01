@@ -24,4 +24,11 @@ describe GroupSerializer do
     links[:layer_group].should eq(group.parent_id.to_s)
     links[:hierarchies].should have(2).items
   end
+
+  it 'does not include deleted children' do
+    a = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
+    b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group, deleted_at: 1.month.ago)
+
+    subject[:links][:children].should have(1).item
+  end
 end

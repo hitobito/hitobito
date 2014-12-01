@@ -40,7 +40,7 @@ class GroupSerializer < ApplicationSerializer
     entity :parent, item.parent, GroupLinkSerializer
     entity :layer_group, item.layer_group, GroupLinkSerializer
     entities :hierarchy, item.hierarchy, GroupLinkSerializer
-    entities :children, item.children, GroupLinkSerializer
+    entities :children, item.children.without_deleted.order(:lft), GroupLinkSerializer
 
     group_template_link 'groups.parent'
     group_template_link 'groups.layer_group'

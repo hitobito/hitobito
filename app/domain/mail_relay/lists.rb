@@ -36,8 +36,10 @@ module MailRelay
     end
 
     # If the email sender was not allowed to post messages, this method is called.
+    # Do not send reject emails to blank recipients nor for mails
+    # sent to the application (noreply) email address (to avoid daemon ping-pong).
     def reject_not_allowed
-      if sender_email.present?
+      if sender_email.present? && envelope_receiver_name != self.class.app_sender_name
         sender = "#{envelope_receiver_name}@#{mail_domain}"
         reply = message.reply do
           body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'

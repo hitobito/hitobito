@@ -245,6 +245,20 @@ describe MailRelay::Lists do
     end
   end
 
+  context 'emails to app sender' do
+    let(:from) { 'deamon@example.com' }
+
+    let(:envelope_to) { MailRelay::Lists.app_sender_name }
+
+    before { Fabricate(:mailing_list, group: list.group, mail_name: MailRelay::Lists.app_sender_name) }
+
+    its(:sender_email) { should == from }
+
+    it 'does not reject messages' do
+      expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+    end
+  end
+
   context 'non existing list' do
     let(:from) { people(:top_leader).email }
     let(:envelope_to) { 'foo' }

@@ -17,7 +17,7 @@ module IdnSanitizer
   end
 
   def sanitize_idn(email)
-    if email =~ /[^\w@\.\-]/ # simple regexp to skip most unaffected addresses
+    if email.strip =~ /[^\w@\.\-]/ # simple regexp to skip most unaffected addresses
       parts = email.strip.split('@')
       domain = parts.last
       suffix = ''

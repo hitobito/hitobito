@@ -43,7 +43,7 @@ module MailRelay
           body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
           from sender
         end
-        deliver(reply)
+        deliver(reply) unless ['', '<>'].include?(reply.to.to_s.strip)
       end
     end
 

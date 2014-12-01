@@ -10,6 +10,6 @@
             method: :put,
             cancel_url: register_group_event_path(group, event),
             buttons_bottom: true) do |f|
-  = render 'people/fields', f: f
+  = render 'people/fields', f: f, without_relations: true
 
   = f.honeypot

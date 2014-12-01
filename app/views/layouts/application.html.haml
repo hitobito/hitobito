@@ -92,3 +92,4 @@
   = javascript_include_tag 'application'
   = yield(:js_includes)
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)
+  = piwik_tracking_tag

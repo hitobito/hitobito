@@ -24,7 +24,6 @@ module Export::Pdf
       def customize(pdf)
         pdf.font_size 9
         pdf
-
       end
 
       def sections

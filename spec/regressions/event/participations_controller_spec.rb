@@ -124,11 +124,8 @@ describe Event::ParticipationsController, type: :controller do
   end
 
   describe 'GET print' do
-    subject { response.body }
     let(:person) { Fabricate(:person_with_address) }
     let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) }
-
-    let(:dom) { Capybara::Node::Simple.new(response.body) }
 
     before do
       test_entry.event.update_attribute(:contact, person)

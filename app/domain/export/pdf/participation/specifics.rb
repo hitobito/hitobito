@@ -13,7 +13,7 @@ module Export::Pdf::Participation
 
       first_page_section do
         if data.present?
-          heading { text t('event.participations.specific_information'), style: :bold }
+          heading { text I18n.t('event.participations.specific_information'), style: :bold }
           table(data, cell_style: { border_width: 0, padding: 2 })
           move_down_line
         end
@@ -33,7 +33,7 @@ module Export::Pdf::Participation
     end
 
     def additional_information_label
-      t('activerecord.attributes.event/participation.additional_information')
+      I18n.t('activerecord.attributes.event/participation.additional_information')
     end
   end
 end

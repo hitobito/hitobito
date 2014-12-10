@@ -44,11 +44,18 @@ describe Group do
   context 'alphabetic order' do
     context 'on insert' do
       it 'at the beginning' do
+        updated = 2.days.ago.to_date
+        Group.update_all(updated_at: updated)
+        groups(:top_layer).reload.updated_at.to_date.should eq(updated)
         parent = groups(:top_layer)
         group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
         group.save!
         groups(:top_layer).children.order(:lft).collect(&:name).should eq [
           'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
+        # :updated_at should not change, tests patch from config/awesome_nested_set_patch.rb
+        groups(:top_layer).reload.updated_at.to_date.should eq(updated)
+        groups(:bottom_layer_one).reload.updated_at.to_date.should eq(updated)
+        groups(:bottom_layer_two).reload.updated_at.to_date.should eq(updated)
       end
 
       it 'at the beginning with same name' do

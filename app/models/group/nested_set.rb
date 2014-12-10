@@ -73,6 +73,10 @@ module Group::NestedSet
           order(:lft)
   end
 
+  def no_touch_on_move
+    true
+  end
+
   private
 
   def store_new_name

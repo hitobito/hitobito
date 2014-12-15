@@ -39,14 +39,17 @@ describe Import::Person do
     end
   end
 
-  context 'extract phone numbers' do
+  context 'extract contact accounts' do
     let(:data) do
       { first_name: 'foo',
         social_account_skype: 'foobar',
         phone_number_vater: '0123',
         additional_email_mutter: 'mutter@example.com' }
     end
-    subject { Import::Person.new(data, {}).person }
+    let(:person) { Person.new }
+    before { Import::Person.new(person, data).populate }
+
+    subject { person }
 
     its(:first_name) { should eq 'foo' }
     its('phone_numbers.first') { should be_present }
@@ -62,61 +65,158 @@ describe Import::Person do
     its('additional_emails.first.email') { should eq 'mutter@example.com' }
   end
 
-  context 'keep existing contact accounts' do
-    before do
-      p = Fabricate(:person, email: 'foo@example.com')
-      p.phone_numbers.create!(number: '123', label: 'Privat')
-      p.phone_numbers.create!(number: '456', label: 'Mobil')
-      p.social_accounts.create!(name: 'foo', label: 'Skype')
-      p.social_accounts.create!(name: 'foo', label: 'MSN')
-      p.additional_emails.create!(email: 'foo@example.com', label: 'Mutter')
-      p.additional_emails.create!(email: 'bar@example.com', label: 'Vater')
+  context 'with keep behaviour' do
+
+    before { Import::Person.new(person, data, false).populate }
+
+    subject { person }
+
+    context 'keeps existing attributes' do
+      let(:person) do
+        Fabricate(:person, email: 'foo@example.com', first_name: 'Peter', last_name: 'Muster')
+      end
+
+      let(:data) do
+         { first_name: 'foo',
+           last_name: '',
+           email: 'foo@example.com',
+           town: 'Bern',
+           birthday: '-' }
+      end
+
+      its('first_name') { should eq 'Peter' }
+      its('last_name') { should eq 'Muster' }
+      its('town') { should eq 'Bern' }
+      its('address') { should be_nil }
+      its('birthday') { should be_nil }
     end
 
-    let(:data) do
-       { first_name: 'foo',
-         email: 'foo@example.com',
-         social_account_skype: 'foo',
-         social_account_msn: 'bar',
-         phone_number_mobil: '123',
-         additional_email_mutter: 'bar@example.com',
-         additional_email_privat: 'privat@example.com' }
+    context 'keep existing contact accounts' do
+      let(:person) do
+        p = Fabricate(:person, email: 'foo@example.com')
+        p.phone_numbers.create!(number: '123', label: 'Privat')
+        p.phone_numbers.create!(number: '456', label: 'Mobil')
+        p.social_accounts.create!(name: 'foo', label: 'Skype')
+        p.social_accounts.create!(name: 'foo', label: 'MSN')
+        p.additional_emails.create!(email: 'foo@example.com', label: 'Mutter')
+        p.additional_emails.create!(email: 'bar@example.com', label: 'Vater')
+        p
+      end
+
+      let(:data) do
+         { first_name: 'foo',
+           email: 'foo@example.com',
+           social_account_skype: 'foo',
+           social_account_msn: 'bar',
+           phone_number_mobil: '789',
+           additional_email_mutter: 'bar@example.com',
+           additional_email_privat: 'privat@example.com' }
+      end
+
+      its('phone_numbers.first.label') { should eq 'Privat' }
+      its('phone_numbers.first.number') { should eq '123' }
+      its('phone_numbers.second.label') { should eq 'Mobil' }
+      its('phone_numbers.second.number') { should eq '456' }
+
+      its('social_accounts.first.label') { should eq 'Skype' }
+      its('social_accounts.first.name') { should eq 'foo' }
+      its('social_accounts.second.label') { should eq 'MSN' }
+      its('social_accounts.second.name') { should eq 'foo' }
+      its('social_accounts.third.label') { should eq 'Msn' }
+      its('social_accounts.third.name') { should eq 'bar' }
+
+      its('additional_emails.first.label') { should eq 'Mutter' }
+      its('additional_emails.first.email') { should eq 'foo@example.com' }
+      its('additional_emails.second.label') { should eq 'Vater' }
+      its('additional_emails.second.email') { should eq 'bar@example.com' }
+      its('additional_emails.third.label') { should eq 'Privat' }
+      its('additional_emails.third.email') { should eq 'privat@example.com' }
     end
 
-    subject { Import::Person.new(data, {}).person }
-
-    its('phone_numbers.first.label') { should eq 'Privat' }
-    its('phone_numbers.first.number') { should eq '123' }
-    its('phone_numbers.second.label') { should eq 'Mobil' }
-    its('phone_numbers.second.number') { should eq '456' }
-
-    its('social_accounts.first.label') { should eq 'Skype' }
-    its('social_accounts.first.name') { should eq 'foo' }
-    its('social_accounts.second.label') { should eq 'MSN' }
-    its('social_accounts.second.name') { should eq 'foo' }
-    its('social_accounts.third.label') { should eq 'Msn' }
-    its('social_accounts.third.name') { should eq 'bar' }
-
-    its('additional_emails.first.label') { should eq 'Mutter' }
-    its('additional_emails.first.email') { should eq 'foo@example.com' }
-    its('additional_emails.second.label') { should eq 'Vater' }
-    its('additional_emails.second.email') { should eq 'bar@example.com' }
-    its('additional_emails.third.label') { should eq 'Privat' }
-    its('additional_emails.third.email') { should eq 'privat@example.com' }
   end
 
+  context 'with override behaviour' do
+
+    before { Import::Person.new(person, data, true).populate }
+
+    subject { person }
+
+    context 'overrides existing attributes' do
+      let(:person) do
+        Fabricate(:person,
+                  email: 'foo@example.com',
+                  first_name: 'Peter',
+                  last_name: 'Muster',
+                  address: 'EP 4')
+      end
+
+      let(:data) do
+         { first_name: 'foo',
+           last_name: '',
+           email: 'foo@example.com',
+           town: 'Bern' }
+      end
+
+      its('first_name') { should eq 'foo' }
+      its('last_name') { should eq '' }
+      its('town') { should eq 'Bern' }
+      its('address') { should eq 'EP 4' }
+    end
+
+    context 'overrides existing contact accounts' do
+      let(:person) do
+        p = Fabricate(:person, email: 'foo@example.com')
+        p.phone_numbers.create!(number: '123', label: 'Privat')
+        p.phone_numbers.create!(number: '456', label: 'Mobil')
+        p.social_accounts.create!(name: 'foo', label: 'Skype')
+        p.social_accounts.create!(name: 'foo', label: 'MSN')
+        p.additional_emails.create!(email: 'foo@example.com', label: 'Mutter')
+        p.additional_emails.create!(email: 'bar@example.com', label: 'Vater')
+        p
+      end
+
+      let(:data) do
+         { first_name: 'foo',
+           email: 'foo@example.com',
+           social_account_skype: 'foo',
+           social_account_msn: 'bar',
+           phone_number_mobil: '789',
+           additional_email_mutter: 'bar@example.com',
+           additional_email_privat: 'privat@example.com' }
+      end
+
+      its('phone_numbers.first.label') { should eq 'Privat' }
+      its('phone_numbers.first.number') { should eq '123' }
+      its('phone_numbers.second.label') { should eq 'Mobil' }
+      its('phone_numbers.second.number') { should eq '789' }
+
+      its('social_accounts.first.label') { should eq 'Skype' }
+      its('social_accounts.first.name') { should eq 'foo' }
+      its('social_accounts.second.label') { should eq 'MSN' }
+      its('social_accounts.second.name') { should eq 'foo' }
+      its('social_accounts.third.label') { should eq 'Msn' }
+      its('social_accounts.third.name') { should eq 'bar' }
+
+      its('additional_emails.first.label') { should eq 'Mutter' }
+      its('additional_emails.first.email') { should eq 'bar@example.com' }
+      its('additional_emails.second.label') { should eq 'Vater' }
+      its('additional_emails.second.email') { should eq 'bar@example.com' }
+      its('additional_emails.third.label') { should eq 'Privat' }
+      its('additional_emails.third.email') { should eq 'privat@example.com' }
+    end
+
+
+  end
 
   context 'can assign mass assigned attributes' do
-    let(:data) { 'all attributes - blacklist' }
     let(:person) { Fabricate(:person) }
 
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
       public_attributes.size.should eq 15
-      expect { Import::Person.new(public_attributes, {}).person }.not_to raise_error
+      expect { Import::Person.new(person, public_attributes).populate }.not_to raise_error
     end
   end
-
 
   context 'tracks emails' do
     let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com', 'foo@bar.com'] }
@@ -124,12 +224,15 @@ describe Import::Person do
     let!(:people) do
       emails_tracker = {}
       emails.map do |email|
-        person = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
-        Import::Person.new(person, emails_tracker)
+        person_attrs = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
+        import_person = Import::Person.new(Person.new, person_attrs)
+        import_person.populate
+        import_person.email_unique?(emails_tracker)
+        import_person
       end
     end
 
-    it 'validates uniquness of emails in currently imported person set' do
+    it 'validates uniqueness of emails in currently imported person set' do
       people.first.should be_valid
       people.second.should be_valid
       people.third.should be_valid

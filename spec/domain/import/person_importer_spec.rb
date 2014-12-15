@@ -114,13 +114,14 @@ describe Import::PersonImporter do
 
     context 'person loaded multiple times via doublette finder' do
       let(:attrs) { { email: 'foo@bar.net', nickname: '', last_name: '' } }
-      let(:data) do [{ email: 'foo@bar.net', nickname: 'nickname', social_account_msn: 'msn' },
-                     { email: 'foo@bar.net', last_name: 'last_name', social_account_skype: 'skype' }] end
+      let(:data) do [{ email: 'foo@bar.net', nickname: 'nickname', town: 'Bern', social_account_msn: 'msn' },
+                     { email: 'foo@bar.net', last_name: 'last_name', town: 'Muri', social_account_skype: 'skype' }] end
 
       before { importer.import }
       its('roles.size') { should eq 1 }
       its(:nickname) { should eq 'nickname' }
       its(:last_name) { should eq 'last_name' }
+      its(:town) { should eq 'Bern' }
       its('social_accounts.size') { should eq 2 }
     end
   end
@@ -189,6 +190,5 @@ describe Import::PersonImporter do
       end
     end
   end
-
 
 end

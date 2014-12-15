@@ -154,7 +154,7 @@ class CsvImportsController < ApplicationController
 
   def map_headers_and_import
     data = parser.map_data(field_mappings)
-    @importer = Import::PersonImporter.new(data, group, role_type)
+    @importer = Import::PersonImporter.new(data, group, role_type, override_behaviour)
   end
 
   def redirect_params
@@ -164,6 +164,10 @@ class CsvImportsController < ApplicationController
 
   def role_type
     @role_type ||= group.class.find_role_type!(params[:role_type])
+  end
+
+  def override_behaviour
+    params[:update_behaviour] == 'override'
   end
 
   def file_param

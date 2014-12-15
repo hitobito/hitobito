@@ -140,6 +140,10 @@ de:
       column_from_csv: 'Spalte aus CSV'
       field_in_database: 'Feld in der Datenbank'
       preview: 'Vorschau'
+      update_behaviour: Aktualisierungsverhalten
+      keep_behaviour: 'Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren, bestehende Werte bleiben erhalten.'
+      override_behaviour: 'Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben. Leere Werte im CSV löschen dabei bestehende in der Datenbank.'
+      update_behaviour_explanation: 'Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen. Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.'
 
     new:
       upload_button: 'Hochladen'

@@ -9,22 +9,19 @@ module Import
   class PersonImporter
     include Translatable
 
-    attr_reader :data, :role_type, :group, :errors, :doublettes,
-                :failure_count, :new_count, :doublette_count
+    attr_reader :data, :role_type, :group, :override,
+                :failure_count, :new_count, :errors
 
 
-    def initialize(data, group, role_type)
+    def initialize(data, group, role_type, override = false)
       @data = data
       @group = group
       @role_type = role_type
-      @errors = []
+      @override = override
+      @imported_emails = {}
       @failure_count = 0
       @new_count = 0
-      @doublettes = {}
-    end
-
-    def people
-      @people ||= populate_people
+      @errors = []
     end
 
     def import
@@ -32,84 +29,56 @@ module Import
       !save_results.include?(false)
     end
 
+    def people
+      @people ||= populate_people
+    end
+
     def human_name(args = {})
       "#{::Person.model_name.human(args)} (#{human_role_name})"
     end
 
     def human_role_name
-      @role_name ||= @role_type.label
+      @role_type.label
     end
 
     def doublette_count
-      doublettes.keys.count
+      doublette_finder.doublette_count
     end
 
     private
 
     def populate_people
-      data.each_with_index.map { |attributes, index| populate_person(attributes, index) }
+      data.each_with_index.map do |attributes, index|
+        populate_person(attributes, index)
+      end
     end
 
     def populate_person(attributes, index)
-      person = Import::Person.new(attributes, unique_emails)
-      person.add_role(group, role_type)
+      person = doublette_finder.find(attributes) || ::Person.new
 
-      validate_person(person, index) do
-        handle_imported_person(person)
-      end
+      import_person = Import::Person.new(person, attributes, override)
+      import_person.populate
+      import_person.add_role(group, role_type)
+
+      count_person(import_person, index)
+      import_person
     end
 
-    def validate_person(person, index)
-      if valid?(person)
-        yield
+    def count_person(import_person, index)
+      if valid?(import_person)
+        @new_count += 1 if import_person.new_record?
       else
         @failure_count += 1
-        errors << translate(:row_with_error, row: index + 1, errors: person.human_errors)
-        person
+        @errors << translate(:row_with_error, row: index + 1, errors: import_person.human_errors)
       end
     end
 
-    def handle_imported_person(person)
-      if person.persisted?
-        handle_potential_dublette(person)
-        doublettes[person.id]
-      else
-        @new_count += 1
-        person
-      end
+    def valid?(import_person)
+      import_person.valid? && import_person.email_unique?(@imported_emails)
     end
 
-    def handle_potential_dublette(import_person)
-      if !doublettes.key?(import_person.id)
-        doublettes[import_person.id] = import_person
-      else
-        consolidate_doublette(import_person)
-      end
-    end
-
-    def consolidate_doublette(import_person)
-      unified_import_person = doublettes[import_person.id]
-      person = unified_import_person.person
-
-      blank_attrs = import_person.attributes.select { |key, _value| person.attributes[key].blank? }
-      person.attributes = blank_attrs
-
-      person.phone_numbers << import_person.person.phone_numbers
-      person.social_accounts << import_person.person.social_accounts
-    end
-
-    # we ignore duplicate emails for persisted people, they are handle by doublettes
-    def valid?(person)
-      # DoubletteFinder in Person populates errors,
-      # still check if initialized person is valid
-      person.errors.empty? &&
-      ((person.persisted? && person.person.valid?) ||
-       person.valid?)
-    end
-
-    # used by Import::Person to check if emails are unique
-    def unique_emails
-      @unique_emails ||= {}
+    def doublette_finder
+      @doublette_finder ||= PersonDoubletteFinder.new
     end
 
   end

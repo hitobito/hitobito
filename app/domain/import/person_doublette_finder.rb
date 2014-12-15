@@ -25,7 +25,7 @@ module Import
     end
 
     def find(attrs)
-      people = duplicates(attrs.with_indifferent_access)
+      people = duplicates(attrs)
       if people.present?
         person = people.first
         if people.size == 1

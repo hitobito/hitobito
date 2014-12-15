@@ -90,7 +90,7 @@ module Import
     private
 
     def prepare(attributes)
-      @attributes = attributes.with_indifferent_access
+      @attributes = attributes
       @additional_emails = extract_contact_fields(AdditionalEmail)
       @phone_numbers = extract_contact_fields(PhoneNumber)
       @social_accounts = extract_contact_fields(SocialAccount)

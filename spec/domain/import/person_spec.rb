@@ -47,7 +47,7 @@ describe Import::Person do
         additional_email_mutter: 'mutter@example.com' }
     end
     let(:person) { Person.new }
-    before { Import::Person.new(person, data).populate }
+    before { Import::Person.new(person, data.with_indifferent_access).populate }
 
     subject { person }
 
@@ -67,7 +67,7 @@ describe Import::Person do
 
   context 'with keep behaviour' do
 
-    before { Import::Person.new(person, data, false).populate }
+    before { Import::Person.new(person, data.with_indifferent_access, false).populate }
 
     subject { person }
 
@@ -137,7 +137,7 @@ describe Import::Person do
 
   context 'with override behaviour' do
 
-    before { Import::Person.new(person, data, true).populate }
+    before { Import::Person.new(person, data.with_indifferent_access, true).populate }
 
     subject { person }
 
@@ -204,7 +204,6 @@ describe Import::Person do
       its('additional_emails.third.label') { should eq 'Privat' }
       its('additional_emails.third.email') { should eq 'privat@example.com' }
     end
-
 
   end
 

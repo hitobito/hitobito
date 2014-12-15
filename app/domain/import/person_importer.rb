@@ -49,7 +49,7 @@ module Import
 
     def populate_people
       data.each_with_index.map do |attributes, index|
-        populate_person(attributes, index)
+        populate_person(attributes.with_indifferent_access, index)
       end
     end
 

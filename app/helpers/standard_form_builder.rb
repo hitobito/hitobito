@@ -200,7 +200,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                         collection_prompt(attr, html_options),
                         html_options)
     else
-      help_inline(ta(:none_available, association(@object, attr)))
+      content_tag(:p, ta(:none_available, association(@object, attr)), class: 'text')
     end
   end
 

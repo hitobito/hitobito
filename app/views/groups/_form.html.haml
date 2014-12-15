@@ -10,7 +10,16 @@
 
   = field_set_tag do
     = f.labeled_input_fields(:name, :short_name)
-    = f.labeled_input_field(:contact_id, help_inline: t('.help_contact'))
+
+    = f.labeled(:contact_id) do
+      - if @contacts.present?
+        = f.select(:contact_id,
+                   @contacts.collect { |p| [p.to_s(:list), p.id] },
+                   { include_blank: ta(:no_entry) },
+                   class: 'span6')
+        = f.help_inline(t('.help_contact'))
+      - else
+        %p.text= ta(:none_available)
 
   = render 'contactable/fields', f: f
 

@@ -79,7 +79,7 @@ class GroupsController < CrudController
   end
 
   def load_contacts
-    @contacts = entry.people.members.only_public_data.order_by_name
+    @contacts = entry.people.members.distinct.only_public_data.order_by_name
   end
 
   def active_sub_groups

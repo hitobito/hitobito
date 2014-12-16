@@ -229,7 +229,7 @@ de:
            von einem über alle diese Rollen übergeordneten Benutzer geändert werden.
 
     fields:
-      format_birthday: (dd.mm.yy)
+      format_birthday: (dd.mm.yyyy)
       no_sensitive_information: ''
 
     log:

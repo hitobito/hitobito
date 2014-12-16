@@ -334,7 +334,6 @@ rm -f %{appdir}/tmp/stop.txt
 
 
 %changelog
-# veni 
-# vidi 
+# veni
+# vidi
 # vici
-

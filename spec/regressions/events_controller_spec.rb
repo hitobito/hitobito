@@ -45,12 +45,17 @@ describe EventsController, type: :controller do
 
     it 'renders button to add new events' do
       get :index, group_id: group.id
-      dom.find('.btn-toolbar .btn').text.should include 'Anlass erstellen'
+      dom.all('.btn-toolbar .btn')[0].text.should include 'Anlass erstellen'
     end
 
     it 'renders button to add new courses' do
       get :index, group_id: group.id, type: 'Event::Course'
-      dom.find('.btn-toolbar .btn').text.should include 'Kurs erstellen'
+      dom.all('.btn-toolbar .btn')[0].text.should include 'Kurs erstellen'
+    end
+
+    it 'renders button to export courses' do
+      get :index, group_id: group.id, type: 'Event::Course'
+      dom.all('.btn-toolbar .btn')[1].text.should include 'CSV Export'
     end
 
     it 'lists entries for current year' do

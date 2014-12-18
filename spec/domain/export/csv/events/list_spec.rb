@@ -125,11 +125,11 @@ describe Export::Csv::Events::List do
 
       before do
         Fabricate(:event_participation, event: course1, active: true,
-                  roles: [Fabricate(:event_role, type: Event::Role::Leader.name)])
+                  roles: [Fabricate(:event_role, type: Event::Role::Leader.sti_name)])
         Fabricate(:event_participation, event: course1, active: true,
-                  roles: [Fabricate(:event_role, type: Event::Role::Participant.name)])
+                  roles: [Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name)])
         Fabricate(:event_participation, event: course1, active: false,
-                  roles: [Fabricate(:event_role, type: Event::Role::Participant.name)])
+                  roles: [Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name)])
         course1.refresh_participant_counts!
         course2.refresh_participant_counts!
       end

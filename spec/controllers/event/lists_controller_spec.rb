@@ -86,7 +86,7 @@ describe Event::ListsController do
         controller.stub(current_user: people(:root))
         get :courses, format: :csv
         response.should be_success
-        rows.first.should match(/^Organisatoren;Kursnummer;Kursart;.*Hauptleitung Telefonnummern$/)
+        rows.first.should match(/^Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/)
         rows.should have(2).rows
       end
     end

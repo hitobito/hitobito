@@ -42,6 +42,8 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:update, :reactivate).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
 
+    permission(:layer_and_below_read).may(:export_events).in_same_layer_or_below
+
     general(:update).group_not_deleted
   end
 

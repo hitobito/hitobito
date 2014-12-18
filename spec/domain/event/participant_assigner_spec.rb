@@ -128,32 +128,32 @@ describe Event::ParticipantAssigner do
       end
     end
 
-    describe 'event#representative_participant_count' do
+    describe 'event#applicant_count' do
 
       before do
         participation
-        assert_representative_participant_count(1, 0)
+        assert_applicant_count(1, 0)
       end
 
       it 'changes when participant role is created and destroyed in priority_2 event' do
         assigner2.add_participant
-        assert_representative_participant_count(0, 1)
+        assert_applicant_count(0, 1)
 
         assigner2.remove_participant
-        assert_representative_participant_count(1, 0)
+        assert_applicant_count(1, 0)
       end
 
       it 'does not change when participant role is created and destroyed in priority_1 event' do
         assigner1.add_participant
-        assert_representative_participant_count(1, 0)
+        assert_applicant_count(1, 0)
 
         assigner1.remove_participant
-        assert_representative_participant_count(1, 0)
+        assert_applicant_count(1, 0)
       end
 
-      def assert_representative_participant_count(count1, count2)
-        event1.reload.representative_participant_count.should eq count1
-        event2.reload.representative_participant_count.should eq count2
+      def assert_applicant_count(count1, count2)
+        event1.reload.applicant_count.should eq count1
+        event2.reload.applicant_count.should eq count2
       end
 
     end

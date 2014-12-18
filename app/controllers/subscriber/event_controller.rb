@@ -37,7 +37,8 @@ module Subscriber
 
     def possible_events
       Event.joins(:groups).
-            since(start_of_last_year).
+            joins(:dates).
+            where('event_dates.start_at >= ?', start_of_last_year).
             where(groups: { id: @group.sister_groups_with_descendants })
     end
 

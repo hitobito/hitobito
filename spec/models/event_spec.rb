@@ -203,24 +203,6 @@ describe Event do
 
   context 'finders' do
 
-    context '.since' do
-      let(:since) { Time.zone.parse('2013-01-10 14:24:21') }
-
-      let!(:yesterday) { event_with_date(since - 1.day) }
-      let!(:tomorrow) { event_with_date(since + 1.day) }
-
-      subject { Event.since(since) }
-
-      it { should include tomorrow }
-      it { should_not include yesterday }
-
-      def event_with_date(start_at)
-        event = Fabricate(:event)
-        event.dates.first.update_attribute(:start_at, start_at)
-        event
-      end
-    end
-
     context '.in_year' do
       context 'one date' do
         before { set_start_finish(event, '2000-01-02') }

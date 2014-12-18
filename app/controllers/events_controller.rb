@@ -31,6 +31,13 @@ class EventsController < CrudController
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
+  def index
+    respond_to do |format|
+      format.html  { entries }
+      format.csv   { render_csv(entries) }
+    end
+  end
+
   def new
     assign_attributes if model_params
     entry.dates.build
@@ -87,6 +94,10 @@ class EventsController < CrudController
     end
   end
 
+  def render_csv(entries)
+    send_data ::Export::Csv::Events::List.export(entries.includes(:course_record)), type: :csv
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
@@ -98,7 +109,11 @@ class EventsController < CrudController
   end
 
   def authorize_class
-    authorize!(:index_events, group)
+    if request.format.csv?
+      authorize!(:export_events, group)
+    else
+      authorize!(:index_events, group)
+    end
   end
 
 end

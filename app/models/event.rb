@@ -44,6 +44,8 @@ class Event < ActiveRecord::Base
   require_dependency 'event/role_decorator'
   require_dependency 'event/role_ability'
 
+  include Event::Participatable
+
   ### ATTRIBUTES
 
   class_attribute :used_attributes,
@@ -112,17 +114,29 @@ class Event < ActiveRecord::Base
   ### CLASS METHODS
 
   class << self
+
+    # Default scope for event lists
+    def list
+      order_by_date.
+      includes(:groups, :kind).
+      preload_all_dates.
+      uniq
+    end
+
+    def preload_all_dates
+      all.extending(Event::PreloadAllDates)
+    end
+
+    def order_by_date
+      joins(:dates).order('event_dates.start_at')
+    end
+
     # Events with at least one date in the given year
     def in_year(year)
       year = ::Date.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
-    end
-
-    # Events with a start_at greater than argument
-    def since(datetime)
-      joins(:dates).where('event_dates.start_at >= ?', datetime)
     end
 
     # Events from groups in the hierarchy of the given user.
@@ -149,22 +163,6 @@ class Event < ActiveRecord::Base
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
       where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
-    end
-
-    def preload_all_dates
-      all.extending(Event::PreloadAllDates)
-    end
-
-    def order_by_date
-      joins(:dates).order('event_dates.start_at')
-    end
-
-    # Default scope for event lists
-    def list
-      order_by_date.
-      includes(:groups, :kind).
-      preload_all_dates.
-      uniq
     end
 
     # Is the given attribute used in the current STI class
@@ -233,64 +231,15 @@ class Event < ActiveRecord::Base
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 
-  def refresh_participant_counts!
-    update_column(:participant_count, count_active_participants)
-    update_column(:representative_participant_count, count_representative_participants)
-  end
-
   def init_questions
     # do nothing by default
-  end
-
-  def participations_for(*role_types)
-    participations.active.
-                   joins(:roles).
-                   where(event_roles: { type: role_types.map(&:sti_name) }).
-                   includes(:person).
-                   references(:person).
-                   order_by_role(self.class).
-                   merge(Person.order_by_name).
-                   uniq
-  end
-
-  # gets a list of all user defined participation role labels for this event
-  def participation_role_labels
-    @participation_role_labels ||=
-      Event::Role.joins(:participation).
-                  where('event_participations.event_id = ?', id).
-                  where('event_roles.label <> ""').
-                  uniq.order(:label).
-                  pluck(:label)
   end
 
   def course_kind?
     kind_class == Event::Kind && kind.present?
   end
 
-  def participant_types
-    self.class.participant_types
-  end
-
   private
-
-  # Sum all assigned participations (no leaders)
-  def count_active_participants
-    participations.active.
-                   joins(:roles).
-                   where(event_roles: { type: participant_types.collect(&:sti_name) }).
-                   distinct.
-                   count
-  end
-
-  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1
-  def count_representative_participants
-    participations.
-      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
-      where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',
-            participant_types.collect(&:sti_name)).
-      distinct.
-      count
-  end
 
   def assert_type_is_allowed_for_groups
     if groups.present?

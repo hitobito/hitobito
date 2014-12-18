@@ -233,6 +233,9 @@ de:
         booking_info: Anmeldungen
         questions: Fragen
         kind_id: Art
+        teamer_count: Anzahl Leitungsteam
+        participant_count: Anzahl Teilnehmende
+        applicant_count: Anzahl Anmeldungen
 
       event/course:
         kind_id: Kursart

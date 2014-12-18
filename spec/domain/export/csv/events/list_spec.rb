@@ -25,7 +25,10 @@ describe Export::Csv::Events::List do
                  :contact_name, :contact_address, :contact_zip_code, :contact_town,
                  :contact_email, :contact_phone_numbers,
                  :leader_name, :leader_address, :leader_zip_code, :leader_town,
-                 :leader_email, :leader_phone_numbers]
+                 :leader_email, :leader_phone_numbers,
+                 :motto, :cost, :application_opening_at, :application_closing_at,
+                 :maximum_participants, :external_applications, :priorization,
+                 :teamer_count, :participant_count, :applicant_count]
     end
 
     its(:labels) do
@@ -36,7 +39,10 @@ describe Export::Csv::Events::List do
                  'Kontaktperson Name', 'Kontaktperson Adresse', 'Kontaktperson PLZ',
                  'Kontaktperson Ort', 'Kontaktperson Haupt-E-Mail', 'Kontaktperson Telefonnummern',
                  'Hauptleitung Name', 'Hauptleitung Adresse', 'Hauptleitung PLZ', 'Hauptleitung Ort',
-                 'Hauptleitung Haupt-E-Mail', 'Hauptleitung Telefonnummern']
+                 'Hauptleitung Haupt-E-Mail', 'Hauptleitung Telefonnummern',
+                 'Motto', 'Kosten', 'Anmeldebeginn', 'Anmeldeschluss', 'Maximale Teilnehmerzahl',
+                 'Externe Anmeldungen', 'Priorisierung', 'Anzahl Leitungsteam',
+                 'Anzahl Teilnehmende', 'Anzahl Anmeldungen']
     end
   end
 
@@ -48,7 +54,7 @@ describe Export::Csv::Events::List do
 
     context 'headers' do
       subject { csv.first }
-      it { should match(/^Organisatoren;Kursnummer;Kursart;.*Hauptleitung Telefonnummern$/) }
+      it { should match(/^Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
     end
 
     context 'first row' do
@@ -89,7 +95,7 @@ describe Export::Csv::Events::List do
         its([6]) { should eq 'Hauptanlass' }
         its([7]) { should eq 'somewhere' }
         its([8]) { should eq '09.06.2013 - 12.06.2013' }
-        its([9]) { should eq nil }
+        its([9]) { should eq '' }
       end
 
       context 'contact' do
@@ -107,6 +113,52 @@ describe Export::Csv::Events::List do
         its([21]) { should eq leader.to_s }
       end
     end
+
+    context 'additional course labels' do
+      let(:courses) { [course1, course2] }
+      let(:course1) do
+        Fabricate(:course, groups: [groups(:top_group)], motto: 'All for one', cost: 1000,
+                  application_opening_at: '01.01.2000', application_closing_at: '01.02.2000',
+                  maximum_participants: 10, external_applications: false, priorization: false)
+      end
+      let(:course2) { Fabricate(:course, groups: [groups(:top_group)]) }
+
+      before do
+        Fabricate(:event_participation, event: course1, active: true,
+                  roles: [Fabricate(:event_role, type: Event::Role::Leader.name)])
+        Fabricate(:event_participation, event: course1, active: true,
+                  roles: [Fabricate(:event_role, type: Event::Role::Participant.name)])
+        Fabricate(:event_participation, event: course1, active: false,
+                  roles: [Fabricate(:event_role, type: Event::Role::Participant.name)])
+        course1.refresh_participant_counts!
+        course2.refresh_participant_counts!
+      end
+
+      context 'first row' do
+        let(:row) { csv[0].split(';') }
+        it 'should contain contain the additional course fields' do
+          expect(row[27..-1]).to eq ['Motto', 'Kosten', 'Anmeldebeginn', 'Anmeldeschluss',
+                                     'Maximale Teilnehmerzahl', 'Externe Anmeldungen',
+                                     'Priorisierung', 'Anzahl Leitungsteam', 'Anzahl Teilnehmende',
+                                     'Anzahl Anmeldungen']
+        end
+      end
+
+      context 'second row' do
+        let(:row) { csv[1].split(';') }
+        it 'should contain contain the additional course and record fields' do
+          expect(row[27..-1]).to eq ['All for one', '1000', '2000-01-01', '2000-02-01', '10',
+                                     'nein', 'nein', '1', '1', '2']
+        end
+      end
+
+      context 'third row (course without record)' do
+        let(:row) { csv[2].split(';') }
+        it 'should contain the additional course fields' do
+          expect(row[27..-1]).to eq ['', '', '', '', '', 'nein', 'ja', '0', '0', '0']
+        end
+      end
+    end
   end
 
   context 'multiple courses' do
@@ -115,6 +167,5 @@ describe Export::Csv::Events::List do
     subject { Export::Csv::Generator.new(list).csv.split("\n") }
     it { should have(5).rows }
   end
-
 
 end

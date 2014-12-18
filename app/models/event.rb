@@ -234,8 +234,9 @@ class Event < ActiveRecord::Base
   end
 
   def refresh_participant_counts!
-    update_column(:participant_count, count_active_participants)
-    update_column(:representative_participant_count, count_representative_participants)
+    update_column(:teamer_count, count_teamers)
+    update_column(:participant_count, count_participants)
+    update_column(:applicant_count, count_applicants)
   end
 
   def init_questions
@@ -251,6 +252,16 @@ class Event < ActiveRecord::Base
                    order_by_role(self.class).
                    merge(Person.order_by_name).
                    uniq
+  end
+
+  def active_participations_without_affiliate_types
+    affiliate_types = role_types.reject(&:kind).collect(&:sti_name)
+    exclude_affiliate_types = affiliate_types.present? &&
+      ['event_roles.type NOT IN (?)', affiliate_types]
+
+    participations.active.
+                   joins(:roles).
+                   where(exclude_affiliate_types)
   end
 
   # gets a list of all user defined participation role labels for this event
@@ -273,8 +284,16 @@ class Event < ActiveRecord::Base
 
   private
 
-  # Sum all assigned participations (no leaders)
-  def count_active_participants
+  # Sum all members of the leading team (non-participants)
+  def count_teamers
+    active_participations_without_affiliate_types.
+                   where.not(event_roles: { type: participant_types.collect(&:sti_name) }).
+                   distinct.
+                   count
+  end
+
+  # Sum all assigned participations (no leaders/teamers)
+  def count_participants
     participations.active.
                    joins(:roles).
                    where(event_roles: { type: participant_types.collect(&:sti_name) }).
@@ -282,8 +301,8 @@ class Event < ActiveRecord::Base
                    count
   end
 
-  # Sum assigned participations (all prios, no leaders) and unassigned with prio 1
-  def count_representative_participants
+  # Sum assigned participations (all prios, no leaders/teamers) and unassigned with prio 1
+  def count_applicants
     participations.
       joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
       where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',

@@ -21,4 +21,11 @@ module GroupsHelper
     end
   end
 
+  def export_event_button
+    if can?(:export_events, @group)
+      action_button(I18n.t('event.lists.courses.csv_export_button'),
+                    params.merge(format: :csv), :download)
+    end
+  end
+
 end

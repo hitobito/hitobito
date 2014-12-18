@@ -21,6 +21,7 @@ module Export::Csv::Events
           .merge(date_labels)
           .merge(prefixed_contactable_labels(:contact))
           .merge(prefixed_contactable_labels(:leader))
+          .merge(additional_course_labels)
     end
 
     def course_labels
@@ -33,6 +34,19 @@ module Export::Csv::Events
 
       labels.delete(:kind) unless Event::Course.attr_used?(:kind_id)
       labels
+    end
+
+    def additional_course_labels
+      { motto: human_attribute(:motto),
+        cost: human_attribute(:cost),
+        application_opening_at: human_attribute(:application_opening_at),
+        application_closing_at: human_attribute(:application_closing_at),
+        maximum_participants: human_attribute(:maximum_participants),
+        external_applications: human_attribute(:external_applications),
+        priorization: human_attribute(:priorization),
+        teamer_count: human_attribute(:teamer_count),
+        participant_count: human_attribute(:participant_count),
+        applicant_count: human_attribute(:applicant_count) }
     end
 
     def date_labels

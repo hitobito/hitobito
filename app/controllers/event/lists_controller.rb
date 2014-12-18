@@ -17,13 +17,21 @@ class Event::ListsController < ApplicationController
 
 
   def events
+    # FIXME This authorize does nothing, as no ability is defined for :index Event.
+    #       Extend Ability DSL to allow definition of class wide abilities.
     authorize!(:index, Event)
 
     @grouped_events = grouped(upcoming_user_events)
   end
 
   def courses
-    authorize!(:index, Event::Course)
+    # FIXME This authorize does nothing, as no ability is defined for :index Event::Course
+    if request.format.csv?
+      authorize!(:export, Event)
+    else
+      authorize!(:index, Event::Course)
+    end
+
     set_group_vars
 
     grouped_courses = grouped(limited_courses_scope, course_grouping)
@@ -31,7 +39,7 @@ class Event::ListsController < ApplicationController
 
     respond_to do |format|
       format.html { @grouped_events }
-      format.csv  { render_courses_csv(@grouped_events.values.flatten) if can?(:export, Event) }
+      format.csv  { render_courses_csv(@grouped_events.values.flatten) }
     end
   end
 
@@ -40,7 +48,7 @@ class Event::ListsController < ApplicationController
   def grouped(scope, grouping = DEFAULT_GROUPING)
     EventDecorator.
       decorate_collection(scope).
-      group_by { |event| grouping.call(event) }
+      group_by(&grouping)
   end
 
   def sorted(courses)

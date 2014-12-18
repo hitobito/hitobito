@@ -49,19 +49,19 @@ describe EventAbility do
         should be_able_to(:index_participations, other)
       end
 
-      it 'may manage_courses' do
-        should be_able_to(:manage_courses, Event)
+      it 'may list all courses' do
+        should be_able_to(:list_all, Event::Course)
       end
 
-      it 'may export events' do
-        should be_able_to(:export, Event)
+      it 'may export course list' do
+        should be_able_to(:export_list, Event::Course)
       end
 
-      it 'may not manage courses if not in course layer' do
+      it 'may not list all courses if not in course layer' do
         Group::TopLayer.event_types.delete(Event::Course)
         Group.root_types(Group::TopLayer)
         begin
-          should_not be_able_to(:manage_courses, Event)
+          should_not be_able_to(:list_all, Event::Course)
         ensure
           Group::TopLayer.event_types << Event::Course
           Group.root_types(Group::TopLayer)
@@ -156,12 +156,12 @@ describe EventAbility do
         should_not be_able_to(:index_participations, other)
       end
 
-      it 'may manage courses' do
-        should be_able_to(:manage_courses, Event)
+      it 'may list all courses' do
+        should be_able_to(:list_all, Event::Course)
       end
 
-      it 'may not export events' do
-        should_not be_able_to(:export, Event)
+      it 'may not export course list' do
+        should_not be_able_to(:export_list, Event::Course)
       end
     end
 
@@ -229,8 +229,8 @@ describe EventAbility do
         should_not be_able_to(:index_participations, other)
       end
 
-      it 'may not manage courses' do
-        should_not be_able_to(:manage_courses, Event)
+      it 'may not list all courses' do
+        should_not be_able_to(:list_all, Event::Course)
       end
     end
 

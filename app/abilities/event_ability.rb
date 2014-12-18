@@ -10,9 +10,7 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
 
   on(Event) do
-    class_side(:index).everybody
-    class_side(:manage_courses).if_full_permission_in_course_layer
-    class_side(:export).if_admin
+    class_side(:list_available).everybody
 
     permission(:any).may(:show).all
     permission(:any).may(:index_participations).for_participations_read_events
@@ -33,7 +31,9 @@ class EventAbility < AbilityDsl::Base
   end
 
   on(Event::Course) do
-    class_side(:index).everybody
+    class_side(:list_available).everybody
+    class_side(:list_all).if_full_permission_in_course_layer
+    class_side(:export_list).if_admin
   end
 
   def for_qualify_event

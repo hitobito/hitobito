@@ -97,4 +97,8 @@ class EventsController < CrudController
     attrs + self.class.permitted_attrs
   end
 
+  def authorize_class
+    authorize!(:index_events, group)
+  end
+
 end

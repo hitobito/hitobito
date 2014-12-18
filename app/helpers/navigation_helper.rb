@@ -11,13 +11,14 @@ module NavigationHelper
     groups:  { url: :groups_path,
                active_for: %w(groups people) },
     events:  { url: :list_events_path,
-               active_for: %w(list_events) },
+               active_for: %w(list_events),
+               if: ->(_) { can?(:list_available, Event) } },
     courses: { url: :list_courses_path,
                active_for: %w(list_courses),
-               if: ->(_) { Group.course_types.present? } },
+               if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
     admin:   { url: :label_formats_path,
                active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
-               if: ->(_) { can?(:manage, LabelFormat) } }
+               if: ->(_) { can?(:index, LabelFormat) } }
   }
 
 

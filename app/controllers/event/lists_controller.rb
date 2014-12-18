@@ -17,16 +17,16 @@ class Event::ListsController < ApplicationController
 
 
   def events
-    authorize!(:index, Event)
+    authorize!(:list_available, Event)
 
     @grouped_events = grouped(upcoming_user_events)
   end
 
   def courses
     if request.format.csv?
-      authorize!(:export, Event)
+      authorize!(:export_list, Event::Course)
     else
-      authorize!(:index, Event::Course)
+      authorize!(:list_available, Event::Course)
     end
 
     set_group_vars
@@ -60,7 +60,7 @@ class Event::ListsController < ApplicationController
   end
 
   def set_group_vars
-    if can?(:manage_courses, Event)
+    if can?(:list_all, Event::Course)
       unless params[:year].present?
         params[:group_id] = default_user_course_group.try(:id)
       end
@@ -85,7 +85,7 @@ class Event::ListsController < ApplicationController
   end
 
   def limited_courses_scope
-    if can?(:manage_courses, Event)
+    if can?(:list_all, Event::Course)
       group_id > 0 ? course_scope.with_group_id(group_id) : course_scope
     else
       course_scope.in_hierarchy(current_user)

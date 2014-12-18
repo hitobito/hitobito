@@ -167,9 +167,7 @@ export PATH=%{ruby_bindir}:$PATH
 %{bundle_cmd} install --path vendor/bundle --without %{bundle_without_groups}
 
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake assets:precompile
-RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_page 404
-RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_page 500
-RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_page 503
+RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_pages
 
 echo "[%{?RAILS_TRANSIFEX_HOST}]
 hostname = %{?RAILS_TRANSIFEX_HOST}

@@ -28,6 +28,9 @@ class MailingListsController < CrudController
     super.order(:name)
   end
 
+  def authorize_class
+    authorize!(:index_mailing_lists, group)
+  end
 
   alias_method :group, :parent
 

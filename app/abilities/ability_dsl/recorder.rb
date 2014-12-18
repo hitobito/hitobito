@@ -36,6 +36,10 @@ module AbilityDsl
       General.new(@store, @ability_class, @subject_class, actions)
     end
 
+    def class_side(*actions)
+      ClassSide.new(@store, @ability_class, @subject_class, actions)
+    end
+
     class Base
 
       def initialize(store, ability_class, subject_class)
@@ -109,6 +113,23 @@ module AbilityDsl
         end
       end
 
+    end
+
+    class ClassSide < Base
+      PERMISSION = :_class_side
+
+      def initialize(store, ability_class, subject_class, actions)
+        super(store, ability_class, subject_class)
+        @actions = actions
+      end
+
+      private
+
+      def constraint(constraint)
+        @actions.each do |action|
+          add_config(PERMISSION, action, constraint)
+        end
+      end
     end
   end
 end

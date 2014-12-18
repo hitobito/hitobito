@@ -49,6 +49,25 @@ describe EventAbility do
         should be_able_to(:index_participations, other)
       end
 
+      it 'may manage_courses' do
+        should be_able_to(:manage_courses, Event)
+      end
+
+      it 'may export events' do
+        should be_able_to(:export, Event)
+      end
+
+      it 'may not manage courses if not in course layer' do
+        Group::TopLayer.event_types.delete(Event::Course)
+        Group.root_types(Group::TopLayer)
+        begin
+          should_not be_able_to(:manage_courses, Event)
+        ensure
+          Group::TopLayer.event_types << Event::Course
+          Group.root_types(Group::TopLayer)
+        end
+      end
+
       context 'in other layer' do
         let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
@@ -137,6 +156,13 @@ describe EventAbility do
         should_not be_able_to(:index_participations, other)
       end
 
+      it 'may manage courses' do
+        should be_able_to(:manage_courses, Event)
+      end
+
+      it 'may not export events' do
+        should_not be_able_to(:export, Event)
+      end
     end
 
     context Event::Participation do
@@ -201,6 +227,10 @@ describe EventAbility do
       it 'may not index people for event in other group' do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
         should_not be_able_to(:index_participations, other)
+      end
+
+      it 'may not manage courses' do
+        should_not be_able_to(:manage_courses, Event)
       end
     end
 

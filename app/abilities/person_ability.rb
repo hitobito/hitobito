@@ -8,7 +8,8 @@
 class PersonAbility < AbilityDsl::Base
 
   on(Person) do
-    permission(:any).may(:index, :query).all
+    class_side(:index, :query).everybody
+
     permission(:any).may(:show, :show_full, :history, :update,
                          :update_email, :primary_group, :log).
                      herself

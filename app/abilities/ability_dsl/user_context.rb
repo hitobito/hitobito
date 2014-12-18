@@ -27,13 +27,15 @@ module AbilityDsl
     end
 
     def all_permissions
-      permissions = user.roles.collect(&:permissions).flatten.uniq
-      Role::PermissionImplications.each do |given, implicated|
-        if permissions.include?(given) && !permissions.include?(implicated)
-          permissions << implicated
+      @all_permissions ||= begin
+        permissions = user.roles.collect(&:permissions).flatten.uniq
+        Role::PermissionImplications.each do |given, implicated|
+          if permissions.include?(given) && !permissions.include?(implicated)
+            permissions << implicated
+          end
         end
+        permissions
       end
-      permissions
     end
 
     def layer_ids(groups)

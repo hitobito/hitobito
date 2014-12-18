@@ -10,20 +10,28 @@ module AbilityDsl
   # Abilities are defined for models, usually only for one per ability class.
   # Eg.
   #  on(Person) do
-  #    permission(:any).may(:index).all
+  #    class_side(:index).everybody
+  #
   #    permission(:group_read).may(:show).in_same_group
   #    permission(:layer_and_below_full).may(:update, :destroy).in_same_layer_or_below
   #  end
   #
-  # All permissions in the given block apply for a Person object.
+  # All permissions in the given block apply for a Person instance.
   # Each permission then is defined for one Role::Permission, several actions and
   # one arbitrary constraint.
   # This constraint must exist as an instance method in the same class and return
-  # true if the current Person subject applies. The constraint method should have
+  # true if the current Person instance applies. The constraint method should have
   # a speaking name that describes its complete purpose.
   #
   # With a +general+ constraint an additional requirement for certain actions
   # may be defined, indifferent of the user's permissions.
+  #
+  # To define abilities for class side actions (if no subject instance is passed to +can?+),
+  # the +class_side+ method with the corresponding actions has to be used.
+  # The following constraint methods must also be defined as instance methods, but there
+  # will be no subject and no permission instance variables available. Therefore,
+  # certain helper methods like +permission_in_group?+ or permission_in_layers?+ must not
+  # be used.
   #
   # Every permission tuple (Role::Permission, Action), including :general,
   # only has one corresponding constraint method. This may be overriden by wagons.
@@ -79,6 +87,20 @@ module AbilityDsl
     # Matches no subjects
     def none
       false
+    end
+
+    # Matches all users
+    def everybody
+      true
+    end
+
+    # Matches no user
+    def nobody
+      false
+    end
+
+    def if_admin
+      user_context.all_permissions.include?(:admin)
     end
 
     private

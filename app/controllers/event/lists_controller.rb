@@ -17,15 +17,12 @@ class Event::ListsController < ApplicationController
 
 
   def events
-    # FIXME This authorize does nothing, as no ability is defined for :index Event.
-    #       Extend Ability DSL to allow definition of class wide abilities.
     authorize!(:index, Event)
 
     @grouped_events = grouped(upcoming_user_events)
   end
 
   def courses
-    # FIXME This authorize does nothing, as no ability is defined for :index Event::Course
     if request.format.csv?
       authorize!(:export, Event)
     else

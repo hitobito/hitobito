@@ -8,19 +8,23 @@
 class VariousAbility < AbilityDsl::Base
 
   on(CustomContent) do
-    permission(:admin).may(:index, :update).all
+    class_side(:index).if_admin
+    permission(:admin).may(:update).all
   end
 
   on(LabelFormat) do
+    class_side(:index).if_admin
     permission(:admin).may(:manage).all
   end
 
   if Group.course_types.present?
     on(Event::Kind) do
+      class_side(:index).if_admin
       permission(:admin).may(:manage).all
     end
 
     on(QualificationKind) do
+      class_side(:index).if_admin
       permission(:admin).may(:manage).all
     end
   end

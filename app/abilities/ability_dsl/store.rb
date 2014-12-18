@@ -25,6 +25,11 @@ module AbilityDsl
       compact
     end
 
+    def class_side_constraints
+      configs.values.each do |c|
+        yield c if c.permission == Recorder::ClassSide::PERMISSION
+      end
+    end
 
     def configs
       @configs ||= load

@@ -87,6 +87,7 @@ module Group::Types
     def reset_types!
       @@root_types = []
       @@all_types = nil
+      @@course_types = nil
       Role.reset_types!
     end
 

@@ -30,13 +30,14 @@ class Event::ListsController < ApplicationController
     end
 
     set_group_vars
-
-    grouped_courses = grouped(limited_courses_scope, course_grouping)
-    @grouped_events = sorted(grouped_courses)
-
     respond_to do |format|
-      format.html { @grouped_events }
-      format.csv  { render_courses_csv(@grouped_events.values.flatten) }
+      format.html do
+        grouped_courses = grouped(limited_courses_scope, course_grouping)
+        @grouped_events = sorted(grouped_courses)
+      end
+      format.csv do
+        render_courses_csv(limited_courses_scope)
+      end
     end
   end
 
@@ -94,7 +95,7 @@ class Event::ListsController < ApplicationController
 
   def course_scope
     Event::Course
-      .includes(:groups,  additional_course_includes)
+      .includes(:groups, additional_course_includes)
       .order(course_ordering)
       .in_year(year)
       .list
@@ -105,7 +106,7 @@ class Event::ListsController < ApplicationController
   end
 
   def course_ordering
-    kind_used? ? 'event_kind_translations.label' : 'event_dates.start_at'
+    kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
   end
 
   def additional_course_includes
@@ -113,7 +114,7 @@ class Event::ListsController < ApplicationController
   end
 
   def kind_used?
-    Event::Course.used_attributes.include?(:kind_id)
+    Event::Course.attr_used?(:kind_id)
   end
 
 end

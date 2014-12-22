@@ -8,7 +8,7 @@
 require 'spec_helper'
 describe Export::Csv::Events::List do
 
-  let(:courses) { double('courses', map: []) }
+  let(:courses) { double('courses', map: [], first: nil) }
   let(:list)  { Export::Csv::Events::List.new(courses) }
   subject { list }
 

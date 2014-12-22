@@ -49,17 +49,17 @@ class EventsController < CrudController
   def list_entries
     model_scope.
       where(type: params[:type]).
+      in_year(year).
       order_by_date.
       preload_all_dates.
-      uniq.
-      in_year(year)
+      uniq
   end
 
   private
 
   def build_entry
     type = model_params && model_params[:type].presence
-    type ||= 'Event'
+    type ||= Event.sti_name
     event = Event.find_event_type!(type).new
     event.groups << parent
     event
@@ -95,7 +95,7 @@ class EventsController < CrudController
   end
 
   def render_csv(entries)
-    send_data ::Export::Csv::Events::List.export(entries.includes(:course_record)), type: :csv
+    send_data ::Export::Csv::Events::List.export(entries), type: :csv
   end
 
   def typed_group_events_path(group, event_type, options = {})

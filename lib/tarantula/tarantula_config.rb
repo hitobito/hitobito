@@ -66,6 +66,8 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/participations\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/user$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/person$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/)
@@ -80,9 +82,6 @@ module TarantulaConfig
     t.allow_404_for(/label_formats\/\d+$/)
     # groups already deleted in another language
     t.allow_404_for(/fr\/groups\/\d+$/)
-    # label mailing list deleted in another language
-    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+$/)
-    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/user$/)
     # custom return_urls end up like that.
     t.allow_404_for(/^\-?\d+$/)
     # delete qualification is not allowed after role was removed from person

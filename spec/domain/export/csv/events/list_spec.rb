@@ -18,7 +18,7 @@ describe Export::Csv::Events::List do
     subject { list }
 
     its(:attributes) do
-      should =~ [:group_names, :number, :kind, :description, :state, :location,
+      should == [:name, :group_names, :number, :kind, :description, :state, :location,
                  :date_0_label, :date_0_location, :date_0_duration,
                  :date_1_label, :date_1_location, :date_1_duration,
                  :date_2_label, :date_2_location, :date_2_duration,
@@ -32,7 +32,7 @@ describe Export::Csv::Events::List do
     end
 
     its(:labels) do
-      should =~ ['Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
+      should == ['Name', 'Organisatoren', 'Kursnummer', 'Kursart', 'Beschreibung', 'Status', 'Ort / Adresse',
                  'Datum 1 Beschreibung', 'Datum 1 Ort', 'Datum 1 Zeitraum',
                  'Datum 2 Beschreibung', 'Datum 2 Ort', 'Datum 2 Zeitraum',
                  'Datum 3 Beschreibung', 'Datum 3 Ort', 'Datum 3 Zeitraum',
@@ -54,24 +54,24 @@ describe Export::Csv::Events::List do
 
     context 'headers' do
       subject { csv.first }
-      it { should match(/^Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
+      it { should match(/^Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
     end
 
     context 'first row' do
       subject { csv.second.split(';') }
-      its([0]) { should eq 'TopGroup' }
+      its([1]) { should eq 'TopGroup' }
 
 
-      its([4]) { should eq 'somestate' }
+      its([5]) { should eq 'somestate' }
 
-      its([5]) { should eq 'somewhere' }
+      its([6]) { should eq 'somewhere' }
 
       context 'state' do
         # This tests the case where Event.possible_states is empty,
         # the case with predefined states is tested in the jubla wagon.
 
         context 'present' do
-          its([4]) { should eq 'somestate' }
+          its([5]) { should eq 'somestate' }
         end
 
         context 'empty' do
@@ -82,7 +82,7 @@ describe Export::Csv::Events::List do
           let(:csv) { Export::Csv::Generator.new(list).csv.split("\n")  }
           subject { csv.second.split(';') }
 
-          its([4]) { should eq '' }
+          its([5]) { should eq '' }
         end
       end
 
@@ -92,25 +92,25 @@ describe Export::Csv::Events::List do
         let(:date) { Fabricate(:event_date, event: course, start_at: start_at, finish_at: finish_at, location: 'somewhere') }
 
         before { course.stub(dates: [date]) }
-        its([6]) { should eq 'Hauptanlass' }
-        its([7]) { should eq 'somewhere' }
-        its([8]) { should eq '09.06.2013 - 12.06.2013' }
-        its([9]) { should eq '' }
+        its([7]) { should eq 'Hauptanlass' }
+        its([8]) { should eq 'somewhere' }
+        its([9]) { should eq '09.06.2013 - 12.06.2013' }
+        its([10]) { should eq '' }
       end
 
       context 'contact' do
         let(:person) { Fabricate(:person_with_address_and_phone) }
         before { course.contact = person }
-        its([15]) { should eq person.to_s }
-        its([20]) { should eq person.phone_numbers.first.to_s }
-        its([20]) { should_not eq '' }
+        its([16]) { should eq person.to_s }
+        its([21]) { should eq person.phone_numbers.first.to_s }
+        its([21]) { should_not eq '' }
       end
 
       context 'leader' do
         let(:participation) { Fabricate(:event_participation, event: course) }
         let!(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation).person }
-        its([21]) { should_not eq '' }
-        its([21]) { should eq leader.to_s }
+        its([22]) { should_not eq '' }
+        its([22]) { should eq leader.to_s }
       end
     end
 
@@ -137,7 +137,7 @@ describe Export::Csv::Events::List do
       context 'first row' do
         let(:row) { csv[0].split(';') }
         it 'should contain contain the additional course fields' do
-          expect(row[27..-1]).to eq ['Motto', 'Kosten', 'Anmeldebeginn', 'Anmeldeschluss',
+          expect(row[28..-1]).to eq ['Motto', 'Kosten', 'Anmeldebeginn', 'Anmeldeschluss',
                                      'Maximale Teilnehmerzahl', 'Externe Anmeldungen',
                                      'Priorisierung', 'Anzahl Leitungsteam', 'Anzahl Teilnehmende',
                                      'Anzahl Anmeldungen']
@@ -147,7 +147,7 @@ describe Export::Csv::Events::List do
       context 'second row' do
         let(:row) { csv[1].split(';') }
         it 'should contain contain the additional course and record fields' do
-          expect(row[27..-1]).to eq ['All for one', '1000', '2000-01-01', '2000-02-01', '10',
+          expect(row[28..-1]).to eq ['All for one', '1000', '2000-01-01', '2000-02-01', '10',
                                      'nein', 'nein', '1', '1', '2']
         end
       end
@@ -155,7 +155,7 @@ describe Export::Csv::Events::List do
       context 'third row (course without record)' do
         let(:row) { csv[2].split(';') }
         it 'should contain the additional course fields' do
-          expect(row[27..-1]).to eq ['', '', '', '', '', 'nein', 'ja', '0', '0', '0']
+          expect(row[28..-1]).to eq ['', '', '', '', '', 'nein', 'ja', '0', '0', '0']
         end
       end
     end

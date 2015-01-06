@@ -50,36 +50,67 @@ describe Export::Csv::People::PeopleFull do
 
   context 'integration' do
 
-    let(:full_headers) do
-      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Zusätzliche Angaben', 'Rollen']
-    end
     let(:data) { Export::Csv::People::PeopleFull.export(list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
-    subject { csv }
-
-    its(:headers) { should == full_headers }
-
-    context 'first row' do
-      before do
-        person.update_attribute(:gender, 'm')
-        person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
-        person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
-        person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
-        person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: 'parent')
-      end
-
-      subject { csv[0] }
-
-      its(['Rollen']) { should eq 'Leader Top / TopGroup' }
-      its(['Telefonnummer Vater']) { should eq '123' }
-      its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
-      its(['Social Media Adresse Skype']) { should eq 'foobar' }
-      its(['Elternteil']) { should eq 'Bottom Member' }
-      its(['Geschlecht']) { should eq 'männlich' }
+    before do
+      person.update_attribute(:gender, 'm')
+      person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
+      person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
+      person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
+      person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: 'parent')
+      I18n.locale = lang
     end
 
+    after do
+      I18n.locale = I18n.default_locale
+    end
+
+    context 'german' do
+      let(:lang) { :de }
+
+      it 'has correct headers' do
+        csv.headers.should == [
+           'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
+           'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+           'Zusätzliche Angaben', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
+           'Social Media Adresse Skype', 'Elternteil']
+      end
+
+      context 'first row' do
+        subject { csv[0] }
+
+        its(['Rollen']) { should eq 'Leader Top / TopGroup' }
+        its(['Telefonnummer Vater']) { should eq '123' }
+        its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
+        its(['Social Media Adresse Skype']) { should eq 'foobar' }
+        its(['Elternteil']) { should eq 'Bottom Member' }
+        its(['Geschlecht']) { should eq 'männlich' }
+      end
+    end
+
+    context 'french' do
+      let(:lang) { :fr }
+
+      it 'has correct headers' do
+        csv.headers.should ==
+           ["prénom", "nom", "nom de l'entreprise", "surnom", "entreprise",
+            "adresse e-mail principale", "adresse", "code postal", "lieu", "pays", "sexe",
+            "anniversaire", "données supplémentaires", " rôles ",
+            "adresse e-mail supplémentaire père", "numéro de téléphone père",
+            "adresse d'un média social Skype", "parent"]
+      end
+
+      context 'first row' do
+        subject { csv[0] }
+
+        its([' rôles ']) { should eq 'Leadre Top / TopGroup' }
+        its(['numéro de téléphone père']) { should eq '123' }
+        its(['adresse e-mail supplémentaire père']) { should eq 'vater@example.com' }
+        its(["adresse d'un média social Skype"]) { should eq 'foobar' }
+        its(['parent']) { should eq 'Bottom Member' }
+        its(['sexe']) { should eq 'masculin' }
+      end
+    end
   end
 end

@@ -13,7 +13,7 @@ module Export::Csv::People
       end
 
       def human(model, label)
-        "#{model.model_name.human} #{label.capitalize}"
+        "#{model.model_name.human} #{label}"
       end
     end
   end

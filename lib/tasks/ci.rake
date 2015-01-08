@@ -43,7 +43,6 @@ namespace :ci do
   end
 
   def wagon_exec(cmd)
-    Rake::Task['wagon:bundle:update'].invoke
     cmd += ' -t' if Rake.application.options.trace
     ENV['CMD'] = cmd
     Rake::Task['wagon:exec'].invoke

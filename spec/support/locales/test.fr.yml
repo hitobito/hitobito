@@ -34,5 +34,5 @@ fr:
     attributes:
       people_relation:
         kinds:
-          parent: parent
-          child: enfant
+          parent: Parent
+          child: Enfant

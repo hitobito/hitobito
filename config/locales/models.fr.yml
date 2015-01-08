@@ -20,15 +20,15 @@ fr:
       delimiter: ''''
       separator: .
   attributes:
-    created_info: créé
-    updated_info: modifié
-    deleted_info: supprimé
+    created_info: Créé
+    updated_info: Modifié
+    deleted_info: Supprimé
   activerecord:
     errors:
       messages:
-        type_not_allowed: ne peut pas être créé ici
-        must_be_after_opening: doit être postérieur à l'inscription
-        must_have_same_type: doivent être de type identique
+        type_not_allowed: Ne peut pas être créé ici
+        must_be_after_opening: Doit être ultérieur à l'inscription
+        must_have_same_type: Doivent être de type identique
         greater_than: doit être plus grand que %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
       models:
@@ -39,11 +39,15 @@ fr:
         event/date:
           attributes:
             finish_at:
-              not_after_start: 'doit être postérieur à la date indiquée sous "depuis"'
+              not_after_start: 'doit être ultérieur à la date indiquée sous "depuis"'
         event/question:
           attributes:
             choices:
               requires_more_than_one_choice: 'doit comporter au moins deux réponses'
+        event/participation:
+          attributes:
+            person_id:
+              taken: est déjà inscrit.
         mailing_list:
           attributes:
             mail_name:
@@ -58,6 +62,10 @@ fr:
                 e-mail supplémentaires", tu peux fournir des adresses mêmes si elles
                 sont déjà attribuées en tant qu'adresse principale d'un autre utilisateur.
                 (Dans ce cas, tu peux laisser "adresse e-mail principale" vide.)
+        people_relation:
+          attributes:
+            tail_id:
+              must_not_be_equal_to_head: à soi-même n'est pas permis.
         qualification:
           attributes:
             qualification_kind_id:
@@ -68,302 +76,328 @@ fr:
               not_a_positive_number: 'doit être un nombre positif pour rendre les %{model} réactivables.'
     models:
       additional_email:
-        one: adresse e-mail supplémentaire
-        other: adresses e-mail supplémentaires
+        one: Adresse e-mail supplémentaire
+        other: Adresses e-mail supplémentaires
       custom_content:
-        one: texte
-        other: textes
+        one: Texte
+        other: Textes
       event:
         one: activité
-        other: activités
+        other: Activités
       event/course:
-        one: cours
-        other: cours
+        one: Cours
+        other: Cours
       event/participation:
-        one: participation
-        other: participations
+        one: Participation
+        other: Participations
       event/application:
-        one: inscription
-        other: inscriptions
+        one: Inscription
+        other: Inscriptions
       event/kind:
-        one: type de cours
-        other: types de cours
+        one: Type de cours
+        other: Types de cours
       event/role/assistant_leader:
-        one: responsable
+        one: Responsable
       event/role/leader:
-        one: responsable principal(e)
+        one: Responsable principal(e)
       event/role/cook:
-        one: cuisine
+        one: Cuisine
       event/role/participant:
-        one: participant/-e
+        one: Participant/-e
       event/role/treasurer:
-        one: trésorier
+        one: Trésorier
       event/role/speaker:
-        one: intervenant/e
+        one: Intervenant/e
+      event/date:
+        one: date
+        other: dates
       group:
         one: groupe
-        other: groupes
+        other: Groupes
       label_format:
-        one: format étiquette
-        other: formats étiquettes
+        one: format d'étiquette
+        other: Formats d'étiquettes
       mailing_list:
         one: abonnement
-        other: abonnements
+        other: Abonnements
       person:
         one: personne
-        other: personnes
+        other: Personnes
       people_filter:
-        one: filtre
-        other: filtres
+        one: Filtre
+        other: Filtres
+      people_relation:
+        one: relation
+        other: relations
       phone_number:
-        one: numéro de téléphone
-        other: numéros de téléphone
+        one: Numéro de téléphone
+        other: Numéros de téléphone
       qualification:
-        one: qualification
-        other: qualifications
+        one: Qualification
+        other: Qualifications
       qualification_kind:
-        one: type de qualification
-        other: types de qualification
+        one: Type de qualification
+        other: Types de qualification
       role:
-        one: rôle
-        other: ' rôles '
+        one: Rôle
+        other: Rôles
       social_account:
-        one: adresse d'un média social
-        other: adresses de médias sociaux
+        one: Adresse d'un média social
+        other: Adresses de réseaux sociaux
       subscription:
         one: abonné
-        other: abonnés
+        other: Abonnés
     attributes:
       person:
-        first_name: prénom
-        last_name: nom
-        name: nom
-        company_name: nom de l'entreprise
-        company: entreprise
-        nickname: surnom
-        email: adresse e-mail principale
-        emails: e-mails
-        password: mot de passe
-        password_confirmation: mot de passe
-        current_password: ancien mot de passe
-        address: adresse
-        zip_code: code postal
-        town: lieu
-        country: pays
-        gender: sexe
+        first_name: Prénom
+        last_name: Nom
+        name: Nom
+        company_name: Nom de l'entreprise
+        company: Entreprise
+        nickname: Surnom
+        email: Adresse e-mail principale
+        emails: E-mails
+        password: Mot de passe
+        password_confirmation: Mot de passe
+        current_password: Ancien mot de passe
+        address: Adresse
+        zip_code: Code postal
+        town: Lieu
+        country: Pays
+        gender: Sexe
         genders:
-          m: masculin
-          w: féminin
-          _nil: inconnu
-        birthday: anniversaire
-        additional_information: données supplémentaires
-        remember_me: rester inscrit
-        phone_numbers: numéros de téléphone
-        social_accounts: médias sociaux
-        additional_emails: adresses e-mail supplémentaires
-        picture: télécharger nouvelle photo
-        remove_picture: supprimer la photo actuelle
-        roles: ' rôles '
-        created_at: créé
-        updated_at: modifié
+          m: Masculin
+          w: Féminin
+          _nil: Inconnu
+        birthday: Anniversaire
+        additional_information: Données supplémentaires
+        remember_me: Se souvenir de moi
+        relations_to_tails: relations
+        phone_numbers: Numéros de téléphone
+        social_accounts: Réseaux sociaux
+        additional_emails: Adresses e-mail supplémentaires
+        picture: Ajouter une nouvelle photo
+        remove_picture: Supprimer la photo actuelle
+        roles: Rôles
+        created_at: Créé
+        updated_at: Modifié
       group:
         name: Nom
-        short_name: Abbréviation
-        email: adresse e-mail principale
-        address: adresse
-        zip_code: code postal
+        short_name: Abréviation
+        email: Adresse e-mail principale
+        address: Adresse
+        zip_code: Code postal
         town: Lieu
-        country: pays
-        contact_id: personne de contact
-        contact: ' personne de contact'
-        phone_numbers: numéros de téléphone
-        social_accounts: médias sociaux
-        additional_emails: adresses e-mail supplémentaires
-        parent_id: groupe de parents
-        layer_group_id: niveau
-        type: type de groupe
-        type_name: type de groupe
+        country: Pays
+        contact_id: Personne de contact
+        contact: ' Personne de contact'
+        phone_numbers: Numéros de téléphone
+        social_accounts: Réseaux sociaux
+        additional_emails: Adresses e-mail supplémentaires
+        parent_id: Groupe de parents
+        layer_group_id: Niveau
+        type: Type de groupe
+        type_name: Type de groupe
       event:
-        group_ids: groupes
+        group_ids: Groupes
         name: Nom
-        number: numéro
-        motto: devise
-        cost: coûts
-        contact: ' personne de contact '
-        maximum_participants: nombre maximal de participants
-        contact_id: ' personne de contact '
-        description: description
-        location: lieu/adresse
-        application_opening_at: début des inscriptions
-        application_closing_at: fin des inscriptions
-        application_conditions: conditions d'admission
-        external_applications: inscriptions externes
-        dates: dates
-        dates_full: dates
-        booking_info: inscriptions
-        questions: questions
-        kind_id: type
+        number: Numéro
+        motto: Devise
+        cost: Coûts
+        contact: ' Personne de contact '
+        maximum_participants: Nombre maximal de participants
+        contact_id: ' Personne de contact '
+        description: Description
+        location: Lieu / Adresse
+        application_opening_at: Début des inscriptions
+        application_closing_at: Fin des inscriptions
+        application_conditions: Conditions d'admission
+        external_applications: Inscriptions externes
+        dates: Dates
+        dates_full: Dates
+        booking_info: Inscriptions
+        questions: Questions
+        kind_id: Type
+        teamer_count: Nombre d’équipe de direction
+        participant_count: Nombre de participant-e-s
+        applicant_count: Nombre d’inscriptions
       event/course:
-        kind_id: type de cours
-        state: statut
-        number: numéro du cours
-        state_translated: statut
-        priorization: préférence
-        requires_approval: validation
+        kind_id: Type de cours
+        state: Statut
+        number: Numéro du cours
+        state_translated: Statut
+        priorization: Préférence
+        requires_approval: Validation
       event/role:
-        label: désignation
-        person: personne
-        participation: personne
+        label: Désignation
+        person: Personne
+        type: Rôle
+        participation: Personne
       event/participation:
-        event_id: événement
-        additional_information: commentaires (généralités, informations en lien avec la santé, allergies, etc.)
-        answers: questions
+        person_id: personne
+        event_id: Evénement
+        additional_information: Commentaires (généralités, informations en lien avec la santé, allergies, etc.)
+        answers: Questions
+        created_at: date d'inscription
+        roles: rôle
       event/application:
-        priority_1_id: "cours"
-        priority_2_id: "cours alternatif (1)"
-        priority_3_id: "cours alternatif (2)"
+        priority_1_id: "Cours"
+        priority_2_id: "Cours alternatif (1)"
+        priority_3_id: "Cours alternatif (2)"
       event/date:
-        label: description
-        location: lieu
-        start_at: du
-        finish_at: au
+        label: Description
+        location: Lieu
+        start_at: Du
+        finish_at: Au
       dates:
-        label: description / lieu
-        start_at: du (date)
-        finish_at: au (date)
+        label: Description / Lieu
+        start_at: Du (date)
+        finish_at: Au (date)
       event/question:
-        question: question
-        choices: réponses possibles
-        multiple_choices: sélection multiple
+        question: Question
+        choices: Réponses possibles
+        multiple_choices: Sélection multiple
+        required: réponse obligatoire
       questions:
-        question: question
-        choices: réponses possibles
-        multiple_choices: sélection multiple
+        question: Question
+        choices: Réponses possibles
+        multiple_choices: Sélection multiple
+        required: réponse obligatoire
       event/answer:
-        answer: réponse
+        answer: Réponse
       answers:
-        answer: réponse
+        answer: Réponse
       event/kind:
-        label: dénomination de l'association
-        short_name: abbréviation
-        minimum_age: âge minimum requis
-        preconditions: conditions préalables
-        prolongations: prolongé
-        qualification_kinds: qualifié pour
-        created_at: créé
-        updated_at: modifié
-        deleted_at: supprimé
+        label: Dénomination de l'association
+        short_name: Abréviation
+        minimum_age: Age minimum requis
+        preconditions: Conditions préalables
+        prolongations: Prolongé
+        qualification_kinds: Qualifié pour
+        created_at: Créé
+        updated_at: Modifié
+        deleted_at: Supprimé
       qualification:
-        qualification_kind: qualification
-        qualification_kind_id: qualification
-        start_at: depuis
-        origin: origine
+        qualification_kind: Qualification
+        qualification_kind_id: Qualification
+        start_at: Depuis
+        origin: Origine
         string: '%{kind}'
         string_with_origin: '%{kind} (de %{origin})'
         string_with_finish_at: '%{kind} (jusque %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (jusque %{finish_at}, de %{origin})'
       qualification_kind:
-        label: désignation
-        description: description
-        validity: validité
-        created_at: créé
-        updated_at: modifié
-        deleted_at: supprimé
-        reactivateable: pouvant être réactivé
+        label: Désignation
+        description: Description
+        validity: Validité
+        created_at: Créé
+        updated_at: Modifié
+        deleted_at: Supprimé
+        reactivateable: Pouvant être réactivé
+      people_relation:
+        head_id: personne
+        tail_id: autre personne
+        kind: genre
+      relations_to_tails:
+        tail_id: relation
+        kind: genre
       phone_number:
-        number: numéro
-        label: type
-        public: public
+        number: Numéro
+        label: Type
+        public: Public
       phone_numbers:
-        number: numéro de téléphone
-        label: type de numéro de téléphone
-        public: public
+        number: Numéro de téléphone
+        label: Type de numéro de téléphone
+        public: Public
       role:
-        label: désignation
-        type: ' rôle'
-        group_id: groupe
-        person_id: personne
+        label: Désignation
+        type: ' Rôle'
+        group_id: Groupe
+        person: personne
+        person_id: Personne
         string_long: '%{role} dans %{group}'
         class:
           permission:
             description:
               admin: Gestion des paramètres valables dans toute l'application (p.ex. types de cours, format des étiquettes).
-              layer_full: Ecriture / lecture à ce niveau et aux niveaux subordonnés. Création d'évènements et d'abonnements à ce niveau.
-              layer_read: 'Lecture à ce niveau et aux niveaux subordonnés. '
+              layer_and_below_full: Ecriture / lecture à ce niveau et aux niveaux subordonnés. Création d'évènements et d'abonnements à ce niveau.
+              layer_and_below_read: 'Lecture à ce niveau et aux niveaux inférieurs. '
+              layer_full: Ecriture / lecture à ce niveau. Création d'évènements et d'abonnements à ce niveau.
+              layer_read: 'Lecture à ce niveau. '
               group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
               group_read: Lecture au niveau du groupe.
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
-              qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux subordonnés.
+              qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
           kind:
             member:
-              one: membre
-              other: membres
+              one: Membre
+              other: Membres
             passive:
-              one: membre passif
-              other: membres passifs
+              one: Membre passif
+              other: Membres passifs
             external:
-              one: contact externe
-              other: contacts externes
+              one: Contact externe
+              other: Membres externes
       contact_account:
         predefined_labels:
-          privat: privé
-          mobil: mobile
-          arbeit: professionnel
-          vater: père
-          mutter: mère
-          fax: fax
-          andere: autre
-          webseite: site web
+          privat: Privé
+          mobil: Mobile
+          arbeit: Professionnel
+          vater: Père
+          mutter: Mère
+          fax: Fax
+          andere: Autre
+          webseite: Site web
       social_account:
-        name: nom
-        label: type
-        public: public
+        name: Nom
+        label: Type
+        public: Public
       social_accounts:
-        name: nom du média social
-        label: type de média social
-        public: public
+        name: Nom du réseau social
+        label: Type de réseau social
+        public: Public
       additional_email:
-        email: adresse e-mail
-        name: adresse e-mail supplémentaire
-        label: type
-        public: public
-        mailings: envoi
+        email: Adresse e-mail
+        name: Adresse e-mail supplémentaire
+        label: Type
+        public: Public
+        mailings: Envoi
       additional_emails:
-        email: adresse e-mail
-        name: adresse e-mail supplémentaire
-        label: type d'adresse e-mail supplémentaire
-        public: public
-        mailings: envoi
+        email: Adresse e-mail
+        name: Adresse e-mail supplémentaire
+        label: Type d'adresse e-mail supplémentaire
+        public: Public
+        mailings: Envoi
       mailing_list:
         name: Nom
-        description: description
-        publisher: éditeur
-        subscribable: les abonnés peuvent s'inscrire / se désinscrire eux-même
-        mail_name: adresse listes de distribution
-        mail_address: liste de distribution
-        subscribers_may_post: les abonnés peuvent éditer la liste de distribution
-        additional_sender: expéditeur supplémentaire
+        description: Description
+        publisher: Editeur
+        subscribable: Les abonnés peuvent s'inscrire / se désinscrire eux-même
+        mail_name: Adresse de la liste de diffusion
+        mail_address: Liste de diffusion
+        subscribers_may_post: les abonnés peuvent éditer la liste de diffusion
+        additional_sender: Expéditeur supplémentaire
       subscription:
-        related_role_types: ' rôles '
+        related_role_types: Rôles
       people_filter:
-        name: nom
+        name: Nom
       custom_content:
-        label: texte
-        subject: objet
-        body: contenu
+        label: Texte
+        subject: Objet
+        body: Contenu
       label_format:
-        name: désignation
-        page_size: taille de page
-        landscape: format
-        font_size: ' taille des caractères  '
-        width: largeur des étiquettes
-        height: hauteur des étiquettes
-        count_horizontal: nombre (dans le sens de la largeur)
-        count_vertical: nombre (dans le sens de la hauteur)
-        padding_top: marge (en haut)
-        padding_left: marge (à gauche)
-        dimensions: nombre
+        name: Désignation
+        page_size: Taille de la page
+        landscape: Format
+        font_size: ' Taille des caractères  '
+        width: Largeur des étiquettes
+        height: Hauteur des étiquettes
+        count_horizontal: Nombre (dans le sens de la largeur)
+        count_vertical: Nombre (dans le sens de la hauteur)
+        padding_top: Marge (en haut)
+        padding_left: Marge (à gauche)
+        dimensions: Nombre
   errors:
     messages:
       invalid_date: "n'est pas une date valable"
@@ -372,10 +406,10 @@ fr:
       is_at: "doit être %{restriction}"
       before: "doit être antérieur à %{restriction}"
       on_or_before: "doit être %{restriction} ou antérieur"
-      after: "doit être postérieur à %{restriction}"
-      on_or_after: "doit être %{restriction} ou postérieur"
+      after: "doit être ultérieur à %{restriction}"
+      on_or_after: "doit être %{restriction} ou ultérieur"
       extension_white_list_error: "ne peut traiter que des fichiers de type %{allowed_types}."
-      expired: "est périmé, prière d'en refaire demande"
+      expired: "est échu, prière d'en refaire demande"
       not_found: "pas trouvé"
       already_confirmed: "a déjà été confirmé"
       not_locked: "n'est pas verrouillé"

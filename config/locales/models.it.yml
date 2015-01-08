@@ -48,6 +48,10 @@ it:
           attributes:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte.'
+        event/participation:
+          attributes:
+            person_id:
+              taken: è già iscritto
         mailing_list:
           attributes:
             mail_name:
@@ -61,6 +65,10 @@ it:
                 che è utilizzato per il login. Puoi però registrare sotto "altri email"
                 tutti gli indirizzi che sono assegnati come email principale ad altre
                 persone (il campo per l'email principale può essere lasciato vuoto).
+        people_relation:
+          attributes:
+            tail_id:
+              must_not_be_equal_to_head: per se stessi non è permesso
         qualification:
           attributes:
             qualification_kind_id:
@@ -105,6 +113,9 @@ it:
         one: 'responsabile/-
 
           relatore/relatrice'
+      event/date:
+        one: data
+        other: date
       group:
         one: gruppo
         other: gruppi
@@ -120,6 +131,9 @@ it:
       people_filter:
         one: filtro
         other: filtri
+      people_relation:
+        one: relazione
+        other: relazioni
       phone_number:
         one: numero di telefono
         other: numeri di telefono
@@ -163,12 +177,13 @@ it:
         genders:
           m: maschile
           w: femminile
-          default: sconosciuto
+          _nil: sconosciuto
         birthday: 'compleanno
 
           data di nascita'
         additional_information: dati supplementari
         remember_me: rimanere connessi
+        relations_to_tails: relazioni
         phone_numbers: numeri di telefono
         social_accounts: social media
         additional_emails: altri email
@@ -240,11 +255,15 @@ it:
 
           definizione'
         person: persona
+        type: ruolo
         participation: persona
       event/participation:
+        person_id: persona
         event_id: evento
         additional_information: osservazioni (generali, informazioni sullo stato di salute, allergie, ecc.)
         answers: domande
+        created_at: data di iscrizione
+        roles: ruolo
       event/application:
         priority_1_id: "corso"
         priority_2_id: "1° corso alternativo"
@@ -262,10 +281,12 @@ it:
         question: domanda
         choices: possibili risposte
         multiple_choices: scelta multipla
+        required: risposta obbligatoria
       questions:
         question: domanda
         choices: possibili risposte
         multiple_choices: scelta multipla
+        required: risposta obbligatoria
       event/answer:
         answer: risposta
       answers:
@@ -309,6 +330,13 @@ it:
         updated_at: cambiato
         deleted_at: cancellato
         reactivateable: riattivabile
+      people_relation:
+        head_id: persona
+        tail_id: altra persona
+        kind: tipo
+      relations_to_tails:
+        tail_id: relazione
+        kind: tipo
       phone_number:
         number: numero
         label: tipo
@@ -323,14 +351,17 @@ it:
           definizione'
         type: ruolo
         group_id: gruppo
+        person: persona
         person_id: persona
         string_long: '%{role} in %{group}'
         class:
           permission:
             description:
               admin: amministrazione delle impostazioni relative alle applicazioni come tipi di corso o formati delle etichette
-              layer_full: leggere e scrivere tutto su questo livello e su tutti i livelli inferiori. Creare eventi e abbonamenti su questo livello.
-              layer_read: leggere tutto su questo livello e su tutti i livelli inferiori.
+              layer_and_below_full: leggere e scrivere tutto su questo livello e su tutti i livelli inferiori. Creare eventi e abbonamenti su questo livello.
+              layer_and_below_read: leggere tutto su questo livello e su tutti i livelli inferiori.
+              layer_full: leggere e scrivere tutto su questo livello. Creare eventi e abbonamenti su questo livello.
+              layer_read: leggere tutto su questo livello.
               group_full: leggere e scrivere su questo gruppo. Creare eventi e abbonamenti su questo gruppo
               group_read: leggere su questo gruppo.
               contact_data: leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto

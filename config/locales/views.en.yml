@@ -2,22 +2,47 @@ en:
   global:
     'yes': "yes"
     'no': "no"
+    unknown: unknown
+    from: from
+    until: to
     no_list_entries: No entries found.
     confirm_delete: Do you really want to delete this entry?
+    do_not_fill: Please do not fill in this field
+    gender:
+      male: male
+      female: female
+      male_short: m
+      female_short: f
     associations:
       no_entry: (none)
       none_available: (none available)
       please_select: Please select
+      add: Add an entry
+      add_with_model: 'add %{model}'
+      remove: Remove
     button:
       save: Save
       cancel: Cancel
       search: Search
+      back: Back
+      refresh: Update
+      print: Print
     link:
       show: Show
       edit: Edit
       add: "Add"
+      add_without_model: Create
       delete: Delete
       list: List
+    errors:
+      header:
+        one: '%{count} error prevented the saving of this post:'
+        other: '%{count} errors prevented the saving of this post:'
+    tabs:
+      info: Info
+    search:
+      placeholder: 'Search...'
+      placeholder_with_model: 'search %{model}...'
   list:
     index:
       title: 'Listing %{models}'
@@ -38,3 +63,483 @@ en:
       flash:
         success: "%{model} was successfully deleted."
         failure: "%{model} could not be deleted."
+  contactable:
+    address_or_email: "%{address} or %{email}"
+    fields:
+      zip_town: Postal code/place
+    public_check_box:
+      tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
+    social_account_fields:
+      placeholder_value: Website, Skype-name, other profiles...
+      placeholder_type: Type (Skype, Facebook, ...)
+    additional_email_fields:
+      placeholder_value: E-Mail
+      placeholder_type: Designation (Home, Work, ...)
+      tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
+  participations:
+    destroy:
+      flash:
+        success: Application was successfully deleted.
+  csv_imports:
+    description:
+      header: CSV files
+      explain_csv_format: 'A CSV file contains the details of a person on each line. The first line contains the field names. The fields are separated with a comma. If a field value itself contains commas, it must be complemented with quotation marks ("). Example:'
+      example: |
+        First name,Last name,e-Mail,Place,gender
+        Hans,Muster,hans@beispiel.ch,Bern,m
+        Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",f
+      explain_field_names: The fields in the CSV file can be assigned to the fields in the application in the next step.
+      explain_role: All persons of a file will be assigned to the same role, which can be selected in the next step.
+      special_fields: Special field values
+      explain_special_fields_html: The following fields must contain one of the <em>italic</ em> values.
+    preview_table:
+      icon_tooltip_invalid: 'Invalid values'
+      icon_tooltip_updated: 'Updating'
+      icon_tooltip_created: 'Recording'
+    define_mapping:
+      choose_role: 'Select role'
+      choose_role_help: 'This role will be assigned to all imported persons'
+      assign_columns_to_fields: 'Assign columns to fields'
+      column_from_csv: 'Column from CSV'
+      field_in_database: 'Field in database'
+      preview: 'Preview'
+    new:
+      upload_button: 'Upload'
+      csv_file: 'CSV file'
+    invalid_file: Please select a valid CSV file.
+    duplicate_keys:
+      one: '%{list} was assigned more than once.'
+      other: '%{list} were assigned more than once.'
+    preview:
+      import_now_button: Import persons now
+      import_details_html: The following persons will be importet with the <strong>role %{role}</strong> into the <strong>group %{group}</strong>.
+      new:
+        one: '%{count} %{role} will be imported.'
+        other: '%{count} %{role} will be imported.'
+      updated:
+        one: '%{count} %{role} will be updated.'
+        other: '%{count} %{role} will be updated.'
+      failed:
+        one: '%{count} %{role} won''t be imported.'
+        other: '%{count} %{role} won''t be imported.'
+    create:
+      new:
+        one: '%{count} %{role} has been imported succesfully.'
+        other: '%{count} %{role} have been imported succesfully.'
+      updated:
+        one: '%{count} %{role} has been updated succesfully.'
+        other: '%{count} %{role} have been updated succesfully.'
+      failed:
+        one: '%{count} %{role} has not been imported.'
+        other: '%{count} %{role} have not been imported.'
+  roles:
+    full_entry_label: '%{model_label} <i>%{role}</i> for <i>%{person}</i> in <i>%{group}</i>'
+    role_changed: 'changed %{full_entry_label} for <i>%{new_role}</i>.'
+    role_changed_to_group: 'changed %{full_entry_label} for <i>%{new_role}</i> in <i>%{new_group}</i>.'
+    form:
+      add_role_for_person: Create role for %{person}
+      edit_role_for_person: Edit role for %{person}
+    fields:
+      help_optional_label: Optional name of the role of this person
+    person_fields:
+      create_new_person: Add new person
+      search_existing_person: Find existing person
+      text_with_alternative_link_html: "%{text} <small>or %{link}</small>"
+    info:
+      role_has_permissions: "The role %{role} in the group %{group} has the following permissions:"
+      role_only_public: >
+        The role %{role} in the group %{group} can only view public data (groups,
+        events and subscriptions; no other persons).
+      only_visible_from_above: This role is visible only to persons in this level, not by people from higher layers.
+  people:
+    send_password_instructions: Login information has been sent.
+    years_old: (%{years} years old)
+    tabs:
+      history: History
+      log: log
+    actions_show:
+      send_login: Send login
+    actions_index:
+      import_list: Import list
+    attrs:
+      additional_data: More information
+      events: My next events
+    email_field:
+      used_as_login: Is used as login
+      only_changeable_by_superior: >
+        The main e-mail address of a person with multiple roles can only be changed
+        by a superordinate user.
+    log:
+      no_changes: So far, no changes were recorded.
+    pdf:
+      cannot_fit: The addresses do not fit into the defined label format.
+    roles:
+      title: Active roles
+    roles_aside:
+      set_main_group: Set main group
+  people_filters:
+    form:
+      save_search: Save search
+      save_filter: Save filter
+      save_filter_placeholder: Enter a name to save this filter
+      prompt_role_selection: Which roles should be displayed?
+    new:
+      title: Filter persons
+  group:
+    merge:
+      select:
+        title: 'Merge %{group}'
+        explanation: When merging two groups all sub-groups, events and people including roles of both groups will be merged. Subscriptions will not be merged. The previous groups are then visible as 'Deleted'.
+        merge_is_irreversible: This action can not be undone!
+        new_group_name: 'Name of the new group'
+        merge_group_with: '%{group} merge with'
+        merge_button: 'Merge group'
+    move:
+      select:
+        title: "Move group"
+        select_group: "Please select the group that you want to move into."
+  groups:
+    reactivated: "Group <i>%{group}</ i> has been successfully reactivated."
+    subgroups: 'Subgroups'
+    form:
+      help_contact: 'Use public address and telephone number of this person.'
+    actions_show:
+      export_subgroups: 'CSV subgroups'
+      reactivate: 'Reactivate'
+    attrs:
+      contact_details: 'Contact data'
+      additional_information: 'More information'
+    tabs:
+      deleted: 'Deleted'
+  group/merge:
+    success: 'The selected groups were merged to form the new group %{new_group_name}.'
+    failure: 'The selected groups can''t be merged.'
+    no_candidates: 'There are no equal groups for merging or you don''t have the required permissions.'
+    group_name_missing: 'Name for new group must be defined.'
+    no_group_selected: 'Please choose a group to be merged with.'
+    not_allowed: 'You do not have the permission to merge these groups.'
+  group/move:
+    success: '%{group} has been moved to %{target}.'
+    failure: 'This group can''t be moved or you don''t have the required persmissions.'
+    choose_group: 'Please select a group.'
+  layouts:
+    nav:
+      sign_out: 'Log off'
+    unauthorized:
+      forgot_password: 'Forgot your password?'
+    application:
+      available_under_license: 'licensed under the'
+      developed_by: 'Developed by'
+      source_code: 'Source code'
+  subscriber:
+    group:
+      form:
+        subgroups_selectable: 'Only groups within the subscription group can be selected'
+        subgroups_and_siblings_selectable: 'Only groups within the subscription group or within the adjacent groups from tye %{type} can be selected'
+      roles:
+        please_choose_group: Please select a group
+    exclude_person:
+      form:
+        exclude_subscriber: 'Exclude subscription'
+  subscriber/base:
+    blank: '%{model_label} must be selected'
+    taken: '%{model_label} has already been added'
+  subscriber/user:
+    success: 'You have been successfully added to the subscription.'
+    failure: 'You could not be added to the subscription: %{errors}'
+    unsubscribed: 'You have been successfully removed from the subscription.'
+  subscriber/exclude_person:
+    success: 'Subscriber %{subscriber} has been successfully excluded'
+    failure: '%{subscriber} is not a subscriber'
+  event/applications:
+    approved: 'The application was approved'
+    rejected: 'The application was rejected'
+  event/participations:
+    full_entry_label: '%{model_label} from <i>%{person}</i> in <i>%{event}</i>'
+    success: '%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary.'
+    instructions: 'For the final registration you have to print the page via <i>Print</i>, sign and mail it to the appropriate address.'
+    show:
+      link:
+        delete: 'Delete application'
+  event/precondition_checker:
+    preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
+    below_minimum_age: "Age limit falls below %{course_minimum_age}"
+    qualifications_missing: "The following qualifications are missing: %{missing}"
+  event/register:
+    not_logged_in: "You must log in for the registration of the event '%{event}'. "
+    person_found: 'We found you in our database.'
+    email_sent: 'We have sent you an e-mail with a link where you can sign up directly for the event.'
+    email_missing: 'Please enter an e-mail'
+    form_data_missing: 'Please fill out the form below before signing up for the event.'
+    registered: 'Your personal data are recorded. Please set now the information for the application.'
+    application_window_closed: 'The login window for this event is closed.'
+  event/roles:
+    full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"
+  version:
+    attribute_change:
+      from_to: "%{attr} has been changed from <i>%{from}</i> to <i>%{to}</i>."
+      from: "%{attr} <i>%{from}</i> has been deleted."
+      to: "%{attr} has been changed to <i>%{to}</i>."
+    association_change:
+      create: "%{model} <i>%{label}</i> has been added."
+      update: "%{model} <i>%{label}</i> has been updated: %{changeset}"
+      destroy: "%{model} <i>%{label}</i> has been deleted."
+  devise:
+    failure:
+      already_authenticated: 'You are already registered.'
+      unauthenticated: 'You need to login or register before you can continue.'
+      unconfirmed: 'You need to confirm your account before you can proceed.'
+      last_attempt: 'You have one more try before your account is blocked.'
+      locked: 'Your account is locked for 10 minutes.'
+      invalid: 'Invalid login credentials.'
+      invalid_token: 'The logon token is invalid.'
+      timeout: 'Your session has expired, please log in again.'
+      inactive: 'Your account is not active.'
+      not_found_in_database: 'Invalid login credentials.'
+      signin_not_allowed: 'You are not authorized you to sign here.'
+      not_permitted_to_view_page: 'You are not authorized to view this page'
+    sessions:
+      signed_out: 'You are now logged out.'
+      new:
+        sign_in: 'Sign in'
+    passwords:
+      send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to reset your password.'
+      updated: 'Your password has been changed. You''re now logged in.'
+      updated_not_active: 'Your password has been changed.'
+      send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."
+      new:
+        reset_password_button: 'Reset password'
+    confirmations:
+      send_instructions: 'In a few minutes you will receive an e-mail with instructions for you to confirm your registration.'
+      send_paranoid_instructions: 'If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to confirm your registration.'
+      confirmed: 'Thank you for your registration. You''re now logged in.'
+    unlocks:
+      send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
+      unlocked: 'Your account has been unlocked. You''re now logged in.'
+      send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
+    omniauth_callbacks:
+      success: 'You have successfully logged in to your %{kind} account.'
+      failure: 'You couldn''t login to your %{kind} account because "%{reason}".'
+    registrations:
+      edit:
+        change_password: "Change password"
+        set_password: "Set password"
+        old_password: 'Old password'
+        new_password: 'New password'
+        new_password_confirmation: 'Confirm new password'
+      person:
+        updated: 'Your password has been updated.'
+    mailer:
+      confirmation_instructions:
+        subject: 'Instructions to confirm your account'
+      reset_password_instructions:
+        subject: 'Instructions for setting your password'
+      unlock_instructions:
+        subject: 'Instruction for unlocking your account.'
+  errors:
+    link_to_main: 'Main page'
+    '404':
+      title: 'Page not found (404)'
+      explanation: 'Maybe you typed the address incorrectly, or the page has been deleted.'
+    '500':
+      title: 'Sorry, something went wrong (500)'
+      explanation: 'We have received a message and will look at the problem as quickly as possible.'
+    '503':
+      title: 'Sorry, page is currently not available (503)'
+      explanation: 'We are working on this page, so it is not available. This should not take too long.'
+      instruction: 'Please try again later.'
+  import/csv_parser:
+    read_error: "Error while reading from "
+    contains_no_data: "Contains no data"
+    read_success:
+      one: "%{count} record read succesfully."
+      other: "%{count} records read succesfully."
+  import/person_importer:
+    row_with_error: "row %{row}: %{errors}"
+  import/person_doublette_finder:
+    duplicates: "%{count} results in duplicate detection."
+  export/csv/events/list:
+    group_names: 'Organizers'
+  event:
+    run_by: 'Operated by'
+    applied_to: 'Registration to'
+    alternative_dates: 'Alternative dates'
+    no_qualifications_could_be_prolonged: "%{person} has no qualifications that can be extended."
+    lists:
+      courses:
+        title: 'Available courses'
+        explanation: 'Courses of your group and their top groups are shown here. Other courses you''ll find in the organizing group.'
+        csv_export_button: 'CSV export'
+      events:
+        title: 'Next events'
+        explanation: 'Events of your groups and their top groups are shown here. Other events you''ll find in the organizing group.'
+    application_market:
+      already_assigned: 'This person is already allocated elsewhere.'
+      participation:
+        registered_at: 'Registration on %{date}'
+      prio_buttons:
+        national_waitinglist: 'national waiting list'
+      index:
+        assigned_participants: 'allocated participants'
+    kinds:
+      form:
+        help_minimum_age: 'Years (vintage on the first course date is decisive)'
+        help_select_qualifications: 'With <Ctrl> + click multiple kinds of qualifications can be selected.'
+        qualifications:
+          for_participants: 'Qualifications for participants'
+          for_leaders: 'Qualifications for leaders'
+    participations:
+      specific_information: 'Specific information'
+      no_answer_given: '(not answered)'
+      actions_show:
+        change_contact_data_button: 'Change contact data'
+        approve_button: 'Release'
+        reject_button: 'Decline'
+      form:
+        title_new: "Register as %{role}"
+        title_edit: "Edit registration from %{person}"
+        apply: 'Register'
+        alternative_dates_info: 'Please enter more suitable courses.'
+        course_information: 'Information about the courses'
+        explain_required_checkmark: '* = reply mandatory'
+      priorities:
+        alternative_course: "%{number}. Alternative course"
+      print:
+        read_and_agreed_for_event: I meet the requirements for the event, have read the event description and agree to them.
+        read_and_agreed_for_event_course: I meet the course prerequisites, have read the course description and course regulations and agree to them.
+        requirements_for_event: Requirements for the event
+        requirements_for_event_course: Prerequisites for the course
+        page_of_pages: "Page <page> from <total>"
+      list:
+        incomplete: Required data is missing
+    register:
+      register:
+        title: Collect contact data
+      index:
+        login: Login
+        no_login: Do not have a Login?
+      email_check:
+        next: Further
+        enter_email: Please enter your email address so you can register for the event.
+  events:
+    preconditions: 'Required qualifications'
+    minimum_age_with_years: '%{minimum_age} years (vintage)'
+    tabs:
+      participants: 'Participants'
+    form:
+      caption_external_applications: 'Externals can sign up for this event'
+      caption_prioritization: 'Participants may set two additional courses as alternatives'
+      caption_requires_approval: 'The group leader will be informed and has to confirm your registration'
+      additional_information: 'Information for registration'
+      times_are_optional: Times are optional
+      explain_application_questions: Here you can request further information for the application. Give possible answers separated by a comma or leave the field blank to allow any answers.
+  custom_content_decorator:
+    available_placeholders: "Available placeholders: %{placeholders}"
+    available_placeholders_empty: 'No placeholders available'
+  event_decorator:
+    apply: 'Register'
+    applied: 'Registered'
+    not_possible: 'not possible'
+    participants_info: '%{count} registrations'
+    participants_info_with_limit: '%{count} registrations for %{limit} places'
+    active_participants_info: '%{count} registrations assigned'
+    issue_only: 'Assigns the %{model} %{issued} on the %{until} (last course date).'
+    prolong_only:
+      one: 'Extends existing qualification %{prolonged} until %{until} (last course date).'
+      other: 'Extends existing qualifications %{prolonged} until %{until} (last course date).'
+    issue_and_prolong: 'Assigns the %{model} %{issued} and extends existing qualifications %{prolonged} until %{until} (last course date).'
+  event/application_decorator:
+    course_acceptance: 'Course release'
+    confirmation:
+      approved: 'confirmed'
+      rejected: 'declined'
+      missing: 'due'
+  event/participation_decorator:
+    waiting_list_link:
+      title_active: 'Remove from the national waiting list'
+      title_inactive: 'Add to the national waiting list'
+      label: 'Waiting list'
+    tooltips:
+      ok: 'Markes course as passed and awards qualifications.'
+      remove: 'Markes course as not passed and removes qualifications.'
+  mailing_lists:
+    form:
+      help_additional_sender: 'In addition to the administrators this e-mail may also send messages to the mailing list.'
+      caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
+      caption_subscribers_may_post: 'Subscribers may write to the mailing list'
+  mailing_list_decorator:
+    may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
+    may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
+    may_post: 'Subscribers may write to the mailing list'
+    may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
+    subscribe: 'Log in'
+    unsubscribe: 'Log off'
+  paper_trail/version_decorator:
+    by: 'from %{author}'
+  dropdown/event/group_filter:
+    all_groups: 'All groups'
+  dropdown/event/role_add:
+    add: 'Add person'
+  dropdown/event/participant_add:
+    as: 'as %{role}'
+  dropdown/group_edit:
+    move: 'Move'
+    merge: 'Merge'
+  dropdown/people_export:
+    button: 'Export'
+    csv: 'CSV'
+    labels: 'Labels'
+    emails: 'E-Mail addresses'
+    addresses: 'Address list'
+    everything: 'All information'
+  filter_navigation/dropdown:
+    additional_views: 'Further views'
+  filter_navigation/people:
+    custom_filter: 'Own filter'
+    entire_layer: 'Whole level'
+    entire_group: 'Whole group'
+    new_filter: 'New filter...'
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: All persons (%{count})
+      teamers: Leaders (%{count})
+      participants: Participants (%{count})
+  sheet/csv_import:
+    title: 'Import person via CSV'
+  sheet/group:
+    belongs_to: 'belongs to'
+    deleted: '(deleted)'
+    layer_upwards: '< to a higher level'
+  label_formats:
+    form:
+      portrait: 'Portrait'
+      landscape: 'Landscape'
+  qualifications:
+    in_years: '%{years} years'
+    valid_until: 'to %{date}'
+    unlimited: 'unlimited'
+  navigation:
+    groups: 'Groups'
+    events: 'Events'
+    courses: 'Courses'
+    admin: 'Admin'
+  full_text:
+    index:
+      title: 'people found'
+      incomplete_search_request: 'Please enter at least two characters.'
+  qualification_kinds:
+    form:
+      help_validity_in_years: 'Years from the date of qualification; by the end of the relevant year'
+      help_reactivateable_in_years: 'Years from the expiration date'
+  subscriptions:
+    actions_index:
+      exclude_person: 'Exclude person'
+    list:
+      excluded_people: 'Excluded persons'
+  views:
+    pagination:
+      next: '>>'
+      previous: '<<'
+      first: first
+      last: last
+      truncate: '...'

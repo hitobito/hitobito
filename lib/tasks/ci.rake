@@ -28,8 +28,6 @@ namespace :ci do
   desc "Run the tasks for a wagon commit build"
   task :wagon do
     Rake::Task['log:clear'].invoke
-    Rake::Task['db:migrate'].invoke
-    Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
     wagon_exec('bundle exec rake app:rubocop app:ci:setup:rspec spec')
   end
 
@@ -38,10 +36,8 @@ namespace :ci do
     desc "Run the tasks for a wagon nightly build"
     task :nightly do
       Rake::Task['log:clear'].invoke
-      Rake::Task['db:migrate'].invoke
-      Rake::Task['wagon:bundle:update'].invoke  # should not be run when gems are not vendored
-      #Rake::Task['erd'].invoke
       wagon_exec('bundle exec rake app:ci:setup:rspec spec app:rubocop:report app:brakeman')
+      Rake::Task['erd'].invoke
     end
 
   end
@@ -52,5 +48,3 @@ namespace :ci do
     Rake::Task['wagon:exec'].invoke
   end
 end
-
-

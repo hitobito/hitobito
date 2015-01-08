@@ -23,11 +23,11 @@ describe I18nEnums do
   it 'returns translated label in french' do
     I18n.locale = :fr
     person.gender = 'm'
-    person.gender_label.should eq 'masculin'
+    person.gender_label.should eq 'Masculin'
     person.gender = 'w'
-    person.gender_label.should eq 'féminin'
+    person.gender_label.should eq 'Féminin'
     person.gender = ''
-    person.gender_label.should eq 'inconnu'
+    person.gender_label.should eq 'Inconnu'
     I18n.locale = :de
   end
 

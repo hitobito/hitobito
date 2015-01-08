@@ -7,9 +7,6 @@
 
 module Export::Pdf::Participation
   class Section
-    include ActionView::Helpers::TranslationHelper
-    include ActionView::Helpers::TextHelper
-    include StandardHelper
 
     attr_reader :pdf, :participation
 
@@ -26,7 +23,6 @@ module Export::Pdf::Participation
     def initialize(pdf, participation)
       @pdf = pdf
       @participation = participation
-      @virtual_path = 'event.participations.print' #  to use t('.key')
     end
 
     private
@@ -84,10 +80,19 @@ module Export::Pdf::Participation
       font_size(11) { yield }
     end
 
-    def labeled_attr(attr, model = nil)
-      model ||= send(self.class.to_s.demodulize.downcase.to_sym)
+    def labeled_attr(model, attr)
       value = model.send(attr)
       text [model.class.human_attribute_name(attr), f(value)].join(': ') if value.present?
+    end
+
+    def f(value)
+      case value
+      when Date   then I18n.l(value)
+      when Time   then I18n.l(value, format: :time)
+      when true   then I18n.t(:"global.yes")
+      when false  then I18n.t(:"global.no")
+      else value.to_s
+      end
     end
 
     def human_event_name

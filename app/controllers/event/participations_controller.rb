@@ -53,21 +53,20 @@ class Event::ParticipationsController < CrudController
   end
 
   def index
-    entries
-
     respond_to do |format|
-      format.html
-      format.pdf   { render_pdf(@participations.collect(&:person)) }
-      format.csv   { render_csv }
-      format.email { render_emails(@participations.collect(&:person)) }
+      format.html  { entries }
+      format.pdf   { render_pdf(entries.collect(&:person)) }
+      format.csv   { send_data(exporter.export(entries), type: :csv) }
+      format.email { render_emails(entries.collect(&:person)) }
     end
   end
 
   def print
     load_answers
-    respond_to do |format|
-      format.pdf   { render_participation(entry) }
-    end
+    pdf = Export::Pdf::Participation.render(entry)
+    filename = Export::Pdf::Participation.filename(entry)
+
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
   end
 
   def destroy
@@ -88,10 +87,6 @@ class Event::ParticipationsController < CrudController
 
   def authorize_class
     authorize!(:index_participations, event)
-  end
-
-  def render_csv
-    send_data(exporter.export(entries), type: :csv)
   end
 
   def exporter

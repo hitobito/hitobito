@@ -106,18 +106,26 @@ Hitobito::Application.routes.draw do
         resources :subscriptions, only: [:index, :destroy] do
           collection do
             resources :person, only: [:new, :create], controller: 'subscriber/person'
+            get 'person' => 'subscriber/person#new' # route required for language switch
+
             resources :exclude_person, only: [:new, :create], controller: 'subscriber/exclude_person'
+            get 'exclude_person' => 'subscriber/exclude_person#new' # route required for language switch
+
             resources :group, only: [:new, :create], controller: 'subscriber/group' do
               collection do
                 get :query
                 get :roles
               end
             end
+            get 'group' => 'subscriber/group#new' # route required for language switch
+
             resources :event, only: [:new, :create], controller: 'subscriber/event' do
               collection  do
                 get :query
               end
             end
+            get 'event' => 'subscriber/event#new' # route required for language switch
+
             resource :user, only: [:create, :destroy], controller: 'subscriber/user'
           end
         end

@@ -29,7 +29,7 @@ module Export::Pdf::Participation
     end
 
     def render_requirements
-      with_count(t(".requirements_for_#{i18n_event_postfix}")) do
+      with_count(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
         boxed_attr(event, :application_conditions)
 
         if course?

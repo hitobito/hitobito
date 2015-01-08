@@ -37,47 +37,71 @@ describe EventsController, type: :controller do
 
 
   describe 'GET #index' do
-    render_views
-    let(:group) { groups(:top_group) }
-    let(:dom) { Capybara::Node::Simple.new(response.body) }
-    let(:today) { Date.today }
-    let(:last_year) { 1.year.ago }
+    context '.html' do
+      render_views
+      let(:group) { groups(:top_layer) }
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:today) { Date.today }
+      let(:last_year) { 1.year.ago }
 
-    it 'renders button to add new events' do
-      get :index, group_id: group.id
-      dom.find('.btn-toolbar .btn').text.should include 'Anlass erstellen'
+      it 'renders button to add new events' do
+        get :index, group_id: group.id, year: 2012
+        dom.all('.btn-toolbar .btn')[0].text.should include 'Anlass erstellen'
+      end
+
+      it 'renders button to add new courses' do
+        get :index, group_id: group.id, type: 'Event::Course', year: 2012
+        dom.all('.btn-toolbar .btn')[0].text.should include 'Kurs erstellen'
+      end
+
+      it 'renders button to export courses' do
+        get :index, group_id: group.id, type: 'Event::Course', year: 2012
+        dom.all('.btn-toolbar .btn')[1].text.should include 'CSV Export'
+      end
+
+      it 'lists entries for current year' do
+        ev = event_with_date(start_at: today)
+        event_with_date(start_at: last_year)
+        get :index, group_id: group.id
+        dom.all('#main table tbody tr').count.should eq 1
+        dom.find('#main table tbody tr').text.should include ev.name
+        dom.find_link(today.year.to_s).native.parent[:class].should eq 'active'
+      end
+
+      it 'pages per year' do
+        event_with_date(start_at: today)
+        ev = event_with_date(start_at: last_year)
+        get :index, group_id: group.id, year: last_year.year
+        dom.all('.pagination li').count.should eq 6
+        dom.all('#main table tbody tr').count.should eq 1
+        dom.find('#main table tbody tr').text.should include ev.name
+        dom.find_link(last_year.year.to_s).native.parent[:class].should eq 'active'
+      end
+
+      def event_with_date(opts = {})
+        opts = { groups: [group], state: 'application_open', start_at: Date.today }.merge(opts)
+        event = Fabricate(:event, groups: opts[:groups], state: opts[:state])
+        set_start_dates(event, opts[:start_at])
+        event
+      end
     end
 
-    it 'renders button to add new courses' do
-      get :index, group_id: group.id, type: 'Event::Course'
-      dom.find('.btn-toolbar .btn').text.should include 'Kurs erstellen'
+    context '.csv' do
+
+      let(:group) { groups(:top_layer) }
+
+      it 'renders events csv' do
+        get :index, group_id: group.id, format: :csv, year: 2012
+        response.body.lines.should have(2).items
+      end
+
+      it 'renders courses csv' do
+        get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
+        response.body.lines.should have(2).items
+      end
+
     end
 
-    it 'lists entries for current year' do
-      ev = event_with_date(start_at: today)
-      event_with_date(start_at: last_year)
-      get :index, group_id: group.id
-      dom.all('#main table tbody tr').count.should eq 1
-      dom.find('#main table tbody tr').text.should include ev.name
-      dom.find_link(today.year.to_s).native.parent[:class].should eq 'active'
-    end
-
-    it 'pages per year' do
-      event_with_date(start_at: today)
-      ev = event_with_date(start_at: last_year)
-      get :index, group_id: group.id, year: last_year.year
-      dom.all('.pagination li').count.should eq 6
-      dom.all('#main table tbody tr').count.should eq 1
-      dom.find('#main table tbody tr').text.should include ev.name
-      dom.find_link(last_year.year.to_s).native.parent[:class].should eq 'active'
-    end
-
-    def event_with_date(opts = {})
-      opts = { groups: [group], state: 'application_open', start_at: Date.today }.merge(opts)
-      event = Fabricate(:event, groups: opts[:groups], state: opts[:state])
-      set_start_dates(event, opts[:start_at])
-      event
-    end
   end
 
   describe 'GET #new' do

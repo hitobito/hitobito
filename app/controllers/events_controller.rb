@@ -31,6 +31,13 @@ class EventsController < CrudController
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
+  def index
+    respond_to do |format|
+      format.html  { entries }
+      format.csv   { render_csv(entries) }
+    end
+  end
+
   def new
     assign_attributes if model_params
     entry.dates.build
@@ -42,17 +49,17 @@ class EventsController < CrudController
   def list_entries
     model_scope.
       where(type: params[:type]).
+      in_year(year).
       order_by_date.
       preload_all_dates.
-      uniq.
-      in_year(year)
+      uniq
   end
 
   private
 
   def build_entry
     type = model_params && model_params[:type].presence
-    type ||= 'Event'
+    type ||= Event.sti_name
     event = Event.find_event_type!(type).new
     event.groups << parent
     event
@@ -87,6 +94,10 @@ class EventsController < CrudController
     end
   end
 
+  def render_csv(entries)
+    send_data ::Export::Csv::Events::List.export(entries), type: :csv
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
@@ -95,6 +106,14 @@ class EventsController < CrudController
   def permitted_attrs
     attrs = entry.class.used_attributes
     attrs + self.class.permitted_attrs
+  end
+
+  def authorize_class
+    if request.format.csv?
+      authorize!(:export_events, group)
+    else
+      authorize!(:index_events, group)
+    end
   end
 
 end

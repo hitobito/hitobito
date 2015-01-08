@@ -27,6 +27,8 @@ module TarantulaConfig
     # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)
     t.skip_uri_patterns << /^http(?!:\/\/www\.example\.com)/
+    # only test two languages (de and fr), the rest should be the same
+    t.skip_uri_patterns << /\/(it)|(en)\//
     t.skip_uri_patterns << /year=#{outside_three_years_window}/
     t.skip_uri_patterns << /users\/sign_out/
     # sphinx not running
@@ -37,9 +39,11 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/participant$/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/waiting_list$/
     # not too many csv, email and pdf requests due to different sorting
+    t.skip_uri_patterns << /groups\/\d+\/people\?.*kind.*sort/
     t.skip_uri_patterns << /groups\/\d+\/people\.csv\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/people\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/people\.pdf\?.*sort/
+    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\?.*filter.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.csv\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
@@ -62,6 +66,8 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/participations\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/user$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/person$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/)
@@ -72,11 +78,12 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/events\/\d+\/participations$/)
     # kind already deleted in another language
     t.allow_404_for(/qualification_kinds\/\d+$/)
+    # label format already deleted in another language
+    t.allow_404_for(/label_formats\/\d+$/)
     # groups already deleted in another language
-    t.allow_404_for(/it\/groups\/\d+$/)
+    t.allow_404_for(/fr\/groups\/\d+$/)
     # custom return_urls end up like that.
     t.allow_404_for(/^\-?\d+$/)
-
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
   end

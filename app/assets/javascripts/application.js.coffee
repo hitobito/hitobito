@@ -80,7 +80,7 @@ swapElements = (event) ->
   $('.' + css).slideToggle()
   event.preventDefault()
 
-toggleHideElementByLink = (event) ->
+toggleElementByLink = (event) ->
   selector = $(this).data('hide')
   if $("##{selector}").is(':visible')
     $("##{selector}").slideUp()
@@ -88,12 +88,19 @@ toggleHideElementByLink = (event) ->
     $("##{selector}").slideDown()
   event.preventDefault()
 
-toggleHideElementByCheckbox = (event) ->
+hideElementByCheckbox = (event) ->
   selector = $(this).data('hide')
   if this.checked
     $("##{selector}").slideUp()
   else
     $("##{selector}").slideDown()
+
+showElementByCheckbox = (event) ->
+  selector = $(this).data('show')
+  if this.checked
+    $("##{selector}").slideDown()
+  else
+    $("##{selector}").slideUp()
 
 resetRolePersonId = (event) ->
   $('#role_person_id').val(null).change()
@@ -184,10 +191,13 @@ $ ->
   $('body').on('click', 'a[data-swap]', swapElements)
 
   # wire up links that hide an other element when checked.
-  $('body').on('click', 'a[data-hide]', toggleHideElementByLink)
+  $('body').on('click', 'a[data-hide]', toggleElementByLink)
 
   # wire up checkboxes that hide an other element when checked.
-  $('body').on('change', 'input[data-hide]', toggleHideElementByCheckbox)
+  $('body').on('change', 'input[data-hide]', hideElementByCheckbox)
+
+  # wire up checkboxes that show an other element when checked.
+  $('body').on('change', 'input[data-show]', showElementByCheckbox)
 
   $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 

@@ -4,7 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 = hidden_field_tag :data, params[:data]
-= hidden_field_tag :role_type,  params[:role_type]
+= hidden_field_tag :role_type, params[:role_type]
+= hidden_field_tag :update_behaviour, params[:update_behaviour]
 
 = fields_for :field_mappings do |f|
   - field_mappings.each do |key, value|

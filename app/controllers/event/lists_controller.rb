@@ -17,21 +17,27 @@ class Event::ListsController < ApplicationController
 
 
   def events
-    authorize!(:index, Event)
+    authorize!(:list_available, Event)
 
     @grouped_events = grouped(upcoming_user_events)
   end
 
   def courses
-    authorize!(:index, Event::Course)
+    if request.format.csv?
+      authorize!(:export_list, Event::Course)
+    else
+      authorize!(:list_available, Event::Course)
+    end
+
     set_group_vars
-
-    grouped_courses = grouped(limited_courses_scope, course_grouping)
-    @grouped_events = sorted(grouped_courses)
-
     respond_to do |format|
-      format.html { @grouped_events }
-      format.csv  { render_courses_csv(@grouped_events.values.flatten) if can?(:export, Event) }
+      format.html do
+        grouped_courses = grouped(limited_courses_scope, course_grouping)
+        @grouped_events = sorted(grouped_courses)
+      end
+      format.csv do
+        render_courses_csv(limited_courses_scope)
+      end
     end
   end
 
@@ -40,7 +46,7 @@ class Event::ListsController < ApplicationController
   def grouped(scope, grouping = DEFAULT_GROUPING)
     EventDecorator.
       decorate_collection(scope).
-      group_by { |event| grouping.call(event) }
+      group_by(&grouping)
   end
 
   def sorted(courses)
@@ -55,7 +61,7 @@ class Event::ListsController < ApplicationController
   end
 
   def set_group_vars
-    if can?(:manage_courses, Event)
+    if can?(:list_all, Event::Course)
       unless params[:year].present?
         params[:group_id] = default_user_course_group.try(:id)
       end
@@ -80,7 +86,7 @@ class Event::ListsController < ApplicationController
   end
 
   def limited_courses_scope
-    if can?(:manage_courses, Event)
+    if can?(:list_all, Event::Course)
       group_id > 0 ? course_scope.with_group_id(group_id) : course_scope
     else
       course_scope.in_hierarchy(current_user)
@@ -89,7 +95,7 @@ class Event::ListsController < ApplicationController
 
   def course_scope
     Event::Course
-      .includes(:groups,  additional_course_includes)
+      .includes(:groups, additional_course_includes)
       .order(course_ordering)
       .in_year(year)
       .list
@@ -100,7 +106,7 @@ class Event::ListsController < ApplicationController
   end
 
   def course_ordering
-    kind_used? ? 'event_kind_translations.label' : 'event_dates.start_at'
+    kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
   end
 
   def additional_course_includes
@@ -108,7 +114,7 @@ class Event::ListsController < ApplicationController
   end
 
   def kind_used?
-    Event::Course.used_attributes.include?(:kind_id)
+    Event::Course.attr_used?(:kind_id)
   end
 
 end

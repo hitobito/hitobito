@@ -10,27 +10,30 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
 
   on(Event) do
-    permission(:any).may(:read).all
+    class_side(:list_available).everybody
+
+    permission(:any).may(:show).all
     permission(:any).may(:index_participations).for_participations_read_events
     permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify).for_qualify_event
 
     permission(:group_full).may(:index_participations, :create, :update, :destroy).in_same_group
-    permission(:group_full).may(:manage_courses).if_in_course_group
 
     permission(:layer_full).may(:index_participations, :update).in_same_layer
     permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
-    permission(:layer_full).may(:manage_courses).if_in_course_layer
 
     permission(:layer_and_below_full).
       may(:index_participations, :update).in_same_layer_or_below
     permission(:layer_and_below_full).
       may(:create, :destroy, :application_market, :qualify).in_same_layer
-    permission(:layer_and_below_full).may(:manage_courses).if_in_course_layer
-
-    permission(:admin).may(:export).all
 
     general(:create, :destroy, :application_market, :qualify).at_least_one_group_not_deleted
+  end
+
+  on(Event::Course) do
+    class_side(:list_available).everybody
+    class_side(:list_all).if_full_permission_in_course_layer
+    class_side(:export_list).if_admin
   end
 
   def for_qualify_event
@@ -41,8 +44,8 @@ class EventAbility < AbilityDsl::Base
     permission_in_groups?(course_offerers)
   end
 
-  def if_in_course_layer
-    permission_in_layers?(course_offerers)
+  def if_full_permission_in_course_layer
+    contains_any?(user_context.layers_full + user_context.layers_and_below_full, course_offerers)
   end
 
   private

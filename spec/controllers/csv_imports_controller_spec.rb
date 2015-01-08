@@ -167,16 +167,16 @@ describe CsvImportsController do
 
         before do
           @person = Fabricate(:person, first_name: 'bar', email: 'foo@bar.net', nickname: '')
-          @role_count = Role.count
-          @person_count = Person.count
         end
 
         it 'last update wins' do
-          post :create, required_params
+          expect do
+            expect do
+              post :create, required_params
+            end.to change { Role.count }.by(1)
+          end.not_to change { Person.count }
 
-          Role.count.should eq @role_count + 1
-          Person.count.should eq @person_count
-          flash[:notice].should eq  ['1 Person (Leader) wurde erfolgreich aktualisiert.']
+          flash[:notice].should eq ['1 Person (Leader) wurde erfolgreich aktualisiert.']
           @person.reload.nickname.should eq 'foobar'
         end
       end

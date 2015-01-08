@@ -42,13 +42,13 @@ describe Event::Role do
     it 'decrements event#(representative_)participant_count' do
       event.reload
       participant_count = event.participant_count
-      representative_participant_count = event.representative_participant_count
+      applicant_count = event.applicant_count
 
       role.destroy
 
       event.reload
       event.participant_count.should eq participant_count - 1
-      event.representative_participant_count.should eq representative_participant_count - 1
+      event.applicant_count.should eq applicant_count - 1
     end
 
     it 'decrements event#participant_count if participations has other non participant roles' do
@@ -58,13 +58,13 @@ describe Event::Role do
 
       event.reload
       participant_count = event.participant_count
-      representative_participant_count = event.representative_participant_count
+      applicant_count = event.applicant_count
 
       role.destroy
 
       event.reload
       event.participant_count.should eq participant_count - 1
-      event.representative_participant_count.should eq representative_participant_count - 1
+      event.applicant_count.should eq applicant_count - 1
     end
 
   end

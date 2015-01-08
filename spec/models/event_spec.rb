@@ -30,7 +30,7 @@
 #  participant_count                :integer          default(0)
 #  application_contact_id           :integer
 #  external_applications            :boolean          default(FALSE)
-#  representative_participant_count :integer          default(0)
+#  applicant_count :integer          default(0)
 #
 
 require 'spec_helper'
@@ -202,24 +202,6 @@ describe Event do
   end
 
   context 'finders' do
-
-    context '.since' do
-      let(:since) { Time.zone.parse('2013-01-10 14:24:21') }
-
-      let!(:yesterday) { event_with_date(since - 1.day) }
-      let!(:tomorrow) { event_with_date(since + 1.day) }
-
-      subject { Event.since(since) }
-
-      it { should include tomorrow }
-      it { should_not include yesterday }
-
-      def event_with_date(start_at)
-        event = Fabricate(:event)
-        event.dates.first.update_attribute(:start_at, start_at)
-        event
-      end
-    end
 
     context '.in_year' do
       context 'one date' do
@@ -411,7 +393,7 @@ describe Event do
     def assert_counts(attrs)
       event.reload
       event.participant_count.should eq attrs[:participant]
-      event.representative_participant_count.should eq attrs[:representative_participant]
+      event.applicant_count.should eq attrs[:applicant]
     end
 
     context 'for basic event' do
@@ -422,27 +404,27 @@ describe Event do
         Event::Application.where('priority_2_id = ? OR priority_3_id = ?', event.id, event.id).
           count.should eq 0
 
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
 
       it 'should not count leaders' do
         leader = Fabricate(:event_participation, event: event, active: true)
         Fabricate(Event::Role::Leader.name.to_sym, participation: leader, label: 'Foolabel')
 
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
 
       it 'should count participations with multiple roles in regular event correctly' do
         p = Fabricate(:event_participation, event: event, active: true)
 
         Fabricate(Event::Role::Cook.name.to_sym, participation: p)
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
 
         r = Fabricate(Event::Role::Participant.name.to_sym, participation: p)
-        assert_counts(participant: 1, representative_participant: 1)
+        assert_counts(participant: 1, applicant: 1)
 
         r.destroy
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
     end
 
@@ -458,39 +440,39 @@ describe Event do
                       application: Fabricate(:event_application, priority_1: event))
 
         Fabricate(Event::Role::Cook.name.to_sym, participation: p)
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
 
         r = Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
-        assert_counts(participant: 1, representative_participant: 1)
+        assert_counts(participant: 1, applicant: 1)
 
         # in courses, participant roles are removed like that
         Event::ParticipantAssigner.new(event, p).remove_participant
-        assert_counts(participant: 0, representative_participant: 1)
+        assert_counts(participant: 0, applicant: 1)
 
         p.destroy!
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
 
       it 'should count active prio 1 participations correctly' do
         p = create_participation(:prio1)
-        assert_counts(participant: 1, representative_participant: 1)
+        assert_counts(participant: 1, applicant: 1)
         p.destroy!
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
 
       it 'should count active prio 2 participations correctly' do
         create_participation(:prio2)
-        assert_counts(participant: 1, representative_participant: 1)
+        assert_counts(participant: 1, applicant: 1)
       end
 
       it 'should count pending prio 1 participations correctly' do
         create_participation(:prio1, active: false)
-        assert_counts(participant: 0, representative_participant: 1)
+        assert_counts(participant: 0, applicant: 1)
       end
 
       it 'should count pending prio 2 participations correctly' do
         create_participation(:prio2, active: false)
-        assert_counts(participant: 0, representative_participant: 0)
+        assert_counts(participant: 0, applicant: 0)
       end
 
       it 'should sum participations/applications correctly' do
@@ -502,7 +484,7 @@ describe Event do
         create_participation(:prio1, active: false)
         create_participation(:prio2, active: false)
 
-        assert_counts(participant: 2, representative_participant: 3)
+        assert_counts(participant: 2, applicant: 3)
       end
 
     end

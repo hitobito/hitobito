@@ -21,3 +21,11 @@
 
 * Möglichkeit für Beziehungen zwischen Personen.
 * Neue Grundberechtigungen nur für die aktuelle Ebene.
+
+== Version 1.5
+
+* Rollen in Anlässen können geändert werden.
+* CSV Import erkennt Auswahlwerte in der aktuellen Sprache (z.B. ja/nein anstelle 1/0).
+* Möglichkeit, beim CSV Import Werte in der Datenbank zu ändern.
+* CSV Export für Gruppenanlässe und Kurse.
+* Verschiedene Bug Fixes und Stabilitätsverbesserungen.

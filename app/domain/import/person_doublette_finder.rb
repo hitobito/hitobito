@@ -9,7 +9,8 @@ module Import
   class PersonDoubletteFinder
     include Translatable
 
-    attr_reader :attrs
+    # if multiple rows match the same existing person, always return the same object
+    attr_reader :doublettes
 
     DOUBLETTE_ATTRIBUTES = [
       :first_name,
@@ -19,39 +20,31 @@ module Import
       :birthday
     ]
 
-    def initialize(attrs)
-      @attrs = attrs
+    def initialize
+      @doublettes = {}
     end
 
-    def find_and_update
-      people = duplicates
+    def find(attrs)
+      people = duplicates(attrs)
       if people.present?
-        people.first.tap do |person|
-          if people.size == 1
-            assign_blank_attrs(person)
-          else
-            person.errors.add(:base, translate(:duplicates, count: people.size))
-          end
+        person = people.first
+        if people.size == 1
+          doublettes[person.id] ||= person
+        else
+          person.errors.add(:base, translate(:duplicates, count: people.size))
+          person
         end
       end
     end
 
-    def assign_blank_attrs(person)
-      blank_attrs = attrs.select { |key, _value| person.attributes[key].blank? }
-      person.attributes = blank_attrs
-    end
-
-    def duplicate_conditions
-      [''].tap do |conditions|
-        append_doublette_conditions(conditions)
-        append_email_condition(conditions)
-      end
+    def doublette_count
+      doublettes.size
     end
 
     private
 
-    def duplicates
-      conditions = duplicate_conditions
+    def duplicates(attrs)
+      conditions = duplicate_conditions(attrs)
       if conditions.first.present?
         ::Person.where(conditions).to_a
       else
@@ -59,8 +52,15 @@ module Import
       end
     end
 
-    def append_doublette_conditions(conditions)
-      exisiting_doublette_attrs.each do |key, value|
+    def duplicate_conditions(attrs)
+      [''].tap do |conditions|
+        append_doublette_conditions(attrs, conditions)
+        append_email_condition(attrs, conditions)
+      end
+    end
+
+    def append_doublette_conditions(attrs, conditions)
+      exisiting_doublette_attrs(attrs).each do |key, value|
         conditions.first << ' AND ' if conditions.first.present?
         if %w(first_name last_name company_name).include?(key.to_s)
           conditions.first << "#{key} = ?"
@@ -72,7 +72,7 @@ module Import
       end
     end
 
-    def append_email_condition(conditions)
+    def append_email_condition(attrs, conditions)
       if attrs[:email].present?
         if conditions.first.present?
           conditions[0] = "(#{conditions[0]}) OR "
@@ -82,7 +82,7 @@ module Import
       end
     end
 
-    def exisiting_doublette_attrs
+    def exisiting_doublette_attrs(attrs)
       existing = attrs.select do |key, value|
         value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym)
       end

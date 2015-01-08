@@ -37,10 +37,7 @@ class Event::ParticipationFilter
   end
 
   def load_entries
-    event.participations.
-      active.
-      joins(:roles).
-      where(exclude_affiliate_types).
+    event.active_participations_without_affiliate_types.
       includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
       uniq
   end
@@ -59,13 +56,6 @@ class Event::ParticipationFilter
       else
         records
       end
-    end
-  end
-
-  def exclude_affiliate_types
-    affiliate_types = event.role_types.reject(&:kind).collect(&:sti_name)
-    if affiliate_types.present?
-      ['event_roles.type NOT IN (?)', affiliate_types]
     end
   end
 

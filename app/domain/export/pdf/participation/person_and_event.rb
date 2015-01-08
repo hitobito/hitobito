@@ -20,7 +20,7 @@ module Export::Pdf::Participation
         text person.email
         move_down_line
 
-        person_attributes.each { |attr| labeled_attr(attr) }
+        person_attributes.each { |attr| labeled_attr(person, attr) }
         move_down_line
       end
 
@@ -46,7 +46,7 @@ module Export::Pdf::Participation
 
         text event.number
         text event.kind if event_with_kind?
-        labeled_attr(:cost)
+        labeled_attr(event, :cost)
         move_down_line
 
         text [human_event_name, dates_label.downcase].join, style: :bold

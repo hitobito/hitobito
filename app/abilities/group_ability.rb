@@ -19,13 +19,14 @@ class GroupAbility < AbilityDsl::Base
     # local people are the ones not visible from above
     permission(:group_read).may(:index_people, :index_local_people).in_same_group
 
-    permission(:group_full).may(:index_full_people).in_same_group
-    permission(:group_full).may(:update, :reactivate).in_same_group
+    permission(:group_full).
+      may(:index_full_people, :update, :reactivate, :export_events).
+      in_same_group
 
     permission(:layer_read).
-      may(:show_details, :index_people, :index_full_people, :index_deep_full_people).
+      may(:show_details, :index_people, :index_local_people, :index_full_people,
+          :index_deep_full_people, :export_events).
       in_same_layer
-    permission(:layer_read).may(:index_local_people).in_same_layer
 
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
@@ -33,7 +34,7 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
-          :export_subgroups).
+          :export_subgroups, :export_events).
       in_same_layer_or_below
     permission(:layer_and_below_read).may(:index_local_people).in_same_layer
 
@@ -41,6 +42,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full).may(:update, :reactivate).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
+
 
     general(:update).group_not_deleted
   end

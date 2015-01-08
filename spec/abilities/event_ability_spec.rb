@@ -49,6 +49,25 @@ describe EventAbility do
         should be_able_to(:index_participations, other)
       end
 
+      it 'may list all courses' do
+        should be_able_to(:list_all, Event::Course)
+      end
+
+      it 'may export course list' do
+        should be_able_to(:export_list, Event::Course)
+      end
+
+      it 'may not list all courses if not in course layer' do
+        Group::TopLayer.event_types.delete(Event::Course)
+        Group.root_types(Group::TopLayer)
+        begin
+          should_not be_able_to(:list_all, Event::Course)
+        ensure
+          Group::TopLayer.event_types << Event::Course
+          Group.root_types(Group::TopLayer)
+        end
+      end
+
       context 'in other layer' do
         let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
@@ -137,6 +156,13 @@ describe EventAbility do
         should_not be_able_to(:index_participations, other)
       end
 
+      it 'may list all courses' do
+        should be_able_to(:list_all, Event::Course)
+      end
+
+      it 'may not export course list' do
+        should_not be_able_to(:export_list, Event::Course)
+      end
     end
 
     context Event::Participation do
@@ -201,6 +227,10 @@ describe EventAbility do
       it 'may not index people for event in other group' do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
         should_not be_able_to(:index_participations, other)
+      end
+
+      it 'may not list all courses' do
+        should_not be_able_to(:list_all, Event::Course)
       end
     end
 

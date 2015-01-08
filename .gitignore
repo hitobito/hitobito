@@ -36,6 +36,9 @@ spec/reports
 .sass-cache
 app/assets/stylesheets_generated
 public/assets
+public/404.html
+public/500.html
+public/503.html
 
 # local settings
 config/settings.local.yml

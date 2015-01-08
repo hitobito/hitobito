@@ -44,7 +44,7 @@ module Export::Csv::People
     end
 
     def contact_account_attribute(accounts, attr)
-      account = accounts.find { |e| ContactAccounts.key(e.class, e.label) == attr }
+      account = accounts.find { |e| ContactAccounts.key(e.class, e.translated_label) == attr }
       account.value if account
     end
 

@@ -50,7 +50,7 @@ describe AdditionalEmail do
 
       a2 = Fabricate(:additional_email, label: 'Privat')
       a2.label.should eq 'Privat'
-      a2.translated_label.should eq 'privé'
+      a2.translated_label.should eq 'Privé'
     end
   end
 
@@ -104,7 +104,7 @@ describe AdditionalEmail do
       a1 = Fabricate(:additional_email, label: 'Foo')
       a2 = Fabricate(:additional_email, label: 'Privat')
 
-      should include('Foo', 'privé')
+      should include('Foo', 'Privé')
     end
 
     it 'is sweeped for all languages if new label is added' do

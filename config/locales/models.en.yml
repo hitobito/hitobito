@@ -2,6 +2,398 @@ en:
   time:
     formats:
       time: "%H:%M"
+      date_time: "%d.%m.%Y %H:%M"
+      month_year: '%B %Y'
+  date:
+    formats:
+      default: '%d.%m.%Y'
+      long: '%e %B %Y'
+      short: '%e %b'
+  number:
+    currency:
+      format:
+        delimiter: ''''
+        format: '%u %n'
+        separator: .
+        unit: CHF
+    format:
+      delimiter: ''''
+      separator: .
+  attributes:
+    created_info: Created
+    updated_info: Changed
+    deleted_info: Deleted
+  activerecord:
+    errors:
+      messages:
+        type_not_allowed: can't be created here
+        must_be_after_opening: must be after the start of the application period
+        must_have_same_type: must be of the same type
+        greater_than: must be bigger than %{count}
+        greater_than_or_equal_to: 'must be bigger or equal to '
+      models:
+        custom_content:
+          attributes:
+            body:
+              placeholder_missing: 'must contain the placeholder %{placeholder} '
+        event/date:
+          attributes:
+            finish_at:
+              not_after_start: 'must be after "from"'
+        event/question:
+          attributes:
+            choices:
+              requires_more_than_one_choice: 'requires more than one choice'
+        event/participation:
+          attributes:
+            person_id:
+              taken: is already registered
+        mailing_list:
+          attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' is not allowed"
+        person:
+          name_missing: 'Please enter your name.'
+          attributes:
+            email:
+              taken: >
+                is already taken. This address must be unique for every person, because
+                it is used when logging in. Under 'Further e-mail" you may specify
+                addresses, which are assigned to other people as main e-mail (the
+                main e-mail can be left blank).
+        people_relation:
+          attributes:
+            tail_id:
+              must_not_be_equal_to_head: to yourself is not allowed.
+        qualification:
+          attributes:
+            qualification_kind_id:
+              exists_for_timeframe: 'already exists in this period'
+        qualification_kind:
+          attributes:
+            validity:
+              not_a_positive_number: 'must be a positive number in order to reactivate the %{model}.'
+    models:
+      additional_email:
+        one: Further e-mail
+        other: Further e-mails
+      custom_content:
+        one: Text
+        other: Texts
+      event:
+        one: Event
+        other: Events
+      event/course:
+        one: Course
+        other: Courses
+      event/participation:
+        one: Participation
+        other: Participations
+      event/application:
+        one: Registration
+        other: Registrations
+      event/kind:
+        one: Course type
+        other: Course types
+      event/role/assistant_leader:
+        one: Leader
+      event/role/leader:
+        one: Main leader
+      event/role/cook:
+        one: Kitchen
+      event/role/participant:
+        one: Participants
+      event/role/treasurer:
+        one: Treasurer
+      event/role/speaker:
+        one: Speaker
+      event/date:
+        one: Date
+        other: Dates
+      group:
+        one: Group
+        other: Groups
+      label_format:
+        one: Label format
+        other: Label formats
+      mailing_list:
+        one: Subscription
+        other: Subscriptions
+      person:
+        one: Person
+        other: Persons
+      people_filter:
+        one: Filter
+        other: Filters
+      people_relation:
+        one: Relation
+        other: Relations
+      phone_number:
+        one: Phone number
+        other: Phone numbers
+      qualification:
+        one: Qualification
+        other: Qualifications
+      qualification_kind:
+        one: Qualification type
+        other: Qualification types
+      role:
+        one: Role
+        other: Roles
+      social_account:
+        one: Social Media
+        other: Social Media
+      subscription:
+        one: Subscriber
+        other: Subscribers
+    attributes:
+      person:
+        first_name: First name
+        last_name: Last name
+        name: Name
+        company_name: Company name
+        company: Company
+        nickname: Nickname
+        email: Main e-mail
+        emails: e-mails
+        password: Password
+        password_confirmation: Password
+        current_password: Old password
+        address: Address
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        gender: Gender
+        genders:
+          m: male
+          w: female
+          _nil: unknown
+        birthday: Birthday
+        additional_information: Further information
+        remember_me: Remember me
+        relations_to_tails: Relations
+        phone_numbers: Phone numbers
+        social_accounts: Social Media
+        additional_emails: Further e-mails
+        picture: Upload new picture
+        remove_picture: Remove current image
+        roles: Roles
+        created_at: Created
+        updated_at: Changed
+      group:
+        name: Name
+        short_name: Nickname
+        email: Main e-mail
+        address: Address
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        contact_id: Contact person
+        contact: Contact Person
+        phone_numbers: Phone numbers
+        social_accounts: Social Media
+        additional_emails: Further e-mails
+        parent_id: Parents group
+        layer_group_id: Level
+        type: Group type
+        type_name: Group type
+      event:
+        group_ids: Groups
+        name: Name
+        number: Number
+        motto: Motto
+        cost: Costs
+        contact: Contact Person
+        maximum_participants: Maximum number of participants
+        contact_id: Contact Person
+        description: Description
+        location: Place/Address
+        application_opening_at: Start of application period
+        application_closing_at: End of application period
+        application_conditions: Application conditions
+        external_applications: External applications
+        dates: Dates
+        dates_full: Dates
+        booking_info: Registrations
+        questions: Questions
+        kind_id: Type
+      event/course:
+        kind_id: Course type
+        state: State
+        number: Course number
+        state_translated: State
+        priorization: Priorization
+        requires_approval: Approval
+      event/role:
+        label: Description
+        person: Person
+        type: Role
+        participation: Person
+      event/participation:
+        person_id: Person
+        event_id: Event
+        additional_information: Comments (general, health information, allergies, etc.)
+        answers: Questions
+        created_at: Registration date
+        roles: Role
+      event/application:
+        priority_1_id: "Course"
+        priority_2_id: "1. Alternative course"
+        priority_3_id: "2. Alternative course"
+      event/date:
+        label: Description
+        location: Place
+        start_at: From
+        finish_at: To
+      dates:
+        label: Description/Place
+        start_at: From date
+        finish_at: To date
+      event/question:
+        question: Question
+        choices: Possible answers
+        multiple_choices: Multiple choice
+        required: Reply mandatory
+      questions:
+        question: Question
+        choices: Possible answers
+        multiple_choices: Multiple choice
+        required: Reply mandatory
+      event/answer:
+        answer: Reply
+      answers:
+        answer: Reply
+      event/kind:
+        label: Association name
+        short_name: Short name
+        minimum_age: Minimum age
+        preconditions: Preconditions
+        prolongations: Extended
+        qualification_kinds: Qualifies for
+        created_at: Created
+        updated_at: Changed
+        deleted_at: Deleted
+      qualification:
+        qualification_kind: Qualification
+        qualification_kind_id: Qualification
+        start_at: Since
+        origin: Origin
+        string: '%{kind}'
+        string_with_origin: '%{kind} (from %{origin})'
+        string_with_finish_at: '%{kind} (until %{finish_at})'
+        string_with_finish_at_and_origin: '%{kind} (until %{finish_at}, from %{origin})'
+      qualification_kind:
+        label: Description
+        description: Description
+        validity: Validity
+        created_at: Created
+        updated_at: Changed
+        deleted_at: Deleted
+        reactivateable: Reactivateable
+      people_relation:
+        head_id: Person
+        tail_id: Other person
+        kind: Type
+      relations_to_tails:
+        tail_id: Relation
+        kind: Type
+      phone_number:
+        number: Number
+        label: Type
+        public: Public
+      phone_numbers:
+        number: Phone number
+        label: Phone number type
+        public: Public
+      role:
+        label: Description
+        type: Role
+        group_id: Group
+        person: Person
+        person_id: Person
+        string_long: '%{role} in %{group}'
+        class:
+          permission:
+            description:
+              admin: Administration of application-wide settings such as types of courses or label formats.
+              layer_and_below_full: All reading and writing at this level and all lower levels. Creating events and subscriptions at this level.
+              layer_and_below_read: 'All reading at this level and all lower levels. '
+              layer_full: All reading and writing at this level. Creating events and subscriptions at this level.
+              layer_read: All reading at this level.
+              group_full: Reading and writing at this group. Creating events and subscriptions at this group.
+              group_read: Reading at this group.
+              contact_data: Read the contact details of all other persons with contact data authorization.
+              qualify: Creating qualifications for persons at this level and all lower levels.
+              approve_applications: Confirmation of course registrations for persons at this level.
+          kind:
+            member:
+              one: Member
+              other: Members
+            passive:
+              one: Passive
+              other: Passives
+            external:
+              one: External
+              other: Externals
+      contact_account:
+        predefined_labels:
+          privat: Private
+          mobil: Mobile
+          arbeit: Work
+          vater: Father
+          mutter: Mother
+          fax: Fax
+          andere: Other
+          webseite: Website
+      social_account:
+        name: Name
+        label: Type
+        public: Public
+      social_accounts:
+        name: Social Media Account
+        label: Social Media Type
+        public: Public
+      additional_email:
+        email: E-Mail
+        name: Further e-mail
+        label: Type
+        public: Public
+        mailings: Mailing
+      additional_emails:
+        email: E-Mail
+        name: Further e-mail
+        label: Further e-mail type
+        public: Public
+        mailings: Mailing
+      mailing_list:
+        name: Name
+        description: Description
+        publisher: Publisher
+        subscribable: Subscribers may subscribe/unsubscribe themselves.
+        mail_name: Mailing list address
+        mail_address: Mailing list
+        subscribers_may_post: Subscribers may write to the mailing list
+        additional_sender: Additional sender
+      subscription:
+        related_role_types: Roles
+      people_filter:
+        name: Name
+      custom_content:
+        label: Text
+        subject: Subject
+        body: Content
+      label_format:
+        name: Description
+        page_size: Page size
+        landscape: Format
+        font_size: Font size
+        width: Label width
+        height: Label height
+        count_horizontal: Columns
+        count_vertical: Rows
+        padding_top: Margin top
+        padding_left: Margin left
+        dimensions: Number
   errors:
     messages:
       invalid_date: "is not a valid date"
@@ -12,6 +404,14 @@ en:
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
+      extension_white_list_error: "can only handle files of type %{allowed_types}"
+      expired: "has expired, please request a new"
+      not_found: "not found"
+      already_confirmed: "already confirmed"
+      not_locked: "is not locked"
+      not_saved:
+        one: "Could not save %{resource}: one error."
+        other: "Could not save %{resource}: %{count} errors."
   validates_timeliness:
     error_value_formats:
       date: "%Y-%m-%d"

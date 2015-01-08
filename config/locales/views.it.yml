@@ -2,10 +2,12 @@ it:
   global:
     'yes': "sì"
     'no': "no"
+    unknown: sconosciuto
     from: da
     until: a
     no_list_entries: nessuna voce relativa è stata trovata
     confirm_delete: vuole veramente cancellare questa voce?
+    do_not_fill: Per favore lasciare libero questo campo
     gender:
       male: maschile
       female: femminile
@@ -66,6 +68,7 @@ it:
         success: "%{model} è stato cancellato con successo"
         failure: "%{model} non può essere cancellato"
   contactable:
+    address_or_email: "%{address} o %{email}"
     fields:
       zip_town: CAP/luogo
     public_check_box:
@@ -145,6 +148,7 @@ it:
     person_fields:
       create_new_person: registrare una nuova persona
       search_existing_person: cercare persona esistente
+      text_with_alternative_link_html: "%{text} <small>o %{link}</small>"
     info:
       role_has_permissions: "Il ruolo %{role} nel gruppo %{group} prevede le seguenti autorizzazioni:"
       role_only_public: >
@@ -153,6 +157,7 @@ it:
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   people:
     send_password_instructions: le informazioni per il login sono state spedite.
+    years_old: (%{years} anni)
     tabs:
       history: svolgimento
       log: log
@@ -162,19 +167,20 @@ it:
       import_list: importare lista
     attrs:
       additional_data: Ulteriori informazioni
-    fields:
-      format_birthday: (dd.mm.yy)
-    log:
-      no_changes: Fino ad ora non è stata registrata nessuna modifica.
-    roles:
-      title: ruoli attivi
-    roles_aside:
-      set_main_group: collocare il gruppo principale
+      events: I miei prossimi eventi
     email_field:
       used_as_login: Verrà utilizzato come login
       only_changeable_by_superior: >
         L'indirizzo email principale di una persona con più ruoli può essere cambiato
         unicamente da un utente che è superiore a tutti questi ruoli.
+    log:
+      no_changes: Fino ad ora non è stata registrata nessuna modifica.
+    pdf:
+      cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette
+    roles:
+      title: ruoli attivi
+    roles_aside:
+      set_main_group: collocare il gruppo principale
   people_filters:
     form:
       save_search: salvare la ricerca
@@ -222,7 +228,7 @@ it:
     choose_group: 'prego selezionare un gruppo'
   layouts:
     nav:
-      sign_out: 'scollegarsi'
+      sign_out: 'logout'
     unauthorized:
       forgot_password: 'password dimenticata?'
     application:
@@ -366,22 +372,26 @@ it:
     lists:
       courses:
         title: 'corsi disponibili'
+        explanation: 'Qui vengono mostrati i corsi per il tuo gruppo così come per i gruppi superiori. Puoi trovare altri corsi tra i gruppi che li organizzano.'
         csv_export_button: 'esportazione CSV'
       events:
         title: 'eventi che si terranno prossimamente'
+        explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
     application_market:
-      already_assigned: 'questa persona è già assegnata ad un evento in un altro modo'
+      already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
         registered_at: 'iscrizione il %{date}'
       prio_buttons:
         national_waitinglist: 'lista d''attesa nazionale'
       index:
-        assigned: 'assegnato'
         assigned_participants: 'partecipanti assegnati'
     kinds:
       form:
         help_minimum_age: 'anni (età alla prima data del corso è determinante)'
-        help_select_prolongations: 'tramite <Ctrl> + click possono essere selezionati più tipi di qualifiche.'
+        help_select_qualifications: 'Tramite <Ctrl> + clic potranno essere selezionati più tipi di qualifica.'
+        qualifications:
+          for_participants: 'Qualifiche per i partecipanti'
+          for_leaders: 'Qualifiche per gli animatori'
     participations:
       specific_information: 'dati specifici'
       no_answer_given: '(non risponde)'
@@ -390,12 +400,22 @@ it:
         approve_button: 'sbloccare'
         reject_button: 'rifiutare'
       form:
-        title: "iscrizione per %{event}"
+        title_new: "Iscrizione come %{role}"
+        title_edit: "Modificare l'iscrizone di %{person}"
         apply: 'iscrivere'
         alternative_dates_info: 'per favore indica altri corsi che potrebbero andarti bene.'
         course_information: 'informazioni sui corsi'
+        explain_required_checkmark: '* = risposta obbligatoria'
       priorities:
         alternative_course: "%{number}° corso alternativo"
+      print:
+        read_and_agreed_for_event: Soddisfo tutti i requisiti per l'evento, ho letto la descrizione dell'evento e sono d'accordo con essa
+        read_and_agreed_for_event_course: Soddisfo i requisiti per il corso, ho letto la descrizione e le disposizioni del corso e sono d'accordo
+        requirements_for_event: requisiti per l'evento
+        requirements_for_event_course: requisiti per il corso
+        page_of_pages: "pagina <page> di <total>"
+      list:
+        incomplete: mancano dei campi obbligatori
     register:
       register:
         title: registrare i dati di contatto
@@ -422,9 +442,11 @@ it:
     available_placeholders_empty: 'nessun carattere a disposizione'
   event_decorator:
     apply: 'iscriversi'
+    applied: 'iscritto'
     not_possible: 'impossibile'
     participants_info: '%{count} iscrizioni'
     participants_info_with_limit: '%{count} iscrizioni per %{limit} posti'
+    active_participants_info: '%{count} iscrizioni assegnate'
     issue_only: 'assegna %{model} %{issued} a %{until} (ultima data del corso).'
     prolong_only:
       one: 'prolunga la qualifica esistente %{prolonged} fino al  %{until} (ultima data del corso).'
@@ -464,6 +486,8 @@ it:
     all_groups: 'tutti i gruppi'
   dropdown/event/role_add:
     add: 'aggiungere una persona'
+  dropdown/event/participant_add:
+    as: 'come %{role}'
   dropdown/group_edit:
     move: 'spostare'
     merge: 'raggruppare'
@@ -483,9 +507,9 @@ it:
     new_filter: 'nuovo filtro...'
   filter_navigation/event/participations:
     predefined_filters:
-      all: tutte le persone
-      teamers: direzione
-      participants: partecipanti
+      all: tutte le persone (%{count})
+      teamers: direzione (%{count})
+      participants: partecipanti (%{count})
   sheet/csv_import:
     title: 'importare persone tramite CSV'
   sheet/group:

@@ -2,12 +2,14 @@ fr:
   global:
     'yes': "oui"
     'no': "non"
+    unknown: Inconnu
     from: de
     until: à
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
+    do_not_fill: Ne pas remplir cette case STP.
     gender:
-      male: masculin
+      male: Masculin
       female: féminin
       male_short: masc.
       female_short: fém.
@@ -15,31 +17,31 @@ fr:
       no_entry: (aucun)
       none_available: (aucun disponible)
       please_select: sélectionner s.v.p.
-      add: ajouter une entrée
-      add_with_model: 'ajouter %{model}'
-      remove: supprimer
+      add: Ajouter une entrée
+      add_with_model: 'Ajouter un %{model}'
+      remove: Supprimer
     button:
-      save: enregistrer
-      cancel: annuler
-      search: chercher
-      back: retour
-      refresh: mettre à jour
-      print: imprimer
+      save: Enregistrer
+      cancel: Annuler
+      search: Chercher
+      back: Retour
+      refresh: Mettre à jour
+      print: Imprimer
     link:
-      show: afficher
-      edit: modifier
-      add: "créer %{model}"
-      add_without_model: créer
-      delete: effacer
-      list: liste
+      show: Afficher
+      edit: Modifier
+      add: "Créer un %{model}"
+      add_without_model: Créer
+      delete: Effacer
+      list: Liste
     errors:
       header:
         one: 'Un erreur est apparu'
         other: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
     tabs:
-      info: informations
+      info: Informations
     search:
-      placeholder: 'recherche'
+      placeholder: 'Recherche...'
       placeholder_with_model: 'Rechercher %{model}...'
   list:
     index:
@@ -48,7 +50,7 @@ fr:
     show:
       title: "%{model}"
     new:
-      title: "créer %{model}"
+      title: "Créer un %{model}"
     edit:
       title: "modifier %{model}"
     create:
@@ -62,24 +64,25 @@ fr:
         success: "%{model} a été effacé avec succès."
         failure: "%{model} n'a pas pu être effacé."
   contactable:
+    address_or_email: "%{address} ou %{email}"
     fields:
-      zip_town: code postal / lieu
+      zip_town: Code postal / Lieu
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
     social_account_fields:
-      placeholder_value: site internet, identifiant Skype, lien vers un profil...
-      placeholder_type: type (Skype, Facebook...)
+      placeholder_value: Site internet, identifiant Skype, lien vers un profil...
+      placeholder_type: Type (Skype, Facebook...)
     additional_email_fields:
-      placeholder_value: courriel
-      placeholder_type: type (privé, professionnel, …)
-      tooltip_mailings: Les distributions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
+      placeholder_value: Courriel
+      placeholder_type: Type (privé, professionnel, …)
+      tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
   participations:
     destroy:
       flash:
         success: L'inscription a été effacée avec succès.
   csv_imports:
     description:
-      header: fichiers CSV
+      header: Fichiers CSV
       explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
       example: |
         prénom,nom,e-mail,lieu,sexe
@@ -87,22 +90,26 @@ fr:
         Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
       explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
       explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux choisir ce rôle lors de la prochaine étappe également.
-      special_fields: valeurs de champs spéciales
+      special_fields: Valeurs de champs spéciales
       explain_special_fields_html: Les champs suivant doivent contenir l'une des valeurs en <em>italique</em>.
     preview_table:
       icon_tooltip_invalid: 'Valeurs non valables.'
       icon_tooltip_updated: 'En cours d''actualisation'
       icon_tooltip_created: 'Est saisi à nouveau'
     define_mapping:
-      choose_role: 'choisir un rôle'
+      choose_role: 'Choisir un rôle'
       choose_role_help: 'Ce rôle est attribué à toutes les personnes importées.'
       assign_columns_to_fields: 'Relier les colonnes aux champs.'
       column_from_csv: 'Colonnes du fichier CSV'
       field_in_database: 'Champ dans la base de données'
-      preview: 'aperçu'
+      preview: 'Aperçu'
+      update_behaviour: Procédé d’actualisation
+      keep_behaviour: 'Actualiser seulement les champs vides avec des données provenant du CSV, les valeurs déjà existantes ne changent pas.'
+      override_behaviour: 'Remplacer les valeurs déjà existantes dans la banque de donnée avec les données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent les valeurs pourvues dans la banque de données d’accueil.'
+      update_behaviour_explanation: 'Ce procédé concerne uniquement  les personnes déjà existantes dans la banque de données. L’inscription de nouvelles personnes doit être entièrement effectuée en conformité avec les données du CSV.'
     new:
-      upload_button: 'télécharger'
-      csv_file: 'fichier CSV'
+      upload_button: 'Télécharger'
+      csv_file: 'Fichier CSV'
     invalid_file: Prière de choisir un fichier CSV valable.
     duplicate_keys:
       one: '%{list} a été attribué plusieurs fois.'
@@ -139,8 +146,9 @@ fr:
     fields:
       help_optional_label: désignation facultative du rôle de cette personne
     person_fields:
-      create_new_person: saisir une nouvelle personne
-      search_existing_person: rechercher une personne existante
+      create_new_person: Saisir une nouvelle personne
+      search_existing_person: Rechercher une personne existante
+      text_with_alternative_link_html: "%{text} <small>ou %{link}</small>"
     info:
       role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
       role_only_public: >
@@ -149,29 +157,33 @@ fr:
       only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
+    years_old: (%{years} ans)
     tabs:
-      history: historique
-      log: journal
+      history: Historique
+      log: Journal
     actions_show:
-      send_login: envoyer données d'identification
+      send_login: Envoyer les données d'identification
     actions_index:
-      import_list: importer une liste
+      import_list: Importer une liste
     attrs:
       additional_data: Indications supplémentaires
-    fields:
-      format_birthday: (dd.mm.yy)
-    log:
-      no_changes: Aucun changement enregistré jusqu'à présent.
-    roles:
-      title: rôles actifs
-    roles_aside:
-      set_main_group: Déterminer le groupe principal
+      events: Mes prochains événements
     email_field:
-      used_as_login: Utilisé en tant qu'authentifiant.
+      used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
         L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
         modifiée que par une personne hiérarchiquement supérieure à chacun de ces
         rôles.
+    fields:
+      format_birthday: (dd.mm.yyyy)
+    log:
+      no_changes: Aucun changement enregistré jusqu'à présent.
+    pdf:
+      cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    roles:
+      title: Rôles actifs
+    roles_aside:
+      set_main_group: Déterminer le groupe principal
   people_filters:
     form:
       save_search: Sauvegarder cette recherche
@@ -188,24 +200,24 @@ fr:
         merge_is_irreversible: Cette opération est irréversible!
         new_group_name: 'Nom du nouveau groupe'
         merge_group_with: 'fusionner %{group} avec '
-        merge_button: 'fusionner un groupe'
+        merge_button: 'Fusionner un groupe'
     move:
       select:
-        title: "déplacer un groupe"
+        title: "Déplacer un groupe"
         select_group: "Sélectionner le groupe vers lequel le déplacement doit avoir lieu."
   groups:
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
-    subgroups: 'sous-groupes'
+    subgroups: 'Sous-groupes'
     form:
-      help_contact: 'utiliser l''adresse et le numéro de téléphone public de cette personne'
+      help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
     actions_show:
-      export_subgroups: 'sous-groupes CSV'
-      reactivate: 'réactiver'
+      export_subgroups: 'Sous-groupes CSV'
+      reactivate: 'Réactiver'
     attrs:
-      contact_details: 'contacts'
-      additional_information: 'informations supplémentaires'
+      contact_details: 'Contacts'
+      additional_information: 'Informations supplémentaires'
     tabs:
-      deleted: 'effacé'
+      deleted: 'Eléments effacés'
   group/merge:
     success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
     failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
@@ -221,11 +233,11 @@ fr:
     nav:
       sign_out: 'Déconnexion'
     unauthorized:
-      forgot_password: 'mot de passe oublié?'
+      forgot_password: 'Mot de passe oublié?'
     application:
-      available_under_license: 'disponible au numéro '
-      developed_by: 'développé par'
-      source_code: 'code source'
+      available_under_license: 'Disponible au numéro '
+      developed_by: 'Développé par'
+      source_code: 'Code source'
   subscriber:
     group:
       form:
@@ -235,7 +247,7 @@ fr:
         please_choose_group: S'il te plaît, choisis un groupe.
     exclude_person:
       form:
-        exclude_subscriber: 'exclure un abonnement'
+        exclude_subscriber: 'Exclure un abonnement'
   subscriber/base:
     blank: '%{model_label} doit être sélectionné'
     taken: '%{model_label} a déjà été ajouté'
@@ -288,7 +300,7 @@ fr:
       locked: 'Ton compte est bloqué pour 10 minutes.'
       invalid: 'Données d''authentification incorrectes.'
       invalid_token: 'Le jeton d''authentification n''est pas valable.'
-      timeout: 'Ta séance est arrivée à échéance, merci de d''authentifier à nouveau.'
+      timeout: 'Ta session est arrivée à échéance, merci de d''authentifier à nouveau.'
       inactive: 'Ton compte n''est pas actif.'
       not_found_in_database: 'Données d''authentification incorrectes.'
       signin_not_allowed: 'Tu n''es pas autorisé(e) à t''inscrire ici.'
@@ -296,14 +308,14 @@ fr:
     sessions:
       signed_out: 'Tu es maintenant déconnecté(e).'
       new:
-        sign_in: 'inscription'
+        sign_in: 'Inscription'
     passwords:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
       updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'
       updated_not_active: 'Ton mot de passe a été modifié.'
       send_paranoid_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
       new:
-        reset_password_button: 'réinitialiser le mot de passe'
+        reset_password_button: 'Réinitialiser le mot de passe'
     confirmations:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel te permettant de confirmer ton enregistrement.'
       send_paranoid_instructions: 'Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel te permettant de confirmer ton enregistrement.'
@@ -317,11 +329,11 @@ fr:
       failure: 'Ton authentification avec ton compte %{kind} n''a pas fonctionné car "%{reason}".'
     registrations:
       edit:
-        change_password: "modifier le mot de passe"
-        set_password: "initialiser le mot de passe"
-        old_password: 'ancien mot de passe'
-        new_password: 'nouveau mot de passe'
-        new_password_confirmation: 'confirmer le nouveau mot de passe'
+        change_password: "Modifier le mot de passe"
+        set_password: "Initialiser le mot de passe"
+        old_password: 'Ancien mot de passe'
+        new_password: 'Nouveau mot de passe'
+        new_password_confirmation: 'Confirmer le nouveau mot de passe'
       person:
         updated: 'Ton mot de passe a été actualisé.'
     mailer:
@@ -363,36 +375,50 @@ fr:
     lists:
       courses:
         title: 'Cours disponibles'
-        csv_export_button: 'export CSV'
+        explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
+        csv_export_button: 'Export CSV'
       events:
         title: 'Evénements prévus prochainement'
+        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent'
     application_market:
-      already_assigned: 'Cette personne est déjà attribuée à l''événement.'
+      already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
         registered_at: 'Inscription le %{date}'
       prio_buttons:
         national_waitinglist: 'liste d''attente nationale'
       index:
-        assigned: 'attribué'
-        assigned_participants: 'participants attribués'
+        assigned_participants: 'Participants attribués'
     kinds:
       form:
         help_minimum_age: 'ans (selon année de naissance au premier jour du cours)'
-        help_select_prolongations: 'On peut choisir plusieurs types de qualification en utilisant la combinaison <Ctrl> + clic.'
+        help_select_qualifications: 'On peut sélectionner plusieurs types de qualifications en cliquant dessus tout en maintenant la touche <Ctrl> enfoncée.'
+        qualifications:
+          for_participants: 'Qualifications des participants'
+          for_leaders: 'Qualifications des responsables'
     participations:
-      specific_information: 'informations spécifiques'
+      specific_information: 'Informations spécifiques'
       no_answer_given: '(pas de réponse)'
       actions_show:
-        change_contact_data_button: 'modifier les données de contact'
-        approve_button: 'publier'
-        reject_button: 'refuser'
+        change_contact_data_button: 'Modifier les données de contact'
+        approve_button: 'Publier'
+        reject_button: 'Refuser'
       form:
-        title: "inscription pour %{event}"
-        apply: 'inscription'
+        title_new: "Inscription en tant que %{role}"
+        title_edit: "Modifier l'inscription de %{person}"
+        apply: 'Inscription'
         alternative_dates_info: 'S''il-te-plaît, indique d''autres cours qui pourraient te convenir.'
         course_information: 'Informations au sujet des cours'
+        explain_required_checkmark: '* = réponse obligatoire'
       priorities:
         alternative_course: "cours alternatif (%{number})"
+      print:
+        read_and_agreed_for_event: Je remplis les conditions d'admission, j'ai bien lu la description de l'événement et me déclare d'accord avec celle-ci.
+        read_and_agreed_for_event_course: Je remplis les conditions d'inscription, j'ai bien lu la description du cours et les conditions d'admission et me déclare d'accord avec celles-ci.
+        requirements_for_event: Conditions d'admission pour l'événement
+        requirements_for_event_course: Conditions d'inscription pour le cours
+        page_of_pages: "page <page> de <total>"
+      list:
+        incomplete: des indications obligatoires manquent
     register:
       register:
         title: Saisir les données de contact
@@ -400,13 +426,13 @@ fr:
         login: Login
         no_login: Tu n'as pas encore d'identifiant?
       email_check:
-        next: continuer
+        next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
   events:
     preconditions: 'qualifications requises'
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     tabs:
-      participants: 'participants'
+      participants: 'Participants'
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
@@ -418,10 +444,12 @@ fr:
     available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   event_decorator:
-    apply: 'inscription'
+    apply: 'Inscription'
+    applied: 'inscrit'
     not_possible: 'impossible'
     participants_info: '%{count} inscriptions'
     participants_info_with_limit: '%{count} inscriptions pour %{limit} places'
+    active_participants_info: '%{count} inscriptions attribuées'
     issue_only: 'Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours).'
     prolong_only:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
@@ -437,72 +465,74 @@ fr:
     waiting_list_link:
       title_active: 'Retirer de la liste d''attente nationale'
       title_inactive: 'Ajouter à la liste d''attente nationale'
-      label: 'liste d''attente'
+      label: 'Liste d''attente'
     tooltips:
       ok: 'Marque la réussite du cours et attribue les qualifications.'
       remove: 'Marque l''échec du cours et retire les qualifications.'
   mailing_lists:
     form:
-      help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de distribution (en plus des administrateurs).'
+      help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
       caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes'
-      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de distribution'
+      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
-    may_post: 'Les abonnés peuvent éditer la liste de distribution'
-    may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de distribution'
-    subscribe: 'inscription'
-    unsubscribe: 'désinscription'
+    may_post: 'Les abonnés peuvent éditer la liste de diffusion'
+    may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    subscribe: 'Inscription'
+    unsubscribe: 'Désinscription'
   paper_trail/version_decorator:
     by: 'de %{author}'
   dropdown/event/group_filter:
-    all_groups: 'tous les groupes'
+    all_groups: 'Tous les groupes'
   dropdown/event/role_add:
-    add: 'ajouter une personne'
+    add: 'Ajouter une personne'
+  dropdown/event/participant_add:
+    as: 'en tant que %{role}'
   dropdown/group_edit:
-    move: 'déplacer'
-    merge: 'fusionner'
+    move: 'Déplacer'
+    merge: 'Fusionner'
   dropdown/people_export:
-    button: 'export'
+    button: 'Exporter'
     csv: 'CSV'
-    labels: 'étiquettes'
-    emails: 'adresses électroniques'
-    addresses: 'liste d''adresses'
-    everything: 'toutes les informations'
+    labels: 'Etiquettes'
+    emails: 'Adresses électroniques'
+    addresses: 'Liste d''adresses'
+    everything: 'Toutes les informations'
   filter_navigation/dropdown:
-    additional_views: 'autres vues'
+    additional_views: 'Autres vues'
   filter_navigation/people:
-    custom_filter: 'filtre personnel'
-    entire_layer: 'tout le niveau'
-    entire_group: 'tout le groupe'
-    new_filter: 'nouveau filtre…'
+    custom_filter: 'Filtre personnel'
+    entire_layer: 'Tout le niveau'
+    entire_group: 'Tout le groupe'
+    new_filter: 'Nouveau filtre…'
   filter_navigation/event/participations:
     predefined_filters:
-      all: Toutes les personnes
-      teamers: Maîtrise
-      participants: Participants
+      all: Toutes les personnes (%{count})
+      teamers: Maîtrise (%{count})
+      participants: Participants (%{count})
   sheet/csv_import:
-    title: 'importer les personnes par CSV'
+    title: 'Importer les personnes par CSV'
   sheet/group:
     belongs_to: 'appartient à'
     deleted: '(effacé)'
     layer_upwards: '< vers le niveau supérieur'
   label_formats:
     form:
-      portrait: 'format portrait'
-      landscape: 'format paysage'
+      portrait: 'Format portrait'
+      landscape: 'Format paysage'
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
     unlimited: 'illimité'
   navigation:
-    groups: 'groupes'
-    events: 'activités'
-    courses: 'cours'
-    admin: 'administrateur'
+    groups: 'Groupes'
+    events: 'Activités'
+    courses: 'Cours'
+    admin: 'Administrateur'
   full_text:
     index:
-      title: 'personnes trouvées'
+      title: 'Personnes trouvées'
       incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
   qualification_kinds:
     form:
@@ -510,9 +540,9 @@ fr:
       help_reactivateable_in_years: 'années après échéance de la validité'
   subscriptions:
     actions_index:
-      exclude_person: 'exclure une personne'
+      exclude_person: 'Exclure une personne'
     list:
-      excluded_people: 'personnes exclues'
+      excluded_people: 'Personnes exclues'
   views:
     pagination:
       next: '>>'

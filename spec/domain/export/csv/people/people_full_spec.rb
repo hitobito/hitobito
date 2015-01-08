@@ -94,22 +94,22 @@ describe Export::Csv::People::PeopleFull do
 
       it 'has correct headers' do
         csv.headers.should ==
-           ["prénom", "nom", "nom de l'entreprise", "surnom", "entreprise",
-            "adresse e-mail principale", "adresse", "code postal", "lieu", "pays", "sexe",
-            "anniversaire", "données supplémentaires", " rôles ",
-            "adresse e-mail supplémentaire père", "numéro de téléphone père",
-            "adresse d'un média social Skype", "parent"]
+           ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
+            "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
+            "Anniversaire", "Données supplémentaires", "Rôles",
+            "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
+            "Adresse d'un média social Skype", "Parent"]
       end
 
       context 'first row' do
         subject { csv[0] }
 
-        its([' rôles ']) { should eq 'Leadre Top / TopGroup' }
-        its(['numéro de téléphone père']) { should eq '123' }
-        its(['adresse e-mail supplémentaire père']) { should eq 'vater@example.com' }
-        its(["adresse d'un média social Skype"]) { should eq 'foobar' }
-        its(['parent']) { should eq 'Bottom Member' }
-        its(['sexe']) { should eq 'masculin' }
+        its(['Rôles']) { should eq 'Leadre Top / TopGroup' }
+        its(['Numéro de téléphone Père']) { should eq '123' }
+        its(['Adresse e-mail supplémentaire Père']) { should eq 'vater@example.com' }
+        its(["Adresse d'un média social Skype"]) { should eq 'foobar' }
+        its(['Parent']) { should eq 'Bottom Member' }
+        its(['Sexe']) { should eq 'Masculin' }
       end
     end
   end

@@ -69,7 +69,7 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
   gem 'pry-debugger', platforms: :ruby_19
-  gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
+  #gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
 end
 
 group :development do

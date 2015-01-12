@@ -32,10 +32,18 @@ describe Person::ListFilter do
       entries.collect(&:id).should =~ [user, @tg_member].collect(&:id)
     end
 
+    it 'contains all existing members' do
+      entries.size.should eq(list_filter.all_count)
+    end
+
     context 'with external types' do
       let(:role_types) { [Role::External] }
       it 'loads externs of a group' do
         entries.collect(&:id).should =~ [@tg_extern].collect(&:id)
+      end
+
+      it 'contains all existing externals' do
+        entries.size.should eq(list_filter.all_count)
       end
     end
 
@@ -43,6 +51,10 @@ describe Person::ListFilter do
       let(:role_types) { [Role::External, Group::TopGroup::Member] }
       it 'loads selected roles of a group' do
         entries.collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
+      end
+
+      it 'contains all existing people' do
+        entries.size.should eq(list_filter.all_count)
       end
     end
   end
@@ -82,6 +94,10 @@ describe Person::ListFilter do
 
       it 'loads selected roles of a group when types given' do
         entries.collect(&:id).should =~ [@bg_leader, @tg_extern].collect(&:id)
+      end
+
+      it 'contains not all existing people' do
+        entries.size.should eq(list_filter.all_count - 1)
       end
     end
   end

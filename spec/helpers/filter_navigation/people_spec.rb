@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe FilterNavigation::People, type: :model do
+describe 'FilterNavigation::People' do
 
   let(:template) do
     double('template').tap do |t|
@@ -15,11 +15,11 @@ describe FilterNavigation::People, type: :model do
       t.stub(group_people_path: 'people_path')
       t.stub(group_people_filter_path: 'people_filter_path')
       t.stub(new_group_people_filter_path: 'new_people_filter_path')
-      t.stub(link_to: '<a>')
-      t.stub(link_action_destroy: '<a>')
+      t.stub(link_action_destroy: '<a destroy>')
       t.stub(icon: '<i>')
       t.stub(ti: 'delete')
-      t.stub(content_tag: '<content>')
+      t.stub(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
+      t.stub(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
     end
   end
 
@@ -35,11 +35,15 @@ describe FilterNavigation::People, type: :model do
 
     context 'without params' do
 
-      its(:main_items)      { should have(2).items }
+      its(:main_items)      { should have(1).item }
       its(:active_label)    { should == 'Mitglieder' }
       its('dropdown.active') { should be_false }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
       its('dropdown.items')  { should have(3).items }
+
+      it 'contains external item with count' do
+        subject.main_items.last.should match(/Externe \(0\)/)
+      end
 
       it 'entire layer contains only layer role types' do
         subject.dropdown.items.first.url =~ /#{[Role::External,
@@ -74,11 +78,24 @@ describe FilterNavigation::People, type: :model do
 
       subject { FilterNavigation::People.new(template, group, 'Leaders', role_types, nil) }
 
-      its(:main_items)      { should have(2).items }
+      its(:main_items)      { should have(1).items }
       its(:active_label)    { should == nil }
       its('dropdown.active') { should be_true }
       its('dropdown.label')  { should == 'Leaders' }
       its('dropdown.items')  { should have(4).item }
+
+    end
+  end
+
+  context 'bottom layer' do
+    let(:group) { groups(:bottom_layer_one).decorate }
+
+    it 'contains member item with count' do
+      subject.main_items.first.should match(/Mitglieder \(1\)/)
+    end
+
+    it 'contains external item with count' do
+      subject.main_items.last.should match(/Externe \(0\)/)
     end
   end
 
@@ -92,6 +109,14 @@ describe FilterNavigation::People, type: :model do
                                               Group::BottomGroup::Leader,
                                               Group::BottomGroup::Member].
                                              collect(&:id).join('-')}/
+    end
+
+    it 'contains member item with count' do
+      subject.main_items.first.should match(/Mitglieder \(0\)/)
+    end
+
+    it 'contains external item with count' do
+      subject.main_items.last.should match(/Externe \(0\)/)
     end
   end
 end

@@ -38,9 +38,10 @@ module FilterNavigation
       end
     end
 
-    def item(label, url)
+    def item(label, url, count = nil)
+      caption = count ? "#{label} (#{count})" : label
       @main_items << content_tag(:li,
-                                 link_to(label, url),
+                                 link_to(caption, url),
                                  class: ('active' if active_label == label))
     end
 

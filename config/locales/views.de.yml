@@ -232,6 +232,14 @@ de:
       format_birthday: (dd.mm.yyyy)
       no_sensitive_information: ''
 
+    list:
+      number_of_people_shown:
+        one: "%{count} Person angezeigt."
+        other: "%{count} Personen angezeigt."
+      number_of_people_hidden:
+        one: "%{count} weitere Person ist für dich nicht sichtbar."
+        other: "%{count} weitere Personen sind für dich nicht sichtbar."
+
     log:
       no_changes: Bisher wurden keine Änderungen aufgezeichnet.
 
@@ -637,10 +645,9 @@ de:
 
   filter_navigation/event/participations:
     predefined_filters:
-      all: Alle Personen (%{count})
-      teamers: Leitungsteam (%{count})
-      participants: Teilnehmende (%{count})
-
+      all: Alle Personen
+      teamers: Leitungsteam
+      participants: Teilnehmende
 
   sheet/csv_import:
     title: 'Personen über CSV importieren'

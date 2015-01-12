@@ -133,6 +133,18 @@
   color: $grayDark;
 }
 
+.pagination-bar {
+
+  .pagination {
+    margin-right: 20px;
+    float: left;
+  }
+
+  .pagination-info {
+    line-height: 20px;
+    padding: 5px 0px;
+  }
+}
 
 // Pills
 .nav-pills > li > a {

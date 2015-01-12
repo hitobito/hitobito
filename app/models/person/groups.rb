@@ -88,8 +88,9 @@ module Person::Groups
     end
 
     # Load people with member roles.
-    def members
-      member_types = Role.all_types.select(&:member?).collect(&:sti_name)
+    def members(group = nil)
+      types = group ? group.role_types : Role.all_types
+      member_types = types.select(&:member?).collect(&:sti_name)
       where(roles: { type: member_types })
     end
 

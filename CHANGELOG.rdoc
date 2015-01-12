@@ -32,5 +32,6 @@
 
 == Version 1.6
 
+* Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf Personenlisten.
 * Anzeige von beliebigen Informationen beim Login Formular.
 * Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.

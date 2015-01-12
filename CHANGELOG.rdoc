@@ -32,4 +32,5 @@
 
 == Version 1.6
 
+* Anzeige von beliebigen Informationen beim Login Formular.
 * Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.

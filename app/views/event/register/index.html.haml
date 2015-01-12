@@ -3,10 +3,14 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+-title t('.sign_in')
+
+= render 'devise/sessions/info'
+
 #main.row-fluid
   %article.span6
     %h3= t('.login')
-    = render template: 'devise/sessions/new'
+    = render 'devise/sessions/form'
 
   %article.span6
     %h3= t('.no_login')

@@ -397,8 +397,9 @@ de:
       signed_in: ''
       signed_out: 'Du bist jetzt abgemeldet.'
       new:
+        sign_in: Anmelden
+      form:
         sign_in: 'Anmelden'
-        usage_advise: ''
     passwords:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
       updated: 'Dein Passwort wurde geändert. Du bist jetzt angemeldet.'
@@ -529,6 +530,7 @@ de:
       register:
         title: Kontaktdaten erfassen
       index:
+        sign_in: Anmelden
         login: Login
         no_login: Du hast noch kein Login?
       email_check:

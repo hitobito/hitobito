@@ -1,0 +1,4 @@
+The following issues are impediments for finalizing the migration to rails 4.2:
+
+* https://github.com/globalize/globalize/issues/393
+* https://github.com/airblade/paper_trail/issues/416

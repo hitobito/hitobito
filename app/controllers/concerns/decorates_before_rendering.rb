@@ -75,7 +75,7 @@ module Concerns
     end
 
     def __superclass_decorator_name(orig_ivar, ivar)
-      superclass = ivar.respond_to?(:model_name) ? ivar.superclass : ivar.class.superclass
+      superclass = __model_class_for__(ivar).superclass
       if superclass == Module
         fail ArgumentError, "#{orig_ivar} does not have an associated decorator"
       end
@@ -85,13 +85,17 @@ module Concerns
     end
 
     def __model_name_for__(ivar)
-      if ivar.respond_to?(:model_name)
-        ivar
+      __model_class_for__(ivar).model_name
+    end
+
+    def __model_class_for__(ivar)
+      if ivar.is_a?(ActiveRecord::Relation)
+        ivar.klass
       elsif ivar.class.respond_to?(:model_name)
         ivar.class
       else
-        fail ArgumentError, "#{ivar} does not have an associated model"
-      end.model_name
+        fail ArgumentError, "#{ivar.inspect} does not have an associated model"
+      end
     end
 
   end

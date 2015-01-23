@@ -9,12 +9,9 @@
     = f.string_field(:subscriber,
                      placeholder: t('global.search.placeholder_with_model', model: Group.model_name.human),
                      data: {provide: 'entity',
-                            id_field: "subscription_subscriber_id",
+                            id_field: 'subscription_subscriber_id',
                             url: query_group_mailing_list_group_index_path(@group, @mailing_list)})
-    - if @group.sister_groups.exists?
-      = f.help_block(t('.subgroups_and_siblings_selectable', type: @group.klass.label))
-    - else
-      = f.help_block(t('.subgroups_selectable'))
+    = render 'help_block', f: f
 
     = f.hidden_field(:subscriber_id,
                      data: { remote: true,

@@ -29,3 +29,7 @@
 * Möglichkeit, beim CSV Import Werte in der Datenbank zu ändern.
 * CSV Export für Gruppenanlässe und Kurse.
 * Verschiedene Bug Fixes und Stabilitätsverbesserungen.
+
+== Version 1.6
+
+* Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.

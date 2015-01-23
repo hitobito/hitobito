@@ -16,18 +16,37 @@ describe Subscriber::GroupController do
   let(:group) { list.group }
 
   context 'GET query' do
-    before do
-      get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
-    end
-
     subject { response.body }
 
-    it { should =~ /Top \\u0026gt; Bottom One/ }
-    it { should =~ /Bottom One \\u0026gt; Group 11/ }
-    it { should =~ /Bottom One \\u0026gt; Group 12/ }
-    it { should =~ /Top \\u0026gt; Bottom Two/ }
-    it { should =~ /Bottom Two \\u0026gt; Group 21/ }
-    it { should_not =~ /Bottom One \\u0026gt; Group 111/ }
+    context 'top group' do
+      before do
+        get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
+      end
+
+      it { should =~ /Top \\u0026gt; Bottom One/ }
+      it { should =~ /Bottom One \\u0026gt; Group 11/ }
+      it { should =~ /Bottom One \\u0026gt; Group 12/ }
+      it { should =~ /Top \\u0026gt; Bottom Two/ }
+      it { should =~ /Bottom Two \\u0026gt; Group 21/ }
+      it { should_not =~ /Bottom One \\u0026gt; Group 111/ }
+    end
+
+    context 'bottom layer' do
+      let(:group) { groups(:bottom_layer_one) }
+      let(:mailing_list) {  MailingList.create!(group: group, name: 'bottom_layer') }
+
+      before do
+        Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))
+        get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
+      end
+
+      it 'does not include sister group or their descendants' do
+        should =~ /Top \\u0026gt; Bottom One/
+        should_not =~ /Top \\u0026gt; Bottom Two/
+        should_not =~ /Bottom Two \\u0026gt; Group 21/
+      end
+    end
+
   end
 
   context 'GET roles.js' do
@@ -47,6 +66,7 @@ describe Subscriber::GroupController do
 
       assigns(:role_types).should be_nil
     end
+
   end
 
   context 'POST create' do

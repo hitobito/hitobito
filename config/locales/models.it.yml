@@ -243,6 +243,9 @@ it:
         booking_info: iscrizioni
         questions: domande
         kind_id: tipo
+        teamer_count: Numero direzione
+        participant_count: Numero partecipanti
+        applicant_count: Numero iscrizioni
       event/course:
         kind_id: tipo di corso
         state: stato

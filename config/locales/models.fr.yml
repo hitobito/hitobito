@@ -218,9 +218,9 @@ fr:
         booking_info: Inscriptions
         questions: Questions
         kind_id: Type
-        teamer_count: Nombre d’équipe de direction
+        teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
-        applicant_count: Nombre d’inscriptions
+        applicant_count: Nombre d'inscriptions
       event/course:
         kind_id: Type de cours
         state: Statut

@@ -23,7 +23,7 @@ class Person::ListFilter
   end
 
   def all_count
-    filtered_entries { |group| all(group) }.count
+    filtered_entries { |group| all(group) }.uniq.count
   end
 
   private

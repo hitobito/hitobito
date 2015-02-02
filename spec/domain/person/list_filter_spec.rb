@@ -18,6 +18,8 @@ describe Person::ListFilter do
     Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
     Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
     Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
+    # duplicate role
+    Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: @tg_member)
     @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
 
     @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person

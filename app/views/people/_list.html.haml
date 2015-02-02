@@ -7,20 +7,30 @@
 
 - content_for(:filter, FilterNavigation::People.new(self, @group, params[:name], params[:role_type_ids], params[:kind]))
 
-= paginate @people
+.pagination-bar
+  = paginate @people
 
-= crud_table do |t|
-  - t.col('') do |p|
-    .profil= image_tag(p.picture.thumb.url, size: '32x32')
-  - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
-    %strong
-      -# Any person listed can be shown
-      = link_to(p.to_s(:list), @multiple_groups ? group_person_path(p.default_group_id, p) : group_person_path(@group, p))
-      %br/
-      = muted p.additional_name
-  - t.col(t.sort_header(:roles, Role.model_name.human(count: 2))) { |p| p.roles_short(@multiple_groups ? nil : @group) }
-  - t.col(Person.human_attribute_name(:emails))                 { |p| p.all_emails(!index_full_ability?) }
-  - t.col(PhoneNumber.model_name.human(count: 2))               { |p| p.all_phone_numbers(!index_full_ability?) }
-  - sortable_grouped_person_attr(t, %w(zip_code town), :address) { |p| p.complete_address }
+  .pagination-info
+    - if @all_count > 0
+      = t('.number_of_people_shown', count: @people.total_count)
+      - unless @all_count == @people.total_count
+        = muted(t('.number_of_people_hidden', count: @all_count - @people.total_count))
+    - else
+      = ti(:no_list_entries)
+
+- if @people.total_count > 0
+  = crud_table do |t|
+    - t.col('') do |p|
+      .profil= image_tag(p.picture.thumb.url, size: '32x32')
+    - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
+      %strong
+        -# Any person listed can be shown
+        = link_to(p.to_s(:list), @multiple_groups ? group_person_path(p.default_group_id, p) : group_person_path(@group, p))
+        %br/
+        = muted p.additional_name
+    - t.col(t.sort_header(:roles, Role.model_name.human(count: 2))) { |p| p.roles_short(@multiple_groups ? nil : @group) }
+    - t.col(Person.human_attribute_name(:emails))                 { |p| p.all_emails(!index_full_ability?) }
+    - t.col(PhoneNumber.model_name.human(count: 2))               { |p| p.all_phone_numbers(!index_full_ability?) }
+    - sortable_grouped_person_attr(t, %w(zip_code town), :address) { |p| p.complete_address }
 
 = paginate @people

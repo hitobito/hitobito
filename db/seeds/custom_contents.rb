@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 CustomContent.seed_once(:key,
-  {key: 'send_login',
+  {key: PersonMailer::CONTENT_LOGIN,
    placeholders_required: 'login-url',
    placeholders_optional: 'recipient-name, sender-name'},
 
@@ -21,12 +21,17 @@ CustomContent.seed_once(:key,
   {key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN,
    placeholders_required: 'event-url',
    placeholders_optional: 'recipient-name, event-name'},
+
+  {key: 'views/devise/sessions/info',
+   placeholders_required: nil,
+   placeholders_optional: nil},
 )
 
-send_login_id = CustomContent.where(key: 'send_login').first.id
-participation_confirmation_id = CustomContent.where(key: Event::ParticipationMailer::CONTENT_CONFIRMATION).first.id
-participation_approval_id = CustomContent.where(key: Event::ParticipationMailer::CONTENT_APPROVAL).first.id
-temp_login_id = CustomContent.where(key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN).first.id
+send_login_id = CustomContent.get(PersonMailer::CONTENT_LOGIN).id
+participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
+participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
+temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
+login_form_id = CustomContent.get('views/devise/sessions/info').id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -118,6 +123,22 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: temp_login_id,
    locale: 'it',
-   label: 'Evento: Inviare un login temporaneamente'}
+   label: 'Evento: Inviare un login temporaneamente'},
+
+  {custom_content_id: login_form_id,
+   locale: 'de',
+   label: 'Login Informationen'},
+
+  {custom_content_id: login_form_id,
+   locale: 'fr',
+   label: 'Informations au login'},
+
+  {custom_content_id: login_form_id,
+   locale: 'en',
+   label: 'Login Information'},
+
+  {custom_content_id: login_form_id,
+   locale: 'it',
+   label: 'Informazioni al login'},
 
 )

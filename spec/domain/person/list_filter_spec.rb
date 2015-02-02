@@ -18,6 +18,8 @@ describe Person::ListFilter do
     Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
     Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
     Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
+    # duplicate role
+    Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: @tg_member)
     @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
 
     @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -32,10 +34,18 @@ describe Person::ListFilter do
       entries.collect(&:id).should =~ [user, @tg_member].collect(&:id)
     end
 
+    it 'contains all existing members' do
+      entries.size.should eq(list_filter.all_count)
+    end
+
     context 'with external types' do
       let(:role_types) { [Role::External] }
       it 'loads externs of a group' do
         entries.collect(&:id).should =~ [@tg_extern].collect(&:id)
+      end
+
+      it 'contains all existing externals' do
+        entries.size.should eq(list_filter.all_count)
       end
     end
 
@@ -43,6 +53,10 @@ describe Person::ListFilter do
       let(:role_types) { [Role::External, Group::TopGroup::Member] }
       it 'loads selected roles of a group' do
         entries.collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
+      end
+
+      it 'contains all existing people' do
+        entries.size.should eq(list_filter.all_count)
       end
     end
   end
@@ -82,6 +96,10 @@ describe Person::ListFilter do
 
       it 'loads selected roles of a group when types given' do
         entries.collect(&:id).should =~ [@bg_leader, @tg_extern].collect(&:id)
+      end
+
+      it 'contains not all existing people' do
+        entries.size.should eq(list_filter.all_count - 1)
       end
     end
   end

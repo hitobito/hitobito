@@ -17,36 +17,40 @@ class Person::ListFilter
   end
 
   def filter_entries
+    entries = filtered_entries { |group| accessibles(group) }.preload_groups.uniq
+    entries = entries.order_by_role if Settings.people.default_sort == 'role'
+    entries.order_by_name
+  end
+
+  def all_count
+    filtered_entries { |group| all(group) }.uniq.count
+  end
+
+  private
+
+  def filtered_entries(&block)
     if filter.role_types.present?
-      list_entries(kind).where(roles: { type: filter.role_types })
+      list_scope(kind, &block).where(roles: { type: filter.role_types })
     else
-      list_entries.members
+      block.call(group).members(group)
     end
   end
 
-  def list_entries(scope_kind = nil)
-    apply_default_sort(list_scope(scope_kind).
-                       preload_groups.
-                       uniq)
-
-  end
-
-  def apply_default_sort(scope)
-    scope = scope.order_by_role if Settings.people.default_sort == 'role'
-    scope.order_by_name
-  end
-
-  def list_scope(scope_kind = nil)
+  def list_scope(scope_kind, &block)
     case scope_kind
     when 'deep'
       @multiple_groups = true
-      accessibles.in_or_below(group)
+      block.call.in_or_below(group)
     when 'layer'
       @multiple_groups = true
-      accessibles.in_layer(group)
+      block.call.in_layer(group)
     else
-      accessibles(group)
+      block.call(group)
     end
+  end
+
+  def all(group = nil)
+    group ? group.people : Person
   end
 
   def accessibles(group = nil)

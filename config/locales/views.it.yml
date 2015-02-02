@@ -107,6 +107,10 @@ it:
       column_from_csv: 'colonna dal CSV'
       field_in_database: 'campo in un banca dati'
       preview: 'anteprima'
+      update_behaviour: Metodo di attualizzazione
+      keep_behaviour: 'Attualizzare solo i campi vuoti nel database con i dati del CSV; i valori già esistenti vengono mantenuti.'
+      override_behaviour: 'Sovrascrivere i valori già esistenti nel database con i dati del CSV. I valori vuoti nel CSV cancellano in questo caso i valori esistenti nel database.'
+      update_behaviour_explanation: 'Questo comportamento si applica unicamente alle persone già esistenti nel database. Nuove persone vengono sempre create in totale corrispondenza ai dati del CSV.'
     new:
       upload_button: 'caricare'
       csv_file: 'file CSV'
@@ -173,6 +177,15 @@ it:
       only_changeable_by_superior: >
         L'indirizzo email principale di una persona con più ruoli può essere cambiato
         unicamente da un utente che è superiore a tutti questi ruoli.
+    fields:
+      format_birthday: (dd.mm.yyyy)
+    list:
+      number_of_people_shown:
+        one: "% {count} persona visualizzata."
+        other: "% {count} persone visualizzate."
+      number_of_people_hidden:
+        one: "% {count} un'altra persona non è visibile per te."
+        other: "% {count} altre persone non sono visibili per te."
     log:
       no_changes: Fino ad ora non è stata registrata nessuna modifica.
     pdf:
@@ -305,6 +318,8 @@ it:
     sessions:
       signed_out: 'ora sei registrato.'
       new:
+        sign_in: iscriversi
+      form:
         sign_in: 'iscriversi'
     passwords:
       send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
@@ -420,6 +435,7 @@ it:
       register:
         title: registrare i dati di contatto
       index:
+        sign_in: iscriversi
         login: login
         no_login: non hai ancora nessun login?
       email_check:
@@ -507,9 +523,9 @@ it:
     new_filter: 'nuovo filtro...'
   filter_navigation/event/participations:
     predefined_filters:
-      all: tutte le persone (%{count})
-      teamers: direzione (%{count})
-      participants: partecipanti (%{count})
+      all: tutte le persone
+      teamers: direzione
+      participants: partecipanti
   sheet/csv_import:
     title: 'importare persone tramite CSV'
   sheet/group:

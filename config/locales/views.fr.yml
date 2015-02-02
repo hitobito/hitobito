@@ -103,10 +103,10 @@ fr:
       column_from_csv: 'Colonnes du fichier CSV'
       field_in_database: 'Champ dans la base de données'
       preview: 'Aperçu'
-      update_behaviour: Procédé d’actualisation
+      update_behaviour: Procédé d'actualisation
       keep_behaviour: 'Actualiser seulement les champs vides avec des données provenant du CSV, les valeurs déjà existantes ne changent pas.'
-      override_behaviour: 'Remplacer les valeurs déjà existantes dans la banque de donnée avec les données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent les valeurs pourvues dans la banque de données d’accueil.'
-      update_behaviour_explanation: 'Ce procédé concerne uniquement  les personnes déjà existantes dans la banque de données. L’inscription de nouvelles personnes doit être entièrement effectuée en conformité avec les données du CSV.'
+      override_behaviour: 'Remplacer les valeurs déjà existantes dans la banque de donnée avec les données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent les valeurs pourvues dans la banque de données d''accueil.'
+      update_behaviour_explanation: 'Ce procédé concerne uniquement  les personnes déjà existantes dans la banque de données. L''inscription de nouvelles personnes doit être entièrement effectuée en conformité avec les données du CSV.'
     new:
       upload_button: 'Télécharger'
       csv_file: 'Fichier CSV'
@@ -176,6 +176,13 @@ fr:
         rôles.
     fields:
       format_birthday: (dd.mm.yyyy)
+    list:
+      number_of_people_shown:
+        one: "% {count} personne affichées."
+        other: "% {count} personnes affichées."
+      number_of_people_hidden:
+        one: "% {count} autre personne ne sont pas visibles pour toi."
+        other: "% {count} autres personnes ne sont pas visibles pour toi."
     log:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
@@ -308,6 +315,8 @@ fr:
     sessions:
       signed_out: 'Tu es maintenant déconnecté(e).'
       new:
+        sign_in: Inscription
+      form:
         sign_in: 'Inscription'
     passwords:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
@@ -423,6 +432,7 @@ fr:
       register:
         title: Saisir les données de contact
       index:
+        sign_in: Inscription
         login: Login
         no_login: Tu n'as pas encore d'identifiant?
       email_check:
@@ -508,9 +518,9 @@ fr:
     new_filter: 'Nouveau filtre…'
   filter_navigation/event/participations:
     predefined_filters:
-      all: Toutes les personnes (%{count})
-      teamers: Maîtrise (%{count})
-      participants: Participants (%{count})
+      all: Toutes les personnes
+      teamers: Maîtrise
+      participants: Participants
   sheet/csv_import:
     title: 'Importer les personnes par CSV'
   sheet/group:

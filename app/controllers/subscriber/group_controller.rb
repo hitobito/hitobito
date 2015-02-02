@@ -31,7 +31,7 @@ module Subscriber
     private
 
     def groups_query
-      @group.sister_groups_with_descendants.
+      candidate_groups.
              where(search_condition('groups.name', 'parents_groups.name')).
              includes(:parent).
              references(:parent).
@@ -49,7 +49,7 @@ module Subscriber
     end
 
     def subscriber
-      @selected_group ||= @group.sister_groups_with_descendants.
+      @selected_group ||= candidate_groups.
                                  where(id: subscriber_id).
                                  first
     end
@@ -61,6 +61,10 @@ module Subscriber
         entry.errors[:subscriber_type].clear
         entry.errors.add(:base, 'Gruppe muss ausgewählt werden')
       end
+    end
+
+    def candidate_groups
+      @group.self_and_descendants
     end
   end
 end

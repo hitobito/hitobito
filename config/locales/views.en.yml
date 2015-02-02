@@ -301,7 +301,7 @@ en:
     sessions:
       signed_out: 'You are now logged out.'
       new:
-        sign_in: 'Sign in'
+        sign_in: Sign in
     passwords:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to reset your password.'
       updated: 'Your password has been changed. You''re now logged in.'
@@ -499,11 +499,6 @@ en:
     entire_layer: 'Whole level'
     entire_group: 'Whole group'
     new_filter: 'New filter...'
-  filter_navigation/event/participations:
-    predefined_filters:
-      all: All persons (%{count})
-      teamers: Leaders (%{count})
-      participants: Participants (%{count})
   sheet/csv_import:
     title: 'Import person via CSV'
   sheet/group:

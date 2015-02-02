@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141218140203) do
+ActiveRecord::Schema.define(version: 20150123100928) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false

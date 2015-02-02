@@ -38,12 +38,12 @@ module FilterNavigation
 
       def init_items
         predefined_filters.each do |key|
-          item(predefined_filter_label(key), event_participation_filter_link(key))
+          item(predefined_filter_label(key), event_participation_filter_link(key), counts[key])
         end
       end
 
       def predefined_filter_label(key)
-        translate("predefined_filters.#{key}",  count: counts[key])
+        translate("predefined_filters.#{key}")
       end
 
       def counts

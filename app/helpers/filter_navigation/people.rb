@@ -20,7 +20,7 @@ module FilterNavigation
       @deep = deep
       init_kind_filter_names
       init_labels
-      init_items
+      init_kind_items
       init_dropdown_links
     end
 
@@ -45,16 +45,13 @@ module FilterNavigation
       end
     end
 
-    def init_items
-      item(main_filter_name, filter_path)
-      init_kind_items
-    end
-
     def init_kind_items
-      @kind_filter_names.to_a[1..-1].each do |kind, name|
+      @kind_filter_names.each do |kind, name|
         types = group.role_types.select { |t| t.kind == kind }
         if visible_role_types?(types)
-          item(name, fixed_types_path(name, types))
+          count = group.people.where(roles: { type: types.collect(&:sti_name) }).uniq.count
+          path = kind == :member ? path : fixed_types_path(name, types)
+          item(name, path, count)
         end
       end
     end
@@ -124,11 +121,13 @@ module FilterNavigation
       filter_path(PeopleFilter.new(role_type_ids: types.collect(&:id), name: name), options)
     end
 
-    def filter_path(filter = nil, options = {})
-      if filter
-        options[:role_type_ids] ||= filter.role_type_ids_string
-        options[:name] ||= filter.name
-      end
+    def filter_path(filter, options = {})
+      options[:role_type_ids] ||= filter.role_type_ids_string
+      options[:name] ||= filter.name
+      path(options)
+    end
+
+    def path(options = {})
       template.group_people_path(group, options)
     end
 

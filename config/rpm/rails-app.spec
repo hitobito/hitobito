@@ -169,6 +169,7 @@ export PATH=%{ruby_bindir}:$PATH
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake assets:precompile
 RAILS_HOST_NAME='build.hitobito.ch' RAILS_GROUPS=assets %{bundle_cmd} exec rails generate error_pages
 
+%if "%{?RAILS_TRANSIFEX_DISABLED}" == ""
 echo "[%{?RAILS_TRANSIFEX_HOST}]
 hostname = %{?RAILS_TRANSIFEX_HOST}
 password = %{?RAILS_TRANSIFEX_PASSWORD}
@@ -177,6 +178,7 @@ username = %{?RAILS_TRANSIFEX_USERNAME}
 " > ~/.transifexrc
 
 RAILS_HOST_NAME='build.hitobito.ch' %{bundle_cmd} exec rake tx:pull tx:wagon:pull -t
+%endif
 
 # cleanup log and tmp we don't want them in the rpm
 rm -rf log tmp

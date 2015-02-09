@@ -214,6 +214,11 @@ de:
 
     actions_show:
       send_login: Login schicken
+      send_login_tooltip:
+        new: <b>Kein Login erstellt</b><br><br>Der Benutzer hat noch kein Login.<br><br>Schick ihm ein Mail, damit er sein Passwort setzen kann.
+        resend: <b>Login zugeschickt</b><br><br>Der Benutzer hat einen Link zum Setzten des Passworts erhalten, aber noch keines gesetzt.<br><br>Schicke ihm erneut den Link zu.
+        reset: <b>Login vorhanden</b><br><br>Benutzer hat ein Login.<br><br>Schicke ihm einen Link, damit er sein Passwort neu setzen kann.
+
 
     actions_index:
       import_list: Liste importieren

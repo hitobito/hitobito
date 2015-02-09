@@ -166,7 +166,7 @@ $ ->
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
 
   # wire up tooltips
-  $('body').tooltip({ selector: '[rel=tooltip]', placement: 'right' })
+  $('body').tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
 
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->

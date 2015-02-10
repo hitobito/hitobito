@@ -372,4 +372,108 @@ describe Person do
      end
   end
 
+  context 'zip code' do
+    let(:person) { Person.new(last_name: 'Foo') }
+
+    context 'switzerland' do
+      def should_be_valid_swiss_post_code
+        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+          person.country = c
+          person.should be_valid
+        end
+      end
+
+      def should_not_be_valid_swiss_post_code
+        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+          person.country = c
+          person.should_not be_valid
+        end
+      end
+
+      it 'should allow official swiss post codes' do
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '1000'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '1234'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '3007'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '9000'
+        should_be_valid_swiss_post_code
+      end
+
+      it 'should not allow foreign post codes' do
+        person.zip_code = '10115'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '01210'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '99577-0727'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '2597 GV 75'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = 'C1420'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = 'SW1W 0NY'
+        should_not_be_valid_swiss_post_code
+      end
+    end
+
+    context 'foreign country' do
+      it 'can be empty' do
+        person.country = 'España'
+        person.should be_valid
+      end
+
+      it 'should allow 5-digit numbers' do
+        person.country = 'Deutschland'
+        person.zip_code = '10115'
+        person.should be_valid
+      end
+
+      it 'should allow leading zeros' do
+        person.country = 'France'
+        person.zip_code = '01210'
+        person.should be_valid
+
+        person.country = 'Vatican'
+        person.zip_code = '00120'
+        person.should be_valid
+      end
+
+      it 'should allow non-numeric characters' do
+        person.country = 'USA'
+        person.zip_code = '99577-0727'
+        person.should be_valid
+
+        person.country = 'Niederlande'
+        person.zip_code = '2597 GV 75'
+        person.should be_valid
+
+        person.country = 'Argentina'
+        person.zip_code = 'C1420'
+        person.should be_valid
+
+        person.country = 'United Kingdom'
+        person.zip_code = 'SW1W 0NY'
+        person.should be_valid
+
+        person.country = 'Canada'
+        person.first_name = 'SANTA'
+        person.last_name = 'CLAUS'
+        person.address = 'NORTH POLE'
+        person.zip_code = 'H0H 0H0'
+        person.should be_valid
+      end
+    end
+  end
+
 end

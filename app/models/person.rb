@@ -126,6 +126,7 @@ class Person < ActiveRecord::Base
   validates :birthday, timeliness: { type: :date, allow_blank: true }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
+  validate :assert_is_valid_swiss_post_code
   # more validations defined by devise
 
 
@@ -292,6 +293,12 @@ class Person < ActiveRecord::Base
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
+    end
+  end
+
+  def assert_is_valid_swiss_post_code
+    unless zip_code.blank? || !ignored_country? || zip_code.strip.match('^[1-9][0-9]{3}$')
+      errors[:zip_code] << :invalid
     end
   end
 

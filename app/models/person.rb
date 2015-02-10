@@ -298,7 +298,7 @@ class Person < ActiveRecord::Base
 
   def assert_is_valid_swiss_post_code
     unless zip_code.blank? || !ignored_country? || zip_code.strip.match('^[1-9][0-9]{3}$')
-      errors[:zip_code] << :invalid
+      errors.add(:zip_code)
     end
   end
 

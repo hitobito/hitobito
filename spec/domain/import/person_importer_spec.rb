@@ -39,7 +39,7 @@ describe Import::PersonImporter do
   end
 
   context 'records successful and failed imports' do
-    let(:data) { [{ first_name: 'foobar', email: 'foo@bar.net' },  { first_name: 'foobar', zip_code: 'asdf' }] }
+    let(:data) { [{ first_name: 'foobar', email: 'foo@bar.net' },  { first_name: 'foobar', zip_code: 'asdf', country: 'CH' }] }
 
     it 'creates only first record' do
       expect { subject.import }.to change(Person, :count).by(1)
@@ -59,7 +59,7 @@ describe Import::PersonImporter do
 
     context 'zip_code validation' do
       before { importer.import }
-      its('errors.first') { should eq 'Zeile 2: PLZ ist keine Zahl' }
+      its('errors.first') { should eq 'Zeile 2: PLZ ist nicht gültig' }
     end
   end
 
@@ -139,8 +139,8 @@ describe Import::PersonImporter do
       subject { importer }
 
       its(:errors) { should include 'Zeile 1: Firmenname muss ausgefüllt werden' }
-      its(:errors) { should include 'Zeile 2: Firmenname muss ausgefüllt werden, PLZ ist keine Zahl' }
-      its(:errors) { should include 'Zeile 4: PLZ ist keine Zahl' }
+      its(:errors) { should include 'Zeile 2: Firmenname muss ausgefüllt werden, PLZ ist nicht gültig' }
+      its(:errors) { should include 'Zeile 4: PLZ ist nicht gültig' }
       its(:errors) { should have(3).items }
     end
 
@@ -155,7 +155,7 @@ describe Import::PersonImporter do
       its(:company_name) { should eq 'Oda Cormier' }
       its(:email) { should eq 'ramiro_brown@example.com' }
       its(:address) { should eq '1649 Georgette Circles' }
-      its(:zip_code) { should eq 72_026 }
+      its(:zip_code) { should eq '72026' }
       its(:town) { should be_blank }
       its(:gender) { should eq 'm' }
       its(:additional_information) { should be_present }

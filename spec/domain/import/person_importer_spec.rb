@@ -155,7 +155,7 @@ describe Import::PersonImporter do
       its(:company_name) { should eq 'Oda Cormier' }
       its(:email) { should eq 'ramiro_brown@example.com' }
       its(:address) { should eq '1649 Georgette Circles' }
-      its(:zip_code) { should eq '72026' }
+      its(:zip_code) { should eq '7202' }
       its(:town) { should be_blank }
       its(:gender) { should eq 'm' }
       its(:additional_information) { should be_present }

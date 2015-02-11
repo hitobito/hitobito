@@ -404,15 +404,15 @@ describe Person do
 
         person.zip_code = '9000'
         should_be_valid_swiss_post_code
-
-        person.zip_code = '10115'
-        should_be_valid_swiss_post_code
-
-        person.zip_code = '01210'
-        should_be_valid_swiss_post_code
       end
 
       it 'should not allow alphanumerical post codes' do
+        person.zip_code = '10115'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '01210'
+        should_not_be_valid_swiss_post_code
+
         person.zip_code = '99577-0727'
         should_not_be_valid_swiss_post_code
 

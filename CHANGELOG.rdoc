@@ -35,3 +35,9 @@
 * Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf Personenlisten.
 * Anzeige von beliebigen Informationen beim Login Formular.
 * Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.
+
+== Version 1.7
+
+* Unterstützung von internationalen Postleitzahlen.
+* Echtzeitvalidierung der Von-/Bis-Daten bei Anlässen.
+* Hinweis mit Details über die Aktion bei 'Login verschicken'.

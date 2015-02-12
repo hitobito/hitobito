@@ -1,5 +1,31 @@
 = Hitobito Changelog
 
+== Version 1.7
+
+* Möglichkeit beliebige Absender auf Mailinglisten zuzulassen.
+* Unterstützung von internationalen Postleitzahlen.
+* Echtzeitvalidierung der Von-/Bis-Daten bei Anlässen.
+* Hinweis mit Details über die Aktion bei 'Login verschicken'.
+
+== Version 1.6
+
+* Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf Personenlisten.
+* Anzeige von beliebigen Informationen beim Login Formular.
+* Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.
+
+== Version 1.5
+
+* Rollen in Anlässen können geändert werden.
+* CSV Import erkennt Auswahlwerte in der aktuellen Sprache (z.B. ja/nein anstelle 1/0).
+* Möglichkeit, beim CSV Import Werte in der Datenbank zu ändern.
+* CSV Export für Gruppenanlässe und Kurse.
+* Verschiedene Bug Fixes und Stabilitätsverbesserungen.
+
+== Version 1.4
+
+* Möglichkeit für Beziehungen zwischen Personen.
+* Neue Grundberechtigungen nur für die aktuelle Ebene.
+
 == Version 1.3
 
 * Mehrsprachigkeit.
@@ -16,28 +42,3 @@
 * Separat definierbare Qualifikationstypen für Kursleiter.
 * Pflichtfelder für Anlass Fragen.
 * Mehrfachauswahl bei Personen Filter und Abo Listen.
-
-== Version 1.4
-
-* Möglichkeit für Beziehungen zwischen Personen.
-* Neue Grundberechtigungen nur für die aktuelle Ebene.
-
-== Version 1.5
-
-* Rollen in Anlässen können geändert werden.
-* CSV Import erkennt Auswahlwerte in der aktuellen Sprache (z.B. ja/nein anstelle 1/0).
-* Möglichkeit, beim CSV Import Werte in der Datenbank zu ändern.
-* CSV Export für Gruppenanlässe und Kurse.
-* Verschiedene Bug Fixes und Stabilitätsverbesserungen.
-
-== Version 1.6
-
-* Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf Personenlisten.
-* Anzeige von beliebigen Informationen beim Login Formular.
-* Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.
-
-== Version 1.7
-
-* Unterstützung von internationalen Postleitzahlen.
-* Echtzeitvalidierung der Von-/Bis-Daten bei Anlässen.
-* Hinweis mit Details über die Aktion bei 'Login verschicken'.

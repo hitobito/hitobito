@@ -84,7 +84,8 @@ module MailRelay
     def sender_allowed?
       sender_is_additional_sender? ||
       sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?)
+      (mailing_list.subscribers_may_post? && sender_is_list_member?) ||
+      mailing_list.anyone_may_post
     end
 
     # List of receiver email addresses for the resent email.

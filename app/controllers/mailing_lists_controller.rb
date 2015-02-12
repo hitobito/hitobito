@@ -10,7 +10,8 @@ class MailingListsController < CrudController
   self.nesting = Group
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
-                          :additional_sender, :subscribable, :subscribers_may_post]
+                          :additional_sender, :subscribable, :subscribers_may_post,
+                          :anyone_may_post]
 
   decorates :group, :mailing_list
 

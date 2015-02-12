@@ -487,8 +487,8 @@ fr:
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
-    may_post: 'Les abonnés peuvent éditer la liste de diffusion'
-    may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion'
+    subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
   paper_trail/version_decorator:

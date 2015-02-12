@@ -38,4 +38,17 @@ describe MailingListDecorator  do
     end
   end
 
+  describe '#anyone_may_post_info' do
+    subject { decorator.anyone_may_post_info }
+
+    context 'anyone_may_post true' do
+      before { mailing_list.update_column(:anyone_may_post, true) }
+      it { should eq 'Beliebige Absender dürfen auf die Mailingliste schreiben<br />' }
+    end
+
+    context 'anyone_may_post false' do
+      it { should eq 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+    end
+  end
+
 end

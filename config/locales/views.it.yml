@@ -492,8 +492,8 @@ it:
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
-    may_post: 'abbonati possono scrivere alla mailing list'
-    may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
+    subscribers_may_post: 'abbonati possono scrivere alla mailing list'
+    subscribers_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     subscribe: 'collegarsi'
     unsubscribe: 'scollegarsi'
   paper_trail/version_decorator:

@@ -64,7 +64,7 @@ describe MailRelay::Lists do
       let!(:e1) { Fabricate(:additional_email, contactable: ind, mailings: true) }
       let!(:e2) { Fabricate(:additional_email, contactable: ind, mailings: false) }
 
-      it { should =~ [ind,bll, bgl1].collect(&:email) + [e1.email]}
+      it { should =~ [ind, bll, bgl1].collect(&:email) + [e1.email] }
     end
   end
 
@@ -133,8 +133,8 @@ describe MailRelay::Lists do
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-        last_email.smtp_envelope_to.should == [from]
-        last_email.from.should == ["#{list.mail_name}@localhost"]
+        last_email.smtp_envelope_to.should eq [from]
+        last_email.from.should eq ["#{list.mail_name}@localhost"]
         last_email.body.should =~ /nicht berechtigt/
       end
     end
@@ -154,8 +154,8 @@ describe MailRelay::Lists do
     it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.smtp_envelope_to.should == [from]
-      last_email.from.should == ["#{list.mail_name}@localhost"]
+      last_email.smtp_envelope_to.should eq [from]
+      last_email.from.should eq ["#{list.mail_name}@localhost"]
       last_email.body.should =~ /nicht berechtigt/
     end
   end
@@ -163,31 +163,72 @@ describe MailRelay::Lists do
   context 'anybody' do
     let(:from) { people(:bottom_member).email }
 
-    it { should_not be_sender_allowed }
-    its(:sender_email) { should == from }
-    its(:sender) { should == people(:bottom_member) }
+    context 'may post' do
+      before { create_individual_subscribers }
+      before { list.update_column(:anyone_may_post, true) }
 
-    it 'rejects' do
-      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      it { should be_sender_allowed }
+      its(:sender_email) { should == from }
+      its(:sender) { should == people(:bottom_member) }
+      its(:receivers) { should =~ subscribers.collect(&:email) }
 
-      last_email.smtp_envelope_to.should == [from]
-      last_email.from.should == ["#{list.mail_name}@localhost"]
-      last_email.body.should =~ /nicht berechtigt/
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
+      end
+    end
+
+    context 'may not post' do
+      before { create_individual_subscribers }
+      before { list.update_column(:anyone_may_post, false) }
+
+      it { should_not be_sender_allowed }
+      its(:sender_email) { should == from }
+      its(:sender) { should == people(:bottom_member) }
+
+      it 'rejects' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        last_email.smtp_envelope_to.should eq [from]
+        last_email.from.should eq ["#{list.mail_name}@localhost"]
+        last_email.body.should =~ /nicht berechtigt/
+      end
     end
   end
 
   context 'foreign' do
     let(:from) { 'anybody@example.com' }
 
-    it { should_not be_sender_allowed }
-    its(:sender_email) { should == from }
+    context 'may post' do
+      before { create_individual_subscribers }
+      before { list.update_column(:anyone_may_post, true) }
 
-    it 'rejects' do
-      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      it { should be_sender_allowed }
+      its(:sender_email) { should == from }
+      its(:receivers) { should =~ subscribers.collect(&:email) }
 
-      last_email.smtp_envelope_to.should == [from]
-      last_email.from.should == ["#{list.mail_name}@localhost"]
-      last_email.body.should =~ /nicht berechtigt/
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        last_email.smtp_envelope_to.should =~ subscribers.collect(&:email)
+      end
+    end
+
+    context 'may not post' do
+      before { create_individual_subscribers }
+      before { list.update_column(:anyone_may_post, false) }
+
+      it { should_not be_sender_allowed }
+      its(:sender_email) { should == from }
+
+      it 'rejects' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        last_email.smtp_envelope_to.should eq [from]
+        last_email.from.should eq ["#{list.mail_name}@localhost"]
+        last_email.body.should =~ /nicht berechtigt/
+      end
     end
   end
 
@@ -239,8 +280,8 @@ describe MailRelay::Lists do
     it 'forwards bounce message' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      last_email.smtp_envelope_to.should == ['test@example.com']
-      last_email.smtp_envelope_from.should == "#{list.mail_name}-bounces@localhost"
+      last_email.smtp_envelope_to.should eq ['test@example.com']
+      last_email.smtp_envelope_from.should eq "#{list.mail_name}-bounces@localhost"
       last_email.from.should == [from]
     end
   end

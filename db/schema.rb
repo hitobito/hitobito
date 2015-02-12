@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210084002) do
+ActiveRecord::Schema.define(version: 20150212103138) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20150210084002) do
     t.string  "additional_sender"
     t.boolean "subscribable",         default: false, null: false
     t.boolean "subscribers_may_post", default: false, null: false
+    t.boolean "anyone_may_post",      default: false, null: false
     t.index ["group_id"], :name => "index_mailing_lists_on_group_id"
   end
 

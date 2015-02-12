@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: people_relations
@@ -15,8 +14,9 @@
 #  tail_id :integer          not null
 #  kind    :string(255)      not null
 #
-# Relates two people together. Every relation has an opposite that is created, updated and deleted
-# at the same time.
+
+# Relates two people together. Every relation has an opposite that is created,
+# updated and deleted at the same time.
 class PeopleRelation < ActiveRecord::Base
 
   KIND_TRANSLATION_KEY = 'activerecord.attributes.people_relation.kinds'

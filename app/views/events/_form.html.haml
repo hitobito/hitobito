@@ -37,7 +37,7 @@
             = f.inline_check_box(:group_ids, group.id, group.to_s)
 
 
-  = field_set_tag Event.human_attribute_name(:dates) do
+  = field_set_tag Event.human_attribute_name(:dates), class: 'event-dates' do
     %p= t('.times_are_optional')
     = f.nested_fields_for :dates, 'event/dates/fields'
 
@@ -57,3 +57,7 @@
     %p= t('.explain_application_questions')
 
     = f.nested_fields_for :questions, 'event/questions/fields'
+
+%input#start_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:start_at), t('errors.messages.invalid_date')] }
+%input#finish_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.invalid_date')] }
+%input#before_message{type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.before') % { restriction: Event::Date.human_attribute_name(:start_at) }] }

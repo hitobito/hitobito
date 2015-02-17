@@ -187,7 +187,8 @@ validateEventDatesFields = (event) ->
       $('<span class="help-inline">' + $('#finish_at_invalid_message').val() + '</span>').insertAfter(finishAtMinField)
       finishAtGroup.addClass('error')
 
-  if startAt && startAt.isValid() && finishAt && finishAt.isValid() && !startAt.isBefore(finishAt)
+  if startAt && startAt.isValid() && finishAt && finishAt.isValid() &&
+     !startAt.isSame(finishAt) && !startAt.isBefore(finishAt)
     # finish date is before start date
     $('<span class="help-inline">' + $('#before_message').val() + '</span>').insertAfter(finishAtMinField)
     finishAtGroup.addClass('error')

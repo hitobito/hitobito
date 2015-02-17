@@ -60,4 +60,4 @@
 
 %input#start_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:start_at), t('errors.messages.invalid_date')] }
 %input#finish_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.invalid_date')] }
-%input#before_message{type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.before') % { restriction: Event::Date.human_attribute_name(:start_at) }] }
+%input#before_message{type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.on_or_after') % { restriction: Event::Date.human_attribute_name(:start_at) }] }

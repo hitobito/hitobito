@@ -30,10 +30,7 @@ class RecurringJob < BaseJob
 
   # Enqueue delayed job if it is not enqueued already
   def schedule
-    Delayed::Job.transaction do
-      lock_delayed_jobs
-      reschedule unless scheduled?
-    end
+    reschedule unless scheduled?
   end
 
   # Is this job enqueued in delayed job?
@@ -65,16 +62,6 @@ class RecurringJob < BaseJob
       [Time.zone.now, job.run_at + interval].max
     else
       interval.from_now
-    end
-  end
-
-  def lock_delayed_jobs
-    c = Delayed::Job.connection
-    case c.adapter_name.downcase
-    when /mysql/
-      c.execute("LOCK TABLES #{Delayed::Job.table_name} WRITE")
-    when /postgres/
-      c.execute("LOCK #{Delayed::Job.table_name}")
     end
   end
 

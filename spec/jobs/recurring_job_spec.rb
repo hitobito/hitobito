@@ -13,6 +13,17 @@ describe RecurringJob do
 
   its(:interval) { should == 15.minutes }
 
+  it 'schedules job unless it exists' do
+    now = Time.zone.now
+    subject.schedule
+    # second schedule does nothing
+    subject.schedule
+
+    subject.should be_scheduled
+    subject.delayed_jobs.count.should == 1
+    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+  end
+
   it 'is rescheduled after successfull run' do
     RecurringJob.any_instance.should_receive(:perform_internal)
 

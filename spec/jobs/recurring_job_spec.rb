@@ -13,6 +13,17 @@ describe RecurringJob do
 
   its(:interval) { should == 15.minutes }
 
+  it 'schedules job unless it exists' do
+    now = Time.zone.now
+    subject.schedule
+    # second schedule does nothing
+    subject.schedule
+
+    subject.should be_scheduled
+    subject.delayed_jobs.count.should == 1
+    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+  end
+
   it 'is rescheduled after successfull run' do
     RecurringJob.any_instance.should_receive(:perform_internal)
 
@@ -49,6 +60,24 @@ describe RecurringJob do
     now = Time.zone.now
     subject.enqueue!(run_at: 1.month.ago)
     subject.should be_scheduled
+
+    Delayed::Worker.new.work_off
+
+    subject.should be_scheduled
+    subject.delayed_jobs.count.should == 1
+    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+  end
+
+  it 'reschedules only one job' do
+    RecurringJob.any_instance.should_receive(:perform_internal)
+
+    subject.should_not be_scheduled
+
+    now = Time.zone.now
+    subject.enqueue!(run_at: now)
+    subject.should be_scheduled
+    subject.enqueue!(run_at: now)
+    subject.enqueue!(run_at: now)
 
     Delayed::Worker.new.work_off
 

@@ -31,6 +31,7 @@ class RecurringJob < BaseJob
   # Enqueue delayed job if it is not enqueued already
   def schedule
     Delayed::Job.transaction do
+      lock_delayed_jobs
       reschedule unless scheduled?
     end
   end
@@ -48,7 +49,14 @@ class RecurringJob < BaseJob
   private
 
   def reschedule
-    enqueue!(run_at: next_run, priority: 5)
+    enqueue!(run_at: next_run, priority: 5) unless others_scheduled?
+  end
+
+  # used to double check that a recurring job really is not scheduled multiple times.
+  def others_scheduled?
+     # when called from a job worker, @delayed_job is set.
+     @delayed_job &&
+     delayed_jobs.where('id > ?', @delayed_job.id).exists?
   end
 
   def next_run
@@ -59,4 +67,15 @@ class RecurringJob < BaseJob
       interval.from_now
     end
   end
+
+  def lock_delayed_jobs
+    c = Delayed::Job.connection
+    case c.adapter_name.downcase
+    when /mysql/
+      c.execute("LOCK TABLES #{Delayed::Job.table_name} WRITE")
+    when /postgres/
+      c.execute("LOCK #{Delayed::Job.table_name}")
+    end
+  end
+
 end

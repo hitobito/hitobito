@@ -83,20 +83,20 @@ describe PeopleController, type: :controller do
 
       it 'should hint for persons without login and token' do
         get :show, group_id: top_group.id, id: other.id
-        tooltip_includes('Kein Login erstellt')
+        tooltip_includes('sendet ihr einen Link')
       end
 
       it 'should hint for persons without login but with token' do
         other.generate_reset_password_token!
         get :show, group_id: top_group.id, id: other.id
-        tooltip_includes('Login zugeschickt')
+        tooltip_includes('sendet ihr den Link erneut')
       end
 
       it 'should hint for persons with login' do
         other.password = '123456'
         other.save!
         get :show, group_id: top_group.id, id: other.id
-        tooltip_includes('Login vorhanden')
+        tooltip_includes('sendet ihr einen Link, damit sie ihr Passwort neu setzen kann')
       end
     end
   end

@@ -167,6 +167,10 @@ it:
       log: log
     actions_show:
       send_login: inviare login
+      send_login_tooltip:
+        new: La persona non ha ancora nessun accesso. <br><br> Questa operazione vi invierà un link dove potrete mettere la vostra password.
+        resend: La persona ha ricevuto un link per inserire la password, ma non l'ha ancora fatto. <br><br> Questa operazione invierà nuovamente il link.
+        reset: La persona ha un login. <br><br> Questa operazione vi invierà un link dove potrete mettere la vostra nuova password.
     actions_index:
       import_list: importare lista
     attrs:
@@ -181,11 +185,11 @@ it:
       format_birthday: (dd.mm.yyyy)
     list:
       number_of_people_shown:
-        one: "% {count} persona visualizzata."
-        other: "% {count} persone visualizzate."
+        one: "%{count} persona visualizzata."
+        other: "%{count} persone visualizzate."
       number_of_people_hidden:
-        one: "% {count} un'altra persona non è visibile per te."
-        other: "% {count} altre persone non sono visibili per te."
+        one: "%{count} un'altra persona non è visibile per te."
+        other: "%{count} altre persone non sono visibili per te."
     log:
       no_changes: Fino ad ora non è stata registrata nessuna modifica.
     pdf:
@@ -489,11 +493,14 @@ it:
       help_additional_sender: 'accanto agli amministratori anche questo indirizzo email può inviare messaggi alla mailing list.'
       caption_subscribable: 'abbonati possono iscriverei/disiscrivere sé stessi'
       caption_subscribers_may_post: 'abbonati posso scrivere alla mailing list'
+      caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
-    subscribers_may_post: 'abbonati possono scrivere alla mailing list'
+    subscribers_may_post: 'gli abbonati possono scrivere sulla mailing list'
     subscribers_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
+    anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
+    anyone_may_not_post: '<strong>Non</strong> tutti i mittenti possono scrivere a questa mailing list.'
     subscribe: 'collegarsi'
     unsubscribe: 'scollegarsi'
   paper_trail/version_decorator:

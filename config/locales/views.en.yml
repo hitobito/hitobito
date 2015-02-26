@@ -470,8 +470,6 @@ en:
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
-    subscribers_may_post: 'Subscribers may write to the mailing list'
-    subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
     subscribe: 'Log in'
     unsubscribe: 'Log off'
   paper_trail/version_decorator:

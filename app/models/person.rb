@@ -5,45 +5,52 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: people
 #
-#  id                     :integer          not null, primary key
-#  first_name             :string(255)
-#  last_name              :string(255)
-#  company_name           :string(255)
-#  nickname               :string(255)
-#  company                :boolean          default(FALSE), not null
-#  email                  :string(255)
-#  address                :string(1024)
-#  zip_code               :integer
-#  town                   :string(255)
-#  country                :string(255)
-#  gender                 :string(1)
-#  birthday               :date
-#  additional_information :text
-#  contact_data_visible   :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  encrypted_password     :string(255)
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  picture                :string(255)
-#  last_label_format_id   :integer
-#  creator_id             :integer
-#  updater_id             :integer
-#  primary_group_id       :integer
-#  failed_attempts        :integer          default(0)
-#  locked_at              :datetime
-#  authentication_token   :string(255)
+#  id                      :integer          not null, primary key
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  company_name            :string(255)
+#  nickname                :string(255)
+#  company                 :boolean          default(FALSE), not null
+#  email                   :string(255)
+#  address                 :string(1024)
+#  zip_code                :string(255)
+#  town                    :string(255)
+#  country                 :string(255)
+#  gender                  :string(1)
+#  birthday                :date
+#  additional_information  :text
+#  contact_data_visible    :boolean          default(FALSE), not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  encrypted_password      :string(255)
+#  reset_password_token    :string(255)
+#  reset_password_sent_at  :datetime
+#  remember_created_at     :datetime
+#  sign_in_count           :integer          default(0)
+#  current_sign_in_at      :datetime
+#  last_sign_in_at         :datetime
+#  current_sign_in_ip      :string(255)
+#  last_sign_in_ip         :string(255)
+#  picture                 :string(255)
+#  last_label_format_id    :integer
+#  creator_id              :integer
+#  updater_id              :integer
+#  primary_group_id        :integer
+#  failed_attempts         :integer          default(0)
+#  locked_at               :datetime
+#  authentication_token    :string(255)
+#  salutation              :string(255)
+#  title                   :string(255)
+#  grade_of_school         :integer
+#  entry_date              :date
+#  leaving_date            :date
+#  j_s_number              :string(255)
+#  correspondence_language :string(5)
+#  brother_and_sisters     :boolean          default(FALSE), not null
 #
 
 class Person < ActiveRecord::Base
@@ -126,6 +133,7 @@ class Person < ActiveRecord::Base
   validates :birthday, timeliness: { type: :date, allow_blank: true }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
+  validate :assert_is_valid_swiss_post_code
   # more validations defined by devise
 
 
@@ -292,6 +300,12 @@ class Person < ActiveRecord::Base
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
+    end
+  end
+
+  def assert_is_valid_swiss_post_code
+    if zip_code.present? && swiss? && !zip_code.to_s.strip.match(/^\d{4}$/)
+      errors.add(:zip_code)
     end
   end
 

@@ -89,7 +89,7 @@ pdf:
 
 # Preset for addresses
 address:
-  ignored_countries:
+  switzerland_variations:
     - ch
     - schweiz
     - suisse

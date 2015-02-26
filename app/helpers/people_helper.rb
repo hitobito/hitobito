@@ -33,4 +33,9 @@ module PeopleHelper
     t.col(safe_join(header, ' '), &block)
   end
 
+  def send_login_tooltip_text
+    entry.password? && t('.send_login_tooltip.reset') ||
+      entry.reset_password_sent_at.present? && t('.send_login_tooltip.resend') ||
+      t('.send_login_tooltip.new')
+  end
 end

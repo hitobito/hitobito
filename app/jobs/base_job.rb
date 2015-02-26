@@ -16,6 +16,7 @@ class BaseJob
     store_locale
   end
 
+  # hook called from DelayedJob
   def perform
     # override in subclass
   end
@@ -24,6 +25,12 @@ class BaseJob
     Delayed::Job.enqueue(self, options)
   end
 
+  # hook called from DelayedJob
+  def before(delayed_job)
+    @delayed_job = delayed_job
+  end
+
+  # hook called from DelayedJob
   def error(_job, exception, payload = parameters)
     logger.error(exception.message)
     logger.error(exception.backtrace.join("\n"))

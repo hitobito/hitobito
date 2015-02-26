@@ -163,6 +163,10 @@ fr:
       log: Journal
     actions_show:
       send_login: Envoyer les données d'identification
+      send_login_tooltip:
+        new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
+        resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.
+        reset: La personne possède déjà Login<br><br>. Cette action lui envoie un lien afin de créer un nouveau mot de passe.
     actions_index:
       import_list: Importer une liste
     attrs:
@@ -178,11 +182,11 @@ fr:
       format_birthday: (dd.mm.yyyy)
     list:
       number_of_people_shown:
-        one: "% {count} personne affichées."
-        other: "% {count} personnes affichées."
+        one: "%{count} personne affichées."
+        other: "%{count} personnes affichées."
       number_of_people_hidden:
-        one: "% {count} autre personne ne sont pas visibles pour toi."
-        other: "% {count} autres personnes ne sont pas visibles pour toi."
+        one: "%{count} autre personne ne sont pas visibles pour toi."
+        other: "%{count} autres personnes ne sont pas visibles pour toi."
     log:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
@@ -484,11 +488,14 @@ fr:
       help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
       caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes'
       caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion'
+      caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
-    may_post: 'Les abonnés peuvent éditer la liste de diffusion'
-    may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    subscribers_may_post: 'les abonnés peuvent éditer la liste de diffusion'
+    subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
+    anyone_may_not_post: 'Tous les expéditeurs ne peuvent <strong>pas</strong> écrire à la liste de diffusion.'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
   paper_trail/version_decorator:

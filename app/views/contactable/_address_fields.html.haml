@@ -5,6 +5,6 @@
 
 = f.labeled_text_area(:address, rows: 2)
 = f.labeled(:zip_code, t('contactable.fields.zip_town'), nil, class: 'controls-row') do
-  = f.integer_field(:zip_code, class: 'span2', maxlenght: 10)
+  = f.string_field(:zip_code, class: 'span2', maxlength: 10)
   = f.string_field(:town, class: 'span4')
 = f.labeled_input_field(:country)

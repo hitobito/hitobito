@@ -73,6 +73,32 @@ describe PeopleController, type: :controller do
       dom.should_not have_selector('dt', text: 'Erstellt')
       dom.should_not have_selector('dt', text: 'Geändert')
     end
+
+    context 'send_login tooltip' do
+      before { sign_in(top_leader) }
+
+      def tooltip_includes(text)
+        expect(dom.all('.btn[rel^=tooltip]')[0][:title]).to include(text)
+      end
+
+      it 'should hint for persons without login and token' do
+        get :show, group_id: top_group.id, id: other.id
+        tooltip_includes('sendet ihr einen Link')
+      end
+
+      it 'should hint for persons without login but with token' do
+        other.generate_reset_password_token!
+        get :show, group_id: top_group.id, id: other.id
+        tooltip_includes('sendet ihr den Link erneut')
+      end
+
+      it 'should hint for persons with login' do
+        other.password = '123456'
+        other.save!
+        get :show, group_id: top_group.id, id: other.id
+        tooltip_includes('sendet ihr einen Link, damit sie ihr Passwort neu setzen kann')
+      end
+    end
   end
 
   describe_action :put, :update, id: true do

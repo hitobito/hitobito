@@ -30,7 +30,11 @@ module Contactable
 
 
   def ignored_country?
-    ['', *Settings.address.ignored_countries].include?(country.to_s.strip.downcase)
+    swiss?
+  end
+
+  def swiss?
+    ['', *Settings.address.switzerland_variations].include?(country.to_s.strip.downcase)
   end
 
   private

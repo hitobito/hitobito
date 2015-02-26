@@ -214,6 +214,11 @@ de:
 
     actions_show:
       send_login: Login schicken
+      send_login_tooltip:
+        new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
+        resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
+        reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
+
 
     actions_index:
       import_list: Liste importieren
@@ -599,14 +604,17 @@ de:
     form:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
-      caption_subscribers_may_post:  'Abonnenten dürfen auf die Mailingliste schreiben'
+      caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
+      caption_anyone_may_post: 'Beliebige Absender dürfen auf die Mailingliste schreiben'
 
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'
     may_not_subscribe: 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden'
-    may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
-    may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
+    subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    anyone_may_post: 'Beliebige Absender dürfen auf die Mailingliste schreiben'
+    anyone_may_not_post: 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 

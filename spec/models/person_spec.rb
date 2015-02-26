@@ -3,40 +3,48 @@
 #
 # Table name: people
 #
-#  id                     :integer          not null, primary key
-#  first_name             :string(255)
-#  last_name              :string(255)
-#  company_name           :string(255)
-#  nickname               :string(255)
-#  company                :boolean          default(FALSE), not null
-#  email                  :string(255)
-#  address                :string(1024)
-#  zip_code               :integer
-#  town                   :string(255)
-#  country                :string(255)
-#  gender                 :string(1)
-#  birthday               :date
-#  additional_information :text
-#  contact_data_visible   :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  encrypted_password     :string(255)
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  picture                :string(255)
-#  last_label_format_id   :integer
-#  creator_id             :integer
-#  updater_id             :integer
-#  primary_group_id       :integer
-#  failed_attempts        :integer          default(0)
-#  locked_at              :datetime
-#  authentication_token   :string(255)
+#  id                      :integer          not null, primary key
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  company_name            :string(255)
+#  nickname                :string(255)
+#  company                 :boolean          default(FALSE), not null
+#  email                   :string(255)
+#  address                 :string(1024)
+#  zip_code                :string(255)
+#  town                    :string(255)
+#  country                 :string(255)
+#  gender                  :string(1)
+#  birthday                :date
+#  additional_information  :text
+#  contact_data_visible    :boolean          default(FALSE), not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  encrypted_password      :string(255)
+#  reset_password_token    :string(255)
+#  reset_password_sent_at  :datetime
+#  remember_created_at     :datetime
+#  sign_in_count           :integer          default(0)
+#  current_sign_in_at      :datetime
+#  last_sign_in_at         :datetime
+#  current_sign_in_ip      :string(255)
+#  last_sign_in_ip         :string(255)
+#  picture                 :string(255)
+#  last_label_format_id    :integer
+#  creator_id              :integer
+#  updater_id              :integer
+#  primary_group_id        :integer
+#  failed_attempts         :integer          default(0)
+#  locked_at               :datetime
+#  authentication_token    :string(255)
+#  salutation              :string(255)
+#  title                   :string(255)
+#  grade_of_school         :integer
+#  entry_date              :date
+#  leaving_date            :date
+#  j_s_number              :string(255)
+#  correspondence_language :string(5)
+#  brother_and_sisters     :boolean          default(FALSE), not null
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -370,6 +378,110 @@ describe Person do
          Person.new(birthday: birthday).years.should eq years
        end
      end
+  end
+
+  context 'zip code' do
+    let(:person) { Person.new(last_name: 'Foo') }
+
+    context 'switzerland' do
+      def should_be_valid_swiss_post_code
+        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+          person.country = c
+          expect(person).to be_valid
+        end
+      end
+
+      def should_not_be_valid_swiss_post_code
+        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+          person.country = c
+          expect(person).not_to be_valid
+        end
+      end
+
+      it 'should allow numerical post codes' do
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '1000'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '1234'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '3007'
+        should_be_valid_swiss_post_code
+
+        person.zip_code = '9000'
+        should_be_valid_swiss_post_code
+      end
+
+      it 'should not allow alphanumerical post codes' do
+        person.zip_code = '10115'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '01210'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '99577-0727'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '2597 GV 75'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = 'C1420'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = 'SW1W 0NY'
+        should_not_be_valid_swiss_post_code
+      end
+    end
+
+    context 'foreign country' do
+      it 'can be empty' do
+        person.country = 'España'
+        expect(person).to be_valid
+      end
+
+      it 'should allow 5-digit numbers' do
+        person.country = 'Deutschland'
+        person.zip_code = '10115'
+        expect(person).to be_valid
+      end
+
+      it 'should allow leading zeros' do
+        person.country = 'France'
+        person.zip_code = '01210'
+        expect(person).to be_valid
+
+        person.country = 'Vatican'
+        person.zip_code = '00120'
+        expect(person).to be_valid
+      end
+
+      it 'should allow non-numeric characters' do
+        person.country = 'USA'
+        person.zip_code = '99577-0727'
+        expect(person).to be_valid
+
+        person.country = 'Niederlande'
+        person.zip_code = '2597 GV 75'
+        expect(person).to be_valid
+
+        person.country = 'Argentina'
+        person.zip_code = 'C1420'
+        expect(person).to be_valid
+
+        person.country = 'United Kingdom'
+        person.zip_code = 'SW1W 0NY'
+        expect(person).to be_valid
+
+        person.country = 'Canada'
+        person.first_name = 'SANTA'
+        person.last_name = 'CLAUS'
+        person.address = 'NORTH POLE'
+        person.zip_code = 'H0H 0H0'
+        expect(person).to be_valid
+      end
+    end
   end
 
 end

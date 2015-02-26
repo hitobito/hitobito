@@ -54,12 +54,12 @@ describe Import::PersonDoubletteFinder do
   context 'joins others with and' do
     context 'includes valid birthday' do
       before { Person.create!(attrs) }
-      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '1991-05-06' } }
+      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '8000', birthday: '1991-05-06' } }
       it do
          conditions.should eq([
            'last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) ' \
            'AND (birthday = ? OR birthday IS NULL)',
-           'bar', 'foo', '213', Time.zone.parse('1991-05-06').to_date])
+           'bar', 'foo', '8000', Time.zone.parse('1991-05-06').to_date])
       end
       it { should be_present }
       it { should have(0).error }
@@ -67,12 +67,12 @@ describe Import::PersonDoubletteFinder do
 
     context 'ignores invalid birthday' do
       before { Person.create!(attrs.merge(birthday: '2000-01-01')) }
-      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '213', birthday: '33.33.33' } }
+      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '8000', birthday: '33.33.33' } }
 
       it do
         conditions.should eq([
           'last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL)',
-          'bar', 'foo', '213'])
+          'bar', 'foo', '8000'])
       end
       it { should be_present }
       it { should have(0).error }

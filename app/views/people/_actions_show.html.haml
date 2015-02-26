@@ -13,11 +13,15 @@
                   send_password_instructions_group_person_path(parent, entry),
                   :envelope,
                   remote: true,
-                  method: :post)
+                  method: :post,
+                  rel: :tooltip,
+                  'data-container' => 'body',
+                  'data-html' => 'true',
+                  'data-placement' => 'bottom',
+                  title: send_login_tooltip_text)
 
 - if entry == current_user
   - if entry.encrypted_password?
     = action_button t('devise.registrations.edit.change_password'), edit_person_registration_path
   - else
     = action_button t('devise.registrations.edit.set_password'), edit_person_registration_path
-

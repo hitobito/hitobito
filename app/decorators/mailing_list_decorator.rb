@@ -22,9 +22,19 @@ class MailingListDecorator < ApplicationDecorator
   def subscribers_may_post_info
     html = ''.html_safe
     if !subscribers_may_post
-      html << translate(:may_not_post).html_safe
+      html << translate(:subscribers_may_not_post).html_safe
     else
-      html << translate(:may_post).html_safe
+      html << translate(:subscribers_may_post).html_safe
+    end
+    html << h.tag(:br)
+  end
+
+  def anyone_may_post_info
+    html = ''.html_safe
+    if !anyone_may_post
+      html << translate(:anyone_may_not_post).html_safe
+    else
+      html << translate(:anyone_may_post).html_safe
     end
     html << h.tag(:br)
   end

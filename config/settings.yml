@@ -52,6 +52,10 @@ email:
 # Initially, a password reset token may be mailed from the application to this address to set a password.
 root_email: hitobito@puzzle.ch
 
+sphinx:
+  index:
+    # interval to index for full-text search in minutes
+    interval: 15
 
 phone_number:
   predefined_labels:

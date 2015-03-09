@@ -6,17 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 require File.expand_path('../boot', __FILE__)
-require 'benchmark'
 
-b = lambda do
-  require 'rails/all'
-  require 'jquery/rails'
+def with_benchmark(tag, &block)
+  if ENV['RAILS_ENV'] == 'production'
+    yield
+  else
+    require 'benchmark'
+    puts "require #{tag}: #{Benchmark.measure(&block)}"
+  end
 end
-puts "require rails:  #{Benchmark.measure(&b)}"
 
-b = -> { Bundler.require(:default, Rails.env) }
-puts "require gems:   #{Benchmark.measure(&b)}"
-
+with_benchmark('rails') do
+  require 'rails/all'
+end
+with_benchmark('gems') do
+  require 'jquery/rails'
+  Bundler.require(:default, Rails.env)
+end
 
 module Hitobito
   class Application < Rails::Application
@@ -57,8 +63,7 @@ module Hitobito
     Globalize.fallbacks = { de: [:de, :fr, :it, :en],
                             fr: [:fr, :it, :en, :de],
                             it: [:it, :fr, :en, :de],
-                            en: [:en, :de, :fr, :it]
-                          }
+                            en: [:en, :de, :fr, :it] }
 
     # Route errors over the Rails application.
     config.exceptions_app = self.routes
@@ -90,15 +95,15 @@ module Hitobito
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
-      # g.fixture_replacement :fabrication
     end
 
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
 
       # Assert the mail relay job is scheduled on every restart.
-      if Delayed::Job.table_exists? && Settings.email.retriever.config.address
-        MailRelayJob.new.schedule
+      if Delayed::Job.table_exists?
+        MailRelayJob.new.schedule if Settings.email.retriever.config.address
+        SphinxIndexJob.new.schedule
       end
     end
 

@@ -14,7 +14,7 @@ structure setup as described below, issue the following commands in the main dir
   rake db:create       # create a development database (Sqlite3)
   rake db:setup:all    # run migrations and load seed data of the app and all wagons
   rails server         # start the rails server
-  
+
 To start the search server, run background jobs or the development mail catcher, run:
 
   rake ts:start
@@ -24,9 +24,9 @@ To start the search server, run background jobs or the development mail catcher,
 
 === Group Hierarchy
 
-hitobito provides a powerful meta-model to describe group structures. 
+hitobito provides a powerful meta-model to describe group structures.
 Groups are always of a specific type and are arranged in a tree.
-Each group type may have several different role types. 
+Each group type may have several different role types.
 
 This core part of hitobito does not provide any specific group or role types.
 They have to be defined in a separate plugin, specific to your organization structure.
@@ -49,11 +49,11 @@ An example group type definition might look like this:
     roles Leader, Member
   end
 
-A group type always inherits from the class Group. 
+A group type always inherits from the class Group.
 It may be a layer, which defines a set of groups that are in a common permission range.
 All subgroups of a layer group belong to this range unless a subgroup is a layer itself.
 
-Then all possible child types of the group are listed. 
+Then all possible child types of the group are listed.
 When creating subgroups, only these types will be allowed.
 As shown, types may be organized recursively.
 
@@ -84,7 +84,7 @@ structure.
 
 hitobito is built on the plugin framework {Wagons}[http://github.com/codez/wagons].
 With Wagons, arbitrary features and extensions may be created for hitobito.
-As mentioned above, as there are no group types coming from hitobito itself, 
+As mentioned above, as there are no group types coming from hitobito itself,
 at least one wagon is required to define group types in order to use hitobito.
 
 A few basic things to consider when working with Wagons:
@@ -92,7 +92,7 @@ A few basic things to consider when working with Wagons:
 * The main hitobito application and all wagons should reside in the same subdirectory.
 * Copy the +Wagonfile.ci+ to +Wagonfile+ to load all wagons in sibling directories in development mode.
 * Wagons use the same database as the main application. When creating migrations in hitobito,
-  make sure to remove all wagon additions from the database before the schema is dumped. 
+  make sure to remove all wagon additions from the database before the schema is dumped.
   This is easiest by dropping and recreating the development database.
 * When new gem dependencies are added to the main application, run <tt>rake wagon:bundle:update</tt>
   to update all wagon Gemfiles.
@@ -120,34 +120,38 @@ RAILS_DB_PORT::                 Port to connect to the dababase.
 RAILS_DB_ADAPTER::              Database adapter. Default is sqlite3.
 RAILS_MAIL_DELIVERY_METHOD::    smtp or sendmail. See {ActionMailer}[http://api.rubyonrails.org/classes/ActionMailer/Base.html] for details.
 RAILS_MAIL_DELIVERY_CONFIG::    A comma-separated "key: value" list with all required
-                                delivery settings for the chosen method, 
-                                e.g. "address: smtp.local, port: 25". See 
-                                {ActionMailer}[http://api.rubyonrails.org/classes/ActionMailer/Base.html] 
-                                for valid options. If this variable is empty, 
+                                delivery settings for the chosen method,
+                                e.g. "address: smtp.local, port: 25". See
+                                {ActionMailer}[http://api.rubyonrails.org/classes/ActionMailer/Base.html]
+                                for valid options. If this variable is empty,
                                 the Rails defaults (localhost:25) are used.
 RAILS_MAIL_PERFORM_DELIVERIES:: Set to false when no mails should be delivered at all.
 RAILS_MAIL_DOMAIN::             The domain name for the mailing lists, default is RAILS_HOST_NAME.
-RAILS_MAIL_RETRIEVER_TYPE::     pop3 or imap, anything supported by the 
-                                {Mail}[https://github.com/mikel/mail] gem. 
+RAILS_MAIL_RETRIEVER_TYPE::     pop3 or imap, anything supported by the
+                                {Mail}[https://github.com/mikel/mail] gem.
                                 Default is pop3.
 RAILS_MAIL_RETRIEVER_CONFIG::   A comma-separated "key: value" list with all required
-                                retriever settings, e.g. 
-                                "address: mailhost.local, port: 995, enable_ssl: true". 
-                                See {Mail}[https://github.com/mikel/mail] for 
-                                valid options. If this variable is empty, 
+                                retriever settings, e.g.
+                                "address: mailhost.local, port: 995, enable_ssl: true".
+                                See {Mail}[https://github.com/mikel/mail] for
+                                valid options. If this variable is empty,
                                 mailing lists will not work.
+RAILS_SPHINX_HOST::             IP address of the sphinx server for this application instance.
+                                Defaults to 127.0.0.1.
 RAILS_SPHINX_PORT::             Unique port of the sphinx server for this application instance.
                                 Defaults to 9312.
 RAILS_AIRBRAKE_API_KEY::        Airbrake api key of the application.
                                 Nothing is sent if this variable is empty.
 RAILS_AIRBRAKE_HOST::           Host name of the airbrake instance to send errors to.
-RAILS_AIRBRAKE_PORT::           Port of the airbrake instance. Defaults to 443
+RAILS_AIRBRAKE_PORT::           Port of the airbrake instance. Defaults to 443.
+MEMCACHED_SERVERS::             A comma-separated list of host:port strings of the memcached servers.
+                                Defaults to 127.0.0.1:11211.
 
 
 === License
 
-hitobito is released under the GNU Affero General Public License. 
-Copyright 2012-2014 by Jungwacht Blauring Schweiz. 
+hitobito is released under the GNU Affero General Public License.
+Copyright 2012-2014 by Jungwacht Blauring Schweiz.
 See COPYING for more details.
 
 hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].

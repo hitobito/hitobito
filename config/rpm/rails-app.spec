@@ -155,11 +155,16 @@ echo "# Rotate rails logs for %{name}
 
 %if %{use_sphinx}
 touch config/production.sphinx.conf
-mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
-echo "# Reindex sphinx for %{name}
-# Created by %{name}.rpm
-10,25,40,55 * * * *  %{name}  cd %{appdir} && . %{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
-" > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
+echo "# Config for Sphinx < 2.1
+ThinkingSphinx::SphinxQL.variables!
+
+ThinkingSphinx::Middlewares::DEFAULT.insert_after(
+  ThinkingSphinx::Middlewares::Inquirer, ThinkingSphinx::Middlewares::UTF8
+)
+ThinkingSphinx::Middlewares::RAW_ONLY.insert_after(
+  ThinkingSphinx::Middlewares::Inquirer, ThinkingSphinx::Middlewares::UTF8
+)
+" > config/initializers/sphinx_20.rb
 %endif
 
 export PATH=%{ruby_bindir}:$PATH

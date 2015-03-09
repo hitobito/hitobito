@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source ${OPENSHIFT_RUBY_DIR}/lib/ruby_context
+
+# CPUS=$((`oo-cgroup-read  cpu.cfs_quota_us` / `oo-cgroup-read cpu.cfs_period_us`))
+WORKERS=${RAILS_WORKERS:-2}
+
+function start {
+  delayed_job -n $WORKERS -m start
+}
+
+function stop {
+  delayed_job -n $WORKERS stop
+}
+
+function delayed_job {
+  if [[ ( -f ${OPENSHIFT_REPO_DIR}/bin/delayed_job ) ]]; then
+    cmd="$@"
+    ruby_context "${OPENSHIFT_REPO_DIR}/bin/delayed_job $cmd"
+  fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    delayed_job status
+    ;;
+  restart|reload|force-reload)
+    stop
+    start
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|status|restart|reload|force-reload}"
+    exit 2
+    ;;
+esac

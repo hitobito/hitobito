@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd $OPENSHIFT_LOG_DIR
+mkdir -p old
+logrotate $OPENSHIFT_REPO_DIR/.openshift/etc/logrotate.conf -s $OPENSHIFT_DATA_DIR/logrotate.status

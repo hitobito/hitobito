@@ -1,0 +1,25 @@
+#!/bin/bash
+# This is a simple build script and will be executed while your application is stopped
+# before the deploy step. This script gets executed directly, so it
+# could be python, php, ruby, etc.
+
+# set up upload directory in persistent location
+mkdir -p $OPENSHIFT_DATA_DIR/uploads
+ln -sf $OPENSHIFT_DATA_DIR/uploads $OPENSHIFT_REPO_DIR/public/uploads
+
+# remove link to application sphinx configuration, otherwise sphinx will not start correctly
+rm -f ${OPENSHIFT_SPHINX_CONFIG_DIR}/sphinx.conf
+
+# set up development seeds if $RAILS_USE_DEVELOPMENT_SEEDS is set
+if [[ !( -z $RAILS_USE_DEVELOPMENT_SEEDS ) && ( -d $OPENSHIFT_REPO_DIR/db ) ]]; then
+  (cd $OPENSHIFT_REPO_DIR/db/seeds && ln -sf development production)
+  for dir in $OPENSHIFT_REPO_DIR/vendor/wagons/*; do
+    (cd $dir/db/seeds && ln -sf development production)
+  done
+fi
+
+# copy data files
+shopt -s dotglob
+for file in $OPENSHIFT_REPO_DIR/.openshift/data/*; do
+  cp -af $file $OPENSHIFT_DATA_DIR
+done

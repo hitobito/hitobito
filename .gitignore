@@ -54,6 +54,10 @@ Wagonfile
 # uploaded pictures
 public/uploads
 
+# ruby-version for multi version builds
+.ruby-version
+.rvmrc
+
 # ama custom project setup
 TAGS
 /.vimrc

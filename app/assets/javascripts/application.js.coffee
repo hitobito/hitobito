@@ -153,7 +153,7 @@ Application.updateApplicationMarketCount = ->
 
 
 eventDateFormats = ['YYYY/MM/DD', 'YYYY-MM-DD', 'YYYY.MM.DD', 'D/M/YY', 'D\M\YY',
-                    'D-M-YY', 'DD-MM-YYYY', 'D.M.YY', 'DD.MM.YYYY', 'D MMM YY']
+                    'D-M-YY', 'DD-MM-YYYY', 'D.M.YY', 'D.M.YYYY', 'DD.MM.YYYY', 'D MMM YY']
 validateEventDatesFields = (event) ->
   fields = $(event.target).closest('.fields')
   startAtDateField = $('.date:nth(0)', fields)

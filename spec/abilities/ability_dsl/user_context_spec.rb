@@ -14,14 +14,14 @@ describe AbilityDsl::UserContext do
   context :top_leader do
     let(:user) { people(:top_leader) }
 
-    its(:groups_group_full) { should =~ [] }
-    its(:groups_group_read) { should =~ [] }
-    its(:groups_layer_and_below_full) { should =~ [groups(:top_group).id] }
-    its(:groups_layer_and_below_read) { should =~ [groups(:top_group).id] }
-    its(:layers_and_below_full)       { should =~ [groups(:top_layer).id] }
-    its(:layers_and_below_read)       { should =~ [groups(:top_layer).id] }
+    its(:groups_group_full) { is_expected.to eq [] }
+    its(:groups_group_read) { is_expected.to eq [] }
+    its(:groups_layer_and_below_full) { is_expected.to eq [groups(:top_group).id] }
+    its(:groups_layer_and_below_read) { is_expected.to eq [groups(:top_group).id] }
+    its(:layers_and_below_full)       { is_expected.to eq [groups(:top_layer).id] }
+    its(:layers_and_below_read)       { is_expected.to eq [groups(:top_layer).id] }
     its(:admin)             { should be_truthy }
-    its(:all_permissions)   { should =~ [:admin, :layer_and_below_full, :layer_and_below_read, :contact_data] }
+    its(:all_permissions)   { is_expected.to contain_exactly(:admin, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
     it 'has no events with permission full' do
       expect(subject.events_with_permission(:event_full)).to be_blank
@@ -31,14 +31,14 @@ describe AbilityDsl::UserContext do
   context :bottom_member do
     let(:user) { people(:bottom_member) }
 
-    its(:groups_group_full) { should =~ [] }
-    its(:groups_group_read) { should =~ [] }
-    its(:groups_layer_and_below_full) { should =~ [] }
-    its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_and_below_full)       { should =~ [] }
-    its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_group_full) { is_expected.to eq [] }
+    its(:groups_group_read) { is_expected.to eq [] }
+    its(:groups_layer_and_below_full) { is_expected.to eq [] }
+    its(:groups_layer_and_below_read) { is_expected.to eq [groups(:bottom_layer_one).id] }
+    its(:layers_and_below_full)       { is_expected.to eq [] }
+    its(:layers_and_below_read)       { is_expected.to eq [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_falsey }
-    its(:all_permissions)   { should =~ [:layer_and_below_read] }
+    its(:all_permissions)   { is_expected.to eq [:layer_and_below_read] }
 
     it 'has events with permission full' do
       expect(subject.events_with_permission(:event_full)).to match_array([events(:top_course).id])
@@ -56,14 +56,14 @@ describe AbilityDsl::UserContext do
       p
     end
 
-    its(:groups_group_full) { should =~ [] }
-    its(:groups_group_read) { should =~ [groups(:top_group).id, groups(:bottom_group_one_two).id] }
-    its(:groups_layer_and_below_full) { should =~ [groups(:bottom_layer_one).id] }
-    its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_and_below_full)       { should =~ [groups(:bottom_layer_one).id] }
-    its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
+    its(:groups_group_full) { is_expected.to eq [] }
+    its(:groups_group_read) { is_expected.to contain_exactly(groups(:top_group).id, groups(:bottom_group_one_two).id) }
+    its(:groups_layer_and_below_full) { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
+    its(:groups_layer_and_below_read) { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
+    its(:layers_and_below_full)       { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
+    its(:layers_and_below_read)       { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
     its(:admin)             { should be_falsey }
-    its(:all_permissions)   { should =~ [:layer_and_below_full, :layer_and_below_read, :group_read, :contact_data, :approve_applications] }
+    its(:all_permissions)   { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :contact_data, :approve_applications) }
   end
 
 end

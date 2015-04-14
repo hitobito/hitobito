@@ -92,12 +92,12 @@ describe EventsController, type: :controller do
 
       it 'renders events csv' do
         get :index, group_id: group.id, format: :csv, year: 2012
-        expect(response.body.lines.size).to eq(2)
+        expect(response.body.lines.to_a.size).to eq(2)
       end
 
       it 'renders courses csv' do
         get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
-        expect(response.body.lines.size).to eq(2)
+        expect(response.body.lines.to_a.size).to eq(2)
       end
 
     end

@@ -21,8 +21,9 @@ module GroupsHelper
     end
   end
 
-  def export_event_button
-    if can?(:export_events, @group)
+  def export_events_button
+    type = params[:type].presence || 'Event'
+    if can?(:"export_#{type.underscore.pluralize}", @group)
       action_button(I18n.t('event.lists.courses.csv_export_button'),
                     params.merge(format: :csv), :download)
     end

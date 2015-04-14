@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_insieme
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_insieme (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -490,7 +490,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_insieme!
   http_accept_language
   jquery-rails
   jquery-ui-rails

@@ -172,11 +172,12 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_priorities
-    if entry.application && entry.event.priorization
-      @alternatives = Event::Course.application_possible.
-                                    where(kind_id: event.kind_id).
-                                    in_hierarchy(current_user).
-                                    list
+    if entry.application && event.priorization
+      @alternatives = event.class.application_possible.
+                                        where(kind_id: event.kind_id).
+                                        in_hierarchy(current_user).
+                                        includes(:groups).
+                                        list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end

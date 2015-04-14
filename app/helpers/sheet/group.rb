@@ -22,7 +22,8 @@ module Sheet
           "#{type.type_name}_group_events_path",
           params: { returning: true },
           if: lambda { |view, group|
-            group.event_types.include?(type) && view.can?(:index_events, group)
+            group.event_types.include?(type) &&
+            view.can?(:"index_#{type.name.underscore.pluralize}", group)
           }
     end
 

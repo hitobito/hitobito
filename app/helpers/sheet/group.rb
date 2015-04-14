@@ -87,8 +87,8 @@ module Sheet
 
     def belongs_to
       translate(:belongs_to).html_safe +
-        StandardHelper::EMPTY_STRING +
-        StandardHelper::EMPTY_STRING
+        FormatHelper::EMPTY_STRING +
+        FormatHelper::EMPTY_STRING
     end
 
   end

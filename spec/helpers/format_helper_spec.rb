@@ -7,8 +7,10 @@
 
 require 'spec_helper'
 
-describe StandardHelper do
+describe FormatHelper do
 
+  include I18nHelper
+  include UtilityHelper
   include CrudTestHelper
   include NestedForm::ViewHelper
 
@@ -42,7 +44,7 @@ describe StandardHelper do
       subject { labeled('label') { '' } }
 
       it { should be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + StandardHelper::EMPTY_STRING + '</dd>' }
+      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + FormatHelper::EMPTY_STRING + '</dd>' }
     end
 
     context 'with unsafe value' do
@@ -98,7 +100,7 @@ describe StandardHelper do
 
     context 'nil' do
       it 'should print an empty string' do
-        f(nil).should == StandardHelper::EMPTY_STRING
+        f(nil).should == FormatHelper::EMPTY_STRING
       end
     end
 
@@ -206,7 +208,7 @@ describe StandardHelper do
       model.remarks = '   '
       string = format_type(model, :remarks)
       string.should be_html_safe
-      string.should == StandardHelper::EMPTY_STRING
+      string.should == FormatHelper::EMPTY_STRING
     end
   end
 
@@ -253,49 +255,6 @@ describe StandardHelper do
     it 'should render human attribute name' do
       captionize(:gets_up_at, CrudTestModel).should == 'Gets up at'
     end
-  end
-
-  describe '#table' do
-    context 'with empty data' do
-      subject { table([]) }
-
-      it { should be_html_safe }
-
-      it 'should handle empty data' do
-        should match(/Keine Eintr/)
-      end
-    end
-
-    context 'with data' do
-      subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
-
-      it { should be_html_safe }
-
-      it 'should render table' do
-        should match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
-      end
-
-      it 'should contain attrs' do
-        should match(/<th>Size<\/th>/)
-      end
-
-      it 'should contain block' do
-        should match(/<th>Upcase<\/th>/)
-      end
-    end
-  end
-
-  describe '#standard_form' do
-    subject do
-      with_test_routing do
-        capture { standard_form(entry, html: { class: 'special' }) { |f| } }
-      end
-    end
-
-    let(:entry) { crud_test_models(:AAAAA) }
-
-    it { should match(/form .*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" .*?method="post"/) }
-
   end
 
   describe '#translate_inheritable' do

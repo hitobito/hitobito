@@ -4,8 +4,10 @@ require 'spec_helper'
 
 describe 'StandardFormBuilder' do
 
-  include StandardHelper
-  include ListHelper
+  include FormatHelper
+  include I18nHelper
+  include FormHelper
+  include UtilityHelper
   include CrudTestHelper
   include LayoutHelper
 

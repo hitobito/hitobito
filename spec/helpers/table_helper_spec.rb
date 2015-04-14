@@ -8,10 +8,18 @@
 require 'spec_helper'
 
 
-describe ListHelper do
+describe TableHelper do
 
-  include StandardHelper
+  include LayoutHelper
+  include I18nHelper
+  include UtilityHelper
+  include ActionHelper
+  include FormatHelper
   include CrudTestHelper
+
+  def can?(*args)
+    true
+  end
 
   before(:all) do
     reset_db
@@ -20,6 +28,7 @@ describe ListHelper do
   end
 
   after(:all) { reset_db }
+
 
   describe '#list_table' do
     let(:entries) { CrudTestModel.all }
@@ -158,4 +167,112 @@ describe ListHelper do
                                :created_at, :updated_at]
       end
   end
+
+  describe '#crud_table' do
+    let(:entries) { CrudTestModel.all }
+
+    context 'default' do
+      subject do
+        with_test_routing { crud_table }
+      end
+
+      it 'should have 7 rows' do
+        subject.scan(REGEXP_ROWS).size.should == 7
+      end
+
+      it 'should have 13 sort headers' do
+        subject.scan(REGEXP_SORT_HEADERS).size.should == 13
+      end
+
+      it 'should have 12 action cells' do
+        subject.scan(REGEXP_ACTION_CELL).size.should == 12
+      end
+    end
+
+    context 'with custom attrs' do
+      subject do
+        with_test_routing { crud_table(:name, :children, :companion_id) }
+      end
+
+      it 'should have 3 sort headers' do
+        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+      end
+    end
+
+    context 'with custom block' do
+      subject do
+        with_test_routing do
+          crud_table do |t|
+            t.attrs :name, :children, :companion_id
+            t.col('head') { |e| content_tag :span, e.income.to_s }
+          end
+        end
+      end
+
+      it 'should have 4 headers' do
+        subject.scan(REGEXP_HEADERS).size.should == 4
+      end
+
+      it 'should have 6 custom col spans' do
+        subject.scan(/<span>.+?<\/span>/m).size.should == 6
+      end
+
+      it 'should have 0 action cells' do
+        subject.scan(REGEXP_ACTION_CELL).size.should == 0
+      end
+    end
+
+    context 'with custom attributes and block' do
+      subject do
+        with_test_routing do
+          crud_table(:name, :children, :companion_id) do |t|
+            t.col('head') { |e| content_tag :span, e.income.to_s }
+          end
+        end
+      end
+
+      it 'should have 3 sort headers' do
+        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+      end
+
+      it 'should have 6 custom col spans' do
+        subject.scan(/<span>.+?<\/span>/m).size.should == 6
+      end
+
+      it 'should have 0 action cells' do
+        subject.scan(REGEXP_ACTION_CELL).size.should == 0
+      end
+    end
+  end
+
+  describe '#table' do
+    context 'with empty data' do
+      subject { table([]) }
+
+      it { should be_html_safe }
+
+      it 'should handle empty data' do
+        should match(/Keine Eintr/)
+      end
+    end
+
+    context 'with data' do
+      subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
+
+      it { should be_html_safe }
+
+      it 'should render table' do
+        should match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
+      end
+
+      it 'should contain attrs' do
+        should match(/<th>Size<\/th>/)
+      end
+
+      it 'should contain block' do
+        should match(/<th>Upcase<\/th>/)
+      end
+    end
+  end
+
 end

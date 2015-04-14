@@ -8,17 +8,16 @@
 require 'spec_helper'
 
 
-describe CrudHelper do
+describe FormHelper do
 
+  include ActionHelper
+  include I18nHelper
+  include TableHelper
+  include UtilityHelper
   include LayoutHelper
-  include StandardHelper
-  include ListHelper
+  include FormatHelper
   include CrudTestHelper
   include NestedForm::ViewHelper
-
-  def can?(*args)
-    true
-  end
 
   before(:all) do
     reset_db
@@ -28,83 +27,6 @@ describe CrudHelper do
 
   after(:all) { reset_db }
 
-
-  describe '#crud_table' do
-    let(:entries) { CrudTestModel.all }
-
-    context 'default' do
-      subject do
-        with_test_routing { crud_table }
-      end
-
-      it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
-      end
-
-      it 'should have 13 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 13
-      end
-
-      it 'should have 12 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 12
-      end
-    end
-
-    context 'with custom attrs' do
-      subject do
-        with_test_routing { crud_table(:name, :children, :companion_id) }
-      end
-
-      it 'should have 3 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
-      end
-    end
-
-    context 'with custom block' do
-      subject do
-        with_test_routing do
-          crud_table do |t|
-            t.attrs :name, :children, :companion_id
-            t.col('head') { |e| content_tag :span, e.income.to_s }
-          end
-        end
-      end
-
-      it 'should have 4 headers' do
-        subject.scan(REGEXP_HEADERS).size.should == 4
-      end
-
-      it 'should have 6 custom col spans' do
-        subject.scan(/<span>.+?<\/span>/m).size.should == 6
-      end
-
-      it 'should have 0 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 0
-      end
-    end
-
-    context 'with custom attributes and block' do
-      subject do
-        with_test_routing do
-          crud_table(:name, :children, :companion_id) do |t|
-            t.col('head') { |e| content_tag :span, e.income.to_s }
-          end
-        end
-      end
-
-      it 'should have 3 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
-      end
-
-      it 'should have 6 custom col spans' do
-        subject.scan(/<span>.+?<\/span>/m).size.should == 6
-      end
-
-      it 'should have 0 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 0
-      end
-    end
-  end
 
   describe '#entry_form' do
     let(:entry) { CrudTestModel.first }
@@ -198,6 +120,19 @@ describe CrudHelper do
       it { should match(/div class="control-group error"\>.*?\<input .*?name="crud_test_model\[name\]" .*?type="text"/) }
       it { should match(/input [^>]*?name="_method" [^>]*?type="hidden" [^>]*?value="patch"/) }
     end
+  end
+
+  describe '#standard_form' do
+    subject do
+      with_test_routing do
+        capture { standard_form(entry, html: { class: 'special' }) { |f| } }
+      end
+    end
+
+    let(:entry) { crud_test_models(:AAAAA) }
+
+    it { should match(/form .*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" .*?method="post"/) }
+
   end
 
 end

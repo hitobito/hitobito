@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe 'Dropdown::PeopleExport' do
 
-  include StandardHelper
+  include FormatHelper
   include LayoutHelper
 
   let(:user) { people(:top_leader) }

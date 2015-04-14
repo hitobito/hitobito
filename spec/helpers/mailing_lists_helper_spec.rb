@@ -9,7 +9,8 @@ require 'spec_helper'
 
 describe MailingListsHelper do
 
-  include StandardHelper
+  include UtilityHelper
+  include FormatHelper
   include LayoutHelper
 
   let(:entry) { mailing_lists(:leaders) }

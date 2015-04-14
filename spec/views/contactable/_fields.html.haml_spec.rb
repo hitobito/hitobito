@@ -18,7 +18,7 @@ describe 'contactable/_fields.html.haml' do
   before do
     controller.controller_path = 'groups'
     controller.request.path_parameters[:controller] = 'groups'
-    view.extend StandardHelper
+    view.extend FormatHelper
     view.stub(entry: GroupDecorator.decorate(group), f: form_builder)
 
     # mock render call to emai_field partial

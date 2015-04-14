@@ -17,7 +17,6 @@ class StandardTableBuilder
   attr_reader :entries, :cols, :options, :template
 
   # Delegate called methods to template.
-  # including StandardHelper would lead to problems with indirectly called methods.
   delegate :content_tag, :format_attr, :column_type, :association, :dom_id,
            :captionize, :add_css_class, :content_tag_nested, to: :template
 

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'StandardTableBuilder' do
-
-  include StandardHelper
+  include UtilityHelper
+  include FormatHelper
 
   let(:entries) { %w(foo bahr) }
   let(:table)   { StandardTableBuilder.new(entries, self) }

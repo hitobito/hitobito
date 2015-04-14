@@ -9,7 +9,8 @@ require 'spec_helper'
 
 describe 'Dropdown::GroupAdd' do
 
-  include StandardHelper
+  include FormatHelper
+  include I18nHelper
   include LayoutHelper
 
   let(:group) { groups(:top_layer) }

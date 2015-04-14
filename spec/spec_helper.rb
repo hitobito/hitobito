@@ -50,6 +50,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
+  config.backtrace_exclusion_patterns = [/lib\/rspec/]
+
   config.include(MailerMacros)
   config.include(EventMacros)
   config.include Devise::TestHelpers, type: :controller

@@ -10,7 +10,7 @@ module ActiveRecord
     class Date < Value
 
       def date_string_to_long_year(string)
-        return string unless string.is_a?(String)
+        return string unless string.is_a?(::String)
         return nil if string.empty?
 
         if string.strip =~ /\A(\d+)\.(\d+)\.(\d{2})\z/

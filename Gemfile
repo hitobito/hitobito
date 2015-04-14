@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.1'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -31,7 +31,7 @@ gem 'mini_magick'
 gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
 gem 'nested_form'
 gem 'oat'
-gem 'paper_trail'
+gem 'paper_trail', '>= 4.0.0.beta2'
 gem 'paranoia'
 gem 'customized_piwik_analytics', '~> 1.0.0'
 gem 'prawn'

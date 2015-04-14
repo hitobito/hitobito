@@ -55,6 +55,7 @@ class Event::KindsController < SimpleCrudController
     mark_qualifikation_kinds_for_removal!(kinds_attrs, existing_kinds)
 
     attrs[:event_kind_qualification_kinds_attributes] = kinds_attrs
+    attrs.permit!
     attrs
   end
 
@@ -74,8 +75,9 @@ class Event::KindsController < SimpleCrudController
 
   def qualification_kind_assoc_id(qualification_kind_id, role, category, existing_kinds)
     kind = existing_kinds.find do |k|
-      k.role == role && k.category == category &&
-        k.qualification_kind_id == qualification_kind_id
+      k.role == role &&
+      k.category == category &&
+      k.qualification_kind_id == qualification_kind_id
     end
     kind.try(:id)
   end

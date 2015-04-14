@@ -50,6 +50,7 @@ class Event::Role < ActiveRecord::Base
 
   belongs_to :participation, inverse_of: :roles, validate: true
 
+
   has_one :event, through: :participation
   has_one :person, through: :participation
 
@@ -106,6 +107,10 @@ class Event::Role < ActiveRecord::Base
   end
 
   def destroy_participation_for_last
+    # prevent callback loops
+    return if @_destroying
+    @_destroying = true
+
     update_participant_count if self.class.participant?
     participation.destroy unless participation.roles(true).exists?
   end

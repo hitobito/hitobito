@@ -28,9 +28,9 @@ describe 'people/_qualifications.html.haml' do
     end
 
     it 'lists qualifications finish_at DESC ' do
-      dom.should have_css('table tr', count: 2)
-      dom.all('tr strong').first.text.should eq 'Super Lead'
-      dom.all('tr strong').last.text.should eq 'Group Lead'
+      expect(dom).to have_css('table tr', count: 2)
+      expect(dom.all('tr strong').first.text).to eq 'Super Lead'
+      expect(dom.all('tr strong').last.text).to eq 'Group Lead'
     end
   end
 
@@ -40,12 +40,12 @@ describe 'people/_qualifications.html.haml' do
 
     it 'lists delete buttons' do
       render
-      dom.all('tr a').first[:href].should eq path(ql_sl)
+      expect(dom.all('tr a').first[:href]).to eq path(ql_sl)
     end
 
     it 'has button to add new qualification' do
       render
-      dom.all('a').first[:href].should eq new_group_person_qualification_path(top_group, top_leader)
+      expect(dom.all('a').first[:href]).to eq new_group_person_qualification_path(top_group, top_leader)
     end
 
     def path(qualification)

@@ -24,34 +24,34 @@ describe ContactableDecorator do
   end
 
   it '#complete_address' do
-    @group.complete_address.should eq '<p>foostreet 3<br />4242 footown</p>'
+    expect(@group.complete_address).to eq '<p>foostreet 3<br />4242 footown</p>'
   end
 
   it '#primary_email' do
-    @group.primary_email.should eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
+    expect(@group.primary_email).to eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
   end
 
   context '#all_emails' do
     subject { @group.all_emails }
 
-    it { should =~ /foo@foobar.com/ }
-    it { should =~ /additional@foobar.com.+Work/ }
-    it { should_not =~ /private@foobar.com.+Mobile/ }
+    it { is_expected.to match(/foo@foobar.com/) }
+    it { is_expected.to match(/additional@foobar.com.+Work/) }
+    it { is_expected.not_to match(/private@foobar.com.+Mobile/) }
   end
 
   context '#all_additional_emails' do
     context 'only public' do
       subject { @group.all_additional_emails }
 
-      it { should =~ /additional@foobar.com.+Work/ }
-      it { should_not =~ /private@foobar.com.+Mobile/ }
+      it { is_expected.to match(/additional@foobar.com.+Work/) }
+      it { is_expected.not_to match(/private@foobar.com.+Mobile/) }
     end
 
     context 'all' do
       subject { @group.all_additional_emails(false) }
 
-      it { should =~ /additional@foobar.com.+Work/ }
-      it { should =~ /private@foobar.com.+Mobile/ }
+      it { is_expected.to match(/additional@foobar.com.+Work/) }
+      it { is_expected.to match(/private@foobar.com.+Mobile/) }
     end
   end
 
@@ -59,17 +59,17 @@ describe ContactableDecorator do
     context 'only public' do
       subject { @group.all_phone_numbers }
 
-      it { should =~ /031.*Home/ }
-      it { should =~ /041.*Work/ }
-      it { should_not =~ /079.*Mobile/ }
+      it { is_expected.to match(/031.*Home/) }
+      it { is_expected.to match(/041.*Work/) }
+      it { is_expected.not_to match(/079.*Mobile/) }
     end
 
     context 'all' do
       subject { @group.all_phone_numbers(false) }
 
-      it { should =~ /031.*Home/ }
-      it { should =~ /041.*Work/ }
-      it { should =~ /079.*Mobile/ }
+      it { is_expected.to match(/031.*Home/) }
+      it { is_expected.to match(/041.*Work/) }
+      it { is_expected.to match(/079.*Mobile/) }
     end
   end
 
@@ -77,10 +77,10 @@ describe ContactableDecorator do
     context 'web links' do
       subject { @group.all_social_accounts }
 
-      it { should =~ /www.puzzle.ch<\/a>/ }
-      it { should =~ /http:\/\/puzzle.ch<\/a>/ }
-      it { should_not =~ /bad.website.link<\/a>/ }
-      it { should_not =~ /www.<\/a>/ }
+      it { is_expected.to match(/www.puzzle.ch<\/a>/) }
+      it { is_expected.to match(/http:\/\/puzzle.ch<\/a>/) }
+      it { is_expected.not_to match(/bad.website.link<\/a>/) }
+      it { is_expected.not_to match(/www.<\/a>/) }
 
     end
   end
@@ -88,12 +88,12 @@ describe ContactableDecorator do
   context 'addresses' do
     context 'country' do
       it "shouldn't print country ch/schweiz" do
-        @group.complete_address.should_not =~ /Schweiz/
+        expect(@group.complete_address).not_to match(/Schweiz/)
       end
 
       it 'should print country' do
         @group.country = 'the ultimate country'
-        @group.complete_address.should =~ /the ultimate country/
+        expect(@group.complete_address).to match(/the ultimate country/)
       end
     end
   end

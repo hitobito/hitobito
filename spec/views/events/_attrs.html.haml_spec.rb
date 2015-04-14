@@ -26,15 +26,15 @@ describe 'events/_attrs.html.haml' do
   context 'course' do
     let(:event) { EventDecorator.decorate(events(:top_course)) }
     it 'lists preconditions' do
-      should have_content 'Qualifikationen'
-      should have_content 'Group Lead'
+      is_expected.to have_content 'Qualifikationen'
+      is_expected.to have_content 'Group Lead'
     end
   end
 
   context 'event' do
     let(:event) { EventDecorator.decorate(events(:top_event)) }
     it 'lists preconditions' do
-      should_not have_content 'Qualifikationen'
+      is_expected.not_to have_content 'Qualifikationen'
     end
   end
 
@@ -43,7 +43,7 @@ describe 'events/_attrs.html.haml' do
     let(:event) { EventDecorator.decorate(event_with_date) }
     let(:event_with_date) { Fabricate(:event_date, event: events(:top_event), label: 'Vorweekend', location: 'Im Wald').event }
     it 'joins event date label and location' do
-      should have_content 'Vorweekend, Im Wald'
+      is_expected.to have_content 'Vorweekend, Im Wald'
     end
   end
 

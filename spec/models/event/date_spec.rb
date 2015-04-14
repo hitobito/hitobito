@@ -30,9 +30,9 @@ describe Event::Date do
     event_date.start_at_date = date1
     event_date.finish_at_date = date2
 
-    event_date.should be_valid
-    event_date.start_at.should == date1.to_date.to_time
-    event_date.finish_at.should == date2.to_date.to_time
+    expect(event_date).to be_valid
+    expect(event_date.start_at).to eq(date1.to_date.to_time)
+    expect(event_date.finish_at).to eq(date2.to_date.to_time)
   end
 
   it 'should store short format date' do
@@ -42,9 +42,9 @@ describe Event::Date do
     event_date.start_at_date = date1
     event_date.finish_at_date = date2
 
-    event_date.should be_valid
-    event_date.start_at.should == Time.zone.local(1998, 2, 1)
-    event_date.finish_at.should == Time.zone.local(2001, 12, 11)
+    expect(event_date).to be_valid
+    expect(event_date.start_at).to eq(Time.zone.local(1998, 2, 1))
+    expect(event_date.finish_at).to eq(Time.zone.local(2001, 12, 11))
   end
 
   it 'should have date and time when hours and min are given' do
@@ -56,10 +56,10 @@ describe Event::Date do
     event_date.start_at_hour = hours
     event_date.start_at_min = min
 
-    event_date.should be_valid
-    event_date.start_at.should == Time.zone.local(2012, 12, 12, 18, 10)
-    event_date.start_at_hour.should == 18
-    event_date.start_at_min.should == 10
+    expect(event_date).to be_valid
+    expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12, 18, 10))
+    expect(event_date.start_at_hour).to eq(18)
+    expect(event_date.start_at_min).to eq(10)
   end
 
   it 'should get hours,mins and date seperately' do
@@ -68,17 +68,17 @@ describe Event::Date do
     # start_at
     event_date.start_at = date
 
-    event_date.should be_valid
-    event_date.start_at_date.should == date.to_date
-    event_date.start_at_hour.should == 18
-    event_date.start_at_min.should == 10
+    expect(event_date).to be_valid
+    expect(event_date.start_at_date).to eq(date.to_date)
+    expect(event_date.start_at_hour).to eq(18)
+    expect(event_date.start_at_min).to eq(10)
     # finish_at
     event_date.finish_at = date
 
-    event_date.should be_valid
-    event_date.finish_at_date.should == date.to_date
-    event_date.finish_at_hour.should == 18
-    event_date.finish_at_min.should == 10
+    expect(event_date).to be_valid
+    expect(event_date.finish_at_date).to eq(date.to_date)
+    expect(event_date.finish_at_hour).to eq(18)
+    expect(event_date.finish_at_min).to eq(10)
   end
 
   it 'should update hours,mins when a date was stored previously' do
@@ -86,14 +86,14 @@ describe Event::Date do
     event_date = event.dates.new(label: 'foobar')
     # set start_at date
     event_date.start_at_date = date
-    event_date.should be_valid
+    expect(event_date).to be_valid
 
     # update time
     event_date.start_at_hour = 18
     event_date.start_at_min = 10
-    event_date.should be_valid
+    expect(event_date).to be_valid
 
-    event_date.start_at.should == Time.zone.local(2012, 12, 12, 18, 10)
+    expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12, 18, 10))
   end
 
   it 'should remove date that was stored previously' do
@@ -101,29 +101,29 @@ describe Event::Date do
     event_date = event.dates.new(label: 'foobar')
     # set start_at date
     event_date.start_at_date = date
-    event_date.should be_valid
-    event_date.start_at.should == date.to_time
+    expect(event_date).to be_valid
+    expect(event_date.start_at).to eq(date.to_time)
 
     # update time
     event_date.start_at_date = ''
     event_date.start_at_hour = 18
     event_date.start_at_min = 10
-    event_date.should_not be_valid
+    expect(event_date).not_to be_valid
 
-    event_date.start_at.should be_nil
+    expect(event_date.start_at).to be_nil
   end
 
   it 'is invalid on partial date input' do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '15.12'
-    date.should_not be_valid
-    date.should have(2).errors_on(:start_at)
+    expect(date).not_to be_valid
+    expect(date).to have(2).errors_on(:start_at)
   end
 
   it 'is invalid on plain numbers input' do
     date = event.dates.new(label: 'foobar')
     date.start_at_date = '77'
-    date.should_not be_valid
-    date.should have(2).errors_on(:start_at)
+    expect(date).not_to be_valid
+    expect(date).to have(2).errors_on(:start_at)
   end
 end

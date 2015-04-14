@@ -9,12 +9,23 @@
 
 RSpec.configure do |c|
   c.before failing: true do
-    model_class.any_instance.stub(:save).and_return(false)
-    model_class.any_instance.stub(:destroy).and_return(false)
+    allow_any_instance_of(model_class).to receive(:save).and_return(false)
+    allow_any_instance_of(model_class).to receive(:destroy).and_return(false)
   end
 
   # currently, no json for hitobito
   c.filter_run_excluding format: :json
+
+  # rspec-rails 3 will no longer automatically infer an example group's spec type
+  # from the file location. You can explicitly opt-in to the feature using this
+  # config option.
+  # To explicitly tag specs without using automatic inference, set the `:type`
+  # metadata manually:
+  #
+  #     describe ThingsController, :type => :controller do
+  #       # Equivalent to being in spec/controllers
+  #     end
+  c.infer_spec_type_from_file_location!
 end
 
 # A set of examples to include into the tests for your crud controller subclasses.
@@ -45,7 +56,7 @@ shared_examples 'crud controller' do |options|
     val[0..((val.size + 1) / 2)]
   end
 
-  before do
+  before do |example|
     m = example.metadata
     perform_combined_request if m[:perform_request] != false && m[:action] && m[:method]
   end
@@ -66,7 +77,7 @@ shared_examples 'crud controller' do |options|
         it_should_respond
         context 'entries' do
           subject { entries }
-          it { should include(test_entry) }
+          it { is_expected.to include(test_entry) }
         end
       end
 
@@ -77,7 +88,7 @@ shared_examples 'crud controller' do |options|
           it_should_respond
           it 'should have sorted entries' do
             sorted = entries.sort_by(&(sort_column.to_sym)).collect(&:id)
-            entries.collect(&:id).should == sorted
+            expect(entries.collect(&:id)).to eq(sorted)
           end
         end
 
@@ -87,7 +98,7 @@ shared_examples 'crud controller' do |options|
           it_should_respond
           it 'should have sorted entries' do
             sorted = entries.sort_by(&(sort_column.to_sym))
-            entries.to_a.should == sorted.reverse
+            expect(entries.to_a).to eq(sorted.reverse)
           end
         end
       end
@@ -96,7 +107,7 @@ shared_examples 'crud controller' do |options|
     context '.json', format: :json, unless: skip?(options, %w(index json)), combine: 'ij' do
       it_should_respond
       it_should_assign_entries
-      its(:body) { should start_with('[{') }
+      its(:body) { is_expected.to start_with('[{') }
     end
 
   end
@@ -122,7 +133,7 @@ shared_examples 'crud controller' do |options|
     context '.json', format: :json, unless: skip?(options, %w(show json)), combine: 'sj' do
       it_should_respond
       it_should_assign_entry
-      its(:body) { should start_with('{') }
+      its(:body) { is_expected.to start_with('{') }
     end
   end
 
@@ -166,14 +177,14 @@ shared_examples 'crud controller' do |options|
       context 'with valid params', unless: skip?(options, %w(create json valid)), combine: 'cjv' do
         it_should_respond(201)
         it_should_set_attrs
-        its(:body) { should start_with('{') }
+        its(:body) { is_expected.to start_with('{') }
         it_should_persist_entry
       end
 
       context 'with invalid params', failing: true, unless: skip?(options, %w(create json invalid)), combine: 'cji' do
         it_should_respond(422)
         it_should_set_attrs
-        its(:body) { should match(/"errors":\{/) }
+        its(:body) { is_expected.to match(/"errors":\{/) }
         it_should_persist_entry(false)
       end
     end
@@ -211,14 +222,14 @@ shared_examples 'crud controller' do |options|
       context 'with valid params', unless: skip?(options, %w(udpate json valid)), combine: 'ujv' do
         it_should_respond(204)
         it_should_set_attrs
-        its(:body) { should match(/s*/) }
+        its(:body) { is_expected.to match(/s*/) }
         it_should_persist_entry
       end
 
       context 'with invalid params', failing: true, unless: skip?(options, %w(update json invalid)), combine: 'uji' do
         it_should_respond(422)
         it_should_set_attrs
-        its(:body) { should match(/"errors":\{/) }
+        its(:body) { is_expected.to match(/"errors":\{/) }
       end
     end
   end
@@ -244,12 +255,12 @@ shared_examples 'crud controller' do |options|
     context '.json', format: :json, unless: skip?(options, %w(destroy json)) do
       context 'successfull', combine: 'djs' do
         it_should_respond(204)
-        its(:body) { should match(/s*/) }
+        its(:body) { is_expected.to match(/s*/) }
       end
 
       context 'with failure', failing: true, combine: 'djf' do
         it_should_respond(422)
-        its(:body) { should match(/"errors":\{/) }
+        its(:body) { is_expected.to match(/"errors":\{/) }
       end
     end
   end

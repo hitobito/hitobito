@@ -10,7 +10,7 @@ require 'spec_helper'
 describe ApplicationDecorator do
   it '#klass returns model class'  do
     dec = GroupDecorator.new(Group.new)
-    dec.klass.should eq Group
+    expect(dec.klass).to eq Group
   end
 
   context 'userstamp' do
@@ -26,14 +26,14 @@ describe ApplicationDecorator do
 
     it 'should return date and time with updater/creator' do
       dec = PersonDecorator.new(@person)
-      @person.creator.should == @creator
-      @person.updater.should == @updater
-      dec.stub(:can?).and_return(true)
+      expect(@person.creator).to eq(@creator)
+      expect(@person.updater).to eq(@updater)
+      allow(dec).to receive(:can?).and_return(true)
       begin
-        dec.created_info.should =~ /#{I18n.l(@person.created_at.to_date)}/
-        dec.created_info.should =~ /#{@creator.to_s}/
-        dec.updated_info.should =~ /#{I18n.l(@person.updated_at.to_date)}/
-        dec.updated_info.should =~ /#{@updater.to_s}/
+        expect(dec.created_info).to match(/#{I18n.l(@person.created_at.to_date)}/)
+        expect(dec.created_info).to match(/#{@creator.to_s}/)
+        expect(dec.updated_info).to match(/#{I18n.l(@person.updated_at.to_date)}/)
+        expect(dec.updated_info).to match(/#{@updater.to_s}/)
       rescue ActionController::RoutingError => e
         # this weird bitch pops up on rare occasions - let's figure out why
         puts e.message

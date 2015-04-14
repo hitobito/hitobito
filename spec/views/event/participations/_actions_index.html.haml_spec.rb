@@ -33,15 +33,15 @@ describe 'event/participations/_actions_index.html.haml' do
   it 'top leader has dropdowns for adding and exporting' do
     login_as(people(:top_leader))
 
-    dropdowns[0].should have_content('Person hinzufügen')
-    dropdowns[1].should have_content('Export')
+    expect(dropdowns[0]).to have_content('Person hinzufügen')
+    expect(dropdowns[1]).to have_content('Export')
   end
 
   it 'event leader has dropdowns for adding and exporting' do
     login_as(leader.participation.person)
 
-    dropdowns[0].should have_content('Person hinzufügen')
-    dropdowns[1].should have_content('Export')
+    expect(dropdowns[0]).to have_content('Person hinzufügen')
+    expect(dropdowns[1]).to have_content('Export')
   end
 
   def login_as(user)

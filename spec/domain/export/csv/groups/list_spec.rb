@@ -14,7 +14,9 @@ describe Export::Csv::Groups::List do
      should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene)
    end
 
-   it { should have(4).items }
+   it 'has 4 items' do
+     expect(subject.size).to eq(4)
+   end
 
    context 'first row' do
 

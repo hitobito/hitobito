@@ -30,30 +30,30 @@ describe Concerns::Localizable do
     cookies[:locale] = 'de'
     get :index, locale: 'fr'
 
-    I18n.locale.should == :fr
-    cookies[:locale].should == :fr
+    expect(I18n.locale).to eq(:fr)
+    expect(cookies[:locale]).to eq(:fr)
   end
 
   it 'uses locale from cookie if param empty' do
     cookies[:locale] = 'fr'
     get :index, locale: ' '
 
-    I18n.locale.should == :fr
-    cookies[:locale].should == :fr
+    expect(I18n.locale).to eq(:fr)
+    expect(cookies[:locale]).to eq(:fr)
   end
 
   it 'uses locale from cookie if param invalid' do
     cookies[:locale] = 'fr'
     get :index, locale: 'et'
 
-    I18n.locale.should == :fr
-    cookies[:locale].should == :fr
+    expect(I18n.locale).to eq(:fr)
+    expect(cookies[:locale]).to eq(:fr)
   end
 
   it 'uses default locale if nothing else found' do
     get :index
 
-    I18n.locale.should == :de
-    cookies[:locale].should == :de
+    expect(I18n.locale).to eq(:de)
+    expect(cookies[:locale]).to eq(:de)
   end
 end

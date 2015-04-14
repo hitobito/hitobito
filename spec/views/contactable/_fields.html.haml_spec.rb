@@ -23,13 +23,13 @@ describe 'contactable/_fields.html.haml' do
 
     # mock render call to emai_field partial
     render_method = view.method(:render)
-    view.should_receive(:render) do |*args|
+    expect(view).to receive(:render) { |*args|
       if args == ['email_field', f: form_builder]
         ''
       else
         render_method.call(*args)
       end
-    end.exactly(3).times
+    }.exactly(3).times
   end
 
   context 'standard' do

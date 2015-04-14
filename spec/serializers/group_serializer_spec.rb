@@ -19,16 +19,16 @@ describe GroupSerializer do
 
   it 'has different entities' do
     links = subject[:links]
-    links[:parent].should eq(group.parent_id.to_s)
-    links.should_not have_key(:children)
-    links[:layer_group].should eq(group.parent_id.to_s)
-    links[:hierarchies].should have(2).items
+    expect(links[:parent]).to eq(group.parent_id.to_s)
+    expect(links).not_to have_key(:children)
+    expect(links[:layer_group]).to eq(group.parent_id.to_s)
+    expect(links[:hierarchies].size).to eq(2)
   end
 
   it 'does not include deleted children' do
     a = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group, deleted_at: 1.month.ago)
 
-    subject[:links][:children].should have(1).item
+    expect(subject[:links][:children].size).to eq(1)
   end
 end

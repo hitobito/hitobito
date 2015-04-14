@@ -51,11 +51,11 @@ describe Event::ParticipationsController do
       before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
 
       it 'has two answers' do
-        assigns(:answers).should have(2).items
+        expect(assigns(:answers).size).to eq(2)
       end
 
       it 'has application' do
-        assigns(:application).should be_present
+        expect(assigns(:application)).to be_present
       end
     end
 
@@ -63,7 +63,7 @@ describe Event::ParticipationsController do
       before { get :show, group_id: group.id, event_id: other_course.id, id: participation.id }
 
       it 'has participation' do
-        assigns(:participation).should eq(participation)
+        expect(assigns(:participation)).to eq(participation)
       end
     end
 
@@ -91,8 +91,8 @@ describe Event::ParticipationsController do
         before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
 
         it 'has participation' do
-          response.status.should eq(200)
-          assigns(:participation).should eq(participation)
+          expect(response.status).to eq(200)
+          expect(assigns(:participation)).to eq(participation)
         end
       end
 
@@ -108,8 +108,8 @@ describe Event::ParticipationsController do
         before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
 
         it 'has participation' do
-          response.status.should eq(200)
-          assigns(:participation).should eq(participation)
+          expect(response.status).to eq(200)
+          expect(assigns(:participation)).to eq(participation)
         end
       end
 
@@ -122,7 +122,7 @@ describe Event::ParticipationsController do
 
     it 'renders participation as pdf' do
       get :print, group_id: group.id, event_id: course.id, id: participation.id, format: :pdf
-      response.should be_ok
+      expect(response).to be_ok
     end
   end
 
@@ -134,12 +134,12 @@ describe Event::ParticipationsController do
 
       it 'builds participation with answers' do
         participation = assigns(:participation)
-        participation.application.should be_present
-        participation.application.priority_1.should == course
-        participation.answers.should have(2).items
-        participation.person.should == user
-        assigns(:priority_2s).collect(&:id).should =~ [events(:top_course).id, other_course.id]
-        assigns(:alternatives).collect(&:id).should =~ [events(:top_course).id, course.id, other_course.id]
+        expect(participation.application).to be_present
+        expect(participation.application.priority_1).to eq(course)
+        expect(participation.answers.size).to eq(2)
+        expect(participation.person).to eq(user)
+        expect(assigns(:priority_2s).collect(&:id)).to match_array([events(:top_course).id, other_course.id])
+        expect(assigns(:alternatives).collect(&:id)).to match_array([events(:top_course).id, course.id, other_course.id])
       end
     end
 
@@ -154,10 +154,10 @@ describe Event::ParticipationsController do
 
       it 'builds participation with answers' do
         participation = assigns(:participation)
-        participation.application.should be_blank
-        participation.answers.should have(2).items
-        participation.person.should == user
-        assigns(:priority_2s).should be_nil
+        expect(participation.application).to be_blank
+        expect(participation.answers.size).to eq(2)
+        expect(participation.person).to eq(user)
+        expect(assigns(:priority_2s)).to be_nil
       end
     end
 
@@ -173,46 +173,46 @@ describe Event::ParticipationsController do
 
     it 'lists participant and leader group by default' do
       get :index, group_id: group.id, event_id: course.id
-      assigns(:participations).should eq [@participant, @leader]
+      expect(assigns(:participations)).to eq [@participant, @leader]
     end
 
     it 'lists particpant and leader group by default order by role if specific in settings' do
       Settings.people.stub(default_sort: 'role')
       get :index, group_id: group.id, event_id: course.id
-      assigns(:participations).should eq [@leader, @participant]
+      expect(assigns(:participations)).to eq [@leader, @participant]
     end
 
     it 'lists only leader_group' do
       get :index, group_id: group.id, event_id: course.id, filter: :teamers
-      assigns(:participations).should eq [@leader]
+      expect(assigns(:participations)).to eq [@leader]
     end
 
     it 'lists only participant_group' do
       get :index, group_id: group.id, event_id: course.id, filter: :participants
-      assigns(:participations).should eq [@participant]
+      expect(assigns(:participations)).to eq [@participant]
     end
 
     it 'generates pdf labels' do
       get :index, group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id, format: :pdf
 
-      @response.content_type.should == 'application/pdf'
-      people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+      expect(@response.content_type).to eq('application/pdf')
+      expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
     end
 
     it 'exports csv files' do
       get :index, group_id: group, event_id: course.id, format: :csv
 
-      @response.content_type.should == 'text/csv'
-      @response.body.should =~ /^Vorname;Nachname/
-      @response.body.should =~ %r{^#{@participant.person.first_name};#{@participant.person.last_name}}
-      @response.body.should =~ %r{^#{@leader.person.first_name};#{@leader.person.last_name}}
+      expect(@response.content_type).to eq('text/csv')
+      expect(@response.body).to match(/^Vorname;Nachname/)
+      expect(@response.body).to match(%r{^#{@participant.person.first_name};#{@participant.person.last_name}})
+      expect(@response.body).to match(%r{^#{@leader.person.first_name};#{@leader.person.last_name}})
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      @response.body.should == "#{@participant.person.email},#{@leader.person.email},#{e1.email}"
+      expect(@response.body).to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
     end
 
 
@@ -220,13 +220,13 @@ describe Event::ParticipationsController do
       %w(first_name last_name nickname zip_code town).each do |attr|
         it "sorts based on #{attr}" do
           get :index, group_id: group, event_id: course.id, sort: attr, sort_dir: :asc
-          assigns(:participations).should == [@participant, @leader]
+          expect(assigns(:participations)).to eq([@participant, @leader])
         end
       end
 
       it "sorts based on role" do
         get :index, group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc
-        assigns(:participations).should == [@leader, @participant]
+        expect(assigns(:participations)).to eq([@leader, @participant])
       end
     end
 
@@ -263,34 +263,34 @@ describe Event::ParticipationsController do
       it 'creates confirmation job' do
         expect do
           post :create, group_id: group.id, event_id: course.id, event_participation: {}
-          assigns(:participation).should be_valid
+          expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count }.by(1)
-        flash[:notice].should_not include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
+        expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
       end
 
       it 'creates active participant role for non course events' do
         post :create, group_id: group.id, event_id: Fabricate(:event).id, event_participation: {}
         participation = assigns(:participation)
-        participation.should be_valid
-        participation.should be_active
-        participation.roles.should have(1).item
+        expect(participation).to be_valid
+        expect(participation).to be_active
+        expect(participation.roles.size).to eq(1)
         role = participation.roles.first
-        flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        flash[:notice].should include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        role.participation.should eq participation.model
+        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(role.participation).to eq participation.model
       end
 
       it 'creates non-active participant role for course events' do
         post :create, group_id: group.id, event_id: course.id, event_participation: {}
         participation = assigns(:participation)
-        participation.should be_valid
-        participation.should_not be_active
-        participation.roles.should have(1).item
+        expect(participation).to be_valid
+        expect(participation).not_to be_active
+        expect(participation.roles.size).to eq(1)
         role = participation.roles.first
-        role.should be_kind_of(Event::Course::Role::Participant)
-        flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        flash[:notice].should include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        role.participation.should eq participation.model
+        expect(role).to be_kind_of(Event::Course::Role::Participant)
+        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(role.participation).to eq participation.model
       end
 
       it 'creates specific non-active participant role for course events' do
@@ -302,14 +302,14 @@ describe Event::ParticipationsController do
                       event_role: { type: 'TestParticipant' }
         Event::Course.role_types -= [TestParticipant]
         participation = assigns(:participation)
-        participation.should be_valid
-        participation.should_not be_active
-        participation.roles.should have(1).item
+        expect(participation).to be_valid
+        expect(participation).not_to be_active
+        expect(participation.roles.size).to eq(1)
         role = participation.roles.first
-        role.should be_kind_of(TestParticipant)
-        flash[:notice].should include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        flash[:notice].should include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        role.participation.should eq participation.model
+        expect(role).to be_kind_of(TestParticipant)
+        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(role.participation).to eq participation.model
       end
 
       it 'fails for invalid event role' do
@@ -341,11 +341,11 @@ describe Event::ParticipationsController do
 
       it 'top leader can create participation for bottom member' do
         post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
-        participation.should be_present
-        participation.persisted?.should be_true
-        participation.should be_active
-        participation.roles.pluck(:type).should == [Event::Course::Role::Participant.sti_name]
-        should redirect_to group_event_participation_path(group, course, participation)
+        expect(participation).to be_present
+        expect(participation.persisted?).to be_truthy
+        expect(participation).to be_active
+        expect(participation.roles.pluck(:type)).to eq([Event::Course::Role::Participant.sti_name])
+        is_expected.to redirect_to group_event_participation_path(group, course, participation)
       end
 
       it 'bottom member can not create participation for top leader' do
@@ -365,10 +365,10 @@ describe Event::ParticipationsController do
 
       context "#{method.upcase} #{action}"  do
         it 'redirects to event#show' do
-          should redirect_to group_event_path(group, course)
+          is_expected.to redirect_to group_event_path(group, course)
         end
         it 'sets flash message' do
-          flash[:alert].last.should =~ /Folgende Qualifikationen fehlen: Group Lead/
+          expect(flash[:alert].last).to match(/Folgende Qualifikationen fehlen: Group Lead/)
         end
       end
     end
@@ -388,15 +388,15 @@ describe Event::ParticipationsController do
     end
 
     it 'top_leader can create without supplying required answer' do
-      make_request(people(:top_leader), '').should be_valid
+      expect(make_request(people(:top_leader), '')).to be_valid
     end
 
     it 'bottom_member cannot create without supplying required answer' do
-      make_request(people(:bottom_member), '').should_not be_valid
+      expect(make_request(people(:bottom_member), '')).not_to be_valid
     end
 
     it 'bottom_member can create when supplying required answer' do
-      make_request(people(:bottom_member), 'dummy').should be_valid
+      expect(make_request(people(:bottom_member), 'dummy')).to be_valid
     end
   end
 
@@ -417,7 +417,7 @@ describe Event::ParticipationsController do
         post :create, group_id: event.groups.first.id,
                       event_id: event.id,
                       event_participation: { answers_attributes: answers_attributes }
-        assigns(:participation).answers.first.answer.should eq 'GA, Halbtax'
+        expect(assigns(:participation).answers.first.answer).to eq 'GA, Halbtax'
       end
     end
 
@@ -433,11 +433,11 @@ describe Event::ParticipationsController do
       end
 
       it 'handles resetting of multiple choice answers' do
-        participation.answers.first.answer.should eq 'GA, Halbtax'
+        expect(participation.answers.first.answer).to eq 'GA, Halbtax'
         put :update, group_id: event.groups.first.id,
                      event_id: event.id, id: participation.id,
                      event_participation: { answers_attributes: answers_attributes }
-        participation.reload.answers.first.answer.should be_nil
+        expect(participation.reload.answers.first.answer).to be_nil
       end
     end
   end

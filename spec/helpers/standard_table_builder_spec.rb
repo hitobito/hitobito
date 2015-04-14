@@ -35,15 +35,15 @@ describe 'StandardTableBuilder' do
     context 'output' do
       before { table.attrs :upcase }
 
-      it { col.html_header.should == '<th>Upcase</th>' }
-      it { col.content('foo').should == 'FOO' }
-      it { col.html_cell('foo').should == '<td>FOO</td>' }
+      it { expect(col.html_header).to eq('<th>Upcase</th>') }
+      it { expect(col.content('foo')).to eq('FOO') }
+      it { expect(col.html_cell('foo')).to eq('<td>FOO</td>') }
     end
 
     context 'content with custom format_size method' do
       before { table.attrs :size }
 
-      it { col.content('abcd').should == '4 chars' }
+      it { expect(col.content('abcd')).to eq('4 chars') }
     end
   end
 

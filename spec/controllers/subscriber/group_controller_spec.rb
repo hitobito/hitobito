@@ -23,12 +23,12 @@ describe Subscriber::GroupController do
         get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /Top \\u0026gt; Bottom One/ }
-      it { should =~ /Bottom One \\u0026gt; Group 11/ }
-      it { should =~ /Bottom One \\u0026gt; Group 12/ }
-      it { should =~ /Top \\u0026gt; Bottom Two/ }
-      it { should =~ /Bottom Two \\u0026gt; Group 21/ }
-      it { should_not =~ /Bottom One \\u0026gt; Group 111/ }
+      it { is_expected.to match(/Top \\u0026gt; Bottom One/) }
+      it { is_expected.to match(/Bottom One \\u0026gt; Group 11/) }
+      it { is_expected.to match(/Bottom One \\u0026gt; Group 12/) }
+      it { is_expected.to match(/Top \\u0026gt; Bottom Two/) }
+      it { is_expected.to match(/Bottom Two \\u0026gt; Group 21/) }
+      it { is_expected.not_to match(/Bottom One \\u0026gt; Group 111/) }
     end
 
     context 'bottom layer' do
@@ -41,9 +41,9 @@ describe Subscriber::GroupController do
       end
 
       it 'does not include sister group or their descendants' do
-        should =~ /Top \\u0026gt; Bottom One/
-        should_not =~ /Top \\u0026gt; Bottom Two/
-        should_not =~ /Bottom Two \\u0026gt; Group 21/
+        is_expected.to match(/Top \\u0026gt; Bottom One/)
+        is_expected.not_to match(/Top \\u0026gt; Bottom Two/)
+        is_expected.not_to match(/Bottom Two \\u0026gt; Group 21/)
       end
     end
 
@@ -56,7 +56,7 @@ describe Subscriber::GroupController do
                         subscription: { subscriber_id: groups(:bottom_layer_one) },
                         format: :js
 
-      assigns(:role_types).root.should == Group::BottomLayer
+      expect(assigns(:role_types).root).to eq(Group::BottomLayer)
     end
 
     it 'does not load role types for nil group' do
@@ -64,7 +64,7 @@ describe Subscriber::GroupController do
                         mailing_list_id: list.id,
                         format: :js
 
-      assigns(:role_types).should be_nil
+      expect(assigns(:role_types)).to be_nil
     end
 
   end
@@ -74,10 +74,10 @@ describe Subscriber::GroupController do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
 
-      should render_template('crud/new')
-      assigns(:subscription).errors[:subscriber_id].should be_blank
-      assigns(:subscription).errors[:subscriber_type].should be_blank
-      assigns(:subscription).errors[:base].should have(1).item
+      is_expected.to render_template('crud/new')
+      expect(assigns(:subscription).errors[:subscriber_id]).to be_blank
+      expect(assigns(:subscription).errors[:subscriber_type]).to be_blank
+      expect(assigns(:subscription).errors[:base].size).to eq(1)
     end
 
     it 'create subscription with role types' do
@@ -90,7 +90,7 @@ describe Subscriber::GroupController do
         end.to change { Subscription.count }.by(1)
       end.to change { RelatedRoleType.count }.by(2)
 
-      should redirect_to(group_mailing_list_subscriptions_path(group, list))
+      is_expected.to redirect_to(group_mailing_list_subscriptions_path(group, list))
     end
   end
 

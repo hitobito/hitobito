@@ -20,8 +20,8 @@ describe 'qualifications/_form.html.haml' do
   subject { Capybara::Node::Simple.new(rendered) }
   it 'translates form fields' do
     render
-    should have_content 'Qualifikation'
-    should have_content 'Seit'
+    is_expected.to have_content 'Qualifikation'
+    is_expected.to have_content 'Seit'
   end
 
 end

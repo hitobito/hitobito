@@ -70,11 +70,11 @@ describe Export::Csv::People::PeopleFull do
       let(:lang) { :de }
 
       it 'has correct headers' do
-        csv.headers.should == [
+        expect(csv.headers).to eq([
            'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
            'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
            'Zusätzliche Angaben', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
-           'Social Media Adresse Skype', 'Elternteil']
+           'Social Media Adresse Skype', 'Elternteil'])
       end
 
       context 'first row' do
@@ -93,12 +93,13 @@ describe Export::Csv::People::PeopleFull do
       let(:lang) { :fr }
 
       it 'has correct headers' do
-        csv.headers.should ==
+        expect(csv.headers).to eq(
            ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
             "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
             "Anniversaire", "Données supplémentaires", "Rôles",
             "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
             "Adresse d'un média social Skype", "Parent"]
+        )
       end
 
       context 'first row' do

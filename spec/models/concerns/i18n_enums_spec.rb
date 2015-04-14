@@ -13,36 +13,36 @@ describe I18nEnums do
 
   it 'returns translated labels' do
     person.gender = 'm'
-    person.gender_label.should eq 'männlich'
+    expect(person.gender_label).to eq 'männlich'
     person.gender = 'w'
-    person.gender_label.should eq 'weiblich'
+    expect(person.gender_label).to eq 'weiblich'
     person.gender = nil
-    person.gender_label.should eq 'unbekannt'
+    expect(person.gender_label).to eq 'unbekannt'
   end
 
   it 'returns translated label in french' do
     I18n.locale = :fr
     person.gender = 'm'
-    person.gender_label.should eq 'Masculin'
+    expect(person.gender_label).to eq 'Masculin'
     person.gender = 'w'
-    person.gender_label.should eq 'Féminin'
+    expect(person.gender_label).to eq 'Féminin'
     person.gender = ''
-    person.gender_label.should eq 'Inconnu'
+    expect(person.gender_label).to eq 'Inconnu'
     I18n.locale = :de
   end
 
   it 'accepts only possible values' do
     person.gender = 'm'
-    person.should be_valid
+    expect(person).to be_valid
     person.gender = ' '
-    person.should be_valid
+    expect(person).to be_valid
     person.gender = nil
-    person.should be_valid
+    expect(person).to be_valid
     person.gender = 'foo'
-    person.should_not be_valid
+    expect(person).not_to be_valid
   end
 
   it 'has class side method to return all labels' do
-    Person.gender_labels.should eq({ m: 'männlich', w: 'weiblich' })
+    expect(Person.gender_labels).to eq({ m: 'männlich', w: 'weiblich' })
   end
 end

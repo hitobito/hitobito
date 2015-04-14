@@ -18,32 +18,32 @@ describe PeopleController, js: true do
       fill_in('people_filter_name', with: 'Bottom Layer')
       all('form .btn-toolbar').first.click_button('Suche speichern')
 
-      page.should have_selector('.table tbody tr', count: 2)
-      page.should have_selector("#person_#{leader.id}")
-      page.should have_selector("#person_#{member.id}")
+      expect(page).to have_selector('.table tbody tr', count: 2)
+      expect(page).to have_selector("#person_#{leader.id}")
+      expect(page).to have_selector("#person_#{member.id}")
 
       # edit the current filter
       click_link 'Bottom Layer'
       click_link 'Neuer Filter...'
 
-      page.should have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Leader.id}")
-      page.should have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Member.id}")
+      expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Leader.id}")
+      expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Member.id}")
 
       find("#people_filter_role_type_ids_#{Group::BottomLayer::Member.id}").set(false)
       all('form .btn-toolbar').first.click_button('Suchen')
 
-      page.should have_selector('.table tbody tr', count: 1)
-      page.should have_selector("tr#person_#{leader.id}")
+      expect(page).to have_selector('.table tbody tr', count: 1)
+      expect(page).to have_selector("tr#person_#{leader.id}")
 
       # open the previously defined filter again
       click_link 'Eigener Filter'
       click_link 'Bottom Layer'
 
-      page.should have_selector('.table tbody tr', count: 2)
+      expect(page).to have_selector('.table tbody tr', count: 2)
 
       # open other tab
       click_link 'Externe'
-      page.should_not have_selector('.table-striped tbody tr')
+      expect(page).not_to have_selector('.table-striped tbody tr')
     end
   end
 
@@ -53,10 +53,10 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        page.should have_css('input:checked', count: 5)
+        expect(page).to have_css('input:checked', count: 5)
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        page.should have_css('input:checked', count: 0)
+        expect(page).to have_css('input:checked', count: 0)
       end
     end
 
@@ -65,10 +65,10 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('label.filter-toggle', text: 'Top Group').click
-        page.should have_css('input:checked', count: 5)
+        expect(page).to have_css('input:checked', count: 5)
 
         find('label.filter-toggle', text: 'Top Group').click
-        page.should have_css('input:checked', count: 0)
+        expect(page).to have_css('input:checked', count: 0)
       end
     end
   end
@@ -76,11 +76,11 @@ describe PeopleController, js: true do
   def sign_in_and_create_filter
     sign_in
     visit group_people_path(group)
-    page.should_not have_selector('.table tbody tr')
+    expect(page).not_to have_selector('.table tbody tr')
 
     click_link 'Weitere Ansichten'
     click_link 'Neuer Filter...'
 
-    page.should have_css('input:checked', count: 0)
+    expect(page).to have_css('input:checked', count: 0)
   end
 end

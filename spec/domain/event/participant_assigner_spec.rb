@@ -37,7 +37,7 @@ describe Event::ParticipantAssigner do
     it 'sets given participation active' do
       subject.add_participant
       participation.reload
-      participation.should be_active
+      expect(participation).to be_active
     end
 
     context 'for other event' do
@@ -52,7 +52,7 @@ describe Event::ParticipantAssigner do
       it 'updates answers for other event' do
         expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
 
-        participation.event_id.should == event.id
+        expect(participation.event_id).to eq(event.id)
       end
 
       it 'raises error on existing participation' do
@@ -73,12 +73,12 @@ describe Event::ParticipantAssigner do
     it 'removes role for given application' do
       subject.remove_participant
       participation.reload
-      participation.should_not be_active
+      expect(participation).not_to be_active
     end
 
     it 'does not touch participation' do
       subject.remove_participant
-      Event::Participation.where(id: participation.id).exists?.should be_true
+      expect(Event::Participation.where(id: participation.id).exists?).to be_truthy
     end
 
     context 'roundtrip' do
@@ -88,9 +88,9 @@ describe Event::ParticipantAssigner do
         participation.application.priority_1 = participation.event
         participation.application.save!
         subject.add_participant
-        participation.reload.event.should eq(event)
+        expect(participation.reload.event).to eq(event)
         subject.remove_participant
-        participation.reload.event.should eq(course)
+        expect(participation.reload.event).to eq(course)
       end
     end
   end
@@ -113,18 +113,18 @@ describe Event::ParticipantAssigner do
 
     describe '#createable?' do
       it 'is true for both when no role has been created' do
-        assigner1.should be_createable
-        assigner2.should be_createable
+        expect(assigner1).to be_createable
+        expect(assigner2).to be_createable
       end
 
       it 'is false for assigner2 when already assigned to event1' do
         assigner1.add_participant
-        assigner2.should_not be_createable
+        expect(assigner2).not_to be_createable
       end
 
       it 'is false for assigner1 when already assigned to event2' do
         assigner2.add_participant
-        assigner1.should_not be_createable
+        expect(assigner1).not_to be_createable
       end
     end
 
@@ -152,8 +152,8 @@ describe Event::ParticipantAssigner do
       end
 
       def assert_applicant_count(count1, count2)
-        event1.reload.applicant_count.should eq count1
-        event2.reload.applicant_count.should eq count2
+        expect(event1.reload.applicant_count).to eq count1
+        expect(event2.reload.applicant_count).to eq count2
       end
 
     end

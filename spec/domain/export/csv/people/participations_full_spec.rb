@@ -32,8 +32,8 @@ describe Export::Csv::People::ParticipationsFull do
 
     before {  participation.init_answers }
     it 'has keys and values' do
-      subject[:"question_#{event_questions(:top_ov).id}"].should eq 'GA oder Halbtax?'
-      subject.keys.select { |key| key =~ /question/ }.should have(3).items
+      expect(subject[:"question_#{event_questions(:top_ov).id}"]).to eq 'GA oder Halbtax?'
+      expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(3)
     end
   end
 
@@ -86,8 +86,8 @@ describe Export::Csv::People::ParticipationsFull do
         end
 
         it 'has answer for first question' do
-          subject["#{first_question.question}"].should eq 'GA'
-          subject["#{second_question.question}"].should eq 'ja'
+          expect(subject["#{first_question.question}"]).to eq 'GA'
+          expect(subject["#{second_question.question}"]).to eq 'ja'
         end
       end
     end

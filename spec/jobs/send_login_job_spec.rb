@@ -26,16 +26,16 @@ describe Event::ParticipationConfirmationJob do
   end
 
   it 'generates reset token' do
-    recipient.reset_password_token.should be_nil
+    expect(recipient.reset_password_token).to be_nil
     subject.perform
-    recipient.reload.reset_password_token.should be_present
+    expect(recipient.reload.reset_password_token).to be_present
   end
 
   it 'sends email' do
     subject.perform
-    last_email.should be_present
-    last_email.body.should =~ /Hallo #{recipient.greeting_name}/
-    last_email.body.should_not =~ /#{recipient.reload.reset_password_token}/
+    expect(last_email).to be_present
+    expect(last_email.body).to match(/Hallo #{recipient.greeting_name}/)
+    expect(last_email.body).not_to match(/#{recipient.reload.reset_password_token}/)
   end
 
   context 'with locale' do
@@ -49,8 +49,8 @@ describe Event::ParticipationConfirmationJob do
     it 'sends localized email' do
       I18n.locale = :de
       subject.perform
-      last_email.should be_present
-      last_email.body.should =~ /Salut #{recipient.greeting_name}/
+      expect(last_email).to be_present
+      expect(last_email.body).to match(/Salut #{recipient.greeting_name}/)
     end
   end
 

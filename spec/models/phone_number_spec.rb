@@ -25,23 +25,23 @@ describe PhoneNumber do
 
     it 'reuses existing label' do
       a1 = Fabricate(:phone_number, label: 'privat')
-      a1.label.should == 'Privat'
+      expect(a1.label).to eq('Privat')
     end
   end
 
   context '#available_labels' do
     subject { PhoneNumber.available_labels }
-    it { should include(Settings.phone_number.predefined_labels.first) }
+    it { is_expected.to include(Settings.phone_number.predefined_labels.first) }
 
     it 'includes labels from database' do
       a = Fabricate(:phone_number, label: 'Foo')
-      should include('Foo')
+      is_expected.to include('Foo')
     end
 
     it 'includes labels from database and predefined only once' do
       predef = Settings.phone_number.predefined_labels.first
       a = Fabricate(:phone_number, label: predef)
-      subject.count(predef).should == 1
+      expect(subject.count(predef)).to eq(1)
     end
   end
 
@@ -54,8 +54,8 @@ describe PhoneNumber do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'create'
-      version.main.should == person
+      expect(version.event).to eq('create')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on update' do
@@ -65,8 +65,8 @@ describe PhoneNumber do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'update'
-      version.main.should == person
+      expect(version.event).to eq('update')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on destroy' do
@@ -76,8 +76,8 @@ describe PhoneNumber do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'destroy'
-      version.main.should == person
+      expect(version.event).to eq('destroy')
+      expect(version.main).to eq(person)
     end
   end
 end

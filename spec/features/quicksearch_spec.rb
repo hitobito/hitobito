@@ -19,9 +19,9 @@ describe 'Quicksearch', :mysql do
         fill_in 'quicksearch', with: 'top'
 
         dropdown = find('.typeahead.dropdown-menu')
-        dropdown.should have_content('Top Leader, Supertown')
-        dropdown.should have_content('Top > TopGroup')
-        dropdown.should have_content('Top')
+        expect(dropdown).to have_content('Top Leader, Supertown')
+        expect(dropdown).to have_content('Top > TopGroup')
+        expect(dropdown).to have_content('Top')
       end
     end
   end

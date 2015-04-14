@@ -20,19 +20,19 @@ describe MailingListAbility do
 
     context 'in own group' do
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may update mailing lists' do
-        should be_able_to(:update, list)
+        is_expected.to be_able_to(:update, list)
       end
 
       it 'may index subscriptions' do
-        should be_able_to(:index_subscriptions, list)
+        is_expected.to be_able_to(:index_subscriptions, list)
       end
 
       it 'may create subscriptions' do
-        should be_able_to(:create, list.subscriptions.new)
+        is_expected.to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -40,19 +40,19 @@ describe MailingListAbility do
       let(:group) { groups(:toppers) }
 
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may update mailing lists' do
-        should be_able_to(:update, list)
+        is_expected.to be_able_to(:update, list)
       end
 
       it 'may index subscriptions' do
-        should be_able_to(:index_subscriptions, list)
+        is_expected.to be_able_to(:index_subscriptions, list)
       end
 
       it 'may create subscriptions' do
-        should be_able_to(:create, list.subscriptions.new)
+        is_expected.to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -60,19 +60,19 @@ describe MailingListAbility do
       let(:group) { groups(:bottom_layer_one) }
 
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may not update mailing lists' do
-        should_not be_able_to(:update, list)
+        is_expected.not_to be_able_to(:update, list)
       end
 
       it 'may not index subscriptions' do
-        should_not be_able_to(:index_subscriptions, list)
+        is_expected.not_to be_able_to(:index_subscriptions, list)
       end
 
       it 'may not create subscriptions' do
-        should_not be_able_to(:create, list.subscriptions.new)
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -81,19 +81,19 @@ describe MailingListAbility do
       let(:group) { groups(:top_layer) }
 
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may not update mailing lists' do
-        should_not be_able_to(:update, list)
+        is_expected.not_to be_able_to(:update, list)
       end
 
       it 'may not index subscriptions' do
-        should_not be_able_to(:index_subscriptions, list)
+        is_expected.not_to be_able_to(:index_subscriptions, list)
       end
 
       it 'may not create subscriptions' do
-        should_not be_able_to(:create, list.subscriptions.new)
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end
   end
@@ -103,19 +103,19 @@ describe MailingListAbility do
 
     context 'in own group' do
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may update mailing lists' do
-        should be_able_to(:update, list)
+        is_expected.to be_able_to(:update, list)
       end
 
       it 'may index subscriptions' do
-        should be_able_to(:index_subscriptions, list)
+        is_expected.to be_able_to(:index_subscriptions, list)
       end
 
       it 'may create subscriptions' do
-        should be_able_to(:create, list.subscriptions.new)
+        is_expected.to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -123,19 +123,19 @@ describe MailingListAbility do
       let(:group) { groups(:top_group) }
 
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may not update mailing lists' do
-        should_not be_able_to(:update, list)
+        is_expected.not_to be_able_to(:update, list)
       end
 
       it 'may not index subscriptions' do
-        should_not be_able_to(:index_subscriptions, list)
+        is_expected.not_to be_able_to(:index_subscriptions, list)
       end
 
       it 'may not create subscriptions' do
-        should_not be_able_to(:create, list.subscriptions.new)
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -143,19 +143,19 @@ describe MailingListAbility do
       let(:group) { groups(:bottom_layer_one) }
 
       it 'may show mailing lists' do
-        should be_able_to(:show, list)
+        is_expected.to be_able_to(:show, list)
       end
 
       it 'may not update mailing lists' do
-        should_not be_able_to(:update, list)
+        is_expected.not_to be_able_to(:update, list)
       end
 
       it 'may not index subscriptions' do
-        should_not be_able_to(:index_subscriptions, list)
+        is_expected.not_to be_able_to(:index_subscriptions, list)
       end
 
       it 'may not create subscriptions' do
-        should_not be_able_to(:create, list.subscriptions.new)
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end
 
@@ -165,15 +165,15 @@ describe MailingListAbility do
       before { list; groups(:toppers).destroy }
 
       it 'may not create mailing list' do
-        should_not be_able_to(:create, list)
+        is_expected.not_to be_able_to(:create, list)
       end
 
       it 'may not update mailing list' do
-        should_not be_able_to(:update, list)
+        is_expected.not_to be_able_to(:update, list)
       end
 
       it 'may not create subscription' do
-        should_not be_able_to(:create, list.subscriptions.new)
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end
   end

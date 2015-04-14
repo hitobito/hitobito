@@ -27,8 +27,8 @@ describe 'groups/_attrs.html.haml' do
     let(:sections) { dom.all('aside section') }
 
     it 'shows layer and subgroups in different sections' do
-      sections.first.should have_content 'Gruppen'
-      sections.last.should have_content 'Untergruppen'
+      expect(sections.first).to have_content 'Gruppen'
+      expect(sections.last).to have_content 'Untergruppen'
     end
   end
 

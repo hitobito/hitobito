@@ -18,8 +18,8 @@ describe Group::MergeController do
 
       get :select, id: group.id
 
-      flash[:alert].should =~ /Es sind keine gleichen Gruppen zum Fusionieren vorhanden/
-      should redirect_to(group_path(group))
+      expect(flash[:alert]).to match(/Es sind keine gleichen Gruppen zum Fusionieren vorhanden/)
+      is_expected.to redirect_to(group_path(group))
     end
 
   end
@@ -33,13 +33,13 @@ describe Group::MergeController do
 
       post :perform, id: group.id, merger: { new_group_name: 'foo' }
 
-      flash[:alert].should =~ /Bitte wähle eine Gruppe mit der fusioniert werden soll/
-      should redirect_to(merge_group_path(group))
+      expect(flash[:alert]).to match(/Bitte wähle eine Gruppe mit der fusioniert werden soll/)
+      is_expected.to redirect_to(merge_group_path(group))
 
       post :perform, id: group.id, merger: { merge_group_id: '33' }
 
-      flash[:alert].should =~ /Name für neue Gruppe muss definiert werden/
-      should redirect_to(merge_group_path(group))
+      expect(flash[:alert]).to match(/Name für neue Gruppe muss definiert werden/)
+      is_expected.to redirect_to(merge_group_path(group))
     end
 
     it "shouldn't be possible to merge groups without update rights in both groups" do
@@ -54,8 +54,8 @@ describe Group::MergeController do
 
       post :perform, id: group1.id, merger: { new_group_name: 'foo', merge_group_id: group2.id }
 
-      flash[:alert].should =~ /Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/
-      should redirect_to(merge_group_path(group1))
+      expect(flash[:alert]).to match(/Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/)
+      is_expected.to redirect_to(merge_group_path(group1))
     end
 
   end

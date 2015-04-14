@@ -37,19 +37,19 @@ describe FullTextController, :mysql, type: :controller do
         it 'finds accessible person' do
           get :index, q: @bg_leader.last_name[1..5]
 
-          assigns(:people).should include(@bg_leader)
+          expect(assigns(:people)).to include(@bg_leader)
         end
 
         it 'does not find not accessible person' do
           get :index, q: @bg_member.last_name[1..5]
 
-          assigns(:people).should_not include(@bg_member)
+          expect(assigns(:people)).not_to include(@bg_member)
         end
 
         it 'does not search for too short queries' do
           get :index, q: 'e'
 
-          assigns(:people).should == []
+          expect(assigns(:people)).to eq([])
         end
       end
 
@@ -59,7 +59,7 @@ describe FullTextController, :mysql, type: :controller do
         it 'finds every person' do
           get :index, q: @bg_member.last_name[1..5]
 
-          assigns(:people).should include(@bg_member)
+          expect(assigns(:people)).to include(@bg_member)
         end
       end
 
@@ -73,19 +73,19 @@ describe FullTextController, :mysql, type: :controller do
       it 'finds accessible person' do
         get :query, q: @bg_leader.last_name[1..5]
 
-        @response.body.should include(@bg_leader.full_name)
+        expect(@response.body).to include(@bg_leader.full_name)
       end
 
       it 'does not find not accessible person' do
         get :query, q: @bg_member.last_name[1..5]
 
-        @response.body.should_not include(@bg_member.full_name)
+        expect(@response.body).not_to include(@bg_member.full_name)
       end
 
       it 'finds groups' do
         get :query, q: groups(:bottom_layer_one).to_s[1..5]
 
-        @response.body.should include(groups(:bottom_layer_one).to_s)
+        expect(@response.body).to include(groups(:bottom_layer_one).to_s)
       end
     end
 

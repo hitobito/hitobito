@@ -14,14 +14,14 @@ describe Event::KindsController do
   before { sign_in(people(:top_leader)) }
 
   it 'POST update resets destroy flag when updating deleted kinds' do
-    destroyed.should be_destroyed
+    expect(destroyed).to be_destroyed
     post :update, id: destroyed.id, event_kind: { label: destroyed.label }
-    destroyed.reload.should_not be_destroyed
+    expect(destroyed.reload).not_to be_destroyed
   end
 
   it 'GET index lists destroyed entries last' do
     get :index
-    assigns(:kinds).last.should == destroyed
+    expect(assigns(:kinds).last).to eq(destroyed)
   end
 
   context 'qualification kinds' do
@@ -33,10 +33,10 @@ describe Event::KindsController do
     it 'creates event kind without associations' do
       post :create, event_kind: { label: 'Foo' }
 
-      assigns(:kind).errors.full_messages.should eq []
+      expect(assigns(:kind).errors.full_messages).to eq []
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      assocs.count.should eq 0
+      expect(assocs.count).to eq 0
     end
 
     it 'adds associations to new event kind' do
@@ -54,19 +54,19 @@ describe Event::KindsController do
                                   }
                                 }
 
-      assigns(:kind).errors.full_messages.should eq []
+      expect(assigns(:kind).errors.full_messages).to eq []
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      assocs.count.should eq 9
-      assocs.where(role: :participant, category: :precondition).count.should eq 2
-      assocs.where(role: :participant, category: :qualification).count.should eq 2
-      assocs.where(role: :participant, category: :prolongation).count.should eq 1
-      assocs.where(role: :leader, category: :qualification).count.should eq 2
-      assocs.where(role: :leader, category: :prolongation).count.should eq 2
+      expect(assocs.count).to eq 9
+      expect(assocs.where(role: :participant, category: :precondition).count).to eq 2
+      expect(assocs.where(role: :participant, category: :qualification).count).to eq 2
+      expect(assocs.where(role: :participant, category: :prolongation).count).to eq 1
+      expect(assocs.where(role: :leader, category: :qualification).count).to eq 2
+      expect(assocs.where(role: :leader, category: :prolongation).count).to eq 2
     end
 
     it 'adds association to existing event kind' do
-      kind.event_kind_qualification_kinds.count.should eq 4
+      expect(kind.event_kind_qualification_kinds.count).to eq 4
       ids = kind.event_kind_qualification_kinds.pluck(:qualification_kind_id)
       ids << ql.id
 
@@ -75,31 +75,31 @@ describe Event::KindsController do
                                                 qualification_kind_ids: ids } } } }
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      assocs.count.should eq 5
-      assocs.pluck(:qualification_kind_id).should match_array(ids)
+      expect(assocs.count).to eq 5
+      expect(assocs.pluck(:qualification_kind_id)).to match_array(ids)
     end
 
     it 'removes association from existing event kind' do
-      kind.event_kind_qualification_kinds.count.should eq 4
+      expect(kind.event_kind_qualification_kinds.count).to eq 4
 
       put :update, id: kind.id, event_kind: { label: kind.label,
                                               qualification_kinds: { participant: { prolongation: {
                                                 qualification_kind_ids: [gl.id] } } } }
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      assocs.count.should eq 1
-      assocs.pluck(:qualification_kind_id).should match_array([gl.id])
+      expect(assocs.count).to eq 1
+      expect(assocs.pluck(:qualification_kind_id)).to match_array([gl.id])
     end
 
     it 'removes all associations from existing event kind' do
-      kind.event_kind_qualification_kinds.count.should eq 4
+      expect(kind.event_kind_qualification_kinds.count).to eq 4
 
       put :update, id: kind.id, event_kind: { label: kind.label,
                                               qualification_kinds: { participant: { prolongation: {
                                                 qualification_kind_ids: [] } } } }
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      assocs.count.should eq 0
+      expect(assocs.count).to eq 0
     end
 
   end

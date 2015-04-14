@@ -28,20 +28,20 @@ describe 'Dropdown::PeopleExport' do
   end
 
   it 'renders dropdown' do
-    should have_content 'Export'
-    should have_selector 'ul.dropdown-menu'
-    should have_selector 'a' do |tag|
-      tag.should have_content 'CSV'
-      tag.should_not have_selector 'ul.dropdown-submenu'
+    is_expected.to have_content 'Export'
+    is_expected.to have_selector 'ul.dropdown-menu'
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'CSV'
+      expect(tag).not_to have_selector 'ul.dropdown-submenu'
     end
-    should have_selector 'a' do |tag|
-      tag.should have_content 'Etiketten'
-      tag.should have_selector 'ul.dropdown-submenu' do |pdf|
-        pdf.should have_content 'Standard'
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'Etiketten'
+      expect(tag).to have_selector 'ul.dropdown-submenu' do |pdf|
+        expect(pdf).to have_content 'Standard'
       end
     end
-    should have_selector 'a' do |tag|
-      tag.should have_content 'E-Mail Adressen'
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'E-Mail Adressen'
     end
   end
 end

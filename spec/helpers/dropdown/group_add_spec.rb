@@ -23,13 +23,13 @@ describe 'Dropdown::GroupAdd' do
   end
 
   it 'renders dropdown' do
-    should have_content 'Gruppe erstellen'
-    should have_selector 'ul.dropdown-menu'
-    should have_selector 'a' do |tag|
-      tag.should have_content 'Group::TopGroup'
+    is_expected.to have_content 'Gruppe erstellen'
+    is_expected.to have_selector 'ul.dropdown-menu'
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'Group::TopGroup'
     end
-    should have_selector 'a' do |tag|
-      tag.should have_content 'Group::BottomLayer'
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'Group::BottomLayer'
     end
   end
 end

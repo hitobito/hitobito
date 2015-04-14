@@ -32,14 +32,14 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
           participation.update_column(:qualified, qualified)
           case state
           when :active then
-            link.should be_present
-            link[:title].should =~ /^Markiert Kurs/
-            icon.should be_present
-            icon[:class].should =~ /disabled/
+            expect(link).to be_present
+            expect(link[:title]).to match(/^Markiert Kurs/)
+            expect(icon).to be_present
+            expect(icon[:class]).to match(/disabled/)
           when :inactive then
-            expect { link.should }.to raise_error Capybara::ElementNotFound
-            icon.should be_present
-            icon[:class].should_not =~ /disabled/
+            expect { expect(link).to }.to raise_error Capybara::ElementNotFound
+            expect(icon).to be_present
+            expect(icon[:class]).not_to match(/disabled/)
           end
         end
       end

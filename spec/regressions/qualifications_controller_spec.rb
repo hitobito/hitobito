@@ -23,12 +23,12 @@ describe QualificationsController, type: :controller do
   class << self
     def it_should_redirect_to_show
       it do
-        should redirect_to group_person_path(top_group, top_leader)
+        is_expected.to redirect_to group_person_path(top_group, top_leader)
       end
     end
 
     def it_should_redirect_to_index
-      it { should redirect_to group_person_path(top_group, top_leader) }
+      it { is_expected.to redirect_to group_person_path(top_group, top_leader) }
     end
   end
 
@@ -47,17 +47,17 @@ describe QualificationsController, type: :controller do
       let(:page) { Capybara::Node::Simple.new(response.body).find('#page') }
 
       it 'renders sheets and form' do
-        page.should have_css('.sheet', count: 3)
+        expect(page).to have_css('.sheet', count: 3)
         sheet = page.find('.container-fluid > .sheet.parent')
-        sheet.find('.breadcrumb').find_link('Top')[:href].should eq group_path(groups(:top_layer))
-        sheet.find_link('TopGroup')[:href].should eq group_path(top_group)
-        sheet.find_link('Personen')[:href].should eq group_people_path(top_group, returning: true)
-        page.find_link('Top Leader')[:href].should eq group_person_path(top_group, top_leader)
+        expect(sheet.find('.breadcrumb').find_link('Top')[:href]).to eq group_path(groups(:top_layer))
+        expect(sheet.find_link('TopGroup')[:href]).to eq group_path(top_group)
+        expect(sheet.find_link('Personen')[:href]).to eq group_people_path(top_group, returning: true)
+        expect(page.find_link('Top Leader')[:href]).to eq group_person_path(top_group, top_leader)
         nav = page.find('.nav-left')
-        nav.find_link('Top')[:href].should eq group_people_path(groups(:top_layer), returning: true)
-        nav.find_link('TopGroup')[:href].should eq group_people_path(top_group, returning: true)
-        nav.find_link('Bottom One')[:href].should eq group_people_path(groups(:bottom_layer_one), returning: true)
-        nav.find_link('Bottom Two')[:href].should eq group_people_path(groups(:bottom_layer_two), returning: true)
+        expect(nav.find_link('Top')[:href]).to eq group_people_path(groups(:top_layer), returning: true)
+        expect(nav.find_link('TopGroup')[:href]).to eq group_people_path(top_group, returning: true)
+        expect(nav.find_link('Bottom One')[:href]).to eq group_people_path(groups(:bottom_layer_one), returning: true)
+        expect(nav.find_link('Bottom Two')[:href]).to eq group_people_path(groups(:bottom_layer_two), returning: true)
       end
     end
   end

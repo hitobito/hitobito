@@ -54,7 +54,7 @@ describe Export::Csv::Events::List do
 
     context 'headers' do
       subject { csv.first }
-      it { should match(/^Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
+      it { is_expected.to match(/^Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
     end
 
     context 'first row' do
@@ -165,7 +165,9 @@ describe Export::Csv::Events::List do
     let(:course) { Fabricate(:course) }
     let(:courses) { [course, course, course, course] }
     subject { Export::Csv::Generator.new(list).csv.split("\n") }
-    it { should have(5).rows }
+    it 'has 5 rows' do
+      expect(subject.size).to eq(5)
+    end
   end
 
 end

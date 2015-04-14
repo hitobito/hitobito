@@ -65,7 +65,7 @@ describe Group::Mover do
       its(:layer_group_id) { should eq target.id }
 
       it 'nested set should still be valid' do
-        Group.should be_valid
+        expect(Group).to be_valid
       end
     end
 

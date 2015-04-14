@@ -30,7 +30,7 @@ describe 'event/participations/_form.html.haml' do
     view.stub(path_args: [group, event, decorated])
     view.stub(entry: decorated)
     view.stub(model_class: Event::Participation)
-    view.stub(:current_user) { user }
+    allow(view).to receive(:current_user) { user }
 
     controller.stub(current_user: user)
     assign(:event, event)
@@ -46,7 +46,7 @@ describe 'event/participations/_form.html.haml' do
       shared_examples 'unchecked_multichoice_checkbox' do
         before { render }
 
-        it { should_not be_checked }
+        it { is_expected.not_to be_checked }
         its([:name]) { should eq 'event_participation[answers_attributes][0][answer][]' }
         its([:type]) { should eq 'checkbox' }
         its([:value]) { should eq value }
@@ -71,8 +71,8 @@ describe 'event/participations/_form.html.haml' do
       let(:answer_text) { 'Halbtax' }
       before { render }
 
-      it { ga.should_not be_checked }
-      it { halbtax.should be_checked }
+      it { expect(ga).not_to be_checked }
+      it { expect(halbtax).to be_checked }
     end
 
 
@@ -80,8 +80,8 @@ describe 'event/participations/_form.html.haml' do
       let(:answer_text) { 'GA, Halbtax' }
       before { render }
 
-      it { ga.should be_checked }
-      it { halbtax.should be_checked }
+      it { expect(ga).to be_checked }
+      it { expect(halbtax).to be_checked }
     end
   end
 

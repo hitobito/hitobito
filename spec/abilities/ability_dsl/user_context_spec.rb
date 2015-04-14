@@ -20,11 +20,11 @@ describe AbilityDsl::UserContext do
     its(:groups_layer_and_below_read) { should =~ [groups(:top_group).id] }
     its(:layers_and_below_full)       { should =~ [groups(:top_layer).id] }
     its(:layers_and_below_read)       { should =~ [groups(:top_layer).id] }
-    its(:admin)             { should be_true }
+    its(:admin)             { should be_truthy }
     its(:all_permissions)   { should =~ [:admin, :layer_and_below_full, :layer_and_below_read, :contact_data] }
 
     it 'has no events with permission full' do
-      subject.events_with_permission(:event_full).should be_blank
+      expect(subject.events_with_permission(:event_full)).to be_blank
     end
   end
 
@@ -37,11 +37,11 @@ describe AbilityDsl::UserContext do
     its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
     its(:layers_and_below_full)       { should =~ [] }
     its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
-    its(:admin)             { should be_false }
+    its(:admin)             { should be_falsey }
     its(:all_permissions)   { should =~ [:layer_and_below_read] }
 
     it 'has events with permission full' do
-      subject.events_with_permission(:event_full).should =~ [events(:top_course).id]
+      expect(subject.events_with_permission(:event_full)).to match_array([events(:top_course).id])
     end
   end
 
@@ -62,7 +62,7 @@ describe AbilityDsl::UserContext do
     its(:groups_layer_and_below_read) { should =~ [groups(:bottom_layer_one).id] }
     its(:layers_and_below_full)       { should =~ [groups(:bottom_layer_one).id] }
     its(:layers_and_below_read)       { should =~ [groups(:bottom_layer_one).id] }
-    its(:admin)             { should be_false }
+    its(:admin)             { should be_falsey }
     its(:all_permissions)   { should =~ [:layer_and_below_full, :layer_and_below_read, :group_read, :contact_data, :approve_applications] }
   end
 

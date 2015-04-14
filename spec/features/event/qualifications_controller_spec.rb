@@ -43,20 +43,20 @@ describe Event::QualificationsController do
       appl_id = "#event_participation_#{participant_1.id}"
 
       # both links are active at begin
-      find("#{appl_id} td.issue").should have_selector('a i.icon-ok.disabled')
-      find("#{appl_id} td.revoke").should have_selector('a i.icon-remove.disabled')
+      expect(find("#{appl_id} td.issue")).to have_selector('a i.icon-ok.disabled')
+      expect(find("#{appl_id} td.revoke")).to have_selector('a i.icon-remove.disabled')
 
       find("#{appl_id} td.issue a").click
-      find("#{appl_id} td.issue").should_not have_selector('a')
-      find("#{appl_id} td.issue").should_not have_selector('i.disabled')
-      find("#{appl_id} td.revoke").should have_selector('a')
-      find("#{appl_id} td.revoke").should have_selector('i.disabled')
+      expect(find("#{appl_id} td.issue")).not_to have_selector('a')
+      expect(find("#{appl_id} td.issue")).not_to have_selector('i.disabled')
+      expect(find("#{appl_id} td.revoke")).to have_selector('a')
+      expect(find("#{appl_id} td.revoke")).to have_selector('i.disabled')
 
       find("#{appl_id} td.revoke a").click
-      find("#{appl_id} td.revoke").should_not have_selector('a')
-      find("#{appl_id} td.revoke").should_not have_selector('i.disabled')
-      find("#{appl_id} td.issue").should have_selector('a')
-      find("#{appl_id} td.issue").should have_selector('i.disabled')
+      expect(find("#{appl_id} td.revoke")).not_to have_selector('a')
+      expect(find("#{appl_id} td.revoke")).not_to have_selector('i.disabled')
+      expect(find("#{appl_id} td.issue")).to have_selector('a')
+      expect(find("#{appl_id} td.issue")).to have_selector('i.disabled')
     end
   end
 

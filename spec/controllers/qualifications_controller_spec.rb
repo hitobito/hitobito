@@ -19,7 +19,7 @@ describe QualificationsController do
     it 'builds entry for person' do
       get :new, params
       qualification = assigns(:qualification)
-      qualification.person.should eq person
+      expect(qualification.person).to eq person
     end
   end
 
@@ -29,7 +29,7 @@ describe QualificationsController do
     it 'redirects to show for person' do
       expect do
         post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
-        should redirect_to group_person_path(group, person)
+        is_expected.to redirect_to group_person_path(group, person)
       end.to change { Qualification.count }.by (1)
     end
 
@@ -47,7 +47,7 @@ describe QualificationsController do
     it 'redirects to show for person' do
       expect do
         post :destroy, params.merge(id: id)
-        should redirect_to group_person_path(group, person)
+        is_expected.to redirect_to group_person_path(group, person)
       end.to change { Qualification.count }.by (-1)
     end
 

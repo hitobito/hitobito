@@ -60,7 +60,7 @@ describe Event::Qualifier do
       person = send(person)
 
       expect { qualifier.issue }.not_to change { person.reload.qualifications.count }
-      obtained_qualification_kinds(person).should be_empty
+      expect(obtained_qualification_kinds(person)).to be_empty
     end
   end
 
@@ -70,7 +70,7 @@ describe Event::Qualifier do
       person = send(person)
 
       expect { qualifier.issue }.to change { person.reload.qualifications.count }.by(kinds.size)
-      kinds.each { |kind| obtained_qualification_kinds(person).should include qualification_kinds(kind) }
+      kinds.each { |kind| expect(obtained_qualification_kinds(person)).to include qualification_kinds(kind) }
     end
   end
 
@@ -81,20 +81,20 @@ describe Event::Qualifier do
 
       qualifier.issue
       person.reload
-      kinds.each { |kind| obtained_qualification_kinds(person).should_not include qualification_kinds(kind) }
+      kinds.each { |kind| expect(obtained_qualification_kinds(person)).not_to include qualification_kinds(kind) }
     end
   end
 
   it 'has correct role for participant ' do
-    participant_qualifier.role.should eq 'participant'
+    expect(participant_qualifier.role).to eq 'participant'
   end
 
   it 'has correct role for leader' do
-    leader_qualifier.role.should eq 'leader'
+    expect(leader_qualifier.role).to eq 'leader'
   end
 
   it 'has correct role for leader that is also participant' do
-    hybrid_qualifier.role.should eq 'leader'
+    expect(hybrid_qualifier.role).to eq 'leader'
   end
 
   context '#issue' do
@@ -211,8 +211,8 @@ describe Event::Qualifier do
       create_qualification(participant, Date.new(2010, 3, 10), :gl)
 
       expect { participant_qualifier.revoke }.to change { participant.qualifications.count }.by(-2)
-      participant.qualifications.map(&:qualification_kind).should_not include qualification_kinds(:sl)
-      participant.qualifications.map(&:qualification_kind).should include qualification_kinds(:gl)
+      expect(participant.qualifications.map(&:qualification_kind)).not_to include qualification_kinds(:sl)
+      expect(participant.qualifications.map(&:qualification_kind)).to include qualification_kinds(:gl)
     end
   end
 
@@ -223,14 +223,14 @@ describe Event::Qualifier do
                                                         role: 'participant')
 
       participant_qualifier.issue
-      participant_qualifier.should_not be_nothing_changed
+      expect(participant_qualifier).not_to be_nothing_changed
     end
 
     it 'is false if prologation was created' do
       create_qualification(participant, Date.new(2012, 3, 10), :gl)
 
       participant_qualifier.issue
-      participant_qualifier.should_not be_nothing_changed
+      expect(participant_qualifier).not_to be_nothing_changed
     end
 
     it 'is true if no existing qualification could not be prolonged' do
@@ -242,7 +242,7 @@ describe Event::Qualifier do
       create_qualification(participant, Date.new(2007, 3, 10), :sl)
 
       participant_qualifier.issue
-      participant_qualifier.should be_nothing_changed
+      expect(participant_qualifier).to be_nothing_changed
     end
   end
 end

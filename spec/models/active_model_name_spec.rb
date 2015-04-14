@@ -15,13 +15,13 @@ describe ActiveModel::Name do
   end
 
   it 'has route keys from sti base class' do
-    Group::TopLayer.model_name.route_key.should == 'groups'
+    expect(Group::TopLayer.model_name.route_key).to eq('groups')
   end
   it 'does not have demodulized route keys by default' do
-    Event::Kind.model_name.route_key.should == 'event_kinds'
+    expect(Event::Kind.model_name.route_key).to eq('event_kinds')
   end
 
   it 'has demodulized route keys if requested' do
-    Event::Application.model_name.route_key.should == 'applications'
+    expect(Event::Application.model_name.route_key).to eq('applications')
   end
 end

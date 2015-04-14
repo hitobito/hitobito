@@ -18,8 +18,8 @@ describe 'FilterNavigation::People' do
       t.stub(link_action_destroy: '<a destroy>')
       t.stub(icon: '<i>')
       t.stub(ti: 'delete')
-      t.stub(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
-      t.stub(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
+      allow(t).to receive(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
+      allow(t).to receive(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
     end
   end
 
@@ -37,12 +37,12 @@ describe 'FilterNavigation::People' do
 
       its(:main_items)      { should have(1).item }
       its(:active_label)    { should == 'Mitglieder' }
-      its('dropdown.active') { should be_false }
+      its('dropdown.active') { should be_falsey }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
       its('dropdown.items')  { should have(3).items }
 
       it 'contains external item with count' do
-        subject.main_items.last.should match(/Externe \(0\)/)
+        expect(subject.main_items.last).to match(/Externe \(0\)/)
       end
 
       it 'entire layer contains only layer role types' do
@@ -62,7 +62,7 @@ describe 'FilterNavigation::People' do
                                        role_types: role_types)
         end
 
-        its('dropdown.active') { should be_false }
+        its('dropdown.active') { should be_falsey }
         its('dropdown.label')  { should == 'Weitere Ansichten' }
         its('dropdown.items')  { should have(4).items }
 
@@ -80,7 +80,7 @@ describe 'FilterNavigation::People' do
 
       its(:main_items)      { should have(1).items }
       its(:active_label)    { should == nil }
-      its('dropdown.active') { should be_true }
+      its('dropdown.active') { should be_truthy }
       its('dropdown.label')  { should == 'Leaders' }
       its('dropdown.items')  { should have(4).item }
 
@@ -91,11 +91,11 @@ describe 'FilterNavigation::People' do
     let(:group) { groups(:bottom_layer_one).decorate }
 
     it 'contains member item with count' do
-      subject.main_items.first.should match(/Mitglieder \(1\)/)
+      expect(subject.main_items.first).to match(/Mitglieder \(1\)/)
     end
 
     it 'contains external item with count' do
-      subject.main_items.last.should match(/Externe \(0\)/)
+      expect(subject.main_items.last).to match(/Externe \(0\)/)
     end
   end
 
@@ -112,11 +112,11 @@ describe 'FilterNavigation::People' do
     end
 
     it 'contains member item with count' do
-      subject.main_items.first.should match(/Mitglieder \(0\)/)
+      expect(subject.main_items.first).to match(/Mitglieder \(0\)/)
     end
 
     it 'contains external item with count' do
-      subject.main_items.last.should match(/Externe \(0\)/)
+      expect(subject.main_items.last).to match(/Externe \(0\)/)
     end
   end
 end

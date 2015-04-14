@@ -66,82 +66,82 @@ describe ApplicationSerializer do
 
   context 'format' do
     it 'contains plural main key with one entry' do
-      hash.should have_key(:people)
-      hash[:people].should have(1).item
+      expect(hash).to have_key(:people)
+      expect(hash[:people].size).to eq(1)
     end
   end
 
 
   context '#extensions' do
     it 'contains all extension properties' do
-      should have_key(:town)
-      should have_key(:email)
-      should_not have_key(:country)
+      is_expected.to have_key(:town)
+      is_expected.to have_key(:email)
+      is_expected.not_to have_key(:country)
     end
   end
 
   context '#json_api_properties' do
     it 'contains id as string' do
-      subject[:id].should eq(person.id.to_s)
+      expect(subject[:id]).to eq(person.id.to_s)
     end
 
     it 'contains plural type' do
-      subject[:type].should eq('people')
+      expect(subject[:type]).to eq('people')
     end
   end
 
   context '#modification_properties' do
     it 'contains created_at and updated_at' do
-      subject[:created_at].should be_kind_of(Time)
-      subject[:updated_at].should be_kind_of(Time)
+      expect(subject[:created_at]).to be_kind_of(Time)
+      expect(subject[:updated_at]).to be_kind_of(Time)
     end
 
     it 'contains creator_id and updater_id' do
-      subject[:links][:creator].should eq(person.id.to_s)
-      subject[:links][:updater].should be_nil
+      expect(subject[:links][:creator]).to eq(person.id.to_s)
+      expect(subject[:links][:updater]).to be_nil
     end
 
     it 'contains links for creator and updater' do
-      hash[:links]['people.creator'].should have_key(:href)
-      hash[:links]['people.creator'][:type].should eq('people')
-      hash[:links]['people.updater'].should have_key(:href)
-      hash[:links]['people.updater'][:type].should eq('people')
+      expect(hash[:links]['people.creator']).to have_key(:href)
+      expect(hash[:links]['people.creator'][:type]).to eq('people')
+      expect(hash[:links]['people.updater']).to have_key(:href)
+      expect(hash[:links]['people.updater'][:type]).to eq('people')
     end
   end
 
   context '#template_link' do
     it 'are added to top level links' do
-      hash[:links][:primary_group][:type].should eq('groups')
-      hash[:links][:primary_group][:href].should eq('/groups/{primary_group}')
-      hash[:links][:primary_group][:returning].should eq(true)
+      expect(hash[:links][:primary_group][:type]).to eq('groups')
+      expect(hash[:links][:primary_group][:href]).to eq('/groups/{primary_group}')
+      expect(hash[:links][:primary_group][:returning]).to eq(true)
     end
   end
 
   context '#unify_linked_entities' do
     context 'with attributes' do
       it 'contains linked entries only once' do
-        hash[:linked]['groups'].should have(1).item
+        expect(hash[:linked]['groups'].size).to eq(1)
       end
 
       it 'contains link data' do
         group = hash[:linked]['groups'].first
-        group[:id].should eq(person.primary_group_id.to_s)
-        group[:name].should eq('TopGroup')
+        expect(group[:id]).to eq(person.primary_group_id.to_s)
+        expect(group[:name]).to eq('TopGroup')
       end
 
       it 'contains only ids in item links' do
-        subject[:links][:primary_group].should eq(person.primary_group_id.to_s)
-        subject[:links][:default_group].should eq(person.primary_group_id.to_s)
+        expect(subject[:links][:primary_group]).to eq(person.primary_group_id.to_s)
+        expect(subject[:links][:default_group]).to eq(person.primary_group_id.to_s)
       end
     end
 
     context 'without attributes' do
       it 'contains only ids in item links' do
-        subject[:links][:roles].should eq([person.roles.first.id.to_s])
+        expect(subject[:links][:roles]).to eq([person.roles.first.id.to_s])
       end
 
       it 'does not contain linked entries' do
-        hash[:linked].should_not have_key('roles')
+        expect(hash[:linked]).not_to have_key('roles')
       end
     end
   end

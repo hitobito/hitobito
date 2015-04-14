@@ -76,7 +76,7 @@ RSpec.configure do |config|
   config.before(:each, :draper_with_helpers) do
     c = ApplicationController.new
     c.request = ActionDispatch::TestRequest.new
-    c.stub(:current_person) { people(:top_leader) }
+    allow(c).to receive(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
 

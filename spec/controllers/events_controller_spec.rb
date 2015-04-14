@@ -24,14 +24,14 @@ describe EventsController do
 
         get :new, group_id: group.id, event: { type: 'Event' }
 
-        assigns(:groups).should == [group3, group2]
+        expect(assigns(:groups)).to eq([group3, group2])
       end
 
       it 'does not load deleted kinds' do
         sign_in(people(:top_leader))
 
         get :new, group_id: group.id, event: { type: 'Event::Course' }
-        assigns(:kinds).should_not include event_kinds(:old)
+        expect(assigns(:kinds)).not_to include event_kinds(:old)
       end
     end
 
@@ -52,14 +52,14 @@ describe EventsController do
                       group_id: group.id
 
         event = assigns(:event)
-        should redirect_to(group_event_path(group, event))
-        event.should be_persisted
-        event.dates.should have(1).item
-        event.dates.first.should be_persisted
-        event.questions.should have(1).item
-        event.questions.first.should be_persisted
+        is_expected.to redirect_to(group_event_path(group, event))
+        expect(event).to be_persisted
+        expect(event.dates.size).to eq(1)
+        expect(event.dates.first).to be_persisted
+        expect(event.questions.size).to eq(1)
+        expect(event.questions.first).to be_persisted
 
-        event.group_ids.should =~ [group.id, group2.id]
+        expect(event.group_ids).to match_array([group.id, group2.id])
       end
 
       it "does not create event course if the user hasn't permission" do
@@ -98,20 +98,20 @@ describe EventsController do
                                    '999' => { label: 'Nachweek',
                                               start_at_date: '3.2.2014',
                                               finish_at_date: '5.2.2014' } } }
-          assigns(:event).should be_valid
+          expect(assigns(:event)).to be_valid
         end.not_to change { Event::Date.count }
 
-        event.reload.name.should eq 'testevent'
+        expect(event.reload.name).to eq 'testevent'
         dates = event.dates.order(:start_at)
-        dates.should have(3).items
+        expect(dates.size).to eq(3)
         first = dates.second
-        first.label.should eq 'Vorweek'
-        first.start_at_date.should eq Date.new(2014, 1, 3)
-        first.finish_at_date.should eq Date.new(2014, 1, 4)
+        expect(first.label).to eq 'Vorweek'
+        expect(first.start_at_date).to eq Date.new(2014, 1, 3)
+        expect(first.finish_at_date).to eq Date.new(2014, 1, 4)
         second = dates.third
-        second.label.should eq 'Nachweek'
-        second.start_at_date.should eq Date.new(2014, 2, 3)
-        second.finish_at_date.should eq Date.new(2014, 2, 5)
+        expect(second.label).to eq 'Nachweek'
+        expect(second.start_at_date).to eq Date.new(2014, 2, 3)
+        expect(second.finish_at_date).to eq Date.new(2014, 2, 5)
       end
 
       it 'creates, updates and destroys questions' do
@@ -128,17 +128,17 @@ describe EventsController do
                                    q2.id.to_s => { id: q2.id, _destroy: true },
                                    '999' => { question: 'How much?',
                                               choices: '1,2,3' } } }
-          assigns(:event).should be_valid
+          expect(assigns(:event)).to be_valid
         end.not_to change { Event::Question.count }
 
-        event.reload.name.should eq 'testevent'
+        expect(event.reload.name).to eq 'testevent'
         questions = event.questions.order(:question)
-        questions.should have(2).items
+        expect(questions.size).to eq(2)
         first = questions.first
-        first.question.should eq 'How much?'
-        first.choices.should eq '1,2,3'
+        expect(first.question).to eq 'How much?'
+        expect(first.choices).to eq '1,2,3'
         second = questions.second
-        second.question.should eq 'Whoo?'
+        expect(second.question).to eq 'Whoo?'
       end
     end
 
@@ -157,12 +157,12 @@ describe EventsController do
 
       it 'new does not include delted kind' do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
-        assigns(:kinds).should_not include(course.reload.kind)
+        expect(assigns(:kinds)).not_to include(course.reload.kind)
       end
 
       it 'edit does include deleted kind' do
         get :edit, group_id: group.id, id: course.id
-        assigns(:kinds).should include(course.reload.kind)
+        expect(assigns(:kinds)).to include(course.reload.kind)
       end
 
     end
@@ -172,12 +172,12 @@ describe EventsController do
 
       it 'new does not include delete' do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
-        assigns(:groups).should_not include(group3)
+        expect(assigns(:groups)).not_to include(group3)
       end
 
       it 'edit does include delete' do
         get :edit, group_id: group.id, id: course.id
-        assigns(:groups).should include(group3)
+        expect(assigns(:groups)).to include(group3)
       end
     end
   end

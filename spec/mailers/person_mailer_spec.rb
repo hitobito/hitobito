@@ -28,7 +28,7 @@ describe PersonMailer do
   context 'with additional emails' do
     it 'does not send to them' do
       Fabricate(:additional_email, contactable: recipient)
-      mail.to.should eq [recipient.email]
+      expect(mail.to).to eq [recipient.email]
     end
   end
 

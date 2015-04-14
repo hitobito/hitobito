@@ -22,17 +22,17 @@ describe 'Sheet::Group::NavLeft' do
     true
   end
 
-  it { should have_selector('li', count: 3) }
+  it { is_expected.to have_selector('li', count: 3) }
 
-  it { should have_selector('ul', count: 2) }
+  it { is_expected.to have_selector('ul', count: 2) }
 
   it 'has balanced li tags' do
-    html.scan(/<li/).size.should eq html.scan(/<\/li>/).size
+    expect(html.scan(/<li/).size).to eq html.scan(/<\/li>/).size
   end
 
   it 'has balanced li tags if last group is stacked' do
     Fabricate(Group::BottomGroup.sti_name.to_sym, parent: groups(:bottom_group_one_two))
-    html.scan(/<li/).size.should eq html.scan(/<\/li>/).size
+    expect(html.scan(/<li/).size).to eq html.scan(/<\/li>/).size
   end
 
 end

@@ -15,12 +15,12 @@ describe MailingListDecorator  do
     subject { decorator.subscribable_info }
 
     context 'subscribable true' do
-      it { should =~ %r{Abonnenten dürfen sich selbst an/abmelden} }
+      it { is_expected.to match(%r{Abonnenten dürfen sich selbst an/abmelden}) }
     end
 
     context 'subscribable false' do
       before { mailing_list.update_column(:subscribable, false) }
-      it { should eq 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden<br />' }
+      it { is_expected.to eq 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden<br />' }
     end
   end
 
@@ -30,11 +30,11 @@ describe MailingListDecorator  do
 
     context 'subscribers_may_post true' do
       before { mailing_list.update_column(:subscribers_may_post, true) }
-      it { should eq 'Abonnenten dürfen auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Abonnenten dürfen auf die Mailingliste schreiben<br />' }
     end
 
     context 'subscribers_may_post false' do
-      it { should eq 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
     end
   end
 
@@ -43,11 +43,11 @@ describe MailingListDecorator  do
 
     context 'anyone_may_post true' do
       before { mailing_list.update_column(:anyone_may_post, true) }
-      it { should eq 'Beliebige Absender dürfen auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Beliebige Absender dürfen auf die Mailingliste schreiben<br />' }
     end
 
     context 'anyone_may_post false' do
-      it { should eq 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
     end
   end
 

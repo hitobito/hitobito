@@ -18,17 +18,17 @@ describe RolesController, js: true do
     obsolete_node_safe do
       sign_in
       visit new_group_role_path(group_id: group.id)
-      should have_content('Person hinzufügen')
-      should have_selector('#role_person', visible: true)
-      should have_selector('#role_new_person_first_name', visible: false)
+      is_expected.to have_content('Person hinzufügen')
+      is_expected.to have_selector('#role_person', visible: true)
+      is_expected.to have_selector('#role_new_person_first_name', visible: false)
 
       click_link('Neue Person erfassen')
-      should have_selector('#role_person', visible: false)
-      should have_selector('#role_new_person_first_name', visible: true)
+      is_expected.to have_selector('#role_person', visible: false)
+      is_expected.to have_selector('#role_new_person_first_name', visible: true)
 
       click_link('Bestehende Person suchen')
-      should have_selector('#role_person', visible: true)
-      should have_selector('#role_new_person_first_name', visible: false)
+      is_expected.to have_selector('#role_person', visible: true)
+      is_expected.to have_selector('#role_new_person_first_name', visible: false)
     end
   end
 
@@ -51,8 +51,8 @@ describe RolesController, js: true do
 
       all('form .btn-toolbar').first.click_button 'Speichern'
 
-      current_path.should == group_people_path(group)
-      should have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
+      expect(current_path).to eq(group_people_path(group))
+      is_expected.to have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
     end
   end
 
@@ -75,8 +75,8 @@ describe RolesController, js: true do
 
       all('form .btn-toolbar').first.click_button 'Speichern'
 
-      current_path.should_not == group_people_path(group)
-      should have_content 'Rolle Leader für Tester in TopGroup wurde erfolgreich erstellt.'
+      expect(current_path).not_to eq(group_people_path(group))
+      is_expected.to have_content 'Rolle Leader für Tester in TopGroup wurde erfolgreich erstellt.'
     end
   end
 
@@ -88,12 +88,12 @@ describe RolesController, js: true do
       find('#role_type_select a.chosen-single').click
       find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
-      find('#role_info').should have_content('Die Rolle Leader in der Gruppe TopGroup')
+      expect(find('#role_info')).to have_content('Die Rolle Leader in der Gruppe TopGroup')
 
       find('#role_type_select a.chosen-single').click
       find('#role_type_select ul.chosen-results').find('li', text: 'Member').click
 
-      find('#role_info').should have_content('Die Rolle Member in der Gruppe TopGroup')
+      expect(find('#role_info')).to have_content('Die Rolle Member in der Gruppe TopGroup')
     end
   end
 
@@ -106,8 +106,8 @@ describe RolesController, js: true do
       fill_in 'Person', with: 'Top'
       page.find('.typeahead.dropdown-menu li').click
 
-      all('#role_group_id option', visible: false).should have(3).items
-      all('#role_type option', visible: false).should have(7).items
+      expect(all('#role_group_id option', visible: false).size).to eq(3)
+      expect(all('#role_type option', visible: false).size).to eq(7)
 
       # select role that will be discarded
       find('#role_type_select a.chosen-single').click
@@ -117,20 +117,20 @@ describe RolesController, js: true do
       find('#role_group_id_chosen a.chosen-single').click
       find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Toppers').click
 
-      find('#role_type_chosen .chosen-single span').should have_content('Bitte auswählen')
-      all('#role_type option', visible: false).should have(4).items
+      expect(find('#role_type_chosen .chosen-single span')).to have_content('Bitte auswählen')
+      expect(all('#role_type option', visible: false).size).to eq(4)
 
       # select role
       find('#role_type_select a.chosen-single').click
       find('#role_type_select ul.chosen-results').find('li', text: 'Member').click
 
-      find('#role_info').should have_content('Die Rolle Member in der Gruppe Toppers')
+      expect(find('#role_info')).to have_content('Die Rolle Member in der Gruppe Toppers')
 
       # save
       all('form .btn-toolbar').first.click_button 'Speichern'
 
-      current_path.should == group_people_path(groups(:toppers))
-      should have_content 'Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt.'
+      expect(current_path).to eq(group_people_path(groups(:toppers)))
+      is_expected.to have_content 'Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt.'
     end
   end
 end

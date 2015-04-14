@@ -18,7 +18,7 @@ describe 'event/participations/_actions_show.html.haml' do
     view.stub(path_args: [group, event])
     view.stub(entry: participation)
     controller.stub(current_user: user)
-    view.stub(:current_user) { user }
+    allow(view).to receive(:current_user) { user }
     controller.request.path_parameters[:action] = 'show'
     controller.request.path_parameters[:group_id] = 42
     controller.request.path_parameters[:event_id] = 42

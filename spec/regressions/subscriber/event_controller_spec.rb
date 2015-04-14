@@ -11,7 +11,7 @@ describe Subscriber::EventController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to group_mailing_list_subscriptions_path(group, list) }
+      it { is_expected.to redirect_to group_mailing_list_subscriptions_path(group, list) }
     end
   end
 

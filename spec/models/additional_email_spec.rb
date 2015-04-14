@@ -29,10 +29,10 @@ describe AdditionalEmail do
   context 'validation' do
     it 'uses devise regexp for email' do
       a1 = Fabricate(:additional_email, label: 'Foo')
-      a1.should be_valid
+      expect(a1).to be_valid
 
       a1.email = 'foo'
-      a1.should_not be_valid
+      expect(a1).not_to be_valid
     end
   end
 
@@ -41,16 +41,16 @@ describe AdditionalEmail do
       I18n.locale = :fr
 
       a1 = Fabricate(:additional_email, label: 'Foo')
-      a1.label.should eq 'Foo'
-      a1.translated_label.should eq 'Foo'
+      expect(a1.label).to eq 'Foo'
+      expect(a1.translated_label).to eq 'Foo'
     end
 
     it 'should return translated label' do
       I18n.locale = :fr
 
       a2 = Fabricate(:additional_email, label: 'Privat')
-      a2.label.should eq 'Privat'
-      a2.translated_label.should eq 'Privé'
+      expect(a2.label).to eq 'Privat'
+      expect(a2.translated_label).to eq 'Privé'
     end
   end
 
@@ -58,21 +58,21 @@ describe AdditionalEmail do
     it 'reuses existing label' do
       a1 = Fabricate(:additional_email, label: 'Foo')
       a2 = Fabricate(:additional_email, label: 'fOO')
-      a2.label.should == 'Foo'
+      expect(a2.label).to eq('Foo')
     end
 
     it 'should preserve untranslated label as-is' do
       I18n.locale = :fr
 
       a1 = Fabricate(:additional_email, label: 'Foo')
-      a1.label.should eq 'Foo'
+      expect(a1.label).to eq 'Foo'
     end
 
     it 'should map label back to default language' do
       I18n.locale = :fr
 
       a2 = Fabricate(:additional_email, label: 'privé')
-      a2.label.should eq 'Privat'
+      expect(a2.label).to eq 'Privat'
     end
   end
 
@@ -85,17 +85,17 @@ describe AdditionalEmail do
     after do
       Settings.application.languages = @settings_langs
     end
-    it { should include(Settings.additional_email.predefined_labels.first) }
+    it { is_expected.to include(Settings.additional_email.predefined_labels.first) }
 
     it 'includes labels from database' do
       a = Fabricate(:additional_email, label: 'Foo')
-      should include('Foo')
+      is_expected.to include('Foo')
     end
 
     it 'includes labels from database and predefined only once' do
       predef = Settings.additional_email.predefined_labels.first
       a = Fabricate(:additional_email, label: predef)
-      subject.count(predef).should == 1
+      expect(subject.count(predef)).to eq(1)
     end
 
     it 'includes translated labels where available' do
@@ -104,25 +104,25 @@ describe AdditionalEmail do
       a1 = Fabricate(:additional_email, label: 'Foo')
       a2 = Fabricate(:additional_email, label: 'Privat')
 
-      should include('Foo', 'Privé')
+      is_expected.to include('Foo', 'Privé')
     end
 
     it 'is sweeped for all languages if new label is added' do
       Rails.cache.clear
 
-      I18n.locale.should eq :de
+      expect(I18n.locale).to eq :de
       labels_de = AdditionalEmail.available_labels
 
       I18n.locale = :fr
       labels_fr = AdditionalEmail.available_labels
 
-      labels_de.should_not eq labels_fr
+      expect(labels_de).not_to eq labels_fr
 
       a1 = Fabricate(:additional_email, label: 'A new label')
-      AdditionalEmail.available_labels.should eq labels_fr + ['A new label']
+      expect(AdditionalEmail.available_labels).to eq labels_fr + ['A new label']
 
       I18n.locale = :de
-      AdditionalEmail.available_labels.should eq labels_de + ['A new label']
+      expect(AdditionalEmail.available_labels).to eq labels_de + ['A new label']
     end
   end
 
@@ -135,8 +135,8 @@ describe AdditionalEmail do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'create'
-      version.main.should == person
+      expect(version.event).to eq('create')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on update' do
@@ -146,8 +146,8 @@ describe AdditionalEmail do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'update'
-      version.main.should == person
+      expect(version.event).to eq('update')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on destroy' do
@@ -157,8 +157,8 @@ describe AdditionalEmail do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'destroy'
-      version.main.should == person
+      expect(version.event).to eq('destroy')
+      expect(version.main).to eq(person)
     end
   end
 end

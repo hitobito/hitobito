@@ -22,7 +22,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'without current user' do
       before { update_attributes }
-      it { should =~ /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/ }
+      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/) }
     end
 
     context 'with current user' do
@@ -31,7 +31,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         update_attributes
       end
 
-      it { should =~ /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person.to_s}<\/a>$/ }
+      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person.to_s}<\/a>$/) }
     end
   end
 
@@ -40,7 +40,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'without current user' do
       before { update_attributes }
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'with current user' do
@@ -51,15 +51,15 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
       context 'and permission to link' do
         it do
-          decorator.h.should_receive(:can?).with(:show, person).and_return(true)
-          should =~ /^<a href=".+">#{person.to_s}<\/a>$/
+          expect(decorator.h).to receive(:can?).with(:show, person).and_return(true)
+          is_expected.to match(/^<a href=".+">#{person.to_s}<\/a>$/)
         end
       end
 
       context 'and no permission to link' do
         it do
-          decorator.h.should_receive(:can?).with(:show, person).and_return(false)
-          should == person.to_s
+          expect(decorator.h).to receive(:can?).with(:show, person).and_return(false)
+          is_expected.to eq(person.to_s)
         end
       end
     end
@@ -72,13 +72,13 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     context 'with attribute changes' do
       before { update_attributes }
 
-      it { should =~ /<div>Ort wurde.+<div>PLZ wurde.+<div>Haupt-E-Mail wurde/ }
+      it { is_expected.to match(/<div>Ort wurde.+<div>PLZ wurde.+<div>Haupt-E-Mail wurde/) }
     end
 
     context 'with association changes' do
       before { Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar') }
 
-      it { should =~ /<div>Social Media/ }
+      it { is_expected.to match(/<div>Social Media/) }
     end
   end
 
@@ -87,36 +87,36 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     it 'contains from and to attributes' do
       string = decorator.attribute_change(:first_name, 'Hans', 'Fritz')
-      string.should be_html_safe
-      string.should == 'Vorname wurde von <i>Hans</i> auf <i>Fritz</i> geändert.'
+      expect(string).to be_html_safe
+      expect(string).to eq('Vorname wurde von <i>Hans</i> auf <i>Fritz</i> geändert.')
     end
 
     it 'contains only from attribute' do
       string = decorator.attribute_change(:first_name, 'Hans', ' ')
-      string.should be_html_safe
-      string.should == 'Vorname <i>Hans</i> wurde gelöscht.'
+      expect(string).to be_html_safe
+      expect(string).to eq('Vorname <i>Hans</i> wurde gelöscht.')
     end
 
     it 'contains only to attribute' do
       string = decorator.attribute_change(:first_name, nil, 'Fritz')
-      string.should be_html_safe
-      string.should == 'Vorname wurde auf <i>Fritz</i> gesetzt.'
+      expect(string).to be_html_safe
+      expect(string).to eq('Vorname wurde auf <i>Fritz</i> gesetzt.')
     end
 
     it 'is empty without from and to ' do
       string = decorator.attribute_change(:first_name, nil, '')
-      string.should be_blank
+      expect(string).to be_blank
     end
 
     it 'escapes html' do
       string = decorator.attribute_change(:first_name, nil, '<b>Fritz</b>')
-      string.should == 'Vorname wurde auf <i>&lt;b&gt;Fritz&lt;/b&gt;</i> gesetzt.'
+      expect(string).to eq('Vorname wurde auf <i>&lt;b&gt;Fritz&lt;/b&gt;</i> gesetzt.')
     end
 
     it 'formats according to column info' do
       now = Time.local(2014, 6, 21, 18)
       string = decorator.attribute_change(:updated_at, nil, now)
-      string.should eq 'Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt.'
+      expect(string).to eq 'Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt.'
     end
   end
 
@@ -126,21 +126,21 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     it 'builds create text' do
       Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
 
-      should == 'Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.'
+      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.')
     end
 
     it 'builds update text' do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
       account.update_attributes!(name: 'Boo')
 
-      should == 'Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.'
+      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
     end
 
     it 'builds destroy text' do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
       account.destroy!
 
-      should == 'Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.'
+      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.')
     end
   end
 

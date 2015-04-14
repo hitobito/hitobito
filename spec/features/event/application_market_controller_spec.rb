@@ -83,13 +83,13 @@ describe Event::ApplicationMarketController do
           @applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_prio_1.id}"
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -113,14 +113,14 @@ describe Event::ApplicationMarketController do
           @applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_waiting.id}"
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
 
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-minus')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
-          all("#applications ##{appl_id} td").last.should have_selector('.icon-ok')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -142,18 +142,18 @@ describe Event::ApplicationMarketController do
           appl_id = "event_participation_#{appl_prio_1.id}"
 
           all("#applications ##{appl_id} td").first.find('a').click
-          should_not have_selector("#applications ##{appl_id}")
+          is_expected.not_to have_selector("#applications ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#participants').should have_content(appl_prio_1.person.to_s(:list))
-          all('#participants tr').last.should have_content(appl_prio_1.person.to_s(:list))
+          expect(find('#participants')).to have_content(appl_prio_1.person.to_s(:list))
+          expect(all('#participants tr').last).to have_content(appl_prio_1.person.to_s(:list))
 
           all("#participants ##{appl_id} td").last.find('a').click
-          should_not have_selector("#participants ##{appl_id}")
+          is_expected.not_to have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#applications').should have_content(appl_prio_1.person.to_s(:list))
-          all('#applications tr').last.should have_content(appl_prio_1.person.to_s(:list))
+          expect(find('#applications')).to have_content(appl_prio_1.person.to_s(:list))
+          expect(all('#applications tr').last).to have_content(appl_prio_1.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -181,16 +181,16 @@ describe Event::ApplicationMarketController do
           all("#applications ##{appl_id} td").first.find('a').click
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#participants').should have_content(appl_waiting.person.to_s(:list))
-          all('#participants tr').last.should have_content(appl_waiting.person.to_s(:list))
-          should_not have_selector("#applications ##{appl_id}")
+          expect(find('#participants')).to have_content(appl_waiting.person.to_s(:list))
+          expect(all('#participants tr').last).to have_content(appl_waiting.person.to_s(:list))
+          is_expected.not_to have_selector("#applications ##{appl_id}")
 
           all("#participants ##{appl_id} td").last.find('a').click
-          should_not have_selector("#participants ##{appl_id}")
+          is_expected.not_to have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#applications').should have_content(appl_waiting.person.to_s(:list))
-          all('#applications tr').last.should have_content(appl_waiting.person.to_s(:list))
+          expect(find('#applications')).to have_content(appl_waiting.person.to_s(:list))
+          expect(all('#applications tr').last).to have_content(appl_waiting.person.to_s(:list))
 
           visit group_event_application_market_index_path(group.id, event.id)
 
@@ -210,17 +210,17 @@ describe Event::ApplicationMarketController do
           appl_id = "event_participation_#{appl_participant.id}"
 
           all("#participants ##{appl_id} td").last.find('a').click
-          should_not have_selector("#participants ##{appl_id}")
+          is_expected.not_to have_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#applications').should have_content(appl_participant.person.to_s(:list))
-          all('#applications tr').last.should have_content(appl_participant.person.to_s(:list))
+          expect(find('#applications')).to have_content(appl_participant.person.to_s(:list))
+          expect(all('#applications tr').last).to have_content(appl_participant.person.to_s(:list))
           all("#applications ##{appl_id} td").first.find('a').click
 
           # first do find().should have_content to make capybara wait for animation, then all().last
-          find('#participants tr').should have_content(appl_participant.person.to_s(:list))
-          all('#participants tr').last.should have_content(appl_participant.person.to_s(:list))
-          should_not have_selector("#applications ##{appl_id}")
+          expect(find('#participants tr')).to have_content(appl_participant.person.to_s(:list))
+          expect(all('#participants tr').last).to have_content(appl_participant.person.to_s(:list))
+          is_expected.not_to have_selector("#applications ##{appl_id}")
 
           visit group_event_application_market_index_path(group.id, event.id)
 

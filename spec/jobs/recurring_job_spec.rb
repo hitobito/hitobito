@@ -19,70 +19,70 @@ describe RecurringJob do
     # second schedule does nothing
     subject.schedule
 
-    subject.should be_scheduled
-    subject.delayed_jobs.count.should == 1
-    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+    expect(subject).to be_scheduled
+    expect(subject.delayed_jobs.count).to eq(1)
+    expect(subject.delayed_jobs.first.run_at).to be_within(1.second).of(now + 15.minutes)
   end
 
   it 'is rescheduled after successfull run' do
-    RecurringJob.any_instance.should_receive(:perform_internal)
+    expect_any_instance_of(RecurringJob).to receive(:perform_internal)
 
-    subject.should_not be_scheduled
+    expect(subject).not_to be_scheduled
 
     now = Time.zone.now
     subject.enqueue!(run_at: now)
-    subject.should be_scheduled
+    expect(subject).to be_scheduled
 
     Delayed::Worker.new.work_off
 
-    subject.should be_scheduled
-    subject.delayed_jobs.count.should == 1
-    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+    expect(subject).to be_scheduled
+    expect(subject.delayed_jobs.count).to eq(1)
+    expect(subject.delayed_jobs.first.run_at).to be_within(1.second).of(now + 15.minutes)
   end
 
   it 'is rescheduled after failed run' do
-    RecurringJob.any_instance.should_receive(:perform_internal).and_raise('error!')
-    RecurringJob.any_instance.should_receive(:error).with(anything, an_instance_of(RuntimeError))
+    expect_any_instance_of(RecurringJob).to receive(:perform_internal).and_raise('error!')
+    expect_any_instance_of(RecurringJob).to receive(:error).with(anything, an_instance_of(RuntimeError))
 
     now = Time.zone.now
     subject.enqueue!(run_at: now)
 
     Delayed::Worker.new.work_off
 
-    subject.should be_scheduled
-    subject.delayed_jobs.count.should == 1
-    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+    expect(subject).to be_scheduled
+    expect(subject.delayed_jobs.count).to eq(1)
+    expect(subject.delayed_jobs.first.run_at).to be_within(1.second).of(now + 15.minutes)
   end
 
   it 'is rescheduled after worker pause' do
-    RecurringJob.any_instance.should_receive(:perform_internal)
+    expect_any_instance_of(RecurringJob).to receive(:perform_internal)
 
     now = Time.zone.now
     subject.enqueue!(run_at: 1.month.ago)
-    subject.should be_scheduled
+    expect(subject).to be_scheduled
 
     Delayed::Worker.new.work_off
 
-    subject.should be_scheduled
-    subject.delayed_jobs.count.should == 1
-    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+    expect(subject).to be_scheduled
+    expect(subject.delayed_jobs.count).to eq(1)
+    expect(subject.delayed_jobs.first.run_at).to be_within(1.second).of(now + 15.minutes)
   end
 
   it 'reschedules only one job' do
-    RecurringJob.any_instance.should_receive(:perform_internal)
+    expect_any_instance_of(RecurringJob).to receive(:perform_internal)
 
-    subject.should_not be_scheduled
+    expect(subject).not_to be_scheduled
 
     now = Time.zone.now
     subject.enqueue!(run_at: now)
-    subject.should be_scheduled
+    expect(subject).to be_scheduled
     subject.enqueue!(run_at: now)
     subject.enqueue!(run_at: now)
 
     Delayed::Worker.new.work_off
 
-    subject.should be_scheduled
-    subject.delayed_jobs.count.should == 1
-    subject.delayed_jobs.first.run_at.should be_within(1.second).of(now + 15.minutes)
+    expect(subject).to be_scheduled
+    expect(subject.delayed_jobs.count).to eq(1)
+    expect(subject.delayed_jobs.first.run_at).to be_within(1.second).of(now + 15.minutes)
   end
 end

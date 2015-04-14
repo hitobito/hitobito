@@ -33,13 +33,13 @@ describe PeopleSerializer do
   before { Draper::ViewContext.clear! }
 
   it 'has one entry' do
-    hash[:people].should have(1).item
+    expect(hash[:people].size).to eq(1)
   end
 
   it 'does not contain login credentials' do
-    should_not have_key(:password)
-    should_not have_key(:encrypted_password)
-    should_not have_key(:authentication_token)
+    is_expected.not_to have_key(:password)
+    is_expected.not_to have_key(:encrypted_password)
+    is_expected.not_to have_key(:authentication_token)
   end
 
   context 'for one group' do
@@ -51,8 +51,8 @@ describe PeopleSerializer do
     end
 
     it 'contains only roles for this group and their linked group and layer' do
-      hash[:linked]['roles'].should have(1).item
-      hash[:linked]['groups'].should have(2).items
+      expect(hash[:linked]['roles'].size).to eq(1)
+      expect(hash[:linked]['groups'].size).to eq(2)
     end
   end
 
@@ -65,8 +65,8 @@ describe PeopleSerializer do
     end
 
     it 'contains all roles and their linked groups' do
-      hash[:linked]['roles'].should have(2).items
-      hash[:linked]['groups'].should have(4).items
+      expect(hash[:linked]['roles'].size).to eq(2)
+      expect(hash[:linked]['groups'].size).to eq(4)
     end
   end
 

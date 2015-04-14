@@ -39,11 +39,11 @@ describe TableHelper do
       end
 
       it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
+        expect(subject.scan(REGEXP_ROWS).size).to eq(7)
       end
 
       it 'should have 13 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 13
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(13)
       end
     end
 
@@ -53,11 +53,11 @@ describe TableHelper do
       end
 
       it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
+        expect(subject.scan(REGEXP_ROWS).size).to eq(7)
       end
 
       it 'should have 3 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(3)
       end
     end
 
@@ -72,19 +72,19 @@ describe TableHelper do
       end
 
       it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
+        expect(subject.scan(REGEXP_ROWS).size).to eq(7)
       end
 
       it 'should have 4 headers' do
-        subject.scan(REGEXP_HEADERS).size.should == 4
+        expect(subject.scan(REGEXP_HEADERS).size).to eq(4)
       end
 
       it 'should have 0 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 0
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(0)
       end
 
       it 'should have 6 spans' do
-        subject.scan(/<span>.+?<\/span>/).size.should == 6
+        expect(subject.scan(/<span>.+?<\/span>/).size).to eq(6)
       end
     end
 
@@ -98,19 +98,19 @@ describe TableHelper do
       end
 
       it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
+        expect(subject.scan(REGEXP_ROWS).size).to eq(7)
       end
 
       it 'should have 4 headers' do
-        subject.scan(REGEXP_HEADERS).size.should == 4
+        expect(subject.scan(REGEXP_HEADERS).size).to eq(4)
       end
 
       it 'should have 3 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(3)
       end
 
       it 'should have 6 spans' do
-        subject.scan(/<span>.+?<\/span>/).size.should == 6
+        expect(subject.scan(/<span>.+?<\/span>/).size).to eq(6)
       end
     end
 
@@ -121,11 +121,11 @@ describe TableHelper do
       end
 
       it 'should have 12 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 12
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(12)
       end
 
       it 'should have 1 ascending sort headers' do
-        subject.scan(/<th><a .*?sort_dir=desc.*?>Children<\/a> &darr;<\/th>/).size.should == 1
+        expect(subject.scan(/<th><a .*?sort_dir=desc.*?>Children<\/a> &darr;<\/th>/).size).to eq(1)
       end
     end
 
@@ -136,11 +136,11 @@ describe TableHelper do
       end
 
       it 'should have 12 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 12
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(12)
       end
 
       it 'should have 1 descending sort headers' do
-        subject.scan(/<th><a .*?sort_dir=asc.*?>Children<\/a> &uarr;<\/th>/).size.should == 1
+        expect(subject.scan(/<th><a .*?sort_dir=asc.*?>Children<\/a> &uarr;<\/th>/).size).to eq(1)
       end
     end
 
@@ -151,20 +151,20 @@ describe TableHelper do
       end
 
       it 'should have 2 sortable headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 2
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(2)
       end
 
       it 'should have 1 ascending sort headers' do
-        subject.scan(/<th><a .*?sort_dir=desc.*?>Chatty<\/a> &darr;<\/th>/).size.should == 1
+        expect(subject.scan(/<th><a .*?sort_dir=desc.*?>Chatty<\/a> &darr;<\/th>/).size).to eq(1)
       end
     end
   end
 
   describe '#default_attrs' do
     it 'should not contain id' do
-      default_attrs.should == [:name, :whatever, :children, :companion_id, :rating, :income,
+      expect(default_attrs).to eq([:name, :whatever, :children, :companion_id, :rating, :income,
                                :birthdate, :gets_up_at, :last_seen, :human, :remarks,
-                               :created_at, :updated_at]
+                               :created_at, :updated_at])
       end
   end
 
@@ -177,15 +177,15 @@ describe TableHelper do
       end
 
       it 'should have 7 rows' do
-        subject.scan(REGEXP_ROWS).size.should == 7
+        expect(subject.scan(REGEXP_ROWS).size).to eq(7)
       end
 
       it 'should have 13 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 13
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(13)
       end
 
       it 'should have 12 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 12
+        expect(subject.scan(REGEXP_ACTION_CELL).size).to eq(12)
       end
     end
 
@@ -195,7 +195,7 @@ describe TableHelper do
       end
 
       it 'should have 3 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(3)
       end
     end
 
@@ -210,15 +210,15 @@ describe TableHelper do
       end
 
       it 'should have 4 headers' do
-        subject.scan(REGEXP_HEADERS).size.should == 4
+        expect(subject.scan(REGEXP_HEADERS).size).to eq(4)
       end
 
       it 'should have 6 custom col spans' do
-        subject.scan(/<span>.+?<\/span>/m).size.should == 6
+        expect(subject.scan(/<span>.+?<\/span>/m).size).to eq(6)
       end
 
       it 'should have 0 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 0
+        expect(subject.scan(REGEXP_ACTION_CELL).size).to eq(0)
       end
     end
 
@@ -232,15 +232,15 @@ describe TableHelper do
       end
 
       it 'should have 3 sort headers' do
-        subject.scan(REGEXP_SORT_HEADERS).size.should == 3
+        expect(subject.scan(REGEXP_SORT_HEADERS).size).to eq(3)
       end
 
       it 'should have 6 custom col spans' do
-        subject.scan(/<span>.+?<\/span>/m).size.should == 6
+        expect(subject.scan(/<span>.+?<\/span>/m).size).to eq(6)
       end
 
       it 'should have 0 action cells' do
-        subject.scan(REGEXP_ACTION_CELL).size.should == 0
+        expect(subject.scan(REGEXP_ACTION_CELL).size).to eq(0)
       end
     end
   end
@@ -249,28 +249,28 @@ describe TableHelper do
     context 'with empty data' do
       subject { table([]) }
 
-      it { should be_html_safe }
+      it { is_expected.to be_html_safe }
 
       it 'should handle empty data' do
-        should match(/Keine Eintr/)
+        is_expected.to match(/Keine Eintr/)
       end
     end
 
     context 'with data' do
       subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
 
-      it { should be_html_safe }
+      it { is_expected.to be_html_safe }
 
       it 'should render table' do
-        should match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
+        is_expected.to match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
       end
 
       it 'should contain attrs' do
-        should match(/<th>Size<\/th>/)
+        is_expected.to match(/<th>Size<\/th>/)
       end
 
       it 'should contain block' do
-        should match(/<th>Upcase<\/th>/)
+        is_expected.to match(/<th>Upcase<\/th>/)
       end
     end
   end

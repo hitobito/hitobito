@@ -64,7 +64,7 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'binding_of_caller'
-  gem 'rspec-rails', '~> 2.14.0'
+  gem 'rspec-rails', '~> 2.99.0'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
@@ -85,6 +85,8 @@ group :test do
   gem 'headless'
   gem 'launchy'
   gem 'rspec-notify-osd'
+  gem 'rspec-its'
+  gem 'rspec-collection_matchers'
   gem 'selenium-webdriver'
 end
 

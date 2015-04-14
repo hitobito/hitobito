@@ -26,23 +26,23 @@ describe SocialAccount do
     it 'reuses existing label' do
       a1 = Fabricate(:social_account, label: 'Foo')
       a2 = Fabricate(:social_account, label: 'fOO')
-      a2.label.should == 'Foo'
+      expect(a2.label).to eq('Foo')
     end
   end
 
   context '#available_labels' do
     subject { SocialAccount.available_labels }
-    it { should include(Settings.social_account.predefined_labels.first) }
+    it { is_expected.to include(Settings.social_account.predefined_labels.first) }
 
     it 'includes labels from database' do
       a = Fabricate(:social_account, label: 'Foo')
-      should include('Foo')
+      is_expected.to include('Foo')
     end
 
     it 'includes labels from database and predefined only once' do
       predef = Settings.social_account.predefined_labels.first
       a = Fabricate(:social_account, label: predef)
-      subject.count(predef).should == 1
+      expect(subject.count(predef)).to eq(1)
     end
   end
 
@@ -55,8 +55,8 @@ describe SocialAccount do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'create'
-      version.main.should == person
+      expect(version.event).to eq('create')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on update' do
@@ -66,8 +66,8 @@ describe SocialAccount do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'update'
-      version.main.should == person
+      expect(version.event).to eq('update')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on destroy' do
@@ -77,8 +77,8 @@ describe SocialAccount do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'destroy'
-      version.main.should == person
+      expect(version.event).to eq('destroy')
+      expect(version.main).to eq(person)
     end
   end
 end

@@ -40,25 +40,25 @@ describe Event::ApplicationMarketController, type: :controller do
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-    it { should render_template('index') }
+    it { is_expected.to render_template('index') }
 
     it 'has participants' do
-      assigns(:participants).should have(2).items
+      expect(assigns(:participants).size).to eq(2)
     end
 
     it 'has applications' do
-      assigns(:applications).should have(1).items
+      expect(assigns(:applications).size).to eq(1)
     end
 
     it 'has event' do
-      assigns(:event).should == course
+      expect(assigns(:event)).to eq(course)
     end
 
     it 'has add button' do
       button = dom.find('.btn-group a')
-      button.text.should eq ' Teilnehmer/-in hinzufügen'
-      button.should have_css('i.icon-plus')
-      button[:href].should eq new_group_event_participation_path(group,
+      expect(button.text).to eq ' Teilnehmer/-in hinzufügen'
+      expect(button).to have_css('i.icon-plus')
+      expect(button[:href]).to eq new_group_event_participation_path(group,
                                                                  course,
                                                                  for_someone_else: true,
                                                                  event_role: {

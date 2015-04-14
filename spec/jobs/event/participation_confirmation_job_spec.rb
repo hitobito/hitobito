@@ -44,8 +44,8 @@ describe Event::ParticipationConfirmationJob do
         course.update_column(:requires_approval, false)
         subject.perform
 
-        ActionMailer::Base.deliveries.should have(1).item
-        last_email.subject.should == 'Bestätigung der Anmeldung'
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
       end
     end
 
@@ -54,8 +54,8 @@ describe Event::ParticipationConfirmationJob do
         course.update_column(:requires_approval, true)
         subject.perform
 
-        ActionMailer::Base.deliveries.should have(1).item
-        last_email.subject.should == 'Bestätigung der Anmeldung'
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
       end
     end
   end
@@ -68,8 +68,8 @@ describe Event::ParticipationConfirmationJob do
         course.update_column(:requires_approval, false)
         subject.perform
 
-        ActionMailer::Base.deliveries.should have(1).items
-        last_email.subject.should == 'Bestätigung der Anmeldung'
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
       end
     end
 
@@ -78,12 +78,12 @@ describe Event::ParticipationConfirmationJob do
         course.update_column(:requires_approval, true)
         subject.perform
 
-        ActionMailer::Base.deliveries.should have(2).items
+        expect(ActionMailer::Base.deliveries.size).to eq(2)
 
         first_email = ActionMailer::Base.deliveries.first
-        last_email.to.to_set.should == [app1.email, app2.email].to_set
-        last_email.subject.should == 'Freigabe einer Kursanmeldung'
-        first_email.subject.should == 'Bestätigung der Anmeldung'
+        expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
+        expect(last_email.subject).to eq('Freigabe einer Kursanmeldung')
+        expect(first_email.subject).to eq('Bestätigung der Anmeldung')
       end
 
       context 'with external role in different group with own approvers' do
@@ -95,10 +95,10 @@ describe Event::ParticipationConfirmationJob do
           course.update_column(:requires_approval, true)
           subject.perform
 
-          ActionMailer::Base.deliveries.should have(2).items
+          expect(ActionMailer::Base.deliveries.size).to eq(2)
 
           first_email = ActionMailer::Base.deliveries.first
-          last_email.to.to_set.should == [app1.email, app2.email].to_set
+          expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
         end
       end
     end

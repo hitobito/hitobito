@@ -19,7 +19,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:grouped_events).values.should eq [[b], [a]]
+      expect(assigns(:grouped_events).values).to eq [[b], [a]]
     end
 
     it 'does not include courses' do
@@ -27,7 +27,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:grouped_events).should be_empty
+      expect(assigns(:grouped_events)).to be_empty
     end
 
     it 'groups by month' do
@@ -36,7 +36,7 @@ describe Event::ListsController do
 
       get :events
 
-      assigns(:grouped_events).keys.should == ['Oktober 2012', 'November 2012']
+      expect(assigns(:grouped_events).keys).to eq(['Oktober 2012', 'November 2012'])
     end
   end
 
@@ -47,19 +47,19 @@ describe Event::ListsController do
 
       it 'defaults to current year' do
         get :courses
-        assigns(:year).should eq year
-        controller.send(:year_range).should eq year_range
+        expect(assigns(:year)).to eq year
+        expect(controller.send(:year_range)).to eq year_range
       end
 
       it 'reads year from params, populates vars'do
         get :courses, year: 2010
-        assigns(:year).should eq 2010
-        controller.send(:year_range).should eq 2008..2011
+        expect(assigns(:year)).to eq 2010
+        expect(controller.send(:year_range)).to eq 2008..2011
       end
 
       it 'groups by course kind' do
         get :courses, year: 2012
-        assigns(:grouped_events).keys.should eq ['Scharleiterkurs']
+        expect(assigns(:grouped_events).keys).to eq ['Scharleiterkurs']
       end
     end
 
@@ -68,12 +68,12 @@ describe Event::ListsController do
 
       it 'defaults to toplevel group with courses in hiearchy' do
         get :courses
-        assigns(:group_id).should eq groups(:top_group).id
+        expect(assigns(:group_id)).to eq groups(:top_group).id
       end
 
       it 'can be set via param, only if year is present' do
         get :courses, year: 2010, group_id: groups(:top_layer).id
-        assigns(:group_id).should eq groups(:top_layer).id
+        expect(assigns(:group_id)).to eq groups(:top_layer).id
       end
     end
 
@@ -85,9 +85,9 @@ describe Event::ListsController do
       it 'renders csv headers' do
         controller.stub(current_user: people(:root))
         get :courses, format: :csv
-        response.should be_success
-        rows.first.should match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
-        rows.should have(2).rows
+        expect(response).to be_success
+        expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
+        expect(rows.size).to eq(2)
       end
     end
 
@@ -96,7 +96,7 @@ describe Event::ListsController do
 
       it 'groups by month' do
         get :courses, year: 2012
-        assigns(:grouped_events).keys.should == ['März 2012']
+        expect(assigns(:grouped_events).keys).to eq(['März 2012'])
       end
 
       after { Event::Course.used_attributes += [:kind_id] }

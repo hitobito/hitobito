@@ -35,9 +35,9 @@ describe EventKindsHelper do
       node = Capybara::Node::Simple.new(html)
 
       options = node.find('select').all('option')
-      options.should have(collection.count).items
-      options.select { |o| o.selected? }.should have(1).items
-      options.one? { |o| o.value == old.id.to_s }.should eq false
+      expect(options.size).to eq(collection.count)
+      expect(options.select { |o| o.selected? }.size).to eq(1)
+      expect(options.one? { |o| o.value == old.id.to_s }).to eq false
     end
 
     it 'includes deleted qualifications if selected' do
@@ -57,9 +57,9 @@ describe EventKindsHelper do
       node = Capybara::Node::Simple.new(html)
 
       options = node.find('select').all('option')
-      options.should have(collection.count + 1).items
-      options.select { |o| o.selected? }.should have(2).items
-      options.one? { |o| o.value == old.id.to_s }.should eq true
+      expect(options.size).to eq(collection.count + 1)
+      expect(options.select { |o| o.selected? }.size).to eq(2)
+      expect(options.one? { |o| o.value == old.id.to_s }).to eq true
     end
 
   end

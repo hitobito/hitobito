@@ -13,106 +13,106 @@ describe I18nSettable do
 
   it 'sets i18n attribute as basic value' do
     person.gender = 'm'
-    person.gender.should eq 'm'
+    expect(person.gender).to eq 'm'
     person.gender = 'w'
-    person.gender.should eq 'w'
+    expect(person.gender).to eq 'w'
     person.gender = ''
-    person.gender.should eq ''
+    expect(person.gender).to eq ''
   end
 
   it 'sets i18n attribute in german' do
     person.gender = 'männlich'
-    person.gender.should eq 'm'
+    expect(person.gender).to eq 'm'
     person.gender = 'weiblich'
-    person.gender.should eq 'w'
+    expect(person.gender).to eq 'w'
     person.gender = 'unbekannt'
-    person.gender.should eq nil
-    person.should be_valid
+    expect(person.gender).to eq nil
+    expect(person).to be_valid
   end
 
   it 'sets i18n attribute in french' do
     I18n.locale = :fr
     person.gender = 'masculin'
-    person.gender.should eq 'm'
+    expect(person.gender).to eq 'm'
     person.gender = 'féminin'
-    person.gender.should eq 'w'
+    expect(person.gender).to eq 'w'
     person.gender = 'inconnu'
-    person.gender.should eq nil
-    person.should be_valid
+    expect(person.gender).to eq nil
+    expect(person).to be_valid
     I18n.locale = :de
   end
 
   it 'sets invalid i18n attribute in german' do
     person.gender = 'foo'
-    person.gender.should eq 'foo'
-    person.should_not be_valid
+    expect(person.gender).to eq 'foo'
+    expect(person).not_to be_valid
   end
 
   it 'sets invalid i18n attribute in french' do
     I18n.locale = :fr
     person.gender = 'weiblich'
-    person.gender.should eq 'weiblich'
-    person.should_not be_valid
+    expect(person.gender).to eq 'weiblich'
+    expect(person).not_to be_valid
     I18n.locale = :de
   end
 
   it 'sets i18n boolean attribute in german' do
     person.company = 'JA'
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = 'Nein'
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute in french' do
     I18n.locale = :fr
     person.company = 'ouI'
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = 'non'
-    person.company.should eq false
+    expect(person.company).to eq false
     I18n.locale = :de
   end
 
   it 'sets invalid i18n boolean attribute' do
     person.company = 'oui'
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute as boolean' do
     person.company = true
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = false
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute as integer' do
     person.company = 1
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = 0
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute as integer string' do
     person.company = '1'
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = '0'
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute as boolean string' do
     person.company = 'true'
-    person.company.should eq true
+    expect(person.company).to eq true
     person.company = 'false'
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute as empty string' do
     person.company = ' '
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
   it 'sets i18n boolean attribute nil' do
     person.company = nil
-    person.company.should eq false
+    expect(person.company).to eq false
   end
 
 end

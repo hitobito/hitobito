@@ -23,11 +23,11 @@ describe UserSerializer do
   subject { hash[:people].first }
 
   it 'contains home url' do
-    subject.should have_key(:href)
+    expect(subject).to have_key(:href)
   end
 
   it 'contains authentication token' do
-    subject.should have_key(:authentication_token)
+    expect(subject).to have_key(:authentication_token)
   end
 
 end

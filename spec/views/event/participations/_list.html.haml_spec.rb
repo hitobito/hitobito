@@ -35,21 +35,21 @@ describe 'event/participations/_list.html.haml' do
 
     question = event.questions.create!(question: 'dummy', required: true)
     participation.answers.create!(question: question, answer: '')
-    dom.should have_text 'Pflichtangaben fehlen'
+    expect(dom).to have_text 'Pflichtangaben fehlen'
   end
 
   context 'created_at' do
 
     it 'can be viewed by someone how can show participation details' do
       login_as(people(:top_leader))
-      dom.should have_text 'Rollen | Anmeldedatum'
-      dom.should have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
+      expect(dom).to have_text 'Rollen | Anmeldedatum'
+      expect(dom).to have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
     end
 
     it 'is not seen by participants' do
       login_as(participation.person)
-      dom.should_not have_text 'Rollen | Anmeldedatum'
-      dom.should_not have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
+      expect(dom).not_to have_text 'Rollen | Anmeldedatum'
+      expect(dom).not_to have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
     end
 
   end

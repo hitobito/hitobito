@@ -24,12 +24,12 @@ describe MailingListsHelper do
       sub.save!
 
       @group = entry.group
-      button_toggle_subscription.should =~ /Abmelden/
+      expect(button_toggle_subscription).to match(/Abmelden/)
     end
 
     it "with not subscribed user shows 'Abmelden'" do
       @group = entry.group
-      button_toggle_subscription.should =~ /Anmelden/
+      expect(button_toggle_subscription).to match(/Anmelden/)
     end
   end
 

@@ -19,7 +19,7 @@ describe 'contactable/_fields.html.haml' do
     controller.controller_path = 'groups'
     controller.request.path_parameters[:controller] = 'groups'
     view.extend FormatHelper
-    view.stub(entry: GroupDecorator.decorate(group), f: form_builder)
+    allow(view).to receive_messages(entry: GroupDecorator.decorate(group), f: form_builder)
 
     # mock render call to emai_field partial
     render_method = view.method(:render)

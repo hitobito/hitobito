@@ -15,9 +15,9 @@ describe 'event/participations/_actions_show.html.haml' do
   let(:group) { event.groups.first }
 
   before do
-    view.stub(path_args: [group, event])
-    view.stub(entry: participation)
-    controller.stub(current_user: user)
+    allow(view).to receive_messages(path_args: [group, event])
+    allow(view).to receive_messages(entry: participation)
+    allow(controller).to receive_messages(current_user: user)
     allow(view).to receive(:current_user) { user }
     controller.request.path_parameters[:action] = 'show'
     controller.request.path_parameters[:group_id] = 42

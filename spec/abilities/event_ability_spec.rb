@@ -109,7 +109,7 @@ describe EventAbility do
       end
 
       it 'may still create when application is not possible' do
-        event.stub(application_possible?: false)
+        allow(event).to receive_messages(application_possible?: false)
         is_expected.to be_able_to(:create, participation)
       end
 
@@ -190,7 +190,7 @@ describe EventAbility do
       end
 
       it 'may still create when application is not possible' do
-        event.stub(application_possible?: false)
+        allow(event).to receive_messages(application_possible?: false)
         is_expected.to be_able_to(:create, participation)
       end
 
@@ -482,12 +482,12 @@ describe EventAbility do
 
     context Event::Participation do
       it 'may create his participation' do
-        participation.event.stub(application_possible?: true)
+        allow(participation.event).to receive_messages(application_possible?: true)
         is_expected.to be_able_to(:create, participation)
       end
 
       it 'may not create his participation if application is not possible' do
-        participation.event.stub(application_possible?: false)
+        allow(participation.event).to receive_messages(application_possible?: false)
         is_expected.not_to be_able_to(:create, participation)
       end
 

@@ -15,37 +15,37 @@ describe Group::Mover do
 
     context 'top_group' do
       let(:group) { groups(:top_group) }
-      its(:candidates) { should be_blank }
+      its(:candidates) { is_expected.to be_blank }
     end
 
     context 'bottom_layer_one' do
       let(:group) { groups(:bottom_layer_one) }
-      its(:candidates) { should be_blank }
+      its(:candidates) { is_expected.to be_blank }
     end
 
     context 'bottom_layer_two' do
       let(:group) { groups(:bottom_layer_two) }
-      its(:candidates) { should be_blank }
+      its(:candidates) { is_expected.to be_blank }
     end
 
     context 'bottom_group_one_one' do
       let(:group) { groups(:bottom_group_one_one) }
-      its(:candidates) { should =~ groups_for(:bottom_layer_two, :bottom_group_one_two) }
+      its(:candidates) { is_expected.to match groups_for(:bottom_layer_two, :bottom_group_one_two) }
     end
 
     context 'bottom_group_one_two' do
       let(:group) { groups(:bottom_group_one_two) }
-      its(:candidates) { should =~ groups_for(:bottom_layer_two, :bottom_group_one_one) }
+      its(:candidates) { is_expected.to match groups_for(:bottom_layer_two, :bottom_group_one_one) }
     end
 
     context 'bottom_group_two_one' do
       let(:group) { groups(:bottom_group_two_one) }
-      its(:candidates) { should =~ groups_for(:bottom_layer_one) }
+      its(:candidates) { is_expected.to match groups_for(:bottom_layer_one) }
     end
 
     context 'bottom_group_one_one_one' do
       let(:group) { groups(:bottom_group_one_one_one) }
-      its(:candidates) { should =~ groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
+      its(:candidates) { is_expected.to match groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
     end
 
     def groups_for(*args)
@@ -61,8 +61,8 @@ describe Group::Mover do
       subject { group.reload }
       before { move.perform(target); }
 
-      its(:parent) { should eq target }
-      its(:layer_group_id) { should eq target.id }
+      its(:parent) { is_expected.to eq target }
+      its(:layer_group_id) { is_expected.to eq target.id }
 
       it 'nested set should still be valid' do
         expect(Group).to be_valid

@@ -11,13 +11,13 @@ describe 'FilterNavigation::People' do
 
   let(:template) do
     double('template').tap do |t|
-      t.stub(can?: true)
-      t.stub(group_people_path: 'people_path')
-      t.stub(group_people_filter_path: 'people_filter_path')
-      t.stub(new_group_people_filter_path: 'new_people_filter_path')
-      t.stub(link_action_destroy: '<a destroy>')
-      t.stub(icon: '<i>')
-      t.stub(ti: 'delete')
+      allow(t).to receive_messages(can?: true)
+      allow(t).to receive_messages(group_people_path: 'people_path')
+      allow(t).to receive_messages(group_people_filter_path: 'people_filter_path')
+      allow(t).to receive_messages(new_group_people_filter_path: 'new_people_filter_path')
+      allow(t).to receive_messages(link_action_destroy: '<a destroy>')
+      allow(t).to receive_messages(icon: '<i>')
+      allow(t).to receive_messages(ti: 'delete')
       allow(t).to receive(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
       allow(t).to receive(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
     end

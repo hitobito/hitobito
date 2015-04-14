@@ -83,7 +83,7 @@ describe Event::ListsController do
       before { Fabricate(:event_date, event: course)  }
 
       it 'renders csv headers' do
-        controller.stub(current_user: people(:root))
+        allow(controller).to receive_messages(current_user: people(:root))
         get :courses, format: :csv
         expect(response).to be_success
         expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)

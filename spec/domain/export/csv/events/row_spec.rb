@@ -81,7 +81,7 @@ describe Export::Csv::Events::Row do
     let(:finish_at) { Date.parse 'Wed, 12 Jun 2013' }
     let(:date) { Fabricate(:event_date, event: course, start_at: start_at, finish_at: finish_at) }
 
-    before { course.stub(dates: [date]) }
+    before { allow(course).to receive_messages(dates: [date]) }
 
     it { expect(row.fetch(:date_0_label)).to eq 'Hauptanlass' }
     it { expect(row.fetch(:date_0_duration)).to eq '09.06.2013 - 12.06.2013' }

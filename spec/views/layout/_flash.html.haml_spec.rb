@@ -10,7 +10,7 @@ describe 'layouts/_flash.html.haml' do
   let(:dom) { Capybara::Node::Simple.new(rendered) }
   subject { dom.find('p') }
   before do
-    view.stub(level: :info)
+    allow(view).to receive_messages(level: :info)
     controller.flash[:info] = info
     render
   end

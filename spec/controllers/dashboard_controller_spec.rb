@@ -11,7 +11,7 @@ describe DashboardController do
 
   describe 'GET index' do
 
-    context :html do
+    context 'html' do
       it 'redirects to login if no user' do
         get :index
         is_expected.to redirect_to(new_person_session_path)
@@ -25,7 +25,7 @@ describe DashboardController do
       end
     end
 
-    context :json do
+    context 'json' do
       it 'shows error if no user' do
         get :index, format: :json
         expect(response.status).to be(401)

@@ -14,7 +14,7 @@ describe 'contactable/_contact_data.html.haml' do
 
   before do
     group.assign_attributes(address: 'foo', town: 'bar', zip_code: 123, country: 'ch')
-    view.stub(contactable: GroupDecorator.decorate(group), only_public: false, postal: true)
+    allow(view).to receive_messages(contactable: GroupDecorator.decorate(group), only_public: false, postal: true)
   end
 
   context 'group' do

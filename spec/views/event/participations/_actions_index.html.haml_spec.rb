@@ -25,9 +25,9 @@ describe 'event/participations/_actions_index.html.haml' do
   before do
     assign(:event, event)
     assign(:group, event.groups.first)
-    view.stub(parent: event)
-    view.stub(entries: [participation])
-    view.stub(params: params)
+    allow(view).to receive_messages(parent: event)
+    allow(view).to receive_messages(entries: [participation])
+    allow(view).to receive_messages(params: params)
   end
 
   it 'top leader has dropdowns for adding and exporting' do
@@ -45,7 +45,7 @@ describe 'event/participations/_actions_index.html.haml' do
   end
 
   def login_as(user)
-    controller.stub(current_user: user)
-    view.stub(current_user: user)
+    allow(controller).to receive_messages(current_user: user)
+    allow(view).to receive_messages(current_user: user)
   end
 end

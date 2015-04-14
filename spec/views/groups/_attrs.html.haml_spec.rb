@@ -16,9 +16,9 @@ describe 'groups/_attrs.html.haml' do
     assign(:group, group)
     assign(:sub_groups,  'Gruppen' => [groups(:bottom_layer_one)],
                          'Untergruppen' => [groups(:top_group)])
-    view.stub(current_user: current_user)
-    controller.stub(current_user: current_user)
-    view.stub(entry: GroupDecorator.decorate(group))
+    allow(view).to receive_messages(current_user: current_user)
+    allow(controller).to receive_messages(current_user: current_user)
+    allow(view).to receive_messages(entry: GroupDecorator.decorate(group))
     render
   end
 

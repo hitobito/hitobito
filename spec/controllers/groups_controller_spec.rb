@@ -30,14 +30,14 @@ describe GroupsController do
     let(:group) { groups(:top_layer) }
 
     describe 'GET index' do
-      context :html do
+      context 'html' do
         it 'keeps flash' do
           get :index
           is_expected.to redirect_to(group_path(Group.root, format: :html))
         end
       end
 
-      context :json do
+      context 'json' do
         it 'redirects to json' do
           get :index, format: :json
           is_expected.to redirect_to(group_path(Group.root, format: :json))
@@ -67,7 +67,7 @@ describe GroupsController do
         its(:values) { should == [[groups(:bottom_group_one_one)]] }
       end
 
-      context :json do
+      context 'json' do
         render_views
 
         it 'is valid' do

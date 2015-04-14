@@ -74,9 +74,9 @@ describe MailRelay::Lists do
     before { create_individual_subscribers }
 
     it { is_expected.to be_sender_allowed }
-    its(:sender_email) { should == from }
-    its(:sender) { should == people(:top_leader) }
-    its(:receivers) { should =~ subscribers.collect(&:email) }
+    its(:sender_email) { is_expected.to eq from }
+    its(:sender) { is_expected.to eq people(:top_leader) }
+    its(:receivers) { is_expected.to match subscribers.collect(&:email) }
 
     it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -92,9 +92,9 @@ describe MailRelay::Lists do
     before { list.update_column(:additional_sender, from) }
 
     it { is_expected.to be_sender_allowed }
-    its(:sender_email) { should == from }
-    its(:sender) { should be_nil }
-    its(:receivers) { should =~ subscribers.collect(&:email) }
+    its(:sender_email) { is_expected.to eq from }
+    its(:sender) { is_expected.to be_nil }
+    its(:receivers) { is_expected.to match subscribers.collect(&:email) }
 
     it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -111,9 +111,9 @@ describe MailRelay::Lists do
       before { list.update_column(:subscribers_may_post, true) }
 
       it { is_expected.to be_sender_allowed }
-      its(:sender_email) { should == from }
-      its(:sender) { should == bgl1 }
-      its(:receivers) { should =~ subscribers.collect(&:email) }
+      its(:sender_email) { is_expected.to eq from }
+      its(:sender) { is_expected.to eq bgl1 }
+      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -127,8 +127,8 @@ describe MailRelay::Lists do
       before { list.update_column(:subscribers_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
-      its(:sender_email) { should == from }
-      its(:sender) { should == bgl1 }
+      its(:sender_email) { is_expected.to eq from }
+      its(:sender) { is_expected.to eq bgl1 }
 
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -148,8 +148,8 @@ describe MailRelay::Lists do
     before { list.update_column(:subscribers_may_post, true) }
 
     it { is_expected.not_to be_sender_allowed }
-    its(:sender_email) { should == from }
-    its(:sender) { should == bgl2 }
+    its(:sender_email) { is_expected.to eq from }
+    its(:sender) { is_expected.to eq bgl2 }
 
     it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -168,9 +168,9 @@ describe MailRelay::Lists do
       before { list.update_column(:anyone_may_post, true) }
 
       it { is_expected.to be_sender_allowed }
-      its(:sender_email) { should == from }
-      its(:sender) { should == people(:bottom_member) }
-      its(:receivers) { should =~ subscribers.collect(&:email) }
+      its(:sender_email) { is_expected.to eq from }
+      its(:sender) { is_expected.to eq people(:bottom_member) }
+      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -184,8 +184,8 @@ describe MailRelay::Lists do
       before { list.update_column(:anyone_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
-      its(:sender_email) { should == from }
-      its(:sender) { should == people(:bottom_member) }
+      its(:sender_email) { is_expected.to eq from }
+      its(:sender) { is_expected.to eq people(:bottom_member) }
 
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -205,8 +205,8 @@ describe MailRelay::Lists do
       before { list.update_column(:anyone_may_post, true) }
 
       it { is_expected.to be_sender_allowed }
-      its(:sender_email) { should == from }
-      its(:receivers) { should =~ subscribers.collect(&:email) }
+      its(:sender_email) { is_expected.to eq from }
+      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -220,7 +220,7 @@ describe MailRelay::Lists do
       before { list.update_column(:anyone_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
-      its(:sender_email) { should == from }
+      its(:sender_email) { is_expected.to eq from }
 
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -236,7 +236,7 @@ describe MailRelay::Lists do
     let(:from) { nil }
 
     it { is_expected.not_to be_sender_allowed }
-    its(:sender_email) { should == from }
+    its(:sender_email) { is_expected.to eq from }
 
     it 'does not relay' do
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
@@ -275,7 +275,7 @@ describe MailRelay::Lists do
 
     let(:envelope_to) { "#{list.mail_name}-bounces+test=example.com" }
 
-    its(:sender_email) { should == from }
+    its(:sender_email) { is_expected.to eq from }
 
     it 'forwards bounce message' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -293,7 +293,7 @@ describe MailRelay::Lists do
 
     before { Fabricate(:mailing_list, group: list.group, mail_name: MailRelay::Lists.app_sender_name) }
 
-    its(:sender_email) { should == from }
+    its(:sender_email) { is_expected.to eq from }
 
     it 'does not reject messages' do
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }

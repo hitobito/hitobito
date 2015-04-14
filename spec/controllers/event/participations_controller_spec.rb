@@ -177,7 +177,7 @@ describe Event::ParticipationsController do
     end
 
     it 'lists particpant and leader group by default order by role if specific in settings' do
-      Settings.people.stub(default_sort: 'role')
+      allow(Settings.people).to receive_messages(default_sort: 'role')
       get :index, group_id: group.id, event_id: course.id
       expect(assigns(:participations)).to eq [@leader, @participant]
     end

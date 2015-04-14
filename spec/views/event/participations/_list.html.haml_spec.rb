@@ -24,9 +24,9 @@ describe 'event/participations/_list.html.haml' do
   before do
     assign(:event, event)
     assign(:group, event.groups.first)
-    view.stub(parent: event)
-    view.stub(entries: Event::ParticipationDecorator.decorate_collection([participation]))
-    view.stub(params: params)
+    allow(view).to receive_messages(parent: event)
+    allow(view).to receive_messages(entries: Event::ParticipationDecorator.decorate_collection([participation]))
+    allow(view).to receive_messages(params: params)
     Fabricate(event.participant_types.first.name, participation: participation)
   end
 
@@ -55,7 +55,7 @@ describe 'event/participations/_list.html.haml' do
   end
 
   def login_as(user)
-    controller.stub(current_user: user)
-    view.stub(current_user: user)
+    allow(controller).to receive_messages(current_user: user)
+    allow(view).to receive_messages(current_user: user)
   end
 end

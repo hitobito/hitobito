@@ -13,8 +13,8 @@ describe 'people/_attrs.html.haml' do
   let(:person) { people(:bottom_member) }
 
   subject do
-    view.stub(current_user: current_user)
-    controller.stub(current_user: current_user)
+    allow(view).to receive_messages(current_user: current_user)
+    allow(controller).to receive_messages(current_user: current_user)
     render
     Capybara::Node::Simple.new(@rendered)
   end
@@ -23,8 +23,8 @@ describe 'people/_attrs.html.haml' do
     assign(:qualifications, [])
     assign(:group, group)
     person.phone_numbers.create(label: 'private phone', public: false)
-    view.stub(parent: top_group)
-    view.stub(entry: PersonDecorator.decorate(person))
+    allow(view).to receive_messages(parent: top_group)
+    allow(view).to receive_messages(entry: PersonDecorator.decorate(person))
   end
 
   context 'viewed by top leader' do

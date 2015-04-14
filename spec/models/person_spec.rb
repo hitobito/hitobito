@@ -365,7 +365,7 @@ describe Person do
   end
 
   context '#years' do
-    before { Time.zone.stub(now: Time.zone.parse('2014-03-01 11:19:50')) }
+    before { allow(Time.zone).to receive_messages(now: Time.zone.parse('2014-03-01 11:19:50')) }
 
     it 'is nil if person has no birthday' do
       expect(Person.new.years).to be_nil

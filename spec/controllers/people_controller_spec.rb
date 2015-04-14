@@ -60,7 +60,7 @@ describe PeopleController do
           end
 
           it "people.default_sort setting can override it to sort by role" do
-            Settings.people.stub(default_sort: 'role')
+            allow(Settings.people).to receive_messages(default_sort: 'role')
             get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
             expect(assigns(:people).collect(&:id)).to eq([top_leader,  @tg_member, @tg_extern].collect(&:id))
           end
@@ -144,7 +144,7 @@ describe PeopleController do
           expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
         end
 
-        context :json do
+        context 'json' do
           render_views
 
           it 'renders json with only the one role in this group' do
@@ -189,7 +189,7 @@ describe PeopleController do
             expect(@response.body).to match(/^Vorname;Nachname;.*Zusätzliche Angaben/)
           end
 
-          context :json do
+          context 'json' do
             render_views
 
             it 'renders json with only the one role in this group' do
@@ -239,7 +239,7 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
 
-        context :json do
+        context 'json' do
           render_views
 
           it 'renders json with only the one role in this group' do
@@ -515,14 +515,14 @@ describe PeopleController do
       end
 
       context 'without group' do
-        context :html do
+        context 'html' do
           it 'keeps flash' do
             get :show, id: top_leader.id
             is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
           end
         end
 
-        context :json do
+        context 'json' do
           it 'redirects to json' do
             get :show, id: top_leader.id, format: :json
             is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
@@ -561,7 +561,7 @@ describe PeopleController do
 
   end
 
-  context :json do
+  context 'json' do
     render_views
 
     before do

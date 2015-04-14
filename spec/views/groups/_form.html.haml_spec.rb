@@ -8,8 +8,8 @@
 require 'spec_helper'
 describe 'groups/_form.html.haml' do
   let(:group) { groups(:top_layer) }
-  before { view.stub(model_class: Group, path_args: group) }
-  before { view.stub(entry: GroupDecorator.new(group)) }
+  before { allow(view).to receive_messages(model_class: Group, path_args: group) }
+  before { allow(view).to receive_messages(entry: GroupDecorator.new(group)) }
 
   it 'does render contactable and extension partials' do
     partials = ['_error_messages', '_fields', 'contactable/_fields',

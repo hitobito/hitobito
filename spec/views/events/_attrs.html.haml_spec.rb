@@ -14,8 +14,8 @@ describe 'events/_attrs.html.haml' do
   before do
     assign(:event, event)
     assign(:group, event.groups.first)
-    view.stub(action_name: 'events', current_user: top_leader, entry: event)
-    controller.stub(current_user: top_leader)
+    allow(view).to receive_messages(action_name: 'events', current_user: top_leader, entry: event)
+    allow(controller).to receive_messages(current_user: top_leader)
     render
   end
 

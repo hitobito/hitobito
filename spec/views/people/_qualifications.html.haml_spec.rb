@@ -15,9 +15,9 @@ describe 'people/_qualifications.html.haml' do
   let(:dom) { @dom = Capybara::Node::Simple.new(@rendered) }
 
   before do
-    view.stub(parent: top_group, entry: top_leader, show_buttons: true)
-    view.stub(current_user: top_leader)
-    controller.stub(current_user: top_leader)
+    allow(view).to receive_messages(parent: top_group, entry: top_leader, show_buttons: true)
+    allow(view).to receive_messages(current_user: top_leader)
+    allow(controller).to receive_messages(current_user: top_leader)
   end
 
 

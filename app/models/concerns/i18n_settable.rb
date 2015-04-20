@@ -41,7 +41,7 @@ module I18nSettable
           normalized = value.to_s.strip.downcase
           if I18n.t('global.yes').downcase == normalized
             value = true
-          elsif value.nil? || I18n.t('global.no').downcase == normalized
+          elsif value.blank? || I18n.t('global.no').downcase == normalized
             value = false
           end
 

@@ -72,7 +72,9 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     context 'with attribute changes' do
       before { update_attributes }
 
-      it { is_expected.to match(/<div>Ort wurde.+<div>PLZ wurde.+<div>Haupt-E-Mail wurde/) }
+      it { is_expected.to match(/<div>Ort wurde/) }
+      it { is_expected.to match(/<div>PLZ wurde/) }
+      it { is_expected.to match(/<div>Haupt-E-Mail wurde/) }
     end
 
     context 'with association changes' do

@@ -55,8 +55,6 @@ describe RecurringJob do
   end
 
   it 'is rescheduled after worker pause' do
-    expect_any_instance_of(RecurringJob).to receive(:perform_internal)
-
     now = Time.zone.now
     subject.enqueue!(run_at: 1.month.ago)
     expect(subject).to be_scheduled
@@ -69,8 +67,6 @@ describe RecurringJob do
   end
 
   it 'reschedules only one job' do
-    expect_any_instance_of(RecurringJob).to receive(:perform_internal)
-
     expect(subject).not_to be_scheduled
 
     now = Time.zone.now

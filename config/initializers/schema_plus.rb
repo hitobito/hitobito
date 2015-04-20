@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-SchemaPlus.setup do |config|
-  config.foreign_keys.auto_create = false
-  config.foreign_keys.auto_index = true
+SchemaPlus::ForeignKeys.setup do |config|
+  config.auto_create = false
+  config.auto_index = true
 end

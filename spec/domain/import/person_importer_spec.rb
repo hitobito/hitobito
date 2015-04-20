@@ -151,8 +151,8 @@ describe Import::PersonImporter do
       its(:first_name) { should eq 'Ramiro' }
       its(:last_name) { should eq 'Brown' }
       its(:additional_information) { should be_present }
-      its(:company) { should eq false }
-      its(:company_name) { should eq 'Oda Cormier' }
+      its(:company) { should eq true }
+      its(:company_name) { should eq 'Mrs. Jalon Kling' }
       its(:email) { should eq 'ramiro_brown@example.com' }
       its(:address) { should eq '1649 Georgette Circles' }
       its(:zip_code) { should eq '7202' }

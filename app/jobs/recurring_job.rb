@@ -45,6 +45,9 @@ class RecurringJob < BaseJob
 
   private
 
+  def perform_internal
+  end
+
   def reschedule
     enqueue!(run_at: next_run, priority: 5) unless others_scheduled?
   end

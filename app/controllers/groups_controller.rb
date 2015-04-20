@@ -38,7 +38,7 @@ class GroupsController < CrudController
   end
 
   def reactivate
-    entry.update_column(:deleted_at, nil)
+    entry.restore!
 
     flash[:notice] = translate(:reactivated, group: entry)
     redirect_to entry

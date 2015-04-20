@@ -54,11 +54,23 @@ DotPosition:
   Enabled: false
 
 # That's no huge stopper
-EmptyLines:
+Style/EmptyLines:
+  Enabled: false
+
+# We thinks that's fine for specs
+Style/EmptyLinesAroundBlockBody:
   Enabled: false
 
 # We thinks that's fine
-EmptyLinesAroundBody:
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# We thinks that's fine
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+# We thinks that's fine
+Style/MultilineOperationIndentation:
   Enabled: false
 
 # Missing UTF-8 encoding statements should always be created.

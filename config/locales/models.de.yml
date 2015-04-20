@@ -200,7 +200,7 @@ de:
         email: Haupt-E-Mail
         emails: E-Mails
         password: Passwort
-        password_confirmation: Passwort
+        password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
         address: Adresse
         zip_code: PLZ

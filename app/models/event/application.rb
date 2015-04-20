@@ -24,7 +24,11 @@ class Event::Application < ActiveRecord::Base
 
   ### ASSOCIATION
 
+<<<<<<< HEAD
   has_one :participation, inverse_of: :application
+=======
+  has_one :participation, dependent: :nullify
+>>>>>>> update all gems
 
   has_one :event, through: :participation
 

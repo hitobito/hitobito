@@ -73,7 +73,7 @@ describe Devise::RegistrationsController do
       before { put :update, person: { current_password: 'foobar', passsword: 'foofoo', password_confirmation: 'barfoo' } }
 
       it { is_expected.to render_template('edit') }
-      it { is_expected.to have_content 'Passwort stimmt nicht mit der Bestätigung überein' }
+      it { is_expected.to have_content 'Passwort Bestätigung stimmt nicht mit Passwort überein' }
     end
 
 

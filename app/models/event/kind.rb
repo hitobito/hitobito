@@ -64,7 +64,7 @@ class Event::Kind < ActiveRecord::Base
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if events.exists?
-      touch_paranoia_column(true)
+      touch_paranoia_column
     else
       really_destroy!
     end

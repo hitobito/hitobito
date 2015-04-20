@@ -17,11 +17,14 @@ MethodLength:
 CyclomaticComplexity:
   Max: 8  # Try to reduce this value
 
-LineLength:
+Metrics/LineLength:
   Max: 115  # Try to reduce this value
 
 Metrics/ParameterLists:
   Max: 6
+
+Metrics/AbcSize:
+  Max: 72
 
 Encoding:
   Enabled: true
@@ -64,9 +67,6 @@ BlockAlignment:
 BlockComments:
   Enabled: false
 
-Blocks:
-  Enabled: false
-
 BracesAroundHashParameters:
   Enabled: false
 
@@ -104,9 +104,6 @@ EmptyLines:
   Enabled: false
 
 EmptyLinesAroundAccessModifier:
-  Enabled: false
-
-EmptyLinesAroundBody:
   Enabled: false
 
 EmptyLiteral:
@@ -314,4 +311,43 @@ Void:
   Enabled: false
 
 WordArray:
+  Enabled: false
+
+Performance/Detect:
+  Enabled: false
+
+Performance/ReverseEach:
+  Enabled: false
+
+Performance/Sample:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/FirstParameterIndentation:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/StructInheritance:
+  Enabled: false
+
+Style/SymbolProc:
   Enabled: false

@@ -16,7 +16,6 @@ require File.expand_path('../config/application', __FILE__)
 require 'ci/reporter/rake/rspec' unless Rails.env.production?
 if Rails.env.development?
   require 'rails-erd'
-  require 'rails_code_qa'
 end
 
 Hitobito::Application.load_tasks

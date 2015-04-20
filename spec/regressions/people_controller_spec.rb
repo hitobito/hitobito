@@ -184,7 +184,8 @@ describe PeopleController, type: :controller do
       Fabricate(:event_application, priority_1: course, participation: create_participation(date, false))
     end
 
-    def create_participation(date, active_participation = false)
+    def
+        p.reload(date, active_participation = false)
       set_start_finish(course, date, date + 5.days)
       Fabricate(:event_participation, person: top_leader, event: course, active: active_participation)
     end

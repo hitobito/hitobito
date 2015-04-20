@@ -453,6 +453,8 @@ describe Event do
         Event::ParticipantAssigner.new(event, p).remove_participant
         assert_counts(participant: 0, applicant: 1)
 
+        p.application.destroy!
+        p.reload
         p.destroy!
         assert_counts(participant: 0, applicant: 0)
       end
@@ -460,6 +462,8 @@ describe Event do
       it 'should count active prio 1 participations correctly' do
         p = create_participation(:prio1)
         assert_counts(participant: 1, applicant: 1)
+        p.application.destroy!
+        p.reload
         p.destroy!
         assert_counts(participant: 0, applicant: 0)
       end

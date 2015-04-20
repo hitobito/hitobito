@@ -109,8 +109,6 @@ group :metrics do
   gem 'annotate'
   gem 'brakeman', '2.5.0'
   gem 'ci_reporter_rspec'
-  gem 'rails_code_qa'
-  gem 'rails_best_practices'
   gem 'rails-erd'
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'

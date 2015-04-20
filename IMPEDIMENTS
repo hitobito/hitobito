@@ -1,4 +1,4 @@
 The following issues are impediments for finalizing the migration to rails 4.2.1:
 
 * https://github.com/airblade/paper_trail/issues/416
-* schema_plus 2.0 not released yet
+* schema_plus 2.0 not released yet, only ruby >= 2.1

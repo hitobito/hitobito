@@ -116,11 +116,18 @@ class Event::Role < ActiveRecord::Base
   end
 
   def protect_applying_participant
+    return if destroyed_by_participation?
+
     if applying_participant? && participation.roles == [self]
       participation.update_attribute(:active, false)
       update_participant_count
       false # do not destroy
     end
+  end
+
+  def destroyed_by_participation?
+    destroyed_by_association &&
+    destroyed_by_association.active_record == Event::Participation
   end
 
   def applying_participant?

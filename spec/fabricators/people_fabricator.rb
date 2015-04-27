@@ -15,7 +15,7 @@ end
 Fabricator(:person_with_address, from: :person) do
   address { Faker::Address.street_address }
   town { Faker::Address.city }
-  zip_code { Faker::Address.zip_code }
+  zip_code { Faker::Address.zip_code[0..3] }
   country { Faker::Address.country }
 end
 

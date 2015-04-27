@@ -32,6 +32,8 @@ class LabelFormat < ActiveRecord::Base
   include Globalized
   translates :name
 
+  has_many :people, foreign_key: :last_label_format_id, dependent: :nullify
+
 
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
   validates :page_size, inclusion: available_page_sizes

@@ -76,7 +76,7 @@ describe MailRelay::Lists do
     it { is_expected.to be_sender_allowed }
     its(:sender_email) { is_expected.to eq from }
     its(:sender) { is_expected.to eq people(:top_leader) }
-    its(:receivers) { is_expected.to match subscribers.collect(&:email) }
+    its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
     it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -94,7 +94,7 @@ describe MailRelay::Lists do
     it { is_expected.to be_sender_allowed }
     its(:sender_email) { is_expected.to eq from }
     its(:sender) { is_expected.to be_nil }
-    its(:receivers) { is_expected.to match subscribers.collect(&:email) }
+    its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
     it 'relays' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -113,7 +113,7 @@ describe MailRelay::Lists do
       it { is_expected.to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
       its(:sender) { is_expected.to eq bgl1 }
-      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
+      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -170,7 +170,7 @@ describe MailRelay::Lists do
       it { is_expected.to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
       its(:sender) { is_expected.to eq people(:bottom_member) }
-      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
+      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -206,7 +206,7 @@ describe MailRelay::Lists do
 
       it { is_expected.to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
-      its(:receivers) { is_expected.to match subscribers.collect(&:email) }
+      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)

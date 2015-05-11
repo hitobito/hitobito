@@ -1,5 +1,9 @@
 = Hitobito Changelog
 
+== Version 1.8
+
+* Möglichkeit, den Zugriff auf Anlässe und Kurse unterschiedlich zu berechtigen.
+
 == Version 1.7
 
 * Möglichkeit beliebige Absender auf Mailinglisten zuzulassen.

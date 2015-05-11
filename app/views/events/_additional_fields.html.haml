@@ -1,0 +1,5 @@
+- if entry.role_types.present?
+  = field_set_tag t('.additional_information') do
+    %p= t('.explain_application_questions')
+
+    = f.nested_fields_for :questions, 'event/questions/fields'

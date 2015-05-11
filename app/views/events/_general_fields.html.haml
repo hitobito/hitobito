@@ -1,0 +1,20 @@
+= field_set_tag do
+  = f.labeled_input_field(:name)
+
+  - entry.used?(:kind_id) do
+    = f.labeled_input_field(:kind_id)
+
+  - entry.used?(:state) do
+    - if entry.possible_states.present?
+      = f.labeled_belongs_to_field(:state, list: entry.state_collection)
+    - else
+      = f.labeled_input_field(:state)
+
+  = render_extensions :main_fields, locals: { f: f }
+
+  = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost, :location))
+
+  - entry.used?(:contact_id) do
+    = f.labeled_person_field :contact
+
+  = render_extensions 'fields', locals: { f: f }

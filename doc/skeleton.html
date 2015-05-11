@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang='de'>
+
+<head>
+  <meta charset='utf-8'>
+  <title>{title}</title>
+
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+
+  <link href="http://demo.hitobito.ch/assets/application-1a5c3ba2b9c4724cf41cb094c0388d20.css" media="screen" rel="stylesheet" />
+  <link href="http://demo.hitobito.ch/assets/print-1e8bdb569280217a2ce85e36c2931b9b.css" media="print" rel="stylesheet" />
+  <link href="http://demo.hitobito.ch/assets/favicon-47dfce94e4b20fdde2ea6c1e13d86902.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+  <style>
+    h1 {
+      font-size: 1.8em !important;
+    }
+
+    h2 {
+      margin-top: 1.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <header id='page-header'>
+    <div class='container-fluid'>
+      <a class="brand" href="#">hitobito</a>
+    </div>
+  </header>
+
+  <div class='with-left-nav' id='page'>
+    <nav class='nav-left'>
+      <div class='inner'>
+        {toc}
+      </div>
+    </nav>
+    <div class='container-fluid'>
+      <div class="sheet current">
+        <div class="container-shadow">
+          <div id="content">
+            <div class='content-header'>
+              <h1>{title}</h1>
+            </div>
+            {content}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer id='page-footer'>
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='span3'>
+        </div>
+        <div class='footer_content span9'>
+          <p>
+            <a href="https://github.com/hitobito" target="_blank">Quellcode</a> verfügbar unter der
+            <a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU Affero General Public License</a>
+            <br> Entwickelt von
+            <a href="http://puzzle.ch" target="_blank">Puzzle ITC</a> 2012 - 2015
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

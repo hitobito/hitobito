@@ -75,6 +75,7 @@ end
 group :development do
   gem 'bullet'
   gem 'quiet_assets'
+  gem 'redcarpet'
   gem 'request_profiler'
 end
 

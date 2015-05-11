@@ -29,6 +29,7 @@ rails_best_practices_output.html
 rubocop-results.xml
 doc/models.png
 doc/app
+doc/architecture/architecture.html
 spec/reports
 
 

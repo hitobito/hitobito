@@ -1,5 +1,10 @@
+-#  Copyright (c) 2015, insieme Schweiz. This file is part of
+-#  hitobito_insieme and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_insieme.
+
 - if entry.role_types.present?
-  = field_set_tag t('.additional_information') do
-    %p= t('.explain_application_questions')
+  = field_set_tag t('events.form.additional_information') do
+    %p= t('events.form.explain_application_questions')
 
     = f.nested_fields_for :questions, 'event/questions/fields'

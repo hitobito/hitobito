@@ -1,14 +1,19 @@
+-#  Copyright (c) 2015, insieme Schweiz. This file is part of
+-#  hitobito_insieme and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_insieme.
+
 - if entry.participant_types.present?
   = field_set_tag Event::Application.model_name.human do
     = f.labeled_input_fields(*entry.used_attributes(:application_opening_at, :application_closing_at, :application_conditions, :maximum_participants))
 
     - entry.used?(:external_applications) do
-      = f.labeled_boolean_field(:external_applications, caption: t('.caption_external_applications'))
+      = f.labeled_boolean_field(:external_applications, caption: t('events.form..caption_external_applications'))
 
     - entry.used?(:priorization) do
-      = f.labeled_boolean_field(:priorization, caption: t('.caption_prioritization'))
+      = f.labeled_boolean_field(:priorization, caption: t('events.form..caption_prioritization'))
 
     - application_approve_role_exists? && entry.used?(:requires_approval) do
-      = f.labeled_boolean_field(:requires_approval, caption: t('.caption_requires_approval'))
+      = f.labeled_boolean_field(:requires_approval, caption: t('events.form..caption_requires_approval'))
 
     = render_extensions 'application_fields', locals: { f: f }

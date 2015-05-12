@@ -155,6 +155,7 @@ Application.updateApplicationMarketCount = ->
 eventDateFormats = ['YYYY/MM/DD', 'YYYY-MM-DD', 'YYYY.MM.DD', 'D/M/YY', 'D\M\YY',
                     'D-M-YY', 'DD-MM-YYYY', 'D.M.YY', 'D.M.YYYY', 'DD.MM.YYYY', 'D MMM YY']
 validateEventDatesFields = (event) ->
+  fieldSet = $(event.target).closest('fieldset')
   fields = $(event.target).closest('.fields')
   startAtDateField = $('.date:nth(0)', fields)
   startAtHourField = $('.time:nth(0)', fields)
@@ -176,7 +177,7 @@ validateEventDatesFields = (event) ->
       set({hour: startAtHourField.val(), minute: startAtMinField.val()})
     if !startAt.isValid()
       # invalid start date
-      $('<span class="help-inline">' + $('#start_at_invalid_message').val() + '</span>').insertAfter(startAtMinField)
+      $('<span class="help-inline">' + fieldSet.data('start-at-invalid-message') + '</span>').insertAfter(startAtMinField)
       startAtGroup.addClass('error')
 
   if finishAtDateField.val().trim()
@@ -184,13 +185,13 @@ validateEventDatesFields = (event) ->
       set({hour: finishAtHourField.val(), minute: finishAtMinField.val()})
     if !finishAt.isValid()
       # invalid finish date
-      $('<span class="help-inline">' + $('#finish_at_invalid_message').val() + '</span>').insertAfter(finishAtMinField)
+      $('<span class="help-inline">' + fieldSet.data('finish-at-invalid-message') + '</span>').insertAfter(finishAtMinField)
       finishAtGroup.addClass('error')
 
   if startAt && startAt.isValid() && finishAt && finishAt.isValid() &&
      !startAt.isSame(finishAt) && !startAt.isBefore(finishAt)
     # finish date is before start date
-    $('<span class="help-inline">' + $('#before_message').val() + '</span>').insertAfter(finishAtMinField)
+    $('<span class="help-inline">' + fieldSet.data('before-message') + '</span>').insertAfter(finishAtMinField)
     finishAtGroup.addClass('error')
 
 

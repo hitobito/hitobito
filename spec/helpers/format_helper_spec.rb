@@ -145,6 +145,52 @@ describe FormatHelper do
     end
   end
 
+  describe '#format_number' do
+    context 'Fixnums' do
+      it 'should print small values unchanged' do
+        expect(format_number(10)).to eq('10')
+      end
+
+      it 'should print large values with delimiters' do
+        expect(format_number(10_000_000)).to eq('10&#39;000&#39;000')
+      end
+    end
+
+    context 'Floats' do
+      it 'should add two digits' do
+        expect(format_number(1.0)).to eq('1.00')
+      end
+
+      it 'should truncate to two digits' do
+        expect(format_number(3.14159)).to eq('3.14')
+      end
+
+      it 'should add delimiters' do
+        expect(format_number(12345.6789)).to eq('12&#39;345.68')
+      end
+    end
+
+    context 'nil' do
+      it 'should print an empty string' do
+        expect(format_number(nil)).to eq(FormatHelper::EMPTY_STRING)
+      end
+    end
+
+    context 'Strings' do
+      it 'should print small integer strings unchanged' do
+        expect(format_number('10')).to eq('10')
+      end
+
+      it 'should print large integer strings with delimiters' do
+        expect(format_number('10000000')).to eq('10&#39;000&#39;000')
+      end
+
+      it 'should convert any other string to integer' do
+        expect(format_number('blah blah')).to eq('0')
+      end
+    end
+  end
+
   describe '#column_type' do
     let(:model) { crud_test_models(:AAAAA) }
 

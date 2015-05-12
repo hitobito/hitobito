@@ -15,6 +15,7 @@ module FormatHelper
   ################  FORMATTING HELPERS  ##################################
 
   # Formats a single value
+  # (integers are not formatted, since years etc. should not contain delimiters)
   def f(value)
     case value
     when Float, BigDecimal then
@@ -59,9 +60,20 @@ module FormatHelper
     end.gsub(/\//, '_')  # deal with nested models
   end
 
+  # Formats decimals and integers
+  def format_number(value)
+    case value
+    when Float, BigDecimal then
+      number_with_precision(value, precision: t('number.format.precision'),
+                                   delimiter: t('number.format.delimiter'))
+    when nil then EMPTY_STRING
+    else
+      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter'))
+    end
+  end
+
 
   ##############  STANDARD HTML SECTIONS  ############################
-
 
   # Renders an arbitrary content with the given label. Used for uniform presentation.
   def labeled(label, content = nil, &block)

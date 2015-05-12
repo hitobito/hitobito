@@ -31,6 +31,18 @@ module FormatHelper
     end
   end
 
+  # Formats single decimal and integer values
+  def fnumber(value)
+    case value
+    when Float, BigDecimal then
+      number_with_precision(value, precision: t('number.format.precision'),
+                                   delimiter: t('number.format.delimiter'))
+    when nil then EMPTY_STRING
+    else
+      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter'))
+    end
+  end
+
   # Formats an arbitrary attribute of the given ActiveRecord object.
   # If no specific format_{type}_{attr} or format_{attr} method is found,
   # formats the value as follows:
@@ -58,18 +70,6 @@ module FormatHelper
     else
       "format_#{obj.class.name.underscore}_#{attr}"
     end.gsub(/\//, '_')  # deal with nested models
-  end
-
-  # Formats decimals and integers
-  def format_number(value)
-    case value
-    when Float, BigDecimal then
-      number_with_precision(value, precision: t('number.format.precision'),
-                                   delimiter: t('number.format.delimiter'))
-    when nil then EMPTY_STRING
-    else
-      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter'))
-    end
   end
 
 

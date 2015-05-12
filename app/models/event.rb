@@ -95,8 +95,8 @@ class Event < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates :dates, presence: { message: 'müssen ausgefüllt werden' }
-  validates :group_ids, presence: { message: 'müssen vorhanden sein' }
+  validates :dates, presence: { message: :must_exist }
+  validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,
             timeliness: { type: :date, allow_blank: true }
   validates :description, :location, :application_conditions,

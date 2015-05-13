@@ -17,6 +17,7 @@ namespace :doc do
     markdown = read_markdown_files(dir)
     html = build_document(markdown, title)
     write_html_file(html, dir)
+    copy_assets(dir)
   end
 
   def read_markdown_files(dir)
@@ -25,7 +26,7 @@ namespace :doc do
   end
 
   def build_document(markdown, title)
-    html = File.read(Rails.root.join('doc', 'skeleton.html'))
+    html = File.read(Rails.root.join('doc', 'template', 'skeleton.html'))
     html.gsub!('{title}', title)
     html.gsub!('{toc}', generate_toc(markdown))
     html.gsub!('{content}', generate_html(markdown))
@@ -38,6 +39,10 @@ namespace :doc do
   def write_html_file(html, dir)
     file = Rails.root.join('doc', dir, "#{dir}.html")
     File.write(file, html)
+  end
+
+  def copy_assets(dir)
+    FileUtils.cp(Dir[Rails.root.join('doc', 'template', '*.css')], Rails.root.join('doc', dir))
   end
 
   def generate_html(markdown)

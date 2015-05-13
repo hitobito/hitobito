@@ -313,6 +313,7 @@ GEM
       json (~> 1.4)
     rdoc-tags (1.3)
       rdoc (~> 4)
+    redcarpet (3.2.3)
     ref (1.0.5)
     request_profiler (0.0.4)
       ruby-prof
@@ -529,6 +530,7 @@ DEPENDENCIES
   rails_code_qa
   rails_config
   rdoc-tags
+  redcarpet
   request_profiler
   rspec-collection_matchers
   rspec-its

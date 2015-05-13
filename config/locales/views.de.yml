@@ -418,6 +418,7 @@ de:
       updated: 'Dein Passwort wurde geändert. Du bist jetzt angemeldet.'
       updated_not_active: 'Dein Passwort wurde geändert.'
       send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen können."
+      no_token: 'Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest.'
       new:
         reset_password_button: 'Passwort zurücksetzen'
     confirmations:

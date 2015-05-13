@@ -42,7 +42,9 @@ namespace :doc do
   end
 
   def copy_assets(dir)
-    FileUtils.cp(Dir[Rails.root.join('doc', 'template', '*.css')], Rails.root.join('doc', dir))
+    assets = Rails.root.join('doc', dir, 'assets')
+    FileUtils.mkdir_p(assets)
+    FileUtils.cp(Dir[Rails.root.join('doc', 'template', '*.{css,png}')], assets)
   end
 
   def generate_html(markdown)

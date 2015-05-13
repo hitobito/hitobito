@@ -30,7 +30,7 @@ rubocop-results.xml
 doc/models.png
 doc/app
 doc/architecture/architecture.html
-doc/architecture/*.css
+doc/architecture/assets/**/*
 spec/reports
 
 

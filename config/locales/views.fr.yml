@@ -327,6 +327,7 @@ fr:
       updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'
       updated_not_active: 'Ton mot de passe a été modifié.'
       send_paranoid_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
+      no_token: 'Vous ne pouvez accéder à cette page qu''en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l''URL en entier.'
       new:
         reset_password_button: 'Réinitialiser le mot de passe'
     confirmations:

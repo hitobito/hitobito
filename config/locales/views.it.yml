@@ -1,52 +1,48 @@
 it:
   global:
-    'yes': "sì"
-    'no': "no"
-    unknown: sconosciuto
-    from: da
-    until: a
-    no_list_entries: nessuna voce relativa è stata trovata
-    confirm_delete: vuole veramente cancellare questa voce?
+    'yes': "Si"
+    'no': "No"
+    unknown: Sconosciuto
+    from: Dal
+    until: Al
+    no_list_entries: Nessuna risultato.
+    confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
     gender:
       male: maschile
       female: femminile
-      male_short: m
-      female_short: f
+      male_short: M
+      female_short: F
     associations:
       no_entry: (nessuna)
       none_available: (nessuna disponibile)
-      please_select: prego scegliere
-      add: aggiungere annotazione
-      add_with_model: 'aggiungere %{model}'
-      remove: eliminare
+      please_select: Scegliere
+      add: Aggiungere annotazione
+      add_with_model: 'Aggiungere %{model}'
+      remove: Eliminare
     button:
-      save: salvare
-      cancel: interrompere
-      search: cercare
-      back: indietro
-      refresh: attualizzare
-      print: stampare
+      save: Salvare
+      cancel: Interrompere
+      search: Cercare
+      back: Indietro
+      refresh: Aggiornare
+      print: Stampare
     link:
-      show: 'mostrare
-
-        visualizzare'
-      edit: 'elaborare
-
-        modificare'
-      add: "creare %{model}"
-      add_without_model: creare
-      delete: cancellare
-      list: lista
+      show: Visualizzare
+      edit: Modificare
+      add: "Creare %{model}"
+      add_without_model: Creare
+      delete: Cancellare
+      list: Lista
     errors:
       header:
         one: 'Un errore impediscono il salvataggio della tua registrazione'
-        other: "%{count} errori impediscono il salvataggio della tua registrazione\n "
+        other: '%{count} errori impediscono il salvataggio:'
     tabs:
-      info: informazioni
+      info: Informazioni
     search:
-      placeholder: 'cercare...'
-      placeholder_with_model: 'cercare %{model} ...'
+      placeholder: 'Cercare...'
+      placeholder_with_model: 'Cercare %{model} ...'
   list:
     index:
       title: '%{models}'
@@ -54,89 +50,89 @@ it:
     show:
       title: "%{model}"
     new:
-      title: "creare %{model}"
+      title: "Inserire %{model}"
     edit:
-      title: "modificare %{model}"
+      title: "Modificare %{model}"
     create:
       flash:
-        success: "%{model} è stato creato con successo."
+        success: "%{model} è stato salvato con successo."
     update:
       flash:
-        success: "%{model} è stato attualizzato con successo."
+        success: "%{model} è stato modificato con successo."
     destroy:
       flash:
-        success: "%{model} è stato cancellato con successo"
-        failure: "%{model} non può essere cancellato"
+        success: "%{model} è stato cancellato con successo."
+        failure: "%{model} non può essere cancellato."
   contactable:
     address_or_email: "%{address} o %{email}"
     fields:
-      zip_town: CAP/luogo
+      zip_town: NAP / luogo
     public_check_box:
-      tooltip: Annotazioni private sono visibili solo al proprio gruppo. Annotazione marcate come pubbliche sono visibili anche agli animatori di altri gruppi, se tu stesso sei un animatore.
+      tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
     social_account_fields:
-      placeholder_value: sito internet, nome Skype, profilo...
-      placeholder_type: tipo (Skype, Facebook...)
+      placeholder_value: Sito internet, nome skype, profilo...
+      placeholder_type: Tipo (Skype, Facebook...)
     additional_email_fields:
-      placeholder_value: e-mail
-      placeholder_type: Denominazione (privato, lavoro, ...)
+      placeholder_value: Email
+      placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
   participations:
     destroy:
       flash:
-        success: l'iscrizione è stata cancellata con successo.
+        success: L'iscrizione è stata cancellata con successo.
   csv_imports:
     description:
-      header: files CSV
-      explain_csv_format: 'un file CSV contiene in ogni sua riga i dati di una persona. La prima riga contiene i campi per i nomi. I singoli campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere completato con le virgolette ("). Esempio:'
+      header: Documento CSV
+      explain_csv_format: 'Ogni riga del documento CSV contiene i dati di una persona. La prima riga contiene i nomi dei  campi. I campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere racchiuso tra virgolette ("). Esempio:'
       example: |
-        nome, cognome, email, luogo, genere
-        Gianni, Modello, gianni@modello.ch, Berna, m
-        Maria, Bernasconi, maria@esempio.net, "Zurigo, New York", f
+        nome, cognome, email, luogo, sesso
+        Gigi, Piantoni, gigi@piantoni.ch, Comano, m
+        Jolanda, Busecca, j@busecca.org, "Zurigo, New York", f
       explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
       explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo
       special_fields: Valori speciali per i campi
-      explain_special_fields_html: 'I campi seguenti devono contenere uno dei valori <em>corsivo</em> '
+      explain_special_fields_html: 'I campi seguenti devono contenere uno dei valori in <em>corsivo</em> '
     preview_table:
-      icon_tooltip_invalid: 'valori non validi'
-      icon_tooltip_updated: 'viene attualizzato'
-      icon_tooltip_created: 'viene registrato nuovamente'
+      icon_tooltip_invalid: 'Valori non validi'
+      icon_tooltip_updated: 'Viene aggiornato'
+      icon_tooltip_created: 'Viene registrato nuovamente'
     define_mapping:
-      choose_role: 'scegliere un ruolo'
-      choose_role_help: 'a tutte le persone importate viene assegnato questo ruolo'
-      assign_columns_to_fields: 'assegnare le colonne ai campi'
-      column_from_csv: 'colonna dal CSV'
-      field_in_database: 'campo in un banca dati'
-      preview: 'anteprima'
-      update_behaviour: Metodo di attualizzazione
-      keep_behaviour: 'Attualizzare solo i campi vuoti nel database con i dati del CSV; i valori già esistenti vengono mantenuti.'
+      choose_role: 'Scegliere un ruolo'
+      choose_role_help: 'Tutte le persone importate ricevono questo ruolo'
+      assign_columns_to_fields: 'Assegnare le colonne ai campi'
+      column_from_csv: 'Colonna CSV'
+      field_in_database: 'Campo in un banca dati'
+      preview: 'Anteprima'
+      update_behaviour: Metodo di aggiornamento
+      keep_behaviour: 'Aggiornare solo i campi vuoti nel database con i dati del CSV; i valori già esistenti vengono mantenuti.'
       override_behaviour: 'Sovrascrivere i valori già esistenti nel database con i dati del CSV. I valori vuoti nel CSV cancellano in questo caso i valori esistenti nel database.'
-      update_behaviour_explanation: 'Questo comportamento si applica unicamente alle persone già esistenti nel database. Nuove persone vengono sempre create in totale corrispondenza ai dati del CSV.'
+      update_behaviour_explanation: 'Questa funzione si applica unicamente alle persone già esistenti nel database. Nuove persone vengono sempre create in totale corrispondenza ai dati del CSV.'
     new:
-      upload_button: 'caricare'
-      csv_file: 'file CSV'
-    invalid_file: selezionare un file CSV valido.
+      upload_button: 'Caricare'
+      csv_file: 'Documento CSV'
+    invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
       one: '%{list} è stato assegnato più volte.'
       other: '%{list} sono stati assegnati più volte.'
     preview:
-      import_now_button: importare ora le persone
-      import_details_html: le persone seguenti vengono importate con il ruolo<strong>%{role}</strong> nel gruppo<strong> %{group}</strong>.
+      import_now_button: Importare le persone
+      import_details_html: Le persone seguenti sono importate con il ruolo<strong>%{role}</strong> nel gruppo<strong> %{group}</strong>.
       new:
-        one: '%{count} %{role} viene nuovamente importato.'
-        other: '%{count} %{role} vengono nuovamente importati.'
+        one: 'È importato %{count} %{role}.'
+        other: 'Sono importati %{count} %{role}.'
       updated:
-        one: '%{count} %{role} viene attualizzato.'
-        other: '%{count} %{role} vengono attualizzati.'
+        one: '%{count} %{role} è aggiornato.'
+        other: '%{count} %{role} sono aggiornati.'
       failed:
-        one: '%{count} %{role} non viene importato.'
-        other: '%{count} %{role} non vengono importati.'
+        one: '%{count} %{role} non è importato.'
+        other: '%{count} %{role} non sono importati.'
     create:
       new:
         one: '%{count} %{role} è stato importato con successo.'
         other: '%{count} %{role} sono stati importati con successo.'
       updated:
-        one: '%{count} %{role} è stato attualizzato con successo.'
-        other: '%{count} %{role} sono stati attualizzati con successo.'
+        one: '%{count} %{role} è stato aggiornato con successo.'
+        other: '%{count} %{role} sono stati aggiornati con successo.'
       failed:
         one: '%{count} %{role} non è stato importato.'
         other: '%{count} %{role} non sono stati importati.'
@@ -145,93 +141,93 @@ it:
     role_changed: '%{full_entry_label} cambiato in <i>%{new_role}</i>.'
     role_changed_to_group: '%{full_entry_label} in <i>%{new_role}</i> in <i>%{new_group}</i> modificato.'
     form:
-      add_role_for_person: 'creare un ruolo per %{person} '
-      edit_role_for_person: 'modificare il ruolo per %{person} '
+      add_role_for_person: 'Inserire un ruolo per %{person} '
+      edit_role_for_person: 'Modificare il ruolo per %{person} '
     fields:
-      help_optional_label: designazione opzionale delruolo di questa persona
+      help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
-      create_new_person: registrare una nuova persona
-      search_existing_person: cercare persona esistente
+      create_new_person: Inserire una nuova persona
+      search_existing_person: Cercare persona esistente
       text_with_alternative_link_html: "%{text} <small>o %{link}</small>"
     info:
       role_has_permissions: "Il ruolo %{role} nel gruppo %{group} prevede le seguenti autorizzazioni:"
       role_only_public: >
-        l ruolo %{role} nel gruppo %{group} può vedere solo i dati pubblici (gruppi,
-        eventi e abbonamenti; nessuna altra persona ).
+        l ruolo %{role} nel gruppo %{group} può visualizzare solo i dati pubblici
+        (gruppi, eventi e abbonamenti; nessuna altra persona ).
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   people:
-    send_password_instructions: le informazioni per il login sono state spedite.
+    send_password_instructions: Le informazioni per il login sono state spedite.
     years_old: (%{years} anni)
     tabs:
-      history: svolgimento
-      log: log
+      history: Azioni
+      log: Log
     actions_show:
-      send_login: inviare login
+      send_login: Inviare login
       send_login_tooltip:
-        new: La persona non ha ancora nessun accesso. <br><br> Questa operazione vi invierà un link dove potrete mettere la vostra password.
-        resend: La persona ha ricevuto un link per inserire la password, ma non l'ha ancora fatto. <br><br> Questa operazione invierà nuovamente il link.
-        reset: La persona ha un login. <br><br> Questa operazione vi invierà un link dove potrete mettere la vostra nuova password.
+        new: La persona non ha ancora nessun accesso. <br><br> Questa operazione invierà un link dove potrete impostare la vostra password.
+        resend: La persona ha ricevuto un link per impostare la password, ma non l'ha ancora fatto. <br><br> Questa operazione invierà nuovamente il link.
+        reset: La persona ha un login. <br><br> Questa operazione vi invierà un link dove potrete impostare una nuova nuova password.
     actions_index:
-      import_list: importare lista
+      import_list: Importare lista
     attrs:
-      additional_data: Ulteriori informazioni
+      additional_data: Informazioni supplementari
       events: I miei prossimi eventi
     email_field:
-      used_as_login: Verrà utilizzato come login
+      used_as_login: Sarà utilizzato come login
       only_changeable_by_superior: >
         L'indirizzo email principale di una persona con più ruoli può essere cambiato
         unicamente da un utente che è superiore a tutti questi ruoli.
     fields:
-      format_birthday: (dd.mm.yyyy)
+      format_birthday: (gg.mm.aaaa)
     list:
       number_of_people_shown:
         one: "%{count} persona visualizzata."
         other: "%{count} persone visualizzate."
       number_of_people_hidden:
-        one: "%{count} un'altra persona non è visibile per te."
+        one: "Un'altra persona non è visibile per te."
         other: "%{count} altre persone non sono visibili per te."
     log:
-      no_changes: Fino ad ora non è stata registrata nessuna modifica.
+      no_changes: Fino a ora non è stata registrata nessuna modifica.
     pdf:
-      cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette
+      cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
     roles:
-      title: ruoli attivi
+      title: Ruoli attivi
     roles_aside:
-      set_main_group: collocare il gruppo principale
+      set_main_group: Impostare il gruppo principale
   people_filters:
     form:
-      save_search: salvare la ricerca
-      save_filter: salvare il filtro
-      save_filter_placeholder: indicare un nome per salvare questo filtro
-      prompt_role_selection: quali ruolo devono essere visualizzati?
+      save_search: Salvare la ricerca
+      save_filter: Salvare il filtro
+      save_filter_placeholder: Indicare un nome per salvare questo filtro
+      prompt_role_selection: Quali ruolo devono essere visualizzati?
     new:
-      title: filtro per le persone
+      title: Filtro per le persone
   group:
     merge:
       select:
-        title: 'raggruppare %{group} '
+        title: 'Raggruppare %{group} '
         explanation: Raggruppando due gruppi, tutti i sottogruppi, gli eventi e le persone unitamente ai ruoli di entrambii gruppo vengono uniti. Gli abbonamenti non vengono rilevati. I gruppi distinti esistenti fino a questo momento potranno essere ancora visualizzati sotto "cancellati".
-        merge_is_irreversible: questo processo non può essere annullato!
-        new_group_name: 'nome del nuovo gruppo'
-        merge_group_with: 'raggruppare %{group} con'
-        merge_button: 'raggruppare gruppo'
+        merge_is_irreversible: Questo processo non può essere annullato!
+        new_group_name: 'Nome del nuovo gruppo'
+        merge_group_with: 'Raggruppare %{group} con'
+        merge_button: 'Raggruppare gruppo'
     move:
       select:
-        title: "spostare gruppo"
-        select_group: "prego scegliere il gruppo che deve essere spostato."
+        title: "Spostare gruppo"
+        select_group: "Scegliere il gruppo che deve essere spostato."
   groups:
-    reactivated: "il gruppo <i>%{group}</i> è stato riattivato con successo."
-    subgroups: 'sottogruppi'
+    reactivated: "Il gruppo <i>%{group}</i> è stato riattivato con successo."
+    subgroups: 'Sottogruppi'
     form:
-      help_contact: 'utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
+      help_contact: 'Utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
     actions_show:
-      export_subgroups: 'sottogruppi CSV'
-      reactivate: 'riattivare'
+      export_subgroups: 'Sottogruppi CSV'
+      reactivate: 'Riattivare'
     attrs:
-      contact_details: 'dati di contatto'
-      additional_information: 'altri dati'
+      contact_details: 'Dati di contatto'
+      additional_information: 'Altri dati'
     tabs:
-      deleted: 'cancellato'
+      deleted: 'Cancellato'
   group/merge:
     success: 'I gruppi selezionati sono stati raggruppati nel nuovo gruppo %{new_group_name}.'
     failure: 'I gruppi selezionati non possono venir raggruppati.'

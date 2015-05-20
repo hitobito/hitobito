@@ -31,6 +31,7 @@ fr:
         must_have_same_type: Doivent être de type identique
         greater_than: doit être plus grand que %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
+        must_exist: Doivent exister
       models:
         custom_content:
           attributes:

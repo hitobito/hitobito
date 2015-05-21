@@ -13,9 +13,9 @@ describe MailRelayJob do
 
   it 'relays mails and gets rescheduled' do
     Settings.email.retriever.config.address = 'localhost'
-    MailRelay::Lists.should_receive(:relay_current)
+    expect(MailRelay::Lists).to receive(:relay_current)
     subject.perform
-    subject.delayed_jobs.should be_exists
+    expect(subject.delayed_jobs).to be_exists
   end
 
   its(:parameters) { should be_blank }

@@ -54,7 +54,7 @@ describe Export::Csv::Events::List do
 
     context 'headers' do
       subject { csv.first }
-      it { should match(/^Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
+      it { is_expected.to match(/^Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$/) }
     end
 
     context 'first row' do
@@ -71,7 +71,7 @@ describe Export::Csv::Events::List do
         # the case with predefined states is tested in the jubla wagon.
 
         context 'present' do
-          its([5]) { should eq 'somestate' }
+          its([5]) { is_expected.to eq 'somestate' }
         end
 
         context 'empty' do
@@ -82,7 +82,7 @@ describe Export::Csv::Events::List do
           let(:csv) { Export::Csv::Generator.new(list).csv.split("\n")  }
           subject { csv.second.split(';') }
 
-          its([5]) { should eq '' }
+          its([5]) { is_expected.to eq '' }
         end
       end
 
@@ -91,26 +91,26 @@ describe Export::Csv::Events::List do
         let(:finish_at) { Date.parse 'Wed, 12 Jun 2013' }
         let(:date) { Fabricate(:event_date, event: course, start_at: start_at, finish_at: finish_at, location: 'somewhere') }
 
-        before { course.stub(dates: [date]) }
-        its([7]) { should eq 'Hauptanlass' }
-        its([8]) { should eq 'somewhere' }
-        its([9]) { should eq '09.06.2013 - 12.06.2013' }
-        its([10]) { should eq '' }
+        before { allow(course).to receive(:dates).and_return([date]) }
+        its([7]) { is_expected.to eq 'Hauptanlass' }
+        its([8]) { is_expected.to eq 'somewhere' }
+        its([9]) { is_expected.to eq '09.06.2013 - 12.06.2013' }
+        its([10]) { is_expected.to eq '' }
       end
 
       context 'contact' do
         let(:person) { Fabricate(:person_with_address_and_phone) }
         before { course.contact = person }
-        its([16]) { should eq person.to_s }
-        its([21]) { should eq person.phone_numbers.first.to_s }
-        its([21]) { should_not eq '' }
+        its([16]) { is_expected.to eq person.to_s }
+        its([21]) { is_expected.to eq person.phone_numbers.first.to_s }
+        its([21]) { is_expected.to_not eq '' }
       end
 
       context 'leader' do
         let(:participation) { Fabricate(:event_participation, event: course) }
         let!(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation).person }
-        its([22]) { should_not eq '' }
-        its([22]) { should eq leader.to_s }
+        its([22]) { is_expected.to_not eq '' }
+        its([22]) { is_expected.to eq leader.to_s }
       end
     end
 
@@ -165,7 +165,9 @@ describe Export::Csv::Events::List do
     let(:course) { Fabricate(:course) }
     let(:courses) { [course, course, course, course] }
     subject { Export::Csv::Generator.new(list).csv.split("\n") }
-    it { should have(5).rows }
+    it 'has 5 rows' do
+      expect(subject.size).to eq(5)
+    end
   end
 
 end

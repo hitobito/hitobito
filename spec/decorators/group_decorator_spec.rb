@@ -28,24 +28,24 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe 'selecting attributes' do
     before do
-      subject.stub(h: context)
-      model.stub_chain(:class, :attr_used?) { |val| val }
+      allow(subject).to receive_messages(h: context)
+      allow(model).to receive_message_chain(:class, :attr_used?) { |val| val }
     end
 
     it '#used_attributes selects via .attr_used?' do
-      model.class.should_receive(:attr_used?).twice
-      subject.used_attributes(:foo, :bar).should eq %w(foo bar)
+      expect(model.class).to receive(:attr_used?).twice
+      expect(subject.used_attributes(:foo, :bar)).to eq %w(foo bar)
     end
 
     it '#modifiable_attributes we can :modify_superior' do
-      context.should_receive(:can?).with(:modify_superior, subject).and_return(true)
-      subject.modifiable_attributes(:foo, :bar).should eq %w(foo bar)
+      expect(context).to receive(:can?).with(:modify_superior, subject).and_return(true)
+      expect(subject.modifiable_attributes(:foo, :bar)).to eq %w(foo bar)
     end
 
     it '#modifiable_attributes filters attributes if we cannot :modify_superior' do
-      model.class.stub(superior_attributes: [:foo])
-      context.should_receive(:can?).with(:modify_superior, subject).and_return(false)
-      subject.modifiable_attributes(:foo, :bar).should eq %w(bar)
+      allow(model.class).to receive_messages(superior_attributes: [:foo])
+      expect(context).to receive(:can?).with(:modify_superior, subject).and_return(false)
+      expect(subject.modifiable_attributes(:foo, :bar)).to eq %w(bar)
     end
   end
 

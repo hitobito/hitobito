@@ -38,12 +38,12 @@ describe Event::Application do
 
       it 'does not include non rejected appliations' do
         application = Fabricate(:event_application, priority_1: course, participation: participation, rejected: false)
-        should == []
+        is_expected.to eq([])
       end
 
       it 'does not include rejected applications' do
         application = Fabricate(:event_application, priority_1: course, participation: participation, rejected: true)
-        should == []
+        is_expected.to eq([])
       end
 
     end
@@ -53,12 +53,12 @@ describe Event::Application do
 
       it 'does not include rejected appliations' do
         application = Fabricate(:event_application, priority_1: course, rejected: true, participation: participation)
-        should == []
+        is_expected.to eq([])
       end
 
       it 'includes non reject applications' do
         application = Fabricate(:event_application, priority_1: course, rejected: false, participation: participation)
-        should == [application]
+        is_expected.to eq([application])
       end
     end
   end

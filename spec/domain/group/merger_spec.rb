@@ -28,35 +28,35 @@ describe Group::Merger do
 
     it 'creates a new group and merges roles, events' do
       merge = Group::Merger.new(group1, group2, 'foo')
-      merge.group2_valid?.should eq true
+      expect(merge.group2_valid?).to eq true
 
       merge.merge!
 
       new_group = Group.find(merge.new_group.id)
-      new_group.name.should eq 'foo'
-      new_group.type.should eq merge.new_group.type
+      expect(new_group.name).to eq 'foo'
+      expect(new_group.type).to eq merge.new_group.type
 
-      new_group.children.count.should eq 3
+      expect(new_group.children.count).to eq 3
 
-      new_group.events.count.should eq 3
+      expect(new_group.events.count).to eq 3
 
-      new_group.roles.count.should eq 4
+      expect(new_group.roles.count).to eq 4
 
       # recent groups
       expect { Group.without_deleted.find(group1.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Group.without_deleted.find(group2.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      group1.children.count.should eq 0
-      group2.children.count.should eq 0
-      group1.roles.count.should eq 0
-      group2.roles.count.should eq 0
-      group1.events.count.should eq 2
-      group2.events.count.should eq 1
+      expect(group1.children.count).to eq 0
+      expect(group2.children.count).to eq 0
+      expect(group1.roles.count).to eq 0
+      expect(group2.roles.count).to eq 0
+      expect(group1.events.count).to eq 2
+      expect(group2.events.count).to eq 1
 
       # the recent role should have been soft-deleted
-      @person.reload.roles.only_deleted.count.should eq 1
+      expect(@person.reload.roles.only_deleted.count).to eq 1
 
       # last but not least, check nested set integrity
-      Group.should be_valid
+      expect(Group).to be_valid
     end
 
     it 'should raise an error if one tries to merge to groups with different types/parent' do
@@ -70,7 +70,7 @@ describe Group::Merger do
       merge.merge!
 
       e.reload
-      e.group_ids.should =~ [group1, group2, merge.new_group].collect(&:id)
+      expect(e.group_ids).to match_array([group1, group2, merge.new_group].collect(&:id))
     end
 
     it 'updates layer_group_id for children' do
@@ -78,8 +78,8 @@ describe Group::Merger do
       merge.merge!
 
       new_group = Group.find(merge.new_group.id)
-      group1.children.map(&:layer_group_id).uniq.should eq [new_group.id]
-      group2.children.map(&:layer_group_id).uniq.should eq [new_group.id]
+      expect(group1.children.map(&:layer_group_id).uniq).to eq [new_group.id]
+      expect(group2.children.map(&:layer_group_id).uniq).to eq [new_group.id]
     end
 
   end

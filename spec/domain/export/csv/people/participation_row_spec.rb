@@ -15,13 +15,13 @@ describe Export::Csv::People::ParticipationRow do
   let(:row) { Export::Csv::People::ParticipationRow.new(participation) }
   subject { row }
 
-  it { row.fetch(:first_name).should eq 'Top' }
-  it { row.fetch(:roles).should be_blank }
-  it { row.fetch(:participation_additional_information).should be_blank }
+  it { expect(row.fetch(:first_name)).to eq 'Top' }
+  it { expect(row.fetch(:roles)).to be_blank }
+  it { expect(row.fetch(:participation_additional_information)).to be_blank }
 
   context 'with additional information' do
     before { participation.update_attribute(:additional_information, 'foobar') }
-    it { row.fetch(:participation_additional_information).should eq 'foobar' }
+    it { expect(row.fetch(:participation_additional_information)).to eq 'foobar' }
   end
 
   context 'with roles' do
@@ -29,7 +29,7 @@ describe Export::Csv::People::ParticipationRow do
       Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
       Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
     end
-    it { row.fetch(:roles).should eq 'Hauptleitung, Leitung' }
+    it { expect(row.fetch(:roles)).to eq 'Hauptleitung, Leitung' }
   end
 
   context 'with answers' do
@@ -41,7 +41,7 @@ describe Export::Csv::People::ParticipationRow do
       participation.reload
     end
     it 'has answer for first question' do
-      row.fetch(:"question_#{question.id}").should be_present
+      expect(row.fetch(:"question_#{question.id}")).to be_present
     end
   end
 end

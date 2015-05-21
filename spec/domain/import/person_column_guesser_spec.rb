@@ -36,7 +36,7 @@ describe  Import::PersonColumnGuesser do
 
   context 'matching' do
     before do
-      Import::Person.stub(fields: [
+      allow(Import::Person).to receive_messages(fields: [
         {key: 'other_name', value: 'Anderer Name'},
         {key: 'name', value: 'Name'}
       ])

@@ -29,30 +29,30 @@ describe Event::ApplicationsController do
     describe 'PUT approve' do
       before { put :approve, group_id: group.id, event_id: event.id, id: application.id }
 
-      it { should redirect_to(group_event_participation_path(group, event, participation)) }
+      it { is_expected.to redirect_to(group_event_participation_path(group, event, participation)) }
 
       it 'sets flash' do
-        flash[:notice].should =~ /freigegeben/
+        expect(flash[:notice]).to match(/freigegeben/)
       end
 
       it 'approves application' do
-        application.reload.should be_approved
-        application.reload.should_not be_rejected
+        expect(application.reload).to be_approved
+        expect(application.reload).not_to be_rejected
       end
     end
 
     describe 'DELETE reject' do
       before { delete :reject, group_id: group.id, event_id: event.id, id: application.id }
 
-      it { should redirect_to(group_event_participation_path(group, event, participation)) }
+      it { is_expected.to redirect_to(group_event_participation_path(group, event, participation)) }
 
       it 'sets flash' do
-        flash[:notice].should =~ /abgelehnt/
+        expect(flash[:notice]).to match(/abgelehnt/)
       end
 
       it 'rejects application' do
-        application.reload.should be_rejected
-        application.reload.should_not be_approved
+        expect(application.reload).to be_rejected
+        expect(application.reload).not_to be_approved
       end
     end
   end

@@ -103,6 +103,10 @@ en:
       column_from_csv: 'Column from CSV'
       field_in_database: 'Field in database'
       preview: 'Preview'
+      update_behaviour: Update behavior
+      keep_behaviour: 'Only update empty values in the database with the values from the CSV file, existing values are preserved.'
+      override_behaviour: 'Overwrite existing values in the database with the values from the CSV file. Empty values in the CSV file will delete existing values in the database.'
+      update_behaviour_explanation: 'This behavior only applies to persons already existing in the database. New persons are created with the data from the CSV file.'
     new:
       upload_button: 'Upload'
       csv_file: 'CSV file'
@@ -159,6 +163,10 @@ en:
       log: log
     actions_show:
       send_login: Send login
+      send_login_tooltip:
+        new: The person does not have a login.<br><br>This action sends a link to set a password.
+        resend: The person has received a link to set a password, but did not set one.<br><br>This action resends the link.
+        reset: Person has a login.<br><br>This action sends a link to reset the password.
     actions_index:
       import_list: Import list
     attrs:
@@ -169,6 +177,15 @@ en:
       only_changeable_by_superior: >
         The main e-mail address of a person with multiple roles can only be changed
         by a superordinate user.
+    fields:
+      format_birthday: (dd.mm.yyy)
+    list:
+      number_of_people_shown:
+        one: "%{count} person displayed."
+        other: "%{count} persons displayed."
+      number_of_people_hidden:
+        one: "%{count} more person is not visible for you."
+        other: "%{count} more persons are not visible for you."
     log:
       no_changes: So far, no changes were recorded.
     pdf:
@@ -302,11 +319,14 @@ en:
       signed_out: 'You are now logged out.'
       new:
         sign_in: Sign in
+      form:
+        sign_in: 'Sign in'
     passwords:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to reset your password.'
       updated: 'Your password has been changed. You''re now logged in.'
       updated_not_active: 'Your password has been changed.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."
+      no_token: 'You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
       new:
         reset_password_button: 'Reset password'
     confirmations:
@@ -416,6 +436,7 @@ en:
       register:
         title: Collect contact data
       index:
+        sign_in: Register
         login: Login
         no_login: Do not have a Login?
       email_check:
@@ -467,9 +488,14 @@ en:
       help_additional_sender: 'In addition to the administrators this e-mail may also send messages to the mailing list.'
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
+      caption_anyone_may_post: 'Any senders may write to the mailing list'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
+    subscribers_may_post: 'Subscribers may write to the mailing list'
+    subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
+    anyone_may_post: 'Anyone may write to the mailing list'
+    anyone_may_not_post: 'An arbitrary sender may <strong>not</strong> write to the mailing list'
     subscribe: 'Log in'
     unsubscribe: 'Log off'
   paper_trail/version_decorator:
@@ -497,6 +523,11 @@ en:
     entire_layer: 'Whole level'
     entire_group: 'Whole group'
     new_filter: 'New filter...'
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: All Persons
+      teamers: Leaders
+      participants: Participants
   sheet/csv_import:
     title: 'Import person via CSV'
   sheet/group:

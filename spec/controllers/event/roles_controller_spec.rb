@@ -28,8 +28,8 @@ describe Event::RolesController do
     it 'builds participation with answers' do
       role = assigns(:role)
       participation = role.participation
-      participation.event_id.should == course.id
-      participation.answers.should have(2).items
+      expect(participation.event_id).to eq(course.id)
+      expect(participation.answers.size).to eq(2)
     end
 
   end
@@ -42,14 +42,14 @@ describe Event::RolesController do
         post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
 
         role = assigns(:role)
-        role.should be_persisted
-        role.should be_kind_of(Event::Role::Leader)
+        expect(role).to be_persisted
+        expect(role).to be_kind_of(Event::Role::Leader)
         participation = role.participation
-        participation.event_id.should == course.id
-        participation.person_id.should == user.id
-        participation.answers.should have(2).items
-        flash[:notice].should eq 'Rolle <i>Hauptleitung</i> für <i>Top Leader</i> wurde erfolgreich erstellt.'
-        should redirect_to(edit_group_event_participation_path(group, course, participation))
+        expect(participation.event_id).to eq(course.id)
+        expect(participation.person_id).to eq(user.id)
+        expect(participation.answers.size).to eq(2)
+        expect(flash[:notice]).to eq 'Rolle <i>Hauptleitung</i> für <i>Top Leader</i> wurde erfolgreich erstellt.'
+        is_expected.to redirect_to(edit_group_event_participation_path(group, course, participation))
       end
     end
 
@@ -67,11 +67,11 @@ describe Event::RolesController do
         end.to change { Event::Participation.count }.by(0)
 
         role = assigns(:role)
-        role.should be_persisted
-        role.should be_kind_of(Event::Role::Leader)
-        role.participation.should == participation
-        participation.answers.should have(0).items # o items as we didn't create any in the before block
-        should redirect_to(group_event_participations_path(group, course))
+        expect(role).to be_persisted
+        expect(role).to be_kind_of(Event::Role::Leader)
+        expect(role.participation).to eq(participation)
+        expect(participation.answers.size).to eq(0) # o items as we didn't create any in the before block
+        is_expected.to redirect_to(group_event_participations_path(group, course))
       end
     end
 
@@ -87,9 +87,9 @@ describe Event::RolesController do
           event_role: { label: 'Foo' }
 
       role = Event::Role.find(role.id)
-      role.should be_kind_of(Event::Role::Leader)
-      role.label.should eq 'Foo'
-      should redirect_to(group_event_participation_path(group, course, role.participation_id))
+      expect(role).to be_kind_of(Event::Role::Leader)
+      expect(role.label).to eq 'Foo'
+      is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
 
     it 'may change type for teamers' do
@@ -101,8 +101,8 @@ describe Event::RolesController do
           event_role: { type: Event::Role::Cook.sti_name }
 
       role = Event::Role.find(role.id)
-      role.should be_kind_of(Event::Role::Cook)
-      should redirect_to(group_event_participation_path(group, course, role.participation_id))
+      expect(role).to be_kind_of(Event::Role::Cook)
+      is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
 
     it 'may not change type for teamers to participant' do
@@ -114,8 +114,8 @@ describe Event::RolesController do
           event_role: { type: Event::Course::Role::Participant.sti_name }
 
       role = Event::Role.find(role.id)
-      role.should be_kind_of(Event::Role::Leader)
-      should redirect_to(group_event_participation_path(group, course, role.participation_id))
+      expect(role).to be_kind_of(Event::Role::Leader)
+      is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
 
 
@@ -129,8 +129,8 @@ describe Event::RolesController do
           event_role: { type: Event::Role::Cook.sti_name }
 
       role = Event::Role.find(role.id)
-      role.should be_kind_of(Event::Course::Role::Participant)
-      should redirect_to(group_event_participation_path(group, course, role.participation_id))
+      expect(role).to be_kind_of(Event::Course::Role::Participant)
+      is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
   end
 

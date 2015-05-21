@@ -20,23 +20,23 @@ describe Duration do
 
 
     context 'between start finish' do
-      it { should be_cover(now) }
+      it { is_expected.to be_cover(now) }
     end
 
     context 'without finish' do
       let(:finish) { nil }
-      it { should be_cover(now) }
+      it { is_expected.to be_cover(now) }
     end
 
     context 'without start' do
       let(:start) { nil }
-      it { should be_cover(now) }
+      it { is_expected.to be_cover(now) }
     end
 
     context 'without start or finish' do
       let(:start) { nil }
       let(:finish) { nil }
-      it { should_not be_cover(now) }
+      it { is_expected.not_to be_cover(now) }
     end
   end
 
@@ -48,7 +48,7 @@ describe Duration do
       let(:finish) { Time.zone.parse('2013-10-12 09:30') }
 
       it 'returns number of days including start and finish' do
-        should eq 3
+        is_expected.to eq 3
       end
     end
 
@@ -57,7 +57,7 @@ describe Duration do
       let(:finish) { nil }
 
       it 'defaults to 1' do
-        should eq 1
+        is_expected.to eq 1
       end
     end
   end

@@ -13,7 +13,7 @@ describe LabelFormatsController, type: :controller do
 
   class << self
     def it_should_redirect_to_show
-      it { should redirect_to label_formats_path(returning: true) }
+      it { is_expected.to redirect_to label_formats_path(returning: true) }
     end
   end
 

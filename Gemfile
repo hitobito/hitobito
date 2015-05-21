@@ -64,7 +64,7 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'binding_of_caller'
-  gem 'rspec-rails', '~> 2.14.0'
+  gem 'rspec-rails'
   gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
@@ -75,16 +75,18 @@ end
 group :development do
   gem 'bullet'
   gem 'quiet_assets'
+  gem 'redcarpet'
   gem 'request_profiler'
 end
 
 group :test do
-  gem 'capybara', '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
+  gem 'capybara' #, '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
-  gem 'rspec-notify-osd'
+  gem 'rspec-its'
+  gem 'rspec-collection_matchers'
   gem 'selenium-webdriver'
 end
 

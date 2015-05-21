@@ -30,7 +30,7 @@ describe Event::QualificationsController do
   before { sign_in(people(:top_leader)) }
 
   it 'event kind has one qualification kind' do
-    event.kind.qualification_kinds('qualification', 'participant').should eq [qualification_kinds(:sl)]
+    expect(event.kind.qualification_kinds('qualification', 'participant')).to eq [qualification_kinds(:sl)]
   end
 
 
@@ -45,8 +45,8 @@ describe Event::QualificationsController do
         get :index, group_id: group.id, event_id: event.id
       end
 
-      it { assigns(:participants).should have(2).items }
-      it { assigns(:leaders).should have(1).items }
+      it { expect(assigns(:participants).size).to eq(2) }
+      it { expect(assigns(:leaders).size).to eq(1) }
     end
 
     context 'for regular event' do
@@ -77,8 +77,8 @@ describe Event::QualificationsController do
           expect do
             put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
           end.to change { Qualification.count }.by(1)
-          should have(1).items
-          should render_template('qualification')
+          expect(subject.size).to eq(1)
+          is_expected.to render_template('qualification')
         end
       end
 
@@ -89,8 +89,8 @@ describe Event::QualificationsController do
           expect do
             put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
           end.not_to change { Qualification.count }
-          should have(1).items
-          should render_template('qualification')
+          expect(subject.size).to eq(1)
+          is_expected.to render_template('qualification')
         end
       end
 
@@ -99,8 +99,10 @@ describe Event::QualificationsController do
     context 'without existing qualifications for participant' do
       before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
 
-      it { should have(1).item }
-      it { should render_template('qualification') }
+      it 'has 1 item' do
+        expect(subject.size).to eq(1)
+      end
+      it { is_expected.to render_template('qualification') }
     end
 
     context 'without existing qualifications for leader' do
@@ -108,8 +110,8 @@ describe Event::QualificationsController do
 
       it 'should obtain a qualification' do
         obtained = obtained_qualifications(leader_1)
-        obtained.should have(1).item
-        obtained.should render_template('qualification')
+        expect(obtained.size).to eq(1)
+        expect(obtained).to render_template('qualification')
       end
     end
   end
@@ -124,8 +126,10 @@ describe Event::QualificationsController do
         delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
 
-      it { should have(0).items }
-      it { should render_template('qualification') }
+      it 'has no items' do
+        expect(subject.size).to eq(0)
+      end
+      it { is_expected.to render_template('qualification') }
     end
 
     context 'with one existing qualification' do
@@ -136,8 +140,10 @@ describe Event::QualificationsController do
         delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
       end
 
-      it { should have(0).items }
-      it { should render_template('qualification') }
+      it 'has no items' do
+        expect(subject.size).to eq(0)
+      end
+      it { is_expected.to render_template('qualification') }
     end
   end
 

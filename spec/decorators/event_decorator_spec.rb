@@ -19,13 +19,13 @@ describe EventDecorator, :draper_with_helpers do
 
   context 'typeahead label' do
     subject { EventDecorator.new(event).as_typeahead[:label] }
-    it { should eq "#{event} (#{event.groups.first})" }
+    it { is_expected.to eq "#{event} (#{event.groups.first})" }
 
     context 'multiple groups are joined and truncated' do
       before do event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
                                  groups(:bottom_layer_two), groups(:bottom_group_two_one)] end
 
-      it { should eq "#{event} (Top, TopGroup, Bottom One...)" }
+      it { is_expected.to eq "#{event} (Top, TopGroup, Bottom One...)" }
     end
   end
 
@@ -36,50 +36,50 @@ describe EventDecorator, :draper_with_helpers do
     it 'joins multiple dates' do
       add_date(start_at: '2002-01-01')
       add_date(start_at: '2002-01-01')
-      subject.dates_info.should eq '01.01.2002<br />01.01.2002'
+      expect(subject.dates_info).to eq '01.01.2002<br />01.01.2002'
     end
 
     context 'date objects'  do
       it 'start_at only' do
         add_date(start_at: '2002-01-01')
-        subject.dates_info.should eq '01.01.2002'
+        expect(subject.dates_info).to eq '01.01.2002'
       end
 
       it 'start and finish' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-13')
-        subject.dates_info.should eq '01.01.2002 - 13.01.2002'
+        expect(subject.dates_info).to eq '01.01.2002 - 13.01.2002'
       end
 
       it 'start and finish on same day' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-01')
-        subject.dates_info.should eq '01.01.2002'
+        expect(subject.dates_info).to eq '01.01.2002'
       end
     end
 
     context 'time objects' do
       it 'start_at only' do
         add_date(start_at: '2002-01-01 13:30')
-        subject.dates_info.should eq '01.01.2002 13:30'
+        expect(subject.dates_info).to eq '01.01.2002 13:30'
       end
 
       it 'start and finish' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-13 15:30')
-        subject.dates_info.should eq '01.01.2002 13:30 - 13.01.2002 15:30'
+        expect(subject.dates_info).to eq '01.01.2002 13:30 - 13.01.2002 15:30'
       end
 
       it 'start and finish on same day, start time' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-01 13:30')
-        subject.dates_info.should eq '01.01.2002 00:00 - 13:30'
+        expect(subject.dates_info).to eq '01.01.2002 00:00 - 13:30'
       end
 
       it 'start and finish on same day, finish time' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-01 13:30')
-        subject.dates_info.should eq '01.01.2002 13:30'
+        expect(subject.dates_info).to eq '01.01.2002 13:30'
       end
 
       it 'start and finish on same day, both times' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-01 15:30')
-        subject.dates_info.should eq '01.01.2002 13:30 - 15:30'
+        expect(subject.dates_info).to eq '01.01.2002 13:30 - 15:30'
       end
     end
 
@@ -153,13 +153,13 @@ describe EventDecorator, :draper_with_helpers do
     context 'event does not support external applications' do
       before { event.update_column(:external_applications, false) }
 
-      it { should eq 'nicht möglich' }
+      it { is_expected.to eq 'nicht möglich' }
     end
 
     context 'event supports external applications' do
       before { event.update_column(:external_applications, true) }
 
-      it { should =~ /register/ }
+      it { is_expected.to match(/register/) }
     end
 
   end

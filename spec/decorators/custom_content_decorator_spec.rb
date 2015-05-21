@@ -16,7 +16,7 @@ describe CustomContentDecorator, :draper_with_helpers  do
       let(:content)   { custom_contents(:login) }
 
       it 'lists available placeholders in string' do
-        should eq 'Verfügbare Platzhalter: {login-url}, {user}'
+        is_expected.to eq 'Verfügbare Platzhalter: {login-url}, {user}'
       end
     end
 
@@ -24,7 +24,7 @@ describe CustomContentDecorator, :draper_with_helpers  do
       let(:content)   { CustomContent.new }
 
       it 'informs when no placeholders are available' do
-        should eq 'Keine Platzhalter vorhanden'
+        is_expected.to eq 'Keine Platzhalter vorhanden'
       end
     end
   end

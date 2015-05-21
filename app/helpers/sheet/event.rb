@@ -16,7 +16,9 @@ module Sheet
 
     tab 'events.tabs.participants',
         :group_event_participations_path,
-        if: :index_participations,
+        if: lambda { |view, _group, event|
+          event.participant_types.present? && view.can?(:index_participations, event)
+        },
         alt: [:group_event_roles_path],
         params: { returning: true }
 

@@ -25,7 +25,7 @@ describe Event::PreconditionChecker do
 
   describe 'defaults' do
     its(:course_minimum_age) { should be_blank }
-    its(:valid?) { should be_true }
+    its(:valid?) { should be_truthy }
   end
 
   describe 'minimum age person' do
@@ -33,25 +33,25 @@ describe Event::PreconditionChecker do
     let(:too_young_error) { 'Altersgrenze von 16 unterschritten.' }
 
     context 'has no birthday' do
-      its(:valid?) { should be_false }
+      its(:valid?) { should be_falsey }
       its('errors_text.last') { should eq too_young_error }
     end
 
     context 'is younger than 16' do
       before { person.birthday = (course_start_at.beginning_of_year - 15.years) }
-      its(:valid?) { should be_false }
+      its(:valid?) { should be_falsey }
       its('errors_text.last') { should eq too_young_error }
     end
 
     context 'is 16 years during course' do
       before { person.birthday = course_start_at - 16.years }
-      its(:valid?) { should be_true }
+      its(:valid?) { should be_truthy }
       its('errors') { should be_empty }
     end
 
     context 'is 16 years end of year' do
       before { person.birthday = course_start_at.end_of_year - 16.years }
-      its(:valid?) { should be_true }
+      its(:valid?) { should be_truthy }
       its('errors') { should be_empty }
     end
   end
@@ -67,23 +67,23 @@ describe Event::PreconditionChecker do
     end
 
     context "person without 'super lead'" do
-      its(:valid?) { should be_false }
+      its(:valid?) { should be_falsey }
       its('errors_text.last') { should =~ /Super Lead/ }
     end
 
     context "person with expired 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
-      its(:valid?) { should be_false }
+      its(:valid?) { should be_falsey }
 
       context "'super lead kind' reactivateable in range" do
         before { sl.update_attribute(:reactivateable, Date.today.year - expired_date.year) }
-        its(:valid?) { should be_true }
+        its(:valid?) { should be_truthy }
       end
     end
 
     context "person with valid 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
-      its(:valid?) { should be_true }
+      its(:valid?) { should be_truthy }
       its(:errors_text) { should == [] }
     end
 
@@ -92,7 +92,7 @@ describe Event::PreconditionChecker do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
       end
-      its(:valid?) { should be_true }
+      its(:valid?) { should be_truthy }
       its(:errors_text) { should == [] }
     end
 
@@ -102,7 +102,7 @@ describe Event::PreconditionChecker do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: course_start_at - 1.day)
       end
 
-      its(:valid?) { should be_true }
+      its(:valid?) { should be_truthy }
     end
 
     context 'multiple preconditions' do
@@ -118,7 +118,7 @@ describe Event::PreconditionChecker do
       context 'missing only one' do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
-        its(:valid?) { should be_false }
+        its(:valid?) { should be_falsey }
         its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead$/ }
       end
     end

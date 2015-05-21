@@ -15,13 +15,13 @@ describe 'qualifications/_form.html.haml' do
     assign(:group, group)
     assign(:person, person)
     path_args = [group, person, qualification]
-    view.stub(parents: [group, person], entry: qualification, path_args: path_args)
+    allow(view).to receive_messages(parents: [group, person], entry: qualification, path_args: path_args)
   end
   subject { Capybara::Node::Simple.new(rendered) }
   it 'translates form fields' do
     render
-    should have_content 'Qualifikation'
-    should have_content 'Seit'
+    is_expected.to have_content 'Qualifikation'
+    is_expected.to have_content 'Seit'
   end
 
 end

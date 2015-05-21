@@ -18,8 +18,8 @@ describe Devise::PasswordsController do
   describe '#create' do
     it '#create with invalid email invalid password' do
       post :create, person: { email: 'asdf' }
-      last_email.should_not be_present
-      controller.resource.errors[:email].should eq ['nicht gefunden']
+      expect(last_email).not_to be_present
+      expect(controller.resource.errors[:email]).to eq ['nicht gefunden']
     end
 
     context 'with login permission' do
@@ -27,16 +27,16 @@ describe Devise::PasswordsController do
 
       it '#create shows invalid password' do
         post :create, person: { email: person.email }
-        flash[:notice].should eq 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
-        last_email.should be_present
+        expect(flash[:notice]).to eq 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
+        expect(last_email).to be_present
       end
     end
 
     context 'without login permission' do
       it '#create shows invalid password' do
         post :create, person: { email: 'not-existing@example.com' }
-        last_email.should_not be_present
-        flash[:alert].should eq  'Du bist nicht berechtigt, Dich hier anzumelden.'
+        expect(last_email).not_to be_present
+        expect(flash[:alert]).to eq  'Du bist nicht berechtigt, Dich hier anzumelden.'
       end
     end
 

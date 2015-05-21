@@ -56,30 +56,30 @@ describe PeopleController do
         context 'default sort' do
           it "sorts by name" do
             get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
-            assigns(:people).collect(&:id).should == [@tg_extern, top_leader,  @tg_member].collect(&:id)
+            expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
           end
 
           it "people.default_sort setting can override it to sort by role" do
-            Settings.people.stub(default_sort: 'role')
+            allow(Settings.people).to receive_messages(default_sort: 'role')
             get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
-            assigns(:people).collect(&:id).should == [top_leader,  @tg_member, @tg_extern].collect(&:id)
+            expect(assigns(:people).collect(&:id)).to eq([top_leader,  @tg_member, @tg_extern].collect(&:id))
           end
         end
 
         it "sorts based on last_name" do
           get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :last_name, sort_dir: :asc
-          assigns(:people).collect(&:id).should == [@tg_extern, top_leader,  @tg_member].collect(&:id)
+          expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
         end
 
         it "sorts based on roles" do
           get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :roles, sort_dir: :asc
-          assigns(:people).should == [top_leader,  @tg_member, @tg_extern]
+          expect(assigns(:people)).to eq([top_leader,  @tg_member, @tg_extern])
         end
 
         %w(first_name nickname zip_code town).each do |attr|
           it "sorts based on #{attr}" do
             get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: attr, sort_dir: :asc
-            assigns(:people).should == [@tg_member, top_leader,  @tg_extern]
+            expect(assigns(:people)).to eq([@tg_member, top_leader,  @tg_extern])
           end
         end
       end
@@ -88,70 +88,70 @@ describe PeopleController do
         it 'loads all members of a group' do
           get :index, group_id: group
 
-          assigns(:people).collect(&:id).should =~ [top_leader, @tg_member].collect(&:id)
+          expect(assigns(:people).collect(&:id)).to match_array([top_leader, @tg_member].collect(&:id))
         end
 
         it 'loads externs of a group when type given' do
           get :index, group_id: group, role_type_ids: [Role::External.id].join('-')
 
-          assigns(:people).collect(&:id).should =~ [@tg_extern].collect(&:id)
+          expect(assigns(:people).collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
 
         it 'loads selected roles of a group when types given' do
           get :index, group_id: group, role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join('-')
 
-          assigns(:people).collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
+          expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
 
         it 'generates pdf labels' do
           get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
 
-          @response.content_type.should == 'application/pdf'
-          people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+          expect(@response.content_type).to eq('application/pdf')
+          expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
         end
 
         it 'exports address csv files' do
           get :index, group_id: group, format: :csv
 
-          @response.content_type.should == 'text/csv'
-          @response.body.should =~ /^Vorname;Nachname;.*Privat/
-          @response.body.should =~ /^Top;Leader;.*/
-          @response.body.should =~ /123/
-          @response.body.should_not =~ /skypefoo/
-          @response.body.should_not =~ /Zusätzliche Angaben/
-          @response.body.should_not =~ /Mobile/
+          expect(@response.content_type).to eq('text/csv')
+          expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
+          expect(@response.body).to match(/^Top;Leader;.*/)
+          expect(@response.body).to match(/123/)
+          expect(@response.body).not_to match(/skypefoo/)
+          expect(@response.body).not_to match(/Zusätzliche Angaben/)
+          expect(@response.body).not_to match(/Mobile/)
         end
 
         it 'exports full csv files' do
           get :index, group_id: group, details: true, format: :csv
 
-          @response.content_type.should == 'text/csv'
-          @response.body.should =~ /^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/
-          @response.body.should =~ /^Top;Leader;.*;bla bla/
-          @response.body.should =~ /123;456;.*facefoo;skypefoo/
+          expect(@response.content_type).to eq('text/csv')
+          expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
+          expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
+          expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
         end
 
         it 'renders email addresses' do
           get :index, group_id: group, format: :email
-          @response.content_type.should == 'text/plain'
-          @response.body.should == "top_leader@example.com,#{@tg_member.email}"
+          expect(@response.content_type).to eq('text/plain')
+          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
         end
 
         it 'renders email addresses with additional ones' do
           e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
           Fabricate(:additional_email, contactable: @tg_member, mailings: false)
           get :index, group_id: group, format: :email
-          @response.body.should == "top_leader@example.com,#{@tg_member.email},#{e1.email}"
+          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
         end
 
-        context :json do
+        context 'json' do
           render_views
 
           it 'renders json with only the one role in this group' do
             get :index, group_id: group, format: :json
             json = JSON.parse(@response.body)
             person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-            person['links']['roles'].should have(1).item
+            expect(person['links']['roles'].size).to eq(1)
           end
         end
       end
@@ -165,8 +165,9 @@ describe PeopleController do
           it 'loads group members when no types given' do
             get :index, group_id: group, kind: 'layer'
 
-            assigns(:people).collect(&:id).should =~
+            expect(assigns(:people).collect(&:id)).to match_array(
               [people(:bottom_member), @bl_leader].collect(&:id)
+            )
           end
 
           it 'loads selected roles of a group when types given' do
@@ -174,7 +175,7 @@ describe PeopleController do
                         role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-'),
                         kind: 'layer'
 
-            assigns(:people).collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
+            expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
           end
 
           it 'exports full csv when types given and ability exists' do
@@ -184,11 +185,11 @@ describe PeopleController do
                         details: true,
                         format: :csv
 
-            @response.content_type.should == 'text/csv'
-            @response.body.should =~ /^Vorname;Nachname;.*Zusätzliche Angaben/
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*Zusätzliche Angaben/)
           end
 
-          context :json do
+          context 'json' do
             render_views
 
             it 'renders json with only the one role in this group' do
@@ -198,7 +199,7 @@ describe PeopleController do
                           format: :json
               json = JSON.parse(@response.body)
               person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-              person['links']['roles'].should have(2).item
+              expect(person['links']['roles'].size).to eq(2)
             end
           end
         end
@@ -213,10 +214,10 @@ describe PeopleController do
                         details: true,
                         format: :csv
 
-            @response.content_type.should == 'text/csv'
-            @response.body.should =~ /^Vorname;Nachname;.*/
-            @response.body.should_not =~ /Zusätzliche Angaben/
-            @response.body.split("\n").should have(2).items
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*/)
+            expect(@response.body).not_to match(/Zusätzliche Angaben/)
+            expect(@response.body.split("\n").size).to eq(2)
           end
         end
       end
@@ -227,7 +228,7 @@ describe PeopleController do
         it 'loads group members when no types are given' do
           get :index, group_id: group, kind: 'deep'
 
-          assigns(:people).collect(&:id).should =~ []
+          expect(assigns(:people).collect(&:id)).to match_array([])
         end
 
         it 'loads selected roles of a group when types given' do
@@ -235,10 +236,10 @@ describe PeopleController do
                       role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
                       kind: 'deep'
 
-          assigns(:people).collect(&:id).should =~ [@bg_leader, @tg_member, @tg_extern].collect(&:id)
+          expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
 
-        context :json do
+        context 'json' do
           render_views
 
           it 'renders json with only the one role in this group' do
@@ -248,7 +249,7 @@ describe PeopleController do
                         format: :json
             json = JSON.parse(@response.body)
             person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-            person['links']['roles'].should have(2).item
+            expect(person['links']['roles'].size).to eq(2)
           end
         end
       end
@@ -261,8 +262,8 @@ describe PeopleController do
         Fabricate(:person, last_name: 'Anything')
         get :query, q: 'pas'
 
-        response.body.should =~ /Pascal/
-        response.body.should =~ /Opassum/
+        expect(response.body).to match(/Pascal/)
+        expect(response.body).to match(/Opassum/)
       end
     end
 
@@ -272,7 +273,7 @@ describe PeopleController do
 
       it 'as admin updates email with password' do
         put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
-        assigns(:person).email.should == 'foo@example.com'
+        expect(assigns(:person).email).to eq('foo@example.com')
       end
 
       context 'as bottom leader' do
@@ -281,13 +282,13 @@ describe PeopleController do
         it 'updates email for person in one group' do
           person.update_column(:encrypted_password, nil)
           put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
-          assigns(:person).email.should == 'foo@example.com'
+          expect(assigns(:person).email).to eq('foo@example.com')
         end
 
         it 'does not update email for person in multiple groups' do
           Fabricate(Group::BottomLayer::Member.name.to_sym, person: person, group: groups(:bottom_layer_two))
           put :update, group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' }
-          assigns(:person).email.should == 'bottom_member@example.com'
+          expect(assigns(:person).email).to eq('bottom_member@example.com')
         end
 
         it 'does not update password for other person' do
@@ -295,7 +296,7 @@ describe PeopleController do
           put :update, group_id: group.id,
                        id: person.id,
                        person: { password: 'yadayada', password_confirmation: 'yadayada' }
-          person.reload.encrypted_password.should eq encrypted
+          expect(person.reload.encrypted_password).to eq encrypted
         end
 
         it 'create new phone numbers' do
@@ -308,13 +309,13 @@ describe PeopleController do
                                        { number: '031 111 1111', translated_label: 'Privat', public: 1 },
                                      '222' =>
                                        { number: '', translated_label: 'Arbeit', public: 1 }  } }
-            assigns(:person).should be_valid
+            expect(assigns(:person)).to be_valid
           end.to change { PhoneNumber.count }.by(1)
-          person.reload.phone_numbers.should have(1).item
+          expect(person.reload.phone_numbers.size).to eq(1)
           number = person.phone_numbers.first
-          number.number.should eq '031 111 1111'
-          number.label.should eq 'Privat'
-          number.public.should be_true
+          expect(number.number).to eq '031 111 1111'
+          expect(number.label).to eq 'Privat'
+          expect(number.public).to be_truthy
         end
 
         it 'updates existing phone numbers' do
@@ -327,8 +328,8 @@ describe PeopleController do
                                      { number: '031 111 2222', translated_label: 'Privat', public: 0, id: n.id } } }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
-          number.number.should eq '031 111 2222'
-          number.public.should be_false
+          expect(number.number).to eq '031 111 2222'
+          expect(number.public).to be_falsey
         end
 
         it 'updates existing phone numbers in other language' do
@@ -352,9 +353,9 @@ describe PeopleController do
           I18n.locale = I18n.default_locale
 
           number = person.reload.phone_numbers.first
-          number.number.should eq '031 111 2222'
-          number.label.should eq 'Mutter'
-          number.public.should be_false
+          expect(number.number).to eq '031 111 2222'
+          expect(number.label).to eq 'Mutter'
+          expect(number.public).to be_falsey
         end
 
         it 'destroys existing phone numbers' do
@@ -366,7 +367,7 @@ describe PeopleController do
                                    phone_numbers_attributes: { n.id.to_s =>
                                      { number: '031 111 1111', translated_label: 'Privat', public: 0, id: n.id, _destroy: true } } }
           end.to change { PhoneNumber.count }.by(-1)
-          person.reload.phone_numbers.should be_blank
+          expect(person.reload.phone_numbers).to be_blank
         end
 
         it 'destroys existing phone numbers when number is empty' do
@@ -378,7 +379,7 @@ describe PeopleController do
                                    phone_numbers_attributes: { n.id.to_s =>
                                      { number: '   ', translated_label: 'Privat', public: 0, id: n.id } } }
           end.to change { PhoneNumber.count }.by(-1)
-          person.reload.phone_numbers.should be_blank
+          expect(person.reload.phone_numbers).to be_blank
         end
 
         it 'create, update and destroys social accounts' do
@@ -397,19 +398,19 @@ describe PeopleController do
                                      '999' => { name: 'John',
                                                 translated_label: 'Twitter',
                                                 public: 0 }, } }
-            assigns(:person).should be_valid
+            expect(assigns(:person)).to be_valid
           end.not_to change { SocialAccount.count }
 
           accounts = person.reload.social_accounts.order(:label)
-          accounts.should have(2).items
+          expect(accounts.size).to eq(2)
           fb = accounts.first
-          fb.label.should eq 'Facebook'
-          fb.name.should eq 'Housi1'
-          fb.public.should be_true
+          expect(fb.label).to eq 'Facebook'
+          expect(fb.name).to eq 'Housi1'
+          expect(fb.public).to be_truthy
           tw = accounts.second
-          tw.label.should eq 'Twitter'
-          tw.name.should eq 'John'
-          tw.public.should be_false
+          expect(tw.label).to eq 'Twitter'
+          expect(tw.name).to eq 'John'
+          expect(tw.public).to be_falsey
         end
 
         it 'create, update and destroys additional emails' do
@@ -431,19 +432,19 @@ describe PeopleController do
                                      '999' => { email: 'John@example.com',
                                                 translated_label: 'Mutter',
                                                 public: 0 }, } }
-            assigns(:person).should be_valid
+            expect(assigns(:person)).to be_valid
           end.not_to change { AdditionalEmail.count }
 
           emails = person.reload.additional_emails.order(:label)
-          emails.should have(2).items
+          expect(emails.size).to eq(2)
           a = emails.first
-          a.label.should eq 'Arbeit'
-          a.email.should eq 'Housi1@example.com'
-          a.public.should be_true
+          expect(a.label).to eq 'Arbeit'
+          expect(a.email).to eq 'Housi1@example.com'
+          expect(a.public).to be_truthy
           tw = emails.second
-          tw.label.should eq 'Mutter'
-          tw.email.should eq 'John@example.com'
-          tw.public.should be_false
+          expect(tw.label).to eq 'Mutter'
+          expect(tw.email).to eq 'John@example.com'
+          expect(tw.public).to be_falsey
         end
 
         it 'create, update and destroys people relations' do
@@ -465,19 +466,19 @@ describe PeopleController do
                                                 kind: 'child' },
                                      '999' => { tail_id: p3.id,
                                                 kind: 'child' }, } }
-            assigns(:person).should be_valid
+            expect(assigns(:person)).to be_valid
           end.not_to change { PeopleRelation.count }
 
           relations = person.reload.relations_to_tails.order(:tail_id)
-          relations.should have(2).items
+          expect(relations.size).to eq(2)
           a = relations.first
-          a.tail_id.should eq p2.id
-          a.kind.should eq 'parent'
-          a.opposite.kind.should eq 'child'
+          expect(a.tail_id).to eq p2.id
+          expect(a.kind).to eq 'parent'
+          expect(a.opposite.kind).to eq 'child'
           b = relations.second
-          b.tail_id.should eq p3.id
-          b.kind.should eq 'child'
-          b.opposite.tail_id.should eq person.id
+          expect(b.tail_id).to eq p3.id
+          expect(b.kind).to eq 'child'
+          expect(b.opposite.tail_id).to eq person.id
         end
       end
     end
@@ -489,16 +490,16 @@ describe PeopleController do
       it 'generates pdf labels' do
         get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :pdf
 
-        @response.content_type.should == 'application/pdf'
-        people(:top_leader).reload.last_label_format.should == label_formats(:standard)
+        expect(@response.content_type).to eq('application/pdf')
+        expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
       end
 
       it 'exports csv file' do
         get :show, group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id, format: :csv
 
-        @response.content_type.should == 'text/csv'
-        @response.body.should =~ /^Vorname;Nachname/
-        @response.body.should =~ /^Top;Leader/
+        expect(@response.content_type).to eq('text/csv')
+        expect(@response.body).to match(/^Vorname;Nachname/)
+        expect(@response.body).to match(/^Top;Leader/)
       end
 
       context 'qualifications' do
@@ -509,22 +510,22 @@ describe PeopleController do
 
         it 'preloads data for asides, ordered by finish_at' do
           get :show, group_id: group.id, id: people(:top_leader).id
-          assigns(:qualifications).should eq [@ql_sl, @ql_gl]
+          expect(assigns(:qualifications)).to eq [@ql_sl, @ql_gl]
         end
       end
 
       context 'without group' do
-        context :html do
+        context 'html' do
           it 'keeps flash' do
             get :show, id: top_leader.id
-            should redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
+            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
           end
         end
 
-        context :json do
+        context 'json' do
           it 'redirects to json' do
             get :show, id: top_leader.id, format: :json
-            should redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
+            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
           end
         end
       end
@@ -545,7 +546,7 @@ describe PeopleController do
         expect do
           post :send_password_instructions, group_id: groups(:bottom_layer_one).id, id: person.id, format: :js
         end.to change { Delayed::Job.count }.by(1)
-        flash[:notice].should eq 'Login Informationen wurden verschickt.'
+        expect(flash[:notice]).to eq 'Login Informationen wurden verschickt.'
       end
     end
 
@@ -553,14 +554,14 @@ describe PeopleController do
       it 'sets primary group' do
         put :primary_group, group_id: group, id: top_leader.id, primary_group_id: group.id, format: :js
 
-        top_leader.reload.primary_group_id.should == group.id
-        should render_template('primary_group')
+        expect(top_leader.reload.primary_group_id).to eq(group.id)
+        is_expected.to render_template('primary_group')
       end
     end
 
   end
 
-  context :json do
+  context 'json' do
     render_views
 
     before do
@@ -576,16 +577,16 @@ describe PeopleController do
         get :index, group_id: group.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['links']['phone_numbers'].should have(2).items
-        person['links']['roles'].should have(1).item
+        expect(person['links']['phone_numbers'].size).to eq(2)
+        expect(person['links']['roles'].size).to eq(1)
       end
 
       it 'GET show contains all roles and all data' do
         get :show, group_id: group.id, id: top_leader.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['links']['phone_numbers'].should have(2).items
-        person['links']['roles'].should have(2).items
+        expect(person['links']['phone_numbers'].size).to eq(2)
+        expect(person['links']['roles'].size).to eq(2)
       end
     end
 
@@ -598,18 +599,18 @@ describe PeopleController do
         get :index, group_id: group.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['links']['phone_numbers'].should have(1).item
-        person['links']['phone_numbers'].first.should eq(@public_number.id.to_s)
-        person['links']['roles'].should have(1).item
+        expect(person['links']['phone_numbers'].size).to eq(1)
+        expect(person['links']['phone_numbers'].first).to eq(@public_number.id.to_s)
+        expect(person['links']['roles'].size).to eq(1)
       end
 
       it 'GET show contains only current roles and public data' do
         get :show, group_id: group.id, id: top_leader.id, format: :json
         json = JSON.parse(response.body)
         person = json['people'].first
-        person['links']['phone_numbers'].should have(1).item
-        person['links']['phone_numbers'].first.should eq(@public_number.id.to_s)
-        person['links']['roles'].should have(1).item
+        expect(person['links']['phone_numbers'].size).to eq(1)
+        expect(person['links']['phone_numbers'].first).to eq(@public_number.id.to_s)
+        expect(person['links']['roles'].size).to eq(1)
       end
     end
   end
@@ -618,18 +619,18 @@ describe PeopleController do
     describe 'GET #show' do
       it 'redirects when token is nil' do
         get :show, group_id: group.id, id: top_leader.id, user_token: '', user_email: top_leader.email
-        should redirect_to new_person_session_path
+        is_expected.to redirect_to new_person_session_path
       end
 
       it 'redirects when token is invalid' do
         get :show, group_id: group.id, id: top_leader.id, user_token: 'yadayada', user_email: top_leader.email
-        should redirect_to new_person_session_path
+        is_expected.to redirect_to new_person_session_path
       end
 
       it 'shows page when token is valid' do
         top_leader.generate_authentication_token!
         get :show, group_id: group.id, id: top_leader.id, user_token: top_leader.authentication_token, user_email: top_leader.email
-        should render_template('show')
+        is_expected.to render_template('show')
       end
 
       it 'shows page when headers are valid' do
@@ -637,7 +638,7 @@ describe PeopleController do
         @request.headers['X-User-Email'] = top_leader.email
         @request.headers['X-User-Token'] = top_leader.authentication_token
         get :show, group_id: group.id, id: top_leader.id
-        should render_template('show')
+        is_expected.to render_template('show')
       end
     end
 

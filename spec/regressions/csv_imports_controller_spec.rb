@@ -20,8 +20,8 @@ describe CsvImportsController, type: :controller do
   describe 'GET :new' do
     it 'renders template' do
       get :new, group_id: group.id
-      should render_template(:new)
-      should have_content 'Personen über CSV importieren'
+      is_expected.to render_template(:new)
+      is_expected.to have_content 'Personen über CSV importieren'
     end
   end
 
@@ -30,11 +30,11 @@ describe CsvImportsController, type: :controller do
     it 'renders template and flash' do
       file = Rack::Test::UploadedFile.new(path(:utf8), 'text/csv')
       post :define_mapping, group_id: group.id, csv_import: { file: file }
-      should render_template(:define_mapping)
-      should have_content '1 Datensatz erfolgreich gelesen.'
-      should have_content 'Rolle auswählen'
-      should have_content 'Spalten zu Feldern zuordnen'
-      subject.find_field('Vorname').find('option[selected]').text.should eq 'Vorname'
+      is_expected.to render_template(:define_mapping)
+      is_expected.to have_content '1 Datensatz erfolgreich gelesen.'
+      is_expected.to have_content 'Rolle auswählen'
+      is_expected.to have_content 'Spalten zu Feldern zuordnen'
+      expect(subject.find_field('Vorname').find('option[selected]').text).to eq 'Vorname'
     end
   end
 
@@ -45,7 +45,7 @@ describe CsvImportsController, type: :controller do
 
     it 'imports single person only' do
       expect { post :create, group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping }.to change(Person, :count).by(1)
-      should redirect_to group_people_path(group, name: 'Leader', role_type_ids: role_type.id)
+      is_expected.to redirect_to group_people_path(group, name: 'Leader', role_type_ids: role_type.id)
     end
   end
 
@@ -55,10 +55,10 @@ describe CsvImportsController, type: :controller do
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true)).merge(role: role_type)  }
 
     it 'imports single person only' do
-      expect { post :preview, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.not_to change(Person, :count).by(1)
-      should have_css 'table'
-      should have_button 'Personen jetzt importieren'
-      should have_button 'Zurück'
+      expect { post :preview, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.not_to change(Person, :count)
+      is_expected.to have_css 'table'
+      is_expected.to have_button 'Personen jetzt importieren'
+      is_expected.to have_button 'Zurück'
     end
   end
 

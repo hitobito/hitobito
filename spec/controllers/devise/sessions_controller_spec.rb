@@ -19,7 +19,7 @@ describe Devise::SessionsController do
     subject { person.roles.first }
     its(:type) { should eq 'Group::BottomGroup::Member' }
     specify 'person has only single role' do
-      person.roles.size.should eq 1
+      expect(person.roles.size).to eq 1
     end
   end
 
@@ -29,15 +29,15 @@ describe Devise::SessionsController do
     context '.html' do
       it 'sets flash for invalid login data' do
         post :create , person: { email: person.email, password: 'foobar' }
-        flash[:alert].should eq 'Ungültige Anmeldedaten.'
-        controller.send(:current_person).should_not be_present
+        expect(flash[:alert]).to eq 'Ungültige Anmeldedaten.'
+        expect(controller.send(:current_person)).not_to be_present
       end
 
       it 'logs in person even when they have no login permission' do
         post :create, person: { email: person.email, password: 'password' }
-        flash[:alert].should_not be_present
-        controller.send(:current_person).should be_present
-        controller.send(:current_person).authentication_token.should be_blank
+        expect(flash[:alert]).not_to be_present
+        expect(controller.send(:current_person)).to be_present
+        expect(controller.send(:current_person).authentication_token).to be_blank
       end
     end
 
@@ -47,21 +47,21 @@ describe Devise::SessionsController do
 
       it 'responds with unauthorized for wrong password' do
         post :create, person: { email: person.email, password: 'foobar' }, format: :json
-        response.status.should be(401)
-        person.reload.authentication_token.should be_blank
+        expect(response.status).to be(401)
+        expect(person.reload.authentication_token).to be_blank
       end
 
       it 'responds with user and new token' do
         post :create, person: { email: person.email, password: 'password' }, format: :json
-        response.body.should match(/^\{.*"authentication_token":".+"/)
-        assigns(:person).authentication_token.should be_present
+        expect(response.body).to match(/^\{.*"authentication_token":".+"/)
+        expect(assigns(:person).authentication_token).to be_present
       end
 
       it 'responds with user and existing token' do
         person.generate_authentication_token!
         post :create, person: { email: person.email, password: 'password' }, format: :json
-        response.body.should match(/^\{.*"authentication_token":"#{person.authentication_token}"/)
-        assigns(:person).authentication_token.should eq(person.authentication_token)
+        expect(response.body).to match(/^\{.*"authentication_token":"#{person.authentication_token}"/)
+        expect(assigns(:person).authentication_token).to eq(person.authentication_token)
       end
     end
   end

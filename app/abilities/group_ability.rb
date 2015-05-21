@@ -10,7 +10,7 @@ class GroupAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(Group) do
-    permission(:any).may(:read, :index_events, :index_mailing_lists).all
+    permission(:any).may(:read, :index_events, :'index_event/courses', :index_mailing_lists).all
     permission(:any).may(:deleted_subgroups).if_member
 
     permission(:contact_data).may(:index_people).all
@@ -20,12 +20,12 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_read).may(:index_people, :index_local_people).in_same_group
 
     permission(:group_full).
-      may(:index_full_people, :update, :reactivate, :export_events).
+      may(:index_full_people, :update, :reactivate, :export_events, :'export_event/courses').
       in_same_group
 
     permission(:layer_read).
       may(:show_details, :index_people, :index_local_people, :index_full_people,
-          :index_deep_full_people, :export_events).
+          :index_deep_full_people, :export_events, :'export_event/courses').
       in_same_layer
 
     permission(:layer_full).may(:create).with_parent_in_same_layer
@@ -34,7 +34,7 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
-          :export_subgroups, :export_events).
+          :export_subgroups, :export_events, :'export_event/courses').
       in_same_layer_or_below
     permission(:layer_and_below_read).may(:index_local_people).in_same_layer
 

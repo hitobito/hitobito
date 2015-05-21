@@ -32,7 +32,7 @@ describe Event::Answer do
     context 'valid array values (position + 1)' do
       let(:answer_param) { %w(1 2) }
       its(:answer) { should eq 'GA, Halbtax' }
-      it { should have(0).errors_on(:answer) }
+      it { is_expected.to have(0).errors_on(:answer) }
     end
 
     context 'values outside of array size' do

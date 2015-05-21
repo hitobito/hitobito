@@ -34,7 +34,7 @@ describe Event::Participation do
       before { subject.init_answers }
 
       it 'creates answers from event' do
-        subject.answers.collect(&:question).to_set.should == course.questions.to_set
+        expect(subject.answers.collect(&:question).to_set).to eq(course.questions.to_set)
       end
     end
 
@@ -56,8 +56,8 @@ describe Event::Participation do
             answers_attributes: [{ question_id: q[0].id, answer: 'ja' },
                                  { question_id: q[1].id, answer: 'nein' }] }
 
-      subject.additional_information.should == 'bla'
-      subject.answers.should have(2).items
+      expect(subject.additional_information).to eq('bla')
+      expect(subject.answers.size).to eq(2)
     end
 
     it 'assigns participation and answers for persisted record' do
@@ -72,9 +72,9 @@ describe Event::Participation do
             answers_attributes: [{ question_id: q[0].id, answer: 'ja' },
                                  { question_id: q[1].id, answer: 'nein' }] }
 
-      subject.person_id.should == p.id
-      subject.additional_information.should == 'bla'
-      subject.answers.should have(2).items
+      expect(subject.person_id).to eq(p.id)
+      expect(subject.additional_information).to eq('bla')
+      expect(subject.answers.size).to eq(2)
     end
   end
 

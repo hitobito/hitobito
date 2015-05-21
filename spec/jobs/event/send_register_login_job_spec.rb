@@ -24,14 +24,14 @@ describe Event::SendRegisterLoginJob do
 
   it 'creates reset password token' do
     subject.perform
-    person.reload.reset_password_token.should be_present
+    expect(person.reload.reset_password_token).to be_present
   end
 
   it 'sends email' do
     subject.perform
 
-    ActionMailer::Base.deliveries.should have(1).item
-    last_email.subject.should == 'Anmeldelink für Anlass'
+    expect(ActionMailer::Base.deliveries.size).to eq(1)
+    expect(last_email.subject).to eq('Anmeldelink für Anlass')
   end
 
 end

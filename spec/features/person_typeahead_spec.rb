@@ -16,12 +16,12 @@ describe 'Person Autocomplete', js: true do
     obsolete_node_safe do
       sign_in
       visit root_path
-      page.should have_content('TopGroup')
-      page.should have_content('Personen')
+      expect(page).to have_content('TopGroup')
+      expect(page).to have_content('Personen')
       click_link 'Personen'
-      should have_content ' Person hinzufügen'
+      is_expected.to have_content ' Person hinzufügen'
       click_link 'Person hinzufügen'
-      should have_content 'Person hinzufügen'
+      is_expected.to have_content 'Person hinzufügen'
     end
   end
 
@@ -32,11 +32,11 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group)
 
         fill_in 'Person', with: 'gibberish'
-        page.should_not have_selector('.typeahead.dropdown-menu')
+        expect(page).not_to have_selector('.typeahead.dropdown-menu')
 
         fill_in 'Person', with: 'Top'
-        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
+        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
       end
     end
 
@@ -47,9 +47,9 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top Super'
         #sleep(0.5)
-        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
-        find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
+        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')
       end
     end
 
@@ -60,9 +60,9 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top  Super '
         #sleep(0.5)
-        page.should have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Top')
-        find('.typeahead.dropdown-menu li').should have_selector('strong', text: 'Super')
+        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')
       end
     end
 
@@ -73,11 +73,11 @@ describe 'Person Autocomplete', js: true do
 
         # search name only
         fill_in 'Person', with: 'Top'
-        find('.typeahead.dropdown-menu li').should have_content 'Top Leader'
+        expect(find('.typeahead.dropdown-menu li')).to have_content 'Top Leader'
         find('.typeahead.dropdown-menu li').click
 
         all('form .btn-toolbar').first.click_button 'Speichern'
-        should have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
+        is_expected.to have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
       end
     end
 

@@ -12,7 +12,7 @@ module CrudControllerTestHelper
 
   # Performs a request based on the metadata of the action example under test.
   def perform_request
-    m = example.metadata
+    m = RSpec.current_example.metadata
     example_params = respond_to?(:params) ? send(:params) : {}
     params = scope_params.merge(format: m[:format])
     params.merge!(id: test_entry.id) if m[:id]
@@ -27,7 +27,7 @@ module CrudControllerTestHelper
   end
 
   def perform_combined_request
-    if stack = example.metadata[:combine]
+    if stack = RSpec.current_example.metadata[:combine]
       @@current_stack ||= nil
       if stack == @@current_stack && described_class == @@current_controller.class
         @response = @@current_response
@@ -70,7 +70,7 @@ module CrudControllerTestHelper
   end
 
   def test_attrs
-    action = example.metadata[:action]
+    action = RSpec.current_example.metadata[:action]
     action_specific_attr_name = "#{action}_entry_attrs".to_sym
     if respond_to?(action_specific_attr_name)
       send(action_specific_attr_name)
@@ -129,38 +129,38 @@ module CrudControllerTestHelper
     # Test that entries are assigned.
     def it_should_assign_entries
       it 'should assign entries' do
-        entries.should be_present
+        expect(entries).to be_present
       end
     end
 
     # Test that entry is assigned.
     def it_should_assign_entry
       it 'should assign entry' do
-        entry.should == test_entry
+        expect(entry).to eq(test_entry)
       end
     end
 
     # Test that the given template or the main template of the action under test is rendered.
     def it_should_render(template = nil)
-      it { should render_template(template || example.metadata[:action]) }
+      it { |example| is_expected.to render_template(template || example.metadata[:action]) }
     end
 
     # Test that test_entry_attrs are set on entry.
     def it_should_set_attrs
       it 'should set params as entry attributes' do
         attrs = test_attrs
-        deep_attributes(attrs, entry).should == attrs
+        expect(deep_attributes(attrs, entry)).to eq(attrs)
       end
     end
 
     # Test that the response redirects to the index action.
     def it_should_redirect_to_index
-      it { should redirect_to scope_params.merge(action: 'index', returning: true) }
+      it { is_expected.to redirect_to scope_params.merge(action: 'index', returning: true) }
     end
 
     # Test that the response redirects to the show action of the current entry.
     def it_should_redirect_to_show
-      it { should redirect_to scope_params.merge(action: 'show', id: entry.id) }
+      it { is_expected.to redirect_to scope_params.merge(action: 'show', id: entry.id) }
     end
 
     # Test that the given flash type is present.
@@ -188,10 +188,10 @@ module CrudControllerTestHelper
         subject { entry }
 
         if bool
-          it { should be_persisted }
-          it { should be_valid }
+          it { is_expected.to be_persisted }
+          it { is_expected.to be_valid }
         else
-          it { should_not be_persisted }
+          it { is_expected.not_to be_persisted }
         end
       end
     end

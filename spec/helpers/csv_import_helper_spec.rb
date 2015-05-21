@@ -1,15 +1,19 @@
 require 'spec_helper'
 
 describe CsvImportHelper do
+
+  include UtilityHelper
+  include ERB::Util
+
   context '#csv_field_documentation' do
     it 'renders string directly' do
-      csv_field_documentation(:first_name, 'Only nice names').should
-      eq '<dt>Vorname</dt><dd>Only nice names</dd>'
+      expect(csv_field_documentation(:first_name, 'Only nice names')).to(
+      eq '<dt>Vorname</dt><dd>Only nice names</dd>')
     end
 
     it 'renders hashes as options' do
-      csv_field_documentation(:gender, 'w' => 'Girls', 'm' => 'Gents').should
-      eq '<dt>Geschlecht</dt><dd><em>w</em> - Girls<br/><em>m</em> - Gents</dd>'
+      expect(csv_field_documentation(:gender, 'w' => 'Girls', 'm' => 'Gents')).to(
+      eq '<dt>Geschlecht</dt><dd><em>w</em> - Girls<br /><em>m</em> - Gents</dd>')
     end
   end
 
@@ -29,7 +33,7 @@ describe CsvImportHelper do
     it 'returns mapping values' do
       fields = []
       csv_import_contact_account_attrs { |f| fields << f[:key] }
-      fields.should eq %w(additional_email_privat
+      expect(fields).to eq %w(additional_email_privat
                           phone_number_privat
                           phone_number_vater
                           social_account_facebook)
@@ -47,19 +51,19 @@ describe CsvImportHelper do
     end
 
     it 'returns email value' do
-      csv_import_contact_account_value(person, 'additional_email_arbeit').should eq 'arbeit@example.com'
+      expect(csv_import_contact_account_value(person, 'additional_email_arbeit')).to eq 'arbeit@example.com'
     end
 
     it 'returns social account value' do
-      csv_import_contact_account_value(person, 'social_account_facebook').should eq 'foo'
+      expect(csv_import_contact_account_value(person, 'social_account_facebook')).to eq 'foo'
     end
 
     it 'returns nil for non existing social account value' do
-      csv_import_contact_account_value(person, 'social_account_skype').should be_nil
+      expect(csv_import_contact_account_value(person, 'social_account_skype')).to be_nil
     end
 
     it 'returns phone number' do
-      csv_import_contact_account_value(person, 'phone_number_privat').should eq '123'
+      expect(csv_import_contact_account_value(person, 'phone_number_privat')).to eq '123'
     end
   end
 end

@@ -92,34 +92,38 @@ describe Event::ApplicationMarketController do
       context 'participants' do
         subject { assigns(:participants) }
 
-        it { should have(1).items }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it 'contains participant' do
-          should include(appl_participant)
+          is_expected.to include(appl_participant)
         end
 
         it 'does not contain unassigned applications' do
-          should_not include(appl_prio_1)
+          is_expected.not_to include(appl_prio_1)
         end
 
         it 'does not contain leader' do
-          should_not include(leader)
+          is_expected.not_to include(leader)
         end
       end
 
       context 'applications' do
         subject { assigns(:applications) }
 
-        it { should have(1).items }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
-        it { should include(appl_prio_1) }
-        it { should_not include(appl_prio_2) }
-        it { should_not include(appl_prio_3) }
-        it { should_not include(appl_waiting) }
+        it { is_expected.to include(appl_prio_1) }
+        it { is_expected.not_to include(appl_prio_2) }
+        it { is_expected.not_to include(appl_prio_3) }
+        it { is_expected.not_to include(appl_waiting) }
 
-        it { should_not include(appl_participant) }
-        it { should_not include(appl_other) }
-        it { should_not include(appl_other_assigned) }
+        it { is_expected.not_to include(appl_participant) }
+        it { is_expected.not_to include(appl_other) }
+        it { is_expected.not_to include(appl_other_assigned) }
       end
     end
 
@@ -128,12 +132,14 @@ describe Event::ApplicationMarketController do
 
       subject { assigns(:applications) }
 
-      it { should have(2).items }
+      it 'has 2 items' do
+        expect(subject.size).to eq(2)
+      end
 
-      it { should include(appl_prio_1) }
-      it { should_not include(appl_prio_2) }
-      it { should include(appl_prio_3) }
-      it { should_not include(appl_waiting) }
+      it { is_expected.to include(appl_prio_1) }
+      it { is_expected.not_to include(appl_prio_2) }
+      it { is_expected.to include(appl_prio_3) }
+      it { is_expected.not_to include(appl_waiting) }
     end
 
     context 'with prio and waiting list filter' do
@@ -141,12 +147,14 @@ describe Event::ApplicationMarketController do
 
       subject { assigns(:applications) }
 
-      it { should have(2).items }
+      it 'has 2 items' do
+        expect(subject.size).to eq(2)
+      end
 
-      it { should_not include(appl_prio_1) }
-      it { should include(appl_prio_2) }
-      it { should_not include(appl_prio_3) }
-      it { should include(appl_waiting) }
+      it { is_expected.not_to include(appl_prio_1) }
+      it { is_expected.to include(appl_prio_2) }
+      it { is_expected.not_to include(appl_prio_3) }
+      it { is_expected.to include(appl_waiting) }
     end
 
     context 'with waiting list filter' do
@@ -154,12 +162,14 @@ describe Event::ApplicationMarketController do
 
       subject { assigns(:applications) }
 
-      it { should have(1).items }
+      it 'has 1 item' do
+        expect(subject.size).to eq(1)
+      end
 
-      it { should_not include(appl_prio_1) }
-      it { should_not include(appl_prio_2) }
-      it { should_not include(appl_prio_3) }
-      it { should include(appl_waiting) }
+      it { is_expected.not_to include(appl_prio_1) }
+      it { is_expected.not_to include(appl_prio_2) }
+      it { is_expected.not_to include(appl_prio_3) }
+      it { is_expected.to include(appl_waiting) }
     end
 
     context 'for regular event' do
@@ -189,8 +199,8 @@ describe Event::ApplicationMarketController do
     it 'creates role' do
       put :add_participant, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js
 
-      appl_prio_1.reload.roles.collect(&:type).should == [event.participant_types.first.sti_name]
-      appl_prio_1.should be_active
+      expect(appl_prio_1.reload.roles.collect(&:type)).to eq([event.participant_types.first.sti_name])
+      expect(appl_prio_1).to be_active
     end
 
     it 'shows error on existing participant role' do
@@ -199,7 +209,7 @@ describe Event::ApplicationMarketController do
 
       put :add_participant, group_id: group.id, event_id: other.id, id: appl_prio_1.id, format: :js
 
-      should render_template('participation_exists_error')
+      is_expected.to render_template('participation_exists_error')
     end
 
     def create_participant_role(other)
@@ -218,7 +228,7 @@ describe Event::ApplicationMarketController do
     before { delete :remove_participant, group_id: group.id, event_id: event.id, id: appl_participant.id, format: :js }
 
     it 'deactivates participation' do
-      appl_participant.reload.should_not be_active
+      expect(appl_participant.reload).not_to be_active
     end
   end
 
@@ -226,7 +236,7 @@ describe Event::ApplicationMarketController do
     before { put :put_on_waiting_list, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js }
 
     it 'sets waiting list flag' do
-      appl_prio_1.reload.application.should be_waiting_list
+      expect(appl_prio_1.reload.application).to be_waiting_list
     end
   end
 
@@ -234,7 +244,7 @@ describe Event::ApplicationMarketController do
     before { delete :remove_from_waiting_list, group_id: group.id, event_id: event.id, id: appl_waiting.id, format: :js }
 
     it 'sets waiting list flag' do
-      appl_waiting.reload.application.should_not be_waiting_list
+      expect(appl_waiting.reload.application).not_to be_waiting_list
     end
   end
 

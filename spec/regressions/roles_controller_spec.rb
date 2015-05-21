@@ -44,11 +44,11 @@ describe RolesController, type: :controller do
   # Override a few methods to match the actual behavior.
   class << self
     def it_should_redirect_to_show
-      it do
+      it do |example|
         if example.metadata[:action] == :create
-          should redirect_to group_people_path(group.id)
+          is_expected.to redirect_to group_people_path(group.id)
         else
-          should redirect_to group_person_path(group.id, entry.person_id)
+          is_expected.to redirect_to group_person_path(group.id, entry.person_id)
         end
       end
     end
@@ -56,7 +56,7 @@ describe RolesController, type: :controller do
     def it_should_redirect_to_index
       it do
         path = Role.where(id: entry.id).exists? ? person_path(entry.person_id) : group_path(group)
-        should redirect_to path
+        is_expected.to redirect_to path
       end
     end
   end
@@ -68,7 +68,7 @@ describe RolesController, type: :controller do
   describe_action :get, :new do
     context '.html', format: :html do
       it 'does not raise exception if no type is given' do
-        test_entry.should be_kind_of(Role)
+        expect(test_entry).to be_kind_of(Role)
       end
 
       context 'with invalid type' do

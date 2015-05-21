@@ -14,15 +14,15 @@ describe Export::Csv::People::ContactAccounts do
 
   context 'phone_numbers' do
     it 'creates standard key and human translations' do
-      subject.key(PhoneNumber, 'foo').should eq :phone_number_foo
-      subject.human(PhoneNumber, 'foo').should eq 'Telefonnummer foo'
+      expect(subject.key(PhoneNumber, 'foo')).to eq :phone_number_foo
+      expect(subject.human(PhoneNumber, 'foo')).to eq 'Telefonnummer foo'
     end
   end
 
   context 'social_accounts' do
     it 'creates standard key and human translations' do
-      subject.key(SocialAccount, 'foo').should eq :social_account_foo
-      subject.human(SocialAccount, 'foo').should eq 'Social Media Adresse foo'
+      expect(subject.key(SocialAccount, 'foo')).to eq :social_account_foo
+      expect(subject.human(SocialAccount, 'foo')).to eq 'Social Media Adresse foo'
     end
   end
 end

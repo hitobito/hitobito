@@ -7,8 +7,10 @@
 
 require 'spec_helper'
 
-describe StandardHelper do
+describe FormatHelper do
 
+  include I18nHelper
+  include UtilityHelper
   include CrudTestHelper
   include NestedForm::ViewHelper
 
@@ -33,7 +35,7 @@ describe StandardHelper do
     context 'regular' do
       subject { labeled('label') { 'value' } }
 
-      it { should be_html_safe }
+      it { is_expected.to be_html_safe }
       # its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
       its(:squish) { should == '<dt class="muted">label</dt> <dd>value</dd>'.gsub('"', "'") }
     end
@@ -41,14 +43,14 @@ describe StandardHelper do
     context 'with empty value' do
       subject { labeled('label') { '' } }
 
-      it { should be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + StandardHelper::EMPTY_STRING + '</dd>' }
+      it { is_expected.to be_html_safe }
+      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + FormatHelper::EMPTY_STRING + '</dd>' }
     end
 
     context 'with unsafe value' do
       subject { labeled('label') { 'value <unsafe>' } }
 
-      it { should be_html_safe }
+      it { is_expected.to be_html_safe }
       its(:squish) { should == '<dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
     end
   end
@@ -56,7 +58,7 @@ describe StandardHelper do
   describe '#labeled_attr' do
     subject { labeled_attr('foo', :size) }
 
-    it { should be_html_safe }
+    it { is_expected.to be_html_safe }
     its(:squish) {  should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
   end
 
@@ -64,51 +66,51 @@ describe StandardHelper do
 
     context 'Fixnums' do
       it 'should print small values unchanged' do
-        f(10).should == '10'
+        expect(f(10)).to eq('10')
       end
 
       it 'should print large values without delimiters' do
-        f(10_000_000).should == '10000000'
+        expect(f(10_000_000)).to eq('10000000')
       end
     end
 
     context 'Floats' do
       it 'should add two digits' do
-        f(1.0).should == '1.00'
+        expect(f(1.0)).to eq('1.00')
       end
 
       it 'should truncate to two digits' do
-        f(3.14159).should == '3.14'
+        expect(f(3.14159)).to eq('3.14')
       end
 
       it 'should add delimiters' do
-        f(12345.6789).should == '12&#39;345.68'
+        expect(f(12345.6789)).to eq('12&#39;345.68')
       end
     end
 
     context 'Booleans' do
       it 'true should print yes' do
-        f(true).should == 'ja'
+        expect(f(true)).to eq('ja')
       end
 
       it 'false should print no' do
-        f(false).should == 'nein'
+        expect(f(false)).to eq('nein')
       end
     end
 
     context 'nil' do
       it 'should print an empty string' do
-        f(nil).should == StandardHelper::EMPTY_STRING
+        expect(f(nil)).to eq(FormatHelper::EMPTY_STRING)
       end
     end
 
     context 'Strings' do
       it 'should print regular strings unchanged' do
-        f('blah blah').should == 'blah blah'
+        expect(f('blah blah')).to eq('blah blah')
       end
 
       it 'should not be html safe' do
-        f('<injection>').should_not be_html_safe
+        expect(f('<injection>')).not_to be_html_safe
       end
     end
 
@@ -116,30 +118,76 @@ describe StandardHelper do
 
   describe '#format_attr' do
     it 'should use #f' do
-      format_attr('12.342', :to_f).should == f(12.342)
+      expect(format_attr('12.342', :to_f)).to eq(f(12.342))
     end
 
     it 'should use object attr format method if it exists' do
-      format_attr('abcd', :size).should == '4 chars'
+      expect(format_attr('abcd', :size)).to eq('4 chars')
     end
 
     it 'should use general attr format method if it exists' do
-      format_attr([1, 2], :size).should == '2 items'
+      expect(format_attr([1, 2], :size)).to eq('2 items')
     end
 
     it 'should format empty belongs_to' do
-      format_attr(crud_test_models(:AAAAA), :companion).should == t(:'global.associations.no_entry')
+      expect(format_attr(crud_test_models(:AAAAA), :companion)).to eq(t(:'global.associations.no_entry'))
     end
 
     it 'should format existing belongs_to' do
       string = format_attr(crud_test_models(:BBBBB), :companion)
-      string.should == 'AAAAA'
+      expect(string).to eq('AAAAA')
     end
 
     it 'should format existing has_many' do
       string = format_attr(crud_test_models(:CCCCC), :others)
-      string.should be_html_safe
-      string.should == '<ul><li>AAAAA</li><li>BBBBB</li></ul>'
+      expect(string).to be_html_safe
+      expect(string).to eq('<ul><li>AAAAA</li><li>BBBBB</li></ul>')
+    end
+  end
+
+  describe '#fnumber' do
+    context 'Fixnums' do
+      it 'should print small values unchanged' do
+        expect(fnumber(10)).to eq('10')
+      end
+
+      it 'should print large values with delimiters' do
+        expect(fnumber(10_000_000)).to eq('10&#39;000&#39;000')
+      end
+    end
+
+    context 'Floats' do
+      it 'should add two digits' do
+        expect(fnumber(1.0)).to eq('1.00')
+      end
+
+      it 'should truncate to two digits' do
+        expect(fnumber(3.14159)).to eq('3.14')
+      end
+
+      it 'should add delimiters' do
+        expect(fnumber(12345.6789)).to eq('12&#39;345.68')
+      end
+    end
+
+    context 'nil' do
+      it 'should print an empty string' do
+        expect(fnumber(nil)).to eq(FormatHelper::EMPTY_STRING)
+      end
+    end
+
+    context 'Strings' do
+      it 'should print small integer strings unchanged' do
+        expect(fnumber('10')).to eq('10')
+      end
+
+      it 'should print large integer strings with delimiters' do
+        expect(fnumber('10000000')).to eq('10&#39;000&#39;000')
+      end
+
+      it 'should convert any other string to integer' do
+        expect(fnumber('blah blah')).to eq('0')
+      end
     end
   end
 
@@ -147,17 +195,17 @@ describe StandardHelper do
     let(:model) { crud_test_models(:AAAAA) }
 
     it 'should recognize types' do
-      column_type(model, :name).should == :string
-      column_type(model, :children).should == :integer
-      column_type(model, :companion_id).should == :integer
-      column_type(model, :rating).should == :float
-      column_type(model, :income).should == :decimal
-      column_type(model, :birthdate).should == :date
-      column_type(model, :gets_up_at).should == :time
-      column_type(model, :last_seen).should == :datetime
-      column_type(model, :human).should == :boolean
-      column_type(model, :remarks).should == :text
-      column_type(model, :companion).should be_nil
+      expect(column_type(model, :name)).to eq(:string)
+      expect(column_type(model, :children)).to eq(:integer)
+      expect(column_type(model, :companion_id)).to eq(:integer)
+      expect(column_type(model, :rating)).to eq(:float)
+      expect(column_type(model, :income)).to eq(:decimal)
+      expect(column_type(model, :birthdate)).to eq(:date)
+      expect(column_type(model, :gets_up_at)).to eq(:time)
+      expect(column_type(model, :last_seen)).to eq(:datetime)
+      expect(column_type(model, :human)).to eq(:boolean)
+      expect(column_type(model, :remarks)).to eq(:text)
+      expect(column_type(model, :companion)).to be_nil
     end
   end
 
@@ -166,47 +214,47 @@ describe StandardHelper do
 
     it 'should format integers' do
       model.children = 10_000
-      format_type(model, :children).should == '10000'
+      expect(format_type(model, :children)).to eq('10000')
     end
 
     it 'should format floats' do
-      format_type(model, :rating).should == '1.10'
+      expect(format_type(model, :rating)).to eq('1.10')
     end
 
     it 'should format decimals' do
-      format_type(model, :income).should == '10&#39;000&#39;000.10'
+      expect(format_type(model, :income)).to eq('10&#39;000&#39;000.10')
     end
 
     it 'should format dates' do
-      format_type(model, :birthdate).should == '01.01.1910'
+      expect(format_type(model, :birthdate)).to eq('01.01.1910')
     end
 
     it 'should format times' do
-      format_type(model, :gets_up_at).should == '01:01'
+      expect(format_type(model, :gets_up_at)).to eq('01:01')
     end
 
     it 'should format datetimes' do
-      format_type(model, :last_seen).should == '01.01.2010 11:21'
+      expect(format_type(model, :last_seen)).to eq('01.01.2010 11:21')
     end
 
     it 'should format texts' do
       string = format_type(model, :remarks)
-      string.should be_html_safe
-      string.should == "<p>AAAAA BBBBB CCCCC\n<br />AAAAA BBBBB CCCCC\n</p>"
+      expect(string).to be_html_safe
+      expect(string).to eq("<p>AAAAA BBBBB CCCCC\n<br />AAAAA BBBBB CCCCC\n</p>")
     end
 
     it 'should escape texts' do
       model.remarks = '<unsecure>bla'
       string = format_type(model, :remarks)
-      string.should be_html_safe
-      string.should == '<p>&lt;unsecure&gt;bla</p>'
+      expect(string).to be_html_safe
+      expect(string).to eq('<p>&lt;unsecure&gt;bla</p>')
     end
 
     it 'should format empty texts' do
       model.remarks = '   '
       string = format_type(model, :remarks)
-      string.should be_html_safe
-      string.should == StandardHelper::EMPTY_STRING
+      expect(string).to be_html_safe
+      expect(string).to eq(FormatHelper::EMPTY_STRING)
     end
   end
 
@@ -214,88 +262,45 @@ describe StandardHelper do
 
     it 'should escape safe content' do
       html = content_tag_nested(:div, %w(a b)) { |e| content_tag(:span, e) }
-      html.should be_html_safe
-      html.should == '<div><span>a</span><span>b</span></div>'
+      expect(html).to be_html_safe
+      expect(html).to eq('<div><span>a</span><span>b</span></div>')
     end
 
     it 'should escape unsafe content' do
       html = content_tag_nested(:div, %w(a b)) { |e| "<#{e}>" }
-      html.should == '<div>&lt;a&gt;&lt;b&gt;</div>'
+      expect(html).to eq('<div>&lt;a&gt;&lt;b&gt;</div>')
     end
 
     it 'should simply join without block' do
       html = content_tag_nested(:div, %w(a b))
-      html.should == '<div>ab</div>'
+      expect(html).to eq('<div>ab</div>')
     end
   end
 
   describe '#safe_join' do
     it 'should works as super without block' do
       html = safe_join(['<a>', '<b>'.html_safe])
-      html.should == '&lt;a&gt;<b>'
+      expect(html).to eq('&lt;a&gt;<b>')
     end
 
     it 'should collect contents for array' do
       html = safe_join(%w(a b)) { |e| content_tag(:span, e) }
-      html.should == '<span>a</span><span>b</span>'
+      expect(html).to eq('<span>a</span><span>b</span>')
     end
   end
 
   describe '#captionize' do
     it 'should handle symbols' do
-      captionize(:camel_case).should == 'Camel Case'
+      expect(captionize(:camel_case)).to eq('Camel Case')
     end
 
     it 'should render all upper case' do
-      captionize('all upper case').should == 'All Upper Case'
+      expect(captionize('all upper case')).to eq('All Upper Case')
     end
 
     it 'should render human attribute name' do
-      captionize(:gets_up_at, CrudTestModel).should == 'Gets up at'
+      expect(captionize(:gets_up_at, CrudTestModel)).to eq('Gets up at')
     end
-  end
-
-  describe '#table' do
-    context 'with empty data' do
-      subject { table([]) }
-
-      it { should be_html_safe }
-
-      it 'should handle empty data' do
-        should match(/Keine Eintr/)
-      end
-    end
-
-    context 'with data' do
-      subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
-
-      it { should be_html_safe }
-
-      it 'should render table' do
-        should match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
-      end
-
-      it 'should contain attrs' do
-        should match(/<th>Size<\/th>/)
-      end
-
-      it 'should contain block' do
-        should match(/<th>Upcase<\/th>/)
-      end
-    end
-  end
-
-  describe '#standard_form' do
-    subject do
-      with_test_routing do
-        capture { standard_form(entry, html: { class: 'special' }) { |f| } }
-      end
-    end
-
-    let(:entry) { crud_test_models(:AAAAA) }
-
-    it { should match(/form .*?action="\/crud_test_models\/#{entry.id}" .?class="special form-horizontal" .*?method="post"/) }
-
   end
 
   describe '#translate_inheritable' do
@@ -304,31 +309,31 @@ describe StandardHelper do
     before { I18n.backend.store_translations :de, global: { test_key: 'global' } }
     subject { ti(:test_key) }
 
-    it { should == 'global' }
+    it { is_expected.to eq('global') }
 
     context 'with list key' do
       before { I18n.backend.store_translations :de, list: { global: { test_key: 'list global' } } }
-      it { should == 'list global' }
+      it { is_expected.to eq('list global') }
 
       context 'and list action key' do
         before { I18n.backend.store_translations :de, list: { index: { test_key: 'list index' } } }
-        it { should == 'list index' }
+        it { is_expected.to eq('list index') }
 
         context 'and crud global key' do
           before { I18n.backend.store_translations :de, crud: {  global: { test_key: 'crud global' } } }
-          it { should == 'crud global' }
+          it { is_expected.to eq('crud global') }
 
           context 'and crud action key' do
             before { I18n.backend.store_translations :de, crud: {  index: { test_key: 'crud index' } } }
-            it { should == 'crud index' }
+            it { is_expected.to eq('crud index') }
 
             context 'and controller global key' do
               before { I18n.backend.store_translations :de, crud_test_models: {  global: { test_key: 'test global' } } }
-              it { should == 'test global' }
+              it { is_expected.to eq('test global') }
 
               context 'and controller action key' do
                 before { I18n.backend.store_translations :de, crud_test_models: {  index: { test_key: 'test index' } } }
-                it { should == 'test index' }
+                it { is_expected.to eq('test index') }
               end
             end
           end
@@ -342,7 +347,7 @@ describe StandardHelper do
     subject { ta(:test_key, assoc) }
 
     before { I18n.backend.store_translations :de, global: { associations: { test_key: 'global' } } }
-    it { should == 'global' }
+    it { is_expected.to eq('global') }
 
     context 'with model key' do
       before do
@@ -353,7 +358,7 @@ describe StandardHelper do
                                               test_key: 'model' } } }
       end
 
-      it { should == 'model' }
+      it { is_expected.to eq('model') }
 
       context 'and assoc key' do
         before do
@@ -366,9 +371,9 @@ describe StandardHelper do
                                                     test_key: 'companion' } } } } }
         end
 
-        it { should == 'companion' }
+        it { is_expected.to eq('companion') }
         it 'should use global without assoc' do
-          ta(:test_key).should == 'global'
+          expect(ta(:test_key)).to eq('global')
         end
       end
     end

@@ -11,15 +11,15 @@ describe Import::Person do
   context 'keys' do
     subject { Import::Person.fields.map { |entry| entry[:key] }  }
     it 'contains social media' do
-      should include('social_account_skype')
+      is_expected.to include('social_account_skype')
     end
 
     it 'contains phone number' do
-      should include('phone_number_vater')
+      is_expected.to include('phone_number_vater')
     end
 
     it 'contains additional email' do
-      should include('additional_email_vater')
+      is_expected.to include('additional_email_vater')
     end
   end
 
@@ -27,15 +27,15 @@ describe Import::Person do
     subject { Import::Person.fields.map { |entry| entry[:value] }  }
 
     it 'contains social media' do
-      should include('Social Media Adresse Skype')
+      is_expected.to include('Social Media Adresse Skype')
     end
 
     it 'contains phone number' do
-      should include('Telefonnummer Mutter')
+      is_expected.to include('Telefonnummer Mutter')
     end
 
     it 'contains additional email' do
-      should include('Weitere E-Mail Mutter')
+      is_expected.to include('Weitere E-Mail Mutter')
     end
   end
 
@@ -212,7 +212,7 @@ describe Import::Person do
 
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
-      public_attributes.size.should eq 15
+      expect(public_attributes.size).to eq 15
       expect { Import::Person.new(person, public_attributes).populate }.not_to raise_error
     end
   end
@@ -232,12 +232,12 @@ describe Import::Person do
     end
 
     it 'validates uniqueness of emails in currently imported person set' do
-      people.first.should be_valid
-      people.second.should be_valid
-      people.third.should be_valid
-      people.fourth.should be_valid
-      people.fifth.should_not be_valid
-      people.fifth.human_errors.should start_with 'Haupt-E-Mail ist bereits vergeben'
+      expect(people.first).to be_valid
+      expect(people.second).to be_valid
+      expect(people.third).to be_valid
+      expect(people.fourth).to be_valid
+      expect(people.fifth).not_to be_valid
+      expect(people.fifth.human_errors).to start_with 'Haupt-E-Mail ist bereits vergeben'
     end
   end
 

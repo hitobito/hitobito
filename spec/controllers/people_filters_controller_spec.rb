@@ -22,9 +22,9 @@ describe PeopleFiltersController do
       get :new, group_id: group.id, people_filter: { role_type_ids: role_type_ids_string }
 
       filter = assigns(:people_filter)
-      filter.group.should == group
-      filter.role_type_ids.should == role_type_ids
-      filter.role_types.should == role_type_names
+      expect(filter.group).to eq(group)
+      expect(filter.role_type_ids).to eq(role_type_ids)
+      expect(filter.role_types).to eq(role_type_names)
     end
   end
 
@@ -34,7 +34,7 @@ describe PeopleFiltersController do
         post :create, group_id: group.id, people_filter: { role_type_ids: role_type_ids }, button: 'search'
       end.not_to change { PeopleFilter.count }
 
-      should redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep'))
+      is_expected.to redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep'))
     end
 
     it 'redirects to show for empty search' do
@@ -42,14 +42,14 @@ describe PeopleFiltersController do
         post :create, group_id: group.id, button: 'search', people_filter: {}
       end.not_to change { PeopleFilter.count }
 
-      should redirect_to(group_people_path(group))
+      is_expected.to redirect_to(group_people_path(group))
     end
 
     it 'saves filter and redirects to show with save' do
       expect do
         expect do
           post :create, group_id: group.id, people_filter: { role_type_ids: role_type_ids, name: 'Test Filter' }, button: 'save'
-          should redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep', name: 'Test Filter'))
+          is_expected.to redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep', name: 'Test Filter'))
         end.to change { PeopleFilter.count }.by(1)
       end.to change { RelatedRoleType.count }.by(2)
     end
@@ -68,7 +68,7 @@ describe PeopleFiltersController do
           post :create, group_id: group.id, people_filter: { role_type_ids: role_type_ids }, button: 'search'
         end.not_to change { PeopleFilter.count }
 
-        should redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep'))
+        is_expected.to redirect_to(group_people_path(group, role_type_ids: role_type_ids_string, kind: 'deep'))
       end
 
       it 'is not authorized with save' do

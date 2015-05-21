@@ -18,9 +18,9 @@ describe EventsController do
     token = user.generate_reset_password_token!
     get :show, group_id: group.id, id: event.id, onetime_token: token
 
-    assigns(:current_person).should == user
-    user.reload.reset_password_token.should be_blank
-    should render_template('crud/show')
+    expect(assigns(:current_person)).to eq(user)
+    expect(user.reload.reset_password_token).to be_blank
+    is_expected.to render_template('crud/show')
   end
 
   it 'cannot sign in with expired token' do
@@ -28,17 +28,17 @@ describe EventsController do
     user.update_column(:reset_password_sent_at, 50.days.ago)
     get :show, group_id: group.id, id: event.id, onetime_token: token
 
-    should redirect_to(new_person_session_path)
-    user.reload.reset_password_token.should be_present
-    assigns(:current_person).should_not be_present
+    is_expected.to redirect_to(new_person_session_path)
+    expect(user.reload.reset_password_token).to be_present
+    expect(assigns(:current_person)).not_to be_present
   end
 
   it 'cannot sign in with wrong token' do
     token = user.generate_reset_password_token!
     get :show, group_id: group.id, id: event.id, onetime_token: 'yadayada'
 
-    should redirect_to(new_person_session_path)
-    user.reload.reset_password_token.should be_present
-    assigns(:current_person).should_not be_present
+    is_expected.to redirect_to(new_person_session_path)
+    expect(user.reload.reset_password_token).to be_present
+    expect(assigns(:current_person)).not_to be_present
   end
 end

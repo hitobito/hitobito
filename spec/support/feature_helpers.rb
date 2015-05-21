@@ -22,7 +22,7 @@ module FeatureHelpers
            Timeout::Error,
            Capybara::FrozenInTime,
            Capybara::ElementNotFound => e
-      pending e.message
+      skip e.message
     end
   end
 

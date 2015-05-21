@@ -1,0 +1,15 @@
+-#  Copyright (c) 2015, insieme Schweiz. This file is part of
+-#  hitobito_insieme and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_insieme.
+
+- start_at_invalid_message = Event::Date.human_attribute_name(:start_at) + ' ' + t('errors.messages.invalid_date')
+- finish_at_invalid_message = Event::Date.human_attribute_name(:finish_at) + ' ' + t('errors.messages.invalid_date')
+- before_message = Event::Date.human_attribute_name(:finish_at) + ' ' + t('errors.messages.on_or_after') % { restriction: Event::Date.human_attribute_name(:start_at) }
+
+= field_set_tag Event.human_attribute_name(:dates),
+                class: 'event-dates', data: { start_at_invalid_message: start_at_invalid_message,
+                                              finish_at_invalid_message: finish_at_invalid_message,
+                                              before_message: before_message } do
+  %p= t('events.form.times_are_optional')
+  = f.nested_fields_for :dates, 'event/dates/fields'

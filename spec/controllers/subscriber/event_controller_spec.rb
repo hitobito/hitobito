@@ -26,7 +26,7 @@ describe Subscriber::EventController do
         get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /event \(TopGroup\)/ }
+      it { is_expected.to match(/event \(TopGroup\)/) }
     end
 
     context 'lists events from previous year onwards' do
@@ -39,10 +39,10 @@ describe Subscriber::EventController do
         get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /now/ }
-      it { should =~ /later/ }
-      it { should =~ /last_year/ }
-      it { should_not =~ /two_years_ago/ }
+      it { is_expected.to match(/now/) }
+      it { is_expected.to match(/later/) }
+      it { is_expected.to match(/last_year/) }
+      it { is_expected.not_to match(/two_years_ago/) }
     end
 
     context 'list only events from self, sister and descendants' do
@@ -59,10 +59,10 @@ describe Subscriber::EventController do
         get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ %r{#{groups(:bottom_group_one_one).name}} }
-      it { should =~ %r{#{groups(:bottom_group_two_one).name}} }
-      it { should =~ %r{#{groups(:bottom_layer_two).name}} }
-      it { should_not =~ %r{#{groups(:top_group).name}} }
+      it { is_expected.to match(%r{#{groups(:bottom_group_one_one).name}}) }
+      it { is_expected.to match(%r{#{groups(:bottom_group_two_one).name}}) }
+      it { is_expected.to match(%r{#{groups(:bottom_layer_two).name}}) }
+      it { is_expected.not_to match(%r{#{groups(:top_group).name}}) }
     end
 
     context 'finds by group name' do
@@ -72,7 +72,7 @@ describe Subscriber::EventController do
         get :query, q: 'Top Group', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /foobar/ }
+      it { is_expected.to match(/foobar/) }
     end
 
     context 'finds by event kind' do
@@ -83,7 +83,7 @@ describe Subscriber::EventController do
         get :query, q: 'Scharleiter', group_id: group.id, mailing_list_id: list.id
       end
 
-      it { should =~ /foobar/ }
+      it { is_expected.to match(/foobar/) }
     end
   end
 
@@ -98,16 +98,16 @@ describe Subscriber::EventController do
                       subscription: { subscriber_id: event.id }
       end.to change(Subscription, :count).by(1)
 
-      should redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
+      is_expected.to redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
     end
 
     it 'without subscriber_id replaces error' do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
 
-      should render_template('crud/new')
-      assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ['Anlass muss ausgewählt werden']
+      is_expected.to render_template('crud/new')
+      expect(assigns(:subscription).errors.size).to eq(1)
+      expect(assigns(:subscription).errors[:base]).to eq ['Anlass muss ausgewählt werden']
     end
 
     it 'duplicated subscription replaces error' do
@@ -120,9 +120,9 @@ describe Subscriber::EventController do
                       subscription: { subscriber_id: event.id }
       end.not_to change(Subscription, :count)
 
-      should render_template('crud/new')
-      assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ['Anlass wurde bereits hinzugefügt']
+      is_expected.to render_template('crud/new')
+      expect(assigns(:subscription).errors.size).to eq(1)
+      expect(assigns(:subscription).errors[:base]).to eq ['Anlass wurde bereits hinzugefügt']
     end
   end
 

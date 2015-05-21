@@ -7,57 +7,13 @@
   - if entry.new_record?
     = f.hidden_field :type
 
-  = field_set_tag do
-    = f.labeled_input_field(:name)
+  = render 'general_fields', f: f
 
-    - entry.used?(:kind_id) do
-      = f.labeled_input_field(:kind_id)
+  = render 'group_fields', f: f
 
-    - entry.used?(:state) do
-      - if entry.possible_states.present?
-        = f.labeled_belongs_to_field(:state, list: entry.state_collection)
-      - else
-        = f.labeled_input_field(:state)
+  = render 'date_fields', f: f
 
-    = render_extensions :main_fields, locals: { f: f }
+  = render 'application_fields', f: f
 
-    = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost, :location))
+  = render 'additional_fields', f: f
 
-    = f.labeled_person_field :contact
-
-    = render_extensions 'fields', locals: { f: f }
-
-  - if @groups.present?
-    - entry.used?(:group_ids) do
-      = field_set_tag t('event.run_by') do
-        = f.labeled(:group_ids, '&nbsp;'.html_safe) do
-          = hidden_field_tag('event[group_ids][]', @group.id)
-          = f.inline_check_box(:group_ids, @group.id, @group.to_s, disabled: true)
-          - @groups.each do |group|
-            = f.inline_check_box(:group_ids, group.id, group.to_s)
-
-
-  = field_set_tag Event.human_attribute_name(:dates), class: 'event-dates' do
-    %p= t('.times_are_optional')
-    = f.nested_fields_for :dates, 'event/dates/fields'
-
-  = field_set_tag Event::Application.model_name.human do
-    = f.labeled_input_fields(:application_opening_at, :application_closing_at, :application_conditions)
-    = f.labeled_input_field(:maximum_participants)
-    = f.labeled_boolean_field(:external_applications, caption: t('.caption_external_applications'))
-
-    - entry.used?(:priorization) do
-      = f.labeled_boolean_field(:priorization, caption: t('.caption_prioritization'))
-    - application_approve_role_exists? && entry.used?(:requires_approval) do
-      = f.labeled_boolean_field(:requires_approval, caption: t('.caption_requires_approval'))
-
-    = render_extensions 'application_fields', locals: { f: f }
-
-  = field_set_tag t('.additional_information') do
-    %p= t('.explain_application_questions')
-
-    = f.nested_fields_for :questions, 'event/questions/fields'
-
-%input#start_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:start_at), t('errors.messages.invalid_date')] }
-%input#finish_at_invalid_message{ type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.invalid_date')] }
-%input#before_message{type: 'hidden', value: "%s %s" % [Event::Date.human_attribute_name(:finish_at), t('errors.messages.on_or_after') % { restriction: Event::Date.human_attribute_name(:start_at) }] }

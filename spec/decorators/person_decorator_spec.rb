@@ -54,9 +54,9 @@ describe PersonDecorator, :draper_with_helpers do
     end
 
     specify do
-      roles_grouped.should have(2).items
-      roles_grouped[groups(:top_group)].should have(2).items
-      roles_grouped[groups(:bottom_layer_one)].should have(1).items
+      expect(roles_grouped.size).to eq(2)
+      expect(roles_grouped[groups(:top_group)].size).to eq(2)
+      expect(roles_grouped[groups(:bottom_layer_one)].size).to eq(1)
     end
   end
 

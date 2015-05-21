@@ -15,13 +15,13 @@ describe GroupsController do
   describe 'authentication' do
     it 'redirects to login' do
       get :show, id: group.id
-      should redirect_to '/users/sign_in'
+      is_expected.to redirect_to '/users/sign_in'
     end
 
     it 'renders template when signed in' do
       sign_in(person)
       get :show, id: group.id
-      should render_template('crud/show')
+      is_expected.to render_template('crud/show')
     end
   end
 
@@ -30,17 +30,17 @@ describe GroupsController do
     let(:group) { groups(:top_layer) }
 
     describe 'GET index' do
-      context :html do
+      context 'html' do
         it 'keeps flash' do
           get :index
-          should redirect_to(group_path(Group.root, format: :html))
+          is_expected.to redirect_to(group_path(Group.root, format: :html))
         end
       end
 
-      context :json do
+      context 'json' do
         it 'redirects to json' do
           get :index, format: :json
-          should redirect_to(group_path(Group.root, format: :json))
+          is_expected.to redirect_to(group_path(Group.root, format: :json))
         end
       end
     end
@@ -67,14 +67,14 @@ describe GroupsController do
         its(:values) { should == [[groups(:bottom_group_one_one)]] }
       end
 
-      context :json do
+      context 'json' do
         render_views
 
         it 'is valid' do
           get :show, id: group.id, format: :json
           json = JSON.parse(response.body)
           group = json['groups'].first
-          group['links']['children'].should have(4).items
+          expect(group['links']['children'].size).to eq(4)
         end
       end
 
@@ -85,21 +85,21 @@ describe GroupsController do
 
       it 'new' do
         get :new, group: attrs
-        response.status.should == 200
-        assigns(:group).type.should eq 'Group::TopGroup'
-        assigns(:group).model.class.should eq Group::TopGroup
-        assigns(:group).parent_id.should eq group.id
+        expect(response.status).to eq(200)
+        expect(assigns(:group).type).to eq 'Group::TopGroup'
+        expect(assigns(:group).model.class).to eq Group::TopGroup
+        expect(assigns(:group).parent_id).to eq group.id
       end
 
       it 'create' do
         post :create, group: attrs.merge(name: 'foobar')
         group = assigns(:group)
-        should redirect_to group_path(group)
+        is_expected.to redirect_to group_path(group)
       end
 
       it 'edit form' do
         get :edit, id: groups(:top_group)
-        assigns(:contacts).should be_present
+        expect(assigns(:contacts)).to be_present
       end
     end
 
@@ -110,7 +110,7 @@ describe GroupsController do
 
       it 'leader can destroy group' do
         expect { post :destroy, id: groups(:bottom_group_one_two).id }.to change { Group.without_deleted.count }.by(-1)
-        should redirect_to groups(:bottom_layer_one)
+        is_expected.to redirect_to groups(:bottom_layer_one)
       end
     end
 
@@ -120,7 +120,7 @@ describe GroupsController do
 
       it 'assigns deleted_subgroups' do
         get :deleted_subgroups, id: group.id
-        assigns(:sub_groups).should have(1).item
+        expect(assigns(:sub_groups).size).to eq(1)
       end
     end
 
@@ -130,12 +130,12 @@ describe GroupsController do
       before { group.destroy }
 
       it 'reactivates group and redirects' do
-        group.should be_deleted
+        expect(group).to be_deleted
         post :reactivate, id: group.id
 
-        Group.find(group.id).should be_present
-        flash[:notice].should eq 'Gruppe <i>Group 111</i> wurde erfolgreich reaktiviert.'
-        should redirect_to group
+        expect(Group.find(group.id)).to be_present
+        expect(flash[:notice]).to eq 'Gruppe <i>Group 111</i> wurde erfolgreich reaktiviert.'
+        is_expected.to redirect_to group
       end
     end
 
@@ -145,12 +145,12 @@ describe GroupsController do
       it 'creates csv' do
         get :export_subgroups, id: group.id
 
-        @response.content_type.should == 'text/csv'
+        expect(@response.content_type).to eq('text/csv')
         lines = @response.body.split("\n")
-        lines.should have(10).items
-        lines[0].should =~ /^Id;Elterngruppe;Name;.*/
-        lines[1].should =~ /^#{group.id};;Top;.*/
-        lines[2].should =~ /^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/
+        expect(lines.size).to eq(10)
+        expect(lines[0]).to match(/^Id;Elterngruppe;Name;.*/)
+        expect(lines[1]).to match(/^#{group.id};;Top;.*/)
+        expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
       end
     end
   end

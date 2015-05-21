@@ -28,21 +28,21 @@ describe PeopleSerializer do
     before { allow(controller).to receive(:can?).and_return(true) }
 
     it 'has additional properties' do
-      should have_key(:birthday)
-      should have_key(:gender)
+      is_expected.to have_key(:birthday)
+      is_expected.to have_key(:gender)
     end
 
     it 'has all accounts' do
       links = subject[:links]
-      links[:social_accounts].should have(2).items
-      links[:additional_emails].should have(1).items
-      links.should_not have_key(:phone_numbers)
+      expect(links[:social_accounts].size).to eq(2)
+      expect(links[:additional_emails].size).to eq(1)
+      expect(links).not_to have_key(:phone_numbers)
     end
 
     it 'does not contain login credentials' do
-      should_not have_key(:password)
-      should_not have_key(:encrypted_password)
-      should_not have_key(:authentication_token)
+      is_expected.not_to have_key(:password)
+      is_expected.not_to have_key(:encrypted_password)
+      is_expected.not_to have_key(:authentication_token)
     end
   end
 
@@ -50,15 +50,15 @@ describe PeopleSerializer do
     before { allow(controller).to receive(:can?).and_return(false) }
 
     it 'has additional properties' do
-      should_not have_key(:birthday)
-      should_not have_key(:gender)
+      is_expected.not_to have_key(:birthday)
+      is_expected.not_to have_key(:gender)
     end
 
     it 'has only public accounts' do
       links = subject[:links]
-      links[:social_accounts].should have(1).items
-      links[:additional_emails].should have(1).items
-      links.should_not have_key(:phone_numbers)
+      expect(links[:social_accounts].size).to eq(1)
+      expect(links[:additional_emails].size).to eq(1)
+      expect(links).not_to have_key(:phone_numbers)
     end
   end
 

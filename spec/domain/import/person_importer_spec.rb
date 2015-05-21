@@ -85,8 +85,8 @@ describe Import::PersonImporter do
       its(:email) { should eq 'foo@bar.net' }
       its('roles.size') { should eq 1 }
       it 'updates double and success count' do
-        importer.doublette_count.should eq 1
-        importer.new_count.should eq 0
+        expect(importer.doublette_count).to eq 1
+        expect(importer.new_count).to eq 0
       end
     end
 
@@ -108,7 +108,7 @@ describe Import::PersonImporter do
       subject { importer }
       its(:errors) { should eq ['Zeile 1: 2 Treffer in Duplikatserkennung.'] }
       it 'does not change person' do
-        person.reload.roles.size.should eq 0
+        expect(person.reload.roles.size).to eq 0
       end
     end
 

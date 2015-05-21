@@ -20,9 +20,9 @@ describe Subscriber::PersonController do
       post :create, group_id: group.id,
                     mailing_list_id: list.id
 
-      should render_template('crud/new')
-      assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ['Person muss ausgewählt werden']
+      is_expected.to render_template('crud/new')
+      expect(assigns(:subscription).errors.size).to eq(1)
+      expect(assigns(:subscription).errors[:base]).to eq ['Person muss ausgewählt werden']
     end
 
     it 'duplicated subscription replaces error' do
@@ -31,9 +31,9 @@ describe Subscriber::PersonController do
       expect do post :create, group_id: group.id, mailing_list_id: list.id,
                               subscription: { subscriber_id: person.id } end.not_to change(Subscription, :count)
 
-      should render_template('crud/new')
-      assigns(:subscription).errors.should have(1).item
-      assigns(:subscription).errors[:base].should eq ['Person wurde bereits hinzugefügt']
+      is_expected.to render_template('crud/new')
+      expect(assigns(:subscription).errors.size).to eq(1)
+      expect(assigns(:subscription).errors[:base]).to eq ['Person wurde bereits hinzugefügt']
     end
 
     it 'updates exclude flag for existing subscription' do
@@ -42,7 +42,7 @@ describe Subscriber::PersonController do
       expect do post :create, group_id: group.id, mailing_list_id: list.id,
                               subscription: { subscriber_id: person.id } end.not_to change(Subscription, :count)
 
-      subscription.reload.should_not be_excluded
+      expect(subscription.reload).not_to be_excluded
     end
 
   end

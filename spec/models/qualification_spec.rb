@@ -29,7 +29,7 @@ describe Qualification do
       quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
                                         start_at: Date.parse('2011-3-3').to_date,
                                         origin: 'SLK 11')
-      quali.to_s.should eq 'Super Lead (bis 31.12.2013)'
+      expect(quali.to_s).to eq 'Super Lead (bis 31.12.2013)'
     end
 
     context :long do
@@ -37,26 +37,26 @@ describe Qualification do
         quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
                                           start_at: Date.parse('2011-3-3').to_date,
                                           origin: 'SLK 11')
-        quali.to_s(:long).should eq 'Super Lead (bis 31.12.2013, von SLK 11)'
+        expect(quali.to_s(:long)).to eq 'Super Lead (bis 31.12.2013, von SLK 11)'
       end
 
       it 'includes origin and no finish_at' do
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: 'Super Lead'),
                                           start_at: Date.parse('2011-3-3').to_date,
                                           origin: 'SLK 11')
-        quali.to_s(:long).should eq 'Super Lead (von SLK 11)'
+        expect(quali.to_s(:long)).to eq 'Super Lead (von SLK 11)'
       end
 
       it 'includes only finish_at' do
         quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
                                           start_at: Date.parse('2011-3-3').to_date)
-        quali.to_s(:long).should eq 'Super Lead (bis 31.12.2013)'
+        expect(quali.to_s(:long)).to eq 'Super Lead (bis 31.12.2013)'
       end
 
       it 'includes only kind' do
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: 'Super Lead'),
                                           start_at: Date.parse('2011-3-3').to_date)
-        quali.to_s(:long).should eq 'Super Lead'
+        expect(quali.to_s(:long)).to eq 'Super Lead'
       end
     end
   end
@@ -68,17 +68,17 @@ describe Qualification do
 
     context 'on same day' do
       let(:date) { Date.parse('2011-3-3') }
-      it { should_not be_valid  }
+      it { is_expected.not_to be_valid  }
     end
 
     context 'later in same year' do
       let(:date) { Date.parse('2011-5-5') }
-      it { should be_valid  }
+      it { is_expected.to be_valid  }
     end
 
     context 'in next year' do
       let(:date) { Date.parse('2012-5-5') }
-      it { should be_valid  }
+      it { is_expected.to be_valid  }
     end
   end
 
@@ -90,28 +90,28 @@ describe Qualification do
       quali = build_qualification(0, date)
       quali.valid?
 
-      quali.finish_at.should == date.end_of_year
+      expect(quali.finish_at).to eq(date.end_of_year)
     end
 
     it 'set respective end of year if validity is 2' do
       quali = build_qualification(2, date)
       quali.valid?
 
-      quali.finish_at.should == (date + 2.years).end_of_year
+      expect(quali.finish_at).to eq((date + 2.years).end_of_year)
     end
 
     it 'does not set year if validity is nil' do
       quali = build_qualification(nil, date)
       quali.valid?
 
-      quali.finish_at.should be_nil
+      expect(quali.finish_at).to be_nil
     end
 
     it 'does not set year if start_at is nil' do
       quali = build_qualification(2, nil)
       quali.valid?
 
-      quali.finish_at.should be_nil
+      expect(quali.finish_at).to be_nil
     end
 
     def build_qualification(validity, start_at)
@@ -122,7 +122,7 @@ describe Qualification do
 
   context '#active' do
     subject { qualification }
-    it { should be_active }
+    it { is_expected.to be_active }
   end
 
   context '.active' do
@@ -130,26 +130,26 @@ describe Qualification do
 
     it 'contains from today' do
       q = Fabricate(:qualification, person: person, start_at: Date.today)
-      q.should be_active
-      should include(q)
+      expect(q).to be_active
+      is_expected.to include(q)
     end
 
     it 'does contain until this year' do
       q = Fabricate(:qualification, person: person, start_at: Date.today - 2.years)
-      q.should be_active
-      should include(q)
+      expect(q).to be_active
+      is_expected.to include(q)
     end
 
     it 'does not contain past' do
       q = Fabricate(:qualification, person: person, start_at: Date.today - 5.years)
-      q.should_not be_active
-      should_not include(q)
+      expect(q).not_to be_active
+      is_expected.not_to include(q)
     end
 
     it 'does not contain future' do
       q = Fabricate(:qualification, person: person, start_at: Date.today + 1.day)
-      q.should_not be_active
-      should_not include(q)
+      expect(q).not_to be_active
+      is_expected.not_to include(q)
     end
   end
 
@@ -163,15 +163,15 @@ describe Qualification do
 
     context 'missing' do
       context 'active qualification' do
-        it { q.should be_active }
-        it { q.should be_reactivateable }
+        it { expect(q).to be_active }
+        it { expect(q).to be_reactivateable }
       end
 
       context 'expired qualification' do
         let(:start_date) { today - 3.years }
 
-        it { q.should_not be_active }
-        it { q.should_not be_reactivateable }
+        it { expect(q).not_to be_active }
+        it { expect(q).not_to be_reactivateable }
       end
     end
 
@@ -179,22 +179,22 @@ describe Qualification do
       before { kind.update_column(:reactivateable, 2) }
 
       context 'active qualification' do
-        it { q.should be_active }
-        it { q.should be_reactivateable }
+        it { expect(q).to be_active }
+        it { expect(q).to be_reactivateable }
       end
 
       context 'expired qualification within reactivateable limit' do
         let(:start_date) { today - 3.years }
 
-        it { q.should_not be_active }
-        it { q.should be_reactivateable }
+        it { expect(q).not_to be_active }
+        it { expect(q).to be_reactivateable }
       end
 
       context 'expired qualification past reactivateable limit' do
         let(:start_date) { today - 5.years }
 
-        it { q.should_not be_active }
-        it { q.should_not be_reactivateable }
+        it { expect(q).not_to be_active }
+        it { expect(q).not_to be_reactivateable }
       end
     end
 
@@ -202,8 +202,8 @@ describe Qualification do
       let(:start_date) { today - 3.years }
       before { kind.update_column(:reactivateable, 2) }
 
-      it { q.should be_reactivateable }
-      it { q.reactivateable?(today + 2.years).should be_false }
+      it { expect(q).to be_reactivateable }
+      it { expect(q.reactivateable?(today + 2.years)).to be_falsey }
     end
   end
 
@@ -218,8 +218,8 @@ describe Qualification do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'create'
-      version.main.should == person
+      expect(version.event).to eq('create')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on update' do
@@ -231,8 +231,8 @@ describe Qualification do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'update'
-      version.main.should == person
+      expect(version.event).to eq('update')
+      expect(version.main).to eq(person)
     end
 
     it 'sets main on destroy' do
@@ -244,8 +244,8 @@ describe Qualification do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      version.event.should == 'destroy'
-      version.main.should == person
+      expect(version.event).to eq('destroy')
+      expect(version.main).to eq(person)
     end
   end
 end

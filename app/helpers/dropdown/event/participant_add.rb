@@ -19,10 +19,10 @@ module Dropdown
       end
 
       def to_s
-        if items.size == 1
-          simple_button(items.first.url)
-        else
-          super
+        case items.size
+        when 0 then nil
+        when 1 then simple_button(items.first.url)
+        else super
         end
       end
 
@@ -37,16 +37,13 @@ module Dropdown
       end
 
       def init_items(url_options)
-        participant_roles.each do |type|
+        event.participant_types.each do |type|
           opts = url_options.merge(event_role: { type: type.sti_name })
           link = template.new_group_event_participation_path(group, event, opts)
           add_item(translate(:as, role: type.label), link)
         end
       end
 
-      def participant_roles
-        event.klass.role_types.select(&:participant?)
-      end
     end
   end
 end

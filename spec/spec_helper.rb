@@ -18,7 +18,6 @@ ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'cancan/matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -32,7 +31,6 @@ Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support'
 Faker::Config.locale = I18n.locale
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -76,7 +74,7 @@ RSpec.configure do |config|
   config.before(:each, :draper_with_helpers) do
     c = ApplicationController.new
     c.request = ActionDispatch::TestRequest.new
-    c.stub(:current_person) { people(:top_leader) }
+    allow(c).to receive(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
 

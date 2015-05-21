@@ -31,6 +31,7 @@ en:
         must_have_same_type: must be of the same type
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
+        must_exist: must exist
       models:
         custom_content:
           attributes:
@@ -217,6 +218,9 @@ en:
         booking_info: Registrations
         questions: Questions
         kind_id: Type
+        teamer_count: Leaders count
+        participant_count: Participants count
+        applicant_count: Registrations count
       event/course:
         kind_id: Course type
         state: State

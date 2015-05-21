@@ -22,7 +22,7 @@ describe Event::Role do
       context part do
         it 'must have valid permissions' do
           # although it looks like, this example is about participation.permissions and not about Participation::Permissions
-          Event::Role::Permissions.should include(*part.permissions)
+          expect(Event::Role::Permissions).to include(*part.permissions)
         end
       end
     end
@@ -47,8 +47,8 @@ describe Event::Role do
       role.destroy
 
       event.reload
-      event.participant_count.should eq participant_count - 1
-      event.applicant_count.should eq applicant_count - 1
+      expect(event.participant_count).to eq participant_count - 1
+      expect(event.applicant_count).to eq applicant_count - 1
     end
 
     it 'decrements event#participant_count if participations has other non participant roles' do
@@ -63,8 +63,8 @@ describe Event::Role do
       role.destroy
 
       event.reload
-      event.participant_count.should eq participant_count - 1
-      event.applicant_count.should eq applicant_count - 1
+      expect(event.participant_count).to eq participant_count - 1
+      expect(event.applicant_count).to eq applicant_count - 1
     end
 
   end

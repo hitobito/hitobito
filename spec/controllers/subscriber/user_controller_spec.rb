@@ -42,15 +42,15 @@ describe Subscriber::UserController do
 
       it 'updates excluded subscription' do
         subscription = Fabricate(:subscription, mailing_list: list, subscriber: person, excluded: true)
-        subscription.should be_excluded
+        expect(subscription).to be_excluded
         expect { post :create, group_id: group.id, mailing_list_id: list.id }.not_to change(Subscription, :count)
 
-        subscription.reload.should_not be_excluded
+        expect(subscription.reload).not_to be_excluded
       end
 
       after do
-        flash[:notice].should eq 'Du wurdest dem Abo erfolgreich hinzugefügt.'
-        should redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
+        expect(flash[:notice]).to eq 'Du wurdest dem Abo erfolgreich hinzugefügt.'
+        is_expected.to redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
       end
     end
   end
@@ -61,7 +61,7 @@ describe Subscriber::UserController do
       Fabricate(:subscription, mailing_list: list, subscriber: groups(:top_layer), excluded: false, role_types: [Group::TopGroup::Leader.sti_name])
       expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.to change { Subscription.count }.by(1)
 
-      person.subscriptions.last.should be_excluded
+      expect(person.subscriptions.last).to be_excluded
     end
 
     it 'handle multiple direct and indirect subscription' do
@@ -69,26 +69,26 @@ describe Subscriber::UserController do
       Fabricate(:subscription, mailing_list: list, subscriber: person, excluded: false)
       expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.not_to change { Subscription.count }
 
-      person.subscriptions.last.should be_excluded
+      expect(person.subscriptions.last).to be_excluded
     end
 
     it 'destroys direct subscription' do
       Fabricate(:subscription, mailing_list: list, subscriber: person, excluded: false)
       expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.to change { Subscription.count }.by(-1)
 
-      person.subscriptions.should be_empty
+      expect(person.subscriptions).to be_empty
     end
 
     it 'does not create exclusion twice' do
       Fabricate(:subscription, mailing_list: list, subscriber: person, excluded: true)
 
-      expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.not_to change { Subscription.count }.by(1)
-      person.subscriptions.last.should be_excluded
+      expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.not_to change { Subscription.count }
+      expect(person.subscriptions.last).to be_excluded
     end
 
     after do
-      flash[:notice].should eq 'Du wurdest erfolgreich vom Abo entfernt.'
-      should redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
+      expect(flash[:notice]).to eq 'Du wurdest erfolgreich vom Abo entfernt.'
+      is_expected.to redirect_to group_mailing_list_path(group_id: list.group.id, id: list.id)
     end
   end
 

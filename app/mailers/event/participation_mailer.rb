@@ -11,7 +11,7 @@ class Event::ParticipationMailer < ApplicationMailer
   CONTENT_APPROVAL     = 'event_application_approval'
 
   # Include all helpers that are required directly or indirectly (in decorators)
-  helper :standard, :layout, :auto_link
+  helper :format, :layout, :auto_link
 
   attr_reader :participation
 

@@ -26,7 +26,7 @@ describe EventsController, type: :controller do
   before { sign_in(people(:top_leader)) }
 
   def self.it_should_redirect_to_index
-    it { should redirect_to course_group_events_path(group.id, returning: true) }
+    it { is_expected.to redirect_to course_group_events_path(group.id, returning: true) }
   end
 
   include_examples 'crud controller', skip: [%w(index), %w(new)]
@@ -46,36 +46,36 @@ describe EventsController, type: :controller do
 
       it 'renders button to add new events' do
         get :index, group_id: group.id, year: 2012
-        dom.all('.btn-toolbar .btn')[0].text.should include 'Anlass erstellen'
+        expect(dom.all('.btn-toolbar .btn')[0].text).to include 'Anlass erstellen'
       end
 
       it 'renders button to add new courses' do
         get :index, group_id: group.id, type: 'Event::Course', year: 2012
-        dom.all('.btn-toolbar .btn')[0].text.should include 'Kurs erstellen'
+        expect(dom.all('.btn-toolbar .btn')[0].text).to include 'Kurs erstellen'
       end
 
       it 'renders button to export courses' do
         get :index, group_id: group.id, type: 'Event::Course', year: 2012
-        dom.all('.btn-toolbar .btn')[1].text.should include 'CSV Export'
+        expect(dom.all('.btn-toolbar .btn')[1].text).to include 'CSV Export'
       end
 
       it 'lists entries for current year' do
         ev = event_with_date(start_at: today)
         event_with_date(start_at: last_year)
         get :index, group_id: group.id
-        dom.all('#main table tbody tr').count.should eq 1
-        dom.find('#main table tbody tr').text.should include ev.name
-        dom.find_link(today.year.to_s).native.parent[:class].should eq 'active'
+        expect(dom.all('#main table tbody tr').count).to eq 1
+        expect(dom.find('#main table tbody tr').text).to include ev.name
+        expect(dom.find_link(today.year.to_s).native.parent[:class]).to eq 'active'
       end
 
       it 'pages per year' do
         event_with_date(start_at: today)
         ev = event_with_date(start_at: last_year)
         get :index, group_id: group.id, year: last_year.year
-        dom.all('.pagination li').count.should eq 6
-        dom.all('#main table tbody tr').count.should eq 1
-        dom.find('#main table tbody tr').text.should include ev.name
-        dom.find_link(last_year.year.to_s).native.parent[:class].should eq 'active'
+        expect(dom.all('.pagination li').count).to eq 6
+        expect(dom.all('#main table tbody tr').count).to eq 1
+        expect(dom.find('#main table tbody tr').text).to include ev.name
+        expect(dom.find_link(last_year.year.to_s).native.parent[:class]).to eq 'active'
       end
 
       def event_with_date(opts = {})
@@ -92,12 +92,12 @@ describe EventsController, type: :controller do
 
       it 'renders events csv' do
         get :index, group_id: group.id, format: :csv, year: 2012
-        response.body.lines.should have(2).items
+        expect(response.body.lines.to_a.size).to eq(2)
       end
 
       it 'renders courses csv' do
         get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
-        response.body.lines.should have(2).items
+        expect(response.body.lines.to_a.size).to eq(2)
       end
 
     end
@@ -111,9 +111,9 @@ describe EventsController, type: :controller do
 
     it 'renders new form' do
       get :new, group_id: group.id, event: { type: 'Event::Course' }
-      dom.find('input#event_type')[:type].should eq 'hidden'
-      dom.all('#questions_fields .fields').count.should eq 3
-      dom.all('#dates_fields').count.should eq 1
+      expect(dom.find('input#event_type')[:type]).to eq 'hidden'
+      expect(dom.all('#questions_fields .fields').count).to eq 3
+      expect(dom.all('#dates_fields').count).to eq 1
     end
   end
 

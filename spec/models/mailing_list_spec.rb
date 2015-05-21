@@ -31,28 +31,28 @@ describe MailingList do
   describe 'validations' do
     it 'succeed with mail_name' do
       list.mail_name = 'aa-b'
-      list.should be_valid
+      expect(list).to be_valid
     end
 
     it 'succeed with one char mail_name' do
       list.mail_name = 'a'
-      list.should be_valid
+      expect(list).to be_valid
     end
 
     it 'fails with mail_name and invalid chars' do
       list.mail_name = 'a@aa'
-      list.should have(1).error_on(:mail_name)
+      expect(list).to have(1).error_on(:mail_name)
     end
 
     it 'fails with mail_name and invalid first char' do
       list.mail_name = '-aa'
-      list.should have(1).error_on(:mail_name)
+      expect(list).to have(1).error_on(:mail_name)
     end
 
     it 'fails with duplicate mail name' do
       Fabricate(:mailing_list, mail_name: 'foo', group: groups(:bottom_layer_one))
       list.mail_name = 'foo'
-      list.should have(1).error_on(:mail_name)
+      expect(list).to have(1).error_on(:mail_name)
     end
   end
 
@@ -61,15 +61,15 @@ describe MailingList do
       it 'is true if included' do
         create_subscription(person)
 
-        list.subscribed?(person).should be_true
-        list.subscribed?(people(:top_leader)).should be_false
+        expect(list.subscribed?(person)).to be_truthy
+        expect(list.subscribed?(people(:top_leader))).to be_falsey
       end
 
       it 'is false if excluded' do
         create_subscription(person)
         create_subscription(person, true)
 
-        list.subscribed?(person).should be_false
+        expect(list.subscribed?(person)).to be_falsey
       end
     end
 
@@ -78,14 +78,14 @@ describe MailingList do
         create_subscription(event)
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        list.subscribed?(p).should be_true
+        expect(list.subscribed?(p)).to be_truthy
       end
 
       it 'is false if non active participation' do
         create_subscription(event)
         p = Fabricate(:event_participation, event: event).person
 
-        list.subscribed?(p).should be_false
+        expect(list.subscribed?(p)).to be_falsey
       end
 
       it 'is false if explicitly excluded' do
@@ -93,7 +93,7 @@ describe MailingList do
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         create_subscription(p, true)
 
-        list.subscribed?(p).should be_false
+        expect(list.subscribed?(p)).to be_falsey
       end
     end
 
@@ -103,7 +103,7 @@ describe MailingList do
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
-        list.subscribed?(p).should be_true
+        expect(list.subscribed?(p)).to be_truthy
       end
 
       it 'is false if different role in groupn' do
@@ -111,7 +111,7 @@ describe MailingList do
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
 
-        list.subscribed?(p).should be_false
+        expect(list.subscribed?(p)).to be_falsey
       end
 
       it 'is false if explicitly excluded' do
@@ -120,7 +120,7 @@ describe MailingList do
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
 
-        list.subscribed?(p).should be_false
+        expect(list.subscribed?(p)).to be_falsey
       end
     end
   end
@@ -134,17 +134,17 @@ describe MailingList do
       it 'includes single person' do
         create_subscription(person)
 
-        should include(person)
-        should have(1).item
+        is_expected.to include(person)
+        expect(subject.size).to eq(1)
       end
 
       it 'includes various people' do
         create_subscription(person)
         create_subscription(people(:top_leader))
 
-        should include(person)
-        should include(people(:top_leader))
-        should have(2).items
+        is_expected.to include(person)
+        is_expected.to include(people(:top_leader))
+        expect(subject.size).to eq(2)
       end
     end
 
@@ -156,9 +156,9 @@ describe MailingList do
         p1 = leader.person
         p2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        should include(p1)
-        should include(p2)
-        should have(2).items
+        is_expected.to include(p1)
+        is_expected.to include(p2)
+        expect(subject.size).to eq(2)
       end
 
       it 'includes people from multiple events' do
@@ -179,10 +179,10 @@ describe MailingList do
                   participation: Fabricate(:event_participation,
                                            event: Fabricate(:event, groups: [list.group])))
 
-        should include(p1)
-        should include(p2)
-        should include(p3)
-        should have(3).items
+        is_expected.to include(p1)
+        is_expected.to include(p2)
+        is_expected.to include(p3)
+        expect(subject.size).to eq(3)
       end
     end
 
@@ -202,10 +202,10 @@ describe MailingList do
         # deleted role in the same hierarchy
         p4 = Fabricate(role, group: groups(:bottom_group_one_one), deleted_at: 1.year.ago).person
 
-        should include(p1)
-        should include(p2)
-        should_not include(p4)
-        should have(2).items
+        is_expected.to include(p1)
+        is_expected.to include(p2)
+        is_expected.not_to include(p4)
+        expect(subject.size).to eq(2)
       end
 
       it 'includes people with the given roles in multiple groups' do
@@ -222,10 +222,10 @@ describe MailingList do
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one))
         Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two))
 
-        should include(p1)
-        should include(p2)
-        should include(p3)
-        should have(3).items
+        is_expected.to include(p1)
+        is_expected.to include(p2)
+        is_expected.to include(p3)
+        expect(subject.size).to eq(3)
       end
     end
 
@@ -235,8 +235,8 @@ describe MailingList do
         create_subscription(people(:top_leader))
         create_subscription(person, true)
 
-        should include(people(:top_leader))
-        should have(1).items
+        is_expected.to include(people(:top_leader))
+        expect(subject.size).to eq(1)
       end
     end
 
@@ -253,9 +253,9 @@ describe MailingList do
 
         create_subscription(p1, true)
 
-        should include(p2)
-        should include(p3)
-        should have(2).items
+        is_expected.to include(p2)
+        is_expected.to include(p3)
+        expect(subject.size).to eq(2)
       end
     end
 
@@ -270,8 +270,8 @@ describe MailingList do
 
         create_subscription(p2, true)
 
-        should include(p1)
-        should have(1).items
+        is_expected.to include(p1)
+        expect(subject.size).to eq(1)
       end
     end
 
@@ -306,15 +306,15 @@ describe MailingList do
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one))
         Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two))
 
-        should include(person)
-        should include(people(:top_leader))
-        should include(pe1)
-        should include(pe2)
-        should include(pe3)
-        should include(pg1)
-        should include(pg2)
-        should include(pg3)
-        should have(8).items
+        is_expected.to include(person)
+        is_expected.to include(people(:top_leader))
+        is_expected.to include(pe1)
+        is_expected.to include(pe2)
+        is_expected.to include(pe3)
+        is_expected.to include(pg1)
+        is_expected.to include(pg2)
+        is_expected.to include(pg3)
+        expect(subject.size).to eq(8)
       end
 
       it 'includes overlapping people from events and groups' do
@@ -345,13 +345,13 @@ describe MailingList do
 
         create_subscription(pg2)
 
-        should include(people(:top_leader))
-        should include(pe1)
-        should include(pe2)
-        should include(pe3)
-        should include(pg1)
-        should include(pg2)
-        should have(6).items
+        is_expected.to include(people(:top_leader))
+        is_expected.to include(pe1)
+        is_expected.to include(pe2)
+        is_expected.to include(pe3)
+        is_expected.to include(pg1)
+        is_expected.to include(pg2)
+        expect(subject.size).to eq(6)
       end
     end
 
@@ -386,18 +386,18 @@ describe MailingList do
         create_subscription(pg2, true)
         create_subscription(pe1, true)
 
-        should include(people(:top_leader))
-        should include(pe2)
-        should include(pe3)
-        should include(pg1)
-        should have(4).items
+        is_expected.to include(people(:top_leader))
+        is_expected.to include(pe2)
+        is_expected.to include(pe3)
+        is_expected.to include(pg1)
+        expect(subject.size).to eq(4)
 
-        list.subscribed?(people(:top_leader)).should be_true
-        list.subscribed?(pe2).should be_true
-        list.subscribed?(pe3).should be_true
-        list.subscribed?(pg1).should be_true
-        list.subscribed?(pg2).should be_false
-        list.subscribed?(pe1).should be_false
+        expect(list.subscribed?(people(:top_leader))).to be_truthy
+        expect(list.subscribed?(pe2)).to be_truthy
+        expect(list.subscribed?(pe3)).to be_truthy
+        expect(list.subscribed?(pg1)).to be_truthy
+        expect(list.subscribed?(pg2)).to be_falsey
+        expect(list.subscribed?(pe1)).to be_falsey
       end
     end
   end

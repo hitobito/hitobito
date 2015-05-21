@@ -57,7 +57,7 @@ describe Event::ParticipationsController, type: :controller do
 
     it 'contains application contact' do
       perform_request
-      dom.should have_content(contact.to_s)
+      expect(dom).to have_content(contact.to_s)
     end
 
   end
@@ -69,9 +69,9 @@ describe Event::ParticipationsController, type: :controller do
       context 'with valid params', combine: 'uhv' do
         it 'updates answer attributes' do
           as = entry.answers
-          as.detect { |a| a.question == event_questions(:top_ov) }.answer.should == 'Halbtax'
-          as.detect { |a| a.question == event_questions(:top_vegi) }.answer.should == 'nein'
-          as.detect { |a| a.question == event_questions(:top_more) }.answer.should == 'Ne du'
+          expect(as.detect { |a| a.question == event_questions(:top_ov) }.answer).to eq('Halbtax')
+          expect(as.detect { |a| a.question == event_questions(:top_vegi) }.answer).to eq('nein')
+          expect(as.detect { |a| a.question == event_questions(:top_more) }.answer).to eq('Ne du')
         end
       end
     end
@@ -82,8 +82,8 @@ describe Event::ParticipationsController, type: :controller do
       it "prompts to change contact data for #{event_sym}" do
         event = send(event_sym)
         post :create, group_id: group.id, event_id: event.id, event_participation: test_entry_attrs
-        flash[:notice].should =~ /Bitte überprüfe die Kontaktdaten/
-        should redirect_to group_event_participation_path(group, event, assigns(:participation))
+        expect(flash[:notice]).to match(/Bitte überprüfe die Kontaktdaten/)
+        is_expected.to redirect_to group_event_participation_path(group, event, assigns(:participation))
       end
     end
   end
@@ -94,32 +94,32 @@ describe Event::ParticipationsController, type: :controller do
       it "renders title for #{event_sym}" do
         event = send(event_sym)
         get :new, group_id: group.id, event_id: event.id
-        should have_content "Anmeldung als Teilnehmer/-in"
+        is_expected.to have_content "Anmeldung als Teilnehmer/-in"
       end
     end
     it 'renders person field when passed for_someone_else param' do
       get :new, group_id: group.id, event_id: course.id, for_someone_else: true
       person_field = subject.all('form .control-group')[0]
-      person_field.should have_content 'Person'
-      person_field.should have_css('input', count: 2)
-      person_field.all('input').first[:type].should eq 'hidden'
+      expect(person_field).to have_content 'Person'
+      expect(person_field).to have_css('input', count: 2)
+      expect(person_field.all('input').first[:type]).to eq 'hidden'
     end
 
     it 'renders alternatives' do
       a = Fabricate(:course, kind_id: course.kind_id)
       a.dates.create!(start_at: course.dates.first.start_at + 2.weeks)
       get :new, group_id: group.id, event_id: course.id
-      should have_content a.name
+      is_expected.to have_content a.name
     end
   end
 
   describe_action :delete, :destroy, format: :html, id: true do
     it 'redirects to application market' do
-      should redirect_to group_event_application_market_index_path(group, course)
+      is_expected.to redirect_to group_event_application_market_index_path(group, course)
     end
 
     it 'has flash noting the application' do
-      flash[:notice].should =~ /Anmeldung/
+      expect(flash[:notice]).to match(/Anmeldung/)
     end
   end
 
@@ -134,7 +134,7 @@ describe Event::ParticipationsController, type: :controller do
 
     it 'renders participant and course contact' do
       get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id, format: :pdf
-      response.should be_ok
+      expect(response).to be_ok
     end
 
     it 'redirects users without permission' do
@@ -163,13 +163,13 @@ describe Event::ParticipationsController, type: :controller do
     it 'filters by event role label' do
       get :index, group_id: event.groups.first.id, event_id: event.id, filter: 'Foolabel'
 
-      dom.should have_selector('a.dropdown-toggle', text: 'Foolabel')
-      dom.should have_selector('.dropdown a', text: 'Foolabel')
-      dom.should have_selector('.dropdown a', text: 'Just label')
+      expect(dom).to have_selector('a.dropdown-toggle', text: 'Foolabel')
+      expect(dom).to have_selector('.dropdown a', text: 'Foolabel')
+      expect(dom).to have_selector('.dropdown a', text: 'Just label')
 
-      dom.should have_selector('a', text: parti1.person.to_s(:list))
-      dom.should have_selector('a', text: parti2.person.to_s(:list))
-      dom.should have_no_selector('a', text: parti3.person.to_s(:list))
+      expect(dom).to have_selector('a', text: parti1.person.to_s(:list))
+      expect(dom).to have_selector('a', text: parti2.person.to_s(:list))
+      expect(dom).to have_no_selector('a', text: parti3.person.to_s(:list))
     end
 
   end

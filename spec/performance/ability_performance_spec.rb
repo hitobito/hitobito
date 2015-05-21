@@ -17,7 +17,7 @@ describe Ability, performance: true do
 
   def measure(max_time, &block)
     Benchmark.bm(12) do |x|
-      ms = x.report(example.description) do
+      ms = x.report(RSpec.current_example.description) do
         N.times(&block)
       end
 

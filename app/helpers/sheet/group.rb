@@ -22,7 +22,8 @@ module Sheet
           "#{type.type_name}_group_events_path",
           params: { returning: true },
           if: lambda { |view, group|
-            group.event_types.include?(type) && view.can?(:index_events, group)
+            group.event_types.include?(type) &&
+            view.can?(:"index_#{type.name.underscore.pluralize}", group)
           }
     end
 
@@ -86,8 +87,8 @@ module Sheet
 
     def belongs_to
       translate(:belongs_to).html_safe +
-        StandardHelper::EMPTY_STRING +
-        StandardHelper::EMPTY_STRING
+        FormatHelper::EMPTY_STRING +
+        FormatHelper::EMPTY_STRING
     end
 
   end

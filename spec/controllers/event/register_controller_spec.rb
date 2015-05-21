@@ -27,14 +27,14 @@ describe Event::RegisterController do
         before { sign_in(people(:top_leader)) }
         it 'displays event page' do
           get :index, group_id: group.id, id: event.id
-          should redirect_to(group_event_path(group, event))
+          is_expected.to redirect_to(group_event_path(group, event))
         end
       end
 
       context 'as external user' do
         it 'displays standard login forms' do
           get :index, group_id: group.id, id: event.id
-          should redirect_to(new_person_session_path)
+          is_expected.to redirect_to(new_person_session_path)
         end
       end
     end
@@ -48,15 +48,15 @@ describe Event::RegisterController do
         before { sign_in(people(:top_leader)) }
         it 'displays event page' do
           get :index, group_id: group.id, id: event.id
-          should redirect_to(group_event_path(group, event))
+          is_expected.to redirect_to(group_event_path(group, event))
         end
       end
 
       context 'as external user' do
         it 'displays external login forms' do
           get :index, group_id: group.id, id: event.id
-          should render_template('index')
-          flash[:notice].should eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
+          is_expected.to render_template('index')
+          expect(flash[:notice]).to eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
         end
       end
     end
@@ -70,16 +70,16 @@ describe Event::RegisterController do
         before { sign_in(people(:top_leader)) }
         it 'displays event page' do
           get :index, group_id: group.id, id: event.id
-          should redirect_to(group_event_path(group, event))
-          flash[:alert].should eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
+          is_expected.to redirect_to(group_event_path(group, event))
+          expect(flash[:alert]).to eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
         end
       end
 
       context 'as external user' do
         it 'displays standard login forms' do
           get :index, group_id: group.id, id: event.id
-          should redirect_to(new_person_session_path)
-          flash[:alert].should eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
+          is_expected.to redirect_to(new_person_session_path)
+          expect(flash[:alert]).to eq 'Das Anmeldefenster für diesen Anlass ist geschlossen.'
         end
       end
     end
@@ -89,15 +89,15 @@ describe Event::RegisterController do
     context 'without email' do
       it 'displays form again' do
         post :check, group_id: group.id, id: event.id, person: { email: '' }
-        should render_template('index')
-        flash[:alert].should eq 'Bitte gib eine E-Mail ein'
+        is_expected.to render_template('index')
+        expect(flash[:alert]).to eq 'Bitte gib eine E-Mail ein'
       end
     end
 
     context 'with honeypot filled' do
       it 'redirects to login' do
         post :check, group_id: group.id, id: event.id, person: { email: 'foo@example.com', name: 'Foo' }
-        should redirect_to(new_person_session_path)
+        is_expected.to redirect_to(new_person_session_path)
       end
     end
 
@@ -106,17 +106,17 @@ describe Event::RegisterController do
         expect do
           post :check, group_id: group.id, id: event.id, person: { email: people(:top_leader).email }
         end.to change { Delayed::Job.count }.by(1)
-        should render_template('index')
-        flash[:notice].should include 'Wir haben dich in unserer Datenbank gefunden.'
-        flash[:notice].should include 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du'
+        is_expected.to render_template('index')
+        expect(flash[:notice]).to include 'Wir haben dich in unserer Datenbank gefunden.'
+        expect(flash[:notice]).to include 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du'
       end
     end
 
     context 'for non-existing person' do
       it 'displays person form' do
         post :check, group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' }
-        should render_template('register')
-        flash[:notice].should eq 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
+        is_expected.to render_template('register')
+        expect(flash[:notice]).to eq 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
       end
     end
   end
@@ -128,15 +128,15 @@ describe Event::RegisterController do
           put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'not-existing@example.com' }
         end.to change { Person.count }.by(1)
 
-        should redirect_to(new_group_event_participation_path(group, event))
-        flash[:notice].should include 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben'
+        is_expected.to redirect_to(new_group_event_participation_path(group, event))
+        expect(flash[:notice]).to include 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben'
       end
     end
 
     context 'with honeypot filled' do
       it 'redirects to login' do
         put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'foo@example.com', name: 'Foo' }
-        should redirect_to(new_person_session_path)
+        is_expected.to redirect_to(new_person_session_path)
       end
     end
 
@@ -146,7 +146,7 @@ describe Event::RegisterController do
           put :register, group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' }
         end.not_to change { Person.count }
 
-        should render_template('register')
+        is_expected.to render_template('register')
       end
     end
   end

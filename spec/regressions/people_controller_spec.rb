@@ -23,7 +23,7 @@ describe PeopleController, type: :controller do
 
 
   def scope_params
-    return { group_id: top_group.id } unless example.metadata[:action] == :new
+    return { group_id: top_group.id } unless RSpec.current_example.metadata[:action] == :new
     {  group_id: top_group.id, role: { type: 'Group::TopGroup::Member', group_id: top_group.id }  }
   end
 
@@ -42,27 +42,27 @@ describe PeopleController, type: :controller do
 
     it 'renders my own page' do
       get :show, group_id: top_group.id, id: top_leader.id
-      page_content.each { |text|  response.body.should =~ /#{text}/ }
+      page_content.each { |text|  expect(response.body).to match(/#{text}/) }
     end
 
     it 'renders page of other group member' do
       sign_in(Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person)
       get :show, group_id: top_group.id, id: other.id
-      page_content.grep(/Info/).each { |text|  response.body.should =~ /#{text}/ }
-      page_content.grep(/[^Info]/).each { |text|  response.body.should_not =~ /#{text}/ }
-      dom.should_not have_selector('a[data-method="delete"] i.icon-trash')
+      page_content.grep(/Info/).each { |text|  expect(response.body).to match(/#{text}/) }
+      page_content.grep(/[^Info]/).each { |text|  expect(response.body).not_to match(/#{text}/) }
+      expect(dom).not_to have_selector('a[data-method="delete"] i.icon-trash')
     end
 
     it 'leader can see link to remove role' do
       get :show, group_id: top_group.id, id: other.id
-      dom.should have_selector('a[data-method="delete"] i.icon-trash')
+      expect(dom).to have_selector('a[data-method="delete"] i.icon-trash')
     end
 
     it 'leader can see created and updated info' do
       sign_in(top_leader)
       get :show, group_id: top_group.id, id: other.id
-      dom.should have_selector('dt', text: 'Erstellt')
-      dom.should have_selector('dt', text: 'Geändert')
+      expect(dom).to have_selector('dt', text: 'Erstellt')
+      expect(dom).to have_selector('dt', text: 'Geändert')
     end
 
     it 'member without permission to see details cannot see created or updated info' do
@@ -70,8 +70,8 @@ describe PeopleController, type: :controller do
       person2 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
       sign_in(person1)
       get :show, id: person2
-      dom.should_not have_selector('dt', text: 'Erstellt')
-      dom.should_not have_selector('dt', text: 'Geändert')
+      expect(dom).not_to have_selector('dt', text: 'Erstellt')
+      expect(dom).not_to have_selector('dt', text: 'Geändert')
     end
 
     context 'send_login tooltip' do
@@ -105,8 +105,8 @@ describe PeopleController, type: :controller do
     let(:params) { { person: { birthday: '33.33.33' } } }
 
     it 'displays old value again' do
-      should render_template('edit')
-      dom.should have_selector('.error input[value="33.33.33"]')
+      is_expected.to render_template('edit')
+      expect(dom).to have_selector('.error input[value="33.33.33"]')
     end
   end
 
@@ -116,12 +116,12 @@ describe PeopleController, type: :controller do
 
     it 'contains roles' do
       get :show, params
-      section.find('h2').text.should eq 'Aktive Rollen'
-      section.all('tr').first.text.should include('TopGroup')
-      section.should have_css('.btn-small')
-      section.find('tr:eq(1) table tr:eq(1)').text.should include('Leader')
+      expect(section.find('h2').text).to eq 'Aktive Rollen'
+      expect(section.all('tr').first.text).to include('TopGroup')
+      expect(section).to have_css('.btn-small')
+      expect(section.find('tr:eq(1) table tr:eq(1)').text).to include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
-      section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml.should include edit_role_path
+      expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml).to include edit_role_path
     end
   end
 
@@ -139,17 +139,17 @@ describe PeopleController, type: :controller do
 
       it 'is missing if we have no applications' do
         get :show, params
-        dom.should have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 2) # only role and qualification
       end
 
       it 'lists application' do
         appl = create_application(date)
         get :show, params
-        header.should eq 'Anmeldungen'
-        label_link[:href].should eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
-        label_link.text.should =~ /Eventus/
-        label.text.should =~ /Top/
-        dates.should eq '02.01.2010 - 07.01.2010'
+        expect(header).to eq 'Anmeldungen'
+        expect(label_link[:href]).to eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
+        expect(label_link.text).to match(/Eventus/)
+        expect(label.text).to match(/Top/)
+        expect(dates).to eq '02.01.2010 - 07.01.2010'
       end
     end
 
@@ -160,23 +160,23 @@ describe PeopleController, type: :controller do
 
       it 'is missing if we have no events' do
         get :show, params
-        dom.should have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 2) # only role and qualification
       end
 
       it 'is missing if we have no upcoming events' do
         create_participation(10.days.ago, true)
         get :show, params
-        dom.should have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 2) # only role and qualification
       end
 
       it 'lists event label, link and dates' do
         create_participation(date, true)
         get :show, params
-        header.should eq 'Meine nächsten Anlässe'
-        label_link[:href].should eq group_event_path(course.groups.first, course)
-        label_link.text.should eq 'Eventus'
-        label.text.should =~ /Top/
-        dates.should eq pretty_date
+        expect(header).to eq 'Meine nächsten Anlässe'
+        expect(label_link[:href]).to eq group_event_path(course.groups.first, course)
+        expect(label_link.text).to eq 'Eventus'
+        expect(label.text).to match(/Top/)
+        expect(dates).to eq pretty_date
       end
     end
 
@@ -195,12 +195,12 @@ describe PeopleController, type: :controller do
     let(:params) { { group_id: top_group.id, id: other.id } }
     it 'list current role and group' do
       get :history, params
-      dom.all('table tbody tr').size.should eq 1
+      expect(dom.all('table tbody tr').size).to eq 1
       role_row = dom.find('table tbody tr:eq(1)')
-      role_row.find('td:eq(1) a').text.should eq 'TopGroup'
-      role_row.find('td:eq(2)').text.strip.should eq 'Member'
-      role_row.find('td:eq(3)').text.should be_present
-      role_row.find('td:eq(4)').text.should_not be_present
+      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
+      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
+      expect(role_row.find('td:eq(3)').text).to be_present
+      expect(role_row.find('td:eq(4)').text).not_to be_present
     end
 
     it 'lists past roles' do
@@ -208,21 +208,21 @@ describe PeopleController, type: :controller do
       role.created_at = Time.zone.now - 2.years
       role.destroy
       get :history, params
-      dom.all('table tbody tr').size.should eq 2
+      expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(1)')
-      role_row.find('td:eq(1) a').text.should eq 'Group 11'
-      role_row.find('td:eq(2)').text.strip.should eq 'Member'
-      role_row.find('td:eq(3)').text.should be_present
-      role_row.find('td:eq(4)').text.should be_present
+      expect(role_row.find('td:eq(1) a').text).to eq 'Group 11'
+      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
+      expect(role_row.find('td:eq(3)').text).to be_present
+      expect(role_row.find('td:eq(4)').text).to be_present
     end
 
     it 'lists roles in other groups' do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
       get :history, params
-      dom.all('table tbody tr').size.should eq 2
+      expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(2)')
-      role_row.find('td:eq(1) a').text.should eq 'TopGroup'
-      role_row.find('td:eq(4)').text.should_not be_present
+      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
+      expect(role_row.find('td:eq(4)').text).not_to be_present
     end
 
     it 'lists past roles in other groups' do
@@ -230,10 +230,10 @@ describe PeopleController, type: :controller do
       role.created_at = Time.zone.now - 2.years
       role.destroy
       get :history, params
-      dom.all('table tbody tr').size.should eq 2
+      expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(2)')
-      role_row.find('td:eq(1) a').text.should eq 'TopGroup'
-      role_row.find('td:eq(4)').text.should be_present
+      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
+      expect(role_row.find('td:eq(4)').text).to be_present
     end
 
     it "lists person's events" do
@@ -248,10 +248,10 @@ describe PeopleController, type: :controller do
 
       events = dom.find('events')
 
-      events.should have_selector('h2', text: 'Kurse')
-      events.should have_selector('h2', text: 'Anlässe')
+      expect(events).to have_selector('h2', text: 'Kurse')
+      expect(events).to have_selector('h2', text: 'Anlässe')
 
-      events.all('tr td a').size.should eq 3
+      expect(events.all('tr td a').size).to eq 3
     end
   end
 
@@ -260,7 +260,7 @@ describe PeopleController, type: :controller do
     it 'renders empty log' do
       get :log, id: test_entry.id, group_id: top_group.id
 
-      response.body.should =~ /keine Änderungen/
+      expect(response.body).to match(/keine Änderungen/)
     end
 
     it 'renders log in correct order' do
@@ -271,8 +271,8 @@ describe PeopleController, type: :controller do
 
       get :log, id: test_entry.id, group_id: top_group.id
 
-      dom.all('h4').should have(1).item
-      dom.all('#content div').should have(11).items
+      expect(dom.all('h4').size).to eq(1)
+      expect(dom.all('#content div').size).to eq(11)
     end
 
   end
@@ -283,8 +283,8 @@ describe PeopleController, type: :controller do
                  id: top_leader.id,
                  return_url: 'foo'
 
-      dom.all('a', text: 'Abbrechen').first[:href].should eq 'foo'
-      dom.find('input#return_url').value.should eq 'foo'
+      expect(dom.all('a', text: 'Abbrechen').first[:href]).to eq 'foo'
+      expect(dom.find('input#return_url').value).to eq 'foo'
     end
   end
 

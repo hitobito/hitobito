@@ -26,24 +26,24 @@ describe SubscriptionsController do
     it 'groups subscriptions by type' do
       get :index, group_id: group.id, mailing_list_id: mailing_list.id
 
-      assigns(:group_subs).count.should eq 1
-      assigns(:person_subs).count.should eq 1
-      assigns(:event_subs).count.should eq 1
-      assigns(:excluded_person_subs).count.should eq 1
+      expect(assigns(:group_subs).count).to eq 1
+      expect(assigns(:person_subs).count).to eq 1
+      expect(assigns(:event_subs).count).to eq 1
+      expect(assigns(:excluded_person_subs).count).to eq 1
     end
 
     it 'renders csv' do
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
       lines = response.body.split("\n")
-      lines.should have(3).items
-      lines[0].should =~ /Vorname;Nachname;.*/
+      expect(lines.size).to eq(3)
+      expect(lines[0]).to match(/Vorname;Nachname;.*/)
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
-      @response.body.should == "#{people(:bottom_member).email},#{@person_subscription.subscriber.email},#{e1.email}"
+      expect(@response.body).to eq("#{people(:bottom_member).email},#{@person_subscription.subscriber.email},#{e1.email}")
     end
   end
 

@@ -109,11 +109,9 @@ class EventsController < CrudController
   end
 
   def authorize_class
-    if request.format.csv?
-      authorize!(:export_events, group)
-    else
-      authorize!(:index_events, group)
-    end
+    type = params[:type].presence || 'Event'
+    action = request.format.csv? ? 'export' : 'index'
+    authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 
 end

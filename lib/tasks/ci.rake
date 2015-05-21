@@ -18,6 +18,7 @@ namespace :ci do
   task :nightly => ['log:clear',
                     'db:migrate',
                     'erd',
+                    'doc:arch',
                     'ci:setup:rspec',
                     'spec:features', # run feature specs first to get coverage from spec
                     'spec',

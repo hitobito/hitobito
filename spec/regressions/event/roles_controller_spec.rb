@@ -47,17 +47,17 @@ describe Event::RolesController, type: :controller do
   # Override a few methods to match the actual behavior.
   class << self
     def it_should_redirect_to_show
-      it do
+      it do |example|
         if example.metadata[:action] == :create
-          should redirect_to edit_group_event_participation_path(group, course, entry.participation_id)
+          is_expected.to redirect_to edit_group_event_participation_path(group, course, entry.participation_id)
         else
-          should redirect_to group_event_participation_path(group, course, entry.participation_id)
+          is_expected.to redirect_to group_event_participation_path(group, course, entry.participation_id)
         end
       end
     end
 
     def it_should_redirect_to_index
-      it { should redirect_to group_event_participations_path(group, course) }
+      it { is_expected.to redirect_to group_event_participations_path(group, course) }
     end
 
   end
@@ -87,11 +87,11 @@ describe Event::RolesController, type: :controller do
         it_should_have_flash(:notice)
 
         it 'should persist entry' do
-          entry.should be_persisted
-          entry.should be_kind_of(Event::Role::AssistantLeader)
-          entry.label.should == create_entry_attrs[:label]
-          entry.participation.should be_persisted
-          entry.participation.person_id.should == create_entry_attrs[:person_id]
+          expect(entry).to be_persisted
+          expect(entry).to be_kind_of(Event::Role::AssistantLeader)
+          expect(entry.label).to eq(create_entry_attrs[:label])
+          expect(entry.participation).to be_persisted
+          expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
         end
       end
     end

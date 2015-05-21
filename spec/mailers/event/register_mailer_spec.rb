@@ -31,19 +31,19 @@ describe Event::RegisterMailer do
     subject { mail.body }
 
     it 'renders placeholders' do
-      should =~ /Top Event/
-      should =~ /#{person.first_name}/
+      is_expected.to match(/Top Event/)
+      is_expected.to match(/#{person.first_name}/)
     end
 
     it 'renders link' do
-      should =~ /<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/
+      is_expected.to match(/<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/)
     end
   end
 
   context 'with additional emails' do
     it 'does not send to them' do
       Fabricate(:additional_email, contactable: person)
-      mail.to.should eq [person.email]
+      expect(mail.to).to eq [person.email]
     end
   end
 end

@@ -19,15 +19,15 @@ describe Group::MoveController do
   context 'GET :select' do
     it 'assigns candidates' do
       get :select, id: group.id
-      assigns(:candidates)['Bottom Layer'].should include target
+      expect(assigns(:candidates)['Bottom Layer']).to include target
     end
   end
 
   context 'POST :perform' do
     it 'performs moving' do
       post :perform, id: group.id, move: { target_group_id: target.id }
-      flash[:notice].should eq "#{group} wurde nach #{target} verschoben."
-      should redirect_to(group)
+      expect(flash[:notice]).to eq "#{group} wurde nach #{target} verschoben."
+      is_expected.to redirect_to(group)
     end
   end
 

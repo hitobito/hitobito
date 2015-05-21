@@ -23,22 +23,22 @@ describe EventsController, js: true do
 
       # set contact
       fill_in 'Kontaktperson', with: 'Top'
-      find('.typeahead.dropdown-menu').should have_content 'Top Leader'
+      expect(find('.typeahead.dropdown-menu')).to have_content 'Top Leader'
       find('.typeahead.dropdown-menu').click
       all('form .btn-toolbar').first.click_button 'Speichern'
 
       # show event
-      find('aside').should have_content 'Kontakt'
-      find('aside').should have_content 'Top Leader'
+      expect(find('aside')).to have_content 'Kontakt'
+      expect(find('aside')).to have_content 'Top Leader'
       click_link 'Bearbeiten'
 
       # remove contact
-      find('#event_contact').value.should == 'Top Leader'
+      expect(find('#event_contact').value).to eq('Top Leader')
       fill_in 'Kontaktperson', with: ''
       all('form .btn-toolbar').first.click_button 'Speichern'
 
       # show event again
-      should_not have_selector('.contactable')
+      is_expected.not_to have_selector('.contactable')
     end
   end
 

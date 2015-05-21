@@ -25,10 +25,10 @@ describe PeopleFilter do
     filter.role_types = ['Group::TopGroup::Leader', 'Group::TopGroup::Member']
     types = filter.related_role_types
 
-    types.should have(2).items
-    types.first.role_type.should == 'Group::TopGroup::Leader'
+    expect(types.size).to eq(2)
+    expect(types.first.role_type).to eq('Group::TopGroup::Leader')
 
-    filter.should be_valid
+    expect(filter).to be_valid
     expect { filter.save }.to change { RelatedRoleType.count }.by(2)
   end
 
@@ -38,11 +38,11 @@ describe PeopleFilter do
     filter.role_type_ids = [Group::TopGroup::Leader.id, Group::TopGroup::Member.id]
     types = filter.related_role_types
 
-    types.should have(2).items
-    types.first.role_type.should == 'Group::TopGroup::Leader'
-    types.last.role_type.should == 'Group::TopGroup::Member'
+    expect(types.size).to eq(2)
+    expect(types.first.role_type).to eq('Group::TopGroup::Leader')
+    expect(types.last.role_type).to eq('Group::TopGroup::Member')
 
-    filter.should be_valid
+    expect(filter).to be_valid
     expect { filter.save }.to change { RelatedRoleType.count }.by(2)
   end
 
@@ -52,11 +52,11 @@ describe PeopleFilter do
     filter.role_type_ids = [Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join('-')
     types = filter.related_role_types
 
-    types.should have(2).items
-    types.first.role_type.should == 'Group::TopGroup::Leader'
-    types.last.role_type.should == 'Group::TopGroup::Member'
+    expect(types.size).to eq(2)
+    expect(types.first.role_type).to eq('Group::TopGroup::Leader')
+    expect(types.last.role_type).to eq('Group::TopGroup::Member')
 
-    filter.should be_valid
+    expect(filter).to be_valid
     expect { filter.save }.to change { RelatedRoleType.count }.by(2)
   end
 
@@ -66,10 +66,10 @@ describe PeopleFilter do
     filter.role_type_ids = [33_256, Group::TopGroup::Member.id].join('-')
     types = filter.related_role_types
 
-    types.should have(1).items
-    types.first.role_type.should == 'Group::TopGroup::Member'
+    expect(types.size).to eq(1)
+    expect(types.first.role_type).to eq('Group::TopGroup::Member')
 
-    filter.should be_valid
+    expect(filter).to be_valid
     expect { filter.save }.to change { RelatedRoleType.count }.by(1)
   end
 end

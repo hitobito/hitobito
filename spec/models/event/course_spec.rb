@@ -77,7 +77,7 @@ describe Event::Course do
 
     it 'renders label_detail' do
       events(:top_course).update_attributes(kind_id: nil, number: 123)
-      events(:top_course).label_detail.should eq '123 Top'
+      expect(events(:top_course).label_detail).to eq '123 Top'
     end
 
     after { Event::Course.used_attributes += [:kind_id] }

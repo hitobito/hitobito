@@ -14,17 +14,17 @@ describe 'contactable/_contact_data.html.haml' do
 
   before do
     group.assign_attributes(address: 'foo', town: 'bar', zip_code: 123, country: 'ch')
-    view.stub(contactable: GroupDecorator.decorate(group), only_public: false, postal: true)
+    allow(view).to receive_messages(contactable: GroupDecorator.decorate(group), only_public: false, postal: true)
   end
 
   context 'group' do
     before { render }
 
     it 'displays group info' do
-      should have_content('foo')
-      should have_content('bar')
-      should have_content('123')
-      should_not have_content('ch')
+      is_expected.to have_content('foo')
+      is_expected.to have_content('bar')
+      is_expected.to have_content('123')
+      is_expected.not_to have_content('ch')
     end
   end
 
@@ -37,10 +37,10 @@ describe 'contactable/_contact_data.html.haml' do
     end
 
     it 'displays contact info' do
-      should have_content('asdf')
-      should have_content('fdas')
-      should have_content('321')
-      should have_content('at')
+      is_expected.to have_content('asdf')
+      is_expected.to have_content('fdas')
+      is_expected.to have_content('321')
+      is_expected.to have_content('at')
     end
   end
 

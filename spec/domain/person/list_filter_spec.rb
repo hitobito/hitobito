@@ -31,32 +31,32 @@ describe Person::ListFilter do
 
   context 'group' do
     it 'loads all members of a group' do
-      entries.collect(&:id).should =~ [user, @tg_member].collect(&:id)
+      expect(entries.collect(&:id)).to match_array([user, @tg_member].collect(&:id))
     end
 
     it 'contains all existing members' do
-      entries.size.should eq(list_filter.all_count)
+      expect(entries.size).to eq(list_filter.all_count)
     end
 
     context 'with external types' do
       let(:role_types) { [Role::External] }
       it 'loads externs of a group' do
-        entries.collect(&:id).should =~ [@tg_extern].collect(&:id)
+        expect(entries.collect(&:id)).to match_array([@tg_extern].collect(&:id))
       end
 
       it 'contains all existing externals' do
-        entries.size.should eq(list_filter.all_count)
+        expect(entries.size).to eq(list_filter.all_count)
       end
     end
 
     context 'with specific types' do
       let(:role_types) { [Role::External, Group::TopGroup::Member] }
       it 'loads selected roles of a group' do
-        entries.collect(&:id).should =~ [@tg_member, @tg_extern].collect(&:id)
+        expect(entries.collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
       end
 
       it 'contains all existing people' do
-        entries.size.should eq(list_filter.all_count)
+        expect(entries.size).to eq(list_filter.all_count)
       end
     end
   end
@@ -69,14 +69,14 @@ describe Person::ListFilter do
       let(:user) { @bl_leader }
 
       it 'loads group members when no types given' do
-        entries.collect(&:id).should =~ [people(:bottom_member), @bl_leader].collect(&:id)
+        expect(entries.collect(&:id)).to match_array([people(:bottom_member), @bl_leader].collect(&:id))
       end
 
       context 'with specific types' do
         let(:role_types) { [Group::BottomGroup::Member, Role::External] }
 
         it 'loads selected roles of a group when types given' do
-          entries.collect(&:id).should =~ [@bg_member, @bl_extern].collect(&:id)
+          expect(entries.collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
         end
       end
     end
@@ -88,18 +88,18 @@ describe Person::ListFilter do
     let(:kind) { 'deep' }
 
     it 'loads group members when no types are given' do
-      entries.collect(&:id).should =~ []
+      expect(entries.collect(&:id)).to match_array([])
     end
 
     context 'with specific types' do
       let(:role_types) { [Group::BottomGroup::Leader, Role::External] }
 
       it 'loads selected roles of a group when types given' do
-        entries.collect(&:id).should =~ [@bg_leader, @tg_extern].collect(&:id)
+        expect(entries.collect(&:id)).to match_array([@bg_leader, @tg_extern].collect(&:id))
       end
 
       it 'contains not all existing people' do
-        entries.size.should eq(list_filter.all_count - 1)
+        expect(entries.size).to eq(list_filter.all_count - 1)
       end
     end
   end

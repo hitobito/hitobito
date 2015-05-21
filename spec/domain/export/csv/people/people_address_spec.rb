@@ -32,8 +32,8 @@ describe Export::Csv::People::PeopleAddress do
 
     context 'key list' do
       subject { people_list.attribute_labels.keys.join(' ') }
-      it { should_not =~ /phone/ }
-      it { should_not =~ /social_account/ }
+      it { is_expected.not_to match(/phone/) }
+      it { is_expected.not_to match(/social_account/) }
     end
   end
 
@@ -99,7 +99,7 @@ describe Export::Csv::People::PeopleAddress do
           its(['Weitere E-Mail Mutter']) { should be_nil }
 
           it 'roles should be complete' do
-            subject['Rollen'].split(', ').should =~ ['Member Bottom One / Group 11', 'Leader Top / TopGroup']
+            expect(subject['Rollen'].split(', ')).to match_array(['Member Bottom One / Group 11', 'Leader Top / TopGroup'])
           end
         end
       end

@@ -41,11 +41,11 @@ require 'spec_helper'
 describe Group do
 
   it 'should load fixtures' do
-    groups(:top_layer).should be_present
+    expect(groups(:top_layer)).to be_present
   end
 
   it 'is a valid nested set' do
-    Group.should be_valid
+    expect(Group).to be_valid
   end
 
   context 'alphabetic order' do
@@ -53,23 +53,23 @@ describe Group do
       it 'at the beginning' do
         updated = 2.days.ago.to_date
         Group.update_all(updated_at: updated)
-        groups(:top_layer).reload.updated_at.to_date.should eq(updated)
+        expect(groups(:top_layer).reload.updated_at.to_date).to eq(updated)
         parent = groups(:top_layer)
         group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
         # :updated_at should not change, tests patch from config/awesome_nested_set_patch.rb
-        groups(:top_layer).reload.updated_at.to_date.should eq(updated)
-        groups(:bottom_layer_one).reload.updated_at.to_date.should eq(updated)
-        groups(:bottom_layer_two).reload.updated_at.to_date.should eq(updated)
+        expect(groups(:top_layer).reload.updated_at.to_date).to eq(updated)
+        expect(groups(:bottom_layer_one).reload.updated_at.to_date).to eq(updated)
+        expect(groups(:bottom_layer_two).reload.updated_at.to_date).to eq(updated)
       end
 
       it 'at the beginning with same name' do
         parent = groups(:top_layer)
         group = Group::BottomLayer.new(name: 'Bottom One', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'Bottom One', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
       end
 
@@ -77,7 +77,7 @@ describe Group do
         parent = groups(:top_layer)
         group = Group::BottomLayer.new(name: 'Frosch', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom Two', 'Frosch', 'TopGroup', 'Toppers']
       end
 
@@ -85,7 +85,7 @@ describe Group do
         parent = groups(:top_layer)
         group = Group::BottomLayer.new(name: 'Bottom Two', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom Two', 'Bottom Two', 'TopGroup', 'Toppers']
       end
 
@@ -93,7 +93,7 @@ describe Group do
         parent = groups(:top_layer)
         group = Group::TopGroup.new(name: 'ZZ Top', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'ZZ Top']
       end
 
@@ -101,7 +101,7 @@ describe Group do
         parent = groups(:top_layer)
         group = Group::TopGroup.new(name: 'Toppers', parent_id: parent.id)
         group.save!
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'Toppers']
       end
     end
@@ -109,55 +109,55 @@ describe Group do
     context 'on update' do
       it 'at the beginning' do
         groups(:bottom_layer_two).update_attributes!(name: 'AAA')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'AAA', 'Bottom One', 'TopGroup', 'Toppers']
       end
 
       it 'at the beginning with same name' do
         groups(:bottom_layer_two).update_attributes!(name: 'Bottom One')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'Bottom One', 'Bottom One', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle keeping position right' do
         groups(:bottom_layer_two).update_attributes!(name: 'Frosch')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Frosch', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle keeping position left' do
         groups(:bottom_layer_two).update_attributes!(name: 'Bottom P')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom P', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle moving right' do
         groups(:bottom_layer_two).update_attributes!(name: 'TopGzzz')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'TopGzzz', 'Toppers']
       end
 
       it 'in the middle moving left' do
         groups(:top_group).update_attributes!(name: 'Bottom P')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom P', 'Bottom Two', 'Toppers']
       end
 
       it 'in the middle with same name' do
         groups(:bottom_layer_two).update_attributes!(name: 'TopGroup')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'TopGroup', 'Toppers']
       end
 
       it 'at the end' do
         groups(:bottom_layer_two).update_attributes!(name: 'ZZ Top')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'Toppers', 'ZZ Top']
       end
 
       it 'at the end with same name' do
         groups(:bottom_layer_two).update_attributes!(name: 'Toppers')
-        groups(:top_layer).children.order(:lft).collect(&:name).should eq [
+        expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'Toppers', 'Toppers']
       end
     end
@@ -165,50 +165,50 @@ describe Group do
 
   context '#hierachy' do
     it 'is itself for root group' do
-      groups(:top_layer).hierarchy.should == [groups(:top_layer)]
+      expect(groups(:top_layer).hierarchy).to eq([groups(:top_layer)])
     end
 
     it 'contains all ancestors' do
-      groups(:bottom_group_one_one).hierarchy.should == [groups(:top_layer), groups(:bottom_layer_one), groups(:bottom_group_one_one)]
+      expect(groups(:bottom_group_one_one).hierarchy).to eq([groups(:top_layer), groups(:bottom_layer_one), groups(:bottom_group_one_one)])
     end
   end
 
   context '#layer_hierarchy' do
     it 'is itself for top layer' do
-      groups(:top_layer).layer_hierarchy.should == [groups(:top_layer)]
+      expect(groups(:top_layer).layer_hierarchy).to eq([groups(:top_layer)])
     end
 
     it 'is next upper layer for top layer group' do
-      groups(:top_group).layer_hierarchy.should == [groups(:top_layer)]
+      expect(groups(:top_group).layer_hierarchy).to eq([groups(:top_layer)])
     end
 
     it 'is all upper layers for regular layer' do
-      groups(:bottom_layer_one).layer_hierarchy.should == [groups(:top_layer), groups(:bottom_layer_one)]
+      expect(groups(:bottom_layer_one).layer_hierarchy).to eq([groups(:top_layer), groups(:bottom_layer_one)])
     end
   end
 
   context '#layer_group' do
     it 'is itself for layer' do
-      groups(:top_layer).layer_group.should == groups(:top_layer)
+      expect(groups(:top_layer).layer_group).to eq(groups(:top_layer))
     end
 
     it 'is next upper layer for regular group' do
-      groups(:bottom_group_one_one).layer_group.should == groups(:bottom_layer_one)
+      expect(groups(:bottom_group_one_one).layer_group).to eq(groups(:bottom_layer_one))
     end
   end
 
   context '#upper_layer_hierarchy' do
     context 'for existing group' do
       it 'contains only upper for layer' do
-        groups(:bottom_layer_one).upper_layer_hierarchy.should == [groups(:top_layer)]
+        expect(groups(:bottom_layer_one).upper_layer_hierarchy).to eq([groups(:top_layer)])
       end
 
       it 'contains only upper for group' do
-        groups(:bottom_group_one_one).upper_layer_hierarchy.should == [groups(:top_layer)]
+        expect(groups(:bottom_group_one_one).upper_layer_hierarchy).to eq([groups(:top_layer)])
       end
 
       it 'is empty for top layer' do
-        groups(:top_group).upper_layer_hierarchy.should be_empty
+        expect(groups(:top_group).upper_layer_hierarchy).to be_empty
       end
     end
 
@@ -216,19 +216,19 @@ describe Group do
       it 'contains only upper for layer' do
         group = Group::BottomLayer.new
         group.parent = groups(:top_layer)
-        group.upper_layer_hierarchy.should == [groups(:top_layer)]
+        expect(group.upper_layer_hierarchy).to eq([groups(:top_layer)])
       end
 
       it 'contains only upper for group' do
         group = Group::BottomGroup.new
         group.parent = groups(:bottom_layer_one)
-        group.upper_layer_hierarchy.should == [groups(:top_layer)]
+        expect(group.upper_layer_hierarchy).to eq([groups(:top_layer)])
       end
 
       it 'is empty for top layer' do
         group = Group::TopGroup.new
         group.parent = groups(:top_layer)
-        group.upper_layer_hierarchy.should be_empty
+        expect(group.upper_layer_hierarchy).to be_empty
       end
     end
   end
@@ -240,7 +240,7 @@ describe Group do
       let(:group) { groups(:top_layer) }
 
       it 'contains all groups' do
-        should =~ Group.all
+        is_expected.to match_array(Group.all)
       end
     end
 
@@ -248,7 +248,7 @@ describe Group do
       let(:group) { groups(:top_group) }
 
       it 'only contains self' do
-        should == [group]
+        is_expected.to eq([group])
       end
     end
 
@@ -256,7 +256,7 @@ describe Group do
       let(:group) { groups(:bottom_layer_one) }
 
       it 'contains other layers and their descendants' do
-        should =~ [group.self_and_descendants, groups(:bottom_layer_two).self_and_descendants].flatten
+        is_expected.to match_array([group.self_and_descendants, groups(:bottom_layer_two).self_and_descendants].flatten)
       end
     end
 
@@ -264,7 +264,7 @@ describe Group do
       let(:group) { groups(:bottom_group_one_one) }
 
       it 'contains other groups and their descendants' do
-        should =~ [group, groups(:bottom_group_one_one_one), groups(:bottom_group_one_two)]
+        is_expected.to match_array([group, groups(:bottom_group_one_one_one), groups(:bottom_group_one_two)])
       end
     end
   end
@@ -277,7 +277,7 @@ describe Group do
 
   context '.order_by_type' do
     it 'has correct ordering without group' do
-      Group.order_by_type.should == [groups(:top_layer),
+      expect(Group.order_by_type).to eq([groups(:top_layer),
                                      groups(:top_group),
                                      groups(:bottom_layer_one),
                                      groups(:bottom_layer_two),
@@ -285,21 +285,22 @@ describe Group do
                                      groups(:bottom_group_one_one_one),
                                      groups(:bottom_group_one_two),
                                      groups(:bottom_group_two_one),
-                                     groups(:toppers)]
+                                     groups(:toppers)])
     end
 
     it 'has correct ordering with parent group' do
       parent = groups(:top_layer)
-      parent.children.order_by_type(parent).should ==
+      expect(parent.children.order_by_type(parent)).to eq(
           [groups(:top_group),
            groups(:bottom_layer_one),
            groups(:bottom_layer_two),
            groups(:toppers)]
+      )
     end
 
     it 'works without possible groups' do
       parent = groups(:bottom_group_one_two)
-      parent.children.order_by_type(parent).should be_empty
+      expect(parent.children.order_by_type(parent)).to be_empty
     end
   end
 
@@ -310,15 +311,15 @@ describe Group do
       group = Group::TopGroup.new(name: 'foobar')
       group.parent_id = top_layer.id
       group.save!
-      group.layer_group_id.should eq top_layer.id
+      expect(group.layer_group_id).to eq top_layer.id
     end
 
     it 'sets layer_group_id on group with default children' do
       group = Group::TopLayer.new(name: 'foobar')
       group.save!
-      group.layer_group_id.should eq group.id
-      group.children.should be_present
-      group.children.first.layer_group_id.should eq group.id
+      expect(group.layer_group_id).to eq group.id
+      expect(group.children).to be_present
+      expect(group.children.first.layer_group_id).to eq group.id
     end
   end
 
@@ -330,13 +331,13 @@ describe Group do
 
     it 'destroys self' do
       expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
-      Group.only_deleted.collect(&:id).should  =~ [bottom_group.id]
-      Group.should be_valid
+      expect(Group.only_deleted.collect(&:id)).to  match_array([bottom_group.id])
+      expect(Group).to be_valid
     end
 
     it 'hard destroys self' do
       expect { bottom_group.really_destroy! }.to change { Group.with_deleted.count }.by(-1)
-      Group.should be_valid
+      expect(Group).to be_valid
     end
 
     it 'protects group with children' do
@@ -402,8 +403,8 @@ describe Group do
       before { group.update_attribute(:contact, contact) }
 
       its(:address)   { should eq 'barfoo' }
-      its(:address?)   { should be_true }
-      its(:zip_code?)   { should be_false }
+      its(:address?)   { should be_truthy }
+      its(:zip_code?)   { should be_falsey }
     end
 
   end

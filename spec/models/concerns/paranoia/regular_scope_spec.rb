@@ -18,21 +18,21 @@ describe Paranoia::RegularScope do
   end
 
   it 'default scope returns also deleted entries' do
-    Event::Kind.all.should have(4).items
+    expect(Event::Kind.all.size).to eq(4)
   end
 
   it 'list returns also deleted entries' do
-    Event::Kind.list.should have(4).items
+    expect(Event::Kind.list.size).to eq(4)
   end
 
   it 'keeps references to deleted entries' do
     course.reload
-    course.kind.should eq(kind)
+    expect(course.kind).to eq(kind)
   end
 
   it 'shows names of deleted entries' do
     course.reload
-    course.kind.to_s.should eq('SLK (Scharleiterkurs)')
+    expect(course.kind.to_s).to eq('SLK (Scharleiterkurs)')
   end
 
 end

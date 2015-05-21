@@ -54,7 +54,7 @@ class PersonSeeder
       last_name: last_name,
       email: "#{Faker::Internet.user_name("#{first_name} #{last_name}")}@hitobito.example.com",
       address: Faker::Address.street_address,
-      zip_code:  Faker::Address.zip_code,
+      zip_code:  Faker::Address.zip_code[0..3],
       town: Faker::Address.city,
       gender: %w(m w).shuffle.first,
       birthday: random_date,

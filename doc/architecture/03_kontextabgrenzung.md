@@ -1,6 +1,6 @@
 ## Kontextabgrenzung
 
-![Kontextabgrenzung](diagrams/kontextabgrenzung.svg)
+![Kontextabgrenzung](diagrams/kontextabgrenzung.svg?raw=true)
 
 
 ### Externe Schnittstellen

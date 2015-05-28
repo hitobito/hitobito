@@ -2,7 +2,7 @@
 
 Die als eigenständige Server zusammengefassten Komponenten stellen die Verteilung bei Puzzle dar. Diese muss nicht zwingend so aufgeteilt werden.
 
-![Verteilungssicht](diagrams/verteilungssicht.svg?raw=true)
+![Verteilungssicht](diagrams/verteilungssicht.svg)
 
 
 **Passenger**: Web Applikationscontainer, welcher die Ruby on Rails Rack Applikation enthält. Nimmt Anfragen von Web Clients entgegen und beantwortet diese. Kann eigenständig oder als Apache HTTPD Modul laufen.

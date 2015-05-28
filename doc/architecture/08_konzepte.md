@@ -4,7 +4,7 @@
 
 Diese Sicht zeigt die Hauptmodelle in hitobito. Ein vollständiges und aktuelles Datenmodell kann mit dem Befehl `rake erd` generiert werden.
 
-![Fachliches Modell](diagrams/fachmodell.svg?raw=true)
+![Fachliches Modell](diagrams/fachmodell.svg)
 
 **Group**: Modelliert die Baumstruktur der Gruppen eines Verbandes. Die konkreten Gruppentypen werden als Subklassen von den jeweiligen Verbandsplugins definiert und mittels [Single Table Inheritance](http://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html) persistiert. Verschiedene Klassenattribute können zur Spezifizierung eines Gruppentyps herangezogen werden, wie beispielsweise die jeweils erlaubten Rollentypen. Die Baumstruktur ist als [Nested Set](http://de.wikipedia.org/wiki/Nested_Sets) persistiert. Es wird unterschieden zwischen einfachen Gruppen und Ebenen/Layer. Ebenen bilden jeweils einen Berechtigungsbereich.
 

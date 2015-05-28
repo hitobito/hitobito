@@ -4,7 +4,7 @@ Folgende Schichten werden zur Strukturierung der einzelnen Klassen verwendet. Si
 
 Die Pfeile geben die Abhängigkeitsrichtung an, beziehungsweise wer wen aufruft. Dabei sollen die Aufrufe immer nur in Pfeilrichtung gehen und nie entgegengesetzt. Weitere, nicht dargestellte Aufrufe zwischen Schichten sind nicht erlaubt. Ausnahmen sind im folgenden explizit erwähnt. Die Einschränkung gilt nicht für weitergereichte Objekte, wie beispielsweise Model Instanzen, welche vom Controller geladen und dann an die View gegeben werden.  
 
-![Bausteinsicht](diagrams/bausteinsicht.svg?raw=true)
+![Bausteinsicht](diagrams/bausteinsicht.svg)
 
 
 **Controller**: Verantwortlich für die Entgegennahme von Anfragen und die Bereitstellung von Antworten an Web Clients. Diese können sowohl natürliche Personen oder auch automatische REST Clients sein. Der Controller überprüft die Berechtigung mittels der Ability, lädt und ändert Daten via Domain und/oder Model und gibt danach die passende View zurück.

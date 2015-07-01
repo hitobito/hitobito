@@ -13,17 +13,30 @@
              submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
-  = hidden_field_tag('event_role[type]', params[:event_role][:type]) if params[:event_role]
+  - if @event.course_kind?
+    %dl.dl-horizontal
+      = labeled(Event.human_attribute_name(:application_conditions)) do
+        = @event.merged_application_conditions
+
+    %dl.dl-horizontal
+      - if @event.kind.general_information
+        = labeled(t('events.attrs.event_kind_general_information'), @event.kind.general_information.to_s.html_safe)
+
+    = render_extensions :event_kind_fields, locals: { kind: entry.event.kind }
+
+  - if params[:event_role]
+    = hidden_field_tag('event_role[type]', params[:event_role][:type])
 
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)
+
 
   = f.fields_for(:answers) do |fans|
     = render 'event/answers/fields', f: fans
 
   = f.labeled_text_area(:additional_information)
 
-  -if entry.application && entry.new_record?
+  - if entry.application && entry.new_record?
     -# once given, priorities may not be changed anymore
     -# (@alternatives might not be in state application_open anymore in the future,
     -#  causing missing choices for the dropdown)

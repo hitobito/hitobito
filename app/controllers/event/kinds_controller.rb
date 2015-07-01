@@ -8,6 +8,7 @@
 class Event::KindsController < SimpleCrudController
 
   self.permitted_attrs = [:label, :short_name, :minimum_age,
+                          :general_information, :application_conditions,
                           qualification_kinds: {
                             participant: {
                               precondition: { qualification_kind_ids: [] },

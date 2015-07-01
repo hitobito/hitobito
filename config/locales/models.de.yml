@@ -301,6 +301,8 @@ de:
         preconditions: Vorbedingungen
         prolongations: Verlängert
         qualification_kinds: Qualifiziert für
+        general_information: Allgemeine Informationen
+        application_conditions: Aufnahmebedingungen
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht

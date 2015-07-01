@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212103138) do
+ActiveRecord::Schema.define(version: 20150701123049) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -107,6 +107,8 @@ ActiveRecord::Schema.define(version: 20150212103138) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "minimum_age"
+    t.text     "general_information"
+    t.text     "application_conditions"
   end
 
   create_table "event_participations", force: true do |t|
@@ -209,15 +211,15 @@ ActiveRecord::Schema.define(version: 20150212103138) do
   end
 
   create_table "label_formats", force: true do |t|
-    t.string  "page_size",                   default: "A4",  null: false
-    t.boolean "landscape",                   default: false, null: false
-    t.float   "font_size",        limit: 24, default: 11.0,  null: false
-    t.float   "width",            limit: 24,                 null: false
-    t.float   "height",           limit: 24,                 null: false
-    t.integer "count_horizontal",                            null: false
-    t.integer "count_vertical",                              null: false
-    t.float   "padding_top",      limit: 24,                 null: false
-    t.float   "padding_left",     limit: 24,                 null: false
+    t.string  "page_size",        default: "A4",  null: false
+    t.boolean "landscape",        default: false, null: false
+    t.float   "font_size",        default: 11.0,  null: false
+    t.float   "width",                            null: false
+    t.float   "height",                           null: false
+    t.integer "count_horizontal",                 null: false
+    t.integer "count_vertical",                   null: false
+    t.float   "padding_top",                      null: false
+    t.float   "padding_left",                     null: false
   end
 
   create_table "mailing_lists", force: true do |t|

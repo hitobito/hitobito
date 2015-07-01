@@ -555,6 +555,8 @@ de:
   events:
     preconditions: 'Erforderliche Qualifikationen'
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
+    attrs:
+      event_kind_general_information: Kursart Informationen
     tabs:
       participants: 'Teilnehmende'
     form:

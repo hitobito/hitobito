@@ -33,8 +33,23 @@ describe 'event/participations/_form.html.haml' do
     allow(view).to receive(:current_user) { user }
 
     allow(controller).to receive_messages(current_user: user)
-    assign(:event, event)
+    assign(:event, event.decorate)
     assign(:group, group)
+  end
+
+  context 'course' do
+    let(:event) { events(:top_course) }
+
+
+    context 'kind' do
+      it 'shows application conditions and general information when set' do
+        event.kind.update!(application_conditions: 'some application conditions',
+                           general_information: 'some general information')
+        render
+        is_expected.not_to have_content 'some general informations'
+        is_expected.not_to have_content 'some application conditions'
+      end
+    end
   end
 
   context 'checkboxes' do

@@ -3,10 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- include_wysiwyg_assets
+
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_fields :label, :short_name
-  = render_extensions 'fields', locals: { f: f }
   = f.labeled_input_field :minimum_age, help_inline: t('.help_minimum_age')
+  = f.labeled_input_fields :general_information, :application_conditions
+  = render_extensions 'fields', locals: { f: f }
 
   = field_set_tag(t('.qualifications.for_participants')) do
     %p= t('.help_select_qualifications')

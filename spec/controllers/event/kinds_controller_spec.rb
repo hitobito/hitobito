@@ -24,6 +24,16 @@ describe Event::KindsController do
     expect(assigns(:kinds).last).to eq(destroyed)
   end
 
+  it 'POST create accepts qualification_conditions and general_information' do
+    post :create, event_kind: { label: 'Foo',
+                                application_conditions: '<b>bar</b>',
+                                general_information: '<b>baz</b>' }
+
+    kind = assigns(:kind)
+    expect(kind.reload.application_conditions).to eq '<b>bar</b>'
+    expect(kind.general_information).to eq '<b>baz</b>'
+  end
+
   context 'qualification kinds' do
     let(:sl) { qualification_kinds(:sl) }
     let(:gl) { qualification_kinds(:gl) }

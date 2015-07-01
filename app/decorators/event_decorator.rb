@@ -13,6 +13,15 @@ class EventDecorator < ApplicationDecorator
     safe_join([name, label_detail], h.tag(:br))
   end
 
+  def merged_application_conditions
+    if model.used_attributes.include?(:kind_id)
+      safe_join([h.format_attr(model.kind, :application_conditions),
+                 h.format_attr(model, :application_conditions)])
+    else
+      h.format_attr(model, :application_conditions)
+    end
+  end
+
   def labeled_link(url = nil, can = nil)
     url ||= h.group_event_path(group_ids.first, model)
     can = can?(:show, model) if can.nil?

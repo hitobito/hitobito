@@ -101,7 +101,7 @@ module MailRelay
     end
 
     def sender
-      @sender ||= Person.where(email: sender_email).first
+      @sender ||= sender_email.presence && Person.find_by_email(sender_email)
     end
 
     def envelope_sender
@@ -119,7 +119,9 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      mailing_list.additional_sender.to_s.split(/[,;]/).collect(&:strip).include?(sender_email)
+      additional_senders = mailing_list.additional_sender.to_s
+      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
+      list.include?(sender_email)
     end
 
     def sender_is_list_administrator?

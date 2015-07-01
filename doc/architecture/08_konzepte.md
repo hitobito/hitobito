@@ -13,3 +13,18 @@ Diese Sicht zeigt die Hauptmodelle in hitobito. Ein vollständiges und aktuelles
 **Event**: Ein einfacher Anlass, ein Kurs oder beliebiger weiterer verbandspezifischer Event. Dieser kann von mehreren Gruppen durchgeführt werden. Die Eventtypen werden wie die Gruppen über Klassenattribute spezifiziert und mittels [Single Table Inheritance](http://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html) persistiert. Kurse verfügen darüber hinaus noch über eine Kursart und damit über Qualifikationseigenschaften.
 
 **MailingList**: Jede Gruppe kann beliebig viele Abos haben, welche optional eine E-Mail Adresse haben und dadurch ebenfalls als E-Mail Liste verwendet werden können. Einzelne Personen, jedoch auch bestimmte Rollen einer Gruppe oder Teilnehmende eines Events können Abonnenten sein.
+
+
+### Wagons
+
+Die Applikation ist aufgeteilt in Core (generischer Teil) und Wagon (Verbandsspezifische Erweiterungen). Im Development und Production Mode sind jeweils beide Teile geladen, in den Tests nur der Core bzw. in den Wagon Tests der Core und der spezifische Wagon. Dies wird über das Gemfile gesteuert. Zur Funktionsweise von Wagons allgemein siehe auch [wagons](http://github.com/codez/wagons).
+
+Falls die Applikation für weitere Verbände customized werden soll, können einfach weitere Wagons erstellt werden.
+
+Einige grundlegende Dinge, welche in Zusammenhang mit Wagons zu beachten sind:
+
+* Der hitobito Core und alle Wagon Verzeichnisse müssen im gleichen Haupverzeichnis sein.
+* Zu Entwicklung kann die Datei `Wagonfile.ci` nach `Wagonfile` kopiert werden, um alle Wagons in benachbarten Verzeichnissen zu laden. Falls nur bestimmte Wagons aktiviert werden sollen, kann dies ebenfalls im `Wagonfile` konfiguriert werden.
+* Wagons verwenden die gleiche Datenbank wie der Core. Wenn im Core Migrationen erstellt werden, müssen alle Wagon Migrationen daraus entfernt werden, bevor das `schema.rb` generiert werden kann. Dies geht am einfachsten, indem die development Datenbank komplett gelöscht und wiederhergestellt wird.
+* Wenn neue Gems zum Core hinzugefügt werden, müssen alle `Gemfile.lock` Dateien in den Wagons aktualisert werden. Dies geschieht am einfachsten mit `rake wagon:bundle:update`.
+* Ein neuer Wagon kann mit `rails g wagon [name]` erstellt werden. Danach sollte dieser von `vendor/wagons` in ein benachbartes Verzeichnis des Cores verschoben werden und die Datei `app_root.rb` des Wagons entsprechend angepasst werden.

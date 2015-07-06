@@ -53,7 +53,7 @@ module Export::Pdf
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
       address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
-      address << contactable.country unless contactable.ignored_country?
+      address << contactable.country_label unless contactable.ignored_country?
       address
     end
 

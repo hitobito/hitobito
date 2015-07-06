@@ -22,6 +22,10 @@ module Export::Csv::People
       entry.gender_label
     end
 
+    def country
+      entry.country_label
+    end
+
     private
 
     def phone_number_attribute(attr)

@@ -30,7 +30,7 @@ describe 'contactable/_contact_data.html.haml' do
 
   context 'group.contact' do
     before do
-      current_user.assign_attributes(address: 'asdf', town: 'fdas', zip_code: 321, country: 'at')
+      current_user.assign_attributes(address: 'asdf', town: 'fdas', zip_code: 321, country: 'AT')
       group.contact = current_user
       group.save
       render
@@ -40,7 +40,7 @@ describe 'contactable/_contact_data.html.haml' do
       is_expected.to have_content('asdf')
       is_expected.to have_content('fdas')
       is_expected.to have_content('321')
-      is_expected.to have_content('at')
+      is_expected.to have_content('Österreich')
     end
   end
 

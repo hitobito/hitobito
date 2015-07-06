@@ -24,6 +24,10 @@ module Export::Csv::Groups
         entry.class.label
       end
 
+      def country
+        entry.country_label
+      end
+
     end
 
     self.row_class = Row

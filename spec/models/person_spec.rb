@@ -67,7 +67,7 @@ describe Person do
   end
 
   it 'company only with company name is valid' do
-    p = expect(Person.new(company: true, company_name: 'foo')).to be_valid
+    expect(Person.new(company: true, company_name: 'foo')).to be_valid
   end
 
   it 'real only with nickname is valid' do
@@ -380,6 +380,18 @@ describe Person do
      end
   end
 
+  context '#country_label' do
+    it 'translates two letter code using locale' do
+      person = Person.new(country: 'IT')
+      expect(person.country_label).to eq 'Italien'
+    end
+
+    it 'returns country value if value is not a two letter country code' do
+      person = Person.new(country: 'Svizzera')
+      expect(person.country_label).to eq 'Svizzera'
+    end
+  end
+
   context 'zip code' do
     let(:person) { Person.new(last_name: 'Foo') }
 
@@ -483,5 +495,6 @@ describe Person do
       end
     end
   end
+
 
 end

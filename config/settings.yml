@@ -96,6 +96,14 @@ address:
     - switzerland
     - svizzera
 
+countries:
+  prioritized:
+    - CH
+    - AT
+    - DE
+    - FR
+    - IT
+
 # Presets for CSV export
 csv:
   # optimized for M$ Excel

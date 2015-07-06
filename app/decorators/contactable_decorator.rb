@@ -83,7 +83,7 @@ module ContactableDecorator
     html = ''.html_safe
     unless ignored_country?
       html << br if zip_code? || town?
-      html << country
+      html << country_label
     end
     html
   end

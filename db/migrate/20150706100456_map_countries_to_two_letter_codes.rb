@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
   def up
     say_with_time('updating groups') do

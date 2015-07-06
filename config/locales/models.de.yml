@@ -229,6 +229,9 @@ de:
         application_closing_at: Anmeldeschluss
         application_conditions: Aufnahmebedingungen
         external_applications: Externe Anmeldungen
+        signature: Unterschrift erforderlich
+        signature_confirmation: Zweitunterschrift erforderlich
+        signature_confirmation_text: Zweitunterschrift von
         dates: Daten
         dates_full: Daten
         booking_info: Anmeldungen

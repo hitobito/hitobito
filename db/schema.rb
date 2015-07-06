@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701123049) do
+ActiveRecord::Schema.define(version: 20150706123121) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(version: 20150701123049) do
 
   create_table "events", force: true do |t|
     t.string   "type"
-    t.string   "name",                                              null: false
+    t.string   "name",                                                   null: false
     t.string   "number"
     t.string   "motto"
     t.string   "cost"
@@ -156,16 +156,19 @@ ActiveRecord::Schema.define(version: 20150701123049) do
     t.date     "application_closing_at"
     t.text     "application_conditions"
     t.integer  "kind_id"
-    t.string   "state",                  limit: 60
-    t.boolean  "priorization",                      default: false, null: false
-    t.boolean  "requires_approval",                 default: false, null: false
+    t.string   "state",                       limit: 60
+    t.boolean  "priorization",                           default: false, null: false
+    t.boolean  "requires_approval",                      default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "participant_count",                 default: 0
+    t.integer  "participant_count",                      default: 0
     t.integer  "application_contact_id"
-    t.boolean  "external_applications",             default: false
-    t.integer  "applicant_count",                   default: 0
-    t.integer  "teamer_count",                      default: 0
+    t.boolean  "external_applications",                  default: false
+    t.integer  "applicant_count",                        default: 0
+    t.integer  "teamer_count",                           default: 0
+    t.boolean  "signature"
+    t.boolean  "signature_confirmation"
+    t.string   "signature_confirmation_text"
     t.index ["kind_id"], :name => "index_events_on_kind_id"
   end
 

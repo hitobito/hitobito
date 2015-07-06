@@ -219,7 +219,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def append_mailing_instructions?
-    false
+    user_course_application? && event.signature?
   end
 
   def event

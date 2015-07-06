@@ -30,8 +30,12 @@ module Export::Pdf::Participation
     def first_page_section
       bounding_box([0, cursor], width: bounds.width, height: section_size) do
         yield
+        first_page_extensions
         stroke_bounds
       end
+    end
+
+    def first_page_extensions
     end
 
     def render_section(section_class)

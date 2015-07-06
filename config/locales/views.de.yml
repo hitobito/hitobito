@@ -532,6 +532,8 @@ de:
       priorities:
         alternative_course: "%{number}. Ausweichkurs"
       print:
+        signature: Unterschrift
+        signature_confirmation: Vorname, Name, Unterschrift
         read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
         read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass
@@ -555,6 +557,10 @@ de:
   events:
     preconditions: 'Erforderliche Qualifikationen'
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
+    application_fields:
+      caption_signature: Teilnehmer müssen die Anmeldung unterschreiben
+      caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
+      signature_confirmation_text_default: Eltern (bei Minderjährigen)
     tabs:
       participants: 'Teilnehmende'
     form:

@@ -16,9 +16,6 @@
       %dl.dl-horizontal
         - entry.used?(:kind_id) do
           = labeled_attr(entry, :kind_id)
-          - if entry.kind
-            = labeled(t('.event_kind_general_information'), format_attr(entry.kind, :general_information))
-
           = render_extensions :kind, folder: 'events'
 
         = render_extensions :main_attrs
@@ -57,8 +54,8 @@
 
         %dl.dl-horizontal
           - entry.used?(:application_conditions) do
-            = labeled(Event.human_attribute_name(:application_conditions)) do
-              = entry.merged_application_conditions
+            = labeled_attr(entry, :application_conditions)
+
           - if entry.course_kind?
             = labeled(Event::Kind.human_attribute_name(:minimum_age),
                       entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')

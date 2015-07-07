@@ -14,12 +14,11 @@
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
   - if @event.course_kind?
-    %dl.dl-horizontal
-      = labeled_attr(@event, :application_conditions)
+    - if format_attr(@event, :application_conditions).present?
+      %dl.dl-horizontal
+        = labeled_attr(@event, :application_conditions)
 
-
-    %dl.dl-horizontal
-    = render_extensions :event_kind_fields, locals: { kind: entry.event.kind }
+    = render_extensions :event_kind_fields
 
   - if params[:event_role]
     = hidden_field_tag('event_role[type]', params[:event_role][:type])

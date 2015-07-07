@@ -7,6 +7,10 @@
 
 module EventsHelper
 
+  def format_training_days(event)
+    number_with_precision(event.training_days, precision: 1)
+  end
+
   def button_action_event_apply(event, group = nil)
     participation = event.participations.new
     participation.person = current_user

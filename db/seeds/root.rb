@@ -11,5 +11,8 @@ Person.seed(:email,
    email: Settings.root_email}
 )
 
-require Rails.root.join('db', 'seeds', 'support', 'location_seeder')
-LocationSeeder.new.seed
+
+if !Rails.env.test? # don't seed in tests as it causes some tests to fail
+  require Rails.root.join('db', 'seeds', 'support', 'location_seeder')
+  LocationSeeder.new.seed
+end

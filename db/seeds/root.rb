@@ -10,3 +10,6 @@ Person.seed(:email,
    company: true,
    email: Settings.root_email}
 )
+
+require Rails.root.join('db', 'seeds', 'support', 'location_seeder')
+LocationSeeder.new.seed

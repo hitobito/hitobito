@@ -496,5 +496,19 @@ describe Person do
     end
   end
 
+  context '#location' do
+    it 'finds location for zip_code' do
+      expect(Person.new.location).to be_nil
+      expect(Person.new(zip_code: 3000).location).to be_nil
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
+      expect(Person.new(zip_code: 3000).location).to be_present
+    end
+
+    it 'reads canton from location if present' do
+      expect(Person.new.canton).to be_nil
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
+      expect(Person.new(zip_code: 3000).canton).to eq 'BE'
+    end
+  end
 
 end

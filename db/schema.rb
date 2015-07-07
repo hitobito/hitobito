@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706123121) do
+ActiveRecord::Schema.define(version: 20150707053351) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -223,6 +223,13 @@ ActiveRecord::Schema.define(version: 20150706123121) do
     t.integer "count_vertical",                   null: false
     t.float   "padding_top",                      null: false
     t.float   "padding_left",                     null: false
+  end
+
+  create_table "locations", force: true do |t|
+    t.string  "name",     null: false
+    t.string  "canton"
+    t.integer "zip_code", null: false
+    t.index ["zip_code", "canton", "name"], :name => "index_locations_on_zip_code_and_canton_and_name", :unique => true
   end
 
   create_table "mailing_lists", force: true do |t|

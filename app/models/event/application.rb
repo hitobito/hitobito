@@ -24,7 +24,7 @@ class Event::Application < ActiveRecord::Base
 
   ### ASSOCIATION
 
-  has_one :participation
+  has_one :participation, inverse_of: :application
 
   has_one :event, through: :participation
 

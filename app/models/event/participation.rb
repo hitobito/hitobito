@@ -32,7 +32,7 @@ class Event::Participation < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
 
-  belongs_to :application, dependent: :destroy, validate: true
+  belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
   has_many :roles, dependent: :destroy
 

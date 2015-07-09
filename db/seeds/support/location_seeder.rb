@@ -32,7 +32,7 @@ class LocationSeeder
 
   def data
     csv.each_with_object([]) do |row, data|
-      data << "('#{row['canton']}', #{row['zip_code']}, \"#{row.fetch('name')}\")"
+      data << "('#{row['canton']}', #{row['zip_code']}, \"#{row['name']}\")"
     end.uniq
   end
 

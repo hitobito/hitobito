@@ -76,7 +76,7 @@ class GroupAbility < AbilityDsl::Base
     permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
   end
 
-  # mMmber is a general role kind. Return true if user has any member role anywhere.
+  # Member is a general role kind. Return true if user has any member role anywhere.
   def if_member
     user.roles.any? { |r| r.class.member? }
   end

@@ -9,6 +9,9 @@ class Event::ParticipationFilter
 
   PREDEFINED_FILTERS = %w(all teamers participants)
 
+  class_attribute :load_entries_includes
+  self.load_entries_includes = [:roles, :event, :answers, person: [:additional_emails, :phone_numbers]]
+
   attr_reader :event, :user, :params, :counts
 
   def initialize(event, user, params = {})
@@ -38,7 +41,7 @@ class Event::ParticipationFilter
 
   def load_entries
     event.active_participations_without_affiliate_types.
-      includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
+      includes(load_entries_includes).
       uniq
   end
 

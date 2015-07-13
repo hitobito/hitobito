@@ -353,8 +353,8 @@ de:
     failure: '%{subscriber} ist kein Abonnent'
 
   event/applications:
-    approved: 'Die Anmeldung wurde freigegeben'
-    rejected: 'Die Anmeldung wurde abgelehnt'
+    approved: 'Die Anmeldung wurde freigegeben.'
+    rejected: 'Die Anmeldung wurde abgelehnt.'
 
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'

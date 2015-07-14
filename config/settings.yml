@@ -99,6 +99,7 @@ address:
 countries:
   prioritized:
     - CH
+    - LI
     - AT
     - DE
     - FR

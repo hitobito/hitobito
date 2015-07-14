@@ -226,9 +226,9 @@ ActiveRecord::Schema.define(version: 20150707053351) do
   end
 
   create_table "locations", force: true do |t|
-    t.string  "name",     null: false
-    t.string  "canton"
-    t.integer "zip_code", null: false
+    t.string  "name",               null: false
+    t.string  "canton",   limit: 2, null: false
+    t.integer "zip_code",           null: false
     t.index ["zip_code", "canton", "name"], :name => "index_locations_on_zip_code_and_canton_and_name", :unique => true
   end
 

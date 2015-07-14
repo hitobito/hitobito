@@ -3,13 +3,14 @@
 #
 # Table name: event_kinds
 #
-#  id          :integer          not null, primary key
-#  created_at  :datetime
-#  updated_at  :datetime
-#  deleted_at  :datetime
-#  minimum_age :integer
+#  id                     :integer          not null, primary key
+#  created_at             :datetime
+#  updated_at             :datetime
+#  deleted_at             :datetime
+#  minimum_age            :integer
+#  general_information    :text
+#  application_conditions :text
 #
-
 
 #  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

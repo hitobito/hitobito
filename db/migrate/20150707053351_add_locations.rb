@@ -9,7 +9,7 @@ class AddLocations < ActiveRecord::Migration
   def change
     create_table(:locations) do |t|
       t.string :name, null: false
-      t.string :canton, null: :false
+      t.string :canton, null: false, limit: 2
       t.integer :zip_code, null: false
     end
 

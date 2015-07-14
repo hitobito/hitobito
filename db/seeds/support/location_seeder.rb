@@ -7,17 +7,19 @@
 
 require 'csv'
 
+# Imports an ISO-8859-1 CSV with the columns zip_code, town and canton.
+#
+# To update the locations.csv file:
+# * Get the file manually from https://www.post.ch/de/pages/downloadcenter-match
+# * Strip all unneeded rows and columns
+# * Add a header for zip_code, town and canton
+# * Save with separator ; encoded as ISO-8859-1
 class LocationSeeder
 
-  attr_reader :file
-
-  def initialize
-    @file = File.expand_path('../plz_p1_20130121.csv', __FILE__)
-  end
+  FILE = Rails.root.join('db', 'seeds', 'support', 'locations.csv')
 
   def seed
     Location.delete_all
-
     bulk_insert
   end
 
@@ -25,19 +27,20 @@ class LocationSeeder
 
   def bulk_insert
     data.each_slice(500).each_with_index do |values, slice|
-      puts "#{self.class.name}: inserting slice #{slice}"
+      puts " - Location: inserting slice #{slice}"
       Location.connection.execute("insert into locations(canton, zip_code, name) values #{values.join(',')}")
     end
   end
 
   def data
     csv.each_with_object([]) do |row, data|
-      data << "('#{row['canton']}', #{row['zip_code']}, \"#{row['name']}\")"
+      data << "('#{row['canton']}', #{row['zip_code']}, \"#{row['town']}\")"
     end.uniq
   end
 
   def csv
-    CSV.read(file, headers: true)
+    CSV.read(FILE, headers: true, col_sep: ';', encoding: 'ISO-8859-1')
   end
+
 end
 

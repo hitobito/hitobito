@@ -37,4 +37,10 @@ module EventsHelper
     Role.types_with_permission(:approve_applications).present?
   end
 
+  def format_event_application_conditions(entry)
+    texts = [entry.application_conditions]
+    texts.unshift(entry.kind.application_conditions) if entry.course_kind?
+    safe_join(texts.select(&:present?).map { |text| simple_format(text) })
+  end
+
 end

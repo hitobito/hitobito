@@ -31,6 +31,7 @@ module Export::Pdf::Participation
     def render_requirements
       with_count(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
         boxed_attr(event, :application_conditions)
+        boxed_attr(event.kind, :application_conditions, '') if event_with_kind?
 
         if course?
           boxed_attr(event_kind, :minimum_age) { translated_minimum_age }

@@ -185,12 +185,17 @@ describe Event::ParticipationsController, type: :controller do
 
     before { course.kind.update(minimum_age: 21) }
 
-    it 'displays warning' do
+    it 'displays full warning on detail' do
       get :show, group_id: group.id, event_id: course.id, id: test_entry.id
 
       expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt.'
     end
 
+    it 'displays warning badge on list' do
+      get :index, group_id: group.id, event_id: course.id
+
+      expect(dom).to have_content 'Vorbedingungen nicht erfüllt'
+    end
   end
 
 end

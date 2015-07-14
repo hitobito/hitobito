@@ -541,6 +541,7 @@ de:
         page_of_pages: "Seite <page> von <total>"
       list:
         incomplete: Pflichtangaben fehlen
+        preconditions_not_met: Vorbedingungen nicht erfüllt
 
     register:
       register:

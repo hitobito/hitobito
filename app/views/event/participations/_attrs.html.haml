@@ -43,4 +43,9 @@
     - if can?(:show_details, entry)
       = render 'people/qualifications', entry: entry.person, show_buttons: false
 
+      - if @precondition_warnings.present?
+        %h2= t('activerecord.attributes.event/kind.preconditions')
+        .alert.alert-warning
+          %p= simple_format(@precondition_warnings.flatten.join("\n"))
+
     = render_extensions :asides

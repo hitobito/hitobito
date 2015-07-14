@@ -24,7 +24,7 @@ describe Event::ParticipationsController, type: :controller do
       answers_attributes: [
         { answer: 'Halbtax', question_id: event_questions(:top_ov).id },
         { answer: 'nein',    question_id: event_questions(:top_vegi).id },
-        { answer: 'Ne du',   question_id: event_questions(:top_more).id },
+        { answer: 'Ne du',   question_id: event_questions(:top_more).id }
       ],
       application_attributes: { priority_2_id: nil }
     }
@@ -46,7 +46,9 @@ describe Event::ParticipationsController, type: :controller do
   describe_action :get, :show, id: true, perform_request: false do
     let(:user) { test_entry.person }
     let(:contact) { Fabricate(:person_with_address) }
-    let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) }
+    let(:application) do
+      Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry)
+    end
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
@@ -83,7 +85,8 @@ describe Event::ParticipationsController, type: :controller do
         event = send(event_sym)
         post :create, group_id: group.id, event_id: event.id, event_participation: test_entry_attrs
         expect(flash[:notice]).to match(/Bitte überprüfe die Kontaktdaten/)
-        is_expected.to redirect_to group_event_participation_path(group, event, assigns(:participation))
+        is_expected.to redirect_to group_event_participation_path(group, event,
+                                                                  assigns(:participation))
       end
     end
   end
@@ -94,7 +97,7 @@ describe Event::ParticipationsController, type: :controller do
       it "renders title for #{event_sym}" do
         event = send(event_sym)
         get :new, group_id: group.id, event_id: event.id
-        is_expected.to have_content "Anmeldung als Teilnehmer/-in"
+        is_expected.to have_content 'Anmeldung als Teilnehmer/-in'
       end
     end
     it 'renders person field when passed for_someone_else param' do
@@ -125,7 +128,9 @@ describe Event::ParticipationsController, type: :controller do
 
   describe 'GET print' do
     let(:person) { Fabricate(:person_with_address) }
-    let(:application) { Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry) }
+    let(:application) do
+      Fabricate(:event_application, priority_1: test_entry.event, participation: test_entry)
+    end
 
     before do
       test_entry.event.update_attribute(:contact, person)
@@ -138,7 +143,8 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it 'redirects users without permission' do
-      sign_in(Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one)).person)
+      sign_in(Fabricate(Group::BottomGroup::Member.name.to_s,
+                        group: groups(:bottom_group_one_one)).person)
       expect do
         get :print, group_id: group.id, event_id: test_entry.event.id, id: test_entry.id
       end.to raise_error(CanCan::AccessDenied)
@@ -172,6 +178,24 @@ describe Event::ParticipationsController, type: :controller do
       expect(dom).to have_no_selector('a', text: parti3.person.to_s(:list))
     end
 
+  end
+
+  context 'preconditions not fullfilled' do
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before { course.kind.update(minimum_age: 21) }
+
+    it 'displays full warning on detail' do
+      get :show, group_id: group.id, event_id: course.id, id: test_entry.id
+
+      expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt.'
+    end
+
+    it 'displays warning badge on list' do
+      get :index, group_id: group.id, event_id: course.id
+
+      expect(dom).to have_content 'Vorbedingungen nicht erfüllt'
+    end
   end
 
 end

@@ -34,11 +34,12 @@ class Event::ParticipationsController < CrudController
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_action :parent, :group
 
-  before_action :check_preconditions, only: [:create, :new]
+  before_action :check_preconditions, only: [:new]
 
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_qualifications
+  before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
 
@@ -101,7 +102,7 @@ class Event::ParticipationsController < CrudController
     event = entry.event
     if user_course_application? && event.course_kind?
       checker = Event::PreconditionChecker.new(event, current_user)
-      redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
+      flash[:alert] = checker.errors_text unless checker.valid?
     end
   end
 
@@ -191,6 +192,11 @@ class Event::ParticipationsController < CrudController
     @qualifications = entry.person.latest_qualifications_uniq_by_kind
   end
 
+  def load_precondition_warnings
+    checker = Event::PreconditionChecker.new(entry.event, entry.person)
+    @precondition_warnings = checker.errors_text unless checker.valid?
+  end
+
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     translate(:full_entry_label, model_label: models_label(false),
@@ -232,7 +238,7 @@ class Event::ParticipationsController < CrudController
 
   # model_params may be empty
   def permitted_params
-    model_params.permit(permitted_attrs)
+    model_params.present? ? model_params.permit(permitted_attrs) : {}
   end
 
   def self.model_class

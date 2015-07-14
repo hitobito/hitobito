@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = crud_table do |t|
-  - t.attrs :label, :short_name, :updated_at, :deleted_at
-  - render_extensions 'list_attrs', locals: {t: t}
+  - t.attrs :label, :short_name
+  - render_extensions 'list_attrs', locals: { t: t }
+  - t.attrs :updated_at, :deleted_at
   - add_table_actions(t)

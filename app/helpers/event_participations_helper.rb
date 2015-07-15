@@ -34,16 +34,4 @@ module EventParticipationsHelper
   def event_participation_attr_list
     [:birthday, :gender, (can?(:show_details, entry) ? :created_at : nil)].compact
   end
-
-  def precondition_warnings_badge(p)
-    if p.event.supports_applications && p.event.course_kind?
-      checker = Event::PreconditionChecker.new(p.event, current_user)
-      unless checker.valid?
-        title = checker.errors_text_without_title.flatten.join('; ')
-        content_tag(:div, class: 'badge badge-warning', title: title) do
-          I18n.t('event.participations.list.preconditions_not_met')
-        end
-      end
-    end
-  end
 end

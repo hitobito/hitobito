@@ -11,5 +11,7 @@
   .muted
     = t('.registered_at', date: f(p.created_at.to_date))
 
-%td= p.priority(event)
+%td
+  = p.application.precondition_warnings(event)
+  = p.priority(event)
 %td= p.confirmation if event.requires_approval?

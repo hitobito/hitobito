@@ -36,22 +36,40 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     content_tag(:span, prio, class: 'badge') if prio
   end
 
+  def precondition_warnings(event)
+    if event.supports_applications && event.course_kind?
+      checker = Event::PreconditionChecker.new(event, current_user)
+      badge('!', 'warning', checker.errors_text.flatten.join('<br>')) unless checker.valid?
+    end
+  end
+
   def confirmation
     confirmation_badge(*confirmation_fields)
   end
 
   def confirmation_label
-    label, css, desc = confirmation_fields
-    confirmation_badge(label, css, desc) +
+    label, type, desc = confirmation_fields
+    confirmation_badge(label, type, desc) +
     " #{translate('.course_acceptance')} #{desc}"
   end
 
-  def confirmation_badge(label, css, desc)
-    content_tag(:span, label.html_safe, class: "badge badge-#{css}",
-                                        title: "#{translate('.course_acceptance')} #{desc}")
+  def confirmation_badge(label, type, tooltip)
+    badge(label, type, "#{translate('.course_acceptance')} #{tooltip}")
   end
 
   private
+
+  def badge(label, type, tooltip)
+    options = { class: "badge badge-#{type || 'default'}" }
+    if tooltip.present?
+      options.merge!(rel: :tooltip,
+                     'data-container' => 'body',
+                     'data-html' => 'true',
+                     'data-placement' => 'bottom',
+                     title: tooltip)
+    end
+    content_tag(:span, label.html_safe, options)
+  end
 
   def confirmation_fields
     if approved?

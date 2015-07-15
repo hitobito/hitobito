@@ -33,14 +33,6 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     text = []
     if errors.present?
       text << translate(:preconditions_not_fulfilled)
-      text += errors_text_without_title
-    end
-    text
-  end
-
-  def errors_text_without_title
-    text = []
-    if errors.present?
       text << birthday_error_text if errors.delete(:birthday)
       text << qualifications_error_text  if errors.present?
     end

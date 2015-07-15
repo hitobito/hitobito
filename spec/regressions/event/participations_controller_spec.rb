@@ -190,12 +190,6 @@ describe Event::ParticipationsController, type: :controller do
 
       expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt.'
     end
-
-    it 'displays warning badge on list' do
-      get :index, group_id: group.id, event_id: course.id
-
-      expect(dom).to have_content 'Vorbedingungen nicht erfüllt'
-    end
   end
 
 end

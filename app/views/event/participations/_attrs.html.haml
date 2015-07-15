@@ -5,11 +5,6 @@
 
 #main.row-fluid
   %article.span6
-
-    - if @event.requires_approval? && @application.present? && can?(:show, @application)
-      %p= @application.confirmation_label
-      %br/
-
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
     = render_attrs(entry.person, :birthday, :gender)
@@ -49,3 +44,5 @@
           %p= simple_format(@precondition_warnings.flatten.join("\n"))
 
     = render_extensions :asides
+
+    = render 'approvals'

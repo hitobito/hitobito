@@ -516,6 +516,8 @@ de:
           for_leaders: 'Qualifikationen für Leitende'
 
     participations:
+      approvals:
+        title: Freigabe
       specific_information: 'Spezifische Angaben'
       no_answer_given: '(nicht beantwortet)'
       actions_show:

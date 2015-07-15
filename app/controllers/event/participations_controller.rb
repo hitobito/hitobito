@@ -193,8 +193,10 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_precondition_warnings
-    checker = Event::PreconditionChecker.new(entry.event, entry.person)
-    @precondition_warnings = checker.errors_text unless checker.valid?
+    if entry.event.course_kind?
+      checker = Event::PreconditionChecker.new(entry.event, entry.person)
+      @precondition_warnings = checker.errors_text unless checker.valid?
+    end
   end
 
   # A label for the current entry, including the model name, used for flash

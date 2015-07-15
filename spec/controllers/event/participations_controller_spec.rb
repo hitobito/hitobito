@@ -118,6 +118,19 @@ describe Event::ParticipationsController do
 
     end
 
+    context 'simple event' do
+      let(:simple_event) do
+        simple_event = Fabricate(:event, groups: [group])
+        simple_event.dates << Fabricate(:event_date, event: simple_event)
+        simple_event
+      end
+      let(:participation) { Fabricate(:event_participation, event: simple_event) }
+
+      it 'renders without errors (regression for load_precondition_warnings error on nil kind)' do
+        get :show, group_id: group.id, event_id: simple_event.id, id: participation.id
+      end
+    end
+
   end
 
   context 'GET print' do
@@ -382,7 +395,17 @@ describe Event::ParticipationsController do
 
   context 'preconditions' do
     before { user.qualifications.first.destroy }
-    let(:participation) { assigns(:participation) }
+
+    context 'GET show' do
+      before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+      let(:warnings) { assigns(:precondition_warnings) }
+
+
+      it 'assigns precondition_warnings' do
+        expect(warnings[0]).to match(/Vorbedingungen.*nicht erfüllt/)
+        expect(warnings[1]).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+      end
+    end
 
     context 'GET new' do
       before { get :new, group_id: group.id, event_id: course.id }
@@ -398,6 +421,7 @@ describe Event::ParticipationsController do
 
     context 'POST create' do
       before { post :create, group_id: group.id, event_id: course.id }
+      let(:participation) { assigns(:participation) }
 
       it 'allows the user to apply' do
         expect(participation).to be_present

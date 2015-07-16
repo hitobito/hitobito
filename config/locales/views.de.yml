@@ -562,7 +562,7 @@ de:
     application_fields:
       caption_signature: Teilnehmer müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
-      signature_confirmation_text_default: Eltern (bei Minderjährigen)
+      signature_confirmation_text_default: Erziehungsberechtiger (bei Minderjährigen)
     tabs:
       participants: 'Teilnehmende'
     form:

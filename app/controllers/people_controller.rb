@@ -22,8 +22,6 @@ class PeopleController < CrudController
                           Contactable::ACCESSIBLE_ATTRS +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
-  self.sort_mappings = { roles: [Person.order_by_role_statement].
-                                  concat(Person.order_by_name_statement) }
 
   decorates :group, :person, :people, :versions
 
@@ -115,6 +113,14 @@ class PeopleController < CrudController
   end
 
   private
+
+  # dont use class level accessor as expression is evaluated whenever constant is
+  # loaded which might be before wagon that defines groups / roles has been loaded
+  def self.sort_mappings_with_indifferent_access
+    { roles: [Person.order_by_role_statement].
+      concat(Person.order_by_name_statement) }.with_indifferent_access
+  end
+
 
   alias_method :group, :parent
 

@@ -86,5 +86,14 @@ describe Event::Course do
     after { Event::Course.used_attributes += [:kind_id] }
   end
 
+  it 'sets signtuare to true when signature confirmation is required' do
+    course = Event::Course.new(signature_confirmation:true)
+    expect(course.signature).to be_falsy
+    expect(course.signature_confirmation).to be_truthy
+    course.valid?
+
+    expect(course.signature).to be_truthy
+    expect(course.signature_confirmation).to be_truthy
+  end
 
 end

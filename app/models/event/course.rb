@@ -60,6 +60,8 @@ class Event::Course < Event
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
 
+  before_validation :set_signature, if: :signature_confirmation?
+
 
   def label_detail
     label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
@@ -89,6 +91,12 @@ class Event::Course < Event
         questions << q.dup
       end
     end
+  end
+
+  private
+
+  def set_signature
+    self[:signature] = true
   end
 
 end

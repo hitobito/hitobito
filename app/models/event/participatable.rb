@@ -52,28 +52,30 @@ module Event::Participatable
 
   # Sum all members of the leading team (non-participants)
   def count_teamers
-    active_participations_without_affiliate_types.
-                   where.not(event_roles: { type: participant_types.collect(&:sti_name) }).
-                   distinct.
-                   count
+    distinct_count(active_participations_without_affiliate_types.
+                   where.not(event_roles: { type: participant_types.collect(&:sti_name) }))
   end
 
   # Sum all assigned participations (no leaders/teamers)
   def count_participants
-    participations.active.
+    distinct_count(participations.active.
                    joins(:roles).
-                   where(event_roles: { type: participant_types.collect(&:sti_name) }).
-                   distinct.
-                   count
+                   where(event_roles: { type: participant_types.collect(&:sti_name) }))
   end
 
   # Sum assigned participations (all prios, no leaders/teamers) and unassigned with prio 1
   def count_applicants
+    distinct_count(count_applicants_scope)
+  end
+
+  def count_applicants_scope
     participations.
       joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
       where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',
-            participant_types.collect(&:sti_name)).
-      distinct.
-      count
+            participant_types.collect(&:sti_name))
+  end
+
+  def distinct_count(scope)
+    scope.distinct.count
   end
 end

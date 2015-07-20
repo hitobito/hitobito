@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 %td
-  %strong= link_to(p.person.to_s(:list), group_event_participation_path(@group, @event, p.id))
+  %strong= link_to(p.to_s(:list), group_event_participation_path(@group, @event, p.id))
   %br/
   = p.person_location_information
   %br/

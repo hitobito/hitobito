@@ -7,7 +7,7 @@ PATH
     hitobito_pbs (0.0.1)
       hitobito_youth
     hitobito_youth (0.0.1)
-    wagons (0.4.2)
+    wagons (0.4.3)
       bundler (>= 1.1)
       rails (>= 3.2)
       seed-fu-ndo (>= 0.0.2)

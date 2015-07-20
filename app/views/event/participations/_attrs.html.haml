@@ -10,7 +10,7 @@
     = render_attrs(entry.person, :birthday, :gender)
 
     - if can?(:show_details, entry)
-      = render_attrs(entry, :created_at)
+      = render 'application_details'
 
       = render_extensions :details,
                           folder: :people,

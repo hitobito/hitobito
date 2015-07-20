@@ -8,14 +8,20 @@
 
 - if entry.person_id == current_user.id
   = action_button(t('global.button.print'),
-                  print_group_event_participation_path(@group, @event, entry, format: :pdf), :print, { target: 'new'})
+                  print_group_event_participation_path(@group, @event, entry, format: :pdf),
+                  :print,
+                  { target: 'new'})
 
 - if can?(:edit, entry.person)
-  = action_button(t('.change_contact_data_button'), edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for), :edit)
+  = action_button(t('.change_contact_data_button'),
+                  edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for),
+                  :edit)
 
 - if @application.present?
   - if can?(:destroy, entry)
     = button_action_destroy
 
   - if @event.requires_approval? && can?(:approve, @application)
-    = render 'application_approval_actions', label_approve: t('.approve_button'), label_reject: t('.reject_button')
+    = render 'actions_approval'
+
+= render_extensions :actions_show

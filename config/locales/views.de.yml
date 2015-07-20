@@ -522,6 +522,7 @@ de:
       no_answer_given: '(nicht beantwortet)'
       actions_show:
         change_contact_data_button: 'Kontaktdaten ändern'
+      actions_approval:
         approve_button: 'Freigeben'
         reject_button: 'Ablehnen'
       form:

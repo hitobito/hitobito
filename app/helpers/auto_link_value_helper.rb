@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module AutoLinkHelper
+module AutoLinkValueHelper
 
-  def auto_link(str, options = {})
+  def auto_link_value(str, options = {})
     if email?(str)
       mail_to(str)
     elsif url_with_protocol?(str)

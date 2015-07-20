@@ -300,6 +300,8 @@ GEM
     rails-i18n (4.0.2)
       i18n (~> 0.6)
       rails (>= 4.0)
+    rails_autolink (1.1.6)
+      rails (> 3.1)
     rails_best_practices (1.15.4)
       activesupport
       awesome_print
@@ -545,6 +547,7 @@ DEPENDENCIES
   rails (= 4.1.8)
   rails-erd
   rails-i18n
+  rails_autolink
   rails_best_practices
   rails_code_qa
   rails_config

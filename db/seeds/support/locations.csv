@@ -1,6 +1,6 @@
 zip_code;town;canton
 1000;Lausanne;VD
-1000;Lausanne 1 Dépôt;VD
+1000;Lausanne 1 DÃ©pÃ´t;VD
 1000;Lausanne 2;VD
 1000;Lausanne 3;VD
 1000;Lausanne Ouchy;VD
@@ -15,44 +15,44 @@ zip_code;town;canton
 1000;Lausanne Grangette;VD
 1000;Lausanne 22;VD
 1000;Lausanne 23;VD
-1000;Lausanne 24;VD
+1000;Lausanne 24 Vennes;VD
 1000;Lausanne 25;VD
 1000;Lausanne 26;VD
 1000;Lausanne 27;VD
-1000;Lausanne Dist;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Prilly;VD
-1000;Pully;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
-1000;Lausanne Adm cant;VD
-1000;Lausanne;VD
-1000;Lausanne;VD
+1000;Lausanne Distribution;VD
+1001;Lausanne;VD
+1002;Lausanne;VD
+1003;Lausanne;VD
+1004;Lausanne;VD
+1005;Lausanne;VD
+1006;Lausanne;VD
+1007;Lausanne;VD
+1008;Prilly;VD
+1009;Pully;VD
+1010;Lausanne;VD
+1011;Lausanne;VD
+1012;Lausanne;VD
+1014;Lausanne Adm cant VD;VD
+1015;Lausanne;VD
+1018;Lausanne;VD
 1020;Renens VD;VD
 1020;Renens VD 1;VD
 1020;Renens VD 2;VD
-1022;Chavannes-Renens;VD
+1022;Chavannes-prÃ¨s-Renens;VD
 1023;Crissier;VD
 1024;Ecublens VD;VD
 1025;St-Sulpice VD;VD
 1026;Echandens-Denges;VD
 1027;Lonay;VD
-1028;Préverenges;VD
+1028;PrÃ©verenges;VD
 1030;Bussigny;VD
-1032;Romanel-s-Lausanne;VD
-1033;Cheseaux-Lausanne;VD
-1037;Etagnières;VD
+1032;Romanel-sur-Lausanne;VD
+1033;Cheseaux-sur-Lausanne;VD
+1037;EtagniÃ¨res;VD
 1038;Bercher;VD
 1040;Echallens;VD
-1040;St-Barthélemy VD;VD
-1377;Oulens-Echallens;VD
+1040;St-BarthÃ©lemy VD;VD
+1377;Oulens-sous-Echallens;VD
 1042;Bettens;VD
 1040;Villars-le-Terroir;VD
 1417;Epautheyres;VD
@@ -62,7 +62,7 @@ zip_code;town;canton
 1041;Poliez-le-Grand;VD
 1041;Poliez-Pittet;VD
 1041;Bottens;VD
-1053;Bretigny-Morrens;VD
+1053;Bretigny-sur-Morrens;VD
 1034;Boussens;VD
 1035;Bournens;VD
 1036;Sullens;VD
@@ -70,17 +70,17 @@ zip_code;town;canton
 1043;Sugnens;VD
 1044;Fey;VD
 1045;Ogens;VD
-1400;Bioley-Magnoux;VD
+1407;Bioley-Magnoux;VD
 1042;Bioley-Orjulaz;VD
-1052;Mont-sur-Lausanne;VD
+1052;Le Mont-sur-Lausanne;VD
 1053;Cugy VD;VD
 1054;Morrens VD;VD
 1055;Froideville;VD
 1410;Thierrens;VD
 1066;Epalinges;VD
 1073;Savigny;VD
-1083;Mézières VD;VD
-1092;Belmont-Lausanne;VD
+1083;MÃ©ziÃ¨res VD;VD
+1092;Belmont-sur-Lausanne;VD
 1093;La Conversion;VD
 1094;Paudex;VD
 1095;Lutry;VD
@@ -91,7 +91,7 @@ zip_code;town;canton
 1059;Peney-le-Jorat;VD
 1061;Villars-Mendraz;VD
 1062;Sottens;VD
-1063;Chapelle-s-Moudon;VD
+1063;Chapelle-sur-Moudon;VD
 1410;St-Cierges;VD
 1073;Mollie-Margot;VD
 1080;Les Cullayes;VD
@@ -117,7 +117,7 @@ zip_code;town;canton
 1126;Vaux-sur-Morges;VD
 1127;Clarmont;VD
 1128;Reverolle;VD
-1113;St-Saphorin-Morges;VD
+1113;St-Saphorin-sur-Morges;VD
 1114;Colombier VD;VD
 1115;Vullierens;VD
 1116;Cottens VD;VD
@@ -127,7 +127,7 @@ zip_code;town;canton
 1122;Romanel-sur-Morges;VD
 1123;Aclens;VD
 1124;Gollion;VD
-1134;Vufflens-Château;VD
+1134;Vufflens-le-ChÃ¢teau;VD
 1135;Denens;VD
 1136;Bussy-Chardonney;VD
 1169;Yens;VD
@@ -137,9 +137,9 @@ zip_code;town;canton
 1146;Mollens VD;VD
 1147;Montricher;VD
 1142;Pampigny;VD
-1141;Sévery;VD
+1141;SÃ©very;VD
 1143;Apples;VD
-1145;Bière;VD
+1145;BiÃ¨re;VD
 1148;L'Isle;VD
 1162;St-Prex;VD
 1163;Etoy;VD
@@ -148,7 +148,7 @@ zip_code;town;canton
 1166;Perroy;VD
 1170;Aubonne;VD
 1172;Bougy-Villars;VD
-1173;Féchy;VD
+1173;FÃ©chy;VD
 1174;Montherod;VD
 1175;Lavigny;VD
 1176;St-Livres;VD
@@ -158,63 +158,63 @@ zip_code;town;canton
 1184;Vinzel;VD
 1184;Luins;VD
 1185;Mont-sur-Rolle;VD
-1186;Essertines-Rolle;VD
+1186;Essertines-sur-Rolle;VD
 1187;St-Oyens;VD
 1189;Saubraz;VD
 1188;Gimel;VD
 1195;Dully-Bursinel;VD
 1196;Gland;VD
 1197;Prangins;VD
-1200;Genève;GE
-1200;Genève 1;GE
-1200;Genève 2 Dépôt;GE
-1200;Genève 3;GE
-1200;Genève 4;GE
-1200;Genève 2 Transit;GE
-1200;Genève 6;GE
-1200;Genève 7;GE
-1200;Genève 8;GE
-1200;Genève 11;GE
-1200;Genève 12;GE
-1200;Genève 13;GE
-1200;Genève 17;GE
-1200;Genève 19;GE
-1200;Genève 20;GE
-1200;Genève 21;GE
-1200;Genève 26;GE
-1200;Genève 28 Balexert;GE
-1200;Genève (CLT);GE
-1200;Genève 2 Dist;GE
-1200;Genève Dist Ba;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève;GE
-1200;Genève 1;GE
-1200;Genève 2;GE
-1200;Genève 3;GE
-1200;Genève 4;GE
-1200;Genève 6;GE
-1200;Genève 7;GE
-1200;Genève 8;GE
-1200;Genève 10;GE
-1200;Genève 11;GE
-1200;Genève 12;GE
-1200;Genève 13;GE
-1200;Genève 17;GE
-1200;Genève 19;GE
-1200;Genève 20;GE
-1200;Genève 21;GE
-1200;Genève 22;GE
-1200;Genève 23;GE
-1200;Genève 26;GE
-1200;Genève 27;GE
-1200;Genève 28;GE
+1200;GenÃ¨ve;GE
+1200;GenÃ¨ve 1;GE
+1200;GenÃ¨ve 2 Cornavin DÃ©pÃ´t;GE
+1200;GenÃ¨ve 3;GE
+1200;GenÃ¨ve 4;GE
+1200;GenÃ¨ve 2 Transit;GE
+1200;GenÃ¨ve 6;GE
+1200;GenÃ¨ve 7;GE
+1200;GenÃ¨ve 8;GE
+1200;GenÃ¨ve 11;GE
+1200;GenÃ¨ve 12;GE
+1200;GenÃ¨ve 13;GE
+1200;GenÃ¨ve 17;GE
+1200;GenÃ¨ve 19;GE
+1200;GenÃ¨ve 20;GE
+1200;GenÃ¨ve 21;GE
+1200;GenÃ¨ve 26;GE
+1200;GenÃ¨ve 28 Balexert;GE
+1200;GenÃ¨ve Centre logistique;GE
+1200;GenÃ¨ve 2 Distribution;GE
+1200;GenÃ¨ve Dist Ba;GE
+1201;GenÃ¨ve;GE
+1202;GenÃ¨ve;GE
+1203;GenÃ¨ve;GE
+1204;GenÃ¨ve;GE
+1205;GenÃ¨ve;GE
+1206;GenÃ¨ve;GE
+1207;GenÃ¨ve;GE
+1208;GenÃ¨ve;GE
+1209;GenÃ¨ve;GE
+1211;GenÃ¨ve 1;GE
+1211;GenÃ¨ve 2;GE
+1211;GenÃ¨ve 3;GE
+1211;GenÃ¨ve 4;GE
+1211;GenÃ¨ve 6;GE
+1211;GenÃ¨ve 7;GE
+1211;GenÃ¨ve 8;GE
+1211;GenÃ¨ve 10;GE
+1211;GenÃ¨ve 11;GE
+1211;GenÃ¨ve 12;GE
+1211;GenÃ¨ve 13;GE
+1211;GenÃ¨ve 17;GE
+1211;GenÃ¨ve 19;GE
+1211;GenÃ¨ve 20;GE
+1211;GenÃ¨ve 21;GE
+1211;GenÃ¨ve 22;GE
+1211;GenÃ¨ve 23;GE
+1211;GenÃ¨ve 26;GE
+1211;GenÃ¨ve 27;GE
+1211;GenÃ¨ve 28;GE
 1212;Grand-Lancy;GE
 1212;Grand-Lancy 1;GE
 1213;Petit-Lancy;GE
@@ -222,22 +222,22 @@ zip_code;town;canton
 1213;Petit-Lancy 2;GE
 1213;Onex;GE
 1214;Vernier;GE
-1215;Genève;GE
-1215;Genève 15 Dépôt;GE
+1215;GenÃ¨ve 15 AÃ©roport;GE
+1215;GenÃ¨ve 15 AÃ©roport DÃ©pÃ´t;GE
 1216;Cointrin;GE
 1217;Meyrin;GE
 1217;Meyrin 1;GE
 1217;Meyrin 2;GE
 1218;Le Grand-Saconnex;GE
 1219;Le Lignon;GE
-1219;Aïre;GE
-1219;Châtelaine;GE
+1219;AÃ¯re;GE
+1219;ChÃ¢telaine;GE
 1220;Les Avanchets;GE
-1222;Vésenaz;GE
+1222;VÃ©senaz;GE
 1223;Cologny;GE
-1224;Chêne-Bougeries;GE
-1225;Chêne-Bourg;GE
-1226;Thônex;GE
+1224;ChÃªne-Bougeries;GE
+1225;ChÃªne-Bourg;GE
+1226;ThÃ´nex;GE
 1227;Carouge GE;GE
 1227;Les Acacias;GE
 1228;Plan-les-Ouates;GE
@@ -254,7 +254,7 @@ zip_code;town;canton
 1244;Choulex;GE
 1245;Collonge-Bellerive;GE
 1246;Corsier GE;GE
-1247;Anières;GE
+1247;AniÃ¨res;GE
 1248;Hermance;GE
 1251;Gy;GE
 1252;Meinier;GE
@@ -265,14 +265,14 @@ zip_code;town;canton
 1257;La Croix-de-Rozon;GE
 1258;Perly;GE
 1260;Nyon;VD
-1260;Nyon 1 Dist;VD
+1260;Nyon 1 Distribution;VD
 1277;Borex;VD
 1278;La Rippe;VD
 1279;Chavannes-de-Bogis;VD
 1274;Grens;VD
-1275;Chéserex;VD
+1275;ChÃ©serex;VD
 1276;Gingins;VD
-1270;Trélex;VD
+1270;TrÃ©lex;VD
 1271;Givrins;VD
 1272;Genolier;VD
 1273;Arzier-Le Muids;VD
@@ -299,14 +299,14 @@ zip_code;town;canton
 1288;Aire-la-Ville;GE
 1290;Versoix;GE
 1291;Commugny;VD
-1292;Chambésy;GE
+1292;ChambÃ©sy;GE
 1293;Bellevue;GE
 1294;Genthod;GE
 1295;Mies-Tannay;VD
 1296;Coppet;VD
 1297;Founex;VD
-1298;Céligny;GE
-1299;Crans-près-Céligny;VD
+1298;CÃ©ligny;GE
+1299;Crans-prÃ¨s-CÃ©ligny;VD
 1302;Vufflens-la-Ville;VD
 1304;Cossonay-Ville;VD
 1304;Dizy;VD
@@ -321,22 +321,22 @@ zip_code;town;canton
 1346;Les Bioux;VD
 1344;L'Abbaye;VD
 1342;Le Pont;VD
-1343;Les Charbonnières;VD
+1343;Les CharbonniÃ¨res;VD
 1345;Le Lieu;VD
 1347;Le Sentier;VD
 1348;Le Brassus;VD
 1306;Daillens;VD
 1303;Penthaz;VD
-1308;La Chaux-Cossonay;VD
+1308;La Chaux (Cossonay);VD
 1148;Cuarnens;VD
 1313;Ferreyres;VD
 1148;Moiry VD;VD
 1321;Arnex-sur-Orbe;VD
 1318;Pompaples;VD
-1312;Eclépens;VD
-1329;Bretonnières;VD
+1312;EclÃ©pens;VD
+1329;BretonniÃ¨res;VD
 1322;Croy;VD
-1323;Romainmôtier;VD
+1323;RomainmÃ´tier;VD
 1324;Premier;VD
 1325;Vaulion;VD
 1326;Juriens;VD
@@ -347,38 +347,38 @@ zip_code;town;canton
 1353;Bofflens;VD
 1354;Montcherand;VD
 1355;L'Abergement;VD
-1356;Les Clées;VD
+1356;Les ClÃ©es;VD
 1357;Lignerolle;VD
-1358;Valeyres-Rances;VD
+1358;Valeyres-sous-Rances;VD
 1439;Rances;VD
 1373;Chavornay;VD
 1372;Bavois;VD
-1374;Corcelles-Chavorn;VD
-1375;Penthéréaz;VD
+1374;Corcelles-sur-Chavornay;VD
+1375;PenthÃ©rÃ©az;VD
 1376;Goumoens-la-Ville;VD
 1400;Yverdon-les-Bains;VD
-1400;Yverdon 1;VD
+1400;Yverdon-les-Bains 1;VD
 1400;Yverdon 2;VD
-1400;Yverdon-les-Bains;VD
-1417;Essertines-Yverdon;VD
+1401;Yverdon-les-Bains;VD
+1417;Essertines-sur-Yverdon;VD
 1416;Pailly;VD
 1418;Vuarrens;VD
 1420;Fiez;VD
-1421;Fontaines-Grandson;VD
+1421;Fontaines-sur-Grandson;VD
 1423;Villars-Burquin;VD
 1453;Mauborget;VD
 1429;Giez;VD
 1430;Orges;VD
 1431;Vugelles-La Mothe;VD
-1400;Pomy;VD
-1400;Cronay;VD
-1400;Donneloye;VD
-1400;Prahins;VD
-1400;Chanéaz;VD
-1412;Valeyres-Ursins;VD
+1405;Pomy;VD
+1406;Cronay;VD
+1407;Donneloye;VD
+1408;Prahins;VD
+1409;ChanÃ©az;VD
+1412;Valeyres-sous-Ursins;VD
 1413;Orzens;VD
 1046;Rueyres;VD
-1400;Cuarny;VD
+1404;Cuarny;VD
 1427;Bonvillars;VD
 1424;Champagne;VD
 1431;Novalles;VD
@@ -387,33 +387,33 @@ zip_code;town;canton
 1422;Grandson;VD
 1425;Onnens VD;VD
 1426;Concise;VD
-1426;Corcelles-Concise;VD
-1432;Belmont-Yverdon;VD
+1426;Corcelles-prÃ¨s-Concise;VD
+1432;Belmont-sur-Yverdon;VD
 1433;Suchy;VD
 1434;Ependes VD;VD
 1435;Essert-Pittet;VD
 1436;Treycovagnes;VD
-1437;Suscévaz;VD
+1437;SuscÃ©vaz;VD
 1438;Mathod;VD
-1441;Valeyres-Montagny;VD
-1442;Montagny-Yverdon;VD
+1441;Valeyres-sous-Montagny;VD
+1442;Montagny-prÃ¨s-Yverdon;VD
 1443;Champvent;VD
 1445;Vuiteboeuf;VD
 1446;Baulmes;VD
 1450;Ste-Croix;VD
-1450;La Sagne VD;VD
+1450;La Sagne (Ste-Croix);VD
 1454;L'Auberson;VD
 1452;Les Rasses;VD
 1453;Bullet;VD
-1450;Le Château-Croix;VD
+1450;Le ChÃ¢teau-de-Ste-Croix;VD
 1462;Yvonand;VD
 1463;Rovray;VD
-1464;Chavannes-le-Chêne;VD
-1464;Chêne-Pâquier;VD
+1464;Chavannes-le-ChÃªne;VD
+1464;ChÃªne-PÃ¢quier;VD
 1468;Cheyres;FR
 1470;Estavayer-le-Lac;FR
 1473;Font;FR
-1474;Châbles FR;FR
+1474;ChÃ¢bles FR;FR
 1483;Montet (Broye);FR
 1482;Cugy FR;FR
 1541;Bussy FR;FR
@@ -421,10 +421,10 @@ zip_code;town;canton
 1485;Nuvilly;FR
 1486;Vuissens;FR
 1537;Champtauroz;VD
-1538;Treytorrens-Payern;VD
+1538;Treytorrens (Payerne);VD
 1489;Murist;FR
 1510;Moudon;VD
-1512;Chavannes-s-Moudon;VD
+1512;Chavannes-sur-Moudon;VD
 1513;Hermenches;VD
 1514;Bussy-sur-Moudon;VD
 1522;Oulens-sur-Lucens;VD
@@ -433,30 +433,30 @@ zip_code;town;canton
 1410;Denezy;VD
 1522;Lucens;VD
 1521;Curtilles;VD
-1523;Granges-Marnand;VD
+1523;Granges-prÃ¨s-Marnand;VD
 1527;Villeneuve FR;FR
 1528;Surpierre;FR
 1529;Cheiry;FR
 1530;Payerne;VD
-1532;Fétigny;FR
-1533;Ménières;FR
+1532;FÃ©tigny;FR
+1533;MÃ©niÃ¨res;FR
 1534;Sassel;VD
-1536;Combremont-Petit;VD
+1536;Combremont-le-Petit;VD
 1526;Forel-sur-Lucens;VD
 1526;Cremin;VD
-1542;Rueyres-les-Prés;FR
+1542;Rueyres-les-PrÃ©s;FR
 1543;Grandcour;VD
 1544;Gletterens;FR
 1545;Chevroux;VD
 1551;Vers-chez-Perrin;VD
 1552;Trey;VD
-1553;Châtonnaye;FR
-1554;Sédeilles;VD
+1553;ChÃ¢tonnaye;FR
+1554;SÃ©deilles;VD
 1555;Villarzel;VD
 1682;Villars-Bramard;VD
 1682;Dompierre VD;VD
-1535;Combremont-Grand;VD
-1562;Corcelles-Payerne;VD
+1535;Combremont-le-Grand;VD
+1562;Corcelles-prÃ¨s-Payerne;VD
 1563;Dompierre FR;FR
 1564;Domdidier;FR
 1565;Missy;VD
@@ -474,8 +474,8 @@ zip_code;town;canton
 1587;Constantine;VD
 1588;Cudrefin;VD
 1595;Faoug;VD
-1607;Palézieux-Village;VD
-1610;Châtillens;VD
+1607;PalÃ©zieux-Village;VD
+1610;ChÃ¢tillens;VD
 1673;Ecublens FR;FR
 1525;Henniez;VD
 1524;Marnand;VD
@@ -485,12 +485,12 @@ zip_code;town;canton
 1070;Puidoux;VD
 1071;Chexbres;VD
 1072;Forel (Lavaux);VD
-1607;Palézieux;VD
+1607;PalÃ©zieux;VD
 1614;Granges (Veveyse);FR
 1615;Bossonnens;FR
 1616;Attalens;FR
 1617;Remaufens;FR
-1618;Châtel-St-Denis;FR
+1618;ChÃ¢tel-St-Denis;FR
 1619;Les Paccots;FR
 1623;Semsales;FR
 1624;La Verrerie;FR
@@ -503,30 +503,30 @@ zip_code;town;canton
 1644;Avry-devant-Pont;FR
 1645;Le Bry;FR
 1646;Echarlens;FR
-1647;Corbières;FR
+1647;CorbiÃ¨res;FR
 1648;Hauteville;FR
 1656;Im Fang;FR
 1656;Jaun;FR
-1657;Abländschen;BE
+1657;AblÃ¤ndschen;BE
 1654;Cerniat FR;FR
 1651;Villarvolard;FR
 1652;Botterens;FR
 1638;Morlon;FR
-1663;Moléson-s-Gruyères;FR
+1663;MolÃ©son-sur-GruyÃ¨res;FR
 1632;Riaz;FR
 1633;Marsens;FR
 1634;La Roche FR;FR
 1649;Pont-la-Ville;FR
-1635;La Tour-de-Trême;FR
+1635;La Tour-de-TrÃªme;FR
 1636;Broc;FR
-1637;Charmey (Gruyère);FR
-1661;Pâquier-Montbarry;FR
+1637;Charmey (GruyÃ¨re);FR
+1661;Le PÃ¢quier-Montbarry;FR
 1663;Pringy;FR
 1665;Estavannens;FR
 1667;Enney;FR
 1669;Neirivue;FR
 1669;Albeuve;FR
-1663;Gruyères;FR
+1663;GruyÃ¨res;FR
 1663;Epagny;FR
 1666;Grandvillard;FR
 1610;Oron-la-Ville;VD
@@ -537,46 +537,46 @@ zip_code;town;canton
 1673;Promasens;FR
 1678;Siviriez;FR
 1679;Villaraboud;FR
-1676;Chavannes-Forts;FR
+1676;Chavannes-les-Forts;FR
 1677;Prez-vers-Siviriez;FR
 1680;Romont FR;FR
 1681;Billens;FR
-1682;Prévonloup;VD
+1682;PrÃ©vonloup;VD
 1683;Brenles;VD
-1683;Chesalles-Moudon;VD
+1683;Chesalles-sur-Moudon;VD
 1694;Orsonnens;FR
 1694;Villarsiviriaux;FR
 1695;Villarlod;FR
-1696;Vuisternens-Ogoz;FR
-1684;Mézières FR;FR
+1696;Vuisternens-en-Ogoz;FR
+1684;MÃ©ziÃ¨res FR;FR
 1685;Villariaz;FR
-1687;Estévenens;FR
-1686;Grangettes-Romont;FR
-1689;Châtelard-p-Romont;FR
+1687;EstÃ©venens;FR
+1686;Grangettes-prÃ¨s-Romont;FR
+1689;Le ChÃ¢telard-prÃ¨s-Romont;FR
 1688;Sommentier;FR
 1626;Romanens;FR
 1692;Massonnens;FR
-1687;Vuisternens-Romont;FR
-1625;Sâles (Gruyère);FR
+1687;Vuisternens-devant-Romont;FR
+1625;SÃ¢les (GruyÃ¨re);FR
 1612;Ecoteaux;VD
 1613;Maracon;VD
-1608;Oron-le-Châtel;VD
+1608;Oron-le-ChÃ¢tel;VD
 1609;St-Martin FR;FR
-1611;Le Crêt-p-Semsales;FR
+1611;Le CrÃªt-prÃ¨s-Semsales;FR
 1697;La Joux FR;FR
 1699;Bouloz;FR
 1699;Porsel;FR
 1699;Pont (Veveyse);FR
 1700;Fribourg;FR
 1700;Fribourg 1;FR
-1700;Fribourg;FR
-1700;Fribourg;FR
-1700;Fribourg;FR
-1700;Fribourg;FR
-1700;Fribourg;FR
+1702;Fribourg;FR
+1704;Fribourg;FR
+1705;Fribourg;FR
+1707;Fribourg;FR
+1708;Fribourg;FR
 1763;Granges-Paccot;FR
-1700;Fribourg 1 Dist;FR
-1700;Fribourg;FR
+1700;Fribourg 1 Distribution;FR
+1701;Fribourg;FR
 1720;Corminboeuf;FR
 1721;Misery-Courtion;FR
 1735;Giffers;FR
@@ -585,13 +585,13 @@ zip_code;town;canton
 1738;Sangernboden;BE
 1716;Schwarzsee;FR
 1724;Bonnefontaine;FR
-1727;Corpataux-Magneden;FR
+1727;Corpataux-Magnedens;FR
 1728;Rossens FR;FR
-1719;Brünisried;FR
+1719;BrÃ¼nisried;FR
 1731;Ependes FR;FR
 1732;Arconciel;FR
 1733;Treyvaux;FR
-1720;Chésopelloz;FR
+1720;ChÃ©sopelloz;FR
 1712;Tafers;FR
 1713;St. Antoni;FR
 1714;Heitenried;FR
@@ -604,33 +604,33 @@ zip_code;town;canton
 1724;Le Mouret;FR
 1725;Posieux;FR
 1726;Farvagny;FR
-1746;Prez-vers-Noréaz;FR
+1746;Prez-vers-NorÃ©az;FR
 1747;Corserey;FR
 1748;Torny-le-Grand;FR
 1749;Middes;FR
 1740;Neyruz FR;FR
 1741;Cottens FR;FR
-1744;Chénens;FR
+1744;ChÃ©nens;FR
 1745;Lentigny;FR
 1742;Autigny;FR
-1695;Estavayer-Gibloux;FR
+1695;Estavayer-le-Gibloux;FR
 1691;Villarimboud;FR
-1752;Villars-sur-Glâne;FR
-1752;Villars-Glâne 1;FR
-1752;Villars-Glâne 2;FR
+1752;Villars-sur-GlÃ¢ne;FR
+1752;Villars-sur-GlÃ¢ne 1;FR
+1752;Villars-sur-GlÃ¢ne 2;FR
 1753;Matran;FR
-1754;Rosé;FR
+1754;RosÃ©;FR
 1756;Onnens FR;FR
-1757;Noréaz;FR
+1757;NorÃ©az;FR
 1690;Villaz-St-Pierre;FR
 1762;Givisiez;FR
 1772;Grolley;FR
-1773;Léchelles;FR
+1773;LÃ©chelles;FR
 1774;Cousset;FR
 1776;Montagny-la-Ville;FR
 1795;Courlevon;FR
 1796;Courgevaux;FR
-1797;Münchenwiler;BE
+1797;MÃ¼nchenwiler;BE
 1794;Salvenach;FR
 1793;Jeuss;FR
 1792;Cordast;FR
@@ -642,21 +642,21 @@ zip_code;town;canton
 1784;Courtepin;FR
 1785;Cressier FR;FR
 1786;Sugiez;FR
-1787;Môtier (Vully);FR
+1787;MÃ´tier (Vully);FR
 1800;Vevey;VD
 1800;Vevey 1;VD
-1800;Vevey 1 Dist;VD
-1801;Le Mont-Pèlerin;VD
-1808;Monts-de-Corsier;VD
+1800;Vevey 1 Distribution;VD
+1801;Le Mont-PÃ¨lerin;VD
+1808;Les Monts-de-Corsier;VD
 1809;Fenil-sur-Corsier;VD
 1802;Corseaux;VD
 1803;Chardonne;VD
 1804;Corsier-sur-Vevey;VD
 1805;Jongny;VD
-1806;St-Légier-Chiésaz;VD
+1806;St-LÃ©gier-La ChiÃ©saz;VD
 1807;Blonay;VD
 1071;Rivaz;VD
-1071;St-Saphorin-Lavaux;VD
+1071;St-Saphorin (Lavaux);VD
 1814;La Tour-de-Peilz;VD
 1815;Clarens;VD
 1816;Chailly-Montreux;VD
@@ -665,12 +665,12 @@ zip_code;town;canton
 1820;Montreux 1;VD
 1820;Montreux 2;VD
 1820;Territet-Veytaux;VD
-1820;Montreux 1 Dist;VD
+1820;Montreux 1 Distribution;VD
 1822;Chernex;VD
 1823;Glion;VD
 1824;Caux;VD
 1832;Villard-sur-Chamby;VD
-1669;Sciernes-d'Albeuve;FR
+1669;Les Sciernes-d'Albeuve;FR
 1658;La Tine;VD
 1660;Les Moulins;VD
 1659;Flendruz;VD
@@ -678,8 +678,8 @@ zip_code;town;canton
 1832;Chamby;VD
 1833;Les Avants;VD
 1669;Montbovon;FR
-1658;Rossinière;VD
-1660;Château-d'Oex;VD
+1658;RossiniÃ¨re;VD
+1660;ChÃ¢teau-d'Oex;VD
 1659;Rougemont;VD
 1844;Villeneuve VD;VD
 1847;Rennaz;VD
@@ -694,9 +694,9 @@ zip_code;town;canton
 1862;La Comballaz;VD
 1862;Les Mosses;VD
 1866;La Forclaz VD;VD
-1884;Huémoz;VD
+1884;HuÃ©moz;VD
 1867;Panex;VD
-1863;Le Sépey;VD
+1863;Le SÃ©pey;VD
 1864;Vers-l'Eglise;VD
 1865;Les Diablerets;VD
 1867;Ollon VD;VD
@@ -704,22 +704,22 @@ zip_code;town;canton
 1870;Monthey;VS
 1870;Monthey 1;VS
 1870;Monthey 2;VS
-1871;Choëx;VS
+1871;ChoÃ«x;VS
 1871;Les Giettes;VS
 1872;Troistorrents;VS
 1873;Val-d'Illiez;VS
-1874;Champéry;VS
+1874;ChampÃ©ry;VS
 1875;Morgins;VS
 1880;Bex;VD
 1880;Fenalet-sur-Bex;VD
-1880;Frenières-sur-Bex;VD
+1880;FreniÃ¨res-sur-Bex;VD
 1880;Les Plans-sur-Bex;VD
 1882;Gryon;VD
 1884;Villars-sur-Ollon;VD
-1885;Chesières;VD
+1885;ChesiÃ¨res;VD
 1890;St-Maurice;VS
 1890;Mex VS;VS
-1891;Vérossaz;VS
+1891;VÃ©rossaz;VS
 1869;Massongex;VS
 1895;Vionnaz;VS
 1897;Les Evouettes;VS
@@ -733,35 +733,35 @@ zip_code;town;canton
 1902;Evionnaz;VS
 1903;Collonges;VS
 1904;Vernayaz;VS
-1905;Dorénaz;VS
+1905;DorÃ©naz;VS
 1906;Charrat;VS
 1907;Saxon;VS
 1908;Riddes;VS
 1912;Leytron;VS
 1911;Ovronnaz;VS
 1913;Saillon;VS
-1914;Isérables;VS
+1914;IsÃ©rables;VS
 1918;La Tzoumaz;VS
 1955;Chamoson;VS
-1955;St-Pierre-Clages;VS
+1955;St-Pierre-de-Clages;VS
 1957;Ardon;VS
 1920;Martigny;VS
 1920;Martigny 1;VS
 1920;Martigny 2;VS
 1921;Martigny-Croix;VS
-1923;Le Trétien;VS
-1925;Le Châtelard VS;VS
+1923;Le TrÃ©tien;VS
+1925;Le ChÃ¢telard VS;VS
 1927;Chemin;VS
 1929;Trient;VS
 1928;Ravoire;VS
 1922;Salvan;VS
-1922;Granges (Salvan);VS
-1923;Les Marécottes;VS
+1922;Les Granges (Salvan);VS
+1923;Les MarÃ©cottes;VS
 1925;Finhaut;VS
 1926;Fully;VS
 1932;Bovernier;VS
-1947;Versegères;VS
-1941;Vollèges;VS
+1947;VersegÃ¨res;VS
+1941;VollÃ¨ges;VS
 1942;Levron;VS
 1948;Lourtier;VS
 1948;Fionnay;VS
@@ -771,32 +771,32 @@ zip_code;town;canton
 1943;Praz-de-Fort;VS
 1944;La Fouly VS;VS
 1933;Sembrancher;VS
-1934;Le Châble VS;VS
+1934;Le ChÃ¢ble VS;VS
 1936;Verbier;VS
-1937;Orsières;VS
+1937;OrsiÃ¨res;VS
 1938;Champex-Lac;VS
 1950;Sion;VS
 1950;Sion 1;VS
-1950;Sion 1 Dist;VS
-1950;Sion;VS
+1950;Sion 1 Distribution;VS
+1951;Sion;VS
 1950;Sion 2;VS
 1950;Sion 3;VS
-1975;St-Séverin;VS
+1975;St-SÃ©verin;VS
 1976;Erde;VS
 1976;Aven;VS
 1976;Daillon;VS
 1971;Grimisuat;VS
 1974;Arbaz;VS
-1961;Vernamiège;VS
+1961;VernamiÃ¨ge;VS
 1973;Nax;VS
 1968;Mase;VS
 1969;St-Martin VS;VS
 1981;Vex;VS
 1982;Euseigne;VS
-1984;Les Haudères;VS
+1984;Les HaudÃ¨res;VS
 1986;Arolla;VS
 1985;La Sage;VS
-1987;Hérémence;VS
+1987;HÃ©rÃ©mence;VS
 1988;Les Collons;VS
 1991;Salins;VS
 1992;Les Agettes;VS
@@ -809,31 +809,31 @@ zip_code;town;canton
 1996;Basse-Nendaz;VS
 1997;Haute-Nendaz;VS
 1994;Aproz (Nendaz);VS
-1962;Pont-de-la-Morge;VS
-1963;Vétroz;VS
+1962;Pont-de-la-Morge (Sion);VS
+1963;VÃ©troz;VS
 1964;Conthey;VS
-1965;Savièse;VS
+1965;SaviÃ¨se;VS
 1966;Ayent;VS
-1966;Signèse (Ayent);VS
+1966;SignÃ¨se (Ayent);VS
 1967;Bramois;VS
-1983;Evolène;VS
-1972;Anzère;VS
+1983;EvolÃ¨ne;VS
+1972;AnzÃ¨re;VS
 1988;Thyon;VS
-2000;Neuchâtel;NE
-2000;Neuchâtel 1 Dépôt;NE
-2000;Neuchâtel 2;NE
-2000;Neuchâtel 4;NE
-2000;Neuchâtel 7;NE
-2000;Neuchâtel;NE
-2000;Neuchâtel 9;NE
-2000;Neuchâtel 1;NE
-2000;Neuchâtel 2;NE
-2000;Neuchâtel 2 Dist;NE
-2000;Neuchâtel 3;NE
-2000;Neuchâtel 6;NE
+2000;NeuchÃ¢tel;NE
+2001;NeuchÃ¢tel 1 DÃ©pÃ´t;NE
+2000;NeuchÃ¢tel 2;NE
+2004;NeuchÃ¢tel 4;NE
+2007;NeuchÃ¢tel 7;NE
+2008;NeuchÃ¢tel;NE
+2009;NeuchÃ¢tel 9;NE
+2001;NeuchÃ¢tel 1;NE
+2002;NeuchÃ¢tel 2;NE
+2000;NeuchÃ¢tel 2 Distribution;NE
+2003;NeuchÃ¢tel 3;NE
+2006;NeuchÃ¢tel 6;NE
 2012;Auvernier;NE
 2013;Colombier NE;NE
-2014;Bôle;NE
+2014;BÃ´le;NE
 2015;Areuse;NE
 2016;Cortaillod;NE
 2017;Boudry;NE
@@ -844,17 +844,17 @@ zip_code;town;canton
 2028;Vaumarcus;NE
 2034;Peseux;NE
 2035;Corcelles NE;NE
-2036;Cormondrèche;NE
+2036;CormondrÃ¨che;NE
 2042;Valangin;NE
 2043;Boudevilliers;NE
 2046;Fontaines NE;NE
 2052;Fontainemelon;NE
 2053;Cernier;NE
-2054;Chézard-St-Martin;NE
-2054;Les Vieux-Prés;NE
+2054;ChÃ©zard-St-Martin;NE
+2054;Les Vieux-PrÃ©s;NE
 2056;Dombresson;NE
 2057;Villiers;NE
-2058;Le Pâquier NE;NE
+2058;Le PÃ¢quier NE;NE
 2063;Vilars NE;NE
 2065;Savagnier;NE
 2067;Chaumont;NE
@@ -869,16 +869,16 @@ zip_code;town;canton
 2103;Noiraigue;NE
 2105;Travers;NE
 2108;Couvet;NE
-2112;Môtiers NE;NE
+2112;MÃ´tiers NE;NE
 2113;Boveresse;NE
 2114;Fleurier;NE
 2115;Buttes;NE
-2117;La Côte-aux-Fées;NE
+2117;La CÃ´te-aux-FÃ©es;NE
 2123;St-Sulpice NE;NE
-2406;La Brévine;NE
-2126;Les Verrières;NE
+2406;La BrÃ©vine;NE
+2126;Les VerriÃ¨res;NE
 2406;Le Brouillet;NE
-2406;Les Taillères;NE
+2406;Les TaillÃ¨res;NE
 2127;Les Bayards;NE
 2149;Champ-du-Moulin;NE
 2124;Les Sagnettes;NE
@@ -887,30 +887,30 @@ zip_code;town;canton
 2019;Chambrelien;NE
 2019;Rochefort;NE
 2037;Montmollin;NE
-2206;Geneveys-Coffrane;NE
+2206;Les Geneveys-sur-Coffrane;NE
 2207;Coffrane;NE
 2208;Les Hauts-Geneveys;NE
 2300;La Chaux-de-Fonds;NE
-2300;La Chaux-de-Fds 1;NE
-2300;La Chaux-de-Fonds;NE
-2300;La Chaux-de-Fonds;NE
-2300;Chdfds 1 Dist;NE
-2300;La Chaux-de-Fonds;NE
-2300;La Chaux-de-Fonds;NE
+2300;La Chaux-de-Fonds 1;NE
+2302;La Chaux-de-Fonds;NE
+2303;La Chaux-de-Fonds;NE
+2300;La Chaux-de-Fonds 1 Dist;NE
+2301;La Chaux-de-Fonds;NE
+2304;La Chaux-de-Fonds;NE
 2316;Petit-Martel;NE
 2338;Les Emibois;JU
 2314;La Sagne NE;NE
-2316;Ponts-de-Martel;NE
-2322;Le Crêt-du-Locle;NE
+2316;Les Ponts-de-Martel;NE
+2322;Le CrÃªt-du-Locle;NE
 2325;Les Planchettes;NE
 2300;La Cibourg;NE
-2333;La Ferrière;BE
+2333;La FerriÃ¨re;BE
 2336;Les Bois;JU
 2400;Le Locle;NE
-2406;La Châtagne;NE
+2406;La ChÃ¢tagne;NE
 2405;La Chaux-du-Milieu;NE
-2400;Le Prévoux;NE
-2414;Cerneux-Péquignot;NE
+2400;Le PrÃ©voux;NE
+2414;Le Cerneux-PÃ©quignot;NE
 2416;Les Brenets;NE
 2500;Biel/Bienne;BE
 2500;Biel/Bienne 1;BE
@@ -919,27 +919,27 @@ zip_code;town;canton
 2500;Biel/Bienne 6;BE
 2500;Biel/Bienne 7;BE
 2500;Biel/Bienne 8;BE
-2500;Biel/Bienne 1 Zust;BE
-2500;Biel 1 Annahme;BE
-2500;Biel/Bienne;BE
-2500;Biel/Bienne;BE
-2500;Biel/Bienne;BE
-2500;Biel/Bienne;BE
-2500;Biel/Bienne;BE
-2512;Tüscherz-Alfermée;BE
+2500;Biel/Bienne 1 Zustellung;BE
+2500;Biel/Bienne 1 Annahme;BE
+2501;Biel/Bienne;BE
+2502;Biel/Bienne;BE
+2503;Biel/Bienne;BE
+2504;Biel/Bienne;BE
+2505;Biel/Bienne;BE
+2512;TÃ¼scherz-AlfermÃ©e;BE
 2513;Twann;BE
 2514;Ligerz;BE
-2515;Prêles;BE
+2515;PrÃªles;BE
 2516;Lamboing;BE
 2517;Diesse;BE
 2518;Nods;BE
 2520;La Neuveville;BE
-2523;Lignières;NE
+2523;LigniÃ¨res;NE
 2525;Le Landeron;NE
 2532;Magglingen/Macolin;BE
 2533;Evilard;BE
 2534;Orvin;BE
-2534;Les Prés-d'Orvin;BE
+2534;Les PrÃ©s-d'Orvin;BE
 2535;Frinvillier;BE
 2536;Plagne;BE
 2537;Vauffelin;BE
@@ -954,7 +954,7 @@ zip_code;town;canton
 2552;Orpund;BE
 2553;Safnern;BE
 2554;Meinisberg;BE
-2555;Brügg BE;BE
+2555;BrÃ¼gg BE;BE
 2556;Scheuren;BE
 2557;Studen BE;BE
 2558;Aegerten;BE
@@ -964,31 +964,31 @@ zip_code;town;canton
 2564;Bellmund;BE
 2565;Jens;BE
 2572;Sutz;BE
-2575;Täuffelen;BE
-2576;Lüscherz;BE
+2575;TÃ¤uffelen;BE
+2576;LÃ¼scherz;BE
 2577;Siselen BE;BE
-3237;Brüttelen;BE
-2603;Péry;BE
+3237;BrÃ¼ttelen;BE
+2603;PÃ©ry;BE
 2604;La Heutte;BE
 2605;Sonceboz-Sombeval;BE
-2606;Corgémont;BE
-2607;Cortébert;BE
+2606;CorgÃ©mont;BE
+2607;CortÃ©bert;BE
 2608;Courtelary;BE
-2608;Mtgne-Courtelary;BE
+2608;Montagne-de-Courtelary;BE
 2610;St-Imier;BE
 2610;Mont-Soleil;BE
 2610;Mont-Crosin;BE
 2612;Cormoret;BE
 2613;Villeret;BE
 2615;Sonvilier;BE
-2615;Montagne-Sonvilier;BE
+2615;Montagne-de-Sonvilier;BE
 2616;Renan BE;BE
 2710;Tavannes;BE
 2712;Le Fuet;BE
-2714;Le Prédame;JU
+2714;Le PrÃ©dame;JU
 2717;Fornet-Dessous;BE
 2718;Fornet-Dessus;JU
-2715;Châtelat-Monible;BE
+2715;ChÃ¢telat-Monible;BE
 2716;Sornetan;BE
 2713;Bellelay;BE
 2714;Les Genevez JU;JU
@@ -999,9 +999,9 @@ zip_code;town;canton
 2723;Mont-Tramelan;BE
 2345;Les Breuleux;JU
 2345;Le Cerneux-Veusil;JU
-2345;Chaux-des-Breuleux;JU
+2345;La Chaux-des-Breuleux;JU
 2340;Le Noirmont;JU
-2350;Saignelégier;JU
+2350;SaignelÃ©gier;JU
 2353;Les Pommerats;JU
 2354;Goumois;JU
 2732;Reconvilier;BE
@@ -1009,8 +1009,8 @@ zip_code;town;canton
 2732;Saules BE;BE
 2732;Loveresse;BE
 2733;Pontenet;BE
-2735;Malleray-Bévilard;BE
-2735;Bévilard;BE
+2735;Malleray-BÃ©vilard;BE
+2735;BÃ©vilard;BE
 2736;Sorvilier;BE
 2738;Court;BE
 2740;Moutier;BE
@@ -1020,18 +1020,18 @@ zip_code;town;canton
 2744;Belprahon;BE
 2747;Seehof;BE
 2745;Grandval;BE
-2746;Crémines;BE
+2746;CrÃ©mines;BE
 2747;Corcelles BE;BE
 2762;Roches BE;BE
 2832;Rebeuvelier;JU
 2830;Courrendlin;JU
-2800;Delémont;JU
-2800;Delémont 1;JU
-2800;Delémont 2;JU
-2800;Delémont 1 Dist;JU
+2800;DelÃ©mont;JU
+2800;DelÃ©mont 1;JU
+2800;DelÃ©mont 2;JU
+2800;DelÃ©mont 1 Distribution;JU
 2802;Develier;JU
 2803;Bourrignon;JU
-2805;Soyhières;JU
+2805;SoyhiÃ¨res;JU
 2806;Mettembert;JU
 2807;Pleigne;JU
 2807;Lucelle;JU
@@ -1047,12 +1047,12 @@ zip_code;town;canton
 2828;Montsevelier;JU
 2829;Vermes;JU
 2842;Rossemaison;JU
-2843;Châtillon JU;JU
-2852;Courtételle;JU
+2843;ChÃ¢tillon JU;JU
+2852;CourtÃ©telle;JU
 2853;Courfaivre;JU
 2854;Bassecourt;JU
 2855;Glovelier;JU
-2856;Boécourt;JU
+2856;BoÃ©court;JU
 2857;Montavon;JU
 2863;Undervelier;JU
 2864;Soulce;JU
@@ -1069,9 +1069,9 @@ zip_code;town;canton
 2900;Porrentruy;JU
 2900;Porrentruy 1;JU
 2900;Porrentruy 2;JU
-2900;Porrentruy 1 Dist;JU
+2900;Porrentruy 1 Distribution;JU
 2902;Fontenais;JU
-2903;Villars-Fontenais;JU
+2903;Villars-sur-Fontenais;JU
 2904;Bressaucourt;JU
 2905;Courtedoux;JU
 2906;Chevenez;JU
@@ -1082,22 +1082,22 @@ zip_code;town;canton
 2915;Bure;JU
 2916;Fahy;JU
 2922;Courchavon;JU
-2923;Courtemaîche;JU
+2923;CourtemaÃ®che;JU
 2924;Montignez;JU
 2925;Buix;JU
 2926;Boncourt;JU
 2932;Coeuve;JU
-2935;Beurnevésin;JU
+2935;BeurnevÃ©sin;JU
 2942;Alle;JU
 2943;Vendlincourt;JU
 2944;Bonfol;JU
-2946;Miécourt;JU
+2946;MiÃ©court;JU
 2947;Charmoille;JU
 2952;Cornol;JU
-2953;Fregiécourt-Pleuj;JU
+2953;FregiÃ©court-Pleujouse;JU
 2954;Asuel;JU
 3000;Bern;BE
-3000;Bern 1 Schanzenpst;BE
+3000;Bern 1 Schanzenpost;BE
 3000;Bern 5;BE
 3000;Bern 6;BE
 3000;Bern 8;BE
@@ -1110,25 +1110,25 @@ zip_code;town;canton
 3000;Bern 23;BE
 3000;Bern 25;BE
 3000;Bern 31;BE
-3000;Bern Postauto;BE
-3000;Bern;BE
-3000;Bern PostFinance;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
-3000;Bern;BE
+3000;Bern Postauto BE-FB-SO;BE
+3001;Bern;BE
+3002;Bern PostFinance;BE
+3003;Bern;BE
+3004;Bern;BE
+3005;Bern;BE
+3006;Bern;BE
+3007;Bern;BE
+3008;Bern;BE
+3010;Bern;BE
+3011;Bern;BE
+3012;Bern;BE
+3013;Bern;BE
+3014;Bern;BE
+3015;Bern;BE
+3018;Bern;BE
+3019;Bern;BE
+3020;Bern;BE
+3027;Bern;BE
 3095;Spiegel b. Bern;BE
 3032;Hinterkappelen;BE
 3033;Wohlen b. Bern;BE
@@ -1139,14 +1139,14 @@ zip_code;town;canton
 3038;Kirchlindach;BE
 3042;Ortschwaben;BE
 3043;Uettligen;BE
-3049;Säriswil;BE
+3049;SÃ¤riswil;BE
 3045;Meikirch;BE
 3046;Wahlendorf;BE
 3047;Bremgarten b. Bern;BE
 3048;Worblaufen;BE
 3052;Zollikofen;BE
-3053;Münchenbuchsee;BE
-3054;Schüpfen;BE
+3053;MÃ¼nchenbuchsee;BE
+3054;SchÃ¼pfen;BE
 3063;Ittigen;BE
 3065;Bolligen;BE
 3065;Bolligen Dorf;BE
@@ -1155,27 +1155,27 @@ zip_code;town;canton
 3068;Utzigen;BE
 3072;Ostermundigen;BE
 3072;Ostermundigen 1;BE
-3073;Gümligen;BE
+3073;GÃ¼mligen;BE
 3074;Muri b. Bern;BE
-3075;Rüfenacht BE;BE
+3075;RÃ¼fenacht BE;BE
 3076;Worb;BE
 3077;Enggistein;BE
 3078;Richigen;BE
 3082;Schlosswil;BE
 3083;Trimstein;BE
 3084;Wabern;BE
-3088;Oberbütschel;BE
+3088;OberbÃ¼tschel;BE
 3086;Zimmerwald;BE
 3087;Niedermuhlern;BE
-3088;Rüeggisberg;BE
+3088;RÃ¼eggisberg;BE
 3089;Hinterfultigen;BE
 3096;Oberbalm;BE
 3097;Liebefeld;BE
-3098;Köniz;BE
-3098;Schliern b. Köniz;BE
-3099;Rüti b. Riggisberg;BE
-3110;Münsingen;BE
-3112;Allmendingen b. BE;BE
+3098;KÃ¶niz;BE
+3098;Schliern b. KÃ¶niz;BE
+3099;RÃ¼ti b. Riggisberg;BE
+3110;MÃ¼nsingen;BE
+3112;Allmendingen b. Bern;BE
 3114;Wichtrach;BE
 3115;Gerzensee;BE
 3116;Kirchdorf BE;BE
@@ -1186,7 +1186,7 @@ zip_code;town;canton
 3124;Belpberg;BE
 3125;Toffen;BE
 3126;Kaufdorf;BE
-3127;Mühlethurnen;BE
+3127;MÃ¼hlethurnen;BE
 3128;Kirchenthurnen;BE
 3132;Riggisberg;BE
 3664;Burgistein;BE
@@ -1196,44 +1196,44 @@ zip_code;town;canton
 3661;Uetendorf;BE
 3144;Gasel;BE
 3145;Niederscherli;BE
-3147;Mittelhäusern;BE
-3148;Lanzenhäusern;BE
+3147;MittelhÃ¤usern;BE
+3148;LanzenhÃ¤usern;BE
 3150;Schwarzenburg;BE
 3152;Mamishaus;BE
-3153;Rüschegg Gambach;BE
-3154;Rüschegg Heubach;BE
-3155;Helgisried;BE
+3153;RÃ¼schegg Gambach;BE
+3154;RÃ¼schegg Heubach;BE
+3155;Helgisried-Rohrbach;BE
 3156;Riffenmatt;BE
 3157;Milken;BE
 3158;Guggisberg;BE
-3159;Riedstätt;BE
-3172;Niederwangen BE;BE
+3159;RiedstÃ¤tt;BE
+3172;Niederwangen b. Bern;BE
 3173;Oberwangen b. Bern;BE
-3174;Thörishaus;BE
+3174;ThÃ¶rishaus;BE
 3175;Flamatt;FR
 3176;Neuenegg;BE
 3177;Laupen BE;BE
-3178;Bösingen;FR
+3178;BÃ¶singen;FR
 3179;Kriechenwil;BE
 3182;Ueberstorf;FR
 3183;Albligen;BE
-3184;Wünnewil;FR
-3186;Düdingen;FR
+3184;WÃ¼nnewil;FR
+3186;DÃ¼dingen;FR
 3126;Gelterfingen;BE
 3202;Frauenkappelen;BE
-3203;Mühleberg;BE
-3204;Rosshäusern;BE
-3205;Gümmenen;BE
+3203;MÃ¼hleberg;BE
+3204;RosshÃ¤usern;BE
+3205;GÃ¼mmenen;BE
 3206;Rizenbach;BE
 3207;Wileroltigen;BE
-3208;Gurbrü;BE
+3208;GurbrÃ¼;BE
 3210;Kerzers;FR
 3216;Ried b. Kerzers;FR
 3215;Gempenach;FR
 3214;Ulmiz;FR
 3213;Liebistorf;FR
 3212;Gurmels;FR
-3225;Müntschemier;BE
+3225;MÃ¼ntschemier;BE
 3226;Treiten;BE
 3232;Ins;BE
 3233;Tschugg;BE
@@ -1242,7 +1242,7 @@ zip_code;town;canton
 3236;Gampelen;BE
 3250;Lyss;BE
 3250;Lyss Zustellung;BE
-3251;Wengi b. Büren;BE
+3251;Wengi b. BÃ¼ren;BE
 3252;Worben;BE
 3253;Schnottwil;SO
 3254;Messen;SO
@@ -1251,13 +1251,13 @@ zip_code;town;canton
 3257;Grossaffoltern;BE
 3257;Ammerzwil BE;BE
 3262;Suberg;BE
-3263;Büetigen;BE
-3264;Diessbach b. Büren;BE
+3263;BÃ¼etigen;BE
+3264;Diessbach b. BÃ¼ren;BE
 3266;Wiler b. Seedorf;BE
 3267;Seedorf BE;BE
 3268;Lobsigen;BE
 3270;Aarberg;BE
-3271;Radelfingen;BE
+3271;Radelfingen b. Aarberg;BE
 3272;Walperswil;BE
 3273;Kappelen;BE
 3274;Hermrigen;BE
@@ -1265,30 +1265,30 @@ zip_code;town;canton
 3280;Meyriez;FR
 3282;Bargen BE;BE
 3283;Kallnach;BE
-3284;Fräschels;FR
+3284;FrÃ¤schels;FR
 3285;Galmiz;FR
 3286;Muntelier;FR
 3292;Busswil BE;BE
 3293;Dotzigen;BE
-3294;Büren an der Aare;BE
-3295;Rüti b. Büren;BE
+3294;BÃ¼ren an der Aare;BE
+3295;RÃ¼ti b. BÃ¼ren;BE
 3296;Arch;BE
 3297;Leuzigen;BE
-3298;Oberwil b. Büren;BE
+3298;Oberwil b. BÃ¼ren;BE
 3302;Moosseedorf;BE
 3303;Jegenstorf;BE
 3308;Grafenried;BE
 3312;Fraubrunnen;BE
-3313;Büren zum Hof;BE
+3313;BÃ¼ren zum Hof;BE
 3314;Schalunen;BE
-3315;Bätterkinden;BE
-3315;Kräiligen;BE
-3321;Schönbühl EKZ;BE
-3322;Urtenen-Schönbühl;BE
+3315;BÃ¤tterkinden;BE
+3315;KrÃ¤iligen;BE
+3321;SchÃ¶nbÃ¼hl Einkaufszentrum;BE
+3322;Urtenen-SchÃ¶nbÃ¼hl;BE
 3322;Mattstetten;BE
-3323;Bäriswil BE;BE
+3323;BÃ¤riswil BE;BE
 3324;Hindelbank;BE
-3325;Hettiswil;BE
+3325;Hettiswil b. Hindelbank;BE
 3326;Krauchthal;BE
 3303;Zuzwil BE;BE
 3305;Iffwil;BE
@@ -1296,126 +1296,126 @@ zip_code;town;canton
 3307;Brunnenthal;SO
 3309;Kernenried;BE
 3317;Limpach;BE
-3317;Mülchi;BE
+3317;MÃ¼lchi;BE
 3360;Herzogenbuchsee;BE
-3429;Höchstetten-Hells;BE
+3429;HÃ¶chstetten-Hellsau;BE
 4556;Aeschi SO;SO
 3376;Graben;BE
 3372;Wanzwil;BE
 3373;Heimenhausen;BE
-3373;Röthenbach Hbsee;BE
+3373;RÃ¶thenbach Herzogenbuchsee;BE
 3374;Wangenried;BE
-3362;Niederönz;BE
-3363;Oberönz;BE
+3362;NiederÃ¶nz;BE
+3363;OberÃ¶nz;BE
 3365;Seeberg;BE
 3365;Grasswil;BE
 3366;Bettenhausen;BE
-3367;Thörigen;BE
+3367;ThÃ¶rigen;BE
 3368;Bleienbach;BE
 3400;Burgdorf;BE
 3400;Burgdorf 1;BE
-3400;Burgdorf Zust;BE
+3400;Burgdorf Zustellung;BE
 3401;Burgdorf;BE
 3402;Burgdorf;BE
 3412;Heimiswil;BE
 3413;Kaltacker;BE
 3414;Oberburg;BE
-3415;Hasle-Rüegsau;BE
-3416;Affoltern BE;BE
-3417;Rüegsau;BE
-3418;Rüegsbach;BE
-3419;Biembach;BE
+3415;Hasle-RÃ¼egsau;BE
+3416;Affoltern im Emmental;BE
+3417;RÃ¼egsau;BE
+3418;RÃ¼egsbach;BE
+3419;Biembach im Emmental;BE
 3421;Lyssach;BE
 3422;Kirchberg BE;BE
-3422;Rüdtligen;BE
-3422;Alchenflüh;BE
+3422;RÃ¼dtligen;BE
+3422;AlchenflÃ¼h;BE
 3423;Ersigen;BE
-3424;Niederösch;BE
+3424;NiederÃ¶sch;BE
 3425;Koppigen;BE
 3426;Aefligen;BE
 3427;Utzenstorf;BE
-3428;Wiler b.Utzenstorf;BE
-3432;Lützelflüh-Goldb;BE
-3433;Schwanden i. E.;BE
+3428;Wiler b. Utzenstorf;BE
+3432;LÃ¼tzelflÃ¼h-Goldbach;BE
+3433;Schwanden im Emmental;BE
 3434;Obergoldbach;BE
 3435;Ramsei;BE
-3436;Zollbrück;BE
-3437;Rüderswil;BE
+3436;ZollbrÃ¼ck;BE
+3437;RÃ¼derswil;BE
 3438;Lauperswil;BE
-3439;Ranflüh;BE
-3452;Grünenmatt;BE
+3439;RanflÃ¼h;BE
+3452;GrÃ¼nenmatt;BE
 3453;Heimisbach;BE
 3454;Sumiswald;BE
-3455;Grünen;BE
+3455;GrÃ¼nen;BE
 3456;Trachselwald;BE
 3457;Wasen im Emmental;BE
 3462;Weier im Emmental;BE
-3463;Häusernmoos;BE
-3464;Schmidigen-Mühlew;BE
-3465;Dürrenroth;BE
+3463;HÃ¤usernmoos im Emmental;BE
+3464;Schmidigen-MÃ¼hleweg;BE
+3465;DÃ¼rrenroth;BE
 3472;Wynigen;BE
 3473;Alchenstorf;BE
-3474;Rüedisbach;BE
+3474;RÃ¼edisbach;BE
 3475;Riedtwil;BE
 3475;Hermiswil;BE
 3476;Oschwand;BE
-3111;Tägertschi;BE
+3111;TÃ¤gertschi;BE
 3503;Gysenstein;BE
-3504;Niederhünigen;BE
-3506;Grosshöchstetten;BE
+3504;NiederhÃ¼nigen;BE
+3506;GrosshÃ¶chstetten;BE
 3507;Biglen;BE
 3508;Arni BE;BE
 3510;Konolfingen;BE
 3512;Walkringen;BE
 3513;Bigenthal;BE
-3415;Schafhausen i. E.;BE
+3415;Schafhausen im Emmental;BE
 3672;Oberdiessbach;BE
-3672;Aeschlen;BE
+3672;Aeschlen b. Oberdiessbach;BE
 3673;Linden;BE
-3674;Bleiken;BE
+3674;Bleiken b. Oberdiessbach;BE
 3671;Brenzikofen;BE
 3531;Oberthal;BE
-3532;Zäziwil;BE
+3532;ZÃ¤ziwil;BE
 3533;Bowil;BE
 3534;Signau;BE
-3535;Schüpbach;BE
+3535;SchÃ¼pbach;BE
 3536;Aeschau;BE
 3537;Eggiwil;BE
-3538;Röthenbach i. E.;BE
+3538;RÃ¶thenbach im Emmental;BE
 3543;Emmenmatt;BE
-3550;Langnau i. E.;BE
+3550;Langnau im Emmental;BE
 3551;Oberfrittenbach;BE
-3552;Bärau;BE
+3552;BÃ¤rau;BE
 3553;Gohl;BE
 3555;Trubschachen;BE
 3556;Trub;BE
 3557;Fankhaus (Trub);BE
 3600;Thun;BE
 3600;Thun 2 Zustellung;BE
-3600;Thun;BE
-3600;Thun;BE
-3600;Thun;BE
-3600;Thun;BE
-3600;Thun;BE
-3600;Thun;BE
-3600;Thun;BE
+3601;Thun;BE
+3602;Thun;BE
+3603;Thun;BE
+3604;Thun;BE
+3605;Thun;BE
+3607;Thun;BE
+3608;Thun;BE
 3617;Fahrni b. Thun;BE
-3618;Süderen;BE
+3618;SÃ¼deren;BE
 3619;Eriz;BE
 3619;Innereriz;BE
 3622;Homberg b. Thun;BE
 3635;Uebeschi;BE
-3631;Höfen b. Thun;BE
-3636;Längenbühl;BE
+3631;HÃ¶fen b. Thun;BE
+3636;LÃ¤ngenbÃ¼hl;BE
 3612;Steffisburg;BE
 3613;Steffisburg;BE
 3614;Unterlangenegg;BE
 3615;Heimenschwand;BE
 3616;Schwarzenegg;BE
-3623;Teuffenthal BE;BE
+3623;Teuffenthal b. Thun;BE
 3624;Goldiwil (Thun);BE
 3625;Heiligenschwendi;BE
-3626;Hünibach;BE
+3626;HÃ¼nibach;BE
 3627;Heimberg;BE
 3633;Amsoldingen;BE
 3634;Thierachern;BE
@@ -1425,12 +1425,12 @@ zip_code;town;canton
 3646;Einigen;BE
 3647;Reutigen;BE
 3652;Hilterfingen;BE
-3653;Oberhofen Thun'see;BE
+3653;Oberhofen am Thunersee;BE
 3654;Gunten;BE
 3655;Sigriswil;BE
-3656;Tschingel;BE
+3656;Tschingel ob Gunten;BE
 3656;Aeschlen ob Gunten;BE
-3657;Schwanden Sigrisw;BE
+3657;Schwanden (Sigriswil);BE
 3658;Merligen;BE
 3700;Spiez;BE
 3702;Hondrich;BE
@@ -1439,10 +1439,10 @@ zip_code;town;canton
 3704;Krattigen;BE
 3705;Faulensee;BE
 3706;Leissigen;BE
-3707;Därligen;BE
+3707;DÃ¤rligen;BE
 3711;Emdthal;BE
-3711;Mülenen;BE
-3713;Reichenbach i. K.;BE
+3711;MÃ¼lenen;BE
+3713;Reichenbach im Kandertal;BE
 3714;Frutigen;BE
 3714;Wengi b. Frutigen;BE
 3715;Adelboden;BE
@@ -1457,22 +1457,22 @@ zip_code;town;canton
 3753;Oey;BE
 3754;Diemtigen;BE
 3755;Horboden;BE
-3756;Zwischenflüh;BE
-3757;Schwenden;BE
+3756;ZwischenflÃ¼h;BE
+3757;Schwenden im Diemtigtal;BE
 3758;Latterbach;BE
-3762;Erlenbach i. S.;BE
-3763;Därstetten;BE
+3762;Erlenbach im Simmental;BE
+3763;DÃ¤rstetten;BE
 3764;Weissenburg;BE
-3765;Oberwil i. S.;BE
+3765;Oberwil im Simmental;BE
 3766;Boltigen;BE
 3770;Zweisimmen;BE
 3771;Blankenburg;BE
 3772;St. Stephan;BE
-3773;Matten(St.Stephan);BE
+3773;Matten (St. Stephan);BE
 3775;Lenk im Simmental;BE
 3776;Oeschseite;BE
-3777;Saanenmöser;BE
-3778;Schönried;BE
+3777;SaanenmÃ¶ser;BE
+3778;SchÃ¶nried;BE
 3780;Gstaad;BE
 3781;Turbach;BE
 3782;Lauenen b. Gstaad;BE
@@ -1482,34 +1482,34 @@ zip_code;town;canton
 3792;Saanen;BE
 3800;Interlaken;BE
 3800;Unterseen;BE
-3800;Matten b. Interl;BE
+3800;Matten b. Interlaken;BE
 3801;Jungfraujoch;VS
 3803;Beatenberg;BE
 3804;Habkern;BE
-3805;Goldswil;BE
-3806;Bönigen;BE
+3805;Goldswil b. Interlaken;BE
+3806;BÃ¶nigen b. Interlaken;BE
 3807;Iseltwald;BE
 3812;Wilderswil;BE
 3813;Saxeten;BE
 3814;Gsteigwiler;BE
-3815;Zweilütschinen;BE
-3816;Lütschental;BE
+3815;ZweilÃ¼tschinen;BE
+3816;LÃ¼tschental;BE
 3816;Burglauenen;BE
 3818;Grindelwald;BE
 3822;Lauterbrunnen;BE
 3822;Isenfluh;BE
 3823;Wengen;BE
 3824;Stechelberg;BE
-3825;Mürren;BE
+3825;MÃ¼rren;BE
 3826;Gimmelwald;BE
 3852;Ringgenberg BE;BE
-3853;Niederried Interl;BE
-3854;Oberried Brienz;BE
+3853;Niederried b. Interlaken;BE
+3854;Oberried am Brienzersee;BE
 3855;Brienz BE;BE
 3855;Axalp;BE
 3856;Brienzwiler;BE
 3857;Unterbach BE;BE
-3858;Hofstetten BE;BE
+3858;Hofstetten b. Brienz;BE
 3860;Meiringen;BE
 3860;Rosenlaui;BE
 3862;Innertkirchen;BE
@@ -1537,21 +1537,21 @@ zip_code;town;canton
 3917;Goppenstein;VS
 3916;Ferden;VS
 3917;Kippel;VS
-3918;Wiler (Lötschen);VS
-3919;Blatten(Lötschen);VS
+3918;Wiler (LÃ¶tschen);VS
+3919;Blatten (LÃ¶tschen);VS
 3904;Naters;VS
 3905;Saas-Almagell;VS
 3906;Saas-Fee;VS
 3920;Zermatt;VS
-3923;Törbel;VS
+3923;TÃ¶rbel;VS
 3926;Embd;VS
 3927;Herbriggen;VS
 3928;Randa;VS
-3929;Täsch;VS
+3929;TÃ¤sch;VS
 3922;Stalden VS;VS
 3922;Kalpetran;VS
 3924;St. Niklaus VS;VS
-3925;Grächen;VS
+3925;GrÃ¤chen;VS
 3930;Visp;VS
 3942;St. German;VS
 3933;Staldenried;VS
@@ -1562,9 +1562,9 @@ zip_code;town;canton
 3931;Lalden;VS
 3932;Visperterminen;VS
 3934;Zeneggen;VS
-3935;Bürchen;VS
+3935;BÃ¼rchen;VS
 3943;Eischoll;VS
-3944;Unterbäch VS;VS
+3944;UnterbÃ¤ch VS;VS
 3947;Ergisch;VS
 3948;Unterems;VS
 3946;Gruben;VS
@@ -1574,11 +1574,11 @@ zip_code;town;canton
 3956;Guttet-Feschel;VS
 3957;Erschmatt;VS
 3953;Varen;VS
-3976;Noës;VS
+3976;NoÃ«s;VS
 3978;Flanthey;VS
 1978;Lens;VS
 1977;Icogne;VS
-3979;Grône;VS
+3979;GrÃ´ne;VS
 3942;Raron;VS
 3942;Niedergesteln;VS
 3945;Gampel;VS
@@ -1589,15 +1589,15 @@ zip_code;town;canton
 3954;Leukerbad;VS
 3970;Salgesch;VS
 3977;Granges VS;VS
-1958;St-Léonard;VS
+1958;St-LÃ©onard;VS
 3960;Sierre;VS
-3960;Corin-de-la-Crête;VS
+3960;Corin-de-la-CrÃªte;VS
 3960;Loc;VS
 3971;Chermignon;VS
-3971;Chermignon-Bas;VS
+3971;Chermignon-d'en-Bas;VS
 3971;Ollon VS;VS
-3972;Miège;VS
-3973;Venthône;VS
+3972;MiÃ¨ge;VS
+3973;VenthÃ´ne;VS
 3974;Mollens VS;VS
 3975;Randogne;VS
 3961;Vissoie;VS
@@ -1612,7 +1612,7 @@ zip_code;town;canton
 3960;Muraz (Sierre);VS
 3965;Chippis;VS
 3966;Chalais;VS
-3966;Réchy;VS
+3966;RÃ©chy;VS
 3968;Veyras;VS
 3982;Bitsch;VS
 3993;Grengiols;VS
@@ -1626,66 +1626,66 @@ zip_code;town;canton
 3985;Geschinen;VS
 3988;Obergesteln;VS
 3999;Oberwald;VS
-3986;Ried-Mörel;VS
+3986;Ried-MÃ¶rel;VS
 3987;Riederalp;VS
 3991;Betten;VS
 3992;Bettmeralp;VS
 3995;Ernen;VS
 3996;Binn;VS
-3983;Mörel;VS
+3983;MÃ¶rel;VS
 3984;Fiesch;VS
-3985;Münster VS;VS
+3985;MÃ¼nster VS;VS
 3988;Ulrichen;VS
 4000;Basel;BS
-4000;Basel 2 Zust;BS
+4000;Basel 2 Zustellung;BS
 4000;Basel Dist Ba;BS
-4000;Basel;BS
-4000;Basel 2 Annahme;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BL
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel UniSpital;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
-4000;Basel;BS
+4001;Basel;BS
+4002;Basel 2 Annahme;BS
+4002;Basel;BS
+4003;Basel;BS
+4004;Basel;BS
+4005;Basel;BS
+4007;Basel;BS
+4009;Basel;BS
+4010;Basel;BS
+4011;Basel;BS
+4012;Basel;BS
+4013;Basel;BS
+4015;Basel;BS
+4016;Basel;BS
+4017;Basel;BS
+4018;Basel;BS
+4019;Basel;BS
+4020;Basel;BS
+4023;Basel;BL
+4024;Basel;BS
+4025;Basel;BS
+4030;Basel;BS
+4031;Basel UniversitÃ¤tsspital;BS
+4032;Basel;BS
+4051;Basel;BS
+4052;Basel;BS
+4053;Basel;BS
+4054;Basel;BS
+4055;Basel;BS
+4056;Basel;BS
+4057;Basel;BS
+4058;Basel;BS
+4059;Basel;BS
+4091;Basel;BS
 4101;Bruderholz;BL
 4102;Binningen;BL
 4102;Binningen 1;BL
-4102;Binningen Gorenm.;BL
+4102;Binningen Gorenmatt;BL
 4103;Bottmingen;BL
 4104;Oberwil BL;BL
 4105;Biel-Benken BL;BL
 4106;Therwil;BL
 4107;Ettingen;BL
 4108;Witterswil;SO
-4112;Bättwil-Flüh;SO
-4112;Bättwil;SO
-4112;Flüh;SO
+4112;BÃ¤ttwil-FlÃ¼h;SO
+4112;BÃ¤ttwil;SO
+4112;FlÃ¼h;SO
 4114;Hofstetten SO;SO
 4115;Mariastein;SO
 4116;Metzerlen;SO
@@ -1694,8 +1694,8 @@ zip_code;town;canton
 4123;Allschwil;BL
 4123;Allschwil 1;BL
 4123;Allschwil Dorf;BL
-4123;Allschwil Lindenpl;BL
-4124;Schönenbuch;BL
+4123;Allschwil Lindenplatz;BL
+4124;SchÃ¶nenbuch;BL
 4125;Riehen;BS
 4125;Riehen 1;BS
 4125;Riehen 2;BS
@@ -1706,9 +1706,9 @@ zip_code;town;canton
 4132;Muttenz Lutzert;BL
 4133;Pratteln;BL
 4133;Pratteln 1;BL
-4142;Münchenstein;BL
-4142;Münchenstein 1;BL
-4142;Münchenstein Zollw;BL
+4142;MÃ¼nchenstein;BL
+4142;MÃ¼nchenstein 1;BL
+4142;MÃ¼nchenstein Zollweiden;BL
 4143;Dornach;SO
 4144;Arlesheim;BL
 4145;Gempen;SO
@@ -1726,12 +1726,12 @@ zip_code;town;canton
 4222;Zwingen;BL
 4225;Brislach;BL
 4226;Breitenbach;SO
-4227;Büsserach;SO
+4227;BÃ¼sserach;SO
 4228;Erschwil;SO
 4242;Laufen;BL
 4243;Dittingen;BL
-4244;Röschenz;BL
-4245;Kleinlützel;SO
+4244;RÃ¶schenz;BL
+4245;KleinlÃ¼tzel;SO
 4204;Himmelried;SO
 4223;Blauen;BL
 4224;Nenzlingen;BL
@@ -1741,20 +1741,20 @@ zip_code;town;canton
 4234;Zullwil;SO
 4246;Wahlen b. Laufen;BL
 4247;Grindel;SO
-4252;Bärschwil;SO
-4252;Bärschwil Dorf;SO
+4252;BÃ¤rschwil;SO
+4252;BÃ¤rschwil Dorf;SO
 4253;Liesberg;BL
 4254;Liesberg Dorf;BL
 4302;Augst BL;BL
 4303;Kaiseraugst;AG
-4303;Kaiseraugst Lieb.;AG
+4303;Kaiseraugst LiebrÃ¼ti;AG
 4304;Giebenach;BL
 4305;Olsberg;AG
 4310;Rheinfelden;AG
 4310;Rheinfelden 1;AG
 4310;Rheinfelden 2;AG
 4312;Magden;AG
-4313;Möhlin;AG
+4313;MÃ¶hlin;AG
 4314;Zeiningen;AG
 4315;Zuzgen;AG
 4316;Hellikon;AG
@@ -1764,7 +1764,7 @@ zip_code;town;canton
 4324;Obermumpf;AG
 4325;Schupfart;AG
 4332;Stein AG;AG
-4333;Münchwilen AG;AG
+4333;MÃ¼nchwilen AG;AG
 4334;Sisseln AG;AG
 5080;Laufenburg;AG
 5082;Kaisten;AG
@@ -1785,8 +1785,8 @@ zip_code;town;canton
 4410;Liestal Kaserne;BL
 4411;Seltisberg;BL
 4412;Nuglar;SO
-4413;Büren SO;SO
-4414;Füllinsdorf;BL
+4413;BÃ¼ren SO;SO
+4414;FÃ¼llinsdorf;BL
 4415;Lausen;BL
 4416;Bubendorf;BL
 4417;Ziefen;BL
@@ -1801,19 +1801,19 @@ zip_code;town;canton
 4431;Bennwil;BL
 4432;Lampenberg;BL
 4433;Ramlinsburg;BL
-4434;Hölstein;BL
+4434;HÃ¶lstein;BL
 4435;Niederdorf;BL
 4436;Oberdorf BL;BL
 4437;Waldenburg;BL
 4438;Langenbruck;BL
-4441;Thürnen;BL
+4441;ThÃ¼rnen;BL
 4442;Diepflingen;BL
 4443;Wittinsburg;BL
-4444;Rümlingen;BL
-4445;Häfelfingen;BL
+4444;RÃ¼mlingen;BL
+4445;HÃ¤felfingen;BL
 4446;Buckten;BL
-4447;Känerkinden;BL
-4448;Läufelfingen;BL
+4447;KÃ¤nerkinden;BL
+4448;LÃ¤ufelfingen;BL
 4450;Sissach;BL
 4451;Wintersingen;BL
 4452;Itingen;BL
@@ -1823,7 +1823,7 @@ zip_code;town;canton
 4457;Diegten;BL
 4458;Eptingen;BL
 4460;Gelterkinden;BL
-4461;Böckten;BL
+4461;BÃ¶ckten;BL
 4465;Hemmiken;BL
 4469;Anwil;BL
 4462;Rickenbach BL;BL
@@ -1837,16 +1837,16 @@ zip_code;town;canton
 4494;Oltingen;BL
 4495;Zeglingen;BL
 4496;Kilchberg BL;BL
-4497;Rünenberg;BL
+4497;RÃ¼nenberg;BL
 4500;Solothurn;SO
 4500;Solothurn 1;SO
-4500;Solothurn 1 Zust;SO
-4500;Solothurn;SO
-4500;Solothurn 1 Ann.;SO
-4500;Solothurn;SO
-4500;Solothurn;SO
-4515;Weissenstein;SO
-4525;Balm b. Günsberg;SO
+4500;Solothurn 1 Zustellung;SO
+4501;Solothurn;SO
+4501;Solothurn 1 Annahme;SO
+4502;Solothurn;SO
+4503;Solothurn;SO
+4515;Weissenstein b. Solothurn;SO
+4525;Balm b. GÃ¼nsberg;SO
 4523;Niederwil SO;SO
 4535;Hubersdorf;SO
 4539;Rumisberg;BE
@@ -1857,8 +1857,8 @@ zip_code;town;canton
 4513;Langendorf;SO
 4514;Lommiswil;SO
 4515;Oberdorf SO;SO
-4522;Rüttenen;SO
-4524;Günsberg;SO
+4522;RÃ¼ttenen;SO
+4524;GÃ¼nsberg;SO
 4528;Zuchwil;SO
 4532;Feldbrunnen;SO
 4533;Riedholz;SO
@@ -1876,13 +1876,13 @@ zip_code;town;canton
 4564;Zielebach;BE
 4565;Recherswil;SO
 4566;Kriegstetten;SO
-4581;Küttigkofen;SO
+4581;KÃ¼ttigkofen;SO
 4586;Kyburg-Buchegg;SO
-4582;Brügglen;SO
-4583;Mühledorf SO;SO
+4582;BrÃ¼gglen;SO
+4583;MÃ¼hledorf SO;SO
 4579;Gossliwil;SO
 4578;Bibern SO;SO
-4571;Lüterkofen-Ichert;SO
+4571;LÃ¼terkofen-Ichertswil;SO
 4571;Ichertswil;SO
 4576;Tscheppach;SO
 4577;Hessigkofen;SO
@@ -1891,33 +1891,33 @@ zip_code;town;canton
 4588;Unterramsern;SO
 4588;Oberramsern;SO
 4574;Nennigkofen;SO
-4574;Lüsslingen;SO
+4574;LÃ¼sslingen;SO
 4600;Olten;SO
 4600;Olten 1;SO
 4600;Olten 2 Zustellung;SO
-4600;Olten 1 Fächer;SO
-4600;Olten;SO
+4601;Olten 1 FÃ¤cher;SO
+4603;Olten;SO
 4612;Wangen b. Olten;SO
 4613;Rickenbach SO;SO
-4614;Hägendorf;SO
+4614;HÃ¤gendorf;SO
 4616;Kappel SO;SO
 4617;Gunzgen;SO
 4618;Boningen;SO
 4622;Egerkingen;SO
 4623;Neuendorf;SO
-4624;Härkingen;SO
+4624;HÃ¤rkingen;SO
 4625;Oberbuchsiten;SO
 4626;Niederbuchsiten;SO
 4632;Trimbach;SO
 4652;Winznau;SO
-4653;Obergösgen;SO
+4653;ObergÃ¶sgen;SO
 4654;Lostorf;SO
-4655;Stüsslingen;SO
+4655;StÃ¼sslingen;SO
 4655;Rohr b. Olten;SO
 4656;Starrkirch-Wil;SO
 4657;Dulliken;SO
-4658;Däniken SO;SO
-5010;Däniken PZ;SO
+4658;DÃ¤niken SO;SO
+5010;DÃ¤niken Postzentrum;SO
 4663;Aarburg;AG
 4665;Oftringen;AG
 4665;Oftringen 1;AG
@@ -1929,54 +1929,54 @@ zip_code;town;canton
 4703;Kestenholz;SO
 4704;Niederbipp;BE
 3380;Wangen an der Aare;BE
-3377;Walliswil b.Wangen;BE
+3377;Walliswil b. Wangen;BE
 4543;Deitingen;SO
 4542;Luterbach;SO
 4710;Balsthal;SO
-4710;Balsthal Postauto;SO
+4710;Balsthal Postauto Thal-GÃ¤u;SO
 4714;Aedermannsdorf;SO
 4715;Herbetswil;SO
 4719;Ramiswil;SO
 4712;Laupersdorf;SO
 4713;Matzendorf;SO
 4716;Welschenrohr;SO
-4716;Gänsbrunnen;SO
-4717;Mümliswil;SO
+4716;GÃ¤nsbrunnen;SO
+4717;MÃ¼mliswil;SO
 4718;Holderbank SO;SO
 4800;Zofingen;AG
-4801;Zofingen;AG
+4801;Zofingen Ringier AG;AG
 4802;Strengelbach;AG
 4803;Vordemwald;AG
 4805;Brittnau;AG
 4806;Wikon;LU
-4812;Mühlethal;AG
+4812;MÃ¼hlethal;AG
 4813;Uerkheim;AG
 4814;Bottenwil;AG
 4852;Rothrist;AG
 4853;Murgenthal;AG
 4629;Fulenbach;SO
 4628;Wolfwil;SO
-4856;Glashütten;AG
+4856;GlashÃ¼tten;AG
 4853;Riken AG;AG
 4900;Langenthal;BE
 4900;Langenthal 1;BE
-4900;Langenthal;BE
-4900;Langenthal;BE
-4911;Schwarzhäusern;BE
+4901;Langenthal;BE
+4902;Langenthal;BE
+4911;SchwarzhÃ¤usern;BE
 4912;Aarwangen;BE
 4913;Bannwil;BE
 4914;Roggwil BE;BE
 4915;St. Urban;LU
 4916;Untersteckholz;BE
 4917;Melchnau;BE
-4917;Busswil b.Melchnau;BE
+4917;Busswil b. Melchnau;BE
 4955;Gondiswil;BE
 4919;Reisiswil;BE
-4922;Bützberg;BE
+4922;BÃ¼tzberg;BE
 4923;Wynau;BE
 4924;Obersteckholz;BE
 4932;Lotzwil;BE
-4933;Rütschelen;BE
+4933;RÃ¼tschelen;BE
 4934;Madiswil;BE
 4935;Leimiswil;BE
 4936;Kleindietwil;BE
@@ -1988,25 +1988,25 @@ zip_code;town;canton
 4938;Rohrbachgraben;BE
 4950;Huttwil;BE
 4952;Eriswil;BE
-4953;Schwarzenbach BE;BE
+4953;Schwarzenbach (Huttwil);BE
 4954;Wyssachen;BE
 5000;Aarau;AG
 5000;Aarau 1;AG
 5000;Aarau 1 Zustellung;AG
-5000;Aarau Postauto AG;AG
+5000;Aarau Postauto Aargau;AG
 5000;Aarau Kaserne;AG
-5000;Aarau 1 Fächer;AG
-5000;Aarau;AG
-5012;Schönenwerd;SO
-5013;Niedergösgen;SO
+5001;Aarau 1 FÃ¤cher;AG
+5004;Aarau;AG
+5012;SchÃ¶nenwerd;SO
+5013;NiedergÃ¶sgen;SO
 5014;Gretzenbach;SO
 5015;Erlinsbach SO;SO
 5017;Barmelweid;AG
 5022;Rombach;AG
 5023;Biberstein;AG
-5024;Küttigen;AG
+5024;KÃ¼ttigen;AG
 5025;Asp;AG
-5026;Densbüren;AG
+5026;DensbÃ¼ren;AG
 5027;Herznach;AG
 5028;Ueken;AG
 5032;Aarau Rohr;AG
@@ -2015,14 +2015,14 @@ zip_code;town;canton
 5035;Unterentfelden;AG
 5036;Oberentfelden;AG
 5037;Muhen;AG
-5040;Schöftland;AG
+5040;SchÃ¶ftland;AG
 5042;Hirschthal;AG
 5043;Holziken;AG
 5044;Schlossrued;AG
 5046;Schmiedrued;AG
 5046;Walde AG;AG
 5053;Staffelbach;AG
-5054;Kirchleerau-Moosle;AG
+5054;Kirchleerau-Moosleerau;AG
 5054;Kirchleerau;AG
 5054;Moosleerau;AG
 5056;Attelwil;AG
@@ -2035,7 +2035,7 @@ zip_code;town;canton
 5108;Oberflachs;AG
 5112;Thalheim AG;AG
 5113;Holderbank AG;AG
-5103;Möriken AG;AG
+5103;MÃ¶riken AG;AG
 5116;Schinznach Bad;AG
 5245;Habsburg;AG
 5246;Scherz;AG
@@ -2050,16 +2050,16 @@ zip_code;town;canton
 5223;Riniken;AG
 5233;Stilli;AG
 5234;Villigen;AG
-5235;Rüfenach AG;AG
+5235;RÃ¼fenach AG;AG
 5236;Remigen;AG
-5237;Mönthal;AG
+5237;MÃ¶nthal;AG
 5242;Birr-Lupfig;AG
 5242;Birr;AG
 5242;Lupfig;AG
-5243;Mülligen;AG
+5243;MÃ¼lligen;AG
 5244;Birrhard;AG
 5078;Effingen;AG
-5076;Bözen;AG
+5076;BÃ¶zen;AG
 5077;Elfingen;AG
 5079;Zeihen;AG
 5075;Hornussen;AG
@@ -2067,32 +2067,32 @@ zip_code;town;canton
 5072;Oeschgen;AG
 5073;Gipf-Oberfrick;AG
 5064;Wittnau;AG
-5063;Wölflinswil;AG
+5063;WÃ¶lflinswil;AG
 5062;Oberhof;AG
 5074;Eiken;AG
 5300;Turgi;AG
 5301;Siggenthal Station;AG
-5303;Würenlingen;AG
+5303;WÃ¼renlingen;AG
 5304;Endingen;AG
 5305;Unterendingen;AG
 5306;Tegerfelden;AG
-5312;Döttingen;AG
+5312;DÃ¶ttingen;AG
 5313;Klingnau;AG
-5314;Kleindöttingen;AG
-5315;Böttstein;AG
+5314;KleindÃ¶ttingen;AG
+5315;BÃ¶ttstein;AG
 5316;Leuggern;AG
 5317;Hettenschwil;AG
 5318;Mandach;AG
 5322;Koblenz;AG
 5400;Baden;AG
 5400;Baden 1;AG
-5400;Ennetbaden;AG
-5400;Baden 1 PAD;AG
-5400;Baden;AG
-5400;Baden;AG
-5400;Baden;AG
-5400;Baden;AG
-5400;Baden;AG
+5408;Ennetbaden;AG
+5400;Baden 1 Postautodienst;AG
+5401;Baden;AG
+5402;Baden;AG
+5404;Baden;AG
+5405;Baden;AG
+5406;Baden;AG
 5412;Gebenstorf;AG
 5413;Birmenstorf AG;AG
 5415;Nussbaumen AG;AG
@@ -2106,11 +2106,11 @@ zip_code;town;canton
 5430;Wettingen 1;AG
 5430;Wettingen 2;AG
 5430;Wettingen 3;AG
-5431;Wettingen Sonderd;AG
+5431;Wettingen Sonderdienste;AG
 5432;Neuenhof;AG
 5442;Fislisbach;AG
 5443;Niederrohrdorf;AG
-5444;Künten;AG
+5444;KÃ¼nten;AG
 5445;Eggenwil;AG
 5452;Oberrohrdorf;AG
 5453;Remetschwil;AG
@@ -2119,13 +2119,13 @@ zip_code;town;canton
 5503;Schafisheim;AG
 5504;Othmarsingen;AG
 5505;Brunegg;AG
-5506;Mägenwil;AG
+5506;MÃ¤genwil;AG
 5507;Mellingen;AG
 5512;Wohlenschwil;AG
-5522;Tägerig;AG
+5522;TÃ¤gerig;AG
 5524;Nesselnbach;AG
 5524;Niederwil AG;AG
-5525;Fischbach-Göslikon;AG
+5525;Fischbach-GÃ¶slikon;AG
 5600;Lenzburg;AG
 5600;Lenzburg 1;AG
 5600;Lenzburg 2;AG
@@ -2134,13 +2134,13 @@ zip_code;town;canton
 5604;Hendschiken;AG
 5605;Dottikon;AG
 5606;Dintikon;AG
-5607;Hägglingen;AG
+5607;HÃ¤gglingen;AG
 5608;Stetten AG;AG
 5610;Wohlen AG;AG
 5610;Wohlen AG 1;AG
 5610;Wohlen AG 2;AG
 5611;Anglikon;AG
-5619;Büttikon AG;AG
+5619;BÃ¼ttikon AG;AG
 5612;Villmergen;AG
 5613;Hilfikon;AG
 5614;Sarmenstorf;AG
@@ -2150,25 +2150,25 @@ zip_code;town;canton
 5618;Bettwil;AG
 5620;Bremgarten AG;AG
 5621;Zufikon;AG
-5620;Bremgarten AG Kas;AG
+5620;Bremgarten AG Kaserne;AG
 5622;Waltenschwil;AG
 5623;Boswil;AG
-5624;Bünzen;AG
+5624;BÃ¼nzen;AG
 5625;Kallern;AG
-5626;Hermetschwil-Staff;AG
-5627;Besenbüren;AG
+5626;Hermetschwil-Staffeln;AG
+5627;BesenbÃ¼ren;AG
 5628;Aristau;AG
 5630;Muri AG;AG
 5632;Buttwil;AG
 5634;Merenschwand;AG
 5636;Benzenschwil;AG
 5637;Beinwil (Freiamt);AG
-5642;Mühlau;AG
+5642;MÃ¼hlau;AG
 5643;Sins;AG
 5644;Auw;AG
 5645;Aettenschwil;AG
 5646;Abtwil AG;AG
-5647;Oberrüti;AG
+5647;OberrÃ¼ti;AG
 5643;Alikon;AG
 5702;Niederlenz;AG
 5703;Seon;AG
@@ -2178,9 +2178,9 @@ zip_code;town;canton
 5707;Seengen;AG
 5708;Birrwil;AG
 5712;Beinwil am See;AG
-5722;Gränichen;AG
+5722;GrÃ¤nichen;AG
 5723;Teufenthal AG;AG
-5724;Dürrenäsch;AG
+5724;DÃ¼rrenÃ¤sch;AG
 5725;Leutwil;AG
 5726;Unterkulm;AG
 5727;Oberkulm;AG
@@ -2191,7 +2191,7 @@ zip_code;town;canton
 5735;Pfeffikon LU;LU
 5736;Burg AG;AG
 5737;Menziken;AG
-5742;Kölliken;AG
+5742;KÃ¶lliken;AG
 5745;Safenwil;AG
 5746;Walterswil SO;SO
 6000;Luzern;LU
@@ -2204,31 +2204,31 @@ zip_code;town;canton
 6000;Luzern 14;LU
 6000;Luzern 15;LU
 6000;Luzern 16;LU
-6000;Luzern Zust;LU
-6000;Luzern;LU
-6000;Luzern;LU
-6000;Luzern;LU
-6000;Luzern;LU
-6000;Luzern;LU
+6000;Luzern Zustellung;LU
+6002;Luzern;LU
+6003;Luzern;LU
+6004;Luzern;LU
+6005;Luzern;LU
+6006;Luzern;LU
 6010;Kriens;LU
 6012;Obernau;LU
 6013;Eigenthal;LU
-6000;Luzern;LU
-6000;Luzern;LU
-6016;Hellbühl;LU
+6014;Luzern;LU
+6015;Luzern;LU
+6016;HellbÃ¼hl;LU
 6017;Ruswil;LU
 6019;Sigigen;LU
 6018;Buttisholz;LU
-6020;Emmenbrücke;LU
-6020;Emmenbrücke 1;LU
-6020;Emmenbrücke 2;LU
-6020;Emmenbrücke 3;LU
+6020;EmmenbrÃ¼cke;LU
+6020;EmmenbrÃ¼cke 1;LU
+6020;EmmenbrÃ¼cke 2;LU
+6020;EmmenbrÃ¼cke 3;LU
 6022;Grosswangen;LU
 6023;Rothenburg;LU
 6024;Hildisrieden;LU
 6025;Neudorf;LU
 6026;Rain;LU
-6027;Römerswil LU;LU
+6027;RÃ¶merswil LU;LU
 6028;Herlisberg;LU
 6030;Ebikon;LU
 6032;Emmen;LU
@@ -2247,7 +2247,7 @@ zip_code;town;canton
 6052;Hergiswil NW;NW
 6053;Alpnachstad;OW
 6055;Alpnach Dorf;OW
-6056;Kägiswil;OW
+6056;KÃ¤giswil;OW
 6060;Sarnen;OW
 6060;Ramersberg;OW
 6068;Melchsee-Frutt;OW
@@ -2257,13 +2257,13 @@ zip_code;town;canton
 6066;St. Niklausen OW;OW
 6067;Melchtal;OW
 6072;Sachseln;OW
-6073;Flüeli-Ranft;OW
+6073;FlÃ¼eli-Ranft;OW
 6074;Giswil;OW
-6078;Bürglen OW;OW
+6078;BÃ¼rglen OW;OW
 6078;Lungern;OW
-3860;Brünig;BE
+3860;BrÃ¼nig;BE
 6083;Hasliberg Hohfluh;BE
-6084;Hasliberg Wasserw;BE
+6084;Hasliberg Wasserwendi;BE
 6085;Hasliberg Goldern;BE
 6086;Hasliberg Reuti;BE
 6010;Pilatus Kulm;OW
@@ -2273,7 +2273,7 @@ zip_code;town;canton
 6106;Werthenstein;LU
 6110;Wolhusen;LU
 6114;Steinhuserberg;LU
-6110;Fontannen;LU
+6110;Fontannen b. Wolhusen;LU
 6112;Doppleschwand;LU
 6113;Romoos;LU
 6122;Menznau;LU
@@ -2282,27 +2282,27 @@ zip_code;town;canton
 6126;Daiwil;LU
 6130;Willisau;LU
 6132;Rohrmatt;LU
-6133;Hergiswil LU;LU
+6133;Hergiswil b. Willisau;LU
 6142;Gettnau;LU
 6143;Ohmstal;LU
 6144;Zell LU;LU
 6145;Fischbach LU;LU
 6146;Grossdietwil;LU
-6147;Altbüron;LU
-6152;Hüswil;LU
+6147;AltbÃ¼ron;LU
+6152;HÃ¼swil;LU
 6153;Ufhusen;LU
 6154;Hofstatt;LU
 6156;Luthern;LU
-6160;Entlebuch;LU
+6160;Entlebuch Businesszentrum;LU
 6162;Entlebuch;LU
 6163;Ebnet;LU
 6162;Rengg;LU
-6162;Finsterwald LU;LU
+6162;Finsterwald b. Entlebuch;LU
 6166;Hasle LU;LU
 6167;Bramboden;LU
-6170;Schüpfheim;LU
-6173;Flühli LU;LU
-6174;Sörenberg;LU
+6170;SchÃ¼pfheim;LU
+6173;FlÃ¼hli LU;LU
+6174;SÃ¶renberg;LU
 6182;Escholzmatt;LU
 6192;Wiggen;LU
 6196;Marbach LU;LU
@@ -2318,7 +2318,7 @@ zip_code;town;canton
 6212;St. Erhard;LU
 6213;Knutwil;LU
 6214;Schenkon;LU
-6215;Beromünster;LU
+6215;BeromÃ¼nster;LU
 6215;Schwarzenbach LU;LU
 6216;Mauensee;LU
 6217;Kottwil;LU
@@ -2327,7 +2327,7 @@ zip_code;town;canton
 6222;Gunzwil;LU
 6231;Schlierbach;LU
 6232;Geuensee;LU
-6233;Büron;LU
+6233;BÃ¼ron;LU
 6234;Triengen;LU
 6234;Kulmerau;LU
 6236;Wilihof;LU
@@ -2337,7 +2337,7 @@ zip_code;town;canton
 6244;Nebikon;LU
 6245;Ebersecken;LU
 6246;Altishofen;LU
-6247;Schötz;LU
+6247;SchÃ¶tz;LU
 6248;Alberswil;LU
 6252;Dagmersellen;LU
 6253;Uffikon;LU
@@ -2357,7 +2357,7 @@ zip_code;town;canton
 6284;Gelfingen;LU
 6285;Hitzkirch;LU
 6285;Retschwil;LU
-6289;Müswangen;LU
+6289;MÃ¼swangen;LU
 6286;Altwis;LU
 6287;Aesch LU;LU
 6288;Schongau;LU
@@ -2366,23 +2366,23 @@ zip_code;town;canton
 6300;Zug;ZG
 6300;Zug 1;ZG
 6330;Cham 2;ZG
-6300;Zug;ZG
-6310;Zug;ZG
+6301;Zug;ZG
+6310;Zug Sonderdienste;ZG
 6313;Edlibach;ZG
 6313;Finstersee;ZG
 6319;Allenwinden;ZG
 6315;Morgarten;ZG
 6312;Steinhausen;ZG
 6313;Menzingen;ZG
-6314;Unterägeri;ZG
-6314;Neuägeri;ZG
-6315;Oberägeri;ZG
+6314;UnterÃ¤geri;ZG
+6314;NeuÃ¤geri;ZG
+6315;OberÃ¤geri;ZG
 6315;Alosen;ZG
 6300;Zugerberg;ZG
 6317;Oberwil b. Zug;ZG
 6318;Walchwil;ZG
 6330;Cham;ZG
-6331;Hünenberg;ZG
+6331;HÃ¼nenberg;ZG
 6332;Hagendorn;ZG
 6340;Baar;ZG
 6343;Rotkreuz;ZG
@@ -2392,16 +2392,16 @@ zip_code;town;canton
 6354;Vitznau;LU
 6356;Rigi Kaltbad;LU
 6362;Stansstad;NW
-6363;Obbürgen;NW
+6363;ObbÃ¼rgen;NW
 6365;Kehrsiten;NW
 6370;Stans;NW
 6372;Ennetmoos;NW
-6373;Ennetbürgen;NW
+6373;EnnetbÃ¼rgen;NW
 6374;Buochs;NW
 6375;Beckenried;NW
 6376;Emmetten;NW
 6377;Seelisberg;UR
-6382;Büren NW;NW
+6382;BÃ¼ren NW;NW
 6383;Dallenwil;NW
 6383;Niederrickenbach;NW
 6386;Wolfenschiessen;NW
@@ -2409,11 +2409,11 @@ zip_code;town;canton
 6388;Grafenort;OW
 6390;Engelberg;OW
 6402;Merlischachen;SZ
-6403;Küssnacht am Rigi;SZ
+6403;KÃ¼ssnacht am Rigi;SZ
 6404;Greppen;LU
 6405;Immensee;SZ
 6410;Goldau;SZ
-6410;Rigi Klösterli;SZ
+6410;Rigi KlÃ¶sterli;SZ
 6410;Rigi Staffel;SZ
 6410;Rigi Kulm;SZ
 6414;Oberarth;SZ
@@ -2426,28 +2426,28 @@ zip_code;town;canton
 6424;Lauerz;SZ
 6430;Schwyz;SZ
 6436;Ried (Muotathal);SZ
-6432;Rickenbach SZ;SZ
+6432;Rickenbach b. Schwyz;SZ
 6433;Stoos SZ;SZ
 6434;Illgau;SZ
 6436;Muotathal;SZ
 6436;Bisisthal;SZ
 6438;Ibach;SZ
 6440;Brunnen;SZ
-6441;Rütli;UR
+6441;RÃ¼tli;UR
 6442;Gersau;SZ
 6443;Morschach;SZ
 6452;Sisikon;UR
 6452;Riemenstalden;SZ
-6454;Flüelen;UR
+6454;FlÃ¼elen;UR
 6460;Altdorf UR;UR
 6461;Isenthal;UR
 6462;Seedorf UR;UR
-6463;Bürglen UR;UR
+6463;BÃ¼rglen UR;UR
 6464;Spiringen;UR
-6465;Unterschächen;UR
+6465;UnterschÃ¤chen;UR
 6466;Bauen;UR
 6467;Schattdorf;UR
-6469;Haldi b.Schattdorf;UR
+6469;Haldi b. Schattdorf;UR
 6468;Attinghausen;UR
 6472;Erstfeld;UR
 6473;Silenen;UR
@@ -2457,7 +2457,7 @@ zip_code;town;canton
 6482;Gurtnellen;UR
 6484;Wassen UR;UR
 6485;Meien;UR
-6487;Göschenen;UR
+6487;GÃ¶schenen;UR
 6490;Andermatt;UR
 6491;Realp;UR
 6493;Hospental;UR
@@ -2466,11 +2466,11 @@ zip_code;town;canton
 6500;Bellinzona 2;TI
 6500;Bellinzona 4;TI
 6500;Bellinzona 5;TI
-6500;Bellinzona;TI
-6500;Bellinzona Dist;TI
+6501;Bellinzona;TI
+6500;Bellinzona Distribuzione;TI
 6500;Bellinzona Caserma;TI
-6500;Bellinzona;TI
-6500;Bellinzona 6 Autop;TI
+6503;Bellinzona;TI
+6506;Bellinzona 6 Autopostale TI;TI
 6512;Giubiasco;TI
 6513;Monte Carasso;TI
 6514;Sementina;TI
@@ -2490,11 +2490,11 @@ zip_code;town;canton
 6523;Preonzo;TI
 6524;Moleno;TI
 6582;Pianezzo;TI
-6583;S. Antonio;TI
+6583;S. Antonio (Val Morobbia);TI
 6584;Carena;TI
 6549;Laura;GR
 6540;Castaneda;GR
-6541;Sta. Maria;GR
+6541;Sta. Maria in Calanca;GR
 6538;Verdabbio;GR
 6542;Buseno;GR
 6543;Arvigo;GR
@@ -2531,12 +2531,12 @@ zip_code;town;canton
 6600;Locarno;TI
 6600;Locarno 1;TI
 6600;Muralto;TI
-6600;Locarno 3 Autopost;TI
-6600;Locarno;TI
-6600;Locarno Dist;TI
-6600;Locarno;TI
-6600;Locarno;TI
-6600;Monte Brè Locarno;TI
+6600;Locarno 3 Stazione Autopost;TI
+6601;Locarno;TI
+6600;Locarno Distribuzione;TI
+6604;Locarno;TI
+6605;Locarno;TI
+6605;Monte BrÃ¨ sopra Locarno;TI
 6656;Golino;TI
 6618;Arcegno;TI
 6646;Contra;TI
@@ -2565,7 +2565,7 @@ zip_code;town;canton
 6616;Losone;TI
 6622;Ronco sopra Ascona;TI
 6644;Orselina;TI
-6645;Brione s. Minusio;TI
+6645;Brione sopra Minusio;TI
 6648;Minusio;TI
 6655;Verdasio;TI
 6655;Rasa;TI
@@ -2587,10 +2587,10 @@ zip_code;town;canton
 6683;Cerentino;TI
 6685;Bosco/Gurin;TI
 6683;Niva (Vallemaggia);TI
-6684;Campo (VM);TI
+6684;Campo (Vallemaggia);TI
 6684;Cimalmotto;TI
 6690;Cavergno;TI
-6690;S. Carlo;TI
+6690;S. Carlo (Val Bavona);TI
 6692;Brontallo;TI
 6692;Menzonio;TI
 6693;Broglio;TI
@@ -2638,9 +2638,9 @@ zip_code;town;canton
 6760;Molare;TI
 6760;Calpiogna;TI
 6760;Campello;TI
-6760;Carì;TI
+6760;CarÃ¬;TI
 6772;Rodi-Fiesso;TI
-6775;Ambrì;TI
+6775;AmbrÃ¬;TI
 6776;Piotta;TI
 6777;Quinto;TI
 6777;Varenzo;TI
@@ -2717,13 +2717,13 @@ zip_code;town;canton
 6900;Lugano;TI
 6900;Lugano 1;TI
 6900;Massagno;TI
-6900;Lugano Dist;TI
-6900;Lugano;TI
-6900;Lugano 2 Caselle;TI
-6900;Lugano;TI
-6900;Lugano 4 Caselle;TI
-6900;Lugano 5 Autoposta;TI
-6900;Lugano 6 Caselle;TI
+6900;Lugano Distribuzione;TI
+6901;Lugano;TI
+6902;Lugano 2 Paradiso Caselle;TI
+6903;Lugano;TI
+6904;Lugano 4 Molino Nuovo Casel;TI
+6905;Lugano 5 Serv Autopostali;TI
+6906;Lugano 6 Cassarate Caselle;TI
 6913;Carabbia;TI
 6915;Pambio-Noranco;TI
 6916;Grancia;TI
@@ -2739,7 +2739,7 @@ zip_code;town;canton
 6937;Breno;TI
 6938;Fescoggia;TI
 6949;Comano;TI
-6979;Brè sopra Lugano;TI
+6979;BrÃ¨ sopra Lugano;TI
 6827;Brusino Arsizio;TI
 6912;Pazzallo;TI
 6914;Carona;TI
@@ -2777,7 +2777,7 @@ zip_code;town;canton
 6951;Cozzo;TI
 6955;Cagiallo;TI
 6955;Oggio;TI
-6951;Signôra;TI
+6951;SignÃ´ra;TI
 6959;Cimadera;TI
 6959;Maglio di Colla;TI
 6959;Certara;TI
@@ -2809,7 +2809,7 @@ zip_code;town;canton
 6999;Astano;TI
 6986;Miglieglia;TI
 6989;Purasca;TI
-6995;Molinazzo;TI
+6995;Molinazzo di Monteggio;TI
 6996;Ponte Cremenaga;TI
 6997;Sessa;TI
 6998;Termine;TI
@@ -2824,11 +2824,11 @@ zip_code;town;canton
 7000;Chur 1 Annahme;GR
 7000;Chur 1 Zustellung;GR
 7000;Chur Kaserne;GR
-7000;Chur;GR
-7000;Chur;GR
-7000;Chur;GR
-7000;Chur;GR
-7000;Chur;GR
+7001;Chur;GR
+7002;Chur;GR
+7004;Chur;GR
+7006;Chur;GR
+7007;Chur;GR
 7012;Felsberg;GR
 7013;Domat/Ems;GR
 7015;Tamins;GR
@@ -2850,18 +2850,18 @@ zip_code;town;canton
 7078;Lenzerheide/Lai;GR
 7082;Vaz/Obervaz;GR
 7083;Lantsch/Lenz;GR
-7084;Brienz/Brinzauls;GR
+7084;Brienz/Brinzauls GR;GR
 7014;Trin;GR
 7016;Trin Mulin;GR
 7019;Fidaz;GR
-7027;Lüen;GR
+7027;LÃ¼en;GR
 7027;Castiel;GR
 7028;St. Peter;GR
 7028;Pagig;GR
 7056;Molinis;GR
 7029;Peist;GR
 7057;Langwies;GR
-7058;Litzirüti;GR
+7058;LitzirÃ¼ti;GR
 7104;Versam;GR
 7104;Arezen;GR
 7106;Tenna;GR
@@ -2913,9 +2913,9 @@ zip_code;town;canton
 7172;Rabius;GR
 7175;Sumvitg;GR
 7174;S. Benedetg;GR
-7180;Disentis/Mustér;GR
+7180;Disentis/MustÃ©r;GR
 7182;Cavardiras;GR
-7183;Mumpé Medel;GR
+7183;MumpÃ© Medel;GR
 7184;Curaglia;GR
 7185;Platta;GR
 7186;Segnas;GR
@@ -2933,27 +2933,27 @@ zip_code;town;canton
 7208;Malans GR;GR
 7212;Seewis Dorf;GR
 7213;Valzeina;GR
-7214;Grüsch;GR
+7214;GrÃ¼sch;GR
 7215;Fanas;GR
 7220;Schiers;GR
 7228;Schuders;GR
 7226;Stels;GR
 7222;Lunden;GR
-7223;Buchen;GR
+7223;Buchen im PrÃ¤ttigau;GR
 7224;Putz;GR
 7228;Pusserein;GR
 7231;Pragg-Jenaz;GR
 7232;Furna;GR
 7233;Jenaz;GR
 7235;Fideris;GR
-7240;Küblis;GR
+7240;KÃ¼blis;GR
 7242;Luzein;GR
 7243;Pany;GR
-7244;Gadenstätt;GR
+7244;GadenstÃ¤tt;GR
 7245;Ascharina;GR
-7246;St. Antönien;GR
-7241;Conters;GR
-7247;Saas im Prättigau;GR
+7246;St. AntÃ¶nien;GR
+7241;Conters im PrÃ¤ttigau;GR
+7247;Saas im PrÃ¤ttigau;GR
 7249;Serneus;GR
 7250;Klosters;GR
 7252;Klosters Dorf;GR
@@ -2968,30 +2968,30 @@ zip_code;town;canton
 7302;Landquart;GR
 7303;Mastrils;GR
 7304;Maienfeld;GR
-7306;Fläsch;GR
+7306;FlÃ¤sch;GR
 7307;Jenins;GR
 7310;Bad Ragaz;SG
 7317;Valens;SG
-7317;Vasön;SG
+7317;VasÃ¶n;SG
 7314;Vadura;SG
-7315;Vättis;SG
-7312;Pfäfers;SG
+7315;VÃ¤ttis;SG
+7312;PfÃ¤fers;SG
 7313;St. Margrethenberg;SG
 7320;Sargans;SG
-7325;Schwendi;SG
+7325;Schwendi im Weisstannental;SG
 7326;Weisstannen;SG
 7323;Wangs;SG
 7324;Vilters;SG
 7402;Bonaduz;GR
-7403;Rhäzüns;GR
+7403;RhÃ¤zÃ¼ns;GR
 7404;Feldis/Veulden;GR
 7405;Rothenbrunnen;GR
 7408;Cazis;GR
 7408;Realta;GR
 7411;Sils im Domleschg;GR
 7412;Scharans;GR
-7413;Fürstenaubruck;GR
-7414;Fürstenau;GR
+7413;FÃ¼rstenaubruck;GR
+7414;FÃ¼rstenau;GR
 7415;Rodels;GR
 7416;Almens;GR
 7417;Paspels;GR
@@ -3007,7 +3007,7 @@ zip_code;town;canton
 7421;Summaprada;GR
 7422;Tartar;GR
 7423;Sarn;GR
-7424;Präz;GR
+7424;PrÃ¤z;GR
 7424;Dalin;GR
 7431;Mutten;GR
 7430;Rongellen;GR
@@ -3018,8 +3018,8 @@ zip_code;town;canton
 7433;Wergenstein;GR
 7433;Lohn GR;GR
 7434;Sufers;GR
-7435;Splügen;GR
-7436;Medels;GR
+7435;SplÃ¼gen;GR
+7436;Medels im Rheinwald;GR
 7437;Nufenen;GR
 7438;Hinterrhein;GR
 7440;Andeer;GR
@@ -3027,7 +3027,7 @@ zip_code;town;canton
 7443;Pignia;GR
 7444;Ausserferrera;GR
 7445;Innerferrera;GR
-7446;Campsut-Cröt;GR
+7446;Campsut-CrÃ¶t;GR
 7447;Cresta (Avers);GR
 7447;Am Bach (Avers);GR
 7448;Juf;GR
@@ -3048,7 +3048,7 @@ zip_code;town;canton
 7472;Surava;GR
 7473;Alvaneu Bad;GR
 7477;Filisur;GR
-7482;Bergün/Bravuogn;GR
+7482;BergÃ¼n/Bravuogn;GR
 7482;Stugl/Stuls;GR
 7484;Latsch;GR
 7482;Preda;GR
@@ -3061,8 +3061,8 @@ zip_code;town;canton
 7502;Bever;GR
 7503;Samedan;GR
 7504;Pontresina;GR
-7505;Celerina;GR
-7512;Champfèr;GR
+7505;Celerina/Schlarigna;GR
+7512;ChampfÃ¨r;GR
 7513;Silvaplana;GR
 7514;Sils/Segl Maria;GR
 7514;Fex;GR
@@ -3078,10 +3078,10 @@ zip_code;town;canton
 7530;Zernez;GR
 7532;Tschierv;GR
 7533;Fuldera;GR
-7534;Lü;GR
+7534;LÃ¼;GR
 7535;Valchava;GR
-7536;Sta. Maria V. M.;GR
-7537;Müstair;GR
+7536;Sta. Maria Val MÃ¼stair;GR
+7537;MÃ¼stair;GR
 7542;Susch;GR
 7543;Lavin;GR
 7545;Guarda;GR
@@ -3093,7 +3093,7 @@ zip_code;town;canton
 7554;Sent;GR
 7554;Crusch;GR
 7556;Ramosch;GR
-7557;Vnà;GR
+7557;VnÃ ;GR
 7558;Strada;GR
 7559;Tschlin;GR
 7560;Martina;GR
@@ -3107,86 +3107,86 @@ zip_code;town;canton
 7610;Soglio;GR
 7608;Castasegna;GR
 7742;Poschiavo;GR
-7742;Sfazù;GR
-7742;La Rösa;GR
+7742;SfazÃ¹;GR
+7742;La RÃ¶sa;GR
 7743;Brusio;GR
 7747;Viano;GR
 7744;Campocologno;GR
 7710;Ospizio Bernina;GR
-7741;S. Carlo GR;GR
-7710;Alp Grüm;GR
+7741;S. Carlo (Poschiavo);GR
+7710;Alp GrÃ¼m;GR
 7745;Li Curt;GR
 7746;Le Prese;GR
 7748;Campascio;GR
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich BZ FP;ZH
-8000;Zürich Mülligen PL;ZH
-8000;Zürich 1;ZH
-8000;Zürich 16 Zust;ZH
-8000;Zürich 80;ZH
-8000;Zürich 1 Sihlpost;ZH
-8000;Zürich 1;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich 32 Zust;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich Dist Ba;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
-8000;Zürich;ZH
+8000;ZÃ¼rich;ZH
+8001;ZÃ¼rich;ZH
+8002;ZÃ¼rich;ZH
+8003;ZÃ¼rich;ZH
+8004;ZÃ¼rich;ZH
+8005;ZÃ¼rich;ZH
+8006;ZÃ¼rich;ZH
+8008;ZÃ¼rich;ZH
+8010;ZÃ¼rich;ZH
+8010;ZÃ¼rich BZ FP;ZH
+8010;ZÃ¼rich MÃ¼lligen PL;ZH
+8020;ZÃ¼rich 1;ZH
+8016;ZÃ¼rich 16 Zustellung;ZH
+8080;ZÃ¼rich 80;ZH
+8021;ZÃ¼rich 1 Sihlpost;ZH
+8021;ZÃ¼rich 1;ZH
+8022;ZÃ¼rich;ZH
+8023;ZÃ¼rich;ZH
+8024;ZÃ¼rich;ZH
+8026;ZÃ¼rich;ZH
+8027;ZÃ¼rich;ZH
+8031;ZÃ¼rich;ZH
+8032;ZÃ¼rich;ZH
+8032;ZÃ¼rich 32 Zustellung;ZH
+8033;ZÃ¼rich;ZH
+8034;ZÃ¼rich;ZH
+8036;ZÃ¼rich;ZH
+8037;ZÃ¼rich;ZH
+8038;ZÃ¼rich;ZH
+8039;ZÃ¼rich;ZH
+8040;ZÃ¼rich;ZH
+8041;ZÃ¼rich;ZH
+8042;ZÃ¼rich;ZH
+8044;ZÃ¼rich;ZH
+8045;ZÃ¼rich;ZH
+8046;ZÃ¼rich;ZH
+8047;ZÃ¼rich;ZH
+8048;ZÃ¼rich;ZH
+8049;ZÃ¼rich;ZH
+8050;ZÃ¼rich;ZH
+8050;ZÃ¼rich Dist Ba;ZH
+8051;ZÃ¼rich;ZH
+8052;ZÃ¼rich;ZH
+8053;ZÃ¼rich;ZH
+8055;ZÃ¼rich;ZH
+8057;ZÃ¼rich;ZH
+8058;ZÃ¼rich;ZH
+8061;ZÃ¼rich;ZH
+8063;ZÃ¼rich;ZH
+8064;ZÃ¼rich;ZH
+8088;ZÃ¼rich;ZH
+8090;ZÃ¼rich;ZH
+8091;ZÃ¼rich;ZH
+8092;ZÃ¼rich ETH-Zentrum;ZH
+8093;ZÃ¼rich ETH-HÃ¶nggerberg;ZH
+8099;ZÃ¼rich Sonderdienste;ZH
 8102;Oberengstringen;ZH
 8103;Unterengstringen;ZH
 8104;Weiningen ZH;ZH
 8105;Regensdorf;ZH
 8105;Watt;ZH
 8107;Buchs ZH;ZH
-8108;Dällikon;ZH
+8108;DÃ¤llikon;ZH
 8112;Otelfingen;ZH
 8113;Boppelsen;ZH
-8114;Dänikon ZH;ZH
-8115;Hüttikon;ZH
-5436;Würenlos;AG
-8117;Fällanden;ZH
+8114;DÃ¤nikon ZH;ZH
+8115;HÃ¼ttikon;ZH
+5436;WÃ¼renlos;AG
+8117;FÃ¤llanden;ZH
 8121;Benglen;ZH
 8122;Binz;ZH
 8123;Ebmatingen;ZH
@@ -3195,7 +3195,7 @@ zip_code;town;canton
 8126;Zumikon;ZH
 8127;Forch;ZH
 8132;Hinteregg;ZH
-8132;Egg b. Zürich;ZH
+8132;Egg b. ZÃ¼rich;ZH
 8133;Esslingen;ZH
 8134;Adliswil;ZH
 8134;Adliswil 1;ZH
@@ -3207,7 +3207,7 @@ zip_code;town;canton
 8143;Stallikon;ZH
 8152;Glattbrugg;ZH
 8152;Opfikon;ZH
-8153;Rümlang;ZH
+8153;RÃ¼mlang;ZH
 8154;Oberglatt ZH;ZH
 8155;Niederhasli;ZH
 8156;Oberhasli;ZH
@@ -3215,55 +3215,55 @@ zip_code;town;canton
 8158;Regensberg;ZH
 8162;Steinmaur;ZH
 8164;Bachs;ZH
-8165;Schöfflisdorf;ZH
+8165;SchÃ¶fflisdorf;ZH
 8166;Niederweningen;ZH
 8172;Niederglatt ZH;ZH
 8173;Neerach;ZH
-8174;Stadel;ZH
+8174;Stadel b. Niederglatt;ZH
 8175;Windlach;ZH
-8180;Bülach;ZH
-8181;Höri;ZH
+8180;BÃ¼lach;ZH
+8181;HÃ¶ri;ZH
 8182;Hochfelden;ZH
-8184;Bachenbülach;ZH
+8184;BachenbÃ¼lach;ZH
 8185;Winkel;ZH
 8192;Glattfelden;ZH
 8193;Eglisau;ZH
-8194;Hüntwangen;ZH
+8194;HÃ¼ntwangen;ZH
 8195;Wasterkingen;ZH
 8196;Wil ZH;ZH
 8197;Rafz;ZH
 8200;Schaffhausen;SH
 8200;Schaffhausen 1;SH
-8200;Schaffh 1 Zust;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
-8200;Schaffhausen;SH
+8200;Schaffhausen 1 Zust;SH
+8201;Schaffhausen;SH
+8202;Schaffhausen;SH
+8203;Schaffhausen;SH
+8204;Schaffhausen;SH
+8205;Schaffhausen;SH
+8207;Schaffhausen;SH
+8208;Schaffhausen;SH
 8219;Trasadingen;SH
 8228;Beggingen;SH
 8231;Hemmental;SH
 8234;Stetten SH;SH
 8235;Lohn SH;SH
 8236;Opfertshofen SH;SH
-8236;Büttenhardt;SH
+8236;BÃ¼ttenhardt;SH
 8242;Bibern SH;SH
 8242;Hofen SH;SH
 8243;Altdorf SH;SH
-8239;Dörflingen;SH
-8212;Neuhausen;SH
-8212;Neuhausen 1;SH
+8239;DÃ¶rflingen;SH
+8212;Neuhausen am Rheinfall;SH
+8212;Neuhausen am Rheinfall 1;SH
 8213;Neunkirch;SH
-8214;Gächlingen;SH
+8214;GÃ¤chlingen;SH
 8215;Hallau;SH
 8216;Oberhallau;SH
 8217;Wilchingen;SH
 8218;Osterfingen;SH
 8222;Beringen;SH
 8223;Guntmadingen;SH
-8224;Löhningen;SH
+8224;LÃ¶hningen;SH
 8225;Siblingen;SH
 8226;Schleitheim;SH
 8232;Merishausen;SH
@@ -3288,78 +3288,78 @@ zip_code;town;canton
 8265;Mammern;TG
 8266;Steckborn;TG
 8267;Berlingen;TG
-8268;Mannenbach-Salenst;TG
+8268;Mannenbach-Salenstein;TG
 8272;Ermatingen;TG
 8273;Triboltingen;TG
-8274;Tägerwilen;TG
+8274;TÃ¤gerwilen;TG
 8280;Kreuzlingen;TG
 8280;Kreuzlingen 1;TG
 8280;Kreuzlingen 2;TG
 8280;Kreuzlingen 3;TG
-8301;Glattzentrum;ZH
+8301;Glattzentrum b. Wallisellen;ZH
 8302;Kloten;ZH
 8303;Bassersdorf;ZH
 8304;Wallisellen;ZH
 8305;Dietlikon;ZH
-8306;Brüttisellen;ZH
+8306;BrÃ¼ttisellen;ZH
 8307;Effretikon;ZH
 8315;Lindau;ZH
 8308;Illnau;ZH
 8308;Agasul;ZH
-8309;Nürensdorf;ZH
+8309;NÃ¼rensdorf;ZH
 8310;Kemptthal;ZH
 8312;Winterberg ZH;ZH
-8311;Brütten;ZH
-8307;Ottikon b.Kemptth.;ZH
+8311;BrÃ¼tten;ZH
+8307;Ottikon b. Kemptthal;ZH
 8314;Kyburg;ZH
 8320;Fehraltorf;ZH
 8489;Wildberg;ZH
 8322;Madetswil;ZH
-8330;Pfäffikon ZH;ZH
+8330;PfÃ¤ffikon ZH;ZH
 8331;Auslikon;ZH
 8332;Russikon;ZH
 8335;Hittnau;ZH
 8340;Hinwil;ZH
 8342;Wernetshausen;ZH
-8344;Bäretswil;ZH
+8344;BÃ¤retswil;ZH
 8345;Adetswil;ZH
 8352;Elsau;ZH
 8353;Elgg;ZH
 8354;Hofstetten ZH;ZH
 8355;Aadorf;TG
 8356;Ettenhausen TG;TG
-8357;Guntershausen;TG
+8357;Guntershausen b. Aadorf;TG
 8360;Eschlikon TG;TG
 8362;Balterswil;TG
 8363;Bichelsee;TG
 8370;Sirnach;TG
-8372;Wiezikon b.Sirnach;TG
+8372;Wiezikon b. Sirnach;TG
 8374;Oberwangen TG;TG
 8374;Dussnang;TG
 8376;Fischingen;TG
 8376;Au TG;TG
 8400;Winterthur;ZH
-8400;Winterthur 1 Ann.;ZH
-8400;Winterthur Zust;ZH
+8400;Winterthur 1 Annahme;ZH
+8400;Winterthur Zustellung;ZH
 8400;Winterthur Kaserne;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
-8400;Winterthur;ZH
+8401;Winterthur;ZH
+8402;Winterthur;ZH
+8404;Winterthur;ZH
+8405;Winterthur;ZH
+8406;Winterthur;ZH
+8408;Winterthur;ZH
+8409;Winterthur;ZH
+8410;Winterthur;ZH
+8411;Winterthur;ZH
 8412;Aesch (Neftenbach);ZH
 8413;Neftenbach;ZH
 8414;Buch am Irchel;ZH
 8415;Berg am Irchel;ZH
-8415;Gräslikon;ZH
+8415;GrÃ¤slikon;ZH
 8416;Flaach;ZH
-8418;Schlatt;ZH
+8418;Schlatt b. Winterthur;ZH
 8422;Pfungen;ZH
-8421;Dättlikon;ZH
+8421;DÃ¤ttlikon;ZH
 8423;Embrach-Embraport;ZH
 8424;Embrach;ZH
 8425;Oberembrach;ZH
@@ -3373,12 +3373,12 @@ zip_code;town;canton
 5332;Rekingen AG;AG
 5330;Bad Zurzach;AG
 5323;Rietheim;AG
-5464;Rümikon AG;AG
+5464;RÃ¼mikon AG;AG
 5465;Mellikon;AG
 5463;Wislikofen;AG
 5462;Siglistorf;AG
 5333;Baldingen;AG
-5334;Böbikon;AG
+5334;BÃ¶bikon;AG
 8442;Hettlingen;ZH
 8444;Henggart;ZH
 8447;Dachsen;ZH
@@ -3386,63 +3386,63 @@ zip_code;town;canton
 8450;Andelfingen;ZH
 8453;Alten;ZH
 8451;Kleinandelfingen;ZH
-8452;Adlikon;ZH
+8452;Adlikon b. Andelfingen;ZH
 8457;Humlikon;ZH
 8458;Dorf;ZH
 8459;Volken;ZH
 8454;Buchberg;SH
-8455;Rüdlingen;SH
+8455;RÃ¼dlingen;SH
 8460;Marthalen;ZH
 8464;Ellikon am Rhein;ZH
 8461;Oerlingen;ZH
 8465;Rudolfingen;ZH
-8466;Trüllikon;ZH
+8466;TrÃ¼llikon;ZH
 8462;Rheinau;ZH
 8463;Benken ZH;ZH
 8472;Seuzach;ZH
-8400;Reutlingen;ZH
+8404;Reutlingen (Winterthur);ZH
 8474;Dinhard;ZH
 8475;Ossingen;ZH
 8476;Unterstammheim;ZH
 8477;Oberstammheim;ZH
-8471;Rutschwil;ZH
-8478;Thalheim;ZH
+8471;Rutschwil (DÃ¤gerlen);ZH
+8478;Thalheim an der Thur;ZH
 8479;Altikon;ZH
 8467;Truttikon;ZH
 8468;Guntalingen;ZH
 8468;Waltalingen;ZH
-8482;Sennhof;ZH
+8482;Sennhof (Winterthur);ZH
 8483;Kollbrunn;ZH
 8484;Weisslingen;ZH
 8484;Neschwil;ZH
 8484;Theilingen;ZH
-8486;Rikon im Tösstal;ZH
-8487;Rämismühle;ZH
+8486;Rikon im TÃ¶sstal;ZH
+8487;RÃ¤mismÃ¼hle;ZH
 8487;Zell ZH;ZH
 8488;Turbenthal;ZH
 8492;Wila;ZH
 8493;Saland;ZH
 8494;Bauma;ZH
-8496;Steg im Tösstal;ZH
+8496;Steg im TÃ¶sstal;ZH
 8497;Fischenthal;ZH
 8498;Gibswil;ZH
-8495;Schmidrüti;ZH
+8495;SchmidrÃ¼ti;ZH
 8499;Sternenberg;ZH
 8500;Frauenfeld;TG
 8500;Frauenfeld 1;TG
 8500;Gerlikon;TG
-8500;Frauenfeld 1 Zust;TG
+8500;Frauenfeld 1 Zustellung;TG
 8501;Frauenfeld;TG
 8502;Frauenfeld;TG
 8503;Frauenfeld;TG
 8505;Pfyn;TG
 8506;Lanzenneunforn;TG
-8507;Hörhausen;TG
+8507;HÃ¶rhausen;TG
 8508;Homburg;TG
 8512;Thundorf;TG
 8512;Lustdorf;TG
 8514;Amlikon-Bissegg;TG
-8522;Häuslenen;TG
+8522;HÃ¤uslenen;TG
 8523;Hagenbuch ZH;ZH
 8524;Uesslingen;TG
 8525;Niederneunforn;TG
@@ -3451,48 +3451,48 @@ zip_code;town;canton
 8524;Buch b. Frauenfeld;TG
 8532;Weiningen TG;TG
 8535;Herdern;TG
-8536;Hüttwilen;TG
+8536;HÃ¼ttwilen;TG
 8537;Nussbaumen TG;TG
 8542;Wiesendangen;ZH
-8400;Stadel(Winterthur);ZH
+8404;Stadel (Winterthur);ZH
 8545;Rickenbach ZH;ZH
 8544;Attikon;ZH
 8546;Islikon;TG
 8547;Gachnang;TG
-8548;Ellikon a d Thur;ZH
+8548;Ellikon an der Thur;ZH
 8552;Felben-Wellhausen;TG
-8553;Hüttlingen-Mettdf;TG
-8554;Müllheim-Wigoltgn;TG
+8553;HÃ¼ttlingen-Mettendorf;TG
+8554;MÃ¼llheim-Wigoltingen;TG
 8554;Bonau;TG
-8555;Müllheim Dorf;TG
+8555;MÃ¼llheim Dorf;TG
 8556;Wigoltingen;TG
 8564;Lipperswil;TG
 8558;Raperswilen;TG
 8269;Fruthwilen;TG
-8560;Märstetten;TG
+8560;MÃ¤rstetten;TG
 8561;Ottoberg;TG
 8565;Hugelshofen;TG
 8566;Dotnacht;TG
 8566;Neuwilen;TG
 8564;Engwilen;TG
-8564;Wäldi;TG
+8564;WÃ¤ldi;TG
 8570;Weinfelden;TG
 8572;Berg TG;TG
 8573;Siegershausen;TG
 8574;Illighausen;TG
-8575;Bürglen TG;TG
+8575;BÃ¼rglen TG;TG
 8576;Mauren TG;TG
-8577;Schönholzerswilen;TG
-9217;Neukirch;TG
+8577;SchÃ¶nholzerswilen;TG
+9217;Neukirch an der Thur;TG
 8580;Amriswil;TG
 8580;Sommeri;TG
 8582;Dozwil;TG
-8580;Hagenwil;TG
+8580;Hagenwil b. Amriswil;TG
 8581;Schocherswil;TG
 8588;Zihlschlacht;TG
 8589;Sitterdorf;TG
 8583;Sulgen;TG
-8583;Götighofen;TG
+8583;GÃ¶tighofen;TG
 8583;Donzhausen;TG
 8584;Leimbach TG;TG
 8584;Opfershofen TG;TG
@@ -3502,76 +3502,76 @@ zip_code;town;canton
 8585;Zuben;TG
 8586;Erlen;TG
 8586;Andwil TG;TG
-8586;Kümmertshausen;TG
+8586;KÃ¼mmertshausen;TG
 8586;Riedt b. Erlen;TG
 8587;Oberaach;TG
 8590;Romanshorn;TG
 8599;Salmsach;TG
 8592;Uttwil;TG
 8593;Kesswil;TG
-8594;Güttingen;TG
+8594;GÃ¼ttingen;TG
 8595;Altnau;TG
 8596;Scherzingen;TG
 8597;Landschlacht;TG
 8598;Bottighofen;TG
-8600;Dübendorf;ZH
-8600;Dübendorf 1;ZH
-8600;Dübendorf 2;ZH
-8602;Wangen ZH;ZH
+8600;DÃ¼bendorf;ZH
+8600;DÃ¼bendorf 1;ZH
+8600;DÃ¼bendorf 2;ZH
+8602;Wangen b. DÃ¼bendorf;ZH
 8603;Schwerzenbach;ZH
 8604;Volketswil;ZH
 8605;Gutenswil;ZH
-8606;Nänikon;ZH
+8606;NÃ¤nikon;ZH
 8606;Greifensee;ZH
-8607;Aathal-Seegräben;ZH
+8607;Aathal-SeegrÃ¤ben;ZH
 8608;Bubikon;ZH
 8610;Uster;ZH
 8610;Uster 1;ZH
-8610;Uster 2;ZH
-8610;Uster 3;ZH
-8614;Bertschikon Gossau;ZH
+8612;Uster 2;ZH
+8613;Uster 3;ZH
+8614;Bertschikon (Gossau ZH);ZH
 8615;Wermatswil;ZH
 8616;Riedikon;ZH
-8617;Mönchaltorf;ZH
+8617;MÃ¶nchaltorf;ZH
 8618;Oetwil am See;ZH
 8620;Wetzikon ZH;ZH
 8620;Wetzikon ZH 1;ZH
-8620;Wetzikon ZH Roben.;ZH
-8620;Wetzikon ZH;ZH
-8620;Wetzikon ZH;ZH
-8624;Grüt (Gossau ZH);ZH
+8621;Wetzikon ZH Robenhausen;ZH
+8622;Wetzikon ZH;ZH
+8623;Wetzikon ZH;ZH
+8624;GrÃ¼t (Gossau ZH);ZH
 8625;Gossau ZH;ZH
-8626;Ottikon;ZH
-8627;Grüningen;ZH
-8630;Rüti ZH;ZH
+8626;Ottikon (Gossau ZH);ZH
+8627;GrÃ¼ningen;ZH
+8630;RÃ¼ti ZH;ZH
 8632;Tann;ZH
 8633;Wolfhausen;ZH
 8634;Hombrechtikon;ZH
-8635;Dürnten;ZH
+8635;DÃ¼rnten;ZH
 8636;Wald ZH;ZH
 8639;Faltigberg;ZH
 8637;Laupen ZH;ZH
 8638;Goldingen;SG
 8640;Rapperswil SG;SG
 8640;Kempraten;SG
-8640;Rapperswil SG Zust;SG
+8640;Rapperswil SG Zustellung;SG
 8645;Jona;SG
 8646;Wagen;SG
-8700;Küsnacht ZH;ZH
+8700;KÃ¼snacht ZH;ZH
 8702;Zollikon;ZH
 8702;Zollikon Dorf;ZH
 8703;Erlenbach ZH;ZH
 8704;Herrliberg;ZH
 8706;Meilen;ZH
 8707;Uetikon am See;ZH
-8708;Männedorf;ZH
-8712;Stäfa;ZH
+8708;MÃ¤nnedorf;ZH
+8712;StÃ¤fa;ZH
 8713;Uerikon;ZH
 8714;Feldbach;ZH
 8715;Bollingen;SG
 8716;Schmerikon;SG
 8717;Benken SG;SG
-8718;Schänis;SG
+8718;SchÃ¤nis;SG
 8722;Kaltbrunn;SG
 8723;Rufi;SG
 8725;Ernetschwil;SG
@@ -3582,22 +3582,22 @@ zip_code;town;canton
 8733;Eschenbach SG;SG
 8734;Ermenswil;SG
 8735;St. Gallenkappel;SG
-8735;Rüeterswil;SG
+8735;RÃ¼eterswil;SG
 8737;Gommiswald;SG
 8738;Uetliburg SG;SG
 8739;Rieden SG;SG
-8740;Uznach Vögele AG;SG
+8740;Uznach VÃ¶gele Versandhaus;SG
 8750;Glarus;GL
 8750;Riedern;GL
-8750;Klöntal;GL
+8750;KlÃ¶ntal;GL
 8751;Urnerboden;UR
-8752;Näfels;GL
+8752;NÃ¤fels;GL
 8753;Mollis;GL
 8754;Netstal;GL
 8755;Ennenda;GL
-8756;Mitlödi;GL
+8756;MitlÃ¶di;GL
 8762;Schwanden GL;GL
-8762;Schwändi GL;GL
+8762;SchwÃ¤ndi b. Schwanden;GL
 8762;Sool;GL
 8765;Engi;GL
 8766;Matt;GL
@@ -3605,28 +3605,28 @@ zip_code;town;canton
 8772;Nidfurn;GL
 8773;Haslen GL;GL
 8775;Luchsingen;GL
-8775;Hätzingen;GL
+8775;HÃ¤tzingen;GL
 8777;Diesbach GL;GL
-8782;Rüti GL;GL
+8782;RÃ¼ti GL;GL
 8783;Linthal;GL
 8784;Braunwald;GL
 8800;Thalwil;ZH
 8802;Kilchberg ZH;ZH
-8803;Rüschlikon;ZH
+8803;RÃ¼schlikon;ZH
 8804;Au ZH;ZH
 8805;Richterswil;ZH
-8805;Richterswil Burghd;ZH
-8806;Bäch SZ;SZ
+8805;Richterswil Burghalden SOB;ZH
+8806;BÃ¤ch SZ;SZ
 8807;Freienbach;SZ
-8808;Pfäffikon SZ;SZ
+8808;PfÃ¤ffikon SZ;SZ
 8810;Horgen;ZH
 8810;Horgen 1;ZH
-8810;Horgen;ZH
+8813;Horgen;ZH
 8815;Horgenberg;ZH
 8816;Hirzel;ZH
-8820;Wädenswil;ZH
-8824;Schönenberg ZH;ZH
-8825;Hütten;ZH
+8820;WÃ¤denswil;ZH
+8824;SchÃ¶nenberg ZH;ZH
+8825;HÃ¼tten;ZH
 8832;Wollerau;SZ
 8833;Samstagern;ZH
 8834;Schindellegi;SZ
@@ -3650,40 +3650,40 @@ zip_code;town;canton
 8856;Tuggen;SZ
 8857;Vorderthal;SZ
 8858;Innerthal;SZ
-8862;Schübelbach;SZ
+8862;SchÃ¼belbach;SZ
 8863;Buttikon SZ;SZ
 8864;Reichenburg;SZ
 8865;Bilten;GL
-8866;Ziegelbrücke;GL
+8866;ZiegelbrÃ¼cke;GL
 8867;Niederurnen;GL
 8868;Oberurnen;GL
 8872;Weesen;SG
 8873;Amden;SG
-8874;Mühlehorn;GL
+8874;MÃ¼hlehorn;GL
 8758;Obstalden;GL
 8757;Filzbach;GL
 8877;Murg;SG
 8878;Quinten;SG
 8880;Walenstadt;SG
 8881;Walenstadtberg;SG
-8881;Knoblisbühl;SG
+8881;KnoblisbÃ¼hl;SG
 8881;Tscherlach;SG
 8882;Unterterzen;SG
 8883;Quarten;SG
 8884;Oberterzen;SG
 8885;Mols;SG
 8887;Mels;SG
-8886;Mädris-Vermol;SG
+8886;MÃ¤dris-Vermol;SG
 8889;Plons;SG
 8888;Heiligkreuz (Mels);SG
 8890;Flums;SG
 8892;Berschis;SG
 8893;Flums Hochwiese;SG
 8894;Flumserberg Saxli;SG
-8895;Flumserberg Portel;SG
-8896;Flumserberg Bergh;SG
-8897;Flumserberg Theim;SG
-8898;Flumserberg Tboden;SG
+8895;Flumserberg Portels;SG
+8896;Flumserberg Bergheim;SG
+8897;Flumserberg Tannenheim;SG
+8898;Flumserberg Tannenbodenalp;SG
 8902;Urdorf;ZH
 8903;Birmensdorf ZH;ZH
 8904;Aesch ZH;ZH
@@ -3717,7 +3717,7 @@ zip_code;town;canton
 8953;Dietikon 1;ZH
 8953;Dietikon 2;ZH
 8954;Geroldswil;ZH
-8955;Oetwil a.d. Limmat;ZH
+8955;Oetwil an der Limmat;ZH
 8956;Killwangen;AG
 8957;Spreitenbach;AG
 8962;Bergdietikon;AG
@@ -3726,21 +3726,21 @@ zip_code;town;canton
 8966;Oberwil-Lieli;AG
 8967;Widen;AG
 9000;St. Gallen;SG
-9000;St. Gallen 1 Ann.;SG
+9000;St. Gallen 1 Annahme;SG
 9000;St. Gallen Dist Ba;SG
 9000;St. Gallen Kaserne;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-9000;St. Gallen;SG
+9001;St. Gallen;SG
+9004;St. Gallen;SG
+9006;St. Gallen;SG
+9007;St. Gallen;SG
+9008;St. Gallen;SG
+9010;St. Gallen;SG
+9011;St. Gallen;SG
+9012;St. Gallen;SG
+9013;St. Gallen;SG
+9014;St. Gallen;SG
+9015;St. Gallen;SG
+9016;St. Gallen;SG
 9030;Abtwil SG;SG
 9032;Engelburg;SG
 9033;Untereggen;SG
@@ -3756,11 +3756,11 @@ zip_code;town;canton
 9052;Niederteufen;AR
 9053;Teufen AR;AR
 9054;Haslen AI;AI
-9055;Bühler;AR
+9055;BÃ¼hler;AR
 9056;Gais;AR
 9057;Weissbad;AI
-9058;Brülisau;AI
-9062;Lustmühle;AR
+9058;BrÃ¼lisau;AI
+9062;LustmÃ¼hle;AR
 9063;Stein AR;AR
 9064;Hundwil;AR
 9100;Herisau;AR
@@ -3768,10 +3768,10 @@ zip_code;town;canton
 9102;Herisau;AR
 9103;Schwellbrunn;AR
 9104;Waldstatt;AR
-9105;Schönengrund;AR
-9107;Urnäsch;AR
+9105;SchÃ¶nengrund;AR
+9107;UrnÃ¤sch;AR
 9108;Gonten;AI
-9112;Schachen b.Herisau;AR
+9112;Schachen b. Herisau;AR
 9113;Degersheim;SG
 9114;Hoffeld;SG
 9115;Dicken;SG
@@ -3781,7 +3781,7 @@ zip_code;town;canton
 9125;Brunnadern;SG
 9126;Necker;SG
 9127;St. Peterzell;SG
-9633;Bächli (Hemberg);SG
+9633;BÃ¤chli (Hemberg);SG
 9200;Gossau SG;SG
 9200;Gossau SG 1;SG
 9200;Gossau SG 2;SG
@@ -3790,9 +3790,9 @@ zip_code;town;canton
 9205;Waldkirch;SG
 9212;Arnegg;SG
 9213;Hauptwil;TG
-9214;Kradolf-Schönenb.;TG
+9214;Kradolf-SchÃ¶nenberg;TG
 9216;Heldswil;TG
-9215;Schönenberg TG;TG
+9215;SchÃ¶nenberg an der Thur;TG
 9215;Buhwil;TG
 9220;Bischofszell;TG
 9223;Schweizersholz;TG
@@ -3802,18 +3802,18 @@ zip_code;town;canton
 9225;St. Pelagiberg;TG
 9230;Flawil;SG
 9230;Flawil 1;SG
-9230;Flawil 2;SG
+9230;Flawil 2 Botsberg;SG
 9231;Egg (Flawil);SG
 9604;Oberrindal;SG
-9604;Lütisburg;SG
+9604;LÃ¼tisburg;SG
 9240;Uzwil;SG
 9240;Niederglatt SG;SG
 9242;Oberuzwil;SG
 9248;Bichwil;SG
 9243;Jonschwil;SG
 9244;Niederuzwil;SG
-9245;Oberbüren;SG
-9246;Niederbüren;SG
+9245;OberbÃ¼ren;SG
+9246;NiederbÃ¼ren;SG
 9247;Henau;SG
 9249;Algetshausen;SG
 9300;Wittenbach;SG
@@ -3821,8 +3821,8 @@ zip_code;town;canton
 9305;Berg SG;SG
 9306;Freidorf TG;TG
 9315;Winden;TG
-9308;Lömmenschwil;SG
-9312;Häggenschwil;SG
+9308;LÃ¶mmenschwil;SG
+9312;HÃ¤ggenschwil;SG
 9313;Muolen;SG
 9314;Steinebrunn;TG
 9315;Neukirch (Egnach);TG
@@ -3833,10 +3833,10 @@ zip_code;town;canton
 9323;Steinach;SG
 9325;Roggwil TG;TG
 9326;Horn;TG
-9327;Tübach;SG
+9327;TÃ¼bach;SG
 9400;Rorschach;SG
 9404;Rorschacherberg;SG
-9402;Mörschwil;SG
+9402;MÃ¶rschwil;SG
 9403;Goldach;SG
 9405;Wienacht-Tobel;AR
 9410;Heiden;AR
@@ -3851,38 +3851,38 @@ zip_code;town;canton
 9427;Wolfhalden;AR
 9428;Walzenhausen;AR
 9430;St. Margrethen SG;SG
-9428;Platz;AR
+9428;Platz AR;AR
 9434;Au SG;SG
 9435;Heerbrugg;SG
 9436;Balgach;SG
 9437;Marbach SG;SG
-9450;Lüchingen;SG
+9450;LÃ¼chingen;SG
 9442;Berneck;SG
 9443;Widnau;SG
 9444;Diepoldsau;SG
 9445;Rebstein;SG
-9450;Altstätten SG;SG
+9450;AltstÃ¤tten SG;SG
 9451;Kriessern;SG
 9452;Hinterforst;SG
 9453;Eichberg;SG
 9462;Montlingen;SG
 9463;Oberriet SG;SG
-9464;Rüthi (Rheintal);SG
+9464;RÃ¼thi (Rheintal);SG
 9464;Lienz;SG
 9465;Salez;SG
 9466;Sennwald;SG
-9467;Frümsen;SG
+9467;FrÃ¼msen;SG
 9468;Sax;SG
 9469;Haag (Rheintal);SG
 9470;Buchs SG;SG
 9470;Buchs SG 1;SG
-9470;Buchs SG Räfis;SG
+9470;Buchs SG RÃ¤fis;SG
 9472;Grabs;SG
 9472;Grabserberg;SG
 9473;Gams;SG
 9475;Sevelen;SG
 9476;Weite;SG
-9477;Trübbach;SG
+9477;TrÃ¼bbach;SG
 9478;Azmoos;SG
 9479;Oberschan;SG
 9485;Nendeln;FL
@@ -3900,52 +3900,52 @@ zip_code;town;canton
 9500;Wil SG;SG
 9500;Wil SG 1;SG
 9500;Wil SG 2;SG
-9500;Wil SG 1 Zust;SG
+9500;Wil SG 1 Zustellung;SG
 9502;Braunau;TG
 9503;Stehrenberg;TG
 9504;Friltschen;TG
 9506;Lommis;TG
 9507;Stettfurt;TG
-9508;Weingarten-Kalth;TG
-9512;Rossrüti;SG
+9508;Weingarten-KalthÃ¤usern;TG
+9512;RossrÃ¼ti;SG
 9514;Wuppenau;TG
 9515;Hosenruck;TG
 9517;Mettlen;TG
 9565;Rothenhausen;TG
-9523;Züberwangen;SG
+9523;ZÃ¼berwangen;SG
 9524;Zuzwil SG;SG
 9525;Lenggenwil;SG
 9526;Zuckenriet;SG
 9527;Niederhelfenschwil;SG
 9532;Rickenbach b. Wil;TG
 9533;Kirchberg SG;SG
-9534;Gähwil;SG
+9534;GÃ¤hwil;SG
 9535;Wilen b. Wil;TG
 9536;Schwarzenbach SG;SG
-9542;Münchwilen TG;TG
+9542;MÃ¼nchwilen TG;TG
 9543;St. Margarethen TG;TG
-9545;Wängi;TG
+9545;WÃ¤ngi;TG
 9546;Tuttwil;TG
 9547;Wittenwil;TG
 9548;Matzingen;TG
 9552;Bronschhofen;SG
 9553;Bettwiesen;TG
-9554;Tägerschen;TG
+9554;TÃ¤gerschen;TG
 9555;Tobel;TG
 9556;Affeltrangen;TG
-9562;Märwil;TG
+9562;MÃ¤rwil;TG
 9565;Schmidshof;TG
 9565;Oppikon;TG
 9565;Bussnang;TG
 9573;Littenheid;TG
-9601;Lütisburg Station;SG
+9601;LÃ¼tisburg Station;SG
 9602;Bazenheid;SG
-9602;Müselbach;SG
-9606;Bütschwil;SG
+9602;MÃ¼selbach;SG
+9606;BÃ¼tschwil;SG
 9607;Mosnang;SG
 9608;Ganterschwil;SG
 9612;Dreien;SG
-9613;Mühlrüti;SG
+9613;MÃ¼hlrÃ¼ti;SG
 9614;Libingen;SG
 9615;Dietfurt;SG
 9620;Lichtensteig;SG
@@ -3957,7 +3957,7 @@ zip_code;town;canton
 9642;Ebnat-Kappel;SG
 9643;Krummenau;SG
 9650;Nesslau;SG
-9651;Ennetbühl;SG
+9651;EnnetbÃ¼hl;SG
 9655;Stein SG;SG
 9652;Neu St. Johann;SG
 9656;Alt St. Johann;SG
@@ -3966,59 +3966,59 @@ zip_code;town;canton
 3185;Schmitten FR;FR
 3113;Rubigen;BE
 3900;Brig Zustellung;VS
-6300;Zug;ZG
-6911;Campione;IT
-8238;Büsingen;DE
-3000;Bern 3 Nationalrat;BE
-3000;Bern 3 Ständerat;BE
-6300;Zug;ZG
-6300;Zug;ZG
-1289;Genève Serv. Spéc.;GE
-7000;Chur Postauto;GR
+6304;Zug;ZG
+6911;Campione d'Italia;IT
+8238;BÃ¼singen;DE
+3003;Bern 3 Nationalrat;BE
+3003;Bern 3 StÃ¤nderat;BE
+6302;Zug;ZG
+6303;Zug;ZG
+1289;GenÃ¨ve Services SpÃ©ciaux;GE
+7003;Chur Postauto GR Reg. Chur;GR
 6900;Lugano 3;TI
-3000;Bern;BE
-1000;Lausanne Veillon;VD
+3024;Bern;BE
+1017;Lausanne Charles Veillon SA;VD
 1934;Bruson;VS
 3800;Sundlauenen;BE
-3000;Bern;BE
+3030;Bern;BE
 1031;Mex VD;VD
 1734;Tentlingen;FR
 1029;Villars-Ste-Croix;VD
-1400;Cheseaux-Noréaz;VD
+1400;Cheseaux-NorÃ©az;VD
 9101;Herisau;AR
 3044;Innerberg;BE
 1295;Mies;VD
 1295;Tannay;VD
-1920;Martigny 1 Dist;VS
+1920;Martigny 1 Distribution;VS
 6370;Oberdorf NW;NW
 8317;Tagelswangen;ZH
-3855;Schwanden-Brienz;BE
+3855;Schwanden b. Brienz;BE
 3700;Spiezwiler;BE
 3961;St-Jean VS;VS
-3380;Walliswil-Nbipp;BE
-6900;Massagno Caselle;TI
-6000;Luzern;LU
+3380;Walliswil b. Niederbipp;BE
+6908;Massagno Caselle;TI
+6009;Luzern;LU
 1267;Vich;VD
 1267;Coinsins;VD
-8000;Gockhausen;ZH
-1700;Fribourg 1 Dépôt;FR
+8044;Gockhausen;ZH
+1700;Fribourg 1 DÃ©pÃ´t;FR
 5232;Villigen PSI;AG
-6349;Baar;ZG
+6349;Baar Sonderdienste;ZG
 8614;Sulzbach;ZH
-1965;Chandolin Savièse;VS
+1965;Chandolin (SaviÃ¨se);VS
 1595;Clavaleyres;BE
 2735;Champoz;BE
 2715;Monible;BE
 2827;Schelten;BE
 2830;Vellerat;JU
-2717;Rebévelier;BE
+2717;RebÃ©velier;BE
 2575;Hagneck;BE
-2572;Mörigen;BE
+2572;MÃ¶rigen;BE
 2556;Schwadernau;BE
 1470;Bollion;FR
 1773;Chandon;FR
 1534;Chapelle (Broye);FR
-1473;Châtillon FR;FR
+1473;ChÃ¢tillon FR;FR
 1475;Forel FR;FR
 1483;Frasses;FR
 1566;Les Friques;FR
@@ -4027,17 +4027,17 @@ zip_code;town;canton
 1475;Montbrelloz;FR
 1541;Morens FR;FR
 1528;Praratoud;FR
-1410;Prévondavaux;FR
+1410;PrÃ©vondavaux;FR
 1773;Russy;FR
 1470;Seiry;FR
-1541;Sévaz;FR
+1541;SÃ©vaz;FR
 1565;Vallon;FR
 1483;Vesin;FR
 1680;Berlens;FR
 1670;Bionnens;FR
 1675;Blessens;FR
-1608;Chapelle (Glâne);FR
-1694;Chavannes-Orsonnen;FR
+1608;Chapelle (GlÃ¢ne);FR
+1694;Chavannes-sous-Orsonnens;FR
 1697;Les Ecasseys;FR
 1670;Esmonts;FR
 1673;Gillarens;FR
@@ -4045,12 +4045,12 @@ zip_code;town;canton
 1688;Lieffrens;FR
 1690;Lussy FR;FR
 1687;La Magne;FR
-1674;Montet (Glâne);FR
+1674;Montet (GlÃ¢ne);FR
 1674;Morlens;FR
 1675;Mossel;FR
 1686;La Neirigue;FR
 1694;Villargiroud;FR
-1653;Châtel-Montsalvens;FR
+1653;ChÃ¢tel-sur-Montsalvens;FR
 1669;Lessoc;FR
 1625;Maules;FR
 1652;Villarbeney;FR
@@ -4067,29 +4067,29 @@ zip_code;town;canton
 1782;Lossy;FR
 1756;Lovens;FR
 1727;Magnedens;FR
-1724;Montévraz;FR
+1724;MontÃ©vraz;FR
 1724;Oberried FR;FR
 1723;Pierrafortscha;FR
 1772;Ponthaux;FR
 1726;Posat;FR
 1695;Rueyres-St-Laurent;FR
-1724;Senèdes;FR
-1695;Villarsel-Gibloux;FR
-1723;Villarsel-Marly;FR
-1724;Zénauva;FR
-1721;Cormérod;FR
+1724;SenÃ¨des;FR
+1695;Villarsel-le-Gibloux;FR
+1723;Villarsel-sur-Marly;FR
+1724;ZÃ©nauva;FR
+1721;CormÃ©rod;FR
 1721;Courtion;FR
 1792;Guschelmuth;FR
 1784;Wallenried;FR
 1716;Oberschrot;FR
 1719;Zumholz;FR
 1609;Besencens;FR
-1609;Fiaugères;FR
+1609;FiaugÃ¨res;FR
 1624;Grattavache;FR
 1174;Pizy;VD
 1787;Mur (Vully) VD;VD
 1580;Oleyres;VD
-1148;Chavannes-Veyron;VD
+1148;Chavannes-le-Veyron;VD
 1148;Mauraz;VD
 1376;Eclagnens;VD
 1376;Goumoens-le-Jux;VD
@@ -4098,13 +4098,13 @@ zip_code;town;canton
 1428;Mutrux;VD
 1423;Romairon;VD
 1423;Vaugondry;VD
-1000;Jouxtens-Mézery;VD
+1008;Jouxtens-MÃ©zery;VD
 1134;Chigny;VD
 1026;Denges;VD
 1410;Correvon;VD
 1682;Lovatens;VD
 1063;Martherenges;VD
-1041;Montaubion-Chardon;VD
+1041;Montaubion-Chardonney;VD
 1513;Rossenges;VD
 1683;Sarzens;VD
 1277;Arnex-sur-Nyon;VD
@@ -4122,60 +4122,60 @@ zip_code;town;canton
 1195;Dully;VD
 1180;Tartegnin;VD
 1436;Chamblon;VD
-1415;Démoret;VD
-1443;Essert-s-Champvent;VD
-1443;Villars-Champvent;VD
-1400;Gossens;VD
+1415;DÃ©moret;VD
+1443;Essert-sous-Champvent;VD
+1443;Villars-sous-Champvent;VD
+1407;Gossens;VD
 1432;Gressy;VD
-1400;Mézery-Donneloye;VD
+1407;MÃ©zery-prÃ¨s-Donneloye;VD
 1047;Oppens;VD
 1412;Ursins;VD
-1400;Villars-Epeney;VD
+1404;Villars-Epeney;VD
 2027;Montalchez;NE
 2063;Engollon;NE
 2933;Damphreux;JU
-2953;Fregiécourt;JU
+2953;FregiÃ©court;JU
 8165;Oberweningen;ZH
 8165;Schleinikon;ZH
 8543;Bertschikon;ZH
-3283;Niederried b. Kall;BE
+3283;Niederried b. Kallnach;BE
 4932;Gutenburg;BE
 3294;Meienried;BE
 3429;Hellsau;BE
-3429;Höchstetten;BE
-3324;Mötschwil;BE
-3424;Oberösch;BE
+3429;HÃ¶chstetten;BE
+3324;MÃ¶tschwil;BE
+3424;OberÃ¶sch;BE
 3472;Rumendingen;BE
-3421;Rüti b. Lyssach;BE
+3421;RÃ¼ti b. Lyssach;BE
 3425;Willadingen;BE
 2577;Finsterhennen;BE
 3303;Ballmoos;BE
-3256;Bangerten;BE
-3053;Deisswil Mbuchsee;BE
+3256;Bangerten b. Dieterswil;BE
+3053;Deisswil b. MÃ¼nchenbuchsee;BE
 3053;Diemerswil;BE
-3303;Münchringen;BE
+3303;MÃ¼nchringen;BE
 3251;Ruppoldsried;BE
 3305;Scheunen;BE
 3053;Wiggiswil;BE
 3309;Zauggenried;BE
 3510;Freimettigen;BE
-3510;Häutligen;BE
+3510;HÃ¤utligen;BE
 3671;Herbligen;BE
 3532;Mirchel;BE
 3629;Oppligen;BE
-3504;Oberhünigen;BE
+3504;OberhÃ¼nigen;BE
 3207;Golaten;BE
-3274;Bühl BE;BE
+3274;BÃ¼hl b. Aarberg;BE
 3272;Epsach;BE
 3274;Merzligen;BE
 3632;Niederstocken;BE
 3086;Englisberg;BE
 3629;Jaberg;BE
 3127;Lohnstorf;BE
-3116;Mühledorf BE;BE
+3116;MÃ¼hledorf BE;BE
 3116;Noflen BE;BE
-3128;Rümligen;BE
-3636;Forst;BE
+3128;RÃ¼mligen;BE
+3636;Forst b. LÃ¤ngenbÃ¼hl;BE
 3623;Horrenbach;BE
 3624;Schwendibach;BE
 3645;Zwieselberg;BE
@@ -4183,27 +4183,27 @@ zip_code;town;canton
 3366;Bollodingen;BE
 3367;Ochlenberg;BE
 4704;Wolfisberg;BE
-6289;Hämikon;LU
-6277;Lieli;LU
+6289;HÃ¤mikon;LU
+6277;Lieli LU;LU
 6284;Sulz LU;LU
 6038;Honau;LU
 8777;Betschwanden;GL
 8774;Leuggelbach;GL
 3216;Agriswil;FR
-3215;Büchslen;FR
+3215;BÃ¼chslen;FR
 3280;Greng;FR
-3213;Kleinbösingen;FR
+3213;KleinbÃ¶singen;FR
 3212;Kleingurmels;FR
 3215;Lurtigen;FR
 3206;Wallenbuch;FR
 4583;Aetigkofen;SO
 3254;Balm b. Messen;SO
-4584;Gächliwil;SO
+4584;GÃ¤chliwil;SO
 4556;Bolken;SO
-4556;Burgäschi;SO
+4556;BurgÃ¤schi;SO
 4566;Halten;SO
 4558;Heinrichswil;SO
-4554;Hüniken;SO
+4554;HÃ¼niken;SO
 4566;Oekingen;SO
 4556;Steinhof SO;SO
 4558;Winistorf;SO
@@ -4212,12 +4212,12 @@ zip_code;town;canton
 9057;Schwende;AI
 7456;Marmorera;GR
 7130;Schnaus;GR
-7116;St. Martin;GR
+7116;St. Martin (Lugnez);GR
 7415;Pratval;GR
 7423;Portein;GR
 7027;Calfreisen;GR
 5619;Uezwil;AG
-2912;Réclère;JU
+2912;RÃ©clÃ¨re;JU
 1820;Veytaux;VD
 5012;Eppenberg;SO
 8905;Islisberg;AG
@@ -4237,10 +4237,10 @@ zip_code;town;canton
 8566;Ellighausen;TG
 8566;Lippoldswilen;TG
 8274;Gottlieben;TG
-8585;Schönenbaumgarten;TG
+8585;SchÃ¶nenbaumgarten;TG
 8585;Herrenhof;TG
 8564;Sonterswil;TG
-9562;Buch b. Märwil;TG
+9562;Buch b. MÃ¤rwil;TG
 9556;Zezikon;TG
 8512;Wetzikon TG;TG
 8360;Wallenwil;TG
@@ -4250,7 +4250,7 @@ zip_code;town;canton
 8572;Andhausen;TG
 8572;Graltshausen;TG
 8585;Birwinken;TG
-8572;Guntershausen Berg;TG
+8572;Guntershausen b. Berg;TG
 8585;Klarsreuti;TG
 8575;Istighofen;TG
 8556;Engwang;TG
@@ -4261,7 +4261,7 @@ zip_code;town;canton
 6963;Cureggia;TI
 6814;Lamone;TI
 3995;Ausserbinn;VS
-3995;Mühlebach (Goms);VS
+3995;MÃ¼hlebach (Goms);VS
 3989;Ritzingen;VS
 3989;Selkingen;VS
 3995;Steinhaus;VS
@@ -4276,18 +4276,18 @@ zip_code;town;canton
 6212;Kaltbach;LU
 8525;Wilen b. Neunforn;TG
 2735;Malleray;BE
-1653;Crésuz;FR
+1653;CrÃ©suz;FR
 1626;Treyfayes;FR
 2027;Fresens;NE
 2933;Lugnez;JU
 2953;Pleujouse;JU
 1624;Progens;FR
-5012;Wöschnau;SO
+5012;WÃ¶schnau;SO
 3984;Fieschertal;VS
 6814;Cadempino;TI
-4584;Lüterswil;SO
+4584;LÃ¼terswil;SO
 8905;Arni AG;AG
-8553;Hüttlingen;TG
+8553;HÃ¼ttlingen;TG
 3956;Feschel;VS
 9470;Werdenberg;SG
 8427;Freienstein;ZH
@@ -4296,106 +4296,106 @@ zip_code;town;canton
 1884;Arveyes;VD
 3963;Aminona;VS
 5053;Wittwil;AG
-6000;St. Niklausen LU;LU
+6005;St. Niklausen LU;LU
 6995;Madonna del Piano;TI
 7226;Fajauna;GR
 7743;Miralago;GR
 8212;Nohl;ZH
-8471;Dägerlen;ZH
+8471;DÃ¤gerlen;ZH
 9030;Gaiserwald;SG
 9122;Ebersol;SG
 6341;Baar;ZG
 6900;Paradiso;TI
 1754;Avry-sur-Matran;FR
-1783;Barberêche;FR
+1783;BarberÃªche;FR
 1774;Montagny-les-Monts;FR
 1110;Morges 3;VD
-9000;St. Gallen;SG
+9029;St. Gallen Sonderdienste;SG
 1585;Bellerive VD;VD
 2052;La Vue-des-Alpes;NE
 3656;Ringoldswil;BE
 4922;Thunstetten;BE
-1700;Fribourg;FR
+1709;Fribourg;FR
 1400;Yverdon;VD
 8879;Pizolpark (Mels);SG
 1195;Bursinel;VD
-6207;Nottwil SPZ;LU
+6207;Nottwil Paraplegikerzentrum;LU
 3000;Bern Radio Schweiz;BE
 3900;Brigerbad;VS
 8118;Pfaffhausen;ZH
-5601;Lenzburg Sonderdst;AG
+5601;Lenzburg Sonderdienste;AG
 1428;Provence;VD
-2715;Châtelat;BE
+2715;ChÃ¢telat;BE
 1091;Chenaux;VD
-9000;St. Gallen;SG
-9000;St. Gallen;SG
-1811;Vevey;VD
+9028;St. Gallen;SG
+9027;St. Gallen Mona Versand;SG
+1811;Vevey Services spÃ©ciaux;VD
 6600;Solduno;TI
-1723;Marly Grand Pré;FR
-3600;Thun;BE
+1723;Marly Grand PrÃ©;FR
+3609;Thun;BE
 1723;Marly 1;FR
-6363;Bürgenstock;NW
+6363;BÃ¼rgenstock;NW
 8832;Wilen b. Wollerau;SZ
 1754;Avry-Centre FR;FR
 1775;Mannens;FR
 1775;Grandsivaz;FR
-1200;Genève 14;GE
+1211;GenÃ¨ve 14;GE
 8926;Hauptikon;ZH
 8926;Uerzlikon;ZH
-8000;Zürich Corona;ZH
+8036;ZÃ¼rich Corona;ZH
 1026;Echandens;VD
-1260;Nyon car postal;VD
-1400;Yverdon car postal;VD
-1950;Sion car postal;VS
-3900;Brig Postauto;VS
-8000;Zürich Postauto;ZH
-8500;Frauenfeld Pauto;TG
-5400;Dättwil AG;AG
-5400;Rütihof;AG
-8106;Adlikon b.Regensdf;ZH
-9400;Rorschach Zust;SG
+1260;Nyon car postal La CÃ´te-Ju;VD
+1400;Yverdon car postal VD-Broye;VD
+1951;Sion car postal VS-LÃ©man;VS
+3900;Brig Postauto Oberwallis;VS
+8050;ZÃ¼rich Postauto ZÃ¼rich;ZH
+8500;Frauenfeld Postauto TG-SH;TG
+5405;DÃ¤ttwil AG;AG
+5406;RÃ¼tihof;AG
+8106;Adlikon b. Regensdorf;ZH
+9400;Rorschach Zustellung;SG
 6343;Buonas;ZG
 6343;Risch;ZG
-6343;Holzhäusern ZG;ZG
+6343;HolzhÃ¤usern ZG;ZG
 3945;Niedergampel;VS
-1965;Drône (Savièse);VS
-1110;Morges Dist;VD
-1400;Yverdon Dist;VD
-3415;Rüegsauschachen;BE
+1965;DrÃ´ne (SaviÃ¨se);VS
+1110;Morges Distribution;VD
+1400;Yverdon Distribution;VD
+3415;RÃ¼egsauschachen;BE
 3415;Hasle b. Burgdorf;BE
-6363;Fürigen;NW
+6363;FÃ¼rigen;NW
 6410;Rigi Scheidegg;SZ
-4571;Lüterkofen;SO
-8775;Luchsingen-Hätzin;GL
-8000;Zürich;ZH
-8000;Zürich CS PZ;ZH
+4571;LÃ¼terkofen;SO
+8775;Luchsingen-HÃ¤tzingen;GL
+8070;ZÃ¼rich;ZH
+8071;ZÃ¼rich CS PZ;ZH
 1631;Bulle;FR
 3040;Bern;BE
-4000;Basel;BL
-6000;Luzern;LU
+4040;Basel;BL
+6007;Luzern;LU
 8759;Netstal;GL
-9000;St. Gallen;SG
-6500;Bellinzona CS;TI
+9020;St. Gallen;SG
+6500;Bellinzona centro servici;TI
 8268;Salenstein;TG
 8522;Aawangen;TG
 9503;Lanterswil;TG
 8574;Oberhofen TG;TG
 6260;Hintermoos;LU
-1200;Genève 71 CS CP;GE
-1279;Chavannes-Bogis LS;VD
-1215;Genève ICC OLS;GE
+1211;GenÃ¨ve 71 CS CP;GE
+1279;Chavannes-de-Bogis OLS;VD
+1215;GenÃ¨ve ICC OLS;GE
 1950;Sion 4;VS
 6383;Wiesenberg;NW
 3000;Bern 71 CS PZ;BE
 4573;Lohn-Ammannsegg;SO
-9000;St. Gallen K AG;SG
-8152;Glattbrugg Zust;ZH
+9026;St. Gallen KÃ¼nzler AG;SG
+8152;Glattbrugg Zustellung;ZH
 1988;Thyon-Les Collons;VS
 8965;Berikon 2 Dorf;AG
 8965;Berikon 1;AG
 5046;Schmiedrued-Walde;AG
 6031;Ebikon;LU
-6021;Emmenbrücke 1;LU
+6021;EmmenbrÃ¼cke 1;LU
 6391;Engelberg;OW
 6281;Hochdorf;LU
 6011;Kriens;LU
@@ -4403,55 +4403,55 @@ zip_code;town;canton
 6371;Stans;NW
 6431;Schwyz;SZ
 8302;Kloten Kaserne;ZH
-9000;St. Gallen Quelle;SG
+9025;St. Gallen Quelle;SG
 8725;Gebertingen;SG
 6900;Lugano 7;TI
-6900;Lugano 7 Caselle;TI
-1240;Genève;GE
+6907;Lugano 7 Loreto Caselle;TI
+1240;GenÃ¨ve;GE
 9471;Buchs SG 1;SG
 9471;Buchs SG 3;SG
 1260;Nyon 2;VD
 1260;Nyon 1;VD
 1530;Payerne Caserne;VD
-8903;Birmensdorf ZH Kas;ZH
-8180;Bülach Kaserne;ZH
-8600;Dübendorf Kaserne;ZH
+8903;Birmensdorf ZH Kaserne;ZH
+8180;BÃ¼lach Kaserne;ZH
+8600;DÃ¼bendorf Kaserne;ZH
 8500;Frauenfeld Kaserne;TG
 9401;Rorschach;SG
 9501;Wil SG 1;SG
 3000;Bern 77 SBV;BE
 5620;Bremgarten AG West;AG
 5620;Bremgarten AG 1;AG
-8000;Zürich BZ;ZH
-2800;Delémont car post;JU
-1200;Genève 70;GE
-4500;Solothurn;SO
+8010;ZÃ¼rich Briefzentrum;ZH
+2800;DelÃ©mont car postal JU-NE;JU
+1211;GenÃ¨ve 70;GE
+4509;Solothurn;SO
 6060;Sarnen 2;OW
-6060;Sarnen 2 Büntenp.;OW
+6060;Sarnen 2 BÃ¼ntenpark;OW
 6060;Sarnen 1;OW
 1958;Uvrier;VS
-1200;Genève 5;GE
-1200;Genève 84 Votation;GE
-9000;St. Gallen 14 Zust;SG
-3800;Interlaken Pauto;BE
-4000;Basel Postauto;BS
-6000;Luzern Postauto;LU
-8730;Uznach Postauto;SG
-9000;St. Gallen Postaut;SG
-4000;Basel;BS
+1211;GenÃ¨ve 5;GE
+1211;GenÃ¨ve 84 Votations;GE
+9014;St. Gallen 14 Zustellung;SG
+3800;Interlaken Postauto BE Ober;BE
+4000;Basel Postauto Nordwestschw;BS
+6000;Luzern Postauto Zentralschw;LU
+8730;Uznach Postauto Linth-SZ-GL;SG
+9001;St. Gallen Postauto SG-Azel;SG
+4070;Basel;BS
 4524;Balmberg;SO
 4524;Oberbalmberg;SO
 6156;Luthern Bad;LU
 5400;Baden 1 Zustellung;AG
 6260;Mehlsecken;LU
-6600;Muralto;TI
-6161;Entlebuch;LU
+6602;Muralto;TI
+6161;Entlebuch Versandzentrum;LU
 6677;Aurigeno;TI
 9201;Gossau SG;SG
 6900;Lugano 2;TI
 6600;Locarno 4 Solduno;TI
-8510;Frauenfeld;TG
-3050;Bern;BE
+8510;Frauenfeld Kant. Verwaltung;TG
+3050;Bern Swisscom;BE
 6900;Lugano 8;TI
 6900;Lugano 4;TI
 6900;Lugano 6;TI
@@ -4460,14 +4460,14 @@ zip_code;town;canton
 2575;Gerolfingen;BE
 3000;Bern 60 UPD;BE
 8260;Stein am Rhein 1;SH
-8260;Stein am Rhein 2;SH
+8260;Stein am Rhein 2 Stadt;SH
 9214;Kradolf;TG
 1400;Yverdon Caserne;VD
-2013;Colombier NE Cas;NE
+2013;Colombier NE Caserne;NE
 1680;Romont Caserne;FR
 6032;Emmen Kaserne;LU
 1700;Fribourg Caserne;FR
-1200;Genève 26 Caserne;GE
+1211;GenÃ¨ve 26 Caserne;GE
 6810;Isone Caserma;TI
 6616;Losone Caserma;TI
 6000;Luzern Kaserne;LU
@@ -4477,233 +4477,233 @@ zip_code;town;canton
 1510;Moudon Caserne;VD
 1890;St-Maurice Caserne;VS
 1950;Sion Caserne;VS
-3380;Wangen Kaserne;BE
+3380;Wangen a. A. Kaserne;BE
 6370;Stans Kaserne;NW
 6780;Airolo Caserma;TI
 3000;Bern 22 Kaserne;BE
-1145;Bière Caserne;VD
+1145;BiÃ¨re Caserne;VD
 2900;Porrentruy Caserne;JU
 8640;Hurden;SZ
-8000;Zürich R Digest;ZH
+8086;ZÃ¼rich Reader's Digest;ZH
 1630;Bulle 1;FR
 1630;Bulle 2;FR
 6460;Altdorf UR 1;UR
-6460;Altdorf UR 2 Ryn.;UR
+6460;Altdorf UR 2 RynÃ¤cht;UR
 6460;Altdorf UR 2;UR
-1660;La Lécherette;VD
-8000;Zürich Versich.;ZH
+1660;La LÃ©cherette;VD
+8085;ZÃ¼rich Versicherung;ZH
 2075;Thielle;NE
 2075;Wavre;NE
 1721;Misery;FR
 3632;Oberstocken;BE
 1068;Les Monts-de-Pully;VD
-2010;Neuchâtel OFS;NE
-8285;Kreuzlingen Ifolor;TG
-4000;Basel;BS
+2010;NeuchÃ¢tel OFS;NE
+8285;Kreuzlingen Ifolor AG;TG
+4039;Basel;BS
 1762;Givisiez Dist Ba;FR
-1950;Sion Dist Ba;VS
-3900;Brig Dist Ba;VS
+1950;Sion Base de distribution;VS
+3900;Brig Distributionsbasis;VS
 3600;Thun Dist Ba;BE
-2510;Biel/Bienne DistBa;BE
-8210;Schaffhausen DistB;SH
-9510;Wil SG Dist Ba;SG
+2510;Biel/Bienne Dist Ba;BE
+8210;Schaffhausen Dist Ba;SH
+9510;Wil SG Distributionsbasis;SG
 6593;Cadenazzo Dist Ba;TI
-1227;Carouge GE Dist;GE
-1225;Chêne-Bourg Dist;GE
+1227;Carouge GE Distribution;GE
+1225;ChÃªne-Bourg Distribution;GE
 1196;Gland Distribution;VD
-1218;Grand-Saconnex D;GE
-1213;Petit-Lancy Dist;GE
-1219;Le Lignon Dist;GE
-1217;Meyrin Dist;GE
-1290;Versoix Dist;GE
+1218;Grand-Saconnex Distribution;GE
+1213;Petit-Lancy Distribution;GE
+1219;Le Lignon Distribution;GE
+1217;Meyrin Distribution;GE
+1290;Versoix Distribution;GE
 1860;Aigle Distribution;VD
-1030;Bussigny Dist;VD
-1023;Crissier 1 Dist;VD
-2540;Grenchen 1 Zust;SO
+1030;Bussigny Distribution;VD
+1023;Crissier Distribution;VD
+2540;Grenchen 1 Zustellung;SO
 4410;Liestal Zustellung;BL
 4242;Laufen Zustellung;BL
-4132;Muttenz 1 Zust;BL
-4142;Münchenstein 1 Zus;BL
-4104;Oberwil BL Zust;BL
-4702;Oensingen Zust;SO
-4133;Pratteln 1 Zust;BL
-4125;Riehen 1 Zust;BS
-4153;Reinach BL Zust;BL
+4132;Muttenz 1 Zustellung;BL
+4142;MÃ¼nchenstein 1 Zustellung;BL
+4104;Oberwil BL Zustellung;BL
+4702;Oensingen Zustellung;SO
+4133;Pratteln 1 Zustellung;BL
+4125;Riehen 1 Zustellung;BS
+4153;Reinach BL Zustellung;BL
 4106;Therwil Zustellung;BL
-5620;Bremgarten 1 Zust;AG
-5600;Lenzburg Zust;AG
-4313;Möhlin Zustellung;AG
-4665;Oftringen 1 Zust;AG
-4310;Rheinfelden 1 Zust;AG
-8957;Spreitenbach Zust;AG
-5012;Schönenwerd Zust;SO
-5430;Wettingen 1 Zust;AG
-5610;Wohlen AG 1 Zust;AG
-4800;Zofingen Zust;AG
-6440;Brunnen Zust;SZ
+5620;Bremgarten AG 1 Zustellung;AG
+5600;Lenzburg Zustellung;AG
+4313;MÃ¶hlin Zustellung;AG
+4665;Oftringen 1 Zustellung;AG
+4310;Rheinfelden 1 Zustellung;AG
+8957;Spreitenbach Zustellung;AG
+5012;SchÃ¶nenwerd Zustellung;SO
+5430;Wettingen 1 Zustellung;AG
+5610;Wohlen AG 1 Zustellung;AG
+4800;Zofingen Zustellung;AG
+6440;Brunnen Zustellung;SZ
 6330;Cham Zustellung;ZG
 6030;Ebikon Zustellung;LU
-6020;Emmenbrücke 1 Zust;LU
-6390;Engelberg Zust;OW
-6410;Goldau Zust;SZ
-6052;Hergiswil NW Zust;NW
-6010;Kriens 2 Zust;LU
-6102;Malters Zust;LU
-6000;Luzern R'bühl Zust;LU
-6343;Rotkreuz Zust;ZG
-6430;Schwyz Zust;SZ
-6370;Stans Zust;NW
-6210;Sursee Zust;LU
-6130;Willisau Zust;LU
-1870;Monthey 1 Dist;VS
+6020;EmmenbrÃ¼cke 1 Zustellung;LU
+6390;Engelberg Zustellung;OW
+6410;Goldau Zustellung;SZ
+6052;Hergiswil NW Zustellung;NW
+6010;Kriens 2 Zustellung;LU
+6102;Malters Zustellung;LU
+6015;Luzern ReussbÃ¼hl Zustellung;LU
+6343;Rotkreuz Zustellung;ZG
+6430;Schwyz Zustellung;SZ
+6370;Stans Zustellung;NW
+6210;Sursee Zustellung;LU
+6130;Willisau Zustellung;LU
+1870;Monthey 1 Distribution;VS
 3280;Murten Zustellung;FR
-8134;Adliswil 1 Zust;ZH
-8910;Affoltern a.A.Zust;ZH
-8580;Amriswil Zust;TG
+8134;Adliswil 1 Zustellung;ZH
+8910;Affoltern am A. Zustellung;ZH
+8580;Amriswil Zustellung;TG
 9320;Arbon Zustellung;TG
-8903;Birmensdorf Zust;ZH
-9220;Bischofszell Zust;TG
-8180;Bülach Zust;ZH
-8157;Dielsdorf Zust;ZH
-8307;Effretikon Zust;ZH
+8903;Birmensdorf ZH Zustellung;ZH
+9220;Bischofszell Zustellung;TG
+8180;BÃ¼lach Zustellung;ZH
+8157;Dielsdorf Zustellung;ZH
+8307;Effretikon Zustellung;ZH
 8424;Embrach Zustellung;ZH
-8634;Hombrechtikon Zust;ZH
+8634;Hombrechtikon Zustellung;ZH
 1350;Orbe Distribution;VD
-8280;Kreuzlingen 1 Zust;TG
-8700;Küsnacht ZH Zust;ZH
-8708;Männedorf Zust;ZH
-8706;Meilen Zust;ZH
-1020;Renens VD 1 Dist;VD
-3960;Sierre Dist;VS
-8330;Pfäffikon ZH Zust;ZH
-8105;Regensdorf 1 Zust;ZH
+8280;Kreuzlingen 1 Zustellung;TG
+8700;KÃ¼snacht ZH Zustellung;ZH
+8708;MÃ¤nnedorf Zustellung;ZH
+8706;Meilen Zustellung;ZH
+1020;Renens VD 1 Distribution;VD
+3960;Sierre Distribution;VS
+8330;PfÃ¤ffikon ZH Zustellung;ZH
+8105;Regensdorf 1 Zustellung;ZH
 3930;Visp Zustellung;VS
-3963;C.-Montana 1 Dist;VS
+3963;Crans-Montana 1 Dist;VS
 3123;Belp Zustellung;BE
-8590;Romanshorn Zust;TG
-8630;Rüti ZH Zustellung;ZH
-8952;Schlieren Zust;ZH
-3714;Frutigen Zust;BE
-8712;Stäfa Zustellung;ZH
+8590;Romanshorn Zustellung;TG
+8630;RÃ¼ti ZH Zustellung;ZH
+8952;Schlieren Zustellung;ZH
+3714;Frutigen Zustellung;BE
+8712;StÃ¤fa Zustellung;ZH
 8800;Thalwil Zustellung;ZH
-3073;Gümligen Zust;BE
-3360;Hbuchsee Zust;BE
-8820;Wädenswil Zust;ZH
+3073;GÃ¼mligen Zustellung;BE
+3360;Herzogenbuchsee Zustellung;BE
+8820;WÃ¤denswil Zustellung;ZH
 8636;Wald ZH Zustellung;ZH
 4950;Huttwil Zustellung;BE
-8304;Wallisellen Zust;ZH
-3800;Interlaken Zust;BE
-8570;Weinfelden Zust;TG
-3303;Jegenstorf Zust;BE
-8126;Zumikon Zust;ZH
-8400;Winterthur 5 Zust;ZH
-8400;Winterthur 6 Zust;ZH
-3422;Kirchberg BE Zust;BE
-8400;Winterthur 8 Zust;ZH
-8000;Zürich 37 Zust;ZH
-4900;Langenthal 1 Zust;BE
-8000;Zürich 50 Zust;ZH
-9050;Appenzell Zust;AI
-9100;Herisau 1 Zust;AR
-6850;Mendrisio Dist;TI
-3053;M'buchsee Zust;BE
-3110;Münsingen Zust;BE
-3322;Urtenen-S Zust;BE
+8304;Wallisellen Zustellung;ZH
+3800;Interlaken Zustellung;BE
+8570;Weinfelden Zustellung;TG
+3303;Jegenstorf Zustellung;BE
+8126;Zumikon Zustellung;ZH
+8405;Winterthur 5 Zustellung;ZH
+8406;Winterthur 6 Zustellung;ZH
+3422;Kirchberg BE Zustellung;BE
+8408;Winterthur 8 Zustellung;ZH
+8037;ZÃ¼rich 37 Zustellung;ZH
+4900;Langenthal 1 Zustellung;BE
+8050;ZÃ¼rich 50 Zustellung;ZH
+9050;Appenzell Zustellung;AI
+9100;Herisau 1 Zustellung;AR
+6850;Mendrisio Distribuzione;TI
+3053;MÃ¼nchenbuchsee Zustellung;BE
+3110;MÃ¼nsingen Zustellung;BE
+3322;Urtenen-SchÃ¶nbÃ¼hl Zust;BE
 3700;Spiez Zustellung;BE
-3612;Steffisburg 1 Zust;BE
+3612;Steffisburg 1 Zustellung;BE
 3076;Worb Zustellung;BE
-3052;Zollikofen Zust;BE
+3052;Zollikofen Zustellung;BE
 8340;Hinwil Zustellung;ZH
-1212;Grand-Lancy Dist;GE
-8302;Kloten Zust;ZH
-9200;Gossau SG 1 Zust;SG
-2400;Le Locle Dist;NE
-2740;Moutier 1 Dist;BE
-4123;Allschwil Zust;BL
-4144;Arlesheim Zust;BL
-4710;Balsthal Zust;SO
-4102;Binningen 1 Zust;BL
-4127;Birsfelden Zust;BL
-4414;Füllinsdorf Zust;BL
-4563;Gerlafingen Zust;SO
-5200;Brugg AG 1 Zust;AG
+1212;Grand-Lancy 1 Distribution;GE
+8302;Kloten Zustellung;ZH
+9200;Gossau SG 1 Zustellung;SG
+2400;Le Locle Distribution;NE
+2740;Moutier 1 Distribution;BE
+4123;Allschwil Zustellung;BL
+4144;Arlesheim Zustellung;BL
+4710;Balsthal Zustellung;SO
+4102;Binningen 1 Zustellung;BL
+4127;Birsfelden Zustellung;BL
+4414;FÃ¼llinsdorf Zustellung;BL
+4563;Gerlafingen Zustellung;SO
+5200;Brugg AG 1 Zustellung;AG
 1274;Signy-Centre;VD
 9476;Fontnas;SG
 6000;Luzern 31;LU
 6000;Luzern 30 AAL;LU
-1200;Genève 5 Dépôt;GE
+1211;GenÃ¨ve 5 DÃ©pÃ´t;GE
 5018;Erlinsbach;AG
-2800;Delémont Dist Ba;JU
+2800;DelÃ©mont Dist Ba;JU
 1310;Daillens Dist Ba;VD
-1310;Daillens Centre Co;VD
-1530;Payerne Dist;VD
-1630;Bulle 1 Dist;FR
-3550;Langnau i. E. Zust;BE
-6460;Altdorf UR 2 Zust;UR
-7270;Davos Zust;GR
-3000;Bern 94;BE
-8000;Zürich;ZH
+1310;Daillens Centre Colis;VD
+1530;Payerne Distribution;VD
+1630;Bulle 1 Distribution;FR
+3550;Langnau i. E. Zustellung;BE
+6460;Altdorf UR 2 Zustellung;UR
+7270;Davos Zustellung;GR
+3000;Bern 94 UBS;BE
+8098;ZÃ¼rich;ZH
 1274;Signy;VD
-8000;Zürich;ZH
+8066;ZÃ¼rich;ZH
 3400;Burgdorf Dist Fil;BE
-4620;Härkingen PZ;SO
-4620;Härkingen Dist Ba;SO
-8183;Bülach Dist Ba;ZH
+4620;HÃ¤rkingen Paketzentrum;SO
+4620;HÃ¤rkingen Dist Ba;SO
+8183;BÃ¼lach Dist Ba;ZH
 8325;Effretikon Dist Ba;ZH
-8520;Frauenfeld PZ;TG
+8520;Frauenfeld Paketzentrum;TG
 8520;Frauenfeld Dist Ba;TG
 8343;Hinwil Dist Ba;ZH
 9442;Berneck Dist Ba;SG
 8564;Hefenhausen;TG
 8564;Wagerswil;TG
-8586;Buch b. Kümmertshs;TG
+8586;Buch b. KÃ¼mmertshausen;TG
 9565;Oberbussnang;TG
 2950;Courtemautruy;JU
 1347;Le Solliat;VD
 1148;Villars-Bozon;VD
 1304;Allens;VD
 9470;Buchs SG Dist Fil;SG
-8867;Niederurnen Dist F;GL
+8867;Niederurnen Dist Fil;GL
 7302;Landquart Dist Ba;GR
 3960;Sierre Dist Fil;VS
 1630;Bulle Dist Fil;FR
 1196;Gland Dist Fil;VD
-5624;Waldhäusern AG;AG
-8000;Zürich;ZH
-3000;Bern 65;BE
-1066;Epalinges Dist;VD
-1033;Cheseaux Dist;VD
+5624;WaldhÃ¤usern AG;AG
+8087;ZÃ¼rich;ZH
+3000;Bern 65 SBB;BE
+1066;Epalinges Distribution;VD
+1033;Cheseaux-Laus Distribution;VD
 3960;Niouc;VS
 4410;Liestal Dist Fil;BL
 1912;Produit (Leytron);VS
-1912;Montagnon (Leytron;VS
+1912;Montagnon (Leytron);VS
 1912;Dugny (Leytron);VS
 1914;Auddes-sur-Riddes;VS
-1932;Les Valettes;VS
-1933;Vens(Sembrancher);VS
-1933;Chamoille;VS
-1933;La Garde;VS
-1941;Cries (Vollèges);VS
-1945;Fontaine Dessus;VS
-1945;Fontaine Dessous;VS
+1932;Les Valettes (Bovernier);VS
+1933;Vens (Sembrancher);VS
+1933;Chamoille (Sembrancher);VS
+1933;La Garde (Sembrancher);VS
+1941;Cries (VollÃ¨ges);VS
+1945;Fontaine Dessus (Liddes);VS
+1945;Fontaine Dessous (Liddes);VS
 1945;Dranse (Liddes);VS
 1945;Chandonne (Liddes);VS
-1945;Rive Haute(Liddes);VS
-1945;Fornex(Liddes);VS
-1945;Les Moulins VS;VS
-1945;Vichères (Liddes);VS
+1945;Rive Haute (Liddes);VS
+1945;Fornex (Liddes);VS
+1945;Les Moulins VS (Liddes);VS
+1945;VichÃ¨res (Liddes);VS
 1945;Palasuit (Liddes);VS
-1945;Chez Petit(Liddes);VS
-1945;Petit Vichères;VS
+1945;Chez Petit (Liddes);VS
+1945;Petit VichÃ¨res (Liddes);VS
 1947;Champsec;VS
-1955;Les Vérines;VS
-1955;Némiaz (Chamoson);VS
+1955;Les VÃ©rines (Chamoson);VS
+1955;NÃ©miaz (Chamoson);VS
 1955;Grugnay (Chamoson);VS
-1965;Roumaz (Savièse);VS
-1965;Granois (Savièse);VS
-1965;St-Germain;VS
-1965;Ormône (Savièse);VS
-1965;Mayens-de-la-Zour;VS
+1965;Roumaz (SaviÃ¨se);VS
+1965;Granois (SaviÃ¨se);VS
+1965;St-Germain (SaviÃ¨se);VS
+1965;OrmÃ´ne (SaviÃ¨se);VS
+1965;Mayens-de-la-Zour (SaviÃ¨se);VS
 1966;Fortunau (Ayent);VS
 1966;Luc (Ayent);VS
 1966;St-Romain (Ayent);VS
@@ -4716,20 +4716,20 @@ zip_code;town;canton
 1969;Liez (St-Martin);VS
 1969;Trogne (St-Martin);VS
 1969;Suen (St-Martin);VS
-1971;Champlan;VS
+1971;Champlan (Grimisuat);VS
 1983;Lanna;VS
 1991;Arvillard (Salins);VS
-1991;Pravidondaz;VS
+1991;Pravidondaz (Salins);VS
 1991;Turin (Salins);VS
-1991;Misériez (Salins);VS
-1993;Clèbes (Nendaz);VS
+1991;MisÃ©riez (Salins);VS
+1993;ClÃ¨bes (Nendaz);VS
 1996;Brignon (Nendaz);VS
-1992;La Vernaz;VS
-1992;Crête-à-l'Oeil;VS
+1992;La Vernaz (Les Agettes);VS
+1992;CrÃªte-Ã -l'Oeil(Les Agettes);VS
 1996;Bieudron (Nendaz);VS
-1996;Condémines (Nendaz;VS
+1996;CondÃ©mines (Nendaz);VS
 1996;Saclentse;VS
-4000;Basel Reader's D.;BS
+4078;Basel Reader's Digest;BS
 1911;Mayens-de-Chamoson;VS
 1585;Cotterd;VD
 1873;Champoussin;VS
@@ -4737,78 +4737,78 @@ zip_code;town;canton
 2063;Saules;NE
 1873;Les Crosets;VS
 1095;Lutry Distribution;VD
-1052;Mont-Lausanne Dist;VD
-2013;Colombier NE Dist;NE
-2074;Marin-Epagnier Dis;NE
-2520;La Neuveville Dist;BE
-2720;Tramelan Dist;BE
-2610;St-Imier Dist;BE
-1580;Avenches Dist;VD
-1510;Moudon Dist;VD
-3186;Düdingen Zust;FR
-1680;Romont FR Dist;FR
-1844;Villeneuve VD Dist;VD
+1052;Le Mont-sur-Lausanne Dist;VD
+2013;Colombier NE Distribution;NE
+2074;Marin-Epagnier Distribution;NE
+2520;La Neuveville Distribution;BE
+2720;Tramelan Distribution;BE
+2610;St-Imier Distribution;BE
+1580;Avenches Distribution;VD
+1510;Moudon Distribution;VD
+3186;DÃ¼dingen Zustellung;FR
+1680;Romont FR Distribution;FR
+1844;Villeneuve VD Distribution;VD
 1880;Bex Distribution;VD
-1233;Bernex Dist;GE
-1214;Vernier Dist;GE
+1233;Bernex Distribution;GE
+1214;Vernier Distribution;GE
 1180;Rolle Distribution;VD
-1040;Echallens Dist;VD
-3150;Schwarzenburg Zust;BE
-3177;Laupen BE Zust;BE
-3210;Kerzers Zust;FR
-3294;Büren a.A. Zust;BE
-3415;Hasle-Rüegsau Zust;BE
-3855;Brienz BE Zust;BE
-3860;Meiringen Zust;BE
+1040;Echallens Distribution;VD
+3150;Schwarzenburg Zustellung;BE
+3177;Laupen BE Zustellung;BE
+3210;Kerzers Zustellung;FR
+3294;BÃ¼ren an der Aare Zust;BE
+3415;Hasle-RÃ¼egsau Zustellung;BE
+3855;Brienz BE Zustellung;BE
+3860;Meiringen Zustellung;BE
 4450;Sissach Zustellung;BL
-4460;Gelterkinden Zust;BL
+4460;Gelterkinden Zustellung;BL
 4512;Bellach Zustellung;SO
-4663;Aarburg Zust;AG
-4614;Hägendorf Zust;SO
-5036;Oberentfelden Zust;AG
+4663;Aarburg Zustellung;AG
+4614;HÃ¤gendorf Zustellung;SO
+5036;Oberentfelden Zustellung;AG
 5070;Frick Zustellung;AG
-5734;Reinach AG Zust;AG
-5722;Gränichen Zust;AG
+5734;Reinach AG Zustellung;AG
+5722;GrÃ¤nichen Zustellung;AG
 5630;Muri AG Zustellung;AG
-6280;Hochdorf Zust;LU
-6110;Wolhusen Zust;LU
+6280;Hochdorf Zustellung;LU
+6110;Wolhusen Zustellung;LU
 6260;Reiden Zustellung;LU
-6314;Unterägeri Zust;ZG
-6060;Sarnen 2 Zust;OW
-6403;Küssnacht SZ Zust;SZ
-8965;Berikon 1 Zust;AG
-8132;Egg ZH Zust;ZH
-8260;Stein a.Rh. 1 Zust;SH
+6314;UnterÃ¤geri Zustellung;ZG
+6060;Sarnen 2 Zustellung;OW
+6403;KÃ¼ssnacht am Rigi Zust;SZ
+8965;Berikon 1 Zustellung;AG
+8132;Egg b. ZÃ¼rich Zustellung;ZH
+8260;Stein am Rhein 1 Zustellung;SH
 8730;Uznach Zustellung;SG
-8808;Pfäffikon SZ Zust;SZ
-8832;Wollerau Zust;SZ
-8840;Einsiedeln Zust;SZ
-8854;Siebnen Zust;SZ
+8808;PfÃ¤ffikon SZ Zustellung;SZ
+8832;Wollerau Zustellung;SZ
+8840;Einsiedeln Zustellung;SZ
+8854;Siebnen Zustellung;SZ
 8750;Glarus Zustellung;GL
-9230;Flawil 1 Zust;SG
+9230;Flawil 1 Zustellung;SG
 9240;Uzwil Zustellung;SG
-9630;Wattwil Zust;SG
-9053;Teufen AR Zust;AR
+9630;Wattwil Zustellung;SG
+9053;Teufen AR Zustellung;AR
 9410;Heiden Zustellung;AR
-9450;Altstätten SG Zust;SG
-9424;Rheineck Zust;SG
-9435;Heerbrugg Zust;SG
-9430;St.Margrethen Zust;SG
-9470;Buchs SG 1 Zust;SG
-7013;Domat/Ems Zust;GR
-7302;Landquart Zust;GR
+9450;AltstÃ¤tten SG Zustellung;SG
+9424;Rheineck Zustellung;SG
+9435;Heerbrugg Zustellung;SG
+9430;St. Margrethen SG Zust;SG
+9470;Buchs SG 1 Zustellung;SG
+7013;Domat/Ems Zustellung;GR
+7302;Landquart Zustellung;GR
 7320;Sargans Zustellung;SG
-7310;Bad Ragaz Zust;SG
+7310;Bad Ragaz Zustellung;SG
 8887;Mels Zustellung;SG
 8890;Flums Zustellung;SG
 7503;Samedan Zustellung;GR
-1222;Vésenaz Dist;GE
-1965;Monteiller;VS
-9000;St. Gallen;SG
-4600;Olten;SO
+1222;VÃ©senaz Distribution;GE
+1965;Monteiller (SaviÃ¨se);VS
+9024;St. Gallen Presse-Serv.GÃ¼ll;SG
+4609;Olten Sonderdienste;SO
 1772;Nierlet-les-Bois;FR
-8000;Zürich 15;ZH
-1818;Montreux Redoute;VD
+8015;ZÃ¼rich 15;ZH
+1818;Montreux La Redoute;VD
 1787;Mur (Vully) FR;FR
 1892;Morcles;VD
 2074;Marin-Centre;NE
@@ -4816,8 +4816,8 @@ zip_code;town;canton
 9479;Malans SG;SG
 8540;Frauenfeld ST PP 1;TG
 8530;Frauenfeld CALL;TG
-4640;Härkingen ST PP 1;SO
-4630;Härkingen CALL;SO
+4640;HÃ¤rkingen ST PP 1;SO
+4630;HÃ¤rkingen CALL;SO
 1330;Daillens CALL;VD
 1320;Daillens ST PP 1;VD
 6010;Kriens 1;LU
@@ -4825,10 +4825,10 @@ zip_code;town;canton
 6010;Kriens 2;LU
 1897;Port-Valais;VS
 6500;Bellinzona VZ;TI
-8000;Zürich PV;ZH
+8080;ZÃ¼rich PV;ZH
 3989;Grafschaft;VS
 2500;Biel/Bienne 10;BE
-1200;Genève 18;GE
+1200;GenÃ¨ve 18;GE
 8564;Hattenhausen;TG
 3000;Bern 90;BE
 1440;Montagny-Chamard;VD
@@ -4837,334 +4837,334 @@ zip_code;town;canton
 9249;Oberstetten;SG
 9249;Niederstetten;SG
 8564;Gunterswilen;TG
-1806;St-Légier Dist;VD
-3815;Gündlischwand;BE
+1806;St-LÃ©gier/Blonay Dist;VD
+3815;GÃ¼ndlischwand;BE
 1023;Crissier 2;VD
 1023;Crissier 1;VD
 3860;Schattenhalb;BE
 2610;Les Pontins;BE
 1617;Tatroz;FR
-8000;Zürich;ZH
+8075;ZÃ¼rich;ZH
 1096;Villette (Lavaux);VD
-4000;Basel;BS
+4080;Basel;BS
 6383;Wirzweli;NW
 2333;La Cibourg;BE
 2616;La Cibourg;BE
 8556;Lamperswil TG;TG
 6039;Root D4;LU
 2037;Montezillon;NE
-3000;Bern 7 Bärenplatz;BE
+3000;Bern 7 BÃ¤renplatz;BE
 1820;Territet;VD
 3963;Crans-Montana 1;VS
 3963;Crans-Montana 2;VS
 6939;Arosio-Mugena;TI
-8253;Diessenhofen Zust;TG
+8253;Diessenhofen Zustellung;TG
 2338;Muriaux;JU
 2748;Les Ecorcheresses;BE
 6830;Chiasso 1 ZF;TI
 6900;Lugano MailSource;TI
-1162;St-Prex Dist;VD
+1162;St-Prex Distribution;VD
 8615;Freudwil;ZH
 6422;Steinen Zustellung;SZ
-5415;Nussbaumen AG Zust;AG
-3661;Uetendorf Zust;BE
-3770;Zweisimmen Zust;BE
-3775;Lenk i. S. Zust;BE
-1223;Cologny Dist;GE
-1964;Conthey Dist;VS
-3454;Sumiswald Zust;BE
-6710;Biasca Dist;TI
-6963;Pregassona Dist;TI
+5415;Nussbaumen AG Zustellung;AG
+3661;Uetendorf Zustellung;BE
+3770;Zweisimmen Zustellung;BE
+3775;Lenk i. S. Zustellung;BE
+1223;Cologny Distribution;GE
+1964;Conthey Distribution;VS
+3454;Sumiswald Zustellung;BE
+6710;Biasca Distribuzione;TI
+6963;Pregassona Distribuzione;TI
 3920;Zermatt Zustellung;VS
 1969;Eison (St-Martin);VS
-3977;Granges VS Dist;VS
-4000;Basel 34 Breite;BS
-4000;Basel;BS
-1618;Châtel-Denis Dist;FR
-1805;Jongny Dist;VD
-1965;Savièse Dist;VS
-8606;Nänikon Zust;ZH
-1450;Ste-Croix Dist;VD
+3977;Granges VS Distribution;VS
+4034;Basel 34 Breite;BS
+4035;Basel 35 BÃ¤umlihof;BS
+1618;ChÃ¢tel-St-Denis Dist;FR
+1805;Jongny Distribution;VD
+1965;SaviÃ¨se Distribution;VS
+8606;NÃ¤nikon Zustellung;ZH
+1450;Ste-Croix Distribution;VD
 3623;Buchen BE;BE
 4588;Brittern;SO
-4416;Bubendorf Zust;BL
-4000;Basel;BS
-9545;Wängi Zustellung;TG
-9463;Oberriet SG Zust;SG
-9113;Degersheim Zust;SG
-8762;Schwanden GL Zust;GL
+4416;Bubendorf Zustellung;BL
+4089;Basel SPILOG;BS
+9545;WÃ¤ngi Zustellung;TG
+9463;Oberriet SG Zustellung;SG
+9113;Degersheim Zustellung;SG
+8762;Schwanden GL Zustellung;GL
 8472;Seuzach Zustellung;ZH
 6330;Cham 1;ZG
 5415;Hertenstein AG;AG
 5415;Rieden AG;AG
-8596;Münsterlingen;TG
-8000;Zürich;ZH
+8596;MÃ¼nsterlingen;TG
+8068;ZÃ¼rich;ZH
 9604;Unterrindal;SG
-3071;Ostermundigen Zust;BE
+3071;Ostermundigen Zustellung;BE
 2013;Boudry Dist Ba;NE
-9444;Diepoldsau Zust;SG
-4000;Basel;BS
+9444;Diepoldsau Zustellung;SG
+4033;Basel 33 Novartis;BS
 8902;Urdorf Dist Ba;ZH
-8902;Urdorf Sortierst.;ZH
-3976;Champzabé;VS
-3072;Omundigen Rüti Fä;BE
-3039;Bern PF OC;BE
-4000;Basel PF OC;BL
+8902;Urdorf Sortierstelle;ZH
+3976;ChampzabÃ©;VS
+3072;Ostermundigen RÃ¼ti FÃ¤cher;BE
+3039;Bern PF Operations Center;BE
+4042;Basel PF Operations Center;BL
 3983;Greich;VS
-1816;Chailly Dist;VD
-8240;Thayngen Zust;SH
-3436;Zollbrück Zust;BE
+1816;Chailly-Montreux Dist;VD
+8240;Thayngen Zustellung;SH
+3436;ZollbrÃ¼ck Zustellung;BE
 3537;Eggiwil Zustellung;BE
-3627;Heimberg Zust;BE
-3715;Adelboden Zust;BE
+3627;Heimberg Zustellung;BE
+3715;Adelboden Zustellung;BE
 3780;Gstaad Zustellung;BE
-3818;Grindelwald Zust;BE
-5242;Birr-Lupfig Zust;AG
-5312;Döttingen Zust;AG
-5605;Dottikon Zust;AG
+3818;Grindelwald Zustellung;BE
+5242;Birr-Lupfig Zustellung;AG
+5312;DÃ¶ttingen Zustellung;AG
+5605;Dottikon Zustellung;AG
 5703;Seon Zustellung;AG
-5726;Unterkulm Zust;AG
-6023;Rothenburg Zust;LU
+5726;Unterkulm Zustellung;AG
+6023;Rothenburg Zustellung;LU
 6037;Root Zustellung;LU
-6043;Adligenswil Zust;LU
+6043;Adligenswil Zustellung;LU
 6045;Meggen Zustellung;LU
 6055;Alpnach Zustellung;OW
 6374;Buochs Zustellung;NW
-3071;Ostermundi Dist Ba;BE
-8000;Zürich;ZH
-1347;Le Sentier Dist;VD
+3071;Ostermundigen Dist Ba;BE
+8081;ZÃ¼rich Helsana;ZH
+1347;Le Sentier Distribution;VD
 9494;Schaan Zustellung;FL
-8901;Urdorf;ZH
-8546;Menzengrüt;ZH
+8901;Urdorf RRD;ZH
+8546;MenzengrÃ¼t;ZH
 4665;Oftringen SPN;AG
-8450;Andelfingen Zust;ZH
-2035;Corcelles NE Dist;NE
+8450;Andelfingen Zustellung;ZH
+2035;Corcelles NE Distribution;NE
 3175;Flamatt Zustellung;FR
 6017;Ruswil Zustellung;LU
-6162;Entlebuch Zust;LU
-6170;Schüpfheim Zust;LU
-6182;Escholzmatt Zust;LU
-8722;Kaltbrunn Zust;SG
+6162;Entlebuch Zustellung;LU
+6170;SchÃ¼pfheim Zustellung;LU
+6182;Escholzmatt Zustellung;LU
+8722;Kaltbrunn Zustellung;SG
 8494;Bauma Zustellung;ZH
 6204;Sempach Stadt;LU
-7078;Lenzerheide Zust;GR
-3041;Bern;BE
-4000;Basel;BS
-8107;Buchs ZH Zust;ZH
-8488;Turbenthal Zust;ZH
-8907;Wettswil Zust;ZH
-8932;Mettmenstetten Zus;ZH
-7050;Arosa Zust;GR
+7078;Lenzerheide Zustellung;GR
+3041;Bern UBS;BE
+4041;Basel UBS;BS
+8107;Buchs ZH Zustellung;ZH
+8488;Turbenthal Zustellung;ZH
+8907;Wettswil Zustellung;ZH
+8932;Mettmenstetten Zustellung;ZH
+7050;Arosa Zustellung;GR
 9489;Schaan Log;FL
-3053;Lätti;BE
+3053;LÃ¤tti;BE
 3256;Seewil;BE
-4551;Derendingen;SO
-1934;Le Châble VS Dist;VS
-1071;Chexbres Dist;VD
-1854;Leysin Dist;VD
+4551;Derendingen Swisscom;SO
+1934;Le ChÃ¢ble VS Distribution;VS
+1071;Chexbres Distribution;VD
+1854;Leysin Distribution;VD
 8135;Sihlwald;ZH
-8152;Glattpark(Opfikon);ZH
-1200;Genève 94 UBS;GE
-1607;Palézieux Dist;VD
+8152;Glattpark (Opfikon);ZH
+1211;GenÃ¨ve 94 UBS;GE
+1607;PalÃ©zieux Distribution;VD
 5645;Fenkrieden;AG
-4000;Basel;BS
-9000;St. Gallen;SG
-8820;Wädenswil Dist Ba;ZH
+4075;Basel;BS
+9022;St. Gallen;SG
+8820;WÃ¤denswil Dist Ba;ZH
 5400;Baden IM;AG
-9602;Bazenheid Zust;SG
+9602;Bazenheid Zustellung;SG
 7430;Thusis Zustellung;GR
 7130;Ilanz Zustellung;GR
-1926;Fully Dist;VS
-1296;Coppet Dist;VD
+1926;Fully Distribution;VS
+1296;Coppet Distribution;VD
 1782;Formangueires;FR
 7513;Silvaplana-Surlej;GR
-7250;Klosters Zust;GR
+7250;Klosters Zustellung;GR
 8543;Gundetswil;ZH
-4000;Basel SPI GLS;BS
+4089;Basel SPI GLS Retour;BS
 3940;Steg-Gampel;VS
 8109;Kloster Fahr;AG
-1000;Lausanne;VD
+1019;Lausanne Services spÃ©ciaux;VD
 1039;Cheseaux Polyval;VD
 6346;Baar 3;ZG
-6331;Hünenberg Zust;ZG
+6331;HÃ¼nenberg Zustellung;ZG
 6346;Baar 3 Dist Ba;ZG
-3085;Wabern Weihnachten;BE
-1200;Genève 73;GE
+3085;Wabern 2 x Weihnachten;BE
+1211;GenÃ¨ve 73;GE
 5610;Dintikon LCD;AG
-8952;Schlieren DS;ZH
-1300;Eclépens CC;VD
-1950;Sion CLVTR;VS
-3050;Bern DS;BE
-3070;Ostermundigen LZB;BE
-4000;Basel LZB;BS
-4621;Härkingen BZ;SO
-6010;Kriens LZB;LU
-6590;Cadenazzo (CLL);TI
-7000;Chur LRV;GR
-8000;Zürich SPS AG;ZH
-9200;Gossau SG LZB;SG
-4702;Oensingen Hub;SO
-9494;Schaan BZ;FL
+8952;Schlieren DocumentServices;ZH
+1300;EclÃ©pens Centre Courrier;VD
+1951;Sion Centre logistique;VS
+3050;Bern DocumentServices;BE
+3070;Ostermundigen (LZB);BE
+4002;Basel Logistikzentrum;BS
+4621;HÃ¤rkingen Briefzentrum;SO
+6010;Kriens Logistikzentrum;LU
+6590;Cadenazzo Centro logistico;TI
+7000;Chur Logistikzentrum;GR
+8010;ZÃ¼rich-MÃ¼lligen SPS AG;ZH
+9200;Gossau SG Logistikzentrum;SG
+4702;Oensingen Hub SecurePost;SO
+9494;Schaan Betriebszentrum;FL
 1148;La Coudre;VD
-1919;Martigny Mutuel;VS
-8000;Zürich IBRS local;ZH
+1919;Martigny Groupe Mutuel;VS
+8096;ZÃ¼rich IBRS local;ZH
 1920;Martigny Gare CFF;VS
-1000;Lausanne Sozialb.;VD
-1700;Fribourg PF Fil.;FR
-4808;Zofingen PF;AG
-4800;Zofingen PFinance;AG
+1001;Lausanne Sozialberatung;VD
+1700;Fribourg PostFinance Fil.;FR
+4808;Zofingen PostFinance;AG
+4800;Zofingen PostFinance;AG
 3400;Burgdorf Filiale;BE
-4807;Zofingen PF;AG
-8000;Zürich BZI;ZH
-1311;Eclépens SC;VD
-4611;Härkingen SC;SO
-8000;Zürich Mülligen SC;ZH
-8000;Zürich BZ AST;ZH
-8000;Zürich;ZH
-8362;Bichelsee-Baltersw;TG
-8352;Ricketwil;ZH
-4310;Rheinfelden SPI;AG
-4133;Pratteln SPI;BL
-6333;Hünenberg See;ZG
-4621;Härkingen SPS AG;SO
-4809;Zofingen PF;AG
-3400;Burgdorf PF mob;BE
-4809;Zofingen PF UBS;AG
-6039;Root Längenbold SH;LU
-8000;Zürich 59 EO;ZH
-8000;Zürich 59 Ausland;ZH
+4807;Zofingen PostFinance;AG
+8010;ZÃ¼rich-MÃ¼lligen BZI;ZH
+1311;EclÃ©pens Scanning-Center;VD
+4611;HÃ¤rkingen Scanning-Center;SO
+8011;ZÃ¼rich MÃ¼lligen SC;ZH
+8010;ZÃ¼rich BZ Annahme;ZH
+8060;ZÃ¼rich;ZH
+8362;Bichelsee-Balterswil;TG
+8352;Ricketwil (Winterthur);ZH
+4310;Rheinfelden SPI Logistics A;AG
+4133;Pratteln SPI Logistics;BL
+6333;HÃ¼nenberg See;ZG
+4621;HÃ¤rkingen SPS AG;SO
+4809;Zofingen Postfinance UBS;AG
+3400;Burgdorf PostFinance mob;BE
+4809;Zofingen PF UBS Verarb.;AG
+6039;Root LÃ¤ngenbold SH;LU
+8059;ZÃ¼rich 59 Exchange Office;ZH
+8059;ZÃ¼rich 59 Ausland;ZH
 8545;Rickenbach Sulz;ZH
 8543;Kefikon ZH;ZH
 8310;Grafstal;ZH
 8465;Wildensbuch;ZH
-3000;Bern Zustellung;BE
-8471;Oberwil (Dägerlen);ZH
-8471;Berg (Dägerlen);ZH
-8471;Bänk (Dägerlen);ZH
+3017;Bern Zustellung;BE
+8471;Oberwil (DÃ¤gerlen);ZH
+8471;Berg (DÃ¤gerlen);ZH
+8471;BÃ¤nk (DÃ¤gerlen);ZH
 9494;Schaan BZ GKS;FL
 9301;Wittenbach;SG
-1300;Eclépens CC Dépôt;VD
+1300;EclÃ©pens CC DÃ©pÃ´t;VD
 8412;Riet (Neftenbach);ZH
-8412;Hünikon;ZH
-6511;Cadenazzo SC;TI
-8000;Zürich Voice Pub;ZH
-8000;Zürich Oerlikon DB;ZH
-6430;Schwyz SKB;SZ
+8412;HÃ¼nikon (Neftenbach);ZH
+6511;Cadenazzo Scanning-Center;TI
+8074;ZÃ¼rich Voice Publishing;ZH
+8050;ZÃ¼rich Oerlikon DB PickPost;ZH
+6430;Schwyz Kantonalbank;SZ
 5643;Meienberg;AG
 3823;Kleine Scheidegg;BE
 3823;Eigergletscher;BE
-1532;Fétigny Dist Fil;FR
+1532;FÃ©tigny Dist Fil;FR
 1880;Bex Dist Fil;VD
-3000;Bern;BE
+3029;Bern;BE
 8200;Schaffhausen PF;SH
 1860;Aigle Gare CFF;VD
-6500;Bellinzona FFS;TI
+6500;Bellinzona Stazione FFS;TI
 5200;Brugg Bahnhof SBB;AG
-6440;Brunnen SBB;SZ
+6440;Brunnen Bahnhof SBB;SZ
 9471;Buchs Bahnhof SBB;SG
-8180;Bülach Bahnhof SBB;ZH
-6830;Chiasso FFS;TI
-8953;Dietikon SBB;ZH
-8307;Effretikon SBB;ZH
-7302;Landquart SBB;GR
-5600;Lenzburg SBB;AG
-4410;Liestal SBB;BL
-6600;Locarno FFS;TI
+8180;BÃ¼lach Bahnhof SBB;ZH
+6830;Chiasso Stazione FFS;TI
+8953;Dietikon Bahnhof SBB;ZH
+8307;Effretikon Bahnhof SBB;ZH
+7302;Landquart Bahnhof SBB;GR
+5600;Lenzburg Bahnhof SBB;AG
+4410;Liestal Bahnhof SBB;BL
+6600;Locarno Stazione FFS;TI
 1260;Nyon Gare CFF;VD
-4702;Oensingen SBB;SO
-8808;Pfäffikon SBB;SZ
+4702;Oensingen Bahnhof SBB;SO
+8808;PfÃ¤ffikon Bahnhof SBB;SZ
 1020;Renens Gare CFF;VD
-4310;Rheinfelden SBB;AG
-6343;Rotkreuz SBB;ZG
-8630;Rüti Bahnhof SBB;ZH
-4500;Solothurn SBB;SO
+4310;Rheinfelden Bahnhof SBB;AG
+6343;Rotkreuz Bahnhof SBB;ZG
+8630;RÃ¼ti Bahnhof SBB;ZH
+4500;Solothurn Bahnhof SBB;SO
 6210;Sursee Bahnhof SBB;LU
-8800;Thalwil SBB;ZH
+8800;Thalwil Bahnhof SBB;ZH
 3930;Visp Bahnhof SBB;VS
-1400;Yverdon CFF;VD
-8866;Ziegelbrücke SBB;GL
-4800;Zofingen SBB;AG
-8820;Wädenswil SBB;ZH
-6300;Zug Bahnhof SBB;ZG
-6900;Lugano FSS;TI
-3000;Bern Brünnen;BE
-3000;Bern LOGIPV;BE
-4621;Härkingen Briefkl.;SO
-9050;Appenzell Eggerst.;AI
-9050;Appenzell Enggenh.;AI
-9050;Appenzell Meister.;AI
+1400;Yverdon-les-Bains Gare CFF;VD
+8866;ZiegelbrÃ¼cke Bahnhof SBB;GL
+4800;Zofingen Bahnhof SBB;AG
+8820;WÃ¤denswil Bahnhof SBB;ZH
+6304;Zug Bahnhof SBB;ZG
+6900;Lugano Stazione FSS;TI
+3000;Bern BrÃ¼nnen;BE
+3030;Bern Logistikcenter;BE
+4621;HÃ¤rkingen BZ Briefklinik;SO
+9050;Appenzell Eggerstanden;AI
+9050;Appenzell EnggenhÃ¼tten;AI
+9050;Appenzell MeistersrÃ¼te;AI
 9050;Appenzell Steinegg;AI
 9050;Appenzell Schlatt;AI
 9057;Wasserauen;AI
 9108;Gontenbad;AI
 6000;Luzern 1 PF;LU
 9108;Jakobsbad;AI
-9442;Büriswilen;AI
-3070;Ostermundigen BHS;BE
+9442;BÃ¼riswilen;AI
+3070;Ostermundigen LZB BHS-AF;BE
 7110;Peiden;GR
-8000;Zürich;ZH
-1300;Eclépens SAB;VD
-6595;Riazzino Dist;TI
-6987;Caslano Dist;TI
-6593;Cadenazzo Dist;TI
-5506;Mägenwil Dist Ba;AG
-5506;Mägenwil GKA;AG
-5506;Mägenwil PL Hub;AG
-5506;Mägenwil HUB;AG
+8012;ZÃ¼rich;ZH
+1300;EclÃ©pens SAB;VD
+6595;Riazzino Distribuzione;TI
+6987;Caslano Distribuzione;TI
+6593;Cadenazzo Distribuzione;TI
+5506;MÃ¤genwil Dist Ba;AG
+5506;MÃ¤genwil GKA;AG
+5506;MÃ¤genwil PL Hub SK Blitz;AG
+5506;MÃ¤genwil HUB;AG
 1356;La Russille;VD
-8307;Effretikon PAG;ZH
+8307;Effretikon PostAuto AG;ZH
 9245;Sonnental;SG
-1227;Genève Carouge;GE
-4310;Rheinfelden PAuto;AG
-8000;Zürich BZI DE;ZH
-1000;Lausanne Ouchy;VD
-1000;Lausanne Centre;VD
-1032;Romanel Shell;VD
-2802;Develier PostAuto;JU
-4000;Basel Shell;BS
+1227;GenÃ¨ve Carouge PostFinance;GE
+4310;Rheinfelden PostAuto AG;AG
+8010;ZÃ¼rich BZI DE;ZH
+1006;Lausanne Parking d'Ouchy;VD
+1003;Lausanne Parking du Centre;VD
+1032;Romanel-sur-Lausanne Shell;VD
+2802;Develier PostAuto AG;JU
+4053;Basel Shell Dreispitz;BS
 4106;Therwil Shell;BL
-8000;Zürich Tbrunnen;ZH
-8000;Zürich West SPS;ZH
+8008;ZÃ¼rich Tiefenbrunnen SBB;ZH
+8080;ZÃ¼rich West SPS;ZH
 8302;Kloten Bahnhof SBB;ZH
-2340;Le Noirmont Dist;JU
-1000;Lausanne PF;VD
-6000;Luzern 2;LU
+2340;Le Noirmont Distribution;JU
+1003;Lausanne Terreaux PF;VD
+6000;Luzern 2 UniversitÃ¤t;LU
 1219;Lignon B&V GK;GE
 1219;Lignon B&V GK 2;GE
 3206;Ferenbalm;BE
 3206;Biberen;BE
 3206;Gammen;BE
 4800;Zofingen B&V GK;AG
-5400;Baden B&V GK 2;AG
-5400;Baden B&V GK;AG
+5405;Baden B&V GK 2;AG
+5405;Baden B&V GK;AG
 8852;Altendorf B&V GK;SZ
 8852;Altendorf B&V GK 2;SZ
-4204;Himmelried Pauto;SO
+4204;Himmelried PostAuto AG;SO
 7000;Chur B&V GK 2;GR
 7000;Chur B&V GK;GR
 8305;Dietlikon Shell;ZH
-8153;Rümlang Shell;ZH
+8153;RÃ¼mlang Tankstelle Shell;ZH
 1762;Givisiez PickPost;FR
-2360;Le Bémont JU;JU
+2360;Le BÃ©mont JU;JU
 2362;Montfaucon;JU
 2362;Montfavergier;JU
 2363;Les Enfers;JU
 2364;St-Brais;JU
-3000;Bern KC PK 4;BE
-3000;Bern KC PK 5;BE
-6010;Kriens KC PGGK2;LU
-9000;St. Gall. KC PKGK5;SG
+3030;Bern KC PK 4;BE
+3030;Bern KC PK 5;BE
+6010;Kriens KC PG/GK 2;LU
+9020;St. Gallen KC PKGK 5;SG
 6000;Luzern Bahnhof SBB;LU
 4600;Olten Personal;SO
-8000;Zürich Enge;ZH
-1905;Dorénaz PA;VS
-1000;Lausanne PF331-120;VD
-1000;Lausanne PF331-140;VD
-1000;Lausanne Jurassien;VD
-4800;Zofi. KC PKGK 3;AG
-8000;Zürich Kanton An.;ZH
-8000;Zürich Helsana;ZH
-8000;Zürich CS Annahme;ZH
+8002;ZÃ¼rich Enge PF Filiale;ZH
+1905;DorÃ©naz PostAuto AG Schweiz;VS
+1001;Lausanne PF 331-120;VD
+1001;Lausanne PF 331-140;VD
+1001;Lausanne Arc Jurassien;VD
+4800;Zofingen KC PK/GK 3;AG
+8010;ZÃ¼rich Kanton Annahme;ZH
+8010;ZÃ¼rich Helsana Annahme;ZH
+8010;ZÃ¼rich CS Annahme;ZH
 9030;St. Josefen;SG
 8723;Maseltrangen;SG
 1000;Lausanne CT;VD
@@ -5172,120 +5172,120 @@ zip_code;town;canton
 8970;Urdorf Exchange;ZH
 1984;La Tour VS;VS
 1985;La Forclaz VS;VS
-1985;Villa (Evolène);VS
-1400;Yverdon Conseil;VD
-1920;Martigny PF;VS
+1985;Villa (EvolÃ¨ne);VS
+1401;Yverdon Conseil et vente;VD
+1920;Martigny PostFinance;VS
 3071;Ostermundigen KATA;BE
 5412;Vogelsang AG;AG
 8645;Jona Buech Gewerbe;SG
-5400;Baden Täfern;AG
-4621;Härkingen BZ FP;SO
-1300;Eclépens CC AP;VD
+5405;Baden TÃ¤fern Gewerbe;AG
+4621;HÃ¤rkingen BZ FP;SO
+1300;EclÃ©pens CC AP;VD
 1997;Sornard (Nendaz);VS
-8810;Horgen Bhf Oberd.;ZH
+8812;Horgen Bahnhof Oberdorf;ZH
 9533;Dietschwil;SG
-2300;La Chx-de-F. Combe;NE
-8162;Sünikon;ZH
+2301;La Chx-de-F. Combe-Ã -l'Ours;NE
+8162;SÃ¼nikon;ZH
 8332;Rumlikon;ZH
-8322;Gündisau;ZH
+8322;GÃ¼ndisau;ZH
 8371;Busswil TG;TG
-3930;Visp Verkauf;VS
-4621;Härkingen SPS DO;SO
-4800;Zofi. KC PKGK4;AG
+3930;Visp Verkaufssupport;VS
+4621;HÃ¤rkingen SPS DO;SO
+4800;Zofingen KC PK/GK 4;AG
 6023;Rothenburg DIST BA;LU
-4800;Zofi. KC PKGK 5;AG
-3072;Ostermundigen Ober;BE
-1300;Eclépens Clinique;VD
-8000;Zürich Briefklinik;ZH
+4800;Zofingen KC PK/GK 5;AG
+3072;Ostermundigen Oberdorf;BE
+1300;EclÃ©pens Clinique;VD
+8010;ZÃ¼rich BZ Brieflklinik;ZH
 7212;Seewis-Pardisla;GR
 7212;Seewis-Schmitten;GR
-8000;Zürich Nord VZ;ZH
+8050;ZÃ¼rich Nord VZ;ZH
 8340;Hinwil VZ;ZH
 8212;Neuhausen Rundbuck;SH
-9000;St. Gallen;SG
-4144;Arlesheim Hub;BL
+9023;St. Gallen;SG
+4144;Arlesheim Postlogistics Hub;BL
 4800;Zofingen KC PK 2;AG
-1200;Genève Les Acacias;GE
+1200;GenÃ¨ve Les Acacias;GE
 5000;Aarau Altstadt;AG
-1920;Martigny PF331-130;VS
+1920;Martigny PF 331-130;VS
 1000;Lausanne 10;VD
 1000;Lausanne 18;VD
-3075;Vielbringen Worb;BE
+3075;Vielbringen b. Worb;BE
 1800;Vevey Orient;VD
 6000;Luzern Altstadt;LU
 8574;Lengwil;TG
-8574;Dettighofen Lengw.;TG
-1663;Gruyères V. Ville;FR
+8574;Dettighofen (Lengwil);TG
+1663;GruyÃ¨res Vieille Ville;FR
 1762;Givisiez DB AFP;FR
 1880;Les Posses-sur-Bex;VD
 6590;Cadenazzo CLL AP;TI
 9200;Gossau SG LZB FP;SG
 1953;Sion RZ;VS
-8000;Zürich;ZH
+8030;ZÃ¼rich;ZH
 8155;Nassenwil;ZH
 4800;Zofingen Abg. St;AG
-1345;Le Séchey;VD
+1345;Le SÃ©chey;VD
 1580;Donatyre;VD
 1721;Cournillens;FR
-8000;Zürich Asendia;ZH
-5225;Bözberg;AG
+8006;ZÃ¼rich Asendia;ZH
+5225;BÃ¶zberg;AG
 3961;Mission;VS
-4600;Olten 4 Hammer;SO
+4604;Olten 4 Hammer;SO
 1310;Daillens PL3;VD
-1532;Fétigny PL3;FR
-3000;Bern PL3;BE
+1532;FÃ©tigny PL3;FR
+3030;Bern PL3;BE
 4133;Pratteln PL3;BL
 4665;Oftringen PL3;AG
 4704;Niederbipp PL3;BE
-5506;Mägenwil PL3;AG
+5506;MÃ¤genwil PL3i;AG
 5606;Dintikon PL3;AG
 5612;Villmergen PL3;AG
 6593;Cadenazzo PL3;TI
 8422;Pfungen PL3;ZH
 8902;Urdorf PL3;ZH
-4500;Solothurn;SO
-2300;La Chaux-de-Fonds;NE
-1965;Diolly (Savièse);VS
-1965;La Muraz (Savièse);VS
-6010;Kriens ContCent;LU
+4504;Solothurn;SO
+2305;La Chaux-de-Fonds;NE
+1965;Diolly (SaviÃ¨se);VS
+1965;La Muraz (SaviÃ¨se);VS
+6010;Kriens Contact Center;LU
 8580;Biessenhofen;TG
 1232;Confignon Cressy;GE
-5312;Döttingen-Klingnau;AG
-4000;Basel;BS
+5312;DÃ¶ttingen-Klingnau;AG
+4028;Basel;BS
 6203;Sempach Bahnhof GK;LU
 8509;Frauenfeld;TG
 8970;Urdorf Exchange PL;ZH
-3000;Bern PAS;BE
+3030;Bern PAS;BE
 5313;Klingnau Wiesenweg;AG
 8953;Dietikon Silbern;ZH
 6875;Campora;TI
-6130;Wilisau Bahnhofstr;LU
-8400;Winterthur;ZH
-5000;Aarau Tellistr;AG
+6130;Wilisau Bahnhofstrasse;LU
+8403;Winterthur;ZH
+5004;Aarau Tellistrasse;AG
 6242;Wauwil Dorfstrasse;LU
-8400;Winterthur Pflanz.;ZH
+8411;Winterthur Pflanzschulstr;ZH
 8804;Au ZH Seestrasse;ZH
-9423;Altenrhein Dorfstr;SG
-8000;Zürich SPS;ZH
-1200;Genf SPS;GE
-3000;Bern SPS;BE
-4000;Basel SPS;BS
-5000;Aarau SPS;AG
+9423;Altenrhein Dorfstrasse;SG
+8010;ZÃ¼rich SPS;ZH
+1211;Genf SPS;GE
+3001;Bern SPS;BE
+4002;Basel SPS;BS
+5001;Aarau SPS;AG
 5201;Brugg SPS;AG
-6000;Luzern SPS;LU
-6300;Zug SPS;ZG
-6500;Bellinzona SPS;TI
-6600;Locarno SPS;TI
+6002;Luzern SPS;LU
+6301;Zug SPS;ZG
+6501;Bellinzona SPS;TI
+6601;Locarno SPS;TI
 6830;Chiasso SPS;TI
-6900;Lugano SPS;TI
-3645;Gwatt (Thun) Spiez;BE
-5463;Wislikofen Probst.;AG
-8400;Winterthur im LInk;ZH
+6901;Lugano SPS;TI
+3645;Gwatt (Thun) Spiezstrasse;BE
+5463;Wislikofen Probsteiweg;AG
+8404;Winterthur im LInk;ZH
 1000;Lausanne SPS;VD
-8620;Wetzikon Kastell;ZH
+8620;Wetzikon Kastellstrasse;ZH
 9494;Schaan IMPCA;FL
 1666;Grandvillard Dist;FR
-8000;Zürich Rütihof;ZH
-8400;Winterthur Tösstal;ZH
-9464;Rüthi Staatstrasse;SG
-1305;Penthalaz Dist;VD
+8049;ZÃ¼rich RÃ¼tihof (HÃ¶ngg);ZH
+8405;Winterthur TÃ¶sstalerstrasse;ZH
+9464;RÃ¼thi (Rheintal) Staatstr;SG
+1305;Penthalaz Distribution;VD

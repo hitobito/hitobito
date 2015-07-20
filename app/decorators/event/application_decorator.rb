@@ -38,7 +38,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def precondition_warnings(event)
     if event.supports_applications && event.course_kind?
-      checker = Event::PreconditionChecker.new(event, current_user)
+      checker = Event::PreconditionChecker.new(event, participation.person)
       badge('!', 'warning', checker.errors_text.flatten.join('<br>')) unless checker.valid?
     end
   end

@@ -28,8 +28,7 @@ class CustomContent < ActiveRecord::Base
 
   class << self
     def get(key)
-      find_by_key(key) ||
-      fail(ActiveRecord::RecordNotFound, "CustomContent with key '#{key}' not found")
+      find_by_key!(key)
     end
   end
 

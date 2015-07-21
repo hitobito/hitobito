@@ -65,7 +65,12 @@ module FilterNavigation
       end
 
       def predefined_filters
-        ::Event::ParticipationFilter::PREDEFINED_FILTERS
+        participation_filter.predefined_filters
+      end
+
+      def participation_filter
+        @participation_filter ||=
+          ::Event::ParticipationFilter.new(event, template.current_user, template.params)
       end
     end
   end

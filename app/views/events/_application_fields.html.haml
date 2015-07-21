@@ -16,8 +16,11 @@
     - application_approve_role_exists? && entry.used?(:requires_approval) do
       = f.labeled_boolean_field(:requires_approval, caption: t('events.form.caption_requires_approval'))
 
-    = f.labeled_boolean_field(:signature, caption: t('.caption_signature'))
-    = f.labeled_boolean_field(:signature_confirmation, caption: t('.caption_signature_confirmation'))
-    = f.labeled_input_field(:signature_confirmation_text, value: entry.signature_confirmation_text ||  t('.signature_confirmation_text_default'))
+    - entry.used?(:signature) do
+      = f.labeled_boolean_field(:signature, caption: t('.caption_signature'))
+    - entry.used?(:signature_confirmation) do
+      = f.labeled_boolean_field(:signature_confirmation, caption: t('.caption_signature_confirmation'))
+    - entry.used?(:signature_confirmation_text) do
+      = f.labeled_input_field(:signature_confirmation_text, value: entry.signature_confirmation_text ||  t('.signature_confirmation_text_default'))
 
     = render_extensions 'application_fields', locals: { f: f }

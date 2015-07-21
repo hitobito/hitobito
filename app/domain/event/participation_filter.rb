@@ -26,6 +26,10 @@ class Event::ParticipationFilter
     apply_default_sort(apply_filter_scope(records))
   end
 
+  def predefined_filters
+    PREDEFINED_FILTERS
+  end
+
   private
 
   def apply_default_sort(records)
@@ -34,7 +38,7 @@ class Event::ParticipationFilter
   end
 
   def populate_counts(records)
-    PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
+    predefined_filters.each_with_object({}) do |name, memo|
       memo[name] = apply_filter_scope(records, name).count
     end
   end

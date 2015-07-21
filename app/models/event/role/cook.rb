@@ -17,5 +17,9 @@
 
 # Kueche
 class Event::Role::Cook < Event::Role
+
   self.permissions = [:participations_read]
+
+  self.kind = :helper
+
 end

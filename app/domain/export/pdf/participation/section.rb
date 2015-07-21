@@ -71,6 +71,13 @@ module Export::Pdf::Participation
       # pdf.stroke_bounds
     end
 
+    def with_header(header)
+      heading { text header, style: :bold }
+      move_down_line
+      yield
+      2.times { move_down_line }
+    end
+
     def text(*args)
       options = args.extract_options!
       pdf.text args.join(' '), options

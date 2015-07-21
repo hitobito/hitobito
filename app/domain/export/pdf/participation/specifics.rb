@@ -13,15 +13,15 @@ module Export::Pdf::Participation
 
       first_page_section do
         if data.present?
-          heading { text I18n.t('event.participations.specific_information'), style: :bold }
-          table(data, cell_style: { border_width: 0, padding: 2 })
-          move_down_line
+          with_header(I18n.t('event.participations.specific_information')) do
+            table(data, cell_style: { border_width: 0, padding: 2 })
+          end
         end
 
-        heading { text additional_information_label, style: :bold }
-
-        pdf.bounding_box([0 + 2, cursor - 5], width: bounds.width - 10, height: 65) do
-          shrinking_text_box participation.additional_information
+        with_header(additional_information_label) do
+          pdf.bounding_box([0 + 2, cursor - 5], width: bounds.width - 10, height: 65) do
+            shrinking_text_box participation.additional_information
+          end
         end
       end
     end

@@ -19,4 +19,7 @@
 class Event::Role::Treasurer < Event::Role
 
   self.permissions = [:participations_read]
+
+  self.kind = :helper
+
 end

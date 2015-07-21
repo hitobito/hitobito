@@ -23,15 +23,19 @@ module Export::Pdf::Participation
     end
 
     def render_description
-      with_count(description_title) do
+      with_header(description_title) do
         text event.description
       end
     end
 
     def render_requirements
-      with_count(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
-        boxed_attr(event, :application_conditions)
-        boxed_attr(event.kind, :application_conditions, '') if event_with_kind?
+      with_header(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
+        text event.application_conditions
+        move_down_line if event.application_conditions?
+        if event_with_kind?
+          text event.kind.application_conditions
+          move_down_line if event.kind.application_conditions?
+        end
 
         if course?
           boxed_attr(event_kind, :minimum_age) { translated_minimum_age }
@@ -44,14 +48,6 @@ module Export::Pdf::Participation
 
     def translated_minimum_age
       I18n.t('qualifications.in_years', years: event_kind.minimum_age)
-    end
-
-    def with_count(content)
-      @count ||= 0
-      heading { text "#{@count += 1}.", content, style: :bold }
-      move_down_line
-      yield
-      2.times { move_down_line }
     end
 
     def description_title
@@ -81,8 +77,8 @@ module Export::Pdf::Participation
 
       if values.present?
         render_boxed(-> { text title }, -> { text values_text })
+        move_down_line
       end
-      move_down_line
     end
 
     class NullEventKind < OpenStruct

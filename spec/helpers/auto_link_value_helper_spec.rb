@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe AutoLinkHelper do
+describe AutoLinkValueHelper do
 
   it 'links www addresses' do
     expect(auto_link_value('www.puzzle.ch')).to eq('<a href="http://www.puzzle.ch" target="_blank">www.puzzle.ch</a>')

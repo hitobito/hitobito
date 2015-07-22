@@ -3,9 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_pbs.
 
-- if @event.requires_approval? && @application.present? && can?(:show, @application)
-  = section(t('.title')) do
-    %table.table.table-basic
-      %tbody
-        %tr
-          %td= @application.confirmation_label
+- if @precondition_warnings.present?
+  %h2= t('activerecord.attributes.event/kind.preconditions')
+  .alert.alert-warning
+    %p= simple_format(@precondition_warnings.flatten.join("\n"))

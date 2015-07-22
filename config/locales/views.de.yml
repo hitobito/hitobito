@@ -488,8 +488,9 @@ de:
 
   event:
     run_by: 'Durchgeführt von'
-    applied_to: 'Anmeldung an'
-    alternative_dates: 'Ausweichdaten'
+    applied_to: Anmeldung an
+    alternative_dates: Ausweichdaten
+    priorities: 'Anmeldeprioritäten'
     no_qualifications_could_be_prolonged: "%{person} hat keine Qualifikationen, die verlängert werden können."
     lists:
       courses:
@@ -533,8 +534,6 @@ de:
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
         explain_required_checkmark: '* = Antwort oblitagorisch'
-      priorities:
-        alternative_course: "%{number}. Ausweichkurs"
       print:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift

@@ -16,33 +16,23 @@
                           folder: :people,
                           locals: { entry: entry.person, show_full: false }
 
-      -if @answers.present?
-        = render 'answers'
+      = render 'answers' if @answers.present?
 
       = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')
 
-    - if @event.priorization && @application.present? && can?(:show, @application)
-      = render 'priorities'
-
   %aside.span5.offset1
-    - if entry.person == current_user && @application.present? && @application.contact.present?
-      = section t('event.applied_to') do
-        - contact_type = @application.contact.class.base_class.name.underscore
-        = render "#{contact_type.pluralize}/contact_data",
-                 contact_type.to_sym => @application.contact,
-                 only_public: true
+    = render 'apply_to'
 
     = render 'roles'
 
     - if can?(:show_details, entry)
       = render 'people/qualifications', entry: entry.person, show_buttons: false
 
-      - if @precondition_warnings.present?
-        %h2= t('activerecord.attributes.event/kind.preconditions')
-        .alert.alert-warning
-          %p= simple_format(@precondition_warnings.flatten.join("\n"))
-
-    = render_extensions :asides
+      = render 'precondition_warnings'
 
     = render 'approvals'
+
+    = render 'priorities'
+
+    = render_extensions :asides

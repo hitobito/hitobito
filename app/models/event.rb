@@ -101,7 +101,7 @@ class Event < ActiveRecord::Base
   validates :dates, presence: { message: :must_exist }
   validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,
-            timeliness: { type: :date, allow_blank: true }
+            timeliness: { type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31) }
   validates :description, :location, :application_conditions,
             length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups

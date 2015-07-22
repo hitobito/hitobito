@@ -34,7 +34,7 @@ class Qualification < ActiveRecord::Base
             uniqueness: { scope: [:person_id, :start_at, :finish_at],
                           message: :exists_for_timeframe  }
   validates :start_at, :finish_at,
-            timeliness: { type: :date, allow_blank: true }
+            timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }
 
 
   delegate :cover?, :active?, to: :duration

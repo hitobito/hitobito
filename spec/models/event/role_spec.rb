@@ -67,5 +67,11 @@ describe Event::Role do
       expect(event.applicant_count).to eq applicant_count - 1
     end
 
+    it 'destroys participation if it was the last role' do
+      expect do
+        event_roles(:top_leader).destroy
+      end.to change { Event::Participation.count }.by(-1)
+    end
+
   end
 end

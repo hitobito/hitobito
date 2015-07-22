@@ -78,5 +78,12 @@ describe Event::Participation do
     end
   end
 
+  context '#destroy' do
+    it 'destroy roles as well' do
+      expect do
+        event_participations(:top).destroy
+      end.to change { Event::Role.count }.by(-1)
+    end
+  end
 
 end

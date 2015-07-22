@@ -497,6 +497,18 @@ describe Event do
   context 'destroyed associations' do
     let(:event) { events(:top_course) }
 
+    it 'destroys everything with event' do
+      expect do
+        expect do
+          expect do
+            expect do
+              expect { event.destroy }.to change { Event.count }.by(-1)
+            end.to change { Event::Participation.count }.by(-1)
+          end.to change { Event::Role.count }.by(-1)
+        end.to change { Event::Date.count }.by(-1)
+      end.to change { Event::Question.count }.by(-3)
+    end
+
     it 'keeps destroyed kind' do
       event.kind.destroy
       event.reload
@@ -519,6 +531,7 @@ describe Event do
         expect(event.groups.size).to eq(2)
       end
     end
+
   end
 
 

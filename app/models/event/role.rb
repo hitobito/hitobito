@@ -48,7 +48,7 @@ class Event::Role < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :participation, validate: true
+  belongs_to :participation, inverse_of: :roles, validate: true
 
   has_one :event, through: :participation
   has_one :person, through: :participation
@@ -107,7 +107,7 @@ class Event::Role < ActiveRecord::Base
 
   def destroy_participation_for_last
     update_participant_count if self.class.participant?
-    participation.destroy unless participation.roles.exists?
+    participation.destroy if !participation.roles(true).exists?
   end
 
   def protect_applying_participant

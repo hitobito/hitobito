@@ -34,7 +34,7 @@ class Event::Participation < ActiveRecord::Base
 
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
-  has_many :roles, dependent: :destroy
+  has_many :roles, inverse_of: :participation, dependent: :destroy
 
   has_many :answers, dependent: :destroy, validate: true
 

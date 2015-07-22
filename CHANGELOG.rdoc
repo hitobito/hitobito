@@ -1,5 +1,16 @@
 = Hitobito Changelog
 
+== Version 1.9
+
+* Überprüfung bei Eingabe von Start- und Enddatum bei Kursen
+* Info Feld auf Login-Maske für allgemeine Informationen (z.B. Wartungsfenster)
+* Internationale Postleitzahlen
+* Anzeige der Anzahl Personen die in einer Liste vorhanden sind
+* Anzeige der Anzahl nicht sichtbaren Personen in Personen- und Teilnehmerlisten
+* Bei Login senden Hinweis ob Person bereits über ein Login verfügt oder nicht
+* Zulassen das beliebige Absender auf Mailinglisten schreiben können
+* Verlinkung Geschwister
+
 == Version 1.8
 
 * Möglichkeit, den Zugriff auf Anlässe und Kurse unterschiedlich zu berechtigen.

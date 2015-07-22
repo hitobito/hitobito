@@ -4,6 +4,5 @@
 -#  https://github.com/hitobito/hitobito_pbs.
 
 - if @precondition_warnings.present?
-  %h2= t('activerecord.attributes.event/kind.preconditions')
   .alert.alert-warning
     %p= simple_format(@precondition_warnings.flatten.join("\n"))

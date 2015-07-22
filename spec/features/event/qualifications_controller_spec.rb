@@ -47,14 +47,14 @@ describe Event::QualificationsController do
       expect(find("#{appl_id} td.revoke")).to have_selector('a i.icon-remove.disabled')
 
       find("#{appl_id} td.issue a").click
-      expect(find("#{appl_id} td.issue")).not_to have_selector('a')
-      expect(find("#{appl_id} td.issue")).not_to have_selector('i.disabled')
+      expect(find("#{appl_id} td.issue")).to have_no_selector('a')
+      expect(find("#{appl_id} td.issue")).to have_no_selector('i.disabled')
       expect(find("#{appl_id} td.revoke")).to have_selector('a')
       expect(find("#{appl_id} td.revoke")).to have_selector('i.disabled')
 
       find("#{appl_id} td.revoke a").click
-      expect(find("#{appl_id} td.revoke")).not_to have_selector('a')
-      expect(find("#{appl_id} td.revoke")).not_to have_selector('i.disabled')
+      expect(find("#{appl_id} td.revoke")).to have_no_selector('a')
+      expect(find("#{appl_id} td.revoke")).to have_no_selector('i.disabled')
       expect(find("#{appl_id} td.issue")).to have_selector('a')
       expect(find("#{appl_id} td.issue")).to have_selector('i.disabled')
     end

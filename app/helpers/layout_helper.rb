@@ -40,8 +40,19 @@ module LayoutHelper
     end
   end
 
-  def icon(name)
-    content_tag(:i, '', class: "icon icon-#{name}")
+  def icon(name, options = {})
+    add_css_class(options, "icon icon-#{name}")
+    content_tag(:i, '', options)
+  end
+
+  def badge(label, type = nil, tooltip = nil)
+    options = { class: "badge badge-#{type || 'default'}" }
+    if tooltip.present?
+      options.merge!(rel: :tooltip,
+                     'data-html' => 'true',
+                     title: tooltip)
+    end
+    content_tag(:span, label, options)
   end
 
   def section(title, &block)

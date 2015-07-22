@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if @application && (@event.priorization? || @application.priority_2_id) && can?(:show, @application)
+- if @application && (@event.priorization? || @application.priority_2_id || @application.waiting_list?) && can?(:show, @application)
   = section t('event.priorities') do
     %table.table
       - [@application.priority_1,
@@ -13,3 +13,7 @@
           %td= "#{i+1}."
           %td= prio.try :labeled_link
           %td= prio.try :dates_full
+
+    - if @application.waiting_list?
+      %strong= t('event.participations.priorities.on_waiting_list')
+      = format_attr(@application, :waiting_list_comment)

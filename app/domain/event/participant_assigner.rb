@@ -5,7 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipantAssigner < Struct.new(:event, :participation)
+class Event::ParticipantAssigner
+
+  attr_reader :event, :participation
+
+  delegate :application, to: :participation
+
+  def initialize(event, participation)
+    @event = event
+    @participation = participation
+  end
 
   def createable?
     participation.event.id == event.id ||
@@ -19,7 +28,8 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
         update_answers
       end
 
-      participation.update_attribute(:active, true)
+      set_active(true)
+      application.update_column(:waiting_list, false) if application.waiting_list?
       create_participant_role
       event.refresh_participant_counts!
     end
@@ -28,7 +38,7 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
 
   def remove_participant
     Event::Participation.transaction do
-      participation.update_attribute(:active, false)
+      set_active(false)
       # destroy all other roles when removing a participant
       participation.roles.where.not(type: event.participant_types.collect(&:sti_name)).destroy_all
       original_event = participation.application.priority_1
@@ -66,6 +76,10 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
     end
   end
 
+  def set_active(active)
+    participation.update!(active: active)
+  end
+
   # update the existing set of answers so that one exists for every question of event.
   def update_answers
     current_answers = participation.answers.includes(:question)
@@ -77,4 +91,5 @@ class Event::ParticipantAssigner < Struct.new(:event, :participation)
       participation.answers.create(question_id: q.id) unless exists
     end
   end
+
 end

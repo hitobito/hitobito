@@ -241,6 +241,18 @@ de:
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
 
+      event/answer:
+        answer: Antwort
+
+      answers:
+        answer: Antwort
+
+      event/application:
+        priority_1_id: "Kurs"
+        priority_2_id: "1. Ausweichkurs"
+        priority_3_id: "2. Ausweichkurs"
+        waiting_list_comment: 'Bemerkung'
+
       event/course:
         kind_id: Kursart
         state: Status
@@ -248,25 +260,6 @@ de:
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
-
-      event/role:
-        label: Bezeichnung
-        person: Person
-        type: Rolle
-        participation: Person
-
-      event/participation:
-        person_id: Person
-        event_id: Event
-        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
-        answers: Fragen
-        created_at: Anmeldedatum
-        roles: Rolle
-
-      event/application:
-        priority_1_id: "Kurs"
-        priority_2_id: "1. Ausweichkurs"
-        priority_3_id: "2. Ausweichkurs"
 
       event/date:
         label: Beschreibung
@@ -278,24 +271,6 @@ de:
         label: Beschreibung/Ort
         start_at: Von Datum
         finish_at: Bis Datum
-
-      event/question:
-        question: Frage
-        choices: Mögliche Antworten
-        multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
-
-      questions:
-        question: Frage
-        choices: Mögliche Antworten
-        multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
-
-      event/answer:
-        answer: Antwort
-
-      answers:
-        answer: Antwort
 
       event/kind:
         label: Verbandsbezeichnung
@@ -309,6 +284,32 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+
+      event/participation:
+        person_id: Person
+        event_id: Event
+        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
+        answers: Fragen
+        created_at: Anmeldedatum
+        roles: Rolle
+
+      event/question:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
+
+      questions:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
+
+      event/role:
+        label: Bezeichnung
+        person: Person
+        type: Rolle
+        participation: Person
 
       qualification:
         qualification_kind: Qualifikation

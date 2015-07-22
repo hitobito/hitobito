@@ -11,6 +11,7 @@ describe 'Dropdown::PeopleExport' do
 
   include FormatHelper
   include LayoutHelper
+  include UtilityHelper
 
   let(:user) { people(:top_leader) }
   let(:dropdown) do

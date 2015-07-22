@@ -5,7 +5,4 @@
 
 - if @event.requires_approval? && @application.present? && can?(:show, @application)
   = section(t('.title')) do
-    %table.table.table-basic
-      %tbody
-        %tr
-          %td= @application.confirmation_label
+    = @application.approval_label

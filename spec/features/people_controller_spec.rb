@@ -28,7 +28,7 @@ describe PeopleController, js: true do
       let(:user) { people(:bottom_member) }
 
       it 'does not render edit link' do
-        expect(cell).not_to have_link 'Bearbeiten'
+        expect(cell).to have_no_link 'Bearbeiten'
       end
     end
 
@@ -41,7 +41,7 @@ describe PeopleController, js: true do
         obsolete_node_safe do
           #find('#role_type_select a.chosen-single').click
           click_link 'Abbrechen'
-          expect(page).not_to have_css('.popover')
+          expect(page).to have_no_css('.popover')
         end
       end
 
@@ -51,7 +51,7 @@ describe PeopleController, js: true do
           find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 
           click_button 'Speichern'
-          expect(page).not_to have_css('.popover')
+          expect(page).to have_no_css('.popover')
           expect(cell).to have_text 'Leader'
         end
       end
@@ -94,7 +94,7 @@ describe PeopleController, js: true do
       sign_in(user)
       visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
 
-      is_expected.not_to have_content 'Beziehungen'
+      expect(page).to have_no_content 'Beziehungen'
     end
 
     context 'with kinds' do

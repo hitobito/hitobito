@@ -2,14 +2,12 @@
 
 == Version 1.9
 
-* Überprüfung bei Eingabe von Start- und Enddatum bei Kursen
-* Info Feld auf Login-Maske für allgemeine Informationen (z.B. Wartungsfenster)
-* Internationale Postleitzahlen
-* Anzeige der Anzahl Personen die in einer Liste vorhanden sind
-* Anzeige der Anzahl nicht sichtbaren Personen in Personen- und Teilnehmerlisten
-* Bei Login senden Hinweis ob Person bereits über ein Login verfügt oder nicht
-* Zulassen das beliebige Absender auf Mailinglisten schreiben können
-* Verlinkung Geschwister
+* Land ist neu ein Auswahlfeld.
+* Kursarten haben zusätzliche Text Felder 'Generelle Informationen' und 'Aufnahmebedinungungen'.
+* Kurse haben zusätzliches Text Feld 'Aufnahmebedingungen'.
+* Möglichkeit, bei einer PDF Kursanmeldung eine Unterschrift einzufordern. 
+* Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt. Eine Anmeldung ist trotzdem möglich.
+* Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben werden.
 
 == Version 1.8
 

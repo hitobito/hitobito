@@ -32,7 +32,7 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group)
 
         fill_in 'Person', with: 'gibberish'
-        expect(page).not_to have_selector('.typeahead.dropdown-menu')
+        expect(page).to have_no_selector('.typeahead.dropdown-menu')
 
         fill_in 'Person', with: 'Top'
         expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')

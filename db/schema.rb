@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707053351) do
+ActiveRecord::Schema.define(version: 20150722094419) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -64,12 +64,13 @@ ActiveRecord::Schema.define(version: 20150707053351) do
   end
 
   create_table "event_applications", force: true do |t|
-    t.integer "priority_1_id",                 null: false
+    t.integer "priority_1_id",                        null: false
     t.integer "priority_2_id"
     t.integer "priority_3_id"
-    t.boolean "approved",      default: false, null: false
-    t.boolean "rejected",      default: false, null: false
-    t.boolean "waiting_list",  default: false, null: false
+    t.boolean "approved",             default: false, null: false
+    t.boolean "rejected",             default: false, null: false
+    t.boolean "waiting_list",         default: false, null: false
+    t.text    "waiting_list_comment"
   end
 
   create_table "event_dates", force: true do |t|

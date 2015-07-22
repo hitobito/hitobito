@@ -43,7 +43,7 @@ describe PeopleController, js: true do
 
       # open other tab
       click_link 'Externe'
-      expect(page).not_to have_selector('.table-striped tbody tr')
+      expect(page).to have_no_selector('.table-striped tbody tr')
     end
   end
 
@@ -76,7 +76,7 @@ describe PeopleController, js: true do
   def sign_in_and_create_filter
     sign_in
     visit group_people_path(group)
-    expect(page).not_to have_selector('.table tbody tr')
+    expect(page).to have_no_selector('.table tbody tr')
 
     click_link 'Weitere Ansichten'
     click_link 'Neuer Filter...'

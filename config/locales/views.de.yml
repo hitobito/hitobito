@@ -509,6 +509,13 @@ de:
         national_waitinglist: 'nationale Warteliste'
       index:
         assigned_participants: 'Zugeteilte Teilnehmende'
+      waiting_list_link:
+        title_active: 'Entfernen von der Warteliste'
+        title_inactive: 'Hinzufügen zur Warteliste'
+        label: 'Warteliste'
+      popover_waiting_list:
+        waiting_list_info: Setze diese Person auf die Warteliste für Kurse der Art %{event_kind}.
+
     kinds:
       form:
         help_minimum_age: 'Jahre (Jahrgang am ersten Kursdatum massgebend)'
@@ -542,6 +549,8 @@ de:
         requirements_for_event: Voraussetzungen für den Anlass
         requirements_for_event_course: Voraussetzungen für den Kurs
         page_of_pages: "Seite <page> von <total>"
+      priorities:
+        on_waiting_list: Auf Warteliste
       list:
         incomplete: Pflichtangaben fehlen
 
@@ -594,18 +603,12 @@ de:
     issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
 
   event/application_decorator:
-    course_acceptance: 'Kursfreigabe'
-    confirmation:
-      approved: 'bestätigt'
-      rejected: 'abgelehnt'
-      missing: 'ausstehend'
+    approval:
+      approved: 'Kursfreigabe bestätigt'
+      rejected: 'Kursfreigabe abgelehnt'
+      missing: 'Kursfreigabe ausstehend'
 
   event/participation_decorator:
-    waiting_list_link:
-      title_active: 'Entfernen von der nationalen Warteliste'
-      title_inactive: 'Hinzufügen zu der nationalen Warteliste'
-      label: 'Warteliste'
-
     tooltips:
       ok: 'Markiert Kurs als bestanden und vergibt Qualifikationen.'
       remove:  'Markiert Kurs als nicht bestanden und entfernt Qualifikationen.'

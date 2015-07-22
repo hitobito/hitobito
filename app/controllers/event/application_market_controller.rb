@@ -31,7 +31,8 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def put_on_waiting_list
-    application.update_column(:waiting_list, true)
+    application.update!(waiting_list: true,
+                        waiting_list_comment: params[:event_application][:waiting_list_comment])
     render 'waiting_list'
   end
 

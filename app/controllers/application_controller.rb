@@ -32,7 +32,6 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::UnknownFormat, with: :not_found
   end
 
-
   def person_home_path(person, options = {})
     group_person_path(person.default_group_id, person, options)
   end

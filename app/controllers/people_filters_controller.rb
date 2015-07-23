@@ -33,7 +33,7 @@ class PeopleFiltersController < CrudController
   end
 
   def destroy
-    super(location: group_people_path(group))
+    super(location: send(people_list_path, group))
   end
 
   private
@@ -52,7 +52,7 @@ class PeopleFiltersController < CrudController
     if entry.role_types.present?
       params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
     end
-    group_people_path(group, params)
+    send(people_list_path, group, params)
   end
 
   def compose_role_lists
@@ -61,5 +61,9 @@ class PeopleFiltersController < CrudController
 
   def permitted_params
     model_params ? model_params.permit(permitted_attrs) : {}
+  end
+
+  def people_list_path
+    :group_people_path
   end
 end

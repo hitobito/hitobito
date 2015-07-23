@@ -13,7 +13,7 @@
         = f.button(t('.save_search'), class: 'btn btn-primary', value: 'save')
     = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')
 
-
+  = render_extensions :form, locals: { f: f }
   = f.error_messages
 
   .label-columns

@@ -95,12 +95,15 @@ module FilterNavigation
 
     def add_define_custom_people_filter_link
       if can?(:new, group.people_filters.new)
-        link = template.new_group_people_filter_path(
-                group.id,
-                people_filter: { role_type_ids: role_type_ids })
         dropdown.add_divider if dropdown.items.present?
-        dropdown.add_item(translate(:new_filter), link)
+        dropdown.add_item(translate(:new_filter), new_group_people_filter_path)
       end
+    end
+
+    def new_group_people_filter_path
+      template.new_group_people_filter_path(
+        group.id,
+        people_filter: { role_type_ids: role_type_ids })
     end
 
     def people_filter_link(filter)
@@ -112,9 +115,13 @@ module FilterNavigation
 
     def delete_filter_item(filter)
       ::Dropdown::Item.new(template.icon(:trash),
-                           template.group_people_filter_path(group, filter),
+                           delete_group_people_filter_path(filter),
                            data: { confirm: template.ti(:confirm_delete),
                                    method:  :delete })
+    end
+
+    def delete_group_people_filter_path(filter)
+      template.group_people_filter_path(group, filter)
     end
 
     def fixed_types_path(name, types, options = {})

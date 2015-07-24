@@ -185,7 +185,9 @@ class Event::ParticipationsController < CrudController
 
   def load_answers
     @answers = entry.answers.includes(:question)
-    @application = Event::ApplicationDecorator.decorate(entry.application)
+    if entry.application
+      @application = Event::ApplicationDecorator.decorate(entry.application)
+    end
   end
 
   def load_qualifications

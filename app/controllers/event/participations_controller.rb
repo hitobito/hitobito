@@ -102,7 +102,7 @@ class Event::ParticipationsController < CrudController
     event = entry.event
     if user_course_application? && event.course_kind?
       checker = Event::PreconditionChecker.new(event, current_user)
-      flash[:alert] = checker.errors_text unless checker.valid?
+      flash.now[:alert] = checker.errors_text unless checker.valid?
     end
   end
 

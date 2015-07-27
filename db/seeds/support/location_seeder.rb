@@ -23,10 +23,17 @@ class LocationSeeder
 
   def seed
     Location.delete_all
+    reset_primary_key
     bulk_insert
   end
 
   private
+
+  def reset_primary_key
+    if Location.connection.adapter_name.downcase =~ /mysql/
+      Location.connection.execute('ALTER TABLE locations AUTO_INCREMENT = 1')
+    end
+  end
 
   def bulk_insert
     data.each_slice(500).each_with_index do |values, slice|

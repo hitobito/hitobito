@@ -1,4 +1,4 @@
-#!/bin/env rvm-shell 1.9.3
+# Runs a wagon nightly build for the stable branch
 
 . hitobito/bin/ci/wagon_setup.sh
 

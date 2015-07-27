@@ -49,6 +49,7 @@ module Hitobito
     # Define which locales from the rails-i18n gem should be loaded
     config.i18n.available_locales = [:de, :fr, :it, :en] # en required for faker (seeds)
     config.i18n.default_locale = :de
+    config.i18n.locale = :de # required to always have default_locale used if nothing else is set.
     config.i18n.fallbacks = [:de]
     I18n.config.enforce_available_locales = true
     # All languages should fall back on each other to avoid empty attributes

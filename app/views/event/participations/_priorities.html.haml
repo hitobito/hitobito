@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if @application && (@event.priorization? || @application.priority_2_id || @application.waiting_list?) && can?(:show, @application)
+- if @application && @application.priorities? && can?(:show, @application)
   = section t('event.priorities') do
     %table.table
       - [@application.priority_1,

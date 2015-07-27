@@ -26,6 +26,10 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     c ? "#{c.class.base_class.name}Decorator".constantize.decorate(c) : nil
   end
 
+  def priorities?
+    event.priorization? || priority_2_id || waiting_list?
+  end
+
   def priority(event)
     prio = model.priority(event)
     if prio

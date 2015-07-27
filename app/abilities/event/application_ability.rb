@@ -13,8 +13,8 @@ class Event::ApplicationAbility < AbilityDsl::Base
   on(Event::Application) do
     permission(:any).may(:show).her_own
     permission(:group_full).may(:show).in_same_group
-    permission(:layer_full).may(:show).in_same_layer
-    permission(:layer_and_below_full).may(:show).in_same_layer
+    permission(:layer_full).may(:show).in_same_layer_or_different_prio
+    permission(:layer_and_below_full).may(:show).in_same_layer_or_different_prio
     permission(:approve_applications).may(:show, :approve, :reject).for_applicant_in_same_layer
   end
 

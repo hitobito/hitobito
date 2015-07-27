@@ -185,8 +185,19 @@ describe EventAbility do
       end
 
       it 'may not show participation in event from lower layer' do
-        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
+        other = Fabricate(:event_participation,
+                          event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
         is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may show participation on waiting list with prio_1 in event from other layer' do
+        event = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
+        application = Fabricate(:event_application, priority_1: event, waiting_list: true)
+        other = Fabricate(:event_participation,
+                          event: event,
+                          application: application)
+        is_expected.to be_able_to(:show, other)
+        is_expected.to be_able_to(:show, other.application)
       end
 
       it 'may still create when application is not possible' do
@@ -525,16 +536,17 @@ describe EventAbility do
 
       it 'may approve participations' do
         is_expected.to be_able_to(:approve, participation.application)
-    end
+      end
     end
 
     context 'for other participants' do
       let(:participant) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two)).person }
 
-      # possible to show it because user has :layer_and_below_full on course group
-      #it 'may not show participations' do
-      #  should_not be_able_to(:show, participation)
-      #end
+      before { participation.application.priority_2 = nil }
+
+      it 'may not show participations' do
+        is_expected.not_to be_able_to(:show, participation)
+      end
 
       it 'may not show application' do
         is_expected.not_to be_able_to(:show, participation.application)

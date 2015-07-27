@@ -14,7 +14,7 @@ module GroupsHelper
       event_type = (params[:type] && params[:type].constantize) || Event
 
       if @group.event_types.include?(event_type)
-        action_button(ti(:'link.add', model: event_type.model_name.human),
+        action_button(t("events.global.link.add_#{event_type.name.underscore}"),
                       new_group_event_path(@group, event: { type: event_type.sti_name }),
                       :plus)
       end

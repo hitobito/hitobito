@@ -231,8 +231,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
     string_field(attr,
-                 placeholder: I18n.t('global.search.placeholder_with_model',
-                                     model: Person.model_name.human),
+                 placeholder: I18n.t('global.search.placeholder_person'),
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: @template.query_people_path })

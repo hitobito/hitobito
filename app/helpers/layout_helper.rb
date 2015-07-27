@@ -94,7 +94,7 @@ module LayoutHelper
   private
 
   def include_add_button(title, add_path)
-    button = action_button(ti(:'link.add_without_model'),
+    button = action_button(ti(:'link.add'),
                            add_path,
                            'plus',
                            class: 'btn-small')

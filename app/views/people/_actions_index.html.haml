@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 - if can?(:new, @group.roles.new)
-  = action_button(t('global.associations.add_with_model', model: Person.model_name.human), new_group_role_path(@group), :plus)
+  = action_button(t('.add_person'), new_group_role_path(@group), :plus)
 
 - if can?(:new, @group.roles.new)
   = action_button(t('.import_list'), new_group_csv_imports_path, :upload)

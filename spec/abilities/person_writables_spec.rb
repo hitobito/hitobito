@@ -11,7 +11,7 @@ describe PersonWritables do
 
   let(:user)   { role.person.reload }
   let(:ability) { PersonWritables.new(user) }
-  let(:accessibles) { Person.accessible_by(ability, :index) }
+  let(:accessibles) { Person.accessible_by(ability) }
 
   subject { accessibles }
 

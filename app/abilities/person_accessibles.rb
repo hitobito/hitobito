@@ -8,6 +8,11 @@
 # This class is only used for fetching lists based on a group association.
 class PersonAccessibles < PersonFetchables
 
+  self.same_group_permissions = [:group_full, :group_read]
+  self.same_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
+                                 :layer_full, :layer_read]
+  self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read]
+
   attr_reader :group
 
   delegate :groups_group_read, :layers_read, :layers_and_below_read, to: :user_context
@@ -53,23 +58,10 @@ class PersonAccessibles < PersonFetchables
   end
 
   def accessible_conditions
-    condition = OrCondition.new
-    condition.or(*herself_condition)
-    condition.or(*contact_data_condition) if user.contact_data_visible?
-    append_group_conditions(condition)
-
-    condition
-  end
-
-  def append_group_conditions(condition)
-    condition.or(*in_same_group_condition) if groups_group_read.present?
-
-    if layers_and_below_read.present? || layers_read.present?
-      condition.or(*in_same_layer_condition(read_layer_groups))
-    end
-
-    if layers_and_below_read.present?
-      condition.or(*visible_from_above_condition(read_layer_and_below_groups))
+    OrCondition.new.tap do |condition|
+      condition.or(*herself_condition)
+      condition.or(*contact_data_condition) if user.contact_data_visible?
+      append_group_conditions(condition)
     end
   end
 
@@ -79,10 +71,6 @@ class PersonAccessibles < PersonFetchables
 
   def herself_condition
     ['people.id = ?', user.id]
-  end
-
-  def in_same_group_condition
-    ['groups.id IN (?)', groups_group_read]
   end
 
   def read_permission_for_this_group?
@@ -113,19 +101,6 @@ class PersonAccessibles < PersonFetchables
   def layer_and_below_read_in_above_layer?
     layers_and_below_read.present? &&
     (layers_and_below_read & group.layer_hierarchy.collect(&:id)).present?
-  end
-
-  def read_layer_groups
-    (read_layer_and_below_groups +
-     user.groups_with_permission(:layer_full) +
-     user.groups_with_permission(:layer_read)).
-      collect(&:layer_group).uniq
-  end
-
-  def read_layer_and_below_groups
-    (user.groups_with_permission(:layer_and_below_full) +
-     user.groups_with_permission(:layer_and_below_read)).
-      collect(&:layer_group).uniq
   end
 
 end

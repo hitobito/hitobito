@@ -8,11 +8,9 @@
 # Fetches people for which the user has write access via layer permissions.
 class PersonWritables < PersonFetchables
 
-  include CanCan::Ability
-
-  attr_reader :user_context
-
-  delegate :user, :layers_full, :layers_and_below_full, to: :user_context
+  self.same_group_permissions = []
+  self.same_layer_permissions = [:layer_and_below_full, :layer_full]
+  self.above_layer_permissions = [:layer_and_below_full]
 
   def initialize(user)
     super(user)
@@ -25,44 +23,28 @@ class PersonWritables < PersonFetchables
   def accessible_people
     if user.root?
       Person.only_public_data
-    elsif writable_conditions.present?
+    else
       accessible_people_scope
+    end
+  end
+
+  def accessible_people_scope
+    conditions = writable_conditions
+    if conditions.present?
+      Person.only_public_data.
+        joins(roles: :group).
+        where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
+        where(conditions.to_a).
+        uniq
     else
       Person.none
     end
   end
 
-  def accessible_people_scope
-    Person.only_public_data.
-      joins(roles: :group).
-      where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
-      where(writable_conditions.to_a).
-      uniq
-  end
-
   def writable_conditions
-    condition = OrCondition.new
-
-    if layers_and_below_full.present? || layers_full.present?
-      condition.or(*in_same_layer_condition(full_layer_groups))
+    OrCondition.new.tap do |condition|
+      append_group_conditions(condition)
     end
-
-    if layers_and_below_full.present?
-      condition.or(*visible_from_above_condition(full_layer_and_below_groups))
-    end
-
-    condition
-  end
-
-  def full_layer_groups
-    (full_layer_and_below_groups +
-     user.groups_with_permission(:layer_full)).
-      collect(&:layer_group).uniq
-  end
-
-  def full_layer_and_below_groups
-    user.groups_with_permission(:layer_and_below_full) .
-      collect(&:layer_group).uniq
   end
 
 end

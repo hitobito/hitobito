@@ -32,7 +32,10 @@ module Person::Groups
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
-      roles_with_groups.to_a.select { |r| r.class.permissions.include?(permission) }.collect(&:group).uniq
+      roles_with_groups.to_a.
+        select { |r| r.class.permissions.include?(permission) }.
+        collect(&:group).
+        uniq
     end
     @groups_with_permission[permission].dup
   end

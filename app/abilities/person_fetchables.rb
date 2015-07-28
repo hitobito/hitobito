@@ -11,6 +11,11 @@ class PersonFetchables
 
   include CanCan::Ability
 
+  class_attribute :same_group_permissions, :same_layer_permissions, :above_layer_permissions
+  self.same_group_permissions = []
+  self.same_layer_permissions = []
+  self.above_layer_permissions = []
+
   attr_reader :user_context
 
   delegate :user, to: :user_context
@@ -21,13 +26,29 @@ class PersonFetchables
 
   private
 
-  def in_same_layer_condition(layer_groups)
-    ['groups.layer_group_id IN (?)', layer_groups.collect(&:id)]
+  def append_group_conditions(condition)
+    in_same_group_condition(condition)
+    in_same_layer_condition(condition)
+    visible_from_above_condition(condition)
   end
 
-  def visible_from_above_condition(layer_groups)
+  def in_same_group_condition(condition)
+    if groups_same_group.present?
+      condition.or('groups.id IN (?)', groups_same_group.collect(&:id))
+    end
+  end
+
+  def in_same_layer_condition(condition)
+    if layer_groups_same_layer.present?
+      condition.or('groups.layer_group_id IN (?)', layer_groups_same_layer.collect(&:id))
+    end
+  end
+
+  def visible_from_above_condition(condition)
+    return if layer_groups_above.blank?
+
     visible_from_above_groups = OrCondition.new
-    collapse_groups_to_highest(layer_groups) do |layer_group|
+    collapse_groups_to_highest(layer_groups_above) do |layer_group|
       visible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
                                    layer_group.left,
                                    layer_group.rgt)
@@ -35,7 +56,7 @@ class PersonFetchables
 
     query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
     args = visible_from_above_groups.to_a[1..-1] + [Role.visible_types.collect(&:sti_name)]
-    [query, *args]
+    condition.or(query, *args)
   end
 
   # If group B is a child of group A, B is collapsed into A.
@@ -46,6 +67,28 @@ class PersonFetchables
         yield group
       end
     end
+  end
+
+  def groups_same_group
+    @groups_same_group ||= groups_with_permissions(*same_group_permissions)
+  end
+
+  def layer_groups_same_layer
+    @layer_groups_same_layer ||= layer_groups_with_permissions(*same_layer_permissions)
+  end
+
+  def layer_groups_above
+    @layer_groups_above ||= layer_groups_with_permissions(*above_layer_permissions)
+  end
+
+  def layer_groups_with_permissions(*permissions)
+    groups_with_permissions(*permissions).collect(&:layer_group).uniq
+  end
+
+  def groups_with_permissions(*permissions)
+    permissions.collect { |p| user.groups_with_permission(p) }.
+                flatten.
+                uniq
   end
 
 end

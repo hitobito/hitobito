@@ -60,7 +60,7 @@ class FullTextController < ApplicationController
   end
 
   def load_accessible_people_ids
-    accessible = Person.accessible_by(PersonAccessibles.new(current_user))
+    accessible = Person.accessible_by(PersonReadables.new(current_user))
 
     # This still selects all people attributes :(
     # accessible.pluck('people.id')

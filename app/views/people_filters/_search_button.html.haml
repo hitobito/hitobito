@@ -1,0 +1,4 @@
+.btn-toolbar
+  .btn-group
+    = button_tag(t('global.button.search'), class: 'btn btn-primary', value: 'search')
+  = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')

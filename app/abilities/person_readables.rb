@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # This class is only used for fetching lists based on a group association.
-class PersonAccessibles < PersonFetchables
+class PersonReadables < PersonFetchables
 
   self.same_group_permissions = [:group_full, :group_read]
   self.same_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
@@ -39,7 +39,7 @@ class PersonAccessibles < PersonFetchables
       can :index, Person,
           group.people.only_public_data.visible_from_above(group) { |_| true }
 
-    elsif group_contact_data_visible?
+    elsif contact_data_visible?
       can :index, Person,
           group.people.only_public_data.contact_data_visible { |_| true }
     end
@@ -60,7 +60,7 @@ class PersonAccessibles < PersonFetchables
   def accessible_conditions
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
-      condition.or(*contact_data_condition) if user.contact_data_visible?
+      condition.or(*contact_data_condition) if contact_data_visible?
       append_group_conditions(condition)
     end
   end
@@ -80,7 +80,7 @@ class PersonAccessibles < PersonFetchables
     user.root?
   end
 
-  def group_contact_data_visible?
+  def contact_data_visible?
     user.contact_data_visible?
   end
 

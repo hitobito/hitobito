@@ -8,6 +8,7 @@
 * Möglichkeit, bei einer PDF Kursanmeldung eine Unterschrift einzufordern. 
 * Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt. Eine Anmeldung ist trotzdem möglich.
 * Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben werden.
+* Möglichkeit, Personen aufgrund ihrer Qualifikationen zu filtern.
 
 == Version 1.8
 

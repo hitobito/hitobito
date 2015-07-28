@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Person::ListFilter do
+describe Person::RoleFilter do
 
 
   let(:user) { people(:top_leader) }
@@ -8,7 +8,7 @@ describe Person::ListFilter do
   let(:kind) { nil }
   let(:role_types) { [] }
   let(:role_type_ids_string) { role_types.collect(&:id).join(RelatedRoleType::Assigners::ID_URL_SEPARATOR) }
-  let(:list_filter) { Person::ListFilter.new(group, user, kind, role_type_ids_string) }
+  let(:list_filter) { Person::RoleFilter.new(group, user, kind: kind, role_type_ids: role_type_ids_string) }
 
   let(:entries) { list_filter.filter_entries }
 

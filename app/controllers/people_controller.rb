@@ -130,12 +130,20 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
+    filter = list_filter
     entries = filter.filter_entries
     entries = entries.reorder(sort_expression) if sorting?
     @multiple_groups = filter.multiple_groups
     @all_count = filter.all_count if html_request?
     entries
+  end
+
+  def list_filter
+    if params[:filter] == 'qualification' && index_full_ability?
+      Person::QualificationFilter.new(@group, current_user, params)
+    else
+      Person::RoleFilter.new(@group, current_user, params)
+    end
   end
 
   def load_asides

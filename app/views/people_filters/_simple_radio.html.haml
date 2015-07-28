@@ -1,0 +1,5 @@
+= label_tag("#{attr}_#{value}", class: 'radio') do
+  = radio_button_tag(attr,
+                     value,
+                     params[attr] == value || defined?(first))
+  = t(".#{attr}.#{value}")

@@ -5,15 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::ListFilter
+class Person::QualificationFilter
 
-  attr_reader :group, :user, :kind, :filter, :multiple_groups
+  attr_reader :group, :user, :kind, :validity, :qualification_kind_ids, :multiple_groups
 
-  def initialize(group, user, kind, role_type_ids)
+  def initialize(group, user, params)
     @group = group
     @user = user
-    @kind = kind.to_s
-    @filter = PeopleFilter.new(role_type_ids: role_type_ids)
+    @kind = params[:kind].to_s
+    @validity = params[:validity].to_s
+    @qualification_kind_ids = params[:qualification_kind_id]
   end
 
   def filter_entries
@@ -29,10 +30,21 @@ class Person::ListFilter
   private
 
   def filtered_entries(&block)
-    if filter.role_types.present?
-      list_scope(kind, &block).where(roles: { type: filter.role_types })
+    if qualification_kind_ids.present?
+      entries_with_qualifications(list_scope(kind, &block))
     else
       block.call(group).members(group)
+    end
+  end
+
+  def entries_with_qualifications(scope)
+    scope = scope.joins(:qualifications).
+                  where(qualifications: { qualification_kind_id: qualification_kind_ids })
+
+    case validity
+    when 'active' then scope.merge(Qualification.active)
+    when 'reactivateable' then scope.merge(Qualification.reactivateable)
+    else scope
     end
   end
 
@@ -54,7 +66,7 @@ class Person::ListFilter
   end
 
   def accessibles(group = nil)
-    ability = PersonAccessibles.new(user, group)
+    ability = PersonFullReadables.new(user, group)
     Person.accessible_by(ability)
   end
 

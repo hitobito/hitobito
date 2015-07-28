@@ -15,7 +15,7 @@ class PeopleFiltersController < CrudController
 
   hide_action :index, :show, :edit, :update
 
-  skip_authorize_resource only: :create
+  skip_authorize_resource only: [:create, :qualification]
 
   # load group before authorization
   prepend_before_action :parent
@@ -34,6 +34,11 @@ class PeopleFiltersController < CrudController
 
   def destroy
     super(location: send(people_list_path, group))
+  end
+
+  def qualification
+    authorize!(:index_full_people, group)
+    @qualification_kinds = QualificationKind.list
   end
 
   private

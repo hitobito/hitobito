@@ -165,6 +165,7 @@ describe Qualification do
       context 'active qualification' do
         it { expect(q).to be_active }
         it { expect(q).to be_reactivateable }
+        it { expect(Qualification.reactivateable).to include q }
       end
 
       context 'expired qualification' do
@@ -172,6 +173,7 @@ describe Qualification do
 
         it { expect(q).not_to be_active }
         it { expect(q).not_to be_reactivateable }
+        it { expect(Qualification.reactivateable).not_to include q }
       end
     end
 
@@ -181,6 +183,7 @@ describe Qualification do
       context 'active qualification' do
         it { expect(q).to be_active }
         it { expect(q).to be_reactivateable }
+        it { expect(Qualification.reactivateable).to include q }
       end
 
       context 'expired qualification within reactivateable limit' do
@@ -188,6 +191,7 @@ describe Qualification do
 
         it { expect(q).not_to be_active }
         it { expect(q).to be_reactivateable }
+        it { expect(Qualification.reactivateable).to include q }
       end
 
       context 'expired qualification past reactivateable limit' do
@@ -195,6 +199,7 @@ describe Qualification do
 
         it { expect(q).not_to be_active }
         it { expect(q).not_to be_reactivateable }
+        it { expect(Qualification.reactivateable).not_to include q }
       end
     end
 
@@ -204,6 +209,7 @@ describe Qualification do
 
       it { expect(q).to be_reactivateable }
       it { expect(q.reactivateable?(today + 2.years)).to be_falsey }
+        it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
     end
   end
 

@@ -8,20 +8,34 @@
 module FilterNavigation
   class People < Base
 
-    attr_reader :group, :name, :role_type_ids, :deep
+    attr_reader :group
 
     delegate :can?, to: :template
 
-    def initialize(template, group, name, role_type_ids, deep = false)
+    def initialize(template, group, params)
       super(template)
       @group = group
-      @name = name
-      @role_type_ids = role_type_ids
-      @deep = deep
+      @params = params
       init_kind_filter_names
       init_labels
       init_kind_items
       init_dropdown_links
+    end
+
+    def name
+      @params[:name]
+    end
+
+    def role_type_ids
+      @params[:role_type_ids]
+    end
+
+    def qualification_kind_ids
+      @params[:qualification_kind_id]
+    end
+
+    def deep
+      @params[:kind] || false
     end
 
     private
@@ -38,7 +52,7 @@ module FilterNavigation
         @active_label = name
       elsif name.present?
         dropdown.activate(name)
-      elsif role_type_ids.present?
+      elsif role_type_ids.present? || qualification_kind_ids.present?
         dropdown.activate(translate(:custom_filter))
       else
         @active_label = main_filter_name
@@ -72,8 +86,9 @@ module FilterNavigation
       else
         add_entire_subgroup_filter_link
       end
-      add_custom_people_filter_links
-      add_define_custom_people_filter_link
+      add_people_role_filter_links
+      add_define_people_role_filter_link
+      add_define_qualification_filter_link
     end
 
     def add_entire_layer_filter_link
@@ -88,15 +103,22 @@ module FilterNavigation
       dropdown.add_item(name, link)
     end
 
-    def add_custom_people_filter_links
+    def add_people_role_filter_links
       filters = PeopleFilter.for_group(group)
       filters.each { |filter| people_filter_link(filter) }
     end
 
-    def add_define_custom_people_filter_link
+    def add_define_people_role_filter_link
       if can?(:new, group.people_filters.new)
         dropdown.add_divider if dropdown.items.present?
-        dropdown.add_item(translate(:new_filter), new_group_people_filter_path)
+        dropdown.add_item(translate(:new_role_filter), new_group_people_filter_path)
+      end
+    end
+
+    def add_define_qualification_filter_link
+      if can?(:index_full_people, group)
+        dropdown.add_item(translate(:new_qualification_filter),
+                          qualification_group_people_filter_path)
       end
     end
 
@@ -104,6 +126,14 @@ module FilterNavigation
       template.new_group_people_filter_path(
         group.id,
         people_filter: { role_type_ids: role_type_ids })
+    end
+
+    def qualification_group_people_filter_path
+      template.qualification_group_people_filters_path(
+        group.id,
+        { qualification_kind_id: qualification_kind_ids,
+          kind: deep,
+          validity: @params[:validity] })
     end
 
     def people_filter_link(filter)

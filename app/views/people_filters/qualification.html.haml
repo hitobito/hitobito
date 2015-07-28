@@ -1,0 +1,34 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title(t('.title'))
+
+= form_tag(group_people_path(@group), method: :get, class: 'form-noindent') do |f|
+  = hidden_field_tag 'filter', 'qualification'
+
+  = render 'search_button'
+
+  .label-columns
+    = field_set_tag(t('.prompt_qualification_selection')) do
+      .controls
+        - @qualification_kinds.each do |kind|
+          - dom_id = "qualification_kind_id_#{kind.id}"
+          = label_tag(dom_id, class: 'checkbox inline') do
+            = check_box_tag('qualification_kind_id[]',
+                            kind.id,
+                            Array(params[:qualification_kind_id]).include?(kind.id.to_s),
+                            id: dom_id)
+            = kind.to_s
+
+  = field_set_tag(t('.prompt_validity')) do
+    = render 'simple_radio', attr: 'validity', value: 'active', first: true
+    = render 'simple_radio', attr: 'validity', value: 'reactivateable'
+    = render 'simple_radio', attr: 'validity', value: 'all'
+
+  = field_set_tag(t('.prompt_kind')) do
+    = render 'simple_radio', attr: 'kind', value: 'deep', first: true
+    = render 'simple_radio', attr: 'kind', value: 'layer'
+
+  = render 'search_button'

@@ -458,7 +458,8 @@ de:
     custom_filter: 'Eigener Filter'
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
-    new_filter: 'Neuer Filter...'
+    new_role_filter: 'Neuer Rollen Filter...'
+    new_qualification_filter: 'Neuer Qualifikationen Filter...'
 
   filter_navigation/event/participations:
     predefined_filters:
@@ -667,7 +668,23 @@ de:
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
 
     new:
-      title: Personen filtern
+      title: Personen nach Rollen filtern
+
+    qualification:
+      title: Personen nach Qualifikationen filtern
+      prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
+      prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_kind: In welchem Bereich soll gesucht werden?
+
+    simple_radio:
+      validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
+      kind:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
 
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'

@@ -20,7 +20,7 @@ class Event::ApplicationMarketController < ApplicationController
 
   def add_participant
     if assigner.createable?
-      assigner.add_participant
+      assigner_add_participant
     else
       render 'participation_exists_error'
     end
@@ -42,6 +42,10 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   private
+
+  def assigner_add_participant
+    assigner.add_participant
+  end
 
   def load_participants
     event.participations_for(*event.participant_types).

@@ -22,6 +22,8 @@ class PeopleFiltersController < CrudController
 
   before_render_form :compose_role_lists
 
+  helper_method :people_list_path
+
   def create
     if params[:button] == 'save'
       authorize!(:create, entry)
@@ -33,7 +35,7 @@ class PeopleFiltersController < CrudController
   end
 
   def destroy
-    super(location: send(people_list_path, group))
+    super(location: people_list_path)
   end
 
   def qualification
@@ -57,7 +59,7 @@ class PeopleFiltersController < CrudController
     if entry.role_types.present?
       params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
     end
-    send(people_list_path, group, params)
+    people_list_path(params)
   end
 
   def compose_role_lists
@@ -68,7 +70,7 @@ class PeopleFiltersController < CrudController
     model_params ? model_params.permit(permitted_attrs) : {}
   end
 
-  def people_list_path
-    :group_people_path
+  def people_list_path(options = {})
+    group_people_path(group, options)
   end
 end

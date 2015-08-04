@@ -38,6 +38,10 @@ module FilterNavigation
       @params[:kind] || false
     end
 
+    def validity
+      @params[:validity]
+    end
+
     private
 
     def init_kind_filter_names
@@ -131,9 +135,9 @@ module FilterNavigation
     def qualification_group_people_filter_path
       template.qualification_group_people_filters_path(
         group.id,
-        { qualification_kind_id: qualification_kind_ids,
-          kind: deep,
-          validity: @params[:validity] })
+        qualification_kind_id: qualification_kind_ids,
+        kind: deep,
+        validity: validity)
     end
 
     def people_filter_link(filter)

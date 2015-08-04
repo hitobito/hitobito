@@ -5,7 +5,7 @@
 
 - title(t('.title'))
 
-= form_tag(group_people_path(@group), method: :get, class: 'form-noindent') do |f|
+= form_tag(people_list_path, method: :get, class: 'form-noindent') do |f|
   = hidden_field_tag 'filter', 'qualification'
 
   = render 'search_button'

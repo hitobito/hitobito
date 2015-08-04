@@ -17,4 +17,10 @@
 
 class Location < ActiveRecord::Base
 
+  validates :canton, inclusion: { in: Cantons.short_name_strings.collect(&:upcase) }
+
+  def canton_label
+    Cantons.full_name(canton)
+  end
+
 end

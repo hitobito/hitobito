@@ -162,6 +162,34 @@ de:
         other: Abonnenten
 
     attributes:
+      cantons:
+        ag: Aargau
+        ai: Appenzell Innerrhoden
+        ar: Appenzell Ausserrhoden
+        be: Bern
+        bl: Basel-Land
+        bs: Basel-Stadt
+        fr: Freiburg
+        ge: Genf
+        gl: Glarus
+        gr: Graubünden
+        ju: Jura
+        lu: Luzern
+        ne: Neuenburg
+        nw: Nidwalden
+        ow: Obwalden
+        sg: St. Gallen
+        sh: Schaffhausen
+        so: Solothurn
+        sz: Schwyz
+        tg: Thurgau
+        ti: Tessin
+        ur: Uri
+        vd: Waadt
+        vs: Wallis
+        zg: Zug
+        zh: Zürich
+
       person:
         first_name: Vorname
         last_name: Nachname

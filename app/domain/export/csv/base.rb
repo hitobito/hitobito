@@ -66,8 +66,12 @@ module Export::Csv
     end
 
     def values(entry)
-      row = row_class.new(entry)
+      row = row_for(entry)
       attributes.collect { |attr| row.fetch(attr) }
+    end
+
+    def row_for(entry)
+      row_class.new(entry)
     end
 
   end

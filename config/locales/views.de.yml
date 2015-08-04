@@ -282,6 +282,8 @@ de:
 
   export/csv/events/list:
     group_names: 'Organisatoren'
+    duration: Zeitraum
+    date: "Datum %{index}"
 
   event:
     run_by: 'Durchgeführt von'

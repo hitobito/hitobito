@@ -19,15 +19,17 @@ sl:
 
 sl_leader:
   validity: 2
+  reactivateable: 4
 
 gl:
   validity: 1
 
 gl_leader:
   validity: 1
+  reactivateable: 2
 
 ql:
-  validity: 2
+  validity:
 
 old:
   validity: 1

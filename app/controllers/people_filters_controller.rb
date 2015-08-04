@@ -38,7 +38,7 @@ class PeopleFiltersController < CrudController
 
   def qualification
     authorize!(:index_full_people, group)
-    @qualification_kinds = QualificationKind.list
+    @qualification_kinds = QualificationKind.list.without_deleted
   end
 
   private

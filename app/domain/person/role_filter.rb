@@ -5,25 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::RoleFilter
+class Person::RoleFilter < Person::ListFilter
 
-  attr_reader :group, :user, :kind, :filter, :multiple_groups
+  attr_reader :kind, :filter
 
   def initialize(group, user, params)
-    @group = group
-    @user = user
+    super(group, user)
     @kind = params[:kind].to_s
     @filter = PeopleFilter.new(role_type_ids: params[:role_type_ids])
-  end
-
-  def filter_entries
-    entries = filtered_entries { |group| accessibles(group) }.preload_groups.uniq
-    entries = entries.order_by_role if Settings.people.default_sort == 'role'
-    entries.order_by_name
-  end
-
-  def all_count
-    filtered_entries { |group| all(group) }.uniq.count
   end
 
   private
@@ -32,30 +21,8 @@ class Person::RoleFilter
     if filter.role_types.present?
       list_scope(kind, &block).where(roles: { type: filter.role_types })
     else
-      block.call(group).members(group)
+      unfiltered_entries(&block)
     end
-  end
-
-  def list_scope(scope_kind, &block)
-    case scope_kind
-    when 'deep'
-      @multiple_groups = true
-      block.call.in_or_below(group)
-    when 'layer'
-      @multiple_groups = true
-      block.call.in_layer(group)
-    else
-      block.call(group)
-    end
-  end
-
-  def all(group = nil)
-    group ? group.people : Person
-  end
-
-  def accessibles(group = nil)
-    ability = PersonReadables.new(user, group)
-    Person.accessible_by(ability)
   end
 
 end

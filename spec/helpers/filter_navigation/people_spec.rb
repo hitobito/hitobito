@@ -103,6 +103,8 @@ describe 'FilterNavigation::People' do
   context 'bottom group' do
     let(:group) { groups(:bottom_group_one_one).decorate }
 
+    its('dropdown.items')  { should have(3).items }
+
     it 'entire sub groups contains only sub groups role types' do
       subject.dropdown.items.first.url =~ /#{[Role::External,
                                               Group::GlobalGroup::Leader,

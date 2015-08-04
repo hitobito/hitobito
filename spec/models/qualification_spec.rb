@@ -161,7 +161,7 @@ describe Qualification do
     let(:start_date) { today - 1.years }
     let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
 
-    context 'missing' do
+    context 'not reactivateable' do
       context 'active qualification' do
         it { expect(q).to be_active }
         it { expect(q).to be_reactivateable }
@@ -177,7 +177,7 @@ describe Qualification do
       end
     end
 
-    context 'when present' do
+    context 'reactivateable' do
       before { kind.update_column(:reactivateable, 2) }
 
       context 'active qualification' do

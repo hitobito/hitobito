@@ -9,8 +9,9 @@ require 'spec_helper'
 
 describe PeopleFiltersController do
 
-  before { sign_in(people(:top_leader)) }
+  before { sign_in(user) }
 
+  let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
   let(:role_types) { [Group::TopGroup::Leader, Group::TopGroup::Member] }
   let(:role_type_ids) { role_types.collect(&:id) }
@@ -79,4 +80,34 @@ describe PeopleFiltersController do
     end
   end
 
+  context 'GET qualification' do
+    it 'builds entry with group and existing params' do
+      get :qualification, group_id: group.id
+
+      expect(assigns(:qualification_kinds)).to be_present
+    end
+
+    context 'user without index_full' do
+      context 'with group read' do
+        let(:user) { Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person }
+
+        it 'is not authorized' do
+          expect do
+            get :qualification, group_id: group.id
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'in other layer' do
+        let(:user) { Fabricate(Group::TopGroup::LocalGuide.name, group: groups(:top_group)).person }
+        let(:group) { groups(:bottom_layer_one) }
+
+        it 'is not authorized' do
+          expect do
+            get :qualification, group_id: group.id
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
+  end
 end

@@ -685,6 +685,7 @@ de:
         deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
         layer: In der aktuellen Ebene und allen ihren Gruppen
         group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
 
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'

@@ -28,7 +28,9 @@
     = render 'simple_radio', attr: 'validity', value: 'all'
 
   = field_set_tag(t('.prompt_kind')) do
-    = render 'simple_radio', attr: 'kind', value: 'deep', first: true
+    = render 'simple_radio', attr: 'kind', value: 'deep', first: true,
+              caption: ".kind.#{@group.layer? ? 'deep' : 'group_deep'}"
     = render 'simple_radio', attr: 'kind', value: 'layer'
+    = render 'simple_radio', attr: 'kind', value: 'group'
 
   = render 'search_button'

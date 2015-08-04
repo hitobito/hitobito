@@ -120,7 +120,7 @@ module FilterNavigation
     end
 
     def add_define_qualification_filter_link
-      if group.layer? && can?(:index_full_people, group)
+      if can?(:index_full_people, group)
         dropdown.add_item(translate(:new_qualification_filter),
                           qualification_group_people_filter_path)
       end

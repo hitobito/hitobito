@@ -161,6 +161,7 @@ class Person < ActiveRecord::Base
     end
 
     def mailing_emails_for(people)
+      people = Array(people)
       emails = people.collect(&:email) +
                AdditionalEmail.mailing_emails_for(people)
       emails.select(&:present?).uniq

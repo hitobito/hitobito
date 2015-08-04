@@ -7,13 +7,14 @@
 
 class Event::ParticipantAssigner
 
-  attr_reader :event, :participation
+  attr_reader :event, :participation, :user
 
   delegate :application, to: :participation
 
-  def initialize(event, participation)
+  def initialize(event, participation, user = nil)
     @event = event
     @participation = participation
+    @user = user
   end
 
   def createable?
@@ -29,7 +30,7 @@ class Event::ParticipantAssigner
       end
 
       set_active(true)
-      application.update_column(:waiting_list, false) if application.waiting_list?
+      remove_from_waiting_list if application.waiting_list?
       create_participant_role
       event.refresh_participant_counts!
     end
@@ -78,6 +79,10 @@ class Event::ParticipantAssigner
 
   def set_active(active)
     participation.update!(active: active)
+  end
+
+  def remove_from_waiting_list
+    application.update_column(:waiting_list, false)
   end
 
   # update the existing set of answers so that one exists for every question of event.

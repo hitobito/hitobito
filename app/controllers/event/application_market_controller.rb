@@ -106,7 +106,7 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def assigner
-    @assigner ||= Event::ParticipantAssigner.new(event, participation)
+    @assigner ||= Event::ParticipantAssigner.new(event, participation, current_user)
   end
 
   def event

@@ -13,4 +13,4 @@ Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobi
 * [Entwurfsentscheidungen](09_entwurfsentscheidungen.md)
 * [Glossar](12_glossar.md)
 
-Alle Diagramme wurden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
+Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.

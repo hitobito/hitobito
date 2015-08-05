@@ -67,4 +67,9 @@ namespace :doc do
   task :arch do
     Hitobito::DocGenerator.new('architecture', 'Architektur Dokumentation').compose
   end
+
+  desc 'Generate the development documentation as HTML'
+  task :dev do
+    Hitobito::DocGenerator.new('development', 'Entwicklungs Dokumentation').compose
+  end
 end

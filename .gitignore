@@ -31,6 +31,8 @@ doc/models.png
 doc/app
 doc/architecture/architecture.html
 doc/architecture/assets/**/*
+doc/development/development.html
+doc/development/assets/**/*
 spec/reports
 
 

@@ -136,7 +136,7 @@ describe Event::ListsController, type: :controller do
         expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK  Top'
         expect(main.find('table tr:eq(1) td:eq(1) a')[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
         expect(main.find('table tr:eq(1) td:eq(2)').native.to_xml).to eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
-        expect { main.find('table tr:eq(2) td:eq(4)') }.to raise_error
+        expect(main).to have_no_selector('table tr:eq(2) td:eq(4)')
       end
 
       it 'groups courses by course type' do

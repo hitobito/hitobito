@@ -21,7 +21,7 @@ module MailRelay
     class << self
       def personal_return_path(list_name, sender_email)
         # recipient format (before @) must match regexp in #reject_not_existing
-        "#{list_name}#{SENDER_SUFFIX}+#{sender_email.gsub('@', '=')}@#{mail_domain}"
+        "#{list_name}#{SENDER_SUFFIX}+#{sender_email.tr('@', '=')}@#{mail_domain}"
       end
 
       def app_sender_name
@@ -64,7 +64,7 @@ module MailRelay
     end
 
     def prepare_reject_message(list_address, sender_address)
-      message.to = sender_address.gsub('=', '@')
+      message.to = sender_address.tr('=', '@')
 
       env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
       message.sender = env_sender

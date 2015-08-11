@@ -8,17 +8,21 @@ AllCops:
     - spec/**/*
     - vendor/**/*
 
-ClassLength:
-  Max: 200  # Try to reduce this value
 
-MethodLength:
-  Max: 18  # Try to reduce this value
-
-CyclomaticComplexity:
+Metrics/CyclomaticComplexity:
   Max: 8  # Try to reduce this value
+
+Metrics/ClassLength:
+  Max: 200  # Try to reduce this value
 
 Metrics/LineLength:
   Max: 115  # Try to reduce this value
+
+Metrics/MethodLength:
+  Max: 18  # Try to reduce this value
+
+Metrics/ModuleLength:
+  Max: 200
 
 Metrics/ParameterLists:
   Max: 6
@@ -26,7 +30,7 @@ Metrics/ParameterLists:
 Metrics/AbcSize:
   Max: 72
 
-Encoding:
+Style/Encoding:
   Enabled: true
 
 # Disable all other cops
@@ -148,9 +152,6 @@ IndentHash:
 Lambda:
   Enabled: false
 
-LeadingCommentSpace:
-  Enabled: false
-
 LineEndConcatenation:
   Enabled: false
 
@@ -161,6 +162,9 @@ Lint/DefEndAlignment:
   Enabled: false
 
 Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UnneededDisable:
   Enabled: false
 
 Loop:
@@ -259,13 +263,22 @@ Style/CommentIndentation:
 Style/EachWithObject:
   Enabled: false
 
+Style/ExtraSpacing:
+  Enabled: false
+
 Style/GuardClause:
   Enabled: false
 
 Style/IndentArray:
   Enabled: false
 
+Style/LeadingCommentSpace:
+  Enabled: false
+
 Style/MethodCallParentheses:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false
 
 Style/Next:
@@ -274,10 +287,10 @@ Style/Next:
 Style/SingleLineBlockParams:
   Enabled: false
 
-Style/SpaceInsideBlockBraces:
+Style/SpaceBeforeComment:
   Enabled: false
 
-Style/SingleLineBlockParams:
+Style/SpaceInsideBlockBraces:
   Enabled: false
 
 Style/VariableName:

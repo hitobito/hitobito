@@ -22,7 +22,7 @@ module TarantulaConfig
     t.crawl
   end
 
-  # rubocop:disable MethodLength
+  # rubocop:disable Metrics/MethodLength, Style/RegexpLiteral
   def configure_urls(t, person)
     # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)
@@ -87,7 +87,7 @@ module TarantulaConfig
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable MethodLength, Style/RegexpLiteral
 
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window

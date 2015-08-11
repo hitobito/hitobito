@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   include Concerns::Authenticatable
   include ERB::Util
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   helper_method :person_home_path
   hide_action :person_home_path

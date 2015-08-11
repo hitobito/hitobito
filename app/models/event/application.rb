@@ -24,7 +24,8 @@ class Event::Application < ActiveRecord::Base
 
   ### ASSOCIATION
 
-  has_one :participation, inverse_of: :application#, dependent: :nullify # not working with rails 4.2.3, uncomment later
+  # dependent: :nullify not working with rails 4.2.3, uncomment later
+  has_one :participation, inverse_of: :application#, dependent: :nullify
 
   has_one :event, through: :participation
 

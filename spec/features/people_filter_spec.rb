@@ -24,7 +24,7 @@ describe PeopleController, js: true do
 
       # edit the current filter
       click_link 'Bottom Layer'
-      click_link 'Neuer Filter...'
+      click_link 'Neuer Rollen Filter...'
 
       expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Leader.id}")
       expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Member.id}")
@@ -79,7 +79,7 @@ describe PeopleController, js: true do
     expect(page).to have_no_selector('.table tbody tr')
 
     click_link 'Weitere Ansichten'
-    click_link 'Neuer Filter...'
+    click_link 'Neuer Rollen Filter...'
 
     expect(page).to have_css('input:checked', count: 0)
   end

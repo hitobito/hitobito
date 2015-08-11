@@ -45,6 +45,8 @@ module I18nSettable
             value = false
           end
 
+          # sorry about the occasional deprecation warning, not possible to avoid this one.
+          # wait it out till rails 5.
           super(value)
         end
       end

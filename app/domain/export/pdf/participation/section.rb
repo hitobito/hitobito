@@ -123,7 +123,7 @@ module Export::Pdf::Participation
     end
 
     def i18n_event_postfix
-      event.class.to_s.underscore.gsub('/', '_')
+      event.class.to_s.underscore.tr('/', '_')
     end
   end
 end

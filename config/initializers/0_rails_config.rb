@@ -5,6 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-RailsConfig.setup do |config|
-  config.const_name = "Settings"
-end
+#Config.setup do |config|
+#  config.const_name = "Settings"
+#end

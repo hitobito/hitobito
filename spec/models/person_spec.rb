@@ -250,7 +250,7 @@ describe Person do
     end
 
     it 'cannot create two people same email' do
-      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error
+      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 

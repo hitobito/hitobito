@@ -19,7 +19,7 @@ describe Devise::PasswordsController do
     it '#create with invalid email invalid password' do
       post :create, person: { email: 'asdf' }
       expect(last_email).not_to be_present
-      expect(controller.resource.errors[:email]).to eq ['nicht gefunden']
+      expect(controller.send(:resource).errors[:email]).to eq ['nicht gefunden']
     end
 
     context 'with login permission' do

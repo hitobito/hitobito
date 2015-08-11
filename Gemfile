@@ -28,20 +28,19 @@ gem 'haml'
 gem 'http_accept_language'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mini_magick'
-gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
+gem 'mysql2'#, '0.3.15' # 0.3.16 fails sphinx specs on jenkins
 gem 'nested_form'
 gem 'oat'
-gem 'paper_trail', '>= 4.0.0.beta2'
+gem 'paper_trail'
 gem 'paranoia'
 gem 'customized_piwik_analytics', '~> 1.0.0'
-gem 'prawn'
+gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
 gem 'prawn-table'
 gem 'protective'
 gem 'rack'
 gem 'rails_autolink'
-gem 'rails_config'
+gem 'config'
 gem 'rails-i18n'
-#gem 'schema_validations'
 gem 'validates_by_schema', path: '../validates_by_schema'
 gem 'seed-fu'
 gem 'simpleidn'
@@ -58,10 +57,10 @@ gem 'bootstrap-wysihtml5-rails', '~> 0.3.1.24'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'compass'
-gem 'compass-rails', '>= 1.1.7'
+gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'sass-rails'
+gem 'sass-rails', '5.0.1' # required for compass-rails
 #gem 'therubyracer', platforms: :ruby
 gem 'uglifier'
 
@@ -107,7 +106,7 @@ end
 
 group :metrics do
   gem 'annotate'
-  gem 'brakeman', '2.5.0'
+  gem 'brakeman'#, '2.5.0'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
   gem 'rubocop'

@@ -10,7 +10,7 @@ class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
   attr_reader :new_group, :errors
 
   def merge!
-    fail('Cant merge these Groups') unless group2_valid?
+    fail('Cannot merge these Groups') unless group2_valid?
 
     ::Group.transaction do
       if create_new_group

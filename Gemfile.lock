@@ -578,5 +578,5 @@ DEPENDENCIES
   thinking-sphinx
   uglifier
   validates_timeliness
-  wagons!
+  wagons
   wirble

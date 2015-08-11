@@ -2,4 +2,5 @@
 
 . hitobito/bin/ci/wagon_setup.sh
 
-bundle exec rake db:create ci:wagon --trace
+bundle exec rake db:create db:test:prepare --trace &&
+bundle exec ci:wagon --trace

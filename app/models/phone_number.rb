@@ -23,6 +23,9 @@ class PhoneNumber < ActiveRecord::Base
 
   self.value_attr = :number
 
+
+  validates_by_schema
+
   class << self
     def predefined_labels
       Settings.phone_number.predefined_labels

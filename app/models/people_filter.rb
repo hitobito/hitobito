@@ -25,6 +25,7 @@ class PeopleFilter < ActiveRecord::Base
   has_many :related_role_types, as: :relation, dependent: :destroy
 
 
+  validates_by_schema
   validates :name, uniqueness: { scope: [:group_id, :group_type] }
 
 

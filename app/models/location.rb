@@ -17,6 +17,8 @@
 
 class Location < ActiveRecord::Base
 
+  validates_by_schema
+  validates :name, uniqueness: { scope: [:zip_code, :canton] }
   validates :canton, inclusion: { in: Cantons.short_name_strings.collect(&:upcase) }
 
   def canton_label

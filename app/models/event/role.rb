@@ -55,6 +55,8 @@ class Event::Role < ActiveRecord::Base
   has_one :person, through: :participation
 
 
+  validates_by_schema
+
   ### CALLBACKS
 
   after_create :set_participation_active

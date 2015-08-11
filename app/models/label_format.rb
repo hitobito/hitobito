@@ -38,6 +38,7 @@ class LabelFormat < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
   validates :page_size, inclusion: available_page_sizes
 
+  validates_by_schema
   validates :width, :height, :font_size, :count_horizontal, :count_vertical,
             numericality: { greater_than_or_equal_to: 1, allow_nil: true }
 

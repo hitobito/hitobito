@@ -83,6 +83,7 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :email, format: Devise.email_regexp, allow_blank: true
 
 

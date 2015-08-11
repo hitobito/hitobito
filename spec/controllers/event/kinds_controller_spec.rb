@@ -14,9 +14,9 @@ describe Event::KindsController do
   before { sign_in(people(:top_leader)) }
 
   it 'POST update resets destroy flag when updating deleted kinds' do
-    expect(destroyed).to be_destroyed
+    expect(destroyed).to be_deleted
     post :update, id: destroyed.id, event_kind: { label: destroyed.label }
-    expect(destroyed.reload).not_to be_destroyed
+    expect(destroyed.reload).not_to be_deleted
   end
 
   it 'GET index lists destroyed entries last' do

@@ -34,6 +34,7 @@ class PeopleRelation < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :kind, inclusion: { in: ->(_) { possible_kinds } }
   validate :assert_head_and_tail_are_different
 

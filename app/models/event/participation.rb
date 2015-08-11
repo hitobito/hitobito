@@ -21,8 +21,6 @@
 
 class Event::Participation < ActiveRecord::Base
 
-  schema_validations except_type: :uniqueness
-
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers
@@ -44,6 +42,7 @@ class Event::Participation < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :person_id,
             uniqueness: { scope: :event_id }
   validates :additional_information,

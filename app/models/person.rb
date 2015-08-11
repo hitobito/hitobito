@@ -118,7 +118,7 @@ class Person < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  schema_validations except: [:email, :picture, :created_at, :updated_at]
+  validates_by_schema except: [:email, :picture]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
   validates :birthday, timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }

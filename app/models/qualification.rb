@@ -30,6 +30,7 @@ class Qualification < ActiveRecord::Base
 
   before_validation :set_finish_at
 
+  validates_by_schema
   validates :qualification_kind_id,
             uniqueness: { scope: [:person_id, :start_at, :finish_at],
                           message: :exists_for_timeframe  }

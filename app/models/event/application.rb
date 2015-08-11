@@ -24,11 +24,7 @@ class Event::Application < ActiveRecord::Base
 
   ### ASSOCIATION
 
-<<<<<<< HEAD
-  has_one :participation, inverse_of: :application
-=======
-  has_one :participation, dependent: :nullify
->>>>>>> update all gems
+  has_one :participation, inverse_of: :application#, dependent: :nullify # not working with rails 4.2.3, uncomment later
 
   has_one :event, through: :participation
 
@@ -36,6 +32,8 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_2, class_name: 'Event' #::Course
   belongs_to :priority_3, class_name: 'Event' #::Course
 
+
+  validates_by_schema
 
   ### CLASS METHODS
 

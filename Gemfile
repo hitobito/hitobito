@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -41,8 +41,8 @@ gem 'rack'
 gem 'rails_autolink'
 gem 'rails_config'
 gem 'rails-i18n'
-gem 'schema_plus', '>= 2.0.0.pre12'
-gem 'schema_validations'
+#gem 'schema_validations'
+gem 'validates_by_schema', path: '../validates_by_schema'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'thinking-sphinx'
@@ -62,7 +62,7 @@ gem 'compass-rails', '>= 1.1.7'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails'
-gem 'therubyracer', platforms: :ruby
+#gem 'therubyracer', platforms: :ruby
 gem 'uglifier'
 
 group :development, :test do

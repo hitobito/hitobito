@@ -27,6 +27,7 @@ class MailingList < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy
 
 
+  validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true

@@ -23,6 +23,7 @@ class CustomContent < ActiveRecord::Base
   validates :label, presence: true
   validates :label, :subject, length: { maximum: 255, allow_nil: true }
   validates :body, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates_by_schema
 
   validate :assert_required_placeholders_are_used
 

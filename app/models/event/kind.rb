@@ -32,6 +32,7 @@ class Event::Kind < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   # explicitly define validations for translated attributes
   validates :label, presence: true
   validates :label, :short_name, length: { allow_nil: true, maximum: 255 }

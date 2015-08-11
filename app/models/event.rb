@@ -98,6 +98,7 @@ class Event < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :dates, presence: { message: :must_exist }
   validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,

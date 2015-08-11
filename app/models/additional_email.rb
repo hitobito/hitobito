@@ -24,6 +24,7 @@ class AdditionalEmail < ActiveRecord::Base
 
   self.value_attr = :email
 
+  validates_by_schema
   validates :email, format: Devise.email_regexp
 
   class << self

@@ -258,7 +258,7 @@
     > .sheet,
     > .sheet > .container-shadow > #content {
       @include border-top-left-radius(0);
-      @include single-box-shadow(none);
+      @include box-shadow(none);
     }
   }
 }

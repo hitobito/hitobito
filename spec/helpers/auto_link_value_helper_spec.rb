@@ -10,15 +10,15 @@ require 'spec_helper'
 describe AutoLinkValueHelper do
 
   it 'links www addresses' do
-    expect(auto_link_value('www.puzzle.ch')).to eq('<a href="http://www.puzzle.ch" target="_blank">www.puzzle.ch</a>')
+    expect(auto_link_value('www.puzzle.ch')).to eq('<a target="_blank" href="http://www.puzzle.ch">www.puzzle.ch</a>')
   end
 
   it 'links http addresses' do
-    expect(auto_link_value('http://puzzle.ch')).to eq('<a href="http://puzzle.ch" target="_blank">http://puzzle.ch</a>')
+    expect(auto_link_value('http://puzzle.ch')).to eq('<a target="_blank" href="http://puzzle.ch">http://puzzle.ch</a>')
   end
 
   it 'links ftps addresses' do
-    expect(auto_link_value('ftps://puzzle.ch')).to eq('<a href="ftps://puzzle.ch" target="_blank">ftps://puzzle.ch</a>')
+    expect(auto_link_value('ftps://puzzle.ch')).to eq('<a target="_blank" href="ftps://puzzle.ch">ftps://puzzle.ch</a>')
   end
 
   it 'links email addresses' do

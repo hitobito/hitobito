@@ -24,6 +24,7 @@ class Event::Date < ActiveRecord::Base
 
   belongs_to :event
 
+  validates_by_schema
   validates :start_at, presence: true
   validate :assert_meaningful
 

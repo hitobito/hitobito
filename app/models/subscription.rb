@@ -32,6 +32,7 @@ class Subscription < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :related_role_types, presence: { if: ->(s) { s.subscriber.is_a?(Group) } }
 
   validates :subscriber_id, uniqueness: { unless: ->(s) { s.subscriber.is_a?(Group) },

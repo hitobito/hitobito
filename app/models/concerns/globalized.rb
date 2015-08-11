@@ -16,7 +16,6 @@ module Globalized
   module ClassMethods
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
-      self::Translation.schema_validations_config.auto_create = false
     end
 
     def list

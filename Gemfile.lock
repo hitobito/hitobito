@@ -1,22 +1,9 @@
 PATH
   remote: ../
   specs:
-    codez-tarantula (0.5.3)
-      hpricot (~> 0.8.4)
-      htmlentities (~> 4.3.0)
     hitobito_pbs (0.0.1)
       hitobito_youth
     hitobito_youth (0.0.1)
-    wagons (0.4.4)
-      bundler (>= 1.1)
-      rails (>= 3.2)
-      seed-fu-ndo (>= 0.0.2)
-
-PATH
-  remote: ../validates_by_schema
-  specs:
-    validates_by_schema (0.3.0)
-      activerecord (>= 3.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -128,6 +115,11 @@ GEM
       nuggets (~> 1.0)
       safe_yaml (~> 1.0)
     coderay (1.1.0)
+    codez-tarantula (0.5.3)
+      hpricot (~> 0.8.4)
+      htmlentities (~> 4.3.0)
+    codez-validates_by_schema (0.3.0)
+      activerecord (>= 3.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -475,6 +467,10 @@ GEM
     uniform_notifier (1.9.0)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
+    wagons (0.4.5)
+      bundler (>= 1.1)
+      rails (>= 3.2)
+      seed-fu-ndo (>= 0.0.2)
     warden (1.2.3)
       rack (>= 1.0)
     websocket (1.2.2)
@@ -505,6 +501,7 @@ DEPENDENCIES
   ci_reporter_rspec
   cmess
   codez-tarantula
+  codez-validates_by_schema
   coffee-rails
   compass
   compass-rails
@@ -570,7 +567,6 @@ DEPENDENCIES
   sqlite3
   thinking-sphinx
   uglifier
-  validates_by_schema!
   validates_timeliness
   wagons
   wirble

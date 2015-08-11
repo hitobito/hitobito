@@ -1,8 +1,12 @@
 PATH
-  remote: ../
+  remote: ../hitobito_pbs
   specs:
     hitobito_pbs (0.0.1)
       hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
     hitobito_youth (0.0.1)
 
 GEM
@@ -472,7 +476,7 @@ GEM
     uniform_notifier (1.9.0)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
-    wagons (0.4.5)
+    wagons (0.4.6)
       bundler (>= 1.1)
       rails (>= 3.2)
       seed-fu-ndo (>= 0.0.2)
@@ -574,5 +578,5 @@ DEPENDENCIES
   thinking-sphinx
   uglifier
   validates_timeliness
-  wagons
+  wagons!
   wirble

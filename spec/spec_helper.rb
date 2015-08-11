@@ -20,11 +20,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'cancan/matchers'
 
+ActiveRecord::Migration.maintain_test_schema!
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
-ActiveRecord::Migration.maintain_test_schema!
 
 # Add test locales
 Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]

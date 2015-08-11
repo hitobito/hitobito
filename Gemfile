@@ -46,7 +46,7 @@ gem 'seed-fu'
 gem 'simpleidn'
 gem 'thinking-sphinx'
 gem 'validates_timeliness'
-gem 'wagons'
+gem 'wagons', path: '../'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'

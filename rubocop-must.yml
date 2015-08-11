@@ -28,7 +28,7 @@ Metrics/ParameterLists:
   Max: 6
 
 Metrics/AbcSize:
-  Max: 27 # Try to reduce this value
+  Max: 36 # Try to reduce this value
 
 Style/Encoding:
   Enabled: true
@@ -291,6 +291,9 @@ Style/SpaceBeforeComment:
   Enabled: false
 
 Style/SpaceInsideBlockBraces:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
   Enabled: false
 
 Style/VariableName:

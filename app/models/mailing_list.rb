@@ -73,10 +73,10 @@ class MailingList < ActiveRecord::Base
            joins('LEFT JOIN event_participations ON event_participations.person_id = people.id').
            joins(', subscriptions ').
            joins('LEFT JOIN groups sub_groups ' \
-                 "ON subscriptions.subscriber_type = 'Group'" <<
+                 "ON subscriptions.subscriber_type = 'Group'" \
                  'AND subscriptions.subscriber_id = sub_groups.id ').
            joins('LEFT JOIN related_role_types ' \
-                 "ON related_role_types.relation_type = 'Subscription' " <<
+                 "ON related_role_types.relation_type = 'Subscription' " \
                  'AND related_role_types.relation_id = subscriptions.id').
            where(subscriptions: { mailing_list_id: id }).
            where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
@@ -97,7 +97,7 @@ class MailingList < ActiveRecord::Base
 
   def person_subscribers(condition)
     condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.excluded = ? AND ' <<
+                 'subscriptions.excluded = ? AND ' \
                  'subscriptions.subscriber_id = people.id',
                  Person.sti_name,
                  false)
@@ -112,7 +112,7 @@ class MailingList < ActiveRecord::Base
 
   def group_subscribers(condition)
     condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.subscriber_id = sub_groups.id AND ' <<
+                 'subscriptions.subscriber_id = sub_groups.id AND ' \
                  'groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND ' \
                  'roles.type = related_role_types.role_type AND ' \
                  'roles.deleted_at IS NULL',
@@ -121,7 +121,7 @@ class MailingList < ActiveRecord::Base
 
   def event_subscribers(condition)
     condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.subscriber_id = event_participations.event_id AND ' <<
+                 'subscriptions.subscriber_id = event_participations.event_id AND ' \
                  'event_participations.active = ?',
                  Event.sti_name,
                  true)

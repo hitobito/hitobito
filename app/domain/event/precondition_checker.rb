@@ -34,7 +34,7 @@ class Event::PreconditionChecker < Struct.new(:course, :person)
     if errors.present?
       text << translate(:preconditions_not_fulfilled)
       text << birthday_error_text if errors.delete(:birthday)
-      text << qualifications_error_text  if errors.present?
+      text << qualifications_error_text if errors.present?
     end
     text
   end

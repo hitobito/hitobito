@@ -76,7 +76,7 @@ module FilterNavigation
 
     def visible_role_types?(role_types)
       role_types.present? &&
-        (role_types.any? { |t| t.visible_from_above } ||
+        (role_types.any?(&:visible_from_above) ||
          can?(:index_local_people, group))
     end
 

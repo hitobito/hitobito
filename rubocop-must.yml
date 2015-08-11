@@ -28,7 +28,7 @@ Metrics/ParameterLists:
   Max: 6
 
 Metrics/AbcSize:
-  Max: 72
+  Max: 27 # Try to reduce this value
 
 Style/Encoding:
   Enabled: true

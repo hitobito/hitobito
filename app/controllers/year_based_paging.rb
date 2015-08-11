@@ -23,6 +23,6 @@ module YearBasedPaging
   end
 
   def default_year
-    @default_year ||= Date.today.year
+    @default_year ||= Time.zone.today.year
   end
 end

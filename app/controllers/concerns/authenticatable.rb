@@ -41,9 +41,7 @@ module Concerns
     end
 
     def authenticate_person!(*args)
-      # Set the authentication token params if not already present,
-      params[:user_token] = params[:user_token].presence || request.headers['X-User-Token'].presence
-      params[:user_email] = params[:user_email].presence || request.headers['X-User-Email'].presence
+      normalize_user_params
 
       user = params[:user_email] && Person.find_by_email(params[:user_email])
 
@@ -63,6 +61,12 @@ module Concerns
       else
         super(*args)
       end
+    end
+
+    def normalize_user_params
+      # Set the authentication token params if not already present,
+      params[:user_token] = params[:user_token].presence || request.headers['X-User-Token'].presence
+      params[:user_email] = params[:user_email].presence || request.headers['X-User-Email'].presence
     end
   end
 end

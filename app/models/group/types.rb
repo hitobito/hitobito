@@ -164,7 +164,7 @@ module Group::Types
     end
 
     def tsort_each_child(type, &block)
-      type.possible_children.reverse.each(&block)
+      type.possible_children.reverse_each(&block)
     end
 
     def sort

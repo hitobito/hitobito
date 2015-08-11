@@ -13,7 +13,7 @@ module Export::Pdf::Participation
     class_attribute :model_class
 
     delegate :bounds, :bounding_box, :table,
-             :text, :cursor,  :font_size, :text_box,
+             :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
              :image, to: :pdf
 

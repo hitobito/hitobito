@@ -25,7 +25,7 @@ module CsvImportHelper
   def csv_import_attrs
     Import::Person.person_attributes.
       select { |f| field_mappings.values.include?(f[:key].to_s) }.
-      map { |f| f[:key]  }
+      map { |f| f[:key] }
   end
 
   def csv_import_contact_account_attrs(&block)

@@ -50,7 +50,7 @@ class Person < ActiveRecord::Base
                   :email, :address, :zip_code, :town, :country, :gender, :birthday,
                   :picture, :primary_group_id]
 
-  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible,  :created_at, :creator_id,
+  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible, :created_at, :creator_id,
                     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
                     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
                     :locked_at, :remember_created_at, :reset_password_token,

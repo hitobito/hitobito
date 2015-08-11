@@ -58,7 +58,7 @@ module MailRelay
         deliver(message)
       else
         logger.info("#{Time.now.strftime('%FT%T%z')}: " \
-                    "Ignored email from #{sender_email} " <<
+                    "Ignored email from #{sender_email} " \
                     "for list #{envelope_receiver_name}")
       end
     end
@@ -112,7 +112,7 @@ module MailRelay
 
     def deliver(message)
       logger.info("#{Time.now.strftime('%FT%T%z')}: " \
-                  "Relaying email from #{sender_email} " <<
+                  "Relaying email from #{sender_email} " \
                   "for list #{envelope_receiver_name} " \
                   "to #{message.smtp_envelope_to.size} people")
       super

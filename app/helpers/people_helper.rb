@@ -17,7 +17,7 @@ module PeopleHelper
 
   def format_birthday(person)
     if person.birthday?
-      f(person.birthday) << ' ' <<  t('people.years_old', years: person.years)
+      f(person.birthday) << ' ' << t('people.years_old', years: person.years)
     end
   end
 

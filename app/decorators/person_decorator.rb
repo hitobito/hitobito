@@ -120,7 +120,6 @@ class PersonDecorator < ApplicationDecorator
                 title: h.t('global.link.edit'),
                 remote: true)
     end
-
   end
 
 end

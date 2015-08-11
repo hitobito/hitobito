@@ -21,7 +21,7 @@ class Event::ParticipationsController < CrudController
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
-                                  Event::Participation.order_by_role_statement(event))
+                                    Event::Participation.order_by_role_statement(event))
                                 end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',

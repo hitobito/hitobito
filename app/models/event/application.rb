@@ -25,7 +25,7 @@ class Event::Application < ActiveRecord::Base
   ### ASSOCIATION
 
   # dependent: :nullify not working with rails 4.2.3, uncomment later
-  has_one :participation, inverse_of: :application#, dependent: :nullify
+  has_one :participation, inverse_of: :application # , dependent: :nullify
 
   has_one :event, through: :participation
 
@@ -56,9 +56,7 @@ class Event::Application < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def contact
-    event.contact
-  end
+  delegate :contact, to: :event
 
   def priority(event)
     [1, 2, 3].detect { |i| send("priority_#{i}_id") == event.id }

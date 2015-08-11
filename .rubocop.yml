@@ -11,25 +11,26 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
 
-# This cop is currently buggy (0.21.0)
-Delegate:
-  Enabled: false
 
-ClassLength:
+Metrics/AbcSize:
+  Max: 20
+  Severity: error
+
+Metrics/ClassLength:
   Max: 200
   Severity: error
 
-MethodLength:
-  Max: 10
-  Severity: error
-
-CyclomaticComplexity:
+Metrics/CyclomaticComplexity:
   Max: 6
   Severity: error
 
-LineLength:
+Metrics/LineLength:
   Max: 100
   Severity: warning
+
+Metrics/MethodLength:
+  Max: 10
+  Severity: error
 
 
 # Keep for now, easier with superclass definitions

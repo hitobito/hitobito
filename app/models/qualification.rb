@@ -33,7 +33,7 @@ class Qualification < ActiveRecord::Base
   validates_by_schema
   validates :qualification_kind_id,
             uniqueness: { scope: [:person_id, :start_at, :finish_at],
-                          message: :exists_for_timeframe  }
+                          message: :exists_for_timeframe }
   validates :start_at, :finish_at,
             timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }
 
@@ -47,13 +47,13 @@ class Qualification < ActiveRecord::Base
     end
 
     def active(date = nil)
-      date ||= Date.today
+      date ||= Time.zone.today
       where('qualifications.start_at <= ?', date).
         where('qualifications.finish_at >= ? OR qualifications.finish_at IS NULL', date)
     end
 
     def reactivateable(date = nil)
-      date ||= Date.today
+      date ||= Time.zone.today
       joins(:qualification_kind).
       where('qualifications.start_at <= ?', date).
         where('qualifications.finish_at IS NULL OR ' \
@@ -81,7 +81,7 @@ class Qualification < ActiveRecord::Base
   end
 
   def reactivateable?(date = nil)
-    date ||= Date.today
+    date ||= Time.zone.today
     finish_at.nil? || (finish_at + qualification_kind.reactivateable.to_i.years) >= date
   end
 

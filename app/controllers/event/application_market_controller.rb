@@ -26,9 +26,7 @@ class Event::ApplicationMarketController < ApplicationController
     end
   end
 
-  def remove_participant
-    assigner.remove_participant
-  end
+  delegate :remove_participant, to: :assigner
 
   def put_on_waiting_list
     application.update!(waiting_list: true,
@@ -78,10 +76,11 @@ class Event::ApplicationMarketController < ApplicationController
 
   def filter_applications
     if params[:prio].nil? && params[:waiting_list].nil?
-      params[:prio] = %w(1)  # default filter
+      params[:prio] = %w(1) # default filter
     end
 
-    conditions, args = [], []
+    conditions = []
+    args = []
     filter_by_prio(conditions, args) if params[:prio]
     filter_by_waiting_list(conditions, args) if params[:waiting_list]
 

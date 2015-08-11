@@ -91,7 +91,7 @@ class Event::Qualifier
   end
 
   def remove(kinds)
-    obtained(kinds).each { |q| q.destroy }
+    obtained(kinds).each(&:destroy)
   end
 
   # Qualifications set for this qualification_date (via preceeding #issue call in controller)

@@ -45,7 +45,7 @@ module Import
     end
 
     def headers
-      csv.headers.reject { |header| header.blank? }
+      csv.headers.reject(&:blank?)
     end
 
     def flash_notice

@@ -112,7 +112,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def devise_controller?
-    true  # hence, no login required
+    true # hence, no login required
   end
 
 

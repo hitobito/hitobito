@@ -191,7 +191,7 @@ module Sheet
     # if alt_paths matches, this tab is active
     # if nothing matches, first tab is active
     def find_active_tab
-      active = visible_tabs.detect { |tab| tab.current_page? }
+      active = visible_tabs.detect(&:current_page?)
       if active.nil?
         current_path = current_nav_path
         active = visible_tabs.detect { |tab| tab.alt_path_of?(current_path) }
@@ -201,7 +201,7 @@ module Sheet
 
     def visible_tabs
       @visible_tabs ||= tabs.collect { |tab| tab.renderer(view, path_args) }.
-                             select  { |tab| tab.show? }
+                             select(&:show?)
     end
   end
 end

@@ -45,7 +45,7 @@ class Event::Date < ActiveRecord::Base
 
   def assert_meaningful
     unless duration.meaningful?
-      errors.add(:finish_at,  :not_after_start)
+      errors.add(:finish_at, :not_after_start)
     end
   end
 end

@@ -137,7 +137,7 @@ class Event < ActiveRecord::Base
 
     # Events with at least one date in the given year
     def in_year(year)
-      year = ::Date.today.year if year.to_i <= 0
+      year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
@@ -162,7 +162,7 @@ class Event < ActiveRecord::Base
 
     # Events that are open for applications.
     def application_possible
-      today = ::Date.today
+      today = Time.zone.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
       where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
@@ -230,8 +230,8 @@ class Event < ActiveRecord::Base
 
   # May participants apply now?
   def application_possible?
-    (!application_opening_at? || application_opening_at <= ::Date.today) &&
-    (!application_closing_at? || application_closing_at >= ::Date.today) &&
+    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
+    (!application_closing_at? || application_closing_at >= Time.zone.today) &&
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 

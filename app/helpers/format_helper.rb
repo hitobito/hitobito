@@ -10,7 +10,7 @@
 # ApplicationController.
 module FormatHelper
 
-  EMPTY_STRING = '&nbsp;'.html_safe   # non-breaking space asserts better css styling.
+  EMPTY_STRING = '&nbsp;'.html_safe # non-breaking space asserts better css styling.
 
   ################  FORMATTING HELPERS  ##################################
 
@@ -69,7 +69,7 @@ module FormatHelper
       "format_#{obj.class.base_class.name.underscore}_#{attr}"
     else
       "format_#{obj.class.name.underscore}_#{attr}"
-    end.gsub(/\//, '_')  # deal with nested models
+    end.gsub(/\//, '_') # deal with nested models
   end
 
 

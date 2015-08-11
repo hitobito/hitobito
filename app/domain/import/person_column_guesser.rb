@@ -16,9 +16,7 @@ module Import
       population_mapping
     end
 
-    def [](key)
-      mapping[key]
-    end
+    delegate :[], to: :mapping
 
     private
 

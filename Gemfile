@@ -61,7 +61,7 @@ gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails', '5.0.1' # required for compass-rails
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 gem 'uglifier'
 
 group :development, :test do

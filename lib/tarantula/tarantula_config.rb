@@ -86,6 +86,7 @@ module TarantulaConfig
     t.allow_404_for(/fr\/groups\/\d+$/)
     # custom return_urls end up like that.
     t.allow_404_for(/^\-?\d+$/)
+    t.allow_500_for(/^\-?\d+$/)
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
   end

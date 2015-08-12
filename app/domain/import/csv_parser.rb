@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'csv'
-require 'cmess/guess_encoding'
+
 
 module Import
   class CsvParser

@@ -59,10 +59,10 @@ module Concerns
     end
 
     def __decorator_name_for__(ivar)
-      orig_ivar = ivar
-      decorator_name = "#{__model_name_for__(ivar)}Decorator"
+      klass = __model_class_for__(ivar)
+      decorator_name = "#{klass.model_name}Decorator"
       until __decorator_class_exists?(decorator_name)
-        ivar, decorator_name = __superclass_decorator_name(orig_ivar, ivar)
+        klass, decorator_name = __superclass_decorator_name(ivar, klass)
       end
       decorator_name
     end
@@ -74,18 +74,14 @@ module Concerns
       false
     end
 
-    def __superclass_decorator_name(orig_ivar, ivar)
-      superclass = __model_class_for__(ivar).superclass
+    def __superclass_decorator_name(ivar, klass)
+      superclass = klass.superclass
       if superclass == Module
-        fail ArgumentError, "#{orig_ivar} does not have an associated decorator"
+        fail ArgumentError, "#{ivar} does not have an associated decorator"
       end
       superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
       superclass_decorator_name += 'Decorator'
       [superclass, superclass_decorator_name]
-    end
-
-    def __model_name_for__(ivar)
-      __model_class_for__(ivar).model_name
     end
 
     def __model_class_for__(ivar)

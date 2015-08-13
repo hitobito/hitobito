@@ -82,7 +82,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
+  gem 'capybara'#, '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

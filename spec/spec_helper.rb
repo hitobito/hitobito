@@ -117,6 +117,7 @@ end
 # Use Capybara only if features are not excluded
 unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+  Capybara.default_wait_time = 10
 
   if ENV['HEADLESS'] == 'false'
     # use selenium-webkit driver
@@ -129,7 +130,5 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     at_exit do
       headless.destroy
     end
-
-    Capybara.default_wait_time = 5
   end
 end

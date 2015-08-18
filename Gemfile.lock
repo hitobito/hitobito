@@ -122,7 +122,7 @@ GEM
     codez-tarantula (0.5.3)
       hpricot (~> 0.8.4)
       htmlentities (~> 4.3.0)
-    codez-validates_by_schema (0.3.0)
+    codez-validates_by_schema (0.3.1)
       activerecord (>= 3.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)

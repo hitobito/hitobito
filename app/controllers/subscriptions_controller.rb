@@ -21,9 +21,9 @@ class SubscriptionsController < CrudController
   def index
     respond_to do |format|
       format.html  { load_grouped_subscriptions }
-      format.pdf   { render_pdf(mailing_list.people) }
-      format.csv   { render_csv(mailing_list.people) }
-      format.email { render_emails(mailing_list.people) }
+      format.pdf   { render_pdf(ordered_people) }
+      format.csv   { render_csv(ordered_people) }
+      format.email { render_emails(ordered_people) }
     end
   end
 
@@ -38,6 +38,10 @@ class SubscriptionsController < CrudController
     @person_subs = person_subscriptions
     @event_subs = event_subscriptions
     @excluded_person_subs = person_subscriptions(true)
+  end
+
+  def ordered_people
+    mailing_list.people.order_by_name
   end
 
   def render_csv(people)

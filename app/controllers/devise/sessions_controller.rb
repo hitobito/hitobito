@@ -11,6 +11,9 @@ require_dependency Devise::Engine.root.
 
 class Devise::SessionsController < DeviseController
 
+  # required to allow api calls
+  protect_from_forgery with: :null_session, only: [:new, :create]
+
   respond_to :html
   respond_to :json, only: [:new, :create]
 

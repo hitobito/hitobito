@@ -10,6 +10,10 @@ class GroupsController < CrudController
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup
 
+  # required to allow api calls
+  protect_from_forgery with: :null_session, only: [:index, :show]
+
+
   decorates :group, :groups, :contact
 
   before_render_show :active_sub_groups, if: -> { html_request? }
@@ -18,7 +22,10 @@ class GroupsController < CrudController
 
   def index
     flash.keep if html_request?
-    redirect_to group_path(Group.root.id, format: request.format.to_sym)
+    redirect_to group_path(Group.root.id,
+                           format: request.format.to_sym,
+                           user_email: params[:user_email],
+                           user_token: params[:user_token])
   end
 
   def show

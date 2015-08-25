@@ -23,6 +23,10 @@ class PeopleController < CrudController
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
 
+  # required to allow api calls
+  protect_from_forgery with: :null_session, only: [:index, :show]
+
+
   decorates :group, :person, :people, :versions
 
   helper_method :index_full_ability?
@@ -126,7 +130,10 @@ class PeopleController < CrudController
 
   def redirect_to_home
     flash.keep if html_request?
-    redirect_to person_home_path(entry, format: request.format.to_sym)
+    redirect_to person_home_path(entry,
+                                format: request.format.to_sym,
+                                user_email: params[:user_email],
+                                user_token: params[:user_token])
   end
 
   def filter_entries

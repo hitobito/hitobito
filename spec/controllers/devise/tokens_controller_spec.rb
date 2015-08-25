@@ -16,7 +16,10 @@ describe Devise::TokensController do
     role.person.reload
   end
 
-  before { @request.env["devise.mapping"] = Devise.mappings[:person] }
+  before do
+    @controller.allow_forgery_protection = true
+    @request.env["devise.mapping"] = Devise.mappings[:person]
+  end
 
   render_views
 

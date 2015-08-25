@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   include Concerns::Authenticatable
   include ERB::Util
 
+  # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception
 
   helper_method :person_home_path

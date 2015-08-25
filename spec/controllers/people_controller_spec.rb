@@ -524,8 +524,12 @@ describe PeopleController do
 
         context 'json' do
           it 'redirects to json' do
-            get :show, id: top_leader.id, format: :json
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
+            get :show, id: top_leader.id, format: :json, user_email: 'hans@example.com', user_token: '123'
+            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
+                                                         top_leader.id,
+                                                         format: :json,
+                                                         user_email: 'hans@example.com',
+                                                         user_token: '123'))
           end
         end
       end

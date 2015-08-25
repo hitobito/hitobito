@@ -13,7 +13,7 @@ Metrics/CyclomaticComplexity:
   Max: 8  # Try to reduce this value
 
 Metrics/ClassLength:
-  Max: 200  # Try to reduce this value
+  Max: 220  # Try to reduce this value
 
 Metrics/LineLength:
   Max: 115  # Try to reduce this value

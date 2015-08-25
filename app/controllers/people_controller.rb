@@ -131,9 +131,9 @@ class PeopleController < CrudController
   def redirect_to_home
     flash.keep if html_request?
     redirect_to person_home_path(entry,
-                                format: request.format.to_sym,
-                                user_email: params[:user_email],
-                                user_token: params[:user_token])
+                                 format: request.format.to_sym,
+                                 user_email: params[:user_email],
+                                 user_token: params[:user_token])
   end
 
   def filter_entries
@@ -262,4 +262,5 @@ class PeopleController < CrudController
   def authorize_class
     authorize!(:index_people, group)
   end
+
 end

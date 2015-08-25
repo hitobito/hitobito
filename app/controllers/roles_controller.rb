@@ -58,7 +58,7 @@ class RolesController < CrudController
     created = false
     Role.transaction do
       created = with_callbacks(:create, :save) do
-        entry.person.save && entry.save
+        (entry.person.persisted? || entry.person.save) && entry.save
       end
       fail ActiveRecord::Rollback unless created
     end

@@ -105,7 +105,7 @@ class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
 
     # returns country code map with translations, e.g. 'CH' => %w(Schweiz Suisse Switzerland)
     def keyed_translations
-      ISO3166::Country::Translations.map do |key, value|
+      ISO3166::Country::Setup.translations.map do |key, value|
         translations = value.fetch('translations')
         names = translations.slice(*LANGUAGES).values
         [key, with_transliterate(names).to_a.compact] # compact because AN has no translations

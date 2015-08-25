@@ -6,11 +6,11 @@ Das JSON Format folgt den Konventionen von [json:api](http://jsonapi.org).
 
 Die folgenden Methoden dienen zur Authentisierung und Verwaltung des Authentisierungstokens. Als Parameter müssen immer `person[email]` und `person[password]` übergeben werden. In der Antwort ist der Wert des `authentication_token` enthalten, welches für die folgenden Requests jeweils mitgegeben werden muss.
 
-| Methode | Pfad           | Funktion |
+| Methode | Pfad                | Funktion |
 | --- | --- | --- |
-| POST    | /users/sign_in | Token auslesen |
-| POST    | /users/token   | Token neu generieren |
-| DELETE  | /users/token   | Token löschen |
+| POST    | /users/sign_in.json | Token auslesen |
+| POST    | /users/token.json   | Token neu generieren |
+| DELETE  | /users/token.json   | Token löschen |
 
 Sobald das Authentisierungstoken bekannt ist, können verschiedene Endpunkte abgefragt werden. Dazu bestehen zwei Möglichkeiten:
 
@@ -29,7 +29,7 @@ Folgende Endpunkte sind momentan definiert:
 | GET     | /groups/:group_id/people/:id | Personen Details      |
 
 
-### Beispielantwort
+### Beispielantwort auf den Sign In Request
 
     {
       people: [ {

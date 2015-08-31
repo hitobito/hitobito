@@ -27,6 +27,7 @@ class RolesController < CrudController
   end
 
   def update
+    @group = find_group
     if change_type?
       change_type
     else
@@ -110,6 +111,7 @@ class RolesController < CrudController
   end
 
   def build_entry
+    @group = find_group
     # delete unused attributes
     extract_model_attr(:person)
 
@@ -125,7 +127,6 @@ class RolesController < CrudController
   end
 
   def build_role
-    @group = find_group
     type = extract_model_attr(:type)
     if type.present?
       @type = @group.class.find_role_type!(type)

@@ -151,7 +151,7 @@ describe RolesController do
 
     it 'terminates and creates new role if type changes' do
       expect do
-        put :update,  group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name }
+        put :update, group_id: group.id, id: role.id, role: { type: Group::TopGroup::Leader.sti_name }
       end.not_to change { Role.with_deleted.count }
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_deleted.where(id: role.id)).not_to be_exists
@@ -161,11 +161,26 @@ describe RolesController do
     it 'terminates and creates new role if type and group changes' do
       g = groups(:toppers)
       expect do
-        put :update,  group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id }
+        put :update, group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id }
       end.not_to change { Role.with_deleted.count }
       is_expected.to redirect_to(group_person_path(g, person))
       expect(Role.with_deleted.where(id: role.id)).not_to be_exists
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+    end
+
+    context 'multiple groups' do
+      let(:group) { groups(:bottom_group_one_one) }
+      let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: group) }
+
+      it 'terminates and creates new role if group changes' do
+        g = groups(:bottom_group_one_two)
+        expect do
+          put :update, group_id: group.id, id: role.id, role: { type: Group::BottomGroup::Leader.sti_name, group_id: g.id }
+        end.not_to change { Role.with_deleted.count }
+        is_expected.to redirect_to(group_person_path(g, person))
+        expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+        expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Group 12</i> geändert."
+      end
     end
 
     context 'as group_full' do

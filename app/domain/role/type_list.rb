@@ -39,19 +39,23 @@ class Role
       seen_groups << group
       set_role_types(layer, group)
       group.possible_children.each do |child|
-        next if seen_groups.include?(child)
-
-        if child.layer
-          compose_role_list_by_layer(child)
-        elsif !@global_group_types.include?(child)
-          compose_role_list_by_layer(layer, child, seen_groups)
+        if seen_groups.include?(child)
+          # set again to move to the end of the list
+          set_role_types(layer, child) unless child.layer
+        else
+          if child.layer
+            compose_role_list_by_layer(child, child, seen_groups)
+          elsif !@global_group_types.include?(child)
+            compose_role_list_by_layer(layer, child, seen_groups)
+          end
         end
       end
     end
 
     def set_role_types(layer, group)
-      types = local_role_types(group)
-      @role_types[layer.label][group.label] = types if types.present?
+      layer_types = @role_types[layer.label]
+      types = layer_types.delete(group.label).presence || local_role_types(group)
+      layer_types[group.label] = types if types.present?
     end
 
     def compose_global_role_list

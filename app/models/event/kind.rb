@@ -36,6 +36,7 @@ class Event::Kind < ActiveRecord::Base
   # explicitly define validations for translated attributes
   validates :label, presence: true
   validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
+  validates :minimum_age, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
 
 
   accepts_nested_attributes_for :event_kind_qualification_kinds, allow_destroy: true

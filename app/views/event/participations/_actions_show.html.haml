@@ -6,7 +6,7 @@
 - if can?(:edit, entry)
   = button_action_edit
 
-- if entry.person_id == current_user.id
+- if can?(:print, entry)
   = action_button(t('global.button.print'),
                   print_group_event_participation_path(@group, @event, entry, format: :pdf),
                   :print,

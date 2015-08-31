@@ -9,12 +9,10 @@ module Export::Pdf::Participation
   class Confirmation < Section
 
     def render
-      first_page_section do
-        render_read_and_agreed
-        render_signature if event.signature?
-        render_signature_confirmation if signature_confirmation?
-        render_contact_address if contact
-      end
+      render_read_and_agreed
+      render_signature if event.signature?
+      render_signature_confirmation if signature_confirmation?
+      render_contact_address if contact
     end
 
     private
@@ -50,10 +48,8 @@ module Export::Pdf::Participation
 
     def render_signature(header = Event::Role::Participant.model_name.human,
                          key = 'event.participations.print.signature')
-      y = cursor
-      render_boxed(-> { text header; label_with_dots(location_and_date) },
-                   -> { move_down_line; label_with_dots(I18n.t(key)) })
-      move_down_line
+      render_columns(-> { text header; label_with_dots(location_and_date) },
+                     -> { move_down_line; label_with_dots(I18n.t(key)) })
     end
 
     def signature_confirmation?

@@ -27,7 +27,7 @@ module Export::Pdf
       end
 
       def sections
-        [Header, PersonAndEvent, Specifics, Confirmation, EventDetails, GeneralInformation]
+        [Header, PersonAndEvent, Specifics, EventDetails, GeneralInformation, Confirmation]
       end
     end
 

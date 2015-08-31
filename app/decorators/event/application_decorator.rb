@@ -53,7 +53,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def approval_label
     label, type, desc = approval_fields(approved?, rejected?)
-    h.badge(label, type) + desc
+    h.badge(label, type) + ' '.html_safe + desc
   end
 
   def approval_fields(approved, rejected)

@@ -11,7 +11,7 @@ module Export::Pdf::Participation
     def render
       bounding_box([0, cursor], width: bounds.width, height: 40) do
         font_size(20) do
-          shrinking_text_box heading, style: :bold, width: bounds.width - 80
+          text heading, style: :bold, width: bounds.width - 80
         end
         render_image
       end
@@ -20,11 +20,7 @@ module Export::Pdf::Participation
     private
 
     def heading
-      [application_type, year].join(' ')
-    end
-
-    def application_type
-      [event.class.model_name.human, Event::Application.model_name.human.downcase].join
+      I18n.t("event.participations.print.heading_#{event.class.name.underscore}", year: year)
     end
 
     def application_name

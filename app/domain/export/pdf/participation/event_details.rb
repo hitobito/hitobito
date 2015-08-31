@@ -10,8 +10,6 @@ module Export::Pdf::Participation
     attr_reader :count
 
     def render
-      pdf.start_new_page if description? || requirements?
-
       render_description if description?
       render_requirements if requirements?
     end
@@ -30,11 +28,14 @@ module Export::Pdf::Participation
 
     def render_requirements
       with_header(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
-        text event.application_conditions
-        move_down_line if event.application_conditions?
-        if event_with_kind?
+        if event.application_conditions?
+          text event.application_conditions
+          move_down_line
+        end
+
+        if event_with_kind? && event.kind.application_conditions?
           text event.kind.application_conditions
-          move_down_line if event.kind.application_conditions?
+          move_down_line
         end
 
         if course?
@@ -76,8 +77,7 @@ module Export::Pdf::Participation
       values_text = block_given? ? yield : values.map(&:to_s).join("\n")
 
       if values.present?
-        render_boxed(-> { text title }, -> { text values_text })
-        move_down_line
+        render_columns(-> { text title }, -> { text values_text })
       end
     end
 

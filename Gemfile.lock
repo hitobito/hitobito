@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_cevi
+  remote: ../hitobito_pbs
   specs:
-    hitobito_cevi (0.0.1)
+    hitobito_pbs (0.0.1)
       hitobito_youth
 
 PATH
@@ -529,7 +529,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_cevi!
+  hitobito_pbs!
   hitobito_youth!
   http_accept_language
   jquery-rails

@@ -46,7 +46,11 @@ class Event::Kind < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def to_s(_format = :default)
-    "#{short_name} (#{label})"
+    if short_name.present?
+      "#{short_name} (#{label})"
+    else
+      label
+    end
   end
 
   # is this event type qualifying

@@ -15,7 +15,7 @@ module Export::Csv::Events
     }
 
     def kind
-      entry.kind.label
+      entry.kind.try(:label)
     end
 
     def state

@@ -176,6 +176,27 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+        expect(last_email.from).to eq [from]
+        expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
+      end
+
+      context 'with invalid sender address' do
+        before do
+          message.from = nil
+        end
+
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to be_nil }
+        its(:sender) { is_expected.to be_nil }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+          expect(last_email.from).to be_nil
+          expect(last_email.sender).to eq 'leaders-bounces@localhost'
+        end
       end
     end
 

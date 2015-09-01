@@ -93,8 +93,7 @@ module Import
     def parse_date(date_string)
       if date_string.present?
         begin
-          normalized = ActiveRecord::Type::Date.new.date_string_to_long_year(date_string)
-          Time.zone.parse(normalized).try(:to_date)
+          ActiveRecord::Type::Date.new.type_cast_from_user(date_string)
         rescue ArgumentError
           nil
         end

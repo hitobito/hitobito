@@ -45,8 +45,8 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, :padding_left,
             numericality: { greater_than_or_equal_to: 0, allow_nil: true }
 
-  validates :padding_top, numericality: { less_than: :height }
-  validates :padding_left, numericality: { less_than: :width }
+  validates :padding_top, numericality: { less_than: :height, if: :height }
+  validates :padding_left, numericality: { less_than: :width, if: :width }
 
   after_save :sweep_cache
   after_destroy :sweep_cache

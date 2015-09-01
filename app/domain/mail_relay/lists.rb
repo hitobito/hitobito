@@ -83,10 +83,13 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address?
     def sender_allowed?
+      return false if sender_email.blank?
+
+      mailing_list.anyone_may_post ||
       sender_is_additional_sender? ||
+      sender_is_group_email? ||
       sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?) ||
-      mailing_list.anyone_may_post
+      (mailing_list.subscribers_may_post? && sender_is_list_member?)
     end
 
     # List of receiver email addresses for the resent email.
@@ -99,10 +102,6 @@ module MailRelay
         mail_name = envelope_receiver_name
         MailingList.where(mail_name: mail_name).first if mail_name
       end
-    end
-
-    def sender
-      @sender ||= sender_email.presence && Person.find_by_email(sender_email)
     end
 
     def envelope_sender
@@ -125,14 +124,27 @@ module MailRelay
       list.include?(sender_email)
     end
 
+    def sender_is_group_email?
+      group = mailing_list.group
+      group.email == sender_email ||
+      group.additional_emails.collect(&:email).include?(sender_email)
+    end
+
     def sender_is_list_administrator?
-      sender.present? &&
-      Ability.new(sender).can?(:update, mailing_list)
+      potential_senders.any? do |sender|
+        Ability.new(sender).can?(:update, mailing_list)
+      end
     end
 
     def sender_is_list_member?
-      sender.present? &&
-      mailing_list.people.where(id: sender.id).exists?
+      mailing_list.people.where(id: potential_senders.select(:id)).exists?
+    end
+
+    def potential_senders
+      Person.joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'").
+             where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email).
+             uniq
     end
 
     # strip spam headers because they might produce encoding issues

@@ -9,6 +9,7 @@
 * Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt. Eine Anmeldung ist trotzdem möglich.
 * Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben werden.
 * Möglichkeit, Personen aufgrund ihrer Qualifikationen zu filtern.
+* Beim Schreiben auf eine Mailing Liste können neu ebenfalls die zusätzlichen E-Mail Adressen sowie die E-Mail Adressen der Gruppe als Absender verwendet werden.
 
 == Version 1.8
 

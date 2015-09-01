@@ -69,19 +69,81 @@ describe MailRelay::Lists do
   end
 
   context 'list admin' do
-    let(:from) { people(:top_leader).email }
-
     before { create_individual_subscribers }
 
-    it { is_expected.to be_sender_allowed }
-    its(:sender_email) { is_expected.to eq from }
-    its(:sender) { is_expected.to eq people(:top_leader) }
-    its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+    context 'from main email' do
+      let(:from) { people(:top_leader).email }
 
-    it 'relays' do
-      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      it { is_expected.to be_sender_allowed }
+      its(:sender_email) { is_expected.to eq from }
+      its(:potential_senders) { is_expected.to eq [people(:top_leader)] }
+      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-      expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+      end
+    end
+
+    context 'from additional email' do
+      let(:from) { people(:top_leader).reload.additional_emails.first.email }
+
+      before { Fabricate(:additional_email, contactable: people(:top_leader)) }
+
+      it { is_expected.to be_sender_allowed }
+      its(:sender_email) { is_expected.to eq from }
+      its(:potential_senders) { is_expected.to eq [people(:top_leader)] }
+
+      context 'with other people with same emails' do
+        before do
+          @other1 = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+          Fabricate(:additional_email, contactable: @other1, email: from)
+          @other2 = Fabricate(Group::BottomLayer::Leader.name,
+                              group: groups(:bottom_layer_one),
+                              person: Fabricate(:person, email: from)).person
+        end
+
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to match_array([people(:top_leader), @other1, @other2]) }
+      end
+    end
+  end
+
+  context 'group email' do
+    before { create_individual_subscribers }
+
+    before do
+      list.group.update!(email: 'toplayer@hitobito.example.com')
+      Fabricate(:additional_email, contactable: list.group)
+    end
+
+    context 'from main email' do
+      let(:from) { list.group.reload.email }
+
+      it { is_expected.to be_sender_allowed }
+      its(:sender_email) { is_expected.to eq from }
+      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+        expect(last_email.sender).to eq('leaders-bounces+toplayer=hitobito.example.com@localhost')
+      end
+    end
+
+    context 'from additional email' do
+      let(:from) { list.group.reload.additional_emails.first.email }
+
+      it { is_expected.to be_sender_allowed }
+      its(:sender_email) { is_expected.to eq from }
+
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+        expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+      end
     end
   end
 
@@ -93,7 +155,7 @@ describe MailRelay::Lists do
 
     it { is_expected.to be_sender_allowed }
     its(:sender_email) { is_expected.to eq from }
-    its(:sender) { is_expected.to be_nil }
+    its(:potential_senders) { is_expected.to be_blank }
     its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
     it 'relays' do
@@ -104,31 +166,57 @@ describe MailRelay::Lists do
   end
 
   context 'list member' do
-    let(:from) { bgl1.email }
+    before { create_individual_subscribers }
 
     context 'may post' do
-      before { create_individual_subscribers }
       before { list.update_column(:subscribers_may_post, true) }
+      before do
+        Fabricate(:additional_email, contactable: bgl1)
+        Fabricate(:additional_email, contactable: bgl1)
+      end
 
-      it { is_expected.to be_sender_allowed }
-      its(:sender_email) { is_expected.to eq from }
-      its(:sender) { is_expected.to eq bgl1 }
-      its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+      context 'from main email' do
+        let(:from) { bgl1.reload.email }
 
-      it 'relays' do
-        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [bgl1] }
+        its(:receivers) { is_expected.to match_array Person.mailing_emails_for(subscribers) }
 
-        expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+        end
+
+      end
+
+      context 'from additional email' do
+        let(:from) { bgl1.reload.additional_emails.last.email }
+
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [bgl1] }
+        its(:receivers) { is_expected.to match_array Person.mailing_emails_for(subscribers) }
+
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+        end
+
       end
     end
 
     context 'may not post' do
-      before { create_individual_subscribers }
+      let(:from) { bgl1.email }
       before { list.update_column(:subscribers_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
-      its(:sender) { is_expected.to eq bgl1 }
+      its(:potential_senders) { is_expected.to eq [bgl1] }
 
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -149,7 +237,7 @@ describe MailRelay::Lists do
 
     it { is_expected.not_to be_sender_allowed }
     its(:sender_email) { is_expected.to eq from }
-    its(:sender) { is_expected.to eq bgl2 }
+    its(:potential_senders) { is_expected.to eq [bgl2] }
 
     it 'rejects' do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -169,7 +257,7 @@ describe MailRelay::Lists do
 
       it { is_expected.to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
-      its(:sender) { is_expected.to eq people(:bottom_member) }
+      its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
       its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
       it 'relays' do
@@ -185,17 +273,13 @@ describe MailRelay::Lists do
           message.from = nil
         end
 
-        it { is_expected.to be_sender_allowed }
+        it { is_expected.not_to be_sender_allowed }
         its(:sender_email) { is_expected.to be_nil }
-        its(:sender) { is_expected.to be_nil }
+        its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-        it 'relays' do
-          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
-
-          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
-          expect(last_email.from).to be_nil
-          expect(last_email.sender).to eq 'leaders-bounces@localhost'
+        it 'does not relays' do
+          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
         end
       end
     end
@@ -206,7 +290,7 @@ describe MailRelay::Lists do
 
       it { is_expected.not_to be_sender_allowed }
       its(:sender_email) { is_expected.to eq from }
-      its(:sender) { is_expected.to eq people(:bottom_member) }
+      its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
 
       it 'rejects' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)

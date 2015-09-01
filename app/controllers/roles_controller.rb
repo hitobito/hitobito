@@ -15,6 +15,8 @@ class RolesController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
+  skip_authorize_resource only: [:details, :role_types]
+
   before_render_form :set_group_selection
 
   hide_action :index, :show
@@ -43,6 +45,7 @@ class RolesController < CrudController
   end
 
   def details
+    authorize!(:details, Role)
     @group = find_group
     if model_params && model_params[:type].present?
       @type = @group.class.find_role_type!(model_params[:type])
@@ -50,6 +53,7 @@ class RolesController < CrudController
   end
 
   def role_types
+    authorize!(:role_types, Role)
     @group = Group.find(params[:role][:group_id])
   end
 

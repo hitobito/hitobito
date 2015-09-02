@@ -55,7 +55,7 @@ root_email: hitobito@puzzle.ch
 sphinx:
   index:
     # interval to index for full-text search in minutes
-    interval: 15
+    interval: 10
 
 phone_number:
   predefined_labels:

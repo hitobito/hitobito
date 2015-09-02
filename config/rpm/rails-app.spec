@@ -155,16 +155,6 @@ echo "# Rotate rails logs for %{name}
 
 %if %{use_sphinx}
 touch config/production.sphinx.conf
-echo "# Config for Sphinx < 2.1
-ThinkingSphinx::SphinxQL.variables!
-
-ThinkingSphinx::Middlewares::DEFAULT.insert_after(
-  ThinkingSphinx::Middlewares::Inquirer, ThinkingSphinx::Middlewares::UTF8
-)
-ThinkingSphinx::Middlewares::RAW_ONLY.insert_after(
-  ThinkingSphinx::Middlewares::Inquirer, ThinkingSphinx::Middlewares::UTF8
-)
-" > config/initializers/sphinx_20.rb
 %endif
 
 export PATH=%{ruby_bindir}:$PATH

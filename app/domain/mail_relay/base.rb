@@ -56,6 +56,8 @@ module MailRelay
         [mails, last_exception]
       end
 
+      # rubocop:disable Rails/Output
+
       # Use this method in the console to clean up errorenous emails.
       def manually_clear_emails
         Mail.find_and_delete(count: 10) do |message|
@@ -79,6 +81,8 @@ module MailRelay
           false
         end
       end
+
+      # rubocop:enable Rails/Output
 
     end
 

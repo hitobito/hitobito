@@ -12,7 +12,8 @@ module Dropdown
       attr_reader :group, :event
 
       def initialize(template, group, event)
-        label = translate("add_to_#{event.klass.name.underscore}", default: full_translation_key(:add))
+        label = translate("add_to_#{event.klass.name.underscore}",
+                          default: full_translation_key(:add))
         super(template, label, :plus)
         @group = group
         @event = event

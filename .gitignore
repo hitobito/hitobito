@@ -60,3 +60,6 @@ TAGS
 /todo.tasks
 /tags
 .envrc
+*.iml
+.generators
+.idea

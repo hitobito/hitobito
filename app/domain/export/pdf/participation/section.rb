@@ -44,7 +44,7 @@ module Export::Pdf::Participation
         width = (bounds.width / 2) - (gutter / 2)
         starting_page = pdf.page_number
 
-        box = pdf.span(width, { position: 0 }, &left)
+        pdf.span(width, { position: 0 }, &left)
         pdf.go_to_page(starting_page)
         pdf.span(width, { position: width + gutter }, &right)
       end

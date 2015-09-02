@@ -15,7 +15,8 @@ module EventParticipationsHelper
     headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
 
     if can?(:update, entries.first)
-      headers << [t.sort_header(:created_at, Event::Participation.human_attribute_name(:created_at))]
+      headers << t.sort_header(:created_at,
+                               Event::Participation.human_attribute_name(:created_at))
     end
 
     headers.join(' | ').html_safe

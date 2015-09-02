@@ -16,7 +16,7 @@ Metrics/ClassLength:
   Max: 220  # Try to reduce this value
 
 Metrics/LineLength:
-  Max: 115  # Try to reduce this value
+  Max: 100  # Try to reduce this value
 
 Metrics/MethodLength:
   Max: 18  # Try to reduce this value

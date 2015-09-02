@@ -48,7 +48,11 @@ namespace :tx do
     password = ENV['RAILS_TRANSIFEX_PASSWORD']
     if username && password
       host = ENV['RAILS_TRANSIFEX_HOST'] || 'https://www.transifex.com'
-      rc = "[#{host}]\nhostname = #{host}\npassword = #{password}\ntoken =\nusername = #{username}\n"
+      rc = ["[#{host}]",
+            "hostname = #{host}",
+            "password = #{password}",
+            "token =",
+            "username = #{username}"].join("\n")
       File.open('.transifexrc', 'w') { |f| f.puts rc }
     else
       puts 'No username and password given'

@@ -34,7 +34,8 @@ module TarantulaConfig
     # sphinx not running
     t.skip_uri_patterns << /\/full$/
     # no modifications of user roles (and thereof its permissions)
-    t.skip_uri_patterns << /groups\/\d+\/roles\/(#{person.roles.collect(&:id).join("|")})$/
+    group_roles = person.roles.collect(&:id).join('|')
+    t.skip_uri_patterns << /groups\/\d+\/roles\/(#{group_roles})$/
     # no ajax links in application market
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/participant$/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/waiting_list$/
@@ -48,7 +49,8 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
     # do not change role type for own event roles
-    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{person.event_roles.pluck(:id).join('|')})$/
+    event_roles = person.event_roles.pluck(:id).join('|')
+    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{event_roles})$/
     # custom return_urls end up like that.
     t.skip_uri_patterns << /\:3000\-?\d+$/
 

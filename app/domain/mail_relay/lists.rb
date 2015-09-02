@@ -58,7 +58,7 @@ module MailRelay
         prepare_reject_message(data[1], data[2])
         deliver(message)
       else
-        logger.info("#{Time.now.strftime('%FT%T%z')}: " \
+        logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
                     "Ignored email from #{sender_email} " \
                     "for list #{envelope_receiver_name}")
       end
@@ -111,7 +111,7 @@ module MailRelay
     private
 
     def deliver(message)
-      logger.info("#{Time.now.strftime('%FT%T%z')}: " \
+      logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
                   "Relaying email from #{sender_email} " \
                   "for list #{envelope_receiver_name} " \
                   "to #{message.smtp_envelope_to.size} people")
@@ -141,9 +141,9 @@ module MailRelay
     end
 
     def potential_senders
-      Person.joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
+      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
                    " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-             where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email).
+             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
              uniq
     end
 

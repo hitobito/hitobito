@@ -26,17 +26,21 @@ module Export::Pdf::Participation
     end
 
     def render_read_and_agreed
-      text I18n.t("event.participations.print.read_and_agreed_for_#{i18n_event_postfix}"), style: :bold
+      text(I18n.t("event.participations.print.read_and_agreed_for_#{i18n_event_postfix}"),
+           style: :bold)
       move_down_line
     end
 
     def render_contact_address
-      text I18n.t('event.applied_to'), style: :bold
+      text(I18n.t('event.applied_to'), style: :bold)
 
       pdf.bounding_box([10, cursor], width: bounds.width) do
-        text I18n.t('contactable.address_or_email',
-                    address: [contact.to_s, contact.address, contact.zip_code, contact.town].join(', '),
-                    email: contact.email)
+        text(I18n.t('contactable.address_or_email',
+                    address: [contact.to_s,
+                              contact.address,
+                              contact.zip_code,
+                              contact.town].join(', '),
+                    email: contact.email))
       end
       move_down_line
     end
@@ -48,8 +52,15 @@ module Export::Pdf::Participation
 
     def render_signature(header = Event::Role::Participant.model_name.human,
                          key = 'event.participations.print.signature')
-      render_columns(-> { text header; label_with_dots(location_and_date) },
-                     -> { move_down_line; label_with_dots(I18n.t(key)) })
+      render_columns(
+        lambda do
+          text header
+          label_with_dots(location_and_date)
+        end,
+        lambda do
+          move_down_line
+          label_with_dots(I18n.t(key))
+        end)
     end
 
     def signature_confirmation?

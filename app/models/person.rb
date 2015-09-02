@@ -121,7 +121,8 @@ class Person < ActiveRecord::Base
   validates_by_schema except: [:email, :picture]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
-  validates :birthday, timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }
+  validates :birthday,
+            timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
   validate :assert_is_valid_swiss_post_code

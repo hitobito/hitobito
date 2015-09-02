@@ -316,9 +316,6 @@ rm -f %{appdir}/tmp/stop.txt
 %defattr(-,root,root,)
 %{_sysconfdir}/sysconfig/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
-%if %{use_sphinx}
-%{_sysconfdir}/cron.d/%{name}
-%endif
 
 %attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user

@@ -16,6 +16,7 @@ gem 'bcrypt-ruby'
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'
+gem 'codez-validates_by_schema', require: 'validates_by_schema'
 gem 'country_select'
 gem 'daemons'
 gem 'dalli'
@@ -41,7 +42,6 @@ gem 'rack'
 gem 'rails_autolink'
 gem 'config'
 gem 'rails-i18n'
-gem 'codez-validates_by_schema', require: 'validates_by_schema'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'thinking-sphinx'
@@ -60,7 +60,7 @@ gem 'compass'
 gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'sass-rails', '5.0.1' # required for compass-rails
+gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
 gem 'uglifier'
 
@@ -82,7 +82,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara' # , '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
+  gem 'capybara'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
@@ -106,7 +106,7 @@ end
 
 group :metrics do
   gem 'annotate'
-  gem 'brakeman' # , '2.5.0'
+  gem 'brakeman'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
   gem 'rubocop'

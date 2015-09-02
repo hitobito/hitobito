@@ -567,7 +567,7 @@ DEPENDENCIES
   rubocop
   rubocop-checkstyle_formatter
   ruby-prof
-  sass-rails (= 5.0.1)
+  sass-rails
   seed-fu
   selenium-webdriver
   simplecov-rcov

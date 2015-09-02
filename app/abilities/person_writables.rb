@@ -9,6 +9,7 @@
 class PersonWritables < PersonFetchables
 
   self.same_group_permissions = []
+  self.above_group_permissions = []
   self.same_layer_permissions = [:layer_and_below_full, :layer_full]
   self.above_layer_permissions = [:layer_and_below_full]
 

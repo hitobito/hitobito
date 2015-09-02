@@ -8,14 +8,16 @@
 # This class is only used for fetching lists based on a group association.
 class PersonReadables < PersonFetchables
 
-  self.same_group_permissions = [:group_full, :group_read]
-  self.same_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
-                                 :layer_full, :layer_read]
+  self.same_group_permissions  = [:group_full, :group_read,
+                                  :group_and_below_full, :group_and_below_read]
+  self.above_group_permissions = [:group_and_below_full, :group_and_below_read]
+  self.same_layer_permissions  = [:layer_full, :layer_read,
+                                  :layer_and_below_full, :layer_and_below_read]
   self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read]
 
   attr_reader :group
 
-  delegate :groups_group_read, :layers_read, :layers_and_below_read, to: :user_context
+  delegate :permission_group_ids, :permission_layer_ids, to: :user_context
 
   def initialize(user, group = nil)
     super(user)
@@ -74,10 +76,11 @@ class PersonReadables < PersonFetchables
   end
 
   def read_permission_for_this_group?
+    user.root? ||
     group_read_in_this_group? ||
+    group_read_in_above_group? ||
     layer_read_in_same_layer? ||
-    layer_and_below_read_in_same_layer? ||
-    user.root?
+    layer_and_below_read_in_same_layer?
   end
 
   def contact_data_visible?
@@ -85,22 +88,33 @@ class PersonReadables < PersonFetchables
   end
 
   def group_read_in_this_group?
-    groups_group_read.include?(group.id)
+    permission_group_ids(:group_read).include?(group.id)
+  end
+
+  def group_read_in_above_group?
+    ids = permission_group_ids(:group_and_below_read)
+    ids.present? && (ids & group.local_hierarchy.collect(&:id)).present?
   end
 
   def layer_read_in_same_layer?
-    layers_read.present? &&
-    layers_read.include?(group.layer_group_id)
+    permission_layer_ids(:layer_read).include?(group.layer_group_id)
   end
 
   def layer_and_below_read_in_same_layer?
-    layers_and_below_read.present? &&
-    layers_and_below_read.include?(group.layer_group_id)
+    permission_layer_ids(:layer_and_below_read).include?(group.layer_group_id)
   end
 
   def layer_and_below_read_in_above_layer?
-    layers_and_below_read.present? &&
-    (layers_and_below_read & group.layer_hierarchy.collect(&:id)).present?
+    ids = permission_layer_ids(:layer_and_below_read)
+    ids.present? && (ids & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def permission_in_group?(permission, group_id)
+    permission_group_ids(permission).include?(group_id)
+  end
+
+  def permission_in_layer?(permission, group_id)
+    permission_layer_ids(permission).include?(layer_id)
   end
 
 end

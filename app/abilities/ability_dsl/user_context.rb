@@ -8,24 +8,19 @@
 module AbilityDsl
   class UserContext
 
-    attr_reader :user,
-                :groups_group_full,
-                :groups_group_read,
-                :groups_layer_full,
-                :groups_layer_read,
-                :groups_layer_and_below_full,
-                :groups_layer_and_below_read,
-                :layers_read,
-                :layers_full,
-                :layers_and_below_read,
-                :layers_and_below_full,
-                :admin
+    GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
+                         :group_and_below_full, :group_and_below_read, :group_full, :group_read]
+
+    LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read]
+
+    attr_reader :user, :admin
 
     def initialize(user)
       @user = user
       init_groups
     end
 
+    # All permissions symbols that the user actually has defined for all her roles.
     def all_permissions
       @all_permissions ||= begin
         permissions = user.roles.collect(&:permissions).flatten.uniq
@@ -36,6 +31,20 @@ module AbilityDsl
         end
         permissions
       end
+    end
+
+    # The ids of the groups where the given permission is defined.
+    # Includes implied permission, i.e. when passing :group_read, the groups
+    # where the user has :group_full are also returned.
+    def permission_group_ids(permission)
+      @permission_group_ids[permission]
+    end
+
+    # The ids of the layer groups where the given layer permission is defined.
+    # Includes implied permission, i.e. when passing :layer_read, the layer groups
+    # where the user has :layer_full are also returned.
+    def permission_layer_ids(permission)
+      @permission_layer_ids[permission]
     end
 
     def layer_ids(groups)
@@ -63,33 +72,22 @@ module AbilityDsl
     end
 
     def init_permission_groups
-      @groups_group_full = user.groups_with_permission(:group_full).to_a
-      @groups_group_read = user.groups_with_permission(:group_read).to_a + @groups_group_full
-      @groups_layer_full = user.groups_with_permission(:layer_full).to_a
-      @groups_layer_read = user.groups_with_permission(:layer_read).to_a +
-                                     @groups_layer_full
-      @groups_layer_and_below_full = user.groups_with_permission(:layer_and_below_full).to_a
-      @groups_layer_and_below_read = user.groups_with_permission(:layer_and_below_read).to_a +
-                                     @groups_layer_and_below_full
+      @permission_group_ids = GROUP_PERMISSIONS.each_with_object({}) do |permission, hash|
+        groups = user.groups_with_permission(permission).to_a
+        given = Role::PermissionImplications.invert[permission]
+        groups += user.groups_with_permission(given).to_a if given
+        hash[permission] = groups
+      end
     end
 
     def init_permission_layers
-      @layers_full = layer_ids(@groups_layer_full)
-      @layers_read = layer_ids(@groups_layer_read)
-
-      @layers_and_below_full = layer_ids(@groups_layer_and_below_full)
-      @layers_and_below_read = layer_ids(@groups_layer_and_below_read)
+      @permission_layer_ids = LAYER_PERMISSIONS.each_with_object({}) do |permission, hash|
+        hash[permission] = layer_ids(@permission_group_ids[permission])
+      end
     end
 
     def collect_group_ids!
-      [@groups_group_full,
-       @groups_group_read,
-       @groups_layer_full,
-       @groups_layer_read,
-       @groups_layer_and_below_full,
-       @groups_layer_and_below_read].each do |list|
-        list.collect!(&:id)
-      end
+      @permission_group_ids.values.each { |groups| groups.collect!(&:id) }
     end
 
     def find_events_with_permission(permission)

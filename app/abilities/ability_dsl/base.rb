@@ -107,50 +107,34 @@ module AbilityDsl
 
     # Check whether the permission for which the check is made is defined in the given group_id.
     def permission_in_group?(group_id)
-      user_groups.include?(group_id)
+      user_group_ids.include?(group_id)
     end
 
     # Check whether the permission for which the check is made is defined in the given group_ids.
     def permission_in_groups?(group_ids)
-      contains_any?(user_groups, group_ids)
+      contains_any?(user_group_ids, group_ids)
     end
 
     # Check whether the layer permission for which the check is made
     # is defined in the given layer_id. Other permissions always return false,
     # even if they are defined in the given layer id.
     def permission_in_layer?(layer_id)
-      user_layers.include?(layer_id)
+      user_layer_ids.include?(layer_id)
     end
 
     # Check whether the layer permission for which the check is made
     # is defined in the given layer_ids. Other permissions always return false,
     # even if they are defined in a given layer id.
     def permission_in_layers?(layer_ids)
-      contains_any?(user_layers, layer_ids)
+      contains_any?(user_layer_ids, layer_ids)
     end
 
-    def user_groups
-      @user_groups ||=
-        case permission
-        when :group_full then user_context.groups_group_full
-        when :group_read then user_context.groups_group_read
-        when :layer_full then user_context.groups_layer_full
-        when :layer_read then user_context.groups_layer_read
-        when :layer_and_below_full then user_context.groups_layer_and_below_full
-        when :layer_and_below_read then user_context.groups_layer_and_below_read
-        else []
-        end
+    def user_group_ids
+      user_context.permission_group_ids(permission) || []
     end
 
-    def user_layers
-      @user_layers ||=
-        case permission
-        when :layer_full then user_context.layers_full
-        when :layer_read then user_context.layers_read
-        when :layer_and_below_full then user_context.layers_and_below_full
-        when :layer_and_below_read then user_context.layers_and_below_read
-        else []
-        end
+    def user_layer_ids
+      user_context.permission_layer_ids(permission) || []
     end
 
     # Are any items of the existing list present in the list of required items?

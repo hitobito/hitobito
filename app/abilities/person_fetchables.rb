@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito_pbs and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -11,8 +10,10 @@ class PersonFetchables
 
   include CanCan::Ability
 
-  class_attribute :same_group_permissions, :same_layer_permissions, :above_layer_permissions
+  class_attribute :same_group_permissions, :above_group_permissions,
+                  :same_layer_permissions, :above_layer_permissions
   self.same_group_permissions = []
+  self.above_group_permissions = []
   self.same_layer_permissions = []
   self.above_layer_permissions = []
 
@@ -28,6 +29,7 @@ class PersonFetchables
 
   def append_group_conditions(condition)
     in_same_group_condition(condition)
+    in_above_group_condition(condition)
     in_same_layer_condition(condition)
     visible_from_above_condition(condition)
   end
@@ -35,6 +37,15 @@ class PersonFetchables
   def in_same_group_condition(condition)
     if groups_same_group.present?
       condition.or('groups.id IN (?)', groups_same_group.collect(&:id))
+    end
+  end
+
+  def in_above_group_condition(condition)
+    groups_above_group.each do |group|
+      condition.or('groups.lft >= ? AND groups.rgt <= ? AND groups.layer_group_id = ?',
+                   group.lft,
+                   group.rgt,
+                   group.layer_group_id)
     end
   end
 
@@ -50,7 +61,7 @@ class PersonFetchables
     visible_from_above_groups = OrCondition.new
     collapse_groups_to_highest(layer_groups_above) do |layer_group|
       visible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
-                                   layer_group.left,
+                                   layer_group.lft,
                                    layer_group.rgt)
     end
 
@@ -71,6 +82,10 @@ class PersonFetchables
 
   def groups_same_group
     @groups_same_group ||= groups_with_permissions(*same_group_permissions)
+  end
+
+  def groups_above_group
+    @groups_above_group ||= groups_with_permissions(*above_group_permissions)
   end
 
   def layer_groups_same_layer

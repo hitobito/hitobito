@@ -30,6 +30,11 @@ module Group::NestedSet
     hierarchy.select { |g| g.class.layer }
   end
 
+  # The group hierarchy inside the layer of this group.
+  def local_hierarchy
+    hierarchy.select { |g| g.layer_group_id == layer_group_id }
+  end
+
   # siblings with the same type
   def sister_groups
     self_and_sister_groups.where('id <> ?', id)

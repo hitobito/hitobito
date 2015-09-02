@@ -25,7 +25,7 @@ module Person::Groups
 
   # All groups where this person has a non-restricted role.
   def non_restricted_groups
-    roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group)
+    roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group).uniq
   end
 
   # All groups where this person has the given permission(s).

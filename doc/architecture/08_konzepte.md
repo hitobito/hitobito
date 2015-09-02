@@ -30,7 +30,7 @@ Der Core von hitobito beinhaltet keine konkreten Gruppen- oder Rollentypen. Dies
 
     class Group::Layer < Group
       self.layer = true
-
+      
       children Group::Layer, Group::Board, Group::Basic
 
       class Leader < Role
@@ -41,14 +41,22 @@ Der Core von hitobito beinhaltet keine konkreten Gruppen- oder Rollentypen. Dies
         self.permissions = [:group_read]
       end
 
+      class External < Role
+        self.permissions = []
+        self.visible_from_above = false
+        self.kind = :external
+      end
+      
       roles Leader, Member
     end
 
 Ein Gruppentyp erbt immer von der Klasse `Group`. Er kann eine Ebene sein (`self.layer = true`), welche mehrere Gruppen zu einem gemeinsamen Berechtigungsbereich zusammenfasst. Alle Untergruppen einer Ebene gehören zu diesem Bereich, ausser sie sind selbst wieder Ebenen.
 
-Danach sind alle möglichen Untergruppentypen des Gruppentyps definiert (`children Group::Layer, Group::Board, Group::Basic`). Wenn Untergruppen erstellt werden, sind nur diese Typen erlaubt. Wie im Beispiel gezeigt, können Gruppentypen rekursiv organisiert sein.
+Danach sind alle möglichen Untergruppentypen des Gruppentyps definiert (`children Group::Layer, Group::Board, Group::Basic`). Als Untergruppen sind nur diese Typen erlaubt. Wie im Beispiel gezeigt, können Gruppentypen rekursiv organisiert sein.
 
-Die Rollentype können direkt in einem Gruppentyp definiert werden und erben von der Klasse `Role`. Jeder Rollentyp hat eine Liste von Grundberechtigungen (`self.permissions = [:layer_full, :contact_data]`). Diese sind allgemeine Angaben für ein Was und Wo, auf welchen die konkreten Berechtigungen aufbauen. Alle spezifischen Möglichkeiten eines Benutzenden sind von den Rollenberechtigungen abgeleitet, welche sie oder er in den verschiedenen Gruppen hat.
+Die Rollentypen können direkt in einem Gruppentyp definiert werden und erben von der Klasse `Role`. Jeder Rollentyp hat eine Liste von Grundberechtigungen (`self.permissions = [:layer_full, :contact_data]`). Diese sind allgemeine Angaben für ein Was und Wo, auf welchen die konkreten Berechtigungen aufbauen. Alle spezifischen Möglichkeiten eines Benutzenden sind von den Rollenberechtigungen abgeleitet, welche sie oder er in den verschiedenen Gruppen hat. Ausserdem ist es möglich, eine Rolle vor dem Zugriff von übergeordneten Ebenen aus zu schützen (`self.visible_from_above = false`). 
+
+Ein Rollentyp kann zusätzlich von einer spezifischen Art sein (`self.kind = :external`), welche bei der Aufteilung der Personen einer Gruppe in verschiedene Bereiche heran gezogen wird. Im Core sind die Bereiche Mitglieder, Passive und Externe vordefiniert. Die Art hat keinen Einfluss auf die Berechtigungen.
 
 
 ### Berechtigungen
@@ -94,9 +102,27 @@ Lesebeispiel am Beispiel Jubla: _Kann ein Mitglied der Bundesleitung einen Anlas
 * Die allgemeine Constraint wirkt in jedem Fall. Falls die Schar also nicht gelöscht ist (`at_least_one_group_not_deleted_and_not_closed_or_admin`), kann dieser Benutzer den Anlass bearbeiten. (Das `not_closed_..` trifft nur auf Kurse zu).
 
 
-### Single Table Inheritance
+### Anlässe und Kurse
 
-TODO: used_attributes
+Anlässe sind ähnlich wie Gruppen immer von einem bestimmten Anlasstyp. Jeder Gruppentyp definiert, welche Anlasstypen in einer jeweiligen Gruppe erstellt werden können. Ein Anlass kann neben Grundinformationen mehrere Daten (`Event::Date`) und beliebige Zusatzangaben (`Event::Question`) definieren, welche die Teilnehmenden bei der Anmeldung angeben müssen (`Event::Answer`). Eine Person, welche an einem Anlass teilnimmt (`Event::Participation`), kann dort mehrere Rollen (`Event::Role`) inhaben. 
+
+Der Anlasstyp bestimmt die möglichen Rollentypen, welche die Teilnehmenden eines Anlasses haben können. 
+
+Ein Anlass-Rollentyp definiert ähnlich wie ein Gruppen-Rollentyp Grundberechtigungen (`permissions`), allerdings nur spezifisch für den jeweiligen Anlass. Folgende sind in hitobito definiert:
+
+**event_full**: Darf den Anlass bearbeiten.
+
+**participations_full**: Sieht alle Informationen der Teilnehmenden und darf die Teilnahmedaten bearbeiten.
+
+**participations_read**: Sieht die öffentlichen Informationen der Teilnehmenden.
+
+**qualify**: Darf den Teilnehmenden eines Kurses die definierten Qualifikationen vergeben.
+
+Ein Rollentyp ist von einer spezifischen Art, welche an gibt, was die Funktion im Anlass ist. Hitobito definiert die Arten Leiter/-in, Helfer/-in und Teilnehmer/-in. Die Art wird unter anderem verwendet bei der Unterteilung in Leitungsteam und Teilnehmende und hat keinen Einfluss auf die Berechtigungen.
+
+Ein Anlass kann selber auch von einer spezifischen Art sein. Dies wird bei den Kursen verwendet, welche einer bestimmten Kursart (`Event::Kind`) zugeordnet sind. Über die Kursart werden Aufnahmebedingungen sowie die erteilten und verlängerten Qualifikationsarten (`QualificationKind`) definiert.
+
+Weiter kann konfigurativ definiert werden, ob ein Anlass Anmeldungen unterstützt. Damit kommt die Möglichkeit, Personen zuzuweisen oder abzulehnen sowie an andere, ähnliche Anlässe zu verweisen. Falls Anmeldungen unterstützt werden, kann eine Teilnahme (`Event::Participation`) aktiviert sein oder nicht. Sonst ist sie immer aktiv.
 
 
 ### Mailing Listen / Abos
@@ -109,8 +135,13 @@ Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über ein
 1. Sende eine Rückweisungsemail, falls der Absender nicht berechtigt ist.
 1. Leite das Email weiter an alle Empfänger der Mailing Liste.
 
+Die Berechtigung, um auf eine Mailing Liste zu schreiben, kann konfiguriert werden. Der Absender wird über seine Haupt- oder zusätzlichen E-Mail Adressen identifiziert. Standardmässig können alle Personen, welche die Liste Bearbeiten können, sowie die Gruppe, welcher das Abo gehört, E-Mails schreiben. Optional können zusätzlich spezifische E-Mail Adressen, alle Abonnenten der Gruppe oder beliebige Absender (auch nicht in hitobito erfasste) berechtigt werden. 
+
 #### No-Reply Liste
 
 Damit jemand bei ungültigen E-Mailadressen oder sonstigen Versandfehlern von E-Mails benachrichtigt wird, sollte eine spezielle Mailingliste (in der Applikation unter "Abos" > "Abo erstellen") eingerichtet werden, welche auf die Applikations-Sendeadresse lautet (`Settings.email.sender`, z.B. `noreply@db.jubla.ch`). Als zusätzlicher Absender muss dabei der verwendete Mailer Daemon definiert werden (z.B. `MAILER-DAEMON@puzzle.ch`) Bei dieser Liste sollte eine Person der Organisation als Abonnent vorhanden sein, welcher sich um die fehlerhaften Adressen kümmert.
 
 
+### Single Table Inheritance
+
+Verschiedene Modelle in hitobito verwenden [Single Table Inheritance](http://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html), z.B. `Group`, `Role` und `Event`. Dabei werden verschiedene Ruby Klassen, welche alle von der selben Hauptklasse erben, in einer Tabelle gespeichert. Nicht alle Subklassen müssen dabei alle in der Tabelle vorhandenen Spalten verwenden. Zur Dokumentation wie auch zum Bestimmen, welche Attribute angezeigt werden sollen, werden die verwendeten Spalten in der jeweiligen Klassenvariable `used_attributes` angegeben.

@@ -61,7 +61,11 @@ class EventSeeder
      values.merge({
         name: "#{kind.try(:short_name)} #{values[:number]}".strip,
         kind_id: kind.try(:id),
-        state: Event::Course.possible_states.shuffle.first
+        state: Event::Course.possible_states.shuffle.first,
+        priorization: Event::Course.used_attributes.include?(:priorization),
+        requires_approval: Event::Course.used_attributes.include?(:requires_approval),
+        signature: Event::Course.used_attributes.include?(:signature),
+        external_applications: Event::Course.used_attributes.include?(:external_applications)
         })
   end
 

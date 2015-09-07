@@ -393,7 +393,7 @@ de:
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
               layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.
-              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen).
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
               group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
               group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
               group_read: Lesen auf der Gruppe.

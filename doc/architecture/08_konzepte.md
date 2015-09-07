@@ -73,6 +73,10 @@ Folgende Grundberechtigungen / Permissions existieren momentan:
 
 **layer_read**: Alles Lesen auf dieser Ebene.
 
+**group_and_below_full**: Lesen und Schreiben auf dieser und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos (Mailinglisten).
+
+**group_and_below_read**: Lesen auf dieser und allen darunter liegenden Gruppen (ohne Ebenen).
+
 **group_full**: Lesen und Schreiben nur auf dieser Gruppe. Erstellen von Anlässen und Abos (Mailinglisten) auf der Gruppe.
 
 **group_read**: Lesen nur auf dieser Gruppe.

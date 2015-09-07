@@ -1,8 +1,8 @@
-== Welcome to hitobito
+= Welcome to hitobito
 
 hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
 
-=== Development
+== Development
 
 Hitobito is a Ruby on Rails application that runs on Ruby 1.9.3 and Rails 4.
 To get going, after you got a copy of hitobito and at least one wagon with an organization
@@ -21,6 +21,13 @@ To start the search server, run background jobs or the development mail catcher,
   rake jobs:work
   mailcatcher -v -f
 
+A more detailed development documentation in German can be found in {doc/development}[doc/development].
+
+== Architecture
+
+The architecture documentation in German can be found in {doc/architecture}[doc/architecture].
+
+Two topics shall be mentioned here explicitly:
 
 === Group Hierarchy
 
@@ -62,21 +69,7 @@ Each role type has a set of permissions.
 They are general indications of what and where.
 All specific abilities of a user are derived from the role permissions she has in her different groups.
 
-The following basic permissions are defined:
-
-:admin::                 May administer application wide settings.
-:layer_and_below_full::  May read and write everything in this layer and all below layers.
-:layer_and_below_read::  May read everything in this layer and all below layers.
-:layer_full::            May read and write everything in this layer.
-:layer_read::            May read everything in this layer.
-:group_full::            May read and write everything in this group.
-:group_read::            May read everything in this group.
-:contact_data::          May see all other people with the :contact_data permission.
-
-Beside these basic group and role type features, some more possibilities exist.
-See the source of the Group class for additional details.
-
-See {hitobito_generic}[https://github.com/hitobito/hitobito_generic] for a complete example group
+See {Gruppen- und Rollentypen}[doc/architecture/08_konzepte.md] for more details and {hitobito_generic}[https://github.com/hitobito/hitobito_generic] for a complete example group
 structure.
 
 
@@ -87,24 +80,12 @@ With Wagons, arbitrary features and extensions may be created for hitobito.
 As mentioned above, as there are no group types coming from hitobito itself,
 at least one wagon is required to define group types in order to use hitobito.
 
-A few basic things to consider when working with Wagons:
-
-* The main hitobito application and all wagons should reside in the same subdirectory.
-* Copy the +Wagonfile.ci+ to +Wagonfile+ to load all wagons in sibling directories in development mode.
-* Wagons use the same database as the main application. When creating migrations in hitobito,
-  make sure to remove all wagon additions from the database before the schema is dumped.
-  This is easiest by dropping and recreating the development database.
-* When new gem dependencies are added to the main application, run <tt>rake wagon:bundle:update</tt>
-  to update all wagon Gemfiles.
-* Create a new wagon with <tt>rails g wagon [name]</tt>. Then move it from <tt>vendor/wagons</tt>
-  to a sibling directory and adjust the wagon's file <tt>app_root.rb</tt> accordingly.
-
-See Wagons for more information on wagons and its available rake tasks.
+See {Wagon Guidelines}[doc/development/03_guidelines.md] or {Wagons}[http://github.com/codez/wagons] for more information on wagons and its available rake tasks.
 
 
-=== Deployment
+== Deployment
 
-For a productive enviroment, the following environment variables may be defined:
+For a productive environment, the following environment variables may be defined:
 
 RAILS_HOST_NAME::               Public host name of the application, used for links in emails.
                                 This value is required.
@@ -148,10 +129,10 @@ MEMCACHED_SERVERS::             A comma-separated list of host:port strings of t
                                 Defaults to 127.0.0.1:11211.
 
 
-=== License
+== License
 
 hitobito is released under the GNU Affero General Public License.
-Copyright 2012-2014 by Jungwacht Blauring Schweiz.
+Copyright 2012-2015 by Jungwacht Blauring Schweiz, Puzzle ITC GmbH, Pfadibewegung Schweiz, CEVI Regionalverband ZH-SH-GL, Insieme Schweiz.
 See COPYING for more details.
 
 hitobito was developed by {Puzzle ITC GmbH}[http://puzzle.ch].

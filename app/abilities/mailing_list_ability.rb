@@ -12,6 +12,9 @@ class MailingListAbility < AbilityDsl::Base
   on(::MailingList) do
     permission(:any).may(:show).all
     permission(:group_full).may(:index_subscriptions, :create, :update, :destroy).in_same_group
+    permission(:group_and_below_full).
+      may(:index_subscriptions, :create, :update, :destroy).
+      in_same_group_or_below
     permission(:layer_full).may(:index_subscriptions, :create, :update, :destroy).in_same_layer
     permission(:layer_and_below_full).
       may(:index_subscriptions, :create, :update, :destroy).in_same_layer

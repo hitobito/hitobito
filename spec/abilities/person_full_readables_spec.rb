@@ -228,6 +228,56 @@ describe PersonFullReadables do
 
       end
 
+      context :group_and_below_full do
+        let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+        context 'own group' do
+          let(:group) { role.group }
+
+          it 'may read himself' do
+            is_expected.to include(role.person)
+          end
+
+          it 'may read people in his group' do
+            other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+
+          it 'may read external people in his group' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'below group' do
+          let(:group) { groups(:top_group) }
+
+          it 'may read people' do
+            other = Fabricate(Group::TopGroup::Member.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+
+          it 'may read external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'in below layer' do
+          let(:group) { groups(:bottom_layer_one) }
+
+          it 'may not read people' do
+            other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+
+          it 'may not read external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+        end
+
+      end
 
       context :group_full do
         let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
@@ -240,12 +290,12 @@ describe PersonFullReadables do
           end
 
           it 'may read people in his group' do
-            other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+            other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: group)
             is_expected.to include(other.person)
           end
 
           it 'may read external people in his group' do
-            other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one))
+            other = Fabricate(Role::External.name.to_sym, group: group)
             is_expected.to include(other.person)
           end
         end

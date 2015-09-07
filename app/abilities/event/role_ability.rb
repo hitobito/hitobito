@@ -12,7 +12,9 @@ class Event::RoleAbility < AbilityDsl::Base
   on(::Event::Role) do
     permission(:any).may(:show, :create, :update).for_participations_full_events
     permission(:any).may(:destroy).for_participations_full_events_except_self
+
     permission(:group_full).may(:manage).in_same_group
+    permission(:group_and_below_full).may(:manage).in_same_group_or_below
     permission(:layer_full).may(:manage).in_same_layer
     permission(:layer_and_below_full).may(:manage).in_same_layer_or_below
   end

@@ -19,8 +19,13 @@ class EventAbility < AbilityDsl::Base
 
     permission(:group_full).may(:index_participations, :create, :update, :destroy).in_same_group
 
-    permission(:layer_full).may(:index_participations, :update).in_same_layer
-    permission(:layer_full).may(:create, :destroy, :application_market, :qualify).in_same_layer
+    permission(:group_and_below_full).
+      may(:index_participations, :create, :update, :destroy).
+      in_same_group_or_below
+
+    permission(:layer_full).
+      may(:index_participations, :update, :create, :destroy, :application_market, :qualify).
+      in_same_layer
 
     permission(:layer_and_below_full).
       may(:index_participations, :update).in_same_layer_or_below
@@ -45,11 +50,13 @@ class EventAbility < AbilityDsl::Base
   end
 
   def if_full_permission_in_course_layer
-    contains_any?(user_context.layers_full + user_context.layers_and_below_full, course_offerers)
+    contains_any?(user_context.permission_layer_ids(:layer_full) +
+                  user_context.permission_layer_ids(:layer_and_below_full),
+                  course_offerers)
   end
 
   def if_layer_and_below_full_on_root
-    user_context.layers_and_below_full.include?(Group.root.id)
+    user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root.id)
   end
 
   private

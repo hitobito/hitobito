@@ -5,11 +5,14 @@
 * Land ist neu ein Auswahlfeld.
 * Kursarten haben zusätzliche Text Felder 'Generelle Informationen' und 'Aufnahmebedingungen'.
 * Kurse haben zusätzliches Text Feld 'Aufnahmebedingungen'.
-* Möglichkeit, bei einer PDF Kursanmeldung eine Unterschrift einzufordern. 
+* Möglichkeit, bei einer PDF Kursanmeldung eine Unterschrift einzufordern.
+* Überarbeitetes Layout der PDF Kursanmeldung.
 * Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt. Eine Anmeldung ist trotzdem möglich.
 * Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben werden.
 * Möglichkeit, Personen aufgrund ihrer Qualifikationen zu filtern.
 * Beim Schreiben auf eine Mailing Liste können neu ebenfalls die zusätzlichen E-Mail Adressen sowie die E-Mail Adressen der Gruppe als Absender verwendet werden.
+* Neue Grundberechtigungen für eine Gruppe und alle darunter liegenden Gruppen.
+* Unterstützung für Deployment auf Openshift v2.
 
 == Version 1.8
 

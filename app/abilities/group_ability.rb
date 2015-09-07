@@ -15,13 +15,23 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:contact_data).may(:index_people).all
 
-    permission(:group_read).may(:show_details).in_same_group
     # local people are the ones not visible from above
-    permission(:group_read).may(:index_people, :index_local_people).in_same_group
+    permission(:group_read).may(:show_details, :index_people, :index_local_people).in_same_group
+    permission(:group_and_below_read).
+      may(:show_details, :index_people, :index_local_people).
+      in_same_group_or_below
 
     permission(:group_full).
       may(:index_full_people, :update, :reactivate, :export_events, :'export_event/courses').
       in_same_group
+
+    permission(:group_and_below_full).
+      may(:index_full_people, :update, :reactivate, :export_events, :'export_event/courses').
+      in_same_group_or_below
+    permission(:group_and_below_full).may(:create).with_parent_in_same_group_hierarchy
+    permission(:group_and_below_full).
+      may(:destroy).
+      in_below_group
 
     permission(:layer_read).
       may(:show_details, :index_people, :index_local_people, :index_full_people,
@@ -57,6 +67,19 @@ class GroupAbility < AbilityDsl::Base
     parent && !parent.deleted? && permission_in_layers?(parent.layer_hierarchy.collect(&:id))
   end
 
+  def with_parent_in_same_group_hierarchy
+    parent = group.parent
+    parent &&
+    !parent.deleted? &&
+    !group.layer? &&
+    permission_in_groups?(parent.local_hierarchy.collect(&:id))
+  end
+
+  def in_below_group
+    !permission_in_group?(group.id) &&
+    permission_in_groups?(group.local_hierarchy.collect(&:id))
+  end
+
   def in_same_layer_except_permission_giving
     in_same_layer && except_permission_giving
   end
@@ -66,10 +89,10 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def except_permission_giving
-    !(user_context.groups_layer_and_below_full.include?(group.id) ||
-      user_context.layers_and_below_full.include?(group.id) ||
-      user_context.groups_layer_full.include?(group.id) ||
-      user_context.layers_full.include?(group.id))
+    [:layer_and_below_full, :layer_full].none? do |permission|
+      user_context.permission_group_ids(permission).include?(group.id) ||
+      user_context.permission_layer_ids(permission).include?(group.id)
+    end
   end
 
   def in_below_layers

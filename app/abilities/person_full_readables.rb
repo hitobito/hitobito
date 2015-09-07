@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 # This class is only used for fetching lists based on a group association.
+# Returns all people that are fully readable.
 class PersonFullReadables < PersonReadables
 
-  self.same_group_permissions = [:group_full]
-
-  delegate :groups_group_full, to: :user_context
+  self.same_group_permissions = [:group_full, :group_and_below_full]
+  self.above_group_permissions = [:group_and_below_full]
 
   private
 
@@ -19,7 +19,12 @@ class PersonFullReadables < PersonReadables
   end
 
   def group_read_in_this_group?
-    groups_group_full.include?(group.id)
+    permission_group_ids(:group_full).include?(group.id)
+  end
+
+  def group_read_in_above_group?
+    ids = permission_group_ids(:group_and_below_full)
+    ids.present? && (ids & group.local_hierarchy.collect(&:id)).present?
   end
 
 end

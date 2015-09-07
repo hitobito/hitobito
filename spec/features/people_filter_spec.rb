@@ -53,7 +53,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        expect(page).to have_css('input:checked', count: 5)
+        expect(page).to have_css('input:checked', count: 6)
 
         find('h4.filter-toggle', text: 'Top Layer').click
         expect(page).to have_css('input:checked', count: 0)

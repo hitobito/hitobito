@@ -109,12 +109,4 @@ class PersonReadables < PersonFetchables
     ids.present? && (ids & group.layer_hierarchy.collect(&:id)).present?
   end
 
-  def permission_in_group?(permission, group_id)
-    permission_group_ids(permission).include?(group_id)
-  end
-
-  def permission_in_layer?(permission, group_id)
-    permission_layer_ids(permission).include?(layer_id)
-  end
-
 end

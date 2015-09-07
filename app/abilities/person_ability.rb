@@ -31,7 +31,9 @@ class PersonAbility < AbilityDsl::Base
     permission(:group_and_below_full).
       may(:update, :primary_group, :send_password_instructions, :log).
       non_restricted_in_same_group_or_below
-    permission(:group_and_below_full).may(:update_email).if_permissions_in_all_capable_groups_or_above
+    permission(:group_and_below_full).
+      may(:update_email).
+      if_permissions_in_all_capable_groups_or_above
     permission(:group_and_below_full).may(:create).all # restrictions are on Roles
 
     permission(:layer_read).

@@ -242,6 +242,116 @@ describe PersonReadables do
       end
 
 
+      context :group_and_below_full do
+        let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+        it 'has group_and_below_full permission' do
+          expect(role.permissions).to include(:group_and_below_full)
+        end
+
+        context 'in own group' do
+          let(:group) { role.group }
+
+          it 'may get himself' do
+            is_expected.to include(role.person)
+          end
+
+          it 'may get people in his group' do
+            other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
+            is_expected.to include(other.person)
+          end
+
+          it 'may get external people in his group' do
+            other = Fabricate(Role::External.name.to_sym, group: groups(:top_layer))
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'in below group' do
+          let(:group) { groups(:top_group) }
+
+          it 'may get people' do
+            other = Fabricate(Group::TopGroup::Member.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+
+          it 'may get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'in below layer' do
+          let(:group) { groups(:bottom_layer_one) }
+
+          it 'may not get people' do
+            other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+
+          it 'may not get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+        end
+
+      end
+
+      context :group_and_below_read do
+        let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)) }
+
+        it 'has group_and_below_read permission' do
+          expect(role.permissions).to include(:group_and_below_read)
+        end
+
+        context 'in own group' do
+          let(:group) { role.group }
+
+          it 'may get himself' do
+            is_expected.to include(role.person)
+          end
+
+          it 'may get people in his group' do
+            other = Fabricate(Group::TopGroup::Member.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+
+          it 'may get external people in his group' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'in below group' do
+          let(:group) { Fabricate(Group::GlobalGroup.name, parent: role.group) }
+
+          it 'may get people' do
+            other = Fabricate(Group::GlobalGroup::Member.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+
+          it 'may get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.to include(other.person)
+          end
+        end
+
+        context 'in same layer' do
+          let(:group) { groups(:toppers) }
+
+          it 'may not get people' do
+            other = Fabricate(Group::GlobalGroup::Member.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+
+          it 'may not get external people' do
+            other = Fabricate(Role::External.name.to_sym, group: group)
+            is_expected.not_to include(other.person)
+          end
+        end
+
+      end
+
       context :group_full do
         let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
 

@@ -32,7 +32,6 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_and_below_full).
       may(:destroy).
       in_below_group
-    # TODO :index_deep_full_people?
 
     permission(:layer_read).
       may(:show_details, :index_people, :index_local_people, :index_full_people,
@@ -70,7 +69,10 @@ class GroupAbility < AbilityDsl::Base
 
   def with_parent_in_same_group_hierarchy
     parent = group.parent
-    parent && !parent.deleted? && permission_in_groups?(parent.local_hierarchy.collect(&:id))
+    parent &&
+    !parent.deleted? &&
+    !group.layer? &&
+    permission_in_groups?(parent.local_hierarchy.collect(&:id))
   end
 
   def in_below_group

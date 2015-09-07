@@ -92,7 +92,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def non_restricted_in_same_group_or_below
-    permission_in_layers?(
+    permission_in_groups?(
       subject.non_restricted_groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
   end
 

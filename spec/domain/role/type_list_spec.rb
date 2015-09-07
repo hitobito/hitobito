@@ -13,7 +13,8 @@ describe Role::TypeList do
     list = Role::TypeList.new(Group::TopLayer)
     expect(list.to_enum.to_a).to eq([
       ['Top Layer',
-       { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalGuide,
+       { 'Top Layer' => [Group::TopLayer::TopAdmin],
+         'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalGuide,
                          Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
                          Group::TopGroup::Member] }],
 

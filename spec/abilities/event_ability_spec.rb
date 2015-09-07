@@ -209,6 +209,115 @@ describe EventAbility do
 
   end
 
+  context :group_and_below_full do
+    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+    context Event do
+      context 'in own group' do
+        it 'may create event' do
+          is_expected.to be_able_to(:create, group.events.new.tap { |e| e.groups << group })
+        end
+
+        it 'may update event' do
+          is_expected.to be_able_to(:update, event)
+        end
+
+        it 'may destroy event' do
+          is_expected.to be_able_to(:destroy, event)
+        end
+
+        it 'may index people for event' do
+          is_expected.to be_able_to(:index_participations, event)
+        end
+
+        it 'may not list all courses' do
+          is_expected.not_to be_able_to(:list_all, Event::Course)
+        end
+      end
+
+      context 'in below group' do
+        let(:group) { groups(:top_group) }
+
+        it 'may create event' do
+          is_expected.to be_able_to(:create, group.events.new.tap { |e| e.groups << group })
+        end
+
+        it 'may update event' do
+          is_expected.to be_able_to(:update, event)
+        end
+
+        it 'may destroy event' do
+          is_expected.to be_able_to(:destroy, event)
+        end
+
+        it 'may index people for event' do
+          is_expected.to be_able_to(:index_participations, event)
+        end
+      end
+
+      context 'in below layer' do
+        let(:group) { groups(:bottom_layer_one) }
+
+        it 'may not update event' do
+          is_expected.not_to be_able_to(:update, event)
+        end
+
+        it 'may not index people for event' do
+          is_expected.not_to be_able_to(:index_participations, event)
+        end
+      end
+    end
+
+    context Event::Participation do
+      before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
+
+      context 'in same group' do
+        it 'may show participation' do
+          is_expected.to be_able_to(:show, participation)
+        end
+
+        it 'may create participation' do
+          is_expected.to be_able_to(:create, participation)
+        end
+
+        it 'may update participation' do
+          is_expected.to be_able_to(:update, participation)
+        end
+
+        it 'may destroy participation' do
+          is_expected.to be_able_to(:destroy, participation)
+        end
+      end
+
+      context 'in below group' do
+        let(:group) { groups(:top_group) }
+        it 'may show participation' do
+          is_expected.to be_able_to(:show, participation)
+        end
+
+        it 'may create participation' do
+          is_expected.to be_able_to(:create, participation)
+        end
+
+        it 'may update participation' do
+          is_expected.to be_able_to(:update, participation)
+        end
+
+        it 'may destroy participation' do
+          is_expected.to be_able_to(:destroy, participation)
+        end
+      end
+
+      context 'in below layer' do
+        let(:group) { groups(:bottom_layer_one) }
+
+        it 'may not show participation' do
+          is_expected.not_to be_able_to(:show, participation)
+        end
+      end
+    end
+
+  end
 
   context :group_full do
     let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }

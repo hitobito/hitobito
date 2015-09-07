@@ -15,8 +15,7 @@ de:
       group/bottom_group: Bottom Group
       group/global_group: Global Group
 
-      group/top_layer/leader: Leader
-      group/top_layer/member: Member
+      group/top_layer/top_admin: Admin
       group/top_group/leader: Leader
       group/top_group/secretary: Secretary
       group/top_group/local_guide: Local Guide

@@ -36,7 +36,7 @@ describe 'FilterNavigation::People' do
 
     context 'without params' do
 
-      its(:main_items)      { should have(1).item }
+      its(:main_items)      { should have(2).item }
       its(:active_label)    { should == 'Mitglieder' }
       its('dropdown.active') { should be_falsey }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
@@ -79,7 +79,7 @@ describe 'FilterNavigation::People' do
 
       subject { FilterNavigation::People.new(template, group, name: 'Leaders', role_type_ids: role_types) }
 
-      its(:main_items)      { should have(1).items }
+      its(:main_items)      { should have(2).items }
       its(:active_label)    { should == nil }
       its('dropdown.active') { should be_truthy }
       its('dropdown.label')  { should == 'Leaders' }

@@ -28,7 +28,28 @@ describe Event::Role do
     end
   end
 
-  describe 'destroying roles' do
+  context 'save together with participation' do
+    let(:course) do
+      course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
+      course.questions << Fabricate(:event_question, event: course, required: true)
+      course.questions << Fabricate(:event_question, event: course)
+      course
+    end
+
+    it 'validates answers' do
+      q = course.questions
+      role = Event::Role::Participant.new
+      role.participation = course.participations.new(person: Person.first)
+      role.participation.enforce_required_answers = true
+      role.participation.init_answers
+      role.participation.attributes = {
+        answers_attributes: [{ question_id: q[1].id, answer: 'ja' }] }
+      expect(role.save).to be_falsey
+      expect(role.errors.full_messages).to eq(['Antwort muss ausgefüllt werden'])
+    end
+  end
+
+  context 'destroying roles' do
     before do
       @role = Event::Role::Participant.new
       @role.participation = participation

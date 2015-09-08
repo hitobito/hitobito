@@ -48,11 +48,13 @@ class Event::Role < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :participation, inverse_of: :roles, validate: true
+  belongs_to :participation, inverse_of: :roles
 
 
   has_one :event, through: :participation
   has_one :person, through: :participation
+
+  after_validation :validate_new_participation
 
 
   validates_by_schema
@@ -101,6 +103,16 @@ class Event::Role < ActiveRecord::Base
   end
 
   private
+
+  def validate_new_participation
+    if participation.validate_associated_records_for_roles != true
+      unless participation.valid?
+        participation.errors.each do |attr, msg|
+          errors.add(attr, msg)
+        end
+      end
+    end
+  end
 
   # A participation with at least one role is active
   def set_participation_active

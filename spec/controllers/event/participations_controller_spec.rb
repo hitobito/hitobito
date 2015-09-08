@@ -397,13 +397,26 @@ describe Event::ParticipationsController do
     before { user.qualifications.first.destroy }
 
     context 'GET show' do
-      before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
-      let(:warnings) { assigns(:precondition_warnings) }
 
+      context 'for participant' do
+        before { Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: participation) }
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+        let(:warnings) { assigns(:precondition_warnings) }
 
-      it 'assigns precondition_warnings' do
-        expect(warnings[0]).to match(/Vorbedingungen.*nicht erfüllt/)
-        expect(warnings[1]).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+        it 'assigns precondition_warnings' do
+          expect(warnings[0]).to match(/Vorbedingungen.*nicht erfüllt/)
+          expect(warnings[1]).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+        end
+      end
+
+      context 'for leader' do
+        before { Fabricate(:event_role, type: Event::Role::Leader.sti_name, participation: participation) }
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+        let(:warnings) { assigns(:precondition_warnings) }
+
+        it 'does not assign precondition_warnings' do
+          expect(warnings).to be_nil
+        end
       end
     end
 

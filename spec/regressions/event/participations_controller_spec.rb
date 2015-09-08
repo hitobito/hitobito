@@ -186,6 +186,7 @@ describe Event::ParticipationsController, type: :controller do
     before { course.kind.update(minimum_age: 21) }
 
     it 'displays full warning on detail' do
+      Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: test_entry)
       get :show, group_id: group.id, event_id: course.id, id: test_entry.id
 
       expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt.'

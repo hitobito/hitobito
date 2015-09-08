@@ -10,7 +10,8 @@ class Event::ParticipationFilter
   PREDEFINED_FILTERS = %w(all teamers participants)
 
   class_attribute :load_entries_includes
-  self.load_entries_includes = [:roles, :event, :answers,
+  self.load_entries_includes = [:roles, :event,
+                                answers: [:question],
                                 person: [:additional_emails, :phone_numbers]]
 
   attr_reader :event, :user, :params, :counts

@@ -338,9 +338,10 @@ de:
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: 'Anmelden'
+        explain_required_checkmark: '* = Antwort oblitagorisch'
+      application_fields:
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
-        explain_required_checkmark: '* = Antwort oblitagorisch'
       print:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift

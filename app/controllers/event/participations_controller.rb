@@ -99,11 +99,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def check_preconditions
-    event = entry.event
-    if user_course_application? && event.course_kind?
-      checker = Event::PreconditionChecker.new(event, current_user)
-      flash.now[:alert] = checker.errors_text unless checker.valid?
-    end
+    load_precondition_warnings
+    flash.now[:alert] = @precondition_warnings
   end
 
   def sort_columns
@@ -195,7 +192,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_precondition_warnings
-    if entry.event.course_kind?
+    if entry.person && entry.event.course_kind? && entry.roles.any? { |r| r.class.participant? }
       checker = Event::PreconditionChecker.new(entry.event, entry.person)
       @precondition_warnings = checker.errors_text unless checker.valid?
     end

@@ -72,4 +72,7 @@ namespace :doc do
   task :dev do
     Hitobito::DocGenerator.new('development', 'Entwicklungs Dokumentation').compose
   end
+
+  desc 'Generate the all documentations'
+  task all: [:arch, :dev]
 end

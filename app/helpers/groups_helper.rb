@@ -8,16 +8,15 @@
 module GroupsHelper
 
   def new_event_button
-    event = @group.events.new
+    event_type = find_event_type
+    return unless event_type
+
+    event = event_type.new
     event.groups << @group
     if can?(:new, event)
-      event_type = (params[:type] && params[:type].constantize) || Event
-
-      if @group.event_types.include?(event_type)
-        action_button(t("events.global.link.add_#{event_type.name.underscore}"),
-                      new_group_event_path(@group, event: { type: event_type.sti_name }),
-                      :plus)
-      end
+      action_button(t("events.global.link.add_#{event_type.name.underscore}"),
+                    new_group_event_path(@group, event: { type: event_type.sti_name }),
+                    :plus)
     end
   end
 
@@ -26,6 +25,14 @@ module GroupsHelper
     if can?(:"export_#{type.underscore.pluralize}", @group)
       action_button(I18n.t('event.lists.courses.csv_export_button'),
                     params.merge(format: :csv), :download)
+    end
+  end
+
+  private
+
+  def find_event_type
+    @group.event_types.find do |t|
+      (params[:type].blank? && t == Event) || t.sti_name == params[:type]
     end
   end
 

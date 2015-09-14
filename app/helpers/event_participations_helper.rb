@@ -35,4 +35,16 @@ module EventParticipationsHelper
   def event_participation_attr_list
     [:birthday, :gender, (can?(:show_details, entry) ? :created_at : nil)].compact
   end
+
+  def show_application_approval?(participation)
+    participation.application &&
+    participation.event.requires_approval? &&
+    can?(:show_approval, participation.application)
+  end
+
+  def show_application_priorities?(participation)
+    participation.application &&
+    participation.application.priorities? &&
+    can?(:show_priorities, participation.application)
+  end
 end

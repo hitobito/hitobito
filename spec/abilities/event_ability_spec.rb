@@ -197,7 +197,7 @@ describe EventAbility do
                           event: event,
                           application: application)
         is_expected.to be_able_to(:show, other)
-        is_expected.to be_able_to(:show, other.application)
+        is_expected.to be_able_to(:show_priorities, other.application)
       end
 
       it 'may still create when application is not possible' do
@@ -640,7 +640,7 @@ describe EventAbility do
       end
 
       it 'may show application' do
-        is_expected.to be_able_to(:show, participation.application)
+        is_expected.to be_able_to(:show_priorities, participation.application)
       end
 
       it 'may approve participations' do
@@ -658,7 +658,7 @@ describe EventAbility do
       end
 
       it 'may not show application' do
-        is_expected.not_to be_able_to(:show, participation.application)
+        is_expected.not_to be_able_to(:show_priorities, participation.application)
       end
 
       it 'may not approve participations' do

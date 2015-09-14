@@ -32,7 +32,8 @@
 
     = render 'approvals'
 
-    = render 'precondition_warnings' if can?(:show_details, entry)
+    - if can?(:show_details, entry) || show_application_approval?(entry)
+      = render 'precondition_warnings'
 
     = render 'priorities'
 

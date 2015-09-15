@@ -33,6 +33,8 @@ class PeopleSerializer < ApplicationSerializer
 
     property :picture, item.picture_full_url
 
+    apply_extensions(:public)
+
     contact_accounts(!h.index_full_ability?)
 
     entities :roles,

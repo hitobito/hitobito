@@ -152,9 +152,10 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 Application.activateChosen = (i, element) ->
   element = $(element)
-  text = element.data('chosen-no-results') || 'Keine Einträge gefunden mit'
-  element.chosen(no_results_text: text,
-                 search_contains: true)
+  blank = element.find('option[value]').first().val() == ''
+  text = element.data('chosen-no-results') || ' '
+  element.chosen({ no_results_text: text, search_contains: true, allow_single_deselect: blank })
+  console.log(element.data('chosen'))
 
 
 Application.updateApplicationMarketCount = ->

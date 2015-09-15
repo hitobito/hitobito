@@ -2,10 +2,11 @@
   = f.labeled(:group_id) do
     = f.select(:group_id,
                group_options_with_level,
-               f.collection_prompt(:group_id),
+               { },
                { class: 'span6 chosen-select',
                  data: { remote: true,
-                         url: role_types_group_roles_path(@group) }})
+                         url: role_types_group_roles_path(@group),
+                         chosen_no_results: t('global.chosen_no_results') } })
 - else
   = f.hidden_field :group_id
 
@@ -14,7 +15,7 @@
     = render 'type_select'
 
 = f.labeled_input_field(:label,
-                        data: {provide: :typeahead, source: entry.klass.available_labels},
+                        data: { provide: :typeahead, source: entry.klass.available_labels },
                         help: t('.help_optional_label'))
 
 = render_extensions :fields, locals: { f: f }

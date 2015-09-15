@@ -3,7 +3,9 @@
                     GroupDecorator.decorate(@group).possible_roles,
                     :sti_name,
                     :label,
-                    { prompt: ta(:please_select) },
+                    { include_blank: true },
                     { class: 'span6 chosen-select',
                       data: { remote: true,
-                              url: details_group_roles_path(@group) }})
+                              url: details_group_roles_path(@group),
+                              placeholder: ta(:please_select),
+                              chosen_no_results: t('global.chosen_no_results') } })

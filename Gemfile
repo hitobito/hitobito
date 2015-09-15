@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.4'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -16,7 +16,6 @@ gem 'bcrypt-ruby'
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'
-gem 'codez-validates_by_schema', require: 'validates_by_schema'
 gem 'country_select'
 gem 'daemons'
 gem 'dalli'
@@ -45,6 +44,7 @@ gem 'rails-i18n'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'thinking-sphinx'
+gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'wagons'
 

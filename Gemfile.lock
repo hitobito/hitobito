@@ -476,7 +476,7 @@ GEM
       activerecord (>= 3.1.0)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
-    wagons (0.4.6)
+    wagons (0.4.7)
       bundler (>= 1.1)
       rails (>= 3.2)
       seed-fu-ndo (>= 0.0.2)

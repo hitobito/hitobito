@@ -21,9 +21,12 @@ end
 Hitobito::Application.load_tasks
 
 
-STATS_DIRECTORIES << ['Abilities', "#{Rails.root}/app/abilities"]
-STATS_DIRECTORIES << ['Decorators', "#{Rails.root}/app/decorators"]
-STATS_DIRECTORIES << ['Domain', "#{Rails.root}/app/domain"]
-STATS_DIRECTORIES << ['Jobs', "#{Rails.root}/app/jobs"]
-STATS_DIRECTORIES << ['Mailers', "#{Rails.root}/app/mailers"]
-STATS_DIRECTORIES << ['Utils', "#{Rails.root}/app/utils"]
+if defined?(STATS_DIRECTORIES)
+  STATS_DIRECTORIES << ['Abilities', "#{Rails.root}/app/abilities"]
+  STATS_DIRECTORIES << ['Decorators', "#{Rails.root}/app/decorators"]
+  STATS_DIRECTORIES << ['Domain', "#{Rails.root}/app/domain"]
+  STATS_DIRECTORIES << ['Jobs', "#{Rails.root}/app/jobs"]
+  STATS_DIRECTORIES << ['Mailers', "#{Rails.root}/app/mailers"]
+  STATS_DIRECTORIES << ['Serializers', "#{Rails.root}/app/serializers"]
+  STATS_DIRECTORIES << ['Utils', "#{Rails.root}/app/utils"]
+end

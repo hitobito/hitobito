@@ -78,14 +78,15 @@ module Person::Groups
     def in_layer(*groups)
       joins(roles: :group).
       where(roles: { deleted_at: nil },
-            groups: { layer_group_id: groups.collect(&:layer_group_id) }).
+            groups: { layer_group_id: groups.collect(&:layer_group_id),
+                      deleted_at: nil }).
       uniq
     end
 
     # Scope listing all people with a role in or below the given group.
     def in_or_below(group)
       joins(roles: :group).
-      where(roles: { deleted_at: nil }).
+      where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
       where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
       uniq
     end

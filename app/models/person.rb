@@ -205,14 +205,6 @@ class Person < ActiveRecord::Base
     first_name.presence || nickname.presence || last_name.presence || company_name
   end
 
-  def male?
-    gender == 'm'
-  end
-
-  def female?
-    gender == 'w'
-  end
-
   def default_group_id
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
@@ -223,31 +215,6 @@ class Person < ActiveRecord::Base
       extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
       now.year - birthday.year - (extra ? 0 : 1)
     end
-  end
-
-  ### ASSOCIATIONS INSTANCE METHODS
-
-  def upcoming_events
-    events.upcoming.merge(Event::Participation.active).uniq
-  end
-
-  def pending_applications
-    event_applications.merge(Event::Participation.pending)
-  end
-
-  def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, qualification_kind: :translations).
-      order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
-  end
-
-  # All time roles of this person, including deleted.
-  def all_roles
-    Role.with_deleted.
-         where(person_id: id).
-         includes(:group).
-         order('groups.name', 'roles.deleted_at')
   end
 
   ### AUTHENTICATION INSTANCE METHODS

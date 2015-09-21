@@ -225,25 +225,6 @@ describe Person do
     end
   end
 
-  context 'finders on participations' do
-    let(:group) { groups(:top_layer) }
-    let(:person) { people(:top_leader) }
-    let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
-
-    it '.pending_applications returns events that are not active' do
-      participation = Fabricate(:event_participation, person: people(:top_leader))
-      application = Fabricate(:event_application, priority_1: course, participation: participation)
-      expect(person.pending_applications).to eq [application]
-    end
-
-    it '.upcoming_events returns events that are active' do
-      course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
-      course.save
-      participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
-      expect(person.upcoming_events).to eq [course]
-    end
-  end
-
   context 'email validation' do
     it 'can create two people with empty email' do
       expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
@@ -251,18 +232,6 @@ describe Person do
 
     it 'cannot create two people same email' do
       expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-  end
-
-  context 'all roles' do
-
-    it 'all group roles ordered by group, to date' do
-      person = Fabricate(:person)
-      r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
-      r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
-      r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
-
-      expect(person.all_roles).to eq([r1, r3, r2])
     end
   end
 

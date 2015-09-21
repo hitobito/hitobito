@@ -18,18 +18,8 @@ module EventsHelper
     if event.application_possible? && can?(:new, participation)
       group ||= event.groups.first
 
-      if participates_in?(event)
-        Dropdown::Event::ParticipantAdd.new(
-          self, group, event, t('event_decorator.applied'), :check).disabled_button
-      else
-        Dropdown::Event::ParticipantAdd.new(
-          self, group, event, t('event_decorator.apply'), :check).to_s
-      end
+      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
     end
-  end
-
-  def participates_in?(event)
-    event.participations.where(person: current_user).exists?
   end
 
   def typed_group_events_path(group, event_type, options = {})

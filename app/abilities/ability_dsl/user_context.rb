@@ -52,7 +52,7 @@ module AbilityDsl
     end
 
     def participations
-      @participations ||= user.event_participations.includes(:roles).to_a
+      @participations ||= user.event_participations.active.includes(:roles).to_a
     end
 
     def events_with_permission(permission)

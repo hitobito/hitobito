@@ -76,7 +76,10 @@ class PeopleController < CrudController
   end
 
   def history
-    @roles = entry.all_roles
+    @roles = Role.with_deleted.
+                  where(person_id: entry.id).
+                  includes(:group).
+                  order('groups.name', 'roles.deleted_at')
 
     @participations_by_event_type = alltime_person_participations.group_by do |p|
       p.event.class.label_plural
@@ -158,19 +161,22 @@ class PeopleController < CrudController
     Event::PreloadAllDates.for(applications.collect(&:event))
     @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
     @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
-    @qualifications       = entry.latest_qualifications_uniq_by_kind
     @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
   def pending_person_applications
-    entry.pending_applications.
+    entry.event_applications.
+          merge(Event::Participation.pending).
           includes(event: [:groups]).
           joins(event: :dates).
           order('event_dates.start_at').uniq
   end
 
   def upcoming_person_events
-    entry.upcoming_events.
+    entry.events.
+          upcoming.
+          merge(Event::Participation.active).
+          uniq.
           includes(:groups).
           preload_all_dates.
           order_by_date

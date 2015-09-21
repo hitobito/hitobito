@@ -38,7 +38,6 @@ class Event::ParticipationsController < CrudController
 
   before_render_form :load_priorities
   before_render_show :load_answers
-  before_render_show :load_qualifications
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
@@ -185,10 +184,6 @@ class Event::ParticipationsController < CrudController
     if entry.application
       @application = Event::ApplicationDecorator.decorate(entry.application)
     end
-  end
-
-  def load_qualifications
-    @qualifications = entry.person.latest_qualifications_uniq_by_kind
   end
 
   def load_precondition_warnings

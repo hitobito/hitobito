@@ -15,7 +15,7 @@ describe 'people/_qualifications.html.haml' do
   let(:dom) { @dom = Capybara::Node::Simple.new(@rendered) }
 
   before do
-    allow(view).to receive_messages(parent: top_group, entry: top_leader, show_buttons: true)
+    allow(view).to receive_messages(parent: top_group, entry: top_leader.decorate, show_buttons: true)
     allow(view).to receive_messages(current_user: top_leader)
     allow(controller).to receive_messages(current_user: top_leader)
   end
@@ -23,7 +23,8 @@ describe 'people/_qualifications.html.haml' do
 
   context 'table order' do
     before do
-      assign(:qualifications, [create_qualification, create_qualification(finish_at_at: 1.year.ago, kind: gl)])
+      create_qualification
+      create_qualification(finish_at_at: 1.year.ago, kind: gl)
       render
     end
 
@@ -36,7 +37,7 @@ describe 'people/_qualifications.html.haml' do
 
   context 'action links' do
     let(:ql_sl) { create_qualification }
-    before { assign(:qualifications, [ql_sl]) }
+    before { ql_sl }
 
     it 'lists delete buttons' do
       render

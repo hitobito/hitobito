@@ -574,6 +574,70 @@ describe EventAbility do
 
   end
 
+  context 'inactive participation' do
+    let(:role)   { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
+    let(:event)  { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    let(:participation) do
+      Fabricate(:event_participation,
+                event: event,
+                person: user,
+                active: false,
+                application: Fabricate(:event_application))
+    end
+
+    before { Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation) }
+
+    context Event do
+      it 'may show his event' do
+        expect(participation).not_to be_active
+        is_expected.to be_able_to(:show, event)
+      end
+
+      it 'may not update his event' do
+        is_expected.not_to be_able_to(:update, event)
+      end
+
+      it 'may not index people for his event' do
+        is_expected.not_to be_able_to(:index_participations, event)
+      end
+
+    end
+
+    context Event::Participation do
+      it 'may show his participation' do
+        is_expected.to be_able_to(:show, participation)
+      end
+
+      it 'may not show other participation' do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may not show details of other participation' do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
+        is_expected.not_to be_able_to(:show_details, other)
+      end
+
+      it 'may not show participation in other event' do
+        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may not update his participation' do
+        is_expected.not_to be_able_to(:update, participation)
+      end
+
+      it 'may not update other participation' do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
+        is_expected.not_to be_able_to(:update, other)
+      end
+    end
+  end
+
   context :in_same_hierarchy do
     let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }

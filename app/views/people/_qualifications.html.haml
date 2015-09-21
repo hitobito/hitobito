@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= section_table(Qualification.model_name.human(count: 2), @qualifications,
+= section_table(Qualification.model_name.human(count: 2), entry.latest_qualifications_uniq_by_kind,
                 show_buttons && can?(:create, entry.qualifications.new) ? new_group_person_qualification_path(parent, entry) : nil) do |item|
   %td
     %strong= item.qualification_kind

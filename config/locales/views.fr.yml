@@ -8,6 +8,7 @@ fr:
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case STP.
+    chosen_no_results: Aucun résultat avec
     gender:
       male: Masculin
       female: féminin
@@ -18,7 +19,6 @@ fr:
       none_available: (aucun disponible)
       please_select: sélectionner s.v.p.
       add: Ajouter une entrée
-      add_with_model: 'Ajouter un %{model}'
       remove: Supprimer
     button:
       save: Enregistrer
@@ -30,8 +30,7 @@ fr:
     link:
       show: Afficher
       edit: Modifier
-      add: "Créer un %{model}"
-      add_without_model: Créer
+      add: Créer
       delete: Effacer
       list: Liste
     errors:
@@ -42,7 +41,9 @@ fr:
       info: Informations
     search:
       placeholder: 'Recherche...'
-      placeholder_with_model: 'Rechercher %{model}...'
+      placeholder_person: 'Chercher une personne …'
+      placeholder_group: 'Chercher un groupe ….'
+      placeholder_event: 'Chercher un événement ….'
   list:
     index:
       title: '%{models}'
@@ -76,10 +77,6 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-  participations:
-    destroy:
-      flash:
-        success: L'inscription a été effacée avec succès.
   csv_imports:
     description:
       header: Fichiers CSV
@@ -136,172 +133,25 @@ fr:
       failed:
         one: '%{count} %{role} n''a pas été importé.'
         other: '%{count} %{role} n''ont pas été importés.'
-  roles:
-    full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
-    role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
-    role_changed_to_group: '%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>.'
-    form:
-      add_role_for_person: Créer un rôle pour %{person}
-      edit_role_for_person: Modifier un rôle pour %{person}
-    fields:
-      help_optional_label: désignation facultative du rôle de cette personne
-    person_fields:
-      create_new_person: Saisir une nouvelle personne
-      search_existing_person: Rechercher une personne existante
-      text_with_alternative_link_html: "%{text} <small>ou %{link}</small>"
-    info:
-      role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
-      role_only_public: >
-        Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
-        (groupes, événements et abonnements; pas d'autres personnes).
-      only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
-  people:
-    send_password_instructions: Les données d'authentification ont été envoyées.
-    years_old: (%{years} ans)
-    tabs:
-      history: Historique
-      log: Journal
-    actions_show:
-      send_login: Envoyer les données d'identification
-      send_login_tooltip:
-        new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
-        resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.
-        reset: La personne possède déjà Login<br><br>. Cette action lui envoie un lien afin de créer un nouveau mot de passe.
-    actions_index:
-      import_list: Importer une liste
-    attrs:
-      additional_data: Indications supplémentaires
-      events: Mes prochains événements
-    email_field:
-      used_as_login: Utilisé en tant qu'identifiant.
-      only_changeable_by_superior: >
-        L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
-        modifiée que par une personne hiérarchiquement supérieure à chacun de ces
-        rôles.
-    fields:
-      format_birthday: (dd.mm.yyyy)
-    list:
-      number_of_people_shown:
-        one: "%{count} personne affichées."
-        other: "%{count} personnes affichées."
-      number_of_people_hidden:
-        one: "%{count} autre personne ne sont pas visibles pour toi."
-        other: "%{count} autres personnes ne sont pas visibles pour toi."
-    log:
-      no_changes: Aucun changement enregistré jusqu'à présent.
-    pdf:
-      cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
-    roles:
-      title: Rôles actifs
-    roles_aside:
-      set_main_group: Déterminer le groupe principal
-  people_filters:
-    form:
-      save_search: Sauvegarder cette recherche
-      save_filter: Sauvegarder ce filtre
-      save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
-      prompt_role_selection: Quels rôles doivent-ils être affichés ?
-    new:
-      title: Filtrer les personnes
-  group:
-    merge:
-      select:
-        title: 'fusionner %{group}'
-        explanation: Lorsqu'on fusionne deux groupes, tous les sous-groupes, événements et personnes ainsi que les rôles des deux groupes sont fusionnés. Les abonnements ne sont pas sauvegardés. On pourra continuer à accéder aux groupes préexistants sous "effacés".
-        merge_is_irreversible: Cette opération est irréversible!
-        new_group_name: 'Nom du nouveau groupe'
-        merge_group_with: 'fusionner %{group} avec '
-        merge_button: 'Fusionner un groupe'
-    move:
-      select:
-        title: "Déplacer un groupe"
-        select_group: "Sélectionner le groupe vers lequel le déplacement doit avoir lieu."
-  groups:
-    reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
-    subgroups: 'Sous-groupes'
-    form:
-      help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
-    actions_show:
-      export_subgroups: 'Sous-groupes CSV'
-      reactivate: 'Réactiver'
-    attrs:
-      contact_details: 'Contacts'
-      additional_information: 'Informations supplémentaires'
-    tabs:
-      deleted: 'Eléments effacés'
-  group/merge:
-    success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
-    failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
-    no_candidates: 'Il n''y a pas de groupes similaires avec lesquels fusionner ou tu n''as pas les autorisations nécessaires.'
-    group_name_missing: 'Le nom du nouveau groupe doit être défini.'
-    no_group_selected: 'Sélectionne un groupe avec lequel fusionner.'
-    not_allowed: 'Tu n''as pas les autorisations nécessaires pour fusionner ces groupes.'
-  group/move:
-    success: '%{group} a été déplacé vers %{target}.'
-    failure: 'Ce groupe ne peut pas être déplacé ou tu n''as pas les autorisations nécessaires.'
-    choose_group: 'Sélectionne un groupe, s''il-te-plaît.'
-  layouts:
-    nav:
-      sign_out: 'Déconnexion'
-    unauthorized:
-      forgot_password: 'Mot de passe oublié?'
-    application:
-      available_under_license: 'Disponible au numéro '
-      developed_by: 'Développé par'
-      source_code: 'Code source'
-  subscriber:
-    group:
-      form:
-        subgroups_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement peuvent être sélectionnés.'
-        subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
-      roles:
-        please_choose_group: S'il te plaît, choisis un groupe.
-    exclude_person:
-      form:
-        exclude_subscriber: 'Exclure un abonnement'
-  subscriber/base:
-    blank: '%{model_label} doit être sélectionné'
-    taken: '%{model_label} a déjà été ajouté'
-  subscriber/user:
-    success: 'Tu as été ajouté(e) à l''abonnement.'
-    failure: 'Tu n''as pas pu être ajouté(e) à l''abonnement: %{errors}'
-    unsubscribed: 'Tu as été retiré(e) de l''abonnement avec succès.'
-  subscriber/exclude_person:
-    success: 'L''abonné %{subscriber} a été retiré avec succès.'
-    failure: '%{subscriber} n''est pas un abonné'
-  event/applications:
-    approved: 'L''inscription a été libérée'
-    rejected: 'L''inscription a été refusée'
-  event/participations:
-    full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
-    success: '%{full_entry_label} a été ajouté avec succès. Prière de contrôler les informations de contact et de les adapter le cas échéant.'
-    instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
-    show:
-      link:
-        delete: 'Effacer l''inscription'
-  event/precondition_checker:
-    preconditions_not_fulfilled: '<b>Des conditions d''inscription ne sont pas remplies.</b>'
-    below_minimum_age: "L'âge limite de %{course_minimum_age} n'est pas atteint."
-    qualifications_missing: "Les qualifications suivantes manquent : %{missing}"
-  event/register:
-    not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
-    person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
-    email_sent: 'Nous t''avons envoyer un courriel avec un lien avec lequel tu pourras t''inscrire directement à cet événement.'
-    email_missing: 'Indique une adresse e-mail, s''il te plaît.'
-    form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
-    registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
-    application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
-  event/roles:
-    full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
-  version:
-    attribute_change:
-      from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."
-      from: "%{attr} <i>%{from}</i> a été effacé."
-      to: "%{attr} a été fixé en tant que <i>%{to}</i>."
-    association_change:
-      create: "%{model} <i>%{label}</i> a été ajouté."
-      update: "%{model} <i>%{label}</i> a été mis à jour : %{changeset}"
-      destroy: "%{model} <i>%{label}</i> a été effacé."
+  custom_content_decorator:
+    available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
+    available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
+  dropdown/event/group_filter:
+    all_groups: 'Tous les groupes'
+  dropdown/event/role_add:
+    add: 'Ajouter une personne'
+  dropdown/event/participant_add:
+    as: 'en tant que %{role}'
+  dropdown/group_edit:
+    move: 'Déplacer'
+    merge: 'Fusionner'
+  dropdown/people_export:
+    button: 'Exporter'
+    csv: 'CSV'
+    labels: 'Etiquettes'
+    emails: 'Adresses électroniques'
+    addresses: 'Liste d''adresses'
+    everything: 'Toutes les informations'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -369,22 +219,15 @@ fr:
       title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
       explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
       instruction: 'Prière de réessayer plus tard.'
-  import/csv_parser:
-    read_error: "Erreur lors de la lecture de %{filename}: %{error}"
-    contains_no_data: "Ne contient pas de données"
-    read_success:
-      one: "%{count} entrée lue avec succès."
-      other: "%{count} entrées lues avec succès."
-  import/person_importer:
-    row_with_error: "Ligne %{row}: %{errors}"
-  import/person_doublette_finder:
-    duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   export/csv/events/list:
     group_names: 'organisateurs'
+    duration: Délai
+    date: "Date %{index}"
   event:
     run_by: 'Réalisé par '
-    applied_to: 'Inscription auprès de'
-    alternative_dates: 'Dates alternatives'
+    applied_to: Inscription auprès de
+    alternative_dates: Dates alternatives
+    priorities: 'Priorité d''inscription'
     no_qualifications_could_be_prolonged: "%{person} n'a pas de qualifications susceptibles d'êtres prolongées."
     lists:
       courses:
@@ -402,6 +245,13 @@ fr:
         national_waitinglist: 'liste d''attente nationale'
       index:
         assigned_participants: 'Participants attribués'
+        add_participant: Ajouter un/e participant/e
+      waiting_list_link:
+        title_active: 'Retirer de la liste d''attente'
+        title_inactive: 'Ajouter à la liste d''attente'
+        label: 'Liste d''attente'
+      popover_waiting_list:
+        waiting_list_info: Ajouter la personne à la liste d'attente pour cette catégorie de cours %{event_kind}.
     kinds:
       form:
         help_minimum_age: 'ans (selon année de naissance au premier jour du cours)'
@@ -410,27 +260,34 @@ fr:
           for_participants: 'Qualifications des participants'
           for_leaders: 'Qualifications des responsables'
     participations:
+      approvals:
+        title: Autorisation
       specific_information: 'Informations spécifiques'
       no_answer_given: '(pas de réponse)'
       actions_show:
         change_contact_data_button: 'Modifier les données de contact'
-        approve_button: 'Publier'
+      actions_approval:
+        approve_button: 'Autoriser'
         reject_button: 'Refuser'
       form:
         title_new: "Inscription en tant que %{role}"
         title_edit: "Modifier l'inscription de %{person}"
         apply: 'Inscription'
+        explain_required_checkmark: '* = réponse obligatoire'
+      application_fields:
         alternative_dates_info: 'S''il-te-plaît, indique d''autres cours qui pourraient te convenir.'
         course_information: 'Informations au sujet des cours'
-        explain_required_checkmark: '* = réponse obligatoire'
-      priorities:
-        alternative_course: "cours alternatif (%{number})"
       print:
+        signature: Signature
+        signature_confirmation: Prénom, nom, signature
+        heading_event/course: Inscription aux cours %{year}
         read_and_agreed_for_event: Je remplis les conditions d'admission, j'ai bien lu la description de l'événement et me déclare d'accord avec celle-ci.
         read_and_agreed_for_event_course: Je remplis les conditions d'inscription, j'ai bien lu la description du cours et les conditions d'admission et me déclare d'accord avec celles-ci.
         requirements_for_event: Conditions d'admission pour l'événement
         requirements_for_event_course: Conditions d'inscription pour le cours
         page_of_pages: "page <page> de <total>"
+      priorities:
+        on_waiting_list: Sur la liste d'attente
       list:
         incomplete: des indications obligatoires manquent
     register:
@@ -446,6 +303,10 @@ fr:
   events:
     preconditions: 'qualifications requises'
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
+    application_fields:
+      caption_signature: Les participants doivent signer l'inscription
+      caption_signature_confirmation: L'inscription doit être confirmé par une deuxième signature
+      signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     tabs:
       participants: 'Participants'
     form:
@@ -455,9 +316,52 @@ fr:
       additional_information: 'Données pour l''inscription'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
-  custom_content_decorator:
-    available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
-    available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
+    global:
+      link:
+        add_event: Créer un événement
+        add_event/course: Créer un cours
+    new:
+      title_event: Créer un événement
+      title_event/course: Créer un cours
+  event/applications:
+    approved: 'L''inscription a été autorisée.'
+    rejected: 'L''inscription a été refusée.'
+  event/application_decorator:
+    approval:
+      approved: 'Autorisation du cours confirmée'
+      rejected: 'Autorisation du cours refusée'
+      missing: 'Autorisation du cours en cours'
+  event/kinds:
+    global:
+      link:
+        add: Créer une catégorie de cours
+    new:
+      title: Créer une catégorie de cours
+  event/participations:
+    full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
+    success: '%{full_entry_label} a été ajouté avec succès. Prière de contrôler les informations de contact et de les adapter le cas échéant.'
+    instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
+    show:
+      link:
+        delete: 'Effacer l''inscription'
+  event/participation_decorator:
+    tooltips:
+      ok: 'Marque la réussite du cours et attribue les qualifications.'
+      remove: 'Marque l''échec du cours et retire les qualifications.'
+  event/precondition_checker:
+    preconditions_not_fulfilled: '<b>Des conditions d''inscription ne sont pas remplies.</b>'
+    below_minimum_age: "L'âge limite de %{course_minimum_age} n'est pas atteint."
+    qualifications_missing: "Les qualifications suivantes manquent : %{missing}"
+  event/register:
+    not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
+    person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
+    email_sent: 'Nous t''avons envoyer un courriel avec un lien avec lequel tu pourras t''inscrire directement à cet événement.'
+    email_missing: 'Indique une adresse e-mail, s''il te plaît.'
+    form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
+    registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
+    application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
+  event/roles:
+    full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
   event_decorator:
     apply: 'Inscription'
     applied: 'inscrit'
@@ -470,21 +374,97 @@ fr:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
       other: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
     issue_and_prolong: 'Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
-  event/application_decorator:
-    course_acceptance: 'validation du cours'
-    confirmation:
-      approved: 'confirmé'
-      rejected: ' refusé'
-      missing: 'en cours'
-  event/participation_decorator:
-    waiting_list_link:
-      title_active: 'Retirer de la liste d''attente nationale'
-      title_inactive: 'Ajouter à la liste d''attente nationale'
-      label: 'Liste d''attente'
-    tooltips:
-      ok: 'Marque la réussite du cours et attribue les qualifications.'
-      remove: 'Marque l''échec du cours et retire les qualifications.'
+  filter_navigation/dropdown:
+    additional_views: 'Autres vues'
+  filter_navigation/people:
+    custom_filter: 'Filtre personnel'
+    entire_layer: 'Tout le niveau'
+    entire_group: 'Tout le groupe'
+    new_role_filter: 'Nouveau filtre pour rôles...'
+    new_qualification_filter: 'Nouveau filtre pour qualifications...'
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: Toutes les personnes
+      teamers: Maîtrise
+      participants: Participants
+  full_text:
+    index:
+      title: 'Personnes trouvées'
+      incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
+  group:
+    merge:
+      select:
+        title: 'fusionner %{group}'
+        explanation: Lorsqu'on fusionne deux groupes, tous les sous-groupes, événements et personnes ainsi que les rôles des deux groupes sont fusionnés. Les abonnements ne sont pas sauvegardés. On pourra continuer à accéder aux groupes préexistants sous "effacés".
+        merge_is_irreversible: Cette opération est irréversible!
+        new_group_name: 'Nom du nouveau groupe'
+        merge_group_with: 'fusionner %{group} avec '
+        merge_button: 'Fusionner un groupe'
+    move:
+      select:
+        title: "Déplacer un groupe"
+        select_group: "Sélectionner le groupe vers lequel le déplacement doit avoir lieu."
+  groups:
+    actions_show:
+      export_subgroups: 'Sous-groupes CSV'
+      reactivate: 'Réactiver'
+    attrs:
+      contact_details: 'Contacts'
+      additional_information: 'Informations supplémentaires'
+    form:
+      help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
+    global:
+      link:
+        add: Créer un groupe
+    new:
+      title: 'Créer un %{model}'
+    reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
+    subgroups: 'Sous-groupes'
+    tabs:
+      deleted: 'Eléments effacés'
+  group/merge:
+    success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
+    failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
+    no_candidates: 'Il n''y a pas de groupes similaires avec lesquels fusionner ou tu n''as pas les autorisations nécessaires.'
+    group_name_missing: 'Le nom du nouveau groupe doit être défini.'
+    no_group_selected: 'Sélectionne un groupe avec lequel fusionner.'
+    not_allowed: 'Tu n''as pas les autorisations nécessaires pour fusionner ces groupes.'
+  group/move:
+    success: '%{group} a été déplacé vers %{target}.'
+    failure: 'Ce groupe ne peut pas être déplacé ou tu n''as pas les autorisations nécessaires.'
+    choose_group: 'Sélectionne un groupe, s''il-te-plaît.'
+  import/csv_parser:
+    read_error: "Erreur lors de la lecture de %{filename}: %{error}"
+    contains_no_data: "Ne contient pas de données"
+    read_success:
+      one: "%{count} entrée lue avec succès."
+      other: "%{count} entrées lues avec succès."
+  import/person_importer:
+    row_with_error: "Ligne %{row}: %{errors}"
+  import/person_doublette_finder:
+    duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
+  label_formats:
+    form:
+      portrait: 'Format portrait'
+      landscape: 'Format paysage'
+    global:
+      link:
+        add: Créer un format d'étiquette
+    new:
+      title: Créer un format d'étiquette
+  layouts:
+    nav:
+      sign_out: 'Déconnexion'
+    unauthorized:
+      forgot_password: 'Mot de passe oublié?'
+    application:
+      available_under_license: 'Disponible au numéro '
+      developed_by: 'Développé par'
+      source_code: 'Code source'
   mailing_lists:
+    global:
+      link:
+        add: Créer un abo
     form:
       help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
       caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes'
@@ -499,68 +479,158 @@ fr:
     anyone_may_not_post: 'Tous les expéditeurs ne peuvent <strong>pas</strong> écrire à la liste de diffusion.'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
+  navigation:
+    groups: 'Groupes'
+    events: 'Activités'
+    courses: 'Cours'
+    admin: 'Administrateur'
+  qualifications:
+    in_years: '%{years} ans'
+    valid_until: 'à %{date}'
+    unlimited: 'illimité'
+  qualification_kinds:
+    global:
+      link:
+        add: Créer une catégorie de qualification
+    form:
+      help_validity_in_years: 'années à partir de la date de qualification; jusqu''à la fin de l''année concernée.'
+      help_reactivateable_in_years: 'années après échéance de la validité'
+    new:
+      title: Créer une catégorie de qualification
   paper_trail/version_decorator:
     by: 'de %{author}'
-  dropdown/event/group_filter:
-    all_groups: 'Tous les groupes'
-  dropdown/event/role_add:
-    add: 'Ajouter une personne'
-  dropdown/event/participant_add:
-    as: 'en tant que %{role}'
-  dropdown/group_edit:
-    move: 'Déplacer'
-    merge: 'Fusionner'
-  dropdown/people_export:
-    button: 'Exporter'
-    csv: 'CSV'
-    labels: 'Etiquettes'
-    emails: 'Adresses électroniques'
-    addresses: 'Liste d''adresses'
-    everything: 'Toutes les informations'
-  filter_navigation/dropdown:
-    additional_views: 'Autres vues'
-  filter_navigation/people:
-    custom_filter: 'Filtre personnel'
-    entire_layer: 'Tout le niveau'
-    entire_group: 'Tout le groupe'
-    new_filter: 'Nouveau filtre…'
-  filter_navigation/event/participations:
-    predefined_filters:
-      all: Toutes les personnes
-      teamers: Maîtrise
-      participants: Participants
+  people:
+    send_password_instructions: Les données d'authentification ont été envoyées.
+    years_old: (%{years} ans)
+    tabs:
+      history: Historique
+      log: Journal
+    actions_show:
+      send_login: Envoyer les données d'identification
+      send_login_tooltip:
+        new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
+        resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.
+        reset: La personne possède déjà Login<br><br>. Cette action lui envoie un lien afin de créer un nouveau mot de passe.
+    actions_index:
+      add_person: Ajouter une personne
+      import_list: Importer une liste
+    attrs:
+      additional_data: Indications supplémentaires
+      events: Mes prochains événements
+    email_field:
+      used_as_login: Utilisé en tant qu'identifiant.
+      only_changeable_by_superior: >
+        L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
+        modifiée que par une personne hiérarchiquement supérieure à chacun de ces
+        rôles.
+    fields:
+      format_birthday: (dd.mm.yyyy)
+    list:
+      number_of_people_shown:
+        one: "%{count} personne affichées."
+        other: "%{count} personnes affichées."
+      number_of_people_hidden:
+        one: "%{count} autre personne n'est pas visible pour toi."
+        other: "%{count} autres personnes ne sont pas visibles pour toi."
+    log:
+      no_changes: Aucun changement enregistré jusqu'à présent.
+    pdf:
+      cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    roles:
+      title: Rôles actifs
+    roles_aside:
+      add_role: Ajouter un rôle
+      set_main_group: Déterminer le groupe principal
+  participations:
+    destroy:
+      flash:
+        success: L'inscription a été effacée avec succès.
+  people_filters:
+    form:
+      save_search: Sauvegarder cette recherche
+      save_filter: Sauvegarder ce filtre
+      save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
+      prompt_role_selection: Quels rôles doivent-ils être affichés ?
+    new:
+      title: Filtrer les personnes par qualification
+    qualification:
+      title: Filtrer les personnes par qualification
+      prompt_qualification_selection: Quelles qualifications doivent apparaître?
+      prompt_validity: Quelles validités doivent avoir les qualifications montrées?
+      prompt_kind: Dans quel secteur faut-il chercher ?
+    simple_radio:
+      validity:
+        active: Uniquement les qualifications valides
+        reactivateable: Les qualifications valides et renouvelables
+        all: Montrer toutes les qualifications non distribuées
+      kind:
+        deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
+        layer: Dans le niveau actuel et tous les groupes
+        group: Uniquement dans le groupe actuel
+        group_deep: Dans le groupe actuel et tous les groupes sous-jacents
+  roles:
+    full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
+    role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
+    role_changed_to_group: '%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>.'
+    form:
+      add_person: Ajouter une personne
+      add_role_for_person: Créer un rôle pour %{person}
+      edit_role_for_person: Modifier un rôle pour %{person}
+    fields:
+      help_optional_label: désignation facultative du rôle de cette personne
+    person_fields:
+      create_new_person: Saisir une nouvelle personne
+      search_existing_person: Rechercher une personne existante
+      text_with_alternative_link_html: "%{text} <small>ou %{link}</small>"
+    info:
+      role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
+      role_only_public: >
+        Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
+        (groupes, événements et abonnements; pas d'autres personnes).
+      only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
+  subscriber:
+    group:
+      form:
+        subgroups_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement peuvent être sélectionnés.'
+        subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
+      roles:
+        please_choose_group: S'il te plaît, choisis un groupe.
+    exclude_person:
+      form:
+        exclude_subscriber: 'Exclure un abonnement'
+  subscriber/base:
+    blank: '%{model_label} doit être sélectionné'
+    taken: '%{model_label} a déjà été ajouté'
+  subscriber/user:
+    success: 'Tu as été ajouté(e) à l''abonnement.'
+    failure: 'Tu n''as pas pu être ajouté(e) à l''abonnement: %{errors}'
+    unsubscribed: 'Tu as été retiré(e) de l''abonnement avec succès.'
+  subscriber/exclude_person:
+    success: 'L''abonné %{subscriber} a été retiré avec succès.'
+    failure: '%{subscriber} n''est pas un abonné'
   sheet/csv_import:
     title: 'Importer les personnes par CSV'
   sheet/group:
     belongs_to: 'appartient à'
     deleted: '(effacé)'
     layer_upwards: '< vers le niveau supérieur'
-  label_formats:
-    form:
-      portrait: 'Format portrait'
-      landscape: 'Format paysage'
-  qualifications:
-    in_years: '%{years} ans'
-    valid_until: 'à %{date}'
-    unlimited: 'illimité'
-  navigation:
-    groups: 'Groupes'
-    events: 'Activités'
-    courses: 'Cours'
-    admin: 'Administrateur'
-  full_text:
-    index:
-      title: 'Personnes trouvées'
-      incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
-  qualification_kinds:
-    form:
-      help_validity_in_years: 'années à partir de la date de qualification; jusqu''à la fin de l''année concernée.'
-      help_reactivateable_in_years: 'années après échéance de la validité'
   subscriptions:
     actions_index:
+      add_person: Ajouter une personne
+      add_group_roles: Ajouter un rôle/group
+      add_event: Ajouter un événement
       exclude_person: 'Exclure une personne'
     list:
       excluded_people: 'Personnes exclues'
+  version:
+    attribute_change:
+      from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."
+      from: "%{attr} <i>%{from}</i> a été effacé."
+      to: "%{attr} a été fixé en tant que <i>%{to}</i>."
+    association_change:
+      create: "%{model} <i>%{label}</i> a été ajouté."
+      update: "%{model} <i>%{label}</i> a été mis à jour : %{changeset}"
+      destroy: "%{model} <i>%{label}</i> a été effacé."
   views:
     pagination:
       next: '>>'

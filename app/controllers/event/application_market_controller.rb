@@ -20,18 +20,17 @@ class Event::ApplicationMarketController < ApplicationController
 
   def add_participant
     if assigner.createable?
-      assigner.add_participant
+      assigner_add_participant
     else
       render 'participation_exists_error'
     end
   end
 
-  def remove_participant
-    assigner.remove_participant
-  end
+  delegate :remove_participant, to: :assigner
 
   def put_on_waiting_list
-    application.update_column(:waiting_list, true)
+    application.update!(waiting_list: true,
+                        waiting_list_comment: params[:event_application][:waiting_list_comment])
     render 'waiting_list'
   end
 
@@ -41,6 +40,10 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   private
+
+  def assigner_add_participant
+    assigner.add_participant
+  end
 
   def load_participants
     event.participations_for(*event.participant_types).
@@ -73,10 +76,11 @@ class Event::ApplicationMarketController < ApplicationController
 
   def filter_applications
     if params[:prio].nil? && params[:waiting_list].nil?
-      params[:prio] = %w(1)  # default filter
+      params[:prio] = %w(1) # default filter
     end
 
-    conditions, args = [], []
+    conditions = []
+    args = []
     filter_by_prio(conditions, args) if params[:prio]
     filter_by_waiting_list(conditions, args) if params[:waiting_list]
 
@@ -101,7 +105,7 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def assigner
-    @assigner ||= Event::ParticipantAssigner.new(event, participation)
+    @assigner ||= Event::ParticipantAssigner.new(event, participation, current_user)
   end
 
   def event

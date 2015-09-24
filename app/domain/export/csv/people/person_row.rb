@@ -15,11 +15,15 @@ module Export::Csv::People
                                 /^people_relation_/ => :people_relation_attribute }
 
     def roles
-      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}"  }.join(', ')
+      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
     end
 
     def gender
       entry.gender_label
+    end
+
+    def country
+      entry.country_label
     end
 
     private

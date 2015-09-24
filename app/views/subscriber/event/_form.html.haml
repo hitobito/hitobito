@@ -8,7 +8,7 @@
 
   = f.labeled(:subscriber, Event.model_name.human) do
     = f.string_field(:subscriber,
-                     placeholder: t('global.search.placeholder_with_model', model: Event.model_name.human),
+                     placeholder: t('global.search.placeholder_event'),
                      data: {provide: 'entity',
                             id_field: "subscription_subscriber_id",
                             url: query_group_mailing_list_event_index_path(@group, @mailing_list)})

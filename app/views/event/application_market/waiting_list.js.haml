@@ -3,4 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-$('##{dom_id(@participation)} td:last').html('#{escape_javascript(@participation.waiting_list_link(@group, @event))}')
+$('##{dom_id(@participation)} td:last').html('#{escape_javascript(render('waiting_list_link', p: @participation))}')

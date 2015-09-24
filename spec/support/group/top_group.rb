@@ -26,7 +26,7 @@ class Group::TopGroup < Group
   end
 
   class Member < ::Role
-    self.permissions = [:contact_data, :group_read]
+    self.permissions = [:contact_data, :group_and_below_read]
   end
 
   roles Leader, LocalGuide, Secretary, LocalSecretary, Member

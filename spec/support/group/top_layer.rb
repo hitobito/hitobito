@@ -16,4 +16,10 @@ class Group::TopLayer < Group
 
   children Group::TopGroup, Group::BottomLayer
 
+  class TopAdmin < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
+  roles TopAdmin
+
 end

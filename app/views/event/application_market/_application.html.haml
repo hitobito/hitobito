@@ -12,4 +12,5 @@
 
   = render 'participation', p: p
 
-  %td= p.waiting_list_link(@group, @event)
+  %td
+    = render 'waiting_list_link', p: p

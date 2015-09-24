@@ -8,30 +8,33 @@
 #
 # Table name: events
 #
-#  id                     :integer          not null, primary key
-#  type                   :string(255)
-#  name                   :string(255)      not null
-#  number                 :string(255)
-#  motto                  :string(255)
-#  cost                   :string(255)
-#  maximum_participants   :integer
-#  contact_id             :integer
-#  description            :text
-#  location               :text
-#  application_opening_at :date
-#  application_closing_at :date
-#  application_conditions :text
-#  kind_id                :integer
-#  state                  :string(60)
-#  priorization           :boolean          default(FALSE), not null
-#  requires_approval      :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  participant_count      :integer          default(0)
-#  application_contact_id :integer
-#  external_applications  :boolean          default(FALSE)
-#  applicant_count        :integer          default(0)
-#  teamer_count           :integer          default(0)
+#  id                          :integer          not null, primary key
+#  type                        :string(255)
+#  name                        :string(255)      not null
+#  number                      :string(255)
+#  motto                       :string(255)
+#  cost                        :string(255)
+#  maximum_participants        :integer
+#  contact_id                  :integer
+#  description                 :text
+#  location                    :text
+#  application_opening_at      :date
+#  application_closing_at      :date
+#  application_conditions      :text
+#  kind_id                     :integer
+#  state                       :string(60)
+#  priorization                :boolean          default(FALSE), not null
+#  requires_approval           :boolean          default(FALSE), not null
+#  created_at                  :datetime
+#  updated_at                  :datetime
+#  participant_count           :integer          default(0)
+#  application_contact_id      :integer
+#  external_applications       :boolean          default(FALSE)
+#  applicant_count             :integer          default(0)
+#  teamer_count                :integer          default(0)
+#  signature                   :boolean
+#  signature_confirmation      :boolean
+#  signature_confirmation_text :string(255)
 #
 
 require 'spec_helper'
@@ -457,6 +460,7 @@ describe Event do
       it 'should count active prio 1 participations correctly' do
         p = create_participation(:prio1)
         assert_counts(participant: 1, applicant: 1)
+
         p.destroy!
         assert_counts(participant: 0, applicant: 0)
       end
@@ -494,6 +498,18 @@ describe Event do
   context 'destroyed associations' do
     let(:event) { events(:top_course) }
 
+    it 'destroys everything with event' do
+      expect do
+        expect do
+          expect do
+            expect do
+              expect { event.destroy }.to change { Event.count }.by(-1)
+            end.to change { Event::Participation.count }.by(-1)
+          end.to change { Event::Role.count }.by(-1)
+        end.to change { Event::Date.count }.by(-1)
+      end.to change { Event::Question.count }.by(-3)
+    end
+
     it 'keeps destroyed kind' do
       event.kind.destroy
       event.reload
@@ -516,6 +532,7 @@ describe Event do
         expect(event.groups.size).to eq(2)
       end
     end
+
   end
 
 

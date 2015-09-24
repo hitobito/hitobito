@@ -98,6 +98,86 @@ describe MailingListAbility do
     end
   end
 
+  context 'group and below full' do
+    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+    context 'in own group' do
+      it 'may show mailing lists' do
+        is_expected.to be_able_to(:show, list)
+      end
+
+      it 'may update mailing lists' do
+        is_expected.to be_able_to(:update, list)
+      end
+
+      it 'may index subscriptions' do
+        is_expected.to be_able_to(:index_subscriptions, list)
+      end
+
+      it 'may create subscriptions' do
+        is_expected.to be_able_to(:create, list.subscriptions.new)
+      end
+    end
+
+    context 'in group in same layer' do
+      let(:group) { groups(:top_group) }
+
+      it 'may show mailing lists' do
+        is_expected.to be_able_to(:show, list)
+      end
+
+      it 'may update mailing lists' do
+        is_expected.to be_able_to(:update, list)
+      end
+
+      it 'may index subscriptions' do
+        is_expected.to be_able_to(:index_subscriptions, list)
+      end
+
+      it 'may create subscriptions' do
+        is_expected.to be_able_to(:create, list.subscriptions.new)
+      end
+    end
+
+    context 'in group in lower layer' do
+      let(:group) { groups(:bottom_layer_one) }
+
+      it 'may show mailing lists' do
+        is_expected.to be_able_to(:show, list)
+      end
+
+      it 'may not update mailing lists' do
+        is_expected.not_to be_able_to(:update, list)
+      end
+
+      it 'may not index subscriptions' do
+        is_expected.not_to be_able_to(:index_subscriptions, list)
+      end
+
+      it 'may not create subscriptions' do
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
+      end
+    end
+
+    context 'for destroyed group' do
+      let(:group) { groups(:toppers) }
+
+      before { list; group.destroy }
+
+      it 'may not create mailing list' do
+        is_expected.not_to be_able_to(:create, list)
+      end
+
+      it 'may not update mailing list' do
+        is_expected.not_to be_able_to(:update, list)
+      end
+
+      it 'may not create subscription' do
+        is_expected.not_to be_able_to(:create, list.subscriptions.new)
+      end
+    end
+  end
+
   context 'group full' do
     let(:role) { Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers)) }
 
@@ -155,24 +235,6 @@ describe MailingListAbility do
       end
 
       it 'may not create subscriptions' do
-        is_expected.not_to be_able_to(:create, list.subscriptions.new)
-      end
-    end
-
-    context 'for destroyed group' do
-      let(:group) { groups(:bottom_group_two_one) }
-
-      before { list; groups(:toppers).destroy }
-
-      it 'may not create mailing list' do
-        is_expected.not_to be_able_to(:create, list)
-      end
-
-      it 'may not update mailing list' do
-        is_expected.not_to be_able_to(:update, list)
-      end
-
-      it 'may not create subscription' do
         is_expected.not_to be_able_to(:create, list.subscriptions.new)
       end
     end

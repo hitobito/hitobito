@@ -14,7 +14,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
 
   delegate :to_s, :email, :primary_email, :all_emails, :all_additional_emails,
            :all_phone_numbers, :all_social_accounts, :complete_address, :town, to: :person
-  delegate :priority, :confirmation, to: :application
   delegate :qualified?, to: :qualifier
 
   def person_additional_information
@@ -58,16 +57,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
     h.link_to(h.group_event_qualification_path(group, event_id, model),
               method: method, remote: true, title: tooltips[icon]) do
       h.content_tag(:i, '', class: "icon icon-#{icon} disabled")
-    end
-  end
-
-  def waiting_list_link(group, event)
-    if application
-      h.toggle_link(application.waiting_list?,
-                    h.waiting_list_group_event_application_market_path(group, event, id),
-                    translate('waiting_list_link.title_active'),
-                    translate('waiting_list_link.title_inactive'),
-                    translate('waiting_list_link.label'))
     end
   end
 

@@ -9,6 +9,11 @@ class Event::ParticipationFilter
 
   PREDEFINED_FILTERS = %w(all teamers participants)
 
+  class_attribute :load_entries_includes
+  self.load_entries_includes = [:roles, :event,
+                                answers: [:question],
+                                person: [:additional_emails, :phone_numbers]]
+
   attr_reader :event, :user, :params, :counts
 
   def initialize(event, user, params = {})
@@ -23,6 +28,10 @@ class Event::ParticipationFilter
     apply_default_sort(apply_filter_scope(records))
   end
 
+  def predefined_filters
+    PREDEFINED_FILTERS
+  end
+
   private
 
   def apply_default_sort(records)
@@ -31,14 +40,14 @@ class Event::ParticipationFilter
   end
 
   def populate_counts(records)
-    PREDEFINED_FILTERS.each_with_object({}) do |name, memo|
+    predefined_filters.each_with_object({}) do |name, memo|
       memo[name] = apply_filter_scope(records, name).count
     end
   end
 
   def load_entries
     event.active_participations_without_affiliate_types.
-      includes(:roles, :event, :answers, person: [:additional_emails, :phone_numbers]).
+      includes(load_entries_includes).
       uniq
   end
 

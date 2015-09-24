@@ -21,7 +21,7 @@ class Event::ParticipationsController < CrudController
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
-                                  Event::Participation.order_by_role_statement(event))
+                                    Event::Participation.order_by_role_statement(event))
                                 end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
@@ -34,11 +34,11 @@ class Event::ParticipationsController < CrudController
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
   prepend_before_action :parent, :group
 
-  before_action :check_preconditions, only: [:create, :new]
+  before_action :check_preconditions, only: [:new]
 
   before_render_form :load_priorities
   before_render_show :load_answers
-  before_render_show :load_qualifications
+  before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
 
@@ -98,11 +98,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def check_preconditions
-    event = entry.event
-    if user_course_application? && event.course_kind?
-      checker = Event::PreconditionChecker.new(event, current_user)
-      redirect_to group_event_path(group, event), alert: checker.errors_text unless checker.valid?
-    end
+    load_precondition_warnings
+    flash.now[:alert] = @precondition_warnings
   end
 
   def sort_columns
@@ -184,11 +181,16 @@ class Event::ParticipationsController < CrudController
 
   def load_answers
     @answers = entry.answers.includes(:question)
-    @application = Event::ApplicationDecorator.decorate(entry.application)
+    if entry.application
+      @application = Event::ApplicationDecorator.decorate(entry.application)
+    end
   end
 
-  def load_qualifications
-    @qualifications = entry.person.latest_qualifications_uniq_by_kind
+  def load_precondition_warnings
+    if entry.person && entry.event.course_kind? && entry.roles.any? { |r| r.class.participant? }
+      checker = Event::PreconditionChecker.new(entry.event, entry.person)
+      @precondition_warnings = checker.errors_text unless checker.valid?
+    end
   end
 
   # A label for the current entry, including the model name, used for flash
@@ -219,7 +221,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def append_mailing_instructions?
-    false
+    user_course_application? && event.signature?
   end
 
   def event
@@ -232,7 +234,7 @@ class Event::ParticipationsController < CrudController
 
   # model_params may be empty
   def permitted_params
-    model_params.permit(permitted_attrs)
+    model_params.present? ? model_params.permit(permitted_attrs) : {}
   end
 
   def self.model_class

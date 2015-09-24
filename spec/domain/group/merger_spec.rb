@@ -59,9 +59,9 @@ describe Group::Merger do
       expect(Group).to be_valid
     end
 
-    it 'should raise an error if one tries to merge to groups with different types/parent' do
+    it 'should raise an error if one tries to merge two groups with different types/parent' do
       merge = Group::Merger.new(group1, other_group, 'foo')
-      expect { merge.merge! }.to raise_error
+      expect { merge.merge! }.to raise_error(RuntimeError)
     end
 
     it 'add events from both groups only once' do

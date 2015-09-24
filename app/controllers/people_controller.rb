@@ -22,8 +22,10 @@ class PeopleController < CrudController
                           Contactable::ACCESSIBLE_ATTRS +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
-  self.sort_mappings = { roles: [Person.order_by_role_statement].
-                                  concat(Person.order_by_name_statement) }
+
+  # required to allow api calls
+  protect_from_forgery with: :null_session, only: [:index, :show]
+
 
   decorates :group, :person, :people, :versions
 
@@ -74,7 +76,10 @@ class PeopleController < CrudController
   end
 
   def history
-    @roles = entry.all_roles
+    @roles = Role.with_deleted.
+                  where(person_id: entry.id).
+                  includes(:group).
+                  order('groups.name', 'roles.deleted_at')
 
     @participations_by_event_type = alltime_person_participations.group_by do |p|
       p.event.class.label_plural
@@ -116,15 +121,26 @@ class PeopleController < CrudController
 
   private
 
+  # dont use class level accessor as expression is evaluated whenever constant is
+  # loaded which might be before wagon that defines groups / roles has been loaded
+  def self.sort_mappings_with_indifferent_access
+    { roles: [Person.order_by_role_statement].
+      concat(Person.order_by_name_statement) }.with_indifferent_access
+  end
+
+
   alias_method :group, :parent
 
   def redirect_to_home
     flash.keep if html_request?
-    redirect_to person_home_path(entry, format: request.format.to_sym)
+    redirect_to person_home_path(entry,
+                                 format: request.format.to_sym,
+                                 user_email: params[:user_email],
+                                 user_token: params[:user_token])
   end
 
   def filter_entries
-    filter = Person::ListFilter.new(@group, current_user, params[:kind], params[:role_type_ids])
+    filter = list_filter
     entries = filter.filter_entries
     entries = entries.reorder(sort_expression) if sorting?
     @multiple_groups = filter.multiple_groups
@@ -132,24 +148,35 @@ class PeopleController < CrudController
     entries
   end
 
+  def list_filter
+    if params[:filter] == 'qualification' && index_full_ability?
+      Person::QualificationFilter.new(@group, current_user, params)
+    else
+      Person::RoleFilter.new(@group, current_user, params)
+    end
+  end
+
   def load_asides
     applications = pending_person_applications
     Event::PreloadAllDates.for(applications.collect(&:event))
     @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
     @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
-    @qualifications       = entry.latest_qualifications_uniq_by_kind
     @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
   def pending_person_applications
-    entry.pending_applications.
+    entry.event_applications.
+          merge(Event::Participation.pending).
           includes(event: [:groups]).
           joins(event: :dates).
           order('event_dates.start_at').uniq
   end
 
   def upcoming_person_events
-    entry.upcoming_events.
+    entry.events.
+          upcoming.
+          merge(Event::Participation.active).
+          uniq.
           includes(:groups).
           preload_all_dates.
           order_by_date
@@ -241,4 +268,5 @@ class PeopleController < CrudController
   def authorize_class
     authorize!(:index_people, group)
   end
+
 end

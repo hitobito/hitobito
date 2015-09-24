@@ -8,12 +8,15 @@
 - else
   - title t('.title_edit', person: entry.person)
 
+= render_extensions :info
+
 = entry_form(stacked: true,
              buttons_top: false,
              submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
-  = hidden_field_tag('event_role[type]', params[:event_role][:type]) if params[:event_role]
+  - if params[:event_role]
+    = hidden_field_tag('event_role[type]', params[:event_role][:type])
 
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)
@@ -23,26 +26,8 @@
 
   = f.labeled_text_area(:additional_information)
 
-  -if entry.application && entry.new_record?
-    -# once given, priorities may not be changed anymore
-    -# (@alternatives might not be in state application_open anymore in the future,
-    -#  causing missing choices for the dropdown)
-    = f.fields_for(:application) do |fap|
-      - if @event.priorization? && @priority_2s.present?
-        = field_set_tag t('event.alternative_dates') do
-          %p= t('.alternative_dates_info')
-          = fap.labeled_belongs_to_field(:priority_2_id)
-          = fap.labeled_belongs_to_field(:priority_3_id)
-
-          %h4= t('.course_information')
-          %table.table
-            - @alternatives.each do |event|
-              %tr{class: "#{'highlight' if event == @event}"}
-                %td= event.label
-                %td= event.dates_full
-      - else
-        -# This is required for correct rendering
-        &nbsp;
+  - if entry.application && entry.new_record?
+    = render 'application_fields', f: f
 
   = render_extensions :fields, locals: { f: f }
 

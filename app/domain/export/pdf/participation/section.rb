@@ -13,9 +13,9 @@ module Export::Pdf::Participation
     class_attribute :model_class
 
     delegate :bounds, :bounding_box, :table,
-             :text, :cursor,  :font_size, :text_box,
+             :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
-             :image, to: :pdf
+             :image, :group, to: :pdf
 
     delegate :event, :person, :application, to: :participation
 
@@ -26,13 +26,6 @@ module Export::Pdf::Participation
     end
 
     private
-
-    def first_page_section
-      bounding_box([0, cursor], width: bounds.width, height: section_size) do
-        yield
-        stroke_bounds
-      end
-    end
 
     def render_section(section_class)
       section_class.new(pdf, participation).render
@@ -45,26 +38,28 @@ module Export::Pdf::Participation
       before.each { |key, value| pdf.send(:"#{key}=", value) }
     end
 
-    # third_of_height
-    def section_size
-      ((bounds.height - 60) / 3) + 3
-    end
+    def render_columns(left, right)
+      bounding_box([0, cursor], width: bounds.width) do
+        gutter = 10
+        width = (bounds.width / 2) - (gutter / 2)
+        starting_page = pdf.page_number
 
-    def render_boxed(left, right, offset = 0)
-      y = cursor
-      gutter = 10
-      width = (bounds.width / 2) - (gutter / 2)
-
-      bounding_box([0 + offset, y], width: width - offset) { left.call }
-      bounding_box([width + gutter + offset, y], width: width - offset) { right.call }
-    end
-
-    def shrinking_text_box(text, opts = {})
-      pdf.text_box(text, opts.merge(overflow: :shrink_to_fit)) if text.present?
+        pdf.span(width, { position: 0 }, &left)
+        pdf.go_to_page(starting_page)
+        pdf.span(width, { position: width + gutter }, &right)
+      end
+      move_down_line
     end
 
     def stroke_bounds
       # pdf.stroke_bounds
+    end
+
+    def with_header(header)
+      heading { text header, style: :bold }
+      move_down_line
+      yield
+      2.times { move_down_line }
     end
 
     def text(*args)
@@ -112,7 +107,7 @@ module Export::Pdf::Participation
     end
 
     def i18n_event_postfix
-      event.class.to_s.underscore.gsub('/', '_')
+      event.class.to_s.underscore.tr('/', '_')
     end
   end
 end

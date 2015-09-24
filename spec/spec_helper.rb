@@ -20,11 +20,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'cancan/matchers'
 
+ActiveRecord::Migration.maintain_test_schema!
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
-ActiveRecord::Migration.maintain_test_schema!
 
 # Add test locales
 Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
@@ -49,6 +50,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.backtrace_exclusion_patterns = [/lib\/rspec/]
 
   config.include(MailerMacros)
   config.include(EventMacros)
@@ -114,6 +117,7 @@ end
 # Use Capybara only if features are not excluded
 unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+  Capybara.default_wait_time = 10
 
   if ENV['HEADLESS'] == 'false'
     # use selenium-webkit driver
@@ -126,7 +130,5 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     at_exit do
       headless.destroy
     end
-
-    Capybara.default_wait_time = 5
   end
 end

@@ -16,7 +16,6 @@ describe 'events/_attrs.html.haml' do
     assign(:group, event.groups.first)
     allow(view).to receive_messages(action_name: 'events', current_user: top_leader, entry: event)
     allow(controller).to receive_messages(current_user: top_leader)
-    render
   end
 
   let(:dom) { Capybara::Node::Simple.new(rendered) }
@@ -26,6 +25,7 @@ describe 'events/_attrs.html.haml' do
   context 'course' do
     let(:event) { EventDecorator.decorate(events(:top_course)) }
     it 'lists preconditions' do
+      render
       is_expected.to have_content 'Qualifikationen'
       is_expected.to have_content 'Group Lead'
     end
@@ -33,7 +33,9 @@ describe 'events/_attrs.html.haml' do
 
   context 'event' do
     let(:event) { EventDecorator.decorate(events(:top_event)) }
+
     it 'lists preconditions' do
+      render
       is_expected.not_to have_content 'Qualifikationen'
     end
   end
@@ -42,7 +44,9 @@ describe 'events/_attrs.html.haml' do
   context 'event dates' do
     let(:event) { EventDecorator.decorate(event_with_date) }
     let(:event_with_date) { Fabricate(:event_date, event: events(:top_event), label: 'Vorweekend', location: 'Im Wald').event }
+
     it 'joins event date label and location' do
+      render
       is_expected.to have_content 'Vorweekend, Im Wald'
     end
   end

@@ -21,7 +21,8 @@ module MailRelay
     class << self
       def personal_return_path(list_name, sender_email)
         # recipient format (before @) must match regexp in #reject_not_existing
-        "#{list_name}#{SENDER_SUFFIX}+#{sender_email.gsub('@', '=')}@#{mail_domain}"
+        id_suffix = sender_email.present? ? '+' + sender_email.tr('@', '=') : ''
+        "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{mail_domain}"
       end
 
       def app_sender_name
@@ -57,14 +58,14 @@ module MailRelay
         prepare_reject_message(data[1], data[2])
         deliver(message)
       else
-        logger.info("#{Time.now.strftime('%FT%T%z')}: " \
-                    "Ignored email from #{sender_email} " <<
+        logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
+                    "Ignored email from #{sender_email} " \
                     "for list #{envelope_receiver_name}")
       end
     end
 
     def prepare_reject_message(list_address, sender_address)
-      message.to = sender_address.gsub('=', '@')
+      message.to = sender_address.tr('=', '@')
 
       env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
       message.sender = env_sender
@@ -82,10 +83,13 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address?
     def sender_allowed?
+      return false if sender_email.blank?
+
+      mailing_list.anyone_may_post ||
       sender_is_additional_sender? ||
+      sender_is_group_email? ||
       sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?) ||
-      mailing_list.anyone_may_post
+      (mailing_list.subscribers_may_post? && sender_is_list_member?)
     end
 
     # List of receiver email addresses for the resent email.
@@ -100,10 +104,6 @@ module MailRelay
       end
     end
 
-    def sender
-      @sender ||= Person.where(email: sender_email).first
-    end
-
     def envelope_sender
       self.class.personal_return_path(envelope_receiver_name, sender_email)
     end
@@ -111,25 +111,40 @@ module MailRelay
     private
 
     def deliver(message)
-      logger.info("#{Time.now.strftime('%FT%T%z')}: " \
-                  "Relaying email from #{sender_email} " <<
+      logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
+                  "Relaying email from #{sender_email} " \
                   "for list #{envelope_receiver_name} " \
                   "to #{message.smtp_envelope_to.size} people")
       super
     end
 
     def sender_is_additional_sender?
-      mailing_list.additional_sender.to_s.split(/[,;]/).collect(&:strip).include?(sender_email)
+      additional_senders = mailing_list.additional_sender.to_s
+      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
+      list.include?(sender_email)
+    end
+
+    def sender_is_group_email?
+      group = mailing_list.group
+      group.email == sender_email ||
+      group.additional_emails.collect(&:email).include?(sender_email)
     end
 
     def sender_is_list_administrator?
-      sender.present? &&
-      Ability.new(sender).can?(:update, mailing_list)
+      potential_senders.any? do |sender|
+        Ability.new(sender).can?(:update, mailing_list)
+      end
     end
 
     def sender_is_list_member?
-      sender.present? &&
-      mailing_list.people.where(id: sender.id).exists?
+      mailing_list.people.where(id: potential_senders.select(:id)).exists?
+    end
+
+    def potential_senders
+      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'").
+             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
+             uniq
     end
 
     # strip spam headers because they might produce encoding issues

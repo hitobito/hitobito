@@ -15,7 +15,8 @@ module EventParticipationsHelper
     headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
 
     if can?(:update, entries.first)
-      headers << [t.sort_header(:created_at, Event::Participation.human_attribute_name(:created_at))]
+      headers << t.sort_header(:created_at,
+                               Event::Participation.human_attribute_name(:created_at))
     end
 
     headers.join(' | ').html_safe
@@ -33,5 +34,17 @@ module EventParticipationsHelper
 
   def event_participation_attr_list
     [:birthday, :gender, (can?(:show_details, entry) ? :created_at : nil)].compact
+  end
+
+  def show_application_approval?(participation)
+    participation.application &&
+    participation.event.requires_approval? &&
+    can?(:show_approval, participation.application)
+  end
+
+  def show_application_priorities?(participation)
+    participation.application &&
+    participation.application.priorities? &&
+    can?(:show_priorities, participation.application)
   end
 end

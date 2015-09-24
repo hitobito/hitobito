@@ -15,7 +15,8 @@ class ApplicationController < ActionController::Base
   include Concerns::Authenticatable
   include ERB::Util
 
-  protect_from_forgery
+  # protect with null_session only in specific api controllers
+  protect_from_forgery with: :exception
 
   helper_method :person_home_path
   hide_action :person_home_path
@@ -31,7 +32,6 @@ class ApplicationController < ActionController::Base
 
     rescue_from ActionController::UnknownFormat, with: :not_found
   end
-
 
   def person_home_path(person, options = {})
     group_person_path(person.default_group_id, person, options)

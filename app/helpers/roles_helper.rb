@@ -23,7 +23,7 @@ module RolesHelper
               link: link_to(t(".#{keys.first}_person"), '#', data: { swap: 'person-fields' }))
 
     visible = keys.first == :create_new ? !entry.person.changed? : entry.person.changed?
-    field_set_tag(title,  class: 'person-fields', style: element_visible(visible)) { yield }
+    field_set_tag(title, class: 'person-fields', style: element_visible(visible)) { yield }
   end
 
 

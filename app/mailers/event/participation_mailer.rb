@@ -11,7 +11,7 @@ class Event::ParticipationMailer < ApplicationMailer
   CONTENT_APPROVAL     = 'event_application_approval'
 
   # Include all helpers that are required directly or indirectly (in decorators)
-  helper :format, :layout, :auto_link
+  helper :format, :layout, :auto_link_value
 
   attr_reader :participation
 
@@ -56,11 +56,11 @@ class Event::ParticipationMailer < ApplicationMailer
     group_event_participation_url(event.groups.first, event, participation)
   end
 
-  # rubocop:disable MethodLength
+  # rubocop:disable MethodLength, Metrics/AbcSize
   def event_details
     infos = []
     infos << event.name
-    infos << labeled(:dates)    { event.dates.map(&:to_s).join('<br/>') }
+    infos << labeled(:dates) { event.dates.map(&:to_s).join('<br/>') }
     infos << labeled(:motto)
     infos << labeled(:cost)
     infos << labeled(:description) { event.description.gsub("\n", '<br/>') }
@@ -71,7 +71,7 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << participation_details
     infos.compact.join('<br/><br/>')
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable MethodLength, Metrics/AbcSize
 
   def labeled(key)
     value = event.send(key).presence

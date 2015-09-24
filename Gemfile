@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.8'
+gem 'rails', '4.2.4'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
@@ -16,6 +16,7 @@ gem 'bcrypt-ruby'
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'
+gem 'country_select'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
@@ -33,16 +34,17 @@ gem 'oat'
 gem 'paper_trail'
 gem 'paranoia'
 gem 'customized_piwik_analytics', '~> 1.0.0'
-gem 'prawn'
+gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
 gem 'prawn-table'
 gem 'protective'
 gem 'rack'
-gem 'rails_config'
+gem 'rails_autolink'
+gem 'config'
 gem 'rails-i18n'
-gem 'schema_validations'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'thinking-sphinx'
+gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'wagons'
 
@@ -55,7 +57,7 @@ gem 'bootstrap-wysihtml5-rails', '~> 0.3.1.24'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'compass'
-gem 'compass-rails', '>= 1.1.7'
+gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails'
@@ -69,7 +71,7 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
   gem 'pry-debugger', platforms: :ruby_19
-  #gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
+  # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
 end
 
 group :development do
@@ -80,7 +82,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara' #, '~> 2.2.1' # 2.4 didn't work on jenkins (occassional failures)
+  gem 'capybara'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'
@@ -104,10 +106,8 @@ end
 
 group :metrics do
   gem 'annotate'
-  gem 'brakeman', '2.5.0'
+  gem 'brakeman'
   gem 'ci_reporter_rspec'
-  gem 'rails_code_qa'
-  gem 'rails_best_practices'
   gem 'rails-erd'
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'

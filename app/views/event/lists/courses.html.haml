@@ -14,8 +14,10 @@
 
 = render 'shared/page_per_year', paging_params: group_id.to_i > 0 ? { group_id: group_id } : {}
 
-- if can?(:export_list, Event::Course)
-  = render 'export_button'
+%p
+  - if can?(:export_list, Event::Course)
+    = action_button(t('event.lists.courses.csv_export_button'), params.merge(format: :csv), :download)
+    = render_extensions :buttons
 
 
 #main

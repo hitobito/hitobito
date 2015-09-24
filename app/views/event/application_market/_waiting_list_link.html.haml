@@ -1,0 +1,18 @@
+- if p.application
+  - if p.application.waiting_list?
+    = link_to("#{icon('ok')}&nbsp; #{t('.label')}".html_safe,
+              waiting_list_group_event_application_market_path(@group, @event, p.id),
+              title: t('.title_active'),
+              remote: true,
+              method: :delete)
+    - if p.application.waiting_list_comment?
+      &nbsp;
+      = badge(icon('comment', class: 'icon-white'), 'info', simple_format(p.application.waiting_list_comment))
+
+  - else
+    .popover-small
+      = link_to("#{icon('minus')}&nbsp; #{t('.label')}".html_safe,
+                '#',
+                title: t('.title_inactive'),
+                data: { toggle: 'popover',
+                        content: render('popover_waiting_list', p: p).to_str })

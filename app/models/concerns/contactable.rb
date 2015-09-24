@@ -25,9 +25,15 @@ module Contactable
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
                                   allow_destroy: true
 
+    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
     before_validation :set_self_in_nested
   end
 
+  def country_label
+    value = country
+    country = ISO3166::Country[value]
+    country ? country.translations[I18n.locale.to_s] || country.name : value
+  end
 
   def ignored_country?
     swiss?
@@ -35,6 +41,10 @@ module Contactable
 
   def swiss?
     ['', *Settings.address.switzerland_variations].include?(country.to_s.strip.downcase)
+  end
+
+  def canton
+    location && location.canton
   end
 
   private

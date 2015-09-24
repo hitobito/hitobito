@@ -25,14 +25,17 @@ module Person::Groups
 
   # All groups where this person has a non-restricted role.
   def non_restricted_groups
-    roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group)
+    roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group).uniq
   end
 
   # All groups where this person has the given permission(s).
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
-      roles_with_groups.to_a.select { |r| r.class.permissions.include?(permission) }.collect(&:group).uniq
+      roles_with_groups.to_a.
+        select { |r| r.class.permissions.include?(permission) }.
+        collect(&:group).
+        uniq
     end
     @groups_with_permission[permission].dup
   end
@@ -75,14 +78,15 @@ module Person::Groups
     def in_layer(*groups)
       joins(roles: :group).
       where(roles: { deleted_at: nil },
-            groups: { layer_group_id: groups.collect(&:layer_group_id) }).
+            groups: { layer_group_id: groups.collect(&:layer_group_id),
+                      deleted_at: nil }).
       uniq
     end
 
     # Scope listing all people with a role in or below the given group.
     def in_or_below(group)
       joins(roles: :group).
-      where(roles: { deleted_at: nil }).
+      where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
       where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
       uniq
     end

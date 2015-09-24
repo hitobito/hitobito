@@ -15,12 +15,14 @@ class PeopleFiltersController < CrudController
 
   hide_action :index, :show, :edit, :update
 
-  skip_authorize_resource only: :create
+  skip_authorize_resource only: [:create, :qualification]
 
   # load group before authorization
   prepend_before_action :parent
 
   before_render_form :compose_role_lists
+
+  helper_method :people_list_path
 
   def create
     if params[:button] == 'save'
@@ -33,7 +35,12 @@ class PeopleFiltersController < CrudController
   end
 
   def destroy
-    super(location: group_people_path(group))
+    super(location: people_list_path)
+  end
+
+  def qualification
+    authorize!(:index_full_people, group)
+    @qualification_kinds = QualificationKind.list.without_deleted
   end
 
   private
@@ -52,7 +59,7 @@ class PeopleFiltersController < CrudController
     if entry.role_types.present?
       params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
     end
-    group_people_path(group, params)
+    people_list_path(params)
   end
 
   def compose_role_lists
@@ -61,5 +68,9 @@ class PeopleFiltersController < CrudController
 
   def permitted_params
     model_params ? model_params.permit(permitted_attrs) : {}
+  end
+
+  def people_list_path(options = {})
+    group_people_path(group, options)
   end
 end

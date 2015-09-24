@@ -32,6 +32,7 @@ class QualificationKind < ActiveRecord::Base
 
   ### VALIDATES
 
+  validates_by_schema
   validates :label, presence: true, length: { maximum: 255, allow_nil: true }
   validates :description, length: { maximum: 1023, allow_nil: true }
   validates :reactivateable, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
@@ -48,7 +49,7 @@ class QualificationKind < ActiveRecord::Base
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if qualifications.exists?
-      touch_paranoia_column(true)
+      touch_paranoia_column
     else
       really_destroy!
     end

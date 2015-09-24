@@ -10,7 +10,7 @@ module Concerns
     extend ActiveSupport::Concern
 
     included do
-      before_action :set_locale
+      before_action :set_locale, if: :multiple_languages?
     end
 
     private
@@ -24,11 +24,7 @@ module Concerns
     end
 
     def default_url_options(_options = {})
-      if application_languages.size > 1
-        { locale: I18n.locale }
-      else
-        {}
-      end
+      multiple_languages? ? { locale: I18n.locale } : {}
     end
 
     def available_locale!(locale)
@@ -43,6 +39,10 @@ module Concerns
 
     def application_languages
       Settings.application.languages.to_hash
+    end
+
+    def multiple_languages?
+      Array(Settings.application.languages).size > 1
     end
 
   end

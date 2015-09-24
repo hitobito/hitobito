@@ -72,7 +72,7 @@ module TableHelper
   def action_col_destroy(table, &block)
     action_col(table) do |e|
       # paranoid entries may be destroyed but still be in the database
-      if can?(:destroy, e) && !e.destroyed?
+      if can?(:destroy, e) && (!e.respond_to?(:deleted?) || !e.deleted?)
         link_action_destroy(action_path(e, &block))
       end
     end

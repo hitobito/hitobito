@@ -4,53 +4,44 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people
 #
-#  id                      :integer          not null, primary key
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  company_name            :string(255)
-#  nickname                :string(255)
-#  company                 :boolean          default(FALSE), not null
-#  email                   :string(255)
-#  address                 :string(1024)
-#  zip_code                :string(255)
-#  town                    :string(255)
-#  country                 :string(255)
-#  gender                  :string(1)
-#  birthday                :date
-#  additional_information  :text
-#  contact_data_visible    :boolean          default(FALSE), not null
-#  created_at              :datetime
-#  updated_at              :datetime
-#  encrypted_password      :string(255)
-#  reset_password_token    :string(255)
-#  reset_password_sent_at  :datetime
-#  remember_created_at     :datetime
-#  sign_in_count           :integer          default(0)
-#  current_sign_in_at      :datetime
-#  last_sign_in_at         :datetime
-#  current_sign_in_ip      :string(255)
-#  last_sign_in_ip         :string(255)
-#  picture                 :string(255)
-#  last_label_format_id    :integer
-#  creator_id              :integer
-#  updater_id              :integer
-#  primary_group_id        :integer
-#  failed_attempts         :integer          default(0)
-#  locked_at               :datetime
-#  authentication_token    :string(255)
-#  salutation              :string(255)
-#  title                   :string(255)
-#  grade_of_school         :integer
-#  entry_date              :date
-#  leaving_date            :date
-#  j_s_number              :string(255)
-#  correspondence_language :string(5)
-#  brother_and_sisters     :boolean          default(FALSE), not null
+#  id                     :integer          not null, primary key
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  company_name           :string(255)
+#  nickname               :string(255)
+#  company                :boolean          default(FALSE), not null
+#  email                  :string(255)
+#  address                :string(1024)
+#  zip_code               :string(255)
+#  town                   :string(255)
+#  country                :string(255)
+#  gender                 :string(1)
+#  birthday               :date
+#  additional_information :text
+#  contact_data_visible   :boolean          default(FALSE), not null
+#  created_at             :datetime
+#  updated_at             :datetime
+#  encrypted_password     :string(255)
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  picture                :string(255)
+#  last_label_format_id   :integer
+#  creator_id             :integer
+#  updater_id             :integer
+#  primary_group_id       :integer
+#  failed_attempts        :integer          default(0)
+#  locked_at              :datetime
+#  authentication_token   :string(255)
 #
 
 class Person < ActiveRecord::Base
@@ -59,7 +50,7 @@ class Person < ActiveRecord::Base
                   :email, :address, :zip_code, :town, :country, :gender, :birthday,
                   :picture, :primary_group_id]
 
-  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible,  :created_at, :creator_id,
+  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible, :created_at, :creator_id,
                     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
                     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
                     :locked_at, :remember_created_at, :reset_password_token,
@@ -127,10 +118,11 @@ class Person < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  schema_validations except: [:email, :picture, :created_at, :updated_at]
+  validates_by_schema except: [:email, :picture]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
-  validates :birthday, timeliness: { type: :date, allow_blank: true }
+  validates :birthday,
+            timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
   validate :assert_is_valid_swiss_post_code
@@ -170,6 +162,7 @@ class Person < ActiveRecord::Base
     end
 
     def mailing_emails_for(people)
+      people = Array(people)
       emails = people.collect(&:email) +
                AdditionalEmail.mailing_emails_for(people)
       emails.select(&:present?).uniq
@@ -212,14 +205,6 @@ class Person < ActiveRecord::Base
     first_name.presence || nickname.presence || last_name.presence || company_name
   end
 
-  def male?
-    gender == 'm'
-  end
-
-  def female?
-    gender == 'w'
-  end
-
   def default_group_id
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
@@ -230,31 +215,6 @@ class Person < ActiveRecord::Base
       extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
       now.year - birthday.year - (extra ? 0 : 1)
     end
-  end
-
-  ### ASSOCIATIONS INSTANCE METHODS
-
-  def upcoming_events
-    events.upcoming.merge(Event::Participation.active).uniq
-  end
-
-  def pending_applications
-    event_applications.merge(Event::Participation.pending)
-  end
-
-  def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, qualification_kind: :translations).
-      order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
-  end
-
-  # All time roles of this person, including deleted.
-  def all_roles
-    Role.with_deleted.
-         where(person_id: id).
-         includes(:group).
-         order('groups.name', 'roles.deleted_at')
   end
 
   ### AUTHENTICATION INSTANCE METHODS

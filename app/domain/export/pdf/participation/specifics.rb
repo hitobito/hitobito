@@ -11,25 +11,21 @@ module Export::Pdf::Participation
     def render
       data = answers.map { |a| [a.question.question, a.answer] }
 
-      first_page_section do
-        if data.present?
-          heading { text I18n.t('event.participations.specific_information'), style: :bold }
+      if data.present?
+        with_header(I18n.t('event.participations.specific_information')) do
           table(data, cell_style: { border_width: 0, padding: 2 })
-          move_down_line
         end
+      end
 
-        heading { text additional_information_label, style: :bold }
-
-        pdf.bounding_box([0 + 2, cursor - 5], width: bounds.width - 10, height: 65) do
-          shrinking_text_box participation.additional_information
-        end
+      with_header(additional_information_label) do
+        text(participation.additional_information.to_s.strip.presence || '-')
       end
     end
 
     private
 
     def answers
-      participation.answers.limit(8)
+      participation.answers
     end
 
     def additional_information_label

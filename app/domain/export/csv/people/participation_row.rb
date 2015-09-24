@@ -17,12 +17,10 @@ module Export::Csv::People
     end
 
     def roles
-      participation.roles.map { |role| role  }.join(', ')
+      participation.roles.map { |role| role }.join(', ')
     end
 
-    def participation_additional_information
-      participation.additional_information
-    end
+    delegate :additional_information, to: :participation, prefix: true
 
     def created_at
       I18n.l(participation.created_at.to_date)

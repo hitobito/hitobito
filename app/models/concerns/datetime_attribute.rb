@@ -32,10 +32,10 @@ module DatetimeAttribute
   end
 
   def assign_datetime(attr, date, hour, min)
-    date = ActiveRecord::ConnectionAdapters::Column.date_string_to_long_year(date)
+    date = ActiveRecord::Type::Date.new.date_string_to_long_year(date)
     date = date.to_date
     send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
-  rescue
+  rescue StandardError
     errors.add(attr, :invalid)
   end
 

@@ -510,7 +510,28 @@ describe PeopleController do
 
         it 'preloads data for asides, ordered by finish_at' do
           get :show, group_id: group.id, id: people(:top_leader).id
-          expect(assigns(:qualifications)).to eq [@ql_sl, @ql_gl]
+          expect(assigns(:person).latest_qualifications_uniq_by_kind).to eq [@ql_sl, @ql_gl]
+        end
+      end
+
+      context 'participations' do
+        let(:group) { groups(:top_layer) }
+        let(:person) { people(:top_leader) }
+        let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
+
+        it 'pending_applications returns events that are not active' do
+          participation = Fabricate(:event_participation, person: person)
+          application = Fabricate(:event_application, priority_1: course, participation: participation)
+          get :show, group_id: group.id, id: person.id
+          expect(assigns(:pending_applications)).to eq [application]
+        end
+
+        it 'upcoming_events returns events that are active' do
+          course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
+          course.save
+          participation = Fabricate(:event_participation, event: course, person: person, active: true)
+          get :show, group_id: group.id, id: person.id
+          expect(assigns(:upcoming_events)).to eq [course]
         end
       end
 
@@ -524,11 +545,33 @@ describe PeopleController do
 
         context 'json' do
           it 'redirects to json' do
-            get :show, id: top_leader.id, format: :json
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :json))
+            get :show, id: top_leader.id, format: :json, user_email: 'hans@example.com', user_token: '123'
+            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
+                                                         top_leader.id,
+                                                         format: :json,
+                                                         user_email: 'hans@example.com',
+                                                         user_token: '123'))
           end
         end
       end
+    end
+
+    describe 'GET #history' do
+
+      context 'all roles' do
+
+        it 'all group roles ordered by group, to date' do
+          person = Fabricate(:person)
+          r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
+          r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
+          r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
+
+          get :history, group_id: groups(:bottom_group_one_one).id, id: person.id
+
+          expect(assigns(:roles)).to eq([r1, r3, r2])
+        end
+      end
+
     end
 
     describe 'POST #send_password_instructions' do

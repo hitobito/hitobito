@@ -1,19 +1,20 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::ListFilter
 
-  attr_reader :group, :user, :kind, :filter, :multiple_groups
+  class_attribute :accessibles_class
+  self.accessibles_class = PersonReadables
 
-  def initialize(group, user, kind, role_type_ids)
+  attr_reader :group, :user, :multiple_groups
+
+  def initialize(group, user)
     @group = group
     @user = user
-    @kind = kind.to_s
-    @filter = PeopleFilter.new(role_type_ids: role_type_ids)
   end
 
   def filter_entries
@@ -28,12 +29,8 @@ class Person::ListFilter
 
   private
 
-  def filtered_entries(&block)
-    if filter.role_types.present?
-      list_scope(kind, &block).where(roles: { type: filter.role_types })
-    else
-      block.call(group).members(group)
-    end
+  def unfiltered_entries(&block)
+    block.call(group).members(group)
   end
 
   def list_scope(scope_kind, &block)
@@ -54,7 +51,7 @@ class Person::ListFilter
   end
 
   def accessibles(group = nil)
-    ability = PersonAccessibles.new(user, group)
+    ability = accessibles_class.new(user, group)
     Person.accessible_by(ability)
   end
 

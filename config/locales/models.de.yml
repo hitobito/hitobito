@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -162,6 +162,34 @@ de:
         other: Abonnenten
 
     attributes:
+      cantons:
+        ag: Aargau
+        ai: Appenzell Innerrhoden
+        ar: Appenzell Ausserrhoden
+        be: Bern
+        bl: Basel-Land
+        bs: Basel-Stadt
+        fr: Freiburg
+        ge: Genf
+        gl: Glarus
+        gr: Graubünden
+        ju: Jura
+        lu: Luzern
+        ne: Neuenburg
+        nw: Nidwalden
+        ow: Obwalden
+        sg: St. Gallen
+        sh: Schaffhausen
+        so: Solothurn
+        sz: Schwyz
+        tg: Thurgau
+        ti: Tessin
+        ur: Uri
+        vd: Waadt
+        vs: Wallis
+        zg: Zug
+        zh: Zürich
+
       person:
         first_name: Vorname
         last_name: Nachname
@@ -172,7 +200,7 @@ de:
         email: Haupt-E-Mail
         emails: E-Mails
         password: Passwort
-        password_confirmation: Passwort
+        password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
         address: Adresse
         zip_code: PLZ
@@ -229,6 +257,9 @@ de:
         application_closing_at: Anmeldeschluss
         application_conditions: Aufnahmebedingungen
         external_applications: Externe Anmeldungen
+        signature: Unterschrift erforderlich
+        signature_confirmation: Zweitunterschrift erforderlich
+        signature_confirmation_text: Zweitunterschrift von
         dates: Daten
         dates_full: Daten
         booking_info: Anmeldungen
@@ -238,6 +269,18 @@ de:
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
 
+      event/answer:
+        answer: Antwort
+
+      answers:
+        answer: Antwort
+
+      event/application:
+        priority_1_id: "Kurs"
+        priority_2_id: "1. Ausweichkurs"
+        priority_3_id: "2. Ausweichkurs"
+        waiting_list_comment: 'Bemerkung'
+
       event/course:
         kind_id: Kursart
         state: Status
@@ -245,25 +288,6 @@ de:
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
-
-      event/role:
-        label: Bezeichnung
-        person: Person
-        type: Rolle
-        participation: Person
-
-      event/participation:
-        person_id: Person
-        event_id: Event
-        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
-        answers: Fragen
-        created_at: Anmeldedatum
-        roles: Rolle
-
-      event/application:
-        priority_1_id: "Kurs"
-        priority_2_id: "1. Ausweichkurs"
-        priority_3_id: "2. Ausweichkurs"
 
       event/date:
         label: Beschreibung
@@ -275,6 +299,27 @@ de:
         label: Beschreibung/Ort
         start_at: Von Datum
         finish_at: Bis Datum
+
+      event/kind:
+        label: Verbandsbezeichnung
+        short_name: Kurzname
+        minimum_age: Mindestalter
+        preconditions: Vorbedingungen
+        prolongations: Verlängert
+        qualification_kinds: Qualifiziert für
+        general_information: Allgemeine Informationen
+        application_conditions: Aufnahmebedingungen
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+
+      event/participation:
+        person_id: Person
+        event_id: Event
+        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
+        answers: Fragen
+        created_at: Anmeldedatum
+        roles: Rolle
 
       event/question:
         question: Frage
@@ -288,22 +333,11 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
 
-      event/answer:
-        answer: Antwort
-
-      answers:
-        answer: Antwort
-
-      event/kind:
-        label: Verbandsbezeichnung
-        short_name: Kurzname
-        minimum_age: Mindestalter
-        preconditions: Vorbedingungen
-        prolongations: Verlängert
-        qualification_kinds: Qualifiziert für
-        created_at: Erstellt
-        updated_at: Geändert
-        deleted_at: Gelöscht
+      event/role:
+        label: Bezeichnung
+        person: Person
+        type: Rolle
+        participation: Person
 
       qualification:
         qualification_kind: Qualifikation
@@ -359,6 +393,8 @@ de:
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
               layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+              group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
               group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
               group_read: Lesen auf der Gruppe.
               contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.

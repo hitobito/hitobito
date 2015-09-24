@@ -7,6 +7,9 @@
 
 class Devise::TokensController < DeviseController
 
+  # required to allow api calls
+  protect_from_forgery with: :null_session, only: [:create, :destroy]
+
   skip_before_action :authenticate_person!
   prepend_before_action :require_no_authentication
   prepend_before_action :allow_params_authentication!

@@ -7,7 +7,7 @@ Die als eigenständige Server zusammengefassten Komponenten stellen die Verteilu
 
 **Passenger**: Web Applikationscontainer, welcher die Ruby on Rails Rack Applikation enthält. Nimmt Anfragen von Web Clients entgegen und beantwortet diese. Kann eigenständig oder als Apache HTTPD Modul laufen.
 
-**Workers**: Ein oder mehrere Worker Prozesse, welche die Delayed::Jobs abarbeiten. Die Jobs werden vom Rails Prozess in der Datenbank persistiert und zu gegebenen Zeitpunkt von Delayed::Jobs wieder geladen und ausgeführt. Workers laufen in der Regel auf dem Hauptserver.
+**Workers**: Ein oder mehrere Worker Prozesse, welche die `Delayed::Jobs` abarbeiten. Die Jobs werden vom Rails Prozess in der Datenbank persistiert und zu gegebenen Zeitpunkt von Delayed::Jobs wieder geladen und ausgeführt. Workers laufen in der Regel auf dem Hauptserver.
 
 **Memcached**: In-Memory Store, welcher zum Caching bestimmter Daten verwendet wird. Läuft in der Regel auf dem Hauptserver.
 

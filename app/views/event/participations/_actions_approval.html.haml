@@ -1,0 +1,10 @@
+- unless @application.approved?
+  = action_button("<strong>&#x2713;</strong>&nbsp; #{t('.approve_button')}".html_safe,
+                  approve_group_event_application_path(@group, @event, @application),
+                  nil,
+                  method: :put)
+- unless @application.rejected?
+  = action_button("<strong>&#x00D7;</strong>&nbsp; #{t('.reject_button')}".html_safe,
+                  reject_group_event_application_path(@group, @event, @application),
+                  nil,
+                  method: :delete)

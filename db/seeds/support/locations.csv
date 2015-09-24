@@ -1,0 +1,5291 @@
+zip_code;town;canton
+1000;Lausanne;VD
+1000;Lausanne 1 Dépôt;VD
+1000;Lausanne 2;VD
+1000;Lausanne 3;VD
+1000;Lausanne Ouchy;VD
+1000;Lausanne 7;VD
+1000;Lausanne 8;VD
+1000;Lausanne 12;VD
+1000;Lausanne 14;VD
+1000;Lausanne 16;VD
+1000;Lausanne 17;VD
+1000;Lausanne 19;VD
+1000;Lausanne 20;VD
+1000;Lausanne Grangette;VD
+1000;Lausanne 22;VD
+1000;Lausanne 23;VD
+1000;Lausanne 24 Vennes;VD
+1000;Lausanne 25;VD
+1000;Lausanne 26;VD
+1000;Lausanne 27;VD
+1000;Lausanne Distribution;VD
+1001;Lausanne;VD
+1002;Lausanne;VD
+1003;Lausanne;VD
+1004;Lausanne;VD
+1005;Lausanne;VD
+1006;Lausanne;VD
+1007;Lausanne;VD
+1008;Prilly;VD
+1009;Pully;VD
+1010;Lausanne;VD
+1011;Lausanne;VD
+1012;Lausanne;VD
+1014;Lausanne Adm cant VD;VD
+1015;Lausanne;VD
+1018;Lausanne;VD
+1020;Renens VD;VD
+1020;Renens VD 1;VD
+1020;Renens VD 2;VD
+1022;Chavannes-près-Renens;VD
+1023;Crissier;VD
+1024;Ecublens VD;VD
+1025;St-Sulpice VD;VD
+1026;Echandens-Denges;VD
+1027;Lonay;VD
+1028;Préverenges;VD
+1030;Bussigny;VD
+1032;Romanel-sur-Lausanne;VD
+1033;Cheseaux-sur-Lausanne;VD
+1037;Etagnières;VD
+1038;Bercher;VD
+1040;Echallens;VD
+1040;St-Barthélemy VD;VD
+1377;Oulens-sous-Echallens;VD
+1042;Bettens;VD
+1040;Villars-le-Terroir;VD
+1417;Epautheyres;VD
+1041;Dommartin;VD
+1063;Peyres-Possens;VD
+1063;Boulens;VD
+1041;Poliez-le-Grand;VD
+1041;Poliez-Pittet;VD
+1041;Bottens;VD
+1053;Bretigny-sur-Morrens;VD
+1034;Boussens;VD
+1035;Bournens;VD
+1036;Sullens;VD
+1042;Assens;VD
+1043;Sugnens;VD
+1044;Fey;VD
+1045;Ogens;VD
+1407;Bioley-Magnoux;VD
+1042;Bioley-Orjulaz;VD
+1052;Le Mont-sur-Lausanne;VD
+1053;Cugy VD;VD
+1054;Morrens VD;VD
+1055;Froideville;VD
+1410;Thierrens;VD
+1066;Epalinges;VD
+1073;Savigny;VD
+1083;Mézières VD;VD
+1092;Belmont-sur-Lausanne;VD
+1093;La Conversion;VD
+1094;Paudex;VD
+1095;Lutry;VD
+1096;Cully;VD
+1097;Riex;VD
+1098;Epesses;VD
+1058;Villars-Tiercelin;VD
+1059;Peney-le-Jorat;VD
+1061;Villars-Mendraz;VD
+1062;Sottens;VD
+1063;Chapelle-sur-Moudon;VD
+1410;St-Cierges;VD
+1073;Mollie-Margot;VD
+1080;Les Cullayes;VD
+1081;Montpreveyres;VD
+1082;Corcelles-le-Jorat;VD
+1088;Ropraz;VD
+1084;Carrouge VD;VD
+1085;Vulliens;VD
+1509;Vucherens;VD
+1510;Syens;VD
+1076;Ferlens VD;VD
+1077;Servion;VD
+1078;Essertes;VD
+1673;Auboranges;FR
+1110;Morges;VD
+1110;Morges 1;VD
+1110;Morges 2;VD
+1112;Echichens;VD
+1167;Lussy-sur-Morges;VD
+1132;Lully VD;VD
+1131;Tolochenaz;VD
+1125;Monnaz;VD
+1126;Vaux-sur-Morges;VD
+1127;Clarmont;VD
+1128;Reverolle;VD
+1113;St-Saphorin-sur-Morges;VD
+1114;Colombier VD;VD
+1115;Vullierens;VD
+1116;Cottens VD;VD
+1117;Grancy;VD
+1304;Senarclens;VD
+1121;Bremblens;VD
+1122;Romanel-sur-Morges;VD
+1123;Aclens;VD
+1124;Gollion;VD
+1134;Vufflens-le-Château;VD
+1135;Denens;VD
+1136;Bussy-Chardonney;VD
+1169;Yens;VD
+1168;Villars-sous-Yens;VD
+1144;Ballens;VD
+1149;Berolle;VD
+1146;Mollens VD;VD
+1147;Montricher;VD
+1142;Pampigny;VD
+1141;Sévery;VD
+1143;Apples;VD
+1145;Bière;VD
+1148;L'Isle;VD
+1162;St-Prex;VD
+1163;Etoy;VD
+1164;Buchillon;VD
+1165;Allaman;VD
+1166;Perroy;VD
+1170;Aubonne;VD
+1172;Bougy-Villars;VD
+1173;Féchy;VD
+1174;Montherod;VD
+1175;Lavigny;VD
+1176;St-Livres;VD
+1180;Rolle;VD
+1182;Gilly;VD
+1183;Bursins;VD
+1184;Vinzel;VD
+1184;Luins;VD
+1185;Mont-sur-Rolle;VD
+1186;Essertines-sur-Rolle;VD
+1187;St-Oyens;VD
+1189;Saubraz;VD
+1188;Gimel;VD
+1195;Dully-Bursinel;VD
+1196;Gland;VD
+1197;Prangins;VD
+1200;Genève;GE
+1200;Genève 1;GE
+1200;Genève 2 Cornavin Dépôt;GE
+1200;Genève 3;GE
+1200;Genève 4;GE
+1200;Genève 2 Transit;GE
+1200;Genève 6;GE
+1200;Genève 7;GE
+1200;Genève 8;GE
+1200;Genève 11;GE
+1200;Genève 12;GE
+1200;Genève 13;GE
+1200;Genève 17;GE
+1200;Genève 19;GE
+1200;Genève 20;GE
+1200;Genève 21;GE
+1200;Genève 26;GE
+1200;Genève 28 Balexert;GE
+1200;Genève Centre logistique;GE
+1200;Genève 2 Distribution;GE
+1200;Genève Dist Ba;GE
+1201;Genève;GE
+1202;Genève;GE
+1203;Genève;GE
+1204;Genève;GE
+1205;Genève;GE
+1206;Genève;GE
+1207;Genève;GE
+1208;Genève;GE
+1209;Genève;GE
+1211;Genève 1;GE
+1211;Genève 2;GE
+1211;Genève 3;GE
+1211;Genève 4;GE
+1211;Genève 6;GE
+1211;Genève 7;GE
+1211;Genève 8;GE
+1211;Genève 10;GE
+1211;Genève 11;GE
+1211;Genève 12;GE
+1211;Genève 13;GE
+1211;Genève 17;GE
+1211;Genève 19;GE
+1211;Genève 20;GE
+1211;Genève 21;GE
+1211;Genève 22;GE
+1211;Genève 23;GE
+1211;Genève 26;GE
+1211;Genève 27;GE
+1211;Genève 28;GE
+1212;Grand-Lancy;GE
+1212;Grand-Lancy 1;GE
+1213;Petit-Lancy;GE
+1213;Petit-Lancy 1;GE
+1213;Petit-Lancy 2;GE
+1213;Onex;GE
+1214;Vernier;GE
+1215;Genève 15 Aéroport;GE
+1215;Genève 15 Aéroport Dépôt;GE
+1216;Cointrin;GE
+1217;Meyrin;GE
+1217;Meyrin 1;GE
+1217;Meyrin 2;GE
+1218;Le Grand-Saconnex;GE
+1219;Le Lignon;GE
+1219;Aïre;GE
+1219;Châtelaine;GE
+1220;Les Avanchets;GE
+1222;Vésenaz;GE
+1223;Cologny;GE
+1224;Chêne-Bougeries;GE
+1225;Chêne-Bourg;GE
+1226;Thônex;GE
+1227;Carouge GE;GE
+1227;Les Acacias;GE
+1228;Plan-les-Ouates;GE
+1231;Conches;GE
+1232;Confignon;GE
+1233;Bernex;GE
+1234;Vessy;GE
+1236;Cartigny;GE
+1237;Avully;GE
+1239;Collex;GE
+1241;Puplinge;GE
+1242;Satigny;GE
+1243;Presinge;GE
+1244;Choulex;GE
+1245;Collonge-Bellerive;GE
+1246;Corsier GE;GE
+1247;Anières;GE
+1248;Hermance;GE
+1251;Gy;GE
+1252;Meinier;GE
+1253;Vandoeuvres;GE
+1254;Jussy;GE
+1255;Veyrier;GE
+1256;Troinex;GE
+1257;La Croix-de-Rozon;GE
+1258;Perly;GE
+1260;Nyon;VD
+1260;Nyon 1 Distribution;VD
+1277;Borex;VD
+1278;La Rippe;VD
+1279;Chavannes-de-Bogis;VD
+1274;Grens;VD
+1275;Chéserex;VD
+1276;Gingins;VD
+1270;Trélex;VD
+1271;Givrins;VD
+1272;Genolier;VD
+1273;Arzier-Le Muids;VD
+1268;Burtigny;VD
+1261;Marchissy;VD
+1261;Le Vaud;VD
+1269;Bassins;VD
+1261;Longirod;VD
+1188;St-George;VD
+1262;Eysins;VD
+1263;Crassier;VD
+1264;St-Cergue;VD
+1265;La Cure;VD
+1266;Duillier;VD
+1267;Vich-Coinsins;VD
+1268;Begnins;VD
+1281;Russin;GE
+1283;Dardagny;GE
+1283;La Plaine;GE
+1284;Chancy;GE
+1285;Athenaz (Avusy);GE
+1286;Soral;GE
+1287;Laconnex;GE
+1288;Aire-la-Ville;GE
+1290;Versoix;GE
+1291;Commugny;VD
+1292;Chambésy;GE
+1293;Bellevue;GE
+1294;Genthod;GE
+1295;Mies-Tannay;VD
+1296;Coppet;VD
+1297;Founex;VD
+1298;Céligny;GE
+1299;Crans-près-Céligny;VD
+1302;Vufflens-la-Ville;VD
+1304;Cossonay-Ville;VD
+1304;Dizy;VD
+1307;Lussery-Villars;VD
+1305;Penthalaz;VD
+1315;La Sarraz;VD
+1317;Orny;VD
+1316;Chevilly;VD
+1337;Vallorbe;VD
+1338;Ballaigues;VD
+1341;Orient;VD
+1346;Les Bioux;VD
+1344;L'Abbaye;VD
+1342;Le Pont;VD
+1343;Les Charbonnières;VD
+1345;Le Lieu;VD
+1347;Le Sentier;VD
+1348;Le Brassus;VD
+1306;Daillens;VD
+1303;Penthaz;VD
+1308;La Chaux (Cossonay);VD
+1148;Cuarnens;VD
+1313;Ferreyres;VD
+1148;Moiry VD;VD
+1321;Arnex-sur-Orbe;VD
+1318;Pompaples;VD
+1312;Eclépens;VD
+1329;Bretonnières;VD
+1322;Croy;VD
+1323;Romainmôtier;VD
+1324;Premier;VD
+1325;Vaulion;VD
+1326;Juriens;VD
+1148;La Praz;VD
+1148;Mont-la-Ville;VD
+1350;Orbe;VD
+1352;Agiez;VD
+1353;Bofflens;VD
+1354;Montcherand;VD
+1355;L'Abergement;VD
+1356;Les Clées;VD
+1357;Lignerolle;VD
+1358;Valeyres-sous-Rances;VD
+1439;Rances;VD
+1373;Chavornay;VD
+1372;Bavois;VD
+1374;Corcelles-sur-Chavornay;VD
+1375;Penthéréaz;VD
+1376;Goumoens-la-Ville;VD
+1400;Yverdon-les-Bains;VD
+1400;Yverdon-les-Bains 1;VD
+1400;Yverdon 2;VD
+1401;Yverdon-les-Bains;VD
+1417;Essertines-sur-Yverdon;VD
+1416;Pailly;VD
+1418;Vuarrens;VD
+1420;Fiez;VD
+1421;Fontaines-sur-Grandson;VD
+1423;Villars-Burquin;VD
+1453;Mauborget;VD
+1429;Giez;VD
+1430;Orges;VD
+1431;Vugelles-La Mothe;VD
+1405;Pomy;VD
+1406;Cronay;VD
+1407;Donneloye;VD
+1408;Prahins;VD
+1409;Chanéaz;VD
+1412;Valeyres-sous-Ursins;VD
+1413;Orzens;VD
+1046;Rueyres;VD
+1404;Cuarny;VD
+1427;Bonvillars;VD
+1424;Champagne;VD
+1431;Novalles;VD
+1423;Fontanezier;VD
+1415;Molondin;VD
+1422;Grandson;VD
+1425;Onnens VD;VD
+1426;Concise;VD
+1426;Corcelles-près-Concise;VD
+1432;Belmont-sur-Yverdon;VD
+1433;Suchy;VD
+1434;Ependes VD;VD
+1435;Essert-Pittet;VD
+1436;Treycovagnes;VD
+1437;Suscévaz;VD
+1438;Mathod;VD
+1441;Valeyres-sous-Montagny;VD
+1442;Montagny-près-Yverdon;VD
+1443;Champvent;VD
+1445;Vuiteboeuf;VD
+1446;Baulmes;VD
+1450;Ste-Croix;VD
+1450;La Sagne (Ste-Croix);VD
+1454;L'Auberson;VD
+1452;Les Rasses;VD
+1453;Bullet;VD
+1450;Le Château-de-Ste-Croix;VD
+1462;Yvonand;VD
+1463;Rovray;VD
+1464;Chavannes-le-Chêne;VD
+1464;Chêne-Pâquier;VD
+1468;Cheyres;FR
+1470;Estavayer-le-Lac;FR
+1473;Font;FR
+1474;Châbles FR;FR
+1483;Montet (Broye);FR
+1482;Cugy FR;FR
+1541;Bussy FR;FR
+1484;Aumont;FR
+1485;Nuvilly;FR
+1486;Vuissens;FR
+1537;Champtauroz;VD
+1538;Treytorrens (Payerne);VD
+1489;Murist;FR
+1510;Moudon;VD
+1512;Chavannes-sur-Moudon;VD
+1513;Hermenches;VD
+1514;Bussy-sur-Moudon;VD
+1522;Oulens-sur-Lucens;VD
+1515;Villars-le-Comte;VD
+1515;Neyruz-sur-Moudon;VD
+1410;Denezy;VD
+1522;Lucens;VD
+1521;Curtilles;VD
+1523;Granges-près-Marnand;VD
+1527;Villeneuve FR;FR
+1528;Surpierre;FR
+1529;Cheiry;FR
+1530;Payerne;VD
+1532;Fétigny;FR
+1533;Ménières;FR
+1534;Sassel;VD
+1536;Combremont-le-Petit;VD
+1526;Forel-sur-Lucens;VD
+1526;Cremin;VD
+1542;Rueyres-les-Prés;FR
+1543;Grandcour;VD
+1544;Gletterens;FR
+1545;Chevroux;VD
+1551;Vers-chez-Perrin;VD
+1552;Trey;VD
+1553;Châtonnaye;FR
+1554;Sédeilles;VD
+1555;Villarzel;VD
+1682;Villars-Bramard;VD
+1682;Dompierre VD;VD
+1535;Combremont-le-Grand;VD
+1562;Corcelles-près-Payerne;VD
+1563;Dompierre FR;FR
+1564;Domdidier;FR
+1565;Missy;VD
+1475;Autavaux;FR
+1567;Delley;FR
+1568;Portalban;FR
+1566;St-Aubin FR;FR
+1580;Avenches;VD
+1583;Villarepos;FR
+1584;Villars-le-Grand;VD
+1585;Salavaux;VD
+1586;Vallamand;VD
+1587;Montmagny;VD
+1589;Chabrey;VD
+1587;Constantine;VD
+1588;Cudrefin;VD
+1595;Faoug;VD
+1607;Palézieux-Village;VD
+1610;Châtillens;VD
+1673;Ecublens FR;FR
+1525;Henniez;VD
+1524;Marnand;VD
+1090;La Croix (Lutry);VD
+1091;Grandvaux;VD
+1091;Aran;VD
+1070;Puidoux;VD
+1071;Chexbres;VD
+1072;Forel (Lavaux);VD
+1607;Palézieux;VD
+1614;Granges (Veveyse);FR
+1615;Bossonnens;FR
+1616;Attalens;FR
+1617;Remaufens;FR
+1618;Châtel-St-Denis;FR
+1619;Les Paccots;FR
+1623;Semsales;FR
+1624;La Verrerie;FR
+1627;Vaulruz;FR
+1628;Vuadens;FR
+1630;Bulle;FR
+1633;Vuippens;FR
+1642;Sorens;FR
+1643;Gumefens;FR
+1644;Avry-devant-Pont;FR
+1645;Le Bry;FR
+1646;Echarlens;FR
+1647;Corbières;FR
+1648;Hauteville;FR
+1656;Im Fang;FR
+1656;Jaun;FR
+1657;Abländschen;BE
+1654;Cerniat FR;FR
+1651;Villarvolard;FR
+1652;Botterens;FR
+1638;Morlon;FR
+1663;Moléson-sur-Gruyères;FR
+1632;Riaz;FR
+1633;Marsens;FR
+1634;La Roche FR;FR
+1649;Pont-la-Ville;FR
+1635;La Tour-de-Trême;FR
+1636;Broc;FR
+1637;Charmey (Gruyère);FR
+1661;Le Pâquier-Montbarry;FR
+1663;Pringy;FR
+1665;Estavannens;FR
+1667;Enney;FR
+1669;Neirivue;FR
+1669;Albeuve;FR
+1663;Gruyères;FR
+1663;Epagny;FR
+1666;Grandvillard;FR
+1610;Oron-la-Ville;VD
+1675;Vauderens;FR
+1670;Ursy;FR
+1674;Vuarmarens;FR
+1673;Rue;FR
+1673;Promasens;FR
+1678;Siviriez;FR
+1679;Villaraboud;FR
+1676;Chavannes-les-Forts;FR
+1677;Prez-vers-Siviriez;FR
+1680;Romont FR;FR
+1681;Billens;FR
+1682;Prévonloup;VD
+1683;Brenles;VD
+1683;Chesalles-sur-Moudon;VD
+1694;Orsonnens;FR
+1694;Villarsiviriaux;FR
+1695;Villarlod;FR
+1696;Vuisternens-en-Ogoz;FR
+1684;Mézières FR;FR
+1685;Villariaz;FR
+1687;Estévenens;FR
+1686;Grangettes-près-Romont;FR
+1689;Le Châtelard-près-Romont;FR
+1688;Sommentier;FR
+1626;Romanens;FR
+1692;Massonnens;FR
+1687;Vuisternens-devant-Romont;FR
+1625;Sâles (Gruyère);FR
+1612;Ecoteaux;VD
+1613;Maracon;VD
+1608;Oron-le-Châtel;VD
+1609;St-Martin FR;FR
+1611;Le Crêt-près-Semsales;FR
+1697;La Joux FR;FR
+1699;Bouloz;FR
+1699;Porsel;FR
+1699;Pont (Veveyse);FR
+1700;Fribourg;FR
+1700;Fribourg 1;FR
+1702;Fribourg;FR
+1704;Fribourg;FR
+1705;Fribourg;FR
+1707;Fribourg;FR
+1708;Fribourg;FR
+1763;Granges-Paccot;FR
+1700;Fribourg 1 Distribution;FR
+1701;Fribourg;FR
+1720;Corminboeuf;FR
+1721;Misery-Courtion;FR
+1735;Giffers;FR
+1736;St. Silvester;FR
+1737;Plasselb;FR
+1738;Sangernboden;BE
+1716;Schwarzsee;FR
+1724;Bonnefontaine;FR
+1727;Corpataux-Magnedens;FR
+1728;Rossens FR;FR
+1719;Brünisried;FR
+1731;Ependes FR;FR
+1732;Arconciel;FR
+1733;Treyvaux;FR
+1720;Chésopelloz;FR
+1712;Tafers;FR
+1713;St. Antoni;FR
+1714;Heitenried;FR
+1715;Alterswil FR;FR
+1716;Plaffeien;FR
+1717;St. Ursen;FR
+1718;Rechthalten;FR
+1722;Bourguillon;FR
+1723;Marly;FR
+1724;Le Mouret;FR
+1725;Posieux;FR
+1726;Farvagny;FR
+1746;Prez-vers-Noréaz;FR
+1747;Corserey;FR
+1748;Torny-le-Grand;FR
+1749;Middes;FR
+1740;Neyruz FR;FR
+1741;Cottens FR;FR
+1744;Chénens;FR
+1745;Lentigny;FR
+1742;Autigny;FR
+1695;Estavayer-le-Gibloux;FR
+1691;Villarimboud;FR
+1752;Villars-sur-Glâne;FR
+1752;Villars-sur-Glâne 1;FR
+1752;Villars-sur-Glâne 2;FR
+1753;Matran;FR
+1754;Rosé;FR
+1756;Onnens FR;FR
+1757;Noréaz;FR
+1690;Villaz-St-Pierre;FR
+1762;Givisiez;FR
+1772;Grolley;FR
+1773;Léchelles;FR
+1774;Cousset;FR
+1776;Montagny-la-Ville;FR
+1795;Courlevon;FR
+1796;Courgevaux;FR
+1797;Münchenwiler;BE
+1794;Salvenach;FR
+1793;Jeuss;FR
+1792;Cordast;FR
+1791;Courtaman;FR
+1788;Praz (Vully);FR
+1789;Lugnorre;FR
+1782;Belfaux;FR
+1783;Pensier;FR
+1784;Courtepin;FR
+1785;Cressier FR;FR
+1786;Sugiez;FR
+1787;Môtier (Vully);FR
+1800;Vevey;VD
+1800;Vevey 1;VD
+1800;Vevey 1 Distribution;VD
+1801;Le Mont-Pèlerin;VD
+1808;Les Monts-de-Corsier;VD
+1809;Fenil-sur-Corsier;VD
+1802;Corseaux;VD
+1803;Chardonne;VD
+1804;Corsier-sur-Vevey;VD
+1805;Jongny;VD
+1806;St-Légier-La Chiésaz;VD
+1807;Blonay;VD
+1071;Rivaz;VD
+1071;St-Saphorin (Lavaux);VD
+1814;La Tour-de-Peilz;VD
+1815;Clarens;VD
+1816;Chailly-Montreux;VD
+1817;Brent;VD
+1820;Montreux;VD
+1820;Montreux 1;VD
+1820;Montreux 2;VD
+1820;Territet-Veytaux;VD
+1820;Montreux 1 Distribution;VD
+1822;Chernex;VD
+1823;Glion;VD
+1824;Caux;VD
+1832;Villard-sur-Chamby;VD
+1669;Les Sciernes-d'Albeuve;FR
+1658;La Tine;VD
+1660;Les Moulins;VD
+1659;Flendruz;VD
+1660;L'Etivaz;VD
+1832;Chamby;VD
+1833;Les Avants;VD
+1669;Montbovon;FR
+1658;Rossinière;VD
+1660;Château-d'Oex;VD
+1659;Rougemont;VD
+1844;Villeneuve VD;VD
+1847;Rennaz;VD
+1845;Noville;VD
+1846;Chessel;VD
+1852;Roche VD;VD
+1853;Yvorne;VD
+1854;Leysin;VD
+1867;St-Triphon;VD
+1860;Aigle;VD
+1856;Corbeyrier;VD
+1862;La Comballaz;VD
+1862;Les Mosses;VD
+1866;La Forclaz VD;VD
+1884;Huémoz;VD
+1867;Panex;VD
+1863;Le Sépey;VD
+1864;Vers-l'Eglise;VD
+1865;Les Diablerets;VD
+1867;Ollon VD;VD
+1868;Collombey;VS
+1870;Monthey;VS
+1870;Monthey 1;VS
+1870;Monthey 2;VS
+1871;Choëx;VS
+1871;Les Giettes;VS
+1872;Troistorrents;VS
+1873;Val-d'Illiez;VS
+1874;Champéry;VS
+1875;Morgins;VS
+1880;Bex;VD
+1880;Fenalet-sur-Bex;VD
+1880;Frenières-sur-Bex;VD
+1880;Les Plans-sur-Bex;VD
+1882;Gryon;VD
+1884;Villars-sur-Ollon;VD
+1885;Chesières;VD
+1890;St-Maurice;VS
+1890;Mex VS;VS
+1891;Vérossaz;VS
+1869;Massongex;VS
+1895;Vionnaz;VS
+1897;Les Evouettes;VS
+1899;Torgon;VS
+1892;Lavey-Village;VD
+1893;Muraz (Collombey);VS
+1896;Vouvry;VS
+1896;Miex;VS
+1897;Bouveret;VS
+1898;St-Gingolph;VS
+1902;Evionnaz;VS
+1903;Collonges;VS
+1904;Vernayaz;VS
+1905;Dorénaz;VS
+1906;Charrat;VS
+1907;Saxon;VS
+1908;Riddes;VS
+1912;Leytron;VS
+1911;Ovronnaz;VS
+1913;Saillon;VS
+1914;Isérables;VS
+1918;La Tzoumaz;VS
+1955;Chamoson;VS
+1955;St-Pierre-de-Clages;VS
+1957;Ardon;VS
+1920;Martigny;VS
+1920;Martigny 1;VS
+1920;Martigny 2;VS
+1921;Martigny-Croix;VS
+1923;Le Trétien;VS
+1925;Le Châtelard VS;VS
+1927;Chemin;VS
+1929;Trient;VS
+1928;Ravoire;VS
+1922;Salvan;VS
+1922;Les Granges (Salvan);VS
+1923;Les Marécottes;VS
+1925;Finhaut;VS
+1926;Fully;VS
+1932;Bovernier;VS
+1947;Versegères;VS
+1941;Vollèges;VS
+1942;Levron;VS
+1948;Lourtier;VS
+1948;Fionnay;VS
+1948;Sarreyer;VS
+1945;Liddes;VS
+1946;Bourg-St-Pierre;VS
+1943;Praz-de-Fort;VS
+1944;La Fouly VS;VS
+1933;Sembrancher;VS
+1934;Le Châble VS;VS
+1936;Verbier;VS
+1937;Orsières;VS
+1938;Champex-Lac;VS
+1950;Sion;VS
+1950;Sion 1;VS
+1950;Sion 1 Distribution;VS
+1951;Sion;VS
+1950;Sion 2;VS
+1950;Sion 3;VS
+1975;St-Séverin;VS
+1976;Erde;VS
+1976;Aven;VS
+1976;Daillon;VS
+1971;Grimisuat;VS
+1974;Arbaz;VS
+1961;Vernamiège;VS
+1973;Nax;VS
+1968;Mase;VS
+1969;St-Martin VS;VS
+1981;Vex;VS
+1982;Euseigne;VS
+1984;Les Haudères;VS
+1986;Arolla;VS
+1985;La Sage;VS
+1987;Hérémence;VS
+1988;Les Collons;VS
+1991;Salins;VS
+1992;Les Agettes;VS
+1992;Les Mayens-de-Sion;VS
+1993;Veysonnaz;VS
+1997;Siviez (Nendaz);VS
+1996;Fey (Nendaz);VS
+1996;Beuson (Nendaz);VS
+1996;Baar (Nendaz);VS
+1996;Basse-Nendaz;VS
+1997;Haute-Nendaz;VS
+1994;Aproz (Nendaz);VS
+1962;Pont-de-la-Morge (Sion);VS
+1963;Vétroz;VS
+1964;Conthey;VS
+1965;Savièse;VS
+1966;Ayent;VS
+1966;Signèse (Ayent);VS
+1967;Bramois;VS
+1983;Evolène;VS
+1972;Anzère;VS
+1988;Thyon;VS
+2000;Neuchâtel;NE
+2001;Neuchâtel 1 Dépôt;NE
+2000;Neuchâtel 2;NE
+2004;Neuchâtel 4;NE
+2007;Neuchâtel 7;NE
+2008;Neuchâtel;NE
+2009;Neuchâtel 9;NE
+2001;Neuchâtel 1;NE
+2002;Neuchâtel 2;NE
+2000;Neuchâtel 2 Distribution;NE
+2003;Neuchâtel 3;NE
+2006;Neuchâtel 6;NE
+2012;Auvernier;NE
+2013;Colombier NE;NE
+2014;Bôle;NE
+2015;Areuse;NE
+2016;Cortaillod;NE
+2017;Boudry;NE
+2022;Bevaix;NE
+2023;Gorgier;NE
+2024;St-Aubin-Sauges;NE
+2025;Chez-le-Bart;NE
+2028;Vaumarcus;NE
+2034;Peseux;NE
+2035;Corcelles NE;NE
+2036;Cormondrèche;NE
+2042;Valangin;NE
+2043;Boudevilliers;NE
+2046;Fontaines NE;NE
+2052;Fontainemelon;NE
+2053;Cernier;NE
+2054;Chézard-St-Martin;NE
+2054;Les Vieux-Prés;NE
+2056;Dombresson;NE
+2057;Villiers;NE
+2058;Le Pâquier NE;NE
+2063;Vilars NE;NE
+2065;Savagnier;NE
+2067;Chaumont;NE
+2068;Hauterive NE;NE
+2072;St-Blaise;NE
+2073;Enges;NE
+2074;Marin-Epagnier;NE
+3238;Gals;BE
+2087;Cornaux NE;NE
+2088;Cressier NE;NE
+2318;Brot-Plamboz;NE
+2103;Noiraigue;NE
+2105;Travers;NE
+2108;Couvet;NE
+2112;Môtiers NE;NE
+2113;Boveresse;NE
+2114;Fleurier;NE
+2115;Buttes;NE
+2117;La Côte-aux-Fées;NE
+2123;St-Sulpice NE;NE
+2406;La Brévine;NE
+2126;Les Verrières;NE
+2406;Le Brouillet;NE
+2406;Les Taillères;NE
+2127;Les Bayards;NE
+2149;Champ-du-Moulin;NE
+2124;Les Sagnettes;NE
+2116;Mont-de-Buttes;NE
+1454;La Vraconnaz;VD
+2019;Chambrelien;NE
+2019;Rochefort;NE
+2037;Montmollin;NE
+2206;Les Geneveys-sur-Coffrane;NE
+2207;Coffrane;NE
+2208;Les Hauts-Geneveys;NE
+2300;La Chaux-de-Fonds;NE
+2300;La Chaux-de-Fonds 1;NE
+2302;La Chaux-de-Fonds;NE
+2303;La Chaux-de-Fonds;NE
+2300;La Chaux-de-Fonds 1 Dist;NE
+2301;La Chaux-de-Fonds;NE
+2304;La Chaux-de-Fonds;NE
+2316;Petit-Martel;NE
+2338;Les Emibois;JU
+2314;La Sagne NE;NE
+2316;Les Ponts-de-Martel;NE
+2322;Le Crêt-du-Locle;NE
+2325;Les Planchettes;NE
+2300;La Cibourg;NE
+2333;La Ferrière;BE
+2336;Les Bois;JU
+2400;Le Locle;NE
+2406;La Châtagne;NE
+2405;La Chaux-du-Milieu;NE
+2400;Le Prévoux;NE
+2414;Le Cerneux-Péquignot;NE
+2416;Les Brenets;NE
+2500;Biel/Bienne;BE
+2500;Biel/Bienne 1;BE
+2500;Biel/Bienne 3;BE
+2500;Biel/Bienne 4;BE
+2500;Biel/Bienne 6;BE
+2500;Biel/Bienne 7;BE
+2500;Biel/Bienne 8;BE
+2500;Biel/Bienne 1 Zustellung;BE
+2500;Biel/Bienne 1 Annahme;BE
+2501;Biel/Bienne;BE
+2502;Biel/Bienne;BE
+2503;Biel/Bienne;BE
+2504;Biel/Bienne;BE
+2505;Biel/Bienne;BE
+2512;Tüscherz-Alfermée;BE
+2513;Twann;BE
+2514;Ligerz;BE
+2515;Prêles;BE
+2516;Lamboing;BE
+2517;Diesse;BE
+2518;Nods;BE
+2520;La Neuveville;BE
+2523;Lignières;NE
+2525;Le Landeron;NE
+2532;Magglingen/Macolin;BE
+2533;Evilard;BE
+2534;Orvin;BE
+2534;Les Prés-d'Orvin;BE
+2535;Frinvillier;BE
+2536;Plagne;BE
+2537;Vauffelin;BE
+2538;Romont BE;BE
+2540;Grenchen;SO
+2540;Grenchen 1;SO
+2540;Grenchen Schmelzi;SO
+2542;Pieterlen;BE
+2543;Lengnau BE;BE
+2544;Bettlach;SO
+2545;Selzach;SO
+2552;Orpund;BE
+2553;Safnern;BE
+2554;Meinisberg;BE
+2555;Brügg BE;BE
+2556;Scheuren;BE
+2557;Studen BE;BE
+2558;Aegerten;BE
+2560;Nidau;BE
+2562;Port;BE
+2563;Ipsach;BE
+2564;Bellmund;BE
+2565;Jens;BE
+2572;Sutz;BE
+2575;Täuffelen;BE
+2576;Lüscherz;BE
+2577;Siselen BE;BE
+3237;Brüttelen;BE
+2603;Péry;BE
+2604;La Heutte;BE
+2605;Sonceboz-Sombeval;BE
+2606;Corgémont;BE
+2607;Cortébert;BE
+2608;Courtelary;BE
+2608;Montagne-de-Courtelary;BE
+2610;St-Imier;BE
+2610;Mont-Soleil;BE
+2610;Mont-Crosin;BE
+2612;Cormoret;BE
+2613;Villeret;BE
+2615;Sonvilier;BE
+2615;Montagne-de-Sonvilier;BE
+2616;Renan BE;BE
+2710;Tavannes;BE
+2712;Le Fuet;BE
+2714;Le Prédame;JU
+2717;Fornet-Dessous;BE
+2718;Fornet-Dessus;JU
+2715;Châtelat-Monible;BE
+2716;Sornetan;BE
+2713;Bellelay;BE
+2714;Les Genevez JU;JU
+2718;Lajoux JU;JU
+2720;Tramelan;BE
+2720;La Tanne;BE
+2722;Les Reussilles;BE
+2723;Mont-Tramelan;BE
+2345;Les Breuleux;JU
+2345;Le Cerneux-Veusil;JU
+2345;La Chaux-des-Breuleux;JU
+2340;Le Noirmont;JU
+2350;Saignelégier;JU
+2353;Les Pommerats;JU
+2354;Goumois;JU
+2732;Reconvilier;BE
+2732;Saicourt;BE
+2732;Saules BE;BE
+2732;Loveresse;BE
+2733;Pontenet;BE
+2735;Malleray-Bévilard;BE
+2735;Bévilard;BE
+2736;Sorvilier;BE
+2738;Court;BE
+2740;Moutier;BE
+2742;Perrefitte;BE
+2748;Souboz;BE
+2743;Eschert;BE
+2744;Belprahon;BE
+2747;Seehof;BE
+2745;Grandval;BE
+2746;Crémines;BE
+2747;Corcelles BE;BE
+2762;Roches BE;BE
+2832;Rebeuvelier;JU
+2830;Courrendlin;JU
+2800;Delémont;JU
+2800;Delémont 1;JU
+2800;Delémont 2;JU
+2800;Delémont 1 Distribution;JU
+2802;Develier;JU
+2803;Bourrignon;JU
+2805;Soyhières;JU
+2806;Mettembert;JU
+2807;Pleigne;JU
+2807;Lucelle;JU
+2812;Movelier;JU
+2813;Ederswiler;JU
+2814;Roggenburg;BL
+2822;Courroux;JU
+2823;Courcelon;JU
+2824;Vicques;JU
+2825;Courchapoix;JU
+2826;Corban;JU
+2827;Mervelier;JU
+2828;Montsevelier;JU
+2829;Vermes;JU
+2842;Rossemaison;JU
+2843;Châtillon JU;JU
+2852;Courtételle;JU
+2853;Courfaivre;JU
+2854;Bassecourt;JU
+2855;Glovelier;JU
+2856;Boécourt;JU
+2857;Montavon;JU
+2863;Undervelier;JU
+2864;Soulce;JU
+2873;Saulcy;JU
+2882;St-Ursanne;JU
+2883;Montmelon;JU
+2884;Montenol;JU
+2885;Epauvillers;JU
+2886;Epiquerez;JU
+2887;Soubey;JU
+2888;Seleute;JU
+2889;Ocourt;JU
+2950;Courgenay;JU
+2900;Porrentruy;JU
+2900;Porrentruy 1;JU
+2900;Porrentruy 2;JU
+2900;Porrentruy 1 Distribution;JU
+2902;Fontenais;JU
+2903;Villars-sur-Fontenais;JU
+2904;Bressaucourt;JU
+2905;Courtedoux;JU
+2906;Chevenez;JU
+2907;Rocourt;JU
+2908;Grandfontaine;JU
+2912;Roche-d'Or;JU
+2914;Damvant;JU
+2915;Bure;JU
+2916;Fahy;JU
+2922;Courchavon;JU
+2923;Courtemaîche;JU
+2924;Montignez;JU
+2925;Buix;JU
+2926;Boncourt;JU
+2932;Coeuve;JU
+2935;Beurnevésin;JU
+2942;Alle;JU
+2943;Vendlincourt;JU
+2944;Bonfol;JU
+2946;Miécourt;JU
+2947;Charmoille;JU
+2952;Cornol;JU
+2953;Fregiécourt-Pleujouse;JU
+2954;Asuel;JU
+3000;Bern;BE
+3000;Bern 1 Schanzenpost;BE
+3000;Bern 5;BE
+3000;Bern 6;BE
+3000;Bern 8;BE
+3000;Bern 9;BE
+3000;Bern 13;BE
+3000;Bern 14;BE
+3000;Bern 15;BE
+3000;Bern 21;BE
+3000;Bern 22;BE
+3000;Bern 23;BE
+3000;Bern 25;BE
+3000;Bern 31;BE
+3000;Bern Postauto BE-FB-SO;BE
+3001;Bern;BE
+3002;Bern PostFinance;BE
+3003;Bern;BE
+3004;Bern;BE
+3005;Bern;BE
+3006;Bern;BE
+3007;Bern;BE
+3008;Bern;BE
+3010;Bern;BE
+3011;Bern;BE
+3012;Bern;BE
+3013;Bern;BE
+3014;Bern;BE
+3015;Bern;BE
+3018;Bern;BE
+3019;Bern;BE
+3020;Bern;BE
+3027;Bern;BE
+3095;Spiegel b. Bern;BE
+3032;Hinterkappelen;BE
+3033;Wohlen b. Bern;BE
+3034;Murzelen;BE
+3035;Frieswil;BE
+3036;Detligen;BE
+3037;Herrenschwanden;BE
+3038;Kirchlindach;BE
+3042;Ortschwaben;BE
+3043;Uettligen;BE
+3049;Säriswil;BE
+3045;Meikirch;BE
+3046;Wahlendorf;BE
+3047;Bremgarten b. Bern;BE
+3048;Worblaufen;BE
+3052;Zollikofen;BE
+3053;Münchenbuchsee;BE
+3054;Schüpfen;BE
+3063;Ittigen;BE
+3065;Bolligen;BE
+3065;Bolligen Dorf;BE
+3066;Stettlen;BE
+3067;Boll;BE
+3068;Utzigen;BE
+3072;Ostermundigen;BE
+3072;Ostermundigen 1;BE
+3073;Gümligen;BE
+3074;Muri b. Bern;BE
+3075;Rüfenacht BE;BE
+3076;Worb;BE
+3077;Enggistein;BE
+3078;Richigen;BE
+3082;Schlosswil;BE
+3083;Trimstein;BE
+3084;Wabern;BE
+3088;Oberbütschel;BE
+3086;Zimmerwald;BE
+3087;Niedermuhlern;BE
+3088;Rüeggisberg;BE
+3089;Hinterfultigen;BE
+3096;Oberbalm;BE
+3097;Liebefeld;BE
+3098;Köniz;BE
+3098;Schliern b. Köniz;BE
+3099;Rüti b. Riggisberg;BE
+3110;Münsingen;BE
+3112;Allmendingen b. Bern;BE
+3114;Wichtrach;BE
+3115;Gerzensee;BE
+3116;Kirchdorf BE;BE
+3629;Kiesen;BE
+3628;Uttigen;BE
+3122;Kehrsatz;BE
+3123;Belp;BE
+3124;Belpberg;BE
+3125;Toffen;BE
+3126;Kaufdorf;BE
+3127;Mühlethurnen;BE
+3128;Kirchenthurnen;BE
+3132;Riggisberg;BE
+3664;Burgistein;BE
+3665;Wattenwil;BE
+3662;Seftigen;BE
+3663;Gurzelen;BE
+3661;Uetendorf;BE
+3144;Gasel;BE
+3145;Niederscherli;BE
+3147;Mittelhäusern;BE
+3148;Lanzenhäusern;BE
+3150;Schwarzenburg;BE
+3152;Mamishaus;BE
+3153;Rüschegg Gambach;BE
+3154;Rüschegg Heubach;BE
+3155;Helgisried-Rohrbach;BE
+3156;Riffenmatt;BE
+3157;Milken;BE
+3158;Guggisberg;BE
+3159;Riedstätt;BE
+3172;Niederwangen b. Bern;BE
+3173;Oberwangen b. Bern;BE
+3174;Thörishaus;BE
+3175;Flamatt;FR
+3176;Neuenegg;BE
+3177;Laupen BE;BE
+3178;Bösingen;FR
+3179;Kriechenwil;BE
+3182;Ueberstorf;FR
+3183;Albligen;BE
+3184;Wünnewil;FR
+3186;Düdingen;FR
+3126;Gelterfingen;BE
+3202;Frauenkappelen;BE
+3203;Mühleberg;BE
+3204;Rosshäusern;BE
+3205;Gümmenen;BE
+3206;Rizenbach;BE
+3207;Wileroltigen;BE
+3208;Gurbrü;BE
+3210;Kerzers;FR
+3216;Ried b. Kerzers;FR
+3215;Gempenach;FR
+3214;Ulmiz;FR
+3213;Liebistorf;FR
+3212;Gurmels;FR
+3225;Müntschemier;BE
+3226;Treiten;BE
+3232;Ins;BE
+3233;Tschugg;BE
+3234;Vinelz;BE
+3235;Erlach;BE
+3236;Gampelen;BE
+3250;Lyss;BE
+3250;Lyss Zustellung;BE
+3251;Wengi b. Büren;BE
+3252;Worben;BE
+3253;Schnottwil;SO
+3254;Messen;SO
+3255;Rapperswil BE;BE
+3256;Dieterswil;BE
+3257;Grossaffoltern;BE
+3257;Ammerzwil BE;BE
+3262;Suberg;BE
+3263;Büetigen;BE
+3264;Diessbach b. Büren;BE
+3266;Wiler b. Seedorf;BE
+3267;Seedorf BE;BE
+3268;Lobsigen;BE
+3270;Aarberg;BE
+3271;Radelfingen b. Aarberg;BE
+3272;Walperswil;BE
+3273;Kappelen;BE
+3274;Hermrigen;BE
+3280;Murten;FR
+3280;Meyriez;FR
+3282;Bargen BE;BE
+3283;Kallnach;BE
+3284;Fräschels;FR
+3285;Galmiz;FR
+3286;Muntelier;FR
+3292;Busswil BE;BE
+3293;Dotzigen;BE
+3294;Büren an der Aare;BE
+3295;Rüti b. Büren;BE
+3296;Arch;BE
+3297;Leuzigen;BE
+3298;Oberwil b. Büren;BE
+3302;Moosseedorf;BE
+3303;Jegenstorf;BE
+3308;Grafenried;BE
+3312;Fraubrunnen;BE
+3313;Büren zum Hof;BE
+3314;Schalunen;BE
+3315;Bätterkinden;BE
+3315;Kräiligen;BE
+3321;Schönbühl Einkaufszentrum;BE
+3322;Urtenen-Schönbühl;BE
+3322;Mattstetten;BE
+3323;Bäriswil BE;BE
+3324;Hindelbank;BE
+3325;Hettiswil b. Hindelbank;BE
+3326;Krauchthal;BE
+3303;Zuzwil BE;BE
+3305;Iffwil;BE
+3306;Etzelkofen;BE
+3307;Brunnenthal;SO
+3309;Kernenried;BE
+3317;Limpach;BE
+3317;Mülchi;BE
+3360;Herzogenbuchsee;BE
+3429;Höchstetten-Hellsau;BE
+4556;Aeschi SO;SO
+3376;Graben;BE
+3372;Wanzwil;BE
+3373;Heimenhausen;BE
+3373;Röthenbach Herzogenbuchsee;BE
+3374;Wangenried;BE
+3362;Niederönz;BE
+3363;Oberönz;BE
+3365;Seeberg;BE
+3365;Grasswil;BE
+3366;Bettenhausen;BE
+3367;Thörigen;BE
+3368;Bleienbach;BE
+3400;Burgdorf;BE
+3400;Burgdorf 1;BE
+3400;Burgdorf Zustellung;BE
+3401;Burgdorf;BE
+3402;Burgdorf;BE
+3412;Heimiswil;BE
+3413;Kaltacker;BE
+3414;Oberburg;BE
+3415;Hasle-Rüegsau;BE
+3416;Affoltern im Emmental;BE
+3417;Rüegsau;BE
+3418;Rüegsbach;BE
+3419;Biembach im Emmental;BE
+3421;Lyssach;BE
+3422;Kirchberg BE;BE
+3422;Rüdtligen;BE
+3422;Alchenflüh;BE
+3423;Ersigen;BE
+3424;Niederösch;BE
+3425;Koppigen;BE
+3426;Aefligen;BE
+3427;Utzenstorf;BE
+3428;Wiler b. Utzenstorf;BE
+3432;Lützelflüh-Goldbach;BE
+3433;Schwanden im Emmental;BE
+3434;Obergoldbach;BE
+3435;Ramsei;BE
+3436;Zollbrück;BE
+3437;Rüderswil;BE
+3438;Lauperswil;BE
+3439;Ranflüh;BE
+3452;Grünenmatt;BE
+3453;Heimisbach;BE
+3454;Sumiswald;BE
+3455;Grünen;BE
+3456;Trachselwald;BE
+3457;Wasen im Emmental;BE
+3462;Weier im Emmental;BE
+3463;Häusernmoos im Emmental;BE
+3464;Schmidigen-Mühleweg;BE
+3465;Dürrenroth;BE
+3472;Wynigen;BE
+3473;Alchenstorf;BE
+3474;Rüedisbach;BE
+3475;Riedtwil;BE
+3475;Hermiswil;BE
+3476;Oschwand;BE
+3111;Tägertschi;BE
+3503;Gysenstein;BE
+3504;Niederhünigen;BE
+3506;Grosshöchstetten;BE
+3507;Biglen;BE
+3508;Arni BE;BE
+3510;Konolfingen;BE
+3512;Walkringen;BE
+3513;Bigenthal;BE
+3415;Schafhausen im Emmental;BE
+3672;Oberdiessbach;BE
+3672;Aeschlen b. Oberdiessbach;BE
+3673;Linden;BE
+3674;Bleiken b. Oberdiessbach;BE
+3671;Brenzikofen;BE
+3531;Oberthal;BE
+3532;Zäziwil;BE
+3533;Bowil;BE
+3534;Signau;BE
+3535;Schüpbach;BE
+3536;Aeschau;BE
+3537;Eggiwil;BE
+3538;Röthenbach im Emmental;BE
+3543;Emmenmatt;BE
+3550;Langnau im Emmental;BE
+3551;Oberfrittenbach;BE
+3552;Bärau;BE
+3553;Gohl;BE
+3555;Trubschachen;BE
+3556;Trub;BE
+3557;Fankhaus (Trub);BE
+3600;Thun;BE
+3600;Thun 2 Zustellung;BE
+3601;Thun;BE
+3602;Thun;BE
+3603;Thun;BE
+3604;Thun;BE
+3605;Thun;BE
+3607;Thun;BE
+3608;Thun;BE
+3617;Fahrni b. Thun;BE
+3618;Süderen;BE
+3619;Eriz;BE
+3619;Innereriz;BE
+3622;Homberg b. Thun;BE
+3635;Uebeschi;BE
+3631;Höfen b. Thun;BE
+3636;Längenbühl;BE
+3612;Steffisburg;BE
+3613;Steffisburg;BE
+3614;Unterlangenegg;BE
+3615;Heimenschwand;BE
+3616;Schwarzenegg;BE
+3623;Teuffenthal b. Thun;BE
+3624;Goldiwil (Thun);BE
+3625;Heiligenschwendi;BE
+3626;Hünibach;BE
+3627;Heimberg;BE
+3633;Amsoldingen;BE
+3634;Thierachern;BE
+3638;Blumenstein;BE
+3638;Pohlern;BE
+3645;Gwatt (Thun);BE
+3646;Einigen;BE
+3647;Reutigen;BE
+3652;Hilterfingen;BE
+3653;Oberhofen am Thunersee;BE
+3654;Gunten;BE
+3655;Sigriswil;BE
+3656;Tschingel ob Gunten;BE
+3656;Aeschlen ob Gunten;BE
+3657;Schwanden (Sigriswil);BE
+3658;Merligen;BE
+3700;Spiez;BE
+3702;Hondrich;BE
+3703;Aeschi b. Spiez;BE
+3703;Aeschiried;BE
+3704;Krattigen;BE
+3705;Faulensee;BE
+3706;Leissigen;BE
+3707;Därligen;BE
+3711;Emdthal;BE
+3711;Mülenen;BE
+3713;Reichenbach im Kandertal;BE
+3714;Frutigen;BE
+3714;Wengi b. Frutigen;BE
+3715;Adelboden;BE
+3716;Kandergrund;BE
+3717;Blausee-Mitholz;BE
+3718;Kandersteg;BE
+3722;Scharnachtal;BE
+3723;Kiental;BE
+3724;Ried (Frutigen);BE
+3725;Achseten;BE
+3752;Wimmis;BE
+3753;Oey;BE
+3754;Diemtigen;BE
+3755;Horboden;BE
+3756;Zwischenflüh;BE
+3757;Schwenden im Diemtigtal;BE
+3758;Latterbach;BE
+3762;Erlenbach im Simmental;BE
+3763;Därstetten;BE
+3764;Weissenburg;BE
+3765;Oberwil im Simmental;BE
+3766;Boltigen;BE
+3770;Zweisimmen;BE
+3771;Blankenburg;BE
+3772;St. Stephan;BE
+3773;Matten (St. Stephan);BE
+3775;Lenk im Simmental;BE
+3776;Oeschseite;BE
+3777;Saanenmöser;BE
+3778;Schönried;BE
+3780;Gstaad;BE
+3781;Turbach;BE
+3782;Lauenen b. Gstaad;BE
+3783;Grund b. Gstaad;BE
+3784;Feutersoey;BE
+3785;Gsteig b. Gstaad;BE
+3792;Saanen;BE
+3800;Interlaken;BE
+3800;Unterseen;BE
+3800;Matten b. Interlaken;BE
+3801;Jungfraujoch;VS
+3803;Beatenberg;BE
+3804;Habkern;BE
+3805;Goldswil b. Interlaken;BE
+3806;Bönigen b. Interlaken;BE
+3807;Iseltwald;BE
+3812;Wilderswil;BE
+3813;Saxeten;BE
+3814;Gsteigwiler;BE
+3815;Zweilütschinen;BE
+3816;Lütschental;BE
+3816;Burglauenen;BE
+3818;Grindelwald;BE
+3822;Lauterbrunnen;BE
+3822;Isenfluh;BE
+3823;Wengen;BE
+3824;Stechelberg;BE
+3825;Mürren;BE
+3826;Gimmelwald;BE
+3852;Ringgenberg BE;BE
+3853;Niederried b. Interlaken;BE
+3854;Oberried am Brienzersee;BE
+3855;Brienz BE;BE
+3855;Axalp;BE
+3856;Brienzwiler;BE
+3857;Unterbach BE;BE
+3858;Hofstetten b. Brienz;BE
+3860;Meiringen;BE
+3860;Rosenlaui;BE
+3862;Innertkirchen;BE
+3863;Gadmen;BE
+3864;Guttannen;BE
+3900;Brig;VS
+3900;Gamsen;VS
+3949;Hohtenn;VS
+3903;Birgisch;VS
+3903;Mund;VS
+3914;Blatten b. Naters;VS
+3914;Belalp;VS
+3913;Rosswald;VS
+3911;Ried-Brig;VS
+3912;Termen;VS
+3901;Rothwald;VS
+3907;Simplon Hospiz;VS
+3907;Simplon Dorf;VS
+3907;Gabi (Simplon);VS
+3907;Gondo;VS
+3922;Eisten;VS
+3908;Saas-Balen;VS
+3910;Saas-Grund;VS
+3902;Glis;VS
+3917;Goppenstein;VS
+3916;Ferden;VS
+3917;Kippel;VS
+3918;Wiler (Lötschen);VS
+3919;Blatten (Lötschen);VS
+3904;Naters;VS
+3905;Saas-Almagell;VS
+3906;Saas-Fee;VS
+3920;Zermatt;VS
+3923;Törbel;VS
+3926;Embd;VS
+3927;Herbriggen;VS
+3928;Randa;VS
+3929;Täsch;VS
+3922;Stalden VS;VS
+3922;Kalpetran;VS
+3924;St. Niklaus VS;VS
+3925;Grächen;VS
+3930;Visp;VS
+3942;St. German;VS
+3933;Staldenried;VS
+3937;Baltschieder;VS
+3938;Ausserberg;VS
+3939;Eggerberg;VS
+3930;Eyholz;VS
+3931;Lalden;VS
+3932;Visperterminen;VS
+3934;Zeneggen;VS
+3935;Bürchen;VS
+3943;Eischoll;VS
+3944;Unterbäch VS;VS
+3947;Ergisch;VS
+3948;Unterems;VS
+3946;Gruben;VS
+3948;Oberems;VS
+3951;Agarn;VS
+3955;Albinen;VS
+3956;Guttet-Feschel;VS
+3957;Erschmatt;VS
+3953;Varen;VS
+3976;Noës;VS
+3978;Flanthey;VS
+1978;Lens;VS
+1977;Icogne;VS
+3979;Grône;VS
+3942;Raron;VS
+3942;Niedergesteln;VS
+3945;Gampel;VS
+3946;Turtmann;VS
+3952;Susten;VS
+3953;Leuk Stadt;VS
+3953;Inden;VS
+3954;Leukerbad;VS
+3970;Salgesch;VS
+3977;Granges VS;VS
+1958;St-Léonard;VS
+3960;Sierre;VS
+3960;Corin-de-la-Crête;VS
+3960;Loc;VS
+3971;Chermignon;VS
+3971;Chermignon-d'en-Bas;VS
+3971;Ollon VS;VS
+3972;Miège;VS
+3973;Venthône;VS
+3974;Mollens VS;VS
+3975;Randogne;VS
+3961;Vissoie;VS
+3961;St-Luc;VS
+3961;Chandolin;VS
+3961;Ayer;VS
+3961;Zinal;VS
+3961;Grimentz;VS
+3967;Vercorin;VS
+3963;Montana;VS
+3963;Crans-Montana;VS
+3960;Muraz (Sierre);VS
+3965;Chippis;VS
+3966;Chalais;VS
+3966;Réchy;VS
+3968;Veyras;VS
+3982;Bitsch;VS
+3993;Grengiols;VS
+3994;Lax;VS
+3997;Bellwald;VS
+3989;Niederwald;VS
+3989;Blitzingen;VS
+3989;Biel VS;VS
+3998;Gluringen;VS
+3998;Reckingen VS;VS
+3985;Geschinen;VS
+3988;Obergesteln;VS
+3999;Oberwald;VS
+3986;Ried-Mörel;VS
+3987;Riederalp;VS
+3991;Betten;VS
+3992;Bettmeralp;VS
+3995;Ernen;VS
+3996;Binn;VS
+3983;Mörel;VS
+3984;Fiesch;VS
+3985;Münster VS;VS
+3988;Ulrichen;VS
+4000;Basel;BS
+4000;Basel 2 Zustellung;BS
+4000;Basel Dist Ba;BS
+4001;Basel;BS
+4002;Basel 2 Annahme;BS
+4002;Basel;BS
+4003;Basel;BS
+4004;Basel;BS
+4005;Basel;BS
+4007;Basel;BS
+4009;Basel;BS
+4010;Basel;BS
+4011;Basel;BS
+4012;Basel;BS
+4013;Basel;BS
+4015;Basel;BS
+4016;Basel;BS
+4017;Basel;BS
+4018;Basel;BS
+4019;Basel;BS
+4020;Basel;BS
+4023;Basel;BL
+4024;Basel;BS
+4025;Basel;BS
+4030;Basel;BS
+4031;Basel Universitätsspital;BS
+4032;Basel;BS
+4051;Basel;BS
+4052;Basel;BS
+4053;Basel;BS
+4054;Basel;BS
+4055;Basel;BS
+4056;Basel;BS
+4057;Basel;BS
+4058;Basel;BS
+4059;Basel;BS
+4091;Basel;BS
+4101;Bruderholz;BL
+4102;Binningen;BL
+4102;Binningen 1;BL
+4102;Binningen Gorenmatt;BL
+4103;Bottmingen;BL
+4104;Oberwil BL;BL
+4105;Biel-Benken BL;BL
+4106;Therwil;BL
+4107;Ettingen;BL
+4108;Witterswil;SO
+4112;Bättwil-Flüh;SO
+4112;Bättwil;SO
+4112;Flüh;SO
+4114;Hofstetten SO;SO
+4115;Mariastein;SO
+4116;Metzerlen;SO
+4117;Burg im Leimental;BL
+4118;Rodersdorf;SO
+4123;Allschwil;BL
+4123;Allschwil 1;BL
+4123;Allschwil Dorf;BL
+4123;Allschwil Lindenplatz;BL
+4124;Schönenbuch;BL
+4125;Riehen;BS
+4125;Riehen 1;BS
+4125;Riehen 2;BS
+4126;Bettingen;BS
+4127;Birsfelden;BL
+4132;Muttenz;BL
+4132;Muttenz 1;BL
+4132;Muttenz Lutzert;BL
+4133;Pratteln;BL
+4133;Pratteln 1;BL
+4142;Münchenstein;BL
+4142;Münchenstein 1;BL
+4142;Münchenstein Zollweiden;BL
+4143;Dornach;SO
+4144;Arlesheim;BL
+4145;Gempen;SO
+4146;Hochwald;SO
+4147;Aesch BL;BL
+4148;Pfeffingen;BL
+4153;Reinach BL;BL
+4153;Reinach BL 1;BL
+4153;Reinach BL Surbaum;BL
+4202;Duggingen;BL
+4203;Grellingen;BL
+4206;Seewen SO;SO
+4207;Bretzwil;BL
+4208;Nunningen;SO
+4222;Zwingen;BL
+4225;Brislach;BL
+4226;Breitenbach;SO
+4227;Büsserach;SO
+4228;Erschwil;SO
+4242;Laufen;BL
+4243;Dittingen;BL
+4244;Röschenz;BL
+4245;Kleinlützel;SO
+4204;Himmelried;SO
+4223;Blauen;BL
+4224;Nenzlingen;BL
+4229;Beinwil SO;SO
+4232;Fehren;SO
+4233;Meltingen;SO
+4234;Zullwil;SO
+4246;Wahlen b. Laufen;BL
+4247;Grindel;SO
+4252;Bärschwil;SO
+4252;Bärschwil Dorf;SO
+4253;Liesberg;BL
+4254;Liesberg Dorf;BL
+4302;Augst BL;BL
+4303;Kaiseraugst;AG
+4303;Kaiseraugst Liebrüti;AG
+4304;Giebenach;BL
+4305;Olsberg;AG
+4310;Rheinfelden;AG
+4310;Rheinfelden 1;AG
+4310;Rheinfelden 2;AG
+4312;Magden;AG
+4313;Möhlin;AG
+4314;Zeiningen;AG
+4315;Zuzgen;AG
+4316;Hellikon;AG
+4317;Wegenstetten;AG
+4322;Mumpf;AG
+4323;Wallbach;AG
+4324;Obermumpf;AG
+4325;Schupfart;AG
+4332;Stein AG;AG
+4333;Münchwilen AG;AG
+4334;Sisseln AG;AG
+5080;Laufenburg;AG
+5082;Kaisten;AG
+5083;Ittenthal;AG
+5084;Rheinsulz;AG
+5085;Sulz AG;AG
+5275;Etzgen;AG
+5274;Mettau;AG
+5273;Oberhofen AG;AG
+5272;Gansingen;AG
+5276;Wil AG;AG
+5277;Hottwil;AG
+5326;Schwaderloch;AG
+5325;Leibstadt;AG
+5324;Full-Reuenthal;AG
+4402;Frenkendorf;BL
+4410;Liestal;BL
+4410;Liestal Kaserne;BL
+4411;Seltisberg;BL
+4412;Nuglar;SO
+4413;Büren SO;SO
+4414;Füllinsdorf;BL
+4415;Lausen;BL
+4416;Bubendorf;BL
+4417;Ziefen;BL
+4418;Reigoldswil;BL
+4419;Lupsingen;BL
+4421;St. Pantaleon;SO
+4422;Arisdorf;BL
+4423;Hersberg;BL
+4424;Arboldswil;BL
+4425;Titterten;BL
+4426;Lauwil;BL
+4431;Bennwil;BL
+4432;Lampenberg;BL
+4433;Ramlinsburg;BL
+4434;Hölstein;BL
+4435;Niederdorf;BL
+4436;Oberdorf BL;BL
+4437;Waldenburg;BL
+4438;Langenbruck;BL
+4441;Thürnen;BL
+4442;Diepflingen;BL
+4443;Wittinsburg;BL
+4444;Rümlingen;BL
+4445;Häfelfingen;BL
+4446;Buckten;BL
+4447;Känerkinden;BL
+4448;Läufelfingen;BL
+4450;Sissach;BL
+4451;Wintersingen;BL
+4452;Itingen;BL
+4453;Nusshof;BL
+4455;Zunzgen;BL
+4456;Tenniken;BL
+4457;Diegten;BL
+4458;Eptingen;BL
+4460;Gelterkinden;BL
+4461;Böckten;BL
+4465;Hemmiken;BL
+4469;Anwil;BL
+4462;Rickenbach BL;BL
+4463;Buus;BL
+4464;Maisprach;BL
+4466;Ormalingen;BL
+4467;Rothenfluh;BL
+4468;Kienberg;SO
+4492;Tecknau;BL
+4493;Wenslingen;BL
+4494;Oltingen;BL
+4495;Zeglingen;BL
+4496;Kilchberg BL;BL
+4497;Rünenberg;BL
+4500;Solothurn;SO
+4500;Solothurn 1;SO
+4500;Solothurn 1 Zustellung;SO
+4501;Solothurn;SO
+4501;Solothurn 1 Annahme;SO
+4502;Solothurn;SO
+4503;Solothurn;SO
+4515;Weissenstein b. Solothurn;SO
+4525;Balm b. Günsberg;SO
+4523;Niederwil SO;SO
+4535;Hubersdorf;SO
+4539;Rumisberg;BE
+4539;Farnern;BE
+4557;Horriwil;SO
+4558;Hersiwil;SO
+4512;Bellach;SO
+4513;Langendorf;SO
+4514;Lommiswil;SO
+4515;Oberdorf SO;SO
+4522;Rüttenen;SO
+4524;Günsberg;SO
+4528;Zuchwil;SO
+4532;Feldbrunnen;SO
+4533;Riedholz;SO
+4534;Flumenthal;SO
+4536;Attiswil;BE
+4537;Wiedlisbach;BE
+4538;Oberbipp;BE
+4552;Derendingen;SO
+4553;Subingen;SO
+4554;Etziken;SO
+3375;Inkwil;BE
+4562;Biberist;SO
+4563;Gerlafingen;SO
+4564;Obergerlafingen;SO
+4564;Zielebach;BE
+4565;Recherswil;SO
+4566;Kriegstetten;SO
+4581;Küttigkofen;SO
+4586;Kyburg-Buchegg;SO
+4582;Brügglen;SO
+4583;Mühledorf SO;SO
+4579;Gossliwil;SO
+4578;Bibern SO;SO
+4571;Lüterkofen-Ichertswil;SO
+4571;Ichertswil;SO
+4576;Tscheppach;SO
+4577;Hessigkofen;SO
+4585;Biezwil;SO
+4587;Aetingen;SO
+4588;Unterramsern;SO
+4588;Oberramsern;SO
+4574;Nennigkofen;SO
+4574;Lüsslingen;SO
+4600;Olten;SO
+4600;Olten 1;SO
+4600;Olten 2 Zustellung;SO
+4601;Olten 1 Fächer;SO
+4603;Olten;SO
+4612;Wangen b. Olten;SO
+4613;Rickenbach SO;SO
+4614;Hägendorf;SO
+4616;Kappel SO;SO
+4617;Gunzgen;SO
+4618;Boningen;SO
+4622;Egerkingen;SO
+4623;Neuendorf;SO
+4624;Härkingen;SO
+4625;Oberbuchsiten;SO
+4626;Niederbuchsiten;SO
+4632;Trimbach;SO
+4652;Winznau;SO
+4653;Obergösgen;SO
+4654;Lostorf;SO
+4655;Stüsslingen;SO
+4655;Rohr b. Olten;SO
+4656;Starrkirch-Wil;SO
+4657;Dulliken;SO
+4658;Däniken SO;SO
+5010;Däniken Postzentrum;SO
+4663;Aarburg;AG
+4665;Oftringen;AG
+4665;Oftringen 1;AG
+4665;Oftringen 2;AG
+4615;Allerheiligenberg;SO
+4633;Hauenstein;SO
+4634;Wisen SO;SO
+4702;Oensingen;SO
+4703;Kestenholz;SO
+4704;Niederbipp;BE
+3380;Wangen an der Aare;BE
+3377;Walliswil b. Wangen;BE
+4543;Deitingen;SO
+4542;Luterbach;SO
+4710;Balsthal;SO
+4710;Balsthal Postauto Thal-Gäu;SO
+4714;Aedermannsdorf;SO
+4715;Herbetswil;SO
+4719;Ramiswil;SO
+4712;Laupersdorf;SO
+4713;Matzendorf;SO
+4716;Welschenrohr;SO
+4716;Gänsbrunnen;SO
+4717;Mümliswil;SO
+4718;Holderbank SO;SO
+4800;Zofingen;AG
+4801;Zofingen Ringier AG;AG
+4802;Strengelbach;AG
+4803;Vordemwald;AG
+4805;Brittnau;AG
+4806;Wikon;LU
+4812;Mühlethal;AG
+4813;Uerkheim;AG
+4814;Bottenwil;AG
+4852;Rothrist;AG
+4853;Murgenthal;AG
+4629;Fulenbach;SO
+4628;Wolfwil;SO
+4856;Glashütten;AG
+4853;Riken AG;AG
+4900;Langenthal;BE
+4900;Langenthal 1;BE
+4901;Langenthal;BE
+4902;Langenthal;BE
+4911;Schwarzhäusern;BE
+4912;Aarwangen;BE
+4913;Bannwil;BE
+4914;Roggwil BE;BE
+4915;St. Urban;LU
+4916;Untersteckholz;BE
+4917;Melchnau;BE
+4917;Busswil b. Melchnau;BE
+4955;Gondiswil;BE
+4919;Reisiswil;BE
+4922;Bützberg;BE
+4923;Wynau;BE
+4924;Obersteckholz;BE
+4932;Lotzwil;BE
+4933;Rütschelen;BE
+4934;Madiswil;BE
+4935;Leimiswil;BE
+4936;Kleindietwil;BE
+4937;Ursenbach;BE
+4938;Rohrbach;BE
+4942;Walterswil BE;BE
+4943;Oeschenbach;BE
+4944;Auswil;BE
+4938;Rohrbachgraben;BE
+4950;Huttwil;BE
+4952;Eriswil;BE
+4953;Schwarzenbach (Huttwil);BE
+4954;Wyssachen;BE
+5000;Aarau;AG
+5000;Aarau 1;AG
+5000;Aarau 1 Zustellung;AG
+5000;Aarau Postauto Aargau;AG
+5000;Aarau Kaserne;AG
+5001;Aarau 1 Fächer;AG
+5004;Aarau;AG
+5012;Schönenwerd;SO
+5013;Niedergösgen;SO
+5014;Gretzenbach;SO
+5015;Erlinsbach SO;SO
+5017;Barmelweid;AG
+5022;Rombach;AG
+5023;Biberstein;AG
+5024;Küttigen;AG
+5025;Asp;AG
+5026;Densbüren;AG
+5027;Herznach;AG
+5028;Ueken;AG
+5032;Aarau Rohr;AG
+5033;Buchs AG;AG
+5034;Suhr;AG
+5035;Unterentfelden;AG
+5036;Oberentfelden;AG
+5037;Muhen;AG
+5040;Schöftland;AG
+5042;Hirschthal;AG
+5043;Holziken;AG
+5044;Schlossrued;AG
+5046;Schmiedrued;AG
+5046;Walde AG;AG
+5053;Staffelbach;AG
+5054;Kirchleerau-Moosleerau;AG
+5054;Kirchleerau;AG
+5054;Moosleerau;AG
+5056;Attelwil;AG
+5057;Reitnau;AG
+5102;Rupperswil;AG
+5103;Wildegg;AG
+5105;Auenstein;AG
+5106;Veltheim AG;AG
+5107;Schinznach Dorf;AG
+5108;Oberflachs;AG
+5112;Thalheim AG;AG
+5113;Holderbank AG;AG
+5103;Möriken AG;AG
+5116;Schinznach Bad;AG
+5245;Habsburg;AG
+5246;Scherz;AG
+5200;Brugg AG;AG
+5200;Brugg AG 1;AG
+5210;Windisch;AG
+5200;Brugg AG Kaserne;AG
+5201;Brugg AG;AG
+5212;Hausen AG;AG
+5213;Villnachern;AG
+5222;Umiken;AG
+5223;Riniken;AG
+5233;Stilli;AG
+5234;Villigen;AG
+5235;Rüfenach AG;AG
+5236;Remigen;AG
+5237;Mönthal;AG
+5242;Birr-Lupfig;AG
+5242;Birr;AG
+5242;Lupfig;AG
+5243;Mülligen;AG
+5244;Birrhard;AG
+5078;Effingen;AG
+5076;Bözen;AG
+5077;Elfingen;AG
+5079;Zeihen;AG
+5075;Hornussen;AG
+5070;Frick;AG
+5072;Oeschgen;AG
+5073;Gipf-Oberfrick;AG
+5064;Wittnau;AG
+5063;Wölflinswil;AG
+5062;Oberhof;AG
+5074;Eiken;AG
+5300;Turgi;AG
+5301;Siggenthal Station;AG
+5303;Würenlingen;AG
+5304;Endingen;AG
+5305;Unterendingen;AG
+5306;Tegerfelden;AG
+5312;Döttingen;AG
+5313;Klingnau;AG
+5314;Kleindöttingen;AG
+5315;Böttstein;AG
+5316;Leuggern;AG
+5317;Hettenschwil;AG
+5318;Mandach;AG
+5322;Koblenz;AG
+5400;Baden;AG
+5400;Baden 1;AG
+5408;Ennetbaden;AG
+5400;Baden 1 Postautodienst;AG
+5401;Baden;AG
+5402;Baden;AG
+5404;Baden;AG
+5405;Baden;AG
+5406;Baden;AG
+5412;Gebenstorf;AG
+5413;Birmenstorf AG;AG
+5415;Nussbaumen AG;AG
+5416;Kirchdorf AG;AG
+5417;Untersiggenthal;AG
+5420;Ehrendingen;AG
+5423;Freienwil;AG
+5425;Schneisingen;AG
+5426;Lengnau AG;AG
+5430;Wettingen;AG
+5430;Wettingen 1;AG
+5430;Wettingen 2;AG
+5430;Wettingen 3;AG
+5431;Wettingen Sonderdienste;AG
+5432;Neuenhof;AG
+5442;Fislisbach;AG
+5443;Niederrohrdorf;AG
+5444;Künten;AG
+5445;Eggenwil;AG
+5452;Oberrohrdorf;AG
+5453;Remetschwil;AG
+5454;Bellikon;AG
+5502;Hunzenschwil;AG
+5503;Schafisheim;AG
+5504;Othmarsingen;AG
+5505;Brunegg;AG
+5506;Mägenwil;AG
+5507;Mellingen;AG
+5512;Wohlenschwil;AG
+5522;Tägerig;AG
+5524;Nesselnbach;AG
+5524;Niederwil AG;AG
+5525;Fischbach-Göslikon;AG
+5600;Lenzburg;AG
+5600;Lenzburg 1;AG
+5600;Lenzburg 2;AG
+5600;Ammerswil AG;AG
+5603;Staufen;AG
+5604;Hendschiken;AG
+5605;Dottikon;AG
+5606;Dintikon;AG
+5607;Hägglingen;AG
+5608;Stetten AG;AG
+5610;Wohlen AG;AG
+5610;Wohlen AG 1;AG
+5610;Wohlen AG 2;AG
+5611;Anglikon;AG
+5619;Büttikon AG;AG
+5612;Villmergen;AG
+5613;Hilfikon;AG
+5614;Sarmenstorf;AG
+5615;Fahrwangen;AG
+5616;Meisterschwanden;AG
+5617;Tennwil;AG
+5618;Bettwil;AG
+5620;Bremgarten AG;AG
+5621;Zufikon;AG
+5620;Bremgarten AG Kaserne;AG
+5622;Waltenschwil;AG
+5623;Boswil;AG
+5624;Bünzen;AG
+5625;Kallern;AG
+5626;Hermetschwil-Staffeln;AG
+5627;Besenbüren;AG
+5628;Aristau;AG
+5630;Muri AG;AG
+5632;Buttwil;AG
+5634;Merenschwand;AG
+5636;Benzenschwil;AG
+5637;Beinwil (Freiamt);AG
+5642;Mühlau;AG
+5643;Sins;AG
+5644;Auw;AG
+5645;Aettenschwil;AG
+5646;Abtwil AG;AG
+5647;Oberrüti;AG
+5643;Alikon;AG
+5702;Niederlenz;AG
+5703;Seon;AG
+5704;Egliswil;AG
+5705;Hallwil;AG
+5706;Boniswil;AG
+5707;Seengen;AG
+5708;Birrwil;AG
+5712;Beinwil am See;AG
+5722;Gränichen;AG
+5723;Teufenthal AG;AG
+5724;Dürrenäsch;AG
+5725;Leutwil;AG
+5726;Unterkulm;AG
+5727;Oberkulm;AG
+5728;Gontenschwil;AG
+5732;Zetzwil;AG
+5733;Leimbach AG;AG
+5734;Reinach AG;AG
+5735;Pfeffikon LU;LU
+5736;Burg AG;AG
+5737;Menziken;AG
+5742;Kölliken;AG
+5745;Safenwil;AG
+5746;Walterswil SO;SO
+6000;Luzern;LU
+6000;Luzern 1 Annahme;LU
+6000;Luzern 4;LU
+6000;Luzern 6;LU
+6000;Luzern 7;LU
+6000;Luzern 10;LU
+6000;Luzern 11;LU
+6000;Luzern 14;LU
+6000;Luzern 15;LU
+6000;Luzern 16;LU
+6000;Luzern Zustellung;LU
+6002;Luzern;LU
+6003;Luzern;LU
+6004;Luzern;LU
+6005;Luzern;LU
+6006;Luzern;LU
+6010;Kriens;LU
+6012;Obernau;LU
+6013;Eigenthal;LU
+6014;Luzern;LU
+6015;Luzern;LU
+6016;Hellbühl;LU
+6017;Ruswil;LU
+6019;Sigigen;LU
+6018;Buttisholz;LU
+6020;Emmenbrücke;LU
+6020;Emmenbrücke 1;LU
+6020;Emmenbrücke 2;LU
+6020;Emmenbrücke 3;LU
+6022;Grosswangen;LU
+6023;Rothenburg;LU
+6024;Hildisrieden;LU
+6025;Neudorf;LU
+6026;Rain;LU
+6027;Römerswil LU;LU
+6028;Herlisberg;LU
+6030;Ebikon;LU
+6032;Emmen;LU
+6033;Buchrain;LU
+6034;Inwil;LU
+6035;Perlen;LU
+6036;Dierikon;LU
+6037;Root;LU
+6038;Gisikon;LU
+6042;Dietwil;AG
+6043;Adligenswil;LU
+6044;Udligenswil;LU
+6045;Meggen;LU
+6047;Kastanienbaum;LU
+6048;Horw;LU
+6052;Hergiswil NW;NW
+6053;Alpnachstad;OW
+6055;Alpnach Dorf;OW
+6056;Kägiswil;OW
+6060;Sarnen;OW
+6060;Ramersberg;OW
+6068;Melchsee-Frutt;OW
+6062;Wilen (Sarnen);OW
+6063;Stalden (Sarnen);OW
+6064;Kerns;OW
+6066;St. Niklausen OW;OW
+6067;Melchtal;OW
+6072;Sachseln;OW
+6073;Flüeli-Ranft;OW
+6074;Giswil;OW
+6078;Bürglen OW;OW
+6078;Lungern;OW
+3860;Brünig;BE
+6083;Hasliberg Hohfluh;BE
+6084;Hasliberg Wasserwendi;BE
+6085;Hasliberg Goldern;BE
+6086;Hasliberg Reuti;BE
+6010;Pilatus Kulm;OW
+6102;Malters;LU
+6103;Schwarzenberg LU;LU
+6105;Schachen LU;LU
+6106;Werthenstein;LU
+6110;Wolhusen;LU
+6114;Steinhuserberg;LU
+6110;Fontannen b. Wolhusen;LU
+6112;Doppleschwand;LU
+6113;Romoos;LU
+6122;Menznau;LU
+6123;Geiss;LU
+6125;Menzberg;LU
+6126;Daiwil;LU
+6130;Willisau;LU
+6132;Rohrmatt;LU
+6133;Hergiswil b. Willisau;LU
+6142;Gettnau;LU
+6143;Ohmstal;LU
+6144;Zell LU;LU
+6145;Fischbach LU;LU
+6146;Grossdietwil;LU
+6147;Altbüron;LU
+6152;Hüswil;LU
+6153;Ufhusen;LU
+6154;Hofstatt;LU
+6156;Luthern;LU
+6160;Entlebuch Businesszentrum;LU
+6162;Entlebuch;LU
+6163;Ebnet;LU
+6162;Rengg;LU
+6162;Finsterwald b. Entlebuch;LU
+6166;Hasle LU;LU
+6167;Bramboden;LU
+6170;Schüpfheim;LU
+6173;Flühli LU;LU
+6174;Sörenberg;LU
+6182;Escholzmatt;LU
+6192;Wiggen;LU
+6196;Marbach LU;LU
+6197;Schangnau;BE
+6203;Sempach Station;LU
+6204;Sempach;LU
+6205;Eich;LU
+6206;Neuenkirch;LU
+6207;Nottwil;LU
+6208;Oberkirch LU;LU
+6210;Sursee;LU
+6211;Buchs LU;LU
+6212;St. Erhard;LU
+6213;Knutwil;LU
+6214;Schenkon;LU
+6215;Beromünster;LU
+6215;Schwarzenbach LU;LU
+6216;Mauensee;LU
+6217;Kottwil;LU
+6218;Ettiswil;LU
+6221;Rickenbach LU;LU
+6222;Gunzwil;LU
+6231;Schlierbach;LU
+6232;Geuensee;LU
+6233;Büron;LU
+6234;Triengen;LU
+6234;Kulmerau;LU
+6236;Wilihof;LU
+6235;Winikon;LU
+6242;Wauwil;LU
+6243;Egolzwil;LU
+6244;Nebikon;LU
+6245;Ebersecken;LU
+6246;Altishofen;LU
+6247;Schötz;LU
+6248;Alberswil;LU
+6252;Dagmersellen;LU
+6253;Uffikon;LU
+6260;Reiden;LU
+6260;Reidermoos;LU
+6262;Langnau b. Reiden;LU
+6263;Richenthal;LU
+6264;Pfaffnau;LU
+6265;Roggliswil;LU
+6274;Eschenbach LU;LU
+6275;Ballwil;LU
+6276;Hohenrain;LU
+6277;Kleinwangen;LU
+6280;Hochdorf;LU
+6280;Urswil;LU
+6283;Baldegg;LU
+6284;Gelfingen;LU
+6285;Hitzkirch;LU
+6285;Retschwil;LU
+6289;Müswangen;LU
+6286;Altwis;LU
+6287;Aesch LU;LU
+6288;Schongau;LU
+6294;Ermensee;LU
+6295;Mosen;LU
+6300;Zug;ZG
+6300;Zug 1;ZG
+6330;Cham 2;ZG
+6301;Zug;ZG
+6310;Zug Sonderdienste;ZG
+6313;Edlibach;ZG
+6313;Finstersee;ZG
+6319;Allenwinden;ZG
+6315;Morgarten;ZG
+6312;Steinhausen;ZG
+6313;Menzingen;ZG
+6314;Unterägeri;ZG
+6314;Neuägeri;ZG
+6315;Oberägeri;ZG
+6315;Alosen;ZG
+6300;Zugerberg;ZG
+6317;Oberwil b. Zug;ZG
+6318;Walchwil;ZG
+6330;Cham;ZG
+6331;Hünenberg;ZG
+6332;Hagendorn;ZG
+6340;Baar;ZG
+6343;Rotkreuz;ZG
+6344;Meierskappel;LU
+6345;Neuheim;ZG
+6353;Weggis;LU
+6354;Vitznau;LU
+6356;Rigi Kaltbad;LU
+6362;Stansstad;NW
+6363;Obbürgen;NW
+6365;Kehrsiten;NW
+6370;Stans;NW
+6372;Ennetmoos;NW
+6373;Ennetbürgen;NW
+6374;Buochs;NW
+6375;Beckenried;NW
+6376;Emmetten;NW
+6377;Seelisberg;UR
+6382;Büren NW;NW
+6383;Dallenwil;NW
+6383;Niederrickenbach;NW
+6386;Wolfenschiessen;NW
+6387;Oberrickenbach;NW
+6388;Grafenort;OW
+6390;Engelberg;OW
+6402;Merlischachen;SZ
+6403;Küssnacht am Rigi;SZ
+6404;Greppen;LU
+6405;Immensee;SZ
+6410;Goldau;SZ
+6410;Rigi Klösterli;SZ
+6410;Rigi Staffel;SZ
+6410;Rigi Kulm;SZ
+6414;Oberarth;SZ
+6415;Arth;SZ
+6416;Steinerberg;SZ
+6417;Sattel;SZ
+6418;Rothenthurm;SZ
+6422;Steinen;SZ
+6423;Seewen SZ;SZ
+6424;Lauerz;SZ
+6430;Schwyz;SZ
+6436;Ried (Muotathal);SZ
+6432;Rickenbach b. Schwyz;SZ
+6433;Stoos SZ;SZ
+6434;Illgau;SZ
+6436;Muotathal;SZ
+6436;Bisisthal;SZ
+6438;Ibach;SZ
+6440;Brunnen;SZ
+6441;Rütli;UR
+6442;Gersau;SZ
+6443;Morschach;SZ
+6452;Sisikon;UR
+6452;Riemenstalden;SZ
+6454;Flüelen;UR
+6460;Altdorf UR;UR
+6461;Isenthal;UR
+6462;Seedorf UR;UR
+6463;Bürglen UR;UR
+6464;Spiringen;UR
+6465;Unterschächen;UR
+6466;Bauen;UR
+6467;Schattdorf;UR
+6469;Haldi b. Schattdorf;UR
+6468;Attinghausen;UR
+6472;Erstfeld;UR
+6473;Silenen;UR
+6474;Amsteg;UR
+6475;Bristen;UR
+6476;Intschi;UR
+6482;Gurtnellen;UR
+6484;Wassen UR;UR
+6485;Meien;UR
+6487;Göschenen;UR
+6490;Andermatt;UR
+6491;Realp;UR
+6493;Hospental;UR
+6500;Bellinzona;TI
+6500;Bellinzona 1;TI
+6500;Bellinzona 2;TI
+6500;Bellinzona 4;TI
+6500;Bellinzona 5;TI
+6501;Bellinzona;TI
+6500;Bellinzona Distribuzione;TI
+6500;Bellinzona Caserma;TI
+6503;Bellinzona;TI
+6506;Bellinzona 6 Autopostale TI;TI
+6512;Giubiasco;TI
+6513;Monte Carasso;TI
+6514;Sementina;TI
+6515;Gudo;TI
+6516;Cugnasco;TI
+6517;Arbedo;TI
+6518;Gorduno;TI
+6525;Gnosca;TI
+6526;Prosito;TI
+6527;Lodrino;TI
+6528;Camorino;TI
+6532;Castione;TI
+6533;Lumino;TI
+6534;S. Vittore;GR
+6535;Roveredo GR;GR
+6537;Grono;GR
+6523;Preonzo;TI
+6524;Moleno;TI
+6582;Pianezzo;TI
+6583;S. Antonio (Val Morobbia);TI
+6584;Carena;TI
+6549;Laura;GR
+6540;Castaneda;GR
+6541;Sta. Maria in Calanca;GR
+6538;Verdabbio;GR
+6542;Buseno;GR
+6543;Arvigo;GR
+6544;Braggio;GR
+6545;Selma;GR
+6546;Cauco;GR
+6547;Augio;GR
+6548;Rossa;GR
+6556;Leggia;GR
+6565;S. Bernardino;GR
+6557;Cama;GR
+6558;Lostallo;GR
+6558;Cabbiolo;GR
+6562;Soazza;GR
+6563;Mesocco;GR
+6572;Quartino;TI
+6573;Magadino;TI
+6574;Vira (Gambarogno);TI
+6575;S. Nazzaro;TI
+6575;Vairano;TI
+6576;Gerra (Gambarogno);TI
+6577;Ranzo;TI
+6578;Caviano;TI
+6579;Piazzogna;TI
+6571;Indemini;TI
+6592;S. Antonino;TI
+6593;Cadenazzo;TI
+6594;Contone;TI
+6595;Riazzino;TI
+6596;Gordola;TI
+6597;Agarone;TI
+6598;Tenero;TI
+6599;Robasacco;TI
+6600;Locarno;TI
+6600;Locarno 1;TI
+6600;Muralto;TI
+6600;Locarno 3 Stazione Autopost;TI
+6601;Locarno;TI
+6600;Locarno Distribuzione;TI
+6604;Locarno;TI
+6605;Locarno;TI
+6605;Monte Brè sopra Locarno;TI
+6656;Golino;TI
+6618;Arcegno;TI
+6646;Contra;TI
+6647;Mergoscia;TI
+6661;Auressio;TI
+6661;Loco;TI
+6661;Berzona;TI
+6611;Mosogno;TI
+6662;Russo;TI
+6664;Vergeletto;TI
+6611;Gresso;TI
+6611;Crana;TI
+6663;Comologno;TI
+6663;Spruga;TI
+6632;Vogorno;TI
+6631;Corippo;TI
+6633;Lavertezzo;TI
+6634;Brione (Verzasca);TI
+6635;Gerra (Verzasca);TI
+6636;Frasco;TI
+6637;Sonogno;TI
+6612;Ascona;TI
+6613;Porto Ronco;TI
+6614;Brissago;TI
+6614;Isole di Brissago;TI
+6616;Losone;TI
+6622;Ronco sopra Ascona;TI
+6644;Orselina;TI
+6645;Brione sopra Minusio;TI
+6648;Minusio;TI
+6655;Verdasio;TI
+6655;Rasa;TI
+6657;Palagnedra;TI
+6658;Borgnone;TI
+6659;Camedo;TI
+6659;Moneto;TI
+6652;Tegna;TI
+6653;Verscio;TI
+6654;Cavigliano;TI
+6655;Intragna;TI
+6670;Avegno;TI
+6677;Moghegno;TI
+6678;Coglio;TI
+6678;Lodano;TI
+6678;Giumaglio;TI
+6674;Riveo;TI
+6682;Linescio;TI
+6683;Cerentino;TI
+6685;Bosco/Gurin;TI
+6683;Niva (Vallemaggia);TI
+6684;Campo (Vallemaggia);TI
+6684;Cimalmotto;TI
+6690;Cavergno;TI
+6690;S. Carlo (Val Bavona);TI
+6692;Brontallo;TI
+6692;Menzonio;TI
+6693;Broglio;TI
+6694;Prato-Sornico;TI
+6695;Peccia;TI
+6695;Piano di Peccia;TI
+6696;Fusio;TI
+6672;Gordevio;TI
+6673;Maggia;TI
+6674;Someo;TI
+6675;Cevio;TI
+6676;Bignasco;TI
+6702;Claro;TI
+6703;Osogna;TI
+6705;Cresciano;TI
+6707;Iragna;TI
+6710;Biasca;TI
+6710;Biasca Stazione;TI
+6721;Ludiano;TI
+6722;Corzoneso;TI
+6716;Leontica;TI
+6723;Prugiasco;TI
+6723;Castro;TI
+6724;Ponto Valentino;TI
+6716;Lottigna;TI
+6719;Aquila;TI
+6720;Campo (Blenio);TI
+6721;Motto (Blenio);TI
+6713;Malvaglia;TI
+6714;Semione;TI
+6715;Dongio;TI
+6716;Acquarossa;TI
+6717;Dangio;TI
+6717;Torre;TI
+6718;Olivone;TI
+6718;Camperio;TI
+6742;Pollegio;TI
+6743;Bodio TI;TI
+6745;Giornico;TI
+6746;Lavorgo;TI
+6746;Calonico;TI
+6746;Nivo;TI
+6747;Chironico;TI
+6760;Faido;TI
+6760;Molare;TI
+6760;Calpiogna;TI
+6760;Campello;TI
+6760;Carì;TI
+6772;Rodi-Fiesso;TI
+6775;Ambrì;TI
+6776;Piotta;TI
+6777;Quinto;TI
+6777;Varenzo;TI
+6780;Airolo;TI
+6781;Villa Bedretto;TI
+6780;Madrano;TI
+6781;Bedretto;TI
+6744;Personico;TI
+6748;Anzonico;TI
+6749;Sobrio;TI
+6749;Cavagnago;TI
+6763;Mairengo;TI
+6763;Osco;TI
+6760;Rossura;TI
+6764;Chiggiogna;TI
+6773;Prato (Leventina);TI
+6774;Dalpe;TI
+6802;Rivera;TI
+6804;Bironico;TI
+6803;Camignolo;TI
+6807;Taverne;TI
+6808;Torricella;TI
+6814;Lamone-Cadempino;TI
+6815;Melide;TI
+6816;Bissone;TI
+6817;Maroggia;TI
+6818;Melano;TI
+6822;Arogno;TI
+6825;Capolago;TI
+6826;Riva San Vitale;TI
+6828;Balerna;TI
+6830;Chiasso;TI
+6830;Chiasso 1;TI
+6830;Chiasso 3;TI
+6839;Sagno;TI
+6837;Caneggio;TI
+6837;Bruzella;TI
+6838;Cabbio;TI
+6838;Muggio;TI
+6838;Scudellate;TI
+6832;Pedrinate;TI
+6832;Seseglio;TI
+6833;Vacallo;TI
+6834;Morbio Inferiore;TI
+6836;Serfontana;TI
+6835;Morbio Superiore;TI
+6809;Medeglia;TI
+6810;Isone;TI
+6805;Mezzovico;TI
+6806;Sigirino;TI
+6821;Rovio;TI
+6823;Pugerna;TI
+6850;Mendrisio;TI
+6850;Mendrisio Stazione;TI
+6850;Mendrisio Borgo;TI
+6875;Monte;TI
+6875;Casima;TI
+6873;Corteglia;TI
+6852;Genestrerio;TI
+6853;Ligornetto;TI
+6854;S. Pietro;TI
+6855;Stabio;TI
+6862;Rancate;TI
+6863;Besazio;TI
+6864;Arzo;TI
+6865;Tremona;TI
+6866;Meride;TI
+6867;Serpiano;TI
+6872;Salorino;TI
+6872;Somazzo;TI
+6874;Castel San Pietro;TI
+6877;Coldrerio;TI
+6883;Novazzano;TI
+6900;Lugano;TI
+6900;Lugano 1;TI
+6900;Massagno;TI
+6900;Lugano Distribuzione;TI
+6901;Lugano;TI
+6902;Lugano 2 Paradiso Caselle;TI
+6903;Lugano;TI
+6904;Lugano 4 Molino Nuovo Casel;TI
+6905;Lugano 5 Serv Autopostali;TI
+6906;Lugano 6 Cassarate Caselle;TI
+6913;Carabbia;TI
+6915;Pambio-Noranco;TI
+6916;Grancia;TI
+6917;Barbengo;TI
+6919;Carabietta;TI
+6921;Vico Morcote;TI
+6928;Manno;TI
+6929;Gravesano;TI
+6930;Bedano;TI
+6939;Arosio;TI
+6939;Mugena;TI
+6938;Vezio;TI
+6937;Breno;TI
+6938;Fescoggia;TI
+6949;Comano;TI
+6979;Brè sopra Lugano;TI
+6827;Brusino Arsizio;TI
+6912;Pazzallo;TI
+6914;Carona;TI
+6918;Figino;TI
+6922;Morcote;TI
+6924;Sorengo;TI
+6925;Gentilino;TI
+6926;Montagnola;TI
+6927;Agra;TI
+6932;Breganzona;TI
+6933;Muzzano;TI
+6934;Bioggio;TI
+6935;Bosco Luganese;TI
+6936;Cademario;TI
+6942;Savosa;TI
+6943;Vezia;TI
+6948;Porza;TI
+6950;Tesserete;TI
+6944;Cureglia;TI
+6945;Origlio;TI
+6946;Ponte Capriasca;TI
+6947;Vaglio;TI
+6954;Sala Capriasca;TI
+6954;Bigorio;TI
+6953;Lugaggia;TI
+6951;Insone;TI
+6951;Odogno;TI
+6956;Lopagno;TI
+6957;Roveredo TI;TI
+6958;Bidogno;TI
+6958;Corticiasca;TI
+6951;Scareglia;TI
+6951;Colla;TI
+6951;Bogno;TI
+6951;Cozzo;TI
+6955;Cagiallo;TI
+6955;Oggio;TI
+6951;Signôra;TI
+6959;Cimadera;TI
+6959;Maglio di Colla;TI
+6959;Certara;TI
+6959;Curtina;TI
+6959;Piandera Paese;TI
+6952;Canobbio;TI
+6962;Viganello;TI
+6963;Pregassona;TI
+6964;Davesco-Soragno;TI
+6965;Cadro;TI
+6966;Villa Luganese;TI
+6967;Dino;TI
+6968;Sonvico;TI
+6974;Aldesago;TI
+6976;Castagnola;TI
+6977;Ruvigliana;TI
+6978;Gandria;TI
+6990;Cassina d'Agno;TI
+6991;Neggio;TI
+6992;Vernate;TI
+6993;Iseo;TI
+6994;Aranno;TI
+6992;Cimo;TI
+6981;Bedigliora;TI
+6981;Biogno-Beride;TI
+6980;Castelrotto;TI
+6981;Bombinasco;TI
+6981;Banco;TI
+6999;Astano;TI
+6986;Miglieglia;TI
+6989;Purasca;TI
+6995;Molinazzo di Monteggio;TI
+6996;Ponte Cremenaga;TI
+6997;Sessa;TI
+6998;Termine;TI
+6982;Agno;TI
+6983;Magliaso;TI
+6984;Pura;TI
+6986;Curio;TI
+6986;Novaggio;TI
+6987;Caslano;TI
+6988;Ponte Tresa;TI
+7000;Chur;GR
+7000;Chur 1 Annahme;GR
+7000;Chur 1 Zustellung;GR
+7000;Chur Kaserne;GR
+7001;Chur;GR
+7002;Chur;GR
+7004;Chur;GR
+7006;Chur;GR
+7007;Chur;GR
+7012;Felsberg;GR
+7013;Domat/Ems;GR
+7015;Tamins;GR
+7017;Flims Dorf;GR
+7018;Flims Waldhaus;GR
+7023;Haldenstein;GR
+7026;Maladers;GR
+7031;Laax GR;GR
+7031;Laax GR 1;GR
+7032;Laax GR 2;GR
+7050;Arosa;GR
+7062;Passugg;GR
+7063;Praden;GR
+7064;Tschiertschen;GR
+7074;Malix;GR
+7075;Churwalden;GR
+7076;Parpan;GR
+7077;Valbella;GR
+7078;Lenzerheide/Lai;GR
+7082;Vaz/Obervaz;GR
+7083;Lantsch/Lenz;GR
+7084;Brienz/Brinzauls GR;GR
+7014;Trin;GR
+7016;Trin Mulin;GR
+7019;Fidaz;GR
+7027;Lüen;GR
+7027;Castiel;GR
+7028;St. Peter;GR
+7028;Pagig;GR
+7056;Molinis;GR
+7029;Peist;GR
+7057;Langwies;GR
+7058;Litzirüti;GR
+7104;Versam;GR
+7104;Arezen;GR
+7106;Tenna;GR
+7107;Safien Platz;GR
+7109;Thalkirch;GR
+7122;Valendas;GR
+7122;Carrera;GR
+7126;Castrisch;GR
+7130;Ilanz;GR
+7154;Ruschein;GR
+7155;Ladir;GR
+7151;Schluein;GR
+7153;Falera;GR
+7152;Sagogn;GR
+7127;Sevgein;GR
+7128;Riein;GR
+7111;Pitasch;GR
+7112;Duvin;GR
+7113;Camuns;GR
+7114;Uors (Lumnezia);GR
+7115;Surcasti;GR
+7116;Tersnaus;GR
+7141;Luven;GR
+7142;Cumbel;GR
+7143;Morissen;GR
+7144;Vella;GR
+7145;Degen;GR
+7146;Vattiz;GR
+7147;Vignogn;GR
+7148;Lumbrein;GR
+7148;Surin;GR
+7149;Vrin;GR
+7137;Flond;GR
+7138;Surcuolm;GR
+7132;Vals;GR
+7134;Obersaxen;GR
+7156;Pigniu;GR
+7156;Rueun;GR
+7157;Siat;GR
+7158;Waltensburg/Vuorz;GR
+7159;Andiast;GR
+7162;Tavanasa;GR
+7163;Danis;GR
+7164;Dardin;GR
+7165;Breil/Brigels;GR
+7166;Trun;GR
+7168;Schlans;GR
+7167;Zignau;GR
+7172;Rabius;GR
+7175;Sumvitg;GR
+7174;S. Benedetg;GR
+7180;Disentis/Mustér;GR
+7182;Cavardiras;GR
+7183;Mumpé Medel;GR
+7184;Curaglia;GR
+7185;Platta;GR
+7186;Segnas;GR
+7187;Camischolas;GR
+7189;Rueras;GR
+7188;Sedrun;GR
+7173;Surrein;GR
+7176;Cumpadials;GR
+7201;Untervaz Bahnhof;GR
+7203;Trimmis;GR
+7202;Says;GR
+7204;Untervaz;GR
+7205;Zizers;GR
+7206;Igis;GR
+7208;Malans GR;GR
+7212;Seewis Dorf;GR
+7213;Valzeina;GR
+7214;Grüsch;GR
+7215;Fanas;GR
+7220;Schiers;GR
+7228;Schuders;GR
+7226;Stels;GR
+7222;Lunden;GR
+7223;Buchen im Prättigau;GR
+7224;Putz;GR
+7228;Pusserein;GR
+7231;Pragg-Jenaz;GR
+7232;Furna;GR
+7233;Jenaz;GR
+7235;Fideris;GR
+7240;Küblis;GR
+7242;Luzein;GR
+7243;Pany;GR
+7244;Gadenstätt;GR
+7245;Ascharina;GR
+7246;St. Antönien;GR
+7241;Conters im Prättigau;GR
+7247;Saas im Prättigau;GR
+7249;Serneus;GR
+7250;Klosters;GR
+7252;Klosters Dorf;GR
+7260;Davos Dorf;GR
+7265;Davos Wolfgang;GR
+7270;Davos Platz;GR
+7270;Davos Platz 1;GR
+7272;Davos Clavadel;GR
+7276;Davos Frauenkirch;GR
+7277;Davos Glaris;GR
+7278;Davos Monstein;GR
+7302;Landquart;GR
+7303;Mastrils;GR
+7304;Maienfeld;GR
+7306;Fläsch;GR
+7307;Jenins;GR
+7310;Bad Ragaz;SG
+7317;Valens;SG
+7317;Vasön;SG
+7314;Vadura;SG
+7315;Vättis;SG
+7312;Pfäfers;SG
+7313;St. Margrethenberg;SG
+7320;Sargans;SG
+7325;Schwendi im Weisstannental;SG
+7326;Weisstannen;SG
+7323;Wangs;SG
+7324;Vilters;SG
+7402;Bonaduz;GR
+7403;Rhäzüns;GR
+7404;Feldis/Veulden;GR
+7405;Rothenbrunnen;GR
+7408;Cazis;GR
+7408;Realta;GR
+7411;Sils im Domleschg;GR
+7412;Scharans;GR
+7413;Fürstenaubruck;GR
+7414;Fürstenau;GR
+7415;Rodels;GR
+7416;Almens;GR
+7417;Paspels;GR
+7407;Trans;GR
+7418;Tumegl/Tomils;GR
+7419;Scheid;GR
+7430;Thusis;GR
+7425;Masein;GR
+7426;Flerden;GR
+7427;Urmein;GR
+7428;Tschappina;GR
+7428;Glaspass;GR
+7421;Summaprada;GR
+7422;Tartar;GR
+7423;Sarn;GR
+7424;Präz;GR
+7424;Dalin;GR
+7431;Mutten;GR
+7430;Rongellen;GR
+7432;Zillis;GR
+7433;Donat;GR
+7433;Farden;GR
+7433;Mathon;GR
+7433;Wergenstein;GR
+7433;Lohn GR;GR
+7434;Sufers;GR
+7435;Splügen;GR
+7436;Medels im Rheinwald;GR
+7437;Nufenen;GR
+7438;Hinterrhein;GR
+7440;Andeer;GR
+7442;Clugin;GR
+7443;Pignia;GR
+7444;Ausserferrera;GR
+7445;Innerferrera;GR
+7446;Campsut-Cröt;GR
+7447;Cresta (Avers);GR
+7447;Am Bach (Avers);GR
+7448;Juf;GR
+7450;Tiefencastel;GR
+7458;Mon;GR
+7459;Stierva;GR
+7451;Alvaschein;GR
+7452;Cunter;GR
+7453;Tinizong;GR
+7454;Rona;GR
+7455;Mulegns;GR
+7456;Sur;GR
+7457;Bivio;GR
+7460;Savognin;GR
+7462;Salouf;GR
+7463;Riom;GR
+7464;Parsonz;GR
+7472;Surava;GR
+7473;Alvaneu Bad;GR
+7477;Filisur;GR
+7482;Bergün/Bravuogn;GR
+7482;Stugl/Stuls;GR
+7484;Latsch;GR
+7482;Preda;GR
+7492;Alvaneu Dorf;GR
+7493;Schmitten (Albula);GR
+7494;Davos Wiesen;GR
+7500;St. Moritz;GR
+7500;St. Moritz 1;GR
+7500;St. Moritz 3;GR
+7502;Bever;GR
+7503;Samedan;GR
+7504;Pontresina;GR
+7505;Celerina/Schlarigna;GR
+7512;Champfèr;GR
+7513;Silvaplana;GR
+7514;Sils/Segl Maria;GR
+7514;Fex;GR
+7515;Sils/Segl Baselgia;GR
+7516;Maloja;GR
+7517;Plaun da Lej;GR
+7522;La Punt-Chamues-ch;GR
+7523;Madulain;GR
+7524;Zuoz;GR
+7525;S-chanf;GR
+7526;Cinuos-chel;GR
+7527;Brail;GR
+7530;Zernez;GR
+7532;Tschierv;GR
+7533;Fuldera;GR
+7534;Lü;GR
+7535;Valchava;GR
+7536;Sta. Maria Val Müstair;GR
+7537;Müstair;GR
+7542;Susch;GR
+7543;Lavin;GR
+7545;Guarda;GR
+7546;Ardez;GR
+7550;Scuol;GR
+7551;Ftan;GR
+7552;Vulpera;GR
+7553;Tarasp;GR
+7554;Sent;GR
+7554;Crusch;GR
+7556;Ramosch;GR
+7557;Vnà;GR
+7558;Strada;GR
+7559;Tschlin;GR
+7560;Martina;GR
+7562;Samnaun-Compatsch;GR
+7563;Samnaun Dorf;GR
+7602;Casaccia;GR
+7603;Vicosoprano;GR
+7604;Borgonovo;GR
+7605;Stampa;GR
+7606;Promontogno;GR
+7610;Soglio;GR
+7608;Castasegna;GR
+7742;Poschiavo;GR
+7742;Sfazù;GR
+7742;La Rösa;GR
+7743;Brusio;GR
+7747;Viano;GR
+7744;Campocologno;GR
+7710;Ospizio Bernina;GR
+7741;S. Carlo (Poschiavo);GR
+7710;Alp Grüm;GR
+7745;Li Curt;GR
+7746;Le Prese;GR
+7748;Campascio;GR
+8000;Zürich;ZH
+8001;Zürich;ZH
+8002;Zürich;ZH
+8003;Zürich;ZH
+8004;Zürich;ZH
+8005;Zürich;ZH
+8006;Zürich;ZH
+8008;Zürich;ZH
+8010;Zürich;ZH
+8010;Zürich BZ FP;ZH
+8010;Zürich Mülligen PL;ZH
+8020;Zürich 1;ZH
+8016;Zürich 16 Zustellung;ZH
+8080;Zürich 80;ZH
+8021;Zürich 1 Sihlpost;ZH
+8021;Zürich 1;ZH
+8022;Zürich;ZH
+8023;Zürich;ZH
+8024;Zürich;ZH
+8026;Zürich;ZH
+8027;Zürich;ZH
+8031;Zürich;ZH
+8032;Zürich;ZH
+8032;Zürich 32 Zustellung;ZH
+8033;Zürich;ZH
+8034;Zürich;ZH
+8036;Zürich;ZH
+8037;Zürich;ZH
+8038;Zürich;ZH
+8039;Zürich;ZH
+8040;Zürich;ZH
+8041;Zürich;ZH
+8042;Zürich;ZH
+8044;Zürich;ZH
+8045;Zürich;ZH
+8046;Zürich;ZH
+8047;Zürich;ZH
+8048;Zürich;ZH
+8049;Zürich;ZH
+8050;Zürich;ZH
+8050;Zürich Dist Ba;ZH
+8051;Zürich;ZH
+8052;Zürich;ZH
+8053;Zürich;ZH
+8055;Zürich;ZH
+8057;Zürich;ZH
+8058;Zürich;ZH
+8061;Zürich;ZH
+8063;Zürich;ZH
+8064;Zürich;ZH
+8088;Zürich;ZH
+8090;Zürich;ZH
+8091;Zürich;ZH
+8092;Zürich ETH-Zentrum;ZH
+8093;Zürich ETH-Hönggerberg;ZH
+8099;Zürich Sonderdienste;ZH
+8102;Oberengstringen;ZH
+8103;Unterengstringen;ZH
+8104;Weiningen ZH;ZH
+8105;Regensdorf;ZH
+8105;Watt;ZH
+8107;Buchs ZH;ZH
+8108;Dällikon;ZH
+8112;Otelfingen;ZH
+8113;Boppelsen;ZH
+8114;Dänikon ZH;ZH
+8115;Hüttikon;ZH
+5436;Würenlos;AG
+8117;Fällanden;ZH
+8121;Benglen;ZH
+8122;Binz;ZH
+8123;Ebmatingen;ZH
+8124;Maur;ZH
+8125;Zollikerberg;ZH
+8126;Zumikon;ZH
+8127;Forch;ZH
+8132;Hinteregg;ZH
+8132;Egg b. Zürich;ZH
+8133;Esslingen;ZH
+8134;Adliswil;ZH
+8134;Adliswil 1;ZH
+8134;Adliswil Sood;ZH
+8135;Langnau am Albis;ZH
+8136;Gattikon;ZH
+8143;Uetliberg;ZH
+8142;Uitikon Waldegg;ZH
+8143;Stallikon;ZH
+8152;Glattbrugg;ZH
+8152;Opfikon;ZH
+8153;Rümlang;ZH
+8154;Oberglatt ZH;ZH
+8155;Niederhasli;ZH
+8156;Oberhasli;ZH
+8157;Dielsdorf;ZH
+8158;Regensberg;ZH
+8162;Steinmaur;ZH
+8164;Bachs;ZH
+8165;Schöfflisdorf;ZH
+8166;Niederweningen;ZH
+8172;Niederglatt ZH;ZH
+8173;Neerach;ZH
+8174;Stadel b. Niederglatt;ZH
+8175;Windlach;ZH
+8180;Bülach;ZH
+8181;Höri;ZH
+8182;Hochfelden;ZH
+8184;Bachenbülach;ZH
+8185;Winkel;ZH
+8192;Glattfelden;ZH
+8193;Eglisau;ZH
+8194;Hüntwangen;ZH
+8195;Wasterkingen;ZH
+8196;Wil ZH;ZH
+8197;Rafz;ZH
+8200;Schaffhausen;SH
+8200;Schaffhausen 1;SH
+8200;Schaffhausen 1 Zust;SH
+8201;Schaffhausen;SH
+8202;Schaffhausen;SH
+8203;Schaffhausen;SH
+8204;Schaffhausen;SH
+8205;Schaffhausen;SH
+8207;Schaffhausen;SH
+8208;Schaffhausen;SH
+8219;Trasadingen;SH
+8228;Beggingen;SH
+8231;Hemmental;SH
+8234;Stetten SH;SH
+8235;Lohn SH;SH
+8236;Opfertshofen SH;SH
+8236;Büttenhardt;SH
+8242;Bibern SH;SH
+8242;Hofen SH;SH
+8243;Altdorf SH;SH
+8239;Dörflingen;SH
+8212;Neuhausen am Rheinfall;SH
+8212;Neuhausen am Rheinfall 1;SH
+8213;Neunkirch;SH
+8214;Gächlingen;SH
+8215;Hallau;SH
+8216;Oberhallau;SH
+8217;Wilchingen;SH
+8218;Osterfingen;SH
+8222;Beringen;SH
+8223;Guntmadingen;SH
+8224;Löhningen;SH
+8225;Siblingen;SH
+8226;Schleitheim;SH
+8232;Merishausen;SH
+8233;Bargen SH;SH
+8240;Thayngen;SH
+8241;Barzheim;SH
+8245;Feuerthalen;ZH
+8246;Langwiesen;ZH
+8247;Flurlingen;ZH
+8252;Schlatt TG;TG
+8254;Basadingen;TG
+8259;Kaltenbach;TG
+8253;Diessenhofen;TG
+8255;Schlattingen;TG
+8259;Etzwilen;TG
+8260;Stein am Rhein;SH
+8259;Wagenhausen;TG
+8261;Hemishofen;SH
+8262;Ramsen;SH
+8263;Buch SH;SH
+8264;Eschenz;TG
+8265;Mammern;TG
+8266;Steckborn;TG
+8267;Berlingen;TG
+8268;Mannenbach-Salenstein;TG
+8272;Ermatingen;TG
+8273;Triboltingen;TG
+8274;Tägerwilen;TG
+8280;Kreuzlingen;TG
+8280;Kreuzlingen 1;TG
+8280;Kreuzlingen 2;TG
+8280;Kreuzlingen 3;TG
+8301;Glattzentrum b. Wallisellen;ZH
+8302;Kloten;ZH
+8303;Bassersdorf;ZH
+8304;Wallisellen;ZH
+8305;Dietlikon;ZH
+8306;Brüttisellen;ZH
+8307;Effretikon;ZH
+8315;Lindau;ZH
+8308;Illnau;ZH
+8308;Agasul;ZH
+8309;Nürensdorf;ZH
+8310;Kemptthal;ZH
+8312;Winterberg ZH;ZH
+8311;Brütten;ZH
+8307;Ottikon b. Kemptthal;ZH
+8314;Kyburg;ZH
+8320;Fehraltorf;ZH
+8489;Wildberg;ZH
+8322;Madetswil;ZH
+8330;Pfäffikon ZH;ZH
+8331;Auslikon;ZH
+8332;Russikon;ZH
+8335;Hittnau;ZH
+8340;Hinwil;ZH
+8342;Wernetshausen;ZH
+8344;Bäretswil;ZH
+8345;Adetswil;ZH
+8352;Elsau;ZH
+8353;Elgg;ZH
+8354;Hofstetten ZH;ZH
+8355;Aadorf;TG
+8356;Ettenhausen TG;TG
+8357;Guntershausen b. Aadorf;TG
+8360;Eschlikon TG;TG
+8362;Balterswil;TG
+8363;Bichelsee;TG
+8370;Sirnach;TG
+8372;Wiezikon b. Sirnach;TG
+8374;Oberwangen TG;TG
+8374;Dussnang;TG
+8376;Fischingen;TG
+8376;Au TG;TG
+8400;Winterthur;ZH
+8400;Winterthur 1 Annahme;ZH
+8400;Winterthur Zustellung;ZH
+8400;Winterthur Kaserne;ZH
+8401;Winterthur;ZH
+8402;Winterthur;ZH
+8404;Winterthur;ZH
+8405;Winterthur;ZH
+8406;Winterthur;ZH
+8408;Winterthur;ZH
+8409;Winterthur;ZH
+8410;Winterthur;ZH
+8411;Winterthur;ZH
+8412;Aesch (Neftenbach);ZH
+8413;Neftenbach;ZH
+8414;Buch am Irchel;ZH
+8415;Berg am Irchel;ZH
+8415;Gräslikon;ZH
+8416;Flaach;ZH
+8418;Schlatt b. Winterthur;ZH
+8422;Pfungen;ZH
+8421;Dättlikon;ZH
+8423;Embrach-Embraport;ZH
+8424;Embrach;ZH
+8425;Oberembrach;ZH
+8426;Lufingen;ZH
+8427;Rorbas-Freienstein;ZH
+8428;Teufen ZH;ZH
+8192;Zweidlen;ZH
+8187;Weiach;ZH
+5466;Kaiserstuhl AG;AG
+5467;Fisibach;AG
+5332;Rekingen AG;AG
+5330;Bad Zurzach;AG
+5323;Rietheim;AG
+5464;Rümikon AG;AG
+5465;Mellikon;AG
+5463;Wislikofen;AG
+5462;Siglistorf;AG
+5333;Baldingen;AG
+5334;Böbikon;AG
+8442;Hettlingen;ZH
+8444;Henggart;ZH
+8447;Dachsen;ZH
+8248;Uhwiesen;ZH
+8450;Andelfingen;ZH
+8453;Alten;ZH
+8451;Kleinandelfingen;ZH
+8452;Adlikon b. Andelfingen;ZH
+8457;Humlikon;ZH
+8458;Dorf;ZH
+8459;Volken;ZH
+8454;Buchberg;SH
+8455;Rüdlingen;SH
+8460;Marthalen;ZH
+8464;Ellikon am Rhein;ZH
+8461;Oerlingen;ZH
+8465;Rudolfingen;ZH
+8466;Trüllikon;ZH
+8462;Rheinau;ZH
+8463;Benken ZH;ZH
+8472;Seuzach;ZH
+8404;Reutlingen (Winterthur);ZH
+8474;Dinhard;ZH
+8475;Ossingen;ZH
+8476;Unterstammheim;ZH
+8477;Oberstammheim;ZH
+8471;Rutschwil (Dägerlen);ZH
+8478;Thalheim an der Thur;ZH
+8479;Altikon;ZH
+8467;Truttikon;ZH
+8468;Guntalingen;ZH
+8468;Waltalingen;ZH
+8482;Sennhof (Winterthur);ZH
+8483;Kollbrunn;ZH
+8484;Weisslingen;ZH
+8484;Neschwil;ZH
+8484;Theilingen;ZH
+8486;Rikon im Tösstal;ZH
+8487;Rämismühle;ZH
+8487;Zell ZH;ZH
+8488;Turbenthal;ZH
+8492;Wila;ZH
+8493;Saland;ZH
+8494;Bauma;ZH
+8496;Steg im Tösstal;ZH
+8497;Fischenthal;ZH
+8498;Gibswil;ZH
+8495;Schmidrüti;ZH
+8499;Sternenberg;ZH
+8500;Frauenfeld;TG
+8500;Frauenfeld 1;TG
+8500;Gerlikon;TG
+8500;Frauenfeld 1 Zustellung;TG
+8501;Frauenfeld;TG
+8502;Frauenfeld;TG
+8503;Frauenfeld;TG
+8505;Pfyn;TG
+8506;Lanzenneunforn;TG
+8507;Hörhausen;TG
+8508;Homburg;TG
+8512;Thundorf;TG
+8512;Lustdorf;TG
+8514;Amlikon-Bissegg;TG
+8522;Häuslenen;TG
+8523;Hagenbuch ZH;ZH
+8524;Uesslingen;TG
+8525;Niederneunforn;TG
+8526;Oberneunforn;TG
+8532;Warth;TG
+8524;Buch b. Frauenfeld;TG
+8532;Weiningen TG;TG
+8535;Herdern;TG
+8536;Hüttwilen;TG
+8537;Nussbaumen TG;TG
+8542;Wiesendangen;ZH
+8404;Stadel (Winterthur);ZH
+8545;Rickenbach ZH;ZH
+8544;Attikon;ZH
+8546;Islikon;TG
+8547;Gachnang;TG
+8548;Ellikon an der Thur;ZH
+8552;Felben-Wellhausen;TG
+8553;Hüttlingen-Mettendorf;TG
+8554;Müllheim-Wigoltingen;TG
+8554;Bonau;TG
+8555;Müllheim Dorf;TG
+8556;Wigoltingen;TG
+8564;Lipperswil;TG
+8558;Raperswilen;TG
+8269;Fruthwilen;TG
+8560;Märstetten;TG
+8561;Ottoberg;TG
+8565;Hugelshofen;TG
+8566;Dotnacht;TG
+8566;Neuwilen;TG
+8564;Engwilen;TG
+8564;Wäldi;TG
+8570;Weinfelden;TG
+8572;Berg TG;TG
+8573;Siegershausen;TG
+8574;Illighausen;TG
+8575;Bürglen TG;TG
+8576;Mauren TG;TG
+8577;Schönholzerswilen;TG
+9217;Neukirch an der Thur;TG
+8580;Amriswil;TG
+8580;Sommeri;TG
+8582;Dozwil;TG
+8580;Hagenwil b. Amriswil;TG
+8581;Schocherswil;TG
+8588;Zihlschlacht;TG
+8589;Sitterdorf;TG
+8583;Sulgen;TG
+8583;Götighofen;TG
+8583;Donzhausen;TG
+8584;Leimbach TG;TG
+8584;Opfershofen TG;TG
+8585;Mattwil;TG
+8585;Happerswil;TG
+8585;Langrickenbach;TG
+8585;Zuben;TG
+8586;Erlen;TG
+8586;Andwil TG;TG
+8586;Kümmertshausen;TG
+8586;Riedt b. Erlen;TG
+8587;Oberaach;TG
+8590;Romanshorn;TG
+8599;Salmsach;TG
+8592;Uttwil;TG
+8593;Kesswil;TG
+8594;Güttingen;TG
+8595;Altnau;TG
+8596;Scherzingen;TG
+8597;Landschlacht;TG
+8598;Bottighofen;TG
+8600;Dübendorf;ZH
+8600;Dübendorf 1;ZH
+8600;Dübendorf 2;ZH
+8602;Wangen b. Dübendorf;ZH
+8603;Schwerzenbach;ZH
+8604;Volketswil;ZH
+8605;Gutenswil;ZH
+8606;Nänikon;ZH
+8606;Greifensee;ZH
+8607;Aathal-Seegräben;ZH
+8608;Bubikon;ZH
+8610;Uster;ZH
+8610;Uster 1;ZH
+8612;Uster 2;ZH
+8613;Uster 3;ZH
+8614;Bertschikon (Gossau ZH);ZH
+8615;Wermatswil;ZH
+8616;Riedikon;ZH
+8617;Mönchaltorf;ZH
+8618;Oetwil am See;ZH
+8620;Wetzikon ZH;ZH
+8620;Wetzikon ZH 1;ZH
+8621;Wetzikon ZH Robenhausen;ZH
+8622;Wetzikon ZH;ZH
+8623;Wetzikon ZH;ZH
+8624;Grüt (Gossau ZH);ZH
+8625;Gossau ZH;ZH
+8626;Ottikon (Gossau ZH);ZH
+8627;Grüningen;ZH
+8630;Rüti ZH;ZH
+8632;Tann;ZH
+8633;Wolfhausen;ZH
+8634;Hombrechtikon;ZH
+8635;Dürnten;ZH
+8636;Wald ZH;ZH
+8639;Faltigberg;ZH
+8637;Laupen ZH;ZH
+8638;Goldingen;SG
+8640;Rapperswil SG;SG
+8640;Kempraten;SG
+8640;Rapperswil SG Zustellung;SG
+8645;Jona;SG
+8646;Wagen;SG
+8700;Küsnacht ZH;ZH
+8702;Zollikon;ZH
+8702;Zollikon Dorf;ZH
+8703;Erlenbach ZH;ZH
+8704;Herrliberg;ZH
+8706;Meilen;ZH
+8707;Uetikon am See;ZH
+8708;Männedorf;ZH
+8712;Stäfa;ZH
+8713;Uerikon;ZH
+8714;Feldbach;ZH
+8715;Bollingen;SG
+8716;Schmerikon;SG
+8717;Benken SG;SG
+8718;Schänis;SG
+8722;Kaltbrunn;SG
+8723;Rufi;SG
+8725;Ernetschwil;SG
+8726;Ricken SG;SG
+8727;Walde SG;SG
+8730;Uznach;SG
+8732;Neuhaus SG;SG
+8733;Eschenbach SG;SG
+8734;Ermenswil;SG
+8735;St. Gallenkappel;SG
+8735;Rüeterswil;SG
+8737;Gommiswald;SG
+8738;Uetliburg SG;SG
+8739;Rieden SG;SG
+8740;Uznach Vögele Versandhaus;SG
+8750;Glarus;GL
+8750;Riedern;GL
+8750;Klöntal;GL
+8751;Urnerboden;UR
+8752;Näfels;GL
+8753;Mollis;GL
+8754;Netstal;GL
+8755;Ennenda;GL
+8756;Mitlödi;GL
+8762;Schwanden GL;GL
+8762;Schwändi b. Schwanden;GL
+8762;Sool;GL
+8765;Engi;GL
+8766;Matt;GL
+8767;Elm;GL
+8772;Nidfurn;GL
+8773;Haslen GL;GL
+8775;Luchsingen;GL
+8775;Hätzingen;GL
+8777;Diesbach GL;GL
+8782;Rüti GL;GL
+8783;Linthal;GL
+8784;Braunwald;GL
+8800;Thalwil;ZH
+8802;Kilchberg ZH;ZH
+8803;Rüschlikon;ZH
+8804;Au ZH;ZH
+8805;Richterswil;ZH
+8805;Richterswil Burghalden SOB;ZH
+8806;Bäch SZ;SZ
+8807;Freienbach;SZ
+8808;Pfäffikon SZ;SZ
+8810;Horgen;ZH
+8810;Horgen 1;ZH
+8813;Horgen;ZH
+8815;Horgenberg;ZH
+8816;Hirzel;ZH
+8820;Wädenswil;ZH
+8824;Schönenberg ZH;ZH
+8825;Hütten;ZH
+8832;Wollerau;SZ
+8833;Samstagern;ZH
+8834;Schindellegi;SZ
+8835;Feusisberg;SZ
+8836;Bennau;SZ
+8840;Einsiedeln;SZ
+8840;Trachslau;SZ
+8849;Alpthal;SZ
+8846;Willerzell;SZ
+8847;Egg SZ;SZ
+8841;Gross;SZ
+8844;Euthal;SZ
+8845;Studen SZ;SZ
+8842;Unteriberg;SZ
+8843;Oberiberg;SZ
+8852;Altendorf;SZ
+8853;Lachen SZ;SZ
+8854;Siebnen;SZ
+8854;Galgenen;SZ
+8855;Wangen SZ;SZ
+8856;Tuggen;SZ
+8857;Vorderthal;SZ
+8858;Innerthal;SZ
+8862;Schübelbach;SZ
+8863;Buttikon SZ;SZ
+8864;Reichenburg;SZ
+8865;Bilten;GL
+8866;Ziegelbrücke;GL
+8867;Niederurnen;GL
+8868;Oberurnen;GL
+8872;Weesen;SG
+8873;Amden;SG
+8874;Mühlehorn;GL
+8758;Obstalden;GL
+8757;Filzbach;GL
+8877;Murg;SG
+8878;Quinten;SG
+8880;Walenstadt;SG
+8881;Walenstadtberg;SG
+8881;Knoblisbühl;SG
+8881;Tscherlach;SG
+8882;Unterterzen;SG
+8883;Quarten;SG
+8884;Oberterzen;SG
+8885;Mols;SG
+8887;Mels;SG
+8886;Mädris-Vermol;SG
+8889;Plons;SG
+8888;Heiligkreuz (Mels);SG
+8890;Flums;SG
+8892;Berschis;SG
+8893;Flums Hochwiese;SG
+8894;Flumserberg Saxli;SG
+8895;Flumserberg Portels;SG
+8896;Flumserberg Bergheim;SG
+8897;Flumserberg Tannenheim;SG
+8898;Flumserberg Tannenbodenalp;SG
+8902;Urdorf;ZH
+8903;Birmensdorf ZH;ZH
+8904;Aesch ZH;ZH
+8905;Arni-Islisberg;AG
+8906;Bonstetten;ZH
+8907;Wettswil;ZH
+8908;Hedingen;ZH
+8910;Affoltern am Albis;ZH
+8909;Zwillikon;ZH
+8911;Rifferswil;ZH
+8912;Obfelden;ZH
+8913;Ottenbach;ZH
+8914;Aeugst am Albis;ZH
+8914;Aeugstertal;ZH
+8915;Hausen am Albis;ZH
+8916;Jonen;AG
+8917;Oberlunkhofen;AG
+8918;Unterlunkhofen;AG
+8919;Rottenschwil;AG
+8925;Ebertswil;ZH
+8926;Kappel am Albis;ZH
+8932;Mettmenstetten;ZH
+8933;Maschwanden;ZH
+8934;Knonau;ZH
+8942;Oberrieden;ZH
+8135;Sihlbrugg Station;ZH
+6340;Sihlbrugg;ZG
+8951;Fahrweid;ZH
+8952;Schlieren;ZH
+8953;Dietikon;ZH
+8953;Dietikon 1;ZH
+8953;Dietikon 2;ZH
+8954;Geroldswil;ZH
+8955;Oetwil an der Limmat;ZH
+8956;Killwangen;AG
+8957;Spreitenbach;AG
+8962;Bergdietikon;AG
+8964;Rudolfstetten;AG
+8965;Berikon;AG
+8966;Oberwil-Lieli;AG
+8967;Widen;AG
+9000;St. Gallen;SG
+9000;St. Gallen 1 Annahme;SG
+9000;St. Gallen Dist Ba;SG
+9000;St. Gallen Kaserne;SG
+9001;St. Gallen;SG
+9004;St. Gallen;SG
+9006;St. Gallen;SG
+9007;St. Gallen;SG
+9008;St. Gallen;SG
+9010;St. Gallen;SG
+9011;St. Gallen;SG
+9012;St. Gallen;SG
+9013;St. Gallen;SG
+9014;St. Gallen;SG
+9015;St. Gallen;SG
+9016;St. Gallen;SG
+9030;Abtwil SG;SG
+9032;Engelburg;SG
+9033;Untereggen;SG
+9034;Eggersriet;SG
+9035;Grub AR;AR
+9036;Grub SG;SG
+9037;Speicherschwendi;AR
+9038;Rehetobel;AR
+9042;Speicher;AR
+9043;Trogen;AR
+9044;Wald AR;AR
+9050;Appenzell;AI
+9052;Niederteufen;AR
+9053;Teufen AR;AR
+9054;Haslen AI;AI
+9055;Bühler;AR
+9056;Gais;AR
+9057;Weissbad;AI
+9058;Brülisau;AI
+9062;Lustmühle;AR
+9063;Stein AR;AR
+9064;Hundwil;AR
+9100;Herisau;AR
+9100;Herisau 1;AR
+9102;Herisau;AR
+9103;Schwellbrunn;AR
+9104;Waldstatt;AR
+9105;Schönengrund;AR
+9107;Urnäsch;AR
+9108;Gonten;AI
+9112;Schachen b. Herisau;AR
+9113;Degersheim;SG
+9114;Hoffeld;SG
+9115;Dicken;SG
+9116;Wolfertswil;SG
+9122;Mogelsberg;SG
+9123;Nassen;SG
+9125;Brunnadern;SG
+9126;Necker;SG
+9127;St. Peterzell;SG
+9633;Bächli (Hemberg);SG
+9200;Gossau SG;SG
+9200;Gossau SG 1;SG
+9200;Gossau SG 2;SG
+9203;Niederwil SG;SG
+9204;Andwil SG;SG
+9205;Waldkirch;SG
+9212;Arnegg;SG
+9213;Hauptwil;TG
+9214;Kradolf-Schönenberg;TG
+9216;Heldswil;TG
+9215;Schönenberg an der Thur;TG
+9215;Buhwil;TG
+9220;Bischofszell;TG
+9223;Schweizersholz;TG
+9223;Halden;TG
+9216;Hohentannen;TG
+9225;Wilen (Gottshaus);TG
+9225;St. Pelagiberg;TG
+9230;Flawil;SG
+9230;Flawil 1;SG
+9230;Flawil 2 Botsberg;SG
+9231;Egg (Flawil);SG
+9604;Oberrindal;SG
+9604;Lütisburg;SG
+9240;Uzwil;SG
+9240;Niederglatt SG;SG
+9242;Oberuzwil;SG
+9248;Bichwil;SG
+9243;Jonschwil;SG
+9244;Niederuzwil;SG
+9245;Oberbüren;SG
+9246;Niederbüren;SG
+9247;Henau;SG
+9249;Algetshausen;SG
+9300;Wittenbach;SG
+9304;Bernhardzell;SG
+9305;Berg SG;SG
+9306;Freidorf TG;TG
+9315;Winden;TG
+9308;Lömmenschwil;SG
+9312;Häggenschwil;SG
+9313;Muolen;SG
+9314;Steinebrunn;TG
+9315;Neukirch (Egnach);TG
+9320;Arbon;TG
+9320;Frasnacht;TG
+9320;Stachen;TG
+9322;Egnach;TG
+9323;Steinach;SG
+9325;Roggwil TG;TG
+9326;Horn;TG
+9327;Tübach;SG
+9400;Rorschach;SG
+9404;Rorschacherberg;SG
+9402;Mörschwil;SG
+9403;Goldach;SG
+9405;Wienacht-Tobel;AR
+9410;Heiden;AR
+9411;Reute AR;AR
+9413;Oberegg;AI
+9414;Schachen b. Reute;AR
+9422;Staad SG;SG
+9423;Altenrhein;SG
+9424;Rheineck;SG
+9425;Thal;SG
+9426;Lutzenberg;AR
+9427;Wolfhalden;AR
+9428;Walzenhausen;AR
+9430;St. Margrethen SG;SG
+9428;Platz AR;AR
+9434;Au SG;SG
+9435;Heerbrugg;SG
+9436;Balgach;SG
+9437;Marbach SG;SG
+9450;Lüchingen;SG
+9442;Berneck;SG
+9443;Widnau;SG
+9444;Diepoldsau;SG
+9445;Rebstein;SG
+9450;Altstätten SG;SG
+9451;Kriessern;SG
+9452;Hinterforst;SG
+9453;Eichberg;SG
+9462;Montlingen;SG
+9463;Oberriet SG;SG
+9464;Rüthi (Rheintal);SG
+9464;Lienz;SG
+9465;Salez;SG
+9466;Sennwald;SG
+9467;Frümsen;SG
+9468;Sax;SG
+9469;Haag (Rheintal);SG
+9470;Buchs SG;SG
+9470;Buchs SG 1;SG
+9470;Buchs SG Räfis;SG
+9472;Grabs;SG
+9472;Grabserberg;SG
+9473;Gams;SG
+9475;Sevelen;SG
+9476;Weite;SG
+9477;Trübbach;SG
+9478;Azmoos;SG
+9479;Oberschan;SG
+9485;Nendeln;FL
+9486;Schaanwald;FL
+9487;Gamprin-Bendern;FL
+9488;Schellenberg;FL
+9490;Vaduz;FL
+9491;Ruggell;FL
+9492;Eschen;FL
+9493;Mauren FL;FL
+9494;Schaan;FL
+9495;Triesen;FL
+9496;Balzers;FL
+9497;Triesenberg;FL
+9500;Wil SG;SG
+9500;Wil SG 1;SG
+9500;Wil SG 2;SG
+9500;Wil SG 1 Zustellung;SG
+9502;Braunau;TG
+9503;Stehrenberg;TG
+9504;Friltschen;TG
+9506;Lommis;TG
+9507;Stettfurt;TG
+9508;Weingarten-Kalthäusern;TG
+9512;Rossrüti;SG
+9514;Wuppenau;TG
+9515;Hosenruck;TG
+9517;Mettlen;TG
+9565;Rothenhausen;TG
+9523;Züberwangen;SG
+9524;Zuzwil SG;SG
+9525;Lenggenwil;SG
+9526;Zuckenriet;SG
+9527;Niederhelfenschwil;SG
+9532;Rickenbach b. Wil;TG
+9533;Kirchberg SG;SG
+9534;Gähwil;SG
+9535;Wilen b. Wil;TG
+9536;Schwarzenbach SG;SG
+9542;Münchwilen TG;TG
+9543;St. Margarethen TG;TG
+9545;Wängi;TG
+9546;Tuttwil;TG
+9547;Wittenwil;TG
+9548;Matzingen;TG
+9552;Bronschhofen;SG
+9553;Bettwiesen;TG
+9554;Tägerschen;TG
+9555;Tobel;TG
+9556;Affeltrangen;TG
+9562;Märwil;TG
+9565;Schmidshof;TG
+9565;Oppikon;TG
+9565;Bussnang;TG
+9573;Littenheid;TG
+9601;Lütisburg Station;SG
+9602;Bazenheid;SG
+9602;Müselbach;SG
+9606;Bütschwil;SG
+9607;Mosnang;SG
+9608;Ganterschwil;SG
+9612;Dreien;SG
+9613;Mühlrüti;SG
+9614;Libingen;SG
+9615;Dietfurt;SG
+9620;Lichtensteig;SG
+9621;Oberhelfenschwil;SG
+9622;Krinau;SG
+9630;Wattwil;SG
+9631;Ulisbach;SG
+9633;Hemberg;SG
+9642;Ebnat-Kappel;SG
+9643;Krummenau;SG
+9650;Nesslau;SG
+9651;Ennetbühl;SG
+9655;Stein SG;SG
+9652;Neu St. Johann;SG
+9656;Alt St. Johann;SG
+9657;Unterwasser;SG
+9658;Wildhaus;SG
+3185;Schmitten FR;FR
+3113;Rubigen;BE
+3900;Brig Zustellung;VS
+6304;Zug;ZG
+6911;Campione d'Italia;IT
+8238;Büsingen;DE
+3003;Bern 3 Nationalrat;BE
+3003;Bern 3 Ständerat;BE
+6302;Zug;ZG
+6303;Zug;ZG
+1289;Genève Services Spéciaux;GE
+7003;Chur Postauto GR Reg. Chur;GR
+6900;Lugano 3;TI
+3024;Bern;BE
+1017;Lausanne Charles Veillon SA;VD
+1934;Bruson;VS
+3800;Sundlauenen;BE
+3030;Bern;BE
+1031;Mex VD;VD
+1734;Tentlingen;FR
+1029;Villars-Ste-Croix;VD
+1400;Cheseaux-Noréaz;VD
+9101;Herisau;AR
+3044;Innerberg;BE
+1295;Mies;VD
+1295;Tannay;VD
+1920;Martigny 1 Distribution;VS
+6370;Oberdorf NW;NW
+8317;Tagelswangen;ZH
+3855;Schwanden b. Brienz;BE
+3700;Spiezwiler;BE
+3961;St-Jean VS;VS
+3380;Walliswil b. Niederbipp;BE
+6908;Massagno Caselle;TI
+6009;Luzern;LU
+1267;Vich;VD
+1267;Coinsins;VD
+8044;Gockhausen;ZH
+1700;Fribourg 1 Dépôt;FR
+5232;Villigen PSI;AG
+6349;Baar Sonderdienste;ZG
+8614;Sulzbach;ZH
+1965;Chandolin (Savièse);VS
+1595;Clavaleyres;BE
+2735;Champoz;BE
+2715;Monible;BE
+2827;Schelten;BE
+2830;Vellerat;JU
+2717;Rebévelier;BE
+2575;Hagneck;BE
+2572;Mörigen;BE
+2556;Schwadernau;BE
+1470;Bollion;FR
+1773;Chandon;FR
+1534;Chapelle (Broye);FR
+1473;Châtillon FR;FR
+1475;Forel FR;FR
+1483;Frasses;FR
+1566;Les Friques;FR
+1484;Granges-de-Vesin;FR
+1470;Lully FR;FR
+1475;Montbrelloz;FR
+1541;Morens FR;FR
+1528;Praratoud;FR
+1410;Prévondavaux;FR
+1773;Russy;FR
+1470;Seiry;FR
+1541;Sévaz;FR
+1565;Vallon;FR
+1483;Vesin;FR
+1680;Berlens;FR
+1670;Bionnens;FR
+1675;Blessens;FR
+1608;Chapelle (Glâne);FR
+1694;Chavannes-sous-Orsonnens;FR
+1697;Les Ecasseys;FR
+1670;Esmonts;FR
+1673;Gillarens;FR
+1681;Hennens;FR
+1688;Lieffrens;FR
+1690;Lussy FR;FR
+1687;La Magne;FR
+1674;Montet (Glâne);FR
+1674;Morlens;FR
+1675;Mossel;FR
+1686;La Neirigue;FR
+1694;Villargiroud;FR
+1653;Châtel-sur-Montsalvens;FR
+1669;Lessoc;FR
+1625;Maules;FR
+1652;Villarbeney;FR
+1666;Villars-sous-Mont;FR
+1782;Autafond;FR
+1782;La Corbaz;FR
+1754;Corjolens;FR
+1782;Cormagens;FR
+1730;Ecuvillens;FR
+1724;Essert FR;FR
+1726;Farvagny-le-Petit;FR
+1724;Ferpicloz;FR
+1726;Grenilles;FR
+1782;Lossy;FR
+1756;Lovens;FR
+1727;Magnedens;FR
+1724;Montévraz;FR
+1724;Oberried FR;FR
+1723;Pierrafortscha;FR
+1772;Ponthaux;FR
+1726;Posat;FR
+1695;Rueyres-St-Laurent;FR
+1724;Senèdes;FR
+1695;Villarsel-le-Gibloux;FR
+1723;Villarsel-sur-Marly;FR
+1724;Zénauva;FR
+1721;Cormérod;FR
+1721;Courtion;FR
+1792;Guschelmuth;FR
+1784;Wallenried;FR
+1716;Oberschrot;FR
+1719;Zumholz;FR
+1609;Besencens;FR
+1609;Fiaugères;FR
+1624;Grattavache;FR
+1174;Pizy;VD
+1787;Mur (Vully) VD;VD
+1580;Oleyres;VD
+1148;Chavannes-le-Veyron;VD
+1148;Mauraz;VD
+1376;Eclagnens;VD
+1376;Goumoens-le-Jux;VD
+1041;Naz;VD
+1421;Grandevent;VD
+1428;Mutrux;VD
+1423;Romairon;VD
+1423;Vaugondry;VD
+1008;Jouxtens-Mézery;VD
+1134;Chigny;VD
+1026;Denges;VD
+1410;Correvon;VD
+1682;Lovatens;VD
+1063;Martherenges;VD
+1041;Montaubion-Chardonney;VD
+1513;Rossenges;VD
+1683;Sarzens;VD
+1277;Arnex-sur-Nyon;VD
+1279;Bogis-Bossey;VD
+1290;Chavannes-des-Bois;VD
+1355;Sergey;VD
+1608;Bussigny-sur-Oron;VD
+1608;Chesalles-sur-Oron;VD
+1607;Les Tavernes;VD
+1607;Les Thioleyres;VD
+1610;Vuibroye;VD
+1682;Cerniaz VD;VD
+1554;Rossens VD;VD
+1525;Seigneux;VD
+1195;Dully;VD
+1180;Tartegnin;VD
+1436;Chamblon;VD
+1415;Démoret;VD
+1443;Essert-sous-Champvent;VD
+1443;Villars-sous-Champvent;VD
+1407;Gossens;VD
+1432;Gressy;VD
+1407;Mézery-près-Donneloye;VD
+1047;Oppens;VD
+1412;Ursins;VD
+1404;Villars-Epeney;VD
+2027;Montalchez;NE
+2063;Engollon;NE
+2933;Damphreux;JU
+2953;Fregiécourt;JU
+8165;Oberweningen;ZH
+8165;Schleinikon;ZH
+8543;Bertschikon;ZH
+3283;Niederried b. Kallnach;BE
+4932;Gutenburg;BE
+3294;Meienried;BE
+3429;Hellsau;BE
+3429;Höchstetten;BE
+3324;Mötschwil;BE
+3424;Oberösch;BE
+3472;Rumendingen;BE
+3421;Rüti b. Lyssach;BE
+3425;Willadingen;BE
+2577;Finsterhennen;BE
+3303;Ballmoos;BE
+3256;Bangerten b. Dieterswil;BE
+3053;Deisswil b. Münchenbuchsee;BE
+3053;Diemerswil;BE
+3303;Münchringen;BE
+3251;Ruppoldsried;BE
+3305;Scheunen;BE
+3053;Wiggiswil;BE
+3309;Zauggenried;BE
+3510;Freimettigen;BE
+3510;Häutligen;BE
+3671;Herbligen;BE
+3532;Mirchel;BE
+3629;Oppligen;BE
+3504;Oberhünigen;BE
+3207;Golaten;BE
+3274;Bühl b. Aarberg;BE
+3272;Epsach;BE
+3274;Merzligen;BE
+3632;Niederstocken;BE
+3086;Englisberg;BE
+3629;Jaberg;BE
+3127;Lohnstorf;BE
+3116;Mühledorf BE;BE
+3116;Noflen BE;BE
+3128;Rümligen;BE
+3636;Forst b. Längenbühl;BE
+3623;Horrenbach;BE
+3624;Schwendibach;BE
+3645;Zwieselberg;BE
+3376;Berken;BE
+3366;Bollodingen;BE
+3367;Ochlenberg;BE
+4704;Wolfisberg;BE
+6289;Hämikon;LU
+6277;Lieli LU;LU
+6284;Sulz LU;LU
+6038;Honau;LU
+8777;Betschwanden;GL
+8774;Leuggelbach;GL
+3216;Agriswil;FR
+3215;Büchslen;FR
+3280;Greng;FR
+3213;Kleinbösingen;FR
+3212;Kleingurmels;FR
+3215;Lurtigen;FR
+3206;Wallenbuch;FR
+4583;Aetigkofen;SO
+3254;Balm b. Messen;SO
+4584;Gächliwil;SO
+4556;Bolken;SO
+4556;Burgäschi;SO
+4566;Halten;SO
+4558;Heinrichswil;SO
+4554;Hüniken;SO
+4566;Oekingen;SO
+4556;Steinhof SO;SO
+4558;Winistorf;SO
+4535;Kammersrohr;SO
+4436;Liedertswil;BL
+9057;Schwende;AI
+7456;Marmorera;GR
+7130;Schnaus;GR
+7116;St. Martin (Lugnez);GR
+7415;Pratval;GR
+7423;Portein;GR
+7027;Calfreisen;GR
+5619;Uezwil;AG
+2912;Réclère;JU
+1820;Veytaux;VD
+5012;Eppenberg;SO
+8905;Islisberg;AG
+5637;Geltwil;AG
+5058;Wiliberg;AG
+8580;Hefenhofen;TG
+8586;Buchackern;TG
+8586;Engishofen;TG
+8586;Ennetaach;TG
+8253;Willisdorf;TG
+8546;Kefikon TG;TG
+8553;Eschikofen;TG
+8553;Harenwilen;TG
+8553;Mettendorf TG;TG
+8573;Alterswilen;TG
+8573;Altishausen;TG
+8566;Ellighausen;TG
+8566;Lippoldswilen;TG
+8274;Gottlieben;TG
+8585;Schönenbaumgarten;TG
+8585;Herrenhof;TG
+8564;Sonterswil;TG
+9562;Buch b. Märwil;TG
+9556;Zezikon;TG
+8512;Wetzikon TG;TG
+8360;Wallenwil;TG
+8537;Uerschhausen;TG
+8505;Dettighofen;TG
+8259;Rheinklingen;TG
+8572;Andhausen;TG
+8572;Graltshausen;TG
+8585;Birwinken;TG
+8572;Guntershausen b. Berg;TG
+8585;Klarsreuti;TG
+8575;Istighofen;TG
+8556;Engwang;TG
+8556;Illhart;TG
+6720;Ghirone;TI
+6724;Largario;TI
+6723;Marolta;TI
+6963;Cureggia;TI
+6814;Lamone;TI
+3995;Ausserbinn;VS
+3995;Mühlebach (Goms);VS
+3989;Ritzingen;VS
+3989;Selkingen;VS
+3995;Steinhaus;VS
+3957;Bratsch;VS
+3956;Guttet;VS
+3983;Bister;VS
+3983;Filet;VS
+3983;Goppisberg;VS
+3994;Martisberg;VS
+3940;Steg VS;VS
+9498;Planken;FL
+6212;Kaltbach;LU
+8525;Wilen b. Neunforn;TG
+2735;Malleray;BE
+1653;Crésuz;FR
+1626;Treyfayes;FR
+2027;Fresens;NE
+2933;Lugnez;JU
+2953;Pleujouse;JU
+1624;Progens;FR
+5012;Wöschnau;SO
+3984;Fieschertal;VS
+6814;Cadempino;TI
+4584;Lüterswil;SO
+8905;Arni AG;AG
+8553;Hüttlingen;TG
+3956;Feschel;VS
+9470;Werdenberg;SG
+8427;Freienstein;ZH
+8427;Rorbas;ZH
+1626;Rueyres-Treyfayes;FR
+1884;Arveyes;VD
+3963;Aminona;VS
+5053;Wittwil;AG
+6005;St. Niklausen LU;LU
+6995;Madonna del Piano;TI
+7226;Fajauna;GR
+7743;Miralago;GR
+8212;Nohl;ZH
+8471;Dägerlen;ZH
+9030;Gaiserwald;SG
+9122;Ebersol;SG
+6341;Baar;ZG
+6900;Paradiso;TI
+1754;Avry-sur-Matran;FR
+1783;Barberêche;FR
+1774;Montagny-les-Monts;FR
+1110;Morges 3;VD
+9029;St. Gallen Sonderdienste;SG
+1585;Bellerive VD;VD
+2052;La Vue-des-Alpes;NE
+3656;Ringoldswil;BE
+4922;Thunstetten;BE
+1709;Fribourg;FR
+1400;Yverdon;VD
+8879;Pizolpark (Mels);SG
+1195;Bursinel;VD
+6207;Nottwil Paraplegikerzentrum;LU
+3000;Bern Radio Schweiz;BE
+3900;Brigerbad;VS
+8118;Pfaffhausen;ZH
+5601;Lenzburg Sonderdienste;AG
+1428;Provence;VD
+2715;Châtelat;BE
+1091;Chenaux;VD
+9028;St. Gallen;SG
+9027;St. Gallen Mona Versand;SG
+1811;Vevey Services spéciaux;VD
+6600;Solduno;TI
+1723;Marly Grand Pré;FR
+3609;Thun;BE
+1723;Marly 1;FR
+6363;Bürgenstock;NW
+8832;Wilen b. Wollerau;SZ
+1754;Avry-Centre FR;FR
+1775;Mannens;FR
+1775;Grandsivaz;FR
+1211;Genève 14;GE
+8926;Hauptikon;ZH
+8926;Uerzlikon;ZH
+8036;Zürich Corona;ZH
+1026;Echandens;VD
+1260;Nyon car postal La Côte-Ju;VD
+1400;Yverdon car postal VD-Broye;VD
+1951;Sion car postal VS-Léman;VS
+3900;Brig Postauto Oberwallis;VS
+8050;Zürich Postauto Zürich;ZH
+8500;Frauenfeld Postauto TG-SH;TG
+5405;Dättwil AG;AG
+5406;Rütihof;AG
+8106;Adlikon b. Regensdorf;ZH
+9400;Rorschach Zustellung;SG
+6343;Buonas;ZG
+6343;Risch;ZG
+6343;Holzhäusern ZG;ZG
+3945;Niedergampel;VS
+1965;Drône (Savièse);VS
+1110;Morges Distribution;VD
+1400;Yverdon Distribution;VD
+3415;Rüegsauschachen;BE
+3415;Hasle b. Burgdorf;BE
+6363;Fürigen;NW
+6410;Rigi Scheidegg;SZ
+4571;Lüterkofen;SO
+8775;Luchsingen-Hätzingen;GL
+8070;Zürich;ZH
+8071;Zürich CS PZ;ZH
+1631;Bulle;FR
+3040;Bern;BE
+4040;Basel;BL
+6007;Luzern;LU
+8759;Netstal;GL
+9020;St. Gallen;SG
+6500;Bellinzona centro servici;TI
+8268;Salenstein;TG
+8522;Aawangen;TG
+9503;Lanterswil;TG
+8574;Oberhofen TG;TG
+6260;Hintermoos;LU
+1211;Genève 71 CS CP;GE
+1279;Chavannes-de-Bogis OLS;VD
+1215;Genève ICC OLS;GE
+1950;Sion 4;VS
+6383;Wiesenberg;NW
+3000;Bern 71 CS PZ;BE
+4573;Lohn-Ammannsegg;SO
+9026;St. Gallen Künzler AG;SG
+8152;Glattbrugg Zustellung;ZH
+1988;Thyon-Les Collons;VS
+8965;Berikon 2 Dorf;AG
+8965;Berikon 1;AG
+5046;Schmiedrued-Walde;AG
+6031;Ebikon;LU
+6021;Emmenbrücke 1;LU
+6391;Engelberg;OW
+6281;Hochdorf;LU
+6011;Kriens;LU
+6061;Sarnen 1;OW
+6371;Stans;NW
+6431;Schwyz;SZ
+8302;Kloten Kaserne;ZH
+9025;St. Gallen Quelle;SG
+8725;Gebertingen;SG
+6900;Lugano 7;TI
+6907;Lugano 7 Loreto Caselle;TI
+1240;Genève;GE
+9471;Buchs SG 1;SG
+9471;Buchs SG 3;SG
+1260;Nyon 2;VD
+1260;Nyon 1;VD
+1530;Payerne Caserne;VD
+8903;Birmensdorf ZH Kaserne;ZH
+8180;Bülach Kaserne;ZH
+8600;Dübendorf Kaserne;ZH
+8500;Frauenfeld Kaserne;TG
+9401;Rorschach;SG
+9501;Wil SG 1;SG
+3000;Bern 77 SBV;BE
+5620;Bremgarten AG West;AG
+5620;Bremgarten AG 1;AG
+8010;Zürich Briefzentrum;ZH
+2800;Delémont car postal JU-NE;JU
+1211;Genève 70;GE
+4509;Solothurn;SO
+6060;Sarnen 2;OW
+6060;Sarnen 2 Büntenpark;OW
+6060;Sarnen 1;OW
+1958;Uvrier;VS
+1211;Genève 5;GE
+1211;Genève 84 Votations;GE
+9014;St. Gallen 14 Zustellung;SG
+3800;Interlaken Postauto BE Ober;BE
+4000;Basel Postauto Nordwestschw;BS
+6000;Luzern Postauto Zentralschw;LU
+8730;Uznach Postauto Linth-SZ-GL;SG
+9001;St. Gallen Postauto SG-Azel;SG
+4070;Basel;BS
+4524;Balmberg;SO
+4524;Oberbalmberg;SO
+6156;Luthern Bad;LU
+5400;Baden 1 Zustellung;AG
+6260;Mehlsecken;LU
+6602;Muralto;TI
+6161;Entlebuch Versandzentrum;LU
+6677;Aurigeno;TI
+9201;Gossau SG;SG
+6900;Lugano 2;TI
+6600;Locarno 4 Solduno;TI
+8510;Frauenfeld Kant. Verwaltung;TG
+3050;Bern Swisscom;BE
+6900;Lugano 8;TI
+6900;Lugano 4;TI
+6900;Lugano 6;TI
+7431;Obermutten;GR
+1892;Lavey-les-Bains;VD
+2575;Gerolfingen;BE
+3000;Bern 60 UPD;BE
+8260;Stein am Rhein 1;SH
+8260;Stein am Rhein 2 Stadt;SH
+9214;Kradolf;TG
+1400;Yverdon Caserne;VD
+2013;Colombier NE Caserne;NE
+1680;Romont Caserne;FR
+6032;Emmen Kaserne;LU
+1700;Fribourg Caserne;FR
+1211;Genève 26 Caserne;GE
+6810;Isone Caserma;TI
+6616;Losone Caserma;TI
+6000;Luzern Kaserne;LU
+3250;Lyss Kaserne;BE
+8887;Mels Kaserne;SG
+6802;Rivera Caserma;TI
+1510;Moudon Caserne;VD
+1890;St-Maurice Caserne;VS
+1950;Sion Caserne;VS
+3380;Wangen a. A. Kaserne;BE
+6370;Stans Kaserne;NW
+6780;Airolo Caserma;TI
+3000;Bern 22 Kaserne;BE
+1145;Bière Caserne;VD
+2900;Porrentruy Caserne;JU
+8640;Hurden;SZ
+8086;Zürich Reader's Digest;ZH
+1630;Bulle 1;FR
+1630;Bulle 2;FR
+6460;Altdorf UR 1;UR
+6460;Altdorf UR 2 Rynächt;UR
+6460;Altdorf UR 2;UR
+1660;La Lécherette;VD
+8085;Zürich Versicherung;ZH
+2075;Thielle;NE
+2075;Wavre;NE
+1721;Misery;FR
+3632;Oberstocken;BE
+1068;Les Monts-de-Pully;VD
+2010;Neuchâtel OFS;NE
+8285;Kreuzlingen Ifolor AG;TG
+4039;Basel;BS
+1762;Givisiez Dist Ba;FR
+1950;Sion Base de distribution;VS
+3900;Brig Distributionsbasis;VS
+3600;Thun Dist Ba;BE
+2510;Biel/Bienne Dist Ba;BE
+8210;Schaffhausen Dist Ba;SH
+9510;Wil SG Distributionsbasis;SG
+6593;Cadenazzo Dist Ba;TI
+1227;Carouge GE Distribution;GE
+1225;Chêne-Bourg Distribution;GE
+1196;Gland Distribution;VD
+1218;Grand-Saconnex Distribution;GE
+1213;Petit-Lancy Distribution;GE
+1219;Le Lignon Distribution;GE
+1217;Meyrin Distribution;GE
+1290;Versoix Distribution;GE
+1860;Aigle Distribution;VD
+1030;Bussigny Distribution;VD
+1023;Crissier Distribution;VD
+2540;Grenchen 1 Zustellung;SO
+4410;Liestal Zustellung;BL
+4242;Laufen Zustellung;BL
+4132;Muttenz 1 Zustellung;BL
+4142;Münchenstein 1 Zustellung;BL
+4104;Oberwil BL Zustellung;BL
+4702;Oensingen Zustellung;SO
+4133;Pratteln 1 Zustellung;BL
+4125;Riehen 1 Zustellung;BS
+4153;Reinach BL Zustellung;BL
+4106;Therwil Zustellung;BL
+5620;Bremgarten AG 1 Zustellung;AG
+5600;Lenzburg Zustellung;AG
+4313;Möhlin Zustellung;AG
+4665;Oftringen 1 Zustellung;AG
+4310;Rheinfelden 1 Zustellung;AG
+8957;Spreitenbach Zustellung;AG
+5012;Schönenwerd Zustellung;SO
+5430;Wettingen 1 Zustellung;AG
+5610;Wohlen AG 1 Zustellung;AG
+4800;Zofingen Zustellung;AG
+6440;Brunnen Zustellung;SZ
+6330;Cham Zustellung;ZG
+6030;Ebikon Zustellung;LU
+6020;Emmenbrücke 1 Zustellung;LU
+6390;Engelberg Zustellung;OW
+6410;Goldau Zustellung;SZ
+6052;Hergiswil NW Zustellung;NW
+6010;Kriens 2 Zustellung;LU
+6102;Malters Zustellung;LU
+6015;Luzern Reussbühl Zustellung;LU
+6343;Rotkreuz Zustellung;ZG
+6430;Schwyz Zustellung;SZ
+6370;Stans Zustellung;NW
+6210;Sursee Zustellung;LU
+6130;Willisau Zustellung;LU
+1870;Monthey 1 Distribution;VS
+3280;Murten Zustellung;FR
+8134;Adliswil 1 Zustellung;ZH
+8910;Affoltern am A. Zustellung;ZH
+8580;Amriswil Zustellung;TG
+9320;Arbon Zustellung;TG
+8903;Birmensdorf ZH Zustellung;ZH
+9220;Bischofszell Zustellung;TG
+8180;Bülach Zustellung;ZH
+8157;Dielsdorf Zustellung;ZH
+8307;Effretikon Zustellung;ZH
+8424;Embrach Zustellung;ZH
+8634;Hombrechtikon Zustellung;ZH
+1350;Orbe Distribution;VD
+8280;Kreuzlingen 1 Zustellung;TG
+8700;Küsnacht ZH Zustellung;ZH
+8708;Männedorf Zustellung;ZH
+8706;Meilen Zustellung;ZH
+1020;Renens VD 1 Distribution;VD
+3960;Sierre Distribution;VS
+8330;Pfäffikon ZH Zustellung;ZH
+8105;Regensdorf 1 Zustellung;ZH
+3930;Visp Zustellung;VS
+3963;Crans-Montana 1 Dist;VS
+3123;Belp Zustellung;BE
+8590;Romanshorn Zustellung;TG
+8630;Rüti ZH Zustellung;ZH
+8952;Schlieren Zustellung;ZH
+3714;Frutigen Zustellung;BE
+8712;Stäfa Zustellung;ZH
+8800;Thalwil Zustellung;ZH
+3073;Gümligen Zustellung;BE
+3360;Herzogenbuchsee Zustellung;BE
+8820;Wädenswil Zustellung;ZH
+8636;Wald ZH Zustellung;ZH
+4950;Huttwil Zustellung;BE
+8304;Wallisellen Zustellung;ZH
+3800;Interlaken Zustellung;BE
+8570;Weinfelden Zustellung;TG
+3303;Jegenstorf Zustellung;BE
+8126;Zumikon Zustellung;ZH
+8405;Winterthur 5 Zustellung;ZH
+8406;Winterthur 6 Zustellung;ZH
+3422;Kirchberg BE Zustellung;BE
+8408;Winterthur 8 Zustellung;ZH
+8037;Zürich 37 Zustellung;ZH
+4900;Langenthal 1 Zustellung;BE
+8050;Zürich 50 Zustellung;ZH
+9050;Appenzell Zustellung;AI
+9100;Herisau 1 Zustellung;AR
+6850;Mendrisio Distribuzione;TI
+3053;Münchenbuchsee Zustellung;BE
+3110;Münsingen Zustellung;BE
+3322;Urtenen-Schönbühl Zust;BE
+3700;Spiez Zustellung;BE
+3612;Steffisburg 1 Zustellung;BE
+3076;Worb Zustellung;BE
+3052;Zollikofen Zustellung;BE
+8340;Hinwil Zustellung;ZH
+1212;Grand-Lancy 1 Distribution;GE
+8302;Kloten Zustellung;ZH
+9200;Gossau SG 1 Zustellung;SG
+2400;Le Locle Distribution;NE
+2740;Moutier 1 Distribution;BE
+4123;Allschwil Zustellung;BL
+4144;Arlesheim Zustellung;BL
+4710;Balsthal Zustellung;SO
+4102;Binningen 1 Zustellung;BL
+4127;Birsfelden Zustellung;BL
+4414;Füllinsdorf Zustellung;BL
+4563;Gerlafingen Zustellung;SO
+5200;Brugg AG 1 Zustellung;AG
+1274;Signy-Centre;VD
+9476;Fontnas;SG
+6000;Luzern 31;LU
+6000;Luzern 30 AAL;LU
+1211;Genève 5 Dépôt;GE
+5018;Erlinsbach;AG
+2800;Delémont Dist Ba;JU
+1310;Daillens Dist Ba;VD
+1310;Daillens Centre Colis;VD
+1530;Payerne Distribution;VD
+1630;Bulle 1 Distribution;FR
+3550;Langnau i. E. Zustellung;BE
+6460;Altdorf UR 2 Zustellung;UR
+7270;Davos Zustellung;GR
+3000;Bern 94 UBS;BE
+8098;Zürich;ZH
+1274;Signy;VD
+8066;Zürich;ZH
+3400;Burgdorf Dist Fil;BE
+4620;Härkingen Paketzentrum;SO
+4620;Härkingen Dist Ba;SO
+8183;Bülach Dist Ba;ZH
+8325;Effretikon Dist Ba;ZH
+8520;Frauenfeld Paketzentrum;TG
+8520;Frauenfeld Dist Ba;TG
+8343;Hinwil Dist Ba;ZH
+9442;Berneck Dist Ba;SG
+8564;Hefenhausen;TG
+8564;Wagerswil;TG
+8586;Buch b. Kümmertshausen;TG
+9565;Oberbussnang;TG
+2950;Courtemautruy;JU
+1347;Le Solliat;VD
+1148;Villars-Bozon;VD
+1304;Allens;VD
+9470;Buchs SG Dist Fil;SG
+8867;Niederurnen Dist Fil;GL
+7302;Landquart Dist Ba;GR
+3960;Sierre Dist Fil;VS
+1630;Bulle Dist Fil;FR
+1196;Gland Dist Fil;VD
+5624;Waldhäusern AG;AG
+8087;Zürich;ZH
+3000;Bern 65 SBB;BE
+1066;Epalinges Distribution;VD
+1033;Cheseaux-Laus Distribution;VD
+3960;Niouc;VS
+4410;Liestal Dist Fil;BL
+1912;Produit (Leytron);VS
+1912;Montagnon (Leytron);VS
+1912;Dugny (Leytron);VS
+1914;Auddes-sur-Riddes;VS
+1932;Les Valettes (Bovernier);VS
+1933;Vens (Sembrancher);VS
+1933;Chamoille (Sembrancher);VS
+1933;La Garde (Sembrancher);VS
+1941;Cries (Vollèges);VS
+1945;Fontaine Dessus (Liddes);VS
+1945;Fontaine Dessous (Liddes);VS
+1945;Dranse (Liddes);VS
+1945;Chandonne (Liddes);VS
+1945;Rive Haute (Liddes);VS
+1945;Fornex (Liddes);VS
+1945;Les Moulins VS (Liddes);VS
+1945;Vichères (Liddes);VS
+1945;Palasuit (Liddes);VS
+1945;Chez Petit (Liddes);VS
+1945;Petit Vichères (Liddes);VS
+1947;Champsec;VS
+1955;Les Vérines (Chamoson);VS
+1955;Némiaz (Chamoson);VS
+1955;Grugnay (Chamoson);VS
+1965;Roumaz (Savièse);VS
+1965;Granois (Savièse);VS
+1965;St-Germain (Savièse);VS
+1965;Ormône (Savièse);VS
+1965;Mayens-de-la-Zour (Savièse);VS
+1966;Fortunau (Ayent);VS
+1966;Luc (Ayent);VS
+1966;St-Romain (Ayent);VS
+1966;Saxonne (Ayent);VS
+1966;Villa (Ayent);VS
+1966;La Place (Ayent);VS
+1966;Botyre (Ayent);VS
+1966;Blignou (Ayent);VS
+1966;Argnou (Ayent);VS
+1969;Liez (St-Martin);VS
+1969;Trogne (St-Martin);VS
+1969;Suen (St-Martin);VS
+1971;Champlan (Grimisuat);VS
+1983;Lanna;VS
+1991;Arvillard (Salins);VS
+1991;Pravidondaz (Salins);VS
+1991;Turin (Salins);VS
+1991;Misériez (Salins);VS
+1993;Clèbes (Nendaz);VS
+1996;Brignon (Nendaz);VS
+1992;La Vernaz (Les Agettes);VS
+1992;Crête-à-l'Oeil(Les Agettes);VS
+1996;Bieudron (Nendaz);VS
+1996;Condémines (Nendaz);VS
+1996;Saclentse;VS
+4078;Basel Reader's Digest;BS
+1911;Mayens-de-Chamoson;VS
+1585;Cotterd;VD
+1873;Champoussin;VS
+2063;Fenin;NE
+2063;Saules;NE
+1873;Les Crosets;VS
+1095;Lutry Distribution;VD
+1052;Le Mont-sur-Lausanne Dist;VD
+2013;Colombier NE Distribution;NE
+2074;Marin-Epagnier Distribution;NE
+2520;La Neuveville Distribution;BE
+2720;Tramelan Distribution;BE
+2610;St-Imier Distribution;BE
+1580;Avenches Distribution;VD
+1510;Moudon Distribution;VD
+3186;Düdingen Zustellung;FR
+1680;Romont FR Distribution;FR
+1844;Villeneuve VD Distribution;VD
+1880;Bex Distribution;VD
+1233;Bernex Distribution;GE
+1214;Vernier Distribution;GE
+1180;Rolle Distribution;VD
+1040;Echallens Distribution;VD
+3150;Schwarzenburg Zustellung;BE
+3177;Laupen BE Zustellung;BE
+3210;Kerzers Zustellung;FR
+3294;Büren an der Aare Zust;BE
+3415;Hasle-Rüegsau Zustellung;BE
+3855;Brienz BE Zustellung;BE
+3860;Meiringen Zustellung;BE
+4450;Sissach Zustellung;BL
+4460;Gelterkinden Zustellung;BL
+4512;Bellach Zustellung;SO
+4663;Aarburg Zustellung;AG
+4614;Hägendorf Zustellung;SO
+5036;Oberentfelden Zustellung;AG
+5070;Frick Zustellung;AG
+5734;Reinach AG Zustellung;AG
+5722;Gränichen Zustellung;AG
+5630;Muri AG Zustellung;AG
+6280;Hochdorf Zustellung;LU
+6110;Wolhusen Zustellung;LU
+6260;Reiden Zustellung;LU
+6314;Unterägeri Zustellung;ZG
+6060;Sarnen 2 Zustellung;OW
+6403;Küssnacht am Rigi Zust;SZ
+8965;Berikon 1 Zustellung;AG
+8132;Egg b. Zürich Zustellung;ZH
+8260;Stein am Rhein 1 Zustellung;SH
+8730;Uznach Zustellung;SG
+8808;Pfäffikon SZ Zustellung;SZ
+8832;Wollerau Zustellung;SZ
+8840;Einsiedeln Zustellung;SZ
+8854;Siebnen Zustellung;SZ
+8750;Glarus Zustellung;GL
+9230;Flawil 1 Zustellung;SG
+9240;Uzwil Zustellung;SG
+9630;Wattwil Zustellung;SG
+9053;Teufen AR Zustellung;AR
+9410;Heiden Zustellung;AR
+9450;Altstätten SG Zustellung;SG
+9424;Rheineck Zustellung;SG
+9435;Heerbrugg Zustellung;SG
+9430;St. Margrethen SG Zust;SG
+9470;Buchs SG 1 Zustellung;SG
+7013;Domat/Ems Zustellung;GR
+7302;Landquart Zustellung;GR
+7320;Sargans Zustellung;SG
+7310;Bad Ragaz Zustellung;SG
+8887;Mels Zustellung;SG
+8890;Flums Zustellung;SG
+7503;Samedan Zustellung;GR
+1222;Vésenaz Distribution;GE
+1965;Monteiller (Savièse);VS
+9024;St. Gallen Presse-Serv.Güll;SG
+4609;Olten Sonderdienste;SO
+1772;Nierlet-les-Bois;FR
+8015;Zürich 15;ZH
+1818;Montreux La Redoute;VD
+1787;Mur (Vully) FR;FR
+1892;Morcles;VD
+2074;Marin-Centre;NE
+9479;Gretschins;SG
+9479;Malans SG;SG
+8540;Frauenfeld ST PP 1;TG
+8530;Frauenfeld CALL;TG
+4640;Härkingen ST PP 1;SO
+4630;Härkingen CALL;SO
+1330;Daillens CALL;VD
+1320;Daillens ST PP 1;VD
+6010;Kriens 1;LU
+6010;Kriens 2 Sternmatt;LU
+6010;Kriens 2;LU
+1897;Port-Valais;VS
+6500;Bellinzona VZ;TI
+8080;Zürich PV;ZH
+3989;Grafschaft;VS
+2500;Biel/Bienne 10;BE
+1200;Genève 18;GE
+8564;Hattenhausen;TG
+3000;Bern 90;BE
+1440;Montagny-Chamard;VD
+2149;Fretereules;NE
+2149;Brot-Dessous;NE
+9249;Oberstetten;SG
+9249;Niederstetten;SG
+8564;Gunterswilen;TG
+1806;St-Légier/Blonay Dist;VD
+3815;Gündlischwand;BE
+1023;Crissier 2;VD
+1023;Crissier 1;VD
+3860;Schattenhalb;BE
+2610;Les Pontins;BE
+1617;Tatroz;FR
+8075;Zürich;ZH
+1096;Villette (Lavaux);VD
+4080;Basel;BS
+6383;Wirzweli;NW
+2333;La Cibourg;BE
+2616;La Cibourg;BE
+8556;Lamperswil TG;TG
+6039;Root D4;LU
+2037;Montezillon;NE
+3000;Bern 7 Bärenplatz;BE
+1820;Territet;VD
+3963;Crans-Montana 1;VS
+3963;Crans-Montana 2;VS
+6939;Arosio-Mugena;TI
+8253;Diessenhofen Zustellung;TG
+2338;Muriaux;JU
+2748;Les Ecorcheresses;BE
+6830;Chiasso 1 ZF;TI
+6900;Lugano MailSource;TI
+1162;St-Prex Distribution;VD
+8615;Freudwil;ZH
+6422;Steinen Zustellung;SZ
+5415;Nussbaumen AG Zustellung;AG
+3661;Uetendorf Zustellung;BE
+3770;Zweisimmen Zustellung;BE
+3775;Lenk i. S. Zustellung;BE
+1223;Cologny Distribution;GE
+1964;Conthey Distribution;VS
+3454;Sumiswald Zustellung;BE
+6710;Biasca Distribuzione;TI
+6963;Pregassona Distribuzione;TI
+3920;Zermatt Zustellung;VS
+1969;Eison (St-Martin);VS
+3977;Granges VS Distribution;VS
+4034;Basel 34 Breite;BS
+4035;Basel 35 Bäumlihof;BS
+1618;Châtel-St-Denis Dist;FR
+1805;Jongny Distribution;VD
+1965;Savièse Distribution;VS
+8606;Nänikon Zustellung;ZH
+1450;Ste-Croix Distribution;VD
+3623;Buchen BE;BE
+4588;Brittern;SO
+4416;Bubendorf Zustellung;BL
+4089;Basel SPILOG;BS
+9545;Wängi Zustellung;TG
+9463;Oberriet SG Zustellung;SG
+9113;Degersheim Zustellung;SG
+8762;Schwanden GL Zustellung;GL
+8472;Seuzach Zustellung;ZH
+6330;Cham 1;ZG
+5415;Hertenstein AG;AG
+5415;Rieden AG;AG
+8596;Münsterlingen;TG
+8068;Zürich;ZH
+9604;Unterrindal;SG
+3071;Ostermundigen Zustellung;BE
+2013;Boudry Dist Ba;NE
+9444;Diepoldsau Zustellung;SG
+4033;Basel 33 Novartis;BS
+8902;Urdorf Dist Ba;ZH
+8902;Urdorf Sortierstelle;ZH
+3976;Champzabé;VS
+3072;Ostermundigen Rüti Fächer;BE
+3039;Bern PF Operations Center;BE
+4042;Basel PF Operations Center;BL
+3983;Greich;VS
+1816;Chailly-Montreux Dist;VD
+8240;Thayngen Zustellung;SH
+3436;Zollbrück Zustellung;BE
+3537;Eggiwil Zustellung;BE
+3627;Heimberg Zustellung;BE
+3715;Adelboden Zustellung;BE
+3780;Gstaad Zustellung;BE
+3818;Grindelwald Zustellung;BE
+5242;Birr-Lupfig Zustellung;AG
+5312;Döttingen Zustellung;AG
+5605;Dottikon Zustellung;AG
+5703;Seon Zustellung;AG
+5726;Unterkulm Zustellung;AG
+6023;Rothenburg Zustellung;LU
+6037;Root Zustellung;LU
+6043;Adligenswil Zustellung;LU
+6045;Meggen Zustellung;LU
+6055;Alpnach Zustellung;OW
+6374;Buochs Zustellung;NW
+3071;Ostermundigen Dist Ba;BE
+8081;Zürich Helsana;ZH
+1347;Le Sentier Distribution;VD
+9494;Schaan Zustellung;FL
+8901;Urdorf RRD;ZH
+8546;Menzengrüt;ZH
+4665;Oftringen SPN;AG
+8450;Andelfingen Zustellung;ZH
+2035;Corcelles NE Distribution;NE
+3175;Flamatt Zustellung;FR
+6017;Ruswil Zustellung;LU
+6162;Entlebuch Zustellung;LU
+6170;Schüpfheim Zustellung;LU
+6182;Escholzmatt Zustellung;LU
+8722;Kaltbrunn Zustellung;SG
+8494;Bauma Zustellung;ZH
+6204;Sempach Stadt;LU
+7078;Lenzerheide Zustellung;GR
+3041;Bern UBS;BE
+4041;Basel UBS;BS
+8107;Buchs ZH Zustellung;ZH
+8488;Turbenthal Zustellung;ZH
+8907;Wettswil Zustellung;ZH
+8932;Mettmenstetten Zustellung;ZH
+7050;Arosa Zustellung;GR
+9489;Schaan Log;FL
+3053;Lätti;BE
+3256;Seewil;BE
+4551;Derendingen Swisscom;SO
+1934;Le Châble VS Distribution;VS
+1071;Chexbres Distribution;VD
+1854;Leysin Distribution;VD
+8135;Sihlwald;ZH
+8152;Glattpark (Opfikon);ZH
+1211;Genève 94 UBS;GE
+1607;Palézieux Distribution;VD
+5645;Fenkrieden;AG
+4075;Basel;BS
+9022;St. Gallen;SG
+8820;Wädenswil Dist Ba;ZH
+5400;Baden IM;AG
+9602;Bazenheid Zustellung;SG
+7430;Thusis Zustellung;GR
+7130;Ilanz Zustellung;GR
+1926;Fully Distribution;VS
+1296;Coppet Distribution;VD
+1782;Formangueires;FR
+7513;Silvaplana-Surlej;GR
+7250;Klosters Zustellung;GR
+8543;Gundetswil;ZH
+4089;Basel SPI GLS Retour;BS
+3940;Steg-Gampel;VS
+8109;Kloster Fahr;AG
+1019;Lausanne Services spéciaux;VD
+1039;Cheseaux Polyval;VD
+6346;Baar 3;ZG
+6331;Hünenberg Zustellung;ZG
+6346;Baar 3 Dist Ba;ZG
+3085;Wabern 2 x Weihnachten;BE
+1211;Genève 73;GE
+5610;Dintikon LCD;AG
+8952;Schlieren DocumentServices;ZH
+1300;Eclépens Centre Courrier;VD
+1951;Sion Centre logistique;VS
+3050;Bern DocumentServices;BE
+3070;Ostermundigen (LZB);BE
+4002;Basel Logistikzentrum;BS
+4621;Härkingen Briefzentrum;SO
+6010;Kriens Logistikzentrum;LU
+6590;Cadenazzo Centro logistico;TI
+7000;Chur Logistikzentrum;GR
+8010;Zürich-Mülligen SPS AG;ZH
+9200;Gossau SG Logistikzentrum;SG
+4702;Oensingen Hub SecurePost;SO
+9494;Schaan Betriebszentrum;FL
+1148;La Coudre;VD
+1919;Martigny Groupe Mutuel;VS
+8096;Zürich IBRS local;ZH
+1920;Martigny Gare CFF;VS
+1001;Lausanne Sozialberatung;VD
+1700;Fribourg PostFinance Fil.;FR
+4808;Zofingen PostFinance;AG
+4800;Zofingen PostFinance;AG
+3400;Burgdorf Filiale;BE
+4807;Zofingen PostFinance;AG
+8010;Zürich-Mülligen BZI;ZH
+1311;Eclépens Scanning-Center;VD
+4611;Härkingen Scanning-Center;SO
+8011;Zürich Mülligen SC;ZH
+8010;Zürich BZ Annahme;ZH
+8060;Zürich;ZH
+8362;Bichelsee-Balterswil;TG
+8352;Ricketwil (Winterthur);ZH
+4310;Rheinfelden SPI Logistics A;AG
+4133;Pratteln SPI Logistics;BL
+6333;Hünenberg See;ZG
+4621;Härkingen SPS AG;SO
+4809;Zofingen Postfinance UBS;AG
+3400;Burgdorf PostFinance mob;BE
+4809;Zofingen PF UBS Verarb.;AG
+6039;Root Längenbold SH;LU
+8059;Zürich 59 Exchange Office;ZH
+8059;Zürich 59 Ausland;ZH
+8545;Rickenbach Sulz;ZH
+8543;Kefikon ZH;ZH
+8310;Grafstal;ZH
+8465;Wildensbuch;ZH
+3017;Bern Zustellung;BE
+8471;Oberwil (Dägerlen);ZH
+8471;Berg (Dägerlen);ZH
+8471;Bänk (Dägerlen);ZH
+9494;Schaan BZ GKS;FL
+9301;Wittenbach;SG
+1300;Eclépens CC Dépôt;VD
+8412;Riet (Neftenbach);ZH
+8412;Hünikon (Neftenbach);ZH
+6511;Cadenazzo Scanning-Center;TI
+8074;Zürich Voice Publishing;ZH
+8050;Zürich Oerlikon DB PickPost;ZH
+6430;Schwyz Kantonalbank;SZ
+5643;Meienberg;AG
+3823;Kleine Scheidegg;BE
+3823;Eigergletscher;BE
+1532;Fétigny Dist Fil;FR
+1880;Bex Dist Fil;VD
+3029;Bern;BE
+8200;Schaffhausen PF;SH
+1860;Aigle Gare CFF;VD
+6500;Bellinzona Stazione FFS;TI
+5200;Brugg Bahnhof SBB;AG
+6440;Brunnen Bahnhof SBB;SZ
+9471;Buchs Bahnhof SBB;SG
+8180;Bülach Bahnhof SBB;ZH
+6830;Chiasso Stazione FFS;TI
+8953;Dietikon Bahnhof SBB;ZH
+8307;Effretikon Bahnhof SBB;ZH
+7302;Landquart Bahnhof SBB;GR
+5600;Lenzburg Bahnhof SBB;AG
+4410;Liestal Bahnhof SBB;BL
+6600;Locarno Stazione FFS;TI
+1260;Nyon Gare CFF;VD
+4702;Oensingen Bahnhof SBB;SO
+8808;Pfäffikon Bahnhof SBB;SZ
+1020;Renens Gare CFF;VD
+4310;Rheinfelden Bahnhof SBB;AG
+6343;Rotkreuz Bahnhof SBB;ZG
+8630;Rüti Bahnhof SBB;ZH
+4500;Solothurn Bahnhof SBB;SO
+6210;Sursee Bahnhof SBB;LU
+8800;Thalwil Bahnhof SBB;ZH
+3930;Visp Bahnhof SBB;VS
+1400;Yverdon-les-Bains Gare CFF;VD
+8866;Ziegelbrücke Bahnhof SBB;GL
+4800;Zofingen Bahnhof SBB;AG
+8820;Wädenswil Bahnhof SBB;ZH
+6304;Zug Bahnhof SBB;ZG
+6900;Lugano Stazione FSS;TI
+3000;Bern Brünnen;BE
+3030;Bern Logistikcenter;BE
+4621;Härkingen BZ Briefklinik;SO
+9050;Appenzell Eggerstanden;AI
+9050;Appenzell Enggenhütten;AI
+9050;Appenzell Meistersrüte;AI
+9050;Appenzell Steinegg;AI
+9050;Appenzell Schlatt;AI
+9057;Wasserauen;AI
+9108;Gontenbad;AI
+6000;Luzern 1 PF;LU
+9108;Jakobsbad;AI
+9442;Büriswilen;AI
+3070;Ostermundigen LZB BHS-AF;BE
+7110;Peiden;GR
+8012;Zürich;ZH
+1300;Eclépens SAB;VD
+6595;Riazzino Distribuzione;TI
+6987;Caslano Distribuzione;TI
+6593;Cadenazzo Distribuzione;TI
+5506;Mägenwil Dist Ba;AG
+5506;Mägenwil GKA;AG
+5506;Mägenwil PL Hub SK Blitz;AG
+5506;Mägenwil HUB;AG
+1356;La Russille;VD
+8307;Effretikon PostAuto AG;ZH
+9245;Sonnental;SG
+1227;Genève Carouge PostFinance;GE
+4310;Rheinfelden PostAuto AG;AG
+8010;Zürich BZI DE;ZH
+1006;Lausanne Parking d'Ouchy;VD
+1003;Lausanne Parking du Centre;VD
+1032;Romanel-sur-Lausanne Shell;VD
+2802;Develier PostAuto AG;JU
+4053;Basel Shell Dreispitz;BS
+4106;Therwil Shell;BL
+8008;Zürich Tiefenbrunnen SBB;ZH
+8080;Zürich West SPS;ZH
+8302;Kloten Bahnhof SBB;ZH
+2340;Le Noirmont Distribution;JU
+1003;Lausanne Terreaux PF;VD
+6000;Luzern 2 Universität;LU
+1219;Lignon B&V GK;GE
+1219;Lignon B&V GK 2;GE
+3206;Ferenbalm;BE
+3206;Biberen;BE
+3206;Gammen;BE
+4800;Zofingen B&V GK;AG
+5405;Baden B&V GK 2;AG
+5405;Baden B&V GK;AG
+8852;Altendorf B&V GK;SZ
+8852;Altendorf B&V GK 2;SZ
+4204;Himmelried PostAuto AG;SO
+7000;Chur B&V GK 2;GR
+7000;Chur B&V GK;GR
+8305;Dietlikon Shell;ZH
+8153;Rümlang Tankstelle Shell;ZH
+1762;Givisiez PickPost;FR
+2360;Le Bémont JU;JU
+2362;Montfaucon;JU
+2362;Montfavergier;JU
+2363;Les Enfers;JU
+2364;St-Brais;JU
+3030;Bern KC PK 4;BE
+3030;Bern KC PK 5;BE
+6010;Kriens KC PG/GK 2;LU
+9020;St. Gallen KC PKGK 5;SG
+6000;Luzern Bahnhof SBB;LU
+4600;Olten Personal;SO
+8002;Zürich Enge PF Filiale;ZH
+1905;Dorénaz PostAuto AG Schweiz;VS
+1001;Lausanne PF 331-120;VD
+1001;Lausanne PF 331-140;VD
+1001;Lausanne Arc Jurassien;VD
+4800;Zofingen KC PK/GK 3;AG
+8010;Zürich Kanton Annahme;ZH
+8010;Zürich Helsana Annahme;ZH
+8010;Zürich CS Annahme;ZH
+9030;St. Josefen;SG
+8723;Maseltrangen;SG
+1000;Lausanne CT;VD
+3434;Landiswil;BE
+8970;Urdorf Exchange;ZH
+1984;La Tour VS;VS
+1985;La Forclaz VS;VS
+1985;Villa (Evolène);VS
+1401;Yverdon Conseil et vente;VD
+1920;Martigny PostFinance;VS
+3071;Ostermundigen KATA;BE
+5412;Vogelsang AG;AG
+8645;Jona Buech Gewerbe;SG
+5405;Baden Täfern Gewerbe;AG
+4621;Härkingen BZ FP;SO
+1300;Eclépens CC AP;VD
+1997;Sornard (Nendaz);VS
+8812;Horgen Bahnhof Oberdorf;ZH
+9533;Dietschwil;SG
+2301;La Chx-de-F. Combe-à-l'Ours;NE
+8162;Sünikon;ZH
+8332;Rumlikon;ZH
+8322;Gündisau;ZH
+8371;Busswil TG;TG
+3930;Visp Verkaufssupport;VS
+4621;Härkingen SPS DO;SO
+4800;Zofingen KC PK/GK 4;AG
+6023;Rothenburg DIST BA;LU
+4800;Zofingen KC PK/GK 5;AG
+3072;Ostermundigen Oberdorf;BE
+1300;Eclépens Clinique;VD
+8010;Zürich BZ Brieflklinik;ZH
+7212;Seewis-Pardisla;GR
+7212;Seewis-Schmitten;GR
+8050;Zürich Nord VZ;ZH
+8340;Hinwil VZ;ZH
+8212;Neuhausen Rundbuck;SH
+9023;St. Gallen;SG
+4144;Arlesheim Postlogistics Hub;BL
+4800;Zofingen KC PK 2;AG
+1200;Genève Les Acacias;GE
+5000;Aarau Altstadt;AG
+1920;Martigny PF 331-130;VS
+1000;Lausanne 10;VD
+1000;Lausanne 18;VD
+3075;Vielbringen b. Worb;BE
+1800;Vevey Orient;VD
+6000;Luzern Altstadt;LU
+8574;Lengwil;TG
+8574;Dettighofen (Lengwil);TG
+1663;Gruyères Vieille Ville;FR
+1762;Givisiez DB AFP;FR
+1880;Les Posses-sur-Bex;VD
+6590;Cadenazzo CLL AP;TI
+9200;Gossau SG LZB FP;SG
+1953;Sion RZ;VS
+8030;Zürich;ZH
+8155;Nassenwil;ZH
+4800;Zofingen Abg. St;AG
+1345;Le Séchey;VD
+1580;Donatyre;VD
+1721;Cournillens;FR
+8006;Zürich Asendia;ZH
+5225;Bözberg;AG
+3961;Mission;VS
+4604;Olten 4 Hammer;SO
+1310;Daillens PL3;VD
+1532;Fétigny PL3;FR
+3030;Bern PL3;BE
+4133;Pratteln PL3;BL
+4665;Oftringen PL3;AG
+4704;Niederbipp PL3;BE
+5506;Mägenwil PL3i;AG
+5606;Dintikon PL3;AG
+5612;Villmergen PL3;AG
+6593;Cadenazzo PL3;TI
+8422;Pfungen PL3;ZH
+8902;Urdorf PL3;ZH
+4504;Solothurn;SO
+2305;La Chaux-de-Fonds;NE
+1965;Diolly (Savièse);VS
+1965;La Muraz (Savièse);VS
+6010;Kriens Contact Center;LU
+8580;Biessenhofen;TG
+1232;Confignon Cressy;GE
+5312;Döttingen-Klingnau;AG
+4028;Basel;BS
+6203;Sempach Bahnhof GK;LU
+8509;Frauenfeld;TG
+8970;Urdorf Exchange PL;ZH
+3030;Bern PAS;BE
+5313;Klingnau Wiesenweg;AG
+8953;Dietikon Silbern;ZH
+6875;Campora;TI
+6130;Wilisau Bahnhofstrasse;LU
+8403;Winterthur;ZH
+5004;Aarau Tellistrasse;AG
+6242;Wauwil Dorfstrasse;LU
+8411;Winterthur Pflanzschulstr;ZH
+8804;Au ZH Seestrasse;ZH
+9423;Altenrhein Dorfstrasse;SG
+8010;Zürich SPS;ZH
+1211;Genf SPS;GE
+3001;Bern SPS;BE
+4002;Basel SPS;BS
+5001;Aarau SPS;AG
+5201;Brugg SPS;AG
+6002;Luzern SPS;LU
+6301;Zug SPS;ZG
+6501;Bellinzona SPS;TI
+6601;Locarno SPS;TI
+6830;Chiasso SPS;TI
+6901;Lugano SPS;TI
+3645;Gwatt (Thun) Spiezstrasse;BE
+5463;Wislikofen Probsteiweg;AG
+8404;Winterthur im LInk;ZH
+1000;Lausanne SPS;VD
+8620;Wetzikon Kastellstrasse;ZH
+9494;Schaan IMPCA;FL
+1666;Grandvillard Dist;FR
+8049;Zürich Rütihof (Höngg);ZH
+8405;Winterthur Tösstalerstrasse;ZH
+9464;Rüthi (Rheintal) Staatstr;SG
+1305;Penthalaz Distribution;VD

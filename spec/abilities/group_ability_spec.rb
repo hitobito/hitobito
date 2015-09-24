@@ -158,6 +158,69 @@ describe GroupAbility do
     end
   end
 
+  context 'group and below full' do
+    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+    context 'in own group' do
+      let(:group) { role.group }
+      it 'may create subgroup' do
+        is_expected.to be_able_to(:create, group.children.new)
+      end
+
+      it 'may not create sub layer' do
+        is_expected.not_to be_able_to(:create, Group::BottomLayer.new(parent: role.group))
+      end
+
+      it 'may edit group' do
+        is_expected.to be_able_to(:update, group)
+      end
+
+      it 'may edit below group' do
+        is_expected.to be_able_to(:update, groups(:toppers))
+      end
+
+      it 'may not edit below layer' do
+        is_expected.not_to be_able_to(:update, groups(:bottom_layer_one))
+      end
+
+      it 'may not destroy group' do
+        is_expected.not_to be_able_to(:destroy, group)
+      end
+
+      it 'may destroy below group' do
+        is_expected.to be_able_to(:destroy, groups(:toppers))
+      end
+
+      it 'may not modify superior' do
+        is_expected.not_to be_able_to(:modify_superior, group)
+      end
+
+      it 'may not modify superior in below group' do
+        is_expected.not_to be_able_to(:modify_superior, groups(:toppers))
+      end
+    end
+
+    context 'without specific group' do
+      it 'may not create subgroup' do
+        is_expected.not_to be_able_to(:create, Group.new)
+      end
+    end
+
+    context 'in other group from same layer' do
+      let(:group) { groups(:top_group) }
+      it 'may create subgroup' do
+        is_expected.to be_able_to(:create, group.children.new)
+      end
+    end
+
+    context 'in group from lower layer' do
+      let(:group) { groups(:bottom_layer_one) }
+      it 'may not create subgroup' do
+        is_expected.not_to be_able_to(:create, group.children.new)
+      end
+    end
+  end
+
   context 'group full' do
     let(:role) { Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers)) }
 

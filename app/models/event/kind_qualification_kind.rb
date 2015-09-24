@@ -30,6 +30,7 @@ class Event::KindQualificationKind < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :category, inclusion: { in: CATEGORIES }
   validates :role, inclusion: { in: ROLES }
 

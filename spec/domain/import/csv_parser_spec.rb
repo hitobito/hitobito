@@ -105,8 +105,8 @@ describe Import::CsvParser do
       subject { parser.map_data(header_mapping) }
 
 
-      its([3]) do should eq 'first_name' => 'Athäna', 'last_name' => 'Rippin', 'company' => 'Holly Stamm MD',
-                            'company_name' => nil, 'email' => 'athena_rippin@example.com', 'address' => nil,
+      its([3]) do should eq 'first_name' => 'Athäna', 'last_name' => 'Rippin', 'company' => '1',
+                            'company_name' => 'Holly Stamm MD', 'email' => 'athena_rippin@example.com', 'address' => nil,
                             'zip_code' => '94851-6726', 'town' => nil, 'gender' => nil, 'birthday' => nil, 'phone_number_andere' => nil,
                             'phone_number_arbeit' => '102.416.2837 x7436', 'phone_number_fax' => '946.881.6109 x21329',
                             'phone_number_mobil' => '399.018.6807 x996', 'phone_number_mutter' => '530.148.0751 x912',

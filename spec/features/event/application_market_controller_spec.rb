@@ -79,22 +79,26 @@ describe Event::ApplicationMarketController do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
+          participants = find('#participants').text
+          applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_prio_1.id}"
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
+          fill_in('event_application_waiting_list_comment', with: 'only if possible')
+          find("#applications ##{appl_id} button.btn-primary").click
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
+          expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-comment')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
+          expect(all("#applications ##{appl_id} td").last).to have_no_selector('.icon-comment')
 
           visit group_event_application_market_index_path(group.id, event.id)
 
-          find('#participants').text == @participants
-          find('#applications').text == @applications
+          expect(find('#participants').text).to eq(participants)
+          expect(find('#applications').text).to eq(applications)
         end
       end
 
@@ -103,14 +107,11 @@ describe Event::ApplicationMarketController do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
-
           find('#waiting_list').set(true)
           click_button('Aktualisieren')
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
+          participants = find('#participants').text
+          applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_waiting.id}"
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
@@ -120,12 +121,14 @@ describe Event::ApplicationMarketController do
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-minus')
 
           find("#applications ##{appl_id}").click_link('Warteliste')
+          find("#applications ##{appl_id} button.btn-primary").click
           expect(all("#applications ##{appl_id} td").last).to have_selector('.icon-ok')
+          expect(all("#applications ##{appl_id} td").last).to have_no_selector('.icon-comment')
 
-          visit group_event_application_market_index_path(group.id, event.id)
+          visit group_event_application_market_index_path(group.id, event.id, 'prio[]' => 1, waiting_list: true)
 
-          find('#participants').text == @participants
-          find('#applications').text == @applications
+          expect(find('#participants').text).to eq(participants)
+          expect(find('#applications').text).to eq(applications)
         end
       end
     end
@@ -136,20 +139,20 @@ describe Event::ApplicationMarketController do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
+          participants = find('#participants').text
+          applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_prio_1.id}"
 
           all("#applications ##{appl_id} td").first.find('a').click
-          is_expected.not_to have_selector("#applications ##{appl_id}")
+          expect(page).to have_no_selector("#applications ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#participants')).to have_content(appl_prio_1.person.to_s(:list))
           expect(all('#participants tr').last).to have_content(appl_prio_1.person.to_s(:list))
 
           all("#participants ##{appl_id} td").last.find('a').click
-          is_expected.not_to have_selector("#participants ##{appl_id}")
+          expect(page).to have_no_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#applications')).to have_content(appl_prio_1.person.to_s(:list))
@@ -157,8 +160,8 @@ describe Event::ApplicationMarketController do
 
           visit group_event_application_market_index_path(group.id, event.id)
 
-          find('#participants').text == @participants
-          find('#applications').text == @applications
+          expect(find('#participants').text).to eq(participants)
+          expect(find('#applications').text).to eq(applications)
         end
       end
 
@@ -167,14 +170,11 @@ describe Event::ApplicationMarketController do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
-
           find('#waiting_list').set(true)
           click_button('Aktualisieren')
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
+          participants = find('#participants').text
+          applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_waiting.id}"
 
@@ -183,19 +183,23 @@ describe Event::ApplicationMarketController do
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#participants')).to have_content(appl_waiting.person.to_s(:list))
           expect(all('#participants tr').last).to have_content(appl_waiting.person.to_s(:list))
-          is_expected.not_to have_selector("#applications ##{appl_id}")
+          expect(page).to have_no_selector("#applications ##{appl_id}")
 
           all("#participants ##{appl_id} td").last.find('a').click
-          is_expected.not_to have_selector("#participants ##{appl_id}")
+          expect(page).to have_no_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#applications')).to have_content(appl_waiting.person.to_s(:list))
           expect(all('#applications tr').last).to have_content(appl_waiting.person.to_s(:list))
+          expect(all('#applications tr').last).to have_selector('.icon-minus')
 
-          visit group_event_application_market_index_path(group.id, event.id)
+          visit group_event_application_market_index_path(group.id, event.id, 'prio[]' => 1, waiting_list: true)
 
-          find('#participants').text == @participants
-          find('#applications').text == @applications
+          # once assigned, a participant is removed from the waiting list
+          expect(page).to have_no_selector("#applications ##{appl_id}")
+
+          expect(find('#participants').text).to eq(participants)
+          expect(find('#applications').text).not_to eq(applications)
         end
       end
 
@@ -204,13 +208,13 @@ describe Event::ApplicationMarketController do
           sign_in
           visit group_event_application_market_index_path(group.id, event.id)
 
-          @participants = find('#participants').text
-          @applications = find('#applications').text
+          participants = find('#participants').text
+          applications = find('#applications').text
 
           appl_id = "event_participation_#{appl_participant.id}"
 
           all("#participants ##{appl_id} td").last.find('a').click
-          is_expected.not_to have_selector("#participants ##{appl_id}")
+          expect(page).to have_no_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#applications')).to have_content(appl_participant.person.to_s(:list))
@@ -220,15 +224,54 @@ describe Event::ApplicationMarketController do
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find('#participants tr')).to have_content(appl_participant.person.to_s(:list))
           expect(all('#participants tr').last).to have_content(appl_participant.person.to_s(:list))
-          is_expected.not_to have_selector("#applications ##{appl_id}")
+          expect(page).to have_no_selector("#applications ##{appl_id}")
 
           visit group_event_application_market_index_path(group.id, event.id)
 
-          find('#participants').text == @participants
-          find('#applications').text == @applications
+          expect(find('#participants').text).to eq(participants)
+          expect(find('#applications').text).to eq(applications)
         end
       end
 
+    end
+  end
+
+  describe 'popovers', js: true do
+    it 'opening one closes the others' do
+      sign_in
+      visit group_event_application_market_index_path(group.id, event.id)
+
+      check('Prio 1')
+      check('Prio 2')
+      check('Prio 3')
+      click_button('Aktualisieren')
+
+      appl1_id = "event_participation_#{appl_prio_1.id}"
+      expect(all("#applications ##{appl1_id} td").last).to have_selector('.icon-minus')
+
+      find("#applications ##{appl1_id}").click_link('Warteliste')
+      expect(all("#applications ##{appl1_id} td").last).to have_selector('.popover')
+
+      appl2_id = "event_participation_#{appl_prio_2.id}"
+      expect(all("#applications ##{appl2_id} td").last).to have_selector('.icon-minus')
+
+      find("#applications ##{appl2_id}").click_link('Warteliste')
+      expect(all("#applications ##{appl2_id} td").last).to have_selector('.popover')
+      expect(all("#applications ##{appl1_id} td").last).to have_no_selector('.popover')
+    end
+
+    it 'may be closed with cancel link' do
+      sign_in
+      visit group_event_application_market_index_path(group.id, event.id)
+
+      appl1_id = "event_participation_#{appl_prio_1.id}"
+      expect(all("#applications ##{appl1_id} td").last).to have_selector('.icon-minus')
+
+      find("#applications ##{appl1_id}").click_link('Warteliste')
+      expect(all("#applications ##{appl1_id} td").last).to have_selector('.popover')
+
+      find("#applications ##{appl1_id}").click_link('Abbrechen')
+      expect(all("#applications ##{appl1_id} td").last).to have_no_selector('.popover')
     end
   end
 

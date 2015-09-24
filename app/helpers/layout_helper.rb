@@ -40,8 +40,19 @@ module LayoutHelper
     end
   end
 
-  def icon(name)
-    content_tag(:i, '', class: "icon icon-#{name}")
+  def icon(name, options = {})
+    add_css_class(options, "icon icon-#{name}")
+    content_tag(:i, '', options)
+  end
+
+  def badge(label, type = nil, tooltip = nil)
+    options = { class: "badge badge-#{type || 'default'}" }
+    if tooltip.present?
+      options.merge!(rel: :tooltip,
+                     'data-html' => 'true',
+                     title: tooltip)
+    end
+    content_tag(:span, label, options)
   end
 
   def section(title, &block)
@@ -83,7 +94,7 @@ module LayoutHelper
   private
 
   def include_add_button(title, add_path)
-    button = action_button(ti(:'link.add_without_model'),
+    button = action_button(ti(:'link.add'),
                            add_path,
                            'plus',
                            class: 'btn-small')

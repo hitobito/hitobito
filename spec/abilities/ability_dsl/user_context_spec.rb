@@ -14,12 +14,12 @@ describe AbilityDsl::UserContext do
   context :top_leader do
     let(:user) { people(:top_leader) }
 
-    its(:groups_group_full) { is_expected.to eq [] }
-    its(:groups_group_read) { is_expected.to eq [] }
-    its(:groups_layer_and_below_full) { is_expected.to eq [groups(:top_group).id] }
-    its(:groups_layer_and_below_read) { is_expected.to eq [groups(:top_group).id] }
-    its(:layers_and_below_full)       { is_expected.to eq [groups(:top_layer).id] }
-    its(:layers_and_below_read)       { is_expected.to eq [groups(:top_layer).id] }
+    it { expect(subject.permission_group_ids(:group_full)).to eq [] }
+    it { expect(subject.permission_group_ids(:group_read)).to eq [] }
+    it { expect(subject.permission_group_ids(:layer_and_below_full)).to eq [groups(:top_group).id] }
+    it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:top_group).id] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:top_layer).id] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:top_layer).id] }
     its(:admin)             { should be_truthy }
     its(:all_permissions)   { is_expected.to contain_exactly(:admin, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
@@ -31,12 +31,12 @@ describe AbilityDsl::UserContext do
   context :bottom_member do
     let(:user) { people(:bottom_member) }
 
-    its(:groups_group_full) { is_expected.to eq [] }
-    its(:groups_group_read) { is_expected.to eq [] }
-    its(:groups_layer_and_below_full) { is_expected.to eq [] }
-    its(:groups_layer_and_below_read) { is_expected.to eq [groups(:bottom_layer_one).id] }
-    its(:layers_and_below_full)       { is_expected.to eq [] }
-    its(:layers_and_below_read)       { is_expected.to eq [groups(:bottom_layer_one).id] }
+    it { expect(subject.permission_group_ids(:group_full)).to eq [] }
+    it { expect(subject.permission_group_ids(:group_read)).to eq [] }
+    it { expect(subject.permission_group_ids(:layer_and_below_full)).to eq [] }
+    it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_falsey }
     its(:all_permissions)   { is_expected.to eq [:layer_and_below_read] }
 
@@ -56,14 +56,15 @@ describe AbilityDsl::UserContext do
       p
     end
 
-    its(:groups_group_full) { is_expected.to eq [] }
-    its(:groups_group_read) { is_expected.to contain_exactly(groups(:top_group).id, groups(:bottom_group_one_two).id) }
-    its(:groups_layer_and_below_full) { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
-    its(:groups_layer_and_below_read) { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
-    its(:layers_and_below_full)       { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
-    its(:layers_and_below_read)       { is_expected.to contain_exactly(groups(:bottom_layer_one).id) }
+    it { expect(subject.permission_group_ids(:group_full)).to eq [] }
+    it { expect(subject.permission_group_ids(:group_read)).to eq [groups(:bottom_group_one_two).id] }
+    it { expect(subject.permission_group_ids(:group_and_below_read)).to eq [groups(:top_group).id] }
+    it { expect(subject.permission_group_ids(:layer_and_below_full)).to eq [groups(:bottom_layer_one).id] }
+    it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:bottom_layer_one).id] }
+    it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_falsey }
-    its(:all_permissions)   { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :contact_data, :approve_applications) }
+    its(:all_permissions)   { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications) }
   end
 
 end

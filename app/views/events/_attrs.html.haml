@@ -34,6 +34,7 @@
 
     = render_extensions :show
 
+
   %aside.span5
     - if entry.contact_id?
       = section Event.human_attribute_name(:contact) do
@@ -53,7 +54,8 @@
 
         %dl.dl-horizontal
           - entry.used?(:application_conditions) do
-            = labeled(Event.human_attribute_name(:application_conditions), format_attr(entry, :application_conditions))
+            = labeled_attr(entry, :application_conditions)
+
           - if entry.course_kind?
             = labeled(Event::Kind.human_attribute_name(:minimum_age),
                       entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
@@ -66,6 +68,7 @@
             = labeled(Event::Kind.human_attribute_name(:prolongations),
                       entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
 
+        = render_attrs(entry, :signature, :signature_confirmation)
         = render_extensions 'application_attrs', folder: 'events'
 
     = render_extensions 'right_section'

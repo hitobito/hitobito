@@ -57,7 +57,11 @@ Hitobito::Application.routes.draw do
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch
 
-      resources :people_filters, only: [:new, :create, :destroy]
+      resources :people_filters, only: [:new, :create, :destroy] do
+        collection do
+          get 'qualification'
+        end
+      end
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
       resources :events do

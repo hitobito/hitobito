@@ -19,9 +19,9 @@ module Export::Csv::Events
       {}.tap do |labels|
         add_main_labels(labels)
         add_date_labels(labels)
-        add_prefixed_contactable_labels(labels, :contact)
-        add_prefixed_contactable_labels(labels, :leader)
+        add_contact_labels(labels)
         add_additional_labels(labels)
+        add_count_labels(labels)
       end
     end
 
@@ -35,6 +35,11 @@ module Export::Csv::Events
       add_used_attribute_label(labels, :location)
     end
 
+    def add_contact_labels(labels)
+      add_prefixed_contactable_labels(labels, :contact)
+      add_prefixed_contactable_labels(labels, :leader)
+    end
+
     def add_additional_labels(labels)
       add_used_attribute_label(labels, :motto)
       add_used_attribute_label(labels, :cost)
@@ -43,6 +48,9 @@ module Export::Csv::Events
       add_used_attribute_label(labels, :maximum_participants)
       add_used_attribute_label(labels, :external_applications)
       add_used_attribute_label(labels, :priorization)
+    end
+
+    def add_count_labels(labels)
       labels[:teamer_count] = human_attribute(:teamer_count)
       labels[:participant_count] = human_attribute(:participant_count)
       labels[:applicant_count] = human_attribute(:applicant_count)
@@ -50,10 +58,10 @@ module Export::Csv::Events
 
     def add_date_labels(labels)
       MAX_DATES.times.each do |i|
-        prefix = "Datum #{i + 1} "
-        labels[:"date_#{i}_label"] = "#{prefix}#{Event::Date.human_attribute_name(:label)}"
-        labels[:"date_#{i}_location"] = "#{prefix}#{Event::Date.human_attribute_name(:location)}"
-        labels[:"date_#{i}_duration"] = "#{prefix}Zeitraum"
+        prefix = translate('date', index: i + 1)
+        labels[:"date_#{i}_label"] = "#{prefix} #{Event::Date.human_attribute_name(:label)}"
+        labels[:"date_#{i}_location"] = "#{prefix} #{Event::Date.human_attribute_name(:location)}"
+        labels[:"date_#{i}_duration"] = "#{prefix} #{translate('duration')}"
       end
     end
 
@@ -87,7 +95,7 @@ module Export::Csv::Events
     end
 
     def model_class
-      @model_class ||= list.first ? list.first.class : Event::Course
+      @model_class ||= list.first ? list.first.class : ::Event::Course
     end
   end
 end

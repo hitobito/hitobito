@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'csv'
-require 'cmess/guess_encoding'
+
 
 module Import
   class CsvParser
@@ -45,7 +45,7 @@ module Import
     end
 
     def headers
-      csv.headers.reject { |header| header.blank? }
+      csv.headers.reject(&:blank?)
     end
 
     def flash_notice

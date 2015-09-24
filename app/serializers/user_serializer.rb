@@ -9,7 +9,7 @@ class UserSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
-    property :href, h.person_home_path(item, only_path: false, format: :json)
+    property :href, h.group_person_url(item.default_group_id, item, format: :json)
 
     map_properties :first_name,
                    :last_name,

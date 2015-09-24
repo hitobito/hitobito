@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212103138) do
+ActiveRecord::Schema.define(version: 20150722094419) do
 
   create_table "additional_emails", force: true do |t|
     t.integer "contactable_id",                  null: false
@@ -64,12 +64,13 @@ ActiveRecord::Schema.define(version: 20150212103138) do
   end
 
   create_table "event_applications", force: true do |t|
-    t.integer "priority_1_id",                 null: false
+    t.integer "priority_1_id",                        null: false
     t.integer "priority_2_id"
     t.integer "priority_3_id"
-    t.boolean "approved",      default: false, null: false
-    t.boolean "rejected",      default: false, null: false
-    t.boolean "waiting_list",  default: false, null: false
+    t.boolean "approved",             default: false, null: false
+    t.boolean "rejected",             default: false, null: false
+    t.boolean "waiting_list",         default: false, null: false
+    t.text    "waiting_list_comment"
   end
 
   create_table "event_dates", force: true do |t|
@@ -107,6 +108,8 @@ ActiveRecord::Schema.define(version: 20150212103138) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "minimum_age"
+    t.text     "general_information"
+    t.text     "application_conditions"
   end
 
   create_table "event_participations", force: true do |t|
@@ -142,7 +145,7 @@ ActiveRecord::Schema.define(version: 20150212103138) do
 
   create_table "events", force: true do |t|
     t.string   "type"
-    t.string   "name",                                              null: false
+    t.string   "name",                                                   null: false
     t.string   "number"
     t.string   "motto"
     t.string   "cost"
@@ -154,16 +157,19 @@ ActiveRecord::Schema.define(version: 20150212103138) do
     t.date     "application_closing_at"
     t.text     "application_conditions"
     t.integer  "kind_id"
-    t.string   "state",                  limit: 60
-    t.boolean  "priorization",                      default: false, null: false
-    t.boolean  "requires_approval",                 default: false, null: false
+    t.string   "state",                       limit: 60
+    t.boolean  "priorization",                           default: false, null: false
+    t.boolean  "requires_approval",                      default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "participant_count",                 default: 0
+    t.integer  "participant_count",                      default: 0
     t.integer  "application_contact_id"
-    t.boolean  "external_applications",             default: false
-    t.integer  "applicant_count",                   default: 0
-    t.integer  "teamer_count",                      default: 0
+    t.boolean  "external_applications",                  default: false
+    t.integer  "applicant_count",                        default: 0
+    t.integer  "teamer_count",                           default: 0
+    t.boolean  "signature"
+    t.boolean  "signature_confirmation"
+    t.string   "signature_confirmation_text"
     t.index ["kind_id"], :name => "index_events_on_kind_id"
   end
 
@@ -218,6 +224,13 @@ ActiveRecord::Schema.define(version: 20150212103138) do
     t.integer "count_vertical",                              null: false
     t.float   "padding_top",      limit: 24,                 null: false
     t.float   "padding_left",     limit: 24,                 null: false
+  end
+
+  create_table "locations", force: true do |t|
+    t.string  "name",               null: false
+    t.string  "canton",   limit: 2, null: false
+    t.integer "zip_code",           null: false
+    t.index ["zip_code", "canton", "name"], :name => "index_locations_on_zip_code_and_canton_and_name", :unique => true
   end
 
   create_table "mailing_lists", force: true do |t|

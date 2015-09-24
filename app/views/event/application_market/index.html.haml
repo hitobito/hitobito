@@ -11,8 +11,7 @@
       = Dropdown::Event::ParticipantAdd.new(self,
                                             @group,
                                             @event,
-                                            t('global.associations.add_with_model',
-                                              model: Event::Role::Participant.model_name.human),
+                                            t('.add_participant'),
                                             :plus,
                                             for_someone_else: true)
 

@@ -8,6 +8,18 @@
 module AbilityDsl::Constraints::Event
   module Participation
 
+    def her_own_or_for_participations_full_events
+      her_own || for_participations_full_events
+    end
+
+    def in_same_layer_or_different_prio
+      in_same_layer || different_prio
+    end
+
+    def in_same_layer_or_below_or_different_prio
+      in_same_layer_or_below || different_prio
+    end
+
     def her_own
       participation.person_id == user.id
     end
@@ -28,6 +40,21 @@ module AbilityDsl::Constraints::Event
 
     def participation
       subject.participation
+    end
+
+    def different_prio
+      return false if participation.active? || !participation.application_id?
+
+      # This is a bit more than really needed, to restrict further we would
+      # need the actual course the participation should be displayed for,
+      # which we do not have.
+      appl = participation.application
+      (appl.waiting_list? || appl.priority_2_id? || appl.priority_3_id?) &&
+        permission_in_layers?(course_offerers)
+    end
+
+    def course_offerers
+      @course_offerers ||= Group.course_offerers.pluck(:id)
     end
 
   end

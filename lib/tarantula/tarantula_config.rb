@@ -22,7 +22,7 @@ module TarantulaConfig
     t.crawl
   end
 
-  # rubocop:disable MethodLength
+  # rubocop:disable Metrics/MethodLength, Style/RegexpLiteral, Metrics/AbcSize
   def configure_urls(t, person)
     # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)
@@ -34,7 +34,8 @@ module TarantulaConfig
     # sphinx not running
     t.skip_uri_patterns << /\/full$/
     # no modifications of user roles (and thereof its permissions)
-    t.skip_uri_patterns << /groups\/\d+\/roles\/(#{person.roles.collect(&:id).join("|")})$/
+    group_roles = person.roles.collect(&:id).join('|')
+    t.skip_uri_patterns << /groups\/\d+\/roles\/(#{group_roles})$/
     # no ajax links in application market
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/participant$/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/waiting_list$/
@@ -48,7 +49,10 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
     # do not change role type for own event roles
-    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{person.event_roles.pluck(:id).join('|')})$/
+    event_roles = person.event_roles.pluck(:id).join('|')
+    t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{event_roles})$/
+    # custom return_urls end up like that.
+    t.skip_uri_patterns << /\:3000\-?\d+$/
 
     # The parent entry may already have been deleted, thus producing 404s.
     t.allow_404_for(/groups$/)
@@ -84,14 +88,15 @@ module TarantulaConfig
     t.allow_404_for(/fr\/groups\/\d+$/)
     # custom return_urls end up like that.
     t.allow_404_for(/^\-?\d+$/)
+    t.allow_500_for(/^\-?\d+$/)
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable MethodLength, Style/RegexpLiteral, Metrics/AbcSize
 
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window
-    year = Date.today.year
+    year = Time.zone.today.year
     [year - 1, year, year + 1].collect do |d|
       "(?!#{d})"
     end.join

@@ -89,6 +89,22 @@ describe Import::PersonDoubletteFinder do
         expect(subject.errors.size).to eq(0)
       end
     end
+
+    context 'accepts two-digit year birthday' do
+      before { Person.create!(attrs.merge(birthday: '2000-01-01')) }
+      let(:attrs) { { last_name: 'bar', first_name: 'foo', zip_code: '8000', birthday: '1.1.00' } }
+
+      it do
+        expect(conditions).to eq([
+          'last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) ' \
+           'AND (birthday = ? OR birthday IS NULL)',
+          'bar', 'foo', '8000', Time.zone.parse('2000-01-01').to_date])
+      end
+      it { is_expected.to be_present }
+      it 'has no error' do
+        expect(subject.errors.size).to eq(0)
+      end
+    end
   end
 
   context 'multiple doublettes for the same person' do

@@ -21,7 +21,7 @@ class Duration < Struct.new(:start_at, :finish_at)
 
   def active?
     if date_only?(start_at) && date_only?(finish_at)
-      cover?(Date.today)
+      cover?(Time.zone.today)
     else
       cover?(Time.zone.now)
     end

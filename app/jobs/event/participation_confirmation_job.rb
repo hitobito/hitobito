@@ -24,7 +24,7 @@ class Event::ParticipationConfirmationJob < BaseJob
 
   def send_confirmation
     if participation.person.email.present?
-      Event::ParticipationMailer.confirmation(participation).deliver
+      Event::ParticipationMailer.confirmation(participation).deliver_now
     end
   end
 
@@ -32,7 +32,7 @@ class Event::ParticipationConfirmationJob < BaseJob
     if participation.event.requires_approval?
       recipients = approvers
       if recipients.present?
-        Event::ParticipationMailer.approval(participation, recipients).deliver
+        Event::ParticipationMailer.approval(participation, recipients).deliver_now
       end
     end
   end

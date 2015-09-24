@@ -21,8 +21,6 @@
 
 class Event::Participation < ActiveRecord::Base
 
-  schema_validations except_type: :uniqueness
-
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers
@@ -32,9 +30,9 @@ class Event::Participation < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
 
-  belongs_to :application, dependent: :destroy, validate: true
+  belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
-  has_many :roles, dependent: :destroy
+  has_many :roles, inverse_of: :participation, dependent: :destroy
 
   has_many :answers, dependent: :destroy, validate: true
 
@@ -44,6 +42,7 @@ class Event::Participation < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :person_id,
             uniqueness: { scope: :event_id }
   validates :additional_information,
@@ -85,7 +84,7 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def upcoming
-      joins(event: :dates).where('event_dates.start_at >= ?', ::Date.today).uniq
+      joins(event: :dates).where('event_dates.start_at >= ?', ::Time.zone.today).uniq
     end
 
   end

@@ -45,15 +45,18 @@ class RecurringJob < BaseJob
 
   private
 
+  def perform_internal
+  end
+
   def reschedule
     enqueue!(run_at: next_run, priority: 5) unless others_scheduled?
   end
 
   # used to double check that a recurring job really is not scheduled multiple times.
   def others_scheduled?
-     # when called from a job worker, @delayed_job is set.
-     @delayed_job &&
-     delayed_jobs.where('id > ?', @delayed_job.id).exists?
+    # when called from a job worker, @delayed_job is set.
+    @delayed_job &&
+    delayed_jobs.where('id > ?', @delayed_job.id).exists?
   end
 
   def next_run

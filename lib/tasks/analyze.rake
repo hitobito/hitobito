@@ -27,14 +27,6 @@ task :brakeman do
   end
 end
 
-desc "Run quality analysis"
-task :qa do
-  # do not fail if we find issues
-  sh 'rails_best_practices -x config,db -f html --vendor .' rescue nil
-  true
-end
-
-
 desc 'Run rubocop-must.yml and fail if there are issues'
 task :rubocop do
   begin

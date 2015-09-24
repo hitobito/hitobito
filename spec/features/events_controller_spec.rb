@@ -38,7 +38,7 @@ describe EventsController, js: true do
       all('form .btn-toolbar').first.click_button 'Speichern'
 
       # show event again
-      is_expected.not_to have_selector('.contactable')
+      expect(page).to have_no_selector('.contactable')
     end
   end
 

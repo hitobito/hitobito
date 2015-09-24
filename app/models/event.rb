@@ -8,30 +8,33 @@
 #
 # Table name: events
 #
-#  id                     :integer          not null, primary key
-#  type                   :string(255)
-#  name                   :string(255)      not null
-#  number                 :string(255)
-#  motto                  :string(255)
-#  cost                   :string(255)
-#  maximum_participants   :integer
-#  contact_id             :integer
-#  description            :text
-#  location               :text
-#  application_opening_at :date
-#  application_closing_at :date
-#  application_conditions :text
-#  kind_id                :integer
-#  state                  :string(60)
-#  priorization           :boolean          default(FALSE), not null
-#  requires_approval      :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  participant_count      :integer          default(0)
-#  application_contact_id :integer
-#  external_applications  :boolean          default(FALSE)
-#  applicant_count        :integer          default(0)
-#  teamer_count           :integer          default(0)
+#  id                          :integer          not null, primary key
+#  type                        :string(255)
+#  name                        :string(255)      not null
+#  number                      :string(255)
+#  motto                       :string(255)
+#  cost                        :string(255)
+#  maximum_participants        :integer
+#  contact_id                  :integer
+#  description                 :text
+#  location                    :text
+#  application_opening_at      :date
+#  application_closing_at      :date
+#  application_conditions      :text
+#  kind_id                     :integer
+#  state                       :string(60)
+#  priorization                :boolean          default(FALSE), not null
+#  requires_approval           :boolean          default(FALSE), not null
+#  created_at                  :datetime
+#  updated_at                  :datetime
+#  participant_count           :integer          default(0)
+#  application_contact_id      :integer
+#  external_applications       :boolean          default(FALSE)
+#  applicant_count             :integer          default(0)
+#  teamer_count                :integer          default(0)
+#  signature                   :boolean
+#  signature_confirmation      :boolean
+#  signature_confirmation_text :string(255)
 #
 
 class Event < ActiveRecord::Base
@@ -95,10 +98,11 @@ class Event < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :dates, presence: { message: :must_exist }
   validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,
-            timeliness: { type: :date, allow_blank: true }
+            timeliness: { type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31) }
   validates :description, :location, :application_conditions,
             length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
@@ -133,7 +137,7 @@ class Event < ActiveRecord::Base
 
     # Events with at least one date in the given year
     def in_year(year)
-      year = ::Date.today.year if year.to_i <= 0
+      year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
@@ -158,7 +162,7 @@ class Event < ActiveRecord::Base
 
     # Events that are open for applications.
     def application_possible
-      today = ::Date.today
+      today = Time.zone.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
       where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
       where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
@@ -226,8 +230,8 @@ class Event < ActiveRecord::Base
 
   # May participants apply now?
   def application_possible?
-    (!application_opening_at? || application_opening_at <= ::Date.today) &&
-    (!application_closing_at? || application_closing_at >= ::Date.today) &&
+    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
+    (!application_closing_at? || application_closing_at >= Time.zone.today) &&
     (maximum_participants.to_i == 0 || participant_count < maximum_participants)
   end
 

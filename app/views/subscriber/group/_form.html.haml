@@ -7,7 +7,7 @@
 
   = field_set_tag Group.model_name.human do
     = f.string_field(:subscriber,
-                     placeholder: t('global.search.placeholder_with_model', model: Group.model_name.human),
+                     placeholder: t('global.search.placeholder_group'),
                      data: {provide: 'entity',
                             id_field: 'subscription_subscriber_id',
                             url: query_group_mailing_list_group_index_path(@group, @mailing_list)})

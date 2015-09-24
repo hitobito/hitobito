@@ -43,7 +43,7 @@ describe SubscriptionsController do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
-      expect(@response.body).to eq("#{people(:bottom_member).email},#{@person_subscription.subscriber.email},#{e1.email}")
+      expect(@response.body.split(',')).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
     end
   end
 

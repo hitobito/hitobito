@@ -38,13 +38,16 @@ module I18nSettable
     def i18n_boolean_setter(*attrs)
       attrs.each do |attr|
         define_method("#{attr}=") do |value|
-          super(value)
-
           normalized = value.to_s.strip.downcase
-          super(true) if I18n.t('global.yes').downcase == normalized
-          super(false) if value.nil? || I18n.t('global.no').downcase == normalized
+          if I18n.t('global.yes').downcase == normalized
+            value = true
+          elsif value.blank? || I18n.t('global.no').downcase == normalized
+            value = false
+          end
 
-          value
+          # sorry about the occasional deprecation warning, not possible to avoid this one.
+          # wait it out till rails 5.
+          super(value)
         end
       end
     end

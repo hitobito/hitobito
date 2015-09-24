@@ -18,14 +18,12 @@ require 'spec_helper'
 
 describe Event::Participation do
 
-
   let(:course) do
     course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
-    course.questions << Fabricate(:event_question, event: course)
+    course.questions << Fabricate(:event_question, event: course, required: true)
     course.questions << Fabricate(:event_question, event: course)
     course
   end
-
 
   context '#init_answers' do
     subject { course.participations.new }
@@ -78,5 +76,28 @@ describe Event::Participation do
     end
   end
 
+  context 'save together with role' do
+    subject { course.participations.new }
+
+    it 'validates answers' do
+      q = course.questions
+      subject.enforce_required_answers = true
+      subject.person_id = Person.first.id
+      subject.init_answers
+      subject.attributes = {
+        answers_attributes: [{ question_id: q[1].id, answer: 'ja' }] }
+      subject.roles.new(type: Event::Course::Role::Participant.sti_name)
+      expect(subject.save).to be_falsey
+      expect(subject.errors.full_messages).to eq(['Antwort muss ausgefüllt werden'])
+    end
+  end
+
+  context '#destroy' do
+    it 'destroy roles as well' do
+      expect do
+        event_participations(:top).destroy
+      end.to change { Event::Role.count }.by(-1)
+    end
+  end
 
 end

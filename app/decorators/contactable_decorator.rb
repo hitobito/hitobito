@@ -57,7 +57,7 @@ module ContactableDecorator
 
   def all_social_accounts(only_public = true)
     nested_values(social_accounts, only_public) do |name|
-      h.auto_link(name)
+      h.auto_link_value(name)
     end
   end
 
@@ -83,7 +83,7 @@ module ContactableDecorator
     html = ''.html_safe
     unless ignored_country?
       html << br if zip_code? || town?
-      html << country
+      html << country_label
     end
     html
   end

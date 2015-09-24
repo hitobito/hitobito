@@ -27,7 +27,8 @@ describe GroupSerializer do
 
   it 'does not include deleted children' do
     a = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
-    b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group, deleted_at: 1.month.ago)
+    b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
+    b.update!(deleted_at: 1.month.ago)
 
     expect(subject[:links][:children].size).to eq(1)
   end

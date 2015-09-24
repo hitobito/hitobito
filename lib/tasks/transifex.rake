@@ -32,14 +32,14 @@ namespace :tx do
 
   desc 'Push source files (=german locales) to transifex'
   task :push do
-    sh "tx push -s"
+    with_tx { sh "tx push -s" }
   end
 
   desc 'Pull translations from transifex'
-  task :pull  do
+  task :pull do
     # force pull because git locale file timestamps
     # will be newer than transifex files during rpm build.
-    sh 'tx pull -f'
+    with_tx { sh 'tx pull -f' }
   end
 
   #desc 'Save transifex credentials from env into .transifexrc'
@@ -48,10 +48,22 @@ namespace :tx do
     password = ENV['RAILS_TRANSIFEX_PASSWORD']
     if username && password
       host = ENV['RAILS_TRANSIFEX_HOST'] || 'https://www.transifex.com'
-      rc = "[#{host}]\nhostname = #{host}\npassword = #{password}\ntoken =\nusername = #{username}\n"
+      rc = ["[#{host}]",
+            "hostname = #{host}",
+            "password = #{password}",
+            "token =",
+            "username = #{username}"].join("\n")
       File.open('.transifexrc', 'w') { |f| f.puts rc }
     else
       puts 'No username and password given'
+    end
+  end
+
+  def with_tx
+    if File.exist?('.tx')
+      yield
+    else
+      puts 'Transifex not configured. Please run rake tx:init first'
     end
   end
 

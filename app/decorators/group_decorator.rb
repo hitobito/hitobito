@@ -48,9 +48,7 @@ class GroupDecorator < ApplicationDecorator
     klass.event_types
   end
 
-  def possible_children
-    klass.possible_children
-  end
+  delegate :possible_children, to: :klass
 
   def modifiable_attributes(*attributes)
     attributes = used_attributes(*attributes)

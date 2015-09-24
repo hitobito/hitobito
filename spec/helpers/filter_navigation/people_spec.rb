@@ -14,7 +14,8 @@ describe 'FilterNavigation::People' do
       allow(t).to receive_messages(can?: true)
       allow(t).to receive_messages(group_people_path: 'people_path')
       allow(t).to receive_messages(group_people_filter_path: 'people_filter_path')
-      allow(t).to receive_messages(new_group_people_filter_path: 'new_people_filter_path')
+      allow(t).to receive_messages(new_group_people_filter_path: 'new_group_people_filter_path')
+      allow(t).to receive_messages(qualification_group_people_filters_path: 'qualification_group_people_filters_path')
       allow(t).to receive_messages(link_action_destroy: '<a destroy>')
       allow(t).to receive_messages(icon: '<i>')
       allow(t).to receive_messages(ti: 'delete')
@@ -23,7 +24,7 @@ describe 'FilterNavigation::People' do
     end
   end
 
-  subject { FilterNavigation::People.new(template, group, nil, nil, nil) }
+  subject { FilterNavigation::People.new(template, group, {}) }
 
   context 'top layer' do
     let(:group) { groups(:top_layer).decorate }
@@ -35,11 +36,11 @@ describe 'FilterNavigation::People' do
 
     context 'without params' do
 
-      its(:main_items)      { should have(1).item }
+      its(:main_items)      { should have(2).item }
       its(:active_label)    { should == 'Mitglieder' }
       its('dropdown.active') { should be_falsey }
       its('dropdown.label')  { should == 'Weitere Ansichten' }
-      its('dropdown.items')  { should have(3).items }
+      its('dropdown.items')  { should have(4).items }
 
       it 'contains external item with count' do
         expect(subject.main_items.last).to match(/Externe \(0\)/)
@@ -64,7 +65,7 @@ describe 'FilterNavigation::People' do
 
         its('dropdown.active') { should be_falsey }
         its('dropdown.label')  { should == 'Weitere Ansichten' }
-        its('dropdown.items')  { should have(4).items }
+        its('dropdown.items')  { should have(5).items }
 
       end
     end
@@ -76,13 +77,13 @@ describe 'FilterNavigation::People' do
                                      role_types: role_types)
       end
 
-      subject { FilterNavigation::People.new(template, group, 'Leaders', role_types, nil) }
+      subject { FilterNavigation::People.new(template, group, name: 'Leaders', role_type_ids: role_types) }
 
-      its(:main_items)      { should have(1).items }
+      its(:main_items)      { should have(2).items }
       its(:active_label)    { should == nil }
       its('dropdown.active') { should be_truthy }
       its('dropdown.label')  { should == 'Leaders' }
-      its('dropdown.items')  { should have(4).item }
+      its('dropdown.items')  { should have(5).item }
 
     end
   end
@@ -101,6 +102,8 @@ describe 'FilterNavigation::People' do
 
   context 'bottom group' do
     let(:group) { groups(:bottom_group_one_one).decorate }
+
+    its('dropdown.items')  { should have(4).items }
 
     it 'entire sub groups contains only sub groups role types' do
       subject.dropdown.items.first.url =~ /#{[Role::External,

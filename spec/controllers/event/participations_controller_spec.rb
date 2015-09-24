@@ -69,8 +69,11 @@ describe Event::ParticipationsController do
 
     context 'for other event of other group' do
 
-      let(:group) { groups(:bottom_layer_one)}
-      let(:user) { Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: groups(:bottom_layer_one)).person }
+      let(:group) { groups(:bottom_layer_one) }
+      let(:user) do
+        Fabricate(Group::BottomLayer::Leader.sti_name.to_sym,
+                  group: groups(:bottom_layer_one)).person
+      end
       let(:other_course) do
         other = Fabricate(:course, groups: [groups(:bottom_layer_two)], kind: course.kind)
         other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
@@ -115,6 +118,19 @@ describe Event::ParticipationsController do
 
     end
 
+    context 'simple event' do
+      let(:simple_event) do
+        simple_event = Fabricate(:event, groups: [group])
+        simple_event.dates << Fabricate(:event_date, event: simple_event)
+        simple_event
+      end
+      let(:participation) { Fabricate(:event_participation, event: simple_event) }
+
+      it 'renders without errors (regression for load_precondition_warnings error on nil kind)' do
+        get :show, group_id: group.id, event_id: simple_event.id, id: participation.id
+      end
+    end
+
   end
 
   context 'GET print' do
@@ -138,8 +154,10 @@ describe Event::ParticipationsController do
         expect(participation.application.priority_1).to eq(course)
         expect(participation.answers.size).to eq(2)
         expect(participation.person).to eq(user)
-        expect(assigns(:priority_2s).collect(&:id)).to match_array([events(:top_course).id, other_course.id])
-        expect(assigns(:alternatives).collect(&:id)).to match_array([events(:top_course).id, course.id, other_course.id])
+        expect(assigns(:priority_2s).collect(&:id)).to match_array([events(:top_course).id,
+                                                                    other_course.id])
+        expect(assigns(:alternatives).collect(&:id)).to match_array([events(:top_course).id,
+                                                                     course.id, other_course.id])
       end
     end
 
@@ -167,8 +185,10 @@ describe Event::ParticipationsController do
     before do
       @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
-      update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al', town: 'Eye', address: 'Spring Road', zip_code: '3000')
-      update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '8000')
+      update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al',
+                                  town: 'Eye', address: 'Spring Road', zip_code: '3000')
+      update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js',
+                                  town: 'Stoke', address: 'Howard Street', zip_code: '8000')
     end
 
     it 'lists participant and leader group by default' do
@@ -193,7 +213,8 @@ describe Event::ParticipationsController do
     end
 
     it 'generates pdf labels' do
-      get :index, group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id, format: :pdf
+      get :index, group_id: group, event_id: course.id,
+                  label_format_id: label_formats(:standard).id, format: :pdf
 
       expect(@response.content_type).to eq('application/pdf')
       expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
@@ -204,15 +225,17 @@ describe Event::ParticipationsController do
 
       expect(@response.content_type).to eq('text/csv')
       expect(@response.body).to match(/^Vorname;Nachname/)
-      expect(@response.body).to match(%r{^#{@participant.person.first_name};#{@participant.person.last_name}})
-      expect(@response.body).to match(%r{^#{@leader.person.first_name};#{@leader.person.last_name}})
+      expect(@response.body).
+        to match(/^#{@participant.person.first_name};#{@participant.person.last_name}/)
+      expect(@response.body).to match(/^#{@leader.person.first_name};#{@leader.person.last_name}/)
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      expect(@response.body).to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+      expect(@response.body).
+        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
     end
 
 
@@ -224,7 +247,7 @@ describe Event::ParticipationsController do
         end
       end
 
-      it "sorts based on role" do
+      it 'sorts based on role' do
         get :index, group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc
         expect(assigns(:participations)).to eq([@leader, @participant])
       end
@@ -253,11 +276,15 @@ describe Event::ParticipationsController do
 
       before do
         # create one person with two approvers
-        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
-        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))
-        Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_one_one))
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1,
+                  group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2,
+                  group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person,
+                  group: groups(:bottom_group_one_one))
 
-        person.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:sl))
+        person.qualifications << Fabricate(:qualification,
+                                           qualification_kind: qualification_kinds(:sl))
       end
 
       it 'creates confirmation job' do
@@ -265,7 +292,8 @@ describe Event::ParticipationsController do
           post :create, group_id: group.id, event_id: course.id, event_participation: {}
           expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count }.by(1)
-        expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, '
+        expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese ' \
+          'Seite über <i>Drucken</i> ausdrucken, '
       end
 
       it 'creates active participant role for non course events' do
@@ -275,8 +303,10 @@ describe Event::ParticipationsController do
         expect(participation).to be_active
         expect(participation.roles.size).to eq(1)
         role = participation.roles.first
-        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).
+          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
       end
 
@@ -288,8 +318,10 @@ describe Event::ParticipationsController do
         expect(participation.roles.size).to eq(1)
         role = participation.roles.first
         expect(role).to be_kind_of(Event::Course::Role::Participant)
-        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).
+          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
       end
 
@@ -307,8 +339,10 @@ describe Event::ParticipationsController do
         expect(participation.roles.size).to eq(1)
         role = participation.roles.first
         expect(role).to be_kind_of(TestParticipant)
-        expect(flash[:notice]).to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).
+          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
       end
 
@@ -340,7 +374,8 @@ describe Event::ParticipationsController do
       let(:participation) { assigns(:participation) }
 
       it 'top leader can create participation for bottom member' do
-        post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id }
+        post :create, group_id: group.id, event_id: course.id,
+                      event_participation: { person_id: bottom_member.id }
         expect(participation).to be_present
         expect(participation.persisted?).to be_truthy
         expect(participation).to be_active
@@ -351,7 +386,8 @@ describe Event::ParticipationsController do
       it 'bottom member can not create participation for top leader' do
         sign_in(bottom_member)
         expect do
-          post :create, group_id: group.id, event_id: course.id, event_participation: { person_id: user.id }
+          post :create, group_id: group.id, event_id: course.id,
+                        event_participation: { person_id: user.id }
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -360,19 +396,55 @@ describe Event::ParticipationsController do
   context 'preconditions' do
     before { user.qualifications.first.destroy }
 
-    { new: :get, create: :post }.each do |action, method|
-      before { send(method, action, group_id: group.id, event_id: course.id) }
+    context 'GET show' do
 
-      context "#{method.upcase} #{action}"  do
-        it 'redirects to event#show' do
-          is_expected.to redirect_to group_event_path(group, course)
+      context 'for participant' do
+        before { Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: participation) }
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+        let(:warnings) { assigns(:precondition_warnings) }
+
+        it 'assigns precondition_warnings' do
+          expect(warnings[0]).to match(/Vorbedingungen.*nicht erfüllt/)
+          expect(warnings[1]).to match(/Folgende Qualifikationen fehlen: Group Lead/)
         end
-        it 'sets flash message' do
-          expect(flash[:alert].last).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+      end
+
+      context 'for leader' do
+        before { Fabricate(:event_role, type: Event::Role::Leader.sti_name, participation: participation) }
+        before { get :show, group_id: group.id, event_id: course.id, id: participation.id }
+        let(:warnings) { assigns(:precondition_warnings) }
+
+        it 'does not assign precondition_warnings' do
+          expect(warnings).to be_nil
         end
       end
     end
 
+    context 'GET new' do
+      before { get :new, group_id: group.id, event_id: course.id }
+
+      it 'allows the user to apply' do
+        is_expected.to_not redirect_to group_event_path(group, course)
+      end
+
+      it 'displays flash message' do
+        expect(flash[:alert].last).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+      end
+    end
+
+    context 'POST create' do
+      before { post :create, group_id: group.id, event_id: course.id }
+      let(:participation) { assigns(:participation) }
+
+      it 'allows the user to apply' do
+        expect(participation).to be_present
+        expect(participation.persisted?).to be_truthy
+      end
+
+      it 'does not display a flash message' do
+        expect(flash[:alert]).to be_blank
+      end
+    end
   end
 
   context 'required answers' do
@@ -424,7 +496,9 @@ describe Event::ParticipationsController do
     context 'PUT #update' do
       let!(:participation) { Fabricate(:event_participation, event: event, person: user) }
       let(:answer) { participation.answers.build }
-      let(:answers_attributes) { { '0' => { 'question_id' => question.id, 'answer' => ['0'], id: answer.id } } }
+      let(:answers_attributes) do
+        { '0' => { 'question_id' => question.id, 'answer' => ['0'], id: answer.id } }
+      end
 
       before do
         answer.answer = 'GA, Halbtax'

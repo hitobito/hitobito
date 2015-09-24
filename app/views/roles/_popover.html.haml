@@ -4,10 +4,11 @@
     = f.labeled(:group_id) do
       = f.select(:group_id,
                  group_options_with_level,
-                 f.collection_prompt(:group_id),
+                 { },
                  { class: 'span3 chosen-select',
                    data: { remote: true,
-                           url: role_types_group_roles_path(@group) }})
+                           url: role_types_group_roles_path(@group),
+                           chosen_no_results: t('global.chosen_no_results') } })
   - else
     = f.hidden_field :group_id
 
@@ -18,13 +19,18 @@
                           GroupDecorator.decorate(@group).possible_roles,
                           :sti_name,
                           :label,
-                          { prompt: ta(:please_select) },
+                          { },
                           { class: 'span3 chosen-select',
                             data: { remote: true,
-                                    url: details_group_roles_path(@group) }})
+                                    url: details_group_roles_path(@group),
+                                    placeholder: ta(:please_select),
+                                    chosen_no_results: t('global.chosen_no_results') } })
 
   = f.labeled(:label) do
-    = f.input_field(:label, data: { provide: :typeahead, source: entry.klass.available_labels },
-                            class: 'span3', style: 'width: 220px;', help: t('roles.fields.help_optional_label'))
+    = f.input_field(:label,
+                    class: 'span3',
+                    style: 'width: 220px;',
+                    help: t('roles.fields.help_optional_label'),
+                    data: { provide: :typeahead, source: entry.klass.available_labels })
 
   = save_form_buttons(f, ti(:"button.save"), '#')

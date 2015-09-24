@@ -17,7 +17,7 @@ describe Subscriber::GroupController, js: true do
     sign_in
     visit new_group_mailing_list_group_path(group.id, list.id)
 
-    expect(find('#roles')).not_to have_selector('input[type=checkbox]')
+    expect(find('#roles')).to have_no_selector('input[type=checkbox]')
 
     # trigger typeahead
     fill_in 'subscription_subscriber', with: 'Bottom'

@@ -4,18 +4,18 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_applications
 #
-#  id            :integer          not null, primary key
-#  priority_1_id :integer          not null
-#  priority_2_id :integer
-#  priority_3_id :integer
-#  approved      :boolean          default(FALSE), not null
-#  rejected      :boolean          default(FALSE), not null
-#  waiting_list  :boolean          default(FALSE), not null
+#  id                   :integer          not null, primary key
+#  priority_1_id        :integer          not null
+#  priority_2_id        :integer
+#  priority_3_id        :integer
+#  approved             :boolean          default(FALSE), not null
+#  rejected             :boolean          default(FALSE), not null
+#  waiting_list         :boolean          default(FALSE), not null
+#  waiting_list_comment :text
 #
 
 class Event::Application < ActiveRecord::Base
@@ -24,7 +24,8 @@ class Event::Application < ActiveRecord::Base
 
   ### ASSOCIATION
 
-  has_one :participation
+  # dependent: :nullify not working with rails 4.2.3, uncomment later
+  has_one :participation, inverse_of: :application # , dependent: :nullify
 
   has_one :event, through: :participation
 
@@ -32,6 +33,8 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_2, class_name: 'Event' #::Course
   belongs_to :priority_3, class_name: 'Event' #::Course
 
+
+  validates_by_schema
 
   ### CLASS METHODS
 
@@ -53,9 +56,7 @@ class Event::Application < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def contact
-    event.contact
-  end
+  delegate :contact, to: :event
 
   def priority(event)
     [1, 2, 3].detect { |i| send("priority_#{i}_id") == event.id }

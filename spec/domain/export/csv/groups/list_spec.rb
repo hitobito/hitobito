@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'csv'
 
 describe Export::Csv::Groups::List do
 
@@ -31,9 +32,8 @@ describe Export::Csv::Groups::List do
      its(['Adresse']) { should == group.address }
      its(['PLZ']) { should == group.zip_code.to_s }
      its(['Ort']) { should == group.town }
-     its(['Land']) { should == group.country }
+     its(['Land']) { should == group.country_label }
      its(['Ebene']) { should == group.id.to_s }
-
    end
 
    context 'group with contact' do
@@ -48,6 +48,6 @@ describe Export::Csv::Groups::List do
      its(['Adresse']) { should == contact.address }
      its(['PLZ']) { should == contact.zip_code.to_s }
      its(['Ort']) { should == contact.town }
-     its(['Land']) { should == contact.country }
+     its(['Land']) { should == contact.country_label }
    end
 end

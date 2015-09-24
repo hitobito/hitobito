@@ -48,11 +48,16 @@ class Event::Role < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :participation, validate: true
+  belongs_to :participation, inverse_of: :roles
+
 
   has_one :event, through: :participation
   has_one :person, through: :participation
 
+  after_validation :validate_new_participation
+
+
+  validates_by_schema
 
   ### CALLBACKS
 
@@ -99,6 +104,16 @@ class Event::Role < ActiveRecord::Base
 
   private
 
+  def validate_new_participation
+    if participation.validate_associated_records_for_roles != true
+      unless participation.valid?
+        participation.errors.each do |attr, msg|
+          errors.add(attr, msg)
+        end
+      end
+    end
+  end
+
   # A participation with at least one role is active
   def set_participation_active
     participation.update_attribute(:active, true) unless applying_participant?
@@ -106,16 +121,27 @@ class Event::Role < ActiveRecord::Base
   end
 
   def destroy_participation_for_last
+    # prevent callback loops
+    return if @_destroying
+    @_destroying = true
+
     update_participant_count if self.class.participant?
-    participation.destroy unless participation.roles.exists?
+    participation.destroy unless participation.roles(true).exists?
   end
 
   def protect_applying_participant
+    return if destroyed_by_participation?
+
     if applying_participant? && participation.roles == [self]
       participation.update_attribute(:active, false)
       update_participant_count
       false # do not destroy
     end
+  end
+
+  def destroyed_by_participation?
+    destroyed_by_association &&
+    destroyed_by_association.active_record == Event::Participation
   end
 
   def applying_participant?

@@ -4,17 +4,19 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_kinds
 #
-#  id          :integer          not null, primary key
-#  created_at  :datetime
-#  updated_at  :datetime
-#  deleted_at  :datetime
-#  minimum_age :integer
+#  id                     :integer          not null, primary key
+#  created_at             :datetime
+#  updated_at             :datetime
+#  deleted_at             :datetime
+#  minimum_age            :integer
+#  general_information    :text
+#  application_conditions :text
 #
+
 class Event::Kind < ActiveRecord::Base
 
   include Paranoia::Globalized
@@ -30,9 +32,11 @@ class Event::Kind < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   # explicitly define validations for translated attributes
   validates :label, presence: true
   validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
+  validates :minimum_age, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
 
 
   accepts_nested_attributes_for :event_kind_qualification_kinds, allow_destroy: true
@@ -43,7 +47,11 @@ class Event::Kind < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def to_s(_format = :default)
-    "#{short_name} (#{label})"
+    if short_name.present?
+      "#{short_name} (#{label})"
+    else
+      label
+    end
   end
 
   # is this event type qualifying
@@ -62,7 +70,7 @@ class Event::Kind < ActiveRecord::Base
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if events.exists?
-      touch_paranoia_column(true)
+      touch_paranoia_column
     else
       really_destroy!
     end

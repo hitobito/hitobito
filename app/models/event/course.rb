@@ -8,30 +8,33 @@
 #
 # Table name: events
 #
-#  id                     :integer          not null, primary key
-#  type                   :string(255)
-#  name                   :string(255)      not null
-#  number                 :string(255)
-#  motto                  :string(255)
-#  cost                   :string(255)
-#  maximum_participants   :integer
-#  contact_id             :integer
-#  description            :text
-#  location               :text
-#  application_opening_at :date
-#  application_closing_at :date
-#  application_conditions :text
-#  kind_id                :integer
-#  state                  :string(60)
-#  priorization           :boolean          default(FALSE), not null
-#  requires_approval      :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  participant_count      :integer          default(0)
-#  application_contact_id :integer
-#  external_applications  :boolean          default(FALSE)
-#  applicant_count        :integer          default(0)
-#  teamer_count           :integer          default(0)
+#  id                          :integer          not null, primary key
+#  type                        :string(255)
+#  name                        :string(255)      not null
+#  number                      :string(255)
+#  motto                       :string(255)
+#  cost                        :string(255)
+#  maximum_participants        :integer
+#  contact_id                  :integer
+#  description                 :text
+#  location                    :text
+#  application_opening_at      :date
+#  application_closing_at      :date
+#  application_conditions      :text
+#  kind_id                     :integer
+#  state                       :string(60)
+#  priorization                :boolean          default(FALSE), not null
+#  requires_approval           :boolean          default(FALSE), not null
+#  created_at                  :datetime
+#  updated_at                  :datetime
+#  participant_count           :integer          default(0)
+#  application_contact_id      :integer
+#  external_applications       :boolean          default(FALSE)
+#  applicant_count             :integer          default(0)
+#  teamer_count                :integer          default(0)
+#  signature                   :boolean
+#  signature_confirmation      :boolean
+#  signature_confirmation_text :string(255)
 #
 
 class Event::Course < Event
@@ -39,7 +42,8 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
-  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval]
+  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval,
+                           :signature, :signature_confirmation, :signature_confirmation_text]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -56,6 +60,8 @@ class Event::Course < Event
   belongs_to :kind
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
+
+  before_validation :set_signature, if: :signature_confirmation?
 
 
   def label_detail
@@ -86,6 +92,12 @@ class Event::Course < Event
         questions << q.dup
       end
     end
+  end
+
+  private
+
+  def set_signature
+    self[:signature] = true
   end
 
 end

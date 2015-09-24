@@ -23,13 +23,26 @@ class PersonAbility < AbilityDsl::Base
       may(:update, :primary_group, :send_password_instructions, :log).
       non_restricted_in_same_group
     permission(:group_full).may(:update_email).if_permissions_in_all_capable_groups
-    permission(:group_full).may(:create).all  # restrictions are on Roles
+    permission(:group_full).may(:create).all # restrictions are on Roles
 
-    permission(:layer_read).may(:show, :show_full, :show_details, :history).
-                            in_same_layer
+    permission(:group_and_below_read).may(:show, :show_details).in_same_group_or_below
 
-    permission(:layer_and_below_read).may(:show, :show_full, :show_details, :history).
-                            in_same_layer_or_visible_below
+    permission(:group_and_below_full).may(:show_full, :history).in_same_group_or_below
+    permission(:group_and_below_full).
+      may(:update, :primary_group, :send_password_instructions, :log).
+      non_restricted_in_same_group_or_below
+    permission(:group_and_below_full).
+      may(:update_email).
+      if_permissions_in_all_capable_groups_or_above
+    permission(:group_and_below_full).may(:create).all # restrictions are on Roles
+
+    permission(:layer_read).
+      may(:show, :show_full, :show_details, :history).
+      in_same_layer
+
+    permission(:layer_and_below_read).
+      may(:show, :show_full, :show_details, :history).
+      in_same_layer_or_visible_below
 
     permission(:layer_full).
       may(:update, :primary_group, :send_password_instructions, :log).
@@ -42,7 +55,7 @@ class PersonAbility < AbilityDsl::Base
       non_restricted_in_same_layer_or_visible_below
     permission(:layer_and_below_full).
       may(:update_email).
-      if_permissions_in_all_capable_groups_or_above
+      if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
 
     general(:send_password_instructions).not_self
@@ -64,6 +77,10 @@ class PersonAbility < AbilityDsl::Base
     permission_in_groups?(subject.group_ids)
   end
 
+  def in_same_group_or_below
+    permission_in_groups?(subject.groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
+  end
+
   def in_same_layer
     permission_in_layers?(subject.layer_group_ids)
   end
@@ -74,6 +91,11 @@ class PersonAbility < AbilityDsl::Base
 
   def non_restricted_in_same_group
     permission_in_groups?(subject.non_restricted_groups.collect(&:id))
+  end
+
+  def non_restricted_in_same_group_or_below
+    permission_in_groups?(
+      subject.non_restricted_groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
   end
 
   def non_restricted_in_same_layer
@@ -96,22 +118,36 @@ class PersonAbility < AbilityDsl::Base
     end
   end
 
+  def if_permissions_in_all_capable_groups_or_above
+    !subject.root? &&
+    # true if capable roles is empty.
+    capable_roles.all? do |role|
+      capable_group_roles?(role.group)
+    end
+  end
+
   def if_permissions_in_all_capable_groups_or_layer
     !subject.root? &&
     # true if capable roles is empty.
     capable_roles.all? do |role|
       permission_in_layer?(role.group.layer_group_id) ||
-      user_context.groups_group_full.include?(role.group_id)
+      capable_group_roles?(role.group)
     end
   end
 
-  def if_permissions_in_all_capable_groups_or_above
+  def if_permissions_in_all_capable_groups_or_layer_or_above
     !subject.root? &&
     # true if capable roles is empty.
     capable_roles.all? do |role|
       permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
-      user_context.groups_group_full.include?(role.group_id)
+      capable_group_roles?(role.group)
     end
+  end
+
+  def capable_group_roles?(group)
+    user_context.permission_group_ids(:group_full).include?(group.id) ||
+    contains_any?(user_context.permission_group_ids(:group_and_below_full),
+                  group.local_hierarchy.collect(&:id))
   end
 
   # Roles of the subject that are capable of doing at least something a their group

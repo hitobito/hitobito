@@ -23,10 +23,11 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :question
 
 
+  validates_by_schema
   validates :question_id, uniqueness: { scope: :participation_id }
-  validates :answer, presence: { if: lambda {
+  validates :answer, presence: { if: lambda do
     question.required? && participation.enforce_required_answers
-  } }
+  end }
   validate :assert_answer_is_in_choice_items
 
   # override to handle array values submitted from checkboxes

@@ -31,6 +31,8 @@ class PersonSerializer < ApplicationSerializer
 
     property :picture, item.picture_full_url
 
+    apply_extensions(:public)
+
     contact_accounts(!details)
 
     if details

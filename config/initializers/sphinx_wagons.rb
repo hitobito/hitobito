@@ -24,7 +24,7 @@ module ThinkingSphinx
           partial_indices.each do |reference, blocks|
             #puts "defining #{blocks.size} indizes for #{reference}"
             define(reference, with: :active_record) do
-              blocks.each {|i| self.instance_eval(&i) }
+              blocks.each { |b| self.instance_eval(&b) }
             end
           end
         end

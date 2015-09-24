@@ -5,15 +5,9 @@
 
 = standard_form(path_args(entry), noindent: true) do |f|
 
-  .btn-toolbar
-    .btn-group
-      = f.button(t('global.button.search'), class: 'btn btn-primary', value: 'search')
-    - if can?(:create, entry)
-      .btn-group
-        = f.button(t('.save_search'), class: 'btn btn-primary', value: 'save')
-    = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')
+  = render 'search_or_save_buttons', f: f
 
-
+  = render_extensions :form, locals: { f: f }
   = f.error_messages
 
   .label-columns
@@ -34,10 +28,4 @@
     = field_set_tag(t('.save_filter')) do
       = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')
 
-  .btn-toolbar
-    .btn-group
-      = f.button(t('global.button.search'), class: 'btn btn-primary', value: 'search')
-    - if can?(:create, entry)
-      .btn-group
-        = f.button(t('.save_search'), class: 'btn btn-primary', value: 'save')
-    = link_to(t('global.button.cancel'), group_people_path(@group), class: 'link')
+  = render 'search_or_save_buttons', f: f

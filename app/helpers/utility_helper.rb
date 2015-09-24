@@ -48,9 +48,8 @@ module UtilityHelper
 
   # Returns an ActiveRecord column property for the passed attr or nil
   def column_property(obj, attr, property)
-    if obj.respond_to?(:column_for_attribute)
-      column = obj.column_for_attribute(attr)
-      column.try(property)
+    if obj.respond_to?(:column_for_attribute) && obj.has_attribute?(attr)
+      obj.column_for_attribute(attr).send(property)
     end
   end
 

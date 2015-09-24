@@ -3,48 +3,40 @@
 #
 # Table name: people
 #
-#  id                      :integer          not null, primary key
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  company_name            :string(255)
-#  nickname                :string(255)
-#  company                 :boolean          default(FALSE), not null
-#  email                   :string(255)
-#  address                 :string(1024)
-#  zip_code                :string(255)
-#  town                    :string(255)
-#  country                 :string(255)
-#  gender                  :string(1)
-#  birthday                :date
-#  additional_information  :text
-#  contact_data_visible    :boolean          default(FALSE), not null
-#  created_at              :datetime
-#  updated_at              :datetime
-#  encrypted_password      :string(255)
-#  reset_password_token    :string(255)
-#  reset_password_sent_at  :datetime
-#  remember_created_at     :datetime
-#  sign_in_count           :integer          default(0)
-#  current_sign_in_at      :datetime
-#  last_sign_in_at         :datetime
-#  current_sign_in_ip      :string(255)
-#  last_sign_in_ip         :string(255)
-#  picture                 :string(255)
-#  last_label_format_id    :integer
-#  creator_id              :integer
-#  updater_id              :integer
-#  primary_group_id        :integer
-#  failed_attempts         :integer          default(0)
-#  locked_at               :datetime
-#  authentication_token    :string(255)
-#  salutation              :string(255)
-#  title                   :string(255)
-#  grade_of_school         :integer
-#  entry_date              :date
-#  leaving_date            :date
-#  j_s_number              :string(255)
-#  correspondence_language :string(5)
-#  brother_and_sisters     :boolean          default(FALSE), not null
+#  id                     :integer          not null, primary key
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  company_name           :string(255)
+#  nickname               :string(255)
+#  company                :boolean          default(FALSE), not null
+#  email                  :string(255)
+#  address                :string(1024)
+#  zip_code               :string(255)
+#  town                   :string(255)
+#  country                :string(255)
+#  gender                 :string(1)
+#  birthday               :date
+#  additional_information :text
+#  contact_data_visible   :boolean          default(FALSE), not null
+#  created_at             :datetime
+#  updated_at             :datetime
+#  encrypted_password     :string(255)
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  picture                :string(255)
+#  last_label_format_id   :integer
+#  creator_id             :integer
+#  updater_id             :integer
+#  primary_group_id       :integer
+#  failed_attempts        :integer          default(0)
+#  locked_at              :datetime
+#  authentication_token   :string(255)
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -67,7 +59,7 @@ describe Person do
   end
 
   it 'company only with company name is valid' do
-    p = expect(Person.new(company: true, company_name: 'foo')).to be_valid
+    expect(Person.new(company: true, company_name: 'foo')).to be_valid
   end
 
   it 'real only with nickname is valid' do
@@ -233,44 +225,13 @@ describe Person do
     end
   end
 
-  context 'finders on participations' do
-    let(:group) { groups(:top_layer) }
-    let(:person) { people(:top_leader) }
-    let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
-
-    it '.pending_applications returns events that are not active' do
-      participation = Fabricate(:event_participation, person: people(:top_leader))
-      application = Fabricate(:event_application, priority_1: course, participation: participation)
-      expect(person.pending_applications).to eq [application]
-    end
-
-    it '.upcoming_events returns events that are active' do
-      course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
-      course.save
-      participation = Fabricate(:event_participation, event: course, person: people(:top_leader), active: true)
-      expect(person.upcoming_events).to eq [course]
-    end
-  end
-
   context 'email validation' do
     it 'can create two people with empty email' do
       expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
     end
 
     it 'cannot create two people same email' do
-      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error
-    end
-  end
-
-  context 'all roles' do
-
-    it 'all group roles ordered by group, to date' do
-      person = Fabricate(:person)
-      r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
-      r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
-      r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
-
-      expect(person.all_roles).to eq([r1, r3, r2])
+      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
@@ -380,6 +341,18 @@ describe Person do
      end
   end
 
+  context '#country_label' do
+    it 'translates two letter code using locale' do
+      person = Person.new(country: 'IT')
+      expect(person.country_label).to eq 'Italien'
+    end
+
+    it 'returns country value if value is not a two letter country code' do
+      person = Person.new(country: 'Svizzera')
+      expect(person.country_label).to eq 'Svizzera'
+    end
+  end
+
   context 'zip code' do
     let(:person) { Person.new(last_name: 'Foo') }
 
@@ -481,6 +454,21 @@ describe Person do
         person.zip_code = 'H0H 0H0'
         expect(person).to be_valid
       end
+    end
+  end
+
+  context '#location' do
+    it 'finds location for zip_code' do
+      expect(Person.new.location).to be_nil
+      expect(Person.new(zip_code: 3000).location).to be_nil
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
+      expect(Person.new(zip_code: 3000).location).to be_present
+    end
+
+    it 'reads canton from location if present' do
+      expect(Person.new.canton).to be_nil
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
+      expect(Person.new(zip_code: 3000).canton).to eq 'BE'
     end
   end
 

@@ -18,7 +18,7 @@ class SendLoginJob < BaseJob
   def perform
     set_locale
     token = recipient.generate_reset_password_token!
-    PersonMailer.login(recipient, sender, token).deliver
+    PersonMailer.login(recipient, sender, token).deliver_now
   end
 
   def sender

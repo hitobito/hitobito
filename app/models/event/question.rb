@@ -22,6 +22,7 @@ class Event::Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
 
+  validates_by_schema
   validate :assert_zero_or_more_than_one_choice
 
   scope :global, -> { where(event_id: nil) }

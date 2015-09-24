@@ -22,6 +22,7 @@ module Export::Pdf::Participation
 
         person_attributes.each { |attr| labeled_attr(person, attr) }
         move_down_line
+        stroke_bounds
       end
 
       private
@@ -63,8 +64,8 @@ module Export::Pdf::Participation
       def render_dates(count = 3)
         height = 80 / count
         event.dates.limit(count).each do |date|
-          bounding_box([0, cursor], width: bounds.width, height: height)  do
-            shrinking_text_box "#{date.label_and_location}\n#{date.duration}"
+          bounding_box([0, cursor], width: bounds.width, height: height) do
+            text "#{date.label_and_location}\n#{date.duration}"
           end
         end
       end
@@ -75,16 +76,13 @@ module Export::Pdf::Participation
     self.person_section = Person
 
     def render
-      first_page_section do
-        heading do
-          render_boxed(-> { text human_participant_name, style: :bold },
+      heading do
+        render_columns(-> { text human_participant_name, style: :bold },
                        -> { text human_event_name, style: :bold })
-        end
-
-        move_down_line
-        render_boxed(-> { render_section(person_section) },
-                     -> { render_section(Event) }, 10)
       end
+
+      render_columns(-> { render_section(person_section) },
+                     -> { render_section(Event) })
     end
 
     private

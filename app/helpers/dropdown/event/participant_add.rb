@@ -11,6 +11,23 @@ module Dropdown
 
       attr_reader :group, :event
 
+      class << self
+        def for_user(template, group, event, user)
+          if user_participates_in?(user, event)
+            new(template, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
+          else
+            new(template, group, event, I18n.t('event_decorator.apply'), :check).to_s
+          end
+        end
+
+        private
+
+        def user_participates_in?(user, event)
+          event.participations.where(person_id: user.id).exists?
+        end
+      end
+
+
       def initialize(template, group, event, label, icon, url_options = {})
         super(template, label, icon)
         @group = group

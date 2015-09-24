@@ -4,11 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if can?(:new, @mailing_list.subscriptions.new)
-  = action_button(t('global.associations.add_with_model', model: Person.model_name.human),
+  = action_button(t('.add_person'),
                   new_group_mailing_list_person_path(@group, @mailing_list), 'plus')
-  = action_button(t('global.associations.add_with_model', model: [Group.model_name.human, Role.model_name.human(count:2)].join('/')),
+  = action_button(t('.add_group_roles'),
                   new_group_mailing_list_group_path(@group, @mailing_list), 'plus')
-  = action_button(t('global.associations.add_with_model', model: Event.model_name.human),
+  = action_button(t('.add_event'),
                   new_group_mailing_list_event_path(@group, @mailing_list), 'plus')
   = action_button(t('.exclude_person'), new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus')
 

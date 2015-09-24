@@ -58,7 +58,7 @@ describe Event::ParticipantAssigner do
       it 'raises error on existing participation' do
         Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))
 
-        expect { subject.add_participant }.to raise_error
+        expect { subject.add_participant }.to raise_error(ActiveRecord::RecordNotUnique)
       end
     end
   end

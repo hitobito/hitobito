@@ -34,7 +34,10 @@ class FullTextController < ApplicationController
   def list_people
     entries = Person.search(Riddle::Query.escape(params[:q]),
                             page: params[:page],
-                            order: 'last_name asc, first_name asc, @weight desc',
+                            order: "last_name asc, " \
+                                   "first_name asc, " \
+                                   "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
+                            star: true,
                             with: { sphinx_internal_id: accessible_people_ids })
     entries = Person::PreloadGroups.for(entries)
     entries = Person::PreloadPublicAccounts.for(entries)
@@ -44,23 +47,26 @@ class FullTextController < ApplicationController
   def query_people
     Person.search(Riddle::Query.escape(params[:q]),
                   per_page: 10,
+                  star: true,
                   with: { sphinx_internal_id: accessible_people_ids })
   end
 
   def query_groups
     Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
+                 star: true,
                  include: :parent)
   end
 
   def accessible_people_ids
-    Rails.cache.fetch("accessible_people_ids_for_#{current_user.id}", expires_in: 15.minutes) do
+    key = "accessible_people_ids_for_#{current_user.id}"
+    Rails.cache.fetch(key, expires_in: 15.minutes) do
       load_accessible_people_ids
     end
   end
 
   def load_accessible_people_ids
-    accessible = Person.accessible_by(PersonAccessibles.new(current_user))
+    accessible = Person.accessible_by(PersonReadables.new(current_user))
 
     # This still selects all people attributes :(
     # accessible.pluck('people.id')

@@ -7,6 +7,10 @@
 
 module EventsHelper
 
+  def format_training_days(event)
+    number_with_precision(event.training_days, precision: 1)
+  end
+
   def button_action_event_apply(event, group = nil)
     participation = event.participations.new
     participation.person = current_user
@@ -14,13 +18,7 @@ module EventsHelper
     if event.application_possible? && can?(:new, participation)
       group ||= event.groups.first
 
-      if event.participations.where(person: current_user).exists?
-        Dropdown::Event::ParticipantAdd.new(
-          self, group, event, t('event_decorator.applied'), :check).disabled_button
-      else
-        Dropdown::Event::ParticipantAdd.new(
-          self, group, event, t('event_decorator.apply'), :check).to_s
-      end
+      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
     end
   end
 
@@ -31,6 +29,12 @@ module EventsHelper
 
   def application_approve_role_exists?
     Role.types_with_permission(:approve_applications).present?
+  end
+
+  def format_event_application_conditions(entry)
+    texts = [entry.application_conditions]
+    texts.unshift(entry.kind.application_conditions) if entry.course_kind?
+    safe_join(texts.select(&:present?).map { |text| simple_format(text) })
   end
 
 end

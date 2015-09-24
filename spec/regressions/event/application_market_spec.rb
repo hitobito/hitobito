@@ -15,7 +15,8 @@ describe Event::ApplicationMarketController, type: :controller do
   let(:course) { events(:top_course) }
 
   before do
-    Fabricate(:event_participation, event: course, application: Fabricate(:event_application, priority_1: course))
+    Fabricate(:event_participation, event: course,
+                                    application: Fabricate(:event_application, priority_1: course))
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_2: course))
     Fabricate(:event_participation, application: Fabricate(:event_application, priority_3: course))
 
@@ -58,11 +59,21 @@ describe Event::ApplicationMarketController, type: :controller do
       button = dom.find('.btn-group a')
       expect(button.text).to eq ' Teilnehmer/-in hinzufügen'
       expect(button).to have_css('i.icon-plus')
-      expect(button[:href]).to eq new_group_event_participation_path(group,
-                                                                 course,
-                                                                 for_someone_else: true,
-                                                                 event_role: {
-                                                                   type: course.class.participant_types.first.sti_name })
+      path_options = { for_someone_else: true,
+                       event_role: { type: course.class.participant_types.first.sti_name } }
+      expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
+    end
+
+    context 'preconditions not fullfilled' do
+      before { course.kind.update(minimum_age: 21) }
+
+      it 'displays warning badge' do
+        get :index, group_id: group.id, event_id: course.id
+
+        expect(dom).to have_selector('.badge.badge-warning', text: '!')
+        badge = dom.all('.badge.badge-warning', text: '!')[0]
+        expect(badge[:title]).to include('Vorbedingungen für Anmeldung sind nicht erfüllt')
+      end
     end
   end
 

@@ -3,7 +3,7 @@
 
 %define app_name     RPM_NAME
 
-%define app_version  1.8
+%define app_version  1.9
 %define ruby_version 1.9.3
 
 ### optional libs
@@ -155,11 +155,6 @@ echo "# Rotate rails logs for %{name}
 
 %if %{use_sphinx}
 touch config/production.sphinx.conf
-mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d
-echo "# Reindex sphinx for %{name}
-# Created by %{name}.rpm
-10,25,40,55 * * * *  %{name}  cd %{appdir} && . %{wwwdir}/%{name}/.bash_profile && bundle exec rake ts:index > /dev/null 2>&1
-" > $RPM_BUILD_ROOT/%{_sysconfdir}/cron.d/%{name}
 %endif
 
 export PATH=%{ruby_bindir}:$PATH
@@ -254,11 +249,7 @@ exit 0
 
 # the following old files would be loaded on startup and must
 # be explicitly deleted to load the stop script
-rm -f %{appdir}/app/utils/devise/strategies/one_time_token_authenticatable.rb
-rm -f %{appdir}/app/utils/datetime_attribute.rb
-rm -f %{appdir}/app/domain/event/qualifier/base.rb
-rm -f %{appdir}/app/domain/event/qualifier/leader.rb
-rm -f %{appdir}/app/domain/event/qualifier/participant.rb
+# rm -f %{appdir}/app/utils/datetime_attribute.rb
 
 su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 
@@ -311,9 +302,6 @@ rm -f %{appdir}/tmp/stop.txt
 %defattr(-,root,root,)
 %{_sysconfdir}/sysconfig/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
-%if %{use_sphinx}
-%{_sysconfdir}/cron.d/%{name}
-%endif
 
 %attr(-,root,%{name}) %{wwwdir}/%{name}/*
 # run application as dedicated user

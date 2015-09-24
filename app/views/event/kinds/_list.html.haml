@@ -3,4 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= crud_table :label, :short_name, :minimum_age, :updated_at, :deleted_at
+= crud_table do |t|
+  - t.sortable_attrs :label, :short_name
+  - render_extensions 'list_attrs', locals: { t: t }
+  - t.sortable_attrs :updated_at, :deleted_at
+  - add_table_actions(t)

@@ -72,6 +72,13 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
+  def latest_qualifications_uniq_by_kind
+    qualifications.
+      includes(:person, qualification_kind: :translations).
+      order_by_date.
+      group_by(&:qualification_kind).values.map(&:first)
+  end
+
   private
 
   def company_address_name
@@ -120,7 +127,6 @@ class PersonDecorator < ApplicationDecorator
                 title: h.t('global.link.edit'),
                 remote: true)
     end
-
   end
 
 end

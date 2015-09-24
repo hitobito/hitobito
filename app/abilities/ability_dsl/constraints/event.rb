@@ -24,12 +24,16 @@ module AbilityDsl::Constraints
       permission_in_groups?(event.group_ids)
     end
 
+    def in_same_group_or_below
+      permission_in_groups?(event.groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
+    end
+
     def in_same_layer
       permission_in_layers?(event.groups.collect(&:layer_group_id))
     end
 
     def in_same_layer_or_below
-      permission_in_layers?(event.groups.collect { |g| g.layer_hierarchy.collect(&:id) }.flatten)
+      permission_in_layers?(event.groups.collect(&:layer_hierarchy).flatten.collect(&:id).uniq)
     end
 
     def at_least_one_group_not_deleted

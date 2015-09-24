@@ -111,8 +111,21 @@ resetRolePersonId = (event) ->
   $('#role_person_id').val(null).change()
   $('#role_person').val(null).change()
 
+togglePopover = (event) ->
+  # custom code to close other popovers when a new one is opened
+  $('[data-toggle=popover]').not(this).popover('hide')
+  $(this).popover()
+  popover = $(this).data('popover')
+  popover.options.html = true
+  popover.options.placement = 'bottom'
+  if popover.tip().hasClass('fade') && !popover.tip().hasClass('in')
+    $(this).popover('hide')
+  else
+    $(this).popover('show')
+
 closePopover = (event) ->
   event.preventDefault()
+  $('[data-toggle=popover]').popover('hide')
   $($('body').data('popover')).popover('destroy')
 
 toggleFilterRoles = (event) ->
@@ -139,9 +152,10 @@ Application.moveElementToBottom = (elementId, targetId, callback) ->
 
 Application.activateChosen = (i, element) ->
   element = $(element)
-  text = element.data('chosen-no-results') || 'Keine Einträge gefunden mit'
-  element.chosen(no_results_text: text,
-                 search_contains: true)
+  blank = element.find('option[value]').first().val() == ''
+  text = element.data('chosen-no-results') || ' '
+  element.chosen({ no_results_text: text, search_contains: true, allow_single_deselect: blank })
+  console.log(element.data('chosen'))
 
 
 Application.updateApplicationMarketCount = ->
@@ -215,6 +229,9 @@ $ ->
 
   # wire up tooltips
   $('body').tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
+
+  # wire up popovers
+  $('body').on('click', '[data-toggle=popover]', togglePopover)
 
   # set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = (content, assoc, link) ->

@@ -41,9 +41,7 @@ module Import
       @role_type.label
     end
 
-    def doublette_count
-      doublette_finder.doublette_count
-    end
+    delegate :doublette_count, to: :doublette_finder
 
     private
 

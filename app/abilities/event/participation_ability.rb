@@ -20,6 +20,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
       may(:show, :show_details, :print, :create, :update, :destroy).
       in_same_group
 
+    permission(:group_and_below_full).
+      may(:show, :show_details, :print, :create, :update, :destroy).
+      in_same_group_or_below
+
     permission(:layer_full).
       may(:show, :show_details, :print, :update).
       in_same_layer_or_different_prio
@@ -43,40 +47,13 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own || for_participations_read_events
   end
 
-  def her_own_or_for_participations_full_events
-    her_own || for_participations_full_events
-  end
-
   def her_own_if_application_possible
     her_own && event.application_possible?
-  end
-
-  def in_same_layer_or_different_prio
-    in_same_layer || different_prio
-  end
-
-  def in_same_layer_or_below_or_different_prio
-    in_same_layer_or_below || different_prio
   end
 
   private
 
   def participation
     subject
-  end
-
-  def different_prio
-    return false if participation.active? || !participation.application_id?
-
-    # This is a bit more than really needed, to restrict further we would
-    # need the actual course the participation should be displayed for,
-    # which we do not have.
-    appl = participation.application
-    (appl.waiting_list? || appl.priority_2_id? || appl.priority_3_id?) &&
-    permission_in_layers?(course_offerers)
-  end
-
-  def course_offerers
-    @course_offerers ||= Group.course_offerers.pluck(:id)
   end
 end

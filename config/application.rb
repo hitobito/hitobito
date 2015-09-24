@@ -6,17 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 require File.expand_path('../boot', __FILE__)
-require 'benchmark'
 
-b = lambda do
-  require 'rails/all'
-  require 'jquery/rails'
+def with_benchmark(tag, &block)
+  if ENV['RAILS_ENV'] == 'production'
+    yield
+  else
+    require 'benchmark'
+    puts "require #{tag}: #{Benchmark.measure(&block)}"
+  end
 end
-puts "require rails:  #{Benchmark.measure(&b)}"
 
-b = -> { Bundler.require(:default, Rails.env) }
-puts "require gems:   #{Benchmark.measure(&b)}"
-
+with_benchmark('rails') do
+  require 'rails/all'
+end
+with_benchmark('gems') do
+  require 'jquery/rails'
+  Bundler.require(:default, Rails.env)
+end
 
 module Hitobito
   class Application < Rails::Application
@@ -49,6 +55,7 @@ module Hitobito
     # Define which locales from the rails-i18n gem should be loaded
     config.i18n.available_locales = [:de, :fr, :it, :en] # en required for faker (seeds)
     config.i18n.default_locale = :de
+    config.i18n.locale = :de # required to always have default_locale used if nothing else is set.
     config.i18n.fallbacks = [:de]
     I18n.config.enforce_available_locales = true
     # All languages should fall back on each other to avoid empty attributes
@@ -56,8 +63,7 @@ module Hitobito
     Globalize.fallbacks = { de: [:de, :fr, :it, :en],
                             fr: [:fr, :it, :en, :de],
                             it: [:it, :fr, :en, :de],
-                            en: [:en, :de, :fr, :it]
-                          }
+                            en: [:en, :de, :fr, :it] }
 
     # Route errors over the Rails application.
     config.exceptions_app = self.routes
@@ -66,10 +72,12 @@ module Hitobito
     config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :user_token]
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
+
+    config.active_record.raise_in_transactional_callbacks = true
 
     config.log_tags = [:uuid]
 
@@ -87,15 +95,15 @@ module Hitobito
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
-      # g.fixture_replacement :fabrication
     end
 
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
 
       # Assert the mail relay job is scheduled on every restart.
-      if Delayed::Job.table_exists? && Settings.email.retriever.config.address
-        MailRelayJob.new.schedule
+      if Delayed::Job.table_exists?
+        MailRelayJob.new.schedule if Settings.email.retriever.config.address
+        SphinxIndexJob.new.schedule
       end
     end
 

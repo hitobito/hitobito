@@ -24,7 +24,7 @@ describe PeopleController, js: true do
 
       # edit the current filter
       click_link 'Bottom Layer'
-      click_link 'Neuer Filter...'
+      click_link 'Neuer Rollen Filter...'
 
       expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Leader.id}")
       expect(page).to have_checked_field("people_filter_role_type_ids_#{Group::BottomLayer::Member.id}")
@@ -43,7 +43,7 @@ describe PeopleController, js: true do
 
       # open other tab
       click_link 'Externe'
-      expect(page).not_to have_selector('.table-striped tbody tr')
+      expect(page).to have_no_selector('.table-striped tbody tr')
     end
   end
 
@@ -53,7 +53,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        expect(page).to have_css('input:checked', count: 5)
+        expect(page).to have_css('input:checked', count: 6)
 
         find('h4.filter-toggle', text: 'Top Layer').click
         expect(page).to have_css('input:checked', count: 0)
@@ -76,10 +76,10 @@ describe PeopleController, js: true do
   def sign_in_and_create_filter
     sign_in
     visit group_people_path(group)
-    expect(page).not_to have_selector('.table tbody tr')
+    expect(page).to have_no_selector('.table tbody tr')
 
     click_link 'Weitere Ansichten'
-    click_link 'Neuer Filter...'
+    click_link 'Neuer Rollen Filter...'
 
     expect(page).to have_css('input:checked', count: 0)
   end

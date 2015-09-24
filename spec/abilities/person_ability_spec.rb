@@ -664,6 +664,200 @@ describe PersonAbility do
 
   end
 
+
+  context :group_and_below_full do
+    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+    it 'may view details of himself' do
+      is_expected.to be_able_to(:show_full, role.person.reload)
+    end
+
+    it 'may update himself' do
+      is_expected.to be_able_to(:update, role.person.reload)
+      is_expected.to be_able_to(:update_email, role.person)
+    end
+
+    it 'may update her email with password' do
+      himself = role.person.reload
+      himself.encrypted_password = 'foooo'
+      is_expected.to be_able_to(:update_email, himself)
+    end
+
+    it 'may update his role' do
+      is_expected.to be_able_to(:update, role)
+    end
+
+    it 'may create other users' do
+      is_expected.to be_able_to(:create, Person)
+    end
+
+    it 'may view and update others in same group' do
+      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: other)
+      is_expected.to be_able_to(:show, other.reload)
+      is_expected.to be_able_to(:update, other)
+      is_expected.to be_able_to(:update_email, other)
+    end
+
+    it 'may update email for person in below group' do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:update, other.person.reload)
+      is_expected.to be_able_to(:update_email, other.person)
+    end
+
+    it 'may not view and update email for person in below layer' do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
+      is_expected.not_to be_able_to(:show, other.person.reload)
+      is_expected.not_to be_able_to(:update, other.person)
+      is_expected.not_to be_able_to(:update_email, other.person)
+    end
+
+    it 'may not update email for person in same group and in below layer' do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
+      Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: other.person)
+      is_expected.to be_able_to(:update, other.person.reload)
+      is_expected.not_to be_able_to(:update_email, other.person)
+    end
+
+    it 'may update email for person in below group if group_and_below_full everywhere' do
+      other = Fabricate(Role::External.name.to_sym, group: groups(:top_layer))
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: other.person)
+      is_expected.to be_able_to(:update, other.person.reload)
+      is_expected.to be_able_to(:update_email, other.person)
+    end
+
+    it 'may not update root email if in same group' do
+      root = people(:root)
+      Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: root)
+      is_expected.to be_able_to(:update, root.reload)
+      is_expected.not_to be_able_to(:update_email, root)
+    end
+
+    it 'may view and update externals in below group' do
+      other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show, other.person.reload)
+      is_expected.to be_able_to(:update, other.person)
+      is_expected.to be_able_to(:update_email, other.person)
+    end
+
+    it 'may view details of others in below group' do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show_details, other.person.reload)
+    end
+
+    it 'may view full of others in below group' do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show_full, other.person.reload)
+    end
+
+    it 'may index same group' do
+      is_expected.to be_able_to(:index_people, groups(:top_layer))
+      is_expected.to be_able_to(:index_local_people, groups(:top_layer))
+      is_expected.to be_able_to(:index_full_people, groups(:top_layer))
+    end
+
+    it 'may index below group' do
+      is_expected.to be_able_to(:index_people, groups(:top_group))
+      is_expected.to be_able_to(:index_local_people, groups(:top_group))
+      is_expected.to be_able_to(:index_full_people, groups(:top_group))
+    end
+
+    it 'may not index groups in below layer' do
+      is_expected.not_to be_able_to(:index_people, groups(:bottom_layer_one))
+      is_expected.not_to be_able_to(:index_full_people, groups(:bottom_layer_one))
+      is_expected.not_to be_able_to(:index_local_people, groups(:bottom_layer_one))
+    end
+  end
+
+  context :group_and_below_read do
+    let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)) }
+
+    it 'may view details of himself' do
+      is_expected.to be_able_to(:show_full, role.person.reload)
+    end
+
+    it 'may update himself' do
+      is_expected.to be_able_to(:update, role.person.reload)
+      is_expected.to be_able_to(:update_email, role.person)
+    end
+
+    it 'may not update his role' do
+      is_expected.not_to be_able_to(:update, role)
+    end
+
+    it 'may not create other users' do
+      is_expected.not_to be_able_to(:create, Person)
+    end
+
+    it 'may view others in same group' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may view others in below group' do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: below)
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may not view others in same layer' do
+      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
+      is_expected.not_to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may view externals in same group' do
+      other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may view externals in below group' do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      other = Fabricate(Role::External.name.to_sym, group: below)
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may view details of others in same group' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:show_details, other.person.reload)
+    end
+
+    it 'may view details of others in below group' do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: below)
+      is_expected.to be_able_to(:show_details, other.person.reload)
+    end
+
+    it 'may not view full of others in same group' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+      is_expected.not_to be_able_to(:show_full, other.person.reload)
+    end
+
+    it 'may not view full of others in same group' do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: below)
+      is_expected.not_to be_able_to(:show_full, other.person.reload)
+    end
+
+    it 'may index same group' do
+      is_expected.to be_able_to(:index_people, groups(:top_group))
+      is_expected.to be_able_to(:index_local_people, groups(:top_group))
+      is_expected.not_to be_able_to(:index_full_people, groups(:top_group))
+    end
+
+    it 'may index below group' do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      is_expected.to be_able_to(:index_people, below)
+      is_expected.to be_able_to(:index_local_people, below)
+      is_expected.not_to be_able_to(:index_full_people, below)
+    end
+
+    it 'may not index groups in same layer' do
+      is_expected.to be_able_to(:index_people, groups(:top_layer))
+      is_expected.not_to be_able_to(:index_full_people, groups(:top_layer))
+      is_expected.not_to be_able_to(:index_local_people, groups(:top_layer))
+    end
+  end
+
   context :group_full do
     let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
 
@@ -705,7 +899,7 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:update_email, other.person)
     end
 
-    it 'may not update email for person in other group if group_full everywhere' do
+    it 'may update email for person in other group if group_full everywhere' do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_two), person: role.person)
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two), person: other.person)

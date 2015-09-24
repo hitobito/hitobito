@@ -12,6 +12,7 @@ describe 'Dropdown::GroupAdd' do
   include FormatHelper
   include I18nHelper
   include LayoutHelper
+  include UtilityHelper
 
   let(:group) { groups(:top_layer) }
   let(:dropdown) { Dropdown::GroupAdd.new(self, group)}

@@ -10,7 +10,7 @@ module Sheet
     class List < Sheet::Base
 
       def left_nav?
-       true
+        true
       end
 
       def render_left_nav

@@ -6,3 +6,5 @@
 = button_action_event_apply(entry, @group)
 = button_action_edit if can?(:update, entry)
 = button_action_destroy if can?(:destroy, entry)
+
+= render_extensions :actions_show

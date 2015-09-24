@@ -35,21 +35,27 @@ class Role
       compose_global_role_list
     end
 
-    def compose_role_list_by_layer(layer, seen_layers = [])
-      seen_layers << layer
-      set_role_types(layer, layer)
-      layer.possible_children.each do |child|
-        if child.layer
-          compose_role_list_by_layer(child) unless seen_layers.include?(child)
-        elsif !@global_group_types.include?(child)
-          set_role_types(layer, child)
+    def compose_role_list_by_layer(layer, group = layer, seen_groups = [])
+      seen_groups << group
+      set_role_types(layer, group)
+      group.possible_children.each do |child|
+        if seen_groups.include?(child)
+          # set again to move to the end of the list
+          set_role_types(layer, child) unless child.layer
+        else
+          if child.layer
+            compose_role_list_by_layer(child, child, seen_groups)
+          elsif !@global_group_types.include?(child)
+            compose_role_list_by_layer(layer, child, seen_groups)
+          end
         end
       end
     end
 
     def set_role_types(layer, group)
-      types = local_role_types(group)
-      @role_types[layer.label][group.label] = types if types.present?
+      layer_types = @role_types[layer.label]
+      types = layer_types.delete(group.label).presence || local_role_types(group)
+      layer_types[group.label] = types if types.present?
     end
 
     def compose_global_role_list

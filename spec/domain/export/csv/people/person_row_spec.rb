@@ -55,4 +55,9 @@ describe Export::Csv::People::PersonRow do
     it { expect(row.fetch(:people_relation_parent)).to eq 'Bottom Member' }
   end
 
+  context 'country' do
+    before { person.country = 'IT' }
+    it { expect(row.fetch(:country)).to eq 'Italien' }
+  end
+
 end

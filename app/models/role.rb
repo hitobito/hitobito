@@ -51,7 +51,7 @@ class Role < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates :type, presence: true
+  validates_by_schema
   validate :assert_type_is_allowed_for_group, on: :create
   validators # eager generate schema validators before sti classes are loaded
 

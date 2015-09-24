@@ -233,10 +233,18 @@ describe Event::ApplicationMarketController do
   end
 
   describe 'PUT waiting_list' do
-    before { put :put_on_waiting_list, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js }
+    before do
+      put :put_on_waiting_list,
+          group_id: group.id,
+          event_id: event.id,
+          id: appl_prio_1.id,
+          format: :js,
+          event_application: { waiting_list_comment: 'foo bar' }
+    end
 
     it 'sets waiting list flag' do
       expect(appl_prio_1.reload.application).to be_waiting_list
+      expect(appl_prio_1.application.waiting_list_comment).to eq('foo bar')
     end
   end
 

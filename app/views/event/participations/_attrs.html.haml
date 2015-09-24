@@ -5,42 +5,36 @@
 
 #main.row-fluid
   %article.span6
-
-    - if @event.requires_approval? && @application.present? && can?(:show, @application)
-      %p= @application.confirmation_label
-      %br/
-
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
     = render_attrs(entry.person, :birthday, :gender)
 
     - if can?(:show_details, entry)
-      = render_attrs(entry, :created_at)
+      = render 'application_details'
 
       = render_extensions :details,
                           folder: :people,
                           locals: { entry: entry.person, show_full: false }
 
-      -if @answers.present?
-        = render 'answers'
+      = render 'answers' if @answers.present?
 
       = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')
 
-    - if @event.priorization && @application.present? && can?(:show, @application)
-      = render 'priorities'
-
   %aside.span5.offset1
-    - if entry.person == current_user && @application.present? && @application.contact.present?
-      = section t('event.applied_to') do
-        - contact_type = @application.contact.class.base_class.name.underscore
-        = render "#{contact_type.pluralize}/contact_data",
-                 contact_type.to_sym => @application.contact,
-                 only_public: true
+    = render 'apply_to'
 
     = render 'roles'
 
     - if can?(:show_details, entry)
       = render 'people/qualifications', entry: entry.person, show_buttons: false
+
+
+    = render 'approvals'
+
+    - if can?(:show_details, entry) || show_application_approval?(entry)
+      = render 'precondition_warnings'
+
+    = render 'priorities'
 
     = render_extensions :asides

@@ -260,6 +260,13 @@ td.issue, td.revoke {
   max-width: 650px;
   width: 650px;
 }
+.popover-small {
+  .popover {
+    max-width: 350px;
+    width: 350px;
+  }
+}
+
 .filter_toggle {
    cursor: pointer;
    cursor: hand;

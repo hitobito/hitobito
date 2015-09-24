@@ -8,22 +8,29 @@ AllCops:
     - spec/**/*
     - vendor/**/*
 
-ClassLength:
-  Max: 200  # Try to reduce this value
 
-MethodLength:
-  Max: 18  # Try to reduce this value
-
-CyclomaticComplexity:
+Metrics/CyclomaticComplexity:
   Max: 8  # Try to reduce this value
 
-LineLength:
-  Max: 115  # Try to reduce this value
+Metrics/ClassLength:
+  Max: 220  # Try to reduce this value
+
+Metrics/LineLength:
+  Max: 100  # Try to reduce this value
+
+Metrics/MethodLength:
+  Max: 18  # Try to reduce this value
+
+Metrics/ModuleLength:
+  Max: 200
 
 Metrics/ParameterLists:
   Max: 6
 
-Encoding:
+Metrics/AbcSize:
+  Max: 36 # Try to reduce this value
+
+Style/Encoding:
   Enabled: true
 
 # Disable all other cops
@@ -64,9 +71,6 @@ BlockAlignment:
 BlockComments:
   Enabled: false
 
-Blocks:
-  Enabled: false
-
 BracesAroundHashParameters:
   Enabled: false
 
@@ -104,9 +108,6 @@ EmptyLines:
   Enabled: false
 
 EmptyLinesAroundAccessModifier:
-  Enabled: false
-
-EmptyLinesAroundBody:
   Enabled: false
 
 EmptyLiteral:
@@ -151,9 +152,6 @@ IndentHash:
 Lambda:
   Enabled: false
 
-LeadingCommentSpace:
-  Enabled: false
-
 LineEndConcatenation:
   Enabled: false
 
@@ -164,6 +162,9 @@ Lint/DefEndAlignment:
   Enabled: false
 
 Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UnneededDisable:
   Enabled: false
 
 Loop:
@@ -262,13 +263,22 @@ Style/CommentIndentation:
 Style/EachWithObject:
   Enabled: false
 
+Style/ExtraSpacing:
+  Enabled: false
+
 Style/GuardClause:
   Enabled: false
 
 Style/IndentArray:
   Enabled: false
 
+Style/LeadingCommentSpace:
+  Enabled: false
+
 Style/MethodCallParentheses:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false
 
 Style/Next:
@@ -277,10 +287,13 @@ Style/Next:
 Style/SingleLineBlockParams:
   Enabled: false
 
+Style/SpaceBeforeComment:
+  Enabled: false
+
 Style/SpaceInsideBlockBraces:
   Enabled: false
 
-Style/SingleLineBlockParams:
+Style/StringLiteralsInInterpolation:
   Enabled: false
 
 Style/VariableName:
@@ -314,4 +327,43 @@ Void:
   Enabled: false
 
 WordArray:
+  Enabled: false
+
+Performance/Detect:
+  Enabled: false
+
+Performance/ReverseEach:
+  Enabled: false
+
+Performance/Sample:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/FirstParameterIndentation:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/StructInheritance:
+  Enabled: false
+
+Style/SymbolProc:
   Enabled: false

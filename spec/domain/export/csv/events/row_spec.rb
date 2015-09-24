@@ -46,7 +46,7 @@ describe Export::Csv::Events::Row do
   context 'event attributes' do
     it { expect(row.fetch(:kind)).to eq 'Scharleiterkurs' }
     it { expect(row.fetch(:state)).to eq 'some state' }
-    it { expect(row.fetch(:number)).to eq 123 }
+    it { expect(row.fetch(:number)).to eq '123' }
     it { expect(row.fetch(:location)).to eq 'somewhere' }
     it { expect(row.fetch(:description)).to eq 'some description' }
     it { expect(row.fetch(:group_names)).to eq 'TopGroup' }

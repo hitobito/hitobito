@@ -148,6 +148,33 @@ it:
         one: abbonato
         other: Abbonati
     attributes:
+      cantons:
+        ag: Argovia
+        ai: Appenzello Interno
+        ar: Appenzello Esterno
+        be: Berna
+        bl: Basilea Campagna
+        bs: Basilea Città
+        fr: Friburgo
+        ge: Ginevra
+        gl: Glarona
+        gr: Grigioni
+        ju: Giura
+        lu: Lucerna
+        ne: Neuchâtel
+        nw: Nidvaldo
+        ow: Obvaldo
+        sg: San Gallo
+        sh: Sciaffusa
+        so: Soletta
+        sz: Svitto
+        tg: Turgovia
+        ti: Ticino
+        ur: Uri
+        vd: Vaud
+        vs: Vallese
+        zg: Zugo
+        zh: Zurigo
       person:
         first_name: Nome
         last_name: Cognome
@@ -158,7 +185,7 @@ it:
         email: Email principale
         emails: Email
         password: Password
-        password_confirmation: Password
+        password_confirmation: Confirmazione della password
         current_password: Vecchia password
         address: Indirizzo
         zip_code: NAP
@@ -213,6 +240,9 @@ it:
         application_closing_at: Termine per le iscrizioni
         application_conditions: Condizioni di ammissione
         external_applications: Iscrizioni esterne
+        signature: Firma obbligatoria
+        signature_confirmation: Seconda firma necessaria
+        signature_confirmation_text: Seconda firma di
         dates: Dati
         dates_full: Dati
         booking_info: Iscrizioni
@@ -221,6 +251,15 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
+      event/answer:
+        answer: Risposta
+      answers:
+        answer: Risposta
+      event/application:
+        priority_1_id: "Corso"
+        priority_2_id: "1° corso alternativo"
+        priority_3_id: "2° corso alternativo"
+        waiting_list_comment: 'Nota'
       event/course:
         kind_id: Tipo di corso
         state: Stato
@@ -228,22 +267,6 @@ it:
         state_translated: Stato
         priorization: Priorità
         requires_approval: Necessita autorizzazione
-      event/role:
-        label: Descrizione
-        person: Persona
-        type: Ruolo
-        participation: Persona
-      event/participation:
-        person_id: Persona
-        event_id: Evento
-        additional_information: Osservazioni (generali, informazioni sullo stato di salute, allergie, ecc.)
-        answers: Domande
-        created_at: Data di iscrizione
-        roles: Ruolo
-      event/application:
-        priority_1_id: "Corso"
-        priority_2_id: "1° corso alternativo"
-        priority_3_id: "2° corso alternativo"
       event/date:
         label: Descrizione
         location: Luogo
@@ -253,6 +276,25 @@ it:
         label: Descrizione / luogo
         start_at: Dal
         finish_at: Al
+      event/kind:
+        label: Definizione dell'associazione
+        short_name: Nome del corso
+        minimum_age: Età minima
+        preconditions: Requisiti per la partecipazione
+        prolongations: Prolungato
+        qualification_kinds: Qualificato per
+        general_information: Informazioni generali
+        application_conditions: Condizioni di ammissione
+        created_at: Salvato
+        updated_at: Modificato
+        deleted_at: Cancellato
+      event/participation:
+        person_id: Persona
+        event_id: Evento
+        additional_information: Osservazioni (generali, informazioni sullo stato di salute, allergie, ecc.)
+        answers: Domande
+        created_at: Data di iscrizione
+        roles: Ruolo
       event/question:
         question: Domanda
         choices: Possibili risposte
@@ -263,20 +305,11 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
-      event/answer:
-        answer: Risposta
-      answers:
-        answer: Risposta
-      event/kind:
-        label: Definizione dell'associazione
-        short_name: Nome del corso
-        minimum_age: Età minima
-        preconditions: Requisiti per la partecipazione
-        prolongations: Prolungato
-        qualification_kinds: Qualificato per
-        created_at: Salvato
-        updated_at: Modificato
-        deleted_at: Cancellato
+      event/role:
+        label: Descrizione
+        person: Persona
+        type: Ruolo
+        participation: Persona
       qualification:
         qualification_kind: Qualifiche
         qualification_kind_id: Qualifica
@@ -324,6 +357,8 @@ it:
               layer_and_below_read: Leggere tutto su questo livello e su tutti i livelli inferiori.
               layer_full: Leggere e scrivere tutto su questo livello. Creare eventi e abbonamenti su questo livello.
               layer_read: Leggere tutto su questo livello.
+              group_and_below_full: 'Leggere e scrivere sul gruppo e su tutti i gruppi sottostanti (senza livelli). Compresa la realizzazione di eventi e abbonamenti.  '
+              group_and_below_read: Leggere sul gruppo e su tutti i gruppi sottostanti (senza livelli).
               group_full: Leggere e scrivere su questo gruppo. Creare eventi e abbonamenti su questo gruppo.
               group_read: Leggere su questo gruppo.
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.

@@ -148,6 +148,33 @@ en:
         one: Subscriber
         other: Subscribers
     attributes:
+      cantons:
+        ag: Aargau
+        ai: Appenzell Innerrhoden
+        ar: Appenzell Ausserrhoden
+        be: Bern
+        bl: Basel-Land
+        bs: Basel-Stadt
+        fr: Fribourg
+        ge: Geneva
+        gl: Glarus
+        gr: Grisons
+        ju: Jura
+        lu: Lucerne
+        ne: Neuchâtel
+        nw: Nidwalden
+        ow: Obwalden
+        sg: St. Gallen
+        sh: Schaffhausen
+        so: Solothurn
+        sz: Schwyz
+        tg: Thurgau
+        ti: Ticino
+        ur: Uri
+        vd: Vaud
+        vs: Valais
+        zg: Zug
+        zh: Zurich
       person:
         first_name: First name
         last_name: Last name
@@ -158,7 +185,7 @@ en:
         email: Main e-mail
         emails: e-mails
         password: Password
-        password_confirmation: Password
+        password_confirmation: Password confirmation
         current_password: Old password
         address: Address
         zip_code: Postal Code
@@ -213,6 +240,9 @@ en:
         application_closing_at: End of application period
         application_conditions: Application conditions
         external_applications: External applications
+        signature: Signature required
+        signature_confirmation: Second signature required
+        signature_confirmation_text: Second signature of
         dates: Dates
         dates_full: Dates
         booking_info: Registrations
@@ -221,6 +251,15 @@ en:
         teamer_count: Leaders count
         participant_count: Participants count
         applicant_count: Registrations count
+      event/answer:
+        answer: Reply
+      answers:
+        answer: Reply
+      event/application:
+        priority_1_id: "Course"
+        priority_2_id: "1. Alternative course"
+        priority_3_id: "2. Alternative course"
+        waiting_list_comment: 'Remarks'
       event/course:
         kind_id: Course type
         state: State
@@ -228,22 +267,6 @@ en:
         state_translated: State
         priorization: Priorization
         requires_approval: Approval
-      event/role:
-        label: Description
-        person: Person
-        type: Role
-        participation: Person
-      event/participation:
-        person_id: Person
-        event_id: Event
-        additional_information: Comments (general, health information, allergies, etc.)
-        answers: Questions
-        created_at: Registration date
-        roles: Role
-      event/application:
-        priority_1_id: "Course"
-        priority_2_id: "1. Alternative course"
-        priority_3_id: "2. Alternative course"
       event/date:
         label: Description
         location: Place
@@ -253,6 +276,25 @@ en:
         label: Description/Place
         start_at: From date
         finish_at: To date
+      event/kind:
+        label: Association name
+        short_name: Short name
+        minimum_age: Minimum age
+        preconditions: Preconditions
+        prolongations: Extended
+        qualification_kinds: Qualifies for
+        general_information: General information
+        application_conditions: Application conditions
+        created_at: Created
+        updated_at: Changed
+        deleted_at: Deleted
+      event/participation:
+        person_id: Person
+        event_id: Event
+        additional_information: Comments (general, health information, allergies, etc.)
+        answers: Questions
+        created_at: Registration date
+        roles: Role
       event/question:
         question: Question
         choices: Possible answers
@@ -263,20 +305,11 @@ en:
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-      event/answer:
-        answer: Reply
-      answers:
-        answer: Reply
-      event/kind:
-        label: Association name
-        short_name: Short name
-        minimum_age: Minimum age
-        preconditions: Preconditions
-        prolongations: Extended
-        qualification_kinds: Qualifies for
-        created_at: Created
-        updated_at: Changed
-        deleted_at: Deleted
+      event/role:
+        label: Description
+        person: Person
+        type: Role
+        participation: Person
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -324,6 +357,8 @@ en:
               layer_and_below_read: 'All reading at this level and all lower levels. '
               layer_full: All reading and writing at this level. Creating events and subscriptions at this level.
               layer_read: All reading at this level.
+              group_and_below_full: Reading and writing at this group and all lower groups (without layers). Includes creating events and subscriptions.
+              group_and_below_read: 'All reading at this group and all lower groups (without layers). '
               group_full: Reading and writing at this group. Creating events and subscriptions at this group.
               group_read: Reading at this group.
               contact_data: Read the contact details of all other persons with contact data authorization.

@@ -122,7 +122,7 @@ fr:
         one: abonnement
         other: Abonnements
       person:
-        one: personne
+        one: Personne
         other: Personnes
       people_filter:
         one: Filtre
@@ -149,6 +149,33 @@ fr:
         one: abonné
         other: Abonnés
     attributes:
+      cantons:
+        ag: Argovie
+        ai: Appenzell Rhodes Intérieures
+        ar: Appenzell Rhodes Extérieures
+        be: Berne
+        bl: Bâle Campagne
+        bs: Bâle Ville
+        fr: Fribourg
+        ge: Genève
+        gl: Glaris
+        gr: Grisons
+        ju: Jura
+        lu: Lucerne
+        ne: Neuchâtel
+        nw: Nidwald
+        ow: Obwald
+        sg: St-Gall
+        sh: Schaffhouse
+        so: Soleure
+        sz: Schwytz
+        tg: Thurgovie
+        ti: Tessin
+        ur: Uri
+        vd: Vaud
+        vs: Valais
+        zg: Zoug
+        zh: Zurich
       person:
         first_name: Prénom
         last_name: Nom
@@ -159,7 +186,7 @@ fr:
         email: Adresse e-mail principale
         emails: E-mails
         password: Mot de passe
-        password_confirmation: Mot de passe
+        password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
         address: Adresse
         zip_code: Code postal
@@ -214,6 +241,9 @@ fr:
         application_closing_at: Fin des inscriptions
         application_conditions: Conditions d'admission
         external_applications: Inscriptions externes
+        signature: Signature nécessaire
+        signature_confirmation: 2ème signature nécessaire
+        signature_confirmation_text: Deuxième signature de
         dates: Dates
         dates_full: Dates
         booking_info: Inscriptions
@@ -222,6 +252,15 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
+      event/answer:
+        answer: Réponse
+      answers:
+        answer: Réponse
+      event/application:
+        priority_1_id: "Cours"
+        priority_2_id: "Cours alternatif (1)"
+        priority_3_id: "Cours alternatif (2)"
+        waiting_list_comment: 'Remarque'
       event/course:
         kind_id: Type de cours
         state: Statut
@@ -229,22 +268,6 @@ fr:
         state_translated: Statut
         priorization: Préférence
         requires_approval: Validation
-      event/role:
-        label: Désignation
-        person: Personne
-        type: Rôle
-        participation: Personne
-      event/participation:
-        person_id: personne
-        event_id: Evénement
-        additional_information: Commentaires (généralités, informations en lien avec la santé, allergies, etc.)
-        answers: Questions
-        created_at: date d'inscription
-        roles: rôle
-      event/application:
-        priority_1_id: "Cours"
-        priority_2_id: "Cours alternatif (1)"
-        priority_3_id: "Cours alternatif (2)"
       event/date:
         label: Description
         location: Lieu
@@ -254,6 +277,25 @@ fr:
         label: Description / Lieu
         start_at: Du (date)
         finish_at: Au (date)
+      event/kind:
+        label: Dénomination de l'association
+        short_name: Abréviation
+        minimum_age: Age minimum requis
+        preconditions: Conditions préalables
+        prolongations: Prolongé
+        qualification_kinds: Qualifié pour
+        general_information: Informations générales
+        application_conditions: Conditions d'admission
+        created_at: Créé
+        updated_at: Modifié
+        deleted_at: Supprimé
+      event/participation:
+        person_id: Personne
+        event_id: Evénement
+        additional_information: Commentaires (généralités, informations en lien avec la santé, allergies, etc.)
+        answers: Questions
+        created_at: date d'inscription
+        roles: rôle
       event/question:
         question: Question
         choices: Réponses possibles
@@ -264,20 +306,11 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: réponse obligatoire
-      event/answer:
-        answer: Réponse
-      answers:
-        answer: Réponse
-      event/kind:
-        label: Dénomination de l'association
-        short_name: Abréviation
-        minimum_age: Age minimum requis
-        preconditions: Conditions préalables
-        prolongations: Prolongé
-        qualification_kinds: Qualifié pour
-        created_at: Créé
-        updated_at: Modifié
-        deleted_at: Supprimé
+      event/role:
+        label: Désignation
+        person: Personne
+        type: Rôle
+        participation: Personne
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -296,8 +329,8 @@ fr:
         deleted_at: Supprimé
         reactivateable: Pouvant être réactivé
       people_relation:
-        head_id: personne
-        tail_id: autre personne
+        head_id: Personne
+        tail_id: Autre personne
         kind: genre
       relations_to_tails:
         tail_id: relation
@@ -314,7 +347,7 @@ fr:
         label: Désignation
         type: ' Rôle'
         group_id: Groupe
-        person: personne
+        person: Personne
         person_id: Personne
         string_long: '%{role} dans %{group}'
         class:
@@ -325,6 +358,8 @@ fr:
               layer_and_below_read: 'Lecture à ce niveau et aux niveaux inférieurs. '
               layer_full: Ecriture / lecture à ce niveau. Création d'évènements et d'abonnements à ce niveau.
               layer_read: 'Lecture à ce niveau. '
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+              group_and_below_read: Lesen auf der Gruppe und allen darunter liegende Gruppen (ohne Ebenen).
               group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
               group_read: Lecture au niveau du groupe.
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.

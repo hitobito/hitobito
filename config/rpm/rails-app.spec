@@ -249,11 +249,7 @@ exit 0
 
 # the following old files would be loaded on startup and must
 # be explicitly deleted to load the stop script
-rm -f %{appdir}/app/utils/devise/strategies/one_time_token_authenticatable.rb
-rm -f %{appdir}/app/utils/datetime_attribute.rb
-rm -f %{appdir}/app/domain/event/qualifier/base.rb
-rm -f %{appdir}/app/domain/event/qualifier/leader.rb
-rm -f %{appdir}/app/domain/event/qualifier/participant.rb
+# rm -f %{appdir}/app/utils/datetime_attribute.rb
 
 su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
 

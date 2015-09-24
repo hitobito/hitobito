@@ -155,8 +155,6 @@ Application.activateChosen = (i, element) ->
   blank = element.find('option[value]').first().val() == ''
   text = element.data('chosen-no-results') || ' '
   element.chosen({ no_results_text: text, search_contains: true, allow_single_deselect: blank })
-  console.log(element.data('chosen'))
-
 
 Application.updateApplicationMarketCount = ->
   applications = $('tbody#applications tr').size()

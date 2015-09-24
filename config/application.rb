@@ -38,13 +38,6 @@ module Hitobito
                                  #{config.root}/app/utils
                              )
 
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
-    # Activate observers that should always be running.
-    # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -79,6 +72,10 @@ module Hitobito
 
     config.active_record.raise_in_transactional_callbacks = true
 
+
+    config.middleware.insert_before Rack::ETag, Rack::Deflater
+
+
     config.log_tags = [:uuid]
 
     config.cache_store = :dalli_store, { compress: true,
@@ -90,8 +87,7 @@ module Hitobito
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
-                                   *.png *.gif *.jpg)
+    config.assets.precompile += %w(print.css ie.css ie7.css *.png *.gif *.jpg)
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

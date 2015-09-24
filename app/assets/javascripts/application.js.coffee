@@ -15,8 +15,10 @@
 # GO AFTER THE REQUIRES BELOW.
 #
 #= require jquery
+#= require jquery.turbolinks
 #= require jquery_ujs
 #= require jquery-ui/datepicker
+#= require jquery-ui-datepicker-i18n
 #= require jquery-ui/effect-highlight
 #= require bootstrap-alert
 #= require bootstrap-button
@@ -25,13 +27,15 @@
 #= require bootstrap-popover
 #= require bootstrap-typeahead
 #= require jquery_nested_form
-#= require jquery-ui-datepicker-i18n
 #= require chosen-jquery
 #= require remote-typeahead
 #= require modernizr.custom.min
 #= require moment.min
+#= require wysiwyg
 #= require_self
 #= require wagon
+#= require turbolinks
+#= require progress-bar
 #
 
 # scope for global functions
@@ -207,66 +211,72 @@ validateEventDatesFields = (event) ->
     finishAtGroup.addClass('error')
 
 
+# set insertFields function for nested-form gem
+window.nestedFormEvents.insertFields = (content, assoc, link) ->
+  el = $(link).closest('form').find("##{assoc}_fields")
+  el.append($(content))
+  .find('[data-provide=entity]').each(Application.setupEntityTypeahead)
+
+
+########################################################################
+# because of turbolinks.jquery, do bind ALL document events on top level
+
+# wire up date picker
+$(document).on('click', 'input.date, .controls .icon-calendar', datepicker.show)
+
+# wire up elements with ajax replace
+$(document).on('ajax:success','[data-replace]', replaceContent)
+$(document).on('ajax:before','[data-replace]', setDataType)
+
+# wire up disabled links
+$(document).on('click', 'a.disabled', (event) -> $.rails.stopEverything(event); event.preventDefault();)
+
+# wire up popovers
+$(document).on('click', '[data-toggle=popover]', togglePopover)
+
+# show alert if ajax requests fail
+$(document).on('ajax:error', (event, xhr, status, error) ->
+  alert('Sorry, something went wrong\n(' + error + ')'))
+
+# make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)
+$(document).on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
+
+# control visibilty of group contact fields in relation to contact
+$(document).on('change', '#group_contact_id', toggleGroupContact)
+
+# wire up links that hide an other element when checked.
+$(document).on('click', 'a[data-hide]', toggleElementByLink)
+
+# wire up checkboxes that hide an other element when checked.
+$(document).on('change', 'input[data-hide]', hideElementByCheckbox)
+
+# wire up checkboxes that show an other element when checked.
+$(document).on('change', 'input[data-show]', showElementByCheckbox)
+
+$(document).on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
+
+$(document).on('click', '.popover a.cancel', closePopover)
+
+$(document).on('click', '.filter-toggle', toggleFilterRoles)
+
+# wire up data swap links
+$(document).on('click', 'a[data-swap]', swapElements)
+
+
+# only bind events for non-document elements in $ ->
 $ ->
   # wire up quick search
   Application.setupQuicksearch()
-
-  # wire up date picker
-  $('body').on('click', 'input.date, .controls .icon-calendar', datepicker.show)
-
-  # wire up elements with ajax replace
-  $('body').on('ajax:success','[data-replace]', replaceContent)
-  $('body').on('ajax:before','[data-replace]', setDataType)
-
-  # wire up disabled links
-  $('body').on('click', 'a.disabled', (event) -> $.rails.stopEverything(event); event.preventDefault();)
 
   # wire up person auto complete
   $('[data-provide=entity]').each(Application.setupEntityTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
 
   # wire up tooltips
-  $('body').tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
-
-  # wire up popovers
-  $('body').on('click', '[data-toggle=popover]', togglePopover)
-
-  # set insertFields function for nested-form gem
-  window.nestedFormEvents.insertFields = (content, assoc, link) ->
-    el = $(link).closest('form').find("##{assoc}_fields")
-    el.append($(content))
-      .find('[data-provide=entity]').each(Application.setupEntityTypeahead)
-
-  # show alert if ajax requests fail
-  $(document).on('ajax:error', (event, xhr, status, error) ->
-    alert('Sorry, something went wrong\n(' + error + ')'))
-
-  # make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)
-  $('body').on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
-
-  # control visibilty of group contact fields in relation to contact
-  $('body').on('change', '#group_contact_id', toggleGroupContact)
+  $(document).tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
 
   # enable chosen js
   $('.chosen-select').each(Application.activateChosen)
-
-  # wire up data swap links
-  $('body').on('click', 'a[data-swap]', swapElements)
-
-  # wire up links that hide an other element when checked.
-  $('body').on('click', 'a[data-hide]', toggleElementByLink)
-
-  # wire up checkboxes that hide an other element when checked.
-  $('body').on('change', 'input[data-hide]', hideElementByCheckbox)
-
-  # wire up checkboxes that show an other element when checked.
-  $('body').on('change', 'input[data-show]', showElementByCheckbox)
-
-  $('body').on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
-
-  $('body').on('click', '.popover a.cancel', closePopover)
-
-  $('body').on('click', '.filter-toggle', toggleFilterRoles)
 
   # wire up client-side validation of event dates
   $('.event-dates').on('change', '.date, .time', validateEventDatesFields)

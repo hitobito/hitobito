@@ -60,6 +60,8 @@ gem 'compass'
 gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jquery-turbolinks'
+gem 'turbolinks'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
 gem 'uglifier'

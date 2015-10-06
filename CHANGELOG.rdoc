@@ -1,5 +1,10 @@
 = Hitobito Changelog
 
+== Version 1.10
+
+* Schnelleres Laden der Seiten dank Javascript und Kompression.
+* Tooltips bei langen Gruppennamen.
+
 == Version 1.9
 
 * Land ist neu ein Auswahlfeld.

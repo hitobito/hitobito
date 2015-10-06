@@ -92,7 +92,7 @@ module Sheet
       def group_link(group)
         cls = " class=\"active\"" if group == entry
         "<li#{cls}>".html_safe +
-        link_to(group, active_path(group))
+        link_to(group.to_s, active_path(group), title: group.to_s)
       end
 
       def render_sub_layers
@@ -100,7 +100,7 @@ module Sheet
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
-            content_tag(:li, link_to(l, active_path(l)))
+            content_tag(:li, link_to(l.to_s, active_path(l), title: l.to_s))
           end
         end
       end

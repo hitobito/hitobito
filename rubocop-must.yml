@@ -278,10 +278,13 @@ Style/LeadingCommentSpace:
 Style/MethodCallParentheses:
   Enabled: false
 
-Style/ParallelAssignment:
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/Next:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false
 
 Style/SingleLineBlockParams:

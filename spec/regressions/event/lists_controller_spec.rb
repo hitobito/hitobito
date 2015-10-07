@@ -33,7 +33,8 @@ describe Event::ListsController, type: :controller do
       get :events
       expect(dom).to have_content 'Demnächst stattfindende Anlässe'
       expect(dom).to have_content I18n.l(tomorrow, format: :month_year)
-      expect(dom.find('body nav .active').text).to eq 'Anlässe'
+      expect(dom.find('body .nav-left .active').text).to eq 'Anlässe'
+      expect(dom.find('body nav#page-navigation .active').text).to eq 'Anlässe'
     end
 
     it 'renders event label with link' do
@@ -88,7 +89,8 @@ describe Event::ListsController, type: :controller do
         expect(items[4].text).to eq top_group.name
         expect(items[4][:href]).to eq list_courses_path(year: year, group_id: top_group.id)
 
-        expect(dom.find('body nav .active').text).to eq 'Kurse'
+        expect(dom.find('body nav#page-navigation .active').text).to eq 'Anlässe'
+        expect(dom.find('body .nav-left .active').text).to eq 'Kurse'
       end
     end
 

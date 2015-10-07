@@ -292,6 +292,7 @@ de:
     alternative_dates: Ausweichdaten
     priorities: 'Anmeldeprioritäten'
     no_qualifications_could_be_prolonged: "%{person} hat keine Qualifikationen, die verlängert werden können."
+
     lists:
       courses:
         title: 'Verfügbare Kurse'
@@ -300,6 +301,9 @@ de:
       events:
         title: 'Demnächst stattfindende Anlässe'
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
+      nav_left:
+        events: Anlässe
+        courses: Kurse
 
     application_market:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'

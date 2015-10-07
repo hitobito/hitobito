@@ -14,7 +14,7 @@ module Sheet
       end
 
       def render_left_nav
-        view.render "nav_left_#{view.params[:action]}"
+        view.render 'nav_left'
       end
 
     end

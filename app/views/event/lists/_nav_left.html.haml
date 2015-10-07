@@ -1,0 +1,7 @@
+%ul.nav-left-list
+  - if can?(:list_available, Event)
+    = nav(t('.events'), list_events_path)
+  - if Group.course_types.present? && can?(:list_available, Event::Course)
+    = nav(t('.courses'), list_courses_path)
+
+  = render_extensions :nav_left

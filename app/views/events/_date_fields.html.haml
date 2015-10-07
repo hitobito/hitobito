@@ -13,3 +13,5 @@
                                               before_message: before_message } do
   %p= t('events.form.times_are_optional')
   = f.nested_fields_for :dates, 'event/dates/fields'
+
+  = render_extensions 'date_fields', locals: { f: f }

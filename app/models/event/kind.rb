@@ -13,14 +13,12 @@
 #  updated_at             :datetime
 #  deleted_at             :datetime
 #  minimum_age            :integer
-#  general_information    :text
-#  application_conditions :text
 #
 
 class Event::Kind < ActiveRecord::Base
 
   include Paranoia::Globalized
-  translates :label, :short_name
+  translates :label, :short_name, :general_information, :application_conditions, :documents_text
 
   ### ASSOCIATIONS
 

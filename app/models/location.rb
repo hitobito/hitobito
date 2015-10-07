@@ -10,7 +10,7 @@
 # Table name: locations
 #
 #  id       :integer          not null, primary key
-#  name     :string(255)      not null
+#  name     :string           not null
 #  canton   :string(2)        not null
 #  zip_code :integer          not null
 #

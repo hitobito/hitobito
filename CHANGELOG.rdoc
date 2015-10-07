@@ -2,8 +2,9 @@
 
 == Version 1.10
 
-* Schnelleres Laden der Seiten dank Javascript und Kompression.
+* Schnelleres Laden der Seiten dank Turbolinks und Kompression.
 * Tooltips bei langen Gruppennamen.
+* Letzte bearbeitende Person von Anlässen wird gespeichert.
 
 == Version 1.9
 

@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: roles
@@ -13,12 +12,13 @@
 #  id         :integer          not null, primary key
 #  person_id  :integer          not null
 #  group_id   :integer          not null
-#  type       :string(255)      not null
-#  label      :string(255)
+#  type       :string           not null
+#  label      :string
 #  created_at :datetime
 #  updated_at :datetime
 #  deleted_at :datetime
 #
+
 class Role < ActiveRecord::Base
 
   has_paper_trail meta: { main_id: ->(r) { r.person_id },

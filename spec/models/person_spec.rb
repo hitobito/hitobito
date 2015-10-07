@@ -4,39 +4,39 @@
 # Table name: people
 #
 #  id                     :integer          not null, primary key
-#  first_name             :string(255)
-#  last_name              :string(255)
-#  company_name           :string(255)
-#  nickname               :string(255)
+#  first_name             :string
+#  last_name              :string
+#  company_name           :string
+#  nickname               :string
 #  company                :boolean          default(FALSE), not null
-#  email                  :string(255)
+#  email                  :string
 #  address                :string(1024)
-#  zip_code               :string(255)
-#  town                   :string(255)
-#  country                :string(255)
+#  zip_code               :string
+#  town                   :string
+#  country                :string
 #  gender                 :string(1)
 #  birthday               :date
 #  additional_information :text
 #  contact_data_visible   :boolean          default(FALSE), not null
 #  created_at             :datetime
 #  updated_at             :datetime
-#  encrypted_password     :string(255)
-#  reset_password_token   :string(255)
+#  encrypted_password     :string
+#  reset_password_token   :string
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime
 #  sign_in_count          :integer          default(0)
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  picture                :string(255)
+#  current_sign_in_ip     :string
+#  last_sign_in_ip        :string
+#  picture                :string
 #  last_label_format_id   :integer
 #  creator_id             :integer
 #  updater_id             :integer
 #  primary_group_id       :integer
 #  failed_attempts        :integer          default(0)
 #  locked_at              :datetime
-#  authentication_token   :string(255)
+#  authentication_token   :string
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

@@ -4,16 +4,15 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: additional_emails
 #
 #  id               :integer          not null, primary key
 #  contactable_id   :integer          not null
-#  contactable_type :string(255)      not null
-#  email            :string(255)      not null
-#  label            :string(255)
+#  contactable_type :string           not null
+#  email            :string           not null
+#  label            :string
 #  public           :boolean          default(TRUE), not null
 #  mailings         :boolean          default(TRUE), not null
 #

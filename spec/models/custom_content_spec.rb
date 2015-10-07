@@ -4,11 +4,10 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string(255)      not null
-#  placeholders_required :string(255)
-#  placeholders_optional :string(255)
+#  key                   :string           not null
+#  placeholders_required :string
+#  placeholders_optional :string
 #
-
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

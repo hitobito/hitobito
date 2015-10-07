@@ -8,6 +8,8 @@ class CreateTranslationTables < ActiveRecord::Migration
 
     # temporary index name too long, drop and recreate
     CustomContent.globalize_migrator.drop_translations_index
+    remove_index(CustomContent.globalize_migrator.translations_table_name,
+                 name: CustomContent.globalize_migrator.translation_locale_index_name)
     change_column_null :custom_content_translations, :label, false
     CustomContent.globalize_migrator.create_translations_index
     remove_column :custom_contents, :label
@@ -37,6 +39,8 @@ class CreateTranslationTables < ActiveRecord::Migration
     )
     # temporary index name too long, drop and recreate
     QualificationKind.globalize_migrator.drop_translations_index
+    remove_index(QualificationKind.globalize_migrator.translations_table_name,
+                 name: QualificationKind.globalize_migrator.translation_locale_index_name)
     change_column_null :qualification_kind_translations, :label, false
     QualificationKind.globalize_migrator.create_translations_index
     remove_column :qualification_kinds, :label

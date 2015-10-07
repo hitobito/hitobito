@@ -1,4 +1,18 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: roles
+#
+#  id         :integer          not null, primary key
+#  person_id  :integer          not null
+#  group_id   :integer          not null
+#  type       :string           not null
+#  label      :string
+#  created_at :datetime
+#  updated_at :datetime
+#  deleted_at :datetime
+#
+
 
 #  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

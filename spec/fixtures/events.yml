@@ -7,11 +7,11 @@
 # Table name: events
 #
 #  id                          :integer          not null, primary key
-#  type                        :string(255)
-#  name                        :string(255)      not null
-#  number                      :string(255)
-#  motto                       :string(255)
-#  cost                        :string(255)
+#  type                        :string
+#  name                        :string           not null
+#  number                      :string
+#  motto                       :string
+#  cost                        :string
 #  maximum_participants        :integer
 #  contact_id                  :integer
 #  description                 :text
@@ -32,7 +32,9 @@
 #  teamer_count                :integer          default(0)
 #  signature                   :boolean
 #  signature_confirmation      :boolean
-#  signature_confirmation_text :string(255)
+#  signature_confirmation_text :string
+#  creator_id                  :integer
+#  updater_id                  :integer
 #
 
 top_event:

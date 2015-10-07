@@ -9,12 +9,12 @@
 # Table name: mailing_lists
 #
 #  id                   :integer          not null, primary key
-#  name                 :string(255)      not null
+#  name                 :string           not null
 #  group_id             :integer          not null
 #  description          :text
-#  publisher            :string(255)
-#  mail_name            :string(255)
-#  additional_sender    :string(255)
+#  publisher            :string
+#  mail_name            :string
+#  additional_sender    :string
 #  subscribable         :boolean          default(FALSE), not null
 #  subscribers_may_post :boolean          default(FALSE), not null
 #  anyone_may_post      :boolean          default(FALSE), not null

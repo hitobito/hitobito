@@ -8,17 +8,17 @@
 #
 # Table name: event_kinds
 #
-#  id                     :integer          not null, primary key
-#  created_at             :datetime
-#  updated_at             :datetime
-#  deleted_at             :datetime
-#  minimum_age            :integer
+#  id          :integer          not null, primary key
+#  created_at  :datetime
+#  updated_at  :datetime
+#  deleted_at  :datetime
+#  minimum_age :integer
 #
 
 class Event::Kind < ActiveRecord::Base
 
   include Paranoia::Globalized
-  translates :label, :short_name, :general_information, :application_conditions, :documents_text
+  translates :label, :short_name, :general_information, :application_conditions
 
   ### ASSOCIATIONS
 

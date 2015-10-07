@@ -33,7 +33,7 @@ module Export::Pdf::Participation
           move_down_line
         end
 
-        if event_with_kind? && event.kind.application_conditions?
+        if event_with_kind? && event.kind.application_conditions.present?
           text event.kind.application_conditions
           move_down_line
         end

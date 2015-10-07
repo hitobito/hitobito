@@ -4,53 +4,56 @@
 
 Prepare your machine for deployment with Openshift:
 
-  gem install rhc
+    gem install rhc
 
-  rhc setup
+    rhc setup
 
 ## Setup
 
 Create an application with ruby and mysql on your Openshift server:
 
-  rhc -ahitobito app create -gmedium ruby-2.0 mysql-5.5 --no-git
+    rhc -ahitobito app create -gmedium ruby-2.0 mysql-5.5 --no-git
 
 This creates an application named 'hitobito' in a medium sized gear.
 
 These additional cartridges are required:
 
 * cron
-  rhc -ahitobito cartridge add cron
+
+    rhc -ahitobito cartridge add cron
 
 * memcached
-  rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-memcached-cartridge
+
+    rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-memcached-cartridge
 
 * sphinx
-  rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-sphinx-cartridge
+
+    rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-sphinx-cartridge
 
 ## Deployment
 
-Package the application with
+Put hitobito core and all desired wagons in the same parent directory. Then package the application with
 
-  .openshift/bin/binary-package.sh
+    hitobito/.openshift/bin/binary-package.sh
 
 Then Deploy the package:
 
-  rhc -ahitobito app deploy deployment.tar.gz
+    rhc -ahitobito app deploy deployment.tar.gz
 
 ## Intraction
 
 Login with SSH to your application server:
 
-  rhc -ahitobito ssh
+    rhc -ahitobito ssh
 
 Tail all application logs:
 
-  rhc -ahitobito tail
+    rhc -ahitobito tail
 
 On the server, opening a Rails console:
 
-  cd app-root/repo
-  ruby_context "rails c"
+    cd app-root/repo
+    ruby_context "rails c"
 
 ## More
 

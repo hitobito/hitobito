@@ -8,6 +8,7 @@ Prepare your machine for deployment with Openshift:
 
     rhc setup
 
+
 ## Setup
 
 Create an application with ruby and mysql on your Openshift server:
@@ -18,17 +19,21 @@ This creates an application named 'hitobito' in a medium sized gear.
 
 These additional cartridges are required:
 
-* cron
+cron:
 
     rhc -ahitobito cartridge add cron
 
-* memcached
+memcached:
 
     rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-memcached-cartridge
 
-* sphinx
+sphinx:
 
     rhc -ahitobito cartridge add http://cartreflect-claytondev.rhcloud.com/github/puzzle/openshift-sphinx-cartridge
+
+
+Finally, define all environment variables defined in the main hitobito README as required for Openshift.
+
 
 ## Deployment
 
@@ -39,6 +44,7 @@ Put hitobito core and all desired wagons in the same parent directory. Then pack
 Then Deploy the package:
 
     rhc -ahitobito app deploy deployment.tar.gz
+
 
 ## Intraction
 
@@ -54,6 +60,7 @@ On the server, opening a Rails console:
 
     cd app-root/repo
     ruby_context "rails c"
+
 
 ## More
 

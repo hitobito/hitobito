@@ -1,16 +1,10 @@
 class FixEventKindGlobalizedFields < ActiveRecord::Migration
   def up
-    Event::Kind::Translation.reset_column_information
-    
-    unless Event::Kind::Translation.column_names.include?('general_information')
-      Event::Kind.add_translation_fields!({ general_information: :text }, migrate_data: true)
-      remove_column :event_kinds, :general_information
-    end
+    Event::Kind.add_translation_fields!({ general_information: :text }, migrate_data: true)
+    remove_column :event_kinds, :general_information
 
-    unless Event::Kind::Translation.column_names.include?('application_conditions')
-      Event::Kind.add_translation_fields!({ application_conditions: :text }, migrate_data: true)
-      remove_column :event_kinds, :application_conditions
-    end
+    Event::Kind.add_translation_fields!({ application_conditions: :text }, migrate_data: true)
+    remove_column :event_kinds, :application_conditions
   end
 
   def down

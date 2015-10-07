@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- include_wysiwyg_assets
+
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_field :subject
   = f.labeled_text_area :body, class: 'span8 wysiwyg', rows: 20, help: entry.available_placeholders

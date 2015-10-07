@@ -87,7 +87,8 @@ module Hitobito
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.assets.precompile += %w(print.css ie.css ie7.css *.png *.gif *.jpg)
+    config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
+                                   *.png *.gif *.jpg)
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

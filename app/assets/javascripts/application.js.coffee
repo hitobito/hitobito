@@ -31,12 +31,12 @@
 #= require remote-typeahead
 #= require modernizr.custom.min
 #= require moment.min
-#= require wysiwyg
 #= require_self
 #= require wagon
 #= require turbolinks
 #= require progress-bar
 #
+
 
 # scope for global functions
 window.Application ||= {}

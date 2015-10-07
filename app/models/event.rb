@@ -128,6 +128,7 @@ class Event < ActiveRecord::Base
     # Default scope for event lists
     def list
       order_by_date.
+      order(:name).
       preload_all_dates.
       uniq
     end

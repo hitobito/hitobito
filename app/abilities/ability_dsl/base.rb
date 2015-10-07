@@ -105,6 +105,10 @@ module AbilityDsl
 
     private
 
+    def role_type?(*role_types)
+      contains_any?(role_types, user.roles.collect(&:class))
+    end
+
     # Check whether the permission for which the check is made is defined in the given group_id.
     def permission_in_group?(group_id)
       user_group_ids.include?(group_id)

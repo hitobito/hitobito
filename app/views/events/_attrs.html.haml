@@ -68,7 +68,8 @@
             = labeled(Event::Kind.human_attribute_name(:prolongations),
                       entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
 
-        = render_attrs(entry, :signature, :signature_confirmation)
+        = render_attrs(entry, *entry.used_attributes(:signature, :signature_confirmation))
+
         = render_extensions 'application_attrs', folder: 'events'
 
     = render_extensions 'right_section'

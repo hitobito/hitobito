@@ -104,7 +104,7 @@ module FormatHelper
   # Like #render_attrs, but only for attributes with a present value.
   def render_present_attrs(obj, *attrs)
     render_attrs(obj, *attrs) do |a|
-      obj.send(a).present?
+      obj.send(a).present? || obj.send(a).is_a?(FalseClass)
     end
   end
 

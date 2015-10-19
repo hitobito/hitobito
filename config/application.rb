@@ -72,6 +72,7 @@ module Hitobito
 
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.active_job.queue_adapter = :delayed_job
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 

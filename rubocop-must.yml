@@ -170,6 +170,9 @@ Lint/UnusedMethodArgument:
 Lint/UnneededDisable:
   Enabled: false
 
+Lint/UselessAccessModifier:
+  Enabled: false
+
 Loop:
   Enabled: false
 

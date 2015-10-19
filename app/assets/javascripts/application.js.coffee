@@ -97,19 +97,29 @@ toggleElementByLink = (event) ->
     $("##{selector}").slideDown()
   event.preventDefault()
 
-hideElementByCheckbox = (event) ->
+hideElementByCheckbox = ->
   selector = $(this).data('hide')
   if this.checked
     $("##{selector}").slideUp()
   else
     $("##{selector}").slideDown()
 
-showElementByCheckbox = (event) ->
+showElementByCheckbox = ->
   selector = $(this).data('show')
   if this.checked
     $("##{selector}").slideDown()
   else
     $("##{selector}").slideUp()
+
+disableElementByCheckbox = ->
+  selector = $(this).data('disable')
+  $("##{selector}").attr('disabled', this.checked && 'disabled')
+                   .toggleClass('disabled', this.checked);
+
+enableElementByCheckbox = ->
+  selector = $(this).data('enable')
+  $("##{selector}").attr('disabled', !this.checked && 'disabled')
+                   .toggleClass('disabled', !this.checked);
 
 resetRolePersonId = (event) ->
   $('#role_person_id').val(null).change()
@@ -253,6 +263,12 @@ $(document).on('change', 'input[data-hide]', hideElementByCheckbox)
 # wire up checkboxes that show an other element when checked.
 $(document).on('change', 'input[data-show]', showElementByCheckbox)
 
+# wire up checkboxes that disable an other element when checked.
+$(document).on('change', 'input[data-disable]', disableElementByCheckbox)
+
+# wire up checkboxes that enable an other element when checked.
+$(document).on('change', 'input[data-enable]', enableElementByCheckbox)
+
 $(document).on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
 
 $(document).on('click', '.popover a.cancel', closePopover)
@@ -280,3 +296,9 @@ $ ->
 
   # wire up client-side validation of event dates
   $('.event-dates').on('change', '.date, .time', validateEventDatesFields)
+
+  # initialize visibility and disabled state of checkbox controlled elements
+  $('input[data-hide]').each((index, element) -> hideElementByCheckbox.call(element))
+  $('input[data-show]').each((index, element) -> showElementByCheckbox.call(element))
+  $('input[data-disable]').each((index, element) -> disableElementByCheckbox.call(element))
+  $('input[data-enable]').each((index, element) -> enableElementByCheckbox.call(element))

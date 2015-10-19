@@ -343,7 +343,7 @@ de:
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: 'Anmelden'
-        explain_required_checkmark: '* = Antwort oblitagorisch'
+        explain_required_checkmark: '* = Antwort obligatorisch'
       application_fields:
         alternative_dates_info: 'Bitte gib weitere Kurse an, welche dir gehen würden.'
         course_information: 'Informationen zu den Kursen'
@@ -376,15 +376,15 @@ de:
     preconditions: 'Erforderliche Qualifikationen'
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     application_fields:
-      caption_signature: Teilnehmer müssen die Anmeldung unterschreiben
+      caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
-      signature_confirmation_text_default: Erziehungsberechtiger (bei Minderjährigen)
+      signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     tabs:
       participants: 'Teilnehmende'
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
-      caption_requires_approval: 'Der Gruppenleiter wird informiert und muss die Anmeldung bestätigen'
+      caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
       additional_information: 'Angaben für Anmeldung'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
@@ -574,15 +574,15 @@ de:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
-      caption_anyone_may_post: 'Beliebige Absender dürfen auf die Mailingliste schreiben'
+      caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'
     may_not_subscribe: 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden'
     subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
     subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
-    anyone_may_post: 'Beliebige Absender dürfen auf die Mailingliste schreiben'
-    anyone_may_not_post: 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
+    anyone_may_not_post: 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 
@@ -731,7 +731,7 @@ de:
 
     exclude_person:
       form:
-        exclude_subscriber: 'Abonnent ausschliessen'
+        exclude_subscriber: 'Abonnent/-in ausschliessen'
 
   subscriber/base:
     blank: '%{model_label} muss ausgewählt werden'
@@ -743,7 +743,7 @@ de:
     unsubscribed: 'Du wurdest erfolgreich vom Abo entfernt.'
 
   subscriber/exclude_person:
-    success: 'Abonnent %{subscriber} wurde erfolgreich ausgeschlossen'
+    success: '%{subscriber} wurde erfolgreich ausgeschlossen'
     failure: '%{subscriber} ist kein Abonnent'
 
   sheet/csv_import:

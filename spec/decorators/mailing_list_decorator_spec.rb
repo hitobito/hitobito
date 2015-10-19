@@ -43,11 +43,11 @@ describe MailingListDecorator  do
 
     context 'anyone_may_post true' do
       before { mailing_list.update_column(:anyone_may_post, true) }
-      it { is_expected.to eq 'Beliebige Absender dürfen auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben<br />' }
     end
 
     context 'anyone_may_post false' do
-      it { is_expected.to eq 'Beliebige Absender dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+      it { is_expected.to eq 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
     end
   end
 

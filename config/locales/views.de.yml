@@ -744,7 +744,7 @@ de:
 
   subscriber/exclude_person:
     success: '%{subscriber} wurde erfolgreich ausgeschlossen'
-    failure: '%{subscriber} ist kein Abonnent'
+    failure: '%{subscriber} ist nicht Abonnent/-in'
 
   sheet/csv_import:
     title: 'Personen über CSV importieren'

@@ -23,7 +23,7 @@ module RestrictedRole
     @restricted_role_changes = {}
     restricted_roles.each do |attr, type|
       role = restricted_role(attr, type)
-      if role.try(:person_id) != send("#{attr}_id")
+      if role.try(:person_id) != send("#{attr}_id").to_i
         destroy_previous_role(attr, type) if role
         id = restricted_role_id(attr, type).presence
         build_restricted_role(type.new, id).save! if id

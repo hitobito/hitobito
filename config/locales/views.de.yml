@@ -11,6 +11,7 @@ de:
     "yes": "ja"
     "no": "nein"
     unknown: unbekannt
+    nobody: niemand
 
     from: Von
     until: Bis

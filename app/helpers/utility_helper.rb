@@ -50,6 +50,8 @@ module UtilityHelper
   def column_property(obj, attr, property)
     if obj.respond_to?(:column_for_attribute) && obj.has_attribute?(attr)
       obj.column_for_attribute(attr).send(property)
+    elsif obj.respond_to?(:translation)
+      column_property(obj.translation, attr, property)
     end
   end
 

@@ -206,6 +206,10 @@ describe FormatHelper do
       expect(column_type(model, :human)).to eq(:boolean)
       expect(column_type(model, :remarks)).to eq(:text)
       expect(column_type(model, :companion)).to be_nil
+
+      # test translated models
+      expect(column_type(event_kinds(:slk), :label)).to eq(:string)
+      expect(column_type(event_kinds(:slk), :general_information)).to eq(:text)
     end
   end
 

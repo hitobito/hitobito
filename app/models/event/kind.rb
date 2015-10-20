@@ -20,7 +20,7 @@
 class Event::Kind < ActiveRecord::Base
 
   include Paranoia::Globalized
-  translates :label, :short_name
+  translates :label, :short_name, :general_information, :application_conditions
 
   ### ASSOCIATIONS
 

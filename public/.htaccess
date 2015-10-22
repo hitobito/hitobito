@@ -7,3 +7,48 @@ ErrorDocument 503 /503.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^(.*)$ /$1 [R=503,L]
 </IfModule>
+
+# Rails finger-printed assets, make them cached forever.
+# Try only match if the asset actually has a fingerprint in it.
+<LocationMatch "^/assets/.*-[0-9a-f]{32,}.*$">
+  Header unset ETag
+  FileETag None
+  # RFC says only cache for 1 year
+  ExpiresActive On
+  ExpiresDefault "access plus 1 year"
+</LocationMatch>
+
+# Let apache serve the pre-compiled .gz version of static assets,
+# if available, and the user-agent can handle it. Set all headers
+# correctly when doing so.
+<IfModule mod_rewrite.c>
+  <LocationMatch "^/assets/.*\.(css|js)$">
+    RewriteEngine on
+
+    # Make sure the browser supports gzip encoding before we send it,
+    # and that we have a precompiled .gz version.
+    RewriteCond %{HTTP:Accept-Encoding} \b(x-)?gzip\b
+    RewriteCond %{REQUEST_FILENAME}.gz -s
+    RewriteRule ^(.+)$ $1.gz
+  </LocationMatch>
+</IfModule>
+
+# Make sure Content-Type is set for 'real' type, not gzip,
+# and Content-Encoding is there to tell browser it needs to
+# unzip to get real type.
+#
+# Make sure Vary header is set; while apache docs suggest it
+# ought to be set automatically by our RewriteCond that uses an HTTP
+# header, does not seem to be reliably working.
+<LocationMatch "^/assets/.*\.css\.gz$">
+    ForceType text/css
+    Header set Content-Encoding gzip
+    Header add Vary Accept-Encoding
+</LocationMatch>
+
+<LocationMatch "^/assets/.*\.js\.gz$">
+    ForceType application/javascript
+    Header set Content-Encoding gzip
+    Header add Vary Accept-Encoding
+</LocationMatch>
+

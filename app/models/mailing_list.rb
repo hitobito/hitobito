@@ -136,6 +136,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def application_retriever_name
-    Settings.email.retriever.config.user_name.presence
+    config = Settings.email.retriever.config
+    config.presence && config.user_name.presence
   end
 end

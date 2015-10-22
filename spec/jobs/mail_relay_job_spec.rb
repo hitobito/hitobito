@@ -12,7 +12,7 @@ describe MailRelayJob do
   subject { MailRelayJob.new }
 
   it 'relays mails and gets rescheduled' do
-    Settings.email.retriever.config.address = 'localhost'
+    Settings.email.retriever.config = Config::Options.new(address: 'localhost')
     expect(MailRelay::Lists).to receive(:relay_current)
     subject.perform
     expect(subject.delayed_jobs).to be_exists

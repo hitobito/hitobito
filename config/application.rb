@@ -100,7 +100,7 @@ module Hitobito
 
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
-        MailRelayJob.new.schedule if Settings.email.retriever.config.address
+        MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule
       end
     end

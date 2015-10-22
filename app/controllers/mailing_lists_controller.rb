@@ -18,11 +18,6 @@ class MailingListsController < CrudController
   prepend_before_action :parent
 
 
-  def show
-    @mailing_list = entry
-    respond_with(@mailing_list)
-  end
-
   private
 
   def list_entries

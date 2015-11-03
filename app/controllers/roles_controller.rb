@@ -19,6 +19,9 @@ class RolesController < CrudController
 
   before_render_form :set_group_selection
 
+  before_filter :remember_primary_group, only: [:destroy]
+  after_destroy :last_primary_group_role_deleted
+
   hide_action :index, :show
 
   def create
@@ -198,4 +201,30 @@ class RolesController < CrudController
       @group_selection = @group.groups_in_same_layer.to_a
     end
   end
+
+  def last_primary_group_role_deleted
+    # only show warning if more than one group remains
+    if @was_last_primary_group_role && entry.person.roles.select(:group_id).distinct.count > 1
+      new_group = entry.person.primary_group
+      flash[:alert] = t('roles.role_primary_group_changed', new_group: new_group.to_s)
+    end
+  end
+
+  def remember_primary_group
+    @was_last_primary_group_role = 
+      persons_last_primary_group_role?(entry)
+  end
+
+  def persons_last_primary_group_role?(role)
+    if belongs_to_persons_primary_group?(role)
+      group_roles = role.person.roles.where(group_id: role.group_id)  
+      return group_roles.size == 1 
+    end
+    false
+  end
+
+  def belongs_to_persons_primary_group?(role)
+    role.group_id == role.person.primary_group_id
+  end
+
 end

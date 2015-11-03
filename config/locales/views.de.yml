@@ -701,6 +701,7 @@ de:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'
     role_changed: '%{full_entry_label} zu <i>%{new_role}</i> geändert.'
     role_changed_to_group: '%{full_entry_label} zu <i>%{new_role}</i> in <i>%{new_group}</i> geändert.'
+    role_primary_group_changed: 'Hauptgruppe auf <i>%{new_group}</i> geändert.'
 
     form:
       add_person: Person hinzufügen

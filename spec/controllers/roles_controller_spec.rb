@@ -159,27 +159,52 @@ describe RolesController do
     end
 
     it 'terminates and creates new role if type and group changes' do
-      g = groups(:toppers)
+      group2 = groups(:toppers)
       expect do
-        put :update, group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: g.id }
+        put :update, group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id }
       end.not_to change { Role.with_deleted.count }
-      is_expected.to redirect_to(group_person_path(g, person))
+
+      person.update_attribute(:primary_group_id, group.id)
+
+      is_expected.to redirect_to(group_person_path(group2, person))
       expect(Role.with_deleted.where(id: role.id)).not_to be_exists
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+
+      # new role's group also assigned to person's primary group
+      expect(person.reload.primary_group).to eq group2
     end
 
     context 'multiple groups' do
       let(:group) { groups(:bottom_group_one_one) }
+      let(:group2) { groups(:bottom_group_one_two) }
       let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: group) }
 
       it 'terminates and creates new role if group changes' do
-        g = groups(:bottom_group_one_two)
+        group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
+        person.update_attribute(:primary_group_id, group3.id)
         expect do
-          put :update, group_id: group.id, id: role.id, role: { type: Group::BottomGroup::Leader.sti_name, group_id: g.id }
+          put :update, group_id: group.id, id: role.id, role: { type: Group::BottomGroup::Leader.sti_name, group_id: group2.id }
         end.not_to change { Role.with_deleted.count }
-        is_expected.to redirect_to(group_person_path(g, person))
+        is_expected.to redirect_to(group_person_path(group2, person))
         expect(Role.with_deleted.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Group 12</i> geändert."
+
+        # keeps person's primary group
+        expect(person.reload.primary_group).to eq group3
+      end
+
+      it 'changes primary group if role changes group' do
+        group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
+        person.update_attribute(:primary_group_id, group.id)
+        expect do
+          put :update, group_id: group.id, id: role.id, role: { type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id }
+        end.not_to change { Role.with_deleted.count }
+        is_expected.to redirect_to(group_person_path(group3, person))
+        expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+        expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+
+        # person's primary group is set to new group
+        expect(person.reload.primary_group).to eq group3
       end
     end
 
@@ -218,10 +243,142 @@ describe RolesController do
 
     it 'redirects to person if user can still view person' do
       Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
-      post :destroy,  group_id: group.id, id: role.id
+      post :destroy, group_id: group.id, id: role.id
 
       expect(flash[:notice]).to eq notice
       is_expected.to redirect_to(person_path(person))
+    end
+
+    it 'sets new primary group and shows warning if more than one group is remaining' do
+      group2 = groups(:bottom_layer_one)
+      group3 = groups(:bottom_layer_two)
+      group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
+                person: person,
+                group: group2)
+      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
+                        person: person, 
+                        group: group3)
+      group3_role1.update_attribute(:updated_at, Date.today - 10.days)
+
+      person.update_attribute(:primary_group, group)
+
+      post :destroy,  group_id: group.id, id: role.id
+
+      expect(flash[:alert]).to eq "Hauptgruppe auf <i>#{group2.to_s}</i> geändert."
+      is_expected.to redirect_to(person_path(person))
+      expect(person.reload.primary_group).to eq group2
+    end
+
+    it 'sets new primary group and does not show warning if only one group is remaining' do
+      group2 = groups(:bottom_layer_one)
+      group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
+                person: person,
+                group: group2)
+      group2_role2 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
+                        person: person, 
+                        group: group2)
+
+      person.update_attribute(:primary_group, group)
+
+      post :destroy,  group_id: group.id, id: role.id
+
+      expect(flash[:alert]).to be_nil
+      is_expected.to redirect_to(person_path(person))
+      expect(person.reload.primary_group).to eq group2
+    end
+
+    it 'does not change primary group if one role is remaining in primary group' do
+      group2 = groups(:bottom_layer_one)
+      group_role2 = Fabricate(Group::TopGroup::Leader.name.to_sym,
+                person: person,
+                group: group)
+
+      group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
+                person: person,
+                group: group2)
+
+      person.update_attribute(:primary_group, group)
+
+      post :destroy,  group_id: group.id, id: role.id
+
+      expect(flash[:alert]).to be_nil
+      is_expected.to redirect_to(person_path(person))
+      expect(person.reload.primary_group).to eq group
+    end
+
+    it 'does not show warning if non primary group role is deleted' do
+      group2 = groups(:bottom_layer_one)
+      group3 = groups(:bottom_layer_two)
+      group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
+                        person: person,
+                        group: group2)
+      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
+                        person: person, 
+                        group: group3)
+
+      person.update_attribute(:primary_group, group2)
+
+      post :destroy, group_id: group.id, id: role.id
+
+      expect(flash[:alert]).to be_nil
+      is_expected.to redirect_to(person_path(person))
+      expect(person.primary_group).to eq group2
+    end
+
+    describe 'persons last primary group' do
+
+      let(:person) { Fabricate(:person) }
+
+      it 'returns true if only one role in persons primary group' do
+        group = groups(:top_group)
+        role = Fabricate(Group::TopGroup::Leader.name.to_sym,
+                         person: person,
+                         group: group)
+        person.update_attribute(:primary_group, group)
+
+        expect(controller.send(:persons_last_primary_group_role?, role)).to be true
+      end
+
+      it 'returns false if there is more than one role in persons primary group' do
+        group = groups(:top_group)
+        role = Fabricate(Group::TopGroup::Leader.name.to_sym,
+                         person: person,
+                         group: group)
+        role2 = Fabricate(Group::TopGroup::Member.name.to_sym,
+                         person: person,
+                         group: group)
+        person.update_attribute(:primary_group, group)
+
+        expect(controller.send(:persons_last_primary_group_role?, role)).to be false
+      end
+
+      it 'returns false if person has no primary group' do
+        group = groups(:top_group)
+        role = Fabricate(Group::TopGroup::Leader.name.to_sym,
+                         person: person,
+                         group: group)
+
+        person.update_attribute(:primary_group, nil)
+
+        expect(controller.send(:persons_last_primary_group_role?, role)).to be false
+      end
+
+      it 'returns false if role does not belong to persons primary group' do
+        group = groups(:bottom_group_one_one)
+        group2 = groups(:top_group)
+        role = Fabricate(Group::TopGroup::Leader.name.to_sym,
+                         person: person,
+                         group: group2)
+        role2 = Fabricate(Group::TopGroup::Member.name.to_sym,
+                         person: person,
+                         group: group2)
+        role3 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+                         person: person,
+                         group: group)
+        person.update_attribute(:primary_group, group)
+
+        expect(controller.send(:persons_last_primary_group_role?, role)).to be false
+      end
     end
   end
 

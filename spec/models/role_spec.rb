@@ -40,7 +40,7 @@ describe Role do
     end
   end
 
-  context 'regular' do
+ context 'regular' do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
     subject do
@@ -87,10 +87,26 @@ describe Role do
         expect(person.primary_group_id).not_to eq(group.id)
       end
 
-      it 'is reset if role is destroyed' do
+      it 'is reset if persons last role is destroyed' do
         subject.save
         expect(subject.destroy).to be_truthy
         expect(person.primary_group_id).to be_nil
+      end
+
+      it 'is reset to remaining role if role is destroyed' do
+        subject.save
+        Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
+        expect(subject.destroy).to be_truthy
+        expect(person.primary_group_id).to eq groups(:top_group)
+      end
+
+      it 'is reset to newest remaining role if role is destroyed' do
+        subject.save
+        role2 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers))
+        role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person, group: groups(:top_group))
+        role3.update_attribute(:updated_at, Date.today - 10.days)
+        expect(subject.destroy).to be_truthy
+        expect(person.primary_group_id).to eq role2.group
       end
 
       it 'is not reset if role is destroyed and other roles in the same group exist' do
@@ -106,6 +122,7 @@ describe Role do
         expect(subject.destroy).to be_truthy
         expect(person.primary_group_id).to eq(42)
       end
+
     end
 
     context 'contact data callback' do

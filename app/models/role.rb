@@ -117,8 +117,12 @@ class Role < ActiveRecord::Base
 
   def reset_primary_group
     if person.primary_group_id == group_id && person.roles.where(group_id: group_id).count == 0
-      person.update_column :primary_group_id, nil
+      person.update_column :primary_group_id, alternative_primary_group
     end
+  end
+
+  def alternative_primary_group
+    person.roles.order(updated_at: :desc).first.try(:group)
   end
 
   def assert_type_is_allowed_for_group

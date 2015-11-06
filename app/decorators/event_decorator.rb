@@ -24,7 +24,9 @@ class EventDecorator < ApplicationDecorator
   end
 
   def dates_full
-    safe_join(dates, h.tag(:br)) do |date|
+    # adding #to_a avoids irregularly occuring, inexplicable
+    # "undefined method `duration' for #<Proc:0x00000004d6dd38>" errors
+    safe_join(dates.to_a, h.tag(:br)) do |date|
       safe_join([date.duration, h.muted(date.label_and_location)], ' ')
     end
   end

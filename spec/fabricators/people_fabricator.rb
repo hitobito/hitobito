@@ -9,14 +9,18 @@ Fabricator(:person) do
   first_name { Faker::Name.first_name }
   last_name { Faker::Name.last_name }
   nickname { Faker::Name.first_name }
-  email { |attrs| "#{attrs[:first_name].downcase.gsub(/[^a-z]/, '')}.#{attrs[:last_name].downcase.gsub(/[^a-z]/, '')}#{sequence}@hitobito.example.com" }
+  email do |attrs|
+    first = attrs[:first_name].downcase.gsub(/[^a-z]/, '')
+    last = attrs[:last_name].downcase.gsub(/[^a-z]/, '')
+    "#{first}.#{last}#{sequence}@hitobito.example.com"
+  end
 end
 
 Fabricator(:person_with_address, from: :person) do
   address { Faker::Address.street_address }
   town { Faker::Address.city }
   zip_code { Faker::Address.zip_code[0..3] }
-  country { Faker::Address.country }
+  country { Faker::Address.country_code }
 end
 
 Fabricator(:person_with_address_and_phone, from: :person_with_address) do

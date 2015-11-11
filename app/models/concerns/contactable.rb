@@ -22,17 +22,34 @@ module Contactable
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
+    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
+
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
                                   allow_destroy: true
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
     before_validation :set_self_in_nested
+
+    validates :country, inclusion: ISO3166::Data.codes, allow_blank: true
+    validate :assert_is_valid_swiss_post_code
   end
 
   def country_label
-    value = country
-    country = ISO3166::Country[value]
-    country ? country.translations[I18n.locale.to_s] || country.name : value
+    c = ISO3166::Country.new(country)
+    c ? c.translations[I18n.locale.to_s] || c.name.presence : country
+  end
+
+  def country=(value)
+    normalized = value.to_s.strip.downcase
+    if normalized.size > 2
+      super(value)
+      ISO3166::Country.translations(I18n.locale).each do |key, label|
+        super(key) if label.downcase == normalized
+      end
+    else
+      super(value.to_s.strip.upcase)
+    end
+
+    value
   end
 
   def ignored_country?
@@ -40,11 +57,11 @@ module Contactable
   end
 
   def swiss?
-    ['', *Settings.address.switzerland_variations].include?(country.to_s.strip.downcase)
+    ['', 'ch'].include?(country.to_s.strip.downcase)
   end
 
   def canton
-    location && location.canton
+    (swiss? && location && location.canton) || nil
   end
 
   private
@@ -56,6 +73,12 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
+    end
+  end
+
+  def assert_is_valid_swiss_post_code
+    if zip_code.present? && swiss? && !zip_code.to_s.match(/^\d{4}$/)
+      errors.add(:zip_code)
     end
   end
 

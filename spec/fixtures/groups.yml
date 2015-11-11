@@ -62,7 +62,7 @@ bottom_layer_one:
   email: bottom_layer@hitobito.example.ch
   zip_code: 3000
   town: Bern
-  country: Yours
+  country: DE
 
 bottom_group_one_one:
   name: Group 11

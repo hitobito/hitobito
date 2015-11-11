@@ -100,33 +100,22 @@ class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
     end
 
     def define_accepted_translations
-      map.merge!(flipped_and_downcased(keyed_translations))
+      map.merge!(keyed_translations)
     end
 
     # returns country code map with translations, e.g. 'CH' => %w(Schweiz Suisse Switzerland)
     def keyed_translations
-      ISO3166::Country::Setup.translations.map do |key, value|
-        translations = value.fetch('translations')
-        names = translations.slice(*LANGUAGES).values
-        [key, with_transliterate(names).to_a.compact] # compact because AN has no translations
+      hash = {}
+      LANGUAGES.map do |lang|
+        ISO3166::Country.translations(lang).map do |key, value|
+          hash[key.downcase] = key
+          if value.present?
+            hash[value.downcase] = key
+            hash[ActiveSupport::Inflector.transliterate(value).downcase] = key
+          end
+        end
       end
-    end
-
-    # adds "simplified" name, e.g. Oesterreich for Österreich
-    def with_transliterate(names)
-      names.inject(Set.new) do |set, val|
-        set << val
-        set << ActiveSupport::Inflector.transliterate(val) if val.present?
-        set
-      end
-    end
-
-    # flips and_downcases 'CH' => %w(Schweiz Suisse Switzerland) to { 'schweiz' => 'ch', 'suisse' => 'ch', ..}
-    def flipped_and_downcased(data)
-      data.each_with_object({}) do |(key, values), hash|
-        hash[key.downcase] = key
-        values.each { |val| hash[val.downcase] = key }
-      end
+      hash
     end
   end
 

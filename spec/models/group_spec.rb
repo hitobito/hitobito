@@ -375,18 +375,18 @@ describe Group do
   end
 
   context 'contacts' do
-    let(:contactable) { { address: 'foobar', zip_code: 123, town: 'thun', country: 'ch' } }
+    let(:contactable) { { address: 'foobar', zip_code: 3600, town: 'thun', country: 'ch' } }
     let(:group) { groups(:top_group) }
 
     subject { group }
-    before { group.update_attributes(contactable) }
+    before { group.update_attributes!(contactable) }
 
     context 'no contactable but contact info'  do
       its(:contact)   { should be_blank }
       its(:address)   { should eq 'foobar' }
       its(:town)      { should eq 'thun' }
-      its(:zip_code)  { should eq 123 }
-      its(:country)   { should eq 'ch' }
+      its(:zip_code)  { should eq 3600 }
+      its(:country)   { should eq 'CH' }
     end
 
     context 'discards contact info when contactable is set' do

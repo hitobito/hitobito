@@ -60,7 +60,7 @@ bottom_member:
   address: Greatstreet 345
   zip_code: 3456
   town: Greattown
-  country: Switzerland
+  country: CH
   primary_group: bottom_layer_one
 
 root:

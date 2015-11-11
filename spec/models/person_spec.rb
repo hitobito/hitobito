@@ -236,8 +236,8 @@ describe Person do
   end
 
   context '#ignored_country?' do
-    it 'ignores ch, schweiz' do
-      person = Person.new(country: 'Schweiz')
+    it 'ignores ch, empty' do
+      person = Person.new(country: nil)
       expect(person.ignored_country?).to be_truthy
       person = Person.new(country: 'CH')
       expect(person.ignored_country?).to be_truthy
@@ -358,14 +358,14 @@ describe Person do
 
     context 'switzerland' do
       def should_be_valid_swiss_post_code
-        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+        [nil, 'Schweiz'].each do |c|
           person.country = c
           expect(person).to be_valid
         end
       end
 
       def should_not_be_valid_swiss_post_code
-        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+        [nil, 'CH'].each do |c|
           person.country = c
           expect(person).not_to be_valid
         end
@@ -391,7 +391,10 @@ describe Person do
         person.zip_code = '10115'
         should_not_be_valid_swiss_post_code
 
-        person.zip_code = '01210'
+        person.zip_code = '01200'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '3000 '
         should_not_be_valid_swiss_post_code
 
         person.zip_code = '99577-0727'
@@ -410,44 +413,44 @@ describe Person do
 
     context 'foreign country' do
       it 'can be empty' do
-        person.country = 'España'
+        person.country = 'ES'
         expect(person).to be_valid
       end
 
       it 'should allow 5-digit numbers' do
-        person.country = 'Deutschland'
+        person.country = 'DE'
         person.zip_code = '10115'
         expect(person).to be_valid
       end
 
       it 'should allow leading zeros' do
-        person.country = 'France'
+        person.country = 'FR'
         person.zip_code = '01210'
         expect(person).to be_valid
 
-        person.country = 'Vatican'
+        person.country = 'FR'
         person.zip_code = '00120'
         expect(person).to be_valid
       end
 
       it 'should allow non-numeric characters' do
-        person.country = 'USA'
+        person.country = 'US'
         person.zip_code = '99577-0727'
         expect(person).to be_valid
 
-        person.country = 'Niederlande'
+        person.country = 'NL'
         person.zip_code = '2597 GV 75'
         expect(person).to be_valid
 
-        person.country = 'Argentina'
+        person.country = 'AR'
         person.zip_code = 'C1420'
         expect(person).to be_valid
 
-        person.country = 'United Kingdom'
+        person.country = 'PL'
         person.zip_code = 'SW1W 0NY'
         expect(person).to be_valid
 
-        person.country = 'Canada'
+        person.country = 'CA'
         person.first_name = 'SANTA'
         person.last_name = 'CLAUS'
         person.address = 'NORTH POLE'

@@ -8,29 +8,33 @@
 class CondensedContact
   CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country]
 
-  attr_accessor :base_contactable, :merged_contactables
+  attr_accessor :base_contactable, :other_contactables
   delegate(*CONDENSABLE_ATTRIBUTES, to: :@base_contactable)
 
-  def initialize(base_contactable, *contactables)
+  def initialize(base_contactable, contactables=[])
     self.base_contactable = base_contactable
-    self.merged_contactables = contactables
+    self.other_contactables = []
+    condense(contactables)
   end
 
-  def contactables
-    [base_contactable] + merged_contactables
+  def condensed_contactables
+    [base_contactable] + other_contactables
   end
 
   def full_name
-    "#{contactables.map(&:first_name).to_sentence} #{base_contactable.last_name}"
+    "#{condensed_contactables.map(&:first_name).to_sentence} #{base_contactable.last_name}"
   end
 
   def condensable?(contactable)
     CondensedContact.condensable?(self, contactable)
   end
 
-  def condense(contactable)
-    merged_contactables << contactable if condensable?(contactable)
+  def condense(candidates)
+    Array.wrap(candidates).each do |candidate|
+      other_contactables << candidate if(condensable?(candidate) && !condensed_contactables.include?(candidate))
+    end
   end
+
   alias_method :<<, :condense
 
   def self.condensable?(base_contactable, contactable)
@@ -40,4 +44,19 @@ class CondensedContact
     true
   end
 
+  def self.condense_list(list)
+    condensed = []
+
+    list.map.with_index do |base_contactable, base_index|
+      next if condensed.include?(base_contactable)
+      candidates = condense_candidates(base_contactable, list[base_index+1..-1])
+      condensed += candidates
+      condensed_contactable = CondensedContact.new(base_contactable, candidates) if candidates.any?
+      condensed_contactable || base_contactable
+    end.compact
+  end
+
+  def self.condense_candidates(base_contactable, list)
+    list.select { |contactable| condensable?(base_contactable, contactable) }
+  end
 end

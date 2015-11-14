@@ -9,8 +9,8 @@ require 'spec_helper'
 
 describe CondensedContact do
   let(:person) { Fabricate(:person_with_address_and_phone) }
-  let(:condensable_person) { Person.create(person.attributes.merge({first_name: Faker::Name.first_name})) }
-  let(:noncondensable_person) { Person.create(person.attributes.merge({last_name: Faker::Name.last_name})) }
+  let(:condensable_person) { Person.create(person.attributes.merge({id: nil, first_name: Faker::Name.first_name})) }
+  let(:noncondensable_person) { Person.create(person.attributes.merge({id: nil, last_name: Faker::Name.last_name})) }
   let(:condensed_contact) { CondensedContact.new(person) }
 
   def condensed_attributes(contactable)
@@ -26,7 +26,7 @@ describe CondensedContact do
     end
 
     describe '#contactables' do
-      subject { condensed_contact.contactables }
+      subject { condensed_contact.condensed_contactables }
 
       it { is_expected.to eq([person]) }
     end
@@ -50,7 +50,13 @@ describe CondensedContact do
         subject { condensed_contact.condense(condensable_person) }
 
         it 'merges the contact' do
-          expect { subject }.to change { condensed_contact.contactables }
+          expect { subject }.to change { condensed_contact.condensed_contactables }
+        end
+
+        it 'does not merge twice' do
+          subject
+          expect { condensed_contact.condense(condensable_person) }.
+            not_to change { condensed_contact.condensed_contactables }
         end
       end
 
@@ -58,19 +64,26 @@ describe CondensedContact do
         subject { condensed_contact.condense(noncondensable_person) }
 
         it 'does not merge the contact' do
-          expect { subject }.not_to change { condensed_contact.contactables }
+          expect { subject }.not_to change { condensed_contact.condensed_contactables }
         end
       end
     end
   end
 
   context 'with merged contactable' do
-    let(:merged_condensed_contact) { CondensedContact.new(person, condensable_person) }
+    let(:merged_condensed_contact) { CondensedContact.new(person, [condensable_person]) }
 
     describe '#full_name' do
       subject { merged_condensed_contact.full_name }
 
       it { is_expected.to eq("#{[person.first_name, condensable_person.first_name].to_sentence} #{person.last_name}") }
     end
+  end
+
+  describe '::condense_list' do
+    let(:condensable_list) { [person, condensable_person, noncondensable_person] }
+    subject { CondensedContact.condense_list(condensable_list) }
+
+    its(:count) { is_expected.to be 2 }
   end
 end

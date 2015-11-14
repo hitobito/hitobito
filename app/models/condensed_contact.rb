@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class CondensedContact
-  CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country]
+  CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country, :country_label, :ignored_country?]
 
   attr_accessor :base_contactable, :other_contactables
   delegate(*CONDENSABLE_ATTRIBUTES, to: :@base_contactable)

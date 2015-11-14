@@ -141,6 +141,7 @@ class PeopleController < CrudController
     filter = list_filter
     entries = filter.filter_entries
     entries = entries.reorder(sort_expression) if sorting?
+    entries = CondensedContact.condense_list(entries) if params[:condense]
     @multiple_groups = filter.multiple_groups
     @all_count = filter.all_count if html_request?
     entries

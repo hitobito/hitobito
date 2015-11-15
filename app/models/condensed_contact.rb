@@ -6,12 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class CondensedContact
-  CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country, :country_label, :ignored_country?]
+  CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country, :country_label,
+    :ignored_country?]
 
   attr_accessor :base_contactable, :other_contactables
   delegate(*CONDENSABLE_ATTRIBUTES, to: :@base_contactable)
 
-  def initialize(base_contactable, contactables=[])
+  def initialize(base_contactable, contactables = [])
     self.base_contactable = base_contactable
     self.other_contactables = []
     condense(contactables)
@@ -31,7 +32,9 @@ class CondensedContact
 
   def condense(candidates)
     Array.wrap(candidates).each do |candidate|
-      other_contactables << candidate if(condensable?(candidate) && !condensed_contactables.include?(candidate))
+      if (condensable?(candidate) && !condensed_contactables.include?(candidate))
+        other_contactables << candidate
+      end
     end
   end
 

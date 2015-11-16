@@ -1,5 +1,6 @@
 AllCops:
   RunRailsCops: true
+  DisplayCopNames: true
   Exclude:
     - Rakefile
     - db/**/*

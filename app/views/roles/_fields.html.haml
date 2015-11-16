@@ -1,17 +1,18 @@
 - if @group_selection.present? && @group_selection.size > 1
   = f.labeled(:group_id) do
-    = f.select(:group_id,
-               group_options_with_level,
-               { },
-               { class: 'span6 chosen-select',
-                 data: { remote: true,
-                         url: role_types_group_roles_path(@group),
-                         chosen_no_results: t('global.chosen_no_results') } })
+    .span6
+      = f.select(:group_id,
+                 group_options_with_level,
+                 { },
+                 { class: 'chosen-select',
+                   data: { remote: true,
+                           url: role_types_group_roles_path(@group),
+                           chosen_no_results: t('global.chosen_no_results') } })
 - else
   = f.hidden_field :group_id
 
 = f.labeled(:type) do
-  #role_type_select
+  #role_type_select.span6
     = render 'type_select'
 
 = f.labeled_input_field(:label,

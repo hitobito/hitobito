@@ -74,7 +74,7 @@ class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
           changes[model.country] << model.id
           log[:mapped] << model.changes['country'] if model.changed?
         else
-          failed <<  model.id
+          failed << model.id
           log[:failed] << model.country
         end
       end
@@ -107,7 +107,7 @@ class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
     def keyed_translations
       hash = {}
       LANGUAGES.map do |lang|
-        ISO3166::Country.translations(lang).map do |key, value|
+        Countries.labels(lang).map do |key, value|
           hash[key.downcase] = key
           if value.present?
             hash[value.downcase] = key

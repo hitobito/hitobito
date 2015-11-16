@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require_relative Rails.root.join('app', 'models', 'countries')
+
 module Contactable
 
   extend ActiveSupport::Concern
@@ -29,26 +31,16 @@ module Contactable
 
     before_validation :set_self_in_nested
 
-    validates :country, inclusion: ISO3166::Data.codes, allow_blank: true
+    validates :country, inclusion: Countries.codes, allow_blank: true
     validate :assert_is_valid_swiss_post_code
   end
 
   def country_label
-    c = ISO3166::Country.new(country)
-    c ? c.translations[I18n.locale.to_s] || c.name.presence : country
+    Countries.label(country)
   end
 
   def country=(value)
-    normalized = value.to_s.strip.downcase
-    if normalized.size > 2
-      super(value)
-      ISO3166::Country.translations(I18n.locale).each do |key, label|
-        super(key) if label.downcase == normalized
-      end
-    else
-      super(value.to_s.strip.upcase)
-    end
-
+    super(Countries.normalize(value))
     value
   end
 
@@ -57,7 +49,7 @@ module Contactable
   end
 
   def swiss?
-    ['', 'ch'].include?(country.to_s.strip.downcase)
+    Countries.swiss?(country)
   end
 
   def canton

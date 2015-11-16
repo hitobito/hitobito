@@ -1,6 +1,7 @@
 # Rubocop configuration that MUST hold for every build.
 
 AllCops:
+  DisplayCopNames: trueq
   Exclude:
     - db/**/*
     - config/**/*

@@ -118,7 +118,16 @@ describe PeopleController do
 
         context '.pdf' do
           it 'generates pdf labels' do
+            expect(Person::CondensedContact).not_to receive(:condense_list)
             get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
+
+            expect(@response.content_type).to eq('application/pdf')
+            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          end
+
+          it 'generates condensed pdf labels' do
+            expect(Person::CondensedContact).to receive(:condense_list).once.and_call_original
+            get :index, group_id: group, label_format_id: label_formats(:standard).id, condense: true, format: :pdf
 
             expect(@response.content_type).to eq('application/pdf')
             expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))

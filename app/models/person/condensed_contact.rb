@@ -4,8 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-class CondensedContact
+class Person::CondensedContact
   CONDENSABLE_ATTRIBUTES = [:address, :last_name, :zip_code, :town, :country, :country_label,
     :ignored_country?]
 
@@ -27,7 +26,7 @@ class CondensedContact
   end
 
   def condensable?(contactable)
-    CondensedContact.condensable?(self, contactable)
+    self.class.condensable?(self, contactable)
   end
 
   def condense(candidates)
@@ -54,7 +53,7 @@ class CondensedContact
       next if condensed.include?(base_contactable)
       candidates = condense_candidates(base_contactable, list[base_index+1..-1])
       condensed += candidates
-      condensed_contactable = CondensedContact.new(base_contactable, candidates) if candidates.any?
+      condensed_contactable = self.new(base_contactable, candidates) if candidates.any?
       condensed_contactable || base_contactable
     end.compact
   end

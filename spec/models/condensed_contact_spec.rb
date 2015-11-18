@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe CondensedContact do
+describe Person::CondensedContact do
   let(:person) { Fabricate(:person_with_address_and_phone) }
   let(:condensable_person) { Person.create(person.attributes.merge({id: nil, first_name: Faker::Name.first_name})) }
   let(:noncondensable_person) { Person.create(person.attributes.merge({id: nil, last_name: Faker::Name.last_name})) }
-  let(:condensed_contact) { CondensedContact.new(person) }
+  let(:condensed_contact) { Person::CondensedContact.new(person) }
 
   def condensed_attributes(contactable)
     contactable.attributes.with_indifferent_access.slice(:address, :last_name, :zip_code, :town, :country)
@@ -71,7 +71,7 @@ describe CondensedContact do
   end
 
   context 'with merged contactable' do
-    let(:merged_condensed_contact) { CondensedContact.new(person, [condensable_person]) }
+    let(:merged_condensed_contact) { Person::CondensedContact.new(person, [condensable_person]) }
 
     describe '#full_name' do
       subject { merged_condensed_contact.full_name }
@@ -82,7 +82,7 @@ describe CondensedContact do
 
   describe '::condense_list' do
     let(:condensable_list) { [person, condensable_person, noncondensable_person] }
-    subject { CondensedContact.condense_list(condensable_list) }
+    subject { Person::CondensedContact.condense_list(condensable_list) }
 
     its(:count) { is_expected.to be 2 }
   end

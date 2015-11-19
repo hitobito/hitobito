@@ -19,6 +19,7 @@ puzzlers = ['Pascal Zumkehr',
             'Andreas Maierhofer',
             'Mathis Hofer',
             'Andre Kunz',
+            'Pascal Simon',
             'Roland Studer']
 
 devs = {'Customer Name' => 'customer@email.com'}

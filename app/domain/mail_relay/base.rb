@@ -47,7 +47,7 @@ module MailRelay
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
             new(message).relay
-          rescue => e
+          rescue Exception => e
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
           end

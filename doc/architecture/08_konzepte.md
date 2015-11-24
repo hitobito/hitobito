@@ -54,14 +54,16 @@ Ein Gruppentyp erbt immer von der Klasse `Group`. Er kann eine Ebene sein (`self
 
 Danach sind alle möglichen Untergruppentypen des Gruppentyps definiert (`children Group::Layer, Group::Board, Group::Basic`). Als Untergruppen sind nur diese Typen erlaubt. Wie im Beispiel gezeigt, können Gruppentypen rekursiv organisiert sein.
 
-Die Rollentypen können direkt in einem Gruppentyp definiert werden und erben von der Klasse `Role`. Jeder Rollentyp hat eine Liste von Grundberechtigungen (`self.permissions = [:layer_full, :contact_data]`). Diese sind allgemeine Angaben für ein Was und Wo, auf welchen die konkreten Berechtigungen aufbauen. Alle spezifischen Möglichkeiten eines Benutzenden sind von den Rollenberechtigungen abgeleitet, welche sie oder er in den verschiedenen Gruppen hat. Ausserdem ist es möglich, eine Rolle vor dem Zugriff von übergeordneten Ebenen aus zu schützen (`self.visible_from_above = false`). 
+Die Rollentypen können direkt in einem Gruppentyp definiert werden und erben von der Klasse `Role`. Jeder Rollentyp hat eine Liste von Grundberechtigungen (`self.permissions = [:layer_full, :contact_data]`). Alle spezifischen Möglichkeiten eines Benutzenden sind von den Rollenberechtigungen abgeleitet, welche sie oder er in den verschiedenen Gruppen hat. Ausserdem ist es möglich, eine Rolle vor dem Zugriff von übergeordneten Ebenen aus zu schützen (`self.visible_from_above = false`). 
 
 Ein Rollentyp kann zusätzlich von einer spezifischen Art sein (`self.kind = :external`), welche bei der Aufteilung der Personen einer Gruppe in verschiedene Bereiche heran gezogen wird. Im Core sind die Bereiche Mitglieder, Passive und Externe vordefiniert. Die Art hat keinen Einfluss auf die Berechtigungen.
 
 
 ### Berechtigungen
 
-Folgende Grundberechtigungen / Permissions existieren momentan:
+Das Berechtigungssystem definiert, ob ein Benutzer eine spezifische Aktion aufrufen darf oder nicht. Dafür sind die jeweiligen Rollen sowie deren zugeordnete Grundberechtigungen / Permissions relevant. Diese sind allgemeine Angaben für ein Was und Wo, auf welchen die konkreten Berechtigungen aufbauen. Eine Permission soll immer einen ganzen Bereich von Aktionen abdecken, nie nur eine einzelne. 
+
+Folgende Permissions existieren momentan:
 
 **admin**: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
 
@@ -86,6 +88,21 @@ Folgende Grundberechtigungen / Permissions existieren momentan:
 **approve_applications**: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 
 
+Die Definition von Berchtigungen geschieht in sogenannten _Abilities_. Diese verknüpfen ein Modell sowie die zugehörigen Aktionen mit den entsprechenden Permissions, wobei durch sogenannte _Constraints_ alle Details geregelt werden. Constraints sind nichts anderes als sprechende Methoden, welche aufgrund Modelleigenschaften und Benutzerrollen die genauen Bedingungen der Berechtigung festlegen. Dies sieht wie folgt aus:
+
+    on(Person) do
+      permission(:group_full).may(:update).in_same_group
+    end
+    
+    def in_same_group
+      roles_with_permission = user.roles.select {|r| r.permissions.include?(permission) }
+      (roles_with_permission.collect(&:group_id) & subject.group_ids).present?
+    end
+
+Diese Deklaration erteilt einer Rolle mit der Permission `:group_full` die Berechtigung, die `update` Aktion auf einer `Person` auszuführen, falls diese `in_same_group` ist. Hier prüft z.B. die Constraint `in_same_group`, dass die Person (`subject`) in der selben Gruppe wie die Benutzerrolle mit der zugehörigen Permission sein muss. Zur Deklaration von Berechtigungen sind zusätzlich die beiden abstrakten Permissions `any` und `general` verfügbar. `any` trifft auf alle Benutzenden unabhängig ihrer Permissions zu. Damit können für alle Benutzer geltende Berechtigungen definiert werden oder, in der Constraint, Einschränkungen nach spezifischen Rollentypen unabhängig ihrer Permissions vorgenommen werden. Die abstrakte Permission `general` wird _zusätzlich_ zu allen anderen Berechtigungsdeklarationen dieser Aktion ebenfalls geprüft. Die Aktionen entsprechen denjenigen von [CanCanCan](https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities), Aliase wie `manage` oder `read` sind ebenfalls möglich. Von allen definierten Berechtigungen muss mindestens eine Constraint erfüllt sein, damit ein Benutzer die gewünschte Aktion ausführen kann.
+
+Jede neu implementierte Aktion erfordert in der Regel eine neue Berechtiungsdeklaration. Diese sollte möglichst auf den bestehenden Constraints und Permissions aufbauen. Ansonsten können neue Constraints dafür definiert werden, neue Permissions sind äusserst zurückhaltend einzuführen.
+
 Folgende zwei Rake Tasks helfen bei der Dokumentation der Rollen und Berechtigungen:
 
     rake hitobito:roles
@@ -95,8 +112,6 @@ Gibt alle Gruppen und zugehörigen Rollen und deren Grundberechtigungen aus. Str
     rake hitobito:abilities
 
 Gibt alle Berechtigungen entsprechend den Permissions aus. Übersicht über die Definition der Berechtigungen, welche ein Benutzer benötigt, um eine bestimmte Aktion auf einem bestimmten Modell auszuführen.
-
-Die Constraint gibt an, welche weiteren Bedinungen erfüllt sein müssen, z.B. `in_same_group` bedeutet, dass das Model in der selben Gruppe wie die zugehörige Permission sein muss. Die Permission `any` trifft auf alle Benutzer unabhängig ihrer Permissions zu, die Permission `general` wird _zusätzlich_ zu allen anderen Constraints dieser Aktion ebenfalls geprüft. Mindestens eine Constraint muss erfüllt sein, damit ein Benutzer die entsprechende Aktion ausführen kann.
 
 Lesebeispiel am Beispiel Jubla: _Kann ein Mitglied der Bundesleitung einen Anlass einer Schar bearbeiten?_
 

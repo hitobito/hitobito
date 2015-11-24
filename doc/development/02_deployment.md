@@ -30,6 +30,7 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | --- | --- | --- |
 | RAILS_HOST_NAME | Öffentlicher Hostname der Applikation. Wird für Links in E-Mails verwendet. | - |
 | RAILS_HOST_SSL | Gibt an, ob die Applikation unter HTTPS läuft (`true` or `false`) | `false` |
+| RAILS_ROOT_USER_EMAIL | Die E-Mailadresse des Root Users | - |
 | RAILS_SECRET_TOKEN | Secret token für die Sessions (128 byte hex). Muss für jede laufende Instanz eindeutig sein. Generierbar mit `rake secret` | - |
 | RAILS_DB_NAME | Name der Datenbank | `[environment].sqlite3` |
 | RAILS_DB_USERNAME | Benutzername, um auf die Datenbank zu verbinden. | - |
@@ -84,11 +85,12 @@ Funktion.
 
 #### Root User
 
-Die Emailadresse des Root User ist im `settings.yml` definiert (je nach dem im entsprechenden Wagon) 
-und wird über die Seed Daten geladen. Über die Passwort vergessen Funktion kann dafür ein Passwort 
-gesetzt werden. Danach können weitere Personen für den Kunden erstellt werden. Der Root User bleibt 
-die einzige Person, mit welcher sich Entwickler auf der Produktion einloggen können. Damit haben 
-Entwickler volle Berechtigungen, sind aber keiner Gruppe zugewiesen. 
+Die Emailadresse des Root User ist in `RAILS_ROOT_USER_EMAIL` oder im `settings.yml` des
+entsprechenden Wagons definiert und wird automatisch über die Seed Daten in die Datenbank geladen. 
+Über die Passwort vergessen Funktion kann dafür ein Passwort gesetzt werden. Danach können weitere 
+Personen für den Kunden erstellt werden. Der Root User bleibt die einzige Person, mit welcher sich 
+Entwickler auf der Produktion einloggen können. Damit haben Entwickler volle Berechtigungen, sind 
+aber keiner Gruppe zugewiesen. 
 
 #### No-Reply Liste
 

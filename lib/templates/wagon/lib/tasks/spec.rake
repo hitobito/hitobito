@@ -5,8 +5,8 @@ if Rake::Task.task_defined?('spec:features')
   Rake::Task['spec:features'].actions.clear
   namespace :spec do
     RSpec::Core::RakeTask.new(:features) do |t|
-      t.pattern = "./spec/features/**/*_spec.rb"
-      t.rspec_opts = "--tag type:feature"
+      t.pattern = './spec/features/**/*_spec.rb'
+      t.rspec_opts = '--tag type:feature'
     end
 
     task all: ['spec:features', 'spec']

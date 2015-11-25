@@ -11,7 +11,7 @@
 
   - entry.used?(:state) do
     - if entry.possible_states.present?
-      = f.labeled_belongs_to_field(:state, list: entry.state_collection)
+      = f.labeled_belongs_to_field(:state, list: entry.state_collection, prompt: true)
     - else
       = f.labeled_input_field(:state)
 

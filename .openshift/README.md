@@ -71,3 +71,10 @@ https://developers.openshift.com/en/ruby-getting-started.html
 For information about .openshift directory, consult the documentation:
 
 http://openshift.github.io/documentation/oo_user_guide.html#the-openshift-directory
+
+
+## Troubleshooting
+
+If Passenger reports "You have already activated rack 1.5.2, but your Gemfile requires rack 1.6.4.",
+running `gem install rake` in the app root directory should help (see 
+https://bugzilla.redhat.com/show_bug.cgi?id=1184179)

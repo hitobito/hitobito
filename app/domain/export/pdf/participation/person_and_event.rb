@@ -11,9 +11,7 @@ module Export::Pdf::Participation
     class Person < Section
 
       def render
-        text person.first_name, person.last_name, style: :bold
-        text person.address
-        text address_details
+        render_address
         move_down_line
 
         phone_numbers.each { |number| text number.to_s }
@@ -26,6 +24,12 @@ module Export::Pdf::Participation
       end
 
       private
+
+      def render_address
+        text person.person_name, style: :bold
+        text person.address
+        text address_details
+      end
 
       def address_details
         [person.zip_code, person.town]
@@ -45,29 +49,34 @@ module Export::Pdf::Participation
         text event, style: :bold
         move_down_line
 
-        text event.number
-        text event.kind if event_with_kind?
-        labeled_attr(event, :cost)
+        render_details
         move_down_line
 
-        text [human_event_name, dates_label.downcase].join, style: :bold
         render_dates
+        move_down_line
         stroke_bounds
       end
 
       private
 
-      def dates_label
-        human_attribute_name(:dates, event)
+      def render_details
+        text event.number
+        text event.kind if event_with_kind?
+        labeled_attr(event, :cost)
       end
 
       def render_dates(count = 3)
+        text dates_label.downcase, style: :bold
         height = 80 / count
         event.dates.limit(count).each do |date|
           bounding_box([0, cursor], width: bounds.width, height: height) do
             text "#{date.label_and_location}\n#{date.duration}"
           end
         end
+      end
+
+      def dates_label
+        human_attribute_name(:dates, event)
       end
     end
 

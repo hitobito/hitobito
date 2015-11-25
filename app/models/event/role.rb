@@ -116,7 +116,7 @@ class Event::Role < ActiveRecord::Base
   # A participation with at least one role is active
   def set_participation_active
     participation.update_attribute(:active, true) unless applying_participant?
-    update_participant_count if self.class.participant?
+    update_participant_count
   end
 
   def destroy_participation_for_last
@@ -124,7 +124,7 @@ class Event::Role < ActiveRecord::Base
     return if @_destroying
     @_destroying = true
 
-    update_participant_count if self.class.participant?
+    update_participant_count
     participation.destroy unless participation.roles(true).exists?
   end
 

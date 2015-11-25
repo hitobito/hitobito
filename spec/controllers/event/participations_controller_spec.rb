@@ -297,32 +297,45 @@ describe Event::ParticipationsController do
       end
 
       it 'creates active participant role for non course events' do
-        post :create, group_id: group.id, event_id: Fabricate(:event).id, event_participation: {}
+        event = Fabricate(:event)
+        post :create, group_id: group.id, event_id: event.id, event_participation: {}
+
         participation = assigns(:participation)
         expect(participation).to be_valid
         expect(participation).to be_active
         expect(participation.roles.size).to eq(1)
         role = participation.roles.first
+        expect(role.participation).to eq participation.model
+
+        expect(event.reload.applicant_count).to eq 1
+        expect(event.teamer_count).to eq 0
+        expect(event.participant_count).to eq 1
+
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
         expect(flash[:notice]).
           to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        expect(role.participation).to eq participation.model
       end
 
       it 'creates non-active participant role for course events' do
         post :create, group_id: group.id, event_id: course.id, event_participation: {}
+
         participation = assigns(:participation)
         expect(participation).to be_valid
         expect(participation).not_to be_active
         expect(participation.roles.size).to eq(1)
         role = participation.roles.first
         expect(role).to be_kind_of(Event::Course::Role::Participant)
+        expect(role.participation).to eq participation.model
+
+        expect(course.reload.applicant_count).to eq 1
+        expect(course.teamer_count).to eq 0
+        expect(course.participant_count).to eq 0
+
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
         expect(flash[:notice]).
           to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        expect(role.participation).to eq participation.model
       end
 
       it 'creates specific non-active participant role for course events' do

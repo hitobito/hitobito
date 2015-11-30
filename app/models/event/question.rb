@@ -25,6 +25,8 @@ class Event::Question < ActiveRecord::Base
   validates_by_schema
   validate :assert_zero_or_more_than_one_choice
 
+  after_create :add_answer_to_participations
+
   scope :global, -> { where(event_id: nil) }
 
 
@@ -37,6 +39,14 @@ class Event::Question < ActiveRecord::Base
   def assert_zero_or_more_than_one_choice
     if choice_items.size == 1
       errors.add(:choices, :requires_more_than_one_choice)
+    end
+  end
+
+  def add_answer_to_participations
+    if event
+      event.participations.find_each do |p|
+        p.answers << answers.new
+      end
     end
   end
 

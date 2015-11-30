@@ -16,10 +16,12 @@ describe 'event/participations/_list.html.haml' do
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
   let(:dropdowns) { dom.all('.dropdown-toggle') }
 
-  let(:params) do { 'action' => 'index',
-                    'controller' => 'event/participations',
-                    'group_id' => '1',
-                    'event_id' => '36' } end
+  let(:params) do
+    { 'action' => 'index',
+      'controller' => 'event/participations',
+      'group_id' => '1',
+      'event_id' => '36' }
+  end
 
   before do
     assign(:event, event)
@@ -33,8 +35,8 @@ describe 'event/participations/_list.html.haml' do
   it 'marks participations where required questions are unanswered' do
     login_as(people(:top_leader))
 
-    question = event.questions.create!(question: 'dummy', required: true)
-    participation.answers.create!(question: question, answer: '')
+    event.questions.create!(question: 'dummy', required: true)
+    participation.reload
     expect(dom).to have_text 'Pflichtangaben fehlen'
   end
 

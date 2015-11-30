@@ -4,6 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_answers
@@ -15,7 +16,9 @@
 #
 
 require 'spec_helper'
+
 describe Event::Answer do
+
   let(:question) { event_questions(:top_ov) }
   let(:choices) { question.choices.split(',') }
 

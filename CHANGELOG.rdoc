@@ -6,6 +6,7 @@
 * Tooltips bei langen Gruppennamen.
 * Letzte bearbeitende Person von Anlässen wird gespeichert.
 * Top Level Menu 'Kurse' ist neu unter 'Anlässe' zu finden.
+* Anlass Formular in mehrere Tabs aufgeteilt.
 
 == Version 1.9
 

@@ -3,18 +3,25 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form cancel_url_new: typed_group_events_path(@group, entry.klass) do |f|
+= entry_form cancel_url_new: typed_group_events_path(@group, entry.klass),
+             html: { class: 'tabbed' } do |f|
   - if entry.new_record?
     = f.hidden_field :type
 
-  = render 'general_fields', f: f
+  = render 'form_tabs'
 
-  = render 'group_fields', f: f
+  .tab-content
+    #general.tab-pane.active
+      = render 'general_fields', f: f
+      = render 'group_fields', f: f
 
-  = render 'date_fields', f: f
+    #dates.tab-pane
+      = render 'date_fields', f: f
 
-  = render 'application_fields', f: f
+    #application.tab-pane
+      = render 'application_fields', f: f
+      = render 'additional_fields', f: f
 
-  = render 'additional_fields', f: f
+    = render_extensions 'form_tab_pane', locals: { f: f }
 
   = render_extensions 'form_actions_caption'

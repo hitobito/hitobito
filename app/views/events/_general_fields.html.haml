@@ -19,9 +19,10 @@
 
   = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost))
 
-  = render 'location_fields', f: f
-
   - entry.used?(:contact_id) do
     = f.labeled_person_field :contact
 
-  = render_extensions 'fields', locals: { f: f }
+  = render 'location_fields', f: f
+
+
+= render_extensions 'fields', locals: { f: f }

@@ -391,6 +391,8 @@ de:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+    form_tabs:
+      general: Allgemein
     global:
       link:
         add_event: Anlass erstellen

@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_insieme.
 
 - if entry.participant_types.present?
-  = field_set_tag Event::Application.model_name.human do
+  = field_set_tag do
     = f.labeled_input_fields(*entry.used_attributes(:application_opening_at, :application_closing_at, :application_conditions, :maximum_participants))
 
     - entry.used?(:external_applications) do

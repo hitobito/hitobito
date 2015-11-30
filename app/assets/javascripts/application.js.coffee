@@ -26,6 +26,7 @@
 #= require bootstrap-tooltip
 #= require bootstrap-popover
 #= require bootstrap-typeahead
+#= require bootstrap-tab
 #= require jquery_nested_form
 #= require chosen-jquery
 #= require remote-typeahead

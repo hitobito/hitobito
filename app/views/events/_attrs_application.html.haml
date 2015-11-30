@@ -1,0 +1,29 @@
+= section Event::Application.model_name.human do
+  %dl.dl-horizontal
+    - entry.used?(:application_opening_at) do
+      = labeled_attr(entry, :application_opening_at)
+    - entry.used?(:application_closing_at) do
+      = labeled_attr(entry, :application_closing_at)
+    = labeled_attr(entry, :booking_info)
+    - entry.used?(:external_applications) do
+      = labeled(Event.human_attribute_name(:external_applications), entry.external_application_link(@group))
+
+  %dl.dl-horizontal
+    - entry.used?(:application_conditions) do
+      = labeled_attr(entry, :application_conditions)
+
+    - if entry.course_kind?
+      = labeled(Event::Kind.human_attribute_name(:minimum_age),
+                      entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+      = labeled(t('events.preconditions'), entry.kind.qualification_kinds('precondition', 'participant').join(', '))
+
+  - if entry.course_kind?
+    %dl.dl-horizontal
+      = labeled(Event::Kind.human_attribute_name(:qualification_kinds),
+                      entry.kind.qualification_kinds('qualification', 'participant').join(', '))
+      = labeled(Event::Kind.human_attribute_name(:prolongations),
+                      entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
+
+  = render_attrs(entry, *entry.used_attributes(:signature, :signature_confirmation))
+
+  = render_extensions 'attrs_application', folder: 'events'

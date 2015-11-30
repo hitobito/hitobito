@@ -1,0 +1,26 @@
+.well
+  %dl.dl-horizontal
+    = labeled_attr(entry, :dates_full)
+    - entry.used?(:motto) do
+      = labeled_attr(entry, :motto)
+    - entry.used?(:cost) do
+      = labeled_attr(entry, :cost)
+
+  %dl.dl-horizontal
+    - entry.used?(:kind_id) do
+      = labeled_attr(entry, :kind_id)
+      = render_extensions :kind, folder: 'events'
+
+    = render_extensions :attrs_main
+
+    - entry.used?(:number) do
+      = labeled_attr(entry, :number)
+
+    = labeled(t('event.run_by'), entry.group_names)
+
+    - entry.used?(:state) do
+      = labeled_attr(entry, :state_translated)
+
+  = render_present_attrs(entry, :description, :location)
+
+  = render_extensions :attrs_primary, folder: 'events'

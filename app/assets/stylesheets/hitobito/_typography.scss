@@ -88,6 +88,26 @@ dl {
     border-bottom: 1px solid $borderColor;
     margin-bottom: $vSpace;
   }
+
+}
+
+.well .dl-horizontal {
+  &:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.dl-vertical {
+  dd {
+    margin-bottom: $vSpace / 4;
+  }
 }
 
 // Table

@@ -2,7 +2,7 @@
 # prepare the environment to use the local mysql database, e.g.
 #  script/with_mysql rails s
 #
-# rake tasks may use the followint subtask:
+# rake tasks may use the following subtask:
 #  rake mysql test:requests
 
 if [ -z "$RAILS_ENV" ]
@@ -16,7 +16,7 @@ export RAILS_DB_ADAPTER=mysql2
 export RAILS_DB_NAME=hitobito_$env
 #export RAILS_DB_NAME=hitobito_production
 export RAILS_DB_USERNAME=root
-export RAILS_DB_PASSWORD=root
+#export RAILS_DB_PASSWORD=root
 #export RAILS_DB_SOCKET=/var/lib/mysql/mysql.sock
 export RAILS_DB_SOCKET=/var/run/mysqld/mysqld.sock
 

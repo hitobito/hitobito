@@ -247,6 +247,9 @@ exit 0
 # Runs after the package got installed.
 # Configure here any services etc.
 
+# write error output to file
+exec 2> /var/log/rpm-postinstall/%{name}.log
+
 # the following old files would be loaded on startup and must
 # be explicitly deleted to load the stop script
 # rm -f %{appdir}/app/utils/datetime_attribute.rb

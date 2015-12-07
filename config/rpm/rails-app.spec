@@ -259,7 +259,12 @@ su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon
 %if %{use_sphinx}
 su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake ts:configure" || exit 1
 
-ln -s %{appdir}/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
+sphinx_config=/etc/sphinx/%{name}.conf
+if [ ! -f $sphinx_config ]
+then
+  ln -s %{appdir}/config/production.sphinx.conf $sphinx_config
+fi
+
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif

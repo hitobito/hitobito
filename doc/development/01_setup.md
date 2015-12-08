@@ -6,6 +6,9 @@ Als Entwicklungsdatenbank wird Sqlite3 verwendet. Zur Emulation des Produktionse
 Die folgenden Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus. Bei einem anderen System müssen die Befehle entsprechend angepasst werden.
 
     sudo apt-get install sqlite3 mysql-client libmysqlclient-dev mysql-server sphinxsearch memcached transifex-client imagemagick
+    sudo apt-get install libsqlite3-dev
+    sudo apt-get install git
+    sudo apt-get install bundler
 
 
 ### Source

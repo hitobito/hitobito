@@ -99,7 +99,7 @@ class PeopleController < CrudController
 
   # POST button, send password instructions
   def send_password_instructions
-    SendLoginJob.new(entry, current_user).enqueue!
+    Person::SendLoginJob.new(entry, current_user).enqueue!
     notice = I18n.t("#{controller_name}.#{action_name}")
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry), notice: notice }

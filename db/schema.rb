@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151125132550) do
+ActiveRecord::Schema.define(version: 20151208102024) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -197,11 +197,11 @@ ActiveRecord::Schema.define(version: 20151125132550) do
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
-    t.string   "name",                        null: false
-    t.string   "short_name",     limit: 31
-    t.string   "type",                        null: false
+    t.string   "name",                                                     null: false
+    t.string   "short_name",                  limit: 31
+    t.string   "type",                                                     null: false
     t.string   "email"
-    t.string   "address",        limit: 1024
+    t.string   "address",                     limit: 1024
     t.integer  "zip_code"
     t.string   "town"
     t.string   "country"
@@ -213,6 +213,7 @@ ActiveRecord::Schema.define(version: 20151125132550) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "deleter_id"
+    t.boolean  "require_person_add_requests",              default: false, null: false
   end
 
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id"
@@ -320,6 +321,18 @@ ActiveRecord::Schema.define(version: 20151125132550) do
 
   add_index "people_relations", ["head_id"], name: "index_people_relations_on_head_id"
   add_index "people_relations", ["tail_id"], name: "index_people_relations_on_tail_id"
+
+  create_table "person_add_requests", force: :cascade do |t|
+    t.integer  "person_id",    null: false
+    t.integer  "requester_id", null: false
+    t.string   "type",         null: false
+    t.integer  "body_id",      null: false
+    t.string   "role_type"
+    t.datetime "created_at",   null: false
+  end
+
+  add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id"
+  add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.integer "contactable_id",                  null: false

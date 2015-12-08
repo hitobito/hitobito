@@ -26,9 +26,11 @@ class RolesController < CrudController
 
   def create
     assign_attributes
-    new_person = entry.person.new_record?
-    created = create_entry_and_person
-    respond_with(entry, success: created, location: after_create_location(new_person))
+    with_person_add_request do
+      new_person = entry.person.new_record?
+      created = create_entry_and_person
+      respond_with(entry, success: created, location: after_create_location(new_person))
+    end
   end
 
   def update
@@ -61,6 +63,17 @@ class RolesController < CrudController
   end
 
   private
+
+  def with_person_add_request
+    creator = Person::AddRequest::Creator::Group.new(entry, current_user)
+    if creator.required?
+      success = creator.create_request
+      msg = success ? creator.success_message : creator.error_message
+      redirect_to group_people_path(entry.group_id), error: msg
+    else
+      yield
+    end
+  end
 
   def create_entry_and_person
     created = false
@@ -211,14 +224,14 @@ class RolesController < CrudController
   end
 
   def remember_primary_group
-    @was_last_primary_group_role = 
+    @was_last_primary_group_role =
       persons_last_primary_group_role?(entry)
   end
 
   def persons_last_primary_group_role?(role)
     if belongs_to_persons_primary_group?(role)
-      group_roles = role.person.roles.where(group_id: role.group_id)  
-      return group_roles.size == 1 
+      group_roles = role.person.roles.where(group_id: role.group_id)
+      return group_roles.size == 1
     end
     false
   end

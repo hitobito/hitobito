@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Event::ParticipationConfirmationJob do
+describe Person::SendLoginJob do
 
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
@@ -17,7 +17,7 @@ describe Event::ParticipationConfirmationJob do
     SeedFu.seed [Rails.root.join('db', 'seeds')]
   end
 
-  subject { SendLoginJob.new(recipient, sender) }
+  subject { Person::SendLoginJob.new(recipient, sender) }
 
   its(:parameters) do
     should == { recipient_id: recipient.id,
@@ -43,7 +43,7 @@ describe Event::ParticipationConfirmationJob do
 
     subject do
       I18n.locale = :fr
-      SendLoginJob.new(recipient, sender)
+      Person::SendLoginJob.new(recipient, sender)
     end
 
     it 'sends localized email' do

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 CustomContent.seed_once(:key,
-  {key: PersonMailer::CONTENT_LOGIN,
+  {key: Person::LoginMailer::CONTENT_LOGIN,
    placeholders_required: 'login-url',
    placeholders_optional: 'recipient-name, sender-name'},
 
@@ -27,7 +27,7 @@ CustomContent.seed_once(:key,
    placeholders_optional: nil},
 )
 
-send_login_id = CustomContent.get(PersonMailer::CONTENT_LOGIN).id
+send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id

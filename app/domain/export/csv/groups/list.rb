@@ -9,7 +9,8 @@
 module Export::Csv::Groups
   class List < Export::Csv::Base
 
-    EXCLUDED_ATTRS = %w(lft rgt contact_id created_at updated_at deleted_at
+    EXCLUDED_ATTRS = %w(lft rgt contact_id require_person_add_requests
+                        created_at updated_at deleted_at
                         creator_id updater_id deleter_id)
 
     self.model_class = Group

@@ -111,6 +111,8 @@ class Person < ActiveRecord::Base
                                 dependent: :destroy,
                                 foreign_key: :head_id
 
+  has_many :add_requests, dependent: :destroy
+
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
 

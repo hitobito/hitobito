@@ -1,4 +1,16 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: event_questions
+#
+#  id               :integer          not null, primary key
+#  event_id         :integer
+#  question         :string
+#  choices          :string
+#  multiple_choices :boolean          default(FALSE)
+#  required         :boolean
+#
+
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

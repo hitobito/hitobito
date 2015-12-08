@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class SendLoginJob < BaseJob
+class Person::SendLoginJob < BaseJob
 
   self.parameters = [:recipient_id, :sender_id, :locale]
 
@@ -18,7 +18,7 @@ class SendLoginJob < BaseJob
   def perform
     set_locale
     token = recipient.generate_reset_password_token!
-    PersonMailer.login(recipient, sender, token).deliver_now
+    Person::LoginMailer.login(recipient, sender, token).deliver_now
   end
 
   def sender

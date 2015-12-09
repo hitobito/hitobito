@@ -8,7 +8,8 @@
 module Person::AddRequest::Approver
 
   def self.for(request, current_user)
-    klass = request.class.name.demodulize.constantize
+    name = request.class.name.demodulize
+    klass = "Person::AddRequest::Approver::#{name}".constantize
     klass.new(request, current_user)
   end
 

@@ -55,7 +55,7 @@ describe RolesController do
       expect(person.first_name).to eq('Hans')
     end
 
-    it 'new role for different group redirects to groups peope list' do
+    it 'new role for different group redirects to groups people list' do
       g = groups(:toppers)
       post :create, group_id: group.id,
                     role: { group_id: g.id,
@@ -122,6 +122,64 @@ describe RolesController do
                                 person_id: person.id,
                                 type: Group::GlobalGroup::Member.sti_name }
         end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context 'with add request' do
+      before { sign_in(user) }
+
+      let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+      let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+      let(:group) { groups(:bottom_group_one_one) }
+
+      before { groups(:top_layer).update_column(:require_person_add_requests, true) }
+
+      it 'creates request' do
+        post :create, group_id: group.id,
+             role: { group_id: group.id,
+                     person_id: person.id,
+                     type: Group::BottomGroup::Member.sti_name }
+
+        is_expected.to redirect_to(group_people_path(group))
+
+        expect(person.reload.roles.count).to eq(1)
+        request = person.add_requests.first
+        expect(request.body_id).to eq(group.id)
+        expect(request.role_type).to eq(Group::BottomGroup::Member.sti_name)
+        expect(flash[:alert]).to match(/sent/)
+      end
+
+      it 'creates role if person already visible' do
+        Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
+
+        post :create, group_id: group.id,
+             role: { group_id: group.id,
+                     person_id: person.id,
+                     type: Group::BottomGroup::Member.sti_name }
+        is_expected.to redirect_to(group_people_path(group))
+
+        expect(person.reload.roles.count).to eq(2)
+        role = person.roles.last
+        expect(role.group_id).to eq(group.id)
+        expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Group 11</i> wurde erfolgreich erstellt.")
+      end
+
+      it 'informs about existing request' do
+        Person::AddRequest::Group.create!(
+          person: person,
+          requester: Fabricate(:person),
+          body: group,
+          role_type: Group::BottomGroup::Leader.sti_name)
+
+        post :create, group_id: group.id,
+             role: { group_id: group.id,
+                     person_id: person.id,
+                     type: Group::BottomGroup::Member.sti_name }
+
+        is_expected.to redirect_to(group_people_path(group))
+        expect(person.reload.roles.count).to eq(1)
+        expect(person.add_requests.count).to eq(1)
+        expect(flash[:alert]).to match(/bereits angefragt/)
       end
     end
 
@@ -255,8 +313,8 @@ describe RolesController do
       group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
                 person: person,
                 group: group2)
-      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
-                        person: person, 
+      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+                        person: person,
                         group: group3)
       group3_role1.update_attribute(:updated_at, Date.today - 10.days)
 
@@ -274,8 +332,8 @@ describe RolesController do
       group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
                 person: person,
                 group: group2)
-      group2_role2 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
-                        person: person, 
+      group2_role2 = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+                        person: person,
                         group: group2)
 
       person.update_attribute(:primary_group, group)
@@ -312,8 +370,8 @@ describe RolesController do
       group2_role1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
                         person: person,
                         group: group2)
-      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, 
-                        person: person, 
+      group3_role1 = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+                        person: person,
                         group: group3)
 
       person.update_attribute(:primary_group, group2)

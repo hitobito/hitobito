@@ -1,0 +1,96 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+require 'spec_helper'
+
+describe Person::AddRequest do
+
+  context '#for_layer' do
+
+    it 'contains people with this primary group layer' do
+      admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
+      topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
+      bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+      # second role in layer
+      Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
+      [admin, topper, bottom].each do |p|
+        Person::AddRequest::Group.create!(
+          person: p,
+          requester: bottom,
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+      end
+
+      people = Person::AddRequest.for_layer(groups(:top_layer)).pluck(:person_id)
+
+      expect(people).to match_array([admin, topper].collect(&:id))
+    end
+
+  end
+
+  context 'uniqueness' do
+    it 'allows multiple requests for the same person in different bodies' do
+      Person::AddRequest::Group.create!(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: groups(:top_layer),
+        role_type: Group::TopLayer::TopAdmin.sti_name)
+
+      other = Person::AddRequest::Event.new(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: events(:top_event),
+        role_type: Event::Role::Leader.sti_name)
+      expect(other).to be_valid
+    end
+
+    it 'does not allow multiple requests for the same person in the same body' do
+      Person::AddRequest::Group.create!(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: groups(:top_group),
+        role_type: Group::TopGroup::Leader.sti_name)
+
+      other = Person::AddRequest::Group.new(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: groups(:top_group),
+        role_type: Group::TopGroup::Member.sti_name)
+      expect(other).not_to be_valid
+    end
+  end
+
+  context 'associations' do
+    it 'person_add_requests contains only respective requests' do
+      group = groups(:top_group)
+      rg = Person::AddRequest::Group.create!(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: group,
+        role_type: Group::TopGroup::Leader.sti_name)
+
+      event = Fabricate(:event, groups: [groups(:top_group)])
+      event.update_column(:id, group.id) # set same id for strong test
+      re = Person::AddRequest::Event.create!(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: event,
+        role_type: Event::Role::Leader.sti_name)
+
+      abo = Fabricate(:mailing_list, group: groups(:top_group))
+      abo.update_column(:id, group.id) # set same id for strong test
+      rm = Person::AddRequest::MailingList.create!(
+        person: people(:bottom_member),
+        requester: people(:top_leader),
+        body: abo)
+
+      expect(group.person_add_requests).to match_array([rg])
+      expect(event.person_add_requests).to match_array([re])
+      expect(abo.person_add_requests).to match_array([rm])
+    end
+  end
+end

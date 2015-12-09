@@ -12,15 +12,17 @@ module Person::AddRequest::Approver
 
     def initialize(request, user)
       @request = request
-      @current_user = user
+      @user = user
     end
 
     def approve
       Person.transaction do
-        if entity.save
+        success = entity.save
+        if success
           send_approval
           request.destroy
         end
+        success
       end
     end
 

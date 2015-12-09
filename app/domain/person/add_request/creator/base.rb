@@ -8,24 +8,28 @@
 module Person::AddRequest::Creator
   class Base
 
-    attr_reader :entity, :requester
+    attr_reader :entity, :ability
 
-    def initialize(entity, requester)
+    def initialize(entity, ability)
       @entity = entity
-      @requester = requester
+      @ability = ability
     end
 
     def required?
       person_layer &&
         person_layer.require_person_add_requests? &&
-        cannot?(:add_without_request, request) &&
+        ability.cannot?(:add_without_request, request) &&
         entity.valid?
     end
 
     def create_request
-      success = request.save
+      success = required? && request.save
       Person::SendAddRequestJob.new(request).enqueue! if success
       success
+    end
+
+    def requester
+      ability.user
     end
 
     def request

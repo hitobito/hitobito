@@ -12,6 +12,10 @@ module AbilityDsl::Constraints
       person.id == user.id
     end
 
+    def other_with_contact_data
+      person.contact_data_visible?
+    end
+
     def in_same_group
       permission_in_groups?(person.group_ids)
     end

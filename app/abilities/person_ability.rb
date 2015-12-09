@@ -69,10 +69,6 @@ class PersonAbility < AbilityDsl::Base
     subject.id != user.id
   end
 
-  def other_with_contact_data
-    subject.contact_data_visible?
-  end
-
   def if_permissions_in_all_capable_groups
     !subject.root? &&
     # true if capable roles is empty.

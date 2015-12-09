@@ -35,4 +35,11 @@ class Person::AddRequest < ActiveRecord::Base
         where(groups: { layer_group_id: layer_group.id })
     end
   end
+
+  # This statement is required because these classes would not be loaded correctly otherwise.
+  # The price we pay for using classes as namespace.
+  require_dependency 'person/add_request/group'
+  require_dependency 'person/add_request/event'
+  require_dependency 'person/add_request/mailing_list'
+
 end

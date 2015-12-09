@@ -31,6 +31,10 @@ module AbilityDsl::Constraints
       !group.deleted?
     end
 
+    def if_layer_group
+      group.layer?
+    end
+
     private
 
     def group

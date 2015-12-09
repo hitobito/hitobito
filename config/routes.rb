@@ -9,7 +9,7 @@ Hitobito::Application.routes.draw do
 
   extend LanguageRouteScope
 
-  root :to => 'dashboard#index'
+  root to: 'dashboard#index'
 
   language_scope do
 
@@ -44,6 +44,7 @@ Hitobito::Application.routes.draw do
           post :send_password_instructions
           put :primary_group
         end
+
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
       end
@@ -63,6 +64,10 @@ Hitobito::Application.routes.draw do
         end
       end
       get 'people_filters' => 'people_filters#new' # route required for language switch
+
+      get 'person_add_requests' => 'person/add_requests#index', as: :person_add_requests
+      post 'person_add_requests' => 'person/add_requests#activate'
+      delete 'person_add_requests' => 'person/add_requests#deactivate'
 
       resources :events do
         collection do
@@ -144,7 +149,7 @@ Hitobito::Application.routes.draw do
         end
       end
 
-    end
+    end # resources :group
 
     get 'list_courses' => 'event/lists#courses', as: :list_courses
     get 'list_events' => 'event/lists#events', as: :list_events
@@ -171,14 +176,13 @@ Hitobito::Application.routes.draw do
       delete 'users/token' => 'devise/tokens#destroy'
     end
 
+    put 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
+    delete 'person_add_requests/:id' => 'person/add_requests#reject'
+
   end # scope locale
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
   # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
 end

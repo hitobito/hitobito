@@ -41,6 +41,9 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).may(:update, :reactivate, :index_person_add_requests).in_same_layer
+    permission(:layer_full).
+      may(:activate_person_add_requests, :deactivate_person_add_requests).
+      in_same_layer
 
     permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
@@ -54,9 +57,15 @@ class GroupAbility < AbilityDsl::Base
       may(:update, :reactivate, :index_person_add_requests).
       in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
-
+    permission(:layer_and_below_full).
+      may(:activate_person_add_requests, :deactivate_person_add_requests).
+      in_same_layer
 
     general(:update).group_not_deleted
+    general(:index_person_add_requests,
+            :activate_person_add_requests,
+            :deactivate_person_add_requests).
+      if_layer_group
   end
 
   def with_parent_in_same_layer

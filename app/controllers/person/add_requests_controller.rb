@@ -9,15 +9,25 @@ class Person::AddRequestsController < ApplicationController
 
   authorize_resource except: :index
 
-  before_action :authorize_class, only: :index
+  before_action :authorize_class, only: [:index, :activate, :deactivate]
 
-  prepend_before_action :parent, only: :index
-  prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy]
+  prepend_before_action :group, only: [:index, :activate, :deactivate]
+  prepend_before_action :entry, only: [:approve, :reject]
 
   # list add requests for the given layer
   def index
     @add_requests = load_entries
     set_status_notification
+  end
+
+  def activate
+    group.update_column(:require_person_add_requests, true)
+    redirect_to group_person_add_requests_path notice: 'TODO activated'
+  end
+
+  def deactivate
+    group.update_column(:require_person_add_requests, false)
+    redirect_to group_person_add_requests_path notice: 'TODO deactivated'
   end
 
   def approve
@@ -35,16 +45,13 @@ class Person::AddRequestsController < ApplicationController
 
   private
 
-  alias_method :group, :parent
-
   def entry
     @entry ||= Person::AddRequest.find(params[:id])
   end
 
   def load_entries
     Person::AddRequest.
-      joins(person: :primary_group).
-      where(groups: { layer_group_id: group.id }).
+      for_layer(group).
       includes(:body,
                person: :primary_group,
                requester: { roles: :group }).
@@ -67,8 +74,12 @@ class Person::AddRequestsController < ApplicationController
     end
   end
 
+  def group
+    @group ||= Group.find(params[:group_id])
+  end
+
   def authorize_class
-    authorize!(:index_person_add_requests, group)
+    authorize!(:"#{action_name}_person_add_requests", group)
   end
 
 end

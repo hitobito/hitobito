@@ -74,6 +74,10 @@ de:
                         'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
                         als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
                         kann leer gelassen werden).
+        person/add_request:
+          attributes:
+            person_id:
+              taken: wurde bereits angefragt.
         people_relation:
           attributes:
             tail_id:
@@ -136,6 +140,9 @@ de:
       person:
         one: Person
         other: Personen
+      person/add_request:
+        one: Anfrage
+        other: Anfragen
       people_filter:
         one: Filter
         other: Filter
@@ -223,6 +230,10 @@ de:
         roles: Rollen
         created_at: Erstellt
         updated_at: Geändert
+
+      person/add_request:
+        person: Person
+        requester: Anfrage von
 
       group:
         name: Name

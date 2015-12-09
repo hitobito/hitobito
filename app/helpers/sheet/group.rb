@@ -38,6 +38,13 @@ module Sheet
         if: :index_mailing_lists,
         params: { returning: true }
 
+    tab :tab_person_add_request_label,
+        :group_person_add_requests_path,
+        if: lambda { |view, group|
+          group.layer &&
+          view.can?(:index_person_add_requests, group)
+        }
+
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
         if: :deleted_subgroups

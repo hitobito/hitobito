@@ -29,4 +29,10 @@ class Person::AddRequest < ActiveRecord::Base
   validates_by_schema
   validates :person_id, uniqueness: { scope: [:type, :body_id] }
 
+  class << self
+    def for_layer(layer_group)
+      joins(person: :primary_group).
+        where(groups: { layer_group_id: layer_group.id })
+    end
+  end
 end

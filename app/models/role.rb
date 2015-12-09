@@ -109,7 +109,7 @@ class Role < ActiveRecord::Base
   end
 
   def set_first_primary_group
-    if person.roles.count <= 1
+    if deleted_at.nil? && person.roles.count <= 1
       person.update_column :primary_group_id, group_id
     end
   end

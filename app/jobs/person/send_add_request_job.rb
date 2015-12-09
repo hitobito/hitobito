@@ -20,18 +20,19 @@ class Person::SendAddRequestJob < BaseJob
     if person.password?
       Person::AddRequestMailer.ask_person_to_add(request).deliver_now
     end
-    Person::AddRequestMailer.ask_responsibles(request, responsibles).deliver_now
+
+    responsibles = load_responsibles.to_a
+    if responsibles.present?
+      Person::AddRequestMailer.ask_responsibles(request, responsibles).deliver_now
+    end
   end
 
   private
 
-  def person_layer
-    request.person.primary_group
-  end
-
-  def responsibles
-    Person.in_layer(request.person.primary_group).
-      where(roles: { type: responsible_role_types.collect(&:sti_name) })
+  def load_responsibles
+    Person.in_layer(person.primary_group).
+      where(roles: { type: responsible_role_types.collect(&:sti_name) }).
+      uniq
   end
 
   def responsible_role_types
@@ -42,6 +43,10 @@ class Person::SendAddRequestJob < BaseJob
 
   def request
     @request ||= Person::AddRequest.find(@request_id)
+  end
+
+  def person
+    request.person
   end
 
 end

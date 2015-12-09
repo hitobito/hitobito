@@ -9,7 +9,7 @@ module Person::AddRequest::Status
   class Group < Base
 
     def created?
-      Role.without_deleted.where(group_id: body_id, person_id: person_id).exists?
+      Role.where(group_id: body_id, person_id: person_id).exists?
     end
 
   end

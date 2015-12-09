@@ -28,12 +28,17 @@ describe Person::AddRequest::Creator::Group do
       expect(subject).to be_required
     end
 
+    it 'is true if deleted role already exists' do
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, deleted_at: 1.year.ago)
+      expect(subject).to be_required
+    end
+
     it 'is false if primary layer deactivated requests' do
       primary_layer.update_column(:require_person_add_requests, false)
       expect(subject).not_to be_required
     end
 
-    it 'is false if person is just created' do
+    it 'is false if person is not persisted yet' do
       entity = Group::BottomGroup::Member.new(group: group, person: Person.new(last_name: 'Tester'))
       creator = Person::AddRequest::Creator::Group.new(entity, ability)
       expect(creator).not_to be_required
@@ -68,6 +73,15 @@ describe Person::AddRequest::Creator::Group do
       expect(request.role_type).to eq(entity.type)
       expect(request.requester).to eq(requester)
       expect(request.person).to eq(person)
+    end
+
+    it 'creates group request if deleted role already exists' do
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, deleted_at: 1.year.ago)
+
+      expect do
+        subject.create_request
+      end.to change { Person::AddRequest.count }.by(1)
+      expect(subject.request).to be_persisted
     end
 
     it 'schedules emails' do

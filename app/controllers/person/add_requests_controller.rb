@@ -59,19 +59,27 @@ class Person::AddRequestsController < ApplicationController
   end
 
   def set_status_notification
-    return if params[:person_id].blank? || params[:body_type].blank? || params[:body_id].blank?
-
-    status = Person::AddRequest::Status.for(
-      group, params[:person_id], params[:body_type], params[:body_id])
-    return unless status.person_in_layer? # prevent information leaking
+    status = request_status
+    return if status.nil? || !person_in_layer?(status)
 
     if status.pending?
       @current = status.pending # TODO: highlight in list
     elsif status.created?
       flash.now[:notice] = status.approved_message
     else
-      flash.now[:error] = status.rejected_message
+      flash.now[:alert] = status.rejected_message
     end
+  end
+
+  def request_status
+    return if params[:person_id].blank? || params[:body_type].blank? || params[:body_id].blank?
+
+    Person::AddRequest::Status.for(
+      params[:person_id], params[:body_type], params[:body_id])
+  end
+
+  def person_in_layer?(status)
+    status.person.primary_group.try(:layer_group_id) == group.layer_group_id
   end
 
   def group

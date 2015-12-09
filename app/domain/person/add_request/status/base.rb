@@ -10,19 +10,19 @@ module Person::AddRequest::Status
   # This checks if the given person exists in the desired body or not.
   class Base
 
-    attr_reader :layer, :person_id, :body_id
+    attr_reader :person_id, :body_id
 
-    def initialize(layer, person_id, body_id)
-      @layer = layer
+    def initialize(person_id, body_id)
       @person_id = person_id
       @body_id = body_id
     end
 
     def pending
-      @pending ||= Person::AddRequest.where(type: request_type,
-                                            person_id: person_id,
-                                            body_id: body_id).
-                                      first
+      @pending ||=
+        Person::AddRequest.where(type: request_type,
+                                 person_id: person_id,
+                                 body_id: body_id).
+                           first
     end
 
     def pending?
@@ -33,20 +33,17 @@ module Person::AddRequest::Status
       @person ||= Person.find(person_id)
     end
 
-    def person_in_layer?
-      person.layer_group_id == layer.layer_group_id
-    end
-
     def created?
       fail(NotImplementedError)
     end
 
     def approved_message
+      'TOOD: request type specific approved message'
     end
 
     def rejected_message
+      'TOOD: request type specific rejected message'
     end
-
 
     private
 

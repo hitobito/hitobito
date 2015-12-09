@@ -6,24 +6,24 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::AddRequest::Creator
-  class Group < Base
+  class Event < Base
 
     alias_method :role, :entity
 
     def required?
-      person.persisted? && super()
+      role.participation.new_record? && super()
     end
 
     def body
-      role.group
+      role.participation.event
     end
 
     def person
-      role.person
+      role.participation.person
     end
 
     def request_attrs
-      super.merge(role_type: entity.type)
+      super.merge(role_type: role.type)
     end
 
   end

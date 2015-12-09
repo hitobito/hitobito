@@ -20,9 +20,11 @@ class Event::RolesController < CrudController
 
   def create
     assign_attributes
-    new_participation = entry.participation.new_record?
-    created = with_callbacks(:create, :save) { save_entry }
-    respond_with(entry, success: created, location: after_create_url(new_participation, created))
+    with_person_add_request do
+      new_participation = entry.participation.new_record?
+      created = with_callbacks(:create, :save) { save_entry }
+      respond_with(entry, success: created, location: after_create_url(new_participation, created))
+    end
   end
 
   def update
@@ -34,6 +36,12 @@ class Event::RolesController < CrudController
   end
 
   private
+
+  def with_person_add_request(&block)
+    creator = Person::AddRequest::Creator::Event.new(entry, current_ability)
+    msg = creator.handle(&block)
+    redirect_to group_event_participations_path(group, event), alert: msg if msg
+  end
 
   def build_entry
     attrs = params[:event_role]

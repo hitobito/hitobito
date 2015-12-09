@@ -9,8 +9,9 @@ require 'spec_helper'
 
 describe SubscriptionsController do
 
-  before { sign_in(people(:top_leader)) }
+  before { sign_in(user) }
 
+  let(:user)  { people(:top_leader) }
   let(:group) { groups(:top_group) }
   let(:event) { Fabricate(:event, groups: [group]) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }

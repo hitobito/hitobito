@@ -40,6 +40,25 @@ describe Subscriber::ExcludePersonController do
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
 
+      it 'creates exclusion even if person add request is required' do
+        group = groups(:bottom_layer_one)
+        list = Fabricate(:mailing_list, group: group)
+        user = Fabricate(Group::BottomLayer::Leader.name, group: group).person
+        sign_in(user)
+
+        person = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one)).person
+        groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
+
+        event = Fabricate(:event_participation, person: person, active: true).event
+        Fabricate(:subscription, mailing_list: list, subscriber: event)
+
+        expect do
+          post :create, group_id: group.id, mailing_list_id: list.id,
+               subscription: { subscriber_id: person.id }
+        end.to change(Subscription, :count).by(1)
+        expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
+      end
+
       after do
         expect(list.subscribed?(person)).to be_falsey
       end
@@ -69,8 +88,12 @@ describe Subscriber::ExcludePersonController do
       subscription.update_attribute(:subscriber, person)
       subscription.update_attribute(:excluded, true)
 
-      expect do post :create, group_id: group.id, mailing_list_id: list.id,
-                              subscription: { subscriber_id: person.id } end.not_to change(Subscription, :count)
+      expect do
+        post :create,
+             group_id: group.id,
+             mailing_list_id: list.id,
+             subscription: { subscriber_id: person.id }
+      end.not_to change(Subscription, :count)
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)

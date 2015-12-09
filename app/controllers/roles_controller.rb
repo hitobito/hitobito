@@ -64,15 +64,10 @@ class RolesController < CrudController
 
   private
 
-  def with_person_add_request
+  def with_person_add_request(&block)
     creator = Person::AddRequest::Creator::Group.new(entry, current_ability)
-    if creator.required?
-      success = creator.create_request
-      msg = success ? creator.success_message : creator.error_message
-      redirect_to group_people_path(entry.group_id), alert: msg
-    else
-      yield
-    end
+    msg = creator.handle(&block)
+    redirect_to group_people_path(entry.group_id), alert: msg if msg
   end
 
   def create_entry_and_person

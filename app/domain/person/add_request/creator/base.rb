@@ -15,6 +15,15 @@ module Person::AddRequest::Creator
       @ability = ability
     end
 
+    def handle
+      if required?
+        create_request ? success_message : error_message
+      else
+        yield
+        nil
+      end
+    end
+
     def required?
       person_layer &&
         person_layer.require_person_add_requests? &&
@@ -55,10 +64,11 @@ module Person::AddRequest::Creator
     end
 
     def success_message
-      fail(NotImplementedError)
+      'TODO type specific sent'
     end
 
     def error_message
+      # TODO: add general message before
       request.errors.full_messages.join(', ')
     end
 

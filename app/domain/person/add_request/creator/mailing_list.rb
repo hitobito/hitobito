@@ -6,24 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::AddRequest::Creator
-  class Group < Base
+  class MailingList < Base
 
-    alias_method :role, :entity
+    alias_method :subscription, :entity
 
     def required?
-      person.persisted? && super()
+      subscription.subscriber.is_a?(Person) &&
+        !subscription.excluded &&
+        super()
     end
 
     def body
-      role.group
+      subscription.mailing_list
     end
 
     def person
-      role.person
-    end
-
-    def request_attrs
-      super.merge(role_type: entity.type)
+      subscription.subscriber
     end
 
   end

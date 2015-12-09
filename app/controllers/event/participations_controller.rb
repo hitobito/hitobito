@@ -52,6 +52,14 @@ class Event::ParticipationsController < CrudController
     respond_with(entry)
   end
 
+  def create
+    assign_attributes
+    with_person_add_request do
+      created = with_callbacks(:create, :save) { save_entry }
+      respond_with(entry, success: created, location: return_path)
+    end
+  end
+
   def index
     respond_to do |format|
       format.html  { entries }
@@ -74,6 +82,12 @@ class Event::ParticipationsController < CrudController
   end
 
   private
+
+  def with_person_add_request(&block)
+    creator = Person::AddRequest::Creator::Event.new(entry.roles.first, current_ability)
+    msg = creator.handle(&block)
+    redirect_to group_event_participations_path(group, event), alert: msg if msg
+  end
 
   def list_entries
     filter = Event::ParticipationFilter.new(event, current_user, params)

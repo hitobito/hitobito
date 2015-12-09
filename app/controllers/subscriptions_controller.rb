@@ -27,11 +27,8 @@ class SubscriptionsController < CrudController
     end
   end
 
-  private
 
-  def authorize_class
-    authorize!(:index_subscriptions, mailing_list)
-  end
+  private
 
   def load_grouped_subscriptions
     @group_subs = group_subscriptions
@@ -71,6 +68,10 @@ class SubscriptionsController < CrudController
       joins("INNER JOIN #{klass.table_name} " \
             "ON #{klass.table_name}.id = subscriptions.subscriber_id").
       includes(:subscriber, :mailing_list)
+  end
+
+  def authorize_class
+    authorize!(:index_subscriptions, mailing_list)
   end
 
 end

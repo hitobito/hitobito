@@ -45,6 +45,92 @@ describe Event::ParticipationsController do
   end
 
 
+  context 'GET index' do
+    before do
+      @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
+
+      update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al',
+                    town: 'Eye', address: 'Spring Road', zip_code: '3000')
+      update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js',
+                    town: 'Stoke', address: 'Howard Street', zip_code: '8000')
+    end
+
+    it 'lists participant and leader group by default' do
+      get :index, group_id: group.id, event_id: course.id
+      expect(assigns(:participations)).to eq [@participant, @leader]
+    end
+
+    it 'lists particpant and leader group by default order by role if specific in settings' do
+      allow(Settings.people).to receive_messages(default_sort: 'role')
+      get :index, group_id: group.id, event_id: course.id
+      expect(assigns(:participations)).to eq [@leader, @participant]
+    end
+
+    it 'lists only leader_group' do
+      get :index, group_id: group.id, event_id: course.id, filter: :teamers
+      expect(assigns(:participations)).to eq [@leader]
+    end
+
+    it 'lists only participant_group' do
+      get :index, group_id: group.id, event_id: course.id, filter: :participants
+      expect(assigns(:participations)).to eq [@participant]
+    end
+
+    it 'generates pdf labels' do
+      get :index, group_id: group, event_id: course.id,
+          label_format_id: label_formats(:standard).id, format: :pdf
+
+      expect(@response.content_type).to eq('application/pdf')
+      expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+    end
+
+    it 'exports csv files' do
+      get :index, group_id: group, event_id: course.id, format: :csv
+
+      expect(@response.content_type).to eq('text/csv')
+      expect(@response.body).to match(/^Vorname;Nachname/)
+      expect(@response.body).
+        to match(/^#{@participant.person.first_name};#{@participant.person.last_name}/)
+      expect(@response.body).to match(/^#{@leader.person.first_name};#{@leader.person.last_name}/)
+    end
+
+    it 'renders email addresses with additional ones' do
+      e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
+      Fabricate(:additional_email, contactable: @leader.person, mailings: false)
+      get :index, group_id: group, event_id: course.id, format: :email
+      expect(@response.body).
+        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+    end
+
+
+    context 'sorting' do
+      %w(first_name last_name nickname zip_code town).each do |attr|
+        it "sorts based on #{attr}" do
+          get :index, group_id: group, event_id: course.id, sort: attr, sort_dir: :asc
+          expect(assigns(:participations)).to eq([@participant, @leader])
+        end
+      end
+
+      it 'sorts based on role' do
+        get :index, group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc
+        expect(assigns(:participations)).to eq([@leader, @participant])
+      end
+    end
+
+
+    def create(*roles)
+      roles.map do |role_class|
+        role = Fabricate(:event_role, type: role_class.sti_name)
+        Fabricate(:event_participation, event: course, roles: [role], active: true)
+      end
+    end
+
+    def update_person(participation, attrs)
+      participation.person.update_attributes!(attrs)
+    end
+  end
+
+
   context 'GET show' do
 
     context 'for same event' do
@@ -181,92 +267,6 @@ describe Event::ParticipationsController do
 
   end
 
-  context 'GET index' do
-    before do
-      @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
-
-      update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al',
-                                  town: 'Eye', address: 'Spring Road', zip_code: '3000')
-      update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js',
-                                  town: 'Stoke', address: 'Howard Street', zip_code: '8000')
-    end
-
-    it 'lists participant and leader group by default' do
-      get :index, group_id: group.id, event_id: course.id
-      expect(assigns(:participations)).to eq [@participant, @leader]
-    end
-
-    it 'lists particpant and leader group by default order by role if specific in settings' do
-      allow(Settings.people).to receive_messages(default_sort: 'role')
-      get :index, group_id: group.id, event_id: course.id
-      expect(assigns(:participations)).to eq [@leader, @participant]
-    end
-
-    it 'lists only leader_group' do
-      get :index, group_id: group.id, event_id: course.id, filter: :teamers
-      expect(assigns(:participations)).to eq [@leader]
-    end
-
-    it 'lists only participant_group' do
-      get :index, group_id: group.id, event_id: course.id, filter: :participants
-      expect(assigns(:participations)).to eq [@participant]
-    end
-
-    it 'generates pdf labels' do
-      get :index, group_id: group, event_id: course.id,
-                  label_format_id: label_formats(:standard).id, format: :pdf
-
-      expect(@response.content_type).to eq('application/pdf')
-      expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
-    end
-
-    it 'exports csv files' do
-      get :index, group_id: group, event_id: course.id, format: :csv
-
-      expect(@response.content_type).to eq('text/csv')
-      expect(@response.body).to match(/^Vorname;Nachname/)
-      expect(@response.body).
-        to match(/^#{@participant.person.first_name};#{@participant.person.last_name}/)
-      expect(@response.body).to match(/^#{@leader.person.first_name};#{@leader.person.last_name}/)
-    end
-
-    it 'renders email addresses with additional ones' do
-      e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
-      Fabricate(:additional_email, contactable: @leader.person, mailings: false)
-      get :index, group_id: group, event_id: course.id, format: :email
-      expect(@response.body).
-        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
-    end
-
-
-    context 'sorting' do
-      %w(first_name last_name nickname zip_code town).each do |attr|
-        it "sorts based on #{attr}" do
-          get :index, group_id: group, event_id: course.id, sort: attr, sort_dir: :asc
-          expect(assigns(:participations)).to eq([@participant, @leader])
-        end
-      end
-
-      it 'sorts based on role' do
-        get :index, group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc
-        expect(assigns(:participations)).to eq([@leader, @participant])
-      end
-    end
-
-
-    def create(*roles)
-      roles.map do |role_class|
-        role = Fabricate(:event_role, type: role_class.sti_name)
-        Fabricate(:event_participation, event: course, roles: [role], active: true)
-      end
-    end
-
-    def update_person(participation, attrs)
-      participation.person.update_attributes!(attrs)
-    end
-  end
-
-
   context 'POST create' do
 
     context 'for current user' do
@@ -318,6 +318,7 @@ describe Event::ParticipationsController do
       end
 
       it 'creates non-active participant role for course events' do
+        groups(:top_layer).update_column(:require_person_add_requests, true)
         post :create, group_id: group.id, event_id: course.id, event_participation: {}
 
         participation = assigns(:participation)
@@ -394,6 +395,23 @@ describe Event::ParticipationsController do
         expect(participation).to be_active
         expect(participation.roles.pluck(:type)).to eq([Event::Course::Role::Participant.sti_name])
         is_expected.to redirect_to group_event_participation_path(group, course, participation)
+      end
+
+      it 'creates person add request if required' do
+        bottom_member.event_participations.destroy_all
+        course = Fabricate(:course, groups: [groups(:bottom_layer_two)])
+        user = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+        sign_in(user)
+        groups(:bottom_layer_one).update_column(:require_person_add_requests, true)
+
+        post :create, group_id: group.id, event_id: course.id,
+             event_participation: { person_id: bottom_member.id }
+
+        is_expected.to redirect_to(group_event_participations_path(group, course))
+        expect(flash[:alert]).to match(/sent/)
+
+        expect(bottom_member.reload.add_requests.count).to eq(1)
+        expect(bottom_member.event_participations.count).to eq(0)
       end
 
       it 'bottom member can not create participation for top leader' do

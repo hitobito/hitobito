@@ -18,7 +18,7 @@ module Subscriber
     prepend_before_action :parent
 
     def create
-      super(location: group_mailing_list_subscriptions_path(@group, @mailing_list))
+      super(location: index_path)
     end
 
 
@@ -56,6 +56,10 @@ module Subscriber
         I18n.t('subscriber/base.blank', model_label: model_label)],
        [:subscriber_id, I18n.t('errors.messages.taken'),
         I18n.t('subscriber/base.taken', model_label: model_label)]]
+    end
+
+    def index_path
+      group_mailing_list_subscriptions_path(@group, @mailing_list)
     end
 
     def authorize!

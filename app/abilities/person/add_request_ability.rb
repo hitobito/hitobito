@@ -13,6 +13,8 @@ class Person::AddRequestAbility < AbilityDsl::Base
     permission(:any).may(:approve, :reject).herself
     permission(:any).may(:reject).her_own
 
+    permission(:group_full).may(:approve, :reject).non_restricted_in_same_group
+    permission(:group_and_below_full).may(:approve, :reject).non_restricted_in_same_group_or_below
     permission(:layer_full).may(:approve, :reject).non_restricted_in_same_layer
     permission(:layer_and_below_full).
       may(:approve, :reject).

@@ -254,7 +254,7 @@ exec 2> /var/log/rpm-postinstall/%{name}.log
 # be explicitly deleted to load the stop script
 # rm -f %{appdir}/app/utils/datetime_attribute.rb
 
-su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
+su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup" || exit 1
 
 %if %{use_sphinx}
 su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake ts:configure" || exit 1

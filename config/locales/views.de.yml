@@ -12,6 +12,8 @@ de:
     "no": "nein"
     unknown: unbekannt
     nobody: niemand
+    activate: Aktivieren
+    deactivate: Deaktivieren
 
     from: Von
     until: Bis
@@ -608,6 +610,13 @@ de:
 
   paper_trail/version_decorator:
     by: 'von %{author}'
+
+  person:
+    add_requests:
+      index:
+        activated: Manuelle Freigabe ist aktiviert
+        deactivated: Manuelle Freigabe ist nicht aktiviert
+        deactivated_caption: Du kannst in hitobito einfach Personen zu Gruppen / Events und Abos hinzufügen. Wer das tut erhält automatisch Schreibzugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button 'Aktivieren', wenn du bevorzugst, dass du oder die betroffene Person selbst die Anfragen auf Personendaten manuell freigeben muss.
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.

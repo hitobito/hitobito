@@ -1,0 +1,14 @@
+%p
+  = require_person_add_requests_button
+
+- if @group.require_person_add_requests
+  %p
+    %b
+      = t('.activated')
+  requests table ...
+- else
+  %p
+    %b
+      = t('.deactivated')
+  %p
+    = t('.deactivated_caption')

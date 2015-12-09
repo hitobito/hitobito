@@ -7,7 +7,7 @@
 
 class Person::AddRequestsController < ApplicationController
 
-  authorize_resource except: :index
+  authorize_resource except: [:index,:activate, :deactivate]
 
   before_action :authorize_class, only: [:index, :activate, :deactivate]
 

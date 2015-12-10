@@ -60,8 +60,8 @@ describe Subscriber::EventController do
       end
 
       it { is_expected.to match(%r{#{groups(:bottom_group_one_one).name}}) }
-      it { is_expected.to match(%r{#{groups(:bottom_group_two_one).name}}) }
-      it { is_expected.to match(%r{#{groups(:bottom_layer_two).name}}) }
+      it { is_expected.not_to match(%r{#{groups(:bottom_group_two_one).name}}) }
+      it { is_expected.not_to match(%r{#{groups(:bottom_layer_two).name}}) }
       it { is_expected.not_to match(%r{#{groups(:top_group).name}}) }
     end
 

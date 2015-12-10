@@ -91,35 +91,35 @@ angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
 
 ### Datenbank Auswahl
 
-Im Entwicklungsmodus wird per Default mit Sqlite3 gearbeitet. Um Tests mit MySQL auszuführen, kann 
-der folgende Befehl verwendet werden. Dabei wird immer die Testdatenbank (hitobito_test) verwendet.
+Im Entwicklungsmodus wird per Default mit Sqlite3 gearbeitet. 
 
-    rake mysql test
-
-Um den Server / Konsole mit MySQL zu starten, existiert das folgende Script:
+Um den Server, die Konsole oder Rake Tasks im Development Environment mit MySQL zu starten, 
+existiert das folgende Script:
 
      bin/with_mysql rails xxx
 
-Dieses Skript kann auch benutzt werden, um Rake Tasks auf der Development Datenbank laufen zu 
-lassen.
+Um Tests mit MySQL auszuführen, kann der folgende Befehl verwendet werden. Dabei wird immer die 
+Testdatenbank (hitobito_test) verwendet.
+
+    rake mysql test
 
 
 ### Sphinx
 
-Um die Volltextsuche zu verwenden, muss der Index erstellt
+Sphinx läuft nur unter MySql. Wenn MySql/Sphinx bei der Entwicklung verwendet werden soll, müssen 
+die Datenbank Tasks und der Rails Server wie oben erwähnt mit `bin/with_mysql` gestart werden.
+
+Um die Volltextsuche zu verwenden, muss erst der Index erstellt
  
-    script/with_mysql rake ts:index
+    bin/with_mysql rake ts:index
  
-und Sphinx gestartet werden: 
+und dann Sphinx gestartet werden: 
 
     rake ts:start
 
 Achtung: Der Index wird grundsätzlich nur über diesen Aufruf aktualisiert! Änderungen an der DB 
 werden für die Volltextsuche also erst sichtbar, wenn wieder neu indexiert wurde. Auf der Produktion 
 läuft dazu alle 10 Minuten ein Delayed Job.
-
-Sphinx läuft nur unter MySql. Wenn Sphinx bei der Entwicklung verwendet werden soll, muss der Rails 
-Server wie oben erwähnt mit MySql gestart werden.
 
 
 ### Delayed Job

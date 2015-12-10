@@ -22,6 +22,8 @@ class PeopleFiltersController < CrudController
 
   before_render_form :compose_role_lists
 
+  after_create :send_person_request_mail
+
   helper_method :people_list_path
 
   def create
@@ -72,5 +74,9 @@ class PeopleFiltersController < CrudController
 
   def people_list_path(options = {})
     group_people_path(group, options)
+  end
+
+  def send_person_request_mail
+    Person::SendPersonRequestJob.new(entry).enqueue!
   end
 end

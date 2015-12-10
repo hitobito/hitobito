@@ -25,6 +25,10 @@ CustomContent.seed_once(:key,
   {key: 'views/devise/sessions/info',
    placeholders_required: nil,
    placeholders_optional: nil},
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON,
+    placeholders_required: 'recipient-name, requester-name, requester-group-roles, request-body-label, show-person-url',
+    placeholders_optional: nil },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -32,6 +36,7 @@ participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CO
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
 login_form_id = CustomContent.get('views/devise/sessions/info').id
+add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -141,4 +146,27 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: 'Informazioni al login'},
 
+  {custom_content_id: add_request_person_id,
+   locale: 'de',
+   label: 'Anfragen: E-Mail manuelle Freigabe Person',
+   subject: 'Freigabe deiner Personendaten',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{requester-name} möchte dich zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
+         "{request-body-label}<br/><br/>" \
+         "{requester-name} gehört zu folgenden Gruppen: <br/><br/>" \
+         "{requester-group-roles}<br/><br/>" \
+         "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
+         "{show-person-url}" },
+
+  {custom_content_id: add_request_person_id,
+   locale: 'fr',
+   label: 'Demandes: E-mail pour validation manuellement de la personne'},
+
+  {custom_content_id: add_request_person_id,
+   locale: 'en',
+   label: 'Add Person Requests: E-Mail manual approval person'},
+
+  {custom_content_id: add_request_person_id,
+   locale: 'it',
+   label: "Richiesta: E-mail per l'abilitazione manuale per la persona"},
 )

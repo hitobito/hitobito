@@ -7,8 +7,17 @@
 
 class Person::AddRequestMailer < ApplicationMailer
 
-  def ask_person_to_add(request)
+  CONTENT_ADD_REQUEST_PERSON = 'add_request_person'
+  CONTENT_ADD_REQUEST_RESPONSIBLES = 'add_request_responsibles'
 
+  def ask_person_to_add(request, request_body_label, requester_name, requester_group_roles)
+    person = request.person
+    compose(CONTENT_ADD_REQUEST_PERSON, person,
+            'recipient-name' => person.first_name,
+            'requester-name' => requester_name,
+            'requester-group-roles' => requester_group_roles,
+            'request-body-label' => request_body_label,
+            'show-person-url' => show_person_url(person.id))
   end
 
   def ask_responsibles(request, responsibles)

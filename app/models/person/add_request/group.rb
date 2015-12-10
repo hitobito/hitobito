@@ -19,7 +19,7 @@
 #
 class Person::AddRequest::Group < Person::AddRequest
 
-  belongs_to :body, class_name: 'Group'
+  belongs_to :body, class_name: '::Group'
 
   validates :role_type, presence: true
   validate :assert_type_is_allowed_for_group

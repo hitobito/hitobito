@@ -86,6 +86,48 @@ describe Person::AddRequestsController do
     end
   end
 
+  describe 'GET activate/deactivate' do
 
+    let(:user) { people(:top_leader) }
+    let(:other_group) { groups(:bottom_layer_one) }
+
+    context 'activate' do
+
+      it 'activates person add requests requirement if user has write permissions' do
+        post :activate, group_id: group.id
+
+        expect(group.reload.require_person_add_requests).to be true
+        expect(flash[:notice]).to match(/aktiviert/)
+      end
+
+      it 'access denied when trying to activate for other group' do
+        expect do
+          post :activate, group_id: other_group.id
+        end.to raise_error(CanCan::AccessDenied)
+      end
+
+    end
+
+    context 'deactivate' do
+
+      before { group.update_attribute(:require_person_add_requests, true) }
+      let(:user) { people(:top_leader) }
+      let(:other_group) { groups(:bottom_layer_one) }
+
+      it 'deactivates person add requests requirement if user has write permissions' do
+        delete :deactivate, group_id: group.id
+
+        expect(group.reload.require_person_add_requests).to be false
+        expect(flash[:notice]).to match(/deaktiviert/)
+      end
+
+      it 'access denied when trying to deactivate for other group' do
+        expect do
+          delete :deactivate, group_id: other_group.id
+        end.to raise_error(CanCan::AccessDenied)
+      end
+
+    end
+  end
 
 end

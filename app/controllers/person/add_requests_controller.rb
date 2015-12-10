@@ -22,12 +22,12 @@ class Person::AddRequestsController < ApplicationController
 
   def activate
     group.update_column(:require_person_add_requests, true)
-    redirect_to group_person_add_requests_path notice: 'TODO activated'
+    redirect_to group_person_add_requests_path, notice: translate(:activated)
   end
 
   def deactivate
     group.update_column(:require_person_add_requests, false)
-    redirect_to group_person_add_requests_path notice: 'TODO deactivated'
+    redirect_to group_person_add_requests_path, notice: translate(:deactivated)
   end
 
   def approve

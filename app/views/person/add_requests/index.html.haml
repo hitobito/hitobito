@@ -11,4 +11,4 @@
     %b
       = t('.deactivated')
   %p
-    = t('.deactivated_caption')
+    = sanitize(t('.deactivated_caption'), attributes: [:strong])

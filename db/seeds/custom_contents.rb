@@ -29,6 +29,10 @@ CustomContent.seed_once(:key,
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON,
     placeholders_required: 'recipient-name, requester-name, requester-group-roles, request-body-label, show-person-url',
     placeholders_optional: nil },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
+    placeholders_required: 'recipient-names, requester-name, requester-group-roles, request-body-label, add-requests-url',
+    placeholders_optional: nil },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -37,6 +41,7 @@ participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTEN
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
 login_form_id = CustomContent.get('views/devise/sessions/info').id
 add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
+add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -164,9 +169,34 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
-   label: 'Requests: Email manual approval for person'},
+   label: 'Requests: E-mail manual approval for person'},
 
   {custom_content_id: add_request_person_id,
    locale: 'it',
    label: "Richiesta: E-mail per l'abilitazione manuale per la persona"},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'de',
+   label: 'Anfragen: E-Mail Freigabe Personendaten durch Verantwortliche',
+   subject: 'Freigabe Personendaten',
+   body: "Hallo {recipient-names}<br/><br/>" \
+         "{requester-name} möchte {request-person} zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
+         "{request-body-label}<br/><br/>" \
+         "{requester-name} hat folgende Rollen: <br/><br/>" \
+         "{requester-group-roles}cbr/><br/>" \
+         "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
+         "{requests-url}" },
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'fr',
+   label: 'Demandes: E-mail pour la libération de la personne par responsables'},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'en',
+   label: 'Requests: Email approval for person data by responsibles'},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'it',
+   label: "Richiesta: Condivisione Email dati personali da parte responsabili"},
+
 )

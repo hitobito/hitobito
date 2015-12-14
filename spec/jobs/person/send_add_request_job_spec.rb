@@ -43,10 +43,11 @@ describe Person::SendAddRequestJob do
     r1 = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
     r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two)).person
     Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two), person: r1)
+    g = r1.primary_group
 
     mail = double('mail')
     expect(mail).to receive(:deliver_now)
-    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2]).and_return(mail)
+    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2], g).and_return(mail)
     job.perform
   end
 

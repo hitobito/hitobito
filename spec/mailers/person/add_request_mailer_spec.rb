@@ -26,25 +26,47 @@ describe Person::AddRequestMailer do
       role_type: Group::BottomLayer::Member)
   end
 
-  let(:mail) { Person::AddRequestMailer.ask_person_to_add(request) }
+  context 'ask person to add' do
 
-  subject { mail }
+    let(:mail) { Person::AddRequestMailer.ask_person_to_add(request) }
 
-  its(:to)       { should == [person.email] }
-  its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
-  its(:subject)  { should == "Freigabe deiner Personendaten" }
-  its(:body)     { should =~ /Hallo #{person.first_name}/ }
-  its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
-  its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
-  its(:body)     { should =~ /#{requester.full_name} gehört zu folgenden Gruppen:/ }
-  its(:body)     { should =~ /Leader in Bottom One/ }
-  its(:body)     { should =~ /test.host\/people\/572407902/ }
+    subject { mail }
 
+    its(:to)       { should == [person.email] }
+    its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
+    its(:subject)  { should == "Freigabe deiner Personendaten" }
+    its(:body)     { should =~ /Hallo #{person.first_name}/ }
+    its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
+    its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
+    its(:body)     { should =~ /Leader in Bottom One/ }
+    its(:body)     { should =~ /test.host\/people\/572407902/ }
 
-  it 'lists requester group roles with write permissions only' do
-    Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
-    Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group), person: requester)
-    expect(mail.body).to match('Leader in Bottom One, Leader in TopGroup')
+    it 'lists requester group roles with write permissions only' do
+      Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
+      Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group), person: requester)
+      expect(mail.body).to match('Leader in Bottom One, Leader in TopGroup')
+    end
+
+  end
+
+  context 'ask responsibles to add person' do
+
+    let(:mail) { Person::AddRequestMailer.ask_responsibles(request) }
+
+    subject { mail }
+
+    # TODO implement tests
+    #its(:to)       { should == [person.email] }
+    #its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
+    #its(:subject)  { should == "Freigabe deiner Personendaten" }
+    #its(:body)     { should =~ /Hallo #{person.first_name}/ }
+    #its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
+    #its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    #its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
+    #its(:body)     { should =~ /Leader in Bottom One/ }
+    #its(:body)     { should =~ /test.host\/people\/572407902/ }
+
   end
 
 end

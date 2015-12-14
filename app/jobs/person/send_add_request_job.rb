@@ -23,7 +23,8 @@ class Person::SendAddRequestJob < BaseJob
 
     responsibles = load_responsibles.to_a
     if responsibles.present?
-      Person::AddRequestMailer.ask_responsibles(request, responsibles).deliver_now
+      group = person.primary_group
+      Person::AddRequestMailer.ask_responsibles(request, responsibles, group).deliver_now
     end
   end
 

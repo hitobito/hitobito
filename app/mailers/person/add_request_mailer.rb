@@ -14,19 +14,30 @@ class Person::AddRequestMailer < ApplicationMailer
     person = request.person
     content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
 
-    envelope = ask_person_to_add_envelope(person, request.requester, content)
+    envelope = add_request_envelope(person.email, request.requester, content)
     values = ask_person_to_add_values(person,
                                       request.requester.full_name,
                                       requester_group_roles(request),
                                       request.body_label)
-
-    mail(envelope) do |format|
-      format.html { render text: content.body_with_values(values) }
-    end
+    compose(content, envelope, values)
   end
 
-  def ask_responsibles(request, responsibles)
-    Person.mailing_emails_for(responsibles)
+  def ask_responsibles(request, responsibles, group)
+    person = request.person
+    content = CustomContent.get(CONTENT_ADD_REQUEST_RESPONSIBLES)
+
+    to = Person.mailing_emails_for(responsibles)
+
+    envelope = add_request_envelope(to, requester, responsibles, content)
+
+    recipient_names = responsibles.collect(&:greeting_name).join(', ')
+    values = ask_responsibles_to_add_values(recipient_names,
+                                            request.requester.full_name,
+                                            requester_group_roles(request),
+                                            request.body_label,
+                                            group.id)
+
+    compose(content, envelope, values)
   end
 
   def approved(person, body, requester, user)
@@ -38,17 +49,22 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   private
+  def compose(content, envelope, values)
+    mail(envelope) do |format|
+      format.html { render text: content.body_with_values(values) }
+    end
+  end
 
   def requester_group_roles(request)
     roles = request.requester.roles.includes(:group).select do |r|
       (r.class.permissions &
-        [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
+       [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
     end
     roles.collect { |r| r.to_s(:long) }.join(', ')
   end
 
-  def ask_person_to_add_envelope(person, requester, content)
-    { to: person.email,
+  def add_request_envelope(to, requester, content)
+    { to: to,
       subject: content.subject,
       return_path: return_path(requester),
       sender: return_path(requester),
@@ -62,7 +78,19 @@ class Person::AddRequestMailer < ApplicationMailer
       'requester-group-roles' => requester_group_roles,
       'request-body-label' => request_body_label,
       'show-person-url' => person_url(person)
-     }
+    }
   end
+
+
+  def ask_responsibles_to_add_values(recipient_names, requester_name, requester_group_roles, request_body_label, group_id)
+    {
+      'recipient-names' => recipient_names,
+      'requester-name' => requester_name,
+      'requester-group-roles' => requester_group_roles,
+      'request-body-label' => request_body_label,
+      'add-requests-url' => group_person_add_requests_url(group_id: group_id)
+    }
+  end
+
 
 end

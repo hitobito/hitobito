@@ -1,5 +1,5 @@
 %ul.nav.nav-tabs
-  %li.active= link_to(t('.general'), '#general', data: { toggle: 'tab' })
+  %li.active= link_to(t('events.form_tabs.general'), '#general', data: { toggle: 'tab' })
   %li= link_to(Event.human_attribute_name(:dates), '#dates', data: { toggle: 'tab' })
   %li= link_to(Event::Application.model_name.human, '#application', data: { toggle: 'tab' })
 

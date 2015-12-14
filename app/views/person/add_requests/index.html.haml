@@ -1,14 +1,9 @@
-%p
-  = require_person_add_requests_button
+- content_for(:toolbar, require_person_add_requests_button)
 
 - if @group.require_person_add_requests
-  %p
-    %b
-      = t('.activated')
   requests table ...
+
 - else
   %p
-    %b
-      = t('.deactivated')
-  %p
-    = sanitize(t('.deactivated_caption'), attributes: [:strong])
+    %strong= t('.deactivated')
+  %p= sanitize(t('.deactivated_caption'), attributes: [:strong])

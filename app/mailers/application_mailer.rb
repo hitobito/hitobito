@@ -18,4 +18,11 @@ class ApplicationMailer < ActionMailer::Base
     super(headers, &block)
   end
 
+  private
+  # use list return path functionality to send a 'no-reply' email with the sender's email
+  # as reply-to address
+  def return_path(sender)
+    MailRelay::Lists.personal_return_path(MailRelay::Lists.app_sender_name, sender.email)
+  end
+
 end

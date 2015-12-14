@@ -1,3 +1,4 @@
+# encoding: utf-8
 module PersonAddRequestsHelper
 
   def require_person_add_requests_button

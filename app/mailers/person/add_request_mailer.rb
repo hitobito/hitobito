@@ -12,12 +12,17 @@ class Person::AddRequestMailer < ApplicationMailer
 
   def ask_person_to_add(request, request_body_label, requester_name, requester_group_roles)
     person = request.person
-    compose(CONTENT_ADD_REQUEST_PERSON, person,
-            'recipient-name' => person.first_name,
-            'requester-name' => requester_name,
-            'requester-group-roles' => requester_group_roles,
-            'request-body-label' => request_body_label,
-            'show-person-url' => show_person_url(person.id))
+    content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
+
+    envelope = ask_person_to_add_envelope(person, request.requester, content)
+    values = ask_person_to_add_values(person,
+                                      requester_name,
+                                      requester_group_roles,
+                                      request_body_label)
+
+    mail(envelope) do |format|
+      format.html { render text: content.body_with_values(values) }
+    end
   end
 
   def ask_responsibles(request, responsibles)
@@ -30,6 +35,25 @@ class Person::AddRequestMailer < ApplicationMailer
 
   def rejected(person, body, requester, user)
 
+  end
+
+  private
+  def ask_person_to_add_envelope(person, requester, content)
+    { to: person.email, 
+      subject: content.subject,
+      return_path: return_path(requester),
+      sender: return_path(requester),
+      reply_to: requester.email }
+  end
+
+  def ask_person_to_add_values(person, requester_name, requester_group_roles, request_body_label)
+    {
+      'recipient-name' => person.greeting_name,
+      'requester-name' => requester_name,
+      'requester-group-roles' => requester_group_roles,
+      'request-body-label' => request_body_label,
+      'show-person-url' => person_url(person)
+     }
   end
 
 end

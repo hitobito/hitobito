@@ -37,8 +37,4 @@ class Person::LoginMailer < ApplicationMailer
     edit_person_password_url(reset_password_token: token)
   end
 
-  def return_path(sender)
-    MailRelay::Lists.personal_return_path(MailRelay::Lists.app_sender_name, sender.email)
-  end
-
 end

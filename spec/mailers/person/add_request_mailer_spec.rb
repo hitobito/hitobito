@@ -27,7 +27,7 @@ describe Person::AddRequestMailer do
   end
 
   let(:request_body_label) { 'Kurs Foo' }
-  let(:requester_name) { 'Albert Einstein' }
+  let(:requester_name) { requester.full_name }
   let(:requester_group_roles) { 'Bund Geschäftsleitung' }
 
   let(:mail) { Person::AddRequestMailer.ask_person_to_add(request, request_body_label, requester_name, requester_group_roles) }
@@ -35,8 +35,13 @@ describe Person::AddRequestMailer do
   subject { mail }
 
   its(:to)       { should == [person.email] }
-  #its(:reply_to) { should == [sender.email] }
+  its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
   its(:subject)  { should == "Freigabe deiner Personendaten" }
   its(:body)     { should =~ /Hallo #{person.first_name}/ }
+  its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
+  its(:body)     { should =~ /Kurs Foo/ }
+  its(:body)     { should =~ /#{requester.full_name} gehört zu folgenden Gruppen:/ }
+  its(:body)     { should =~ /Bund Geschäftsleitung/ }
+  its(:body)     { should =~ /test.host\/people\/572407902/ }
 
 end

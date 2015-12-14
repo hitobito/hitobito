@@ -267,12 +267,17 @@ describe PeopleController, type: :controller do
       Fabricate(:social_account, contactable: test_entry, label: 'Foo', name: 'Bar')
       test_entry.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
       Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '23425 1341 12')
+      Person::AddRequest::Group.create!(
+        person: test_entry,
+        requester: Fabricate(:person),
+        body: groups(:top_group),
+        role_type: Group::TopGroup::Member.sti_name)
       Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '43 3453 45 254')
 
       get :log, id: test_entry.id, group_id: top_group.id
 
       expect(dom.all('h4').size).to eq(1)
-      expect(dom.all('#content div').size).to eq(11)
+      expect(dom.all('#content div').size).to eq(12)
     end
 
   end

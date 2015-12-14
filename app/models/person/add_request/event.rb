@@ -19,8 +19,15 @@
 #
 class Person::AddRequest::Event < Person::AddRequest
 
-  belongs_to :body, class_name: 'Event'
+  belongs_to :body, class_name: '::Event'
 
   validates :role_type, presence: true
+
+  def to_s(format = :default)
+    group = body.groups.first
+    event_label = body_label
+    group_label = "#{group.model_name.human} '#{group}'"
+    self.class.human_attribute_name(:label, body: event_label, group: group_label)
+  end
 
 end

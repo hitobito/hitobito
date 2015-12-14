@@ -64,7 +64,8 @@ module PaperTrail
       changeset = model.event == 'update' ? changeset_list : nil
       item = reifyed_item
 
-      I18n.t("version.association_change.#{model.event}",
+      I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
+             default: :"version.association_change.#{model.event}",
              model: item_class.model_name.human,
              label: item ? item.to_s(:long) : '',
              changeset: changeset).html_safe

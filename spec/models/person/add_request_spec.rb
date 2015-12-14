@@ -64,33 +64,73 @@ describe Person::AddRequest do
     end
   end
 
-  context 'associations' do
-    it 'person_add_requests contains only respective requests' do
-      group = groups(:top_group)
-      rg = Person::AddRequest::Group.create!(
+  context 'subclasses' do
+    let(:group) { groups(:top_group) }
+    let(:event) { Fabricate(:event, groups: [group]) }
+    let(:abo) { Fabricate(:mailing_list, group: group) }
+
+    before do
+      @rg = Person::AddRequest::Group.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: group,
         role_type: Group::TopGroup::Leader.sti_name)
 
-      event = Fabricate(:event, groups: [groups(:top_group)])
       event.update_column(:id, group.id) # set same id for strong test
-      re = Person::AddRequest::Event.create!(
+      @re = Person::AddRequest::Event.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: event,
         role_type: Event::Role::Leader.sti_name)
 
-      abo = Fabricate(:mailing_list, group: groups(:top_group))
       abo.update_column(:id, group.id) # set same id for strong test
-      rm = Person::AddRequest::MailingList.create!(
+      @rm = Person::AddRequest::MailingList.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: abo)
-
-      expect(group.person_add_requests).to match_array([rg])
-      expect(event.person_add_requests).to match_array([re])
-      expect(abo.person_add_requests).to match_array([rm])
     end
+
+    context 'group' do
+      it '#person_add_requests contains only respective requests' do
+        expect(group.person_add_requests).to match_array([@rg])
+      end
+
+      it '#body is group' do
+        expect(@rg.body).to eq(group)
+      end
+
+      it '#to_s contains group type' do
+        expect(@rg.to_s).to eq("Top Group 'TopGroup'")
+      end
+    end
+
+    context 'event' do
+      it '#person_add_requests contains only respective requests' do
+        expect(event.person_add_requests).to match_array([@re])
+      end
+
+      it '#body is event' do
+        expect(@re.body).to eq(event)
+      end
+
+      it '#to_s contains group type' do
+        expect(@re.to_s).to eq("Anlass 'Eventus' in Top Group 'TopGroup'")
+      end
+    end
+
+    context 'mailing_list' do
+      it '#person_add_requests contains only respective requests' do
+        expect(abo.person_add_requests).to match_array([@rm])
+      end
+
+      it '#body is mailing_list' do
+        expect(@rm.body).to eq(abo)
+      end
+
+      it '#to_s contains group type' do
+        expect(@rm.to_s).to eq("Abo '#{abo.to_s}' in Top Group 'TopGroup'")
+      end
+    end
+
   end
 end

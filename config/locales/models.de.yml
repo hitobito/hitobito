@@ -235,6 +235,12 @@ de:
         person: Person
         requester: Anfrage von
 
+      person/add_request/event:
+        label: "%{body} in %{group}"
+
+      person/add_request/mailing_list:
+        label: "%{body} in %{group}"
+
       group:
         name: Name
         short_name: Kurzname

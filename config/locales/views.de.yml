@@ -780,10 +780,16 @@ de:
       from_to: "%{attr} wurde von <i>%{from}</i> auf <i>%{to}</i> geändert."
       from: "%{attr} <i>%{from}</i> wurde gelöscht."
       to: "%{attr} wurde auf <i>%{to}</i> gesetzt."
+
     association_change:
       create: "%{model} <i>%{label}</i> wurde hinzugefügt."
       update: "%{model} <i>%{label}</i> wurde aktualisiert: %{changeset}"
       destroy: "%{model} <i>%{label}</i> wurde gelöscht."
+
+      person/add_request:
+        create: "Anfrage für <i>%{label}</i> wurde gestellt."
+        update: "Anfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
+        destroy: "Anfrage für <i>%{label}</i> wurde beantwortet."
 
   views:
     pagination:

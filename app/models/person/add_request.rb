@@ -42,4 +42,13 @@ class Person::AddRequest < ActiveRecord::Base
   require_dependency 'person/add_request/event'
   require_dependency 'person/add_request/mailing_list'
 
+
+  def to_s(format = :default)
+    body_label
+  end
+
+  def body_label
+    "#{body.class.model_name.human} '#{body}'"
+  end
+
 end

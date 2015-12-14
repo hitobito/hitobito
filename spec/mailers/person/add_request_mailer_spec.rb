@@ -26,11 +26,7 @@ describe Person::AddRequestMailer do
       role_type: Group::BottomLayer::Member)
   end
 
-  let(:request_body_label) { 'Kurs Foo' }
-  let(:requester_name) { requester.full_name }
-  let(:requester_group_roles) { 'Bund Geschäftsleitung' }
-
-  let(:mail) { Person::AddRequestMailer.ask_person_to_add(request, request_body_label, requester_name, requester_group_roles) }
+  let(:mail) { Person::AddRequestMailer.ask_person_to_add(request) }
 
   subject { mail }
 
@@ -39,9 +35,16 @@ describe Person::AddRequestMailer do
   its(:subject)  { should == "Freigabe deiner Personendaten" }
   its(:body)     { should =~ /Hallo #{person.first_name}/ }
   its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
-  its(:body)     { should =~ /Kurs Foo/ }
+  its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
   its(:body)     { should =~ /#{requester.full_name} gehört zu folgenden Gruppen:/ }
-  its(:body)     { should =~ /Bund Geschäftsleitung/ }
+  its(:body)     { should =~ /Leader in Bottom One/ }
   its(:body)     { should =~ /test.host\/people\/572407902/ }
+
+
+  it 'lists requester group roles with write permissions only' do
+    Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
+    Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group), person: requester)
+    expect(mail.body).to match('Leader in Bottom One, Leader in TopGroup')
+  end
 
 end

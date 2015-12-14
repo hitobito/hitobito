@@ -18,11 +18,7 @@ class Person::SendAddRequestJob < BaseJob
     set_locale
 
     if person.password?
-      Person::AddRequestMailer.ask_person_to_add(request,
-                                                 request_body_label,
-                                                 requester_name,
-                                                 requester_group_roles).
-                                                 deliver_now
+      Person::AddRequestMailer.ask_person_to_add(request).deliver_now
     end
 
     responsibles = load_responsibles.to_a
@@ -51,25 +47,6 @@ class Person::SendAddRequestJob < BaseJob
 
   def person
     request.person
-  end
-
-  def requester
-    request.requester
-  end
-
-  def requester_group_roles
-    roles = requester.roles.includes(:group).where(type: responsible_role_types)
-    roles.collect { |r| r.to_s(:long) }.join(', ')
-  end
-
-  def requester_name
-    requester.full_name
-  end
-
-  def request_body_label
-    type = request.body.model_name.human
-    label = request.body.to_s
-    "#{type}: #{label}"
   end
 
 end

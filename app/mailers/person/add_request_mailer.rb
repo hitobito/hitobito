@@ -10,15 +10,15 @@ class Person::AddRequestMailer < ApplicationMailer
   CONTENT_ADD_REQUEST_PERSON = 'add_request_person'
   CONTENT_ADD_REQUEST_RESPONSIBLES = 'add_request_responsibles'
 
-  def ask_person_to_add(request, request_body_label, requester_name, requester_group_roles)
+  def ask_person_to_add(request)
     person = request.person
     content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
 
     envelope = ask_person_to_add_envelope(person, request.requester, content)
     values = ask_person_to_add_values(person,
-                                      requester_name,
-                                      requester_group_roles,
-                                      request_body_label)
+                                      request.requester.full_name,
+                                      requester_group_roles(request),
+                                      request.body_label)
 
     mail(envelope) do |format|
       format.html { render text: content.body_with_values(values) }
@@ -38,8 +38,17 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   private
+
+  def requester_group_roles(request)
+    roles = request.requester.roles.includes(:group).select do |r|
+      (r.class.permissions &
+        [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
+    end
+    roles.collect { |r| r.to_s(:long) }.join(', ')
+  end
+
   def ask_person_to_add_envelope(person, requester, content)
-    { to: person.email, 
+    { to: person.email,
       subject: content.subject,
       return_path: return_path(requester),
       sender: return_path(requester),

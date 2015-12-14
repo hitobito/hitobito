@@ -151,20 +151,20 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: 'Anfragen: E-Mail manuelle Freigabe Person',
    subject: 'Freigabe deiner Personendaten',
    body: "Hallo {recipient-name}<br/><br/>" \
-         "{requester-name} möchte dich zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
+         "{requester-name} möchte dich zu folgender Gruppe/Anlass/Abo hinzufügen: <br/><br/>" \
          "{request-body-label}<br/><br/>" \
-         "{requester-name} gehört zu folgenden Gruppen: <br/><br/>" \
+         "{requester-name} hat folgende Rollen: <br/><br/>" \
          "{requester-group-roles}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
          "{show-person-url}" },
 
   {custom_content_id: add_request_person_id,
    locale: 'fr',
-   label: 'Demandes: E-mail pour validation manuellement de la personne'},
+   label: 'Demandes: E-mail pour la libération de la personne'},
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
-   label: 'Add Person Requests: E-Mail manual approval person'},
+   label: 'Requests: Email manual approval for person'},
 
   {custom_content_id: add_request_person_id,
    locale: 'it',

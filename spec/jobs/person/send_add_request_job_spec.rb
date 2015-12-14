@@ -50,15 +50,4 @@ describe Person::SendAddRequestJob do
     job.perform
   end
 
-  it 'formats Group body label' do
-    expect(job.send(:request_body_label)).to eq('Bottom Layer: Bottom One')
-  end
-
-  it 'lists requester group roles with write permissions only' do
-    Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
-    Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group), person: requester)
-    expect(job.send(:requester_group_roles)).to eq('Leader in Bottom One, Leader in TopGroup')
-  end
-
- 
 end

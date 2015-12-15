@@ -8,10 +8,13 @@
 require 'spec_helper'
 require 'csv'
 
-describe CsvImportsController do
+describe Person::CsvImportsController do
+
   include CsvImportMacros
+
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
+
   before { sign_in(person) }
 
 
@@ -57,7 +60,7 @@ describe CsvImportsController do
     it 'renders preview even when field_mapping is missing' do
       post :preview, required_params
       expect(flash[:alert]).to eq ['1 Person (Leader) wird nicht importiert.',
-                               'Zeile 1: Bitte geben Sie einen Namen ein.']
+                               'Zeile 1: Bitte geben Sie einen Namen ein']
       is_expected.to render_template(:preview)
     end
 
@@ -156,6 +159,64 @@ describe CsvImportsController do
           expect(last_person.last_name).to be_present
           expect(last_person.phone_numbers.size).to eq(4)
           expect(last_person.social_accounts.size).to eq(3)
+        end
+      end
+
+
+      context 'with add request' do
+
+        let(:role_type) { Group::BottomGroup::Member }
+        let(:mapping) { { Vorname: 'first_name', Nachname: 'last_name', Geburtsdatum: 'birthday', Email: 'email', Ort: 'town' } }
+
+        let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+        let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+        let(:group) { groups(:bottom_group_one_one) }
+
+        let(:data) { generate_csv(%w{Nachname Email Ort}, [person.last_name, person.email, 'Wabern']) }
+
+        before { sign_in(user) }
+        before { groups(:top_layer).update_column(:require_person_add_requests, true) }
+
+        it 'creates request' do
+          person # create
+          post :create, required_params.merge(update_behaviour: 'override')
+          is_expected.to redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Member')
+
+          expect(person.reload.roles.count).to eq(1)
+          expect(person.town).not_to eq('Wabern')
+          request = person.add_requests.first
+          expect(request.body_id).to eq(group.id)
+          expect(request.role_type).to eq(role_type.sti_name)
+          expect(flash[:alert].join).to match(/Zugriffsanfrage .*erhalten/)
+        end
+
+        it 'creates role if person already visible' do
+          person # create
+          Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
+
+          post :create, required_params.merge(update_behaviour: 'override')
+          is_expected.to redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Member')
+
+          expect(person.reload.roles.count).to eq(2)
+          expect(person.town).to eq('Wabern')
+          role = person.roles.last
+          expect(role.group_id).to eq(group.id)
+          expect(flash[:notice].join).to eq("1 Person (Member) wurde erfolgreich aktualisiert.")
+        end
+
+        it 'informs about existing request' do
+          Person::AddRequest::Group.create!(
+            person: person,
+            requester: Fabricate(:person),
+            body: group,
+            role_type: Group::BottomGroup::Leader.sti_name)
+
+          post :create, required_params
+
+          is_expected.to redirect_to group_people_path(group, role_type_ids: role_type.id, name: 'Member')
+          expect(person.reload.roles.count).to eq(1)
+          expect(person.add_requests.count).to eq(1)
+          expect(flash[:alert].join).to match(/Zugriffsanfrage .*erhalten/)
         end
       end
     end

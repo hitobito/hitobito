@@ -108,78 +108,6 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
-  csv_imports:
-    description:
-      header: CSV Dateien
-      explain_csv_format: 'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
-        Die erste Zeile enthält die Feldnamen.
-        Die einzelnen Felder sind mit einem Komma getrennt.
-        Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
-        Beispiel:'
-      example: |
-        Vorname,Nachname,E-Mail,Ort,Geschlecht
-        Hans,Muster,hans@beispiel.ch,Bern,m
-        Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
-      explain_field_names: Es können beliebige Feldnamen verwendet werden.
-        Die Felder in der CSV Datei können im nächsten Schritt
-        den Feldern in der Applikation zugeordnet werden.
-      explain_role: Allen Personen einer Datei wird die gleiche Rolle vergeben,
-        welche ebenfalls im nächsten Schritt ausgewählt werden kann.
-      special_fields: Spezielle Feldwerte
-      explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
-
-    preview_table:
-      icon_tooltip_invalid: 'Ungültige Werte'
-      icon_tooltip_updated: 'Wird aktualisiert'
-      icon_tooltip_created: 'Wird neu erfasst'
-
-    define_mapping:
-      choose_role: 'Rolle auswählen'
-      choose_role_help: 'Allen importierten Personen wird diese Rolle zugewiesen'
-      assign_columns_to_fields: 'Spalten zu Feldern zuordnen'
-      column_from_csv: 'Spalte aus CSV'
-      field_in_database: 'Feld in der Datenbank'
-      preview: 'Vorschau'
-      update_behaviour: Aktualisierungsverhalten
-      keep_behaviour: 'Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren, bestehende Werte bleiben erhalten.'
-      override_behaviour: 'Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben. Leere Werte im CSV löschen dabei bestehende in der Datenbank.'
-      update_behaviour_explanation: 'Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen. Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.'
-
-    new:
-      upload_button: 'Hochladen'
-      csv_file: 'CSV Datei'
-
-    invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
-
-    duplicate_keys:
-      one: '%{list} wurde mehrfach zugewiesen.'
-      other: '%{list} wurden mehrfach zugewiesen.'
-
-    preview:
-      import_now_button: Personen jetzt importieren
-      import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
-        in die <strong>Gruppe %{group}</strong> importiert.
-      new:
-        one: '%{count} %{role} wird neu importiert.'
-        other: '%{count} %{role} werden neu importiert.'
-      updated:
-        one: '%{count} %{role} wird aktualisiert.'
-        other: '%{count} %{role} werden aktualisiert.'
-      failed:
-        one: '%{count} %{role} wird nicht importiert.'
-        other: '%{count} %{role} werden nicht importiert.'
-
-    create:
-      new:
-        one: '%{count} %{role} wurde erfolgreich importiert.'
-        other: '%{count} %{role} wurden erfolgreich importiert.'
-      updated:
-        one: '%{count} %{role} wurde erfolgreich aktualisiert.'
-        other: '%{count} %{role} wurden erfolgreich aktualisiert.'
-      failed:
-        one: '%{count} %{role} wurde nicht importiert.'
-        other: '%{count} %{role} wurden nicht importiert.'
-
   custom_content_decorator:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
@@ -617,9 +545,93 @@ de:
         activated: Manuelle Freigabe ist aktiviert
         deactivated: Manuelle Freigabe ist nicht aktiviert
         deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
+
   person/add_requests:
     deactivated: Manuelle Freigabe deaktiviert
     activated: Manuelle Freigabe aktiviert
+
+  person:
+    csv_imports:
+      description:
+        header: CSV Dateien
+        explain_csv_format: 'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
+          Die erste Zeile enthält die Feldnamen.
+          Die einzelnen Felder sind mit einem Komma getrennt.
+          Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
+          Beispiel:'
+        example: |
+          Vorname,Nachname,E-Mail,Ort,Geschlecht
+          Hans,Muster,hans@beispiel.ch,Bern,m
+          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+        explain_field_names: Es können beliebige Feldnamen verwendet werden.
+          Die Felder in der CSV Datei können im nächsten Schritt
+          den Feldern in der Applikation zugeordnet werden.
+        explain_role: Allen Personen einer Datei wird die gleiche Rolle vergeben,
+          welche ebenfalls im nächsten Schritt ausgewählt werden kann.
+        special_fields: Spezielle Feldwerte
+        explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
+
+      preview_table:
+        icon_tooltip_invalid: 'Ungültige Werte'
+        icon_tooltip_updated: 'Wird aktualisiert'
+        icon_tooltip_created: 'Wird neu erfasst'
+        icon_tooltip_request: 'Wird angefragt'
+
+      define_mapping:
+        choose_role: 'Rolle auswählen'
+        choose_role_help: 'Allen importierten Personen wird diese Rolle zugewiesen'
+        assign_columns_to_fields: 'Spalten zu Feldern zuordnen'
+        column_from_csv: 'Spalte aus CSV'
+        field_in_database: 'Feld in der Datenbank'
+        preview: 'Vorschau'
+        update_behaviour: Aktualisierungsverhalten
+        keep_behaviour: 'Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren, bestehende Werte bleiben erhalten.'
+        override_behaviour: 'Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben. Leere Werte im CSV löschen dabei bestehende in der Datenbank.'
+        update_behaviour_explanation: 'Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen. Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.'
+
+      new:
+        upload_button: 'Hochladen'
+        csv_file: 'CSV Datei'
+
+      preview:
+        import_now_button: Personen jetzt importieren
+        import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
+          in die <strong>Gruppe %{group}</strong> importiert.
+
+  person/csv_imports:
+    invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
+
+    duplicate_keys:
+      one: '%{list} wurde mehrfach zugewiesen.'
+      other: '%{list} wurden mehrfach zugewiesen.'
+
+    preview:
+      new:
+        one: '%{count} %{role} wird neu importiert.'
+        other: '%{count} %{role} werden neu importiert.'
+      updated:
+        one: '%{count} %{role} wird aktualisiert.'
+        other: '%{count} %{role} werden aktualisiert.'
+      failed:
+        one: '%{count} %{role} wird nicht importiert.'
+        other: '%{count} %{role} werden nicht importiert.'
+      requests:
+        one: '%{count} %{role} wird nicht importiert und wird eine Zugriffsanfrage für ihre Personendaten erhalten.'
+        other: '%{count} %{role} werden nicht importiert und werden eine Zugriffsanfrage für ihre Personendaten erhalten.'
+
+    create:
+      new:
+        one: '%{count} %{role} wurde erfolgreich importiert.'
+        other: '%{count} %{role} wurden erfolgreich importiert.'
+      updated:
+        one: '%{count} %{role} wurde erfolgreich aktualisiert.'
+        other: '%{count} %{role} wurden erfolgreich aktualisiert.'
+      failed:
+        one: '%{count} %{role} wurde nicht importiert.'
+        other: '%{count} %{role} wurden nicht importiert.'
+      requests:
+        one: '%{count} %{role} wurde nicht importiert und hat eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfrage erneut vorgenommen werden.'
+        other: '%{count} %{role} wurden nicht importiert und haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden.'
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.
@@ -758,7 +770,7 @@ de:
     success: '%{subscriber} wurde erfolgreich ausgeschlossen'
     failure: '%{subscriber} ist nicht Abonnent/-in'
 
-  sheet/csv_import:
+  sheet/person/csv_import:
     title: 'Personen über CSV importieren'
 
   sheet/group:

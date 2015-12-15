@@ -6,11 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class CsvImport < Base
-    self.parent_sheet = Sheet::Group
+  class Person
+    class CsvImport < Base
+      self.parent_sheet = Sheet::Group
 
-    def title
-      translate(:title)
+      def title
+        translate(:title)
+      end
     end
   end
 end

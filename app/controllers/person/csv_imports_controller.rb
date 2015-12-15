@@ -5,7 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CsvImportsController < ApplicationController
+class Person::CsvImportsController < ApplicationController
+
   attr_accessor :group
   attr_reader :importer, :parser, :entries
 
@@ -13,7 +14,11 @@ class CsvImportsController < ApplicationController
 
   before_action :load_group
   before_action :custom_authorization
+
   decorates :group
+
+  def new
+  end
 
   def define_mapping
     if valid_file_or_data?
@@ -40,8 +45,11 @@ class CsvImportsController < ApplicationController
         define_mapping
         render :define_mapping
       else
+        importer.people # populate
+        importer.errors.clear # do not display previous validation errors
         importer.import
         set_importer_flash_info
+        set_importer_flash_errors
         redirect_to group_people_path(redirect_params)
       end
     end
@@ -51,7 +59,8 @@ class CsvImportsController < ApplicationController
 
   def set_importer_flash_info
     add_importer_info_to_flash(:notice, :new, importer.new_count)
-    add_importer_info_to_flash(:notice, :updated, importer.doublette_count)
+    add_importer_info_to_flash(:notice, :updated, importer.update_count)
+    add_importer_info_to_flash(:alert, :requests, importer.request_people.size)
     add_importer_info_to_flash(:alert, :failed, importer.failure_count)
   end
 
@@ -155,6 +164,7 @@ class CsvImportsController < ApplicationController
   def map_headers_and_import
     data = parser.map_data(field_mappings)
     @importer = Import::PersonImporter.new(data, group, role_type, override_behaviour)
+    @importer.user_ability = current_ability
   end
 
   def redirect_params

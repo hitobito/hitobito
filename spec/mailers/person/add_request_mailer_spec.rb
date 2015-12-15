@@ -31,14 +31,14 @@ describe Person::AddRequestMailer do
     let(:mail) { Person::AddRequestMailer.ask_person_to_add(request) }
 
     subject { mail }
-
+    
     its(:to)       { should == [person.email] }
     its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
     its(:subject)  { should == "Freigabe deiner Personendaten" }
     its(:body)     { should =~ /Hallo #{person.first_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
     its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
-    its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
+    its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should =~ /test.host\/people\/572407902/ }
 

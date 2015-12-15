@@ -140,12 +140,12 @@ Hitobito::Application.routes.draw do
         end
       end
 
-      resource :csv_imports, only: [:new, :create] do
+      resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do
         member do
           post :define_mapping
           post :preview
-          get 'define_mapping' => 'csv_imports#new' # route required for language switch
-          get 'preview'        => 'csv_imports#new' # route required for language switch
+          get 'define_mapping' => 'person/csv_imports#new' # route required for language switch
+          get 'preview'        => 'person/csv_imports#new' # route required for language switch
         end
       end
 

@@ -54,7 +54,7 @@ de:
         event/question:
           attributes:
             choices:
-              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten.'
+              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
         event/participation:
           attributes:
             person_id:
@@ -65,7 +65,7 @@ de:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
         person:
-          name_missing: 'Bitte geben Sie einen Namen ein.'
+          name_missing: 'Bitte geben Sie einen Namen ein'
           attributes:
             email:
               taken: >
@@ -89,7 +89,7 @@ de:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen.'
+              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen'
 
     models:
       additional_email:

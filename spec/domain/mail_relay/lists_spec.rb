@@ -10,7 +10,7 @@ require 'spec_helper'
 describe MailRelay::Lists do
 
   let(:message) do
-    mail = Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'regular.eml')))
+    mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
     mail.header['X-Envelope-To'] = nil
     mail.header['X-Envelope-To'] = envelope_to
     mail.from = from

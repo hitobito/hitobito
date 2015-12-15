@@ -9,9 +9,9 @@ require 'spec_helper'
 
 describe MailRelay::Base do
 
-  let(:simple)  { Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'simple.eml'))) }
-  let(:regular) { Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'regular.eml'))) }
-  let(:list)    { Mail.new(File.read(Rails.root.join('spec', 'support', 'email', 'list.eml'))) }
+  let(:simple)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
+  let(:regular) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml'))) }
+  let(:list)    { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml'))) }
 
   let(:relay) { MailRelay::Base.new(message) }
 

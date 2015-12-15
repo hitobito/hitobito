@@ -8,9 +8,9 @@
 module Import
   class Person
 
-    delegate :save, :new_record?, to: :person
+    delegate :save, :new_record?, :persisted?, to: :person
 
-    attr_reader :person, :attributes, :override,
+    attr_reader :person, :attributes, :override, :role,
                 :phone_numbers, :social_accounts, :additional_emails
 
     class << self
@@ -53,10 +53,10 @@ module Import
     def add_role(group, role_type)
       return if person.roles.any? { |role| role.group == group && role.type == role_type.sti_name }
 
-      role = person.roles.build
-      role.group = group
-      role.type = role_type.sti_name
-      role
+      @role = person.roles.build
+      @role.group = group
+      @role.type = role_type.sti_name
+      @role
     end
 
     def human_errors

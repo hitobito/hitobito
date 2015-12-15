@@ -7,7 +7,8 @@
 
 require 'spec_helper'
 require 'csv'
-describe CsvImportsController, type: :controller do
+describe Person::CsvImportsController, type: :controller do
+
   include CsvImportMacros
 
   render_views

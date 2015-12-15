@@ -158,7 +158,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "Hallo {recipient-name}<br/><br/>" \
          "{requester-name} möchte dich zu folgender Gruppe/Anlass/Abo hinzufügen: <br/><br/>" \
          "{request-body-label}<br/><br/>" \
-         "{requester-name} hat folgende Rollen: <br/><br/>" \
+         "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
          "{requester-group-roles}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
          "{show-person-url}" },

@@ -42,7 +42,10 @@ class PeopleController < CrudController
 
   def index
     respond_to do |format|
-      format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
+      format.html  do
+        @people = prepare_entries(filter_entries).page(params[:page])
+        @person_add_requests = fetch_person_add_requests
+      end
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_entries_csv(filter_entries) }
       format.email { render_emails(filter_entries) }
@@ -213,6 +216,12 @@ class PeopleController < CrudController
       entries.includes(:additional_emails, :phone_numbers)
     else
       entries.preload_public_accounts
+    end
+  end
+
+  def fetch_person_add_requests
+    if params[:kind].blank? && can?(:create, @group.roles.new)
+      @group.person_add_requests.list.includes(person: :primary_group)
     end
   end
 

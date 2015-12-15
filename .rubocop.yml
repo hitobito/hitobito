@@ -75,6 +75,10 @@ Style/EmptyLinesAroundModuleBody:
 Style/MultilineOperationIndentation:
   Enabled: false
 
+# We thinks that's fine
+Style/RegexpLiteral:
+  Enabled: false
+
 # Missing UTF-8 encoding statements should always be created.
 Encoding:
   Severity: error

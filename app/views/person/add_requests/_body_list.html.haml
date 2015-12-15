@@ -1,0 +1,16 @@
+= link_to(t('.open_requests', count: @person_add_requests.size),
+          '#',
+          data: { hide: 'person_add_requests'})
+
+#person_add_requests.hide
+  .well.panel
+    = table(@person_add_requests, class: 'table table-hover table-condensed') do |t|
+      - t.attr(:person_id)
+      - t.col(t('.request_to')) { |r| link_to(r.person_layer, r.person_layer) }
+      - t.attr(:created_at)
+      - t.col('', class: 'center') do |r|
+        - if can?(:reject, r)
+          - link_to(icon(:remove),
+                    person_add_request_path(r, cancel: true),
+                    title: t('.cancel'),
+                    data: { method: :delete })

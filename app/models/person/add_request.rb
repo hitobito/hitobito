@@ -29,6 +29,8 @@ class Person::AddRequest < ActiveRecord::Base
   validates_by_schema
   validates :person_id, uniqueness: { scope: [:type, :body_id] }
 
+  scope :list, -> { includes(:person).references(:person).merge(Person.order_by_name) }
+
   class << self
     def for_layer(layer_group)
       joins(person: :primary_group).
@@ -43,12 +45,16 @@ class Person::AddRequest < ActiveRecord::Base
   require_dependency 'person/add_request/mailing_list'
 
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     body_label
   end
 
   def body_label
     "#{body.class.model_name.human} '#{body}'"
+  end
+
+  def person_layer
+    person.primary_group.try(:layer_group)
   end
 
 end

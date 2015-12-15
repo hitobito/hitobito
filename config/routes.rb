@@ -176,7 +176,7 @@ Hitobito::Application.routes.draw do
       delete 'users/token' => 'devise/tokens#destroy'
     end
 
-    put 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
+    post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
     delete 'person_add_requests/:id' => 'person/add_requests#reject'
 
   end # scope locale

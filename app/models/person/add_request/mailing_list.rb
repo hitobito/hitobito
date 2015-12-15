@@ -22,7 +22,7 @@ class Person::AddRequest::MailingList < Person::AddRequest
 
   belongs_to :body, class_name: '::MailingList'
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     group = body.group
     list_label = body_label
     group_label = "#{group.model_name.human} '#{group}'"

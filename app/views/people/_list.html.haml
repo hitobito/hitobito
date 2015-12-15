@@ -18,6 +18,9 @@
     - else
       = ti(:no_list_entries)
 
+    - if @person_add_requests.present?
+      = render 'person/add_requests/body_list'
+
 - if @people.total_count > 0
   = crud_table do |t|
     - t.col('') do |p|

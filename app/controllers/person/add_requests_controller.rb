@@ -7,7 +7,7 @@
 
 class Person::AddRequestsController < ApplicationController
 
-  authorize_resource except: [:index,:activate, :deactivate]
+  authorize_resource except: [:index, :activate, :deactivate]
 
   before_action :authorize_class, only: [:index, :activate, :deactivate]
 
@@ -31,16 +31,22 @@ class Person::AddRequestsController < ApplicationController
   end
 
   def approve
-    if Person::AddRequest::Approver.for(entry).approve
-      # redirect back with notice
+    approver = Person::AddRequest::Approver.for(entry, current_user)
+    if approver.approve
+      redirect_back notice: t('person.add_requests.approve.success_notice',
+                              person: entry.person.full_name)
     else
-      # redirect back with error
+      redirect_back alert: t('person.add_requests.approve.failure_notice',
+                             person: entry.person.full_name,
+                             errors: approver.error_message)
     end
   end
 
   def reject
-    Person::AddRequest::Approver.for(entry).reject
-    # redirect back with notice
+    Person::AddRequest::Approver.for(entry, current_user).reject
+    action = params[:cancel] ? 'cancel' : 'reject'
+    redirect_back notice: t("person.add_requests.#{action}.success_notice",
+                            person: entry.person.full_name)
   end
 
   private
@@ -84,6 +90,14 @@ class Person::AddRequestsController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def redirect_back(options = {})
+    if request.env['HTTP_REFERER'].present?
+      redirect_to :back, options
+    else
+      redirect_to person_path(entry.person), options
+    end
   end
 
   def authorize_class

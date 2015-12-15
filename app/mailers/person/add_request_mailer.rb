@@ -49,6 +49,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   private
+
   def compose(content, envelope, values)
     mail(envelope) do |format|
       format.html { render text: content.body_with_values(values) }
@@ -82,7 +83,8 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
 
-  def ask_responsibles_to_add_values(recipient_names, requester_name, requester_group_roles, request_body_label, group_id)
+  def ask_responsibles_to_add_values(recipient_names, requester_name, requester_group_roles,
+                                     request_body_label, group_id)
     {
       'recipient-names' => recipient_names,
       'requester-name' => requester_name,

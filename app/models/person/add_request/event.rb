@@ -23,7 +23,7 @@ class Person::AddRequest::Event < Person::AddRequest
 
   validates :role_type, presence: true
 
-  def to_s(format = :default)
+  def to_s(_format = :default)
     group = body.groups.first
     event_label = body_label
     group_label = "#{group.model_name.human} '#{group}'"

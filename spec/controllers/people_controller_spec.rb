@@ -89,6 +89,7 @@ describe PeopleController do
           get :index, group_id: group
 
           expect(assigns(:people).collect(&:id)).to match_array([top_leader, @tg_member].collect(&:id))
+          expect(assigns(:person_add_requests)).to eq([])
         end
 
         it 'loads externs of a group when type given' do
@@ -103,48 +104,66 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
 
-        it 'generates pdf labels' do
-          get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
+        it 'loads pending person add requests' do
+          r1 = Person::AddRequest::Group.create!(
+                  person: Fabricate(:person),
+                  requester: Fabricate(:person),
+                  body: group,
+                  role_type: group.class.role_types.first.sti_name)
 
-          expect(@response.content_type).to eq('application/pdf')
-          expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          get :index, group_id: group.id
+
+          expect(assigns(:person_add_requests)).to eq([r1])
         end
 
-        it 'exports address csv files' do
-          get :index, group_id: group, format: :csv
+        context '.pdf' do
+          it 'generates pdf labels' do
+            get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
 
-          expect(@response.content_type).to eq('text/csv')
-          expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
-          expect(@response.body).to match(/^Top;Leader;.*/)
-          expect(@response.body).to match(/123/)
-          expect(@response.body).not_to match(/skypefoo/)
-          expect(@response.body).not_to match(/Zusätzliche Angaben/)
-          expect(@response.body).not_to match(/Mobile/)
+            expect(@response.content_type).to eq('application/pdf')
+            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          end
         end
 
-        it 'exports full csv files' do
-          get :index, group_id: group, details: true, format: :csv
+        context '.csv' do
+          it 'exports address csv files' do
+            get :index, group_id: group, format: :csv
 
-          expect(@response.content_type).to eq('text/csv')
-          expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
-          expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
-          expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
+            expect(@response.body).to match(/^Top;Leader;.*/)
+            expect(@response.body).to match(/123/)
+            expect(@response.body).not_to match(/skypefoo/)
+            expect(@response.body).not_to match(/Zusätzliche Angaben/)
+            expect(@response.body).not_to match(/Mobile/)
+          end
+
+          it 'exports full csv files' do
+            get :index, group_id: group, details: true, format: :csv
+
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
+            expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
+            expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
+          end
         end
 
-        it 'renders email addresses' do
-          get :index, group_id: group, format: :email
-          expect(@response.content_type).to eq('text/plain')
-          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
+        context '.email' do
+          it 'renders email addresses' do
+            get :index, group_id: group, format: :email
+            expect(@response.content_type).to eq('text/plain')
+            expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
+          end
+
+          it 'renders email addresses with additional ones' do
+            e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
+            Fabricate(:additional_email, contactable: @tg_member, mailings: false)
+            get :index, group_id: group, format: :email
+            expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
+          end
         end
 
-        it 'renders email addresses with additional ones' do
-          e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
-          Fabricate(:additional_email, contactable: @tg_member, mailings: false)
-          get :index, group_id: group, format: :email
-          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
-        end
-
-        context 'json' do
+        context '.json' do
           render_views
 
           it 'renders json with only the one role in this group' do
@@ -176,6 +195,18 @@ describe PeopleController do
                         kind: 'layer'
 
             expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
+          end
+
+          it 'does not load pending person add requests' do
+            r1 = Person::AddRequest::Group.create!(
+              person: Fabricate(:person),
+              requester: Fabricate(:person),
+              body: group,
+              role_type: group.class.role_types.first.sti_name)
+
+            get :index, group_id: group.id, kind: 'layer'
+
+            expect(assigns(:person_add_requests)).to be_nil
           end
 
           it 'exports full csv when types given and ability exists' do

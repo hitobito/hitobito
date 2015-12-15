@@ -234,6 +234,7 @@ de:
       person/add_request:
         person: Person
         requester: Anfrage von
+        created_at: Datum
 
       person/add_request/event:
         label: "%{body} in %{group}"

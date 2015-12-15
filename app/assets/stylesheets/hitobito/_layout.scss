@@ -277,6 +277,19 @@ body {
 .well {
   border: none;
   background: $grayLighter;
+
+  &.panel {
+    margin-top: 5px;
+    border: 2px solid $grayLighter;
+    background: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+
+    table:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 // higher z-index than popover (1010)
@@ -315,6 +328,10 @@ table.roles {
       margin-bottom: 0;
     }
   }
+}
+
+.table-striped th:first-child {
+  padding-left: 8px;
 }
 
 //  Logs

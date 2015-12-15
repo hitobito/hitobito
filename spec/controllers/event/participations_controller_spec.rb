@@ -408,7 +408,7 @@ describe Event::ParticipationsController do
              event_participation: { person_id: bottom_member.id }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
-        expect(flash[:alert]).to match(/sent/)
+        expect(flash[:alert]).to match(/versendet/)
 
         expect(bottom_member.reload.add_requests.count).to eq(1)
         expect(bottom_member.event_participations.count).to eq(0)

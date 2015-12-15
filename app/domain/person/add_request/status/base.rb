@@ -38,17 +38,23 @@ module Person::AddRequest::Status
     end
 
     def approved_message
-      'TOOD: request type specific approved message'
+      I18n.t("person.add_requests.status.#{body_class_name.underscore}.approved",
+             person: person.full_name)
     end
 
     def rejected_message
-      'TOOD: request type specific rejected message'
+      I18n.t("person.add_requests.status.#{body_class_name.underscore}.rejected",
+             person: person.full_name)
     end
 
     private
 
     def request_type
-      "Person::AddRequest::#{self.class.name.demodulize}"
+      "Person::AddRequest::#{body_class_name}"
+    end
+
+    def body_class_name
+      self.class.name.demodulize
     end
 
   end

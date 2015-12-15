@@ -146,7 +146,7 @@ describe RolesController do
         request = person.add_requests.first
         expect(request.body_id).to eq(group.id)
         expect(request.role_type).to eq(Group::BottomGroup::Member.sti_name)
-        expect(flash[:alert]).to match(/sent/)
+        expect(flash[:alert]).to match(/versendet/)
       end
 
       it 'creates role if person already visible' do

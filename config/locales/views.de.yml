@@ -539,6 +539,10 @@ de:
   paper_trail/version_decorator:
     by: 'von %{author}'
 
+  person/add_requests:
+    deactivated: Manuelle Freigabe deaktiviert
+    activated: Manuelle Freigabe aktiviert
+
   person:
     add_requests:
       index:
@@ -546,11 +550,28 @@ de:
         deactivated: Manuelle Freigabe ist nicht aktiviert
         deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
 
-  person/add_requests:
-    deactivated: Manuelle Freigabe deaktiviert
-    activated: Manuelle Freigabe aktiviert
+      creator:
+        group:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Allfällige Informationen zur gewünschten Rolle müssen nach der Bestätigung der Anfrage erneut angegeben werden."
+          failure: "Die Rolle konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        event:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Allfällige Informationen zur gewünschten Teilnahme müssen nach der Bestätigung der Anfrage erneut angegeben werden."
+          failure: "Die Teilnahme konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        mailing_list:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet."
+          failure: "%{person} konnte nicht hinzugefügt werden, da für diese Person eine Zugriffsanfrage erforderlich ist. %{errors}."
 
-  person:
+      status:
+        group:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        event:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        mailing_list:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+
     csv_imports:
       description:
         header: CSV Dateien

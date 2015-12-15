@@ -68,7 +68,7 @@ describe Event::RolesController do
              event_role: { type: Event::Role::Speaker.sti_name, person_id: person.id }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
-        expect(flash[:alert]).to match(/sent/)
+        expect(flash[:alert]).to match(/versendet/)
         expect(person.reload.event_participations.count).to eq(0)
         expect(person.add_requests.count).to eq(1)
       end

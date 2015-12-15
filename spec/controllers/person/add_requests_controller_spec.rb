@@ -49,7 +49,7 @@ describe Person::AddRequestsController do
             body_id: groups(:top_group).id,
             body_type: 'Group'
 
-        expect(flash[:notice]).to match(/approved/)
+        expect(flash[:notice]).to match(/freigegeben/)
         expect(flash[:alert]).to be_blank
       end
 
@@ -61,7 +61,7 @@ describe Person::AddRequestsController do
             body_type: 'Group'
 
         expect(flash[:notice]).to be_blank
-        expect(flash[:alert]).to match(/rejected/)
+        expect(flash[:alert]).to match(/abgelehnt/)
       end
 
       it 'assigns current if request exists' do

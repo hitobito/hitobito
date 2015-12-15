@@ -64,16 +64,22 @@ module Person::AddRequest::Creator
     end
 
     def success_message
-      'TODO type specific sent'
+      I18n.t("person.add_requests.creator.#{body_class_name.underscore}.success",
+             person: person.full_name)
     end
 
     def error_message
-      # TODO: add general message before
-      request.errors.full_messages.join(', ')
+      I18n.t("person.add_requests.creator.#{body_class_name.underscore}.failure",
+             person: person.full_name,
+             errors: request.errors.full_messages.join(', '))
     end
 
     def request_class
-      "Person::AddRequest::#{self.class.name.demodulize}".constantize
+      "Person::AddRequest::#{body_class_name}".constantize
+    end
+
+    def body_class_name
+      self.class.name.demodulize
     end
 
   end

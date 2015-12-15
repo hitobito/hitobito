@@ -99,7 +99,7 @@ describe Person::AddRequest::Creator::MailingList do
         subject.create_request
       end.not_to change { Delayed::Job.count }
       expect(subject.request).to be_new_record
-      expect(subject.error_message).to eq('Person wurde bereits angefragt.')
+      expect(subject.error_message).to match(/Person wurde bereits angefragt/)
     end
   end
 

@@ -77,7 +77,7 @@ describe Subscriber::PersonController do
              mailing_list_id: list.id,
              subscription: { subscriber_id: person.id }
 
-        expect(flash[:alert]).to match(/sent/)
+        expect(flash[:alert]).to match(/versendet/)
         expect(list.reload.subscriptions.count).to eq(0)
         expect(person.reload.add_requests.count).to eq(1)
       end

@@ -559,18 +559,18 @@ de:
 
       creator:
         group:
-          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Allfällige Informationen zur gewünschten Rolle müssen nach der Bestätigung der Anfrage erneut angegeben werden."
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Rolle wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Details zur Rolle müssen nach der Freigabe erneut angegeben werden."
           failure: "Die Rolle konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
         event:
-          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Allfällige Informationen zur gewünschten Teilnahme müssen nach der Bestätigung der Anfrage erneut angegeben werden."
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Teilnahme wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Informationen zur Teilnahme müssen nach der Freigabe erneut angegeben werden."
           failure: "Die Teilnahme konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
         mailing_list:
-          success: "Wir haben eine Zugriffsanfrage für %{person} versendet."
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Person wird zum Abo hinzugefügt, sobald die Anfrage freigegeben wird."
           failure: "%{person} konnte nicht hinzugefügt werden, da für diese Person eine Zugriffsanfrage erforderlich ist. %{errors}."
 
       approve:
-        success_notice: "Die Zugriffsanfrage für %{person} wurde frei gegeben."
-        failure_notice: "Die Zugriffsanfrage für %{person} konnte nicht frei gegeben werden: %{errors}."
+        success_notice: "Die Zugriffsanfrage für %{person} wurde freigegeben."
+        failure_notice: "Die Zugriffsanfrage für %{person} konnte nicht freigegeben werden: %{errors}."
       reject:
         success_notice: "Die Zugriffsanfrage für %{person} wurde abgelehnt."
       cancel:

@@ -1,5 +1,9 @@
 = Hitobito Changelog
 
+== Version 1.11
+
+* Pro Ebene aktivierbare Zugriffsanfragen, falls Personen zu einer fremden Gruppe, Anlass oder Abo hinzugefügt werden.
+
 == Version 1.10
 
 * Schnelleres Laden der Seiten dank Turbolinks und Kompression.

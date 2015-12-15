@@ -799,9 +799,9 @@ de:
       destroy: "%{model} <i>%{label}</i> wurde gelöscht."
 
       person/add_request:
-        create: "Anfrage für <i>%{label}</i> wurde gestellt."
-        update: "Anfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
-        destroy: "Anfrage für <i>%{label}</i> wurde beantwortet."
+        create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."
+        update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
+        destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
 
   views:
     pagination:

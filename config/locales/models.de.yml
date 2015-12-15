@@ -141,7 +141,7 @@ de:
         one: Person
         other: Personen
       person/add_request:
-        one: Anfrage
+        one: Zugriffsanfrage
         other: Anfragen
       people_filter:
         one: Filter

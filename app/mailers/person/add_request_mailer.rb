@@ -72,7 +72,7 @@ class Person::AddRequestMailer < ApplicationMailer
       'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
       'requester-group-roles' => requester_group_roles(request),
-      'request-body-label' => request.body_label,
+      'request-body-label' => link_to(request.body_label, body_url(request.body)),
       'show-person-url' => person_url(person)
     }
   end
@@ -84,9 +84,26 @@ class Person::AddRequestMailer < ApplicationMailer
       'recipient-names' => recipient_names,
       'requester-name' => request.requester.full_name,
       'requester-group-roles' => requester_group_roles(request),
-      'request-body-label' => request.body_label,
+      'request-body-label' => link_to(request.body_label, body_url(request.body)),
       'add-requests-url' => group_person_add_requests_url(group_id: group_id)
     }
+  end
+
+  def link_to(name, url)
+    "<a href=\"#{url}\">#{name}</a>"
+  end
+
+  def body_url(body)
+    id = body.id
+    if body.is_a?(Event)
+      group_id = body.groups.first.id
+      group_event_url(group_id: group_id, id: id)
+    elsif body.is_a?(Group)
+      group_url(id: id)
+    elsif body.is_a?(MailingList)
+      group_id = body.group_id
+      group_mailing_list_url(group_id: group_id, id: id)
+    end
   end
 
 

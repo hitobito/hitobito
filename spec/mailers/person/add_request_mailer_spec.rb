@@ -38,6 +38,7 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /Hallo #{person.first_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
     its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should =~ /test.host\/people\/572407902/ }
@@ -66,9 +67,36 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name} zu folgender/ }
     its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}\/person_add_requests/ }
+
+  end
+
+  context 'body url' do
+
+    let(:mail) { Person::AddRequestMailer.send(:new) }
+
+    it 'event url' do
+      event = events(:top_course)
+      group_id = event.groups.first.id
+      expect(mail.send(:body_url, event)).to match(/http:/)
+      expect(mail.send(:body_url, event)).to match(/\/groups\/#{group_id}\/events\/#{event.id}/)
+    end
+
+    it 'group url' do
+      group = groups(:toppers)
+      expect(mail.send(:body_url, group)).to match(/http:/)
+      expect(mail.send(:body_url, group)).to match(/\/groups\/#{group.id}/)
+    end
+
+    it 'mailing list url' do
+      list = mailing_lists(:leaders)
+      group_id = list.group_id
+      expect(mail.send(:body_url, list)).to match(/http:/)
+      expect(mail.send(:body_url, list)).to match(/\/groups\/#{group_id}\/mailing_lists\/#{list.id}/)
+    end
 
   end
 

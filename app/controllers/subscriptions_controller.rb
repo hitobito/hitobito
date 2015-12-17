@@ -66,11 +66,15 @@ class SubscriptionsController < CrudController
       where(subscriber_type: klass.name).
       joins("INNER JOIN #{klass.table_name} " \
             "ON #{klass.table_name}.id = subscriptions.subscriber_id").
-      includes(:subscriber, :mailing_list)
+      includes(:subscriber)
   end
 
   def authorize_class
-    authorize!(:index_subscriptions, mailing_list)
+    if html_request?
+      authorize!(:index_subscriptions, mailing_list)
+    else
+      authorize!(:export_subscriptions, mailing_list)
+    end
   end
 
 end

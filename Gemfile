@@ -43,6 +43,7 @@ gem 'config'
 gem 'rails-i18n'
 gem 'seed-fu'
 gem 'simpleidn'
+gem 'sqlite3' # for development, test and production when generating assets
 gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness'
@@ -69,7 +70,6 @@ gem 'uglifier'
 group :development, :test do
   gem 'binding_of_caller'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
   gem 'pry-debugger', platforms: :ruby_19

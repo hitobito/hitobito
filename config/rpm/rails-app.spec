@@ -17,7 +17,7 @@
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/production.sqlite3 bin/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/*.sqlite3'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml

@@ -11,7 +11,7 @@ class MailingListAbility < AbilityDsl::Base
 
   on(::MailingList) do
     permission(:any).may(:show).all
-    
+
     permission(:group_full).may(:index_subscriptions, :create, :update, :destroy).in_same_group
     permission(:group_full).
       may(:export_subscriptions).

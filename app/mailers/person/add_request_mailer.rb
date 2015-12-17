@@ -15,10 +15,7 @@ class Person::AddRequestMailer < ApplicationMailer
     content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
 
     envelope = add_request_envelope(person.email, request.requester, content)
-    values = ask_person_to_add_values(person,
-                                      request.requester.full_name,
-                                      requester_group_roles(request),
-                                      request.body_label)
+    values = ask_person_to_add_values(person, request)
     compose(content, envelope, values)
   end
 
@@ -28,13 +25,12 @@ class Person::AddRequestMailer < ApplicationMailer
 
     to = Person.mailing_emails_for(responsibles)
 
-    envelope = add_request_envelope(to, requester, responsibles, content)
+    envelope = add_request_envelope(to, request.requester, content)
 
     recipient_names = responsibles.collect(&:greeting_name).join(', ')
     values = ask_responsibles_to_add_values(recipient_names,
-                                            request.requester.full_name,
-                                            requester_group_roles(request),
-                                            request.body_label,
+                                            request,
+                                            person,
                                             group.id)
 
     compose(content, envelope, values)
@@ -49,7 +45,6 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   private
-
   def compose(content, envelope, values)
     mail(envelope) do |format|
       format.html { render text: content.body_with_values(values) }
@@ -72,24 +67,24 @@ class Person::AddRequestMailer < ApplicationMailer
       reply_to: requester.email }
   end
 
-  def ask_person_to_add_values(person, requester_name, requester_group_roles, request_body_label)
+  def ask_person_to_add_values(person, request)
     {
       'recipient-name' => person.greeting_name,
-      'requester-name' => requester_name,
-      'requester-group-roles' => requester_group_roles,
-      'request-body-label' => request_body_label,
+      'requester-name' => request.requester.full_name,
+      'requester-group-roles' => requester_group_roles(request),
+      'request-body-label' => request.body_label,
       'show-person-url' => person_url(person)
     }
   end
 
 
-  def ask_responsibles_to_add_values(recipient_names, requester_name, requester_group_roles,
-                                     request_body_label, group_id)
+  def ask_responsibles_to_add_values(recipient_names, request, person, group_id)
     {
+      'person-name' => person.full_name,
       'recipient-names' => recipient_names,
-      'requester-name' => requester_name,
-      'requester-group-roles' => requester_group_roles,
-      'request-body-label' => request_body_label,
+      'requester-name' => request.requester.full_name,
+      'requester-group-roles' => requester_group_roles(request),
+      'request-body-label' => request.body_label,
       'add-requests-url' => group_person_add_requests_url(group_id: group_id)
     }
   end

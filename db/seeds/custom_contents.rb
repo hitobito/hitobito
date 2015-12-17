@@ -31,7 +31,7 @@ CustomContent.seed_once(:key,
     placeholders_optional: nil },
 
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
-    placeholders_required: 'recipient-names, requester-name, requester-group-roles, request-body-label, add-requests-url',
+    placeholders_required: 'recipient-names, requester-name, person-name, requester-group-roles, request-body-label, add-requests-url',
     placeholders_optional: nil },
 )
 
@@ -180,12 +180,12 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: 'Anfragen: E-Mail Freigabe Personendaten durch Verantwortliche',
    subject: 'Freigabe Personendaten',
    body: "Hallo {recipient-names}<br/><br/>" \
-         "{requester-name} möchte {request-person} zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
+         "{requester-name} möchte {person-name} zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
          "{request-body-label}<br/><br/>" \
          "{requester-name} hat folgende Rollen: <br/><br/>" \
          "{requester-group-roles}cbr/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
-         "{requests-url}" },
+         "{add-requests-url}" },
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'fr',

@@ -52,20 +52,23 @@ describe Person::AddRequestMailer do
 
   context 'ask responsibles to add person' do
 
-    let(:mail) { Person::AddRequestMailer.ask_responsibles(request) }
+    let(:leader) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
+    let(:leader2) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
+    let(:responsibles) { [leader, leader2] }
+
+    let(:mail) { Person::AddRequestMailer.ask_responsibles(request, responsibles, group) }
 
     subject { mail }
 
-    # TODO implement tests
-    #its(:to)       { should == [person.email] }
-    #its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
-    #its(:subject)  { should == "Freigabe deiner Personendaten" }
-    #its(:body)     { should =~ /Hallo #{person.first_name}/ }
-    #its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
-    #its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
-    #its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
-    #its(:body)     { should =~ /Leader in Bottom One/ }
-    #its(:body)     { should =~ /test.host\/people\/572407902/ }
+    its(:to)       { should == [leader.email, leader2.email] }
+    its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
+    its(:subject)  { should == "Freigabe Personendaten" }
+    its(:body)     { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
+    its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name} zu folgender/ }
+    its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
+    its(:body)     { should =~ /Leader in Bottom One/ }
+    its(:body)     { should =~ /test.host\/groups\/#{group.id}\/person_add_requests/ }
 
   end
 

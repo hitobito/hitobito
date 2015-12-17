@@ -129,7 +129,7 @@ Hitobito::Application.routes.draw do
             get 'group' => 'subscriber/group#new' # route required for language switch
 
             resources :event, only: [:new, :create], controller: 'subscriber/event' do
-              collection  do
+              collection do
                 get :query
               end
             end

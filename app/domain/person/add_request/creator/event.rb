@@ -11,7 +11,7 @@ module Person::AddRequest::Creator
     alias_method :role, :entity
 
     def required?
-      role.participation.new_record? && super()
+      new_or_restricted? && super()
     end
 
     def body
@@ -24,6 +24,15 @@ module Person::AddRequest::Creator
 
     def request_attrs
       super.merge(role_type: role.type)
+    end
+
+    private
+
+    def new_or_restricted?
+      return true if role.participation.new_record?
+
+      roles = role.participation.roles - [role]
+      roles.all? { |r| r.class.kind.nil? }
     end
 
   end

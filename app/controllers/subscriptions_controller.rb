@@ -27,7 +27,6 @@ class SubscriptionsController < CrudController
     end
   end
 
-
   private
 
   def load_grouped_subscriptions

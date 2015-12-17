@@ -26,7 +26,7 @@ describe MailingList do
 
   let(:list)   { Fabricate(:mailing_list, group: groups(:top_layer)) }
   let(:person) { Fabricate(:person) }
-  let(:event)  { Fabricate(:event, groups: [list.group]) }
+  let(:event)  { Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
 
   describe 'validations' do
     it 'succeed with mail_name' do
@@ -166,7 +166,7 @@ describe MailingList do
         p1 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         p2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        e2 = Fabricate(:event, groups: [list.group])
+        e2 = Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)])
         create_subscription(e2)
         p3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: p1))
@@ -246,7 +246,7 @@ describe MailingList do
         p1 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         p2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        e2 = Fabricate(:event, groups: [list.group])
+        e2 = Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)])
         create_subscription(e2)
         p3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: p1))
@@ -286,7 +286,7 @@ describe MailingList do
         pe1 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         pe2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        e2 = Fabricate(:event, groups: [list.group])
+        e2 = Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today + 200)])
         create_subscription(e2)
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))
@@ -326,7 +326,7 @@ describe MailingList do
         pe1 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         pe2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        e2 = Fabricate(:event, groups: [list.group])
+        e2 = Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today - 100)])
         create_subscription(e2)
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))
@@ -366,7 +366,7 @@ describe MailingList do
         pe1 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         pe2 = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        e2 = Fabricate(:event, groups: [list.group])
+        e2 = Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)])
         create_subscription(e2)
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))

@@ -12,8 +12,8 @@ describe SubscriptionsController do
   before { sign_in(user) }
 
   let(:user)  { people(:top_leader) }
-  let(:group) { groups(:top_group) }
-  let(:event) { Fabricate(:event, groups: [group]) }
+  let(:group) { groups(:top_layer) }
+  let(:event) { Fabricate(:event, groups: [group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
 
   context 'GET index' do
@@ -61,7 +61,6 @@ describe SubscriptionsController do
   end
 
   def create_event_subscription(mailing_list)
-    event = Event.all.sample
     Fabricate(:subscription, mailing_list: mailing_list, subscriber: event)
   end
 

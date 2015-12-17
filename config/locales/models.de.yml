@@ -58,7 +58,7 @@ de:
         event/participation:
           attributes:
             person_id:
-              taken: ist bereits angemeldet.
+              taken: ist bereits angemeldet
         mailing_list:
           attributes:
             mail_name:
@@ -77,11 +77,11 @@ de:
         person/add_request:
           attributes:
             person_id:
-              taken: wurde bereits angefragt.
+              taken: wurde bereits angefragt
         people_relation:
           attributes:
             tail_id:
-              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt.
+              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt
         qualification:
           attributes:
             qualification_kind_id:
@@ -90,6 +90,11 @@ de:
           attributes:
             validity:
               not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen'
+        subscription:
+          attributes:
+            subscriber_id:
+              group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
 
     models:
       additional_email:
@@ -478,6 +483,7 @@ de:
 
       subscription:
         related_role_types: Rollen
+        subscriber_id: '' # not used, error messages require different labels
 
       people_filter:
         name: Name

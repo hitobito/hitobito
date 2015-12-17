@@ -76,6 +76,7 @@ module CrudControllerTestHelper
       send(action_specific_attr_name)
     else
       action = { new: :create, edit: :update }[action.to_sym] || action
+      action_specific_attr_name = "#{action}_entry_attrs".to_sym
       respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
     end
   end

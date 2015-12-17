@@ -21,7 +21,6 @@ module Subscriber
       super(location: index_path)
     end
 
-
     private
 
     alias_method :mailing_list, :parent

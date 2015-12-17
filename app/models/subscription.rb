@@ -4,6 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: subscriptions
@@ -36,7 +37,12 @@ class Subscription < ActiveRecord::Base
 
   validates :subscriber_id, uniqueness: { unless: ->(s) { s.subscriber.is_a?(Group) },
                                           scope: [:mailing_list_id, :subscriber_type, :excluded] }
-
+  validates :subscriber_id, inclusion: { if: ->(s) { s.subscriber.is_a?(Group) },
+                                         in: ->(s) { s.possible_groups.pluck(:id) },
+                                         message: :group_not_allowed }
+  validates :subscriber_id, inclusion: { if: ->(s) { s.subscriber.is_a?(Event) },
+                                         in: ->(s) { s.possible_events.pluck(:id) },
+                                         message: :event_not_allowed }
 
   ### INSTANCE METHODS
 
@@ -47,6 +53,28 @@ class Subscription < ActiveRecord::Base
       string << ' (' << related_role_types.join(', ') << ')'
     end
     string
+  end
+
+  def possible_events
+    Event.
+      joins(:groups, :dates).
+      where('event_dates.start_at >= ?', earliest_possible_event_date).
+      where(groups: { id: possible_event_groups })
+  end
+
+  def possible_groups
+    mailing_list.group.self_and_descendants
+  end
+
+  private
+
+  def earliest_possible_event_date
+    Time.zone.now.prev_year.beginning_of_year
+  end
+
+  # this may be different from possible_groups in wagons
+  def possible_event_groups
+    mailing_list.group.self_and_descendants
   end
 
 end

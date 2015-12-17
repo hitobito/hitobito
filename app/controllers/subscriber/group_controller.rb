@@ -31,12 +31,12 @@ module Subscriber
     private
 
     def groups_query
-      candidate_groups.
-             where(search_condition('groups.name', 'parents_groups.name')).
-             includes(:parent).
-             references(:parent).
-             order('groups.lft').
-             limit(10)
+      possible = Subscription.new(mailing_list: @mailing_list).possible_groups
+      possible.where(search_condition('groups.name', 'parents_groups.name')).
+               includes(:parent).
+               references(:parent).
+               order('groups.lft').
+               limit(10)
     end
 
     def assign_attributes
@@ -49,9 +49,7 @@ module Subscriber
     end
 
     def subscriber
-      @selected_group ||= candidate_groups.
-                                 where(id: subscriber_id).
-                                 first
+      @selected_group ||= Group.where(id: subscriber_id).first
     end
 
     def replace_validation_errors
@@ -63,8 +61,5 @@ module Subscriber
       end
     end
 
-    def candidate_groups
-      @group.self_and_descendants
-    end
   end
 end

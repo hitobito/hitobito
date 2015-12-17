@@ -59,7 +59,7 @@ describe Person::AddRequest::Creator::Event do
     end
 
     it 'is false if person already participates in event' do
-      entity.save!
+      Fabricate(Event::Role::Cook.name, participation: entity.participation)
       expect(subject).not_to be_required
     end
 

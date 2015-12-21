@@ -44,19 +44,18 @@ class Event::RolesController < CrudController
   end
 
   def build_entry
-    attrs = params[:event_role]
-    type = attrs && attrs[:type]
-    role = event.class.find_role_type!(type).new
-
+    attrs = params[:event_role] || {}
     # delete unused attributes
     attrs.delete(:event_id)
     attrs.delete(:person)
+    # assert that type is valid
+    event.class.find_role_type!(attrs[:type])
 
-    role.participation = event.participations.where(person_id: attrs.delete(:person_id)).
-                                              first_or_initialize
-    role.participation.init_answers if role.participation.new_record?
-
-    role
+    participation = event.participations.where(person_id: attrs.delete(:person_id)).
+                                         first_or_initialize
+    participation.roles.build(type: attrs[:type]).tap do |role|
+      role.participation = participation
+    end
   end
 
   def assign_attributes

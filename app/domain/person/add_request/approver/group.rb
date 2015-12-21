@@ -11,8 +11,9 @@ module Person::AddRequest::Approver
     private
 
     def build_entity
-      role_type.new(person_id: request.person_id,
-                    group_id: request.body_id)
+      role_type.
+        where(person_id: request.person_id, group_id: request.body_id).
+        first_or_initialize
     end
 
     def role_type

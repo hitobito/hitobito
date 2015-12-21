@@ -10,23 +10,12 @@ module Person::AddRequest::Approver
 
     private
 
-    # TODO move that out to domain object shared with controllers?
     # set state assigned for youth wagon
     def build_entity
-      participation = event.participations.where(person_id: request.person_id).first_or_initialize
-      if participation.new_record?
-        participation.init_answers
-        participation.active = true
-        if event.supports_applications
-          appl = participation.build_application
-          appl.priority_1 = event
-        end
+      event.participations.where(person_id: request.person_id).first_or_initialize.tap do |p|
+        build_role(p)
+        set_active(p) if p.new_record?
       end
-      if participation.roles.none? { |r| r.class.sti_name == request.role_type }
-        role = participation.roles.build(type: role_type.sti_name)
-        role.participation = participation
-      end
-      participation
     end
 
     def role_type
@@ -35,6 +24,19 @@ module Person::AddRequest::Approver
 
     def event
       request.body
+    end
+
+    private
+
+    def set_active(participation)
+      participation.active = true
+    end
+
+    def build_role(participation)
+      if participation.roles.none? { |r| r.class.sti_name == request.role_type }
+        role = participation.roles.build(type: role_type.sti_name)
+        role.participation = participation
+      end
     end
 
   end

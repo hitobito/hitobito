@@ -36,6 +36,7 @@ class Event::ParticipationsController < CrudController
 
   before_action :check_preconditions, only: [:new]
 
+  before_render_new :init_answers
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_precondition_warnings
@@ -46,12 +47,6 @@ class Event::ParticipationsController < CrudController
   # apply for an event themselves. A participation for somebody
   # else is created through event roles.
   # (Except for course participants, who may be created by special other roles)
-  def new
-    assign_attributes if model_params
-    entry.init_answers
-    respond_with(entry)
-  end
-
   def create
     assign_attributes
     with_person_add_request do
@@ -131,55 +126,53 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  # new and create are only invoked by people who wish to
-  # apply for an event themselves. A participation for somebody
-  # else is created through event roles.
-  # (Except for course participants, who may be created by special other roles)
   def build_entry
-    participation = event.participations.new
-    participation.person = current_user unless params[:for_someone_else]
-    build_application(participation) if event.supports_applications
-    build_participant_role(participation)
+    participation = event.participations.new(person_id: person_id)
+    role = participation.roles.build(type: role_type)
+    role.participation = participation
+
     participation
   end
 
-  def build_application(participation)
-    appl = participation.build_application
-    appl.priority_1 = event
+  def person_id
+    return current_user.id unless event.supports_applications
+
     if model_params && model_params.key?(:person_id)
-      model_params.delete(:person)
-      participation.person_id = model_params.delete(:person_id)
       params[:for_someone_else] = true
+      model_params.delete(:person)
+      model_params.delete(:person_id)
+    elsif params[:for_someone_else].blank?
+      current_user.id
     end
   end
 
-  def build_participant_role(participation)
-    participation.active = !event.supports_applications ||
-                           (can?(:create, event) && params[:for_someone_else].present?)
+  def role_type
+    role_type = params[:event_role] && params[:event_role][:type].presence
+    role_type ||= event.class.participant_types.first.sti_name
 
-    role = participation.roles.build(type: find_participant_role)
-    role.participation = participation
-    role
-  end
-
-  def find_participant_role
-    attrs = params[:event_role]
-    type_name = (attrs && attrs[:type].presence) || event.class.participant_types.first.sti_name
-    type = event.class.find_role_type!(type_name)
+    type = event.class.find_role_type!(role_type)
     unless type.participant?
-      fail ActiveRecord::RecordNotFound, "No participant role '#{type_name}' found"
+      fail ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
-    type_name
+    role_type
+  end
+
+  def set_active
+    entry.active = !entry.applying_participant? || params[:for_someone_else].present?
   end
 
   def assign_attributes
     super
-    # Set these attrs again as a new application instance might have been
-    # created by the mass assignment.
-    entry.application.priority_1 ||= event if entry.application
+
+    set_active if entry.new_record?
 
     # Required questions are enforced only for users that are not allowed to add others
     entry.enforce_required_answers = true unless can?(:update, entry)
+  end
+
+  def init_answers
+    entry.init_answers
+    entry.init_application
   end
 
   def load_priorities

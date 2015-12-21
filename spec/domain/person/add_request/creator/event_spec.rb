@@ -60,6 +60,7 @@ describe Person::AddRequest::Creator::Event do
 
     it 'is false if person already participates in event' do
       Fabricate(Event::Role::Cook.name, participation: entity.participation)
+      entity.participation.reload
       expect(subject).not_to be_required
     end
 

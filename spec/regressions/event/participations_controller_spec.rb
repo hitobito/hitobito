@@ -25,8 +25,7 @@ describe Event::ParticipationsController, type: :controller do
         { answer: 'Halbtax', question_id: event_questions(:top_ov).id },
         { answer: 'nein',    question_id: event_questions(:top_vegi).id },
         { answer: 'Ne du',   question_id: event_questions(:top_more).id }
-      ],
-      application_attributes: { priority_2_id: nil }
+      ]
     }
   end
 

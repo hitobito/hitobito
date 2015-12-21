@@ -156,7 +156,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: 'Anfragen: E-Mail Freigabe Personendaten durch Person',
    subject: 'Freigabe deiner Personendaten',
    body: "Hallo {recipient-name}<br/><br/>" \
-         "{requester-name} möchte dich zu folgender Gruppe/Anlass/Abo hinzufügen: <br/><br/>" \
+         "{requester-name} möchte dich hier hinzufügen: <br/><br/>" \
          "{request-body-label}<br/><br/>" \
          "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
          "{requester-group-roles}<br/><br/>" \
@@ -180,10 +180,10 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: 'Anfragen: E-Mail Freigabe Personendaten durch Verantwortliche',
    subject: 'Freigabe Personendaten',
    body: "Hallo {recipient-names}<br/><br/>" \
-         "{requester-name} möchte {person-name} zu folgender Gruppe/Event/Aboliste hinzufügen: <br/><br/>" \
+         "{requester-name} möchte {person-name} hier hinzufügen: <br/><br/>" \
          "{request-body-label}<br/><br/>" \
-         "{requester-name} hat folgende Rollen: <br/><br/>" \
-         "{requester-group-roles}cbr/><br/>" \
+         "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{requester-group-roles}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
          "{add-requests-url}" },
 

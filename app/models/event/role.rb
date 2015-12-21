@@ -144,7 +144,7 @@ class Event::Role < ActiveRecord::Base
   end
 
   def applying_participant?
-    self.class.participant? && participation.application_id?
+    self.class.participant? && participation.event.supports_applications?
   end
 
   def update_participant_count

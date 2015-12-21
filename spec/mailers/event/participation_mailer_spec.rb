@@ -63,7 +63,7 @@ describe Event::ParticipationMailer do
     it 'renders questions if present' do
       question = event_questions(:top_ov)
       event.questions << event_questions(:top_ov)
-      participation.answers.create!(question_id: question.id, answer: 'GA')
+      participation.answers.detect { |a| a.question_id == question.id }.update!(answer: 'GA')
 
       is_expected.to match(%r{Fragen:.*GA})
     end

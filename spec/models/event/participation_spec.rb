@@ -63,12 +63,14 @@ describe Event::Participation do
       subject.person = p
       subject.save!
 
+      expect(subject.answers.size).to eq(2)
+
       q = course.questions
       subject.attributes = {
             additional_information: 'bla',
             application_attributes: { priority_2_id: 42 },
-            answers_attributes: [{ question_id: q[0].id, answer: 'ja' },
-                                 { question_id: q[1].id, answer: 'nein' }] }
+            answers_attributes: [{ question_id: q[0].id, answer: 'ja', id: subject.answers.first.id },
+                                 { question_id: q[1].id, answer: 'nein', id: subject.answers.last.id }] }
 
       expect(subject.person_id).to eq(p.id)
       expect(subject.additional_information).to eq('bla')

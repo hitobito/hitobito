@@ -29,9 +29,9 @@ class Person::AddRequestMailer < ApplicationMailer
     envelope = mail_envelope(to, request.requester, content)
     recipient_names = responsibles.collect(&:greeting_name).join(', ')
     values = responsible_mail_values(recipient_names,
-                                            request,
-                                            person,
-                                            group.id)
+                                     request,
+                                     person,
+                                     group.id)
 
     compose(content, envelope, values)
   end
@@ -45,6 +45,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   private
+
   def compose(content, envelope, values)
     mail(envelope) do |format|
       format.html { render text: content.body_with_values(values) }

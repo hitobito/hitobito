@@ -51,6 +51,7 @@ class Event::Participation < ActiveRecord::Base
 
   ### CALLBACKS
 
+  before_validation :init, on: :create
   before_validation :set_self_in_nested
 
   # There may be old participations without roles, so they must
@@ -93,13 +94,26 @@ class Event::Participation < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def init_answers
-    if answers.blank?
-      event.questions.each do |q|
-        a = q.answers.new
-        a.question = q # without this, only the id is set
-        answers << a
-      end
+    return if answers.present?
+
+    event.questions.each do |q|
+      a = q.answers.new
+      a.question = q # without this, only the id is set
+      answers << a
     end
+  end
+
+  def init_application
+    return unless applying_participant?
+
+    (application || build_application).tap do |appl|
+      appl.priority_1 = event
+    end
+  end
+
+  def applying_participant?
+    role = roles.first
+    event.supports_applications && (application_id || role && role.class.participant?)
   end
 
   private
@@ -108,6 +122,13 @@ class Event::Participation < ActiveRecord::Base
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     answers.each { |e| e.participation = self unless e.frozen? }
   end
+
+  def init
+    init_answers
+    init_application
+    true
+  end
+
 
   def update_participant_count
     event.refresh_participant_counts!

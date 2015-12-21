@@ -65,10 +65,10 @@ describe Person::AddRequestMailer do
     its(:sender)   { should =~ /#{requester.email.gsub('@','=')}/ }
     its(:subject)  { should == "Freigabe Personendaten" }
     its(:body)     { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
-    its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name} zu folgender/ }
+    its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name}/ }
     its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
-    its(:body)     { should =~ /#{requester.full_name} hat folgende Rollen:/ }
+    its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}\/person_add_requests/ }
 

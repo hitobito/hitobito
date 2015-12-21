@@ -17,9 +17,7 @@ module Subscriber
       assign_attributes
       with_person_add_request do
         created = with_callbacks(:create, :save) { save_entry }
-        respond_with(entry,
-                     success: created,
-                     location: index_path)
+        respond_with(entry, success: created, location: index_path)
       end
     end
 
@@ -43,7 +41,8 @@ module Subscriber
     def find_excluded_subscription
       if subscriber_id
         mailing_list.subscriptions.where(subscriber_id: subscriber_id,
-                                         subscriber_type: Person.sti_name, excluded: true).first
+                                         subscriber_type: Person.sti_name,
+                                         excluded: true).first
       end
     end
 

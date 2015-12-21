@@ -29,9 +29,10 @@ describe Event::ParticipationsController do
     p = Fabricate(:event_participation,
                   event: course,
                   application: Fabricate(:event_application,
+                                         priority_1: course,
                                          priority_2: Fabricate(:course, kind: course.kind)))
-    p.answers.create!(question_id: course.questions[0].id, answer: 'juhu')
-    p.answers.create!(question_id: course.questions[1].id, answer: 'blabla')
+    p.answers.detect { |a| a.question_id == course.questions[0].id }.update!(answer: 'juhu')
+    p.answers.detect { |a| a.question_id == course.questions[1].id }.update!(answer: 'blabla')
     p
   end
 
@@ -391,7 +392,8 @@ describe Event::ParticipationsController do
         post :create, group_id: group.id, event_id: course.id,
                       event_participation: { person_id: bottom_member.id }
         expect(participation).to be_present
-        expect(participation.persisted?).to be_truthy
+        expect(participation).to be_valid
+        expect(participation).to be_persisted
         expect(participation).to be_active
         expect(participation.roles.pluck(:type)).to eq([Event::Course::Role::Participant.sti_name])
         is_expected.to redirect_to group_event_participation_path(group, course, participation)
@@ -526,19 +528,18 @@ describe Event::ParticipationsController do
 
     context 'PUT #update' do
       let!(:participation) { Fabricate(:event_participation, event: event, person: user) }
-      let(:answer) { participation.answers.build }
+      let(:answer) { participation.answers.where(question_id: question.id).first }
       let(:answers_attributes) do
         { '0' => { 'question_id' => question.id, 'answer' => ['0'], id: answer.id } }
       end
 
       before do
         answer.answer = 'GA, Halbtax'
-        answer.question = question
-        answer.save
+        answer.save!
       end
 
       it 'handles resetting of multiple choice answers' do
-        expect(participation.answers.first.answer).to eq 'GA, Halbtax'
+        expect(participation.reload.answers.first.answer).to eq 'GA, Halbtax'
         put :update, group_id: event.groups.first.id,
                      event_id: event.id, id: participation.id,
                      event_participation: { answers_attributes: answers_attributes }

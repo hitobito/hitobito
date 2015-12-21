@@ -44,6 +44,7 @@ describe Export::Csv::People::ParticipationsAddress do
         before do
           Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
           Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
+          participation.reload
         end
         its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
       end

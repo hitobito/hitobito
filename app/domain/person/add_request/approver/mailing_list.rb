@@ -11,7 +11,9 @@ module Person::AddRequest::Approver
     private
 
     def build_entity
-      request.body.subscriptions.build(subscriber: request.person)
+      request.body.subscriptions.where(subscriber: request.person).first_or_initialize.tap do |s|
+        s.excluded = false
+      end
     end
 
   end

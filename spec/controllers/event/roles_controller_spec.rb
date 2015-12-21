@@ -25,11 +25,11 @@ describe Event::RolesController do
   context 'GET new' do
     before { get :new, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } }
 
-    it 'builds participation with answers' do
+    it 'builds participation without answers' do
       role = assigns(:role)
       participation = role.participation
       expect(participation.event_id).to eq(course.id)
-      expect(participation.answers.size).to eq(2)
+      expect(participation.answers.size).to eq(0)
     end
 
   end
@@ -102,7 +102,7 @@ describe Event::RolesController do
         expect(role).to be_persisted
         expect(role).to be_kind_of(Event::Role::Leader)
         expect(role.participation).to eq(participation)
-        expect(participation.answers.size).to eq(0) # o items as we didn't create any in the before block
+        expect(participation.answers.size).to eq(2)
         is_expected.to redirect_to(group_event_participations_path(group, course))
       end
 

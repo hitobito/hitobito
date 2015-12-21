@@ -94,6 +94,26 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application).to be_present
         expect(p.application.priority_1).to eq event
       end
+
+      it 'does nothing if role already exists' do
+        p = Fabricate(:event_participation,
+                      event: event,
+                      person: person,
+                      active: false,
+                      application: Fabricate(:event_application, priority_1: event))
+        Fabricate(role_type.name, participation: p)
+
+        expect do
+          expect(subject.approve).to eq(true)
+        end.not_to change { Event::Participation.count }
+
+        p = person.event_participations.first
+        expect(p).not_to be_active
+        expect(p.roles.count).to eq(1)
+        expect(p.roles.first).to be_a(role_type)
+        expect(p.answers.count).to eq(2)
+        expect(p.application).to be_present
+      end
     end
 
     context 'leader' do

@@ -68,12 +68,14 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def person_mail_values(person, request)
+    body_type = request.body.class
+    body_id = request.body.id
     {
       'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
       'requester-group-roles' => requester_group_roles(request),
       'request-body-label' => link_to(request.body_label, body_url(request.body)),
-      'show-person-url' => person_url(person)
+      'show-person-url' => person_url(person, body_type: body_type, body_id: body_id)
     }
   end
 

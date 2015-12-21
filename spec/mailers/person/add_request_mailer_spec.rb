@@ -41,7 +41,7 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
-    its(:body)     { should =~ /test.host\/people\/572407902/ }
+    its(:body)     { should =~ /test.host\/people\/572407902\?body_id=#{group.id}&body_type=Group%3A%3ABottomLayer/ }
 
     it 'lists requester group roles with write permissions only' do
       Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)

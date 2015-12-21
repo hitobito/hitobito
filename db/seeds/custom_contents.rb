@@ -100,7 +100,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
          "{participant-name} hat sich für den folgenden Kurs angemeldet:<br/><br/>" \
          "{event-details}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anmeldung unter der folgenden Adresse:<br/><br/>" \
-         "{application-url}" },
+        "{application-url}" },
 
   {custom_content_id: participation_approval_id,
    locale: 'fr',
@@ -153,7 +153,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'de',
-   label: 'Anfragen: E-Mail manuelle Freigabe Person',
+   label: 'Anfragen: E-Mail Freigabe Personendaten durch Person',
    subject: 'Freigabe deiner Personendaten',
    body: "Hallo {recipient-name}<br/><br/>" \
          "{requester-name} möchte dich zu folgender Gruppe/Anlass/Abo hinzufügen: <br/><br/>" \

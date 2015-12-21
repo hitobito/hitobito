@@ -14,8 +14,10 @@ class Person::AddRequestMailer < ApplicationMailer
     person = request.person
     content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
 
-    envelope = add_request_envelope(person.email, request.requester, content)
-    values = ask_person_to_add_values(person, request)
+    to = Person.mailing_emails_for(person)
+    envelope = mail_envelope(to, request.requester, content)
+    values = person_mail_values(person, request)
+
     compose(content, envelope, values)
   end
 
@@ -24,11 +26,9 @@ class Person::AddRequestMailer < ApplicationMailer
     content = CustomContent.get(CONTENT_ADD_REQUEST_RESPONSIBLES)
 
     to = Person.mailing_emails_for(responsibles)
-
-    envelope = add_request_envelope(to, request.requester, content)
-
+    envelope = mail_envelope(to, request.requester, content)
     recipient_names = responsibles.collect(&:greeting_name).join(', ')
-    values = ask_responsibles_to_add_values(recipient_names,
+    values = responsible_mail_values(recipient_names,
                                             request,
                                             person,
                                             group.id)
@@ -59,7 +59,7 @@ class Person::AddRequestMailer < ApplicationMailer
     roles.collect { |r| r.to_s(:long) }.join(', ')
   end
 
-  def add_request_envelope(to, requester, content)
+  def mail_envelope(to, requester, content)
     { to: to,
       subject: content.subject,
       return_path: return_path(requester),
@@ -67,7 +67,7 @@ class Person::AddRequestMailer < ApplicationMailer
       reply_to: requester.email }
   end
 
-  def ask_person_to_add_values(person, request)
+  def person_mail_values(person, request)
     {
       'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
@@ -78,7 +78,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
 
-  def ask_responsibles_to_add_values(recipient_names, request, person, group_id)
+  def responsible_mail_values(recipient_names, request, person, group_id)
     {
       'person-name' => person.full_name,
       'recipient-names' => recipient_names,

@@ -20,7 +20,10 @@ class SubscriptionsController < CrudController
 
   def index
     respond_to do |format|
-      format.html  { load_grouped_subscriptions }
+      format.html do
+        @person_add_requests = fetch_person_add_requests
+        load_grouped_subscriptions
+      end
       format.pdf   { render_pdf(ordered_people) }
       format.csv   { render_csv(ordered_people) }
       format.email { render_emails(ordered_people) }
@@ -74,6 +77,12 @@ class SubscriptionsController < CrudController
       authorize!(:index_subscriptions, mailing_list)
     else
       authorize!(:export_subscriptions, mailing_list)
+    end
+  end
+
+  def fetch_person_add_requests
+    if can?(:create, mailing_list.subscriptions.new)
+      @mailing_list.person_add_requests.list.includes(person: :primary_group)
     end
   end
 

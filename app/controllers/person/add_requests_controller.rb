@@ -17,7 +17,7 @@ class Person::AddRequestsController < ApplicationController
   # list add requests for the given layer
   def index
     @add_requests = load_entries
-    set_status_notification
+    set_status_notification if flash[:notice].blank? && flash[:alert].blank?
   end
 
   def activate
@@ -65,7 +65,6 @@ class Person::AddRequestsController < ApplicationController
   end
 
   def set_status_notification
-    return if flash[:notice].present? || flash[:alert].present?
     status = request_status
     return if status.nil? || !person_in_layer?(status)
 

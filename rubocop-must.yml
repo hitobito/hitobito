@@ -1,13 +1,14 @@
 # Rubocop configuration that MUST hold for every build.
 
 AllCops:
-  DisplayCopNames: trueq
+  DisplayCopNames: true
   Exclude:
     - db/**/*
     - config/**/*
     - bin/**/*
     - spec/**/*
     - vendor/**/*
+    - tmp/**/*
 
 
 Metrics/CyclomaticComplexity:

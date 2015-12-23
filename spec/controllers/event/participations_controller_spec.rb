@@ -59,6 +59,7 @@ describe Event::ParticipationsController do
     it 'lists participant and leader group by default' do
       get :index, group_id: group.id, event_id: course.id
       expect(assigns(:participations)).to eq [@participant, @leader]
+      expect(assigns(:person_add_requests)).to eq([])
     end
 
     it 'lists particpant and leader group by default order by role if specific in settings' do
@@ -101,6 +102,18 @@ describe Event::ParticipationsController do
       get :index, group_id: group, event_id: course.id, format: :email
       expect(@response.body).
         to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+    end
+
+    it 'loads pending person add requests' do
+      r1 = Person::AddRequest::Event.create!(
+              person: Fabricate(:person),
+              requester: Fabricate(:person),
+              body: course,
+              role_type: course.class.role_types.first.sti_name)
+
+      get :index, group_id: group.id, event_id: course.id
+      expect(assigns(:participations)).to eq [@participant, @leader]
+      expect(assigns(:person_add_requests)).to eq([r1])
     end
 
 

@@ -57,7 +57,10 @@ class Event::ParticipationsController < CrudController
 
   def index
     respond_to do |format|
-      format.html  { entries }
+      format.html do
+        @person_add_requests = fetch_person_add_requests
+        entries
+      end
       format.pdf   { render_pdf(entries.collect(&:person)) }
       format.csv   { send_data(exporter.export(entries), type: :csv) }
       format.email { render_emails(entries.collect(&:person)) }
@@ -242,6 +245,12 @@ class Event::ParticipationsController < CrudController
   # model_params may be empty
   def permitted_params
     model_params.present? ? model_params.permit(permitted_attrs) : {}
+  end
+
+  def fetch_person_add_requests
+    if can?(:create, event.participations.new)
+      @event.person_add_requests.list.includes(person: :primary_group)
+    end
   end
 
   def self.model_class

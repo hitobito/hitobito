@@ -124,9 +124,9 @@ describe Person::AddRequestsController do
 
   end
 
-  context 'DELETE reject' do
+  context 'POST approve' do
 
-    let(:request) do
+    let!(:request) do
       Person::AddRequest::Group.create!(
         person: people(:top_leader),
         requester: people(:bottom_member),
@@ -134,7 +134,25 @@ describe Person::AddRequestsController do
         role_type: group.class.role_types.first.sti_name)
     end
 
-    before { request } # create
+    it 'removes the given request' do
+      expect { post :approve, id: request.id }.
+        to change { Person::AddRequest::Group.count }.by(-1)
+      expect(flash[:notice]).to match(/freigegeben/)
+      is_expected.to redirect_to(person_path(request.person))
+      expect(people(:top_leader).reload.roles.any? { |r| r.type == request.role_type }).to be_truthy
+    end
+
+  end
+
+  context 'DELETE reject' do
+
+    let!(:request) do
+      Person::AddRequest::Group.create!(
+        person: people(:top_leader),
+        requester: people(:bottom_member),
+        body: group,
+        role_type: group.class.role_types.first.sti_name)
+    end
 
     it 'removes the given request' do
       expect { delete :reject, id: request.id }.

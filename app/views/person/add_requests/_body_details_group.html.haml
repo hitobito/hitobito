@@ -1,1 +1,3 @@
 = link_to_if(can?(:show, request.body), request.body_label, group_path(request.body_id))
+%br/
+= muted request.body.class.find_role_type!(request.role_type).model_name.human

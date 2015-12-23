@@ -252,13 +252,13 @@ GEM
     middleware (0.1.0)
     mime-types (2.6.2)
     mini_magick (4.3.6)
-    mini_portile (0.6.2)
+    mini_portile2 (2.0.0)
     minitest (5.8.2)
     multi_json (1.11.2)
     mysql2 (0.3.15)
     nested_form (0.3.2)
-    nokogiri (1.6.6.3)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.6.7.1)
+      mini_portile2 (~> 2.0.0.rc2)
     nuggets (1.4.0)
     oat (0.4.6)
       activesupport
@@ -594,3 +594,6 @@ DEPENDENCIES
   validates_timeliness
   wagons
   wirble
+
+BUNDLED WITH
+   1.10.6

@@ -58,8 +58,8 @@ class Event::ParticipationsController < CrudController
   def index
     respond_to do |format|
       format.html do
-        @person_add_requests = fetch_person_add_requests
         entries
+        @person_add_requests = fetch_person_add_requests
       end
       format.pdf   { render_pdf(entries.collect(&:person)) }
       format.csv   { send_data(exporter.export(entries), type: :csv) }
@@ -248,7 +248,9 @@ class Event::ParticipationsController < CrudController
   end
 
   def fetch_person_add_requests
-    if can?(:create, event.participations.new)
+    p = event.participations.new
+    role = p.roles.new(participation: p)
+    if can?(:create, role)
       @event.person_add_requests.list.includes(person: :primary_group)
     end
   end

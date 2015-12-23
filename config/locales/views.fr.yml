@@ -3,6 +3,7 @@ fr:
     'yes': "oui"
     'no': "non"
     unknown: Inconnu
+    nobody: personne
     from: de
     until: à
     no_list_entries: Aucun résultat.
@@ -316,6 +317,8 @@ fr:
       additional_information: 'Données pour l''inscription'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
+    form_tabs:
+      general: Général
     global:
       link:
         add_event: Créer un événement
@@ -476,7 +479,7 @@ fr:
     subscribers_may_post: 'les abonnés peuvent éditer la liste de diffusion'
     subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
     anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
-    anyone_may_not_post: 'Tous les expéditeurs ne peuvent <strong>pas</strong> écrire à la liste de diffusion.'
+    anyone_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
   navigation:
@@ -572,6 +575,7 @@ fr:
     full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
     role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
     role_changed_to_group: '%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>.'
+    role_primary_group_changed: 'Groupe principal modifié sur <i>%{new_group}</i>.'
     form:
       add_person: Ajouter une personne
       add_role_for_person: Créer un rôle pour %{person}
@@ -597,7 +601,7 @@ fr:
         please_choose_group: S'il te plaît, choisis un groupe.
     exclude_person:
       form:
-        exclude_subscriber: 'Exclure un abonnement'
+        exclude_subscriber: 'Exclure les abonné-e-s'
   subscriber/base:
     blank: '%{model_label} doit être sélectionné'
     taken: '%{model_label} a déjà été ajouté'
@@ -606,7 +610,7 @@ fr:
     failure: 'Tu n''as pas pu être ajouté(e) à l''abonnement: %{errors}'
     unsubscribed: 'Tu as été retiré(e) de l''abonnement avec succès.'
   subscriber/exclude_person:
-    success: 'L''abonné %{subscriber} a été retiré avec succès.'
+    success: '%{subscriber} a été exclu avec succès'
     failure: '%{subscriber} n''est pas un abonné'
   sheet/csv_import:
     title: 'Importer les personnes par CSV'

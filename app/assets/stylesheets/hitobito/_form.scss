@@ -9,6 +9,7 @@
   margin-top: 0;
   margin-bottom: $vSpace;
 }
+
 .btn {
   color: $blueDark;
 
@@ -77,9 +78,11 @@ a.btn[disabled="disabled"] {
   .form-horizontal .btn-toolbar {
     margin-left: 180px;
   }
-  .form-horizontal.form-noindent .btn-toolbar {
+  .form-horizontal.form-noindent .btn-toolbar,
+  .form-horizontal.tabbed .btn-toolbar.top {
     margin-left: 0;
   }
+
 }
 
 fieldset {

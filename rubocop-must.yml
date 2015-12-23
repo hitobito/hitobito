@@ -1,6 +1,7 @@
 # Rubocop configuration that MUST hold for every build.
 
 AllCops:
+  DisplayCopNames: trueq
   Exclude:
     - db/**/*
     - config/**/*
@@ -164,7 +165,13 @@ Lint/DefEndAlignment:
 Lint/UnusedBlockArgument:
   Enabled: false
 
+Lint/UnusedMethodArgument:
+  Enabled: false
+
 Lint/UnneededDisable:
+  Enabled: false
+
+Lint/UselessAccessModifier:
   Enabled: false
 
 Loop:
@@ -278,10 +285,13 @@ Style/LeadingCommentSpace:
 Style/MethodCallParentheses:
   Enabled: false
 
-Style/ParallelAssignment:
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/Next:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false
 
 Style/SingleLineBlockParams:

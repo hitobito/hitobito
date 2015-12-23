@@ -4,7 +4,10 @@ Das JSON Format folgt den Konventionen von [json:api](http://jsonapi.org).
 
 ### Authentisierung
 
-Die folgenden Methoden dienen zur Authentisierung und Verwaltung des Authentisierungstokens. Als Parameter müssen immer `person[email]` und `person[password]` übergeben werden. In der Antwort ist der Wert des `authentication_token` enthalten, welches für die folgenden Requests jeweils mitgegeben werden muss.
+Die folgenden Methoden dienen zur Authentisierung und Verwaltung des Authentisierungstokens. 
+Als Parameter müssen immer `person[email]` und `person[password]` übergeben werden. In der Antwort 
+ist der Wert des `authentication_token` enthalten, welches für die folgenden Requests jeweils 
+mitgegeben werden muss.
 
 | Methode | Pfad                | Funktion |
 | --- | --- | --- |
@@ -12,10 +15,13 @@ Die folgenden Methoden dienen zur Authentisierung und Verwaltung des Authentisie
 | POST    | /users/token.json   | Token neu generieren |
 | DELETE  | /users/token.json   | Token löschen |
 
-Sobald das Authentisierungstoken bekannt ist, können verschiedene Endpunkte abgefragt werden. Dazu bestehen zwei Möglichkeiten:
+Sobald das Authentisierungstoken bekannt ist, können verschiedene Endpunkte abgefragt werden. 
+Dazu bestehen zwei Möglichkeiten:
 
-* **Parameter**: `user_email` und `user_token` werden als Pfadparameter angegeben, der Pfad muss mit `.json` enden (Bsp: `/groups/1.json?user_email=zumkehr@puzzle.ch&user_token=abcdef`).
-* **Headers**: `X-User-Email`, `X-User-Token` und `Accept` (=`application/json`) Header entsprechend setzen.
+* **Parameter**: `user_email` und `user_token` werden als Pfadparameter angegeben, der Pfad muss 
+mit `.json` enden (Bsp: `/groups/1.json?user_email=zumkehr@puzzle.ch&user_token=abcdef`).
+* **Headers**: `X-User-Email`, `X-User-Token` und `Accept` (=`application/json`) Header 
+entsprechend setzen.
 
 ### Endpunkte
 

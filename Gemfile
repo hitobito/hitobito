@@ -7,13 +7,13 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 
 gem 'activerecord-session_store'
 gem 'airbrake'
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
-gem 'cancancan'
+gem 'cancancan', '< 1.13.0' # requires ruby 2.0
 gem 'carrierwave'
 gem 'cmess'
 gem 'country_select'
@@ -60,6 +60,8 @@ gem 'compass'
 gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jquery-turbolinks'
+gem 'turbolinks'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
 gem 'uglifier'

@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require_relative Rails.root.join('app', 'models', 'countries')
+
 module Contactable
 
   extend ActiveSupport::Concern
@@ -22,17 +24,24 @@ module Contactable
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
+    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
+
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
                                   allow_destroy: true
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
     before_validation :set_self_in_nested
+
+    validates :country, inclusion: Countries.codes, allow_blank: true
+    validate :assert_is_valid_swiss_post_code
   end
 
   def country_label
-    value = country
-    country = ISO3166::Country[value]
-    country ? country.translations[I18n.locale.to_s] || country.name : value
+    Countries.label(country)
+  end
+
+  def country=(value)
+    super(Countries.normalize(value))
+    value
   end
 
   def ignored_country?
@@ -40,11 +49,11 @@ module Contactable
   end
 
   def swiss?
-    ['', *Settings.address.switzerland_variations].include?(country.to_s.strip.downcase)
+    Countries.swiss?(country)
   end
 
   def canton
-    location && location.canton
+    (swiss? && location && location.canton) || nil
   end
 
   private
@@ -56,6 +65,12 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
+    end
+  end
+
+  def assert_is_valid_swiss_post_code
+    if zip_code.present? && swiss? && !zip_code.to_s.match(/^\d{4}$/)
+      errors.add(:zip_code)
     end
   end
 

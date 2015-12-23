@@ -17,15 +17,21 @@ module Sheet
         alt: [:group_roles_path, :new_group_csv_imports_path],
         params: { returning: true }
 
-    ::Event.all_types.each do |type|
-      tab "activerecord.models.#{type.model_name.i18n_key}.other",
-          "#{type.type_name}_group_events_path",
-          params: { returning: true },
-          if: lambda { |view, group|
-            group.event_types.include?(type) &&
-            view.can?(:"index_#{type.name.underscore.pluralize}", group)
-          }
-    end
+    tab 'activerecord.models.event.other',
+        :simple_group_events_path,
+        params: { returning: true },
+        if: lambda { |view, group|
+          group.event_types.include?(::Event) &&
+          view.can?(:index_events, group)
+        }
+
+    tab 'activerecord.models.event/course.other',
+        :course_group_events_path,
+        params: { returning: true },
+        if: lambda { |view, group|
+          group.event_types.include?(::Event::Course) &&
+            view.can?(:'index_event/courses', group)
+        }
 
     tab 'activerecord.models.mailing_list.other',
         :group_mailing_lists_path,

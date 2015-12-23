@@ -4,17 +4,15 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_roles
 #
 #  id               :integer          not null, primary key
-#  type             :string(255)      not null
+#  type             :string           not null
 #  participation_id :integer          not null
-#  label            :string(255)
+#  label            :string
 #
-
 
 Fabricator(:event_role, class_name: 'Event::Role') do
   participation { Fabricate(:event_participation) }

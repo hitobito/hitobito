@@ -30,7 +30,9 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
     end
 
-    rescue_from ActionController::UnknownFormat, with: :not_found
+    rescue_from ActionController::UnknownFormat,
+                ActionView::MissingTemplate,
+                with: :not_found
   end
 
   def person_home_path(person, options = {})

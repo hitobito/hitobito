@@ -46,7 +46,7 @@ module FormHelper
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << save_form_buttons(form, submit_label, cancel_url) if buttons_top
+      content << save_form_buttons(form, submit_label, cancel_url, 'top') if buttons_top
 
       content << if block_given?
                    capture(form, &block)
@@ -54,15 +54,15 @@ module FormHelper
                    form.labeled_input_fields(*attrs)
                  end
 
-      content << save_form_buttons(form, submit_label, cancel_url) if buttons_bottom
+      content << save_form_buttons(form, submit_label, cancel_url, 'bottom') if buttons_bottom
 
       content.html_safe
     end
   end
 
-  def save_form_buttons(form, submit_label, cancel_url)
+  def save_form_buttons(form, submit_label, cancel_url, toolbar_class = nil)
     submit_label ||= ti(:"button.save")
-    content_tag(:div, class: 'btn-toolbar') do
+    content_tag(:div, class: "btn-toolbar #{toolbar_class}") do
       submit_button(form, submit_label) +
       cancel_link(cancel_url)
     end

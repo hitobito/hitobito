@@ -26,7 +26,7 @@ describe Subscriber::ExcludePersonController do
           post :create, group_id: group.id, mailing_list_id: list.id,
                         subscription: { subscriber_id: person.id }
         end.to change(Subscription, :count).by(-1)
-        expect(flash[:notice]).to eq "Abonnent #{person} wurde erfolgreich ausgeschlossen"
+        expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
 
       it 'creates exclusion' do
@@ -37,7 +37,7 @@ describe Subscriber::ExcludePersonController do
           post :create, group_id: group.id, mailing_list_id: list.id,
                         subscription: { subscriber_id: person.id }
         end.to change(Subscription, :count).by(1)
-        expect(flash[:notice]).to eq "Abonnent #{person} wurde erfolgreich ausgeschlossen"
+        expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
 
       after do
@@ -61,7 +61,7 @@ describe Subscriber::ExcludePersonController do
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)
-      expect(assigns(:subscription).errors[:base]).to eq ["#{other} ist kein Abonnent"]
+      expect(assigns(:subscription).errors[:base]).to eq ["#{other} ist nicht Abonnent/-in"]
     end
 
     it 'duplicated subscription replaces error' do
@@ -74,7 +74,7 @@ describe Subscriber::ExcludePersonController do
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)
-      expect(assigns(:subscription).errors[:base]).to eq ["#{person} ist kein Abonnent"]
+      expect(assigns(:subscription).errors[:base]).to eq ["#{person} ist nicht Abonnent/-in"]
     end
   end
 end

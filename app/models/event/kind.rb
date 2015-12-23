@@ -8,13 +8,11 @@
 #
 # Table name: event_kinds
 #
-#  id                     :integer          not null, primary key
-#  created_at             :datetime
-#  updated_at             :datetime
-#  deleted_at             :datetime
-#  minimum_age            :integer
-#  general_information    :text
-#  application_conditions :text
+#  id          :integer          not null, primary key
+#  created_at  :datetime
+#  updated_at  :datetime
+#  deleted_at  :datetime
+#  minimum_age :integer
 #
 
 class Event::Kind < ActiveRecord::Base
@@ -70,7 +68,7 @@ class Event::Kind < ActiveRecord::Base
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if events.exists?
-      touch_paranoia_column
+      delete
     else
       really_destroy!
     end

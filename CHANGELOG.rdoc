@@ -1,5 +1,12 @@
 = Hitobito Changelog
 
+== Version 1.10
+
+* Schnelleres Laden der Seiten dank Turbolinks und Kompression.
+* Tooltips bei langen Gruppennamen.
+* Letzte bearbeitende Person von Anlässen wird gespeichert.
+* Anlass Formular in mehrere Tabs aufgeteilt.
+
 == Version 1.9
 
 * Land ist neu ein Auswahlfeld.

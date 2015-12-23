@@ -49,7 +49,7 @@ class QualificationKind < ActiveRecord::Base
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if qualifications.exists?
-      touch_paranoia_column
+      delete
     else
       really_destroy!
     end

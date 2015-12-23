@@ -38,13 +38,6 @@ module Hitobito
                                  #{config.root}/app/utils
                              )
 
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
-    # Activate observers that should always be running.
-    # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -79,6 +72,11 @@ module Hitobito
 
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.active_job.queue_adapter = :delayed_job
+
+    config.middleware.insert_before Rack::ETag, Rack::Deflater
+
+
     config.log_tags = [:uuid]
 
     config.cache_store = :dalli_store, { compress: true,
@@ -102,7 +100,7 @@ module Hitobito
 
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
-        MailRelayJob.new.schedule if Settings.email.retriever.config.address
+        MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule
       end
     end

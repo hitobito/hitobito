@@ -5,7 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-Mail.defaults do
-  retriever_method(Settings.email.retriever.type.to_sym,
-                   Settings.email.retriever.config.to_hash)
+if Settings.email.retriever.config.present?
+  Mail.defaults do
+    retriever_method(Settings.email.retriever.type.to_sym,
+                     Settings.email.retriever.config.to_hash)
+  end
 end

@@ -268,7 +268,6 @@ it:
         priorization: Priorità
         requires_approval: Necessita autorizzazione
       event/date:
-        label: Descrizione
         location: Luogo
         start_at: Dal
         finish_at: Al

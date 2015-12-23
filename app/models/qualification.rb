@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: qualifications
@@ -14,7 +13,7 @@
 #  qualification_kind_id :integer          not null
 #  start_at              :date             not null
 #  finish_at             :date
-#  origin                :string(255)
+#  origin                :string
 #
 
 class Qualification < ActiveRecord::Base

@@ -12,7 +12,7 @@
   - if question.choices?
     - question.choice_items.each_with_index do |q, index|
       - if question.multiple_choices?
-        = f.inline_nested_form_custom_checkbox(:answer,q, index)
+        = f.inline_nested_form_custom_checkbox(:answer, q, index)
       - else
         = f.inline_radio_button(:answer, q, q, false)
   - else

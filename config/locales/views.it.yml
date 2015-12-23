@@ -273,7 +273,7 @@ it:
         title_new: "Iscrizione come %{role}"
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: 'iscrivere'
-        explain_required_checkmark: '* = risposta obbligatoria'
+        explain_required_checkmark: '* = Risposta obbligatoria'
       application_fields:
         alternative_dates_info: 'per favore indica altri corsi che potrebbero andarti bene.'
         course_information: 'informazioni sui corsi'
@@ -476,7 +476,7 @@ it:
     subscribers_may_post: 'gli abbonati possono scrivere sulla mailing list'
     subscribers_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
-    anyone_may_not_post: '<strong>Non</strong> tutti i mittenti possono scrivere a questa mailing list.'
+    anyone_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     subscribe: 'collegarsi'
     unsubscribe: 'scollegarsi'
   navigation:
@@ -596,9 +596,6 @@ it:
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
-    exclude_person:
-      form:
-        exclude_subscriber: 'escludere abbonato'
   subscriber/base:
     blank: '%{model_label} deve venir selezionato'
     taken: '%{model_label} è appena stato aggiunto'
@@ -607,7 +604,6 @@ it:
     failure: 'non puoi essere aggiunto all''abbonamento: %{errors}'
     unsubscribed: 'sei stato eliminato con successo dall''abbonamento'
   subscriber/exclude_person:
-    success: 'l''abbonato %{subscriber} è stato escluso con successo'
     failure: '%{subscriber} non è un abbonato'
   sheet/csv_import:
     title: 'importare persone tramite CSV'

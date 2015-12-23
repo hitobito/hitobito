@@ -290,7 +290,7 @@ de:
         requires_approval: Freigabe
 
       event/date:
-        label: Beschreibung
+        label: Bezeichnung
         location: Ort
         start_at: Von
         finish_at: Bis

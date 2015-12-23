@@ -6,9 +6,8 @@
 #  id      :integer          not null, primary key
 #  head_id :integer          not null
 #  tail_id :integer          not null
-#  kind    :string(255)      not null
+#  kind    :string           not null
 #
-
 
 #  Copyright (c) 2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

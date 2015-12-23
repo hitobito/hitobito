@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103115637) do
+ActiveRecord::Schema.define(version: 20151125132550) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 20151103115637) do
     t.boolean  "signature"
     t.boolean  "signature_confirmation"
     t.string   "signature_confirmation_text"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"

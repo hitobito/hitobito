@@ -1,6 +1,7 @@
 - languages = Settings.application.languages.to_hash
 - if languages.size > 1
-  %li.lang
+  -# no turbolinks to switch lang attribute in html tag
+  %li.lang{'data-no-turbolink' => true}
     - languages.each do |lang, label|
       = link_to lang.upcase,
                 url_for(params.merge(locale: lang)),

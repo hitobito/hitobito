@@ -4,15 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_roles
 #
 #  id               :integer          not null, primary key
-#  type             :string(255)      not null
+#  type             :string           not null
 #  participation_id :integer          not null
-#  label            :string(255)
+#  label            :string
 #
 
 class Event::Role < ActiveRecord::Base
@@ -117,7 +116,7 @@ class Event::Role < ActiveRecord::Base
   # A participation with at least one role is active
   def set_participation_active
     participation.update_attribute(:active, true) unless applying_participant?
-    update_participant_count if self.class.participant?
+    update_participant_count
   end
 
   def destroy_participation_for_last
@@ -125,7 +124,7 @@ class Event::Role < ActiveRecord::Base
     return if @_destroying
     @_destroying = true
 
-    update_participant_count if self.class.participant?
+    update_participant_count
     participation.destroy unless participation.roles(true).exists?
   end
 

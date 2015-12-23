@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_kind_qualification_kinds
@@ -12,8 +11,8 @@
 #  id                    :integer          not null, primary key
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
-#  category              :string(255)      not null
-#  role                  :string(255)      not null
+#  category              :string           not null
+#  role                  :string           not null
 #
 
 class Event::KindQualificationKind < ActiveRecord::Base

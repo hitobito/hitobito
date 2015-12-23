@@ -7,27 +7,34 @@
 
 module NavigationHelper
 
-  MAIN = {
-    groups: { url: :groups_path,
-              active_for: %w(groups people) },
-    events: { url: :list_events_path,
-              active_for: %w(list_events),
-              if: ->(_) { can?(:list_available, Event) } },
-    courses: { url: :list_courses_path,
-               active_for: %w(list_courses),
-               if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
-    admin: { url: :label_formats_path,
-             active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
-             if: ->(_) { can?(:index, LabelFormat) } }
-  }
+  MAIN = [
+    { label: :groups,
+      url: :groups_path,
+      active_for: %w(groups people) },
+
+    { label: :events,
+      url: :list_events_path,
+      active_for: %w(list_events),
+      if: ->(_) { can?(:list_available, Event) } },
+
+    { label: :courses,
+      url: :list_courses_path,
+      active_for: %w(list_courses),
+      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
+
+    { label: :admin,
+      url: :label_formats_path,
+      active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
+      if: ->(_) { can?(:index, LabelFormat) } }
+  ]
 
 
   def render_main_nav
-    content_tag_nested(:ul, MAIN, class: 'nav') do |label, options|
+    content_tag_nested(:ul, MAIN, class: 'nav') do |options|
       if !options.key?(:if) || instance_eval(&options[:if])
         url = options[:url]
         url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{label}"), url, options[:active_for])
+        nav(I18n.t("navigation.#{options[:label]}"), url, options[:active_for])
       end
     end
   end

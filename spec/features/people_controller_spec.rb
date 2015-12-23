@@ -39,7 +39,6 @@ describe PeopleController, js: true do
 
       it 'cancel closes popover' do
         obsolete_node_safe do
-          #find('#role_type_select a.chosen-single').click
           click_link 'Abbrechen'
           expect(page).to have_no_css('.popover')
         end
@@ -74,7 +73,6 @@ describe PeopleController, js: true do
           find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
 
           click_button 'Speichern'
-          sleep 0.2
           expect(page).to have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
 
           find('#role_type_select a.chosen-single').click

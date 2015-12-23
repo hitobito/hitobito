@@ -247,17 +247,17 @@ describe Event::ApplicationMarketController do
       click_button('Aktualisieren')
 
       appl1_id = "event_participation_#{appl_prio_1.id}"
-      expect(all("#applications ##{appl1_id} td").last).to have_selector('.icon-minus')
-
-      find("#applications ##{appl1_id}").click_link('Warteliste')
-      expect(all("#applications ##{appl1_id} td").last).to have_selector('.popover')
+      expect(page).to have_selector("#applications ##{appl1_id} td .icon-minus")
 
       appl2_id = "event_participation_#{appl_prio_2.id}"
-      expect(all("#applications ##{appl2_id} td").last).to have_selector('.icon-minus')
+      expect(page).to have_selector("#applications ##{appl2_id} td .icon-minus")
 
       find("#applications ##{appl2_id}").click_link('Warteliste')
-      expect(all("#applications ##{appl2_id} td").last).to have_selector('.popover')
-      expect(all("#applications ##{appl1_id} td").last).to have_no_selector('.popover')
+      expect(page).to have_selector("#applications ##{appl2_id} td .popover")
+
+      find("#applications ##{appl1_id}").click_link('Warteliste')
+      expect(page).to have_selector("#applications ##{appl1_id} td .popover")
+      expect(all("#applications ##{appl2_id} td").last).to have_no_selector('.popover')
     end
 
     it 'may be closed with cancel link' do
@@ -265,10 +265,10 @@ describe Event::ApplicationMarketController do
       visit group_event_application_market_index_path(group.id, event.id)
 
       appl1_id = "event_participation_#{appl_prio_1.id}"
-      expect(all("#applications ##{appl1_id} td").last).to have_selector('.icon-minus')
+      expect(page).to have_selector("#applications ##{appl1_id} td .icon-minus")
 
       find("#applications ##{appl1_id}").click_link('Warteliste')
-      expect(all("#applications ##{appl1_id} td").last).to have_selector('.popover')
+      expect(page).to have_selector("#applications ##{appl1_id} td .popover")
 
       find("#applications ##{appl1_id}").click_link('Abbrechen')
       expect(all("#applications ##{appl1_id} td").last).to have_no_selector('.popover')

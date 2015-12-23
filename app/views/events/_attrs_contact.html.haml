@@ -1,0 +1,4 @@
+- if entry.contact_id?
+  = section Event.human_attribute_name(:contact) do
+    %dl.dl-horizontal
+      = entry.contact.complete_contact

@@ -3,7 +3,7 @@
 
 %define app_name     RPM_NAME
 
-%define app_version  1.9
+%define app_version  1.10
 %define ruby_version 1.9.3
 
 ### optional libs
@@ -247,16 +247,24 @@ exit 0
 # Runs after the package got installed.
 # Configure here any services etc.
 
+# write error output to file
+exec 2> /var/log/rpm-postinstall/%{name}.log
+
 # the following old files would be loaded on startup and must
 # be explicitly deleted to load the stop script
 # rm -f %{appdir}/app/utils/datetime_attribute.rb
 
-su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup -t" || exit 1
+su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake db:migrate db:seed wagon:setup" || exit 1
 
 %if %{use_sphinx}
 su - %{name} -c "cd %{appdir}/; %{bundle_cmd} exec rake ts:configure" || exit 1
 
-ln -s %{appdir}/config/production.sphinx.conf /etc/sphinx/%{name}.conf || :
+sphinx_config=/etc/sphinx/%{name}.conf
+if [ ! -f $sphinx_config ]
+then
+  ln -s %{appdir}/config/production.sphinx.conf $sphinx_config
+fi
+
 /sbin/chkconfig --add searchd || :
 /sbin/service searchd condrestart >/dev/null 2>&1 || :
 %endif

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people_relations
@@ -12,7 +11,7 @@
 #  id      :integer          not null, primary key
 #  head_id :integer          not null
 #  tail_id :integer          not null
-#  kind    :string(255)      not null
+#  kind    :string           not null
 #
 
 # Relates two people together. Every relation has an opposite that is created,

@@ -4,15 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people_filters
 #
 #  id         :integer          not null, primary key
-#  name       :string(255)      not null
+#  name       :string           not null
 #  group_id   :integer
-#  group_type :string(255)
+#  group_type :string
 #
 
 class PeopleFilter < ActiveRecord::Base

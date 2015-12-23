@@ -26,13 +26,19 @@ describe 'Person Autocomplete', js: true do
   end
 
   context 'highlights content in typeahead' do
+    it 'for non-existing queries' do
+      obsolete_node_safe do
+        sign_in
+        visit new_group_role_path(group)
+        fill_in 'Person', with: 'gcxy'
+        expect(page).to have_no_selector('.typeahead.dropdown-menu')
+      end
+    end
+
     it 'for regular queries' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group)
-
-        fill_in 'Person', with: 'gibberish'
-        expect(page).to have_no_selector('.typeahead.dropdown-menu')
 
         fill_in 'Person', with: 'Top'
         expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
@@ -46,7 +52,7 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         fill_in 'Person', with: 'Top Super'
-        #sleep(0.5)
+
         expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
         expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
         expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')
@@ -59,7 +65,7 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         fill_in 'Person', with: 'Top  Super '
-        #sleep(0.5)
+
         expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
         expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
         expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')

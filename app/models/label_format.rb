@@ -4,14 +4,12 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-
 # == Schema Information
 #
 # Table name: label_formats
 #
 #  id               :integer          not null, primary key
-#  page_size        :string(255)      default("A4"), not null
+#  page_size        :string           default("A4"), not null
 #  landscape        :boolean          default(FALSE), not null
 #  font_size        :float            default(11.0), not null
 #  width            :float            not null
@@ -21,6 +19,7 @@
 #  padding_top      :float            not null
 #  padding_left     :float            not null
 #
+
 class LabelFormat < ActiveRecord::Base
 
   class << self

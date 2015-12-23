@@ -37,8 +37,10 @@ module UtilityHelper
   end
 
   def include_wysiwyg_assets
-    content_for(:head)        { stylesheet_link_tag 'wysiwyg.css', media: 'all' }
-    content_for(:js_includes) { javascript_include_tag 'wysiwyg' }
+    content_for(:head) do
+      stylesheet_link_tag('wysiwyg.css', media: 'all', 'data-turbolinks-track' => true) +
+      javascript_include_tag('wysiwyg', 'data-turbolinks-track' => true)
+    end
   end
 
   # Returns the ActiveRecord column type or nil.

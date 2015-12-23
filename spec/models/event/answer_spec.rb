@@ -12,11 +12,13 @@
 #  id               :integer          not null, primary key
 #  participation_id :integer          not null
 #  question_id      :integer          not null
-#  answer           :string(255)
+#  answer           :string
 #
 
 require 'spec_helper'
+
 describe Event::Answer do
+
   let(:question) { event_questions(:top_ov) }
   let(:choices) { question.choices.split(',') }
 

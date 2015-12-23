@@ -17,7 +17,17 @@ module Event::RestrictedRole
 
   def build_restricted_role(role, id)
     role.participation = participations.where(person_id: id).first_or_create
+    role.participation.init_answers
     role
+  end
+
+  def destroy_previous_role(attr, type)
+    # be on the save side with destroy_all
+    Event::Role.joins(:participation).
+                where(event_participations: { event_id: id },
+                      event_roles: { type: type.sti_name }).
+                destroy_all
+    @restricted_role[attr] = nil # clear cache
   end
 
   def restricted_role_scope(type)

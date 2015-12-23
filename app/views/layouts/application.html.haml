@@ -9,31 +9,33 @@
   %head
     %meta{charset: 'utf-8'}
     %title= "#{Settings.application.name} - #{title}"
-    = csrf_meta_tag
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+
+    = csrf_meta_tag
+    = favicon_link_tag 'favicon.ico'
 
     <!-- HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
-    = stylesheet_link_tag 'ie.css', :media => 'all'
+    = stylesheet_link_tag 'ie.css', media: 'all', 'data-turbolinks-track' => true
     <![endif]-->
 
     <!--[if IE 7]>
-    = stylesheet_link_tag 'ie7.css', :media => 'all'
+    = stylesheet_link_tag 'ie7.css', media: 'all', 'data-turbolinks-track' => true
     <![endif]-->
 
-    = stylesheet_link_tag 'application.css', :media => :screen
-    = stylesheet_link_tag 'print.css', :media => :print
+    = stylesheet_link_tag 'application.css', media: :screen, 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'print.css', media: :print
 
-    = favicon_link_tag 'favicon.ico'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
-    = yield :head
+    = yield(:head)
 
   %body
 
     %header#page-header
       .container-fluid
-        = link_to Settings.application.name, root_path, :class => 'brand'
+        = link_to Settings.application.name, root_path, class: 'brand'
 
         - if current_user
           = render 'layouts/nav'
@@ -89,7 +91,5 @@
               2012 -
               = Time.zone.now.year
 
-  = javascript_include_tag 'application'
-  = yield(:js_includes)
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)
   = piwik_tracking_tag

@@ -4,39 +4,39 @@
 # Table name: people
 #
 #  id                     :integer          not null, primary key
-#  first_name             :string(255)
-#  last_name              :string(255)
-#  company_name           :string(255)
-#  nickname               :string(255)
+#  first_name             :string
+#  last_name              :string
+#  company_name           :string
+#  nickname               :string
 #  company                :boolean          default(FALSE), not null
-#  email                  :string(255)
+#  email                  :string
 #  address                :string(1024)
-#  zip_code               :string(255)
-#  town                   :string(255)
-#  country                :string(255)
+#  zip_code               :string
+#  town                   :string
+#  country                :string
 #  gender                 :string(1)
 #  birthday               :date
 #  additional_information :text
 #  contact_data_visible   :boolean          default(FALSE), not null
 #  created_at             :datetime
 #  updated_at             :datetime
-#  encrypted_password     :string(255)
-#  reset_password_token   :string(255)
+#  encrypted_password     :string
+#  reset_password_token   :string
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime
 #  sign_in_count          :integer          default(0)
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  picture                :string(255)
+#  current_sign_in_ip     :string
+#  last_sign_in_ip        :string
+#  picture                :string
 #  last_label_format_id   :integer
 #  creator_id             :integer
 #  updater_id             :integer
 #  primary_group_id       :integer
 #  failed_attempts        :integer          default(0)
 #  locked_at              :datetime
-#  authentication_token   :string(255)
+#  authentication_token   :string
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -236,8 +236,8 @@ describe Person do
   end
 
   context '#ignored_country?' do
-    it 'ignores ch, schweiz' do
-      person = Person.new(country: 'Schweiz')
+    it 'ignores ch, empty' do
+      person = Person.new(country: nil)
       expect(person.ignored_country?).to be_truthy
       person = Person.new(country: 'CH')
       expect(person.ignored_country?).to be_truthy
@@ -358,14 +358,14 @@ describe Person do
 
     context 'switzerland' do
       def should_be_valid_swiss_post_code
-        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+        [nil, 'Schweiz'].each do |c|
           person.country = c
           expect(person).to be_valid
         end
       end
 
       def should_not_be_valid_swiss_post_code
-        [nil, 'Schweiz', 'Suisse', 'Svizzera', 'Switzerland'].each do |c|
+        [nil, 'CH'].each do |c|
           person.country = c
           expect(person).not_to be_valid
         end
@@ -391,7 +391,10 @@ describe Person do
         person.zip_code = '10115'
         should_not_be_valid_swiss_post_code
 
-        person.zip_code = '01210'
+        person.zip_code = '01200'
+        should_not_be_valid_swiss_post_code
+
+        person.zip_code = '3000 '
         should_not_be_valid_swiss_post_code
 
         person.zip_code = '99577-0727'
@@ -410,44 +413,44 @@ describe Person do
 
     context 'foreign country' do
       it 'can be empty' do
-        person.country = 'España'
+        person.country = 'ES'
         expect(person).to be_valid
       end
 
       it 'should allow 5-digit numbers' do
-        person.country = 'Deutschland'
+        person.country = 'DE'
         person.zip_code = '10115'
         expect(person).to be_valid
       end
 
       it 'should allow leading zeros' do
-        person.country = 'France'
+        person.country = 'FR'
         person.zip_code = '01210'
         expect(person).to be_valid
 
-        person.country = 'Vatican'
+        person.country = 'FR'
         person.zip_code = '00120'
         expect(person).to be_valid
       end
 
       it 'should allow non-numeric characters' do
-        person.country = 'USA'
+        person.country = 'US'
         person.zip_code = '99577-0727'
         expect(person).to be_valid
 
-        person.country = 'Niederlande'
+        person.country = 'NL'
         person.zip_code = '2597 GV 75'
         expect(person).to be_valid
 
-        person.country = 'Argentina'
+        person.country = 'AR'
         person.zip_code = 'C1420'
         expect(person).to be_valid
 
-        person.country = 'United Kingdom'
+        person.country = 'PL'
         person.zip_code = 'SW1W 0NY'
         expect(person).to be_valid
 
-        person.country = 'Canada'
+        person.country = 'CA'
         person.first_name = 'SANTA'
         person.last_name = 'CLAUS'
         person.address = 'NORTH POLE'
@@ -461,14 +464,14 @@ describe Person do
     it 'finds location for zip_code' do
       expect(Person.new.location).to be_nil
       expect(Person.new(zip_code: 3000).location).to be_nil
-      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'be')
       expect(Person.new(zip_code: 3000).location).to be_present
     end
 
     it 'reads canton from location if present' do
       expect(Person.new.canton).to be_nil
-      Location.create!(zip_code: 3000, name: 'Bern', canton: 'BE')
-      expect(Person.new(zip_code: 3000).canton).to eq 'BE'
+      Location.create!(zip_code: 3000, name: 'Bern', canton: 'be')
+      expect(Person.new(zip_code: 3000).canton).to eq 'be'
     end
   end
 

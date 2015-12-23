@@ -38,4 +38,8 @@ module PeopleHelper
       entry.reset_password_sent_at.present? && t('.send_login_tooltip.resend') ||
       t('.send_login_tooltip.new')
   end
+
+  def person_link(person)
+    person ? assoc_link(person) : "(#{t('global.nobody')})"
+  end
 end

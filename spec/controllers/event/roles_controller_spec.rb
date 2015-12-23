@@ -38,7 +38,7 @@ describe Event::RolesController do
 
     context 'without participation' do
 
-     it 'creates role and participation' do
+      it 'creates role and participation' do
         post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
 
         role = assigns(:role)
@@ -48,6 +48,9 @@ describe Event::RolesController do
         expect(participation.event_id).to eq(course.id)
         expect(participation.person_id).to eq(user.id)
         expect(participation.answers.size).to eq(2)
+        expect(course.reload.applicant_count).to eq 0
+        expect(course.teamer_count).to eq 1
+        expect(course.participant_count).to eq 0
         expect(flash[:notice]).to eq 'Rolle <i>Hauptleitung</i> für <i>Top Leader</i> wurde erfolgreich erstellt.'
         is_expected.to redirect_to(edit_group_event_participation_path(group, course, participation))
       end

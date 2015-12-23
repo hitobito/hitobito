@@ -11,7 +11,7 @@ class Event::ListsController < ApplicationController
   DEFAULT_GROUPING = ->(event) { I18n.l(event.dates.first.start_at, format: :month_year) }
 
   attr_reader :group_id
-  helper_method :group_id, :kind_used?
+  helper_method :group_id, :kind_used?, :nav_left
 
   skip_authorize_resource only: [:events, :courses]
 
@@ -115,6 +115,10 @@ class Event::ListsController < ApplicationController
 
   def kind_used?
     Event::Course.attr_used?(:kind_id)
+  end
+
+  def nav_left
+    @nav_left || params[:action]
   end
 
 end

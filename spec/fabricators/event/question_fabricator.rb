@@ -10,8 +10,8 @@
 #
 #  id               :integer          not null, primary key
 #  event_id         :integer
-#  question         :string(255)
-#  choices          :string(255)
+#  question         :string
+#  choices          :string
 #  multiple_choices :boolean          default(FALSE)
 #  required         :boolean
 #

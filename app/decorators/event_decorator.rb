@@ -46,7 +46,7 @@ class EventDecorator < ApplicationDecorator
 
   def state_translated(state = model.state)
     if possible_states.present? && state
-      h.t("activerecord.attributes.event/course.states.#{state}")
+      h.t("activerecord.attributes.#{model.class.name.underscore}.states.#{state}")
     else
       state
     end

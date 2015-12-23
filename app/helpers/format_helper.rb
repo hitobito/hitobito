@@ -94,17 +94,17 @@ module FormatHelper
   # Renders a list of attributes with label and value for a given object.
   # If the optional block returns false for a given attribute, it will not be rendered.
   def render_attrs(obj, *attrs)
-    content_tag(:dl, class: 'dl-horizontal') do
-      safe_join(attrs) do |a|
-        labeled_attr(obj, a) if !block_given? || yield(a)
-      end
-    end if attrs.present?
+    return if attrs.blank?
+    content = safe_join(attrs) do |a|
+      labeled_attr(obj, a) if !block_given? || yield(a)
+    end
+    content_tag(:dl, content, class: 'dl-horizontal') if content.present?
   end
 
   # Like #render_attrs, but only for attributes with a present value.
   def render_present_attrs(obj, *attrs)
     render_attrs(obj, *attrs) do |a|
-      obj.send(a).present?
+      obj.send(a).present? || obj.send(a).is_a?(FalseClass)
     end
   end
 

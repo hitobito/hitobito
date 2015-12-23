@@ -200,6 +200,12 @@
   }
 }
 
+.nav-tabs > .active > a,
+.nav-tabs > .active > a:hover,
+.nav-tabs > .active > a:focus {
+  background-color: white;
+}
+
 // Dropdown
 .dropdown-menu .dropdown-menu {
   min-width: 0;
@@ -310,4 +316,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+html.turbolinks-progress-bar::before {
+  background-color: $bodyBackground !important;
+  height: 2px !important;
 }

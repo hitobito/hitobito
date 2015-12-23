@@ -239,6 +239,7 @@ de:
       person/add_request:
         person: Person
         requester: Anfrage von
+        body: Anfrage für
         created_at: Datum
 
       person/add_request/event:

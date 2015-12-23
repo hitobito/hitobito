@@ -556,6 +556,12 @@ de:
         activated: Manuelle Freigabe ist aktiviert
         deactivated: Manuelle Freigabe ist nicht aktiviert
         deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
+        activate_title: Manuelle Freigabe aktivieren
+        deactivate_title: Manuelle Freigabe deaktivieren
+
+      list:
+        approve: Akzeptieren
+        reject: Ablehnen
 
       creator:
         group:

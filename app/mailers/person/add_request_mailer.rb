@@ -52,12 +52,8 @@ class Person::AddRequestMailer < ApplicationMailer
     end
   end
 
-  def requester_group_roles(request)
-    roles = request.requester.roles.includes(:group).select do |r|
-      (r.class.permissions &
-       [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
-    end
-    roles.collect { |r| r.to_s(:long) }.join(', ')
+  def requester_full_roles(request)
+    request.requester_full_roles.collect { |r| r.to_s(:long) }.join(', ')
   end
 
   def mail_envelope(to, requester, content)
@@ -74,7 +70,7 @@ class Person::AddRequestMailer < ApplicationMailer
     {
       'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
-      'requester-group-roles' => requester_group_roles(request),
+      'requester-group-roles' => requester_full_roles(request),
       'request-body-label' => link_to(request.body_label, body_url(request.body)),
       'show-person-url' => person_url(person, body_type: body_type, body_id: body_id)
     }
@@ -86,7 +82,7 @@ class Person::AddRequestMailer < ApplicationMailer
       'person-name' => person.full_name,
       'recipient-names' => recipient_names,
       'requester-name' => request.requester.full_name,
-      'requester-group-roles' => requester_group_roles(request),
+      'requester-group-roles' => requester_full_roles(request),
       'request-body-label' => link_to(request.body_label, body_url(request.body)),
       'add-requests-url' => group_person_add_requests_url(group_id: group_id)
     }

@@ -26,7 +26,7 @@ class Person::AddRequest::Event < Person::AddRequest
   def to_s(_format = :default)
     group = body.groups.first
     event_label = body_label
-    group_label = "#{group.model_name.human} '#{group}'"
+    group_label = "#{group.model_name.human} #{group}"
     self.class.human_attribute_name(:label, body: event_label, group: group_label)
   end
 

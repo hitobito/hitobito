@@ -1,9 +1,8 @@
-- content_for(:toolbar, require_person_add_requests_button)
+- content_for(:toolbar, render('actions_index'))
 
-- if @group.require_person_add_requests
-  requests table ...
-
-- else
+- unless @group.require_person_add_requests
   %p
     %strong= t('.deactivated')
   %p= sanitize(t('.deactivated_caption'), attributes: [:strong])
+
+= render 'list'

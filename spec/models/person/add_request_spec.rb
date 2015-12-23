@@ -100,7 +100,7 @@ describe Person::AddRequest do
       end
 
       it '#to_s contains group type' do
-        expect(@rg.to_s).to eq("Top Group 'TopGroup'")
+        expect(@rg.to_s).to eq("Top Group TopGroup")
       end
     end
 
@@ -114,7 +114,7 @@ describe Person::AddRequest do
       end
 
       it '#to_s contains group type' do
-        expect(@re.to_s).to eq("Anlass 'Eventus' in Top Group 'TopGroup'")
+        expect(@re.to_s).to eq("Anlass Eventus in Top Group TopGroup")
       end
     end
 
@@ -128,7 +128,7 @@ describe Person::AddRequest do
       end
 
       it '#to_s contains group type' do
-        expect(@rm.to_s).to eq("Abo '#{abo.to_s}' in Top Group 'TopGroup'")
+        expect(@rm.to_s).to eq("Abo #{abo.to_s} in Top Group TopGroup")
       end
     end
 

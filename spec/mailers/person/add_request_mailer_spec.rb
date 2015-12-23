@@ -37,7 +37,7 @@ describe Person::AddRequestMailer do
     its(:subject)  { should == "Freigabe deiner Personendaten" }
     its(:body)     { should =~ /Hallo #{person.first_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte dich/ }
-    its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /Bottom Layer Bottom One/ }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
@@ -66,7 +66,7 @@ describe Person::AddRequestMailer do
     its(:subject)  { should == "Freigabe Personendaten" }
     its(:body)     { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name}/ }
-    its(:body)     { should =~ /Bottom Layer 'Bottom One'/ }
+    its(:body)     { should =~ /Bottom Layer Bottom One/ }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }

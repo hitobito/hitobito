@@ -11,6 +11,8 @@ module PersonAddRequestsHelper
     options = {}
     required = @group.require_person_add_requests
     options[:method] = required ? :delete : :post
+    title = required ? 'deactivate_title' : 'activate_title'
+    options[:title] = t("person.add_requests.index.#{title}")
     url = group_person_add_requests_path(@group)
 
     toggle_button(url, required, nil, options)

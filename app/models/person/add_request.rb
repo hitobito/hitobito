@@ -50,11 +50,18 @@ class Person::AddRequest < ActiveRecord::Base
   end
 
   def body_label
-    "#{body.class.model_name.human} '#{body}'"
+    "#{body.class.model_name.human} #{body}"
   end
 
   def person_layer
     person.primary_group.try(:layer_group)
+  end
+
+  def requester_full_roles
+    requester.roles.includes(:group).select do |r|
+      (r.class.permissions &
+        [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
+    end
   end
 
 end

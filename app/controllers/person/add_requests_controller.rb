@@ -59,17 +59,18 @@ class Person::AddRequestsController < ApplicationController
     Person::AddRequest.
       for_layer(group).
       includes(:body,
-               person: :primary_group,
+               :person,
                requester: { roles: :group }).
       merge(Person.order_by_name)
   end
 
   def set_status_notification
+    return if flash[:notice].present? || flash[:alert].present?
     status = request_status
     return if status.nil? || !person_in_layer?(status)
 
     if status.pending?
-      @current = status.pending # TODO: highlight in list
+      @current_add_request = status.pending
     elsif status.created?
       flash.now[:notice] = status.approved_message
     else

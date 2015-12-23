@@ -25,7 +25,7 @@ class Person::AddRequest::MailingList < Person::AddRequest
   def to_s(_format = :default)
     group = body.group
     list_label = body_label
-    group_label = "#{group.model_name.human} '#{group}'"
+    group_label = "#{group.model_name.human} #{group}"
     self.class.human_attribute_name(:label, body: list_label, group: group_label)
   end
 

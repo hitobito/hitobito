@@ -1,0 +1,38 @@
+
+= table(@add_requests, class: 'table table-striped table-hover') do |t|
+  - t.col('') do |r|
+    .profil= image_tag(r.person.picture.thumb.url, size: '32x32')
+
+  - t.col(Person::AddRequest.human_attribute_name(:person)) do |r|
+    %strong
+      = link_to_if(can?(:show, r.person),
+                   r.person.to_s(:list),
+                   group_person_path(r.person.default_group_id, r.person_id))
+    %br/
+    = muted r.person.decorate.additional_name
+
+  - t.col(Person::AddRequest.human_attribute_name(:body)) do |r|
+    = render "body_details_#{r.class.name.demodulize.underscore}", request: r
+
+  - t.col(Person::AddRequest.human_attribute_name(:requester)) do |r|
+    = link_to_if(can?(:show, r.requester),
+                 r.requester.to_s(:list),
+                 group_person_path(r.requester.default_group_id, r.requester_id))
+    - r.requester_full_roles.each do |role|
+      %br/
+      = muted role.to_s(:long)
+
+  - t.col('') do |r|
+    - if can?(:approve, r)
+      = action_button(t('.approve'), person_add_request_path(r), :ok, method: :post)
+
+  - t.col('') do |r|
+    - if can?(:reject, r)
+      = action_button(t('.reject'), person_add_request_path(r), :remove, method: :delete)
+
+  - t.attr(:created_at)
+
+
+- if @current_add_request
+  - content_for(:javascripts) do
+    $('#person_add_request_#{@current_add_request.id} td').effect('highlight', { easing: 'easeInExpo', color: '#ffffbb' }, 5000);

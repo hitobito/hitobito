@@ -81,7 +81,7 @@ describe Person::AddRequestsController do
         expect(flash[:notice]).to be_blank
         expect(flash[:alert]).to be_blank
 
-        expect(assigns(:current)).to eq(request)
+        expect(assigns(:current_add_request)).to eq(request)
       end
     end
   end

@@ -14,6 +14,8 @@ class Person::AddRequestsController < ApplicationController
   prepend_before_action :group, only: [:index, :activate, :deactivate]
   prepend_before_action :entry, only: [:approve, :reject]
 
+  decorates :add_requests
+
   # list add requests for the given layer
   def index
     @add_requests = load_entries

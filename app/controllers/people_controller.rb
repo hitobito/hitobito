@@ -27,7 +27,7 @@ class PeopleController < CrudController
   protect_from_forgery with: :null_session, only: [:index, :show]
 
 
-  decorates :group, :person, :people, :versions
+  decorates :group, :person, :people, :versions, :add_requests
 
   helper_method :index_full_ability?
 
@@ -42,7 +42,7 @@ class PeopleController < CrudController
 
   def index
     respond_to do |format|
-      format.html  do
+      format.html do
         @people = prepare_entries(filter_entries).page(params[:page])
         @person_add_requests = fetch_person_add_requests
       end
@@ -84,7 +84,8 @@ class PeopleController < CrudController
                   includes(:group).
                   order('groups.name', 'roles.deleted_at')
 
-    @participations_by_event_type = alltime_person_participations.group_by do |p|
+    queries = Person::EventQueries.new(entry)
+    @participations_by_event_type = queries.alltime_participations.group_by do |p|
       p.event.class.label_plural
     end
 
@@ -160,37 +161,29 @@ class PeopleController < CrudController
   end
 
   def load_asides
-    applications = pending_person_applications
-    Event::PreloadAllDates.for(applications.collect(&:event))
-    @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
-    @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
+    queries = Person::EventQueries.new(entry)
+    @pending_applications = Event::ApplicationDecorator.decorate_collection(
+                              queries.pending_applications)
+    @upcoming_events      = EventDecorator.decorate_collection(queries.upcoming_events)
     @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
+
+    if can?(:update, entry)
+      @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
+      set_add_request_status_notification if flash[:notice].blank? && flash[:alert].blank?
+    end
   end
 
-  def pending_person_applications
-    entry.event_applications.
-          merge(Event::Participation.pending).
-          includes(event: [:groups]).
-          joins(event: :dates).
-          order('event_dates.start_at').uniq
-  end
+  def set_add_request_status_notification
+    return if params[:body_type].blank? || params[:body_id].blank?
+    status = Person::AddRequest::Status.for(entry.id, params[:body_type], params[:body_id])
 
-  def upcoming_person_events
-    entry.events.
-          upcoming.
-          merge(Event::Participation.active).
-          uniq.
-          includes(:groups).
-          preload_all_dates.
-          order_by_date
-  end
-
-  def alltime_person_participations
-    entry.event_participations.
-          active.
-          includes(:roles, event: [:dates, :groups]).
-          uniq.
-          order('event_dates.start_at DESC')
+    if status.pending?
+      @current_add_request = status.pending
+    elsif status.created?
+      flash.now[:notice] = status.approved_message
+    else
+      flash.now[:alert] = status.rejected_message
+    end
   end
 
   def find_entry

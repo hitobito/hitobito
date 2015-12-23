@@ -248,6 +248,7 @@ exit 0
 # Configure here any services etc.
 
 # write error output to file
+mkdir -p /var/log/rpm-postinstall
 exec 2> /var/log/rpm-postinstall/%{name}.log
 
 # the following old files would be loaded on startup and must

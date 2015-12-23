@@ -31,6 +31,7 @@ describe SubscriptionsController do
       expect(assigns(:person_subs).count).to eq 1
       expect(assigns(:event_subs).count).to eq 1
       expect(assigns(:excluded_person_subs).count).to eq 1
+      expect(assigns(:person_add_requests)).to eq([])
     end
 
     it 'renders csv' do
@@ -45,6 +46,17 @@ describe SubscriptionsController do
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
       expect(@response.body.split(',')).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
+    end
+
+    it 'loads pending person add requests' do
+      r1 = Person::AddRequest::MailingList.create!(
+              person: Fabricate(:person),
+              requester: Fabricate(:person),
+              body: mailing_list)
+
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id
+
+      expect(assigns(:person_add_requests)).to eq([r1])
     end
   end
 

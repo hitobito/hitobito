@@ -108,7 +108,7 @@ fr:
       event/role/treasurer:
         one: Trésorier
       event/role/speaker:
-        one: Intervenant/e
+        one: Conférencier
       event/date:
         one: date
         other: dates
@@ -269,7 +269,7 @@ fr:
         priorization: Préférence
         requires_approval: Validation
       event/date:
-        label: Description
+        label: Désignation
         location: Lieu
         start_at: Du
         finish_at: Au

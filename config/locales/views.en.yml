@@ -3,6 +3,7 @@ en:
     'yes': "yes"
     'no': "no"
     unknown: unknown
+    nobody: nobody
     from: from
     until: to
     no_list_entries: No entries found.
@@ -273,7 +274,7 @@ en:
         title_new: "Register as %{role}"
         title_edit: "Edit registration from %{person}"
         apply: 'Register'
-        explain_required_checkmark: '* = reply mandatory'
+        explain_required_checkmark: 'Reply mandatory'
       application_fields:
         alternative_dates_info: 'Please enter more suitable courses.'
         course_information: 'Information about the courses'
@@ -316,6 +317,8 @@ en:
       additional_information: 'Information for registration'
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application. Give possible answers separated by a comma or leave the field blank to allow any answers.
+    form_tabs:
+      general: General
     global:
       link:
         add_event: Create event
@@ -469,14 +472,14 @@ en:
       help_additional_sender: 'In addition to the administrators this e-mail may also send messages to the mailing list.'
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
-      caption_anyone_may_post: 'Any senders may write to the mailing list'
+      caption_anyone_may_post: 'Anyone may write to the mailing list'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
     subscribers_may_post: 'Subscribers may write to the mailing list'
     subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
     anyone_may_post: 'Anyone may write to the mailing list'
-    anyone_may_not_post: 'An arbitrary sender may <strong>not</strong> write to the mailing list'
+    anyone_may_not_post: '<strong>Not</strong> anyone may write to the mailing list'
     subscribe: 'Log in'
     unsubscribe: 'Log off'
   navigation:
@@ -571,6 +574,7 @@ en:
     full_entry_label: '%{model_label} <i>%{role}</i> for <i>%{person}</i> in <i>%{group}</i>'
     role_changed: 'changed %{full_entry_label} for <i>%{new_role}</i>.'
     role_changed_to_group: 'changed %{full_entry_label} for <i>%{new_role}</i> in <i>%{new_group}</i>.'
+    role_primary_group_changed: 'Changed primary group to <i>%{new_group}</i>.'
     form:
       add_person: Add person
       add_role_for_person: Create role for %{person}
@@ -596,7 +600,7 @@ en:
         please_choose_group: Please select a group
     exclude_person:
       form:
-        exclude_subscriber: 'Exclude subscription'
+        exclude_subscriber: 'Exclude person'
   subscriber/base:
     blank: '%{model_label} must be selected'
     taken: '%{model_label} has already been added'

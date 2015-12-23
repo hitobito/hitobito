@@ -46,7 +46,7 @@ module Person::AddRequest::Creator
     end
 
     def person_layer
-      person.primary_group.try(:layer_group)
+      person && person.primary_group.try(:layer_group)
     end
 
     def request_attrs

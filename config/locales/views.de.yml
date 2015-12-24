@@ -640,6 +640,12 @@ de:
         import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
           in die <strong>Gruppe %{group}</strong> importiert.
 
+    add_request_mailer:
+      ask_person_to_add:
+        request_link: Zur Anfrage
+      ask_responsibles:
+        request_link: Zur Anfrage
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 

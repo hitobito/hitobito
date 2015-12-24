@@ -21,8 +21,9 @@ class Person::AddRequestMailer < ApplicationMailer
     compose(content, envelope, values)
   end
 
-  def ask_responsibles(request, responsibles, group)
+  def ask_responsibles(request, responsibles)
     person = request.person
+    person_layer = request.person_layer
     content = CustomContent.get(CONTENT_ADD_REQUEST_RESPONSIBLES)
 
     to = Person.mailing_emails_for(responsibles)
@@ -31,7 +32,7 @@ class Person::AddRequestMailer < ApplicationMailer
     values = responsible_mail_values(recipient_names,
                                      request,
                                      person,
-                                     group.id)
+                                     person_layer.id)
 
     compose(content, envelope, values)
   end
@@ -65,31 +66,42 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def person_mail_values(person, request)
-    body_type = request.body.class
-    body_id = request.body.id
     {
       'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
       'requester-group-roles' => requester_full_roles(request),
       'request-body-label' => link_to(request.body_label, body_url(request.body)),
-      'show-person-url' => person_url(person, body_type: body_type, body_id: body_id)
+      'show-person-url' => link_to_request(person, request.body)
     }
   end
 
 
-  def responsible_mail_values(recipient_names, request, person, group_id)
+  def responsible_mail_values(recipient_names, request, person, person_layer_id)
     {
       'person-name' => person.full_name,
       'recipient-names' => recipient_names,
       'requester-name' => request.requester.full_name,
       'requester-group-roles' => requester_full_roles(request),
       'request-body-label' => link_to(request.body_label, body_url(request.body)),
-      'add-requests-url' => group_person_add_requests_url(group_id: group_id)
+      'add-requests-url' => link_to_add_requests(person_layer_id, person.id, request.body)
     }
   end
 
   def link_to(name, url)
     "<a href=\"#{url}\">#{name}</a>"
+  end
+
+  def link_to_add_requests(person_layer_id, person_id, body)
+    params = body_params(body) 
+    params[:person_id] = person_id
+    params[:group_id] = person_layer_id
+    url = group_person_add_requests_url(params)
+    link_to(t('.request_link'), url)
+  end
+
+  def link_to_request(person, body)
+    url = requested_person_url(person, body)
+    link_to(t('.request_link'), url)
   end
 
   def body_url(body)
@@ -105,5 +117,19 @@ class Person::AddRequestMailer < ApplicationMailer
     end
   end
 
+  def requested_person_url(person, body)
+    person_url(person, body_params(body))
+  end
+
+  def body_params(body)
+    {body_type: body_type(body),
+     body_id: body.id}
+  end
+
+  def body_type(body)
+    type = body.class.name
+    type = type.deconstantize if type.match(/::/)
+    type
+  end
 
 end

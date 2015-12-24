@@ -41,7 +41,8 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
-    its(:body)     { should =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group%3A%3ABottomLayer/ }
+    its(:body)     { should =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group/ }
+    its(:body)     { should have_css 'a', text: 'Zur Anfrage' }
 
     it 'lists requester group roles with write permissions only' do
       Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
@@ -55,9 +56,10 @@ describe Person::AddRequestMailer do
 
     let(:leader) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
     let(:leader2) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
+    let(:person_layer) { groups(:bottom_layer_two) }
     let(:responsibles) { [leader, leader2] }
 
-    let(:mail) { Person::AddRequestMailer.ask_responsibles(request, responsibles, group) }
+    let(:mail) { Person::AddRequestMailer.ask_responsibles(request, responsibles) }
 
     subject { mail }
 
@@ -67,10 +69,12 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
     its(:body)     { should =~ /#{requester.full_name} möchte #{person.full_name}/ }
     its(:body)     { should =~ /Bottom Layer Bottom One/ }
+    its(:body)     { should have_css 'a', text: 'Bottom Layer Bottom One' }
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
-    its(:body)     { should =~ /test.host\/groups\/#{group.id}\/person_add_requests/ }
+    its(:body)     { should have_css 'a', text: 'Zur Anfrage' }
+    its(:body)     { should =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ }
 
   end
 
@@ -81,21 +85,54 @@ describe Person::AddRequestMailer do
     it 'event url' do
       event = events(:top_course)
       group_id = event.groups.first.id
-      expect(mail.send(:body_url, event)).to match(/http:/)
-      expect(mail.send(:body_url, event)).to match(/\/groups\/#{group_id}\/events\/#{event.id}/)
+      link = mail.send(:body_url, event)
+      expect(link).to match(/http:/)
+      expect(link).to match(/\/groups\/#{group_id}\/events\/#{event.id}/)
     end
 
     it 'group url' do
       group = groups(:toppers)
-      expect(mail.send(:body_url, group)).to match(/http:/)
-      expect(mail.send(:body_url, group)).to match(/\/groups\/#{group.id}/)
+      link = mail.send(:body_url, group)
+      expect(link).to match(/http:/)
+      expect(link).to match(/\/groups\/#{group.id}/)
     end
 
     it 'mailing list url' do
       list = mailing_lists(:leaders)
       group_id = list.group_id
-      expect(mail.send(:body_url, list)).to match(/http:/)
-      expect(mail.send(:body_url, list)).to match(/\/groups\/#{group_id}\/mailing_lists\/#{list.id}/)
+      link = mail.send(:body_url, list)
+      expect(link).to match(/http:/)
+      expect(link).to match(/\/groups\/#{group_id}\/mailing_lists\/#{list.id}/)
+    end
+
+  end
+
+  context 'requested person url' do
+
+    let(:mail) { Person::AddRequestMailer.send(:new) }
+
+    it 'event body' do
+      event = events(:top_course)
+      link = mail.send(:requested_person_url, person, event)
+      expect(link).to match(/http:/)
+      expect(link).to match(/body_id=#{event.id}/)
+      expect(link).to match(/body_type=Event/)
+    end
+
+    it 'group body' do
+      group = groups(:toppers)
+      link = mail.send(:requested_person_url, person, group)
+      expect(link).to match(/http:/)
+      expect(link).to match(/body_id=#{group.id}/)
+      expect(link).to match(/body_type=Group/)
+    end
+
+    it 'mailing list body' do
+      list = mailing_lists(:leaders)
+      link = mail.send(:requested_person_url, person, list)
+      expect(link).to match(/http:/)
+      expect(link).to match(/body_id=#{list.id}/)
+      expect(link).to match(/body_type=MailingList/)
     end
 
   end

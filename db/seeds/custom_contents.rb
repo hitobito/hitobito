@@ -27,12 +27,12 @@ CustomContent.seed_once(:key,
    placeholders_optional: nil},
 
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON,
-    placeholders_required: 'recipient-name, requester-name, requester-group-roles, request-body-label, show-person-url',
-    placeholders_optional: nil },
+    placeholders_required: 'request-body, answer-request-url',
+    placeholders_optional: 'recipient-name, requester-name, requester-roles' },
 
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
-    placeholders_required: 'recipient-names, requester-name, person-name, requester-group-roles, request-body-label, add-requests-url',
-    placeholders_optional: nil },
+    placeholders_required: 'person-name, request-body, answer-request-url',
+    placeholders_optional: 'recipient-names, requester-name, requester-roles' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -157,11 +157,11 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Freigabe deiner Personendaten',
    body: "Hallo {recipient-name}<br/><br/>" \
          "{requester-name} möchte dich hier hinzufügen: <br/><br/>" \
-         "{request-body-label}<br/><br/>" \
+         "{request-body}<br/><br/>" \
          "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
-         "{requester-group-roles}<br/><br/>" \
+         "{requester-roles}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
-         "{show-person-url}" },
+         "{answer-request-url}" },
 
   {custom_content_id: add_request_person_id,
    locale: 'fr',
@@ -181,11 +181,11 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Freigabe Personendaten',
    body: "Hallo {recipient-names}<br/><br/>" \
          "{requester-name} möchte {person-name} hier hinzufügen: <br/><br/>" \
-         "{request-body-label}<br/><br/>" \
+         "{request-body}<br/><br/>" \
          "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
-         "{requester-group-roles}<br/><br/>" \
+         "{requester-roles}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
-         "{add-requests-url}" },
+         "{answer-request-url}" },
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'fr',

@@ -11,19 +11,16 @@ class Person::AddRequestMailer < ApplicationMailer
   CONTENT_ADD_REQUEST_RESPONSIBLES = 'add_request_responsibles'
 
   def ask_person_to_add(request)
-    person = request.person
     content = CustomContent.get(CONTENT_ADD_REQUEST_PERSON)
 
-    to = Person.mailing_emails_for(person)
+    to = Person.mailing_emails_for(request.person)
     envelope = mail_envelope(to, request.requester, content)
-    values = person_mail_values(person, request)
+    values = person_mail_values(request.person, request)
 
-    compose(content, envelope, values)
+    compose(envelope, content, values)
   end
 
   def ask_responsibles(request, responsibles)
-    person = request.person
-    person_layer = request.person_layer
     content = CustomContent.get(CONTENT_ADD_REQUEST_RESPONSIBLES)
 
     to = Person.mailing_emails_for(responsibles)
@@ -31,10 +28,10 @@ class Person::AddRequestMailer < ApplicationMailer
     recipient_names = responsibles.collect(&:greeting_name).join(', ')
     values = responsible_mail_values(recipient_names,
                                      request,
-                                     person,
-                                     person_layer.id)
+                                     request.person,
+                                     request.person_layer.id)
 
-    compose(content, envelope, values)
+    compose(envelope, content, values)
   end
 
   def approved(person, body, requester, user)
@@ -47,7 +44,7 @@ class Person::AddRequestMailer < ApplicationMailer
 
   private
 
-  def compose(content, envelope, values)
+  def compose(envelope, content, values)
     mail(envelope) do |format|
       format.html { render text: content.body_with_values(values) }
     end
@@ -66,25 +63,21 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def person_mail_values(person, request)
-    {
-      'recipient-name' => person.greeting_name,
+    { 'recipient-name' => person.greeting_name,
       'requester-name' => request.requester.full_name,
-      'requester-group-roles' => requester_full_roles(request),
-      'request-body-label' => link_to(request.body_label, body_url(request.body)),
-      'show-person-url' => link_to_request(person, request.body)
-    }
+      'requester-roles' => requester_full_roles(request),
+      'request-body' => link_to(request.body_label, body_url(request.body)),
+      'answer-request-url' => link_to_request(person, request.body) }
   end
 
 
   def responsible_mail_values(recipient_names, request, person, person_layer_id)
-    {
-      'person-name' => person.full_name,
+    { 'person-name' => person.full_name,
       'recipient-names' => recipient_names,
       'requester-name' => request.requester.full_name,
-      'requester-group-roles' => requester_full_roles(request),
-      'request-body-label' => link_to(request.body_label, body_url(request.body)),
-      'add-requests-url' => link_to_add_requests(person_layer_id, person.id, request.body)
-    }
+      'requester-roles' => requester_full_roles(request),
+      'request-body' => link_to(request.body_label, body_url(request.body)),
+      'answer-request-url' => link_to_add_requests(person_layer_id, person.id, request.body) }
   end
 
   def link_to(name, url)
@@ -92,7 +85,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def link_to_add_requests(person_layer_id, person_id, body)
-    params = body_params(body) 
+    params = body_params(body)
     params[:person_id] = person_id
     params[:group_id] = person_layer_id
     url = group_person_add_requests_url(params)
@@ -105,15 +98,15 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def body_url(body)
-    id = body.id
-    if body.is_a?(Event)
-      group_id = body.groups.first.id
-      group_event_url(group_id: group_id, id: id)
-    elsif body.is_a?(Group)
-      group_url(id: id)
-    elsif body.is_a?(MailingList)
-      group_id = body.group_id
-      group_mailing_list_url(group_id: group_id, id: id)
+    case body
+    when Event
+      group_event_url(group_id: body.groups.first.id, id: body.id)
+    when Group
+      group_url(id: body.id)
+    when MailingList
+      group_mailing_list_url(group_id: body.group_id, id: body.id)
+    else
+      fail(ArgumentError, "Unknown body type #{body.class}")
     end
   end
 
@@ -122,14 +115,12 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def body_params(body)
-    {body_type: body_type(body),
-     body_id: body.id}
+    { body_type: body_type(body),
+      body_id: body.id }
   end
 
   def body_type(body)
-    type = body.class.name
-    type = type.deconstantize if type.match(/::/)
-    type
+    body.class.base_class.name
   end
 
 end

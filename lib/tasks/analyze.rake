@@ -10,7 +10,7 @@ task :brakeman do
   FileUtils.rm_f('brakeman-output.tabs')
   begin
     Timeout.timeout(300) do
-      sh %W(brakeman -o brakeman-output.tabs
+      sh %w(brakeman -o brakeman-output.tabs
                      -q
                      --no-progress).join(' ')
     end

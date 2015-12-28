@@ -307,6 +307,9 @@ Style/SpaceInsideBlockBraces:
 Style/StringLiteralsInInterpolation:
   Enabled: false
 
+Style/UnneededCapitalW:
+  Enabled: false
+  
 Style/VariableName:
   Enabled: false
 

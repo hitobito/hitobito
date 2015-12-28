@@ -1,0 +1,81 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "b5ba7582a3ff0bf447a41a24c287cb72296eeb151a4cd09f9ff74864db59db88",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/subscriber/event_controller.rb",
+      "line": 38,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Subscription.new(:mailing_list => (@mailing_list)).possible_events.joins(\"LEFT JOIN event_kinds ON events.kind_id = event_kinds.id AND events.type = '#{Event::Course.sti_name}' LEFT JOIN event_kind_translations ON event_kinds.id  = event_kind_translations.event_kind_id\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Subscriber::EventController",
+        "method": "matching_events"
+      },
+      "user_input": "Event::Course.sti_name",
+      "confidence": "High",
+      "note": "#sti_name is not prone to sql injection"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "e158e1df83e3ab734b79ddeaf462102fcd74e13b87e8b1c01133f1cf66d7de7a",
+      "message": "Possible SQL injection",
+      "file": "app/models/group.rb",
+      "line": 117,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "reorder(\"#{\"CASE groups.type WHEN '#{t.sti_name}' THEN #{i} END, \"} lft\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Group",
+        "method": "order_by_type"
+      },
+      "user_input": "t.sti_name",
+      "confidence": "Medium",
+      "note": "#sti_name is not prone to injection"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "e927e339ff09518b328361dd95336287a75c5049ed4c1ce15824aa29df7da1ca",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/full_text_controller.rb",
+      "line": 76,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Person.connection.execute(Person.accessible_by(PersonReadables.new(current_user)).to_sql.gsub(/SELECT (.+) FROM /, \"SELECT DISTINCT people.id FROM \"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FullTextController",
+        "method": "load_accessible_people_ids"
+      },
+      "user_input": "Person.accessible_by(PersonReadables.new(current_user)).to_sql",
+      "confidence": "High",
+      "note": "Custom SQL without injection possibilities"
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4000ff73f6b8ea02cc258bc13979b5f086367affcae15ec82e7fd38d32825bac",
+      "message": "Unescaped model attribute",
+      "file": "app/views/devise/sessions/_info.html.haml",
+      "line": 3,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "CustomContent.get(\"views/devise/sessions/info\").body.to_s",
+      "render_path": [{"type":"template","name":"devise/sessions/new","line":8,"file":"app/views/devise/sessions/new.html.haml"}],
+      "location": {
+        "type": "template",
+        "template": "devise/sessions/_info"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": "HTML Tags ARE allowed here"
+    }
+  ],
+  "updated": "2015-12-28 14:22:28 +0100",
+  "brakeman_version": "3.1.2"
+}

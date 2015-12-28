@@ -8,17 +8,9 @@
 desc "Run brakeman"
 task :brakeman do
   FileUtils.rm_f('brakeman-output.tabs')
-  # some files seem to cause brakeman to hang. ignore them
-  ignores = %w(app/views/people_filters/_form.html.haml
-               app/views/csv_imports/define_mapping.html.haml
-               app/models/mailing_list.rb
-               app/controllers/full_text_controller.rb)
-
   begin
     Timeout.timeout(300) do
       sh %W(brakeman -o brakeman-output.tabs
-                     --skip-files #{ignores.join(',')}
-                     -x ModelAttrAccessible
                      -q
                      --no-progress).join(' ')
     end

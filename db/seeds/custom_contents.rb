@@ -163,7 +163,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'de',
-   label: 'Anfragen: E-Mail Freigabe Personendaten durch Person',
+   label: 'Anfrage Personendaten: E-Mail Freigabe durch Person',
    subject: 'Freigabe deiner Personendaten',
    body: "Hallo {recipient-name}<br/><br/>" \
          "{requester-name} möchte dich hier hinzufügen: <br/><br/>" \
@@ -175,19 +175,19 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'fr',
-   label: 'Demandes: E-mail pour la libération de la personne'},
+   label: 'Demande de l\'état civil: E-mail pour la libération par la personne'},
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
-   label: 'Requests: E-mail approval for person data by person'},
+   label: 'Personal data request: E-mail approval by person'},
 
   {custom_content_id: add_request_person_id,
    locale: 'it',
-   label: "Richiesta: E-mail per l'abilitazione dei dati personali della persona"},
+   label: "Richiesta dei dati personali: E-mail per l'abilitazione per mano della persona"},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'de',
-   label: 'Anfragen: E-Mail Freigabe Personendaten durch Verantwortliche',
+   label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche',
    subject: 'Freigabe Personendaten',
    body: "Hallo {recipient-names}<br/><br/>" \
          "{requester-name} möchte {person-name} hier hinzufügen: <br/><br/>" \
@@ -199,19 +199,19 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'fr',
-   label: 'Demandes: E-mail pour la libération de la personne par responsables'},
+   label: 'Demande de l\'état civil: E-mail pour la libération par les responsables'},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'en',
-   label: 'Requests: Email approval for person data by responsibles'},
+   label: 'Personal data request: Email approval by responsibles'},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'it',
-   label: "Richiesta: E-mail per l'abilitazione dei dati personali da parte responsabili"},
+   label: "Richiesta dei dati personali: E-mail per l'abilitazione per mano dei responsabili"},
 
   {custom_content_id: add_request_approved_id,
    locale: 'de',
-   label: 'Anfragen: E-Mail Freigabe Personendaten akzeptiert',
+   label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert',
    subject: 'Freigabe der Personendaten akzeptiert',
    body: "Hallo {recipient-name}<br/><br/>" \
          "{approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>" \
@@ -219,19 +219,19 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_approved_id,
    locale: 'fr',
-   label: 'Demandes: E-mail pour la libération de la personne accepté'},
+   label: 'Demande de l\'état civil: E-mail libération accepté'},
 
   {custom_content_id: add_request_approved_id,
    locale: 'en',
-   label: 'Requests: Email approval for person data accepted'},
+   label: 'Personal data request: Email approval accepted'},
 
   {custom_content_id: add_request_approved_id,
    locale: 'it',
-   label: "Richiesta: Email per l'abilitazione dei dati personali accettata"},
+   label: "Richiesta dei dati personali: Email abilitazione accettata"},
 
     {custom_content_id: add_request_rejected_id,
      locale: 'de',
-     label: 'Anfragen: E-Mail Freigabe Personendaten abgelehnt',
+     label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt',
      subject: 'Freigabe der Personendaten abgelehnt',
      body: "Hallo {recipient-name}<br/><br/>" \
            "{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>" \
@@ -239,14 +239,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
     {custom_content_id: add_request_rejected_id,
      locale: 'fr',
-     label: 'Demandes: E-mail pour la libération de la personne refusé'},
+     label: 'Demande de l\'état civil: E-mail libération refusé'},
 
     {custom_content_id: add_request_rejected_id,
      locale: 'en',
-     label: 'Requests: Email approval for person data rejected'},
+     label: 'Personal data request: Email approval rejected'},
 
     {custom_content_id: add_request_rejected_id,
      locale: 'it',
-     label: "Richiesta: Email per l'abilitazione dei dati personali rifiutata"},
+     label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
 
 )

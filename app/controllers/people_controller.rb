@@ -176,10 +176,9 @@ class PeopleController < CrudController
   def set_add_request_status_notification
     return if params[:body_type].blank? || params[:body_id].blank?
     status = Person::AddRequest::Status.for(entry.id, params[:body_type], params[:body_id])
+    return if status.pending?
 
-    if status.pending?
-      @current_add_request = status.pending
-    elsif status.created?
+    if status.created?
       flash.now[:notice] = status.approved_message
     else
       flash.now[:alert] = status.rejected_message

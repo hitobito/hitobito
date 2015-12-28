@@ -700,6 +700,10 @@ de:
       add_person: Person hinzufügen
       import_list: Liste importieren
 
+    add_requests:
+      approve_title: 'Anfrage akzeptieren'
+      reject_title: 'Anfrage ablehnen'
+
     attrs:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe

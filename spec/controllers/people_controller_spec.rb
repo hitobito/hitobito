@@ -566,6 +566,31 @@ describe PeopleController do
         end
       end
 
+      context 'add requests' do
+        let(:person) { people(:top_leader) }
+
+        it 'loads requests' do
+          r1 = Person::AddRequest::Group.create!(
+            person: person,
+            requester: Fabricate(:person),
+            body: groups(:bottom_layer_one),
+            role_type: Group::BottomLayer::Member.sti_name)
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id
+          expect(assigns(:add_requests)).to eq([r1])
+          expect(flash[:notice]).to be_blank
+        end
+
+        it 'shows flash status accepted' do
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: group.id
+          expect(flash[:notice]).to match(/freigegeben/)
+        end
+
+        it 'shows flash status rejected' do
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_group_one_one).id
+          expect(flash[:alert]).to match(/abgelehnt/)
+        end
+      end
+
       context 'without group' do
         context 'html' do
           it 'keeps flash' do
@@ -688,6 +713,30 @@ describe PeopleController do
       end
     end
   end
+
+  context 'as reader' do
+
+    before { sign_in(user) }
+
+    let(:user) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+
+    context 'add requests' do
+      let(:person) { people(:top_leader) }
+
+      it 'does not load requests' do
+        r1 = Person::AddRequest::Group.create!(
+          person: person,
+          requester: Fabricate(:person),
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+        get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id
+        expect(assigns(:add_requests)).to be_nil
+        expect(flash[:notice]).to be_blank
+      end
+    end
+    
+  end
+
   context 'as api user' do
 
     describe 'GET #show' do

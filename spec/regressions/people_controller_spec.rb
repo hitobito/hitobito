@@ -101,14 +101,6 @@ describe PeopleController, type: :controller do
     end
   end
 
-  describe_action :put, :update, id: true do
-    let(:params) { { person: { birthday: '33.33.33' } } }
-
-    it 'displays old value again' do
-      is_expected.to render_template('edit')
-      expect(dom).to have_selector('.error input[value="33.33.33"]')
-    end
-  end
 
   describe 'role section' do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
@@ -122,6 +114,44 @@ describe PeopleController, type: :controller do
       expect(section.find('tr:eq(1) table tr:eq(1)').text).to include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
       expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml).to include edit_role_path
+    end
+  end
+
+  describe 'add requests section' do
+    let(:section) { dom.all('aside section')[1] }
+
+    it 'contains requests' do
+      r1 = Person::AddRequest::Group.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: groups(:bottom_layer_one),
+        role_type: Group::BottomLayer::Member.sti_name)
+      r2 = Person::AddRequest::Event.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: events(:top_course),
+        role_type: Event::Role::Cook.sti_name)
+      r3 = Person::AddRequest::MailingList.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: mailing_lists(:leaders))
+      get :show, group_id: top_group.id, id: top_leader.id
+
+      expect(section.find('h2').text).to eq 'Anfragen'
+      expect(section.all('tr')[0].text).to include('Bottom Layer Bottom One')
+      expect(section.all('tr')[1].text).to include('Kurs Top Course')
+      expect(section.all('tr')[2].text).to include('Abo Leaders')
+    end
+
+    it 'is hidden if no pending requests exist' do
+      Person::AddRequest::Group.create!(
+        person: Fabricate(:person),
+        requester: Fabricate(:person),
+        body: groups(:bottom_layer_one),
+        role_type: Group::BottomLayer::Member.sti_name)
+      get :show, group_id: top_group.id, id: top_leader.id
+
+      expect(section.find('h2').text).to eq 'Qualifikationen Erstellen'
     end
   end
 
@@ -280,6 +310,15 @@ describe PeopleController, type: :controller do
       expect(dom.all('#content div').size).to eq(12)
     end
 
+  end
+
+  describe_action :put, :update, id: true do
+    let(:params) { { person: { birthday: '33.33.33' } } }
+
+    it 'displays old value again' do
+      is_expected.to render_template('edit')
+      expect(dom).to have_selector('.error input[value="33.33.33"]')
+    end
   end
 
   describe 'redirect_url' do

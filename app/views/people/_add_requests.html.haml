@@ -7,10 +7,16 @@
   = section_table(Person::AddRequest.model_name.human(count: 2), @add_requests) do |request|
     %td
       - if can?(:approve, request)
-        = link_to(icon(:ok), person_add_request_path(request), method: :post)
+        = link_to(icon(:ok),
+                  person_add_request_path(request),
+                  method: :post,
+                  title: t('people.add_requests.approve_title'))
     %td
       - if can?(:reject, request)
-        = link_to(icon(:remove), person_add_request_path(request), method: :delete)
+        = link_to(icon(:remove),
+                  person_add_request_path(request),
+                  method: :delete,
+                  title: t('people.add_requests.reject_title'))
     %td
       %strong= link_to_if(can?(:show, request.body), request.body_label, request.body_path)
       = muted request.body_details

@@ -14,8 +14,12 @@ describe Person::AddRequestMailer do
     SeedFu.seed [Rails.root.join('db', 'seeds')]
   end
 
-  let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
-  let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+  let(:person) do
+    Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
+  end
+  let(:requester) do
+    Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+  end
   let(:group) { groups(:bottom_layer_one) }
 
   let(:request) do
@@ -23,7 +27,7 @@ describe Person::AddRequestMailer do
       person: person,
       requester: requester,
       body: group,
-      role_type: Group::BottomLayer::Member)
+      role_type: Group::BottomLayer::Member.sti_name)
   end
 
   context 'ask person to add' do
@@ -42,7 +46,7 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group/ }
-    its(:body)     { should have_css 'a', text: 'Zur Anfrage' }
+    its(:body)     { should have_css 'a', text: 'Anfrage beantworten' }
 
     it 'lists requester group roles with write permissions only' do
       Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
@@ -54,8 +58,13 @@ describe Person::AddRequestMailer do
 
   context 'ask responsibles to add person' do
 
-    let(:leader) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
-    let(:leader2) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
+    let(:leader) do
+      Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+    end
+    let(:leader2) do
+      Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+    end
+
     let(:person_layer) { groups(:bottom_layer_two) }
     let(:responsibles) { [leader, leader2] }
 
@@ -73,8 +82,45 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /test.host\/groups\/#{group.id}/ }
     its(:body)     { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body)     { should =~ /Leader in Bottom One/ }
-    its(:body)     { should have_css 'a', text: 'Zur Anfrage' }
+    its(:body)     { should have_css 'a', text: 'Anfrage beantworten' }
     its(:body)     { should =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ }
+
+  end
+
+  context 'request approved' do
+
+    let(:leader) do
+      Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+    end
+    let(:mail) { Person::AddRequestMailer.approved(person, group, requester, leader) }
+
+    subject { mail }
+
+    its(:to)       { should == [requester.email] }
+    its(:sender)   { should =~ /#{leader.email.gsub('@','=')}/ }
+    its(:subject)  { should == "Freigabe der Personendaten akzeptiert" }
+    its(:body)     { should =~ /Hallo #{requester.greeting_name}/ }
+    its(:body)     { should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} freigegeben/ }
+    its(:body)     { should have_css 'a', text: 'Bottom Layer Bottom One' }
+
+  end
+
+  context 'request rejected' do
+
+    let(:leader) do
+      Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+    end
+
+    let(:mail) { Person::AddRequestMailer.rejected(person, group, requester, leader) }
+
+    subject { mail }
+
+    its(:to)       { should == [requester.email] }
+    its(:sender)   { should =~ /#{leader.email.gsub('@','=')}/ }
+    its(:subject)  { should == "Freigabe der Personendaten abgelehnt" }
+    its(:body)     { should =~ /Hallo #{requester.greeting_name}/ }
+    its(:body)     { should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} abgelehnt/ }
+    its(:body)     { should have_css 'a', text: 'Bottom Layer Bottom One' }
 
   end
 
@@ -84,36 +130,46 @@ describe Person::AddRequestMailer do
 
     it 'event url' do
       event = events(:top_course)
+      request = Person::AddRequest::Event.new(body: event)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
       group_id = event.groups.first.id
-      link = mail.send(:body_url, event)
+      link = mail.send(:body_url)
       expect(link).to match(/http:/)
       expect(link).to match(/\/groups\/#{group_id}\/events\/#{event.id}/)
     end
 
     it 'group url' do
       group = groups(:toppers)
-      link = mail.send(:body_url, group)
+      request = Person::AddRequest::Group.new(body: group)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
+      link = mail.send(:body_url)
       expect(link).to match(/http:/)
       expect(link).to match(/\/groups\/#{group.id}/)
     end
 
     it 'mailing list url' do
       list = mailing_lists(:leaders)
+      request = Person::AddRequest::MailingList.new(body: list)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
       group_id = list.group_id
-      link = mail.send(:body_url, list)
+      link = mail.send(:body_url)
       expect(link).to match(/http:/)
       expect(link).to match(/\/groups\/#{group_id}\/mailing_lists\/#{list.id}/)
     end
 
   end
 
-  context 'requested person url' do
+  context '#link_to_request' do
 
     let(:mail) { Person::AddRequestMailer.send(:new) }
 
     it 'event body' do
       event = events(:top_course)
-      link = mail.send(:requested_person_url, person, event)
+      request = Person::AddRequest::Event.new(body: event, person: person)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
+
+      link = mail.send(:link_to_request)
+
       expect(link).to match(/http:/)
       expect(link).to match(/body_id=#{event.id}/)
       expect(link).to match(/body_type=Event/)
@@ -121,7 +177,11 @@ describe Person::AddRequestMailer do
 
     it 'group body' do
       group = groups(:toppers)
-      link = mail.send(:requested_person_url, person, group)
+      request = Person::AddRequest::Group.new(body: group, person: person)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
+
+      link = mail.send(:link_to_request)
+
       expect(link).to match(/http:/)
       expect(link).to match(/body_id=#{group.id}/)
       expect(link).to match(/body_type=Group/)
@@ -129,7 +189,11 @@ describe Person::AddRequestMailer do
 
     it 'mailing list body' do
       list = mailing_lists(:leaders)
-      link = mail.send(:requested_person_url, person, list)
+      request = Person::AddRequest::MailingList.new(body: list, person: person)
+      expect(mail).to receive(:add_request).and_return(request).at_least(:once)
+
+      link = mail.send(:link_to_request)
+
       expect(link).to match(/http:/)
       expect(link).to match(/body_id=#{list.id}/)
       expect(link).to match(/body_type=MailingList/)

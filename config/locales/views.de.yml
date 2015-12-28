@@ -642,9 +642,9 @@ de:
 
     add_request_mailer:
       ask_person_to_add:
-        request_link: Zur Anfrage
+        request_link: Anfrage beantworten
       ask_responsibles:
-        request_link: Zur Anfrage
+        request_link: Anfrage beantworten
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.

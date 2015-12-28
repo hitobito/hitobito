@@ -19,11 +19,39 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   private
-  
+
+  def custom_content_mail(recipients, content_key, values, headers = {})
+    content = CustomContent.get(content_key)
+    headers[:to] = use_mailing_emails(recipients)
+    headers[:subject] ||= content.subject
+    mail(headers) do |format|
+      format.html { render text: content.body_with_values(values) }
+    end
+  end
+
+  def use_mailing_emails(recipients)
+    if Array(recipients).first.is_a?(Person)
+      Person.mailing_emails_for(recipients)
+    else
+      recipients
+    end
+  end
+
+  def with_personal_sender(person, headers = {})
+    headers[:return_path] = return_path(person)
+    headers[:sender] = return_path(person)
+    headers[:reply_to] = person.email
+    headers
+  end
+
   # use list return path functionality to send a 'no-reply' email with the sender's email
   # as reply-to address
   def return_path(sender)
     MailRelay::Lists.personal_return_path(MailRelay::Lists.app_sender_name, sender.email)
+  end
+
+  def link_to(label, url = nil)
+    "<a href=\"#{url || label}\">#{label}</a>"
   end
 
 end

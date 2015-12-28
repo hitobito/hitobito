@@ -10,27 +10,20 @@ class Person::LoginMailer < ApplicationMailer
   CONTENT_LOGIN = 'send_login'
 
   def login(recipient, sender, token)
-    content = CustomContent.get(CONTENT_LOGIN)
+    values = content_values(recipient, sender, token)
 
     # This email contains sensitive information and thus
     # is only sent to the main email address.
-    mail(to: recipient.email,
-         return_path: return_path(sender),
-         sender: return_path(sender),
-         reply_to: sender.email,
-         subject: content.subject) do |format|
-      format.html { render text: content_body(content, recipient, sender, token) }
-    end
+    custom_content_mail(recipient.email, CONTENT_LOGIN, values, with_personal_sender(sender))
   end
 
   private
 
-  def content_body(content, recipient, sender, token)
+  def content_values(recipient, sender, token)
     url = login_url(token)
-    content.body_with_values(
-      'recipient-name' => recipient.greeting_name,
+    { 'recipient-name' => recipient.greeting_name,
       'sender-name'    => sender.to_s,
-      'login-url'      => "<a href=\"#{url}\">#{url}</a>")
+      'login-url'      => link_to(url) }
   end
 
   def login_url(token)

@@ -33,6 +33,14 @@ CustomContent.seed_once(:key,
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
     placeholders_required: 'person-name, request-body, answer-request-url',
     placeholders_optional: 'recipient-names, requester-name, requester-roles' },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED,
+    placeholders_required: 'person-name, request-body',
+    placeholders_optional: 'recipient-name, approver-name' },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED,
+    placeholders_required: 'person-name, request-body',
+    placeholders_optional: 'recipient-name, rejecter-name' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -42,6 +50,8 @@ temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN)
 login_form_id = CustomContent.get('views/devise/sessions/info').id
 add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
 add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES).id
+add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
+add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -169,11 +179,11 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
-   label: 'Requests: E-mail manual approval for person'},
+   label: 'Requests: E-mail approval for person data by person'},
 
   {custom_content_id: add_request_person_id,
    locale: 'it',
-   label: "Richiesta: E-mail per l'abilitazione manuale per la persona"},
+   label: "Richiesta: E-mail per l'abilitazione dei dati personali della persona"},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'de',
@@ -197,6 +207,46 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'it',
-   label: "Richiesta: Condivisione Email dati personali da parte responsabili"},
+   label: "Richiesta: E-mail per l'abilitazione dei dati personali da parte responsabili"},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'de',
+   label: 'Anfragen: E-Mail Freigabe Personendaten akzeptiert',
+   subject: 'Freigabe der Personendaten akzeptiert',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>" \
+         "{person-name} wurde zu {request-body} hinzugefügt.<br/><br/>" },
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'fr',
+   label: 'Demandes: E-mail pour la libération de la personne accepté'},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'en',
+   label: 'Requests: Email approval for person data accepted'},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'it',
+   label: "Richiesta: Email per l'abilitazione dei dati personali accettata"},
+
+    {custom_content_id: add_request_rejected_id,
+     locale: 'de',
+     label: 'Anfragen: E-Mail Freigabe Personendaten abgelehnt',
+     subject: 'Freigabe der Personendaten abgelehnt',
+     body: "Hallo {recipient-name}<br/><br/>" \
+           "{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>" \
+           "{person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>" },
+
+    {custom_content_id: add_request_rejected_id,
+     locale: 'fr',
+     label: 'Demandes: E-mail pour la libération de la personne refusé'},
+
+    {custom_content_id: add_request_rejected_id,
+     locale: 'en',
+     label: 'Requests: Email approval for person data rejected'},
+
+    {custom_content_id: add_request_rejected_id,
+     locale: 'it',
+     label: "Richiesta: Email per l'abilitazione dei dati personali rifiutata"},
 
 )

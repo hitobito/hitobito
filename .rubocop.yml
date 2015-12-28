@@ -55,6 +55,22 @@ Documentation:
 DotPosition:
   Enabled: false
 
+# Missing UTF-8 encoding statements should always be created.
+Encoding:
+  Severity: error
+
+# Keep single line bodys for if and unless
+IfUnlessModifier:
+  Enabled: false
+
+# We thinks that's fine
+HasAndBelongsToMany:
+  Enabled: false
+
+# We think that's the developers choice
+Rails/Delegate:
+  Enabled: false
+
 # That's no huge stopper
 Style/EmptyLines:
   Enabled: false
@@ -79,16 +95,8 @@ Style/MultilineOperationIndentation:
 Style/RegexpLiteral:
   Enabled: false
 
-# Missing UTF-8 encoding statements should always be created.
-Encoding:
-  Severity: error
-
-# Keep single line bodys for if and unless
-IfUnlessModifier:
-  Enabled: false
-
-# We thinks that's fine
-HasAndBelongsToMany:
+# We think that's the developers choice
+Style/SymbolProc:
   Enabled: false
 
 # Probably later

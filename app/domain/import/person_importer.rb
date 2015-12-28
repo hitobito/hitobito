@@ -49,7 +49,7 @@ module Import
 
     private
 
-    def save_person(import_person, index)
+    def save_person(import_person, _index)
       creator = request_creator(import_person)
 
       if creator && creator.required?
@@ -76,17 +76,25 @@ module Import
       import_person
     end
 
+    def valid?(import_person)
+      import_person.valid? && import_person.email_unique?(@imported_emails)
+    end
+
     def count_person(import_person, index)
       if valid?(import_person)
-        creator = request_creator(import_person)
-        if import_person.new_record?
-          @new_count += 1
-        elsif creator && creator.required?
-          @request_people << import_person.person
-        end
+        count_valid_person(import_person)
       else
         @failure_count += 1
         @errors << translate(:row_with_error, row: index + 1, errors: import_person.human_errors)
+      end
+    end
+    
+    def count_valid_person(import_person)
+      creator = request_creator(import_person)
+      if import_person.new_record?
+        @new_count += 1
+      elsif creator && creator.required?
+        @request_people << import_person.person
       end
     end
 
@@ -95,9 +103,6 @@ module Import
         ::Person::AddRequest::Creator::Group.new(import_person.role, user_ability)
     end
 
-    def valid?(import_person)
-      import_person.valid? && import_person.email_unique?(@imported_emails)
-    end
 
     def doublette_finder
       @doublette_finder ||= PersonDoubletteFinder.new

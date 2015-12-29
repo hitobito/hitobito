@@ -10,8 +10,7 @@ module Sheet
   class Base
     include Translatable
 
-    class_attribute :parent_sheet, :tabs, :index_on_parent
-    self.index_on_parent = true
+    class_attribute :parent_sheet, :tabs
 
     attr_accessor :title
     attr_reader :view, :child, :entry
@@ -44,18 +43,11 @@ module Sheet
 
       def sheet_for_controller(view_context)
         sheet_class = controller_sheet_class(view_context.controller)
-        if use_parent_sheet?(view_context, sheet_class)
+        if view_context.action_name == 'index' && sheet_class.parent_sheet
           sheet_class = sheet_class.parent_sheet
         end
         sheet_class
       end
-
-      def use_parent_sheet?(view_context, sheet_class)
-        view_context.action_name == 'index' &&
-        sheet_class.parent_sheet &&
-        sheet_class.index_on_parent?
-      end
-
 
       def controller_sheet_class(controller)
         sheet_class_name = controller.class.name.gsub(/Controller/, '').singularize

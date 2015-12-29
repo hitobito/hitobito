@@ -7,15 +7,9 @@
 
 module Sheet
   class Person
-    class History < Sheet::Person
+    class History < Base
 
-      self.index_on_parent = false
-
-      private
-
-      def model_name
-        'person'
-      end
+      self.parent_sheet = Sheet::Person
 
     end
   end

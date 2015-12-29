@@ -23,17 +23,12 @@ class Event::ListsController < ApplicationController
   end
 
   def courses
-    if request.format.csv?
-      authorize!(:export_list, Event::Course)
-    else
-      authorize!(:list_available, Event::Course)
-    end
-
+    authorize_courses
     set_group_vars
+
     respond_to do |format|
       format.html do
-        grouped_courses = grouped(limited_courses_scope, course_grouping)
-        @grouped_events = sorted(grouped_courses)
+        @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
       end
       format.csv do
         render_courses_csv(limited_courses_scope)
@@ -119,6 +114,14 @@ class Event::ListsController < ApplicationController
 
   def nav_left
     @nav_left || params[:action]
+  end
+
+  def authorize_courses
+    if request.format.csv?
+      authorize!(:export_list, Event::Course)
+    else
+      authorize!(:list_available, Event::Course)
+    end
   end
 
 end

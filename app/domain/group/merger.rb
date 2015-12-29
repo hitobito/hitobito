@@ -5,9 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Group::Merger < Struct.new(:group1, :group2, :new_group_name)
+class Group::Merger
 
-  attr_reader :new_group, :errors
+  attr_reader :group1, :group2, :new_group_name, :new_group, :errors
+
+  def initialize(group1, group2, new_group_name)
+    @group1 = group1
+    @group2 = group2
+    @new_group_name = new_group_name
+  end
 
   def merge!
     fail('Cannot merge these Groups') unless group2_valid?

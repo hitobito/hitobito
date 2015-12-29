@@ -9,10 +9,7 @@ class PeopleController < CrudController
 
   include Concerns::RenderPeopleExports
 
-  QUERY_FIELDS = [:first_name, :last_name, :company_name, :nickname, :town]
-
   self.nesting = Group
-  self.nesting_optional = true
 
   self.remember_params += [:name, :kind, :role_type_ids]
 
@@ -27,7 +24,7 @@ class PeopleController < CrudController
   protect_from_forgery with: :null_session, only: [:index, :show]
 
 
-  decorates :group, :person, :people, :versions, :add_requests
+  decorates :group, :person, :people, :add_requests
 
   helper_method :index_full_ability?
 
@@ -37,15 +34,12 @@ class PeopleController < CrudController
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
-  before_render_show :load_asides, if: -> { html_request? }
-
+  before_render_show :load_person_add_requests, if: -> { html_request? }
+  before_render_index :load_people_add_requests, if: -> { html_request? }
 
   def index
     respond_to do |format|
-      format.html do
-        @people = prepare_entries(filter_entries).page(params[:page])
-        @person_add_requests = fetch_person_add_requests
-      end
+      format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_entries_csv(filter_entries) }
       format.email { render_emails(filter_entries) }
@@ -54,51 +48,12 @@ class PeopleController < CrudController
   end
 
   def show
-    return redirect_to_home if group.nil?
-
     respond_to do |format|
       format.html
       format.pdf  { render_pdf([entry]) }
       format.csv  { render_entry_csv }
       format.json { render_entry_json }
     end
-  end
-
-  # GET ajax, for auto complete fields, without @group
-  def query
-    people = []
-    if params.key?(:q) && params[:q].size >= 3
-      people = Person.where(search_condition(*QUERY_FIELDS)).
-                      only_public_data.
-                      order_by_name.
-                      limit(10)
-      people = decorate(people)
-    end
-
-    render json: people.collect(&:as_typeahead)
-  end
-
-  def history
-    @roles = Role.with_deleted.
-                  where(person_id: entry.id).
-                  includes(:group).
-                  order('groups.name', 'roles.deleted_at')
-
-    queries = Person::EventQueries.new(entry)
-    @participations_by_event_type = queries.alltime_participations.group_by do |p|
-      p.event.class.label_plural
-    end
-
-    @participations_by_event_type.each do |_kind, entries|
-      entries.collect! { |e| Event::ParticipationDecorator.new(e) }
-    end
-  end
-
-  def log
-    @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name).
-                                    reorder('created_at DESC, id DESC').
-                                    includes(:item).
-                                    page(params[:page])
   end
 
   # POST button, send password instructions
@@ -135,12 +90,51 @@ class PeopleController < CrudController
 
   alias_method :group, :parent
 
-  def redirect_to_home
-    flash.keep if html_request?
-    redirect_to person_home_path(entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+  def find_entry
+    if group && group.root?
+      # every person may be displayed underneath the root group,
+      # even if it does not directly belong to it.
+      Person.find(params[:id])
+    else
+      super
+    end
+  end
+
+  def assign_attributes
+    if model_params.present?
+      email = model_params.delete(:email)
+      entry.email = email if can?(:update_email, entry)
+    end
+    super
+  end
+
+  def load_people_add_requests
+    if params[:kind].blank? && can?(:create, @group.roles.new)
+      @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
+    end
+  end
+
+  def load_person_add_requests
+    if can?(:update, entry)
+      @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
+      set_add_request_status_notification if show_add_request_status?
+    end
+  end
+
+  def show_add_request_status?
+    flash[:notice].blank? && flash[:alert].blank? &&
+    params[:body_type].present? && params[:body_id].present?
+  end
+
+  def set_add_request_status_notification
+    status = Person::AddRequest::Status.for(entry.id, params[:body_type], params[:body_id])
+    return if status.pending?
+
+    if status.created?
+      flash.now[:notice] = status.approved_message
+    else
+      flash.now[:alert] = status.rejected_message
+    end
   end
 
   def filter_entries
@@ -160,60 +154,11 @@ class PeopleController < CrudController
     end
   end
 
-  def load_asides
-    queries = Person::EventQueries.new(entry)
-    @pending_applications = Event::ApplicationDecorator.decorate_collection(
-                              queries.pending_applications)
-    @upcoming_events      = EventDecorator.decorate_collection(queries.upcoming_events)
-    @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
-
-    if can?(:update, entry)
-      @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
-      set_add_request_status_notification if flash[:notice].blank? && flash[:alert].blank?
-    end
-  end
-
-  def set_add_request_status_notification
-    return if params[:body_type].blank? || params[:body_id].blank?
-    status = Person::AddRequest::Status.for(entry.id, params[:body_type], params[:body_id])
-    return if status.pending?
-
-    if status.created?
-      flash.now[:notice] = status.approved_message
-    else
-      flash.now[:alert] = status.rejected_message
-    end
-  end
-
-  def find_entry
-    if group && group.root?
-      # every person may be displayed underneath the root group,
-      # even if it does not directly belong to it.
-      Person.find(params[:id])
-    else
-      super
-    end
-  end
-
-  def assign_attributes
-    if model_params.present?
-      email = model_params.delete(:email)
-      entry.email = email if can?(:update_email, entry)
-    end
-    super
-  end
-
   def prepare_entries(entries)
     if index_full_ability?
       entries.includes(:additional_emails, :phone_numbers)
     else
       entries.preload_public_accounts
-    end
-  end
-
-  def fetch_person_add_requests
-    if params[:kind].blank? && can?(:create, @group.roles.new)
-      @group.person_add_requests.list.includes(person: :primary_group)
     end
   end
 

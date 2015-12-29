@@ -286,18 +286,6 @@ describe PeopleController do
       end
     end
 
-    context 'GET query' do
-      it 'queries all people' do
-        Fabricate(:person, first_name: 'Pascal')
-        Fabricate(:person, last_name: 'Opassum')
-        Fabricate(:person, last_name: 'Anything')
-        get :query, q: 'pas'
-
-        expect(response.body).to match(/Pascal/)
-        expect(response.body).to match(/Opassum/)
-      end
-    end
-
     context 'PUT update' do
       let(:person) { people(:bottom_member) }
       let(:group) { person.groups.first }
@@ -545,27 +533,6 @@ describe PeopleController do
         end
       end
 
-      context 'participations' do
-        let(:group) { groups(:top_layer) }
-        let(:person) { people(:top_leader) }
-        let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
-
-        it 'pending_applications returns events that are not active' do
-          participation = Fabricate(:event_participation, person: person)
-          application = Fabricate(:event_application, priority_1: course, participation: participation)
-          get :show, group_id: group.id, id: person.id
-          expect(assigns(:pending_applications)).to eq [application]
-        end
-
-        it 'upcoming_events returns events that are active' do
-          course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
-          course.save
-          participation = Fabricate(:event_participation, event: course, person: person, active: true)
-          get :show, group_id: group.id, id: person.id
-          expect(assigns(:upcoming_events)).to eq [course]
-        end
-      end
-
       context 'add requests' do
         let(:person) { people(:top_leader) }
 
@@ -588,43 +555,6 @@ describe PeopleController do
         it 'shows flash status rejected' do
           get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_group_one_one).id
           expect(flash[:alert]).to match(/abgelehnt/)
-        end
-      end
-
-      context 'without group' do
-        context 'html' do
-          it 'keeps flash' do
-            get :show, id: top_leader.id
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
-          end
-        end
-
-        context 'json' do
-          it 'redirects to json' do
-            get :show, id: top_leader.id, format: :json, user_email: 'hans@example.com', user_token: '123'
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
-                                                         top_leader.id,
-                                                         format: :json,
-                                                         user_email: 'hans@example.com',
-                                                         user_token: '123'))
-          end
-        end
-      end
-    end
-
-    describe 'GET #history' do
-
-      context 'all roles' do
-
-        it 'all group roles ordered by group, to date' do
-          person = Fabricate(:person)
-          r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
-          r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
-          r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
-
-          get :history, group_id: groups(:bottom_group_one_one).id, id: person.id
-
-          expect(assigns(:roles)).to eq([r1, r3, r2])
         end
       end
 
@@ -734,7 +664,7 @@ describe PeopleController do
         expect(flash[:notice]).to be_blank
       end
     end
-    
+
   end
 
   context 'as api user' do

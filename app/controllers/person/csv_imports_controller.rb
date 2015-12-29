@@ -41,21 +41,25 @@ class Person::CsvImportsController < ApplicationController
 
   def create
     valid_for_import? do
-      if params[:button] == 'back'
+      if params[:button] != 'back'
+        perform_import
+      else
         define_mapping
         render :define_mapping
-      else
-        importer.people # populate
-        importer.errors.clear # do not display previous validation errors
-        importer.import
-        set_importer_flash_info
-        set_importer_flash_errors
-        redirect_to group_people_path(redirect_params)
       end
     end
   end
 
   private
+
+  def perform_import
+    importer.people # populate
+    importer.errors.clear # do not display previous validation errors
+    importer.import
+    set_importer_flash_info
+    set_importer_flash_errors
+    redirect_to group_people_path(redirect_params)
+  end
 
   def set_importer_flash_info
     add_importer_info_to_flash(:notice, :new, importer.new_count)

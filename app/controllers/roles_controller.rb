@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
+
   respond_to :js
 
   self.nesting = Group
@@ -19,7 +20,7 @@ class RolesController < CrudController
 
   before_render_form :set_group_selection
 
-  before_filter :remember_primary_group, only: [:destroy]
+  before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
   hide_action :index, :show
@@ -90,14 +91,19 @@ class RolesController < CrudController
 
   def change_type
     if create_new_role_and_destroy_old_role
-      @role, @old_role = @new_role, @role
-      respond_to do |format|
-        format.html { redirect_to(after_update_location, notice: role_change_message) }
-        format.js
-      end
+      change_type_successfull
     else
       copy_errors(@new_role)
       render :edit
+    end
+  end
+
+  def change_type_successfull
+    @old_role = @role
+    @role = @new_role
+    respond_to do |format|
+      format.html { redirect_to(after_update_location, notice: role_change_message) }
+      format.js
     end
   end
 

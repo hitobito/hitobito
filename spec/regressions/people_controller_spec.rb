@@ -66,10 +66,10 @@ describe PeopleController, type: :controller do
     end
 
     it 'member without permission to see details cannot see created or updated info' do
-      person1 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
-      person2 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
+      person1 = (Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person)
+      person2 = (Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
       sign_in(person1)
-      get :show, id: person2
+      get :show, group_id: person2.primary_group_id, id: person2
       expect(dom).not_to have_selector('dt', text: 'Erstellt')
       expect(dom).not_to have_selector('dt', text: 'Geändert')
     end
@@ -217,97 +217,6 @@ describe PeopleController, type: :controller do
     def create_participation(date, active_participation = false)
       set_start_finish(course, date, date + 5.days)
       Fabricate(:event_participation, person: top_leader, event: course, active: active_participation)
-    end
-
-  end
-
-  describe '#history' do
-    let(:params) { { group_id: top_group.id, id: other.id } }
-    it 'list current role and group' do
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 1
-      role_row = dom.find('table tbody tr:eq(1)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
-      expect(role_row.find('td:eq(3)').text).to be_present
-      expect(role_row.find('td:eq(4)').text).not_to be_present
-    end
-
-    it 'lists past roles' do
-      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
-      role.created_at = Time.zone.now - 2.years
-      role.destroy
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(1)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'Group 11'
-      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
-      expect(role_row.find('td:eq(3)').text).to be_present
-      expect(role_row.find('td:eq(4)').text).to be_present
-    end
-
-    it 'lists roles in other groups' do
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(2)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(4)').text).not_to be_present
-    end
-
-    it 'lists past roles in other groups' do
-      role = Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      role.created_at = Time.zone.now - 2.years
-      role.destroy
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(2)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(4)').text).to be_present
-    end
-
-    it "lists person's events" do
-      course1 = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
-      event1 = Fabricate(:event, groups: [groups(:top_layer)])
-      event2 = Fabricate(:event, groups: [groups(:top_layer)])
-      [course1, event1, event2].each do |event|
-        Fabricate(:event_role, participation: Fabricate(:event_participation, person: people(:top_leader), event: event), type: 'Event::Role::Leader')
-      end
-
-      get :history, group_id: top_group.id, id: top_leader.id
-
-      events = dom.find('events')
-
-      expect(events).to have_selector('h2', text: 'Kurse')
-      expect(events).to have_selector('h2', text: 'Anlässe')
-
-      expect(events.all('tr td a').size).to eq 3
-    end
-  end
-
-  describe 'GET log', versioning: true do
-
-    it 'renders empty log' do
-      get :log, id: test_entry.id, group_id: top_group.id
-
-      expect(response.body).to match(/keine Änderungen/)
-    end
-
-    it 'renders log in correct order' do
-      Fabricate(:social_account, contactable: test_entry, label: 'Foo', name: 'Bar')
-      test_entry.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
-      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '23425 1341 12')
-      Person::AddRequest::Group.create!(
-        person: test_entry,
-        requester: Fabricate(:person),
-        body: groups(:top_group),
-        role_type: Group::TopGroup::Member.sti_name)
-      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '43 3453 45 254')
-
-      get :log, id: test_entry.id, group_id: top_group.id
-
-      expect(dom.all('h4').size).to eq(1)
-      expect(dom.all('#content div').size).to eq(12)
     end
 
   end

@@ -189,17 +189,16 @@ class Person < ActiveRecord::Base
   end
 
   def person_name(format = :default)
-    name = if format == :list
-             "#{last_name} #{first_name}".strip
-           else
-             full_name
-           end
+    name = full_name(format)
     name << " / #{nickname}" if nickname?
     name
   end
 
-  def full_name
-    "#{first_name} #{last_name}".strip
+  def full_name(format = :default)
+    case format
+    when :list then "#{last_name} #{first_name}".strip
+    else "#{first_name} #{last_name}".strip
+    end
   end
 
   def greeting_name
@@ -211,11 +210,11 @@ class Person < ActiveRecord::Base
   end
 
   def years
-    if birthday?
-      now = Time.zone.now.to_date
-      extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
-      now.year - birthday.year - (extra ? 0 : 1)
-    end
+    return unless birthday?
+
+    now = Time.zone.now.to_date
+    extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
+    now.year - birthday.year - (extra ? 0 : 1)
   end
 
   ### AUTHENTICATION INSTANCE METHODS
@@ -242,7 +241,6 @@ class Person < ActiveRecord::Base
     errors.add(:email, :taken)
     false
   end
-
 
   private
 

@@ -29,9 +29,9 @@ class Person::AddRequest < ActiveRecord::Base
   validates_by_schema
   validates :person_id, uniqueness: { scope: [:type, :body_id] }
 
-  scope :list, -> do
+  scope :list, (lambda do
     includes(:person).references(:person).merge(Person.order_by_name).order(:created_at)
-  end
+  end)
 
   class << self
     def for_layer(layer_group)

@@ -17,11 +17,8 @@ Hitobito::Application.routes.draw do
     get '/500', to: 'errors#500'
     get '/503', to: 'errors#503'
 
-    resources :people, only: :show do
-      collection do
-        get :query
-      end
-    end
+    get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/:id' => 'person/top#show', as: :person
 
     resources :groups do
 
@@ -39,10 +36,11 @@ Hitobito::Application.routes.draw do
 
       resources :people, except: [:new, :create] do
         member do
-          get :history
-          get :log
           post :send_password_instructions
           put :primary_group
+
+          get 'history' => 'person/history#index'
+          get 'log' => 'person/log#index'
         end
 
         resources :qualifications, only: [:new, :create, :destroy]

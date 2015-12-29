@@ -594,3 +594,6 @@ DEPENDENCIES
   validates_timeliness
   wagons
   wirble
+
+BUNDLED WITH
+   1.10.6

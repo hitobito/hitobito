@@ -4,8 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-
 # == Schema Information
 #
 # Table name: qualification_kinds
@@ -17,6 +15,7 @@
 #  deleted_at     :datetime
 #  reactivateable :integer
 #
+
 class QualificationKind < ActiveRecord::Base
 
   include Paranoia::Globalized

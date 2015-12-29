@@ -1,4 +1,15 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: subscriptions
+#
+#  id              :integer          not null, primary key
+#  mailing_list_id :integer          not null
+#  subscriber_id   :integer          not null
+#  subscriber_type :string           not null
+#  excluded        :boolean          default(FALSE), not null
+#
+
 
 #  Copyright (c) 2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

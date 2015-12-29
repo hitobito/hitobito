@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151208102024) do
+ActiveRecord::Schema.define(version: 20151229124153) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -321,6 +321,13 @@ ActiveRecord::Schema.define(version: 20151208102024) do
 
   add_index "people_relations", ["head_id"], name: "index_people_relations_on_head_id"
   add_index "people_relations", ["tail_id"], name: "index_people_relations_on_tail_id"
+
+  create_table "person_add_request_ignored_approvers", force: :cascade do |t|
+    t.integer "group_id",  null: false
+    t.integer "person_id", null: false
+  end
+
+  add_index "person_add_request_ignored_approvers", ["group_id", "person_id"], name: "person_add_request_ignored_approvers_index", unique: true
 
   create_table "person_add_requests", force: :cascade do |t|
     t.integer  "person_id",    null: false

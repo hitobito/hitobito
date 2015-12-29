@@ -20,18 +20,18 @@ module Sheet
     tab 'activerecord.models.event.other',
         :simple_group_events_path,
         params: { returning: true },
-        if: lambda { |view, group|
+        if: (lambda do |view, group|
           group.event_types.include?(::Event) &&
           view.can?(:index_events, group)
-        }
+        end)
 
     tab 'activerecord.models.event/course.other',
         :course_group_events_path,
         params: { returning: true },
-        if: lambda { |view, group|
+        if: (lambda do |view, group|
           group.event_types.include?(::Event::Course) &&
             view.can?(:'index_event/courses', group)
-        }
+        end)
 
     tab 'activerecord.models.mailing_list.other',
         :group_mailing_lists_path,
@@ -40,10 +40,10 @@ module Sheet
 
     tab :tab_person_add_request_label,
         :group_person_add_requests_path,
-        if: lambda { |view, group|
+        if: (lambda do |view, group|
           group.layer &&
           view.can?(:index_person_add_requests, group)
-        }
+        end)
 
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,

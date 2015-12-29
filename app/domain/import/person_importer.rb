@@ -88,7 +88,7 @@ module Import
         @errors << translate(:row_with_error, row: index + 1, errors: import_person.human_errors)
       end
     end
-    
+
     def count_valid_person(import_person)
       creator = request_creator(import_person)
       if import_person.new_record?

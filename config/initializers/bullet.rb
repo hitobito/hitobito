@@ -15,18 +15,28 @@ if defined? Bullet
   Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :groups
   Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Person', association: :roles
 
-  # answers for event::participations
+  # When loading events via the polymorphic Person::AddRequest#body, it is not possible to include
+  # :groups
+  Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event', association: :groups
+  Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event::Course', association: :groups
 
   # EventKind may not be eager loaded if some event types have kind and others not.
   Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Event::Course', association: :kind
 
   # event, :person and roles for participation list
   [:application, :answers, :event, :person, :roles].each do |assoc|
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Participation', association: assoc
+    Bullet.add_whitelist type: :unused_eager_loading,
+                         class_name: 'Event::Participation',
+                         association: assoc
   end
 
-  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Kind', association: :translations
+  Bullet.add_whitelist type: :unused_eager_loading,
+                       class_name: 'Event::Kind',
+                       association: :translations
 
-  # Event::Participation decorator informs marks participants with incomplete answers on participations lists
-  Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event::Answer', association: :question
+  # Event::Participation decorator informs marks participants with incomplete answers on
+  # participations lists
+  Bullet.add_whitelist type: :unused_eager_loading,
+                       class_name: 'Event::Answer',
+                       association: :question
 end

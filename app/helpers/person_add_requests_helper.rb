@@ -12,10 +12,17 @@ module PersonAddRequestsHelper
     required = @group.require_person_add_requests
     options[:method] = required ? :delete : :post
     title = required ? 'deactivate_title' : 'activate_title'
-    options[:title] = t("person.add_requests.index.#{title}")
+    options[:title] = t("group.person_add_requests.index.#{title}")
     url = group_person_add_requests_path(@group)
 
     toggle_button(url, required, nil, options)
+  end
+
+  def approver_layer_roles(person)
+    types = Person::AddRequest::IgnoredApprover.approver_role_types
+    person.roles.select do |r|
+      types.include?(r.class) && r.group.layer_group_id == @group.id
+    end.collect(&:to_s).join(', ')
   end
 
 end

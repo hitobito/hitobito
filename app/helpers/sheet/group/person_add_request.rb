@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Person
-    class AddRequest < Base
+  class Group
+    class PersonAddRequest < Base
       self.parent_sheet = Sheet::Group
     end
   end

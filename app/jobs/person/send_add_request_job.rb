@@ -17,28 +17,34 @@ class Person::SendAddRequestJob < BaseJob
   def perform
     set_locale
 
+    ask_person
+    ask_responsibles
+
+    # as a little extra, maintain the ignored approvers here
+    clear_old_ignored_approvers
+  end
+
+  private
+
+  def ask_person
     if person.password?
       Person::AddRequestMailer.ask_person_to_add(request).deliver_now
     end
+  end
 
+  def ask_responsibles
     responsibles = load_responsibles.to_a
     if responsibles.present?
       Person::AddRequestMailer.ask_responsibles(request, responsibles).deliver_now
     end
   end
 
-  private
-
   def load_responsibles
-    Person.in_layer(person.primary_group).
-      where(roles: { type: responsible_role_types.collect(&:sti_name) }).
-      uniq
+    Person::AddRequest::IgnoredApprover.approvers(person.primary_group.layer_group)
   end
 
-  def responsible_role_types
-    Role.all_types.select do |type|
-      (type.permissions & [:layer_full, :layer_and_below_full]).present?
-    end
+  def clear_old_ignored_approvers
+    Person::AddRequest::IgnoredApprover.delete_old_ones
   end
 
   def request

@@ -427,6 +427,22 @@ de:
         title: "Gruppe verschieben"
         select_group: "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
 
+    person_add_requests:
+
+      index:
+        activated: Manuelle Freigabe ist aktiviert
+        deactivated: Manuelle Freigabe ist nicht aktiviert
+        deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
+        activate_title: Manuelle Freigabe aktivieren
+        deactivate_title: Manuelle Freigabe deaktivieren
+
+      list:
+        approve: Akzeptieren
+        reject: Ablehnen
+
+      approvers:
+        title: 'Benachrichtigungen an'
+
   groups:
     actions_show:
       export_subgroups: 'CSV Untergruppen'
@@ -451,23 +467,6 @@ de:
     activated: Manuelle Freigabe aktiviert
     global:
       no_list_entries: Momentan sind keine Anfragen offen.
-
-  group:
-    person_add_requests:
-
-      index:
-        activated: Manuelle Freigabe ist aktiviert
-        deactivated: Manuelle Freigabe ist nicht aktiviert
-        deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
-        activate_title: Manuelle Freigabe aktivieren
-        deactivate_title: Manuelle Freigabe deaktivieren
-
-      list:
-        approve: Akzeptieren
-        reject: Ablehnen
-
-      approvers:
-        title: 'Benachrichtigungen an'
 
   group/merge:
     success: 'Die gewählten Gruppen wurden zur neuen Gruppe %{new_group_name} fusioniert.'

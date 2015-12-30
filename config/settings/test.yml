@@ -5,3 +5,7 @@
 
 csv:
   encoding: UTF-8
+
+event:
+  attachments:
+    max_file_size: 2 # mb

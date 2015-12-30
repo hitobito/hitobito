@@ -70,6 +70,14 @@ a.btn[disabled="disabled"] {
   pointer-events: none;
 }
 
+a.green {
+  .icon,
+  [class^="icon-"],
+  [class*=" icon-"] {
+    background-image: image-url("glyphicons-halflings-green.png");
+  }
+}
+
 .form-horizontal .control-group {
   margin-bottom: 0;
 }
@@ -274,6 +282,36 @@ td.issue, td.revoke {
    cursor: pointer;
    cursor: hand;
 }
+
+li.form {
+  margin-top: 5px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.custom-file {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 10px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    cursor: pointer;
+    display: block;
+  }
+}
+
 
 input.switcher {
   max-height: 0;

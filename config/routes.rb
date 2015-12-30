@@ -79,13 +79,12 @@ Hitobito::Application.routes.draw do
         end
 
         scope module: 'event' do
-          resources :participations do
-            get 'print', on: :member
-          end
 
-          resources :roles, except: [:index, :show]
-          get 'roles' => 'roles#new' # route required for language switch
-          get 'roles/:id' => 'roles#edit' # route required for language switch
+          member do
+            get  'register' => 'register#index'
+            post 'register' => 'register#check'
+            put  'register' => 'register#register'
+          end
 
           resources :application_market, only: :index do
             member do
@@ -103,13 +102,18 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resources :attachments, only: [:create, :destroy]
+
+          resources :participations do
+            get 'print', on: :member
+          end
+
+          resources :roles, except: [:index, :show]
+          get 'roles' => 'roles#new' # route required for language switch
+          get 'roles/:id' => 'roles#edit' # route required for language switch
+
           resources :qualifications, only: [:index, :update, :destroy]
 
-          member do
-            get  'register' => 'register#index'
-            post 'register' => 'register#check'
-            put  'register' => 'register#register'
-          end
         end
 
       end

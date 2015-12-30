@@ -5,7 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class PictureUploader < CarrierWave::Uploader::Base
+class Person::PictureUploader < CarrierWave::Uploader::Base
+
+  MAX_DIMENSION = 8000
+  EXTENSION_WHITE_LIST = %w(jpg jpeg gif png)
 
   include CarrierWave::MiniMagick
 
@@ -13,11 +16,18 @@ class PictureUploader < CarrierWave::Uploader::Base
   storage :file
 
   # Process files as they are uploaded:
+  process :validate_dimensions
   process resize_to_fill: [72, 72]
 
   # Create different versions of your uploaded files:
   version :thumb do
     process resize_to_fill: [32, 32]
+  end
+
+  class << self
+    def accept_extensions
+      EXTENSION_WHITE_LIST.collect { |e| ".#{e}" }.join(',')
+    end
   end
 
   # Override the directory where uploaded files will be stored.
@@ -38,7 +48,20 @@ class PictureUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_white_list
-    %w(jpg jpeg gif png)
+    EXTENSION_WHITE_LIST
+  end
+
+  private
+
+  # check for images that are larger than you probably want
+  def validate_dimensions
+    manipulate! do |img|
+      if img.dimensions.any? { |i| i > MAX_DIMENSION }
+        fail CarrierWave::ProcessingError,
+             I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
+      end
+      img
+    end
   end
 
 end

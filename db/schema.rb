@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151229124153) do
+ActiveRecord::Schema.define(version: 20151230101630) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -76,6 +76,13 @@ ActiveRecord::Schema.define(version: 20151229124153) do
     t.boolean "waiting_list",         default: false, null: false
     t.text    "waiting_list_comment"
   end
+
+  create_table "event_attachments", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string  "file",     null: false
+  end
+
+  add_index "event_attachments", ["event_id"], name: "index_event_attachments_on_event_id"
 
   create_table "event_dates", force: :cascade do |t|
     t.integer  "event_id",  null: false

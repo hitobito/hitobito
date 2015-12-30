@@ -77,7 +77,7 @@ class Person < ActiveRecord::Base
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
-  mount_uploader :picture, PictureUploader
+  mount_uploader :picture, Person::PictureUploader
 
   model_stamper
   stampable stamper_class_name: :person,

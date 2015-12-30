@@ -93,6 +93,8 @@ class Event < ActiveRecord::Base
 
   belongs_to :contact, class_name: 'Person'
 
+  has_many :attachments, dependent: :destroy
+
   has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
   has_many :questions, dependent: :destroy, validate: true
 

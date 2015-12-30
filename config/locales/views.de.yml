@@ -248,6 +248,12 @@ de:
       popover_waiting_list:
         waiting_list_info: Setze diese Person auf die Warteliste für Kurse der Art %{event_kind}.
 
+    attachments:
+      create:
+        failure: "Upload fehlgeschlagen: %{errors}."
+      destroy:
+        failure: "Löschen fehlgeschlagen: %{errors}."
+
     kinds:
       form:
         help_minimum_age: 'Jahre (Jahrgang am ersten Kursdatum massgebend)'
@@ -300,14 +306,12 @@ de:
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
 
   events:
-    preconditions: 'Erforderliche Qualifikationen'
-    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
-    tabs:
-      participants: 'Teilnehmende'
+    attachments:
+      add: "hinzufügen"
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
@@ -323,9 +327,13 @@ de:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen
       title_event/course: Kurs erstellen
+    preconditions: 'Erforderliche Qualifikationen'
+    tabs:
+      participants: 'Teilnehmende'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

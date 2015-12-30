@@ -29,10 +29,12 @@
 #= require bootstrap-tab
 #= require jquery_nested_form
 #= require chosen-jquery
+#= require jquery.remotipart
 #= require remote-typeahead
 #= require modernizr.custom.min
 #= require moment.min
 #= require_self
+#= require_tree ./modules
 #= require wagon
 #= require turbolinks
 #= require progress-bar

@@ -62,9 +62,10 @@ gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
-gem 'turbolinks'
+gem 'remotipart'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
+gem 'turbolinks'
 gem 'uglifier'
 
 group :development, :test do

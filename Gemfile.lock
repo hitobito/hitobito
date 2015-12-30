@@ -350,6 +350,7 @@ GEM
       rdoc (~> 4)
     redcarpet (3.3.3)
     ref (2.0.0)
+    remotipart (1.2.1)
     request_profiler (0.0.4)
       ruby-prof
     request_store (1.2.0)
@@ -572,6 +573,7 @@ DEPENDENCIES
   rails_autolink
   rdoc-tags
   redcarpet
+  remotipart
   request_profiler
   rspec-collection_matchers
   rspec-its

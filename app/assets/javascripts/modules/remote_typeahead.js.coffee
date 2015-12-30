@@ -1,12 +1,16 @@
+#  Copyright (c) 2015 Pro Natura Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 # scope for global functions
-window.Application ||= {}
+app = window.App ||= {}
 
-Application.setupQuicksearch = ->
+app.setupQuicksearch = ->
   qs = $('#quicksearch')
   setupRemoteTypeahead(qs, 20, openQuicksearchResult)
 
-Application.setupEntityTypeahead = (index, field) ->
+app.setupEntityTypeahead = (index, field) ->
   input = $(this)
   setupRemoteTypeahead(input, 10, setEntityId)
   input.keydown((event) ->
@@ -73,3 +77,19 @@ isModifyingKey = (k) ->
      (k >= 33 && k <= 34 )  || # Page Down, Page Up
      (k >= 112 && k <= 123) || # F1 - F12
      (k >= 144 && k <= 145 ))  # Num Lock, Scroll Lock
+
+
+# set insertFields function for nested-form gem
+window.nestedFormEvents.insertFields = (content, assoc, link) ->
+  el = $(link).closest('form').find("##{assoc}_fields")
+  el.append($(content))
+    .find('[data-provide=entity]').each(app.setupEntityTypeahead)
+
+
+$ ->
+  # wire up quick search
+  app.setupQuicksearch()
+
+  # wire up person auto complete
+  $('[data-provide=entity]').each(app.setupEntityTypeahead)
+  $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))

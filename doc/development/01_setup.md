@@ -196,6 +196,9 @@ sollten folgende generierten Dateien gelöscht werden:
 * Übersetzungen der Models in `config/locales/models.[name].de.yml`
 * Seeddaten: `rm -rf db/seeds`
 
+Damit entsprechende Testdaten für Tests sowie Tarantula vorhanden sind, müssen die Fixtures im Wagon entsprechend der generierten Organisationsstruktur angepasst werden.
+* Anpassen der Fixtures für people, groups, roles, events, usw. (`spec/fixtures`)
+* Anpassen der Tarantula Tests im Wagon (`test/tarantula/tarantula_test.rb`)
 
 ### Gruppenstruktur erstellen
 

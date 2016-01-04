@@ -95,6 +95,8 @@ module TarantulaConfig
     # access denied - POST participations is allowed, but not GET participations
     # (only GET participations/new).
     t.allow_500_for(/groups\/\d+\/events\/\d+\/participations\?event_participation/)
+    # tarantula posts number instead of filename which causes a 500 error
+    t.allow_500_for(/groups\/\d+\/events\/\d+\/attachments/)
   end
   # rubocop:enable MethodLength, Style/RegexpLiteral, Metrics/AbcSize
 

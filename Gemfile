@@ -10,7 +10,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.5'
 
 gem 'activerecord-session_store'
-gem 'airbrake'
+gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
@@ -46,7 +46,7 @@ gem 'simpleidn'
 gem 'sqlite3' # for development, test and production when generating assets
 gem 'thinking-sphinx'
 gem 'validates_by_schema'
-gem 'validates_timeliness'
+gem 'validates_timeliness', '< 4.0'
 gem 'wagons'
 
 # load after others because of active record inherited alias chain.

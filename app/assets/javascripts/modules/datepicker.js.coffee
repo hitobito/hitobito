@@ -31,6 +31,6 @@ class app.Datepicker
 
   bind: ->
     self = this
-    $(document).on('click', 'input.date, .controls .icon-calendar', (e) -> self.show(this))
+    $(document).on('click', 'input.date, .control-group .icon-calendar', (e) -> self.show(this))
 
 new app.Datepicker().bind()

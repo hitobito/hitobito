@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_pbs
+  remote: ../hitobito_pro_natura
   specs:
-    hitobito_pbs (0.0.1)
+    hitobito_pro_natura (0.0.1)
       hitobito_youth
 
 PATH
@@ -473,6 +473,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timecop (0.8.0)
     timeliness (0.3.7)
     tins (1.6.0)
     ttfunk (1.4.0)
@@ -541,7 +542,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_pbs!
+  hitobito_pro_natura!
   hitobito_youth!
   http_accept_language
   jquery-rails
@@ -590,12 +591,10 @@ DEPENDENCIES
   sqlite3
   therubyracer
   thinking-sphinx
+  timecop
   turbolinks
   uglifier
   validates_by_schema
   validates_timeliness
   wagons
   wirble
-
-BUNDLED WITH
-   1.10.6

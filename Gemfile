@@ -93,6 +93,7 @@ group :test do
   gem 'rspec-its'
   gem 'rspec-collection_matchers'
   gem 'selenium-webdriver'
+  gem 'timecop'
 end
 
 group :console do

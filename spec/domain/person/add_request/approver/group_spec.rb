@@ -59,7 +59,7 @@ describe Person::AddRequest::Approver::Group do
       end.to change { Delayed::Job.count }.by(1)
     end
 
-    it 'creates person log entry for role and for request' do
+    it 'creates person log entry for role and for request', versioning: true do
       expect do
         subject.approve
       end.to change { PaperTrail::Version.count }.by(2)
@@ -104,7 +104,7 @@ describe Person::AddRequest::Approver::Group do
       end.to change { Delayed::Job.count }.by(1)
     end
 
-    it 'creates person log entry for request' do
+    it 'creates person log entry for request', versioning: true do
       expect do
         subject.reject
       end.to change { PaperTrail::Version.count }.by(1)
@@ -120,7 +120,7 @@ describe Person::AddRequest::Approver::Group do
         end.not_to change { Delayed::Job.count }
       end
 
-      it 'creates person log entry for request' do
+      it 'creates person log entry for request', versioning: true do
         expect do
           subject.reject
         end.to change { PaperTrail::Version.count }.by(1)

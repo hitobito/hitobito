@@ -12,8 +12,6 @@ de:
     "no": "nein"
     unknown: unbekannt
     nobody: niemand
-    activate: Aktivieren
-    deactivate: Aktiviert
 
     from: Von
     until: Bis
@@ -437,12 +435,18 @@ de:
 
     person_add_requests:
 
+      actions_index:
+        activate: Manuelle Freigabe aktivieren
+        deactivate: Deaktivieren
+        activate_title: Manuelle Freigabe aktivieren
+        deactivate_title: Manuelle Freigabe deaktivieren
+
       index:
         activated: Manuelle Freigabe ist aktiviert
         deactivated: Manuelle Freigabe ist nicht aktiviert
-        deactivated_caption: Du kannst einfach Personen zu Gruppen, Anlässen und Abos hinzufügen. Wer das tut, erhält automatisch Zugriff auf diese Personendaten. Aktiviere die manuelle Freigabe über den Button <strong>Aktivieren</strong>, wenn du bevorzugst, dass du oder die betroffene Person selbst Anfragen auf Personendaten erst manuell freigeben muss.
-        activate_title: Manuelle Freigabe aktivieren
-        deactivate_title: Manuelle Freigabe deaktivieren
+        explanation: >
+          Wenn aktiv, werden Personen dieser Ebene erst zu Gruppen, Anlässen und Abos hinzugefügt,
+          nachdem eine zugriffsberechtigte Person die Freigabe erteilt.
 
       list:
         approve: Akzeptieren
@@ -643,9 +647,15 @@ de:
         field_in_database: 'Feld in der Datenbank'
         preview: 'Vorschau'
         update_behaviour: Aktualisierungsverhalten
-        keep_behaviour: 'Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren, bestehende Werte bleiben erhalten.'
-        override_behaviour: 'Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben. Leere Werte im CSV löschen dabei bestehende in der Datenbank.'
-        update_behaviour_explanation: 'Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen. Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.'
+        keep_behaviour: >
+          Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
+          bestehende Werte bleiben erhalten.
+        override_behaviour: >
+          Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
+          Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        update_behaviour_explanation: >
+          Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
+          Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.
 
       new:
         upload_button: 'Hochladen'
@@ -653,7 +663,8 @@ de:
 
       preview:
         import_now_button: Personen jetzt importieren
-        import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
+        import_details_html: >
+          Folgende Personen werden mit der <strong>Rolle %{role}</strong>
           in die <strong>Gruppe %{group}</strong> importiert.
 
     add_request_mailer:
@@ -680,8 +691,8 @@ de:
         one: '%{count} %{role} wird nicht importiert.'
         other: '%{count} %{role} werden nicht importiert.'
       requests:
-        one: '%{count} %{role} wird nicht importiert und wird eine Zugriffsanfrage für ihre Personendaten erhalten.'
-        other: '%{count} %{role} werden nicht importiert und werden eine Zugriffsanfrage für ihre Personendaten erhalten.'
+        one: '%{count} %{role} wird eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert.'
+        other: '%{count} %{role} werden eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert.'
 
     create:
       new:
@@ -694,8 +705,8 @@ de:
         one: '%{count} %{role} wurde nicht importiert.'
         other: '%{count} %{role} wurden nicht importiert.'
       requests:
-        one: '%{count} %{role} wurde nicht importiert und hat eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfrage erneut vorgenommen werden.'
-        other: '%{count} %{role} wurden nicht importiert und haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden.'
+        one: '%{count} %{role} hat eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfrage erneut vorgenommen werden.'
+        other: '%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden.'
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.

@@ -8,7 +8,8 @@
 - unless @group.require_person_add_requests
   %p
     %strong= t('.deactivated')
-  %p= sanitize(t('.deactivated_caption'), attributes: [:strong])
+
+%p= t('.explanation')
 
 = render 'list'
 

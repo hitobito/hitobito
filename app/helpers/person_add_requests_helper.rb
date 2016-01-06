@@ -8,14 +8,15 @@
 module PersonAddRequestsHelper
 
   def require_person_add_requests_button
-    options = {}
     required = @group.require_person_add_requests
-    options[:method] = required ? :delete : :post
-    title = required ? 'deactivate_title' : 'activate_title'
-    options[:title] = t("group.person_add_requests.index.#{title}")
+    action = required ? 'deactivate' : 'activate'
+    label = t("group.person_add_requests.actions_index.#{action}")
     url = group_person_add_requests_path(@group)
-
-    toggle_button(url, required, nil, options)
+    options = {}
+    options[:method] = required ? :delete : :post
+    options[:title] = t("group.person_add_requests.actions_index.#{action}_title")
+    add_css_class(options, 'active btn-success') if required
+    button(label, url, nil, options)
   end
 
   def approver_layer_roles(person)

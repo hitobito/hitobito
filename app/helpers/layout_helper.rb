@@ -16,12 +16,6 @@ module LayoutHelper
     end
   end
 
-  def toggle_button(url, checked = false, icon = nil, options = {})
-    label = checked ? t('global.deactivate') : t('global.activate')
-    add_css_class options, 'active' if checked
-    button(label, url, icon, options)
-  end
-
   def button_group(&block)
     if @in_button_group
       capture(&block)

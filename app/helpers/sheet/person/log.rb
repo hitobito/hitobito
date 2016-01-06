@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Person
+  class Person < Base
     class Log < Base
 
       self.parent_sheet = Sheet::Person

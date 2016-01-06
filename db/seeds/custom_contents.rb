@@ -36,11 +36,11 @@ CustomContent.seed_once(:key,
 
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED,
     placeholders_required: 'person-name, request-body',
-    placeholders_optional: 'recipient-name, approver-name' },
+    placeholders_optional: 'recipient-name, approver-name, approver-roles' },
 
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED,
     placeholders_required: 'person-name, request-body',
-    placeholders_optional: 'recipient-name, rejecter-name' },
+    placeholders_optional: 'recipient-name, rejecter-name, rejecter-roles' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -215,7 +215,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Freigabe der Personendaten akzeptiert',
    body: "Hallo {recipient-name}<br/><br/>" \
          "{approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>" \
-         "{person-name} wurde zu {request-body} hinzugefügt.<br/><br/>" },
+         "{person-name} wurde zu {request-body} hinzugefügt.<br/><br/>" \
+         "{approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{approver-roles}<br/><br/>" },
 
   {custom_content_id: add_request_approved_id,
    locale: 'fr',
@@ -229,24 +231,26 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: "Richiesta dei dati personali: Email abilitazione accettata"},
 
-    {custom_content_id: add_request_rejected_id,
-     locale: 'de',
-     label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt',
-     subject: 'Freigabe der Personendaten abgelehnt',
-     body: "Hallo {recipient-name}<br/><br/>" \
-           "{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>" \
-           "{person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>" },
+  {custom_content_id: add_request_rejected_id,
+   locale: 'de',
+   label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt',
+   subject: 'Freigabe der Personendaten abgelehnt',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>" \
+         "{person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>" \
+         "{rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{rejecter-roles}<br/><br/>" },
 
-    {custom_content_id: add_request_rejected_id,
-     locale: 'fr',
-     label: 'Demande de l\'état civil: E-mail libération refusé'},
+  {custom_content_id: add_request_rejected_id,
+   locale: 'fr',
+   label: 'Demande de l\'état civil: E-mail libération refusé'},
 
-    {custom_content_id: add_request_rejected_id,
-     locale: 'en',
-     label: 'Personal data request: Email approval rejected'},
+  {custom_content_id: add_request_rejected_id,
+   locale: 'en',
+   label: 'Personal data request: Email approval rejected'},
 
-    {custom_content_id: add_request_rejected_id,
-     locale: 'it',
-     label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
+  {custom_content_id: add_request_rejected_id,
+   locale: 'it',
+   label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
 
 )

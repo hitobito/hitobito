@@ -52,7 +52,7 @@ class Person::AddRequestMailer < ApplicationMailer
   def person_mail_values
     { 'recipient-name' => person.greeting_name,
       'requester-name' => requester.full_name,
-      'requester-roles' => requester_full_roles,
+      'requester-roles' => roles_as_string(add_request.requester_full_roles),
       'answer-request-url' => link_to_request }
   end
 
@@ -60,24 +60,33 @@ class Person::AddRequestMailer < ApplicationMailer
     { 'recipient-names' => recipient_names,
       'person-name' => person.full_name,
       'requester-name' => requester.full_name,
-      'requester-roles' => requester_full_roles,
+      'requester-roles' => roles_as_string(add_request.requester_full_roles),
       'answer-request-url' => link_to_add_requests }
   end
 
   def approved_mail_values(user)
     { 'recipient-name' => requester.greeting_name,
       'person-name' => person.full_name,
-      'approver-name' => user.full_name }
+      'approver-name' => user.full_name,
+      'approver-roles' => roles_as_string(layer_full_roles(user)) }
   end
 
   def rejected_mail_values(user)
     { 'recipient-name' => requester.greeting_name,
       'person-name' => person.full_name,
-      'rejecter-name' => user.full_name }
+      'rejecter-name' => user.full_name,
+      'rejecter-roles' => roles_as_string(layer_full_roles(user)) }
   end
 
-  def requester_full_roles
-    add_request.requester_full_roles.collect { |r| r.to_s(:long) }.join(', ')
+  def roles_as_string(roles)
+    roles.collect { |r| r.to_s(:long) }.join(', ')
+  end
+
+  def layer_full_roles(person)
+    person.roles.includes(:group).select do |r|
+      r.group.layer_group_id == add_request.person_layer.try(:id) &&
+      (r.class.permissions & [:layer_and_below_full, :layer_full]).present?
+    end
   end
 
   def link_to_add_requests

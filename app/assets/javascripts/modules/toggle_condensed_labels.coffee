@@ -1,7 +1,7 @@
 $ ->
-  button = $('#toggle-condensed-labels')
+  button = $('#toggle-condense-labels')
   checkbox = button.find('input[type="checkbox"]')
-  param = 'condense='
+  param = 'condense_labels='
 
   button.click (event) ->
     event.stopPropagation()

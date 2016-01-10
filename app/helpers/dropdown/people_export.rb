@@ -87,7 +87,7 @@ module Dropdown
 
     def export_label_format_path(id)
       params.merge(format: :pdf, label_format_id: id,
-                   condense: ToggleCondensedLabelsItem::DEFAULT_STATE)
+                   condense_labels: ToggleCondensedLabelsItem::DEFAULT_STATE)
     end
 
   end
@@ -96,12 +96,12 @@ module Dropdown
     DEFAULT_STATE = false
 
     def initialize(template)
-      super(template, template.t('groups.global.link.add'), :plus)
+      super(template, template.t('dropdown/people_export.condense_labels'), :plus)
     end
 
     def render(template)
       template.content_tag(:li) do
-        template.link_to('#', id: 'toggle-condensed-labels') do
+        template.link_to('#', id: 'toggle-condense-labels') do
           render_checkbox(template)
         end
       end
@@ -112,8 +112,9 @@ module Dropdown
         template.content_tag(:label, for: :condense) do
           template.safe_join([
             template.check_box_tag(:condense, '1', DEFAULT_STATE),
-            template.t('groups.global.link.add'),
-            template.content_tag(:p, template.t('groups.global.link.add'), class: 'help-text')
+            template.t('dropdown/people_export.condense_labels'),
+            template.content_tag(:p, template.t('dropdown/people_export.condense_labels_hint'),
+                                 class: 'help-text')
           ].compact)
         end
       end

@@ -147,7 +147,7 @@ class PeopleController < CrudController
   end
 
   def condense_entries
-    return filter_entries unless params[:condense].present?
+    return filter_entries unless params[:condense_labels] == 'true'
     Person::CondensedContact.condense_list(filter_entries)
   end
 

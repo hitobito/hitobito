@@ -68,8 +68,9 @@ Ausführen der Tests:
     rake
 
 Dies führt aus Performancegründen keine Javascript/Feature Specs aus. Diese können explizit 
-gestartet werden:
+gestartet werden. Dazu muss xvfb installiert sein.
 
+    sudo apt-get install xvfb
     rake spec:features
 
 Ausführen der Wagon Tests (vom Hitobito Core aus):
@@ -100,6 +101,10 @@ Um den Server, die Konsole oder Rake Tasks im Development Environment mit MySQL 
 existiert das folgende Script:
 
      bin/with_mysql rails xxx
+
+Wenn auf der DB ein Passwort verwendet wird, kann es folgendermassen angegeben weden:
+   
+     RAILS_DB_PASSWORD=password bin/with_mysql rails xxx
 
 Um Tests mit MySQL auszuführen, kann der folgende Befehl verwendet werden. Dabei wird immer die 
 Testdatenbank (hitobito_test) verwendet.

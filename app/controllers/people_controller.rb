@@ -40,7 +40,7 @@ class PeopleController < CrudController
   def index
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
-      format.pdf   { render_pdf(condense_entries) }
+      format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_entries_csv(filter_entries) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
@@ -144,11 +144,6 @@ class PeopleController < CrudController
     @multiple_groups = filter.multiple_groups
     @all_count = filter.all_count if html_request?
     entries
-  end
-
-  def condense_entries
-    return filter_entries unless params[:condense_labels] == 'true'
-    Person::CondensedContact.condense_list(filter_entries)
   end
 
   def list_filter

@@ -1,0 +1,6 @@
+%h1 Changelog
+- ChangelogReader.get_changelog.each do |i|
+  %h2 #{i.first}
+  - i.last.each do |p|
+    %ul
+      %li #{p}

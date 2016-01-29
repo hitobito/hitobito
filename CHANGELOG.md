@@ -20,28 +20,21 @@
 ## Version 1.9
 
 *   Land ist neu ein Auswahlfeld.
-*   Kursarten haben zusätzliche Text Felder 'Generelle Informationen' und
-    'Aufnahmebedingungen'.
+*   Kursarten haben zusätzliche Text Felder 'Generelle Informationen' und 'Aufnahmebedingungen'.
 *   Kurse haben zusätzliches Text Feld 'Aufnahmebedingungen'.
 *   Möglichkeit, bei einer PDF Kursanmeldung eine Unterschrift einzufordern.
 *   Überarbeitetes Layout der PDF Kursanmeldung.
-*   Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt.
-    Eine Anmeldung ist trotzdem möglich.
-*   Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben
-    werden.
+*   Nicht erfüllte Aufnahmebedingungen werden bei einer Teilnahme angezeigt. Eine Anmeldung ist trotzdem möglich.
+*   Beim Hinzufügen zur Kurs Warteliste kann neu ein Kommentar eingegeben werden.
 *   Möglichkeit, Personen aufgrund ihrer Qualifikationen zu filtern.
-*   Beim Schreiben auf eine Mailing Liste können neu ebenfalls die
-    zusätzlichen E-Mail Adressen sowie die E-Mail Adressen der Gruppe als
-    Absender verwendet werden.
-*   Neue Grundberechtigungen für eine Gruppe und alle darunter liegenden
-    Gruppen.
+*   Beim Schreiben auf eine Mailing Liste können neu ebenfalls die zusätzlichen E-Mail Adressen sowie die E-Mail Adressen der Gruppe als Absender verwendet werden.
+*   Neue Grundberechtigungen für eine Gruppe und alle darunter liegenden Gruppen.
 *   Unterstützung für Deployment auf Openshift v2.
 
 
 ## Version 1.8
 
-*   Möglichkeit, den Zugriff auf Anlässe und Kurse unterschiedlich zu
-    berechtigen.
+*   Möglichkeit, den Zugriff auf Anlässe und Kurse unterschiedlich zu berechtigen.
 
 
 ## Version 1.7
@@ -54,8 +47,7 @@
 
 ## Version 1.6
 
-*   Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf
-    Personenlisten.
+*   Anzeige der Anzahl gefundenen und nicht sichtbaren Personen auf Personenlisten.
 *   Anzeige von beliebigen Informationen beim Login Formular.
 *   Beschränkung der Gruppen / Rollen bei Abos auf Gruppe und Untergruppen.
 
@@ -63,8 +55,7 @@
 ## Version 1.5
 
 *   Rollen in Anlässen können geändert werden.
-*   CSV Import erkennt Auswahlwerte in der aktuellen Sprache (z.B. ja/nein
-    anstelle 1/0).
+*   CSV Import erkennt Auswahlwerte in der aktuellen Sprache (z.B. ja/nein anstelle 1/0).
 *   Möglichkeit, beim CSV Import Werte in der Datenbank zu ändern.
 *   CSV Export für Gruppenanlässe und Kurse.
 *   Verschiedene Bug Fixes und Stabilitätsverbesserungen.

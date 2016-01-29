@@ -1,6 +1,6 @@
 %h1 Changelog
-- ChangelogReader.get_changelog.each do |i|
-  %h2 #{i.first}
-  - i.last.each do |p|
+- ChangelogReader.changelog.each do |entry|
+  %h2 #{entry.first}
+  - entry.last.each do |change|
     %ul
-      %li #{p}
+      %li #{change}

@@ -1,59 +1,88 @@
 # encoding: utf-8
-
 class ChangelogReader
   class << self
     def changelog
-      @changelogs = {}
-      @version = ''
-
-      add_core_changes
-      add_wagon_changes
-
-      @changelogs
+      ChangelogReader.new.changelogs
     end
+  end
 
-private
-    def add_changes(file)
-      file.each_line do |l|
-        l.delete! "\n"
-        add_line(l)
+  def initialize
+    @changelogs = []
+    collect_changelog_data
+  end
+
+  def changelogs
+    @changelogs.sort.reverse
+  end
+
+  private
+  def collect_changelog_data
+    changelog_files_content = read_changelog_files(changelog_file_paths)
+    parse_changelog_lines(changelog_files_content)
+  end
+
+  def parse_changelog_lines(changelog_files_content)
+    version = ''
+    changelog_files_content.each_line do |l|
+      if h = changelog_header_line(l)
+        version = find_or_create_version(h)
+      else
+        add_changelog_line(version, l)
       end
     end
+  end
 
-    def add_line(l)
-      if l.include? "##"
-        l.delete! '#'
-        @version = l
-      elsif l.include? "*"
-        l.delete! '*'
-        @changelogs[@version] << l
+  def add_changelog_line(version, l)
+    if e = changelog_entry_line(l)
+      add_changelog_entry(version, e)
+    end
+  end
+
+  def read_changelog_files(files_path)
+    data = ''
+    files_path.each do |p|
+      if File.exist?(p)
+        data += File.read(p)
       end
     end
+    data
+  end
 
-    def add_core_changes
-      core_file = File.read('CHANGELOG.md')
-      create_versions(core_file)
-      add_changes(core_file)
+  def changelog_file_paths
+    file_paths = ["CHANGELOG.md"]
+    Wagons.all.each do |w|
+      file_paths << "#{w.root}/CHANGELOG.md"
     end
+    file_paths
+  end
 
-    def create_versions(core_file)
-      core_file.each_line do |l|
-        l.delete! "\n"
-        if l.include? "##"
-          l.delete! '#'
-          @changelogs[l] = []
-        end
-      end
+  def changelog_header_line(h)
+    if h.match(/^## [^\s]+ (\d+\.)?(\*|\d+)$/)
+      h.gsub(/[^.0-9]+/, '')
     end
+  end
 
-    def add_wagon_changes
-      Wagons.all.each do |w|
-        file_location = "#{w.root}/CHANGELOG.md"
-        if File.exist?(file_location)
-          file = File.read(file_location)
-          add_changes(file)
-        end
-      end
+  def changelog_entry_line(e)
+    e.strip!
+    e.match(/^\*\s*(.*)/).try(:[], 1)
+  end
+
+  def find_or_create_version(header_line)
+    version = find_version(header_line)
+    unless version
+      version = ChangelogVersion.new(header_line)
+      @changelogs << version
     end
+    version
+  end
+
+  def find_version(header_line)
+    @changelogs.find do |v|
+      v.version == header_line
+    end
+  end
+
+  def add_changelog_entry(version, entry)
+    version.log_entries << entry
   end
 end

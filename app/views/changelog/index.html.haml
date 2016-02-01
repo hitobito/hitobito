@@ -1,6 +1,7 @@
-%h1 Changelog
-- ChangelogReader.changelog.each do |entry|
-  %h2 #{entry.first}
-  - entry.last.each do |change|
+- title 'Changelog'
+
+- ChangelogReader.changelog.each do |changelog_entry|
+  %h2 #{changelog_entry.label}
+  - changelog_entry.log_entries.each do |change|
     %ul
       %li #{change}

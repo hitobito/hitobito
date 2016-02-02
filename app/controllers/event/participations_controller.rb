@@ -49,6 +49,8 @@ class Event::ParticipationsController < CrudController
   # (Except for course participants, who may be created by special other roles)
   def create
     assign_attributes
+    init_answers
+    set_active
     with_person_add_request do
       created = with_callbacks(:create, :save) { save_entry }
       respond_with(entry, success: created, location: return_path)
@@ -166,8 +168,6 @@ class Event::ParticipationsController < CrudController
 
   def assign_attributes
     super
-
-    set_active if entry.new_record?
 
     # Required questions are enforced only for users that are not allowed to add others
     entry.enforce_required_answers = true unless can?(:update, entry)

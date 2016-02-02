@@ -321,6 +321,8 @@ describe Event::ParticipationsController do
         role = participation.roles.first
         expect(role.participation).to eq participation.model
 
+        expect(participation.application).to be_blank
+
         expect(event.reload.applicant_count).to eq 1
         expect(event.teamer_count).to eq 0
         expect(event.participant_count).to eq 1
@@ -347,6 +349,8 @@ describe Event::ParticipationsController do
         expect(course.teamer_count).to eq 0
         expect(course.participant_count).to eq 0
 
+        expect(participation.application).to be_present
+
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
         expect(flash[:notice]).
@@ -372,6 +376,31 @@ describe Event::ParticipationsController do
         expect(flash[:notice]).
           to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
+      end
+
+      it 'creates new participation with application' do
+        post :create, group_id: group.id, event_id: course.id, event_participation: { application_attributes: {priority_2_id: other_course.id} }
+
+        participation = assigns(:participation)
+        application = participation.application
+        expect(participation).to be_valid
+        expect(participation).not_to be_active
+        expect(participation.roles.size).to eq(1)
+        role = participation.roles.first
+        expect(role).to be_kind_of(Event::Course::Role::Participant)
+        expect(role.participation).to eq participation.model
+
+        expect(course.reload.applicant_count).to eq 1
+        expect(course.teamer_count).to eq 0
+        expect(course.participant_count).to eq 0
+
+        expect(application).to be_present
+        expect(application.priority_2_id).to eq other_course.id
+
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).
+          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
       it 'fails for invalid event role' do

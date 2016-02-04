@@ -24,6 +24,6 @@ class ChangelogVersion
   end
 
   def version
-  "#{major_version}.#{minor_version}"
+    "#{major_version}.#{minor_version}"
   end
 end

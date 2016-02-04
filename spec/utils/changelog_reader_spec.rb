@@ -79,21 +79,21 @@ describe ChangelogReader do
 
     a = a.sort.reverse
 
-    expect(v1).to eq(a.last)
-    expect(v2).to eq(a[1])
-    expect(v3).to eq(a[2])
-    expect(v4).to eq(a.first)
+    expect(a.last).to eq(v1)
+    expect(a[1]).to eq(v2)
+    expect(a[2]).to eq(v3)
+    expect(a.first).to eq(v4)
   end
 
   it 'reads existing changelog file' do
     allow(File).to receive(:exist?).and_return(true)
-    allow(File).to receive(:read).and_return('test')
+    allow(File).to receive(:read).and_return('example text')
 
     files_path = ['test']
 
     data = subject.send(:read_changelog_files, files_path)
 
-    expect(data).to eq('test')
+    expect(data).to eq('example text')
   end
 
   it 'does not read unexisting changelog file' do

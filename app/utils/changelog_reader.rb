@@ -57,9 +57,8 @@ class ChangelogReader
   end
 
   def changelog_header_line(h)
-    if h.match(/^\s*## [^\s]+ (\d+\.)?(\*|\d+)\s*$/)
-      h.gsub(/[^.0-9]+/, '')
-    end
+    h.strip!
+    h.match(/^## [^\s]+ ((\d+\.)?(\*|\d+))$/).try(:[], 1)
   end
 
   def changelog_entry_line(e)

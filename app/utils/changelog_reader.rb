@@ -26,15 +26,9 @@ class ChangelogReader
     changelog_files_content.each_line do |l|
       if h = changelog_header_line(l)
         version = find_or_create_version(h)
-      else
-        add_changelog_line(version, l)
+      elsif e = changelog_entry_line(l)
+        add_changelog_entry(version, e)
       end
-    end
-  end
-
-  def add_changelog_line(version, l)
-    if e = changelog_entry_line(l)
-      add_changelog_entry(version, e)
     end
   end
 
@@ -57,7 +51,7 @@ class ChangelogReader
   end
 
   def changelog_header_line(h)
-    if h.match(/^## [^\s]+ (\d+\.)?(\*|\d+)$/)
+    if h.match(/^\s*## [^\s]+ (\d+\.)?(\*|\d+)\s*$/)
       h.gsub(/[^.0-9]+/, '')
     end
   end

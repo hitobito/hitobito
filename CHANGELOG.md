@@ -2,10 +2,8 @@
 
 ## Version 1.11
 
-*   Pro Ebene aktivierbare Zugriffsanfragen, falls Personen zu einer fremden
-    Gruppe, Anlass oder Abo hinzugefügt werden.
-*   Bei Anlässen können Dateien angehängt werden, welche für alle einsehbar
-    sind.
+*   Pro Ebene aktivierbare Zugriffsanfragen, falls Personen zu einer fremden Gruppe, Anlass oder Abo hinzugefügt werden.
+*   Bei Anlässen können Dateien angehängt werden, welche für alle einsehbar sind.
 *   Option, um beim Etikettenexport Mehrfachsendungen zu vermeiden.
 
 

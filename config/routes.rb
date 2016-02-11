@@ -186,6 +186,8 @@ Hitobito::Application.routes.draw do
     post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
     delete 'person_add_requests/:id' => 'person/add_requests#reject'
 
+    get 'changelog' => 'changelog#index'
+
   end # scope locale
 
   # The priority is based upon order of creation:

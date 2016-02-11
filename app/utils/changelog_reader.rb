@@ -58,12 +58,12 @@ class ChangelogReader
 
   def changelog_header_line(h)
     h.strip!
-    h.match(/^## [^\s]+ ((\d+\.)?(\*|\d+))$/).try(:[], 1)
+    h[/^## [^\s]+ ((\d+\.)?(\*|\d+))$/, 1]
   end
 
   def changelog_entry_line(e)
     e.strip!
-    e.match(/^\*\s*(.*)/).try(:[], 1)
+    e[/^\*\s*(.*)/, 1]
   end
 
   def find_or_create_version(header_line)

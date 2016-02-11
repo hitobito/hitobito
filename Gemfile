@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.1'
 
 gem 'activerecord-session_store'
 gem 'airbrake', '< 5.0' # requires newer errbit

@@ -15,5 +15,6 @@ if [ ! -f $rpmdir/$RPM_NAME-*.rpm ]; do
 fi
 
 for rpm in $rpmdir/$RPM_NAME-*.rpm; do
+  echo "uploading ${rpm} to pulp repo ${PULP_REPO}"
   /usr/local/bin/upload_rpm_to_pulp.sh $PULP_REPO $rpm || exit 1
 done

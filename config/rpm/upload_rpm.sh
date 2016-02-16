@@ -7,13 +7,6 @@ fi
 
 rpmdir="/var/lib/mock/epel-6-x86_64/result"
 
-if [ ! -f "${rpmdir}/${RPM_NAME}-*.src.rpm" ]; then
-  echo "no rpm file for given project for upload found."
-  echo "rpm name prefix: ${RPM_NAME}"
-  echo "rpm location: ${rpmdir}"
-  exit 1
-fi
-
 for rpm in $rpmdir/$RPM_NAME-*.rpm; do
   echo "uploading ${rpm} to pulp repo ${PULP_REPO}"
   /usr/local/bin/upload_rpm_to_pulp.sh $PULP_REPO $rpm || exit 1

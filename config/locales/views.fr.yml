@@ -78,62 +78,6 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-  csv_imports:
-    description:
-      header: Fichiers CSV
-      explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
-      example: |
-        prénom,nom,e-mail,lieu,sexe
-        Jean,Dupont,jean@exemple.ch,Fribourg,m
-        Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
-      explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
-      explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux choisir ce rôle lors de la prochaine étappe également.
-      special_fields: Valeurs de champs spéciales
-      explain_special_fields_html: Les champs suivant doivent contenir l'une des valeurs en <em>italique</em>.
-    preview_table:
-      icon_tooltip_invalid: 'Valeurs non valables.'
-      icon_tooltip_updated: 'En cours d''actualisation'
-      icon_tooltip_created: 'Est saisi à nouveau'
-    define_mapping:
-      choose_role: 'Choisir un rôle'
-      choose_role_help: 'Ce rôle est attribué à toutes les personnes importées.'
-      assign_columns_to_fields: 'Relier les colonnes aux champs.'
-      column_from_csv: 'Colonnes du fichier CSV'
-      field_in_database: 'Champ dans la base de données'
-      preview: 'Aperçu'
-      update_behaviour: Procédé d'actualisation
-      keep_behaviour: 'Actualiser seulement les champs vides avec des données provenant du CSV, les valeurs déjà existantes ne changent pas.'
-      override_behaviour: 'Remplacer les valeurs déjà existantes dans la banque de donnée avec les données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent les valeurs pourvues dans la banque de données d''accueil.'
-      update_behaviour_explanation: 'Ce procédé concerne uniquement  les personnes déjà existantes dans la banque de données. L''inscription de nouvelles personnes doit être entièrement effectuée en conformité avec les données du CSV.'
-    new:
-      upload_button: 'Télécharger'
-      csv_file: 'Fichier CSV'
-    invalid_file: Prière de choisir un fichier CSV valable.
-    duplicate_keys:
-      one: '%{list} a été attribué plusieurs fois.'
-      other: '%{list} ont été attribués plusieurs fois.'
-    preview:
-      import_now_button: Importer les personnes
-      import_details_html: Les personnes suivantes vont être importées avec le <strong>rôle  %{role}</strong> dans le <strong>groupe %{group}</strong>.
-      new:
-        one: '%{count} %{role} va être nouvellement importé.'
-        other: '%{count} %{role} vont être nouvellement importés.'
-      updated:
-        one: '%{count} %{role} va être actualisé.'
-        other: '%{count} %{role} vont être actualisés.'
-      failed:
-        one: '%{count} %{role} ne va pas être importé.'
-        other: '%{count} %{role} ne vont pas être importés.'
-    create:
-      new:
-        one: '%{count} %{role} a été importé avec succès.'
-        other: '%{count} %{role} ont été importés avec succès.'
-      updated:
-        one: '%{count} %{role} a été actualisé avec succès.'
-        other: '%{count} %{role} ont été actualisés avec succès.'
-      failed:
-        one: '%{count} %{role} n''a pas été importé.'
-        other: '%{count} %{role} n''ont pas été importés.'
   custom_content_decorator:
     available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
@@ -153,6 +97,8 @@ fr:
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
     everything: 'Toutes les informations'
+    condense_labels: 'éviter les envois multiples'
+    condense_labels_hint: 'Ne délivrer une entrée que quand l''adresse en entier et le nom de famille correspondent'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -253,6 +199,11 @@ fr:
         label: 'Liste d''attente'
       popover_waiting_list:
         waiting_list_info: Ajouter la personne à la liste d'attente pour cette catégorie de cours %{event_kind}.
+    attachments:
+      create:
+        failure: "Échec de l'upload: %{errors}."
+      destroy:
+        failure: "Échec de la suppression: %{errors}."
     kinds:
       form:
         help_minimum_age: 'ans (selon année de naissance au premier jour du cours)'
@@ -302,14 +253,12 @@ fr:
         next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
   events:
-    preconditions: 'qualifications requises'
-    minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     application_fields:
       caption_signature: Les participants doivent signer l'inscription
       caption_signature_confirmation: L'inscription doit être confirmé par une deuxième signature
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
-    tabs:
-      participants: 'Participants'
+    attachments:
+      add: "ajouter"
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
@@ -323,9 +272,13 @@ fr:
       link:
         add_event: Créer un événement
         add_event/course: Créer un cours
+    minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     new:
       title_event: Créer un événement
       title_event/course: Créer un cours
+    preconditions: 'qualifications requises'
+    tabs:
+      participants: 'Participants'
   event/applications:
     approved: 'L''inscription a été autorisée.'
     rejected: 'L''inscription a été refusée.'
@@ -401,12 +354,31 @@ fr:
         explanation: Lorsqu'on fusionne deux groupes, tous les sous-groupes, événements et personnes ainsi que les rôles des deux groupes sont fusionnés. Les abonnements ne sont pas sauvegardés. On pourra continuer à accéder aux groupes préexistants sous "effacés".
         merge_is_irreversible: Cette opération est irréversible!
         new_group_name: 'Nom du nouveau groupe'
-        merge_group_with: 'fusionner %{group} avec '
-        merge_button: 'Fusionner un groupe'
+        merge_group_with: 'fusionner avec %{group}'
+        merge_button: 'Fusionner le groupe'
     move:
       select:
         title: "Déplacer un groupe"
         select_group: "Sélectionner le groupe vers lequel le déplacement doit avoir lieu."
+    person_add_requests:
+      actions_index:
+        activate: Activer le déblocage manuel
+        deactivate: Désactiver
+        activate_title: Activer le déblocage manuel
+        deactivate_title: désactiver le déblocage manuel
+      index:
+        activated: Le déblocage manuel est activé
+        deactivated: Le déblocage manuel est désactivé
+        explanation: >+
+          Lorsque cette fonction est active, les personnes ne sont ajoutées aux groupes,
+          activité et abonnements qu'après qu'une personne autorisée ait donné son
+          accord.
+
+      list:
+        approve: Accepter
+        reject: refuser
+      approvers:
+        title: 'Notification à'
   groups:
     actions_show:
       export_subgroups: 'Sous-groupes CSV'
@@ -425,6 +397,11 @@ fr:
     subgroups: 'Sous-groupes'
     tabs:
       deleted: 'Eléments effacés'
+  group/person_add_requests:
+    deactivated: Déblocage manuel désactivé
+    activated: Déblocage manuel activé
+    global:
+      no_list_entries: Il n'y a pour l'instant pas de requête ouverte
   group/merge:
     success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
     failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
@@ -502,6 +479,118 @@ fr:
       title: Créer une catégorie de qualification
   paper_trail/version_decorator:
     by: 'de %{author}'
+  person:
+    add_requests:
+      body_list:
+        open_requests:
+          one: 1 requête ouverte
+          other: '%{count} requêtes ouvertes. '
+        request_to: Requête à
+        cancel: Retirer une demande d'autorisation
+      creator:
+        group:
+          success: "Nous avons envoyé une demande d'accès pour %{person}. Le rôle sera établi dès que la requête sera débloquée. D'éventuels détails concernant le rôle devront à nouveau être donnés après le déblocage."
+          failure: "Le rôle n'a pas pu être établi pour %{person}, car une demande d'accès est nécessaire. %{errors}."
+        event:
+          success: "Nous avons envoyé une demande d'accès pour %{person}.  La participation sera établie dès que la requête sera débloquée. D'éventuels détails concernant le rôle devront à nouveau être donnés après le déblocage."
+          failure: "La participation n'a pas pu être établie pour %{person}, car une demande d'accès est nécessaire. %{errors}."
+        mailing_list:
+          success: "Nous avons envoyé une demande d'accès pour %{person}. La personnes sera ajoutée à l'abonnement dès que la requête sera débloquée"
+          failure: "%{person} n'a pas pu être ajouté, car une demande d'accès est nécessaire pour cette personne. %{errors}."
+      approve:
+        success_notice: "La demande d'accès pour %{person} a été validée."
+        failure_notice: "La demande d'accès pour %{person} n'a pas pu être validée: %{errors}."
+      reject:
+        success_notice: "La demande d'accès pour %{person} a été refusée."
+      cancel:
+        success_notice: "La demande d'accès pour %{person} a été retirée."
+      status:
+        group:
+          approved: "La demande d'accès pour %{person} a déjà été validée."
+          rejected: "La demande d'accès pour %{person} a déjà été refusée."
+        event:
+          approved: "La demande d'accès pour %{person} a déjà été validée."
+          rejected: "La demande d'accès pour %{person} a déjà été refusée. "
+        mailing_list:
+          approved: "La demande d'accès pour %{person} a déjà été validée. "
+          rejected: "La demande d'accès pour %{person} a déjà été refusée. "
+    csv_imports:
+      description:
+        header: Fichiers CSV
+        explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
+        example: "prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,\"Genève, New York\",f \n"
+        explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
+        explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux également choisir ce rôle lors de la prochaine étape.
+        special_fields: Valeurs de champs spéciales
+        explain_special_fields_html: Les champs suivant doivent contenir l'une des valeurs en <em>italique</em>.
+      preview_table:
+        icon_tooltip_invalid: 'Valeurs non valables.'
+        icon_tooltip_updated: 'En cours d''actualisation'
+        icon_tooltip_created: 'Est saisi à nouveau'
+        icon_tooltip_request: 'Va être demandé'
+      define_mapping:
+        choose_role: 'Choisir un rôle'
+        choose_role_help: 'Ce rôle est attribué à toutes les personnes importées.'
+        assign_columns_to_fields: 'Relier les colonnes aux champs.'
+        column_from_csv: 'Colonnes du fichier CSV'
+        field_in_database: 'Champ dans la base de données'
+        preview: 'Aperçu'
+        update_behaviour: Procédé d'actualisation
+        keep_behaviour: >
+          N'actualiser que les champs vides avec des données provenant du CSV, les
+          valeurs déjà existantes ne changent pas.
+        override_behaviour: >
+          Remplacer les valeurs déjà existantes dans la base de donnée avec les données
+          provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent
+          les valeurs pourvues dans la banque de données d'accueil.
+        update_behaviour_explanation: >
+          Ce procédé ne concerne que les personnes déjà présentes dans la base de
+          données de données. L'inscription de nouvelles personnes doit être entièrement
+          effectuée en conformité avec les données du CSV.
+      new:
+        upload_button: 'Télécharger'
+        csv_file: 'Fichier CSV'
+      preview:
+        import_now_button: Importer les personnes
+        import_details_html: >
+          Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
+          dans le <strong>groupe %{group}</strong>.
+    add_request_mailer:
+      ask_person_to_add:
+        request_link: Répondre à la requête
+      ask_responsibles:
+        request_link: 'Répondre à la requête '
+  person/csv_imports:
+    invalid_file: Veuillez choisir un fichier CSV valable.
+    duplicate_keys:
+      one: '%{list} a été attribué plusieurs fois.'
+      other: '%{list} ont été attribués plusieurs fois.'
+    preview:
+      new:
+        one: '%{count} %{role} va être importé à nouveau.'
+        other: '%{count} %{role} vont être importés à nouveau. '
+      updated:
+        one: '%{count} %{role} va être actualisé.'
+        other: '%{count} %{role} vont être actualisés.'
+      failed:
+        one: '%{count} %{role} ne va pas être importé.'
+        other: '%{count} %{role} ne vont pas être importés.'
+      requests:
+        one: '%{count} %{role} va recevoir une demande d''accès pour ses données personnelles, les données ne seront pas importées.'
+        other: '%{count} %{role} vont recevoir une demande d''accès pour leurs données personnelles, les données ne seront pas importées.'
+    create:
+      new:
+        one: '%{count} %{role} a été importé avec succès.'
+        other: '%{count} %{role} ont été importés avec succès.'
+      updated:
+        one: '%{count} %{role} a été actualisé avec succès.'
+        other: '%{count} %{role} ont été actualisés avec succès. '
+      failed:
+        one: '%{count} %{role} n''a pas été importé.'
+        other: '%{count} %{role} n''ont pas été importés.'
+      requests:
+        one: '%{count} %{role} a reçu une demande d''accès pour ses données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
+        other: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
     years_old: (%{years} ans)
@@ -517,6 +606,9 @@ fr:
     actions_index:
       add_person: Ajouter une personne
       import_list: Importer une liste
+    add_requests:
+      approve_title: 'Accepter la requête'
+      reject_title: 'Refuser la requête'
     attrs:
       additional_data: Indications supplémentaires
       events: Mes prochains événements
@@ -612,7 +704,7 @@ fr:
   subscriber/exclude_person:
     success: '%{subscriber} a été exclu avec succès'
     failure: '%{subscriber} n''est pas un abonné'
-  sheet/csv_import:
+  sheet/person/csv_import:
     title: 'Importer les personnes par CSV'
   sheet/group:
     belongs_to: 'appartient à'
@@ -626,6 +718,7 @@ fr:
       exclude_person: 'Exclure une personne'
     list:
       excluded_people: 'Personnes exclues'
+      export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."
@@ -635,6 +728,10 @@ fr:
       create: "%{model} <i>%{label}</i> a été ajouté."
       update: "%{model} <i>%{label}</i> a été mis à jour : %{changeset}"
       destroy: "%{model} <i>%{label}</i> a été effacé."
+      person/add_request:
+        create: "La demande d'accès pour <i>%{label}</i> a été établie."
+        update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
+        destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
   views:
     pagination:
       next: '>>'

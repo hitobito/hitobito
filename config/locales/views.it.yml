@@ -3,12 +3,13 @@ it:
     'yes': "Si"
     'no': "No"
     unknown: Sconosciuto
+    nobody: nessuno
     from: Dal
     until: Al
-    no_list_entries: Nessuna risultato.
+    no_list_entries: Nessun risultato.
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
-    chosen_no_results: Nessuna risultato con
+    chosen_no_results: Nessun risultato con
     gender:
       male: maschile
       female: femminile
@@ -77,62 +78,6 @@ it:
       placeholder_value: Email
       placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-  csv_imports:
-    description:
-      header: Documento CSV
-      explain_csv_format: 'Ogni riga del documento CSV contiene i dati di una persona. La prima riga contiene i nomi dei  campi. I campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere racchiuso tra virgolette ("). Esempio:'
-      example: |
-        nome, cognome, email, luogo, sesso
-        Gigi, Piantoni, gigi@piantoni.ch, Comano, m
-        Jolanda, Busecca, j@busecca.org, "Zurigo, New York", f
-      explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
-      explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo
-      special_fields: Valori speciali per i campi
-      explain_special_fields_html: 'I campi seguenti devono contenere uno dei valori in <em>corsivo</em> '
-    preview_table:
-      icon_tooltip_invalid: 'Valori non validi'
-      icon_tooltip_updated: 'Viene aggiornato'
-      icon_tooltip_created: 'Viene registrato nuovamente'
-    define_mapping:
-      choose_role: 'Scegliere un ruolo'
-      choose_role_help: 'Tutte le persone importate ricevono questo ruolo'
-      assign_columns_to_fields: 'Assegnare le colonne ai campi'
-      column_from_csv: 'Colonna CSV'
-      field_in_database: 'Campo in un banca dati'
-      preview: 'Anteprima'
-      update_behaviour: Metodo di aggiornamento
-      keep_behaviour: 'Aggiornare solo i campi vuoti nel database con i dati del CSV; i valori già esistenti vengono mantenuti.'
-      override_behaviour: 'Sovrascrivere i valori già esistenti nel database con i dati del CSV. I valori vuoti nel CSV cancellano in questo caso i valori esistenti nel database.'
-      update_behaviour_explanation: 'Questa funzione si applica unicamente alle persone già esistenti nel database. Nuove persone vengono sempre create in totale corrispondenza ai dati del CSV.'
-    new:
-      upload_button: 'Caricare'
-      csv_file: 'Documento CSV'
-    invalid_file: Selezionare un file CSV valido.
-    duplicate_keys:
-      one: '%{list} è stato assegnato più volte.'
-      other: '%{list} sono stati assegnati più volte.'
-    preview:
-      import_now_button: Importare le persone
-      import_details_html: Le persone seguenti sono importate con il ruolo<strong>%{role}</strong> nel gruppo<strong> %{group}</strong>.
-      new:
-        one: 'È importato %{count} %{role}.'
-        other: 'Sono importati %{count} %{role}.'
-      updated:
-        one: '%{count} %{role} è aggiornato.'
-        other: '%{count} %{role} sono aggiornati.'
-      failed:
-        one: '%{count} %{role} non è importato.'
-        other: '%{count} %{role} non sono importati.'
-    create:
-      new:
-        one: '%{count} %{role} è stato importato con successo.'
-        other: '%{count} %{role} sono stati importati con successo.'
-      updated:
-        one: '%{count} %{role} è stato aggiornato con successo.'
-        other: '%{count} %{role} sono stati aggiornati con successo.'
-      failed:
-        one: '%{count} %{role} non è stato importato.'
-        other: '%{count} %{role} non sono stati importati.'
   custom_content_decorator:
     available_placeholders: "caratteri a disposizione: %{placeholders}"
     available_placeholders_empty: 'nessun carattere a disposizione'
@@ -152,6 +97,8 @@ it:
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'
     everything: 'tutti i dati'
+    condense_labels: 'Evitare invii multipi'
+    condense_labels_hint: 'Indicare solo una registrazione se l''indirizzo e il cognome corrispondono.'
   devise:
     failure:
       already_authenticated: 'sei già iscritto.'
@@ -252,6 +199,11 @@ it:
         label: 'Lista d''attesa'
       popover_waiting_list:
         waiting_list_info: Metti questa persona in lista d'attesa per il corso del tipo %{event_kind}.
+    attachments:
+      create:
+        failure: "Upload fallito: %{errors}."
+      destroy:
+        failure: "\"Cancella\" fallito: %{errors}."
     kinds:
       form:
         help_minimum_age: 'anni (età alla prima data del corso è determinante)'
@@ -301,14 +253,12 @@ it:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
   events:
-    preconditions: 'qualifiche necessarie'
-    minimum_age_with_years: '%{minimum_age} anni (anno di nascita)'
     application_fields:
       caption_signature: I partecipanti devono firmare l'iscrizione
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
-    tabs:
-      participants: 'partecipanti'
+    attachments:
+      add: "aggiungere"
     form:
       caption_external_applications: 'esterni possono iscriversi a questo evento'
       caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
@@ -316,13 +266,19 @@ it:
       additional_information: 'dati per l''iscrizione'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
+    form_tabs:
+      general: In generale
     global:
       link:
         add_event: Creare un evento
         add_event/course: Creare un corso
+    minimum_age_with_years: '%{minimum_age} anni (anno di nascita)'
     new:
       title_event: Creare un evento
       title_event/course: Creare un corso
+    preconditions: 'qualifiche necessarie'
+    tabs:
+      participants: 'partecipanti'
   event/applications:
     approved: 'L''iscrizione è stata accettata'
     rejected: 'L''iscrizione è stata rifiutata'
@@ -394,8 +350,8 @@ it:
   group:
     merge:
       select:
-        title: 'Raggruppare %{group} '
-        explanation: Raggruppando due gruppi, tutti i sottogruppi, gli eventi e le persone unitamente ai ruoli di entrambii gruppo vengono uniti. Gli abbonamenti non vengono rilevati. I gruppi distinti esistenti fino a questo momento potranno essere ancora visualizzati sotto "cancellati".
+        title: 'raggruppare %{group}'
+        explanation: Raggruppando due gruppi, tutti i sottogruppi, gli eventi e le persone unitamente ai ruoli di entrambi i gruppi vengono uniti. Gli abbonamenti non vengono rilevati. I gruppi distinti esistenti fino a questo momento potranno essere ancora visualizzati sotto "cancellati".
         merge_is_irreversible: Questo processo non può essere annullato!
         new_group_name: 'Nome del nuovo gruppo'
         merge_group_with: 'Raggruppare %{group} con'
@@ -404,6 +360,23 @@ it:
       select:
         title: "Spostare gruppo"
         select_group: "Scegliere il gruppo che deve essere spostato."
+    person_add_requests:
+      actions_index:
+        activate: Attivare l'autorizzazione manuale
+        deactivate: Disattivare
+        activate_title: Attivare l'autorizzazione manuale
+        deactivate_title: Disattivare l'autorizzazione manuale
+      index:
+        activated: L'autorizzazione manuale è attivata
+        deactivated: L'autorizzazione manuale non è attivata
+        explanation: >
+          Se attivata, le persone di questo livello vengono aggiunte a gruppi, eventi
+          e abbonamenti solo dopo che una persona con diritto di accesso ha dato l'autorizzazione.
+      list:
+        approve: Accettare
+        reject: Rifiutare
+      approvers:
+        title: 'Notifica a'
   groups:
     actions_show:
       export_subgroups: 'Sottogruppi CSV'
@@ -422,6 +395,11 @@ it:
     subgroups: 'Sottogruppi'
     tabs:
       deleted: 'Cancellato'
+  group/person_add_requests:
+    deactivated: Autorizzazione manuale disattivata
+    activated: Autorizzazione manuale attivata
+    global:
+      no_list_entries: Attualmente non ci sono richieste aperte.
   group/merge:
     success: 'I gruppi selezionati sono stati raggruppati nel nuovo gruppo %{new_group_name}.'
     failure: 'I gruppi selezionati non possono venir raggruppati.'
@@ -483,9 +461,7 @@ it:
     groups: 'gruppi'
     events: 'eventi'
     courses: 'corsi'
-    admin: 'amministrazione
-
-      admin'
+    admin: 'admin'
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -501,6 +477,122 @@ it:
       title: Creare il tipo di qualifica
   paper_trail/version_decorator:
     by: 'da %{author}'
+  person:
+    add_requests:
+      body_list:
+        open_requests:
+          one: 1 richiesta aperta.
+          other: '%{count} richieste aperte.'
+        request_to: Richiesta a
+        cancel: Ritirare richiesta d'accesso
+      creator:
+        group:
+          success: "Abbiamo inviato una richiesta d'accesso per %{person}. Il ruolo viene creato non appena la richiesta viene accettata. Tutti i dettagli sul ruolo devono essere nuovamente indicati dopo l'autorizzazione. "
+          failure: "Non è possibile creare il ruolo perché per %{person} è necessaria una richiesta d'accesso. %{errors}"
+        event:
+          success: "Abbiamo inviato una richiesta d'accesso per %{person}. La partecipazione viene creata non appena la richiesta viene accettata. Tutti i dettagli sulla partecipazione devono essere nuovamente indicati dopo l'autorizzazione."
+          failure: "Non è possibile creare la partecipazione perché per %{person} è necessaria una richiesta d'accesso. %{errors}"
+        mailing_list:
+          success: "Abbiamo inviato una richiesta d'accesso per %{person}. La persona viene aggiunta all'abbonamento non appena viene accettata la richiesta."
+          failure: "Non è possibile aggiungere %{person} perché per questa persona è necessaria una richiesta d'accesso. %{errors}"
+      approve:
+        success_notice: "La richiesta d'accesso per %{person} è stata accettata."
+        failure_notice: "La richiesta d'accesso per %{person} non è stata accettata: %{errors}."
+      reject:
+        success_notice: "La richiesta d'accesso per %{person} è stata rifiutata."
+      cancel:
+        success_notice: "La richiesta d'accesso per %{person} è stata ritirata."
+      status:
+        group:
+          approved: "La richiesta d'accesso per %{person} è già stata accettata."
+          rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
+        event:
+          approved: "La richiesta d'accesso per %{person} è già stata accettata."
+          rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
+        mailing_list:
+          approved: "La richiesta d'accesso per %{person} è già stata accettata."
+          rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
+    csv_imports:
+      description:
+        header: Documenti CSV
+        explain_csv_format: 'Ogni riga del documento CSV contiene i dati di una persona. La prima riga contiene i nomi dei campi. I campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere racchiuso tra virgolette ("). Esempio:'
+        example: |+
+          nome,cognome,email,luogo,sesso
+          Hans,Muster,hans@beispiel.ch,Bern,m
+          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+
+        explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
+        explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo.
+        special_fields: Valori speciali per i campi
+        explain_special_fields_html: 'I campi seguenti devono contenere uno dei valori in <em>corsivo</em> '
+      preview_table:
+        icon_tooltip_invalid: 'Valori non validi'
+        icon_tooltip_updated: 'Viene aggiornato'
+        icon_tooltip_created: 'Viene registrato nuovamente'
+        icon_tooltip_request: 'Viene richiesto'
+      define_mapping:
+        choose_role: 'Scegliere un ruolo'
+        choose_role_help: 'Tutte le persone importate ricevono questo ruolo'
+        assign_columns_to_fields: 'Assegnare le colonne ai campi'
+        column_from_csv: 'Colonna CSV'
+        field_in_database: 'Campo nella banca dati'
+        preview: 'Anteprima'
+        update_behaviour: Metodo di aggiornamento
+        keep_behaviour: >
+          Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
+          già esistenti vengono mantenuti.
+        override_behaviour: >
+          Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
+          I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
+          banca dati.
+        update_behaviour_explanation: >
+          Questa funzione si applica unicamente alle persone già esistenti nella banca
+          dati. Nuove persone vengono sempre create in totale corrispondenza ai dati
+          del CSV.
+      new:
+        upload_button: 'Caricare'
+        csv_file: 'Documento CSV'
+      preview:
+        import_now_button: Importare le persone
+        import_details_html: >
+          Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
+          nel gruppo<strong> %{group}</strong>.
+    add_request_mailer:
+      ask_person_to_add:
+        request_link: Rispondere alla richiesta
+      ask_responsibles:
+        request_link: Rispondere alla richiesta
+  person/csv_imports:
+    invalid_file: Selezionare un file CSV valido.
+    duplicate_keys:
+      one: '%{list} è stato assegnato più volte.'
+      other: '%{list} sono stati assegnati più volte.'
+    preview:
+      new:
+        one: '%{count} %{role} viene reimportato.'
+        other: '%{count} %{role} vengono reimportati.'
+      updated:
+        one: '%{count} %{role} viene aggiornato.'
+        other: '%{count} %{role} vengono aggiornati.'
+      failed:
+        one: '%{count} %{role} non viene importato.'
+        other: '%{count} %{role} non vengono importati.'
+      requests:
+        one: '%{count} %{role} riceverà una richiesta d''accesso per i suoi dati personali; i dati non vengono importati.'
+        other: '%{count} %{role} riceveranno una richiesta d''accesso per i loro dati personali; i dati non vengono importati.'
+    create:
+      new:
+        one: '%{count} %{role} è stato importato con successo.'
+        other: '%{count} %{role} sono stati importati con successo.'
+      updated:
+        one: '%{count} %{role} è stato aggiornato con successo.'
+        other: '%{count} %{role} sono stati aggiornati con successo.'
+      failed:
+        one: '%{count} %{role} non è stato importato.'
+        other: '%{count} %{role} non sono stati importati.'
+      requests:
+        one: '%{count} %{role} ha ricevuto una richiesta d''accesso per i suoi dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta.'
+        other: '%{count} %{role} hanno ricevuto una richiesta d''accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta.'
   people:
     send_password_instructions: Le informazioni per il login sono state spedite.
     years_old: (%{years} anni)
@@ -516,6 +608,9 @@ it:
     actions_index:
       add_person: Aggiungere una persona
       import_list: Importare lista
+    add_requests:
+      approve_title: 'Accettare la richiesta'
+      reject_title: 'Rifiutare la richiesta'
     attrs:
       additional_data: Informazioni supplementari
       events: I miei prossimi eventi
@@ -573,6 +668,7 @@ it:
     full_entry_label: '%{model_label} <i>%{role}</i> per <i>%{person}</i> in <i>%{group}</i>'
     role_changed: '%{full_entry_label} cambiato in <i>%{new_role}</i>.'
     role_changed_to_group: '%{full_entry_label} in <i>%{new_role}</i> in <i>%{new_group}</i> modificato.'
+    role_primary_group_changed: 'Gruppo principale modificato con <i>%{new_group}</i>.'
     form:
       add_person: Aggiungere una persona
       add_role_for_person: 'Inserire un ruolo per %{person} '
@@ -596,6 +692,9 @@ it:
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
+    exclude_person:
+      form:
+        exclude_subscriber: 'Escludere abbonato/a'
   subscriber/base:
     blank: '%{model_label} deve venir selezionato'
     taken: '%{model_label} è appena stato aggiunto'
@@ -604,9 +703,10 @@ it:
     failure: 'non puoi essere aggiunto all''abbonamento: %{errors}'
     unsubscribed: 'sei stato eliminato con successo dall''abbonamento'
   subscriber/exclude_person:
+    success: '%{subscriber} è stato escluso/a con successo'
     failure: '%{subscriber} non è un abbonato'
-  sheet/csv_import:
-    title: 'importare persone tramite CSV'
+  sheet/person/csv_import:
+    title: 'Importare persone tramite CSV'
   sheet/group:
     belongs_to: 'appartiene a'
     deleted: '(eliminato)'
@@ -619,6 +719,7 @@ it:
       exclude_person: 'escludere persone'
     list:
       excluded_people: 'persone escluse'
+      export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."
@@ -628,6 +729,10 @@ it:
       create: "%{model} <i>%{label}</i> è stato aggiunto."
       update: "%{model} <i>%{label}</i> è stato aggiornato: %{changeset}"
       destroy: "%{model} <i>%{label}</i> è stato cancellato."
+      person/add_request:
+        create: "La richiesta d'accesso per <i>%{label}</i> è stata inviata."
+        update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
+        destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
   views:
     pagination:
       next: '>>'

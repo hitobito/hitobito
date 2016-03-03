@@ -284,6 +284,7 @@ de:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift
         heading_event/course: Kursanmeldung %{year}
+        heading_event: Anmeldung Anlass
         read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
         read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass

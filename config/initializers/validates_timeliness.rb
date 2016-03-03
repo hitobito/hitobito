@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, insieme Schweiz. This file is part of
+#  Copyright (c) 2012-2016, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,6 +11,7 @@ require 'validates_timeliness/validator'
 # May be removed after a newer version than 3.0.14 is released
 module ValidatesTimeliness
   class Validator < ActiveModel::EachValidator
+
     def initialize_with_setup(options)
       initialize_without_setup(options)
       model = options[:class]
@@ -61,9 +62,23 @@ ValidatesTimeliness.setup do |config|
   # Remove one or more formats making them invalid. e.g. remove_formats(:date, 'dd/mm/yyy')
   # config.parser.remove_formats()
   #
-  # Change the amiguous year threshold when parsing a 2 digit year
+  # Change the ambiguous year threshold when parsing a 2 digit year
   # config.parser.ambiguous_year_threshold =  30
   #
   # Treat ambiguous dates, such as 01/02/1950, as a Non-US date.
   config.parser.remove_us_formats
 end
+
+
+module ValidatesTimeliness
+  module CacheAttributeMethods
+
+    # provide access to the cached values
+    def timeliness_cache_attribute(name)
+      @timeliness_cache && @timeliness_cache[name.to_s]
+    end
+
+  end
+end
+
+ActiveRecord::Base.send(:include, ValidatesTimeliness::CacheAttributeMethods)

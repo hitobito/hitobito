@@ -22,9 +22,9 @@ describe Event::QualificationsController do
   let(:leader_1)       { create_participation(Event::Role::Leader) }
 
   def create_participation(role)
-    participation = Fabricate(:event_participation, event: event)
+    participation = Fabricate(:event_participation, event: event, active: true)
     Fabricate(role.name.to_sym, participation: participation)
-    participation
+    participation.reload
   end
 
   before { sign_in(people(:top_leader)) }

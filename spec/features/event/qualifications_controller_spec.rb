@@ -18,13 +18,13 @@ describe Event::QualificationsController do
   let(:group) { event.groups.first }
 
   let(:participant_1)  do
-    participation = Fabricate(:event_participation, event: event)
+    participation = Fabricate(:event_participation, event: event, active: true)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     participation
   end
 
   let(:participant_2)  do
-    participation = Fabricate(:event_participation, event: event)
+    participation = Fabricate(:event_participation, event: event, active: true)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     participation
   end

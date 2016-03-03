@@ -58,14 +58,14 @@ describe Subscriber::UserController do
 
   context 'POST destroy' do
     it 'creates exclusion when no direct subscription exists' do
-      Fabricate(:subscription, mailing_list: list, subscriber: groups(:top_layer), excluded: false, role_types: [Group::TopGroup::Leader.sti_name])
+      Fabricate(:subscription, mailing_list: list, subscriber: groups(:top_group), excluded: false, role_types: [Group::TopGroup::Leader.sti_name])
       expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.to change { Subscription.count }.by(1)
 
       expect(person.subscriptions.last).to be_excluded
     end
 
     it 'handle multiple direct and indirect subscription' do
-      Fabricate(:subscription, mailing_list: list, subscriber: groups(:top_layer), excluded: false, role_types: [Group::TopGroup::Leader.sti_name])
+      Fabricate(:subscription, mailing_list: list, subscriber: groups(:top_group), excluded: false, role_types: [Group::TopGroup::Leader.sti_name])
       Fabricate(:subscription, mailing_list: list, subscriber: person, excluded: false)
       expect { post :destroy, group_id: group.id, mailing_list_id: list.id }.not_to change { Subscription.count }
 

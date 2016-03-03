@@ -26,6 +26,11 @@ class MailingList < ActiveRecord::Base
 
   has_many :subscriptions, dependent: :destroy
 
+  has_many :person_add_requests,
+           foreign_key: :body_id,
+           inverse_of: :body,
+           class_name: 'Person::AddRequest::MailingList',
+           dependent: :destroy
 
   validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },

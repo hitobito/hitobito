@@ -8,26 +8,27 @@
 #
 # Table name: groups
 #
-#  id             :integer          not null, primary key
-#  parent_id      :integer
-#  lft            :integer
-#  rgt            :integer
-#  name           :string           not null
-#  short_name     :string(31)
-#  type           :string           not null
-#  email          :string
-#  address        :string(1024)
-#  zip_code       :integer
-#  town           :string
-#  country        :string
-#  contact_id     :integer
-#  created_at     :datetime
-#  updated_at     :datetime
-#  deleted_at     :datetime
-#  layer_group_id :integer
-#  creator_id     :integer
-#  updater_id     :integer
-#  deleter_id     :integer
+#  id                          :integer          not null, primary key
+#  parent_id                   :integer
+#  lft                         :integer
+#  rgt                         :integer
+#  name                        :string           not null
+#  short_name                  :string(31)
+#  type                        :string           not null
+#  email                       :string
+#  address                     :string(1024)
+#  zip_code                    :integer
+#  town                        :string
+#  country                     :string
+#  contact_id                  :integer
+#  created_at                  :datetime
+#  updated_at                  :datetime
+#  deleted_at                  :datetime
+#  layer_group_id              :integer
+#  creator_id                  :integer
+#  updater_id                  :integer
+#  deleter_id                  :integer
+#  require_person_add_requests :boolean          default(FALSE), not null
 #
 
 class Group < ActiveRecord::Base
@@ -80,6 +81,11 @@ class Group < ActiveRecord::Base
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
+  has_many :person_add_requests,
+           foreign_key: :body_id,
+           inverse_of: :body,
+           class_name: 'Person::AddRequest::Group',
+           dependent: :destroy
 
   ### VALIDATIONS
 

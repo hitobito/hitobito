@@ -10,7 +10,7 @@ module CsvImportMacros
   FILES = [:utf8, :iso88591, :utf8_with_spaces]
 
   def path(name, extension = :csv)
-    File.expand_path("../csv/#{name}.#{extension}", __FILE__)
+    Rails.root.join('spec', 'fixtures', 'csv', "#{name}.#{extension}")
   end
 
   def default_mapping

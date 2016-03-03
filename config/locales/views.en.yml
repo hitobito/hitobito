@@ -78,62 +78,6 @@ en:
       placeholder_value: E-Mail
       placeholder_type: Designation (Home, Work, ...)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
-  csv_imports:
-    description:
-      header: CSV files
-      explain_csv_format: 'A CSV file contains the details of a person on each line. The first line contains the field names. The fields are separated with a comma. If a field value itself contains commas, it must be complemented with quotation marks ("). Example:'
-      example: |
-        First name,Last name,e-Mail,Place,gender
-        Hans,Muster,hans@beispiel.ch,Bern,m
-        Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",f
-      explain_field_names: The fields in the CSV file can be assigned to the fields in the application in the next step.
-      explain_role: All persons of a file will be assigned to the same role, which can be selected in the next step.
-      special_fields: Special field values
-      explain_special_fields_html: The following fields must contain one of the <em>italic</ em> values.
-    preview_table:
-      icon_tooltip_invalid: 'Invalid values'
-      icon_tooltip_updated: 'Updating'
-      icon_tooltip_created: 'Recording'
-    define_mapping:
-      choose_role: 'Select role'
-      choose_role_help: 'This role will be assigned to all imported persons'
-      assign_columns_to_fields: 'Assign columns to fields'
-      column_from_csv: 'Column from CSV'
-      field_in_database: 'Field in database'
-      preview: 'Preview'
-      update_behaviour: Update behavior
-      keep_behaviour: 'Only update empty values in the database with the values from the CSV file, existing values are preserved.'
-      override_behaviour: 'Overwrite existing values in the database with the values from the CSV file. Empty values in the CSV file will delete existing values in the database.'
-      update_behaviour_explanation: 'This behavior only applies to persons already existing in the database. New persons are created with the data from the CSV file.'
-    new:
-      upload_button: 'Upload'
-      csv_file: 'CSV file'
-    invalid_file: Please select a valid CSV file.
-    duplicate_keys:
-      one: '%{list} was assigned more than once.'
-      other: '%{list} were assigned more than once.'
-    preview:
-      import_now_button: Import persons now
-      import_details_html: The following persons will be importet with the <strong>role %{role}</strong> into the <strong>group %{group}</strong>.
-      new:
-        one: '%{count} %{role} will be imported.'
-        other: '%{count} %{role} will be imported.'
-      updated:
-        one: '%{count} %{role} will be updated.'
-        other: '%{count} %{role} will be updated.'
-      failed:
-        one: '%{count} %{role} won''t be imported.'
-        other: '%{count} %{role} won''t be imported.'
-    create:
-      new:
-        one: '%{count} %{role} has been imported succesfully.'
-        other: '%{count} %{role} have been imported succesfully.'
-      updated:
-        one: '%{count} %{role} has been updated succesfully.'
-        other: '%{count} %{role} have been updated succesfully.'
-      failed:
-        one: '%{count} %{role} has not been imported.'
-        other: '%{count} %{role} have not been imported.'
   custom_content_decorator:
     available_placeholders: "Available placeholders: %{placeholders}"
     available_placeholders_empty: 'No placeholders available'
@@ -302,14 +246,10 @@ en:
         next: Further
         enter_email: Please enter your email address so you can register for the event.
   events:
-    preconditions: 'Required qualifications'
-    minimum_age_with_years: '%{minimum_age} years (vintage)'
     application_fields:
       caption_signature: Participants must sign the application
       caption_signature_confirmation: Application must be confirmed with a second signature
       signature_confirmation_text_default: Legal guardian (for minors)
-    tabs:
-      participants: 'Participants'
     form:
       caption_external_applications: 'Externals can sign up for this event'
       caption_prioritization: 'Participants may set two additional courses as alternatives'
@@ -323,9 +263,13 @@ en:
       link:
         add_event: Create event
         add_event/course: Create course
+    minimum_age_with_years: '%{minimum_age} years (vintage)'
     new:
       title_event: Create event
       title_event/course: Create course
+    preconditions: 'Required qualifications'
+    tabs:
+      participants: 'Participants'
   event/applications:
     approved: 'The application was approved.'
     rejected: 'The application was declined.'
@@ -394,19 +338,6 @@ en:
     index:
       title: 'people found'
       incomplete_search_request: 'Please enter at least two characters.'
-  group:
-    merge:
-      select:
-        title: 'Merge %{group}'
-        explanation: When merging two groups all sub-groups, events and people including roles of both groups will be merged. Subscriptions will not be merged. The previous groups are then visible as 'Deleted'.
-        merge_is_irreversible: This action can not be undone!
-        new_group_name: 'Name of the new group'
-        merge_group_with: '%{group} merge with'
-        merge_button: 'Merge group'
-    move:
-      select:
-        title: "Move group"
-        select_group: "Please select the group that you want to move into."
   groups:
     actions_show:
       export_subgroups: 'CSV subgroups'
@@ -611,8 +542,6 @@ en:
   subscriber/exclude_person:
     success: 'Subscriber %{subscriber} has been successfully excluded'
     failure: '%{subscriber} is not a subscriber'
-  sheet/csv_import:
-    title: 'Import person via CSV'
   sheet/group:
     belongs_to: 'belongs to'
     deleted: '(deleted)'

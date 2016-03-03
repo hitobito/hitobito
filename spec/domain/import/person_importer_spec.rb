@@ -54,7 +54,7 @@ describe Import::PersonImporter do
     context 'base error' do
       let(:data) { [{}] }
       before { importer.import }
-      its('errors.first') { should eq 'Zeile 1: Bitte geben Sie einen Namen ein.' }
+      its('errors.first') { should eq 'Zeile 1: Bitte geben Sie einen Namen ein' }
     end
 
     context 'zip_code validation' do
@@ -85,8 +85,9 @@ describe Import::PersonImporter do
       its(:email) { should eq 'foo@bar.net' }
       its('roles.size') { should eq 1 }
       it 'updates double and success count' do
-        expect(importer.doublette_count).to eq 1
+        expect(importer.update_count).to eq 1
         expect(importer.new_count).to eq 0
+        expect(importer.request_people.size).to eq 0
       end
     end
 
@@ -123,6 +124,80 @@ describe Import::PersonImporter do
       its(:last_name) { should eq 'last_name' }
       its(:town) { should eq 'Bern' }
       its('social_accounts.size') { should eq 2 }
+    end
+  end
+
+  context 'with person add requests' do
+    let(:role_type) { Group::BottomGroup::Member }
+
+    let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+    let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+    let(:group) { groups(:bottom_group_one_one) }
+
+    before do
+      importer.user_ability = Ability.new(user)
+      groups(:top_layer).update_column(:require_person_add_requests, true)
+    end
+
+    context 'records successful and failed imports' do
+      let(:data) do
+        [{ first_name: 'foobar', email: 'foo@bar.net' },
+         { first_name: 'foobar', zip_code: 'asdf', country: 'CH' },
+         { first_name: person.first_name, email: person.email, town: 'Wabern' }]
+      end
+
+      it 'creates only first record' do
+        expect { subject.import }.to change(Person, :count).by(1)
+      end
+
+      it 'creates request' do
+        subject.import
+
+        expect(subject.request_people.size).to eq(1)
+        expect(subject.failure_count).to eq(1)
+        expect(subject.update_count).to eq(0)
+
+        expect(person.reload.roles.count).to eq(1)
+        expect(person.town).not_to eq('Wabern')
+        request = person.add_requests.first
+        expect(request.body_id).to eq(group.id)
+        expect(request.role_type).to eq(role_type.sti_name)
+      end
+
+      it 'creates role if person already visible' do
+        Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
+        u = Person.find(user.id)
+        importer.user_ability = Ability.new(u)
+
+        subject.import
+
+        expect(subject.request_people.size).to eq(0)
+        expect(subject.update_count).to eq(1)
+        expect(subject.failure_count).to eq(1)
+
+        expect(person.reload.roles.count).to eq(2)
+        expect(person.town).to eq('Wabern')
+        role = person.roles.last
+        expect(role.group_id).to eq(group.id)
+      end
+
+      it 'does not inform about existing request' do
+        Person::AddRequest::Group.create!(
+          person: person,
+          requester: Fabricate(:person),
+          body: group,
+          role_type: Group::BottomGroup::Leader.sti_name)
+
+        subject.import
+
+        expect(subject.request_people.size).to eq(1)
+        expect(subject.failure_count).to eq(1)
+        expect(subject.update_count).to eq(0)
+
+        expect(person.reload.roles.count).to eq(1)
+        expect(person.add_requests.count).to eq(1)
+      end
+
     end
   end
 

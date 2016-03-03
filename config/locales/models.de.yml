@@ -54,18 +54,18 @@ de:
         event/question:
           attributes:
             choices:
-              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten.'
+              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
         event/participation:
           attributes:
             person_id:
-              taken: ist bereits angemeldet.
+              taken: ist bereits angemeldet
         mailing_list:
           attributes:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
         person:
-          name_missing: 'Bitte geben Sie einen Namen ein.'
+          name_missing: 'Bitte geben Sie einen Namen ein'
           attributes:
             email:
               taken: >
@@ -74,10 +74,14 @@ de:
                         'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
                         als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
                         kann leer gelassen werden).
+        person/add_request:
+          attributes:
+            person_id:
+              taken: wurde bereits angefragt
         people_relation:
           attributes:
             tail_id:
-              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt.
+              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt
         qualification:
           attributes:
             qualification_kind_id:
@@ -85,7 +89,12 @@ de:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen.'
+              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen'
+        subscription:
+          attributes:
+            subscriber_id:
+              group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
 
     models:
       additional_email:
@@ -106,6 +115,9 @@ de:
       event/application:
         one: Anmeldung
         other: Anmeldungen
+      event/attachment:
+        one: Anhang
+        other: 'Anhänge'
       event/kind:
         one: Kursart
         other: Kursarten
@@ -136,6 +148,9 @@ de:
       person:
         one: Person
         other: Personen
+      person/add_request:
+        one: Zugriffsanfrage
+        other: Anfragen
       people_filter:
         one: Filter
         other: Filter
@@ -224,6 +239,18 @@ de:
         created_at: Erstellt
         updated_at: Geändert
 
+      person/add_request:
+        person: Person
+        requester: Anfrage von
+        body: Anfrage für
+        created_at: Datum
+
+      person/add_request/event:
+        label: "%{body} in %{group}"
+
+      person/add_request/mailing_list:
+        label: "%{body} in %{group}"
+
       group:
         name: Name
         short_name: Kurzname
@@ -280,6 +307,9 @@ de:
         priority_2_id: "1. Ausweichkurs"
         priority_3_id: "2. Ausweichkurs"
         waiting_list_comment: 'Bemerkung'
+
+      event/attachment:
+        file: Datei
 
       event/course:
         kind_id: Kursart
@@ -460,6 +490,7 @@ de:
 
       subscription:
         related_role_types: Rollen
+        subscriber_id: '' # not used, error messages require different labels
 
       people_filter:
         name: Name
@@ -494,7 +525,9 @@ de:
       after: "muss  nach %{restriction} sein"
       on_or_after: "muss %{restriction} oder danach sein"
       # carrierwave
-      extension_white_list_error: "kann nur Dateien der Typen %{allowed_types} verarbeiten."
+      extension_white_list_error: "akzeptiert nur die folgenden Dateitypen: %{allowed_types}"
+      dimensions_too_large: "akzeptiert nur Bilder mit einer Grösse kleiner als %{maximum} Pixel"
+      filesize_too_large: "darf nicht grösser als %{maximum} MB sein"
       # devise
       expired: "ist abgelaufen, bitte neu anfordern"
       not_found: "nicht gefunden"

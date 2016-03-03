@@ -324,7 +324,7 @@ module CrudTestHelper
   end
 
   def str(index)
-     (index + 64).chr * 5
+    (index + 64).chr * 5
   end
 
   # hack to avoid ddl in transaction issues with mysql.

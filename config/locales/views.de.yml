@@ -106,78 +106,6 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
-  csv_imports:
-    description:
-      header: CSV Dateien
-      explain_csv_format: 'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
-        Die erste Zeile enthält die Feldnamen.
-        Die einzelnen Felder sind mit einem Komma getrennt.
-        Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
-        Beispiel:'
-      example: |
-        Vorname,Nachname,E-Mail,Ort,Geschlecht
-        Hans,Muster,hans@beispiel.ch,Bern,m
-        Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
-      explain_field_names: Es können beliebige Feldnamen verwendet werden.
-        Die Felder in der CSV Datei können im nächsten Schritt
-        den Feldern in der Applikation zugeordnet werden.
-      explain_role: Allen Personen einer Datei wird die gleiche Rolle vergeben,
-        welche ebenfalls im nächsten Schritt ausgewählt werden kann.
-      special_fields: Spezielle Feldwerte
-      explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
-
-    preview_table:
-      icon_tooltip_invalid: 'Ungültige Werte'
-      icon_tooltip_updated: 'Wird aktualisiert'
-      icon_tooltip_created: 'Wird neu erfasst'
-
-    define_mapping:
-      choose_role: 'Rolle auswählen'
-      choose_role_help: 'Allen importierten Personen wird diese Rolle zugewiesen'
-      assign_columns_to_fields: 'Spalten zu Feldern zuordnen'
-      column_from_csv: 'Spalte aus CSV'
-      field_in_database: 'Feld in der Datenbank'
-      preview: 'Vorschau'
-      update_behaviour: Aktualisierungsverhalten
-      keep_behaviour: 'Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren, bestehende Werte bleiben erhalten.'
-      override_behaviour: 'Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben. Leere Werte im CSV löschen dabei bestehende in der Datenbank.'
-      update_behaviour_explanation: 'Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen. Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.'
-
-    new:
-      upload_button: 'Hochladen'
-      csv_file: 'CSV Datei'
-
-    invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
-
-    duplicate_keys:
-      one: '%{list} wurde mehrfach zugewiesen.'
-      other: '%{list} wurden mehrfach zugewiesen.'
-
-    preview:
-      import_now_button: Personen jetzt importieren
-      import_details_html: Folgende Personen werden mit der <strong>Rolle %{role}</strong>
-        in die <strong>Gruppe %{group}</strong> importiert.
-      new:
-        one: '%{count} %{role} wird neu importiert.'
-        other: '%{count} %{role} werden neu importiert.'
-      updated:
-        one: '%{count} %{role} wird aktualisiert.'
-        other: '%{count} %{role} werden aktualisiert.'
-      failed:
-        one: '%{count} %{role} wird nicht importiert.'
-        other: '%{count} %{role} werden nicht importiert.'
-
-    create:
-      new:
-        one: '%{count} %{role} wurde erfolgreich importiert.'
-        other: '%{count} %{role} wurden erfolgreich importiert.'
-      updated:
-        one: '%{count} %{role} wurde erfolgreich aktualisiert.'
-        other: '%{count} %{role} wurden erfolgreich aktualisiert.'
-      failed:
-        one: '%{count} %{role} wurde nicht importiert.'
-        other: '%{count} %{role} wurden nicht importiert.'
-
   custom_content_decorator:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
@@ -202,6 +130,8 @@ de:
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
     everything: 'Alle Angaben'
+    condense_labels: 'Mehrfachsendungen vermeiden'
+    condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
 
   devise:
     failure:
@@ -318,6 +248,12 @@ de:
       popover_waiting_list:
         waiting_list_info: Setze diese Person auf die Warteliste für Kurse der Art %{event_kind}.
 
+    attachments:
+      create:
+        failure: "Upload fehlgeschlagen: %{errors}."
+      destroy:
+        failure: "Löschen fehlgeschlagen: %{errors}."
+
     kinds:
       form:
         help_minimum_age: 'Jahre (Jahrgang am ersten Kursdatum massgebend)'
@@ -348,6 +284,7 @@ de:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift
         heading_event/course: Kursanmeldung %{year}
+        heading_event: Anmeldung Anlass
         read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
         read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass
@@ -370,14 +307,12 @@ de:
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
 
   events:
-    preconditions: 'Erforderliche Qualifikationen'
-    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
-    tabs:
-      participants: 'Teilnehmende'
+    attachments:
+      add: "hinzufügen"
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
@@ -393,9 +328,13 @@ de:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+    minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen
       title_event/course: Kurs erstellen
+    preconditions: 'Erforderliche Qualifikationen'
+    tabs:
+      participants: 'Teilnehmende'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
@@ -497,6 +436,28 @@ de:
         title: "Gruppe verschieben"
         select_group: "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
 
+    person_add_requests:
+
+      actions_index:
+        activate: Manuelle Freigabe aktivieren
+        deactivate: Deaktivieren
+        activate_title: Manuelle Freigabe aktivieren
+        deactivate_title: Manuelle Freigabe deaktivieren
+
+      index:
+        activated: Manuelle Freigabe ist aktiviert
+        deactivated: Manuelle Freigabe ist nicht aktiviert
+        explanation: >
+          Wenn aktiv, werden Personen dieser Ebene erst zu Gruppen, Anlässen und Abos hinzugefügt,
+          nachdem eine zugriffsberechtigte Person die Freigabe erteilt.
+
+      list:
+        approve: Akzeptieren
+        reject: Ablehnen
+
+      approvers:
+        title: 'Benachrichtigungen an'
+
   groups:
     actions_show:
       export_subgroups: 'CSV Untergruppen'
@@ -516,6 +477,11 @@ de:
     tabs:
       deleted: 'Gelöscht'
 
+  group/person_add_requests:
+    deactivated: Manuelle Freigabe deaktiviert
+    activated: Manuelle Freigabe aktiviert
+    global:
+      no_list_entries: Momentan sind keine Anfragen offen.
 
   group/merge:
     success: 'Die gewählten Gruppen wurden zur neuen Gruppe %{new_group_name} fusioniert.'
@@ -609,6 +575,142 @@ de:
   paper_trail/version_decorator:
     by: 'von %{author}'
 
+
+  person:
+    add_requests:
+
+      body_list:
+        open_requests:
+          one: 1 offene Anfrage.
+          other: "%{count} offene Anfragen."
+        request_to: Anfrage an
+        cancel: Zugriffsanfrage zurückziehen
+
+      creator:
+        group:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Rolle wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Details zur Rolle müssen nach der Freigabe erneut angegeben werden."
+          failure: "Die Rolle konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        event:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Teilnahme wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Informationen zur Teilnahme müssen nach der Freigabe erneut angegeben werden."
+          failure: "Die Teilnahme konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        mailing_list:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Person wird zum Abo hinzugefügt, sobald die Anfrage freigegeben wird."
+          failure: "%{person} konnte nicht hinzugefügt werden, da für diese Person eine Zugriffsanfrage erforderlich ist. %{errors}."
+
+      approve:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde freigegeben."
+        failure_notice: "Die Zugriffsanfrage für %{person} konnte nicht freigegeben werden: %{errors}."
+      reject:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde abgelehnt."
+      cancel:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde zurückgezogen."
+
+      status:
+        group:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        event:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        mailing_list:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+
+    csv_imports:
+      description:
+        header: CSV Dateien
+        explain_csv_format: 'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
+          Die erste Zeile enthält die Feldnamen.
+          Die einzelnen Felder sind mit einem Komma getrennt.
+          Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
+          Beispiel:'
+        example: |
+          Vorname,Nachname,E-Mail,Ort,Geschlecht
+          Hans,Muster,hans@beispiel.ch,Bern,m
+          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+        explain_field_names: Es können beliebige Feldnamen verwendet werden.
+          Die Felder in der CSV Datei können im nächsten Schritt
+          den Feldern in der Applikation zugeordnet werden.
+        explain_role: Allen Personen einer Datei wird die gleiche Rolle vergeben,
+          welche ebenfalls im nächsten Schritt ausgewählt werden kann.
+        special_fields: Spezielle Feldwerte
+        explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
+
+      preview_table:
+        icon_tooltip_invalid: 'Ungültige Werte'
+        icon_tooltip_updated: 'Wird aktualisiert'
+        icon_tooltip_created: 'Wird neu erfasst'
+        icon_tooltip_request: 'Wird angefragt'
+
+      define_mapping:
+        choose_role: 'Rolle auswählen'
+        choose_role_help: 'Allen importierten Personen wird diese Rolle zugewiesen'
+        assign_columns_to_fields: 'Spalten zu Feldern zuordnen'
+        column_from_csv: 'Spalte aus CSV'
+        field_in_database: 'Feld in der Datenbank'
+        preview: 'Vorschau'
+        update_behaviour: Aktualisierungsverhalten
+        keep_behaviour: >
+          Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
+          bestehende Werte bleiben erhalten.
+        override_behaviour: >
+          Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
+          Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        update_behaviour_explanation: >
+          Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
+          Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.
+
+      new:
+        upload_button: 'Hochladen'
+        csv_file: 'CSV Datei'
+
+      preview:
+        import_now_button: Personen jetzt importieren
+        import_details_html: >
+          Folgende Personen werden mit der <strong>Rolle %{role}</strong>
+          in die <strong>Gruppe %{group}</strong> importiert.
+
+    add_request_mailer:
+      ask_person_to_add:
+        request_link: Anfrage beantworten
+      ask_responsibles:
+        request_link: Anfrage beantworten
+
+  person/csv_imports:
+    invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
+
+    duplicate_keys:
+      one: '%{list} wurde mehrfach zugewiesen.'
+      other: '%{list} wurden mehrfach zugewiesen.'
+
+    preview:
+      new:
+        one: '%{count} %{role} wird neu importiert.'
+        other: '%{count} %{role} werden neu importiert.'
+      updated:
+        one: '%{count} %{role} wird aktualisiert.'
+        other: '%{count} %{role} werden aktualisiert.'
+      failed:
+        one: '%{count} %{role} wird nicht importiert.'
+        other: '%{count} %{role} werden nicht importiert.'
+      requests:
+        one: '%{count} %{role} wird eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert.'
+        other: '%{count} %{role} werden eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert.'
+
+    create:
+      new:
+        one: '%{count} %{role} wurde erfolgreich importiert.'
+        other: '%{count} %{role} wurden erfolgreich importiert.'
+      updated:
+        one: '%{count} %{role} wurde erfolgreich aktualisiert.'
+        other: '%{count} %{role} wurden erfolgreich aktualisiert.'
+      failed:
+        one: '%{count} %{role} wurde nicht importiert.'
+        other: '%{count} %{role} wurden nicht importiert.'
+      requests:
+        one: '%{count} %{role} hat eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfrage erneut vorgenommen werden.'
+        other: '%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden.'
+
   people:
     send_password_instructions: Login Informationen wurden verschickt.
     years_old: (%{years} Jahre alt)
@@ -627,6 +729,10 @@ de:
     actions_index:
       add_person: Person hinzufügen
       import_list: Liste importieren
+
+    add_requests:
+      approve_title: 'Anfrage akzeptieren'
+      reject_title: 'Anfrage ablehnen'
 
     attrs:
       additional_data: Weitere Angaben
@@ -746,7 +852,7 @@ de:
     success: '%{subscriber} wurde erfolgreich ausgeschlossen'
     failure: '%{subscriber} ist nicht Abonnent/-in'
 
-  sheet/csv_import:
+  sheet/person/csv_import:
     title: 'Personen über CSV importieren'
 
   sheet/group:
@@ -762,16 +868,23 @@ de:
       exclude_person: 'Person ausschliessen'
     list:
       excluded_people: 'Ausgeschlossene Personen'
+      export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
 
   version:
     attribute_change:
       from_to: "%{attr} wurde von <i>%{from}</i> auf <i>%{to}</i> geändert."
       from: "%{attr} <i>%{from}</i> wurde gelöscht."
       to: "%{attr} wurde auf <i>%{to}</i> gesetzt."
+
     association_change:
       create: "%{model} <i>%{label}</i> wurde hinzugefügt."
       update: "%{model} <i>%{label}</i> wurde aktualisiert: %{changeset}"
       destroy: "%{model} <i>%{label}</i> wurde gelöscht."
+
+      person/add_request:
+        create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."
+        update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
+        destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
 
   views:
     pagination:

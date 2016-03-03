@@ -8,9 +8,10 @@
 - before_message = Event::Date.human_attribute_name(:finish_at) + ' ' + t('errors.messages.on_or_after') % { restriction: Event::Date.human_attribute_name(:start_at) }
 
 = field_set_tag nil,
-                class: 'event-dates', data: { start_at_invalid_message: start_at_invalid_message,
-                                              finish_at_invalid_message: finish_at_invalid_message,
-                                              before_message: before_message } do
+                class: 'date-period-validated',
+                data: { start_at_invalid_message: start_at_invalid_message,
+                        finish_at_invalid_message: finish_at_invalid_message,
+                        before_message: before_message } do
   %p= t('events.form.times_are_optional')
   = f.nested_fields_for :dates, 'event/dates/fields'
 

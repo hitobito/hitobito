@@ -94,11 +94,8 @@ class CrudController < ListController
   #   DELETE /entries/1.json
   def destroy(options = {}, &block)
     destroyed = run_callbacks(:destroy) { entry.destroy }
-    if !destroyed && html_request?
-      flash[:alert] ||= error_messages.presence || flash_message(:failure)
-    end
-    location = (!destroyed && request.env['HTTP_REFERER'].presence) ||
-               (options[:location] || index_path)
+    set_failure_notice unless destroyed
+    location = destroy_return_path(destroyed, options)
     respond_with(entry, options.reverse_merge(success: destroyed, location: location), &block)
   end
 
@@ -157,6 +154,10 @@ class CrudController < ListController
     flash[:notice] ||= flash_message(:success) if html_request?
   end
 
+  def set_failure_notice
+    flash[:alert] ||= error_messages.presence || flash_message(:failure) if html_request?
+  end
+
   # Get an I18n flash message, considering _html keys as well.
   # Uses the key {controller_name}.{action_name}.flash.{state}
   # or crud.{action_name}.flash.{state} as fallback.
@@ -182,6 +183,11 @@ class CrudController < ListController
         nil
       end
     end
+  end
+
+  def destroy_return_path(destroyed, options = {})
+    (!destroyed && request.env['HTTP_REFERER'].presence) ||
+      (options[:location] || index_path)
   end
 
   class << self

@@ -66,10 +66,10 @@ describe PeopleController, type: :controller do
     end
 
     it 'member without permission to see details cannot see created or updated info' do
-      person1 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
-      person2 = (Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group).person)
+      person1 = (Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person)
+      person2 = (Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
       sign_in(person1)
-      get :show, id: person2
+      get :show, group_id: person2.primary_group_id, id: person2
       expect(dom).not_to have_selector('dt', text: 'Erstellt')
       expect(dom).not_to have_selector('dt', text: 'Geändert')
     end
@@ -101,14 +101,6 @@ describe PeopleController, type: :controller do
     end
   end
 
-  describe_action :put, :update, id: true do
-    let(:params) { { person: { birthday: '33.33.33' } } }
-
-    it 'displays old value again' do
-      is_expected.to render_template('edit')
-      expect(dom).to have_selector('.error input[value="33.33.33"]')
-    end
-  end
 
   describe 'role section' do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
@@ -122,6 +114,44 @@ describe PeopleController, type: :controller do
       expect(section.find('tr:eq(1) table tr:eq(1)').text).to include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
       expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml).to include edit_role_path
+    end
+  end
+
+  describe 'add requests section' do
+    let(:section) { dom.all('aside section')[1] }
+
+    it 'contains requests' do
+      r1 = Person::AddRequest::Group.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: groups(:bottom_layer_one),
+        role_type: Group::BottomLayer::Member.sti_name)
+      r2 = Person::AddRequest::Event.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: events(:top_course),
+        role_type: Event::Role::Cook.sti_name)
+      r3 = Person::AddRequest::MailingList.create!(
+        person: top_leader,
+        requester: Fabricate(:person),
+        body: mailing_lists(:leaders))
+      get :show, group_id: top_group.id, id: top_leader.id
+
+      expect(section.find('h2').text).to eq 'Anfragen'
+      expect(section.all('tr')[0].text).to include('Bottom Layer Bottom One')
+      expect(section.all('tr')[1].text).to include('Kurs Top Course')
+      expect(section.all('tr')[2].text).to include('Abo Leaders')
+    end
+
+    it 'is hidden if no pending requests exist' do
+      Person::AddRequest::Group.create!(
+        person: Fabricate(:person),
+        requester: Fabricate(:person),
+        body: groups(:bottom_layer_one),
+        role_type: Group::BottomLayer::Member.sti_name)
+      get :show, group_id: top_group.id, id: top_leader.id
+
+      expect(section.find('h2').text).to eq 'Qualifikationen Erstellen'
     end
   end
 
@@ -191,90 +221,13 @@ describe PeopleController, type: :controller do
 
   end
 
-  describe '#history' do
-    let(:params) { { group_id: top_group.id, id: other.id } }
-    it 'list current role and group' do
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 1
-      role_row = dom.find('table tbody tr:eq(1)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
-      expect(role_row.find('td:eq(3)').text).to be_present
-      expect(role_row.find('td:eq(4)').text).not_to be_present
+  describe_action :put, :update, id: true do
+    let(:params) { { person: { birthday: '33.33.33' } } }
+
+    it 'displays old value again' do
+      is_expected.to render_template('edit')
+      expect(dom).to have_selector('.error input[value="33.33.33"]')
     end
-
-    it 'lists past roles' do
-      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
-      role.created_at = Time.zone.now - 2.years
-      role.destroy
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(1)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'Group 11'
-      expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
-      expect(role_row.find('td:eq(3)').text).to be_present
-      expect(role_row.find('td:eq(4)').text).to be_present
-    end
-
-    it 'lists roles in other groups' do
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(2)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(4)').text).not_to be_present
-    end
-
-    it 'lists past roles in other groups' do
-      role = Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      role.created_at = Time.zone.now - 2.years
-      role.destroy
-      get :history, params
-      expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(2)')
-      expect(role_row.find('td:eq(1) a').text).to eq 'TopGroup'
-      expect(role_row.find('td:eq(4)').text).to be_present
-    end
-
-    it "lists person's events" do
-      course1 = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
-      event1 = Fabricate(:event, groups: [groups(:top_layer)])
-      event2 = Fabricate(:event, groups: [groups(:top_layer)])
-      [course1, event1, event2].each do |event|
-        Fabricate(:event_role, participation: Fabricate(:event_participation, person: people(:top_leader), event: event), type: 'Event::Role::Leader')
-      end
-
-      get :history, group_id: top_group.id, id: top_leader.id
-
-      events = dom.find('events')
-
-      expect(events).to have_selector('h2', text: 'Kurse')
-      expect(events).to have_selector('h2', text: 'Anlässe')
-
-      expect(events.all('tr td a').size).to eq 3
-    end
-  end
-
-  describe 'GET log', versioning: true do
-
-    it 'renders empty log' do
-      get :log, id: test_entry.id, group_id: top_group.id
-
-      expect(response.body).to match(/keine Änderungen/)
-    end
-
-    it 'renders log in correct order' do
-      Fabricate(:social_account, contactable: test_entry, label: 'Foo', name: 'Bar')
-      test_entry.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
-      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '23425 1341 12')
-      Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '43 3453 45 254')
-
-      get :log, id: test_entry.id, group_id: top_group.id
-
-      expect(dom.all('h4').size).to eq(1)
-      expect(dom.all('#content div').size).to eq(11)
-    end
-
   end
 
   describe 'redirect_url' do

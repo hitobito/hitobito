@@ -5,7 +5,6 @@ require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
 class <%= wagon_name.camelize %>PersonSeeder < PersonSeeder
 
   def amount(role_type)
-    # TODO: define how many instances each role type should have
     case role_type.name.demodulize
     when 'Member' then 5
     else 1

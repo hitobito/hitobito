@@ -71,6 +71,7 @@ describe PeopleController, js: true do
         obsolete_node_safe do
           find('#role_group_id_chosen a.chosen-single').click
           find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+          fill_in('role_label', with: 'dummy')
 
           click_button 'Speichern'
           expect(page).to have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
@@ -144,4 +145,3 @@ describe PeopleController, js: true do
     end
   end
 end
-

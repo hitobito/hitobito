@@ -91,6 +91,12 @@ module TarantulaConfig
     t.allow_500_for(/^\-?\d+$/)
     # delete qualification is not allowed after role was removed from person
     t.allow_500_for(/groups\/\d+\/people\/\d+\/qualifications\/\d+$/)
+    # switching language when creating an own participation failed will result in an
+    # access denied - POST participations is allowed, but not GET participations
+    # (only GET participations/new).
+    t.allow_500_for(/groups\/\d+\/events\/\d+\/participations\?event_participation/)
+    # tarantula posts number instead of filename which causes a 500 error
+    t.allow_500_for(/groups\/\d+\/events\/\d+\/attachments/)
   end
   # rubocop:enable MethodLength, Style/RegexpLiteral, Metrics/AbcSize
 

@@ -41,20 +41,11 @@ en:
           attributes:
             finish_at:
               not_after_start: 'must be after "from"'
-        event/question:
-          attributes:
-            choices:
-              requires_more_than_one_choice: 'requires more than one choice'
-        event/participation:
-          attributes:
-            person_id:
-              taken: is already registered
         mailing_list:
           attributes:
             mail_name:
               not_allowed: "'%{mail_name}' is not allowed"
         person:
-          name_missing: 'Please enter your name.'
           attributes:
             email:
               taken: >
@@ -62,18 +53,10 @@ en:
                 it is used when logging in. Under 'Further e-mail" you may specify
                 addresses, which are assigned to other people as main e-mail (the
                 main e-mail can be left blank).
-        people_relation:
-          attributes:
-            tail_id:
-              must_not_be_equal_to_head: to yourself is not allowed.
         qualification:
           attributes:
             qualification_kind_id:
               exists_for_timeframe: 'already exists in this period'
-        qualification_kind:
-          attributes:
-            validity:
-              not_a_positive_number: 'must be a positive number in order to reactivate the %{model}.'
     models:
       additional_email:
         one: Further e-mail
@@ -443,7 +426,6 @@ en:
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
-      extension_white_list_error: "can only handle files of type %{allowed_types}"
       expired: "has expired, please request a new"
       not_found: "not found"
       already_confirmed: "already confirmed"

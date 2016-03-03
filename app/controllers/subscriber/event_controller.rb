@@ -32,30 +32,21 @@ module Subscriber
     private
 
     def subscriber
-      possible_events.find(subscriber_id)
-    end
-
-    def possible_events
-      Event.joins(:groups).
-            joins(:dates).
-            where('event_dates.start_at >= ?', start_of_last_year).
-            where(groups: { id: @group.sister_groups_with_descendants })
+      Event.find(subscriber_id)
     end
 
     def matching_events
-      possible_events.joins('LEFT JOIN event_kinds ' \
-                            'ON events.kind_id = event_kinds.id ' \
-                            "AND events.type = '#{Event::Course.sti_name}' " \
-                            'LEFT JOIN event_kind_translations ' \
-                            'ON event_kinds.id  = event_kind_translations.event_kind_id').
-                      where(search_condition(*SEARCH_COLUMNS)).
-                      order_by_date.
-                      uniq
+      possible = Subscription.new(mailing_list: @mailing_list).possible_events
+      possible.joins('LEFT JOIN event_kinds ' \
+                     'ON events.kind_id = event_kinds.id ' \
+                     "AND events.type = '#{Event::Course.sti_name}' " \
+                     'LEFT JOIN event_kind_translations ' \
+                     'ON event_kinds.id  = event_kind_translations.event_kind_id').
+               where(search_condition(*SEARCH_COLUMNS)).
+               order_by_date.
+               uniq
     end
 
-    def start_of_last_year
-      Time.zone.now.prev_year.beginning_of_year
-    end
 
     def model_label
       Event.model_name.human

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,17 +8,9 @@
 desc "Run brakeman"
 task :brakeman do
   FileUtils.rm_f('brakeman-output.tabs')
-  # some files seem to cause brakeman to hang. ignore them
-  ignores = %w(app/views/people_filters/_form.html.haml
-               app/views/csv_imports/define_mapping.html.haml
-               app/models/mailing_list.rb
-               app/controllers/full_text_controller.rb)
-
   begin
     Timeout.timeout(300) do
-      sh %W(brakeman -o brakeman-output.tabs
-                     --skip-files #{ignores.join(',')}
-                     -x ModelAttrAccessible
+      sh %w(brakeman -o brakeman-output.tabs
                      -q
                      --no-progress).join(' ')
     end
@@ -46,5 +38,10 @@ namespace :rubocop do
           --no-color
           --out rubocop-results.xml).join(' ') rescue nil
     true
+  end
+
+  desc 'Run .rubocop.yml on changed files'
+  task :changed do
+    sh "git ls-files -m -o -x spec -x test | grep '\\.rb$' | xargs rubocop"
   end
 end

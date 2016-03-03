@@ -34,8 +34,8 @@ class FullTextController < ApplicationController
   def list_people
     entries = Person.search(Riddle::Query.escape(params[:q]),
                             page: params[:page],
-                            order: "last_name asc, " \
-                                   "first_name asc, " \
+                            order: 'last_name asc, ' \
+                                   'first_name asc, ' \
                                    "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
                             star: true,
                             with: { sphinx_internal_id: accessible_people_ids })

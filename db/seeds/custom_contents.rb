@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 CustomContent.seed_once(:key,
-  {key: PersonMailer::CONTENT_LOGIN,
+  {key: Person::LoginMailer::CONTENT_LOGIN,
    placeholders_required: 'login-url',
    placeholders_optional: 'recipient-name, sender-name'},
 
@@ -25,13 +25,33 @@ CustomContent.seed_once(:key,
   {key: 'views/devise/sessions/info',
    placeholders_required: nil,
    placeholders_optional: nil},
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON,
+    placeholders_required: 'request-body, answer-request-url',
+    placeholders_optional: 'recipient-name, requester-name, requester-roles' },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
+    placeholders_required: 'person-name, request-body, answer-request-url',
+    placeholders_optional: 'recipient-names, requester-name, requester-roles' },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED,
+    placeholders_required: 'person-name, request-body',
+    placeholders_optional: 'recipient-name, approver-name, approver-roles' },
+
+  { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED,
+    placeholders_required: 'person-name, request-body',
+    placeholders_optional: 'recipient-name, rejecter-name, rejecter-roles' },
 )
 
-send_login_id = CustomContent.get(PersonMailer::CONTENT_LOGIN).id
+send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
 login_form_id = CustomContent.get('views/devise/sessions/info').id
+add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
+add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES).id
+add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
+add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -90,7 +110,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
          "{participant-name} hat sich für den folgenden Kurs angemeldet:<br/><br/>" \
          "{event-details}<br/><br/>" \
          "Bitte bestätige oder verwerfe diese Anmeldung unter der folgenden Adresse:<br/><br/>" \
-         "{application-url}" },
+        "{application-url}" },
 
   {custom_content_id: participation_approval_id,
    locale: 'fr',
@@ -140,5 +160,97 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: login_form_id,
    locale: 'it',
    label: 'Informazioni al login'},
+
+  {custom_content_id: add_request_person_id,
+   locale: 'de',
+   label: 'Anfrage Personendaten: E-Mail Freigabe durch Person',
+   subject: 'Freigabe deiner Personendaten',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{requester-name} möchte dich hier hinzufügen: <br/><br/>" \
+         "{request-body}<br/><br/>" \
+         "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{requester-roles}<br/><br/>" \
+         "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
+         "{answer-request-url}" },
+
+  {custom_content_id: add_request_person_id,
+   locale: 'fr',
+   label: 'Demande de l\'état civil: E-mail pour la libération par la personne'},
+
+  {custom_content_id: add_request_person_id,
+   locale: 'en',
+   label: 'Personal data request: E-mail approval by person'},
+
+  {custom_content_id: add_request_person_id,
+   locale: 'it',
+   label: "Richiesta dei dati personali: E-mail per l'abilitazione per mano della persona"},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'de',
+   label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche',
+   subject: 'Freigabe Personendaten',
+   body: "Hallo {recipient-names}<br/><br/>" \
+         "{requester-name} möchte {person-name} hier hinzufügen: <br/><br/>" \
+         "{request-body}<br/><br/>" \
+         "{requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{requester-roles}<br/><br/>" \
+         "Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>" \
+         "{answer-request-url}" },
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'fr',
+   label: 'Demande de l\'état civil: E-mail pour la libération par les responsables'},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'en',
+   label: 'Personal data request: Email approval by responsibles'},
+
+  {custom_content_id: add_request_responsibles_id,
+   locale: 'it',
+   label: "Richiesta dei dati personali: E-mail per l'abilitazione per mano dei responsabili"},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'de',
+   label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert',
+   subject: 'Freigabe der Personendaten akzeptiert',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>" \
+         "{person-name} wurde zu {request-body} hinzugefügt.<br/><br/>" \
+         "{approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{approver-roles}<br/><br/>" },
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'fr',
+   label: 'Demande de l\'état civil: E-mail libération accepté'},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'en',
+   label: 'Personal data request: Email approval accepted'},
+
+  {custom_content_id: add_request_approved_id,
+   locale: 'it',
+   label: "Richiesta dei dati personali: Email abilitazione accettata"},
+
+  {custom_content_id: add_request_rejected_id,
+   locale: 'de',
+   label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt',
+   subject: 'Freigabe der Personendaten abgelehnt',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>" \
+         "{person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>" \
+         "{rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>" \
+         "{rejecter-roles}<br/><br/>" },
+
+  {custom_content_id: add_request_rejected_id,
+   locale: 'fr',
+   label: 'Demande de l\'état civil: E-mail libération refusé'},
+
+  {custom_content_id: add_request_rejected_id,
+   locale: 'en',
+   label: 'Personal data request: Email approval rejected'},
+
+  {custom_content_id: add_request_rejected_id,
+   locale: 'it',
+   label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
 
 )

@@ -7,10 +7,10 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.1'
 
 gem 'activerecord-session_store'
-gem 'airbrake'
+gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
@@ -43,9 +43,10 @@ gem 'config'
 gem 'rails-i18n'
 gem 'seed-fu'
 gem 'simpleidn'
+gem 'sqlite3' # for development, test and production when generating assets
 gem 'thinking-sphinx'
 gem 'validates_by_schema'
-gem 'validates_timeliness'
+gem 'validates_timeliness', '< 4.0'
 gem 'wagons'
 
 # load after others because of active record inherited alias chain.
@@ -61,15 +62,15 @@ gem 'compass-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
-gem 'turbolinks'
+gem 'remotipart'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
+gem 'turbolinks'
 gem 'uglifier'
 
 group :development, :test do
   gem 'binding_of_caller'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
   gem 'pry-debugger', platforms: :ruby_19
@@ -92,6 +93,7 @@ group :test do
   gem 'rspec-its'
   gem 'rspec-collection_matchers'
   gem 'selenium-webdriver'
+  gem 'timecop'
 end
 
 group :console do

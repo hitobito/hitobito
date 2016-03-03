@@ -18,7 +18,7 @@ describe Subscriber::EventController, type: :controller do
 
   let(:list) { mailing_lists(:leaders) }
   let(:group) { list.group }
-  let(:event) { setup_event }
+  let!(:event) { setup_event }
 
   let(:test_entry) { subscriptions(:leaders_group) }
   let(:test_entry_attrs) { { subscriber_id: event.id } }

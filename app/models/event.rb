@@ -93,6 +93,8 @@ class Event < ActiveRecord::Base
 
   belongs_to :contact, class_name: 'Person'
 
+  has_many :attachments, dependent: :destroy
+
   has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
   has_many :questions, dependent: :destroy, validate: true
 
@@ -100,6 +102,12 @@ class Event < ActiveRecord::Base
   has_many :people, through: :participations
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
+
+  has_many :person_add_requests,
+           foreign_key: :body_id,
+           inverse_of: :body,
+           class_name: 'Person::AddRequest::Event',
+           dependent: :destroy
 
   ### VALIDATIONS
 

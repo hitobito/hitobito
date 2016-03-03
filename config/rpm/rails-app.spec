@@ -3,7 +3,7 @@
 
 %define app_name     RPM_NAME
 
-%define app_version  1.10
+%define app_version  1.11
 %define ruby_version 1.9.3
 
 ### optional libs
@@ -17,7 +17,7 @@
 %define use_imagemagick 1
 
 %define bundle_without_groups 'development test metrics guard console'
-%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/production.sqlite3 bin/phantomjs'
+%define exclude_dirs 'doc spec test vendor/cache log tmp Guardfile .rspec Wagonfile.ci rubocop-* db/*.sqlite3'
 
 # those are set automatically by the ENV variable used
 # to generate the database yml
@@ -248,6 +248,7 @@ exit 0
 # Configure here any services etc.
 
 # write error output to file
+mkdir -p /var/log/rpm-postinstall
 exec 2> /var/log/rpm-postinstall/%{name}.log
 
 # the following old files would be loaded on startup and must

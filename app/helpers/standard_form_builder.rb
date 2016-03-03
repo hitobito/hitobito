@@ -109,7 +109,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def date_value(attr)
-    raw = @object._timeliness_raw_value_for(attr.to_s)
+    raw = @object.timeliness_cache_attribute(attr)
     if raw
       raw
     else

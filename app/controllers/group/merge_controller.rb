@@ -17,24 +17,31 @@ class Group::MergeController < ApplicationController
   end
 
   def perform
-    merger = Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
     if merger.group2_valid? && merger.merge!
-      flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
-      redirect_to group_path(merger.new_group)
+      respond_success
     else
-      flash[:alert] = merger.errors ? merger.errors.join('<br/>').html_safe : translate(:failure)
-      redirect_to merge_group_path(group)
+      respond_failure
     end
   end
 
   private
 
+  def respond_success
+    flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
+    redirect_to group_path(merger.new_group)
+  end
+
+  def respond_failure
+    flash[:alert] = merger.errors ? merger.errors.join('<br/>').html_safe : translate(:failure)
+    redirect_to merge_group_path(group)
+  end
+
   def group
     @group ||= Group.find(params[:id])
   end
 
-  def authorize
-    authorize!(:edit, group)
+  def merger
+    @merger ||= Group::Merger.new(group, @merge_group, params[:merger][:new_group_name])
   end
 
   def candidates
@@ -63,6 +70,10 @@ class Group::MergeController < ApplicationController
       flash[:alert] = translate(:not_allowed)
       redirect_to merge_group_path(group)
     end
+  end
+
+  def authorize
+    authorize!(:edit, group)
   end
 
 end

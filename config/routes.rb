@@ -9,7 +9,7 @@ Hitobito::Application.routes.draw do
 
   extend LanguageRouteScope
 
-  root :to => 'dashboard#index'
+  root to: 'dashboard#index'
 
   language_scope do
 
@@ -17,11 +17,8 @@ Hitobito::Application.routes.draw do
     get '/500', to: 'errors#500'
     get '/503', to: 'errors#503'
 
-    resources :people, only: :show do
-      collection do
-        get :query
-      end
-    end
+    get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/:id' => 'person/top#show', as: :person
 
     resources :groups do
 
@@ -39,11 +36,13 @@ Hitobito::Application.routes.draw do
 
       resources :people, except: [:new, :create] do
         member do
-          get :history
-          get :log
           post :send_password_instructions
           put :primary_group
+
+          get 'history' => 'person/history#index'
+          get 'log' => 'person/log#index'
         end
+
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
       end
@@ -64,6 +63,15 @@ Hitobito::Application.routes.draw do
       end
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
+
+      get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
+      post 'person_add_requests' => 'group/person_add_requests#activate'
+      delete 'person_add_requests' => 'group/person_add_requests#deactivate'
+
+      put 'person_add_request_ignored_approvers' =>
+            'group/person_add_request_ignored_approvers#update',
+          as: 'person_add_request_ignored_approvers'
+
       resources :events do
         collection do
           get 'simple' => 'events#index'
@@ -71,13 +79,12 @@ Hitobito::Application.routes.draw do
         end
 
         scope module: 'event' do
-          resources :participations do
-            get 'print', on: :member
-          end
 
-          resources :roles, except: [:index, :show]
-          get 'roles' => 'roles#new' # route required for language switch
-          get 'roles/:id' => 'roles#edit' # route required for language switch
+          member do
+            get  'register' => 'register#index'
+            post 'register' => 'register#check'
+            put  'register' => 'register#register'
+          end
 
           resources :application_market, only: :index do
             member do
@@ -95,13 +102,18 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resources :attachments, only: [:create, :destroy]
+
+          resources :participations do
+            get 'print', on: :member
+          end
+
+          resources :roles, except: [:index, :show]
+          get 'roles' => 'roles#new' # route required for language switch
+          get 'roles/:id' => 'roles#edit' # route required for language switch
+
           resources :qualifications, only: [:index, :update, :destroy]
 
-          member do
-            get  'register' => 'register#index'
-            post 'register' => 'register#check'
-            put  'register' => 'register#register'
-          end
         end
 
       end
@@ -124,7 +136,7 @@ Hitobito::Application.routes.draw do
             get 'group' => 'subscriber/group#new' # route required for language switch
 
             resources :event, only: [:new, :create], controller: 'subscriber/event' do
-              collection  do
+              collection do
                 get :query
               end
             end
@@ -135,16 +147,16 @@ Hitobito::Application.routes.draw do
         end
       end
 
-      resource :csv_imports, only: [:new, :create] do
+      resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do
         member do
           post :define_mapping
           post :preview
-          get 'define_mapping' => 'csv_imports#new' # route required for language switch
-          get 'preview'        => 'csv_imports#new' # route required for language switch
+          get 'define_mapping' => 'person/csv_imports#new' # route required for language switch
+          get 'preview'        => 'person/csv_imports#new' # route required for language switch
         end
       end
 
-    end
+    end # resources :group
 
     get 'list_courses' => 'event/lists#courses', as: :list_courses
     get 'list_events' => 'event/lists#events', as: :list_events
@@ -171,14 +183,15 @@ Hitobito::Application.routes.draw do
       delete 'users/token' => 'devise/tokens#destroy'
     end
 
+    post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
+    delete 'person_add_requests/:id' => 'person/add_requests#reject'
+
+    get 'changelog' => 'changelog#index'
+
   end # scope locale
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
   # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
 end

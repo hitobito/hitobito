@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
+
   respond_to :js
 
   self.nesting = Group
@@ -19,16 +20,18 @@ class RolesController < CrudController
 
   before_render_form :set_group_selection
 
-  before_filter :remember_primary_group, only: [:destroy]
+  before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
   hide_action :index, :show
 
   def create
     assign_attributes
-    new_person = entry.person.new_record?
-    created = create_entry_and_person
-    respond_with(entry, success: created, location: after_create_location(new_person))
+    with_person_add_request do
+      new_person = entry.person.new_record?
+      created = create_entry_and_person
+      respond_with(entry, success: created, location: after_create_location(new_person))
+    end
   end
 
   def update
@@ -62,6 +65,12 @@ class RolesController < CrudController
 
   private
 
+  def with_person_add_request(&block)
+    creator = Person::AddRequest::Creator::Group.new(entry, current_ability)
+    msg = creator.handle(&block)
+    redirect_to group_people_path(entry.group_id), alert: msg if msg
+  end
+
   def create_entry_and_person
     created = false
     Role.transaction do
@@ -82,14 +91,19 @@ class RolesController < CrudController
 
   def change_type
     if create_new_role_and_destroy_old_role
-      @role, @old_role = @new_role, @role
-      respond_to do |format|
-        format.html { redirect_to(after_update_location, notice: role_change_message) }
-        format.js
-      end
+      change_type_successfull
     else
       copy_errors(@new_role)
       render :edit
+    end
+  end
+
+  def change_type_successfull
+    @old_role = @role
+    @role = @new_role
+    respond_to do |format|
+      format.html { redirect_to(after_update_location, notice: role_change_message) }
+      format.js
     end
   end
 
@@ -211,14 +225,14 @@ class RolesController < CrudController
   end
 
   def remember_primary_group
-    @was_last_primary_group_role = 
+    @was_last_primary_group_role =
       persons_last_primary_group_role?(entry)
   end
 
   def persons_last_primary_group_role?(role)
     if belongs_to_persons_primary_group?(role)
-      group_roles = role.person.roles.where(group_id: role.group_id)  
-      return group_roles.size == 1 
+      group_roles = role.person.roles.where(group_id: role.group_id)
+      return group_roles.size == 1
     end
     false
   end

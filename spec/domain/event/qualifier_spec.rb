@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Event::Qualifier do
+
   let(:event_kind) { event_kinds(:slk) }
   let(:course) do
     event = Fabricate(:course, kind: event_kind)
@@ -11,20 +12,20 @@ describe Event::Qualifier do
   let(:participation) do
     participation = Fabricate(:event_participation, event: course)
     Fabricate(Event::Role::Participant.name.to_sym, participation: participation)
-    participation
+    participation.reload
   end
 
   let(:leader_participation) do
     participation = Fabricate(:event_participation, event: course)
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
-    participation
+    participation.reload
   end
 
   let(:hybrid_participation) do
     participation = Fabricate(:event_participation, event: course)
     Fabricate(Event::Role::Participant.name.to_sym, participation: participation)
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
-    participation
+    participation.reload
   end
 
   let(:participant)      { participation.person }

@@ -28,6 +28,7 @@ describe Export::Csv::People::ParticipationRow do
     before do
       Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
       Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
+      participation.reload
     end
     it { expect(row.fetch(:roles)).to eq 'Hauptleitung, Leitung' }
   end

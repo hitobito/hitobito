@@ -20,9 +20,11 @@ class Event::RolesController < CrudController
 
   def create
     assign_attributes
-    new_participation = entry.participation.new_record?
-    created = with_callbacks(:create, :save) { save_entry }
-    respond_with(entry, success: created, location: after_create_url(new_participation, created))
+    with_person_add_request do
+      new_participation = entry.participation.new_record?
+      created = with_callbacks(:create, :save) { save_entry }
+      respond_with(entry, success: created, location: after_create_url(new_participation, created))
+    end
   end
 
   def update
@@ -35,20 +37,25 @@ class Event::RolesController < CrudController
 
   private
 
-  def build_entry
-    attrs = params[:event_role]
-    type = attrs && attrs[:type]
-    role = event.class.find_role_type!(type).new
+  def with_person_add_request(&block)
+    creator = Person::AddRequest::Creator::Event.new(entry, current_ability)
+    msg = creator.handle(&block)
+    redirect_to group_event_participations_path(group, event), alert: msg if msg
+  end
 
+  def build_entry
+    attrs = params[:event_role] || {}
     # delete unused attributes
     attrs.delete(:event_id)
     attrs.delete(:person)
+    # assert that type is valid
+    event.class.find_role_type!(attrs[:type])
 
-    role.participation = event.participations.where(person_id: attrs.delete(:person_id)).
-                                              first_or_initialize
-    role.participation.init_answers if role.participation.new_record?
-
-    role
+    participation = event.participations.where(person_id: attrs.delete(:person_id)).
+                                         first_or_initialize
+    participation.roles.build(type: attrs[:type]).tap do |role|
+      role.participation = participation
+    end
   end
 
   def assign_attributes

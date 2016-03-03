@@ -21,8 +21,7 @@ describe 'event/participations/_form.html.haml' do
   before do
     question.update_attribute(:multiple_choices, true)
     event.questions << question
-    answer = participation.answers.build
-    answer.question = question
+    answer = participation.answers.detect { |a| a.question_id == question.id }
     answer.answer = answer_text
 
     decorated = Event::ParticipationDecorator.new(participation)

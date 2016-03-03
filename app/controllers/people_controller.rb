@@ -9,10 +9,7 @@ class PeopleController < CrudController
 
   include Concerns::RenderPeopleExports
 
-  QUERY_FIELDS = [:first_name, :last_name, :company_name, :nickname, :town]
-
   self.nesting = Group
-  self.nesting_optional = true
 
   self.remember_params += [:name, :kind, :role_type_ids]
 
@@ -27,7 +24,7 @@ class PeopleController < CrudController
   protect_from_forgery with: :null_session, only: [:index, :show]
 
 
-  decorates :group, :person, :people, :versions
+  decorates :group, :person, :people, :add_requests
 
   helper_method :index_full_ability?
 
@@ -37,8 +34,8 @@ class PeopleController < CrudController
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
-  before_render_show :load_asides, if: -> { html_request? }
-
+  before_render_show :load_person_add_requests, if: -> { html_request? }
+  before_render_index :load_people_add_requests, if: -> { html_request? }
 
   def index
     respond_to do |format|
@@ -51,8 +48,6 @@ class PeopleController < CrudController
   end
 
   def show
-    return redirect_to_home if group.nil?
-
     respond_to do |format|
       format.html
       format.pdf  { render_pdf([entry]) }
@@ -61,45 +56,9 @@ class PeopleController < CrudController
     end
   end
 
-  # GET ajax, for auto complete fields, without @group
-  def query
-    people = []
-    if params.key?(:q) && params[:q].size >= 3
-      people = Person.where(search_condition(*QUERY_FIELDS)).
-                      only_public_data.
-                      order_by_name.
-                      limit(10)
-      people = decorate(people)
-    end
-
-    render json: people.collect(&:as_typeahead)
-  end
-
-  def history
-    @roles = Role.with_deleted.
-                  where(person_id: entry.id).
-                  includes(:group).
-                  order('groups.name', 'roles.deleted_at')
-
-    @participations_by_event_type = alltime_person_participations.group_by do |p|
-      p.event.class.label_plural
-    end
-
-    @participations_by_event_type.each do |_kind, entries|
-      entries.collect! { |e| Event::ParticipationDecorator.new(e) }
-    end
-  end
-
-  def log
-    @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name).
-                                    reorder('created_at DESC, id DESC').
-                                    includes(:item).
-                                    page(params[:page])
-  end
-
   # POST button, send password instructions
   def send_password_instructions
-    SendLoginJob.new(entry, current_user).enqueue!
+    Person::SendLoginJob.new(entry, current_user).enqueue!
     notice = I18n.t("#{controller_name}.#{action_name}")
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry), notice: notice }
@@ -131,12 +90,51 @@ class PeopleController < CrudController
 
   alias_method :group, :parent
 
-  def redirect_to_home
-    flash.keep if html_request?
-    redirect_to person_home_path(entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+  def find_entry
+    if group && group.root?
+      # every person may be displayed underneath the root group,
+      # even if it does not directly belong to it.
+      Person.find(params[:id])
+    else
+      super
+    end
+  end
+
+  def assign_attributes
+    if model_params.present?
+      email = model_params.delete(:email)
+      entry.email = email if can?(:update_email, entry)
+    end
+    super
+  end
+
+  def load_people_add_requests
+    if params[:kind].blank? && can?(:create, @group.roles.new)
+      @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
+    end
+  end
+
+  def load_person_add_requests
+    if can?(:update, entry)
+      @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
+      set_add_request_status_notification if show_add_request_status?
+    end
+  end
+
+  def show_add_request_status?
+    flash[:notice].blank? && flash[:alert].blank? &&
+    params[:body_type].present? && params[:body_id].present?
+  end
+
+  def set_add_request_status_notification
+    status = Person::AddRequest::Status.for(entry.id, params[:body_type], params[:body_id])
+    return if status.pending?
+
+    if status.created?
+      flash.now[:notice] = status.approved_message
+    else
+      flash.now[:alert] = status.rejected_message
+    end
   end
 
   def filter_entries
@@ -154,58 +152,6 @@ class PeopleController < CrudController
     else
       Person::RoleFilter.new(@group, current_user, params)
     end
-  end
-
-  def load_asides
-    applications = pending_person_applications
-    Event::PreloadAllDates.for(applications.collect(&:event))
-    @pending_applications = Event::ApplicationDecorator.decorate_collection(applications)
-    @upcoming_events      = EventDecorator.decorate_collection(upcoming_person_events)
-    @relations            = entry.relations_to_tails.list.includes(tail: [:groups, :roles])
-  end
-
-  def pending_person_applications
-    entry.event_applications.
-          merge(Event::Participation.pending).
-          includes(event: [:groups]).
-          joins(event: :dates).
-          order('event_dates.start_at').uniq
-  end
-
-  def upcoming_person_events
-    entry.events.
-          upcoming.
-          merge(Event::Participation.active).
-          uniq.
-          includes(:groups).
-          preload_all_dates.
-          order_by_date
-  end
-
-  def alltime_person_participations
-    entry.event_participations.
-          active.
-          includes(:roles, event: [:dates, :groups]).
-          uniq.
-          order('event_dates.start_at DESC')
-  end
-
-  def find_entry
-    if group && group.root?
-      # every person may be displayed underneath the root group,
-      # even if it does not directly belong to it.
-      Person.find(params[:id])
-    else
-      super
-    end
-  end
-
-  def assign_attributes
-    if model_params.present?
-      email = model_params.delete(:email)
-      entry.email = email if can?(:update_email, entry)
-    end
-    super
   end
 
   def prepare_entries(entries)

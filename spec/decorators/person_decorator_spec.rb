@@ -60,4 +60,23 @@ describe PersonDecorator, :draper_with_helpers do
     end
   end
 
+
+  context 'participations' do
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
+
+    it 'pending_applications returns events that are not active' do
+      participation = Fabricate(:event_participation, person: person)
+      application = Fabricate(:event_application, priority_1: course, participation: participation)
+
+      expect(subject.pending_applications).to eq [application]
+    end
+
+    it 'upcoming_events returns events that are active' do
+      course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
+      course.save
+      participation = Fabricate(:event_participation, event: course, person: person, active: true)
+
+      expect(subject.upcoming_events).to eq [course]
+    end
+  end
 end

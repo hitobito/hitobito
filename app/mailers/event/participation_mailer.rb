@@ -21,35 +21,32 @@ class Event::ParticipationMailer < ApplicationMailer
     filename = Export::Pdf::Participation.filename(participation)
     attachments[filename] = Export::Pdf::Participation.render(participation)
 
-    compose(CONTENT_CONFIRMATION,
-            [person],
+    compose(person,
+            CONTENT_CONFIRMATION,
             'recipient-name' => person.greeting_name)
   end
 
   def approval(participation, recipients)
     @participation = participation
 
-    compose(CONTENT_APPROVAL,
-            recipients,
+    compose(recipients,
+            CONTENT_APPROVAL,
             'participant-name' => person.to_s,
             'recipient-names'  => recipients.collect(&:greeting_name).join(', '))
   end
 
   private
 
-  def compose(content_key, recipients, values = {})
+  def compose(recipients, content_key, values = {})
     # Assert the current mailer's view context is stored as Draper::ViewContext.
     # This is done in the #view_context method overriden by Draper.
     # Otherwise, decorators will not have access to all helper methods.
     view_context
 
-    content = CustomContent.get(content_key)
     values['event-details']   = event_details
-    values['application-url'] = "<a href=\"#{participation_url}\">#{participation_url}</a>"
+    values['application-url'] = link_to(participation_url)
 
-    mail(to: Person.mailing_emails_for(recipients), subject: content.subject) do |format|
-      format.html { render text: content.body_with_values(values) }
-    end
+    custom_content_mail(recipients, content_key, values)
   end
 
   def participation_url

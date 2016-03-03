@@ -12,5 +12,5 @@
                   new_group_mailing_list_event_path(@group, @mailing_list), 'plus')
   = action_button(t('.exclude_person'), new_group_mailing_list_exclude_person_path(@group, @mailing_list), 'minus')
 
-- if can?(:index_subscriptions, @mailing_list)
+- if can?(:export_subscriptions, @mailing_list)
   = dropdown_people_export

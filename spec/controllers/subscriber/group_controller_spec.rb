@@ -9,7 +9,6 @@ require 'spec_helper'
 
 describe Subscriber::GroupController do
 
-
   before { sign_in(people(:top_leader)) }
 
   let(:list) { mailing_lists(:leaders) }
@@ -33,7 +32,7 @@ describe Subscriber::GroupController do
 
     context 'bottom layer' do
       let(:group) { groups(:bottom_layer_one) }
-      let(:mailing_list) {  MailingList.create!(group: group, name: 'bottom_layer') }
+      let(:list) { MailingList.create!(group: group, name: 'bottom_layer') }
 
       before do
         Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))

@@ -10,8 +10,9 @@ module Import
     include Translatable
 
     attr_reader :data, :role_type, :group, :override,
-                :failure_count, :new_count, :errors
+                :failure_count, :new_count, :request_people, :errors
 
+    attr_accessor :user_ability
 
     def initialize(data, group, role_type, override = false)
       @data = data
@@ -21,11 +22,12 @@ module Import
       @imported_emails = {}
       @failure_count = 0
       @new_count = 0
+      @request_people = []
       @errors = []
     end
 
     def import
-      save_results = people.map { |p| valid?(p) && p.save }
+      save_results = people.each_with_index.map { |p, i| valid?(p) && save_person(p, i) }
       !save_results.include?(false)
     end
 
@@ -41,9 +43,21 @@ module Import
       @role_type.label
     end
 
-    delegate :doublette_count, to: :doublette_finder
+    def update_count
+      doublette_finder.doublette_count - request_people.size
+    end
 
     private
+
+    def save_person(import_person, _index)
+      creator = request_creator(import_person)
+
+      if creator && creator.required?
+        creator.create_request
+      else
+        import_person.save
+      end
+    end
 
     def populate_people
       data.each_with_index.map do |attributes, index|
@@ -62,18 +76,33 @@ module Import
       import_person
     end
 
+    def valid?(import_person)
+      import_person.valid? && import_person.email_unique?(@imported_emails)
+    end
+
     def count_person(import_person, index)
       if valid?(import_person)
-        @new_count += 1 if import_person.new_record?
+        count_valid_person(import_person)
       else
         @failure_count += 1
         @errors << translate(:row_with_error, row: index + 1, errors: import_person.human_errors)
       end
     end
 
-    def valid?(import_person)
-      import_person.valid? && import_person.email_unique?(@imported_emails)
+    def count_valid_person(import_person)
+      creator = request_creator(import_person)
+      if import_person.new_record?
+        @new_count += 1
+      elsif creator && creator.required?
+        @request_people << import_person.person
+      end
     end
+
+    def request_creator(import_person)
+      user_ability && import_person.persisted? && import_person.role &&
+        ::Person::AddRequest::Creator::Group.new(import_person.role, user_ability)
+    end
+
 
     def doublette_finder
       @doublette_finder ||= PersonDoubletteFinder.new

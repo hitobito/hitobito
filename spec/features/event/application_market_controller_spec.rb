@@ -40,20 +40,20 @@ describe Event::ApplicationMarketController do
               application: Fabricate(:event_application))
   end
   let(:appl_other_assigned) do
-    participation = Fabricate(:event_participation)
+    participation = Fabricate(:event_participation, active: true)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     Fabricate(:event_application, priority_2: event, participation: participation)
-    participation
+    participation.reload
   end
 
-  let(:appl_participant)  do
-    participation = Fabricate(:event_participation, event: event)
+  let(:appl_participant) do
+    participation = Fabricate(:event_participation, event: event, active: true)
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     Fabricate(:event_application, participation: participation, priority_2: event)
-    participation
+    participation.reload
   end
 
-  let(:leader)  do
+  let(:leader) do
     participation = Fabricate(:event_participation, event: event)
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
   end

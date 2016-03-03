@@ -5,7 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Group::Mover < Struct.new(:group)
+class Group::Mover
+
+  attr_reader :group
+
+  def initialize(group)
+    @group = group
+  end
 
   def candidates
     @candidate ||= possible_candidates - [group, group.parent]

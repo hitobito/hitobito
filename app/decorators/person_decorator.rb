@@ -79,7 +79,24 @@ class PersonDecorator < ApplicationDecorator
       group_by(&:qualification_kind).values.map(&:first)
   end
 
+  def pending_applications
+    @pending_applications ||=
+      Event::ApplicationDecorator.decorate_collection(event_queries.pending_applications)
+  end
+
+  def upcoming_events
+    @upcoming_events ||= EventDecorator.decorate_collection(event_queries.upcoming_events)
+  end
+
+  def relations
+    @relations ||= relations_to_tails.list.includes(tail: [:groups, :roles])
+  end
+
   private
+
+  def event_queries
+    Person::EventQueries.new(object)
+  end
 
   def company_address_name
     html = content_tag(:strong, company_name)

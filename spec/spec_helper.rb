@@ -19,6 +19,7 @@ ENV['RAILS_GROUPS'] = 'assets'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'cancan/matchers'
+require 'paper_trail/frameworks/rspec'
 
 ActiveRecord::Migration.maintain_test_schema!
 

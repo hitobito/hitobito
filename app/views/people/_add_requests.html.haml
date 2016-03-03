@@ -1,0 +1,22 @@
+-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if can?(:update, entry)
+  = section_table(Person::AddRequest.model_name.human(count: 2), @add_requests) do |request|
+    %td
+      - if can?(:approve, request)
+        = link_to(icon(:ok),
+                  person_add_request_path(request),
+                  method: :post,
+                  title: t('people.add_requests.approve_title'))
+    %td
+      - if can?(:reject, request)
+        = link_to(icon(:remove),
+                  person_add_request_path(request),
+                  method: :delete,
+                  title: t('people.add_requests.reject_title'))
+    %td
+      %strong= link_to_if(can?(:show, request.body), request.body_label, request.body_path)
+      = muted request.body_details

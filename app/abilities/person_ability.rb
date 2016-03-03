@@ -7,6 +7,8 @@
 
 class PersonAbility < AbilityDsl::Base
 
+  include AbilityDsl::Constraints::Person
+
   on(Person) do
     class_side(:index, :query).everybody
 
@@ -27,7 +29,9 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:group_and_below_read).may(:show, :show_details).in_same_group_or_below
 
-    permission(:group_and_below_full).may(:show_full, :history).in_same_group_or_below
+    permission(:group_and_below_full).
+      may(:show_full, :history).
+      in_same_group_or_below
     permission(:group_and_below_full).
       may(:update, :primary_group, :send_password_instructions, :log).
       non_restricted_in_same_group_or_below
@@ -40,18 +44,18 @@ class PersonAbility < AbilityDsl::Base
       may(:show, :show_full, :show_details, :history).
       in_same_layer
 
-    permission(:layer_and_below_read).
-      may(:show, :show_full, :show_details, :history).
-      in_same_layer_or_visible_below
-
     permission(:layer_full).
-      may(:update, :primary_group, :send_password_instructions, :log).
+      may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request).
       non_restricted_in_same_layer
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
 
+    permission(:layer_and_below_read).
+      may(:show, :show_full, :show_details, :history).
+      in_same_layer_or_visible_below
+
     permission(:layer_and_below_full).
-      may(:update, :primary_group, :send_password_instructions, :log).
+      may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request).
       non_restricted_in_same_layer_or_visible_below
     permission(:layer_and_below_full).
       may(:update_email).
@@ -61,53 +65,8 @@ class PersonAbility < AbilityDsl::Base
     general(:send_password_instructions).not_self
   end
 
-  def herself
-    subject.id == user.id
-  end
-
   def not_self
     subject.id != user.id
-  end
-
-  def other_with_contact_data
-    subject.contact_data_visible?
-  end
-
-  def in_same_group
-    permission_in_groups?(subject.group_ids)
-  end
-
-  def in_same_group_or_below
-    permission_in_groups?(subject.groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
-  end
-
-  def in_same_layer
-    permission_in_layers?(subject.layer_group_ids)
-  end
-
-  def in_same_layer_or_visible_below
-    in_same_layer || visible_below
-  end
-
-  def non_restricted_in_same_group
-    permission_in_groups?(subject.non_restricted_groups.collect(&:id))
-  end
-
-  def non_restricted_in_same_group_or_below
-    permission_in_groups?(
-      subject.non_restricted_groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
-  end
-
-  def non_restricted_in_same_layer
-    permission_in_layers?(subject.non_restricted_groups.collect(&:layer_group_id))
-  end
-
-  def non_restricted_in_same_layer_or_visible_below
-    non_restricted_in_same_layer || visible_below
-  end
-
-  def visible_below
-    permission_in_layers?(subject.above_groups_where_visible_from.collect(&:id))
   end
 
   def if_permissions_in_all_capable_groups
@@ -155,6 +114,10 @@ class PersonAbility < AbilityDsl::Base
     # restricted roles are not included because the may not be modified
     # in their group (and thus are not vulnerable to email updates)
     subject.roles.reject { |r| r.class.restricted? || r.class.permissions.blank? }
+  end
+
+  def person
+    subject
   end
 
 end

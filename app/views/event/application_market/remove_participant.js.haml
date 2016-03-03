@@ -3,10 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-Application.moveElementToBottom('#{dom_id(@participation)}', 'applications', function() {
+handler = new App.ApplicationMarket()
+handler.moveElementToBottom('#{dom_id(@participation)}', 'applications', function() {
 $('##{dom_id(@participation)}').remove();
-$('#applications').append('#{escape_javascript(render('application', p: @participation))}');
-Application.updateApplicationMarketCount();
+$('#applications').append('#{j(render('application', p: @participation))}');
+handler.updateCount();
 });
-$('#booking_info').html('#{escape_javascript(event.booking_info)}');
-$('#active_participants_info').html('#{escape_javascript(event.active_participants_info)}');
+$('#booking_info').html('#{j(event.booking_info)}');
+$('#active_participants_info').html('#{j(event.active_participants_info)}');

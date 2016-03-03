@@ -1,0 +1,17 @@
+%div{style: 'max-height: 500px; margin-bottom: 20px; overflow: auto;'}
+  = list_table do |t|
+    - t.col('') do |p|
+      - if p.errors.present?
+        %i.icon.icon-warning-sign{title: t('.icon_tooltip_invalid')}
+      - elsif @importer.request_people.include?(p)
+        %i.icon.icon-question-sign{title: t('.icon_tooltip_request')}
+      - elsif p.persisted?
+        %i.icon.icon-refresh{title: t('.icon_tooltip_updated')}
+      - else
+        %i.icon.icon-plus{title: t('.icon_tooltip_created')}
+
+    - t.attrs *csv_import_attrs
+
+    - csv_import_contact_account_attrs do |account_attr|
+      - t.col(account_attr[:value]) do |p|
+        = csv_import_contact_account_value(p, account_attr[:key])

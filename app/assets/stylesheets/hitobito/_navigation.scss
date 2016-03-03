@@ -223,6 +223,12 @@
   left: auto;
 }
 
+.dropdown-menu label > .help-text {
+  max-width: 240px;
+  white-space: pre-wrap;
+  font-size: 0.8em;
+}
+
 // Left navigation
 .nav-left {
   .inner {

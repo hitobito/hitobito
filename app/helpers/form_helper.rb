@@ -78,6 +78,10 @@ module FormHelper
     link_to(ti(:"button.cancel"), url, class: 'link cancel')
   end
 
+  def spinner
+    image_tag('spinner.gif', size: '16x16', class: 'spinner', style: 'display: none;')
+  end
+
   private
 
   # Get the cancel url for the given object considering options:

@@ -89,6 +89,7 @@ describe PeopleController do
           get :index, group_id: group
 
           expect(assigns(:people).collect(&:id)).to match_array([top_leader, @tg_member].collect(&:id))
+          expect(assigns(:person_add_requests)).to eq([])
         end
 
         it 'loads externs of a group when type given' do
@@ -103,48 +104,75 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
 
-        it 'generates pdf labels' do
-          get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
+        it 'loads pending person add requests' do
+          r1 = Person::AddRequest::Group.create!(
+                  person: Fabricate(:person),
+                  requester: Fabricate(:person),
+                  body: group,
+                  role_type: group.class.role_types.first.sti_name)
 
-          expect(@response.content_type).to eq('application/pdf')
-          expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          get :index, group_id: group.id
+
+          expect(assigns(:person_add_requests)).to eq([r1])
         end
 
-        it 'exports address csv files' do
-          get :index, group_id: group, format: :csv
+        context '.pdf' do
+          it 'generates pdf labels' do
+            expect(Person::CondensedContact).not_to receive(:condense_list)
+            get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
 
-          expect(@response.content_type).to eq('text/csv')
-          expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
-          expect(@response.body).to match(/^Top;Leader;.*/)
-          expect(@response.body).to match(/123/)
-          expect(@response.body).not_to match(/skypefoo/)
-          expect(@response.body).not_to match(/Zusätzliche Angaben/)
-          expect(@response.body).not_to match(/Mobile/)
+            expect(@response.content_type).to eq('application/pdf')
+            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          end
+
+          it 'generates condensed pdf labels' do
+            expect(Person::CondensedContact).to receive(:condense_list).once.and_call_original
+            get :index, group_id: group, label_format_id: label_formats(:standard).id, condense_labels: 'true', format: :pdf
+
+            expect(@response.content_type).to eq('application/pdf')
+            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
+          end
         end
 
-        it 'exports full csv files' do
-          get :index, group_id: group, details: true, format: :csv
+        context '.csv' do
+          it 'exports address csv files' do
+            get :index, group_id: group, format: :csv
 
-          expect(@response.content_type).to eq('text/csv')
-          expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
-          expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
-          expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
+            expect(@response.body).to match(/^Top;Leader;.*/)
+            expect(@response.body).to match(/123/)
+            expect(@response.body).not_to match(/skypefoo/)
+            expect(@response.body).not_to match(/Zusätzliche Angaben/)
+            expect(@response.body).not_to match(/Mobile/)
+          end
+
+          it 'exports full csv files' do
+            get :index, group_id: group, details: true, format: :csv
+
+            expect(@response.content_type).to eq('text/csv')
+            expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
+            expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
+            expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
+          end
         end
 
-        it 'renders email addresses' do
-          get :index, group_id: group, format: :email
-          expect(@response.content_type).to eq('text/plain')
-          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
+        context '.email' do
+          it 'renders email addresses' do
+            get :index, group_id: group, format: :email
+            expect(@response.content_type).to eq('text/plain')
+            expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
+          end
+
+          it 'renders email addresses with additional ones' do
+            e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
+            Fabricate(:additional_email, contactable: @tg_member, mailings: false)
+            get :index, group_id: group, format: :email
+            expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
+          end
         end
 
-        it 'renders email addresses with additional ones' do
-          e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
-          Fabricate(:additional_email, contactable: @tg_member, mailings: false)
-          get :index, group_id: group, format: :email
-          expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email},#{e1.email}")
-        end
-
-        context 'json' do
+        context '.json' do
           render_views
 
           it 'renders json with only the one role in this group' do
@@ -176,6 +204,18 @@ describe PeopleController do
                         kind: 'layer'
 
             expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
+          end
+
+          it 'does not load pending person add requests' do
+            r1 = Person::AddRequest::Group.create!(
+              person: Fabricate(:person),
+              requester: Fabricate(:person),
+              body: group,
+              role_type: group.class.role_types.first.sti_name)
+
+            get :index, group_id: group.id, kind: 'layer'
+
+            expect(assigns(:person_add_requests)).to be_nil
           end
 
           it 'exports full csv when types given and ability exists' do
@@ -252,18 +292,6 @@ describe PeopleController do
             expect(person['links']['roles'].size).to eq(2)
           end
         end
-      end
-    end
-
-    context 'GET query' do
-      it 'queries all people' do
-        Fabricate(:person, first_name: 'Pascal')
-        Fabricate(:person, last_name: 'Opassum')
-        Fabricate(:person, last_name: 'Anything')
-        get :query, q: 'pas'
-
-        expect(response.body).to match(/Pascal/)
-        expect(response.body).to match(/Opassum/)
       end
     end
 
@@ -514,61 +542,28 @@ describe PeopleController do
         end
       end
 
-      context 'participations' do
-        let(:group) { groups(:top_layer) }
+      context 'add requests' do
         let(:person) { people(:top_leader) }
-        let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
 
-        it 'pending_applications returns events that are not active' do
-          participation = Fabricate(:event_participation, person: person)
-          application = Fabricate(:event_application, priority_1: course, participation: participation)
-          get :show, group_id: group.id, id: person.id
-          expect(assigns(:pending_applications)).to eq [application]
+        it 'loads requests' do
+          r1 = Person::AddRequest::Group.create!(
+            person: person,
+            requester: Fabricate(:person),
+            body: groups(:bottom_layer_one),
+            role_type: Group::BottomLayer::Member.sti_name)
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id
+          expect(assigns(:add_requests)).to eq([r1])
+          expect(flash[:notice]).to be_blank
         end
 
-        it 'upcoming_events returns events that are active' do
-          course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
-          course.save
-          participation = Fabricate(:event_participation, event: course, person: person, active: true)
-          get :show, group_id: group.id, id: person.id
-          expect(assigns(:upcoming_events)).to eq [course]
-        end
-      end
-
-      context 'without group' do
-        context 'html' do
-          it 'keeps flash' do
-            get :show, id: top_leader.id
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
-          end
+        it 'shows flash status accepted' do
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: group.id
+          expect(flash[:notice]).to match(/freigegeben/)
         end
 
-        context 'json' do
-          it 'redirects to json' do
-            get :show, id: top_leader.id, format: :json, user_email: 'hans@example.com', user_token: '123'
-            is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
-                                                         top_leader.id,
-                                                         format: :json,
-                                                         user_email: 'hans@example.com',
-                                                         user_token: '123'))
-          end
-        end
-      end
-    end
-
-    describe 'GET #history' do
-
-      context 'all roles' do
-
-        it 'all group roles ordered by group, to date' do
-          person = Fabricate(:person)
-          r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
-          r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
-          r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
-
-          get :history, group_id: groups(:bottom_group_one_one).id, id: person.id
-
-          expect(assigns(:roles)).to eq([r1, r3, r2])
+        it 'shows flash status rejected' do
+          get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_group_one_one).id
+          expect(flash[:alert]).to match(/abgelehnt/)
         end
       end
 
@@ -657,6 +652,30 @@ describe PeopleController do
       end
     end
   end
+
+  context 'as reader' do
+
+    before { sign_in(user) }
+
+    let(:user) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+
+    context 'add requests' do
+      let(:person) { people(:top_leader) }
+
+      it 'does not load requests' do
+        r1 = Person::AddRequest::Group.create!(
+          person: person,
+          requester: Fabricate(:person),
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+        get :show, group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id
+        expect(assigns(:add_requests)).to be_nil
+        expect(flash[:notice]).to be_blank
+      end
+    end
+
+  end
+
   context 'as api user' do
 
     describe 'GET #show' do

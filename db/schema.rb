@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230101630) do
+ActiveRecord::Schema.define(version: 20160314124800) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -347,6 +347,16 @@ ActiveRecord::Schema.define(version: 20151230101630) do
 
   add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id"
   add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
+
+  create_table "person_notes", force: :cascade do |t|
+    t.integer  "person_id",  null: false
+    t.integer  "author_id",  null: false
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "person_notes", ["person_id"], name: "index_person_notes_on_person_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.integer "contactable_id",                  null: false

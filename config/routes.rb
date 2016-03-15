@@ -45,6 +45,10 @@ Hitobito::Application.routes.draw do
 
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
+
+        scope module: 'person' do
+          resources :notes, only: [:create]
+        end
       end
 
       resources :roles, except: [:index, :show] do

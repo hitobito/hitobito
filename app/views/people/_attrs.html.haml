@@ -24,6 +24,9 @@
 
     = render_extensions :show_left
 
+    - if can?(:show_notes, entry)
+      = render 'notes'
+
   - if can?(:show_full, entry)
     %aside.span6.offset1
       = render 'roles'

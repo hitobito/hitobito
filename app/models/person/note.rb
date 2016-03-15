@@ -7,10 +7,19 @@
 
 class Person::Note < ActiveRecord::Base
 
+  default_scope { order(created_at: :desc) }
+
   ### ASSOCIATIONS
 
   belongs_to :person
-
   belongs_to :author, class_name: 'Person'
+
+  ### VALIDATIONS
+
+  validates :text, presence: true
+
+  def to_s
+    text.present? && text.sub("\n", ' ')[0..9] + (text.length > 10 ? '...' : '')
+  end
 
 end

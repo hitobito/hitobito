@@ -344,3 +344,14 @@ table.roles {
 .log-infos {
   padding-top: 11px;
 }
+
+// Notes
+.person-note-item {
+  margin-top: 2em;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+.person-note-text {
+  padding-top: 11px;
+}

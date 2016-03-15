@@ -769,6 +769,10 @@ de:
       add_role: Rolle hinzfügen
       set_main_group: Hauptgruppe setzen
 
+    notes:
+      new_note: Neue Notiz
+      no_notes: Keine Notizen vorhanden
+
   participations:
     destroy:
       flash:

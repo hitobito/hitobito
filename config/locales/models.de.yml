@@ -151,6 +151,9 @@ de:
       person/add_request:
         one: Zugriffsanfrage
         other: Anfragen
+      person/note:
+        one: Notiz
+        other: Notizen
       people_filter:
         one: Filter
         other: Filter
@@ -250,6 +253,9 @@ de:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      person/note:
+        text: Text
 
       group:
         name: Name

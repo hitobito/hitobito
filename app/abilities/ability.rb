@@ -21,6 +21,7 @@ class Ability
                  PeopleFilterAbility,
                  PersonAbility,
                  Person::AddRequestAbility,
+                 Person::NoteAbility,
                  QualificationAbility,
                  RoleAbility,
                  SubscriptionAbility,

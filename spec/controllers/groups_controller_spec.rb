@@ -153,5 +153,19 @@ describe GroupsController do
         expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
       end
     end
+
+    describe '#person_notes' do
+      let(:group) { groups(:top_layer) }
+      let(:top_leader) { people(:top_leader) }
+      let(:bottom_member) { people(:bottom_member) }
+
+      it 'assignes all notes of layer' do
+        n1 = Person::Note.create!(author: top_leader, person: top_leader, text: 'lorem')
+        n2 = Person::Note.create!(author: top_leader, person: bottom_member, text: 'ipsum')
+        get :person_notes, id: group.id
+
+        expect(assigns(:notes)).to eq([n1])
+      end
+    end
   end
 end

@@ -60,6 +60,12 @@ class GroupsController < CrudController
     send_data csv, type: :csv
   end
 
+  def person_notes
+    @notes = Person::Note.
+      where(person: Person.in_layer(entry))#.
+      # order(created_at: :desc)
+  end
+
   private
 
   def build_entry

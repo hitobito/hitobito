@@ -7,14 +7,18 @@
 
 class Person::NotesController < CrudController
 
-  self.nesting = Person
+  self.nesting = Group, Person
 
   self.permitted_attrs = [:text]
 
-  decorates :person, :author
+  decorates :group, :person
 
   # load group before authorization
   prepend_before_action :parent
+
+  def create
+    super(location: group_person_path(@group, @person))
+  end
 
   private
 

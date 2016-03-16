@@ -15,15 +15,4 @@
       = f.labeled_text_area(:text)
       = save_form_buttons(f, nil, 'javascript:App.PersonNotes.cancelForm()')
 
-- if entry.notes.present?
-  - entry.notes.includes(:author).each do |note|
-    .row-fluid.person-note-item
-      .span4
-        %h4
-          = note.author
-          = note.created_at
-      .span8.person-note-text
-        = simple_format(note.text)
-
-- else
-  .row-fluid.person-note-item= t('.no_notes')
+= render 'notes_list', notes: entry.notes, show_person: false

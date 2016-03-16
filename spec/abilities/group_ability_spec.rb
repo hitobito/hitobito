@@ -47,6 +47,10 @@ describe GroupAbility do
       it 'may not destroy permission giving group' do
         is_expected.not_to be_able_to(:destroy, group)
       end
+
+      it 'may show person notes' do
+        is_expected.to be_able_to(:person_notes, group)
+      end
     end
 
     context 'in group from lower layer' do
@@ -73,6 +77,10 @@ describe GroupAbility do
       it 'may destroy group' do
         is_expected.to be_able_to(:destroy, group)
       end
+
+      it 'may show person notes' do
+        is_expected.to be_able_to(:person_notes, group)
+      end
     end
   end
 
@@ -88,6 +96,18 @@ describe GroupAbility do
 
       it 'may not modify superior' do
         is_expected.not_to be_able_to(:modify_superior, group)
+      end
+
+      it 'may show person notes' do
+        is_expected.to be_able_to(:person_notes, group)
+      end
+    end
+
+    context 'in top layer' do
+      let(:group) { groups(:top_group) }
+
+      it 'may not show person notes' do
+        is_expected.not_to be_able_to(:person_notes, group)
       end
     end
   end
@@ -123,6 +143,10 @@ describe GroupAbility do
       it 'may not create sublayer' do
         is_expected.not_to be_able_to(:create, Group::BottomLayer.new(parent_id: group.layer_group_id))
       end
+
+      it 'may show person notes' do
+        is_expected.to be_able_to(:person_notes, group)
+      end
     end
 
     context 'in group from same layer' do
@@ -139,6 +163,10 @@ describe GroupAbility do
       it 'may destroy group' do
         is_expected.to be_able_to(:destroy, group)
       end
+
+      it 'may show person notes' do
+        is_expected.to be_able_to(:person_notes, group)
+      end
     end
 
     context 'in group from lower layer' do
@@ -154,6 +182,10 @@ describe GroupAbility do
 
       it 'may not destroy group' do
         is_expected.not_to be_able_to(:destroy, group)
+      end
+
+      it 'may not show person notes' do
+        is_expected.not_to be_able_to(:person_notes, group)
       end
     end
   end
@@ -197,6 +229,10 @@ describe GroupAbility do
 
       it 'may not modify superior in below group' do
         is_expected.not_to be_able_to(:modify_superior, groups(:toppers))
+      end
+
+      it 'may not show person notes' do
+        is_expected.not_to be_able_to(:person_notes, group)
       end
     end
 

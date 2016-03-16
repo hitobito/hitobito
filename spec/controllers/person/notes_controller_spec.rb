@@ -17,12 +17,13 @@ describe Person::NotesController do
   describe 'POST #create' do
 
     it 'creates person notes' do
-      post :create, group_id: bottom_member.groups.first.id, person_id: bottom_member.id,
-                    note: { text: 'Lorem ipsum' }
+      post :create, group_id: bottom_member.groups.first.id,
+                    person_id: bottom_member.id,
+                    person_note: { text: 'Lorem ipsum' }
 
-      is_expected.to redirect_to new_person_session_path
       expect(Person::Note.count).to eq(1)
-
+      expect(assigns(:note).text).to eq('Lorem ipsum')
+      is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
   end

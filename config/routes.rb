@@ -25,7 +25,6 @@ Hitobito::Application.routes.draw do
       member do
         get :deleted_subgroups
         get :export_subgroups
-        get :person_notes
         post :reactivate
 
         get 'merge' => 'group/merge#select'
@@ -33,6 +32,8 @@ Hitobito::Application.routes.draw do
 
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
+
+        get 'person_notes' => 'person/notes#index'
       end
 
       resources :people, except: [:new, :create] do

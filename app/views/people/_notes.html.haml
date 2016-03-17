@@ -10,10 +10,13 @@
 
   #person-notes-form{style: 'display: none;'}
     %h3= t('.new_note')
-    = standard_form(Person::Note.new, {url: group_person_notes_path(@group, entry)}) do |f|
-      = hidden_field_tag('return_url', group_person_path(@group, entry, anchor: 'person-notes'))
-      = f.labeled_text_area(:text)
-      = save_form_buttons(f, nil, 'javascript:App.PersonNotes.cancelForm()')
 
-= render 'notes_list', notes: entry.notes.includes(:author).page(params[:notes_page]).per(10),
-                       show_person: false
+    .alert.alert-error#person-notes-error{style: 'display: none;'}
+
+    = form_for(Person::Note.new, url: group_person_notes_path(@group, entry), remote: true) do |f|
+      = f.text_area(:text, rows: 7, width: '100%')
+      = save_form_buttons(f, nil, 'javascript:App.PersonNotes.hideForm()')
+
+= render 'person/notes/list',
+         notes: entry.notes.includes(:author).page(params[:notes_page]).per(10),
+         show_person: false

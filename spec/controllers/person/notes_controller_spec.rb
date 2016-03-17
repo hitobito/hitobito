@@ -14,8 +14,21 @@ describe Person::NotesController do
 
   before { sign_in(top_leader) }
 
-  describe 'POST #create' do
+  describe 'GET #index' do
+    let(:group) { groups(:top_layer) }
+    let(:top_leader) { people(:top_leader) }
+    let(:bottom_member) { people(:bottom_member) }
 
+    it 'assignes all notes of layer' do
+      n1 = Person::Note.create!(author: top_leader, person: top_leader, text: 'lorem')
+      n2 = Person::Note.create!(author: top_leader, person: bottom_member, text: 'ipsum')
+      get :index, id: group.id
+
+      expect(assigns(:notes)).to eq([n1])
+    end
+  end
+
+  describe 'POST #create' do
     it 'creates person notes' do
       post :create, group_id: bottom_member.groups.first.id,
                     person_id: bottom_member.id,
@@ -25,7 +38,6 @@ describe Person::NotesController do
       expect(assigns(:note).text).to eq('Lorem ipsum')
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
-
   end
 
 end

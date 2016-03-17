@@ -676,6 +676,11 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
+    notes:
+      note:
+        created: vor %{time_ago}
+        wrote_about: schrieb zu
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -771,10 +776,6 @@ de:
 
     notes:
       new_note: Neue Notiz
-
-    notes_list:
-      created: vor %{time_ago}
-      wrote_about: schrieb zu
 
   participations:
     destroy:

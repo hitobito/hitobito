@@ -10,17 +10,23 @@ app.PersonNotes = {
     form = $('#person-notes-form')
     form.slideDown(undefined, -> $('#person_note_text').focus())
 
-    button = $('#person-notes-new-button')
-    button.hide()
+    $('#person-notes-new-button').hide()
+    $('#person-notes-error').text('').hide()
 
-  cancelForm: ->
+  hideForm: ->
     form = $('#person-notes-form')
     form.find('form')[0].reset()
     form.slideUp()
 
-    button = $('#person-notes-new-button')
-    button.show()
+    $('#person-notes-new-button').show()
+    $('#person-notes-error').text('').hide()
 
     # explicitly return undefined to work with href="javascript:..." links
     return
+
+  addNote: (note) ->
+    $('#person-notes-list').prepend(note)
+
+  showError: (error) ->
+    $('#person-notes-error').text(error).show()
 }

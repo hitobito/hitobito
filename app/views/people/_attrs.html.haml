@@ -24,7 +24,7 @@
 
     = render_extensions :show_left
 
-    - if can?(:show_notes, entry)
+    - if can?(:index_notes, entry)
       = render 'notes'
 
   - if can?(:show_full, entry)

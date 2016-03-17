@@ -3,4 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-= render 'people/notes_list', notes: @notes, show_person: true
+- @sheet = Sheet::Group.new(self)
+
+= render 'person/notes/list', notes: @notes, show_person: true

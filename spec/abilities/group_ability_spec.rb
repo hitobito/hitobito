@@ -49,7 +49,7 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:person_notes, group)
+        is_expected.to be_able_to(:index_person_notes, group)
       end
     end
 
@@ -79,7 +79,7 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:person_notes, group)
+        is_expected.to be_able_to(:index_person_notes, group)
       end
     end
   end
@@ -99,7 +99,7 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:person_notes, group)
+        is_expected.to be_able_to(:index_person_notes, group)
       end
     end
 
@@ -107,7 +107,7 @@ describe GroupAbility do
       let(:group) { groups(:top_group) }
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:person_notes, group)
+        is_expected.not_to be_able_to(:index_person_notes, group)
       end
     end
   end
@@ -145,7 +145,7 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:person_notes, group)
+        is_expected.to be_able_to(:index_person_notes, group)
       end
     end
 
@@ -165,7 +165,7 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:person_notes, group)
+        is_expected.to be_able_to(:index_person_notes, group)
       end
     end
 
@@ -185,7 +185,7 @@ describe GroupAbility do
       end
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:person_notes, group)
+        is_expected.not_to be_able_to(:index_person_notes, group)
       end
     end
   end
@@ -232,7 +232,7 @@ describe GroupAbility do
       end
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:person_notes, group)
+        is_expected.not_to be_able_to(:index_person_notes, group)
       end
     end
 

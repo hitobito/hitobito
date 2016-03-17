@@ -11,16 +11,8 @@
       = ti(:no_list_entries)
 
 - if notes.total_count > 0
-  - notes.each do |note|
-    .row-fluid.person-note-item
-      .span4
-        %h4
-          = !show_person ? person_link(note.author) : note.author
-          - if show_person
-            = t('.wrote_about')
-            = person_link(note.person)
-          = t('.created', time_ago: time_ago_in_words(note.created_at))
-      .span8.person-note-text
-        = simple_format(note.text)
+  #person-notes-list
+    - notes.each do |note|
+      = render note, show_person: show_person
 
 = paginate notes, param_name: :notes_page, params: { anchor: 'person-notes' }

@@ -5,51 +5,46 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_dsj.
 
-class Person::NotesController < CrudController
+class Person::NotesController < ApplicationController
 
-  self.nesting = Group, Person
+  class_attribute :permitted_attrs
 
-  self.permitted_attrs = [:text]
+  authorize_resource except: :index
 
   decorates :group, :person
 
-  # load group before authorization
-  prepend_before_action :parent
+  respond_to :html
+
+  self.permitted_attrs = [:text]
+
+  def index
+    @group = Group.find(params[:id])
+    authorize!(:index_person_notes, @group)
+
+    @notes = Person::Note.
+      includes(:author, { person: :groups }).
+      where(person: Person.in_layer(@group)).
+      page(params[:notes_page]).
+      per(100)
+
+    respond_with(@notes)
+  end
 
   def create
-    super(location: group_person_path(@group, @person))
+    @group = Group.find(params[:group_id])
+    @person = Person.find(params[:person_id])
+    @note = @person.notes.create(permitted_params.merge(author_id: current_user.id))
+
+    respond_to do |format|
+      format.html { redirect_to group_person_path(@group, @person) }
+      format.js # create.js.haml
+    end
   end
 
   private
 
-  def build_entry
-    person.notes.new(author_id: current_user.id)
-  end
-
-  def person
-    parent
-  end
-
-  # model_params may be empty
   def permitted_params
-    model_params.present? ? model_params.permit(permitted_attrs) : {}
-  end
-
-  def return_path
-    if params[:return_url].present?
-      begin
-        uri = URI.parse(params[:return_url])
-        uri.path + (uri.fragment ? "\##{uri.fragment}" : '')
-      rescue URI::Error
-        nil
-      end
-    end
-  end
-
-  class << self
-    def model_class
-      Person::Note
-    end
+    params.require(:person_note).permit(permitted_attrs)
   end
 
 end

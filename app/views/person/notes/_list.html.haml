@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_dsj.
 
 .pagination-bar
-  = paginate notes, param_name: :notes_page, params: { anchor: 'person-notes' }
+  = render 'person/notes/paginator', notes: notes
 
   .pagination-info
     - if notes.total_count == 0
@@ -15,4 +15,4 @@
     - notes.each do |note|
       = render note, show_person: show_person
 
-= paginate notes, param_name: :notes_page, params: { anchor: 'person-notes' }
+= render 'person/notes/paginator', notes: notes

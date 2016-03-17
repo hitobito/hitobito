@@ -680,6 +680,9 @@ de:
       note:
         created: vor %{time_ago}
         wrote_about: schrieb zu
+      paginator:
+        newer_notes: Neuere Beiträge
+        older_notes: Altere Beiträge
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.

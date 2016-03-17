@@ -15,4 +15,5 @@
       = f.labeled_text_area(:text)
       = save_form_buttons(f, nil, 'javascript:App.PersonNotes.cancelForm()')
 
-= render 'notes_list', notes: entry.notes, show_person: false
+= render 'notes_list', notes: entry.notes.includes(:author).page(params[:notes_page]).per(10),
+                       show_person: false

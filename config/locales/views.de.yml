@@ -773,7 +773,6 @@ de:
       new_note: Neue Notiz
 
     notes_list:
-      no_notes: Keine Notizen vorhanden
       created: vor %{time_ago}
       wrote_about: schrieb zu
 

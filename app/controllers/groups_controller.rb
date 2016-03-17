@@ -62,8 +62,11 @@ class GroupsController < CrudController
 
   def person_notes
     @notes = Person::Note.
-      where(person: Person.in_layer(entry))#.
-      # order(created_at: :desc)
+      includes(:author, { person: :groups }).
+      where(person: Person.in_layer(entry)).
+      page(params[:notes_page]).
+      per(100)
+    respond_with(@notes)
   end
 
   private

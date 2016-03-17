@@ -3,10 +3,15 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-- if notes.present?
-  - includes = [:author]
-  - includes << { person: :groups } if show_person
-  - notes.includes(*includes).each do |note|
+.pagination-bar
+  = paginate notes, param_name: :notes_page, params: { anchor: 'person-notes' }
+
+  .pagination-info
+    - if notes.total_count == 0
+      = ti(:no_list_entries)
+
+- if notes.total_count > 0
+  - notes.each do |note|
     .row-fluid.person-note-item
       .span4
         %h4
@@ -18,5 +23,4 @@
       .span8.person-note-text
         = simple_format(note.text)
 
-- else
-  .row-fluid.person-note-item= t('.no_notes')
+= paginate notes, param_name: :notes_page, params: { anchor: 'person-notes' }

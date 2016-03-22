@@ -65,15 +65,6 @@ toggleGroupContact = ->
   else if open && !fields.is(':visible')
     fields.slideDown()
 
-swapElements = (event) ->
-  css = $(this).data('swap')
-  $('.' + css).slideToggle()
-  event.preventDefault()
-
-resetRolePersonId = (event) ->
-  $('#role_person_id').val(null).change()
-  $('#role_person').val(null).change()
-
 toggleFilterRoles = (event) ->
   target = $(event.target)
 
@@ -111,13 +102,7 @@ $(document).on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
 # control visibilty of group contact fields in relation to contact
 $(document).on('change', '#group_contact_id', toggleGroupContact)
 
-$(document).on('click', 'a[data-swap="person-fields"]', resetRolePersonId)
-
 $(document).on('click', '.filter-toggle', toggleFilterRoles)
-
-# wire up data swap links
-$(document).on('click', 'a[data-swap]', swapElements)
-
 
 # only bind events for non-document elements in $ ->
 $ ->

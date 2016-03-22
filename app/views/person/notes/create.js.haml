@@ -1,5 +1,4 @@
 - if @note.errors.blank?
   App.PersonNotes.addNote('#{escape_javascript(render @note, show_person: false)}');
-  App.PersonNotes.hideForm();
 - else
   App.PersonNotes.showError('#{@note.errors.full_messages.join("\n")}');

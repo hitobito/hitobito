@@ -6,27 +6,30 @@
 app = window.App ||= {}
 
 app.PersonNotes = {
-  showForm: ->
-    form = $('#person-notes-form')
-    form.slideDown(undefined, -> $('#person_note_text').focus())
-
-    $('#person-notes-new-button').hide()
-    $('#person-notes-error').text('').hide()
-
-  hideForm: ->
-    form = $('#person-notes-form')
-    form.find('form')[0].reset()
-    form.slideUp()
-
-    $('#person-notes-new-button').show()
-    $('#person-notes-error').text('').hide()
-
-    # explicitly return undefined to work with href="javascript:..." links
-    return
-
   addNote: (note) ->
     $('#person-notes-list').prepend(note)
 
+    new app.ElementSwapper().swap.call($('#person-notes-form'))
+    app.PersonNotes.resetForm()
+    app.PersonNotes.hideError()
+
+  resetForm: ->
+    $('#person-notes-form').find('form')[0].reset()
+
+  focus: ->
+    setTimeout(-> $('#person_note_text').focus())
+
   showError: (error) ->
     $('#person-notes-error').text(error).show()
+
+  hideError: ->
+    $('#person-notes-error').text('').hide()
 }
+
+$ ->
+  $('#person-notes-new-button').on('click', app.PersonNotes.focus)
+  $('#person-notes-form .cancel').on('click', new app.ElementSwapper().swap)
+  $('#person-notes-form .cancel').on('click', ->
+    app.PersonNotes.resetForm()
+    app.PersonNotes.hideError()
+  )

@@ -6,16 +6,16 @@
 %h2#person-notes= Person::Note.model_name.human(count: 2)
 
 - if can?(:create, Person::Note)
-  %button.btn#person-notes-new-button{onclick: 'App.PersonNotes.showForm()'}= t('.new_note')
+  %button#person-notes-new-button.btn.person-notes-swap{ data: { swap: 'person-notes-swap' } }= t('.new_note')
 
-  #person-notes-form{style: 'display: none;'}
+  #person-notes-form.person-notes-swap{ style: 'display: none;', data: { swap: 'person-notes-swap' } }
     %h3= t('.new_note')
 
-    .alert.alert-error#person-notes-error{style: 'display: none;'}
+    #person-notes-error.alert.alert-error{ style: 'display: none;' }
 
     = form_for(Person::Note.new, url: group_person_notes_path(@group, entry), remote: true) do |f|
       = f.text_area(:text, rows: 7, width: '100%')
-      = save_form_buttons(f, nil, 'javascript:App.PersonNotes.hideForm()')
+      = save_form_buttons(f, nil, nil)
 
 = render 'person/notes/list',
          notes: entry.notes.includes(:author).page(params[:notes_page]).per(10),

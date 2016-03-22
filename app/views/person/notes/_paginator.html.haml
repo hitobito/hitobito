@@ -3,17 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-.pagination
-  %ul
-    %li{class: notes.first_page? && :disabled}
-      = link_to_previous_page notes, "« #{t('.newer_notes')}",
-                              param_name: :notes_page,
-                              params: { anchor: 'person-notes' }
-      - if notes.first_page?
-        %a= "« #{t('.newer_notes')}"
-    %li{class: notes.last_page? && :disabled}
-      = link_to_next_page notes, "#{t('.older_notes')} »",
-                          param_name: :notes_page,
-                          params: { anchor: 'person-notes' }
-      - if notes.last_page?
-        %a= "#{t('.older_notes')} »"
+- if notes.total_count > 0
+  .pagination
+    %ul
+      %li{class: notes.first_page? && :disabled}
+        = link_to_previous_page notes, "« #{t('.newer_notes')}",
+                                param_name: :notes_page,
+                                params: { anchor: 'person-notes' }
+        - if notes.first_page?
+          %a= "« #{t('.newer_notes')}"
+      %li{class: notes.last_page? && :disabled}
+        = link_to_next_page notes, "#{t('.older_notes')} »",
+                            param_name: :notes_page,
+                            params: { anchor: 'person-notes' }
+        - if notes.last_page?
+          %a= "#{t('.older_notes')} »"

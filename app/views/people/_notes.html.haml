@@ -15,7 +15,7 @@
 
     = form_for(Person::Note.new, url: group_person_notes_path(@group, entry), remote: true) do |f|
       = f.text_area(:text, rows: 7, width: '100%')
-      = save_form_buttons(f, nil, nil)
+      = save_form_buttons(f, nil, '')
 
 = render 'person/notes/list',
          notes: entry.notes.includes(:author).page(params[:notes_page]).per(10),

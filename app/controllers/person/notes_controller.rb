@@ -22,8 +22,9 @@ class Person::NotesController < ApplicationController
     authorize!(:index_person_notes, @group)
 
     @notes = Person::Note.
-      includes(:author, { person: :groups }).
+      includes(:author, person: :groups).
       where(person: Person.in_layer(@group)).
+      where(person: Person.in_or_below(@group)).
       page(params[:notes_page]).
       per(100)
 

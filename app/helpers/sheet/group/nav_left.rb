@@ -79,7 +79,7 @@ module Sheet
       end
 
       def render_group_item(group, stack, out)
-        if view.can?(:show, group)
+        if view.can?(:show, group) && visible?(group)
           if group.leaf?
             out << group_link(group) << "</li>\n".html_safe
           else
@@ -125,6 +125,21 @@ module Sheet
         else
           view.group_path(group)
         end
+      end
+
+      def visible?(group)
+        # is_first_level = group.parent_id == group.layer_group_id
+        # is_ancestor = group.lft <= @entry.lft && group.rgt >= @entry.lft
+        is_child = group.parent_id == @entry.id
+        is_sibling = group.parent_id == @entry.parent_id
+        is_ancestor_or_ancestor_sibling = @entry.ancestors.map(&:self_and_siblings).flatten.
+                                                 include?(group)
+
+        # is_first_level ||
+        #   is_ancestor ||
+        is_child ||
+          is_sibling ||
+          is_ancestor_or_ancestor_sibling
       end
 
     end

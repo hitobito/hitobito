@@ -178,6 +178,9 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
+      tag:
+        one: Tag
+        other: Tags
 
     attributes:
       cantons:
@@ -518,6 +521,10 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
+
+      tag:
+        name: Name
+        taggable_id: Taggable
 
   errors:
     messages:

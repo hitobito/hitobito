@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314124800) do
+ActiveRecord::Schema.define(version: 20160324134656) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -450,6 +450,17 @@ ActiveRecord::Schema.define(version: 20160314124800) do
 
   add_index "subscriptions", ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id"
   add_index "subscriptions", ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type"
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",          null: false
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name"
+  add_index "tags", ["taggable_type", "taggable_id"], name: "index_tags_on_taggable_type_and_taggable_id"
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false

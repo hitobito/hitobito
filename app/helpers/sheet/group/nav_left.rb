@@ -55,6 +55,7 @@ module Sheet
       end
 
       def render_layer_groups
+        Rails.logger.info('=========1')
         out = ''.html_safe
         stack = []
         Array(groups[1..-1]).each do |group|
@@ -63,6 +64,7 @@ module Sheet
         stack.size.times do
           out << "</ul>\n</li>\n".html_safe
         end
+        Rails.logger.info('=========2')
         out
       end
 
@@ -128,18 +130,7 @@ module Sheet
       end
 
       def visible?(group)
-        # is_first_level = group.parent_id == group.layer_group_id
-        # is_ancestor = group.lft <= @entry.lft && group.rgt >= @entry.lft
-        is_child = group.parent_id == @entry.id
-        is_sibling = group.parent_id == @entry.parent_id
-        is_ancestor_or_ancestor_sibling = @entry.ancestors.map(&:self_and_siblings).flatten.
-                                                 include?(group)
-
-        # is_first_level ||
-        #   is_ancestor ||
-        is_child ||
-          is_sibling ||
-          is_ancestor_or_ancestor_sibling
+        @entry.hierarchy.any? { |g| g.id == group.parent_id }
       end
 
     end

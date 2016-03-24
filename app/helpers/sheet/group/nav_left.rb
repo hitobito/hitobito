@@ -55,7 +55,6 @@ module Sheet
       end
 
       def render_layer_groups
-        Rails.logger.info('=========1')
         out = ''.html_safe
         stack = []
         Array(groups[1..-1]).each do |group|
@@ -64,7 +63,6 @@ module Sheet
         stack.size.times do
           out << "</ul>\n</li>\n".html_safe
         end
-        Rails.logger.info('=========2')
         out
       end
 

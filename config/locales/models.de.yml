@@ -95,6 +95,10 @@ de:
             subscriber_id:
               group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
               event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'Dieses Tag existiert bereits'
 
     models:
       additional_email:

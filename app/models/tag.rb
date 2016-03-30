@@ -9,6 +9,9 @@ class Tag < ActiveRecord::Base
 
   belongs_to :taggable, polymorphic: true
 
+  validates :name, uniqueness: { scope: [:taggable_id, :taggable_type],
+                                 message: :must_be_unique }
+
   def to_s
     "#{name}: #{taggable}"
   end

@@ -21,6 +21,14 @@ module PeopleHelper
     end
   end
 
+  def format_tags(person)
+    if person.tags.present?
+      person.tags.map(&:name).join(', ')
+    else
+      t('global.associations.no_entry')
+    end
+  end
+
   def sortable_grouped_person_attr(t, sortable_attrs, grouping_attr = nil, &block)
     list = sortable_attrs.map do |attr|
       t.sort_header(attr.to_sym, Person.human_attribute_name(attr.to_sym))

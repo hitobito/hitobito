@@ -25,6 +25,7 @@ class Ability
                  QualificationAbility,
                  RoleAbility,
                  SubscriptionAbility,
+                 TagAbility,
                  VariousAbility
 
   attr_reader :user, :user_context

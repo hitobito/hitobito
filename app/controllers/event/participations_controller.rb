@@ -140,14 +140,14 @@ class Event::ParticipationsController < CrudController
   end
 
   def person_id
-    return current_user.id unless event.supports_applications
+    return current_user.try(:id) unless event.supports_applications
 
     if model_params && model_params.key?(:person_id)
       params[:for_someone_else] = true
       model_params.delete(:person)
       model_params.delete(:person_id)
     elsif params[:for_someone_else].blank?
-      current_user.id
+      current_user.try(:id)
     end
   end
 
@@ -179,7 +179,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def load_priorities
-    if entry.application && event.priorization
+    if entry.application && event.priorization && current_user
       @alternatives = event.class.application_possible.
                                         where(kind_id: event.kind_id).
                                         in_hierarchy(current_user).

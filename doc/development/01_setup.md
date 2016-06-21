@@ -12,12 +12,12 @@ Als Entwicklungsdatenbank wird Sqlite3 verwendet. Zur Emulation des Produktionse
 MySQL installiert sein. Die Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus. 
 Bei einem anderen System müssen die Befehle entsprechend angepasst werden.
 
-    sudo apt-get install sqlite3 libsqlite3-dev
+    sudo apt-get install sqlite3 libsqlite3-dev libgmp3-dev
     sudo apt-get install mysql-client libmysqlclient-dev mysql-server
 
 Folgende Dritt-Packete sind für die verschiedenen Features von hitobito zusätzlich erforderlich. 
 
-    sudo apt-get install sphinxsearch memcached imagemagick transifex-client 
+    sudo apt-get install sphinxsearch memcached imagemagick transifex-client graphviz
 
 
 ### Source

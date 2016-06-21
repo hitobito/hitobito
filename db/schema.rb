@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230101630) do
+ActiveRecord::Schema.define(version: 20160324134656) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -348,6 +348,16 @@ ActiveRecord::Schema.define(version: 20151230101630) do
   add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id"
   add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
 
+  create_table "person_notes", force: :cascade do |t|
+    t.integer  "person_id",  null: false
+    t.integer  "author_id",  null: false
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "person_notes", ["person_id"], name: "index_person_notes_on_person_id"
+
   create_table "phone_numbers", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
     t.string  "contactable_type",                null: false
@@ -440,6 +450,17 @@ ActiveRecord::Schema.define(version: 20151230101630) do
 
   add_index "subscriptions", ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id"
   add_index "subscriptions", ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type"
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",          null: false
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name"
+  add_index "tags", ["taggable_type", "taggable_id"], name: "index_tags_on_taggable_type_and_taggable_id"
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false

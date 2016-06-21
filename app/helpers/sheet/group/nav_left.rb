@@ -79,7 +79,7 @@ module Sheet
       end
 
       def render_group_item(group, stack, out)
-        if view.can?(:show, group)
+        if view.can?(:show, group) && visible?(group)
           if group.leaf?
             out << group_link(group) << "</li>\n".html_safe
           else
@@ -125,6 +125,10 @@ module Sheet
         else
           view.group_path(group)
         end
+      end
+
+      def visible?(group)
+        @entry.hierarchy.any? { |g| g.id == group.parent_id }
       end
 
     end

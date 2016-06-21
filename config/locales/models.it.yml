@@ -44,7 +44,7 @@ it:
         event/question:
           attributes:
             choices:
-              requires_more_than_one_choice: 'deve contenere almeno due risposte.'
+              requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
           attributes:
             person_id:
@@ -54,7 +54,7 @@ it:
             mail_name:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
-          name_missing: 'Per favore digitare un nome.'
+          name_missing: 'Inserire un nome'
           attributes:
             email:
               taken: >
@@ -62,10 +62,14 @@ it:
                 che è utilizzato per il login. Puoi però registrare sotto "altre email"
                 tutti gli indirizzi che sono assegnati come email principale ad altre
                 persone (il campo per l'email principale può essere lasciato vuoto).
+        person/add_request:
+          attributes:
+            person_id:
+              taken: è già stato chiesto
         people_relation:
           attributes:
             tail_id:
-              must_not_be_equal_to_head: per se stessi non è permesso
+              must_not_be_equal_to_head: non è permesso
         qualification:
           attributes:
             qualification_kind_id:
@@ -73,7 +77,12 @@ it:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'deve essere un numero positivo affinché %{model} sia reso riattivabile.'
+              not_a_positive_number: 'deve essere un numero positivo per riattivare %{model} '
+        subscription:
+          attributes:
+            subscriber_id:
+              group_not_allowed: 'Questo gruppo non può essere aggiunto'
+              event_not_allowed: 'Questo evento non può essere aggiunto'
     models:
       additional_email:
         one: altro email
@@ -93,6 +102,9 @@ it:
       event/application:
         one: iscrizione
         other: Iscrizioni
+      event/attachment:
+        one: Allegato
+        other: Allegati
       event/kind:
         one: tipo di corso
         other: Tipi di corso
@@ -123,6 +135,9 @@ it:
       person:
         one: persona
         other: Persone
+      person/add_request:
+        one: Richiesta di accesso
+        other: Richieste
       people_filter:
         one: filtro
         other: Filtri
@@ -185,7 +200,7 @@ it:
         email: Email principale
         emails: Email
         password: Password
-        password_confirmation: Confirmazione della password
+        password_confirmation: Confermare la password
         current_password: Vecchia password
         address: Indirizzo
         zip_code: NAP
@@ -208,6 +223,15 @@ it:
         roles: Ruoli
         created_at: Salvato
         updated_at: Modificato
+      person/add_request:
+        person: Persona
+        requester: Richiesta di
+        body: Richiesta per
+        created_at: Data
+      person/add_request/event:
+        label: "%{body} in %{group}"
+      person/add_request/mailing_list:
+        label: "%{body} in %{group}"
       group:
         name: Cognome
         short_name: Abbreviazione
@@ -260,6 +284,8 @@ it:
         priority_2_id: "1° corso alternativo"
         priority_3_id: "2° corso alternativo"
         waiting_list_comment: 'Nota'
+      event/attachment:
+        file: File
       event/course:
         kind_id: Tipo di corso
         state: Stato
@@ -268,6 +294,7 @@ it:
         priorization: Priorità
         requires_approval: Necessita autorizzazione
       event/date:
+        label: Definizione
         location: Luogo
         start_at: Dal
         finish_at: Al
@@ -407,7 +434,7 @@ it:
         name: Nome della lista
         description: Descrizione
         publisher: Mittente
-        subscribable: Gli abbonato possono iscriversi/disiscriversi personalmente.
+        subscribable: Gli abbonati possono iscriversi/disiscriversi personalmente.
         mail_name: Indirizzo delle mailing list
         mail_address: Mailing list
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
@@ -442,7 +469,9 @@ it:
       on_or_before: "deve essere %{restriction} oppure prima"
       after: "deve essere dopo %{restriction}"
       on_or_after: "deve essere %{restriction} oppure dopo"
-      extension_white_list_error: "può elaborare unicamente documenti del tipo %{allowed_types} "
+      extension_white_list_error: "accetta solo i tipi di file seguenti: %{allowed_types}"
+      dimensions_too_large: "accetta solo immagini con una dimensione inferiore a %{maximum} Pixel"
+      filesize_too_large: "non può essere maggiore a %{maximum} MB"
       expired: "è scaduto, per favore richiedere nuovamente"
       not_found: "non trovato"
       already_confirmed: "è stato appena confermato"

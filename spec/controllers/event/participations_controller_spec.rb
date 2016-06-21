@@ -243,9 +243,9 @@ describe Event::ParticipationsController do
   end
 
   context 'GET new' do
-    before { get :new, group_id: group.id, event_id: event.id }
-
     context 'for course with priorization' do
+      before { get :new, group_id: group.id, event_id: event.id }
+
       let(:event) { course }
 
       it 'builds participation with answers' do
@@ -262,6 +262,8 @@ describe Event::ParticipationsController do
     end
 
     context 'for event without application' do
+      before { get :new, group_id: group.id, event_id: event.id }
+
       let(:event) do
         event = Fabricate(:event, groups: [group])
         event.questions << Fabricate(:event_question, event: event)
@@ -276,6 +278,26 @@ describe Event::ParticipationsController do
         expect(participation.answers.size).to eq(2)
         expect(participation.person).to eq(user)
         expect(assigns(:priority_2s)).to be_nil
+      end
+    end
+
+    context 'unauthenticated' do
+      before { sign_out(user) }
+
+      context 'event that does not support applications' do
+        let(:event) { events(:top_event) }
+
+        it 'does not throw any exception (regression test for #16403)' do
+          get :new, group_id: group.id, event_id: event.id
+        end
+      end
+
+      context 'event that supports applications' do
+        let(:event) { course }
+
+        it 'is fine when event supports applications (regression test for #16403)' do
+          get :new, group_id: group.id, event_id: event.id
+        end
       end
     end
 

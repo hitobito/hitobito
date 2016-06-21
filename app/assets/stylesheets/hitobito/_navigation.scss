@@ -133,6 +133,12 @@
   color: $grayDark;
 }
 
+.pagination ul > .disabled {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+
 .pagination-bar {
   overflow: hidden;
 

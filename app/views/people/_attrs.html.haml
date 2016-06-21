@@ -14,7 +14,9 @@
 
         = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
-        = render_attrs(entry, :created_info, :updated_info)
+        - meta_attrs = [:created_info, :updated_info]
+        - meta_attrs.unshift(:tags) if can?(:index_tags, entry)
+        = render_attrs(entry, *meta_attrs)
 
         = render 'people_relations'
 
@@ -23,6 +25,9 @@
         = simple_format(entry.additional_information)
 
     = render_extensions :show_left
+
+    - if can?(:index_notes, entry)
+      = render 'notes'
 
   - if can?(:show_full, entry)
     %aside.span6.offset1

@@ -284,6 +284,7 @@ de:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift
         heading_event/course: Kursanmeldung %{year}
+        heading_event: Anmeldung Anlass
         read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
         read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
         requirements_for_event: Voraussetzungen für den Anlass
@@ -675,6 +676,14 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
+    notes:
+      note:
+        created: vor %{time_ago}
+        wrote_about: schrieb zu
+      paginator:
+        newer_notes: Neuere Beiträge
+        older_notes: Altere Beiträge
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -767,6 +776,9 @@ de:
     roles_aside:
       add_role: Rolle hinzfügen
       set_main_group: Hauptgruppe setzen
+
+    notes:
+      new_note: Neue Notiz
 
   participations:
     destroy:

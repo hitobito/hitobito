@@ -153,5 +153,6 @@ describe GroupsController do
         expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
       end
     end
+
   end
 end

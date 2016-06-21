@@ -1,5 +1,10 @@
 # Hitobito Changelog
 
+## Version 1.12
+
+*   Zu Personen können eingeschränkt sichtbare Notizen hinterlegt werden.
+
+
 ## Version 1.11
 
 *   Pro Ebene aktivierbare Zugriffsanfragen, falls Personen zu einer fremden Gruppe, Anlass oder Abo hinzugefügt werden.

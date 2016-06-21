@@ -21,9 +21,11 @@ class Ability
                  PeopleFilterAbility,
                  PersonAbility,
                  Person::AddRequestAbility,
+                 Person::NoteAbility,
                  QualificationAbility,
                  RoleAbility,
                  SubscriptionAbility,
+                 TagAbility,
                  VariousAbility
 
   attr_reader :user, :user_context

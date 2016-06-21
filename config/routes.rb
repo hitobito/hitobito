@@ -32,6 +32,8 @@ Hitobito::Application.routes.draw do
 
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
+
+        get 'person_notes' => 'person/notes#index'
       end
 
       resources :people, except: [:new, :create] do
@@ -45,6 +47,10 @@ Hitobito::Application.routes.draw do
 
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
+
+        scope module: 'person' do
+          resources :notes, only: [:create]
+        end
       end
 
       resources :roles, except: [:index, :show] do

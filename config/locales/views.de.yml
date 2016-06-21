@@ -679,7 +679,6 @@ de:
     notes:
       note:
         created: vor %{time_ago}
-        wrote_about: schrieb zu
       paginator:
         newer_notes: Neuere Beiträge
         older_notes: Altere Beiträge

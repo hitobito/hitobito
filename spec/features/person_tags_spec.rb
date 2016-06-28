@@ -21,12 +21,6 @@ describe 'Person Tags', js: true do
   end
 
   context 'listing' do
-    before do
-      person.tags.create!(name: 'lorem')
-      person.tags.create!(name: 'ipsum')
-      visit group_person_path(group_id: group.id, id: person.id)
-    end
-
     context 'user without :index_tags permission' do
       let(:user) { secretary }
 
@@ -38,17 +32,41 @@ describe 'Person Tags', js: true do
     context 'user with :index_tags permission' do
       let(:user) { leader }
 
-      it 'lists tags' do
+      it 'lists tags without categories' do
+        person.tags.create!(name: 'lorem')
+        person.tags.create!(name: 'ipsum')
+        visit group_person_path(group_id: group.id, id: person.id)
+
         expect(page).to have_content('Tags')
-        expect(all('.person-tag')[0].text).to eq('lorem')
-        expect(all('.person-tag')[1].text).to eq('ipsum')
+        expect(all('.person-tags-category').length).to eq(1)
+        expect(page).to have_no_selector('.person-tags-category-title')
+        expect(all('.person-tag')[0].text).to eq('ipsum')
+        expect(all('.person-tag')[1].text).to eq('lorem')
+      end
+
+      it 'lists tags grouped by categories' do
+        person.tags.create!(name: 'vegetable:potato')
+        person.tags.create!(name: 'pizza')
+        person.tags.create!(name: 'fruit:banana')
+        person.tags.create!(name: 'fruit:apple')
+        visit group_person_path(group_id: group.id, id: person.id)
+
+        expect(page).to have_content('Tags')
+        expect(all('.person-tags-category').length).to eq(3)
+        expect(all('.person-tags-category-title').map(&:text)).to eq(%w(fruit vegetable Andere))
+        expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
+          to eq(%w(apple banana))
+        expect(all('.person-tags-category')[1].all('.person-tag').map(&:text)).
+          to eq(%w(potato))
+        expect(all('.person-tags-category')[2].all('.person-tag').map(&:text)).
+          to eq(%w(pizza))
       end
     end
   end
 
   context 'creation' do
     before do
-      user.tags.create!(name: 'ipsum')
+      user.tags.create!(name: 'pasta')
       visit group_person_path(group_id: group.id, id: person.id)
     end
 
@@ -62,43 +80,63 @@ describe 'Person Tags', js: true do
       expect(page).to have_selector('.person-tags-add-form')
 
       within '.person-tags-add-form' do
-        fill_in 'tag_name', :with => 'lorem'
+        fill_in 'tag_name', :with => 'pizza'
       end
       find('.person-tags-add-form button').click
-      expect(page).to have_selector('.person-tag', text: 'lorem')
+      expect(page).to have_selector('.person-tag', text: 'pizza')
       expect(person.tags.count).to eq(1)
-      expect(person.tags.last.name).to eq('lorem')
+      expect(person.tags.last.name).to eq('pizza')
       expect(page).to have_selector('.person-tag-add')
       expect(page).to have_no_selector('.person-tags-add-form')
 
       find('.person-tag-add').click
       within '.person-tags-add-form' do
-        fill_in 'tag_name', :with => 'ips'
+        fill_in 'tag_name', :with => 'pas'
       end
-      expect(page).to have_selector('ul.typeahead li a', text: 'ipsum')
+      expect(page).to have_selector('ul.typeahead li a', text: 'pasta')
       find('ul.typeahead li a').click
       find('.person-tags-add-form button').click
-      expect(page).to have_selector('.person-tag', text: 'lorem')
+      expect(page).to have_selector('.person-tag', text: 'pasta')
       expect(person.tags.count).to eq(2)
-      expect(person.tags.last.name).to eq('ipsum')
+      expect(person.tags.last.name).to eq('pasta')
+
+      find('.person-tag-add').click
+      within '.person-tags-add-form' do
+        fill_in 'tag_name', :with => 'fruit:banana'
+      end
+      find('.person-tags-add-form button').click
+      expect(page).to have_selector('.person-tags-category', count: 2)
+      expect(all('.person-tags-category-title').map(&:text)).to eq(%w(fruit Andere))
+      expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
+        to eq(%w(banana))
+      expect(all('.person-tags-category')[1].all('.person-tag').map(&:text)).
+        to eq(%w(pasta pizza))
+      expect(person.tags.count).to eq(3)
+      expect(person.tags.last.name).to eq('fruit:banana')
     end
   end
 
   context 'deletion' do
     before do
-      person.tags.create!(name: 'lorem')
-      person.tags.create!(name: 'ipsum')
+      person.tags.create!(name: 'pizza')
+      person.tags.create!(name: 'fruit:banana')
+      person.tags.create!(name: 'fruit:apple')
       visit group_person_path(group_id: group.id, id: person.id)
     end
 
     it 'removes deleted tags' do
-      expect(page).to have_selector('.person-tag', text: 'lorem')
-      expect(page).to have_selector('.person-tag', text: 'ipsum')
-      expect(page).to have_selector('.person-tag-remove')
+      expect(page).to have_selector('.person-tags-category', count: 2)
+      expect(page).to have_selector('.person-tag-remove', count: 3)
 
-      all('.person-tag-remove')[0].click
-      expect(page).to have_no_selector('.person-tag', text: 'lorem')
-      expect(page).to have_selector('.person-tag', text: 'ipsum')
+      find('.person-tag', text: 'apple').find('.person-tag-remove').click
+      expect(page).to have_selector('.person-tags-category', count: 2)
+      expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
+        to eq(%w(banana))
+
+      find('.person-tag', text: 'banana').find('.person-tag-remove').click
+      expect(page).to have_selector('.person-tags-category', count: 1)
+      expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
+        to eq(%w(pizza))
     end
   end
 

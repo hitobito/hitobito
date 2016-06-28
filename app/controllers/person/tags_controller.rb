@@ -33,6 +33,7 @@ class Person::TagsController < ApplicationController
     load_group_and_person
     authorize!(:create, @person.tags.new)
     @tag = @person.tags.create(name: permitted_params[:name])
+    @tags = @person.tags.grouped_by_category
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }

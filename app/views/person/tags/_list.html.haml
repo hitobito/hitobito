@@ -1,0 +1,9 @@
+.person-tags
+  - if tags.present?
+    - tags.each do |category, category_tags|
+      .person-tags-category
+        .person-tags-category-title{class: tags.length == 1 && category == :other ? 'hidden' : nil}
+          = category == :other ? t('.category_other') : category
+        .person-tags-category-list
+          - category_tags.each do |tag|
+            = render 'person/tags/tag', tag: tag

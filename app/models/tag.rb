@@ -13,8 +13,30 @@ class Tag < ActiveRecord::Base
                    uniqueness: { scope: [:taggable_id, :taggable_type],
                                  message: :must_be_unique }
 
+  scope :grouped_by_category, -> do
+    order(:name).
+      each_with_object({}) { |tag, h| h[tag.category] ||= []; h[tag.category] << tag }.
+      to_a.
+      sort do |a, b|
+        if a[0] == :other || a[0] > b[0]; 1
+        elsif a[0] < b[0]; -1
+        else; 0
+        end
+    end
+  end
+
   def to_s
     "#{name}: #{taggable}"
+  end
+
+  def category
+    m = name.match /^([^:]+):(.+)$/ if name.present?
+    m ? m[1].strip.to_sym : :other
+  end
+
+  def name_without_category
+    m = name.match /^([^:]+):(.+)$/ if name.present?
+    m ? m[2].strip : name
   end
 
 end

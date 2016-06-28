@@ -8,10 +8,8 @@
     %h2= t('.title')
     .person-tags-error.alert.alert-error{ style: 'display: none;' }
 
-    .person-tags-list
-      - if @tags.present?
-        - @tags.each do |tag|
-          = render 'person/tags/tag', tag: tag
+    = render 'person/tags/list', tags: @tags
+
     - if can?(:create, entry.tags.new)
       %span.label.person-tag.person-tag-add
         = t('.add_tag')

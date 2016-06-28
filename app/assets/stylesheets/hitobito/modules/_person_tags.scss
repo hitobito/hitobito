@@ -1,3 +1,21 @@
+.person-tags-category {
+  display: table-row;
+}
+.person-tags-category-title,
+.person-tags-category-list {
+  display: table-cell;
+  padding-bottom: 6px;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.person-tags-category-title {
+  padding-right: 20px;
+  text-align: right;
+}
+
 .person-tag {
   margin-bottom: 4px;
   padding: 3px 6px;
@@ -16,10 +34,6 @@
   &:hover {
     background-color: $grayLighter;
   }
-}
-
-.person-tags-list {
-  display: inline;
 }
 
 .person-tags-add-form {

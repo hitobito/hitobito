@@ -20,19 +20,23 @@ app.PersonTags = {
     $('.person-tags-add-form button').prop('disabled', flag)
     $('.person-tags-add-form button .spinner').toggle(flag);
 
-  addTag: (tag) ->
-    console.log('addTag', tag)
-    $('.person-tags-list').append(tag)
+  updateTags: (tags) ->
+    $('.person-tags').replaceWith(tags)
     app.PersonTags.hideForm()
     app.PersonTags.hideError()
 
   removeTag: (event) ->
     event.preventDefault()
     tagId = $(event.target).parent().data('tag-id')
-    $('.person-tags-list').find('.person-tag').each((i, elem) ->
-      if $(elem).data('tag-id') == tagId
-        $(elem).remove()
-        return false
+    $('.person-tags').find('.person-tag').each((i, elem) ->
+      tag = $(elem)
+      if tag.data('tag-id') == tagId
+        if tag.parent().children().length == 1
+          tag.closest('.person-tags-category').remove()
+          return false
+        else
+          tag.remove()
+          return false
     )
 
   showError: (error) ->

@@ -35,7 +35,7 @@ class PeopleController < CrudController
                                        :send_password_instructions, :primary_group]
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
-  before_render_show :load_person_tags, if: -> { html_request? }
+  before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
   def index
@@ -122,8 +122,8 @@ class PeopleController < CrudController
     end
   end
 
-  def load_person_tags
-    @tags = entry.tags.includes(:taggable)
+  def load_grouped_person_tags
+    @tags = entry.tags.includes(:taggable).grouped_by_category
   end
 
   def show_add_request_status?

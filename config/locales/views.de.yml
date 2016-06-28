@@ -683,6 +683,10 @@ de:
         newer_notes: Neuere Beiträge
         older_notes: Altere Beiträge
 
+    tags:
+      list:
+        category_other: Andere
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 

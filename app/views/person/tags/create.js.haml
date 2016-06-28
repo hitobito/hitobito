@@ -1,0 +1,4 @@
+- if @tag.errors.blank?
+  App.PersonTags.addTag('#{escape_javascript(render @tag)}');
+- else
+  App.PersonTags.showError('#{@tag.errors.full_messages.join("\n")}');

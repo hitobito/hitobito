@@ -3,6 +3,7 @@
 ## Version 1.12
 
 *   Zu Personen können eingeschränkt sichtbare Notizen hinterlegt werden.
+*   Personen können eingeschränkt sichtbar getaggt werden.
 
 
 ## Version 1.11

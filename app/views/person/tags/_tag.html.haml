@@ -1,0 +1,10 @@
+%span.label.label-inverse.person-tag{data: {tag_id: tag.id}}
+  = tag.name
+  - if can?(:destroy, tag)
+    -#%a.person-tag-remove{href: "##{tag.name}"}= icon(:remove)
+    = link_to icon(:remove),
+              group_person_tag_path(person_id: tag.taggable.id, id: tag.id),
+              method: :delete,
+              data: { tag_id: tag.id },
+              remote: true,
+              class: 'person-tag-remove'

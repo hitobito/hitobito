@@ -11,11 +11,11 @@ class TagAbility < AbilityDsl::Base
 
   on(Tag) do
     permission(:layer_full).
-      may(:create, :show).
+      may(:create, :show, :destroy).
       on_person_in_same_layer
 
     permission(:layer_and_below_full).
-      may(:create, :show).
+      may(:create, :show, :destroy).
       on_person_in_same_layer_or_below
   end
 

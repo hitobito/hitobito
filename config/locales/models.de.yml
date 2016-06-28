@@ -98,7 +98,7 @@ de:
         tag:
           attributes:
             name:
-              must_be_unique: 'Dieses Tag existiert bereits'
+              must_be_unique: 'existiert bereits'
 
     models:
       additional_email:

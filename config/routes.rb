@@ -50,6 +50,8 @@ Hitobito::Application.routes.draw do
 
         scope module: 'person' do
           resources :notes, only: [:create]
+          resources :tags, only: [:create, :destroy]
+          get 'tags/query' => 'tags#query'
         end
       end
 

@@ -4,6 +4,7 @@
 
 *   Zu Personen können eingeschränkt sichtbare Notizen hinterlegt werden.
 *   Personen können eingeschränkt sichtbar getaggt werden.
+*   In der Navigation wird der Gruppenkurzname angezeigt, wenn vorhanden.
 
 
 ## Version 1.11

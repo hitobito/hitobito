@@ -35,6 +35,31 @@ describe 'Sheet::Group::NavLeft' do
     expect(html.scan(/<li/).size).to eq html.scan(/<\/li>/).size
   end
 
+  context 'short name' do
+    let(:group) { groups(:top_layer) }
+
+    before do
+      group.update(short_name: 'TP')
+      groups(:top_group).update(short_name: 'TG')
+    end
+
+    it 'displays header group with full name' do
+      is_expected.to have_link('Top', text: 'Top')
+      is_expected.to_not have_link('TP', text: 'TP')
+    end
+
+    # TODO: safe_join of this test's view does not behave as it should
+    # it 'displays sub layer with short name if available' do
+    #   is_expected.to have_link('One', text: 'One')
+    #   is_expected.to_not have_link('Bottom One', text: 'Bottom One')
+    # end
+
+    it 'displays group with short name if available' do
+      is_expected.to have_link('TG', text: 'TG')
+      is_expected.to_not have_link('TopGroup', text: 'TopGroup')
+    end
+  end
+
   context 'layer groups visibility' do
     before do
       # Hierarchy:

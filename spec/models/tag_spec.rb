@@ -9,9 +9,35 @@ require 'spec_helper'
 
 describe Tag do
 
-  describe 'grouped_by_category scope' do
-    let(:person) { people(:top_leader) }
+  let(:person) { people(:top_leader) }
 
+  context 'stripping' do
+    it 'strips whitespaces before validation' do
+      t1 = Tag.create!(name: ' pizza ', taggable: person)
+      expect(t1.name).to eq('pizza')
+
+      t2 = Tag.new(name: 'pizza ', taggable: person)
+      expect(t2).to_not be_valid
+      expect(t2.name).to eq('pizza')
+
+      t2.name = 'pasta'
+      expect(t2).to be_valid
+    end
+
+    [{ input: 'lorem:ipsum', output: 'lorem:ipsum' },
+     { input: 'lorem: ipsum', output: 'lorem:ipsum' },
+     { input: 'lorem : ipsum', output: 'lorem:ipsum' },
+     { input: ' lorem:ipsum ', output: 'lorem:ipsum' },
+     { input: 'lorem:  ipsum', output: 'lorem:ipsum' }].each do |data|
+      it "strips '#{data[:input]}' '#{data[:input]}'" do
+        t = Tag.new(name: data[:input])
+        t.valid?
+        expect(t.name).to eq(data[:output])
+      end
+    end
+  end
+
+  describe 'grouped_by_category scope' do
     before do
       Tag.create!(name: 'vegetable:potato', taggable: person)
       Tag.create!(name: 'pizza', taggable: person)

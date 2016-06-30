@@ -13,6 +13,8 @@ class Tag < ActiveRecord::Base
                    uniqueness: { scope: [:taggable_id, :taggable_type],
                                  message: :must_be_unique }
 
+  before_validation :strip_name
+
   scope :grouped_by_category, lambda {
     tags = order(:name).each_with_object({}) do |tag, h|
       h[tag.category] ||= []
@@ -40,7 +42,14 @@ class Tag < ActiveRecord::Base
 
   def name_without_category
     m = name.match(/^([^:]+):(.+)$/) if name.present?
-    m ? m[2].strip : name
+    m ? m[2].strip : name.strip
+  end
+
+  private
+
+  def strip_name
+    c = category
+    self.name = c == :other ? name_without_category : "#{c}:#{name_without_category}"
   end
 
 end

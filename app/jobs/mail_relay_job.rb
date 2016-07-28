@@ -18,9 +18,20 @@ class MailRelayJob < RecurringJob
 
   def error(job, exception)
     if exception.is_a?(MailRelay::Error)
-      super(job, exception.original, mail: exception.mail)
+      super(job, exception.original, mail: extract_mail_for_errbit(exception))
     else
       super(job, exception)
     end
   end
+
+  def extract_mail_for_errbit(exception)
+    exception.mail.to_s
+  rescue StandardError # See https://github.com/mikel/mail/issues/544
+    begin
+      exception.mail.inspect
+    rescue Exception # Be sure to get notified whatever happens
+      nil
+    end
+  end
+
 end

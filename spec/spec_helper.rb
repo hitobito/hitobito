@@ -120,6 +120,14 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
   Capybara.default_max_wait_time = 10
 
+  if ENV['FIREFOX_PATH']
+    Capybara.register_driver :selenium do |app|
+      require 'selenium/webdriver'
+      Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_PATH']
+      Capybara::Selenium::Driver.new(app, :browser => :firefox)
+    end
+  end
+
   if ENV['HEADLESS'] == 'false'
     # use selenium-webkit driver
   else

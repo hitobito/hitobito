@@ -11,4 +11,10 @@ class ChangelogController < ApplicationController
   def index
 
   end
+
+  private
+
+  def devise_controller?
+    true # hence, no login required
+  end
 end

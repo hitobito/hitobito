@@ -1,4 +1,4 @@
-## Deployment
+## Deployment und Betrieb
 
 Hitobito kann wie die meisten Ruby on Rails Applikationen auf verschiedene Arten 
 [deployt](http://rubyonrails.org/deploy/) werden. 
@@ -127,3 +127,28 @@ Betreffende Datei ausfindig machen, manuell vom Server löschen und Workers noch
 (`/sbin/service %{name}-workers stop`). Ev. mit weiteren Dateien wiederholen. Sobald das 
 funktioniert, die Dateien zu Beginn des `%preun` Abschnitts der Datei `config/rpm/rails-app.spec` 
 explizit löschen.
+
+### Umsysteme
+
+Hitobito benötigt für den Betrieb einige weitere Dienste die installiert und konfiguriert werden müssen. 
+
+#### Sphinx / Searchd
+
+Damit es möglich ist über das Webfrontend nach Personen, Events und weiteren definierten Einträgen zu Suchen wird Sphinx verwendet. Über die Umgebungsvariablen RAILS_SPHINX_HOST und RAILS_SPHINX_PORT wird dabei definiert wie der Sphinx-Daemon erreichbar ist. 
+Sphinx lässt sich unter Centos/Rhel folgendermassen installieren:
+```
+yum install sphinx
+```
+Um eine entsprechende Konfiguration für Sphinx zu generieren steht ein Rake Task zur Verfügung. Vor dem Ausführen dieses Befehls innerhalb des Rails Verzeichnisses muss sichergestellt sein das die zuvor erwähnten Environment Variablen für Host und Port gesetzt sind.
+```
+cd $rails_dir
+bundle exec rake ts:configure
+```
+Über diesen Task wird nun eine entsprechende Sphinx Konfiguration unter config/production.sphinx.conf abgelegt. Diese erstellte Konfiguration linkt man nun am besten gleich nach /etc/sphinx/app-name.conf
+```
+ln -s $app_dir/config/production.sphinx.conf /etc/sphinx/$app-name.conf
+```
+Danach lässt sich der Sphinx Daemon mit der neuen Konfiguration starten:
+```
+service searchd start
+```

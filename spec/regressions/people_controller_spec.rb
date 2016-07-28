@@ -104,7 +104,7 @@ describe PeopleController, type: :controller do
 
   describe 'role section' do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:section) { dom.all('aside section')[0] }
+    let(:section) { dom.all('aside section')[1] }
 
     it 'contains roles' do
       get :show, params
@@ -118,7 +118,7 @@ describe PeopleController, type: :controller do
   end
 
   describe 'add requests section' do
-    let(:section) { dom.all('aside section')[1] }
+    let(:section) { dom.all('aside section')[2] }
 
     it 'contains requests' do
       r1 = Person::AddRequest::Group.create!(
@@ -164,12 +164,12 @@ describe PeopleController, type: :controller do
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))  }
 
     context 'pending applications' do
-      let(:section) { dom.all('aside section')[1] }
+      let(:section) { dom.all('aside section')[2] }
       let(:date) { Time.zone.parse('02-01-2010') }
 
       it 'is missing if we have no applications' do
         get :show, params
-        expect(dom).to have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'lists application' do
@@ -184,19 +184,19 @@ describe PeopleController, type: :controller do
     end
 
     context 'upcoming events' do
-      let(:section) { dom.all('aside section')[1] }
+      let(:section) { dom.all('aside section')[2] }
       let(:date) { 2.days.from_now }
       let(:pretty_date) { date.strftime('%d.%m.%Y %H:%M') + ' - ' + (date + 5.days).strftime('%d.%m.%Y %H:%M') }
 
       it 'is missing if we have no events' do
         get :show, params
-        expect(dom).to have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'is missing if we have no upcoming events' do
         create_participation(10.days.ago, true)
         get :show, params
-        expect(dom).to have_css('aside section', count: 2) # only role and qualification
+        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'lists event label, link and dates' do

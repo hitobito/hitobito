@@ -13,9 +13,10 @@ app.setupQuicksearch = ->
 app.setupEntityTypeahead = (index, field) ->
   input = $(this)
   setupRemoteTypeahead(input, 10, setEntityId)
-  input.keydown((event) ->
-    if isModifyingKey(event.which)
-      $('#' + adjustSelector(input.data('id-field'))).val(null).change())
+  if input.data('id-field')
+    input.keydown((event) ->
+      if isModifyingKey(event.which)
+        $('#' + adjustSelector(input.data('id-field'))).val(null).change())
 
 # supports using typeahead for nested fields:
 # changes person[people_relations_attributes][1407938119241]_tail_id
@@ -26,8 +27,9 @@ adjustSelector = (selector) ->
 setEntityId = (item) ->
   typeahead = this
   item = JSON.parse(item)
-  idField = $('#' + adjustSelector(typeahead.$element.data('id-field')))
-  idField.val(item.id).change()
+  if typeahead.$element.data('id-field')
+    idField = $('#' + adjustSelector(typeahead.$element.data('id-field')))
+    idField.val(item.id).change()
   $('<div/>').html(item.label).text()
 
 openQuicksearchResult = (item) ->

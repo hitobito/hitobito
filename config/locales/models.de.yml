@@ -95,6 +95,10 @@ de:
             subscriber_id:
               group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
               event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'existiert bereits'
 
     models:
       additional_email:
@@ -178,6 +182,9 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
+      tag:
+        one: Tag
+        other: Tags
 
     attributes:
       cantons:
@@ -518,6 +525,10 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
+
+      tag:
+        name: Name
+        taggable_id: Taggable
 
   errors:
     messages:

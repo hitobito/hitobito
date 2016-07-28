@@ -46,7 +46,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_notes).
+          :index_tags, :index_notes).
       non_restricted_in_same_layer
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
@@ -57,7 +57,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_and_below_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_notes).non_restricted_in_same_layer_or_visible_below
+          :index_tags, :index_notes).non_restricted_in_same_layer_or_visible_below
     permission(:layer_and_below_full).
       may(:update_email).
       if_permissions_in_all_capable_groups_or_layer_or_above

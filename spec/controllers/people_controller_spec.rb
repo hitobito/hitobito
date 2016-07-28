@@ -530,6 +530,19 @@ describe PeopleController do
         expect(@response.body).to match(/^Top;Leader/)
       end
 
+      context 'tags' do
+        before do
+          top_leader.tags.create!(name: 'fruit:banana')
+          top_leader.tags.create!(name: 'pizza')
+        end
+
+        it 'preloads and assigns grouped tags' do
+          get :show, group_id: group.id, id: people(:top_leader).id
+          expect(assigns(:tags).map(&:first)).to eq([:fruit, :other])
+          expect(assigns(:tags).second.second.map(&:name)).to eq(%w(pizza))
+        end
+      end
+
       context 'qualifications' do
         before do
           @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)

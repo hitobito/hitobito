@@ -6,6 +6,9 @@
   = contact.primary_email
   = contact.all_additional_emails(only_public)
   = contact.all_phone_numbers(only_public)
+  = render_extensions :address_attrs
 
 .social
   = contact.all_social_accounts(only_public)
+
+= render_extensions :additional_attrs

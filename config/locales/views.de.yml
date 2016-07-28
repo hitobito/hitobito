@@ -679,10 +679,13 @@ de:
     notes:
       note:
         created: vor %{time_ago}
-        wrote_about: schrieb zu
       paginator:
         newer_notes: Neuere Beiträge
         older_notes: Altere Beiträge
+
+    tags:
+      list:
+        category_other: Andere
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
@@ -769,6 +772,11 @@ de:
 
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
+
+    tags:
+      title: Tags
+      add_tag: Tag hinzufügen…
+      no_entry: (keine)
 
     roles:
       title: Aktive Rollen

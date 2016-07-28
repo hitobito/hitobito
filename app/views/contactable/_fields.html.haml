@@ -19,3 +19,5 @@
 
 = field_set_tag do
   = f.labeled_inline_fields_for :social_accounts, 'contactable/social_account_fields'
+
+= render_extensions :additional_fields, locals: { f: f }

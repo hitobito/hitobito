@@ -58,10 +58,11 @@ it:
           attributes:
             email:
               taken: >
-                è già stato assegnato. Questo indirizzo deve essere univoco, visto
-                che è utilizzato per il login. Puoi però registrare sotto "altre email"
-                tutti gli indirizzi che sono assegnati come email principale ad altre
-                persone (il campo per l'email principale può essere lasciato vuoto).
+                  è già stato assegnato. Questo indirizzo deve essere univoco, visto
+                  che è utilizzato per il login. Puoi però registrare sotto "altre
+                  email" tutti gli indirizzi che sono assegnati come email principale
+                  ad altre persone (il campo per l'email principale può essere lasciato
+                  vuoto).
         person/add_request:
           attributes:
             person_id:

@@ -58,11 +58,12 @@ fr:
           attributes:
             email:
               taken: >
-                a déjà été attribué. Cette adresse doit être unique pour chaque personne,
-                car elle est utilisée pour l'authentification. Néanmoins, sous "adresses
-                e-mail supplémentaires", tu peux fournir des adresses mêmes si elles
-                sont déjà attribuées en tant qu'adresse principale d'un autre utilisateur.
-                (Dans ce cas, tu peux laisser "adresse e-mail principale" vide.)
+                  a déjà été attribué. Cette adresse doit être unique pour chaque
+                  personne, car elle est utilisée pour l'authentification. Néanmoins,
+                  sous "adresses e-mail supplémentaires", tu peux fournir des adresses
+                  mêmes si elles sont déjà attribuées en tant qu'adresse principale
+                  d'un autre utilisateur. (Dans ce cas, tu peux laisser "adresse e-mail
+                  principale" vide.)
         person/add_request:
           attributes:
             person_id:
@@ -233,6 +234,8 @@ fr:
         label: "%{body} dans %{group}"
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
+      person/note:
+        text: Texte
       group:
         name: Nom
         short_name: Abréviation

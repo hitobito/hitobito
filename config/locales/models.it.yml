@@ -84,6 +84,10 @@ it:
             subscriber_id:
               group_not_allowed: 'Questo gruppo non può essere aggiunto'
               event_not_allowed: 'Questo evento non può essere aggiunto'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'già existe'
     models:
       additional_email:
         one: altro email
@@ -139,6 +143,9 @@ it:
       person/add_request:
         one: Richiesta di accesso
         other: Richieste
+      person/note:
+        one: Nota
+        other: Note
       people_filter:
         one: filtro
         other: Filtri
@@ -163,6 +170,9 @@ it:
       subscription:
         one: abbonato
         other: Abbonati
+      tag:
+        one: Tag
+        other: Tags
     attributes:
       cantons:
         ag: Argovia
@@ -233,6 +243,8 @@ it:
         label: "%{body} in %{group}"
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+      person/note:
+        text: Testo
       group:
         name: Cognome
         short_name: Abbreviazione
@@ -460,6 +472,9 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
+      tag:
+        name: Nome
+        taggable_id: Taggable
   errors:
     messages:
       invalid_date: "non è una data valida"

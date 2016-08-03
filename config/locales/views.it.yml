@@ -564,6 +564,15 @@ it:
         request_link: Rispondere alla richiesta
       ask_responsibles:
         request_link: Rispondere alla richiesta
+    notes:
+      note:
+        created: fa %{time_ago}
+      paginator:
+        newer_notes: Più nuovo
+        older_notes: Più vecchio
+    tags:
+      list:
+        category_other: Altro
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -634,11 +643,17 @@ it:
       no_changes: Fino a ora non è stata registrata nessuna modifica.
     pdf:
       cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
+    tags:
+      title: Tags
+      add_tag: Aggiungere un tag
+      no_entry: (nessuno)
     roles:
       title: Ruoli attivi
     roles_aside:
       add_role: Aggiungere un ruolo
       set_main_group: Impostare il gruppo principale
+    notes:
+      new_note: Aggiungere una nota
   participations:
     destroy:
       flash:

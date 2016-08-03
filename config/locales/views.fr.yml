@@ -562,6 +562,15 @@ fr:
         request_link: Répondre à la requête
       ask_responsibles:
         request_link: 'Répondre à la requête '
+    notes:
+      note:
+        created: il y a %{time_ago}
+      paginator:
+        newer_notes: Plus récent
+        older_notes: Plus ancien
+    tags:
+      list:
+        category_other: Autre
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -633,11 +642,17 @@ fr:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    tags:
+      title: Tags
+      add_tag: Ajouter tag…
+      no_entry: (aucun)
     roles:
       title: Rôles actifs
     roles_aside:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
+    notes:
+      new_note: Ajouter note
   participations:
     destroy:
       flash:

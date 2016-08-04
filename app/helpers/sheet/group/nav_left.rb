@@ -79,7 +79,7 @@ module Sheet
       end
 
       def render_group_item(group, stack, out)
-        if view.can?(:show, group)
+        if view.can?(:show, group) && visible?(group)
           if group.leaf?
             out << group_link(group) << "</li>\n".html_safe
           else
@@ -92,7 +92,8 @@ module Sheet
       def group_link(group)
         cls = " class=\"active\"" if group == entry
         "<li#{cls}>".html_safe +
-        link_to(group.to_s, active_path(group), title: group.to_s)
+        link_to(group.short_name.present? ? group.short_name : group.to_s,
+                active_path(group), title: group.to_s)
       end
 
       def render_sub_layers
@@ -100,7 +101,8 @@ module Sheet
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
-            content_tag(:li, link_to(l.to_s, active_path(l), title: l.to_s))
+            content_tag(:li, link_to(l.short_name.present? ? l.short_name : l.to_s,
+                                     active_path(l), title: l.to_s))
           end
         end
       end
@@ -125,6 +127,10 @@ module Sheet
         else
           view.group_path(group)
         end
+      end
+
+      def visible?(group)
+        @entry.hierarchy.any? { |g| g.id == group.parent_id }
       end
 
     end

@@ -676,6 +676,17 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
+    notes:
+      note:
+        created: vor %{time_ago}
+      paginator:
+        newer_notes: Neuere Beiträge
+        older_notes: Altere Beiträge
+
+    tags:
+      list:
+        category_other: Andere
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -762,12 +773,20 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
+    tags:
+      title: Tags
+      add_tag: Tag hinzufügen…
+      no_entry: (keine)
+
     roles:
       title: Aktive Rollen
 
     roles_aside:
       add_role: Rolle hinzfügen
       set_main_group: Hauptgruppe setzen
+
+    notes:
+      new_note: Neue Notiz
 
   participations:
     destroy:

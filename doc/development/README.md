@@ -4,7 +4,7 @@ Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu 
 
 ## Inhalt
 
-* [Setup der Entwicklungsumgebung](01_setup.md)
+* [Entwicklungsumgebung](01_setup.md)
 * [Deployment](02_deployment.md)
 * [Guidelines](03_guidelines.md)
 * [REST API](04_rest_api.md)

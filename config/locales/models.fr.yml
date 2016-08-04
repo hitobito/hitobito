@@ -58,11 +58,12 @@ fr:
           attributes:
             email:
               taken: >
-                a déjà été attribué. Cette adresse doit être unique pour chaque personne,
-                car elle est utilisée pour l'authentification. Néanmoins, sous "adresses
-                e-mail supplémentaires", tu peux fournir des adresses mêmes si elles
-                sont déjà attribuées en tant qu'adresse principale d'un autre utilisateur.
-                (Dans ce cas, tu peux laisser "adresse e-mail principale" vide.)
+                  a déjà été attribué. Cette adresse doit être unique pour chaque
+                  personne, car elle est utilisée pour l'authentification. Néanmoins,
+                  sous "adresses e-mail supplémentaires", tu peux fournir des adresses
+                  mêmes si elles sont déjà attribuées en tant qu'adresse principale
+                  d'un autre utilisateur. (Dans ce cas, tu peux laisser "adresse e-mail
+                  principale" vide.)
         person/add_request:
           attributes:
             person_id:
@@ -84,6 +85,10 @@ fr:
             subscriber_id:
               group_not_allowed: 'Ce groupe ne peut pas être ajouté ici'
               event_not_allowed: 'Cette activité ne peut pas être ajoutée ici'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'existe déjà'
     models:
       additional_email:
         one: Adresse e-mail supplémentaire
@@ -139,6 +144,9 @@ fr:
       person/add_request:
         one: Question
         other: Questions
+      person/note:
+        one: Note
+        other: Notes
       people_filter:
         one: Filtre
         other: Filtres
@@ -163,6 +171,9 @@ fr:
       subscription:
         one: abonné
         other: Abonnés
+      tag:
+        one: Tag
+        other: Tags
     attributes:
       cantons:
         ag: Argovie
@@ -233,6 +244,8 @@ fr:
         label: "%{body} dans %{group}"
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
+      person/note:
+        text: Texte
       group:
         name: Nom
         short_name: Abréviation
@@ -460,6 +473,9 @@ fr:
         padding_top: Marge (en haut)
         padding_left: Marge (à gauche)
         dimensions: Nombre
+      tag:
+        name: Nom
+        taggable_id: Taggable
   errors:
     messages:
       invalid_date: "n'est pas une date valable"

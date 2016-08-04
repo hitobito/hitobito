@@ -233,6 +233,7 @@ it:
         signature: Firma
         signature_confirmation: Nome, cognome, firma
         heading_event/course: Iscrizione a corsi %{year}
+        heading_event: Iscrizioni all'evento
         read_and_agreed_for_event: Soddisfo tutti i requisiti per l'evento, ho letto la descrizione dell'evento e sono d'accordo con essa
         read_and_agreed_for_event_course: Soddisfo i requisiti per il corso, ho letto la descrizione e le disposizioni del corso e sono d'accordo
         requirements_for_event: requisiti per l'evento
@@ -370,8 +371,9 @@ it:
         activated: L'autorizzazione manuale è attivata
         deactivated: L'autorizzazione manuale non è attivata
         explanation: >
-          Se attivata, le persone di questo livello vengono aggiunte a gruppi, eventi
-          e abbonamenti solo dopo che una persona con diritto di accesso ha dato l'autorizzazione.
+            Se attivata, le persone di questo livello vengono aggiunte a gruppi, eventi
+            e abbonamenti solo dopo che una persona con diritto di accesso ha dato
+            l'autorizzazione.
       list:
         approve: Accettare
         reject: Rifiutare
@@ -539,29 +541,38 @@ it:
         preview: 'Anteprima'
         update_behaviour: Metodo di aggiornamento
         keep_behaviour: >
-          Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
-          già esistenti vengono mantenuti.
+            Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
+            già esistenti vengono mantenuti.
         override_behaviour: >
-          Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
-          I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
-          banca dati.
+            Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
+            I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
+            banca dati.
         update_behaviour_explanation: >
-          Questa funzione si applica unicamente alle persone già esistenti nella banca
-          dati. Nuove persone vengono sempre create in totale corrispondenza ai dati
-          del CSV.
+            Questa funzione si applica unicamente alle persone già esistenti nella
+            banca dati. Nuove persone vengono sempre create in totale corrispondenza
+            ai dati del CSV.
       new:
         upload_button: 'Caricare'
         csv_file: 'Documento CSV'
       preview:
         import_now_button: Importare le persone
         import_details_html: >
-          Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
-          nel gruppo<strong> %{group}</strong>.
+            Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
+            nel gruppo<strong> %{group}</strong>.
     add_request_mailer:
       ask_person_to_add:
         request_link: Rispondere alla richiesta
       ask_responsibles:
         request_link: Rispondere alla richiesta
+    notes:
+      note:
+        created: fa %{time_ago}
+      paginator:
+        newer_notes: Più nuovo
+        older_notes: Più vecchio
+    tags:
+      list:
+        category_other: Altro
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -617,8 +628,8 @@ it:
     email_field:
       used_as_login: Sarà utilizzato come login
       only_changeable_by_superior: >
-        L'indirizzo email principale di una persona con più ruoli può essere cambiato
-        unicamente da un utente che è superiore a tutti questi ruoli.
+          L'indirizzo email principale di una persona con più ruoli può essere cambiato
+          unicamente da un utente che è superiore a tutti questi ruoli.
     fields:
       format_birthday: (gg.mm.aaaa)
     list:
@@ -632,11 +643,17 @@ it:
       no_changes: Fino a ora non è stata registrata nessuna modifica.
     pdf:
       cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
+    tags:
+      title: Tags
+      add_tag: Aggiungere un tag
+      no_entry: (nessuno)
     roles:
       title: Ruoli attivi
     roles_aside:
       add_role: Aggiungere un ruolo
       set_main_group: Impostare il gruppo principale
+    notes:
+      new_note: Aggiungere una nota
   participations:
     destroy:
       flash:
@@ -682,8 +699,8 @@ it:
     info:
       role_has_permissions: "Il ruolo %{role} nel gruppo %{group} prevede le seguenti autorizzazioni:"
       role_only_public: >
-        l ruolo %{role} nel gruppo %{group} può visualizzare solo i dati pubblici
-        (gruppi, eventi e abbonamenti; nessuna altra persona ).
+          l ruolo %{role} nel gruppo %{group} può visualizzare solo i dati pubblici
+          (gruppi, eventi e abbonamenti; nessuna altra persona ).
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   subscriber:
     group:

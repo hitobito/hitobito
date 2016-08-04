@@ -133,6 +133,12 @@
   color: $grayDark;
 }
 
+.pagination ul > .disabled {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+
 .pagination-bar {
   overflow: hidden;
 
@@ -275,6 +281,9 @@
   }
 }
 
+$left-padding-initial: 20px;
+$left-padding-increment: 12px;
+
 .nav-left-list,
 .nav-left-list ul {
   list-style: none;
@@ -286,18 +295,25 @@
 }
 .nav-left-list li > a {
   display: block;
-  padding: 4px 20px;
+  padding: 4px $left-padding-initial;
   margin: 2px -18px 0 -20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .nav-left-list ul li > a {
-  padding-left: 32px;
+  padding-left: ($left-padding-initial + 1 * $left-padding-increment) ;
 }
 .nav-left-list ul ul li > a {
-  padding-left: 44px;
+  padding-left: ($left-padding-initial + 2 * $left-padding-increment) ;
 }
+.nav-left-list ul ul ul li > a {
+  padding-left: ($left-padding-initial + 3 * $left-padding-increment) ;
+}
+.nav-left-list ul ul ul ul li > a {
+  padding-left: ($left-padding-initial + 4 * $left-padding-increment) ;
+}
+
 .nav-left-list .active > a {
   background: $grayLight;
 }

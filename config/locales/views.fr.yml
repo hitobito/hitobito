@@ -8,7 +8,7 @@ fr:
     until: à
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
-    do_not_fill: Ne pas remplir cette case STP.
+    do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat avec
     gender:
       male: Masculin
@@ -54,7 +54,7 @@ fr:
     new:
       title: "Créer un %{model}"
     edit:
-      title: "modifier %{model}"
+      title: "Modifier %{model}"
     create:
       flash:
         success: "%{model} a été créé avec succès."
@@ -233,6 +233,7 @@ fr:
         signature: Signature
         signature_confirmation: Prénom, nom, signature
         heading_event/course: Inscription aux cours %{year}
+        heading_event: Inscription activité
         read_and_agreed_for_event: Je remplis les conditions d'admission, j'ai bien lu la description de l'événement et me déclare d'accord avec celle-ci.
         read_and_agreed_for_event_course: Je remplis les conditions d'inscription, j'ai bien lu la description du cours et les conditions d'admission et me déclare d'accord avec celles-ci.
         requirements_for_event: Conditions d'admission pour l'événement
@@ -370,9 +371,9 @@ fr:
         activated: Le déblocage manuel est activé
         deactivated: Le déblocage manuel est désactivé
         explanation: >+
-          Lorsque cette fonction est active, les personnes ne sont ajoutées aux groupes,
-          activité et abonnements qu'après qu'une personne autorisée ait donné son
-          accord.
+            Lorsque cette fonction est active, les personnes ne sont ajoutées aux
+            groupes, activité et abonnements qu'après qu'une personne autorisée ait
+            donné son accord.
 
       list:
         approve: Accepter
@@ -518,7 +519,8 @@ fr:
       description:
         header: Fichiers CSV
         explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
-        example: "prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,\"Genève, New York\",f \n"
+        example: |
+          prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
         explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
         explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux également choisir ce rôle lors de la prochaine étape.
         special_fields: Valeurs de champs spéciales
@@ -537,29 +539,38 @@ fr:
         preview: 'Aperçu'
         update_behaviour: Procédé d'actualisation
         keep_behaviour: >
-          N'actualiser que les champs vides avec des données provenant du CSV, les
-          valeurs déjà existantes ne changent pas.
+            N'actualiser que les champs vides avec des données provenant du CSV, les
+            valeurs déjà existantes ne changent pas.
         override_behaviour: >
-          Remplacer les valeurs déjà existantes dans la base de donnée avec les données
-          provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent
-          les valeurs pourvues dans la banque de données d'accueil.
+            Remplacer les valeurs déjà existantes dans la base de donnée avec les
+            données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV
+            effacent les valeurs pourvues dans la banque de données d'accueil.
         update_behaviour_explanation: >
-          Ce procédé ne concerne que les personnes déjà présentes dans la base de
-          données de données. L'inscription de nouvelles personnes doit être entièrement
-          effectuée en conformité avec les données du CSV.
+            Ce procédé ne concerne que les personnes déjà présentes dans la base de
+            données de données. L'inscription de nouvelles personnes doit être entièrement
+            effectuée en conformité avec les données du CSV.
       new:
         upload_button: 'Télécharger'
         csv_file: 'Fichier CSV'
       preview:
         import_now_button: Importer les personnes
         import_details_html: >
-          Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
-          dans le <strong>groupe %{group}</strong>.
+            Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
+            dans le <strong>groupe %{group}</strong>.
     add_request_mailer:
       ask_person_to_add:
         request_link: Répondre à la requête
       ask_responsibles:
         request_link: 'Répondre à la requête '
+    notes:
+      note:
+        created: il y a %{time_ago}
+      paginator:
+        newer_notes: Plus récent
+        older_notes: Plus ancien
+    tags:
+      list:
+        category_other: Autre
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -615,9 +626,9 @@ fr:
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
-        L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
-        modifiée que par une personne hiérarchiquement supérieure à chacun de ces
-        rôles.
+          L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut
+          être modifiée que par une personne hiérarchiquement supérieure à chacun
+          de ces rôles.
     fields:
       format_birthday: (dd.mm.yyyy)
     list:
@@ -631,11 +642,17 @@ fr:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    tags:
+      title: Tags
+      add_tag: Ajouter tag…
+      no_entry: (aucun)
     roles:
       title: Rôles actifs
     roles_aside:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
+    notes:
+      new_note: Ajouter note
   participations:
     destroy:
       flash:
@@ -681,8 +698,8 @@ fr:
     info:
       role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
       role_only_public: >
-        Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
-        (groupes, événements et abonnements; pas d'autres personnes).
+          Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
+          (groupes, événements et abonnements; pas d'autres personnes).
       only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
   subscriber:
     group:

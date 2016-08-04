@@ -1,0 +1,27 @@
+-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  hitobito_dsj and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_dsj.
+
+
+- if show_person
+  .row-fluid.note
+    %img.note-image{:src => note.person.picture}
+    .note-body
+      %small.muted.note-author
+        = !show_person ? person_link(note.author) : note.author
+        = t('.created', time_ago: time_ago_in_words(note.created_at))
+      .note-person
+        = person_link(note.person)
+      = auto_link(simple_format(note.text))
+- else
+  .row-fluid.note
+    .span12
+      %small.muted
+        = !show_person ? person_link(note.author) : note.author
+        - if show_person
+          = t('.wrote_about')
+          = person_link(note.person)
+        .pull-right
+          = t('.created', time_ago: time_ago_in_words(note.created_at))
+      = auto_link(simple_format(note.text))

@@ -1,0 +1,29 @@
+-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  hitobito_dsj and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_dsj.
+
+- if can?(:index_tags, entry) || can?(:create, entry.tags.new)
+  %section.tags
+    %h2= t('.title')
+    .person-tags-error.alert.alert-error{ style: 'display: none;' }
+
+    = render 'person/tags/list', tags: @tags
+
+    - if can?(:create, entry.tags.new)
+      %span.label.person-tag.person-tag-add
+        = t('.add_tag')
+        = icon(:plus)
+
+      = form_for(entry.tags.new, url: group_person_tags_path(@group, entry), remote: true,
+                 html: {class: 'person-tags-add-form', style: 'display:none'}) do |f|
+        = f.text_field(:name, placeholder: t('.add_tag'),
+                                  data: { provide: 'entity',
+                                          url: group_person_tags_query_path(group_id: @group.id,
+                                                                            person_id: entry.id) })
+
+        %button.btn{type: :submit}
+          = t('global.ok')
+          = spinner
+    - elsif @tags.blank?
+      = t('.no_entry')

@@ -1,0 +1,2 @@
+- if @tag.errors.present?
+  App.PersonTags.showError('#{@tag.errors.full_messages.join("\n")}');

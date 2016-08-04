@@ -41,22 +41,52 @@ en:
           attributes:
             finish_at:
               not_after_start: 'must be after "from"'
+        event/question:
+          attributes:
+            choices:
+              requires_more_than_one_choice: 'needs at least two picks'
+        event/participation:
+          attributes:
+            person_id:
+              taken: is already registered
         mailing_list:
           attributes:
             mail_name:
               not_allowed: "'%{mail_name}' is not allowed"
         person:
+          name_missing: 'Please enter a name'
           attributes:
             email:
               taken: >
-                is already taken. This address must be unique for every person, because
-                it is used when logging in. Under 'Further e-mail" you may specify
-                addresses, which are assigned to other people as main e-mail (the
-                main e-mail can be left blank).
+                  is already taken. This address must be unique for every person,
+                  because it is used when logging in. Under 'Further e-mail" you may
+                  specify addresses, which are assigned to other people as main e-mail
+                  (the main e-mail can be left blank).
+        person/add_request:
+          attributes:
+            person_id:
+              taken: was already confirmed
+        people_relation:
+          attributes:
+            tail_id:
+              must_not_be_equal_to_head: to yourself is not allowed.
         qualification:
           attributes:
             qualification_kind_id:
               exists_for_timeframe: 'already exists in this period'
+        qualification_kind:
+          attributes:
+            validity:
+              not_a_positive_number: 'must be a positive number in order to reactivate the %{model}.'
+        subscription:
+          attributes:
+            subscriber_id:
+              group_not_allowed: 'This group cannot be added here'
+              event_not_allowed: 'This event cannot be added here'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'already exists'
     models:
       additional_email:
         one: Further e-mail
@@ -76,6 +106,9 @@ en:
       event/application:
         one: Registration
         other: Registrations
+      event/attachment:
+        one: attachment
+        other: attachments
       event/kind:
         one: Course type
         other: Course types
@@ -106,6 +139,12 @@ en:
       person:
         one: Person
         other: Persons
+      person/add_request:
+        one: request
+        other: requests
+      person/note:
+        one: note
+        other: notes
       people_filter:
         one: Filter
         other: Filters
@@ -130,6 +169,9 @@ en:
       subscription:
         one: Subscriber
         other: Subscribers
+      tag:
+        one: tag
+        other: tags
     attributes:
       cantons:
         ag: Aargau
@@ -191,6 +233,17 @@ en:
         roles: Roles
         created_at: Created
         updated_at: Changed
+      person/add_request:
+        person: person
+        requester: request from
+        body: request for
+        created_at: date
+      person/add_request/event:
+        label: "%{body} in %{group}"
+      person/add_request/mailing_list:
+        label: "%{body} in %{group}"
+      person/note:
+        text: text
       group:
         name: Name
         short_name: Nickname
@@ -243,6 +296,8 @@ en:
         priority_2_id: "1. Alternative course"
         priority_3_id: "2. Alternative course"
         waiting_list_comment: 'Remarks'
+      event/attachment:
+        file: file
       event/course:
         kind_id: Course type
         state: State
@@ -416,6 +471,9 @@ en:
         padding_top: Margin top
         padding_left: Margin left
         dimensions: Number
+      tag:
+        name: name
+        taggable_id: taggable
   errors:
     messages:
       invalid_date: "is not a valid date"
@@ -426,6 +484,9 @@ en:
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
+      extension_white_list_error: "only accepts the following type of files: %{allowed_types}"
+      dimensions_too_large: "only accepts images with a size smaller than  %{maximum} pixel"
+      filesize_too_large: "can not be bigger than  %{maximum} mb"
       expired: "has expired, please request a new"
       not_found: "not found"
       already_confirmed: "already confirmed"

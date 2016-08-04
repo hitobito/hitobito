@@ -454,8 +454,8 @@ en:
     email_field:
       used_as_login: Is used as login
       only_changeable_by_superior: >
-        The main e-mail address of a person with multiple roles can only be changed
-        by a superordinate user.
+          The main e-mail address of a person with multiple roles can only be changed
+          by a superordinate user.
     fields:
       format_birthday: (dd.mm.yyy)
     list:
@@ -519,8 +519,8 @@ en:
     info:
       role_has_permissions: "The role %{role} in the group %{group} has the following permissions:"
       role_only_public: >
-        The role %{role} in the group %{group} can only view public data (groups,
-        events and subscriptions; no other persons).
+          The role %{role} in the group %{group} can only view public data (groups,
+          events and subscriptions; no other persons).
       only_visible_from_above: This role is visible only to persons in this level, not by people from higher layers.
   subscriber:
     group:

@@ -113,6 +113,15 @@ class Person < ActiveRecord::Base
 
   has_many :add_requests, dependent: :destroy
 
+  has_many :notes, class_name: 'Note',
+                   dependent: :destroy
+
+  has_many :authored_notes, class_name: 'Note',
+                            foreign_key: 'author_id',
+                            dependent: :destroy
+
+  has_many :tags, as: :taggable, dependent: :destroy
+
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
 

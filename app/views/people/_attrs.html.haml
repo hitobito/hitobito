@@ -24,8 +24,12 @@
 
     = render_extensions :show_left
 
+    - if can?(:index_notes, entry)
+      = render 'notes'
+
   - if can?(:show_full, entry)
     %aside.span6.offset1
+      = render 'tags'
       = render 'roles'
       = render 'add_requests'
       = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: entry.pending_applications

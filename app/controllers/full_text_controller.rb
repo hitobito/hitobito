@@ -32,6 +32,7 @@ class FullTextController < ApplicationController
   private
 
   def list_people
+    return [] unless params[:q].present?
     entries = Person.search(Riddle::Query.escape(params[:q]),
                             page: params[:page],
                             order: 'last_name asc, ' \
@@ -45,6 +46,7 @@ class FullTextController < ApplicationController
   end
 
   def query_people
+    return [] unless params[:q].present?
     Person.search(Riddle::Query.escape(params[:q]),
                   per_page: 10,
                   star: true,
@@ -52,6 +54,7 @@ class FullTextController < ApplicationController
   end
 
   def query_groups
+    return [] unless params[:q].present?
     Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
                  star: true,

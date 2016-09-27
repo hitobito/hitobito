@@ -63,31 +63,59 @@ describe FullTextController, :mysql, type: :controller do
         end
       end
 
+      context 'as unprivileged person' do
+        before do
+          person = Fabricate(:person)
+          sign_in(person)
+        end
+
+        it 'finds zero people' do
+          get :index, q: @bg_member.last_name[1..5]
+
+          expect(assigns(:people)).to be_empty
+        end
+      end
+
     end
 
     describe 'GET query' do
 
-      before { sign_in(people(:top_leader)) }
+      context 'as leader' do
+        before { sign_in(people(:top_leader)) }
 
+        it 'finds accessible person' do
+          get :query, q: @bg_leader.last_name[1..5]
 
-      it 'finds accessible person' do
-        get :query, q: @bg_leader.last_name[1..5]
+          expect(@response.body).to include(@bg_leader.full_name)
+        end
 
-        expect(@response.body).to include(@bg_leader.full_name)
+        it 'does not find not accessible person' do
+          get :query, q: @bg_member.last_name[1..5]
+
+          expect(@response.body).not_to include(@bg_member.full_name)
+        end
+
+        it 'finds groups' do
+          get :query, q: groups(:bottom_layer_one).to_s[1..5]
+
+          expect(@response.body).to include(groups(:bottom_layer_one).to_s)
+        end
       end
 
-      it 'does not find not accessible person' do
-        get :query, q: @bg_member.last_name[1..5]
+      context 'as unprivileged person' do
+        before do
+          person = Fabricate(:person)
+          sign_in(person)
+        end
 
-        expect(@response.body).not_to include(@bg_member.full_name)
-      end
+        it 'finds zero people' do
+          get :query, q: @bg_member.last_name[1..5]
 
-      it 'finds groups' do
-        get :query, q: groups(:bottom_layer_one).to_s[1..5]
-
-        expect(@response.body).to include(groups(:bottom_layer_one).to_s)
+          expect(assigns(:people)).to be_nil
+        end
       end
     end
+
 
   end
 

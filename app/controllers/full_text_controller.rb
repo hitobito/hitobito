@@ -32,23 +32,33 @@ class FullTextController < ApplicationController
   private
 
   def list_people
-    entries = Person.search(Riddle::Query.escape(params[:q]),
-                            page: params[:page],
-                            order: 'last_name asc, ' \
-                                   'first_name asc, ' \
-                                   "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
-                            star: true,
-                            with: { sphinx_internal_id: accessible_people_ids })
-    entries = Person::PreloadGroups.for(entries)
-    entries = Person::PreloadPublicAccounts.for(entries)
-    entries
+    query_accesible_people do |ids|
+      entries = Person.search(Riddle::Query.escape(params[:q]),
+                              page: params[:page],
+                              order: 'last_name asc, ' \
+                                     'first_name asc, ' \
+                                     "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
+                              star: true,
+                              with: { sphinx_internal_id: ids })
+      entries = Person::PreloadGroups.for(entries)
+      entries = Person::PreloadPublicAccounts.for(entries)
+      entries
+    end
   end
 
   def query_people
-    Person.search(Riddle::Query.escape(params[:q]),
-                  per_page: 10,
-                  star: true,
-                  with: { sphinx_internal_id: accessible_people_ids })
+    query_accesible_people do |ids|
+      Person.search(Riddle::Query.escape(params[:q]),
+                    per_page: 10,
+                    star: true,
+                    with: { sphinx_internal_id: ids })
+    end
+  end
+
+  def query_accesible_people
+    ids = accessible_people_ids
+    return Person.none.page(1) if ids.blank?
+    yield ids
   end
 
   def query_groups

@@ -8,7 +8,7 @@ fr:
     until: à
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
-    do_not_fill: Ne pas remplir cette case STP.
+    do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat avec
     gender:
       male: Masculin
@@ -54,7 +54,7 @@ fr:
     new:
       title: "Créer un %{model}"
     edit:
-      title: "modifier %{model}"
+      title: "Modifier %{model}"
     create:
       flash:
         success: "%{model} a été créé avec succès."
@@ -233,6 +233,7 @@ fr:
         signature: Signature
         signature_confirmation: Prénom, nom, signature
         heading_event/course: Inscription aux cours %{year}
+        heading_event: Inscription activité
         read_and_agreed_for_event: Je remplis les conditions d'admission, j'ai bien lu la description de l'événement et me déclare d'accord avec celle-ci.
         read_and_agreed_for_event_course: Je remplis les conditions d'inscription, j'ai bien lu la description du cours et les conditions d'admission et me déclare d'accord avec celles-ci.
         requirements_for_event: Conditions d'admission pour l'événement

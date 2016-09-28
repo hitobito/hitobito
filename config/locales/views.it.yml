@@ -233,6 +233,7 @@ it:
         signature: Firma
         signature_confirmation: Nome, cognome, firma
         heading_event/course: Iscrizione a corsi %{year}
+        heading_event: Iscrizioni all'evento
         read_and_agreed_for_event: Soddisfo tutti i requisiti per l'evento, ho letto la descrizione dell'evento e sono d'accordo con essa
         read_and_agreed_for_event_course: Soddisfo i requisiti per il corso, ho letto la descrizione e le disposizioni del corso e sono d'accordo
         requirements_for_event: requisiti per l'evento

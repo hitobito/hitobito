@@ -233,6 +233,8 @@ fr:
         label: "%{body} dans %{group}"
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
+      person/note:
+        text: Texte
       group:
         name: Nom
         short_name: Abréviation

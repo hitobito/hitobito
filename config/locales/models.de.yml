@@ -127,16 +127,22 @@ de:
         other: Kursarten
       event/role/assistant_leader:
         one: Leitung
+        other: Leitung
       event/role/leader:
         one: Hauptleitung
+        other: Hauptleitung
       event/role/cook:
         one: Küche
+        other: Küche
       event/role/participant:
         one: Teilnehmer/-in
+        other: Teilnehmer/-innen
       event/role/treasurer:
         one: Kassier
+        other: Kassiere
       event/role/speaker:
         one: Referent/-in
+        other: Referent/-innen
       event/date:
         one: Datum
         other: Daten

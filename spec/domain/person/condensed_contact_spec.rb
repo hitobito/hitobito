@@ -31,23 +31,29 @@ describe Person::CondensedContact do
       it { is_expected.to eq([person]) }
     end
 
-    describe '#mergeable?' do
+    describe '#condensable?' do
       context 'with mergeable contact' do
         subject { condensed_contact.condensable?(condensable_person) }
-
         it { is_expected.to be true }
       end
 
       context 'with nonmergeable contact' do
         subject { condensed_contact.condensable?(noncondensable_person) }
-
         it { is_expected.to be false }
+      end
+
+      context 'with nil and emtpy values' do
+        let(:condensable_person) do
+          Person.create(person.attributes.merge(id: nil, first_name: Faker::Name.first_name, company_name: ''))
+        end
+        subject { condensed_contact.condensable?(condensable_person) }
+        it { is_expected.to be true }
       end
     end
 
     describe '#merge' do
       context 'with mergeable contact' do
-        subject { condensed_contact.condense(condensable_person) }
+        subject { condensed_contact.try_condense(condensable_person) }
 
         it 'merges the contact' do
           expect { subject }.to change { condensed_contact.condensed_contactables }
@@ -55,13 +61,13 @@ describe Person::CondensedContact do
 
         it 'does not merge twice' do
           subject
-          expect { condensed_contact.condense(condensable_person) }.
+          expect { condensed_contact.try_condense(condensable_person) }.
             not_to change { condensed_contact.condensed_contactables }
         end
       end
 
       context 'with nonmergeable contact' do
-        subject { condensed_contact.condense(noncondensable_person) }
+        subject { condensed_contact.try_condense(noncondensable_person) }
 
         it 'does not merge the contact' do
           expect { subject }.not_to change { condensed_contact.condensed_contactables }

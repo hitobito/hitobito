@@ -51,6 +51,14 @@ describe FullTextController, :mysql, type: :controller do
 
           expect(assigns(:people)).to eq([])
         end
+
+        context 'without any params' do
+          it 'returns nothing' do
+            get :index
+
+            expect(@response).to be_ok
+          end
+        end
       end
 
       context 'as root' do
@@ -60,19 +68,6 @@ describe FullTextController, :mysql, type: :controller do
           get :index, q: @bg_member.last_name[1..5]
 
           expect(assigns(:people)).to include(@bg_member)
-        end
-      end
-
-      context 'as unprivileged person' do
-        before do
-          person = Fabricate(:person)
-          sign_in(person)
-        end
-
-        it 'finds zero people' do
-          get :index, q: @bg_member.last_name[1..5]
-
-          expect(assigns(:people)).to be_empty
         end
       end
 
@@ -99,6 +94,15 @@ describe FullTextController, :mysql, type: :controller do
           get :query, q: groups(:bottom_layer_one).to_s[1..5]
 
           expect(@response.body).to include(groups(:bottom_layer_one).to_s)
+        end
+
+        context 'without any params' do
+          it 'returns nothing' do
+            get :query
+
+            expect(@response).to be_ok
+            expect(JSON.parse(@response.body)).to eq([])
+          end
         end
       end
 

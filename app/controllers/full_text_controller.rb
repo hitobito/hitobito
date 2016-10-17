@@ -32,7 +32,8 @@ class FullTextController < ApplicationController
   private
 
   def list_people
-    query_accesible_people do |ids|
+    return Person.none.page(1) unless params[:q].present?
+    query_accessible_people do |ids|
       entries = Person.search(Riddle::Query.escape(params[:q]),
                               page: params[:page],
                               order: 'last_name asc, ' \
@@ -47,7 +48,8 @@ class FullTextController < ApplicationController
   end
 
   def query_people
-    query_accesible_people do |ids|
+    return Person.none.page(1) unless params[:q].present?
+    query_accessible_people do |ids|
       Person.search(Riddle::Query.escape(params[:q]),
                     per_page: 10,
                     star: true,
@@ -55,13 +57,14 @@ class FullTextController < ApplicationController
     end
   end
 
-  def query_accesible_people
+  def query_accessible_people
     ids = accessible_people_ids
     return Person.none.page(1) if ids.blank?
     yield ids
   end
 
   def query_groups
+    return Person.none.page(1) unless params[:q].present?
     Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
                  star: true,

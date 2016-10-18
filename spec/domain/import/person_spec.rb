@@ -65,9 +65,43 @@ describe Import::Person do
     its('additional_emails.first.email') { should eq 'mutter@example.com' }
   end
 
+  context 'tags' do
+    let(:data) do
+      { first_name: 'foo',
+        tags: 'de, responsible:jack,foo bar' }
+    end
+
+    let(:person) { Person.new }
+    before do
+      Import::Person.new(person, data.with_indifferent_access,
+                         can_manage_tags: can_manage_tags).populate
+    end
+
+    subject { person }
+
+    context 'can manage' do
+      let (:can_manage_tags) { true }
+
+      its('tags.length') { should eq 3 }
+      its('tags.first.name') { should eq 'de' }
+      its('tags.second.name') { should eq 'responsible:jack' }
+      its('tags.third.name') { should eq 'foo bar' }
+    end
+
+    context 'cannot manage' do
+      let (:can_manage_tags) { false }
+
+      its('tags.length') { should eq 0 }
+    end
+
+  end
+
   context 'with keep behaviour' do
 
-    before { Import::Person.new(person, data.with_indifferent_access, false).populate }
+    before do
+      Import::Person.new(person, data.with_indifferent_access,
+                         override: false, can_manage_tags: true).populate
+    end
 
     subject { person }
 
@@ -91,7 +125,7 @@ describe Import::Person do
       its('birthday') { should be_nil }
     end
 
-    context 'keep existing contact accounts' do
+    context 'keeps existing contact accounts' do
       let(:person) do
         p = Fabricate(:person, email: 'foo@example.com')
         p.phone_numbers.create!(number: '123', label: 'Privat')
@@ -133,11 +167,46 @@ describe Import::Person do
       its('additional_emails.third.email') { should eq 'privat@example.com' }
     end
 
+    context 'keeps existing tags' do
+      let(:person) do
+        p = Fabricate(:person, email: 'foo@example.com')
+        p.tags.create!(name: 'foo bar')
+        p.tags.create!(name: 'bar')
+        p
+      end
+
+      context 'nonempty' do
+        let(:data) do
+          { first_name: 'foo',
+            tags: 'de, responsible:jack,foo bar' }
+        end
+
+        its('tags.length') { should eq 4 }
+        its('tags.first.name') { should eq 'foo bar' }
+        its('tags.second.name') { should eq 'bar' }
+        its('tags.third.name') { should eq 'de' }
+        its('tags.fourth.name') { should eq 'responsible:jack' }
+      end
+
+      context 'empty' do
+        let(:data) do
+          { first_name: 'foo' }
+        end
+
+        its('tags.length') { should eq 2 }
+        its('tags.first.name') { should eq 'foo bar' }
+        its('tags.second.name') { should eq 'bar' }
+      end
+    end
+
   end
 
   context 'with override behaviour' do
 
-    before { Import::Person.new(person, data.with_indifferent_access, true).populate }
+    before do
+      Import::Person.new(person, data.with_indifferent_access,
+                         override: true, can_manage_tags: true).populate
+    end
 
     subject { person }
 
@@ -205,6 +274,35 @@ describe Import::Person do
       its('additional_emails.third.email') { should eq 'privat@example.com' }
     end
 
+    context 'overrides existing tags' do
+      let(:person) do
+        p = Fabricate(:person, email: 'foo@example.com')
+        p.tags.create!(name: 'foo bar')
+        p.tags.create!(name: 'bar')
+        p
+      end
+
+      context 'nonempty' do
+        let(:data) do
+          { first_name: 'foo',
+            tags: 'de, responsible:jack,foo bar' }
+        end
+
+        its('tags.length') { should eq 3 }
+        its('tags.first.name') { should eq 'de' }
+        its('tags.second.name') { should eq 'responsible:jack' }
+        its('tags.third.name') { should eq 'foo bar' }
+      end
+
+      context 'empty' do
+        let(:data) do
+          { first_name: 'foo' }
+        end
+
+        its('tags.length') { should eq 0 }
+      end
+    end
+
   end
 
   context 'can assign mass assigned attributes' do
@@ -213,14 +311,16 @@ describe Import::Person do
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
       expect(public_attributes.size).to eq 15
-      expect { Import::Person.new(person, public_attributes).populate }.not_to raise_error
+      expect do
+        Import::Person.new(person, public_attributes).populate
+      end.not_to raise_error
     end
   end
 
   context 'tracks emails' do
     let(:emails) { ['foo@bar.com', '', nil, 'bar@foo.com', 'foo@bar.com'] }
 
-    let!(:people) do
+    let(:import_people) do
       emails_tracker = {}
       emails.map do |email|
         person_attrs = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
@@ -232,14 +332,13 @@ describe Import::Person do
     end
 
     it 'validates uniqueness of emails in currently imported person set' do
-      expect(people.first).to be_valid
-      expect(people.second).to be_valid
-      expect(people.third).to be_valid
-      expect(people.fourth).to be_valid
-      expect(people.fifth).not_to be_valid
-      expect(people.fifth.human_errors).to start_with 'Haupt-E-Mail ist bereits vergeben'
+      expect(import_people.first).to be_valid
+      expect(import_people.second).to be_valid
+      expect(import_people.third).to be_valid
+      expect(import_people.fourth).to be_valid
+      expect(import_people.fifth).not_to be_valid
+      expect(import_people.fifth.human_errors).to start_with 'Haupt-E-Mail ist bereits vergeben'
     end
   end
-
 
 end

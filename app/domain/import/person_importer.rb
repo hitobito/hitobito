@@ -9,16 +9,16 @@ module Import
   class PersonImporter
     include Translatable
 
-    attr_reader :data, :role_type, :group, :override,
+    attr_reader :data, :role_type, :group, :options,
                 :failure_count, :new_count, :request_people, :errors
 
     attr_accessor :user_ability
 
-    def initialize(data, group, role_type, override = false)
+    def initialize(data, group, role_type, options = {})
       @data = data
       @group = group
       @role_type = role_type
-      @override = override
+      @options = options
       @imported_emails = {}
       @failure_count = 0
       @new_count = 0
@@ -68,7 +68,7 @@ module Import
     def populate_person(attributes, index)
       person = doublette_finder.find(attributes) || ::Person.new
 
-      import_person = Import::Person.new(person, attributes, override)
+      import_person = Import::Person.new(person, attributes, options)
       import_person.populate
       import_person.add_role(group, role_type)
 

@@ -127,7 +127,8 @@ describe Import::CsvParser do
                   'social_account_skype' => 'dale_walter',
                   'social_account_msn' => 'christina.reilly',
                   'social_account_webseite' => 'bosco.com',
-                  'additional_information' => 'Qui repellendus quas quibusdam reprehenderit. Qui mollitia quo molestias debitis adipisci nostrum sed. Rerum ut cumque ut impedit neque et laboriosam.'
+                  'additional_information' => 'Qui repellendus quas quibusdam reprehenderit. Qui mollitia quo molestias debitis adipisci nostrum sed. Rerum ut cumque ut impedit neque et laboriosam.',
+                  'tags' => 'bar,baz'
       end
     end
 

@@ -8,12 +8,13 @@
 class Person::CsvImportsController < ApplicationController
 
   attr_accessor :group
-  attr_reader :importer, :parser, :entries
+  attr_reader :importer, :parser, :entries, :can_manage_tags
 
   helper_method :group, :parser, :guess, :model_class, :entries, :role_name, :field_mappings
 
   before_action :load_group
   before_action :custom_authorization
+  before_action :load_can_manage_tags
 
   decorates :group
 
@@ -125,6 +126,10 @@ class Person::CsvImportsController < ApplicationController
     @group = Group.find(params[:group_id])
   end
 
+  def load_can_manage_tags
+    @can_manage_tags = current_ability.can?(:manage_person_tags, group)
+  end
+
   def valid_file?(io)
     io.present? &&
     io.respond_to?(:content_type) &&
@@ -167,7 +172,10 @@ class Person::CsvImportsController < ApplicationController
 
   def map_headers_and_import
     data = parser.map_data(field_mappings)
-    @importer = Import::PersonImporter.new(data, group, role_type, override_behaviour)
+    @importer = Import::PersonImporter.new(data, group, role_type, {
+      override: override_behaviour,
+      can_manage_tags: can_manage_tags
+    })
     @importer.user_ability = current_ability
   end
 

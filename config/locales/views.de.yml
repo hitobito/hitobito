@@ -653,12 +653,15 @@ de:
         keep_behaviour: >
           Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
           bestehende Werte bleiben erhalten.
+        keep_behaviour_tags: Tags werden ergänzt.
         override_behaviour: >
           Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
           Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        override_behaviour_tags: Tags werden gelöscht oder ersetzt.
         update_behaviour_explanation: >
           Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
           Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.
+
 
       new:
         upload_button: 'Hochladen'

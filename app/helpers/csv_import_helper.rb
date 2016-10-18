@@ -47,4 +47,8 @@ module CsvImportHelper
     contact && contact.value
   end
 
+  def csv_import_tag_values(p)
+    p.tags.map(&:name).join(', ')
+  end
+
 end

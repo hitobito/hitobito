@@ -8,7 +8,7 @@
 
 module Export
   # Base class for csv/xlsx export
-  class GeneralBase
+  class Base
 
     attr_reader :list
 

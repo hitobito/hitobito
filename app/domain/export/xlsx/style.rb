@@ -43,7 +43,7 @@ module Export::Xlsx
     end
 
     def attribute_labels_style
-      default_styl.deep_merge(style: { bg_color: LABEL_BACKGROUND })
+      default_style.deep_merge(style: { bg_color: LABEL_BACKGROUND })
     end
 
     def centered_style

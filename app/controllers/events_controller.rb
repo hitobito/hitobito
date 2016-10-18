@@ -37,6 +37,7 @@ class EventsController < CrudController
     respond_to do |format|
       format.html  { entries }
       format.csv   { render_csv(entries) }
+      format.xlsx { render_xlsx(entries) }
     end
   end
 
@@ -98,6 +99,10 @@ class EventsController < CrudController
 
   def render_csv(entries)
     send_data ::Export::Csv::Events::List.export(entries), type: :csv
+  end
+
+  def render_xlsx(entries)
+    send_data ::Export::Xlsx::Events::List.export(entries), type: :xlsx
   end
 
   def typed_group_events_path(group, event_type, options = {})

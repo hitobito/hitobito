@@ -8,7 +8,7 @@
 
 module Export::Xlsx
   # The base class for all the different xlsx export files.
-  class Base < Export::GeneralBase
+  class Base < ::Export::Base
 
     class_attribute :model_class, :row_class, :style_class
     self.row_class = Row

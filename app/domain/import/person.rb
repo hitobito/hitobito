@@ -31,7 +31,7 @@ module Import
       end
 
       def tag_attributes
-        [{ key: 'tags', value: Tag.model_name.human(count: 2) }]
+        [{ key: 'tags', value: ActsAsTaggableOn::Tag.model_name.human(count: 2) }]
       end
 
       # alle attributes - technische attributes
@@ -127,11 +127,10 @@ module Import
     def assign_tags
       return unless can_manage_tags
 
-      person.tags.destroy_all if override
-
-      tags.each do |imported|
-        existing = person.tags.detect { |t| t.name == imported }
-        person.tags.build(name: imported) unless existing
+      if override
+        person.tag_list = tags
+      else
+        person.tag_list.add(tags, parse: true)
       end
     end
 

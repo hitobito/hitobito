@@ -10,6 +10,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.7.1'
 
 gem 'activerecord-session_store'
+gem 'acts-as-taggable-on', '~> 4.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'axlsx', '2.1.0.pre'
 gem 'awesome_nested_set'

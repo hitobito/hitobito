@@ -17,5 +17,5 @@
         = csv_import_contact_account_value(p, account_attr[:key])
 
     - if field_mappings.values.include?('tags') && @can_manage_tags
-      - t.col(Tag.model_name.human(count: 2)) do |p|
+      - t.col(ActsAsTaggableOn::Tag.model_name.human(count: 2)) do |p|
         = csv_import_tag_values(p)

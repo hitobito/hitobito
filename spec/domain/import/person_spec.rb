@@ -71,10 +71,12 @@ describe Import::Person do
         tags: 'de, responsible:jack,foo bar' }
     end
 
-    let(:person) { Person.new }
+    let(:person) { Fabricate(:person) }
+    let(:import_person) do
+      Import::Person.new(person, data.with_indifferent_access, can_manage_tags: can_manage_tags)
+    end
     before do
-      Import::Person.new(person, data.with_indifferent_access,
-                         can_manage_tags: can_manage_tags).populate
+      import_person.populate
     end
 
     subject { person }
@@ -82,16 +84,19 @@ describe Import::Person do
     context 'can manage' do
       let (:can_manage_tags) { true }
 
-      its('tags.length') { should eq 3 }
-      its('tags.first.name') { should eq 'de' }
-      its('tags.second.name') { should eq 'responsible:jack' }
-      its('tags.third.name') { should eq 'foo bar' }
+      its('tag_list') { should eq ['de', 'responsible:jack', 'foo bar'] }
+      its('tags.count') { should eq 0 }
+
+      it 'saves the tags' do
+        import_person.save
+        expect(person.tags.count).to eq(3)
+      end
     end
 
     context 'cannot manage' do
       let (:can_manage_tags) { false }
 
-      its('tags.length') { should eq 0 }
+      its('tag_list') { should eq [] }
     end
 
   end
@@ -170,8 +175,8 @@ describe Import::Person do
     context 'keeps existing tags' do
       let(:person) do
         p = Fabricate(:person, email: 'foo@example.com')
-        p.tags.create!(name: 'foo bar')
-        p.tags.create!(name: 'bar')
+        p.tag_list.add('foo bar', 'bar')
+        p.save!
         p
       end
 
@@ -181,11 +186,7 @@ describe Import::Person do
             tags: 'de, responsible:jack,foo bar' }
         end
 
-        its('tags.length') { should eq 4 }
-        its('tags.first.name') { should eq 'foo bar' }
-        its('tags.second.name') { should eq 'bar' }
-        its('tags.third.name') { should eq 'de' }
-        its('tags.fourth.name') { should eq 'responsible:jack' }
+        its('tag_list') { should eq ['foo bar', 'bar', 'de', 'responsible:jack'] }
       end
 
       context 'empty' do
@@ -193,9 +194,7 @@ describe Import::Person do
           { first_name: 'foo' }
         end
 
-        its('tags.length') { should eq 2 }
-        its('tags.first.name') { should eq 'foo bar' }
-        its('tags.second.name') { should eq 'bar' }
+        its('tag_list') { should eq ['foo bar', 'bar'] }
       end
     end
 
@@ -277,8 +276,8 @@ describe Import::Person do
     context 'overrides existing tags' do
       let(:person) do
         p = Fabricate(:person, email: 'foo@example.com')
-        p.tags.create!(name: 'foo bar')
-        p.tags.create!(name: 'bar')
+        p.tag_list.add('foo bar', 'bar')
+        p.save!
         p
       end
 
@@ -288,10 +287,7 @@ describe Import::Person do
             tags: 'de, responsible:jack,foo bar' }
         end
 
-        its('tags.length') { should eq 3 }
-        its('tags.first.name') { should eq 'de' }
-        its('tags.second.name') { should eq 'responsible:jack' }
-        its('tags.third.name') { should eq 'foo bar' }
+        its('tag_list') { should eq ['de', 'responsible:jack', 'foo bar'] }
       end
 
       context 'empty' do
@@ -299,7 +295,7 @@ describe Import::Person do
           { first_name: 'foo' }
         end
 
-        its('tags.length') { should eq 0 }
+        its('tag_list') { should eq [] }
       end
     end
 

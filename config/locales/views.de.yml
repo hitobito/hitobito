@@ -776,17 +776,16 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
-    tags:
-      title: Tags
-      add_tag: Tag hinzufügen…
-      no_entry: (keine)
-
     roles:
       title: Aktive Rollen
 
     roles_aside:
       add_role: Rolle hinzufügen
       set_main_group: Hauptgruppe setzen
+
+    tags:
+      add_tag: Tag hinzufügen…
+      no_entry: (keine)
 
     notes:
       new_note: Neue Notiz

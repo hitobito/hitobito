@@ -48,14 +48,14 @@ describe Import::PersonImporter do
 
     context 'can manage tags' do
       it 'creates tag' do
-        expect { subject.import }.to change(Tag, :count).by(1)
+        expect { subject.import }.to change(ActsAsTaggableOn::Tagging, :count).by(1)
       end
     end
 
     context 'cannot manage tags' do
       let(:can_manage_tags) { false }
       it 'does not create tag' do
-        expect { subject.import }.not_to change(Tag, :count)
+        expect { subject.import }.not_to change(ActsAsTaggableOn::Tagging, :count)
       end
     end
 
@@ -92,6 +92,21 @@ describe Import::PersonImporter do
     before { importer.import }
     its(:errors) { should have(1).item }
     its('errors.last') { should start_with 'Zeile 5: Haupt-E-Mail ist bereits vergeben' }
+  end
+
+  context 'existing tags' do
+    let(:attrs) { { first_name: 'Paul', tag_list: ['Responsible:John'] } }
+    let(:data) { [{ first_name: 'Paul', tags: 'responsible: john, lang: de' }] }
+    let(:person) { @person.reload }
+    before do
+      @person = Fabricate(:person, attrs)
+      importer.import
+    end
+
+    it 'parses tags before assigning' do
+      expect(person.tags.count).to eq(2)
+      expect(person.tag_list).to eq(['Responsible:John', 'lang:de'])
+    end
   end
 
   context 'doublettes' do

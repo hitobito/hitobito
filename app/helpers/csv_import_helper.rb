@@ -48,7 +48,7 @@ module CsvImportHelper
   end
 
   def csv_import_tag_values(p)
-    p.tags.map(&:name).join(', ')
+    p.tag_list.join(', ')
   end
 
 end

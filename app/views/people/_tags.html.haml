@@ -3,14 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-- if can?(:index_tags, entry) || can?(:create, entry.tags.new)
+- if can?(:index_tags, entry) || can?(:manage_tags, entry)
   %section.tags
-    %h2= t('.title')
-    .person-tags-error.alert.alert-error{ style: 'display: none;' }
-
+    %h2= ActsAsTaggableOn::Tag.model_name.human(count: 2)
     = render 'person/tags/list', tags: @tags
 
-    - if can?(:create, entry.tags.new)
+    - if can?(:manage_tags, entry)
       %span.label.person-tag.person-tag-add
         = t('.add_tag')
         = icon(:plus)

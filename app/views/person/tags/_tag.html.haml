@@ -1,8 +1,8 @@
 %span.label.label-inverse.person-tag{data: {tag_id: tag.id}}
   = tag.name_without_category
-  - if can?(:destroy, tag)
+  - if can?(:manage_tags, person)
     = link_to icon(:remove),
-              group_person_tag_path(person_id: tag.taggable.id, id: tag.id),
+              group_person_tag_path(person_id: person.id, name: tag.name),
               method: :delete,
               data: { tag_id: tag.id },
               remote: true,

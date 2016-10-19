@@ -123,7 +123,7 @@ class PeopleController < CrudController
   end
 
   def load_grouped_person_tags
-    @tags = entry.tags.includes(:taggable).grouped_by_category
+    @tags = entry.tags.grouped_by_category
   end
 
   def show_add_request_status?

@@ -25,6 +25,11 @@ module Export::Xlsx
       []
     end
 
+    # override in subclass to define column widths
+    def column_widths
+      []
+    end
+
     def default_style_data_rows
       :centered
     end

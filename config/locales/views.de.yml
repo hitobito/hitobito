@@ -861,6 +861,8 @@ de:
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'
       roles:
         please_choose_group: Bitte wähle eine Gruppe aus
+      tags:
+        only_add_persons_with_tags: 'Nur Person mit einem der untenstehenden Tags hinzufügen:'
 
     exclude_person:
       form:
@@ -896,6 +898,8 @@ de:
     list:
       excluded_people: 'Ausgeschlossene Personen'
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
+    subscription:
+      only_persons_with: 'Nur Personen mit:'
 
   version:
     attribute_change:

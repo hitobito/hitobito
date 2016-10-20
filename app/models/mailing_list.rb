@@ -70,27 +70,39 @@ class MailingList < ActiveRecord::Base
     end
   end
 
-  # rubocop:disable MethodLength
   def people(people_scope = Person.only_public_data)
     people_scope.
-           joins('LEFT JOIN roles ON people.id = roles.person_id').
-           joins('LEFT JOIN groups ON roles.group_id = groups.id').
-           joins('LEFT JOIN event_participations ON event_participations.person_id = people.id').
-           joins(', subscriptions ').
-           joins('LEFT JOIN groups sub_groups ' \
-                 "ON subscriptions.subscriber_type = 'Group'" \
-                 'AND subscriptions.subscriber_id = sub_groups.id ').
-           joins('LEFT JOIN related_role_types ' \
-                 "ON related_role_types.relation_type = 'Subscription' " \
-                 'AND related_role_types.relation_id = subscriptions.id').
+           joins(people_joins).
+           joins(subscription_joins).
            where(subscriptions: { mailing_list_id: id }).
            where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
            where(suscriber_conditions).
            uniq
   end
-  # rubocop:enable MethodLength
 
   private
+
+  def people_joins
+    'LEFT JOIN roles ON people.id = roles.person_id ' \
+    'LEFT JOIN groups ON roles.group_id = groups.id ' \
+    'LEFT JOIN event_participations ON event_participations.person_id = people.id ' \
+    'LEFT JOIN taggings AS people_taggings ' \
+    "ON people_taggings.taggable_type = 'Person' " \
+    'AND people_taggings.taggable_id = people.id'
+  end
+
+  def subscription_joins
+    ', subscriptions ' \
+    'LEFT JOIN groups sub_groups ' \
+    "ON subscriptions.subscriber_type = 'Group'" \
+    'AND subscriptions.subscriber_id = sub_groups.id ' \
+    'LEFT JOIN related_role_types ' \
+    "ON related_role_types.relation_type = 'Subscription' " \
+    'AND related_role_types.relation_id = subscriptions.id ' \
+    'LEFT JOIN taggings AS subscriptions_taggings ' \
+    "ON subscriptions_taggings.taggable_type = 'Subscription' " \
+    'AND subscriptions_taggings.taggable_id = subscriptions.id'
+  end
 
   def suscriber_conditions
     condition = OrCondition.new
@@ -120,7 +132,9 @@ class MailingList < ActiveRecord::Base
                  'subscriptions.subscriber_id = sub_groups.id AND ' \
                  'groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND ' \
                  'roles.type = related_role_types.role_type AND ' \
-                 'roles.deleted_at IS NULL',
+                 'roles.deleted_at IS NULL AND ' \
+                 '(subscriptions_taggings.tag_id IS NULL OR ' \
+                 ' people_taggings.tag_id = subscriptions_taggings.tag_id)',
                  Group.sti_name)
   end
 

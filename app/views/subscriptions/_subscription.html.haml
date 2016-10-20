@@ -1,0 +1,18 @@
+-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  hitobito_dsj and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_dsj.
+
+- if subscription.subscriber.is_a?(Group) && subscription.related_role_types.present?
+  %h4= subscription.subscriber.with_layer.join(' / ')
+  %dl
+    - subscription.grouped_role_types.each do |group_type, role_types|
+      %dt= t("activerecord.models.#{group_type.model_name.i18n_key}.one")
+      %dd= role_types.map(&:label).join(', ')
+  - unless subscription.tag_list.empty?
+    %p
+      = t('.only_persons_with')
+      - subscription.tag_list.each do |tag|
+        %span.label.label-inverse.person-tag= tag
+- else
+  = subscription.to_s(:list)

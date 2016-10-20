@@ -45,8 +45,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    acts-as-taggable-on (4.0.0)
-      activerecord (>= 4.0)
+    acts-as-taggable-on (3.5.0)
+      activerecord (>= 3.2, < 5)
     addressable (2.4.0)
     airbrake (4.3.4)
       builder
@@ -507,7 +507,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
-  acts-as-taggable-on (~> 4.0)
+  acts-as-taggable-on (~> 3.5.0)
   airbrake (< 5.0)
   annotate
   awesome_nested_set

@@ -117,8 +117,12 @@ class EventsController < CrudController
 
   def authorize_class
     type = params[:type].presence || 'Event'
-    action = request.format.csv? ? 'export' : 'index'
+    action = export? ? 'export' : 'index'
     authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 
+  def export?
+    format = request.format
+    format.xlsx? || format.csv?
+  end
 end

@@ -43,7 +43,12 @@ module Export::Xlsx
         exportable.data_rows.each do |row|
           sheet.add_row(row[:values], row_style(row))
         end
+        apply_column_widths(sheet, exportable)
       end
+    end
+
+    def apply_column_widths(sheet, exportable)
+      sheet.column_widths(*exportable.column_widths)
     end
 
     def header_rows(sheet, exportable)

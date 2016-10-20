@@ -14,6 +14,8 @@ module Export::Xlsx
     self.row_class = Row
     self.style_class = Style
 
+    delegate :column_widths, :style_definitions, to: :style
+
     class << self
       def export(*args)
         Export::Xlsx::Generator.new(new(*args)).xlsx
@@ -30,10 +32,6 @@ module Export::Xlsx
         rows << { values: values(entry), style: row_style(index) }
       end
       rows
-    end
-
-    def style_definitions
-      style.style_definitions
     end
 
     private

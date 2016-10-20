@@ -33,8 +33,8 @@ describe 'Person Tags', js: true do
       let(:user) { leader }
 
       it 'lists tags without categories' do
-        person.tags.create!(name: 'lorem')
-        person.tags.create!(name: 'ipsum')
+        person.tag_list.add('lorem', 'ipsum')
+        person.save!
         visit group_person_path(group_id: group.id, id: person.id)
 
         expect(page).to have_content('Tags')
@@ -45,10 +45,8 @@ describe 'Person Tags', js: true do
       end
 
       it 'lists tags grouped by categories' do
-        person.tags.create!(name: 'vegetable:potato')
-        person.tags.create!(name: 'pizza')
-        person.tags.create!(name: 'fruit:banana')
-        person.tags.create!(name: 'fruit:apple')
+        person.tag_list.add('vegetable:potato', 'pizza', 'fruit:banana', 'fruit:apple')
+        person.save!
         visit group_person_path(group_id: group.id, id: person.id)
 
         expect(page).to have_content('Tags')
@@ -66,7 +64,8 @@ describe 'Person Tags', js: true do
 
   context 'creation' do
     before do
-      user.tags.create!(name: 'pasta')
+      user.tag_list.add('pasta')
+      user.save!
       visit group_person_path(group_id: group.id, id: person.id)
     end
 
@@ -80,29 +79,31 @@ describe 'Person Tags', js: true do
       expect(page).to have_selector('.person-tags-add-form')
 
       within '.person-tags-add-form' do
-        fill_in 'tag_name', :with => 'pizza'
+        fill_in 'acts_as_taggable_on_tag[name]', :with => 'pizza'
       end
       find('.person-tags-add-form button').click
       expect(page).to have_selector('.person-tag', text: 'pizza')
+      person.reload
       expect(person.tags.count).to eq(1)
-      expect(person.tags.last.name).to eq('pizza')
+      expect(person.tag_list).to eq(['pizza'])
       expect(page).to have_selector('.person-tag-add')
       expect(page).to have_no_selector('.person-tags-add-form')
 
       find('.person-tag-add').click
       within '.person-tags-add-form' do
-        fill_in 'tag_name', :with => 'pas'
+        fill_in 'acts_as_taggable_on_tag[name]', :with => 'pas'
       end
       expect(page).to have_selector('ul.typeahead li a', text: 'pasta')
       find('ul.typeahead li a').click
       find('.person-tags-add-form button').click
       expect(page).to have_selector('.person-tag', text: 'pasta')
+      person.reload
       expect(person.tags.count).to eq(2)
-      expect(person.tags.last.name).to eq('pasta')
+      expect(person.tag_list).to eq(['pizza', 'pasta'])
 
       find('.person-tag-add').click
       within '.person-tags-add-form' do
-        fill_in 'tag_name', :with => 'fruit:banana'
+        fill_in 'acts_as_taggable_on_tag[name]', :with => 'fruit:banana'
       end
       find('.person-tags-add-form button').click
       expect(page).to have_selector('.person-tags-category', count: 2)
@@ -111,16 +112,16 @@ describe 'Person Tags', js: true do
         to eq(%w(banana))
       expect(all('.person-tags-category')[1].all('.person-tag').map(&:text)).
         to eq(%w(pasta pizza))
+      person.reload
       expect(person.tags.count).to eq(3)
-      expect(person.tags.last.name).to eq('fruit:banana')
+      expect(person.tag_list).to eq(['pizza', 'pasta', 'fruit:banana'])
     end
   end
 
   context 'deletion' do
     before do
-      person.tags.create!(name: 'pizza')
-      person.tags.create!(name: 'fruit:banana')
-      person.tags.create!(name: 'fruit:apple')
+      person.tag_list.add('pizza', 'fruit:banana', 'fruit:apple')
+      person.save!
       visit group_person_path(group_id: group.id, id: person.id)
     end
 

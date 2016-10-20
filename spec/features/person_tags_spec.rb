@@ -99,7 +99,7 @@ describe 'Person Tags', js: true do
       expect(page).to have_selector('.person-tag', text: 'pasta')
       person.reload
       expect(person.tags.count).to eq(2)
-      expect(person.tag_list).to eq(['pizza', 'pasta'])
+      expect(Set.new(person.tag_list)).to eq(Set.new(['pizza', 'pasta']))
 
       find('.person-tag-add').click
       within '.person-tags-add-form' do
@@ -114,7 +114,7 @@ describe 'Person Tags', js: true do
         to eq(%w(pasta pizza))
       person.reload
       expect(person.tags.count).to eq(3)
-      expect(person.tag_list).to eq(['pizza', 'pasta', 'fruit:banana'])
+      expect(Set.new(person.tag_list)).to eq(Set.new(['pizza', 'pasta', 'fruit:banana']))
     end
   end
 

@@ -6,8 +6,6 @@
 - if can?(:new, @mailing_list.subscriptions.new)
   = action_button(t('.add_person'),
                   new_group_mailing_list_person_path(@group, @mailing_list), 'plus')
-  = action_button("Tags hinzufügen",
-                  new_group_mailing_list_person_path(@group, @mailing_list), 'plus')
   = action_button(t('.add_group_roles'),
                   new_group_mailing_list_group_path(@group, @mailing_list), 'plus')
   = action_button(t('.add_event'),

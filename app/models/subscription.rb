@@ -20,6 +20,8 @@ class Subscription < ActiveRecord::Base
 
   include RelatedRoleType::Assigners
 
+  acts_as_taggable
+
 
   ### ASSOCIATIONS
 
@@ -47,12 +49,7 @@ class Subscription < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def to_s(format = :default)
-    string = subscriber.to_s(format).dup
-    if subscriber.is_a?(Group) && related_role_types.present?
-      string = subscriber.with_layer.join(' / ')
-      string << ' (' << related_role_types.join(', ') << ')'
-    end
-    string
+    subscriber.to_s(format).dup
   end
 
   def possible_events
@@ -64,6 +61,13 @@ class Subscription < ActiveRecord::Base
 
   def possible_groups
     mailing_list.group.self_and_descendants
+  end
+
+  def grouped_role_types
+    related_role_types.each_with_object({}) do |related_role_type, result|
+      result[related_role_type.group_class] ||= []
+      result[related_role_type.group_class] << related_role_type.role_class
+    end
   end
 
   private

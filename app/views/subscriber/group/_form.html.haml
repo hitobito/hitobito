@@ -20,3 +20,6 @@
 
   = field_set_tag Role.model_name.human(count: 2) do
     #roles.label-columns= render 'roles'
+
+  = field_set_tag ActsAsTaggableOn::Tag.model_name.human(count: 2) do
+    = render 'tags', f: f

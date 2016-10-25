@@ -11,7 +11,7 @@ module Export::Xlsx::Events
 
     MAX_DATES = 3
 
-    self.row_class = Export::Csv::Events::Row
+    self.row_class = Export::Xlsx::Events::Row
     self.style_class = Export::Xlsx::Events::Style
 
     private

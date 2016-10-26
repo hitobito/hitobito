@@ -94,3 +94,5 @@ CEVI Regionalverband ZH-SH-GL, Insieme Schweiz.
 See COPYING for more details.
 
 hitobito was developed by [Puzzle ITC GmbH](http://puzzle.ch).
+
+The hitobito logo is a registered trademark of hitobito LTD, Switzerland. Please contact [KunoKunz](https://github.com/KunoKunz) if you want to use the logo and be part of our community.

@@ -35,26 +35,41 @@ module Export::Xlsx
     def build_sheets(wb, exportable)
       load_style_definitions(wb.styles, exportable)
       wb.add_worksheet do |sheet|
-        # add optional header rows
-        header_rows(sheet, exportable)
-        # add attribute label row
-        sheet.add_row(exportable.labels, style_definition(:attribute_labels))
+        add_header_rows(sheet, exportable)
 
-        exportable.data_rows.each do |row|
-          sheet.add_row(row[:values], row_style(row))
-        end
+        add_attribute_label_row(sheet, exportable)
+
+        add_data_rows(sheet, exportable)
         apply_column_widths(sheet, exportable)
+        sheet.page_setup.set(exportable.page_setup)
       end
+    end
+
+    def add_header_rows(sheet, exportable)
+      exportable.header_rows.each do |r|
+        sheet.add_row(r[:values], row_style(r))
+      end
+    end
+
+    def add_attribute_label_row(sheet, exportable)
+      sheet.add_row(exportable.labels, style_definition(:attribute_labels))
+    end
+
+    def add_data_rows(sheet, exportable)
+      exportable.data_rows.each do |row|
+        options = {}
+        options.merge!(row_style(row))
+        options.merge!(data_row_height(exportable.data_row_height))
+        sheet.add_row(row[:values], options)
+      end
+    end
+
+    def data_row_height(height)
+      height.nil? ? {} : { height: height }
     end
 
     def apply_column_widths(sheet, exportable)
       sheet.column_widths(*exportable.column_widths)
-    end
-
-    def header_rows(sheet, exportable)
-      exportable.header_rows.each do |r|
-        sheet.add_row(r[:values], row_style(r))
-      end
     end
 
     def load_style_definitions(workbook_styles, exportable)

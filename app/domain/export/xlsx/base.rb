@@ -14,7 +14,7 @@ module Export::Xlsx
     self.row_class = Row
     self.style_class = Style
 
-    delegate :column_widths, :style_definitions, to: :style
+    delegate :column_widths, :style_definitions, :page_setup, :data_row_height, to: :style
 
     class << self
       def export(*args)

@@ -10,7 +10,7 @@ require 'axlsx'
 module Export::Xlsx
   class Style
     LABEL_BACKGROUND = Settings.xlsx.label_background
-    class_attribute :style_definition_labels
+    class_attribute :style_definition_labels, :data_row_height
     # extend in subclass and add your own definitions
     self.style_definition_labels = [:default, :attribute_labels, :centered]
 
@@ -18,6 +18,10 @@ module Export::Xlsx
       style_definition_labels.each_with_object({}) do |l, d|
         d[l] = send("#{l}_style")
       end
+    end
+
+    def data_row_height
+      self.class.data_row_height
     end
 
     # specify styles to apply per row or cell
@@ -28,6 +32,13 @@ module Export::Xlsx
     # override in subclass to define column widths
     def column_widths
       []
+    end
+
+    # override in subclass to define page setup
+    def page_setup
+      {paper_size: 9, # Default A4
+       fit_to_height: 1,
+       orientation: :landscape }
     end
 
     def default_style_data_rows

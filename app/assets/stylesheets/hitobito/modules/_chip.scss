@@ -1,0 +1,32 @@
+.chip {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 28px;
+  font-size: 13px;
+  border-radius: 14px;
+  background-color: $grayLight;
+  margin-bottom: 8px;
+  padding: 4px 12px 6px 12px;
+
+  i {
+    opacity: 0.6;
+  }
+  i:hover {
+    opacity: 1;
+  }
+
+  &.chip-add {
+    color: $textColor;
+    font-size: inherit;
+    font-weight: normal;
+    border: 2px dashed $grayLight;
+    background-color: transparent;
+    cursor: pointer;
+    i {
+      opacity: 0.8;
+    }
+    &:hover {
+      background-color: $grayLighter;
+    }
+  }
+}

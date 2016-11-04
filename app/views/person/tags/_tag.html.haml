@@ -1,4 +1,4 @@
-%span.label.label-inverse.person-tag{data: {tag_id: tag.id}}
+%span.chip.person-tag{data: {tag_id: tag.id}}
   = tag.name_without_category
   - if can?(:manage_tags, person)
     = link_to icon(:remove),

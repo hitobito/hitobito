@@ -33,15 +33,15 @@ class EventDecorator < ApplicationDecorator
 
   def booking_info
     if maximum_participants.to_i > 0
-      translate(:participants_info_with_limit, count: applicant_count.to_s,
+      translate(:participants_info_with_limit, count: applicant_count,
                                                limit: maximum_participants.to_i)
     else
-      translate(:participants_info, count: applicant_count.to_s)
+      translate(:participants_info, count: applicant_count)
     end
   end
 
   def active_participants_info
-    translate(:active_participants_info, count: participant_count.to_s)
+    translate(:active_participants_info, count: participant_count)
   end
 
   def state_translated(state = model.state)

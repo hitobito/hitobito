@@ -388,9 +388,15 @@ de:
     apply: 'Anmelden'
     applied: 'Angemeldet'
     not_possible: 'nicht möglich'
-    participants_info: '%{count} Anmeldungen'
-    participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'
-    active_participants_info: '%{count} Anmeldungen zugeteilt'
+    participants_info:
+      one: '%{count} Anmeldung'
+      other: '%{count} Anmeldungen'
+    participants_info_with_limit:
+      one: '%{count} Anmeldung für %{limit} Plätze'
+      other: '%{count} Anmeldungen für %{limit} Plätze'
+    active_participants_info:
+      one: '%{count} Anmeldung zugeteilt'
+      other: '%{count} Anmeldungen zugeteilt'
     issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
     prolong_only:
       one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'

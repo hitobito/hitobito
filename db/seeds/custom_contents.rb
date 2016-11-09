@@ -114,7 +114,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: participation_approval_id,
    locale: 'fr',
-   label: "Événement: E-Mail pour la libération de l'inscription"},
+   label: "Événement: E-Mail pour débloquer l'inscription"},
 
   {custom_content_id: participation_approval_id,
    locale: 'en',
@@ -151,7 +151,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: login_form_id,
    locale: 'fr',
-   label: 'Informations au login'},
+   label: 'Informations sur le login'},
 
   {custom_content_id: login_form_id,
    locale: 'en',
@@ -175,7 +175,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail pour la libération par la personne'},
+   label: 'Demande sur les données personnelles: Email pour la libération par la personne'},
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
@@ -199,7 +199,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail pour la libération par les responsables'},
+   label: 'Demande sur les données personnelles: E-mail pour la libération par les responsables'},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'en',
@@ -221,7 +221,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_approved_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail libération accepté'},
+   label: 'Demande sur les données personnelles: E-mail libération accepté'},
 
   {custom_content_id: add_request_approved_id,
    locale: 'en',
@@ -243,7 +243,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_rejected_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail libération refusé'},
+   label: 'Demande sur les données personnelles: E-mail libre-accès refusé'},
 
   {custom_content_id: add_request_rejected_id,
    locale: 'en',

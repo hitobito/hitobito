@@ -22,6 +22,7 @@
 #= require jquery-ui/effect-highlight
 #= require bootstrap-alert
 #= require bootstrap-button
+#= require bootstrap-collapse
 #= require bootstrap-dropdown
 #= require bootstrap-tooltip
 #= require bootstrap-popover

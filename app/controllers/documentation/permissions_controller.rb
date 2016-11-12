@@ -5,12 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Documentation::PermissionsController < ApplicationController
+module Documentation
+  class PermissionsController < ApplicationController
 
-  skip_authorization_check
+    skip_authorization_check
 
-  def roles; end
+    def roles; end
 
-  def abilities; end
+    def abilities; end
 
+  end
 end

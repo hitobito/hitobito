@@ -436,19 +436,46 @@ de:
         string_long: '%{role} in %{group}'
         class:
           permission:
-            description:
-              admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
-              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
-              layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
-              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
-              layer_read: Alles Lesen auf dieser Ebene.
-              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
-              group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
-              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
-              group_read: Lesen auf der Gruppe.
-              contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
-              qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
-              approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+            any:
+              short: Alle
+            _general:
+              short: Allgemein
+            admin:
+              short: Administration
+              description: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
+            layer_and_below_full:
+              short: Schreiben in Ebene oder darunter
+              description: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+            layer_and_below_read:
+              short: Lesen in Ebene oder darunter
+              description: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
+            layer_full:
+              short: Schreiben in Ebene
+              description: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
+            layer_read:
+              short: Lesen in Ebene
+              description: Alles Lesen auf dieser Ebene.
+            group_and_below_full:
+              short: Schreiben in Gruppe oder darunter
+              description: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+            group_and_below_read:
+              short: Lesen in Gruppe oder darunter
+              description: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
+            group_full:
+              short: Schreiben in Gruppe
+              description: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
+            group_read:
+              short: Lesen in Gruppe
+              description: Lesen auf der Gruppe.
+            contact_data:
+              short: Lesen Kontaktdaten
+              description: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
+            qualify:
+              short: Qualifizieren
+              description: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
+            approve_applications:
+              short: Kursanmeldungen bestätigen
+              description: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
           kind:
             member:
               one: Mitglied

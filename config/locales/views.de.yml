@@ -115,13 +115,40 @@ de:
       title: Dokumentation
 
     permissions:
-      title: Authorisation
+      title: Berechtigungen
 
       roles:
         title: Rollen
+        layer: Ebene
+
       abilities:
         title: Befähigungen
+        permission: Berechtigung
+        entity: Entität
+        action: Aktion
+        constraint: Bedingung
 
+        actions:
+          index: Auflisten
+          show: Anzeigen
+          create: Erstellen
+          update: Bearbeiten
+          destroy: Löschen
+          manage: Verwalten
+
+        constraints:
+          all: Alle
+          in_same_group: In der gleichen Gruppe
+          in_same_group_or_below: In der gleichen Gruppe oder darunter
+          in_same_layer: In der gleichen Ebene
+          in_same_layer_or_below: In der gleichen Ebene oder darunter
+          in_below_group: In der Gruppe darunter
+          if_layer_group: Wenn die Gruppe eine Ebene ist
+          if_member: Wenn Mitglied
+          group_not_deleted: Wenn die Gruppe nicht gelöscht wurde
+          herself: Sich selbst
+          her_own: Die/der/das eigen(e)
+          not_self: Nicht sich selbst
 
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'

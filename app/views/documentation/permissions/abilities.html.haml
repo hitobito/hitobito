@@ -1,21 +1,29 @@
 -#  Copyright (c) 2012-2016, Puzzle ITC GmbH. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito.
+-#  https://github.com/hitobito/hitobito.b
 
 %table.table.table-border.table-striped
   %thead
     %tr
-      %th Permission
-      %th Class
-      %th Action
-      %th Constraint
+      %th= t('.permission')
+      %th= t('.entity')
+      %th= t('.action')
+      %th= t('.constraint')
 
   %tbody
     - all = Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
     - Ability.store.configs_for_permissions(all) do |c|
       %tr
-        %td= c.permission.to_s
-        %td= c.subject_class.to_s
-        %td= c.action.to_s
-        %td= c.constraint
+        %td
+          %span{rel: 'tooltip', title: human_permission_description(c.permission)}
+            = human_permission(c.permission)
+        %td
+          %span{rel: 'tooltip', title: c.subject_class.to_s}
+            = c.subject_class.model_name.human
+        %td
+          %span{rel: 'tooltip', title: c.action.to_s}
+            = human_action(c.action)
+        %td
+          %span{rel: 'tooltip', title: c.constraint.to_s}
+            = human_constraint(c.constraint)

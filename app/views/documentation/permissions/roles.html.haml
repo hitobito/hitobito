@@ -3,12 +3,24 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-  %h2= layer
-  - groups.each do |group, roles|
-    %h3= group
-    %ul
-      - roles.each do |role|
-        %li
-          = role.model_name.human
-          = role.permissions.inspect
+.accordion#roles
+  - layer_index = 0
+  - Role::TypeList.new(Group.root_types.first).each do |layer, groups|
+    .accordion-group
+      .accordion-heading
+        %a{class: 'accordion-toggle', 'data-toggle' => 'collapse', 'data-parent' => '#roles', href: "#layer_#{layer_index}"}
+          = "#{t('.layer')}: #{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
+      .accordion-body.collapse{id: "layer_#{layer_index}"}
+        .accordion-inner
+          - groups.each do|group, roles|
+            %h2= group
+            %ul
+              - roles.each do |role|
+                %li
+                  %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}= role.model_name.human
+                  %ul
+                    - role.permissions.each do |permission|
+                      %li
+                        %span{rel: 'tooltip', title: human_permission_description(permission)}
+                          = human_permission(permission)
+    - layer_index += 1

@@ -110,6 +110,19 @@ de:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
 
+  documentation:
+    index:
+      title: Dokumentation
+
+    permissions:
+      title: Authorisation
+
+      roles:
+        title: Rollen
+      abilities:
+        title: Befähigungen
+
+
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 

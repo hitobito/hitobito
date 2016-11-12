@@ -17,6 +17,15 @@ Hitobito::Application.routes.draw do
     get '/500', to: 'errors#500'
     get '/503', to: 'errors#503'
 
+    get 'changelog' => 'changelog#index'
+
+    get 'documentation', to: 'documentation#index'
+    namespace :documentation do
+      get 'permissions', to: redirect('documentation/permissions/roles')
+      get 'permissions/roles', to: 'permissions#roles'
+      get 'permissions/abilities', to: 'permissions#abilities'
+    end
+
     get '/people/query' => 'person/query#index', as: :query_people
     get '/people/:id' => 'person/top#show', as: :person
 
@@ -193,8 +202,6 @@ Hitobito::Application.routes.draw do
 
     post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
     delete 'person_add_requests/:id' => 'person/add_requests#reject'
-
-    get 'changelog' => 'changelog#index'
 
   end # scope locale
 

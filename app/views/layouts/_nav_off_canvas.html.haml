@@ -1,0 +1,13 @@
+-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%nav#page-navigation
+  = render_off_canvas_nav
+
+.options
+  %ul
+    = render 'layouts/languages'
+    %li= link_to current_user, person_home_path(current_user)
+    %li= link_to t('.sign_out'), destroy_person_session_path, method: "delete"

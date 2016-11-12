@@ -39,18 +39,34 @@ module NavigationHelper
     end
   end
 
+  # Renders an nav where left nav is grouped under the main point
+
+  def render_off_canvas_nav
+    content_tag_nested(:ul, MAIN, class: 'nav') do |options|
+      if !options.key?(:if) || instance_eval(&options[:if])
+        url = options[:url]
+        url = send(url) if url.is_a?(Symbol)
+        nav(I18n.t("navigation.#{options[:label]}"), url, options[:active_for]) do
+          concat(sheet.render_left_nav) if sheet.left_nav?
+        end
+      end
+    end
+  end
+
   # Create a list item for navigations.
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, active_for = [])
+  def nav(label, url, active_for = [], &block)
     options = {}
-    if current_page?(url) ||
-       active_for.any? { |p| request.path =~ %r{/?#{p}/?} }
+    active = current_page?(url) || active_for.any? { |p| request.path =~ %r{/?#{p}/?} }
+    if active
       options[:class] = 'active'
     end
-    content_tag(:li, link_to(label, url), options)
+    content_tag(:li, options) do
+      concat(link_to(label, url))
+      yield if block_given? && active
+    end
   end
-
 end

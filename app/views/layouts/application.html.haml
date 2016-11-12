@@ -32,64 +32,67 @@
     = yield(:head)
 
   %body
+    %div.off-canvas
+      = render 'layouts/nav_off_canvas'
+    %main
 
-    %header#page-header
-      .container-fluid
-        = link_to Settings.application.name, root_path, class: 'brand'
+      %header#page-header
+        .container-fluid
+          = link_to Settings.application.name, root_path, class: 'brand'
 
-        - if current_user
-          = render 'layouts/nav'
-        - elsif current_user.nil? # nil without login, false on error
-          = render 'layouts/unauthorized'
+          - if current_user
+            = render 'layouts/nav'
+          - elsif current_user.nil? # nil without login, false on error
+            = render 'layouts/unauthorized'
 
-    #page{class: ('with-left-nav' if sheet.left_nav?)}
-      - if sheet.left_nav?
-        %nav.nav-left
-          .inner
-            = sheet.render_left_nav
+      #page{class: ('with-left-nav' if sheet.left_nav?)}
+        - if sheet.left_nav?
+          %nav.nav-left
+            .inner
+              = sheet.render_left_nav
 
-      .container-fluid
-        = render_sheets do
-          .content-header
-            %h1= title
-            = sheet.render_main_tabs
+        .container-fluid
+          = render_sheets do
+            .content-header
+              %h1= title
+              = sheet.render_main_tabs
 
-          = yield :filter
-          - if content_for?(:toolbar)
-            .btn-toolbar= yield :toolbar
+            = yield :filter
+            - if content_for?(:toolbar)
+              .btn-toolbar= yield :toolbar
 
-          -# div must always exist to insert flash messages with ajax
-          #flash
-            = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+            -# div must always exist to insert flash messages with ajax
+            #flash
+              = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
 
-          = content_for?(:content) ? yield(:content) : yield
+            = content_for?(:content) ? yield(:content) : yield
 
-    %footer#page-footer
-      .container-fluid
-        .row
-          - footer = Settings.application.footer
-          .span3
-            - if footer.logo_image.present?
-              = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
-          .footer_content.span9
-            %p
-              -footer.links.to_hash.each do |label, url|
-                = link_to label, url, target: '_blank'
+      %footer#page-footer
+        .container-fluid
+          .row
+            - footer = Settings.application.footer
+            .span3
+              - if footer.logo_image.present?
+                = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
+            .footer_content.span9
+              %p
+                -footer.links.to_hash.each do |label, url|
+                  = link_to label, url, target: '_blank'
+                  %br/
+              %p
+                - if Wagons.app_version.to_s > '0.0'
+                  = link_to "Version #{Wagons.app_version}", changelog_path
+
+                  %br/
+
+                = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
+                = t('.available_under_license')
+                = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
                 %br/
-            %p
-              - if Wagons.app_version.to_s > '0.0'
-                = link_to "Version #{Wagons.app_version}", changelog_path
-
-                %br/
-
-              = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
-              = t('.available_under_license')
-              = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
-              %br/
-              = t('.developed_by')
-              = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
-              2012 -
-              = Time.zone.now.year
+                = t('.developed_by')
+                = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
+                2012 -
+                = Time.zone.now.year
 
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)
   = piwik_tracking_tag

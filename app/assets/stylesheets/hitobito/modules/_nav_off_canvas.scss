@@ -1,0 +1,47 @@
+.nav-off-canvas {
+  display: none;
+  background-color: $grayLight;
+  & > ul.nav {
+    padding: 0;
+    & > li.active {
+      background-color: white;
+    }
+
+    & > li { // nav item first level
+      padding: 1em;
+      & > a {
+        text-transform: uppercase;
+        font-size: 1.5rem;
+        padding: 1em 0;
+      }
+
+      & > h3 { // nav item layer title
+
+      }
+
+      & > ul.nav-left-list { // nav second level
+        & > li.active {
+          background-color: $linkColor;
+          color: white;
+        }
+        & > li > a {
+          background-color: inherit;
+          color: inherit;
+          padding: 1em;
+        }
+      }
+
+    }
+
+    & > a { text-transform: uppercase; }
+  }
+}
+
+@media (max-width: 600px) {
+  #page-navigation  {
+    display: none;
+  }
+  #page-header .options {
+    display: none;
+  }
+}

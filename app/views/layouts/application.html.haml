@@ -32,11 +32,12 @@
     = yield(:head)
 
   %body
-    %div.off-canvas
+    %div.nav-off-canvas
       = render 'layouts/nav_off_canvas'
     %main
 
       %header#page-header
+        %a{href: '#'} Menu
         .container-fluid
           = link_to Settings.application.name, root_path, class: 'brand'
 

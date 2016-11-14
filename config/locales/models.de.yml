@@ -255,6 +255,7 @@ de:
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
+        tags: Tags
         created_at: Erstellt
         updated_at: Geändert
 

@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Version 1.13
+
+*   Tags auf Personen können importiert und exportiert werden.
+
 ## Version 1.12
 
 *   Zu Personen können eingeschränkt sichtbare Notizen hinterlegt werden.

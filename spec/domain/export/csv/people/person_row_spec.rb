@@ -29,17 +29,6 @@ describe Export::Csv::People::PersonRow do
     it { expect(row.fetch(:first_name)).to eq 'Top' }
   end
 
-  context 'roles' do
-    it { expect(row.fetch(:roles)).to eq 'Leader Top / TopGroup' }
-
-    context 'multiple roles' do
-      let(:group) { groups(:bottom_group_one_one) }
-      before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
-
-      it { expect(row.fetch(:roles)).to eq 'Member Bottom One / Group 11, Leader Top / TopGroup' }
-    end
-  end
-
   context 'phone numbers' do
     before { person.phone_numbers << PhoneNumber.new(label: 'foobar', number: 321) }
     it { expect(row.fetch(:phone_number_foobar)).to eq '321' }
@@ -58,6 +47,25 @@ describe Export::Csv::People::PersonRow do
   context 'country' do
     before { person.country = 'IT' }
     it { expect(row.fetch(:country)).to eq 'Italien' }
+  end
+
+  context 'roles' do
+    it { expect(row.fetch(:roles)).to eq 'Leader Top / TopGroup' }
+
+    context 'multiple roles' do
+      let(:group) { groups(:bottom_group_one_one) }
+      before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
+
+      it { expect(row.fetch(:roles)).to eq 'Member Bottom One / Group 11, Leader Top / TopGroup' }
+    end
+  end
+
+  context 'tags' do
+    before do
+      person.tag_list = 'lorem: ipsum, loremipsum'
+      person.save
+    end
+    it { expect(row.fetch(:tags)).to eq 'lorem:ipsum, loremipsum'}
   end
 
 end

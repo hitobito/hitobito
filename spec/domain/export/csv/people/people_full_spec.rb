@@ -25,8 +25,9 @@ describe Export::Csv::People::PeopleFull do
 
   subject { people_list }
 
-  its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company, :email, :address,
-                                 :zip_code, :town, :country, :gender, :birthday, :additional_information, :roles] end
+  its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company,
+                                 :email, :address, :zip_code, :town, :country, :gender, :birthday,
+                                 :additional_information, :roles, :tags] end
 
   context '#attribute_labels' do
     subject { people_list.attribute_labels }
@@ -59,6 +60,8 @@ describe Export::Csv::People::PeopleFull do
       person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
       person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
       person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: 'parent')
+      person.tag_list = 'lorem: ipsum, loremipsum'
+      person.save
       I18n.locale = lang
     end
 
@@ -73,7 +76,7 @@ describe Export::Csv::People::PeopleFull do
         expect(csv.headers).to eq([
            'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
            'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-           'Zusätzliche Angaben', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
+           'Zusätzliche Angaben', 'Rollen', 'Tags', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
            'Social Media Adresse Skype', 'Elternteil'])
       end
 
@@ -81,6 +84,7 @@ describe Export::Csv::People::PeopleFull do
         subject { csv[0] }
 
         its(['Rollen']) { should eq 'Leader Top / TopGroup' }
+        its(['Tags']) { should eq 'lorem:ipsum, loremipsum' }
         its(['Telefonnummer Vater']) { should eq '123' }
         its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
         its(['Social Media Adresse Skype']) { should eq 'foobar' }
@@ -96,7 +100,7 @@ describe Export::Csv::People::PeopleFull do
         expect(csv.headers).to eq(
            ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
             "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-            "Anniversaire", "Données supplémentaires", "Rôles",
+            "Anniversaire", "Données supplémentaires", "Rôles", "Tags",
             "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
             "Adresse d'un média social Skype", "Parent"]
         )

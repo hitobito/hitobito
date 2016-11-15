@@ -8,7 +8,7 @@ app = window.App ||= {}
 app.PersonTags = {
   showForm: ->
     $('.person-tags-add-form').show();
-    $('.person-tags-add-form input#tag_name').val('').focus()
+    $('.person-tags-add-form input#acts_as_taggable_on_tag_name').val('').focus()
     $('.person-tag-add').hide();
 
   hideForm: ->
@@ -44,6 +44,6 @@ $(document).on('click', 'a.person-tag-remove', app.PersonTags.removeTag)
 $ ->
   $('.person-tag-add').on('click', app.PersonTags.showForm)
   $('.person-tags-add-form').on('submit', -> app.PersonTags.loading(true); return true);
-  $('.person-tags-add-form input#tag_name').on('keypress', (event) ->
+  $('.person-tags-add-form input#acts_as_taggable_on_tag_name').on('keypress', (event) ->
     event.keyCode == 27 && app.PersonTags.hideForm(); return true)
 

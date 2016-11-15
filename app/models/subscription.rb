@@ -49,7 +49,11 @@ class Subscription < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def to_s(format = :default)
-    subscriber.to_s(format).dup
+    if subscriber.is_a?(Group)
+      subscriber.with_layer.join(' / ')
+    else
+      subscriber.to_s(format).dup
+    end
   end
 
   def possible_events

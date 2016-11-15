@@ -67,7 +67,7 @@ describe Subscription do
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_group_one_one))
       subscription.role_types = [Group::BottomGroup::Leader, Group::BottomGroup::Member]
-      expect(subscription.to_s).to eq('Bottom One / Group 11 (Leader Bottom Group, Member Bottom Group)')
+      expect(subscription.to_s).to eq('Bottom One / Group 11')
     end
 
     it 'renders event label' do

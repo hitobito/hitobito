@@ -80,4 +80,19 @@ describe Subscription do
     end
   end
 
+  context '#grouped_role_types' do
+    it 'returns hash with the form {layer: {group: [roles]}}' do
+      list = Fabricate(:mailing_list, group: groups(:top_layer))
+      subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_layer_one))
+      subscription.role_types = [Group::BottomLayer::Leader, Group::BottomGroup::Leader,
+                                 Group::BottomGroup::Member]
+      expect(subscription.grouped_role_types).to eq({
+        'Bottom Layer' => {
+          'Bottom Layer' => [Group::BottomLayer::Leader],
+          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member]
+        }
+      })
+    end
+  end
+
 end

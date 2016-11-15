@@ -68,10 +68,17 @@ class Subscription < ActiveRecord::Base
   end
 
   def grouped_role_types
-    related_role_types.each_with_object({}) do |related_role_type, result|
-      result[related_role_type.group_class] ||= []
-      result[related_role_type.group_class] << related_role_type.role_class
+    result = {}
+    role_classes = related_role_types.map(&:role_class)
+    Role::TypeList.new(subscriber.class).each do |layer, groups|
+      groups_result = {}
+      groups.each do |group, role_types|
+        role_types_result = role_types.select { |rt| role_classes.include?(rt) }
+        groups_result[group] = role_types_result if role_types_result.present?
+      end
+      result[layer] = groups_result if groups_result.present?
     end
+    result
   end
 
   private

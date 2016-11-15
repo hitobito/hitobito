@@ -5,10 +5,12 @@
 
 - if subscription.subscriber.is_a?(Group) && subscription.related_role_types.present?
   %h4= subscription.subscriber.with_layer.join(' / ')
-  %dl
-    - subscription.grouped_role_types.each do |group_type, role_types|
-      %dt= t("activerecord.models.#{group_type.model_name.i18n_key}.one")
-      %dd= role_types.map(&:label).join(', ')
+  - subscription.grouped_role_types.each do |layer, groups|
+    %h5= layer
+    %dl.dl-horizontal.dl-borderless
+      - groups.each do |group, role_types|
+        %dt= group
+        %dd= role_types.map(&:label).join(', ')
   - unless subscription.tag_list.empty?
     %p
       = t('.only_persons_with')

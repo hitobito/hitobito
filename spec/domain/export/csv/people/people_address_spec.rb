@@ -17,7 +17,7 @@ describe Export::Csv::People::PeopleAddress do
 
   its(:attributes) do
     should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-               :zip_code, :town, :country, :gender, :birthday, :roles]
+               :zip_code, :town, :country, :gender, :birthday, :roles, :tags]
   end
 
   context 'standard attributes' do
@@ -65,9 +65,14 @@ describe Export::Csv::People::PeopleAddress do
   end
 
   context 'integration' do
+      before do
+        person.tag_list = 'lorem: ipsum, loremipsum'
+        person.save
+      end
+
       let(:simple_headers) do
         ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
+         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen', 'Tags']
       end
       let(:data) { Export::Csv::People::PeopleAddress.export(list) }
       let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
@@ -85,6 +90,7 @@ describe Export::Csv::People::PeopleAddress do
         its(['Haupt-E-Mail']) { should eq person.email }
         its(['Ort']) { should eq person.town }
         its(['Geschlecht']) { should eq 'unbekannt' }
+        its(['Tags']) { should eq 'lorem:ipsum, loremipsum' }
 
         context 'roles and phone number' do
           before do

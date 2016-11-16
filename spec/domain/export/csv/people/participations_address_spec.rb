@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+require 'csv'
 
 describe Export::Csv::People::ParticipationsAddress do
 
@@ -24,7 +25,7 @@ describe Export::Csv::People::ParticipationsAddress do
   context 'integration' do
     let(:simple_headers) do
       ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen', 'Tags']
     end
 
     let(:data) { Export::Csv::People::ParticipationsAddress.export(list) }

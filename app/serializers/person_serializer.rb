@@ -79,6 +79,8 @@ class PersonSerializer < ApplicationSerializer
                      :gender,
                      :additional_information
 
+      property :tags, item.tag_list.join(', ')
+
       apply_extensions(:details, show_full: full)
 
       modification_properties

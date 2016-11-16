@@ -67,7 +67,7 @@ describe Subscription do
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_group_one_one))
       subscription.role_types = [Group::BottomGroup::Leader, Group::BottomGroup::Member]
-      expect(subscription.to_s).to eq('Bottom One / Group 11 (Leader Bottom Group, Member Bottom Group)')
+      expect(subscription.to_s).to eq('Bottom One / Group 11')
     end
 
     it 'renders event label' do
@@ -77,6 +77,21 @@ describe Subscription do
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: event)
       expect(subscription.to_s).to eq(event.to_s)
+    end
+  end
+
+  context '#grouped_role_types' do
+    it 'returns hash with the form {layer: {group: [roles]}}' do
+      list = Fabricate(:mailing_list, group: groups(:top_layer))
+      subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_layer_one))
+      subscription.role_types = [Group::BottomLayer::Leader, Group::BottomGroup::Leader,
+                                 Group::BottomGroup::Member]
+      expect(subscription.grouped_role_types).to eq({
+        'Bottom Layer' => {
+          'Bottom Layer' => [Group::BottomLayer::Leader],
+          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member]
+        }
+      })
     end
   end
 

@@ -9,7 +9,8 @@ class Person::TagsController < ApplicationController
 
   class_attribute :permitted_attrs
 
-  # authorize_resource except: :query
+  before_action :load_group
+  before_action :load_person
 
   decorates :group, :person
 
@@ -18,7 +19,6 @@ class Person::TagsController < ApplicationController
   self.permitted_attrs = [:name]
 
   def query
-    load_group_and_person
     authorize!(:index_tags, @person)
     tags = []
 
@@ -30,10 +30,10 @@ class Person::TagsController < ApplicationController
   end
 
   def create
-    load_group_and_person
-    authorize!(:create, @person.tags.new)
-    @tag = @person.tags.create(name: permitted_params[:name])
-    @tags = @person.tags.grouped_by_category
+    authorize!(:manage_tags, @person)
+    @person.tag_list.add(permitted_params[:name], parse: true)
+    @person.save!
+    @tags = @person.reload.tags.grouped_by_category
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
@@ -42,9 +42,9 @@ class Person::TagsController < ApplicationController
   end
 
   def destroy
-    load_group_and_person
-    @tag = @person.tags.find(params[:id]).destroy
-    authorize!(:destroy, @tag)
+    authorize!(:manage_tags, @person)
+    @person.tag_list.remove(params[:name])
+    @person.save!
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
@@ -55,22 +55,22 @@ class Person::TagsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:tag).permit(permitted_attrs)
+    params.require(:acts_as_taggable_on_tag).permit(permitted_attrs)
   end
 
   def available_tags(q)
-    Tag.
-      where.not(name: @person.tags.map(&:name)).
-      where('name LIKE ?', "%#{q}%").
-      select(:name).
-      order(:name).
-      distinct.
-      limit(10).
-      pluck(:name)
+    Person.tags_on(:tags)
+      .where('name LIKE ?', "%#{q}%")
+      .order(:name)
+      .limit(10)
+      .pluck(:name)
   end
 
-  def load_group_and_person
+  def load_group
     @group = Group.find(params[:group_id])
+  end
+
+  def load_person
     @person = Person.find(params[:person_id])
   end
 

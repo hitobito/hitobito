@@ -12,6 +12,7 @@ module Subscriber
 
     before_render_form :replace_validation_errors
     before_render_form :load_role_types
+    before_render_form :load_possible_tags
 
     # GET query queries available groups via ajax
     def query
@@ -41,11 +42,20 @@ module Subscriber
 
     def assign_attributes
       super
-      entry.role_types = model_params[:role_types] if model_params
+      if model_params
+        entry.role_types = model_params[:role_types]
+        entry.tag_list = model_params[:tag_list]
+      end
     end
 
     def load_role_types
       @role_types = Role::TypeList.new(subscriber.class) if subscriber
+    end
+
+    def load_possible_tags
+      @possible_tags ||= Person.tags_on(:tags)
+        .order(:name)
+        .pluck(:name)
     end
 
     def subscriber

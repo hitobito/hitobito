@@ -90,6 +90,9 @@ fr:
             name:
               must_be_unique: 'existe déjà'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: Adresse e-mail supplémentaire
         other: Adresses e-mail supplémentaires
@@ -116,16 +119,22 @@ fr:
         other: Types de cours
       event/role/assistant_leader:
         one: Responsable
+        other: Responsables
       event/role/leader:
-        one: Responsable principal(e)
+        one: Responsable principal/-e
+        other: Responsables principal/-es
       event/role/cook:
         one: Cuisine
+        other: Cuisine
       event/role/participant:
         one: Participant/-e
+        other: Participant/-es
       event/role/treasurer:
         one: Trésorier
+        other: Trésoriers
       event/role/speaker:
         one: Conférencier
+        other: Conférenciers
       event/date:
         one: date
         other: dates
@@ -171,10 +180,9 @@ fr:
       subscription:
         one: abonné
         other: Abonnés
-      tag:
-        one: Tag
-        other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nom
       cantons:
         ag: Argovie
         ai: Appenzell Rhodes Intérieures
@@ -233,6 +241,7 @@ fr:
         picture: Ajouter une nouvelle photo
         remove_picture: Supprimer la photo actuelle
         roles: Rôles
+        tags: Tags
         created_at: Créé
         updated_at: Modifié
       person/add_request:
@@ -473,9 +482,6 @@ fr:
         padding_top: Marge (en haut)
         padding_left: Marge (à gauche)
         dimensions: Nombre
-      tag:
-        name: Nom
-        taggable_id: Taggable
   errors:
     messages:
       invalid_date: "n'est pas une date valable"

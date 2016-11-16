@@ -69,6 +69,7 @@ class PersonSerializer < ApplicationSerializer
                    :country
 
     property :picture, item.picture_full_url
+    property :tags, item.tag_list.to_s if h.can?(:index_tags, item)
 
     apply_extensions(:public)
 
@@ -78,6 +79,7 @@ class PersonSerializer < ApplicationSerializer
       map_properties :birthday,
                      :gender,
                      :additional_information
+
 
       apply_extensions(:details, show_full: full)
 

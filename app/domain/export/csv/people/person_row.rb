@@ -14,16 +14,20 @@ module Export::Csv::People
                                 /^additional_email_/ => :additional_email_attribute,
                                 /^people_relation_/ => :people_relation_attribute }
 
-    def roles
-      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+    def country
+      entry.country_label
     end
 
     def gender
       entry.gender_label
     end
 
-    def country
-      entry.country_label
+    def roles
+      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+    end
+
+    def tags
+      entry.tag_list.to_s
     end
 
     private

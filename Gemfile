@@ -7,10 +7,12 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.7.1'
 
 gem 'activerecord-session_store'
+gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
+gem 'axlsx', '2.0.1'
 gem 'awesome_nested_set'
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
@@ -27,6 +29,7 @@ gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
 gem 'magiclabs-userstamp', require: 'userstamp'
+gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
 gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
 gem 'nested_form'

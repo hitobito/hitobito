@@ -12,11 +12,16 @@
                          :keep,
                          params[:update_behaviour].blank? || params[:update_behaviour] == 'keep')
       = t('.keep_behaviour')
+      - if @can_manage_tags
+        = t('.keep_behaviour_tags')
+
     %label.radio
       = radio_button_tag(:update_behaviour,
                          :override,
                          params[:update_behaviour] == 'override')
       = t('.override_behaviour')
+      - if @can_manage_tags
+        = t('.override_behaviour_tags')
 
     %p.help-block= t('.update_behaviour_explanation')
 

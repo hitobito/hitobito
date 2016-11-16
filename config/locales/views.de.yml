@@ -388,9 +388,15 @@ de:
     apply: 'Anmelden'
     applied: 'Angemeldet'
     not_possible: 'nicht möglich'
-    participants_info: '%{count} Anmeldungen'
-    participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'
-    active_participants_info: '%{count} Anmeldungen zugeteilt'
+    participants_info:
+      one: '%{count} Anmeldung'
+      other: '%{count} Anmeldungen'
+    participants_info_with_limit:
+      one: '%{count} Anmeldung für %{limit} Plätze'
+      other: '%{count} Anmeldungen für %{limit} Plätze'
+    active_participants_info:
+      one: '%{count} Anmeldung zugeteilt'
+      other: '%{count} Anmeldungen zugeteilt'
     issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
     prolong_only:
       one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
@@ -653,12 +659,15 @@ de:
         keep_behaviour: >
           Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
           bestehende Werte bleiben erhalten.
+        keep_behaviour_tags: Tags werden ergänzt.
         override_behaviour: >
           Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
           Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        override_behaviour_tags: Tags werden gelöscht oder ersetzt.
         update_behaviour_explanation: >
           Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
           Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.
+
 
       new:
         upload_button: 'Hochladen'
@@ -773,17 +782,16 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
-    tags:
-      title: Tags
-      add_tag: Tag hinzufügen…
-      no_entry: (keine)
-
     roles:
       title: Aktive Rollen
 
     roles_aside:
-      add_role: Rolle hinzfügen
+      add_role: Rolle hinzufügen
       set_main_group: Hauptgruppe setzen
+
+    tags:
+      add_tag: Tag hinzufügen…
+      no_entry: (keine)
 
     notes:
       new_note: Neue Notiz
@@ -853,6 +861,8 @@ de:
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'
       roles:
         please_choose_group: Bitte wähle eine Gruppe aus
+      tags:
+        only_add_persons_with_tags: 'Nur Person mit einem der untenstehenden Tags hinzufügen:'
 
     exclude_person:
       form:
@@ -888,6 +898,8 @@ de:
     list:
       excluded_people: 'Ausgeschlossene Personen'
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
+    subscription:
+      only_persons_with: 'Nur Personen mit:'
 
   version:
     attribute_change:

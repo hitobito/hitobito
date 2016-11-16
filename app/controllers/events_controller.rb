@@ -37,6 +37,7 @@ class EventsController < CrudController
     respond_to do |format|
       format.html  { entries }
       format.csv   { render_csv(entries) }
+      format.xlsx { render_xlsx(entries) }
     end
   end
 
@@ -100,6 +101,10 @@ class EventsController < CrudController
     send_data ::Export::Csv::Events::List.export(entries), type: :csv
   end
 
+  def render_xlsx(entries)
+    send_data ::Export::Xlsx::Events::List.export(entries), type: :xlsx
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
@@ -112,8 +117,12 @@ class EventsController < CrudController
 
   def authorize_class
     type = params[:type].presence || 'Event'
-    action = request.format.csv? ? 'export' : 'index'
+    action = export? ? 'export' : 'index'
     authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 
+  def export?
+    format = request.format
+    format.xlsx? || format.csv?
+  end
 end

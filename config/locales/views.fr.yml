@@ -183,7 +183,7 @@ fr:
         csv_export_button: 'Export CSV'
       events:
         title: 'Evénements prévus prochainement'
-        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent'
+        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
     application_market:
       already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
@@ -255,8 +255,8 @@ fr:
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
   events:
     application_fields:
-      caption_signature: Les participants doivent signer l'inscription
-      caption_signature_confirmation: L'inscription doit être confirmé par une deuxième signature
+      caption_signature: Les participants doivent signer l'inscription.
+      caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
       add: "ajouter"
@@ -323,9 +323,15 @@ fr:
     apply: 'Inscription'
     applied: 'inscrit'
     not_possible: 'impossible'
-    participants_info: '%{count} inscriptions'
-    participants_info_with_limit: '%{count} inscriptions pour %{limit} places'
-    active_participants_info: '%{count} inscriptions attribuées'
+    participants_info:
+      one: '%{count} inscription'
+      other: '%{count} inscriptions'
+    participants_info_with_limit:
+      one: '%{count} inscription pour %{limit} places'
+      other: '%{count} inscriptions pour %{limit} places'
+    active_participants_info:
+      one: '%{count} inscription attribuée'
+      other: '%{count} inscriptions attribuées'
     issue_only: 'Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours).'
     prolong_only:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
@@ -335,7 +341,7 @@ fr:
     additional_views: 'Autres vues'
   filter_navigation/people:
     custom_filter: 'Filtre personnel'
-    entire_layer: 'Tout le niveau'
+    entire_layer: 'Tous les niveaux'
     entire_group: 'Tout le groupe'
     new_role_filter: 'Nouveau filtre pour rôles...'
     new_qualification_filter: 'Nouveau filtre pour qualifications...'
@@ -371,9 +377,9 @@ fr:
         activated: Le déblocage manuel est activé
         deactivated: Le déblocage manuel est désactivé
         explanation: >+
-            Lorsque cette fonction est active, les personnes ne sont ajoutées aux
-            groupes, activité et abonnements qu'après qu'une personne autorisée ait
-            donné son accord.
+            Lorsque cette fonction est active, les personnes sont uniquement ajoutées
+            à  «groupes», «activités» et «abonnements» après que la personne habilitée
+            à donner les accès donne son accord.
 
       list:
         approve: Accepter
@@ -402,7 +408,7 @@ fr:
     deactivated: Déblocage manuel désactivé
     activated: Déblocage manuel activé
     global:
-      no_list_entries: Il n'y a pour l'instant pas de requête ouverte
+      no_list_entries: Il n’y a pas de requête ouverte pour l’instant.
   group/merge:
     success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
     failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
@@ -448,8 +454,8 @@ fr:
         add: Créer un abo
     form:
       help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
-      caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes'
-      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion'
+      caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes.'
+      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion.'
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
@@ -541,10 +547,12 @@ fr:
         keep_behaviour: >
             N'actualiser que les champs vides avec des données provenant du CSV, les
             valeurs déjà existantes ne changent pas.
+        keep_behaviour_tags: Tags seront ajoutés.
         override_behaviour: >
             Remplacer les valeurs déjà existantes dans la base de donnée avec les
             données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV
             effacent les valeurs pourvues dans la banque de données d'accueil.
+        override_behaviour_tags: Tags seront enlevés ou remplacés.
         update_behaviour_explanation: >
             Ce procédé ne concerne que les personnes déjà présentes dans la base de
             données de données. L'inscription de nouvelles personnes doit être entièrement
@@ -642,17 +650,16 @@ fr:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
-    tags:
-      title: Tags
-      add_tag: Ajouter tag…
-      no_entry: (aucun)
     roles:
       title: Rôles actifs
     roles_aside:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
+    tags:
+      add_tag: Ajouter un tag…
+      no_entry: (aucun)
     notes:
-      new_note: Ajouter note
+      new_note: Ajouter une note
   participations:
     destroy:
       flash:
@@ -662,7 +669,7 @@ fr:
       save_search: Sauvegarder cette recherche
       save_filter: Sauvegarder ce filtre
       save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
-      prompt_role_selection: Quels rôles doivent-ils être affichés ?
+      prompt_role_selection: Quels rôles doivent être affichés?
     new:
       title: Filtrer les personnes par qualification
     qualification:
@@ -674,7 +681,7 @@ fr:
       validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
-        all: Montrer toutes les qualifications non distribuées
+        all: Toutes les qualifications non distribuées
       kind:
         deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
         layer: Dans le niveau actuel et tous les groupes
@@ -708,6 +715,8 @@ fr:
         subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
+      tags:
+        only_add_persons_with_tags: 'Seulement ajouter les contacts aves un des tags suivants:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
@@ -736,6 +745,8 @@ fr:
     list:
       excluded_people: 'Personnes exclues'
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
+    subscription:
+      only_persons_with: 'Seulement personnes avec:'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

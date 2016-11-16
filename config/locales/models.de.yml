@@ -101,6 +101,9 @@ de:
               must_be_unique: 'existiert bereits'
 
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: Weitere E-Mail
         other: Weitere E-Mails
@@ -188,11 +191,11 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
-      tag:
-        one: Tag
-        other: Tags
 
     attributes:
+      acts_as_taggable_on/tag:
+        name: Name
+
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -252,6 +255,7 @@ de:
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
+        tags: Tags
         created_at: Erstellt
         updated_at: Geändert
 
@@ -531,10 +535,6 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
-
-      tag:
-        name: Name
-        taggable_id: Taggable
 
   errors:
     messages:

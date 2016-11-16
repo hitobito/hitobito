@@ -109,6 +109,12 @@ csv:
   separator: ;
   encoding: ISO-8859-1
 
+# Presets for XLSX export
+xlsx:
+  font_name: Calibri
+  label_background: C0C0C0
+
+
 role:
   # If a role last less than this number of days, it is not archived
   minimum_days_to_archive: 7

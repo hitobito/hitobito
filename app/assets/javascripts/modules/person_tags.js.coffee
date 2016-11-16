@@ -8,7 +8,7 @@ app = window.App ||= {}
 app.PersonTags = {
   showForm: ->
     $('.person-tags-add-form').show();
-    $('.person-tags-add-form input#tag_name').val('').focus()
+    $('.person-tags-add-form input#acts_as_taggable_on_tag_name').val('').focus()
     $('.person-tag-add').hide();
 
   hideForm: ->
@@ -23,7 +23,6 @@ app.PersonTags = {
   updateTags: (tags) ->
     $('.person-tags').replaceWith(tags)
     app.PersonTags.hideForm()
-    app.PersonTags.hideError()
 
   removeTag: (event) ->
     event.preventDefault()
@@ -38,19 +37,13 @@ app.PersonTags = {
           tag.remove()
           return false
     )
-
-  showError: (error) ->
-    app.PersonTags.loading(false)
-    $('.person-tags-error').text(error).show()
-
-  hideError: ->
-    $('.person-tags-error').text('').hide()
 }
+
+$(document).on('click', 'a.person-tag-remove', app.PersonTags.removeTag)
 
 $ ->
   $('.person-tag-add').on('click', app.PersonTags.showForm)
   $('.person-tags-add-form').on('submit', -> app.PersonTags.loading(true); return true);
-  $('.person-tags-add-form input#tag_name').on('keypress', (event) ->
+  $('.person-tags-add-form input#acts_as_taggable_on_tag_name').on('keypress', (event) ->
     event.keyCode == 27 && app.PersonTags.hideForm(); return true)
-  $(document).on('click', 'a.person-tag-remove', app.PersonTags.removeTag)
 

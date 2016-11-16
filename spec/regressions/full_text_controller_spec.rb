@@ -51,6 +51,14 @@ describe FullTextController, :mysql, type: :controller do
 
           expect(assigns(:people)).to eq([])
         end
+
+        context 'without any params' do
+          it 'returns nothing' do
+            get :index
+
+            expect(@response).to be_ok
+          end
+        end
       end
 
       context 'as root' do
@@ -99,6 +107,15 @@ describe FullTextController, :mysql, type: :controller do
           get :query, q: groups(:bottom_layer_one).to_s[1..5]
 
           expect(@response.body).to include(groups(:bottom_layer_one).to_s)
+        end
+
+        context 'without any params' do
+          it 'returns nothing' do
+            get :query
+
+            expect(@response).to be_ok
+            expect(JSON.parse(@response.body)).to eq([])
+          end
         end
       end
 

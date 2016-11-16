@@ -313,9 +313,6 @@ en:
     apply: 'Register'
     applied: 'Registered'
     not_possible: 'not possible'
-    participants_info: '%{count} registrations'
-    participants_info_with_limit: '%{count} registrations for %{limit} places'
-    active_participants_info: '%{count} registrations assigned'
     issue_only: 'Assigns the %{model} %{issued} on the %{until} (last course date).'
     prolong_only:
       one: 'Extends existing qualification %{prolonged} until %{until} (last course date).'
@@ -472,7 +469,6 @@ en:
     roles:
       title: Active roles
     roles_aside:
-      add_role: Add Role
       set_main_group: Set main group
   participations:
     destroy:

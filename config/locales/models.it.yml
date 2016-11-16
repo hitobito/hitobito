@@ -114,17 +114,23 @@ it:
         one: tipo di corso
         other: Tipi di corso
       event/role/assistant_leader:
-        one: Formatore
+        one: Responsabile
+        other: Responsabile
       event/role/leader:
         one: Responsabile
+        other: Responsabile
       event/role/cook:
         one: Cucina
+        other: Cucina
       event/role/participant:
         one: Partecipante
+        other: Partecipante
       event/role/treasurer:
         one: Cassiere
+        other: Cassiere
       event/role/speaker:
         one: Conferenziere
+        other: Conferenziere
       event/date:
         one: data
         other: Date
@@ -170,10 +176,9 @@ it:
       subscription:
         one: abbonato
         other: Abbonati
-      tag:
-        one: Tag
-        other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nome
       cantons:
         ag: Argovia
         ai: Appenzello Interno
@@ -472,9 +477,6 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
-      tag:
-        name: Nome
-        taggable_id: Taggable
   errors:
     messages:
       invalid_date: "non è una data valida"

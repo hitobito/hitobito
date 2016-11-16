@@ -323,9 +323,15 @@ it:
     apply: 'iscriversi'
     applied: 'iscritto'
     not_possible: 'impossibile'
-    participants_info: '%{count} iscrizioni'
-    participants_info_with_limit: '%{count} iscrizioni per %{limit} posti'
-    active_participants_info: '%{count} iscrizioni assegnate'
+    participants_info:
+      one: '%{count} iscrizione'
+      other: '%{count} iscrizioni'
+    participants_info_with_limit:
+      one: '%{count} iscrizione per %{limit} posti'
+      other: '%{count} iscrizioni per %{limit} posti'
+    active_participants_info:
+      one: '%{count} iscrizione assegnate'
+      other: '%{count} iscrizioni assegnate'
     issue_only: 'assegna %{model} %{issued} a %{until} (ultima data del corso).'
     prolong_only:
       one: 'prolunga la qualifica esistente %{prolonged} fino al  %{until} (ultima data del corso).'
@@ -643,15 +649,14 @@ it:
       no_changes: Fino a ora non è stata registrata nessuna modifica.
     pdf:
       cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
-    tags:
-      title: Tags
-      add_tag: Aggiungere un tag
-      no_entry: (nessuno)
     roles:
       title: Ruoli attivi
     roles_aside:
       add_role: Aggiungere un ruolo
       set_main_group: Impostare il gruppo principale
+    tags:
+      add_tag: Aggiungere un tag
+      no_entry: (nessuno)
     notes:
       new_note: Aggiungere una nota
   participations:

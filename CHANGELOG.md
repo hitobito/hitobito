@@ -2,7 +2,6 @@
 
 ## Version 1.13
 
-*   Personentags können importiert und exportiert werden.
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
 
 

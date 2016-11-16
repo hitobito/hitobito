@@ -27,7 +27,7 @@ module Export::Csv::People
     end
 
     def tags
-      entry.tag_list.join(', ')
+      entry.tag_list.to_s
     end
 
     private

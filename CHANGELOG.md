@@ -4,6 +4,7 @@
 
 *   Personentags können importiert und exportiert werden.
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+*   JSON API für Kurs Typen.
 
 
 ## Version 1.12

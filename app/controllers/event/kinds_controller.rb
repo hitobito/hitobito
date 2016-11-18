@@ -25,8 +25,19 @@ class Event::KindsController < SimpleCrudController
 
   before_render_form :load_assocations
 
+  def index
+    respond_to do |format|
+      format.json   { render_entries_json(entries) }
+      format.html
+    end
+  end
+
 
   private
+
+  def render_entries_json(entries)
+    render json: ListSerializer.new(entries.decorate, controller: self, serializer: KindSerializer)
+  end
 
   def list_entries
     super.list

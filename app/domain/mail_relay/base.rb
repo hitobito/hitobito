@@ -30,6 +30,8 @@ module MailRelay
 
     attr_reader :message
 
+    delegate :valid_email?, to: :class
+
     class << self
 
       # Retrieve, process and delete all mails from the mail server.
@@ -66,6 +68,11 @@ module MailRelay
         end
       end
 
+      def valid_email?(email)
+        email_address = email.to_s.strip
+        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
+      end
+
       private
 
       def should_clear_email?(message)
@@ -96,7 +103,7 @@ module MailRelay
 
     # Process the given email.
     def relay
-      if relay_address? && to_valid?
+      if relay_address?
         if sender_allowed?
           resend
         else
@@ -173,10 +180,6 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address
     def sender_allowed?
-      true
-    end
-
-    def to_valid?
       true
     end
 

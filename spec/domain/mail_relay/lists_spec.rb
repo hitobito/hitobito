@@ -274,7 +274,6 @@ describe MailRelay::Lists do
         end
 
         it { is_expected.not_to be_sender_allowed }
-        it { is_expected.to be_to_valid }
         its(:sender_email) { is_expected.to be_nil }
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
@@ -290,7 +289,6 @@ describe MailRelay::Lists do
         end
 
         it { is_expected.not_to be_sender_allowed }
-        it { is_expected.to be_to_valid }
         its(:sender_email) { is_expected.to eq('John Nonsense <>') }
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
@@ -306,29 +304,35 @@ describe MailRelay::Lists do
         end
 
         it { is_expected.to be_sender_allowed }
-        it { is_expected.not_to be_to_valid }
         its(:sender_email) { is_expected.to eq from }
         its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-        it 'does not relay' do
-          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+          expect(last_email.from).to eq [from]
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
         end
       end
 
       context 'with invalid receiver address' do
         before do
-          message.to = 'John Nonsense <>'
+          message.to = 'Undisclosed recipients <>'
         end
 
         it { is_expected.to be_sender_allowed }
-        it { is_expected.not_to be_to_valid }
         its(:sender_email) { is_expected.to eq from }
         its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-        it 'does not relay' do
-          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+          expect(last_email.from).to eq [from]
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
         end
       end
     end

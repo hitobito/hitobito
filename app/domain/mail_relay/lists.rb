@@ -21,13 +21,18 @@ module MailRelay
     class << self
       def personal_return_path(list_name, sender_email)
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = sender_email.present? ? '+' + sender_email.tr('@', '=') : ''
+        id_suffix = self.valid_email?(sender_email) ? '+' + sender_email.tr('@', '=') : ''
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{mail_domain}"
       end
 
       def app_sender_name
         app_sender = Settings.email.sender
         app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+      end
+
+      def valid_email?(email)
+        email_address = email.to_s.strip
+        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
       end
     end
 
@@ -42,7 +47,7 @@ module MailRelay
     def reject_not_allowed
       if send_reject_message?
         reply = prepare_not_allowed_message
-        unless ['', '<>'].include?(reply.to.to_s.strip)
+        if self.class.valid_email?(reply.to.to_s.strip)
           logger.info("Rejecting email from #{sender_email} for list #{envelope_receiver_name}")
           deliver(reply)
         end
@@ -74,13 +79,18 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address?
     def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity
-      return false if sender_email.blank?
+      return false unless self.class.valid_email?(sender_email)
 
       mailing_list.anyone_may_post ||
       sender_is_additional_sender? ||
       sender_is_group_email? ||
       sender_is_list_administrator? ||
       (mailing_list.subscribers_may_post? && sender_is_list_member?)
+    end
+
+    def to_valid?
+      tos = Array(message.to)
+      tos.present? && tos.map { |m| self.class.valid_email?(m) }.all?
     end
 
     # List of receiver email addresses for the resent email.

@@ -96,7 +96,7 @@ module MailRelay
 
     # Process the given email.
     def relay
-      if relay_address?
+      if relay_address? && to_valid?
         if sender_allowed?
           resend
         else
@@ -148,7 +148,7 @@ module MailRelay
     end
 
     def sender_email
-      @sender_email ||= message.from && message.from.first
+      @sender_email ||= message.from && Array(message.from).first
     end
 
     # Heuristic method to find actual receiver of the message.
@@ -173,6 +173,10 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address
     def sender_allowed?
+      true
+    end
+
+    def to_valid?
       true
     end
 

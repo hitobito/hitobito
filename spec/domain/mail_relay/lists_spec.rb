@@ -268,17 +268,66 @@ describe MailRelay::Lists do
         expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
       end
 
-      context 'with invalid sender address' do
+      context 'with no sender address' do
         before do
           message.from = nil
         end
 
         it { is_expected.not_to be_sender_allowed }
+        it { is_expected.to be_to_valid }
         its(:sender_email) { is_expected.to be_nil }
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-        it 'does not relays' do
+        it 'does not relay' do
+          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context 'with invalid sender address' do
+        before do
+          message.from = 'John Nonsense <>'
+        end
+
+        it { is_expected.not_to be_sender_allowed }
+        it { is_expected.to be_to_valid }
+        its(:sender_email) { is_expected.to eq('John Nonsense <>') }
+        its(:potential_senders) { is_expected.to be_blank }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'does not relay' do
+          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context 'with no receiver address' do
+        before do
+          message.to = nil
+        end
+
+        it { is_expected.to be_sender_allowed }
+        it { is_expected.not_to be_to_valid }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'does not relay' do
+          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context 'with invalid receiver address' do
+        before do
+          message.to = 'John Nonsense <>'
+        end
+
+        it { is_expected.to be_sender_allowed }
+        it { is_expected.not_to be_to_valid }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'does not relay' do
           expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
         end
       end

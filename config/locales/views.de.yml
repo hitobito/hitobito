@@ -584,6 +584,8 @@ de:
 
 
   person:
+    confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
     add_requests:
 
       body_list:

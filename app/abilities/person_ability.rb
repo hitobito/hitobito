@@ -13,6 +13,8 @@ class PersonAbility < AbilityDsl::Base
     class_side(:index, :query).everybody
     class_side(:index_people_without_role).if_admin
 
+    permission(:admin).may(:destroy).not_self
+    
     permission(:any).may(:show, :show_full, :history, :update,
                          :update_email, :primary_group, :log).
                      herself

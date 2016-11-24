@@ -17,6 +17,7 @@ de:
     until: Bis
     no_list_entries: Keine Einträge gefunden.
     confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
+    confirm_delete_person: Wollen Sie %{person} wirklich löschen?
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden mit
 

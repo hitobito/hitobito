@@ -57,4 +57,8 @@ module PeopleHelper
                        method: :delete }
     action_button ti(:"link.delete"), path, 'trash', options
   end
+
+  def not_self(person)
+    return person.id != current_user.id
+  end
 end

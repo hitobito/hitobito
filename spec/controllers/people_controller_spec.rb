@@ -718,4 +718,20 @@ describe PeopleController do
     end
 
   end
+
+  context 'as admin' do
+
+    describe 'POST #destroy' do
+      let(:person) { people(:top_leader) }
+
+      it 'fails without permissions' do
+        sign_in(person)
+        expect { 
+          delete :destroy, group_id: group.id, id: person.id 
+        }.to raise_error(CanCan::AccessDenied)
+      end
+
+    end
+  end
+
 end

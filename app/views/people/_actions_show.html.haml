@@ -6,7 +6,7 @@
 - if can?(:edit, entry)
   = button_action_edit
 
-- if can?(:destroy, entry)
+- if can?(:destroy, entry) && not_self(entry.person)
   = button_action_destroy_person
   
 = dropdown_people_export(can?(:show_full, entry), false)

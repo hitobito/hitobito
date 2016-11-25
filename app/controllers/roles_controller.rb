@@ -30,7 +30,11 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      respond_with(entry, success: created, location: after_create_location(new_person))
+      if request.format == 'text/javascript'
+        redirect_to after_create_location(new_person)
+      else
+        respond_with(entry, success: created, location: after_create_location(new_person))
+      end
     end
   end
 

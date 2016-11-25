@@ -73,6 +73,7 @@ Hitobito::Application.routes.draw do
 
 
       get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
+      get 'deleted_people' => 'group/deleted_people#index'
       post 'person_add_requests' => 'group/person_add_requests#activate'
       delete 'person_add_requests' => 'group/person_add_requests#deactivate'
 

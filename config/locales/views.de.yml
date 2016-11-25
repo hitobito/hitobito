@@ -436,6 +436,11 @@ de:
         new_group_name: 'Name der neuen Gruppe'
         merge_group_with: '%{group} fusionieren mit'
         merge_button: 'Gruppe fusionieren'
+    deleted_people:
+      list:
+        number_of_people_shown:
+          one: "%{count} Person angezeigt."
+          other: "%{count} Personen angezeigt."
 
     move:
       select:
@@ -476,6 +481,7 @@ de:
     global:
       link:
         add: Gruppe erstellen
+        deleted_person: Gelöschte Personen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -838,6 +844,7 @@ de:
       add_person: Person hinzufügen
       add_role_for_person: Rolle für %{person} erstellen
       edit_role_for_person: Rolle für %{person} bearbeiten
+      new_role_for_person: Neue Rolle erstellen
 
     fields:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person

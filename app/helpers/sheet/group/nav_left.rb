@@ -22,7 +22,7 @@ module Sheet
         render_upwards +
         render_header +
         content_tag(:ul, class: 'nav-left-list') do
-          render_layer_groups + render_sub_layers
+          render_layer_groups + render_sub_layers + render_deleted_people_link(groups.first)
         end
       end
 
@@ -94,6 +94,15 @@ module Sheet
         "<li#{cls}>".html_safe +
         link_to(group.short_name.present? ? group.short_name : group.to_s,
                 active_path(group), title: group.to_s)
+      end
+
+      def render_deleted_people_link(group)
+        if view.can?(:layer_full, group) && visible?(group)
+          cls = " class=\"active\"" if false
+          "<li#{cls}>".html_safe +
+          link_to(view.t('groups.global.link.deleted_person'),
+                  view.group_deleted_people_path(group.id))
+        end
       end
 
       def render_sub_layers

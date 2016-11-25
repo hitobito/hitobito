@@ -92,6 +92,15 @@ class PersonDecorator < ApplicationDecorator
     @relations ||= relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
+  def last_role_new_link
+    content_tag(:span, style: 'padding-left: 10px', id: "role_#{last_role.id}") do
+      h.link_to(h.icon(:edit),
+                h.new_group_role_path(last_role.group, role_id: last_role.id),
+                title: h.t('global.link.edit'),
+                remote: true)
+    end 
+  end
+
   private
 
   def event_queries

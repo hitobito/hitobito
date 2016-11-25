@@ -1,0 +1,37 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title @group.to_s
+
+.pagination-bar
+  = paginate @people
+
+  .pagination-info
+    - if @all_count > 0
+      = t('.number_of_people_shown', count: @people.total_count)
+      - unless @all_count == @people.total_count
+        = muted(t('.number_of_people_hidden', count: @all_count - @people.total_count))
+    - else
+      = ti(:no_list_entries)
+
+    - if @person_add_requests.present?
+      = render 'person/add_requests/body_list'
+
+- if @people.total_count > 0
+  = crud_table do |t|
+    - t.col('') do |p|
+      .profil= image_tag(p.picture.thumb.url, size: '32x32')
+    - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
+      %strong
+        -# Any person listed can be shown
+        = link_to(p.to_s(:list), group_person_path(Group.find(1), p))
+        %br/
+        = muted p.additional_name
+    - t.col(t.sort_header(:roles, Role.model_name.human(count: 2))) { |p| p.last_role_new_link if can?(:create, p.last_role) }
+    - t.col(Person.human_attribute_name(:emails))                   { |p| p.all_emails(!index_full_ability?) }
+    - t.col(PhoneNumber.model_name.human(count: 2))                 { |p| p.all_phone_numbers(!index_full_ability?) }
+    - sortable_grouped_person_attr(t, %w(zip_code town), :address)  { |p| p.complete_address }
+
+= paginate @people

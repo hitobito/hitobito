@@ -225,6 +225,10 @@ class Person < ActiveRecord::Base
     now.year - birthday.year - (extra ? 0 : 1)
   end
 
+  def last_role
+    @last_role ||= Role.unscoped.where(person: self).order(:deleted_at).last
+  end
+
   ### AUTHENTICATION INSTANCE METHODS
 
   # Is this person allowed to login?

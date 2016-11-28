@@ -20,10 +20,6 @@ describe Group::DeletedPeopleController do
       get :index, group_id: group.id
       is_expected.to render_template('group/deleted_people/index')
     end
-
-    it 'find entry' do
-      expect(Group::DeletedPeopleController.send(:find_entry)).to eq(person)
-    end
-
+    
   end
 end

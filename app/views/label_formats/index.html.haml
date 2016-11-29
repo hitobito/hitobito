@@ -1,0 +1,39 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title ti('label_formats.title')
+
+.btn-toolbar
+  %label
+    %input#admin_toggle{ type: 'checkbox', data: {hide: 'admin_labels'} }
+      = I18n.t('label_formats.see_own_labels')
+
+#main
+  .btn-toolbar
+    = button_action_add(new_label_format_path(current_user: true))
+  = label_formats_crud_table(personal_entries) do |t|
+    - t.col(t.sort_header(:name)) do |p|
+      = link_to(p.name, label_format_path(p.id))
+    - t.col(t.sort_header(:page_size)) { |p| p.render_html(p.page_size) }
+    - t.col(t.sort_header(:landscape)) { |p| t("label_formats.form.#{p.page_layout}") }
+    - t.col(t.sort_header(:dimensions)) { |p| p.render_html(p.dimensions) }
+    - t.col(t.sort_header(:font_size)) { |p| '%.2f' % p.render_html(p.font_size) }
+    - t.col(t.sort_header(:width)) { |p| '%.2f' % p.render_html(p.width) }
+    - t.col(t.sort_header(:height)) { |p| '%.2f' % p.render_html(p.height) }
+
+  %div#admin_labels{ style: "display: block" }
+    - if can?(:create_global, LabelFormat)
+      %h1= I18n.t('label_formats.layer_labels', toplayername: current_user.primary_group)
+      .btn-toolbar
+        = button_action_add
+      = label_formats_crud_table(entries) do |t|
+        - t.col(t.sort_header(:name)) do |p|
+          = link_to(p.name, label_format_path(p.id))
+        - t.col(t.sort_header(:page_size)) { |p| p.render_html(p.page_size) }
+        - t.col(t.sort_header(:landscape)) { |p| t("label_formats.form.#{p.page_layout}") }
+        - t.col(t.sort_header(:dimensions)) { |p| p.render_html(p.dimensions) }
+        - t.col(t.sort_header(:font_size)) { |p| '%.2f' % p.render_html(p.font_size) }
+        - t.col(t.sort_header(:width)) { |p| '%.2f' % p.render_html(p.width) }
+        - t.col(t.sort_header(:height)) { |p| '%.2f' % p.render_html(p.height) }

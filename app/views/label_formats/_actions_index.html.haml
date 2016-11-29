@@ -3,4 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= crud_table :name, :page_size, :landscape, :dimensions, :font_size, :width, :height
+= button_action_add if can?(:new, model_class)

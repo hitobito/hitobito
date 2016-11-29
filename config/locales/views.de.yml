@@ -44,6 +44,9 @@ de:
       refresh: Aktualisieren
       print: Drucken
 
+    label_formats:
+      title: Meine Etikettenformate
+
     link:
       show: Anzeigen
       edit: Bearbeiten
@@ -516,6 +519,8 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   label_formats:
+    layer_labels: "Etikettenformate für %{toplayername}"
+    see_own_labels: "Nur eigene Etikettenformate anzeigen"
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'
@@ -561,7 +566,7 @@ de:
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'
-    admin: 'Admin'
+    admin: 'Einstellungen'
 
   qualifications:
     in_years: '%{years} Jahre'

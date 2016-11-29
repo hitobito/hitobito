@@ -13,10 +13,39 @@ class LabelFormatsController < SimpleCrudController
   self.sort_mappings = { name: 'label_format_translations.name',
                          dimensions: %w(count_horizontal count_vertical) }
 
+  helper_method :personal_entries
+
+  def create
+    super
+    if normal_user? || (admin_user? && current_user_set?)
+      entry.update(user_id: current_user.id)
+    end
+  end
+
   private
+
+  def normal_user?
+    !admin_user?
+  end
+
+  def admin_user?
+    can?(:create_global, entry)
+  end
+
+  def current_user_set?
+    !params[:current_user].blank?
+  end
 
   def list_entries
     super.list
+  end
+
+  def entries
+    LabelFormat.where(user_id: nil)
+  end
+
+  def personal_entries
+    LabelFormat.where(user_id: current_user.id)
   end
 
 end

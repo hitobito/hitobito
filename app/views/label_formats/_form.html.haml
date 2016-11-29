@@ -17,5 +17,6 @@
       = f.labeled_input_field :height, help_inline: 'mm'
       = f.labeled_input_field :padding_top, help_inline: 'mm'
       = f.labeled_input_field :padding_left, help_inline: 'mm'
+      = hidden_field_tag :current_user, params[:current_user] 
     %aside.span6
       = image_tag("label_formats.png", size: '426x323')

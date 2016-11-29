@@ -70,6 +70,11 @@ class LabelFormat < ActiveRecord::Base
     landscape ? :landscape : :portrait
   end
 
+  def render_html(value)
+    html = ''.html_safe
+    html << value.to_s
+  end
+
   private
 
   def sweep_cache

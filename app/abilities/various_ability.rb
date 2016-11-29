@@ -13,8 +13,11 @@ class VariousAbility < AbilityDsl::Base
   end
 
   on(LabelFormat) do
-    class_side(:index).if_admin
+    class_side(:index).everybody
+    class_side(:manage_global).if_admin
     permission(:admin).may(:manage).all
+    permission(:any).may(:create, :update, :destroy, :read).own
+    permission(:any).may(:create, :new).all
   end
 
   if Group.course_types.present?
@@ -29,4 +32,7 @@ class VariousAbility < AbilityDsl::Base
     end
   end
 
+  def own
+    subject.user_id == user.id
+  end
 end

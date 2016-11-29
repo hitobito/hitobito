@@ -5,7 +5,8 @@
 
 - title ti('label_formats.title')
 
-.btn-toolbar
+-if can?(:create_global, LabelFormat)
+  .btn-toolbar
   %label
     %input#admin_toggle{ type: 'checkbox', data: {hide: 'admin_labels'} }
       = I18n.t('label_formats.see_own_labels')
@@ -22,6 +23,8 @@
     - t.col(t.sort_header(:font_size)) { |p| '%.2f' % p.render_html(p.font_size) }
     - t.col(t.sort_header(:width)) { |p| '%.2f' % p.render_html(p.width) }
     - t.col(t.sort_header(:height)) { |p| '%.2f' % p.render_html(p.height) }
+    - action_col_edit(t)
+    - action_col_destroy(t)
 
   %div#admin_labels{ style: "display: block" }
     - if can?(:create_global, LabelFormat)
@@ -37,3 +40,6 @@
         - t.col(t.sort_header(:font_size)) { |p| '%.2f' % p.render_html(p.font_size) }
         - t.col(t.sort_header(:width)) { |p| '%.2f' % p.render_html(p.width) }
         - t.col(t.sort_header(:height)) { |p| '%.2f' % p.render_html(p.height) }
+        - action_col_edit(t)
+        - action_col_destroy(t)
+

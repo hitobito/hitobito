@@ -14,7 +14,8 @@ class VariousAbility < AbilityDsl::Base
 
   on(LabelFormat) do
     class_side(:index).if_admin
-    permission(:any).may(:manage).all
+    permission(:admin).may(:manage).all
+    permission(:any).may(:show_nav, :index, :show, :edit, :destroy, :create).all
     permission(:admin).may(:create_global).all
   end
 

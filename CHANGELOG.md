@@ -6,7 +6,7 @@
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
 *   Anfrageverfahren wird für gelöschte Personen ebenfalls ausgelöst.
 *   Gelöschte Personen können pro Ebene angezeigt werden.
-
+*   Benutzer/-innen können personalisierte Etiketten erstellen.
 
 ## Version 1.13
 

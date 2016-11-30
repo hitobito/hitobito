@@ -7,6 +7,7 @@
 *   Anfrageverfahren wird für gelöschte Personen ebenfalls ausgelöst.
 *   Gelöschte Personen können pro Ebene angezeigt werden.
 *   Benutzer/-innen können personalisierte Etiketten erstellen.
+*   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
 
 ## Version 1.13
 

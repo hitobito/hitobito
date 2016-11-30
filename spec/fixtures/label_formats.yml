@@ -48,3 +48,26 @@ envelope:
   padding_left: 80
   count_horizontal: 1
   count_vertical: 1
+
+with_pp_post:
+  page_size: 'A4'
+  font_size: 11
+  width: 70
+  height: 29.7
+  padding_top: 5
+  padding_left: 5
+  count_horizontal: 3
+  count_vertical: 10
+  pp_post: 'P.P. 3012 Bern'
+
+with_nickname:
+  page_size: 'A4'
+  font_size: 11
+  width: 70
+  height: 29.7
+  padding_top: 5
+  padding_left: 5
+  count_horizontal: 3
+  count_vertical: 10
+  nickname: true
+  

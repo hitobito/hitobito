@@ -249,6 +249,8 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.float   "padding_top",      limit: 24,                  null: false
     t.float   "padding_left",     limit: 24,                  null: false
     t.integer "person_id"
+    t.boolean "nickname",                     default: false, null: false
+    t.string  "pp_post"
   end
 
   create_table "locations", force: :cascade do |t|

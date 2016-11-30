@@ -253,4 +253,12 @@ describe 'StandardFormBuilder' do
       expect(form.respond_to?(:labeled_text_field)).to be_truthy
     end
   end
+
+  context '#pp_post_field' do
+    subject { form.pp_post_field(:name) }
+
+    it { is_expected.to match(/class="input-prepend input-append"/) }
+    it { is_expected.to match(/class="add-on"/) }
+    it { is_expected.to match(/class="span5"/) }
+  end 
 end

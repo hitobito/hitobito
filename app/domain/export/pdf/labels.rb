@@ -48,7 +48,9 @@ module Export::Pdf
 
     def address(contactable)
       address = ''
+      address << print_pp_post(format) << "\n" if pp_post?(format)
       address << contactable.company_name << "\n" if print_company?(contactable)
+      address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << contactable.full_name << "\n" if contactable.full_name.present?
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
@@ -71,6 +73,18 @@ module Export::Pdf
 
     def print_company?(contactable)
       contactable.respond_to?(:company) && contactable.company_name?
+    end
+
+    def print_nickname?(contactable)
+      contactable.respond_to?(:nickname) && contactable.nickname.present?
+    end
+
+    def pp_post?(format)
+      format.respond_to?(:pp_post) && format.pp_post.present?
+    end
+
+    def print_pp_post(format)
+      "P.P. " + format.pp_post + " Post CH AG"
     end
 
     def min_border

@@ -75,9 +75,15 @@ module Dropdown
 
     def add_label_format_items(parent)
       LabelFormat.all_as_hash.each do |id, label|
-        parent.sub_items << Item.new(label, export_label_format_path(id),
-                                     target: :new, class: 'export-label-format')
+        if own_label(id)
+          parent.sub_items << Item.new(label, export_label_format_path(id),
+                                      target: :new, class: 'export-label-format')
+        end
       end
+    end
+
+    def own_label(id)
+      user.id == LabelFormat.find(id).user_id || LabelFormat.find(id).user_id == nil
     end
 
     def add_condensed_labels_option_items(parent)

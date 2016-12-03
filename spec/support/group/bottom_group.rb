@@ -9,6 +9,11 @@ class Group::BottomGroup < Group
 
   children Group::BottomGroup
 
+  class LeaderWithBelow < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
+
   class Leader < ::Role
     self.permissions = [:group_full]
   end
@@ -18,6 +23,6 @@ class Group::BottomGroup < Group
     self.visible_from_above = false
   end
 
-  roles Leader, Member
+  roles LeaderWithBelow, Leader, Member
 
 end

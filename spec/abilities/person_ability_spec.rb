@@ -309,18 +309,18 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_local_people, groups(:toppers))
     end
 
-    it 'may not show notes and tags in same layer' do
+    it 'may show notes and tags in same group (group_full)' do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
-      is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_notes, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it 'may not show notes in lower layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:index_tags, other.person)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
   end
 
@@ -849,6 +849,21 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:index_people, groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_full_people, groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_local_people, groups(:bottom_layer_one))
+    end
+
+    it 'may show notes and tags in same group' do
+      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: other)
+      is_expected.to be_able_to(:index_notes, other.reload)
+      is_expected.to be_able_to(:index_tags, other)
+      is_expected.to be_able_to(:manage_tags, other)
+    end
+
+    it 'may show notes and tags in below group' do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:index_notes, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
   end
 

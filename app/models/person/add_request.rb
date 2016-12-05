@@ -35,8 +35,10 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      joins(person: :primary_group).
-        where(groups: { layer_group_id: layer_group.id })
+      ids = (joins(person: :primary_group).
+        where(groups: { layer_group_id: layer_group.id }).pluck(:id) +
+        people_with_last_group(layer_group).pluck(:id))
+      where(id: ids)
     end
   end
 
@@ -56,7 +58,7 @@ class Person::AddRequest < ActiveRecord::Base
   end
 
   def person_layer
-    person.primary_group.try(:layer_group)
+    person.primary_group.try(:layer_group) || last_layer_group
   end
 
   def requester_full_roles
@@ -66,4 +68,24 @@ class Person::AddRequest < ActiveRecord::Base
     end
   end
 
+  private
+
+  def last_layer_group
+    last_role = Role.unscoped.where(person: person).order(:deleted_at).last
+    last_role && last_role.group.layer_group
+  end
+
+  def self.people_with_last_group(group)
+    candidate_ids = no_role_and_last_member_in(group).map(&:id)
+    Person::AddRequest.joins(:person).where(people: { id: candidate_ids })
+  end
+
+  def self.no_role_and_last_member_in(group)
+    subquery = "select max(roles.deleted_at) from roles " \
+               "where roles.person_id = people.id and people.primary_group_id is null"
+    query =    "select people.* from people inner join roles on roles.person_id = people.id " \
+               "inner join groups on roles.group_id = groups.id " \
+               "where roles.deleted_at = (#{subquery}) and groups.layer_group_id = ?;"
+    Person.find_by_sql([query, group.id])
+  end
 end

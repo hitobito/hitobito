@@ -43,6 +43,23 @@ describe Person::AddRequest do
       expect(people).to match_array([admin, topper].collect(&:id))
     end
 
+    it 'contains people without primary group this primary group layer' do
+      admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
+      topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
+      bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+      # second role in layer
+      Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
+      Person::AddRequest::Group.create!(
+        person: topper,
+        requester: bottom,
+        body: groups(:bottom_layer_one),
+        role_type: Group::BottomLayer::Member.sti_name)
+
+      requests = Person::AddRequest.for_layer(groups(:top_layer))
+
+      expect(requests.first.person).to eq(topper)
+    end
+
   end
 
   context 'uniqueness' do
@@ -114,6 +131,22 @@ describe Person::AddRequest do
 
       it '#to_s contains group type' do
         expect(@rg.to_s).to eq("Top Group TopGroup")
+      end
+
+      it '#last_layer_group contains last layer' do
+        admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
+        topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
+        bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+        # second role in layer
+        Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
+        Person::AddRequest::Group.create!(
+          person: topper,
+          requester: bottom,
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+        topper.update(primary_group_id: nil)
+        add_request = Person::AddRequest.where(person_id: topper.id)
+        expect(add_request.first.send(:last_layer_group)).to eq(groups(:top_layer))
       end
     end
 

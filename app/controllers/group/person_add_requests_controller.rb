@@ -39,7 +39,7 @@ class Group::PersonAddRequestsController < ApplicationController
       includes(:body,
                :person,
                requester: { roles: :group }).
-      merge(Person.order_by_name)
+      order(created_at: :desc)
   end
 
   def load_approvers

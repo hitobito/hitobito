@@ -50,6 +50,15 @@ class PersonReadables < PersonFetchables
   def accessible_people
     if user.root?
       Person.only_public_data
+    elsif Ability.new(user).can?(:show_people_without_role, Person)
+      join_fragment = "INNER JOIN roles AS roles0 ON roles0.person_id = people.id " \
+                      "INNER JOIN groups AS groups0 ON groups0.id = roles0.group_id"
+      ac = accessible_conditions.to_a
+      ac[0] = ac[0].gsub('groups', 'groups0').gsub('roles', 'roles0')
+      Person.only_public_data.
+             joins(join_fragment).
+             where(ac).
+             uniq
     else
       Person.only_public_data.
              joins(roles: :group).

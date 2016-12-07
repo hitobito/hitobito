@@ -68,6 +68,20 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
+
+        context 'admin' do
+
+          if action == :global
+
+            it 'may get deleted people' do
+              other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+              other.update(created_at: Time.now - 1.year)
+              other.destroy
+              is_expected.to include(other.person)
+            end
+          end
+        end
+
       end
 
 

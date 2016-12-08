@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav-left-list
-  - if can?(:show_nav, LabelFormat)
+  - if can?(:index, LabelFormat)
     = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
   - if can?(:index, CustomContent)
     = nav CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)

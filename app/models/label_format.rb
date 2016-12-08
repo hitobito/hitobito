@@ -47,16 +47,7 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, numericality: { less_than: :height, if: :height }
   validates :padding_left, numericality: { less_than: :width, if: :width }
 
-  after_save :sweep_cache
-  after_destroy :sweep_cache
-
-  class << self
-    def all_as_hash
-      Rails.cache.fetch("label_formats_#{I18n.locale}") do
-        LabelFormat.list.each_with_object({}) { |f, result| result[f.id] = f.to_s }
-      end
-    end
-  end
+  scope :for_user, -> (user) { where('user_id = ? OR user_id IS null', user.id) }
 
   def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"
@@ -68,19 +59,6 @@ class LabelFormat < ActiveRecord::Base
 
   def page_layout
     landscape ? :landscape : :portrait
-  end
-
-  def render_html(value)
-    html = ''.html_safe
-    html << value.to_s
-  end
-
-  private
-
-  def sweep_cache
-    Settings.application.languages.to_hash.keys.each do |lang|
-      Rails.cache.delete("label_formats_#{lang}")
-    end
   end
 
 end

@@ -51,14 +51,4 @@ module PeopleHelper
     person ? assoc_link(person) : "(#{t('global.nobody')})"
   end
 
-  def button_action_destroy_person(path = nil, options = {})
-    path ||= path_args(entry)
-    options[:data] = { confirm: ti(:confirm_delete_person, person: entry.person),
-                       method: :delete }
-    action_button ti(:"link.delete"), path, 'trash', options
-  end
-
-  def not_self(person)
-    return person.id != current_user.id
-  end
 end

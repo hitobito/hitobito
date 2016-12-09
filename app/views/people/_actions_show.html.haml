@@ -6,8 +6,9 @@
 - if can?(:edit, entry)
   = button_action_edit
 
-- if can?(:destroy, entry) && not_self(entry.person)
-  = button_action_destroy_person
+- if can?(:destroy, entry)
+  = button_action_destroy(nil, {confirm: t('person.confirm_delete', person: entry.person),
+                                method: 'delete'})
   
 = dropdown_people_export(can?(:show_full, entry), false)
 

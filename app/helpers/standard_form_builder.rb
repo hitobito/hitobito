@@ -384,14 +384,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def pp_post_field(attr)
-    content_tag(:div, class: 'input-prepend input-append') do
-      content_tag(:span, 'P.P.', class: "add-on") +
-      text_field(attr, html_options = {class: 'span5', type: 'text', placeholder: 'CH-3030 Bern'} ) +
-      content_tag(:span, 'Post CH AG', class: "add-on")
-    end
-  end
-
   private
 
   # Returns true if attr is a non-polymorphic association.

@@ -519,7 +519,6 @@ de:
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'
-      nickname: Übername einschliessen
     global:
       link:
         add: Etikettenformat erstellen

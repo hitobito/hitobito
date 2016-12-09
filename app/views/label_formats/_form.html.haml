@@ -17,10 +17,13 @@
       = f.labeled_input_field :height, help_inline: 'mm'
       = f.labeled_input_field :padding_top, help_inline: 'mm'
       = f.labeled_input_field :padding_left, help_inline: 'mm'
-      = f.labeled(:nickname) do
-        = f.check_box(:nickname)
-        = t('.nickname')
+      = f.labeled_input_field :nickname
       = f.labeled(:pp_post) do
-        = f.pp_post_field(:pp_post)
+        .input-prepend.input-append
+          %span.add-on
+            = 'P.P.'
+          = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
+          %span.add-on
+            = 'Post CH AG'
     %aside.span6
       = image_tag("label_formats.png", size: '426x323')

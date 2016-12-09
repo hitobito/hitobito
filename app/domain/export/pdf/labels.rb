@@ -34,6 +34,8 @@ module Export::Pdf
       pdf.bounding_box(pos,
                        width: format.width.mm - min_border,
                        height: format.height.mm - min_border) do
+
+        print_pp_post(pdf, format) if pp_post?(format)
         # pdf.stroke_bounds
         pdf.text_box(address, at: [format.padding_left.mm,
                                    format.height.mm - format.padding_top.mm - min_border])
@@ -42,13 +44,13 @@ module Export::Pdf
 
     # print without line wrap
     def print_address(pdf, address, pos)
+      print_pp_post(pdf, format) if pp_post?(format)
       pdf.text_box(address, at: [pos.first + format.padding_left.mm,
                                  pos.last - format.padding_top.mm])
     end
 
     def address(contactable)
       address = ''
-      address << print_pp_post(format) << "\n" if pp_post?(format)
       address << contactable.company_name << "\n" if print_company?(contactable)
       address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << contactable.full_name << "\n" if contactable.full_name.present?
@@ -83,8 +85,13 @@ module Export::Pdf
       format.respond_to?(:pp_post) && format.pp_post.present?
     end
 
-    def print_pp_post(format)
-      "P.P. " + format.pp_post + " Post CH AG"
+    def print_pp_post(pdf, format)
+      pdf.bounding_box([format.padding_left.mm,
+                        format.height.mm - format.padding_top.mm + 12],
+                        width: format.width.mm - min_border,
+                        height: format.height.mm - min_border) do
+        pdf.text "<u><b>P.P. </b>" + format.pp_post + " Post CH AG</u>", :inline_format => true
+      end
     end
 
     def min_border

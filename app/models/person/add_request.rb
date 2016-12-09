@@ -35,10 +35,9 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      ids = (joins(:person).
-        joins('LEFT JOIN groups ON groups.id = people.primary_group_id') +
-          where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id, layer_group).pluck(:id)
-      ).where(id: ids)
+      joins(:person).
+        joins('LEFT JOIN groups ON groups.id = people.primary_group_id').
+          where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id, layer_group.people.pluck(:id))
     end
 
     def no_role_and_last_member_in(group)

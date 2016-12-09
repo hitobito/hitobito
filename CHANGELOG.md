@@ -4,6 +4,8 @@
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
+*   Übernamen können den Etiketten hinzugefügt werden.
+*   Ebenfalls kann ein P.P. Post Feld für das effiziente Frankieren eines Massenversands konfiguriert werden.
 
 ## Version 1.13
 

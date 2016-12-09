@@ -45,7 +45,7 @@ module Person::AddRequest::Creator
     end
 
     def person_layer
-      (person && person.primary_group.try(:layer_group)) || last_layer_group
+      person && (person.primary_group.try(:layer_group) || last_layer_group)
     end
 
     def request_attrs
@@ -82,7 +82,7 @@ module Person::AddRequest::Creator
     end
 
     def last_layer_group
-      last_role = Role.unscoped.where(person: person).order(:deleted_at).last
+      last_role = person.roles.only_deleted.order(:deleted_at).last
       last_role && last_role.group.layer_group
     end
 

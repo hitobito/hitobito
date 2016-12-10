@@ -8,6 +8,7 @@
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+*   Personen, denen alle Rollen gelöscht wurden, können von Berechtigten in einer Liste angezeigt werden.
 
 ## Version 1.12
 

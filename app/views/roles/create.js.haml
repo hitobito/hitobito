@@ -1,0 +1,9 @@
+// noalert
+$('.popover div.alert').remove();
+- if entry.persisted?
+  window.location.reload();
+- else
+  :plain
+    $('<div class="alert alert-danger" role="alert"></div>').
+      text('#{entry.errors.full_messages.to_sentence.capitalize}').
+      prependTo('form#new_role');

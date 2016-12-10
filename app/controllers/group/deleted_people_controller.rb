@@ -5,45 +5,31 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Group::DeletedPeopleController < CrudController
+class Group::DeletedPeopleController < ListController
 
-  decorates :group, :person
+  before_action :authorize_action
 
-  helper_method :index_full_ability?
+  self.nesting = Group
 
-  def index
-    respond_to do |format|
-      format.html  { @people = Kaminari.paginate_array(PersonDecorator.decorate_collection(deleted_people)).page(params[:page]); @all_count = deleted_people.count }
-    end
-  end
+  decorates :people, :group
 
   private
 
-  def find_entry
-    Person.find(params[:id]).decorate
-  end
-
-  def path_args(last)
-    [Group.first, find_entry]
+  def group
+    parent
   end
 
   def model_class
     Person
   end
 
-  def deleted_people
-    @deleted_people ||= Group::DeletedPeople.deleted_for(group)
+  def list_entries
+    Group::DeletedPeople.deleted_for(group).
+      includes(:additional_emails, :phone_numbers).
+      page(params[:page])
   end
 
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
-
-  def index_full_ability?
-    if params[:kind].blank?
-      can?(:index_full_people, @group)
-    else
-      can?(:index_deep_full_people, @group)
-    end
+  def authorize_action
+    authorize!(:index_deleted_people, group)
   end
 end

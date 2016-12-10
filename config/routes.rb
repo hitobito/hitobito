@@ -72,8 +72,9 @@ Hitobito::Application.routes.draw do
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
 
-      get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
       get 'deleted_people' => 'group/deleted_people#index'
+
+      get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
       post 'person_add_requests' => 'group/person_add_requests#activate'
       delete 'person_add_requests' => 'group/person_add_requests#deactivate'
 

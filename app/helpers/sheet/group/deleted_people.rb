@@ -8,7 +8,6 @@
 module Sheet
   class Group
     class DeletedPeople < Base
-      self.parent_sheet = Sheet::Group
     end
   end
 end

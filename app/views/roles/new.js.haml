@@ -1,13 +1,1 @@
-:plain
-  $($('body').data('popover')).popover('destroy')
-  $('#role_#{params[:role_id]}').popover({content: '#{j(render('popover_create'))}',
-                                  title: "#{t('roles.form.new_role_for_person', person: entry.person)}",
-                                  container: 'body',
-                                  placement: 'bottom',
-                                  html: true }).popover('show')
-  $('#new_role').on('ajax:success', function() {
-    window.location.reload();
-  })
-
-  $('body').data('popover', '#role_#{params[:role_id]}')
-  $('body .chosen-select').each(App.activateChosen)
+= render('popover', title_key: 'roles.form.new_role_for_person', id: "role_#{params[:role_id]}" )

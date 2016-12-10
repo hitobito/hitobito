@@ -19,6 +19,7 @@ class RolesController < CrudController
   skip_authorize_resource only: [:details, :role_types]
 
   before_render_form :set_group_selection
+  before_create :set_noalert_header
 
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
@@ -30,11 +31,7 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      if request.format == 'text/javascript'
-        redirect_to after_create_location(new_person)
-      else
-        respond_with(entry, success: created, location: after_create_location(new_person))
-      end
+      respond_with(entry, success: created, status: response_status(created), location: after_create_location(new_person))
     end
   end
 
@@ -84,6 +81,10 @@ class RolesController < CrudController
       fail ActiveRecord::Rollback unless created
     end
     created
+  end
+
+  def response_status(created)
+    created ? :ok : :unprocessable_entity
   end
 
   def change_type?
@@ -243,6 +244,10 @@ class RolesController < CrudController
 
   def belongs_to_persons_primary_group?(role)
     role.group_id == role.person.primary_group_id
+  end
+
+  def set_noalert_header
+    response.headers['X-No-Alert'] = 'True'
   end
 
 end

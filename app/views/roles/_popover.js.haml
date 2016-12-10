@@ -1,0 +1,10 @@
+:plain
+  $($('body').data('popover')).popover('destroy')
+  $('##{id}').popover({content: '#{j(render('popover.html', group: entry.group))}',
+                                  title: "#{t(title_key, person: entry.person)}",
+                                  container: 'body',
+                                  placement: 'bottom',
+                                  html: true }).popover('show')
+
+  $('body').data('popover', '##{id}')
+  $('body .chosen-select').each(App.activateChosen)

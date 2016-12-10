@@ -9,11 +9,18 @@
 class Group::DeletedPeople
 
   def self.deleted_for(group)
-    subquery = "select max(roles.deleted_at) from roles " \
-               "where roles.person_id = people.id and people.primary_group_id is null"
-    query =    "select people.* from people inner join roles on roles.person_id = people.id " \
-               "where roles.deleted_at = (#{subquery}) and roles.group_id = ?;"
-    Person.find_by_sql([query, group.id])
+
+    undeleted_roles = "SELECT * FROM roles " \
+                        "WHERE roles.deleted_at IS NULL " \
+                        "AND roles.person_id = people.id"
+
+    subquery = "SELECT MAX(roles.deleted_at) FROM roles " \
+                 "WHERE roles.person_id = people.id " \
+                 "AND NOT EXISTS (#{undeleted_roles})"
+    Person.
+      joins('INNER JOIN roles ON roles.person_id = people.id').
+      where("roles.deleted_at = (#{subquery}) AND (roles.group_id IN (?) OR roles.group_id = ?)",
+        group.layer_group.children.select(:id), group.id)
   end
 
 end

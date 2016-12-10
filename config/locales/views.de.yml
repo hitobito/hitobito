@@ -436,11 +436,6 @@ de:
         new_group_name: 'Name der neuen Gruppe'
         merge_group_with: '%{group} fusionieren mit'
         merge_button: 'Gruppe fusionieren'
-    deleted_people:
-      list:
-        number_of_people_shown:
-          one: "%{count} Person angezeigt."
-          other: "%{count} Personen angezeigt."
 
     move:
       select:

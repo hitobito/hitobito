@@ -47,7 +47,7 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, numericality: { less_than: :height, if: :height }
   validates :padding_left, numericality: { less_than: :width, if: :width }
 
-  scope :for_user, -> (user) { where('user_id = ? OR user_id IS null', user.id) }
+  scope :for_user, ->(user) { where('user_id = ? OR user_id IS null', user.id) }
 
   def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"

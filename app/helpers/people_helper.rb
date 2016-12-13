@@ -50,5 +50,4 @@ module PeopleHelper
   def person_link(person)
     person ? assoc_link(person) : "(#{t('global.nobody')})"
   end
-
 end

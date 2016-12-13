@@ -719,24 +719,34 @@ describe PeopleController do
 
   end
 
-  context 'as admin' do
+  context 'DELETE #destroy' do
+    
+    let(:member) { people(:bottom_member) }
+    let(:admin) { people(:top_leader) }
 
-    describe 'POST #destroy' do
-      let(:member) { people(:bottom_member) }
-      let(:admin) { people(:top_leader) }
+    describe 'as admin user' do
+      before { sign_in(admin) }
 
       it 'can delete person' do
-        member.destroy
-        expect(response).to be_success
+        delete :destroy, group_id: member.primary_group.id, id: member.id
+        expect(response.status).to eq(302)
       end
+
+      it 'deletes person' do
+        expect do
+          delete :destroy, group_id: member.primary_group.id, id: member.id 
+        end.to change(Person, :count).by(-1)
+      end
+    end
+
+    describe 'as normal user' do
+      before { sign_in(member) }
 
       it 'fails without permissions' do
-        sign_in(member)
         expect do
-          delete :destroy, group_id: group.id, id: admin.id 
+          delete :destroy, group_id: group.id, id: admin.id
         end.to raise_error(CanCan::AccessDenied)
       end
-
     end
   end
 

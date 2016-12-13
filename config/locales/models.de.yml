@@ -365,6 +365,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+        general_information: Standardbeschreibung
 
       event/participation:
         person_id: Person

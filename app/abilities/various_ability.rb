@@ -21,6 +21,7 @@ class VariousAbility < AbilityDsl::Base
     on(Event::Kind) do
       class_side(:index).if_admin
       permission(:admin).may(:manage).all
+      permission(:any).may(:index).all
     end
 
     on(QualificationKind) do

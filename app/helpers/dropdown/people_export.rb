@@ -74,7 +74,11 @@ module Dropdown
     end
 
     def add_label_format_items(parent)
-      LabelFormat.list.for_user(user).each do |label_format|
+      label_formats = LabelFormat.all
+      if user.display_only_own_label_formats?
+        label_formats = label_formats.where(user: user)
+      end
+      label_formats.list.for_user(user).each do |label_format|
         parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
                                      target: :new, class: 'export-label-format')
       end

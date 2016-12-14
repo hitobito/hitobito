@@ -7,9 +7,17 @@
 
 #main
   -if can?(:manage_global, LabelFormat)
-    %label
-      %input#admin_toggle{ type: 'checkbox', data: {hide: 'admin_labels'} }
-        = I18n.t('label_formats.see_own_labels')
+    = check_box_tag(:display_only_own_label_formats,
+      true,
+      current_user.display_only_own_label_formats,
+      id: 'display_only_own_label_formats',
+      class: 'switcher',
+      data: { remote: true,
+              url: label_format_settings_path,
+              method: :put })
+    %label{for: 'display_only_own_label_formats'}
+    &nbsp;
+    %strong= t('label_formats.see_own_labels')
   
   %h2= I18n.t('label_formats.own_labels')
   = render 'list'

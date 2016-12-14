@@ -9,58 +9,51 @@ app.EventDescription = {
   getDescription: ->
     that = app.EventDescription
     id = $(this).val()
-    if that.dataPresent()
-      that.insertOrAsk(id)
-    else
-      $.getJSON( "/event_kinds.json", (data) ->
-        that.data = data.event_kinds
-        that.insertOrAsk(id)
-      )
+    that.insertOrAsk(id)
   
   insertOrAsk: (id) ->
     if this.descriptionEmpty()
       this.fillDescription(id)
     else
-      this.showDescriptionLink(id)
+      this.enableDefaultLink(id)
 
-  dataPresent: ->
-    return typeof this.data != 'undefined'
+  getDescriptionForId: (id) ->
+    $('.default-description[data-kind=' + id + ']').text().trim()
 
   fillDescription: (id) ->
-    textarea = $('textarea#event_description')
-    newTexts = this.data.filter (e) -> e.id == id
-    newText = newTexts[0]
+    textarea = this.elements().textarea
+    oldText = textarea.val()
+    newText = this.getDescriptionForId(id)
 
-    return unless newText?
-    return unless newText.general_information?
-
-    spacer = if textarea.val() == "" then "" else " "
-    textarea.val(textarea.val() + spacer + newText.general_information)
+    spacer = if oldText == "" then "" else " "
+    textarea.val(oldText + spacer + newText)
 
   descriptionEmpty: ->
-    textarea = $('textarea#event_description')
-    return textarea.val() == ""
+    return this.elements().textarea.val() == ""
+  
+  elements: ->
+    {
+      descriptionLink: $('.standard-description-link'),
+      textarea: $('textarea#event_description')
+    }
 
-  showDescriptionLink: (id) ->
-    this.hideLinks()
+  enableDefaultLink: (id) ->
+    this.showLink()
+    link = this.elements().descriptionLink
+
     that = this
-    input = $('#event_description').parents('.control-group')
-    link = $('<div class="controls">
-                <span class="help-inline">
-                  <a href="#" class="standard-description-link">Standardbeschreibung</a>
-                </span>
-              </div>');
     
+    link.off('click')
     link.click (e) ->
       e.preventDefault()
       that.fillDescription(id)
-      that.hideLinks()
-
-    input.prepend(link)
+      that.hideLink()
   
-  hideLinks: ->
-    $('.standard-description-link').parent().parent().remove();
+  hideLink: ->
+    this.elements().descriptionLink.parents('.controls').hide();
+  
+  showLink: ->
+    this.elements().descriptionLink.parents('.controls').show();
 }
 
-$ ->
 $(document).on('change', 'select#event_kind_id', app.EventDescription.getDescription)

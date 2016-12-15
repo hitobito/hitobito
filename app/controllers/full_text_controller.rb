@@ -74,12 +74,16 @@ class FullTextController < ApplicationController
   def accessible_people_ids
     key = "accessible_people_ids_for_#{current_user.id}"
     Rails.cache.fetch(key, expires_in: 15.minutes) do
-      load_accessible_people_ids
+      ids = load_accessible_people_ids
+      if can?(:index_people_without_role, Person)
+        ids += Person::FullText.load_accessible_deleted_people_ids(current_user)
+      end
+      ids.uniq
     end
   end
 
   def load_accessible_people_ids
-    accessible = Person.accessible_by(PersonReadables.new(current_user))
+    accessible = Person.accessible_by(PersonReadables.new(current_user)) 
 
     # This still selects all people attributes :(
     # accessible.pluck('people.id')

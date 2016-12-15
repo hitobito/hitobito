@@ -3,6 +3,6 @@
     %a.standard-description-link
       = t('activerecord.attributes.event/kind.general_information')
 
-- Event::Kind.all.each do |event_kind|
+- @kinds.each do |event_kind|
   %p.hide.default-description{data: {kind: event_kind.id} }
     = event_kind.general_information

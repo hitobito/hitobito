@@ -2,11 +2,7 @@ class LabelFormat::SettingsController < ApplicationController
   before_action :authorize
   
   def update
-    if params[:display_only_own_label_formats].blank?
-      user.update!(display_only_own_label_formats: false)
-    else
-      user.update!(display_only_own_label_formats: true)
-    end
+    user.update_column(:show_global_label_formats, params[:show_global_label_formats].present?)
   end
 
   private

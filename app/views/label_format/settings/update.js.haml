@@ -1,2 +1,8 @@
-var onlyOwn = $('#display_only_own_label_formats').get(0).checked;
-// do something?
+:plain
+  var showGlobal = $('#show_global_label_formats').get(0).checked;
+
+  if(showGlobal) {
+    $('.global-formats').slideDown();
+  } else {
+    $('.global-formats').slideUp();
+  }

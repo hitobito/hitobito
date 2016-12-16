@@ -45,4 +45,22 @@ describe 'Dropdown::PeopleExport' do
       expect(tag).to have_content 'E-Mail Adressen'
     end
   end
+
+  context 'for global labels' do
+    before :each do
+      Fabricate(:label_format, name: 'SampleFormat')
+    end
+
+    it 'includes global formats if Person#show_global_label_formats is true' do
+      user.update(show_global_label_formats: true)
+
+      is_expected.to include 'SampleFormat'
+    end
+
+    it 'excludes global formats if Person#show_global_label_formats is false' do
+      user.update(show_global_label_formats: false)
+
+      is_expected.not_to include 'SampleFormat'
+    end
+  end
 end

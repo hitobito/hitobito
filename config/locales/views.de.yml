@@ -518,7 +518,7 @@ de:
   label_formats:
     global_labels: "Globale Etikettenformate"
     own_labels: Meine Etikettenformate
-    see_own_labels: "Nur eigene Etikettenformate anzeigen"
+    see_global_labels: "Globale Etikettenformate anzeigen"
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'

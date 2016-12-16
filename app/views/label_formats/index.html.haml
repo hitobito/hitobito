@@ -6,21 +6,22 @@
 - title ti(:title, :models => models_label)
 
 #main
-  -if can?(:manage_global, LabelFormat)
-    = check_box_tag(:display_only_own_label_formats,
+  -if can?(:label_format_settings, LabelFormat)
+    = check_box_tag(:show_global_label_formats,
       true,
-      current_user.display_only_own_label_formats,
-      id: 'display_only_own_label_formats',
+      current_user.show_global_label_formats,
+      id: 'show_global_label_formats',
       class: 'switcher',
       data: { remote: true,
               url: label_format_settings_path,
               method: :put })
-    %label{for: 'display_only_own_label_formats'}
+    %label{for: 'show_global_label_formats'}
     &nbsp;
-    %strong= t('label_formats.see_own_labels')
+    %strong= t('label_formats.see_global_labels')
   
   %h2= I18n.t('label_formats.own_labels')
   = render 'list'
 
-  %h2= I18n.t('label_formats.global_labels')
-  = render 'list', entries: @global_entries, global: true
+  .global-formats{ style: element_visible(current_user.show_global_label_formats) }
+    %h2= I18n.t('label_formats.global_labels')
+    = render 'list', entries: @global_entries, global: true

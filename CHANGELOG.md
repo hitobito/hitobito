@@ -4,11 +4,11 @@
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
+*   Personen, denen alle Rollen gelöscht wurden, können von Berechtigten in einer Liste angezeigt werden.
 
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
-*   Personen, denen alle Rollen gelöscht wurden, können von Berechtigten in einer Liste angezeigt werden.
 
 ## Version 1.12
 

@@ -8,6 +8,11 @@
 module Sheet
   class Group
     class DeletedPeople < Base
+
+      def title
+        I18n.t('groups.global.link.deleted_person')
+      end
+      
     end
   end
 end

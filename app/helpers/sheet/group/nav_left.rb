@@ -98,10 +98,10 @@ module Sheet
 
       def render_deleted_people_link
         if view.can?(:index_deleted_people, layer)
-          cls = " class=\"active\"" if false
-          "<li#{cls}>".html_safe +
-          link_to(view.t('groups.global.link.deleted_person'),
-                  view.group_deleted_people_path(layer.id))
+          "<li>".html_safe +
+            link_to(view.t('groups.global.link.deleted_person'),
+                    view.group_deleted_people_path(layer.id)) +
+            "</li>".html_safe
         end
       end
 

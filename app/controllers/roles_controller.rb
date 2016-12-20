@@ -19,8 +19,8 @@ class RolesController < CrudController
   skip_authorize_resource only: [:details, :role_types]
 
   before_render_form :set_group_selection
-  before_create :set_noalert_header
 
+  before_action :set_person_id, only: [:new]
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
@@ -246,8 +246,8 @@ class RolesController < CrudController
     role.group_id == role.person.primary_group_id
   end
 
-  def set_noalert_header
-    response.headers['X-No-Alert'] = 'True'
+  def set_person_id
+    @person_id = Role.unscoped.find(params[:role_id]).person_id if params[:role_id]
   end
 
 end

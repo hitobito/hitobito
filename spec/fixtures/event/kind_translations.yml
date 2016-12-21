@@ -8,6 +8,7 @@ slk_de:
   locale: de
   label: Scharleiterkurs
   short_name: SLK
+  general_information: Hier lernst du alles, um deine Schar toll zu leiten.
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

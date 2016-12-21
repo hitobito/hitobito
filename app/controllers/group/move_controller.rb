@@ -19,7 +19,8 @@ class Group::MoveController < ApplicationController
 
   def perform
     if target && mover.candidates.include?(target)
-      authorize!(:create, target)
+      group.parent_id = target.id
+      authorize!(:create, group)
 
       success = mover.perform(target)
       build_flash_messages(success)

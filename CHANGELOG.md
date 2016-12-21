@@ -3,6 +3,7 @@
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+*   Automatische Ausfüllung der Kurs Beschreibungen wenn ein Kurstyp gewählt wird.
 
 
 ## Version 1.12

@@ -42,4 +42,65 @@ describe EventsController, js: true do
     end
   end
 
+  context 'standard course description' do
+    let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: { type: Event::Course }, format: :html) }
+
+    context 'if textarea is empty' do
+      before :each do
+        sign_in
+        visit form_path
+      end
+
+      it 'fills default description' do
+        obsolete_node_safe do
+          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+          expect(find('#event_description').value).to eq event.kind.general_information
+        end
+      end
+
+      it 'does not display description insertion link' do
+        obsolete_node_safe do
+          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+          expect(page).to have_selector('.standard-description-link', visible: false)
+        end
+      end
+    end
+
+    context 'if textarea is not empty' do
+      let(:prefill_description) { 'Test description' }
+
+      before :each do
+        sign_in
+        visit form_path
+
+        fill_in 'event_description', with: prefill_description
+      end
+
+      it 'displays description insertion link' do
+        obsolete_node_safe do
+          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+          expect(page).to have_selector('.standard-description-link', visible: true)
+        end
+      end
+
+      it 'does not fill textarea' do
+        obsolete_node_safe do
+          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+          expect(find('#event_description').value).to eq prefill_description
+        end
+      end
+
+      it 'fills textarea if clicked on description insertion link' do
+        obsolete_node_safe do
+          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+
+          find('.standard-description-link').click
+
+          concat_description = prefill_description + ' ' + event.kind.general_information
+          expect(find('#event_description').value).to eq concat_description
+        end
+      end
+    end
+  end
+
 end

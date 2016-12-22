@@ -35,18 +35,11 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      joins(:person).
-        joins('LEFT JOIN groups ON groups.id = people.primary_group_id').
-          where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id, layer_group.people.pluck(:id))
-    end
-
-    def no_role_and_last_member_in(group)
-      subquery = "select max(roles.deleted_at) from roles " \
-                "where roles.person_id = people.id and people.primary_group_id is null"
-      query =    "select people.* from people inner join roles on roles.person_id = people.id " \
-                "inner join groups on roles.group_id = groups.id " \
-                "where roles.deleted_at = (#{subquery}) and groups.layer_group_id = ?;"
-      Person.find_by_sql([query, group.id])
+      ids = (joins(:person).
+             joins('LEFT JOIN groups ON groups.id = people.primary_group_id').
+             where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id,
+                                ::Group::DeletedPeople.deleted_for(layer_group).pluck(:id)))
+      where(id: ids)
     end
   end
 

@@ -31,11 +31,11 @@
         = muted role.to_s(:long)
 
     - t.col('') do |r|
-      - if can?(:approve, r)
+      - if can?(:approve, r) || last_role_nil?(r.person)
         = action_button(t('.approve'), person_add_request_path(r), :ok, method: :post)
 
     - t.col('') do |r|
-      - if can?(:reject, r)
+      - if can?(:reject, r) || last_role_nil?(r.person)
         = action_button(t('.reject'), person_add_request_path(r), :remove, method: :delete)
 
     - t.attr(:created_at)

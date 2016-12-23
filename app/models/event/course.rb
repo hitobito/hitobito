@@ -44,6 +44,8 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
+  class_attribute :cancel_participation_possible
+
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval,
                            :signature, :signature_confirmation, :signature_confirmation_text]
 
@@ -57,6 +59,8 @@ class Event::Course < Event
   self.supports_applications = true
 
   self.kind_class = Event::Kind
+
+  self.cancel_participation_possible = true
 
 
   belongs_to :kind

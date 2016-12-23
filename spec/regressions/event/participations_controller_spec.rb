@@ -116,8 +116,8 @@ describe Event::ParticipationsController, type: :controller do
   end
 
   describe_action :delete, :destroy, format: :html, id: true do
-    it 'redirects to application market' do
-      is_expected.to redirect_to group_event_application_market_index_path(group, course)
+    it 'redirects to group event path' do
+      is_expected.to redirect_to group_event_path(group, course)
     end
 
     it 'has flash noting the application' do

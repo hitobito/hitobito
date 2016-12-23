@@ -39,4 +39,38 @@ describe 'event/participations/_actions_show.html.haml' do
     end
   end
 
+  context '#cancel participation' do
+
+    let(:dom) { Capybara::Node::Simple.new(rendered) }
+
+    subject { dom }
+
+    context 'if application open' do
+
+      before do
+        event.update(application_opening_at: Time.now - 10.days,
+                    application_closing_at: Time.now + 5.days,
+                    cancel_participation_enabled: true )
+      end
+
+      it 'it renders participation' do
+        render
+        is_expected.to have_content 'Du bist für diesen Anlass angemeldet'
+      end
+    end
+
+    context 'if application closed' do
+      before do
+        event.update(application_opening_at: Time.now - 10.days,
+                    application_closing_at: Time.now - 5.days )
+      end
+
+      it 'renders participation' do
+        render
+        is_expected.not_to have_content 'Du bist für diesen Anlass angemeldet'
+      end
+
+    end
+  end
+
 end

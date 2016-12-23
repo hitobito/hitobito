@@ -3,7 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= button_action_event_apply(entry, @group)
+- if current_user.participating_in?(entry) && entry.application_possible? && entry.cancel_participation_enabled
+  = render partial: 'banner_signed_in'
+- else
+  = button_action_event_apply(entry, @group)
 = button_action_edit if can?(:update, entry)
 = button_action_destroy if can?(:destroy, entry)
 

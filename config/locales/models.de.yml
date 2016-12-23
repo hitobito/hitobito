@@ -314,6 +314,7 @@ de:
         teamer_count: Anzahl Leitungsteam
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
+        cancel_participation_enabled: Abmeldung möglich
 
       event/answer:
         answer: Antwort

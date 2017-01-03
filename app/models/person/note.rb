@@ -5,6 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_dsj.
 
+# == Schema Information
+#
+# Table name: person_notes
+#
+#  id         :integer          not null, primary key
+#  person_id  :integer          not null
+#  author_id  :integer          not null
+#  text       :text
+#  created_at :datetime
+#  updated_at :datetime
+#
 class Person::Note < ActiveRecord::Base
 
   default_scope { order(created_at: :desc) }

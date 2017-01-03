@@ -3,6 +3,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: event_kinds
+#
+#  id          :integer          not null, primary key
+#  created_at  :datetime
+#  updated_at  :datetime
+#  deleted_at  :datetime
+#  minimum_age :integer
+#
+
 slk: {}
 
 glk: {}

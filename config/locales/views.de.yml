@@ -800,6 +800,9 @@ de:
     destroy:
       flash:
         success: Anmeldung wurde erfolgreich gelöscht.
+    create:
+      flash:
+        failure: Bitte keine Sonderzeichen (insbesondere Emoji) für die Bemerkungen verwenden.
 
   people_filters:
     form:

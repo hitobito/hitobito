@@ -52,7 +52,11 @@ class Event::ParticipationsController < CrudController
     init_answers
     set_active
     with_person_add_request do
-      created = with_callbacks(:create, :save) { save_entry }
+      begin
+        created = with_callbacks(:create, :save) { save_entry }
+      rescue ActiveRecord::StatementInvalid
+        set_failure_notice
+      end
       respond_with(entry, success: created, location: return_path)
     end
   end

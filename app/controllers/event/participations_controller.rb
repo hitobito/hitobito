@@ -54,7 +54,8 @@ class Event::ParticipationsController < CrudController
     with_person_add_request do
       begin
         created = with_callbacks(:create, :save) { save_entry }
-      rescue ActiveRecord::StatementInvalid
+      rescue ActiveRecord::StatementInvalid => e
+        raise e unless e.original_exception.try :message =~ /Incorrect string value/
         set_failure_notice
       end
       respond_with(entry, success: created, location: return_path)

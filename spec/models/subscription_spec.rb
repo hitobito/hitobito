@@ -34,6 +34,16 @@ describe Subscription do
       subscription.role_types = [Group::BottomGroup::Leader, Group::BottomGroup::Member]
       expect(subscription).not_to be_valid
     end
+
+    it 'does not include deleted groups' do
+      list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
+      subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_group_one_one))
+      subscription.role_types = [Group::BottomGroup::Leader, Group::BottomGroup::Member]
+
+      expect {
+        groups(:bottom_group_one_one_one).destroy
+      }.to change { subscription.possible_groups.count }.by -1
+    end
   end
 
   context '#possible_events' do

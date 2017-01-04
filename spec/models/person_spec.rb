@@ -1,4 +1,4 @@
-# encoding: utf-8
+ encoding: utf-8
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -481,10 +481,9 @@ describe Person do
       Fabricate(:person, zip_code: '01200', country: 'DE')
       Fabricate(:person, zip_code: '1200')
       Fabricate(:person, zip_code: '1200 ', country: 'DE')
-      list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code)
+      list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code).to_a
       expect(list.first.location).to be_nil
       expect(list.second.location).to eq(l)
-      list.inspect # this fixes the test-failure that is happening due to a bad lookup
       expect(list.third.location).to be_nil
     end
   end

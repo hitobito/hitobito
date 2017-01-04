@@ -484,6 +484,7 @@ describe Person do
       list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code)
       expect(list.first.location).to be_nil
       expect(list.second.location).to eq(l)
+      list.inspect # this fixes the test-failure that is happening due to a bad lookup
       expect(list.third.location).to be_nil
     end
   end

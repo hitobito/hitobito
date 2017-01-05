@@ -458,7 +458,7 @@ describe Event::ParticipationsController do
         expect do
           post :create, group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier😝'}
 
-          expect(flash[:alert]).to include 'Bitte keine Sonderzeichen (insbesondere Emoji) für die Bemerkungen verwenden.'
+          expect(assigns(:participation).errors.messages).to have(1).keys
         end.to_not raise_error
       end
     end

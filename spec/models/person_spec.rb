@@ -1,4 +1,4 @@
-# encoding: utf-8
+# vim:fileencoding=utf-8
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -70,6 +70,13 @@ describe Person do
 
   it 'real only with company_name is not valid' do
     expect(Person.new(company: false, company_name: 'foo')).to have(1).errors_on(:base)
+  end
+
+  it 'cannot be saved with emoji' do
+    person = Person.new(company: false, nickname: 'foo', additional_information: ' Vegetarier😝 ')
+    expect(person.save).to be false
+    expect(person.errors.messages[:base].size).to be 1
+    expect(person.errors.messages[:base].first).to match /emoji/i
   end
 
   it 'with login role does not require email' do

@@ -72,7 +72,7 @@ describe Person do
     expect(Person.new(company: false, company_name: 'foo')).to have(1).errors_on(:base)
   end
 
-  it 'cannot be saved with emoji' do
+  it 'cannot be saved with emoji', :mysql do
     person = Person.new(company: false, nickname: 'foo', additional_information: ' Vegetarier😝 ')
     expect(person.save).to be false
     expect(person.errors.messages[:base].size).to be 1

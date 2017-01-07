@@ -446,6 +446,21 @@ describe Event::ParticipationsController do
         end
 
       end
+
+      it 'stores additional information' do
+        post :create, group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier'}
+
+        expect(assigns(:participation)).to be_valid
+        expect(assigns(:participation).additional_information).to eq('Vegetarier')
+      end
+
+      it 'handles DB-errors for too wide unicode characters (emoji)', :mysql do
+        expect do
+          post :create, group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier😝'}
+
+          expect(assigns(:participation).errors.messages).to have(1).keys
+        end.to_not raise_error
+      end
     end
 
     context 'other user' do

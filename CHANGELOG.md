@@ -6,11 +6,9 @@
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
 *   Benutzer können eigene personalisierte Etiketten erstellen.
 
-
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
-
 
 ## Version 1.12
 

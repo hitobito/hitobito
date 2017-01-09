@@ -16,7 +16,8 @@ class VariousAbility < AbilityDsl::Base
     class_side(:index).everybody
     class_side(:manage_global).if_admin
     permission(:admin).may(:manage).all
-    permission(:any).may(:crud).own
+    permission(:any).may(:create, :update, :destroy, :read).own
+    permission(:any).may(:create, :new).all
   end
 
   if Group.course_types.present?

@@ -19,7 +19,8 @@ describe LabelFormatsController do
     end
 
     it 'create layer label' do
-      post :create, label_format: { name: 'foo layer',
+      post :create, global: 'true', 
+                    label_format: { name: 'foo layer',
                                     page_size: 'A4',
                                     landscape: false,
                                     font_size: 12,
@@ -33,7 +34,7 @@ describe LabelFormatsController do
     end
 
     it 'create layer personalize label' do
-      post :create, current_user: true, 
+      post :create, global: 'false',
                     label_format: { name: 'foo layer',
                                     page_size: 'A4',
                                     landscape: false,
@@ -49,14 +50,14 @@ describe LabelFormatsController do
 
   describe 'without admin permissions' do
     
-    let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+    let(:person) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person }
 
     before do
       sign_in(person)
     end
 
     it 'create personalize label' do
-      post :create, current_user: true, 
+      post :create, global: 'false',
                     label_format: { name: 'foo layer',
                                     page_size: 'A4',
                                     landscape: false,
@@ -70,8 +71,8 @@ describe LabelFormatsController do
       expect(LabelFormat.last.user_id).to eq(person.id)
     end
 
-    it 'can not create label without person id' do
-      post :create, current_user: false,
+    it 'can not create global label' do
+      post :create, global: 'true',
                     label_format: { name: 'foo layer',
                                     page_size: 'A4',
                                     landscape: false,
@@ -82,9 +83,9 @@ describe LabelFormatsController do
                                     padding_top: 5,
                                     padding_left: 5 }
 
-      expect(LabelFormat.last.user_id).to eq(nil)
+      expect(response).to have_http_status(302)
     end
   end  
 
   end
-end  
+end 

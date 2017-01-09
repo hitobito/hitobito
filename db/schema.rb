@@ -307,6 +307,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer  "failed_attempts",        limit: 4,     default: 0
     t.datetime "locked_at"
     t.string   "authentication_token",   limit: 255
+    t.boolean  "show_global_label_formats",            default: true
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token"

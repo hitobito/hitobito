@@ -11,4 +11,4 @@ install:
   - bundle update mysql2
   - bundle install --path vendor/bundle
 script:
-  - rake db:create ci --trace
+  - bundle exec rake db:create ci --trace

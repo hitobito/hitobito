@@ -1,7 +1,8 @@
 language: ruby
 env:
-  - HEADLESS=true
-  - RAILS_DB_ADAPTER=mysql2
+  global:
+    - HEADLESS=true
+    - RAILS_DB_ADAPTER=mysql2
 rvm:
   - 2.1.7
   - 2.2.3

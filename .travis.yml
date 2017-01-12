@@ -1,4 +1,8 @@
 language: ruby
+branches:
+  only:
+    - master
+    - stable
 env:
   global:
     - HEADLESS=true

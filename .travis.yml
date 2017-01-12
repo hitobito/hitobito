@@ -4,8 +4,12 @@ env:
     - HEADLESS=true
     - RAILS_DB_ADAPTER=mysql2
 rvm:
-  - 2.1.7
-  - 2.2.3
+  - 1.9.3
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
+  - 2.4
 install:
   - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
   - bundle update mysql2

@@ -12,7 +12,7 @@ rvm:
   - 2.4
 install:
   - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
-  - bundle update mysql2 --path vendor/bundle
   - bundle install --path vendor/bundle
+  - bundle update mysql2
 script:
   - bundle exec rake db:create ci --trace

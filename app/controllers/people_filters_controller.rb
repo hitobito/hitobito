@@ -73,4 +73,5 @@ class PeopleFiltersController < CrudController
   def people_list_path(options = {})
     group_people_path(group, options)
   end
+
 end

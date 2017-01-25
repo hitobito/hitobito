@@ -1,4 +1,10 @@
-# encoding: utf-8
+# vim:fileencoding=utf-8
+
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: people
@@ -39,10 +45,6 @@
 #  authentication_token   :string
 #
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 require 'spec_helper'
 
 describe Person do
@@ -68,6 +70,13 @@ describe Person do
 
   it 'real only with company_name is not valid' do
     expect(Person.new(company: false, company_name: 'foo')).to have(1).errors_on(:base)
+  end
+
+  it 'cannot be saved with emoji', :mysql do
+    person = Person.new(company: false, nickname: 'foo', additional_information: ' Vegetarier😝 ')
+    expect(person.save).to be false
+    expect(person.errors.messages[:base].size).to be 1
+    expect(person.errors.messages[:base].first).to match /emoji/i
   end
 
   it 'with login role does not require email' do
@@ -472,6 +481,17 @@ describe Person do
       expect(Person.new.canton).to be_nil
       Location.create!(zip_code: 3000, name: 'Bern', canton: 'be')
       expect(Person.new(zip_code: 3000).canton).to eq 'be'
+    end
+
+    it 'may preload location for various zip_codes' do
+      l = Location.create!(zip_code: 1200, name: 'Lausanne', canton: 'be')
+      Fabricate(:person, zip_code: '01200', country: 'DE')
+      Fabricate(:person, zip_code: '1200')
+      Fabricate(:person, zip_code: '1200 ', country: 'DE')
+      list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code).to_a
+      expect(list.first.location).to be_nil
+      expect(list.second.location).to eq(l)
+      expect(list.third.location).to be_nil
     end
   end
 

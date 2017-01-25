@@ -30,6 +30,8 @@ module MailRelay
 
     attr_reader :message
 
+    delegate :valid_email?, to: :class
+
     class << self
 
       # Retrieve, process and delete all mails from the mail server.
@@ -64,6 +66,11 @@ module MailRelay
           message.mark_for_delete = should_clear_email?(message)
           puts ''
         end
+      end
+
+      def valid_email?(email)
+        email_address = email.to_s.strip
+        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
       end
 
       private
@@ -148,7 +155,7 @@ module MailRelay
     end
 
     def sender_email
-      @sender_email ||= message.from && message.from.first
+      @sender_email ||= message.from && Array(message.from).first
     end
 
     # Heuristic method to find actual receiver of the message.

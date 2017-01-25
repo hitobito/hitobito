@@ -56,6 +56,7 @@ de:
             choices:
               requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
         event/participation:
+          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           attributes:
             person_id:
               taken: ist bereits angemeldet
@@ -66,6 +67,7 @@ de:
             mail_name_not_allowed:
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
+          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           attributes:
             email:
               taken: >
@@ -360,7 +362,7 @@ de:
         preconditions: Vorbedingungen
         prolongations: Verlängert
         qualification_kinds: Qualifiziert für
-        general_information: Allgemeine Informationen
+        general_information: Standardbeschreibung
         application_conditions: Aufnahmebedingungen
         created_at: Erstellt
         updated_at: Geändert

@@ -1,8 +1,0 @@
-.controls{style: 'display: none' }
-  %span.help-inline
-    %a.standard-description-link
-      = t('activerecord.attributes.event/kind.general_information')
-
-- @kinds.each do |event_kind|
-  %p.hide.default-description{data: {kind: event_kind.id} }
-    = event_kind.general_information

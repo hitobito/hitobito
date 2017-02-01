@@ -77,7 +77,6 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'pry-rails'
   gem 'pry-debugger', platforms: :ruby_19
-  gem 'pry-doc'
   # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
 end
 
@@ -104,6 +103,7 @@ group :console do
   gem 'awesome_print'
   gem 'hirb'
   gem 'mailcatcher'
+  gem 'pry-doc'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'

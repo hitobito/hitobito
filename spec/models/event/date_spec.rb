@@ -30,8 +30,8 @@ describe Event::Date do
     event_date.finish_at_date = date2
 
     expect(event_date).to be_valid
-    expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12))
-    expect(event_date.finish_at).to eq(Time.zone.local(2012, 12, 13))
+    expect(event_date.start_at).to eq(date1.to_date.to_time)
+    expect(event_date.finish_at).to eq(date2.to_date.to_time)
   end
 
   it 'should store short format date' do
@@ -101,7 +101,7 @@ describe Event::Date do
     # set start_at date
     event_date.start_at_date = date
     expect(event_date).to be_valid
-    expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12))
+    expect(event_date.start_at).to eq(date.to_time)
 
     # update time
     event_date.start_at_date = ''

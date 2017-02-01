@@ -21,7 +21,7 @@ module MailRelay
     class << self
       def personal_return_path(list_name, sender_email)
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = valid_email?(sender_email) ? '+' + sender_email.tr('@', '=') : ''
+        id_suffix = sender_email.present? ? '+' + sender_email.tr('@', '=') : ''
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{mail_domain}"
       end
 
@@ -42,7 +42,7 @@ module MailRelay
     def reject_not_allowed
       if send_reject_message?
         reply = prepare_not_allowed_message
-        if valid_email?(reply.to.to_s.strip)
+        unless ['', '<>'].include?(reply.to.to_s.strip)
           logger.info("Rejecting email from #{sender_email} for list #{envelope_receiver_name}")
           deliver(reply)
         end
@@ -74,7 +74,7 @@ module MailRelay
 
     # Is the mail sender allowed to post to this address?
     def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity
-      return false unless valid_email?(sender_email)
+      return false if sender_email.blank?
 
       mailing_list.anyone_may_post ||
       sender_is_additional_sender? ||

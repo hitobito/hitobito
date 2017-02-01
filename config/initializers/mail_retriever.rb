@@ -11,6 +11,3 @@ if Settings.email.retriever.config.present?
                      Settings.email.retriever.config.to_hash)
   end
 end
-
-# Handle invalid charsets gracefully (e.g. windows-1258)
-Mail::Ruby19.charset_encoder = Mail::Ruby19::BestEffortCharsetEncoder.new

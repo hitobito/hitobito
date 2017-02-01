@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+
 module Export::Csv::Groups
   class List < Export::Csv::Base
 
@@ -13,11 +14,24 @@ module Export::Csv::Groups
                         creator_id updater_id deleter_id)
 
     self.model_class = Group
-    self.row_class = GroupRow
 
     def attributes
       (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)
     end
+
+    class Row < Export::Csv::Row
+
+      def type
+        entry.class.label
+      end
+
+      def country
+        entry.country_label
+      end
+
+    end
+
+    self.row_class = Row
 
   end
 end

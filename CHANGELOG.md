@@ -1,12 +1,9 @@
 # Hitobito Changelog
 
-## Version 1.14
-
-*   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
-
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+
 
 ## Version 1.12
 

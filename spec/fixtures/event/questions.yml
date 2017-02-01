@@ -3,18 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# == Schema Information
-#
-# Table name: event_questions
-#
-#  id               :integer          not null, primary key
-#  event_id         :integer
-#  question         :string
-#  choices          :string
-#  multiple_choices :boolean          default(FALSE)
-#  required         :boolean
-#
-
 top_ov:
   question: GA oder Halbtax?
   choices: "GA, Halbtax, nix"
@@ -24,7 +12,7 @@ top_vegi:
   question: Ich bin Vegetarier
   choices: "ja, nein"
   event: top_course
-
+  
 top_more:
   question: Sonst noch was?
   event: top_course

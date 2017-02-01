@@ -66,7 +66,7 @@ module Export::Pdf::Participation
       end
 
       def render_dates(count = 3)
-        text dates_label, style: :bold
+        text dates_label.downcase, style: :bold
         height = 80 / count
         event.dates.limit(count).each do |date|
           bounding_box([0, cursor], width: bounds.width, height: height) do

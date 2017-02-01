@@ -69,7 +69,7 @@ module Contactable
   end
 
   def assert_is_valid_swiss_post_code
-    if zip_code.present? && swiss? && !zip_code.to_s.match(/\A\d{4}\z/)
+    if zip_code.present? && swiss? && !zip_code.to_s.match(/^\d{4}$/)
       errors.add(:zip_code)
     end
   end

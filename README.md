@@ -2,8 +2,6 @@
 
 hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
 
-[![Build Status](https://travis-ci.org/hitobito/hitobito.svg?branch=master)](https://travis-ci.org/hitobito/hitobito)
-
 ## Development
 
 Hitobito is a Ruby on Rails application that runs on Ruby >= 1.9.3 and Rails 4.

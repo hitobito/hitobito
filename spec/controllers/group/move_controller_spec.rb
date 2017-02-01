@@ -21,16 +21,6 @@ describe Group::MoveController do
       get :select, id: group.id
       expect(assigns(:candidates)['Bottom Layer']).to include target
     end
-    it 'leader of a group can move sub-subgroup up into his group' do
-      group = groups(:bottom_layer_one)
-      subsubgroup = groups(:bottom_group_one_one_one)
-      user = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: group).person
-      sign_in(user)
- 
-      get :select, id: subsubgroup
-      expect(assigns(:candidates)['Bottom Layer']).to include group
-      expect(assigns(:candidates)['Bottom Group']).to include groups(:bottom_group_one_two)
-    end
   end
 
   context 'POST :perform' do

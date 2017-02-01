@@ -16,5 +16,4 @@
 #  https://github.com/hitobito/hitobito.
 Fabricator(:event_kind, class_name: 'Event::Kind') do
   label { Faker::Company.bs }
-  general_information { Faker::Lorem.sentence }
 end

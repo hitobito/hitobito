@@ -3,18 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# == Schema Information
-#
-# Table name: event_dates
-#
-#  id        :integer          not null, primary key
-#  event_id  :integer          not null
-#  label     :string
-#  start_at  :datetime
-#  finish_at :datetime
-#  location  :string
-#
-
 first:
   label: Kurs
   event: top_course

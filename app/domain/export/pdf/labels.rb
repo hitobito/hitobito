@@ -78,7 +78,7 @@ module Export::Pdf
     end
 
     def print_nickname?(contactable)
-      contactable.respond_to?(:nickname) && contactable.nickname.present?
+      format.nickname? && contactable.respond_to?(:nickname) && contactable.nickname.present?
     end
 
     def pp_post?(format)
@@ -90,7 +90,7 @@ module Export::Pdf
                         format.height.mm - format.padding_top.mm + 12],
                         width: format.width.mm - min_border,
                         height: format.height.mm - min_border) do
-        pdf.text "<u><b>P.P. </b>" + format.pp_post + " Post CH AG</u>", :inline_format => true
+        pdf.text "<u><b>P.P. </b>" + format.pp_post + " Post CH AG</u>", inline_format: true
       end
     end
 

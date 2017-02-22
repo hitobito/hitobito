@@ -11,6 +11,7 @@ class PersonAbility < AbilityDsl::Base
 
   on(Person) do
     class_side(:index, :query).everybody
+    class_side(:index_people_without_role).if_admin
 
     permission(:any).may(:show, :show_full, :history, :update,
                          :update_email, :primary_group, :log).
@@ -63,11 +64,17 @@ class PersonAbility < AbilityDsl::Base
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
 
+    permission(:admin).may(:show).people_without_roles
+
     general(:send_password_instructions).not_self
   end
 
   def not_self
     subject.id != user.id
+  end
+
+  def people_without_roles
+    subject.roles.empty?
   end
 
   def if_permissions_in_all_capable_groups

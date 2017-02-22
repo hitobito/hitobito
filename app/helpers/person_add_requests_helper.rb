@@ -26,4 +26,7 @@ module PersonAddRequestsHelper
     end.collect(&:to_s).join(', ')
   end
 
+  def last_role_nil?(person)
+    !Role.unscoped.where(person: person).order(:deleted_at).last.deleted_at.nil?
+  end
 end

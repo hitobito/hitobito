@@ -35,8 +35,11 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      joins(person: :primary_group).
-        where(groups: { layer_group_id: layer_group.id })
+      ids = (joins(:person).
+             joins('LEFT JOIN groups ON groups.id = people.primary_group_id').
+             where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id,
+                                ::Group::DeletedPeople.deleted_for(layer_group).pluck(:id)))
+      where(id: ids)
     end
   end
 
@@ -56,7 +59,7 @@ class Person::AddRequest < ActiveRecord::Base
   end
 
   def person_layer
-    person.primary_group.try(:layer_group)
+    person.primary_group.try(:layer_group) || last_layer_group
   end
 
   def requester_full_roles
@@ -64,6 +67,13 @@ class Person::AddRequest < ActiveRecord::Base
       (r.class.permissions &
         [:layer_and_below_full, :layer_full, :group_and_below_full, :group_full]).present?
     end
+  end
+
+  private
+
+  def last_layer_group
+    last_role = Role.unscoped.where(person: person).order(:deleted_at).last
+    last_role && last_role.group.layer_group
   end
 
 end

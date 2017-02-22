@@ -38,9 +38,6 @@ describe RolesController, type: :controller do
 
   let(:scope_params) { { group_id: group.id } }
 
-
-  before { sign_in(people(:top_leader)) }
-
   # Override a few methods to match the actual behavior.
   class << self
     def it_should_redirect_to_show
@@ -64,6 +61,7 @@ describe RolesController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(index), %w(show), %w(new plain)]
 
+  let!(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
 
   describe_action :get, :new do
     context '.html', format: :html do

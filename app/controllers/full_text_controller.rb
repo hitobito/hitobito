@@ -34,17 +34,21 @@ class FullTextController < ApplicationController
   def list_people
     return Person.none.page(1) unless params[:q].present?
     query_accessible_people do |ids|
-      entries = Person.search(Riddle::Query.escape(params[:q]),
-                              page: params[:page],
-                              order: 'last_name asc, ' \
-                                     'first_name asc, ' \
-                                     "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
-                              star: true,
-                              with: { sphinx_internal_id: ids })
+      entries = fetch_people(ids)
       entries = Person::PreloadGroups.for(entries)
       entries = Person::PreloadPublicAccounts.for(entries)
       entries
     end
+  end
+
+  def fetch_people(ids)
+    Person.search(Riddle::Query.escape(params[:q]),
+                  page: params[:page],
+                  order: 'last_name asc, ' \
+                         'first_name asc, ' \
+                         "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
+                  star: true,
+                  with: { sphinx_internal_id: ids })
   end
 
   def query_people
@@ -75,15 +79,13 @@ class FullTextController < ApplicationController
     key = "accessible_people_ids_for_#{current_user.id}"
     Rails.cache.fetch(key, expires_in: 15.minutes) do
       ids = load_accessible_people_ids
-      if can?(:index_people_without_role, Person)
-        ids += Person::FullText.load_accessible_deleted_people_ids(current_user)
-      end
+      ids += load_deleted_people_ids if can?(:index_people_without_role, Person)
       ids.uniq
     end
   end
 
   def load_accessible_people_ids
-    accessible = Person.accessible_by(PersonReadables.new(current_user)) 
+    accessible = Person.accessible_by(PersonReadables.new(current_user))
 
     # This still selects all people attributes :(
     # accessible.pluck('people.id')
@@ -92,6 +94,12 @@ class FullTextController < ApplicationController
     sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
     result = Person.connection.execute(sql)
     result.collect { |row| row[0] }
+  end
+
+  def load_deleted_people_ids
+    Person.where('NOT EXISTS (SELECT * FROM roles ' \
+                 'WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)').
+           pluck(:id)
   end
 
   def result_with_separator(people, groups)

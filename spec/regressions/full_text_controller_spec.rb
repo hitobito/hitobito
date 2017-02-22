@@ -26,12 +26,29 @@ describe FullTextController, :mysql, type: :controller do
                              group: groups(:bottom_group_one_one),
                              person: Fabricate(:person, last_name: 'Bindella', first_name: 'Yasmine')).person
 
+      @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+      leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
+      leader.update(created_at: Time.now - 1.year)
+      leader.destroy!
+
+      @no_role = Fabricate(:person)
+
+      role = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
+      role.update(created_at: Time.now - 1.year)
+      role.destroy
+      @deleted_leader = role.person
+
+      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      role.update(created_at: Time.now - 1.year)
+      role.destroy
+      @deleted_bg_member = role.person
+
       index_sphinx
     end
 
     describe 'GET index' do
 
-      context 'as top leader' do
+      context 'as admin' do
         before { sign_in(people(:top_leader)) }
 
         it 'finds accessible person' do
@@ -52,12 +69,66 @@ describe FullTextController, :mysql, type: :controller do
           expect(assigns(:people)).to eq([])
         end
 
+        it 'finds people without any roles' do
+          get :index, q: @no_role.last_name[1..5]
+
+          expect(assigns(:people)).to include(@no_role)
+        end
+
+        it 'does not find people not accessible person with deleted role' do
+          get :index, q: @bg_member_with_deleted.last_name[1..5]
+
+          expect(assigns(:people)).not_to include(@bg_member_with_deleted)
+        end
+
+        it 'finds deleted people' do
+          get :index, q: @deleted_leader.last_name[1..5]
+
+          expect(assigns(:people)).to include(@deleted_leader)
+        end
+
+        it 'finds deleted, not accessible people' do
+          get :index, q: @deleted_bg_member.last_name[1..5]
+
+          expect(assigns(:people)).to include(@deleted_bg_member)
+        end
+
+
         context 'without any params' do
           it 'returns nothing' do
             get :index
 
             expect(@response).to be_ok
+            expect(assigns(:people)).to eq([])
           end
+        end
+      end
+
+      context 'as leader' do
+        before { sign_in(@bl_leader) }
+
+        it 'finds accessible person' do
+          get :index, q: @bg_leader.last_name[1..5]
+
+          expect(assigns(:people)).to include(@bg_leader)
+        end
+
+        it 'finds local accessible person' do
+          get :index, q: @bg_member.last_name[1..5]
+
+          expect(assigns(:people)).to include(@bg_member)
+        end
+
+        it 'does not find people without any roles' do
+          get :index, q: @no_role.last_name[1..5]
+
+          expect(assigns(:people)).not_to include(@no_role)
+        end
+
+        it 'does not find deleted people' do
+          get :index, q: @deleted_leader.last_name[1..5]
+
+          expect(assigns(:people)).not_to include(@deleted_leader)
         end
       end
 

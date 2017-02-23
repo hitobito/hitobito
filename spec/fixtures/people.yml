@@ -51,6 +51,7 @@ top_leader:
   additional_information: bla bla
   primary_group: top_group
   contact_data_visible: true
+  nickname: Funny Name
 
 bottom_member:
   first_name: Bottom

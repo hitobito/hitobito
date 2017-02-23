@@ -98,6 +98,7 @@ group :test do
   gem 'rspec-collection_matchers'
   gem 'selenium-webdriver'
   gem 'timecop'
+  gem 'pdf-inspector', require: 'pdf/inspector'
 end
 
 group :console do

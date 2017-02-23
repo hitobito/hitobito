@@ -4,6 +4,7 @@
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
+*   Benutzer können eigene personalisierte Etiketten erstellen.
 
 ## Version 1.13
 

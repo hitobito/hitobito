@@ -516,6 +516,9 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   label_formats:
+    global_labels: "Globale Etikettenformate"
+    own_labels: Meine Etikettenformate
+    see_global_labels: "Globale Etikettenformate anzeigen"
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'
@@ -561,7 +564,7 @@ de:
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'
-    admin: 'Admin'
+    admin: 'Einstellungen'
 
   qualifications:
     in_years: '%{years} Jahre'

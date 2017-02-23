@@ -75,7 +75,7 @@ module Dropdown
 
     def add_label_format_items(parent)
       label_formats = LabelFormat.all
-      if !user.show_global_label_formats?
+      unless user.show_global_label_formats?
         label_formats = label_formats.where(user: user)
       end
       label_formats.list.for_user(user).each do |label_format|

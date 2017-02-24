@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Export::Pdf::Labels do
   
-  let(:contactables) { [people(:top_leader)] }
+  let(:contactables) { [people(:nickname_member)] }
   let(:label_format) { label_formats(:standard) }
   let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables) }
 
@@ -15,11 +15,11 @@ describe Export::Pdf::Labels do
     let(:subject_nickname) { PDF::Inspector::Text.analyze(pdf_nickname) }
 
     it 'renders pp_post if pp_post given' do
-      expect(subject_nickname.strings).to include(people(:top_leader).nickname)
+      expect(subject_nickname.strings).to include('Funny Name')
     end
 
     it 'ignores nickname if disabled' do
-      expect(subject.strings.join(' ')).not_to include(people(:top_leader).nickname)
+      expect(subject.strings.join(' ')).not_to include('Funny Name')
     end
   end
 

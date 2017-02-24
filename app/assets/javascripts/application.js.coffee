@@ -91,8 +91,7 @@ $(document).on('ajax:before','[data-replace]', setDataType)
 
 # show alert if ajax requests fail
 $(document).on('ajax:error', (event, xhr, status, error) ->
-  unless xhr.getResponseHeader("X-No-Alert")?
-    alert('Sorry, something went wrong\n(' + error + ')'))
+  alert('Sorry, something went wrong\n(' + error + ')'))
 
 # wire up disabled links
 $(document).on('click', 'a.disabled', (event) -> $.rails.stopEverything(event); event.preventDefault();)

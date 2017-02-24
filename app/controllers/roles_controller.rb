@@ -31,7 +31,9 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      respond_with(entry, success: created, status: response_status(created), location: after_create_location(new_person))
+      respond_with(entry, success: created,
+                          status: response_status(created),
+                          location: after_create_location(new_person))
     end
   end
 

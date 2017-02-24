@@ -22,7 +22,8 @@ class Group::DeletedPeople
               joins('INNER JOIN roles ON roles.person_id = people.id').
               joins('INNER JOIN groups ON groups.id = roles.group_id').
               where('groups.layer_group_id = ?', group.id).
-              where("roles.deleted_at = (#{subquery}) AND (roles.group_id IN (?) OR roles.group_id = ?)",
+              where("roles.deleted_at = (#{subquery})" <<
+                    "AND (roles.group_id IN (?) OR roles.group_id = ?)",
                 group.layer_group.children.select(:id), group.id).uniq
   end
 

@@ -94,7 +94,7 @@ class PersonDecorator < ApplicationDecorator
 
   def last_role_new_link
     path = h.new_group_role_path(last_role.group, role_id: last_role.id)
-    role_popover_link(last_role, path, "role_#{last_role.id}")
+    role_popover_link(path, "role_#{last_role.id}")
   end
 
   def last_role
@@ -148,10 +148,10 @@ class PersonDecorator < ApplicationDecorator
 
   def popover_edit_link(function)
     path = h.edit_group_role_path(function.group, function)
-    role_popover_link(function, path)
+    role_popover_link(path)
   end
 
-  def role_popover_link(function, path, html_id = nil)
+  def role_popover_link(path, html_id = nil)
     content_tag(:span, style: 'padding-left: 10px', id: html_id) do
       h.link_to(h.icon(:edit),
                 path,

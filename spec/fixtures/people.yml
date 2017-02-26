@@ -63,18 +63,6 @@ bottom_member:
   country: CH
   primary_group: bottom_layer_one
 
-nickname_member:
-  first_name: Nick
-  last_name: Member
-  email: nick_member@example.com
-  encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
-  address: Longalley 33
-  zip_code: 3012
-  town: Greattown
-  country: CH
-  primary_group: bottom_layer_one
-  nickname: Funny Name
-
 root:
   company_name: 'Puzzle ITC'
   company: true

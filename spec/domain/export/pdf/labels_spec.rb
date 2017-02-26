@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Export::Pdf::Labels do
   
-  let(:contactables) { [people(:nickname_member)] }
+  let(:contactables) { [people(:top_leader).tap{ |u| u.update(nickname: 'Funny Name') }] }
   let(:label_format) { label_formats(:standard) }
   let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables) }
 

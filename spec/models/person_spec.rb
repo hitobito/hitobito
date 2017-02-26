@@ -123,14 +123,18 @@ describe Person do
 
     it 'found deleted last role' do
       deletion_date = DateTime.current
+      expect(person.roles.count).to eq 1
       role.update(deleted_at: deletion_date)
+      expect(person.roles.count).to eq 0
       expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
     end
 
     it 'found deleted last role also with one active role' do
-      role2 = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+      role2 = Fabricate(Group::BottomGroup::Member.sti_name.to_sym, group: groups(:bottom_group_one_one), person: subject)
+      expect(person.roles.count).to eq 2
       deletion_date = DateTime.current
       role.update(deleted_at: deletion_date)
+      expect(person.roles.count).to eq 1
       expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
     end
   end

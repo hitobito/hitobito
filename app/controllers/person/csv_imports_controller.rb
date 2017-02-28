@@ -133,7 +133,7 @@ class Person::CsvImportsController < ApplicationController
   def valid_file?(io)
     io.present? &&
     io.respond_to?(:content_type) &&
-    io.content_type =~ /text\/|excel/ # windows sends csv files as application/vnd.excel
+    io.content_type =~ /text\/|excel|octet-stream/ # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
   end
 
   def parse_or_redirect

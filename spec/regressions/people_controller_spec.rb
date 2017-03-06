@@ -237,7 +237,7 @@ describe PeopleController, type: :controller do
                  return_url: 'foo'
 
       expect(dom.all('a', text: 'Abbrechen').first[:href]).to eq 'foo'
-      expect(dom.find('input#return_url').value).to eq 'foo'
+      expect(dom.find('input#return_url', visible: false).value).to eq 'foo'
     end
   end
 

@@ -79,4 +79,33 @@ describe RolesController, type: :controller do
     end
   end
 
+  context 'using js' do
+
+    before { sign_in(user) }
+
+    let(:person) { Fabricate(:person) }
+
+    it 'new role for existing person returns 200' do
+      xhr :post, :create,
+          group_id: group.id,
+          role: { group_id: group.id,
+                  person_id: person.id,
+                  type: Group::BottomLayer::Member.sti_name }
+
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('create')
+      expect(response.body).to include('Bottom One')
+    end
+
+    it 'creation of role without type returns 422' do
+      xhr :post, :create,
+          group_id: group.id,
+          role: { group_id: group.id, person_id: person.id }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      is_expected.to render_template('create')
+      expect(response.body).to include('alert')
+    end
+  end
+
 end

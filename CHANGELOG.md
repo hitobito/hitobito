@@ -5,6 +5,8 @@
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
 *   Admin kann gelöschte Personen in der Volltextsuche finden.
 *   Anfrageverfahren wird für gelöschte Personen ebenfalls ausgelöst.
+*   Gelöschte Personen können pro Ebene angezeigt werden.
+
 
 ## Version 1.13
 

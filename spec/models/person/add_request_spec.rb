@@ -43,6 +43,27 @@ describe Person::AddRequest do
       expect(people).to match_array([admin, topper].collect(&:id))
     end
 
+    it 'contains deleted people' do
+      admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
+      ex_topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago).person
+      ex_topper.roles.first.destroy
+      bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+      # deleted role in layer
+      del = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom, created_at: 1.year.ago)
+      del.destroy
+      [admin, ex_topper, bottom].each do |p|
+        Person::AddRequest::Group.create!(
+          person: p,
+          requester: bottom,
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+      end
+
+      people = Person::AddRequest.for_layer(groups(:top_layer)).pluck(:person_id)
+
+      expect(people).to match_array([admin, ex_topper].collect(&:id))
+    end
+
   end
 
   context 'uniqueness' do
@@ -114,6 +135,21 @@ describe Person::AddRequest do
 
       it '#to_s contains group type' do
         expect(@rg.to_s).to eq("Top Group TopGroup")
+      end
+
+      it '#last_layer_group contains last layer' do
+        topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago).person
+        bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
+        # second role in layer
+        Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
+        Person::AddRequest::Group.create!(
+          person: topper,
+          requester: bottom,
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+        topper.roles.first.destroy!
+        add_request = Person::AddRequest.where(person_id: topper.id)
+        expect(add_request.first.send(:last_layer_group)).to eq(groups(:top_layer))
       end
     end
 

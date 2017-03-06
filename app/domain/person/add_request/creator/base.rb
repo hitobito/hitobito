@@ -25,7 +25,7 @@ module Person::AddRequest::Creator
     end
 
     def required?
-      (current_group_add_requests? || no_group_and_add_requests?) &&
+      person_layer.try(:require_person_add_requests?) &&
         ability.cannot?(:add_without_request, request) &&
         entity.valid?
     end
@@ -82,23 +82,9 @@ module Person::AddRequest::Creator
     end
 
     def last_layer_group
-      last_role = person.roles.only_deleted.order(:deleted_at).last
+      last_role = person.last_non_restricted_role
       last_role && last_role.group.layer_group
     end
 
-    def has_no_roles?
-      person.roles.empty? 
-    end
-
-    def no_group_and_add_requests?
-      has_no_roles? &&
-        last_layer_group &&
-        last_layer_group.require_person_add_requests?
-    end
-
-    def current_group_add_requests?
-      person_layer &&
-        person_layer.require_person_add_requests?
-    end
   end
 end

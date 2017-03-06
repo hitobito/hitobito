@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Person::AddRequest::Creator::Group do
 
   let(:primary_layer) { person.primary_group.layer_group }
-  let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
+  let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), created_at: 1.year.ago).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
 
   let(:group) { groups(:bottom_group_one_one) }
@@ -33,8 +33,21 @@ describe Person::AddRequest::Creator::Group do
       expect(subject).to be_required
     end
 
+    it 'is true if last layer activated requests' do
+      person.roles.first.destroy
+      expect(person.primary_group_id).to be_nil
+      expect(subject).to be_required
+    end
+
     it 'is false if primary layer deactivated requests' do
       primary_layer.update_column(:require_person_add_requests, false)
+      expect(subject).not_to be_required
+    end
+
+    it 'is false if last layer activated requests' do
+      primary_layer.update_column(:require_person_add_requests, false)
+      person.roles.first.destroy
+      expect(person.primary_group_id).to be_nil
       expect(subject).not_to be_required
     end
 

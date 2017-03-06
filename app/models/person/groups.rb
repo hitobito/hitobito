@@ -55,6 +55,13 @@ module Person::Groups
     groups_where_visible_from_above.collect(&:hierarchy).flatten.uniq
   end
 
+  def last_non_restricted_role
+    return nil if roles.exists?
+
+    restricted = Role.all_types.select(&:restricted?).collect(&:sti_name)
+    roles.with_deleted.where.not(type: restricted).order(deleted_at: :desc).first
+  end
+
   private
 
   # Helper method to access the roles association,

@@ -25,7 +25,7 @@
   = crud_table do |t|
     - t.col('') do |p|
       .profil= image_tag(p.picture.thumb.url, size: '32x32')
-    - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
+    - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
       %strong
         -# Any person listed can be shown
         = link_to(p.to_s(:list), @multiple_groups ? group_person_path(p.default_group_id, p) : group_person_path(@group, p))
@@ -34,6 +34,6 @@
     - t.col(t.sort_header(:roles, Role.model_name.human(count: 2))) { |p| p.roles_short(@multiple_groups ? nil : @group) }
     - t.col(Person.human_attribute_name(:emails))                 { |p| p.all_emails(!index_full_ability?) }
     - t.col(PhoneNumber.model_name.human(count: 2))               { |p| p.all_phone_numbers(!index_full_ability?) }
-    - sortable_grouped_person_attr(t, %w(zip_code town), :address) { |p| p.complete_address }
+    - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
 
 = paginate @people

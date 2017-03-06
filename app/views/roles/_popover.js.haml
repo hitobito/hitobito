@@ -1,0 +1,12 @@
+- id ||= nil
+:plain
+  var el = #{id ? "'##{id}'" : "$('body').data('popover')"};
+  $($('body').data('popover')).popover('destroy');
+  $(el).popover({content: '#{j(render('popover.html', group: entry.group))}',
+                 title: "#{t(title_key, person: entry.person)}",
+                 container: 'body',
+                 placement: 'bottom',
+                 html: true }).popover('show');
+
+  $('body').data('popover', el);
+  $('body .chosen-select').each(App.activateChosen);

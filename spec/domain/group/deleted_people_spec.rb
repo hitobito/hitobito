@@ -74,18 +74,21 @@ describe Group::DeletedPeople do
 
     it 'doesnt find when last role deleted in bottom group' do
       role_top.destroy
+      role_top.update_column(:deleted_at, 1.hour.ago)
       role_bottom.destroy
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
     it 'find if last deleted role in top group' do
       role_bottom.destroy
+      role_bottom.update_column(:deleted_at, 1.hour.ago)
       role_top.destroy
       expect(Group::DeletedPeople.deleted_for(group)).to include person
     end
 
     it 'finds people in child group' do
       role_top.destroy
+      role_top.update_column(:deleted_at, 1.hour.ago)
       role_bottom.destroy
       expect(Group::DeletedPeople.deleted_for(bottom_group)).to include person
     end
@@ -113,3 +116,4 @@ describe Group::DeletedPeople do
 
   end
 end
+

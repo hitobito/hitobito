@@ -18,8 +18,12 @@ class RolesController < CrudController
 
   skip_authorize_resource only: [:details, :role_types]
 
-  before_render_form :set_group_selection
+  define_render_callbacks :create
 
+  before_render_form :set_group_selection
+  before_render_create :set_group_selection
+
+  before_action :set_person_id, only: [:new]
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
@@ -30,7 +34,9 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      respond_with(entry, success: created, location: after_create_location(new_person))
+      respond_with(entry, success: created,
+                          status: response_status(created),
+                          location: after_create_location(new_person))
     end
   end
 
@@ -80,6 +86,10 @@ class RolesController < CrudController
       fail ActiveRecord::Rollback unless created
     end
     created
+  end
+
+  def response_status(created)
+    created ? :ok : :unprocessable_entity
   end
 
   def change_type?
@@ -239,6 +249,10 @@ class RolesController < CrudController
 
   def belongs_to_persons_primary_group?(role)
     role.group_id == role.person.primary_group_id
+  end
+
+  def set_person_id
+    @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
   end
 
 end

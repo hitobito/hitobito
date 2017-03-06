@@ -476,6 +476,7 @@ de:
     global:
       link:
         add: Gruppe erstellen
+        deleted_person: Gelöschte Personen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -838,6 +839,7 @@ de:
       add_person: Person hinzufügen
       add_role_for_person: Rolle für %{person} erstellen
       edit_role_for_person: Rolle für %{person} bearbeiten
+      new_role_for_person: Neue Rolle erstellen
 
     fields:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person

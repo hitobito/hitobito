@@ -1,0 +1,7 @@
+- if entry.persisted?
+  $($('body').data('popover')).parent().hide()
+  $($('body').data('popover')).popover('destroy').replaceWith('#{j(PersonDecorator.new(entry.person).roles_short)}')
+  $('##{dom_id(entry)}').parent().toggle('highlight', {duration: 1000})
+- else
+  - @person_id = entry.person_id
+  = render('popover', title_key: 'roles.form.new_role_for_person' )

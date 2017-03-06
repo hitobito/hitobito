@@ -35,11 +35,11 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      ids = (joins(:person).
-             joins('LEFT JOIN groups ON groups.id = people.primary_group_id').
-             where('groups.layer_group_id = ? OR people.id IN (?)', layer_group.id,
-                                ::Group::DeletedPeople.deleted_for(layer_group).pluck(:id)))
-      where(id: ids)
+      joins(:person).
+        joins('LEFT JOIN groups AS primary_groups ON primary_groups.id = people.primary_group_id').
+        where('primary_groups.layer_group_id = ? OR people.id IN (?)',
+              layer_group.id,
+              ::Group::DeletedPeople.deleted_for(layer_group).select(:id))
     end
   end
 
@@ -72,7 +72,7 @@ class Person::AddRequest < ActiveRecord::Base
   private
 
   def last_layer_group
-    last_role = Role.unscoped.where(person: person).order(:deleted_at).last
+    last_role = person.last_non_restricted_role
     last_role && last_role.group.layer_group
   end
 

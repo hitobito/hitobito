@@ -36,10 +36,9 @@ class Group::PersonAddRequestsController < ApplicationController
   def load_entries
     Person::AddRequest.
       for_layer(group).
-      includes(:body,
-               :person,
+      includes(:person,
                requester: { roles: :group }).
-      order(created_at: :desc)
+      merge(Person.order_by_name)
   end
 
   def load_approvers

@@ -43,21 +43,25 @@ describe Person::AddRequest do
       expect(people).to match_array([admin, topper].collect(&:id))
     end
 
-    it 'contains people without primary group this primary group layer' do
+    it 'contains deleted people' do
       admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
-      topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
+      ex_topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago).person
+      ex_topper.roles.first.destroy
       bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
-      # second role in layer
-      Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
-      Person::AddRequest::Group.create!(
-        person: topper,
-        requester: bottom,
-        body: groups(:bottom_layer_one),
-        role_type: Group::BottomLayer::Member.sti_name)
+      # deleted role in layer
+      del = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom, created_at: 1.year.ago)
+      del.destroy
+      [admin, ex_topper, bottom].each do |p|
+        Person::AddRequest::Group.create!(
+          person: p,
+          requester: bottom,
+          body: groups(:bottom_layer_one),
+          role_type: Group::BottomLayer::Member.sti_name)
+      end
 
-      requests = Person::AddRequest.for_layer(groups(:top_layer))
+      people = Person::AddRequest.for_layer(groups(:top_layer)).pluck(:person_id)
 
-      expect(requests.first.person).to eq(topper)
+      expect(people).to match_array([admin, ex_topper].collect(&:id))
     end
 
   end
@@ -134,8 +138,7 @@ describe Person::AddRequest do
       end
 
       it '#last_layer_group contains last layer' do
-        admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
-        topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
+        topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago).person
         bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
         # second role in layer
         Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: bottom)
@@ -144,7 +147,7 @@ describe Person::AddRequest do
           requester: bottom,
           body: groups(:bottom_layer_one),
           role_type: Group::BottomLayer::Member.sti_name)
-        topper.update(primary_group_id: nil)
+        topper.roles.first.destroy!
         add_request = Person::AddRequest.where(person_id: topper.id)
         expect(add_request.first.send(:last_layer_group)).to eq(groups(:top_layer))
       end

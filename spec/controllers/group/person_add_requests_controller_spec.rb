@@ -81,6 +81,7 @@ describe Group::PersonAddRequestsController do
         expect(flash[:notice]).to be_blank
         expect(flash[:alert]).to be_blank
 
+        expect(assigns(:add_requests)).to eq([request])
         expect(assigns(:current_add_request)).to eq(request)
       end
     end
@@ -123,5 +124,5 @@ describe Group::PersonAddRequestsController do
     end
 
   end
-  
+
 end

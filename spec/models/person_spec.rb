@@ -504,4 +504,17 @@ describe Person do
     end
   end
 
+  context 'person has participation' do
+
+    let(:participant) { people(:top_leader) }
+    let(:participation) { Fabricate(:event_participation, person: participant) }
+    let(:user) { participant }
+    let(:event) { participation.event }
+    let(:group) { event.groups.first }
+    
+    it 'check for participation' do
+      expect(user.participating_in?(event.id)).to eq(true)
+    end
+  end
+
 end

@@ -38,5 +38,4 @@ describe 'event/participations/_actions_show.html.haml' do
       its(:text) { should eq ' Kontaktdaten ändern' } # space because of icon
     end
   end
-
 end

@@ -22,5 +22,9 @@
       = f.labeled_boolean_field(:signature_confirmation, caption: t('.caption_signature_confirmation'))
     - entry.used?(:signature_confirmation_text) do
       = f.labeled_input_field(:signature_confirmation_text, value: entry.signature_confirmation_text ||  t('.signature_confirmation_text_default'))
+    
+    - if entry.object.class.cancel_participation_possible
+      = f.labeled_boolean_field(:cancel_participation_enabled,
+                            caption: t('events.form.caption_cancel_participation_active'))
 
     = render_extensions 'application_fields', locals: { f: f }

@@ -18,6 +18,10 @@ CustomContent.seed_once(:key,
    placeholders_required: 'participant-name, event-details, application-url',
    placeholders_optional: 'recipient-names'},
 
+  {key: Event::ParticipationMailer::CONTENT_CANCEL_PARTICIPATION,
+   placeholders_required: 'event-details, application-url',
+   placeholders_optional: 'recipient-name'},
+
   {key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN,
    placeholders_required: 'event-url',
    placeholders_optional: 'recipient-name, event-name'},
@@ -46,6 +50,7 @@ CustomContent.seed_once(:key,
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
+cancel_participation_id = CustomContent.where(key: Event::ParticipationMailer::CONTENT_CANCEL_PARTICIPATION).first.id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
 login_form_id = CustomContent.get('views/devise/sessions/info').id
 add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
@@ -252,5 +257,13 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: add_request_rejected_id,
    locale: 'it',
    label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
+
+  {custom_content_id: cancel_participation_id,
+   locale: 'de',
+   label: 'Anlass: E-Mail Abmeldebestätigung',
+   subject: 'Bestätigung der Abmeldung',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Du hast dich für folgenden Anlass abgemeldet:<br/><br/>" \
+         "{event-details}<br/><br/>"}
 
 )

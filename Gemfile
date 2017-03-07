@@ -104,7 +104,7 @@ group :test do
   gem 'launchy'
   gem 'rspec-its'
   gem 'rspec-collection_matchers'
-  gem 'selenium-webdriver', '2.51.0' # this version works on travis, 3.2.2 fails with "Unable to find Mozilla geckodriver"
+  gem 'selenium-webdriver', '2.51.0' # 3.2.2 fails with "Unable to find Mozilla geckodriver"
   gem 'timecop'
   gem 'pdf-inspector', require: 'pdf/inspector'
 end
@@ -136,4 +136,4 @@ end
 #
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
 wagonfile = File.expand_path('../Wagonfile', __FILE__)
-eval(File.read(wagonfile)) if File.exist?(wagonfile)
+eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Lint/Eval

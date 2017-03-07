@@ -584,6 +584,8 @@ de:
 
 
   person:
+    confirm_delete: Wollen Sie %{person} wirklich löschen?
+
     add_requests:
 
       body_list:

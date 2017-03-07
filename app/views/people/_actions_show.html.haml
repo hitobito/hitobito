@@ -6,6 +6,10 @@
 - if can?(:edit, entry)
   = button_action_edit
 
+- if can?(:destroy, entry)
+  = button_action_destroy(nil, { data: { confirm: t('person.confirm_delete',
+                                                    person: entry.person)})
+  
 = dropdown_people_export(can?(:show_full, entry), false)
 
 - if entry.email? && can?(:send_password_instructions, entry)

@@ -17,9 +17,9 @@
 #= require jquery
 #= require jquery.turbolinks
 #= require jquery_ujs
-#= require jquery-ui/datepicker
+#= require jquery-ui/widgets/datepicker
 #= require jquery-ui-datepicker-i18n
-#= require jquery-ui/effect-highlight
+#= require jquery-ui/effects/effect-highlight
 #= require bootstrap-alert
 #= require bootstrap-button
 #= require bootstrap-dropdown

@@ -17,7 +17,6 @@ class VariousAbility < AbilityDsl::Base
     class_side(:manage_global).if_admin
     permission(:admin).may(:manage).all
     permission(:any).may(:create, :update, :destroy, :read).own
-    permission(:any).may(:create, :new).all
   end
 
   if Group.course_types.present?
@@ -33,6 +32,6 @@ class VariousAbility < AbilityDsl::Base
   end
 
   def own
-    subject.user_id == user.id
+    subject.person_id == user.id
   end
 end

@@ -1,8 +1,5 @@
-:plain
-  var showGlobal = $('#show_global_label_formats').get(0).checked;
+- if current_user.show_global_label_formats
+  $('.global-formats').slideDown();
+- else
+  $('.global-formats').slideUp();
 
-  if(showGlobal) {
-    $('.global-formats').slideDown();
-  } else {
-    $('.global-formats').slideUp();
-  }

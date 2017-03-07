@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= button_action_event_apply(entry, @group) unless @user_participation
-= button_action_edit if can?(:update, entry)
-= button_action_destroy if can?(:destroy, entry)
-
-= render_extensions :actions_show
+.alert.alert-success
+  = t("event.participations.cancel_application.explanation")
+  - if can?(:destroy, @user_participation)
+    &nbsp;
+    = action_button_cancel_participation

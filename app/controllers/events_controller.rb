@@ -30,6 +30,7 @@ class EventsController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
+  before_render_show :load_user_participation
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
@@ -94,6 +95,12 @@ class EventsController < CrudController
     if entry.kind_class
       @kinds = entry.kind_class.list.without_deleted
       @kinds << entry.kind if entry.kind && entry.kind.deleted?
+    end
+  end
+
+  def load_user_participation
+    if current_user
+      @user_participation = current_user.event_participations.where(event_id: entry.id).first
     end
   end
 

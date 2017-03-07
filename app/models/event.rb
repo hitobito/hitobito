@@ -64,7 +64,7 @@ class Event < ActiveRecord::Base
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at,
                           :application_closing_at, :application_conditions,
-                          :external_applications]
+                          :external_applications, :applications_cancelable]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -82,6 +82,7 @@ class Event < ActiveRecord::Base
 
   # The class used for the kind_id
   self.kind_class = nil
+
 
   model_stamper
   stampable stamper_class_name: :person,

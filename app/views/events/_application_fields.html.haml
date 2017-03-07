@@ -23,4 +23,8 @@
     - entry.used?(:signature_confirmation_text) do
       = f.labeled_input_field(:signature_confirmation_text, value: entry.signature_confirmation_text ||  t('.signature_confirmation_text_default'))
 
+    - entry.used?(:applications_cancelable) do
+      = f.labeled_boolean_field(:applications_cancelable,
+                            caption: t('events.form.caption_applications_cancelable'))
+
     = render_extensions 'application_fields', locals: { f: f }

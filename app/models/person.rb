@@ -229,10 +229,6 @@ class Person < ActiveRecord::Base
     now.year - birthday.year - (extra ? 0 : 1)
   end
 
-  def participating_in?(event)
-    event_participations.where(event: event).any?
-  end
-
   ### AUTHENTICATION INSTANCE METHODS
 
   # Is this person allowed to login?

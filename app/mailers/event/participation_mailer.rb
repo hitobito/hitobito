@@ -9,7 +9,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
   CONTENT_CONFIRMATION = 'event_application_confirmation'
   CONTENT_APPROVAL     = 'event_application_approval'
-  CONTENT_CANCEL_PARTICIPATION = 'event_cancel_participation'
+  CONTENT_CANCEL       = 'event_cancel_application'
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value
@@ -36,23 +36,14 @@ class Event::ParticipationMailer < ApplicationMailer
             'recipient-names'  => recipients.collect(&:greeting_name).join(', '))
   end
 
-  def cancel_participation(event, person)
+  def cancel(event, person)
     @event = event
     @person = person
 
     custom_content_mail(@person,
-                        CONTENT_CANCEL_PARTICIPATION,
+                        CONTENT_CANCEL,
                         { 'recipient-name' => @person.greeting_name,
                           'event-details' => event_without_participation })
-  end
-
-  def event_without_participation
-    infos = []
-    infos << @event.name
-    date_label = @event.class.human_attribute_name(:dates)
-    date_formatted = @event.dates.map(&:to_s).join('<br/>')
-    infos << "#{date_label}:<br/>#{date_formatted}"
-    infos.compact.join('<br/><br/>')
   end
 
   private
@@ -90,6 +81,13 @@ class Event::ParticipationMailer < ApplicationMailer
   end
   # rubocop:enable MethodLength, Metrics/AbcSize
 
+  def event_without_participation
+    infos = []
+    infos << event.name
+    infos << labeled(:dates) { event.dates.map(&:to_s).join('<br/>') }
+    infos.compact.join('<br/><br/>')
+  end
+
   def labeled(key)
     value = event.send(key).presence
     if value
@@ -123,11 +121,11 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def person
-    participation.person
+    @person ||= participation.person
   end
 
   def event
-    participation.event
+    @event ||= participation.event
   end
 
 end

@@ -15,7 +15,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
     permission(:any).may(:create).her_own_if_application_possible
     permission(:any).may(:update).for_participations_full_events
-    permission(:any).may(:destroy).her_own_if_application_possible
+    permission(:any).may(:destroy).her_own_if_application_cancelable
 
     permission(:group_full).
       may(:show, :show_details, :print, :create, :update, :destroy).
@@ -50,6 +50,12 @@ class Event::ParticipationAbility < AbilityDsl::Base
 
   def her_own_if_application_possible
     her_own && event.application_possible?
+  end
+
+  def her_own_if_application_cancelable
+    her_own &&
+      event.applications_cancelable? &&
+      (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
   end
 
   private

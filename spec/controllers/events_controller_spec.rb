@@ -17,6 +17,27 @@ describe EventsController do
 
     before { group2 }
 
+    context 'GET show' do
+
+      it 'sets empty @user_participation' do
+        sign_in(people(:top_leader))
+
+        get :show, group_id: groups(:top_layer).id, id: events(:top_event)
+
+        expect(assigns(:user_participation)).to be_nil
+      end
+
+      it 'sets  @user_participation' do
+        p = Fabricate(:event_participation, event: events(:top_event), person: people(:top_leader))
+        sign_in(people(:top_leader))
+
+        get :show, group_id: groups(:top_layer).id, id: events(:top_event)
+
+        expect(assigns(:user_participation)).to eq(p)
+      end
+
+    end
+
     context 'GET new' do
       it 'loads sister groups' do
         sign_in(people(:top_leader))

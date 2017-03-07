@@ -115,8 +115,8 @@ describe Event::ParticipationMailer do
     it { is_expected.to match(/Top Leader hat sich/) }
   end
 
-  describe '#cancel participation' do
-    let(:mail) { Event::ParticipationMailer.cancel_participation(event, person) }
+  describe '#cancel' do
+    let(:mail) { Event::ParticipationMailer.cancel(event, person) }
     subject { mail.body }
 
     it 'renders dates if set' do

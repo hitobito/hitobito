@@ -505,6 +505,27 @@ describe Event::ParticipationsController do
     end
   end
 
+
+  context 'DELETE destroy' do
+
+    it 'redirects to application market' do
+      delete :destroy, group_id: group.id, event_id: course.id, id: participation.id
+
+      is_expected.to redirect_to group_event_application_market_index_path(group, course)
+      expect(flash[:notice]).to match(/Anmeldung/)
+      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).not_to exist
+    end
+
+    it 'redirects to event show if own participation' do
+      participation.update_column(:person_id, user.id)
+      delete :destroy, group_id: group.id, event_id: course.id, id: participation.id
+
+      is_expected.to redirect_to group_event_path(group, course)
+      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).to exist
+    end
+
+  end
+
   context 'preconditions' do
     before { user.qualifications.first.destroy }
 

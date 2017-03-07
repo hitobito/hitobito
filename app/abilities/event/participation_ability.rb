@@ -15,6 +15,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
     permission(:any).may(:create).her_own_if_application_possible
     permission(:any).may(:update).for_participations_full_events
+    permission(:any).may(:destroy).her_own_if_application_possible
 
     permission(:group_full).
       may(:show, :show_details, :print, :create, :update, :destroy).

@@ -537,6 +537,8 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
+        nickname: Übername auf Etikett
+        pp_post: PP-Zeile
 
   errors:
     messages:

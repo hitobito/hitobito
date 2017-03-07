@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer "count_vertical",   limit: 4,                   null: false
     t.float   "padding_top",      limit: 24,                  null: false
     t.float   "padding_left",     limit: 24,                  null: false
-    t.integer "user_id"
+    t.integer "person_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -307,7 +307,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer  "failed_attempts",        limit: 4,     default: 0
     t.datetime "locked_at"
     t.string   "authentication_token",   limit: 255
-    t.boolean  "show_global_label_formats",            default: true
+    t.boolean  "show_global_label_formats",            default: true, null: false
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token"

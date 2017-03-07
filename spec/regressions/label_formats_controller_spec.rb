@@ -31,6 +31,8 @@ describe LabelFormatsController, type: :controller do
       padding_left: 2.0 }
   end
 
+  before { Fabricate(:label_format, person: people(:top_leader)) }
+
   before { sign_in(people(:top_leader)) }
 
   include_examples 'crud controller', skip: [%w(show)]

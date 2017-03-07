@@ -18,6 +18,7 @@
 #  count_vertical   :integer          not null
 #  padding_top      :float            not null
 #  padding_left     :float            not null
+#  person_id        :integer
 #
 
 class LabelFormat < ActiveRecord::Base
@@ -33,7 +34,7 @@ class LabelFormat < ActiveRecord::Base
 
   has_many :people, foreign_key: :last_label_format_id, dependent: :nullify
 
-  belongs_to :user
+  belongs_to :person
 
 
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
@@ -50,6 +51,15 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_left, numericality: { less_than: :width, if: :width }
 
   scope :for_user, ->(user) { where('user_id = ? OR user_id IS null', user.id) }
+
+  def self.for_person(person)
+    if person.show_global_label_formats?
+      where('person_id = ? OR person_id IS NULL', person.id)
+    else
+      where(person_id: person.id)
+    end
+  end
+
 
   def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"

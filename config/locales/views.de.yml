@@ -471,6 +471,8 @@ de:
     attrs:
       contact_details: 'Kontaktangaben'
       additional_information: 'Weitere Angaben'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
     global:

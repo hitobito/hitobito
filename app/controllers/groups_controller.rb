@@ -105,8 +105,9 @@ class GroupsController < CrudController
         @sub_groups[label] << group
       end
     end
-    # move this entry to the end
-    @sub_groups[sub_groups_label] = @sub_groups.delete(sub_groups_label)
+    # move entry with non-layer groups to the end
+    children = @sub_groups.delete(sub_groups_label)
+    @sub_groups[sub_groups_label] = children if children
   end
 
 

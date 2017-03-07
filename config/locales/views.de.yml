@@ -294,6 +294,10 @@ de:
         on_waiting_list: Auf Warteliste
       list:
         incomplete: Pflichtangaben fehlen
+      cancel_application:
+        explanation: Du bist für diesen Anlass angemeldet.
+        caption: Abmelden
+        confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
     register:
       register:
@@ -322,6 +326,7 @@ de:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      caption_applications_cancelable: Teilnehmende können sich selbst abmelden
     form_tabs:
       general: Allgemein
     global:

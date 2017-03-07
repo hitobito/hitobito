@@ -47,4 +47,15 @@ module EventParticipationsHelper
     participation.application.priorities? &&
     can?(:show_priorities, participation.application)
   end
+
+  def action_button_cancel_participation
+    action_button(
+      t('event.participations.cancel_application.caption'),
+      group_event_participation_path(parent, entry, @user_participation),
+      'remove-circle',
+      data: {
+        confirm: t('event.participations.cancel_application.confirmation'),
+        method: :delete
+      })
+  end
 end

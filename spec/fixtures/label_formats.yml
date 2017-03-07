@@ -3,15 +3,18 @@
 # Table name: label_formats
 #
 #  id               :integer          not null, primary key
-#  page_size        :string           default("A4"), not null
+#  page_size        :string(255)      default("A4"), not null
 #  landscape        :boolean          default(FALSE), not null
-#  font_size        :float            default(11.0), not null
-#  width            :float            not null
-#  height           :float            not null
+#  font_size        :float(24)        default(11.0), not null
+#  width            :float(24)        not null
+#  height           :float(24)        not null
 #  count_horizontal :integer          not null
 #  count_vertical   :integer          not null
-#  padding_top      :float            not null
-#  padding_left     :float            not null
+#  padding_top      :float(24)        not null
+#  padding_left     :float(24)        not null
+#  person_id        :integer
+#  nickname         :boolean          default(FALSE), not null
+#  pp_post          :string
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -48,26 +51,3 @@ envelope:
   padding_left: 80
   count_horizontal: 1
   count_vertical: 1
-
-with_pp_post:
-  page_size: 'A4'
-  font_size: 11
-  width: 70
-  height: 29.7
-  padding_top: 5
-  padding_left: 5
-  count_horizontal: 3
-  count_vertical: 10
-  pp_post: 'P.P. 3012 Bern'
-
-with_nickname:
-  page_size: 'A4'
-  font_size: 11
-  width: 70
-  height: 29.7
-  padding_top: 5
-  padding_left: 5
-  count_horizontal: 3
-  count_vertical: 10
-  nickname: true
-  

@@ -115,16 +115,6 @@ describe Event::ParticipationsController, type: :controller do
     end
   end
 
-  describe_action :delete, :destroy, format: :html, id: true do
-    it 'redirects to group event path' do
-      is_expected.to redirect_to group_event_path(group, course)
-    end
-
-    it 'has flash noting the application' do
-      expect(flash[:notice]).to match(/Anmeldung/)
-    end
-  end
-
   describe 'GET print' do
     let(:person) { Fabricate(:person_with_address) }
     let(:application) do

@@ -42,7 +42,7 @@ class Event::ParticipationsController < CrudController
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
-  after_destroy :send_cancel_participation_email
+  after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
@@ -79,11 +79,12 @@ class Event::ParticipationsController < CrudController
   end
 
   def destroy
-    super(location: group_event_path(group, event))
-  end
-
-  def send_cancel_participation_email
-    Event::CancelParticipationJob.new(entry.event, entry.person).enqueue!
+    location = if entry.person_id == current_user.id
+                 group_event_path(group, event)
+               else
+                 group_event_application_market_index_path(group, event)
+               end
+    super(location: location)
   end
 
   private
@@ -218,6 +219,12 @@ class Event::ParticipationsController < CrudController
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
+  end
+
+  def send_cancel_email
+    if entry.person_id == current_user.id
+      Event::CancelApplicationJob.new(entry.event, entry.person).enqueue!
     end
   end
 

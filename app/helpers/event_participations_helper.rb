@@ -48,13 +48,14 @@ module EventParticipationsHelper
     can?(:show_priorities, participation.application)
   end
 
-  def action_button_cancel_participation(options={})
-    participation = entry.participations.where(person: current_user).first
-    path = group_event_participation_path(parent,
-                                          entry,
-                                          participation)
-    options[:data] = { confirm: t('event.participations.cancel_participation.confirm_cancel_participation'),
-                       method: :delete }
-    action_button t('event.participations.cancel_participation.cancel_participation'), path, 'trash', options
+  def action_button_cancel_participation
+    action_button(
+      t('event.participations.cancel_application.caption'),
+      group_event_participation_path(parent, entry, @user_participation),
+      'remove-circle',
+      data: {
+        confirm: t('event.participations.cancel_application.confirmation'),
+        method: :delete
+      })
   end
 end

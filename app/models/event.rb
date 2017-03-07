@@ -58,14 +58,13 @@ class Event < ActiveRecord::Base
                   :role_types,
                   :supports_applications,
                   :possible_states,
-                  :kind_class,
-                  :cancel_participation_possible
+                  :kind_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at,
                           :application_closing_at, :application_conditions,
-                          :external_applications, :cancel_participation_enabled]
+                          :external_applications, :applications_cancelable]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -84,8 +83,6 @@ class Event < ActiveRecord::Base
   # The class used for the kind_id
   self.kind_class = nil
 
-  # Participations can be cancelled
-  self.cancel_participation_possible = true
 
   model_stamper
   stampable stamper_class_name: :person,

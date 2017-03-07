@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.string   "signature_confirmation_text", limit: 255
     t.integer  "creator_id",                  limit: 4
     t.integer  "updater_id",                  limit: 4
-    t.boolean  "cancel_participation_enabled",              default: false
+    t.boolean  "applications_cancelable",                   default: false, null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"

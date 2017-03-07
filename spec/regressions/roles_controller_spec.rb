@@ -85,7 +85,7 @@ describe RolesController, type: :controller do
 
     let(:person) { Fabricate(:person) }
 
-    it 'new role for existing person returns 200' do
+    it 'new role for existing person returns new role' do
       xhr :post, :create,
           group_id: group.id,
           role: { group_id: group.id,
@@ -97,12 +97,12 @@ describe RolesController, type: :controller do
       expect(response.body).to include('Bottom One')
     end
 
-    it 'creation of role without type returns 422' do
+    it 'creation of role without type returns error' do
       xhr :post, :create,
           group_id: group.id,
           role: { group_id: group.id, person_id: person.id }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:ok)
       is_expected.to render_template('create')
       expect(response.body).to include('alert')
     end

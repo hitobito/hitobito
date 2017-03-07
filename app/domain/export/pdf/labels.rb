@@ -34,19 +34,26 @@ module Export::Pdf
       pdf.bounding_box(pos,
                        width: format.width.mm - min_border,
                        height: format.height.mm - min_border) do
-
-        print_pp_post(pdf, format) if pp_post?(format)
+        left = format.padding_left.mm
+        top = format.height.mm - format.padding_top.mm - min_border
         # pdf.stroke_bounds
-        pdf.text_box(address, at: [format.padding_left.mm,
-                                   format.height.mm - format.padding_top.mm - min_border])
+        print_address_with_pp_post(pdf, address, left, top)
       end
     end
 
     # print without line wrap
     def print_address(pdf, address, pos)
-      print_pp_post(pdf, format) if pp_post?(format)
-      pdf.text_box(address, at: [pos.first + format.padding_left.mm,
-                                 pos.last - format.padding_top.mm])
+      left = pos.first + format.padding_left.mm
+      top = pos.last - format.padding_top.mm
+      print_address_with_pp_post(pdf, address, left, top)
+    end
+
+    def print_address_with_pp_post(pdf, address, left, top)
+      if format.pp_post?
+        print_pp_post(pdf, [left, top])
+        top -= 7.mm
+      end
+      pdf.text_box(address, at: [left, top])
     end
 
     def address(contactable)
@@ -81,17 +88,11 @@ module Export::Pdf
       format.nickname? && contactable.respond_to?(:nickname) && contactable.nickname.present?
     end
 
-    def pp_post?(format)
-      format.respond_to?(:pp_post) && format.pp_post.present?
-    end
-
-    def print_pp_post(pdf, format)
-      pdf.bounding_box([format.padding_left.mm,
-                        format.height.mm - format.padding_top.mm + 12],
-                        width: format.width.mm - min_border,
-                        height: format.height.mm - min_border) do
-        pdf.text "<u><b>P.P. </b>" + format.pp_post + " Post CH AG</u>", inline_format: true
-      end
+    def print_pp_post(pdf, at)
+      pdf.text_box("<u><font size='12'><b>P.P.</b></font> " \
+                   "<font size='8'>#{format.pp_post}  Post CH AG</font></u>",
+                   inline_format: true,
+                   at: at)
     end
 
     def min_border

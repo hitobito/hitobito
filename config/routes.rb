@@ -178,7 +178,11 @@ Hitobito::Application.routes.draw do
 
     resources :qualification_kinds
 
-    resources :label_formats
+    resources :label_formats do
+      collection do
+        resource :settings, controller: 'label_format/settings', as: 'label_format_settings'
+      end
+    end
 
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'

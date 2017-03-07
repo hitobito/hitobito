@@ -47,7 +47,7 @@ module Dropdown
     end
 
     def label_links
-      if LabelFormat.all_as_hash.present?
+      if LabelFormat.exists?
         label_item = add_item(translate(:labels), main_label_link)
         add_last_used_format_item(label_item)
         add_label_format_items(label_item)
@@ -74,8 +74,8 @@ module Dropdown
     end
 
     def add_label_format_items(parent)
-      LabelFormat.all_as_hash.each do |id, label|
-        parent.sub_items << Item.new(label, export_label_format_path(id),
+      LabelFormat.list.for_person(user).each do |label_format|
+        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
                                      target: :new, class: 'export-label-format')
       end
     end

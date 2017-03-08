@@ -7,6 +7,6 @@
 
 - ChangelogReader.changelog.each do |changelog_entry|
   %h2 #{changelog_entry.label}
-  - changelog_entry.log_entries.each do |change|
-    %ul
+  %ul
+    - changelog_entry.log_entries.each do |change|
       %li #{change}

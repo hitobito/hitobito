@@ -1,5 +1,4 @@
 AllCops:
-  RunRailsCops: true
   DisplayCopNames: true
   Exclude:
     - Rakefile
@@ -12,12 +11,18 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
 
+Rails:
+  Enabled: true
 
 Metrics/AbcSize:
   Max: 20
   Severity: error
 
 Metrics/ClassLength:
+  Max: 200
+  Severity: error
+
+Metrics/ModuleLength:
   Max: 200
   Severity: error
 
@@ -32,7 +37,6 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Max: 10
   Severity: error
-
 
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:
@@ -57,6 +61,7 @@ DotPosition:
 
 # Missing UTF-8 encoding statements should always be created.
 Encoding:
+  EnforcedStyle: always
   Severity: error
 
 # Keep single line bodys for if and unless

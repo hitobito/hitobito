@@ -7,24 +7,24 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.7.1'
+gem 'rails', '4.2.8'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'axlsx', '2.0.1'
-gem 'awesome_nested_set'
+gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
-gem 'carrierwave'
+gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'cmess'
 gem 'country_select'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
-gem 'devise'
+gem 'devise', '< 4.0.0' # requires ruby 2.1
 gem 'draper'
-gem 'faker'
+gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
@@ -35,14 +35,14 @@ gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
 gem 'nested_form'
 gem 'oat'
 gem 'paper_trail'
-gem 'paranoia'
+gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'customized_piwik_analytics', '~> 1.0.0'
 gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
 gem 'prawn-table'
 gem 'protective'
 gem 'rack'
 gem 'rails_autolink'
-gem 'config'
+gem 'config', '< 1.1.0' # requires ruby 2
 gem 'rails-i18n'
 gem 'seed-fu'
 gem 'simpleidn'
@@ -53,7 +53,7 @@ gem 'validates_timeliness', '< 4.0'
 gem 'wagons'
 
 # load after others because of active record inherited alias chain.
-gem 'kaminari'
+gem 'kaminari', '< 1.0.0' # requires ruby 2.0
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'
@@ -70,6 +70,14 @@ gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
+
+# if these are ever in your way, you can remove these lines.
+# they mostly serve as a version-restriction
+group :dependencies do
+  gem 'nokogiri', '< 1.7.0' # requires ruby 2.1
+  gem 'addressable', '< 2.5' # requires ruby 2.0
+  gem 'sort_alphabetical', '< 1.1.0' # requires ruby 2.0
+end
 
 group :development, :test do
   gem 'binding_of_caller'
@@ -96,7 +104,7 @@ group :test do
   gem 'launchy'
   gem 'rspec-its'
   gem 'rspec-collection_matchers'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '2.51.0' # 3.2.2 fails with "Unable to find Mozilla geckodriver"
   gem 'timecop'
   gem 'pdf-inspector', require: 'pdf/inspector'
 end
@@ -117,7 +125,7 @@ group :metrics do
   gem 'brakeman'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
-  gem 'rubocop'
+  gem 'rubocop', '< 0.42' # require ruby 2.0
   gem 'rubocop-checkstyle_formatter'
   gem 'ruby-prof'
   gem 'simplecov-rcov'
@@ -128,4 +136,4 @@ end
 #
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
 wagonfile = File.expand_path('../Wagonfile', __FILE__)
-eval(File.read(wagonfile)) if File.exist?(wagonfile)
+eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Lint/Eval

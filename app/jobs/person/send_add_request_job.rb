@@ -40,7 +40,7 @@ class Person::SendAddRequestJob < BaseJob
   end
 
   def load_responsibles
-    Person::AddRequest::IgnoredApprover.approvers(person.primary_group.layer_group)
+    Person::AddRequest::IgnoredApprover.approvers(person_layer)
   end
 
   def clear_old_ignored_approvers
@@ -53,6 +53,15 @@ class Person::SendAddRequestJob < BaseJob
 
   def person
     request.person
+  end
+
+  def person_layer
+    person.primary_group.try(:layer_group) || last_layer_group
+  end
+
+  def last_layer_group
+    last_role = person.last_non_restricted_role
+    last_role && last_role.group.layer_group
   end
 
 end

@@ -90,7 +90,7 @@ describe FormHelper do
       let(:entry) { crud_test_models(:AAAAA) }
 
       it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]") }
-      it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]") }
+      it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text][value=AAAAA]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text][value='01.01.1910']") }
       it { is_expected.to have_selector("input[name='crud_test_model[children]'][type=text][value='9']") }
@@ -120,7 +120,7 @@ describe FormHelper do
 
       it { is_expected.to have_selector("div#error_explanation") }
       it { is_expected.to have_selector("div.control-group.error input[name='crud_test_model[name]'][type=text]") }
-      it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]") }
+      it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
     end
   end
 

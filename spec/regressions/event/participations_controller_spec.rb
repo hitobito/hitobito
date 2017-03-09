@@ -103,8 +103,8 @@ describe Event::ParticipationsController, type: :controller do
       get :new, group_id: group.id, event_id: course.id, for_someone_else: true
       person_field = subject.all('form .control-group')[0]
       expect(person_field).to have_content 'Person'
-      expect(person_field).to have_css('input', count: 2)
-      expect(person_field.all('input').first[:type]).to eq 'hidden'
+      expect(person_field).to have_css('input', visible: false, count: 2)
+      expect(person_field.all('input', visible: false).first[:type]).to eq 'hidden'
     end
 
     it 'renders alternatives' do

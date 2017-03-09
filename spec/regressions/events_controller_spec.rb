@@ -111,7 +111,7 @@ describe EventsController, type: :controller do
 
     it 'renders new form' do
       get :new, group_id: group.id, event: { type: 'Event::Course' }
-      expect(dom.find('input#event_type')[:type]).to eq 'hidden'
+      expect(dom.find('input#event_type', visible: false)[:type]).to eq 'hidden'
       expect(dom.all('#questions_fields .fields').count).to eq 3
       expect(dom.all('#dates_fields').count).to eq 1
     end

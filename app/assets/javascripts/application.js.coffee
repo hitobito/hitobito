@@ -37,9 +37,7 @@
 #= require_tree ./modules
 #= require wagon
 #= require turbolinks
-#= require progress-bar
 #
-
 
 # scope for global functions
 app = window.App ||= {}

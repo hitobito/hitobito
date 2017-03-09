@@ -52,8 +52,7 @@ class Event::ApplicationMarketController < ApplicationController
 
   def load_applications
     Event::Participation.
-      joins(:event).
-      includes(:application, person: [:primary_group]).
+      includes(:application, :event, person: [:primary_group]).
       references(:application).
       where(filter_applications).
       merge(Event::Participation.pending).

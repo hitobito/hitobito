@@ -3,16 +3,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-$ ->
-  button = $('#toggle-condense-labels')
-  checkbox = button.find('input[type="checkbox"]')
+$(document).on('click', '#toggle-condense-labels', (event) ->
+  event.stopPropagation()
+  $(this).find('input[type="checkbox"]').toggle
+)
+
+$(document).on('change', '#toggle-condense-labels input[type="checkbox"]', () ->
   param = 'condense_labels='
-
-  button.click (event) ->
-    event.stopPropagation()
-    checkbox.toggle
-
-  checkbox.change ->
-    checked = !!this.checked
-    $(this).parents('.dropdown-menu').find('a.export-label-format').each ->
-      $(this).attr('href', $(this).attr('href').replace(param + !checked, param + checked))
+  checked = !!this.checked
+  $(this).parents('.dropdown-menu').find('a.export-label-format').each ->
+    $(this).attr('href', $(this).attr('href').replace(param + !checked, param + checked))  
+)

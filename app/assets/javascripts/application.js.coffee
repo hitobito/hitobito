@@ -37,6 +37,7 @@
 #= require_tree ./modules
 #= require wagon
 #= require turbolinks
+#= require turbolinks-compatibility
 #
 
 # scope for global functions

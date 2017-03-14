@@ -1,4 +1,4 @@
-#  Copyright (c) 2015 Pro Natura Schweiz. This file is part of
+#  Copyright (c) 2017 Pro Natura Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -6,11 +6,10 @@
 app = window.App ||= {}
 
 app.EventDescription = {
-  getDescription: ->
-    that = app.EventDescription
+  changeEventKind: ->
     id = $(this).val()
-    that.insertOrAsk(id)
-  
+    app.EventDescription.insertOrAsk(id)
+
   insertOrAsk: (id) ->
     if this.descriptionEmpty()
       this.fillDescription(id)
@@ -21,7 +20,7 @@ app.EventDescription = {
     $('.default-description[data-kind=' + id + ']').text().trim()
 
   fillDescription: (id) ->
-    textarea = this.elements().textarea
+    textarea = this.textarea()
     oldText = textarea.val()
     newText = this.getDescriptionForId(id)
 
@@ -29,31 +28,34 @@ app.EventDescription = {
     textarea.val(oldText + spacer + newText)
 
   descriptionEmpty: ->
-    return this.elements().textarea.val() == ""
-  
-  elements: ->
-    {
-      descriptionLink: $('.standard-description-link'),
-      textarea: $('textarea#event_description')
-    }
+    this.textarea().val() == ""
+
+  insertDescription: (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    that = app.EventDescription
+    id = that.kindSelect().val()
+    that.fillDescription(id)
+    that.descriptionLink().hide()
 
   enableDefaultLink: (id) ->
-    this.showLink()
-    link = this.elements().descriptionLink
+    if id && this.getDescriptionForId(id) != ""
+      this.descriptionLink().show()
+    else
+      this.descriptionLink().hide()
 
-    that = this
-    
-    link.off('click')
-    link.click (e) ->
-      e.preventDefault()
-      that.fillDescription(id)
-      that.hideLink()
-  
-  hideLink: ->
-    this.elements().descriptionLink.parents('.controls').hide();
-  
-  showLink: ->
-    this.elements().descriptionLink.parents('.controls').show();
+  descriptionLink: ->
+    $('.standard-description-link').parents('.help-block')
+
+  textarea: ->
+    $('textarea#event_description')
+
+  kindSelect: ->
+    $('select#event_kind_id')
 }
 
-$(document).on('change', 'select#event_kind_id', app.EventDescription.getDescription)
+$(document).on('change', 'select#event_kind_id', app.EventDescription.changeEventKind)
+$(document).on('click', '.standard-description-link', app.EventDescription.insertDescription)
+$(document).on('turbolinks:load', ->
+  $('select#event_kind_id').each((i, e) ->
+    app.EventDescription.enableDefaultLink($(e).val())))

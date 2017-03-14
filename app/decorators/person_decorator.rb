@@ -92,13 +92,17 @@ class PersonDecorator < ApplicationDecorator
     @relations ||= relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
-  def last_role_new_link
-    path = h.new_group_role_path(last_role.group, role_id: last_role.id)
+  def last_role_new_link(group)
+    path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
     role_popover_link(path, "role_#{last_role.id}")
   end
 
   def last_role
     @last_role ||= last_non_restricted_role
+  end
+
+  def restored_group(default_group)
+    last_role.group.deleted_at? ? default_group : last_role.group
   end
 
   private

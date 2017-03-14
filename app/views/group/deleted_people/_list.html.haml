@@ -23,9 +23,14 @@
         = p.to_s(:list)
         %br/
         = muted p.additional_name
-    - t.col(Role.model_name.human(count: 2))                        { |p| p.last_role_new_link if can?(:create, p.last_role) }
-    - t.col(Person.human_attribute_name(:emails))                   { |p| p.all_emails(true) }
-    - t.col(PhoneNumber.model_name.human(count: 2))                 { |p| p.all_phone_numbers(true) }
-    - sortable_grouped_person_attr(t, address: false, zip_code: false, town: false) { |p| p.complete_address }
+    - t.col(Role.model_name.human(count: 2)) do |p|
+      - if can?(:create, Role.new(group_id: p.restored_group(@group).id))
+        - p.last_role_new_link(@group)
+    - t.col(Person.human_attribute_name(:emails)) do |p|
+      - p.all_emails(true)
+    - t.col(PhoneNumber.model_name.human(count: 2)) do |p|
+      - p.all_phone_numbers(true)
+    - sortable_grouped_person_attr(t, address: false, zip_code: false, town: false) do |p|
+      - p.complete_address
 
 = paginate @people

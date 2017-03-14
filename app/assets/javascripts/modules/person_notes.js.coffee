@@ -27,10 +27,12 @@ app.PersonNotes = {
     $('#person-notes-error').text('').hide()
 }
 
-$ ->
+
+$(document).on('turbolinks:load', ->
   $('#person-notes-new-button').on('click', app.PersonNotes.focus)
   $('#person-notes-form .cancel').on('click', new app.ElementSwapper().swap)
   $('#person-notes-form .cancel').on('click', ->
     app.PersonNotes.resetForm()
     app.PersonNotes.hideError()
   )
+)

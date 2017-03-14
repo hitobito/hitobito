@@ -16,7 +16,6 @@
 # BLANK LINE SHOULD GO AFTER THE REQUIRES BELOW.
 #
 #= require jquery
-#= require jquery.turbolinks
 #= require jquery_ujs
 #= require jquery-ui/widgets/datepicker
 #= require jquery-ui-datepicker-i18n
@@ -37,7 +36,6 @@
 #= require_tree ./modules
 #= require wagon
 #= require turbolinks
-#= require turbolinks-compatibility
 #
 
 # scope for global functions
@@ -104,11 +102,11 @@ $(document).on('change', '#group_contact_id', toggleGroupContact)
 
 $(document).on('click', '.filter-toggle', toggleFilterRoles)
 
-# only bind events for non-document elements in $ ->
-$ ->
-
+# only bind events for non-document elements in turbolinks:load
+$(document).on('turbolinks:load', ->
   # wire up tooltips
   $(document).tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
 
   # enable chosen js
   $('.chosen-select').each(app.activateChosen)
+)

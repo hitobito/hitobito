@@ -23,7 +23,8 @@ class app.InputEnabler
 $(document).on('change', 'input[data-disable]', (e) -> new app.InputEnabler(this).disable())
 $(document).on('change', 'input[data-enable]', (e) -> new app.InputEnabler(this).enable())
 
-$ ->
+$(document).on('turbolinks:load', ->
   # initialize disabled state of checkbox controlled elements
   $('input[data-disable]').each((index, element) -> new app.InputEnabler(element).disable())
   $('input[data-enable]').each((index, element) -> new app.InputEnabler(element).enable())
+)

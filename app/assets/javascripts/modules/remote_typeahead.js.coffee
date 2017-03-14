@@ -88,10 +88,11 @@ window.nestedFormEvents.insertFields = (content, assoc, link) ->
     .find('[data-provide=entity]').each(app.setupEntityTypeahead)
 
 
-$ ->
+$(document).on('turbolinks:load', ->
   # wire up quick search
   app.setupQuicksearch()
 
   # wire up person auto complete
   $('[data-provide=entity]').each(app.setupEntityTypeahead)
   $('[data-provide]').each(() -> $(this).attr('autocomplete', "off"))
+)

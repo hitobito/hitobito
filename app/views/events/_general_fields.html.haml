@@ -21,8 +21,8 @@
     = f.labeled_input_field(:number)
 
   - entry.used?(:description) do
-    = render partial: 'default_description_link' if entry.kind_class == Event::Kind
-    = f.labeled_input_field(:description)
+    - link = entry.kind_class == Event::Kind ? render('default_description_link') : nil
+    = f.labeled_input_field(:description, help: link)
 
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 

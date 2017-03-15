@@ -11,5 +11,6 @@
                        placeholder: t('global.search.placeholder'),
                        data: { url: query_path,
                                person_url: person_path(1).gsub(/\/1$/, ''),
-                               group_url: groups_path }
+                               group_url: groups_path,
+                               event_url: event_path(1).gsub(/\/1$/, '') }
     = button_tag icon(:search), class: 'btn'

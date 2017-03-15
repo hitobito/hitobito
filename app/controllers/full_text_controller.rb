@@ -25,8 +25,9 @@ class FullTextController < ApplicationController
   def query
     people = query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
     groups = query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
+    events = query_events.collect { |i| EventDecorator.new(i).as_quicksearch }
 
-    render json: result_with_separator(people, groups)
+    render json: results_with_separator(people, groups, events) || []
   end
 
   private
@@ -67,12 +68,20 @@ class FullTextController < ApplicationController
     yield ids
   end
 
-  def query_groups
+    def query_groups
     return Person.none.page(1) unless params[:q].present?
     Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
                  star: true,
                  include: :parent)
+  end
+
+  def query_events
+    return Person.none.page(1) unless params[:q].present?
+    Event.search(Riddle::Query.escape(params[:q]),
+                 per_page: 10,
+                 star: true,
+                 include: :groups)
   end
 
   def accessible_people_ids
@@ -102,11 +111,9 @@ class FullTextController < ApplicationController
            pluck(:id)
   end
 
-  def result_with_separator(people, groups)
-    if people.present? && groups.present?
-      people + [{ label: '—' * 20 }] + groups
-    else
-      people + groups
+  def results_with_separator(*sets)
+    sets.select(&:present?).inject do |memo, set|
+      memo + [{ label: '—' * 20 }] + set
     end
   end
 

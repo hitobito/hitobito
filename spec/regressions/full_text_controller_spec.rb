@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe FullTextController, :mysql, type: :controller do
 
-  sphinx_environment(:people, :groups) do
+  sphinx_environment(:people, :groups, :events) do
 
     before do
       Rails.cache.clear
@@ -165,6 +165,11 @@ describe FullTextController, :mysql, type: :controller do
           get :query, q: groups(:bottom_layer_one).to_s[1..5]
 
           expect(@response.body).to include(groups(:bottom_layer_one).to_s)
+        end
+
+        it 'finds events' do
+          get :query, q: events(:top_course).to_s[1..5]
+          expect(@response.body).to include(events(:top_course).to_s)
         end
 
         context 'without any params' do

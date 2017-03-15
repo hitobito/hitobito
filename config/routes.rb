@@ -19,6 +19,7 @@ Hitobito::Application.routes.draw do
 
     get '/people/query' => 'person/query#index', as: :query_people
     get '/people/:id' => 'person/top#show', as: :person
+    get '/events/:id' => 'event/top#show', as: :event
 
     resources :groups do
 

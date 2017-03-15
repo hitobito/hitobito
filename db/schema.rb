@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103142035) do
+ActiveRecord::Schema.define(version: 20170314130759) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer "qualification_kind_id", limit: 4,   null: false
     t.string  "category",              limit: 255, null: false
     t.string  "role",                  limit: 255, null: false
+    t.integer "grouping"
   end
 
   add_index "event_kind_qualification_kinds", ["category"], name: "index_event_kind_qualification_kinds_on_category"

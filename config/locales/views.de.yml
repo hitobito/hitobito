@@ -261,6 +261,12 @@ de:
         qualifications:
           for_participants: 'Qualifikationen für Teilnehmende'
           for_leaders: 'Qualifikationen für Leitende'
+      precondition_fields:
+        add_precondition_grouping: '+ Vorbedingungen hinzufügen'
+        add_precondition: 'Hinzufügen'
+      qualifications:
+        or: oder
+        and: und
 
     participations:
       approvals:
@@ -375,9 +381,10 @@ de:
       remove:  'Markiert Kurs als nicht bestanden und entfernt Qualifikationen.'
 
   event/precondition_checker:
-    preconditions_not_fulfilled: '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
-    below_minimum_age: "Altersgrenze von %{course_minimum_age} unterschritten."
-    qualifications_missing: "Folgende Qualifikationen fehlen: %{missing}"
+    preconditions_not_fulfilled: '<b>Vorbedingungen für Anmeldung sind nicht erfüllt:</b>'
+    below_minimum_age: "Altersgrenze von %{course_minimum_age} Jahren ist unterschritten."
+    qualifications_missing: "Folgende Qualifikationen fehlen: %{missing}."
+    some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
 
   event/register:
     not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."

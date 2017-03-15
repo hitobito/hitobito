@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Version 1.X
+
+*   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

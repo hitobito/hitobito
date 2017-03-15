@@ -8,6 +8,7 @@
 *   Gelöschte Personen können pro Ebene angezeigt werden.
 *   Benutzer/-innen können personalisierte Etiketten erstellen.
 *   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
+*   Globale Suche nach Anlassnamen und Kursnummern.
 
 ## Version 1.13
 

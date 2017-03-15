@@ -88,6 +88,9 @@ window.nestedFormEvents.insertFields = (content, assoc, link) ->
     .find('[data-provide=entity]').each(app.setupEntityTypeahead)
 
 
+# make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)
+$(document).on('mousedown', 'ul.typeahead', (e) -> e.preventDefault())
+
 $(document).on('turbolinks:load', ->
   # wire up quick search
   app.setupQuicksearch()

@@ -48,7 +48,7 @@ class Event::ListsController < ApplicationController
     courses.values.each do |entries|
       entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }
     end
-    courses
+    Hash[courses.sort]
   end
 
   def render_courses_csv(courses)

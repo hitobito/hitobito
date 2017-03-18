@@ -42,7 +42,7 @@ module Export::Xlsx
     end
 
     def default_style_data_rows
-      :centered
+      :default
     end
 
     private

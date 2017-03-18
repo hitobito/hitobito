@@ -24,6 +24,7 @@ module Dropdown
 
     def init_items
       csv_links
+      xlsx_links
       label_links
       email_addresses_link
     end
@@ -37,6 +38,18 @@ module Dropdown
         csv_item.sub_items << Item.new(translate(:everything), csv_path.merge(details: true))
       else
         add_item(translate(:csv), csv_path)
+      end
+    end
+
+    def xlsx_links
+      xlsx_path = params.merge(format: :xlsx)
+
+      if @details
+        xlsx_item = add_item(translate(:xlsx), '#')
+        xlsx_item.sub_items << Item.new(translate(:addresses), xlsx_path)
+        xlsx_item.sub_items << Item.new(translate(:everything), xlsx_path.merge(details: true))
+      else
+        add_item(translate(:xlsx), xlsx_path)
       end
     end
 

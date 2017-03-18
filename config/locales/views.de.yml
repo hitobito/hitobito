@@ -126,6 +126,7 @@ de:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'XLSX'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'

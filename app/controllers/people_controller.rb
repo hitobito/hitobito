@@ -43,6 +43,7 @@ class PeopleController < CrudController
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_entries_csv(filter_entries) }
+      format.xlsx   { render_entries_xlsx(filter_entries) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end
@@ -191,6 +192,33 @@ class PeopleController < CrudController
       send_data Export::Csv::People::PeopleAddress.export(entries), type: :csv
     end
   end
+
+  def render_entries_xlsx(entries)
+    full = params[:details].present? && index_full_ability?
+    render_xlsx(prepare_xlsx_entries(entries, full), full)
+  end
+
+  def prepare_xlsx_entries(entries, full)
+    if full
+      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+    else
+      entries.preload_public_accounts
+    end
+  end
+
+  def render_entry_xlsx
+    render_xlsx([entry], params[:details].present? && can?(:show_full, entry))
+  end
+
+  def render_xlsx(entries, full)
+    if full
+      send_data ::Export::Xlsx::People::ListFull.export(entries), type: :xlsx
+    else
+      send_data ::Export::Xlsx::People::List.export(entries), type: :xlsx
+    end
+
+  end
+
 
   def render_entries_json(entries)
     render json: ListSerializer.new(prepare_entries(entries).

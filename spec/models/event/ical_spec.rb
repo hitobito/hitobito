@@ -11,15 +11,15 @@ describe Event do
   let(:event) { events(:top_course) }
   let(:event_date) { event.dates.first }
 
-  describe '#ical' do
-    subject(:ical) { event.ical }
+  describe '#ical_events' do
+    subject(:ical) { event.ical_events }
 
     it 'contains the event dates' do
       is_expected.to all(be_a(Icalendar::Event))
       expect(ical.first).to have_attributes(
         dtstart: event_date.start_at ,
         dtend: event_date.finish_at,
-        summary: event_date.label
+        summary: "#{event.name}: #{event_date.label}"
       )
       #expect(ical.to_ical).to include('VCALENDAR', 'DTSTART', 'DTEND', 'SUMMARY')
     end

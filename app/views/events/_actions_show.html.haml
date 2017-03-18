@@ -6,5 +6,6 @@
 = button_action_event_apply(entry, @group) unless @user_participation
 = button_action_edit if can?(:update, entry)
 = button_action_destroy if can?(:destroy, entry)
+= export_events_ical_button
 
 = render_extensions :actions_show

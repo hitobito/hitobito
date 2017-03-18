@@ -258,6 +258,20 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
+  def ical
+    dates.map do |event_date|
+      Icalendar::Event.new.tap do |ical_event|
+        ical_event.dtstart = event_date.start_at
+        ical_event.dtend   = event_date.finish_at
+        ical_event.summary = "#{name}: #{event_date.label}"
+        ical_event.location = event_date.location
+        ical_event.description = description
+        ical_event.contact = contact
+        #ical_event.url = ???
+      end
+    end
+  end
+
   private
 
   def assert_type_is_allowed_for_groups

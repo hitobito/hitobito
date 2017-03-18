@@ -28,7 +28,7 @@ gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
-gem 'icalendar', git: 'https://github.com/icalendar/icalendar.git', branch: :master
+gem 'icalendar'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'

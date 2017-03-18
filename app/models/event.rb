@@ -258,7 +258,7 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
-  def ical
+  def ical_events
     dates.map do |event_date|
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = event_date.start_at
@@ -267,7 +267,6 @@ class Event < ActiveRecord::Base
         ical_event.location = event_date.location
         ical_event.description = description
         ical_event.contact = contact
-        #ical_event.url = ???
       end
     end
   end

@@ -121,7 +121,9 @@ class EventsController < CrudController
   end
 
   def render_ical(entries)
-    send_data (Icalendar::Calendar.new.tap { |ical| entries.map(&:ical).flatten.each { |entry| ical.add_event(entry) } }.to_ical), type: :ics
+    ical_data = Icalendar::Calendar.new
+    entries.map(&:ical_events).flatten.each { |entry| ical_data.add_event(entry) }
+    send_data ical_data.to_ical, type: :ics
   end
 
   def typed_group_events_path(group, event_type, options = {})

@@ -1,12 +1,11 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2016, insieme Schweiz. This file is part of
-#  hitobito_insieme and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_insieme.
-#
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
+#  This file is part of hitobito and licensed under the Affero General Public
+#  License version 3 or later. See the COPYING file at the top-level directory
+#  or at https://github.com/hitobito/hitobito.
 
-module Export::Xlsx
+module Export::Tabular
 
   # Decorator for a row entry.
   # Attribute values may be accessed with fetch(attr).
@@ -18,10 +17,11 @@ module Export::Xlsx
     class_attribute :dynamic_attributes
     self.dynamic_attributes = {}
 
-    attr_reader :entry
+    attr_reader :entry, :format
 
-    def initialize(entry)
+    def initialize(entry, format = nil)
       @entry = entry
+      @format = format
     end
 
     def fetch(attr)
@@ -52,11 +52,17 @@ module Export::Xlsx
       end
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+    # rubocop:disable Metrics/PerceivedComplexity
     def normalize(value)
       if value == true
         I18n.t('global.yes')
       elsif value == false
         I18n.t('global.no')
+      elsif value.is_a?(Time)
+        format == :xlsx ? value.to_s : "#{I18n.l(value.to_date)} #{I18n.l(value, format: :time)}"
+      elsif value.is_a?(Date)
+        format == :xlsx ? value.to_s : I18n.l(value)
       else
         value
       end

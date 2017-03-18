@@ -5,15 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::Groups
-  class List < Export::Csv::Base
+module Export::Tabular::Groups
+  class List < Export::Tabular::Base
 
     EXCLUDED_ATTRS = %w(lft rgt contact_id require_person_add_requests
                         created_at updated_at deleted_at
-                        creator_id updater_id deleter_id)
+                        creator_id updater_id deleter_id).freeze
 
     self.model_class = Group
-    self.row_class = GroupRow
+    self.row_class = Export::Tabular::Groups::Row
 
     def attributes
       (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)

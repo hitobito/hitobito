@@ -5,26 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::People
-
-  # Attributes of people we want to include
-  class PeopleAddress < Export::Csv::Base
+module Export::Tabular::People
+  class PeopleAddress < Export::Tabular::Base
 
     self.model_class = ::Person
     self.row_class = PersonRow
 
-
     private
-
-    def build_attribute_labels
-      person_attribute_labels.merge(association_attributes)
-    end
-
-    def person_attribute_labels
-      person_attributes.each_with_object({}) do |attr, hash|
-        hash[attr] = attribute_label(attr)
-      end
-    end
 
     def person_attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
@@ -33,7 +20,8 @@ module Export::Csv::People
 
     def association_attributes
       public_account_labels(:additional_emails, AdditionalEmail).merge(
-        public_account_labels(:phone_numbers, PhoneNumber))
+        public_account_labels(:phone_numbers, PhoneNumber)
+      )
     end
 
     def public_account_labels(accounts, klass)
@@ -48,8 +36,19 @@ module Export::Csv::People
       end
     end
 
+    def build_attribute_labels
+      person_attribute_labels.merge(association_attributes)
+    end
+
+    def person_attribute_labels
+      person_attributes.each_with_object({}) do |attr, hash|
+        hash[attr] = attribute_label(attr)
+      end
+    end
+
     def people
       list
     end
+
   end
 end

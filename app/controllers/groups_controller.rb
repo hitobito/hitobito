@@ -56,7 +56,7 @@ class GroupsController < CrudController
                  without_deleted.
                  order(:lft).
                  includes(:contact)
-    csv = Export::Csv::Groups::List.export(list)
+    csv = Export::Tabular::Groups::List.csv(list)
     send_data csv, type: :csv
   end
 

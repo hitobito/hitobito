@@ -65,7 +65,8 @@ class Event::ParticipationsController < CrudController
         @person_add_requests = fetch_person_add_requests
       end
       format.pdf   { render_pdf(entries.collect(&:person)) }
-      format.csv   { send_data(exporter.export(entries), type: :csv) }
+      format.csv   { render_tabular(:csv, entries) }
+      format.xlsx  { render_tabular(:xlsx, entries) }
       format.email { render_emails(entries.collect(&:person)) }
     end
   end
@@ -109,11 +110,15 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
-  def exporter
+  def render_tabular(format, entries)
+    send_data(tabular_exporter.export(format, entries), type: format)
+  end
+
+  def tabular_exporter
     if params[:details] && can?(:show_details, entries.first)
-      Export::Csv::People::ParticipationsFull
+      Export::Tabular::People::ParticipationsFull
     else
-      Export::Csv::People::ParticipationsAddress
+      Export::Tabular::People::ParticipationsAddress
     end
   end
 

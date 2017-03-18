@@ -23,20 +23,21 @@ module Dropdown
     private
 
     def init_items
-      csv_links
+      tabular_links(:csv)
+      tabular_links(:xlsx)
       label_links
       email_addresses_link
     end
 
-    def csv_links
-      csv_path = params.merge(format: :csv)
+    def tabular_links(format)
+      path = params.merge(format: format)
 
       if @details
-        csv_item = add_item(translate(:csv), '#')
-        csv_item.sub_items << Item.new(translate(:addresses), csv_path)
-        csv_item.sub_items << Item.new(translate(:everything), csv_path.merge(details: true))
+        item = add_item(translate(format), '#')
+        item.sub_items << Item.new(translate(:addresses), path)
+        item.sub_items << Item.new(translate(:everything), path.merge(details: true))
       else
-        add_item(translate(:csv), csv_path)
+        add_item(translate(format), path)
       end
     end
 

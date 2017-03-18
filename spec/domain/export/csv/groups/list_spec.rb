@@ -1,12 +1,19 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 require 'csv'
 
-describe Export::Csv::Groups::List do
+describe Export::Tabular::Groups::List do
 
   let(:group) { groups(:bottom_layer_one) }
 
   let(:list) { group.self_and_descendants.without_deleted.includes(:contact) }
-  let(:data) { Export::Csv::Groups::List.export(list) }
+  let(:data) { Export::Tabular::Groups::List.csv(list) }
   let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
   subject { csv }

@@ -1,12 +1,11 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::People
-  # adds social_accounts and company related attributes
+module Export::Tabular::People
   class PeopleFull < PeopleAddress
 
     def person_attributes
@@ -18,9 +17,14 @@ module Export::Csv::People
 
     def association_attributes
       account_labels(people.map(&:additional_emails).flatten, AdditionalEmail).merge(
-        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber)).merge(
-          account_labels(people.map(&:social_accounts).flatten, SocialAccount)).merge(
-            relation_kind_labels)
+        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber)
+      ).merge(
+        account_labels(people.map(&:social_accounts).flatten, SocialAccount)
+      ).merge(
+        qualification_kind_labels
+      ).merge(
+        relation_kind_labels
+      )
     end
 
     def relation_kind_labels
@@ -31,5 +35,17 @@ module Export::Csv::People
         end
       end
     end
+
+    def qualification_kind_labels
+      qualification_kinds = people.flat_map do |p|
+        p.qualifications.map { |q| q.qualification_kind.label }
+      end
+      qualification_kinds.uniq.sort.each_with_object({}) do |label, obj|
+        if label.present?
+          obj[ContactAccounts.key(QualificationKind, label)] = label
+        end
+      end
+    end
+
   end
 end

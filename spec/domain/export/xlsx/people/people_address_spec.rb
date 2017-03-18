@@ -7,17 +7,25 @@
 
 require 'spec_helper'
 
-describe Export::Tabular::Events::List do
+describe Export::Tabular::People::PeopleAddress do
 
-  let(:courses) { [course1] }
-  let(:course1) { events(:top_course) }
+  before do
+    PeopleRelation.kind_opposites['parent'] = 'child'
+    PeopleRelation.kind_opposites['child'] = 'parent'
+  end
 
-  it 'exports events list as xlsx' do
+  after do
+    PeopleRelation.kind_opposites.clear
+  end
+
+  let(:person) { people(:top_leader) }
+  let(:list) { [person] }
+
+  it 'exports people list as xlsx' do
     expect_any_instance_of(Axlsx::Worksheet)
       .to receive(:add_row)
       .exactly(2).times.and_call_original
 
-    Export::Tabular::Events::List.xlsx(courses)
+    Export::Tabular::People::PeopleAddress.xlsx(list)
   end
-
 end

@@ -16,7 +16,7 @@
 
 %p
   - if can?(:export_list, Event::Course)
-    = action_button(t('event.lists.courses.csv_export_button'), params.merge(format: :csv), :download)
+    = Dropdown::Event::EventsExport.new(self, params).to_s
     = render_extensions :buttons
 
 

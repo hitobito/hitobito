@@ -2,7 +2,7 @@
 
 Damit Hitobito lauffähig ist wird mindestens ein Wagon benötigt. In einem solchen Wagon kann neben der Grundkonfiguration das Verhalten der Applikation auf benutzerspezifische Bedürfnisse angepasst werden. Jeder Wagon wird in einem eigenen Gitrepo verwaltet.
 
-### Wagonspezfische Anpassungen
+### Wagonspezifische Anpassungen
 
 #### Beispiel 1 - Pbs Person full_name
 

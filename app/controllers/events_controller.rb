@@ -39,6 +39,14 @@ class EventsController < CrudController
       format.html  { entries }
       format.csv   { render_csv(entries) }
       format.xlsx { render_xlsx(entries) }
+      format.ics { render_ical(entries) }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html  { entries }
+      format.ics { render_ical(entries) }
     end
   end
 
@@ -110,6 +118,10 @@ class EventsController < CrudController
 
   def render_xlsx(entries)
     send_data ::Export::Xlsx::Events::List.export(entries), type: :xlsx
+  end
+
+  def render_ical(entries)
+    send_data (Icalendar::Calendar.new.tap { |ical| entries.map(&:ical).flatten.each { |entry| ical.add_event(entry) } }.to_ical), type: :ics
   end
 
   def typed_group_events_path(group, event_type, options = {})

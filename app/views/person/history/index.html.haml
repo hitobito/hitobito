@@ -6,7 +6,8 @@
 %h2= Role.model_name.human(count: 2)
 
 = table(@roles, class: 'table table-striped') do |t|
-  - t.attr(:group_id, Group.model_name.human)
+  - t.col(Group.model_name.human) do |r|
+    = GroupDecorator.new(r.group).link_with_layer
   - t.col(Role.model_name.human) do |r|
     = r.to_s
   - t.attr(:created_at, t('global.from'))

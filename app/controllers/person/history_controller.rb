@@ -19,10 +19,10 @@ class Person::HistoryController < ApplicationController
   private
 
   def fetch_roles
-    Role.with_deleted.
-         where(person_id: entry.id).
-         includes(:group).
-         order('groups.name', 'roles.deleted_at')
+    Person::PreloadGroups.for([entry]).first.roles.
+      with_deleted.
+      includes(:group).
+      sort_by {|r| GroupDecorator.new(r.group).name_with_layer }
   end
 
   def fetch_participations

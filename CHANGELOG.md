@@ -1,5 +1,7 @@
 # Hitobito Changelog
 
+## Version 1.15
+
 *   Der Verlauf einer Person zeigt neu die Rollen so an, dass die Gruppen auch die übergeordneten Ebenen anzeigt.
 *   Der Verlauf einer Person wird neu nach der Gruppe inkl. übergeordneter Ebenen sortiert.
 

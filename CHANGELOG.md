@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## Version 1.15
+*   XLSX Export der Entität Person. 
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

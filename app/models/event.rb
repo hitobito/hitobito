@@ -264,7 +264,7 @@ class Event < ActiveRecord::Base
         ical_event.dtstart = event_date.start_at
         ical_event.dtend   = event_date.finish_at
         ical_event.summary = "#{name}: #{event_date.label}"
-        ical_event.location = event_date.location
+        ical_event.location = event_date.location || location
         ical_event.description = description
         ical_event.contact = contact
       end

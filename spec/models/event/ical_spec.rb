@@ -21,7 +21,6 @@ describe Event do
         dtend: event_date.finish_at,
         summary: "#{event.name}: #{event_date.label}"
       )
-      #expect(ical.to_ical).to include('VCALENDAR', 'DTSTART', 'DTEND', 'SUMMARY')
     end
   end
 end

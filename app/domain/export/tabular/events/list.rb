@@ -5,13 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::Events
-  class List < Export::Csv::Base
+module Export::Tabular::Events
+  class List < Export::Tabular::Base
+
     include Translatable
 
     MAX_DATES = 3
 
-    self.row_class = Export::Csv::Events::Row
+    self.row_class = Export::Tabular::Events::Row
 
     private
 

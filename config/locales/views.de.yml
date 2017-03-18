@@ -113,6 +113,11 @@ de:
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
+
   dropdown/event/role_add:
     add: 'Person hinzufügen'
 
@@ -126,6 +131,7 @@ de:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
@@ -212,7 +218,7 @@ de:
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
 
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organisatoren'
     duration: Zeitraum
     date: "Datum %{index}"

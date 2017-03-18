@@ -56,7 +56,7 @@ describe EventsController, type: :controller do
 
       it 'renders button to export courses' do
         get :index, group_id: group.id, type: 'Event::Course', year: 2012
-        expect(dom.all('.btn-toolbar .btn')[1].text).to include 'CSV Export'
+        expect(dom.all('.btn-toolbar .btn')[1].text).to include 'Export'
       end
 
       it 'lists entries for current year' do

@@ -1,66 +1,72 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2016, insieme Schweiz. This file is part of
-#  hitobito_insieme and licensed under the Affero General Public License version 3
+#  Copyright (c) 2012-2017, insieme Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_insieme.
+#  https://github.com/hitobito/hitobito.
 #
 
 require 'axlsx'
+
 module Export::Xlsx
 
   def self.export(exportable)
-    Generator.new(exportable).xls
+    Generator.new(exportable).call
   end
 
   class Generator
 
-    attr_reader :xlsx
+    attr_reader :exportable, :style
 
     def initialize(exportable)
-      @xlsx = generate(exportable)
+      @exportable = exportable
+      @style = Style.for(exportable.class)
+    end
+
+    def call
+      generate
     end
 
     private
 
-    def generate(exportable)
+    def generate
       package = Axlsx::Package.new do |p|
         p.workbook do |wb|
-          build_sheets(wb, exportable)
+          build_sheets(wb)
         end
       end
       package.to_stream.read
     end
 
-    def build_sheets(wb, exportable)
-      load_style_definitions(wb.styles, exportable)
+    def build_sheets(wb)
+      load_style_definitions(wb.styles)
       wb.add_worksheet do |sheet|
-        add_header_rows(sheet, exportable)
+        add_header_rows(sheet)
+        add_attribute_label_row(sheet)
+        add_data_rows(sheet)
+        apply_column_widths(sheet)
 
-        add_attribute_label_row(sheet, exportable)
-
-        add_data_rows(sheet, exportable)
-        apply_column_widths(sheet, exportable)
-        sheet.page_setup.set(exportable.page_setup)
+        sheet.page_setup.set(style.page_setup)
+        sheet.auto_filter = sheet.dimension.sqref
       end
     end
 
-    def add_header_rows(sheet, exportable)
-      exportable.header_rows.each do |r|
-        sheet.add_row(r[:values], row_style(r))
+    def add_header_rows(sheet)
+      exportable.header_rows.each_with_index do |row, index|
+        sheet.add_row(row, row_style(style.header_style(index)))
       end
     end
 
-    def add_attribute_label_row(sheet, exportable)
+    def add_attribute_label_row(sheet)
       sheet.add_row(exportable.labels, style_definition(:attribute_labels))
     end
 
-    def add_data_rows(sheet, exportable)
-      exportable.data_rows.each do |row|
+    def add_data_rows(sheet)
+      exportable.data_rows(:xlsx).each_with_index do |row, index|
         options = {}
-        options.merge!(row_style(row))
-        options.merge!(data_row_height(exportable.data_row_height))
-        sheet.add_row(row[:values], options)
+        options.merge!(row_style(style.row_style(index)))
+        options.merge!(data_row_height(style.data_row_height))
+        sheet.add_row(row, options)
       end
     end
 
@@ -68,12 +74,12 @@ module Export::Xlsx
       height.nil? ? {} : { height: height }
     end
 
-    def apply_column_widths(sheet, exportable)
-      sheet.column_widths(*exportable.column_widths)
+    def apply_column_widths(sheet)
+      sheet.column_widths(*style.column_widths)
     end
 
-    def load_style_definitions(workbook_styles, exportable)
-      definitions = exportable.style_definitions
+    def load_style_definitions(workbook_styles)
+      definitions = style.style_definitions
       definitions.each do |k, v|
         # pass each style definition through add_style
         # as recommended by axlsx
@@ -86,8 +92,7 @@ module Export::Xlsx
       @style_definitions[key].deep_dup
     end
 
-    def row_style(row)
-      style = row[:style]
+    def row_style(style)
       if style.is_a?(Array)
         cell_styles(style)
       else

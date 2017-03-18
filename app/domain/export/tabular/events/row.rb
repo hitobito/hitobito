@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Xlsx::Events
-  class Row < Export::Xlsx::Row
+module Export::Tabular::Events
+  class Row < Export::Tabular::Row
 
     self.dynamic_attributes = {
       /^contact_/  => :contactable_attribute,

@@ -17,7 +17,7 @@ describe Event::ListsController, type: :controller do
 
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-  let(:dropdown) { dom.find('.dropdown-menu') }
+  let(:dropdown) { dom.find('.nav .dropdown-menu') }
   let(:year) { Date.today.year }
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }

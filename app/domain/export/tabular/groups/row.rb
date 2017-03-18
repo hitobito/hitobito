@@ -1,12 +1,12 @@
 # encoding: utf-8
 
 #  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
-#  hitobito_dsj and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_dsj.
+#  https://github.com/hitobito/hitobito.
 
-module Export::Csv::Groups
-  class GroupRow < Export::Csv::Row
+module Export::Tabular::Groups
+  class Row < Export::Tabular::Row
 
     def type
       entry.class.label
@@ -18,4 +18,3 @@ module Export::Csv::Groups
 
   end
 end
-

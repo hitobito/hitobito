@@ -9,6 +9,8 @@
 *   Benutzer/-innen können personalisierte Etiketten erstellen.
 *   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
 *   Globale Suche nach Anlassnamen und Kursnummern.
+*   Excel-Export für Personen und Anlässe.
+*   CSV- und Excel-Exporte von Personen mit allen Angaben enthalten aktuelle Qualifikationen.
 
 ## Version 1.13
 

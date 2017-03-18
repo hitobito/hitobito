@@ -1,12 +1,13 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe Export::Csv::Events::Row do
+
+describe Export::Tabular::Events::Row do
 
   let(:max_dates) { 3 }
   let(:contactable_keys) { [:name, :address, :zip_code, :town, :email, :phone_numbers] }
@@ -16,7 +17,7 @@ describe Export::Csv::Events::Row do
               description: 'some description', number: 123, location: 'somewhere')
   end
 
-  let(:row) { Export::Csv::Events::Row.new(course) }
+  let(:row) { Export::Tabular::Events::Row.new(course) }
 
   subject { row }
 

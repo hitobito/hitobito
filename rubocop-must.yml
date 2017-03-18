@@ -425,3 +425,6 @@ Style/SymbolProc:
 
 Style/UnneededInterpolation:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

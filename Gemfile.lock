@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/icalendar/icalendar.git
+  revision: 97ed9d301448350de15da4ba3b2323bd685d358c
+  branch: master
+  specs:
+    icalendar (2.4.1)
+
 PATH
   remote: ../hitobito_pbs
   specs:
@@ -539,6 +546,7 @@ DEPENDENCIES
   hitobito_pbs!
   hitobito_youth!
   http_accept_language
+  icalendar!
   jquery-rails
   jquery-turbolinks
   jquery-ui-rails

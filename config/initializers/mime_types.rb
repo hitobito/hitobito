@@ -5,4 +5,3 @@
 # Mime::Type.register_alias "text/html", :iphone
 Mime::Type.register_alias 'text/plain', :email
 Mime::Type.register_alias 'application/xlsx', :xlsx
-Mime::Type.register_alias 'text/calendar', :ics

@@ -55,7 +55,6 @@ module ContactableDecorator
     nested_values(phone_numbers, only_public) do |number|
         h.link_to(number,"tel:#{number}")
     end
-    
   end
 
   def all_social_accounts(only_public = true)

@@ -14,7 +14,8 @@ module Export::Csv::People
     self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
                                 /^additional_email_/ => :additional_email_attribute,
-                                /^people_relation_/ => :people_relation_attribute }
+                                /^people_relation_/ => :people_relation_attribute,
+                                /^qualification_kind_/ => :qualification_kind}
 
   end
 end

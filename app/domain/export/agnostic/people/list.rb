@@ -35,6 +35,14 @@ module Export::Agnostic::People::List
     end
   end
 
+  def qualification_kind_labels(collection, model)
+    collection.map(&:label).uniq.each_with_object({}) do |label, obj|
+      if label.present?
+        obj[Export::Agnostic::People::ContactAccounts.key(model, label)] = label
+      end
+    end
+  end
+
   def build_attribute_labels
     person_attribute_labels.merge(association_attributes)
   end

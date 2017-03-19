@@ -21,6 +21,9 @@ module Export::Agnostic::People::ListFull
     account_labels(people.map(&:additional_emails).flatten, AdditionalEmail).merge(
       account_labels(people.map(&:phone_numbers).flatten, PhoneNumber)).merge(
       account_labels(people.map(&:social_accounts).flatten, SocialAccount)).merge(
+      qualification_kind_labels(people.map(&:qualifications).flatten
+                                  .map(&:qualification_kind).flatten,
+                                QualificationKind)).merge(
       relation_kind_labels)
   end
 

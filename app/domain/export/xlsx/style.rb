@@ -58,6 +58,10 @@ module Export::Xlsx
       }
     end
 
+    def date_style
+      default_style.deep_merge(style: { numFmts: NUM_FMT_YYYYMMDD })
+    end
+
     def attribute_labels_style
       default_style.deep_merge(style: { bg_color: LABEL_BACKGROUND })
     end

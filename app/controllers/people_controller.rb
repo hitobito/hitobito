@@ -175,7 +175,8 @@ class PeopleController < CrudController
 
   def prepare_export_entries(entries, full)
     if full
-      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail).includes(qualifications: [:qualification_kind])
+      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+        .includes(qualifications: [:qualification_kind])
     else
       entries.preload_public_accounts
     end

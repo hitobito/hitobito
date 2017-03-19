@@ -52,7 +52,8 @@ module Export::Agnostic::People::Row
                       .reject { |q| !q.start_at.blank? && q.start_at > Time.zone.today }
                       .reject { |q| !q.finish_at.blank? && q.finish_at < Time.zone.today }
                       .find { |e|
-      Export::Agnostic::People::ContactAccounts.key(e.qualification_kind.class, e.qualification_kind.label) == attr
+      Export::Agnostic::People::ContactAccounts.key(e.qualification_kind.class,
+                                                    e.qualification_kind.label) == attr
     }
     qualification.finish_at.try(:to_s) || I18n.t('global.yes') if qualification
   end

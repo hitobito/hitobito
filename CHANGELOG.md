@@ -1,7 +1,7 @@
 # Hitobito Changelog
 
 ## Version 1.15
-*   XLSX Export der Entität Person. 
+*   XLSX Export der Entität Person inklusive Integration. 
 
 ## Version 1.14
 

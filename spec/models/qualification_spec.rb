@@ -83,7 +83,7 @@ describe Qualification do
 
 
   context '#set_finish_at' do
-    let(:date) { Date.today }
+    let(:date) { Time.zone.today }
 
     it 'set current end of year if validity is 0' do
       quali = build_qualification(0, date)
@@ -128,25 +128,25 @@ describe Qualification do
     subject { person.reload.qualifications.active }
 
     it 'contains from today' do
-      q = Fabricate(:qualification, person: person, start_at: Date.today)
+      q = Fabricate(:qualification, person: person, start_at: Time.zone.today)
       expect(q).to be_active
       is_expected.to include(q)
     end
 
     it 'does contain until this year' do
-      q = Fabricate(:qualification, person: person, start_at: Date.today - 2.years)
+      q = Fabricate(:qualification, person: person, start_at: Time.zone.today - 2.years)
       expect(q).to be_active
       is_expected.to include(q)
     end
 
     it 'does not contain past' do
-      q = Fabricate(:qualification, person: person, start_at: Date.today - 5.years)
+      q = Fabricate(:qualification, person: person, start_at: Time.zone.today - 5.years)
       expect(q).not_to be_active
       is_expected.not_to include(q)
     end
 
     it 'does not contain future' do
-      q = Fabricate(:qualification, person: person, start_at: Date.today + 1.day)
+      q = Fabricate(:qualification, person: person, start_at: Time.zone.today + 1.day)
       expect(q).not_to be_active
       is_expected.not_to include(q)
     end
@@ -155,7 +155,7 @@ describe Qualification do
   context 'reactivateable qualification kind' do
     subject { person.reload.qualifications }
 
-    let(:today) { Date.today }
+    let(:today) { Time.zone.today }
     let(:kind) { qualification_kinds(:sl) }
     let(:start_date) { today - 1.years }
     let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
@@ -219,7 +219,7 @@ describe Qualification do
       expect do
         person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                       origin: 'Bar',
-                                      start_at: Date.today)
+                                      start_at: Time.zone.today)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -230,7 +230,7 @@ describe Qualification do
     it 'sets main on update' do
       quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                             origin: 'Bar',
-                                            start_at: Date.today)
+                                            start_at: Time.zone.today)
       expect do
         quali.update_attributes!(origin: 'Bur')
       end.to change { PaperTrail::Version.count }.by(1)
@@ -243,7 +243,7 @@ describe Qualification do
     it 'sets main on destroy' do
       quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                             origin: 'Bar',
-                                            start_at: Date.today)
+                                            start_at: Time.zone.today)
       expect do
         quali.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

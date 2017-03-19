@@ -17,7 +17,7 @@ describe Export::Xlsx::People::List do
   it 'exports people list as xlsx' do
     expect_any_instance_of(Axlsx::Worksheet)
       .to receive(:add_row)
-      .exactly(2).times
+      .exactly(2).times.and_call_original
 
     Export::Xlsx::People::List.export(list)
   end

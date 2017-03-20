@@ -9,7 +9,8 @@ kann ein solches Token erstellen. Dieses Token ist danach mit dem Benutzeraccoun
 verknüpft und hat die selben Zugriffsrechte wie der/die Benutzer/in.
 
 Ein Token ist für unbeschränkte Zeit gültig, es kann also z.B. in eine Webseite
-eingebunden werden, ohne dass das Passwort verwendet werden muss.
+eingebunden werden, ohne dass das Passwort für den Benutzeraccount 
+verwendet werden muss.
 
 Für die Verwaltung des Tokens dienen die folgenden HTTP Endpunkte:
 

@@ -18,64 +18,63 @@ class Person::AddRequestMailer < ApplicationMailer
 
   def ask_person_to_add(add_request)
     @add_request = add_request
-    values = person_mail_values
-    compose(person, CONTENT_ADD_REQUEST_PERSON, values, requester)
+    compose(person, CONTENT_ADD_REQUEST_PERSON, requester)
   end
 
   def ask_responsibles(add_request, responsibles)
     @add_request = add_request
-    recipient_names = responsibles.collect(&:greeting_name).join(', ')
-    values = responsible_mail_values(recipient_names)
-    compose(responsibles, CONTENT_ADD_REQUEST_RESPONSIBLES, values, requester)
+    @responsibles = responsibles
+    compose(responsibles, CONTENT_ADD_REQUEST_RESPONSIBLES, requester)
   end
 
   def approved(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    values = approved_mail_values(user)
-    compose(requester, CONTENT_ADD_REQUEST_APPROVED, values, user)
+    @user = user
+    compose(requester, CONTENT_ADD_REQUEST_APPROVED, user)
   end
 
   def rejected(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    values = rejected_mail_values(user)
-    compose(requester, CONTENT_ADD_REQUEST_REJECTED, values, user)
+    @user = user
+    compose(requester, CONTENT_ADD_REQUEST_REJECTED, user)
   end
 
   private
 
-  def compose(recipients, content_key, values, sender)
+  def compose(recipients, content_key, sender)
+    values = placeholder_values(content_key)
     values['request-body'] = link_to(add_request.body_label, body_url)
     custom_content_mail(recipients, content_key, values, with_personal_sender(sender))
   end
 
 
-  def person_mail_values
-    { 'recipient-name' => person.greeting_name,
-      'requester-name' => requester.full_name,
-      'requester-roles' => roles_as_string(add_request.requester_full_roles),
+  define_method("#{CONTENT_ADD_REQUEST_PERSON}_values") do
+    { 'recipient-name'     => person.greeting_name,
+      'requester-name'     => requester.full_name,
+      'requester-roles'    => roles_as_string(add_request.requester_full_roles),
       'answer-request-url' => link_to_request }
   end
 
-  def responsible_mail_values(recipient_names)
-    { 'recipient-names' => recipient_names,
-      'person-name' => person.full_name,
-      'requester-name' => requester.full_name,
-      'requester-roles' => roles_as_string(add_request.requester_full_roles),
+  define_method("#{CONTENT_ADD_REQUEST_RESPONSIBLES}_values") do
+    { 'recipient-names'    => @responsibles.collect(&:greeting_name).join(', '),
+      'person-name'        => person.full_name,
+      'requester-name'     => requester.full_name,
+      'requester-roles'    => roles_as_string(add_request.requester_full_roles),
       'answer-request-url' => link_to_add_requests }
   end
 
-  def approved_mail_values(user)
+  define_method("#{CONTENT_ADD_REQUEST_APPROVED}_values") do
     { 'recipient-name' => requester.greeting_name,
-      'person-name' => person.full_name,
-      'approver-name' => user.full_name,
-      'approver-roles' => roles_as_string(layer_full_roles(user)) }
+      'person-name'    => person.full_name,
+      'approver-name'  => @user.full_name,
+      'approver-roles' => roles_as_string(layer_full_roles(@user)) }
   end
 
-  def rejected_mail_values(user)
+  define_method("#{CONTENT_ADD_REQUEST_REJECTED}_values") do
     { 'recipient-name' => requester.greeting_name,
-      'person-name' => person.full_name,
-      'rejecter-name' => user.full_name,
-      'rejecter-roles' => roles_as_string(layer_full_roles(user)) }
+      'person-name'    => person.full_name,
+      'rejecter-name'  => @user.full_name,
+      'rejecter-roles' => roles_as_string(layer_full_roles(@user)) }
   end
 
   def roles_as_string(roles)

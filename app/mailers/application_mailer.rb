@@ -29,6 +29,16 @@ class ApplicationMailer < ActionMailer::Base
     end
   end
 
+  def placeholder_values(content_key, *args)
+    method_key = :"#{content_key}_values"
+
+    if respond_to?(method_key, :including_private)
+      send(method_key, *args)
+    else
+      {}
+    end
+  end
+
   def use_mailing_emails(recipients)
     if Array(recipients).first.is_a?(Person)
       Person.mailing_emails_for(recipients)

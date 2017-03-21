@@ -22,38 +22,52 @@ class Event::ParticipationMailer < ApplicationMailer
     filename = Export::Pdf::Participation.filename(participation)
     attachments[filename] = Export::Pdf::Participation.render(participation)
 
-    compose(person,
-            CONTENT_CONFIRMATION,
-            'recipient-name' => person.greeting_name)
+    compose(person, CONTENT_CONFIRMATION)
   end
 
   def approval(participation, recipients)
     @participation = participation
+    @recipients    = recipients
 
-    compose(recipients,
-            CONTENT_APPROVAL,
-            'participant-name' => person.to_s,
-            'recipient-names'  => recipients.collect(&:greeting_name).join(', '))
+    compose(@recipients, CONTENT_APPROVAL)
   end
 
   def cancel(event, person)
     @event = event
     @person = person
 
-    custom_content_mail(@person,
-                        CONTENT_CANCEL,
-                        { 'recipient-name' => @person.greeting_name,
-                          'event-details' => event_without_participation })
+    custom_content_mail(@person, CONTENT_CANCEL, placeholder_values(CONTENT_CANCEL))
   end
 
   private
 
-  def compose(recipients, content_key, values = {})
+  define_method(:"#{CONTENT_CONFIRMATION}_values") do
+    {
+      'recipient-name' => person.greeting_name,
+    }
+  end
+
+  define_method(:"#{CONTENT_APPROVAL}_values") do
+    {
+      'participant-name' => person.to_s,
+      'recipient-names'  => @recipients.collect(&:greeting_name).join(', ')
+    }
+  end
+
+  define_method(:"#{CONTENT_CANCEL}_values") do
+    {
+      'recipient-name' => @person.greeting_name,
+      'event-details'  => event_without_participation,
+    }
+  end
+
+  def compose(recipients, content_key, values = nil)
     # Assert the current mailer's view context is stored as Draper::ViewContext.
     # This is done in the #view_context method overriden by Draper.
     # Otherwise, decorators will not have access to all helper methods.
     view_context
 
+    values ||= placeholder_values(content_key)
     values['event-details']   = event_details
     values['application-url'] = link_to(participation_url)
 

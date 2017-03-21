@@ -7,9 +7,9 @@
 
 class Event::ParticipationMailer < ApplicationMailer
 
-  CONTENT_CONFIRMATION = 'event_application_confirmation'
-  CONTENT_APPROVAL     = 'event_application_approval'
-  CONTENT_CANCEL       = 'event_cancel_application'
+  CONTENT_CONFIRMATION = 'event_application_confirmation'.freeze
+  CONTENT_APPROVAL     = 'event_application_approval'.freeze
+  CONTENT_CANCEL       = 'event_cancel_application'.freeze
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value
@@ -43,7 +43,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
   define_method(:"#{CONTENT_CONFIRMATION}_values") do
     {
-      'recipient-name' => person.greeting_name,
+      'recipient-name' => person.greeting_name
     }
   end
 
@@ -57,7 +57,7 @@ class Event::ParticipationMailer < ApplicationMailer
   define_method(:"#{CONTENT_CANCEL}_values") do
     {
       'recipient-name' => @person.greeting_name,
-      'event-details'  => event_without_participation,
+      'event-details'  => event_without_participation
     }
   end
 

@@ -82,7 +82,7 @@ describe Event do
     end
 
     context 'with closing date in the future' do
-      before { subject.application_closing_at = Date.today + 1 }
+      before { subject.application_closing_at = Time.zone.today + 1 }
 
        it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -97,7 +97,7 @@ describe Event do
     end
 
     context 'with closing date today' do
-      before { subject.application_closing_at = Date.today }
+      before { subject.application_closing_at = Time.zone.today }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -111,7 +111,7 @@ describe Event do
     end
 
     context 'with closing date in the past' do
-      before { subject.application_closing_at = Date.today - 1 }
+      before { subject.application_closing_at = Time.zone.today - 1 }
 
       it 'is closed without maximum participant' do
         is_expected.not_to be_application_possible
@@ -126,7 +126,7 @@ describe Event do
 
 
     context 'with opening date in the past' do
-      before { subject.application_opening_at = Date.today - 1 }
+      before { subject.application_opening_at = Time.zone.today - 1 }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -140,7 +140,7 @@ describe Event do
     end
 
     context 'with opening date today' do
-      before { subject.application_opening_at = Date.today }
+      before { subject.application_opening_at = Time.zone.today }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -154,7 +154,7 @@ describe Event do
     end
 
     context 'with opening date in the future' do
-      before { subject.application_opening_at = Date.today + 1 }
+      before { subject.application_opening_at = Time.zone.today + 1 }
 
       it 'is closed without maximum participant' do
         is_expected.not_to be_application_possible
@@ -163,8 +163,8 @@ describe Event do
 
     context 'with opening and closing dates' do
       before do
-        subject.application_opening_at = Date.today - 2
-        subject.application_closing_at = Date.today + 2
+        subject.application_opening_at = Time.zone.today - 2
+        subject.application_closing_at = Time.zone.today + 2
       end
 
       it 'is open' do
@@ -186,8 +186,8 @@ describe Event do
 
     context 'with opening and closing dates in the future' do
       before do
-        subject.application_opening_at = Date.today + 1
-        subject.application_closing_at = Date.today + 2
+        subject.application_opening_at = Time.zone.today + 1
+        subject.application_closing_at = Time.zone.today + 2
       end
 
       it 'is closed' do
@@ -197,8 +197,8 @@ describe Event do
 
     context 'with opening and closing dates in the past' do
       before do
-        subject.application_opening_at = Date.today - 2
-        subject.application_closing_at = Date.today - 1
+        subject.application_opening_at = Time.zone.today - 2
+        subject.application_closing_at = Time.zone.today - 1
       end
 
       it 'is closed' do
@@ -289,28 +289,28 @@ describe Event do
     end
 
     it 'is valid with application closing after opening' do
-      subject.application_opening_at = Date.today - 5
-      subject.application_closing_at = Date.today + 5
+      subject.application_opening_at = Time.zone.today - 5
+      subject.application_closing_at = Time.zone.today + 5
       subject.valid?
 
       is_expected.to be_valid
     end
 
     it 'is not valid with application closing before opening' do
-      subject.application_opening_at = Date.today - 5
-      subject.application_closing_at = Date.today - 6
+      subject.application_opening_at = Time.zone.today - 5
+      subject.application_closing_at = Time.zone.today - 6
 
       is_expected.not_to be_valid
     end
 
     it 'is valid with application closing and without opening' do
-      subject.application_closing_at = Date.today - 6
+      subject.application_closing_at = Time.zone.today - 6
 
       is_expected.to be_valid
     end
 
     it 'is valid with application opening and without closing' do
-      subject.application_opening_at = Date.today - 6
+      subject.application_opening_at = Time.zone.today - 6
 
       is_expected.to be_valid
     end

@@ -7,7 +7,7 @@
 
 class ApplicationMailer < ActionMailer::Base
 
-  HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to]
+  HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
   def mail(headers = {}, &block)
     HEADERS_TO_SANITIZE.each do |h|

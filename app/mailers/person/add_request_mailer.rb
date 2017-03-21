@@ -7,10 +7,10 @@
 
 class Person::AddRequestMailer < ApplicationMailer
 
-  CONTENT_ADD_REQUEST_PERSON = 'person_add_request_person'
-  CONTENT_ADD_REQUEST_RESPONSIBLES = 'person_add_request_responsibles'
-  CONTENT_ADD_REQUEST_APPROVED = 'person_add_request_approved'
-  CONTENT_ADD_REQUEST_REJECTED = 'person_add_request_rejected'
+  CONTENT_ADD_REQUEST_PERSON = 'person_add_request_person'.freeze
+  CONTENT_ADD_REQUEST_RESPONSIBLES = 'person_add_request_responsibles'.freeze
+  CONTENT_ADD_REQUEST_APPROVED = 'person_add_request_approved'.freeze
+  CONTENT_ADD_REQUEST_REJECTED = 'person_add_request_rejected'.freeze
 
   attr_reader :add_request
 
@@ -106,7 +106,7 @@ class Person::AddRequestMailer < ApplicationMailer
     when Group then group_url(id: body.id)
     when Event then group_event_url(group_id: body.groups.first.id, id: body.id)
     when MailingList then group_mailing_list_url(group_id: body.group_id, id: body.id)
-    else fail(ArgumentError, "Unknown body type #{body.class}")
+    else raise ArgumentError, "Unknown body type #{body.class}"
     end
   end
 

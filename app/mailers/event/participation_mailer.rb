@@ -87,7 +87,7 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << labeled(:cost)
     infos << labeled(:description) { event.description.gsub("\n", '<br/>') }
     infos << labeled(:location) { event.location.gsub("\n", '<br/>') }
-    infos << labeled(:contact)  { "#{event.contact}<br/>#{event.contact.email}" }
+    infos << labeled(:contact) { "#{event.contact}<br/>#{event.contact.email}" }
     infos << answers_details
     infos << additional_information_details
     infos << participation_details

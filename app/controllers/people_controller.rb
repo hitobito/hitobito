@@ -72,7 +72,7 @@ class PeopleController < CrudController
 
   # PUT button, ajax
   def primary_group
-    entry.update_column :primary_group_id, params[:primary_group_id]
+    entry.update!({primary_group_id: params[:primary_group_id]})
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry) }
       format.js

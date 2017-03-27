@@ -46,8 +46,9 @@ describe Person::NotesController do
       expect(Person::Note.count).to eq(1)
       post :destroy, group_id: n.person.groups.first.id,
                      person_id: n.person.id,
-                     id: n.id
-      expect(Person::Note.count).to eq(0)          
+                     id: n.id,
+                     format: :js
+      expect(Person::Note.count).to eq(0)
     end
   end
 

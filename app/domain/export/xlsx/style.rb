@@ -42,7 +42,7 @@ module Export::Xlsx
     end
 
     def default_style_data_rows
-      :centered
+      :default
     end
 
     private
@@ -56,6 +56,10 @@ module Export::Xlsx
       { style: {
         font_name: Settings.xlsx.font_name, alignment: { horizontal: :left } }
       }
+    end
+
+    def date_style
+      default_style.deep_merge(style: { numFmts: NUM_FMT_YYYYMMDD })
     end
 
     def attribute_labels_style

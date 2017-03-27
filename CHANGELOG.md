@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Version 1.15
+*   Excel-Export der Entität Person inklusive Integration.
+*   CSV- und Excel-Export enthalten Qualifikationen welche zum Zeitpunkt des Exports gültig sind
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

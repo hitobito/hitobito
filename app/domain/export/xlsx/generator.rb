@@ -42,11 +42,13 @@ module Export::Xlsx
         add_data_rows(sheet, exportable)
         apply_column_widths(sheet, exportable)
         sheet.page_setup.set(exportable.page_setup)
+
+        sheet.auto_filter = sheet.dimension.sqref
       end
     end
 
     def add_header_rows(sheet, exportable)
-      exportable.header_rows.each do |r|
+      exportable.header_rows.each_with_index do |r, i|
         sheet.add_row(r[:values], row_style(r))
       end
     end

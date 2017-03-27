@@ -40,9 +40,10 @@ class PeopleController < CrudController
 
   def index
     respond_to do |format|
-      format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
+      format.html  { @people = prepare_html_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_entries_csv(filter_entries) }
+      format.xlsx   { render_entries_xlsx(filter_entries) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end
@@ -159,7 +160,7 @@ class PeopleController < CrudController
     end
   end
 
-  def prepare_entries(entries)
+  def prepare_html_entries(entries)
     if index_full_ability?
       entries.includes(:additional_emails, :phone_numbers)
     else
@@ -169,12 +170,13 @@ class PeopleController < CrudController
 
   def render_entries_csv(entries)
     full = params[:details].present? && index_full_ability?
-    render_csv(prepare_csv_entries(entries, full), full)
+    render_csv(prepare_export_entries(entries, full), full)
   end
 
-  def prepare_csv_entries(entries, full)
+  def prepare_export_entries(entries, full)
     if full
       entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+        .includes(qualifications: [:qualification_kind])
     else
       entries.preload_public_accounts
     end
@@ -192,8 +194,26 @@ class PeopleController < CrudController
     end
   end
 
+  def render_entries_xlsx(entries)
+    full = params[:details].present? && index_full_ability?
+    render_xlsx(prepare_export_entries(entries, full), full)
+  end
+
+  def render_entry_xlsx
+    render_xlsx([entry], params[:details].present? && can?(:show_full, entry))
+  end
+
+  def render_xlsx(entries, full)
+    if full
+      send_data ::Export::Xlsx::People::ListFull.export(entries), type: :xlsx
+    else
+      send_data ::Export::Xlsx::People::List.export(entries), type: :xlsx
+    end
+  end
+
+
   def render_entries_json(entries)
-    render json: ListSerializer.new(prepare_entries(entries).
+    render json: ListSerializer.new(prepare_html_entries(entries).
                                       includes(:social_accounts).
                                       decorate,
                                     group: @group,

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Csv::People
+module Export::Agnostic::People
   module ContactAccounts
     class << self
       def key(model, label)

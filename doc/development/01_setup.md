@@ -58,7 +58,14 @@ Initialisieren der Datenbank, laden der Seeds und Wagons:
 
 Starten des Entwicklungsservers:
 
+    gem install foreman
+    foreman start
+
+
+oder:
+
     rails server
+
 
 
 ### Tests

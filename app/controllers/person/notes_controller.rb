@@ -49,7 +49,6 @@ class Person::NotesController < ApplicationController
     @note.destroy
 
     respond_to do |format|
-      format.html { redirect_to group_person_path(@group, @person) }
       format.js # destroy.js.haml
     end
   end

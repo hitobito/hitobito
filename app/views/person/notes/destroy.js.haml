@@ -1,0 +1,11 @@
+-#  Copyright (c) 2012-2016, hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if @note.destroyed?
+  note = $('#person-notes-list ##{dom_id(@note)}')
+  alert = '<div class="alert alert-success note-body">#{t("global.alert.deleted")}</div>'
+  note.html(alert).delay(1000).fadeOut('slow')
+- else
+  alert('#{t('.failure', errors: @note.errors.full_messages.join(', '))}');

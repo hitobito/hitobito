@@ -20,6 +20,9 @@ de:
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden mit
 
+    alert:
+      deleted: Gelöscht
+
     gender:
       male: männlich
       female: weiblich

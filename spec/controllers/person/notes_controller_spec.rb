@@ -40,4 +40,15 @@ describe Person::NotesController do
     end
   end
 
+  describe 'POST #destroy' do
+    it 'destroy person note' do
+      n = Person::Note.create!(author: top_leader, person: top_leader, text: 'lorem')
+      expect(Person::Note.count).to eq(1)
+      post :destroy, group_id: n.person.groups.first.id,
+                     person_id: n.person.id,
+                     id: n.id
+      expect(Person::Note.count).to eq(0)          
+    end
+  end
+
 end

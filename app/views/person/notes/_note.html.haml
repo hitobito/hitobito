@@ -3,41 +3,23 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
+-#TODO: remote true fehlen
 
-- if show_person
-  .row-fluid.note
+
+.row-fluid.note{id: dom_id(note), :class => ("is-current-person" unless show_person)}
+  - if show_person
     %img.note-image{:src => note.person.picture}
-    .note-body
-      %small.muted.note-author
-        = !show_person ? person_link(note.author) : note.author
+  .note-body
+    - if show_person
+      = person_link(note.person)
+    %small.muted.note-author
+      = person_link(note.author) || note.author
+      .note-date
         = t('.created', time_ago: time_ago_in_words(note.created_at))
-      .note-person
-        = person_link(note.person)
-      = auto_link(simple_format(note.text))
-      - if can?(:manage_tags, note.person)
-        = link_to icon(:trash), group_person_note_path(person_id: note.person.id)
-
-- else
-  .row-fluid.note
-    .span12
-      %small.muted
-        = !show_person ? person_link(note.author) : note.author
-        - if show_person
-          = t('.wrote_about')
-          = person_link(note.person)
-        .pull-right
-          = t('.created', time_ago: time_ago_in_words(note.created_at))
-
-          - if can?(:manage_tags, note.person)
-            = link_to icon(:trash),
-              group_person_note_path(person_id: note.person.id, id: note.id), 
-              method: :delete # why is this different
-
-      = auto_link(simple_format(note.text))
--#
--# = link_to icon(:remove),
--#           group_person_tags_path(person_id: note.person.id, name: tag.name),
--#           method: :delete,
--#           data: { tag_id: tag.id },
--#           remote: true,
--#           class: 'person-tag-remove'
+        - if can?(:index_notes, note.person)
+          = link_to icon(:trash),
+            group_person_note_path(group_id: @group.id, person_id: note.person.id, id: note.id),
+            method: :delete,
+            remote: true,
+            data: {confirm: ti(:confirm_delete)}
+    = auto_link(simple_format(note.text))

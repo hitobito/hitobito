@@ -15,64 +15,73 @@ describe Person::NoteAbility do
   context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-    it 'may create note in his layer' do
+    it 'may create and destroy note in his layer' do
       other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
       note = create_note(role.person, other)
       is_expected.to be_able_to(:create, note)
+      is_expected.to be_able_to(:destroy, note)
     end
 
-    it 'may create note in bottom layer' do
+    it 'may create and destroy note in bottom layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       note = create_note(role.person, other)
       is_expected.to be_able_to(:create, note)
+      is_expected.to be_able_to(:destroy, note)
     end
+
   end
 
   context 'layer_and_below_full in bottom layer' do
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
-    it 'may create note in his layer' do
+    it 'may create and destroy note in his layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       note = create_note(role.person, other)
       is_expected.to be_able_to(:create, note)
+      is_expected.to be_able_to(:destroy, note)
     end
 
-    it 'may not create note in top layer' do
+    it 'may not create and destroy note in top layer' do
       other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
       note = create_note(role.person, other)
       is_expected.not_to be_able_to(:create, note)
+      is_expected.not_to be_able_to(:destroy, note)
     end
   end
 
   context :layer_full do
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
-    it 'may create note in his layer' do
+    it 'may create and destroy note in his layer' do
       other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
       note = create_note(role.person, other)
       is_expected.to be_able_to(:create, note)
+      is_expected.to be_able_to(:destroy, note)
     end
 
-    it 'may not create note in bottom layer' do
+    it 'may not create or delete note in bottom layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       note = create_note(role.person, other)
       is_expected.not_to be_able_to(:create, note)
+      is_expected.not_to be_able_to(:destroy, note)
     end
   end
 
   context 'layer_full in bottom layer' do
     let(:role) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)) }
 
-    it 'may create note in his layer' do
+    it 'may create or delete note in his layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       note = create_note(role.person, other)
       is_expected.to be_able_to(:create, note)
+      is_expected.to be_able_to(:destroy, note)
     end
 
     it 'may not create note in upper layer' do
       other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
       note = create_note(role.person, other)
       is_expected.not_to be_able_to(:create, note)
+      is_expected.not_to be_able_to(:destroy, note)
     end
   end
 

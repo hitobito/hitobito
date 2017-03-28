@@ -29,13 +29,17 @@ class Person::AddRequestMailer < ApplicationMailer
 
   def approved(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @user = user
+    @person      = person
+    @requester   = requester
+    @user        = user
     compose(requester, CONTENT_ADD_REQUEST_APPROVED, user)
   end
 
   def rejected(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @user = user
+    @person      = person
+    @requester   = requester
+    @user        = user
     compose(requester, CONTENT_ADD_REQUEST_REJECTED, user)
   end
 
@@ -64,15 +68,15 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   define_method("#{CONTENT_ADD_REQUEST_APPROVED}_values") do
-    { 'recipient-name' => requester.greeting_name,
-      'person-name'    => person.full_name,
+    { 'recipient-name' => @requester.greeting_name,
+      'person-name'    => @person.full_name,
       'approver-name'  => @user.full_name,
       'approver-roles' => roles_as_string(layer_full_roles(@user)) }
   end
 
   define_method("#{CONTENT_ADD_REQUEST_REJECTED}_values") do
-    { 'recipient-name' => requester.greeting_name,
-      'person-name'    => person.full_name,
+    { 'recipient-name' => @requester.greeting_name,
+      'person-name'    => @person.full_name,
       'rejecter-name'  => @user.full_name,
       'rejecter-roles' => roles_as_string(layer_full_roles(@user)) }
   end

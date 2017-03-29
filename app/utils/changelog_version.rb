@@ -9,14 +9,14 @@ class ChangelogVersion
   attr_accessor :major_version, :minor_version, :log_entries
 
   def initialize(header_line)
-    values = header_line.split(".")
+    values = header_line.split('.')
     @major_version = values.first.to_i
-    @minor_version = values.second.to_i
+    @minor_version = values.second.casecmp('x') == 0 ? values.second : values.second.to_i
     @log_entries = []
   end
 
   def <=>(other)
-    [self.major_version, self.minor_version] <=> [other.major_version, other.minor_version]
+    [major_version, minor_version] <=> [other.major_version, other.minor_version]
   end
 
   def label

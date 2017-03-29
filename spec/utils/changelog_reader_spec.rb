@@ -20,6 +20,8 @@ describe ChangelogReader do
         '* change',
         '* change two',
         '', # invalid line
+        '## Version 1.X',
+        '* far future change',
         '## Version 2.3',
         '* change',
         '## Version 1.1',
@@ -36,7 +38,7 @@ describe ChangelogReader do
       subject.send(:parse_changelog_lines, changelog_lines)
 
       changelogs = subject.instance_variable_get(:@changelogs)
-      expect(changelogs.count).to eq(2)
+      expect(changelogs.count).to eq(3)
 
       version11 = changelogs[0]
       expect(version11.log_entries.count).to eq(3)
@@ -45,7 +47,12 @@ describe ChangelogReader do
       expect(version11.log_entries[1]).to eq('change two')
       expect(version11.log_entries[2]).to eq('another change')
 
-      version23 = changelogs[1]
+      version1x = changelogs[1]
+      expect(version1x.log_entries.count).to eq(1)
+      expect(version1x.version).to eq('1.X')
+      expect(version1x.log_entries[0]).to eq('far future change')
+
+      version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)
       expect(version23.version).to eq('2.3')
       expect(version23.log_entries[0]).to eq('change')

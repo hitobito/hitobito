@@ -20,6 +20,7 @@
 
     #application.tab-pane
       = render 'application_fields', f: f
+      = render 'contact_attr_fields', f: f
       = render 'additional_fields', f: f
 
     = render_extensions 'form_tab_pane', locals: { f: f }

@@ -203,5 +203,37 @@ describe EventsController do
     end
   end
 
+  context 'contact attributes' do
+
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+
+    before { sign_in(people(:top_leader)) }
+
+    it 'assigns required and hidden contact attributes' do
+
+      put :update, group_id: group.id, id: event.id,
+        event: { contact_attrs: { nickname: :required, address: :hidden, social_accounts: :hidden } }
+
+      expect(event.reload.required_contact_attrs).to include('nickname')
+      expect(event.reload.hidden_contact_attrs).to include('address')
+      expect(event.reload.hidden_contact_attrs).to include('social_accounts')
+
+    end
+
+    it 'removes contact attributes' do
+
+      event.update!({hidden_contact_attrs: ['social_accounts', 'address', 'nickname']})
+
+      put :update, group_id: group.id, id: event.id,
+        event: { contact_attrs: { nickname: :hidden } }
+
+      expect(event.reload.hidden_contact_attrs).to include('nickname')
+      expect(event.hidden_contact_attrs).not_to include('address')
+      expect(event.hidden_contact_attrs).not_to include('social_accounts')
+
+    end
+  end
+
 
 end

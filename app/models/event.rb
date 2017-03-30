@@ -65,7 +65,8 @@ class Event < ActiveRecord::Base
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at,
                           :application_closing_at, :application_conditions,
-                          :external_applications, :applications_cancelable]
+                          :external_applications, :applications_cancelable,
+                          :required_contact_attrs, :hidden_contact_attrs]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -122,14 +123,17 @@ class Event < ActiveRecord::Base
             length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
-
+  validate :valid_person_contact_attrs
 
   ### CALLBACKS
 
   before_validation :set_self_in_nested
 
-
   accepts_nested_attributes_for :dates, :questions, allow_destroy: true
+
+  ### SERIALIZED ATTRIBUTES
+  serialize :required_contact_attrs, Array
+  serialize :hidden_contact_attrs, Array
 
   ### CLASS METHODS
 
@@ -281,6 +285,39 @@ class Event < ActiveRecord::Base
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     (dates + questions).each { |e| e.event = self unless e.frozen? }
+  end
+
+  def valid_person_contact_attrs
+    validate_required_contact_attrs
+    validate_hidden_contact_attrs
+  end
+
+  def valid_contact_attr?(attr)
+    (ParticipationContactData::CONTACT_ATTRS +
+      ParticipationContactData::CONTACT_ASSOCIATIONS).include?(attr)
+  end
+
+  def validate_required_contact_attrs
+    required_contact_attrs.map(&:to_sym).each do |a|
+      unless valid_contact_attr?(a) &&
+          ParticipationContactData::CONTACT_ASSOCIATIONS.exclude?(a)
+        errors.add(:required_contact_attrs, "#{a} is not a valid contact attr or a contact association")
+      end
+      if hidden_contact_attrs.include?(a)
+        errors.add(:required_contact_attrs, "#{a} cannot be set as required and hidden")
+      end
+    end
+  end
+
+  def validate_hidden_contact_attrs
+    hidden_contact_attrs.map(&:to_sym).each do |a|
+      unless valid_contact_attr?(a)
+        errors.add(:hidden_contact_attrs, "#{a} is not a valid contact attr")
+      end
+      if ParticipationContactData::MANDATORY_CONTACT_ATTRS.include?(a)
+        errors.add(:hidden_contact_attrs, "#{a} is a mandatory contact attr")
+      end
+    end
   end
 
 end

@@ -448,7 +448,7 @@ describe Event do
         Fabricate(Event::Role::Cook.name.to_sym, participation: p)
         assert_counts(participant: 0, applicant: 0)
 
-        r = Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
         assert_counts(participant: 1, applicant: 1)
 
         # in courses, participant roles are removed like that
@@ -533,6 +533,45 @@ describe Event do
 
         expect(event.groups.size).to eq(2)
       end
+    end
+
+  end
+
+  context 'contact attributes' do
+
+    let(:event) { events(:top_course) }
+
+    it 'does not accept invalid person attributes' do
+      event.update({required_contact_attrs: [:foobla],
+                    hidden_contact_attrs: [:foofofofo]})
+
+      expect(event.errors[:required_contact_attrs]).to be_present
+      expect(event.errors[:hidden_contact_attrs]).to be_present
+    end
+
+    it 'is not possible to set same attr as hidden and required' do
+      event.update({required_contact_attrs: [:nickname],
+                    hidden_contact_attrs: [:nickname]})
+
+      expect(event.errors[:required_contact_attrs]).to be_present
+    end
+
+    it 'is not possible to set mandatory attr as hidden' do
+      event.update({hidden_contact_attrs: [:email]})
+
+      expect(event.errors[:hidden_contact_attrs]).to be_present
+    end
+
+    it 'is not possible to set contact association as required' do
+      event.update({required_contact_attrs: [:additional_emails]})
+
+      expect(event.errors[:required_contact_attrs]).to be_present
+    end
+
+    it 'is possible to hide contact association' do
+      event.update({hidden_contact_attrs: [:additional_emails]})
+
+      expect(event.reload.hidden_contact_attrs).to include(:additional_emails)
     end
 
   end

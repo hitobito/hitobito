@@ -15,6 +15,7 @@ class Ability
   store.register EventAbility,
                  Event::ApplicationAbility,
                  Event::ParticipationAbility,
+                 Event::ParticipationContactDataAbility,
                  Event::RoleAbility,
                  GroupAbility,
                  MailingListAbility,

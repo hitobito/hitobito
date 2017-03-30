@@ -36,29 +36,33 @@ class Event::ParticipationMailer < ApplicationMailer
     @event = event
     @person = person
 
-    custom_content_mail(@person, CONTENT_CANCEL, placeholder_values(CONTENT_CANCEL))
+    custom_content_mail(@person, CONTENT_CANCEL, values_for_placeholders(CONTENT_CANCEL))
   end
 
   private
 
-  define_method(:"#{CONTENT_CONFIRMATION}_values") do
-    {
-      'recipient-name' => person.greeting_name
-    }
+  def placeholder_recipient_name
+    person.greeting_name
   end
 
-  define_method(:"#{CONTENT_APPROVAL}_values") do
-    {
-      'participant-name' => person.to_s,
-      'recipient-names'  => @recipients.collect(&:greeting_name).join(', ')
-    }
+  def placeholder_participant_name
+    person.to_s
   end
 
-  define_method(:"#{CONTENT_CANCEL}_values") do
-    {
-      'recipient-name' => @person.greeting_name,
-      'event-details'  => event_without_participation
-    }
+  def placeholder_recipient_names
+    @recipients.collect(&:greeting_name).join(', ')
+  end
+
+  def placeholder_event_details
+    if participation.nil?
+      event_without_participation
+    else
+      event_details
+    end
+  end
+
+  def placeholder_application_url
+    link_to(participation_url)
   end
 
   def compose(recipients, content_key, values = nil)
@@ -67,9 +71,14 @@ class Event::ParticipationMailer < ApplicationMailer
     # Otherwise, decorators will not have access to all helper methods.
     view_context
 
-    values ||= placeholder_values(content_key)
-    values['event-details']   = event_details
-    values['application-url'] = link_to(participation_url)
+    values = if values
+               values.merge(
+                 'event-details'   => event_details,
+                 'application-url' => link_to(participation_url)
+               )
+             else
+               values_for_placeholders(content_key)
+             end
 
     custom_content_mail(recipients, content_key, values)
   end

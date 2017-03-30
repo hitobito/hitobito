@@ -14,7 +14,7 @@ class Person::LoginMailer < ApplicationMailer
     @sender    = sender
     @token     = token
 
-    values = placeholder_values(CONTENT_LOGIN)
+    values = values_for_placeholders(CONTENT_LOGIN)
 
     # This email contains sensitive information and thus
     # is only sent to the main email address.
@@ -23,10 +23,16 @@ class Person::LoginMailer < ApplicationMailer
 
   private
 
-  define_method("#{CONTENT_LOGIN}_values") do
-    { 'recipient-name' => @recipient.greeting_name,
-      'sender-name'    => @sender.to_s,
-      'login-url'      => link_to(login_url(@token)) }
+  def placeholder_recipient_name
+    @recipient.greeting_name
+  end
+
+  def placeholder_sender_name
+    @sender.to_s
+  end
+
+  def placeholder_login_url
+    link_to(login_url(@token))
   end
 
   def login_url(token)

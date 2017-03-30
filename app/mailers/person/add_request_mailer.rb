@@ -17,28 +17,29 @@ class Person::AddRequestMailer < ApplicationMailer
   delegate :body, :person, :requester, to: :add_request
 
   def ask_person_to_add(add_request)
-    @add_request = add_request
+    @add_request        = add_request
+    @answer_request_url = link_to_request
+    @recipient          = person
     compose(person, CONTENT_ADD_REQUEST_PERSON, requester)
   end
 
   def ask_responsibles(add_request, responsibles)
-    @add_request = add_request
-    @responsibles = responsibles
+    @add_request        = add_request
+    @answer_request_url = link_to_add_requests
+    @recipients         = responsibles
     compose(responsibles, CONTENT_ADD_REQUEST_RESPONSIBLES, requester)
   end
 
   def approved(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @person      = person
-    @requester   = requester
+    @recipient   = requester
     @user        = user
     compose(requester, CONTENT_ADD_REQUEST_APPROVED, user)
   end
 
   def rejected(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @person      = person
-    @requester   = requester
+    @recipient   = requester
     @user        = user
     compose(requester, CONTENT_ADD_REQUEST_REJECTED, user)
   end
@@ -46,39 +47,52 @@ class Person::AddRequestMailer < ApplicationMailer
   private
 
   def compose(recipients, content_key, sender)
-    values = placeholder_values(content_key)
-    values['request-body'] = link_to(add_request.body_label, body_url)
+    values = values_for_placeholders(content_key)
     custom_content_mail(recipients, content_key, values, with_personal_sender(sender))
   end
 
-
-  define_method("#{CONTENT_ADD_REQUEST_PERSON}_values") do
-    { 'recipient-name'     => person.greeting_name,
-      'requester-name'     => requester.full_name,
-      'requester-roles'    => roles_as_string(add_request.requester_full_roles),
-      'answer-request-url' => link_to_request }
+  def placeholder_request_body
+    link_to(add_request.body_label, body_url)
   end
 
-  define_method("#{CONTENT_ADD_REQUEST_RESPONSIBLES}_values") do
-    { 'recipient-names'    => @responsibles.collect(&:greeting_name).join(', '),
-      'person-name'        => person.full_name,
-      'requester-name'     => requester.full_name,
-      'requester-roles'    => roles_as_string(add_request.requester_full_roles),
-      'answer-request-url' => link_to_add_requests }
+  def placeholder_recipient_name
+    @recipient.greeting_name
   end
 
-  define_method("#{CONTENT_ADD_REQUEST_APPROVED}_values") do
-    { 'recipient-name' => @requester.greeting_name,
-      'person-name'    => @person.full_name,
-      'approver-name'  => @user.full_name,
-      'approver-roles' => roles_as_string(layer_full_roles(@user)) }
+  def placeholder_requester_name
+    requester.full_name
   end
 
-  define_method("#{CONTENT_ADD_REQUEST_REJECTED}_values") do
-    { 'recipient-name' => @requester.greeting_name,
-      'person-name'    => @person.full_name,
-      'rejecter-name'  => @user.full_name,
-      'rejecter-roles' => roles_as_string(layer_full_roles(@user)) }
+  def placeholder_requester_roles
+    roles_as_string(add_request.requester_full_roles)
+  end
+
+  def placeholder_answer_request_url
+    @answer_request_url
+  end
+
+  def placeholder_recipient_names
+    @recipients.collect(&:greeting_name).join(', ')
+  end
+
+  def placeholder_person_name
+    person.full_name
+  end
+
+  def placeholder_approver_name
+    @user.full_name
+  end
+
+  def placeholder_rejecter_name
+    @user.full_name
+  end
+
+  def placeholder_approver_roles
+    roles_as_string(layer_full_roles(@user))
+  end
+
+  def placeholder_rejecter_roles
+    roles_as_string(layer_full_roles(@user))
   end
 
   def roles_as_string(roles)
@@ -88,7 +102,7 @@ class Person::AddRequestMailer < ApplicationMailer
   def layer_full_roles(person)
     person.roles.includes(:group).select do |r|
       r.group.layer_group_id == add_request.person_layer.try(:id) &&
-      (r.class.permissions & [:layer_and_below_full, :layer_full]).present?
+        (r.class.permissions & [:layer_and_below_full, :layer_full]).present?
     end
   end
 

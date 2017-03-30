@@ -31,8 +31,11 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   def update
     if entry.save
-      redirect_to new_group_event_participation_path(group, event,
-                                                     event_role: { type: params[:event_role][:type] })
+      redirect_to new_group_event_participation_path(
+        group,
+        event,
+        event_role: { type: params[:event_role][:type] }
+      )
     else
       render :edit
     end

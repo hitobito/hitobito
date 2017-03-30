@@ -12,6 +12,7 @@
 *   Gelöschte Personen können pro Ebene angezeigt werden.
 *   Benutzer/-innen können personalisierte Etiketten erstellen.
 *   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
+*   Aktualisieren der Kontaktdaten bei der Eventanmeldung
 
 ## Version 1.13
 

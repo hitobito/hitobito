@@ -20,6 +20,7 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
+  # TODO: deprecate/remove values-parameter and call values_for_placeholders instead
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
@@ -29,14 +30,11 @@ class ApplicationMailer < ActionMailer::Base
     end
   end
 
-  def placeholder_values(content_key, *args)
-    method_key = :"#{content_key}_values"
-
-    if respond_to?(method_key, :including_private)
-      send(method_key, *args)
-    else
-      {}
-    end
+  def values_for_placeholders(content_key)
+    content = CustomContent.get(content_key)
+    content.placeholders_list.map do |token|
+      [token, send(:"placeholder_#{token.underscore}")]
+    end.to_h
   end
 
   def use_mailing_emails(recipients)

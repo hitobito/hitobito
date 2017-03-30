@@ -19,16 +19,22 @@ class Event::RegisterMailer < ApplicationMailer
     custom_content_mail(
       recipient.email,
       CONTENT_REGISTER_LOGIN,
-      placeholder_values(CONTENT_REGISTER_LOGIN)
+      values_for_placeholders(CONTENT_REGISTER_LOGIN)
     )
   end
 
   private
 
-  define_method("#{CONTENT_REGISTER_LOGIN}_values") do
-    { 'recipient-name' => @recipient.greeting_name,
-      'event-name'     => @event.to_s,
-      'event-url'      => link_to(event_url(@group, @event, @token)) }
+  def placeholder_recipient_name
+    @recipient.greeting_name
+  end
+
+  def placeholder_event_name
+    @event.to_s
+  end
+
+  def placeholder_event_url
+    link_to(event_url(@group, @event, @token))
   end
 
   def event_url(group, event, token)

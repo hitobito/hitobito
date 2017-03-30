@@ -301,7 +301,8 @@ class Event < ActiveRecord::Base
     required_contact_attrs.map(&:to_sym).each do |a|
       unless valid_contact_attr?(a) &&
           ParticipationContactData::CONTACT_ASSOCIATIONS.exclude?(a)
-        errors.add(:required_contact_attrs, "#{a} is not a valid contact attr or a contact association")
+        errors.add(:required_contact_attrs,
+                   "#{a} is not a valid contact attr or a contact association")
       end
       if hidden_contact_attrs.include?(a)
         errors.add(:required_contact_attrs, "#{a} cannot be set as required and hidden")

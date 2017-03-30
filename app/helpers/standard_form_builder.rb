@@ -407,6 +407,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Returns true if the given attribute must be present.
   def required?(attr)
+    return true if dynamic_required?(attr)
     attr = attr.to_s
     attr, attr_id = assoc_and_id_attr(attr)
     validators = klass.validators_on(attr) +
@@ -415,6 +416,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       v.kind == :presence &&
       !v.options.key?(:if) && !v.options.key?(:unless)
     end
+  end
+
+  def dynamic_required?(attr)
+    return false unless @object.respond_to?(:required_attributes)
+    @object.required_attributes.include?(attr.to_s)
   end
 
   private

@@ -56,9 +56,16 @@ module Dropdown
       def init_items(url_options)
         event.participant_types.each do |type|
           opts = url_options.merge(event_role: { type: type.sti_name })
-          link = template.new_group_event_participation_path(group, event, opts)
+          link = participate_link(opts)
           add_item(translate(:as, role: type.label), link)
         end
+      end
+
+      def participate_link(opts)
+        if opts[:for_someone_else]
+          return template.new_group_event_participation_path(group, event, opts)
+        end
+        template.contact_data_group_event_participations_path(group, event, opts)
       end
 
     end

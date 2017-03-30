@@ -8,6 +8,9 @@
 - else
   - title t('.title_edit', person: entry.person)
 
+- unless params[:for_someone_else]
+  = render 'event/participations/step_wizard', step: 2
+
 = render_extensions :info
 
 = entry_form(stacked: true,

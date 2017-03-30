@@ -1,0 +1,4 @@
+= field_set_tag t('events.form.contact_attrs') do
+  %p= t('events.form.contact_attrs_explanation')
+  .control-group
+    = ContactAttrs::ControlBuilder.new(f, entry).render

@@ -53,7 +53,7 @@ describe Event::ListsController, type: :controller do
         get :events
 
         expect(link.text.strip).to eq 'Anmelden'
-        expect(link[:href]).to eq new_group_event_participation_path(event.groups.first,
+        expect(link[:href]).to eq contact_data_group_event_participations_path(event.groups.first,
                                                                  event,
                                                                  event_role: {
                                                                    type: event.class.participant_types.first.sti_name})

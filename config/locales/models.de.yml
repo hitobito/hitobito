@@ -322,6 +322,11 @@ de:
         applicant_count: Anzahl Anmeldungen
         applications_cancelable: Abmeldung möglich
 
+      event/contact_attrs:
+        required: Obligatorisch
+        optional: Optional
+        hidden: Nicht anzeigen
+
       event/answer:
         answer: Antwort
 

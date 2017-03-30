@@ -32,9 +32,9 @@ class ApplicationMailer < ActionMailer::Base
 
   def values_for_placeholders(content_key)
     content = CustomContent.get(content_key)
-    content.placeholders_list.map do |token|
-      [token, send(:"placeholder_#{token.underscore}")]
-    end.to_h
+    content.placeholders_list.each_with_object({}) do |token, hash|
+      hash[token] = send(:"placeholder_#{token.underscore}")
+    end
   end
 
   def use_mailing_emails(recipients)

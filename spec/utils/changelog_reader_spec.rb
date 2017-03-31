@@ -82,14 +82,18 @@ describe ChangelogReader do
     v2 = ChangelogVersion.new('2.3')
     v3 = ChangelogVersion.new('1.11')
     v4 = ChangelogVersion.new('2.15')
-    a = [v1, v2, v3, v4]
+    v5 = ChangelogVersion.new('1.X')
+    unsorted = [v1, v2, v3, v4, v5]
 
-    a = a.sort.reverse
+    sorted = unsorted.sort.reverse
 
-    expect(a.last).to eq(v1)
-    expect(a[1]).to eq(v2)
-    expect(a[2]).to eq(v3)
-    expect(a.first).to eq(v4)
+    expect(sorted[0]).to eq(v4)
+    expect(sorted[1]).to eq(v2)
+    expect(sorted[2]).to eq(v5)
+    expect(sorted[3]).to eq(v3)
+    expect(sorted[4]).to eq(v1)
+
+    expect(sorted.map(&:version)).to eq(%w( 2.15 2.3 1.X 1.11 1.1 ))
   end
 
   it 'reads existing changelog file' do

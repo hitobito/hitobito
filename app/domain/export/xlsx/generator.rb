@@ -47,7 +47,7 @@ module Export::Xlsx
         apply_column_widths(sheet)
 
         sheet.page_setup.set(style.page_setup)
-        sheet.auto_filter = sheet.dimension.sqref
+        add_auto_filter(sheet)
       end
     end
 
@@ -55,6 +55,13 @@ module Export::Xlsx
       exportable.header_rows.each_with_index do |row, index|
         sheet.add_row(row, row_style(style.header_style(index)))
       end
+    end
+
+    def add_auto_filter(sheet)
+      return unless exportable.auto_filter
+      range = "#{sheet.rows[exportable.header_rows.size].cells.first.r}:" \
+              "#{sheet.rows.last.cells.last.r}"
+      sheet.auto_filter = range
     end
 
     def add_attribute_label_row(sheet)

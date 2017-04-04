@@ -10,8 +10,9 @@ module Export::Tabular
   # Base class for csv/xlsx export
   class Base
 
-    class_attribute :model_class, :row_class
+    class_attribute :model_class, :row_class, :auto_filter
     self.row_class = Export::Tabular::Row
+    self.auto_filter = true
 
     attr_reader :list
 

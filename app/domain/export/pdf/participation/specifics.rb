@@ -25,7 +25,10 @@ module Export::Pdf::Participation
     private
 
     def answers
-      participation.answers.joins(:question).includes(:question).where(event_questions: { admin: false })
+      participation.answers.
+        joins(:question).
+        includes(:question).
+        where(event_questions: { admin: false })
     end
 
     def additional_information_label

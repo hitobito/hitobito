@@ -126,7 +126,8 @@ class Event < ActiveRecord::Base
             length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
-  validate :valid_person_contact_attrs
+  validate :assert_required_contact_attrs_valid
+  validate :assert_hidden_contact_attrs_valid
 
   ### CALLBACKS
 
@@ -293,36 +294,32 @@ class Event < ActiveRecord::Base
     end
   end
 
-  def valid_person_contact_attrs
-    validate_required_contact_attrs
-    validate_hidden_contact_attrs
-  end
-
   def valid_contact_attr?(attr)
-    (ParticipationContactData::CONTACT_ATTRS +
-      ParticipationContactData::CONTACT_ASSOCIATIONS).include?(attr)
+    (ParticipationContactData.contact_attrs +
+      ParticipationContactData.contact_associations).
+      map(&:to_s).include?(attr.to_s)
   end
 
-  def validate_required_contact_attrs
-    required_contact_attrs.map(&:to_sym).each do |a|
+  def assert_required_contact_attrs_valid
+    required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
-          ParticipationContactData::CONTACT_ASSOCIATIONS.exclude?(a)
-        errors.add(:required_contact_attrs,
-                   "#{a} is not a valid contact attr or a contact association")
+          ParticipationContactData.contact_associations.
+          map(&:to_s).exclude?(a)
+        errors.add(:base, :contact_attr_invalid, {attribute: a})
       end
       if hidden_contact_attrs.include?(a)
-        errors.add(:required_contact_attrs, "#{a} cannot be set as required and hidden")
+        errors.add(:base, :contact_attr_hidden_required, {attribute: a})
       end
     end
   end
 
-  def validate_hidden_contact_attrs
+  def assert_hidden_contact_attrs_valid
     hidden_contact_attrs.map(&:to_sym).each do |a|
       unless valid_contact_attr?(a)
-        errors.add(:hidden_contact_attrs, "#{a} is not a valid contact attr")
+        errors.add(:base, :contact_attr_invalid, {attribute: a})
       end
-      if ParticipationContactData::MANDATORY_CONTACT_ATTRS.include?(a)
-        errors.add(:hidden_contact_attrs, "#{a} is a mandatory contact attr")
+      if ParticipationContactData.mandatory_contact_attrs.include?(a)
+        errors.add(:base, :contact_attr_mandatory, {attribute: a})
       end
     end
   end

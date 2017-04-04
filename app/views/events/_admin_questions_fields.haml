@@ -1,4 +1,4 @@
--#  Copyright (c) 2015 - 2017, insieme Schweiz. This file is part of
+-#  Copyright (c) 2015 - 2017, Pfadibewegung Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -6,5 +6,6 @@
 
 %p= t('events.form.explain_admin_questions')
 
-= f.nested_fields_for :admin_questions do |fields|
-  = render 'event/questions/fields', f: fields, admin: true
+= field_set_tag nil do
+  = f.nested_fields_for :admin_questions do |fields|
+    = render 'event/questions/fields', f: fields, admin: true

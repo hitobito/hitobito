@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
-#  hitobito_pbs and licensed under the Affero General Public License version 3
+#  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_pbs.
+#  https://github.com/hitobito/hitobito.
 
 module ContactAttrs
   class ControlBuilder
@@ -26,42 +26,40 @@ module ContactAttrs
     attr_reader :f, :event
 
     def mandatory_contact_attrs
-      Event::ParticipationContactData::MANDATORY_CONTACT_ATTRS.collect do |a|
-        [f.label(a, attr_label(a), class: 'control-label'),
-        radio_buttons(a, true, [:required]),
-        line_break]
+      Event::ParticipationContactData.mandatory_contact_attrs.collect do |a|
+        f.labeled(a, attr_label(a)) do
+          radio_buttons(a, true, [:required])
+        end
       end
     end
 
     def configurable_contact_attrs
       non_mandatory_contact_attrs.collect do |a|
-        [f.label(a, attr_label(a), class: 'control-label'),
-        radio_buttons(a),
-        line_break]
+        f.labeled(a, attr_label(a)) do
+          radio_buttons(a)
+        end
       end
     end
 
     def non_mandatory_contact_attrs
-      Event::ParticipationContactData::CONTACT_ATTRS -
-        Event::ParticipationContactData::MANDATORY_CONTACT_ATTRS
+      Event::ParticipationContactData.contact_attrs -
+        Event::ParticipationContactData.mandatory_contact_attrs
     end
 
     def contact_associations
-      Event::ParticipationContactData::CONTACT_ASSOCIATIONS.collect do |a|
-        [f.label(a, attr_label(a), class: 'control-label'),
-        assoc_checkbox(a),
-        line_break]
+      Event::ParticipationContactData.contact_associations.collect do |a|
+        f.labeled(a, attr_label(a)) do
+          assoc_checkbox(a)
+        end
       end
     end
 
     def radio_buttons(attr, disabled = false, options = [:required, :optional, :hidden])
-      f.content_tag(:div, class: 'controls') do
-        buttons = options.collect do |o|
-          checked = options.size == 1
-          radio_button(attr, disabled, o, checked)
-        end
-        safe_join(buttons)
+      buttons = options.collect do |o|
+        checked = options.size == 1
+        radio_button(attr, disabled, o, checked)
       end
+      safe_join(buttons)
     end
 
     def radio_button(attr, disabled, option, checked = false)
@@ -74,12 +72,10 @@ module ContactAttrs
     end
 
     def assoc_checkbox(assoc)
-      f.content_tag(:div, class: 'controls') do
-        f.label(for_label(assoc), class: 'checkbox inline') do
-          options = {checked: assoc_hidden?(assoc)}
-          f.check_box(for_label(assoc), options, :hidden) +
-            option_label(:hidden)
-        end
+      f.label(for_label(assoc), class: 'checkbox inline') do
+        options = {checked: assoc_hidden?(assoc)}
+        f.check_box(for_label(assoc), options, :hidden) +
+          option_label(:hidden)
       end
     end
 
@@ -106,10 +102,6 @@ module ContactAttrs
 
     def attr_label(attr)
       t("activerecord.attributes.person.#{attr}")
-    end
-
-    def line_break
-      '<br/>'.html_safe
     end
 
   end

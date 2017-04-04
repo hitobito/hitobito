@@ -6,5 +6,6 @@
 
 %p= t('events.form.explain_application_questions')
 
-= f.nested_fields_for :application_questions do |fields|
-  = render 'event/questions/fields', f: fields, admin: false
+= field_set_tag nil do
+  = f.nested_fields_for :application_questions do |fields|
+    = render 'event/questions/fields', f: fields, admin: false

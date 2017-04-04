@@ -5,5 +5,5 @@
 
 %p= t('events.form.explain_contact_attrs')
 
-.control-group
+= field_set_tag nil do
   = ContactAttrs::ControlBuilder.new(f, entry).render

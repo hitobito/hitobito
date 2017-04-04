@@ -12,7 +12,6 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
-                          :contact_attrs,
                           group_ids: [],
                           dates_attributes: [
                             :id, :label, :location, :start_at, :start_at_date,
@@ -39,8 +38,6 @@ class EventsController < CrudController
   before_render_show :load_user_participation
   before_render_form :load_sister_groups
   before_render_form :load_kinds
-
-  before_action :assign_contact_attrs, only: [:create, :update]
 
   def index
     respond_to do |format|
@@ -139,6 +136,11 @@ class EventsController < CrudController
   def export?
     format = request.format
     format.xlsx? || format.csv?
+  end
+
+  def assign_attributes
+    assign_contact_attrs
+    super
   end
 
   def assign_contact_attrs

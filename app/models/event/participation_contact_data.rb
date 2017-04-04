@@ -11,18 +11,20 @@ class Event::ParticipationContactData
 
   T_PERSON_ATTRS = 'activerecord.attributes.person.'.freeze
 
-  # rubocop:disable Style/MutableConstant
-  MANDATORY_CONTACT_ATTRS = [:email, :first_name, :last_name]
+  class_attribute :mandatory_contact_attrs,
+                  :contact_attrs,
+                  :contact_associations
 
-  CONTACT_ATTRS = [:first_name, :last_name, :nickname, :company_name,
-                   :email, :address, :zip_code, :town,
-                   :country, :gender, :birthday]
+  self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
-  CONTACT_ASSOCIATIONS = [:additional_emails, :phone_numbers, :social_accounts]
-  # rubocop:enable Style/MutableConstant
+  self.contact_attrs = [:first_name, :last_name, :nickname, :company_name,
+                        :email, :address, :zip_code, :town,
+                        :country, :gender, :birthday]
 
-  delegate(*CONTACT_ATTRS, to: :person)
-  delegate(*CONTACT_ASSOCIATIONS, to: :person)
+  self.contact_associations = [:additional_emails, :phone_numbers, :social_accounts]
+
+  delegate(*contact_attrs, to: :person)
+  delegate(*contact_associations, to: :person)
 
   delegate :t, to: I18n
 
@@ -33,8 +35,8 @@ class Event::ParticipationContactData
 
   include ActiveModel::Validations
 
-  validate :validate_required_contact_attrs
-  validate :validate_person_attrs
+  validate :assert_required_contact_attrs_valid
+  validate :assert_person_attrs_valid
 
   class << self
 
@@ -58,8 +60,7 @@ class Event::ParticipationContactData
   end
 
   def save
-    return false unless valid?
-    person.save
+    valid? && person.save
   end
 
   def parent
@@ -82,7 +83,7 @@ class Event::ParticipationContactData
   end
 
   def attribute_keys
-    CONTACT_ATTRS - hidden_contact_attrs
+    self.class.contact_attrs - hidden_contact_attrs
   end
 
   def hidden_contact_attrs
@@ -112,14 +113,14 @@ class Event::ParticipationContactData
 
   def required_attributes
     @required_attributes ||= event.required_contact_attrs +
-      MANDATORY_CONTACT_ATTRS.map(&:to_s)
+      self.class.mandatory_contact_attrs.map(&:to_s)
   end
 
   private
 
   attr_reader :model_params, :event
 
-  def validate_required_contact_attrs
+  def assert_required_contact_attrs_valid
     required_attributes.each do |a|
       if model_params[a.to_s].blank?
         errors.add(a, t('errors.messages.blank'))
@@ -127,7 +128,7 @@ class Event::ParticipationContactData
     end
   end
 
-  def validate_person_attrs
+  def assert_person_attrs_valid
     unless person.valid?
       collect_person_errors
     end

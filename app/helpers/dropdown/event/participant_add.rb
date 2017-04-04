@@ -63,9 +63,10 @@ module Dropdown
 
       def participate_link(opts)
         if opts[:for_someone_else]
-          return template.new_group_event_participation_path(group, event, opts)
+          template.new_group_event_participation_path(group, event, opts)
+        else
+          template.contact_data_group_event_participations_path(group, event, opts)
         end
-        template.contact_data_group_event_participations_path(group, event, opts)
       end
 
     end

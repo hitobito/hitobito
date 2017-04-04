@@ -23,7 +23,7 @@
   - if entry.show_attr?(:email)
     = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
 
-  - Event::ParticipationContactData::CONTACT_ASSOCIATIONS.each do |a|
+  - Event::ParticipationContactData.contact_associations.each do |a|
     = field_set_tag do
       - unless entry.hidden_contact_attrs.include?(a)
         = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"

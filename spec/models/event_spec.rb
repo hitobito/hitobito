@@ -542,36 +542,36 @@ describe Event do
     let(:event) { events(:top_course) }
 
     it 'does not accept invalid person attributes' do
-      event.update({required_contact_attrs: [:foobla],
-                    hidden_contact_attrs: [:foofofofo]})
+      event.update({required_contact_attrs: ['foobla'],
+                    hidden_contact_attrs: ['foofofofo']})
 
-      expect(event.errors[:required_contact_attrs]).to be_present
-      expect(event.errors[:hidden_contact_attrs]).to be_present
+      expect(event.errors.full_messages.first).to match /'foobla' ist kein gültiges Personen-Attribut/
+      expect(event.errors.full_messages.second).to match /'foofofofo' ist kein gültiges Personen-Attribut/
     end
 
     it 'is not possible to set same attr as hidden and required' do
-      event.update({required_contact_attrs: [:nickname],
-                    hidden_contact_attrs: [:nickname]})
+      event.update({required_contact_attrs: ['nickname'],
+                    hidden_contact_attrs: ['nickname']})
 
-      expect(event.errors[:required_contact_attrs]).to be_present
+      expect(event.errors.full_messages.first).to match /'nickname' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden/
     end
 
     it 'is not possible to set mandatory attr as hidden' do
-      event.update({hidden_contact_attrs: [:email]})
+      event.update({hidden_contact_attrs: ['email']})
 
-      expect(event.errors[:hidden_contact_attrs]).to be_present
+      expect(event.errors.full_messages.first).to match /'email' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden/
     end
 
     it 'is not possible to set contact association as required' do
-      event.update({required_contact_attrs: [:additional_emails]})
+      event.update({required_contact_attrs: ['additional_emails']})
 
-      expect(event.errors[:required_contact_attrs]).to be_present
+      expect(event.errors.full_messages.first).to match /'additional_emails' ist kein gültiges Personen-Attribut/
     end
 
     it 'is possible to hide contact association' do
-      event.update({hidden_contact_attrs: [:additional_emails]})
+      event.update({hidden_contact_attrs: ['additional_emails']})
 
-      expect(event.reload.hidden_contact_attrs).to include(:additional_emails)
+      expect(event.reload.hidden_contact_attrs).to include('additional_emails')
     end
 
   end

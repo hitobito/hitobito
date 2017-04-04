@@ -9,6 +9,8 @@ require 'spec_helper'
 
 describe EventsController, type: :controller do
 
+  render_views
+
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { ev = events(:top_course); ev.dates.clear; ev }
   let(:group) { test_entry.groups.first }
@@ -38,7 +40,6 @@ describe EventsController, type: :controller do
 
   describe 'GET #index' do
     context '.html' do
-      render_views
       let(:group) { groups(:top_layer) }
       let(:dom) { Capybara::Node::Simple.new(response.body) }
       let(:today) { Date.today }
@@ -105,14 +106,13 @@ describe EventsController, type: :controller do
   end
 
   describe 'GET #new' do
-    render_views
     let(:group) { groups(:top_group) }
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
     it 'renders new form' do
       get :new, group_id: group.id, event: { type: 'Event::Course' }
       expect(dom.find('input#event_type', visible: false)[:type]).to eq 'hidden'
-      expect(dom.all('#questions_fields .fields').count).to eq 3
+      expect(dom.all('#application_questions_fields .fields').count).to eq 3
       expect(dom.all('#dates_fields').count).to eq 1
     end
   end

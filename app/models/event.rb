@@ -101,6 +101,9 @@ class Event < ActiveRecord::Base
   has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
   has_many :questions, dependent: :destroy, validate: true
 
+  has_many :application_questions, -> { where(admin: false) }, class_name: 'Event::Question'
+  has_many :admin_questions, -> { where(admin: true) }, class_name: 'Event::Question'
+
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
 
@@ -129,7 +132,8 @@ class Event < ActiveRecord::Base
 
   before_validation :set_self_in_nested
 
-  accepts_nested_attributes_for :dates, :questions, allow_destroy: true
+  accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
+                                allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
   serialize :required_contact_attrs, Array
@@ -284,7 +288,9 @@ class Event < ActiveRecord::Base
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    (dates + questions).each { |e| e.event = self unless e.frozen? }
+    (dates + application_questions + admin_questions).each do |e|
+      e.event = self unless e.frozen?
+    end
   end
 
   def valid_person_contact_attrs

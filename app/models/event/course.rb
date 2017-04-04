@@ -90,9 +90,9 @@ class Event::Course < Event
   end
 
   def init_questions
-    if questions.blank?
-      Event::Question.global.each do |q|
-        questions << q.dup
+    if application_questions.blank?
+      Event::Question.application.global.each do |q|
+        application_questions << q.dup
       end
     end
   end

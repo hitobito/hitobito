@@ -16,7 +16,14 @@
                           folder: :people,
                           locals: { entry: entry.person, show_full: false }
 
-      = render 'answers' if @answers.present?
+      = render 'answers',
+               answers: @answers.reject(&:admin?),
+               title: t('event.participations.application_answers')
+
+      - if entry.person != current_user
+        = render 'answers',
+                 answers: @answers.select(&:admin?),
+                 title: t('event.participations.admin_answers')
 
       = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')

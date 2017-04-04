@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# encoding:  utf-8
-
 require 'spec_helper'
 
 describe Event::ParticipationsController, type: :controller do

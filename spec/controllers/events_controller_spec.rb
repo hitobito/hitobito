@@ -67,7 +67,7 @@ describe EventsController do
                                 name: 'foo',
                                 kind_id: event_kinds(:slk).id,
                                 dates_attributes: [date],
-                                questions_attributes: [question],
+                                application_questions_attributes: [question],
                                 contact_id: people(:top_leader).id,
                                 type: 'Event::Course' },
                       group_id: group.id
@@ -138,28 +138,37 @@ describe EventsController do
       it 'creates, updates and destroys questions' do
         q1 = event.questions.create!(question: 'Who?')
         q2 = event.questions.create!(question: 'What?')
+        q3 = event.questions.create!(question: 'Payed?', admin: true)
 
         expect do
           put :update, group_id: group.id,
                        id: event.id,
                        event: { name: 'testevent',
-                                questions_attributes: {
-                                   q1.id.to_s => { id: q1.id,
-                                                   question: 'Whoo?' },
-                                   q2.id.to_s => { id: q2.id, _destroy: true },
-                                   '999' => { question: 'How much?',
-                                              choices: '1,2,3' } } }
+                                application_questions_attributes: {
+                                  q1.id.to_s => { id: q1.id,
+                                                  question: 'Whoo?' },
+                                  q2.id.to_s => { id: q2.id, _destroy: true },
+                                  '999' => { question: 'How much?',
+                                             choices: '1,2,3' } },
+                                admin_questions_attributes: {
+                                  q3.id.to_s => { id: q3.id, _destroy: true },
+                                  '999' => { question: 'Powned?',
+                                             choices: 'ja, nein' } } }
           expect(assigns(:event)).to be_valid
         end.not_to change { Event::Question.count }
 
         expect(event.reload.name).to eq 'testevent'
         questions = event.questions.order(:question)
-        expect(questions.size).to eq(2)
+        expect(questions.size).to eq(3)
         first = questions.first
         expect(first.question).to eq 'How much?'
         expect(first.choices).to eq '1,2,3'
         second = questions.second
-        expect(second.question).to eq 'Whoo?'
+        expect(second.question).to eq 'Powned?'
+        expect(second.admin).to eq true
+        third = questions.third
+        expect(third.question).to eq 'Whoo?'
+        expect(third.admin).to eq false
       end
     end
 

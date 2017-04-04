@@ -273,10 +273,17 @@ body {
   }
 }
 
-// well
 .well {
   border: none;
   background: $grayLighter;
+
+  > {
+    h1, h2, h3, h4, h5 {
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
 
   &.panel {
     margin-top: 5px;

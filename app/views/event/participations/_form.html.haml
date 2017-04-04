@@ -24,8 +24,12 @@
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)
 
-  = f.fields_for(:answers) do |fans|
+  = f.fields_for(:answers, @answers.reject(&:admin?)) do |fans|
     = render 'event/answers/fields', f: fans
+
+  - if params[:for_someone_else] || (entry.persisted? && entry.person_id != current_user.id)
+    = f.fields_for(:answers, @answers.select(&:admin?)) do |fans|
+      = render 'event/answers/fields', f: fans
 
   = f.labeled_text_area(:additional_information)
 

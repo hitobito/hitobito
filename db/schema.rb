@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322144544) do
+ActiveRecord::Schema.define(version: 20170404113313) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -146,8 +146,9 @@ ActiveRecord::Schema.define(version: 20170322144544) do
     t.integer "event_id"
     t.string  "question"
     t.string  "choices"
-    t.boolean "multiple_choices", default: false
-    t.boolean "required"
+    t.boolean "multiple_choices", default: false, null: false
+    t.boolean "required",         default: false, null: false
+    t.boolean "admin",            default: false, null: false
   end
 
   add_index "event_questions", ["event_id"], name: "index_event_questions_on_event_id"

@@ -28,12 +28,18 @@ describe Export::Csv::People::ParticipationsFull do
 
   context 'questions' do
     let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-    let(:question) { events(:top_course).questions.first }
 
-    before {  participation.init_answers }
-    it 'has keys and values' do
+    it 'has keys and values of application questions' do
+      participation.init_answers
       expect(subject[:"question_#{event_questions(:top_ov).id}"]).to eq 'GA oder Halbtax?'
       expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(3)
+    end
+
+    it 'has keys and values of admin questions' do
+      irgendwas = events(:top_course).questions.create!(question: 'Irgendwas', admin: true)
+      participation.init_answers
+      expect(subject[:"question_#{irgendwas.id}"]).to eq 'Irgendwas'
+      expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(4)
     end
   end
 

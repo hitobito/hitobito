@@ -121,13 +121,21 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def answers_details
-    if participation.answers.present?
+    answers = load_application_answers
+    if answers.present?
       text = ["#{Event::Participation.human_attribute_name(:answers)}:"]
-      participation.answers.each do |a|
+      answers.each do |a|
         text << "#{a.question.question}: #{a.answer}"
       end
       text.join('<br/>')
     end
+  end
+
+  def load_application_answers
+    participation.answers
+      .joins(:question)
+      .includes(:question)
+      .where(event_questions: { admin: false })
   end
 
   def additional_information_details

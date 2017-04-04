@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -18,11 +18,21 @@
     #dates.tab-pane
       = render 'date_fields', f: f
 
-    #application.tab-pane
-      = render 'application_fields', f: f
-      = render 'contact_attr_fields', f: f
-      = render 'additional_fields', f: f
+    - if entry.participant_types.present?
+      #application.tab-pane
+        = render 'application_fields', f: f
 
     = render_extensions 'form_tab_pane', locals: { f: f }
+
+    - if entry.role_types.present?
+      #application_questions.tab-pane
+        = render 'application_questions_fields', f: f
+
+      #admin_questions.tab-pane
+        = render 'admin_questions_fields', f: f
+
+    - if entry.participant_types.present?
+      #contact_attrs.tab-pane
+        = render 'contact_attr_fields', f: f
 
   = render_extensions 'form_actions_caption', locals: { f: f }

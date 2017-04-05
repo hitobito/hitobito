@@ -7,7 +7,7 @@
   %article.span6
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
-    = render_attrs(entry.person, :birthday, :gender)
+    = render_attrs(entry.person, :layer_group, :birthday, :gender)
 
     - if can?(:show_details, entry)
       = render 'application_details'

@@ -74,9 +74,23 @@ describe PersonDecorator, :draper_with_helpers do
     it 'upcoming_events returns events that are active' do
       course.dates.build(start_at: 2.days.from_now, finish_at: 5.days.from_now)
       course.save
-      participation = Fabricate(:event_participation, event: course, person: person, active: true)
+      Fabricate(:event_participation, event: course, person: person, active: true)
 
       expect(subject.upcoming_events).to eq [course]
+    end
+  end
+
+  context 'layer group' do
+    let(:label) { PersonDecorator.new(person).layer_group_label }
+
+    it 'creates link for group layer' do
+      expect(label).to match /Top/
+      expect(label).to match /#{groups(:top_layer).id}/
+    end
+
+    it 'empty string if no group layer' do
+      person.update!(primary_group: nil)
+      expect(label).to be nil
     end
   end
 end

@@ -236,6 +236,7 @@ de:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'
       participation:
         registered_at: 'Anmeldung am %{date}'
+        town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:

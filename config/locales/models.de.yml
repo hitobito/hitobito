@@ -241,6 +241,7 @@ de:
         nickname: Übername
         email: Haupt-E-Mail
         emails: E-Mails
+        layer_group: gehört zu
         password: Passwort
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort

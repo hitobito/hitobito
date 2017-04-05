@@ -257,6 +257,10 @@ class Person < ActiveRecord::Base
     false
   end
 
+  def layer_group
+    primary_group.layer_group if primary_group
+  end
+
   private
 
   def override_blank_email

@@ -55,6 +55,11 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
+  def layer_group_label
+    group = person.layer_group
+    h.link_to(group, h.group_path(group)) if group
+  end
+
   # render a list of all roles
   # if a group is given, only render the roles of this group
   def roles_short(group = nil)

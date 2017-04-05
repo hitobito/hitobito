@@ -27,7 +27,7 @@ describe Export::Csv::People::PeopleFull do
 
   its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company,
                                  :email, :address, :zip_code, :town, :country, :gender, :birthday,
-                                 :additional_information, :roles] end
+                                 :additional_information, :layer_group, :roles] end
 
   context '#attribute_labels' do
     subject { people_list.attribute_labels }
@@ -75,7 +75,7 @@ describe Export::Csv::People::PeopleFull do
         expect(csv.headers).to eq([
            'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
            'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-           'Zusätzliche Angaben', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
+           'Zusätzliche Angaben', 'gehört zu', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
            'Social Media Adresse Skype', 'Elternteil'])
       end
 
@@ -88,6 +88,7 @@ describe Export::Csv::People::PeopleFull do
         its(['Social Media Adresse Skype']) { should eq 'foobar' }
         its(['Elternteil']) { should eq 'Bottom Member' }
         its(['Geschlecht']) { should eq 'männlich' }
+        its(['gehört zu']) { should eq 'Top' }
       end
     end
 
@@ -98,7 +99,7 @@ describe Export::Csv::People::PeopleFull do
         expect(csv.headers).to eq(
            ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
             "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-            "Anniversaire", "Données supplémentaires", "Rôles",
+            "Anniversaire", "Données supplémentaires", "Niveau", "Rôles",
             "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
             "Adresse d'un média social Skype", "Parent"]
         )

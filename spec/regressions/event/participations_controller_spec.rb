@@ -76,18 +76,6 @@ describe Event::ParticipationsController, type: :controller do
     end
   end
 
-  describe 'POST create' do
-    [:event_base, :course].each do |event_sym|
-      it "prompts to change contact data for #{event_sym}" do
-        event = send(event_sym)
-        post :create, group_id: group.id, event_id: event.id, event_participation: test_entry_attrs
-        expect(flash[:notice]).to match(/Bitte überprüfe die Kontaktdaten/)
-        is_expected.to redirect_to group_event_participation_path(group, event,
-                                                                  assigns(:participation))
-      end
-    end
-  end
-
   describe 'GET new' do
     subject { Capybara::Node::Simple.new(response.body) }
     [:event_base, :course].each do |event_sym|

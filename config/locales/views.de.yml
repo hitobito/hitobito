@@ -382,7 +382,7 @@ de:
 
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
-    success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+    success: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
 
     show:

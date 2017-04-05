@@ -219,6 +219,7 @@ fr:
         nickname: Surnom
         email: Adresse e-mail principale
         emails: E-mails
+        layer_group: Niveau
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe

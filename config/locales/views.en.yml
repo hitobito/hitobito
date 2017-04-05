@@ -286,7 +286,7 @@ en:
       title: Create course kind
   event/participations:
     full_entry_label: '%{model_label} from <i>%{person}</i> in <i>%{event}</i>'
-    success: '%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary.'
+    success: '%{full_entry_label} has successfully been created.'
     instructions: 'For the final registration you have to print the page via <i>Print</i>, sign and mail it to the appropriate address.'
     show:
       link:

@@ -326,13 +326,13 @@ describe Event do
     it 'adds 3 default questions for courses' do
       e = Event::Course.new
       e.init_questions
-      expect(e.questions.size).to eq(3)
+      expect(e.application_questions.size).to eq(3)
     end
 
     it 'does nothing for regular events' do
       e = Event.new
       e.init_questions
-      expect(e.questions).to be_blank
+      expect(e.application_questions).to be_blank
     end
   end
 

@@ -20,7 +20,7 @@
                answers: @answers.reject(&:admin?),
                title: t('event.participations.application_answers')
 
-      - if entry.person != current_user
+      - if can?(:show_full, entry)
         = render 'answers',
                  answers: @answers.select(&:admin?),
                  title: t('event.participations.admin_answers')

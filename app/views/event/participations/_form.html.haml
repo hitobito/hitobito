@@ -26,7 +26,7 @@
   = f.fields_for(:answers, @answers.reject(&:admin?)) do |fans|
     = render 'event/answers/fields', f: fans
 
-  - if params[:for_someone_else] || (entry.persisted? && entry.person_id != current_user.id)
+  - if params[:for_someone_else] || entry.persisted?
     = f.fields_for(:answers, @answers.select(&:admin?)) do |fans|
       = render 'event/answers/fields', f: fans
 

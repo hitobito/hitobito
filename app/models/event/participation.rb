@@ -94,13 +94,14 @@ class Event::Participation < ActiveRecord::Base
   ### INSTANCE METHODS
 
   def init_answers
-    return answers if answers.present?
-
-    event.questions.map do |q|
-      a = q.answers.new
-      a.question = q # without this, only the id is set
-      answers << a
-      a
+    answers.tap do |list|
+      event.questions.each do |q|
+        unless list.find { |a| a.question_id == q.id }
+          a = q.answers.new
+          a.question = q # without this, only the id is set
+          list << a
+        end
+      end
     end
   end
 

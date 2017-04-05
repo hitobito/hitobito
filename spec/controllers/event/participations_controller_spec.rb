@@ -425,6 +425,20 @@ describe Event::ParticipationsController do
           to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
+      it 'creates new participation with all answers' do
+        post :create,
+             group_id: group.id,
+             event_id: course.id,
+             event_participation: {
+               answers: {
+                 1 => { question_id: course.questions.first.id, answer: 'Bla' }
+               }
+             }
+
+        participation = assigns(:participation)
+        expect(participation.answers.size).to eq(2)
+      end
+
       it 'fails for invalid event role' do
         expect do
           post :create, group_id: group.id,

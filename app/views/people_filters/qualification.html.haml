@@ -10,8 +10,8 @@
 
   = render 'search_button'
 
-  .label-columns
-    = field_set_tag(t('.prompt_qualification_selection')) do
+  = field_set_tag(t('.prompt_qualification_selection')) do
+    .label-columns
       .controls
         - @qualification_kinds.each do |kind|
           - dom_id = "qualification_kind_id_#{kind.id}"
@@ -21,6 +21,18 @@
                             Array(params[:qualification_kind_id]).include?(kind.id.to_s),
                             id: dom_id)
             = kind.to_s
+
+    .controls
+      &nbsp;
+
+    .controls
+      = label_tag('match_one', class: 'radio inline') do
+        = radio_button_tag(:match, 'one', true)
+        = t('people_filters.simple_radio.match.one')
+      = label_tag('match_all', class: 'radio inline') do
+        = radio_button_tag(:match, 'all', params[:match] == 'all')
+        = t('people_filters.simple_radio.match.all')
+
 
   = field_set_tag(t('.prompt_validity')) do
     = render 'simple_radio', attr: 'validity', value: 'active', first: true

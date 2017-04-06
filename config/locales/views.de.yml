@@ -855,6 +855,9 @@ de:
       prompt_kind: In welchem Bereich soll gesucht werden?
 
     simple_radio:
+      match:
+        one: Person hat mindestens EINE dieser Qualifikationen
+        all: Person hat ALLE diese Qualifikationen
       validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen

@@ -15,6 +15,7 @@ class Person::QualificationFilter < Person::ListFilter
     super(group, user)
     @kind = params[:kind].to_s
     @validity = params[:validity].to_s
+    @match_all = params[:match].to_s == 'all'
     @qualification_kind_ids = Array(params[:qualification_kind_id])
   end
 
@@ -29,13 +30,37 @@ class Person::QualificationFilter < Person::ListFilter
   end
 
   def entries_with_qualifications(scope)
-    scope = scope.joins(:qualifications).
-                  where(qualifications: { qualification_kind_id: qualification_kind_ids })
+    if @match_all
+      match_all_qualification_kinds(scope)
+    else
+      match_one_qualification_kind(scope)
+    end
+  end
 
+  def match_all_qualification_kinds(scope)
+    subquery = qualification_validity_scope.
+               select('1').
+               where('qualifications.person_id = people.id AND ' \
+                       'qualifications.qualification_kind_id = qk.id')
+
+    scope.where('NOT EXISTS (' \
+                '  SELECT 1 FROM qualification_kinds qk' \
+                '  WHERE qk.id IN (?) ' \
+                "  AND NOT EXISTS (#{subquery.to_sql}) )",
+                qualification_kind_ids)
+  end
+
+  def match_one_qualification_kind(scope)
+    scope.joins(:qualifications).
+      where(qualifications: { qualification_kind_id: qualification_kind_ids }).
+      merge(qualification_validity_scope)
+  end
+
+  def qualification_validity_scope
     case validity
-    when 'active' then scope.merge(Qualification.active)
-    when 'reactivateable' then scope.merge(Qualification.reactivateable)
-    else scope
+    when 'active' then Qualification.active
+    when 'reactivateable' then Qualification.reactivateable
+    else Qualification.all
     end
   end
 

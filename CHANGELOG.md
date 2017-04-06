@@ -3,6 +3,7 @@
 ## Version 1.X
 
 *   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+*   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
 
 ## Version 1.14
 

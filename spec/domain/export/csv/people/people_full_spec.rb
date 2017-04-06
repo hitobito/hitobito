@@ -75,7 +75,7 @@ describe Export::Csv::People::PeopleFull do
         expect(csv.headers).to eq([
            'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
            'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-           'Zusätzliche Angaben', 'gehört zu', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
+           'Zusätzliche Angaben', 'Hauptebene', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
            'Social Media Adresse Skype', 'Elternteil'])
       end
 
@@ -88,7 +88,7 @@ describe Export::Csv::People::PeopleFull do
         its(['Social Media Adresse Skype']) { should eq 'foobar' }
         its(['Elternteil']) { should eq 'Bottom Member' }
         its(['Geschlecht']) { should eq 'männlich' }
-        its(['gehört zu']) { should eq 'Top' }
+        its(['Hauptebene']) { should eq 'Top' }
       end
     end
 

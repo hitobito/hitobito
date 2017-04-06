@@ -49,7 +49,7 @@ de:
               placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
-            base: 
+            base:
               contact_attr_mandatory: "'%{attribute}' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden"
               contact_attr_invalid: "'%{attribute}' ist kein gültiges Personen-Attribut"
               contact_attr_hidden_required: "'%{attribute}' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden"
@@ -241,7 +241,7 @@ de:
         nickname: Übername
         email: Haupt-E-Mail
         emails: E-Mails
-        layer_group: gehört zu
+        layer_group: Hauptebene
         password: Passwort
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort

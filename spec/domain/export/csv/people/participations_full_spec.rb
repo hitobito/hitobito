@@ -50,7 +50,7 @@ describe Export::Csv::People::ParticipationsFull do
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum', 'gehört zu']
+       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum', 'Hauptebene']
     end
 
     subject { csv }

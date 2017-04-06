@@ -25,7 +25,7 @@ describe Export::Csv::People::ParticipationsAddress do
   context 'integration' do
     let(:simple_headers) do
       ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'gehört zu', 'Rollen']
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Hauptebene', 'Rollen']
     end
 
     let(:data) { Export::Csv::People::ParticipationsAddress.export(list) }

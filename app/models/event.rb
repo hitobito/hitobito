@@ -147,9 +147,9 @@ class Event < ActiveRecord::Base
     # Default scope for event lists
     def list
       order_by_date.
-      order(:name).
-      preload_all_dates.
-      uniq
+        order(:name).
+        preload_all_dates.
+        uniq
     end
 
     def preload_all_dates
@@ -182,15 +182,15 @@ class Event < ActiveRecord::Base
     def upcoming
       midnight = Time.zone.now.midnight
       joins(:dates).
-      where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
+        where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
-      where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-      where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
+        where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
+        where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
     end
 
@@ -218,7 +218,7 @@ class Event < ActiveRecord::Base
     # Return the event type with the given sti_name or raise an exception if not found
     def find_event_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
       type
     end
 
@@ -229,7 +229,7 @@ class Event < ActiveRecord::Base
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
       type
     end
   end
@@ -270,6 +270,24 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
+  def duplicate
+    dup.tap do |event|
+      event.groups = groups
+      event.state = nil
+      event.application_opening_at = nil
+      event.application_closing_at = nil
+      event.participant_count = 0
+      event.applicant_count = 0
+      event.teamer_count = 0
+      application_questions.each do |q|
+        event.application_questions << q.dup
+      end
+      admin_questions.each do |q|
+        event.admin_questions << q.dup
+      end
+    end
+  end
+
   private
 
   def assert_type_is_allowed_for_groups
@@ -306,11 +324,11 @@ class Event < ActiveRecord::Base
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
           ParticipationContactData.contact_associations.
-          map(&:to_s).exclude?(a)
-        errors.add(:base, :contact_attr_invalid, {attribute: a})
+             map(&:to_s).exclude?(a)
+        errors.add(:base, :contact_attr_invalid, attribute: a)
       end
       if hidden_contact_attrs.include?(a)
-        errors.add(:base, :contact_attr_hidden_required, {attribute: a})
+        errors.add(:base, :contact_attr_hidden_required, attribute: a)
       end
     end
   end
@@ -318,10 +336,10 @@ class Event < ActiveRecord::Base
   def assert_hidden_contact_attrs_valid
     hidden_contact_attrs.map(&:to_sym).each do |a|
       unless valid_contact_attr?(a)
-        errors.add(:base, :contact_attr_invalid, {attribute: a})
+        errors.add(:base, :contact_attr_invalid, attribute: a)
       end
       if ParticipationContactData.mandatory_contact_attrs.include?(a)
-        errors.add(:base, :contact_attr_mandatory, {attribute: a})
+        errors.add(:base, :contact_attr_mandatory, attribute: a)
       end
     end
   end

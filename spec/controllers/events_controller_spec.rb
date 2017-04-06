@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,6 +53,29 @@ describe EventsController do
 
         get :new, group_id: group.id, event: { type: 'Event::Course' }
         expect(assigns(:kinds)).not_to include event_kinds(:old)
+      end
+
+      it 'duplicates other course' do
+        sign_in(people(:top_leader))
+        source = events(:top_course)
+
+        get :new, group_id: source.groups.first.id, source_id: source.id
+
+        event = assigns(:event)
+        expect(event.state).to be_nil
+        expect(event.name).to eq(source.name)
+        expect(event.kind_id).to eq(source.kind_id)
+        expect(event.application_questions.map(&:question)).to match_array(
+          source.application_questions.map(&:question))
+        expect(event.application_questions.map(&:id).uniq).to eq([nil])
+      end
+
+      it 'raises not found if event is in other group' do
+        sign_in(people(:top_leader))
+
+        expect do
+          get :new, group_id: group.id, source_id: events(:top_course).id
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

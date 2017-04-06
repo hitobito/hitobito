@@ -576,6 +576,48 @@ describe Event do
 
   end
 
+  context '#duplicate' do
+
+    let(:event) { events(:top_event) }
+
+    it 'resets participant counts' do
+      Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: event))
+      Fabricate(Event::Role::Participant.name, participation: Fabricate(:event_participation, event: event))
+
+      expect(event.participant_count).not_to eq(0)
+      expect(event.teamer_count).not_to eq(0)
+
+      d = event.duplicate
+      expect(d.participant_count).to eq(0)
+      expect(d.teamer_count).to eq(0)
+      expect(d.applicant_count).to eq(0)
+    end
+
+    it 'keeps empty questions' do
+      d = event.duplicate
+      expect(d.application_questions.size).to eq(0)
+    end
+
+    it 'copies existing questions' do
+      event.questions << Fabricate(:event_question)
+      event.questions << Fabricate(:event_question, admin: true)
+      d = event.duplicate
+
+      expect do
+        d.dates << Fabricate.build(:event_date, event: d)
+        d.save!
+      end.to change { Event::Question.count }.by(2)
+    end
+
+    it 'copies all groups' do
+      event.groups << Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer))
+
+      d = event.duplicate
+      expect(d.group_ids.size).to eq(2)
+    end
+
+  end
+
 
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)

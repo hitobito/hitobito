@@ -355,6 +355,7 @@ de:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+        duplicate: Duplizieren
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen

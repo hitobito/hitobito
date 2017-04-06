@@ -237,6 +237,8 @@ class Event < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
+  delegate :participant_types, :find_role_type!, to: :singleton_class
+
   def to_s(_format = :default)
     name
   end

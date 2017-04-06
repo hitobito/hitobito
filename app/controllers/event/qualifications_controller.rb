@@ -40,7 +40,7 @@ class Event::QualificationsController < ApplicationController
   private
 
   def entries
-    types = event.class.role_types
+    types = event.role_types
     @leaders ||= participations(*types.select(&:leader?))
     @participants ||= participations(*types.select(&:participant?))
   end

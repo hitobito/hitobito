@@ -389,7 +389,7 @@ describe Event do
 
       participation = Fabricate(:event_participation, participation_attrs.merge(attrs))
       participation.create_application!(application_attrs)
-      Fabricate(event.class.participant_types.first.name.to_sym, participation: participation)
+      Fabricate(event.participant_types.first.name.to_sym, participation: participation)
       participation.save!
 
       Event::ParticipantAssigner.new(event, participation).add_participant if attrs[:active]

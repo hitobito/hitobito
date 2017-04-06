@@ -38,27 +38,39 @@ class Event::ParticipationDecorator < ApplicationDecorator
     end
   end
 
-  def issue_action(group)
+  def issue_option(group)
     if qualified.nil? || !qualified?
-      qualify_action_link(group, :put, :ok)
+      qualify_option_icon(group, :put, :ok)
     else
       h.icon(:ok)
     end
   end
 
-  def revoke_action(group)
+  def revoke_option(group)
     if qualified.nil? || qualified?
-      qualify_action_link(group, :delete, :remove)
+      qualify_option_icon(group, :delete, :remove)
     else
       h.icon(:remove)
     end
   end
 
-  def qualify_action_link(group, method, icon)
+  def qualify_option_icon(group, method, icon)
+    if can?(:qualify, event)
+      qualify_option_link(group, method, icon)
+    else
+      qualification_open_option(icon)
+    end
+  end
+
+  def qualify_option_link(group, method, icon)
     h.link_to(h.group_event_qualification_path(group, event_id, model),
               method: method, remote: true, title: tooltips[icon]) do
-      h.content_tag(:i, '', class: "icon icon-#{icon} disabled")
+      qualification_open_option(icon)
     end
+  end
+
+  def qualification_open_option(icon)
+    h.content_tag(:i, '', class: "icon icon-#{icon} disabled")
   end
 
   def qualifier

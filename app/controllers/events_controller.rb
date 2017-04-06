@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -67,11 +67,15 @@ class EventsController < CrudController
   private
 
   def build_entry
-    type = model_params && model_params[:type].presence
-    type ||= Event.sti_name
-    event = Event.find_event_type!(type).new
-    event.groups << parent
-    event
+    if params[:source_id]
+      group.events.find(params[:source_id]).duplicate
+    else
+      type = model_params && model_params[:type].presence
+      type ||= Event.sti_name
+      event = Event.find_event_type!(type).new
+      event.groups << parent
+      event
+    end
   end
 
   def permitted_params
@@ -157,4 +161,5 @@ class EventsController < CrudController
     entry.required_contact_attrs = []
     entry.hidden_contact_attrs = []
   end
+
 end

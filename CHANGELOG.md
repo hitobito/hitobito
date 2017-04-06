@@ -3,7 +3,9 @@
 ## Version 1.X
 
 *   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+*   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.
 *   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
+*   Anlässe können dupliziert werden.
 
 ## Version 1.14
 

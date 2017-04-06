@@ -19,7 +19,7 @@ module Person::AddRequest::Approver
     end
 
     def role_type
-      @role_type ||= event.class.find_role_type!(request.role_type)
+      @role_type ||= event.find_role_type!(request.role_type)
     end
 
     def event

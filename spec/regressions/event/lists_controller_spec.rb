@@ -56,7 +56,7 @@ describe Event::ListsController, type: :controller do
         expect(link[:href]).to eq contact_data_group_event_participations_path(event.groups.first,
                                                                  event,
                                                                  event_role: {
-                                                                   type: event.class.participant_types.first.sti_name})
+                                                                   type: event.participant_types.first.sti_name})
       end
     end
   end

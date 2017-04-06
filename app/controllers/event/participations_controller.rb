@@ -160,9 +160,9 @@ class Event::ParticipationsController < CrudController
 
   def role_type
     role_type = params[:event_role] && params[:event_role][:type].presence
-    role_type ||= event.class.participant_types.first.sti_name
+    role_type ||= event.participant_types.first.sti_name
 
-    type = event.class.find_role_type!(role_type)
+    type = event.find_role_type!(role_type)
     unless type.participant?
       fail ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end

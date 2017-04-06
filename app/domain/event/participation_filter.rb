@@ -37,7 +37,7 @@ class Event::ParticipationFilter
   private
 
   def apply_default_sort(records)
-    records = records.order_by_role(event.class) if Settings.people.default_sort == 'role'
+    records = records.order_by_role(event) if Settings.people.default_sort == 'role'
     records.merge(Person.order_by_name)
   end
 

@@ -19,11 +19,14 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
   let(:participant_role) { Event::Role::Leader }
   let(:group)            { groups(:top_group) }
 
-  { issue_action: [[nil, :active], [true, :inactive], [false, :active]],
-    revoke_action: [[nil, :active], [true, :active], [false, :inactive]] }.each do |action, values|
+  { issue_option: [[nil, :active], [true, :inactive], [false, :active]],
+    revoke_option: [[nil, :active], [true, :active], [false, :inactive]] }.each do |option, values|
 
-    context "##{action}" do
-      let(:node) { Capybara::Node::Simple.new(decorator.send(action, group)) }
+    context "##{option}" do
+      before do
+        decorator.stub(:can?).and_return(true)
+      end
+      let(:node) { Capybara::Node::Simple.new(decorator.send(option, group)) }
       let(:icon) { node.find('i') }
       let(:link) { node.find('a') }
 

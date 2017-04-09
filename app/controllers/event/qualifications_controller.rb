@@ -72,6 +72,7 @@ class Event::QualificationsController < ApplicationController
   end
 
   def authorize_read
+    event_qualifying
     authorize!(:qualifications_read, event)
   end
 

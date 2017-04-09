@@ -6,5 +6,5 @@
 - if @nothing_changed
   alert("#{j(t('event.no_qualifications_could_be_prolonged', person: participation.person))}");
 
-$('##{dom_id(participation)} td.issue').html('#{escape_javascript(participation.issue_action(@group))}')
-$('##{dom_id(participation)} td.revoke').html('#{escape_javascript(participation.revoke_action(@group))}')
+$('##{dom_id(participation)} td.issue').html('#{escape_javascript(participation.issue_option(@group))}')
+$('##{dom_id(participation)} td.revoke').html('#{escape_javascript(participation.revoke_option(@group))}')

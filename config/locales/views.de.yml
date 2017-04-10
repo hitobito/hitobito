@@ -426,11 +426,11 @@ de:
     active_participants_info:
       one: '%{count} Anmeldung zugeteilt'
       other: '%{count} Anmeldungen zugeteilt'
-    issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
+    issue_only: 'Vergibt die %{model} %{issued} unmittelbar per %{until} (letztes Kursdatum).'
     prolong_only:
-      one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
-      other: 'Verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
-    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
+      one: 'Verlängert existierende Qualifikation %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+      other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
 
   filter_navigation/dropdown:

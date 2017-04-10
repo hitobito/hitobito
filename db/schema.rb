@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20170404113313) do
+ActiveRecord::Schema.define(version: 20170410094209) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -195,6 +194,7 @@ ActiveRecord::Schema.define(version: 20170404113313) do
     t.boolean  "applications_cancelable",                default: false, null: false
     t.text     "required_contact_attrs"
     t.text     "hidden_contact_attrs"
+    t.boolean  "display_booking_info",                   default: true,  null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"

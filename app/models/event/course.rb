@@ -46,7 +46,8 @@ class Event::Course < Event
   require_dependency 'event/course/role/participant'
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval,
-                           :signature, :signature_confirmation, :signature_confirmation_text]
+                           :signature, :signature_confirmation, :signature_confirmation_text,
+                           :display_booking_info]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,

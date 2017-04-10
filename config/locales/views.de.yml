@@ -346,6 +346,7 @@ de:
       explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
         abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben

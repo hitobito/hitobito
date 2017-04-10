@@ -100,7 +100,7 @@ describe EventDecorator, :draper_with_helpers do
   context 'qualification infos' do
     context 'with qualifications and prolongations' do
       its(:issued_qualifications_info_for_leaders) do
-        should == 'Vergibt die Qualifikation Super Lead (for Leaders) unmittelbar pe 01.03.2012 (letztes Kursdatum).'
+        should == 'Vergibt die Qualifikation Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum).'
       end
 
       its(:issued_qualifications_info_for_participants) do

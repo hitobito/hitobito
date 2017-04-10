@@ -7,6 +7,7 @@
 *   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
 *   Anlässe können dupliziert werden.
 *   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
+*   Sichtbarkeit der Anmeldungen auf Kursliste für alle Personen ist pro Kurs konfigurierbar.
 
 ## Version 1.14
 
@@ -110,4 +111,3 @@
 *   Separat definierbare Qualifikationstypen für Kursleiter.
 *   Pflichtfelder für Anlass Fragen.
 *   Mehrfachauswahl bei Personen Filter und Abo Listen.
-

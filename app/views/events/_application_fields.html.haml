@@ -27,4 +27,8 @@
     = f.labeled_boolean_field(:applications_cancelable,
                           caption: t('events.form.caption_applications_cancelable'))
 
+  - entry.used?(:display_booking_info) do
+    = f.labeled_boolean_field(:display_booking_info,
+                          caption: t('events.form.caption_display_booking_info'))
+
   = render_extensions 'application_fields', locals: { f: f }

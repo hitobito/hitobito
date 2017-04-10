@@ -6,6 +6,7 @@
 *   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.
 *   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
 *   Anlässe können dupliziert werden.
+*   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
 
 ## Version 1.14
 

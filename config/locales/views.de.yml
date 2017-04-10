@@ -852,7 +852,14 @@ de:
       title: Personen nach Qualifikationen filtern
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_year: Qualifikationsjahr einschränken
       prompt_kind: In welchem Bereich soll gesucht werden?
+      start_at_year_label: Erhalten zwischen
+      start_at_year_infix: und
+      start_at_year_suffix: ''
+      finish_at_year_label: Abgelaufen zwischen
+      finish_at_year_infix: und
+      finish_at_year_suffix: ''
 
     simple_radio:
       match:

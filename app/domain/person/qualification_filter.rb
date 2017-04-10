@@ -17,6 +17,10 @@ class Person::QualificationFilter < Person::ListFilter
     @validity = params[:validity].to_s
     @match_all = params[:match].to_s == 'all'
     @qualification_kind_ids = Array(params[:qualification_kind_id])
+    @start_at_year_from = params[:start_at_year_from].presence.to_i
+    @start_at_year_until = params[:start_at_year_until].presence.to_i
+    @finish_at_year_from = params[:finish_at_year_from].presence.to_i
+    @finish_at_year_until = params[:finish_at_year_until].presence.to_i
   end
 
   private
@@ -38,7 +42,7 @@ class Person::QualificationFilter < Person::ListFilter
   end
 
   def match_all_qualification_kinds(scope)
-    subquery = qualification_validity_scope.
+    subquery = qualification_scope.
                select('1').
                where('qualifications.person_id = people.id AND ' \
                        'qualifications.qualification_kind_id = qk.id')
@@ -53,7 +57,13 @@ class Person::QualificationFilter < Person::ListFilter
   def match_one_qualification_kind(scope)
     scope.joins(:qualifications).
       where(qualifications: { qualification_kind_id: qualification_kind_ids }).
-      merge(qualification_validity_scope)
+      merge(qualification_scope)
+  end
+
+  def qualification_scope
+    qualification_validity_scope.
+      merge(qualification_date_year_scope(:start_at, @start_at_year_from, @start_at_year_until)).
+      merge(qualification_date_year_scope(:finish_at, @finish_at_year_from, @finish_at_year_until))
   end
 
   def qualification_validity_scope
@@ -62,6 +72,13 @@ class Person::QualificationFilter < Person::ListFilter
     when 'reactivateable' then Qualification.reactivateable
     else Qualification.all
     end
+  end
+
+  def qualification_date_year_scope(attr, from, untils)
+    scope = Qualification.all
+    scope = scope.where("#{attr} >= ?", Date.new(from, 1, 1)) if from > 0
+    scope = scope.where("#{attr} <= ?", Date.new(untils, 12, 31)) if untils > 0
+    scope
   end
 
 end

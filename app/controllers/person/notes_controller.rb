@@ -21,12 +21,12 @@ class Person::NotesController < ApplicationController
     @group = Group.find(params[:id])
     authorize!(:index_person_notes, @group)
 
-    @notes = Person::Note.
-      includes(:author, person: :groups).
-      where(person: Person.in_layer(@group)).
-      where(person: Person.in_or_below(@group)).
-      page(params[:notes_page]).
-      per(100)
+    @notes = Person::Note
+             .includes(:author, person: :groups)
+             .where(person: Person.in_layer(@group))
+             .where(person: Person.in_or_below(@group))
+             .page(params[:notes_page])
+             .per(100)
 
     respond_with(@notes)
   end
@@ -39,6 +39,18 @@ class Person::NotesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
       format.js # create.js.haml
+    end
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @person = Person.find(params[:person_id])
+    @note = Person::Note.find(params[:id])
+    @note.destroy
+
+    respond_to do |format|
+      format.html { redirect_to group_person_path(@group, @person) }
+      format.js # destroy.js.haml
     end
   end
 

@@ -50,7 +50,7 @@ Hitobito::Application.routes.draw do
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :notes, only: [:create]
+          resources :notes, only: [:create, :destroy]
           resources :tags, param: :name, only: [:create, :destroy]
           get 'tags/query' => 'tags#query'
         end

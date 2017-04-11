@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,9 +24,8 @@ module Group::Types
     self.event_types = [Event]
 
 
-    after_create :set_layer_group_id
-    after_update :set_layer_group_id
-    after_create :create_default_children
+    after_save :set_layer_group_id
+    after_save :create_default_children
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end
@@ -34,6 +33,9 @@ module Group::Types
   private
 
   def create_default_children
+    # hack to have after_save ordering for this semantical after_create callback
+    return if created_at < Time.zone.now - 10.seconds
+
     default_children.each do |group_type|
       child = group_type.new(name: group_type.label)
       child.parent = self
@@ -50,7 +52,10 @@ module Group::Types
   def set_layer_group_id
     layer_id = self.class.layer ? id : parent.layer_group_id
     unless layer_id == layer_group_id
-      update_column(:layer_group_id, layer_id)
+      self_and_descendants.
+        where(layer_group_id: layer_group_id).
+        update_all(layer_group_id: layer_id)
+      self.layer_group_id = layer_id
     end
   end
 

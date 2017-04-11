@@ -21,7 +21,7 @@ describe Person::NotesController do
 
     it 'assignes all notes of layer' do
       n1 = Person::Note.create!(author: top_leader, person: top_leader, text: 'lorem')
-      n2 = Person::Note.create!(author: top_leader, person: bottom_member, text: 'ipsum')
+      _n2 = Person::Note.create!(author: top_leader, person: bottom_member, text: 'ipsum')
       get :index, id: group.id
 
       expect(assigns(:notes)).to eq([n1])
@@ -30,13 +30,26 @@ describe Person::NotesController do
 
   describe 'POST #create' do
     it 'creates person notes' do
-      post :create, group_id: bottom_member.groups.first.id,
-                    person_id: bottom_member.id,
-                    person_note: { text: 'Lorem ipsum' }
+      expect do
+        post :create, group_id: bottom_member.groups.first.id,
+                      person_id: bottom_member.id,
+                      person_note: { text: 'Lorem ipsum' }
+      end.to change { Person::Note.count }.by(1)
 
-      expect(Person::Note.count).to eq(1)
       expect(assigns(:note).text).to eq('Lorem ipsum')
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+    end
+  end
+
+  describe 'POST #destroy' do
+    it 'destroys person note' do
+      n = Person::Note.create!(author: top_leader, person: top_leader, text: 'lorem')
+      expect do
+        post :destroy, group_id: n.person.groups.first.id,
+                       person_id: n.person.id,
+                       id: n.id,
+                       format: :js
+      end.to change { Person::Note.count }.by(-1)
     end
   end
 

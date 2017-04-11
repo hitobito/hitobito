@@ -67,6 +67,10 @@ describe Group::Mover do
       it 'nested set should still be valid' do
         expect(Group).to be_valid
       end
+
+      it 'updates layer groups of children' do
+        expect(groups(:bottom_group_one_one_one).layer_group_id).to eq(target.id)
+      end
     end
 
     context 'association count' do

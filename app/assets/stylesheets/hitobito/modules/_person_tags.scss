@@ -1,5 +1,6 @@
 .person-tags-category {
   display: table-row;
+  margin-top: 12px;
 }
 .person-tags-category-title,
 .person-tags-category-list {
@@ -12,28 +13,9 @@
 }
 
 .person-tags-category-title {
+  padding-bottom: 20px;
   padding-right: 20px;
   text-align: right;
-}
-
-.person-tag {
-  margin-bottom: 4px;
-  padding: 3px 6px;
-  border: 2px solid $grayDark;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.person-tag-add {
-  color: $textColor;
-  font-weight: normal;
-  border: 2px dashed $grayLight;
-  background-color: transparent;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $grayLighter;
-  }
 }
 
 .person-tags-add-form {

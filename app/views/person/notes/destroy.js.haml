@@ -4,8 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @note.destroyed?
-  note = $('#person-notes-list ##{dom_id(@note)}')
-  alert = '<div class="alert alert-success note-body">#{t("global.alert.deleted")}</div>'
-  note.html(alert).delay(1000).fadeOut('slow')
+  $('#person-notes-list ##{dom_id(@note)}').remove()
 - else
   alert('#{t('.failure', errors: @note.errors.full_messages.join(', '))}');

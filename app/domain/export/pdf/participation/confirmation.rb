@@ -36,10 +36,7 @@ module Export::Pdf::Participation
 
       pdf.bounding_box([10, cursor], width: bounds.width) do
         text(I18n.t('contactable.address_or_email',
-                    address: [contact.to_s,
-                              contact.address,
-                              contact.zip_code,
-                              contact.town].join(', '),
+                    address: contact_address,
                     email: contact.email))
       end
       move_down_line
@@ -70,6 +67,17 @@ module Export::Pdf::Participation
     def location_and_date
       [Event::Date.human_attribute_name(:location),
        Event::Date.model_name.human].join(' / ')
+    end
+
+    def contact_address
+      [contact.company_name,
+       contact.full_name,
+       contact.address.present? && contact.address.split("\n"),
+       contact.zip_code,
+       contact.town]
+        .flatten
+        .select { |v| v.present? }
+        .join(', ')
     end
 
     def label_with_dots(content)

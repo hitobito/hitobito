@@ -26,6 +26,12 @@ end
 
 module Hitobito
   class Application < Rails::Application
+
+    def local_sphinx?
+      sphinx_host = ENV['RAILS_SPHINX_HOST']
+      sphinx_host.blank? || sphinx_host == '127.0.0.1'
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -101,7 +107,7 @@ module Hitobito
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
-        SphinxIndexJob.new.schedule
+        SphinxIndexJob.new.schedule if local_sphinx?
       end
     end
 

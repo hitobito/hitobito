@@ -27,7 +27,7 @@ end
 module Hitobito
   class Application < Rails::Application
 
-    def local_sphinx?
+    def self.local_sphinx?
       sphinx_host = ENV['RAILS_SPHINX_HOST']
       sphinx_host.blank? || sphinx_host == '127.0.0.1'
     end

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -ex
+
+# this script is executed after our rails images default assemble script.
+
+pushd /opt/app-root/src
+
+# TODO pull transifex translations
+
+popd
+
+

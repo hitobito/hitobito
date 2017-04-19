@@ -6,6 +6,8 @@ set -ex
 
 pushd /opt/app-root/src
 
+bundle exec rake db:seed
 bundle exec rake wagon:migrate
+bundle exec rake wagon:seed
 
 popd

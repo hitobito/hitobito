@@ -8,4 +8,4 @@
 
 . hitobito/bin/ci/wagon_setup.sh
 
-bundle exec rake db:drop db:create ci:wagon --trace
+bundle exec rake db:create ci:wagon --trace

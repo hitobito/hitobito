@@ -83,6 +83,10 @@ en:
     available_placeholders_empty: 'No placeholders available'
   dropdown/event/group_filter:
     all_groups: 'All groups'
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'Add person'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ en:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Labels'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
@@ -164,7 +169,7 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organizers'
     duration: Duration
     date: "Date %{index}"
@@ -183,7 +188,6 @@ en:
         title: 'Next events'
         explanation: 'Events of your groups and their top groups are shown here. Other events you''ll find in the organizing group.'
     application_market:
-      already_assigned: 'This person is already allocated elsewhere.'
       participation:
         registered_at: 'Registration on %{date}'
       prio_buttons:
@@ -414,7 +418,6 @@ en:
     groups: 'Groups'
     events: 'Events'
     courses: 'Courses'
-    admin: 'Admin'
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'

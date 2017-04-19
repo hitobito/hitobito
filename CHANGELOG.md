@@ -1,10 +1,5 @@
 # Hitobito Changelog
 
-## Version 1.15
-
-*   Der Verlauf einer Person zeigt neu die Rollen so an, dass die Gruppen auch die übergeordneten Ebenen anzeigt.
-*   Der Verlauf einer Person wird neu nach der Gruppe inkl. übergeordneter Ebenen sortiert.
-
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
@@ -16,10 +11,14 @@
 *   Globale Suche nach Anlassnamen und Kursnummern.
 *   Excel-Export für Personen und Anlässe.
 *   CSV- und Excel-Exporte von Personen mit allen Angaben enthalten aktuelle Qualifikationen.
+*   Der Verlauf einer Person zeigt neu die Rollen so an, dass die Gruppen auch die übergeordneten Ebenen anzeigt.
+*   Der Verlauf einer Person wird neu nach der Gruppe inkl. übergeordneter Ebenen sortiert.
+
 
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+
 
 ## Version 1.12
 
@@ -109,4 +108,3 @@
 *   Separat definierbare Qualifikationstypen für Kursleiter.
 *   Pflichtfelder für Anlass Fragen.
 *   Mehrfachauswahl bei Personen Filter und Abo Listen.
-

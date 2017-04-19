@@ -329,7 +329,6 @@ en:
         preconditions: Preconditions
         prolongations: Extended
         qualification_kinds: Qualifies for
-        general_information: General information
         application_conditions: Application conditions
         created_at: Created
         updated_at: Changed

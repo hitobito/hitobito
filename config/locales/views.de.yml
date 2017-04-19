@@ -113,6 +113,11 @@ de:
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
+
   dropdown/event/role_add:
     add: 'Person hinzufügen'
 
@@ -126,6 +131,7 @@ de:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
@@ -212,7 +218,7 @@ de:
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
 
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organisatoren'
     duration: Zeitraum
     date: "Datum %{index}"
@@ -233,7 +239,7 @@ de:
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
 
     application_market:
-      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'
+      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
         registered_at: 'Anmeldung am %{date}'
       prio_buttons:
@@ -294,6 +300,10 @@ de:
         on_waiting_list: Auf Warteliste
       list:
         incomplete: Pflichtangaben fehlen
+      cancel_application:
+        explanation: Du bist für diesen Anlass angemeldet.
+        caption: Abmelden
+        confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
     register:
       register:
@@ -313,6 +323,8 @@ de:
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
       add: "hinzufügen"
+    default_description_link:
+      insert_general_information: Standardbeschreibung einsetzen
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
@@ -322,6 +334,7 @@ de:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      caption_applications_cancelable: Teilnehmende können sich selbst abmelden
     form_tabs:
       general: Allgemein
     global:
@@ -471,11 +484,14 @@ de:
     attrs:
       contact_details: 'Kontaktangaben'
       additional_information: 'Weitere Angaben'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
     global:
       link:
         add: Gruppe erstellen
+        deleted_person: Gelöschte Personen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -516,6 +532,9 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   label_formats:
+    global_labels: "Globale Etikettenformate"
+    own_labels: Meine Etikettenformate
+    see_global_labels: "Globale Etikettenformate anzeigen"
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'
@@ -561,7 +580,7 @@ de:
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'
-    admin: 'Admin'
+    admin: 'Einstellungen'
 
   qualifications:
     in_years: '%{years} Jahre'
@@ -583,6 +602,8 @@ de:
 
 
   person:
+    confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
     add_requests:
 
       body_list:
@@ -838,6 +859,7 @@ de:
       add_person: Person hinzufügen
       add_role_for_person: Rolle für %{person} erstellen
       edit_role_for_person: Rolle für %{person} bearbeiten
+      new_role_for_person: Neue Rolle erstellen
 
     fields:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person

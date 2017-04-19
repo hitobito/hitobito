@@ -42,7 +42,8 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
-      format.csv   { render_entries_csv(filter_entries) }
+      format.csv   { render_tabular_entries(:csv, filter_entries) }
+      format.xlsx  { render_tabular_entries(:xlsx, filter_entries) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end
@@ -52,7 +53,8 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html
       format.pdf  { render_pdf([entry]) }
-      format.csv  { render_entry_csv }
+      format.csv  { render_tabular_entry(:csv) }
+      format.xlsx { render_tabular_entry(:xlsx) }
       format.json { render_entry_json }
     end
   end
@@ -72,7 +74,7 @@ class PeopleController < CrudController
 
   # PUT button, ajax
   def primary_group
-    entry.update_column :primary_group_id, params[:primary_group_id]
+    entry.update!({primary_group_id: params[:primary_group_id]})
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry) }
       format.js
@@ -167,29 +169,28 @@ class PeopleController < CrudController
     end
   end
 
-  def render_entries_csv(entries)
+  def render_tabular_entries(format, entries)
     full = params[:details].present? && index_full_ability?
-    render_csv(prepare_csv_entries(entries, full), full)
+    render_tabular(format, prepare_tabular_entries(entries, full), full)
   end
 
-  def prepare_csv_entries(entries, full)
+  def prepare_tabular_entries(entries, full)
     if full
-      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+      entries.select('people.*').
+        preload_accounts.
+        includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
     else
       entries.preload_public_accounts
     end
   end
 
-  def render_entry_csv
-    render_csv([entry], params[:details].present? && can?(:show_full, entry))
+  def render_tabular_entry(format)
+    render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end
 
-  def render_csv(entries, full)
-    if full
-      send_data Export::Csv::People::PeopleFull.export(entries), type: :csv
-    else
-      send_data Export::Csv::People::PeopleAddress.export(entries), type: :csv
-    end
+  def render_tabular(format, entries, full)
+    exporter = full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    send_data exporter.export(format, entries), type: format
   end
 
   def render_entries_json(entries)

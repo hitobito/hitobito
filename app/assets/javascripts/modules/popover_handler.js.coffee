@@ -9,13 +9,14 @@ app = window.App ||= {}
 class app.PopoverHandler
   constructor: () ->
 
-  toggle: (toggler) ->
+  toggle: (toggler, event) ->
     # custom code to close other popovers when a new one is opened
     $('[data-toggle=popover]').not(toggler).popover('hide')
     $(toggler).popover()
     popover = $(toggler).data('popover')
     popover.options.html = true
     popover.options.placement = 'bottom'
+    event.preventDefault()
     if popover.tip().hasClass('fade') && !popover.tip().hasClass('in')
       $(toggler).popover('hide')
     else
@@ -28,7 +29,7 @@ class app.PopoverHandler
 
   bind: ->
     self = this
-    $(document).on('click', '[data-toggle=popover]', (e) -> self.toggle(this))
+    $(document).on('click', '[data-toggle=popover]', (e) -> self.toggle(this, e))
     $(document).on('click', '.popover a.cancel', (e) -> self.close(e))
 
 new app.PopoverHandler().bind()

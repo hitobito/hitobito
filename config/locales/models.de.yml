@@ -318,6 +318,7 @@ de:
         teamer_count: Anzahl Leitungsteam
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
+        applications_cancelable: Abmeldung möglich
 
       event/answer:
         answer: Antwort
@@ -535,6 +536,8 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
+        nickname: Übername auf Etikett
+        pp_post: PP-Zeile
 
   errors:
     messages:

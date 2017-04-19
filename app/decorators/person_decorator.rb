@@ -92,6 +92,19 @@ class PersonDecorator < ApplicationDecorator
     @relations ||= relations_to_tails.list.includes(tail: [:groups, :roles])
   end
 
+  def last_role_new_link(group)
+    path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
+    role_popover_link(path, "role_#{last_role.id}")
+  end
+
+  def last_role
+    @last_role ||= last_non_restricted_role
+  end
+
+  def restored_group(default_group)
+    last_role.group.deleted_at? ? default_group : last_role.group
+  end
+
   private
 
   def event_queries
@@ -138,12 +151,16 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def popover_edit_link(function)
-    content_tag(:span, style: 'padding-left: 10px') do
+    path = h.edit_group_role_path(function.group, function)
+    role_popover_link(path)
+  end
+
+  def role_popover_link(path, html_id = nil)
+    content_tag(:span, style: 'padding-left: 10px', id: html_id) do
       h.link_to(h.icon(:edit),
-                h.edit_group_role_path(function.group, function),
+                path,
                 title: h.t('global.link.edit'),
                 remote: true)
     end
   end
-
 end

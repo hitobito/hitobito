@@ -52,7 +52,9 @@ module ContactableDecorator
   end
 
   def all_phone_numbers(only_public = true)
-    nested_values(phone_numbers, only_public)
+    nested_values(phone_numbers, only_public) do |number|
+        h.link_to(number,"tel:#{number}")
+    end
   end
 
   def all_social_accounts(only_public = true)

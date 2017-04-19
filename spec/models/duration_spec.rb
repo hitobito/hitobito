@@ -74,27 +74,27 @@ describe Duration do
 
     context 'by date' do
       it 'today is active' do
-        @duration = Duration.new(Date.today, Date.today)
+        @duration = Duration.new(Time.zone.today, Time.zone.today)
         is_expected.to be_active
       end
 
       it 'until today is active' do
-        @duration = Duration.new(Date.today - 10.days, Date.today)
+        @duration = Duration.new(Time.zone.today - 10.days, Time.zone.today)
         is_expected.to be_active
       end
 
       it 'from today is active' do
-        @duration = Duration.new(Date.today, Date.today + 10.days)
+        @duration = Duration.new(Time.zone.today, Time.zone.today + 10.days)
         is_expected.to be_active
       end
 
       it 'from tomorrow is not active' do
-        @duration = Duration.new(Date.today + 1.day, Date.today + 10.days)
+        @duration = Duration.new(Time.zone.today + 1.day, Time.zone.today + 10.days)
         is_expected.not_to be_active
       end
 
       it 'until yesterday is not active' do
-        @duration = Duration.new(Date.today - 10.days, Date.today - 1.day)
+        @duration = Duration.new(Time.zone.today - 10.days, Time.zone.today - 1.day)
         is_expected.not_to be_active
       end
     end

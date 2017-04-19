@@ -1,0 +1,5 @@
+%a.standard-description-link{ href: '#' }= t('.insert_general_information')
+
+- @kinds.each do |event_kind|
+  %span.hide.default-description{ data: { kind: event_kind.id } }
+    = event_kind.general_information

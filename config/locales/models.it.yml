@@ -46,6 +46,7 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
+          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
           attributes:
             person_id:
               taken: è già iscritto
@@ -55,6 +56,7 @@ it:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'Inserire un nome'
+          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
           attributes:
             email:
               taken: >
@@ -89,6 +91,9 @@ it:
             name:
               must_be_unique: 'già existe'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: altro email
         other: Altre email
@@ -237,6 +242,7 @@ it:
         picture: Carica una nuova foto
         remove_picture: Elimina la foto attuale
         roles: Ruoli
+        tags: Tags
         created_at: Salvato
         updated_at: Modificato
       person/add_request:
@@ -293,6 +299,7 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
+        applications_cancelable: Disiscrizione possibile
       event/answer:
         answer: Risposta
       answers:
@@ -327,7 +334,7 @@ it:
         preconditions: Requisiti per la partecipazione
         prolongations: Prolungato
         qualification_kinds: Qualificato per
-        general_information: Informazioni generali
+        general_information: Descrizione standard
         application_conditions: Condizioni di ammissione
         created_at: Salvato
         updated_at: Modificato
@@ -477,6 +484,8 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
+        nickname: Nome scout sull'etichetta
+        pp_post: riga PP
   errors:
     messages:
       invalid_date: "non è una data valida"

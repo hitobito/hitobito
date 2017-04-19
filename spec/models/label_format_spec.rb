@@ -32,4 +32,26 @@ describe LabelFormat do
     expect(p.reload.last_label_format_id).to be_nil
   end
 
+  context '.for_person' do
+
+    let(:person) { Person.first }
+
+    before do
+      Fabricate(:label_format, person: person)
+    end
+
+    it 'includes all label formats if show_global_label_formats' do
+      person.show_global_label_formats = true
+
+      expect(LabelFormat.for_person(person).size).to eq(4)
+    end
+
+    it 'includes only personal label formats if !show_global_label_formats' do
+      person.show_global_label_formats = false
+
+      expect(LabelFormat.for_person(person).size).to eq(1)
+    end
+
+  end
+
 end

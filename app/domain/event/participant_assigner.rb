@@ -19,7 +19,7 @@ class Event::ParticipantAssigner
 
   def createable?
     participation.event.id == event.id ||
-    !(participating?(event) || participating?(participation.event))
+      !(applied?(event) || participating?(participation.event))
   end
 
   def add_participant
@@ -52,12 +52,20 @@ class Event::ParticipantAssigner
   private
 
   def participating?(event)
-    event.participations.
-          active.
-          joins(:roles).
-          where(event_roles: { type: event.participant_types.map(&:sti_name) }).
-          where(person_id: participation.person_id).
-          exists?
+    event.participations
+         .active # only active/assigned participations are relevant
+         .joins(:roles)
+         .where(event_roles: { type: event.participant_types.map(&:sti_name) })
+         .where(person_id: participation.person_id)
+         .exists?
+  end
+
+  def applied?(event)
+    event.participations
+         .joins(:roles)
+         .where(event_roles: { type: event.participant_types.map(&:sti_name) })
+         .where(person_id: participation.person_id)
+         .exists?
   end
 
   def create_participant_role

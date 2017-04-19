@@ -19,6 +19,7 @@ Hitobito::Application.routes.draw do
 
     get '/people/query' => 'person/query#index', as: :query_people
     get '/people/:id' => 'person/top#show', as: :person
+    get '/events/:id' => 'event/top#show', as: :event
 
     resources :groups do
 
@@ -49,7 +50,7 @@ Hitobito::Application.routes.draw do
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :notes, only: [:create]
+          resources :notes, only: [:create, :destroy]
           resources :tags, param: :name, only: [:create, :destroy]
           get 'tags/query' => 'tags#query'
         end
@@ -71,6 +72,8 @@ Hitobito::Application.routes.draw do
       end
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
+
+      get 'deleted_people' => 'group/deleted_people#index'
 
       get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
       post 'person_add_requests' => 'group/person_add_requests#activate'
@@ -176,7 +179,11 @@ Hitobito::Application.routes.draw do
 
     resources :qualification_kinds
 
-    resources :label_formats
+    resources :label_formats do
+      collection do
+        resource :settings, controller: 'label_format/settings', as: 'label_format_settings'
+      end
+    end
 
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'

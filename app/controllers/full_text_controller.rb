@@ -25,8 +25,9 @@ class FullTextController < ApplicationController
   def query
     people = query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
     groups = query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
+    events = query_events.collect { |i| EventDecorator.new(i).as_quicksearch }
 
-    render json: result_with_separator(people, groups)
+    render json: results_with_separator(people, groups, events) || []
   end
 
   private
@@ -34,17 +35,21 @@ class FullTextController < ApplicationController
   def list_people
     return Person.none.page(1) unless params[:q].present?
     query_accessible_people do |ids|
-      entries = Person.search(Riddle::Query.escape(params[:q]),
-                              page: params[:page],
-                              order: 'last_name asc, ' \
-                                     'first_name asc, ' \
-                                     "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
-                              star: true,
-                              with: { sphinx_internal_id: ids })
+      entries = fetch_people(ids)
       entries = Person::PreloadGroups.for(entries)
       entries = Person::PreloadPublicAccounts.for(entries)
       entries
     end
+  end
+
+  def fetch_people(ids)
+    Person.search(Riddle::Query.escape(params[:q]),
+                  page: params[:page],
+                  order: 'last_name asc, ' \
+                         'first_name asc, ' \
+                         "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
+                  star: true,
+                  with: { sphinx_internal_id: ids })
   end
 
   def query_people
@@ -63,7 +68,7 @@ class FullTextController < ApplicationController
     yield ids
   end
 
-  def query_groups
+    def query_groups
     return Person.none.page(1) unless params[:q].present?
     Group.search(Riddle::Query.escape(params[:q]),
                  per_page: 10,
@@ -71,10 +76,20 @@ class FullTextController < ApplicationController
                  include: :parent)
   end
 
+  def query_events
+    return Person.none.page(1) unless params[:q].present?
+    Event.search(Riddle::Query.escape(params[:q]),
+                 per_page: 10,
+                 star: true,
+                 include: :groups)
+  end
+
   def accessible_people_ids
     key = "accessible_people_ids_for_#{current_user.id}"
     Rails.cache.fetch(key, expires_in: 15.minutes) do
-      load_accessible_people_ids
+      ids = load_accessible_people_ids
+      ids += load_deleted_people_ids if can?(:index_people_without_role, Person)
+      ids.uniq
     end
   end
 
@@ -90,11 +105,15 @@ class FullTextController < ApplicationController
     result.collect { |row| row[0] }
   end
 
-  def result_with_separator(people, groups)
-    if people.present? && groups.present?
-      people + [{ label: '—' * 20 }] + groups
-    else
-      people + groups
+  def load_deleted_people_ids
+    Person.where('NOT EXISTS (SELECT * FROM roles ' \
+                 'WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)').
+           pluck(:id)
+  end
+
+  def results_with_separator(*sets)
+    sets.select(&:present?).inject do |memo, set|
+      memo + [{ label: '—' * 20 }] + set
     end
   end
 

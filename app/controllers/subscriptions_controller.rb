@@ -25,7 +25,8 @@ class SubscriptionsController < CrudController
         load_grouped_subscriptions
       end
       format.pdf   { render_pdf(ordered_people) }
-      format.csv   { render_csv(ordered_people) }
+      format.csv   { render_tabular(:csv, ordered_people) }
+      format.xlsx  { render_tabular(:xlsx, ordered_people) }
       format.email { render_emails(ordered_people) }
     end
   end
@@ -43,9 +44,13 @@ class SubscriptionsController < CrudController
     mailing_list.people.order_by_name
   end
 
-  def render_csv(people)
-    csv = Export::Csv::People::PeopleAddress.export(people)
-    send_data csv, type: :csv
+  def render_tabular(format, people)
+    data = Export::Tabular::People::PeopleAddress.export(format, prepare_tabular_entries(people))
+    send_data data, type: format
+  end
+
+  def prepare_tabular_entries(people)
+    people.preload_public_accounts.includes(roles: :group)
   end
 
   def group_subscriptions

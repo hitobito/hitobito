@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe 'Quicksearch', :mysql do
 
-  sphinx_environment(:people, :groups) do
+  sphinx_environment(:people, :groups, :events) do
     it 'finds people and groups', js: true do
       obsolete_node_safe do
         index_sphinx
@@ -22,6 +22,7 @@ describe 'Quicksearch', :mysql do
         expect(dropdown).to have_content('Top Leader, Supertown')
         expect(dropdown).to have_content('Top > TopGroup')
         expect(dropdown).to have_content('Top')
+        expect(dropdown).to have_content('Top: Top Course (TOP-007)')
       end
     end
   end

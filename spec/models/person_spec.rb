@@ -111,6 +111,15 @@ describe Person do
     it 'has layer_and_below_full permission in top_group' do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:top_group)])
     end
+
+    it 'found deleted last role' do
+      deletion_date = DateTime.current
+      expect(person.roles.count).to eq 1
+      role.update(deleted_at: deletion_date)
+      expect(person.roles.count).to eq 0
+      expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
+    end
+
   end
 
 

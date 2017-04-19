@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 20161019081705) do
     t.string   "signature_confirmation_text", limit: 255
     t.integer  "creator_id",                  limit: 4
     t.integer  "updater_id",                  limit: 4
+    t.boolean  "applications_cancelable",                   default: false, null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"
@@ -248,6 +249,9 @@ ActiveRecord::Schema.define(version: 20161019081705) do
     t.integer "count_vertical",   limit: 4,                   null: false
     t.float   "padding_top",      limit: 24,                  null: false
     t.float   "padding_left",     limit: 24,                  null: false
+    t.integer "person_id"
+    t.boolean "nickname",                     default: false, null: false
+    t.string  "pp_post",          limit: 23
   end
 
   create_table "locations", force: :cascade do |t|
@@ -306,6 +310,7 @@ ActiveRecord::Schema.define(version: 20161019081705) do
     t.integer  "failed_attempts",        limit: 4,     default: 0
     t.datetime "locked_at"
     t.string   "authentication_token",   limit: 255
+    t.boolean  "show_global_label_formats",            default: true, null: false
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token"

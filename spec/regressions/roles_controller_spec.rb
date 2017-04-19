@@ -38,9 +38,6 @@ describe RolesController, type: :controller do
 
   let(:scope_params) { { group_id: group.id } }
 
-
-  before { sign_in(people(:top_leader)) }
-
   # Override a few methods to match the actual behavior.
   class << self
     def it_should_redirect_to_show
@@ -64,6 +61,7 @@ describe RolesController, type: :controller do
 
   include_examples 'crud controller', skip: [%w(index), %w(show), %w(new plain)]
 
+  let!(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
 
   describe_action :get, :new do
     context '.html', format: :html do
@@ -78,6 +76,35 @@ describe RolesController, type: :controller do
           expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
+    end
+  end
+
+  context 'using js' do
+
+    before { sign_in(user) }
+
+    let(:person) { Fabricate(:person) }
+
+    it 'new role for existing person returns new role' do
+      xhr :post, :create,
+          group_id: group.id,
+          role: { group_id: group.id,
+                  person_id: person.id,
+                  type: Group::BottomLayer::Member.sti_name }
+
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('create')
+      expect(response.body).to include('Bottom One')
+    end
+
+    it 'creation of role without type returns error' do
+      xhr :post, :create,
+          group_id: group.id,
+          role: { group_id: group.id, person_id: person.id }
+
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('create')
+      expect(response.body).to include('alert')
     end
   end
 

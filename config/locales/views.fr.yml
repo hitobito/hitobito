@@ -83,6 +83,10 @@ fr:
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   dropdown/event/group_filter:
     all_groups: 'Tous les groupes'
+  dropdown/event/events_export:
+    button: Exporter
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'Ajouter une personne'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ fr:
   dropdown/people_export:
     button: 'Exporter'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Etiquettes'
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
@@ -166,7 +171,7 @@ fr:
       title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
       explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
       instruction: 'Prière de réessayer plus tard.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'organisateurs'
     duration: Délai
     date: "Date %{index}"
@@ -185,7 +190,6 @@ fr:
         title: 'Evénements prévus prochainement'
         explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
     application_market:
-      already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
         registered_at: 'Inscription le %{date}'
       prio_buttons:
@@ -243,6 +247,10 @@ fr:
         on_waiting_list: Sur la liste d'attente
       list:
         incomplete: des indications obligatoires manquent
+      cancel_application:
+        explanation: Tu es inscrit(e) pour cette activité.
+        caption: Désinscription
+        confirmation: "Souhaites-tu vraiment te désinscrire de cette activité?"
     register:
       register:
         title: Saisir les données de contact
@@ -260,6 +268,8 @@ fr:
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
       add: "ajouter"
+    default_description_link:
+      insert_general_information: 'Introduire une description standard '
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
@@ -267,6 +277,7 @@ fr:
       additional_information: 'Données pour l''inscription'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
+      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes
     form_tabs:
       general: Général
     global:
@@ -393,11 +404,14 @@ fr:
     attrs:
       contact_details: 'Contacts'
       additional_information: 'Informations supplémentaires'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'pas de groupes supprimés disponibles'
     form:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
     global:
       link:
         add: Créer un groupe
+        deleted_person: Personnes supprimées
     new:
       title: 'Créer un %{model}'
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
@@ -431,6 +445,9 @@ fr:
   import/person_doublette_finder:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   label_formats:
+    global_labels: "l'ensemble des formats d'étiquettes"
+    own_labels: mes Formats d'étiquettes
+    see_global_labels: "afficher l'ensemble des formats d'étiquettes"
     form:
       portrait: 'Format portrait'
       landscape: 'Format paysage'
@@ -470,7 +487,7 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Administrateur'
+    admin: 'Paramètres'
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
@@ -487,6 +504,7 @@ fr:
   paper_trail/version_decorator:
     by: 'de %{author}'
   person:
+    confirm_delete: "Toutes les données à  %(personne) seront définitivement supprimées, y compris participations et qualifications.Ne supprime cette personne que si personne n'a plus besoin de ces données."
     add_requests:
       body_list:
         open_requests:
@@ -547,12 +565,12 @@ fr:
         keep_behaviour: >
             N'actualiser que les champs vides avec des données provenant du CSV, les
             valeurs déjà existantes ne changent pas.
-        keep_behaviour_tags: Tags seront ajoutés.
+        keep_behaviour_tags: les balises (tags) sont complétées.
         override_behaviour: >
             Remplacer les valeurs déjà existantes dans la base de donnée avec les
             données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV
             effacent les valeurs pourvues dans la banque de données d'accueil.
-        override_behaviour_tags: Tags seront enlevés ou remplacés.
+        override_behaviour_tags: Les balises (tags) sont supprimées ou modifiées.
         update_behaviour_explanation: >
             Ce procédé ne concerne que les personnes déjà présentes dans la base de
             données de données. L'inscription de nouvelles personnes doit être entièrement
@@ -656,7 +674,7 @@ fr:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
     tags:
-      add_tag: Ajouter un tag…
+      add_tag: Ajouter tag…
       no_entry: (aucun)
     notes:
       new_note: Ajouter une note
@@ -696,6 +714,7 @@ fr:
       add_person: Ajouter une personne
       add_role_for_person: Créer un rôle pour %{person}
       edit_role_for_person: Modifier un rôle pour %{person}
+      new_role_for_person: Créer un nouveau rôle
     fields:
       help_optional_label: désignation facultative du rôle de cette personne
     person_fields:
@@ -716,7 +735,7 @@ fr:
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
-        only_add_persons_with_tags: 'Seulement ajouter les contacts aves un des tags suivants:'
+        only_add_persons_with_tags: 'N''ajouter une personne qu''avec l''une des balises (tags) ci-dessous:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
@@ -746,7 +765,7 @@ fr:
       excluded_people: 'Personnes exclues'
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
     subscription:
-      only_persons_with: 'Seulement personnes avec:'
+      only_persons_with: 'Seulement les personnes avec:'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

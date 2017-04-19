@@ -288,12 +288,14 @@ describe RolesController do
     end
   end
 
-  describe 'POST destroy' do
+  describe 'DELETE destroy' do
     let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 
 
     it 'redirects to group' do
-      post :destroy,  group_id: group.id, id: role.id
+      user = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group)
+      sign_in(user.person)
+      delete :destroy,  group_id: group.id, id: role.id
 
       expect(flash[:notice]).to eq notice
       is_expected.to redirect_to(group_path(group))
@@ -301,7 +303,7 @@ describe RolesController do
 
     it 'redirects to person if user can still view person' do
       Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
-      post :destroy, group_id: group.id, id: role.id
+      delete :destroy, group_id: group.id, id: role.id
 
       expect(flash[:notice]).to eq notice
       is_expected.to redirect_to(person_path(person))
@@ -320,7 +322,7 @@ describe RolesController do
 
       person.update_attribute(:primary_group, group)
 
-      post :destroy,  group_id: group.id, id: role.id
+      delete :destroy,  group_id: group.id, id: role.id
 
       expect(flash[:alert]).to eq "Hauptgruppe auf <i>#{group2.to_s}</i> geändert."
       is_expected.to redirect_to(person_path(person))
@@ -338,7 +340,7 @@ describe RolesController do
 
       person.update_attribute(:primary_group, group)
 
-      post :destroy,  group_id: group.id, id: role.id
+      delete :destroy,  group_id: group.id, id: role.id
 
       expect(flash[:alert]).to be_nil
       is_expected.to redirect_to(person_path(person))
@@ -357,7 +359,7 @@ describe RolesController do
 
       person.update_attribute(:primary_group, group)
 
-      post :destroy,  group_id: group.id, id: role.id
+      delete :destroy,  group_id: group.id, id: role.id
 
       expect(flash[:alert]).to be_nil
       is_expected.to redirect_to(person_path(person))
@@ -376,7 +378,7 @@ describe RolesController do
 
       person.update_attribute(:primary_group, group2)
 
-      post :destroy, group_id: group.id, id: role.id
+      delete :destroy, group_id: group.id, id: role.id
 
       expect(flash[:alert]).to be_nil
       is_expected.to redirect_to(person_path(person))

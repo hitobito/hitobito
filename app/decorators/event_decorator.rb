@@ -110,6 +110,16 @@ class EventDecorator < ApplicationDecorator
     { id: id, label: "#{model} (#{groups_label})" }
   end
 
+  def as_quicksearch
+    { id: id, label: label_with_group, type: :event }
+  end
+
+  def label_with_group
+    label = to_s
+    label += " (#{number})" if number?
+    h.safe_join([groups.first.to_s, label], ': ')
+  end
+
   private
 
   def translate_issued_qualifications_info(qualis, prolongs, variables)

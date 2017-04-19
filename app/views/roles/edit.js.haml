@@ -1,10 +1,1 @@
-:plain
-  $($('body').data('popover')).popover('destroy')
-  $('##{dom_id(entry)}').popover({content: '#{j(render('popover'))}',
-                                  title: "#{t('roles.form.edit_role_for_person', person: entry.person)}",
-                                  container: 'body',
-                                  placement: 'bottom',
-                                  html: true }).popover('show')
-
-  $('body').data('popover', '##{dom_id(entry)}')
-  $('body .chosen-select').each(App.activateChosen)
+= render('popover', title_key: 'roles.form.edit_role_for_person', id: dom_id(entry) )

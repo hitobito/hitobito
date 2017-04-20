@@ -9,6 +9,7 @@ AllCops:
     - spec/**/*
     - vendor/**/*
     - tmp/**/*
+    - vendor/bundle/**/*
 
 
 Metrics/CyclomaticComplexity:
@@ -310,7 +311,7 @@ Style/StringLiteralsInInterpolation:
 
 Style/UnneededCapitalW:
   Enabled: false
-  
+
 Style/VariableName:
   Enabled: false
 

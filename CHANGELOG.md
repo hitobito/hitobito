@@ -108,3 +108,4 @@
 *   Separat definierbare Qualifikationstypen für Kursleiter.
 *   Pflichtfelder für Anlass Fragen.
 *   Mehrfachauswahl bei Personen Filter und Abo Listen.
+

@@ -19,7 +19,8 @@ class Group::MoveController < ApplicationController
 
   def perform
     if target && mover.candidates.include?(target)
-      authorize!(:create, target)
+      group.parent_id = target.id
+      authorize!(:create, group)
 
       success = mover.perform(target)
       build_flash_messages(success)
@@ -37,7 +38,7 @@ class Group::MoveController < ApplicationController
   end
 
   def candidates
-    @candidates = mover.candidates.select { |candidate| can?(:create, candidate) }.
+    @candidates = mover.candidates.select { |candidate| can?(:update, candidate) }.
                                    group_by { |candidate| candidate.class.label }
     @candidates.values.each { |groups| groups.sort_by(&:name) }
 

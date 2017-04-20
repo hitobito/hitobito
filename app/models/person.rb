@@ -246,11 +246,15 @@ class Person < ActiveRecord::Base
     email == Settings.root_email
   end
 
-  # Overwrite to handle uniquness validation race conditions
+  # Overwrite to handle uniquness validation race conditions and improper characters
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
     errors.add(:email, :taken)
+    false
+  rescue ActiveRecord::StatementInvalid => e
+    raise e unless e.original_exception.message =~ /Incorrect string value/
+    errors.add(:base, :emoji_suspected)
     false
   end
 

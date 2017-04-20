@@ -16,11 +16,11 @@ module SearchStrategies
                 :address, :zip_code, :town, :country, :birthday, :additional_information,
                 'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'],
         joins: ['LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND ' \
-                'phone_numbers.contactable_type = \'Person\'',
+                "phone_numbers.contactable_type = 'Person'",
                 'LEFT JOIN social_accounts ON social_accounts.contactable_id = people.id AND '\
-                'phone_numbers.contactable_type = \'Person\'',
+                "phone_numbers.contactable_type = 'Person'",
                 'LEFT JOIN additional_emails ON additional_emails.contactable_id = people.id AND '\
-                'phone_numbers.contactable_type = \'Person\'']
+                "phone_numbers.contactable_type = 'Person'"]
       },
       'Group' => {
         attrs: ['groups.name', 'groups.short_name', 'groups.email', 'groups.address',
@@ -29,11 +29,11 @@ module SearchStrategies
                 'additional_emails.email'],
         joins: ['LEFT JOIN groups parent ON parent.id = groups.parent_id',
                 'LEFT JOIN phone_numbers ON phone_numbers.contactable_id = groups.id AND ' \
-                'phone_numbers.contactable_type = \'Group\'',
+                "phone_numbers.contactable_type = 'Group'",
                 'LEFT JOIN social_accounts ON social_accounts.contactable_id = groups.id AND '\
-                'phone_numbers.contactable_type = \'Group\'',
+                "phone_numbers.contactable_type = 'Group'",
                 'LEFT JOIN additional_emails ON additional_emails.contactable_id = groups.id AND '\
-                'phone_numbers.contactable_type = \'Group\'']
+                "phone_numbers.contactable_type = 'Group'"]
       },
       'Event' => {
         attrs: ['events.name', :number, 'groups.name'],

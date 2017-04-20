@@ -8,6 +8,8 @@
 module SearchStrategies
   class Sql < Base
 
+    MIN_TERM_LENGTH = 2
+
     SEARCH_FIELDS = {
       'Person' => {
         attrs: [:first_name, :last_name, :company_name, :nickname, :company, 'people.email',
@@ -40,21 +42,24 @@ module SearchStrategies
     }.freeze
 
     def list_people
+      return Person.none.page(1) unless term_present?
       Kaminari.paginate_array(super).page(@page)
     end
 
     def query_people
-      return Person.none.page(1) unless @term.present?
-      query_entities(Person.all).page(1).per(10)
+      return Person.none.page(1) unless term_present?
+      query_accessible_people do |ids|
+        query_entities(Person.where(id: ids)).page(1).per(10)
+      end
     end
 
     def query_groups
-      return Group.none.page(1) unless @term.present?
+      return Group.none.page(1) unless term_present?
       query_entities(Group.all).page(1).per(10)
     end
 
     def query_events
-      return Event.none.page(1) unless @term.present?
+      return Event.none.page(1) unless term_present?
       query_entities(Event.all).page(1).per(10)
     end
 
@@ -72,6 +77,10 @@ module SearchStrategies
 
     def sql_search_condition(attrs)
       [attrs.map { |attr| "#{attr} LIKE ?" }.join(' OR ')] + attrs.map { "%#{@term}%" }
+    end
+
+    def term_present?
+      @term.present? && @term.length > MIN_TERM_LENGTH
     end
 
   end

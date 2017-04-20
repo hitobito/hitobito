@@ -142,19 +142,6 @@ describe FullTextController, :mysql, type: :controller do
         end
       end
 
-      context 'as unprivileged person' do
-        before do
-          person = Fabricate(:person)
-          sign_in(person)
-        end
-
-        it 'finds zero people' do
-          get :index, q: @bg_member.last_name[1..5]
-
-          expect(assigns(:people)).to be_empty
-        end
-      end
-
     end
 
     describe 'GET query' do

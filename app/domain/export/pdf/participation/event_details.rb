@@ -28,7 +28,7 @@ module Export::Pdf::Participation
 
     def render_requirements
       with_header(I18n.t("event.participations.print.requirements_for_#{i18n_event_postfix}")) do
-        if event.application_conditions.present?
+        if event.application_conditions?
           text event.application_conditions
           move_down_line
         end

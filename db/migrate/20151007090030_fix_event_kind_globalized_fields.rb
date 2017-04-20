@@ -8,6 +8,8 @@ class FixEventKindGlobalizedFields < ActiveRecord::Migration
   end
 
   def down
+    fail 'translation data will be lost!'
+
     add_column(:event_kinds, :general_information, :text)
     add_column(:event_kinds, :application_conditions, :text)
 

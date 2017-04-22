@@ -83,6 +83,10 @@ it:
     available_placeholders_empty: 'nessun carattere a disposizione'
   dropdown/event/group_filter:
     all_groups: 'tutti i gruppi'
+  dropdown/event/events_export:
+    button: esportare
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'aggiungere una persona'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ it:
   dropdown/people_export:
     button: 'esportare'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'etichette'
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'
@@ -166,7 +171,7 @@ it:
       title: 'siamo spiacenti, questa pagina non è disponibile al momento (503)'
       explanation: 'al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo.'
       instruction: 'vi preghiamo di riprovare nuovamente più tardi.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'organizzatori'
     duration: Periodo di tempo
     date: "Data %{index}"
@@ -185,7 +190,6 @@ it:
         title: 'eventi che si terranno prossimamente'
         explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
     application_market:
-      already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
         registered_at: 'iscrizione il %{date}'
       prio_buttons:
@@ -243,6 +247,10 @@ it:
         on_waiting_list: In lista d'attesa
       list:
         incomplete: mancano dei campi obbligatori
+      cancel_application:
+        explanation: Sei iscritto a questo evento.
+        caption: Scollegarsi
+        confirmation: "Vuoi veramente disiscriverti da questo evento?"
     register:
       register:
         title: registrare i dati di contatto
@@ -260,6 +268,8 @@ it:
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
       add: "aggiungere"
+    default_description_link:
+      insert_general_information: Usa la descrizione standard
     form:
       caption_external_applications: 'esterni possono iscriversi a questo evento'
       caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
@@ -267,6 +277,7 @@ it:
       additional_information: 'dati per l''iscrizione'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
+      caption_applications_cancelable: I partecipanti possono disiscrivere sé stessi
     form_tabs:
       general: In generale
     global:
@@ -392,11 +403,14 @@ it:
     attrs:
       contact_details: 'Dati di contatto'
       additional_information: 'Altri dati'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'Non ci sono gruppi cancellati.'
     form:
       help_contact: 'Utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
     global:
       link:
         add: Creare un gruppo
+        deleted_person: Persone cancellato
     new:
       title: 'Creare %{model} '
     reactivated: "Il gruppo <i>%{group}</i> è stato riattivato con successo."
@@ -430,6 +444,9 @@ it:
   import/person_doublette_finder:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
   label_formats:
+    global_labels: "Formati delle etichette globale"
+    own_labels: mia Formati delle etichette
+    see_global_labels: "Visualizza i formati delle etichette globali"
     form:
       portrait: 'formato verticale'
       landscape: 'formato orizzontale'
@@ -469,7 +486,7 @@ it:
     groups: 'gruppi'
     events: 'eventi'
     courses: 'corsi'
-    admin: 'admin'
+    admin: 'Impostazioni'
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -486,6 +503,7 @@ it:
   paper_trail/version_decorator:
     by: 'da %{author}'
   person:
+    confirm_delete: "Tutti i dati relativi a %{person} saranno cancellati definitivamente, comprese le partecipazioni e le qualifiche. Cancella questa persona solo se i dati non servono più a nessuno."
     add_requests:
       body_list:
         open_requests:
@@ -549,10 +567,12 @@ it:
         keep_behaviour: >
             Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
             già esistenti vengono mantenuti.
+        keep_behaviour_tags: I tag saranno aggiunti
         override_behaviour: >
             Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
             I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
             banca dati.
+        override_behaviour_tags: I tag saranno cancellati o sostituiti
         update_behaviour_explanation: >
             Questa funzione si applica unicamente alle persone già esistenti nella
             banca dati. Nuove persone vengono sempre create in totale corrispondenza
@@ -695,6 +715,7 @@ it:
       add_person: Aggiungere una persona
       add_role_for_person: 'Inserire un ruolo per %{person} '
       edit_role_for_person: 'Modificare il ruolo per %{person} '
+      new_role_for_person: Crea un nuovo ruolo
     fields:
       help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
@@ -714,6 +735,8 @@ it:
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
+      tags:
+        only_add_persons_with_tags: 'Aggiungi solo persone con uno dei tag seguenti:'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
@@ -742,6 +765,8 @@ it:
     list:
       excluded_people: 'persone escluse'
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
+    subscription:
+      only_persons_with: 'Solo persone con:'
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."

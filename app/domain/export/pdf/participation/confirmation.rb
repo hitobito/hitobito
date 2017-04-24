@@ -73,8 +73,7 @@ module Export::Pdf::Participation
       [contact.company_name,
        contact.full_name,
        contact.address.present? && contact.address.split("\n"),
-       contact.zip_code,
-       contact.town]
+       "#{contact.zip_code} #{contact.town}".strip]
         .flatten
         .select { |v| v.present? }
         .join(', ')

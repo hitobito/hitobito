@@ -26,7 +26,7 @@ mv -f config/rpm/Wagonfile .
 
 # move hidden core dirs
 rm -f .s2i/pre_assemble
-cp -rf hitobito/.s2i . # cannot be moved since it is in use during this script's execution
+cp -rf hitobito/.s2i .  # cannot be moved since it is in use during this script's execution
 mv hitobito/.tx .
 
 # finally remove core source directory

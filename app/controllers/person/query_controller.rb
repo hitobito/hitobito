@@ -9,6 +9,8 @@ class Person::QueryController < ApplicationController
 
   before_action :authorize_action
 
+  delegate :model_class, to: :class
+
   # GET ajax, for auto complete fields, without @group
   def index
     people = []
@@ -26,10 +28,6 @@ class Person::QueryController < ApplicationController
     Person.only_public_data.order_by_name
   end
 
-  def model_class
-    Person
-  end
-
   def authorize_action
     authorize!(:query, Person)
   end
@@ -37,5 +35,13 @@ class Person::QueryController < ApplicationController
   include Searchable
 
   self.search_columns = [:first_name, :last_name, :company_name, :nickname, :town]
+
+  class << self
+
+    def model_class
+      Person
+    end
+
+  end
 
 end

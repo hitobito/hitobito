@@ -53,6 +53,12 @@ describe SearchStrategies::Sql do
         expect(result).to include(@bg_leader)
       end
 
+      it 'finds accessible person with two terms' do
+        result = strategy("#{@bg_leader.last_name[1..5]} #{@bg_leader.first_name[0..3]}").list_people
+
+        expect(result).to include(@bg_leader)
+      end
+
       it 'does not find not accessible person' do
         result = strategy(@bg_member.last_name[1..5]).list_people
 

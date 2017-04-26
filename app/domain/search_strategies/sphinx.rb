@@ -12,7 +12,7 @@ module SearchStrategies
       return Person.none.page(1) unless @term.present?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
-                      per_page: 10,
+                      per_page: QUERY_PER_PAGE,
                       star: true,
                       with: { sphinx_internal_id: ids })
       end
@@ -21,7 +21,7 @@ module SearchStrategies
     def query_groups
       return Group.none.page(1) unless @term.present?
       Group.search(Riddle::Query.escape(@term),
-                   per_page: 10,
+                   per_page: QUERY_PER_PAGE,
                    star: true,
                    include: :parent)
     end
@@ -29,7 +29,7 @@ module SearchStrategies
     def query_events
       return Event.none.page(1) unless @term.present?
       Event.search(Riddle::Query.escape(@term),
-                   per_page: 10,
+                   per_page: QUERY_PER_PAGE,
                    star: true,
                    include: :groups)
     end

@@ -12,8 +12,9 @@ module SearchStrategies
 
     SEARCH_FIELDS = {
       'Person' => {
-        attrs: [:first_name, :last_name, :company_name, :nickname, :company, 'people.email',
-                :address, :zip_code, :town, :country, :birthday, :additional_information,
+        attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
+                'people.company', 'people.email', 'people.address', 'people.zip_code',
+                'people.town', 'people.country', 'people.birthday', 'people.additional_information',
                 'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'],
         joins: ['LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND ' \
                 "phone_numbers.contactable_type = 'Person'",
@@ -36,10 +37,10 @@ module SearchStrategies
                 "phone_numbers.contactable_type = 'Group'"]
       },
       'Event' => {
-        attrs: ['events.name', :number, 'groups.name'],
+        attrs: ['events.name', 'events.number', 'groups.name'],
         joins: [:groups]
       }
-    }.freeze
+    }
 
     def list_people
       return Person.none.page(1) unless term_present?
@@ -49,18 +50,18 @@ module SearchStrategies
     def query_people
       return Person.none.page(1) unless term_present?
       query_accessible_people do |ids|
-        query_entities(Person.where(id: ids)).page(1).per(10)
+        query_entities(Person.where(id: ids)).page(1).per(QUERY_PER_PAGE)
       end
     end
 
     def query_groups
       return Group.none.page(1) unless term_present?
-      query_entities(Group.all).page(1).per(10)
+      query_entities(Group.all).page(1).per(QUERY_PER_PAGE)
     end
 
     def query_events
       return Event.none.page(1) unless term_present?
-      query_entities(Event.all).page(1).per(10)
+      query_entities(Event.all).page(1).per(QUERY_PER_PAGE)
     end
 
     protected
@@ -72,11 +73,8 @@ module SearchStrategies
     def query_entities(scope)
       fields = SEARCH_FIELDS[scope.model.sti_name]
       scope.joins(fields[:joins])
-           .where(sql_search_condition(fields[:attrs]))
-    end
-
-    def sql_search_condition(attrs)
-      [attrs.map { |attr| "#{attr} LIKE ?" }.join(' OR ')] + attrs.map { "%#{@term}%" }
+           .where(SqlConditionBuilder.new(@term, fields[:attrs]).search_conditions)
+           .uniq
     end
 
     def term_present?

@@ -102,7 +102,7 @@ module Hitobito
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
-        SphinxIndexJob.new.schedule if Application.sphinx_present? && !Application.sphinx_local?
+        SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
       end
     end
 
@@ -120,7 +120,7 @@ module Hitobito
 
     def self.sphinx_local?
       host = ENV['RAILS_SPHINX_HOST']
-      host.blank? || host == '127.0.0.1'
+      host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
   end
 end

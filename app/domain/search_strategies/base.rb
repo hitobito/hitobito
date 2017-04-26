@@ -8,6 +8,8 @@
 module SearchStrategies
   class Base
 
+    QUERY_PER_PAGE = 10
+
     def initialize(user, term, page)
       @user = user
       @term = term

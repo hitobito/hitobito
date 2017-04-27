@@ -39,8 +39,20 @@ module SearchStrategies
       @search_tables_and_fields.map do |table_field|
         table_name, field = table_field.split('.', 2)
         table = Arel::Table.new(table_name)
-        table[field].matches("%#{word}%")
+        text_column(table, field).matches("%#{word}%")
       end
+    end
+
+    def text_column(table, field)
+      if column_type(table, field) == :string
+        table[field]
+      else
+        Arel::Nodes::NamedFunction.new('CAST', [table[field].as('TEXT')])
+      end
+    end
+
+    def column_type(table, field)
+      table.engine.connection.schema_cache.columns_hash(table.table_name)[field].type
     end
 
   end

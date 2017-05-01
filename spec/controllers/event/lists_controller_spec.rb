@@ -66,9 +66,9 @@ describe Event::ListsController do
     context 'filter per group' do
       before { sign_in(people(:top_leader)) }
 
-      it 'defaults to toplevel group with courses in hiearchy' do
+      it 'defaults to layer of primary group' do
         get :courses
-        expect(assigns(:group_id)).to eq groups(:top_group).id
+        expect(assigns(:group_id)).to eq groups(:top_group).layer_group_id
       end
 
       it 'can be set via param, only if year is present' do

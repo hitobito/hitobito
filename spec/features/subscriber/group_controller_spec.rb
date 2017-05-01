@@ -42,7 +42,7 @@ describe Subscriber::GroupController, js: true do
 
       all('form .btn-toolbar').first.click_button 'Speichern'
 
-      expect(page).to have_content('Abonnent Bottom One (Leader Bottom Group) wurde erfolgreich')
+      expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
     end
   end
 

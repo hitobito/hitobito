@@ -47,4 +47,8 @@ module CsvImportHelper
     contact && contact.value
   end
 
+  def csv_import_tag_values(p)
+    p.tag_list.to_s
+  end
+
 end

@@ -31,7 +31,10 @@ class Event::ListsController < ApplicationController
         @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
       end
       format.csv do
-        render_courses_csv(limited_courses_scope)
+        render_tabular(:csv, limited_courses_scope)
+      end
+      format.xlsx do
+        render_tabular(:xlsx, limited_courses_scope)
       end
     end
   end
@@ -48,11 +51,11 @@ class Event::ListsController < ApplicationController
     courses.values.each do |entries|
       entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }
     end
-    courses
+    Hash[courses.sort]
   end
 
-  def render_courses_csv(courses)
-    send_data Export::Csv::Events::List.export(courses), type: :csv
+  def render_tabular(format, courses)
+    send_data Export::Tabular::Events::List.export(format, courses), type: format
   end
 
   def set_group_vars

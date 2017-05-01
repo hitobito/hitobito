@@ -29,4 +29,8 @@ class RelatedRoleType < ActiveRecord::Base
     role_type.constantize
   end
 
+  def group_class
+    role_class.model_name.to_s.deconstantize.constantize
+  end
+
 end

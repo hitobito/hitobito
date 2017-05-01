@@ -46,6 +46,7 @@ fr:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
         event/participation:
+          emoji_suspected: 'Prière de ne pas utiliser de signes spéciaux (not. émoticônes)'
           attributes:
             person_id:
               taken: est déjà annoncé
@@ -55,6 +56,7 @@ fr:
               not_allowed: "'%{mail_name}' ne peut pas être utilisé"
         person:
           name_missing: 'Veuillez entrer votre nom'
+          emoji_suspected: 'Prière de ne pas utiliser de signes spéciaux (not. émoticônes)'
           attributes:
             email:
               taken: >
@@ -90,6 +92,9 @@ fr:
             name:
               must_be_unique: 'existe déjà'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: Adresse e-mail supplémentaire
         other: Adresses e-mail supplémentaires
@@ -116,16 +121,22 @@ fr:
         other: Types de cours
       event/role/assistant_leader:
         one: Responsable
+        other: Responsables
       event/role/leader:
-        one: Responsable principal(e)
+        one: Responsable principal/-e
+        other: Responsables principal/-es
       event/role/cook:
         one: Cuisine
+        other: Cuisine
       event/role/participant:
         one: Participant/-e
+        other: Participant/-es
       event/role/treasurer:
         one: Trésorier
+        other: Trésoriers
       event/role/speaker:
         one: Conférencier
+        other: Conférenciers
       event/date:
         one: date
         other: dates
@@ -171,10 +182,9 @@ fr:
       subscription:
         one: abonné
         other: Abonnés
-      tag:
-        one: Tag
-        other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nom
       cantons:
         ag: Argovie
         ai: Appenzell Rhodes Intérieures
@@ -233,6 +243,7 @@ fr:
         picture: Ajouter une nouvelle photo
         remove_picture: Supprimer la photo actuelle
         roles: Rôles
+        tags: Tags
         created_at: Créé
         updated_at: Modifié
       person/add_request:
@@ -289,6 +300,7 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
+        applications_cancelable: Possibilité de se désinscrire
       event/answer:
         answer: Réponse
       answers:
@@ -323,7 +335,7 @@ fr:
         preconditions: Conditions préalables
         prolongations: Prolongé
         qualification_kinds: Qualifié pour
-        general_information: Informations générales
+        general_information: description standard
         application_conditions: Conditions d'admission
         created_at: Créé
         updated_at: Modifié
@@ -473,9 +485,8 @@ fr:
         padding_top: Marge (en haut)
         padding_left: Marge (à gauche)
         dimensions: Nombre
-      tag:
-        name: Nom
-        taggable_id: Taggable
+        nickname: nom scout sur l'étiquette
+        pp_post: ligne PP
   errors:
     messages:
       invalid_date: "n'est pas une date valable"

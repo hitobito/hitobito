@@ -18,8 +18,12 @@ class RolesController < CrudController
 
   skip_authorize_resource only: [:details, :role_types]
 
-  before_render_form :set_group_selection
+  define_render_callbacks :create
 
+  before_render_form :set_group_selection
+  before_render_create :set_group_selection
+
+  before_action :set_person_id, only: [:new]
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
@@ -239,6 +243,10 @@ class RolesController < CrudController
 
   def belongs_to_persons_primary_group?(role)
     role.group_id == role.person.primary_group_id
+  end
+
+  def set_person_id
+    @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
   end
 
 end

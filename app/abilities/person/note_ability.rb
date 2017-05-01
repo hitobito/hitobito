@@ -11,11 +11,11 @@ class Person::NoteAbility < AbilityDsl::Base
 
   on(Person::Note) do
     permission(:layer_full).
-      may(:create, :show).
+      may(:create, :show, :destroy).
       in_same_layer
 
     permission(:layer_and_below_full).
-      may(:create, :show).
+      may(:create, :show, :destroy).
       in_same_layer_or_below
   end
 

@@ -35,7 +35,8 @@ $(document).on('change', 'input[data-hide]', (e) -> new app.ElementToggler(this)
 $(document).on('change', 'input[data-show]', (e) -> new app.ElementToggler(this).show())
 $(document).on('click', 'a[data-hide]', (e) -> new app.ElementToggler(this).toggle(e))
 
-$ ->
+$(document).on('turbolinks:load', ->
   # initialize visibility of checkbox controlled elements
   $('input[data-hide]').each((index, element) -> new app.ElementToggler(element).hide())
   $('input[data-show]').each((index, element) -> new app.ElementToggler(element).show())
+)

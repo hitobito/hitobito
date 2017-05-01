@@ -32,7 +32,7 @@ describe Person::SendAddRequestJob do
     job.perform
   end
 
-  it 'sends no email to person if it has a login password' do
+  it 'sends no email to person if it has no login password' do
     person.update_column(:encrypted_password, nil)
     expect(Person::AddRequestMailer).not_to receive(:ask_person_to_add)
     expect(Person::AddRequestMailer).not_to receive(:ask_responsibles)
@@ -43,7 +43,19 @@ describe Person::SendAddRequestJob do
     r1 = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
     r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two)).person
     Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two), person: r1)
-    g = r1.primary_group
+
+    mail = double('mail')
+    expect(mail).to receive(:deliver_now)
+    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2]).and_return(mail)
+    job.perform
+  end
+
+  it 'sends email to last resposibles if person has no roles' do
+    person.roles.first.update!(created_at: 1.year.ago)
+    person.roles.first.destroy!
+    r1 = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person
+    r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two)).person
+    Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two), person: r1)
 
     mail = double('mail')
     expect(mail).to receive(:deliver_now)

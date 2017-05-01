@@ -56,6 +56,7 @@ de:
             choices:
               requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
         event/participation:
+          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           attributes:
             person_id:
               taken: ist bereits angemeldet
@@ -66,6 +67,7 @@ de:
             mail_name_not_allowed:
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
+          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           attributes:
             email:
               taken: >
@@ -101,6 +103,9 @@ de:
               must_be_unique: 'existiert bereits'
 
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: Weitere E-Mail
         other: Weitere E-Mails
@@ -188,11 +193,11 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
-      tag:
-        one: Tag
-        other: Tags
 
     attributes:
+      acts_as_taggable_on/tag:
+        name: Name
+
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -252,6 +257,7 @@ de:
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
+        tags: Tags
         created_at: Erstellt
         updated_at: Geändert
 
@@ -314,6 +320,7 @@ de:
         teamer_count: Anzahl Leitungsteam
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
+        applications_cancelable: Abmeldung möglich
 
       event/answer:
         answer: Antwort
@@ -356,7 +363,7 @@ de:
         preconditions: Vorbedingungen
         prolongations: Verlängert
         qualification_kinds: Qualifiziert für
-        general_information: Allgemeine Informationen
+        general_information: Standardbeschreibung
         application_conditions: Aufnahmebedingungen
         created_at: Erstellt
         updated_at: Geändert
@@ -558,10 +565,8 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
-
-      tag:
-        name: Name
-        taggable_id: Taggable
+        nickname: Übername auf Etikett
+        pp_post: PP-Zeile
 
   errors:
     messages:

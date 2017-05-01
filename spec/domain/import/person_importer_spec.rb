@@ -11,7 +11,11 @@ describe Import::PersonImporter do
 
   let(:group) { groups(:top_group) }
   let(:role_type) { Group::TopGroup::Leader }
-  let(:importer)  { Import::PersonImporter.new(data, group, role_type) }
+  let(:importer) do
+    Import::PersonImporter.new(data, group, role_type, can_manage_tags: can_manage_tags)
+  end
+  let(:can_manage_tags) { true }
+
   subject { importer }
 
   context 'minimal' do
@@ -27,15 +31,34 @@ describe Import::PersonImporter do
   end
 
   context 'creates associations' do
-    let(:data) { [{ first_name: 'foo', social_account_skype: 'foobar', phone_number_vater: '0123' }] }
+    let(:data) do
+      [{ first_name: 'foo',
+         social_account_skype: 'foobar',
+         phone_number_vater: '0123',
+         tags: 'foo' }]
+    end
 
-    it 'creates person' do
+    it 'creates social account' do
       expect { subject.import }.to change(SocialAccount, :count).by(1)
     end
 
-    it 'creates role' do
+    it 'creates phone number' do
       expect { subject.import }.to change(PhoneNumber, :count).by(1)
     end
+
+    context 'can manage tags' do
+      it 'creates tag' do
+        expect { subject.import }.to change(ActsAsTaggableOn::Tagging, :count).by(1)
+      end
+    end
+
+    context 'cannot manage tags' do
+      let(:can_manage_tags) { false }
+      it 'does not create tag' do
+        expect { subject.import }.not_to change(ActsAsTaggableOn::Tagging, :count)
+      end
+    end
+
   end
 
   context 'records successful and failed imports' do
@@ -69,6 +92,21 @@ describe Import::PersonImporter do
     before { importer.import }
     its(:errors) { should have(1).item }
     its('errors.last') { should start_with 'Zeile 5: Haupt-E-Mail ist bereits vergeben' }
+  end
+
+  context 'existing tags' do
+    let(:attrs) { { first_name: 'Paul', tag_list: ['Responsible:John'] } }
+    let(:data) { [{ first_name: 'Paul', tags: 'responsible: john, lang: de' }] }
+    let(:person) { @person.reload }
+    before do
+      @person = Fabricate(:person, attrs)
+      importer.import
+    end
+
+    it 'parses tags before assigning' do
+      expect(person.tags.count).to eq(2)
+      expect(person.tag_list).to eq(['Responsible:John', 'lang:de'])
+    end
   end
 
   context 'doublettes' do
@@ -262,6 +300,13 @@ describe Import::PersonImporter do
 
         its('third.label') { should eq 'Webseite' }
         its('third.name') { should eq 'colliäs.com' }
+      end
+
+      context 'tags' do
+        subject { imported.tags }
+        its(:size) { should eq 2 }
+        its('first.name') { should eq 'foo' }
+        its('second.name') { should eq 'bar' }
       end
     end
   end

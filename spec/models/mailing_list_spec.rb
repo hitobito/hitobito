@@ -106,10 +106,46 @@ describe MailingList do
         expect(list.subscribed?(p)).to be_truthy
       end
 
-      it 'is false if different role in groupn' do
+      it 'is false if different role in group' do
         sub = create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is true if in group and all tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.tag_list = 'foo: bar, baz'
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:bar, geez, baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is true if in group and not all tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.tag_list = 'foo: bar, baz'
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:bar'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is false if in group and no tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.tag_list = 'foo: bar, baz'
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:baz'
+        p.save!
 
         expect(list.subscribed?(p)).to be_falsey
       end
@@ -298,10 +334,15 @@ describe MailingList do
                                    Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
+        sub2.tag_list = 'foo, bar'
+        sub2.save!
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         pg3 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+        pg3.tag_list = 'foo, bar, baz'
+        pg3.save!
+        pg4 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
         # role in a group in different hierarchy
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one))
         Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two))
@@ -314,6 +355,7 @@ describe MailingList do
         is_expected.to include(pg1)
         is_expected.to include(pg2)
         is_expected.to include(pg3)
+        is_expected.not_to include(pg4)
         expect(subject.size).to eq(8)
       end
 

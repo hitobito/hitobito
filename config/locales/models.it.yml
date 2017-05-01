@@ -46,6 +46,7 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
+          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
           attributes:
             person_id:
               taken: è già iscritto
@@ -55,6 +56,7 @@ it:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'Inserire un nome'
+          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
           attributes:
             email:
               taken: >
@@ -89,6 +91,9 @@ it:
             name:
               must_be_unique: 'già existe'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: altro email
         other: Altre email
@@ -114,17 +119,23 @@ it:
         one: tipo di corso
         other: Tipi di corso
       event/role/assistant_leader:
-        one: Formatore
+        one: Responsabile
+        other: Responsabile
       event/role/leader:
         one: Responsabile
+        other: Responsabile
       event/role/cook:
         one: Cucina
+        other: Cucina
       event/role/participant:
         one: Partecipante
+        other: Partecipante
       event/role/treasurer:
         one: Cassiere
+        other: Cassiere
       event/role/speaker:
         one: Conferenziere
+        other: Conferenziere
       event/date:
         one: data
         other: Date
@@ -170,10 +181,9 @@ it:
       subscription:
         one: abbonato
         other: Abbonati
-      tag:
-        one: Tag
-        other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nome
       cantons:
         ag: Argovia
         ai: Appenzello Interno
@@ -232,6 +242,7 @@ it:
         picture: Carica una nuova foto
         remove_picture: Elimina la foto attuale
         roles: Ruoli
+        tags: Tags
         created_at: Salvato
         updated_at: Modificato
       person/add_request:
@@ -288,6 +299,7 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
+        applications_cancelable: Disiscrizione possibile
       event/answer:
         answer: Risposta
       answers:
@@ -322,7 +334,7 @@ it:
         preconditions: Requisiti per la partecipazione
         prolongations: Prolungato
         qualification_kinds: Qualificato per
-        general_information: Informazioni generali
+        general_information: Descrizione standard
         application_conditions: Condizioni di ammissione
         created_at: Salvato
         updated_at: Modificato
@@ -472,9 +484,8 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
-      tag:
-        name: Nome
-        taggable_id: Taggable
+        nickname: Nome scout sull'etichetta
+        pp_post: riga PP
   errors:
     messages:
       invalid_date: "non è una data valida"

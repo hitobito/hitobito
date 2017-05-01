@@ -153,6 +153,11 @@ de:
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
+
   dropdown/event/role_add:
     add: 'Person hinzufügen'
 
@@ -166,6 +171,7 @@ de:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
@@ -252,7 +258,7 @@ de:
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
 
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organisatoren'
     duration: Zeitraum
     date: "Datum %{index}"
@@ -273,7 +279,7 @@ de:
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
 
     application_market:
-      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'
+      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
         registered_at: 'Anmeldung am %{date}'
       prio_buttons:
@@ -334,6 +340,10 @@ de:
         on_waiting_list: Auf Warteliste
       list:
         incomplete: Pflichtangaben fehlen
+      cancel_application:
+        explanation: Du bist für diesen Anlass angemeldet.
+        caption: Abmelden
+        confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
     register:
       register:
@@ -353,6 +363,8 @@ de:
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
       add: "hinzufügen"
+    default_description_link:
+      insert_general_information: Standardbeschreibung einsetzen
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
@@ -362,6 +374,7 @@ de:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      caption_applications_cancelable: Teilnehmende können sich selbst abmelden
     form_tabs:
       general: Allgemein
     global:
@@ -428,9 +441,15 @@ de:
     apply: 'Anmelden'
     applied: 'Angemeldet'
     not_possible: 'nicht möglich'
-    participants_info: '%{count} Anmeldungen'
-    participants_info_with_limit: '%{count} Anmeldungen für %{limit} Plätze'
-    active_participants_info: '%{count} Anmeldungen zugeteilt'
+    participants_info:
+      one: '%{count} Anmeldung'
+      other: '%{count} Anmeldungen'
+    participants_info_with_limit:
+      one: '%{count} Anmeldung für %{limit} Plätze'
+      other: '%{count} Anmeldungen für %{limit} Plätze'
+    active_participants_info:
+      one: '%{count} Anmeldung zugeteilt'
+      other: '%{count} Anmeldungen zugeteilt'
     issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
     prolong_only:
       one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
@@ -505,11 +524,14 @@ de:
     attrs:
       contact_details: 'Kontaktangaben'
       additional_information: 'Weitere Angaben'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
     global:
       link:
         add: Gruppe erstellen
+        deleted_person: Gelöschte Personen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -550,6 +572,9 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   label_formats:
+    global_labels: "Globale Etikettenformate"
+    own_labels: Meine Etikettenformate
+    see_global_labels: "Globale Etikettenformate anzeigen"
     form:
       portrait: 'Hochformat'
       landscape: 'Querformat'
@@ -595,7 +620,7 @@ de:
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'
-    admin: 'Admin'
+    admin: 'Einstellungen'
 
   qualifications:
     in_years: '%{years} Jahre'
@@ -617,6 +642,8 @@ de:
 
 
   person:
+    confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
     add_requests:
 
       body_list:
@@ -693,12 +720,15 @@ de:
         keep_behaviour: >
           Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
           bestehende Werte bleiben erhalten.
+        keep_behaviour_tags: Tags werden ergänzt.
         override_behaviour: >
           Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
           Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        override_behaviour_tags: Tags werden gelöscht oder ersetzt.
         update_behaviour_explanation: >
           Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
           Neue Personen werden immer vollständig entsprechend den Daten aus dem CSV erstellt.
+
 
       new:
         upload_button: 'Hochladen'
@@ -813,17 +843,16 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
-    tags:
-      title: Tags
-      add_tag: Tag hinzufügen…
-      no_entry: (keine)
-
     roles:
       title: Aktive Rollen
 
     roles_aside:
       add_role: Rolle hinzufügen
       set_main_group: Hauptgruppe setzen
+
+    tags:
+      add_tag: Tag hinzufügen…
+      no_entry: (keine)
 
     notes:
       new_note: Neue Notiz
@@ -870,6 +899,7 @@ de:
       add_person: Person hinzufügen
       add_role_for_person: Rolle für %{person} erstellen
       edit_role_for_person: Rolle für %{person} bearbeiten
+      new_role_for_person: Neue Rolle erstellen
 
     fields:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person
@@ -893,6 +923,8 @@ de:
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'
       roles:
         please_choose_group: Bitte wähle eine Gruppe aus
+      tags:
+        only_add_persons_with_tags: 'Nur Person mit einem der untenstehenden Tags hinzufügen:'
 
     exclude_person:
       form:
@@ -928,6 +960,8 @@ de:
     list:
       excluded_people: 'Ausgeschlossene Personen'
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
+    subscription:
+      only_persons_with: 'Nur Personen mit:'
 
   version:
     attribute_change:

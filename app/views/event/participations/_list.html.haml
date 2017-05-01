@@ -14,7 +14,7 @@
   - t.col('') do |p|
     .profil
       = image_tag(p.person.picture.thumb.url, size: '32x32')
-  - sortable_grouped_person_attr(t, %w(last_name first_name nickname)) do |p|
+  - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
     %strong
       -# Any person listed can be shown
       = link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
@@ -22,6 +22,6 @@
   - t.col(event_participations_roles_header(t))                  { |p| event_participations_roles_content(p) }
   - t.col(Person.human_attribute_name(:emails))                  { |p| p.all_emails(cannot?(:show_details, p)) }
   - t.col(PhoneNumber.model_name.human(count: 2))                { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
-  - sortable_grouped_person_attr(t, %w(zip_code town), :address) { |p| p.complete_address }
+  - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
 
   = render_extensions :list, locals: { table: t }

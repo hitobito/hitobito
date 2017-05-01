@@ -18,6 +18,10 @@ CustomContent.seed_once(:key,
    placeholders_required: 'participant-name, event-details, application-url',
    placeholders_optional: 'recipient-names'},
 
+  {key: Event::ParticipationMailer::CONTENT_CANCEL,
+   placeholders_required: 'event-details',
+   placeholders_optional: 'recipient-name'},
+
   {key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN,
    placeholders_required: 'event-url',
    placeholders_optional: 'recipient-name, event-name'},
@@ -46,6 +50,7 @@ CustomContent.seed_once(:key,
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
+cancel_application_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CANCEL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
 login_form_id = CustomContent.get('views/devise/sessions/info').id
 add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON).id
@@ -102,6 +107,26 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: "Evento: E-mail per l'affermazione della inscrizione"},
 
+  {custom_content_id: cancel_application_id,
+   locale: 'de',
+   label: 'Anlass: E-Mail Abmeldebestätigung',
+   subject: 'Bestätigung der Abmeldung',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Du hast dich von folgendem Anlass abgemeldet:<br/><br/>" \
+         "{event-details}<br/><br/>"},
+
+  {custom_content_id: cancel_application_id,
+   locale: 'fr',
+   label: "Événement: E-Mail de confirmation de la désinscription"},
+
+  {custom_content_id: cancel_application_id,
+   locale: 'en',
+   label: 'Event: Deregistration confirmation email'},
+
+  {custom_content_id: cancel_application_id,
+   locale: 'it',
+   label: "Evento: E-mail per l'affermazione della disinscrizione"},
+
   {custom_content_id: participation_approval_id,
    locale: 'de',
    label: 'Anlass: E-Mail Freigabe der Anmeldung',
@@ -114,7 +139,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: participation_approval_id,
    locale: 'fr',
-   label: "Événement: E-Mail pour la libération de l'inscription"},
+   label: "Événement: E-Mail pour débloquer l'inscription"},
 
   {custom_content_id: participation_approval_id,
    locale: 'en',
@@ -151,7 +176,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: login_form_id,
    locale: 'fr',
-   label: 'Informations au login'},
+   label: 'Informations sur le login'},
 
   {custom_content_id: login_form_id,
    locale: 'en',
@@ -175,7 +200,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_person_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail pour la libération par la personne'},
+   label: 'Demande sur les données personnelles: Email pour la libération par la personne'},
 
   {custom_content_id: add_request_person_id,
    locale: 'en',
@@ -199,7 +224,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail pour la libération par les responsables'},
+   label: 'Demande sur les données personnelles: E-mail pour la libération par les responsables'},
 
   {custom_content_id: add_request_responsibles_id,
    locale: 'en',
@@ -221,7 +246,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_approved_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail libération accepté'},
+   label: 'Demande sur les données personnelles: E-mail libération accepté'},
 
   {custom_content_id: add_request_approved_id,
    locale: 'en',
@@ -243,7 +268,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_rejected_id,
    locale: 'fr',
-   label: 'Demande de l\'état civil: E-mail libération refusé'},
+   label: 'Demande sur les données personnelles: E-mail libre-accès refusé'},
 
   {custom_content_id: add_request_rejected_id,
    locale: 'en',
@@ -251,6 +276,6 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_rejected_id,
    locale: 'it',
-   label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
+   label: "Richiesta dei dati personali: Email abilitazione rifiutata"}
 
 )

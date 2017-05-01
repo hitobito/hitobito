@@ -34,21 +34,32 @@ module Export::Pdf
       pdf.bounding_box(pos,
                        width: format.width.mm - min_border,
                        height: format.height.mm - min_border) do
+        left = format.padding_left.mm
+        top = format.height.mm - format.padding_top.mm - min_border
         # pdf.stroke_bounds
-        pdf.text_box(address, at: [format.padding_left.mm,
-                                   format.height.mm - format.padding_top.mm - min_border])
+        print_address_with_pp_post(pdf, address, left, top)
       end
     end
 
     # print without line wrap
     def print_address(pdf, address, pos)
-      pdf.text_box(address, at: [pos.first + format.padding_left.mm,
-                                 pos.last - format.padding_top.mm])
+      left = pos.first + format.padding_left.mm
+      top = pos.last - format.padding_top.mm
+      print_address_with_pp_post(pdf, address, left, top)
+    end
+
+    def print_address_with_pp_post(pdf, address, left, top)
+      if format.pp_post?
+        print_pp_post(pdf, [left, top])
+        top -= 7.mm
+      end
+      pdf.text_box(address, at: [left, top])
     end
 
     def address(contactable)
       address = ''
       address << contactable.company_name << "\n" if print_company?(contactable)
+      address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << contactable.full_name << "\n" if contactable.full_name.present?
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
@@ -71,6 +82,17 @@ module Export::Pdf
 
     def print_company?(contactable)
       contactable.respond_to?(:company) && contactable.company_name?
+    end
+
+    def print_nickname?(contactable)
+      format.nickname? && contactable.respond_to?(:nickname) && contactable.nickname.present?
+    end
+
+    def print_pp_post(pdf, at)
+      pdf.text_box("<u><font size='12'><b>P.P.</b></font> " \
+                   "<font size='8'>#{format.pp_post}  Post CH AG</font></u>",
+                   inline_format: true,
+                   at: at)
     end
 
     def min_border

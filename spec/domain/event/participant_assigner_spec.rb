@@ -126,6 +126,25 @@ describe Event::ParticipantAssigner do
         assigner2.add_participant
         expect(assigner1).not_to be_createable
       end
+
+      context 'waiting list duplicate' do
+        before do
+          participation.application.update!(waiting_list: true, priority_2: nil)
+
+          p = Fabricate(:event_participation, event: event2, person: participation.person,
+                                              active: false)
+          p.create_application!(priority_1: event2)
+          Fabricate(course.participant_types.first.name.to_sym, participation: p)
+          p.save!
+          p.reload
+          p
+        end
+
+        it 'is false for assigner2 when person on waiting list already applied' do
+          # regression test for: https://github.com/hitobito/hitobito/issues/162
+          expect(assigner2).not_to be_createable
+        end
+      end
     end
 
     describe 'event#applicant_count' do

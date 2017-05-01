@@ -8,40 +8,41 @@
 #
 # Table name: people
 #
-#  id                     :integer          not null, primary key
-#  first_name             :string
-#  last_name              :string
-#  company_name           :string
-#  nickname               :string
-#  company                :boolean          default(FALSE), not null
-#  email                  :string
-#  address                :string(1024)
-#  zip_code               :string
-#  town                   :string
-#  country                :string
-#  gender                 :string(1)
-#  birthday               :date
-#  additional_information :text
-#  contact_data_visible   :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  encrypted_password     :string
-#  reset_password_token   :string
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string
-#  last_sign_in_ip        :string
-#  picture                :string
-#  last_label_format_id   :integer
-#  creator_id             :integer
-#  updater_id             :integer
-#  primary_group_id       :integer
-#  failed_attempts        :integer          default(0)
-#  locked_at              :datetime
-#  authentication_token   :string
+#  id                        :integer          not null, primary key
+#  first_name                :string
+#  last_name                 :string
+#  company_name              :string
+#  nickname                  :string
+#  company                   :boolean          default(FALSE), not null
+#  email                     :string
+#  address                   :string(1024)
+#  zip_code                  :string
+#  town                      :string
+#  country                   :string
+#  gender                    :string(1)
+#  birthday                  :date
+#  additional_information    :text
+#  contact_data_visible      :boolean          default(FALSE), not null
+#  created_at                :datetime
+#  updated_at                :datetime
+#  encrypted_password        :string
+#  reset_password_token      :string
+#  reset_password_sent_at    :datetime
+#  remember_created_at       :datetime
+#  sign_in_count             :integer          default(0)
+#  current_sign_in_at        :datetime
+#  last_sign_in_at           :datetime
+#  current_sign_in_ip        :string
+#  last_sign_in_ip           :string
+#  picture                   :string
+#  last_label_format_id      :integer
+#  creator_id                :integer
+#  updater_id                :integer
+#  primary_group_id          :integer
+#  failed_attempts           :integer          default(0)
+#  locked_at                 :datetime
+#  authentication_token      :string
+#  show_global_label_formats :boolean          default(TRUE), not null
 #
 
 class Person < ActiveRecord::Base
@@ -54,7 +55,8 @@ class Person < ActiveRecord::Base
                     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
                     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
                     :locked_at, :remember_created_at, :reset_password_token,
-                    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id]
+                    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
+                    :show_global_label_formats]
 
   GENDERS = %w(m w)
 
@@ -86,6 +88,7 @@ class Person < ActiveRecord::Base
   has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
                   skip: Person::INTERNAL_ATTRS + [:picture]
 
+  acts_as_taggable
 
   ### ASSOCIATIONS
 
@@ -120,10 +123,10 @@ class Person < ActiveRecord::Base
                             foreign_key: 'author_id',
                             dependent: :destroy
 
-  has_many :tags, as: :taggable, dependent: :destroy
-
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
+
+  has_many :label_formats, dependent: :destroy
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
@@ -243,11 +246,15 @@ class Person < ActiveRecord::Base
     email == Settings.root_email
   end
 
-  # Overwrite to handle uniquness validation race conditions
+  # Overwrite to handle uniquness validation race conditions and improper characters
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
     errors.add(:email, :taken)
+    false
+  rescue ActiveRecord::StatementInvalid => e
+    raise e unless e.original_exception.message =~ /Incorrect string value/
+    errors.add(:base, :emoji_suspected)
     false
   end
 

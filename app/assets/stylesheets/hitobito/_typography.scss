@@ -90,6 +90,9 @@ dl {
   }
 
 }
+.dl-borderless, .dl-borderless:last-child {
+  border: 0;
+}
 
 .well .dl-horizontal {
   &:first-child {

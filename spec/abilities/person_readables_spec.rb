@@ -68,6 +68,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
+
       end
 
 

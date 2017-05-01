@@ -114,4 +114,31 @@ describe Event::ParticipationMailer do
     it { is_expected.to match(/Hallo firsty, lasty/) }
     it { is_expected.to match(/Top Leader hat sich/) }
   end
+
+  describe '#cancel' do
+    let(:mail) { Event::ParticipationMailer.cancel(event, person) }
+    subject { mail.body }
+
+    it 'renders dates if set' do
+      event.dates.clear
+      event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
+      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012/)
+    end
+
+    it 'renders multiple dates below each other' do
+      event.dates.clear
+      event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
+      event.dates.build(label: 'Anlass', start_at: Date.parse('2012-10-21'))
+      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012<br\/>Anlass: 21.10.2012/)
+    end
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'Bestätigung der Abmeldung'
+      expect(mail.to).to eq(['top_leader@example.com'])
+      expect(mail.from).to eq(['noreply@localhost'])
+    end
+
+    it { is_expected.to match(/Hallo Top/) }
+
+  end
 end

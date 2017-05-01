@@ -3,6 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- if @user_participation
+  = render 'banner_participating'
+
 #main.row-fluid
   %article.span7
     = render 'attrs_primary'

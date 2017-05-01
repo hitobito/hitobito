@@ -59,17 +59,17 @@ describe ContactableDecorator do
     context 'only public' do
       subject { @group.all_phone_numbers }
 
-      it { is_expected.to match(/031.*Home/) }
-      it { is_expected.to match(/041.*Work/) }
-      it { is_expected.not_to match(/079.*Mobile/) }
+      it { is_expected.to match(/tel:031.*Home/) }
+      it { is_expected.to match(/tel:041.*Work/) }
+      it { is_expected.not_to match(/tel:079.*Mobile/) }
     end
 
     context 'all' do
       subject { @group.all_phone_numbers(false) }
 
-      it { is_expected.to match(/031.*Home/) }
-      it { is_expected.to match(/041.*Work/) }
-      it { is_expected.to match(/079.*Mobile/) }
+      it { is_expected.to match(/tel:031.*Home/) }
+      it { is_expected.to match(/tel:041.*Work/) }
+      it { is_expected.to match(/tel:079.*Mobile/) }
     end
   end
 

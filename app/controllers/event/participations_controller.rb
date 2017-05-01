@@ -42,6 +42,7 @@ class Event::ParticipationsController < CrudController
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
+  after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
@@ -64,7 +65,8 @@ class Event::ParticipationsController < CrudController
         @person_add_requests = fetch_person_add_requests
       end
       format.pdf   { render_pdf(entries.collect(&:person)) }
-      format.csv   { send_data(exporter.export(entries), type: :csv) }
+      format.csv   { render_tabular(:csv, entries) }
+      format.xlsx  { render_tabular(:xlsx, entries) }
       format.email { render_emails(entries.collect(&:person)) }
     end
   end
@@ -78,7 +80,12 @@ class Event::ParticipationsController < CrudController
   end
 
   def destroy
-    super(location: group_event_application_market_index_path(group, event))
+    location = if entry.person_id == current_user.id
+                 group_event_path(group, event)
+               else
+                 group_event_application_market_index_path(group, event)
+               end
+    super(location: location)
   end
 
   private
@@ -103,11 +110,15 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
-  def exporter
+  def render_tabular(format, entries)
+    send_data(tabular_exporter.export(format, entries), type: format)
+  end
+
+  def tabular_exporter
     if params[:details] && can?(:show_details, entries.first)
-      Export::Csv::People::ParticipationsFull
+      Export::Tabular::People::ParticipationsFull
     else
-      Export::Csv::People::ParticipationsAddress
+      Export::Tabular::People::ParticipationsAddress
     end
   end
 
@@ -213,6 +224,12 @@ class Event::ParticipationsController < CrudController
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
+  end
+
+  def send_cancel_email
+    if entry.person_id == current_user.id
+      Event::CancelApplicationJob.new(entry.event, entry.person).enqueue!
     end
   end
 

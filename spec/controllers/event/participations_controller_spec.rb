@@ -446,6 +446,21 @@ describe Event::ParticipationsController do
         end
 
       end
+
+      it 'stores additional information' do
+        post :create, group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier'}
+
+        expect(assigns(:participation)).to be_valid
+        expect(assigns(:participation).additional_information).to eq('Vegetarier')
+      end
+
+      it 'handles DB-errors for too wide unicode characters (emoji)', :mysql do
+        expect do
+          post :create, group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier😝'}
+
+          expect(assigns(:participation).errors.messages).to have(1).keys
+        end.to_not raise_error
+      end
     end
 
     context 'other user' do
@@ -488,6 +503,27 @@ describe Event::ParticipationsController do
         end.to raise_error(CanCan::AccessDenied)
       end
     end
+  end
+
+
+  context 'DELETE destroy' do
+
+    it 'redirects to application market' do
+      delete :destroy, group_id: group.id, event_id: course.id, id: participation.id
+
+      is_expected.to redirect_to group_event_application_market_index_path(group, course)
+      expect(flash[:notice]).to match(/Anmeldung/)
+      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).not_to exist
+    end
+
+    it 'redirects to event show if own participation' do
+      participation.update_column(:person_id, user.id)
+      delete :destroy, group_id: group.id, event_id: course.id, id: participation.id
+
+      is_expected.to redirect_to group_event_path(group, course)
+      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).to exist
+    end
+
   end
 
   context 'preconditions' do

@@ -77,7 +77,7 @@ class Event::ListsController < ApplicationController
 
   def default_user_course_group
     Group.course_offerers.
-          find(current_user.primary_group.try(:layer_group_id) || Group.root.id)
+          where(id: current_user.primary_group.try(:layer_group_id)).first
   end
 
   def limited_courses_scope(scope = course_scope)

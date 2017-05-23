@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Version 1.15
+
+*   Neue Rolle "Helfer/-in" für Anlässe
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

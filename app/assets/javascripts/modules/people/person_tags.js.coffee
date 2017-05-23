@@ -23,6 +23,7 @@ app.PersonTags = {
   updateTags: (tags) ->
     $('.person-tags').replaceWith(tags)
     app.PersonTags.hideForm()
+    $('.person-tag-add').focus();
 
   removeTag: (event) ->
     event.preventDefault()
@@ -44,4 +45,3 @@ $(document).on('click', '.person-tag-add', app.PersonTags.showForm)
 $(document).on('submit', '.person-tags-add-form', -> app.PersonTags.loading(true); return true);
 $(document).on('keydown', '.person-tags-add-form input#acts_as_taggable_on_tag_name', (event) ->
     event.keyCode == 27 && app.PersonTags.hideForm(); return true)
-

@@ -9,7 +9,7 @@
     = render 'person/tags/list', tags: @tags
 
     - if can?(:manage_tags, entry)
-      %span.chip.chip-add.person-tag-add
+      %button.chip.chip-add.person-tag-add
         = t('.add_tag')
         = icon(:plus)
 

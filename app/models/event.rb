@@ -70,6 +70,7 @@ class Event < ActiveRecord::Base
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
                      Event::Role::Cook,
+                     Event::Role::Helper,
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]

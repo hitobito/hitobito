@@ -139,6 +139,9 @@ de:
       event/role/cook:
         one: Küche
         other: Küche
+      event/role/helper:
+        one: Helfer/-in
+        other: Helfer/-innen
       event/role/participant:
         one: Teilnehmer/-in
         other: Teilnehmer/-innen

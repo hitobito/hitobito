@@ -51,7 +51,8 @@ Hitobito::Application.routes.draw do
 
         scope module: 'person' do
           resources :notes, only: [:create, :destroy]
-          resources :tags, param: :name, only: [:create, :destroy]
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
         end
       end

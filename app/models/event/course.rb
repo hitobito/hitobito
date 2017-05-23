@@ -44,8 +44,7 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
-  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval,
-                           :signature, :signature_confirmation, :signature_confirmation_text]
+  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -63,8 +62,6 @@ class Event::Course < Event
   belongs_to :kind
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
-
-  before_validation :set_signature, if: :signature_confirmation?
 
 
   def label_detail
@@ -95,12 +92,6 @@ class Event::Course < Event
         questions << q.dup
       end
     end
-  end
-
-  private
-
-  def set_signature
-    self[:signature] = true
   end
 
 end

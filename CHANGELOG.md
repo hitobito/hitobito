@@ -2,7 +2,8 @@
 
 ## Version 1.15
 
-*   Neue Rolle "Helfer/-in" für Anlässe
+*   Neue Rolle "Helfer/-in" für Anlässe.
+*   Unterschriften können nun bei allen Anlässen eingefordert werden.
 
 ## Version 1.14
 

@@ -124,10 +124,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     time_select(attr, { include_blank: true, ignore_date: true }, html_options)
   end
 
-  # Render a select with minutes
+  # Render a select with every 5 minutes
   def minutes_select(attr, html_options = {})
     html_options[:class] ||= 'time'
-    ma = (0..59).collect { |n| [format('%02d', n), n] }
+    ma = (0..11).collect { |n| [format('%02d', n*5), n] }
     select(attr, ma, {}, html_options)
   end
 

@@ -17,6 +17,14 @@ class Person::NoteAbility < AbilityDsl::Base
     permission(:layer_and_below_full).
       may(:create, :show, :destroy).
       in_same_layer_or_below
+
+    permission(:group_full).
+      may(:create, :show).
+      in_same_group
+
+    permission(:group_and_below_full).
+      may(:create, :show).
+      in_same_group_or_below
   end
 
   private

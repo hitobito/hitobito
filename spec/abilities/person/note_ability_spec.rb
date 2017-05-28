@@ -84,6 +84,38 @@ describe Person::NoteAbility do
       is_expected.not_to be_able_to(:destroy, note)
     end
   end
+  
+  context :group_and_below_full do
+    let(:role) { Fabricate(Group::BottomGroup::LeaderWithBelow.name.to_sym, group: groups(:bottom_group_one_one)) }
+
+    it 'may create note in his group' do
+      other = Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one)).person
+      note = create_note(role.person, other)
+      is_expected.to be_able_to(:create, note)
+    end
+    
+    it 'may create note in subgroup' do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one_one)).person
+      note = create_note(role.person, other)
+      is_expected.to be_able_to(:create, note)
+    end
+  end
+
+  context :group_full do
+    let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
+
+    it 'may create note in his group' do
+      other = Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one)).person
+      note = create_note(role.person, other)
+      is_expected.to be_able_to(:create, note)
+    end
+    
+    it 'may not create note in subgroup' do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one_one)).person
+      note = create_note(role.person, other)
+      is_expected.not_to be_able_to(:create, note)
+    end
+  end
 
   context :group_and_below_read do
     let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)) }

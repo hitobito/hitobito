@@ -21,6 +21,10 @@ module Concerns
       render text: emails.join(',')
     end
 
+    def render_tabular(format, entries)
+      send_data(tabular_exporter.export(format, entries), type: format)
+    end
+
     private
 
     def condense_people(people)
@@ -40,6 +44,14 @@ module Concerns
         unless current_user.last_label_format_id == label_format.id
           current_user.update_column(:last_label_format_id, label_format.id)
         end
+      end
+    end
+
+    def tabular_exporter
+      if params[:details] && can?(:show_details, entries.first)
+        Export::Tabular::People::ParticipationsFull
+      else
+        Export::Tabular::People::ParticipationsAddress
       end
     end
 

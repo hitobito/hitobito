@@ -4,6 +4,7 @@
 
 *   Neue Rolle "Helfer/-in" für Anlässe.
 *   Unterschriften können nun bei allen Anlässen eingefordert werden.
+*   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
 
 ## Version 1.14
 

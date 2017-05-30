@@ -21,7 +21,8 @@ class Event::ParticipationsController < CrudController
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
-                                    Event::Participation.order_by_role_statement(event))
+                                    Event::Participation.order_by_role_statement(event)
+                                  )
                                 end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
@@ -89,6 +90,10 @@ class Event::ParticipationsController < CrudController
     super(location: location)
   end
 
+  def self.model_class
+    Event::Participation
+  end
+
   private
 
   def with_person_add_request(&block)
@@ -109,18 +114,6 @@ class Event::ParticipationsController < CrudController
 
   def authorize_class
     authorize!(:index_participations, event)
-  end
-
-  def render_tabular(format, entries)
-    send_data(tabular_exporter.export(format, entries), type: format)
-  end
-
-  def tabular_exporter
-    if params[:details] && can?(:show_details, entries.first)
-      Export::Tabular::People::ParticipationsFull
-    else
-      Export::Tabular::People::ParticipationsAddress
-    end
   end
 
   def check_preconditions
@@ -169,7 +162,7 @@ class Event::ParticipationsController < CrudController
 
     type = event.class.find_role_type!(role_type)
     unless type.participant?
-      fail ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
+      raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
     role_type
   end
@@ -192,11 +185,11 @@ class Event::ParticipationsController < CrudController
 
   def load_priorities
     if entry.application && event.priorization && current_user
-      @alternatives = event.class.application_possible.
-                                        where(kind_id: event.kind_id).
-                                        in_hierarchy(current_user).
-                                        includes(:groups).
-                                        list
+      @alternatives = event.class.application_possible
+                           .where(kind_id: event.kind_id)
+                           .in_hierarchy(current_user)
+                           .includes(:groups)
+                           .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
@@ -273,7 +266,4 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def self.model_class
-    Event::Participation
-  end
 end

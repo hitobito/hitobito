@@ -8,7 +8,7 @@ app = window.App ||= {}
 app.Notes = {
   addNote: (note) ->
     $('#notes-list').prepend(note)
-    $('#notes-pagination .pagination-info').text('')
+    $('#notes-list .pagination-info').text('')
 
     new app.ElementSwapper().swap.call($('#notes-form'))
     app.Notes.resetForm()

@@ -26,9 +26,24 @@ class Note < ActiveRecord::Base
 
   ### VALIDATIONS
 
+  validates_by_schema
   validates :text, presence: true
 
   scope :list, -> { order(created_at: :desc) }
+
+  class << self
+    def in_or_layer_below(group)
+      joins('LEFT JOIN roles ' \
+            "ON roles.person_id = notes.subject_id AND notes.subject_type = '#{Person.sti_name}'").
+        joins('INNER JOIN groups ' \
+              "ON (groups.id = notes.subject_id AND notes.subject_type = '#{Group.sti_name}') " \
+              'OR (groups.id = roles.group_id)').
+        where(roles: { deleted_at: nil },
+              groups: { deleted_at: nil, layer_group_id: group.layer_group_id }).
+        where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
+        uniq
+    end
+  end
 
   def to_s
     text.to_s.delete("\n").truncate(10)

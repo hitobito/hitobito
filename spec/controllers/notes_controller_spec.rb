@@ -38,7 +38,34 @@ describe NotesController do
       end.to change { Note.count }.by(1)
 
       expect(assigns(:note).text).to eq('Lorem ipsum')
+      expect(assigns(:note).subject).to eq(bottom_member)
       expect(response.status).to eq(200)
+    end
+
+    it 'creates group notes' do
+      group = bottom_member.groups.first
+      expect do
+        post :create, group_id: group.id,
+                      note: { text: 'Lorem ipsum' },
+                      format: :js
+      end.to change { Note.count }.by(1)
+
+      expect(assigns(:note).text).to eq('Lorem ipsum')
+      expect(assigns(:note).subject).to eq(group)
+      expect(response.status).to eq(200)
+    end
+
+    it 'cannot create notes on lower layer' do
+      sign_in(Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)).person)
+
+      expect do
+        expect do
+          post :create, group_id: bottom_member.groups.first.id,
+                        person_id: bottom_member.id,
+                        note: { text: 'Lorem ipsum' },
+                        format: :js
+        end.to raise_error(CanCan::AccessDenied)
+      end.not_to change { Note.count }
     end
   end
 

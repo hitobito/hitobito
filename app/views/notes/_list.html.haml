@@ -3,14 +3,14 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-#notes-pagination.pagination-bar
+.pagination-bar
   = render 'notes/paginator', notes: notes
 
-  .pagination-info
-    - if notes.total_count == 0
+#notes-list
+  - if notes.total_count == 0
+    .pagination-info
       = ti(:no_list_entries)
 
-#notes-list
   - notes.each do |note|
     = render note, show_subject: show_subject
 

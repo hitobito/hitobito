@@ -11,8 +11,8 @@ module PeopleHelper
     person.gender_label
   end
 
-  def dropdown_people_export(details = false, emails = true)
-    Dropdown::PeopleExport.new(self, current_user, params, details, emails).to_s
+  def dropdown_people_export(details = false, emails = true, labels = true)
+    Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
   end
 
   def format_birthday(person)

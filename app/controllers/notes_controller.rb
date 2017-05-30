@@ -7,34 +7,18 @@
 
 class NotesController < ApplicationController
 
-  class_attribute :permitted_attrs
-  self.permitted_attrs = [:text]
-
-  authorize_resource except: :index
-
   decorates :group, :person
-
-  respond_to :html
-
 
   def index
     authorize!(:index_notes, group)
-
-    @notes = Note
-             .includes(:author, subject: :groups)
-             .where(subject: Person.in_layer(group))
-             .where(subject: Person.in_or_below(group))
-             .list
-             .page(params[:notes_page])
-             .per(100)
-
-    respond_with(@notes)
+    @notes = entries
   end
 
   def create
-    group
-    @person = Person.find(params[:person_id])
-    @note = @person.notes.create(permitted_params.merge(author_id: current_user.id))
+    @note = subject.notes.build(permitted_params.merge(author_id: current_user.id))
+    authorize!(:create, @note)
+    group # required for view
+    @note.save
 
     respond_to do |format|
       format.js # create.js.haml
@@ -43,6 +27,7 @@ class NotesController < ApplicationController
 
   def destroy
     @note = Note.find(params[:id])
+    authorize!(:destroy, @note)
     @note.destroy
 
     respond_to do |format|
@@ -52,12 +37,32 @@ class NotesController < ApplicationController
 
   private
 
+  def entries
+    Note
+      .includes(:subject, :author)
+      .in_or_layer_below(group)
+      .list
+      .page(params[:notes_page])
+      .tap do |notes|
+      Person::PreloadGroups.for(notes.collect(&:subject).select { |s| s.is_a?(Person) })
+      Person::PreloadGroups.for(notes.collect(&:author))
+    end
+  end
+
   def group
     @group ||= Group.find(params[:group_id])
   end
 
+  def subject
+    if params[:person_id]
+      Person.find(params[:person_id])
+    else
+      group
+    end
+  end
+
   def permitted_params
-    params.require(:note).permit(permitted_attrs)
+    params.require(:note).permit(:text)
   end
 
 end

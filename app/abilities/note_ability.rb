@@ -7,8 +7,6 @@
 
 class NoteAbility < AbilityDsl::Base
 
-  include AbilityDsl::Constraints::Person
-
   on(Note) do
     permission(:layer_full).
       may(:create, :show, :destroy).
@@ -19,9 +17,25 @@ class NoteAbility < AbilityDsl::Base
       in_same_layer_or_below
   end
 
+  def in_same_layer
+    case subj
+    when Group then permission_in_layer?(subj.layer_group_id)
+    when Person then permission_in_layers?(subj.layer_group_ids)
+    else raise(ArgumentError, "Unknown note subject #{subj.class}")
+    end
+  end
+
+  def in_same_layer_or_below
+    case subj
+    when Group then permission_in_layers?(subj.layer_hierarchy.collect(&:id))
+    when Person then permission_in_layers?(subj.groups_hierarchy_ids)
+    else raise(ArgumentError, "Unknown note subject #{subj.class}")
+    end
+  end
+
   private
 
-  def person
+  def subj
     subject.subject
   end
 

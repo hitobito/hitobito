@@ -22,7 +22,6 @@ Hitobito::Application.routes.draw do
     get '/events/:id' => 'event/top#show', as: :event
 
     resources :groups do
-
       member do
         get :deleted_subgroups
         get :export_subgroups
@@ -34,8 +33,9 @@ Hitobito::Application.routes.draw do
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
 
-        get 'person_notes' => 'person/notes#index'
       end
+
+      resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
         member do
@@ -46,11 +46,11 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
         end
 
+        resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :notes, only: [:create, :destroy]
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'

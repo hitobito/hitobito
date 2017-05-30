@@ -1,0 +1,4 @@
+- if @note.errors.blank?
+  App.Notes.addNote('#{escape_javascript(render @note, show_subject: false)}');
+- else
+  App.Notes.showError('#{@note.errors.full_messages.join("\n")}');

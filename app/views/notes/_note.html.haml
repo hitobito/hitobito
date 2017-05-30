@@ -3,19 +3,19 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_dsj.
 
-.row-fluid.note{id: dom_id(note), :class => ("is-current-person" unless show_person)}
-  - if show_person
-    %img.note-image{:src => note.person.picture}
+.row-fluid.note{id: dom_id(note), class: ('is-current-subject' unless show_subject)}
+  - if show_subject
+    %img.note-image{src: note.subject.picture}
   .note-body
-    - if show_person
-      = person_link(note.person)
+    - if show_subject
+      = assoc_link(note.subject)
     %small.muted.note-author
-      = person_link(note.author) || note.author
+      = person_link(note.author)
       .note-date
         = t('.created', time_ago: time_ago_in_words(note.created_at))
         - if can?(:destroy, note)
           = link_to icon(:trash),
-            group_person_note_path(group_id: @group.id, person_id: note.person.id, id: note.id),
+            group_person_note_path(group_id: @group.id, person_id: note.subject.id, id: note.id),
               method: :delete,
               remote: true,
               data: { confirm: ti(:confirm_delete) }

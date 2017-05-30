@@ -37,6 +37,7 @@
 #  signature_confirmation_text :string
 #  creator_id                  :integer
 #  updater_id                  :integer
+#  applications_cancelable     :boolean          default(FALSE), not null
 #
 
 class Event < ActiveRecord::Base

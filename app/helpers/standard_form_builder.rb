@@ -231,6 +231,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                          url: @template.query_people_path })
   end
 
+  def company_name_field(attr, _html_options = {})
+    hidden_field(attr) +
+    string_field(attr,
+                 placeholder: I18n.t('global.search.placeholder_company_name'),
+                 data: { provide: 'entity',
+                         id_field: "#{object_name}_#{attr}",
+                         url: @template.query_company_name_path })
+  end
+
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, &block)
     content_tag(:div, class: 'control-group') do
       label(assoc, class: 'control-label') +

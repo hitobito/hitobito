@@ -18,6 +18,7 @@ Hitobito::Application.routes.draw do
     get '/503', to: 'errors#503'
 
     get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 

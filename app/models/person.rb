@@ -47,18 +47,22 @@
 
 class Person < ActiveRecord::Base
 
-  PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
-                  :email, :address, :zip_code, :town, :country, :gender, :birthday,
-                  :picture, :primary_group_id]
+  PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
+    :id, :first_name, :last_name, :nickname, :company_name, :company,
+    :email, :address, :zip_code, :town, :country, :gender, :birthday,
+    :picture, :primary_group_id
+  ]
 
-  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible, :created_at, :creator_id,
-                    :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
-                    :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
-                    :locked_at, :remember_created_at, :reset_password_token,
-                    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-                    :show_global_label_formats]
+  INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
+    :authentication_token, :contact_data_visible, :created_at, :creator_id,
+    :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
+    :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
+    :locked_at, :remember_created_at, :reset_password_token,
+    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
+    :show_global_label_formats
+  ]
 
-  GENDERS = %w(m w)
+  GENDERS = %w(m w).freeze
 
 
   # define devise before other modules
@@ -220,7 +224,7 @@ class Person < ActiveRecord::Base
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years
+  def years # rubocop:disable Metrics/AbcSize Age calculation is complex
     return unless birthday?
 
     now = Time.zone.now.to_date

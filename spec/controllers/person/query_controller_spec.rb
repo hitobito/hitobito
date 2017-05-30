@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Person::QueryController do
-  
+
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }

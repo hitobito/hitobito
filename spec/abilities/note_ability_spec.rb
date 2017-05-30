@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Person::NoteAbility do
+describe NoteAbility do
 
   subject { ability }
   let(:ability) { Ability.new(role.person.reload) }
@@ -104,9 +104,9 @@ describe Person::NoteAbility do
   end
 
   def create_note(author, person)
-    Person::Note.create!(
+    Note.create!(
       author: author,
-      person: person,
+      subject: person,
       text: 'Lorem ipsum'
     )
   end

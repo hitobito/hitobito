@@ -582,6 +582,14 @@ de:
     courses: 'Kurse'
     admin: 'Einstellungen'
 
+  notes:
+    new_note: Neue Notiz
+    note:
+      created: vor %{time_ago}
+    paginator:
+      newer_notes: Neuere Beiträge
+      older_notes: Altere Beiträge
+
   qualifications:
     in_years: '%{years} Jahre'
     valid_until: 'bis %{date}'
@@ -706,13 +714,6 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
-    notes:
-      note:
-        created: vor %{time_ago}
-      paginator:
-        newer_notes: Neuere Beiträge
-        older_notes: Altere Beiträge
-
     tags:
       list:
         category_other: Andere
@@ -813,9 +814,6 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
-
-    notes:
-      new_note: Neue Notiz
 
   participations:
     destroy:

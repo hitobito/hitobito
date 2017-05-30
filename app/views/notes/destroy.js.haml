@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @note.destroyed?
-  $('#person-notes-list ##{dom_id(@note)}').remove()
+  $('#notes-list ##{dom_id(@note)}').remove()
 - else
   alert('#{t('.failure', errors: @note.errors.full_messages.join(', '))}');

@@ -4,33 +4,34 @@
 #  hitobito_dsj and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_dsj.
-
 # == Schema Information
 #
-# Table name: person_notes
+# Table name: notes
 #
-#  id         :integer          not null, primary key
-#  person_id  :integer          not null
-#  author_id  :integer          not null
-#  text       :text
-#  created_at :datetime
-#  updated_at :datetime
+#  id           :integer          not null, primary key
+#  subject_id   :integer          not null
+#  author_id    :integer          not null
+#  text         :text
+#  created_at   :datetime
+#  updated_at   :datetime
+#  subject_type :string
 #
-class Person::Note < ActiveRecord::Base
 
-  default_scope { order(created_at: :desc) }
+class Note < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :person
+  belongs_to :subject, polymorphic: true
   belongs_to :author, class_name: 'Person'
 
   ### VALIDATIONS
 
   validates :text, presence: true
 
+  scope :list, -> { order(created_at: :desc) }
+
   def to_s
-    text.present? && text.sub("\n", ' ')[0..9] + (text.length > 10 ? '...' : '')
+    text.to_s.delete("\n").truncate(10)
   end
 
 end

@@ -1,13 +1,14 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito_dsj and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_dsj.
 
-class Person::NotesController < ApplicationController
+class NotesController < ApplicationController
 
   class_attribute :permitted_attrs
+  self.permitted_attrs = [:text]
 
   authorize_resource except: :index
 
@@ -15,16 +16,15 @@ class Person::NotesController < ApplicationController
 
   respond_to :html
 
-  self.permitted_attrs = [:text]
 
   def index
-    @group = Group.find(params[:id])
-    authorize!(:index_person_notes, @group)
+    authorize!(:index_notes, group)
 
-    @notes = Person::Note
-             .includes(:author, person: :groups)
-             .where(person: Person.in_layer(@group))
-             .where(person: Person.in_or_below(@group))
+    @notes = Note
+             .includes(:author, subject: :groups)
+             .where(subject: Person.in_layer(group))
+             .where(subject: Person.in_or_below(group))
+             .list
              .page(params[:notes_page])
              .per(100)
 
@@ -32,32 +32,32 @@ class Person::NotesController < ApplicationController
   end
 
   def create
-    @group = Group.find(params[:group_id])
+    group
     @person = Person.find(params[:person_id])
     @note = @person.notes.create(permitted_params.merge(author_id: current_user.id))
 
     respond_to do |format|
-      format.html { redirect_to group_person_path(@group, @person) }
       format.js # create.js.haml
     end
   end
 
   def destroy
-    @group = Group.find(params[:group_id])
-    @person = Person.find(params[:person_id])
-    @note = Person::Note.find(params[:id])
+    @note = Note.find(params[:id])
     @note.destroy
 
     respond_to do |format|
-      format.html { redirect_to group_person_path(@group, @person) }
       format.js # destroy.js.haml
     end
   end
 
   private
 
+  def group
+    @group ||= Group.find(params[:group_id])
+  end
+
   def permitted_params
-    params.require(:person_note).permit(permitted_attrs)
+    params.require(:note).permit(permitted_attrs)
   end
 
 end

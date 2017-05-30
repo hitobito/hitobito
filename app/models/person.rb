@@ -116,8 +116,7 @@ class Person < ActiveRecord::Base
 
   has_many :add_requests, dependent: :destroy
 
-  has_many :notes, class_name: 'Note',
-                   dependent: :destroy
+  has_many :notes, dependent: :destroy, as: :subject
 
   has_many :authored_notes, class_name: 'Note',
                             foreign_key: 'author_id',

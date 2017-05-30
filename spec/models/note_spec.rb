@@ -19,23 +19,23 @@
 
 require 'spec_helper'
 
-describe Person::Note do
+describe Note do
   context 'dependent destroy' do
-    let(:person) { Fabricate(:person) }
+    let(:subject) { Fabricate(:person) }
     let(:author) { Fabricate(:person) }
 
     it 'gets destroyed if the person is destroyed' do
-      person.notes.create!(author_id: author.id, text: 'Lorem ipsum')
-      expect(Person::Note.count).to eq(1)
-      person.destroy!
-      expect(Person::Note.count).to eq(0)
+      subject.notes.create!(author_id: author.id, text: 'Lorem ipsum')
+      expect(Note.count).to eq(1)
+      subject.destroy!
+      expect(Note.count).to eq(0)
     end
 
     it 'gets destroyed if the author is destroyed' do
-      person.notes.create!(author_id: author.id, text: 'Lorem ipsum')
-      expect(Person::Note.count).to eq(1)
+      subject.notes.create!(author_id: author.id, text: 'Lorem ipsum')
+      expect(Note.count).to eq(1)
       author.destroy!
-      expect(Person::Note.count).to eq(0)
+      expect(Note.count).to eq(0)
     end
   end
 end

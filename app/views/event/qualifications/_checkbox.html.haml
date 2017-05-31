@@ -3,13 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title event.to_s
-
-= form_tag(nil, method: :put) do
-
-  = render 'people'
-
-  .btn-group
-    = button_tag(t('event.qualifications.index.save'),
-                 class: 'btn btn-primary',
-                 data: { disable_with: t('event.qualifications.index.save') })
+= check_box_tag('participation_ids[]', participation.id, participation.qualified?)

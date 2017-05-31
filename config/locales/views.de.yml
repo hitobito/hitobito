@@ -229,7 +229,6 @@ de:
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten
     priorities: 'Anmeldeprioritäten'
-    no_qualifications_could_be_prolonged: "%{person} hat keine Qualifikationen, die verlängert werden können."
     lists:
       courses:
         title: 'Verfügbare Kurse'
@@ -305,6 +304,13 @@ de:
         explanation: Du bist für diesen Anlass angemeldet.
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
+
+    qualifications:
+      index:
+        save: Qualifikationen aktualisieren
+      update:
+        flash:
+          success: Die Qualifikationen wurden erfolgreich aktualisiert.
 
     register:
       register:

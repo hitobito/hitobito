@@ -761,6 +761,7 @@ de:
     tabs:
       history: Verlauf
       log: Log
+      colleagues: Mitarbeiter/-innen
 
     actions_show:
       send_login: Login schicken

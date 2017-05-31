@@ -116,6 +116,18 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
+  def render_tabular(format, entries)
+    send_data(tabular_exporter.export(format, entries), type: format)
+  end
+
+  def tabular_exporter
+    if params[:details] && can?(:show_details, entries.first)
+      Export::Tabular::People::ParticipationsFull
+    else
+      Export::Tabular::People::ParticipationsAddress
+    end
+  end
+
   def check_preconditions
     load_precondition_warnings
     flash.now[:alert] = @precondition_warnings

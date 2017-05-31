@@ -17,11 +17,11 @@ class NotesController < ApplicationController
   def create
     @note = subject.notes.build(permitted_params.merge(author_id: current_user.id))
     authorize!(:create, @note)
-    group # required for view
     @note.save
 
     respond_to do |format|
-      format.js # create.js.haml
+      format.html { redirect_to subject_path }
+      format.js { group } # create.js.haml
     end
   end
 
@@ -31,6 +31,7 @@ class NotesController < ApplicationController
     @note.destroy
 
     respond_to do |format|
+      format.html { redirect_to subject_path }
       format.js # destroy.js.haml
     end
   end
@@ -63,6 +64,14 @@ class NotesController < ApplicationController
 
   def permitted_params
     params.require(:note).permit(:text)
+  end
+
+  def subject_path
+    if @note.subject_type == Group.name
+      group_path(id: group.id)
+    else
+      group_person_path(group_id: group.id, id: subject.id)
+    end
   end
 
 end

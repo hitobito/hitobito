@@ -45,6 +45,7 @@ Hitobito::Application.routes.draw do
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
+          get 'colleagues' => 'person/colleagues#index'
         end
 
         resources :notes, only: [:create, :destroy]

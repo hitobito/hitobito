@@ -126,8 +126,8 @@ Hitobito::Application.routes.draw do
           get 'roles' => 'roles#new' # route required for language switch
           get 'roles/:id' => 'roles#edit' # route required for language switch
 
-          resources :qualifications, only: [:index, :update, :destroy]
-
+          get 'qualifications' => 'qualifications#index'
+          put 'qualifications' => 'qualifications#update'
         end
 
       end

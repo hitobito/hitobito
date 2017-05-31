@@ -7,6 +7,7 @@
 *   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
 *   Notizen ebenfalls auf Gruppen möglich.
 *   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
+*   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
 
 ## Version 1.14
 

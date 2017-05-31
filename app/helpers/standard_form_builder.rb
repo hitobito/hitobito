@@ -33,8 +33,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
-  # rubocop:disable Metrics/PerceivedComplexity
-  def input_field(attr, html_options = {})
+  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity
     type = column_type(@object, attr)
     custom_field_method = :"#{type}_field"
     if type == :text
@@ -53,7 +52,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       text_field(attr, html_options)
     end
   end
-  # rubocop:enable Metrics/PerceivedComplexity
 
   # Render a password field
   def password_field(attr, html_options = {})
@@ -204,14 +202,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  # rubocop:disable PredicateName
-
   # Render a multi select element for a :has_many or :has_and_belongs_to_many
   # association defined by attr.
   # Use additional html_options for the select element.
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
-  def has_many_field(attr, html_options = {})
+  def has_many_field(attr, html_options = {}) # rubocop:disable PredicateName
     html_options[:multiple] = true
     html_options[:class] ||= 'span6'
     add_css_class(html_options, 'multiselect')
@@ -225,8 +221,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                       html_options)
   end
 
-  # rubocop:enable PredicateName
-
   def person_field(attr, _html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
@@ -235,6 +229,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: @template.query_people_path })
+  end
+
+  def company_name_field(attr, _html_options = {})
+    hidden_field(attr) +
+    string_field(attr,
+                 placeholder: I18n.t('global.search.placeholder_company_name'),
+                 data: { provide: 'entity',
+                         id_field: "#{object_name}_#{attr}",
+                         url: @template.query_company_name_path })
   end
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, &block)

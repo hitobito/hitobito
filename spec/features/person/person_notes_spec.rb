@@ -69,7 +69,7 @@ describe 'Person Notes', js: true do
         accept_confirm do
           find("#note_#{@n1.id} a[data-method=delete]").click
         end
-        expect(page).to have_selector('#notes-list .note', count: 2)
+        expect(page).to have_selector('#notes-list .note', count: 1)
       end.to change { Note.count }.by(-1)
     end
   end

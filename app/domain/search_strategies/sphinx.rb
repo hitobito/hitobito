@@ -8,12 +8,14 @@
 module SearchStrategies
   class Sphinx < Base
 
+    delegate :star_supported?, to: :class
+
     def query_people
       return Person.none.page(1) unless @term.present?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
                       per_page: QUERY_PER_PAGE,
-                      star: true,
+                      star: star_supported?,
                       with: { sphinx_internal_id: ids })
       end
     end
@@ -22,7 +24,7 @@ module SearchStrategies
       return Group.none.page(1) unless @term.present?
       Group.search(Riddle::Query.escape(@term),
                    per_page: QUERY_PER_PAGE,
-                   star: true,
+                   star: star_supported?,
                    include: :parent)
     end
 
@@ -30,7 +32,7 @@ module SearchStrategies
       return Event.none.page(1) unless @term.present?
       Event.search(Riddle::Query.escape(@term),
                    per_page: QUERY_PER_PAGE,
-                   star: true,
+                   star: star_supported?,
                    include: :groups)
     end
 
@@ -42,8 +44,17 @@ module SearchStrategies
                     order: 'last_name asc, ' \
                            'first_name asc, ' \
                            "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
-                    star: true,
+                    star: star_supported?,
                     with: { sphinx_internal_id: ids })
+    end
+
+    class << self
+
+      def star_supported?
+        version = Rails.application.class.sphinx_version
+        version.nil? || version >= '2.1'
+      end
+
     end
 
   end

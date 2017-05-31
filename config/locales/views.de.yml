@@ -64,6 +64,7 @@ de:
       placeholder_person: 'Person suchen...'
       placeholder_group: 'Gruppe suchen...'
       placeholder_event: 'Anlass suchen...'
+      placeholder_company_name: 'Firmennamen suchen...'
 
   list:
     index:

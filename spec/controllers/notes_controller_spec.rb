@@ -53,6 +53,16 @@ describe NotesController do
       expect(assigns(:note).text).to eq('Lorem ipsum')
       expect(assigns(:note).subject).to eq(group)
       expect(response.status).to eq(200)
+      is_expected.to render_template('create')
+    end
+
+    it 'redirects for html requests' do
+      group = bottom_member.groups.first
+      expect do
+        post :create, group_id: group.id,
+             note: { text: 'Lorem ipsum' }
+      end.to change { Note.count }.by(1)
+      is_expected.to redirect_to(group_path(group))
     end
 
     it 'cannot create notes on lower layer' do
@@ -78,6 +88,18 @@ describe NotesController do
                        id: n.id,
                        format: :js
       end.to change { Note.count }.by(-1)
+      is_expected.to render_template('destroy')
+    end
+
+    it 'redirects for html requests' do
+      group = top_leader.groups.first
+      n = Note.create!(author: top_leader, subject: top_leader, text: 'lorem')
+      expect do
+        post :destroy, group_id: group.id,
+                       person_id: n.subject_id,
+                       id: n.id
+      end.to change { Note.count }.by(-1)
+      is_expected.to redirect_to(group_person_path(group, top_leader))
     end
   end
 

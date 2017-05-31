@@ -12,7 +12,10 @@
 
 = field_set_tag do
   = f.labeled_input_fields :first_name, :last_name, :nickname
-  = f.labeled_company_name_field :company_name
+  = f.labeled_string_field(:company_name,
+                           placeholder: I18n.t('global.search.placeholder_company_name'),
+                           data: { provide: 'entity',
+                                   url: query_company_name_path })
   = f.labeled_input_fields :company
 
   = render_extensions :name_fields, locals: { f: f }

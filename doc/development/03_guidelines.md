@@ -116,13 +116,15 @@ sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wir
 und in der JSON Personen Liste angezeigt, wenn nicht, nur im Full CSV und im Einzelperson JSON,
 falls die Berechtigung dafür vorhanden ist.
 
+Ein Anleitung, wie im Code Attribute hinzugefügt werden. Findest du im Kapitel Custom Attributes.
+
 ##### Personenattribute
 
 * CSV Import
 * CSV Export (Adressexport? Voller Export?)
 * Log (Papertrail)
 
-##### Rollen umbennen / entfernen
+#### Rollen umbennen / entfernen
 
 * Migration aller betroffenen `Role` Instanzen (`with_deleted`!).
 * Migration aller betroffenen `RelatedRoleType` Instanzen.

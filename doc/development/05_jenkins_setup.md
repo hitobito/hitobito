@@ -1,4 +1,4 @@
-#Jenkins Setup
+## Jenkins Setup
 
 Um mit den verschiedenen Hitobito Projekten nicht zuviel Overhead zu erzeugen, werden die Jenkins Jobs wie folgt aufgeteilt. Damit werden die jeweiligen Tests nur einmal ausgeführt.
 
@@ -18,7 +18,7 @@ Als Home Verzeichnis für alle Tasks und Reports muss danach hitobito gesetzt we
 
 Damit die Änderungen am Core Repo bei Wagon Jobs keinen Commit Build triggert, müssen dort für das Core Repo alle Dateien ausgeschlossen werden (Erweitert > Included Regions: 'none'). Änderungen am Core, welche bei Wagons Probleme verursachen könnten, werden somit spätestens in den Nightly Builds erkannt (Core Repo Daten nicht ausgeschlossen). Dies ist ein Trade-off zwischen ständig laufenden Jobs, auf welche gewartet werden muss, und unmittelbarem Feedback.
 
-##Umgebungsvariablen
+### Umgebungsvariablen
 
 Für alle Jobs muss eine ensprechende Test DB erstellt und konfiguriert werden. Jeder Job muss eine eigene DB erstellen, damit sich diese nicht in die Quere kommen. Dabei ist der Prefix 'jenkins_hitobito_' zu wählen. Die Jobs müssen ebenfalls einen eindeutigen RAILS_SPHINX_PORT sowie einen CAPYBARA_SERVER_PORT definieren.
 
@@ -36,7 +36,7 @@ Set environment variable names:
     RAILS_DB_PASSWORD=..
 
 
-##hitobito-core: Commit Build für den Core
+### hitobito-core: Commit Build für den Core
 
 Läuft nach jedem Commit auf dem Core Repo (pitc_hit/hitobito.git), Master und Stable Branch.
    * Läuft die Rubocop Hard Conventions
@@ -58,7 +58,7 @@ Läuft jede Nacht bei Changes auf dem Core Repo Master und Stable Branch. Die ge
 
 Rake Task: bundle exec rake ci:nightly tx:auth tx:push -t
 
-##hitobito-[wagon]: Commit Build für einen Wagon
+### hitobito-[wagon]: Commit Build für einen Wagon
 
 Läuft nach jedem Commit auf dem Wagon Repo, je nach dem auf dem Master oder Stable Branch.
 
@@ -91,7 +91,7 @@ Script:
     bin/ci/wagon_nightly_master.sh
 
 
-##Abhängigkeiten
+### Abhängigkeiten
 
 Zum überprüfen, ob der hitobito-core-nightly Job erfolgreich war, wurde folgendes Script als erster Build Step verwendet. Dieses funktioniert leider nicht mehr, da die Jobs auf unterschiedlichen Build Nodes ablaufen können und daher keinen Zugriff aufeinander haben. D.h., dass momentan ein Wagon Nightly Job erfolgreich sein kann, obwohl der Core Nightly failed. Damit können fehlerhafte Cores deployt werden.
 
@@ -109,7 +109,7 @@ Zum überprüfen, ob der hitobito-core-nightly Job erfolgreich war, wurde folgen
 
 Dadurch failt der Job direkt, falls hitobito-core-nightly nicht successfull ist.
 
-##hitobito-[wagon]-nightly_stable: Nightly Build für einen Wagon, Stable Branch
+### hitobito-[wagon]-nightly_stable: Nightly Build für einen Wagon, Stable Branch
 
 Läuft jede Nacht bei Changes auf dem Wagon Repo, Stable Branch, falls der hitobito-core-nightly Job erfolgreich war.
 
@@ -124,7 +124,7 @@ Script:
 
     bin/ci/wagon_nightly_stable.sh
 
-##hitobito-[wagon]-rpm: RPM Build für einen Wagon
+### hitobito-[wagon]-rpm: RPM Build für einen Wagon
 
 Läuft nach dem entsprechenden hitobito-[wagon]-nightly Job und erstellt ein RPM. Master oder Stable Branch.
 

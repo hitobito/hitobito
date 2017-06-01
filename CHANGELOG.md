@@ -1,5 +1,14 @@
 # Hitobito Changelog
 
+## Version 1.15
+
+*   Neue Rolle "Helfer/-in" für Anlässe.
+*   Unterschriften können nun bei allen Anlässen eingefordert werden.
+*   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
+*   Notizen ebenfalls auf Gruppen möglich.
+*   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
+*   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

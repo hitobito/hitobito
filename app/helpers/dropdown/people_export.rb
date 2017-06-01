@@ -10,12 +10,13 @@ module Dropdown
 
     attr_reader :user, :params
 
-    def initialize(template, user, params, details, email_addresses)
+    def initialize(template, user, params, details, email_addresses, labels = true)
       super(template, translate(:button), :download)
       @user = user
       @params = params
       @details = details
       @email_addresses = email_addresses
+      @labels = labels
 
       init_items
     end
@@ -48,7 +49,7 @@ module Dropdown
     end
 
     def label_links
-      if LabelFormat.exists?
+      if @labels && LabelFormat.exists?
         label_item = add_item(translate(:labels), main_label_link)
         add_last_used_format_item(label_item)
         add_label_format_items(label_item)

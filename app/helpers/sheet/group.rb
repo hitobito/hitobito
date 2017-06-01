@@ -45,9 +45,9 @@ module Sheet
           view.can?(:index_person_add_requests, group)
         end)
 
-    tab 'activerecord.models.person/note.other',
-        :person_notes_group_path,
-        if: :index_person_notes
+    tab 'activerecord.models.note.other',
+        :group_notes_path,
+        if: :index_notes
 
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,

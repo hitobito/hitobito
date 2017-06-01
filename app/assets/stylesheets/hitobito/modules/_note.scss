@@ -1,3 +1,21 @@
+#notes-list .note:first-child {
+  border-top: 0;
+}
+
+.notes-pagination {
+  margin: 0;
+}
+
+#notes-index .pagination {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+#notes-index .pagination:first-child {
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
 .note {
   border-top: 1px solid $grayLight;
   padding: 5px 0 10px;
@@ -8,6 +26,7 @@
     flex: 0 0 auto;
     margin-right: 20px;
     height: 40px;
+    width: 40px;
   }
 
   .note-body {
@@ -15,7 +34,7 @@
     width: 100%;
   }
 
-  .note-person {
+  .note-subject {
     font-size: 110%;
   }
 
@@ -28,11 +47,12 @@
     padding-left: 0.2em;
   }
 
-  &.is-current-person .note-author {
+  &.is-current-subject .note-author {
     width: 100%;
   }
+
   @include responsive(phone, $mediaTablet) {
-    .note-person {
+    .note-subject {
       width: 100%;
       clear: both;
     }
@@ -41,9 +61,11 @@
       width: 100%;
     }
   }
+
   i {
     opacity: 0.7;
   }
+
   i:hover {
     opacity: 1;
   }

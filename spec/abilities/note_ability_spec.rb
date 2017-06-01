@@ -1,13 +1,13 @@
 # encoding: utf-8
 
 #  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
-#  hitobito_dsj and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_dsj.
+#  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
-describe Person::NoteAbility do
+describe NoteAbility do
 
   subject { ability }
   let(:ability) { Ability.new(role.person.reload) }
@@ -104,9 +104,9 @@ describe Person::NoteAbility do
   end
 
   def create_note(author, person)
-    Person::Note.create!(
+    Note.create!(
       author: author,
-      person: person,
+      subject: person,
       text: 'Lorem ipsum'
     )
   end

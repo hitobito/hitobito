@@ -82,6 +82,8 @@ class Group < ActiveRecord::Base
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
+  has_many :notes, as: :subject, dependent: :destroy
+
   has_many :person_add_requests,
            foreign_key: :body_id,
            inverse_of: :body,

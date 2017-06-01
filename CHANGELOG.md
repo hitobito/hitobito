@@ -8,6 +8,7 @@
 *   Notizen ebenfalls auf Gruppen möglich.
 *   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
 *   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
+*   Anmeldedatum wird bei Anmeldeknopf auf Anlassliste angezeigt.
 
 ## Version 1.14
 

@@ -76,8 +76,19 @@ class Event::ListsController < ApplicationController
   end
 
   def default_user_course_group
+    course_group_from_primary_layer || course_group_from_hierarchy
+  end
+
+  def course_group_from_primary_layer
     Group.course_offerers.
-          where(id: current_user.primary_group.try(:layer_group_id)).first
+              where(id: current_user.primary_group.try(:layer_group_id)).first
+  end
+
+  def course_group_from_hierarchy
+    Group.course_offerers.   
+          where(id: current_user.groups_hierarchy_ids).
+          where('groups.id <> ?', Group.root.id).   
+          select(:id).first
   end
 
   def limited_courses_scope(scope = course_scope)

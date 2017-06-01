@@ -64,6 +64,14 @@ bottom_member:
   country: CH
   primary_group: bottom_layer_one
 
+bottom_group_member:
+  first_name: Bottom
+  last_name: Member
+  email: bottom_group_member@example.com
+  encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
+  primary_group: bottom_group_one_one
+
+
 root:
   company_name: 'Puzzle ITC'
   company: true

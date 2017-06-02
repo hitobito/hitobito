@@ -51,11 +51,11 @@ class PersonReadables < PersonFetchables
     if user.root?
       Person.only_public_data
     else
-      Person.only_public_data.
-             joins(roles: :group).
-             where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
-             where(accessible_conditions.to_a).
-             uniq
+      Person.only_public_data
+            .joins(roles: :group)
+            .where(roles: { deleted_at: nil }, groups: { deleted_at: nil })
+            .where(accessible_conditions.to_a)
+            .uniq
     end
   end
 

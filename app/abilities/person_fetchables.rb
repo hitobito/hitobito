@@ -101,9 +101,9 @@ class PersonFetchables
   end
 
   def groups_with_permissions(*permissions)
-    permissions.collect { |p| user.groups_with_permission(p) }.
-                flatten.
-                uniq
+    permissions.collect { |p| user.groups_with_permission(p) }
+               .flatten
+               .uniq
   end
 
 end

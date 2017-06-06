@@ -330,7 +330,6 @@ describe Person do
         'bottom_member@example.com',
         'hitobito@puzzle.ch',
         'top_leader@example.com',
-        'bottom_group_member@example.com',
         e1.email
       ])
     end
@@ -339,8 +338,7 @@ describe Person do
       people(:bottom_member).update_attributes!(email: ' ')
       expect(Person.mailing_emails_for(Person.all)).to match_array([
         'hitobito@puzzle.ch',
-        'top_leader@example.com',
-        'bottom_group_member@example.com'
+        'top_leader@example.com'
       ])
     end
   end

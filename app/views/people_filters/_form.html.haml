@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -10,19 +10,28 @@
   = render_extensions :form, locals: { f: f }
   = f.error_messages
 
+
+  = field_set_tag(t('.prompt_kind')) do
+    = render 'simple_radio', attr: 'kind', value: 'deep', first: true,
+              caption: ".kind.#{@group.layer? ? 'deep' : 'group_deep'}"
+    - if @group.layer?
+      = render 'simple_radio', attr: 'kind', value: 'layer'
+    = render 'simple_radio', attr: 'kind', value: 'group'
+
   .label-columns
     = field_set_tag(t('.prompt_role_selection')) do
       - @role_types.each do |layer, groups|
-        %h4.filter-toggle= layer
-        - groups.each do |group, role_types|
-          .control-group
-            = label_tag(nil, group, class: 'filter-toggle control-label')
-            .controls
-              - role_types.each do |role_type|
-                = f.inline_check_box(:role_type_ids,
-                                    role_type.id,
-                                    role_type.label,
-                                    checked: entry.role_types.include?(role_type.sti_name))
+        .layer{ class: [@group.klass.label, @group.layer_group.class.label].include?(layer) && 'same-layer' }
+          %h4.filter-toggle= layer
+          - groups.each do |group, role_types|
+            .group.control-group{ class: group == @group.klass.label && 'same-group' }
+              = label_tag(nil, group, class: 'filter-toggle control-label')
+              .controls
+                - role_types.each do |role_type|
+                  = f.inline_check_box(:role_type_ids,
+                                      role_type.id,
+                                      role_type.label,
+                                      checked: entry.role_types.include?(role_type.sti_name))
 
   - if can?(:create, entry)
     = field_set_tag(t('.save_filter')) do

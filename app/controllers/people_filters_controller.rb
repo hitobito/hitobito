@@ -55,11 +55,15 @@ class PeopleFiltersController < CrudController
 
   def result_path
     assign_attributes
-    params = {}
+    search_params = {}
     if entry.role_types.present?
-      params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
+      search_params = {
+        name: entry.name,
+        role_type_ids: entry.role_type_ids_string,
+        kind: params[:kind] || 'deep'
+      }
     end
-    people_list_path(params)
+    people_list_path(search_params)
   end
 
   def compose_role_lists

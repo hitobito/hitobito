@@ -77,6 +77,36 @@ describe PeopleController, js: true do
         expect(page).to have_css('input:checked', count: 0)
       end
     end
+
+    it 'toggles groups and layers when changing kind' do
+      obsolete_node_safe do
+        sign_in
+        visit group_people_path(group, kind: 'layer')
+
+        click_link 'Weitere Ansichten'
+        click_link 'Neuer Rollen Filter...'
+
+        expect(page).to have_no_selector('h4', text: 'Bottom Layer')
+        expect(page).to have_selector('h4', text: 'Top Layer')
+        expect(page).to have_selector('label', text: 'Top Layer')
+        expect(page).to have_selector('label', text: 'Top Group')
+
+        find('#kind_deep').set(true)
+        expect(page).to have_selector('h4', text: 'Bottom Layer')
+
+        find('#kind_group').set(true)
+        expect(page).to have_no_selector('h4', text: 'Bottom Layer')
+        expect(page).to have_selector('h4', text: 'Top Layer')
+        expect(page).to have_selector('label', text: 'Top Layer')
+        expect(page).to have_no_selector('label', text: 'Top Group')
+
+        find('#kind_layer').set(true)
+        expect(page).to have_no_selector('h4', text: 'Bottom Layer')
+        expect(page).to have_selector('h4', text: 'Top Layer')
+        expect(page).to have_selector('label', text: 'Top Layer')
+        expect(page).to have_selector('label', text: 'Top Group')
+      end
+    end
   end
 
   def sign_in_and_create_filter
@@ -87,6 +117,6 @@ describe PeopleController, js: true do
     click_link 'Weitere Ansichten'
     click_link 'Neuer Rollen Filter...'
 
-    expect(page).to have_css('input:checked', count: 0)
+    expect(page).to have_css('.label-columns input:checked', count: 0)
   end
 end

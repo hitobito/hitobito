@@ -249,12 +249,8 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def user_course_application?
-    entry.person == current_user && event.supports_applications
-  end
-
   def append_mailing_instructions?
-    user_course_application? && event.signature?
+    entry.person == current_user && event.signature?
   end
 
   def event

@@ -43,7 +43,7 @@ describe 'Person Notes', js: true do
 
       # submit without input
       find('#new_note button').click
-      expect(page).to have_selector('#notes-error')
+      expect(page).to have_selector('#notes-error', text: 'Text muss ausgefüllt werden')
 
       # submit with input
       expect do

@@ -858,6 +858,7 @@ de:
       save_search: Suche speichern
       save_filter: Filter speichern
       save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
+      prompt_kind: In welchem Bereich soll gesucht werden?
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
 
     new:

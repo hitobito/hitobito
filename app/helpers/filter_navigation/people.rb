@@ -133,6 +133,7 @@ module FilterNavigation
     def new_group_people_filter_path
       template.new_group_people_filter_path(
         group.id,
+        kind: deep,
         people_filter: { role_type_ids: role_type_ids })
     end
 

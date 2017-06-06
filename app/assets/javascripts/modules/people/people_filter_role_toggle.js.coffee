@@ -12,4 +12,28 @@ toggleFilterRoles = (event) ->
   boxes.each((el) -> $(this).prop('checked', !checked))
   target.data('checked', !checked)
 
+showAllGroups = (radio) ->
+  if radio.checked
+    $('.layer, .group').slideDown()
+
+showSameLayerGroups = (radio) ->
+  if radio.checked
+    $('.layer').hide()
+    $('.same-layer').show()
+    $('.same-layer .group').slideDown()
+
+showSameGroup = (radio) ->
+  if radio.checked
+    $('.layer, .group').hide()
+    $('.same-layer, .same-group').show()
+
 $(document).on('click', '.filter-toggle', toggleFilterRoles)
+$(document).on('change', 'input#kind_deep', (e) -> showAllGroups(e.target))
+$(document).on('change', 'input#kind_layer', (e) -> showSameLayerGroups(e.target))
+$(document).on('change', 'input#kind_group', (e) -> showSameGroup(e.target))
+
+$(document).on('turbolinks:load', ->
+  $('input#kind_deep').each((i, e) -> showAllGroups(e))
+  $('input#kind_layer').each((i, e) -> showSameLayerGroups(e))
+  $('input#kind_group').each((i, e) -> showSameGroup(e))
+)

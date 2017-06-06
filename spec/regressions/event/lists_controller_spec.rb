@@ -99,10 +99,10 @@ describe Event::ListsController, type: :controller do
       it 'tabs contain year based pagination' do
         first, last = tabs.all('a')[1], tabs.all('a')[-2]
         expect(first.text).to eq (year - 2).to_s
-        expect(first[:href]).to eq list_courses_path(year: year - 2, group_id: top_group.id)
+        expect(first[:href]).to eq list_courses_path(year: year - 2, group_id: people(:top_leader).primary_group.layer_group_id)
 
         expect(last.text).to eq (year + 1).to_s
-        expect(last[:href]).to eq list_courses_path(year: year + 1, group_id: top_group.id)
+        expect(last[:href]).to eq list_courses_path(year: year + 1, group_id: people(:top_leader).primary_group.layer_group_id)
       end
     end
 

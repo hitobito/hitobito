@@ -45,11 +45,7 @@ nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguratio
 Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
 
 
-
-
-### Anleitungen: Anpassungen in einem Wagon vornehmen
-
-#### Wagon erstellen
+### Anleitung: Wagon erstellen
 
 Die Grundstruktur eines neuen Wagons kann sehr 
 einfach im Hauptprojekt generiert werden (Die Templates dazu befinden sich in `lib/templates/wagon`):
@@ -85,7 +81,7 @@ Damit entsprechende Testdaten für Tests sowie Tarantula vorhanden sind, müssen
 * Anpassen der Fixtures für people, groups, roles, events, usw. (`spec/fixtures`)
 * Anpassen der Tarantula Tests im Wagon (`test/tarantula/tarantula_test.rb`)
 
-#### Gruppenstruktur definieren
+### Anleitung: Gruppenstruktur definieren
 
 Nachdem für eine Organisation ein neuer Wagon erstellt worden ist, muss oft auch eine 
 Gruppenstruktur definiert werden. Wie die entsprechenden Modelle aufgebaut sind, ist in der 
@@ -108,7 +104,7 @@ Entwicklungsumgebung noch vorgenommen werden müssen:
 * `README.md` mit Output von `rake app:hitobito:roles` ergänzen.
 
 
-#### Einzelne Methode anpassen
+### Anleitung: Einzelne Methode anpassen
 
 Im PBS Wagon wurde die Methode `full_name` auf dem `Person` Model angepasst.
 
@@ -153,13 +149,13 @@ Damit der Code in diesem Module entsprechend für das Person Model übernommen w
          ...
 
 
-#### Attribute hinzufügen 
+### Anleitung: Attribute hinzufügen 
 
 The following documentation describes how new attributes can be added to a model in an own wagon. For reasons of simplification, this documentation follows an example where the generic wagon is going to be adapted and the `Person` model gets two new attributes called `title` and `salutation`.
 
 All mentioned files are created/adjusted in a dedicated wagon, not in the core application.
 
-##### Add new attributes to the database
+#### Add new attributes to the database
 
 In order to adapt the database structure and add the desired new attributes to the model, a new migration must be created by the following command, which is executed in the root directory of the wagon:
 
@@ -176,7 +172,7 @@ This command will create a new migration file in the path `db/migrate/YYYYMMDDHH
 
 In this example, the data types of the attributes are set to strings.
 
-##### Permit attributes for editing
+#### Permit attributes for editing
 
 The new attributes must be included in the application logic. To do so, a new controller has to be created in `app/controllers/<wagon_namespace>/people_controller.rb` which permits the two attributes to be updated:
 
@@ -189,7 +185,7 @@ The new attributes must be included in the application logic. To do so, a new co
       end
     end
 
-##### Show and edit attributes in the view
+#### Show and edit attributes in the view
 
 There are two views which have to be adapted regarding the `Person` model: On one side the show view of the person and on the other side the edit view of the person.
 
@@ -203,7 +199,7 @@ Create a new file in `app/views/people/_fields_<wagon_namespace>.html.haml` with
 
 It is important that these files start with `_details` respectively `_fields`. The core-application automatically includes/renders all files starting with `_details` and `_fields`. The subsequent characters (`_<wagon_namespace>`) can be chosen arbitrarily.
 
-##### Translate the attribute names
+#### Translate the attribute names
 
 In order to display the attribute names properly in each language, the language files of all used languages must be adapted by simply adding the following lines to the `config/locales/models.<wagon_namespace>.<language_code>.yml`-files:
 
@@ -212,7 +208,7 @@ In order to display the attribute names properly in each language, the language 
       title: <translation_for_title_attribute_in_corresponding_language>
       salutation: <translation_for_salutation_attribute_in_corresponding_language>
 
-##### Include attributes in the CSV/Excel Exports
+#### Include attributes in the CSV/Excel Exports
 
 If wished, the attributes can be included in the CSV-File that is generated when performing a contact export. For this inclusion, a new file in `app/domain/<wagon_namespace>/export/tabular/people/people_address.rb` with the following content must be created:
 
@@ -236,7 +232,7 @@ If wished, the attributes can be included in the CSV-File that is generated when
       end
     end
 
-##### Make attributes searchable
+#### Make attributes searchable
 
 The new attributes must be indexed in `app/indices/person_index.rb` where all indexes for Sphinx (the search tool that is used by hitobito) are defined.
 
@@ -244,7 +240,7 @@ The new attributes must be indexed in `app/indices/person_index.rb` where all in
       indexes title
     end
 
-##### Output attributes in the API
+#### Output attributes in the API
 
 In order to provide the additional attributes in the API (the JSON-file of the object), the serializer for the people must be extended in `app/serializers/<wagon_namespace>/person_serializer.rb`:
 
@@ -257,7 +253,7 @@ In order to provide the additional attributes in the API (the JSON-file of the o
       end
     end
 
-##### Wire up above extensions
+#### Wire up above extensions
 
 The newly created or updated `PeopleController`, the CSV export file and the serializer file for the API must also be defined in the wagon configuration file which is located in `lib/<wagon_name>/wagon.rb`.
 
@@ -268,7 +264,7 @@ The newly created or updated `PeopleController`, the CSV export file and the ser
         PersonSerializer.send :include, <wagon_namespace>::PersonSerializer
     end
 
-##### Write tests for attributes
+#### Write tests for attributes
 
 Arbitrary tests cases can be defined in the `spec/` directory of the wagon. As an example, the following file (`spec/domain/export/tabular/people/people_address_spec.rb`) proposes a test case that checks whether the attributes are exported properly into the CSV-file:
 

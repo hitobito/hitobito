@@ -46,7 +46,7 @@ Rake Task:
 
     ci
 
-##hitobito-core-nightly_master/stable: Nightly Build für den Core
+### hitobito-core-nightly_master/stable: Nightly Build für den Core
 
 Läuft jede Nacht bei Changes auf dem Core Repo Master und Stable Branch. Die gesamte Build History wird archiviert.
 
@@ -71,7 +71,7 @@ Rake Task:
 
 Script: bin/ci/wagon_commit.sh
 
-##hitobito-[wagon]-nightly_master: Nightly Build für einen Wagon, Master Branch
+### hitobito-[wagon]-nightly_master: Nightly Build für einen Wagon, Master Branch
 
 Läuft jede Nacht bei Changes auf dem Wagon Repo, Master Branch, falls der hitobito-core-nightly Job erfolgreich war. Die gesamte Build History wird archiviert.
 
@@ -91,7 +91,7 @@ Script:
     bin/ci/wagon_nightly_master.sh
 
 
-### Abhängigkeiten
+#### Abhängigkeiten
 
 Zum überprüfen, ob der hitobito-core-nightly Job erfolgreich war, wurde folgendes Script als erster Build Step verwendet. Dieses funktioniert leider nicht mehr, da die Jobs auf unterschiedlichen Build Nodes ablaufen können und daher keinen Zugriff aufeinander haben. D.h., dass momentan ein Wagon Nightly Job erfolgreich sein kann, obwohl der Core Nightly failed. Damit können fehlerhafte Cores deployt werden.
 

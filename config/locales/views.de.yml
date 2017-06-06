@@ -498,7 +498,7 @@ de:
     global:
       link:
         add: Gruppe erstellen
-        deleted_person: Gelöschte Personen
+        deleted_person: Ohne Rollen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."

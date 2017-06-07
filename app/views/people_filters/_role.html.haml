@@ -12,7 +12,7 @@
         %h4.filter-toggle= layer
         - groups.each do |group, role_types|
           .group.control-group{ class: group == @group.klass.label && 'same-group' }
-            = label_tag(nil, group, class: 'filter-toggle control-label')
+            %h5.filter-toggle= group
             .controls
               - role_types.each do |role_type|
                 - id = "filters_role_role_type_ids_#{role_type.id}"

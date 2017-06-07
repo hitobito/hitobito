@@ -3,12 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= field_set_tag(t('.prompt_range')) do
-  = render 'simple_radio',
-           attr: 'range',
-           value: 'deep',
-           checked: true,
-           caption: "people_filters.form.range.#{@group.layer? ? 'deep' : 'group_deep'}"
-  - if @group.layer?
-    = render 'simple_radio', attr: 'range', value: 'layer', checked: entry.range == 'layer'
-  = render 'simple_radio', attr: 'range', value: 'group', checked: entry.range == 'group'
+= render 'simple_radio',
+         attr: 'range',
+         value: 'deep',
+         checked: true,
+         caption: "people_filters.form.range.#{@group.layer? ? 'deep' : 'group_deep'}"
+- if @group.layer?
+  = render 'simple_radio', attr: 'range', value: 'layer', checked: entry.range == 'layer'
+= render 'simple_radio', attr: 'range', value: 'group', checked: entry.range == 'group'
+
+%br/

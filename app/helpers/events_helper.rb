@@ -38,8 +38,11 @@ module EventsHelper
     if event_user_application_possible?(event)
       group ||= event.groups.first
 
-      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user) +
-      content_tag(:div, t('event.lists.apply_until', date: f(event.application_closing_at)))
+      button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      if event.application_closing_at.present?
+        button += content_tag(:div, t('event.lists.apply_until', date: f(event.application_closing_at)))
+      end
+      button
     end
   end
 

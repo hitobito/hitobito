@@ -19,21 +19,23 @@ showAllGroups = (radio) ->
 showSameLayerGroups = (radio) ->
   if radio.checked
     $('.layer').hide()
+    $('.layer:not(.same-layer) input[type=checkbox]').prop('checked', false)
     $('.same-layer').show()
     $('.same-layer .group').slideDown()
 
 showSameGroup = (radio) ->
   if radio.checked
     $('.layer, .group').hide()
+    $('.layer:not(.same-layer) input[type=checkbox], .group:not(.same-group) input[type=checkbox]').prop('checked', false)
     $('.same-layer, .same-group').show()
 
 $(document).on('click', '.filter-toggle', toggleFilterRoles)
-$(document).on('change', 'input#kind_deep', (e) -> showAllGroups(e.target))
-$(document).on('change', 'input#kind_layer', (e) -> showSameLayerGroups(e.target))
-$(document).on('change', 'input#kind_group', (e) -> showSameGroup(e.target))
+$(document).on('change', 'input#range_deep', (e) -> showAllGroups(e.target))
+$(document).on('change', 'input#range_layer', (e) -> showSameLayerGroups(e.target))
+$(document).on('change', 'input#range_group', (e) -> showSameGroup(e.target))
 
 $(document).on('turbolinks:load', ->
-  $('input#kind_deep').each((i, e) -> showAllGroups(e))
-  $('input#kind_layer').each((i, e) -> showSameLayerGroups(e))
-  $('input#kind_group').each((i, e) -> showSameGroup(e))
+  $('input#range_deep').each((i, e) -> showAllGroups(e))
+  $('input#range_layer').each((i, e) -> showSameLayerGroups(e))
+  $('input#range_group').each((i, e) -> showSameGroup(e))
 )

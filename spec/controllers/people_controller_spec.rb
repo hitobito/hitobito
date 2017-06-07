@@ -56,30 +56,30 @@ describe PeopleController do
 
         context 'default sort' do
           it "sorts by name" do
-            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
+            get :index, group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }
             expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
           end
 
           it "people.default_sort setting can override it to sort by role" do
             allow(Settings.people).to receive_messages(default_sort: 'role')
-            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids
+            get :index, group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids }}
             expect(assigns(:people).collect(&:id)).to eq([top_leader,  @tg_member, @tg_extern].collect(&:id))
           end
         end
 
         it "sorts based on last_name" do
-          get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :last_name, sort_dir: :asc
+          get :index, group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: :last_name, sort_dir: :asc
           expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
         end
 
         it "sorts based on roles" do
-          get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: :roles, sort_dir: :asc
+          get :index, group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: :roles, sort_dir: :asc
           expect(assigns(:people)).to eq([top_leader,  @tg_member, @tg_extern])
         end
 
         %w(first_name nickname zip_code town).each do |attr|
           it "sorts based on #{attr}" do
-            get :index, group_id: group, kind: 'layer', role_type_ids: role_type_ids, sort: attr, sort_dir: :asc
+            get :index, group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: attr, sort_dir: :asc
             expect(assigns(:people)).to eq([@tg_member, top_leader,  @tg_extern])
           end
         end
@@ -94,13 +94,13 @@ describe PeopleController do
         end
 
         it 'loads externs of a group when type given' do
-          get :index, group_id: group, role_type_ids: [Role::External.id].join('-')
+          get :index, group_id: group, filters: { role: { role_type_ids: [Role::External.id].join('-') } }
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
 
         it 'loads selected roles of a group when types given' do
-          get :index, group_id: group, role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join('-')
+          get :index, group_id: group, filters: { role: { role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join('-') } }
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
@@ -233,7 +233,7 @@ describe PeopleController do
           before { sign_in(@bl_leader) }
 
           it 'loads group members when no types given' do
-            get :index, group_id: group, kind: 'layer'
+            get :index, group_id: group, range: 'layer'
 
             expect(assigns(:people).collect(&:id)).to match_array(
               [people(:bottom_member), @bl_leader].collect(&:id)
@@ -242,8 +242,8 @@ describe PeopleController do
 
           it 'loads selected roles of a group when types given' do
             get :index, group_id: group,
-                        role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-'),
-                        kind: 'layer'
+                        filters: { role: { role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-') } },
+                        range: 'layer'
 
             expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
           end
@@ -255,15 +255,15 @@ describe PeopleController do
               body: group,
               role_type: group.class.role_types.first.sti_name)
 
-            get :index, group_id: group.id, kind: 'layer'
+            get :index, group_id: group.id, range: 'layer'
 
             expect(assigns(:person_add_requests)).to be_nil
           end
 
           it 'exports full csv when types given and ability exists' do
             get :index, group_id: group,
-                        role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-'),
-                        kind: 'layer',
+                        filters: { role: { role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-') } },
+                        range: 'layer',
                         details: true,
                         format: :csv
 
@@ -276,8 +276,8 @@ describe PeopleController do
 
             it 'renders json with only the one role in this group' do
               get :index, group_id: group,
-                          kind: 'layer',
-                          role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
+                          range: 'layer',
+                          filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } },
                           format: :json
               json = JSON.parse(@response.body)
               person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
@@ -291,8 +291,8 @@ describe PeopleController do
 
           it 'exports only address csv when types given and no ability exists' do
             get :index, group_id: group,
-                        role_type_ids: [Group::BottomLayer::Leader.id, Group::BottomLayer::Member.id].join('-'),
-                        kind: 'layer',
+                        filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id, Group::BottomLayer::Member.id].join('-') } },
+                        range: 'layer',
                         details: true,
                         format: :csv
 
@@ -308,15 +308,15 @@ describe PeopleController do
         let(:group) { groups(:top_layer) }
 
         it 'loads group members when no types are given' do
-          get :index, group_id: group, kind: 'deep'
+          get :index, group_id: group, range: 'deep'
 
           expect(assigns(:people).collect(&:id)).to match_array([])
         end
 
         it 'loads selected roles of a group when types given' do
           get :index, group_id: group,
-                      role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
-                      kind: 'deep'
+                      filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } },
+                      range: 'deep'
 
           expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
@@ -326,13 +326,31 @@ describe PeopleController do
 
           it 'renders json with only the one role in this group' do
             get :index, group_id: group,
-                        kind: 'deep',
-                        role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-'),
+                        range: 'deep',
+                        filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } },
                         format: :json
             json = JSON.parse(@response.body)
             person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
             expect(person['links']['roles'].size).to eq(2)
           end
+        end
+      end
+
+      context 'filter_id' do
+        let(:group) { groups(:top_layer) }
+
+        it 'loads selected roles of a group' do
+          filter = PeopleFilter.create!(
+            name: 'My Filter',
+            range: 'deep',
+            filter_chain: {
+              role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') }
+            }
+          )
+
+          get :index, group_id: group, filter_id: filter.id
+
+          expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
       end
     end
@@ -762,7 +780,7 @@ describe PeopleController do
   end
 
   context 'DELETE #destroy' do
-    
+
     let(:member) { people(:bottom_member) }
     let(:admin) { people(:top_leader) }
 
@@ -776,7 +794,7 @@ describe PeopleController do
 
       it 'deletes person' do
         expect do
-          delete :destroy, group_id: member.primary_group.id, id: member.id 
+          delete :destroy, group_id: member.primary_group.id, id: member.id
         end.to change(Person, :count).by(-1)
       end
     end

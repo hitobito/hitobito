@@ -1,37 +1,48 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: people_filters
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  group_id   :integer
-#  group_type :string
+#  id           :integer          not null, primary key
+#  name         :string           not null
+#  group_id     :integer
+#  group_type   :string
+#  filter_chain :text
+#  range        :string
+#  created_at   :datetime
+#  updated_at   :datetime
 #
 
 class PeopleFilter < ActiveRecord::Base
 
-  include RelatedRoleType::Assigners
+  RANGES = %w(deep layer group).freeze
 
+  serialize :filter_chain, Person::Filter::Chain
 
   belongs_to :group
 
-  has_many :related_role_types, as: :relation, dependent: :destroy
-
-
   validates_by_schema
   validates :name, uniqueness: { scope: [:group_id, :group_type] }
+  validates :range, inclusion: { in: RANGES }
 
-
-  default_scope { order(:name).includes(:related_role_types) }
+  scope :list, -> { order(:name) }
 
   def to_s(_format = :default)
     name
+  end
+
+  def filter_chain=(value)
+    if value.is_a?(Hash)
+      super(Person::Filter::Chain.new(value))
+    else
+      super
+    end
   end
 
   class << self

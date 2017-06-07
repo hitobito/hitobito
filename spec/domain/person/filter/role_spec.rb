@@ -1,22 +1,29 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
-describe Person::RoleFilter do
+describe Person::Filter::Role do
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
-  let(:kind) { nil }
+  let(:range) { nil }
   let(:role_types) { [] }
-  let(:role_type_ids_string) { role_types.collect(&:id).join(RelatedRoleType::Assigners::ID_URL_SEPARATOR) }
-  let(:list_filter) { Person::RoleFilter.new(group, user, kind: kind, role_type_ids: role_type_ids_string) }
+  let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
+  let(:list_filter) do
+    Person::Filter::List.new(group,
+                             user,
+                             range: range,
+                             filters: {
+                               role: {role_type_ids: role_type_ids_string }
+                             })
+  end
 
-  let(:entries) { list_filter.filter_entries }
+  let(:entries) { list_filter.entries }
 
   before do
     @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
@@ -69,13 +76,14 @@ describe Person::RoleFilter do
 
   context 'layer' do
     let(:group) { groups(:bottom_layer_one) }
-    let(:kind) { 'layer' }
+    let(:range) { 'layer' }
 
     context 'with layer and below full' do
       let(:user) { @bl_leader }
 
       it 'loads group members when no types given' do
         expect(entries.collect(&:id)).to match_array([people(:bottom_member), @bl_leader].collect(&:id))
+        expect(list_filter.all_count).to eq(2)
       end
 
       context 'with specific types' do
@@ -83,6 +91,7 @@ describe Person::RoleFilter do
 
         it 'loads selected roles of a group when types given' do
           expect(entries.collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
+          expect(list_filter.all_count).to eq(2)
         end
       end
     end
@@ -91,7 +100,7 @@ describe Person::RoleFilter do
 
   context 'deep' do
     let(:group) { groups(:top_layer) }
-    let(:kind) { 'deep' }
+    let(:range) { 'deep' }
 
     it 'loads group members when no types are given' do
       expect(entries.collect(&:id)).to match_array([])
@@ -109,4 +118,5 @@ describe Person::RoleFilter do
       end
     end
   end
+
 end

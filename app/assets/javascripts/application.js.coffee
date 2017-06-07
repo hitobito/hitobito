@@ -20,8 +20,10 @@
 #= require jquery-ui/widgets/datepicker
 #= require jquery-ui-datepicker-i18n
 #= require jquery-ui/effects/effect-highlight
+#= require bootstrap-transition
 #= require bootstrap-alert
 #= require bootstrap-button
+#= require bootstrap-collapse
 #= require bootstrap-dropdown
 #= require bootstrap-tooltip
 #= require bootstrap-popover

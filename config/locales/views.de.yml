@@ -874,9 +874,11 @@ de:
       prompt_range: In welchem Bereich soll gesucht werden?
 
     role:
+      title: Rollen
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
 
     qualification:
+      title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken

@@ -31,6 +31,7 @@ describe PeopleController, js: true do
       # edit the current filter
       click_link 'Bottom Layer'
       click_link 'Neuer Filter...'
+      click_link 'Rollen'
 
       expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Leader.id}")
       expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Member.id}")
@@ -44,6 +45,7 @@ describe PeopleController, js: true do
       # open the previously defined filter again
       click_link 'Eigener Filter'
       click_link 'Bottom Layer'
+      click_link 'Rollen'
 
       expect(page).to have_selector('.table tbody tr', count: 2)
 
@@ -70,10 +72,10 @@ describe PeopleController, js: true do
       obsolete_node_safe do
         sign_in_and_create_filter
 
-        find('label.filter-toggle', text: 'Top Group').click
+        find('h5.filter-toggle', text: 'Top Group').click
         expect(page).to have_css('#roles input:checked', count: 5)
 
-        find('label.filter-toggle', text: 'Top Group').click
+        find('h5.filter-toggle', text: 'Top Group').click
         expect(page).to have_css('#roles input:checked', count: 0)
       end
     end
@@ -85,11 +87,12 @@ describe PeopleController, js: true do
 
         click_link 'Weitere Ansichten'
         click_link 'Neuer Filter...'
+        click_link 'Rollen'
 
         expect(page).to have_no_selector('h4', text: 'Bottom Layer')
         expect(page).to have_selector('h4', text: 'Top Layer')
-        expect(page).to have_selector('label', text: 'Top Layer')
-        expect(page).to have_no_selector('label', text: 'Top Group')
+        expect(page).to have_selector('h5', text: 'Top Layer')
+        expect(page).to have_no_selector('h5', text: 'Top Group')
 
         find('#range_deep').set(true)
         expect(page).to have_selector('h4', text: 'Bottom Layer')
@@ -97,14 +100,14 @@ describe PeopleController, js: true do
         find('#range_group').set(true)
         expect(page).to have_no_selector('h4', text: 'Bottom Layer')
         expect(page).to have_selector('h4', text: 'Top Layer')
-        expect(page).to have_selector('label', text: 'Top Layer')
-        expect(page).to have_no_selector('label', text: 'Top Group')
+        expect(page).to have_selector('h5', text: 'Top Layer')
+        expect(page).to have_no_selector('h5', text: 'Top Group')
 
         find('#range_layer').set(true)
         expect(page).to have_no_selector('h4', text: 'Bottom Layer')
         expect(page).to have_selector('h4', text: 'Top Layer')
-        expect(page).to have_selector('label', text: 'Top Layer')
-        expect(page).to have_selector('label', text: 'Top Group')
+        expect(page).to have_selector('h5', text: 'Top Layer')
+        expect(page).to have_selector('h5', text: 'Top Group')
       end
     end
   end
@@ -116,6 +119,7 @@ describe PeopleController, js: true do
 
     click_link 'Weitere Ansichten'
     click_link 'Neuer Filter...'
+    click_link 'Rollen'
 
     expect(page).to have_css('#roles .label-columns input:checked', count: 0)
   end

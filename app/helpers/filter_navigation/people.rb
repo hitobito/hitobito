@@ -54,11 +54,11 @@ module FilterNavigation
     def init_kind_items
       @kind_filter_names.each do |kind, name|
         types = group.role_types.select { |t| t.kind == kind }
-        if visible_role_types?(types)
-          count = group.people.where(roles: { type: types.collect(&:sti_name) }).uniq.count
-          path = kind == :member ? path : fixed_types_path(name, types)
-          item(name, path, count)
-        end
+        next unless visible_role_types?(types)
+
+        count = group.people.where(roles: { type: types.collect(&:sti_name) }).uniq.count
+        path = kind == :member ? path : fixed_types_path(name, types)
+        item(name, path, count)
       end
     end
 
@@ -130,19 +130,36 @@ module FilterNavigation
     def people_filter_link(filter)
       item = dropdown.add_item(filter.name, path(filter_id: filter.id))
       if can?(:destroy, filter)
+        item.sub_items << edit_filter_item(filter)
         item.sub_items << delete_filter_item(filter)
       end
     end
 
     def delete_filter_item(filter)
-      ::Dropdown::Item.new(template.icon(:trash),
-                           delete_group_people_filter_path(filter),
-                           data: { confirm: template.ti(:confirm_delete),
-                                   method:  :delete })
+      ::Dropdown::Item.new(
+        filter_label(:trash, :delete),
+        delete_group_people_filter_path(filter),
+        data: { confirm: template.ti(:confirm_delete), method:  :delete }
+      )
     end
 
     def delete_group_people_filter_path(filter)
       template.group_people_filter_path(group, filter)
+    end
+
+    def edit_filter_item(filter)
+      ::Dropdown::Item.new(
+        filter_label(:edit, :edit),
+        edit_group_people_filter_path(filter)
+      )
+    end
+
+    def edit_group_people_filter_path(filter)
+      template.edit_group_people_filter_path(group, filter)
+    end
+
+    def filter_label(icon, desc)
+      template.safe_join([template.icon(icon), ' ', template.t("global.link.#{desc}")])
     end
 
     def fixed_types_path(name, types, options = {})

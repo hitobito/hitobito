@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,10 +14,15 @@ describe 'FilterNavigation::People' do
       allow(t).to receive_messages(can?: true)
       allow(t).to receive_messages(group_people_path: 'people_path')
       allow(t).to receive_messages(group_people_filter_path: 'people_filter_path')
+      allow(t).to receive_messages(edit_group_people_filter_path: 'edit_people_filter_path')
       allow(t).to receive_messages(new_group_people_filter_path: 'new_group_people_filter_path')
       allow(t).to receive_messages(link_action_destroy: '<a destroy>')
       allow(t).to receive_messages(icon: '<i>')
       allow(t).to receive_messages(ti: 'delete')
+      allow(t).to receive_messages(t: 'global.link.edit')
+      allow(t).to receive_messages(t: 'global.link.delete')
+      allow(t).to receive_messages(safe_join: ["<i>", " ", "global.link.edit"])
+      allow(t).to receive_messages(safe_join: ["<i>", " ", "global.link.delete"])
       allow(t).to receive(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
       allow(t).to receive(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
     end

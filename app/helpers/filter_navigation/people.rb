@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,14 +8,14 @@
 module FilterNavigation
   class People < Base
 
-    attr_reader :group
+    attr_reader :group, :filter
 
     delegate :can?, to: :template
 
-    def initialize(template, group, params)
+    def initialize(template, group, filter)
       super(template)
       @group = group
-      @params = params
+      @filter = filter
       init_kind_filter_names
       init_labels
       init_kind_items
@@ -23,23 +23,7 @@ module FilterNavigation
     end
 
     def name
-      @params[:name]
-    end
-
-    def role_type_ids
-      @params[:role_type_ids]
-    end
-
-    def qualification_kind_ids
-      @params[:qualification_kind_id]
-    end
-
-    def deep
-      @params[:kind] || false
-    end
-
-    def validity
-      @params[:validity]
+      filter.name
     end
 
     def match
@@ -60,7 +44,7 @@ module FilterNavigation
         @active_label = name
       elsif name.present?
         dropdown.activate(name)
-      elsif role_type_ids.present? || qualification_kind_ids.present?
+      elsif filter.chain.present?
         dropdown.activate(translate(:custom_filter))
       else
         @active_label = main_filter_name
@@ -94,47 +78,40 @@ module FilterNavigation
       else
         add_entire_subgroup_filter_link
       end
-      add_people_role_filter_links
-      add_define_people_role_filter_link
-      add_define_qualification_filter_link
+      add_people_filter_links
+      add_define_people_filter_link
     end
 
     def add_entire_layer_filter_link
       name = translate(:entire_layer)
-      link = fixed_types_path(name, sub_groups_role_types, kind: 'layer')
+      link = fixed_types_path(name, sub_groups_role_types, range: 'layer')
       dropdown.add_item(name, link)
     end
 
     def add_entire_subgroup_filter_link
       name = translate(:entire_group)
-      link = fixed_types_path(name, sub_groups_role_types, kind: 'deep')
+      link = fixed_types_path(name, sub_groups_role_types, range: 'deep')
       dropdown.add_item(name, link)
     end
 
-    def add_people_role_filter_links
+    def add_people_filter_links
       filters = PeopleFilter.for_group(group)
       filters.each { |filter| people_filter_link(filter) }
     end
 
-    def add_define_people_role_filter_link
+    def add_define_people_filter_link
       if can?(:new, group.people_filters.new)
         dropdown.add_divider if dropdown.items.present?
-        dropdown.add_item(translate(:new_role_filter), new_group_people_filter_path)
-      end
-    end
-
-    def add_define_qualification_filter_link
-      if can?(:index_full_people, group)
-        dropdown.add_item(translate(:new_qualification_filter),
-                          qualification_group_people_filter_path)
+        dropdown.add_item(translate(:new_filter), new_group_people_filter_path)
       end
     end
 
     def new_group_people_filter_path
       template.new_group_people_filter_path(
         group.id,
-        kind: deep,
-        people_filter: { role_type_ids: role_type_ids })
+        range: filter.range,
+        filters: filter.chain.to_hash
+      )
     end
 
     def qualification_group_people_filter_path
@@ -151,7 +128,7 @@ module FilterNavigation
     end
 
     def people_filter_link(filter)
-      item = dropdown.add_item(filter.name, filter_path(filter, kind: 'deep'))
+      item = dropdown.add_item(filter.name, path(filter_id: filter.id))
       if can?(:destroy, filter)
         item.sub_items << delete_filter_item(filter)
       end
@@ -169,13 +146,9 @@ module FilterNavigation
     end
 
     def fixed_types_path(name, types, options = {})
-      filter_path(PeopleFilter.new(role_type_ids: types.collect(&:id), name: name), options)
-    end
-
-    def filter_path(filter, options = {})
-      options[:role_type_ids] ||= filter.role_type_ids_string
-      options[:name] ||= filter.name
-      path(options)
+      type_ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
+      path(options.merge(name: name,
+                         filters: { role: { role_type_ids: type_ids } }))
     end
 
     def path(options = {})

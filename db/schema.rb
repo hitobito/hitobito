@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170529134942) do
+ActiveRecord::Schema.define(version: 20170607111148) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -334,9 +334,13 @@ ActiveRecord::Schema.define(version: 20170529134942) do
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
 
   create_table "people_filters", force: :cascade do |t|
-    t.string  "name",       limit: 255, null: false
-    t.integer "group_id",   limit: 4
-    t.string  "group_type", limit: 255
+    t.string   "name",         limit: 255,   null: false
+    t.integer  "group_id",     limit: 4
+    t.string   "group_type",   limit: 255
+    t.text     "filter_chain", limit: 65535
+    t.string   "range",        limit: 255,   default: 'deep'
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "people_filters", ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"

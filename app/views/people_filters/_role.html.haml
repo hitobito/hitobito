@@ -19,6 +19,6 @@
                 = label_tag(nil, id, class: 'checkbox inline') do
                   = check_box_tag("filters[role][role_type_ids][]",
                                   role_type.id,
-                                  filter && filter.args[:role_type_ids].include?(role_type.id),
+                                  filter && filter.to_hash[:role_types].include?(role_type.to_s),
                                   id: id)
                   = role_type.label

@@ -110,7 +110,7 @@ module FilterNavigation
       template.new_group_people_filter_path(
         group.id,
         range: filter.range,
-        filters: filter.chain.to_hash
+        filters: filter.chain.to_params
       )
     end
 

@@ -8,6 +8,7 @@
 class Person::Filter::Qualification < Person::Filter::Base
 
   self.required_ability = :full
+  self.permitted_args = [:qualification_kind_ids, :validity]
 
   def initialize(attr, args)
     super
@@ -30,7 +31,7 @@ class Person::Filter::Qualification < Person::Filter::Base
     args[:qualification_kind_ids].blank?
   end
 
-  def to_hash
+  def to_params
     args.dup.tap do |hash|
       hash[:qualification_kind_ids] = hash[:qualification_kind_ids].join(ID_URL_SEPARATOR)
     end

@@ -24,7 +24,7 @@ class Person::Filter::Chain
               "Attribute was supposed to be a #{self}, but was a #{obj.class}. -- #{obj.inspect}"
       end
 
-      YAML.dump(obj.to_hash)
+      YAML.dump(obj.to_hash.deep_stringify_keys)
     end
   end
 
@@ -50,11 +50,11 @@ class Person::Filter::Chain
 
   def to_hash
     # call #to_hash twice to get a regular hash (without indifferent access)
-    filters.each_with_object({}) { |f, h| h[f.attr.to_s] = f.to_hash.to_hash }
+    build_hash { |f| f.to_hash.to_hash }
   end
 
   def to_params
-    to_hash
+    build_hash { |f| f.to_params }
   end
 
   def required_abilities
@@ -63,19 +63,25 @@ class Person::Filter::Chain
 
   private
 
+  def build_hash
+    filters.each_with_object({}) { |f, h| h[f.attr] = yield f }
+  end
+
   def parse(params)
     (params || {}).map { |attr, args| build_filter(attr, args) }.compact
   end
 
   def build_filter(attr, args)
-    filter = filter_type(attr).new(attr, args.with_indifferent_access)
-    filter.present? ? filter : nil
+    type = filter_type(attr)
+    if type
+      filter = type.new(attr, args.with_indifferent_access)
+      filter.present? ? filter : nil
+    end
   end
 
   def filter_type(attr)
     key = filter_type_key(attr)
-    TYPES.find { |t| t.key == key } ||
-      raise(ArgumentError, "Unknown filter type #{key}")
+    TYPES.find { |t| t.key == key }
   end
 
   def filter_type_key(attr)

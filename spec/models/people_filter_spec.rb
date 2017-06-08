@@ -23,7 +23,7 @@ describe PeopleFilter do
 
     it 'assigns hash to filter_chain' do
       filter = PeopleFilter.new(filter_chain: { role: { role_type_ids: [1, 2, 3] }})
-      expect(filter.filter_chain[:role].args).to eq('role_type_ids' => [1, 2, 3])
+      expect(filter.filter_chain[:role].to_params).to eq(role_type_ids: '1-2-3')
     end
 
   end

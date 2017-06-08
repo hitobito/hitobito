@@ -12,5 +12,12 @@ class AddPeopleFilterChain < ActiveRecord::Migration
 
     add_column :people_filters, :created_at, :timestamp
     add_column :people_filters, :updated_at, :timestamp
+
+    PeopleFilter.reset_column_information
+
+    PeopleFilter.find_each do |filter|
+      types = RelatedRoleType.where(relation: filter).pluck(:role_type)
+      filter.update!(range: 'deep', filter_chain: { role: { role_types: types } })
+    end
   end
 end

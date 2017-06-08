@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_cevi
+  remote: ../hitobito_pbs
   specs:
-    hitobito_cevi (0.0.1)
+    hitobito_pbs (0.0.1)
       hitobito_youth
 
 PATH
@@ -94,6 +94,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-screenshot (1.0.14)
+      capybara (>= 1.0, < 3)
+      launchy
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -513,6 +516,7 @@ DEPENDENCIES
   bullet
   cancancan (< 1.13.0)
   capybara
+  capybara-screenshot
   carrierwave (< 0.11.1)
   chosen-rails
   ci_reporter_rspec
@@ -536,7 +540,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_cevi!
+  hitobito_pbs!
   hitobito_youth!
   http_accept_language
   jquery-rails
@@ -598,4 +602,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   1.14.6
+   1.15.1

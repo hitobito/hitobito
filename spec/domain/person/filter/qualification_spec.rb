@@ -178,6 +178,48 @@ describe Person::Filter::Qualification do
 
         end
       end
+
+      context 'as bottom leader' do
+        let(:user) { bl_leader }
+
+        it 'loads all accessible entries' do
+          expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, @bl_extern])
+        end
+
+        it 'contains only visible people' do
+          expect(entries.size).to eq(list_filter.all_count - 2)
+        end
+
+        context 'combined with role filter' do
+          let(:list_filter) do
+            Person::Filter::List.new(group,
+                                     user,
+                                     range: range,
+                                     filters: {
+                                       role: {
+                                         role_types: [
+                                           Group::TopGroup::Member.sti_name,
+                                           Group::BottomLayer::Leader.sti_name,
+                                           Group::BottomGroup::Leader.sti_name
+                                         ]
+                                       },
+                                       qualification: {
+                                         qualification_kind_ids: qualification_kind_ids,
+                                         validity: validity
+                                       }
+                                     })
+          end
+
+          it 'loads all accessible entries' do
+            expect(entries).to match_array([@bl_leader, @bg_leader])
+          end
+
+          it 'contains only visible people' do
+            expect(entries.size).to eq(list_filter.all_count - 1)
+          end
+
+        end
+      end
     end
 
   end

@@ -157,7 +157,7 @@ class PeopleController < CrudController
   def list_filter_args
     if params[:filter_id]
       filter = PeopleFilter.for_group(group).find(params[:filter_id])
-      { name: filter.name, range: filter.range, filters: filter.filter_chain.to_hash }
+      { name: filter.name, range: filter.range, filters: filter.filter_chain.to_params }
     else
       params
     end

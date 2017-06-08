@@ -1,5 +1,10 @@
 # Hitobito Changelog
 
+## Version 1.X
+
+*   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+
+
 ## Version 1.17
 
 *   Export der Abonnenten einer Mailingliste wird im Hintergrund erstellt und per mail versendet

@@ -18,7 +18,7 @@ class Person::Filter::Base
     end
   end
 
-  attr_reader :attr
+  attr_reader :attr, :args
 
   def initialize(attr, args)
     @attr = attr
@@ -44,8 +44,6 @@ class Person::Filter::Base
   end
 
   private
-
-  attr_reader :args
 
   def id_list(key)
     args[key] = args[key].to_s.split(ID_URL_SEPARATOR) unless args[key].is_a?(Array)

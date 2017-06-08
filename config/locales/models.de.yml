@@ -272,6 +272,7 @@ de:
 
       person/add_request/event:
         label: "%{body} in %{group}"
+        deleted_event: Gelöschter Anlass
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"

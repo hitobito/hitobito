@@ -11,12 +11,14 @@ source_dir=$(dirname $0)/..
 pushd $source_dir
 
 # move core
+rm -r hitobito/.git
 mv hitobito/* .
 
 # add wagon sources
 mkdir vendor/wagons
 for dir in hitobito_*; do
   if [[ ( -d $dir ) ]]; then
+    rm -r $dir/.git
     mv $dir vendor/wagons/
   fi
 done
@@ -31,6 +33,7 @@ mv hitobito/.tx .
 
 # finally remove core source directory
 rm -rf hitobito
+rm -r .git
 
 # TODO: Investigate. This seems ugly and is a hack to prevent assemble from failing with
 #

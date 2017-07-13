@@ -17,18 +17,8 @@ if [ $DEMO_INSTANCE -eq 1 ]; then
 fi
 
 if [ $PULL_TRANSIFEX -eq 1 ]; then
-
-cat <<EOF > ~/.transifexrc
-[${RAILS_TRANSIFEX_HOST}]
-hostname = ${RAILS_TRANSIFEX_HOST}
-password = ${RAILS_TRANSIFEX_PASSWORD}
-token =
-username = ${RAILS_TRANSIFEX_USERNAME}
-EOF
-
-echo 'pulling transifex translations ...'
-RAILS_HOST_NAME='build.hitobito.ch' bundle exec rake tx:pull tx:wagon:pull -t
-
+  echo 'pulling transifex translations ...'
+  RAILS_HOST_NAME='build.hitobito.ch' bundle exec rake tx:pull tx:wagon:pull -t
 fi
 
 BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')

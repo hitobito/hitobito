@@ -78,10 +78,8 @@
                 = link_to label, url, target: '_blank'
                 %br/
             %p
-              - if Wagons.app_version.to_s > '0.0'
-                = link_to "Version #{Wagons.app_version}", changelog_path
-
-                %br/
+              = app_version_changelog_link
+              %br/
 
               = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
               = t('.available_under_license')

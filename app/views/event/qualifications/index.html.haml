@@ -1,18 +1,15 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
--title event.to_s
+- title event.to_s
 
-= render_extensions(:index)
+= form_tag(nil, method: :put) do
 
-- if @event.kind.qualification_kinds(%w(qualification prolongation), 'leader').to_a.present?
-  %p= event.issued_qualifications_info_for_leaders
+  = render 'people'
 
-  = render 'list', entries: @leaders
-
-- if @event.kind.qualification_kinds(%w(qualification prolongation), 'participant').to_a.present?
-  %p= event.issued_qualifications_info_for_participants
-
-  = render 'list', entries: @participants
+  .btn-group
+    = button_tag(t('event.qualifications.index.save'),
+                 class: 'btn btn-primary',
+                 data: { disable_with: t('event.qualifications.index.save') })

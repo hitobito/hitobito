@@ -25,7 +25,7 @@
     = render_extensions :show_left
 
     - if can?(:index_notes, entry)
-      = render 'notes'
+      = render 'notes/section', create_path: group_person_notes_path(@group, entry)
 
   - if can?(:show_full, entry)
     %aside.span6.offset1

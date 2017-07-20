@@ -10,57 +10,30 @@
   <link href="assets/style.css" media="screen" rel="stylesheet" />
   <link href="assets/print.css" media="print" rel="stylesheet" />
 
-  <style>
-    h1 { font-size: 2.0em !important; }
-    h2 { font-size: 1.7em !important; margin-top: 1.5em; }
-    h3 { font-size: 1.4em !important; margin-top: 1.2em; }
-    h4 { margin-top: 1.1em; }
-  </style>
 </head>
 
 <body>
-  <header id='page-header'>
-    <div class='container-fluid'>
-      <a class="brand" href="#">hitobito</a>
-    </div>
-  </header>
+  <nav class="toc">
+    <img src="assets/logo.png" alt="">
+    <h1>{title}</h1>
+    {toc}
+  </nav>
 
-  <div class='with-left-nav' id='page'>
-    <nav class='nav-left'>
-      <div class='inner'>
-        {toc}
-      </div>
-    </nav>
-    <div class='container-fluid'>
-      <div class="sheet current">
-        <div class="container-shadow">
-          <div id="content">
-            <div class='content-header'>
-              <h1>{title}</h1>
-            </div>
-            {content}
-          </div>
-        </div>
-      </div>
+  <main>
+    <div class="content">
+      {content}
     </div>
-  </div>
+    <footer>
+              <p>
+      <a href="https://github.com/hitobito" target="_blank">Quellcode</a> verfügbar unter der
+      <a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU Affero General Public License</a>
+      <br> Entwickelt von
+      <a href="http://puzzle.ch" target="_blank">Puzzle ITC</a> 2012 - 2015
+    </p>
 
-  <footer id='page-footer'>
-    <div class='container-fluid'>
-      <div class='row'>
-        <div class='span3'>
-        </div>
-        <div class='footer_content span9'>
-          <p>
-            <a href="https://github.com/hitobito" target="_blank">Quellcode</a> verfügbar unter der
-            <a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU Affero General Public License</a>
-            <br> Entwickelt von
-            <a href="http://puzzle.ch" target="_blank">Puzzle ITC</a> 2012 - 2015
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
+    </footer>
+
+  </main>
 </body>
 
 </html>

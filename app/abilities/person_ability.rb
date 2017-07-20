@@ -16,7 +16,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:admin).may(:destroy).not_self
 
     permission(:any).
-      may(:show, :show_full, :history, :update, :update_email, :primary_group, :log,
+      may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
           :update_settings).
       herself
 

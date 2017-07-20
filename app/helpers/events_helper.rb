@@ -27,14 +27,24 @@ module EventsHelper
     end
   end
 
-  def button_action_event_apply(event, group = nil)
+  def event_user_application_possible?(event)
     participation = event.participations.new
     participation.person = current_user
 
-    if event.application_possible? && can?(:new, participation)
+    event.application_possible? && can?(:new, participation)
+  end
+
+  def button_action_event_apply(event, group = nil)
+    if event_user_application_possible?(event)
       group ||= event.groups.first
 
-      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      if event.application_closing_at.present?
+        button += content_tag(:div,
+                              t('event.lists.apply_until',
+                                date: f(event.application_closing_at)))
+      end
+      button
     end
   end
 

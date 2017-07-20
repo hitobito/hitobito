@@ -66,14 +66,30 @@ describe Event::ListsController do
     context 'filter per group' do
       before { sign_in(people(:top_leader)) }
 
-      it 'defaults to toplevel group with courses in hiearchy' do
+      it 'defaults to layer of primary group' do
         get :courses
-        expect(assigns(:group_id)).to eq groups(:top_group).id
+        expect(assigns(:group_id)).to eq groups(:top_group).layer_group_id
       end
 
       it 'can be set via param, only if year is present' do
         get :courses, year: 2010, group_id: groups(:top_layer).id
         expect(assigns(:group_id)).to eq groups(:top_layer).id
+      end
+    end
+
+    context 'finds course offerer' do
+      it 'via primary group' do
+        sign_in(people(:top_leader))
+        get :courses
+        expect(controller.send(:course_group_from_primary_layer)).to eq groups(:top_layer)
+      end
+
+      it 'via hierarchy' do
+        group = groups(:bottom_group_one_one)
+        user = Fabricate(Group::BottomGroup::Leader.name.to_s, label: 'foo', group: group).person
+        sign_in(user)
+        get :courses
+        expect(controller.send(:course_group_from_hierarchy).id).to eq groups(:bottom_layer_one).id
       end
     end
 

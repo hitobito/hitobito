@@ -51,9 +51,9 @@ describe Event::ParticipationsController do
       @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
       update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al',
-                    town: 'Eye', address: 'Spring Road', zip_code: '3000')
+                    town: 'Eye', address: 'Spring Road', zip_code: '3000', birthday: '21.10.1978')
       update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js',
-                    town: 'Stoke', address: 'Howard Street', zip_code: '8000')
+                    town: 'Stoke', address: 'Howard Street', zip_code: '8000', birthday: '1.3.1992')
     end
 
     it 'lists participant and leader group by default' do
@@ -118,7 +118,7 @@ describe Event::ParticipationsController do
 
 
     context 'sorting' do
-      %w(first_name last_name nickname zip_code town).each do |attr|
+      %w(first_name last_name nickname zip_code town birthday).each do |attr|
         it "sorts based on #{attr}" do
           get :index, group_id: group, event_id: course.id, sort: attr, sort_dir: :asc
           expect(assigns(:participations)).to eq([@participant, @leader])

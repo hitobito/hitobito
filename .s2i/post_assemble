@@ -16,6 +16,12 @@ if [ $DEMO_INSTANCE -eq 1 ]; then
   done
 fi
 
-# TODO pull transifex translations
+if [ $PULL_TRANSIFEX -eq 1 ]; then
+  echo 'pulling transifex translations ...'
+  RAILS_HOST_NAME='build.hitobito.ch' bundle exec rake tx:pull tx:wagon:pull -t
+fi
+
+BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
+echo "(built at: $BUILD_DATE)" > BUILD_INFO
 
 popd

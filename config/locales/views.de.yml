@@ -64,6 +64,7 @@ de:
       placeholder_person: 'Person suchen...'
       placeholder_group: 'Gruppe suchen...'
       placeholder_event: 'Anlass suchen...'
+      placeholder_company_name: 'Firmennamen suchen...'
 
   list:
     index:
@@ -228,7 +229,6 @@ de:
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten
     priorities: 'Anmeldeprioritäten'
-    no_qualifications_could_be_prolonged: "%{person} hat keine Qualifikationen, die verlängert werden können."
     lists:
       courses:
         title: 'Verfügbare Kurse'
@@ -237,7 +237,7 @@ de:
       events:
         title: 'Demnächst stattfindende Anlässe'
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
-
+      apply_until: 'bis %{date}'
     application_market:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
@@ -305,6 +305,13 @@ de:
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
+    qualifications:
+      index:
+        save: Qualifikationen aktualisieren
+      update:
+        flash:
+          success: Die Qualifikationen wurden erfolgreich aktualisiert.
+
     register:
       register:
         title: Kontaktdaten erfassen
@@ -369,7 +376,7 @@ de:
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-    instructions: 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
+    instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
 
     show:
       link:
@@ -491,7 +498,7 @@ de:
     global:
       link:
         add: Gruppe erstellen
-        deleted_person: Gelöschte Personen
+        deleted_person: Ohne Rollen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -581,6 +588,14 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+
+  notes:
+    new_note: Neue Notiz
+    note:
+      created: vor %{time_ago}
+    paginator:
+      newer_notes: Neuere Beiträge
+      older_notes: Altere Beiträge
 
   qualifications:
     in_years: '%{years} Jahre'
@@ -706,13 +721,6 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
-    notes:
-      note:
-        created: vor %{time_ago}
-      paginator:
-        newer_notes: Neuere Beiträge
-        older_notes: Altere Beiträge
-
     tags:
       list:
         category_other: Andere
@@ -759,6 +767,7 @@ de:
     tabs:
       history: Verlauf
       log: Log
+      colleagues: Mitarbeiter/-innen
 
     actions_show:
       send_login: Login schicken
@@ -813,9 +822,6 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
-
-    notes:
-      new_note: Neue Notiz
 
   participations:
     destroy:

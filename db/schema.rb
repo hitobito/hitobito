@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103142035) do
+ActiveRecord::Schema.define(version: 20170529134942) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                  null: false
@@ -276,6 +276,17 @@ ActiveRecord::Schema.define(version: 20170103142035) do
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id"
 
+  create_table "notes", force: :cascade do |t|
+    t.integer  "subject_id",   null: false
+    t.integer  "author_id",    null: false
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "subject_type"
+  end
+
+  add_index "notes", ["subject_id"], name: "index_notes_on_subject_id"
+
   create_table "people", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -352,16 +363,6 @@ ActiveRecord::Schema.define(version: 20170103142035) do
 
   add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id"
   add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
-
-  create_table "person_notes", force: :cascade do |t|
-    t.integer  "person_id",  null: false
-    t.integer  "author_id",  null: false
-    t.text     "text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "person_notes", ["person_id"], name: "index_person_notes_on_person_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.integer "contactable_id",                  null: false

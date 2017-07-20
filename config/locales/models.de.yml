@@ -139,6 +139,9 @@ de:
       event/role/cook:
         one: Küche
         other: Küche
+      event/role/helper:
+        one: Helfer/-in
+        other: Helfer/-innen
       event/role/participant:
         one: Teilnehmer/-in
         other: Teilnehmer/-innen
@@ -160,15 +163,15 @@ de:
       mailing_list:
         one: Abo
         other: Abos
+      note:
+        one: Notiz
+        other: Notizen
       person:
         one: Person
         other: Personen
       person/add_request:
         one: Zugriffsanfrage
         other: Anfragen
-      person/note:
-        one: Notiz
-        other: Notizen
       people_filter:
         one: Filter
         other: Filter
@@ -269,12 +272,10 @@ de:
 
       person/add_request/event:
         label: "%{body} in %{group}"
+        deleted_event: Gelöschter Anlass
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
-
-      person/note:
-        text: Text
 
       group:
         name: Name
@@ -394,6 +395,9 @@ de:
         person: Person
         type: Rolle
         participation: Person
+
+      note:
+        text: Text
 
       qualification:
         qualification_kind: Qualifikation

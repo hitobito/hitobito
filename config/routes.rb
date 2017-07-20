@@ -18,11 +18,11 @@ Hitobito::Application.routes.draw do
     get '/503', to: 'errors#503'
 
     get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 
     resources :groups do
-
       member do
         get :deleted_subgroups
         get :export_subgroups
@@ -34,8 +34,9 @@ Hitobito::Application.routes.draw do
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
 
-        get 'person_notes' => 'person/notes#index'
       end
+
+      resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
         member do
@@ -44,14 +45,16 @@ Hitobito::Application.routes.draw do
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
+          get 'colleagues' => 'person/colleagues#index'
         end
 
+        resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :notes, only: [:create, :destroy]
-          resources :tags, param: :name, only: [:create, :destroy]
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
         end
       end
@@ -123,8 +126,8 @@ Hitobito::Application.routes.draw do
           get 'roles' => 'roles#new' # route required for language switch
           get 'roles/:id' => 'roles#edit' # route required for language switch
 
-          resources :qualifications, only: [:index, :update, :destroy]
-
+          get 'qualifications' => 'qualifications#index'
+          put 'qualifications' => 'qualifications#update'
         end
 
       end

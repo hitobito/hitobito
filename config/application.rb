@@ -97,15 +97,12 @@ module Hitobito
     end
 
     config.to_prepare do
-      sphinx_host = ENV['RAILS_SPHINX_HOST']
-      local_sphinx = sphinx_host.blank? || sphinx_host == '127.0.0.1'
-
       ActionMailer::Base.default from: Settings.email.sender
 
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
-        SphinxIndexJob.new.schedule if local_sphinx
+        SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
       end
     end
 
@@ -115,6 +112,26 @@ module Hitobito
         ThinkingSphinx::Index.define_partial_indizes!
       end
     end
+
+    def self.sphinx_version
+      @sphinx_version ||= ThinkingSphinx::Configuration.instance.controller.sphinx_version.presence ||
+        ENV['RAILS_SPHINX_VERSION']
+    end
+
+    def self.sphinx_present?
+      port = ENV['RAILS_SPHINX_PORT']
+      port.present? || ThinkingSphinx::Configuration.instance.controller.running?
+    end
+
+    def self.sphinx_local?
+      host = ENV['RAILS_SPHINX_HOST']
+      host.blank? || host == '127.0.0.1' || host == 'localhost'
+    end
+
+    def self.build_info
+      @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
+    end
+
   end
 end
 

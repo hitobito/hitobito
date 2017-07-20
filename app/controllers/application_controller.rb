@@ -52,6 +52,6 @@ class ApplicationController < ActionController::Base
   end
 
   def html_request?
-    request.format.html? || request.format == Mime::ALL
+    request.formats.any? { |f| f.html? || f == Mime::ALL }
   end
 end

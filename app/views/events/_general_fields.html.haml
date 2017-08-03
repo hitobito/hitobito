@@ -1,7 +1,7 @@
 -#  Copyright (c) 2015, insieme Schweiz. This file is part of
--#  hitobito_insieme and licensed under the Affero General Public License version 3
+-#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito_insieme.
+-#  https://github.com/hitobito/hitobito.
 
 = field_set_tag do
   = f.labeled_input_field(:name)
@@ -17,7 +17,14 @@
 
   = render_extensions :main_fields, locals: { f: f }
 
-  = f.labeled_input_fields(*entry.used_attributes(:number, :description, :motto, :cost))
+  - entry.used?(:number) do
+    = f.labeled_input_field(:number)
+
+  - entry.used?(:description) do
+    - link = entry.kind_class == Event::Kind ? render('default_description_link') : nil
+    = f.labeled_input_field(:description, help: link)
+
+  = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
   - entry.used?(:contact_id) do
     = f.labeled_person_field :contact

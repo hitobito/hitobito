@@ -14,8 +14,10 @@ describe EventDecorator, :draper_with_helpers do
   let(:event) { events(:top_course) }
   subject { EventDecorator.new(event) }
 
-  its(:labeled_link) { should =~ /SLK  Top/ }
-  its(:labeled_link) { should =~ %r{<a href="/groups/#{event.group_ids.first}/events/#{event.id}">} }
+  its(:labeled_link) { is_expected.to match(/SLK TOP\-007 Top/) }
+  its(:labeled_link) { is_expected.to match(%r{<a href="/groups/#{event.group_ids.first}/events/#{event.id}">}) }
+
+  its(:label_with_group) { is_expected.to eq('Top: Top Course (TOP-007)')}
 
   context 'typeahead label' do
     subject { EventDecorator.new(event).as_typeahead[:label] }

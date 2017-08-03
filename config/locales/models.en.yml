@@ -88,6 +88,9 @@ en:
             name:
               must_be_unique: 'already exists'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: Further e-mail
         other: Further e-mails
@@ -114,16 +117,22 @@ en:
         other: Course types
       event/role/assistant_leader:
         one: Leader
+        other: Leaders
       event/role/leader:
         one: Main leader
+        other: Main leaders
       event/role/cook:
         one: Kitchen
+        other: Kitchen
       event/role/participant:
-        one: Participants
+        one: Participant
+        other: Participants
       event/role/treasurer:
         one: Treasurer
+        other: Treasurers
       event/role/speaker:
         one: Speaker
+        other: Speakers
       event/date:
         one: Date
         other: Dates
@@ -173,6 +182,8 @@ en:
         one: tag
         other: tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: name
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -321,7 +332,6 @@ en:
         preconditions: Preconditions
         prolongations: Extended
         qualification_kinds: Qualifies for
-        general_information: General information
         application_conditions: Application conditions
         created_at: Created
         updated_at: Changed

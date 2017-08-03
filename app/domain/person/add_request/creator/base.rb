@@ -25,8 +25,7 @@ module Person::AddRequest::Creator
     end
 
     def required?
-      person_layer &&
-        person_layer.require_person_add_requests? &&
+      person_layer.try(:require_person_add_requests?) &&
         ability.cannot?(:add_without_request, request) &&
         entity.valid?
     end
@@ -46,7 +45,7 @@ module Person::AddRequest::Creator
     end
 
     def person_layer
-      person && person.primary_group.try(:layer_group)
+      person && (person.primary_group.try(:layer_group) || last_layer_group)
     end
 
     def request_attrs
@@ -80,6 +79,11 @@ module Person::AddRequest::Creator
 
     def body_class_name
       self.class.name.demodulize
+    end
+
+    def last_layer_group
+      last_role = person.last_non_restricted_role
+      last_role && last_role.group.layer_group
     end
 
   end

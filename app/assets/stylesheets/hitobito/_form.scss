@@ -32,6 +32,7 @@
     }
   }
 
+
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
@@ -49,6 +50,12 @@
   &.btn-info, &.btn-info:hover,
   &.btn-inverse, &.btn-inverse:hover {
     color: $white;
+
+    .icon,
+    [class^="icon-"],
+    [class*=" icon-"] {
+      background-image: image-url("glyphicons-halflings-white.png");
+    }
   }
 }
 
@@ -182,7 +189,6 @@ select[class*="span"][multiple] {
 
 label.checkbox,
 label.radio {
-  height: 20px;
   font-size: 14px;
   line-height: 20px;
   margin-right: 10px;

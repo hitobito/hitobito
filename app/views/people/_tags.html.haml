@@ -1,17 +1,15 @@
 -#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
--#  hitobito_dsj and licensed under the Affero General Public License version 3
+-#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito_dsj.
+-#  https://github.com/hitobito/hitobito.
 
-- if can?(:index_tags, entry) || can?(:create, entry.tags.new)
+- if can?(:index_tags, entry) || can?(:manage_tags, entry)
   %section.tags
-    %h2= t('.title')
-    .person-tags-error.alert.alert-error{ style: 'display: none;' }
-
+    %h2= ActsAsTaggableOn::Tag.model_name.human(count: 2)
     = render 'person/tags/list', tags: @tags
 
-    - if can?(:create, entry.tags.new)
-      %span.label.person-tag.person-tag-add
+    - if can?(:manage_tags, entry)
+      %button.chip.chip-add.person-tag-add
         = t('.add_tag')
         = icon(:plus)
 

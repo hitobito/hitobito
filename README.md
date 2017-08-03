@@ -2,6 +2,8 @@
 
 hitobito is an open source web application to manage complex group hierarchies with members, events and a lot more.
 
+[![Build Status](https://travis-ci.org/hitobito/hitobito.svg?branch=master)](https://travis-ci.org/hitobito/hitobito)
+
 ## Development
 
 Hitobito is a Ruby on Rails application that runs on Ruby >= 1.9.3 and Rails 4.
@@ -94,3 +96,5 @@ CEVI Regionalverband ZH-SH-GL, Insieme Schweiz.
 See COPYING for more details.
 
 hitobito was developed by [Puzzle ITC GmbH](http://puzzle.ch).
+
+The hitobito logo is a registered trademark of hitobito LTD, Switzerland. Please contact [KunoKunz](https://github.com/KunoKunz) if you want to use the logo and be part of our community.

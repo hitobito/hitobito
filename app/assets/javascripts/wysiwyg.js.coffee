@@ -22,8 +22,8 @@ for lang, title of wysi_languages
   for num in [1..6]
     $.fn.wysihtml5.locale[lang].font_styles["h#{num}"] = "#{title} #{num}"
 
-$ ->
 
+$(document).on('turbolinks:load', ->
   wysilocale = do ->
     lang = $('html').attr('lang')
     lang + '-' + lang.toUpperCase()
@@ -31,5 +31,6 @@ $ ->
   # wire up wysiwyg text areas
   $('textarea.wysiwyg').wysihtml5({
     locale: wysilocale
-  });
+  })
+)
 

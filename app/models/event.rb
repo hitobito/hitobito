@@ -37,6 +37,7 @@
 #  signature_confirmation_text :string
 #  creator_id                  :integer
 #  updater_id                  :integer
+#  applications_cancelable     :boolean          default(FALSE), not null
 #
 
 class Event < ActiveRecord::Base
@@ -64,12 +65,14 @@ class Event < ActiveRecord::Base
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at,
                           :application_closing_at, :application_conditions,
-                          :external_applications]
+                          :external_applications, :applications_cancelable,
+                          :signature, :signature_confirmation, :signature_confirmation_text]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
                      Event::Role::Cook,
+                     Event::Role::Helper,
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]
@@ -82,6 +85,7 @@ class Event < ActiveRecord::Base
 
   # The class used for the kind_id
   self.kind_class = nil
+
 
   model_stamper
   stampable stamper_class_name: :person,
@@ -125,6 +129,7 @@ class Event < ActiveRecord::Base
   ### CALLBACKS
 
   before_validation :set_self_in_nested
+  before_validation :set_signature, if: :signature_confirmation?
 
 
   accepts_nested_attributes_for :dates, :questions, allow_destroy: true
@@ -279,6 +284,10 @@ class Event < ActiveRecord::Base
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     (dates + questions).each { |e| e.event = self unless e.frozen? }
+  end
+
+  def set_signature
+    self.signature = true
   end
 
 end

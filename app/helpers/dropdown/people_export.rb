@@ -10,12 +10,13 @@ module Dropdown
 
     attr_reader :user, :params
 
-    def initialize(template, user, params, details, email_addresses)
+    def initialize(template, user, params, details, email_addresses, labels = true)
       super(template, translate(:button), :download)
       @user = user
       @params = params
       @details = details
       @email_addresses = email_addresses
+      @labels = labels
 
       init_items
     end
@@ -23,20 +24,21 @@ module Dropdown
     private
 
     def init_items
-      csv_links
+      tabular_links(:csv)
+      tabular_links(:xlsx)
       label_links
       email_addresses_link
     end
 
-    def csv_links
-      csv_path = params.merge(format: :csv)
+    def tabular_links(format)
+      path = params.merge(format: format)
 
       if @details
-        csv_item = add_item(translate(:csv), '#')
-        csv_item.sub_items << Item.new(translate(:addresses), csv_path)
-        csv_item.sub_items << Item.new(translate(:everything), csv_path.merge(details: true))
+        item = add_item(translate(format), '#')
+        item.sub_items << Item.new(translate(:addresses), path)
+        item.sub_items << Item.new(translate(:everything), path.merge(details: true))
       else
-        add_item(translate(:csv), csv_path)
+        add_item(translate(format), path)
       end
     end
 
@@ -47,7 +49,7 @@ module Dropdown
     end
 
     def label_links
-      if LabelFormat.all_as_hash.present?
+      if @labels && LabelFormat.exists?
         label_item = add_item(translate(:labels), main_label_link)
         add_last_used_format_item(label_item)
         add_label_format_items(label_item)
@@ -74,8 +76,8 @@ module Dropdown
     end
 
     def add_label_format_items(parent)
-      LabelFormat.all_as_hash.each do |id, label|
-        parent.sub_items << Item.new(label, export_label_format_path(id),
+      LabelFormat.list.for_person(user).each do |label_format|
+        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
                                      target: :new, class: 'export-label-format')
       end
     end

@@ -37,14 +37,14 @@ module AbilityDsl
     # Includes implied permission, i.e. when passing :group_read, the groups
     # where the user has :group_full are also returned.
     def permission_group_ids(permission)
-      @permission_group_ids[permission]
+      group_ids_with_permission(@permission_group_ids, permission)
     end
 
     # The ids of the layer groups where the given layer permission is defined.
     # Includes implied permission, i.e. when passing :layer_read, the layer groups
     # where the user has :layer_full are also returned.
     def permission_layer_ids(permission)
-      @permission_layer_ids[permission]
+      group_ids_with_permission(@permission_layer_ids, permission)
     end
 
     def layer_ids(groups)
@@ -88,6 +88,14 @@ module AbilityDsl
 
     def collect_group_ids!
       @permission_group_ids.values.each { |groups| groups.collect!(&:id) }
+    end
+
+    def group_ids_with_permission(source, permission)
+      if permission == :any
+        source.values.flatten.uniq
+      else
+        source[permission]
+      end
     end
 
     def find_events_with_permission(permission)

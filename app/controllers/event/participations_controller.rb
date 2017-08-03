@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,11 +21,13 @@ class Event::ParticipationsController < CrudController
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
-                                    Event::Participation.order_by_role_statement(event))
+                                    Event::Participation.order_by_role_statement(event)
+                                  )
                                 end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
-                         town:       'people.town' }
+                         town:       'people.town',
+                         birthday:   'people.birthday' }
 
 
   decorates :group, :event, :participation, :participations, :alternatives
@@ -42,6 +44,7 @@ class Event::ParticipationsController < CrudController
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
+  after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
   # apply for an event themselves. A participation for somebody
@@ -64,7 +67,8 @@ class Event::ParticipationsController < CrudController
         @person_add_requests = fetch_person_add_requests
       end
       format.pdf   { render_pdf(entries.collect(&:person)) }
-      format.csv   { send_data(exporter.export(entries), type: :csv) }
+      format.csv   { render_tabular(:csv, entries) }
+      format.xlsx  { render_tabular(:xlsx, entries) }
       format.email { render_emails(entries.collect(&:person)) }
     end
   end
@@ -78,7 +82,16 @@ class Event::ParticipationsController < CrudController
   end
 
   def destroy
-    super(location: group_event_application_market_index_path(group, event))
+    location = if entry.person_id == current_user.id
+                 group_event_path(group, event)
+               else
+                 group_event_application_market_index_path(group, event)
+               end
+    super(location: location)
+  end
+
+  def self.model_class
+    Event::Participation
   end
 
   private
@@ -103,11 +116,15 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
-  def exporter
+  def render_tabular(format, entries)
+    send_data(tabular_exporter.export(format, entries), type: format)
+  end
+
+  def tabular_exporter
     if params[:details] && can?(:show_details, entries.first)
-      Export::Csv::People::ParticipationsFull
+      Export::Tabular::People::ParticipationsFull
     else
-      Export::Csv::People::ParticipationsAddress
+      Export::Tabular::People::ParticipationsAddress
     end
   end
 
@@ -157,7 +174,7 @@ class Event::ParticipationsController < CrudController
 
     type = event.class.find_role_type!(role_type)
     unless type.participant?
-      fail ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
+      raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
     role_type
   end
@@ -180,11 +197,11 @@ class Event::ParticipationsController < CrudController
 
   def load_priorities
     if entry.application && event.priorization && current_user
-      @alternatives = event.class.application_possible.
-                                        where(kind_id: event.kind_id).
-                                        in_hierarchy(current_user).
-                                        includes(:groups).
-                                        list
+      @alternatives = event.class.application_possible
+                           .where(kind_id: event.kind_id)
+                           .in_hierarchy(current_user)
+                           .includes(:groups)
+                           .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
@@ -216,6 +233,12 @@ class Event::ParticipationsController < CrudController
     end
   end
 
+  def send_cancel_email
+    if entry.person_id == current_user.id
+      Event::CancelApplicationJob.new(entry.event, entry.person).enqueue!
+    end
+  end
+
   def set_success_notice
     if action_name.to_s == 'create'
       notice = translate(:success, full_entry_label: full_entry_label)
@@ -226,12 +249,8 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def user_course_application?
-    entry.person == current_user && event.supports_applications
-  end
-
   def append_mailing_instructions?
-    user_course_application? && event.signature?
+    entry.person == current_user && event.signature?
   end
 
   def event
@@ -255,7 +274,4 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def self.model_class
-    Event::Participation
-  end
 end

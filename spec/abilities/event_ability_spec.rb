@@ -635,6 +635,28 @@ describe EventAbility do
         Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
         is_expected.not_to be_able_to(:update, other)
       end
+
+      it 'may destroy his participation if applications_cancelable' do
+        event.update!(applications_cancelable: true, application_closing_at: Time.zone.today)
+        is_expected.to be_able_to(:destroy, participation)
+      end
+
+      it 'may not destroy his participation if applications cancelable and applications closed' do
+        event.update!(applications_cancelable: true, application_closing_at: Time.zone.today - 1.day)
+        is_expected.not_to be_able_to(:destroy, participation)
+      end
+
+      it 'may not destroy his participation if applications not cancelable' do
+        event.update!(applications_cancelable: false, application_closing_at: Time.zone.today + 10.days)
+        is_expected.not_to be_able_to(:destroy, participation)
+      end
+
+      it 'may not destroy other participation if applications cancelable' do
+        event.update!(applications_cancelable: true, application_closing_at: Time.zone.today)
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
+        is_expected.not_to be_able_to(:destroy, other)
+      end
     end
   end
 

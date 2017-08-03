@@ -21,7 +21,7 @@ module MailRelay
     class << self
       def personal_return_path(list_name, sender_email)
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = sender_email.present? ? '+' + sender_email.tr('@', '=') : ''
+        id_suffix = valid_email?(sender_email) ? '+' + sender_email.tr('@', '=') : ''
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{mail_domain}"
       end
 
@@ -40,13 +40,12 @@ module MailRelay
     # Do not send reject emails to blank recipients nor for mails
     # sent to the application (noreply) email address (to avoid daemon ping-pong).
     def reject_not_allowed
-      if sender_email.present? && envelope_receiver_name != self.class.app_sender_name
-        sender = "#{envelope_receiver_name}@#{mail_domain}"
-        reply = message.reply do
-          body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
-          from sender
+      if send_reject_message?
+        reply = prepare_not_allowed_message
+        if valid_email?(reply.to.to_s.strip)
+          logger.info("Rejecting email from #{sender_email} for list #{envelope_receiver_name}")
+          deliver(reply)
         end
-        deliver(reply) unless ['', '<>'].include?(reply.to.to_s.strip)
       end
     end
 
@@ -55,21 +54,13 @@ module MailRelay
     def reject_not_existing
       data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
       if data && valid_address?(data[1])
-        prepare_reject_message(data[1], data[2])
+        prepare_bounced_message(data[1], data[2])
+        logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
         deliver(message)
       else
-        logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
-                    "Ignored email from #{sender_email} " \
-                    "for list #{envelope_receiver_name}")
+        logger.info("Ignored email from #{sender_email} " \
+                    "for unknown list #{envelope_receiver_name}")
       end
-    end
-
-    def prepare_reject_message(list_address, sender_address)
-      message.to = sender_address.tr('=', '@')
-
-      env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
-      message.sender = env_sender
-      message.smtp_envelope_from = env_sender
     end
 
     def valid_address?(mail_name)
@@ -82,8 +73,8 @@ module MailRelay
     end
 
     # Is the mail sender allowed to post to this address?
-    def sender_allowed?
-      return false if sender_email.blank?
+    def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity
+      return false unless valid_email?(sender_email)
 
       mailing_list.anyone_may_post ||
       sender_is_additional_sender? ||
@@ -110,12 +101,20 @@ module MailRelay
 
     private
 
-    def deliver(message)
-      logger.info("#{Time.zone.now.strftime('%FT%T%z')}: " \
-                  "Relaying email from #{sender_email} " \
-                  "for list #{envelope_receiver_name} " \
-                  "to #{message.smtp_envelope_to.size} people")
-      super
+    def prepare_not_allowed_message
+      sender = "#{envelope_receiver_name}#{SENDER_SUFFIX}@#{mail_domain}"
+      message.reply do
+        body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
+        from sender
+      end
+    end
+
+    def prepare_bounced_message(list_address, sender_address)
+      message.to = sender_address.tr('=', '@')
+
+      env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
+      message.sender = env_sender
+      message.smtp_envelope_from = env_sender
     end
 
     def sender_is_additional_sender?
@@ -147,6 +146,11 @@ module MailRelay
              uniq
     end
 
+    def send_reject_message?
+      sender_email.present? &&
+        envelope_receiver_name != self.class.app_sender_name
+    end
+
     # strip spam headers because they might produce encoding issues
     # (Encoding::UndefinedConversionError)
     def strip_spam_headers(message)
@@ -156,8 +160,5 @@ module MailRelay
       end
     end
 
-    def logger
-      Delayed::Worker.logger || Rails.logger
-    end
   end
 end

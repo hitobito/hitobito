@@ -1,0 +1,30 @@
+-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.row-fluid.note{id: dom_id(note), class: ('is-current-subject' unless show_subject)}
+  - if show_subject
+    .note-image
+      - case note.subject
+      - when Group
+        = image_tag('group.svg')
+      - when Person
+        %img{src: note.subject.picture}
+
+  .note-body
+    - if show_subject
+      = assoc_link(note.subject)
+
+    %small.muted.note-author
+      = person_link(note.author)
+      .note-date
+        = t('.created', time_ago: time_ago_in_words(note.created_at))
+      - if can?(:destroy, note)
+        = link_to icon(:trash),
+                  note_path(@group, note),
+                  method: :delete,
+                  remote: true,
+                  data: { confirm: ti(:confirm_delete) }
+
+    = auto_link(simple_format(note.text))

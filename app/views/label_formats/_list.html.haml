@@ -3,4 +3,14 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= crud_table :name, :page_size, :landscape, :dimensions, :font_size, :width, :height
+- global ||= false
+
+-if !global || can?(:manage_global, LabelFormat)
+  .btn-toolbar 
+    = button_action_add(new_label_format_path(global: global))
+
+= table(entries, class: 'table table-striped table-hover') do |t|
+  - t.sortable_attr(:name) do |f|
+    - link_to_if(!global || can?(:manage_global, LabelFormat), f.name, label_format_path(f.id))
+  - t.sortable_attrs(:page_size, :landscape, :dimensions, :font_size, :width, :height)
+  - add_table_actions(t)

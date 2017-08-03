@@ -1,5 +1,35 @@
 # Hitobito Changelog
 
+## Version 1.15
+
+*   Neue Rolle "Helfer/-in" für Anlässe.
+*   Unterschriften können nun bei allen Anlässen eingefordert werden.
+*   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
+*   Notizen ebenfalls auf Gruppen möglich.
+*   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
+*   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
+*   Anmeldedatum wird bei Anmeldeknopf auf Anlassliste angezeigt.
+
+## Version 1.14
+
+*   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
+*   Admin kann gelöschte Personen in der Volltextsuche finden.
+*   Anfrageverfahren wird für gelöschte Personen ebenfalls ausgelöst.
+*   Gelöschte Personen können pro Ebene angezeigt werden.
+*   Benutzer/-innen können personalisierte Etiketten erstellen.
+*   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
+*   Globale Suche nach Anlassnamen und Kursnummern.
+*   Excel-Export für Personen und Anlässe.
+*   CSV- und Excel-Exporte von Personen mit allen Angaben enthalten aktuelle Qualifikationen.
+*   Der Verlauf einer Person zeigt neu die Rollen so an, dass die Gruppen auch die übergeordneten Ebenen anzeigt.
+*   Der Verlauf einer Person wird neu nach der Gruppe inkl. übergeordneter Ebenen sortiert.
+
+
+## Version 1.13
+
+*   Personen können in Mailinglisten nach Tags gefiltert werden.
+
+
 ## Version 1.12
 
 *   Zu Personen können eingeschränkt sichtbare Notizen hinterlegt werden.
@@ -88,4 +118,3 @@
 *   Separat definierbare Qualifikationstypen für Kursleiter.
 *   Pflichtfelder für Anlass Fragen.
 *   Mehrfachauswahl bei Personen Filter und Abo Listen.
-

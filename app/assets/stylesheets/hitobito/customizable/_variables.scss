@@ -52,6 +52,11 @@ $tableColorHover:       lighten($purple, 50%);
 
 // Typography
 // -------------------------
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
+
+
 $sansFontFamily:        Helvetica, Arial, sans-serif !default;
 $headingFontFamily:     'Quicksand', $sansFontFamily !default;
 $baseFontFamily:        'Varela Round', $sansFontFamily !default;

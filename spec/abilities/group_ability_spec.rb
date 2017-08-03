@@ -49,7 +49,11 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:index_person_notes, group)
+        is_expected.to be_able_to(:index_notes, group)
+      end
+
+      it 'may manage person tags' do
+        is_expected.to be_able_to(:manage_person_tags, group)
       end
     end
 
@@ -79,7 +83,11 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:index_person_notes, group)
+        is_expected.to be_able_to(:index_notes, group)
+      end
+
+      it 'may manage person tags' do
+        is_expected.to be_able_to(:manage_person_tags, group)
       end
     end
   end
@@ -99,7 +107,11 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:index_person_notes, group)
+        is_expected.to be_able_to(:index_notes, group)
+      end
+
+      it 'may manage person tags' do
+        is_expected.to be_able_to(:manage_person_tags, group)
       end
     end
 
@@ -107,7 +119,11 @@ describe GroupAbility do
       let(:group) { groups(:top_group) }
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:index_person_notes, group)
+        is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not manage person tags' do
+        is_expected.not_to be_able_to(:manage_person_tags, group)
       end
     end
   end
@@ -145,7 +161,11 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:index_person_notes, group)
+        is_expected.to be_able_to(:index_notes, group)
+      end
+
+      it 'may manage person tags' do
+        is_expected.to be_able_to(:manage_person_tags, group)
       end
     end
 
@@ -165,7 +185,11 @@ describe GroupAbility do
       end
 
       it 'may show person notes' do
-        is_expected.to be_able_to(:index_person_notes, group)
+        is_expected.to be_able_to(:index_notes, group)
+      end
+
+      it 'may manage person tags' do
+        is_expected.to be_able_to(:manage_person_tags, group)
       end
     end
 
@@ -185,7 +209,11 @@ describe GroupAbility do
       end
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:index_person_notes, group)
+        is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not manage person tags' do
+        is_expected.not_to be_able_to(:manage_person_tags, group)
       end
     end
   end
@@ -232,7 +260,11 @@ describe GroupAbility do
       end
 
       it 'may not show person notes' do
-        is_expected.not_to be_able_to(:index_person_notes, group)
+        is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not manage person tags' do
+        is_expected.not_to be_able_to(:manage_person_tags, group)
       end
     end
 
@@ -276,6 +308,14 @@ describe GroupAbility do
 
       it 'may not modify superior' do
         is_expected.not_to be_able_to(:modify_superior, group)
+      end
+
+      it 'may not show person notes' do
+        is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not manage person tags' do
+        is_expected.not_to be_able_to(:manage_person_tags, group)
       end
     end
 

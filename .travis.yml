@@ -1,0 +1,23 @@
+language: ruby
+cache: bundler
+branches:
+  only:
+    - master
+    - stable
+env:
+  global:
+    - HEADLESS=true
+    - RAILS_DB_ADAPTER=mysql2
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.7
+  - 2.2.3
+  - 2.3.1
+  - 2.4.0
+install:
+  - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
+  - bundle install --path vendor/bundle
+  - bundle update mysql2
+script:
+  - bundle exec rake db:create ci --trace

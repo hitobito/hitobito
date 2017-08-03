@@ -103,8 +103,8 @@ describe Event::ParticipationsController, type: :controller do
       get :new, group_id: group.id, event_id: course.id, for_someone_else: true
       person_field = subject.all('form .control-group')[0]
       expect(person_field).to have_content 'Person'
-      expect(person_field).to have_css('input', count: 2)
-      expect(person_field.all('input').first[:type]).to eq 'hidden'
+      expect(person_field).to have_css('input', visible: false, count: 2)
+      expect(person_field.all('input', visible: false).first[:type]).to eq 'hidden'
     end
 
     it 'renders alternatives' do
@@ -112,16 +112,6 @@ describe Event::ParticipationsController, type: :controller do
       a.dates.create!(start_at: course.dates.first.start_at + 2.weeks)
       get :new, group_id: group.id, event_id: course.id
       is_expected.to have_content a.name
-    end
-  end
-
-  describe_action :delete, :destroy, format: :html, id: true do
-    it 'redirects to application market' do
-      is_expected.to redirect_to group_event_application_market_index_path(group, course)
-    end
-
-    it 'has flash noting the application' do
-      expect(flash[:notice]).to match(/Anmeldung/)
     end
   end
 

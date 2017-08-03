@@ -10,6 +10,7 @@
     %meta{charset: 'utf-8'}
     %title= "#{Settings.application.name} - #{title}"
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    %meta{name: 'turbolinks-cache-control', content: 'no-cache'}
 
     = csrf_meta_tag
     = favicon_link_tag 'favicon.ico'
@@ -26,32 +27,28 @@
 
     = stylesheet_link_tag 'application.css', media: :screen, 'data-turbolinks-track' => true
     = stylesheet_link_tag 'print.css', media: :print
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
 
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
     = yield(:head)
 
   %body
-    %div.nav-off-canvas
-      = render 'layouts/nav_off_canvas'
     %main
 
       %header#page-header
-        %a{href: '#'} Menu
         .container-fluid
           = link_to Settings.application.name, root_path, class: 'brand'
 
           - if current_user
-            = render 'layouts/nav'
+            -# = render 'layouts/nav'
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 
-      #page{class: ('with-left-nav' if sheet.left_nav?)}
-        - if sheet.left_nav?
-          %nav.nav-left
-            .inner
-              = sheet.render_left_nav
-
+      #page
+        -# REMOVE Left Nav Conditional helpers... because it had {class: ('with-left-nav' if sheet.left_nav?)}
+        %nav.nav-left
+          = render 'layouts/nav'
         .container-fluid
           = render_sheets do
             .content-header

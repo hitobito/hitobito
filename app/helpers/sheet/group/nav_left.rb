@@ -22,7 +22,7 @@ module Sheet
         render_upwards +
         render_header +
         content_tag(:ul, class: 'nav-left-list') do
-          render_layer_groups + render_sub_layers
+          render_layer_groups + render_deleted_people_link + render_sub_layers
         end
       end
 
@@ -49,7 +49,8 @@ module Sheet
       end
 
       def render_header
-        content_tag(:h3, class: "nav-left-title #{'active' if layer == entry}") do
+        active = layer == entry && view.request.path !~ /\/deleted_people$/
+        content_tag(:h3, class: "nav-left-title #{'active' if active}") do
           link_to(layer, active_path(layer))
         end
       end
@@ -96,6 +97,16 @@ module Sheet
                 active_path(group), title: group.to_s)
       end
 
+      def render_deleted_people_link
+        if view.can?(:index_deleted_people, layer)
+          active = view.current_page?(view.group_deleted_people_path(layer.id))
+          content_tag(:li, class: "#{'active' if active}") do
+            link_to(view.t('groups.global.link.deleted_person'),
+                    view.group_deleted_people_path(layer.id))
+          end
+        end
+      end
+
       def render_sub_layers
         safe_join(grouped_sub_layers) do |type, layers|
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
@@ -121,8 +132,8 @@ module Sheet
       end
 
       def active_path(group)
-        renderer = sheet.active_tab.renderer(view, [group])
-        if renderer.show?
+        renderer = sheet.active_tab.try(:renderer, view, [group])
+        if renderer && renderer.show?
           renderer.path
         else
           view.group_path(group)

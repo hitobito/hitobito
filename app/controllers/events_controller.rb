@@ -30,13 +30,15 @@ class EventsController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
+  before_render_show :load_user_participation
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
   def index
     respond_to do |format|
-      format.html  { entries }
-      format.csv   { render_csv(entries) }
+      format.html { entries }
+      format.csv  { render_tabular(:csv, entries) }
+      format.xlsx { render_tabular(:xlsx, entries) }
     end
   end
 
@@ -96,8 +98,14 @@ class EventsController < CrudController
     end
   end
 
-  def render_csv(entries)
-    send_data ::Export::Csv::Events::List.export(entries), type: :csv
+  def load_user_participation
+    if current_user
+      @user_participation = current_user.event_participations.where(event_id: entry.id).first
+    end
+  end
+
+  def render_tabular(format, entries)
+    send_data ::Export::Tabular::Events::List.export(format, entries), type: format
   end
 
   def typed_group_events_path(group, event_type, options = {})
@@ -112,8 +120,12 @@ class EventsController < CrudController
 
   def authorize_class
     type = params[:type].presence || 'Event'
-    action = request.format.csv? ? 'export' : 'index'
+    action = export? ? 'export' : 'index'
     authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 
+  def export?
+    format = request.format
+    format.xlsx? || format.csv?
+  end
 end

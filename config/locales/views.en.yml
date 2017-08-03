@@ -83,6 +83,10 @@ en:
     available_placeholders_empty: 'No placeholders available'
   dropdown/event/group_filter:
     all_groups: 'All groups'
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'Add person'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ en:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Labels'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
@@ -164,7 +169,7 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organizers'
     duration: Duration
     date: "Date %{index}"
@@ -183,7 +188,6 @@ en:
         title: 'Next events'
         explanation: 'Events of your groups and their top groups are shown here. Other events you''ll find in the organizing group.'
     application_market:
-      already_assigned: 'This person is already allocated elsewhere.'
       participation:
         registered_at: 'Registration on %{date}'
       prio_buttons:
@@ -313,9 +317,6 @@ en:
     apply: 'Register'
     applied: 'Registered'
     not_possible: 'not possible'
-    participants_info: '%{count} registrations'
-    participants_info_with_limit: '%{count} registrations for %{limit} places'
-    active_participants_info: '%{count} registrations assigned'
     issue_only: 'Assigns the %{model} %{issued} on the %{until} (last course date).'
     prolong_only:
       one: 'Extends existing qualification %{prolonged} until %{until} (last course date).'
@@ -417,7 +418,6 @@ en:
     groups: 'Groups'
     events: 'Events'
     courses: 'Courses'
-    admin: 'Admin'
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'
@@ -454,8 +454,8 @@ en:
     email_field:
       used_as_login: Is used as login
       only_changeable_by_superior: >
-        The main e-mail address of a person with multiple roles can only be changed
-        by a superordinate user.
+          The main e-mail address of a person with multiple roles can only be changed
+          by a superordinate user.
     fields:
       format_birthday: (dd.mm.yyy)
     list:
@@ -472,7 +472,6 @@ en:
     roles:
       title: Active roles
     roles_aside:
-      add_role: Add Role
       set_main_group: Set main group
   participations:
     destroy:
@@ -519,8 +518,8 @@ en:
     info:
       role_has_permissions: "The role %{role} in the group %{group} has the following permissions:"
       role_only_public: >
-        The role %{role} in the group %{group} can only view public data (groups,
-        events and subscriptions; no other persons).
+          The role %{role} in the group %{group} can only view public data (groups,
+          events and subscriptions; no other persons).
       only_visible_from_above: This role is visible only to persons in this level, not by people from higher layers.
   subscriber:
     group:

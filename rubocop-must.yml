@@ -9,6 +9,7 @@ AllCops:
     - spec/**/*
     - vendor/**/*
     - tmp/**/*
+    - vendor/bundle/**/*
 
 
 Metrics/CyclomaticComplexity:
@@ -33,6 +34,7 @@ Metrics/AbcSize:
   Max: 36 # Try to reduce this value
 
 Style/Encoding:
+  EnforcedStyle: always
   Enabled: true
 
 # Disable all other cops
@@ -94,9 +96,6 @@ CommentAnnotation:
 ConstantName:
   Enabled: false
 
-DefaultScope:
-  Enabled: false
-
 Documentation:
   Enabled: false
 
@@ -131,9 +130,6 @@ HandleExceptions:
   Enabled: false
 
 HasAndBelongsToMany:
-  Enabled: false
-
-DeprecatedHashMethods:
   Enabled: false
 
 HashSyntax:
@@ -173,6 +169,9 @@ Lint/UnneededDisable:
   Enabled: false
 
 Lint/UselessAccessModifier:
+  Enabled: false
+
+Lint/IneffectiveAccessModifier:
   Enabled: false
 
 Loop:
@@ -229,9 +228,6 @@ ShadowingOuterLocalVariable:
 SignalException:
   Enabled: false
 
-SingleSpaceBeforeFirstArg:
-  Enabled: false
-
 SpaceAfterComma:
   Enabled: false
 
@@ -242,6 +238,9 @@ SpaceAroundOperators:
   Enabled: false
 
 SpaceBeforeComma:
+  Enabled: false
+
+SpaceBeforeFirstArg:
   Enabled: false
 
 SpaceInsideBrackets:
@@ -263,6 +262,9 @@ StringLiterals:
   Enabled: false
 
 Style/ClassCheck:
+  Enabled: false
+
+Style/ConditionalAssignment:
   Enabled: false
 
 Style/CommentIndentation:
@@ -309,7 +311,7 @@ Style/StringLiteralsInInterpolation:
 
 Style/UnneededCapitalW:
   Enabled: false
-  
+
 Style/VariableName:
   Enabled: false
 
@@ -319,7 +321,10 @@ Tab:
 TrailingBlankLines:
   Enabled: false
 
-TrailingComma:
+TrailingCommaInLiteral:
+  Enabled: false
+
+TrailingCommaInArguments:
   Enabled: false
 
 TrailingWhitespace:
@@ -343,7 +348,16 @@ Void:
 WordArray:
   Enabled: false
 
+Performance/Casecmp:
+  Enabled: false
+
 Performance/Detect:
+  Enabled: false
+
+Performance/PushSplat:
+  Enabled: false
+
+Performance/RedundantBlockCall:
   Enabled: false
 
 Performance/ReverseEach:
@@ -373,11 +387,41 @@ Style/EmptyLinesAroundModuleBody:
 Style/FirstParameterIndentation:
   Enabled: false
 
+Style/IfInsideElse:
+  Enabled: false
+
 Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/MultilineMethodCallIndentation:
+  Enabled: false
+
+Style/MultilineHashBraceLayout:
+  Enabled: false
+
+Style/MultilineArrayBraceLayout:
+  Enabled: false
+
+Style/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/RedundantParentheses:
+  Enabled: false
+
+Style/PreferredHashMethods:
+  Enabled: false
+
+Style/SpaceAroundKeyword:
   Enabled: false
 
 Style/StructInheritance:
   Enabled: false
 
 Style/SymbolProc:
+  Enabled: false
+
+Style/UnneededInterpolation:
   Enabled: false

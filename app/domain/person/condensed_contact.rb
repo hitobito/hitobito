@@ -26,7 +26,8 @@ class Person::CondensedContact
 
     def condensable?(base_contactable, contactable)
       CONDENSABLE_ATTRIBUTES.all? do |attribute|
-        base_contactable.try(attribute) == contactable.try(attribute)
+        base_contactable.try(attribute).blank? && contactable.try(attribute).blank? ||
+        base_contactable.try(attribute).to_s == contactable.try(attribute).to_s
       end
     end
 
@@ -45,7 +46,7 @@ class Person::CondensedContact
   def initialize(base_contactable, contactables = [])
     @base_contactable = base_contactable
     @other_contactables = []
-    condense(contactables)
+    try_condense(contactables)
   end
 
   def condensed_contactables
@@ -60,7 +61,7 @@ class Person::CondensedContact
     self.class.condensable?(self, contactable)
   end
 
-  def condense(candidates)
+  def try_condense(candidates)
     Array.wrap(candidates).each do |candidate|
       if condensable?(candidate) && !condensed_contactables.include?(candidate)
         other_contactables << candidate
@@ -68,6 +69,5 @@ class Person::CondensedContact
     end
   end
 
-  alias_method :<<, :condense
-
+  alias_method :<<, :try_condense
 end

@@ -109,6 +109,8 @@ body {
 /* Content */
 #page {
   padding: 20px 10px 90px;
+  width: 100vw;
+  min-height: 100vh;
   margin: 0;
   background: $pageBackground;
 
@@ -118,6 +120,21 @@ body {
   }
 
   & > .sheet { margin: 0 20px; }
+}
+
+.nav-left {
+  width: 20em;
+  position: absolute;
+  left: 2em;
+  top: 8em;
+  z-index: 1
+}
+
+#page > .container-fluid {
+  position: absolute;
+  left: 20em;
+  right: 2em;
+  z-index: 2
 }
 
 .sheet,
@@ -332,6 +349,10 @@ table.roles {
 
 .table-striped th:first-child {
   padding-left: 8px;
+}
+
+td.action {
+  text-align: center;
 }
 
 //  Logs

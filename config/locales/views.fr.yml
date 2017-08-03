@@ -83,6 +83,10 @@ fr:
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   dropdown/event/group_filter:
     all_groups: 'Tous les groupes'
+  dropdown/event/events_export:
+    button: Exporter
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'Ajouter une personne'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ fr:
   dropdown/people_export:
     button: 'Exporter'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Etiquettes'
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
@@ -166,7 +171,7 @@ fr:
       title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
       explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
       instruction: 'Prière de réessayer plus tard.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'organisateurs'
     duration: Délai
     date: "Date %{index}"
@@ -183,9 +188,8 @@ fr:
         csv_export_button: 'Export CSV'
       events:
         title: 'Evénements prévus prochainement'
-        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent'
+        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
     application_market:
-      already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
         registered_at: 'Inscription le %{date}'
       prio_buttons:
@@ -243,6 +247,10 @@ fr:
         on_waiting_list: Sur la liste d'attente
       list:
         incomplete: des indications obligatoires manquent
+      cancel_application:
+        explanation: Tu es inscrit(e) pour cette activité.
+        caption: Désinscription
+        confirmation: "Souhaites-tu vraiment te désinscrire de cette activité?"
     register:
       register:
         title: Saisir les données de contact
@@ -255,11 +263,13 @@ fr:
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
   events:
     application_fields:
-      caption_signature: Les participants doivent signer l'inscription
-      caption_signature_confirmation: L'inscription doit être confirmé par une deuxième signature
+      caption_signature: Les participants doivent signer l'inscription.
+      caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
       add: "ajouter"
+    default_description_link:
+      insert_general_information: 'Introduire une description standard '
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
@@ -267,6 +277,7 @@ fr:
       additional_information: 'Données pour l''inscription'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
+      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes
     form_tabs:
       general: Général
     global:
@@ -323,9 +334,15 @@ fr:
     apply: 'Inscription'
     applied: 'inscrit'
     not_possible: 'impossible'
-    participants_info: '%{count} inscriptions'
-    participants_info_with_limit: '%{count} inscriptions pour %{limit} places'
-    active_participants_info: '%{count} inscriptions attribuées'
+    participants_info:
+      one: '%{count} inscription'
+      other: '%{count} inscriptions'
+    participants_info_with_limit:
+      one: '%{count} inscription pour %{limit} places'
+      other: '%{count} inscriptions pour %{limit} places'
+    active_participants_info:
+      one: '%{count} inscription attribuée'
+      other: '%{count} inscriptions attribuées'
     issue_only: 'Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours).'
     prolong_only:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
@@ -335,7 +352,7 @@ fr:
     additional_views: 'Autres vues'
   filter_navigation/people:
     custom_filter: 'Filtre personnel'
-    entire_layer: 'Tout le niveau'
+    entire_layer: 'Tous les niveaux'
     entire_group: 'Tout le groupe'
     new_role_filter: 'Nouveau filtre pour rôles...'
     new_qualification_filter: 'Nouveau filtre pour qualifications...'
@@ -371,9 +388,9 @@ fr:
         activated: Le déblocage manuel est activé
         deactivated: Le déblocage manuel est désactivé
         explanation: >+
-          Lorsque cette fonction est active, les personnes ne sont ajoutées aux groupes,
-          activité et abonnements qu'après qu'une personne autorisée ait donné son
-          accord.
+            Lorsque cette fonction est active, les personnes sont uniquement ajoutées
+            à  «groupes», «activités» et «abonnements» après que la personne habilitée
+            à donner les accès donne son accord.
 
       list:
         approve: Accepter
@@ -387,11 +404,14 @@ fr:
     attrs:
       contact_details: 'Contacts'
       additional_information: 'Informations supplémentaires'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'pas de groupes supprimés disponibles'
     form:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
     global:
       link:
         add: Créer un groupe
+        deleted_person: Personnes supprimées
     new:
       title: 'Créer un %{model}'
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
@@ -402,7 +422,7 @@ fr:
     deactivated: Déblocage manuel désactivé
     activated: Déblocage manuel activé
     global:
-      no_list_entries: Il n'y a pour l'instant pas de requête ouverte
+      no_list_entries: Il n’y a pas de requête ouverte pour l’instant.
   group/merge:
     success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
     failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
@@ -425,6 +445,9 @@ fr:
   import/person_doublette_finder:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   label_formats:
+    global_labels: "l'ensemble des formats d'étiquettes"
+    own_labels: mes Formats d'étiquettes
+    see_global_labels: "afficher l'ensemble des formats d'étiquettes"
     form:
       portrait: 'Format portrait'
       landscape: 'Format paysage'
@@ -448,8 +471,8 @@ fr:
         add: Créer un abo
     form:
       help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
-      caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes'
-      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion'
+      caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes.'
+      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion.'
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
@@ -464,7 +487,7 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Administrateur'
+    admin: 'Paramètres'
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
@@ -481,6 +504,7 @@ fr:
   paper_trail/version_decorator:
     by: 'de %{author}'
   person:
+    confirm_delete: "Toutes les données à  %(personne) seront définitivement supprimées, y compris participations et qualifications.Ne supprime cette personne que si personne n'a plus besoin de ces données."
     add_requests:
       body_list:
         open_requests:
@@ -519,7 +543,8 @@ fr:
       description:
         header: Fichiers CSV
         explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
-        example: "prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,\"Genève, New York\",f \n"
+        example: |
+          prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
         explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
         explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux également choisir ce rôle lors de la prochaine étape.
         special_fields: Valeurs de champs spéciales
@@ -538,29 +563,40 @@ fr:
         preview: 'Aperçu'
         update_behaviour: Procédé d'actualisation
         keep_behaviour: >
-          N'actualiser que les champs vides avec des données provenant du CSV, les
-          valeurs déjà existantes ne changent pas.
+            N'actualiser que les champs vides avec des données provenant du CSV, les
+            valeurs déjà existantes ne changent pas.
+        keep_behaviour_tags: les balises (tags) sont complétées.
         override_behaviour: >
-          Remplacer les valeurs déjà existantes dans la base de donnée avec les données
-          provenant du CSV. Les valeurs non pourvues (vides) dans le CSV effacent
-          les valeurs pourvues dans la banque de données d'accueil.
+            Remplacer les valeurs déjà existantes dans la base de donnée avec les
+            données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV
+            effacent les valeurs pourvues dans la banque de données d'accueil.
+        override_behaviour_tags: Les balises (tags) sont supprimées ou modifiées.
         update_behaviour_explanation: >
-          Ce procédé ne concerne que les personnes déjà présentes dans la base de
-          données de données. L'inscription de nouvelles personnes doit être entièrement
-          effectuée en conformité avec les données du CSV.
+            Ce procédé ne concerne que les personnes déjà présentes dans la base de
+            données de données. L'inscription de nouvelles personnes doit être entièrement
+            effectuée en conformité avec les données du CSV.
       new:
         upload_button: 'Télécharger'
         csv_file: 'Fichier CSV'
       preview:
         import_now_button: Importer les personnes
         import_details_html: >
-          Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
-          dans le <strong>groupe %{group}</strong>.
+            Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
+            dans le <strong>groupe %{group}</strong>.
     add_request_mailer:
       ask_person_to_add:
         request_link: Répondre à la requête
       ask_responsibles:
         request_link: 'Répondre à la requête '
+    notes:
+      note:
+        created: il y a %{time_ago}
+      paginator:
+        newer_notes: Plus récent
+        older_notes: Plus ancien
+    tags:
+      list:
+        category_other: Autre
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -616,9 +652,9 @@ fr:
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
-        L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut être
-        modifiée que par une personne hiérarchiquement supérieure à chacun de ces
-        rôles.
+          L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut
+          être modifiée que par une personne hiérarchiquement supérieure à chacun
+          de ces rôles.
     fields:
       format_birthday: (dd.mm.yyyy)
     list:
@@ -637,6 +673,11 @@ fr:
     roles_aside:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
+    tags:
+      add_tag: Ajouter tag…
+      no_entry: (aucun)
+    notes:
+      new_note: Ajouter une note
   participations:
     destroy:
       flash:
@@ -646,7 +687,7 @@ fr:
       save_search: Sauvegarder cette recherche
       save_filter: Sauvegarder ce filtre
       save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
-      prompt_role_selection: Quels rôles doivent-ils être affichés ?
+      prompt_role_selection: Quels rôles doivent être affichés?
     new:
       title: Filtrer les personnes par qualification
     qualification:
@@ -658,7 +699,7 @@ fr:
       validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
-        all: Montrer toutes les qualifications non distribuées
+        all: Toutes les qualifications non distribuées
       kind:
         deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
         layer: Dans le niveau actuel et tous les groupes
@@ -673,6 +714,7 @@ fr:
       add_person: Ajouter une personne
       add_role_for_person: Créer un rôle pour %{person}
       edit_role_for_person: Modifier un rôle pour %{person}
+      new_role_for_person: Créer un nouveau rôle
     fields:
       help_optional_label: désignation facultative du rôle de cette personne
     person_fields:
@@ -682,8 +724,8 @@ fr:
     info:
       role_has_permissions: "Le rôle %{role} du groupe %{group} a les droits suivants:"
       role_only_public: >
-        Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
-        (groupes, événements et abonnements; pas d'autres personnes).
+          Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
+          (groupes, événements et abonnements; pas d'autres personnes).
       only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
   subscriber:
     group:
@@ -692,6 +734,8 @@ fr:
         subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
+      tags:
+        only_add_persons_with_tags: 'N''ajouter une personne qu''avec l''une des balises (tags) ci-dessous:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
@@ -720,6 +764,8 @@ fr:
     list:
       excluded_people: 'Personnes exclues'
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
+    subscription:
+      only_persons_with: 'Seulement les personnes avec:'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

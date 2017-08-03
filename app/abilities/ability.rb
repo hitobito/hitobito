@@ -18,14 +18,13 @@ class Ability
                  Event::RoleAbility,
                  GroupAbility,
                  MailingListAbility,
+                 NoteAbility,
                  PeopleFilterAbility,
                  PersonAbility,
                  Person::AddRequestAbility,
-                 Person::NoteAbility,
                  QualificationAbility,
                  RoleAbility,
                  SubscriptionAbility,
-                 TagAbility,
                  VariousAbility
 
   attr_reader :user, :user_context

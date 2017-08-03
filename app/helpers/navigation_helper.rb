@@ -10,43 +10,36 @@ module NavigationHelper
   MAIN = [
     { label: :groups,
       url: :groups_path,
+      icon_name: 'user',
       active_for: %w(groups people) },
 
     { label: :events,
       url: :list_events_path,
+      icon_name: 'calendar',
       active_for: %w(list_events),
       if: ->(_) { can?(:list_available, Event) } },
 
     { label: :courses,
       url: :list_courses_path,
+      icon_name: 'book',
       active_for: %w(list_courses),
       if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
 
     { label: :admin,
       url: :label_formats_path,
+      icon_name: 'cog',
       active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 
 
   def render_main_nav
-    content_tag_nested(:ul, MAIN, class: 'nav') do |options|
+    content_tag_nested(:ul, MAIN, class: 'nav-left-list') do |options|
       if !options.key?(:if) || instance_eval(&options[:if])
         url = options[:url]
+        icon_name = options[:icon_name]
         url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{options[:label]}"), url, options[:active_for])
-      end
-    end
-  end
-
-  # Renders an nav where left nav is grouped under the main point
-
-  def render_off_canvas_nav
-    content_tag_nested(:ul, MAIN, class: 'nav') do |options|
-      if !options.key?(:if) || instance_eval(&options[:if])
-        url = options[:url]
-        url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{options[:label]}"), url, options[:active_for]) do
+        nav(I18n.t("navigation.#{options[:label]}"), url, icon_name, options[:active_for]) do
           concat(sheet.render_left_nav) if sheet.left_nav?
         end
       end
@@ -58,14 +51,14 @@ module NavigationHelper
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, active_for = [], &block)
+  def nav(label, url, icon_name = false, active_for = [], &block)
     options = {}
     active = current_page?(url) || active_for.any? { |p| request.path =~ %r{/?#{p}/?} }
     if active
       options[:class] = 'active'
     end
     content_tag(:li, options) do
-      concat(link_to(label, url))
+      concat(link_to(icon(icon_name) + label, url))
       yield if block_given? && active
     end
   end

@@ -222,7 +222,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq ["#{list.mail_name}@localhost"]
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -243,7 +243,7 @@ describe MailRelay::Lists do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       expect(last_email.smtp_envelope_to).to eq [from]
-      expect(last_email.from).to eq ["#{list.mail_name}@localhost"]
+      expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
       expect(last_email.body).to match(/nicht berechtigt/)
     end
   end
@@ -268,7 +268,7 @@ describe MailRelay::Lists do
         expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
       end
 
-      context 'with invalid sender address' do
+      context 'with no sender address' do
         before do
           message.from = nil
         end
@@ -278,8 +278,61 @@ describe MailRelay::Lists do
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
-        it 'does not relays' do
+        it 'does not relay' do
           expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context 'with invalid sender address' do
+        before do
+          message.from = 'John Nonsense <>'
+        end
+
+        it { is_expected.not_to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq('John Nonsense <>') }
+        its(:potential_senders) { is_expected.to be_blank }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'does not relay' do
+          expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context 'with no receiver address' do
+        before do
+          message.to = nil
+        end
+
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+          expect(last_email.from).to eq [from]
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
+        end
+      end
+
+      context 'with invalid receiver address' do
+        before do
+          message.to = 'Undisclosed recipients <>'
+        end
+
+        it { is_expected.to be_sender_allowed }
+        its(:sender_email) { is_expected.to eq from }
+        its(:potential_senders) { is_expected.to eq [people(:bottom_member)] }
+        its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
+
+        it 'relays' do
+          expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+          expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+          expect(last_email.from).to eq [from]
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
         end
       end
     end
@@ -296,7 +349,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq ["#{list.mail_name}@localhost"]
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -331,7 +384,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq ["#{list.mail_name}@localhost"]
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -378,16 +431,26 @@ describe MailRelay::Lists do
   context 'bounce' do
     let(:from) { 'deamon@example.com' }
 
-    let(:envelope_to) { "#{list.mail_name}-bounces+test=example.com" }
+    context 'individual' do
+      let(:envelope_to) { "#{list.mail_name}-bounces+test=example.com" }
 
-    its(:sender_email) { is_expected.to eq from }
+      its(:sender_email) { is_expected.to eq from }
 
-    it 'forwards bounce message' do
-      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      it 'forwards bounce message' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      expect(last_email.smtp_envelope_to).to eq ['test@example.com']
-      expect(last_email.smtp_envelope_from).to eq "#{list.mail_name}-bounces@localhost"
-      expect(last_email.from).to eq([from])
+        expect(last_email.smtp_envelope_to).to eq ['test@example.com']
+        expect(last_email.smtp_envelope_from).to eq "#{list.mail_name}-bounces@localhost"
+        expect(last_email.from).to eq([from])
+      end
+    end
+
+    context 'general' do
+      let(:envelope_to) { "#{list.mail_name}-bounces" }
+
+      it 'ignores message' do
+        expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
+      end
     end
   end
 

@@ -18,6 +18,9 @@
 #  count_vertical   :integer          not null
 #  padding_top      :float            not null
 #  padding_left     :float            not null
+#  person_id        :integer
+#  nickname         :boolean          default(FALSE), not null
+#  pp_post          :string(23)
 #
 
 class LabelFormat < ActiveRecord::Base
@@ -33,6 +36,8 @@ class LabelFormat < ActiveRecord::Base
 
   has_many :people, foreign_key: :last_label_format_id, dependent: :nullify
 
+  belongs_to :person
+
 
   validates :name, presence: true, length: { maximum: 255, allow_nil: true }
   validates :page_size, inclusion: available_page_sizes
@@ -47,16 +52,16 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, numericality: { less_than: :height, if: :height }
   validates :padding_left, numericality: { less_than: :width, if: :width }
 
-  after_save :sweep_cache
-  after_destroy :sweep_cache
+  scope :for_user, ->(user) { where('user_id = ? OR user_id IS null', user.id) }
 
-  class << self
-    def all_as_hash
-      Rails.cache.fetch("label_formats_#{I18n.locale}") do
-        LabelFormat.list.each_with_object({}) { |f, result| result[f.id] = f.to_s }
-      end
+  def self.for_person(person)
+    if person.show_global_label_formats?
+      where('person_id = ? OR person_id IS NULL', person.id)
+    else
+      where(person_id: person.id)
     end
   end
+
 
   def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"
@@ -68,14 +73,6 @@ class LabelFormat < ActiveRecord::Base
 
   def page_layout
     landscape ? :landscape : :portrait
-  end
-
-  private
-
-  def sweep_cache
-    Settings.application.languages.to_hash.keys.each do |lang|
-      Rails.cache.delete("label_formats_#{lang}")
-    end
   end
 
 end

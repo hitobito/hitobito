@@ -1,6 +1,6 @@
 #!/bin/bash
 # prepare the environment to use the local mysql database, e.g.
-#  script/with_mysql rails s
+#  bin /with_mysql rails s
 #
 # rake tasks may use the following subtask:
 #  rake mysql test:requests

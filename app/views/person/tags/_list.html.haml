@@ -6,4 +6,4 @@
           = category == :other ? t('.category_other') : category
         .person-tags-category-list
           - category_tags.each do |tag|
-            = render 'person/tags/tag', tag: tag
+            = render 'person/tags/tag', tag: tag, person: @person

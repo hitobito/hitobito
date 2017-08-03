@@ -35,17 +35,19 @@
 #  signature_confirmation_text :string
 #  creator_id                  :integer
 #  updater_id                  :integer
+#  applications_cancelable     :boolean          default(FALSE), not null
 #
 
 top_event:
   name: Top Event
   groups: top_layer
-  type: 
+  type:
 
 top_course:
   name: Top Course
   groups: top_layer
   type: Event::Course
+  number: TOP-007
   kind: slk
   priorization: true
   requires_approval: true

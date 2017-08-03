@@ -83,6 +83,10 @@ it:
     available_placeholders_empty: 'nessun carattere a disposizione'
   dropdown/event/group_filter:
     all_groups: 'tutti i gruppi'
+  dropdown/event/events_export:
+    button: esportare
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'aggiungere una persona'
   dropdown/event/participant_add:
@@ -93,6 +97,7 @@ it:
   dropdown/people_export:
     button: 'esportare'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'etichette'
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'
@@ -166,7 +171,7 @@ it:
       title: 'siamo spiacenti, questa pagina non è disponibile al momento (503)'
       explanation: 'al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo.'
       instruction: 'vi preghiamo di riprovare nuovamente più tardi.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'organizzatori'
     duration: Periodo di tempo
     date: "Data %{index}"
@@ -185,7 +190,6 @@ it:
         title: 'eventi che si terranno prossimamente'
         explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
     application_market:
-      already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
         registered_at: 'iscrizione il %{date}'
       prio_buttons:
@@ -243,6 +247,10 @@ it:
         on_waiting_list: In lista d'attesa
       list:
         incomplete: mancano dei campi obbligatori
+      cancel_application:
+        explanation: Sei iscritto a questo evento.
+        caption: Scollegarsi
+        confirmation: "Vuoi veramente disiscriverti da questo evento?"
     register:
       register:
         title: registrare i dati di contatto
@@ -260,6 +268,8 @@ it:
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
       add: "aggiungere"
+    default_description_link:
+      insert_general_information: Usa la descrizione standard
     form:
       caption_external_applications: 'esterni possono iscriversi a questo evento'
       caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
@@ -267,6 +277,7 @@ it:
       additional_information: 'dati per l''iscrizione'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
+      caption_applications_cancelable: I partecipanti possono disiscrivere sé stessi
     form_tabs:
       general: In generale
     global:
@@ -323,9 +334,15 @@ it:
     apply: 'iscriversi'
     applied: 'iscritto'
     not_possible: 'impossibile'
-    participants_info: '%{count} iscrizioni'
-    participants_info_with_limit: '%{count} iscrizioni per %{limit} posti'
-    active_participants_info: '%{count} iscrizioni assegnate'
+    participants_info:
+      one: '%{count} iscrizione'
+      other: '%{count} iscrizioni'
+    participants_info_with_limit:
+      one: '%{count} iscrizione per %{limit} posti'
+      other: '%{count} iscrizioni per %{limit} posti'
+    active_participants_info:
+      one: '%{count} iscrizione assegnate'
+      other: '%{count} iscrizioni assegnate'
     issue_only: 'assegna %{model} %{issued} a %{until} (ultima data del corso).'
     prolong_only:
       one: 'prolunga la qualifica esistente %{prolonged} fino al  %{until} (ultima data del corso).'
@@ -371,8 +388,9 @@ it:
         activated: L'autorizzazione manuale è attivata
         deactivated: L'autorizzazione manuale non è attivata
         explanation: >
-          Se attivata, le persone di questo livello vengono aggiunte a gruppi, eventi
-          e abbonamenti solo dopo che una persona con diritto di accesso ha dato l'autorizzazione.
+            Se attivata, le persone di questo livello vengono aggiunte a gruppi, eventi
+            e abbonamenti solo dopo che una persona con diritto di accesso ha dato
+            l'autorizzazione.
       list:
         approve: Accettare
         reject: Rifiutare
@@ -385,11 +403,14 @@ it:
     attrs:
       contact_details: 'Dati di contatto'
       additional_information: 'Altri dati'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'Non ci sono gruppi cancellati.'
     form:
       help_contact: 'Utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
     global:
       link:
         add: Creare un gruppo
+        deleted_person: Persone cancellato
     new:
       title: 'Creare %{model} '
     reactivated: "Il gruppo <i>%{group}</i> è stato riattivato con successo."
@@ -423,6 +444,9 @@ it:
   import/person_doublette_finder:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
   label_formats:
+    global_labels: "Formati delle etichette globale"
+    own_labels: mia Formati delle etichette
+    see_global_labels: "Visualizza i formati delle etichette globali"
     form:
       portrait: 'formato verticale'
       landscape: 'formato orizzontale'
@@ -462,7 +486,7 @@ it:
     groups: 'gruppi'
     events: 'eventi'
     courses: 'corsi'
-    admin: 'admin'
+    admin: 'Impostazioni'
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -479,6 +503,7 @@ it:
   paper_trail/version_decorator:
     by: 'da %{author}'
   person:
+    confirm_delete: "Tutti i dati relativi a %{person} saranno cancellati definitivamente, comprese le partecipazioni e le qualifiche. Cancella questa persona solo se i dati non servono più a nessuno."
     add_requests:
       body_list:
         open_requests:
@@ -540,29 +565,40 @@ it:
         preview: 'Anteprima'
         update_behaviour: Metodo di aggiornamento
         keep_behaviour: >
-          Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
-          già esistenti vengono mantenuti.
+            Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
+            già esistenti vengono mantenuti.
+        keep_behaviour_tags: I tag saranno aggiunti
         override_behaviour: >
-          Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
-          I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
-          banca dati.
+            Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
+            I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
+            banca dati.
+        override_behaviour_tags: I tag saranno cancellati o sostituiti
         update_behaviour_explanation: >
-          Questa funzione si applica unicamente alle persone già esistenti nella banca
-          dati. Nuove persone vengono sempre create in totale corrispondenza ai dati
-          del CSV.
+            Questa funzione si applica unicamente alle persone già esistenti nella
+            banca dati. Nuove persone vengono sempre create in totale corrispondenza
+            ai dati del CSV.
       new:
         upload_button: 'Caricare'
         csv_file: 'Documento CSV'
       preview:
         import_now_button: Importare le persone
         import_details_html: >
-          Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
-          nel gruppo<strong> %{group}</strong>.
+            Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
+            nel gruppo<strong> %{group}</strong>.
     add_request_mailer:
       ask_person_to_add:
         request_link: Rispondere alla richiesta
       ask_responsibles:
         request_link: Rispondere alla richiesta
+    notes:
+      note:
+        created: fa %{time_ago}
+      paginator:
+        newer_notes: Più nuovo
+        older_notes: Più vecchio
+    tags:
+      list:
+        category_other: Altro
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -618,8 +654,8 @@ it:
     email_field:
       used_as_login: Sarà utilizzato come login
       only_changeable_by_superior: >
-        L'indirizzo email principale di una persona con più ruoli può essere cambiato
-        unicamente da un utente che è superiore a tutti questi ruoli.
+          L'indirizzo email principale di una persona con più ruoli può essere cambiato
+          unicamente da un utente che è superiore a tutti questi ruoli.
     fields:
       format_birthday: (gg.mm.aaaa)
     list:
@@ -638,6 +674,11 @@ it:
     roles_aside:
       add_role: Aggiungere un ruolo
       set_main_group: Impostare il gruppo principale
+    tags:
+      add_tag: Aggiungere un tag
+      no_entry: (nessuno)
+    notes:
+      new_note: Aggiungere una nota
   participations:
     destroy:
       flash:
@@ -674,6 +715,7 @@ it:
       add_person: Aggiungere una persona
       add_role_for_person: 'Inserire un ruolo per %{person} '
       edit_role_for_person: 'Modificare il ruolo per %{person} '
+      new_role_for_person: Crea un nuovo ruolo
     fields:
       help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
@@ -683,8 +725,8 @@ it:
     info:
       role_has_permissions: "Il ruolo %{role} nel gruppo %{group} prevede le seguenti autorizzazioni:"
       role_only_public: >
-        l ruolo %{role} nel gruppo %{group} può visualizzare solo i dati pubblici
-        (gruppi, eventi e abbonamenti; nessuna altra persona ).
+          l ruolo %{role} nel gruppo %{group} può visualizzare solo i dati pubblici
+          (gruppi, eventi e abbonamenti; nessuna altra persona ).
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   subscriber:
     group:
@@ -693,6 +735,8 @@ it:
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
+      tags:
+        only_add_persons_with_tags: 'Aggiungi solo persone con uno dei tag seguenti:'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
@@ -721,6 +765,8 @@ it:
     list:
       excluded_people: 'persone escluse'
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
+    subscription:
+      only_persons_with: 'Solo persone con:'
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."

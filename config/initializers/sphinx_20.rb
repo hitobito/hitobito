@@ -1,5 +1,5 @@
 # Config for Sphinx < 2.1
-version = ThinkingSphinx::Configuration.instance.controller.sphinx_version
+version = Rails.application.class.sphinx_version
 if version.nil? || version < '2.1'
   ThinkingSphinx::SphinxQL.variables!
 

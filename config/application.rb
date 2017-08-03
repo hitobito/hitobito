@@ -26,6 +26,7 @@ end
 
 module Hitobito
   class Application < Rails::Application
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -89,7 +90,7 @@ module Hitobito
     config.assets.version = '1.0'
 
     config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
-                                   *.png *.gif *.jpg)
+                                   *.png *.gif *.jpg favicon.ico)
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
@@ -101,7 +102,7 @@ module Hitobito
       # Assert the mail relay job is scheduled on every restart.
       if Delayed::Job.table_exists?
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
-        SphinxIndexJob.new.schedule
+        SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
       end
     end
 
@@ -110,6 +111,21 @@ module Hitobito
       app.config.to_prepare do
         ThinkingSphinx::Index.define_partial_indizes!
       end
+    end
+
+    def self.sphinx_version
+      @sphinx_version ||= ThinkingSphinx::Configuration.instance.controller.sphinx_version.presence ||
+        ENV['RAILS_SPHINX_VERSION']
+    end
+
+    def self.sphinx_present?
+      port = ENV['RAILS_SPHINX_PORT']
+      port.present? || ThinkingSphinx::Configuration.instance.controller.running?
+    end
+
+    def self.sphinx_local?
+      host = ENV['RAILS_SPHINX_HOST']
+      host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
   end
 end

@@ -30,6 +30,8 @@ module MailRelay
 
     attr_reader :message
 
+    delegate :valid_email?, to: :class
+
     class << self
 
       # Retrieve, process and delete all mails from the mail server.
@@ -47,7 +49,7 @@ module MailRelay
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
             new(message).relay
-          rescue Exception => e
+          rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
           end
@@ -66,6 +68,11 @@ module MailRelay
         end
       end
 
+      def valid_email?(email)
+        email_address = email.to_s.strip
+        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
+      end
+
       private
 
       def should_clear_email?(message)
@@ -74,12 +81,16 @@ module MailRelay
         when 'y'
           true
         when 'i'
-          puts message
-          puts "\n\n"
-          should_clear_email?(message)
+          inspect_message(message)
         else
           false
         end
+      end
+
+      def inspect_message(message)
+        puts message
+        puts "\n\n"
+        should_clear_email?(message)
       end
 
       # rubocop:enable Rails/Output
@@ -115,9 +126,9 @@ module MailRelay
         message.sender = envelope_sender
         message.smtp_envelope_from = envelope_sender
 
-        # set list headers
-        message.header['Precedence'] = 'list'
-        message.header['List-Id'] = list_id
+        logger.info("Relaying email from #{sender_email} " \
+                    "for list #{envelope_receiver_name} " \
+                    "to #{message.smtp_envelope_to.size} people")
 
         deliver(message)
       end
@@ -144,7 +155,7 @@ module MailRelay
     end
 
     def sender_email
-      @sender_email ||= message.from && message.from.first
+      @sender_email ||= message.from && Array(message.from).first
     end
 
     # Heuristic method to find actual receiver of the message.
@@ -191,7 +202,13 @@ module MailRelay
       if defined?(ActionMailer::Base)
         ActionMailer::Base.wrap_delivery_behavior(message)
       end
+      message.header['Precedence'] = 'list'
+      message.header['List-Id'] = list_id
       message.deliver
+    end
+
+    def logger
+      Delayed::Worker.logger || Rails.logger
     end
 
   end

@@ -11,10 +11,14 @@ class PersonAbility < AbilityDsl::Base
 
   on(Person) do
     class_side(:index, :query).everybody
+    class_side(:index_people_without_role).if_admin
 
-    permission(:any).may(:show, :show_full, :history, :update,
-                         :update_email, :primary_group, :log).
-                     herself
+    permission(:admin).may(:destroy).not_self
+
+    permission(:any).
+      may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
+          :update_settings).
+      herself
 
     permission(:contact_data).may(:show).other_with_contact_data
 
@@ -46,7 +50,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_tags, :index_notes).
+          :index_tags, :manage_tags, :index_notes).
       non_restricted_in_same_layer
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
@@ -57,17 +61,23 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_and_below_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_tags, :index_notes).non_restricted_in_same_layer_or_visible_below
+          :index_tags, :manage_tags, :index_notes).non_restricted_in_same_layer_or_visible_below
     permission(:layer_and_below_full).
       may(:update_email).
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
+
+    permission(:admin).may(:show).people_without_roles
 
     general(:send_password_instructions).not_self
   end
 
   def not_self
     subject.id != user.id
+  end
+
+  def people_without_roles
+    subject.roles.empty?
   end
 
   def if_permissions_in_all_capable_groups

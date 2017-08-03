@@ -22,8 +22,7 @@ class Group::Merger
       if create_new_group
         update_events
         copy_roles
-        move_children(group1)
-        move_children(group2)
+        move_children
         delete_old_groups
       end
     end
@@ -62,14 +61,14 @@ class Group::Merger
     end
   end
 
-  def move_children(group)
+  def move_children
     children = group1.children + group2.children
     children.each do |child|
       child.parent_id = new_group.id
+      child.parent(true)
       child.save!
-      child.update_attribute(:layer_group_id, child.layer_group.id)
     end
-    group.children.update_all(parent_id: new_group.id)
+
   end
 
   def copy_roles

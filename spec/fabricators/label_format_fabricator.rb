@@ -13,6 +13,9 @@
 #  count_vertical   :integer          not null
 #  padding_top      :float            not null
 #  padding_left     :float            not null
+#  person_id        :integer
+#  nickname         :boolean          default(FALSE), not null
+#  pp_post          :string(23)
 #
 
 #  Copyright (c) 2014, Insieme Schweiz. This file is part of

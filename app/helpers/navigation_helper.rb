@@ -10,7 +10,7 @@ module NavigationHelper
   MAIN = [
     { label: :groups,
       url: :groups_path,
-      icon_name: 'user',
+      icon_name: 'users',
       active_for: %w(groups people) },
 
     { label: :events,

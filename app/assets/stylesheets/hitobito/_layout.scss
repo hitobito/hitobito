@@ -8,6 +8,7 @@
 
 body {
   padding: 0; // new
+  background: $bodyBackground;
 }
 
 /* Header */
@@ -15,7 +16,7 @@ body {
   @include clearfix;
   margin: 0;
   padding: 10px 10px 0;
-  background: $pageBackground;
+  // background: $pageBackground;
 
   @include responsive(mediaTablet) {
     padding: 10px 20px 0;
@@ -112,7 +113,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   margin: 0;
-  background: $pageBackground;
+  // background: $pageBackground;
 
   @include responsive(mediaTablet) {
     margin: 0;
@@ -224,10 +225,10 @@ body {
     }
   }
 
-  & > .container-fluid {
-    @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
-    background: $bodyBackground;
-  }
+  // & > .container-fluid {
+  //   @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
+  //   background: $bodyBackground;
+  // }
 }
 
 

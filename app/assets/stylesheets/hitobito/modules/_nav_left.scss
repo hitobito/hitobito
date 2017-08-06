@@ -4,62 +4,105 @@
 	overflow: auto;
 	border-radius: 6px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+	background-color: rgba(0,0,0,0.3);
+
+	// list resets
+	
 	ul { margin: 0}
+
 	li {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 	}
-	i {
-		max-width: 1rem;
-		margin-right: 1rem;
-	}
-	
+
+	// make active section slightly darker
+
 	& > .nav-left-list {
 
-		background-color: white;
+		& > li > .nav-left-list { padding-top: 0.5rem; }
 
+		.nav-left-title a {
+			font-size: 24px;
+		}
 		& > li {
-			background-color: white;
 			padding-bottom: 1rem;
 		}
 
 		& > li.active {
-			background-color: $grayLighter;
-			box-shadow: inset 0 0px 2px 1px rgba(0, 0, 0, 0.1)
+			background-color: rgba(0,0,0,0.1);
 		}
 
+		// first level links with icons
 
 		& > li > a {
-			display: inline-block;
+			display: block;
+			color: white;
 			font-size: 24px;
 			padding: 1rem 1rem 0rem;
 			i {
 				padding-right: 1rem;
+				max-width: 1rem;
+				margin-right: 1rem;
 			}
+		}
+	}
 
+	// All the styling should be applied to the link element, as the the lists are nested.
+
+
+	a {
+		color: white;
+		font-weight: 300;
+		display: block;
+	}
+
+	.divider {
+		color: rgba(255,255,255,0.7);
+		text-transform: uppercase;
+		font-weight: 100;
+		display: inline-block;
+		margin-top: 1rem;
+	}
+
+	// second level
+
+	.nav-left-list  {
+		.nav-left-title a, a, .divider {
+			padding: 0.2rem 0.5rem 0.2rem 3rem;
+			border-left: 4px solid transparent;
 		}
 
-		& 
-
-		h3, .divider {
-			padding-left: 3rem;
+		.nav-left-title.active a, .nav-left-list .active > a {
+			background-color: rgba(255,255,255,0.1);
+			border-left: 4px solid $blue;
 		}
+	}
 
-		.nav-left-title.active {
-			background-color: rgba(50,152,151,0.2);
-			border-left: 4px solid #329897;
-		}
+	// further levels
 
-		& .nav-left-list {
-			& > li {
-				padding: 0.2rem 0rem 0.2rem 3rem;
-			}
-			li.active {
-						background-color: rgba(50,152,151,0.2);
-						border-left: 4px solid #329897;
+	$offset: 0.7rem;
+	.nav-left-list ul ul {
+		a { padding-left: (3rem + $offset); }
+		ul {
+			a { padding-left: (3rem + 2*$offset) }
+			ul {
+				a { padding-left: (3rem + 3*$offset ) }
+				ul {
+					a { padding-left: ( 3rem + 4 * $offset)	}
+					ul { 
+						a { padding-left: (3rem + 5 * $offset)}
 					}
+				}
+			}
 		}
+	}
+
+	// nav left back
+
+	.nav-left-back {
+		font-size: 0.7rem !important;
+		padding-left: 3rem !important;
 	}
 }
 

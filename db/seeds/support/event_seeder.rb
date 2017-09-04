@@ -39,7 +39,7 @@ class EventSeeder
     seed_questions(event) if true?
     seed_leaders(event)
     3.times do
-      event.class.participant_types.each do |type|
+      event.participant_types.each do |type|
         seed_event_role(event, type)
       end
     end
@@ -104,7 +104,7 @@ class EventSeeder
 
   def seed_participants(event)
     3.times do
-      event.class.participant_types.each do |type|
+      event.participant_types.each do |type|
         p = seed_event_role(event, type)
         seed_application(p)
       end

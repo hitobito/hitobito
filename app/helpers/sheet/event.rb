@@ -9,6 +9,16 @@ module Sheet
   class Event < Base
     self.parent_sheet = Sheet::Group
 
+    class << self
+
+      private
+
+      def can_view_qualifications?(view, event)
+        view.can?(:qualify, event) || view.can?(:qualifications_read, event)
+      end
+
+    end
+
     tab 'global.tabs.info',
         :group_event_path,
         if: :show,
@@ -31,7 +41,8 @@ module Sheet
     tab 'activerecord.models.qualification.other',
         :group_event_qualifications_path,
         if: (lambda do |view, _group, event|
-          event.course_kind? && event.qualifying? && view.can?(:qualify, event)
+          event.course_kind? && event.qualifying? &&
+            can_view_qualifications?(view, event)
         end)
 
     def link_url

@@ -133,6 +133,11 @@ Achtung: Der Index wird grundsätzlich nur über diesen Aufruf aktualisiert! Än
 werden für die Volltextsuche also erst sichtbar, wenn wieder neu indexiert wurde. Auf der Produktion 
 läuft dazu alle 10 Minuten ein Delayed Job.
 
+Hinweis: Falls beim Indexieren der Fehler ``ERROR: index 'group_core': sql_fetch_row: Out of sort memory, consider increasing server sort buffer size.`` auftritt, muss in der MySql-Konfiguration (je nach Distro im File ``/etc/mysql/mysql.conf.d/mysqld.cnf`` oder ``/etc/mysql/my.cnf``) folgende Buffergrösse erhöht werden:
+
+    [mysqld]
+    sort_buffer_size = 2M
+
 
 ### Delayed Job
 

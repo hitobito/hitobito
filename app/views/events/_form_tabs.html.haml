@@ -1,6 +1,20 @@
+-#  Copyright (c) 2015 - 2017, insieme Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 %ul.nav.nav-tabs
   %li.active= link_to(t('events.form_tabs.general'), '#general', data: { toggle: 'tab' })
   %li= link_to(Event.human_attribute_name(:dates), '#dates', data: { toggle: 'tab' })
-  %li= link_to(Event::Application.model_name.human, '#application', data: { toggle: 'tab' })
+  - if entry.participant_types.present?
+    %li= link_to(Event::Application.model_name.human, '#application', data: { toggle: 'tab' })
 
   = render_extensions :form_tabs
+
+  - if entry.role_types.present?
+    %li= link_to(t('events.form_tabs.application_questions'), '#application_questions', data: { toggle: 'tab' })
+    %li= link_to(t('events.form_tabs.admin_questions'), '#admin_questions', data: { toggle: 'tab' })
+
+  - if entry.participant_types.present?
+    %li= link_to(t('events.form_tabs.contact_attrs'), '#contact_attrs', data: { toggle: 'tab' })
+

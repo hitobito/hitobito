@@ -47,6 +47,12 @@ de:
           attributes:
             body:
               placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden"
+              contact_attr_invalid: "'%{attribute}' ist kein gültiges Personen-Attribut"
+              contact_attr_hidden_required: "'%{attribute}' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden"
         event/date:
           attributes:
             finish_at:
@@ -238,6 +244,7 @@ de:
         nickname: Übername
         email: Haupt-E-Mail
         emails: E-Mails
+        layer_group: Hauptebene
         password: Passwort
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
@@ -322,6 +329,12 @@ de:
         participant_count: Anzahl Teilnehmende
         applicant_count: Anzahl Anmeldungen
         applications_cancelable: Abmeldung möglich
+        display_booking_info: Anzeige Anmeldestand
+
+      event/contact_attrs:
+        required: Obligatorisch
+        optional: Optional
+        hidden: Nicht anzeigen
 
       event/answer:
         answer: Antwort

@@ -7,7 +7,8 @@
 
 class Event::QualificationsController < ApplicationController
 
-  before_action :authorize
+  before_action :authorize_write, except: :index
+  before_action :authorize_read, only: :index
 
   decorates :event, :leaders, :participants, :group
 
@@ -34,7 +35,7 @@ class Event::QualificationsController < ApplicationController
   private
 
   def entries
-    types = event.class.role_types
+    types = event.role_types
     @leaders ||= participations(*types.select(&:leader?))
     @participants ||= participations(*types.select(&:participant?))
   end
@@ -51,9 +52,18 @@ class Event::QualificationsController < ApplicationController
     event.participations_for(*role_types).includes(:roles, :event)
   end
 
-  def authorize
-    not_found unless event.course_kind? && event.qualifying?
+  def authorize_write
+    event_qualifying
     authorize!(:qualify, event)
+  end
+
+  def authorize_read
+    event_qualifying
+    authorize!(:qualifications_read, event)
+  end
+
+  def event_qualifying
+    not_found unless event.course_kind? && event.qualifying?
   end
 
 end

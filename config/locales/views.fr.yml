@@ -307,7 +307,7 @@ fr:
       title: Créer une catégorie de cours
   event/participations:
     full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
-    success: '%{full_entry_label} a été ajouté avec succès. Prière de contrôler les informations de contact et de les adapter le cas échéant.'
+    success: '%{full_entry_label} a été ajouté avec succès.'
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     show:
       link:

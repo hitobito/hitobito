@@ -4,6 +4,7 @@ branches:
   only:
     - master
     - stable
+    - kurswesen
 env:
   global:
     - HEADLESS=true
@@ -21,3 +22,9 @@ install:
   - bundle update mysql2
 script:
   - bundle exec rake db:create ci --trace
+matrix:
+  allow_failures:
+  - rvm: 2.0.0
+  - rvm: 2.1.7
+  - rvm: 2.3.1
+  - rvm: 2.4.0

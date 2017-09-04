@@ -44,7 +44,7 @@ describe Export::Tabular::People::ParticipationsFull do
 
   context 'integration' do
 
-    let(:data) { Export::Tabular::People::ParticipationsFull.export(list) }
+    let(:data) { Export::Tabular::People::ParticipationsFull.export(:csv, list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',

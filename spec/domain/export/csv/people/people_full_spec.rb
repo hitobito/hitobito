@@ -59,7 +59,7 @@ describe Export::Tabular::People::PeopleFull do
 
   context 'integration' do
 
-    let(:data) { Export::Tabular::People::PeopleFull.export(list) }
+    let(:data) { Export::Tabular::People::PeopleFull.export(:csv, list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
     before do

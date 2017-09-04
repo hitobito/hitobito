@@ -69,7 +69,7 @@ describe Export::Tabular::People::PeopleAddress do
         ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
          'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Hauptebene', 'Rollen']
       end
-      let(:data) { Export::Tabular::People::PeopleAddress.export(list) }
+      let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, list) }
       let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
       subject { csv }

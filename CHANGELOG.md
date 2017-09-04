@@ -1,5 +1,16 @@
 # Hitobito Changelog
 
+## Version 1.X
+
+*   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+*   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.
+*   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
+*   Anlässe können dupliziert werden.
+*   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
+*   Sichtbarkeit der Anmeldungen auf Kursliste für alle Personen ist pro Kurs konfigurierbar.
+*   Aktualisieren der Kontaktdaten bei der Eventanmeldung
+
+
 ## Version 1.15
 
 *   Neue Rolle "Helfer/-in" für Anlässe.
@@ -9,6 +20,7 @@
 *   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
 *   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
 *   Anmeldedatum wird bei Anmeldeknopf auf Anlassliste angezeigt.
+
 
 ## Version 1.14
 

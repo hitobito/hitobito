@@ -307,7 +307,7 @@ it:
       title: Creare il tipo di corso
   event/participations:
     full_entry_label: '%{model_label} da <i>%{person}</i> a <i>%{event}</i>'
-    success: '%{full_entry_label} è stato creato con successo. Verifica i dati di contatto e eventualmente aggiornali'
+    success: '%{full_entry_label} è stato creato con successo.'
     instructions: 'per l''iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all''indirizzo corrispondente'
     show:
       link:

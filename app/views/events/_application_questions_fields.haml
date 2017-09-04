@@ -3,8 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if entry.role_types.present?
-  = field_set_tag t('events.form.additional_information') do
-    %p= t('events.form.explain_application_questions')
 
-    = f.nested_fields_for :questions, 'event/questions/fields'
+%p= t('events.form.explain_application_questions')
+
+= field_set_tag nil do
+  = f.nested_fields_for :application_questions do |fields|
+    = render 'event/questions/fields', f: fields, admin: false

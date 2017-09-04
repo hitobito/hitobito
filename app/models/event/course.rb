@@ -45,7 +45,7 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
-  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval]
+  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval, :display_booking_info]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -88,9 +88,9 @@ class Event::Course < Event
   end
 
   def init_questions
-    if questions.blank?
-      Event::Question.global.each do |q|
-        questions << q.dup
+    if application_questions.blank?
+      Event::Question.application.global.each do |q|
+        application_questions << q.dup
       end
     end
   end

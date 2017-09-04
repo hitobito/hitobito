@@ -54,7 +54,7 @@ class Qualification < ActiveRecord::Base
     def reactivateable(date = nil)
       date ||= Time.zone.today
       joins(:qualification_kind).
-      where('qualifications.start_at <= ?', date).
+        where('qualifications.start_at <= ?', date).
         where('qualifications.finish_at IS NULL OR ' \
               '(qualification_kinds.reactivateable IS NULL AND ' \
               ' qualifications.finish_at >= ?) OR ' \

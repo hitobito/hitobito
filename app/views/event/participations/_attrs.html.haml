@@ -7,7 +7,7 @@
   %article.span6
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
-    = render_attrs(entry.person, :birthday, :gender)
+    = render_attrs(entry.person, :layer_group, :birthday, :gender)
 
     - if can?(:show_details, entry)
       = render 'application_details'
@@ -16,7 +16,14 @@
                           folder: :people,
                           locals: { entry: entry.person, show_full: false }
 
-      = render 'answers' if @answers.present?
+      = render 'answers',
+               answers: @answers.reject(&:admin?),
+               title: t('event.participations.application_answers')
+
+      - if can?(:show_full, entry)
+        = render 'answers',
+                 answers: @answers.select(&:admin?),
+                 title: t('event.participations.admin_answers')
 
       = section t('activerecord.attributes.event/participation.additional_information') do
         = simple_format(entry.additional_information || '-')

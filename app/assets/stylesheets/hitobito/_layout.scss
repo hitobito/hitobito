@@ -273,10 +273,17 @@ body {
   }
 }
 
-// well
 .well {
   border: none;
   background: $grayLighter;
+
+  > {
+    h1, h2, h3, h4, h5 {
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
 
   &.panel {
     margin-top: 5px;
@@ -299,43 +306,6 @@ body {
 
 .ui-datepicker td .ui-state-default:hover {
   background-color: $purple !important;
-}
-
-table.roles {
-  width: 100%;
-  td {
-    border: none;
-    padding: 0px;
-  }
-  td:first-child { padding-left: 10px; width: 100%; }
-  td { min-width: 20px; }
-}
-
-.table-responsive {
-  .table {
-    background-color: #fff;
-  }
-
-  @media screen and (max-width: $mediaDesktop) {
-    width: 100%;
-    margin-bottom: 15px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-    -webkit-overflow-scrolling: touch;
-
-    .table {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.table-striped th:first-child {
-  padding-left: 8px;
-}
-
-td.action {
-  text-align: center;
 }
 
 //  Logs

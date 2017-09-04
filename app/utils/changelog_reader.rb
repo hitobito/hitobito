@@ -22,6 +22,7 @@ class ChangelogReader
   end
 
   private
+
   def collect_changelog_data
     changelog_files_content = read_changelog_files(changelog_file_paths)
     parse_changelog_lines(changelog_files_content)
@@ -49,7 +50,7 @@ class ChangelogReader
   end
 
   def changelog_file_paths
-    file_paths = ["CHANGELOG.md"]
+    file_paths = ['CHANGELOG.md']
     Wagons.all.each do |w|
       file_paths << "#{w.root}/CHANGELOG.md"
     end
@@ -58,7 +59,7 @@ class ChangelogReader
 
   def changelog_header_line(h)
     h.strip!
-    h[/^## [^\s]+ ((\d+\.)?(\*|\d+))$/, 1]
+    h[/^## [^\s]+ ((\d+\.)?(\*|x|\d+))$/i, 1]
   end
 
   def changelog_entry_line(e)

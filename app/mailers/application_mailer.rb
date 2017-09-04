@@ -7,7 +7,7 @@
 
 class ApplicationMailer < ActionMailer::Base
 
-  HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to]
+  HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
   def mail(headers = {}, &block)
     HEADERS_TO_SANITIZE.each do |h|
@@ -20,12 +20,20 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
+  # TODO: deprecate/remove values-parameter and call values_for_placeholders instead
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
     headers[:subject] ||= content.subject
     mail(headers) do |format|
       format.html { render text: content.body_with_values(values) }
+    end
+  end
+
+  def values_for_placeholders(content_key)
+    content = CustomContent.get(content_key)
+    content.placeholders_list.each_with_object({}) do |token, hash|
+      hash[token] = send(:"placeholder_#{token.underscore}")
     end
   end
 

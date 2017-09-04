@@ -242,6 +242,7 @@ de:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
         registered_at: 'Anmeldung am %{date}'
+        town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:
@@ -267,11 +268,25 @@ de:
         qualifications:
           for_participants: 'Qualifikationen für Teilnehmende'
           for_leaders: 'Qualifikationen für Leitende'
+      precondition_fields:
+        add_precondition_grouping: '+ Vorbedingungen hinzufügen'
+        add_precondition: 'Hinzufügen'
+      qualifications:
+        or: oder
+        and: und
 
+    participation_contact_datas:
+      edit:
+        title: Kontaktangaben
+        save: Weiter
     participations:
+      edit:
+        title: Anmeldung
       approvals:
         title: Freigabe
       specific_information: 'Spezifische Angaben'
+      application_answers: Anmeldeangaben
+      admin_answers: Administrationsangaben
       no_answer_given: '(nicht beantwortet)'
       actions_show:
         change_contact_data_button: 'Kontaktdaten ändern'
@@ -336,18 +351,26 @@ de:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
       caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
-      additional_information: 'Angaben für Anmeldung'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
+        welche nur für die Kursadministration verwendet werden.
+      explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
+        abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
     form_tabs:
       general: Allgemein
+      application_questions: Anmeldeangaben
+      admin_questions: Administrationsangaben
+      contact_attrs: Kontaktangaben
     global:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+        duplicate: Duplizieren
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen
@@ -417,11 +440,11 @@ de:
     active_participants_info:
       one: '%{count} Anmeldung zugeteilt'
       other: '%{count} Anmeldungen zugeteilt'
-    issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
+    issue_only: 'Vergibt die %{model} %{issued} unmittelbar per %{until} (letztes Kursdatum).'
     prolong_only:
-      one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
-      other: 'Verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
-    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
+      one: 'Verlängert existierende Qualifikation %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+      other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
 
   filter_navigation/dropdown:
@@ -842,9 +865,19 @@ de:
       title: Personen nach Qualifikationen filtern
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_year: Qualifikationsjahr einschränken
       prompt_kind: In welchem Bereich soll gesucht werden?
+      start_at_year_label: Erhalten zwischen
+      start_at_year_infix: und
+      start_at_year_suffix: ''
+      finish_at_year_label: Abgelaufen zwischen
+      finish_at_year_infix: und
+      finish_at_year_suffix: ''
 
     simple_radio:
+      match:
+        one: Person hat mindestens EINE dieser Qualifikationen
+        all: Person hat ALLE diese Qualifikationen
       validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen

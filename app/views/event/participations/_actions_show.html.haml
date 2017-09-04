@@ -21,7 +21,6 @@
   - if can?(:destroy, entry)
     = button_action_destroy
 
-  - if @event.requires_approval? && can?(:approve, @application)
-    = render 'actions_approval'
+  = render 'actions_approval'
 
 = render_extensions :actions_show

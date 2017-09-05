@@ -40,7 +40,7 @@
 #  applications_cancelable     :boolean          default(FALSE), not null
 #
 
-class Event < ActiveRecord::Base
+class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.

@@ -397,7 +397,13 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
 
-      questions:
+      admin_questions:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
+
+      application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl

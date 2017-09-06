@@ -192,7 +192,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def init_answers
-    entry.init_answers
+    @answers = entry.init_answers
     entry.init_application
   end
 

@@ -562,6 +562,10 @@ describe Event::ParticipationsController do
     context 'GET new' do
       before { get :new, group_id: group.id, event_id: course.id }
 
+      it 'sets answers instance variable' do
+        expect(assigns(:answers)).to have(1).item
+      end
+
       it 'allows the user to apply' do
         is_expected.to_not redirect_to group_event_path(group, course)
       end

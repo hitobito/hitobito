@@ -45,6 +45,7 @@ it:
       placeholder_person: 'Ricerca della persona....'
       placeholder_group: 'Ricerca del gruppo...'
       placeholder_event: 'Ricerca dell''evento...'
+      placeholder_company_name: 'Ricerca nome della ditta'
   list:
     index:
       title: '%{models}'
@@ -180,7 +181,6 @@ it:
     applied_to: iscrizioni a
     alternative_dates: dati alternativi
     priorities: 'Priorità per l''iscrizione'
-    no_qualifications_could_be_prolonged: "%{person} non ha nessuna qualifica che può essere prolungata."
     lists:
       courses:
         title: 'corsi disponibili'
@@ -189,9 +189,12 @@ it:
       events:
         title: 'eventi che si terranno prossimamente'
         explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
+      apply_until: 'fino a %{date}'
     application_market:
+      already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
         registered_at: 'iscrizione il %{date}'
+        town: Domicilio
       prio_buttons:
         national_waitinglist: 'lista d''attesa nazionale'
       index:
@@ -215,10 +218,24 @@ it:
         qualifications:
           for_participants: 'Qualifiche per i partecipanti'
           for_leaders: 'Qualifiche per gli animatori'
+      precondition_fields:
+        add_precondition_grouping: 'Aggiungere requisiti per la partecipazione'
+        add_precondition: 'aggiungere'
+      qualifications:
+        or: oppure
+        and: e
+    participation_contact_datas:
+      edit:
+        title: Dati di contatto
+        save: avanti
     participations:
+      edit:
+        title: Iscrizione
       approvals:
         title: Attivazione
       specific_information: 'dati specifici'
+      application_answers: Dati per l'iscrizione
+      admin_answers: Dati amministrativi
       no_answer_given: '(non risponde)'
       actions_show:
         change_contact_data_button: 'modificare i dati di contatto'
@@ -249,8 +266,14 @@ it:
         incomplete: mancano dei campi obbligatori
       cancel_application:
         explanation: Sei iscritto a questo evento.
-        caption: Scollegarsi
-        confirmation: "Vuoi veramente disiscriverti da questo evento?"
+        caption: Disiscriversi
+        confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
+    qualifications:
+      index:
+        save: Aggiornare le qualifiche
+      update:
+        flash:
+          success: Le qualifiche sono state aggiornate con successo.
     register:
       register:
         title: registrare i dati di contatto
@@ -269,21 +292,27 @@ it:
     attachments:
       add: "aggiungere"
     default_description_link:
-      insert_general_information: Usa la descrizione standard
+      insert_general_information: Inserire informazioni generali
     form:
       caption_external_applications: 'esterni possono iscriversi a questo evento'
       caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
       caption_requires_approval: 'il responsabile verrà informato e dovrà confermare l''iscrizione'
-      additional_information: 'dati per l''iscrizione'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
-      caption_applications_cancelable: I partecipanti possono disiscrivere sé stessi
+      explain_admin_questions: Qui per ogni partecipante puoi definire altri dati che vengono utilizzati solo per l'amministratzione del corso.
+      explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
+      caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente
+      caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso
     form_tabs:
       general: In generale
+      application_questions: Dati per l'iscrizione
+      admin_questions: Dati amministrativi
+      contact_attrs: Dati di contatto
     global:
       link:
         add_event: Creare un evento
         add_event/course: Creare un corso
+        duplicate: Raddoppiare
     minimum_age_with_years: '%{minimum_age} anni (anno di nascita)'
     new:
       title_event: Creare un evento
@@ -320,6 +349,7 @@ it:
     preconditions_not_fulfilled: '<b>le condizioni per iscriversi non sono soddisfatte.</b>'
     below_minimum_age: "il limite di età di %{course_minimum_age} non è raggiunto"
     qualifications_missing: "mancano le qualifiche seguenti: %{missing}"
+    some_qualifications_missing: "Le qualifiche necessarie mancano."
   event/register:
     not_logged_in: "devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
     person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
@@ -404,13 +434,13 @@ it:
       contact_details: 'Dati di contatto'
       additional_information: 'Altri dati'
     deleted_subgroups:
-      no_deleted_sub_groups: 'Non ci sono gruppi cancellati.'
+      no_deleted_sub_groups: 'Non ci sono gruppi cancellati'
     form:
       help_contact: 'Utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
     global:
       link:
         add: Creare un gruppo
-        deleted_person: Persone cancellato
+        deleted_person: Persone cancellate
     new:
       title: 'Creare %{model} '
     reactivated: "Il gruppo <i>%{group}</i> è stato riattivato con successo."
@@ -444,9 +474,9 @@ it:
   import/person_doublette_finder:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
   label_formats:
-    global_labels: "Formati delle etichette globale"
-    own_labels: mia Formati delle etichette
-    see_global_labels: "Visualizza i formati delle etichette globali"
+    global_labels: "Formati globali delle etichette"
+    own_labels: I miei formati delle etichette
+    see_global_labels: "Indicare formati globali delle etichette"
     form:
       portrait: 'formato verticale'
       landscape: 'formato orizzontale'
@@ -486,7 +516,14 @@ it:
     groups: 'gruppi'
     events: 'eventi'
     courses: 'corsi'
-    admin: 'Impostazioni'
+    admin: 'admin'
+  notes:
+    new_note: Aggiungere una nota
+    note:
+      created: fa %{time_ago}
+    paginator:
+      newer_notes: Contributi più recenti
+      older_notes: Contributi più vecchi
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -503,7 +540,7 @@ it:
   paper_trail/version_decorator:
     by: 'da %{author}'
   person:
-    confirm_delete: "Tutti i dati relativi a %{person} saranno cancellati definitivamente, comprese le partecipazioni e le qualifiche. Cancella questa persona solo se i dati non servono più a nessuno."
+    confirm_delete: "Tutti i dati relativi a %{person} vengono cancellati definitivamente, incl. partecipazioni e qualifiche. Cancella questa persona solo se nessuno ha ancora bisogno di queste informazioni."
     add_requests:
       body_list:
         open_requests:
@@ -567,12 +604,12 @@ it:
         keep_behaviour: >
             Aggiornare solo i campi vuoti nella banca dati con i dati del CSV; i valori
             già esistenti vengono mantenuti.
-        keep_behaviour_tags: I tag saranno aggiunti
+        keep_behaviour_tags: I tags vengono completati.
         override_behaviour: >
             Sovrascrivere i valori già esistenti nella banca dati con i dati del CSV.
             I valori vuoti nel CSV cancellano in questo caso i valori esistenti nella
             banca dati.
-        override_behaviour_tags: I tag saranno cancellati o sostituiti
+        override_behaviour_tags: I tags vengono cancellati o completati.
         update_behaviour_explanation: >
             Questa funzione si applica unicamente alle persone già esistenti nella
             banca dati. Nuove persone vengono sempre create in totale corrispondenza
@@ -590,12 +627,6 @@ it:
         request_link: Rispondere alla richiesta
       ask_responsibles:
         request_link: Rispondere alla richiesta
-    notes:
-      note:
-        created: fa %{time_ago}
-      paginator:
-        newer_notes: Più nuovo
-        older_notes: Più vecchio
     tags:
       list:
         category_other: Altro
@@ -636,6 +667,7 @@ it:
     tabs:
       history: Azioni
       log: Log
+      colleagues: Collaboratore
     actions_show:
       send_login: Inviare login
       send_login_tooltip:
@@ -677,8 +709,6 @@ it:
     tags:
       add_tag: Aggiungere un tag
       no_entry: (nessuno)
-    notes:
-      new_note: Aggiungere una nota
   participations:
     destroy:
       flash:
@@ -695,8 +725,16 @@ it:
       title: Filtrare le persone secondo le qualifiche
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
       prompt_validity: Che validità devono avere le qualifiche mostrate?
+      prompt_year: Limitare l'anno delle qualifiche
       prompt_kind: In quale ambito deve essere ricercato?
+      start_at_year_label: Ricevuto tra
+      start_at_year_infix: e
+      finish_at_year_label: Scaduto tra
+      finish_at_year_infix: e
     simple_radio:
+      match:
+        one: La persona ha almeno UNA di queste qualifiche
+        all: La persona ha TUTTE queste qualifiche
       validity:
         active: Solo qualifiche attuali e valide
         reactivateable: Qualifiche valide e riattivabili
@@ -715,7 +753,7 @@ it:
       add_person: Aggiungere una persona
       add_role_for_person: 'Inserire un ruolo per %{person} '
       edit_role_for_person: 'Modificare il ruolo per %{person} '
-      new_role_for_person: Crea un nuovo ruolo
+      new_role_for_person: Creare un nuovo ruolo
     fields:
       help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
@@ -736,7 +774,7 @@ it:
       roles:
         please_choose_group: prego selezionare un gruppo
       tags:
-        only_add_persons_with_tags: 'Aggiungi solo persone con uno dei tag seguenti:'
+        only_add_persons_with_tags: 'Aggiungere solo una persona con i tags sottostanti'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
@@ -766,7 +804,7 @@ it:
       excluded_people: 'persone escluse'
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
     subscription:
-      only_persons_with: 'Solo persone con:'
+      only_persons_with: 'Solo persone con'
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."

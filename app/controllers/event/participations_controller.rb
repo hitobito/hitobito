@@ -39,7 +39,8 @@ class Event::ParticipationsController < CrudController
   before_action :check_preconditions, only: [:new]
 
   before_render_new :init_answers
-  before_render_form :load_priorities, :load_answers
+  before_render_edit :load_answers
+  before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_precondition_warnings
 

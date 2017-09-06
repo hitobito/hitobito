@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 1.X
+## Version 1.16
 
 *   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
 *   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.

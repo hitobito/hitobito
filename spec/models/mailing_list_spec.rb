@@ -99,7 +99,7 @@ describe MailingList do
 
     context 'groups' do
       it 'is true if in group' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
@@ -107,7 +107,7 @@ describe MailingList do
       end
 
       it 'is false if different role in group' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
 
@@ -151,7 +151,7 @@ describe MailingList do
       end
 
       it 'is false if explicitly excluded' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
@@ -224,7 +224,7 @@ describe MailingList do
 
     context 'only groups' do
       it 'includes people with the given roles' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
@@ -245,10 +245,10 @@ describe MailingList do
       end
 
       it 'includes people with the given roles in multiple groups' do
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         p1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -297,7 +297,7 @@ describe MailingList do
 
     context 'groups with excluded' do
       it 'excludes person from groups' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
@@ -329,7 +329,7 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
@@ -375,10 +375,10 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -415,10 +415,10 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person

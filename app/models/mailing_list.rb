@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -60,7 +60,7 @@ class MailingList < ActiveRecord::Base
     subscriptions.where(subscriber_id: person.id,
                         subscriber_type: Person.sti_name,
                         excluded: false).
-                  destroy_all
+      destroy_all
 
     if subscribed?(person)
       sub = subscriptions.new
@@ -72,12 +72,12 @@ class MailingList < ActiveRecord::Base
 
   def people(people_scope = Person.only_public_data)
     people_scope.
-           joins(people_joins).
-           joins(subscription_joins).
-           where(subscriptions: { mailing_list_id: id }).
-           where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
-           where(suscriber_conditions).
-           uniq
+      joins(people_joins).
+      joins(subscription_joins).
+      where(subscriptions: { mailing_list_id: id }).
+      where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
+      where(suscriber_conditions).
+      uniq
   end
 
   private
@@ -122,9 +122,9 @@ class MailingList < ActiveRecord::Base
 
   def excluded_person_subscribers
     Subscription.select(:subscriber_id).
-                 where(mailing_list_id: id,
-                       excluded: true,
-                       subscriber_type: Person.sti_name)
+      where(mailing_list_id: id,
+            excluded: true,
+            subscriber_type: Person.sti_name)
   end
 
   def group_subscribers(condition)
@@ -148,7 +148,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.downcase == application_retriever_name.split('@', 2).first.downcase
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first) == 0
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

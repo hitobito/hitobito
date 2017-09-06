@@ -9,6 +9,11 @@
 *   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
 *   Sichtbarkeit der Anmeldungen auf Kursliste für alle Personen ist pro Kurs konfigurierbar.
 *   Aktualisieren der Kontaktdaten bei der Eventanmeldung
+*   Festlegen von Pflichtangaben zur Person bei der Eventanmeldung
+*   Anmeldestand kann für alle sichtbar gemacht werden
+*   Zugriffsberechtigungen von LKB angepasst
+*   Neu strukturierte Empfehlungen für Kurse
+*   Empfehlungsinstanz kann gewählt werden
 
 
 ## Version 1.15

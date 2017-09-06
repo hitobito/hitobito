@@ -10,8 +10,8 @@
 
   = render 'search_button'
 
-  .label-columns
-    = field_set_tag(t('.prompt_qualification_selection')) do
+  = field_set_tag(t('.prompt_qualification_selection')) do
+    .label-columns
       .controls
         - @qualification_kinds.each do |kind|
           - dom_id = "qualification_kind_id_#{kind.id}"
@@ -21,6 +21,43 @@
                             Array(params[:qualification_kind_id]).include?(kind.id.to_s),
                             id: dom_id)
             = kind.to_s
+
+    .controls
+      &nbsp;
+
+    .controls
+      = label_tag('match_one', class: 'radio inline') do
+        = radio_button_tag(:match, 'one', true)
+        = t('people_filters.simple_radio.match.one')
+      = label_tag('match_all', class: 'radio inline') do
+        = radio_button_tag(:match, 'all', params[:match] == 'all')
+        = t('people_filters.simple_radio.match.all')
+
+  = field_set_tag(t('.prompt_year'), class: 'form-horizontal') do
+    .control-group
+      = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label')
+      .controls
+        = number_field_tag(:start_at_year_from, params[:start_at_year_from], class: 'span2')
+        %span.text
+          &nbsp;
+          = t('.start_at_year_infix')
+          &nbsp;
+        = number_field_tag(:start_at_year_until, params[:start_at_year_until], class: 'span2')
+        %span.text
+          &nbsp;
+          = t('.start_at_year_suffix')
+    .control-group
+      = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label')
+      .controls
+        = number_field_tag(:finish_at_year_from, params[:finish_at_year_from], class: 'span2')
+        %span.text
+          &nbsp;
+          = t('.finish_at_year_infix')
+          &nbsp;
+        = number_field_tag(:finish_at_year_until, params[:finish_at_year_until], class: 'span2')
+        %span.text
+          &nbsp;
+          = t('.finish_at_year_suffix')
 
   = field_set_tag(t('.prompt_validity')) do
     = render 'simple_radio', attr: 'validity', value: 'active', first: true

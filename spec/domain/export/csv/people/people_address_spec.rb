@@ -12,16 +12,24 @@ describe Export::Tabular::People::PeopleAddress do
 
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
-  let(:simple_headers) do
-    ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-     'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
-  end
-  let(:data) { Export::Tabular::People::PeopleAddress.csv(list) }
+  let(:people_list) { Export::Tabular::People::PeopleAddress.new(list) }
+  subject { people_list }
+
+  let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, list) }
   let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
-  subject { csv }
 
-  its(:headers) { should == simple_headers }
+  context 'headers' do
+    let(:simple_headers) do
+      ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Hauptebene',
+       'Rollen']
+    end
+
+    subject { csv }
+
+    its(:headers) { should == simple_headers }
+  end
 
   context 'first row' do
 
@@ -32,6 +40,7 @@ describe Export::Tabular::People::PeopleAddress do
     its(['Haupt-E-Mail']) { should eq person.email }
     its(['Ort']) { should eq person.town }
     its(['Geschlecht']) { should eq 'unbekannt' }
+    its(['Hauptebene']) { should eq 'Top' }
 
     context 'roles and phone number' do
       before do
@@ -50,5 +59,5 @@ describe Export::Tabular::People::PeopleAddress do
       end
     end
   end
-
 end
+

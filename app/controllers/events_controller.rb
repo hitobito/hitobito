@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,14 +12,20 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
+                          :display_booking_info,
                           group_ids: [],
-                          dates_attributes: [:id, :label, :location, :start_at, :start_at_date,
-                                             :start_at_hour, :start_at_min, :finish_at,
-                                             :finish_at_date, :finish_at_hour, :finish_at_min,
-                                             :_destroy],
-                          questions_attributes: [:id, :question, :choices, :multiple_choices,
-                                                 :required,
-                                                 :_destroy]]
+                          dates_attributes: [
+                            :id, :label, :location, :start_at, :start_at_date,
+                            :start_at_hour, :start_at_min, :finish_at,
+                            :finish_at_date, :finish_at_hour, :finish_at_min,
+                            :_destroy
+                          ],
+                          application_questions_attributes: [
+                            :id, :question, :choices, :multiple_choices, :required, :_destroy
+                          ],
+                          admin_questions_attributes: [
+                            :id, :question, :choices, :multiple_choices, :_destroy
+                          ]]
 
 
   self.remember_params += [:year]
@@ -62,11 +68,15 @@ class EventsController < CrudController
   private
 
   def build_entry
-    type = model_params && model_params[:type].presence
-    type ||= Event.sti_name
-    event = Event.find_event_type!(type).new
-    event.groups << parent
-    event
+    if params[:source_id]
+      group.events.find(params[:source_id]).duplicate
+    else
+      type = model_params && model_params[:type].presence
+      type ||= Event.sti_name
+      event = Event.find_event_type!(type).new
+      event.groups << parent
+      event
+    end
   end
 
   def permitted_params
@@ -128,4 +138,25 @@ class EventsController < CrudController
     format = request.format
     format.xlsx? || format.csv?
   end
+
+  def assign_attributes
+    assign_contact_attrs
+    super
+  end
+
+  def assign_contact_attrs
+    contact_attrs = model_params.delete(:contact_attrs)
+    return unless contact_attrs.present?
+    reset_contact_attrs
+    contact_attrs.each do |a, v|
+      entry.required_contact_attrs << a if v.to_sym == :required
+      entry.hidden_contact_attrs << a if v.to_sym == :hidden
+    end
+  end
+
+  def reset_contact_attrs
+    entry.required_contact_attrs = []
+    entry.hidden_contact_attrs = []
+  end
+
 end

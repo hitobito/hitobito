@@ -7,22 +7,34 @@
 
 class Event::RegisterMailer < ApplicationMailer
 
-  CONTENT_REGISTER_LOGIN = 'event_register_login'
+  CONTENT_REGISTER_LOGIN = 'event_register_login'.freeze
 
   def register_login(recipient, group, event, token)
+    @recipient = recipient
+    @group     = group
+    @event     = event
+    @token     = token
     # This email contains sensitive information and thus
     # is only sent to the main email address.
-    values = register_login_values(recipient, group, event, token)
-    custom_content_mail(recipient.email, CONTENT_REGISTER_LOGIN, values)
+    custom_content_mail(
+      recipient.email,
+      CONTENT_REGISTER_LOGIN,
+      values_for_placeholders(CONTENT_REGISTER_LOGIN)
+    )
   end
 
   private
 
-  def register_login_values(recipient, group, event, token)
-    url = event_url(group, event, token)
-    { 'recipient-name' => recipient.greeting_name,
-      'event-name'     => event.to_s,
-      'event-url'      => link_to(url) }
+  def placeholder_recipient_name
+    @recipient.greeting_name
+  end
+
+  def placeholder_event_name
+    @event.to_s
+  end
+
+  def placeholder_event_url
+    link_to(event_url(@group, @event, @token))
   end
 
   def event_url(group, event, token)

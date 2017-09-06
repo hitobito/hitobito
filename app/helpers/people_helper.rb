@@ -52,4 +52,8 @@ module PeopleHelper
   def person_link(person)
     person ? assoc_link(person) : "(#{t('global.nobody')})"
   end
+
+  def format_person_layer_group(person)
+    person.layer_group_label
+  end
 end

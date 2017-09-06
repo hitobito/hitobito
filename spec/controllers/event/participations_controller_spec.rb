@@ -351,8 +351,6 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
       it 'creates non-active participant role for course events' do
@@ -375,8 +373,6 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
       it 'creates specific non-active participant role for course events' do
@@ -395,8 +391,6 @@ describe Event::ParticipationsController do
         expect(role).to be_kind_of(TestParticipant)
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
       end
 
@@ -421,8 +415,20 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+      end
+
+      it 'creates new participation with all answers' do
+        post :create,
+             group_id: group.id,
+             event_id: course.id,
+             event_participation: {
+               answers: {
+                 1 => { question_id: course.questions.first.id, answer: 'Bla' }
+               }
+             }
+
+        participation = assigns(:participation)
+        expect(participation.answers.size).to eq(2)
       end
 
       it 'fails for invalid event role' do
@@ -555,6 +561,10 @@ describe Event::ParticipationsController do
 
     context 'GET new' do
       before { get :new, group_id: group.id, event_id: course.id }
+
+      it 'sets answers instance variable' do
+        expect(assigns(:answers)).to have(2).item
+      end
 
       it 'allows the user to apply' do
         is_expected.to_not redirect_to group_event_path(group, course)

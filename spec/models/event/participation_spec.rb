@@ -28,12 +28,18 @@ describe Event::Participation do
   context '#init_answers' do
     subject { course.participations.new }
 
-    context do
-      before { subject.init_answers }
+    it 'creates answers from event' do
+      subject.init_answers
+      expect(subject.answers.collect(&:question).to_set).to eq(course.questions.to_set)
+    end
 
-      it 'creates answers from event' do
-        expect(subject.answers.collect(&:question).to_set).to eq(course.questions.to_set)
-      end
+    it 'creates missing answers' do
+      subject.answers_attributes = [{ question_id: course.questions.first.id, answer: 'Foo' }]
+      subject.init_answers
+
+      expect(subject.answers.size).to eq(2)
+      expect(subject.answers.first.answer).to eq('Foo')
+      expect(subject.answers.last.answer).to be_blank
     end
 
     it 'does not save associations in database' do

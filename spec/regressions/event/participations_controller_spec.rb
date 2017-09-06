@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# encoding:  utf-8
-
 require 'spec_helper'
 
 describe Event::ParticipationsController, type: :controller do
@@ -74,18 +72,6 @@ describe Event::ParticipationsController, type: :controller do
           expect(as.detect { |a| a.question == event_questions(:top_vegi) }.answer).to eq('nein')
           expect(as.detect { |a| a.question == event_questions(:top_more) }.answer).to eq('Ne du')
         end
-      end
-    end
-  end
-
-  describe 'POST create' do
-    [:event_base, :course].each do |event_sym|
-      it "prompts to change contact data for #{event_sym}" do
-        event = send(event_sym)
-        post :create, group_id: group.id, event_id: event.id, event_participation: test_entry_attrs
-        expect(flash[:notice]).to match(/Bitte überprüfe die Kontaktdaten/)
-        is_expected.to redirect_to group_event_participation_path(group, event,
-                                                                  assigns(:participation))
       end
     end
   end
@@ -178,7 +164,7 @@ describe Event::ParticipationsController, type: :controller do
       Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: test_entry)
       get :show, group_id: group.id, event_id: course.id, id: test_entry.id
 
-      expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt.'
+      expect(dom).to have_content 'Vorbedingungen für Anmeldung sind nicht erfüllt'
     end
   end
 

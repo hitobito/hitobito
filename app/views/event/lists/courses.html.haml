@@ -22,13 +22,14 @@
 
 #main
   %section
-    = grouped_table(@grouped_events, manager ? 4 : 3) do |event|
+    = grouped_table(@grouped_events, manager || display_any_booking_info? ? 4 : 3) do |event|
       %td
         %strong
           = event.labeled_link
       %td= event.dates_full
+      - if manager || display_any_booking_info?
+        %td= manager || event.display_booking_info? ? event.booking_info : ''
       - if manager
-        %td= event.booking_info
         %td= event.state_translated
       - else
         %td.center= button_action_event_apply(event)

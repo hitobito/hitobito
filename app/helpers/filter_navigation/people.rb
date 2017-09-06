@@ -42,6 +42,10 @@ module FilterNavigation
       @params[:validity]
     end
 
+    def match
+      @params[:match]
+    end
+
     private
 
     def init_kind_filter_names
@@ -137,7 +141,12 @@ module FilterNavigation
         group.id,
         qualification_kind_id: qualification_kind_ids,
         kind: deep,
-        validity: validity)
+        validity: validity,
+        match: match,
+        start_at_year_from: @params[:start_at_year_from],
+        start_at_year_until: @params[:start_at_year_until],
+        finish_at_year_from: @params[:finish_at_year_from],
+        finish_at_year_until: @params[:finish_at_year_until])
     end
 
     def people_filter_link(filter)

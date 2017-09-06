@@ -39,6 +39,7 @@ class Event::ParticipationsController < CrudController
   before_action :check_preconditions, only: [:new]
 
   before_render_new :init_answers
+  before_render_edit :load_answers
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_precondition_warnings
@@ -191,7 +192,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def init_answers
-    entry.init_answers
+    @answers = entry.init_answers
     entry.init_application
   end
 

@@ -45,6 +45,7 @@ fr:
       placeholder_person: 'Chercher une personne …'
       placeholder_group: 'Chercher un groupe ….'
       placeholder_event: 'Chercher un événement ….'
+      placeholder_company_name: 'Chercher un nom d''entreprise…'
   list:
     index:
       title: '%{models}'
@@ -180,7 +181,6 @@ fr:
     applied_to: Inscription auprès de
     alternative_dates: Dates alternatives
     priorities: 'Priorité d''inscription'
-    no_qualifications_could_be_prolonged: "%{person} n'a pas de qualifications susceptibles d'êtres prolongées."
     lists:
       courses:
         title: 'Cours disponibles'
@@ -189,9 +189,12 @@ fr:
       events:
         title: 'Evénements prévus prochainement'
         explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
+      apply_until: 'jusqu''au %{date}'
     application_market:
+      already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
         registered_at: 'Inscription le %{date}'
+        town: Domicile
       prio_buttons:
         national_waitinglist: 'liste d''attente nationale'
       index:
@@ -215,10 +218,24 @@ fr:
         qualifications:
           for_participants: 'Qualifications des participants'
           for_leaders: 'Qualifications des responsables'
+      precondition_fields:
+        add_precondition_grouping: '+ Ajouter une condition préalable'
+        add_precondition: 'Ajouter'
+      qualifications:
+        or: ou
+        and: et
+    participation_contact_datas:
+      edit:
+        title: Coordonnées
+        save: Continuer
     participations:
+      edit:
+        title: Inscription
       approvals:
         title: Autorisation
       specific_information: 'Informations spécifiques'
+      application_answers: Données pour l'inscription
+      admin_answers: Données administratives
       no_answer_given: '(pas de réponse)'
       actions_show:
         change_contact_data_button: 'Modifier les données de contact'
@@ -248,9 +265,15 @@ fr:
       list:
         incomplete: des indications obligatoires manquent
       cancel_application:
-        explanation: Tu es inscrit(e) pour cette activité.
-        caption: Désinscription
-        confirmation: "Souhaites-tu vraiment te désinscrire de cette activité?"
+        explanation: Tu es déjà inscrit(e) à cet évènement.
+        caption: Désinscrire
+        confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
+    qualifications:
+      index:
+        save: Mettre à jour les qualifications
+      update:
+        flash:
+          success: Les qualifications ont été mises à jour.
     register:
       register:
         title: Saisir les données de contact
@@ -269,21 +292,27 @@ fr:
     attachments:
       add: "ajouter"
     default_description_link:
-      insert_general_information: 'Introduire une description standard '
+      insert_general_information: Placer une description standard
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
       caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
-      additional_information: 'Données pour l''inscription'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
-      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes
+      explain_admin_questions: Tu peux définir des données supplémentaires pour chaque participant(e); elles ne seront utilisées que pour l'administration du cours.
+      explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
+      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
+      caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
     form_tabs:
       general: Général
+      application_questions: Données pour l'inscription
+      admin_questions: Données administratives
+      contact_attrs: Coordonnées
     global:
       link:
         add_event: Créer un événement
         add_event/course: Créer un cours
+        duplicate: Dupliquer
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     new:
       title_event: Créer un événement
@@ -307,7 +336,7 @@ fr:
       title: Créer une catégorie de cours
   event/participations:
     full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
-    success: '%{full_entry_label} a été ajouté avec succès. Prière de contrôler les informations de contact et de les adapter le cas échéant.'
+    success: '%{full_entry_label} a été ajouté avec succès.'
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     show:
       link:
@@ -320,6 +349,7 @@ fr:
     preconditions_not_fulfilled: '<b>Des conditions d''inscription ne sont pas remplies.</b>'
     below_minimum_age: "L'âge limite de %{course_minimum_age} n'est pas atteint."
     qualifications_missing: "Les qualifications suivantes manquent : %{missing}"
+    some_qualifications_missing: "Des qualifications requises manquent."
   event/register:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
     person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
@@ -405,13 +435,13 @@ fr:
       contact_details: 'Contacts'
       additional_information: 'Informations supplémentaires'
     deleted_subgroups:
-      no_deleted_sub_groups: 'pas de groupes supprimés disponibles'
+      no_deleted_sub_groups: 'Pas de groupes effacés.'
     form:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
     global:
       link:
         add: Créer un groupe
-        deleted_person: Personnes supprimées
+        deleted_person: Personnes effacées
     new:
       title: 'Créer un %{model}'
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
@@ -445,9 +475,9 @@ fr:
   import/person_doublette_finder:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   label_formats:
-    global_labels: "l'ensemble des formats d'étiquettes"
-    own_labels: mes Formats d'étiquettes
-    see_global_labels: "afficher l'ensemble des formats d'étiquettes"
+    global_labels: "Formats globaux d'étiquettes"
+    own_labels: Mes formats d'étiquettes
+    see_global_labels: "Afficher les formats globaux d'étiquettes"
     form:
       portrait: 'Format portrait'
       landscape: 'Format paysage'
@@ -487,7 +517,14 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Paramètres'
+    admin: 'Administrateur'
+  notes:
+    new_note: Ajouter une note
+    note:
+      created: il y a %{time_ago}
+    paginator:
+      newer_notes: Nouvelles contributions
+      older_notes: Anciennes contributions
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
@@ -504,7 +541,7 @@ fr:
   paper_trail/version_decorator:
     by: 'de %{author}'
   person:
-    confirm_delete: "Toutes les données à  %(personne) seront définitivement supprimées, y compris participations et qualifications.Ne supprime cette personne que si personne n'a plus besoin de ces données."
+    confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si plus personne n'a besoin de ces données. "
     add_requests:
       body_list:
         open_requests:
@@ -565,12 +602,12 @@ fr:
         keep_behaviour: >
             N'actualiser que les champs vides avec des données provenant du CSV, les
             valeurs déjà existantes ne changent pas.
-        keep_behaviour_tags: les balises (tags) sont complétées.
+        keep_behaviour_tags: Tags seront ajoutés.
         override_behaviour: >
             Remplacer les valeurs déjà existantes dans la base de donnée avec les
             données provenant du CSV. Les valeurs non pourvues (vides) dans le CSV
             effacent les valeurs pourvues dans la banque de données d'accueil.
-        override_behaviour_tags: Les balises (tags) sont supprimées ou modifiées.
+        override_behaviour_tags: Tags seront enlevés ou remplacés.
         update_behaviour_explanation: >
             Ce procédé ne concerne que les personnes déjà présentes dans la base de
             données de données. L'inscription de nouvelles personnes doit être entièrement
@@ -588,12 +625,6 @@ fr:
         request_link: Répondre à la requête
       ask_responsibles:
         request_link: 'Répondre à la requête '
-    notes:
-      note:
-        created: il y a %{time_ago}
-      paginator:
-        newer_notes: Plus récent
-        older_notes: Plus ancien
     tags:
       list:
         category_other: Autre
@@ -634,6 +665,7 @@ fr:
     tabs:
       history: Historique
       log: Journal
+      colleagues: Collaborateurs/collaboratrices
     actions_show:
       send_login: Envoyer les données d'identification
       send_login_tooltip:
@@ -674,10 +706,8 @@ fr:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
     tags:
-      add_tag: Ajouter tag…
+      add_tag: Ajouter un tag…
       no_entry: (aucun)
-    notes:
-      new_note: Ajouter une note
   participations:
     destroy:
       flash:
@@ -694,8 +724,16 @@ fr:
       title: Filtrer les personnes par qualification
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
+      prompt_year: Restreindre l'année de qualification
       prompt_kind: Dans quel secteur faut-il chercher ?
+      start_at_year_label: 'Reçu entre '
+      start_at_year_infix: et
+      finish_at_year_label: Périmé entre
+      finish_at_year_infix: et
     simple_radio:
+      match:
+        one: La personne a au moins UNE de ces qualifications
+        all: La personne a TOUTES ces qualifications
       validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
@@ -735,7 +773,7 @@ fr:
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
-        only_add_persons_with_tags: 'N''ajouter une personne qu''avec l''une des balises (tags) ci-dessous:'
+        only_add_persons_with_tags: 'Seulement ajouter les contacts aves un des tags suivants:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
@@ -765,7 +803,7 @@ fr:
       excluded_people: 'Personnes exclues'
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
     subscription:
-      only_persons_with: 'Seulement les personnes avec:'
+      only_persons_with: 'Seulement personnes avec:'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

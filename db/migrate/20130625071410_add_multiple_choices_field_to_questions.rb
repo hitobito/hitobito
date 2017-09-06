@@ -7,6 +7,6 @@
 
 class AddMultipleChoicesFieldToQuestions < ActiveRecord::Migration
   def change
-    add_column(:event_questions, :multiple_choices, :boolean, default: false)
+    add_column(:event_questions, :multiple_choices, :boolean, default: false, null: false)
   end
 end

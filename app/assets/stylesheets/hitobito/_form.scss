@@ -152,6 +152,11 @@ input[type="color"],
   }
 }
 
+select {
+  height: 30px;
+  line-height: 30px;
+}
+
 .form-inline {
   select,
   textarea,
@@ -271,6 +276,9 @@ textarea {
 
 .controls > .text {
   line-height: 29px;
+  padding-bottom: 8px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .remove_nested_fields {

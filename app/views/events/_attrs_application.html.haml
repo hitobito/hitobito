@@ -14,15 +14,15 @@
 
     - if entry.course_kind?
       = labeled(Event::Kind.human_attribute_name(:minimum_age),
-                      entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
-      = labeled(t('events.preconditions'), entry.kind.qualification_kinds('precondition', 'participant').join(', '))
+                entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+      = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
 
   - if entry.course_kind?
     %dl.dl-horizontal
       = labeled(Event::Kind.human_attribute_name(:qualification_kinds),
-                      entry.kind.qualification_kinds('qualification', 'participant').join(', '))
+                entry.kind.qualification_kinds('qualification', 'participant').join(', '))
       = labeled(Event::Kind.human_attribute_name(:prolongations),
-                      entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
+                entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
 
   = render_attrs(entry, *entry.used_attributes(:signature, :signature_confirmation))
 

@@ -10,9 +10,12 @@ require 'csv'
 
 describe Export::Tabular::People::PeopleFull do
 
+  let(:person) { people(:top_leader) }
+  let(:list) { [person] }
+  let(:data) { Export::Tabular::People::PeopleFull.export(:csv, list) }
+  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+
   before do
-    PeopleRelation.kind_opposites['parent'] = 'child'
-    PeopleRelation.kind_opposites['child'] = 'parent'
     person.update_attribute(:gender, 'm')
     person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
     person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
@@ -23,26 +26,19 @@ describe Export::Tabular::People::PeopleFull do
   end
 
   after do
-    PeopleRelation.kind_opposites.clear
     I18n.locale = I18n.default_locale
+    PeopleRelation.kind_opposites.clear
   end
-
-  let(:person) { people(:top_leader) }
-  let(:list) { [person] }
-  let(:people_list) { Export::Tabular::People::PeopleFull.new(list) }
-
-  let(:data) { Export::Tabular::People::PeopleFull.csv(list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
   context 'german' do
     let(:lang) { :de }
 
     it 'has correct headers' do
       expect(csv.headers).to eq([
-         'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
-         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-         'Zusätzliche Angaben', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
-         'Social Media Adresse Skype', 'Elternteil'])
+        'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
+        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+        'Zusätzliche Angaben', 'Hauptebene', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
+        'Social Media Adresse Skype', 'Elternteil'])
     end
 
     context 'first row' do
@@ -54,6 +50,7 @@ describe Export::Tabular::People::PeopleFull do
       its(['Social Media Adresse Skype']) { should eq 'foobar' }
       its(['Elternteil']) { should eq 'Bottom Member' }
       its(['Geschlecht']) { should eq 'männlich' }
+      its(['Hauptebene']) { should eq 'Top' }
     end
   end
 
@@ -62,11 +59,11 @@ describe Export::Tabular::People::PeopleFull do
 
     it 'has correct headers' do
       expect(csv.headers).to eq(
-         ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
-          "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-          "Anniversaire", "Données supplémentaires", "Rôles",
-          "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
-          "Adresse d'un média social Skype", "Parent"]
+        ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
+         "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
+         "Anniversaire", "Données supplémentaires", "Niveau", "Rôles",
+         "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
+         "Adresse d'un média social Skype", "Parent"]
       )
     end
 
@@ -81,5 +78,4 @@ describe Export::Tabular::People::PeopleFull do
       its(['Sexe']) { should eq 'Masculin' }
     end
   end
-
 end

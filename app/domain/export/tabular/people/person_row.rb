@@ -30,6 +30,10 @@ module Export::Tabular::People
       entry.tag_list.to_s
     end
 
+    def layer_group
+      entry.layer_group.to_s
+    end
+
     private
 
     def phone_number_attribute(attr)

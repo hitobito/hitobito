@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20170529134942) do
     t.integer "qualification_kind_id", null: false
     t.string  "category",              null: false
     t.string  "role",                  null: false
+    t.integer "grouping"
   end
 
   add_index "event_kind_qualification_kinds", ["category"], name: "index_event_kind_qualification_kinds_on_category"
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 20170529134942) do
     t.string  "choices"
     t.boolean "multiple_choices", default: false
     t.boolean "required"
+    t.boolean "admin",            default: false, null: false
   end
 
   add_index "event_questions", ["event_id"], name: "index_event_questions_on_event_id"
@@ -190,6 +192,9 @@ ActiveRecord::Schema.define(version: 20170529134942) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.boolean  "applications_cancelable",                default: false, null: false
+    t.text     "required_contact_attrs"
+    t.text     "hidden_contact_attrs"
+    t.boolean  "display_booking_info",                   default: true,  null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"

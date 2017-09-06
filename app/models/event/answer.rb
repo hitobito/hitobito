@@ -18,6 +18,8 @@ class Event::Answer < ActiveRecord::Base
 
   attr_writer :answer_required
 
+  delegate :admin?, to: :question
+
   belongs_to :participation
   belongs_to :question
 

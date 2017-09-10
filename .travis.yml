@@ -1,5 +1,7 @@
 language: ruby
 cache: bundler
+addons:
+  firefox: 45.0
 branches:
   only:
     - master

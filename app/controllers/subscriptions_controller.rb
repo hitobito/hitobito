@@ -24,8 +24,8 @@ class SubscriptionsController < CrudController
         load_grouped_subscriptions
       end
       format.pdf   { render_pdf(ordered_people) }
-      format.csv   { render_tabular(:csv, ordered_people) }
-      format.xlsx  { render_tabular(:xlsx, ordered_people) }
+      format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
+      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.email { render_emails(ordered_people) }
     end
   end
@@ -41,6 +41,16 @@ class SubscriptionsController < CrudController
 
   def ordered_people
     mailing_list.people.order_by_name
+  end
+
+  def render_tabular_in_background(format)
+    email = current_person.email
+    if email
+      Export::SubscriptionsJob.new(format, mailing_list.id, current_person.id).enqueue!
+      flash[:notice] = translate(:export_enqueued, email: email)
+    else
+      flash[:alert] = translate(:export_email_needed)
+    end
   end
 
   def render_tabular(format, people)

@@ -45,6 +45,10 @@ CustomContent.seed_once(:key,
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED,
     placeholders_required: 'person-name, request-body',
     placeholders_optional: 'recipient-name, rejecter-name, rejecter-roles' },
+
+  { key: Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT,
+    placeholders_required: nil,
+    placeholders_optional: 'recipient-name, mailing-list-name' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -57,6 +61,7 @@ add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_
 add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES).id
 add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
 add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
+subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -276,6 +281,25 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: add_request_rejected_id,
    locale: 'it',
-   label: "Richiesta dei dati personali: Email abilitazione rifiutata"}
+   label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
+
+  {custom_content_id: subscriptions_export_id,
+   locale: 'de',
+   label: 'Export der Abonnenten',
+   subject: 'Export der Abonnenten',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Der Export der Abonnenten von {mailing-list-name} ist fertig und an dieser Mail angehängt.<br/><br/>" },
+
+  {custom_content_id: subscriptions_export_id,
+   locale: 'en',
+   label: 'Export of Mailinglist' },
+
+  {custom_content_id: subscriptions_export_id,
+   locale: 'fr',
+   label: 'Export der Abonnenten' },
+
+  {custom_content_id: subscriptions_export_id,
+   locale: 'it',
+   label: 'Export der Abonnenten' },
 
 )

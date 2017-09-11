@@ -34,11 +34,18 @@ describe SubscriptionsController do
       expect(assigns(:person_add_requests)).to eq([])
     end
 
-    it 'renders csv' do
-      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
-      lines = response.body.split("\n")
-      expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Vorname;Nachname;.*/)
+    it 'renders csv in backround job' do
+      expect do
+        get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
+    end
+
+    it 'renders xlsx in backround job' do
+      expect do
+        get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :xlsx
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
     end
 
     it 'renders email addresses with additional ones' do

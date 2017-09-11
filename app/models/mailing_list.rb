@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -60,7 +60,7 @@ class MailingList < ActiveRecord::Base
     subscriptions.where(subscriber_id: person.id,
                         subscriber_type: Person.sti_name,
                         excluded: false).
-                  destroy_all
+      destroy_all
 
     if subscribed?(person)
       sub = subscriptions.new
@@ -72,12 +72,13 @@ class MailingList < ActiveRecord::Base
 
   def people(people_scope = Person.only_public_data)
     people_scope.
-           joins(people_joins).
-           joins(subscription_joins).
-           where(subscriptions: { mailing_list_id: id }).
-           where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
-           where(suscriber_conditions).
-           uniq
+      joins(combined_role_join).select('all_roles.role_with_layer').
+      joins(people_joins).
+      joins(subscription_joins).
+      where(subscriptions: { mailing_list_id: id }).
+      where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
+      where(suscriber_conditions).
+      uniq
   end
 
   private
@@ -92,6 +93,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def subscription_joins
+    # the comma is needed because it is not a JOIN, but a second "FROM"
     ', subscriptions ' \
     'LEFT JOIN groups sub_groups ' \
     "ON subscriptions.subscriber_type = 'Group'" \
@@ -102,6 +104,19 @@ class MailingList < ActiveRecord::Base
     'LEFT JOIN taggings AS subscriptions_taggings ' \
     "ON subscriptions_taggings.taggable_type = 'Subscription' " \
     'AND subscriptions_taggings.taggable_id = subscriptions.id'
+  end
+
+  def combined_role_join
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      INNER JOIN (
+        SELECT DISTINCT people.id, GROUP_CONCAT(concat_ws(' / ', layers.name, groups.name) SEPARATOR ', ') as role_with_layer
+        FROM people
+        LEFT JOIN roles ON people.id = roles.person_id
+        LEFT JOIN groups ON roles.group_id = groups.id
+        LEFT JOIN groups AS layers ON ( groups.layer_group_id = layers.id AND groups.id <> layers.id)
+        GROUP BY people.id
+      ) AS all_roles ON (people.id = all_roles.id)
+    SQL
   end
 
   def suscriber_conditions
@@ -122,9 +137,9 @@ class MailingList < ActiveRecord::Base
 
   def excluded_person_subscribers
     Subscription.select(:subscriber_id).
-                 where(mailing_list_id: id,
-                       excluded: true,
-                       subscriber_type: Person.sti_name)
+      where(mailing_list_id: id,
+            excluded: true,
+            subscriber_type: Person.sti_name)
   end
 
   def group_subscribers(condition)
@@ -148,7 +163,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.downcase == application_retriever_name.split('@', 2).first.downcase
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first) == 0
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

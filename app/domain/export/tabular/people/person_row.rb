@@ -23,7 +23,11 @@ module Export::Tabular::People
     end
 
     def roles
-      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+      if entry.try(:role_with_layer).present?
+        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+      else
+        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+      end
     end
 
     def tags

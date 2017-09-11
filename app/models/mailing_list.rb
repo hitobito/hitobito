@@ -92,6 +92,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def subscription_joins
+    # the comma is needed because it is not a JOIN, but a second "FROM"
     ', subscriptions ' \
     'LEFT JOIN groups sub_groups ' \
     "ON subscriptions.subscriber_type = 'Group'" \

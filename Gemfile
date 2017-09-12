@@ -87,7 +87,6 @@ group :development, :test do
   gem 'pry-debugger', platforms: :ruby_19
   gem 'pry-doc'
   # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
-  gem 'better_errors'
 end
 
 group :development do

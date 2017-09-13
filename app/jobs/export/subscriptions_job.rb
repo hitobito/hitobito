@@ -60,7 +60,7 @@ class Export::SubscriptionsJob < BaseJob
   def data
     Export::Tabular::People::PeopleAddress.export(
       @format,
-      mailing_list.people
+      mailing_list.people.includes(:primary_group, :groups)
                   .order_by_name
                   .preload_public_accounts
                   .includes(roles: :group)

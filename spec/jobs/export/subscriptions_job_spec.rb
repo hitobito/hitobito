@@ -39,6 +39,30 @@ describe Export::SubscriptionsJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
     end
+
+    it 'send exports zipped if larger than 512kb' do
+      export = subject.export_file
+      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
+
+      expect do
+        subject.perform
+      end.to change { ActionMailer::Base.deliveries.size }.by 1
+
+      file = last_email.attachments.first
+      expect(file.content_type).to match(%r!application/zip!)
+      expect(file.content_type).to match(/filename=subscriptions.zip/)
+    end
+
+    it 'zips exports larger than 512kb' do
+      export = subject.export_file
+      export_size = export.size
+      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
+
+      file, format = subject.export_file_and_format
+
+      expect(format).to eq :zip
+      expect(file.size).to be < export_size
+    end
   end
 
   context 'creates an Excel-Export' do

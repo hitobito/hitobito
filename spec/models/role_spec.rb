@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -168,7 +168,7 @@ describe Role do
     it 'reuses existing label' do
       a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
       a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO', group: groups(:bottom_layer_one))
-      expect(a2.label).to eq('foo')
+      expect(a2.label).to eq(a1.label)
     end
   end
 

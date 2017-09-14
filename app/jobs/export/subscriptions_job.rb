@@ -6,7 +6,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'zlib'
+require 'zip'
 
 class Export::SubscriptionsJob < BaseJob
 
@@ -21,9 +21,13 @@ class Export::SubscriptionsJob < BaseJob
 
   def perform
     set_locale
-    Export::SubscriptionsMailer.completed(recipient, mailing_list, *export_file_and_format)
-                               .deliver_now
+    file, format = export_file_and_format
+    Export::SubscriptionsMailer.completed(recipient, mailing_list, file, format).deliver_now
   ensure
+    if file != export_file
+      file.close
+      file.unlink
+    end
     export_file.close
     export_file.unlink
   end
@@ -35,8 +39,11 @@ class Export::SubscriptionsJob < BaseJob
   def export_file_and_format
     if export_file.size > 512.kilobyte # size reduction is by 70-80 %
       zip = Tempfile.new("subscriptions-#{@mailing_list_id}-#{@format}-zip", encoding: 'ascii-8bit')
-      zip.write(Zlib::Deflate.deflate(export_file.read, Zlib::BEST_COMPRESSION))
-      zip.rewind # make subsequent read-calls start at the beginning
+
+      Zip::OutputStream.open(zip.path) do |zos|
+        zos.put_next_entry "subscriptions.#{@format}"
+        zos.write export_file.read
+      end
 
       [zip, :zip]
     else

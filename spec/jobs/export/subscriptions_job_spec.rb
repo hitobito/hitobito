@@ -54,6 +54,8 @@ describe Export::SubscriptionsJob do
     end
 
     it 'zips exports larger than 512kb' do
+      10.times { Fabricate(:subscription, mailing_list: mailing_list) } # create a few entries to make zipping worth it.
+
       export = subject.export_file
       export_size = export.size
       expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size

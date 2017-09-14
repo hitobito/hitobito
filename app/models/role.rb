@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -110,13 +110,13 @@ class Role < ActiveRecord::Base
 
   def set_first_primary_group
     if deleted_at.nil? && person.roles.count <= 1
-      person.update_attribute :primary_group_id, group_id
+      person.update_column :primary_group_id, group_id
     end
   end
 
   def reset_primary_group
     if person.primary_group_id == group_id && person.roles.where(group_id: group_id).count == 0
-      person.update_attribute :primary_group_id, alternative_primary_group
+      person.update_column :primary_group_id, alternative_primary_group
     end
   end
 

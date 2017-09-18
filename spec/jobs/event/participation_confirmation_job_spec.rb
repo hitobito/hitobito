@@ -97,7 +97,6 @@ describe Event::ParticipationConfirmationJob do
 
           expect(ActionMailer::Base.deliveries.size).to eq(2)
 
-          first_email = ActionMailer::Base.deliveries.first
           expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
         end
       end

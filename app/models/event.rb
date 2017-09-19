@@ -273,7 +273,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     kind_class == Event::Kind && kind.present?
   end
 
-  def duplicate
+  def duplicate # rubocop:disable Metrics/MethodLength splitting this up does not make it better
     dup.tap do |event|
       event.groups = groups
       event.state = nil
@@ -303,13 +303,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   private
 
   def assert_type_is_allowed_for_groups
-    if groups.present?
-      master = groups.first
-      if groups.any? { |g| g.class != master.class }
-        errors.add(:group_ids, :must_have_same_type)
-      elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
-        errors.add(:type, :type_not_allowed)
-      end
+    master = groups.try(:first)
+    return unless master
+
+    if groups.any? { |g| g.class != master.class }
+      errors.add(:group_ids, :must_have_same_type)
+    elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
+      errors.add(:type, :type_not_allowed)
     end
   end
 

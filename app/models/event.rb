@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -289,6 +289,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
         event.admin_questions << q.dup
       end
     end
+  end
+
+  # Overwrite to handle improper characters
+  def save(*args)
+    super
+  rescue ActiveRecord::StatementInvalid => e
+    raise e unless e.original_exception.message =~ /Incorrect string value/
+    errors.add(:base, :emoji_suspected)
+    false
   end
 
   private

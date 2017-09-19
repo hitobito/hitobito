@@ -9,6 +9,7 @@ desc "Runs the tasks for a commit build"
 task :ci => ['log:clear',
              'rubocop',
              'db:migrate',
+             'ci:setup:env',
              'ci:setup:rspec',
              'spec:features', # run feature specs first to get coverage from spec
              'spec']
@@ -19,6 +20,7 @@ namespace :ci do
                     'db:migrate',
                     'erd',
                     'doc:all',
+                    'ci:setup:env',
                     'ci:setup:rspec',
                     'spec:features', # run feature specs first to get coverage from spec
                     'spec',
@@ -30,6 +32,12 @@ namespace :ci do
   task :wagon do
     Rake::Task['log:clear'].invoke
     wagon_exec('bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
+  end
+
+  namespace :setup do
+    task :env do
+      ENV['CI'] = "true"
+    end
   end
 
   namespace :wagon do

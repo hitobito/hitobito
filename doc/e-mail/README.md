@@ -37,6 +37,7 @@ Da man aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger nich
 Bei folgenden Aktionen werden Mails versendet: (Wagon Features sind hier nicht berücksichtigt)
 
 | Aktion | Mailer Class | DelayedJob | Attachment ? |
+| --- | --- | --- | --- |
 | Passwort vergessen | via Devise gem | - | nein |
 | Passwort Reset / Login erstellen (durch Fremdperson) | Person::LoginMailer | Person::SendLoginJob | nein |
 | Zugriffsanfrage Person | Person::AddRequestMailer | Person::SendAddRequestJob | nein |

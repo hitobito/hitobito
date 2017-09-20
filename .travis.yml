@@ -6,7 +6,6 @@ branches:
   only:
     - master
     - stable
-    - kurswesen
 env:
   global:
     - HEADLESS=true

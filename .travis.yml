@@ -20,6 +20,7 @@ rvm:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install sphinxsearch
+  - echo -e '[mysqld]\nsort_buffer_size = 2M\n' > /etc/mysql/conf.d/sort_buffer_size.cnf
 install:
   - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
   - bundle install --path vendor/bundle

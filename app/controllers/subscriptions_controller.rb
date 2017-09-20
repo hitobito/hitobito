@@ -44,13 +44,8 @@ class SubscriptionsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    email = current_person.email
-    if email
-      Export::SubscriptionsJob.new(format, mailing_list.id, current_person.id).enqueue!
-      flash[:notice] = translate(:export_enqueued, email: email)
-    else
-      flash[:alert] = translate(:export_email_needed)
-    end
+    Export::SubscriptionsJob.new(format, mailing_list.id, current_person.id).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
   def render_tabular(format, people)

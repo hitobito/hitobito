@@ -6,7 +6,6 @@ branches:
   only:
     - master
     - stable
-    - kurswesen
 env:
   global:
     - HEADLESS=true
@@ -21,6 +20,9 @@ rvm:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install sphinxsearch
+  - echo '[mysqld]'              | sudo tee    /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
+  - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
+  - sudo service mysql restart
 install:
   - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
   - bundle install --path vendor/bundle

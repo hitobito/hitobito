@@ -963,7 +963,6 @@ de:
     subscription:
       only_persons_with: 'Nur Personen mit:'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
-    export_email_needed: 'Es wird eine E-Mail-Adresse benötigt, um den Export nach Fertigstellung zu versenden.'
 
   version:
     attribute_change:

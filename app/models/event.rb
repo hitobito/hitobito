@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -273,7 +273,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     kind_class == Event::Kind && kind.present?
   end
 
-  def duplicate
+  def duplicate # rubocop:disable Metrics/MethodLength splitting this up does not make it better
     dup.tap do |event|
       event.groups = groups
       event.state = nil
@@ -291,16 +291,25 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
   end
 
+  # Overwrite to handle improper characters
+  def save(*args)
+    super
+  rescue ActiveRecord::StatementInvalid => e
+    raise e unless e.original_exception.message =~ /Incorrect string value/
+    errors.add(:base, :emoji_suspected)
+    false
+  end
+
   private
 
   def assert_type_is_allowed_for_groups
-    if groups.present?
-      master = groups.first
-      if groups.any? { |g| g.class != master.class }
-        errors.add(:group_ids, :must_have_same_type)
-      elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
-        errors.add(:type, :type_not_allowed)
-      end
+    master = groups.try(:first)
+    return unless master
+
+    if groups.any? { |g| g.class != master.class }
+      errors.add(:group_ids, :must_have_same_type)
+    elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
+      errors.add(:type, :type_not_allowed)
     end
   end
 

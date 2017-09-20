@@ -55,6 +55,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/]
+  config.example_status_persistence_file_path = Rails.root.join('tmp','examples.txt').to_s
 
   config.include(MailerMacros)
   config.include(EventMacros)

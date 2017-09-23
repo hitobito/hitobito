@@ -146,6 +146,7 @@ describe PeopleController do
             expect(@response.body).not_to match(/skypefoo/)
             expect(@response.body).not_to match(/Zusätzliche Angaben/)
             expect(@response.body).not_to match(/Mobile/)
+            expect(@response.body).not_to match(/;456;/)
           end
 
           it 'exports full csv files' do
@@ -160,6 +161,9 @@ describe PeopleController do
         
         context '.vcf' do
           it 'exports vcf files' do
+            e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
+            e2 = Fabricate(:additional_email, contactable: @tg_member, public: false)
+
             get :index, group_id: group, format: :vcf
 
             expect(@response.content_type).to eq('text/vcard')
@@ -182,11 +186,14 @@ describe PeopleController do
             expect(cards[1]).to match(/^NICKNAME:al/)
             expect(cards[1]).to match(/^ADR:;;;Eye;;8000;/)
             expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@tg_member.email}/)
+            expect(cards[1]).to match(/^EMAIL;TYPE=privat:#{e1.email}/)
+            expect(cards[1]).not_to match(/^EMAIL;.*:#{e2.email}/)
             expect(cards[1]).to match(/^TEL;TYPE=privat:123/)
             expect(cards[1]).to match(/^TEL;TYPE=office:789/)
+            expect(cards[1]).not_to match(/^TEL:.*:456/)
           end
         end
-        
+
         context '.email' do
           it 'renders email addresses' do
             get :index, group_id: group, format: :email

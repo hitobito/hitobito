@@ -163,6 +163,7 @@ describe PeopleController do
           it 'exports vcf files' do
             e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
             e2 = Fabricate(:additional_email, contactable: @tg_member, public: false)
+            @tg_member.update_attributes(birthday: '09.10.1978')
 
             get :index, group_id: group, format: :vcf
 
@@ -179,6 +180,9 @@ describe PeopleController do
             expect(cards[0]).to match(/^FN:Top Leader/)
             expect(cards[0]).to match(/^ADR:;;;Supertown;;;/)
             expect(cards[0]).to match(/^EMAIL;TYPE=pref:top_leader@example.com/)
+            expect(cards[0]).not_to match(/^TEL.*/)
+            expect(cards[0]).not_to match(/^NICKNAME.*/)
+            expect(cards[0]).not_to match(/^BDAY.*/)
 
             expect(cards[1][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
             expect(cards[1]).to match(/^N:Zoe;Al;;;/)
@@ -187,10 +191,11 @@ describe PeopleController do
             expect(cards[1]).to match(/^ADR:;;;Eye;;8000;/)
             expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@tg_member.email}/)
             expect(cards[1]).to match(/^EMAIL;TYPE=privat:#{e1.email}/)
-            expect(cards[1]).not_to match(/^EMAIL;.*:#{e2.email}/)
+            expect(cards[1]).not_to match(/^EMAIL.*:#{e2.email}/)
             expect(cards[1]).to match(/^TEL;TYPE=privat:123/)
             expect(cards[1]).to match(/^TEL;TYPE=office:789/)
-            expect(cards[1]).not_to match(/^TEL:.*:456/)
+            expect(cards[1]).not_to match(/^TEL.*:456/)
+            expect(cards[1]).to match(/^BDAY:19781009/)
           end
         end
 

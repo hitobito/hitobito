@@ -15,47 +15,72 @@ module Export::Vcf
       people.each do |person|
         vcards << vcard(person)
       end
-      vcards.join;
+      vcards.join
     end
-    
-    
+
+
     private
-    
-    def vcard(person)
-      vcard = Vcard::Vcard::Maker.make2 do |m|
-        m.name do |n|
-          n.given = person.first_name.presence || ""
-          n.family = person.last_name.presence || ""
-        end
-        if person.nickname.present?
-          m.nickname = person.nickname
-        end
-        if person.address.present? || person.town.present? || person.zip_code.present? || person.country.present?
-          m.add_addr do |a|
-            a.street = person.address.presence || ""
-            a.locality = person.town.presence || ""
-            a.postalcode = person.zip_code.presence || ""
-            a.country = person.country.presence || ""
-          end
-        end
-        if person.email.present?
-          m.add_email(person.email) { |e| e.preferred = true }
-        end
-        person.additional_emails.each do |email|
-          if email.public? 
-            m.add_email(email.email) { |e| e.location = email.label; e.preferred = false }
-          end
-        end
-        person.phone_numbers.each do |phone|
-          if phone.public?
-            m.add_tel(phone.number) { |t| t.location = phone.label }
-          end
-        end
-        if person.birthday.present?
-          m.birthday = person.birthday
+
+    def name(card, person)
+      card.name do |n|
+        n.given = person.first_name.presence || ''
+        n.family = person.last_name.presence || ''
+      end
+      if person.nickname.present?
+        card.nickname = person.nickname
+      end
+    end
+
+    def birthday(card, person)
+      if person.birthday.present?
+        card.birthday = person.birthday
+      end
+    end
+
+    def address_empty?(person)
+      !person.address.present? && !person.town.present? &&
+      !person.zip_code.present? && !person.country.present?
+    end
+
+    def address(card, person)
+      unless address_empty?(person)
+        card.add_addr do |a|
+          a.street = person.address.presence || ''
+          a.locality = person.town.presence || ''
+          a.postalcode = person.zip_code.presence || ''
+          a.country = person.country.presence || ''
         end
       end
-      vcard
+    end
+
+    def emails(card, person)
+      if person.email.present?
+        card.add_email(person.email) { |e| e.preferred = true }
+      end
+      person.additional_emails.each do |email|
+        next unless email.public?
+        card.add_email(email.email) do |e|
+          e.location = email.label
+          e.preferred = false
+        end
+      end
+    end
+
+    def phones(card, person)
+      person.phone_numbers.each do |phone|
+        next unless phone.public?
+        card.add_tel(phone.number) { |t| t.location = phone.label }
+      end
+    end
+
+    def vcard(person)
+      Vcard::Vcard::Maker.make2 do |m|
+        name(m, person)
+        birthday(m, person)
+        address(m, person)
+        emails(m, person)
+        phones(m, person)
+      end
     end
   end
 end

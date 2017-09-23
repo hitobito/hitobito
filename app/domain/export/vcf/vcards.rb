@@ -32,10 +32,10 @@ module Export::Vcf
         end
         if person.address.present? || person.town.present? || person.zip_code.present? || person.country.present?
           m.add_addr do |a|
-            a.street = person.address
-            a.locality = person.town
-            a.postalcode = person.zip_code
-            a.country = person.country
+            a.street = person.address.presence || ""
+            a.locality = person.town.presence || ""
+            a.postalcode = person.zip_code.presence || ""
+            a.country = person.country.presence || ""
           end
         end
         if person.email.present?

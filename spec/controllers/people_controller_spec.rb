@@ -31,6 +31,7 @@ describe PeopleController do
         @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         Fabricate(:phone_number, contactable: @tg_member, number: '123', label: 'Privat', public: true)
         Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
+        Fabricate(:phone_number, contactable: @tg_member, number: '789', label: 'Office', public: true)
         Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
         Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @tg_member)
@@ -139,9 +140,9 @@ describe PeopleController do
             get :index, group_id: group, format: :csv
 
             expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*Privat/)
+            expect(@response.body).to match(/^Vorname;Nachname;.*Privat;.*Office/)
             expect(@response.body).to match(/^Top;Leader;.*/)
-            expect(@response.body).to match(/123/)
+            expect(@response.body).to match(/123;789/)
             expect(@response.body).not_to match(/skypefoo/)
             expect(@response.body).not_to match(/Zusätzliche Angaben/)
             expect(@response.body).not_to match(/Mobile/)
@@ -151,12 +152,41 @@ describe PeopleController do
             get :index, group_id: group, details: true, format: :csv
 
             expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Facebook;.*Skype/)
+            expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Office;.*Facebook;.*Skype/)
             expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
-            expect(@response.body).to match(/123;456;.*facefoo;skypefoo/)
+            expect(@response.body).to match(/123;456;789;.*facefoo;skypefoo/)
           end
         end
+        
+        context '.vcf' do
+          it 'exports vcf files' do
+            get :index, group_id: group, format: :vcf
 
+            expect(@response.content_type).to eq('text/vcard')
+            cards = @response.body.split("END:VCARD\n")
+            expect(cards.length).to equal(2);
+
+            if cards[1].include?("N:Member;Bottom")
+              cards.reverse!
+            end
+
+            expect(cards[0][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
+            expect(cards[0]).to match(/^N:Leader;Top;;;/)
+            expect(cards[0]).to match(/^FN:Top Leader/)
+            expect(cards[0]).to match(/^ADR:;;;Supertown;;;/)
+            expect(cards[0]).to match(/^EMAIL;TYPE=pref:top_leader@example.com/)
+
+            expect(cards[1][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
+            expect(cards[1]).to match(/^N:Zoe;Al;;;/)
+            expect(cards[1]).to match(/^FN:Al Zoe/)
+            expect(cards[1]).to match(/^NICKNAME:al/)
+            expect(cards[1]).to match(/^ADR:;;;Eye;;8000;/)
+            expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@tg_member.email}/)
+            expect(cards[1]).to match(/^TEL;TYPE=privat:123/)
+            expect(cards[1]).to match(/^TEL;TYPE=office:789/)
+          end
+        end
+        
         context '.email' do
           it 'renders email addresses' do
             get :index, group_id: group, format: :email

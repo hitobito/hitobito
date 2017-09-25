@@ -23,8 +23,8 @@ module Export::Vcf
 
     def name(card, person)
       card.name do |n|
-        n.given = person.first_name.presence || ''
-        n.family = person.last_name.presence || ''
+        n.given = person.first_name.to_s
+        n.family = person.last_name.to_s
       end
       if person.nickname.present?
         card.nickname = person.nickname
@@ -45,10 +45,10 @@ module Export::Vcf
     def address(card, person)
       unless address_empty?(person)
         card.add_addr do |a|
-          a.street = person.address.presence || ''
-          a.locality = person.town.presence || ''
-          a.postalcode = person.zip_code.presence || ''
-          a.country = person.country.presence || ''
+          a.street = person.address.to_s
+          a.locality = person.town.to_s
+          a.postalcode = person.zip_code.to_s
+          a.country = person.country.to_s
         end
       end
     end

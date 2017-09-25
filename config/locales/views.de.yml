@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -962,6 +962,7 @@ de:
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
     subscription:
       only_persons_with: 'Nur Personen mit:'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   version:
     attribute_change:

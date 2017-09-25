@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,8 +15,7 @@ class SubscriptionsController < CrudController
 
   prepend_before_action :parent
 
-  alias_method :mailing_list, :parent
-
+  alias mailing_list parent
 
   def index
     respond_to do |format|
@@ -25,8 +24,8 @@ class SubscriptionsController < CrudController
         load_grouped_subscriptions
       end
       format.pdf   { render_pdf(ordered_people) }
-      format.csv   { render_tabular(:csv, ordered_people) }
-      format.xlsx  { render_tabular(:xlsx, ordered_people) }
+      format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
+      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.email { render_emails(ordered_people) }
     end
   end
@@ -42,6 +41,11 @@ class SubscriptionsController < CrudController
 
   def ordered_people
     mailing_list.people.order_by_name
+  end
+
+  def render_tabular_in_background(format)
+    Export::SubscriptionsJob.new(format, mailing_list.id, current_person.id).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
   def render_tabular(format, people)

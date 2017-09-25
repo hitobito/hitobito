@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -81,7 +81,7 @@ class RolesController < CrudController
       created = with_callbacks(:create, :save) do
         (entry.person.persisted? || entry.person.save) && entry.save
       end
-      fail ActiveRecord::Rollback unless created
+      raise ActiveRecord::Rollback unless created
     end
     created
   end
@@ -168,8 +168,8 @@ class RolesController < CrudController
       role.person_id = person_id
       role.person = Person.new unless role.person
     else
-      attrs = ActionController::Parameters.new(person_attrs).
-               permit(*PeopleController.permitted_attrs)
+      attrs = ActionController::Parameters.new(person_attrs)
+                                          .permit(*PeopleController.permitted_attrs)
       role.person = Person.new(attrs)
     end
   end

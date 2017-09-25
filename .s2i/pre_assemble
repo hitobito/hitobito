@@ -10,6 +10,12 @@ source_dir=$(dirname $0)/..
 
 pushd $source_dir
 
+# update the composition-repo to newest versions of configured .gitmodules-branch
+# devel is our indicator for the integration-environment
+if [[ "x${OPENSHIFT_BUILD_REFERENCE}" = "xdevel" ]]; then
+  git submodule update --remote
+fi
+
 # move core
 rm -r hitobito/.git
 mv hitobito/* .

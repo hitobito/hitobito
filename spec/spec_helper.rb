@@ -7,12 +7,14 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-require 'simplecov'
-require 'simplecov-rcov'
-SimpleCov.start 'rails'
-SimpleCov.coverage_dir 'spec/coverage'
-# use this formatter for jenkins compatibility
-SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+if ENV['CI']
+  require 'simplecov'
+  require 'simplecov-rcov'
+  SimpleCov.start 'rails'
+  SimpleCov.coverage_dir 'spec/coverage'
+  # use this formatter for jenkins compatibility
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+end
 
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
@@ -53,6 +55,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/]
+  config.example_status_persistence_file_path = Rails.root.join('tmp','examples.txt').to_s
 
   config.include(MailerMacros)
   config.include(EventMacros)

@@ -570,6 +570,7 @@ DEPENDENCIES
   rubocop (< 0.42)
   rubocop-checkstyle_formatter
   ruby-prof
+  rubyzip
   sass-rails
   seed-fu
   selenium-webdriver (= 2.51.0)
@@ -589,4 +590,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   1.15.1
+   1.15.4

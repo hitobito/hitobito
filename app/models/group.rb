@@ -62,6 +62,7 @@ class Group < ActiveRecord::Base
 
   before_save :reset_contact_info
 
+
   # Root group may not be destroyed
   protect_if :root?
   protect_if :children_without_deleted
@@ -154,7 +155,7 @@ class Group < ActiveRecord::Base
   end
 
   # create alias to call it again
-  alias_method :hard_destroy, :really_destroy!
+  alias hard_destroy really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia

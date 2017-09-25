@@ -804,6 +804,7 @@ fr:
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
     subscription:
       only_persons_with: 'Seulement personnes avec:'
+    export_enqueued: 'L''exportation a commencé. Il sera envoyé à %{email} une fois terminé.'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."

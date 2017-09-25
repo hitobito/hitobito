@@ -44,7 +44,7 @@ class PeopleController < CrudController
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_tabular_entries(:csv, filter_entries) }
       format.xlsx  { render_tabular_entries(:xlsx, filter_entries) }
-      format.vcf   { render_vcf(filter_entries) }
+      format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end

@@ -1,5 +1,10 @@
 # Hitobito Changelog
 
+## Version 1.17
+
+*   Export der Abonnenten einer Mailingliste wird im Hintergrund erstellt und per mail versendet
+
+
 ## Version 1.16
 
 *   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.

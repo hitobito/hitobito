@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -44,6 +44,7 @@ class PeopleController < CrudController
       format.pdf   { render_pdf(filter_entries) }
       format.csv   { render_tabular_entries(:csv, filter_entries) }
       format.xlsx  { render_tabular_entries(:xlsx, filter_entries) }
+      format.vcf   { render_vcf(filter_entries) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end
@@ -55,6 +56,7 @@ class PeopleController < CrudController
       format.pdf  { render_pdf([entry]) }
       format.csv  { render_tabular_entry(:csv) }
       format.xlsx { render_tabular_entry(:xlsx) }
+      format.vcf  { render_vcf([entry]) }
       format.json { render_entry_json }
     end
   end

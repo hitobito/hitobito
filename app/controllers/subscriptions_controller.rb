@@ -26,6 +26,7 @@ class SubscriptionsController < CrudController
       format.pdf   { render_pdf(ordered_people) }
       format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
       format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.vcf   { render_vcf(ordered_people) }
       format.email { render_emails(ordered_people) }
     end
   end

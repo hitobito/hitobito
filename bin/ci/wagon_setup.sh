@@ -14,6 +14,11 @@ bundle install --path vendor/bundle
 
 for d in ../hitobito_*; do
   cp Gemfile.lock $d
+  mkdir -p $d/.bundle
+  bundle_config=$d/.bundle/config
+  echo "---" > $bundle_config
+  echo "BUNDLE_PATH: ../hitobito/vendor/bundle" >> $bundle_config
+  echo "BUNDLE_DISABLE_SHARED_GEMS: '1'" >> $bundle_config
 done
 
 rm -rf tmp/tarantula

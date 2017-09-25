@@ -45,7 +45,7 @@ namespace :ci do
     desc "Run the tasks for a wagon nightly build"
     task :nightly do
       Rake::Task['log:clear'].invoke
-      wagon_exec('bundle exec rake app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
+      wagon_exec('bundle exec rake app:ci:setup:env app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
       Rake::Task['erd'].invoke
     end
 

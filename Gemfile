@@ -44,6 +44,7 @@ gem 'rack'
 gem 'rails_autolink'
 gem 'config', '< 1.1.0' # requires ruby 2
 gem 'rails-i18n'
+gem 'rubyzip'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'sqlite3' # for development, test and production when generating assets

@@ -223,7 +223,7 @@ it:
       person:
         first_name: Nome
         last_name: Cognome
-        name: Cognome
+        name: Nome
         company_name: Nome della ditta
         company: Ditta
         nickname: Soprannome
@@ -266,7 +266,7 @@ it:
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
       group:
-        name: Cognome
+        name: Nome
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
@@ -284,7 +284,7 @@ it:
         type_name: Tipo di gruppi
       event:
         group_ids: Gruppi
-        name: Cognome
+        name: Nome
         number: Numero
         motto: Motto
         cost: Costi
@@ -488,7 +488,7 @@ it:
       subscription:
         related_role_types: Ruoli
       people_filter:
-        name: Cognome
+        name: Nome
       custom_content:
         label: Testo
         subject: Oggetto

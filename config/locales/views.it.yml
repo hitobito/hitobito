@@ -518,7 +518,7 @@ it:
     courses: 'corsi'
     admin: 'admin'
   notes:
-    new_note: Aggiungere una nota
+    new_note: Nuova nota
     note:
       created: fa %{time_ago}
     paginator:
@@ -805,6 +805,7 @@ it:
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
     subscription:
       only_persons_with: 'Solo persone con'
+    export_enqueued: 'L''esportazione viene effettuata e verrà inviata a %{email}.'
   version:
     attribute_change:
       from_to: "%{attr} è stato modificato da <i>%{from}</i> in <i>%{to}</i>."

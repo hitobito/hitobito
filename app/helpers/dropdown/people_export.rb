@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,6 +26,7 @@ module Dropdown
     def init_items
       tabular_links(:csv)
       tabular_links(:xlsx)
+      vcard_link
       label_links
       email_addresses_link
     end
@@ -42,6 +43,10 @@ module Dropdown
       end
     end
 
+    def vcard_link
+      add_item(translate(:vcard), params.merge(format: :vcf), target: :new)
+    end
+    
     def email_addresses_link
       if @email_addresses
         add_item(translate(:emails), params.merge(format: :email), target: :new)

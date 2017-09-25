@@ -133,6 +133,7 @@ de:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'

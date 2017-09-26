@@ -456,8 +456,7 @@ de:
     custom_filter: 'Eigener Filter'
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
-    new_role_filter: 'Neuer Rollen Filter...'
-    new_qualification_filter: 'Neuer Qualifikationen Filter...'
+    new_filter: 'Neuer Filter...'
 
   filter_navigation/event/participations:
     predefined_filters:
@@ -858,13 +857,28 @@ de:
       save_search: Suche speichern
       save_filter: Filter speichern
       save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
-      prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+      filters_qualification_validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
 
     new:
-      title: Personen nach Rollen filtern
+      title: Personen filtern
+
+    range:
+      prompt_range: In welchem Bereich soll gesucht werden?
+
+    role:
+      title: Rollen
+      prompt_role_selection: Welche Rollen sollen angezeigt werden?
 
     qualification:
-      title: Personen nach Qualifikationen filtern
+      title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken
@@ -875,6 +889,7 @@ de:
       finish_at_year_label: Abgelaufen zwischen
       finish_at_year_infix: und
       finish_at_year_suffix: ''
+      not_enough_permissions: Du verfügst nicht über ausreichende Berechtigungen, um Personen mit diesem Filter zu suchen.
 
     simple_radio:
       match:

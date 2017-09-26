@@ -11,7 +11,7 @@ class PeopleController < CrudController
 
   self.nesting = Group
 
-  self.remember_params += [:name, :kind, :role_type_ids]
+  self.remember_params += [:name, :range, :filters, :filter_id]
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
@@ -76,14 +76,14 @@ class PeopleController < CrudController
 
   # PUT button, ajax
   def primary_group
-    entry.update!({primary_group_id: params[:primary_group_id]})
+    entry.update!(primary_group_id: params[:primary_group_id])
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry) }
       format.js
     end
   end
 
-  private
+  private_class_method
 
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
@@ -92,8 +92,9 @@ class PeopleController < CrudController
       concat(Person.order_by_name_statement) }.with_indifferent_access
   end
 
+  private
 
-  alias_method :group, :parent
+  alias group parent
 
   def find_entry
     if group && group.root?
@@ -114,7 +115,7 @@ class PeopleController < CrudController
   end
 
   def load_people_add_requests
-    if params[:kind].blank? && can?(:create, @group.roles.new)
+    if params[:range].blank? && can?(:create, @group.roles.new)
       @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
     end
   end
@@ -147,19 +148,18 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    filter = list_filter
-    entries = filter.filter_entries
+    @person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
+    entries = @person_filter.entries
     entries = entries.reorder(sort_expression) if sorting?
-    @multiple_groups = filter.multiple_groups
-    @all_count = filter.all_count if html_request?
     entries
   end
 
-  def list_filter
-    if params[:filter] == 'qualification' && index_full_ability?
-      Person::QualificationFilter.new(@group, current_user, params)
+  def list_filter_args
+    if params[:filter_id]
+      filter = PeopleFilter.for_group(group).find(params[:filter_id])
+      { name: filter.name, range: filter.range, filters: filter.filter_chain.to_params }
     else
-      Person::RoleFilter.new(@group, current_user, params)
+      params
     end
   end
 
@@ -200,7 +200,7 @@ class PeopleController < CrudController
                                       includes(:social_accounts).
                                       decorate,
                                     group: @group,
-                                    multiple_groups: @multiple_groups,
+                                    multiple_groups: @person_filter.multiple_groups,
                                     serializer: PeopleSerializer,
                                     controller: self)
   end
@@ -210,7 +210,7 @@ class PeopleController < CrudController
   end
 
   def index_full_ability?
-    if params[:kind].blank?
+    if params[:range].blank? || params[:range] == 'group'
       can?(:index_full_people, @group)
     else
       can?(:index_deep_full_people, @group)

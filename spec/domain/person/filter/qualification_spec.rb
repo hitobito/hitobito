@@ -1,31 +1,40 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
-describe Person::QualificationFilter do
+describe Person::Filter::Qualification do
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
-  let(:kind) { nil }
+  let(:range) { nil }
   let(:validity) { 'all' }
   let(:match) { 'one' }
   let(:qualification_kind_ids) { [] }
 
   let(:list_filter) do
-    Person::QualificationFilter.new(group,
-                                    user,
-                                    kind: kind,
-                                    qualification_kind_id: qualification_kind_ids,
-                                    validity: validity,
-                                    match: match)
+    Person::Filter::List.new(
+      group,
+      user,
+      range: range,
+      filters: { qualification: filters.merge(additional_filters) }
+    )
   end
 
-  let(:entries) { list_filter.filter_entries }
+  let(:filters) do
+    {
+      qualification_kind_ids: qualification_kind_ids,
+      validity: validity,
+      match: match,
+    }
+  end
+  let(:additional_filters) { {} }
+
+  let(:entries) { list_filter.entries }
 
   let(:bl_leader) { create_person(Group::BottomLayer::Leader, :bottom_layer_one, 'reactivateable', :sl, :gl_leader) }
 
@@ -48,11 +57,11 @@ describe Person::QualificationFilter do
     qualification_kinds.each do |key|
       kind = qualification_kinds(key)
       start = case validity
-      when 'active' then Date.today
-      when 'reactivateable' then Date.today - kind.validity.years - 1.year
-      when Fixnum then Date.new(validity, 1, 1)
-      else Date.today - 20.years
-      end
+              when 'active'         then Date.today
+              when 'reactivateable' then Date.today - kind.validity.years - 1.year
+              when Fixnum           then Date.new(validity, 1, 1)
+              else Date.today - 20.years
+              end
       Fabricate(:qualification, person: person, qualification_kind: kind, start_at: start)
     end
     person
@@ -69,7 +78,7 @@ describe Person::QualificationFilter do
   end
 
   context 'kind deep' do
-    let(:kind) { 'deep' }
+    let(:range) { 'deep' }
 
     context 'no qualification kinds' do
       it 'loads only entries on group' do
@@ -98,78 +107,128 @@ describe Person::QualificationFilter do
           @sl_2016 = create_person(Group::TopGroup::Member, :top_group, 2016, :sl_leader)
         end
 
-        it 'loads entry with start_at later' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   start_at_year_from: 2015)
-          expect(filter.filter_entries).to match_array([@sl_2015, @sl_2016])
+        context 'loads entry with start_at later' do
+          let(:additional_filters) do
+            {
+              start_at_year_from: 2015
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2015, @sl_2016])
+          end
         end
 
-        it 'loads entry with start_at before' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   start_at_year_until: 2015)
-          expect(filter.filter_entries).to match_array([@sl_2015, @sl_2014, @sl_2013])
+        context 'loads entry with start_at before' do
+          let(:additional_filters) do
+            {
+              start_at_year_until: 2015
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2015, @sl_2014, @sl_2013])
+          end
         end
 
-        it 'loads entry with start_at between' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   start_at_year_from: 2014,
-                                                   start_at_year_until: 2015)
-          expect(filter.filter_entries).to match_array([@sl_2015, @sl_2014])
+        context 'loads entry with start_at between' do
+          let(:additional_filters) do
+            {
+              start_at_year_from: 2014,
+              start_at_year_until: 2015
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2015, @sl_2014])
+          end
         end
 
-        it 'loads entry with finish_at later' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   finish_at_year_from: 2016)
-          expect(filter.filter_entries).to match_array([@sl_2014, @sl_2015, @sl_2016])
+        context 'loads entry with finish_at later' do
+          let(:additional_filters) do
+            {
+              finish_at_year_from: 2016
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2014, @sl_2015, @sl_2016])
+          end
         end
 
-        it 'loads entry with finish_at before' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   finish_at_year_until: 2016)
-          expect(filter.filter_entries).to match_array([@sl_2014, @sl_2013])
+        context 'loads entry with finish_at before' do
+          let(:additional_filters) do
+            {
+              finish_at_year_until: 2016
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2014, @sl_2013])
+          end
         end
 
-        it 'loads entry with finish_at between' do
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'deep',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   finish_at_year_from: 2016,
-                                                   finish_at_year_until: 2017)
-          expect(filter.filter_entries).to match_array([@sl_2015, @sl_2014])
+        context 'loads entry with finish_at between' do
+          let(:additional_filters) do
+            {
+              finish_at_year_from: 2016,
+              finish_at_year_until: 2017
+            }
+          end
+          it 'correctly' do
+            expect(entries).to match_array([@sl_2015, @sl_2014])
+          end
         end
 
         context 'only active' do
 
-          it 'loads entry with finish_at before' do
-            filter = Person::QualificationFilter.new(group,
-                                                     user,
-                                                     kind: 'deep',
-                                                     qualification_kind_id: qualification_kind_ids,
-                                                     validity: 'active',
-                                                     finish_at_year_until: 2016)
-            expect(filter.filter_entries).to match_array([])
+          context 'loads entry with finish_at before' do
+            let(:additional_filters) do
+              {
+                validity: 'active',
+                finish_at_year_until: 2016
+              }
+            end
+            it 'correctly' do
+              expect(entries).to match_array([])
+            end
+          end
+
+        end
+      end
+
+      context 'as bottom leader' do
+        let(:user) { bl_leader }
+
+        it 'loads all accessible entries' do
+          expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, @bl_extern])
+        end
+
+        it 'contains only visible people' do
+          expect(entries.size).to eq(list_filter.all_count - 2)
+        end
+
+        context 'combined with role filter' do
+          let(:list_filter) do
+            Person::Filter::List.new(group,
+                                     user,
+                                     range: range,
+                                     filters: {
+                                       role: {
+                                         role_types: [
+                                           Group::TopGroup::Member.sti_name,
+                                           Group::BottomLayer::Leader.sti_name,
+                                           Group::BottomGroup::Leader.sti_name
+                                         ]
+                                       },
+                                       qualification: {
+                                         qualification_kind_ids: qualification_kind_ids,
+                                         validity: validity
+                                       }
+                                     })
+          end
+
+          it 'loads all accessible entries' do
+            expect(entries).to match_array([@bl_leader, @bg_leader])
+          end
+
+          it 'contains only visible people' do
+            expect(entries.size).to eq(list_filter.all_count - 1)
           end
 
         end
@@ -179,7 +238,7 @@ describe Person::QualificationFilter do
   end
 
   context 'kind layer' do
-    let(:kind) { 'layer' }
+    let(:range) { 'layer' }
 
     context 'with qualification kinds' do
       let(:qualification_kind_ids) { qualification_kinds(:sl, :gl_leader).collect(&:id) }
@@ -196,7 +255,7 @@ describe Person::QualificationFilter do
 
   context 'in bottom layer' do
     let(:user) { bl_leader }
-    let(:kind) { 'layer' }
+    let(:range) { 'layer' }
     let(:group) { groups(:bottom_layer_one) }
     let(:qualification_kind_ids) { qualification_kinds(:sl, :gl_leader).collect(&:id) }
 
@@ -246,46 +305,48 @@ describe Person::QualificationFilter do
           expect(entries).to match_array([@bg_leader])
         end
 
-        it 'loads entry with start_at between' do
-          start_at = Date.today - 2.years
-          @bg_leader.qualifications.
-            find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-            update!(start_at: start_at)
-          Fabricate(:qualification,
-                    person: @bg_leader,
-                    qualification_kind: qualification_kinds(:sl),
-                    start_at: start_at)
+        context 'loads entry with start_at between' do
+          let(:start_at) { Date.today - 2.years }
+          let(:additional_filters) do
+            {
+              start_at_year_from: start_at.year,
+              start_at_year_until: start_at.year
+            }
+          end
 
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'layer',
-                                                   match: 'all',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   start_at_year_from: start_at.year,
-                                                   start_at_year_until: start_at.year)
-          expect(filter.filter_entries).to match_array([@bg_leader])
+          it 'correctly' do
+            @bg_leader.qualifications.
+              find { |q| q.qualification_kind == qualification_kinds(:ql) }.
+              update!(start_at: start_at)
+            Fabricate(:qualification,
+                      person: @bg_leader,
+                      qualification_kind: qualification_kinds(:sl),
+                      start_at: start_at)
+
+            expect(entries).to match_array([@bg_leader])
+          end
         end
 
-        it 'does not contain entries outside start_at between' do
-          start_at = Date.today - 2.years
-          @bg_leader.qualifications.
-            find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-            update!(start_at: start_at)
-          Fabricate(:qualification,
-                    person: @bg_leader,
-                    qualification_kind: qualification_kinds(:sl),
-                    start_at: start_at)
+        context 'does not contain entries outside start_at between' do
+          let(:start_at) { Date.today - 2.years }
+          let(:additional_filters) do
+            {
+              start_at_year_from: start_at.year - 2,
+              start_at_year_until: start_at.year - 1
+            }
+          end
 
-          filter = Person::QualificationFilter.new(group,
-                                                   user,
-                                                   kind: 'layer',
-                                                   match: 'all',
-                                                   qualification_kind_id: qualification_kind_ids,
-                                                   validity: 'all',
-                                                   start_at_year_from: start_at.year - 2,
-                                                   start_at_year_until: start_at.year - 1)
-          expect(filter.filter_entries).to match_array([])
+          it 'correctly' do
+            @bg_leader.qualifications.
+              find { |q| q.qualification_kind == qualification_kinds(:ql) }.
+              update!(start_at: start_at)
+            Fabricate(:qualification,
+                      person: @bg_leader,
+                      qualification_kind: qualification_kinds(:sl),
+                      start_at: start_at)
+
+            expect(entries).to match_array([])
+          end
         end
 
         it 'does not contain people with all, but expired qualifications' do

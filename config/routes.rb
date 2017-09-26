@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -68,11 +68,7 @@ Hitobito::Application.routes.draw do
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch
 
-      resources :people_filters, only: [:new, :create, :destroy] do
-        collection do
-          get 'qualification'
-        end
-      end
+      resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
 

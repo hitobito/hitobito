@@ -181,8 +181,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def redirect_params
-    filter = PeopleFilter.new(role_type_ids: [role_type.id])
-    { role_type_ids: filter.role_type_ids_string, name: importer.human_role_name }
+    { filters: { role: { role_type_ids: [role_type.id] } }, name: importer.human_role_name }
   end
 
   def role_type

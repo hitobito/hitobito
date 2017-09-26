@@ -7,7 +7,7 @@
 
 class Person::Filter::Chain
 
-  TYPES = [ # rubocop:disable Style/MutableConstant
+  TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
     Person::Filter::Qualification
   ]

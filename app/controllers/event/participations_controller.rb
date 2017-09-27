@@ -69,6 +69,7 @@ class Event::ParticipationsController < CrudController
       end
       format.pdf   { render_pdf(entries.collect(&:person)) }
       format.csv   { render_tabular(:csv, entries) }
+      format.vcf   { render_vcf(entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx  { render_tabular(:xlsx, entries) }
       format.email { render_emails(entries.collect(&:person)) }
     end

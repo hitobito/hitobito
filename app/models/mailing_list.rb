@@ -95,7 +95,7 @@ class MailingList < ActiveRecord::Base
   def combined_role_join
     <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
       INNER JOIN (
-        SELECT DISTINCT people.id, GROUP_CONCAT(CONCAT_WS(' / ', layers.name, groups.name) SEPARATOR ', ') as role_with_layer
+        SELECT DISTINCT people.id, GROUP_CONCAT(CONCAT_WS(' / ', layers.name, groups.name) SEPARATOR ', ') AS role_with_layer
         FROM people
         LEFT JOIN roles ON people.id = roles.person_id
         LEFT JOIN groups ON roles.group_id = groups.id
@@ -106,26 +106,27 @@ class MailingList < ActiveRecord::Base
   end
 
   def people_joins
-    'LEFT JOIN roles ON people.id = roles.person_id ' \
-    'LEFT JOIN groups ON roles.group_id = groups.id ' \
-    'LEFT JOIN event_participations ON event_participations.person_id = people.id ' \
-    'LEFT JOIN taggings AS people_taggings ' \
-    "ON people_taggings.taggable_type = 'Person' " \
-    'AND people_taggings.taggable_id = people.id'
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      LEFT JOIN roles ON people.id = roles.person_id
+      LEFT JOIN groups ON roles.group_id = groups.id
+      LEFT JOIN event_participations ON event_participations.person_id = people.id
+      LEFT JOIN taggings AS people_taggings
+        ON people_taggings.taggable_type = 'Person'
+        AND people_taggings.taggable_id = people.id
+    SQL
   end
 
   def subscription_joins
     # the comma is needed because it is not a JOIN, but a second "FROM"
-    ', subscriptions ' \
-    'LEFT JOIN groups sub_groups ' \
-    "ON subscriptions.subscriber_type = 'Group'" \
-    'AND subscriptions.subscriber_id = sub_groups.id ' \
-    'LEFT JOIN related_role_types ' \
-    "ON related_role_types.relation_type = 'Subscription' " \
-    'AND related_role_types.relation_id = subscriptions.id ' \
-    'LEFT JOIN taggings AS subscriptions_taggings ' \
-    "ON subscriptions_taggings.taggable_type = 'Subscription' " \
-    'AND subscriptions_taggings.taggable_id = subscriptions.id'
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      , subscriptions
+      LEFT JOIN groups sub_groups
+        ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
+      LEFT JOIN related_role_types
+        ON related_role_types.relation_type = 'Subscription' AND related_role_types.relation_id = subscriptions.id
+      LEFT JOIN taggings AS subscriptions_taggings
+        ON subscriptions_taggings.taggable_type = 'Subscription' AND subscriptions_taggings.taggable_id = subscriptions.id
+    SQL
   end
 
   def suscriber_conditions

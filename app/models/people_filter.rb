@@ -47,10 +47,11 @@ class PeopleFilter < ActiveRecord::Base
 
   class << self
     def for_group(group)
-      where('group_id = ? OR group_type = ? OR ' \
-            '(group_id IS NULL AND group_type IS NULL)',
-            group.id,
-            group.type)
+      includes(:group)
+        .where('group_id = ? OR group_type = ? OR ' \
+               '(group_id IS NULL AND group_type IS NULL)',
+               group.id,
+               group.type)
     end
   end
 

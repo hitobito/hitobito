@@ -11,7 +11,6 @@ describe 'event/participations/_list.html.haml' do
 
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
   let(:participation) { Fabricate(:event_participation, event: event) }
-  #let(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
   let(:dropdowns) { dom.all('.dropdown-toggle') }

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,13 +8,12 @@
 require 'spec_helper'
 require 'csv'
 
-
-describe Export::Csv::People::ParticipationsFull do
+describe Export::Tabular::People::ParticipationsFull do
 
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:list) { [participation] }
-  let(:people_list) { Export::Csv::People::ParticipationsFull.new(list) }
+  let(:people_list) { Export::Tabular::People::ParticipationsFull.new(list) }
 
   subject { people_list.attribute_labels }
 
@@ -28,23 +27,29 @@ describe Export::Csv::People::ParticipationsFull do
 
   context 'questions' do
     let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-    let(:question) { events(:top_course).questions.first }
 
-    before {  participation.init_answers }
-    it 'has keys and values' do
+    it 'has keys and values of application questions' do
+      participation.init_answers
       expect(subject[:"question_#{event_questions(:top_ov).id}"]).to eq 'GA oder Halbtax?'
       expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(3)
+    end
+
+    it 'has keys and values of admin questions' do
+      irgendwas = events(:top_course).questions.create!(question: 'Irgendwas', admin: true)
+      participation.init_answers
+      expect(subject[:"question_#{irgendwas.id}"]).to eq 'Irgendwas'
+      expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(4)
     end
   end
 
   context 'integration' do
 
-    let(:data) { Export::Csv::People::ParticipationsFull.export(list) }
+    let(:data) { Export::Tabular::People::ParticipationsFull.export(:csv, list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum']
+       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum', 'Hauptebene']
     end
 
     subject { csv }

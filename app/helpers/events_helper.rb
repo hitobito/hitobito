@@ -1,24 +1,50 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module EventsHelper
 
-  def format_training_days(event)
-    number_with_precision(event.training_days, precision: 1)
+  def new_event_button
+    event_type = find_event_type
+    return unless event_type
+
+    event = event_type.new
+    event.groups << @group
+    if can?(:new, event)
+      action_button(t("events.global.link.add_#{event_type.name.underscore}"),
+                    new_group_event_path(@group, event: { type: event_type.sti_name }),
+                    :plus)
+    end
   end
 
-  def button_action_event_apply(event, group = nil)
+  def export_events_button
+    type = params[:type].presence || 'Event'
+    if can?(:"export_#{type.underscore.pluralize}", @group)
+      Dropdown::Event::EventsExport.new(self, params).to_s
+    end
+  end
+
+  def event_user_application_possible?(event)
     participation = event.participations.new
     participation.person = current_user
 
-    if event.application_possible? && can?(:new, participation)
+    event.application_possible? && can?(:new, participation)
+  end
+
+  def button_action_event_apply(event, group = nil)
+    if event_user_application_possible?(event)
       group ||= event.groups.first
 
-      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      if event.application_closing_at.present?
+        button += content_tag(:div,
+                              t('event.lists.apply_until',
+                                date: f(event.application_closing_at)))
+      end
+      button
     end
   end
 
@@ -31,10 +57,22 @@ module EventsHelper
     Role.types_with_permission(:approve_applications).present?
   end
 
+  def format_training_days(event)
+    number_with_precision(event.training_days, precision: 1)
+  end
+
   def format_event_application_conditions(entry)
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
     safe_join(texts.select(&:present?).map { |text| simple_format(text) })
+  end
+
+  private
+
+  def find_event_type
+    @group.event_types.find do |t|
+      (params[:type].blank? && t == Event) || t.sti_name == params[:type]
+    end
   end
 
 end

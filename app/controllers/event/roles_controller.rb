@@ -49,7 +49,7 @@ class Event::RolesController < CrudController
     attrs.delete(:event_id)
     attrs.delete(:person)
     # assert that type is valid
-    event.class.find_role_type!(attrs[:type])
+    event.find_role_type!(attrs[:type])
 
     participation = event.participations.where(person_id: attrs.delete(:person_id)).
                                          first_or_initialize
@@ -104,9 +104,9 @@ class Event::RolesController < CrudController
   def possible_types
     @possible_types ||=
       if entry.restricted?
-        event.class.participant_types
+        event.participant_types
       else
-        event.class.role_types.reject(&:restricted?)
+        event.role_types.reject(&:restricted?)
       end
   end
 

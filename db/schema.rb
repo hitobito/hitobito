@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103142035) do
+ActiveRecord::Schema.define(version: 20170607111148) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer "qualification_kind_id", limit: 4,   null: false
     t.string  "category",              limit: 255, null: false
     t.string  "role",                  limit: 255, null: false
+    t.integer "grouping"
   end
 
   add_index "event_kind_qualification_kinds", ["category"], name: "index_event_kind_qualification_kinds_on_category"
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.string  "choices",          limit: 255
     t.boolean "multiple_choices",             default: false
     t.boolean "required"
+    t.boolean "admin",            default: false, null: false
   end
 
   add_index "event_questions", ["event_id"], name: "index_event_questions_on_event_id"
@@ -190,6 +192,9 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer  "creator_id",                  limit: 4
     t.integer  "updater_id",                  limit: 4
     t.boolean  "applications_cancelable",                   default: false, null: false
+    t.text     "required_contact_attrs"
+    t.text     "hidden_contact_attrs"
+    t.boolean  "display_booking_info",                   default: true,  null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"
@@ -249,7 +254,7 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.integer "count_vertical",   limit: 4,                   null: false
     t.float   "padding_top",      limit: 24,                  null: false
     t.float   "padding_left",     limit: 24,                  null: false
-    t.integer "person_id"
+    t.integer "person_id",        limit: 4
     t.boolean "nickname",                     default: false, null: false
     t.string  "pp_post",          limit: 23
   end
@@ -276,41 +281,52 @@ ActiveRecord::Schema.define(version: 20170103142035) do
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id"
 
-  create_table "people", force: :cascade do |t|
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.string   "company_name",           limit: 255
-    t.string   "nickname",               limit: 255
-    t.boolean  "company",                              default: false, null: false
-    t.string   "email",                  limit: 255
-    t.string   "address",                limit: 1024
-    t.string   "zip_code",               limit: 255
-    t.string   "town",                   limit: 255
-    t.string   "country",                limit: 255
-    t.string   "gender",                 limit: 1
-    t.date     "birthday"
-    t.text     "additional_information", limit: 65535
-    t.boolean  "contact_data_visible",                 default: false, null: false
+  create_table "notes", force: :cascade do |t|
+    t.integer  "subject_id",   limit: 4,     null: false
+    t.integer  "author_id",    limit: 4,     null: false
+    t.text     "text",         limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "encrypted_password",     limit: 255
-    t.string   "reset_password_token",   limit: 255
+    t.string   "subject_type", limit: 255
+  end
+
+  add_index "notes", ["subject_id"], name: "index_notes_on_subject_id"
+
+  create_table "people", force: :cascade do |t|
+    t.string   "first_name",                limit: 255
+    t.string   "last_name",                 limit: 255
+    t.string   "company_name",              limit: 255
+    t.string   "nickname",                  limit: 255
+    t.boolean  "company",                                 default: false, null: false
+    t.string   "email",                     limit: 255
+    t.string   "address",                   limit: 1024
+    t.string   "zip_code",                  limit: 255
+    t.string   "town",                      limit: 255
+    t.string   "country",                   limit: 255
+    t.string   "gender",                    limit: 1
+    t.date     "birthday"
+    t.text     "additional_information",    limit: 65535
+    t.boolean  "contact_data_visible",                    default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "encrypted_password",        limit: 255
+    t.string   "reset_password_token",      limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,     default: 0
+    t.integer  "sign_in_count",             limit: 4,     default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "picture",                limit: 255
-    t.integer  "last_label_format_id",   limit: 4
-    t.integer  "creator_id",             limit: 4
-    t.integer  "updater_id",             limit: 4
-    t.integer  "primary_group_id",       limit: 4
-    t.integer  "failed_attempts",        limit: 4,     default: 0
+    t.string   "current_sign_in_ip",        limit: 255
+    t.string   "last_sign_in_ip",           limit: 255
+    t.string   "picture",                   limit: 255
+    t.integer  "last_label_format_id",      limit: 4
+    t.integer  "creator_id",                limit: 4
+    t.integer  "updater_id",                limit: 4
+    t.integer  "primary_group_id",          limit: 4
+    t.integer  "failed_attempts",           limit: 4,     default: 0
     t.datetime "locked_at"
-    t.string   "authentication_token",   limit: 255
-    t.boolean  "show_global_label_formats",            default: true, null: false
+    t.string   "authentication_token",      limit: 255
+    t.boolean  "show_global_label_formats",               default: true,  null: false
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token"
@@ -318,9 +334,13 @@ ActiveRecord::Schema.define(version: 20170103142035) do
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
 
   create_table "people_filters", force: :cascade do |t|
-    t.string  "name",       limit: 255, null: false
-    t.integer "group_id",   limit: 4
-    t.string  "group_type", limit: 255
+    t.string   "name",         limit: 255,   null: false
+    t.integer  "group_id",     limit: 4
+    t.string   "group_type",   limit: 255
+    t.text     "filter_chain", limit: 65535
+    t.string   "range",        limit: 255,   default: 'deep'
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "people_filters", ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
@@ -352,16 +372,6 @@ ActiveRecord::Schema.define(version: 20170103142035) do
 
   add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id"
   add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
-
-  create_table "person_notes", force: :cascade do |t|
-    t.integer  "person_id",  limit: 4,     null: false
-    t.integer  "author_id",  limit: 4,     null: false
-    t.text     "text",       limit: 65535
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "person_notes", ["person_id"], name: "index_person_notes_on_person_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -466,15 +476,15 @@ ActiveRecord::Schema.define(version: 20170103142035) do
     t.datetime "created_at"
   end
 
-  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
 
   create_table "tags", force: :cascade do |t|
     t.string  "name",           limit: 255
     t.integer "taggings_count", limit: 4,   default: 0
   end
 
-  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+  add_index "tags", ["name"], name: "index_tags_on_name", unique: true
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      limit: 255,   null: false

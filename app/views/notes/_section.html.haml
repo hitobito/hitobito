@@ -1,0 +1,28 @@
+-#  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+
+%section
+  %h2
+    = Note.model_name.human(count: 2)
+    - if can?(:create, entry.notes.new)
+      %span.pull-right
+        = action_button(t('notes.new_note'),
+                        '#',
+                        'plus',
+                        id: 'notes-new-button',
+                        class: 'btn-small notes-swap',
+                        data: { swap: 'notes-swap' })
+
+  #notes-form.notes-swap{ style: 'display: none;', data: { swap: 'notes-swap' } }
+    #notes-error.alert.alert-error{ style: 'display: none;' }
+
+    = form_for(Note.new, url: create_path, remote: true) do |f|
+      = f.text_area(:text, rows: 5, class: 'input-block-level')
+      = save_form_buttons(f, nil, '')
+
+  = render 'notes/list',
+           notes: entry.notes.includes(:author, :subject).list.page(params[:notes_page]).per(10),
+           show_subject: false

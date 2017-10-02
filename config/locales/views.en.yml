@@ -83,6 +83,10 @@ en:
     available_placeholders_empty: 'No placeholders available'
   dropdown/event/group_filter:
     all_groups: 'All groups'
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
   dropdown/event/role_add:
     add: 'Add person'
   dropdown/event/participant_add:
@@ -93,10 +97,13 @@ en:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
     labels: 'Labels'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
+    condense_labels: 'Avoid multiple entries for household'
+    condense_labels_hint: 'Only give one entry for multiple people with the same adress and family name. '
   devise:
     failure:
       already_authenticated: 'You are already registered.'
@@ -164,7 +171,7 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organizers'
     duration: Duration
     date: "Date %{index}"
@@ -173,7 +180,6 @@ en:
     applied_to: Registration to
     alternative_dates: Alternative dates
     priorities: 'Application priorities'
-    no_qualifications_could_be_prolonged: "%{person} has no qualifications that can be extended."
     lists:
       courses:
         title: 'Available courses'
@@ -183,7 +189,7 @@ en:
         title: 'Next events'
         explanation: 'Events of your groups and their top groups are shown here. Other events you''ll find in the organizing group.'
     application_market:
-      already_assigned: 'This person is already allocated elsewhere.'
+      already_assigned: 'This person was already assigned or registered for a different event.'
       participation:
         registered_at: 'Registration on %{date}'
       prio_buttons:
@@ -197,6 +203,11 @@ en:
         label: 'Waiting list'
       popover_waiting_list:
         waiting_list_info: Put this person on the waiting list for courses of of %{event_kind}.
+    attachments:
+      create:
+        failure: "Upload failed: %{errors}."
+      destroy:
+        failure: "Failed to delete: %{errors}."
     kinds:
       form:
         help_minimum_age: 'Years (vintage on the first course date is decisive)'
@@ -226,6 +237,7 @@ en:
         signature: Signature
         signature_confirmation: First name, last name, signature
         heading_event/course: Course application %{year}
+        heading_event: Registration for event
         read_and_agreed_for_event: I meet the requirements for the event, have read the event description and agree to them.
         read_and_agreed_for_event_course: I meet the course prerequisites, have read the course description and course regulations and agree to them.
         requirements_for_event: Requirements for the event
@@ -235,6 +247,10 @@ en:
         on_waiting_list: On waiting list
       list:
         incomplete: Required data is missing
+      cancel_application:
+        explanation: You are registered for this event.
+        caption: Cancel registration
+        confirmation: "Are you sure, that you want to cancel your registration?"
     register:
       register:
         title: Collect contact data
@@ -250,13 +266,17 @@ en:
       caption_signature: Participants must sign the application
       caption_signature_confirmation: Application must be confirmed with a second signature
       signature_confirmation_text_default: Legal guardian (for minors)
+    attachments:
+      add: "add"
+    default_description_link:
+      insert_general_information: Insert standard description
     form:
       caption_external_applications: 'Externals can sign up for this event'
       caption_prioritization: 'Participants may set two additional courses as alternatives'
       caption_requires_approval: 'The group leader will be informed and has to confirm your registration'
-      additional_information: 'Information for registration'
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application. Give possible answers separated by a comma or leave the field blank to allow any answers.
+      caption_applications_cancelable: Participants can cancel their registration
     form_tabs:
       general: General
     global:
@@ -287,7 +307,6 @@ en:
   event/participations:
     full_entry_label: '%{model_label} from <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary.'
-    instructions: 'For the final registration you have to print the page via <i>Print</i>, sign and mail it to the appropriate address.'
     show:
       link:
         delete: 'Delete application'
@@ -297,7 +316,6 @@ en:
       remove: 'Markes course as not passed and removes qualifications.'
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
-    below_minimum_age: "Age limit falls below %{course_minimum_age}"
     qualifications_missing: "The following qualifications are missing: %{missing}"
   event/register:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
@@ -313,11 +331,15 @@ en:
     apply: 'Register'
     applied: 'Registered'
     not_possible: 'not possible'
-    issue_only: 'Assigns the %{model} %{issued} on the %{until} (last course date).'
-    prolong_only:
-      one: 'Extends existing qualification %{prolonged} until %{until} (last course date).'
-      other: 'Extends existing qualifications %{prolonged} until %{until} (last course date).'
-    issue_and_prolong: 'Assigns the %{model} %{issued} and extends existing qualifications %{prolonged} until %{until} (last course date).'
+    participants_info:
+      one: '%{count} registered'
+      other: '%{count} registered'
+    participants_info_with_limit:
+      one: '%{count} registered for %{limit} plesac'
+      other: '%{count} registered for %{limit} places'
+    active_participants_info:
+      one: '%{count} assigned registration'
+      other: '%{count} assigned registrations'
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:
@@ -328,13 +350,43 @@ en:
     new_qualification_filter: 'New qualification filter...'
   filter_navigation/event/participations:
     predefined_filters:
-      all: All Persons
+      all: All people
       teamers: Leaders
       participants: Participants
   full_text:
     index:
       title: 'people found'
       incomplete_search_request: 'Please enter at least two characters.'
+  group:
+    merge:
+      select:
+        title: 'Merge %{group} '
+        explanation: When merging two groups all the subgroups, events and people including their roles will be merged. Subscriptions will not be merged. All former groups will still be visible under 'Deleted'.
+        merge_is_irreversible: This process cannot be undone!
+        new_group_name: 'Name of the merged group'
+        merge_group_with: 'Merge %{group} with'
+        merge_button: 'Merge group'
+    move:
+      select:
+        title: "Move group"
+        select_group: "Please pick the target group that will contain the current group."
+    person_add_requests:
+      actions_index:
+        activate: Activate manual approval
+        deactivate: Deactivate
+        activate_title: Activate manual approval
+        deactivate_title: Deactivate manual approval
+      index:
+        activated: Manual approval is active
+        deactivated: Manual approval is not active
+        explanation: >
+            When active people from this layer will only be added to other groups,
+            events or subscriptions after an authorized person has given his/her approval.
+      list:
+        approve: Accept
+        reject: Deny
+      approvers:
+        title: 'Notifications to'
   groups:
     actions_show:
       export_subgroups: 'CSV subgroups'
@@ -342,6 +394,8 @@ en:
     attrs:
       contact_details: 'Contact data'
       additional_information: 'More information'
+    deleted_subgroups:
+      no_deleted_sub_groups: 'No deleted groups found.'
     form:
       help_contact: 'Use public address and telephone number of this person.'
     global:
@@ -353,6 +407,11 @@ en:
     subgroups: 'Subgroups'
     tabs:
       deleted: 'Deleted'
+  group/person_add_requests:
+    deactivated: Manual approval deactivated
+    activated: Manual approval activated
+    global:
+      no_list_entries: No pending approvals.
   group/merge:
     success: 'The selected groups were merged to form the new group %{new_group_name}.'
     failure: 'The selected groups can''t be merged.'
@@ -375,6 +434,9 @@ en:
   import/person_doublette_finder:
     duplicates: "%{count} results in duplicate detection."
   label_formats:
+    global_labels: "Global label formats"
+    own_labels: My label formats
+    see_global_labels: "Show global labels"
     form:
       portrait: 'Portrait'
       landscape: 'Landscape'
@@ -414,7 +476,7 @@ en:
     groups: 'Groups'
     events: 'Events'
     courses: 'Courses'
-    admin: 'Admin'
+    admin: 'Settings'
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'
@@ -430,6 +492,126 @@ en:
       title: Create qualification kind
   paper_trail/version_decorator:
     by: 'from %{author}'
+  person:
+    confirm_delete: "All Data for %{person} will be completely deleted, including any participations and qualifications. Delete this person only, if no one needs this data anymore."
+    add_requests:
+      body_list:
+        open_requests:
+          one: 1 pending approval.
+          other: '%{count} pending approvals.'
+        request_to: Request to
+        cancel: Cancel request for access
+      creator:
+        group:
+          success: "We sent an approval request for %{person}. The role will be created as soon as the request was granted. Any additional details for the role have to entered again after the approval."
+          failure: "The role could not be created, because for %{person} you need be granted access by approval. %{errors}."
+        event:
+          success: "We sent an approval request for %{person}. The registration will be created as soon as the request was granted. Any additional details for the registration have to entered again after the approval."
+          failure: "The registration could not be created, because for %{person} you need be granted access by approval. %{errors}."
+        mailing_list:
+          success: "We sent an approval request for %{person}. The subscription will be created as soon as the request was granted."
+          failure: "%{person} could not be added, because you need be granted access using an approval request. %{errors}."
+      approve:
+        success_notice: "The request for access for %{person} was granted."
+        failure_notice: "The request for approval für %{person} could not be granted: %{errors}."
+      reject:
+        success_notice: "The request for access for %{person} has been denied."
+      cancel:
+        success_notice: "The request for access for %{person} has been retracted."
+      status:
+        group:
+          approved: "The request for access for %{person} has already been granted."
+          rejected: "The request for access for %{person} has already been denied."
+        event:
+          approved: "The request for access for %{person} has already been granted."
+          rejected: "The request for access for %{person} has already been denied."
+        mailing_list:
+          approved: "The request for access for %{person} has already been granted."
+          rejected: "The request for access for %{person} has already been denied."
+    csv_imports:
+      description:
+        header: CSV files
+        explain_csv_format: 'A CSV file contains the details of a person on each line. The first line contains the field names. The fields are separated with a comma. If a field value itself contains commas, it must be complemented with quotation marks ("). Example:'
+        example: |
+          First name,Last name,e-Mail,Place,gender
+          Hans,Muster,hans@beispiel.ch,Bern,m
+          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",f
+        explain_field_names: The fields in the CSV file can be assigned to the fields in the application in the next step.
+        explain_role: All people in a file will be assigned to the same role, which can be selected in the next step.
+        special_fields: Special field values
+        explain_special_fields_html: The following fields must contain one of the <em>italic</ em> values.
+      preview_table:
+        icon_tooltip_invalid: 'Invalid values'
+        icon_tooltip_updated: 'Updating'
+        icon_tooltip_created: 'Recording'
+        icon_tooltip_request: 'is being requested'
+      define_mapping:
+        choose_role: 'Select role'
+        choose_role_help: 'This role will be assigned to all imported people'
+        assign_columns_to_fields: 'Assign columns to fields'
+        column_from_csv: 'Column from CSV'
+        field_in_database: 'Field in database'
+        preview: 'Preview'
+        update_behaviour: Update behavior
+        keep_behaviour: >
+            Only update empty values in the database with the values from the CSV
+            file, existing values are preserved.
+        keep_behaviour_tags: Tags will be added.
+        override_behaviour: >
+            Overwrite existing values in the database with the values from the CSV
+            file. Empty values in the CSV file will delete existing values in the
+            database.
+        override_behaviour_tags: Tags will be removed or replaced.
+        update_behaviour_explanation: >
+            This behavior only applies to persons already existing in the database.
+            New persons are created with the data from the CSV file.
+      new:
+        upload_button: 'Upload'
+        csv_file: 'CSV file'
+      preview:
+        import_now_button: Import people now
+        import_details_html: >
+            The following persons will be importet with the <strong>role %{role}</strong>
+            into the <strong>group %{group}</strong>.
+    add_request_mailer:
+      ask_person_to_add:
+        request_link: Answer request
+      ask_responsibles:
+        request_link: Answer request
+    tags:
+      list:
+        category_other: Other
+  person/csv_imports:
+    invalid_file: Please select a valid CSV file.
+    duplicate_keys:
+      one: '%{list} was assigned more than once.'
+      other: '%{list} were assigned more than once.'
+    preview:
+      new:
+        one: '%{count} %{role} will be imported.'
+        other: '%{count} %{role} will be imported.'
+      updated:
+        one: '%{count} %{role} will be updated.'
+        other: '%{count} %{role} will be updated.'
+      failed:
+        one: '%{count} %{role} won''t be imported.'
+        other: '%{count} %{role} won''t be imported.'
+      requests:
+        one: '%{count} %{role} will receive a request for their data. Your data will not be imported.'
+        other: '%{count} %{role} will receive a request for their data. Your data will not be imported.'
+    create:
+      new:
+        one: '%{count} %{role} has been imported succesfully.'
+        other: '%{count} %{role} have been imported succesfully.'
+      updated:
+        one: '%{count} %{role} has been updated succesfully.'
+        other: '%{count} %{role} have been updated succesfully.'
+      failed:
+        one: '%{count} %{role} has not been imported.'
+        other: '%{count} %{role} have not been imported.'
+      requests:
+        one: '%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access.'
+        other: '%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access.'
   people:
     send_password_instructions: Login information has been sent.
     years_old: (%{years} years old)
@@ -445,6 +627,9 @@ en:
     actions_index:
       add_person: Add Person
       import_list: Import list
+    add_requests:
+      approve_title: 'Approve request'
+      reject_title: 'Deny request'
     attrs:
       additional_data: More information
       events: My next events
@@ -458,10 +643,10 @@ en:
     list:
       number_of_people_shown:
         one: "%{count} person displayed."
-        other: "%{count} persons displayed."
+        other: "%{count} people displayed."
       number_of_people_hidden:
         one: "%{count} more person is not visible for you."
-        other: "%{count} more persons are not visible for you."
+        other: "%{count} more people are not visible for you."
     log:
       no_changes: So far, no changes were recorded.
     pdf:
@@ -469,7 +654,11 @@ en:
     roles:
       title: Active roles
     roles_aside:
+      add_role: Add role
       set_main_group: Set main group
+    tags:
+      add_tag: Add tag...
+      no_entry: (none)
   participations:
     destroy:
       flash:
@@ -506,6 +695,7 @@ en:
       add_person: Add person
       add_role_for_person: Create role for %{person}
       edit_role_for_person: Edit role for %{person}
+      new_role_for_person: Create role
     fields:
       help_optional_label: Optional name of the role of this person
     person_fields:
@@ -516,8 +706,8 @@ en:
       role_has_permissions: "The role %{role} in the group %{group} has the following permissions:"
       role_only_public: >
           The role %{role} in the group %{group} can only view public data (groups,
-          events and subscriptions; no other persons).
-      only_visible_from_above: This role is visible only to persons in this level, not by people from higher layers.
+          events and subscriptions; no other people).
+      only_visible_from_above: This role is visible only to people in this level, not by people from higher layers.
   subscriber:
     group:
       form:
@@ -525,6 +715,8 @@ en:
         subgroups_and_siblings_selectable: 'Only groups within the subscription group or within the adjacent groups from tye %{type} can be selected'
       roles:
         please_choose_group: Please select a group
+      tags:
+        only_add_persons_with_tags: 'Only add people with one of the following tags:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclude person'
@@ -538,6 +730,8 @@ en:
   subscriber/exclude_person:
     success: 'Subscriber %{subscriber} has been successfully excluded'
     failure: '%{subscriber} is not a subscriber'
+  sheet/person/csv_import:
+    title: 'Import person via CSV'
   sheet/group:
     belongs_to: 'belongs to'
     deleted: '(deleted)'
@@ -549,7 +743,10 @@ en:
       add_event: Add event
       exclude_person: 'Exclude person'
     list:
-      excluded_people: 'Excluded persons'
+      excluded_people: 'Excluded people'
+      export_not_allowed: 'You are not allowed to export the subscribers, because it contains people outside of your authorization.'
+    subscription:
+      only_persons_with: 'Only people with:'
   version:
     attribute_change:
       from_to: "%{attr} has been changed from <i>%{from}</i> to <i>%{to}</i>."
@@ -559,6 +756,10 @@ en:
       create: "%{model} <i>%{label}</i> has been added."
       update: "%{model} <i>%{label}</i> has been updated: %{changeset}"
       destroy: "%{model} <i>%{label}</i> has been deleted."
+      person/add_request:
+        create: "Access for <i>%{label}</i> requested."
+        update: "Update of request for <i>%{label}</i>: %{changeset}"
+        destroy: "Request for <i>%{label}</i> has been answered."
   views:
     pagination:
       next: '>>'

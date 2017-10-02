@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,12 +10,13 @@ module Dropdown
 
     attr_reader :user, :params
 
-    def initialize(template, user, params, details, email_addresses)
+    def initialize(template, user, params, details, email_addresses, labels = true)
       super(template, translate(:button), :download)
       @user = user
       @params = params
       @details = details
       @email_addresses = email_addresses
+      @labels = labels
 
       init_items
     end
@@ -23,23 +24,29 @@ module Dropdown
     private
 
     def init_items
-      csv_links
+      tabular_links(:csv)
+      tabular_links(:xlsx)
+      vcard_link
       label_links
       email_addresses_link
     end
 
-    def csv_links
-      csv_path = params.merge(format: :csv)
+    def tabular_links(format)
+      path = params.merge(format: format)
 
       if @details
-        csv_item = add_item(translate(:csv), '#')
-        csv_item.sub_items << Item.new(translate(:addresses), csv_path)
-        csv_item.sub_items << Item.new(translate(:everything), csv_path.merge(details: true))
+        item = add_item(translate(format), '#')
+        item.sub_items << Item.new(translate(:addresses), path)
+        item.sub_items << Item.new(translate(:everything), path.merge(details: true))
       else
-        add_item(translate(:csv), csv_path)
+        add_item(translate(format), path)
       end
     end
 
+    def vcard_link
+      add_item(translate(:vcard), params.merge(format: :vcf), target: :new)
+    end
+    
     def email_addresses_link
       if @email_addresses
         add_item(translate(:emails), params.merge(format: :email), target: :new)
@@ -47,7 +54,7 @@ module Dropdown
     end
 
     def label_links
-      if LabelFormat.exists?
+      if @labels && LabelFormat.exists?
         label_item = add_item(translate(:labels), main_label_link)
         add_last_used_format_item(label_item)
         add_label_format_items(label_item)

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,15 +9,16 @@ class Event::KindsController < SimpleCrudController
 
   self.permitted_attrs = [:label, :short_name, :minimum_age,
                           :general_information, :application_conditions,
+                          precondition_qualification_kinds: [{ qualification_kind_ids: [] }],
                           qualification_kinds: {
                             participant: {
-                              precondition: { qualification_kind_ids: [] },
                               qualification: { qualification_kind_ids: [] },
-                              prolongation: { qualification_kind_ids: [] } },
+                              prolongation: { qualification_kind_ids: [] }
+                            },
                             leader: {
-                              precondition: { qualification_kind_ids: [] },
                               qualification: { qualification_kind_ids: [] },
-                              prolongation: { qualification_kind_ids: [] } }
+                              prolongation: { qualification_kind_ids: [] }
+                            }
                           }]
 
   self.sort_mappings = { label:      'event_kind_translations.label',
@@ -49,9 +50,12 @@ class Event::KindsController < SimpleCrudController
   def permitted_params
     attrs = super
     kinds_attrs = attrs.delete(:qualification_kinds) || {}
+    precondition_attrs = attrs.delete(:precondition_qualification_kinds) || {}
+
     existing_kinds = entry.event_kind_qualification_kinds.to_a
 
     kinds_attrs = flatten_nested_qualification_kinds(kinds_attrs, existing_kinds)
+    kinds_attrs += flatten_precondition_qualification_kinds(precondition_attrs, existing_kinds)
     mark_qualifikation_kinds_for_removal!(kinds_attrs, existing_kinds)
 
     attrs[:event_kind_qualification_kinds_attributes] = kinds_attrs
@@ -63,21 +67,35 @@ class Event::KindsController < SimpleCrudController
     kinds_attrs.flat_map do |role, categories|
       categories.flat_map do |category, ids|
         ids.fetch(:qualification_kind_ids, []).collect do |id|
-          { id: qualification_kind_assoc_id(id, role, category, existing_kinds),
+          { id: find_qualification_kind_assoc_id(existing_kinds, id, role, category),
             role: role,
             category: category,
             qualification_kind_id: id }
-
         end
       end
     end
   end
 
-  def qualification_kind_assoc_id(qualification_kind_id, role, category, existing_kinds)
+  def flatten_precondition_qualification_kinds(grouped_ids, existing_kinds)
+    grouped_ids.each_with_index.flat_map do |(_, ids), index|
+      ids.fetch(:qualification_kind_ids, []).map do |id|
+        { id: find_qualification_kind_assoc_id(existing_kinds, id,
+                                               'participant', 'precondition', index + 1),
+          role: 'participant',
+          category: 'precondition',
+          qualification_kind_id: id,
+          grouping: index + 1 }
+      end
+    end
+  end
+
+  def find_qualification_kind_assoc_id(existing_kinds, qualification_kind_id, role,
+                                       category, grouping = nil)
     kind = existing_kinds.find do |k|
       k.role == role &&
       k.category == category &&
-      k.qualification_kind_id == qualification_kind_id
+      k.qualification_kind_id == qualification_kind_id &&
+      k.grouping == grouping
     end
     kind.try(:id)
   end

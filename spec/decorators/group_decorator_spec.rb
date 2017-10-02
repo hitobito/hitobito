@@ -6,16 +6,16 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+
 describe GroupDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
-  let(:model) { double('model') }
-  let(:decorator) { GroupDecorator.new(model) }
   let(:context) { double('context') }
-  subject { decorator }
+  let(:model) { groups(:top_group) }
+
+  subject { GroupDecorator.new(model) }
 
   describe 'possible roles' do
-    let(:model) { groups(:top_group) }
     its(:possible_roles) do
       should eq [Group::TopGroup::Leader,
                  Group::TopGroup::LocalGuide,
@@ -27,13 +27,18 @@ describe GroupDecorator, :draper_with_helpers do
   end
 
   describe 'selecting attributes' do
+
+    class DummyGroup < Group
+      self.used_attributes += [:foo, :bar]
+    end
+
+    let(:model) { DummyGroup.new }
+
     before do
       allow(subject).to receive_messages(h: context)
-      allow(model).to receive_message_chain(:class, :attr_used?) { |val| val }
     end
 
     it '#used_attributes selects via .attr_used?' do
-      expect(model.class).to receive(:attr_used?).twice
       expect(subject.used_attributes(:foo, :bar)).to eq %w(foo bar)
     end
 

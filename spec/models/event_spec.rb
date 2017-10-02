@@ -82,7 +82,7 @@ describe Event do
     end
 
     context 'with closing date in the future' do
-      before { subject.application_closing_at = Date.today + 1 }
+      before { subject.application_closing_at = Time.zone.today + 1 }
 
        it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -97,7 +97,7 @@ describe Event do
     end
 
     context 'with closing date today' do
-      before { subject.application_closing_at = Date.today }
+      before { subject.application_closing_at = Time.zone.today }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -111,7 +111,7 @@ describe Event do
     end
 
     context 'with closing date in the past' do
-      before { subject.application_closing_at = Date.today - 1 }
+      before { subject.application_closing_at = Time.zone.today - 1 }
 
       it 'is closed without maximum participant' do
         is_expected.not_to be_application_possible
@@ -126,7 +126,7 @@ describe Event do
 
 
     context 'with opening date in the past' do
-      before { subject.application_opening_at = Date.today - 1 }
+      before { subject.application_opening_at = Time.zone.today - 1 }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -140,7 +140,7 @@ describe Event do
     end
 
     context 'with opening date today' do
-      before { subject.application_opening_at = Date.today }
+      before { subject.application_opening_at = Time.zone.today }
 
       it 'is open without maximum participant' do
         is_expected.to be_application_possible
@@ -154,7 +154,7 @@ describe Event do
     end
 
     context 'with opening date in the future' do
-      before { subject.application_opening_at = Date.today + 1 }
+      before { subject.application_opening_at = Time.zone.today + 1 }
 
       it 'is closed without maximum participant' do
         is_expected.not_to be_application_possible
@@ -163,8 +163,8 @@ describe Event do
 
     context 'with opening and closing dates' do
       before do
-        subject.application_opening_at = Date.today - 2
-        subject.application_closing_at = Date.today + 2
+        subject.application_opening_at = Time.zone.today - 2
+        subject.application_closing_at = Time.zone.today + 2
       end
 
       it 'is open' do
@@ -186,8 +186,8 @@ describe Event do
 
     context 'with opening and closing dates in the future' do
       before do
-        subject.application_opening_at = Date.today + 1
-        subject.application_closing_at = Date.today + 2
+        subject.application_opening_at = Time.zone.today + 1
+        subject.application_closing_at = Time.zone.today + 2
       end
 
       it 'is closed' do
@@ -197,8 +197,8 @@ describe Event do
 
     context 'with opening and closing dates in the past' do
       before do
-        subject.application_opening_at = Date.today - 2
-        subject.application_closing_at = Date.today - 1
+        subject.application_opening_at = Time.zone.today - 2
+        subject.application_closing_at = Time.zone.today - 1
       end
 
       it 'is closed' do
@@ -289,28 +289,28 @@ describe Event do
     end
 
     it 'is valid with application closing after opening' do
-      subject.application_opening_at = Date.today - 5
-      subject.application_closing_at = Date.today + 5
+      subject.application_opening_at = Time.zone.today - 5
+      subject.application_closing_at = Time.zone.today + 5
       subject.valid?
 
       is_expected.to be_valid
     end
 
     it 'is not valid with application closing before opening' do
-      subject.application_opening_at = Date.today - 5
-      subject.application_closing_at = Date.today - 6
+      subject.application_opening_at = Time.zone.today - 5
+      subject.application_closing_at = Time.zone.today - 6
 
       is_expected.not_to be_valid
     end
 
     it 'is valid with application closing and without opening' do
-      subject.application_closing_at = Date.today - 6
+      subject.application_closing_at = Time.zone.today - 6
 
       is_expected.to be_valid
     end
 
     it 'is valid with application opening and without closing' do
-      subject.application_opening_at = Date.today - 6
+      subject.application_opening_at = Time.zone.today - 6
 
       is_expected.to be_valid
     end
@@ -326,13 +326,13 @@ describe Event do
     it 'adds 3 default questions for courses' do
       e = Event::Course.new
       e.init_questions
-      expect(e.questions.size).to eq(3)
+      expect(e.application_questions.size).to eq(3)
     end
 
     it 'does nothing for regular events' do
       e = Event.new
       e.init_questions
-      expect(e.questions).to be_blank
+      expect(e.application_questions).to be_blank
     end
   end
 
@@ -389,7 +389,7 @@ describe Event do
 
       participation = Fabricate(:event_participation, participation_attrs.merge(attrs))
       participation.create_application!(application_attrs)
-      Fabricate(event.class.participant_types.first.name.to_sym, participation: participation)
+      Fabricate(event.participant_types.first.name.to_sym, participation: participation)
       participation.save!
 
       Event::ParticipantAssigner.new(event, participation).add_participant if attrs[:active]
@@ -448,7 +448,7 @@ describe Event do
         Fabricate(Event::Role::Cook.name.to_sym, participation: p)
         assert_counts(participant: 0, applicant: 0)
 
-        r = Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+        Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
         assert_counts(participant: 1, applicant: 1)
 
         # in courses, participant roles are removed like that
@@ -533,6 +533,87 @@ describe Event do
 
         expect(event.groups.size).to eq(2)
       end
+    end
+
+  end
+
+  context 'contact attributes' do
+
+    let(:event) { events(:top_course) }
+
+    it 'does not accept invalid person attributes' do
+      event.update({required_contact_attrs: ['foobla'],
+                    hidden_contact_attrs: ['foofofofo']})
+
+      expect(event.errors.full_messages.first).to match /'foobla' ist kein gültiges Personen-Attribut/
+      expect(event.errors.full_messages.second).to match /'foofofofo' ist kein gültiges Personen-Attribut/
+    end
+
+    it 'is not possible to set same attr as hidden and required' do
+      event.update({required_contact_attrs: ['nickname'],
+                    hidden_contact_attrs: ['nickname']})
+
+      expect(event.errors.full_messages.first).to match /'nickname' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden/
+    end
+
+    it 'is not possible to set mandatory attr as hidden' do
+      event.update({hidden_contact_attrs: ['email']})
+
+      expect(event.errors.full_messages.first).to match /'email' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden/
+    end
+
+    it 'is not possible to set contact association as required' do
+      event.update({required_contact_attrs: ['additional_emails']})
+
+      expect(event.errors.full_messages.first).to match /'additional_emails' ist kein gültiges Personen-Attribut/
+    end
+
+    it 'is possible to hide contact association' do
+      event.update({hidden_contact_attrs: ['additional_emails']})
+
+      expect(event.reload.hidden_contact_attrs).to include('additional_emails')
+    end
+
+  end
+
+  context '#duplicate' do
+
+    let(:event) { events(:top_event) }
+
+    it 'resets participant counts' do
+      Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: event))
+      Fabricate(Event::Role::Participant.name, participation: Fabricate(:event_participation, event: event))
+
+      expect(event.participant_count).not_to eq(0)
+      expect(event.teamer_count).not_to eq(0)
+
+      d = event.duplicate
+      expect(d.participant_count).to eq(0)
+      expect(d.teamer_count).to eq(0)
+      expect(d.applicant_count).to eq(0)
+    end
+
+    it 'keeps empty questions' do
+      d = event.duplicate
+      expect(d.application_questions.size).to eq(0)
+    end
+
+    it 'copies existing questions' do
+      event.questions << Fabricate(:event_question)
+      event.questions << Fabricate(:event_question, admin: true)
+      d = event.duplicate
+
+      expect do
+        d.dates << Fabricate.build(:event_date, event: d)
+        d.save!
+      end.to change { Event::Question.count }.by(2)
+    end
+
+    it 'copies all groups' do
+      event.groups << Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer))
+
+      d = event.duplicate
+      expect(d.group_ids.size).to eq(2)
     end
 
   end

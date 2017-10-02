@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -64,6 +64,7 @@ de:
       placeholder_person: 'Person suchen...'
       placeholder_group: 'Gruppe suchen...'
       placeholder_event: 'Anlass suchen...'
+      placeholder_company_name: 'Firmennamen suchen...'
 
   list:
     index:
@@ -113,6 +114,11 @@ de:
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
+
   dropdown/event/role_add:
     add: 'Person hinzufügen'
 
@@ -126,6 +132,8 @@ de:
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
+    xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Etiketten'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
@@ -212,7 +220,7 @@ de:
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
 
-  export/csv/events/list:
+  export/tabular/events/list:
     group_names: 'Organisatoren'
     duration: Zeitraum
     date: "Datum %{index}"
@@ -222,7 +230,6 @@ de:
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten
     priorities: 'Anmeldeprioritäten'
-    no_qualifications_could_be_prolonged: "%{person} hat keine Qualifikationen, die verlängert werden können."
     lists:
       courses:
         title: 'Verfügbare Kurse'
@@ -232,11 +239,12 @@ de:
       events:
         title: 'Demnächst stattfindende Anlässe'
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
-
+      apply_until: 'bis %{date}'
     application_market:
-      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt.'
+      already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
         registered_at: 'Anmeldung am %{date}'
+        town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:
@@ -262,11 +270,25 @@ de:
         qualifications:
           for_participants: 'Qualifikationen für Teilnehmende'
           for_leaders: 'Qualifikationen für Leitende'
+      precondition_fields:
+        add_precondition_grouping: '+ Vorbedingungen hinzufügen'
+        add_precondition: 'Hinzufügen'
+      qualifications:
+        or: oder
+        and: und
 
+    participation_contact_datas:
+      edit:
+        title: Kontaktangaben
+        save: Weiter
     participations:
+      edit:
+        title: Anmeldung
       approvals:
         title: Freigabe
       specific_information: 'Spezifische Angaben'
+      application_answers: Anmeldeangaben
+      admin_answers: Administrationsangaben
       no_answer_given: '(nicht beantwortet)'
       actions_show:
         change_contact_data_button: 'Kontaktdaten ändern'
@@ -300,6 +322,13 @@ de:
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
+    qualifications:
+      index:
+        save: Qualifikationen aktualisieren
+      update:
+        flash:
+          success: Die Qualifikationen wurden erfolgreich aktualisiert.
+
     register:
       register:
         title: Kontaktdaten erfassen
@@ -324,18 +353,26 @@ de:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
       caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
-      additional_information: 'Angaben für Anmeldung'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
+        welche nur für die Kursadministration verwendet werden.
+      explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
+        abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
     form_tabs:
       general: Allgemein
+      application_questions: Anmeldeangaben
+      admin_questions: Administrationsangaben
+      contact_attrs: Kontaktangaben
     global:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+        duplicate: Duplizieren
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen
@@ -364,7 +401,7 @@ de:
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-    instructions: 'Für die definitive Anmeldung musst du diese Seite über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
+    instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
 
     show:
       link:
@@ -377,8 +414,9 @@ de:
 
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
-    below_minimum_age: "Altersgrenze von %{course_minimum_age} unterschritten."
+    below_minimum_age: "Altersgrenze von %{course_minimum_age} Jahren ist unterschritten."
     qualifications_missing: "Folgende Qualifikationen fehlen: %{missing}"
+    some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
 
   event/register:
     not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."
@@ -405,11 +443,11 @@ de:
     active_participants_info:
       one: '%{count} Anmeldung zugeteilt'
       other: '%{count} Anmeldungen zugeteilt'
-    issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
+    issue_only: 'Vergibt die %{model} %{issued} unmittelbar per %{until} (letztes Kursdatum).'
     prolong_only:
-      one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
-      other: 'Verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
-    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
+      one: 'Verlängert existierende Qualifikation %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+      other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
 
   filter_navigation/dropdown:
@@ -419,8 +457,7 @@ de:
     custom_filter: 'Eigener Filter'
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
-    new_role_filter: 'Neuer Rollen Filter...'
-    new_qualification_filter: 'Neuer Qualifikationen Filter...'
+    new_filter: 'Neuer Filter...'
 
   filter_navigation/event/participations:
     predefined_filters:
@@ -486,7 +523,7 @@ de:
     global:
       link:
         add: Gruppe erstellen
-        deleted_person: Gelöschte Personen
+        deleted_person: Ohne Rollen
     new:
       title: '%{model} erstellen'
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
@@ -576,6 +613,14 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+
+  notes:
+    new_note: Neue Notiz
+    note:
+      created: vor %{time_ago}
+    paginator:
+      newer_notes: Neuere Beiträge
+      older_notes: Altere Beiträge
 
   qualifications:
     in_years: '%{years} Jahre'
@@ -701,13 +746,6 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
-    notes:
-      note:
-        created: vor %{time_ago}
-      paginator:
-        newer_notes: Neuere Beiträge
-        older_notes: Altere Beiträge
-
     tags:
       list:
         category_other: Andere
@@ -754,6 +792,7 @@ de:
     tabs:
       history: Verlauf
       log: Log
+      colleagues: Mitarbeiter/-innen
 
     actions_show:
       send_login: Login schicken
@@ -809,9 +848,6 @@ de:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
 
-    notes:
-      new_note: Neue Notiz
-
   participations:
     destroy:
       flash:
@@ -822,18 +858,44 @@ de:
       save_search: Suche speichern
       save_filter: Filter speichern
       save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
-      prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+      filters_qualification_validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
 
     new:
-      title: Personen nach Rollen filtern
+      title: Personen filtern
+
+    range:
+      prompt_range: In welchem Bereich soll gesucht werden?
+
+    role:
+      title: Rollen
+      prompt_role_selection: Welche Rollen sollen angezeigt werden?
 
     qualification:
-      title: Personen nach Qualifikationen filtern
+      title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_year: Qualifikationsjahr einschränken
       prompt_kind: In welchem Bereich soll gesucht werden?
+      start_at_year_label: Erhalten zwischen
+      start_at_year_infix: und
+      start_at_year_suffix: ''
+      finish_at_year_label: Abgelaufen zwischen
+      finish_at_year_infix: und
+      finish_at_year_suffix: ''
+      not_enough_permissions: Du verfügst nicht über ausreichende Berechtigungen, um Personen mit diesem Filter zu suchen.
 
     simple_radio:
+      match:
+        one: Person hat mindestens EINE dieser Qualifikationen
+        all: Person hat ALLE diese Qualifikationen
       validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
@@ -917,6 +979,7 @@ de:
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
     subscription:
       only_persons_with: 'Nur Personen mit:'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   version:
     attribute_change:

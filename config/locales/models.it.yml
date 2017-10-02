@@ -37,6 +37,12 @@ it:
           attributes:
             body:
               placeholder_missing: 'deve contenere il carattere %{placeholder}'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' è un campo obbligatorio e non può essere impostato come facoltativo o 'non visualizzare'"
+              contact_attr_invalid: "'%{attribute}' non è un attributo valido in merito alla persona"
+              contact_attr_hidden_required: "'%{attribute}' non può essere impostato come obbligatorio e 'non visualizzare'"
         event/date:
           attributes:
             finish_at:
@@ -46,6 +52,7 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
+          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
           attributes:
             person_id:
               taken: è già iscritto
@@ -55,6 +62,7 @@ it:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'Inserire un nome'
+          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
           attributes:
             email:
               taken: >
@@ -89,6 +97,9 @@ it:
             name:
               must_be_unique: 'già existe'
     models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
       additional_email:
         one: altro email
         other: Altre email
@@ -122,6 +133,9 @@ it:
       event/role/cook:
         one: Cucina
         other: Cucina
+      event/role/helper:
+        one: Aiutante
+        other: Aiutanti
       event/role/participant:
         one: Partecipante
         other: Partecipante
@@ -143,15 +157,15 @@ it:
       mailing_list:
         one: abbonamento
         other: Abbonamenti
+      note:
+        one: Nota
+        other: Note
       person:
         one: persona
         other: Persone
       person/add_request:
         one: Richiesta di accesso
         other: Richieste
-      person/note:
-        one: Nota
-        other: Note
       people_filter:
         one: filtro
         other: Filtri
@@ -209,12 +223,13 @@ it:
       person:
         first_name: Nome
         last_name: Cognome
-        name: Cognome
+        name: Nome
         company_name: Nome della ditta
         company: Ditta
         nickname: Soprannome
         email: Email principale
         emails: Email
+        layer_group: Livello principale
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
@@ -237,6 +252,7 @@ it:
         picture: Carica una nuova foto
         remove_picture: Elimina la foto attuale
         roles: Ruoli
+        tags: Tags
         created_at: Salvato
         updated_at: Modificato
       person/add_request:
@@ -246,12 +262,11 @@ it:
         created_at: Data
       person/add_request/event:
         label: "%{body} in %{group}"
+        deleted_event: Evento cancellato
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
-      person/note:
-        text: Testo
       group:
-        name: Cognome
+        name: Nome
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
@@ -269,7 +284,7 @@ it:
         type_name: Tipo di gruppi
       event:
         group_ids: Gruppi
-        name: Cognome
+        name: Nome
         number: Numero
         motto: Motto
         cost: Costi
@@ -293,6 +308,12 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
+        applications_cancelable: Disiscrizione possibile
+        display_booking_info: Visualizza stato iscrizioni
+      event/contact_attrs:
+        required: Obbligatorio
+        optional: Facoltativo
+        hidden: Non visualizzare
       event/answer:
         answer: Risposta
       answers:
@@ -344,7 +365,12 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
-      questions:
+      admin_questions:
+        question: Domanda
+        choices: Possibili risposte
+        multiple_choices: Scelta multipla
+        required: Risposta obbligatoria
+      application_questions:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
@@ -354,6 +380,8 @@ it:
         person: Persona
         type: Ruolo
         participation: Persona
+      note:
+        text: Testo
       qualification:
         qualification_kind: Qualifiche
         qualification_kind_id: Qualifica
@@ -460,7 +488,7 @@ it:
       subscription:
         related_role_types: Ruoli
       people_filter:
-        name: Cognome
+        name: Nome
       custom_content:
         label: Testo
         subject: Oggetto
@@ -477,6 +505,8 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
+        nickname: Soprannome sull'etichetta
+        pp_post: Riga PP
   errors:
     messages:
       invalid_date: "non è una data valida"

@@ -1,0 +1,18 @@
+-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+-#  hitobito_pbs and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_pbs.
+
+.stepwizard
+  .stepwizard-step{class: (step == 1 ? 'is-current' : 'is-disabled')}
+    %a.stepwizard-link{href: '#'}
+      .stepwizard-number
+        1
+      .stepwizard-title
+        = t('event.participation_contact_datas.edit.title')
+  .stepwizard-step{class: (step == 2 ? 'is-current' : 'is-disabled')}
+    %a.stepwizard-link{href: '#'}
+      .stepwizard-number
+        2
+      .stepwizard-title
+        = t('event.participations.edit.title')

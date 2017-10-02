@@ -1,7 +1,7 @@
 #  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
-#  hitobito_dsj and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_dsj.
+#  https://github.com/hitobito/hitobito.
 
 app = window.App ||= {}
 
@@ -23,6 +23,7 @@ app.PersonTags = {
   updateTags: (tags) ->
     $('.person-tags').replaceWith(tags)
     app.PersonTags.hideForm()
+    $('.person-tag-add').focus();
 
   removeTag: (event) ->
     event.preventDefault()
@@ -44,4 +45,3 @@ $(document).on('click', '.person-tag-add', app.PersonTags.showForm)
 $(document).on('submit', '.person-tags-add-form', -> app.PersonTags.loading(true); return true);
 $(document).on('keydown', '.person-tags-add-form input#acts_as_taggable_on_tag_name', (event) ->
     event.keyCode == 27 && app.PersonTags.hideForm(); return true)
-

@@ -37,6 +37,12 @@ fr:
           attributes:
             body:
               placeholder_missing: 'doit contenir la variable %{placeholder}'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' est un champ obligatoire et ne peut pas être défini comme optionnel ou invisible"
+              contact_attr_invalid: "'%{attribute}'  n'est pas un attribut personnel valable"
+              contact_attr_hidden_required: "'%{attribute}' ne peut pas être défini comme optionnel ou invisible"
         event/date:
           attributes:
             finish_at:
@@ -46,6 +52,7 @@ fr:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
         event/participation:
+          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
           attributes:
             person_id:
               taken: est déjà annoncé
@@ -55,6 +62,7 @@ fr:
               not_allowed: "'%{mail_name}' ne peut pas être utilisé"
         person:
           name_missing: 'Veuillez entrer votre nom'
+          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
           attributes:
             email:
               taken: >
@@ -126,6 +134,9 @@ fr:
       event/role/cook:
         one: Cuisine
         other: Cuisine
+      event/role/helper:
+        one: Assistant/e
+        other: Assistant(e)s
       event/role/participant:
         one: Participant/-e
         other: Participant/-es
@@ -147,15 +158,15 @@ fr:
       mailing_list:
         one: abonnement
         other: Abonnements
+      note:
+        one: Note
+        other: Notes
       person:
         one: Personne
         other: Personnes
       person/add_request:
         one: Question
         other: Questions
-      person/note:
-        one: Note
-        other: Notes
       people_filter:
         one: Filtre
         other: Filtres
@@ -219,6 +230,7 @@ fr:
         nickname: Surnom
         email: Adresse e-mail principale
         emails: E-mails
+        layer_group: Niveau
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
@@ -251,10 +263,9 @@ fr:
         created_at: Date
       person/add_request/event:
         label: "%{body} dans %{group}"
+        deleted_event: Évènement supprimé
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
-      person/note:
-        text: Texte
       group:
         name: Nom
         short_name: Abréviation
@@ -298,6 +309,12 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
+        applications_cancelable: Désinscription possible
+        display_booking_info: Voir l'état des inscriptions
+      event/contact_attrs:
+        required: Obligatoire
+        optional: Optionnel
+        hidden: Ne pas afficher
       event/answer:
         answer: Réponse
       answers:
@@ -349,7 +366,12 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: réponse obligatoire
-      questions:
+      admin_questions:
+        question: Question
+        choices: Réponses possibles
+        multiple_choices: Sélection multiple
+        required: réponse obligatoire
+      application_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
@@ -359,6 +381,8 @@ fr:
         person: Personne
         type: Rôle
         participation: Personne
+      note:
+        text: Texte
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -482,6 +506,8 @@ fr:
         padding_top: Marge (en haut)
         padding_left: Marge (à gauche)
         dimensions: Nombre
+        nickname: Surnom sur l'étiquette
+        pp_post: Espace PP
   errors:
     messages:
       invalid_date: "n'est pas une date valable"

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,7 +11,7 @@ class PeopleController < CrudController
 
   self.nesting = Group
 
-  self.remember_params += [:name, :kind, :role_type_ids]
+  self.remember_params += [:name, :range, :filters, :filter_id]
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
@@ -38,11 +38,13 @@ class PeopleController < CrudController
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
-  def index
+  def index # rubocop:disable Metrics/AbcSize we support a lot of format, hence many code-branches
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
-      format.csv   { render_entries_csv(filter_entries) }
+      format.csv   { render_tabular_entries(:csv, filter_entries) }
+      format.xlsx  { render_tabular_entries(:xlsx, filter_entries) }
+      format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
     end
@@ -52,7 +54,9 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html
       format.pdf  { render_pdf([entry]) }
-      format.csv  { render_entry_csv }
+      format.csv  { render_tabular_entry(:csv) }
+      format.xlsx { render_tabular_entry(:xlsx) }
+      format.vcf  { render_vcf([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -72,14 +76,14 @@ class PeopleController < CrudController
 
   # PUT button, ajax
   def primary_group
-    entry.update_column :primary_group_id, params[:primary_group_id]
+    entry.update!(primary_group_id: params[:primary_group_id])
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry) }
       format.js
     end
   end
 
-  private
+  private_class_method
 
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
@@ -88,8 +92,9 @@ class PeopleController < CrudController
       concat(Person.order_by_name_statement) }.with_indifferent_access
   end
 
+  private
 
-  alias_method :group, :parent
+  alias group parent
 
   def find_entry
     if group && group.root?
@@ -110,7 +115,7 @@ class PeopleController < CrudController
   end
 
   def load_people_add_requests
-    if params[:kind].blank? && can?(:create, @group.roles.new)
+    if params[:range].blank? && can?(:create, @group.roles.new)
       @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
     end
   end
@@ -143,19 +148,18 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    filter = list_filter
-    entries = filter.filter_entries
+    @person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
+    entries = @person_filter.entries
     entries = entries.reorder(sort_expression) if sorting?
-    @multiple_groups = filter.multiple_groups
-    @all_count = filter.all_count if html_request?
     entries
   end
 
-  def list_filter
-    if params[:filter] == 'qualification' && index_full_ability?
-      Person::QualificationFilter.new(@group, current_user, params)
+  def list_filter_args
+    if params[:filter_id]
+      filter = PeopleFilter.for_group(group).find(params[:filter_id])
+      { name: filter.name, range: filter.range, filters: filter.filter_chain.to_params }
     else
-      Person::RoleFilter.new(@group, current_user, params)
+      params
     end
   end
 
@@ -167,29 +171,30 @@ class PeopleController < CrudController
     end
   end
 
-  def render_entries_csv(entries)
+  def render_tabular_entries(format, entries)
     full = params[:details].present? && index_full_ability?
-    render_csv(prepare_csv_entries(entries, full), full)
+    render_tabular(format, prepare_tabular_entries(entries, full), full)
   end
 
-  def prepare_csv_entries(entries, full)
+  def prepare_tabular_entries(entries, full)
     if full
-      entries.select('people.*').preload_accounts.includes(relations_to_tails: :tail)
+      entries
+        .select('people.*')
+        .preload_accounts
+        .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
+        .includes(:primary_group)
     else
-      entries.preload_public_accounts
+      entries.preload_public_accounts.includes(:primary_group)
     end
   end
 
-  def render_entry_csv
-    render_csv([entry], params[:details].present? && can?(:show_full, entry))
+  def render_tabular_entry(format)
+    render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end
 
-  def render_csv(entries, full)
-    if full
-      send_data Export::Csv::People::PeopleFull.export(entries), type: :csv
-    else
-      send_data Export::Csv::People::PeopleAddress.export(entries), type: :csv
-    end
+  def render_tabular(format, entries, full)
+    exporter = full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    send_data exporter.export(format, entries), type: format
   end
 
   def render_entries_json(entries)
@@ -197,7 +202,7 @@ class PeopleController < CrudController
                                       includes(:social_accounts).
                                       decorate,
                                     group: @group,
-                                    multiple_groups: @multiple_groups,
+                                    multiple_groups: @person_filter.multiple_groups,
                                     serializer: PeopleSerializer,
                                     controller: self)
   end
@@ -207,7 +212,7 @@ class PeopleController < CrudController
   end
 
   def index_full_ability?
-    if params[:kind].blank?
+    if params[:range].blank? || params[:range] == 'group'
       can?(:index_full_people, @group)
     else
       can?(:index_deep_full_people, @group)

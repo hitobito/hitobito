@@ -39,16 +39,27 @@ module Export::Pdf::Participation
         end
 
         if course?
-          boxed_attr(event_kind, :minimum_age) { translated_minimum_age }
-          boxed_attr(event_kind, :qualification_kinds,
-                     human_attribute_name(:preconditions, event_kind),
-                     %w(precondition participant))
+          boxed_attr(human_attribute_name(:minimum_age, event_kind)) do
+            translated_minimum_age
+          end
+          boxed_attr(human_attribute_name(:preconditions, event_kind)) do
+            precondition_qualifications_summary
+          end
         end
       end
     end
 
     def translated_minimum_age
-      I18n.t('qualifications.in_years', years: event_kind.minimum_age)
+      I18n.t('qualifications.in_years', years: event_kind.minimum_age) if event_kind.minimum_age
+    end
+
+    def precondition_qualifications_summary
+      kinds = event_kind.qualification_kinds('precondition', 'participant').group_by(&:id)
+      grouped_ids = event_kind.grouped_qualification_kind_ids('precondition', 'participant')
+      sentences = grouped_ids.collect do |ids|
+        ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence
+      end
+      sentences.join(' ' + I18n.t('event.kinds.qualifications.or').upcase + ' ')
     end
 
     def description_title
@@ -70,14 +81,10 @@ module Export::Pdf::Participation
        event_kind.qualification_kinds('precondition', 'participant')].any?(&:present?)
     end
 
-    def boxed_attr(model, attr, title = nil, args = nil)
-      title ||= human_attribute_name(attr, model)
-
-      values = Array(model.send(attr, *args)).reject(&:blank?)
-      values_text = block_given? ? yield : values.map(&:to_s).join("\n")
-
-      if values.present?
-        render_columns(-> { text title }, -> { text values_text })
+    def boxed_attr(title)
+      text = yield
+      if text.present?
+        render_columns(-> { text title }, -> { text text })
       end
     end
 

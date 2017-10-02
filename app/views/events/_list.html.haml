@@ -8,7 +8,10 @@
 = render 'shared/page_per_year'
 
 = crud_table do |t|
-  -t.col(Event.human_attribute_name(:name)) do |e|
+  - t.col(t.attr_header(:name)) do |e|
     %strong= link_to e.name, group_event_path(@group, e)
-  -t.attrs(:dates_full, :booking_info)
+  - t.attr(:dates_full)
+  - t.attr(:description_short, t.attr_header(:description))
+  - t.attr(:booking_info)
+  - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
 

@@ -846,6 +846,8 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_email_needed: 'Für den export wird eine Email Adresse benötigt.'
 
   participations:
     destroy:

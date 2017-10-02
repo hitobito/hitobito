@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -135,27 +135,27 @@ describe PeopleController do
           end
         end
 
-        context '.csv' do
-          it 'exports address csv files' do
-            get :index, group_id: group, format: :csv
-
-            expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*Privat;.*Office/)
-            expect(@response.body).to match(/^Top;Leader;.*/)
-            expect(@response.body).to match(/123;789/)
-            expect(@response.body).not_to match(/skypefoo/)
-            expect(@response.body).not_to match(/Zusätzliche Angaben/)
-            expect(@response.body).not_to match(/Mobile/)
-            expect(@response.body).not_to match(/;456;/)
+        context 'background job' do
+          it 'exports csv' do
+            expect do
+              get :index, group_id: group, format: :csv
+              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+            end.to change(Delayed::Job, :count).by(1)
           end
 
-          it 'exports full csv files' do
-            get :index, group_id: group, details: true, format: :csv
+          it 'exports xlsx' do
+            expect do
+              get :index, group_id: group, format: :xlsx
+              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+            end.to change(Delayed::Job, :count).by(1)
+          end
 
-            expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*;Zusätzliche Angaben;.*Privat;.*Mobile;.*Office;.*Facebook;.*Skype/)
-            expect(@response.body).to match(/^Top;Leader;.*;bla bla/)
-            expect(@response.body).to match(/123;456;789;.*facefoo;skypefoo/)
+          it 'does not export if no mail is given' do
+            expect_any_instance_of(Person).to receive(:email).at_least(1).times.and_return(nil)
+            expect do
+              get :index, group_id: group, format: :csv
+              expect(flash[:alert]).to match(/wird eine Email Adresse benötigt/)
+            end.to change(Delayed::Job, :count).by(0)
           end
         end
         
@@ -260,17 +260,6 @@ describe PeopleController do
             expect(assigns(:person_add_requests)).to be_nil
           end
 
-          it 'exports full csv when types given and ability exists' do
-            get :index, group_id: group,
-                        filters: { role: { role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-') } },
-                        range: 'layer',
-                        details: true,
-                        format: :csv
-
-            expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*Zusätzliche Angaben/)
-          end
-
           context 'json' do
             render_views
 
@@ -283,23 +272,6 @@ describe PeopleController do
               person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
               expect(person['links']['roles'].size).to eq(2)
             end
-          end
-        end
-
-        context 'with contact data' do
-          before { sign_in(@tg_member) }
-
-          it 'exports only address csv when types given and no ability exists' do
-            get :index, group_id: group,
-                        filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id, Group::BottomLayer::Member.id].join('-') } },
-                        range: 'layer',
-                        details: true,
-                        format: :csv
-
-            expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Vorname;Nachname;.*/)
-            expect(@response.body).not_to match(/Zusätzliche Angaben/)
-            expect(@response.body.split("\n").size).to eq(2)
           end
         end
       end

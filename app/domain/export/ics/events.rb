@@ -10,14 +10,12 @@ module Export::Ics
 
     def generate(events)
       ical = Icalendar::Calendar.new
-      ical_events = events.map { |event| generate_ical_from_event(event) }.flatten
+      ical_events = events.map { |event| generate_ical_events(event) }.flatten
       ical_events.each { |event| ical.add_event(event) }
       ical.to_ical
     end
 
-    private
-
-    def generate_ical_from_event(event)
+    def generate_ical_events(event)
       event.dates.map do |event_date|
         Icalendar::Event.new.tap do |ical_event|
           ical_event.dtstart = event_date.start_at

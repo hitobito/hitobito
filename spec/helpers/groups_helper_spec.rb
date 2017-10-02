@@ -11,21 +11,24 @@ describe GroupsHelper, type: :helper do
   let(:button_label) { 'Export Button' }
 
   describe '#export_events_ical_button' do
-    it do
+    it 'displays ical export button' do
       expect(helper).to receive_messages(can?: true)
       expect(I18n).to receive_messages(t: button_label)
-      expect(helper).to receive(:action_button).with(button_label, hash_including({ format: :ics }), :calendar).and_return(button_label)
+      expect(helper).to receive(:action_button)
+        .with(button_label, hash_including(format: :ics), :calendar)
+        .and_return(button_label)
       expect(helper.export_events_ical_button).to eq(button_label)
     end
   end
 
   describe '#export_events_button' do
-    it do
+    it 'displays csv export button' do
       expect(helper).to receive_messages(can?: true)
       expect(I18n).to receive_messages(t: button_label)
-      expect(helper).to receive(:action_button).with(button_label, hash_including({ format: :csv }), :download).and_return(button_label)
+      expect(helper).to receive(:action_button)
+        .with(button_label, hash_including(format: :csv), :download)
+        .and_return(button_label)
       expect(helper.export_events_button).to eq(button_label)
     end
   end
-
 end

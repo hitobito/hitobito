@@ -7,19 +7,6 @@
 
 module GroupsHelper
 
-  # def new_event_button
-  #   event_type = find_event_type
-  #   return unless event_type
-
-  #   event = event_type.new
-  #   event.groups << @group
-  #   if can?(:new, event)
-  #     action_button(t("events.global.link.add_#{event_type.name.underscore}"),
-  #                   new_group_event_path(@group, event: { type: event_type.sti_name }),
-  #                   :plus)
-  #   end
-  # end
-
   def export_events_ical_button
     type = params[:type].presence || 'Event'
     if can?(:"export_#{type.underscore.pluralize}", @group)

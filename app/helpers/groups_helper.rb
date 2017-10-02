@@ -7,6 +7,7 @@
 
 module GroupsHelper
 
+<<<<<<< HEAD
   def new_event_button
     event_type = find_event_type
     return unless event_type
@@ -36,19 +37,13 @@ module GroupsHelper
     end
   end
 
+=======
+>>>>>>> b427aa076b76460892f01b175dd36b3d1a892329
   def tab_person_add_request_label(group)
     label = t('activerecord.models.person/add_request.other')
     count = Person::AddRequest.for_layer(group).count
     label << " (#{count})" if count > 0
     label.html_safe
-  end
-
-  private
-
-  def find_event_type
-    @group.event_types.find do |t|
-      (params[:type].blank? && t == Event) || t.sti_name == params[:type]
-    end
   end
 
 end

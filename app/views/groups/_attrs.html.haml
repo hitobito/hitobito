@@ -8,11 +8,13 @@
     %h2= t('.contact_details')
     = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
 
-
     %h2= t('.additional_information')
     = render_attrs(entry, :type_name)
     = render_extensions :attrs
     = render_present_attrs(entry, :created_info, :updated_info, :deleted_info) if can?(:show_details, @group)
+
+    - if can?(:index_notes, entry)
+      = render 'notes/section', create_path: group_notes_path(@group)
 
   %aside.span5.offset1
     = render 'child_groups'

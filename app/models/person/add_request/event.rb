@@ -24,10 +24,15 @@ class Person::AddRequest::Event < Person::AddRequest
   validates :role_type, presence: true
 
   def to_s(_format = :default)
-    group = body.groups.first
-    event_label = body_label
-    group_label = "#{group.model_name.human} #{group}"
-    self.class.human_attribute_name(:label, body: event_label, group: group_label)
+    if body
+      group = body.groups.first
+      event_label = body_label
+      group_label = "#{group.model_name.human} #{group}"
+      self.class.human_attribute_name(:label, body: event_label, group: group_label)
+    else
+      # event was deleted in the mean time
+      self.class.human_attribute_name(:deleted_event)
+    end
   end
 
 end

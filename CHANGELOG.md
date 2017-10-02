@@ -1,5 +1,39 @@
 # Hitobito Changelog
 
+## Version 1.X
+
+*   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+
+
+## Version 1.17
+
+*   Export der Abonnenten einer Mailingliste wird im Hintergrund erstellt und per mail versendet
+
+
+## Version 1.16
+
+*   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+*   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.
+*   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
+*   Anlässe können dupliziert werden.
+*   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
+*   Sichtbarkeit der Anmeldungen auf Kursliste für alle Personen ist pro Kurs konfigurierbar.
+*   Aktualisieren der Kontaktdaten bei der Eventanmeldung
+*   Festlegen von Pflichtangaben zur Person bei der Eventanmeldung
+*   Anmeldestand kann für alle sichtbar gemacht werden
+
+
+## Version 1.15
+
+*   Neue Rolle "Helfer/-in" für Anlässe.
+*   Unterschriften können nun bei allen Anlässen eingefordert werden.
+*   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
+*   Notizen ebenfalls auf Gruppen möglich.
+*   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
+*   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
+*   Anmeldedatum wird bei Anmeldeknopf auf Anlassliste angezeigt.
+
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.
@@ -9,10 +43,16 @@
 *   Benutzer/-innen können personalisierte Etiketten erstellen.
 *   Übername und ein P.P. Post Feld können den Etiketten hinzugefügt werden.
 *   Globale Suche nach Anlassnamen und Kursnummern.
+*   Excel-Export für Personen und Anlässe.
+*   CSV- und Excel-Exporte von Personen mit allen Angaben enthalten aktuelle Qualifikationen.
+*   Der Verlauf einer Person zeigt neu die Rollen so an, dass die Gruppen auch die übergeordneten Ebenen anzeigt.
+*   Der Verlauf einer Person wird neu nach der Gruppe inkl. übergeordneter Ebenen sortiert.
+
 
 ## Version 1.13
 
 *   Personen können in Mailinglisten nach Tags gefiltert werden.
+
 
 ## Version 1.12
 
@@ -102,4 +142,3 @@
 *   Separat definierbare Qualifikationstypen für Kursleiter.
 *   Pflichtfelder für Anlass Fragen.
 *   Mehrfachauswahl bei Personen Filter und Abo Listen.
-

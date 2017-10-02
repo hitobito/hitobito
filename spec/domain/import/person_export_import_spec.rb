@@ -55,7 +55,7 @@ describe 'export import person' do
   end
 
   def export(person)
-    Export::Csv::People::PeopleFull.export([person])
+    Export::Tabular::People::PeopleFull.csv([person])
   end
 
   def import(csv)

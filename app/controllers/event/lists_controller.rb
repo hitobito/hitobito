@@ -11,7 +11,7 @@ class Event::ListsController < ApplicationController
   DEFAULT_GROUPING = ->(event) { I18n.l(event.dates.first.start_at, format: :month_year) }
 
   attr_reader :group_id
-  helper_method :group_id, :kind_used?, :nav_left
+  helper_method :group_id, :kind_used?, :nav_left, :display_any_booking_info?
 
   skip_authorize_resource only: [:events, :courses]
 
@@ -31,7 +31,10 @@ class Event::ListsController < ApplicationController
         @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
       end
       format.csv do
-        render_courses_csv(limited_courses_scope)
+        render_tabular(:csv, limited_courses_scope)
+      end
+      format.xlsx do
+        render_tabular(:xlsx, limited_courses_scope)
       end
     end
   end
@@ -51,8 +54,8 @@ class Event::ListsController < ApplicationController
     Hash[courses.sort]
   end
 
-  def render_courses_csv(courses)
-    send_data Export::Csv::Events::List.export(courses), type: :csv
+  def render_tabular(format, courses)
+    send_data Export::Tabular::Events::List.export(format, courses), type: format
   end
 
   def set_group_vars
@@ -65,19 +68,32 @@ class Event::ListsController < ApplicationController
   end
 
   def upcoming_user_events
-    Event.upcoming.
-          in_hierarchy(current_user).
-          includes(:dates, :groups).
-          where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
-          order('event_dates.start_at ASC')
+    Event.
+      upcoming.
+      in_hierarchy(current_user).
+      includes(:dates, :groups).
+      where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
+      order('event_dates.start_at ASC')
   end
 
   def default_user_course_group
-    Group.course_offerers.
-          where(id: current_user.groups_hierarchy_ids).
-          where('groups.id <> ?', Group.root.id).
-          select(:id).
-          first
+    course_group_from_primary_layer || course_group_from_hierarchy
+  end
+
+  def course_group_from_primary_layer
+    Group.
+      course_offerers.
+      where(id: current_user.primary_group.try(:layer_group_id)).
+      first
+  end
+
+  def course_group_from_hierarchy
+    Group.
+      course_offerers.
+      where(id: current_user.groups_hierarchy_ids).
+      where('groups.id <> ?', Group.root.id).
+      select(:id).
+      first
   end
 
   def limited_courses_scope(scope = course_scope)
@@ -89,11 +105,11 @@ class Event::ListsController < ApplicationController
   end
 
   def course_scope
-    Event::Course
-      .includes(:groups, additional_course_includes)
-      .order(course_ordering)
-      .in_year(year)
-      .list
+    Event::Course.
+      includes(:groups, additional_course_includes).
+      order(course_ordering).
+      in_year(year).
+      list
   end
 
   def course_grouping
@@ -114,6 +130,10 @@ class Event::ListsController < ApplicationController
 
   def nav_left
     @nav_left || params[:action]
+  end
+
+  def display_any_booking_info?
+    @grouped_events.values.flatten.any? { |e| e.display_booking_info? }
   end
 
   def authorize_courses

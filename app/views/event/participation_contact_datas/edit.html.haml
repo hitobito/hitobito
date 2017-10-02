@@ -1,0 +1,43 @@
+-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+-#  hitobito_pbs and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_pbs.
+
+- title t('.title')
+
+= render 'event/participations/step_wizard', step: 1
+
+= crud_form(entry,
+  { cancel_url: group_event_path(group, event),
+    buttons_bottom: true,
+    submit_label: t('.save'),
+    url: contact_data_group_event_participations_path(group, event,
+      {event_role: { type: params[:event_role][:type] }})}) do |f|
+
+  = field_set_tag do
+    - [:first_name, :last_name, :nickname, :company_name].each do |a|
+      = f.labeled_input_field(a) if entry.show_attr?(a)
+
+  = render 'address_fields', f: f
+
+  - if entry.show_attr?(:email)
+    = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+
+  - Event::ParticipationContactData.contact_associations.each do |a|
+    = field_set_tag do
+      - unless entry.hidden_contact_attrs.include?(a)
+        = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
+
+  = field_set_tag do
+    - if entry.show_attr?(:gender)
+      = f.labeled(:gender) do
+        - (Person::GENDERS + ['']).each do |key|
+          = f.inline_radio_button(:gender, key, entry.gender_label(key))
+
+    - if entry.show_attr?(:birthday)
+      = f.labeled_string_field(:birthday,
+                               value: f.date_value(:birthday),
+                               help_inline: t('people.fields.format_birthday'),
+                               class: 'span2')
+
+  = render_extensions :fields, locals: { f: f }

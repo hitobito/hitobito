@@ -18,6 +18,8 @@ class Event::Answer < ActiveRecord::Base
 
   attr_writer :answer_required
 
+  delegate :admin?, to: :question
+
   belongs_to :participation
   belongs_to :question
 
@@ -25,7 +27,7 @@ class Event::Answer < ActiveRecord::Base
   validates_by_schema
   validates :question_id, uniqueness: { scope: :participation_id }
   validates :answer, presence: { if: lambda do
-    question.required? && participation.enforce_required_answers
+    question && question.required? && participation.enforce_required_answers
   end }
   validate :assert_answer_is_in_choice_items
 

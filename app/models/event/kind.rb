@@ -58,11 +58,16 @@ class Event::Kind < ActiveRecord::Base
   end
 
   def qualification_kinds(category, role)
-    QualificationKind.includes(:translations).
-                      joins(:event_kind_qualification_kinds).
-                      where(event_kind_qualification_kinds: { event_kind_id: id,
-                                                              category: category,
-                                                              role: role })
+    QualificationKind.
+      includes(:translations).
+      joins(:event_kind_qualification_kinds).
+      where(event_kind_qualification_kinds: { event_kind_id: id,
+                                              category: category,
+                                              role: role })
+  end
+
+  def grouped_qualification_kind_ids(category, role)
+    event_kind_qualification_kinds.grouped_qualification_kind_ids(category, role)
   end
 
   # Soft destroy if events exist, otherwise hard destroy

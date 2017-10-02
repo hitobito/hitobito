@@ -44,6 +44,12 @@ class GroupDecorator < ApplicationDecorator
     h.safe_join(links, ' / ')
   end
 
+  # compute layers and concat group names using a '/'
+  def name_with_layer
+    group_names = with_layer.map { |g| g.to_s }
+    group_names.join(' / ')
+  end
+
   def possible_events
     klass.event_types
   end

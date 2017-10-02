@@ -32,6 +32,7 @@
     }
   }
 
+
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
@@ -49,6 +50,12 @@
   &.btn-info, &.btn-info:hover,
   &.btn-inverse, &.btn-inverse:hover {
     color: $white;
+
+    .icon,
+    [class^="icon-"],
+    [class*=" icon-"] {
+      background-image: image-url("glyphicons-halflings-white.png");
+    }
   }
 }
 
@@ -143,6 +150,11 @@ input[type="color"],
     border-color: $focusColor;
     @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $focusColor);
   }
+}
+
+select {
+  height: 30px;
+  line-height: 30px;
 }
 
 .form-inline {
@@ -264,6 +276,9 @@ textarea {
 
 .controls > .text {
   line-height: 29px;
+  padding-bottom: 8px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .remove_nested_fields {
@@ -395,5 +410,51 @@ input.switcher {
   &:checked + label:after {
     left: 20px;
     box-shadow: inset 0 0 0 1px $green, 0 1px 2px rgba(0, 0, 0, .2);
+  }
+}
+
+.accordion-heading {
+  .header {
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+
+  a {
+    color: $black;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.accordion-body {
+  legend {
+    border-bottom: 0;
+    font-size: 1.12em;
+  }
+
+  fieldset:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#roles {
+  legend + .layer {
+    margin-top: 0;
+  }
+
+  .layer {
+    + .layer {
+      margin-top: 2em;
+    }
+
+    .control-group {
+      margin-top: 0;
+    }
+
+    h4, h5 {
+      cursor: pointer;
+    }
   }
 }

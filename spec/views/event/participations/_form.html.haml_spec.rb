@@ -34,6 +34,7 @@ describe 'event/participations/_form.html.haml' do
     allow(controller).to receive_messages(current_user: user)
     assign(:event, event.decorate)
     assign(:group, group)
+    assign(:answers, participation.answers)
   end
 
   context 'course' do

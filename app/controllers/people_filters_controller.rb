@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,13 +9,11 @@ class PeopleFiltersController < CrudController
 
   self.nesting = Group
 
-  self.permitted_attrs = [:name, :role_type_ids, role_types: [], role_type_ids: []]
-
   decorates :group
 
-  hide_action :index, :show, :edit, :update
+  hide_action :index, :show
 
-  skip_authorize_resource only: [:create, :qualification]
+  skip_authorize_resource only: [:create]
 
   # load group before authorization
   prepend_before_action :parent
@@ -24,12 +22,18 @@ class PeopleFiltersController < CrudController
 
   helper_method :people_list_path
 
+  def new
+    assign_attributes
+    super
+  end
+
   def create
     if params[:button] == 'save'
       authorize!(:create, entry)
-      super(location: result_path)
+      super
     else
       authorize!(:new, entry)
+      assign_attributes
       redirect_to result_path
     end
   end
@@ -38,14 +42,9 @@ class PeopleFiltersController < CrudController
     super(location: people_list_path)
   end
 
-  def qualification
-    authorize!(:index_full_people, group)
-    @qualification_kinds = QualificationKind.list.without_deleted
-  end
-
   private
 
-  alias_method :group, :parent
+  alias group parent
 
   def build_entry
     filter = super
@@ -53,21 +52,31 @@ class PeopleFiltersController < CrudController
     filter
   end
 
+  def return_path
+    super || people_list_path(filter_id: entry.id)
+  end
+
   def result_path
-    assign_attributes
-    params = {}
-    if entry.role_types.present?
-      params = { name: entry.name, role_type_ids: entry.role_type_ids_string, kind: :deep }
+    search_params = {}
+    if entry.filter_chain.present?
+      search_params = {
+        name: entry.name,
+        range: entry.range || 'deep',
+        filters: entry.filter_chain.to_params
+      }
     end
-    people_list_path(params)
+    people_list_path(search_params)
   end
 
   def compose_role_lists
     @role_types = Role::TypeList.new(group.class)
+    @qualification_kinds = QualificationKind.list.without_deleted
   end
 
-  def permitted_params
-    model_params ? model_params.permit(permitted_attrs) : {}
+  def assign_attributes
+    entry.name = params[:name] || (params[:people_filter] && params[:people_filter][:name])
+    entry.range = params[:range]
+    entry.filter_chain = params[:filters]
   end
 
   def people_list_path(options = {})

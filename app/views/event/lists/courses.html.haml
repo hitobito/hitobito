@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -6,7 +6,7 @@
 - title t('.title')
 - manager = can?(:list_all, Event::Course)
 
-%p= t('.explanation')
+%p= t('.explanation') unless can?(:list_all, Event::Course) 
 
 - content_for :toolbar do
   - if manager
@@ -16,19 +16,20 @@
 
 %p
   - if can?(:export_list, Event::Course)
-    = action_button(t('event.lists.courses.csv_export_button'), params.merge(format: :csv), :download)
+    = Dropdown::Event::EventsExport.new(self, params).to_s
     = render_extensions :buttons
 
 
 #main
   %section
-    = grouped_table(@grouped_events, manager ? 4 : 3) do |event|
+    = grouped_table(@grouped_events, manager || display_any_booking_info? ? 4 : 3) do |event|
       %td
         %strong
           = event.labeled_link
       %td= event.dates_full
+      - if manager || display_any_booking_info?
+        %td= manager || event.display_booking_info? ? event.booking_info : ''
       - if manager
-        %td= event.booking_info
         %td= event.state_translated
       - else
-        %td= button_action_event_apply(event)
+        %td.center= button_action_event_apply(event)

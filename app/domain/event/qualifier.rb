@@ -25,7 +25,7 @@ class Event::Qualifier
 
   attr_reader :created, :prolonged, :participation, :role
 
-  delegate :qualified?, :person, :event, to: :participation
+  delegate :person, :event, to: :participation
   delegate :qualification_date, to: :event
 
   def initialize(participation, role)

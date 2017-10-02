@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,7 +32,7 @@ gem 'icalendar'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
-gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
+gem 'mysql2', '0.4.9'
 gem 'nested_form'
 gem 'oat'
 gem 'paper_trail'
@@ -45,12 +45,14 @@ gem 'rack'
 gem 'rails_autolink'
 gem 'config', '< 1.1.0' # requires ruby 2
 gem 'rails-i18n'
+gem 'rubyzip'
 gem 'seed-fu'
 gem 'simpleidn'
 gem 'sqlite3' # for development, test and production when generating assets
 gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
+gem 'vcard'
 gem 'wagons'
 
 # load after others because of active record inherited alias chain.
@@ -99,6 +101,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

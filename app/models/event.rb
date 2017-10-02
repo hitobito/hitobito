@@ -273,17 +273,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     kind_class == Event::Kind && kind.present?
   end
 
-<<<<<<< HEAD
-  def ical_events
-    dates.map do |event_date|
-      Icalendar::Event.new.tap do |ical_event|
-        ical_event.dtstart = event_date.start_at
-        ical_event.dtend   = event_date.finish_at
-        ical_event.summary = "#{name}: #{event_date.label}"
-        ical_event.location = event_date.location || location
-        ical_event.description = description
-        ical_event.contact = contact
-=======
   def duplicate # rubocop:disable Metrics/MethodLength splitting this up does not make it better
     dup.tap do |event|
       event.groups = groups
@@ -298,13 +287,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       end
       admin_questions.each do |q|
         event.admin_questions << q.dup
->>>>>>> b427aa076b76460892f01b175dd36b3d1a892329
       end
     end
   end
 
-<<<<<<< HEAD
-=======
   # Overwrite to handle improper characters
   def save(*args)
     super
@@ -314,7 +300,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     false
   end
 
->>>>>>> b427aa076b76460892f01b175dd36b3d1a892329
   private
 
   def assert_type_is_allowed_for_groups

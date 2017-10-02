@@ -52,7 +52,7 @@ class EventsController < CrudController
   def show
     respond_to do |format|
       format.html  { entry }
-      format.ics { render_ical(entry) }
+      format.ics { render_ical([entry]) }
     end
   end
 
@@ -127,9 +127,7 @@ class EventsController < CrudController
   end
 
   def render_ical(entries)
-    ical_data = Icalendar::Calendar.new
-    entries.map(&:ical_events).flatten.each { |entry| ical_data.add_event(entry) }
-    send_data ical_data.to_ical, type: :ics
+    send_data ::Export::Ics::Events.new.generate(entries), type: :ics, disposition: :inline
   end
 
   def typed_group_events_path(group, event_type, options = {})

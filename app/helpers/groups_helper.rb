@@ -7,19 +7,18 @@
 
 module GroupsHelper
 
-<<<<<<< HEAD
-  def new_event_button
-    event_type = find_event_type
-    return unless event_type
+  # def new_event_button
+  #   event_type = find_event_type
+  #   return unless event_type
 
-    event = event_type.new
-    event.groups << @group
-    if can?(:new, event)
-      action_button(t("events.global.link.add_#{event_type.name.underscore}"),
-                    new_group_event_path(@group, event: { type: event_type.sti_name }),
-                    :plus)
-    end
-  end
+  #   event = event_type.new
+  #   event.groups << @group
+  #   if can?(:new, event)
+  #     action_button(t("events.global.link.add_#{event_type.name.underscore}"),
+  #                   new_group_event_path(@group, event: { type: event_type.sti_name }),
+  #                   :plus)
+  #   end
+  # end
 
   def export_events_ical_button
     type = params[:type].presence || 'Event'
@@ -37,8 +36,6 @@ module GroupsHelper
     end
   end
 
-=======
->>>>>>> b427aa076b76460892f01b175dd36b3d1a892329
   def tab_person_add_request_label(group)
     label = t('activerecord.models.person/add_request.other')
     count = Person::AddRequest.for_layer(group).count

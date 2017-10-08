@@ -24,14 +24,6 @@ module Export::Pdf::List
 #      I18n.t("event.participations.print.heading_#{event.class.name.underscore}", year: year)
     end
 
-    def application_name
-      Settings.application.name
-    end
-
-    def year
-      event.dates.map(&:start_at).map(&:year).min
-    end
-
     def render_image
     end
 

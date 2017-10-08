@@ -135,6 +135,7 @@ de:
     xlsx: 'Excel'
     vcard: 'vCard'
     labels: 'Etiketten'
+    pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
     everything: 'Alle Angaben'

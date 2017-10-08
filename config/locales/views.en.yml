@@ -99,6 +99,7 @@ en:
     csv: 'CSV'
     xlsx: 'Excel'
     labels: 'Labels'
+    pdf: 'PDF'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'

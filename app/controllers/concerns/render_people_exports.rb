@@ -37,7 +37,11 @@ module Concerns
     end
 
     def generate_pdf(people)
-      Export::Pdf::Labels.new(find_and_remember_label_format).generate(people)
+      if params[:label_format_id]
+        Export::Pdf::Labels.new(find_and_remember_label_format).generate(people)
+      else
+        Export::Pdf::List.render(people)
+      end
     end
     
     def generate_vcf(people)

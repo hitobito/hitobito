@@ -204,13 +204,13 @@ class Person < ActiveRecord::Base
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if nickname?
+    name << " / #{nickname}" if nickname? && format != :print_list
     name
   end
 
   def full_name(format = :default)
     case format
-    when :list then "#{last_name} #{first_name}".strip
+    when :list, :print_list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip
     end
   end

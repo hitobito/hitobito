@@ -20,7 +20,7 @@ module Export::Pdf::List
     private
 
     def heading
-      "Mitgliederliste"
+      "Mitgliederliste " + group.name
 #      I18n.t("event.participations.print.heading_#{event.class.name.underscore}", year: year)
     end
 

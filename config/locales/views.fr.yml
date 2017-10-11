@@ -99,7 +99,6 @@ fr:
     button: 'Exporter'
     csv: 'CSV'
     xlsx: 'Excel'
-    vcard: 'vCard'
     labels: 'Etiquettes'
     pdf: 'PDF'
     emails: 'Adresses électroniques'

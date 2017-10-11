@@ -9,30 +9,32 @@ module Export::Pdf
   module List
 
     class Runner
-      def render(contactables)
+      def render(contactables, group)
         pdf = Prawn::Document.new(page_size: 'A4',
-                                  page_layout: :landscape,
-                                  margin: 2.cm)
-        customize(pdf)
-        sections.each { |section| section.new(pdf, contactables).render }
+                                  page_layout: :portrait,
+                                  margin: 1.cm)
+        pdf.font_size 9
+        sections.each { |section| section.new(pdf, contactables, group).render }
         pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
                          at: [0, 0],
-                         align: :right,
-                         size: 9)
-        pdf.render
-
+                         align: :right)
+    
+        pdf.repeat(:all) {
+          pdf.bounding_box([0, 0], width: pdf.bounds.width, height: 2.cm) do
+            pdf.text timestamp     
+          end
+        }
         pdf.render
       end
 
       private
 
-      def customize(pdf)
-        pdf.font_size 9
-        pdf
-      end
-
       def sections
         [Header, People]
+      end
+      
+      def timestamp
+        Time.now.strftime '%d.%m.%Y %H:%M'
       end
 
     end
@@ -41,8 +43,8 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(contactables)
-      runner.new.render(contactables)
+    def self.render(contactables, group)
+      runner.new.render(contactables, group)
     end
 
   end

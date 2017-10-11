@@ -9,18 +9,29 @@ module Export::Pdf::List
   class People < Section
 
     def render
-      pdf.table(
-        contactables.map {|p| person_row(p)}.unshift(table_header) , :header => true, :cell_style => {:borders => [], :inline_format => true})
+      bounding_box([bounds.left, bounds.top], width: bounds.width, height: bounds.height - 5.mm) do
+        move_down_line 40; # first page has a header
+        data = contactables.map {|p| person_row(p)}.unshift(table_header)
+        pdf.table(data, :header => true) do
+          rows(0..data.length).borders = [:bottom]
+          rows(1..data.length).border_lines = [:dotted]
+          cells.padding = [1, 1, 1, 5]
+          cells.overflow = :shrink_to_fit
+          cells.single_line = true
+          row(0).font_style = :bold
+          row(0).border_lines = [:solid]
+        end
+      end
     end
 
     private
 
     def table_header
-      ["<b>Name</b>", "<b>Adresse</b>", "<b>E-Mail</b>", "<b>Privat</b>", "<b>Mobil</b>"]
+      ["Name", "Adresse", "E-Mail", "Privat", "Mobil"]
     end
 
     def person_row(person)
-      [person.person_name, address(person), person.email, phone_numbers(person, %w(Privat)), phone_numbers(person, %w(Mobil))]
+      [person.to_s(:print_list), address(person), person.email, phone_numbers(person, %w(Privat)), phone_numbers(person, %w(Mobil))]
     end
 
     def address(person)

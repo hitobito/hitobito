@@ -12,10 +12,6 @@ class Export::ExportBaseJob < BaseJob
 
   PARAMETERS = [:format, :exporter, :user_id, :tempfile_name].freeze
 
-  def initialize
-    super()
-  end
-
   def perform
     set_locale
     file, format = export_file_and_format

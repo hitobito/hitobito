@@ -380,6 +380,7 @@ de:
     preconditions: 'Erforderliche Qualifikationen'
     tabs:
       participants: 'Teilnehmende'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

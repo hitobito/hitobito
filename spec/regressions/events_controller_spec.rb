@@ -92,13 +92,17 @@ describe EventsController, type: :controller do
       let(:group) { groups(:top_layer) }
 
       it 'renders events csv' do
-        get :index, group_id: group.id, format: :csv, year: 2012
-        expect(response.body.lines.to_a.size).to eq(2)
+        expect do
+          get :index, group_id: group.id, format: :csv, year: 2012
+          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+        end.to change(Delayed::Job, :count).by(1)
       end
 
       it 'renders courses csv' do
-        get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
-        expect(response.body.lines.to_a.size).to eq(2)
+        expect do
+          get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
+          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+        end.to change(Delayed::Job, :count).by(1)
       end
 
     end

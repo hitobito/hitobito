@@ -49,6 +49,14 @@ CustomContent.seed_once(:key,
   { key: Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT,
     placeholders_required: nil,
     placeholders_optional: 'recipient-name, mailing-list-name' },
+
+  { key: Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT,
+    placeholders_required: nil,
+    placeholders_optional: 'recipient-name' },
+
+  { key: Export::EventsExportMailer::CONTENT_EVENTS_EXPORT,
+    placeholders_required: nil,
+    placeholders_optional: 'recipient-name' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -62,6 +70,8 @@ add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTEN
 add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
 add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
 subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT).id
+people_export_id = CustomContent.get(Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT).id
+events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_EXPORT).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -301,5 +311,43 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: subscriptions_export_id,
    locale: 'it',
    label: 'Export der Abonnenten' },
+
+  {custom_content_id: people_export_id,
+   locale: 'de',
+   label: 'Export der Personen',
+   subject: 'Export der Personen',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Der Export der Personen ist fertig und an dieser Mail angehängt.<br/><br/>" },
+
+  {custom_content_id: people_export_id,
+   locale: 'en',
+   label: 'Export of People' },
+
+  {custom_content_id: people_export_id,
+   locale: 'fr',
+   label: 'Export der Personen' },
+
+  {custom_content_id: people_export_id,
+   locale: 'it',
+   label: 'Export der Personen' },
+
+  {custom_content_id: events_export_id,
+   locale: 'de',
+   label: 'Export der Anlässe',
+   subject: 'Export der Anlässe',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Der Export der Anlässe ist fertig und an dieser Mail angehängt.<br/><br/>" },
+
+  {custom_content_id: events_export_id,
+   locale: 'en',
+   label: 'Export of Events' },
+
+  {custom_content_id: events_export_id,
+   locale: 'fr',
+   label: 'Export der Anlässe' },
+
+  {custom_content_id: events_export_id,
+   locale: 'it',
+   label: 'Export der Anlässe' },
 
 )

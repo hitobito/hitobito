@@ -57,6 +57,10 @@ CustomContent.seed_once(:key,
   { key: Export::EventsExportMailer::CONTENT_EVENTS_EXPORT,
     placeholders_required: nil,
     placeholders_optional: 'recipient-name' },
+
+  { key: Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT,
+    placeholders_required: nil,
+    placeholders_optional: 'recipient-name' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -72,6 +76,7 @@ add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_AD
 subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT).id
 people_export_id = CustomContent.get(Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT).id
 events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_EXPORT).id
+event_participations_export_id = CustomContent.get(Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -349,5 +354,24 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: events_export_id,
    locale: 'it',
    label: 'Export der Anlässe' },
+
+  {custom_content_id: event_participations_export_id,
+   locale: 'de',
+   label: 'Export der Event Teilnehmer',
+   subject: 'Export der Event Teilnehmer',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Der Export der Event Teilnehmer ist fertig und an dieser Mail angehängt.<br/><br/>" },
+
+  {custom_content_id: event_participations_export_id,
+   locale: 'en',
+   label: 'Export of Event Participants' },
+
+  {custom_content_id: event_participations_export_id,
+   locale: 'fr',
+   label: 'Export der Event Teilnehmer' },
+
+  {custom_content_id: event_participations_export_id,
+   locale: 'it',
+   label: 'Export der Event Teilnehmer' },
 
 )

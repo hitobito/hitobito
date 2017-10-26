@@ -357,10 +357,10 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: event_participations_export_id,
    locale: 'de',
-   label: 'Export der Event Teilnehmer',
-   subject: 'Export der Event Teilnehmer',
+   label: 'Export der Event-Teilnehmer',
+   subject: 'Export der Event-Teilnehmer',
    body: "Hallo {recipient-name}<br/><br/>" \
-         "Der Export der Event Teilnehmer ist fertig und an dieser Mail angehängt.<br/><br/>" },
+         "Der Export der Event-Teilnehmer ist fertig und an dieser Mail angehängt.<br/><br/>" },
 
   {custom_content_id: event_participations_export_id,
    locale: 'en',
@@ -368,10 +368,10 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: event_participations_export_id,
    locale: 'fr',
-   label: 'Export der Event Teilnehmer' },
+   label: 'Export der Event-Teilnehmer' },
 
   {custom_content_id: event_participations_export_id,
    locale: 'it',
-   label: 'Export der Event Teilnehmer' },
+   label: 'Export der Event-Teilnehmer' },
 
 )

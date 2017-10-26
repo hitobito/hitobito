@@ -119,7 +119,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    Export::EventParticipationsExportJob.new(format, current_person.id, event, params).enqueue!
+    Export::EventParticipationsExportJob.new(format, current_person.id, event.id, params).enqueue!
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 

@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event, params) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, params) }
 
   let(:participation) { event_participations(:top) }
   let(:user)          { participation.person }
@@ -29,7 +29,7 @@ describe Export::EventParticipationsExportJob do
         subject.perform
       end.to change { ActionMailer::Base.deliveries.size }.by 1
 
-      expect(last_email.subject).to eq('Export der Event Teilnehmer')
+      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
 
       lines = last_email.attachments.first.body.to_s.split("\n")
       expect(lines.size).to eq(2)
@@ -77,7 +77,7 @@ describe Export::EventParticipationsExportJob do
         subject.perform
       end.to change { ActionMailer::Base.deliveries.size }.by 1
 
-      expect(last_email.subject).to eq('Export der Event Teilnehmer')
+      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
 
       lines = last_email.attachments.first.body.to_s.split("\n")
       expect(lines.size).to eq(2)
@@ -95,7 +95,7 @@ describe Export::EventParticipationsExportJob do
         subject.perform
       end.to change { ActionMailer::Base.deliveries.size }.by 1
 
-      expect(last_email.subject).to eq('Export der Event Teilnehmer')
+      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
 
       file = last_email.attachments.first
       expect(file.content_type).to match(/officedocument.spreadsheetml.sheet/)

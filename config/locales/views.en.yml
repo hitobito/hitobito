@@ -660,6 +660,11 @@ en:
       cannot_fit: The addresses do not fit into the defined label format.
     print:
       heading: "Members %{group}"
+      name: "Name"
+      address: "Address"
+      email: "E-Mail"
+      home_phone: "Home"
+      mobile_phone: "Mobile"
     roles:
       title: Active roles
     roles_aside:

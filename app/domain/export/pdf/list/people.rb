@@ -27,7 +27,7 @@ module Export::Pdf::List
     private
 
     def table_header
-      ["Name", "Adresse", "E-Mail", "Privat", "Mobil"]
+      [I18n.t('people.print.name'), I18n.t('people.print.address'), I18n.t('people.print.email'), I18n.t('people.print.home_phone'), I18n.t('people.print.mobile_phone')]
     end
 
     def person_row(person)

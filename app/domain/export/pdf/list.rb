@@ -18,10 +18,10 @@ module Export::Pdf
         pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
                          at: [0, 0],
                          align: :right)
-    
+
         pdf.repeat(:all) {
           pdf.bounding_box([0, 0], width: pdf.bounds.width, height: 2.cm) do
-            pdf.text timestamp     
+            pdf.text I18n.l(Time.now)
           end
         }
         pdf.render
@@ -31,10 +31,6 @@ module Export::Pdf
 
       def sections
         [Header, People]
-      end
-
-      def timestamp
-        Time.now.strftime '%d.%m.%Y %H:%M'
       end
 
     end

@@ -710,6 +710,11 @@ it:
       cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
     print:
       heading: "Membri %{group}"
+      name: "Nome"
+      address: "Indirizzo"
+      email: "E-Mail"
+      home_phone: "Telefono"
+      mobile_phone: "Telefonino"
     roles:
       title: Ruoli attivi
     roles_aside:

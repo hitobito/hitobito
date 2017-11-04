@@ -709,6 +709,11 @@ fr:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
     print:
       heading: "Membres %{group}"
+      name: "Nom"
+      address: "Adresse"
+      email: "E-mail"
+      home_phone: "Fixe"
+      mobile_phone: "Mobile"
     roles:
       title: Rôles actifs
     roles_aside:

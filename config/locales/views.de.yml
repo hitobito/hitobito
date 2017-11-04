@@ -841,6 +841,11 @@ de:
 
     print:
       heading: "Mitgliederliste %{group}"
+      name: "Name"
+      address: "Adresse"
+      email: "E-Mail"
+      home_phone: "Privat"
+      mobile_phone: "Mobil"
 
     roles:
       title: Aktive Rollen

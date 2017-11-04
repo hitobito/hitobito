@@ -20,7 +20,7 @@ module Export::Pdf::List
     private
 
     def heading
-      I18n.t("people.print.heading", group: group.name)
+      I18n.t('people.print.heading', group: group.name)
     end
 
     def render_image

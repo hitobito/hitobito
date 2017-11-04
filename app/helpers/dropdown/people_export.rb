@@ -47,7 +47,7 @@ module Dropdown
     def vcard_link
       add_item(translate(:vcard), params.merge(format: :vcf), target: :new)
     end
-    
+
     def email_addresses_link
       if @email_addresses
         add_item(translate(:emails), params.merge(format: :email), target: :new)

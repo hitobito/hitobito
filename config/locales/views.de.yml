@@ -839,6 +839,9 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
+    print:
+      heading: "Mitgliederliste %{group}"
+
     roles:
       title: Aktive Rollen
 

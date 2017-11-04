@@ -1,7 +1,7 @@
 PATH
   remote: ../hitobito_aolv
   specs:
-    hitobito_aolv (1.5.3)
+    hitobito_aolv (1.6.0.pre.SNAPSHOT)
 
 GEM
   remote: https://rubygems.org/

@@ -1,3 +1,9 @@
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 fr:
   global:
     'yes': "oui"
@@ -701,6 +707,8 @@ fr:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    print:
+      heading: "Membres %{group}"
     roles:
       title: Rôles actifs
     roles_aside:

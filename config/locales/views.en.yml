@@ -1,3 +1,9 @@
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 en:
   global:
     'yes': "yes"
@@ -640,7 +646,7 @@ en:
           The main e-mail address of a person with multiple roles can only be changed
           by a superordinate user.
     fields:
-      format_birthday: (dd.mm.yyy)
+      format_birthday: (dd.mm.yyyy)
     list:
       number_of_people_shown:
         one: "%{count} person displayed."
@@ -652,6 +658,8 @@ en:
       no_changes: So far, no changes were recorded.
     pdf:
       cannot_fit: The addresses do not fit into the defined label format.
+    print:
+      heading: "Members %{group}"
     roles:
       title: Active roles
     roles_aside:

@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_aolv
+  remote: ../hitobito_dsj
   specs:
-    hitobito_aolv (1.6.0.pre.SNAPSHOT)
+    hitobito_dsj (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -535,7 +535,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_aolv!
+  hitobito_dsj!
   http_accept_language
   jquery-rails
   jquery-turbolinks

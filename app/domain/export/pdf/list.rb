@@ -15,15 +15,7 @@ module Export::Pdf
                                   margin: 1.cm)
         pdf.font_size 9
         sections.each { |section| section.new(pdf, contactables, group).render }
-        pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
-                         at: [0, 0],
-                         align: :right)
-
-        pdf.repeat(:all) {
-          pdf.bounding_box([0, 0], width: pdf.bounds.width, height: 2.cm) do
-            pdf.text I18n.l(Time.now)
-          end
-        }
+        footer(pdf)
         pdf.render
       end
 
@@ -31,6 +23,18 @@ module Export::Pdf
 
       def sections
         [Header, People]
+      end
+
+      def footer(pdf)
+        pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
+                         at: [0, 0],
+                         align: :right)
+
+        pdf.repeat(:all) do
+          pdf.bounding_box([0, 0], width: pdf.bounds.width, height: 2.cm) do
+            pdf.text I18n.l(Time.current)
+          end
+        end
       end
 
     end

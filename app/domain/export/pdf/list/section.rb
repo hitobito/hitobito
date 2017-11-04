@@ -27,7 +27,7 @@ module Export::Pdf::List
 
     def move_down_line(line = 10)
       pdf.move_down(line)
-	end
+    end
 
   end
 end

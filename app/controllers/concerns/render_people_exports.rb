@@ -20,7 +20,7 @@ module Concerns
       emails = Person.mailing_emails_for(people)
       render text: emails.join(',')
     end
-    
+
     def render_vcf(people)
       vcf = generate_vcf(people)
       send_data vcf, type: :vcf, disposition: 'inline'
@@ -43,7 +43,7 @@ module Concerns
         Export::Pdf::List.render(people, group)
       end
     end
-    
+
     def generate_vcf(people)
       Export::Vcf::Vcards.new.generate(people)
     end

@@ -16,7 +16,6 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
     @tempfile_name = 'event-participations-export'
     @event_id = event_id
     @controller_params = controller_params
-    @exporter = exporter
   end
 
   private

@@ -12,6 +12,8 @@ class Export::ExportBaseJob < BaseJob
 
   PARAMETERS = [:format, :exporter, :user_id, :tempfile_name].freeze
 
+  attr_reader :exporter
+
   def perform
     set_locale
     file, format = export_file_and_format
@@ -60,7 +62,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def data
-    @exporter.export(@format, entries)
+    exporter.export(@format, entries)
   end
 
 end

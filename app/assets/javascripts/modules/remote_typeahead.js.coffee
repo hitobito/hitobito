@@ -53,8 +53,11 @@ setupRemoteTypeahead = (input, items, updater) ->
 
 queryForTypeahead = (query, process) ->
   return [] if query.length < 3
-  $.get(this.$element.data('url'), { q: query }, (data) ->
+  app.request.abort() if app.request
+  $('#quicksearch').addClass('input-loading')
+  app.request = $.get(this.$element.data('url'), { q: query }, (data) ->
     json = $.map(data, (item) -> JSON.stringify(item))
+    $('#quicksearch').removeClass('input-loading')
     return process(json)
   )
 

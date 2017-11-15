@@ -152,6 +152,13 @@ input[type="color"],
   }
 }
 
+.input-loading {
+  background-image: image-url("spinner.gif");
+  background-size: 16px;
+  background-position:right 5px center;
+  background-repeat: no-repeat;
+}
+
 select {
   height: 30px;
   line-height: 30px;

@@ -1,0 +1,8 @@
+invoice:
+  title: Invoice
+  group: bottom_layer_one
+  recipient: top_leader
+  sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
+  esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
+  total: 2
+

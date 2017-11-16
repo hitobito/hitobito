@@ -3,6 +3,7 @@
 ## Version 1.X
 
 *   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+*   PDF-Export für Personen
 
 
 ## Version 1.17

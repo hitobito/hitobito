@@ -14,13 +14,12 @@ describe Person::Filter::Role do
   let(:range) { nil }
   let(:role_types) { [] }
   let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
+  let(:filters) { { role: { role_type_ids: role_type_ids_string } } }
   let(:list_filter) do
     Person::Filter::List.new(group,
                              user,
                              range: range,
-                             filters: {
-                               role: {role_type_ids: role_type_ids_string }
-                             })
+                             filters: filters)
   end
 
   let(:entries) { list_filter.entries }
@@ -132,6 +131,20 @@ describe Person::Filter::Role do
         it 'contains not all existing people' do
           expect(entries.size).to eq(list_filter.all_count - 1)
         end
+      end
+    end
+
+    context 'unknown' do
+      let(:user) { people(:bottom_member) }
+      let(:group) { groups(:bottom_group_one_one) }
+      let(:range) { 'unknown' }
+      let(:role_types) { [Group::BottomGroup::Leader] }
+      let(:filters) { {qualification: {qualification_kind_ids: "1483", validity: "-2835"} } }
+
+      it 'does not throw exception if range type is unknown' do
+        expect do
+          list_filter.entries.first
+        end.not_to raise_error
       end
     end
   end

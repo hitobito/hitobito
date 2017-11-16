@@ -38,7 +38,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     its(:admin)             { should be_falsey }
-    its(:all_permissions)   { is_expected.to eq [:layer_and_below_read] }
+    its(:all_permissions)   { is_expected.to eq [:layer_and_below_read, :finance] }
 
     it 'has events with permission full' do
       expect(subject.events_with_permission(:event_full)).to match_array([events(:top_course).id])

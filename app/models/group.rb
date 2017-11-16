@@ -91,6 +91,10 @@ class Group < ActiveRecord::Base
            class_name: 'Person::AddRequest::Group',
            dependent: :destroy
 
+  has_one :invoice_config, dependent: :destroy
+
+  after_create :create_invoice_config, if: :layer?
+
   ### VALIDATIONS
 
   validates_by_schema
@@ -192,5 +196,9 @@ class Group < ActiveRecord::Base
     # do not destroy descendants on soft delete
   end
   alias_method_chain :destroy_descendants, :paranoia
+
+  def create_invoice_config
+    create_invoice_config!
+  end
 
 end

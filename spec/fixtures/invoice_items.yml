@@ -1,0 +1,12 @@
+pens:
+  invoice: invoice
+  name: pens
+  unit_cost: 1.5
+  vat_rate: 0.08
+  count: 3
+
+pins:
+  invoice: invoice
+  name: pins
+  unit_cost: 0.5
+  count: 1

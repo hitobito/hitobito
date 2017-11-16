@@ -564,6 +564,18 @@ de:
         nickname: Übername auf Etikett
         pp_post: PP-Zeile
 
+      invoice:
+        title: Titel
+        description: Beschreibung
+        invoice_items: Rechnungsposten
+
+      invoice_items:
+        name: Name
+        description: Beschreibung
+        vat_rate: MWSt.
+        unit_cost: Betrag
+        count: Anzahl
+
   errors:
     messages:
       # timeliness

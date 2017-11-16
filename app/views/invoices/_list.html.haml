@@ -1,0 +1,19 @@
+= form_tag group_invoice_list_path(parent), data: { checkable: true } do
+  = button_action_add(new_group_invoice_list_path(parent))
+
+  - if parent.invoices.draft.exists?
+    = button_tag 'Rechnung stellen', class: 'btn', data: { method: :put }
+
+  - if parent.invoices.list.exists?
+    = button_tag class: 'btn', data: { method: :delete } do
+      - safe_join([icon('trash'), ti('link.delete')], ' ')
+
+  %br
+  %br
+
+  = crud_table(data: { checkable: true }) do |t|
+    - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
+      - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
+    - t.col(t.attr_header(:title)) do |invoice|
+      %strong= link_to invoice.title, group_invoice_path(parent, invoice)
+    - t.attrs(:state, :recipient, :due_at, :sent_at, :total)

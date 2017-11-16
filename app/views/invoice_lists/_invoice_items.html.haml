@@ -1,0 +1,5 @@
+= f.input_field(:name, class: 'span2', placeholder: InvoiceItem.human_attribute_name(:name))
+= f.input_field(:description, class: 'span2', rows: 1, placeholder: InvoiceItem.human_attribute_name(:description))
+= f.input_field(:vat_rate, class: 'span1', placeholder: InvoiceItem.human_attribute_name(:vat_rate))
+= f.input_field(:unit_cost, class: 'span1', placeholder: InvoiceItem.human_attribute_name(:unit_cost))
+= f.input_field(:count, class: 'span1', placeholder: InvoiceItem.human_attribute_name(:count))

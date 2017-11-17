@@ -18,7 +18,6 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope.joins(:roles) if sort_by_role?
     if args[:match].to_s == 'all'
       match_all_qualification_kinds(scope)
     else
@@ -93,10 +92,6 @@ class Person::Filter::Qualification < Person::Filter::Base
     when 'reactivateable' then ::Qualification.reactivateable
     else ::Qualification.all
     end
-  end
-
-  def sort_by_role?
-    Settings.people.default_sort == 'role'
   end
 
 end

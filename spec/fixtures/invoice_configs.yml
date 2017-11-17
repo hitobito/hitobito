@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: invoice_configs
+#
+#  id                  :integer          not null, primary key
+#  group_id            :integer          not null
+#  contact_id          :integer
+#  sequence_number     :integer          default(1), not null
+#  due_days            :integer          default(30), not null
+#  address             :text
+#  payment_information :text
+#
+
+top_layer:
+  group: top_layer
+  sequence_number: 1
+
+bottom_layer_one:
+  group: bottom_layer_one
+  sequence_number: 1

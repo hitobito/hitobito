@@ -564,6 +564,24 @@ de:
   import/person_doublette_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
+  invoices:
+    destroy:
+      flash:
+        success: Rechnung wurde storniert.
+
+  invoice_lists:
+    create:
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    update:
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde verschickt."
+      other: "%{count} Rechnungen wurden verschickt."
+    destroy:
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
+
   label_formats:
     global_labels: "Globale Etikettenformate"
     own_labels: Meine Etikettenformate

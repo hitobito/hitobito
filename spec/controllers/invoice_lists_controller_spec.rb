@@ -1,10 +1,8 @@
 require 'spec_helper'
 
 describe InvoiceListsController do
-
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
-
 
   context 'authorization' do
     before { sign_in(person) }
@@ -33,6 +31,8 @@ describe InvoiceListsController do
   end
 
   context 'authorized' do
+    include ActiveSupport::Testing::TimeHelpers
+
     before { sign_in(person) }
 
     it 'GET#new renders crud/new template' do
@@ -76,7 +76,7 @@ describe InvoiceListsController do
     it 'PUT#update moves invoice to sent state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        post :update, { group_id: group.id, ids: [invoice.id] }
+        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id] } }
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to eq 'Rechnung wurde verschickt.'
@@ -89,7 +89,7 @@ describe InvoiceListsController do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        post :update, { group_id: group.id, ids: [invoice.id, other.id] }
+        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id, other.id] } }
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to eq '2 Rechnungen wurden verschickt.'
@@ -104,7 +104,7 @@ describe InvoiceListsController do
     it 'DELETE#destroy moves invoice to cancelled state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        delete :destroy, { group_id: group.id, ids: [invoice.id] }
+        travel(1.day) { delete :destroy, { group_id: group.id, ids: [invoice.id] } }
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
@@ -115,7 +115,9 @@ describe InvoiceListsController do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        delete :destroy, { group_id: group.id, ids: [invoice.id, other.id] }
+        travel 1.day do
+          delete :destroy, { group_id: group.id, ids: [invoice.id, other.id] }
+        end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to eq '2 Rechnungen wurden storniert.'

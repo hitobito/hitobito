@@ -60,7 +60,7 @@ class AddInvoiceModels < ActiveRecord::Migration
 
     reversible do |dir|
       dir.up do
-        ids = select_values("SELECT id FROM groups WHERE id == layer_group_id")
+        ids = select_values("SELECT id FROM groups WHERE id = layer_group_id")
         values = ids.collect { |id| "(#{id})" }.join(', ')
         execute("INSERT INTO invoice_configs(group_id) VALUES #{values}") if ids.present?
       end

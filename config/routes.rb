@@ -22,6 +22,7 @@ Hitobito::Application.routes.draw do
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 
+
     resources :groups do
       member do
         get :deleted_subgroups
@@ -35,6 +36,9 @@ Hitobito::Application.routes.draw do
         post 'move' => 'group/move#perform'
 
       end
+
+      resource :invoice_list, except: [:show, :edit]
+      resources :invoices, except: [:new, :create]
 
       resources :notes, only: [:index, :create, :destroy]
 

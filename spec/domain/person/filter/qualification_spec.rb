@@ -463,4 +463,15 @@ describe Person::Filter::Qualification do
     expect(list_filter.entries).to be_empty
   end
 
+  it 'does not fail if sorting by role and person has layer_and_below_full' do
+    allow(Settings.people).to receive(:default_sort).and_return('role')
+    list_filter = Person::Filter::List.new(
+      group,
+      user,
+      range: "214",
+      filters: { qualification: { qualification_kind_ids: "2", validity: "1" }}
+    )
+    expect(list_filter.entries).to be_empty
+  end
+
 end

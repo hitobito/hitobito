@@ -62,7 +62,7 @@ class Person::Filter::List
       @multiple_groups = true
       scope.in_layer(group)
     else
-      scope
+      scope.to_sql['INNER JOIN `roles`'] ? scope : scope.joins(:roles)
     end
   end
 

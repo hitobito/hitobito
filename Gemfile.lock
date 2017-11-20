@@ -1,7 +1,13 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_jubla_ci
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_jubla_ci (0.0.1)
+
+PATH
+  remote: ../hitobito_jubla
+  specs:
+    hitobito_jubla (1.0.0)
+      hitobito_youth
 
 PATH
   remote: ../hitobito_youth
@@ -543,7 +549,8 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_jubla!
+  hitobito_jubla_ci!
   hitobito_youth!
   http_accept_language
   jquery-rails

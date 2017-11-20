@@ -128,7 +128,7 @@ group :metrics do
   gem 'brakeman'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
-  gem 'rubocop', '< 0.42' # require ruby 2.0
+  gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
   gem 'ruby-prof'
   gem 'simplecov-rcov'

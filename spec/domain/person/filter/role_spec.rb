@@ -135,4 +135,156 @@ describe Person::Filter::Role do
       end
     end
   end
+
+  context 'filering specific timeframe' do
+    include ActiveSupport::Testing::TimeHelpers
+
+    let(:person)      { people(:top_leader) }
+    let(:now)         { Time.zone.parse('2017-02-01 10:00:00') }
+
+    around(:each) { |example| travel_to(now) { example.run } }
+
+    def transform(attrs)
+      attrs.slice(:start_at, :finish_at).transform_values do |value|
+        value.to_date.to_s
+      end
+    end
+
+    context :time_range do
+      def time_range(attrs = {})
+        Person::Filter::Role.new(:role, transform(attrs)).time_range
+      end
+
+      it 'sets min to beginning_of_time if missing' do
+        expect(time_range.min).to eq Time.at(0).beginning_of_day
+      end
+
+      it 'sets max to Date.today#end_of_day if missing' do
+        expect(time_range.max).to eq now.end_of_day
+      end
+
+      it 'sets min to start_at#beginning_of_day' do
+        expect(time_range(start_at: now).min).to eq now.beginning_of_day
+      end
+
+      it 'sets max to finish_at#end_of_day' do
+        expect(time_range(finish_at: now).max).to eq now.end_of_day
+      end
+
+      it 'accepts start_at and finish_at on same day' do
+        range = time_range(start_at: now, finish_at: now)
+        expect(range.min).to eq now.beginning_of_day
+        expect(range.max).to eq now.end_of_day
+      end
+
+      it 'min and max are nil if range is invalid' do
+        range = time_range(start_at: now, finish_at: 1.day.ago)
+        expect(range.min).to be_nil
+        expect(range.max).to be_nil
+      end
+    end
+
+    context :filter do
+      def filter(attrs)
+        kind = described_class.to_s
+        filters = { role: transform(attrs).merge(role_type_ids: [role_type.id], kind: kind) }
+        Person::Filter::List.new(group, user, range: kind, filters: filters)
+      end
+
+      context :created do
+        let(:role) { roles(:top_leader) }
+        let(:role_type) { Group::TopGroup::Leader }
+
+        it 'finds role created on same day' do
+          role.update_columns(created_at: now)
+          expect(filter(start_at: now).entries).to have(1).item
+        end
+
+        it 'finds role created within range' do
+          role.update_columns(created_at: now)
+          expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+
+        it 'does not find role created before start_at' do
+          role.update(created_at: 1.day.ago)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+
+        it 'does not find role created after finish_at' do
+          role.update_columns(created_at: 1.day.from_now)
+          expect(filter(finish_at: now).entries).to be_empty
+        end
+
+        it 'does not find role when invalid range is given' do
+          role.update_columns(created_at: now, deleted_at: now)
+          expect(filter(start_at: now, finish_at: 1.day.ago).entries).to be_empty
+        end
+
+        it 'does not find deleted role' do
+          role.update_columns(created_at: now, deleted_at: now)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+      end
+
+      context :deleted do
+        let(:role_type) { Group::TopGroup::Member }
+        let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+
+        it 'finds role deleted on same day' do
+          role.update(deleted_at: now)
+          expect(filter(start_at: now).entries).to have(1).item
+        end
+
+        it 'finds role deleted within range' do
+          role.update(deleted_at: now)
+          expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+
+        it 'does not find role deleted before start_at' do
+          role.update(deleted_at: 1.day.ago)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+
+        it 'does not find role deleted after finish_at' do
+          role.update(deleted_at: 1.day.from_now)
+          expect(filter(finish_at: now).entries).to be_empty
+        end
+
+        it 'does not find role deleted on same when invalid range is given' do
+          role.update(deleted_at: now)
+          expect(filter(start_at: now, finish_at: 1.day.ago).entries).to be_empty
+        end
+
+        it 'does not find active role' do
+          role.update_columns(created_at: now)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+      end
+
+      context :active do
+        let(:role_type) { Group::TopGroup::Member }
+        let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+
+        it 'does not find role deleted before timeframe' do
+          role.update(deleted_at: 1.day.ago)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+
+        it 'does not find role created after timeframe' do
+          role.update(created_at: 1.day.from_now)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+
+        it 'finds role deleted within range' do
+          role.update(deleted_at: now)
+          expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+
+        it 'finds role created within range' do
+          role.update(created_at: now)
+          expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+      end
+    end
+  end
 end

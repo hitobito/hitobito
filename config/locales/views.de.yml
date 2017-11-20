@@ -888,6 +888,10 @@ de:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
         all: Alle jemals erteilten Qualifikationen
+      filters_role_kind:
+        active: war die Role aktiv.
+        created: wurde die Role erstellt.
+        deleted: wurde die Role gelöscht.
 
     new:
       title: Personen filtern
@@ -898,6 +902,9 @@ de:
     role:
       title: Rollen
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      prompt_role_duration: Im Zeitraum (optional)
+      prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
+      prompt_role_duration_until: bis
 
     qualification:
       title: Qualifikationen

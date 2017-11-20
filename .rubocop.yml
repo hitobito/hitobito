@@ -59,11 +59,6 @@ Documentation:
 DotPosition:
   Enabled: false
 
-# Missing UTF-8 encoding statements should always be created.
-Encoding:
-  EnforcedStyle: always
-  Severity: error
-
 # Keep single line bodys for if and unless
 IfUnlessModifier:
   Enabled: false
@@ -77,23 +72,27 @@ Rails/Delegate:
   Enabled: false
 
 # That's no huge stopper
-Style/EmptyLines:
+Layout/EmptyLines:
   Enabled: false
 
 # We thinks that's fine for specs
-Style/EmptyLinesAroundBlockBody:
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
 # We thinks that's fine
-Style/EmptyLinesAroundClassBody:
+Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
 # We thinks that's fine
-Style/EmptyLinesAroundModuleBody:
+Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
 # We thinks that's fine
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+# For now, we keep encoding comment
+Style/Encoding:
   Enabled: false
 
 # We thinks that's fine

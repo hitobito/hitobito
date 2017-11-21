@@ -156,7 +156,7 @@ describe Person::Filter::Role do
       end
 
       it 'sets min to beginning_of_time if missing' do
-        expect(time_range.min).to eq Time.at(0).beginning_of_day
+        expect(time_range.min).to eq Time.zone.at(0).beginning_of_day
       end
 
       it 'sets max to Date.today#end_of_day if missing' do

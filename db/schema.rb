@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911123243) do
+ActiveRecord::Schema.define(version: 20171120181851) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -232,6 +232,21 @@ ActiveRecord::Schema.define(version: 20170911123243) do
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id"
   add_index "groups", ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id"
+
+  create_table "invoice_articles", force: :cascade do |t|
+    t.string   "number",      limit: 255
+    t.string   "name",        limit: 255,                          null: false
+    t.string   "description", limit: 255
+    t.string   "category",    limit: 255
+    t.decimal  "net_price",               precision: 12, scale: 2
+    t.decimal  "vat_rate",                precision: 5,  scale: 2
+    t.string   "cost_center", limit: 255
+    t.string   "account",     limit: 255
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+  end
+
+  add_index "invoice_articles", ["number"], name: "index_invoice_articles_on_number", unique: true
 
   create_table "invoice_configs", force: :cascade do |t|
     t.integer "sequence_number",     default: 1,  null: false

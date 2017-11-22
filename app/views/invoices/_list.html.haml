@@ -11,6 +11,8 @@
     = button_tag class: 'btn', data: { method: :delete } do
       - safe_join([icon('trash'), ti('link.delete')], ' ')
 
+  = invoices_dropdown
+
   %br
   %br
 

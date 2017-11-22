@@ -75,6 +75,16 @@ describe InvoicesController do
       expect(assigns(:reminder)).to be_present
       expect(assigns(:reminder_valid)).to eq false
     end
+
+    it 'exports pdf' do
+      expect_any_instance_of(Invoice).to receive(:title).
+        at_least(:once).and_return('?invoice ^?ti_tlä')
+
+      get :show, group_id: group.id, id: invoice.id, format: :pdf
+
+      expect(response.header['Content-Disposition']).to match(/invoice_ti_tlä.pdf/)
+      expect(response.content_type).to eq('application/pdf')
+    end
   end
 
   it 'GET#index finds invoices by sequence_number' do
@@ -94,6 +104,16 @@ describe InvoicesController do
     expect(invoice.reload.state).to eq 'cancelled'
     expect(response).to redirect_to group_invoices_path(group)
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+  end
+
+  context '#index' do
+    before { sign_in(person) }
+
+    it 'exports pdf' do
+      get :index, group_id: group.id, format: :pdf
+      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
+      expect(response.content_type).to eq('application/pdf')
+    end
   end
 
 end

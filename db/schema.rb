@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123102231) do
+ActiveRecord::Schema.define(version: 20171129105145) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -235,16 +235,16 @@ ActiveRecord::Schema.define(version: 20171123102231) do
 
   create_table "invoice_articles", force: :cascade do |t|
     t.string   "number",      limit: 255
-    t.string   "name",        limit: 255,                          null: false
+    t.string   "name",        limit: 255,                            null: false
     t.text     "description", limit: 65535
     t.string   "category",    limit: 255
-    t.decimal  "unit_cost",               precision: 12, scale: 2
-    t.decimal  "vat_rate",                precision: 5,  scale: 2
+    t.decimal  "unit_cost",                 precision: 12, scale: 2
+    t.decimal  "vat_rate",                  precision: 5,  scale: 2
     t.string   "cost_center", limit: 255
     t.string   "account",     limit: 255
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
-    t.integer  "group_id",                                         null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.integer  "group_id",                                           null: false
   end
 
   add_index "invoice_articles", ["number"], name: "index_invoice_articles_on_number", unique: true
@@ -257,6 +257,7 @@ ActiveRecord::Schema.define(version: 20171123102231) do
     t.integer "page_size",           default: 15
     t.text    "address"
     t.text    "payment_information"
+    t.string  "account_number"
   end
 
   add_index "invoice_configs", ["contact_id"], name: "index_invoice_configs_on_contact_id"
@@ -288,6 +289,8 @@ ActiveRecord::Schema.define(version: 20171123102231) do
     t.decimal  "total",             precision: 12, scale: 2
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
+    t.string   "account_number"
+    t.text     "address"
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number"

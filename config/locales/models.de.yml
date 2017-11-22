@@ -597,7 +597,7 @@ de:
         name: Bezeichnung
         description: Beschreibung
         category: Kategorie
-        unit_cost: Betrag
+        unit_cost: Preis
         vat_rate: MWSt.
         cost_center: Kostenstelle
         account: Konto
@@ -606,8 +606,9 @@ de:
         name: Name
         description: Beschreibung
         vat_rate: MWSt.
-        unit_cost: Betrag
+        unit_cost: Preis
         count: Anzahl
+        cost: Betrag
 
       payment_reminder:
         invoice: Rechnung

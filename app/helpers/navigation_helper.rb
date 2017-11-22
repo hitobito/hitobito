@@ -30,7 +30,6 @@ module NavigationHelper
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
-      active_for: [],
       if: ->(_) { can?(:index, Invoice) } }
   ]
 
@@ -61,8 +60,8 @@ module NavigationHelper
   def nav(label, url, active_for = [], inactive_for = [])
     options = {}
     if current_page?(url) ||
-       active_for.any? { |p| request.path =~ %r{/?#{p}/?} } &&
-        inactive_for.none? { |p| request.path =~ %r{/?#{p}/?} }
+       Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
+        Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
 
       options[:class] = 'active'
     end

@@ -163,6 +163,9 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      invoice:
+        one: Rechnung
+        other: Rechnungen
       label_format:
         one: Etikettenformat
         other: Etikettenformate

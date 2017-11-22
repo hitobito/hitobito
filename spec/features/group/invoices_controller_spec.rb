@@ -15,6 +15,13 @@ describe InvoicesController do
     expect(page).to have_link 'Rechnungen'
   end
 
+  it 'shows invoices subnav when person is authorised' do
+    sign_in(people(:bottom_member))
+    visit group_invoices_path(groups(:bottom_layer_one))
+    expect(page).to have_link 'Rechnungen'
+    expect(page).to have_css('nav.nav-left', text: 'Einstellungen')
+  end
+
   it 'hides invoices link when person is authorised' do
     sign_in(people(:top_leader))
     visit root_path

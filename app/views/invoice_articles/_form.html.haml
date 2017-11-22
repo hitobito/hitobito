@@ -1,0 +1,7 @@
+= entry_form do |f|
+  = f.labeled_input_fields :number, :name, :description
+  = f.labeled_input_field(:category, data: { provide: :typeahead, source: InvoiceArticle.categories })
+
+  = f.labeled_input_fields :net_price, :vat_rate
+  = f.labeled_input_field(:cost_center, data: { provide: :typeahead, source: InvoiceArticle.cost_centers })
+  = f.labeled_input_field(:account,     data: { provide: :typeahead, source: InvoiceArticle.accounts })

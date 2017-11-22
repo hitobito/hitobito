@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -166,6 +166,9 @@ de:
       invoice:
         one: Rechnung
         other: Rechnungen
+      invoice_article:
+        one: Rechnungsartikel
+        other: Rechnungsartikel
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -571,10 +574,21 @@ de:
         title: Titel
         description: Beschreibung
         invoice_items: Rechnungsposten
+        invoice_item_article: Rechnungsartikel
         state: Status
         recipient: Empfänger
         due_at: Fällig am
         sent_at: Gestellt am
+
+      invoice_article:
+        number: Artikelnummer
+        name: Bezeichnung
+        description: Beschreibung
+        category: Kategorie
+        net_price: Preis Netto (ohne MWSt)
+        vat_rate: MWSt-Satz
+        cost_center: Kostenstelle
+        account: Konto
 
       invoice_items:
         name: Name

@@ -107,9 +107,21 @@ Style/SymbolProc:
 Style/GuardClause:
   Enabled: false
 
+# We think that's fine
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%w': '()'
+
+# We think that's fine
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '()'
+
 
 # We thinks that's fine
 Style/SingleLineBlockParams:

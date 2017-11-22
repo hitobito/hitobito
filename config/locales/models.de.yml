@@ -571,6 +571,10 @@ de:
         title: Titel
         description: Beschreibung
         invoice_items: Rechnungsposten
+        state: Status
+        recipient: Empfänger
+        due_at: Fällig am
+        sent_at: Gestellt am
 
       invoice_items:
         name: Name

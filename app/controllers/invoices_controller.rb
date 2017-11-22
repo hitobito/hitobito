@@ -12,20 +12,46 @@ class InvoicesController < CrudController
   self.sort_mappings = { recipient: Person.order_by_name_statement }
 
 
-  def show
-    if entry.remindable?
-      @reminder = entry.payment_reminders.build(reminder_attrs)
-      @reminder_valid = reminder_attrs ? @reminder.valid? : true
-    end
-  end
-
   def destroy
     cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
     set_failure_notice unless cancelled
     respond_with(entry, success: cancelled, location: group_invoices_path(parent))
   end
 
+  def show
+    respond_to do |format|
+      format.html { render_html }
+      format.pdf { render_pdf }
+    end
+  end
+
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.pdf { render_multiple_pdf }
+    end
+  end
+
   private
+
+  def render_html
+    if entry.remindable?
+      @reminder = entry.payment_reminders.build(reminder_attrs)
+      @reminder_valid = reminder_attrs ? @reminder.valid? : true
+    end
+  end
+
+  def render_pdf
+    pdf = Export::Pdf::Invoice.render(entry, pdf_options)
+    filename = "#{entry.title.tr(' ', '_').downcase.scan(/[a-z0-9äöüéèêáàâ_]/i).join}.pdf"
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+  end
+
+  def render_multiple_pdf
+    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    filename = "#{t('activerecord.models.invoice.other').downcase}.pdf"
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+  end
 
   def list_entries
     scope = super.includes(recipient: [:groups, :roles]).references(:recipient).list
@@ -38,6 +64,22 @@ class InvoicesController < CrudController
 
   def reminder_attrs
     @reminder_attrs ||= flash[:payment_reminder]
+  end
+
+  def pdf_options
+    {
+      articles: params[:articles] != 'false',
+      esr: params[:esr] != 'false'
+    }
+  end
+
+  def invoices
+    return entries if invoice_ids.blank?
+    Invoice.where(id: invoice_ids)
+  end
+
+  def invoice_ids
+    params[:invoice_ids].to_s.split(',')
   end
 
 end

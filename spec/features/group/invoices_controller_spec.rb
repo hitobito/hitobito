@@ -46,6 +46,36 @@ describe InvoicesController do
 
   end
 
+  context 'export' do
+    before do
+      @group = groups(:bottom_layer_one)
+      @invoice = invoices(:invoice)
+      sign_in(people(:bottom_member))
+      visit group_invoice_path(@group, @invoice)
+      click_link('Export')
+    end
 
+    it 'dropdown is available' do
+      expect(page).to have_link 'Export'
+      expect(page).to have_link 'Rechnung inkl. Einzahlungsschein'
+      expect(page).to have_link 'Rechnung separat'
+      expect(page).to have_link 'Einzahlungsschein separat'
+    end
+
+    it 'exports full invoice' do
+      click_link('Rechnung inkl. Einzahlungsschein')
+      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf")
+    end
+
+    it 'exports only articles' do
+      click_link('Rechnung separat')
+      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf?esr=false")
+    end
+
+    it 'exports only esr' do
+      click_link('Einzahlungsschein separat')
+      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf?articles=false")
+    end
+  end
 end
 

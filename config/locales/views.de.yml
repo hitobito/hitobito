@@ -141,6 +141,12 @@ de:
     condense_labels: 'Mehrfachsendungen vermeiden'
     condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
 
+  dropdown/invoices_export:
+    button: 'Export'
+    full: 'Rechnung inkl. Einzahlungsschein'
+    esr_only: 'Einzahlungsschein separat'
+    articles_only: 'Rechnung separat'
+
   devise:
     failure:
       already_authenticated: 'Du bist bereits angemeldet.'
@@ -568,6 +574,12 @@ de:
     destroy:
       flash:
         success: Rechnung wurde storniert.
+    pdf:
+      total: Gesamtbetrag
+      total_vat: MWSt. gesamt
+      invoice_number: Rechnungsnummer
+      invoice_date: Rechnungsdataum
+      due_at: Fällig bis
 
   invoice_lists:
     form:

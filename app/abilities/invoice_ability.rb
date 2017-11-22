@@ -14,6 +14,10 @@ class InvoiceAbility < AbilityDsl::Base
     class_side(:index).any_finance_group
   end
 
+  on(InvoiceArticle) do
+    permission(:finance).may(:index, :new, :create, :show, :edit, :update, :destroy).everybody
+  end
+
   def in_same_group
     user.finance_groups.include?(subject.group)
   end

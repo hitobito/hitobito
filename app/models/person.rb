@@ -264,6 +264,12 @@ class Person < ActiveRecord::Base
     primary_group.layer_group if primary_group
   end
 
+  def finance_groups
+    %w(admin finance).inject([]) do |memo, permission|
+      memo + groups_with_permission(permission.to_sym)
+    end.compact.uniq.select(&:layer?)
+  end
+
   private
 
   def override_blank_email

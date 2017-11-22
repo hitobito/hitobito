@@ -14,9 +14,12 @@ app.InvoiceArticles = {
       vat_rate: 'vat_rate',
       unit_cost:'net_price'
     }
-    $('#invoice_items_fields .fields').last().find('input,textarea').each (idx, elm) ->
+
+    fields = $('#invoice_items_fields .fields').last().find('input,textarea')
+    fields.each (idx, elm) ->
       name = elm.name.match(/\d\]\[(.*)\]$/)[1]
       elm.value = data[mapping[name]] if mapping[name]
+      $(elm).trigger({ type: 'change', field: elm }) if (idx + 1) == fields.size()
 }
 
 $(document).on('change', '#invoice_item_article', app.InvoiceArticles.add)

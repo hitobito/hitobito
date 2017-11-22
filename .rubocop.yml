@@ -107,6 +107,10 @@ Style/SymbolProc:
 Style/GuardClause:
   Enabled: false
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '()'
+
 # We thinks that's fine
 Style/SingleLineBlockParams:
   Enabled: false

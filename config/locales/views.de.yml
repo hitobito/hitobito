@@ -632,6 +632,7 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+    invoices: 'Rechnungen'
 
   notes:
     new_note: Neue Notiz

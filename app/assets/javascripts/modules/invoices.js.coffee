@@ -15,7 +15,6 @@ app.Invoices = {
 
   recalculate: (e) ->
     form = $(e.target).closest('form')
-    console.log('recalculate')
     $.ajax(url: "#{form.attr('action')}/new?#{form.serialize()}", dataType: 'script')
 }
 

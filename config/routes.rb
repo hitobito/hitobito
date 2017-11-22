@@ -194,6 +194,8 @@ Hitobito::Application.routes.draw do
       end
     end
 
+    resources :invoice_articles
+
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
 

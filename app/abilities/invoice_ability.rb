@@ -8,11 +8,18 @@
 class InvoiceAbility < AbilityDsl::Base
 
   on(Invoice) do
+    permission(:admin).may(:create, :show, :edit, :update, :destroy).in_same_group
     permission(:finance).may(:create, :show, :edit, :update, :destroy).in_same_group
+
+    class_side(:index).any_finance_group
   end
 
   def in_same_group
-    user.groups_with_permission(permission).include?(subject.group)
+    user.finance_groups.include?(subject.group)
+  end
+
+  def any_finance_group
+    user.finance_groups.present?
   end
 
 end

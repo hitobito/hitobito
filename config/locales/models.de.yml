@@ -166,6 +166,9 @@ de:
       invoice:
         one: Rechnung
         other: Rechnungen
+      invoice_article:
+        one: Rechnungsartikel
+        other: Rechnungsartikel
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -576,6 +579,16 @@ de:
         recipient: Empfänger
         due_at: Fällig am
         sent_at: Gestellt am
+
+      invoice_article:
+        number: Artikelnummer
+        name: Bezeichnung
+        description: Beschreibung
+        category: Kategorie
+        net_price: Preis Netto (ohne MWSt)
+        vat_rate: MWSt-Satz
+        cost_center: Kostenstelle
+        account: Konto
 
       invoice_items:
         name: Name

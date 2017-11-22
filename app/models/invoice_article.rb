@@ -23,4 +23,21 @@
 #
 
 class InvoiceArticle < ActiveRecord::Base
+
+  def self.categories
+    pluck(:category).uniq
+  end
+
+  def self.cost_centers
+    pluck(:cost_center).uniq
+  end
+
+  def self.accounts
+    pluck(:account).uniq
+  end
+
+  def to_s
+    [number, name].compact.join(' - ')
+  end
+
 end

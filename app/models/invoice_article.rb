@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoice_articles
@@ -12,17 +11,25 @@
 #  id          :integer          not null, primary key
 #  number      :string(255)
 #  name        :string(255)      not null
-#  description :string(255)
+#  description :text(65535)
 #  category    :string(255)
-#  net_price   :decimal(12, 2)
+#  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)
 #  cost_center :string(255)
 #  account     :string(255)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  group_id    :integer          not null
 #
 
 class InvoiceArticle < ActiveRecord::Base
+
+  belongs_to :group
+
+  validates :name, presence: true, uniqueness: { scope: :group_id }
+  validates :number, presence: true, uniqueness: { scope: :group_id }
+
+  validates_by_schema
 
   def self.categories
     pluck(:category).uniq

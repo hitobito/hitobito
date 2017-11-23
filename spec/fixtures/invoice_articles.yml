@@ -3,44 +3,48 @@
 # Table name: invoice_articles
 #
 #  id          :integer          not null, primary key
-#  number      :string
-#  name        :string           not null
-#  description :string
-#  category    :string
-#  net_price   :decimal(12, 2)
+#  number      :string(255)
+#  name        :string(255)      not null
+#  description :text(65535)
+#  category    :string(255)
+#  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)
-#  cost_center :string
-#  account     :string
+#  cost_center :string(255)
+#  account     :string(255)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  group_id    :integer          not null
 #
 
 beitrag:
+  group: bottom_layer_one
   number: BEI-18
   name: Beitrag Erwachsene
   description: normaler Beitrag für Erwachsene
   category: Beiträge
-  net_price: 10
+  unit_cost: 10
   vat_rate: 8
   cost_center: BEI
   account: 23
 
 ermaessigt:
+  group: bottom_layer_one
   number: BEI-JU
   name: Beitrag Kinder
   description: ermässiger Beitrage für Kinder und Jugendliche
   category: Beiträge
-  net_price: 5
+  unit_cost: 5
   vat_rate: 8
   cost_center: BEI
   account: 23
 
 abo:
+  group: bottom_layer_one
   number: ABO-NEWS
   name: Abonnement der Mitgliederzeitschrift
   description: monatliche Mitgliederzeitschrift
   category: Publikationen
-  net_price: 120
+  unit_cost: 120
   vat_rate: 8
   cost_center: PUB
   account: 42

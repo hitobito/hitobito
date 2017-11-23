@@ -27,6 +27,7 @@
 #
 
 class Invoice < ActiveRecord::Base
+  include I18nEnums
 
   STATES = %w(draft sent payed overdue cancelled).freeze
 
@@ -50,9 +51,11 @@ class Invoice < ActiveRecord::Base
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
+  i18n_enum :state, STATES
+
   validates_by_schema
 
-  scope :list,       -> { where.not(state: :cancelled).order(:title) }
+  scope :list,       -> { where.not(state: :cancelled).order(:title, :state) }
   scope :draft,      -> { where(state: :draft) }
   scope :sent,       -> { where(state: :sent) }
 

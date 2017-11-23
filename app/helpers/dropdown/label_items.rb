@@ -37,7 +37,7 @@ module Dropdown
         last_format = user.last_label_format
         parent.sub_items << Item.new(last_format.to_s,
                                      export_label_format_path(last_format.id),
-                                     target: :new)
+                                     target: :new, class: 'export-label-format')
         parent.sub_items << Divider.new
       end
     end

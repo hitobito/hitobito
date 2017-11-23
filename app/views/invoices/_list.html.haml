@@ -11,9 +11,15 @@
   %br
   %br
 
+  .pagination-bar
+    = paginate @invoices
+
+
   = crud_table(data: { checkable: true }) do |t|
     - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
       - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
     - t.col(t.sort_header(:title)) do |invoice|
       %strong= link_to invoice.title, group_invoice_path(parent, invoice)
-    - t.sortable_attrs(:state, :recipient, :due_at, :sent_at, :total)
+    - t.sortable_attrs(:state, :recipient, :sent_at, :due_at, :total)
+
+= paginate @invoices

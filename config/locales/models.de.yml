@@ -591,8 +591,8 @@ de:
         name: Bezeichnung
         description: Beschreibung
         category: Kategorie
-        net_price: Preis Netto (ohne MWSt)
-        vat_rate: MWSt-Satz
+        unit_cost: Betrag
+        vat_rate: MWSt.
         cost_center: Kostenstelle
         account: Konto
 

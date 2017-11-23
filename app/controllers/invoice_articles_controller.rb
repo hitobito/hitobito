@@ -9,8 +9,10 @@ class InvoiceArticlesController < CrudController
 
   respond_to :json, only: [:show]
 
+  self.nesting = Group
+
   self.permitted_attrs = %i[
-    number name description category net_price vat_rate cost_center account
+    number name description category unit_cost vat_rate cost_center account
   ]
 
 end

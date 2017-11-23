@@ -93,6 +93,7 @@ class Group < ActiveRecord::Base
 
   has_one :invoice_config, dependent: :destroy
   has_many :invoices
+  has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
 
   after_create :create_invoice_config, if: :layer?

@@ -265,9 +265,8 @@ class Person < ActiveRecord::Base
   end
 
   def finance_groups
-    %w(admin finance).inject([]) do |memo, permission|
-      memo + groups_with_permission(permission.to_sym)
-    end.compact.uniq.select(&:layer?)
+    groups_with_permission(:finance).
+      flat_map(&:layer_group)
   end
 
   private

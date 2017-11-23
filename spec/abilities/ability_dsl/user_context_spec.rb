@@ -21,7 +21,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:top_layer).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:top_layer).id] }
     its(:admin)             { should be_truthy }
-    its(:all_permissions)   { is_expected.to contain_exactly(:admin, :layer_and_below_full, :layer_and_below_read, :contact_data) }
+    its(:all_permissions)   { is_expected.to contain_exactly(:admin, :finance, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
     it 'has no events with permission full' do
       expect(subject.events_with_permission(:event_full)).to be_blank

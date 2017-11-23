@@ -14,18 +14,14 @@ describe InvoiceAbility do
 
   let(:ability) { Ability.new(role.person.reload) }
 
-  [ %w(bottom_member finance),
-    %w(bottom_leader admin)].each do |role, permission|
-
-    before do
-      allow(Group::BottomLayer::Leader).to receive(:permissions).and_return([:admin])
-    end
-
-    context permission do
-      let(:role) { send(role)}
+  [
+    %w(bottom_member bottom_layer_one top_layer),
+    %w(top_leader top_layer bottom_layer_one)
+  ].each do |role, own_group, other_group|
+    context role do
+      let(:role) { roles(role)}
       let(:invoice) { Invoice.new(group: group) }
-      let(:own_group) { groups(:bottom_layer_one) }
-      let(:other_group) { groups(:top_layer) }
+      let(:article) { InvoiceArticle.new(group: group) }
 
       it 'may index' do
         is_expected.to be_able_to(:index, Invoice)
@@ -36,43 +32,49 @@ describe InvoiceAbility do
       end
 
       context 'in own group' do
-        let(:group) { groups(:bottom_layer_one) }
-
+        let(:group) { groups(own_group) }
 
         %w(create edit show update destroy).each do |action|
-          it "may #{action} invoices" do
+          it "may #{action} invoices in #{own_group}" do
             is_expected.to be_able_to(action.to_sym, invoice)
+          end
+        end
+
+        %w(create edit show update destroy).each do |action|
+          it "may #{action} invoices in #{own_group}" do
+            is_expected.to be_able_to(action.to_sym, article)
+          end
+        end
+
+        %w(edit show update).each do |action|
+          it "may #{action} invoice_config in #{own_group}" do
+            is_expected.to be_able_to(action.to_sym, group.invoice_config)
           end
         end
       end
 
       context 'in other group' do
-        let(:group) { groups(:top_layer) }
+        let(:group) { groups(other_group) }
 
         %w(create edit show update destroy).each do |action|
-          it "may not #{action} invoices" do
+          it "may not #{action} invoices in #{other_group}" do
             is_expected.not_to be_able_to(action.to_sym, invoice)
+          end
+        end
+
+        %w(create edit show update destroy).each do |action|
+          it "may not #{action} invoices in #{other_group}" do
+            is_expected.not_to be_able_to(action.to_sym, article)
+          end
+        end
+
+
+        %w(edit show update destroy).each do |action|
+          it "may not #{action} invoices in #{other_group}" do
+            is_expected.not_to be_able_to(action.to_sym, group.invoice_config)
           end
         end
       end
     end
   end
-
-  context :top_leader do
-    let(:role) { roles(:top_leader) }
-
-    it 'may not index' do
-      is_expected.not_to be_able_to(:index, Invoice)
-    end
-
-  end
-
-  def bottom_member
-    roles(:bottom_member)
-  end
-
-  def bottom_leader
-    @bottom_leader ||= Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
-  end
-
 end

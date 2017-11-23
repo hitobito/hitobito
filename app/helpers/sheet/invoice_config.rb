@@ -6,6 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class InvoiceList < Sheet::Invoice
+  class InvoiceConfig < Sheet::Invoice
   end
 end

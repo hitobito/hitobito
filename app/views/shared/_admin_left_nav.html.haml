@@ -16,9 +16,6 @@
   - if can?(:index, QualificationKind)
     = nav QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
 
-  - if can?(:index, InvoiceArticle)
-    = nav InvoiceArticle.model_name.human(count: 2), invoice_articles_path, %w(invoice_articles)
-
   = render_extensions(:admin_nav_kinds)
 
 

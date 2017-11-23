@@ -22,7 +22,6 @@ Hitobito::Application.routes.draw do
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 
-
     resources :groups do
       member do
         get :deleted_subgroups
@@ -38,8 +37,9 @@ Hitobito::Application.routes.draw do
       end
 
       resource :invoice_list, except: [:show, :edit]
-      resources :invoices, except: [:new, :create]
       resource :invoice_config, only: [:edit, :show, :update]
+      resources :invoices, except: [:new, :create]
+      resources :invoice_articles
 
 
       resources :notes, only: [:index, :create, :destroy]
@@ -195,8 +195,6 @@ Hitobito::Application.routes.draw do
         resource :settings, controller: 'label_format/settings', as: 'label_format_settings'
       end
     end
-
-    resources :invoice_articles
 
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'

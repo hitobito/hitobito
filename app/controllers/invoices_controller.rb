@@ -8,6 +8,8 @@
 class InvoicesController < CrudController
   self.nesting = Group
   self.permitted_attrs = [:title, :description, :invoice_items_attributes]
+  self.sort_mappings = { recipient: Person.order_by_name_statement }
+
 
   def destroy
     cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
@@ -18,7 +20,8 @@ class InvoicesController < CrudController
   private
 
   def list_entries
-    super.includes(recipient: [:groups, :roles]).list
+    scope = super.includes(recipient: [:groups, :roles]).references(:recipient).list
+    scope.page(params[:page]).per(50)
   end
 
   def authorize_class

@@ -576,6 +576,12 @@ de:
         invoice_items: Rechnungsposten
         invoice_item_article: Rechnungsartikel
         state: Status
+        states:
+          draft: Entwurf
+          sent: Gestellt
+          payed: Bezahlt
+          overdue: Überfällig
+          cancelled: Storniert
         recipient: Empfänger
         due_at: Fällig am
         sent_at: Gestellt am

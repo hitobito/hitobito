@@ -1,3 +1,4 @@
+
 # encoding: utf-8
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
@@ -6,6 +7,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class InvoiceList < Sheet::Invoice
+  class InvoiceArticle < Sheet::Invoice
   end
 end

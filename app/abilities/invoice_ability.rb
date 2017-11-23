@@ -18,6 +18,11 @@ class InvoiceAbility < AbilityDsl::Base
     permission(:finance).may(:index, :new, :create, :show, :edit, :update, :destroy).everybody
   end
 
+  on(InvoiceConfig) do
+    permission(:admin).may(:create, :show, :edit, :update, :destroy).in_same_group
+    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_same_group
+  end
+
   def in_same_group
     user.finance_groups.include?(subject.group)
   end

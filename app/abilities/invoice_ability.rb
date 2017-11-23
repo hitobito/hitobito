@@ -15,7 +15,8 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(InvoiceArticle) do
-    permission(:finance).may(:index, :new, :create, :show, :edit, :update, :destroy).everybody
+    permission(:admin).may(:index, :new, :create, :show, :edit, :update, :destroy).in_same_group
+    permission(:finance).may(:index, :new, :create, :show, :edit, :update, :destroy).in_same_group
   end
 
   on(InvoiceConfig) do

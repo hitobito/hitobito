@@ -25,4 +25,10 @@ class InvoiceConfig < ActiveRecord::Base
   validates :group_id, uniqueness: true
 
   validates_by_schema
+
+  def to_s
+    #TODO
+    "#{group.name} - Invoice Config"
+  end
+
 end

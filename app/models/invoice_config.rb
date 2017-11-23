@@ -4,18 +4,18 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoice_configs
 #
 #  id                  :integer          not null, primary key
-#  group_id            :integer          not null
-#  contact_id          :integer
 #  sequence_number     :integer          default(1), not null
 #  due_days            :integer          default(30), not null
-#  address             :text
-#  payment_information :text
+#  group_id            :integer          not null
+#  contact_id          :integer
+#  page_size           :integer          default(15)
+#  address             :text(65535)
+#  payment_information :text(65535)
 #
 
 class InvoiceConfig < ActiveRecord::Base

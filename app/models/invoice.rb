@@ -4,26 +4,25 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoices
 #
 #  id                :integer          not null, primary key
-#  title             :string           not null
-#  sequence_number   :string           not null
-#  state             :string           default("draft"), not null
-#  esr_number        :string           not null
-#  description       :text
-#  recipient_email   :string
-#  recipient_address :text
+#  title             :string(255)      not null
+#  sequence_number   :string(255)      not null
+#  state             :string(255)      default("draft"), not null
+#  esr_number        :string(255)      not null
+#  description       :text(65535)
+#  recipient_email   :string(255)
+#  recipient_address :text(65535)
 #  sent_at           :date
 #  due_at            :date
 #  group_id          :integer          not null
 #  recipient_id      :integer          not null
 #  total             :decimal(12, 2)
-#  created_at        :datetime
-#  updated_at        :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 
 class Invoice < ActiveRecord::Base

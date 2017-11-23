@@ -4,15 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoice_items
 #
 #  id          :integer          not null, primary key
 #  invoice_id  :integer          not null
-#  name        :string           not null
-#  description :text
+#  name        :string(255)      not null
+#  description :text(65535)
 #  vat_rate    :decimal(5, 2)
 #  unit_cost   :decimal(12, 2)   not null
 #  count       :integer          default(1), not null

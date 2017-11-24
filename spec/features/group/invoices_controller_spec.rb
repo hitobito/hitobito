@@ -23,7 +23,8 @@ describe InvoicesController do
   end
 
   it 'hides invoices link when person is authorised' do
-    sign_in(people(:top_leader))
+    top_group_member = Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group))
+    sign_in(top_group_member.person)
     visit root_path
     expect(page).not_to have_link 'Rechnungen'
   end

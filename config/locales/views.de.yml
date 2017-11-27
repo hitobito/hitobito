@@ -570,6 +570,10 @@ de:
         success: Rechnung wurde storniert.
 
   invoice_lists:
+    form:
+      recipient_info:
+        one: "Rechnung wird für eine Person erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
     create:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
@@ -824,6 +828,7 @@ de:
     actions_index:
       add_person: Person hinzufügen
       import_list: Liste importieren
+      create_invoice: Rechnung erstellen
 
     add_requests:
       approve_title: 'Anfrage akzeptieren'

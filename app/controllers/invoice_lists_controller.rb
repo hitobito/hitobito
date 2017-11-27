@@ -9,6 +9,7 @@ class InvoiceListsController < CrudController
   self.nesting = Group
   self.permitted_attrs = [:title,
                           :description,
+                          :recipient_ids,
                           invoice_items_attributes: [
                             :name,
                             :description,
@@ -16,27 +17,24 @@ class InvoiceListsController < CrudController
                             :vat_rate,
                             :count,
                             :_destroy
-                          ]]
+                          ],
+  ]
 
   skip_authorize_resource
   before_action :authorize
+  respond_to :js, only: [:new]
 
   def new
-    respond_to do |format|
-      format.html
-      format.js do
-        assign_attributes if params[:invoice].present?
-      end
-    end
+    assign_attributes
   end
 
   def create
     assign_attributes
     entry.recipient = parent.people.first
-    succeeded = entry.valid? ? entry.multi_create(parent.people) : [nil]
+    succeeded = entry.multi_create if entry.valid?
 
-    if succeeded.all?
-      redirect_with(count: succeeded.size, title: entry.title)
+    if succeeded
+      redirect_with(count: entry.recipients.size, title: entry.title)
     else
       render :new
     end

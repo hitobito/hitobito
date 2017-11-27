@@ -14,12 +14,9 @@ class FullTextController < ApplicationController
   respond_to :html
 
   def index
-    @people = if params[:q].to_s.size >= 2
-                PaginatingDecorator.decorate(search_strategy.list_people)
-              else
-                Kaminari.paginate_array([]).page(1)
-              end
-    respond_with(@people)
+    @people = with_query { search_strategy.list_people }
+    @groups = with_query { search_strategy.query_groups }
+    @events = with_query { search_strategy.query_events(sql: { include: [:groups, :dates] }) }
   end
 
   def query
@@ -56,5 +53,9 @@ class FullTextController < ApplicationController
 
   def entries
     @people
+  end
+
+  def with_query
+    params[:q].to_s.size >= 2 ? yield : []
   end
 end

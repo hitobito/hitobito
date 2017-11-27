@@ -828,7 +828,6 @@ de:
     actions_index:
       add_person: Person hinzufügen
       import_list: Liste importieren
-      create_invoice: Rechnung erstellen
 
     add_requests:
       approve_title: 'Anfrage akzeptieren'

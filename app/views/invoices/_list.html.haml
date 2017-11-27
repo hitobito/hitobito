@@ -4,8 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 = form_tag group_invoice_list_path(parent), data: { checkable: true } do
-  = button_action_add(new_group_invoice_list_path(parent))
-
   - if parent.invoices.draft.exists?
     = button_tag 'Rechnung stellen', class: 'btn', data: { method: :put }
 

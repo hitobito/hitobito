@@ -11,7 +11,7 @@ module SearchStrategies
     delegate :star_supported?, to: :class
 
     def query_people
-      return Person.none.page(1) unless @term.present?
+      return Person.none.page(1) if @term.blank?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
                       per_page: QUERY_PER_PAGE,
@@ -21,14 +21,14 @@ module SearchStrategies
     end
 
     def query_groups
-      return Group.none.page(1) unless @term.present?
+      return Group.none.page(1) if @term.blank?
       Group.search(Riddle::Query.escape(@term),
                    per_page: QUERY_PER_PAGE,
                    star: star_supported?)
     end
 
     def query_events
-      return Event.none.page(1) unless @term.present?
+      return Event.none.page(1) if @term.blank?
       Event.search(Riddle::Query.escape(@term),
                    per_page: QUERY_PER_PAGE,
                    star: star_supported?,

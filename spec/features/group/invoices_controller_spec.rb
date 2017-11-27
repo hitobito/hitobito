@@ -38,7 +38,7 @@ describe InvoicesController do
       visit group_people_path(group)
       click_link 'Rechnung erstellen'
       click_link 'Eintrag hinzufügen'
-      fill_in 'Unit cost', with: 1
+      fill_in 'Preis', with: 1
       expect(page).to have_content 'Total 1.0'
     end
 

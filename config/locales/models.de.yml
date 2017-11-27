@@ -169,6 +169,9 @@ de:
       invoice_article:
         one: Rechnungsartikel
         other: Rechnungsartikel
+      invoice_item:
+        one: Rechnungsposten
+        other: Rechnungsposten
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -597,6 +600,7 @@ de:
         recipient_address: Empfänger Adresse
         due_at: Fällig am
         sent_at: Gestellt am
+        total_inkl_vat: Total inkl. MWSt.
 
       invoice_article:
         number: Artikelnummer
@@ -608,7 +612,7 @@ de:
         cost_center: Kostenstelle
         account: Konto
 
-      invoice_items:
+      invoice_item:
         name: Name
         description: Beschreibung
         vat_rate: MWSt.

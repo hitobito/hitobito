@@ -5,6 +5,11 @@
 - if can?(:new, @group.roles.new)
   = action_button(t('.add_person'), new_group_role_path(@group), :plus)
 
+- if can?(:create, @group.layer_group.invoices.new)
+  = action_button(t('.create_invoice'),
+                  new_group_invoice_list_path(@group.layer_group, invoice: { recipient_ids: @people.collect(&:id).join(',') }),
+                  :plus)
+
 - if can?(:new, @group.roles.new)
   = action_button(t('.import_list'), new_group_csv_imports_path, :upload)
 

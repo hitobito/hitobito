@@ -8,24 +8,24 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it "may index when person has finance permission on layer group" do
-      get :new, group_id: group.id
+      get :new, group_id: group.id, invoice: { recipient_ids: [] }
       expect(response).to be_success
     end
 
     it "may update when person has finance permission on layer group" do
-      put :update, group_id: group.id
+      put :update, group_id: group.id, invoice: { recipient_ids: [] }
       expect(response).to redirect_to group_invoices_path(group)
     end
 
     it "may not index when person has finance permission on layer group" do
       expect do
-        get :new, group_id: groups(:top_layer).id
+        get :new, group_id: groups(:top_layer).id, invoice: { recipient_ids: [] }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        put :update, group_id: groups(:top_layer).id
+        put :update, group_id: groups(:top_layer).id, invoice: { recipient_ids: [] }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -35,9 +35,10 @@ describe InvoiceListsController do
 
     before { sign_in(person) }
 
-    it 'GET#new renders crud/new template' do
-      get :new, group_id: group.id
+    it 'GET#new assigns_attributes and renders crud/new template' do
+      get :new, group_id: group.id, invoice: { recipient_ids: person.id }
       expect(response).to render_template('crud/new')
+      expect(assigns(:invoice).recipients).to eq [person]
     end
 
     it 'GET#new via xhr assigns invoice items and total' do
@@ -49,7 +50,7 @@ describe InvoiceListsController do
 
     it 'POST#create creates an invoice for single member' do
       expect do
-        post :create, { group_id: group.id, invoice: invoice_attrs }
+        post :create, { group_id: group.id, invoice: invoice_attrs.merge(recipient_ids: person.id) }
       end.to change { group.invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
@@ -128,6 +129,7 @@ describe InvoiceListsController do
   def invoice_attrs
     {
       title: 'Title',
+      recipient_ids: group.people.limit(2).collect(&:id).join(','),
       invoice_items_attributes: { '1' => { name: 'item1', unit_cost: 1, count: 1},
                                   '2' => { name: 'item2', unit_cost: 2, count: 1 } }
     }

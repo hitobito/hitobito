@@ -49,13 +49,20 @@ describe Invoice do
     expect(invoice.total).to eq(1.5)
   end
 
+  it '#recipients loads people from recipient_ids' do
+    invoice = Invoice.new(title: 'invoice', group: group)
+    invoice.recipient_ids = "2,b,#{person.id},c,"
+    expect(invoice.recipients).to eq [person]
+  end
+
   it '#multi_create creates invoices for multiple recipients' do
     invoice = Invoice.new(title: 'invoice', group: group)
+    invoice.recipient_ids = [person.id, other_person.id].join(',')
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
     invoice.invoice_items.build(name: 'pins', unit_cost: 0.5, count: 2)
 
     expect do
-      invoice.multi_create([person, other_person])
+      invoice.multi_create
     end.to change { [group.invoices.count, group.invoice_items.count] }.by([2,4])
   end
 

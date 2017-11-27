@@ -28,6 +28,8 @@
 class Invoice < ActiveRecord::Base
   include I18nEnums
 
+  attr_accessor :recipient_ids
+
   STATES = %w(draft sent payed overdue cancelled).freeze
 
   belongs_to :group
@@ -58,10 +60,10 @@ class Invoice < ActiveRecord::Base
   scope :draft,      -> { where(state: :draft) }
   scope :sent,       -> { where(state: :sent) }
 
-  def multi_create(people)
-    people.collect do |person|
+  def multi_create
+    recipients.collect do |recipient|
       Invoice.transaction do
-        invoice = self.class.new(attributes.merge(recipient: person))
+        invoice = self.class.new(attributes.merge(recipient_id: recipient.id))
         invoice_items.each do |invoice_item|
           invoice.invoice_items.build(invoice_item.attributes)
         end
@@ -86,6 +88,10 @@ class Invoice < ActiveRecord::Base
 
   def sent?
     state == 'sent'
+  end
+
+  def recipients
+    Person.where(id: recipient_ids.to_s.split(','))
   end
 
   private

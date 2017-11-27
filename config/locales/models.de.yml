@@ -303,6 +303,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        layer_group: Ebene
         parent_id: Elterngruppe
         layer_group_id: Ebene
         type: Gruppentyp

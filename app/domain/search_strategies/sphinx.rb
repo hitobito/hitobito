@@ -14,28 +14,30 @@ module SearchStrategies
       return Person.none.page(1) if @term.blank?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
-                      per_page: QUERY_PER_PAGE,
-                      star: star_supported?,
-                      with: { sphinx_internal_id: ids })
+                      default_search_options.merge(
+                        with: { sphinx_internal_id: ids }
+                      ))
       end
     end
 
     def query_groups
       return Group.none.page(1) if @term.blank?
       Group.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: star_supported?)
+                   default_search_options)
     end
 
-    def query_events
+    def query_events(options = {})
       return Event.none.page(1) if @term.blank?
       Event.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: star_supported?,
-                   include: :groups)
+                   default_search_options.merge(options))
     end
 
     protected
+
+    def default_search_options
+      { per_page: QUERY_PER_PAGE,
+        star: star_supported? }
+    end
 
     def fetch_people(ids)
       Person.search(Riddle::Query.escape(@term),

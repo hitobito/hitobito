@@ -24,8 +24,7 @@ module SearchStrategies
       return Group.none.page(1) unless @term.present?
       Group.search(Riddle::Query.escape(@term),
                    per_page: QUERY_PER_PAGE,
-                   star: star_supported?,
-                   include: :parent)
+                   star: star_supported?)
     end
 
     def query_events

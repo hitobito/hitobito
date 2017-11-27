@@ -468,7 +468,7 @@ de:
 
   full_text:
     index:
-      title: 'Gefundene Personen'
+      title: 'Ergebnisse'
       incomplete_search_request: 'Bitte geben Sie mindestens zwei Zeichen ein.'
 
   group:

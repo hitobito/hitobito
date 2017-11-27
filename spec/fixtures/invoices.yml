@@ -12,6 +12,7 @@ sent:
   recipient: top_leader
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
-  due_at: <%= 2.weeks.from_now.to_date %>
+  sent_at: <%= 10.days.ago.to_date %>
+  due_at: <%= 20.days.from_now.to_date %>
   state: sent
   total: 2

@@ -571,6 +571,9 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   invoices:
+    sent: Rechnung gestellt
+    reminder_sent: Mahnung versendet
+    payd: Rechnung bezahlt
     destroy:
       flash:
         success: Rechnung wurde storniert.

@@ -40,7 +40,7 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
-  before_validation :set_dates, on: :update, if: :sent?
+  before_validation :set_dates, on: :update, if: :sent_state?
   before_validation :set_recipient_fields, on: :create, if: :recipient
   before_validation :set_self_in_nested
   before_validation :recalculate
@@ -90,7 +90,15 @@ class Invoice < ActiveRecord::Base
     "#{title}(#{sequence_number}): #{total}"
   end
 
+  def reminder_sent?
+    payment_reminders.present?
+  end
+
   def sent?
+    sent_at.present?
+  end
+
+  def sent_state?
     state == 'sent'
   end
 

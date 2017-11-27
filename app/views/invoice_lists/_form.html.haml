@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(url: group_invoice_list_path(parent)) do |f|
+= entry_form(url: group_invoice_list_path(parent), cancel_url: cancel_url) do |f|
   = f.hidden_field :recipient_ids
   = f.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients.size)
 

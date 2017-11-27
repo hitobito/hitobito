@@ -17,15 +17,17 @@ class InvoiceListsController < CrudController
                             :vat_rate,
                             :count,
                             :_destroy
-                          ],
-  ]
+                          ]]
 
   skip_authorize_resource
   before_action :authorize
   respond_to :js, only: [:new]
 
+  helper_method :cancel_url
+
   def new
     assign_attributes
+    session[:invoice_referer] = request.referer
   end
 
   def create
@@ -35,6 +37,7 @@ class InvoiceListsController < CrudController
 
     if succeeded
       redirect_with(count: entry.recipients.size, title: entry.title)
+      session.delete :invoice_referer
     else
       render :new
     end
@@ -83,6 +86,10 @@ class InvoiceListsController < CrudController
 
   def authorize
     authorize!(:create, parent.invoices.build)
+  end
+
+  def cancel_url
+    session[:invoice_referer] || group_invoices_path(parent)
   end
 
 end

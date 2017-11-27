@@ -61,14 +61,16 @@ class Invoice < ActiveRecord::Base
   scope :sent,       -> { where(state: :sent) }
 
   def multi_create
-    recipients.collect do |recipient|
-      Invoice.transaction do
+    Invoice.transaction do
+      all_saved = recipients.all? do |recipient|
         invoice = self.class.new(attributes.merge(recipient_id: recipient.id))
         invoice_items.each do |invoice_item|
           invoice.invoice_items.build(invoice_item.attributes)
         end
         invoice.save
       end
+      raise ActiveRecord::Rollback unless all_saved
+      all_saved
     end
   end
 

@@ -5,15 +5,15 @@
 
 %nav.nav-left-list
   %inner
-    %h3.nav-left-title.active= link_to(parent, group_invoices_path(parent))
+    %h3.nav-left-title= nav parent, group_invoices_path(parent), %w(invoices)
     %ul.nav-left-list
-      %li= link_to(InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent))
-      %li= link_to(t('navigation.admin'), group_invoice_config_path(parent))
+      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent), %w(invoice_articles)
+      = nav t('navigation.admin'), group_invoice_config_path(parent), %w(invoice_configs)
 
 
     %ul.nav-left-list
     - (current_user.finance_groups - [parent]).each do |group|
       - attrs = { class: 'active' } if current_page?(group_invoices_path(group))
-      = content_tag(:li, link_to(group, group_invoices_path(group)), attrs)
-      %li= link_to(InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent))
-      %li= link_to(t('navigation.admin'), group_invoice_config_path(parent))
+      = content_tag(:li, nav(group, group_invoices_path(group), %(invoices)), attrs)
+      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent), %w(invoice_articles)
+      = nav t('navigation.admin'), group_invoice_config_path(parent), %w(invoice_configs)

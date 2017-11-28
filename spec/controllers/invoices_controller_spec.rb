@@ -33,6 +33,38 @@ describe InvoicesController do
     end
   end
 
+  context 'searching' do
+    before { sign_in(person) }
+
+    it 'GET#index finds invoices by title' do
+      get :index, group_id: group.id, q: 'Invoice'
+      expect(assigns(:invoices)).to have(1).item
+    end
+
+    it 'GET#index finds invoices by sequence_number' do
+      get :index, group_id: group.id, q: invoices(:invoice).sequence_number
+      expect(assigns(:invoices)).to have(1).item
+    end
+
+    it 'GET#index finds invoices by recipient.last_name' do
+      get :index, group_id: group.id, q: people(:top_leader).last_name
+      expect(assigns(:invoices)).to have(1).item
+    end
+
+    it 'GET#index finds nothing for dummy' do
+      get :index, group_id: group.id, q: 'dummy'
+      expect(assigns(:invoices)).to be_empty
+    end
+
+  end
+
+  it 'GET#index finds invoices by sequence_number' do
+    sign_in(person)
+    invoice = Invoice.create!(title: 'dummy', group: group, recipient: person)
+    get :index, group_id: group.id, q: invoice.sequence_number
+    expect(assigns(:invoices)).to have(1).item
+  end
+
   it 'DELETE#destroy moves invoice to cancelled state' do
     sign_in(person)
 

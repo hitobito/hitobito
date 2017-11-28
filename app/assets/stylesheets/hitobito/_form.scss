@@ -465,3 +465,24 @@ input.switcher {
     }
   }
 }
+
+.has-clear {
+  input::-ms-clear { display: none; }
+
+  [data-clear] {
+    cursor: pointer;
+    opacity: 0.3;
+    pointer-events: auto;
+    position: relative;
+    left: -25px;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &.has-empty-value {
+    [data-clear] { display: none; }
+  }
+}
+

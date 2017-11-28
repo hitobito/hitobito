@@ -7,6 +7,7 @@
 
 class InvoicesController < CrudController
   self.nesting = Group
+  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
   self.permitted_attrs = [:title, :description, :invoice_items_attributes]
   self.sort_mappings = { recipient: Person.order_by_name_statement }
 

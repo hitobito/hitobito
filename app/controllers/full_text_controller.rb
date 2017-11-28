@@ -16,7 +16,7 @@ class FullTextController < ApplicationController
   def index
     @people = with_query { search_strategy.list_people }
     @groups = with_query { search_strategy.query_groups }
-    @events = with_query { search_strategy.query_events(sql: { include: [:groups, :dates] }) }
+    @events = with_query { search_strategy.query_events }
   end
 
   def query

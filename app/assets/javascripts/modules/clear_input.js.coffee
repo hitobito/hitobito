@@ -1,0 +1,26 @@
+class ClearInput
+
+  clear: (cross) ->
+    @_input(cross).val('').trigger('change')
+
+  toggleHide: (input) ->
+    group = input.parents('.form-group')
+    if input.val() == ''
+      group.addClass('has-empty-value')
+    else
+      console.log input.val()
+      group.removeClass('has-empty-value')
+
+  _input: (cross) ->
+    cross.parents('.form-group').find('input')
+
+  bind: ->
+    self = this
+    $(document).on('click', '[data-clear]', () -> self.clear($(this)))
+    $(document).on('change', '.has-clear input', () -> self.toggleHide($(this)))
+
+
+new ClearInput().bind()
+
+$(document).on 'turbolinks:load', ->
+  $('.has-clear input').each((i, e) -> new ClearInput().toggleHide($(e)))

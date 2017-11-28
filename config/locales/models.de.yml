@@ -577,6 +577,7 @@ de:
         invoice_items: Rechnungsposten
         invoice_item_article: Rechnungsartikel
         state: Status
+        sequence_number: Nummer
         states:
           draft: Entwurf
           sent: Gestellt

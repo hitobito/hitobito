@@ -26,10 +26,11 @@ module SearchStrategies
                    default_search_options)
     end
 
-    def query_events(options = {})
+    def query_events
       return Event.none.page(1) if @term.blank?
+      sql = { include: [:groups, :dates] }
       Event.search(Riddle::Query.escape(@term),
-                   default_search_options.merge(options))
+                   default_search_options.merge(sql: sql))
     end
 
     protected

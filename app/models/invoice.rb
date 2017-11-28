@@ -56,7 +56,7 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,       -> { where.not(state: :cancelled).order(:title, :state) }
+  scope :list,       -> { where.not(state: :cancelled).order(:sequence_number) }
   scope :draft,      -> { where(state: :draft) }
   scope :sent,       -> { where(state: :sent) }
 

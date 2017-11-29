@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,6 +19,11 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   private
+
+  def compose(recipients, content_key)
+    values = values_for_placeholders(content_key)
+    custom_content_mail(recipients, content_key, values)
+  end
 
   # TODO: deprecate/remove values-parameter and call values_for_placeholders instead
   def custom_content_mail(recipients, content_key, values, headers = {})

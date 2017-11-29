@@ -12,6 +12,13 @@ class InvoicesController < CrudController
   self.sort_mappings = { recipient: Person.order_by_name_statement }
 
 
+  def show
+    if entry.remindable?
+      @reminder = entry.payment_reminders.build(reminder_attrs)
+      @reminder_valid = reminder_attrs ? @reminder.valid? : true
+    end
+  end
+
   def destroy
     cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
     set_failure_notice unless cancelled
@@ -27,6 +34,10 @@ class InvoicesController < CrudController
 
   def authorize_class
     authorize!(:create, parent.invoices.build)
+  end
+
+  def reminder_attrs
+    @reminder_attrs ||= flash[:payment_reminder]
   end
 
 end

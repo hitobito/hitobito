@@ -48,14 +48,33 @@ describe InvoicesController do
 
     it 'GET#index finds invoices by recipient.last_name' do
       get :index, group_id: group.id, q: people(:top_leader).last_name
-      expect(assigns(:invoices)).to have(1).item
+      expect(assigns(:invoices)).to have(2).item
     end
 
     it 'GET#index finds nothing for dummy' do
       get :index, group_id: group.id, q: 'dummy'
       expect(assigns(:invoices)).to be_empty
     end
+  end
 
+  context 'show' do
+    let(:invoice) { invoices(:invoice) }
+    before { sign_in(person) }
+
+    it 'GET#show assigns reminder if invoice has been sent' do
+      invoice.update(state: :sent)
+      get :show, group_id: group.id, id: invoice.id
+      expect(assigns(:reminder)).to be_present
+      expect(assigns(:reminder_valid)).to eq true
+    end
+
+    it 'GET#show assigns reminder with flash parameters' do
+      invoice.update(state: :sent)
+      expect(subject).to receive(:flash).and_return(payment_reminder: {due_at: invoice.due_at})
+      get :show, group_id: group.id, id: invoice.id
+      expect(assigns(:reminder)).to be_present
+      expect(assigns(:reminder_valid)).to eq false
+    end
   end
 
   it 'GET#index finds invoices by sequence_number' do

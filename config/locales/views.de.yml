@@ -598,6 +598,11 @@ de:
       one: "Rechnung wurde storniert."
       other: "%{count} Rechnungen wurden storniert."
 
+  payments:
+    create:
+      flash:
+        success: Zahlung über %{amount} wurde erfasst.
+
   label_formats:
     global_labels: "Globale Etikettenformate"
     own_labels: Meine Etikettenformate

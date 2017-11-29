@@ -20,6 +20,10 @@ class InvoiceAbility < AbilityDsl::Base
     permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
   end
 
+  on(PaymentReminder) do
+    permission(:finance).may(:create).in_layer
+  end
+
   def any_finance_group
     user.finance_groups.present?
   end

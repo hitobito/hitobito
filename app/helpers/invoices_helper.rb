@@ -5,7 +5,7 @@ module InvoicesHelper
            when /draft|cancelled/ then 'info'
            when /sent/ then 'warning'
            when /payed/ then 'success'
-           when /overdue/ then 'important'
+           when /overdue|reminded/ then 'important'
            end
     badge(invoice.state_label, type)
   end

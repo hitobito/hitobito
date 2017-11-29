@@ -6,3 +6,12 @@ invoice:
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   total: 2
 
+sent:
+  title: Sent
+  group: bottom_layer_one
+  recipient: top_leader
+  sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
+  esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
+  due_at: <%= 2.weeks.from_now.to_date %>
+  state: sent
+  total: 2

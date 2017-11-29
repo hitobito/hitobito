@@ -105,6 +105,19 @@ describe Invoice do
     end
   end
 
+  context '#remindable?' do
+    %w(sent overdue reminded).each do |state|
+      it "#{state} invoice is remindable" do
+        expect(Invoice.new(state: state)).to be_remindable
+      end
+    end
+    %w(draft payed cancelled).each do |state|
+      it "#{state} invoice is not remindable" do
+        expect(Invoice.new(state: state)).not_to be_remindable
+      end
+    end
+  end
+
   private
 
   def create_invoice(attrs = {})

@@ -1,0 +1,6 @@
+= render "payment_reminder_form" if @reminder
+
+= render_attrs entry, :title, :state, :due_at, :description
+= render_attrs entry, :sequence_number, :esr_number
+= render_attrs entry, :recipient, :recipient_email, :recipient_address
+

@@ -19,9 +19,10 @@ describe InvoiceAbility do
     %w(top_leader top_layer bottom_layer_one)
   ].each do |role, own_group, other_group|
     context role do
-      let(:role) { roles(role)}
-      let(:invoice) { Invoice.new(group: group) }
-      let(:article) { InvoiceArticle.new(group: group) }
+      let(:role)     { roles(role)}
+      let(:invoice)  { Invoice.new(group: group) }
+      let(:article)  { InvoiceArticle.new(group: group) }
+      let(:reminder) { invoice.payment_reminders.build }
 
       it 'may index' do
         is_expected.to be_able_to(:index, Invoice)
@@ -41,8 +42,14 @@ describe InvoiceAbility do
         end
 
         %w(create edit show update destroy).each do |action|
-          it "may #{action} invoices in #{own_group}" do
+          it "may #{action} articles in #{own_group}" do
             is_expected.to be_able_to(action.to_sym, article)
+          end
+        end
+
+        %w(create).each do |action|
+          it "may #{action} reminders in #{own_group}" do
+            is_expected.to be_able_to(action.to_sym, reminder)
           end
         end
 
@@ -63,14 +70,19 @@ describe InvoiceAbility do
         end
 
         %w(create edit show update destroy).each do |action|
-          it "may not #{action} invoices in #{other_group}" do
+          it "may not #{action} articles in #{other_group}" do
             is_expected.not_to be_able_to(action.to_sym, article)
           end
         end
 
+        %w(create).each do |action|
+          it "may not #{action} reminders #{other_group}" do
+            is_expected.not_to be_able_to(action.to_sym, reminder)
+          end
+        end
 
         %w(edit show update destroy).each do |action|
-          it "may not #{action} invoices in #{other_group}" do
+          it "may not #{action} invoice_config in #{other_group}" do
             is_expected.not_to be_able_to(action.to_sym, group.invoice_config)
           end
         end

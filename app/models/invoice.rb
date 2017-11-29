@@ -35,6 +35,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
   has_many :invoice_items, dependent: :destroy
+  has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
 
   before_validation :set_sequence_number, on: :create, if: :group

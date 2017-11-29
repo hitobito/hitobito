@@ -33,6 +33,24 @@ describe InvoicesController do
       expect(page).to have_css('nav.nav-left', text: 'Einstellungen')
     end
 
+    it 'updating invoice_item updates total', js: true do
+      visit group_people_path(group)
+      click_link 'Rechnung erstellen'
+      click_link 'Eintrag hinzufügen'
+      fill_in 'Unit cost', with: 1
+      expect(page).to have_content 'Total 1.0'
+    end
+
+    it 'adding articles fills new invoice item', js: true do
+      visit group_people_path(group)
+      click_link 'Rechnung erstellen'
+      select 'BEI-JU', from: 'invoice_item_article'
+      expect(page).to have_content 'Total 5.4'
+
+      # TODO why does this part not execute success
+      # expect(page).to have_content 'ermässiger Beitrage für Kinder und Jugendliche'
+    end
+
     it 'creates payment reminders', js: true do
       invoice = invoices(:sent)
       visit group_invoice_path(group, invoice)
@@ -43,7 +61,6 @@ describe InvoicesController do
       expect(page).to have_content(/Mahnung.*wurde erfolgreich erstellt/)
       expect(page).not_to have_css('#new_payment_reminder')
     end
-
   end
 
   context 'export' do

@@ -12,10 +12,10 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
   def initialize(format, mailing_list_id, user_id)
     super()
     @mailing_list_id = mailing_list_id
-    @format = format
-    @exporter = Export::Tabular::People::PeopleAddress
-    @user_id = user_id
-    @tempfile_name = "subscriptions-#{mailing_list_id}-#{format}-zip"
+    @format          = format
+    @exporter        = Export::Tabular::People::PeopleAddress
+    @user_id         = user_id
+    @tempfile_name   = "subscriptions-#{mailing_list_id}-#{format}-zip"
   end
 
   private

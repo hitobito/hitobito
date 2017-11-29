@@ -589,6 +589,8 @@ de:
           reminded: Gemahnt
           cancelled: Storniert
         recipient: Empfänger
+        recipient_email: Empfänger E-Mail
+        recipient_address: Empfänger Adresse
         due_at: Fällig am
         sent_at: Gestellt am
 

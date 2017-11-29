@@ -1,6 +1,9 @@
 class ChangeInvoiceArticles < ActiveRecord::Migration
   def change
-    add_column(:invoice_articles, :group_id, :integer, null: false, index: true)
+    # Workaround because SQLite cannot add new column with null false
+    add_column(:invoice_articles, :group_id, :integer, index: true)
+    change_column(:invoice_articles, :group_id, :integer, null: false, index: true)
+    
     rename_column(:invoice_articles, :net_price, :unit_cost)
 
     reversible do |dir|

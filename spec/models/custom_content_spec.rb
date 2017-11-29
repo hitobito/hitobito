@@ -1,4 +1,10 @@
 # encoding: utf-8
+
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: custom_contents
@@ -9,10 +15,6 @@
 #  placeholders_optional :string
 #
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 require 'spec_helper'
 
 describe CustomContent do
@@ -57,6 +59,13 @@ describe CustomContent do
     end
 
     it 'succeeds if all required placeholders are used' do
+      is_expected.to be_valid
+    end
+
+    it 'succeeds if placeholder is used in subject' do
+      subject.placeholders_required = 'login-url, sender'
+      subject.subject = "Mail from {sender}"
+
       is_expected.to be_valid
     end
   end

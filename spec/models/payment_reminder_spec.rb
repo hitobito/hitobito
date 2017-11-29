@@ -19,10 +19,9 @@
 require 'spec_helper'
 
 describe PaymentReminder do
-  let(:invoice) { invoices(:invoice) }
+  let(:invoice) { invoices(:sent) }
 
   it 'creating a payment_reminder updates invoice' do
-    invoice = invoices(:sent)
     due_at = invoice.due_at + 2.weeks
     expect do
       invoice.payment_reminders.create!(due_at: due_at)
@@ -32,7 +31,7 @@ describe PaymentReminder do
   end
 
   it 'validates invoice is in state sent' do
-    reminder = invoice.payment_reminders.build
+    reminder = Invoice.new.payment_reminders.build
     expect(reminder).to have(1).error_on(:invoice)
   end
 

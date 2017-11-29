@@ -8,6 +8,8 @@
 require 'spec_helper'
 
 describe InvoicesController do
+  let(:group)   { groups(:bottom_layer_one) }
+  let(:invoice) { invoices(:invoice) }
 
   it 'hides invoices link when person is not authorised' do
     top_group_member = Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group))
@@ -18,7 +20,6 @@ describe InvoicesController do
 
   context 'authenticated' do
     let(:person)  { people(:bottom_member) }
-    let(:group)   { groups(:bottom_layer_one) }
 
     before { sign_in(person) }
 
@@ -63,13 +64,10 @@ describe InvoicesController do
     end
   end
 
-  context 'export' do
+  context 'export single invoice' do
     before do
-      @group = groups(:bottom_layer_one)
-      @invoice = invoices(:invoice)
       sign_in(people(:bottom_member))
-      visit group_invoice_path(@group, @invoice)
-      click_link('Export')
+      visit group_invoice_path(group, invoice)
     end
 
     it 'dropdown is available' do
@@ -80,19 +78,23 @@ describe InvoicesController do
     end
 
     it 'exports full invoice' do
+      click_link('Export')
       click_link('Rechnung inkl. Einzahlungsschein')
-      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf")
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf")
     end
 
     it 'exports only articles' do
+      click_link('Export')
       click_link('Rechnung separat')
-      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf?esr=false")
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?esr=false")
     end
 
     it 'exports only esr' do
+      click_link('Export')
       click_link('Einzahlungsschein separat')
-      expect(page).to have_current_path("/groups/#{@group.id}/invoices/#{@invoice.id}.pdf?articles=false")
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?articles=false")
     end
   end
+
 end
 

@@ -23,6 +23,7 @@ describe InvoiceAbility do
       let(:invoice)  { Invoice.new(group: group) }
       let(:article)  { InvoiceArticle.new(group: group) }
       let(:reminder) { invoice.payment_reminders.build }
+      let(:payment)  { invoice.payments.build }
 
       it 'may index' do
         is_expected.to be_able_to(:index, Invoice)
@@ -47,9 +48,9 @@ describe InvoiceAbility do
           end
         end
 
-        %w(create).each do |action|
-          it "may #{action} reminders in #{own_group}" do
-            is_expected.to be_able_to(action.to_sym, reminder)
+        [:reminder, :payment].each do |obj|
+          it "may create #{obj} in #{own_group}" do
+            is_expected.to be_able_to(:create, send(obj))
           end
         end
 
@@ -75,9 +76,9 @@ describe InvoiceAbility do
           end
         end
 
-        %w(create).each do |action|
-          it "may not #{action} reminders #{other_group}" do
-            is_expected.not_to be_able_to(action.to_sym, reminder)
+        [:reminder, :payment].each do |obj|
+          it "may not create #{obj} in #{own_group}" do
+            is_expected.not_to be_able_to(:create, send(obj))
           end
         end
 

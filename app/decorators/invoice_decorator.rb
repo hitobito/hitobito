@@ -22,4 +22,3 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
 end
-

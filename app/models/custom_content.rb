@@ -29,7 +29,7 @@ class CustomContent < ActiveRecord::Base
 
   class << self
     def get(key)
-      find_by_key!(key)
+      find_by!(key: key)
     end
   end
 
@@ -81,9 +81,9 @@ class CustomContent < ActiveRecord::Base
   def check_placeholders_exist(placeholders)
     non_existing = (placeholders.keys - placeholders_list).presence
     if non_existing
-      fail(ArgumentError,
-           "Placeholder(s) #{non_existing.join(', ')} given, " \
-           'but not defined for this custom content')
+      raise(ArgumentError,
+            "Placeholder(s) #{non_existing.join(', ')} given, " \
+            'but not defined for this custom content')
     end
   end
 end

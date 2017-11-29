@@ -1,0 +1,24 @@
+= entry_form(data: { group: group_path(parent) }) do |f|
+  = field_set_tag do
+    = f.labeled_input_fields :title, :description
+    = f.labeled(:state) do
+      = f.collection_select(:state, Invoice.state_labels.to_a, :first, :second)
+    = f.labeled_input_field :due_at
+
+  = field_set_tag do
+    = f.labeled_person_field :recipient
+    = f.labeled_input_field :recipient_email
+    = f.labeled_input_field :recipient_address
+
+
+  = field_set_tag do
+    = f.labeled(:invoice_item_article) do
+      = select("temp", "invoice_article_id",
+        InvoiceArticle.all.pluck(:number, :id),
+        { include_blank: true },
+        { id: "invoice_item_article" })
+
+    = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
+
+
+  = render "invoice_lists/calculated", calculated: entry.calculated

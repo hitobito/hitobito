@@ -58,7 +58,7 @@ class InvoicesController < CrudController
   end
 
   def render_multiple_pdf
-    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    pdf = Export::Pdf::Invoice.render_multiple(invoices.includes(:invoice_items), pdf_options)
     filename = "#{t('activerecord.models.invoice.other').downcase}.pdf"
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename
   end

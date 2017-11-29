@@ -608,6 +608,8 @@ de:
         cost: Betrag
         total: Total
         total_inkl_vat: Total inkl. MWSt.
+        total: Total inkl. MWSt.
+        vat: MWSt.
 
       invoice_article:
         number: Artikelnummer

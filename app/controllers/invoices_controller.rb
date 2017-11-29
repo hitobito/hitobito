@@ -48,6 +48,9 @@ class InvoicesController < CrudController
     if entry.remindable?
       @reminder = entry.payment_reminders.build(reminder_attrs)
       @reminder_valid = reminder_attrs ? @reminder.valid? : true
+
+      @payment = entry.payments.build(payment_attrs)
+      @payment_valid = payment_attrs ? @payment.valid? : true
     end
   end
 
@@ -74,6 +77,10 @@ class InvoicesController < CrudController
 
   def reminder_attrs
     @reminder_attrs ||= flash[:payment_reminder]
+  end
+
+  def payment_attrs
+    @payment_attrs ||= flash[:payment] || { amount: entry.total }
   end
 
   def pdf_options

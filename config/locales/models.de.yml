@@ -178,6 +178,9 @@ de:
       note:
         one: Notiz
         other: Notizen
+      payment:
+        one: Zahlung
+        other: Zahlungen
       payment_reminder:
         one: Mahnung
         other: Mahnungen
@@ -611,6 +614,11 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+
+      payment:
+        invoice: Rechnung
+        amount: Betrag
+        received_at: Empfangen am
 
       payment_reminder:
         invoice: Rechnung

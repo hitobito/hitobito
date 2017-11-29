@@ -18,8 +18,6 @@
 
 class PaymentReminder < ActiveRecord::Base
 
-  attr_accessor :invoice_ids
-
   belongs_to :invoice
 
   validate :assert_invoice_remindable

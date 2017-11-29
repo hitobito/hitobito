@@ -1,4 +1,4 @@
-= entry_form do |f|
+= entry_form(data: { group: group_path(parent) }) do |f|
   = field_set_tag do
     = f.labeled_input_fields :title, :description
     = f.labeled(:state) do

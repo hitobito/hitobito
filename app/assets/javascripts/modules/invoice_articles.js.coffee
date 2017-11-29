@@ -2,9 +2,9 @@ app = window.App ||= {}
 
 app.InvoiceArticles = {
   add: (e) ->
-    action = $(e.target).closest('form').attr('action')
-    articleAction =  action.replace('invoice_list', "invoice_articles/#{e.target.value}.json")
-    $.ajax(url: articleAction, dataType: 'json', success: app.InvoiceArticles.updateForm)
+    url = $('form[data-group').data('group')
+    articleAction = "#{url}/invoice_articles/#{e.target.value}.json"
+    $.ajax(url: url, dataType: 'json', success: app.InvoiceArticles.updateForm)
     e.target.value = undefined # reset field as preparation for next addition
 
   updateForm: (data, status, req) ->

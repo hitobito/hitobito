@@ -10,3 +10,6 @@
 - if entry.remindable? && can?(:update, entry)
   = action_button(t('crud.new.title', model: PaymentReminder.model_name.human),
     '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment_reminder' } })
+
+  = action_button(t('crud.new.title', model: Payment.model_name.human),
+    '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment' } })

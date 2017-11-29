@@ -178,6 +178,9 @@ de:
       note:
         one: Notiz
         other: Notizen
+      payment_reminder:
+        one: Mahnung
+        other: Mahnungen
       person:
         one: Person
         other: Personen
@@ -583,6 +586,7 @@ de:
           sent: Gestellt
           payed: Bezahlt
           overdue: Überfällig
+          reminded: Gemahnt
           cancelled: Storniert
         recipient: Empfänger
         due_at: Fällig am
@@ -604,6 +608,11 @@ de:
         vat_rate: MWSt.
         unit_cost: Betrag
         count: Anzahl
+
+      payment_reminder:
+        invoice: Rechnung
+        message: Nachricht
+        due_at: Fällig am
 
   errors:
     messages:

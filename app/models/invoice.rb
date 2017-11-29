@@ -30,11 +30,12 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
-  STATES = %w(draft sent payed overdue cancelled).freeze
+  STATES = %w(draft sent payed overdue reminded cancelled).freeze
 
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
   has_many :invoice_items, dependent: :destroy
+  has_many :payment_reminders, dependent: :destroy
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
@@ -90,6 +91,10 @@ class Invoice < ActiveRecord::Base
 
   def sent?
     state == 'sent'
+  end
+
+  def remindable?
+    %w(sent reminded overdue).include?(state)
   end
 
   def recipients

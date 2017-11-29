@@ -14,6 +14,10 @@ AllCops:
 Rails:
   Enabled: true
 
+# we have not yet introcued ApplicationRecord as a Pattern
+Rails/ApplicationRecord:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 20
   Severity: error
@@ -116,12 +120,9 @@ Style/PercentLiteralDelimiters:
 Style/SymbolArray:
   EnforcedStyle: brackets
 
-
-
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%w': '()'
-
 
 # We thinks that's fine
 Style/SingleLineBlockParams:

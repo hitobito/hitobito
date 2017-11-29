@@ -96,4 +96,33 @@ describe CustomContent do
     end
   end
 
+  context '#subject_with_values' do
+    it 'replaces all placeholders' do
+      subject.subject = 'New Login for {user} at {login-url}'
+      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      expect(output).to eq('New Login for Fred at example.com/login')
+    end
+
+    it 'handles contents without placeholders' do
+      subject.subject = 'Hi There'
+      output = subject.subject_with_values
+      expect(output).to eq('Hi There')
+    end
+
+    it 'raises an error if placeholder is missing' do
+      subject.subject = 'Your new Login at {login-url}'
+      expect { subject.subject_with_values('user' => 'Fred') }.to raise_error(KeyError)
+    end
+
+    it 'raises an error if non-defined placeholder is given' do
+      expect { custom_contents(:notes).subject_with_values('foo' => 'bar') }.to raise_error(ArgumentError)
+    end
+
+    it 'does not care about unused placeholders' do
+      subject.subject = 'Your new Login at {login-url}'
+      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      expect(output).to eq('Your new Login at example.com/login')
+    end
+  end
+
 end

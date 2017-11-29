@@ -53,6 +53,10 @@ class CustomContent < ActiveRecord::Base
     "{#{key}}"
   end
 
+  def subject_with_values(placeholders = {})
+    replace_placeholders(subject.dup, placeholders)
+  end
+
   def body_with_values(placeholders = {})
     replace_placeholders(body.dup, placeholders)
   end

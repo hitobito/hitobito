@@ -23,10 +23,15 @@ module Dropdown
     end
 
     def pdf_links
-      path = params.merge(format: :pdf)
-      add_item(translate(:full), path)
-      add_item(translate(:articles_only), path.merge(esr: false))
-      add_item(translate(:esr_only), path.merge(articles: false))
+      add_item(:full)
+      add_item(:articles_only, esr: false)
+      add_item(:esr_only, articles: false)
     end
+
+    def add_item(key, options = {})
+      path = params.merge(options).merge(format: :pdf)
+      super(translate(key), path.merge(options), data: { invoice_export: true })
+    end
+
   end
 end

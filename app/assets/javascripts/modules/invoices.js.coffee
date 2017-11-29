@@ -18,18 +18,14 @@ app.Invoices = {
     $.ajax(url: "#{form.data('group')}/invoice_list/new?#{form.serialize()}", dataType: 'script')
 
   buildPdfExportLink: (e) ->
-    invoiceIds = []
-    checkedBoxes = $('tbody :checked')
-    for cb in checkedBoxes
-      invoiceIds.push($(cb).attr('value'))
-
-    href = $(e.target).attr('href')
-    separator = if href.indexOf('?') != -1 then '&' else '?'
-    param = separator + 'invoice_ids=' + invoiceIds
-    $(e.target).attr('href',  href + param)
+    ids = ($(item).val() for item in  $('tbody :checked'))
+    if ids.length > 0
+      separator = if e.target.href.indexOf('?') != -1 then '&' else '?'
+      $(e.target).attr('href',  e.target.href + separator + 'invoice_ids=' + ids)
 }
 
 $(document).on('click', 'table[data-checkable] thead :checkbox', app.Invoices.toggle)
 $(document).on('click', 'form[data-checkable] button[type=submit]', app.Invoices.submit)
 $(document).on('input', '#invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
 $(document).on('nested:fieldRemoved:invoice_items', 'form', app.Invoices.recalculate)
+$(document).on('click', 'a[data-invoice-export]', app.Invoices.buildPdfExportLink)

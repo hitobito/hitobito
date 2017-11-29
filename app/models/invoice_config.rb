@@ -27,8 +27,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates_by_schema
 
   def to_s
-    #TODO
-    "#{group.name} - Invoice Config"
+    "#{group.name} - Invoice Config" # TODO: determine proper string representation
   end
 
 end

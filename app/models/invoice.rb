@@ -70,7 +70,7 @@ class Invoice < ActiveRecord::Base
     scope state.to_sym, -> { where(state: state) }
   end
 
-  def multi_create
+  def multi_create # rubocop:disable Metrics/MethodLength
     Invoice.transaction do
       all_saved = recipients.all? do |recipient|
         invoice = self.class.new(attributes.merge(recipient_id: recipient.id))
@@ -85,7 +85,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def calculated
-    %i(total cost vat).collect do |field|
+    [:total, :cost, :vat].collect do |field|
       [field, invoice_items.to_a.sum(&field)]
     end.to_h
   end
@@ -147,7 +147,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def increment_sequence_number
-    invoice_config.increment!(:sequence_number)
+    invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def invoice_config
@@ -163,7 +163,7 @@ class Invoice < ActiveRecord::Base
 
   def sendable?
     return if recipient
-    if(recipient_email.blank? && recipient_address.blank?)
+    if recipient_email.blank? && recipient_address.blank?
       errors.add(:address, :or_email_required)
     end
   end

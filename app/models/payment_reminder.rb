@@ -21,7 +21,6 @@ class PaymentReminder < ActiveRecord::Base
   attr_accessor :invoice_ids
 
   belongs_to :invoice
-  has_one :group, through: :invoice
 
   validate :assert_invoice_remindable
   validates :due_at, uniqueness: { scope: :invoice_id },
@@ -38,6 +37,10 @@ class PaymentReminder < ActiveRecord::Base
 
   def to_s
     I18n.l(due_at)
+  end
+
+  def group
+    invoice.group
   end
 
   private

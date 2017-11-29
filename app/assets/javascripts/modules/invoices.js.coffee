@@ -31,5 +31,5 @@ app.Invoices = {
 
 $(document).on('click', 'table[data-checkable] thead :checkbox', app.Invoices.toggle)
 $(document).on('click', 'form[data-checkable] button[type=submit]', app.Invoices.submit)
-$(document).on('change', '#invoice_items_fields :input', app.Invoices.recalculate)
+$(document).on('input', '#invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
 $(document).on('nested:fieldRemoved:invoice_items', 'form', app.Invoices.recalculate)

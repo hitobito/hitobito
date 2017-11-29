@@ -150,7 +150,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first) == 0
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

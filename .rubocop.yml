@@ -95,6 +95,10 @@ Layout/EmptyLinesAroundModuleBody:
 Layout/MultilineOperationIndentation:
   Enabled: false
 
+# We are using Ruby 2+ anyway...
+Style/AsciiComments:
+  Enabled: false
+
 # For now, we keep encoding comment
 Style/Encoding:
   Enabled: false

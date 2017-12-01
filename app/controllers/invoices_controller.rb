@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoicesController < CrudController
+
   self.nesting = Group
   self.sort_mappings = { recipient: Person.order_by_name_statement }
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
@@ -61,7 +62,7 @@ class InvoicesController < CrudController
   end
 
   def render_multiple_pdf
-    pdf = Export::Pdf::Invoice.render_multiple(invoices.includes(:invoice_items), pdf_options)
+    pdf = Export::Pdf::Invoice.render_multiple(list_entries.includes(:invoice_items), pdf_options)
     filename = "#{t('activerecord.models.invoice.other').downcase}.pdf"
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename
   end
@@ -89,15 +90,6 @@ class InvoicesController < CrudController
       articles: params[:articles] != 'false',
       esr: params[:esr] != 'false'
     }
-  end
-
-  def invoices
-    return entries if invoice_ids.blank?
-    Invoice.where(id: invoice_ids)
-  end
-
-  def invoice_ids
-    params[:invoice_ids].to_s.split(',')
   end
 
 end

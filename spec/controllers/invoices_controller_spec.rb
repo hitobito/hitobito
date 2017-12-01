@@ -34,7 +34,8 @@ describe InvoicesController do
   end
 
   context 'searching' do
-    before { sign_in(person) }
+    let(:invoice) { invoices(:invoice) }
+    before        { sign_in(person) }
 
     it 'GET#index finds invoices by title' do
       get :index, group_id: group.id, q: 'Invoice'
@@ -54,6 +55,17 @@ describe InvoicesController do
     it 'GET#index finds nothing for dummy' do
       get :index, group_id: group.id, q: 'dummy'
       expect(assigns(:invoices)).to be_empty
+    end
+
+    it 'filters invoices by state' do
+      get :index, group_id: group.id, state: :draft
+      expect(assigns(:invoices)).to have(1).item
+    end
+
+    it 'filters invoices by due_since' do
+      invoice.update(due_at: 2.weeks.ago)
+      get :index, group_id: group.id, due_since: :one_week
+      expect(assigns(:invoices)).to have(1).item
     end
   end
 
@@ -101,13 +113,6 @@ describe InvoicesController do
       expect(response.header['Content-Disposition']).to match(/invoice_ti_tlä.pdf/)
       expect(response.content_type).to eq('application/pdf')
     end
-  end
-
-  it 'GET#index finds invoices by sequence_number' do
-    sign_in(person)
-    invoice = Invoice.create!(title: 'dummy', group: group, recipient: person)
-    get :index, group_id: group.id, q: invoice.sequence_number
-    expect(assigns(:invoices)).to have(1).item
   end
 
   it 'DELETE#destroy moves invoice to cancelled state' do

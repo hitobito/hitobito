@@ -16,7 +16,7 @@ class Invoice::Filter
   def apply(scope)
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
-    scope
+    cancelled? ? scope : scope.visible
   end
 
   private
@@ -24,6 +24,10 @@ class Invoice::Filter
   def apply_scope(relation, scope, valid_scopes)
     return relation unless valid_scopes.include?(scope)
     relation.send(scope)
+  end
+
+  def cancelled?
+    params[:state] == 'cancelled'
   end
 
 end

@@ -12,6 +12,7 @@ de:
     "no": "nein"
     unknown: unbekannt
     nobody: niemand
+    all: Alle
 
     from: Von
     until: Bis
@@ -571,6 +572,13 @@ de:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   invoices:
+    filter:
+      due_since: Fällig seit
+      due_since_list:
+        one_day: Gestern
+        one_week: Einer Woche
+        one_month: Einem Monat
+
     sent: Rechnung gestellt
     reminder_sent: Mahnung versendet
     payd: Rechnung bezahlt

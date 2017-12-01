@@ -63,6 +63,7 @@ class Invoice < ActiveRecord::Base
   scope :one_day,    -> { where('due_at < ?', 1.day.ago.to_date) }
   scope :one_week,   -> { where('due_at < ?', 1.week.ago.to_date) }
   scope :one_month,  -> { where('due_at < ?', 1.month.ago.to_date) }
+  scope :visible,    -> { where.not(state: :cancelled) }
 
   STATES.each do |state|
     scope state.to_sym, -> { where(state: state) }

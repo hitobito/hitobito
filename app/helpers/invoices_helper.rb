@@ -44,9 +44,9 @@ module InvoicesHelper
     return unless invoice.sent?
 
     content_tag :table do
-      table_rows = [history_entry(invoice_sent_data(invoice), 'blue')]
+      table_rows = [invoice_history_entry(invoice_sent_data(invoice), 'blue')]
       table_rows << invoice_reminder_rows(invoice)
-      # TODO: Payment done
+      table_rows << invoice_payment_rows(invoice)
       table_rows.join.html_safe
     end
   end
@@ -57,12 +57,21 @@ module InvoicesHelper
     if invoice.reminder_sent?
       invoice.payment_reminders.collect.with_index do |reminder, count|
         next unless reminder.persisted?
-        history_entry(reminder_sent_data(reminder, count + 1), 'red')
+        invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
       end
     end
   end
 
-  def history_entry(data, color)
+  def invoice_payment_rows(invoice)
+    if invoice.payments.present?
+      invoice.payments.collect do |payment|
+        next unless payment.persisted?
+        invoice_history_entry(payment_data(payment), 'green')
+      end
+    end
+  end
+
+  def invoice_history_entry(data, color)
     content_tag :tr do
       data.collect do |d|
         concat content_tag(:td, d, class: color)
@@ -83,6 +92,14 @@ module InvoicesHelper
       '⬤', # Middle Dot
       l(reminder.created_at.to_date, format: :long),
       "#{count}. #{t('invoices.reminder_sent')}"
+    ]
+  end
+
+  def payment_data(payment)
+    [
+      '⬤', # Middle Dot
+      (l(payment.received_at.to_date, format: :long) if payment.received_at),
+      "#{number_to_currency(payment.amount)} #{t('invoices.payd')}"
     ]
   end
 end

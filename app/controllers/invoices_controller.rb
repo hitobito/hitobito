@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoicesController < CrudController
+  decorates :invoice
 
   self.nesting = Group
   self.sort_mappings = { recipient: Person.order_by_name_statement }
@@ -30,6 +31,7 @@ class InvoicesController < CrudController
   end
 
   def show
+    @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { render_html }
       format.pdf { render_pdf }
@@ -62,7 +64,8 @@ class InvoicesController < CrudController
   end
 
   def render_multiple_pdf
-    pdf = Export::Pdf::Invoice.render_multiple(list_entries.includes(:invoice_items), pdf_options)
+    scope = list_entries.includes(:invoice_items)
+    pdf = Export::Pdf::Invoice.render_multiple(scope, pdf_options)
     filename = "#{t('activerecord.models.invoice.other').downcase}.pdf"
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename
   end

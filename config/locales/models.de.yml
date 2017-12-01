@@ -605,6 +605,8 @@ de:
         recipient_address: Empfänger Adresse
         due_at: Fällig am
         sent_at: Gestellt am
+        cost: Betrag
+        total: Total
         total_inkl_vat: Total inkl. MWSt.
 
       invoice_article:

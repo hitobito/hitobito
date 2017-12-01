@@ -8,7 +8,7 @@
     .contactable
       .address
         = invoice_receiver_address(entry)
-        
+
   .invoice-table
     %h2= entry.title
 
@@ -19,24 +19,30 @@
         %td.right
           = l(entry.sent_at, format: :long) if entry.sent?
 
-    = table(entry.invoice_items, :name, :description, :unit_cost, :count, :cost, class: 'table table-striped')
-    
+    = table(entry.invoice_items.list, class: 'table table-striped') do |t|
+      - t.attr(:name)
+      - t.attr(:description)
+      - t.attr(:count)
+      - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
+      - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
+      - t.attr(:total)  { |i| i.decorate.cost }
+
     .invoice-items-total
       %table
         %tr
           %td.left
-            = captionize(:total, Invoice)
+            = captionize(:cost, Invoice)
           %td.right
-            = number_to_currency(entry.calculated[:cost], format: '%n %u')
+            = entry.cost
         %tr
           %td.left
             = captionize(:vat_rate, InvoiceItem)
           %td.right
-            = number_to_currency(entry.calculated[:vat], format: '%n %u')
+            = entry.vat
         %tr
           %td.left
             %b= captionize(:total_inkl_vat, Invoice)
           %td.right
-            %b= number_to_currency(entry.calculated[:total], format: '%n %u')
+            %b= entry.total
 
-    %p= entry.description
+  %p= entry.description

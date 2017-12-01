@@ -10,19 +10,23 @@ class InvoiceMailer < ApplicationMailer
 
   CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
 
-  def notification(recipient, sender, invoice, invoice_file)
-    @recipient = recipient
-    @sender    = sender
-    @invoice   = invoice
+  def notification(recipient_name, recipient_mail, sender, invoice, invoice_file)
+    @recipient_name = recipient_name
+    @recipient_mail = recipient_mail
+    @sender         = sender
+    @invoice        = invoice
 
-    attachments[invoice_file.basename] = invoice_file.read
-    compose(recipient, CONTENT_INVOICE_NOTIFICATION)
+    attachments[invoice.filename] = invoice_file
+
+    custom_content_mail(@recipient_mail, CONTENT_INVOICE_NOTIFICATION,
+                        values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
+                        with_personal_sender(@sender))
   end
 
   private
 
   def placeholder_recipient_name
-    @recipient.greeting_name
+    @recipient_name
   end
 
   def placeholder_invoice_number
@@ -48,7 +52,7 @@ class InvoiceMailer < ApplicationMailer
           [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
            content_tag(:td, calculated[key])].join
         end
-      end
+      end.join
     end
   end
 
@@ -58,6 +62,11 @@ class InvoiceMailer < ApplicationMailer
 
   def placeholder_payment_information
     @invoice.invoice_config.payment_information
+  end
+
+  def content_tag(name, content = nil)
+    content = yield if block_given?
+    "<#{name}>#{content}</#{name}>"
   end
 
 end

@@ -12,6 +12,7 @@
       - safe_join([icon('trash'), ti('link.delete')], ' ')
 
   = invoices_dropdown
+  = action_button(t('invoices.add'), new_polymorphic_path([parent, :invoice]))
 
   %br
   %br

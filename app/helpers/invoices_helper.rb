@@ -35,7 +35,7 @@ module InvoicesHelper
       recipient_address_lines.collect do |l|
         out << (l == recipient_address_lines.first ? "<b>#{l}</b>" : l) + '<br>'
       end
-      out << mail_to(entry.recipient.email)
+      out << mail_to(entry.recipient_email)
       out.html_safe
     end
   end

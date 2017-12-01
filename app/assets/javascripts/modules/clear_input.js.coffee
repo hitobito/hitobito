@@ -4,7 +4,7 @@ class ClearInput
     @_input(cross).val('').trigger('change')
 
   toggleHide: (input) ->
-    group = input.parents('.form-group')
+    group = input.parents('.control-group')
     if input.val() == ''
       group.addClass('has-empty-value')
     else
@@ -12,7 +12,7 @@ class ClearInput
       group.removeClass('has-empty-value')
 
   _input: (cross) ->
-    cross.parents('.form-group').find('input')
+    cross.parents('.control-group').find('input')
 
   bind: ->
     self = this

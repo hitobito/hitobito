@@ -17,6 +17,12 @@ module InvoicesHelper
     badge(invoice.state_label, type)
   end
 
+  def invoice_due_since_options
+    [:one_day, :one_week, :one_month].collect do |key|
+      [key, I18n.t("invoices.filter.due_since_list.#{key}")]
+    end
+  end
+
   def invoices_dropdown
     Dropdown::InvoicesExport.new(self, params).to_s
   end

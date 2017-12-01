@@ -31,6 +31,7 @@ class Invoice < ActiveRecord::Base
   attr_accessor :recipient_ids
 
   STATES = %w(draft sent payed overdue reminded cancelled).freeze
+  DUE_SINCE = %w(one_day one_week one_month).freeze
 
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
@@ -58,9 +59,14 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,       -> { where.not(state: :cancelled).order(:sequence_number) }
-  scope :draft,      -> { where(state: :draft) }
-  scope :sent,       -> { where(state: :sent) }
+  scope :list,       -> { order(:sequence_number) }
+  scope :one_day,    -> { where('due_at < ?', 1.day.ago.to_date) }
+  scope :one_week,   -> { where('due_at < ?', 1.week.ago.to_date) }
+  scope :one_month,  -> { where('due_at < ?', 1.month.ago.to_date) }
+
+  STATES.each do |state|
+    scope state.to_sym, -> { where(state: state) }
+  end
 
   def multi_create
     Invoice.transaction do

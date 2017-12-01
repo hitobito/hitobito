@@ -10,4 +10,4 @@
         = icon(:remove)
 
     = direct_filter_select(:state, Invoice.state_labels.to_a, nil)
-    = direct_filter_select(:due_at, invoice_due_since_options, t('.due_since'))
+    = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))

@@ -581,7 +581,7 @@ de:
     add: Externe Rechnung erstellen
     sent: Rechnung gestellt
     reminder_sent: Mahnung versendet
-    payd: Rechnung bezahlt
+    payd: bezahlt
     destroy:
       flash:
         success: Rechnung wurde storniert.

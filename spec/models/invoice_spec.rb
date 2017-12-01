@@ -1,3 +1,11 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
+#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 
 describe Invoice do
@@ -122,6 +130,13 @@ describe Invoice do
         expect(Invoice.new(state: state)).not_to be_remindable
       end
     end
+  end
+
+  it 'knows a filename for the invoice-pdf' do
+    invoice = create_invoice(sent_at: Time.zone.parse('2017-09-18 14:00:00'))
+    expect(invoice.sequence_number).to eq '834963567-1'
+
+    expect(invoice.filename).to eq 'rechnung-20170918-834963567-1.pdf'
   end
 
   private

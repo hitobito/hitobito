@@ -133,10 +133,14 @@ describe Invoice do
   end
 
   it 'knows a filename for the invoice-pdf' do
-    invoice = create_invoice(sent_at: Time.zone.parse('2017-09-18 14:00:00'))
-    expect(invoice.sequence_number).to eq '834963567-1'
+    invoice = create_invoice
+    now = Time.zone.parse('2017-09-18 14:00:00')
+    Timecop.freeze now do
+      invoice.update(state: :sent)
+      expect(invoice.sequence_number).to eq '834963567-1'
 
-    expect(invoice.filename).to eq 'rechnung-20170918-834963567-1.pdf'
+      expect(invoice.filename).to eq 'rechnung-20170918-834963567-1.pdf'
+    end
   end
 
   private

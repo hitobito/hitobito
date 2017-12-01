@@ -42,16 +42,17 @@ class Invoice < ActiveRecord::Base
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
   before_validation :set_dates, on: :update, if: :sent_state?
-  before_validation :set_recipient_fields, on: :create, if: :recipient
   before_validation :set_self_in_nested
   before_validation :recalculate
 
   validates :state, inclusion: { in: STATES }
   validates :due_at, timeliness: { after: :sent_at }, if: :sent?
   validates :due_at, presence: true, if: :sent?
+  validate :sendable?
 
+  before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
-  after_create :set_recipient_fields
+
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
@@ -160,4 +161,10 @@ class Invoice < ActiveRecord::Base
      recipient.country].compact.join("\n")
   end
 
+  def sendable?
+    return if recipient
+    if(recipient_email.blank? && recipient_address.blank?)
+      errors.add(:address, :or_email_required)
+    end
+  end
 end

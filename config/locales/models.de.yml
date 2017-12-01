@@ -108,6 +108,11 @@ de:
             name:
               must_be_unique: 'existiert bereits'
 
+        invoice:
+          attributes:
+            address:
+              or_email_required: 'oder Email muss ausgefüllt werden'
+
     models:
       acts_as_taggable_on/tag:
         one: Tag

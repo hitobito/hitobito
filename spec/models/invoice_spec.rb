@@ -18,6 +18,12 @@ describe Invoice do
     end.to change { invoice_config.reload.sequence_number }.by(2)
   end
 
+  it 'validates that at least one email or an address is specified if no recipient' do
+    invoice = Invoice.create(title: 'invoice', group: group)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages).to include('Address oder Email muss ausgefüllt werden')
+  end
+
   it 'computes sequence_number based of group_id and invoice_config.sequence_number' do
     expect(create_invoice.sequence_number).to eq "#{group.id}-1"
   end

@@ -21,11 +21,6 @@ class Export::EventParticipationsExportMailer < ApplicationMailer
 
   private
 
-  def compose(recipients, content_key)
-    values = values_for_placeholders(content_key)
-    custom_content_mail(recipients, content_key, values)
-  end
-
   def placeholder_recipient_name
     @recipient.greeting_name
   end

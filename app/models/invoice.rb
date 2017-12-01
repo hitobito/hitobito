@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -118,6 +118,22 @@ class Invoice < ActiveRecord::Base
     Person.where(id: recipient_ids.to_s.split(','))
   end
 
+  def recipient_name
+    recipient.try(:greeting_name) || recipient_address.split("\n").first
+  end
+
+  def filename
+    format('rechnung-%s-%s.pdf', sent_at.strftime('%Y%m%d'), sequence_number)
+  end
+
+  def invoice_config
+    group.invoice_config
+  end
+
+  def state
+    ActiveSupport::StringInquirer.new(self[:state])
+  end
+
   private
 
   def set_self_in_nested
@@ -148,10 +164,6 @@ class Invoice < ActiveRecord::Base
 
   def increment_sequence_number
     invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def invoice_config
-    group.invoice_config
   end
 
   def build_recipient_address

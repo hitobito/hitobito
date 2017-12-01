@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,7 @@ class InvoiceListsController < CrudController
 
   skip_authorize_resource
   before_action :authorize
+  before_action :prepare_flash
   respond_to :js, only: [:new]
 
   helper_method :cancel_url
@@ -44,15 +45,13 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    sent_at = Time.zone.today
-    due_at = sent_at + parent.invoice_config.due_days.days
+    jobs = invoices.map do |invoice|
+      alert('not_draft', invoice) && next unless invoice.state.draft?
 
-    count = invoices.update_all(state: :sent,
-                                due_at: due_at,
-                                sent_at: sent_at,
-                                updated_at: sent_at)
+      Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
+    end.compact
 
-    redirect_with(count: count)
+    redirect_with(count: jobs.count)
   end
 
   def destroy
@@ -81,7 +80,21 @@ class InvoiceListsController < CrudController
   def redirect_with(attrs)
     message = I18n.t("#{controller_name}.#{action_name}", attrs)
     key = attrs[:count] > 0 ? :notice : :alert
-    redirect_to group_invoices_path(parent), key => message
+    flash[key] << message
+    redirect_to group_invoices_path(parent)
+  end
+
+  def prepare_flash
+    flash[:notice] = []
+    flash[:alert] = []
+  end
+
+  def alert(key, invoice)
+    flash[:alert] << I18n.t(
+      "#{controller_name}.#{action_name}.error.#{key}",
+      number: invoice.sequence_number,
+      name:   invoice.recipient_name
+    )
   end
 
   def authorize

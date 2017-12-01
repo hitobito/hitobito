@@ -46,13 +46,10 @@ class InvoiceListsController < CrudController
 
   def update
     jobs = invoices.map do |invoice|
-      if invoice.recipient_email.present?
-        Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
-      else
-        flash[:alert] << I18n.t("#{controller_name}.#{action_name}.error.no_mail",
-                                number: invoice.sequence_number, name: invoice.recipient_name)
-        nil
-      end
+      alert('no_mail', invoice) && next if invoice.recipient_email.blank?
+      alert('not_draft', invoice) && next unless invoice.state.draft?
+
+      Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
     end.compact
 
     redirect_with(count: jobs.count)
@@ -91,6 +88,14 @@ class InvoiceListsController < CrudController
   def prepare_flash
     flash[:notice] = []
     flash[:alert] = []
+  end
+
+  def alert(key, invoice)
+    flash[:alert] << I18n.t(
+      "#{controller_name}.#{action_name}.error.#{key}",
+      number: invoice.sequence_number,
+      name:   invoice.recipient_name
+    )
   end
 
   def authorize

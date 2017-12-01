@@ -16,16 +16,7 @@
   %br
   %br
 
-  = content_for(:filter) do
-    = form_tag(nil, { method: :get, class: 'form-inline', role: 'search', remote: true, data: { spin: true } }) do
-      = hidden_field_tag :returning, true
-      = hidden_field_tag :page, 1
-
-      .form-group.has-feedback.has-clear
-        = search_field_tag :q, params[:q], class: 'form-control', placeholder: 'Search', data: { submit: true }
-        %span.form-control-feedback{data: { clear: true }}
-          = icon(:remove)
-
+  = render "filter"
   .pagination-bar
     = paginate @invoices
 

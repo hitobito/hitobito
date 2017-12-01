@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -61,6 +61,10 @@ CustomContent.seed_once(:key,
   { key: Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT,
     placeholders_required: nil,
     placeholders_optional: 'recipient-name' },
+
+  { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
+    placeholders_required: 'invoice-items, invoice-total, payment-information',
+    placeholders_optional: 'recipient-name, group-name, invoice-number' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -77,6 +81,7 @@ subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT
 people_export_id = CustomContent.get(Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT).id
 events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_EXPORT).id
 event_participations_export_id = CustomContent.get(Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT).id
+invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -373,5 +378,29 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: event_participations_export_id,
    locale: 'it',
    label: 'Export der Event-Teilnehmer' },
+
+  {custom_content_id: invoice_notification_id,
+   locale: 'de',
+   label: 'Rechnung',
+   subject: 'Rechnung {invoice-number} von {group-name}',
+   body: "<p>Hallo {recipient-name}</p>" \
+         "<p>Rechnung von:</p>" \
+         "<p><b>Absender: Verband, Verbandstrasse 23, 3000 Verbandort</b></p>" \
+         "<br/><br/>" \
+         "{invoice-items}<br/><br/>" \
+         "{invoice-total}<br/><br/>" \
+         "{payment-information}<br/><br/>" },
+
+  {custom_content_id: invoice_notification_id,
+   locale: 'en',
+   label: 'Rechnung' },
+
+  {custom_content_id: invoice_notification_id,
+   locale: 'fr',
+   label: 'Rechnung' },
+
+  {custom_content_id: invoice_notification_id,
+   locale: 'it',
+   label: 'Rechnung' },
 
 )

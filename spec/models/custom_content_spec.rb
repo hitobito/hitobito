@@ -1,4 +1,10 @@
 # encoding: utf-8
+
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: custom_contents
@@ -9,10 +15,6 @@
 #  placeholders_optional :string
 #
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 require 'spec_helper'
 
 describe CustomContent do
@@ -59,6 +61,13 @@ describe CustomContent do
     it 'succeeds if all required placeholders are used' do
       is_expected.to be_valid
     end
+
+    it 'succeeds if placeholder is used in subject' do
+      subject.placeholders_required = 'login-url, sender'
+      subject.subject = "Mail from {sender}"
+
+      is_expected.to be_valid
+    end
   end
 
   context '#body_with_values' do
@@ -84,6 +93,35 @@ describe CustomContent do
       subject.body = 'Hello You, here is your site to login: {login-url}'
       output = subject.body_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
       expect(output).to eq('Hello You, here is your site to login: example.com/login')
+    end
+  end
+
+  context '#subject_with_values' do
+    it 'replaces all placeholders' do
+      subject.subject = 'New Login for {user} at {login-url}'
+      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      expect(output).to eq('New Login for Fred at example.com/login')
+    end
+
+    it 'handles contents without placeholders' do
+      subject.subject = 'Hi There'
+      output = subject.subject_with_values
+      expect(output).to eq('Hi There')
+    end
+
+    it 'raises an error if placeholder is missing' do
+      subject.subject = 'Your new Login at {login-url}'
+      expect { subject.subject_with_values('user' => 'Fred') }.to raise_error(KeyError)
+    end
+
+    it 'raises an error if non-defined placeholder is given' do
+      expect { custom_contents(:notes).subject_with_values('foo' => 'bar') }.to raise_error(ArgumentError)
+    end
+
+    it 'does not care about unused placeholders' do
+      subject.subject = 'Your new Login at {login-url}'
+      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      expect(output).to eq('Your new Login at example.com/login')
     end
   end
 

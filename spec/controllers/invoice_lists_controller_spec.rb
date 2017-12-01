@@ -1,4 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
+
+#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 describe InvoiceListsController do
   let(:group) { groups(:bottom_layer_one) }
@@ -54,7 +61,7 @@ describe InvoiceListsController do
       end.to change { group.invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq 'Rechnung <i>Title</i> wurde erstellt.'
+      expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde erstellt.'
     end
 
     it 'POST#create creates an invoice for each member of group' do
@@ -65,22 +72,25 @@ describe InvoiceListsController do
       end.to change { group.invoices.count }.by(2)
 
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq 'Rechnung <i>Title</i> wurde für 2 Empfänger erstellt.'
+      expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde für 2 Empfänger erstellt.'
     end
 
     it 'PUT#update informs if not invoice has been selected' do
       post :update, { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:alert]).to eq 'Zuerst muss eine Rechnung ausgewählt werden.'
+      expect(flash[:alert]).to include 'Zuerst muss eine Rechnung ausgewählt werden.'
     end
 
     it 'PUT#update moves invoice to sent state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id] } }
+        travel(1.day) do
+          post :update, { group_id: group.id, ids: [invoice.id] }
+          Delayed::Worker.new.work_off
+        end
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq 'Rechnung wurde verschickt.'
+      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund verschickt.'
       expect(invoice.reload.state).to eq 'sent'
       expect(invoice.due_at).to be_present
       expect(invoice.sent_at).to be_present
@@ -90,16 +100,19 @@ describe InvoiceListsController do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id, other.id] } }
+        travel(1.day) do
+          post :update, { group_id: group.id, ids: [invoice.id, other.id] }
+          Delayed::Worker.new.work_off
+        end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq '2 Rechnungen wurden verschickt.'
+      expect(flash[:notice]).to include '2 Rechnungen werden im Hintergrund verschickt.'
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do
       delete :destroy, { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:alert]).to eq 'Zuerst muss eine Rechnung ausgewählt werden.'
+      expect(flash[:alert]).to include 'Zuerst muss eine Rechnung ausgewählt werden.'
     end
 
     it 'DELETE#destroy moves invoice to cancelled state' do
@@ -108,7 +121,7 @@ describe InvoiceListsController do
         travel(1.day) { delete :destroy, { group_id: group.id, ids: [invoice.id] } }
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+      expect(flash[:notice]).to include 'Rechnung wurde storniert.'
       expect(invoice.reload.state).to eq 'cancelled'
     end
 
@@ -121,7 +134,7 @@ describe InvoiceListsController do
         end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to eq '2 Rechnungen wurden storniert.'
+      expect(flash[:notice]).to include '2 Rechnungen wurden storniert.'
       expect(other.reload.state).to eq 'cancelled'
     end
   end

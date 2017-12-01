@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,10 +53,20 @@ class CustomContent < ActiveRecord::Base
     "{#{key}}"
   end
 
+  def subject_with_values(placeholders = {})
+    replace_placeholders(subject.dup, placeholders)
+  end
+
   def body_with_values(placeholders = {})
+    replace_placeholders(body.dup, placeholders)
+  end
+
+  private
+
+  def replace_placeholders(string, placeholders)
     check_placeholders_exist(placeholders)
 
-    placeholders_list.each_with_object(body.dup) do |placeholder, output|
+    placeholders_list.each_with_object(string) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
         output.gsub!(token, placeholders.fetch(placeholder))
@@ -64,15 +74,13 @@ class CustomContent < ActiveRecord::Base
     end
   end
 
-  private
-
   def as_list(placeholders)
     placeholders.to_s.split(',').collect(&:strip)
   end
 
   def assert_required_placeholders_are_used
     placeholders_required_list.each do |placeholder|
-      unless body.to_s.include?(placeholder_token(placeholder))
+      unless [subject, body].any? { |str| str.to_s.include?(placeholder_token(placeholder)) }
         errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
       end
     end

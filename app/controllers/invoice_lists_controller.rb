@@ -21,6 +21,7 @@ class InvoiceListsController < CrudController
 
   skip_authorize_resource
   before_action :authorize
+  before_action :prepare_flash
   respond_to :js, only: [:new]
 
   helper_method :cancel_url
@@ -45,8 +46,14 @@ class InvoiceListsController < CrudController
 
   def update
     jobs = invoices.map do |invoice|
-      Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
-    end
+      if invoice.recipient_email.present?
+        Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
+      else
+        flash[:alert] << I18n.t("#{controller_name}.#{action_name}.error.no_mail",
+                                number: invoice.sequence_number, name: invoice.recipient_name)
+        nil
+      end
+    end.compact
 
     redirect_with(count: jobs.count)
   end
@@ -77,7 +84,13 @@ class InvoiceListsController < CrudController
   def redirect_with(attrs)
     message = I18n.t("#{controller_name}.#{action_name}", attrs)
     key = attrs[:count] > 0 ? :notice : :alert
-    redirect_to group_invoices_path(parent), key => message
+    flash[key] << message
+    redirect_to group_invoices_path(parent)
+  end
+
+  def prepare_flash
+    flash[:notice] = []
+    flash[:alert] = []
   end
 
   def authorize

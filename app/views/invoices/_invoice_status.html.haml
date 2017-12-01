@@ -15,7 +15,7 @@
       %td
         = format_attr(entry, :state)
       %td
-        = number_to_currency(entry.calculated[:cost], format: '%n %u')
+        = entry.cost
       %td
         = format_attr(entry, :due_at)
 

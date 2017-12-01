@@ -21,6 +21,8 @@ class InvoiceItem < ActiveRecord::Base
 
   belongs_to :invoice
 
+  scope :list, -> { order(:name) }
+
   validates_by_schema
 
   def to_s

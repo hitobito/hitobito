@@ -84,7 +84,10 @@ describe InvoiceListsController do
     it 'PUT#update moves invoice to sent state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id] } }
+        travel(1.day) do
+          post :update, { group_id: group.id, ids: [invoice.id] }
+          Delayed::Worker.new.work_off
+        end
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include 'Rechnung wird im Hintergrund verschickt.'
@@ -97,7 +100,10 @@ describe InvoiceListsController do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { post :update, { group_id: group.id, ids: [invoice.id, other.id] } }
+        travel(1.day) do
+          post :update, { group_id: group.id, ids: [invoice.id, other.id] }
+          Delayed::Worker.new.work_off
+        end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include '2 Rechnungen werden im Hintergrund verschickt.'

@@ -130,6 +130,10 @@ class Invoice < ActiveRecord::Base
     group.invoice_config
   end
 
+  def state
+    ActiveSupport::StringInquirer.new(self[:state])
+  end
+
   private
 
   def set_self_in_nested

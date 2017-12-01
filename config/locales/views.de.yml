@@ -602,10 +602,11 @@ de:
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
-      one: "Rechnung wurde verschickt."
-      other: "%{count} Rechnungen wurden verschickt."
+      one: "Rechnung wird im Hintergrund verschickt."
+      other: "%{count} Rechnungen werden im Hintergrund verschickt."
       error:
-        no_mail: "Rechnung %{number} an %{name} konnte nicht verschickt werden, da keine E-Mail hinterlegt ist."
+        no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
+        not_draft: "Rechnung %{number} wurde bereits verschickt."
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."

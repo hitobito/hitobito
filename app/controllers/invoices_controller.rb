@@ -68,7 +68,8 @@ class InvoicesController < CrudController
 
   def list_entries
     scope = super.includes(recipient: [:groups, :roles]).references(:recipient).list
-    scope.page(params[:page]).per(50)
+    scope = scope.page(params[:page]).per(50)
+    Invoice::Filter.new(params).apply(scope)
   end
 
   def authorize_class

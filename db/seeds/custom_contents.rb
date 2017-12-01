@@ -386,8 +386,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "<p>Hallo {recipient-name}</p>" \
          "<p>Rechnung von:</p>" \
          "<p><b>Absender: Verband, Verbandstrasse 23, 3000 Verbandort</b></p>" \
+         "<br/><br/>" \
          "{invoice-items}<br/><br/>" \
-         "{invoide-total}<br/><br/>" \
+         "{invoice-total}<br/><br/>" \
          "{payment-information}<br/><br/>" },
 
   {custom_content_id: invoice_notification_id,

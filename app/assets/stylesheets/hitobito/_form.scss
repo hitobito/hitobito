@@ -89,6 +89,9 @@ a.green {
   margin-bottom: 0;
 }
 
+.form-inline-search .control-group {
+  display: inline-block;
+}
 @include responsive(mediaPhone) {
   .form-horizontal .btn-toolbar {
     margin-left: 180px;
@@ -467,14 +470,16 @@ input.switcher {
 }
 
 .has-clear {
+  position: relative;
   input::-ms-clear { display: none; }
 
   [data-clear] {
     cursor: pointer;
     opacity: 0.3;
     pointer-events: auto;
-    position: relative;
-    left: -25px;
+    position: absolute;
+    right: 5px;
+    top: 30px;
 
     &:hover {
       opacity: 0.5;

@@ -44,15 +44,11 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    sent_at = Time.zone.today
-    due_at = sent_at + parent.invoice_config.due_days.days
+    jobs = invoices.map do |invoice|
+      Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
+    end
 
-    count = invoices.update_all(state: :sent,
-                                due_at: due_at,
-                                sent_at: sent_at,
-                                updated_at: sent_at)
-
-    redirect_with(count: count)
+    redirect_with(count: jobs.count)
   end
 
   def destroy

@@ -14,7 +14,7 @@ class InvoiceMailer < ApplicationMailer
     @recipient_name = recipient_name
     @recipient_mail = recipient_mail
     @sender         = sender
-    @invoice        = invoice
+    @invoice        = InvoiceDecorator.decorate(invoice)
 
     attachments[invoice.filename] = invoice_file
 
@@ -34,7 +34,7 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_invoice_items
-    @invoice.invoice_items.map do |item|
+    InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
       [
         item.name,
         item.description,
@@ -44,13 +44,11 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_invoice_total
-    calculated = @invoice.calculated
-
     content_tag :table do
       [:total, :vat].map do |key|
         content_tag :tr do
           [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-           content_tag(:td, calculated[key])].join
+           content_tag(:td, @invoice.send(key))].join
         end
       end.join
     end

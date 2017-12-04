@@ -9,15 +9,14 @@ class InvoiceAbility < AbilityDsl::Base
 
   on(Invoice) do
     permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
-    class_side(:index).any_finance_group
   end
 
   on(InvoiceArticle) do
-    permission(:finance).may(:index, :new, :create, :show, :edit, :update, :destroy).in_layer
+    permission(:finance).may(:new, :create, :show, :edit, :update, :destroy).in_layer
   end
 
   on(InvoiceConfig) do
-    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
+    permission(:finance).may(:show, :edit, :update).in_layer
   end
 
   on(Payment) do

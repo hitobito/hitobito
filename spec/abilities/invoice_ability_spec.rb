@@ -25,8 +25,8 @@ describe InvoiceAbility do
       let(:reminder) { invoice.payment_reminders.build }
       let(:payment)  { invoice.payments.build }
 
-      it 'may index' do
-        is_expected.to be_able_to(:index, Invoice)
+      it 'may not index' do
+        is_expected.not_to be_able_to(:index, Invoice)
       end
 
       it 'may not manage' do

@@ -74,7 +74,7 @@ class InvoiceListsController < CrudController
   end
 
   def invoices
-    parent.invoices.where(id: params[:ids])
+    parent.invoices.where(id: params[:ids].to_s.split(','))
   end
 
   def redirect_with(attrs)

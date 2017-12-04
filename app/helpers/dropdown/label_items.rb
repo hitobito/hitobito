@@ -7,21 +7,22 @@
 
 module Dropdown
   class LabelItems
-    attr_reader :dropdown
+    attr_reader :dropdown, :item_options
 
     delegate :add_item, :translate, :user, :params, to: :dropdown
 
-    def initialize(dropdown, condense_labels: false)
+    def initialize(dropdown, item_options = {})
       @dropdown = dropdown
-      @condense_labels = condense_labels
+      @condense_labels = item_options.delete(:condense_labels)
+      @item_options = item_options.reverse_merge(target: :new,
+                                                 class: 'export-label-format')
     end
-
 
     def add
       label_item = add_item(translate(:labels), main_label_link)
       add_last_used_format_item(label_item)
       add_label_format_items(label_item)
-      add_condensed_labels_option_items(label_item)
+      add_condensed_labels_option_items(label_item) if @condense_labels
     end
 
     def main_label_link
@@ -37,15 +38,16 @@ module Dropdown
         last_format = user.last_label_format
         parent.sub_items << Item.new(last_format.to_s,
                                      export_label_format_path(last_format.id),
-                                     target: :new)
+                                     item_options)
         parent.sub_items << Divider.new
       end
     end
 
     def add_label_format_items(parent)
       LabelFormat.list.for_person(user).each do |label_format|
-        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-                                     target: :new, class: 'export-label-format')
+        parent.sub_items << Item.new(label_format,
+                                     export_label_format_path(label_format.id),
+                                     item_options)
       end
     end
 
@@ -53,6 +55,7 @@ module Dropdown
       parent.sub_items << Divider.new
       parent.sub_items << ToggleCondensedLabelsItem.new(dropdown.template)
     end
+
     def export_label_format_path(id)
       params.merge(format: :pdf, label_format_id: id,
                    condense_labels: ToggleCondensedLabelsItem::DEFAULT_STATE)

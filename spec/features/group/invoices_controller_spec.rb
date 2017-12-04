@@ -15,7 +15,7 @@ describe InvoicesController do
     top_group_member = Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group))
     sign_in(top_group_member.person)
     visit root_path
-    expect(page).not_to have_link 'Rechnungen'
+    expect(page.find('#page-navigation')).not_to have_link 'Rechnungen'
   end
 
   context 'authenticated' do
@@ -25,7 +25,7 @@ describe InvoicesController do
 
     it 'shows invoices link' do
       visit root_path
-      expect(page).to have_link 'Rechnungen'
+      expect(page.find('#page-navigation')).to have_link 'Rechnungen'
     end
 
     it 'shows invoices subnav' do

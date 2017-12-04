@@ -73,7 +73,7 @@ class InvoicesController < CrudController
     if invoices.size > 1
       "#{t('activerecord.models.invoice.other').downcase}.pdf"
     else
-      "#{invoices.first.title.tr(' ', '_').downcase.scan(/[a-z0-9äöüéèêáàâ_]/i).join}.pdf"
+      invoices.first.filename
     end
   end
 

@@ -70,6 +70,13 @@ class Invoice < ActiveRecord::Base
     scope state.to_sym, -> { where(state: state) }
   end
 
+  def self.to_contactables(invoices)
+    invoices.collect do |invoice|
+      next if invoice.recipient_address.blank?
+      Person.new(address: invoice.recipient_address)
+    end.compact
+  end
+
   def multi_create # rubocop:disable Metrics/MethodLength
     Invoice.transaction do
       all_saved = recipients.all? do |recipient|
@@ -132,10 +139,6 @@ class Invoice < ActiveRecord::Base
 
   def state
     ActiveSupport::StringInquirer.new(self[:state])
-  end
-
-  def recipient_as_person
-    Person.new(address: recipient_address)
   end
 
   private

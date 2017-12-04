@@ -25,9 +25,9 @@ module Dropdown
     end
 
     def pdf_links
-      add_item(translate(:full), export_path)
-      add_item(translate(:articles_only), export_path(esr: false))
-      add_item(translate(:esr_only), export_path(articles: false))
+      add_item(translate(:full), export_path, target: :new)
+      add_item(translate(:articles_only), export_path(esr: false), target: :new)
+      add_item(translate(:esr_only), export_path(articles: false), target: :new)
     end
 
     def export_path(options = {})

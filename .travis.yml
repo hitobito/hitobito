@@ -26,7 +26,7 @@ install:
   - bundle install --path vendor/bundle
   - bundle update mysql2
 script:
-  - bundle exec rake db:create ci --trace
+  - bundle exec rake db:create ci --trace skip_tasks=spec:features
 matrix:
   allow_failures:
   - rvm: 2.4.0

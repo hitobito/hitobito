@@ -149,6 +149,8 @@ de:
     full: 'Rechnung inkl. Einzahlungsschein'
     esr_only: 'Einzahlungsschein separat'
     articles_only: 'Rechnung separat'
+    csv: 'CSV'
+    pdf: 'PDF'
 
   dropdown/invoice_sending:
     button: 'Rechnung stellen'

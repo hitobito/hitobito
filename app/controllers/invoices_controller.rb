@@ -27,6 +27,7 @@ class InvoicesController < CrudController
     respond_to do |format|
       format.html { super }
       format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
     end
   end
 
@@ -35,6 +36,7 @@ class InvoicesController < CrudController
     respond_to do |format|
       format.html { render_html }
       format.pdf { generate_pdf([entry]) }
+      format.csv { render_invoices_csv([entry]) }
     end
   end
 
@@ -60,20 +62,25 @@ class InvoicesController < CrudController
     if params[:label_format_id]
       render_labels(invoices)
     else
-      render_invoices(invoices)
+      render_invoices_pdf(invoices)
     end
   end
 
-  def render_invoices(invoices)
-    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(invoices)
+  def render_invoices_csv(invoices)
+    csv = Export::Tabular::Invoices::List.csv(invoices)
+    send_data csv, type: :csv, filename: filename(:csv, invoices)
   end
 
-  def filename(invoices)
+  def render_invoices_pdf(invoices)
+    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+  end
+
+  def filename(extension, invoices)
     if invoices.size > 1
-      "#{t('activerecord.models.invoice.other').downcase}.pdf"
+      "#{t('activerecord.models.invoice.other').downcase}.#{extension}"
     else
-      invoices.first.filename
+      invoices.first.filename(extension)
     end
   end
 
@@ -96,7 +103,7 @@ class InvoicesController < CrudController
   end
 
   def payment_attrs
-    @payment_attrs ||= flash[:payment] || { amount: entry.open_amount }
+    @payment_attrs ||= flash[:payment] || { amount: entry.amount_open }
   end
 
   def pdf_options

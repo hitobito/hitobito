@@ -95,7 +95,7 @@ describe InvoicesController do
       expect(assigns(:payment).amount).to eq 5
     end
 
-    it 'GET#show assigns payment with open_amount' do
+    it 'GET#show assigns payment with amount_open' do
       invoice.update(state: :sent)
       invoice.payments.create!(amount: 0.5)
       get :show, group_id: group.id, id: invoice.id
@@ -123,8 +123,15 @@ describe InvoicesController do
     it 'exports pdf' do
       get :show, group_id: group.id, id: invoice.id, format: :pdf
 
-      expect(response.header['Content-Disposition']).to match /Rechnung-#{invoice.sequence_number}.pdf/
+      expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.pdf/)
       expect(response.content_type).to eq('application/pdf')
+    end
+
+    it 'exports csv' do
+      get :show, group_id: group.id, id: invoice.id, format: :csv
+
+      expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.csv/)
+      expect(response.content_type).to eq('text/csv')
     end
   end
 
@@ -152,6 +159,12 @@ describe InvoicesController do
     it 'exports labels pdf' do
       get :index, group_id: group.id, label_format_id: label_formats(:standard).id, format: :pdf
       expect(response.content_type).to eq('application/pdf')
+    end
+
+    it 'exports pdf' do
+      get :index, group_id: group.id, format: :csv
+      expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
+      expect(response.content_type).to eq('text/csv')
     end
   end
 

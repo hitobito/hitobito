@@ -148,7 +148,7 @@ describe Invoice do
   it 'knows a filename for the invoice-pdf' do
     invoice = create_invoice
     expect(invoice.sequence_number).to eq '834963567-1'
-    expect(invoice.filename).to eq 'Rechnung-834963567-1.pdf'
+    expect(invoice.filename(:pdf)).to eq 'Rechnung-834963567-1.pdf'
   end
 
   it '.to_contactable' do
@@ -158,13 +158,13 @@ describe Invoice do
     expect(contactables({}, { recipient_address: 'test' })).to have(1).item
   end
 
-  it 'open_amount returns total amount minus payments' do
+  it 'amount_open returns total amount minus payments' do
     invoice = invoices(:invoice)
-    expect(invoice.open_amount).to eq 2.0
+    expect(invoice.amount_open).to eq 2.0
     invoice.payments.create!(amount: 1.5)
-    expect(invoice.open_amount).to eq 0.5
+    expect(invoice.amount_open).to eq 0.5
     invoice.payments.create!(amount: 1)
-    expect(invoice.open_amount).to eq(-0.5)
+    expect(invoice.amount_open).to eq -0.5
   end
 
   private

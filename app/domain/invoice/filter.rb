@@ -37,6 +37,6 @@ class Invoice::Filter
   end
 
   def invoice_ids
-    @invoice_ids = params[:invoice_ids].to_s.split(',')
+    @invoice_ids = params[:ids].to_s.split(',')
   end
 end

@@ -85,7 +85,7 @@ describe InvoiceListsController do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
         travel(1.day) do
-          post :update, { group_id: group.id, ids: [invoice.id] }
+          post :update, { group_id: group.id, ids: invoice.id }
           Delayed::Worker.new.work_off
         end
       end.to change { invoice.reload.updated_at }
@@ -101,7 +101,7 @@ describe InvoiceListsController do
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
         travel(1.day) do
-          post :update, { group_id: group.id, ids: [invoice.id, other.id] }
+          post :update, { group_id: group.id, ids: [invoice.id, other.id].join(',') }
           Delayed::Worker.new.work_off
         end
       end.to change { other.reload.updated_at }
@@ -118,7 +118,7 @@ describe InvoiceListsController do
     it 'DELETE#destroy moves invoice to cancelled state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { delete :destroy, { group_id: group.id, ids: [invoice.id] } }
+        travel(1.day) { delete :destroy, { group_id: group.id, ids: invoice.id } }
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include 'Rechnung wurde storniert.'
@@ -130,7 +130,7 @@ describe InvoiceListsController do
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
         travel 1.day do
-          delete :destroy, { group_id: group.id, ids: [invoice.id, other.id] }
+          delete :destroy, { group_id: group.id, ids: [invoice.id, other.id].join(',') }
         end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)

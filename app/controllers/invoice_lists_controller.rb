@@ -46,6 +46,7 @@ class InvoiceListsController < CrudController
 
   def update
     jobs = invoices.map do |invoice|
+      alert('no_mail', invoice) && next if invoice.recipient_email.blank?
       alert('not_draft', invoice) && next unless invoice.state.draft?
 
       Invoice::SendNotificationJob.new(invoice, current_user).enqueue!

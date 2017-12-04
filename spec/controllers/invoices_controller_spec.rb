@@ -135,6 +135,11 @@ describe InvoicesController do
       expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
       expect(response.content_type).to eq('application/pdf')
     end
+
+    it 'exports labels pdf' do
+      get :index, group_id: group.id, label_format_id: label_formats(:standard).id, format: :pdf
+      expect(response.content_type).to eq('application/pdf')
+    end
   end
 
 end

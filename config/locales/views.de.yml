@@ -149,6 +149,11 @@ de:
     esr_only: 'Einzahlungsschein separat'
     articles_only: 'Rechnung separat'
 
+  dropdown/invoice_sending:
+    button: 'Rechnung stellen'
+    state: 'Status setzen'
+    mail: 'Status setzen und per mail verschicken'
+
   devise:
     failure:
       already_authenticated: 'Du bist bereits angemeldet.'
@@ -602,9 +607,13 @@ de:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
-      zero: "Zuerst muss eine Rechnung ausgewählt werden."
-      one: "Rechnung wird im Hintergrund verschickt."
-      other: "%{count} Rechnungen werden im Hintergrund verschickt."
+      zero: 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
+      one: "Rechnung wurde gestellt."
+      other: "%{count} Rechnungen wurden gestellt."
+      background_send:
+        zero: "Es werden keine Rechnungen per mail verschickt."
+        one: "Rechnung wird im Hintergrund per mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per mail verschickt."
       error:
         no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
         not_draft: "Rechnung %{number} wurde bereits verschickt."

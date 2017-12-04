@@ -149,6 +149,11 @@ de:
     esr_only: 'Einzahlungsschein separat'
     articles_only: 'Rechnung separat'
 
+  dropdown/invoice_sending:
+    button: 'Rechnung stellen'
+    state: 'Status setzen'
+    mail: 'Status setzen und per mail verschicken'
+
   devise:
     failure:
       already_authenticated: 'Du bist bereits angemeldet.'

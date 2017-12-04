@@ -143,7 +143,19 @@ describe Invoice do
     end
   end
 
+  it '.to_contactable' do
+    expect(contactables(recipient_address: 'test')).to have(1).item
+    expect(contactables(recipient_address: 'test').first.address).to eq 'test'
+    expect(contactables({})).to be_empty
+    expect(contactables({}, { recipient_address: 'test' })).to have(1).item
+  end
+
   private
+
+  def contactables(*args)
+    invoices = args.collect { |attrs| Invoice.new(attrs) }
+    Invoice.to_contactables(invoices)
+  end
 
   def create_invoice(attrs = {})
     Invoice.create!(attrs.merge(title: 'invoice', group: group, recipient: person))

@@ -78,7 +78,7 @@ class InvoicesController < CrudController
   end
 
   def render_labels(invoices)
-    recipients = invoices.collect(&:recipient_as_person)
+    recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
     send_data pdf, type: :pdf, disposition: 'inline'
   rescue Prawn::Errors::CannotFit

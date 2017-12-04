@@ -134,6 +134,10 @@ class Invoice < ActiveRecord::Base
     ActiveSupport::StringInquirer.new(self[:state])
   end
 
+  def recipient_as_person
+    Person.new(address: recipient_address)
+  end
+
   private
 
   def set_self_in_nested

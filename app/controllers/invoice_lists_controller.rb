@@ -45,12 +45,11 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    jobs = invoices.map do |invoice|
-      alert('no_mail', invoice) && next if invoice.recipient_email.blank?
+    jobs = invoices.includes(:recipient).map do |invoice|
       alert('not_draft', invoice) && next unless invoice.state.draft?
+      alert('no_mail', invoice) && next if send_mail? && invoice.recipient_email.blank?
 
-      invoice.update(state: 'sent')
-      Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
+      update_and_send_mail(invoice, send_mail?)
     end.compact
 
     redirect_with(count: jobs.count)
@@ -71,6 +70,20 @@ class InvoiceListsController < CrudController
 
   private
 
+  def send_mail?
+    params[:mail] == 'true'
+  end
+
+  def update_and_send_mail(invoice, send_mail)
+    invoice.update(state: 'sent')
+
+    if send_mail
+      Invoice::SendNotificationJob.new(invoice, current_person).enqueue!
+    else
+      invoice
+    end
+  end
+
   def list_entries
     super.includes(recipient: [:groups, :roles])
   end
@@ -80,9 +93,11 @@ class InvoiceListsController < CrudController
   end
 
   def redirect_with(attrs)
-    message = I18n.t("#{controller_name}.#{action_name}", attrs)
+    i18n_prefix = "#{controller_name}.#{action_name}"
+    message = I18n.t(i18n_prefix, attrs)
     key = attrs[:count] > 0 ? :notice : :alert
     flash[key] << message
+    flash[key] << I18n.t("#{i18n_prefix}.background_send", attrs) if send_mail?
     redirect_to group_invoices_path(parent)
   end
 

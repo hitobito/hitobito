@@ -30,7 +30,7 @@ module NavigationHelper
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
-      if: ->(_) { can?(:index, Invoice) } }
+      if: ->(_) { current_user.finance_groups.any? } }
   ]
 
 

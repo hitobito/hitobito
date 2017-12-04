@@ -12,6 +12,10 @@ class InvoiceConfigsController < CrudController
 
   private
 
+  def build_entry
+    parent.invoice_config
+  end
+
   def find_entry
     parent.invoice_config
   end

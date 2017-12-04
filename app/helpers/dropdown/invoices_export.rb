@@ -25,9 +25,13 @@ module Dropdown
     end
 
     def pdf_links
-      add_item(translate(:full), export_path, target: :new)
-      add_item(translate(:articles_only), export_path(esr: false), target: :new)
-      add_item(translate(:esr_only), export_path(articles: false), target: :new)
+      add_item(translate(:full), export_path, item_options)
+      add_item(translate(:articles_only), export_path(esr: false), item_options)
+      add_item(translate(:esr_only), export_path(articles: false), item_options)
+    end
+
+    def item_options
+      { target: :new, data: { checkable: true } }
     end
 
     def export_path(options = {})
@@ -36,7 +40,7 @@ module Dropdown
 
     def label_links
       if LabelFormat.exists?
-        Dropdown::LabelItems.new(self).add
+        Dropdown::LabelItems.new(self, item_options.merge(condense_labels: false)).add
       end
     end
 

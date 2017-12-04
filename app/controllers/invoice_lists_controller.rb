@@ -49,6 +49,7 @@ class InvoiceListsController < CrudController
       alert('no_mail', invoice) && next if invoice.recipient_email.blank?
       alert('not_draft', invoice) && next unless invoice.state.draft?
 
+      invoice.update(state: 'sent')
       Invoice::SendNotificationJob.new(invoice, current_user).enqueue!
     end.compact
 

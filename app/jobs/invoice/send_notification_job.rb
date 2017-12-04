@@ -20,8 +20,6 @@ class Invoice::SendNotificationJob < BaseJob
 
     pdf_options = { articles: true, esr: false }
 
-    invoice.update(state: 'sent')
-
     InvoiceMailer.notification(
       invoice.recipient_name,
       invoice.recipient_email,

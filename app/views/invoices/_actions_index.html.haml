@@ -2,3 +2,12 @@
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
+
+- if parent.invoices.draft.exists?
+  = action_button 'Rechnung stellen', group_invoice_list_path, :envelope, method: :put, data: { checkable: true }
+
+- if entries.present?
+  = action_button ti('link.delete'), group_invoice_list_path, :trash, method: :delete, data: { checkable: true }
+  = invoices_dropdown
+
+= action_button(t('invoices.add'), new_group_invoice_path(parent), :plus)

@@ -57,7 +57,7 @@ class InvoiceListsController < CrudController
   end
 
   def destroy
-    count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
+    count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
     redirect_with(count: count)
   end
 

@@ -36,7 +36,7 @@ module InvoicesHelper
         out << (l == recipient_address_lines.first ? "<b>#{l}</b>" : l) + '<br>'
       end
       out << mail_to(entry.recipient_email)
-      out.html_safe
+      out.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 
@@ -47,7 +47,7 @@ module InvoicesHelper
       table_rows = [invoice_history_entry(invoice_sent_data(invoice), 'blue')]
       table_rows << invoice_reminder_rows(invoice)
       table_rows << invoice_payment_rows(invoice)
-      table_rows.join.html_safe
+      table_rows.join.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 
@@ -75,7 +75,7 @@ module InvoicesHelper
     content_tag :tr do
       data.collect do |d|
         concat content_tag(:td, d, class: color)
-      end.to_s.html_safe
+      end.to_s.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 

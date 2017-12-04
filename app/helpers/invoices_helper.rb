@@ -27,6 +27,10 @@ module InvoicesHelper
     Dropdown::InvoicesExport.new(self, params).to_s
   end
 
+  def invoice_sending_dropdown(path_meth)
+    Dropdown::InvoiceSending.new(self, params, path_meth).to_s
+  end
+
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
     out = ''

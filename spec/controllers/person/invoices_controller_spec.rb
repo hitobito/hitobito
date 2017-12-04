@@ -6,12 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+require_dependency 'person/invoices_controller'
 
 describe Person::InvoicesController do
   let(:group)         { groups(:bottom_layer_one) }
   let(:top_leader)    { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
-
 
   it 'may not index person invoices if we have no finance permission in layer' do
     sign_in(bottom_member)
@@ -20,7 +20,7 @@ describe Person::InvoicesController do
     end.to raise_error(CanCan::AccessDenied)
   end
 
-  it 'may  index my own invoices' do
+  it 'may index my own invoices' do
     sign_in(top_leader)
     get :index, group_id: groups(:top_group).id, id: top_leader.id
     expect(assigns(:invoices)).to have(2).items

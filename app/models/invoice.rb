@@ -111,10 +111,6 @@ class Invoice < ActiveRecord::Base
     payment_reminders.present?
   end
 
-  def open_amount
-    total - payments.sum(:amount)
-  end
-
   def remindable?
     %w(sent reminded overdue).include?(state)
   end
@@ -127,12 +123,24 @@ class Invoice < ActiveRecord::Base
     recipient.try(:greeting_name) || recipient_address.split("\n").first
   end
 
-  def filename
-    format('%s-%s.pdf', self.class.model_name.human, sequence_number)
+  def filename(extension)
+    format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
   end
 
   def invoice_config
     group.invoice_config
+  end
+
+  def state
+    ActiveSupport::StringInquirer.new(self[:state])
+  end
+
+  def amount_open
+    total - payments.sum(:amount)
+  end
+
+  def amount_paid
+    payments.sum(:amount)
   end
 
   private

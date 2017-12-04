@@ -591,6 +591,8 @@ de:
         invoice_item_article: Rechnungsartikel
         state: Status
         sequence_number: Nummer
+        esr_number: Referenz Nummer
+        amount_paid: Total bezahlt
         states:
           draft: Entwurf
           sent: Gestellt

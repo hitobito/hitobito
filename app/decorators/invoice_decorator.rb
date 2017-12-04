@@ -10,15 +10,29 @@ class InvoiceDecorator < ApplicationDecorator
   decorates :invoice
 
   def cost
-    h.number_to_currency(calculated[:cost], format: '%n %u')
+    format_currency(calculated[:cost])
   end
 
   def vat
-    h.number_to_currency(calculated[:vat], format: '%n %u')
+    format_currency(calculated[:vat])
   end
 
   def total
-    h.number_to_currency(model.total || calculated[:total], format: '%n %u')
+    format_currency(model.total || calculated[:total])
+  end
+
+  def amount_open
+    format_currency(model.amount_open)
+  end
+
+  def amount_paid
+    format_currency(model.amount_paid)
+  end
+
+  private
+
+  def format_currency(amount)
+    h.number_to_currency(amount, format: '%n %u')
   end
 
 end

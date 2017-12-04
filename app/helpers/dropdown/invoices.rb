@@ -23,15 +23,16 @@ module Dropdown
 
     def export
       label_links
+      csv_links
       self
     end
 
     private
 
     def pdf_links
-      add_item(translate(:full), export_path, item_options)
-      add_item(translate(:articles_only), export_path(esr: false), item_options)
-      add_item(translate(:esr_only), export_path(articles: false), item_options)
+      add_item(translate(:full), export_path(:pdf), item_options)
+      add_item(translate(:articles_only), export_path(:pdf, esr: false), item_options)
+      add_item(translate(:esr_only), export_path(:pdf, articles: false), item_options)
     end
 
     def label_links
@@ -40,13 +41,16 @@ module Dropdown
       end
     end
 
+    def csv_links
+      add_item(translate(:csv), export_path(:csv), target: :new)
+    end
+
     def item_options
       { target: :new, data: { checkable: true } }
     end
 
-    def export_path(options = {})
-      params.merge(options).merge(format: :pdf)
+    def export_path(format, options = {})
+      params.merge(options).merge(format: format)
     end
-
   end
 end

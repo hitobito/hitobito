@@ -1111,11 +1111,29 @@ describe PersonAbility do
     end
   end
 
+  context 'finance' do
+    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+    it 'may not index in bottom layer group' do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
+      is_expected.not_to be_able_to(:index_invoices, other)
+    end
+
+    it 'may index in top group' do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.not_to be_able_to(:index_invoices, other)
+    end
+  end
+
   describe 'no permissions' do
     let(:role) { Fabricate(Role::External.name.to_sym, group: groups(:top_group)) }
 
     it 'may view details of himself' do
       is_expected.to be_able_to(:show_full, role.person.reload)
+    end
+
+    it 'may view invoices of himself' do
+      is_expected.to be_able_to(:index_invoices, role.person.reload)
     end
 
     it 'may modify himself' do

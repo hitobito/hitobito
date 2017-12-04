@@ -115,7 +115,8 @@ describe CustomContent do
     end
 
     it 'raises an error if non-defined placeholder is given' do
-      expect { custom_contents(:notes).subject_with_values('foo' => 'bar') }.to raise_error(ArgumentError)
+      subject.subject = 'Your new Login'
+      expect { subject.subject_with_values('foo' => 'bar') }.to raise_error(ArgumentError)
     end
 
     it 'does not care about unused placeholders' do

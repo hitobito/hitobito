@@ -37,6 +37,7 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
   Max: 100
   Severity: warning
+  IgnoreCopDirectives: true
 
 Metrics/MethodLength:
   Max: 10

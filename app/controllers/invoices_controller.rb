@@ -91,10 +91,6 @@ class InvoicesController < CrudController
     Invoice::Filter.new(params).apply(scope)
   end
 
-  def authorize_class
-    authorize!(:create, parent.invoices.build)
-  end
-
   def reminder_attrs
     @reminder_attrs ||= flash[:payment_reminder]
   end
@@ -116,6 +112,10 @@ class InvoicesController < CrudController
         current_user.update_column(:last_label_format_id, label_format.id)
       end
     end
+  end
+
+  def authorize_class
+    authorize!(:index_invoices, parent)
   end
 
 end

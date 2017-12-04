@@ -340,6 +340,26 @@ describe GroupAbility do
     end
   end
 
+  context 'finance' do
+    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+    it 'may not index invoices on random group' do
+      is_expected.not_to be_able_to(:index_invoices, Group.new)
+    end
+
+    it 'may not index in own group' do
+      is_expected.not_to be_able_to(:index_invoices, groups(:top_group))
+    end
+
+    it 'may not index in bottom layer group' do
+      is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+    end
+
+    it 'may index in top layer layer group' do
+      is_expected.to be_able_to(:index_invoices, groups(:top_layer))
+    end
+  end
+
   context 'deleted group' do
     let(:group) { groups(:bottom_layer_two) }
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group) }

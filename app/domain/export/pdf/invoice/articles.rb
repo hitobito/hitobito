@@ -39,9 +39,9 @@ module Export::Pdf::Invoice
     def articles
       [
         [I18n.t('activerecord.models.invoice_article.one'),
-         I18n.t('activerecord.attributes.invoice_items.count'),
-         I18n.t('activerecord.attributes.invoice_items.unit_cost'),
-         I18n.t('activerecord.attributes.invoice_items.cost')]
+         I18n.t('activerecord.attributes.invoice_item.count'),
+         I18n.t('activerecord.attributes.invoice_item.unit_cost'),
+         I18n.t('activerecord.attributes.invoice_item.cost')]
       ] + article_data
     end
 

@@ -15,4 +15,10 @@ class InvoiceArticlesController < CrudController
     number name description category unit_cost vat_rate cost_center account
   ]
 
+  private
+
+  def authorize_class
+    authorize!(:index_invoices, parent)
+  end
+
 end

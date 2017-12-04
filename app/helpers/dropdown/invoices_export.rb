@@ -8,11 +8,12 @@
 module Dropdown
   class InvoicesExport < Base
 
-    attr_reader :params
+    attr_reader :params, :user
 
     def initialize(template, params)
       super(template, translate(:button), :download)
       @params = params
+      @user = template.current_user
       init_items
     end
 
@@ -20,17 +21,23 @@ module Dropdown
 
     def init_items
       pdf_links
+      label_links
     end
 
     def pdf_links
-      add_item(:full)
-      add_item(:articles_only, esr: false)
-      add_item(:esr_only, articles: false)
+      add_item(translate(:full), export_path, target: :new)
+      add_item(translate(:articles_only), export_path(esr: false), target: :new)
+      add_item(translate(:esr_only), export_path(articles: false), target: :new)
     end
 
-    def add_item(key, options = {})
-      path = params.merge(options).merge(format: :pdf)
-      super(translate(key), path.merge(options), data: { invoice_export: true })
+    def export_path(options = {})
+      params.merge(options).merge(format: :pdf)
+    end
+
+    def label_links
+      if LabelFormat.exists?
+        Dropdown::LabelItems.new(self).add
+      end
     end
 
   end

@@ -28,4 +28,4 @@ $(document).on('click', 'table[data-checkable] thead :checkbox', app.Invoices.to
 $(document).on('click', 'form[data-checkable] button[type=submit]', app.Invoices.submit)
 $(document).on('input', '#invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
 $(document).on('nested:fieldRemoved:invoice_items', 'form', app.Invoices.recalculate)
-$(document).on('click', 'a[data-invoice-export]', app.Invoices.buildPdfExportLink)
+$(document).on('click', 'form[data-checkable] ul.dropdown-menu a', app.Invoices.buildPdfExportLink)

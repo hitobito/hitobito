@@ -23,26 +23,25 @@ class InvoicesController < CrudController
                             :_destroy
                           ]]
 
-
-  def destroy
-    cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
-    set_failure_notice unless cancelled
-    respond_with(entry, success: cancelled, location: group_invoices_path(parent))
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
+    end
   end
 
   def show
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { render_html }
-      format.pdf { render_pdf }
+      format.pdf { generate_pdf([entry]) }
     end
   end
 
-  def index
-    respond_to do |format|
-      format.html { super }
-      format.pdf { render_multiple_pdf }
-    end
+  def destroy
+    cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
+    set_failure_notice unless cancelled
+    respond_with(entry, success: cancelled, location: group_invoices_path(parent))
   end
 
   private
@@ -57,17 +56,33 @@ class InvoicesController < CrudController
     end
   end
 
-  def render_pdf
-    pdf = Export::Pdf::Invoice.render(entry, pdf_options)
-    filename = "#{entry.title.tr(' ', '_').downcase.scan(/[a-z0-9äöüéèêáàâ_]/i).join}.pdf"
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+  def generate_pdf(invoices)
+    if params[:label_format_id]
+      render_labels(invoices)
+    else
+      render_invoices(invoices)
+    end
   end
 
-  def render_multiple_pdf
-    scope = list_entries.includes(:invoice_items)
-    pdf = Export::Pdf::Invoice.render_multiple(scope, pdf_options)
-    filename = "#{t('activerecord.models.invoice.other').downcase}.pdf"
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+  def render_invoices(invoices)
+    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(invoices)
+  end
+
+  def filename(invoices)
+    if invoices.size > 1
+      "#{t('activerecord.models.invoice.other').downcase}.pdf"
+    else
+      "#{invoices.first.title.tr(' ', '_').downcase.scan(/[a-z0-9äöüéèêáàâ_]/i).join}.pdf"
+    end
+  end
+
+  def render_labels(invoices)
+    recipients = Invoice.to_contactables(invoices)
+    pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
+    send_data pdf, type: :pdf, disposition: 'inline'
+  rescue Prawn::Errors::CannotFit
+    redirect_to :back, alert: t('people.pdf.cannot_fit')
   end
 
   def list_entries
@@ -93,6 +108,14 @@ class InvoicesController < CrudController
       articles: params[:articles] != 'false',
       esr: params[:esr] != 'false'
     }
+  end
+
+  def find_and_remember_label_format
+    LabelFormat.find(params[:label_format_id]).tap do |label_format|
+      unless current_user.last_label_format_id == label_format.id
+        current_user.update_column(:last_label_format_id, label_format.id)
+      end
+    end
   end
 
 end

@@ -47,6 +47,7 @@ Hitobito::Application.routes.draw do
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
+
         member do
           post :send_password_instructions
           put :primary_group
@@ -54,6 +55,7 @@ Hitobito::Application.routes.draw do
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
+          get 'invoices' => 'person/invoices#index'
         end
 
         resources :notes, only: [:create, :destroy]

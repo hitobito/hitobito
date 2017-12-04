@@ -849,6 +849,7 @@ de:
       history: Verlauf
       log: Log
       colleagues: Mitarbeiter/-innen
+      invoices: Rechnungen
 
     actions_show:
       send_login: Login schicken

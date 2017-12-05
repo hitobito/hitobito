@@ -6,9 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class Payment < ActiveRecord::Base
+
   belongs_to :invoice
 
-  before_validation :set_recieved_at
+  before_validation :set_received_at
   after_create :update_invoice
 
   scope :list, -> { order(created_at: :desc) }
@@ -27,7 +28,7 @@ class Payment < ActiveRecord::Base
     end
   end
 
-  def set_recieved_at
+  def set_received_at
     self.received_at ||= Time.zone.today
   end
 

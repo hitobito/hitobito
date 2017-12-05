@@ -16,7 +16,7 @@ class Group::Merger
   end
 
   def merge!
-    fail('Cannot merge these Groups') unless group2_valid?
+    raise('Cannot merge these Groups') unless group2_valid?
 
     ::Group.transaction do
       if create_new_group
@@ -69,7 +69,6 @@ class Group::Merger
       child.parent(true)
       child.save!
     end
-
   end
 
   def copy_roles

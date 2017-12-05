@@ -55,8 +55,9 @@ class InvoiceListsController < CrudController
     redirect_with(count: jobs.count)
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def destroy
-    count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+    count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
     redirect_with(count: count)
   end
 

@@ -45,14 +45,14 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    jobs = invoices.includes(:recipient).map do |invoice|
-      alert('not_draft', invoice) && next unless invoice.state.draft?
+    updated = invoices.includes(:recipient).map do |invoice|
+      alert('not_draft', invoice) && next unless invoice.draft?
       alert('no_mail', invoice) && next if send_mail? && invoice.recipient_email.blank?
 
-      update_and_send_mail(invoice, send_mail?)
+      update_and_send_mail(invoice)
     end.compact
 
-    redirect_with(count: jobs.count)
+    redirect_with(count: updated.count)
   end
 
   # rubocop:disable Rails/SkipsModelValidations
@@ -75,14 +75,14 @@ class InvoiceListsController < CrudController
     params[:mail] == 'true'
   end
 
-  def update_and_send_mail(invoice, send_mail)
-    invoice.update(state: 'sent')
-
-    if send_mail
-      Invoice::SendNotificationJob.new(invoice, current_person).enqueue!
-    else
-      invoice
+  def update_and_send_mail(invoice)
+    invoice.update(state: send_mail? ? :sent : :issued).tap do
+      enqueue_sender_job(invoice) if send_mail?
     end
+  end
+
+  def enqueue_sender_job(invoice)
+    Invoice::SendNotificationJob.new(invoice, current_person).enqueue!
   end
 
   def list_entries

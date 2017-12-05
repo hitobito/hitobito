@@ -153,7 +153,7 @@ de:
   dropdown/invoice_sending:
     button: 'Rechnung stellen'
     state: 'Status setzen'
-    mail: 'Status setzen und per mail verschicken'
+    mail: 'Status setzen und per E-Mail verschicken'
 
   devise:
     failure:
@@ -612,9 +612,9 @@ de:
       one: "Rechnung wurde gestellt."
       other: "%{count} Rechnungen wurden gestellt."
       background_send:
-        zero: "Es werden keine Rechnungen per mail verschickt."
-        one: "Rechnung wird im Hintergrund per mail verschickt."
-        other: "%{count} Rechnungen werden im Hintergrund per mail verschickt."
+        zero: "Es werden keine Rechnungen per E-Mail verschickt."
+        one: "Rechnung wird im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
       error:
         no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
         not_draft: "Rechnung %{number} wurde bereits verschickt."

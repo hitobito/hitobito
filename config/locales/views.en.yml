@@ -98,6 +98,7 @@ en:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Labels'
     emails: 'E-Mail addresses'
     addresses: 'Address list'

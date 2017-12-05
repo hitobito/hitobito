@@ -6,7 +6,7 @@
     - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
   - t.col(t.sort_header(:title)) do |invoice|
     %strong= link_to invoice.title, group_invoice_path(parent, invoice)
-  - t.sortable_attrs(:sequence_number, :state, :recipient, :sent_at, :due_at)
+  - t.sortable_attrs(:sequence_number, :state, :recipient, :issued_at, :sent_at, :due_at)
   - t.col(t.sort_header(:total)) { |i| i.decorate.total }
 
 = paginate @invoices

@@ -3,6 +3,7 @@
     = f.labeled_input_fields :title, :description
     = f.labeled(:state) do
       = f.collection_select(:state, Invoice.state_labels.to_a, :first, :second)
+    = f.labeled_input_field :issued_at
     = f.labeled_input_field :due_at
 
   = field_set_tag do

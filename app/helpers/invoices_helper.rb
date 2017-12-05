@@ -35,6 +35,10 @@ module InvoicesHelper
     Dropdown::InvoiceSending.new(self, params, path_meth)
   end
 
+  def invoice_history(invoice)
+    Invoice::History.new(self, invoice)
+  end
+
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
     out = ''
@@ -46,69 +50,5 @@ module InvoicesHelper
       out << mail_to(entry.recipient_email)
       out.html_safe # rubocop:disable Rails/OutputSafety
     end
-  end
-
-  def invoice_history(invoice)
-    return unless invoice.sent?
-
-    content_tag :table do
-      table_rows = [invoice_history_entry(invoice_sent_data(invoice), 'blue')]
-      table_rows << invoice_reminder_rows(invoice)
-      table_rows << invoice_payment_rows(invoice)
-      table_rows.compact.join.html_safe # rubocop:disable Rails/OutputSafety
-    end
-  end
-
-  private
-
-  def invoice_reminder_rows(invoice)
-    if invoice.reminder_sent?
-      invoice.payment_reminders.collect.with_index do |reminder, count|
-        next unless reminder.persisted?
-        invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
-      end
-    end
-  end
-
-  def invoice_payment_rows(invoice)
-    if invoice.payments.present?
-      invoice.payments.collect do |payment|
-        next unless payment.persisted?
-        invoice_history_entry(payment_data(payment), 'green')
-      end
-    end
-  end
-
-  def invoice_history_entry(data, color)
-    return unless data
-    content_tag :tr do
-      data.collect do |d|
-        concat content_tag(:td, d, class: color)
-      end.to_s.html_safe # rubocop:disable Rails/OutputSafety
-    end
-  end
-
-  def invoice_sent_data(invoice)
-    [
-      '⬤', # Middle Dot
-      l(invoice.sent_at, format: :long),
-      t('invoices.sent')
-    ] if invoice.sent_at?
-  end
-
-  def reminder_sent_data(reminder, count)
-    [
-      '⬤', # Middle Dot
-      l(reminder.created_at.to_date, format: :long),
-      "#{count}. #{t('invoices.reminder_sent')}"
-    ]
-  end
-
-  def payment_data(payment)
-    [
-      '⬤', # Middle Dot
-      (l(payment.received_at.to_date, format: :long) if payment.received_at),
-      "#{number_to_currency(payment.amount)} #{t('invoices.payd')}"
-    ]
   end
 end

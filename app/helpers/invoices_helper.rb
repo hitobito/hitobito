@@ -23,12 +23,16 @@ module InvoicesHelper
     end
   end
 
-  def invoices_dropdown
-    Dropdown::InvoicesExport.new(self, params).to_s
+  def invoices_export_dropdown
+    Dropdown::Invoices.new(self, params, :download).export
+  end
+
+  def invoices_print_dropdown
+    Dropdown::Invoices.new(self, params, :print).print
   end
 
   def invoice_sending_dropdown(path_meth)
-    Dropdown::InvoiceSending.new(self, params, path_meth).to_s
+    Dropdown::InvoiceSending.new(self, params, path_meth)
   end
 
   def invoice_receiver_address(invoice)

@@ -8,6 +8,7 @@
 
 - if entries.present?
   = action_button ti('link.delete'), group_invoice_list_path, :trash, method: :delete, data: { checkable: true }
-  = invoices_dropdown
+  = invoices_export_dropdown
+  = invoices_print_dropdown
 
 = action_button(t('invoices.add'), new_group_invoice_path(parent), :plus)

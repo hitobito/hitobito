@@ -4,7 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 = button_action_edit if can?(:edit, entry)
-= invoices_dropdown
+= invoices_export_dropdown
+= invoices_print_dropdown
 = button_action_destroy if can?(:destroy, entry)
 
 - if entry.remindable? && can?(:update, entry)

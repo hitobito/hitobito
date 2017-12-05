@@ -112,12 +112,9 @@ describe InvoicesController do
     end
 
     it 'exports pdf' do
-      expect_any_instance_of(Invoice).to receive(:title).
-        at_least(:once).and_return('?invoice ^?ti_tlä')
-
       get :show, group_id: group.id, id: invoice.id, format: :pdf
 
-      expect(response.header['Content-Disposition']).to match(/invoice_ti_tlä.pdf/)
+      expect(response.header['Content-Disposition']).to match /Rechnung-#{invoice.sequence_number}.pdf/
       expect(response.content_type).to eq('application/pdf')
     end
   end

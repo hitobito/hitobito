@@ -130,7 +130,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def filename
-    format('rechnung-%s-%s.pdf', sent_at.strftime('%Y%m%d'), sequence_number)
+    format('%s-%s.pdf', self.class.model_name.human, sequence_number)
   end
 
   def invoice_config

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171201094234) do
+ActiveRecord::Schema.define(version: 20171205085115) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -370,7 +370,7 @@ ActiveRecord::Schema.define(version: 20171201094234) do
   create_table "payments", force: :cascade do |t|
     t.integer "invoice_id",                           null: false
     t.decimal "amount",      precision: 12, scale: 2, null: false
-    t.date    "received_at"
+    t.date    "received_at", null: false
   end
 
   add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id"

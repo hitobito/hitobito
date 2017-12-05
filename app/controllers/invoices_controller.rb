@@ -96,7 +96,7 @@ class InvoicesController < CrudController
   end
 
   def payment_attrs
-    @payment_attrs ||= flash[:payment] || { amount: entry.total }
+    @payment_attrs ||= flash[:payment] || { amount: entry.open_amount }
   end
 
   def pdf_options

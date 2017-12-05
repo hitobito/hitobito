@@ -145,6 +145,15 @@ describe Invoice do
     expect(contactables({}, { recipient_address: 'test' })).to have(1).item
   end
 
+  it 'open_amount returns total amount minus payments' do
+    invoice = invoices(:invoice)
+    expect(invoice.open_amount).to eq 2.0
+    invoice.payments.create!(amount: 1.5)
+    expect(invoice.open_amount).to eq 0.5
+    invoice.payments.create!(amount: 1)
+    expect(invoice.open_amount).to eq -0.5
+  end
+
   private
 
   def contactables(*args)

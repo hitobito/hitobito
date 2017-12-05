@@ -117,7 +117,7 @@ describe InvoiceListsController do
 
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
-      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund per mail verschickt.'
+      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund per E-Mail verschickt.'
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do

@@ -18,7 +18,7 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def total
-    h.number_to_currency(model.total, format: '%n %u')
+    h.number_to_currency(model.total || calculated[:total], format: '%n %u')
   end
 
 end

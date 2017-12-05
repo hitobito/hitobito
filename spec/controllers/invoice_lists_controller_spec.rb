@@ -78,19 +78,20 @@ describe InvoiceListsController do
     it 'PUT#update informs if not invoice has been selected' do
       post :update, { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:alert]).to include 'Zuerst muss eine Rechnung ausgewählt werden.'
+      expect(flash[:alert]).to include 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
     end
 
     it 'PUT#update moves invoice to sent state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
-      expect do
-        travel(1.day) do
-          post :update, { group_id: group.id, ids: invoice.id }
-          Delayed::Worker.new.work_off
-        end
-      end.to change { invoice.reload.updated_at }
+      travel(1.day) do
+        expect do
+          expect do
+            post :update, { group_id: group.id, ids: invoice.id }
+          end.to change { invoice.reload.updated_at }
+        end.not_to change { Delayed::Job.count }
+      end
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund verschickt.'
+      expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
       expect(invoice.reload.state).to eq 'sent'
       expect(invoice.due_at).to be_present
       expect(invoice.sent_at).to be_present
@@ -99,14 +100,24 @@ describe InvoiceListsController do
     it 'PUT#update can move multiple invoices at once' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       other = Invoice.create!(group: group, title: 'test', recipient: person)
-      expect do
-        travel(1.day) do
+      travel(1.day) do
+        expect do
           post :update, { group_id: group.id, ids: [invoice.id, other.id].join(',') }
-          Delayed::Worker.new.work_off
-        end
-      end.to change { other.reload.updated_at }
+        end.to change { other.reload.updated_at }
+      end
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to include '2 Rechnungen werden im Hintergrund verschickt.'
+      expect(flash[:notice]).to include '2 Rechnungen wurden gestellt.'
+    end
+
+    it 'PUT#update enqueues job' do
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person)
+      expect do
+        post :update, { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
+      end.to change { Delayed::Job.count }.by(1)
+
+      expect(response).to redirect_to group_invoices_path(group)
+      expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
+      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund per mail verschickt.'
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do

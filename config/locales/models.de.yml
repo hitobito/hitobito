@@ -109,9 +109,7 @@ de:
               must_be_unique: 'existiert bereits'
 
         invoice:
-          attributes:
-            address:
-              or_email_required: 'oder Email muss ausgefüllt werden'
+          recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
 
     models:
       acts_as_taggable_on/tag:

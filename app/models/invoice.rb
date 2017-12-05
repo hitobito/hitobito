@@ -183,7 +183,7 @@ class Invoice < ActiveRecord::Base
   def sendable?
     return if recipient
     if recipient_email.blank? && recipient_address.blank?
-      errors.add(:address, :or_email_required)
+      errors.add(:base, :recipient_address_or_email_required)
     end
   end
 end

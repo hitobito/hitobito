@@ -29,7 +29,7 @@ describe Invoice do
   it 'validates that at least one email or an address is specified if no recipient' do
     invoice = Invoice.create(title: 'invoice', group: group)
     expect(invoice).not_to be_valid
-    expect(invoice.errors.full_messages).to include('Address oder Email muss ausgefüllt werden')
+    expect(invoice.errors.full_messages).to include('Empfänger Addresse oder E-Mail muss ausgefüllt werden')
   end
 
   it 'computes sequence_number based of group_id and invoice_config.sequence_number' do

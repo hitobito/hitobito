@@ -92,7 +92,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
-  has_many :invoices
+  has_many :invoices, dependent: :destroy
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
 

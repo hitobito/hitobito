@@ -11,7 +11,7 @@ class Person::InvoicesController < InvoicesController
 
   def list_entries
     scope = Invoice.
-      includes(recipient: [:groups, :roles]).
+      includes(:group, recipient: [:groups, :roles]).
       joins(:recipient).where(recipient: person).list
 
     scope = scope.page(params[:page]).per(50)

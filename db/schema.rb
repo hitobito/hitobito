@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205085115) do
+ActiveRecord::Schema.define(version: 20171205122949) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -291,6 +291,7 @@ ActiveRecord::Schema.define(version: 20171205085115) do
     t.datetime "updated_at",                                                   null: false
     t.string   "account_number"
     t.text     "address"
+    t.date     "issued_at"
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number"

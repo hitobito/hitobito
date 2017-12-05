@@ -41,14 +41,13 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
-  before_validation :set_dates, on: :update, if: :sent_state?
+  before_validation :set_dates, on: :update, if: :sent?
   before_validation :set_self_in_nested
   before_validation :recalculate
 
   validates :state, inclusion: { in: STATES }
-  validates :due_at, timeliness: { after: :sent_at }, if: :sent?
-  validates :due_at, presence: true, if: :sent?
-  validate :sendable?
+  validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validate :assert_sendable?, unless: :recipient_id?
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
@@ -68,6 +67,9 @@ class Invoice < ActiveRecord::Base
 
   STATES.each do |state|
     scope state.to_sym, -> { where(state: state) }
+    define_method "#{state}?" do
+      self.state == state
+    end
   end
 
   def self.to_contactables(invoices)
@@ -107,14 +109,6 @@ class Invoice < ActiveRecord::Base
 
   def reminder_sent?
     payment_reminders.present?
-  end
-
-  def sent?
-    sent_at.present?
-  end
-
-  def sent_state?
-    state == 'sent'
   end
 
   def open_amount
@@ -184,8 +178,7 @@ class Invoice < ActiveRecord::Base
      recipient.country].compact.join("\n")
   end
 
-  def sendable?
-    return if recipient
+  def assert_sendable?
     if recipient_email.blank? && recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
     end

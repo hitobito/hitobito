@@ -42,8 +42,8 @@ class PeopleController < CrudController
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries) }
-      format.csv   { render_tabular_entries(:csv, filter_entries) }
-      format.xlsx  { render_tabular_entries(:xlsx, filter_entries) }
+      format.csv   { render_tabular_entries_in_background(:csv)  && redirect_to(action: :index) }
+      format.xlsx  { render_tabular_entries_in_background(:xlsx) && redirect_to(action: :index) }
       format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }
       format.email { render_emails(filter_entries) }
       format.json  { render_entries_json(filter_entries) }
@@ -171,9 +171,15 @@ class PeopleController < CrudController
     end
   end
 
-  def render_tabular_entries(format, entries)
-    full = params[:details].present? && index_full_ability?
-    render_tabular(format, prepare_tabular_entries(entries, full), full)
+  def render_tabular_entries_in_background(format)
+    email = current_person.email
+    if email
+      full = params[:details].present? && index_full_ability?
+      render_tabular_in_background(format, full)
+      flash[:notice] = translate(:export_enqueued, email: email)
+    else
+      flash[:alert] = translate(:export_email_needed)
+    end
   end
 
   def prepare_tabular_entries(entries, full)
@@ -190,6 +196,11 @@ class PeopleController < CrudController
 
   def render_tabular_entry(format)
     render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
+  end
+
+  def render_tabular_in_background(format, full)
+    person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
+    Export::PeopleExportJob.new(format, full, current_person.id, person_filter).enqueue!
   end
 
   def render_tabular(format, entries, full)

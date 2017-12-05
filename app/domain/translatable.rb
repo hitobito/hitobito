@@ -7,11 +7,11 @@
 
 module Translatable
 
-  private
-
   def translate(key, options = {})
     I18n.t(full_translation_key(key), options)
   end
+
+  private
 
   def full_translation_key(suffix)
     [translation_prefix, suffix].join('.').to_sym

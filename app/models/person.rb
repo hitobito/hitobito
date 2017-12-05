@@ -264,6 +264,11 @@ class Person < ActiveRecord::Base
     primary_group.layer_group if primary_group
   end
 
+  def finance_groups
+    groups_with_permission(:finance).
+      flat_map(&:layer_group)
+  end
+
   private
 
   def override_blank_email

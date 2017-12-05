@@ -1,0 +1,16 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= button_action_edit if can?(:edit, entry)
+= invoices_export_dropdown
+= invoices_print_dropdown
+= button_action_destroy if can?(:destroy, entry)
+
+- if entry.remindable? && can?(:update, entry)
+  = action_button(t('crud.new.title', model: PaymentReminder.model_name.human),
+    '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment_reminder' } })
+
+  = action_button(t('crud.new.title', model: Payment.model_name.human),
+    '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment' } })

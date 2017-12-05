@@ -99,6 +99,7 @@ it:
     button: 'esportare'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'etichette'
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'

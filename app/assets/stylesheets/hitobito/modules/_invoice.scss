@@ -1,0 +1,73 @@
+.invoice-state {
+  background: $grayLighter;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 10px 21px;
+
+  .invoice-state-table {
+    float: left;
+    margin-left: 50px;
+    margin-bottom: 20px;
+
+    tr th {
+      color: $gray;
+      font-weight: normal;
+      text-align: left;
+    }
+    tr td{
+      padding-right: 30px;
+    }
+  }
+
+  .invoice-history{
+    table {
+      float: left;
+      margin-left: 50px;
+
+      td:first-child { font-size: 6px; padding-right: 5px; }
+      td.red:first-child { color: $red; }
+      td.blue:first-child { color: $blue; }
+      td.green:first-child { color: $green; }
+      td:nth-child(2) { 
+        padding-right: 20px;
+        color: $gray;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+.invoice {
+  margin: 0px 50px;
+
+  .invoice-recipient-address{
+    margin: 30px 0px;
+  }
+
+
+  .invoice-table {
+    table.header {
+      border-bottom: 1px solid $grayLight;
+      width: 100%;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    table tr th:last-child,
+    table tr td:last-child {
+      @extend .right;
+    }
+
+    .invoice-items-total {
+      margin-top: -15px;
+      height: 60px;
+
+      table{
+        float: right;
+        width: 250px;
+        tr{ border-bottom: 1px solid $grayLight; }
+        tr:first-child{ border-bottom: none; }
+      }
+    }
+  }
+}

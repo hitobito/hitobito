@@ -67,9 +67,16 @@ class PersonAbility < AbilityDsl::Base
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
 
+    permission(:finance).may(:index_invoices).in_layer_group
+    permission(:any).may(:index_invoices).herself
+
     permission(:admin).may(:show).people_without_roles
 
     general(:send_password_instructions).not_self
+  end
+
+  def in_layer_group
+    contains_any?(user.finance_groups.collect(&:id), person.layer_group_ids)
   end
 
   def not_self

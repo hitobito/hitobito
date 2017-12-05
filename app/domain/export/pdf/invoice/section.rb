@@ -18,7 +18,7 @@ module Export::Pdf::Invoice
              :image, :group, :move_cursor_to, :float,
              to: :pdf
 
-    delegate :recipient, :invoice_items, to: :invoice
+    delegate :recipient, :invoice_items, :recipient_address, :address, to: :invoice
 
     def initialize(pdf, invoice)
       @pdf = pdf
@@ -26,16 +26,6 @@ module Export::Pdf::Invoice
     end
 
     private
-
-    def receiver_address_table
-      receiver_address = [
-        [recipient.full_name],
-        [recipient.address],
-        ["#{recipient.zip_code} #{recipient.town}"],
-        [Countries.label(recipient.country)]
-      ]
-      table(receiver_address, cell_style: { borders: [], padding: [0, 0, 0, 0] })
-    end
 
     def helper
       @helper ||= Class.new do

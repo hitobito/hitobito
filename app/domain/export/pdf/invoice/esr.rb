@@ -58,9 +58,16 @@ module Export::Pdf::Invoice
     def receiver_address
       [[300, 100], [-48, 70]].each do |width, height|
         bounding_box([width, height], width: 150, height: 80) do
-          receiver_address_table
+          address_table
         end
       end
+    end
+
+    def address_table
+      return unless address.present?
+      address_data = [address.split(/\n/)]
+
+      table(address_data, cell_style: { borders: [], padding: [0, 0, 0, 0] })
     end
   end
 end

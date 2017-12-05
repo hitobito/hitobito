@@ -92,7 +92,16 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount).to eq invoice.total
+      expect(assigns(:payment).amount).to eq 5
+    end
+
+    it 'GET#show assigns payment with open_amount' do
+      invoice.update(state: :sent)
+      invoice.payments.create!(amount: 0.5)
+      get :show, group_id: group.id, id: invoice.id
+      expect(assigns(:payment)).to be_present
+      expect(assigns(:payment_valid)).to eq true
+      expect(assigns(:payment).amount).to eq 4.5
     end
 
     it 'GET#show assigns reminder with flash parameters' do

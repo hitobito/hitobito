@@ -117,6 +117,10 @@ class Invoice < ActiveRecord::Base
     state == 'sent'
   end
 
+  def open_amount
+    total - payments.sum(:amount)
+  end
+
   def remindable?
     %w(sent reminded overdue).include?(state)
   end

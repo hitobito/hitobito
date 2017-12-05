@@ -10,6 +10,28 @@ class SphinxIndexJob < RecurringJob
   run_every Settings.sphinx.index.interval.minutes
 
   def perform_internal
-    ThinkingSphinx::RakeInterface.new.index
+    if sphinx_local?
+      run_rebuild_task
+    end
   end
+
+  private
+
+  def sphinx_local?
+    Hitobito::Application.sphinx_local?
+  end
+
+  def reschedule
+    sphinx_local? ? super : disable_job!
+  end
+
+  def disable_job!
+    delayed_jobs.destroy_all
+  end
+
+  def run_rebuild_task
+    Hitobito::Application.load_tasks
+    Rake::Task['ts:rebuild'].invoke
+  end
+
 end

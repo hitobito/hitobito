@@ -1,0 +1,7 @@
+- state = 'in' unless @reminder_valid
+
+#payment_reminder{class: %W(collapse #{state}).compact.join(' ')}
+  = standard_form(@reminder, url: group_invoice_payment_reminders_path(parent, entry)) do |f|
+    = f.error_messages
+    = f.labeled_input_fields :due_at, :message
+    = save_form_buttons(f, nil, cancel_url: group_invoice_path(parent, entry))

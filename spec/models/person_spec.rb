@@ -504,4 +504,8 @@ describe Person do
     end
   end
 
+  it '#finance_groups returns list of group on which user may manage invoices' do
+    expect(people(:bottom_member).finance_groups).to eq [groups(:bottom_layer_one)]
+  end
+
 end

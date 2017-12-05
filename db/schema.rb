@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607111148) do
+ActiveRecord::Schema.define(version: 20171205122949) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 20170607111148) do
     t.string  "choices",          limit: 255
     t.boolean "multiple_choices",             default: false
     t.boolean "required"
-    t.boolean "admin",            default: false, null: false
+    t.boolean "admin",                        default: false, null: false
   end
 
   add_index "event_questions", ["event_id"], name: "index_event_questions_on_event_id"
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20170607111148) do
     t.boolean  "applications_cancelable",                   default: false, null: false
     t.text     "required_contact_attrs"
     t.text     "hidden_contact_attrs"
-    t.boolean  "display_booking_info",                   default: true,  null: false
+    t.boolean  "display_booking_info",                      default: true,  null: false
   end
 
   add_index "events", ["kind_id"], name: "index_events_on_kind_id"
@@ -232,6 +232,72 @@ ActiveRecord::Schema.define(version: 20170607111148) do
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id"
   add_index "groups", ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id"
+
+  create_table "invoice_articles", force: :cascade do |t|
+    t.string   "number",      limit: 255
+    t.string   "name",        limit: 255,                            null: false
+    t.text     "description", limit: 65535
+    t.string   "category",    limit: 255
+    t.decimal  "unit_cost",                 precision: 12, scale: 2
+    t.decimal  "vat_rate",                  precision: 5,  scale: 2
+    t.string   "cost_center", limit: 255
+    t.string   "account",     limit: 255
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.integer  "group_id",                                           null: false
+  end
+
+  add_index "invoice_articles", ["number"], name: "index_invoice_articles_on_number", unique: true
+
+  create_table "invoice_configs", force: :cascade do |t|
+    t.integer "sequence_number",     default: 1,  null: false
+    t.integer "due_days",            default: 30, null: false
+    t.integer "group_id",                         null: false
+    t.integer "contact_id"
+    t.integer "page_size",           default: 15
+    t.text    "address"
+    t.text    "payment_information"
+    t.string  "account_number"
+  end
+
+  add_index "invoice_configs", ["contact_id"], name: "index_invoice_configs_on_contact_id"
+  add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id"
+
+  create_table "invoice_items", force: :cascade do |t|
+    t.integer "invoice_id",                                       null: false
+    t.string  "name",                                             null: false
+    t.text    "description"
+    t.decimal "vat_rate",    precision: 5,  scale: 2
+    t.decimal "unit_cost",   precision: 12, scale: 2,             null: false
+    t.integer "count",                                default: 1, null: false
+  end
+
+  add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+
+  create_table "invoices", force: :cascade do |t|
+    t.string   "title",                                                        null: false
+    t.string   "sequence_number",                                              null: false
+    t.string   "state",                                      default: "draft", null: false
+    t.string   "esr_number",                                                   null: false
+    t.text     "description"
+    t.string   "recipient_email"
+    t.text     "recipient_address"
+    t.date     "sent_at"
+    t.date     "due_at"
+    t.integer  "group_id",                                                     null: false
+    t.integer  "recipient_id"
+    t.decimal  "total",             precision: 12, scale: 2
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+    t.string   "account_number"
+    t.text     "address"
+    t.date     "issued_at"
+  end
+
+  add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number"
+  add_index "invoices", ["group_id"], name: "index_invoices_on_group_id"
+  add_index "invoices", ["recipient_id"], name: "index_invoices_on_recipient_id"
+  add_index "invoices", ["sequence_number"], name: "index_invoices_on_sequence_number"
 
   create_table "label_format_translations", force: :cascade do |t|
     t.integer  "label_format_id", limit: 4,   null: false
@@ -292,6 +358,24 @@ ActiveRecord::Schema.define(version: 20170607111148) do
 
   add_index "notes", ["subject_id"], name: "index_notes_on_subject_id"
 
+  create_table "payment_reminders", force: :cascade do |t|
+    t.integer  "invoice_id", null: false
+    t.text     "message"
+    t.date     "due_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "payment_reminders", ["invoice_id"], name: "index_payment_reminders_on_invoice_id"
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "invoice_id",                           null: false
+    t.decimal "amount",      precision: 12, scale: 2, null: false
+    t.date    "received_at", null: false
+  end
+
+  add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id"
+
   create_table "people", force: :cascade do |t|
     t.string   "first_name",                limit: 255
     t.string   "last_name",                 limit: 255
@@ -334,11 +418,11 @@ ActiveRecord::Schema.define(version: 20170607111148) do
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
 
   create_table "people_filters", force: :cascade do |t|
-    t.string   "name",         limit: 255,   null: false
+    t.string   "name",         limit: 255,                    null: false
     t.integer  "group_id",     limit: 4
     t.string   "group_type",   limit: 255
     t.text     "filter_chain", limit: 65535
-    t.string   "range",        limit: 255,   default: 'deep'
+    t.string   "range",        limit: 255,   default: "deep"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

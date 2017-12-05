@@ -57,7 +57,9 @@ class StandardTableBuilder
   # contain the formatted attribute value for the current entry.
   def attr(a, header = nil)
     header ||= attr_header(a)
-    col(header, class: align_class(a)) { |e| format_attr(e, a) }
+    col(header, class: align_class(a)) do |e|
+      block_given? ? yield(e) : format_attr(e, a)
+    end
   end
 
   # Renders the table as HTML.
@@ -100,7 +102,7 @@ class StandardTableBuilder
     if entries.respond_to?(:klass)
       entries.klass
     elsif entries.respond_to?(:decorator_class)
-      entries.decorator_class.object_class
+      entries.decorator_class.try(:object_class) || entries.first.model.class
     else
       entries.first.class
     end

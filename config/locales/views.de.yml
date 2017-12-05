@@ -12,6 +12,7 @@ de:
     "no": "nein"
     unknown: unbekannt
     nobody: niemand
+    all: Alle
 
     from: Von
     until: Bis
@@ -140,6 +141,21 @@ de:
     everything: 'Alle Angaben'
     condense_labels: 'Mehrfachsendungen vermeiden'
     condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
+
+  dropdown/invoices:
+    download: 'Export'
+    print: 'Drucken'
+    labels: 'Etiketten'
+    full: 'Rechnung inkl. Einzahlungsschein'
+    esr_only: 'Einzahlungsschein separat'
+    articles_only: 'Rechnung separat'
+    csv: 'CSV'
+    pdf: 'PDF'
+
+  dropdown/invoice_sending:
+    button: 'Rechnung stellen'
+    state: 'Status setzen'
+    mail: 'Status setzen und per E-Mail verschicken'
 
   devise:
     failure:
@@ -380,6 +396,7 @@ de:
     preconditions: 'Erforderliche Qualifikationen'
     tabs:
       participants: 'Teilnehmende'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
@@ -402,6 +419,7 @@ de:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
     show:
       link:
@@ -467,7 +485,7 @@ de:
 
   full_text:
     index:
-      title: 'Gefundene Personen'
+      title: 'Ergebnisse'
       incomplete_search_request: 'Bitte geben Sie mindestens zwei Zeichen ein.'
 
   group:
@@ -563,6 +581,57 @@ de:
   import/person_doublette_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
+  invoices:
+    filter:
+      due_since: Fällig seit
+      due_since_list:
+        one_day: Gestern
+        one_week: Einer Woche
+        one_month: Einem Monat
+    add: Externe Rechnung erstellen
+    issued: Rechnung gestellt
+    sent: Rechnung versendet
+    reminder_sent: Mahnung versendet
+    payd: bezahlt
+    destroy:
+      flash:
+        success: Rechnung wurde storniert.
+    pdf:
+      total: Gesamtbetrag
+      total_vat: MWSt. gesamt
+      invoice_number: Rechnungsnummer
+      invoice_date: Rechnungsdataum
+      due_at: Fällig bis
+
+  invoice_lists:
+    form:
+      recipient_info:
+        one: "Rechnung wird für eine Person erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
+    create:
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    update:
+      zero: 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
+      one: "Rechnung wurde gestellt."
+      other: "%{count} Rechnungen wurden gestellt."
+      background_send:
+        zero: "Es werden keine Rechnungen per E-Mail verschickt."
+        one: "Rechnung wird im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+      error:
+        no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
+        not_draft: "Rechnung %{number} wurde bereits verschickt."
+    destroy:
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
+
+  payments:
+    create:
+      flash:
+        success: Zahlung über %{amount} wurde erfasst.
+
   label_formats:
     global_labels: "Globale Etikettenformate"
     own_labels: Meine Etikettenformate
@@ -613,6 +682,7 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+    invoices: 'Rechnungen'
 
   notes:
     new_note: Neue Notiz
@@ -793,6 +863,7 @@ de:
       history: Verlauf
       log: Log
       colleagues: Mitarbeiter/-innen
+      invoices: Rechnungen
 
     actions_show:
       send_login: Login schicken
@@ -847,6 +918,8 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_email_needed: 'Für den export wird eine Email Adresse benötigt.'
 
   participations:
     destroy:
@@ -867,6 +940,10 @@ de:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
         all: Alle jemals erteilten Qualifikationen
+      filters_role_kind:
+        active: war die Role aktiv.
+        created: wurde die Role erstellt.
+        deleted: wurde die Role gelöscht.
 
     new:
       title: Personen filtern
@@ -877,6 +954,9 @@ de:
     role:
       title: Rollen
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      prompt_role_duration: Im Zeitraum (optional)
+      prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
+      prompt_role_duration_until: bis
 
     qualification:
       title: Qualifikationen

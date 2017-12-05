@@ -1,0 +1,48 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.invoice
+  .invoice-recipient-address
+    .contactable
+      .address
+        = invoice_receiver_address(entry)
+
+  .invoice-table
+    %h2= entry.title
+
+    %table.header
+      %tr
+        %td.left
+          = "#{t('activerecord.models.invoice.one')}: ##{entry.sequence_number}"
+        %td.right
+          = l(entry.sent_at, format: :long) if entry.sent_at?
+
+    = table(entry.invoice_items.list, class: 'table table-striped') do |t|
+      - t.attr(:name)
+      - t.attr(:description)
+      - t.attr(:count)
+      - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
+      - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
+      - t.attr(:total)  { |i| i.decorate.cost }
+
+    .invoice-items-total
+      %table
+        %tr
+          %td.left
+            = captionize(:cost, Invoice)
+          %td.right
+            = entry.cost
+        %tr
+          %td.left
+            = captionize(:vat_rate, InvoiceItem)
+          %td.right
+            = entry.vat
+        %tr
+          %td.left
+            %b= captionize(:total_inkl_vat, Invoice)
+          %td.right
+            %b= entry.total
+
+  %p= entry.description

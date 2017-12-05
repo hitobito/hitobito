@@ -92,9 +92,9 @@ describe InvoiceListsController do
       end
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
-      expect(invoice.reload.state).to eq 'sent'
+      expect(invoice.reload.state).to eq 'issued'
       expect(invoice.due_at).to be_present
-      expect(invoice.sent_at).to be_present
+      expect(invoice.issued_at).to be_present
     end
 
     it 'PUT#update can move multiple invoices at once' do

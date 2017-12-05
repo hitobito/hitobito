@@ -42,7 +42,7 @@ module Dropdown
     end
 
     def csv_links
-      add_item(translate(:csv), export_path(:csv), target: :new)
+      add_item(translate(:csv), export_path(:csv), item_options)
     end
 
     def item_options

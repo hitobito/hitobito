@@ -30,7 +30,7 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
-  STATES = %w(draft sent payed overdue reminded cancelled).freeze
+  STATES = %w(draft issued sent payed overdue reminded cancelled).freeze
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
   belongs_to :group
@@ -41,7 +41,7 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
-  before_validation :set_dates, on: :update, if: :sent?
+  before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
   before_validation :recalculate
 
@@ -150,8 +150,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_dates
-    self.sent_at = Time.zone.today
-    self.due_at = sent_at + invoice_config.due_days.days
+    self.sent_at ||= Time.zone.today if sent?
+    if sent? || issued?
+      self.issued_at ||= Time.zone.today
+      self.due_at ||= issued_at + invoice_config.due_days.days
+    end
   end
 
   def set_recipient_fields

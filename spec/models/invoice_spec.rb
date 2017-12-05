@@ -17,7 +17,6 @@ describe Invoice do
   it 'saving requires group, title and recipient' do
     invoice = create_invoice
     expect(invoice).to be_valid
-    expect(invoice.state).to eq 'draft'
   end
 
   it 'saving increments number on invoice_config' do
@@ -106,16 +105,30 @@ describe Invoice do
     expect(calculated[:vat]).to eq 0.0036
   end
 
-  it 'changing state to sent sets sent_at and due_at dates' do
-    invoice = create_invoice
-    now = Time.zone.parse('2017-09-18 14:00:00')
-    Timecop.freeze now do
-      expect do
-        invoice.update(state: :sent)
-      end.to change { [invoice.sent_at, invoice.due_at] }.to([
-        now.to_date,
-        now.to_date + 30.days
-      ])
+  context 'state changes' do
+    include ActiveSupport::Testing::TimeHelpers
+
+    let(:now)     { Time.zone.parse('2017-09-18 14:00:00') }
+    let(:invoice) { invoices(:invoice) }
+    before        { travel_to(now) }
+    after         { travel_back }
+
+    it 'creating sets state to draft' do
+      expect(create_invoice.state).to eq 'draft'
+    end
+
+    it 'changing state to issued sets issued_at and due_at dates' do
+      expect { invoice.update(state: :issued) }.to change { [invoice.issued_at, invoice.due_at] }
+      expect(invoice.due_at).to eq(now.to_date + 30.days)
+      expect(invoice.issued_at).to eq(now.to_date)
+      expect(invoice.sent_at).to be_nil
+    end
+    it 'changing state to sent sets sent_at and due_at dates' do
+      expect { invoice.update(state: :sent) }.to change { [invoice.issued_at, invoice.sent_at, invoice.due_at] }
+
+      expect(invoice.due_at).to eq(now.to_date + 30.days)
+      expect(invoice.issued_at).to eq(now.to_date)
+      expect(invoice.sent_at).to eq(now.to_date)
     end
   end
 
@@ -151,7 +164,7 @@ describe Invoice do
     invoice.payments.create!(amount: 1.5)
     expect(invoice.open_amount).to eq 0.5
     invoice.payments.create!(amount: 1)
-    expect(invoice.open_amount).to eq -0.5
+    expect(invoice.open_amount).to eq(-0.5)
   end
 
   private

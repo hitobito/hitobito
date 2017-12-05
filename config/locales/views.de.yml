@@ -586,7 +586,8 @@ de:
         one_week: Einer Woche
         one_month: Einem Monat
     add: Externe Rechnung erstellen
-    sent: Rechnung gestellt
+    issued: Rechnung gestellt
+    sent: Rechnung versendet
     reminder_sent: Mahnung versendet
     payd: bezahlt
     destroy:

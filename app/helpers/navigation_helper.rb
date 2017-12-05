@@ -11,7 +11,7 @@ module NavigationHelper
     { label: :groups,
       url: :groups_path,
       active_for: %w(groups people),
-      inactive_for: %w(invoices) },
+      inactive_for: %w(invoices invoice_articles invoice_config) },
 
     { label: :events,
       url: :list_events_path,
@@ -30,7 +30,8 @@ module NavigationHelper
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
-      if: ->(_) { current_user.finance_groups.any? } }
+      if: ->(_) { current_user.finance_groups.any? },
+      active_for: %w(invoices invoice_articles invoice_config) }
   ]
 
 

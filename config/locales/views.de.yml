@@ -142,8 +142,9 @@ de:
     condense_labels: 'Mehrfachsendungen vermeiden'
     condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
 
-  dropdown/invoices_export:
-    button: 'Export'
+  dropdown/invoices:
+    download: 'Export'
+    print: 'Drucken'
     labels: 'Etiketten'
     full: 'Rechnung inkl. Einzahlungsschein'
     esr_only: 'Einzahlungsschein separat'

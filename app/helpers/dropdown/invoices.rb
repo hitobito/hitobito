@@ -6,28 +6,38 @@
 #  https://github.com/hitobito/hitobito.
 
 module Dropdown
-  class InvoicesExport < Base
+  class Invoices < Base
 
     attr_reader :params, :user
 
-    def initialize(template, params)
-      super(template, translate(:button), :download)
+    def initialize(template, params, type)
+      super(template, translate(type), type)
       @params = params
       @user = template.current_user
-      init_items
+    end
+
+    def print
+      pdf_links
+      self
+    end
+
+    def export
+      label_links
+      self
     end
 
     private
-
-    def init_items
-      pdf_links
-      label_links
-    end
 
     def pdf_links
       add_item(translate(:full), export_path, item_options)
       add_item(translate(:articles_only), export_path(esr: false), item_options)
       add_item(translate(:esr_only), export_path(articles: false), item_options)
+    end
+
+    def label_links
+      if LabelFormat.exists?
+        Dropdown::LabelItems.new(self, item_options.merge(condense_labels: false)).add
+      end
     end
 
     def item_options
@@ -36,12 +46,6 @@ module Dropdown
 
     def export_path(options = {})
       params.merge(options).merge(format: :pdf)
-    end
-
-    def label_links
-      if LabelFormat.exists?
-        Dropdown::LabelItems.new(self, item_options.merge(condense_labels: false)).add
-      end
     end
 
   end

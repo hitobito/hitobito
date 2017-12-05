@@ -3,6 +3,7 @@
 ## Version 1.X
 
 *   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+*   Personenfilter erlauben den Gültigzeitszeitraum einer Rolle einzuschränken.
 
 
 ## Version 1.17

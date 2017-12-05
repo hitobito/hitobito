@@ -17,7 +17,7 @@
         %td.left
           = "#{t('activerecord.models.invoice.one')}: ##{entry.sequence_number}"
         %td.right
-          = l(entry.sent_at, format: :long) if entry.sent?
+          = l(entry.sent_at, format: :long) if entry.sent_at?
 
     = table(entry.invoice_items.list, class: 'table table-striped') do |t|
       - t.attr(:name)

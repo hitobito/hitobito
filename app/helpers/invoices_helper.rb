@@ -51,7 +51,7 @@ module InvoicesHelper
       table_rows = [invoice_history_entry(invoice_sent_data(invoice), 'blue')]
       table_rows << invoice_reminder_rows(invoice)
       table_rows << invoice_payment_rows(invoice)
-      table_rows.join.html_safe # rubocop:disable Rails/OutputSafety
+      table_rows.compact.join.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 
@@ -76,6 +76,7 @@ module InvoicesHelper
   end
 
   def invoice_history_entry(data, color)
+    return unless data
     content_tag :tr do
       data.collect do |d|
         concat content_tag(:td, d, class: color)
@@ -88,7 +89,7 @@ module InvoicesHelper
       '⬤', # Middle Dot
       l(invoice.sent_at, format: :long),
       t('invoices.sent')
-    ]
+    ] if invoice.sent_at?
   end
 
   def reminder_sent_data(reminder, count)

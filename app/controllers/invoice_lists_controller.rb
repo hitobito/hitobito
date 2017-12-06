@@ -9,6 +9,8 @@ class InvoiceListsController < CrudController
   self.nesting = Group
   self.permitted_attrs = [:title,
                           :description,
+                          :payment_information,
+                          :payment_purpose,
                           :recipient_ids,
                           invoice_items_attributes: [
                             :name,
@@ -28,6 +30,8 @@ class InvoiceListsController < CrudController
 
   def new
     assign_attributes
+    entry.attributes = { payment_information: entry.invoice_config.payment_information }
+
     session[:invoice_referer] = request.referer
   end
 

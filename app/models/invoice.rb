@@ -41,6 +41,7 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
+  before_validation :set_payment_attributes, on: :create, if: :group
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
   before_validation :recalculate
@@ -157,6 +158,12 @@ class Invoice < ActiveRecord::Base
 
   def set_esr_number
     self.esr_number = sequence_number
+  end
+
+  def set_payment_attributes
+    self.address = invoice_config.address
+    self.account_number = invoice_config.account_number
+    self.iban = invoice_config.iban
   end
 
   def set_dates

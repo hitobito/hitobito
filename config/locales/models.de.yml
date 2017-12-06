@@ -110,6 +110,12 @@ de:
 
         invoice:
           recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
+        invoice_config:
+          attributes:
+            iban:
+              required: 'muss ausgefüllt werden'
+            account_number: 
+              required: 'muss ausgefüllt werden'
 
     models:
       acts_as_taggable_on/tag:
@@ -172,6 +178,9 @@ de:
       invoice_article:
         one: Rechnungsartikel
         other: Rechnungsartikel
+      invoice_config:
+        one: Rechnungseinstellungen
+        other: Rechnungseinstellungen
       invoice_item:
         one: Rechnungsposten
         other: Rechnungsposten
@@ -611,6 +620,8 @@ de:
         total_inkl_vat: Total inkl. MWSt.
         total: Total inkl. MWSt.
         vat: MWSt.
+        payment_information: Zahlungsinformation
+        payment_purpose: Zahlungszweck
 
       invoice_article:
         number: Artikelnummer
@@ -621,6 +632,15 @@ de:
         vat_rate: MWSt.
         cost_center: Kostenstelle
         account: Konto
+
+      invoice_config:
+        payment_information: Zahlungsinformation
+        address: Adresse
+        account_number: Kontonummer
+        iban: IBAN
+        due_days: Tage bis Fällig
+        contact: Kontaktperson
+        contact_id: Kontaktperson
 
       invoice_item:
         name: Name

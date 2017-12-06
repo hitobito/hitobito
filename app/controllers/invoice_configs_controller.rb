@@ -8,7 +8,7 @@
 class InvoiceConfigsController < CrudController
 
   self.nesting = Group
-  self.permitted_attrs = [:payment_information, :address, :iban, :account_number]
+  self.permitted_attrs = [:payment_information, :address, :iban, :account_number, :contact_id]
 
   private
 

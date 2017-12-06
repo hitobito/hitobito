@@ -10,6 +10,8 @@
     = f.labeled_input_field :recipient_email
     = f.labeled_input_field :recipient_address
 
+  = f.labeled_input_field :payment_information
+  = f.labeled_input_field :payment_purpose
 
   = field_set_tag do
     - if parent.invoice_articles.exists?

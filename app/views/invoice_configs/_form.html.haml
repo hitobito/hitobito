@@ -5,5 +5,11 @@
 
 = standard_form(entry, url: [parent, :invoice_config]) do |f|
   = f.error_messages
+  = f.labeled_person_field(:contact)
+  = f.labeled_input_field :due_days
   = f.labeled_input_field :payment_information
+  = f.labeled_input_field :address
+  = f.labeled_input_field :account_number
+  = f.labeled_input_field :iban
+
   = save_form_buttons(f, nil, group_invoice_config_path(parent))

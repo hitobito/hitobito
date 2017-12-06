@@ -23,11 +23,23 @@ class InvoiceConfig < ActiveRecord::Base
   belongs_to :contact, class_name: 'Person'
 
   validates :group_id, uniqueness: true
+  validates :address, presence: true, on: :update
+  validates :iban, format: { with: /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){16,30}\z/ }, on: :update
+  validates :account_number, format: { with: /\A[0-9][-0-9]{4,20}[0-9]\z/ }, on: :update
+  validate :account_number_or_iban_present?, on: :update
 
   validates_by_schema
 
   def to_s
-    "#{group.name} - Invoice Config" # TODO: determine proper string representation
+    [model_name.human, group.to_s].join(' - ')
   end
 
+  private
+
+  def account_number_or_iban_present?
+    # TODO: validate presence if orange or red deposit slip
+    return if account_number.present? || iban.present?
+    errors.add(:iban, :required) if iban.blank?
+    errors.add(:account_number, :required) if account_number.blank?
+  end
 end

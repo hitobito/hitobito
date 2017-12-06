@@ -14,7 +14,13 @@
 top_layer:
   group: top_layer
   sequence_number: 1
+  address: 'top layer address'
+  iban: 'CH93 0076 2011 6238 5295 7'
+  account_number: '10-5318-01' 
 
 bottom_layer_one:
   group: bottom_layer_one
   sequence_number: 1
+  address: 'bottom layer one address'
+  iban: 'CH93 0076 2011 6238 5295 8'
+  account_number: '10-3991-803' 

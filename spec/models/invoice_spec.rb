@@ -105,6 +105,14 @@ describe Invoice do
     expect(calculated[:vat]).to eq 0.0036
   end
 
+  it '#create sets payment attributes from invoice_config' do
+    invoice = Invoice.create(title: 'test_invoice', group: group, recipient_address: 'address')
+
+    expect(invoice.address).to eq invoice_config.address
+    expect(invoice.account_number).to eq invoice_config.account_number
+    expect(invoice.iban).to eq invoice_config.iban
+  end
+
   context 'state changes' do
     include ActiveSupport::Testing::TimeHelpers
 

@@ -13,6 +13,7 @@ class InvoicesController < CrudController
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
+                          :payment_information, :payment_purpose,
                           invoice_items_attributes: [
                             :id,
                             :name,
@@ -22,6 +23,11 @@ class InvoicesController < CrudController
                             :count,
                             :_destroy
                           ]]
+
+  def new
+    assign_attributes
+    entry.attributes = { payment_information: entry.invoice_config.payment_information }
+  end
 
   def index
     respond_to do |format|

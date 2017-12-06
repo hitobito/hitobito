@@ -601,6 +601,11 @@ de:
       invoice_number: Rechnungsnummer
       invoice_date: Rechnungsdataum
       due_at: Fällig bis
+  
+  invoice_configs:
+    update:
+      flash:
+        success: Rechnungseinstellungen wurden erfolgreich aktualisiert
 
   invoice_lists:
     form:

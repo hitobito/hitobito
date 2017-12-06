@@ -38,6 +38,18 @@ describe Event::ParticipationContactData do
       expect(contact_data.errors.full_messages.first).to eq('Geburtstag ist kein gültiges Datum')
     end
 
+    it 'can have a mandatory phone-number' do
+      contact_data = participation_contact_data(attributes)
+      event.update!(required_contact_attrs: ['phone_numbers'])
+
+      expect(contact_data).not_to be_valid
+      expect(contact_data.errors.full_messages.first).to eq('Telefonnummern muss ausgefüllt werden')
+
+      contact_data = participation_contact_data(attributes.merge(phone_numbers: [PhoneNumber.create(number: '117', translated_label: 'Privat', public: false)]))
+      event.update!(required_contact_attrs: ['phone_numbers'])
+      expect(contact_data).to be_valid
+    end
+
   end
 
   context 'update person data' do

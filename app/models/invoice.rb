@@ -79,17 +79,12 @@ class Invoice < ActiveRecord::Base
     end.compact
   end
 
-  def multi_create # rubocop:disable Metrics/MethodLength
+  def multi_create
     Invoice.transaction do
-      all_saved = recipients.all? do |recipient|
-        invoice = self.class.new(attributes.merge(recipient_id: recipient.id))
-        invoice_items.each do |invoice_item|
-          invoice.invoice_items.build(invoice_item.attributes)
-        end
+      recipients.all? do |recipient|
+        invoice = self.class.new(multi_create_attributes(recipient))
         invoice.save
-      end
-      raise ActiveRecord::Rollback unless all_saved
-      all_saved
+      end || (raise ActiveRecord::Rollback)
     end
   end
 
@@ -144,6 +139,13 @@ class Invoice < ActiveRecord::Base
   end
 
   private
+
+  def multi_create_attributes(recipient)
+    attributes.merge(
+      invoice_items_attributes: invoice_items.collect(&:attributes),
+      recipient_id: recipient.id
+    )
+  end
 
   def set_self_in_nested
     invoice_items.each { |item| item.invoice = self }

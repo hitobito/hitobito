@@ -25,7 +25,7 @@ describe Event::ParticipationContactData do
       contact_data = participation_contact_data(attributes)
       event.update!(required_contact_attrs: ['nickname'])
 
-      expect(contact_data.valid?).to be false
+      expect(contact_data).not_to be_valid
       expect(contact_data.errors.full_messages.first).to eq('Übername muss ausgefüllt werden')
     end
 
@@ -34,7 +34,7 @@ describe Event::ParticipationContactData do
       attrs[:birthday] = 'invalid'
       contact_data = participation_contact_data(attrs)
 
-      expect(contact_data.valid?).to be false
+      expect(contact_data).not_to be_valid
       expect(contact_data.errors.full_messages.first).to eq('Geburtstag ist kein gültiges Datum')
     end
 

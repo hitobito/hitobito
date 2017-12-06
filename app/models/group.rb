@@ -92,7 +92,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
-  has_many :invoices, dependent: :destroy
+  has_many :invoices
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
 
@@ -166,10 +166,15 @@ class Group < ActiveRecord::Base
   def really_destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
+
     # load events to destroy orphaned later
-    list = events.to_a
+    event_list = events.to_a
+    invoice_list = invoices.to_a
+
     hard_destroy
-    list.each { |e| destroy_orphaned_event(e) }
+
+    event_list.each { |e| destroy_orphaned_event(e) }
+    invoice_list.each(&:destroy)
   end
 
   def decorator_class

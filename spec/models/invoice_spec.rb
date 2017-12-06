@@ -164,7 +164,19 @@ describe Invoice do
     invoice.payments.create!(amount: 1.5)
     expect(invoice.amount_open).to eq 0.5
     invoice.payments.create!(amount: 1)
-    expect(invoice.amount_open).to eq -0.5
+    expect(invoice.amount_open).to eq(-0.5)
+  end
+
+  it 'soft deleting group does not delete invoices' do
+    other = Group::BottomLayer.create!(name: 'x', parent: group)
+    Fabricate(:invoice, group: other, recipient: person)
+    expect { other.destroy }.not_to change { other.invoices.count }
+  end
+
+  it 'hard deleting group does delete invoices' do
+    other = Group::BottomLayer.create!(name: 'x', parent: group)
+    Fabricate(:invoice, group: other, recipient: person)
+    expect { other.really_destroy! }.to change { other.invoices.count }
   end
 
   private

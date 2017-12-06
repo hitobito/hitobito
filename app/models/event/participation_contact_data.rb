@@ -19,9 +19,9 @@ class Event::ParticipationContactData
 
   self.contact_attrs = [:first_name, :last_name, :nickname, :company_name,
                         :email, :address, :zip_code, :town,
-                        :country, :gender, :birthday]
+                        :country, :gender, :birthday, :phone_numbers]
 
-  self.contact_associations = [:additional_emails, :phone_numbers, :social_accounts]
+  self.contact_associations = [:additional_emails, :social_accounts]
 
   delegate(*contact_attrs, to: :person)
   delegate(*contact_associations, to: :person)
@@ -122,6 +122,8 @@ class Event::ParticipationContactData
 
   def assert_required_contact_attrs_valid
     required_attributes.each do |a|
+      next if a == 'phone_numbers' && person.phone_numbers.any?
+
       if model_params[a.to_s].blank?
         errors.add(a, t('errors.messages.blank'))
       end

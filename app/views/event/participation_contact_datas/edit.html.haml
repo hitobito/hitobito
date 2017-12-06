@@ -29,6 +29,10 @@
         = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
 
   = field_set_tag do
+    - unless entry.hidden_contact_attrs.include?(:phone_numbers)
+      = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields"
+
+  = field_set_tag do
     - if entry.show_attr?(:gender)
       = f.labeled(:gender) do
         - (Person::GENDERS + ['']).each do |key|

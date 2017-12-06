@@ -25,7 +25,6 @@ class InvoicesController < CrudController
                           ]]
 
   def new
-    assign_attributes
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
   end
 

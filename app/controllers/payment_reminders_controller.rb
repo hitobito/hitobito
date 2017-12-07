@@ -27,7 +27,6 @@ class PaymentRemindersController < CrudController
   def save_entry
     return entry.save if entry.invoice
     return entry.multi_create(invoices) if invoices.present?
-    entry.errors.add(:invoice, :invalid)
     false
   end
 

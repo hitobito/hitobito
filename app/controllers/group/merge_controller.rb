@@ -33,7 +33,7 @@ class Group::MergeController < ApplicationController
   end
 
   def respond_failure
-    flash[:alert] = merger.errors ? merger.errors.join('<br/>').html_safe : translate(:failure)
+    flash[:alert] = merger.errors ? merger.errors.to_sentence : translate(:failure)
     redirect_to merge_group_path(group)
   end
 

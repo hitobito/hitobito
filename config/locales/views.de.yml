@@ -638,8 +638,8 @@ de:
   payment_reminders:
     create:
       success:
-        one: Zahlungserinnerung wurde erfasst.
-        other: "%{count} Zahlungserinnerungen wurden erfasst."
+        one: "Mahnung wurde erfolgreich erstellt."
+        other: "%{count} Mahnungen wurden erfolgreich erstellt."
       failure: Es wurden keine gültigen Rechnungen ausgewählt.
 
   label_formats:

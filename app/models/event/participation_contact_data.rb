@@ -122,11 +122,25 @@ class Event::ParticipationContactData
 
   def assert_required_contact_attrs_valid
     required_attributes.each do |a|
-      next if a == 'phone_numbers' && person.phone_numbers.any?
+      next assert_phone_number_present if a == 'phone_numbers'
 
       if model_params[a.to_s].blank?
         errors.add(a, t('errors.messages.blank'))
       end
+    end
+  end
+
+  def assert_phone_number_present
+    phone_changes = { add: [], sub: [] }
+    changed_attrs = model_params.fetch('phone_numbers_attributes', {})
+
+    phone_changes = changed_attrs.each_with_object(phone_changes) do |(_key, entry), memo|
+      key = entry['_destroy'] == 'false' ? :add : :sub
+      memo[key] << entry['number']
+    end
+
+    if (phone_changes[:add] - phone_changes[:sub]).empty?
+      errors.add('phone_numbers', t('errors.messages.blank'))
     end
   end
 

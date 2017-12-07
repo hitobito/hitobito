@@ -114,7 +114,7 @@ de:
           attributes:
             iban:
               required: 'muss ausgefüllt werden'
-            account_number: 
+            account_number:
               required: 'muss ausgefüllt werden'
 
     models:
@@ -604,7 +604,8 @@ de:
         amount_paid: Total bezahlt
         states:
           draft: Entwurf
-          sent: Gestellt
+          issued: Gestellt
+          sent: Versendet
           payed: Bezahlt
           overdue: Überfällig
           reminded: Gemahnt

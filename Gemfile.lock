@@ -1,7 +1,12 @@
 PATH
-  remote: ../hitobito_pbs
+  remote: ../hitobito_jubla_ci
   specs:
-    hitobito_pbs (0.0.1)
+    hitobito_jubla_ci (0.0.1)
+
+PATH
+  remote: ../hitobito_jubla
+  specs:
+    hitobito_jubla (1.0.0)
       hitobito_youth
 
 PATH
@@ -267,6 +272,8 @@ GEM
       activerecord (>= 4.0, < 5.2)
       request_store (~> 1.1)
     parallel (1.12.0)
+    parallel_tests (2.19.0)
+      parallel
     paranoia (2.1.1)
       activerecord (~> 4.0)
     parser (2.4.0.2)
@@ -543,7 +550,8 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_pbs!
+  hitobito_jubla!
+  hitobito_jubla_ci!
   hitobito_youth!
   http_accept_language
   jquery-rails
@@ -560,6 +568,7 @@ DEPENDENCIES
   nokogiri (< 1.7.0)
   oat
   paper_trail
+  parallel_tests
   paranoia (< 2.1.2)
   pdf-inspector
   prawn (< 2.0)

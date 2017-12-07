@@ -73,6 +73,9 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
+gem 'parallel_tests', group: [:development, :test]
+
+
 # if these are ever in your way, you can remove these lines.
 # they mostly serve as a version-restriction
 group :dependencies do

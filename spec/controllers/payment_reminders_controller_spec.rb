@@ -25,7 +25,7 @@ describe PaymentRemindersController do
           payment_reminder: { due_at: invoice.due_at + 2.weeks  }
       end.to change { invoice.payment_reminders.count }.by(1)
 
-      expect(flash[:notice]).to eq 'Zahlungserinnerung wurde erfasst.'
+      expect(flash[:notice]).to match(/Mahnung wurde erfolgreich erstellt./)
       expect(response).to redirect_to(group_invoice_path(group, invoice))
     end
 
@@ -61,7 +61,7 @@ describe PaymentRemindersController do
       end.to change { PaymentReminder.count }.by(2)
 
       expect(flash[:notice]).to be_present
-      expect(flash[:notice]).to eq '2 Zahlungserinnerungen wurden erfasst.'
+      expect(flash[:notice]).to eq '2 Mahnungen wurden erfolgreich erstellt.'
       expect(response).to redirect_to(group_invoices_path(group))
     end
   end

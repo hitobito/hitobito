@@ -7,5 +7,12 @@
 = render 'payment_reminder_form', url: group_invoice_payment_reminders_path(parent, entry) if @reminder
 = render 'payment_form' if @payment
 
-= render 'summary'
-= render 'details'
+.invoice
+  = render 'summary'
+  = render 'infos'
+  = render 'invoice_articles'
+
+%br
+%p
+  %b= entry.payment_information
+%p= entry.description

@@ -27,4 +27,10 @@ describe InvoiceConfig do
     expect(invoice_config).not_to be_valid
     expect(invoice_config.errors.full_messages).to include('Kontonummer ist nicht gültig')
   end
+
+  it 'validates presence of beneficiary' do
+    invoice_config.update(beneficiary: '')
+
+    expect(invoice_config).not_to be_valid
+  end
 end

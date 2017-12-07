@@ -51,6 +51,7 @@ class Invoice < ActiveRecord::Base
   validates :state, inclusion: { in: STATES }
   validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
   validate :assert_sendable?, unless: :recipient_id?
+  validates_associated :invoice_config
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
@@ -59,6 +60,7 @@ class Invoice < ActiveRecord::Base
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
   i18n_enum :state, STATES
+  i18n_enum :payment_slip, InvoiceConfig::PAYMENT_SLIPS
 
   validates_by_schema
 
@@ -168,9 +170,9 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_payment_attributes
-    self.address = invoice_config.address
-    self.account_number = invoice_config.account_number
-    self.iban = invoice_config.iban
+    [:address, :account_number, :iban, :payment_slip, :beneficiary].each do |at|
+      assign_attributes(at => invoice_config.send(at))
+    end
   end
 
   def set_dates

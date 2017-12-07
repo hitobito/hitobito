@@ -43,6 +43,10 @@ Metrics/MethodLength:
   Max: 10
   Severity: error
 
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:
   Enabled: false

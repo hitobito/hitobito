@@ -30,18 +30,18 @@ class InvoicesController < CrudController
 
   def index
     respond_to do |format|
-      format.html { super }
-      format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.html { populate_list_form_objects; super }
+      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
     end
   end
 
   def show
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
-      format.html { render_html }
-      format.pdf { generate_pdf([entry]) }
-      format.csv { render_invoices_csv([entry]) }
+      format.html { populate_show_form_objects }
+      format.pdf  { generate_pdf([entry]) }
+      format.csv  { render_invoices_csv([entry]) }
     end
   end
 
@@ -53,7 +53,12 @@ class InvoicesController < CrudController
 
   private
 
-  def render_html
+  def populate_list_form_objects
+    @reminder = PaymentReminder.new
+    @reminder_valid = true
+  end
+
+  def populate_show_form_objects
     if entry.remindable?
       @reminder = entry.payment_reminders.build(reminder_attrs)
       @reminder_valid = reminder_attrs ? @reminder.valid? : true
@@ -104,7 +109,7 @@ class InvoicesController < CrudController
   end
 
   def reminder_attrs
-    @reminder_attrs ||= flash[:payment_reminder]
+    @reminder_attrs ||= flash[:payment_reminder] || entry.payment_reminder_attributes
   end
 
   def payment_attrs

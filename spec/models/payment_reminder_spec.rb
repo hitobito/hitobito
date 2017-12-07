@@ -19,15 +19,24 @@
 require 'spec_helper'
 
 describe PaymentReminder do
-  let(:invoice) { invoices(:sent) }
+
+  let(:draft) { invoices(:invoice) }
+  let(:sent)  { invoices(:sent) }
 
   it 'creating a payment_reminder updates invoice' do
-    due_at = invoice.due_at + 2.weeks
+    due_at = sent.due_at + 2.weeks
     expect do
-      invoice.payment_reminders.create!(due_at: due_at)
-    end.to change { [invoice.due_at, invoice.state] }
-    expect(invoice.due_at).to eq due_at
-    expect(invoice.state).to eq 'overdue'
+      sent.payment_reminders.create!(due_at: due_at)
+    end.to change { [sent.due_at, sent.state] }
+    expect(sent.due_at).to eq due_at
+    expect(sent.state).to eq 'overdue'
+  end
+
+  it 'multi_create creates several payment_reminders at once' do
+    draft.update(state: :sent)
+    expect do
+      PaymentReminder.new.multi_create([draft, sent])
+    end.to change { PaymentReminder.count }.by(2)
   end
 
   it 'validates invoice is in state sent' do
@@ -36,12 +45,12 @@ describe PaymentReminder do
   end
 
   it 'validates due_at is set' do
-    reminder = invoice.payment_reminders.build
+    reminder = sent.payment_reminders.build
     expect(reminder).to have(1).error_on(:due_at)
   end
 
   it 'validates due_at is after invoice.due_date' do
-    reminder = invoice.payment_reminders.build(due_at: invoice.due_at)
+    reminder = sent.payment_reminders.build(due_at: sent.due_at)
     expect(reminder).to have(1).error_on(:due_at)
   end
 

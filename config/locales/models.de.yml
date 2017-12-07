@@ -110,6 +110,9 @@ de:
 
         invoice:
           recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
+          attributes:
+            invoice_config:
+              invalid: 'ist nicht gültig, passen sie die Einstellungen an bevor sie eine Rechnung erstellen'
         invoice_config:
           attributes:
             iban:
@@ -578,6 +581,7 @@ de:
         subject: Betreff
         body: Inhalt
 
+
       label_format:
         name: Bezeichnung
         page_size: Seitengrösse
@@ -598,10 +602,16 @@ de:
         description: Beschreibung
         invoice_items: Rechnungsposten
         invoice_item_article: Rechnungsartikel
+        invoice_config: Rechnungseinstellung
         state: Status
         sequence_number: Nummer
         esr_number: Referenz Nummer
         amount_paid: Total bezahlt
+        payment_slips:
+          ch_es: Roter Einzahlungsschein Post (CH)
+          ch_bes: Roter Einzahlungsschein Bank (CH)
+          ch_esr: Oranger Einzahlungsschein Post (CH)
+          ch_besr: Oranger Einzahlungsschein Bank (CH)
         states:
           draft: Entwurf
           issued: Gestellt
@@ -623,6 +633,11 @@ de:
         vat: MWSt.
         payment_information: Zahlungsinformation
         payment_purpose: Zahlungszweck
+        address: Absender Adresse
+        beneficiary: Zugunsten von
+        account_number: Kontonummer
+        iban: IBAN
+        payment_slip: Einzahlungsschein
 
       invoice_article:
         number: Artikelnummer
@@ -636,12 +651,19 @@ de:
 
       invoice_config:
         payment_information: Zahlungsinformation
-        address: Adresse
+        address: Absender Adresse
         account_number: Kontonummer
         iban: IBAN
         due_days: Tage bis Fällig
         contact: Kontaktperson
         contact_id: Kontaktperson
+        beneficiary: Zugunsten von
+        payment_slip: Einzahlungsschein
+        payment_slips:
+          ch_es: Roter Einzahlungsschein Post (CH)
+          ch_bes: Roter Einzahlungsschein Bank (CH)
+          ch_esr: Oranger Einzahlungsschein Post (CH)
+          ch_besr: Oranger Einzahlungsschein Bank (CH)
 
       invoice_item:
         name: Name

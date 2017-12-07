@@ -29,7 +29,6 @@ describe Group::Merger do
       Fabricate(:event, groups: [group1])
       Fabricate(:event, groups: [group2])
 
-      group2.create_invoice_config!
       Fabricate(:invoice, group: group2, recipient: @person)
       Fabricate(:invoice_article, group: group2)
     end

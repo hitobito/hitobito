@@ -6,7 +6,6 @@
 
   .invoice-state-table {
     float: left;
-    margin-left: 50px;
     margin-bottom: 20px;
 
     tr th {
@@ -14,7 +13,7 @@
       font-weight: normal;
       text-align: left;
     }
-    tr td{
+    tr td, tr th{
       padding-right: 30px;
     }
   }
@@ -22,7 +21,7 @@
   .invoice-history{
     table {
       float: left;
-      margin-left: 50px;
+      margin-left: 30px;
 
       td:first-child { font-size: 6px; padding-right: 5px; }
       td.red:first-child { color: $red; }
@@ -38,14 +37,21 @@
 }
 
 .invoice {
-  margin: 0px 50px;
 
-  .invoice-recipient-address{
-    margin: 30px 0px;
+  .invoice-info {
+    margin-top: 20px;
+    width: 100%;
+    .invoice-payment {
+      float: right;
+    }
+
+    .invoice-recipient-address{
+      float: left;
+    }
   }
 
 
-  .invoice-table {
+  .invoice-articles-table {
     table.header {
       border-bottom: 1px solid $grayLight;
       width: 100%;

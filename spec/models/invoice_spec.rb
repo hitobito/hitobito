@@ -28,7 +28,16 @@ describe Invoice do
   it 'validates that at least one email or an address is specified if no recipient' do
     invoice = Invoice.create(title: 'invoice', group: group)
     expect(invoice).not_to be_valid
-    expect(invoice.errors.full_messages).to include('Empfänger Addresse oder E-Mail muss ausgefüllt werden')
+    expect(invoice.errors.full_messages).
+      to include('Empfänger Addresse oder E-Mail muss ausgefüllt werden')
+  end
+
+  it 'validates that the invoice_config is valid' do
+    other = Group::BottomLayer.create!(name: 'x', parent: group)
+
+    invoice = Invoice.create(group: other, title: 'fuu')
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages).to include(/Rechnungseinstellung ist nicht gültig/)
   end
 
   it 'computes sequence_number based of group_id and invoice_config.sequence_number' do
@@ -76,7 +85,7 @@ describe Invoice do
 
     expect do
       invoice.multi_create
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2,4])
+    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
   end
 
   it '#multi_create does rollsback if any save fails' do
@@ -85,7 +94,7 @@ describe Invoice do
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
 
     allow_any_instance_of(Invoice).to receive(:save).and_wrap_original do |m|
-      @saved = @saved ? false  : m.call
+      @saved = @saved ? false : m.call
     end
 
     expect do
@@ -111,6 +120,8 @@ describe Invoice do
     expect(invoice.address).to eq invoice_config.address
     expect(invoice.account_number).to eq invoice_config.account_number
     expect(invoice.iban).to eq invoice_config.iban
+    expect(invoice.payment_slip).to eq invoice_config.payment_slip
+    expect(invoice.beneficiary).to eq invoice_config.beneficiary
   end
 
   context 'state changes' do
@@ -163,7 +174,7 @@ describe Invoice do
     expect(contactables(recipient_address: 'test')).to have(1).item
     expect(contactables(recipient_address: 'test').first.address).to eq 'test'
     expect(contactables({})).to be_empty
-    expect(contactables({}, { recipient_address: 'test' })).to have(1).item
+    expect(contactables({}, recipient_address: 'test')).to have(1).item
   end
 
   it 'amount_open returns total amount minus payments' do
@@ -177,12 +188,22 @@ describe Invoice do
 
   it 'soft deleting group does not delete invoices' do
     other = Group::BottomLayer.create!(name: 'x', parent: group)
+    other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
+                                beneficiary: 'fuu',
+                                address: 'fuu',
+                                account_number: 123_443)
+
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.destroy }.not_to change { other.invoices.count }
   end
 
   it 'hard deleting group does delete invoices' do
     other = Group::BottomLayer.create!(name: 'x', parent: group)
+    other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
+                                beneficiary: 'fuu',
+                                address: 'fuu',
+                                account_number: 123_443)
+
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.really_destroy! }.to change { other.invoices.count }
   end

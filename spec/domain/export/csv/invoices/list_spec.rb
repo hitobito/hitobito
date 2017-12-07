@@ -56,7 +56,7 @@ describe Export::Tabular::Invoices::List do
 
      its(['Titel']) { should == 'Sent' }
      its(['Nummer']) { should == invoice.sequence_number }
-     its(['Status']) { should == 'Gestellt' }
+     its(['Status']) { should == 'Versendet' }
      its(['Referenz Nummer']) { should == invoice.esr_number }
      its(['Verschickt am']) { should == I18n.l(invoice.sent_at) }
      its(['Fällig am']) { should == I18n.l(invoice.due_at) }

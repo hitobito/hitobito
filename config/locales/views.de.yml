@@ -601,7 +601,7 @@ de:
       invoice_number: Rechnungsnummer
       invoice_date: Rechnungsdataum
       due_at: Fällig bis
-  
+
   invoice_configs:
     update:
       flash:
@@ -635,6 +635,12 @@ de:
     create:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
+  payment_reminders:
+    create:
+      success:
+        one: Zahlungserinnerung wurde erfasst.
+        other: "%{count} Zahlungserinnerungen wurden erfasst."
+      failure: Es wurden keine gültigen Rechnungen ausgewählt.
 
   label_formats:
     global_labels: "Globale Etikettenformate"

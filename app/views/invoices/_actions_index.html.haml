@@ -10,5 +10,8 @@
   = action_button ti('link.delete'), group_invoice_list_path, :trash, method: :delete, data: { checkable: true }
   = invoices_export_dropdown
   = invoices_print_dropdown
+  = action_button(t('crud.new.title', model: PaymentReminder.model_name.human),
+    '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment_reminder' } })
+
 
 = action_button(t('invoices.add'), new_group_invoice_path(parent), :plus)

@@ -13,6 +13,11 @@ $(document).on('click', 'a[data-checkable]:not(data-method)', (e) ->
   e.target.href = buildLinkWithIds(e.target.href)
 )
 
+$(document).on('submit', 'form[data-checkable]', (e) ->
+  ids = ($(item).val() for item in  $('table[data-checkable] tbody :checked'))
+  $(this).find('input:input[data-checkable]').val(ids)
+)
+
 buildLinkWithIds = (href) ->
   ids = ($(item).val() for item in  $('table[data-checkable] tbody :checked'))
   separator = if href.indexOf('?') != -1 then '&' else '?'

@@ -3,7 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= render 'payment_reminder_form' if @reminder
+
+= render 'payment_reminder_form', url: group_invoice_payment_reminders_path(parent, entry) if @reminder
 = render 'payment_form' if @payment
 
 = render 'summary'

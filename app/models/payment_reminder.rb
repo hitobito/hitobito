@@ -18,6 +18,8 @@
 
 class PaymentReminder < ActiveRecord::Base
 
+  attr_reader :ids
+
   belongs_to :invoice
 
   validate :assert_invoice_remindable
@@ -32,6 +34,16 @@ class PaymentReminder < ActiveRecord::Base
   delegate :due_at, :remindable?, to: :invoice, prefix: true
 
   scope :list, -> { order(created_at: :desc) }
+
+  def multi_create(invoices)
+    PaymentReminder.transaction do
+      invoices.all? do |invoice|
+        attributes = invoice.payment_reminder_attributes.merge(message: message)
+        reminder = self.class.new(attributes)
+        reminder.save
+      end || (raise ActiveRecord::Rollback)
+    end
+  end
 
   def to_s
     I18n.l(due_at)

@@ -31,6 +31,8 @@ class Invoice < ActiveRecord::Base
   attr_accessor :recipient_ids
 
   STATES = %w(draft issued sent payed overdue reminded cancelled).freeze
+  STATES_REMINDABLE = %w(issued sent overdue reminded).freeze
+
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
   belongs_to :group
@@ -65,6 +67,7 @@ class Invoice < ActiveRecord::Base
   scope :one_week,       -> { where('due_at < ?', 1.week.ago.to_date) }
   scope :one_month,      -> { where('due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
+  scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 
   STATES.each do |state|
     scope state.to_sym, -> { where(state: state) }
@@ -108,7 +111,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def remindable?
-    %w(sent reminded overdue).include?(state)
+    STATES_REMINDABLE.include?(state)
   end
 
   def recipients
@@ -137,6 +140,10 @@ class Invoice < ActiveRecord::Base
 
   def amount_paid
     payments.sum(:amount)
+  end
+
+  def payment_reminder_attributes
+    { invoice_id: id, due_at: I18n.l(due_at + invoice_config.due_days.days) }
   end
 
   private

@@ -40,7 +40,7 @@ describe InvoicesController do
     end
   end
 
-  context 'searching' do
+  context 'index' do
     let(:invoice) { invoices(:invoice) }
     before        { sign_in(person) }
 
@@ -73,6 +73,12 @@ describe InvoicesController do
       invoice.update(due_at: 2.weeks.ago)
       get :index, group_id: group.id, due_since: :one_week
       expect(assigns(:invoices)).to have(1).item
+    end
+
+    it 'assigns form objects' do
+      get :index, group_id: group.id
+      expect(assigns(:reminder)).to be_present
+      expect(assigns(:reminder_valid)).to eq true
     end
   end
 

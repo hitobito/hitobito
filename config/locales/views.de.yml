@@ -561,6 +561,7 @@ de:
     group_name_missing: 'Name für neue Gruppe muss definiert werden.'
     no_group_selected: 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
     not_allowed: 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
+    invoice_config_not_merged: 'Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte nimm hierfür die jetzt korrekten Einstellungen manuell vor.'
 
   group/move:
     success: '%{group} wurde nach %{target} verschoben.'

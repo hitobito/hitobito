@@ -13,3 +13,5 @@
 
     - if params[:state].blank? || %w(overdue reminded).include?(params[:state])
       = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
+
+- params[:q] = nil # Reset param so quicksearch filter does not get populated

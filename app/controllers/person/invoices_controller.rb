@@ -5,13 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::InvoicesController < InvoicesController
+class Person::InvoicesController < ListController
+
+  self.sort_mappings = { recipient: Person.order_by_name_statement }
+  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
 
   private
 
   def list_entries
     scope = Invoice.
       includes(:group, recipient: [:groups, :roles]).
+      where(search_conditions).
       joins(:recipient).where(recipient: person).list
 
     scope = scope.page(params[:page]).per(50)

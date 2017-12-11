@@ -119,6 +119,8 @@ de:
               required: 'muss ausgefüllt werden'
             account_number:
               required: 'muss ausgefüllt werden'
+            payment_for:
+              to_long: 'darf höchstens 2 Zeilen enthalten'
 
     models:
       acts_as_taggable_on/tag:

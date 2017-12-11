@@ -32,5 +32,23 @@ module Export::Pdf::Invoice
         include ActionView::Helpers::NumberHelper
       end.new
     end
+
+    def receiver_address_data
+      if recipient
+        recipient_address_data
+      else
+        return if recipient_address.blank?
+        recipient_address.split(/\n/).map { |ra| [ra] }
+      end
+    end
+
+    def recipient_address_data
+      [
+        [recipient.full_name],
+        [recipient.address],
+        ["#{recipient.zip_code} #{recipient.town}"],
+        [Countries.label(recipient.country)]
+      ]
+    end
   end
 end

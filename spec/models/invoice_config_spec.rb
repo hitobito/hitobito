@@ -33,4 +33,12 @@ describe InvoiceConfig do
 
     expect(invoice_config).not_to be_valid
   end
+
+  it 'validates wordwrap of payment_for if bank payment' do
+    invoice_config.update(payment_for: "line1 \n line2 \n \line 3", payment_slip: 'ch_bes')
+
+    expect(invoice_config).not_to be_valid
+    expect(invoice_config.errors.full_messages).
+      to include('Einzahlung für darf höchstens 2 Zeilen enthalten')
+  end
 end

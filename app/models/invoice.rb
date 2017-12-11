@@ -78,6 +78,13 @@ class Invoice < ActiveRecord::Base
     end
   end
 
+  InvoiceConfig::PAYMENT_SLIPS.each do |payment_slip|
+    scope payment_slip.to_sym, -> { where(payment_slip: payment_slip) }
+    define_method "#{payment_slip}?" do
+      self.payment_slip == payment_slip
+    end
+  end
+
   def self.to_contactables(invoices)
     invoices.collect do |invoice|
       next if invoice.recipient_address.blank?
@@ -170,7 +177,8 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_payment_attributes
-    [:address, :account_number, :iban, :payment_slip, :beneficiary].each do |at|
+    [:address, :account_number, :iban,
+     :payment_slip, :beneficiary, :payment_for].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

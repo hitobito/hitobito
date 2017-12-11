@@ -28,14 +28,15 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :group_id, uniqueness: true
   validates :address, presence: true, on: :update
-  validates :beneficiary, presence: true, on: :update
+  validates :payment_for, presence: true, on: :update
+  validates :beneficiary, presence: true, on: :update, if: proc { |ic| ic.ch_bes? || ic.ch_besr? }
+
 
   # TODO: probably the if condition is not correct, it has to be specified by the product owner
   validates :iban, presence: true, on: :update, if: proc { |ic| ic.ch_es? || ic.ch_bes? }
   validates :iban, format: { with: /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/ },
                    on: :update, allow_blank: true
 
-  # TODO: Same as todo above
   validates :account_number, presence: true, on: :update
   validates :account_number, format: { with: /\A[0-9][-0-9]{4,20}[0-9]\z/ },
                              on: :update, allow_blank: true

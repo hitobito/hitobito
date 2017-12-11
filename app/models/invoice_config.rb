@@ -40,6 +40,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :account_number, presence: true, on: :update
   validates :account_number, format: { with: /\A[0-9][-0-9]{4,20}[0-9]\z/ },
                              on: :update, allow_blank: true
+  validate :correct_address_wordwrap, if: proc { |ic| ic.ch_bes? || ic.ch_besr? }
 
   i18n_enum :payment_slip, PAYMENT_SLIPS
 
@@ -56,4 +57,10 @@ class InvoiceConfig < ActiveRecord::Base
     end
   end
 
+  private
+
+  def correct_address_wordwrap
+    return if payment_for.split(/\n/).length <= 2
+    errors.add(:payment_for, :to_long)
+  end
 end

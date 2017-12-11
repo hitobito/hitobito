@@ -189,7 +189,7 @@ describe Invoice do
   it 'soft deleting group does not delete invoices' do
     other = Group::BottomLayer.create!(name: 'x', parent: group)
     other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
-                                beneficiary: 'fuu',
+                                payment_for: 'fuu',
                                 address: 'fuu',
                                 account_number: 123_443)
 
@@ -200,7 +200,7 @@ describe Invoice do
   it 'hard deleting group does delete invoices' do
     other = Group::BottomLayer.create!(name: 'x', parent: group)
     other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
-                                beneficiary: 'fuu',
+                                payment_for: 'fuu',
                                 address: 'fuu',
                                 account_number: 123_443)
 

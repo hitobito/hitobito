@@ -10,6 +10,7 @@
   = labeled_attr(entry, :payment_information)
 
   = labeled(captionize(:payment_slip, object_class(entry)), entry.payment_slip_label)
+  = labeled_attr(entry, :payment_for)
   = labeled_attr(entry, :beneficiary)
   = labeled_attr(entry, :address)
   = labeled_attr(entry, :account_number)

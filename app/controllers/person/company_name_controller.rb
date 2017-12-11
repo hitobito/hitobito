@@ -19,7 +19,7 @@ class Person::CompanyNameController < ApplicationController
   private
 
   def entries
-    if params.key?(:q) && params[:q].size >= 3
+    if params.key?(:q) && params[:q].to_s.strip.size >= 3
       list_entries.
         limit(10).
         pluck(:company_name).

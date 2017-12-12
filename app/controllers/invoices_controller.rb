@@ -119,7 +119,7 @@ class InvoicesController < CrudController
   def pdf_options
     {
       articles: params[:articles] != 'false',
-      esr: params[:esr] != 'false'
+      payment_slip: params[:payment_slip] != 'false'
     }
   end
 

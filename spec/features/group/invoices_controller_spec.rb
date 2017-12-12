@@ -95,7 +95,7 @@ describe InvoicesController do
     it 'exports only articles' do
       click_link('Export')
       click_link('Rechnung separat')
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?esr=false")
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?payment_slip=false")
     end
 
     it 'exports only esr' do

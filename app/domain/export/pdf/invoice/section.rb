@@ -8,7 +8,7 @@
 module Export::Pdf::Invoice
   class Section
 
-    attr_reader :pdf, :invoice
+    attr_reader :pdf, :invoice, :options
 
     class_attribute :model_class
 
@@ -20,9 +20,10 @@ module Export::Pdf::Invoice
 
     delegate :recipient, :invoice_items, :recipient_address, :address, to: :invoice
 
-    def initialize(pdf, invoice)
+    def initialize(pdf, invoice, options={})
       @pdf = pdf
       @invoice = invoice
+      @options = options
     end
 
     private

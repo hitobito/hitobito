@@ -31,8 +31,12 @@ module Dropdown
 
     def pdf_links
       add_item(translate(:full), export_path(:pdf), item_options)
+      add_item(translate(:full_without_amount), export_path(:pdf, amount: false), item_options)
       add_item(translate(:articles_only), export_path(:pdf, payment_slip: false), item_options)
       add_item(translate(:esr_only), export_path(:pdf, articles: false), item_options)
+      add_item(translate(:esr_only_without_amount),
+               export_path(:pdf, articles: false, amount: false),
+               item_options)
     end
 
     def label_links

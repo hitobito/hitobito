@@ -92,6 +92,12 @@ describe InvoicesController do
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf")
     end
 
+    it 'exports full invoice without amount' do
+      click_link('Export')
+      click_link('Rechnung inkl. Einzahlungsschein (ohne Rechnungsbetrag)')
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?amount=false")
+    end
+
     it 'exports only articles' do
       click_link('Export')
       click_link('Rechnung separat')
@@ -102,6 +108,13 @@ describe InvoicesController do
       click_link('Export')
       click_link('Einzahlungsschein separat')
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?articles=false")
+    end
+
+    it 'exports only esr without amount' do
+      click_link('Export')
+      click_link('Einzahlungsschein separat (ohne Rechnungsbetrag)')
+      expect(page).
+        to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?amount=false&articles=false")
     end
   end
 

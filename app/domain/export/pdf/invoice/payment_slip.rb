@@ -9,9 +9,10 @@ module Export::Pdf::Invoice
   class PaymentSlip < Section
 
     def render
+      return unless options[:payment_slip]
       invoice_address
       account_number
-      price
+      amount if options[:amount]
       esr_number if invoice.ch_esr? || invoice.ch_besr?
       payment_purpose if invoice.ch_es? || invoice.ch_bes?
       receiver_address
@@ -56,15 +57,15 @@ module Export::Pdf::Invoice
       end
     end
 
-    def price
+    def amount
       [-54, 120].each do |x|
         pdf.font('Courier', size: 12) do
           bounding_box([x, 98], width: 145) do
-            table price_data(0), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
+            table amount_data(0), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
 
           bounding_box([x+131, 98], width: 36) do
-            table price_data(1), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
+            table amount_data(1), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
         end
       end
@@ -92,7 +93,7 @@ module Export::Pdf::Invoice
       end
     end
 
-    def price_data(i)
+    def amount_data(i)
       numbers = helper.number_to_currency(invoice.calculated[:total],
                                           format: '%n',
                                           delimiter: '').split('.')

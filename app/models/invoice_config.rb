@@ -28,7 +28,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :group_id, uniqueness: true
   validates :address, presence: true, on: :update
-  validates :payment_for, presence: true, on: :update
+  validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: proc { |ic| ic.ch_bes? || ic.ch_besr? }
 
 
@@ -60,7 +60,7 @@ class InvoiceConfig < ActiveRecord::Base
   private
 
   def correct_address_wordwrap
-    return if payment_for.split(/\n/).length <= 2
-    errors.add(:payment_for, :to_long)
+    return if payee.split(/\n/).length <= 2
+    errors.add(:payee, :to_long)
   end
 end

@@ -30,7 +30,7 @@ module Export::Pdf::Invoice
     def bank_invoice_address
       [-50, 125].each do |x|
         bounding_box([x, 220], width: 150, height: 80) do
-          text invoice.payment_for
+          text invoice.payee
         end
         bounding_box([x, 180], width: 150, height: 80) do
           pdf.font('Courier', size: 9) { text invoice.iban }

@@ -28,14 +28,14 @@ describe InvoiceConfig do
     expect(invoice_config.errors.full_messages).to include('Kontonummer ist nicht gültig')
   end
 
-  it 'validates presence of payment_for' do
-    invoice_config.update(payment_for: '')
+  it 'validates presence of payee' do
+    invoice_config.update(payee: '')
 
     expect(invoice_config).not_to be_valid
   end
 
-  it 'validates wordwrap of payment_for if bank payment' do
-    invoice_config.update(payment_for: "line1 \n line2 \n \line 3", payment_slip: 'ch_bes')
+  it 'validates wordwrap of payee if bank payment' do
+    invoice_config.update(payee: "line1 \n line2 \n \line 3", payment_slip: 'ch_bes')
 
     expect(invoice_config).not_to be_valid
     expect(invoice_config.errors.full_messages).

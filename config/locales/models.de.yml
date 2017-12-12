@@ -119,7 +119,7 @@ de:
               required: 'muss ausgefüllt werden'
             account_number:
               required: 'muss ausgefüllt werden'
-            payment_for:
+            payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
 
     models:
@@ -637,7 +637,7 @@ de:
         payment_purpose: Zahlungszweck
         address: Absender Adresse
         beneficiary: Zugunsten von
-        payment_for: Einzahlung für
+        payee: Einzahlung für
         account_number: Kontonummer
         iban: IBAN
         payment_slip: Einzahlungsschein
@@ -661,7 +661,7 @@ de:
         contact: Kontaktperson
         contact_id: Kontaktperson
         beneficiary: Zugunsten von
-        payment_for: Einzahlung für
+        payee: Einzahlung für
         payment_slip: Einzahlungsschein
         payment_slips:
           ch_es: Roter Einzahlungsschein Post (CH)

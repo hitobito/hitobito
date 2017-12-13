@@ -73,7 +73,7 @@ module Export::Pdf::Invoice
 
     def esr_number
       bounding_box([300, 146], width: 220) do
-        pdf.font('Courier', size: 12) do
+        pdf.font('Courier', size: 10) do
           text invoice.esr_number
         end
       end

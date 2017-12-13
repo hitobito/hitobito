@@ -12,7 +12,7 @@ module Export::Pdf::Invoice
       return unless options[:payment_slip]
       invoice_address
       account_number
-      amount if options[:amount]
+      amount if invoice.invoice_items.present?
       esr_number if invoice.ch_esr? || invoice.ch_besr?
       payment_purpose if invoice.ch_es? || invoice.ch_bes?
       receiver_address

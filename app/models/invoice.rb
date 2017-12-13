@@ -103,12 +103,16 @@ class Invoice < ActiveRecord::Base
 
   def calculated
     [:total, :cost, :vat].collect do |field|
-      [field, invoice_items.to_a.sum(&field)]
+      [field, invoice_items.reject(&:frozen?).sum(&field)]
     end.to_h
   end
 
   def recalculate
-    self.total = invoice_items.to_a.sum(&:total) || 0
+    self.total = calculated[:total] || 0
+  end
+
+  def recalculate!
+    update_attribute(:total, calculated[:total] || 0)
   end
 
   def to_s

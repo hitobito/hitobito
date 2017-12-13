@@ -12,3 +12,4 @@ app.Invoices = {
 }
 
 $(document).on('input', '#invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
+$(document).on('click', '#invoice_items_fields .remove_nested_fields', app.Invoices.recalculate)

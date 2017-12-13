@@ -19,9 +19,13 @@
 
 class InvoiceItem < ActiveRecord::Base
 
+  after_destroy :recalculate!
+
   belongs_to :invoice
 
   scope :list, -> { order(:name) }
+
+  delegate :recalculate!, to: :invoice
 
   validates_by_schema
 
@@ -40,5 +44,4 @@ class InvoiceItem < ActiveRecord::Base
   def vat
     vat_rate ? cost * (vat_rate / 100) : 0
   end
-
 end

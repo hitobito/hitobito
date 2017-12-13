@@ -44,10 +44,6 @@ describe Invoice do
     expect(create_invoice.sequence_number).to eq "#{group.id}-1"
   end
 
-  it 'computes esr_number based of group_id and invoice_config.sequence_number' do
-    expect(create_invoice.esr_number).to eq "#{group.id}-1"
-  end
-
   it '#save sets recipient and related fields' do
     invoice = create_invoice
     expect(invoice.recipient).to eq person

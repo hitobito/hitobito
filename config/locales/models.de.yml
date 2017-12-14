@@ -112,7 +112,7 @@ de:
           recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
           attributes:
             invoice_config:
-              invalid: 'ist nicht gültig, passen sie die Einstellungen an bevor sie eine Rechnung erstellen'
+              invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
         invoice_config:
           attributes:
             iban:

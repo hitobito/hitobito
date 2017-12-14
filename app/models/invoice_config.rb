@@ -32,7 +32,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :beneficiary, presence: true, on: :update, if: proc { |ic| ic.ch_bes? || ic.ch_besr? }
 
 
-  # TODO: probably the if condition is not correct, it has to be specified by the product owner
+  # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: proc { |ic| ic.ch_es? || ic.ch_bes? }
   validates :iban, format: { with: /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/ },
                    on: :update, allow_blank: true

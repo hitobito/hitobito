@@ -170,7 +170,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_esr_number
-    self.esr_number = EsrNumber.new(sequence_number).generate
+    self.esr_number = Invoice::PaymentSlip.new(self).esr_number
   end
 
   def set_payment_attributes

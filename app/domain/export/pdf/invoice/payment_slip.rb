@@ -15,6 +15,7 @@ module Export::Pdf::Invoice
       amount if invoice.invoice_items.present?
       invoice.with_reference? ? esr_number : payment_purpose
       receiver_address
+      code_line
     end
 
     private
@@ -63,7 +64,7 @@ module Export::Pdf::Invoice
             table amount_data(0), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
 
-          bounding_box([x+131, 98], width: 36) do
+          bounding_box([x + 131, 98], width: 36) do
             table amount_data(1), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
         end
@@ -88,6 +89,14 @@ module Export::Pdf::Invoice
       [[295, 103], [-50, 66]].each do |width, height|
         bounding_box([width, height], width: 150, height: 80) do
           table receiver_address_data.take(3), cell_style: { padding: [5.5, 0, 1, 0], borders: [] }
+        end
+      end
+    end
+
+    def code_line
+      bounding_box([150, 0], width: 380, height: 11) do
+        pdf.font('Courier', size: 11) do
+          text Invoice::PaymentSlip.new(invoice).code_line
         end
       end
     end

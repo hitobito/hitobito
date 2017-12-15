@@ -18,7 +18,8 @@ top_layer:
   payee: 'Hans Gerber'
   address: 'top layer address'
   iban: 'CH93 0076 2011 6238 5295 7'
-  account_number: '10-5318-01' 
+  account_number: '10-5318-5' 
+  payment_slip: 'ch_esr'
 
 bottom_layer_one:
   group: bottom_layer_one

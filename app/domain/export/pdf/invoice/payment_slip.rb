@@ -13,15 +13,14 @@ module Export::Pdf::Invoice
       invoice_address
       account_number
       amount if invoice.invoice_items.present?
-      esr_number if invoice.ch_esr? || invoice.ch_besr?
-      payment_purpose if invoice.ch_es? || invoice.ch_bes?
+      invoice.with_reference? ? esr_number : payment_purpose
       receiver_address
     end
 
     private
 
     def invoice_address
-      if invoice.ch_bes? || invoice.ch_besr?
+      if invoice.bank?
         bank_invoice_address
       else
         post_invoice_address

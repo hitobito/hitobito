@@ -27,6 +27,7 @@
 
 class Invoice < ActiveRecord::Base
   include I18nEnums
+  include PaymentSlips
 
   attr_accessor :recipient_ids
 
@@ -60,7 +61,6 @@ class Invoice < ActiveRecord::Base
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
   i18n_enum :state, STATES
-  i18n_enum :payment_slip, InvoiceConfig::PAYMENT_SLIPS
 
   validates_by_schema
 
@@ -75,13 +75,6 @@ class Invoice < ActiveRecord::Base
     scope state.to_sym, -> { where(state: state) }
     define_method "#{state}?" do
       self.state == state
-    end
-  end
-
-  InvoiceConfig::PAYMENT_SLIPS.each do |payment_slip|
-    scope payment_slip.to_sym, -> { where(payment_slip: payment_slip) }
-    define_method "#{payment_slip}?" do
-      self.payment_slip == payment_slip
     end
   end
 

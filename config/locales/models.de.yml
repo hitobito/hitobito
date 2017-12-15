@@ -119,6 +119,7 @@ de:
               required: 'muss ausgefüllt werden'
             account_number:
               required: 'muss ausgefüllt werden'
+              invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
 

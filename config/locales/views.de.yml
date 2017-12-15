@@ -608,7 +608,7 @@ de:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
     form:
-      account_number_example: 'Beispiel: 16075473007'
+      account_number_example: 'Beispiel: 01-162-5'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
 
   invoice_lists:

@@ -36,9 +36,10 @@ class InvoiceConfig < ActiveRecord::Base
                    on: :update, allow_blank: true
 
   validates :account_number, presence: true, on: :update
-  validates :account_number, format: { with: /\A[0-9][-0-9]{4,20}[0-9]\z/ },
+  validates :account_number, format: { with: /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/ },
                              on: :update, allow_blank: true
   validate :correct_address_wordwrap, if: :bank?
+  validate :correct_check_digit
 
 
   validates_by_schema
@@ -52,5 +53,14 @@ class InvoiceConfig < ActiveRecord::Base
   def correct_address_wordwrap
     return if payee.split(/\n/).length <= 2
     errors.add(:payee, :to_long)
+  end
+
+  def correct_check_digit
+    return if account_number.blank?
+    payment_slip = Invoice::PaymentSlip.new
+    splitted = account_number.delete('-').split('')
+    check_digit = splitted.pop
+    return if payment_slip.check_digit(splitted.join) == check_digit.to_i
+    errors.add(:account_number, :invalid_check_digit)
   end
 end

@@ -41,4 +41,17 @@ describe InvoiceConfig do
     expect(invoice_config.errors.full_messages).
       to include('Einzahlung für darf höchstens 2 Zeilen enthalten')
   end
+
+  it 'validates account_number check digit' do
+    # incorrect check digit
+    invoice_config.update(account_number: '12-123-1')
+
+    expect(invoice_config).not_to be_valid
+    expect(invoice_config.errors.full_messages).to include(/Inkorrekte Prüfziffer/)
+
+    # correct check digit
+    invoice_config.update(account_number: '12-123-9')
+
+    expect(invoice_config).to be_valid
+  end
 end

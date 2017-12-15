@@ -187,7 +187,7 @@ describe Invoice do
     other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
                                 payee: 'fuu',
                                 address: 'fuu',
-                                account_number: 123_443)
+                                account_number: '01-162-5')
 
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.destroy }.not_to change { other.invoices.count }
@@ -198,7 +198,7 @@ describe Invoice do
     other.invoice_config.update(iban: 'CH12 2134 1234 1234 1234',
                                 payee: 'fuu',
                                 address: 'fuu',
-                                account_number: 123_443)
+                                account_number: '01-162-5')
 
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.really_destroy! }.to change { other.invoices.count }

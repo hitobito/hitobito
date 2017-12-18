@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -1122,6 +1122,14 @@ describe PersonAbility do
     it 'may index in top group' do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_invoices, other)
+    end
+  end
+
+  context 'impersonation' do
+    let(:role) { people(:top_leader).roles.first }
+
+    it 'may not impersonate user' do
+      is_expected.to be_able_to(:impersonate_user, people(:bottom_member))
     end
   end
 

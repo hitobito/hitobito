@@ -671,6 +671,10 @@ de:
       developed_by: 'Entwickelt von'
       source_code: 'Quellcode'
 
+    user_impersonation:
+      info: "Du bist jetzt als %{user} angemeldet"
+      end: "Imitation beenden"
+
   mailing_lists:
     global:
       link:
@@ -886,6 +890,9 @@ de:
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
 
+      impersonate_user: Imitieren
+      impersonate_user_tooltip: Du kannst hitobito so bedienen als wärst du diese Person
+
     actions_index:
       add_person: Person hinzufügen
       import_list: Liste importieren
@@ -1090,6 +1097,9 @@ de:
         create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."
         update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
         destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
+
+    impersonate: "Account wurde von %{user} übernommen."
+    impersonation_done: "Account wird nicht mehr von %{user} verwendet."
 
   views:
     pagination:

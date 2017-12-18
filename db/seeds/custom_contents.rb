@@ -65,6 +65,10 @@ CustomContent.seed_once(:key,
   { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
     placeholders_required: 'invoice-items, invoice-total, payment-information',
     placeholders_optional: 'recipient-name, group-name, invoice-number' },
+
+  { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
+    placeholders_required: 'taker-name',
+    placeholders_optional: 'recipient-name' },
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -82,6 +86,7 @@ people_export_id = CustomContent.get(Export::PeopleExportMailer::CONTENT_PEOPLE_
 events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_EXPORT).id
 event_participations_export_id = CustomContent.get(Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT).id
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
+user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -383,7 +388,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'de',
    label: 'Rechnung',
    subject: 'Rechnung {invoice-number} von {group-name}',
-   body: "<p>Hallo {recipient-name}</p>" \
+ body: "<p>Hallo {recipient-name}</p>" \
          "<p>Rechnung von:</p>" \
          "<p><b>Absender: Verband, Verbandstrasse 23, 3000 Verbandort</b></p>" \
          "<br/><br/>" \
@@ -402,5 +407,26 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: invoice_notification_id,
    locale: 'it',
    label: 'Rechnung' },
+
+  {custom_content_id: user_impersonation_id,
+   locale: 'de',
+   label: 'Benutzer impersonierung',
+   subject: "Dein Account auf [#{Settings.application.name}] wurde von {taker-name} übernommen",
+   body: "<p>Hallo {recipient-name}</p>" \
+   "<p>{taker-name} hat auf [#{Settings.application.name}] deinen Account übernommen.</p>" \
+   "<p>Falls du glaubst, dass dieser Zugriff von {taker-name} missbräuchlich ist, "\
+   "melde dich beim Verantwortlichen der Datenbank."},
+
+  {custom_content_id: user_impersonation_id,
+   locale: 'en',
+   label: 'Benutzer impersonierung' },
+
+  {custom_content_id: user_impersonation_id,
+   locale: 'fr',
+   label: 'Benutzer impersonierung' },
+
+  {custom_content_id: user_impersonation_id,
+   locale: 'it',
+   label: 'Benutzer impersonierung' },
 
 )

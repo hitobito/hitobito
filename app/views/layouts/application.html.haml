@@ -33,6 +33,8 @@
     = yield(:head)
 
   %body
+    - if origin_user
+      = render 'layouts/user_impersonation'
 
     %header#page-header
       .container-fluid

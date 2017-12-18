@@ -91,6 +91,14 @@ module LayoutHelper
     "display: #{visible ? 'block' : 'none'};"
   end
 
+  def sign_out_path
+    if session[:origin_user]
+      group_person_impersonate_path(current_user.primary_group_id, current_user)
+    else
+      destroy_person_session_path
+    end
+  end
+
   private
 
   def include_add_button(title, add_path)

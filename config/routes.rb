@@ -68,6 +68,8 @@ Hitobito::Application.routes.draw do
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
+          post 'impersonate' => 'impersonation#create'
+          delete 'impersonate' => 'impersonation#destroy'
         end
       end
 

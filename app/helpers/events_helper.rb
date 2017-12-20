@@ -67,6 +67,10 @@ module EventsHelper
     safe_join(texts.select(&:present?).map { |text| simple_format(text) })
   end
 
+  def format_event_state(event)
+    event.state_translated
+  end
+
   private
 
   def find_event_type

@@ -55,6 +55,8 @@ class EventsController < CrudController
     respond_with(entry)
   end
 
+  private
+
   # list scope preload :groups, :kinds which we dont need
   def list_entries
     model_scope.
@@ -64,8 +66,6 @@ class EventsController < CrudController
       preload_all_dates.
       uniq
   end
-
-  private
 
   def build_entry
     if params[:source_id]
@@ -147,7 +147,7 @@ class EventsController < CrudController
 
   def assign_contact_attrs
     contact_attrs = model_params.delete(:contact_attrs)
-    return unless contact_attrs.present?
+    return if contact_attrs.blank?
     reset_contact_attrs
     contact_attrs.each do |a, v|
       entry.required_contact_attrs << a if v.to_sym == :required

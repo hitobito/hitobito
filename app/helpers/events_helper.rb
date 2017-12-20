@@ -71,6 +71,17 @@ module EventsHelper
     event.state_translated
   end
 
+  def format_event_group_ids(event)
+    groups = event.groups
+    linker = ->(group) { link_to_if(assoc_link?(group), group.with_layer.join(' / '), group) }
+
+    if groups.one?
+      linker[event.groups.first]
+    elsif groups.present?
+      simple_list(groups) { |group| linker[group] }
+    end
+  end
+
   private
 
   def find_event_type

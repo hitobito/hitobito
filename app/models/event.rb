@@ -262,7 +262,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def application_possible?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
     (!application_closing_at? || application_closing_at >= Time.zone.today) &&
-    (maximum_participants.to_i == 0 || participant_count < maximum_participants)
+    (maximum_participants.to_i.zero? || participant_count < maximum_participants)
   end
 
   def init_questions

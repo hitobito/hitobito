@@ -516,6 +516,7 @@ de:
               qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
               finance: Erstellen und Verwalten von Rechnungen.
+              impersonation: Hitobito als andere Person bedienen.
           kind:
             member:
               one: Mitglied

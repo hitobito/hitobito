@@ -13,5 +13,6 @@
   - t.attr(:dates_full)
   - t.attr(:description_short, t.attr_header(:description))
   - t.attr(:booking_info)
+  - t.sortable_attr(:state)
   - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
 

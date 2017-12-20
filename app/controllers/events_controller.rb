@@ -59,13 +59,17 @@ class EventsController < CrudController
 
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    model_scope_without_nesting.
+    model_scope_without_nesting. # nesting restricts to parent, we want more
       where(type: params[:type]).
-      with_group_id([parent.id] + parent.descendants.pluck(:id)).
+      with_group_id(relevant_group_ids).
       in_year(year).
       order_by_date.
       preload_all_dates.
       uniq
+  end
+
+  def relevant_group_ids
+    [parent.id] + parent.descendants.pluck(:id)
   end
 
   def build_entry

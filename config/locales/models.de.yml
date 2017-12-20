@@ -338,6 +338,8 @@ de:
 
       event:
         group_ids: Gruppen
+        groups: Gruppen
+        state: Status
         name: Name
         number: Nummer
         motto: Motto

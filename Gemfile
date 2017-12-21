@@ -76,14 +76,6 @@ gem 'uglifier'
 gem 'parallel_tests', group: [:development, :test]
 
 
-# if these are ever in your way, you can remove these lines.
-# they mostly serve as a version-restriction
-group :dependencies do
-  gem 'nokogiri', '< 1.7.0' # requires ruby 2.1
-  gem 'addressable', '< 2.5' # requires ruby 2.0
-  gem 'sort_alphabetical', '< 1.1.0' # requires ruby 2.0
-end
-
 group :development, :test do
   gem 'binding_of_caller'
   gem 'rspec-rails'

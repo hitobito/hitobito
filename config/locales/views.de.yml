@@ -476,6 +476,10 @@ de:
     entire_group: 'Gesamte Gruppe'
     new_filter: 'Neuer Filter...'
 
+  filter_navigation/events:
+    all: 'Alle'
+    layer: 'nur %{layer}'
+
   filter_navigation/event/participations:
     predefined_filters:
       all: Alle Personen

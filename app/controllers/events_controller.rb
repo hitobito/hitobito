@@ -61,6 +61,7 @@ class EventsController < CrudController
   def list_entries
     model_scope_without_nesting. # nesting restricts to parent, we want more
       where(type: params[:type]).
+      includes(:groups).
       with_group_id(relevant_group_ids).
       in_year(year).
       order_by_date.
@@ -69,7 +70,10 @@ class EventsController < CrudController
   end
 
   def relevant_group_ids
-    [parent.id] + parent.descendants.pluck(:id)
+    case params[:filter]
+    when 'layer' then [parent.id] + parent.children.pluck(:id)
+    else [parent.id] + parent.descendants.pluck(:id) # handles 'all' also
+    end
   end
 
   def build_entry

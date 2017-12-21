@@ -91,6 +91,8 @@ module Concerns
     def __model_class_for__(ivar)
       if ivar.is_a?(ActiveRecord::Relation)
         ivar.klass
+      elsif ivar.respond_to?(:each) # Array or Enumerable
+        ivar.first.class
       elsif ivar.class.respond_to?(:model_name)
         ivar.class
       else

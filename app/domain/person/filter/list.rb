@@ -18,7 +18,11 @@ class Person::Filter::List
   end
 
   def entries
-    default_order(filter(accessibles).preload_groups)
+    default_order(filtered.preload_groups)
+  end
+
+  def filtered
+    filter(accessibles)
   end
 
   def all_count

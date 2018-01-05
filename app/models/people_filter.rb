@@ -33,6 +33,10 @@ class PeopleFilter < ActiveRecord::Base
 
   scope :list, -> { order(:name) }
 
+  def to_params
+    { name: name, range: range, filters: filter_chain.to_params }
+  end
+
   def to_s(_format = :default)
     name
   end

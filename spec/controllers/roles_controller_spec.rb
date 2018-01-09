@@ -455,6 +455,20 @@ describe RolesController do
      end
   end
 
+  describe 'GET role_types' do
+    it 'renders template' do
+      xhr :get, :role_types, group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name }
+      is_expected.to render_template('role_types')
+      expect(assigns(:group)).to eq(group)
+    end
+
+    it 'returns 404 without role' do
+      expect do
+        xhr :get, :role_types, group_id: group.id
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe 'handling return_url param' do
     it 'POST create redirects to people after create' do
       post :create, group_id: group.id,

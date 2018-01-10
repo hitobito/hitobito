@@ -11,7 +11,7 @@
 
 = crud_table do |t|
   - t.col(t.attr_header(:name)) do |e|
-    %strong= link_to e.name, group_event_path(@group, e)
+    %strong= link_to e.name, group_event_path(e.groups.first, e)
   - t.attr(:dates_full)
   - t.attr(:description_short, t.attr_header(:description))
   - t.attr(:booking_info)

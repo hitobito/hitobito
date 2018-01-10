@@ -18,5 +18,8 @@
   - t.attr(:booking_info)
   - t.attr(:state)
   - t.attr(:group_ids)
+
+  = render_extensions(:list_columns, locals: { t: t })
+
   - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
 

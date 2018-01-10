@@ -16,7 +16,7 @@ module FilterNavigation
     end
 
     def active_label
-      label_for_filter(template.params[:filter])
+      label_for_filter(template.params.fetch(:filter, 'all'))
     end
 
     private

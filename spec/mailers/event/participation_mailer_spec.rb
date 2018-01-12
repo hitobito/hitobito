@@ -110,7 +110,7 @@ describe Event::ParticipationMailer do
       e2 = Fabricate(:additional_email, contactable: approvers[0], mailings: true)
       Fabricate(:additional_email, contactable: approvers[1], mailings: false)
 
-      expect(mail.to).to eq ['approver0@example.com', 'approver1@example.com', e1.email, e2.email]
+      expect(mail.to).to match_array(['approver0@example.com', 'approver1@example.com', e1.email, e2.email])
       expect(mail.subject).to eq 'Freigabe einer Kursanmeldung'
     end
 

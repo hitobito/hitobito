@@ -30,13 +30,6 @@ class AdditionalEmail < ActiveRecord::Base
     def predefined_labels
       Settings.additional_email.predefined_labels
     end
-
-    def mailing_emails_for(people)
-      where(contactable_id: people.collect(&:id),
-            contactable_type: Person.sti_name,
-            mailings: true).
-      pluck(:email)
-    end
   end
 
 end

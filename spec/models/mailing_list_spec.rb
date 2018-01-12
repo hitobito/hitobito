@@ -28,6 +28,28 @@ describe MailingList do
   let(:person) { Fabricate(:person) }
   let(:event)  { Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
 
+  describe 'preferred_labels' do
+    it 'serializes to empty array if missing' do
+      expect(MailingList.new.preferred_labels).to eq []
+      expect(mailing_lists(:leaders).preferred_labels).to eq []
+    end
+
+    it 'sorts array and removes duplicates' do
+      list.update(preferred_labels: %w(foo bar bar baz))
+      expect(list.reload.preferred_labels).to eq %w(bar baz foo)
+    end
+
+    it 'ignores blank values' do
+      list.update(preferred_labels: [''])
+      expect(list.reload.preferred_labels).to eq []
+    end
+
+    it 'strips whitespaces blank values' do
+      list.update(preferred_labels: [' test '])
+      expect(list.reload.preferred_labels).to eq ['test']
+    end
+  end
+
   describe 'validations' do
     it 'succeed with mail_name' do
       list.mail_name = 'aa-b'

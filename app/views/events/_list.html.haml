@@ -6,9 +6,12 @@
 - title @group.to_s
 
 - if parent.layer?
-  - content_for(:filter, FilterNavigation::Events.new(self, @group).to_s)
+  - content_for :filter do
+    = FilterNavigation::Events.new(self, @group).to_s
+    .pull-right
+      = render 'shared/page_per_year'
 
-= render 'shared/page_per_year'
+= paginate @events
 
 = crud_table do |t|
   - t.col(t.attr_header(:name)) do |e|

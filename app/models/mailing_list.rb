@@ -47,7 +47,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def preferred_labels=(labels)
-    self[:preferred_labels] = labels.reject(&:blank?).uniq.sort
+    self[:preferred_labels] = labels.reject(&:blank?).collect(&:strip).uniq.sort
   end
 
   def mail_address

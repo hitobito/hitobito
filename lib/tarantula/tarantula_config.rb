@@ -79,6 +79,7 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/participations\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications\/\d+$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/user$/)

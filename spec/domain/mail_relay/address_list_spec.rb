@@ -47,6 +47,20 @@ describe MailRelay::AddressList do
     ])
   end
 
+  it 'it ignores case when mathing labels' do
+    e1 = Fabricate(:additional_email, contactable: top_leader, label: 'FOO')
+    expect(entries([top_leader], %w(foo))).to match_array([
+      e1.email,
+    ])
+  end
+
+  it 'it leading and trailing whitespaces case when mathing labels' do
+    e1 = Fabricate(:additional_email, contactable: top_leader, label: ' FOO ')
+    expect(entries([top_leader], %w(foo))).to match_array([
+      e1.email,
+    ])
+  end
+
   it 'falls back to default behviour of no label matches' do
     e1 = Fabricate(:additional_email, contactable: top_leader, mailings: true)
     Fabricate(:additional_email, contactable: top_leader, label: 'buz', mailings: false)

@@ -43,6 +43,11 @@ describe MailingList do
       list.update(preferred_labels: [''])
       expect(list.reload.preferred_labels).to eq []
     end
+
+    it 'strips whitespaces blank values' do
+      list.update(preferred_labels: [' test '])
+      expect(list.reload.preferred_labels).to eq ['test']
+    end
   end
 
   describe 'validations' do

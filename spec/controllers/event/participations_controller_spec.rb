@@ -104,8 +104,11 @@ describe Event::ParticipationsController do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      expect(@response.body).
-        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+      expect(@response.body.split(',')).to match_array([
+        @participant.person.email,
+        @leader.person.email,
+        e1.email
+      ])
     end
 
     it 'loads pending person add requests' do

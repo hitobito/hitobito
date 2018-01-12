@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form do |f|
+= entry_form(data: { mailing_list_labels: true }) do |f|
   = f.labeled_input_fields(:name, :description, :publisher)
 
   = f.labeled(:mail_name) do
@@ -12,6 +12,19 @@
       %span.add-on= "@#{entry.mail_domain}"
 
   = f.labeled_input_field(:additional_sender, help: t('.help_additional_sender'))
+  = f.labeled(:preferred_labels) do
+    %div
+      = link_to '#', class: 'chip chip-add' do
+        = ti('associations.add')
+        = icon(:plus)
+      = text_field_tag(:label, nil, style: 'display: none', data: { provide: :typeahead, source: @labels })
+
+    = hidden_field_tag('mailing_list[preferred_labels][]')
+    - @preferred_labels.each do |label|
+      %span.chip
+        = label
+        = link_to(icon(:remove), '#')
+        = hidden_field_tag('mailing_list[preferred_labels][]', label)
 
   = f.indented do
     = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))

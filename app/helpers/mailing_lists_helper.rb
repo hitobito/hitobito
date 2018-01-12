@@ -7,6 +7,10 @@
 
 module MailingListsHelper
 
+  def format_mailing_list_preferred_labels(mailing_list)
+    safe_join mailing_list.preferred_labels.sort, ', '
+  end
+
   def button_toggle_subscription
     if entry.subscribable?
       if entry.subscribed?(current_user)

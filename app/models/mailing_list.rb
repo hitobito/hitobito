@@ -22,6 +22,8 @@
 
 class MailingList < ActiveRecord::Base
 
+  serialize :preferred_labels, Array
+
   belongs_to :group
 
   has_many :subscriptions, dependent: :destroy
@@ -42,6 +44,10 @@ class MailingList < ActiveRecord::Base
 
   def to_s(_format = :default)
     name
+  end
+
+  def preferred_labels=(labels)
+    self[:preferred_labels] = labels.reject(&:blank?).uniq.sort
   end
 
   def mail_address

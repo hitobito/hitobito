@@ -69,6 +69,14 @@ CustomContent.seed_once(:key,
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',
     placeholders_optional: 'recipient-name' },
+
+  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
+   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
+   placeholders_optional: nil},
+
+  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED,
+   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients',
+   placeholders_optional: nil}
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -87,6 +95,8 @@ events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_
 event_participations_export_id = CustomContent.get(Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT).id
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
+bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
+bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -429,4 +439,23 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: 'Benutzer impersonierung' },
 
+  {custom_content_id: bulk_mail_success_id,
+   locale: 'de',
+   label: 'Sendebericht Abo',
+   subject: 'Sendebericht Mail an {mail-to}',
+   body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
+         "Betreff: {mail-subject}<br/>" \
+         "Zeit: {delivered-at}<br/>" \
+         "Empfänger: {total-recipients}<br/><br/>" },
+
+  {custom_content_id: bulk_mail_with_failed_id,
+   locale: 'de',
+   label: 'Sendebericht Abo nicht alle erfolgreich',
+   subject: 'Sendebericht Mail an {mail-to}',
+   body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
+         "Betreff: {mail-subject}<br/>" \
+         "Zeit: {delivered-at}<br/>" \
+         "Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>" \
+         "Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>" \
+         "{failed-recipients}<br/><br/>"},
 )

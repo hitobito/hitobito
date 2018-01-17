@@ -24,7 +24,7 @@ class ApplicationMailer < ActionMailer::Base
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
-    headers[:subject] ||= content.subject
+    headers[:subject] ||= content.subject_with_values(values)
     mail(headers) do |format|
       format.html { render text: content.body_with_values(values) }
     end

@@ -49,6 +49,14 @@ CustomContent.seed_once(:key,
   { key: Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT,
     placeholders_required: nil,
     placeholders_optional: 'recipient-name, mailing-list-name' },
+
+  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
+   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
+   placeholders_optional: nil},
+
+  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED,
+   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients',
+   placeholders_optional: nil}
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -62,6 +70,8 @@ add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTEN
 add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
 add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
 subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT).id
+bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
+bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
@@ -302,4 +312,23 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: 'Export der Abonnenten' },
 
+  {custom_content_id: bulk_mail_success_id,
+   locale: 'de',
+   label: 'Sendebericht Abo',
+   subject: 'Sendebericht Mail an {mail-to}',
+   body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
+         "Betreff: {mail-subject}<br/>" \
+         "Zeit: {delivered-at}<br/>" \
+         "Empfänger: {total-recipients}<br/><br/>" },
+
+  {custom_content_id: bulk_mail_with_failed_id,
+   locale: 'de',
+   label: 'Sendebericht Abo nicht alle erfolgreich',
+   subject: 'Sendebericht Mail an {mail-to}',
+   body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
+         "Betreff: {mail-subject}<br/>" \
+         "Zeit: {delivered-at}<br/>" \
+         "Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>" \
+         "Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>" \
+         "{failed-recipients}<br/><br/>"},
 )

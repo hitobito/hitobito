@@ -53,18 +53,26 @@ class CustomContent < ActiveRecord::Base
     "{#{key}}"
   end
 
+  def subject_with_values(placeholders = {})
+    replace_placeholders(subject.dup, placeholders)
+  end
+
   def body_with_values(placeholders = {})
+    replace_placeholders(body.dup, placeholders)
+  end
+
+  private
+  
+  def replace_placeholders(string, placeholders)
     check_placeholders_exist(placeholders)
 
-    placeholders_list.each_with_object(body.dup) do |placeholder, output|
+    placeholders_list.each_with_object(string) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
         output.gsub!(token, placeholders.fetch(placeholder))
       end
     end
   end
-
-  private
 
   def as_list(placeholders)
     placeholders.to_s.split(',').collect(&:strip)

@@ -29,6 +29,13 @@ describe MailRelay::Lists do
   let(:subscribers) { [ind, bll, bgl1] }
 
   let(:relay) { MailRelay::Lists.new(message) }
+
+  before do
+    # we do not have custom content for report loaded in test env
+    allow_any_instance_of(DeliveryReportMailer).
+      to receive(:bulk_mail)
+  end
+
   subject { relay }
 
   context '#mailing_list' do

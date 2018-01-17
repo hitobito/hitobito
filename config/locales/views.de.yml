@@ -612,6 +612,11 @@ de:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
     form:
+      payment_slip: 'Einzahlungsschein'
+      payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden.'
+      address_help: 'Erscheint auf dem Brief als Absenderadresse'
+      payee_help: 'Erscheint auf dem Einzahlungsschein'
+      beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
       account_number_example: 'Beispiel: 01-162-5'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
 

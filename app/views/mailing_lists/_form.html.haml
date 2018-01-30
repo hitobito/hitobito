@@ -26,6 +26,8 @@
         = link_to(icon(:remove), '#')
         = hidden_field_tag('mailing_list[preferred_labels][]', label)
 
+      %span.help-block= t('.help_preferred_labels')
+
   = f.indented do
     = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
   = f.indented do

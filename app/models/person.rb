@@ -176,8 +176,8 @@ class Person < ActiveRecord::Base
       all.extending(Person::PreloadGroups)
     end
 
-    def mailing_emails_for(people)
-      MailRelay::AddressList.new(people).entries
+    def mailing_emails_for(people, labels = [])
+      MailRelay::AddressList.new(people, labels).entries
     end
 
     private

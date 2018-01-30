@@ -574,7 +574,7 @@ de:
         mail_address: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
-        preferred_labels: Bevorzugte E-Mails
+        preferred_labels: Bevorzugte E-Mail-Labels
 
       subscription:
         related_role_types: Rollen

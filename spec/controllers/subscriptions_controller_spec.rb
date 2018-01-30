@@ -47,7 +47,7 @@ describe SubscriptionsController do
         expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
       end.to change(Delayed::Job, :count).by(1)
     end
-    
+
     it 'exports vcf files' do
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :vcf
       expect(@response.content_type).to eq('text/vcard')
@@ -77,6 +77,13 @@ describe SubscriptionsController do
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
       expect(@response.body.split(',')).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
+    end
+
+    it 'renders email addresses with additional_email matching preferred_labels instead of subscriber email' do
+      e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, label: :preferred)
+      mailing_list.update(preferred_labels: %w(preferred))
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
+      expect(@response.body.split(',')).to match_array([people(:bottom_member).email, e1.email])
     end
 
     it 'loads pending person add requests' do

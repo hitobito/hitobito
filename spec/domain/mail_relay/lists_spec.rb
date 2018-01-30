@@ -66,6 +66,26 @@ describe MailRelay::Lists do
 
       it { is_expected.to match_array([ind, bll, bgl1].collect(&:email) + [e1.email]) }
     end
+
+    context 'with matching preferred_labels' do
+      before do
+        list.update(preferred_labels: %w(preferred1 preferred2))
+      end
+      let!(:e1) { Fabricate(:additional_email, contactable: ind, label: 'preferred1') }
+      let!(:e2) { Fabricate(:additional_email, contactable: ind, label: 'preferred2') }
+
+      it { is_expected.to match_array([e1, e2, bll, bgl1].collect(&:email)) }
+    end
+
+    context 'without matching preferred_labels' do
+      before do
+        list.update(preferred_labels: %w(preferred1 preferred2))
+      end
+      let!(:e1) { Fabricate(:additional_email, contactable: ind, label: 'preferreda', mailings: false) }
+      let!(:e2) { Fabricate(:additional_email, contactable: ind, label: 'preferredb', mailings: true) }
+
+      it { is_expected.to match_array([e2, ind, bll, bgl1].collect(&:email)) }
+    end
   end
 
   context 'list admin' do

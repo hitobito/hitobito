@@ -31,7 +31,7 @@ gem 'http_accept_language'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
-gem 'mysql2', '0.3.15' # 0.3.16 fails sphinx specs on jenkins
+gem 'mysql2', '0.4.9'
 gem 'nested_form'
 gem 'oat'
 gem 'paper_trail'

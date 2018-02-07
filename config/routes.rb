@@ -11,6 +11,8 @@ Hitobito::Application.routes.draw do
 
   root to: 'dashboard#index'
 
+  get '/healthz', to: 'healthz#show'
+
   language_scope do
 
     get '/404', to: 'errors#404'

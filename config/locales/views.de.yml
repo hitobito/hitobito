@@ -967,9 +967,9 @@ de:
         reactivateable: Gültige und reaktivierbare Qualifikationen
         all: Alle jemals erteilten Qualifikationen
       filters_role_kind:
-        active: war die Role aktiv.
-        created: wurde die Role erstellt.
-        deleted: wurde die Role gelöscht.
+        active: war die Rolle aktiv.
+        created: wurde die Rolle erstellt.
+        deleted: wurde die Rolle gelöscht.
 
     new:
       title: Personen filtern

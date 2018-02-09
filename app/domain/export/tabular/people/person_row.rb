@@ -65,7 +65,7 @@ module Export::Tabular::People
     end
 
     def find_qualification(label)
-      entry.qualifications.find do |q|
+      entry.decorate.latest_qualifications_uniq_by_kind.find do |q|
         qualification_active?(q) &&
         ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
       end

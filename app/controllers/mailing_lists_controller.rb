@@ -11,7 +11,7 @@ class MailingListsController < CrudController
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
-                          :anyone_may_post]
+                          :anyone_may_post, :delivery_report]
 
   decorates :group, :mailing_list
 

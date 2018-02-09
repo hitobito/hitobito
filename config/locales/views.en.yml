@@ -463,6 +463,7 @@ en:
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
       caption_anyone_may_post: 'Anyone may write to the mailing list'
+      caption_delivery_report: 'Send delivery report to sender'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
@@ -470,6 +471,8 @@ en:
     subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
     anyone_may_post: 'Anyone may write to the mailing list'
     anyone_may_not_post: '<strong>Not</strong> anyone may write to the mailing list'
+    delivery_report: 'Sender receives delivery report'
+    no_delivery_report: 'Sender does not receive delivery report'
     subscribe: 'Log in'
     unsubscribe: 'Log off'
   navigation:

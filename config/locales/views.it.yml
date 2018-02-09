@@ -503,6 +503,7 @@ it:
       caption_subscribable: 'abbonati possono iscriverei/disiscrivere sé stessi'
       caption_subscribers_may_post: 'abbonati posso scrivere alla mailing list'
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
+      caption_delivery_report: 'Invia mail di conferma al mittente'
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -510,6 +511,8 @@ it:
     subscribers_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
     anyone_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
+    delivery_report: 'I mittenti ricevono un'' e-mail di conferma'
+    no_delivery_report: 'I mittenti non ricevono un'' e-mail di conferma'
     subscribe: 'collegarsi'
     unsubscribe: 'scollegarsi'
   navigation:

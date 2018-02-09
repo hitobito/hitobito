@@ -18,6 +18,7 @@
 #  subscribable         :boolean          default(FALSE), not null
 #  subscribers_may_post :boolean          default(FALSE), not null
 #  anyone_may_post      :boolean          default(FALSE), not null
+#  delivery_report      :boolean          default(FALSE), not null
 #
 
 Fabricator(:mailing_list) do

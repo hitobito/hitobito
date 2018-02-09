@@ -72,6 +72,11 @@ module MailRelay
       mailing_list.present?
     end
 
+    # Sends a delivery_report to sender_email if flag is set
+    def delivery_report_to
+      sender_email if mailing_list.delivery_report
+    end
+
     # Is the mail sender allowed to post to this address?
     def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity
       return false unless valid_email?(sender_email)

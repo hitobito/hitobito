@@ -45,7 +45,7 @@ module MailRelay
         @previous_success = true
         sleep BATCH_TIMEOUT.to_i unless last_slice?(i)
       end
-      delivery_report
+      delivery_report if @delivery_report_to
     end
 
     private
@@ -127,9 +127,13 @@ module MailRelay
           deliver_now
       rescue => e
         logger.info("Delivery report for bulk mail to \
-                    #{envelope_to} could not be delivered: #{e.message}")
+                    #{@delivery_report_to} could not be delivered: #{e.message}")
         raise e unless Rails.env.production?
       end
+    end
+
+    def logger
+      Delayed::Worker.logger || Rails.logger
     end
 
     def apply_headers

@@ -196,7 +196,7 @@ module MailRelay
     end
 
     def bulk_mail
-      bulk_mail = BulkMail.new(message, envelope_sender, sender_email, receivers)
+      bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
       bulk_mail.headers['Precedence'] = 'list'
       bulk_mail.headers['List-Id'] = list_id
       bulk_mail
@@ -204,6 +204,11 @@ module MailRelay
 
     def logger
       Delayed::Worker.logger || Rails.logger
+    end
+
+    # Sends a delivery_report to that address (e.g. sender_email) if set
+    def delivery_report_to
+      nil
     end
 
   end

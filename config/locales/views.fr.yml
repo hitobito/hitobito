@@ -512,6 +512,7 @@ fr:
       caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes.'
       caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion.'
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
+      caption_delivery_report: 'Envoyer un mail de confirmation à l''expéditeur'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
@@ -519,6 +520,8 @@ fr:
     subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
     anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
     anyone_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    delivery_report: 'Les expéditeurs reçoivent un email de confirmation'
+    no_delivery_report: 'Les expéditeurs ne reçoivent pas d'' e-mail de confirmation'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
   navigation:

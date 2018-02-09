@@ -712,6 +712,7 @@ de:
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
+      caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
       help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
 
   mailing_list_decorator:
@@ -721,6 +722,9 @@ de:
     subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
     anyone_may_not_post: 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    delivery_report: 'Absender erhalten ein E-Mail als Versandbestätigung'
+    no_delivery_report: 'Absender erhalten kein E-Mail als Versandbestätigung'
+
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 

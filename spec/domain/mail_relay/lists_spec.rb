@@ -111,6 +111,17 @@ describe MailRelay::Lists do
 
         expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
       end
+
+      it 'does not send delivery report if flag is false' do
+        expect_any_instance_of(MailRelay::BulkMail).not_to receive(:delivery_report)
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      end
+
+      it 'does send delivery report if set flag is true' do
+        list.update(delivery_report: true)
+        expect_any_instance_of(MailRelay::BulkMail).to receive(:delivery_report)
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      end
     end
 
     context 'from additional email' do

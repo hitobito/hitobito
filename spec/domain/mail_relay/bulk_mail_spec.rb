@@ -194,7 +194,17 @@ describe MailRelay::BulkMail do
 
     end
 
+    context 'with delivery_report_to set to nil' do
+      let(:delivery_report_to) { nil }
 
-  end 
+      it 'does not send delivery_report' do
+        expect(bulk_mail).not_to receive(:delivery_report_to)
+
+        bulk_mail.deliver
+      end
+    end
+
+
+  end
 
 end

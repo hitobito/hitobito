@@ -448,6 +448,18 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
          "Zeit: {delivered-at}<br/>" \
          "Empfänger: {total-recipients}<br/><br/>" },
 
+  {custom_content_id: bulk_mail_success_id,
+   locale: 'en',
+   label: 'Sendebericht Abo' },
+
+  {custom_content_id: bulk_mail_success_id,
+   locale: 'fr',
+   label: 'Sendebericht Abo' },
+
+  {custom_content_id: bulk_mail_success_id,
+   locale: 'it',
+   label: 'Sendebericht Abo' },
+
   {custom_content_id: bulk_mail_with_failed_id,
    locale: 'de',
    label: 'Sendebericht Abo nicht alle erfolgreich',
@@ -458,4 +470,16 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
          "Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>" \
          "Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>" \
          "{failed-recipients}<br/><br/>"},
+
+  {custom_content_id: bulk_mail_with_failed_id,
+   locale: 'en',
+   label: 'Sendebericht Abo nicht alle erfolgreich' },
+
+  {custom_content_id: bulk_mail_with_failed_id,
+   locale: 'fr',
+   label: 'Sendebericht Abo nicht alle erfolgreich' },
+
+  {custom_content_id: bulk_mail_with_failed_id,
+   locale: 'it',
+   label: 'Sendebericht Abo nicht alle erfolgreich' },
 )

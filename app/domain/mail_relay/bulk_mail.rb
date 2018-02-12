@@ -13,7 +13,7 @@ module MailRelay
 
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
-    RETRY_AFTER_ERROR = [5.minutes, 30.minutes]
+    RETRY_AFTER_ERROR = [5.minutes, 10.minutes]
     EMAIL_REGEX = /([\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+)/i
     DOMAIN_NOT_FOUND_REGEX = /Domain not found/i
 
@@ -39,13 +39,20 @@ module MailRelay
 
       yield if block_given?
 
+      log_info("starting bulk send to #{@recipients.count} recipients")
+
+      @slices = (@recipients.count / BULK_SIZE.to_f).ceil
+      @current_slice = 0
+
       @recipients.each_slice(BULK_SIZE).with_index do |r, i|
         break if @abort
+        @current_slice += 1
+        log_info("sending #{@current_slice}/#{@slices} blocks with #{BULK_SIZE} recipients")
         batch_deliver(r)
         @previous_success = true
         sleep BATCH_TIMEOUT.to_i unless last_slice?(i)
       end
-      delivery_report if @delivery_report_to
+      delivery_report
     end
 
     private
@@ -82,17 +89,27 @@ module MailRelay
         # raise error if initial deliver fails.
         # if running inside delayed job this retriggers
         # current job at a later time.
-        raise error unless @previous_success
+        unless @previous_success
+          log_info("initial send failed: #{error.message}")
+          raise error
+        end
 
         if @retry >= 2
           abort_delivery(error.message)
           return
         else
-          @retry += 1
-          sleep RETRY_AFTER_ERROR[@retry-1]
+          retry_after_sleep(error)
         end
       end
       batch_deliver(recipients)
+    end
+
+    def retry_after_sleep(error)
+      @retry += 1
+      retry_in = RETRY_AFTER_ERROR[@retry-1]
+      log_info("error at #{@current_slice}/#{@slices} send blocks, " +
+               "retrying in #{retry_in / 60}mins: #{error.message}")
+      sleep retry_in
     end
 
     def reject_failing(error, recipients)
@@ -113,23 +130,41 @@ module MailRelay
     def abort_delivery(error_message)
       @abort = true
       failed = @recipients - @succeeded_recipients
+      log_info("aborting delivery for remaining #{failed.count} " + 
+               "recipients: #{error_message}")
       failed.each do |r|
         @failed_recipients << [r, error_message]
       end
     end
 
     def delivery_report
-      success_count = @succeeded_recipients.count
+      @success_count = @succeeded_recipients.count
+      log_info("delivered to #{@success_count}/#{@recipients.count} " +
+               "recipients, #{@failed_recipients.count} failed")
+      delivery_report_mail if @delivery_report_to
+    end
+
+    def delivery_report_mail
       delivered_at = DateTime.now
       begin
         DeliveryReportMailer.
-          bulk_mail(@delivery_report_to, @message, success_count, delivered_at, @failed_recipients).
-          deliver_now
+          bulk_mail(@delivery_report_to, @message, 
+                    @success_count, delivered_at,
+                    @failed_recipients).
+                    deliver_now
       rescue => e
-        logger.info("Delivery report for bulk mail to \
-                    #{@delivery_report_to} could not be delivered: #{e.message}")
+        log_info("Delivery report for bulk mail to " +
+                 "#{@delivery_report_to} could not be delivered: #{e.message}")
         raise e unless Rails.env.production?
       end
+    end
+
+    def log_info(info)
+      logger.info("#{log_prefix} #{info}")
+    end
+
+    def log_prefix
+      @log_prefix ||= "BULK MAIL #{@envelope_sender} '#{@message.subject[0..20]}' |"
     end
 
     def logger

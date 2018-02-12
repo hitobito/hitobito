@@ -15,11 +15,20 @@ describe MailRelay::BulkMail do
   let(:delivery_report_to) { 'author@example.hitobito.com' }
   let(:bulk_mail) { MailRelay::BulkMail.new(message, envelope_sender, delivery_report_to, recipients) }
   let(:failed_recipients) { bulk_mail.instance_variable_get(:@failed_recipients) }
+  let(:logger) { double }
+  let(:log_prefix) { "BULK MAIL #{envelope_sender} '#{message.subject}' |" }
 
   before do
     allow(bulk_mail)
       .to receive(:sleep)
       .with(5)
+
+    allow(bulk_mail)
+      .to receive(:logger)
+      .and_return(logger)
+
+    allow(logger)
+      .to receive(:info)
   end
 
   describe 'delivery error' do
@@ -31,6 +40,10 @@ describe MailRelay::BulkMail do
           .to receive(:deliver)
           .and_raise(Net::OpenTimeout, 'execution expired')
 
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} initial send failed: execution expired")
+
         expect do
           bulk_mail.deliver
         end.to raise_error(Net::OpenTimeout)
@@ -40,6 +53,10 @@ describe MailRelay::BulkMail do
         expect(message)
           .to receive(:deliver)
           .and_raise(Net::SMTPFatalError, '550 5.7.1 <mail@recipient.com> Relaying denied')
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} initial send failed: 550 5.7.1 <mail@recipient.com> Relaying denied")
 
         expect do
           bulk_mail.deliver
@@ -66,6 +83,10 @@ describe MailRelay::BulkMail do
           .to receive(:deliver)
           .and_raise(Net::OpenTimeout, 'execution expired')
 
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} error at 2/2 send blocks, retrying in 5mins: execution expired")
+
         expect(bulk_mail)
           .to receive(:sleep)
           .with(300)
@@ -79,12 +100,20 @@ describe MailRelay::BulkMail do
         expect(failed_recipients.size).to eq(0)
       end
 
-      it 'retries delivery a second time after 30mins' do
+      it 'retries delivery a second time after 10mins' do
         # connection error at second block
         expect(message)
           .to receive(:deliver)
           .twice
           .and_raise(Net::OpenTimeout, 'execution expired')
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} error at 2/2 send blocks, retrying in 5mins: execution expired")
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} error at 2/2 send blocks, retrying in 10mins: execution expired")
 
         expect(bulk_mail)
           .to receive(:sleep)
@@ -92,7 +121,7 @@ describe MailRelay::BulkMail do
 
         expect(bulk_mail)
           .to receive(:sleep)
-          .with(1800)
+          .with(600)
 
         # successful delivery at third try
         expect(message)
@@ -116,7 +145,11 @@ describe MailRelay::BulkMail do
 
         expect(bulk_mail)
           .to receive(:sleep)
-          .with(1800)
+          .with(600)
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} aborting delivery for remaining 1 recipients: execution expired")
 
         bulk_mail.deliver
         expect(bulk_mail.instance_variable_get(:@abort)).to eql(true)
@@ -145,6 +178,10 @@ describe MailRelay::BulkMail do
         expect_any_instance_of(DeliveryReportMailer)
           .to receive(:bulk_mail)
           .with(delivery_report_to, message, 15, instance_of(DateTime), [failed_entry])
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} delivered to 15/16 recipients, 1 failed")
 
         bulk_mail.deliver
         expect(failed_recipients.size).to eq(1)
@@ -181,6 +218,26 @@ describe MailRelay::BulkMail do
           .with(5)
           .exactly(2)
           .times
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} starting bulk send to 42 recipients")
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} sending 1/3 blocks with 15 recipients")
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} sending 2/3 blocks with 15 recipients")
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} sending 3/3 blocks with 15 recipients")
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} delivered to 42/42 recipients, 0 failed")
 
         expect_any_instance_of(DeliveryReportMailer)
           .to receive(:bulk_mail)

@@ -103,6 +103,11 @@ a.green {
 
 }
 
+@include keyframes(highlight) {
+  0%   { background: $green; }
+  100% { background: none; }
+}
+
 fieldset {
   margin-bottom: 18px;
 }

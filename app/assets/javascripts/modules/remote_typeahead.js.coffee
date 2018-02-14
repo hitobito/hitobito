@@ -12,7 +12,14 @@ app.setupQuicksearch = ->
 
 app.setupEntityTypeahead = (index, field) ->
   input = $(this)
-  setupRemoteTypeahead(input, 10, setEntityId)
+  updateFunction = setEntityId
+
+  if input.data('updater')
+    updateFunction = app
+    updateFunction = updateFunction[prop] for prop in input.data('updater').split('.')
+
+
+  setupRemoteTypeahead(input, 10, updateFunction)
   if input.data('id-field')
     input.keydown((event) ->
       if isModifyingKey(event.which)

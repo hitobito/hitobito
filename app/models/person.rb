@@ -64,6 +64,8 @@ class Person < ActiveRecord::Base
 
   GENDERS = %w(m w).freeze
 
+  ADDRESS_ATTRS = %w(address zip_code town country).freeze
+
   # define devise before other modules
   devise :database_authenticatable,
          :lockable,
@@ -132,6 +134,8 @@ class Person < ActiveRecord::Base
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
+  attr_accessor :household_people_ids
+
   ### VALIDATIONS
 
   validates_by_schema except: [:email, :picture]
@@ -149,6 +153,10 @@ class Person < ActiveRecord::Base
   before_validation :override_blank_email
   before_validation :remove_blank_relations
   before_destroy :destroy_roles
+
+  ### Scopes
+
+  scope :household, -> { where.not(household_key: nil) }
 
 
   ### CLASS METHODS
@@ -210,6 +218,14 @@ class Person < ActiveRecord::Base
     when :list, :print_list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip
     end
+  end
+
+  def household_people
+    Person.
+      includes(:groups).
+      where.not(id: id).
+      where('id IN (?) OR (household_key IS NOT NULL AND household_key = ?)',
+            household_people_ids, household_key)
   end
 
   def greeting_name

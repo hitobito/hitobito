@@ -804,6 +804,11 @@ de:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
+    households:
+      fields:
+        lives_in_household_with: "Wohnt im Haushalt mit"
+        update_denied: "Keine Schreibrechte für %{other_person}."
+
     csv_imports:
       description:
         header: CSV Dateien

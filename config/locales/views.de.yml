@@ -943,6 +943,9 @@ de:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe
 
+    contact_data:
+      lives_in_household_with: Wohnt im Haushalt mit
+
     email_field:
       used_as_login: Wird als Login verwendet
       only_changeable_by_superior: >

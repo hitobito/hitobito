@@ -34,7 +34,7 @@
 
 = render_extensions :fields, locals: { f: f }
 
-- if !without_relations && PeopleRelation.possible_kinds.present?
+- if true
   = field_set_tag do
     = f.labeled_inline_fields_for :relations_to_tails,
                                   'people_relation_fields',

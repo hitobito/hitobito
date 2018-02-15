@@ -56,4 +56,13 @@ module PeopleHelper
   def format_person_layer_group(person)
     person.layer_group_label
   end
+
+  def render_household(person)
+    content_tag(:ul) do
+      safe_join(person.household_people.collect do |p|
+        content_tag(:li, can?(:show, p) ? link_to(p, p) : p)
+      end, "\n")
+    end
+  end
+
 end

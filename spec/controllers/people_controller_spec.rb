@@ -782,4 +782,22 @@ describe PeopleController do
     end
   end
 
+  context 'households' do
+    let(:member) { people(:bottom_member) }
+    before { sign_in(top_leader) }
+
+    it 'POST#update creates household' do
+      put :update, group_id: group.id, id: top_leader.id, person: { household_people_ids: [member.id] }
+
+      expect(top_leader.reload.household_key).to be_present
+      expect(top_leader.household_people).to eq [member]
+    end
+
+    it 'POST#update clears household' do
+      top_leader.update(household_key: 1)
+      put :update, group_id: group.id, id: top_leader.id, person: { town: top_leader.town }
+
+      expect(top_leader.reload.household_key).to be_nil
+    end
+  end
 end

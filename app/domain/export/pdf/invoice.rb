@@ -33,12 +33,18 @@ module Export::Pdf
       def customize(pdf)
         pdf.font_size 10
         pdf.font 'Helvetica'
+        pdf.font_families.update('ocrb' => { normal: ocrb_path })
         pdf
       end
 
       def sections
         [Header, InvoiceInformation, ReceiverAddress, Articles, InvoiceText]
       end
+
+      def ocrb_path
+        Rails.root.join('app', 'assets', 'fonts', 'OCRB.ttf')
+      end
+
     end
 
     mattr_accessor :runner

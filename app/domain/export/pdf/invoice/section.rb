@@ -16,7 +16,7 @@ module Export::Pdf::Invoice
              :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
              :image, :group, :move_cursor_to, :float,
-             to: :pdf
+             :stroke_bounds, to: :pdf
 
     delegate :recipient, :invoice_items, :recipient_address, :address, to: :invoice
 

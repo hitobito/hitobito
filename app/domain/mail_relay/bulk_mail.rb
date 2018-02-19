@@ -130,7 +130,7 @@ module MailRelay
     def abort_delivery(error_message)
       @abort = true
       failed = @recipients - @succeeded_recipients
-      log_info("aborting delivery for remaining #{failed.count} " + 
+      log_info("aborting delivery for remaining #{failed.count} " +
                "recipients: #{error_message}")
       failed.each do |r|
         @failed_recipients << [r, error_message]
@@ -148,7 +148,7 @@ module MailRelay
       delivered_at = DateTime.now
       begin
         DeliveryReportMailer.
-          bulk_mail(@delivery_report_to, @message, 
+          bulk_mail(@delivery_report_to, @message,
                     @success_count, delivered_at,
                     @failed_recipients).
                     deliver_now

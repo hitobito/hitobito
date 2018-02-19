@@ -164,7 +164,7 @@ module MailRelay
     end
 
     def log_prefix
-      @log_prefix ||= "BULK MAIL #{@envelope_sender} '#{@message.subject[0..20]}' |"
+      @log_prefix ||= "BULK MAIL #{@envelope_sender} '#{@message.subject.to_s[0..20]}' |"
     end
 
     def logger

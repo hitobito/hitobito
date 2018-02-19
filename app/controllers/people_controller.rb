@@ -208,7 +208,8 @@ class PeopleController < CrudController
   end
 
   def render_tabular(format, entries, full)
-    exporter = full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    exporter = Export::Tabular::People::Households if params[:household]
+    exporter ||= full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
     send_data exporter.export(format, entries), type: format
   end
 

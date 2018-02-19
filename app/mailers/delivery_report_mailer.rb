@@ -28,7 +28,7 @@ class DeliveryReportMailer < ApplicationMailer
   end
 
   def placeholder_mail_subject
-    @sent_message.subject
+    @sent_message.subject.to_s
   end
 
   def placeholder_delivered_at

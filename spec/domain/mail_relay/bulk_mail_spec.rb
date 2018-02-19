@@ -19,6 +19,11 @@ describe MailRelay::BulkMail do
   let(:log_prefix) { "BULK MAIL #{envelope_sender} '#{message.subject}' |" }
 
   before do
+
+    # load custom contents
+    SeedFu.quiet = true
+    SeedFu.seed [Rails.root.join('db', 'seeds')]
+
     allow(bulk_mail)
       .to receive(:sleep)
       .with(5)
@@ -202,6 +207,38 @@ describe MailRelay::BulkMail do
 
     end
 
+    context 'only one recipient' do
+
+      let(:recipient) { Faker::Internet.email }
+      let(:domain_not_found_error) { "450 4.1.2 #{recipient}: Recipient address rejected: Domain not found" }
+      let(:recipients) { [recipient] }
+
+      it 'failing' do
+        expect(message)
+          .to receive(:deliver)
+          .and_raise(Net::SMTPServerBusy, domain_not_found_error)
+
+        expect(message)
+          .to receive(:deliver)
+          .never
+
+        expect(logger)
+          .to receive(:info)
+          .with("#{log_prefix} delivered to 0/1 recipients, 1 failed")
+
+        bulk_mail.deliver
+
+        failed_entry = [recipient, domain_not_found_error]
+        expect(failed_recipients.size).to eq(1)
+        expect(failed_recipients.first).to eq(failed_entry)
+      end
+
+    end
+
+  end
+
+  describe 'send' do
+
     context 'bulk send' do
 
       let(:recipients) { 42.times.collect { Faker::Internet.email } }
@@ -251,7 +288,23 @@ describe MailRelay::BulkMail do
 
     end
 
+    context 'without subject' do
+
+      it 'delivers message' do
+
+        message.subject = nil
+
+        bulk_mail.deliver
+        expect(failed_recipients.size).to eq(0)
+        succeeded_recipients = bulk_mail.instance_variable_get(:@succeeded_recipients)
+        expect(succeeded_recipients).to eq(recipients)
+
+      end
+
+    end
+
     context 'with delivery_report_to set to nil' do
+
       let(:delivery_report_to) { nil }
 
       it 'does not send delivery_report' do

@@ -50,21 +50,21 @@ module Export::Pdf::Invoice
     end
 
     def account_number
-      [20, 193].each do |x|
-        bounding_box([x, 122], width: 90) do
-          pdf.font('Courier', size: 12) { text invoice.account_number }
+      [15, 195].each do |x|
+        bounding_box([x, 122], width: 85, height: 10) do
+          pdf.font('ocrb', size: 10) { text invoice.account_number }
         end
       end
     end
 
     def amount
-      [-54, 120].each do |x|
+      [-58, 120].each do |x|
         pdf.font('Courier', size: 12) do
-          bounding_box([x, 98], width: 145) do
+          bounding_box([x, 100], width: 145) do
             table amount_data(0), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
 
-          bounding_box([x + 131, 98], width: 36) do
+          bounding_box([x + 131, 100], width: 36) do
             table amount_data(1), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
           end
         end
@@ -72,8 +72,8 @@ module Export::Pdf::Invoice
     end
 
     def esr_number
-      bounding_box([300, 146], width: 220) do
-        pdf.font('Courier', size: 10) do
+      bounding_box([295, 147], width: 235, height: 10) do
+        pdf.font('ocrb', size: 10) do
           text invoice.esr_number
         end
       end
@@ -94,8 +94,8 @@ module Export::Pdf::Invoice
     end
 
     def code_line
-      bounding_box([150, 0], width: 380, height: 11) do
-        pdf.font('Courier', size: 11) do
+      bounding_box([135, 0], width: 390, height: 10) do
+        pdf.font('ocrb', size: 10) do
           text Invoice::PaymentSlip.new(invoice).code_line
         end
       end

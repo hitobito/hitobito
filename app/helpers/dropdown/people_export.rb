@@ -38,6 +38,7 @@ module Dropdown
       if @details
         item = add_item(translate(format), '#')
         item.sub_items << Item.new(translate(:addresses), path)
+        item.sub_items << Item.new(translate(:households), path.merge(household: true))
         item.sub_items << Item.new(translate(:everything), path.merge(details: true))
       else
         add_item(translate(format), path)

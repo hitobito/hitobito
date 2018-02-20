@@ -5,6 +5,7 @@ invoice:
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
+  participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
   total: 2
 
 sent:
@@ -16,5 +17,6 @@ sent:
   sent_at: <%= 10.days.ago.to_date %>
   due_at: <%= 20.days.from_now.to_date %>
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
+  participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
   state: sent
   total: 2

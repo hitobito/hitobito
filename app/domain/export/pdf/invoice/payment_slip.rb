@@ -50,7 +50,7 @@ module Export::Pdf::Invoice
     end
 
     def account_number
-      number = with_reference? ? participant_number : account_number
+      number = with_reference? ? participant_number : invoice.account_number
 
       [15, 195].each do |x|
         bounding_box([x, 122], width: 85, height: 10) do

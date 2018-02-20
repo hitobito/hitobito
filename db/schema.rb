@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180110093210) do
+ActiveRecord::Schema.define(version: 20180220123745) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                  null: false
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 20180110093210) do
     t.string  "payment_slip",        default: "ch_es", null: false
     t.text    "beneficiary"
     t.text    "payee"
+    t.string  "participant_number"
   end
 
   add_index "invoice_configs", ["contact_id"], name: "index_invoice_configs_on_contact_id"

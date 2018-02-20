@@ -19,7 +19,7 @@ module Export::Pdf::Invoice
              :stroke_bounds, to: :pdf
 
     delegate :recipient, :invoice_items, :recipient_address, :address,
-      :with_reference?, :account_number, :participant_number, to: :invoice
+      :with_reference?, :participant_number, to: :invoice
 
     def initialize(pdf, invoice, options={})
       @pdf = pdf

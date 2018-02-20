@@ -18,7 +18,8 @@ module Export::Pdf::Invoice
              :image, :group, :move_cursor_to, :float,
              :stroke_bounds, to: :pdf
 
-    delegate :recipient, :invoice_items, :recipient_address, :address, to: :invoice
+    delegate :recipient, :invoice_items, :recipient_address, :address,
+      :with_reference?, :account_number, :participant_number, to: :invoice
 
     def initialize(pdf, invoice, options={})
       @pdf = pdf

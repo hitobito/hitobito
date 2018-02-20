@@ -118,6 +118,7 @@ describe Invoice do
     expect(invoice.iban).to eq invoice_config.iban
     expect(invoice.payment_slip).to eq invoice_config.payment_slip
     expect(invoice.beneficiary).to eq invoice_config.beneficiary
+    expect(invoice.participant_number).to eq invoice_config.participant_number
   end
 
   context 'state changes' do

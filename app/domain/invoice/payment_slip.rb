@@ -50,7 +50,7 @@ class Invoice::PaymentSlip
 
   def last_code_line_block
     block = ''
-    invoice.account_number.split('-').each_with_index do |nr, i|
+    invoice.participant_number.split('-').each_with_index do |nr, i|
       next block << nr if i != 1
       block << format('%06d', nr.to_i)
     end

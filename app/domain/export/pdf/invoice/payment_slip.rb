@@ -50,9 +50,11 @@ module Export::Pdf::Invoice
     end
 
     def account_number
+      number = with_reference? ? participant_number : account_number
+
       [15, 195].each do |x|
         bounding_box([x, 122], width: 85, height: 10) do
-          pdf.font('ocrb', size: 10) { text invoice.account_number }
+          pdf.font('ocrb', size: 10) { text number }
         end
       end
     end

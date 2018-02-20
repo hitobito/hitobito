@@ -21,6 +21,9 @@
 class InvoiceConfig < ActiveRecord::Base
   include PaymentSlips
 
+  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
+  ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
+
   belongs_to :group, class_name: 'Group'
   belongs_to :contact, class_name: 'Person'
 
@@ -32,12 +35,13 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :without_reference?
-  validates :iban, format: { with: /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/ },
+  validates :iban, format: { with: IBAN_REGEX },
                    on: :update, allow_blank: true
 
   validates :account_number, presence: true, on: :update
-  validates :account_number, format: { with: /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/ },
+  validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
                              on: :update, allow_blank: true
+  validates :participant_number, presence: true, on: :update, if: :with_reference?
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
 
@@ -63,4 +67,5 @@ class InvoiceConfig < ActiveRecord::Base
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
     errors.add(:account_number, :invalid_check_digit)
   end
+
 end

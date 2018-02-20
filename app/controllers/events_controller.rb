@@ -30,6 +30,10 @@ class EventsController < CrudController
 
   self.remember_params += [:year]
 
+  self.sort_mappings = { name: 'events.name', state: 'events.state',
+                         dates_full: 'event_dates.start_at',
+                         group_ids: 'groups.name' }
+
   decorates :event, :events, :group
 
   prepend_before_action :authenticate_person_from_onetime_token!
@@ -59,7 +63,7 @@ class EventsController < CrudController
 
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    model_scope_without_nesting. # nesting restricts to parent, we want more
+    scope = model_scope_without_nesting. # nesting restricts to parent, we want more
       where(type: params[:type]).
       includes(:groups).
       with_group_id(relevant_group_ids).
@@ -67,12 +71,14 @@ class EventsController < CrudController
       order_by_date.
       preload_all_dates.
       uniq
+
+    sorting? ? scope.reorder(sort_expression) : scope
   end
 
   def relevant_group_ids
     case params[:filter]
-    when 'layer' then [parent.id] + parent.children.pluck(:id)
-    else [parent.id] + parent.descendants.pluck(:id) # handles 'all' also
+    when 'layer' then [parent.id] + descendants(layer: true).pluck(:id)
+    else [parent.id] + descendants.pluck(:id) # handles 'all' also
     end
   end
 
@@ -93,6 +99,11 @@ class EventsController < CrudController
     p.delete(:type)
     p.delete(:contact)
     p.permit(permitted_attrs)
+  end
+
+  def descendants(layer: false)
+    scope = group.descendants
+    layer ? scope.where(layer_group_id: group.layer_group_id) : scope
   end
 
   def group

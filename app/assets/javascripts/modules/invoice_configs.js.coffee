@@ -9,17 +9,32 @@ class app.InvoiceConfigs
   constructor: () ->
 
   showPaymentSlipSpecificAttributes: ->
-    payment_slip = $('#invoice_config_payment_slip').find(":selected").val()
-    beneficiary_control_group = $('#invoice_config_beneficiary').closest('.control-group')
+    payment_slip =
+    beneficiary = $('#invoice_config_beneficiary').closest('.control-group')
+    participant_number = $('#invoice_config_participant_number').closest('.control-group')
 
-    if payment_slip == 'ch_besr' || payment_slip == 'ch_bes'
-      beneficiary_control_group.slideDown()
+    if @isBank()
+      beneficiary.slideDown()
     else
-      beneficiary_control_group.hide()
+      beneficiary.hide()
+
+    if @withReference()
+      participant_number.slideDown()
+    else
+      participant_number.hide()
+
 
   bind: ->
     self = this
     $(document).on('change', '#invoice_config_payment_slip', (e) -> self.showPaymentSlipSpecificAttributes())
     $(document).on('turbolinks:load', (e) -> self.showPaymentSlipSpecificAttributes())
+
+  isBank: ->
+    val = $('#invoice_config_payment_slip').find(":selected").val()
+    val == 'ch_besr' || val == 'ch_bes'
+
+  withReference: ->
+    val = $('#invoice_config_payment_slip').find(":selected").val()
+    val == 'ch_besr' || val == 'ch_esr'
 
 new app.InvoiceConfigs().bind()

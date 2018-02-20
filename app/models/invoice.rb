@@ -175,7 +175,7 @@ class Invoice < ActiveRecord::Base
 
   def set_payment_attributes
     [:address, :account_number, :iban,
-     :payment_slip, :beneficiary, :payee].each do |at|
+     :payment_slip, :beneficiary, :payee, :participant_number].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

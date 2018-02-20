@@ -18,8 +18,9 @@ top_layer:
   payee: 'Hans Gerber'
   address: 'top layer address'
   iban: 'CH93 0076 2011 6238 5295 7'
-  account_number: '10-5318-5' 
+  account_number: '10-5318-5'
   payment_slip: 'ch_esr'
+  participant_number: '10-5318-6'
 
 bottom_layer_one:
   group: bottom_layer_one
@@ -28,7 +29,7 @@ bottom_layer_one:
   payee: 'Fritz von Gunten'
   address: 'bottom layer one address'
   iban: 'CH93 0076 2011 6238 5295 8'
-  account_number: '01-162-5' 
+  account_number: '01-162-5'
 
 bottom_layer_two:
   group: bottom_layer_two
@@ -37,4 +38,4 @@ bottom_layer_two:
   payee: 'Anna Streit'
   address: 'bottom layer two address'
   iban: 'CH84 0221 1981 6169 5329 8'
-  account_number: '03-162-4' 
+  account_number: '03-162-4'

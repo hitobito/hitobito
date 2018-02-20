@@ -646,6 +646,7 @@ de:
         account_number: Kontonummer
         iban: IBAN
         payment_slip: Einzahlungsschein
+        participant_number: Teilnehmernummer
 
       invoice_article:
         number: Artikelnummer

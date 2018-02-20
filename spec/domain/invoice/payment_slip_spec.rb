@@ -41,7 +41,7 @@ describe Invoice::PaymentSlip do
       invoice.total = 32.32
       code_line = Invoice::PaymentSlip.new(invoice).code_line
 
-      expected_code_line = "0100000032320>#{invoice.esr_number.delete(' ')}+ 100053185>"
+      expected_code_line = "0100000032320>#{invoice.esr_number.delete(' ')}+ 100053186>"
       expect(code_line).to eq(expected_code_line)
     end
 
@@ -49,7 +49,7 @@ describe Invoice::PaymentSlip do
       invoice = create_invoice
       code_line = Invoice::PaymentSlip.new(invoice).code_line
 
-      expected_code_line = "042>#{invoice.esr_number.delete(' ')}+ 100053185>"
+      expected_code_line = "042>#{invoice.esr_number.delete(' ')}+ 100053186>"
       expect(code_line).to eq(expected_code_line)
     end
   end

@@ -110,8 +110,8 @@ module Export::Pdf::Invoice
     end
 
     def code_line
-      bounding_box([145, 0], width: 380, height: 10) do
-        pdf.font('ocrb', size: 9.7) do
+      bounding_box([134, 0], width: 390, height: 10) do
+        pdf.font('ocrb', size: 10) do
           text Invoice::PaymentSlip.new(invoice).code_line
         end
       end

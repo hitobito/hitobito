@@ -37,7 +37,7 @@ describe Export::SubscriptionsJob do
 
       lines = last_email.attachments.first.body.to_s.split("\n")
       expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Vorname;Nachname;.*/)
+      expect(lines[0]).to match(/Name;Adresse;.*/)
     end
 
     it 'send exports zipped if larger than 512kb' do
@@ -54,7 +54,7 @@ describe Export::SubscriptionsJob do
     end
 
     it 'zips exports larger than 512kb' do
-      10.times { Fabricate(:subscription, mailing_list: mailing_list) } # create a few entries to make zipping worth it.
+      20.times { Fabricate(:subscription, mailing_list: mailing_list) } # create a few entries to make zipping worth it.
 
       export = subject.export_file
       export_size = export.size

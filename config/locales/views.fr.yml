@@ -111,8 +111,6 @@ fr:
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
     everything: 'Toutes les informations'
-    condense_labels: 'éviter les envois multiples'
-    condense_labels_hint: 'Ne délivrer une entrée que quand l''adresse en entier et le nom de famille correspondent'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'

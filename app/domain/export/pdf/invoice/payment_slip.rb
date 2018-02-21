@@ -9,10 +9,9 @@ module Export::Pdf::Invoice
   class PaymentSlip < Section
 
     def render
-      return unless options[:payment_slip]
       invoice_address
       account_number
-      amount if invoice.invoice_items.present?
+      amount if invoice_items.present?
       invoice.with_reference? ? esr_number : payment_purpose
       left_receiver_address
       right_receiver_address

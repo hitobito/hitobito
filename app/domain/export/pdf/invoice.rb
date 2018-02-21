@@ -27,7 +27,10 @@ module Export::Pdf
         if options[:articles]
           sections.each { |section| section.new(pdf, invoice).render }
         end
-        PaymentSlip.new(pdf, invoice, options).render
+
+        if options[:payment_slip]
+          PaymentSlip.new(pdf, invoice).render
+        end
       end
 
       def customize(pdf)

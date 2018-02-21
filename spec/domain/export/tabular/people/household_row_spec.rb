@@ -15,6 +15,10 @@ describe Export::Tabular::People::HouseholdRow do
     Export::Tabular::People::HouseholdRow.new(person).name
   end
 
+  it 'handles nil first and last name' do
+    expect(Export::Tabular::People::HouseholdRow.new(Person.new).name).to eq ''
+  end
+
   it 'treats blank last name as first present lastname' do
     expect(name(%w(Andreas Mara), ['Mäder', ''])).to eq 'Andreas und Mara Mäder'
     expect(name(%w(Andreas Mara Blunsch), ['Mäder', '', 'Wyss'])).to eq 'Andreas und Mara Mäder, Blunsch Wyss'

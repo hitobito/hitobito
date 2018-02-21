@@ -12,7 +12,7 @@ describe Export::Tabular::People::Households do
   let(:member) { people(:bottom_member) }
 
   def households(list = [])
-    Export::Tabular::People::Households.new(Person.where(id: list.collect(&:id)))
+    Export::Tabular::People::Households.new(list)
   end
 
   context 'header' do
@@ -27,20 +27,26 @@ describe Export::Tabular::People::Households do
     end
   end
 
-  it 'includes non household people' do
+  it 'accepts non household people' do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq ['Top Leader', nil, nil, 'Supertown', nil, '']
+    expect(data[0]).to eq ['Top Leader', nil, nil, 'Supertown', nil, 'Top']
   end
 
-  it 'aggregates household people' do
+  it 'accepts single person array' do
+    data = households([people(:top_leader)]).data_rows.to_a
+    expect(data).to have(1).item
+    expect(data[0]).to eq ['Top Leader', nil, nil, 'Supertown', nil, 'Top']
+  end
+
+  it 'aggregates household people, uses first person''s address' do
     leader.update(household_key: 1)
     member.update(household_key: 1)
 
-    data = households(Person.where(household_key: 1)).data_rows.to_a
+    data = households([member, leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0].shift).to eq 'Top Leader, Bottom Member'
-    expect(data[0]).to eq [nil, nil, 'Supertown', nil, '']
+    expect(data[0].shift).to eq 'Bottom Member, Top Leader'
+    expect(data[0]).to eq ['Greatstreet 345', '3456', 'Greattown', 'Schweiz', 'Bottom One']
   end
 
 end

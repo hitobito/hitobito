@@ -12,7 +12,7 @@ module Export::Pdf::Invoice
 
     class_attribute :model_class
 
-    delegate :bounds, :bounding_box, :table,
+    delegate :bounds, :table,
              :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
              :image, :group, :move_cursor_to, :float,
@@ -52,5 +52,13 @@ module Export::Pdf::Invoice
         [Countries.label(recipient.country)]
       ]
     end
+
+    def bounding_box(top_left, attrs = {})
+      pdf.bounding_box(top_left, attrs) do
+        yield
+        # pdf.transparent(0.5) { stroke_bounds }
+      end
+    end
+
   end
 end

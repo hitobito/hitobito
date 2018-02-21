@@ -604,7 +604,7 @@ de:
       total: Gesamtbetrag
       total_vat: MWSt. gesamt
       invoice_number: Rechnungsnummer
-      invoice_date: Rechnungsdataum
+      invoice_date: Rechnungsdatum
       due_at: Fällig bis
 
   invoice_configs:

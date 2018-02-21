@@ -8,23 +8,19 @@
 module Export::Pdf::Invoice
   class Section
 
-    attr_reader :pdf, :invoice, :options
+    attr_reader :pdf, :invoice
 
-    class_attribute :model_class
-
-    delegate :bounds, :table,
-             :text, :cursor, :font_size, :text_box,
+    delegate :bounds, :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
              :image, :group, :move_cursor_to, :float,
              :stroke_bounds, to: :pdf
 
-    delegate :recipient, :invoice_items, :recipient_address, :address,
-      :with_reference?, :participant_number, to: :invoice
+    delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
-    def initialize(pdf, invoice, options={})
+    def initialize(pdf, invoice, debug = false)
       @pdf = pdf
       @invoice = invoice
-      @options = options
+      @debug = debug
     end
 
     private
@@ -36,27 +32,21 @@ module Export::Pdf::Invoice
     end
 
     def receiver_address_data
-      if recipient
-        recipient_address_data
-      else
-        return if recipient_address.blank?
-        recipient_address.split(/\n/).map { |ra| [ra] }
-      end
+      @receiver_address_data ||= tabelize(invoice.recipient_address)
     end
 
-    def recipient_address_data
-      [
-        [recipient.full_name],
-        [recipient.address],
-        ["#{recipient.zip_code} #{recipient.town}"],
-        [Countries.label(recipient.country)]
-      ]
+    def tabelize(string)
+      string.to_s.split(/\n/).reject(&:blank?).collect { |ra| [ra] }
+    end
+
+    def table(table, options)
+      pdf.table(table, options) if table.present?
     end
 
     def bounding_box(top_left, attrs = {})
       pdf.bounding_box(top_left, attrs) do
         yield
-        # pdf.transparent(0.5) { stroke_bounds }
+        pdf.transparent(0.5) { stroke_bounds } if @debug
       end
     end
 

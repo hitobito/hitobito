@@ -50,11 +50,11 @@ module Export::Tabular::People
     end
 
     def first_names
-      strip(entry.first_name.split(','))
+      strip(entry.first_name.to_s.split(','))
     end
 
     def last_names
-      strip(entry.last_name.split(','))
+      strip(entry.last_name.to_s.split(','))
     end
 
     def strip(array)

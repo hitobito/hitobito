@@ -90,7 +90,9 @@ module Export::Pdf::Invoice
     def left_receiver_address
       receiver_address(-50, 66) do
         if with_reference?
-          pdf.text_box invoice.esr_number, at: [0, cursor], width: 150, height: 10, overflow: :shrink_to_fit
+          pdf.text_box(invoice.esr_number,
+                       at: [0, cursor], width: 150, height: 10,
+                       overflow: :shrink_to_fit)
           pdf.move_down 10
         end
       end

@@ -107,6 +107,34 @@ describe EventsController, type: :controller do
 
     end
 
+    context '.ics' do
+
+      let(:group) { groups(:top_layer) }
+
+      it 'renders events ics' do
+        get :index, group_id: group.id, format: :ics, year: 2012
+        expect(response.content_type).to eq('text/calendar')
+      end
+
+      it 'renders courses csv' do
+        get :index, group_id: group.id, format: :ics, year: 2012, type: Event::Course.sti_name
+        expect(response.content_type).to eq('text/calendar')
+      end
+
+    end
+
+  end
+
+  describe 'GET #show' do
+    context '.ics' do
+
+      let(:group) { groups(:top_layer) }
+
+      it 'renders event ics' do
+        get :show, group_id: group.id, id: test_entry.to_param, format: :ics
+        expect(response.content_type).to eq('text/calendar')
+      end
+    end
   end
 
   describe 'GET #new' do

@@ -49,6 +49,14 @@ class EventsController < CrudController
       format.html { @events = entries.page(params[:page]) }
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.ics { render_ical(entries) }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html  { entry }
+      format.ics { render_ical([entry]) }
     end
   end
 
@@ -137,6 +145,10 @@ class EventsController < CrudController
   def render_tabular_in_background(format)
     Export::EventsExportJob.new(format, current_person.id, params[:type], year, parent).enqueue!
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
+  end
+
+  def render_ical(entries)
+    send_data ::Export::Ics::Events.new.generate(entries), type: :ics, disposition: :inline
   end
 
   def typed_group_events_path(group, event_type, options = {})

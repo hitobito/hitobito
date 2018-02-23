@@ -176,11 +176,8 @@ class Person < ActiveRecord::Base
       all.extending(Person::PreloadGroups)
     end
 
-    def mailing_emails_for(people)
-      people = Array(people)
-      emails = people.collect(&:email) +
-               AdditionalEmail.mailing_emails_for(people)
-      emails.select(&:present?).uniq
+    def mailing_emails_for(people, labels = [])
+      MailRelay::AddressList.new(people, labels).entries
     end
 
     private
@@ -262,6 +259,11 @@ class Person < ActiveRecord::Base
 
   def layer_group
     primary_group.layer_group if primary_group
+  end
+
+  def finance_groups
+    groups_with_permission(:finance).
+      flat_map(&:layer_group)
   end
 
   private

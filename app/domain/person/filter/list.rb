@@ -18,7 +18,11 @@ class Person::Filter::List
   end
 
   def entries
-    default_order(filter(accessibles).preload_groups)
+    default_order(filtered.preload_groups)
+  end
+
+  def filtered
+    filter(accessibles)
   end
 
   def all_count
@@ -62,7 +66,7 @@ class Person::Filter::List
       @multiple_groups = true
       scope.in_layer(group)
     else
-      scope
+      scope.to_sql['INNER JOIN `roles`'] ? scope : scope.joins(:roles)
     end
   end
 

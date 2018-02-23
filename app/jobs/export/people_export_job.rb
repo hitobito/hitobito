@@ -9,8 +9,6 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   self.parameters = PARAMETERS + [:full, :person_filter]
 
-  attr_reader :entries
-
   def initialize(format, full, user_id, person_filter)
     super()
     @format = format

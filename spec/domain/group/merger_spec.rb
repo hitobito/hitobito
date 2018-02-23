@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,6 +28,9 @@ describe Group::Merger do
       Fabricate(:event, groups: [group1])
       Fabricate(:event, groups: [group1])
       Fabricate(:event, groups: [group2])
+
+      Fabricate(:invoice, group: group2, recipient: @person)
+      Fabricate(:invoice_article, group: group2)
     end
 
     it 'creates a new group and merges roles, events' do
@@ -79,6 +82,24 @@ describe Group::Merger do
       merger.merge!
 
       expect(Group.find(ids).map(&:layer_group_id).uniq).to eq [new_group.id]
+    end
+
+    it 'moves invoices' do
+      expect(group1.invoices.count).to eq 2
+      expect(group2.invoices.count).to eq 1
+
+      merger.merge!
+
+      expect(new_group.invoices.count).to eq 3
+    end
+
+    it 'moves invoice-articles' do
+      expect(group1.invoice_articles.count).to eq 3
+      expect(group2.invoice_articles.count).to eq 1
+
+      merger.merge!
+
+      expect(new_group.invoice_articles.count).to eq 4
     end
 
   end

@@ -18,6 +18,7 @@ class Ability
                  Event::ParticipationContactDataAbility,
                  Event::RoleAbility,
                  GroupAbility,
+                 InvoiceAbility,
                  MailingListAbility,
                  NoteAbility,
                  PeopleFilterAbility,

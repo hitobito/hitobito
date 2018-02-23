@@ -118,13 +118,12 @@ module FilterNavigation
       template.qualification_group_people_filters_path(
         group.id,
         qualification_kind_id: qualification_kind_ids,
-        kind: deep,
-        validity: validity,
-        match: match,
+        kind: deep, validity: validity, match: match,
         start_at_year_from: @params[:start_at_year_from],
         start_at_year_until: @params[:start_at_year_until],
         finish_at_year_from: @params[:finish_at_year_from],
-        finish_at_year_until: @params[:finish_at_year_until])
+        finish_at_year_until: @params[:finish_at_year_until]
+      )
     end
 
     def people_filter_link(filter)
@@ -139,7 +138,7 @@ module FilterNavigation
       ::Dropdown::Item.new(
         filter_label(:trash, :delete),
         delete_group_people_filter_path(filter),
-        data: { confirm: template.ti(:confirm_delete), method:  :delete }
+        data: { confirm: template.ti(:confirm_delete), method: :delete }
       )
     end
 

@@ -16,7 +16,7 @@ def sphinx_environment(*tables, &block)
     run_sphinx_around_example
     yield
   ensure
-    reset_configuration_affter_all(transactional)
+    reset_configuration_after_all(transactional)
   end
 end
 
@@ -24,7 +24,7 @@ def index_sphinx
   ThinkingSphinx::Test.index
   # Wait for index to finish. If entries are not found, probably increase the sleep period.
   sleep 1
-  sleep 0.25 until index_finished?
+  sleep 0.5 until index_finished?
 end
 
 def init_sphinx_before_all(tables)
@@ -50,7 +50,7 @@ def run_sphinx_around_example
   end
 end
 
-def reset_configuration_affter_all(transactional)
+def reset_configuration_after_all(transactional)
   obj = self
   after(:all) do
     DatabaseCleaner.strategy = defined?(DB_CLEANER_STRATEGY) ? DB_CLEANER_STRATEGY : :transaction

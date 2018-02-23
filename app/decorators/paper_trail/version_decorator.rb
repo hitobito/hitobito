@@ -32,9 +32,15 @@ module PaperTrail
     def changes
       if item_type != main_type
         content_tag(:div, association_change)
+      elsif !item_class.paper_trail_options[:on].include?(event.to_sym)
+        custom_event_changes
       else
         changeset_lines
       end
+    end
+
+    def custom_event_changes
+      content_tag(:div, I18n.t("version.#{event}", user: whodunnit))
     end
 
     def changeset_lines

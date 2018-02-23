@@ -89,6 +89,9 @@ a.green {
   margin-bottom: 0;
 }
 
+.form-inline-search .control-group {
+  display: inline-block;
+}
 @include responsive(mediaPhone) {
   .form-horizontal .btn-toolbar {
     margin-left: 180px;
@@ -150,6 +153,13 @@ input[type="color"],
     border-color: $focusColor;
     @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $focusColor);
   }
+}
+
+.input-loading {
+  background-image: image-url("spinner.gif");
+  background-size: 16px;
+  background-position:right 5px center;
+  background-repeat: no-repeat;
 }
 
 select {
@@ -458,3 +468,26 @@ input.switcher {
     }
   }
 }
+
+.has-clear {
+  position: relative;
+  input::-ms-clear { display: none; }
+
+  [data-clear] {
+    cursor: pointer;
+    opacity: 0.3;
+    pointer-events: auto;
+    position: absolute;
+    right: 5px;
+    top: 30px;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &.has-empty-value {
+    [data-clear] { display: none; }
+  }
+}
+

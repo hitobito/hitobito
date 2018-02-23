@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -108,6 +108,21 @@ de:
             name:
               must_be_unique: 'existiert bereits'
 
+        invoice:
+          recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
+          attributes:
+            invoice_config:
+              invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
+        invoice_config:
+          attributes:
+            iban:
+              required: 'muss ausgefüllt werden'
+            account_number:
+              required: 'muss ausgefüllt werden'
+              invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
+            payee:
+              to_long: 'darf höchstens 2 Zeilen enthalten'
+
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -163,6 +178,18 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      invoice:
+        one: Rechnung
+        other: Rechnungen
+      invoice_article:
+        one: Rechnungsartikel
+        other: Rechnungsartikel
+      invoice_config:
+        one: Rechnungseinstellungen
+        other: Rechnungseinstellungen
+      invoice_item:
+        one: Rechnungsposten
+        other: Rechnungsposten
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -172,6 +199,12 @@ de:
       note:
         one: Notiz
         other: Notizen
+      payment:
+        one: Zahlung
+        other: Zahlungen
+      payment_reminder:
+        one: Mahnung
+        other: Mahnungen
       person:
         one: Person
         other: Personen
@@ -297,6 +330,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        layer_group: Ebene
         parent_id: Elterngruppe
         layer_group_id: Ebene
         type: Gruppentyp
@@ -304,6 +338,8 @@ de:
 
       event:
         group_ids: Gruppen
+        groups: Gruppen
+        state: Status
         name: Name
         number: Nummer
         motto: Motto
@@ -479,6 +515,8 @@ de:
               contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
               qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+              finance: Erstellen und Verwalten von Rechnungen.
+              impersonation: Hitobito als andere Person bedienen.
           kind:
             member:
               one: Mitglied
@@ -536,6 +574,8 @@ de:
         mail_address: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
+        preferred_labels: Bevorzugte E-Mail-Labels
+        main_email: Versand an Haupt E-Mail
 
       subscription:
         related_role_types: Rollen
@@ -548,6 +588,7 @@ de:
         label: Text
         subject: Betreff
         body: Inhalt
+
 
       label_format:
         name: Bezeichnung
@@ -563,6 +604,96 @@ de:
         dimensions: Anzahl
         nickname: Übername auf Etikett
         pp_post: PP-Zeile
+
+      invoice:
+        title: Titel
+        description: Beschreibung
+        invoice_items: Rechnungsposten
+        invoice_item_article: Rechnungsartikel
+        invoice_config: Rechnungseinstellung
+        state: Status
+        sequence_number: Nummer
+        esr_number: Referenz Nummer
+        amount_paid: Total bezahlt
+        payment_slips:
+          ch_es: Roter Einzahlungsschein Post (CH)
+          ch_bes: Roter Einzahlungsschein Bank (CH)
+          ch_esr: Oranger Einzahlungsschein Post (CH)
+          ch_besr: Oranger Einzahlungsschein Bank (CH)
+        states:
+          draft: Entwurf
+          issued: Gestellt
+          sent: Versendet
+          payed: Bezahlt
+          overdue: Überfällig
+          reminded: Gemahnt
+          cancelled: Storniert
+        recipient: Empfänger
+        recipient_email: Empfänger E-Mail
+        recipient_address: Empfänger Adresse
+        due_at: Fällig am
+        issued_at: Gestellt am
+        sent_at: Verschickt am
+        cost: Betrag
+        total: Total
+        total_inkl_vat: Total inkl. MWSt.
+        total: Total inkl. MWSt.
+        vat: MWSt.
+        payment_information: Zahlungsinformation
+        payment_purpose: Zahlungszweck
+        address: Absender Adresse
+        beneficiary: Zugunsten von
+        payee: Einzahlung für
+        account_number: Kontonummer
+        iban: IBAN
+        payment_slip: Einzahlungsschein
+        participant_number: Teilnehmernummer
+
+      invoice_article:
+        number: Artikelnummer
+        name: Bezeichnung
+        description: Beschreibung
+        category: Kategorie
+        unit_cost: Preis
+        vat_rate: MWSt.
+        cost_center: Kostenstelle
+        account: Konto
+
+      invoice_config:
+        payment_information: Zahlungsinformation
+        address: Absender Adresse
+        account_number: Kontonummer
+        iban: IBAN
+        due_days: Tage bis Fällig
+        contact: Kontaktperson
+        contact_id: Kontaktperson
+        beneficiary: Zugunsten von
+        payee: Einzahlung für
+        payment_slip: Einzahlungsschein
+        payment_slips:
+          ch_es: Roter Einzahlungsschein Post (CH)
+          ch_bes: Roter Einzahlungsschein Bank (CH)
+          ch_esr: Oranger Einzahlungsschein Post (CH)
+          ch_besr: Oranger Einzahlungsschein Bank (CH)
+        participant_number: Teilnehmernummer
+
+      invoice_item:
+        name: Name
+        description: Beschreibung
+        vat_rate: MWSt.
+        unit_cost: Preis
+        count: Anzahl
+        cost: Betrag
+
+      payment:
+        invoice: Rechnung
+        amount: Betrag
+        received_at: Empfangen am
+
+      payment_reminder:
+        invoice: Rechnung
+        message: Nachricht
+        due_at: Fällig am
 
   errors:
     messages:

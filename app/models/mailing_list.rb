@@ -22,6 +22,8 @@
 
 class MailingList < ActiveRecord::Base
 
+  serialize :preferred_labels, Array
+
   belongs_to :group
 
   has_many :subscriptions, dependent: :destroy
@@ -39,9 +41,18 @@ class MailingList < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
 
+  DEFAULT_LABEL = '_main'.freeze
 
   def to_s(_format = :default)
     name
+  end
+
+  def labels
+    main_email ? preferred_labels + [DEFAULT_LABEL]: preferred_labels
+  end
+
+  def preferred_labels=(labels)
+    self[:preferred_labels] = labels.reject(&:blank?).collect(&:strip).uniq.sort
   end
 
   def mail_address
@@ -71,7 +82,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def people(people_scope = Person.only_public_data)
-    people_scope_maybe_with_roles(people_scope).
+    people_scope.
       joins(people_joins).
       joins(subscription_joins).
       where(subscriptions: { mailing_list_id: id }).
@@ -81,29 +92,6 @@ class MailingList < ActiveRecord::Base
   end
 
   private
-
-  def people_scope_maybe_with_roles(people_scope)
-    if self.class.connection.adapter_name.casecmp('mysql2') == 0
-      people_scope.
-        joins(combined_role_join).select('all_roles.role_with_layer')
-    else
-      people_scope
-    end
-  end
-
-  # this is MySQL-specific SQL, namely GROUP_CONCAT(... SEPARATOR ...) and CONCAT_WS
-  def combined_role_join
-    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
-      INNER JOIN (
-        SELECT DISTINCT people.id, GROUP_CONCAT(CONCAT_WS(' / ', layers.name, groups.name) SEPARATOR ', ') AS role_with_layer
-        FROM people
-        LEFT JOIN roles ON people.id = roles.person_id
-        LEFT JOIN groups ON roles.group_id = groups.id
-        LEFT JOIN groups AS layers ON ( groups.layer_group_id = layers.id AND groups.id <> layers.id)
-        GROUP BY people.id
-      ) AS all_roles ON (people.id = all_roles.id)
-    SQL
-  end
 
   def people_joins
     <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
@@ -173,7 +161,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first) == 0
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

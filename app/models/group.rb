@@ -91,6 +91,13 @@ class Group < ActiveRecord::Base
            class_name: 'Person::AddRequest::Group',
            dependent: :destroy
 
+  has_one :invoice_config, dependent: :destroy
+  has_many :invoices
+  has_many :invoice_articles, dependent: :destroy
+  has_many :invoice_items, through: :invoices
+
+  after_create :create_invoice_config, if: :layer?
+
   ### VALIDATIONS
 
   validates_by_schema
@@ -159,10 +166,15 @@ class Group < ActiveRecord::Base
   def really_destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
+
     # load events to destroy orphaned later
-    list = events.to_a
+    event_list = events.to_a
+    invoice_list = invoices.to_a
+
     hard_destroy
-    list.each { |e| destroy_orphaned_event(e) }
+
+    event_list.each { |e| destroy_orphaned_event(e) }
+    invoice_list.each(&:destroy)
   end
 
   def decorator_class
@@ -192,5 +204,9 @@ class Group < ActiveRecord::Base
     # do not destroy descendants on soft delete
   end
   alias_method_chain :destroy_descendants, :paranoia
+
+  def create_invoice_config
+    create_invoice_config!
+  end
 
 end

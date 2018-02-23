@@ -14,6 +14,10 @@ AllCops:
 Rails:
   Enabled: true
 
+# we have not yet introcued ApplicationRecord as a Pattern
+Rails/ApplicationRecord:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 20
   Severity: error
@@ -33,10 +37,15 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
   Max: 100
   Severity: warning
+  IgnoreCopDirectives: true
 
 Metrics/MethodLength:
   Max: 10
   Severity: error
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
 
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:
@@ -59,11 +68,6 @@ Documentation:
 DotPosition:
   Enabled: false
 
-# Missing UTF-8 encoding statements should always be created.
-Encoding:
-  EnforcedStyle: always
-  Severity: error
-
 # Keep single line bodys for if and unless
 IfUnlessModifier:
   Enabled: false
@@ -77,23 +81,31 @@ Rails/Delegate:
   Enabled: false
 
 # That's no huge stopper
-Style/EmptyLines:
+Layout/EmptyLines:
   Enabled: false
 
 # We thinks that's fine for specs
-Style/EmptyLinesAroundBlockBody:
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
 # We thinks that's fine
-Style/EmptyLinesAroundClassBody:
+Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
 # We thinks that's fine
-Style/EmptyLinesAroundModuleBody:
+Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
 # We thinks that's fine
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+# We are using Ruby 2+ anyway...
+Style/AsciiComments:
+  Enabled: false
+
+# For now, we keep encoding comment
+Style/Encoding:
   Enabled: false
 
 # We thinks that's fine
@@ -107,6 +119,19 @@ Style/SymbolProc:
 # Probably later
 Style/GuardClause:
   Enabled: false
+
+# We think that's fine
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '()'
+
+# We think that's fine
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '()'
 
 # We thinks that's fine
 Style/SingleLineBlockParams:

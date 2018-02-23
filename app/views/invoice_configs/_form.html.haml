@@ -1,0 +1,24 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= standard_form(entry, url: [parent, :invoice_config]) do |f|
+  = f.error_messages
+  = f.labeled_person_field(:contact)
+  = f.labeled_input_field :due_days
+  = f.labeled_input_field :payment_information
+
+  %hr
+  = f.labeled(:payment_slip) do
+    = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
+
+  = f.labeled_input_field :beneficiary
+  = f.labeled_input_field :participant_number, help: t('.account_number_example')
+
+  = f.labeled_input_field :payee
+  = f.labeled_input_field :address
+  = f.labeled_input_field :account_number, help: t('.account_number_example')
+  = f.labeled_input_field :iban, help: t('.iban_example')
+
+  = save_form_buttons(f, nil, group_invoice_config_path(parent))

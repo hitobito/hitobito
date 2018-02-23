@@ -22,3 +22,23 @@
                                   filter && filter.to_hash[:role_types].include?(role_type.to_s),
                                   id: id)
                   = role_type.label
+
+  = field_set_tag do
+    = label_tag(:duration) do
+      %label=t('.prompt_role_duration')
+      .input-prepend
+        %span{class: 'add-on'}
+          = icon(:calendar)
+        = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date span2')
+      %div{style: 'vertical-align: middle; margin: 0px 5px 15px 5px; display: inline-block;'}
+
+        =t('.prompt_role_duration_until')
+      .input-prepend
+        %span{class: 'add-on'}
+          = icon(:calendar)
+        = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date span2')
+    - %w(active created deleted).each do |key|
+      = render 'simple_radio',
+          attr: "filters[role][kind]",
+          value: key,
+          checked: filter && filter.args[:kind] == key

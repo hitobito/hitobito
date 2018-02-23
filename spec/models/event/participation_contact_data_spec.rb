@@ -25,7 +25,7 @@ describe Event::ParticipationContactData do
       contact_data = participation_contact_data(attributes)
       event.update!(required_contact_attrs: ['nickname'])
 
-      expect(contact_data.valid?).to be false
+      expect(contact_data).not_to be_valid
       expect(contact_data.errors.full_messages.first).to eq('Übername muss ausgefüllt werden')
     end
 
@@ -34,8 +34,34 @@ describe Event::ParticipationContactData do
       attrs[:birthday] = 'invalid'
       contact_data = participation_contact_data(attrs)
 
-      expect(contact_data.valid?).to be false
+      expect(contact_data).not_to be_valid
       expect(contact_data.errors.full_messages.first).to eq('Geburtstag ist kein gültiges Datum')
+    end
+
+    it 'can have a mandatory phone-number' do
+      contact_data = participation_contact_data(attributes)
+      event.update!(required_contact_attrs: ['phone_numbers'])
+
+      expect(contact_data).not_to be_valid
+      expect(contact_data.errors.full_messages.first).to eq('Telefonnummern muss ausgefüllt werden')
+    end
+
+    it 'can handle deletion and mutation of phone-number' do
+      event.update!(required_contact_attrs: ['phone_numbers'])
+      existing_number = person.phone_numbers.create(number: '112', translated_label: 'Privat', public: true)
+      expect(person.phone_numbers.count).to be > 0
+
+      add_a_number = {"number"=>"110", "translated_label"=>"Privat", "public"=>"1", "_destroy"=>"false"}
+      destroy_a_number = {"number"=>"112", "translated_label"=>"Privat", "public"=>"1", "_destroy"=>"1", "id"=>existing_number.id}
+
+      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: { 0 => destroy_a_number }))
+      expect(contact_data).not_to be_valid
+
+      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: { 0 => add_a_number, 1 => destroy_a_number }))
+      expect(contact_data).to be_valid
+
+      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: { 0 => add_a_number }))
+      expect(contact_data).to be_valid
     end
 
   end

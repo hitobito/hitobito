@@ -5,6 +5,8 @@
 - if can?(:new, @group.roles.new)
   = action_button(t('.add_person'), new_group_role_path(@group), :plus)
 
+= render 'invoices/button_new', group: @group, people: @people
+
 - if can?(:new, @group.roles.new)
   = action_button(t('.import_list'), new_group_csv_imports_path, :upload)
 

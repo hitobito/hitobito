@@ -335,3 +335,17 @@ body {
 #person-notes-form textarea {
   width: 100%;
 }
+
+// User Impersonation
+.user-impersonation{
+  height: 30px;
+  div {
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+
+    a { color: black; margin-left: 30px}
+  }
+}

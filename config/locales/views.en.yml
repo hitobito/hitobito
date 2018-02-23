@@ -104,6 +104,7 @@ en:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Labels'
     pdf: 'PDF'
     emails: 'E-Mail addresses'
@@ -136,7 +137,7 @@ en:
       updated: 'Your password has been changed. You''re now logged in.'
       updated_not_active: 'Your password has been changed.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."
-      no_token: 'You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
+      no_token: 'You can only access this page by clicking the link provided in a password reset e-mail. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
       new:
         reset_password_button: 'Reset password'
     confirmations:

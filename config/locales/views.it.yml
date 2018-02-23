@@ -105,6 +105,7 @@ it:
     button: 'esportare'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'etichette'
     pdf: 'PDF'
     emails: 'indirizzi email'

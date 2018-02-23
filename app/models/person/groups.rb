@@ -28,7 +28,7 @@ module Person::Groups
     roles_with_groups.to_a.reject { |r| r.class.restricted? }.collect(&:group).uniq
   end
 
-  # All groups where this person has the given permission(s).
+  # All groups where this person has the given permission.
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin

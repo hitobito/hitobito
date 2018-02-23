@@ -136,6 +136,7 @@ de:
     xlsx: 'Excel'
     vcard: 'vCard'
     labels: 'Etiketten'
+    pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
     everything: 'Alle Angaben'
@@ -935,6 +936,14 @@ de:
 
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
+
+    print:
+      heading: "Mitgliederliste %{group}"
+      name: "Name"
+      address: "Adresse"
+      email: "E-Mail"
+      home_phone: "Privat"
+      mobile_phone: "Mobil"
 
     roles:
       title: Aktive Rollen

@@ -251,6 +251,7 @@ de:
         title: 'Verfügbare Kurse'
         explanation: 'Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe.'
         csv_export_button: 'CSV Export'
+        ical_export_button: 'Kalender Export'
       events:
         title: 'Demnächst stattfindende Anlässe'
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'

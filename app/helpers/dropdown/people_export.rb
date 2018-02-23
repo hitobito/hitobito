@@ -27,6 +27,7 @@ module Dropdown
       tabular_links(:csv)
       tabular_links(:xlsx)
       vcard_link
+      pdf_link
       label_links
       email_addresses_link
     end
@@ -51,6 +52,10 @@ module Dropdown
       if @email_addresses
         add_item(translate(:emails), params.merge(format: :email), target: :new)
       end
+    end
+
+    def pdf_link
+      add_item(translate(:pdf), params.merge(format: :pdf), target: :new)
     end
 
     def label_links

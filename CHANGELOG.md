@@ -3,6 +3,7 @@
 ## Version 1.X
 
 *   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+*   PDF-Export für Personen
 *   Personenfilter erlauben den Gültigzeitszeitraum einer Rolle einzuschränken.
 *   Berechtigte Personen können die Applikation als eine andere Personen verwenden.
 *   Mailinglisten können an spezifische E-Mail Adressen einer Person verschickt werden.

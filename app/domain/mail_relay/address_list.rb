@@ -24,7 +24,7 @@ module MailRelay
     private
 
     def preferred_emails(person)
-      additional_emails(person).select do |email|
+      additional_emails_with_default(person).select do |email|
         sanitized_labels.include?(email.label.strip.downcase)
       end.collect(&:email)
     end
@@ -37,6 +37,14 @@ module MailRelay
       @sanitized_labels ||= labels.collect do |label|
         label.strip.downcase
       end.compact
+    end
+
+    def additional_emails_with_default(person)
+      additional_emails(person) + [default_additional_email(person)]
+    end
+
+    def default_additional_email(person)
+      AdditionalEmail.new(label: MailingList::DEFAULT_LABEL, email: person.email)
     end
 
     def additional_emails(person)

@@ -20,14 +20,18 @@
       = text_field_tag(:label, nil, style: 'display: none', data: { provide: :typeahead, source: @labels })
 
     = hidden_field_tag('mailing_list[preferred_labels][]')
+
     - @preferred_labels.each do |label|
       %span.chip
         = label
         = link_to(icon(:remove), '#')
         = hidden_field_tag('mailing_list[preferred_labels][]', label)
 
-      %span.help-block= t('.help_preferred_labels')
+    %span.help-block= t('.help_preferred_labels')
 
+  - if entry.preferred_labels.present?
+    = f.indented do
+      = f.boolean_field(:main_email, caption: t('.caption_main_email'))
   = f.indented do
     = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
   = f.indented do

@@ -685,10 +685,11 @@ de:
         add: Abo erstellen
     form:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
+      caption_main_email: 'Versand auch an Haupt E-Mail Adresse'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
-      help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt.'
+      help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'

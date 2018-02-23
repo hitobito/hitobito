@@ -86,7 +86,7 @@ module MailRelay
     # List of receiver email addresses for the resent email.
     def receivers
       Person.mailing_emails_for(mailing_list.people.to_a,
-                                mailing_list.preferred_labels)
+                                mailing_list.labels)
     end
 
     def mailing_list

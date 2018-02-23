@@ -46,7 +46,7 @@ class SubscriptionsController < CrudController
 
   # Override so we can pass preferred_labels from mailing_list
   def render_emails(people)
-    emails = Person.mailing_emails_for(people, parent.preferred_labels)
+    emails = Person.mailing_emails_for(people, parent.labels)
     render text: emails.join(',')
   end
 

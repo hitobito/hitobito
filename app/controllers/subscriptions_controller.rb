@@ -17,7 +17,7 @@ class SubscriptionsController < CrudController
 
   alias mailing_list parent
 
-  def index
+  def index # rubocop:disable Metrics/MethodLength there are a lof of formats supported
     respond_to do |format|
       format.html do
         @person_add_requests = fetch_person_add_requests
@@ -26,8 +26,8 @@ class SubscriptionsController < CrudController
       format.pdf   { render_pdf(ordered_people) }
       format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
       format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
-      format.vcf   { render_vcf(ordered_people) }
-      format.email { render_emails(ordered_people) }
+      format.vcf   { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }
+      format.email { render_emails(ordered_people.includes(:additional_emails)) }
     end
   end
 
@@ -42,6 +42,12 @@ class SubscriptionsController < CrudController
 
   def ordered_people
     mailing_list.people.order_by_name
+  end
+
+  # Override so we can pass preferred_labels from mailing_list
+  def render_emails(people)
+    emails = Person.mailing_emails_for(people, parent.labels)
+    render text: emails.join(',')
   end
 
   def render_tabular_in_background(format)

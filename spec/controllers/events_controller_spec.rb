@@ -17,6 +17,28 @@ describe EventsController do
 
     before { group2 }
 
+    context 'GET index' do
+      let(:group) { groups(:bottom_layer) }
+
+
+      before do
+        sign_in(people(:top_leader))
+        @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
+        Fabricate(:event, groups: [@g1])
+        Fabricate(:event, groups: [groups(:bottom_group_one_one)])
+      end
+
+      it 'lists events of descendant groups by default' do
+        get :index, group_id: groups(:top_layer).id, year: 2012
+        expect(assigns(:events)).to have(3).entries
+      end
+
+      it 'limits list to events of all non layer descendants' do
+        get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012
+        expect(assigns(:events)).to have(2).entries
+      end
+    end
+
     context 'GET show' do
 
       it 'sets empty @user_participation' do

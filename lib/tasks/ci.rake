@@ -6,13 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 desc "Runs the tasks for a commit build"
-task :ci => ['log:clear',
-             'rubocop',
-             'db:migrate',
-             'ci:setup:env',
-             'ci:setup:rspec',
-             'spec:features', # run feature specs first to get coverage from spec
-             'spec']
+task :ci do
+  tasks_to_skip = ENV['skip_tasks'].present? ? ENV['skip_tasks'].split(',') : []
+  tasks = ['log:clear',
+           'rubocop',
+           'db:migrate',
+           'ci:setup:env',
+           'ci:setup:rspec',
+           'spec:features', # run feature specs first to get coverage from spec
+           'spec'].delete_if { |task| tasks_to_skip.include?(task) }
+  
+  tasks.each { |task| Rake::Task[task].invoke }
+end
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"

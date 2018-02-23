@@ -11,5 +11,6 @@
   = action_button(t('events.global.link.duplicate'),
                   new_group_event_path(@group, source_id: entry.id),
                   :book)
+= export_events_ical_button
 
 = render_extensions :actions_show

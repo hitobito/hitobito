@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2014, insime Schweiz. This file is part of
+#  Copyright (c) 2014-2017, insime Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,7 +22,7 @@ module TarantulaConfig
     t.crawl
   end
 
-  # rubocop:disable Metrics/MethodLength, Style/RegexpLiteral, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/LineLength
   def configure_urls(t, person)
     # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)
@@ -66,10 +66,12 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/people\/\d+\/colleagues$/)
     t.allow_404_for(/groups\/\d+\/people\/\d+\/log$/)
     t.allow_404_for(/groups\/\d+\/people\/\d+\/history$/)
+    t.allow_404_for(/groups\/\d+\/people\/\d+\/invoices$/)
     t.allow_404_for(/groups\/\d+\/people\/\d+\/tags\?name=-?\d+$/)
     t.allow_500_for(/groups\/\d+\/people\/\d+\/tags\?name=-?\d+$/)
     t.allow_404_for(/groups\/\d+\/people\/\d+\/notes\/\d+$/)
     t.allow_500_for(/groups\/\d+\/people\/\d+\/notes\/\d+$/)
+    t.allow_500_for(/groups\/\d+\/people\/\d+\/send_password_instructions$/) # we might have switched to another account
     t.allow_404_for(/groups\/\d+\/merge$/)
     t.allow_404_for(/groups\/\d+\/move$/)
     t.allow_404_for(/groups\/\d+\/events$/)
@@ -77,6 +79,7 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/roles\/\d+$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/participations\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications$/)
     t.allow_404_for(/groups\/\d+\/events\/\d+\/qualifications\/\d+$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/user$/)

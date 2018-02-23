@@ -1,0 +1,5 @@
+= table(@groups, class: 'table table-striped table-hover') do |t|
+  - t.col(Group.human_attribute_name(:name)) do |g|
+    - content_tag(:strong, link_to(g, g))
+  - t.col(Group.human_attribute_name(:layer_group)) do |g|
+    - link_to(format_attr(g, :layer_group), g.layer_group)

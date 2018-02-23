@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,13 +16,14 @@ class Group::Merger
   end
 
   def merge!
-    fail('Cannot merge these Groups') unless group2_valid?
+    raise('Cannot merge these Groups') unless group2_valid?
 
     ::Group.transaction do
       if create_new_group
         update_events
         copy_roles
         move_children
+        move_invoices_and_articles
         delete_old_groups
       end
     end
@@ -68,7 +69,6 @@ class Group::Merger
       child.parent(true)
       child.save!
     end
-
   end
 
   def copy_roles
@@ -80,9 +80,24 @@ class Group::Merger
     end
   end
 
+  def move_invoices_and_articles
+    invoices = group1.invoices + group2.invoices
+    invoices.each do |invoice|
+      invoice.group_id = new_group.id
+      invoice.save!
+    end
+
+    invoice_articles = group1.invoice_articles + group2.invoice_articles
+    invoice_articles.each do |invoice_article|
+      invoice_article.group_id = new_group.id
+      invoice_article.save!
+    end
+  end
+
   def delete_old_groups
-    group1.destroy
-    group2.destroy
+    [group1, group2].each do |group|
+      group.reload.destroy
+    end
   end
 
 end

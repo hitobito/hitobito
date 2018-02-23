@@ -36,9 +36,20 @@ Hitobito::Application.routes.draw do
 
       end
 
+      resource :invoice_list, except: [:edit]
+      resource :invoice_config, only: [:edit, :show, :update]
+      resources :payment_reminders, only: :create
+
+      resources :invoices do
+        resources :payment_reminders, only: :create
+        resources :payments, only: :create
+      end
+      resources :invoice_articles
+
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
+
         member do
           post :send_password_instructions
           put :primary_group
@@ -46,6 +57,7 @@ Hitobito::Application.routes.draw do
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
+          get 'invoices' => 'person/invoices#index'
         end
 
         resources :notes, only: [:create, :destroy]
@@ -56,6 +68,8 @@ Hitobito::Application.routes.draw do
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
+          post 'impersonate' => 'impersonation#create'
+          delete 'impersonate' => 'impersonation#destroy'
         end
       end
 

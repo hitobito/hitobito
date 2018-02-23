@@ -28,6 +28,7 @@ gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
+gem 'icalendar'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
@@ -73,13 +74,8 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
-# if these are ever in your way, you can remove these lines.
-# they mostly serve as a version-restriction
-group :dependencies do
-  gem 'nokogiri', '< 1.7.0' # requires ruby 2.1
-  gem 'addressable', '< 2.5' # requires ruby 2.0
-  gem 'sort_alphabetical', '< 1.1.0' # requires ruby 2.0
-end
+gem 'parallel_tests', group: [:development, :test]
+
 
 group :development, :test do
   gem 'binding_of_caller'
@@ -108,7 +104,6 @@ group :test do
   gem 'rspec-its'
   gem 'rspec-collection_matchers'
   gem 'selenium-webdriver', '2.51.0' # 3.2.2 fails with "Unable to find Mozilla geckodriver"
-  gem 'timecop'
   gem 'pdf-inspector', require: 'pdf/inspector'
 end
 
@@ -128,7 +123,7 @@ group :metrics do
   gem 'brakeman'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
-  gem 'rubocop', '< 0.42' # require ruby 2.0
+  gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
   gem 'ruby-prof'
   gem 'simplecov-rcov'
@@ -139,4 +134,4 @@ end
 #
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
 wagonfile = File.expand_path('../Wagonfile', __FILE__)
-eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Lint/Eval
+eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval

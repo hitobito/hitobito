@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -67,9 +67,18 @@ class PersonAbility < AbilityDsl::Base
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
 
+    permission(:finance).may(:index_invoices).in_layer_group
+    permission(:any).may(:index_invoices).herself
+
     permission(:admin).may(:show).people_without_roles
 
+    permission(:impersonation).may(:impersonate_user).all
+
     general(:send_password_instructions).not_self
+  end
+
+  def in_layer_group
+    contains_any?(user.finance_groups.collect(&:id), person.layer_group_ids)
   end
 
   def not_self

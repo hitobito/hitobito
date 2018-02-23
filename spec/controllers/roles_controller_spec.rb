@@ -183,6 +183,24 @@ describe RolesController do
       end
     end
 
+    context 'with impersonation' do
+      let(:origin_user_id) { people(:bottom_member).id }
+
+      with_versioning do
+        it 'new role for existing person redirects to people list' do
+          allow(controller).to receive(:session).and_return(origin_user: origin_user_id)
+          post :create, group_id: group.id,
+            role: { group_id: group.id,
+                    person_id: person.id,
+                    type: Group::TopGroup::Member.sti_name }
+
+          expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+
+          expect(PaperTrail::Version.last.whodunnit).to eq origin_user_id.to_s
+        end
+      end
+    end
+
   end
 
   describe 'PUT update' do
@@ -453,6 +471,20 @@ describe RolesController do
        is_expected.to render_template('details')
        expect(assigns(:type)).to eq(Group::TopGroup::Member)
      end
+  end
+
+  describe 'GET role_types' do
+    it 'renders template' do
+      xhr :get, :role_types, group_id: group.id, role: { group_id: group.id, type: Group::TopGroup::Member.sti_name }
+      is_expected.to render_template('role_types')
+      expect(assigns(:group)).to eq(group)
+    end
+
+    it 'returns 404 without role' do
+      expect do
+        xhr :get, :role_types, group_id: group.id
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe 'handling return_url param' do

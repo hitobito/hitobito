@@ -63,11 +63,17 @@ class GroupAbility < AbilityDsl::Base
       may(:activate_person_add_requests, :deactivate_person_add_requests).
       in_same_layer
 
+    permission(:finance).may(:index_invoices).in_layer_group
+
     general(:update).group_not_deleted
     general(:index_person_add_requests,
             :activate_person_add_requests,
             :deactivate_person_add_requests).
       if_layer_group
+  end
+
+  def in_layer_group
+    user.finance_groups.include?(subject)
   end
 
   def with_parent_in_same_layer

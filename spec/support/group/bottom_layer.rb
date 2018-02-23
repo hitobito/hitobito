@@ -25,7 +25,7 @@ class Group::BottomLayer < Group
   end
 
   class Member < ::Role
-    self.permissions = [:layer_and_below_read]
+    self.permissions = [:layer_and_below_read, :finance]
   end
 
   roles Leader, LocalGuide, Member

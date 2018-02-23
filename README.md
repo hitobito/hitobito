@@ -6,7 +6,10 @@ hitobito is an open source web application to manage complex group hierarchies w
 
 ## Development
 
-Hitobito is a Ruby on Rails application that runs on Ruby >= 1.9.3 and Rails 4.
+Hitobito is a Ruby on Rails application that runs on Ruby >= 2.1 and Rails 4.
+It might run with minor tweaks on older Rubies, but is not tested against those
+versions.
+
 To get going, after you got a copy of hitobito and at least one wagon with an organization
 structure setup as described below, issue the following commands in the main directory:
 

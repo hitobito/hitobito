@@ -11,32 +11,34 @@ module SearchStrategies
     delegate :star_supported?, to: :class
 
     def query_people
-      return Person.none.page(1) unless @term.present?
+      return Person.none.page(1) if @term.blank?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
-                      per_page: QUERY_PER_PAGE,
-                      star: star_supported?,
-                      with: { sphinx_internal_id: ids })
+                      default_search_options.merge(
+                        with: { sphinx_internal_id: ids }
+                      ))
       end
     end
 
     def query_groups
-      return Group.none.page(1) unless @term.present?
+      return Group.none.page(1) if @term.blank?
       Group.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: star_supported?,
-                   include: :parent)
+                   default_search_options)
     end
 
     def query_events
-      return Event.none.page(1) unless @term.present?
+      return Event.none.page(1) if @term.blank?
+      sql = { include: [:groups, :dates] }
       Event.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: star_supported?,
-                   include: :groups)
+                   default_search_options.merge(sql: sql))
     end
 
     protected
+
+    def default_search_options
+      { per_page: QUERY_PER_PAGE,
+        star: star_supported? }
+    end
 
     def fetch_people(ids)
       Person.search(Riddle::Query.escape(@term),

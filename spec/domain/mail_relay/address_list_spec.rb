@@ -38,6 +38,14 @@ describe MailRelay::AddressList do
     ])
   end
 
+  it 'it uses additional_email and main address if matches' do
+    e1 = Fabricate(:additional_email, contactable: top_leader, label: 'foo')
+    expect(entries([top_leader], %W(foo #{MailingList::DEFAULT_LABEL}))).to match_array([
+      e1.email,
+      top_leader.email
+    ])
+  end
+
   it 'it uses all matching additional_emails' do
     e1 = Fabricate(:additional_email, contactable: top_leader, label: 'foo')
     e2 = Fabricate(:additional_email, contactable: top_leader, label: 'bar')

@@ -25,11 +25,15 @@ class app.MailingListLabels
   remove: (e) ->
     e.preventDefault()
     $(this).closest('.chip').remove()
+    if $("[name='mailing_list[preferred_labels][]']").size() < 2
+      $('#mailing_list_main_email').attr('checked', false)
+      $('#mailing_list_main_email').closest('.control-group').hide()
 
   update: (e)=>
     label = $("#{@selector} input[name=label]")
     label.attr('name', 'mailing_list[preferred_labels][]')
-    $.ajax(url: window.location.href + "?#{$(@selector).serialize()}", dataType: 'script')
+    form = $("#{@selector}")
+    form.load(window.location.href + '.js', form.serialize())
 
   preventEnterSubmit: (event) =>
     if event.keyCode == 13

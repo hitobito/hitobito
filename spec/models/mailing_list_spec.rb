@@ -50,6 +50,16 @@ describe MailingList do
     end
   end
 
+  describe 'labels' do
+    it 'includes main if set' do
+      expect(list.labels).to eq []
+      list.update(preferred_labels: %w(foo))
+      expect(list.reload.labels).to eq %w(foo)
+      list.update(main_email: true)
+      expect(list.reload.labels).to eq %w(foo _main)
+    end
+  end
+
   describe 'validations' do
     it 'succeed with mail_name' do
       list.mail_name = 'aa-b'

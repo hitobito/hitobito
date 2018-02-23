@@ -41,9 +41,14 @@ class MailingList < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
 
+  DEFAULT_LABEL = '_main'.freeze
 
   def to_s(_format = :default)
     name
+  end
+
+  def labels
+    main_email ? preferred_labels + [DEFAULT_LABEL]: preferred_labels
   end
 
   def preferred_labels=(labels)

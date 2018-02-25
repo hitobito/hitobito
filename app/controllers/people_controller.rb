@@ -53,7 +53,7 @@ class PeopleController < CrudController
   def show
     respond_to do |format|
       format.html
-      format.pdf  { render_pdf([entry]) }
+      format.pdf  { render_pdf([entry], group) }
       format.csv  { render_tabular_entry(:csv) }
       format.xlsx { render_tabular_entry(:xlsx) }
       format.vcf  { render_vcf([entry]) }

@@ -5,31 +5,68 @@
 
 - filter = entry.filter_chain[:qualification]
 
-.label-columns
-  = field_set_tag(t('.prompt_qualification_selection')) do
-    - unless can?(:index_full_people, @group)
-      .alert.alert-warning= t('.not_enough_permissions')
+= field_set_tag(t('.prompt_qualification_selection')) do
+  - unless can?(:index_full_people, @group)
+    .alert.alert-warning= t('.not_enough_permissions')
 
+  .controls.label-columns
+    - @qualification_kinds.each do |kind|
+      - dom_id = "qualification_kind_id_#{kind.id}"
+      = label_tag(dom_id, class: 'checkbox inline') do
+        = check_box_tag("filters[qualification][qualification_kind_ids][]",
+                        kind.id,
+                        filter && filter.args[:qualification_kind_ids].include?(kind.id),
+                        id: dom_id)
+        = kind.to_s
+
+
+  .controls
+    &nbsp;
+
+  .controls
+    = label_tag('match_one', class: 'radio inline') do
+      = radio_button_tag(:match, 'one', true)
+      = t('people_filters.simple_radio.match.one')
+    = label_tag('match_all', class: 'radio inline') do
+      = radio_button_tag(:match, 'all', params[:match] == 'all')
+      = t('people_filters.simple_radio.match.all')
+
+= field_set_tag(t('.prompt_validity')) do
+  = render 'simple_radio',
+            attr: "filters[qualification][validity]",
+            value: 'active',
+            checked: true # first item is checked per default
+  = render 'simple_radio',
+            attr: "filters[qualification][validity]",
+            value: 'reactivateable',
+            checked: filter && filter.args[:validity] == 'reactivateable'
+  = render 'simple_radio',
+            attr: "filters[qualification][validity]",
+            value: 'all',
+            checked: filter && filter.args[:validity] == 'all'
+
+= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: filter.try(:year_scope?) ? '' : 'display:none') do
+  .control-group
+    = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label')
     .controls
-      - @qualification_kinds.each do |kind|
-        - dom_id = "qualification_kind_id_#{kind.id}"
-        = label_tag(dom_id, class: 'checkbox inline') do
-          = check_box_tag("filters[qualification][qualification_kind_ids][]",
-                          kind.id,
-                          filter && filter.args[:qualification_kind_ids].include?(kind.id),
-                          id: dom_id)
-          = kind.to_s
-
-  = field_set_tag(t('.prompt_validity')) do
-    = render 'simple_radio',
-             attr: "filters[qualification][validity]",
-             value: 'active',
-             checked: true # first item is checked per default
-    = render 'simple_radio',
-             attr: "filters[qualification][validity]",
-             value: 'reactivateable',
-             checked: filter && filter.args[:validity] == 'reactivateable'
-    = render 'simple_radio',
-             attr: "filters[qualification][validity]",
-             value: 'all',
-             checked: filter && filter.args[:validity] == 'all'
+      = number_field_tag("filters[qualification][start_at_year_from]", filter && filter.args[:start_at_year_from], class: 'span2')
+      %span.text
+        &nbsp;
+        = t('.start_at_year_infix')
+        &nbsp;
+      = number_field_tag("filters[qualification][start_at_year_until]", filter && filter.args[:start_at_year_until], class: 'span2')
+      %span.text
+        &nbsp;
+        = t('.start_at_year_suffix')
+  .control-group
+    = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label')
+    .controls
+      = number_field_tag("filters[qualification][finish_at_year_from]", filter && filter.args[:finish_at_year_from], class: 'span2')
+      %span.text
+        &nbsp;
+        = t('.finish_at_year_infix')
+        &nbsp;
+      = number_field_tag("filters[qualification][finish_at_year_until]", filter && filter.args[:finish_at_year_until], class: 'span2')
+      %span.text
+        &nbsp;
+        = t('.finish_at_year_suffix')

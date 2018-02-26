@@ -35,6 +35,13 @@ class Person::Filter::Qualification < Person::Filter::Base
     end
   end
 
+  def year_scope?
+    %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
+      key = [pre, post].join('_')
+      args.key?(key.to_sym) || args.key?(key)
+    end
+  end
+
   private
 
   def match_all_qualification_kinds(scope)
@@ -58,31 +65,36 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def qualification_scope(scope)
-    qualification_validity_scope(scope)
-      .merge(start_scope)
-      .merge(finish_scope)
+    scope = qualification_validity_scope(scope)
+    return scope unless year_scope?
+
+    scope.
+      where(id: grouped_most_recent_qualifications_ids).
+      merge(start_scope).
+      merge(finish_scope)
+  end
+
+  def grouped_most_recent_qualifications_ids
+    Qualification.
+      group(:person_id, :qualification_kind_id).select('max(id)').
+      where(qualification_kind_id: args[:qualification_kind_ids])
   end
 
   def finish_scope
-    qualification_date_year_scope(
-      :finish_at,
-      args[:finish_at_year_from],
-      args[:finish_at_year_until]
-    )
+    qualification_date_year_scope(:finish_at)
   end
 
   def start_scope
-    qualification_date_year_scope(
-      :start_at,
-      args[:start_at_year_from],
-      args[:start_at_year_until]
-    )
+    qualification_date_year_scope(:start_at)
   end
 
-  def qualification_date_year_scope(attr, from, untils)
+  def qualification_date_year_scope(attr)
+    from = args[:"#{attr}_year_from"].to_i
+    untils = args["#{attr}_year_until"].to_i
+
     scope = ::Qualification.all
-    scope = scope.where("#{attr} >= ?", Date.new(from, 1, 1)) if from.to_i > 0
-    scope = scope.where("#{attr} <= ?", Date.new(untils, 12, 31)) if untils.to_i > 0
+    scope = scope.where("#{attr} >= ?", Date.new(from, 1, 1)) if from > 0
+    scope = scope.where("#{attr} <= ?", Date.new(untils, 12, 31)) if untils > 0
     scope
   end
 

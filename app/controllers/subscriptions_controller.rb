@@ -23,7 +23,7 @@ class SubscriptionsController < CrudController
         @person_add_requests = fetch_person_add_requests
         load_grouped_subscriptions
       end
-      format.pdf   { render_pdf(ordered_people) }
+      format.pdf   { render_pdf(ordered_people, parents.first) }
       format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
       format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.vcf   { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }

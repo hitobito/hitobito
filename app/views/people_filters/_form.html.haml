@@ -13,11 +13,11 @@
   = render 'range', f: f
 
   .accordion
-    = render(layout: 'filter', locals: { caption: t('people_filters.role.title'), id: 'roles' }) do
+    = render(layout: 'filter', locals: { type: :role }) do
       = render 'role', f: f
 
     - if @qualification_kinds.present?
-      = render(layout: 'filter', locals: { caption: t('people_filters.qualification.title'), id: 'qualifications' }) do
+      = render(layout: 'filter', locals: { type: :qualification }) do
         = render 'qualification', f: f
 
 

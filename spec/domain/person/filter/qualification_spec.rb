@@ -21,7 +21,7 @@ describe Person::Filter::Qualification do
       group,
       user,
       range: range,
-      filters: { qualification: filters.merge(additional_filters) }
+      filters: { qualification: filters.merge(additional_filter_params) }
     )
   end
 
@@ -37,6 +37,10 @@ describe Person::Filter::Qualification do
   let(:entries) { list_filter.entries }
 
   let(:bl_leader) { create_person(Group::BottomLayer::Leader, :bottom_layer_one, 'reactivateable', :sl, :gl_leader) }
+
+  def additional_filter_params
+    additional_filters.invert.stringify_keys.invert
+  end
 
   before do
     @tg_member = create_person(Group::TopGroup::Member, :top_group, 'active', :sl)
@@ -65,6 +69,13 @@ describe Person::Filter::Qualification do
       Fabricate(:qualification, person: person, qualification_kind: kind, start_at: start)
     end
     person
+  end
+
+  def create_qualification(person, kind, year)
+    Fabricate(:qualification,
+              person: person,
+              qualification_kind: qualification_kinds(kind),
+              start_at: Date.new(year, 1, 1))
   end
 
   context 'no filter' do
@@ -116,16 +127,22 @@ describe Person::Filter::Qualification do
           it 'correctly' do
             expect(entries).to match_array([@sl_2015, @sl_2016])
           end
+
         end
 
         context 'loads entry with start_at before' do
           let(:additional_filters) do
             {
-              start_at_year_until: 2015
+              start_at_year_until: '2015'
             }
           end
           it 'correctly' do
             expect(entries).to match_array([@sl_2015, @sl_2014, @sl_2013])
+          end
+
+          it 'only considers newest qualification for query' do
+            create_qualification(@sl_2015, :sl_leader, 2016)
+            expect(entries).to match_array([@sl_2014, @sl_2013])
           end
         end
 

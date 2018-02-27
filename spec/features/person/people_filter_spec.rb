@@ -31,7 +31,9 @@ describe PeopleController, js: true do
       # edit the current filter
       click_link 'Bottom Layer'
       click_link 'Neuer Filter...'
-      click_link 'Rollen'
+
+      # roles accordion is already open
+      expect(page).to have_selector('.accordion-body', count: 1)
 
       expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Leader.id}")
       expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Member.id}")
@@ -45,8 +47,8 @@ describe PeopleController, js: true do
       # open the previously defined filter again
       click_link 'Eigener Filter'
       click_link 'Bottom Layer'
-      click_link 'Rollen'
 
+      # roles accordion is already open
       expect(page).to have_selector('.table tbody tr', count: 2)
 
       # open other tab

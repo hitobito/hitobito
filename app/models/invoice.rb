@@ -31,8 +31,8 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
-  STATES = %w(draft issued sent payed overdue reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent overdue reminded).freeze
+  STATES = %w(draft issued sent payed reminded cancelled).freeze
+  STATES_REMINDABLE = %w(issued sent reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
@@ -112,10 +112,6 @@ class Invoice < ActiveRecord::Base
     "#{title}(#{sequence_number}): #{total}"
   end
 
-  def reminder_sent?
-    payment_reminders.present?
-  end
-
   def remindable?
     STATES_REMINDABLE.include?(state)
   end
@@ -146,10 +142,6 @@ class Invoice < ActiveRecord::Base
 
   def amount_paid
     payments.sum(:amount)
-  end
-
-  def payment_reminder_attributes
-    { invoice_id: id, due_at: I18n.l(due_at + invoice_config.due_days.days) }
   end
 
   private

@@ -29,14 +29,7 @@ describe PaymentReminder do
       sent.payment_reminders.create!(due_at: due_at)
     end.to change { [sent.due_at, sent.state] }
     expect(sent.due_at).to eq due_at
-    expect(sent.state).to eq 'overdue'
-  end
-
-  it 'multi_create creates several payment_reminders at once' do
-    draft.update(state: :sent)
-    expect do
-      PaymentReminder.new.multi_create([draft, sent])
-    end.to change { PaymentReminder.count }.by(2)
+    expect(sent.state).to eq 'reminded'
   end
 
   it 'validates invoice is in state sent' do

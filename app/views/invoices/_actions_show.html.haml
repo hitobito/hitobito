@@ -4,8 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if can?(:update, entry)
-  - if entry.draft? || entry.overdue?
-    = invoice_sending_dropdown(:group_invoice_list_path)
+  = invoice_sending_dropdown(:group_invoice_list_path) unless entry.payed?
   = button_action_edit
 
 = invoices_export_dropdown
@@ -13,9 +12,6 @@
 
 = button_action_destroy if can?(:destroy, entry)
 
-- if entry.remindable? && can?(:update, entry)
-  = action_button(t('crud.new.title', model: PaymentReminder.model_name.human),
-    '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment_reminder' } })
-
+- if can?(:update, entry)
   = action_button(t('crud.new.title', model: Payment.model_name.human),
     '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment' } })

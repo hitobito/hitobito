@@ -35,16 +35,6 @@ class PaymentReminder < ActiveRecord::Base
 
   scope :list, -> { order(created_at: :desc) }
 
-  def multi_create(invoices)
-    PaymentReminder.transaction do
-      invoices.all? do |invoice|
-        attributes = invoice.payment_reminder_attributes.merge(message: message)
-        reminder = self.class.new(attributes)
-        reminder.save
-      end || (raise ActiveRecord::Rollback)
-    end
-  end
-
   def to_s
     I18n.l(due_at)
   end
@@ -56,7 +46,7 @@ class PaymentReminder < ActiveRecord::Base
   private
 
   def update_invoice
-    invoice.update(state: :overdue, due_at: due_at)
+    invoice.update(state: :reminded, due_at: due_at)
   end
 
   def assert_invoice_remindable

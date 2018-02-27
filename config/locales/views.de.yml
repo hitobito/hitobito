@@ -154,9 +154,9 @@ de:
     pdf: 'PDF'
 
   dropdown/invoice_sending:
-    button: 'Rechnung stellen'
-    state: 'Status setzen'
-    mail: 'Status setzen und per E-Mail verschicken'
+    button: 'Rechnung stellen / mahnen'
+    set_state: 'Status setzen (Gestellt/Gemahnt)'
+    send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
 
   devise:
     failure:

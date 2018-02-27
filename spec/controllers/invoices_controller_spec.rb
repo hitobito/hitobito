@@ -74,24 +74,11 @@ describe InvoicesController do
       get :index, group_id: group.id, due_since: :one_week
       expect(assigns(:invoices)).to have(1).item
     end
-
-    it 'assigns form objects' do
-      get :index, group_id: group.id
-      expect(assigns(:reminder)).to be_present
-      expect(assigns(:reminder_valid)).to eq true
-    end
   end
 
   context 'show' do
     let(:invoice) { invoices(:invoice) }
     before { sign_in(person) }
-
-    it 'GET#show assigns reminder if invoice has been sent' do
-      invoice.update(state: :sent)
-      get :show, group_id: group.id, id: invoice.id
-      expect(assigns(:reminder)).to be_present
-      expect(assigns(:reminder_valid)).to eq true
-    end
 
     it 'GET#show assigns payment if invoice has been sent' do
       invoice.update(state: :sent)
@@ -108,14 +95,6 @@ describe InvoicesController do
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
       expect(assigns(:payment).amount).to eq 4.5
-    end
-
-    it 'GET#show assigns reminder with flash parameters' do
-      invoice.update(state: :sent)
-      allow(subject).to receive(:flash).and_return(payment_reminder: { due_at: invoice.due_at })
-      get :show, group_id: group.id, id: invoice.id
-      expect(assigns(:reminder)).to be_present
-      expect(assigns(:reminder_valid)).to eq false
     end
 
     it 'GET#show assigns payment with flash parameters' do

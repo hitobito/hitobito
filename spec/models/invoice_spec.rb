@@ -149,7 +149,7 @@ describe Invoice do
   end
 
   context '#remindable?' do
-    %w(sent overdue reminded).each do |state|
+    %w(issued sent reminded).each do |state|
       it "#{state} invoice is remindable" do
         expect(Invoice.new(state: state)).to be_remindable
       end

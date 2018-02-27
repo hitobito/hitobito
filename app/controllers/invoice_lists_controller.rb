@@ -56,7 +56,9 @@ class InvoiceListsController < CrudController
       update_and_send_mail(invoice)
     end.compact
 
-    redirect_with(count: updated.count)
+    redirect_with(count: updated.count) do
+      group_invoice_path(parent, invoices.first) if params[:singular]
+    end
   end
 
   # rubocop:disable Rails/SkipsModelValidations
@@ -103,7 +105,9 @@ class InvoiceListsController < CrudController
     key = attrs[:count] > 0 ? :notice : :alert
     flash[key] << message
     flash[key] << I18n.t("#{i18n_prefix}.background_send", attrs) if send_mail?
-    redirect_to group_invoices_path(parent)
+    path = yield if block_given?
+    path ||= group_invoices_path(parent)
+    redirect_to path
   end
 
   def prepare_flash

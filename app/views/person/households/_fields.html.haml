@@ -9,10 +9,9 @@
     %span= t('.lives_in_household_with')
 
   .household_key_people
-    %ul
-      = render_household(f.object)
-      - f.object.household_people.each do |person|
-        = hidden_field_tag 'person[household_people_ids][]', person.id
+    = render_household(f.object)
+    - f.object.household_people.each do |person|
+      = hidden_field_tag 'person[household_people_ids][]', person.id
 
 
   - display_style = 'display: none' unless f.object.household_people.present?

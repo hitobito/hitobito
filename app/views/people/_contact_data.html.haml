@@ -12,7 +12,8 @@
            postal: true,
            only_public: only_public
 
-- if person.household_people.present?
-  .well
-    %span=t('.lives_in_household_with')
-    = render_household(person)
+  - if person.household_people.present?
+    %div
+      %small= t('.lives_in_household_with')
+      %br
+      = render_household(person)

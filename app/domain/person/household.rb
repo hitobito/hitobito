@@ -90,8 +90,10 @@ class Person::Household
 
   def update_address
     unless address_attrs(person) == address_attrs(other)
-      person.attributes = address_attrs(other)
-      @address_changed = true
+      unless %w(plz town zip_code).all? { |attr| address_attrs(other)[attr].blank? }
+        person.attributes = address_attrs(other)
+        @address_changed = true
+      end
     end
   end
 

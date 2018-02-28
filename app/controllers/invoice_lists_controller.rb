@@ -49,16 +49,17 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    updated = invoices.includes(:recipient).map do |invoice|
-      alert('not_draft', invoice) && next unless invoice.draft?
-      alert('no_mail', invoice) && next if send_mail? && invoice.recipient_email.blank?
+    update_count = batch_update.call do |error_key, invoice|
+      alert(error_key, invoice)
+    end
 
-      update_and_send_mail(invoice)
-    end.compact
-
-    redirect_with(count: updated.count) do
+    redirect_with(count: update_count) do
       group_invoice_path(parent, invoices.first) if params[:singular]
     end
+  end
+
+  def batch_update
+    @batch_update ||= Invoice::BatchUpdate.new(invoices.includes(:recipient), sender)
   end
 
   # rubocop:disable Rails/SkipsModelValidations
@@ -77,18 +78,8 @@ class InvoiceListsController < CrudController
 
   private
 
-  def send_mail?
-    params[:mail] == 'true'
-  end
-
-  def update_and_send_mail(invoice)
-    invoice.update(state: send_mail? ? :sent : :issued).tap do
-      enqueue_sender_job(invoice) if send_mail?
-    end
-  end
-
-  def enqueue_sender_job(invoice)
-    Invoice::SendNotificationJob.new(invoice, current_person).enqueue!
+  def sender
+    params[:mail] == 'true' && current_user
   end
 
   def list_entries
@@ -104,7 +95,7 @@ class InvoiceListsController < CrudController
     message = I18n.t(i18n_prefix, attrs)
     key = attrs[:count] > 0 ? :notice : :alert
     flash[key] << message
-    flash[key] << I18n.t("#{i18n_prefix}.background_send", attrs) if send_mail?
+    flash[key] << I18n.t("#{i18n_prefix}.background_send", attrs) if sender
     path = yield if block_given?
     path ||= group_invoices_path(parent)
     redirect_to path

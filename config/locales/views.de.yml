@@ -626,16 +626,22 @@ de:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
-      zero: 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
-      one: "Rechnung wurde gestellt."
-      other: "%{count} Rechnungen wurden gestellt."
-      background_send:
-        zero: "Es werden keine Rechnungen per E-Mail verschickt."
-        one: "Rechnung wird im Hintergrund per E-Mail verschickt."
+      zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
+      issued:
+        one: "Rechnung %{number} wurde gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
+      overdue:
+        one: "Rechnung %{number} wurde gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
+      send_notification:
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
         other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
-      error:
-        no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
-        not_draft: "Rechnung %{number} wurde bereits verschickt."
+      invalid_state:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      invalid_recipient:
+        one: "Rechnung %{number} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen können nicht verschickt werden, da keine E-Mails hinterlegt sind."
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."

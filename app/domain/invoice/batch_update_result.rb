@@ -15,8 +15,22 @@ class Invoice::BatchUpdateResult
     errors[key.to_sym] << invoice
   end
 
-  def to_s
-    update_lines + error_lines
+  def notice
+    translate(updates)
+  end
+
+  def alert
+    translate(errors)
+  end
+
+  def to_options
+    present? ? { notice: notice, alert: alert } : { alert: empty_message }
+  end
+
+  private
+
+  def present?
+    [updates, errors].any?(&:present?)
   end
 
   def updates
@@ -27,16 +41,18 @@ class Invoice::BatchUpdateResult
     @errors ||= Hash.new { |h, k| h[k] = [] }
   end
 
-  private
-
-  def update_lines
-
+  def translate(hash)
+    hash.collect { |key, invoices| line(key, invoices) }
   end
 
-  def error_lines
+  def line(key, invoices)
+    I18n.t("invoice_lists.update.#{key}",
+           count: invoices.count,
+           number: invoices.first.sequence_number)
+  end
 
+  def empty_message
+    I18n.t('invoice_lists.update', count: 0)
   end
 
 end
-
-

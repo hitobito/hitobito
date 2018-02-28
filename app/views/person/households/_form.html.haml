@@ -5,7 +5,12 @@
 
 - f = StandardFormBuilder.new(:person, @person, self, {})
 
-= content_tag(:div, class: @household.address_changed? ? 'animated-highlight' : nil) do
+- if @household.address_changed?
+  = content_tag(:div, class: 'animated-highlight') do 
+    %div.alert.alert-warning
+      = t('.address_updated')
+    = render 'contactable/address_fields', f: f
+- else
   = render 'contactable/address_fields', f: f
 
 = content_tag(:div, class: @household.people_changed? ? 'animated-highlight' : nil) do

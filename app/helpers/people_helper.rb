@@ -58,11 +58,11 @@ module PeopleHelper
   end
 
   def render_household(person)
-    content_tag(:ul) do
-      safe_join(person.household_people.collect do |p|
-        content_tag(:li, can?(:show, p) ? link_to(p, p) : p)
-      end, "\n")
-    end
+    safe_join(person.household_people.collect do |p|
+      content_tag(:li, :class => 'chip') do
+        can?(:show, p) ? link_to(p, p) : p
+      end
+    end, "\n")
   end
 
 end

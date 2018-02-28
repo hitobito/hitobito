@@ -109,7 +109,18 @@ a.green {
 }
 
 fieldset {
-  margin-bottom: 18px;
+  $content-padding: 20px;
+  margin-bottom: 9px;
+  padding-top: $content-padding / 2;
+  padding-bottom: $content-padding / 2; 
+  margin-left: - $content-padding;
+  margin-right: - $content-padding;
+  padding-left: $content-padding;
+  padding-right: $content-padding;
+}
+
+fieldset:nth-of-type(2n) {
+  background-color: $grayLighter;
 }
 
 legend {

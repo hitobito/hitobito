@@ -2,6 +2,7 @@ invoice:
   title: Invoice
   group: bottom_layer_one
   recipient: top_leader
+  recipient_email: top_leader@example.com
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
@@ -12,6 +13,7 @@ sent:
   title: Sent
   group: bottom_layer_one
   recipient: top_leader
+  recipient_email: top_leader@example.com
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   sent_at: <%= 10.days.ago.to_date %>

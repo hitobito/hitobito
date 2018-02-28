@@ -23,7 +23,6 @@ class InvoiceListsController < CrudController
 
   skip_authorize_resource
   before_action :authorize
-  before_action :prepare_flash
   respond_to :js, only: [:new]
 
   helper_method :cancel_url
@@ -36,12 +35,9 @@ class InvoiceListsController < CrudController
   end
 
   def create
-    assign_attributes
-    entry.recipient = parent.people.first
-    succeeded = entry.multi_create if entry.valid?
-
-    if succeeded
-      redirect_with(count: entry.recipients.size, title: entry.title)
+    if multi_create
+      message = flash_message(count: entry.recipients.size, title: entry.title)
+      redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
       render :new
@@ -49,23 +45,16 @@ class InvoiceListsController < CrudController
   end
 
   def update
-    update_count = batch_update.call do |error_key, invoice|
-      alert(error_key, invoice)
-    end
-
-    redirect_with(count: update_count) do
-      group_invoice_path(parent, invoices.first) if params[:singular]
-    end
-  end
-
-  def batch_update
-    @batch_update ||= Invoice::BatchUpdate.new(invoices.includes(:recipient), sender)
+    batch_update = Invoice::BatchUpdate.new(invoices.includes(:recipient), sender)
+    batch_result = batch_update.call
+    redirect_to return_path, batch_result.to_options
   end
 
   # rubocop:disable Rails/SkipsModelValidations
   def destroy
     count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
-    redirect_with(count: count)
+    key = count > 0 ? :notice : :alert
+    redirect_to(group_invoices_path(parent), key => flash_message(count: count))
   end
 
   def show
@@ -77,6 +66,20 @@ class InvoiceListsController < CrudController
   end
 
   private
+
+  def multi_create
+    assign_attributes
+    entry.recipient = parent.people.first
+    entry.multi_create if entry.valid?
+  end
+
+  def return_path
+    if params[:singular]
+      group_invoice_path(parent, invoices.first)
+    else
+      group_invoices_path(parent)
+    end
+  end
 
   def sender
     params[:mail] == 'true' && current_user
@@ -90,28 +93,8 @@ class InvoiceListsController < CrudController
     parent.invoices.where(id: params[:ids].to_s.split(','))
   end
 
-  def redirect_with(attrs)
-    i18n_prefix = "#{controller_name}.#{action_name}"
-    message = I18n.t(i18n_prefix, attrs)
-    key = attrs[:count] > 0 ? :notice : :alert
-    flash[key] << message
-    flash[key] << I18n.t("#{i18n_prefix}.background_send", attrs) if sender
-    path = yield if block_given?
-    path ||= group_invoices_path(parent)
-    redirect_to path
-  end
-
-  def prepare_flash
-    flash[:notice] = []
-    flash[:alert] = []
-  end
-
-  def alert(key, invoice)
-    flash[:alert] << I18n.t(
-      "#{controller_name}.#{action_name}.error.#{key}",
-      number: invoice.sequence_number,
-      name:   invoice.recipient_name
-    )
+  def flash_message(attrs)
+    I18n.t("#{controller_name}.#{action_name}", attrs)
   end
 
   def authorize

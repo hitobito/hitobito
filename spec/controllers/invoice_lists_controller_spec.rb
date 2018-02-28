@@ -78,7 +78,7 @@ describe InvoiceListsController do
     it 'PUT#update informs if not invoice has been selected' do
       post :update, { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:alert]).to include 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
+      expect(flash[:alert]).to include 'Es muss mindestens eine Rechnung ausgewählt werden.'
     end
 
     it 'PUT#update moves invoice to sent state' do
@@ -91,7 +91,7 @@ describe InvoiceListsController do
         end.not_to change { Delayed::Job.count }
       end
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
+      expect(flash[:notice][0]).to match /Rechnung \d+-\d+ wurde gestellt./
       expect(invoice.reload.state).to eq 'issued'
       expect(invoice.due_at).to be_present
       expect(invoice.issued_at).to be_present
@@ -116,8 +116,8 @@ describe InvoiceListsController do
       end.to change { Delayed::Job.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to include 'Rechnung wurde gestellt.'
-      expect(flash[:notice]).to include 'Rechnung wird im Hintergrund per E-Mail verschickt.'
+      expect(flash[:notice][0]).to match(/Rechnung \d+-\d+ wurde gestellt./)
+      expect(flash[:notice][1]).to match(/Rechnung \d+-\d+ wird im Hintergrund per E-Mail verschickt./)
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do

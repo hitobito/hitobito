@@ -10,6 +10,7 @@ require 'spec_helper'
 
 describe Export::Pdf::Invoice do
   let(:invoice) { invoices(:invoice) }
+  let(:sent)    { invoices(:sent) }
 
   it 'renders invoice with articles and payment_slip' do
     described_class.render(invoice, articles: true, payment_slip: true)
@@ -21,6 +22,14 @@ describe Export::Pdf::Invoice do
 
   it 'renders empty invoice payment slip if esr_number and participant_number are set' do
     described_class.render(Invoice.new(esr_number: 1, participant_number: 1),  payment_slip: true )
+  end
+
+  it 'includes payment reminder title and text' do
+    reminder = Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 10.days)
+    pdf = described_class.render(sent, articles: true)
+    text = PDF::Inspector::Text.analyze(pdf).show_text
+    expect(text).to include "#{reminder.title} - #{sent.title}"
+    expect(text).to include reminder.text
   end
 
 end

@@ -21,7 +21,11 @@ $(document).on('submit', 'form[data-checkable]', (e) ->
 buildLinkWithIds = (href) ->
   ids = ($(item).val() for item in  $('table[data-checkable] tbody :checked'))
   separator = if href.indexOf('?') != -1 then '&' else '?'
-  href + separator + "ids=#{ids}"
+  match = window.location.href.match(/.+?(\d+)$/)
+  if match
+    href + separator + "ids=#{[match[1]]}&singular=true"
+  else
+    href + separator + "ids=#{ids}"
 
 $.rails.href = (element) ->
   href = element[0].href

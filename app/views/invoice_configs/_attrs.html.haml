@@ -3,7 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-
 %dl.dl-horizontal
   = labeled_attr(entry, :contact)
   = labeled_attr(entry, :address)
@@ -17,3 +16,9 @@
   = labeled_attr(entry, :participant_number) if entry.with_reference?
   = labeled_attr(entry, :account_number)
   = labeled_attr(entry, :iban)
+
+
+%h2= PaymentReminder.model_name.human(count: 2)
+= table(entry.payment_reminder_configs, class: 'table table-striped table-hover') do |t|
+  - t.col('')  { |c| "#{c.level}. #{PaymentReminder.model_name.human}" }
+  - t.attrs(:title, :text, :due_days)

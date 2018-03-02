@@ -23,6 +23,7 @@ class PaymentReminder < ActiveRecord::Base
   belongs_to :invoice
 
   validate :assert_invoice_remindable
+  validates :level, inclusion: (1..3)
   validates :due_at, uniqueness: { scope: :invoice_id },
                      timeliness: { after: :invoice_due_at, allow_blank: true, type: :date },
                      if: :invoice_remindable?
@@ -33,17 +34,7 @@ class PaymentReminder < ActiveRecord::Base
 
   delegate :due_at, :remindable?, to: :invoice, prefix: true
 
-  scope :list, -> { order(created_at: :desc) }
-
-  def multi_create(invoices)
-    PaymentReminder.transaction do
-      invoices.all? do |invoice|
-        attributes = invoice.payment_reminder_attributes.merge(message: message)
-        reminder = self.class.new(attributes)
-        reminder.save
-      end || (raise ActiveRecord::Rollback)
-    end
-  end
+  scope :list, -> { order(:level) }
 
   def to_s
     I18n.l(due_at)
@@ -56,7 +47,7 @@ class PaymentReminder < ActiveRecord::Base
   private
 
   def update_invoice
-    invoice.update(state: :overdue, due_at: due_at)
+    invoice.update(state: :reminded, due_at: due_at)
   end
 
   def assert_invoice_remindable

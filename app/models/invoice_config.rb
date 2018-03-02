@@ -27,11 +27,12 @@ class InvoiceConfig < ActiveRecord::Base
   belongs_to :group, class_name: 'Group'
   belongs_to :contact, class_name: 'Person'
 
+  has_many :payment_reminder_configs, dependent: :destroy
+
   validates :group_id, uniqueness: true
   validates :address, presence: true, on: :update
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
-
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :without_reference?
@@ -45,6 +46,7 @@ class InvoiceConfig < ActiveRecord::Base
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
 
+  accepts_nested_attributes_for :payment_reminder_configs
 
   validates_by_schema
 

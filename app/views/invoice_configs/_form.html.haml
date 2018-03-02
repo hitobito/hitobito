@@ -5,20 +5,15 @@
 
 = standard_form(entry, url: [parent, :invoice_config]) do |f|
   = f.error_messages
-  = f.labeled_person_field(:contact)
-  = f.labeled_input_field :due_days
-  = f.labeled_input_field :payment_information
 
-  %hr
-  = f.labeled(:payment_slip) do
-    = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
+  = render 'form_tabs'
 
-  = f.labeled_input_field :beneficiary
-  = f.labeled_input_field :participant_number, help: t('.account_number_example')
+  .tab-content
+    #general.tab-pane.active
+      = render 'general_fields', f: f
 
-  = f.labeled_input_field :payee
-  = f.labeled_input_field :address
-  = f.labeled_input_field :account_number, help: t('.account_number_example')
-  = f.labeled_input_field :iban, help: t('.iban_example')
+    #reminders.tab-pane
+      = f.fields_for(:payment_reminder_configs) do |ff|
+        = render 'reminder_fields', f: ff
 
   = save_form_buttons(f, nil, group_invoice_config_path(parent))

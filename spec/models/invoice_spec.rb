@@ -14,6 +14,12 @@ describe Invoice do
   let(:other_person)   { people(:bottom_member) }
   let(:invoice_config) { group.invoice_config }
 
+  it 'sorts by sequence_number and it''s length' do
+    invoices(:invoice).update_columns(sequence_number: '1-10')
+    invoices(:sent).update_columns(sequence_number: '1-2')
+    expect(Invoice.list).to eq [invoices(:sent), invoices(:invoice)]
+  end
+
   it 'saving requires group, title and recipient' do
     invoice = create_invoice
     expect(invoice).to be_valid
@@ -149,7 +155,7 @@ describe Invoice do
   end
 
   context '#remindable?' do
-    %w(sent overdue reminded).each do |state|
+    %w(issued sent reminded).each do |state|
       it "#{state} invoice is remindable" do
         expect(Invoice.new(state: state)).to be_remindable
       end

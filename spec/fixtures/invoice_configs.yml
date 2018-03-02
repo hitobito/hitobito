@@ -3,12 +3,18 @@
 # Table name: invoice_configs
 #
 #  id                  :integer          not null, primary key
-#  group_id            :integer          not null
-#  contact_id          :integer
 #  sequence_number     :integer          default(1), not null
 #  due_days            :integer          default(30), not null
-#  address             :text
-#  payment_information :text
+#  group_id            :integer          not null
+#  contact_id          :integer
+#  address             :text(65535)
+#  payment_information :text(65535)
+#  account_number      :string(255)
+#  iban                :string(255)
+#  payment_slip        :string(255)      default("ch_es"), not null
+#  beneficiary         :text(65535)
+#  payee               :text(65535)
+#  participant_number  :string(255)
 #
 
 top_layer:

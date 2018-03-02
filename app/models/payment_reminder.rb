@@ -10,10 +10,12 @@
 #
 #  id         :integer          not null, primary key
 #  invoice_id :integer          not null
-#  message    :text(65535)
 #  due_at     :date             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  title      :string(255)
+#  text       :string(255)
+#  level      :integer
 #
 
 class PaymentReminder < ActiveRecord::Base

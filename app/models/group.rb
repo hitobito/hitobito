@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: groups
@@ -13,14 +12,14 @@
 #  parent_id                   :integer
 #  lft                         :integer
 #  rgt                         :integer
-#  name                        :string           not null
+#  name                        :string(255)      not null
 #  short_name                  :string(31)
-#  type                        :string           not null
-#  email                       :string
+#  type                        :string(255)      not null
+#  email                       :string(255)
 #  address                     :string(1024)
 #  zip_code                    :integer
-#  town                        :string
-#  country                     :string
+#  town                        :string(255)
+#  country                     :string(255)
 #  contact_id                  :integer
 #  created_at                  :datetime
 #  updated_at                  :datetime

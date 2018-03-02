@@ -10,10 +10,11 @@
 #
 #  id               :integer          not null, primary key
 #  event_id         :integer
-#  question         :string
-#  choices          :string
+#  question         :string(255)
+#  choices          :string(255)
 #  multiple_choices :boolean          default(FALSE)
 #  required         :boolean
+#  admin            :boolean          default(FALSE), not null
 #
 
 Fabricator(:event_question, class_name: 'Event::Question') do

@@ -13,9 +13,14 @@
 #  due_days            :integer          default(30), not null
 #  group_id            :integer          not null
 #  contact_id          :integer
-#  page_size           :integer          default(15)
 #  address             :text(65535)
 #  payment_information :text(65535)
+#  account_number      :string(255)
+#  iban                :string(255)
+#  payment_slip        :string(255)      default("ch_es"), not null
+#  beneficiary         :text(65535)
+#  payee               :text(65535)
+#  participant_number  :string(255)
 #
 
 class InvoiceConfig < ActiveRecord::Base

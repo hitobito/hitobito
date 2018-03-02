@@ -30,7 +30,7 @@ class InvoicesController < CrudController
 
   def index
     respond_to do |format|
-      format.html { populate_list_form_objects; super }
+      format.html { super }
       format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
       format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
     end
@@ -39,7 +39,7 @@ class InvoicesController < CrudController
   def show
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
-      format.html { populate_show_form_objects }
+      format.html { build_payment }
       format.pdf  { generate_pdf([entry]) }
       format.csv  { render_invoices_csv([entry]) }
     end
@@ -53,19 +53,9 @@ class InvoicesController < CrudController
 
   private
 
-  def populate_list_form_objects
-    @reminder = PaymentReminder.new
-    @reminder_valid = true
-  end
-
-  def populate_show_form_objects
-    if entry.remindable?
-      @reminder = entry.payment_reminders.build(reminder_attrs)
-      @reminder_valid = reminder_attrs ? @reminder.valid? : true
-
-      @payment = entry.payments.build(payment_attrs)
-      @payment_valid = payment_attrs ? @payment.valid? : true
-    end
+  def build_payment
+    @payment = entry.payments.build(payment_attrs)
+    @payment_valid = payment_attrs ? @payment.valid? : true
   end
 
   def generate_pdf(invoices)
@@ -103,13 +93,11 @@ class InvoicesController < CrudController
   end
 
   def list_entries
-    scope = super.includes(recipient: [:groups, :roles]).references(:recipient).list
+    scope = super.
+      includes(:payment_reminders,
+               recipient: [:groups, :roles]).references(:recipient).list
     scope = scope.page(params[:page]).per(50)
     Invoice::Filter.new(params).apply(scope)
-  end
-
-  def reminder_attrs
-    @reminder_attrs ||= flash[:payment_reminder] || entry.payment_reminder_attributes
   end
 
   def payment_attrs

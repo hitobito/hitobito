@@ -31,8 +31,8 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
-  STATES = %w(draft issued sent payed overdue reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent overdue reminded).freeze
+  STATES = %w(draft issued sent payed reminded cancelled).freeze
+  STATES_REMINDABLE = %w(issued sent reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
@@ -64,10 +64,10 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,           -> { order(:sequence_number) }
-  scope :one_day,        -> { where('due_at < ?', 1.day.ago.to_date) }
-  scope :one_week,       -> { where('due_at < ?', 1.week.ago.to_date) }
-  scope :one_month,      -> { where('due_at < ?', 1.month.ago.to_date) }
+  scope :list,           -> { order('LENGTH(sequence_number), sequence_number') }
+  scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
+  scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
+  scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 
@@ -112,10 +112,6 @@ class Invoice < ActiveRecord::Base
     "#{title}(#{sequence_number}): #{total}"
   end
 
-  def reminder_sent?
-    payment_reminders.present?
-  end
-
   def remindable?
     STATES_REMINDABLE.include?(state)
   end
@@ -148,8 +144,8 @@ class Invoice < ActiveRecord::Base
     payments.sum(:amount)
   end
 
-  def payment_reminder_attributes
-    { invoice_id: id, due_at: I18n.l(due_at + invoice_config.due_days.days) }
+  def overdue?
+    due_at && due_at < Time.zone.today
   end
 
   private

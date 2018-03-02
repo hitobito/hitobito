@@ -154,9 +154,9 @@ de:
     pdf: 'PDF'
 
   dropdown/invoice_sending:
-    button: 'Rechnung stellen'
-    state: 'Status setzen'
-    mail: 'Status setzen und per E-Mail verschicken'
+    button: 'Rechnung stellen / mahnen'
+    set_state: 'Status setzen (Gestellt/Gemahnt)'
+    send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
 
   devise:
     failure:
@@ -597,8 +597,8 @@ de:
     add: Externe Rechnung erstellen
     issued: Rechnung gestellt
     sent: Rechnung versendet
-    reminder_sent: Mahnung versendet
-    payd: bezahlt
+    reminder_sent: Mahnung versendet, fällig am %{date} (%{title})
+    payed: bezahlt
     destroy:
       flash:
         success: Rechnung wurde storniert.
@@ -610,6 +610,8 @@ de:
       due_at: Fällig bis
 
   invoice_configs:
+    form_tabs:
+      general: Allgemein
     update:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
@@ -626,16 +628,35 @@ de:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
-      zero: 'Es muss mindestens eine Rechnung im Status "Entwurf" ausgewählt werden.'
-      one: "Rechnung wurde gestellt."
-      other: "%{count} Rechnungen wurden gestellt."
-      background_send:
-        zero: "Es werden keine Rechnungen per E-Mail verschickt."
-        one: "Rechnung wird im Hintergrund per E-Mail verschickt."
+      zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
+      issued:
+        one: "Rechnung %{number} wurde gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
+      reminded:
+        one: "Rechnung %{number} wurde gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
+      send_notification:
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
         other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
-      error:
-        no_mail: "Rechnung %{number} an %{name} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
-        not_draft: "Rechnung %{number} wurde bereits verschickt."
+      invalid_state:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      issued_invalid:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      sent_invalid:
+        one: "Rechnung %{number} wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
+      payed_invalid:
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
+      reminded_invalid:
+        one: "Mahnung %{number} wurde bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
+      recipient_email_invalid:
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."

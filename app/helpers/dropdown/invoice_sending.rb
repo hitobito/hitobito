@@ -25,8 +25,8 @@ module Dropdown
     end
 
     def send_links
-      add_item(:state, mail: false)
-      add_item(:mail,  mail: true)
+      add_item(:set_state, mail: false)
+      add_item(:send_mail, mail: true)
     end
 
     def add_item(key, options = {})

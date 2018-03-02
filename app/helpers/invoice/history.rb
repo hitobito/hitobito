@@ -31,20 +31,14 @@ class Invoice::History
   private
 
   def invoice_reminder_rows
-    if invoice.reminder_sent?
-      invoice.payment_reminders.collect.with_index do |reminder, count|
-        next unless reminder.persisted?
-        invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
-      end
+    invoice.payment_reminders.list.collect.with_index do |reminder, count|
+      invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
     end
   end
 
   def invoice_payment_rows
-    if invoice.payments.present?
-      invoice.payments.collect do |payment|
-        next unless payment.persisted?
-        invoice_history_entry(payment_data(payment), 'green')
-      end
+    invoice.payments.list.collect do |payment|
+      invoice_history_entry(payment_data(payment), 'green')
     end
   end
 
@@ -61,7 +55,7 @@ class Invoice::History
     if invoice.issued_at?
       [
         '⬤', # Middle Dot
-        l(invoice.issued_at, format: :long),
+        long_date(invoice.issued_at),
         t('invoices.issued')
       ]
     end
@@ -71,7 +65,7 @@ class Invoice::History
     if invoice.sent_at?
       [
         '⬤', # Middle Dot
-        l(invoice.sent_at, format: :long),
+        long_date(invoice.sent_at),
         t('invoices.sent')
       ]
     end
@@ -80,16 +74,22 @@ class Invoice::History
   def reminder_sent_data(reminder, count)
     [
       '⬤', # Middle Dot
-      l(reminder.created_at.to_date, format: :long),
-      "#{count}. #{t('invoices.reminder_sent')}"
+      long_date(reminder.created_at.to_date),
+      "#{count}. #{t('invoices.reminder_sent',
+                     title: reminder.title,
+                     date: long_date(reminder.due_at))}"
     ]
   end
 
   def payment_data(payment)
     [
       '⬤', # Middle Dot
-      l(payment.received_at, format: :long),
-      "#{number_to_currency(payment.amount)} #{t('invoices.payd')}"
+      long_date(payment.received_at),
+      "#{number_to_currency(payment.amount)} #{t('invoices.payed')}"
     ]
+  end
+
+  def long_date(date)
+    l(date, format: :long)
   end
 end

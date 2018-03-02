@@ -17,7 +17,7 @@ class Invoice::BatchUpdate
   def call
     invoices.each do |invoice|
       state = next_state(invoice)
-      next result.track_error(:invalid_state, invoice) unless state
+      next result.track_error("#{invoice.state}_invalid", invoice) unless state
 
       update(invoice, state)
     end

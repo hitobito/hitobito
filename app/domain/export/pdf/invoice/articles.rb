@@ -7,19 +7,31 @@
 
 module Export::Pdf::Invoice
   class Articles < Section
+    attr_reader :reminder
 
-    def render
+    def render # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      reminder = invoice.payment_reminders.last
+
       bounding_box([0, 510], width: bounds.width) do
-        font_size(12) { text invoice.title }
-        pdf.move_down 10
-        pdf.font_size(8) do
-          articles_table
+        font_size(12) { text title(reminder) }
+
+        if reminder
+          pdf.move_down 8
+          font_size(10) { text reminder.text }
         end
+
+        pdf.move_down 10
+        pdf.font_size(8) { articles_table }
       end
+
       total_box
     end
 
     private
+
+    def title(reminder)
+      reminder ? "#{reminder.title} - #{invoice.title}" : invoice.title
+    end
 
     def articles_table
       table articles, header: true, column_widths: { 0 => 290, 1 => 50, 2 => 60, 3 => 80 },
@@ -34,7 +46,6 @@ module Export::Pdf::Invoice
         style(columns(1..3), align: :right)
       end
     end
-
 
     def articles
       [

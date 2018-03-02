@@ -16,7 +16,7 @@ Fabricator(:invoice_article) do
 end
 
 Fabricator(:payment_reminder) do
-  title    { Faker::Lorem.words }
-  text     { Faker::Lorem.words }
+  title    { Faker::Lorem.sentence }
+  text     { Faker::Lorem.sentence(10) }
   level    { 1 }
 end

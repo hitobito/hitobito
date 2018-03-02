@@ -84,7 +84,7 @@ class Invoice::BatchUpdate
       enqueue_send_job(invoice)
       result.track_update(:send_notification, invoice)
     else
-      result.track_error(:recipient_email, invoice)
+      result.track_error(:recipient_email_invalid, invoice)
     end
   end
 

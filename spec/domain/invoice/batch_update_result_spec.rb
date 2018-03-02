@@ -39,5 +39,22 @@ describe Invoice::BatchUpdateResult do
                                   '2 Rechnungen werden im Hintergrund per E-Mail verschickt.']
   end
 
+  it 'tracks single invoice which could not be sent' do
+    subject.track_update(:recipient_email_invalid, draft)
+    expect(subject.notice).to eq ["Rechnung #{draft.sequence_number} konnte nicht " \
+                                  "verschickt werden, da keine Empfänger E-Mail " \
+                                  "hinterlegt ist."]
+
+  end
+
+  it 'tracks multiple invoices which could not be sent' do
+    subject.track_update(:recipient_email_invalid, draft)
+    subject.track_update(:recipient_email_invalid, sent)
+    expect(subject.notice).to eq ["2 Rechnungen konnten nicht " \
+                                  "verschickt werden, da keine Empfänger E-Mails " \
+                                  "hinterlegt sind."]
+
+  end
+
 end
 

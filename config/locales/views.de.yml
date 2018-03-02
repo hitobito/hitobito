@@ -641,9 +641,6 @@ de:
       invalid_state:
         one: "Rechnung %{number} wurde bereits gestellt."
         other: "%{count} Rechnungen wurde bereits gestellt."
-      invalid_recipient:
-        one: "Rechnung %{number} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
-        other: "%{count} Rechnungen können nicht verschickt werden, da keine E-Mails hinterlegt sind."
       issued_invalid:
         one: "Rechnung %{number} wurde bereits gestellt."
         other: "%{count} Rechnungen wurde bereits gestellt."
@@ -656,6 +653,10 @@ de:
       reminded_invalid:
         one: "Mahnung %{number} wurde bereits erstellt."
         other: "%{count} Mahnungen wurden bereits erstellt."
+      recipient_email_invalid:
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."

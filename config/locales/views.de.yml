@@ -630,7 +630,7 @@ de:
       issued:
         one: "Rechnung %{number} wurde gestellt."
         other: "%{count} Rechnungen wurden gestellt."
-      overdue:
+      reminded:
         one: "Rechnung %{number} wurde gemahnt."
         other: "%{count} Rechnungen wurden gemahnt."
       send_notification:
@@ -642,6 +642,18 @@ de:
       invalid_recipient:
         one: "Rechnung %{number} kann nicht verschickt werden, da keine E-Mail hinterlegt ist."
         other: "%{count} Rechnungen können nicht verschickt werden, da keine E-Mails hinterlegt sind."
+      issued_invalid:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      sent_invalid:
+        one: "Rechnung %{number} wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
+      payed_invalid:
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
+      reminded_invalid:
+        one: "Mahnung %{number} wurde bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."

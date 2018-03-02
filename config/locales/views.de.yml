@@ -610,6 +610,8 @@ de:
       due_at: Fällig bis
 
   invoice_configs:
+    form_tabs:
+      general: Allgemein
     update:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert

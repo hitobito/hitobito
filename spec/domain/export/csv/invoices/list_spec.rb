@@ -42,7 +42,7 @@ describe Export::Tabular::Invoices::List do
      its(['MWSt.']) { should == '0.00 CHF' }
      its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
-     its(['Empfänger E-Mail']) { should == nil }
+     its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }
      its(['Empfänger Adresse']) { should == nil }
      its(['Verschickt am']) { should == nil }
@@ -64,7 +64,7 @@ describe Export::Tabular::Invoices::List do
      its(['MWSt.']) { should == '0.00 CHF' }
      its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
-     its(['Empfänger E-Mail']) { should == nil }
+     its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }
      its(['Empfänger Adresse']) { should == nil }
    end

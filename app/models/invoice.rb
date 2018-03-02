@@ -65,9 +65,9 @@ class Invoice < ActiveRecord::Base
   validates_by_schema
 
   scope :list,           -> { order(:sequence_number) }
-  scope :one_day,        -> { where('due_at < ?', 1.day.ago.to_date) }
-  scope :one_week,       -> { where('due_at < ?', 1.week.ago.to_date) }
-  scope :one_month,      -> { where('due_at < ?', 1.month.ago.to_date) }
+  scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
+  scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
+  scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 

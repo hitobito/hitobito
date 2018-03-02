@@ -14,3 +14,9 @@ Fabricator(:invoice_article) do
   name      { Faker::Commerce.product_name }
   unit_cost { Faker::Commerce.price }
 end
+
+Fabricator(:payment_reminder) do
+  title    { Faker::Lorem.words }
+  text     { Faker::Lorem.words }
+  level    { 1 }
+end

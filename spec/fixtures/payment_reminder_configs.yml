@@ -1,20 +1,19 @@
-top_layer_first:
-  invoice_config: top_layer
+bottom_layer_one_first:
+  invoice_config: bottom_layer_one
   text: text
   title: title
   level: 1
   due_days: 10
 
-top_layer_second:
-  invoice_config: top_layer
+bottom_layer_one_second:
+  invoice_config: bottom_layer_one
   text: text
   title: title
   level: 2
   due_days: 10
 
-
-top_layer_third:
-  invoice_config: top_layer
+bottom_layer_one_third:
+  invoice_config: bottom_layer_one
   text: text
   title: title
   level: 3

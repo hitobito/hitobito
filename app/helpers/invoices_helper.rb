@@ -14,7 +14,10 @@ module InvoicesHelper
            when /payed/ then 'success'
            when /reminded/ then 'important'
            end
-    badge(invoice.state_label, type)
+
+    text = invoice.state_label
+    text << " (#{invoice.payment_reminders.list.last.title})" if invoice.reminded?
+    badge(text, type)
   end
 
   def invoice_due_since_options

@@ -12,7 +12,7 @@ class Payment < ActiveRecord::Base
   before_validation :set_received_at
   after_create :update_invoice
 
-  scope :list, -> { order(created_at: :desc) }
+  scope :list, -> { order(received_at: :desc) }
 
   validates_by_schema
 

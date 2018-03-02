@@ -64,7 +64,7 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,           -> { order(:sequence_number) }
+  scope :list,           -> { order('LENGTH(sequence_number), sequence_number') }
   scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
   scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
   scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }

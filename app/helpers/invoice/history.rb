@@ -31,20 +31,14 @@ class Invoice::History
   private
 
   def invoice_reminder_rows
-    if invoice.reminder_sent?
-      invoice.payment_reminders.collect.with_index do |reminder, count|
-        next unless reminder.persisted?
-        invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
-      end
+    invoice.payment_reminders.list.collect.with_index do |reminder, count|
+      invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
     end
   end
 
   def invoice_payment_rows
-    if invoice.payments.present?
-      invoice.payments.collect do |payment|
-        next unless payment.persisted?
-        invoice_history_entry(payment_data(payment), 'green')
-      end
+    invoice.payments.list.collect do |payment|
+      invoice_history_entry(payment_data(payment), 'green')
     end
   end
 
@@ -89,7 +83,7 @@ class Invoice::History
     [
       '⬤', # Middle Dot
       l(payment.received_at, format: :long),
-      "#{number_to_currency(payment.amount)} #{t('invoices.payd')}"
+      "#{number_to_currency(payment.amount)} #{t('invoices.payed')}"
     ]
   end
 end

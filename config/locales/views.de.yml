@@ -595,9 +595,9 @@ de:
         one_week: Einer Woche
         one_month: Einem Monat
     add: Externe Rechnung erstellen
-    issued: Rechnung gestellt, fällig am %{date}
+    issued: Rechnung gestellt
     sent: Rechnung versendet
-    reminder_sent: Mahnung versendet
+    reminder_sent: Mahnung versendet, fällig am %{date} (%{title})
     payed: bezahlt
     destroy:
       flash:

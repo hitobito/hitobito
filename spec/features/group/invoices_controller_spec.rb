@@ -53,23 +53,20 @@ describe InvoicesController do
     end
 
     it 'creates payment reminder for multiple resources', js: true do
-      invoices(:invoice).update(state: :issued)
+      Invoice.update_all(state: :issued, due_at: 1.day.ago)
       visit group_invoices_path(group)
       check 'all'
-      click_link 'Mahnung erstellen'
-      click_button 'Speichern'
-      expect(page).to have_content(/2 Mahnungen wurden erfolgreich erstellt/)
+      click_link 'Rechnung stellen / mahnen'
+      click_link 'Status setzen (Gestellt/Gemahnt)'
+      expect(page).to have_content(/2 Rechnungen wurden gemahnt/)
     end
 
     it 'creates payment reminders', js: true do
-      invoice = invoices(:sent)
+      Invoice.update_all(state: :issued, due_at: 1.day.ago)
       visit group_invoice_path(group, invoice)
-      expect(page).not_to have_css('#new_payment_reminder')
-      click_link 'Mahnung erstellen'
-      fill_in 'Fällig am', with: invoice.due_at + 2.weeks
-      click_button 'Speichern'
-      expect(page).to have_content(/Mahnung wurde erfolgreich erstellt/)
-      expect(page).not_to have_css('#new_payment_reminder')
+      click_link 'Rechnung stellen / mahnen'
+      click_link 'Status setzen (Gestellt/Gemahnt)'
+      expect(page).to have_content(/Rechnung \d+-\d+ wurde gemahnt/)
     end
   end
 

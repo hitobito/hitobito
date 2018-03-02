@@ -26,7 +26,7 @@ describe PaymentReminder do
   it 'creating a payment_reminder updates invoice' do
     due_at = sent.due_at + 2.weeks
     expect do
-      sent.payment_reminders.create!(due_at: due_at)
+      Fabricate(:payment_reminder, invoice: sent, due_at: due_at)
     end.to change { [sent.due_at, sent.state] }
     expect(sent.due_at).to eq due_at
     expect(sent.state).to eq 'reminded'

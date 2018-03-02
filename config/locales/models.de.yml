@@ -675,6 +675,7 @@ de:
           ch_esr: Oranger Einzahlungsschein Post (CH)
           ch_besr: Oranger Einzahlungsschein Bank (CH)
         participant_number: Teilnehmernummer
+        payment_reminder_configs: Mahnungen
 
       invoice_item:
         name: Name
@@ -693,6 +694,16 @@ de:
         invoice: Rechnung
         message: Nachricht
         due_at: Fällig am
+
+      payment_reminder_config:
+        title: Titel
+        text: Text
+        due_days: Tage bis Fällig
+
+      payment_reminder_configs:
+        title: Titel der Mahnung
+        text: Text der Mahnung
+        due_days: Fälligkeitszeitraum der Mahnung
 
   errors:
     messages:

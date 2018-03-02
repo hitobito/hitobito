@@ -11,7 +11,7 @@
 #  id      :integer          not null, primary key
 #  head_id :integer          not null
 #  tail_id :integer          not null
-#  kind    :string           not null
+#  kind    :string(255)      not null
 #
 
 # Relates two people together. Every relation has an opposite that is created,

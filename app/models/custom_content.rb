@@ -9,9 +9,9 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
+#  key                   :string(255)      not null
+#  placeholders_required :string(255)
+#  placeholders_optional :string(255)
 #
 
 class CustomContent < ActiveRecord::Base

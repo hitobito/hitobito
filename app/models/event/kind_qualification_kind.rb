@@ -11,8 +11,8 @@
 #  id                    :integer          not null, primary key
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
-#  category              :string           not null
-#  role                  :string           not null
+#  category              :string(255)      not null
+#  role                  :string(255)      not null
 #  grouping              :integer
 #
 

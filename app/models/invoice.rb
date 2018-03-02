@@ -144,6 +144,10 @@ class Invoice < ActiveRecord::Base
     payments.sum(:amount)
   end
 
+  def overdue?
+    due_at && due_at < Time.zone.today
+  end
+
   private
 
   def multi_create_attributes(recipient)

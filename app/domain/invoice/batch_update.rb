@@ -34,8 +34,7 @@ class Invoice::BatchUpdate
       update_state(invoice, state)
     end
 
-    due_at = next_due_at(invoice)
-    create_reminder(invoice, due_at) if due_at
+    create_reminder(invoice) if invoice.overdue?
   end
 
   def next_state(invoice)
@@ -43,7 +42,7 @@ class Invoice::BatchUpdate
       send_email? ? 'sent' : 'issued'
     elsif invoice.issued? && send_email?
       'sent'
-    elsif next_due_at(invoice)
+    elsif invoice.overdue?
       'reminded'
     end
   end
@@ -53,10 +52,15 @@ class Invoice::BatchUpdate
     today + invoice.invoice_config.due_days.days if invoice.due_at < today
   end
 
-  def create_reminder(invoice, due_at)
-    unless invoice.payment_reminders.where(due_at: due_at).exists?
-      invoice.payment_reminders.create!(due_at: due_at)
-    end
+  def create_reminder(invoice)
+    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config)
+    invoice.payment_reminders.create!(attributes)
+  end
+
+  def payment_reminder_attrs(reminders, config)
+    next_level = [3, reminders.size + 1].min
+    config = config.payment_reminder_configs.find_by(level: next_level)
+    config.slice('title', 'text', 'level').merge(due_at: Time.zone.today + config.due_days)
   end
 
   def update_state(invoice, state)

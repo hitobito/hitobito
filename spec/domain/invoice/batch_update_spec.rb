@@ -42,9 +42,9 @@ describe Invoice::BatchUpdate do
   end
 
   it 'changes overdue invoice to state reminded, creates first reminder' do
-    sent.update(state: :overdue, due_at: 31.days.ago)
+    sent.update_columns(due_at: 31.days.ago)
     expect do
-      expect { update([sent]) }.not_to change { sent.state }
+      expect { update([sent]) }.to change { sent.state }.to 'reminded'
     end.to change { sent.payment_reminders.size }.by(1)
     expect(results.notice).to have(1).item
   end
@@ -66,25 +66,18 @@ describe Invoice::BatchUpdate do
 
   context 'reminders' do
     it 'creates first reminder for overdue invoice' do
-      sent.update(state: :overdue, due_at: 31.days.ago)
+      sent.update_columns(due_at: 31.days.ago)
       expect do
         expect do
-          expect { update([sent], person) }.not_to change { sent.state }
+          expect { update([sent], person) }.to change { sent.state }.to 'reminded'
         end.to change { sent.payment_reminders.size }.by(1)
       end.to change { Delayed::Job.count }.by(1)
       expect(results.notice).to have(2).items
+      expect(sent.payment_reminders.first.level).to eq 1
     end
 
     it 'does not create another reminder if overdue invoice is not yet due' do
-      sent.update(state: :overdue, due_at: 10.days.from_now)
-      expect do
-        expect { update([sent]) }.not_to change { sent.state }
-      end.not_to change { sent.payment_reminders.size }
-      expect(results.alert).to have(1).item
-    end
-
-    it 'does not create another reminder if one exists for that date' do
-      sent.payment_reminders.create!(due_at: 30.days.from_now)
+      sent.update(state: :reminded, due_at: 10.days.from_now)
       expect do
         expect { update([sent]) }.not_to change { sent.state }
       end.not_to change { sent.payment_reminders.size }
@@ -92,13 +85,14 @@ describe Invoice::BatchUpdate do
     end
 
     it 'does create another reminder if overdue invoice is overdue again' do
-      sent.payment_reminders.create!(due_at: 30.days.from_now)
+      Fabricate(:payment_reminder, invoice: sent, due_at: 30.days.from_now)
       expect do
         travel_to 31.days.from_now do
           expect { update([sent]) }.not_to change { sent.state }
         end
       end.to change { sent.payment_reminders.size }.by(1)
       expect(sent.payment_reminders).to have(2).items
+      expect(sent.payment_reminders.last.level).to eq 2
       expect(results.notice).to have(1).item
     end
   end

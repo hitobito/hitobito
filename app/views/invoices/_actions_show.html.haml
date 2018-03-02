@@ -3,15 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if can?(:update, entry)
-  = invoice_sending_dropdown(:group_invoice_list_path) unless entry.payed?
-  = button_action_edit
-
+= invoice_sending_dropdown(:group_invoice_list_path) unless entry.payed?
+= button_action_edit
 = invoices_export_dropdown
 = invoices_print_dropdown
+= button_action_destroy
 
-= button_action_destroy if can?(:destroy, entry)
-
-- if can?(:update, entry)
+- unless entry.draft? || entry.payed?
   = action_button(t('crud.new.title', model: Payment.model_name.human),
     '#', :plus, { data: { turbolinks: false, toggle: 'collapse', target: '#payment' } })

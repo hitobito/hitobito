@@ -23,7 +23,7 @@ class PaymentReminder < ActiveRecord::Base
   belongs_to :invoice
 
   validate :assert_invoice_remindable
-  validates :level, uniqueness: { scope: :invoice_id }, inclusion: (1..3)
+  validates :level, inclusion: (1..3)
   validates :due_at, uniqueness: { scope: :invoice_id },
                      timeliness: { after: :invoice_due_at, allow_blank: true, type: :date },
                      if: :invoice_remindable?

@@ -65,7 +65,7 @@ describe Invoice::BatchUpdate do
   end
 
   context 'reminders' do
-    it 'creates first reminder for overdue invoice' do
+    it 'creates 1st reminder for overdue invoice' do
       sent.update_columns(due_at: 31.days.ago)
       expect do
         expect do
@@ -76,7 +76,7 @@ describe Invoice::BatchUpdate do
       expect(sent.payment_reminders.first.level).to eq 1
     end
 
-    it 'does not create another reminder if overdue invoice is not yet due' do
+    it 'does not create 2nd reminder invoice is not yet due' do
       sent.update(state: :reminded, due_at: 10.days.from_now)
       expect do
         expect { update([sent]) }.not_to change { sent.state }
@@ -84,7 +84,7 @@ describe Invoice::BatchUpdate do
       expect(results.alert).to have(1).item
     end
 
-    it 'does create another reminder if overdue invoice is overdue again' do
+    it 'creates 2nd reminder for overdue invoice' do
       Fabricate(:payment_reminder, invoice: sent, due_at: 30.days.from_now)
       expect do
         travel_to 31.days.from_now do
@@ -93,6 +93,33 @@ describe Invoice::BatchUpdate do
       end.to change { sent.payment_reminders.size }.by(1)
       expect(sent.payment_reminders).to have(2).items
       expect(sent.payment_reminders.last.level).to eq 2
+      expect(results.notice).to have(1).item
+    end
+
+    it 'creates 3rd reminder for overdue invoice' do
+      Fabricate(:payment_reminder, invoice: sent, due_at: 30.days.from_now)
+      Fabricate(:payment_reminder, invoice: sent, due_at: 40.days.from_now, level: 2)
+      expect do
+        travel_to 41.days.from_now do
+          expect { update([sent]) }.not_to change { sent.state }
+        end
+      end.to change { sent.payment_reminders.size }.by(1)
+      expect(sent.payment_reminders).to have(3).items
+      expect(sent.payment_reminders.last.level).to eq 3
+      expect(results.notice).to have(1).item
+    end
+
+    it 'creates 4th reminder for overdue invoice, does not increase level' do
+      Fabricate(:payment_reminder, invoice: sent, due_at: 30.days.from_now)
+      Fabricate(:payment_reminder, invoice: sent, due_at: 40.days.from_now, level: 2)
+      Fabricate(:payment_reminder, invoice: sent, due_at: 50.days.from_now, level: 3)
+      expect do
+        travel_to 51.days.from_now do
+          expect { update([sent]) }.not_to change { sent.state }
+        end
+      end.to change { sent.payment_reminders.size }.by(1)
+      expect(sent.payment_reminders).to have(4).items
+      expect(sent.payment_reminders.last.level).to eq 3
       expect(results.notice).to have(1).item
     end
   end

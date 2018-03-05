@@ -124,6 +124,10 @@ td {
   }
 }
 
+.form-subtitle {
+  margin-left: 180px;
+}
+
 select,
 textarea,
 input[type="text"],
@@ -271,7 +275,7 @@ textarea {
   .controls-row {
     border-bottom: 1px solid $grayLight;
     margin-bottom: 10px;
-    padding-top: 5px;
+    padding-top: 10px;
     padding-bottom: 5px;
   }
 
@@ -281,7 +285,8 @@ textarea {
 }
 
 .form-horizontal .controls .help-block {
-  margin: 0 0 10px 0;
+  margin: -8px 0 10px 0;
+  font-size: 90%;
 }
 
 .controls > .text {

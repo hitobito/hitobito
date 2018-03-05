@@ -6,6 +6,7 @@
 .person-tags-category-list {
   display: table-cell;
   padding-bottom: 6px;
+  vertical-align: top;
 
   &.hidden {
     display: none;
@@ -13,9 +14,10 @@
 }
 
 .person-tags-category-title {
-  padding-bottom: 20px;
-  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-right: 10px;
   text-align: right;
+  padding-top: 2px;
 }
 
 .person-tags-add-form {

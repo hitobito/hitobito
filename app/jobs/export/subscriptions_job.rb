@@ -13,7 +13,7 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
     super()
     @mailing_list_id = mailing_list_id
     @format          = format
-    @exporter        = Export::Tabular::People::PeopleAddress
+    @exporter        = Export::Tabular::People::Households
     @user_id         = user_id
     @tempfile_name   = "subscriptions-#{mailing_list_id}-#{format}-zip"
   end
@@ -29,10 +29,7 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
   end
 
   def entries
-    mailing_list.people.includes(:primary_group, :groups)
-                .order_by_name
-                .preload_public_accounts
-                .includes(roles: :group)
+    mailing_list.people.includes(:primary_group).order_by_name
   end
 
 end

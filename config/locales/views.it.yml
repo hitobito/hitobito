@@ -111,8 +111,6 @@ it:
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'
     everything: 'tutti i dati'
-    condense_labels: 'Evitare invii multipi'
-    condense_labels_hint: 'Indicare solo una registrazione se l''indirizzo e il cognome corrispondono.'
   devise:
     failure:
       already_authenticated: 'sei già iscritto.'

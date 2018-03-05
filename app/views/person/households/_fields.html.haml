@@ -1,0 +1,28 @@
+-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.labeled(:household_key, '&nbsp;'.html_safe) do
+  %label.checkbox
+    = check_box_tag(:household, 1, f.object.household_people.present?, class: 'inline')
+    %span= t('.lives_in_household_with')
+
+  .household_key_people
+    = render_household(f.object)
+    - f.object.household_people.each do |person|
+      = hidden_field_tag 'person[household_people_ids][]', person.id
+
+
+  - display_style = 'display: none' unless f.object.household_people.present?
+
+  = text_field_tag('q', nil,
+                  placeholder: I18n.t('global.search.placeholder_person'),
+                  style: display_style,
+                  data: { provide: 'entity',
+                          updater: 'HouseHolds.update',
+                          url: query_people_path(with_address: true) })
+
+  - if @invalid
+    .alert.alert-error= t('.update_denied', other_person: @other_person)
+

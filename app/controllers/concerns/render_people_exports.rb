@@ -10,7 +10,7 @@ module Concerns
     extend ActiveSupport::Concern
 
     def render_pdf(people, group = nil)
-      pdf = generate_pdf(condense_people(people), group)
+      pdf = generate_pdf(people, group)
       send_data pdf, type: :pdf, disposition: 'inline'
     rescue Prawn::Errors::CannotFit
       redirect_to :back, alert: t('people.pdf.cannot_fit')
@@ -27,14 +27,6 @@ module Concerns
     end
 
     private
-
-    def condense_people(people)
-      if params[:condense_labels] == 'true'
-        Person::CondensedContact.condense_list(people)
-      else
-        people
-      end
-    end
 
     def generate_pdf(people, group)
       if params[:label_format_id]

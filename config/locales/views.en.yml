@@ -110,8 +110,6 @@ en:
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
-    condense_labels: 'Avoid multiple entries for household'
-    condense_labels_hint: 'Only give one entry for multiple people with the same adress and family name. '
   devise:
     failure:
       already_authenticated: 'You are already registered.'

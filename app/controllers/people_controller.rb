@@ -17,7 +17,9 @@ class PeopleController < CrudController
                           :gender, :birthday, :additional_information,
                           :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS +
+                          [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
+
 
 
   # required to allow api calls
@@ -33,6 +35,9 @@ class PeopleController < CrudController
 
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
+
+  before_save :validate_household
+  after_save :persist_household
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
@@ -203,7 +208,8 @@ class PeopleController < CrudController
   end
 
   def render_tabular(format, entries, full)
-    exporter = full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    exporter = Export::Tabular::People::Households if params[:household]
+    exporter ||= full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
     send_data exporter.export(format, entries), type: format
   end
 
@@ -233,6 +239,18 @@ class PeopleController < CrudController
 
   def authorize_class
     authorize!(:index_people, group)
+  end
+
+  def validate_household
+    household.valid?
+  end
+
+  def persist_household
+    household.persist!
+  end
+
+  def household
+    @household ||= Person::Household.new(entry, current_ability)
   end
 
 end

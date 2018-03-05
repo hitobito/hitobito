@@ -139,10 +139,8 @@ de:
     pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
+    households: 'Haushaltsliste'
     everything: 'Alle Angaben'
-    condense_labels: 'Mehrfachsendungen vermeiden'
-    condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
-
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'
@@ -804,6 +802,13 @@ de:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
+    households:
+      form:
+        address_updated: "Adresse aktualisiert"
+      fields:
+        lives_in_household_with: "Wohnt im Haushalt mit"
+        update_denied: "Keine Schreibrechte für %{other_person}."
+
     csv_imports:
       description:
         header: CSV Dateien
@@ -937,6 +942,9 @@ de:
     attrs:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe
+
+    contact_data:
+      lives_in_household_with: Wohnt im Haushalt mit
 
     email_field:
       used_as_login: Wird als Login verwendet

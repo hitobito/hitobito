@@ -19,7 +19,11 @@ class Person::QueryController < ApplicationController
       people = decorate(people)
     end
 
-    render json: people.collect(&:as_typeahead)
+    if params.key?(:with_address)
+      render json: people.collect(&:as_typeahead_with_address)
+    else
+      render json: people.collect(&:as_typeahead)
+    end
   end
 
   private

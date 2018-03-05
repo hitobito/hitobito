@@ -23,15 +23,15 @@ module NavigationHelper
       active_for: %w(list_courses),
       if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
 
+    { label: :invoices,
+      url: :first_group_invoices_or_root_path,
+      if: ->(_) { current_user.finance_groups.any? },
+      active_for: %w(invoices invoice_articles invoice_config) },
+
     { label: :admin,
       url: :label_formats_path,
       active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
       if: ->(_) { can?(:index, LabelFormat) } },
-
-    { label: :invoices,
-      url: :first_group_invoices_or_root_path,
-      if: ->(_) { current_user.finance_groups.any? },
-      active_for: %w(invoices invoice_articles invoice_config) }
   ]
 
 

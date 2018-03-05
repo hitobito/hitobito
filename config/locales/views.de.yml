@@ -623,6 +623,8 @@ de:
       beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
       account_number_example: 'Beispiel: 01-162-5'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
+    reminder_fields:
+      third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
 
   invoice_lists:
     form:

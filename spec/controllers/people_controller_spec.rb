@@ -149,7 +149,7 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(0)
           end
         end
-        
+
         context '.vcf' do
           it 'exports vcf files' do
             e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
@@ -187,16 +187,6 @@ describe PeopleController do
             expect(cards[1]).to match(/^TEL;TYPE=office:789/)
             expect(cards[1]).not_to match(/^TEL.*:456/)
             expect(cards[1]).to match(/^BDAY:19781009/)
-          end
-
-          it 'exports household csv files' do
-            top_leader.update(household_key: 1)
-            @tg_member.update_attributes(household_key: 1, town: 'Supertown', zip_code: nil)
-            get :index, group_id: group, household: true, layer: true, format: :csv
-
-            expect(@response.content_type).to eq('text/csv')
-            expect(@response.body).to match(/^Name;Adresse;PLZ;Ort;Land;Hauptebene/)
-            expect(@response.body).to match(/Top Leader, Al Zoe;;;Supertown;;Top/)
           end
         end
 

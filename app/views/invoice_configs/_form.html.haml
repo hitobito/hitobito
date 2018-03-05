@@ -5,7 +5,6 @@
 
 = standard_form(entry, url: [parent, :invoice_config]) do |f|
   = f.error_messages
-
   = render 'form_tabs'
 
   .tab-content
@@ -15,5 +14,4 @@
     #reminders.tab-pane
       = f.fields_for(:payment_reminder_configs) do |ff|
         = render 'reminder_fields', f: ff
-
   = save_form_buttons(f, nil, group_invoice_config_path(parent))

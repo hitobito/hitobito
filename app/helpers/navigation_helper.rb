@@ -31,7 +31,7 @@ module NavigationHelper
     { label: :admin,
       url: :label_formats_path,
       active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
-      if: ->(_) { can?(:index, LabelFormat) } },
+      if: ->(_) { can?(:index, LabelFormat) } }
   ]
 
 

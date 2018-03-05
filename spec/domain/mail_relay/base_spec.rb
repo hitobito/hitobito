@@ -15,6 +15,12 @@ describe MailRelay::Base do
 
   let(:relay) { MailRelay::Base.new(message) }
 
+  before do
+    # we do not have custom content for report loaded in test env
+    allow_any_instance_of(DeliveryReportMailer).
+      to receive(:bulk_mail)
+  end
+
   describe '#receiver_from_received_header' do
     context 'simple' do
       let(:message) { simple }

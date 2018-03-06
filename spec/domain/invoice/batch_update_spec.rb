@@ -11,7 +11,6 @@ require 'spec_helper'
 describe Invoice::BatchUpdate do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:group)   { groups(:top_layer) }
   let(:person)  { people(:top_leader) }
   let(:draft)   { invoices(:invoice) }
   let(:sent)    { invoices(:sent) }
@@ -19,6 +18,12 @@ describe Invoice::BatchUpdate do
 
   def update(invoices, sender = nil)
     @results = Invoice::BatchUpdate.new(invoices, sender).call
+  end
+
+  it 'tracks invalid invoice_config' do
+    draft.group.invoice_config.payment_reminder_configs.destroy_all
+    expect { update([draft]) }.not_to change { draft.state }
+    expect(results.alert).to have(1).item
   end
 
   it 'changes invoice to state from draft to issued' do

@@ -50,6 +50,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :participant_number, presence: true, on: :update, if: :with_reference?
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
+  validate :assert_payment_reminder_configs
 
   accepts_nested_attributes_for :payment_reminder_configs
 
@@ -73,6 +74,12 @@ class InvoiceConfig < ActiveRecord::Base
     check_digit = splitted.pop
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
     errors.add(:account_number, :invalid_check_digit)
+  end
+
+  def assert_payment_reminder_configs
+    unless payment_reminder_configs.select(&:valid?).size == 3
+      errors.add(:payment_reminder_configs, :invalid)
+    end
   end
 
 end

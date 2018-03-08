@@ -654,9 +654,9 @@ de:
       recipient_email_invalid:
         one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
         other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
-      invoice_config_invalid:
-        one: "Rechnung %{number} konnte bearbeitet werden, da die Rechnungseinstellungen ungültig sind."
-        other: "%{count} Rechnungen konnten bearbeiten werden, da die Rechnungseinstellungen ungültig sind."
+      payment_reminders_missing:
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
 
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."

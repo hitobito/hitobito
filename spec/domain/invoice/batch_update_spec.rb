@@ -20,12 +20,6 @@ describe Invoice::BatchUpdate do
     @results = Invoice::BatchUpdate.new(invoices, sender).call
   end
 
-  it 'tracks invalid invoice_config' do
-    draft.group.invoice_config.payment_reminder_configs.destroy_all
-    expect { update([draft]) }.not_to change { draft.state }
-    expect(results.alert).to have(1).item
-  end
-
   it 'changes invoice to state from draft to issued' do
     expect { update([draft]) }.to change { draft.state }.to 'issued'
     expect(results.notice).to have(1).item
@@ -52,6 +46,13 @@ describe Invoice::BatchUpdate do
       expect { update([sent]) }.to change { sent.state }.to 'reminded'
     end.to change { sent.payment_reminders.size }.by(1)
     expect(results.notice).to have(1).item
+  end
+
+  it 'tracks error if no reminder can be issued because config is misisng' do
+    sent.group.invoice_config.payment_reminder_configs.destroy_all
+    sent.update_columns(due_at: 31.days.ago)
+    expect { update([sent]) }.not_to change { sent.state }
+    expect(results.alert).to have(1).item
   end
 
   it 'does not change non draft invoice' do

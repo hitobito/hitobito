@@ -18,7 +18,10 @@ class Invoice::BatchUpdate
     invoices.each do |invoice|
       state = next_state(invoice)
       next track_error("#{invoice.state}_invalid", invoice) unless state
-      next track_error('invoice_config_invalid', invoice) unless invoice.invoice_config.valid?
+
+      if state == 'reminded' && payment_reminders_missing?(invoice)
+        next track_error('payment_reminders_missing', invoice)
+      end
 
       update(invoice, state)
     end
@@ -27,6 +30,10 @@ class Invoice::BatchUpdate
   end
 
   private
+
+  def payment_reminders_missing?(invoice)
+    invoice.invoice_config.payment_reminder_configs.empty?
+  end
 
   def track_error(key, invoice)
     result.track_error(key, invoice)

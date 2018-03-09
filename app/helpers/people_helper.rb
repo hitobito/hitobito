@@ -56,4 +56,13 @@ module PeopleHelper
   def format_person_layer_group(person)
     person.layer_group_label
   end
+
+  def render_household(person)
+    safe_join(person.household_people.collect do |p|
+      content_tag(:li, class: 'chip') do
+        can?(:show, p) ? link_to(p, p) : p.to_s
+      end
+    end, "\n")
+  end
+
 end

@@ -139,10 +139,8 @@ de:
     pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
+    households: 'Haushaltsliste'
     everything: 'Alle Angaben'
-    condense_labels: 'Mehrfachsendungen vermeiden'
-    condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
-
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'
@@ -663,6 +661,9 @@ de:
       recipient_email_invalid:
         one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
         other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+      payment_reminders_missing:
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
 
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
@@ -719,6 +720,7 @@ de:
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
+      caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
       help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
 
   mailing_list_decorator:
@@ -728,6 +730,9 @@ de:
     subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
     anyone_may_not_post: 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    delivery_report: 'Absender erhalten ein E-Mail als Versandbestätigung'
+    no_delivery_report: 'Absender erhalten kein E-Mail als Versandbestätigung'
+
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 
@@ -806,6 +811,13 @@ de:
         mailing_list:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+
+    households:
+      form:
+        address_updated: "Adresse aktualisiert"
+      fields:
+        lives_in_household_with: "Wohnt im Haushalt mit"
+        update_denied: "Keine Schreibrechte für %{other_person}."
 
     csv_imports:
       description:
@@ -940,6 +952,9 @@ de:
     attrs:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe
+
+    contact_data:
+      lives_in_household_with: Wohnt im Haushalt mit
 
     email_field:
       used_as_login: Wird als Login verwendet

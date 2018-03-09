@@ -33,6 +33,7 @@ describe 'Dropdown::PeopleExport' do
     is_expected.to have_selector 'ul.dropdown-menu'
     is_expected.to have_selector 'a' do |tag|
       expect(tag).to have_content 'CSV'
+      expect(tag).to have_content 'Haushaltsliste'
       expect(tag).not_to have_selector 'ul.dropdown-submenu'
     end
     is_expected.to have_selector 'a' do |tag|

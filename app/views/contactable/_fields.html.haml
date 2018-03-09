@@ -4,7 +4,13 @@
 -#  https://github.com/hitobito/hitobito.
 
 = info_field_set_tag do
-  = render 'contactable/address_fields', f: f
+  - if entry.is_a?(Person)
+    %div{data: { household: true }}
+      = render 'contactable/address_fields', f: f
+      = render 'person/households/fields', f: f
+  - else
+    = render 'contactable/address_fields', f: f
+
 
 = render_extensions :address_fields, locals: { f: f }
 

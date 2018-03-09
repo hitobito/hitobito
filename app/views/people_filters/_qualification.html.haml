@@ -31,7 +31,7 @@
       = radio_button_tag(:match, 'all', params[:match] == 'all')
       = t('people_filters.simple_radio.match.all')
 
-= field_set_tag(t('.prompt_validity')) do
+= field_set_tag(t('.prompt_validity'), style: 'background-color: inherit') do
   = render 'simple_radio',
             attr: "filters[qualification][validity]",
             value: 'active',

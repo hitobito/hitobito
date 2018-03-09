@@ -11,7 +11,6 @@ require 'spec_helper'
 describe Invoice::BatchUpdate do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:group)   { groups(:top_layer) }
   let(:person)  { people(:top_leader) }
   let(:draft)   { invoices(:invoice) }
   let(:sent)    { invoices(:sent) }
@@ -47,6 +46,13 @@ describe Invoice::BatchUpdate do
       expect { update([sent]) }.to change { sent.state }.to 'reminded'
     end.to change { sent.payment_reminders.size }.by(1)
     expect(results.notice).to have(1).item
+  end
+
+  it 'tracks error if no reminder can be issued because config is misisng' do
+    sent.group.invoice_config.payment_reminder_configs.destroy_all
+    sent.update_columns(due_at: 31.days.ago)
+    expect { update([sent]) }.not_to change { sent.state }
+    expect(results.alert).to have(1).item
   end
 
   it 'does not change non draft invoice' do

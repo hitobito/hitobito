@@ -39,4 +39,15 @@ class MailingListDecorator < ApplicationDecorator
     html << h.tag(:br)
   end
 
+  def delivery_report_info
+    html = ''.html_safe
+    if !delivery_report
+      html << translate(:no_delivery_report).html_safe
+    else
+      html << translate(:delivery_report).html_safe
+    end
+    html << h.tag(:br)
+  end
+
+
 end

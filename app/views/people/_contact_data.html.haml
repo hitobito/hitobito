@@ -11,3 +11,9 @@
            contactable: person,
            postal: true,
            only_public: only_public
+
+  - if person.household_people.present?
+    %div
+      %small= t('.lives_in_household_with')
+      %br
+      = render_household(person)

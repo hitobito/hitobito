@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.boolean "anyone_may_post",                    default: false, null: false
     t.string  "preferred_labels",     limit: 255
     t.boolean "main_email",                         default: false
+    t.boolean "delivery_report",                    default: false, null: false
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree
@@ -436,10 +437,12 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.datetime "locked_at"
     t.string   "authentication_token",      limit: 255
     t.boolean  "show_global_label_formats",               default: true,  null: false
+    t.string   "household_key",             limit: 255
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token", using: :btree
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
+  add_index "people", ["household_key"], name: "index_people_on_household_key", using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 
   create_table "people_filters", force: :cascade do |t|

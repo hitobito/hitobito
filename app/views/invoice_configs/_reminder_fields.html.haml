@@ -1,4 +1,4 @@
-= field_set_tag "#{f.object.level}. #{PaymentReminder.model_name.human}" do
+= field_set_tag "#{f.object.level}. #{PaymentReminder.model_name.human}", style: 'margin-right: 0px' do
   -if f.object.level == 3
     %p= t('.third_level')
   = f.hidden_field :level

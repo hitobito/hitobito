@@ -74,6 +74,11 @@ describe InvoicesController do
       get :index, group_id: group.id, due_since: :one_week
       expect(assigns(:invoices)).to have(1).item
     end
+
+    it 'ignores page param when passing in ids' do
+      get :index, group_id: group.id, ids: Invoice.pluck(:id).join(','), page: 2
+      expect(assigns(:invoices)).to have(2).items
+    end
   end
 
   context 'show' do

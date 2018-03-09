@@ -94,9 +94,10 @@ class InvoicesController < CrudController
 
   def list_entries
     scope = super.
-      includes(:payment_reminders,
-               recipient: [:groups, :roles]).references(:recipient).list
-    scope = scope.page(params[:page]).per(50)
+      includes(:payment_reminders, recipient: [:groups, :roles]).
+      references(:recipient).list
+
+    scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)
   end
 

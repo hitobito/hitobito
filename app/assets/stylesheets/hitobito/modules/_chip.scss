@@ -1,15 +1,15 @@
 .chip {
   display: inline-block;
   box-sizing: border-box;
-  height: 28px;
-  margin-bottom: 8px;
-  padding: 4px 12px 6px 12px;
+  padding: 2px 10px;
   font-size: 13px;
   border-radius: 14px;
   background-color: $grayLight;
+  white-space: nowrap;
+  overflow: hidden;
 
   i {
-    opacity: 0.6;
+    opacity: 0.5;
   }
   i:hover {
     opacity: 1;
@@ -31,3 +31,5 @@
     }
   }
 }
+
+

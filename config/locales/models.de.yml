@@ -42,6 +42,7 @@ de:
         greater_than: muss grösser als %{count} sein
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein
+        readonly: darf nicht verändert werden
       models:
         custom_content:
           attributes:

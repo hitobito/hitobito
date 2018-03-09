@@ -38,6 +38,7 @@ module Dropdown
       if @details
         item = add_item(translate(format), '#')
         item.sub_items << Item.new(translate(:addresses), path)
+        item.sub_items << Item.new(translate(:households), path.merge(household: true))
         item.sub_items << Item.new(translate(:everything), path.merge(details: true))
       else
         add_item(translate(format), path)
@@ -60,8 +61,39 @@ module Dropdown
 
     def label_links
       if @labels && LabelFormat.exists?
-        Dropdown::LabelItems.new(self, condense_labels: true).add
+        label_item = add_item(translate(:labels), main_label_link)
+        add_last_used_format_item(label_item)
+        add_label_format_items(label_item)
       end
+    end
+
+    def main_label_link
+      if user.last_label_format_id
+        export_label_format_path(user.last_label_format_id)
+      else
+        '#'
+      end
+    end
+
+    def add_last_used_format_item(parent)
+      if user.last_label_format_id?
+        last_format = user.last_label_format
+        parent.sub_items << Item.new(last_format.to_s,
+                                     export_label_format_path(last_format.id),
+                                     target: :new)
+        parent.sub_items << Divider.new
+      end
+    end
+
+    def add_label_format_items(parent)
+      LabelFormat.list.for_person(user).each do |label_format|
+        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
+                                     target: :new, class: 'export-label-format')
+      end
+    end
+
+    def export_label_format_path(id)
+      params.merge(format: :pdf, label_format_id: id)
     end
 
   end

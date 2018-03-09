@@ -119,16 +119,7 @@ describe PeopleController do
 
         context '.pdf' do
           it 'generates pdf labels' do
-            expect(Person::CondensedContact).not_to receive(:condense_list)
             get :index, group_id: group, label_format_id: label_formats(:standard).id, format: :pdf
-
-            expect(@response.content_type).to eq('application/pdf')
-            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
-          end
-
-          it 'generates condensed pdf labels' do
-            expect(Person::CondensedContact).to receive(:condense_list).once.and_call_original
-            get :index, group_id: group, label_format_id: label_formats(:standard).id, condense_labels: 'true', format: :pdf
 
             expect(@response.content_type).to eq('application/pdf')
             expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
@@ -158,7 +149,7 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(0)
           end
         end
-        
+
         context '.vcf' do
           it 'exports vcf files' do
             e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
@@ -782,4 +773,22 @@ describe PeopleController do
     end
   end
 
+  context 'households' do
+    let(:member) { people(:bottom_member) }
+    before { sign_in(top_leader) }
+
+    it 'POST#update creates household' do
+      put :update, group_id: group.id, id: top_leader.id, person: { household_people_ids: [member.id] }
+
+      expect(top_leader.reload.household_key).to be_present
+      expect(top_leader.household_people).to eq [member]
+    end
+
+    it 'POST#update clears household' do
+      top_leader.update(household_key: 1)
+      put :update, group_id: group.id, id: top_leader.id, person: { town: top_leader.town }
+
+      expect(top_leader.reload.household_key).to be_nil
+    end
+  end
 end

@@ -72,6 +72,10 @@
   border-color: $purpleDark;
 }
 
+.dropdown-menu .dropdown-menu-subtitle {
+  padding: 3px 20px;
+}
+
 a.btn.disabled,
 a.btn[disabled="disabled"] {
   pointer-events: none;

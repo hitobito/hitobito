@@ -41,6 +41,12 @@ module Dropdown
       item
     end
 
+    def add_title(label, options = {})
+      item = Title.new("test", options)
+      @items << item
+      item
+    end
+
     private
 
     def render_dropdown_button
@@ -114,6 +120,18 @@ module Dropdown
   class Divider
     def render(template)
       template.content_tag(:li, '', class: 'divider')
+    end
+  end
+
+  Title = Struct.new(:label, :options) do
+    def initalize(label, options = {})
+      super(label, options)
+    end
+
+    def render(template)
+      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do |title|
+        template.content_tag(:small, label, options)
+      end
     end
   end
 end

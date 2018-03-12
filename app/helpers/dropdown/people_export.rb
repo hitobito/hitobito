@@ -76,8 +76,9 @@ module Dropdown
     end
 
     def add_last_used_format_item(parent)
-      if user.last_label_format_id?
+      if user.last_label_format_id? && LabelFormat.list.for_person(user).length > 1
         last_format = user.last_label_format
+        parent.sub_items << Title.new(translate(:last_used))
         parent.sub_items << Item.new(last_format.to_s,
                                      export_label_format_path(last_format.id),
                                      target: :new)

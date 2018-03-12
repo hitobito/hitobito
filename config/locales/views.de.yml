@@ -141,6 +141,7 @@ de:
     addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
+    last_used: 'Zuletzt benutzt'
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'

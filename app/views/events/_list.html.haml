@@ -5,7 +5,7 @@
 
 - title @group.to_s
 
-- if parent.layer?
+- if parent.layer? && @group.has_sublayers?
   - content_for :filter do
     = FilterNavigation::Events.new(self, @group).to_s
     .pull-right

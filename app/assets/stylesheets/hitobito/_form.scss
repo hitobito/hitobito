@@ -123,8 +123,11 @@ fieldset {
   padding-right: $content-padding;
 }
 
-fieldset:nth-of-type(2n) {
+.form-striped {
+  fieldset:nth-of-type(2n) {
   background-color: $grayLighter;
+}
+
 }
 
 legend {

@@ -73,7 +73,7 @@
 }
 
 .dropdown-menu .dropdown-menu-subtitle {
-  padding: 3px 20px;
+  padding: 0px 20px;
 }
 
 a.btn.disabled,
@@ -171,7 +171,18 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDarker;
+  color: $black;
+
+  &::placeholder, 
+  &::-webkit-input-placeholder
+  {
+    color: $gray;
+  }
+
+  &:-ms-input-placeholder, &:-moz-placeholder {
+    color: $gray;
+  }
+
 
   &:focus {
     border-color: $focusColor;

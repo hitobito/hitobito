@@ -15,6 +15,16 @@ module PeopleHelper
     Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
   end
 
+  def invoice_button(people)
+    if current_user.finance_groups.size == 1
+      action_button(t('crud.new.title', model: Invoice.model_name.human),
+                    new_group_invoice_list_path(current_user.finance_groups.first, invoice: { recipient_ids: people.collect(&:id).join(',') }),
+                    :plus)
+    elsif current_user.finance_groups.size > 1
+      Dropdown::InvoiceNew.new(self, t('crud.new.title', model: Invoice.model_name.human), current_user.finance_groups, people, :plus).to_s
+    end
+  end
+
   def format_birthday(person)
     if person.birthday?
       f(person.birthday) << ' ' << t('people.years_old', years: person.years)

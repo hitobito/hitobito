@@ -1,3 +1,9 @@
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 en:
   global:
     'yes': "yes"
@@ -98,12 +104,12 @@ en:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Labels'
+    pdf: 'PDF'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
-    condense_labels: 'Avoid multiple entries for household'
-    condense_labels_hint: 'Only give one entry for multiple people with the same adress and family name. '
   devise:
     failure:
       already_authenticated: 'You are already registered.'
@@ -129,7 +135,7 @@ en:
       updated: 'Your password has been changed. You''re now logged in.'
       updated_not_active: 'Your password has been changed.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."
-      no_token: 'You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
+      no_token: 'You can only access this page by clicking the link provided in a password reset e-mail. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
       new:
         reset_password_button: 'Reset password'
     confirmations:
@@ -642,7 +648,7 @@ en:
           The main e-mail address of a person with multiple roles can only be changed
           by a superordinate user.
     fields:
-      format_birthday: (dd.mm.yyy)
+      format_birthday: (dd.mm.yyyy)
     list:
       number_of_people_shown:
         one: "%{count} person displayed."
@@ -654,6 +660,13 @@ en:
       no_changes: So far, no changes were recorded.
     pdf:
       cannot_fit: The addresses do not fit into the defined label format.
+    print:
+      heading: "Members %{group}"
+      name: "Name"
+      address: "Address"
+      email: "E-Mail"
+      home_phone: "Home"
+      mobile_phone: "Mobile"
     roles:
       title: Active roles
     roles_aside:

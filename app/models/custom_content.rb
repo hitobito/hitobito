@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,9 +9,9 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
+#  key                   :string(255)      not null
+#  placeholders_required :string(255)
+#  placeholders_optional :string(255)
 #
 
 class CustomContent < ActiveRecord::Base
@@ -29,7 +29,7 @@ class CustomContent < ActiveRecord::Base
 
   class << self
     def get(key)
-      find_by_key!(key)
+      find_by!(key: key)
     end
   end
 
@@ -62,7 +62,7 @@ class CustomContent < ActiveRecord::Base
   end
 
   private
-  
+
   def replace_placeholders(string, placeholders)
     check_placeholders_exist(placeholders)
 
@@ -80,7 +80,7 @@ class CustomContent < ActiveRecord::Base
 
   def assert_required_placeholders_are_used
     placeholders_required_list.each do |placeholder|
-      unless body.to_s.include?(placeholder_token(placeholder))
+      unless [subject, body].any? { |str| str.to_s.include?(placeholder_token(placeholder)) }
         errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
       end
     end
@@ -89,9 +89,9 @@ class CustomContent < ActiveRecord::Base
   def check_placeholders_exist(placeholders)
     non_existing = (placeholders.keys - placeholders_list).presence
     if non_existing
-      fail(ArgumentError,
-           "Placeholder(s) #{non_existing.join(', ')} given, " \
-           'but not defined for this custom content')
+      raise(ArgumentError,
+            "Placeholder(s) #{non_existing.join(', ')} given, " \
+            'but not defined for this custom content')
     end
   end
 end

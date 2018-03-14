@@ -11,7 +11,7 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer          not null
 #  person_id              :integer          not null
-#  additional_information :text
+#  additional_information :text(65535)
 #  created_at             :datetime
 #  updated_at             :datetime
 #  active                 :boolean          default(FALSE), not null

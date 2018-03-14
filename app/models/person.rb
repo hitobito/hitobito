@@ -59,10 +59,12 @@ class Person < ActiveRecord::Base
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
     :locked_at, :remember_created_at, :reset_password_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-    :show_global_label_formats
+    :show_global_label_formats, :household_key
   ]
 
   GENDERS = %w(m w).freeze
+
+  ADDRESS_ATTRS = %w(address zip_code town country).freeze
 
   # define devise before other modules
   devise :database_authenticatable,
@@ -132,6 +134,8 @@ class Person < ActiveRecord::Base
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
+  attr_accessor :household_people_ids
+
   ### VALIDATIONS
 
   validates_by_schema except: [:email, :picture]
@@ -149,6 +153,10 @@ class Person < ActiveRecord::Base
   before_validation :override_blank_email
   before_validation :remove_blank_relations
   before_destroy :destroy_roles
+
+  ### Scopes
+
+  scope :household, -> { where.not(household_key: nil) }
 
 
   ### CLASS METHODS
@@ -176,11 +184,8 @@ class Person < ActiveRecord::Base
       all.extending(Person::PreloadGroups)
     end
 
-    def mailing_emails_for(people)
-      people = Array(people)
-      emails = people.collect(&:email) +
-               AdditionalEmail.mailing_emails_for(people)
-      emails.select(&:present?).uniq
+    def mailing_emails_for(people, labels = [])
+      MailRelay::AddressList.new(people, labels).entries
     end
 
     private
@@ -204,15 +209,23 @@ class Person < ActiveRecord::Base
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if nickname?
+    name << " / #{nickname}" if nickname? && format != :print_list
     name
   end
 
   def full_name(format = :default)
     case format
-    when :list then "#{last_name} #{first_name}".strip
+    when :list, :print_list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip
     end
+  end
+
+  def household_people
+    Person.
+      includes(:groups).
+      where.not(id: id).
+      where('id IN (?) OR (household_key IS NOT NULL AND household_key = ?)',
+            household_people_ids, household_key)
   end
 
   def greeting_name
@@ -262,6 +275,11 @@ class Person < ActiveRecord::Base
 
   def layer_group
     primary_group.layer_group if primary_group
+  end
+
+  def finance_groups
+    groups_with_permission(:finance).
+      flat_map(&:layer_group)
   end
 
   private

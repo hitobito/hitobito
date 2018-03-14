@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,9 +38,18 @@ Hitobito::Application.routes.draw do
 
       end
 
+      resource :invoice_list, except: [:edit]
+      resource :invoice_config, only: [:edit, :show, :update]
+
+      resources :invoices do
+        resources :payments, only: :create
+      end
+      resources :invoice_articles
+
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
+
         member do
           post :send_password_instructions
           put :primary_group
@@ -48,6 +57,7 @@ Hitobito::Application.routes.draw do
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
+          get 'invoices' => 'person/invoices#index'
         end
 
         resources :notes, only: [:create, :destroy]
@@ -58,7 +68,11 @@ Hitobito::Application.routes.draw do
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
+          post 'impersonate' => 'impersonation#create'
+          delete 'impersonate' => 'impersonation#destroy'
+          get 'households' => 'households#new'
         end
+
       end
 
       resources :roles, except: [:index, :show] do
@@ -70,11 +84,7 @@ Hitobito::Application.routes.draw do
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch
 
-      resources :people_filters, only: [:new, :create, :destroy] do
-        collection do
-          get 'qualification'
-        end
-      end
+      resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
 

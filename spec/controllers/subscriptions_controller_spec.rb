@@ -48,11 +48,42 @@ describe SubscriptionsController do
       end.to change(Delayed::Job, :count).by(1)
     end
 
+    it 'exports vcf files' do
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :vcf
+      expect(@response.content_type).to eq('text/vcard')
+
+      cards = @response.body.split("END:VCARD\n")
+      expect(cards.length).to equal(2);
+
+      if cards[1].include?("N:Member;Bottom")
+        cards.reverse!
+      end
+
+      expect(cards[0][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
+      expect(cards[0]).to match(/^N:Member;Bottom;;;/)
+      expect(cards[0]).to match(/^FN:Bottom Member/)
+      expect(cards[0]).to match(/^ADR:;;Greatstreet 345;Greattown;;3456;CH/)
+      expect(cards[0]).to match(/^EMAIL;TYPE=pref:bottom_member@example.com/)
+
+      expect(cards[1][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
+      expect(cards[1]).to match(/^N:#{@person_subscription.subscriber.last_name};#{@person_subscription.subscriber.first_name};;;/)
+      expect(cards[1]).to match(/^FN:#{@person_subscription.subscriber.first_name} #{@person_subscription.subscriber.last_name}/)
+      expect(cards[1]).to match(/^NICKNAME:#{@person_subscription.subscriber.nickname}/)
+      expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@person_subscription.subscriber.email}/)
+    end
+
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
       expect(@response.body.split(',')).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
+    end
+
+    it 'renders email addresses with additional_email matching preferred_labels instead of subscriber email' do
+      e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, label: :preferred)
+      mailing_list.update(preferred_labels: %w(preferred))
+      get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :email
+      expect(@response.body.split(',')).to match_array([people(:bottom_member).email, e1.email])
     end
 
     it 'loads pending person add requests' do

@@ -9,19 +9,23 @@
 # Table name: mailing_lists
 #
 #  id                   :integer          not null, primary key
-#  name                 :string           not null
+#  name                 :string(255)      not null
 #  group_id             :integer          not null
-#  description          :text
-#  publisher            :string
-#  mail_name            :string
-#  additional_sender    :string
+#  description          :text(65535)
+#  publisher            :string(255)
+#  mail_name            :string(255)
+#  additional_sender    :string(255)
 #  subscribable         :boolean          default(FALSE), not null
 #  subscribers_may_post :boolean          default(FALSE), not null
 #  anyone_may_post      :boolean          default(FALSE), not null
 #  delivery_report      :boolean          default(FALSE), not null
+#  preferred_labels     :string(255)
+#  main_email           :boolean          default(FALSE)
 #
 
 class MailingList < ActiveRecord::Base
+
+  serialize :preferred_labels, Array
 
   belongs_to :group
 
@@ -40,9 +44,18 @@ class MailingList < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
 
+  DEFAULT_LABEL = '_main'.freeze
 
   def to_s(_format = :default)
     name
+  end
+
+  def labels
+    main_email ? preferred_labels + [DEFAULT_LABEL]: preferred_labels
+  end
+
+  def preferred_labels=(labels)
+    self[:preferred_labels] = labels.reject(&:blank?).collect(&:strip).uniq.sort
   end
 
   def mail_address
@@ -151,7 +164,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first) == 0
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

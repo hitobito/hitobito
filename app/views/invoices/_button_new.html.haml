@@ -1,0 +1,4 @@
+- if can?(:create, group.layer_group.invoices.new)
+  = action_button(t('crud.new.title', model: Invoice.model_name.human),
+                  new_group_invoice_list_path(current_user.finance_groups.first, invoice: { recipient_ids: people.collect(&:id).join(',') }),
+                  :plus)

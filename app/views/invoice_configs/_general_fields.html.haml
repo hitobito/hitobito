@@ -1,0 +1,16 @@
+= f.labeled_person_field(:contact)
+= f.labeled_input_field :address, rows: 4, help: t('.address_help')
+= f.labeled_input_field :due_days
+= f.labeled_input_field :payment_information, rows: 2, help: t('.payment_information_help')
+
+%h3.form-subtitle= t('.payment_slip') 
+= f.labeled(:payment_slip) do
+  = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
+
+= f.labeled_input_field :beneficiary, rows: 3, help: t('.beneficiary_help')
+= f.labeled_input_field :participant_number, help: t('.account_number_example')
+
+= f.labeled_input_field :payee, rows: 3, help: t('.payee_help')
+= f.labeled_input_field :address
+= f.labeled_input_field :account_number, help: t('.account_number_example')
+= f.labeled_input_field :iban, help: t('.iban_example')

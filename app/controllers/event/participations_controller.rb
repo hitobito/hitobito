@@ -67,9 +67,10 @@ class Event::ParticipationsController < CrudController
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf   { render_pdf(entries.collect(&:person)) }
-      format.csv   { render_tabular(:csv, entries) }
-      format.xlsx  { render_tabular(:xlsx, entries) }
+      format.pdf   { render_pdf(entries.collect(&:person), group) }
+      format.csv   { render_tabular_in_background(:csv) && redirect_to(action: :index) }
+      format.vcf   { render_vcf(entries.includes(person: :phone_numbers).collect(&:person)) }
+      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.email { render_emails(entries.collect(&:person)) }
     end
   end
@@ -117,16 +118,9 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
-  def render_tabular(format, entries)
-    send_data(tabular_exporter.export(format, entries), type: format)
-  end
-
-  def tabular_exporter
-    if params[:details] && can?(:show_details, entries.first)
-      Export::Tabular::People::ParticipationsFull
-    else
-      Export::Tabular::People::ParticipationsAddress
-    end
+  def render_tabular_in_background(format)
+    Export::EventParticipationsExportJob.new(format, current_person.id, event.id, params).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
   def check_preconditions

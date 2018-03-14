@@ -11,12 +11,19 @@ class MailingListsController < CrudController
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
-                          :anyone_may_post, :delivery_report]
+                          :anyone_may_post, :main_email, :delivery_report, preferred_labels: []]
 
   decorates :group, :mailing_list
 
   prepend_before_action :parent
+  before_render_form :load_labels
 
+  respond_to :js
+
+  def edit
+    assign_attributes if request.format.js?
+    super
+  end
 
   private
 
@@ -26,6 +33,11 @@ class MailingListsController < CrudController
 
   def authorize_class
     authorize!(:index_mailing_lists, group)
+  end
+
+  def load_labels
+    @labels = AdditionalEmail.uniq.pluck(:label)
+    @preferred_labels = entry.preferred_labels.sort
   end
 
   alias_method :group, :parent

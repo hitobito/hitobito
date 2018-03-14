@@ -1,3 +1,9 @@
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 fr:
   global:
     'yes': "oui"
@@ -99,12 +105,12 @@ fr:
     button: 'Exporter'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Etiquettes'
+    pdf: 'PDF'
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
     everything: 'Toutes les informations'
-    condense_labels: 'éviter les envois multiples'
-    condense_labels_hint: 'Ne délivrer une entrée que quand l''adresse en entier et le nom de famille correspondent'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -703,6 +709,13 @@ fr:
       no_changes: Aucun changement enregistré jusqu'à présent.
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
+    print:
+      heading: "Membres %{group}"
+      name: "Nom"
+      address: "Adresse"
+      email: "E-mail"
+      home_phone: "Fixe"
+      mobile_phone: "Mobile"
     roles:
       title: Rôles actifs
     roles_aside:

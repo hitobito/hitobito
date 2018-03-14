@@ -1,0 +1,47 @@
+# == Schema Information
+#
+# Table name: invoice_configs
+#
+#  id                  :integer          not null, primary key
+#  sequence_number     :integer          default(1), not null
+#  due_days            :integer          default(30), not null
+#  group_id            :integer          not null
+#  contact_id          :integer
+#  address             :text(65535)
+#  payment_information :text(65535)
+#  account_number      :string(255)
+#  iban                :string(255)
+#  payment_slip        :string(255)      default("ch_es"), not null
+#  beneficiary         :text(65535)
+#  payee               :text(65535)
+#  participant_number  :string(255)
+#
+
+top_layer:
+  group: top_layer
+  sequence_number: 1
+  beneficiary: 'Hitobito AG'
+  payee: 'Hans Gerber'
+  address: 'top layer address'
+  iban: 'CH93 0076 2011 6238 5295 7'
+  account_number: '10-5318-5'
+  payment_slip: 'ch_esr'
+  participant_number: '10-5318-6'
+
+bottom_layer_one:
+  group: bottom_layer_one
+  sequence_number: 1
+  beneficiary: 'Hitobito AG'
+  payee: 'Fritz von Gunten'
+  address: 'bottom layer one address'
+  iban: 'CH93 0076 2011 6238 5295 8'
+  account_number: '01-162-5'
+
+bottom_layer_two:
+  group: bottom_layer_two
+  sequence_number: 1
+  beneficiary: 'Hitobito AG'
+  payee: 'Anna Streit'
+  address: 'bottom layer two address'
+  iban: 'CH84 0221 1981 6169 5329 8'
+  account_number: '03-162-4'

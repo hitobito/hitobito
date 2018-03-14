@@ -87,21 +87,28 @@ describe Event::ParticipationsController do
     end
 
     it 'exports csv files' do
-      get :index, group_id: group, event_id: course.id, format: :csv
+      expect do
+        get :index, group_id: group, event_id: course.id, format: :csv
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
+    end
 
-      expect(@response.content_type).to eq('text/csv')
-      expect(@response.body).to match(/^Vorname;Nachname/)
-      expect(@response.body).
-        to match(/^#{@participant.person.first_name};#{@participant.person.last_name}/)
-      expect(@response.body).to match(/^#{@leader.person.first_name};#{@leader.person.last_name}/)
+    it 'exports xlsx files' do
+      expect do
+        get :index, group_id: group, event_id: course.id, format: :xlsx
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      expect(@response.body).
-        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+      expect(@response.body.split(',')).to match_array([
+        @participant.person.email,
+        @leader.person.email,
+        e1.email
+      ])
     end
 
     it 'loads pending person add requests' do

@@ -72,6 +72,10 @@
   border-color: $purpleDark;
 }
 
+.dropdown-menu .dropdown-menu-subtitle {
+  padding: 0px 20px;
+}
+
 a.btn.disabled,
 a.btn[disabled="disabled"] {
   pointer-events: none;
@@ -89,6 +93,9 @@ a.green {
   margin-bottom: 0;
 }
 
+.form-inline-search .control-group {
+  display: inline-block;
+}
 @include responsive(mediaPhone) {
   .form-horizontal .btn-toolbar {
     margin-left: 180px;
@@ -100,8 +107,27 @@ a.green {
 
 }
 
+@include keyframes(highlight) {
+  0%   { background: $green; }
+  100% { background: none; }
+}
+
 fieldset {
-  margin-bottom: 18px;
+  $content-padding: 20px;
+  margin-bottom: 9px;
+  padding-top: $content-padding / 2;
+  padding-bottom: $content-padding / 2; 
+  margin-left: - $content-padding;
+  margin-right: - $content-padding;
+  padding-left: $content-padding;
+  padding-right: $content-padding;
+}
+
+.form-striped {
+  fieldset:nth-of-type(2n) {
+  background-color: $grayLighter;
+}
+
 }
 
 legend {
@@ -119,6 +145,10 @@ td {
   input[type="number"]  {
   margin-bottom: 0 !important;
   }
+}
+
+.form-subtitle {
+  margin-left: 180px;
 }
 
 select,
@@ -144,12 +174,30 @@ input[type="color"],
   margin-bottom: 9px !important;
   font-size: 14px;
   line-height: 20px;
-  color: $grayDarker;
+  color: $black;
+
+  &::placeholder, 
+  &::-webkit-input-placeholder
+  {
+    color: $gray;
+  }
+
+  &:-ms-input-placeholder, &:-moz-placeholder {
+    color: $gray;
+  }
+
 
   &:focus {
     border-color: $focusColor;
     @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $focusColor);
   }
+}
+
+.input-loading {
+  background-image: image-url("spinner.gif");
+  background-size: 16px;
+  background-position:right 5px center;
+  background-repeat: no-repeat;
 }
 
 select {
@@ -261,7 +309,7 @@ textarea {
   .controls-row {
     border-bottom: 1px solid $grayLight;
     margin-bottom: 10px;
-    padding-top: 5px;
+    padding-top: 10px;
     padding-bottom: 5px;
   }
 
@@ -271,7 +319,8 @@ textarea {
 }
 
 .form-horizontal .controls .help-block {
-  margin: 0 0 10px 0;
+  margin: -8px 0 10px 0;
+  font-size: 90%;
 }
 
 .controls > .text {
@@ -412,3 +461,72 @@ input.switcher {
     box-shadow: inset 0 0 0 1px $green, 0 1px 2px rgba(0, 0, 0, .2);
   }
 }
+
+.accordion-heading {
+  .header {
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+
+  a {
+    color: $black;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.accordion-body {
+  legend {
+    border-bottom: 0;
+    font-size: 1.12em;
+  }
+
+  fieldset:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#roles {
+  legend + .layer {
+    margin-top: 0;
+  }
+
+  .layer {
+    + .layer {
+      margin-top: 2em;
+    }
+
+    .control-group {
+      margin-top: 0;
+    }
+
+    h4, h5 {
+      cursor: pointer;
+    }
+  }
+}
+
+.has-clear {
+  position: relative;
+  input::-ms-clear { display: none; }
+
+  [data-clear] {
+    cursor: pointer;
+    opacity: 0.3;
+    pointer-events: auto;
+    position: absolute;
+    right: 5px;
+    top: 30px;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &.has-empty-value {
+    [data-clear] { display: none; }
+  }
+}
+

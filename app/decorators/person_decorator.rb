@@ -19,6 +19,10 @@ class PersonDecorator < ApplicationDecorator
     { id: id, label: h.h(full_label), type: :person }
   end
 
+  def as_typeahead_with_address
+    { id: id, label: h.h(name_with_address) }
+  end
+
   def full_label
     label = to_s
     label << ", #{town}" if town?
@@ -28,6 +32,13 @@ class PersonDecorator < ApplicationDecorator
     else
       label << " (#{birthday.year})" if birthday
     end
+    label
+  end
+
+  def name_with_address
+    label = to_s
+    details = [zip_code, town].compact.join(' ')
+    label << " (#{details})" if details.present?
     label
   end
 

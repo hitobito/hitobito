@@ -4,15 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: locations
 #
 #  id       :integer          not null, primary key
-#  name     :string           not null
+#  name     :string(255)      not null
 #  canton   :string(2)        not null
-#  zip_code :string           not null
+#  zip_code :string(255)      not null
 #
 
 class Location < ActiveRecord::Base

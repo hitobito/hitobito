@@ -1,5 +1,16 @@
 # Hitobito Changelog
 
+## Version 1.X
+
+*   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+*   Personenfilter erlauben den Gültigzeitszeitraum einer Rolle einzuschränken.
+*   Berechtigte Personen können die Applikation als eine andere Personen verwenden.
+*   Mailinglisten können an spezifische E-Mail Adressen einer Person verschickt werden.
+*   Mehrere Personen können zu einem Haushalt zusammengefasst werden.
+*   ICAL Kalender Export für Anlässe.
+*   PDF-Export für Personen
+
+
 ## Version 1.17
 
 *   Export der Abonnenten einer Mailingliste wird im Hintergrund erstellt und per mail versendet

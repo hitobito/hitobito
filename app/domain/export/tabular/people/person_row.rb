@@ -54,7 +54,7 @@ module Export::Tabular::People
 
     def people_relation_attribute(attr)
       entry.relations_to_tails.
-        select { |r| :"people_relation_#{r.kind}" == attr }.
+        select { |r| attr == :"people_relation_#{r.kind}" }.
         map { |r| r.tail.to_s }.
         join(', ')
     end

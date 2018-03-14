@@ -1,6 +1,7 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,6 +37,12 @@ module Dropdown
 
     def add_item(label, url, options = {})
       item = Item.new(label, url, options)
+      @items << item
+      item
+    end
+
+    def add_title(label, options = {})
+      item = Title.new("test", options)
       @items << item
       item
     end
@@ -79,7 +86,7 @@ module Dropdown
 
   end
 
-  class Item < Struct.new(:label, :url, :sub_items, :options)
+  Item = Struct.new(:label, :url, :sub_items, :options) do
 
     def initialize(label, url, options = {})
       super(label, url, [], options)
@@ -113,6 +120,18 @@ module Dropdown
   class Divider
     def render(template)
       template.content_tag(:li, '', class: 'divider')
+    end
+  end
+
+  Title = Struct.new(:label, :options) do
+    def initalize(label, options = {})
+      super(label, options)
+    end
+
+    def render(template)
+      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do |title|
+        template.content_tag(:small, label, options)
+      end
     end
   end
 end

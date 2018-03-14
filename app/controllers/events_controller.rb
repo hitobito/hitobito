@@ -30,6 +30,10 @@ class EventsController < CrudController
 
   self.remember_params += [:year]
 
+  self.sort_mappings = { name: 'events.name', state: 'events.state',
+                         dates_full: 'event_dates.start_at',
+                         group_ids: 'groups.name' }
+
   decorates :event, :events, :group
 
   prepend_before_action :authenticate_person_from_onetime_token!
@@ -42,9 +46,17 @@ class EventsController < CrudController
 
   def index
     respond_to do |format|
-      format.html { entries }
-      format.csv  { render_tabular(:csv, entries) }
-      format.xlsx { render_tabular(:xlsx, entries) }
+      format.html { @events = entries.page(params[:page]) }
+      format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
+      format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.ics { render_ical(entries) }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html  { entry }
+      format.ics { render_ical([entry]) }
     end
   end
 
@@ -55,17 +67,28 @@ class EventsController < CrudController
     respond_with(entry)
   end
 
+  private
+
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    model_scope.
+    scope = model_scope_without_nesting. # nesting restricts to parent, we want more
       where(type: params[:type]).
+      includes(:groups).
+      with_group_id(relevant_group_ids).
       in_year(year).
       order_by_date.
       preload_all_dates.
       uniq
+
+    sorting? ? scope.reorder(sort_expression) : scope
   end
 
-  private
+  def relevant_group_ids
+    case params[:filter]
+    when 'layer' then [parent.id] + descendants(layer: true).pluck(:id)
+    else [parent.id] + descendants.pluck(:id) # handles 'all' also
+    end
+  end
 
   def build_entry
     if params[:source_id]
@@ -84,6 +107,11 @@ class EventsController < CrudController
     p.delete(:type)
     p.delete(:contact)
     p.permit(permitted_attrs)
+  end
+
+  def descendants(layer: false)
+    scope = group.descendants
+    layer ? scope.where(layer_group_id: group.layer_group_id) : scope
   end
 
   def group
@@ -114,8 +142,13 @@ class EventsController < CrudController
     end
   end
 
-  def render_tabular(format, entries)
-    send_data ::Export::Tabular::Events::List.export(format, entries), type: format
+  def render_tabular_in_background(format)
+    Export::EventsExportJob.new(format, current_person.id, params[:type], year, parent).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
+  end
+
+  def render_ical(entries)
+    send_data ::Export::Ics::Events.new.generate(entries), type: :ics, disposition: :inline
   end
 
   def typed_group_events_path(group, event_type, options = {})
@@ -146,7 +179,7 @@ class EventsController < CrudController
 
   def assign_contact_attrs
     contact_attrs = model_params.delete(:contact_attrs)
-    return unless contact_attrs.present?
+    return if contact_attrs.blank?
     reset_contact_attrs
     contact_attrs.each do |a, v|
       entry.required_contact_attrs << a if v.to_sym == :required

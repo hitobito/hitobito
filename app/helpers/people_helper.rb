@@ -15,6 +15,22 @@ module PeopleHelper
     Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
   end
 
+  def invoice_button(people)
+    if current_user.finance_groups.size == 1
+      invoice_button_single(people)
+    elsif current_user.finance_groups.size > 1
+      Dropdown::InvoiceNew.new(self,
+                               t('crud.new.title', model: Invoice.model_name.human),
+                               current_user.finance_groups, people, :plus).to_s
+    end
+  end
+
+  def invoice_button_single(people)
+    action_button(t('crud.new.title', model: Invoice.model_name.human),
+                  new_invoices_for_people_path(current_user.finance_groups.first, people),
+                  :plus)
+  end
+
   def format_birthday(person)
     if person.birthday?
       f(person.birthday) << ' ' << t('people.years_old', years: person.years)
@@ -56,4 +72,13 @@ module PeopleHelper
   def format_person_layer_group(person)
     person.layer_group_label
   end
+
+  def render_household(person)
+    safe_join(person.household_people.collect do |p|
+      content_tag(:li, class: 'chip') do
+        can?(:show, p) ? link_to(p, p) : p.to_s
+      end
+    end, "\n")
+  end
+
 end

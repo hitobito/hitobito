@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: notes
@@ -12,10 +11,10 @@
 #  id           :integer          not null, primary key
 #  subject_id   :integer          not null
 #  author_id    :integer          not null
-#  text         :text
+#  text         :text(65535)
 #  created_at   :datetime
 #  updated_at   :datetime
-#  subject_type :string
+#  subject_type :string(255)
 #
 
 class Note < ActiveRecord::Base

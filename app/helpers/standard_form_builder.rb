@@ -238,7 +238,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
         content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
-        content_tag(:div, content, class: 'controls controls-row')
+        content_tag(:div, content, class: 'controls controls-row well')
       end
     end
   end

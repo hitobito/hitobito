@@ -10,8 +10,8 @@
 #
 #  id            :integer          not null, primary key
 #  relation_id   :integer
-#  role_type     :string           not null
-#  relation_type :string
+#  role_type     :string(255)      not null
+#  relation_type :string(255)
 #
 
 class RelatedRoleType < ActiveRecord::Base

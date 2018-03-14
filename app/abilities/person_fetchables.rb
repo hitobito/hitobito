@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Commnon Base Class for fetching people.
+# Common Base Class for fetching people.
 class PersonFetchables
 
   include CanCan::Ability

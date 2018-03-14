@@ -13,7 +13,7 @@
 #  qualification_kind_id :integer          not null
 #  start_at              :date             not null
 #  finish_at             :date
-#  origin                :string
+#  origin                :string(255)
 #
 
 Fabricator(:qualification) do

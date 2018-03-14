@@ -10,10 +10,10 @@
 #
 #  id        :integer          not null, primary key
 #  event_id  :integer          not null
-#  label     :string
+#  label     :string(255)
 #  start_at  :datetime
 #  finish_at :datetime
-#  location  :string
+#  location  :string(255)
 #
 
 class Event::Date < ActiveRecord::Base

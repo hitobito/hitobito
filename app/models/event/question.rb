@@ -4,18 +4,17 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_questions
 #
 #  id               :integer          not null, primary key
 #  event_id         :integer
-#  question         :string
-#  choices          :string
-#  multiple_choices :boolean          not null, default(FALSE)
-#  required         :boolean          not null, default(FALSE)
-#  admin            :boolean          not null, default(FALSE)
+#  question         :string(255)
+#  choices          :string(255)
+#  multiple_choices :boolean          default(FALSE)
+#  required         :boolean
+#  admin            :boolean          default(FALSE), not null
 #
 
 class Event::Question < ActiveRecord::Base

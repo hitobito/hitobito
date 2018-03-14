@@ -15,19 +15,20 @@ module PeopleHelper
     Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
   end
 
-  def invoice_button(people)
-    if current_user.finance_groups.size == 1
-      invoice_button_single(people)
-    elsif current_user.finance_groups.size > 1
+  def invoice_button(people, *groups)
+    finance_groups = groups & current_user.finance_groups
+    if finance_groups.size == 1
+      invoice_button_single(people, finance_groups.first)
+    elsif finance_groups.size > 1
       Dropdown::InvoiceNew.new(self,
                                t('crud.new.title', model: Invoice.model_name.human),
-                               current_user.finance_groups, people, :plus).to_s
+                               finance_groups, people, :plus).to_s
     end
   end
 
-  def invoice_button_single(people)
+  def invoice_button_single(people, finance_group)
     action_button(t('crud.new.title', model: Invoice.model_name.human),
-                  new_invoices_for_people_path(current_user.finance_groups.first, people),
+                  new_invoices_for_people_path(finance_group, people),
                   :plus)
   end
 

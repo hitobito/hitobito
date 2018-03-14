@@ -31,7 +31,8 @@ module Sheet
     tab 'people.tabs.invoices',
         :invoices_group_person_path,
         if: (lambda do |view, group, person|
-          view.can?(:index_invoices, group) || view.can?(:index_invoices, person)
+          person.finance_groups.present? &&
+            (view.can?(:index_invoices, group) || view.can?(:index_invoices, person) )
         end)
 
     def link_url

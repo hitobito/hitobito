@@ -9,7 +9,7 @@
 - if can?(:destroy, entry)
   = button_action_destroy(nil, { class: "btn-danger", data: { confirm: t('person.confirm_delete',
                                                               person: entry.person) } })
-= invoice_button([entry])
+= invoice_button([entry], *current_user.finance_groups)
 = dropdown_people_export(can?(:show_full, entry), false)
 
 = action_button(t('.send_login'),
@@ -35,5 +35,3 @@
                   nil,
                   method: :post,
                   title: t('.impersonate_user_tooltip'))
-    
-

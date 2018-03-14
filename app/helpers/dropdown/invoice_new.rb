@@ -26,7 +26,7 @@ module Dropdown
 
     def finance_group_links
       @finance_groups.each do |group|
-        add_item(group.name, template.new_group_invoice_list_path(group, invoice: { recipient_ids: @people.collect(&:id).join(',') }))
+        add_item(group.name, template.new_invoices_for_people_path(group, @people))
       end
     end
   end

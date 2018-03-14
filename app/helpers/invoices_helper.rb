@@ -26,6 +26,11 @@ module InvoicesHelper
     end
   end
 
+  def new_invoices_for_people_path(group, people)
+    ids = people.collect(&:id).join(',')
+    new_group_invoice_list_path(group, invoice: { recipient_ids: ids })
+  end
+
   def invoices_export_dropdown
     Dropdown::Invoices.new(self, params, :download).export
   end

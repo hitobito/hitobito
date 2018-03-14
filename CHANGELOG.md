@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 1.X
+## Version 1.18
 
 *   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
 *   Personenfilter erlauben den Gültigzeitszeitraum einer Rolle einzuschränken.
@@ -9,7 +9,6 @@
 *   Mehrere Personen können zu einem Haushalt zusammengefasst werden.
 *   ICAL Kalender Export für Anlässe.
 *   PDF-Export für Personen
-
 
 ## Version 1.17
 

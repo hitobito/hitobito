@@ -29,7 +29,7 @@ module Export::Pdf::List
 
     def person_row(person)
       [
-        person.to_s(:print_list),
+        person.person_name,
         address(person),
         person.email,
         phone_numbers(person, %w(Privat)),

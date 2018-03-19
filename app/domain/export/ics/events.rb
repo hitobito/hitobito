@@ -23,7 +23,7 @@ module Export::Ics
           ical_event.summary = "#{event.name}: #{event_date.label}"
           ical_event.location = event_date.location || event.location
           ical_event.description = event.description
-          ical_event.contact = event.contact
+          ical_event.contact = event.contact && event.contact.to_s
         end
       end
     end

@@ -24,10 +24,9 @@ class app.MailingListLabels
 
   remove: (e) ->
     e.preventDefault()
+    form = $(this).closest("form")
     $(this).closest('.chip').remove()
-    if $("[name='mailing_list[preferred_labels][]']").size() < 2
-      $('#mailing_list_main_email').attr('checked', false)
-      $('#mailing_list_main_email').closest('.control-group').hide()
+    form.load(window.location.href + '.js', form.serialize())
 
   update: (e)=>
     label = $("#{@selector} input[name=label]")

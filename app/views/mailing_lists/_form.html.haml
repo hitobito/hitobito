@@ -32,9 +32,11 @@
 
       %span.help-block= t('.help_preferred_labels')
 
-    - if entry.preferred_labels.present?
-      = f.indented do
-        = f.boolean_field(:main_email, caption: t('.caption_main_email'))
+    = f.indented do
+      - if entry.preferred_labels.present?
+        = f.boolean_field(:main_email, caption: t('.caption_main_email_with_preferred_labels').html_safe)
+      - else
+        = f.boolean_field(:main_email, caption: t('.caption_main_email').html_safe)
 
   %fieldset
     = f.indented do

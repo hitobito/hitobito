@@ -24,6 +24,12 @@ describe Export::Ics::Events do
         summary: "#{event.name}: #{event_date.label}"
       )
     end
+
+    it 'does not fail if contact is set' do
+      event.update(contact: people(:top_leader))
+      is_expected.to all(be_a(Icalendar::Event))
+      expect(subject.first.contact.first.value).to eq 'Top Leader'
+    end
   end
 
   describe '#generate' do

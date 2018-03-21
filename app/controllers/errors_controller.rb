@@ -11,6 +11,8 @@ class ErrorsController < ActionController::Base
   layout 'application'
   helper_method :current_user
 
+  protect_from_forgery
+
   private
 
   def current_user

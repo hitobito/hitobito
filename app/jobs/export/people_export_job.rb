@@ -7,9 +7,9 @@
 
 class Export::PeopleExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:full, :person_filter]
+  self.parameters = PARAMETERS + [:full, :person_filter, :household]
 
-  def initialize(format, full, user_id, person_filter)
+  def initialize(format, full, user_id, person_filter, household)
     super()
     @format = format
     @full = full
@@ -17,6 +17,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
     @user_id = user_id
     @tempfile_name = "people-#{format}-zip"
     @person_filter = person_filter
+    @household = household
   end
 
   private
@@ -43,6 +44,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def exporter
+    return Export::Tabular::People::Households if @household
     @full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
   end
 

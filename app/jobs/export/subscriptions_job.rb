@@ -7,13 +7,14 @@
 
 class Export::SubscriptionsJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:mailing_list_id]
+  self.parameters = PARAMETERS + [:mailing_list_id, :household]
 
-  def initialize(format, mailing_list_id, user_id)
+  def initialize(format, mailing_list_id, user_id, household)
     super()
     @mailing_list_id = mailing_list_id
     @format          = format
-    @exporter        = Export::Tabular::People::Households
+    @household       = household
+    @exporter        = exporter
     @user_id         = user_id
     @tempfile_name   = "subscriptions-#{mailing_list_id}-#{format}-zip"
   end
@@ -30,6 +31,11 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
 
   def entries
     mailing_list.people.includes(:primary_group).order_by_name
+  end
+
+  def exporter
+    return Export::Tabular::People::Households if @household
+    Export::Tabular::People::PeopleAddress
   end
 
 end

@@ -51,12 +51,20 @@ class SubscriptionsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    Export::SubscriptionsJob.new(format, mailing_list.id, current_person.id).enqueue!
+    Export::SubscriptionsJob.new(format,
+                                 mailing_list.id,
+                                 current_person.id,
+                                 params[:household]).enqueue!
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
   def render_tabular(format, people)
-    data = Export::Tabular::People::PeopleAddress.export(format, prepare_tabular_entries(people))
+    if params[:household]
+      exporter = Export::Tabular::People::Households
+    else
+      exporter = Export::Tabular::People::PeopleAddress
+    end
+    data = exporter.export(format, prepare_tabular_entries(people))
     send_data data, type: format
   end
 

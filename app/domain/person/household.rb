@@ -16,7 +16,7 @@ class Person::Household
     same_address?(person).tap do
       address_attrs(person).each do |attr, value|
         next if readonly_people.all? { |p| p.send(attr) == value }
-        person.errors.add(attr, :readonly)
+        person.errors.add(attr, :readonly, name: "#{person.first_name} #{person.last_name}")
       end
     end
   end

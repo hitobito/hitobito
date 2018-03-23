@@ -75,6 +75,7 @@ de:
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
+          readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             email:
               taken: >

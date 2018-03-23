@@ -14,13 +14,15 @@ module Export::Pdf
       @format = format
     end
 
-    def generate(contactables)
+    def generate(contactables, household = false)
       pdf = Prawn::Document.new(page_size: format.page_size,
                                 page_layout: format.page_layout,
                                 margin: 0.mm)
       pdf.font Settings.pdf.labels.font_name, size: format.font_size
 
-      to_households(contactables).each_with_index do |contactable, i|
+      rows = household ? to_households(contactables) : contactables
+
+      rows.each_with_index do |contactable, i|
         name = to_name(contactable)
 
         print_address_in_bounding_box(pdf,

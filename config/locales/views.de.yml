@@ -142,6 +142,7 @@ de:
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
     last_used: 'Zuletzt benutzt'
+    household_option: 'Haushalte zusammenfassen'
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'

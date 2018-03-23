@@ -59,6 +59,7 @@ module Dropdown
         label_item = add_item(translate(:labels), main_label_link)
         add_last_used_format_item(label_item)
         add_label_format_items(label_item)
+        add_household_labels_option_items(label_item)
       end
     end
 
@@ -88,9 +89,43 @@ module Dropdown
       end
     end
 
-    def export_label_format_path(id)
-      params.merge(format: :pdf, label_format_id: id)
+    def add_household_labels_option_items(parent)
+      parent.sub_items << Divider.new
+      parent.sub_items << ToggleHouseholdLabelsItem.new(template)
     end
+
+    def export_label_format_path(id)
+      params.merge(format: :pdf, label_format_id: id,
+                   household: ToggleHouseholdLabelsItem::DEFAULT_STATE)
+    end
+
+    class ToggleHouseholdLabelsItem < Dropdown::Base
+      DEFAULT_STATE = true
+
+      def initialize(template)
+        super(template, template.t('dropdown/people_export.household_option'), :plus)
+      end
+
+      def render(template)
+        template.content_tag(:li) do
+          template.link_to('#', id: 'toggle-household-labels') do
+            render_checkbox(template)
+          end
+        end
+      end
+
+      def render_checkbox(template)
+        template.content_tag(:div, class: 'checkbox') do
+          template.content_tag(:label, for: :household) do
+            template.safe_join([
+              template.check_box_tag(:household, '1', DEFAULT_STATE),
+              template.t('dropdown/people_export.household_option')
+            ].compact)
+          end
+        end
+      end
+    end
+
 
   end
 

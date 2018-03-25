@@ -88,6 +88,8 @@ it:
   custom_content_decorator:
     available_placeholders: "caratteri a disposizione: %{placeholders}"
     available_placeholders_empty: 'nessun carattere a disposizione'
+  dropdown:
+    last_used: Usato ultimo
   dropdown/event/group_filter:
     all_groups: 'tutti i gruppi'
   dropdown/event/events_export:

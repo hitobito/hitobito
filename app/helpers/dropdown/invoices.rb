@@ -37,7 +37,7 @@ module Dropdown
 
     def label_links
       if LabelFormat.exists?
-        Dropdown::LabelItems.new(self, item_options.merge(condense_labels: false)).add
+        Dropdown::LabelItems.new(self, item_options.merge(household: false)).add
       end
     end
 

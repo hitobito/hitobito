@@ -10,7 +10,7 @@
   = button_action_destroy(nil, { class: "btn-danger", data: { confirm: t('person.confirm_delete',
                                                               person: entry.person) } })
 = invoice_button([entry], *current_user.finance_groups)
-= dropdown_people_export(can?(:show_full, entry), false)
+= dropdown_people_export(can?(:show_full, entry), false, true, false)
 
 = action_button(t('.send_login'),
                 send_password_instructions_group_person_path(parent, entry),

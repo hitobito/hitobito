@@ -112,6 +112,9 @@ de:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
 
+  dropdown:
+    last_used: 'Zuletzt benutzt'
+
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
@@ -141,8 +144,8 @@ de:
     addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
-    last_used: 'Zuletzt benutzt'
     household_option: 'Haushalte zusammenfassen'
+
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'

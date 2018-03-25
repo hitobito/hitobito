@@ -10,13 +10,15 @@ module Dropdown
 
     attr_reader :user, :params
 
-    def initialize(template, user, params, details, email_addresses, labels = true)
+    def initialize(template, user, params, options = {})
       super(template, translate(:button), :download)
+      details, email_addresses, labels = true
       @user = user
       @params = params
-      @details = details
-      @email_addresses = email_addresses
-      @labels = labels
+      @details = options[:details]
+      @email_addresses = options[:emails]
+      @labels = options[:labels]
+      @households = options[:households]
 
       init_items
     end
@@ -36,7 +38,7 @@ module Dropdown
       path = params.merge(format: format)
       item = add_item(translate(format), '#')
       item.sub_items << Item.new(translate(:addresses), path)
-      item.sub_items << Item.new(translate(:households), path.merge(household: true))
+      item.sub_items << Item.new(translate(:households), path.merge(household: true)) if @households
       item.sub_items << Item.new(translate(:everything), path.merge(details: true)) if @details
     end
 
@@ -56,77 +58,9 @@ module Dropdown
 
     def label_links
       if @labels && LabelFormat.exists?
-        label_item = add_item(translate(:labels), main_label_link)
-        add_last_used_format_item(label_item)
-        add_label_format_items(label_item)
-        add_household_labels_option_items(label_item)
+        Dropdown::LabelItems.new(self, households: @households).add
       end
     end
-
-    def main_label_link
-      if user.last_label_format_id
-        export_label_format_path(user.last_label_format_id)
-      else
-        '#'
-      end
-    end
-
-    def add_last_used_format_item(parent)
-      if user.last_label_format_id? && LabelFormat.list.for_person(user).length > 1
-        last_format = user.last_label_format
-        parent.sub_items << Title.new(translate(:last_used))
-        parent.sub_items << Item.new(last_format.to_s,
-                                     export_label_format_path(last_format.id),
-                                     target: :new)
-        parent.sub_items << Divider.new
-      end
-    end
-
-    def add_label_format_items(parent)
-      LabelFormat.list.for_person(user).each do |label_format|
-        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-                                     target: :new, class: 'export-label-format')
-      end
-    end
-
-    def add_household_labels_option_items(parent)
-      parent.sub_items << Divider.new
-      parent.sub_items << ToggleHouseholdLabelsItem.new(template)
-    end
-
-    def export_label_format_path(id)
-      params.merge(format: :pdf, label_format_id: id,
-                   household: ToggleHouseholdLabelsItem::DEFAULT_STATE)
-    end
-
-    class ToggleHouseholdLabelsItem < Dropdown::Base
-      DEFAULT_STATE = true
-
-      def initialize(template)
-        super(template, template.t('dropdown/people_export.household_option'), :plus)
-      end
-
-      def render(template)
-        template.content_tag(:li) do
-          template.link_to('#', id: 'toggle-household-labels') do
-            render_checkbox(template)
-          end
-        end
-      end
-
-      def render_checkbox(template)
-        template.content_tag(:div, class: 'checkbox') do
-          template.content_tag(:label, for: :household) do
-            template.safe_join([
-              template.check_box_tag(:household, '1', DEFAULT_STATE),
-              template.t('dropdown/people_export.household_option')
-            ].compact)
-          end
-        end
-      end
-    end
-
-
   end
 
 end

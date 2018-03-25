@@ -11,8 +11,11 @@ module PeopleHelper
     person.gender_label
   end
 
-  def dropdown_people_export(details = false, emails = true, labels = true)
-    Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
+  def dropdown_people_export(details = false, emails = true, labels = true, households = true)
+    Dropdown::PeopleExport.new(self, current_user, params, details: details,
+                                                           emails: emails,
+                                                           labels: labels,
+                                                           households: households).to_s
   end
 
   def invoice_button(people, *groups)

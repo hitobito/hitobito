@@ -19,6 +19,8 @@ class ErrorsController < ActionController::Base
     false
   end
 
-  alias :current_user :origin_user
+  def origin_user
+    false
+  end
 
 end

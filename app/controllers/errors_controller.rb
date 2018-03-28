@@ -9,11 +9,16 @@
 # RAILS_GROUPS=assets rails generate error_page {status}
 class ErrorsController < ActionController::Base
   layout 'application'
-  helper_method :current_user
+  helper_method :current_user, :origin_user
+
+  protect_from_forgery
 
   private
 
   def current_user
     false
   end
+
+  alias :current_user :origin_user
+
 end

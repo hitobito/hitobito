@@ -112,6 +112,9 @@ de:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
 
+  dropdown:
+    last_used: 'Zuletzt benutzt'
+
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
@@ -141,7 +144,8 @@ de:
     addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
-    last_used: 'Zuletzt benutzt'
+    household_option: 'Haushalte zusammenfassen'
+
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'
@@ -717,7 +721,8 @@ de:
         add: Abo erstellen
     form:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
-      caption_main_email: 'Versand auch an Haupt E-Mail Adresse'
+      caption_main_email: 'Versand nur an Haupt E-Mail Adresse'
+      caption_main_email_with_preferred_labels: 'Versand auch an Haupt E-Mail Adresse'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
@@ -982,7 +987,6 @@ de:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
     print:
-      heading: "Mitgliederliste %{group}"
       name: "Name"
       address: "Adresse"
       email: "E-Mail"

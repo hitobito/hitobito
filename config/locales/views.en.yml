@@ -87,6 +87,8 @@ en:
   custom_content_decorator:
     available_placeholders: "Available placeholders: %{placeholders}"
     available_placeholders_empty: 'No placeholders available'
+  dropdown:
+    last_used: 'Used last'
   dropdown/event/group_filter:
     all_groups: 'All groups'
   dropdown/event/events_export:

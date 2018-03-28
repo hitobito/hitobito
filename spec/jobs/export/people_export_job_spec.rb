@@ -9,16 +9,16 @@ require 'spec_helper'
 
 describe Export::PeopleExportJob do
 
-  subject { Export::PeopleExportJob.new(format, full, user.id, person_filter) }
+  subject { Export::PeopleExportJob.new(format, full, user.id, person_filter, household) }
 
   let(:user)          { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:person_filter) { Person::Filter::List.new(group, user) }
   let(:group)         { groups(:bottom_layer_one) }
+  let(:household)     { false }
 
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join('db', 'seeds')]
-    
   end
 
   context 'creates a CSV-Export' do
@@ -62,6 +62,21 @@ describe Export::PeopleExportJob do
 
       expect(format).to eq :zip
       expect(file.size).to be < export_size
+    end
+
+    context 'household' do
+      let(:household) { true }
+
+      before do
+        user.update(household_key: 1)
+        people(:bottom_member).update(household_key: 1)
+      end
+
+      it 'and sends email with single line per household' do
+        subject.perform
+        lines = last_email.attachments.first.body.to_s.split("\n")
+        expect(lines.size).to eq(2)
+      end
     end
   end
 

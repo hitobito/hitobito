@@ -90,6 +90,8 @@ fr:
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   dropdown/event/group_filter:
     all_groups: 'Tous les groupes'
+  dropdown:
+    last_used: 'Dernière utilisée'
   dropdown/event/events_export:
     button: Exporter
     csv: CSV

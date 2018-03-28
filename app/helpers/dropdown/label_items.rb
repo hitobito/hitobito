@@ -13,7 +13,7 @@ module Dropdown
 
     def initialize(dropdown, item_options = {})
       @dropdown = dropdown
-      @condense_labels = item_options.delete(:condense_labels)
+      @households = item_options.delete(:households)
       @item_options = item_options.reverse_merge(target: :new,
                                                  class: 'export-label-format')
     end
@@ -22,7 +22,7 @@ module Dropdown
       label_item = add_item(translate(:labels), main_label_link)
       add_last_used_format_item(label_item)
       add_label_format_items(label_item)
-      add_condensed_labels_option_items(label_item) if @condense_labels
+      add_households_labels_option_items(label_item)
     end
 
     def main_label_link
@@ -34,44 +34,51 @@ module Dropdown
     end
 
     def add_last_used_format_item(parent)
-      if user.last_label_format_id?
+      if last_label_format?
         last_format = user.last_label_format
+        parent.sub_items << Title.new(dropdown.template.t('dropdown.last_used'))
         parent.sub_items << Item.new(last_format.to_s,
                                      export_label_format_path(last_format.id),
-                                     item_options)
+                                     target: :new, class: 'export-label-format')
         parent.sub_items << Divider.new
       end
     end
 
+    def last_label_format?
+      user.last_label_format_id? && LabelFormat.list.for_person(user).length > 1
+    end
+
     def add_label_format_items(parent)
       LabelFormat.list.for_person(user).each do |label_format|
-        parent.sub_items << Item.new(label_format,
-                                     export_label_format_path(label_format.id),
-                                     item_options)
+        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
+                                     target: :new, class: 'export-label-format')
       end
     end
 
-    def add_condensed_labels_option_items(parent)
-      parent.sub_items << Divider.new
-      parent.sub_items << ToggleCondensedLabelsItem.new(dropdown.template)
+    def add_households_labels_option_items(parent)
+      if @households
+        parent.sub_items << Divider.new
+        parent.sub_items << ToggleHouseholdsLabelsItem.new(dropdown.template)
+      end
     end
 
     def export_label_format_path(id)
+      households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
       params.merge(format: :pdf, label_format_id: id,
-                   condense_labels: ToggleCondensedLabelsItem::DEFAULT_STATE)
+                   household: households)
     end
 
 
-    class ToggleCondensedLabelsItem < Dropdown::Base
-      DEFAULT_STATE = false
+    class ToggleHouseholdsLabelsItem < Dropdown::Base
+      DEFAULT_STATE = true
 
       def initialize(template)
-        super(template, template.t('dropdown/people_export.condense_labels'), :plus)
+        super(template, template.t('dropdown/people_export.household_option'), :plus)
       end
 
       def render(template)
         template.content_tag(:li) do
-          template.link_to('#', id: 'toggle-condense-labels') do
+          template.link_to('#', id: 'toggle-household-labels') do
             render_checkbox(template)
           end
         end
@@ -79,17 +86,15 @@ module Dropdown
 
       def render_checkbox(template)
         template.content_tag(:div, class: 'checkbox') do
-          template.content_tag(:label, for: :condense) do
+          template.content_tag(:label, for: :household) do
             template.safe_join([
-              template.check_box_tag(:condense, '1', DEFAULT_STATE),
-              template.t('dropdown/people_export.condense_labels'),
-              template.content_tag(:p, template.t('dropdown/people_export.condense_labels_hint'),
-                                   class: 'help-text')
+              template.check_box_tag(:household, '1', DEFAULT_STATE),
+              template.t('dropdown/people_export.household_option')
             ].compact)
           end
         end
       end
     end
+
   end
 end
-

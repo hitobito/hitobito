@@ -42,7 +42,7 @@ module Dropdown
     end
 
     def add_title(label, options = {})
-      item = Title.new("test", options)
+      item = Title.new(label, options)
       @items << item
       item
     end
@@ -124,12 +124,12 @@ module Dropdown
   end
 
   Title = Struct.new(:label, :options) do
-    def initalize(label, options = {})
+    def initialize(label, options = {})
       super(label, options)
     end
 
     def render(template)
-      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do |title|
+      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do
         template.content_tag(:small, label, options)
       end
     end

@@ -18,8 +18,7 @@ describe 'Dropdown::PeopleExport' do
     Dropdown::PeopleExport.new(self,
                                user,
                                { controller: 'people', group_id: groups(:top_group).id },
-                               false,
-                               true)
+                               households: true, labels: true)
   end
 
   subject { dropdown.to_s }

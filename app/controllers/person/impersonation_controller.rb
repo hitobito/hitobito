@@ -17,7 +17,10 @@ class Person::ImpersonationController < ApplicationController
     sign_in(person)
 
     PaperTrail::Version.create(main: person, item: person, whodunnit: taker, event: :impersonate)
-    Person::UserImpersonationMailer.completed(person, taker.full_name).deliver_now
+
+    if person.password? && person.email?
+      Person::UserImpersonationMailer.completed(person, taker.full_name).deliver_now
+    end
 
     redirect_to root_path
   end

@@ -30,7 +30,8 @@ module Concerns
 
     def generate_pdf(people, group)
       if params[:label_format_id]
-        Export::Pdf::Labels.new(find_and_remember_label_format).generate(people)
+        household = params[:household] == 'true'
+        Export::Pdf::Labels.new(find_and_remember_label_format).generate(people, household)
       else
         Export::Pdf::List.render(people, group)
       end

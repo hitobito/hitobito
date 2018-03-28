@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  generation: 1
+  labels:
+    app: memcached
+  name: memcached
+spec:
+  dockerImageRepository: memcached
+  tags:
+  - annotations:
+      openshift.io/imported-from: memcached
+    from:
+      kind: DockerImage
+      name: memcached:latest
+    generation: 1
+    importPolicy:
+      scheduled: true
+    name: latest
+

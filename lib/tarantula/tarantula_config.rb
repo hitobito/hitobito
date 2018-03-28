@@ -53,6 +53,8 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{event_roles})$/
     # custom return_urls end up like that.
     t.skip_uri_patterns << /\:3000\-?\d+$/
+    # avoid impersionation as results in 401s
+    t.skip_uri_patterns << /groups\/\d+\/people\/\d+\/impersonate$/
 
     # The parent entry may already have been deleted, thus producing 404s.
     t.allow_404_for(/groups$/)

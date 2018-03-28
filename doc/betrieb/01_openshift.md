@@ -41,6 +41,8 @@ Um ein bestehendes Compositon Repo auszuchecken:
 
 ## Neues Projekt
 
+Install oc client first: https://github.com/openshift/origin/releases
+
 Als erstes wird ein neues Projekt auf Openshift angelegt:
 
     project=my-hitobito

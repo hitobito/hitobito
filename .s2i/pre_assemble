@@ -30,7 +30,7 @@ for dir in hitobito_*; do
 done
 
 # place Wagonfile
-mv -f config/rpm/Wagonfile .
+mv -f .s2i/Wagonfile .
 
 # move hidden core dirs
 rm -f .s2i/pre_assemble

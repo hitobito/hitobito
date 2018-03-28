@@ -29,13 +29,13 @@ for dir in hitobito_*; do
   fi
 done
 
-# place Wagonfile
-mv -f .s2i/Wagonfile .
-
 # move hidden core dirs
 rm -f .s2i/pre_assemble
 cp -rf hitobito/.s2i .  # cannot be moved since it is in use during this script's execution
 mv hitobito/.tx .
+
+# place Wagonfile
+mv -f .s2i/Wagonfile .
 
 # finally remove core source directory
 rm -rf hitobito

@@ -1,0 +1,126 @@
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: Puzzle ITC
+  labels:
+    app: sphinx
+    promotion-enabled: "true"
+    redeployment-enabled: "true"
+    redeployment-lifecycle: around-database
+    redeployment-start: "true"
+    redeployment-stop: "true"
+  name: sphinx
+spec:
+  replicas: 1
+  selector:
+    app: sphinx
+  strategy:
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: Puzzle ITC
+      labels:
+        app: sphinx
+        promotion-enabled: "true"
+        redeployment-enabled: "true"
+        redeployment-lifecycle: around-database
+        redeployment-start: "true"
+        redeployment-stop: "true"
+    spec:
+      containers:
+      - command:
+        - /usr/libexec/s2i/run-sphinx.sh
+        env:
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              key: key
+              name: rails-secret-key-base
+        - name: TZ
+          value: Europe/Berlin
+        - name: RAILS_ENV
+          value: production
+        - name: RAILS_DB_NAME
+          value: database
+        - name: RAILS_DB_HOST
+          value: mysql
+        - name: RAILS_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: database-credentials
+        - name: RAILS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: database-credentials
+        - name: RAILS_DB_ADAPTER
+          value: mysql2
+        - name: RAILS_HOST_NAME
+          value: your-public-hostname.example.com
+        - name: RAILS_SPHINX_HOST
+          value: 0.0.0.0
+        - name: RAILS_SPHINX_PORT
+          value: "9312"
+        - name: RAILS_AIRBRAKE_HOST
+          value: errbit.example.com
+        - name: RAILS_AIRBRAKE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: key
+              name: errbit-credentials
+        - name: RAILS_MAIL_RETRIEVER_CONFIG
+          valueFrom:
+            secretKeyRef:
+              key: config
+              name: rails-mail-retriever-config
+        - name: RAILS_MAIL_DELIVERY_CONFIG
+          valueFrom:
+            secretKeyRef:
+              key: config
+              name: rails-mail-delivery-config
+        image: 172.30.1.1:5000/hitobito-templaterails:latest
+        imagePullPolicy: Always
+        name: sphinx
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 256m
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  triggers:
+  - type: ConfigChange
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sphinx
+  name: sphinx
+spec:
+  ports:
+  - name: 9312-tcp
+    port: 9312
+    protocol: TCP
+    targetPort: 9312
+  selector:
+    app: sphinx
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+

@@ -1,6 +1,6 @@
 # Openshift
 
-
+![](diagrams/ose3-rails.png?raw=true)
 
 ---- notes
 

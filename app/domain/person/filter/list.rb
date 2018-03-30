@@ -18,25 +18,21 @@ class Person::Filter::List
   end
 
   def entries
-    default_order(filtered.preload_groups)
+    default_order(filtered_accessibles.preload_groups)
   end
 
-  def filtered
-    filter(accessibles)
+  def filtered_accessibles
+    filter.where(id: accessibles.unscope(:select).select(:id)).uniq
   end
 
   def all_count
-    @all_count ||= filter(all).count
+    @all_count ||= filter.uniq.count
   end
 
   private
 
-  def filter(scope)
-    if chain.present?
-      chain.filter(list_range(scope)).uniq
-    else
-      scope.members(group).uniq
-    end
+  def filter
+    chain.present? ? chain.filter(list_range) : list_range
   end
 
   def accessibles
@@ -53,20 +49,16 @@ class Person::Filter::List
     end
   end
 
-  def all
-    chain.blank? || group_range? ? group.people : Person
-  end
-
-  def list_range(scope)
+  def list_range
     case range
     when 'deep'
       @multiple_groups = true
-      scope.in_or_below(group)
+      Person.in_or_below(group)
     when 'layer'
       @multiple_groups = true
-      scope.in_layer(group)
+      Person.in_layer(group)
     else
-      scope.to_sql['INNER JOIN `roles`'] ? scope : scope.joins(:roles)
+      chain.blank? ? group.people.members(group) : group.people
     end
   end
 

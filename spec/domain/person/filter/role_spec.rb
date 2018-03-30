@@ -97,9 +97,13 @@ describe Person::Filter::Role do
       context 'with layer and below full' do
         let(:user) { @bl_leader }
 
-        it 'loads group members when no types given' do
-          expect(entries.collect(&:id)).to match_array([people(:bottom_member), @bl_leader].collect(&:id))
-          expect(list_filter.all_count).to eq(2)
+        it 'loads people in layer when no types given' do
+          expect(entries.collect(&:id)).to match_array([people(:bottom_member),
+                                                        @bl_leader,
+                                                        @bl_extern,
+                                                        @bg_leader,
+                                                        @bg_member].collect(&:id))
+          expect(list_filter.all_count).to eq(5)
         end
 
         context 'with specific types' do
@@ -118,8 +122,15 @@ describe Person::Filter::Role do
       let(:group) { groups(:top_layer) }
       let(:range) { 'deep' }
 
-      it 'loads group members when no types are given' do
-        expect(entries.collect(&:id)).to match_array([])
+      it 'loads people in subtree when no types are given' do
+        expect(entries.collect(&:id)).to match_array([people(:top_leader),
+                                                      people(:bottom_member),
+                                                      @tg_member,
+                                                      @tg_extern,
+                                                      @bl_leader,
+                                                      @bg_leader,
+                                                      ].collect(&:id))
+        expect(list_filter.all_count).to eq(8)
       end
 
       context 'with specific types' do

@@ -11,10 +11,10 @@ describe InvoicesController do
 
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
+  let(:invoice) { invoices(:invoice) }
+  before { sign_in(person) }
 
   context 'authorization' do
-    before { sign_in(person) }
-
     it "may index when person has finance permission on layer group" do
       get :index, group_id: group.id
       expect(response).to be_success
@@ -41,9 +41,6 @@ describe InvoicesController do
   end
 
   context 'index' do
-    let(:invoice) { invoices(:invoice) }
-    before        { sign_in(person) }
-
     it 'GET#index finds invoices by title' do
       get :index, group_id: group.id, q: 'Invoice'
       expect(assigns(:invoices)).to have(1).item
@@ -79,12 +76,26 @@ describe InvoicesController do
       get :index, group_id: group.id, ids: Invoice.pluck(:id).join(','), page: 2
       expect(assigns(:invoices)).to have(2).items
     end
+
+    it 'exports pdf' do
+      get :index, group_id: group.id, format: :pdf
+      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
+      expect(response.content_type).to eq('application/pdf')
+    end
+
+    it 'exports labels pdf' do
+      get :index, group_id: group.id, label_format_id: label_formats(:standard).id, format: :pdf
+      expect(response.content_type).to eq('application/pdf')
+    end
+
+    it 'exports pdf' do
+      get :index, group_id: group.id, format: :csv
+      expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
+      expect(response.content_type).to eq('text/csv')
+    end
   end
 
   context 'show' do
-    let(:invoice) { invoices(:invoice) }
-    before { sign_in(person) }
-
     it 'GET#show assigns payment if invoice has been sent' do
       invoice.update(state: :sent)
       get :show, group_id: group.id, id: invoice.id
@@ -126,36 +137,12 @@ describe InvoicesController do
   end
 
   it 'DELETE#destroy moves invoice to cancelled state' do
-    sign_in(person)
-
-    invoice = Invoice.create!(group: group, title: 'test', recipient: person)
     expect do
       delete :destroy, group_id: group.id, id: invoice.id
     end.not_to change { group.invoices.count }
     expect(invoice.reload.state).to eq 'cancelled'
     expect(response).to redirect_to group_invoices_path(group)
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
-  end
-
-  context '#index' do
-    before { sign_in(person) }
-
-    it 'exports pdf' do
-      get :index, group_id: group.id, format: :pdf
-      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
-      expect(response.content_type).to eq('application/pdf')
-    end
-
-    it 'exports labels pdf' do
-      get :index, group_id: group.id, label_format_id: label_formats(:standard).id, format: :pdf
-      expect(response.content_type).to eq('application/pdf')
-    end
-
-    it 'exports pdf' do
-      get :index, group_id: group.id, format: :csv
-      expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
-      expect(response.content_type).to eq('text/csv')
-    end
   end
 
 end

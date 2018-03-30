@@ -270,6 +270,13 @@ describe Person::Filter::Role do
           role.update_columns(created_at: now)
           expect(filter(start_at: now).entries).to be_empty
         end
+
+        it 'does not find active role if deleted role from other group matches' do
+          other_group = Fabricate(Group::TopGroup.name.to_sym, parent: groups(:top_layer))
+          other_role = Fabricate(Group::TopGroup::Member.name.to_sym, group: other_group, person: person)
+          other_role.update(deleted_at: now)
+          expect(filter(start_at: now).entries).to be_empty
+        end
       end
 
       context :bottom_group_one_one do

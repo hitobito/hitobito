@@ -53,13 +53,17 @@ class Person::Filter::List
     case range
     when 'deep'
       @multiple_groups = true
-      Person.in_or_below(group)
+      Person.in_or_below(group, chain.roles_join)
     when 'layer'
       @multiple_groups = true
-      Person.in_layer(group)
+      Person.in_layer(group, join: chain.roles_join)
     else
-      chain.blank? ? group.people.members(group) : group.people
+      chain.blank? ? group_scope.members(group) : group_scope
     end
+  end
+
+  def group_scope
+    Person.in_group(group, chain.roles_join)
   end
 
   def group_range?

@@ -89,6 +89,7 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/invoice_articles\/\d+$/)
     t.allow_404_for(/event_kinds\/\d+$/)
     t.allow_404_for(/event_kinds$/)
     # tarantula role type is invalid

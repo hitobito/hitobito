@@ -36,7 +36,7 @@ class Person::Filter::List
   end
 
   def accessibles
-    ability = accessibles_class.new(user, group_range? ? group : nil)
+    ability = accessibles_class.new(user, nil)
     Person.accessible_by(ability)
   end
 

@@ -272,6 +272,28 @@ describe Person::Filter::Role do
         end
       end
 
+      context :bottom_group_one_one do
+        let(:group)     { groups(:bottom_group_one_one) }
+        let(:role_type) { Group::BottomGroup::Member }
+        let(:role)      { Fabricate(role_type.name.to_sym, group: group) }
+        let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+
+        context :deleted do
+          it 'finds one deleted role but has no access' do
+            role.update(deleted_at: now)
+            expect(filter(start_at: now).entries).to be_empty
+            expect(filter(start_at: now).all_count).to eq 1
+          end
+
+          it 'finds one deleted role but and has access because of another active role' do
+            role.update(deleted_at: now)
+            Fabricate(role_type.name.to_sym, group: groups(:bottom_group_one_two), person: role.person)
+            expect(filter(start_at: now).entries).to have(1).item
+            expect(filter(start_at: now).all_count).to eq 1
+          end
+        end
+      end
+
       context :active do
         let(:role_type) { Group::TopGroup::Member }
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }

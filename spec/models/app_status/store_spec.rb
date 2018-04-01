@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe AppStatus do
+describe AppStatus::Store do
 
-  let(:app_status) { AppStatus.new }
+  let(:app_status) { AppStatus::Store.new }
 
   context 'app healthy' do
 
@@ -11,7 +11,7 @@ describe AppStatus do
     end
 
     it '#store_ok?' do
-      expect(app_status.store_ok?).to eq(true)
+      expect(app_status.send(:store_ok?)).to eq(true)
     end
 
   end

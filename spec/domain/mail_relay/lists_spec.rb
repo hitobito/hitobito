@@ -122,6 +122,14 @@ describe MailRelay::Lists do
         expect_any_instance_of(MailRelay::BulkMail).to receive(:delivery_report_mail)
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
+
+      it 'creates mail log entry and assigns mailing list' do
+        subject.relay
+        mail_log = MailLog.find_by(mail_hash: '0317286fdc1069f725ae971f1fd2c776')
+        expect(mail_log.mailing_list).to eq(list)
+        expect(mail_log.status).to eq('completed')
+      end
+
     end
 
     context 'from additional email' do

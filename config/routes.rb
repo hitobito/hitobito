@@ -12,6 +12,7 @@ Hitobito::Application.routes.draw do
   root to: 'dashboard#index'
 
   get '/healthz', to: 'healthz#show'
+  get '/healthz/mail', to: 'healthz/mail#show'
 
   language_scope do
 

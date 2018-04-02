@@ -1,0 +1,19 @@
+-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+-#  hitobito_pbs and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_pbs.
+
+= f.labeled_text_area(:address, rows: 2) if entry.show_attr?(:address)
+= f.labeled_input_field(:zip_code, class: 'span2') if entry.show_attr?(:zip_code)
+= f.labeled_input_field(:town, class: 'span4') if entry.show_attr?(:town)
+- if entry.show_attr?(:country)
+  = f.labeled(:country) do
+    .span6{style: 'margin-left: 0px'}
+      = country_select(f.object.class.model_name.param_key,
+                       'country',
+                       { priority_countries: Settings.countries.prioritized,
+                         include_blank: true },
+                       { class: 'chosen-select',
+                         data: { placeholder: ' ',
+                                 chosen_no_results: t('global.chosen_no_results') } })
+    = entry.required_attr?(:country) ? content_tag(:span, class: 'required') { '*' } : ''

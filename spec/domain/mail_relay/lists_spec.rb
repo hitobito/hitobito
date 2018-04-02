@@ -29,6 +29,13 @@ describe MailRelay::Lists do
   let(:subscribers) { [ind, bll, bgl1] }
 
   let(:relay) { MailRelay::Lists.new(message) }
+
+  before do
+    # we do not have custom content for report loaded in test env
+    allow_any_instance_of(DeliveryReportMailer).
+      to receive(:bulk_mail)
+  end
+
   subject { relay }
 
   context '#mailing_list' do
@@ -66,6 +73,26 @@ describe MailRelay::Lists do
 
       it { is_expected.to match_array([ind, bll, bgl1].collect(&:email) + [e1.email]) }
     end
+
+    context 'with matching preferred_labels' do
+      before do
+        list.update(preferred_labels: %w(preferred1 preferred2))
+      end
+      let!(:e1) { Fabricate(:additional_email, contactable: ind, label: 'preferred1') }
+      let!(:e2) { Fabricate(:additional_email, contactable: ind, label: 'preferred2') }
+
+      it { is_expected.to match_array([e1, e2, bll, bgl1].collect(&:email)) }
+    end
+
+    context 'without matching preferred_labels' do
+      before do
+        list.update(preferred_labels: %w(preferred1 preferred2))
+      end
+      let!(:e1) { Fabricate(:additional_email, contactable: ind, label: 'preferreda', mailings: false) }
+      let!(:e2) { Fabricate(:additional_email, contactable: ind, label: 'preferredb', mailings: true) }
+
+      it { is_expected.to match_array([e2, ind, bll, bgl1].collect(&:email)) }
+    end
   end
 
   context 'list admin' do
@@ -83,6 +110,17 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
+      end
+
+      it 'does not send delivery report if flag is false' do
+        expect_any_instance_of(MailRelay::BulkMail).not_to receive(:delivery_report_mail)
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      end
+
+      it 'does send delivery report if set flag is true' do
+        list.update(delivery_report: true)
+        expect_any_instance_of(MailRelay::BulkMail).to receive(:delivery_report_mail)
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
     end
 

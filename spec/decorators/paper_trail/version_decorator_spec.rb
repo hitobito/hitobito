@@ -144,6 +144,13 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
       is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.')
     end
+
+    it 'builds destroy text for non existing Role class' do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person, group: groups(:bottom_layer_one))
+      role.destroy!
+      hide_const("Group::BottomLayer::Leader")
+      is_expected.to eq('Rolle <i>Group::BottomLayer::Leader</i> wurde gelöscht.')
+    end
   end
 
   def update_attributes

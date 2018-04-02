@@ -37,6 +37,12 @@ en:
           attributes:
             body:
               placeholder_missing: 'must contain the placeholder %{placeholder} '
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' is a mandatory field and cannot be set to optional or 'do not display'."
+              contact_attr_invalid: "'%{attribute}' is no valid person attribute."
+              contact_attr_hidden_required: "'%{attribute}' cannot be set as mandatory or as 'do-not-display'"
         event/date:
           attributes:
             finish_at:
@@ -46,6 +52,7 @@ en:
             choices:
               requires_more_than_one_choice: 'needs at least two picks'
         event/participation:
+          emoji_suspected: 'Please don''t use any special characters (especially emojis).'
           attributes:
             person_id:
               taken: is already registered
@@ -55,6 +62,7 @@ en:
               not_allowed: "'%{mail_name}' is not allowed"
         person:
           name_missing: 'Please enter a name'
+          emoji_suspected: 'Please don''t use any special characters (especially emojis).'
           attributes:
             email:
               taken: >
@@ -124,6 +132,9 @@ en:
       event/role/cook:
         one: Kitchen
         other: Kitchen
+      event/role/helper:
+        one: Helper
+        other: Helpers
       event/role/participant:
         one: Participant
         other: Participants
@@ -145,15 +156,15 @@ en:
       mailing_list:
         one: Subscription
         other: Subscriptions
+      note:
+        one: Note
+        other: Notes
       person:
         one: Person
         other: Persons
       person/add_request:
         one: request
         other: requests
-      person/note:
-        one: note
-        other: notes
       people_filter:
         one: Filter
         other: Filters
@@ -220,6 +231,7 @@ en:
         nickname: Nickname
         email: Main e-mail
         emails: e-mails
+        layer_group: Main layer
         password: Password
         password_confirmation: Password confirmation
         current_password: Old password
@@ -242,6 +254,7 @@ en:
         picture: Upload new picture
         remove_picture: Remove current image
         roles: Roles
+        tags: Tags
         created_at: Created
         updated_at: Changed
       person/add_request:
@@ -251,10 +264,9 @@ en:
         created_at: date
       person/add_request/event:
         label: "%{body} in %{group}"
+        deleted_event: Deleted event
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
-      person/note:
-        text: text
       group:
         name: Name
         short_name: Nickname
@@ -298,6 +310,12 @@ en:
         teamer_count: Leaders count
         participant_count: Participants count
         applicant_count: Registrations count
+        applications_cancelable: Deregistration possible
+        display_booking_info: Display number of registrations
+      event/contact_attrs:
+        required: Mandatory
+        optional: Optional
+        hidden: Do not display
       event/answer:
         answer: Reply
       answers:
@@ -332,6 +350,7 @@ en:
         preconditions: Preconditions
         prolongations: Extended
         qualification_kinds: Qualifies for
+        general_information: Standard description
         application_conditions: Application conditions
         created_at: Created
         updated_at: Changed
@@ -348,7 +367,12 @@ en:
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-      questions:
+      admin_questions:
+        question: Question
+        choices: Possible answers
+        multiple_choices: Multiple choice
+        required: Reply mandatory
+      application_questions:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
@@ -358,6 +382,8 @@ en:
         person: Person
         type: Role
         participation: Person
+      note:
+        text: Text
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -481,6 +507,8 @@ en:
         padding_top: Margin top
         padding_left: Margin left
         dimensions: Number
+        nickname: Nickname on label
+        pp_post: PP-Line
       tag:
         name: name
         taggable_id: taggable

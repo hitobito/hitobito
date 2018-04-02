@@ -10,9 +10,9 @@
 #
 #  id               :integer          not null, primary key
 #  contactable_id   :integer          not null
-#  contactable_type :string           not null
-#  number           :string           not null
-#  label            :string
+#  contactable_type :string(255)      not null
+#  number           :string(255)      not null
+#  label            :string(255)
 #  public           :boolean          default(TRUE), not null
 #
 

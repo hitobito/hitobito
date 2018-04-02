@@ -105,32 +105,12 @@ module MailRelay
     def relay
       if relay_address?
         if sender_allowed?
-          resend
+          bulk_deliver(message)
         else
           reject_not_allowed
         end
       else
         reject_not_existing
-      end
-    end
-
-    # Send the same mail to all receivers, if any.
-    def resend
-      destinations = receivers
-      if destinations.present?
-        # set destinations
-        message.smtp_envelope_to = IdnSanitizer.sanitize(destinations)
-
-        # Set sender to actual server to satisfy SPF:
-        # http://www.openspf.org/Best_Practices/Webgenerated
-        message.sender = envelope_sender
-        message.smtp_envelope_from = envelope_sender
-
-        logger.info("Relaying email from #{sender_email} " \
-                    "for list #{envelope_receiver_name} " \
-                    "to #{message.smtp_envelope_to.size} people")
-
-        deliver(message)
       end
     end
 
@@ -207,8 +187,28 @@ module MailRelay
       message.deliver
     end
 
+    def bulk_deliver(message)
+      bulk_mail.deliver do
+        logger.info("Relaying email from #{sender_email} " \
+                    "for list #{envelope_receiver_name} " \
+                    "to #{message.smtp_envelope_to.size} people")
+      end
+    end
+
+    def bulk_mail
+      bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
+      bulk_mail.headers['Precedence'] = 'list'
+      bulk_mail.headers['List-Id'] = list_id
+      bulk_mail
+    end
+
     def logger
       Delayed::Worker.logger || Rails.logger
+    end
+
+    # Sends a delivery_report to that address (e.g. sender_email) if set
+    def delivery_report_to
+      nil
     end
 
   end

@@ -15,31 +15,40 @@ describe Export::Tabular::People::ParticipationsAddress do
   let(:list) { [participation] }
   let(:people_list) { Export::Tabular::People::ParticipationsAddress.new(list) }
 
-  let(:simple_headers) do
-    ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-     'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Rollen']
+  subject { people_list.attribute_labels }
+
+  context 'address data' do
+    its([:first_name]) { should eq 'Vorname' }
+    its([:town]) { should eq 'Ort' }
   end
 
-  let(:data) { Export::Tabular::People::ParticipationsAddress.csv(list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+  context 'integration' do
+    let(:simple_headers) do
+      ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Hauptebene', 'Rollen']
+    end
 
-  subject { csv }
+    let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, list) }
+    let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
 
-  its(:headers) { should == simple_headers }
+    subject { csv }
 
-  context 'first row' do
-    subject { csv[0] }
+    its(:headers) { should == simple_headers }
 
-    its(['Vorname']) { should eq person.first_name }
-    its(['Rollen']) { should be_blank }
+    context 'first row' do
+      subject { csv[0] }
 
-    context 'with roles' do
-      before do
-        Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
-        Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
-        participation.reload
+      its(['Vorname']) { should eq person.first_name }
+      its(['Rollen']) { should be_blank }
+
+      context 'with roles' do
+        before do
+          Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
+          Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
+          participation.reload
+        end
+        its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
       end
-      its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
     end
   end
 end

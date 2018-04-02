@@ -1,0 +1,44 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- filter = entry.filter_chain[:role]
+
+.label-columns
+  = field_set_tag(t('.prompt_role_selection')) do
+    - @role_types.each do |layer, groups|
+      .layer{ class: [@group.klass.label, @group.layer_group.class.label].include?(layer) && 'same-layer' }
+        %h4.filter-toggle= layer
+        - groups.each do |group, role_types|
+          .group.control-group{ class: group == @group.klass.label && 'same-group' }
+            %h5.filter-toggle= group
+            .controls
+              - role_types.each do |role_type|
+                - id = "filters_role_role_type_ids_#{role_type.id}"
+                = label_tag(nil, id, class: 'checkbox inline') do
+                  = check_box_tag("filters[role][role_type_ids][]",
+                                  role_type.id,
+                                  filter && filter.to_hash[:role_types].include?(role_type.to_s),
+                                  id: id)
+                  = role_type.label
+
+  = field_set_tag '' do
+    = label_tag(:duration) do
+      %label=t('.prompt_role_duration')
+      .input-prepend
+        %span{class: 'add-on'}
+          = icon(:calendar)
+        = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date span2')
+      %div{style: 'vertical-align: middle; margin: 0px 5px 15px 5px; display: inline-block;'}
+
+        =t('.prompt_role_duration_until')
+      .input-prepend
+        %span{class: 'add-on'}
+          = icon(:calendar)
+        = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date span2')
+    - %w(active created deleted).each do |key|
+      = render 'simple_radio',
+          attr: "filters[role][kind]",
+          value: key,
+          checked: filter && filter.args[:kind] == key

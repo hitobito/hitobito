@@ -9,8 +9,8 @@
 #  id         :integer          not null, primary key
 #  person_id  :integer          not null
 #  group_id   :integer          not null
-#  type       :string           not null
-#  label      :string
+#  type       :string(255)      not null
+#  label      :string(255)
 #  created_at :datetime
 #  updated_at :datetime
 #  deleted_at :datetime

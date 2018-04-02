@@ -20,7 +20,7 @@ class LabelFormatsController < SimpleCrudController
 
   def build_entry
     super.tap do |entry|
-      entry.person_id = current_user.id unless manage_global?
+      entry.person_id = current_user.id if current_user && !manage_global?
     end
   end
 

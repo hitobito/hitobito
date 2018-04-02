@@ -33,6 +33,12 @@ gl_leader_de:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+ql:
+  qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:ql) %>
+  locale: de
+  label: Quality Lead
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
 
 old_de:
   qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:old) %>

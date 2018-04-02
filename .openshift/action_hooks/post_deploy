@@ -1,9 +1,0 @@
-#!/bin/bash
-# This is a simple post deploy hook executed after your application
-# is deployed and started.  This script gets executed directly, so
-# it could be python, php, ruby, etc.
-
-# restart sphinx with the newly deployed configuration
-if [[ ( -f ${OPENSHIFT_REPO_DIR}/config/thinking_sphinx.yml ) ]]; then
-  [ -x ${OPENSHIFT_SPHINX_DIR}/bin/control ] && ${OPENSHIFT_SPHINX_DIR}/bin/control restart
-fi

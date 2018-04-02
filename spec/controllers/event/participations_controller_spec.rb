@@ -87,21 +87,28 @@ describe Event::ParticipationsController do
     end
 
     it 'exports csv files' do
-      get :index, group_id: group, event_id: course.id, format: :csv
+      expect do
+        get :index, group_id: group, event_id: course.id, format: :csv
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
+    end
 
-      expect(@response.content_type).to eq('text/csv')
-      expect(@response.body).to match(/^Vorname;Nachname/)
-      expect(@response.body).
-        to match(/^#{@participant.person.first_name};#{@participant.person.last_name}/)
-      expect(@response.body).to match(/^#{@leader.person.first_name};#{@leader.person.last_name}/)
+    it 'exports xlsx files' do
+      expect do
+        get :index, group_id: group, event_id: course.id, format: :xlsx
+        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung an \S+@\S+ versendet./)
+      end.to change(Delayed::Job, :count).by(1)
     end
 
     it 'renders email addresses with additional ones' do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, group_id: group, event_id: course.id, format: :email
-      expect(@response.body).
-        to eq("#{@participant.person.email},#{@leader.person.email},#{e1.email}")
+      expect(@response.body.split(',')).to match_array([
+        @participant.person.email,
+        @leader.person.email,
+        e1.email
+      ])
     end
 
     it 'loads pending person add requests' do
@@ -351,8 +358,6 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
       it 'creates non-active participant role for course events' do
@@ -375,8 +380,6 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
       end
 
       it 'creates specific non-active participant role for course events' do
@@ -395,8 +398,6 @@ describe Event::ParticipationsController do
         expect(role).to be_kind_of(TestParticipant)
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
         expect(role.participation).to eq participation.model
       end
 
@@ -421,8 +422,20 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(flash[:notice]).
-          to include 'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+      end
+
+      it 'creates new participation with all answers' do
+        post :create,
+             group_id: group.id,
+             event_id: course.id,
+             event_participation: {
+               answers: {
+                 1 => { question_id: course.questions.first.id, answer: 'Bla' }
+               }
+             }
+
+        participation = assigns(:participation)
+        expect(participation.answers.size).to eq(2)
       end
 
       it 'fails for invalid event role' do
@@ -555,6 +568,10 @@ describe Event::ParticipationsController do
 
     context 'GET new' do
       before { get :new, group_id: group.id, event_id: course.id }
+
+      it 'sets answers instance variable' do
+        expect(assigns(:answers)).to have(2).item
+      end
 
       it 'allows the user to apply' do
         is_expected.to_not redirect_to group_event_path(group, course)

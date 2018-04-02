@@ -191,3 +191,7 @@ a.anchor {
   color: inherit;
   text-decoration: none;
 }
+
+.animated-highlight {
+  @include animation(highlight 2.5s);
+}

@@ -35,43 +35,43 @@
 
   %body
     %main
+    - if origin_user
+      = render 'layouts/user_impersonation'
 
-      %header#page-header
-        .container-fluid
-          = link_to Settings.application.name, root_path, class: 'brand'
-          - if current_user
-            .options
-              %ul
-                = render 'layouts/languages'
-                %li= link_to current_user, person_home_path(current_user)
-                %li= link_to t('.sign_out'), destroy_person_session_path, method: "delete"
-                %li= render 'layouts/quicksearch'
-
-          - elsif current_user.nil? # nil without login, false on error
-            = render 'layouts/unauthorized'
-
-
-
-      #page
-        -# REMOVE Left Nav Conditional helpers... because it had {class: ('with-left-nav' if sheet.left_nav?)}
+    %header#page-header
+      .container-fluid
+        = link_to Settings.application.name, root_path, class: 'brand'
         - if current_user
-          %nav.nav-left
-            = render 'layouts/nav'
-        .container-fluid
-          = render_sheets do
-            .content-header
-              %h1= title
-              = sheet.render_main_tabs
+          .options
+            %ul
+              = render 'layouts/languages'
+              %li= link_to current_user, person_home_path(current_user)
+              %li= link_to t('.sign_out'), destroy_person_session_path, method: "delete"
+              %li= render 'layouts/quicksearch'
 
-            = yield :filter
-            - if content_for?(:toolbar)
-              .btn-toolbar= yield :toolbar
+        - elsif current_user.nil? # nil without login, false on error
+          = render 'layouts/unauthorized'
 
-            -# div must always exist to insert flash messages with ajax
-            #flash
-              = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+    #page
+      -# REMOVE Left Nav Conditional helpers... because it had {class: ('with-left-nav' if sheet.left_nav?)}
+      - if current_user
+        %nav.nav-left
+          = render 'layouts/nav'
+      .container-fluid
+        = render_sheets do
+          .content-header
+            %h1= title
+            = sheet.render_main_tabs
 
-            = content_for?(:content) ? yield(:content) : yield
+          = yield :filter
+          - if content_for?(:toolbar)
+            .btn-toolbar= yield :toolbar
+
+          -# div must always exist to insert flash messages with ajax
+          #flash
+            = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+
+          = content_for?(:content) ? yield(:content) : yield
 
       %footer#page-footer
         .container-fluid

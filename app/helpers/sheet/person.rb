@@ -28,6 +28,13 @@ module Sheet
           person.company_name?
         end)
 
+    tab 'people.tabs.invoices',
+        :invoices_group_person_path,
+        if: (lambda do |view, group, person|
+          person.finance_groups.present? &&
+            (view.can?(:index_invoices, group) || view.can?(:index_invoices, person) )
+        end)
+
     def link_url
       view.group_person_path(parent_sheet.entry.id, entry.id)
     end

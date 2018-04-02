@@ -67,3 +67,5 @@ TAGS
 *.iml
 .generators
 .idea
+.tool-versions
+.pry_history

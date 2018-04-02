@@ -9,18 +9,18 @@
 # Table name: events
 #
 #  id                          :integer          not null, primary key
-#  type                        :string
-#  name                        :string           not null
-#  number                      :string
-#  motto                       :string
-#  cost                        :string
+#  type                        :string(255)
+#  name                        :string(255)      not null
+#  number                      :string(255)
+#  motto                       :string(255)
+#  cost                        :string(255)
 #  maximum_participants        :integer
 #  contact_id                  :integer
-#  description                 :text
-#  location                    :text
+#  description                 :text(65535)
+#  location                    :text(65535)
 #  application_opening_at      :date
 #  application_closing_at      :date
-#  application_conditions      :text
+#  application_conditions      :text(65535)
 #  kind_id                     :integer
 #  state                       :string(60)
 #  priorization                :boolean          default(FALSE), not null
@@ -34,10 +34,13 @@
 #  teamer_count                :integer          default(0)
 #  signature                   :boolean
 #  signature_confirmation      :boolean
-#  signature_confirmation_text :string
+#  signature_confirmation_text :string(255)
 #  creator_id                  :integer
 #  updater_id                  :integer
 #  applications_cancelable     :boolean          default(FALSE), not null
+#  required_contact_attrs      :text(65535)
+#  hidden_contact_attrs        :text(65535)
+#  display_booking_info        :boolean          default(TRUE), not null
 #
 
 class Event::Course < Event
@@ -45,7 +48,8 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
-  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids, :requires_approval]
+  self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
+                           :requires_approval, :display_booking_info]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -88,9 +92,9 @@ class Event::Course < Event
   end
 
   def init_questions
-    if questions.blank?
-      Event::Question.global.each do |q|
-        questions << q.dup
+    if application_questions.blank?
+      Event::Question.application.global.each do |q|
+        application_questions << q.dup
       end
     end
   end

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,6 +12,7 @@ de:
     "no": "nein"
     unknown: unbekannt
     nobody: niemand
+    all: Alle
 
     from: Von
     until: Bis
@@ -111,6 +112,9 @@ de:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
 
+  dropdown:
+    last_used: 'Zuletzt benutzt'
+
   dropdown/event/group_filter:
     all_groups: 'Alle Gruppen'
 
@@ -133,12 +137,29 @@ de:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Etiketten'
+    pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
+    households: 'Haushaltsliste'
     everything: 'Alle Angaben'
-    condense_labels: 'Mehrfachsendungen vermeiden'
-    condense_labels_hint: 'Nur einen Eintrag ausgeben, wenn die gesamte Adresse und der Nachname übereinstimmen.'
+    household_option: 'Haushalte zusammenfassen'
+
+  dropdown/invoices:
+    download: 'Export'
+    print: 'Drucken'
+    labels: 'Etiketten'
+    full: 'Rechnung inkl. Einzahlungsschein'
+    esr_only: 'Einzahlungsschein separat'
+    articles_only: 'Rechnung separat'
+    csv: 'CSV'
+    pdf: 'PDF'
+
+  dropdown/invoice_sending:
+    button: 'Rechnung stellen / mahnen'
+    set_state: 'Status setzen (Gestellt/Gemahnt)'
+    send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
 
   devise:
     failure:
@@ -234,6 +255,7 @@ de:
         title: 'Verfügbare Kurse'
         explanation: 'Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe.'
         csv_export_button: 'CSV Export'
+        ical_export_button: 'Kalender Export'
       events:
         title: 'Demnächst stattfindende Anlässe'
         explanation: 'Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe.'
@@ -242,6 +264,7 @@ de:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
         registered_at: 'Anmeldung am %{date}'
+        town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
       index:
@@ -267,11 +290,25 @@ de:
         qualifications:
           for_participants: 'Qualifikationen für Teilnehmende'
           for_leaders: 'Qualifikationen für Leitende'
+      precondition_fields:
+        add_precondition_grouping: '+ Vorbedingungen hinzufügen'
+        add_precondition: 'Hinzufügen'
+      qualifications:
+        or: oder
+        and: und
 
+    participation_contact_datas:
+      edit:
+        title: Kontaktangaben
+        save: Weiter
     participations:
+      edit:
+        title: Anmeldung
       approvals:
         title: Freigabe
       specific_information: 'Spezifische Angaben'
+      application_answers: Anmeldeangaben
+      admin_answers: Administrationsangaben
       no_answer_given: '(nicht beantwortet)'
       actions_show:
         change_contact_data_button: 'Kontaktdaten ändern'
@@ -336,18 +373,26 @@ de:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
       caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
-      additional_information: 'Angaben für Anmeldung'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
+      explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
+        welche nur für die Kursadministration verwendet werden.
+      explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
+        abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
     form_tabs:
       general: Allgemein
+      application_questions: Anmeldeangaben
+      admin_questions: Administrationsangaben
+      contact_attrs: Kontaktangaben
     global:
       link:
         add_event: Anlass erstellen
         add_event/course: Kurs erstellen
+        duplicate: Duplizieren
     minimum_age_with_years: '%{minimum_age} Jahre (Jahrgang)'
     new:
       title_event: Anlass erstellen
@@ -355,6 +400,7 @@ de:
     preconditions: 'Erforderliche Qualifikationen'
     tabs:
       participants: 'Teilnehmende'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
@@ -377,6 +423,7 @@ de:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
     show:
       link:
@@ -389,8 +436,9 @@ de:
 
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
-    below_minimum_age: "Altersgrenze von %{course_minimum_age} unterschritten."
+    below_minimum_age: "Altersgrenze von %{course_minimum_age} Jahren ist unterschritten."
     qualifications_missing: "Folgende Qualifikationen fehlen: %{missing}"
+    some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
 
   event/register:
     not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."
@@ -417,11 +465,11 @@ de:
     active_participants_info:
       one: '%{count} Anmeldung zugeteilt'
       other: '%{count} Anmeldungen zugeteilt'
-    issue_only: 'Vergibt die %{model} %{issued} auf den %{until} (letztes Kursdatum).'
+    issue_only: 'Vergibt die %{model} %{issued} unmittelbar per %{until} (letztes Kursdatum).'
     prolong_only:
-      one: 'Verlängert existierende Qualifikation %{prolonged} auf den %{until} (letztes Kursdatum).'
-      other: 'Verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
-    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} auf den %{until} (letztes Kursdatum).'
+      one: 'Verlängert existierende Qualifikation %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+      other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
+    issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
 
   filter_navigation/dropdown:
@@ -431,8 +479,11 @@ de:
     custom_filter: 'Eigener Filter'
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
-    new_role_filter: 'Neuer Rollen Filter...'
-    new_qualification_filter: 'Neuer Qualifikationen Filter...'
+    new_filter: 'Neuer Filter...'
+
+  filter_navigation/events:
+    all: 'Alle'
+    layer: 'nur %{layer}'
 
   filter_navigation/event/participations:
     predefined_filters:
@@ -442,7 +493,7 @@ de:
 
   full_text:
     index:
-      title: 'Gefundene Personen'
+      title: 'Ergebnisse'
       incomplete_search_request: 'Bitte geben Sie mindestens zwei Zeichen ein.'
 
   group:
@@ -519,6 +570,7 @@ de:
     group_name_missing: 'Name für neue Gruppe muss definiert werden.'
     no_group_selected: 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
     not_allowed: 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
+    invoice_config_not_merged: 'Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte nimm hierfür die jetzt korrekten Einstellungen manuell vor.'
 
   group/move:
     success: '%{group} wurde nach %{target} verschoben.'
@@ -537,6 +589,102 @@ de:
 
   import/person_doublette_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
+
+  invoices:
+    filter:
+      due_since: Fällig seit
+      due_since_list:
+        one_day: Gestern
+        one_week: Einer Woche
+        one_month: Einem Monat
+    add: Externe Rechnung erstellen
+    issued: Rechnung gestellt
+    sent: Rechnung versendet
+    reminder_sent: Mahnung versendet, fällig am %{date} (%{title})
+    payed: bezahlt
+    destroy:
+      flash:
+        success: Rechnung wurde storniert.
+    pdf:
+      total: Gesamtbetrag
+      total_vat: MWSt. gesamt
+      invoice_number: Rechnungsnummer
+      invoice_date: Rechnungsdatum
+      due_at: Fällig bis
+
+  invoice_configs:
+    form_tabs:
+      general: Allgemein
+    update:
+      flash:
+        success: Rechnungseinstellungen wurden erfolgreich aktualisiert
+    general_fields:
+      payment_slip: 'Einzahlungsschein'
+      payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden.'
+      address_help: 'Erscheint auf dem Brief als Absenderadresse'
+      payee_help: 'Erscheint auf dem Einzahlungsschein'
+      beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
+      account_number_example: 'Beispiel: 01-162-5'
+      iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
+    reminder_fields:
+      third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
+
+  invoice_lists:
+    form:
+      recipient_info:
+        one: "Rechnung wird für eine Person erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
+    create:
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    update:
+      zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
+      issued:
+        one: "Rechnung %{number} wurde gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
+      reminded:
+        one: "Rechnung %{number} wurde gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
+      send_notification:
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+      invalid_state:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      issued_invalid:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      sent_invalid:
+        one: "Rechnung %{number} wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
+      payed_invalid:
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
+      reminded_invalid:
+        one: "Mahnung %{number} wurde bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
+      recipient_email_invalid:
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+      payment_reminders_missing:
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+
+    destroy:
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
+
+  payments:
+    create:
+      flash:
+        success: Zahlung über %{amount} wurde erfasst.
+  payment_reminders:
+    create:
+      success:
+        one: "Mahnung wurde erfolgreich erstellt."
+        other: "%{count} Mahnungen wurden erfolgreich erstellt."
+      failure: Es wurden keine gültigen Rechnungen ausgewählt.
 
   label_formats:
     global_labels: "Globale Etikettenformate"
@@ -563,15 +711,23 @@ de:
       developed_by: 'Entwickelt von'
       source_code: 'Quellcode'
 
+    user_impersonation:
+      info: "Du bist jetzt als %{user} angemeldet"
+      end: "Imitation beenden"
+
   mailing_lists:
     global:
       link:
         add: Abo erstellen
     form:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
+      caption_main_email: 'Versand nur an Haupt E-Mail Adresse'
+      caption_main_email_with_preferred_labels: 'Versand auch an Haupt E-Mail Adresse'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
+      caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
+      help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'
@@ -580,6 +736,9 @@ de:
     subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
     anyone_may_not_post: 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    delivery_report: 'Absender erhalten ein E-Mail als Versandbestätigung'
+    no_delivery_report: 'Absender erhalten kein E-Mail als Versandbestätigung'
+
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 
@@ -588,6 +747,7 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+    invoices: 'Rechnungen'
 
   notes:
     new_note: Neue Notiz
@@ -657,6 +817,13 @@ de:
         mailing_list:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+
+    households:
+      form:
+        address_updated: "Adresse aktualisiert"
+      fields:
+        lives_in_household_with: "Wohnt im Haushalt mit"
+        update_denied: "Keine Schreibrechte für %{other_person}."
 
     csv_imports:
       description:
@@ -768,6 +935,7 @@ de:
       history: Verlauf
       log: Log
       colleagues: Mitarbeiter/-innen
+      invoices: Rechnungen
 
     actions_show:
       send_login: Login schicken
@@ -775,6 +943,9 @@ de:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
+
+      impersonate_user: Imitieren
+      impersonate_user_tooltip: Du kannst hitobito so bedienen als wärst du diese Person
 
     actions_index:
       add_person: Person hinzufügen
@@ -787,6 +958,9 @@ de:
     attrs:
       additional_data: Weitere Angaben
       events: Meine nächsten Anlässe
+
+    contact_data:
+      lives_in_household_with: Wohnt im Haushalt mit
 
     email_field:
       used_as_login: Wird als Login verwendet
@@ -812,6 +986,13 @@ de:
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
 
+    print:
+      name: "Name"
+      address: "Adresse"
+      email: "E-Mail"
+      home_phone: "Privat"
+      mobile_phone: "Mobil"
+
     roles:
       title: Aktive Rollen
 
@@ -822,6 +1003,8 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_email_needed: 'Für den export wird eine Email Adresse benötigt.'
 
   participations:
     destroy:
@@ -833,18 +1016,51 @@ de:
       save_search: Suche speichern
       save_filter: Filter speichern
       save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
-      prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+      filters_qualification_validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
+      filters_role_kind:
+        active: war die Rolle aktiv.
+        created: wurde die Rolle erstellt.
+        deleted: wurde die Rolle gelöscht.
 
     new:
-      title: Personen nach Rollen filtern
+      title: Personen filtern
+
+    range:
+      prompt_range: In welchem Bereich soll gesucht werden?
+
+    role:
+      title: Rollen
+      prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      prompt_role_duration: Im Zeitraum (optional)
+      prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
+      prompt_role_duration_until: bis
 
     qualification:
-      title: Personen nach Qualifikationen filtern
+      title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_year: Qualifikationsjahr einschränken
       prompt_kind: In welchem Bereich soll gesucht werden?
+      start_at_year_label: Erhalten zwischen
+      start_at_year_infix: und
+      start_at_year_suffix: ''
+      finish_at_year_label: Abgelaufen zwischen
+      finish_at_year_infix: und
+      finish_at_year_suffix: ''
+      not_enough_permissions: Du verfügst nicht über ausreichende Berechtigungen, um Personen mit diesem Filter zu suchen.
 
     simple_radio:
+      match:
+        one: Person hat mindestens EINE dieser Qualifikationen
+        all: Person hat ALLE diese Qualifikationen
       validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
@@ -928,6 +1144,7 @@ de:
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
     subscription:
       only_persons_with: 'Nur Personen mit:'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   version:
     attribute_change:
@@ -944,6 +1161,9 @@ de:
         create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."
         update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
         destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
+
+    impersonate: "Account wurde von %{user} übernommen."
+    impersonation_done: "Account wird nicht mehr von %{user} verwendet."
 
   views:
     pagination:

@@ -410,5 +410,22 @@ describe Group do
 
   end
 
+  context 'invoice_config' do
+    let (:parent) { groups(:top_layer) }
 
+    it 'is created for layer group' do
+      group = Fabricate(Group::BottomLayer.sti_name, name: 'g', parent: parent)
+      expect(group.invoice_config).to be_present
+    end
+
+    it 'is not created for non layer group' do
+      group = Fabricate(Group::TopGroup.sti_name, name: 'g', parent: parent)
+      expect(group.invoice_config).not_to be_present
+    end
+
+    it 'is destroyed group when group gets destroyed' do
+      group = Fabricate(Group::BottomLayer.sti_name, name: 'g', parent: parent)
+      expect { group.destroy }.to change { InvoiceConfig.count }.by(-1)
+    end
+  end
 end

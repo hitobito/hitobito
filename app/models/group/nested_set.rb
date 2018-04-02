@@ -78,6 +78,10 @@ module Group::NestedSet
           order(:lft)
   end
 
+  def has_sublayers?
+    children.any? { |child| child.layer? }
+  end
+
   def no_touch_on_move
     true
   end

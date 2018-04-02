@@ -1,0 +1,15 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%nav.nav-left-list
+  - current_user.finance_groups.each do |group|
+    - if group == parent
+      %h3.nav-left-title= link_to parent, parent
+      %ul.nav-left-list
+        = nav Invoice.model_name.human(count: 2), group_invoices_path(parent), %w(invoices)
+        = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent), %w(invoice_articles)
+        = nav t('navigation.admin'), group_invoice_config_path(parent), %w(invoice_config)
+    - else
+      = nav(group, group_invoices_path(group))

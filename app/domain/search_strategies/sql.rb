@@ -61,7 +61,7 @@ module SearchStrategies
 
     def query_events
       return Event.none.page(1) unless term_present?
-      query_entities(Event.all).page(1).per(QUERY_PER_PAGE)
+      query_entities(Event.includes(:groups, :dates).all).page(1).per(QUERY_PER_PAGE)
     end
 
     protected

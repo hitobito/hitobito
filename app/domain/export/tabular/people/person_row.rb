@@ -23,11 +23,19 @@ module Export::Tabular::People
     end
 
     def roles
-      entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+      if entry.try(:role_with_layer).present?
+        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+      else
+        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+      end
     end
 
     def tags
       entry.tag_list.to_s
+    end
+
+    def layer_group
+      entry.layer_group.to_s
     end
 
     private
@@ -46,7 +54,7 @@ module Export::Tabular::People
 
     def people_relation_attribute(attr)
       entry.relations_to_tails.
-        select { |r| :"people_relation_#{r.kind}" == attr }.
+        select { |r| attr == :"people_relation_#{r.kind}" }.
         map { |r| r.tail.to_s }.
         join(', ')
     end
@@ -57,7 +65,7 @@ module Export::Tabular::People
     end
 
     def find_qualification(label)
-      entry.qualifications.find do |q|
+      entry.decorate.latest_qualifications_uniq_by_kind.find do |q|
         qualification_active?(q) &&
         ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
       end

@@ -15,7 +15,7 @@
 #  approved             :boolean          default(FALSE), not null
 #  rejected             :boolean          default(FALSE), not null
 #  waiting_list         :boolean          default(FALSE), not null
-#  waiting_list_comment :text
+#  waiting_list_comment :text(65535)
 #
 
 class Event::Application < ActiveRecord::Base

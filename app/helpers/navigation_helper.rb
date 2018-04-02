@@ -11,7 +11,8 @@ module NavigationHelper
     { label: :groups,
       url: :groups_path,
       icon_name: 'users',
-      active_for: %w(groups people) },
+      active_for: %w(groups people),
+      inactive_for: %w(invoices invoice_articles invoice_config) },
 
     { label: :events,
       url: :list_events_path,
@@ -24,6 +25,11 @@ module NavigationHelper
       icon_name: 'book',
       active_for: %w(list_courses),
       if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
+
+    { label: :invoices,
+      url: :first_group_invoices_or_root_path,
+      if: ->(_) { current_user.finance_groups.any? },
+      active_for: %w(invoices invoice_articles invoice_config) },
 
     { label: :admin,
       url: :label_formats_path,
@@ -44,6 +50,11 @@ module NavigationHelper
         end
       end
     end
+  end
+
+  def first_group_invoices_or_root_path
+    return root_path if current_user.finance_groups.blank?
+    group_invoices_path(current_user.finance_groups.first)
   end
 
   # Create a list item for navigations.

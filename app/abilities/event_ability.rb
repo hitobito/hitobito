@@ -15,7 +15,7 @@ class EventAbility < AbilityDsl::Base
     permission(:any).may(:show).all
     permission(:any).may(:index_participations).for_participations_read_events
     permission(:any).may(:update).for_leaded_events
-    permission(:any).may(:qualify).for_qualify_event
+    permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
     permission(:group_full).may(:index_participations, :create, :update, :destroy).in_same_group
 
@@ -24,15 +24,17 @@ class EventAbility < AbilityDsl::Base
       in_same_group_or_below
 
     permission(:layer_full).
-      may(:index_participations, :update, :create, :destroy, :application_market, :qualify).
+      may(:index_participations, :update, :create, :destroy,
+          :application_market, :qualify, :qualifications_read).
       in_same_layer
 
     permission(:layer_and_below_full).
       may(:index_participations, :update).in_same_layer_or_below
     permission(:layer_and_below_full).
-      may(:create, :destroy, :application_market, :qualify).in_same_layer
+      may(:create, :destroy, :application_market, :qualify, :qualifications_read).in_same_layer
 
-    general(:create, :destroy, :application_market, :qualify).at_least_one_group_not_deleted
+    general(:create, :destroy, :application_market, :qualify, :qualifications_read).
+      at_least_one_group_not_deleted
   end
 
   on(Event::Course) do

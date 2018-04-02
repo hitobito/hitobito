@@ -98,4 +98,36 @@ describe Event::Course do
     expect(course.signature_confirmation).to be_truthy
   end
 
+  context '#duplicate' do
+
+    let(:event) { events(:top_course) }
+
+    it 'resets participant counts' do
+      d = event.duplicate
+      expect(d.participant_count).to eq(0)
+      expect(d.teamer_count).to eq(0)
+      expect(d.applicant_count).to eq(0)
+    end
+
+    it 'resets state' do
+      d = event.duplicate
+      expect(d.state).to be_nil
+    end
+
+    it 'keeps empty questions' do
+      event.questions = []
+      d = event.duplicate
+      expect(d.application_questions.size).to eq(0)
+    end
+
+    it 'copies existing questions' do
+      d = event.duplicate
+      expect do
+        d.dates << Fabricate.build(:event_date, event: d)
+        d.save!
+      end.to change { Event::Question.count }.by(3)
+    end
+
+  end
+
 end

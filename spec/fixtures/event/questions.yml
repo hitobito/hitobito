@@ -2,17 +2,17 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_questions
 #
 #  id               :integer          not null, primary key
 #  event_id         :integer
-#  question         :string
-#  choices          :string
+#  question         :string(255)
+#  choices          :string(255)
 #  multiple_choices :boolean          default(FALSE)
 #  required         :boolean
+#  admin            :boolean          default(FALSE), not null
 #
 
 top_ov:

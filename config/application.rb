@@ -127,6 +127,11 @@ module Hitobito
       host = ENV['RAILS_SPHINX_HOST']
       host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
+
+    def self.build_info
+      @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
+    end
+
   end
 end
 

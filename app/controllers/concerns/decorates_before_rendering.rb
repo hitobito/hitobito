@@ -2,6 +2,10 @@
 
 # Copyright (c) 2012 Rob Hanlon, MIT License
 
+#  Copyright (c) 2017, Pfadibewebung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 module Concerns
   # Decorates the specified fields. For instance, if you have
@@ -77,7 +81,7 @@ module Concerns
     def __superclass_decorator_name(ivar, klass)
       superclass = klass.superclass
       if superclass == Module
-        fail ArgumentError, "#{ivar} does not have an associated decorator"
+        raise ArgumentError, "#{ivar} does not have an associated decorator"
       end
       superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
       superclass_decorator_name += 'Decorator'
@@ -87,10 +91,12 @@ module Concerns
     def __model_class_for__(ivar)
       if ivar.is_a?(ActiveRecord::Relation)
         ivar.klass
+      elsif ivar.respond_to?(:each) # Array or Enumerable
+        ivar.first.class
       elsif ivar.class.respond_to?(:model_name)
         ivar.class
       else
-        fail ArgumentError, "#{ivar.inspect} does not have an associated model"
+        raise ArgumentError, "#{ivar.inspect} does not have an associated model"
       end
     end
 

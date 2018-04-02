@@ -14,20 +14,34 @@ module Export::Pdf
       @format = format
     end
 
-    def generate(contactables)
+    def generate(contactables, household = false)
       pdf = Prawn::Document.new(page_size: format.page_size,
                                 page_layout: format.page_layout,
                                 margin: 0.mm)
       pdf.font Settings.pdf.labels.font_name, size: format.font_size
 
-      contactables.each_with_index do |contactable, i|
-        print_address_in_bounding_box(pdf, address(contactable), position(pdf, i))
+      rows = household ? to_households(contactables) : contactables
+
+      rows.each_with_index do |contactable, i|
+        name = to_name(contactable)
+
+        print_address_in_bounding_box(pdf,
+                                      address(contactable, name),
+                                      position(pdf, i))
       end
 
       pdf.render
     end
 
     private
+
+    def to_households(contactables)
+      Export::Tabular::People::Households.new(contactables).list
+    end
+
+    def to_name(contactable)
+      Export::Tabular::People::HouseholdRow.new(contactable).name
+    end
 
     # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos)
@@ -56,11 +70,11 @@ module Export::Pdf
       pdf.text_box(address, at: [left, top])
     end
 
-    def address(contactable)
+    def address(contactable, name)
       address = ''
       address << contactable.company_name << "\n" if print_company?(contactable)
       address << contactable.nickname << "\n" if print_nickname?(contactable)
-      address << contactable.full_name << "\n" if contactable.full_name.present?
+      address << name << "\n" if name.present?
       address << contactable.address.to_s
       address << "\n" unless contactable.address =~ /\n\s*$/
       address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"

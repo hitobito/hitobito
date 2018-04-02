@@ -13,14 +13,15 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :application
 
   delegate :to_s, :email, :primary_email, :all_emails, :all_additional_emails,
-           :all_phone_numbers, :all_social_accounts, :complete_address, :town, to: :person
+           :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
+           :layer_group, to: :person
 
   def person_additional_information
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
   end
 
   def person_location_information
-    [person.town, originating_group].reject(&:blank?).join(', ')
+    [layer_group, town_info].reject(&:blank?).join(' ')
   end
 
   def incomplete_label
@@ -40,8 +41,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
     safe_join(roles, h.tag(:br)) { |role| role.to_s }
   end
 
-  def originating_group
-    person.primary_group
+  def town_info
+    "(#{h.t('.town')}: #{person.town})" if person.town
   end
 
 end

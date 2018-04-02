@@ -6,6 +6,8 @@
 - if can?(:new, @event.new_role)
   = Dropdown::Event::RoleAdd.new(self, @group, @event)
 
+= invoice_button(entries.collect(&:person), @group)
+
 = dropdown_people_export(can?(:show_details, entries.first))
 
 = action_button(t('global.button.print'), 'javascript:window.print();', :print)

@@ -1,11 +1,12 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+
 describe Event::PreconditionChecker do
   let(:course) { events(:top_course) }
   let(:person) { people(:top_leader) }
@@ -17,6 +18,7 @@ describe Event::PreconditionChecker do
   end
 
   subject { Event::PreconditionChecker.new(course, person) }
+
   before do
     course.kind.event_kind_qualification_kinds.
       where(category: 'precondition', role: 'participant').
@@ -30,7 +32,7 @@ describe Event::PreconditionChecker do
 
   describe 'minimum age person' do
     before { course.kind.minimum_age = 16 }
-    let(:too_young_error) { 'Altersgrenze von 16 unterschritten.' }
+    let(:too_young_error) { 'Altersgrenze von 16 Jahren ist unterschritten.' }
 
     context 'has no birthday' do
       its(:valid?) { should be_falsey }
@@ -68,7 +70,7 @@ describe Event::PreconditionChecker do
 
     context "person without 'super lead'" do
       its(:valid?) { should be_falsey }
-      its('errors_text.last') { should =~ /Super Lead/ }
+      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead/ }
     end
 
     context "person with expired 'super lead'" do
@@ -113,13 +115,58 @@ describe Event::PreconditionChecker do
                                                            category: 'precondition',
                                                            role: 'participant')
       end
-      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead$/ }
+
+      its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
 
       context 'missing only one' do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead$/ }
+        its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead/ }
+      end
+
+      context 'with both present' do
+        before do
+          qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+          qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
+        end
+
+        its(:valid?) { should be_truthy }
+      end
+
+      context 'in multiple groups' do
+        let(:ql) { qualification_kinds(:ql) }
+
+        before do
+          course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: ql.id,
+                                                             category: 'precondition',
+                                                             role: 'participant',
+                                                             grouping: 1)
+        end
+
+        its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+
+        context 'missing only one in a grouping' do
+          before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
+
+          its(:valid?) { should be_falsey }
+          its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+        end
+
+        context 'with both in grouping nil' do
+          before do
+            qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+            qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
+          end
+
+          its(:valid?) { should be_truthy }
+        end
+
+        context 'with the single one in grouping 1' do
+          before { qualifications << Fabricate(:qualification, qualification_kind: ql, start_at: valid_date) }
+
+          its(:valid?) { should be_truthy }
+        end
       end
     end
 

@@ -51,9 +51,12 @@ describe Event::KindsController do
 
     it 'adds associations to new event kind' do
       post :create, event_kind: { label: 'Foo',
+                                  precondition_qualification_kinds: {
+                                    '0' => { qualification_kind_ids: [sl.id, gl.id] },
+                                    '2' => { qualification_kind_ids: [sl.id, ql.id] }
+                                  },
                                   qualification_kinds: {
                                     participant: {
-                                      precondition: { qualification_kind_ids: [sl.id, gl.id] },
                                       qualification: { qualification_kind_ids: [sl.id, gl.id] },
                                       prolongation: { qualification_kind_ids: [sl.id] }
                                     },
@@ -67,8 +70,9 @@ describe Event::KindsController do
       expect(assigns(:kind).errors.full_messages).to eq []
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      expect(assocs.count).to eq 9
-      expect(assocs.where(role: :participant, category: :precondition).count).to eq 2
+      expect(assocs.count).to eq 11
+      expect(assocs.where(role: :participant, category: :precondition, grouping: 1).count).to eq 2
+      expect(assocs.where(role: :participant, category: :precondition, grouping: 2).count).to eq 2
       expect(assocs.where(role: :participant, category: :qualification).count).to eq 2
       expect(assocs.where(role: :participant, category: :prolongation).count).to eq 1
       expect(assocs.where(role: :leader, category: :qualification).count).to eq 2
@@ -90,19 +94,29 @@ describe Event::KindsController do
     end
 
     it 'removes association from existing event kind' do
-      expect(kind.event_kind_qualification_kinds.count).to eq 4
+      kind.event_kind_qualification_kinds.create!(
+        category: 'precondition', role: 'participant', grouping: 1, qualification_kind_id: gl.id)
+      kind.event_kind_qualification_kinds.create!(
+        category: 'precondition', role: 'participant', grouping: 2, qualification_kind_id: sl.id)
+      expect(kind.event_kind_qualification_kinds.count).to eq 6
 
       put :update, id: kind.id, event_kind: { label: kind.label,
+                                              precondition_qualification_kinds: {
+                                                '0' => { qualification_kind_ids: [ql.id] },
+                                                '1' => { qualification_kind_ids: [gl.id] },
+                                              },
                                               qualification_kinds: { participant: { prolongation: {
                                                 qualification_kind_ids: [gl.id] } } } }
 
       assocs = assigns(:kind).event_kind_qualification_kinds
-      expect(assocs.count).to eq 1
-      expect(assocs.pluck(:qualification_kind_id)).to match_array([gl.id])
+      expect(assocs.count).to eq 3
+      expect(assocs.pluck(:qualification_kind_id)).to match_array([gl.id, gl.id, ql.id])
     end
 
     it 'removes all associations from existing event kind' do
-      expect(kind.event_kind_qualification_kinds.count).to eq 4
+      kind.event_kind_qualification_kinds.create!(
+        category: 'precondition', role: 'participant', grouping: 1, qualification_kind_id: gl.id)
+      expect(kind.event_kind_qualification_kinds.count).to eq 5
 
       put :update, id: kind.id, event_kind: { label: kind.label,
                                               qualification_kinds: { participant: { prolongation: {

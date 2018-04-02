@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: person_add_requests
@@ -12,9 +11,9 @@
 #  id           :integer          not null, primary key
 #  person_id    :integer          not null
 #  requester_id :integer          not null
-#  type         :string           not null
+#  type         :string(255)      not null
 #  body_id      :integer          not null
-#  role_type    :string
+#  role_type    :string(255)
 #  created_at   :datetime         not null
 #
 

@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  generation: 1
+  labels:
+    app: memcached
+    promotion-enabled: "true"
+    redeployment-enabled: "true"
+    redeployment-lifecycle: around-database
+    redeployment-start: "true"
+    redeployment-stop: "true"
+  name: memcached
+spec:
+  replicas: 1
+  selector:
+    app: memcached
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/container.memcached.image.entrypoint: '["docker-entrypoint.sh","memcached"]'
+        openshift.io/generated-by: OpenShiftNewApp
+      labels:
+        app: memcached
+        promotion-enabled: "true"
+        redeployment-enabled: "true"
+        redeployment-lifecycle: around-database
+        redeployment-start: "true"
+        redeployment-stop: "true"
+    spec:
+      containers:
+      - image: 172.30.1.1:5000/hitobito-templatememcached
+        imagePullPolicy: Always
+        name: memcached
+        ports:
+        - containerPort: 11211
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers: []
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  labels:
+    app: memcached
+  name: memcached
+spec:
+  ports:
+  - name: 11211-tcp
+    port: 11211
+    protocol: TCP
+    targetPort: 11211
+  selector:
+    app: memcached
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+

@@ -355,6 +355,7 @@ ActiveRecord::Schema.define(version: 20180401081855) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_index "mail_logs", ["mail_hash"], name: "index_mail_logs_on_mail_hash"
   add_index "mail_logs", ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id"
 
   create_table "mailing_lists", force: :cascade do |t|

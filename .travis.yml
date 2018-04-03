@@ -22,9 +22,7 @@ before_install:
   - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - sudo service mysql restart
 install:
-  - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
   - bundle install --path vendor/bundle
-  - bundle update mysql2
 script:
   - bundle exec rake db:create ci --trace skip_tasks=spec:features
 matrix:

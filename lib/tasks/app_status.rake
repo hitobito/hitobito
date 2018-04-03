@@ -9,8 +9,7 @@ namespace :app_status do
 
   desc "retreive app status auth token"
   task :auth_token => :environment do
-    app_status = AppStatus.new
-    puts app_status.auth_token
+    puts AppStatus.auth_token
   end
 
 end

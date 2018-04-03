@@ -85,4 +85,11 @@ module PeopleHelper
     end, "\n")
   end
 
+  def may_impersonate?(user, group)
+    can?(:impersonate_user, user) &&
+      user != current_user &&
+      !origin_user &&
+      group.people.exists?(id: user.id)
+  end
+
 end

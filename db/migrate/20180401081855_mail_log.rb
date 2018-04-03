@@ -10,9 +10,9 @@ class MailLog < ActiveRecord::Migration
       t.string :mailing_list_name
       t.belongs_to :mailing_list, index: true
       t.timestamps(null: false)
-
-      add_index :mail_logs, :mail_hash
     end
+
+    add_index :mail_logs, :mail_hash
 
   end
 

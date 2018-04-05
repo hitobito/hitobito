@@ -33,7 +33,7 @@ class MailLog < ActiveRecord::Base
   end
 
   def mail_subject=(value)
-    value = I18n.transliterate(value, '?')
+    value = I18n.transliterate(value, '?') if value.present?
     super(value)
   end
 

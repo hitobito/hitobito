@@ -69,12 +69,12 @@ describe Export::Ics::Events do
 
     context 'with fullday event' do
       let(:datetime) { Time.zone.local(2018, 5, 19) }
-      it { is_expected.to be_a(Icalendar::Values::Date) }
+      it { is_expected.to be_a(ical_date_klass) }
     end
 
     context 'with timed event' do
       let(:datetime) { Time.zone.local(2018, 5, 19, 12, 15) }
-      it { is_expected.to be_a(Icalendar::Values::DateTime) }
+      it { is_expected.to be_a(ical_datetime_klass) }
     end
 
     context 'with nil' do

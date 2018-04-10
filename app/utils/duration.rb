@@ -83,4 +83,7 @@ class Duration < Struct.new(:start_at, :finish_at)
     self.class.date_only?(value)
   end
 
+  deprecate date_only?: 'Don\'t use this private method anymore.
+    Instead use the static variant ```Duration.date_only?```'
+
 end

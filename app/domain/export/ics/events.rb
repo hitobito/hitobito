@@ -24,7 +24,7 @@ module Export::Ics
     def generate_ical_from_event_date(event_date, event)
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
-        ical_event.dtend   = datetime_to_ical(event_date.finish_at)
+        ical_event.dtend = datetime_to_ical(event_date.finish_at)
         ical_event.summary = "#{event.name}: #{event_date.label}"
         ical_event.location = event_date.location || event.location
         ical_event.description = event.description
@@ -35,9 +35,10 @@ module Export::Ics
     def datetime_to_ical(datetime)
       return unless datetime.respond_to?(:strftime)
       if Duration.date_only?(datetime)
-        return Icalendar::Values::Date.new(datetime.strftime(Icalendar::Values::Date::FORMAT))
+        Icalendar::Values::Date.new(datetime.strftime(Icalendar::Values::Date::FORMAT))
+      else
+        Icalendar::Values::DateTime.new(datetime.strftime(Icalendar::Values::DateTime::FORMAT))
       end
-      Icalendar::Values::DateTime.new(datetime.strftime(Icalendar::Values::DateTime::FORMAT))
     end
   end
 end

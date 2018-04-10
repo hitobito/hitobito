@@ -53,6 +53,8 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{event_roles})$/
     # custom return_urls end up like that.
     t.skip_uri_patterns << /\:3000\-?\d+$/
+    # avoid impersionation as results in 401s
+    t.skip_uri_patterns << /groups\/\d+\/people\/\d+\/impersonate$/
 
     # The parent entry may already have been deleted, thus producing 404s.
     t.allow_404_for(/groups$/)
@@ -87,6 +89,7 @@ module TarantulaConfig
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/event$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/exclude_person$/)
     t.allow_404_for(/groups\/\d+\/mailing_lists\/\d+\/subscriptions\/\d+$/)
+    t.allow_404_for(/groups\/\d+\/invoice_articles\/\d+$/)
     t.allow_404_for(/event_kinds\/\d+$/)
     t.allow_404_for(/event_kinds$/)
     # tarantula role type is invalid

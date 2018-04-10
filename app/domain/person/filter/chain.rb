@@ -48,6 +48,10 @@ class Person::Filter::Chain
     filters.blank?
   end
 
+  def roles_join
+    first_custom_roles_join || { roles: :group }
+  end
+
   def to_hash
     # call #to_hash twice to get a regular hash (without indifferent access)
     build_hash { |f| f.to_hash.to_hash }
@@ -62,6 +66,10 @@ class Person::Filter::Chain
   end
 
   private
+
+  def first_custom_roles_join
+    filters.collect(&:roles_join).compact.first
+  end
 
   def build_hash
     filters.each_with_object({}) { |f, h| h[f.attr] = yield f }

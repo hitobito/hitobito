@@ -15,11 +15,13 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    with_deleted(scope).where(type_conditions).where(duration_conditions)
+    scope.
+      where(type_conditions).
+      where(duration_conditions)
   end
 
   def blank?
-    args[:role_type_ids].blank?
+    args[:role_type_ids].blank? && args[:kind].blank?
   end
 
   def to_hash
@@ -30,8 +32,11 @@ class Person::Filter::Role < Person::Filter::Base
     merge_duration_args(role_type_ids: args[:role_type_ids].join(ID_URL_SEPARATOR))
   end
 
-  def with_deleted?
-    %w(active deleted).include?(args[:kind])
+  def roles_join
+    case args[:kind]
+    when 'active' then active_roles_join
+    when 'deleted' then deleted_roles_join
+    end
   end
 
   def time_range
@@ -66,35 +71,38 @@ class Person::Filter::Role < Person::Filter::Base
     args[:role_types].map { |t| map[t] }.compact
   end
 
-  def with_deleted(scope)
-    with_deleted? ? scope.joins(all_roles_join) : scope
-  end
-
-  def role_relation
-    with_deleted? ? :with_deleted_roles : :roles
-  end
-
   def type_conditions
-    [[role_relation, { type: args[:role_types] }]].to_h
+    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
   end
 
   def duration_conditions
     case args[:kind]
-    when 'created' then [[role_relation, { created_at: time_range }]].to_h
-    when 'deleted' then [[role_relation, { deleted_at: time_range }]].to_h
+    when 'created' then [[:roles, { created_at: time_range }]].to_h
+    when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
     when 'active' then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
 
   def active_role_condition
     <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
-    with_deleted_roles.created_at <= :max AND
-    (with_deleted_roles.deleted_at >= :min OR with_deleted_roles.deleted_at IS NULL)
+    roles.created_at <= :max AND
+    (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
 
-  def all_roles_join
-    'INNER JOIN roles AS with_deleted_roles ON with_deleted_roles.person_id = people.id'
+  def deleted_roles_join
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      INNER JOIN roles ON
+        (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
+      INNER JOIN groups ON roles.group_id = groups.id
+    SQL
+  end
+
+  def active_roles_join
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      INNER JOIN roles ON roles.person_id = people.id
+      INNER JOIN groups ON roles.group_id = groups.id
+    SQL
   end
 
 end

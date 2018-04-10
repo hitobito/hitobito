@@ -92,8 +92,15 @@ describe Person::Filter::Qualification do
     let(:range) { 'deep' }
 
     context 'no qualification kinds' do
-      it 'loads only entries on group' do
-        expect(entries).to be_empty
+      it 'loads people in subtree' do
+        expect(entries).to match_array([
+          people(:top_leader),
+          people(:bottom_member),
+          @tg_member,
+          @tg_extern,
+          @bl_leader,
+          @bg_leader
+        ])
       end
     end
 

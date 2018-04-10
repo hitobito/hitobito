@@ -49,6 +49,9 @@ module MailRelay
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
             new(message).relay
+          rescue MailProcessedBeforeError => e
+            message.mark_for_delete = false
+            Airbrake.notify(e)
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
@@ -99,19 +102,25 @@ module MailRelay
 
     def initialize(message)
       @message = message
+      @mail_log = init_mail_log(message)
     end
 
     # Process the given email.
     def relay
       if relay_address?
         if sender_allowed?
+          @mail_log.update(status: :bulk_delivering)
           bulk_deliver(message)
+          @mail_log.update(status: :completed)
         else
+          @mail_log.update(status: :sender_rejected)
           reject_not_allowed
         end
       else
+        @mail_log.update(status: :unkown_recipient)
         reject_not_existing
       end
+      nil
     end
 
     # If the email sender was not allowed to post messages, this method is called.
@@ -211,6 +220,25 @@ module MailRelay
       nil
     end
 
+    def init_mail_log(message)
+      mail_log = MailLog.build(message)
+      if mail_log.exists?
+        processed_before_error(mail_log)
+        return
+      end
+      mail_log.mailing_list_name = envelope_receiver_name
+      mail_log.save
+      mail_log
+    end
+
+    def processed_before_error(mail_log)
+      msg = "Mail with subject '#{mail_log.mail_subject}' has already been " \
+            'processed before and is skipped. Please remove it manually ' \
+            "from catch-all inbox and check why it could not be processed.\n" \
+            "Mail Hash: #{mail_log.mail_hash}"
+      raise MailProcessedBeforeError, msg
+    end
+
   end
 
   class Error < StandardError
@@ -222,5 +250,7 @@ module MailRelay
       @original = original
     end
   end
+
+  class MailProcessedBeforeError < StandardError; end
 
 end

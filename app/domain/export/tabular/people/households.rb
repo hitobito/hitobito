@@ -41,8 +41,10 @@ module Export::Tabular::People
 
     def add_household_key(list)
       return list unless list.respond_to?(:unscoped)
-      list = list.includes(:primary_group)
-      list.to_sql =~ /people\.\*|household_key/ ? list : list.select('household_key')
+      list.unscope(:select).
+        only_public_data.
+        select('household_key').
+        includes(:primary_group)
     end
 
     def assign(person, first_name, last_name)

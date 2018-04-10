@@ -11,19 +11,6 @@ describe Person::Filter::Role do
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
-  let(:range) { nil }
-  let(:role_types) { [] }
-  let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
-  let(:list_filter) do
-    Person::Filter::List.new(group,
-                             user,
-                             range: range,
-                             filters: {
-                               role: {role_type_ids: role_type_ids_string }
-                             })
-  end
-
-  let(:entries) { list_filter.entries }
 
   context 'initialize' do
 
@@ -37,9 +24,34 @@ describe Person::Filter::Role do
       expect(filter.to_params).to eq(role_type_ids: '1-3')
     end
 
+    it 'is considered blank if no role_type_ids are set' do
+      filter = Person::Filter::Role.new(:role, role_type_ids: %w())
+      expect(filter).to be_blank
+    end
+
+    %w(active deleted).each do |kind|
+      it "is not considered blank if kind #{kind} but no role_type_ids are set" do
+        filter = Person::Filter::Role.new(:role, role_type_ids: %w(), kind: kind)
+        expect(filter).not_to be_blank
+      end
+    end
   end
 
   context 'filtering' do
+    let(:list_filter) do
+      Person::Filter::List.new(group,
+                               user,
+                               range: range,
+                               filters: {
+                                 role: {role_type_ids: role_type_ids_string }
+                               })
+    end
+
+    let(:entries) { list_filter.entries }
+    let(:range) { nil }
+    let(:role_types) { [] }
+    let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
+
 
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
@@ -97,9 +109,13 @@ describe Person::Filter::Role do
       context 'with layer and below full' do
         let(:user) { @bl_leader }
 
-        it 'loads group members when no types given' do
-          expect(entries.collect(&:id)).to match_array([people(:bottom_member), @bl_leader].collect(&:id))
-          expect(list_filter.all_count).to eq(2)
+        it 'loads people in layer when no types given' do
+          expect(entries.collect(&:id)).to match_array([people(:bottom_member),
+                                                        @bl_leader,
+                                                        @bl_extern,
+                                                        @bg_leader,
+                                                        @bg_member].collect(&:id))
+          expect(list_filter.all_count).to eq(5)
         end
 
         context 'with specific types' do
@@ -118,8 +134,15 @@ describe Person::Filter::Role do
       let(:group) { groups(:top_layer) }
       let(:range) { 'deep' }
 
-      it 'loads group members when no types are given' do
-        expect(entries.collect(&:id)).to match_array([])
+      it 'loads people in subtree when no types are given' do
+        expect(entries.collect(&:id)).to match_array([people(:top_leader),
+                                                      people(:bottom_member),
+                                                      @tg_member,
+                                                      @tg_extern,
+                                                      @bl_leader,
+                                                      @bg_leader,
+                                                      ].collect(&:id))
+        expect(list_filter.all_count).to eq(8)
       end
 
       context 'with specific types' do
@@ -186,8 +209,9 @@ describe Person::Filter::Role do
 
     context :filter do
       def filter(attrs)
-        kind = described_class.to_s
-        filters = { role: transform(attrs).merge(role_type_ids: [role_type.id], kind: kind) }
+        kind = attrs[:kind] || described_class.to_s
+        role_type_ids = Array(role_type).collect(&:id)
+        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind) }
         Person::Filter::List.new(group, user, range: kind, filters: filters)
       end
 
@@ -258,6 +282,54 @@ describe Person::Filter::Role do
         it 'does not find active role' do
           role.update_columns(created_at: now)
           expect(filter(start_at: now).entries).to be_empty
+        end
+
+        it 'does not find active role if deleted role from other group matches' do
+          other_group = Fabricate(Group::TopGroup.name.to_sym, parent: groups(:top_layer))
+          other_role = Fabricate(Group::TopGroup::Member.name.to_sym, group: other_group, person: person)
+          other_role.update(deleted_at: now)
+          expect(filter(start_at: now).entries).to be_empty
+        end
+      end
+
+      context :without_role_type do
+        let(:role_type) { nil }
+        let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group) }
+
+        context :deleted do
+          it 'applies filter and does not find role deleted outside of timeframe' do
+            role.update(deleted_at: 3.days.ago)
+            expect(filter(start_at: now).entries).to be_empty
+            expect(filter(start_at: now).all_count).to eq 0
+          end
+
+          it 'applies filter and finds role deleted inside of timeframe' do
+            role.update(deleted_at: now)
+            expect(filter(start_at: now).entries).to have(1).item
+            expect(filter(start_at: now).all_count).to eq 1
+          end
+        end
+      end
+
+      context :bottom_group_one_one do
+        let(:group)     { groups(:bottom_group_one_one) }
+        let(:role_type) { Group::BottomGroup::Member }
+        let(:role)      { Fabricate(role_type.name.to_sym, group: group) }
+        let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+
+        context :deleted do
+          it 'finds one deleted role but has no access' do
+            role.update(deleted_at: now)
+            expect(filter(start_at: now).entries).to be_empty
+            expect(filter(start_at: now).all_count).to eq 1
+          end
+
+          it 'finds one deleted role but and has access because of another active role' do
+            role.update(deleted_at: now)
+            Fabricate(role_type.name.to_sym, group: groups(:bottom_group_one_two), person: role.person)
+            expect(filter(start_at: now).entries).to have(1).item
+            expect(filter(start_at: now).all_count).to eq 1
+          end
         end
       end
 

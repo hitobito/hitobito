@@ -43,6 +43,11 @@ class Person::Filter::Base
     args
   end
 
+  # Returns customized roles join (e.g. for working with deleted roles)
+  def roles_join
+    nil
+  end
+
   private
 
   def id_list(key)

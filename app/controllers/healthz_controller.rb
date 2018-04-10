@@ -19,6 +19,6 @@ class HealthzController < ActionController::Base
   private
 
   def app_status
-    @app_status ||= AppStatus.new
+    @app_status ||= AppStatus::Store.new
   end
 end

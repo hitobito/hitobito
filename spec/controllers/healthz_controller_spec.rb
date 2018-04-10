@@ -20,8 +20,7 @@ describe HealthzController do
 
         expect(response.status).to eq(200)
 
-        expect(json).to eq('app_status' => { 'code' => 'ok', 'store_ok?' => true })
-
+        expect(json).to eq('app_status' => { 'code' => 'ok', 'details' => { 'store_ok?' => true }})
       end
 
     end
@@ -30,13 +29,13 @@ describe HealthzController do
 
       it 'has HTTP status 503' do
 
-        expect_any_instance_of(AppStatus).to receive(:store_ok?).twice.and_return(false)
+        expect_any_instance_of(AppStatus::Store).to receive(:store_ok?).and_return(false)
 
         get :show
 
         expect(response.status).to eq(503)
 
-        expect(json).to eq('app_status' => { 'code' => 'service_unavailable', 'store_ok?' => false })
+        expect(json).to eq('app_status' => { 'code' => 'service_unavailable', 'details' => { 'store_ok?' => false }})
 
       end
 

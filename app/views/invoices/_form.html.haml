@@ -1,8 +1,6 @@
 = entry_form(data: { group: group_path(parent) }) do |f|
   = field_set_tag do
     = f.labeled_input_fields :title, :description, rows: 3
-    = f.labeled(:state) do
-      = f.collection_select(:state, Invoice.state_labels.to_a, :first, :second)
     = f.labeled_input_field :issued_at
     = f.labeled_input_field :due_at
 

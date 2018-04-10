@@ -5,13 +5,13 @@
 
 - title @group.to_s
 
-- if parent.layer? && @group.has_sublayers?
-  - content_for :filter do
+- content_for :filter do
+  - if parent.layer? && @group.has_sublayers?
     = FilterNavigation::Events.new(self, @group).to_s
-    .pull-right
-      = render 'shared/page_per_year'
+  .pull-right
+    = render 'shared/page_per_year'
 
-= paginate @events
+=q paginate @events
 
 = crud_table do |t|
   - t.col(t.sort_header(:name)) do |e|

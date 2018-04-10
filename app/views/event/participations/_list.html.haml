@@ -7,6 +7,9 @@
 
 - content_for(:filter, FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter]).to_s)
 
+.pagination-bar
+  = paginate entries
+
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 
@@ -28,3 +31,5 @@
   - t.col(Person.human_attribute_name(:layer_group)) 		 { |p| p.layer_group_label }
 
   = render_extensions :list, locals: { table: t }
+
+= paginate entries

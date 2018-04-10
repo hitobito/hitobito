@@ -223,11 +223,17 @@ describe PeopleController do
         context 'with layer and below full' do
           before { sign_in(@bl_leader) }
 
-          it 'loads group members when no types given' do
+          it 'loads people in layer when no types given' do
             get :index, group_id: group, range: 'layer'
 
             expect(assigns(:people).collect(&:id)).to match_array(
-              [people(:bottom_member), @bl_leader].collect(&:id)
+              [ people(:bottom_member),
+                @bl_leader,
+                @bl_extern,
+                @bg_leader,
+                @bg_member,
+                @tg_member # also has Group::BottomGroup::Leader role
+              ].collect(&:id)
             )
           end
 
@@ -270,10 +276,15 @@ describe PeopleController do
       context 'deep' do
         let(:group) { groups(:top_layer) }
 
-        it 'loads group members when no types are given' do
+        it 'loads people in subtree when no types are given' do
           get :index, group_id: group, range: 'deep'
 
-          expect(assigns(:people).collect(&:id)).to match_array([])
+          expect(assigns(:people).collect(&:id)).to match_array([people(:top_leader),
+                                                                 people(:bottom_member),
+                                                                 @tg_member,
+                                                                 @tg_extern,
+                                                                 @bl_leader,
+                                                                 @bg_leader].collect(&:id))
         end
 
         it 'loads selected roles of a group when types given' do

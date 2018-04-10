@@ -106,7 +106,7 @@ class Event::ParticipationsController < CrudController
 
   def list_entries
     filter = Event::ParticipationFilter.new(event, current_user, params)
-    records = filter.list_entries
+    records = filter.list_entries.page(params[:page])
     @counts = filter.counts
 
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])

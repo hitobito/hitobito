@@ -2,6 +2,14 @@
 
 ![Openshift Project](diagrams/ose3-rails.png)
 
+| Container | Beschreibung | Image |
+| --- | --- | --- |
+| rails | Apache, Passenger, Rails Applikation | Projekteigenes rails Image |
+| delayed-job | Delayed Job Worker | Projekteigenes rails Image |
+| sphinx | Sphinx Daemon | Projekteigenes rails Image |
+| mysql | Mysql DB Server | centos/mysql-56-centos7, https://hub.docker.com/r/centos/mysql-56-centos7/ |
+| mysql-backup | Mysql DB Backup | appuio/mysql-simple-backup-container, https://hub.docker.com/r/appuio/mysql-simple-backup-container/ |
+| memcached | Memcached Server|  |
 
 
 ## Composition Repository
@@ -32,6 +40,8 @@ Um ein bestehendes Compositon Repo auszuchecken:
     git clone --recurse-submodules https://github.com/hitobito/ose_composition_cevi.git -b production
 
 ## Neues Projekt
+
+Install oc client first: https://github.com/openshift/origin/releases
 
 Als erstes wird ein neues Projekt auf Openshift angelegt:
 

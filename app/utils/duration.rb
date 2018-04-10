@@ -45,6 +45,10 @@ class Duration < Struct.new(:start_at, :finish_at)
     start_at.blank? || finish_at.blank? || start_at <= finish_at
   end
 
+  def self.date_only?(value)
+    !value.respond_to?(:seconds_since_midnight) || value.seconds_since_midnight.zero?
+  end
+
   private
 
   def format_start_finish(format)
@@ -76,7 +80,7 @@ class Duration < Struct.new(:start_at, :finish_at)
   end
 
   def date_only?(value)
-    !value.respond_to?(:seconds_since_midnight) || value.seconds_since_midnight.zero?
+    self.class.date_only?(value)
   end
 
 end

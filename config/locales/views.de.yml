@@ -976,7 +976,7 @@ de:
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
 
       impersonate_user: Imitieren
-      impersonate_user_tooltip: Du kannst hitobito so bedienen als wärst du diese Person
+      impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.
 
     actions_index:
       add_person: Person hinzufügen
@@ -1035,7 +1035,7 @@ de:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
-    export_email_needed: 'Für den export wird eine Email Adresse benötigt.'
+    export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
 
   participations:
     destroy:

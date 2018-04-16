@@ -1,5 +1,9 @@
 class ChangeMailingsDefaultForAddiditonalEmails < ActiveRecord::Migration
-  def change
-  	change_column_default :additional_emails, :mailings, :false
+  def up
+    change_column_default :additional_emails, :mailings, false
+  end
+
+  def down
+    change_column_default :additional_emails, :mailings, true
   end
 end

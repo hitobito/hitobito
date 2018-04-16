@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(version: 20180416091154) do
 
   create_table "additional_emails", force: :cascade do |t|
-    t.integer "contactable_id",   limit: 4,                  null: false
-    t.string  "contactable_type", limit: 255,                null: false
-    t.string  "email",            limit: 255,                null: false
+    t.integer "contactable_id",   limit: 4,                   null: false
+    t.string  "contactable_type", limit: 255,                 null: false
+    t.string  "email",            limit: 255,                 null: false
     t.string  "label",            limit: 255
-    t.boolean "public",                       default: true, null: false
-    t.boolean "mailings",                     default: true, null: false
+    t.boolean "public",                       default: true,  null: false
+    t.boolean "mailings",                     default: false, null: false
   end
 
   add_index "additional_emails", ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type", using: :btree
@@ -370,8 +370,8 @@ ActiveRecord::Schema.define(version: 20180416091154) do
     t.boolean "subscribers_may_post",               default: false, null: false
     t.boolean "anyone_may_post",                    default: false, null: false
     t.string  "preferred_labels",     limit: 255
-    t.boolean "main_email",                         default: false
     t.boolean "delivery_report",                    default: false, null: false
+    t.boolean "main_email",                         default: false
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -126,6 +126,9 @@ class CrudController < ListController
   # perform the save operation
   def save_entry
     entry.save
+  rescue Mysql2::Error => e
+    logger.error e.message
+    false
   end
 
   # A label for the current entry, including the model name.

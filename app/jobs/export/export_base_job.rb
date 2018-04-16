@@ -10,7 +10,7 @@ require 'zip'
 
 class Export::ExportBaseJob < BaseJob
 
-  PARAMETERS = [:format, :exporter, :user_id, :tempfile_name].freeze
+  PARAMETERS = [:locale, :format, :exporter, :user_id, :tempfile_name].freeze
 
   attr_reader :exporter
 

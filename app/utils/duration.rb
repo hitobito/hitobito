@@ -5,7 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Duration < Struct.new(:start_at, :finish_at)
+class Duration
+
+  attr_reader :start_at, :finish_at
+
+  def initialize(start_at, finish_at)
+    @start_at  = start_at
+    @finish_at = finish_at
+  end
 
   def to_s(format = :long)
     if start_at && finish_at
@@ -51,7 +58,7 @@ class Duration < Struct.new(:start_at, :finish_at)
 
   private
 
-  def format_start_finish(format)
+  def format_start_finish(format) # rubocop:disable Metrics/AbcSize
     if start_at == finish_at
       format_datetime(start_at)
     elsif start_at.to_date == finish_at.to_date
@@ -83,7 +90,7 @@ class Duration < Struct.new(:start_at, :finish_at)
     self.class.date_only?(value)
   end
 
-  deprecate date_only?: 'Don\'t use this private method anymore.
-    Instead use the static variant ```Duration.date_only?```'
+  deprecate date_only?: "Don't use this private method anymore." \
+                        'Instead use the static variant `Duration.date_only?`'
 
 end

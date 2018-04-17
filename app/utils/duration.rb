@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,7 +20,7 @@ class Duration < Struct.new(:start_at, :finish_at)
   end
 
   def active?
-    if date_only?(start_at) && date_only?(finish_at)
+    if self.class.date_only?(start_at) && self.class.date_only?(finish_at)
       cover?(Time.zone.today)
     else
       cover?(Time.zone.now)
@@ -64,7 +64,7 @@ class Duration < Struct.new(:start_at, :finish_at)
   end
 
   def format_datetime(value)
-    if date_only?(value)
+    if self.class.date_only?(value)
       format_date(value)
     else
       "#{format_date(value)} #{format_time(value)}"

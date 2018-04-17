@@ -13,14 +13,7 @@ module PaymentSlips
   PAYMENT_SLIPS = %w(ch_es ch_bes ch_esr ch_besr).freeze
 
   included do
-    i18n_enum :payment_slip, PAYMENT_SLIPS
-
-    PAYMENT_SLIPS.each do |payment_slip|
-      scope payment_slip.to_sym, -> { where(payment_slip: payment_slip) }
-      define_method "#{payment_slip}?" do
-        self.payment_slip == payment_slip
-      end
-    end
+    i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
 
     def bank?
       ch_bes? || ch_besr?

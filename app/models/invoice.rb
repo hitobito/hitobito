@@ -70,7 +70,7 @@ class Invoice < ActiveRecord::Base
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
-  i18n_enum :state, STATES
+  i18n_enum :state, STATES, scopes: true, queries: true
 
   validates_by_schema
 
@@ -80,13 +80,6 @@ class Invoice < ActiveRecord::Base
   scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
-
-  STATES.each do |state|
-    scope state.to_sym, -> { where(state: state) }
-    define_method "#{state}?" do
-      self.state == state
-    end
-  end
 
   def self.to_contactables(invoices)
     invoices.collect do |invoice|

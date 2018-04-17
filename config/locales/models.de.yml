@@ -687,6 +687,15 @@ de:
         count: Anzahl
         cost: Betrag
 
+      # used for nested attributes
+      invoice_items:
+        name: Name
+        description: Beschreibung
+        vat_rate: MWSt.
+        unit_cost: Preis
+        count: Anzahl
+        cost: Betrag
+
       payment:
         invoice: Rechnung
         amount: Betrag

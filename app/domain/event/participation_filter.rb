@@ -9,25 +9,22 @@ class Event::ParticipationFilter
 
   PREDEFINED_FILTERS = %w(all teamers participants)
 
-  class_attribute :load_entries_includes
-  self.load_entries_includes = [:roles, :event,
-                                answers: [:question],
-                                person: [:additional_emails, :phone_numbers,
-                                         :primary_group]
-                               ]
-
   attr_reader :event, :user, :params, :counts
 
-  def initialize(event, user, params = {})
+  def initialize(event, user, params = {}, search_results_count)
     @event = event
     @user = user
     @params = params
+    @search_results_count = search_results_count
   end
 
-  def list_entries
-    records = load_entries
+  def apply
+    scope = apply_filter_scope(records)
+  end
+
+  def list_entries(records)
     @counts = populate_counts(records)
-    apply_default_sort(apply_filter_scope(records))
+    apply_default_sort(apply_filter_scope(records))     
   end
 
   def predefined_filters
@@ -42,9 +39,11 @@ class Event::ParticipationFilter
   end
 
   def populate_counts(records)
-    predefined_filters.each_with_object({}) do |name, memo|
+    counts = predefined_filters.each_with_object({}) do |name, memo|
       memo[name] = apply_filter_scope(records, name).count
     end
+    counts[:query] = @search_results_count if params[:q]
+    counts      
   end
 
   def load_entries

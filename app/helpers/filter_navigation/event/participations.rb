@@ -13,11 +13,12 @@ module FilterNavigation
 
       delegate :can?, to: :template
 
-      def initialize(template, group, event, filter)
+      def initialize(template, group, event, filter, query)
         super(template)
         @group = group
         @event = event
         @filter = filter.to_s
+        @query = query
         init_labels
         init_items
         init_dropdown_items
@@ -26,7 +27,9 @@ module FilterNavigation
       private
 
       def init_labels
-        if role_labels.include?(filter)
+        if @query && !@query.blank?
+          @active_label = @query
+        elsif role_labels.include?(filter)
           dropdown.label = filter
           dropdown.active = true
         elsif predefined_filters.include?(filter)
@@ -37,6 +40,7 @@ module FilterNavigation
       end
 
       def init_items
+        item(@query, '', counts[:query]) unless @query.blank?
         predefined_filters.each do |key|
           item(predefined_filter_label(key), event_participation_filter_link(key), counts[key])
         end

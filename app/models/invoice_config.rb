@@ -56,7 +56,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates_by_schema
 
   def to_s
-    [model_name.human, group.to_s].join(' - ')
+    model_name.human
   end
 
   private

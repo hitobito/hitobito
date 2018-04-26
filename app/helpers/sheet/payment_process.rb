@@ -6,23 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Invoice < Base
+  class PaymentProcess < Base
+    self.parent_sheet = Sheet::Invoice
 
     def title
-      ::Invoice.model_name.human(count: 2)
+      translate(:title)
     end
-
-    def self.parent_sheet
-      nil
-    end
-
-    def left_nav?
-      true
-    end
-
-    def render_left_nav
-      view.render('invoices/nav_left')
-    end
-
   end
+
 end

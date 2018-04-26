@@ -1,0 +1,46 @@
+-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+#main.row-fluid
+  %h3=t('.payments_with_invoice', from: l(processor.from), to: l(processor.to))
+  = standard_form(:payment_process, url: group_payment_process_path(group)) do |f|
+    = table(processor.payments_with_invoice, class: 'table table-stripped') do |t|
+      - t.col('') do |p|
+        - if p.valid?
+          - if p.settles?
+            %i.icon.icon-ok{title: t('.icon_tooltip_settles')}
+          - elsif p.undercuts?
+            %i.icon.icon-minus{title: t('.icon_tooltip_undercuts', difference: p.difference)}
+          - elsif p.exceeds?
+            %i.icon.icon-plus{title: t('.icon_tooltip_exceeds', difference: p.difference)}
+        - else
+          %i.icon.icon-warning-sign{title: p.errors.full_messages.join("\n")}
+      - t.col(Invoice.model_name.human) do |p|
+        %strong=link_to(p.invoice.title, [p.invoice.group, p.invoice])
+      - t.col(Invoice.human_attribute_name(:recipient)) do |p|
+        %strong=format_attr(p.invoice, :recipient)
+      - t.col(Invoice.human_attribute_name(:state)) { |p| format_attr(p.invoice, :state) }
+      - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.invoice.esr_number }
+      - t.col(t('.amount_open')) { |p| f(p.invoice.amount_open) }
+      - t.attr :amount
+      - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
+
+    %h3=t('.payments_without_invoice')
+    = table(processor.payments_without_invoice, class: 'table table-stripped', style: 'width: 100%') do |t|
+      - t.col('') do |p|
+        - if !p.invoice
+          %i.icon.icon-warning-sign{title: t('.icon_tooltip_invoice_missing')}
+        - elsif !p.invoice.payable?
+          %i.icon.icon-warning-sign{title: t('.icon_tooltip_invoice_not_payable')}
+
+      - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
+      - t.attr :amount
+      - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
+
+
+    = hidden_field_tag :data, @data
+    .btn-toolbar
+      = submit_button(f, t('.create', count: processor.valid_payments.count), disabled: processor.valid_payments.empty?)
+      = cancel_link(group_invoices_path(group))

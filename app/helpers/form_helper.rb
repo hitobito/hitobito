@@ -68,9 +68,9 @@ module FormHelper
     end
   end
 
-  def submit_button(form, label)
+  def submit_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, class: 'btn btn-primary', data: { disable_with: label })
+      form.button(label, options.merge(class: 'btn btn-primary', data: { disable_with: label }))
     end
   end
 

@@ -28,6 +28,7 @@ class InvoiceArticle < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { scope: :group_id }
   validates :number, presence: true, uniqueness: { scope: :group_id }
+  validates :unit_cost, money: true, allow_nil: true
 
   validates_by_schema
 

@@ -41,6 +41,8 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
+  ROUND_TO = BigDecimal.new('0.05')
+
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
   STATES_PAYABLE = %w(issued sent reminded).freeze
@@ -100,7 +102,7 @@ class Invoice < ActiveRecord::Base
 
   def calculated
     [:total, :cost, :vat].collect do |field|
-      [field, invoice_items.reject(&:frozen?).sum(&field)]
+      [field, round(invoice_items.reject(&:frozen?).sum(&field))]
     end.to_h
   end
 
@@ -216,5 +218,9 @@ class Invoice < ActiveRecord::Base
     if recipient_email.blank? && recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
     end
+  end
+
+  def round(decimal)
+    ((decimal / ROUND_TO).round) * ROUND_TO
   end
 end

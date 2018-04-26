@@ -25,6 +25,7 @@ class InvoiceItem < ActiveRecord::Base
 
   scope :list, -> { order(:name) }
 
+  validates :unit_cost, money: true, allow_nil: true
   delegate :recalculate!, to: :invoice
 
   validates_by_schema

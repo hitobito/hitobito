@@ -719,6 +719,7 @@ de:
 
   errors:
     messages:
+      invalid_money: "muss auf 5 Rappen gerundet werden"
       # timeliness
       invalid_date: "ist kein gültiges Datum"
       invalid_time: "ist keine gültige Zeit"

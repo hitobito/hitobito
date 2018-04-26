@@ -43,6 +43,7 @@ class Invoice < ActiveRecord::Base
 
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
+  STATES_PAYABLE = %w(issued sent reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
@@ -117,6 +118,10 @@ class Invoice < ActiveRecord::Base
 
   def remindable?
     STATES_REMINDABLE.include?(state)
+  end
+
+  def payable?
+    STATES_PAYABLE.include?(state)
   end
 
   def recipients

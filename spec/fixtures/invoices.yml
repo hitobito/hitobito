@@ -38,7 +38,7 @@ invoice:
   esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
-  total: 5
+  total: 5.35
 
 sent:
   title: Sent

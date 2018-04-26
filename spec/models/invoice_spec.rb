@@ -106,7 +106,7 @@ describe Invoice do
 
   it '#to_s returns total amount' do
     invoice = invoices(:invoice)
-    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.0"
+    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.35"
   end
 
   it '#calculated returns summed fields of invoice_items, rounds to 0.05' do
@@ -182,11 +182,11 @@ describe Invoice do
 
   it 'amount_open returns total amount minus payments' do
     invoice = invoices(:invoice)
-    expect(invoice.amount_open).to eq 5
+    expect(invoice.amount_open).to eq 5.35
     invoice.payments.create!(amount: 4)
-    expect(invoice.amount_open).to eq 1
+    expect(invoice.amount_open).to eq 1.35
     invoice.payments.create!(amount: 1.5)
-    expect(invoice.amount_open).to eq(-0.5)
+    expect(invoice.amount_open).to eq(-0.15)
   end
 
   it 'soft deleting group does not delete invoices' do

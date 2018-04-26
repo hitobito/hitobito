@@ -9,7 +9,7 @@
 #  email            :string(255)      not null
 #  label            :string(255)
 #  public           :boolean          default(TRUE), not null
-#  mailings         :boolean          default(TRUE), not null
+#  mailings         :boolean          default(FALSE), not null
 #
 
 #  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of

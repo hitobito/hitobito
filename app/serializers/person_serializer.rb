@@ -38,6 +38,7 @@
 #  locked_at                 :datetime
 #  authentication_token      :string(255)
 #  show_global_label_formats :boolean          default(TRUE), not null
+#  household_key             :string(255)
 #
 
 #  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of

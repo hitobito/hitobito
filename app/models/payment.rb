@@ -7,8 +7,8 @@
 #  invoice_id  :integer          not null
 #  amount      :decimal(12, 2)   not null
 #  received_at :date             not null
+#  reference   :string(255)
 #
-
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

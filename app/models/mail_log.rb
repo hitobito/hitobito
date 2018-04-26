@@ -1,4 +1,19 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: mail_logs
+#
+#  id                :integer          not null, primary key
+#  mail_from         :string(255)
+#  mail_subject      :string(255)
+#  mail_hash         :string(255)
+#  status            :integer          default(0)
+#  mailing_list_name :string(255)
+#  mailing_list_id   :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 
 #  Copyright (c) 2018, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

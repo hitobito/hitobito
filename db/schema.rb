@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416091154) do
+ActiveRecord::Schema.define(version: 20180423132520) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -370,8 +370,8 @@ ActiveRecord::Schema.define(version: 20180416091154) do
     t.boolean "subscribers_may_post",               default: false, null: false
     t.boolean "anyone_may_post",                    default: false, null: false
     t.string  "preferred_labels",     limit: 255
-    t.boolean "delivery_report",                    default: false, null: false
     t.boolean "main_email",                         default: false
+    t.boolean "delivery_report",                    default: false, null: false
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree
@@ -410,9 +410,10 @@ ActiveRecord::Schema.define(version: 20180416091154) do
   add_index "payment_reminders", ["invoice_id"], name: "index_payment_reminders_on_invoice_id", using: :btree
 
   create_table "payments", force: :cascade do |t|
-    t.integer "invoice_id",  limit: 4,                          null: false
-    t.decimal "amount",                precision: 12, scale: 2, null: false
-    t.date    "received_at",                                    null: false
+    t.integer "invoice_id",  limit: 4,                            null: false
+    t.decimal "amount",                  precision: 12, scale: 2, null: false
+    t.date    "received_at",                                      null: false
+    t.string  "reference",   limit: 255
   end
 
   add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id", using: :btree

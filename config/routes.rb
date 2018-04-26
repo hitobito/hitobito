@@ -47,6 +47,7 @@ Hitobito::Application.routes.draw do
       end
       resources :invoice_articles
 
+      resource :payment_process, only: [:new, :show, :create]
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do

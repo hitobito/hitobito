@@ -43,6 +43,7 @@ class Invoice < ActiveRecord::Base
 
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
+  STATES_PAYABLE = %w(issued sent reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
@@ -119,6 +120,10 @@ class Invoice < ActiveRecord::Base
     STATES_REMINDABLE.include?(state)
   end
 
+  def payable?
+    STATES_PAYABLE.include?(state)
+  end
+
   def recipients
     Person.where(id: recipient_ids.to_s.split(','))
   end
@@ -139,8 +144,8 @@ class Invoice < ActiveRecord::Base
     ActiveSupport::StringInquirer.new(self[:state])
   end
 
-  def amount_open
-    total - payments.sum(:amount)
+  def amount_open(without: nil)
+    total - payments.where.not(id: without).sum(:amount)
   end
 
   def amount_paid

@@ -699,7 +699,8 @@ de:
       payment:
         invoice: Rechnung
         amount: Betrag
-        received_at: Empfangen am
+        received_at: Eingangsdatum
+        reference: Zahlungsreferenz
 
       payment_reminder:
         invoice: Rechnung

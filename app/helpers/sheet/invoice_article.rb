@@ -8,5 +8,10 @@
 
 module Sheet
   class InvoiceArticle < Sheet::Invoice
+
+    def title
+      ::InvoiceArticle.model_name.human(count: 2)
+    end
+
   end
 end

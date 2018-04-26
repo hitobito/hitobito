@@ -106,7 +106,7 @@ describe Invoice do
 
   it '#to_s returns total amount' do
     invoice = invoices(:invoice)
-    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 2.0"
+    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.0"
   end
 
   it '#calculated returns summed fields of invoice_items' do
@@ -182,10 +182,10 @@ describe Invoice do
 
   it 'amount_open returns total amount minus payments' do
     invoice = invoices(:invoice)
-    expect(invoice.amount_open).to eq 2.0
+    expect(invoice.amount_open).to eq 5
+    invoice.payments.create!(amount: 4)
+    expect(invoice.amount_open).to eq 1
     invoice.payments.create!(amount: 1.5)
-    expect(invoice.amount_open).to eq 0.5
-    invoice.payments.create!(amount: 1)
     expect(invoice.amount_open).to eq(-0.5)
   end
 

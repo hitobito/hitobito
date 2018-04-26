@@ -144,8 +144,8 @@ class Invoice < ActiveRecord::Base
     ActiveSupport::StringInquirer.new(self[:state])
   end
 
-  def amount_open
-    total - payments.sum(:amount)
+  def amount_open(without: nil)
+    total - payments.where.not(id: without).sum(:amount)
   end
 
   def amount_paid

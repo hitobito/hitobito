@@ -9,11 +9,6 @@ require 'spec_helper'
 
 describe DeliveryReportMailer do
 
-  before do
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
-  end
-
   let(:recipient_email) { 'dude@hito42test.com' }
   let(:sent_message) do
     mail = Mail.new

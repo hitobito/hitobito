@@ -19,11 +19,6 @@ describe MailRelay::BulkMail do
   let(:log_prefix) { "BULK MAIL #{envelope_sender} '#{message.subject}' |" }
 
   before do
-
-    # load custom contents
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
-
     allow(bulk_mail)
       .to receive(:sleep)
       .with(5)

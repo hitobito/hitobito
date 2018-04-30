@@ -29,4 +29,31 @@ notes:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+bulk_mail_success_de:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:bulk_mail_success) %>
+  locale: de
+  label: 'Sendebericht Abo'
+  subject: 'Sendebericht Mail an {mail-to}'
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-recipients}<br/><br/>'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
 
+bulk_mail_with_failed_de:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:bulk_mail_with_failed) %>
+  locale: de
+  label: Sendebericht Abo nicht alle erfolgreich,
+  subject: Sendebericht Mail an {mail-to}
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>
+  Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
+  <br/><br/>
+  '
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

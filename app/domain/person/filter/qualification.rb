@@ -38,7 +38,7 @@ class Person::Filter::Qualification < Person::Filter::Base
   def year_scope?
     %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
       key = [pre, post].join('_')
-      args.key?(key.to_sym) || args.key?(key)
+      args[key.to_sym].present? || args[key].present?
     end
   end
 

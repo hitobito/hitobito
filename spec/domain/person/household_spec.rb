@@ -119,9 +119,11 @@ describe Person::Household do
   end
 
   context '#save' do
-    it 'persists new household' do
+    it 'persists new household', versioning: true do
       leader.household_people_ids = [member.id]
-      household(leader).save
+      expect do
+        household(leader).save
+      end.to change { member.versions.count }.by(1)
 
       expect(leader.reload.household_key).to eq member.reload.household_key
       expect(leader.household_key).to be_present

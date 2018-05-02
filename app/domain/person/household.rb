@@ -49,7 +49,9 @@ class Person::Household
   def save
     fail 'invalid' unless valid?
     person.update(household_key: key)
-    people.update_all(address_attrs(person).merge(household_key: key))
+    people.each do |housemate|
+      housemate.update(address_attrs(person).merge(household_key: key))
+    end
   end
 
   def remove

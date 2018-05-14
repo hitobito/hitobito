@@ -134,7 +134,7 @@ class Invoice < ActiveRecord::Base
     recipient.try(:greeting_name) || recipient_address.split("\n").first
   end
 
-  def filename(extension)
+  def filename(extension = 'pdf')
     format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
   end
 

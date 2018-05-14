@@ -74,11 +74,9 @@ module Export::Pdf::Invoice
     def total_box
       bounding_box([0, cursor], width: bounds.width) do
         font_size(10) do
-          table total_data, position: :right, cell_style: { borders: [:bottom],
-                                                            border_color: 'CCCCCC',
+          table total_data, position: :right, cell_style: { borders: [],
                                                             border_width: 0.5 } do
             style(row(1).column(0), size: 8)
-            style(column(1), align: :right)
           end
         end
       end
@@ -87,9 +85,7 @@ module Export::Pdf::Invoice
     def total_data
       [
         [I18n.t('invoices.pdf.total'),
-         helper.number_to_currency(invoice.calculated[:total], format: '%n %u')],
-        [I18n.t('invoices.pdf.total_vat'),
-         helper.number_to_currency(invoice.calculated[:vat], format: '%n %u')]
+         helper.number_to_currency(invoice.calculated[:total], format: '%n %u')]
       ]
     end
   end

@@ -211,6 +211,16 @@ describe Invoice do
     expect { other.really_destroy! }.to change { other.invoices.count }
   end
 
+  it '#recipient_name is read from recipient if present' do
+    expect(create_invoice.recipient_name).to eq 'Top'
+  end
+
+  it '#recipient_name is read from recipient_address if recipient is missing' do
+    invoice = create_invoice
+    invoice.update(recipient: nil)
+    expect(invoice.recipient_name).to eq 'Top Leader'
+  end
+
   private
 
   def contactables(*args)

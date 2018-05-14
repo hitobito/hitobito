@@ -131,7 +131,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def recipient_name
-    recipient.try(:greeting_name) || recipient_address.split("\n").first
+    recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end
 
   def filename(extension = 'pdf')
@@ -212,6 +212,10 @@ class Invoice < ActiveRecord::Base
      recipient.address,
      [recipient.zip_code, recipient.town].compact.join(' / '),
      recipient.country].compact.join("\n")
+  end
+
+  def recipient_name_from_recipient_address
+    recipient_address.to_s.split("\n").first.presence
   end
 
   def assert_sendable?

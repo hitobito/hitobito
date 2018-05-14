@@ -34,7 +34,7 @@ module Export::Pdf::Invoice
     end
 
     def articles_table
-      table articles, header: true, column_widths: { 0 => 290, 1 => 50, 2 => 60, 3 => 80 },
+      table articles, header: true, column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
                       cell_style: { borders: [:bottom],
                                     border_color: 'CCCCCC',
                                     border_width: 0.5,
@@ -52,7 +52,8 @@ module Export::Pdf::Invoice
         [I18n.t('activerecord.models.invoice_article.one'),
          I18n.t('activerecord.attributes.invoice_item.count'),
          I18n.t('activerecord.attributes.invoice_item.unit_cost'),
-         I18n.t('activerecord.attributes.invoice_item.cost')]
+         I18n.t('activerecord.attributes.invoice_item.cost'),
+         I18n.t('activerecord.attributes.invoice_item.vat_rate')]
       ] + article_data
     end
 
@@ -62,7 +63,8 @@ module Export::Pdf::Invoice
           "<b>#{it.name}</b>\n#{it.description}",
           it.count,
           helper.number_to_currency(it.unit_cost, unit: ''),
-          helper.number_to_currency(it.cost, unit: '')
+          helper.number_to_currency(it.cost, unit: ''),
+          helper.number_to_percentage(it.vat_rate)
         ]
       end
     end

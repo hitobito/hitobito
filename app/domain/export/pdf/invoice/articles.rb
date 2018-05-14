@@ -14,6 +14,8 @@ module Export::Pdf::Invoice
 
       bounding_box([0, 510], width: bounds.width) do
         font_size(12) { text title(reminder) }
+        pdf.move_down 8
+        text invoice.description
 
         if reminder
           pdf.move_down 8

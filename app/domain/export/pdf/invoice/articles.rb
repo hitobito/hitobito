@@ -36,26 +36,23 @@ module Export::Pdf::Invoice
     end
 
     def articles_table
-      table articles, header: true, column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
-                      cell_style: { borders: [:bottom],
-                                    border_color: 'CCCCCC',
-                                    border_width: 0.5,
-                                    padding: [2, 0, 2, 0],
-                                    inline_format: true } do
-
-        style(row(0), align: :center, font_style: :bold)
-        style(column(0), align: :left)
-        style(columns(1..3), align: :right)
-      end
+      table(articles,
+            header: true,
+            column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
+            cell_style: { borders: [:bottom],
+                          border_color: 'CCCCCC',
+                          border_width: 0.5,
+                          padding: [2, 0, 2, 0],
+                          inline_format: true })
     end
 
     def articles
       [
         [I18n.t('activerecord.models.invoice_article.one'),
-         I18n.t('activerecord.attributes.invoice_item.count'),
-         I18n.t('activerecord.attributes.invoice_item.unit_cost'),
-         I18n.t('activerecord.attributes.invoice_item.cost'),
-         I18n.t('activerecord.attributes.invoice_item.vat_rate')]
+         align_right(I18n.t('activerecord.attributes.invoice_item.count')),
+         align_right(I18n.t('activerecord.attributes.invoice_item.unit_cost')),
+         align_right(I18n.t('activerecord.attributes.invoice_item.cost')),
+         align_right(I18n.t('activerecord.attributes.invoice_item.vat_rate'))]
       ] + article_data
     end
 
@@ -63,10 +60,10 @@ module Export::Pdf::Invoice
       invoice_items.collect do |it|
         [
           "<b>#{it.name}</b>\n#{it.description}",
-          it.count,
-          helper.number_to_currency(it.unit_cost, unit: ''),
-          helper.number_to_currency(it.cost, unit: ''),
-          helper.number_to_percentage(it.vat_rate)
+          align_right(it.count.to_s),
+          align_right(helper.number_to_currency(it.unit_cost, unit: '')),
+          align_right(helper.number_to_currency(it.cost, unit: '')),
+          align_right(helper.number_to_percentage(it.vat_rate))
         ]
       end
     end
@@ -87,6 +84,10 @@ module Export::Pdf::Invoice
         [I18n.t('invoices.pdf.total'),
          helper.number_to_currency(invoice.calculated[:total], format: '%n %u')]
       ]
+    end
+
+    def align_right(content)
+      pdf.make_cell(content: content, align: :right)
     end
   end
 end

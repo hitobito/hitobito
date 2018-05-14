@@ -80,6 +80,6 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def pdf_options
-    { articles: true, esr: true }
+    { articles: true, payment_slip: true }
   end
 end

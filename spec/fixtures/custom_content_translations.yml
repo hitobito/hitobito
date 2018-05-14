@@ -57,3 +57,19 @@ bulk_mail_with_failed_de:
   '
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+content_invoice_notification:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_invoice_notification) %>
+  locale: de
+  label: Rechnung
+  subject: Rechnung {invoice-number} von {group-name}
+  body: '<p>Hallo {recipient-name}</p>
+   <p>Rechnung von:</p>
+   <p><b>Absender: {group-address}</b></p>
+   <br/><br/>
+   {invoice-items}<br/><br/>
+   {invoice-total}<br/><br/>
+   {payment-information}<br/><br/>
+  '
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

@@ -32,6 +32,7 @@ it:
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
+        readonly: non può venir cambiato
       models:
         custom_content:
           attributes:
@@ -63,6 +64,7 @@ it:
         person:
           name_missing: 'Inserire un nome'
           emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
+          readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             email:
               taken: >
@@ -119,8 +121,8 @@ it:
         one: iscrizione
         other: Iscrizioni
       event/attachment:
-        one: Allegato
-        other: Allegati
+        one: 'Allegato'
+        other: 'Allegati'
       event/kind:
         one: tipo di corso
         other: Tipi di corso
@@ -436,6 +438,7 @@ it:
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
+              impersonation: Utilizza Hitobito come altra persona.
           kind:
             member:
               one: Membro
@@ -485,6 +488,8 @@ it:
         mail_address: Mailing list
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
         additional_sender: Mittente supplementare
+        preferred_labels: Etichetta e-mail preferita
+        main_email: Spedizione all'e-mail principale
       subscription:
         related_role_types: Ruoli
       people_filter:

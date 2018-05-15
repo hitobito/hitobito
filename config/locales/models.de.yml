@@ -687,10 +687,20 @@ de:
         count: Anzahl
         cost: Betrag
 
+      # used for nested attributes
+      invoice_items:
+        name: Name
+        description: Beschreibung
+        vat_rate: MWSt.
+        unit_cost: Preis
+        count: Anzahl
+        cost: Betrag
+
       payment:
         invoice: Rechnung
         amount: Betrag
-        received_at: Empfangen am
+        received_at: Eingangsdatum
+        reference: Zahlungsreferenz
 
       payment_reminder:
         invoice: Rechnung
@@ -709,6 +719,7 @@ de:
 
   errors:
     messages:
+      invalid_money: "muss auf 5 Rappen gerundet werden"
       # timeliness
       invalid_date: "ist kein gültiges Datum"
       invalid_time: "ist keine gültige Zeit"

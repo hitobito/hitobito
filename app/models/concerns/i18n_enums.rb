@@ -12,7 +12,8 @@ module I18nEnums
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def i18n_enum(attr, possible_values)
+
+    def i18n_enum(attr, possible_values, scopes: false, queries: false)
       i18n_prefix = "activerecord.attributes.#{name.underscore}.#{attr.to_s.pluralize}"
 
       validates attr, inclusion: possible_values, allow_blank: true
@@ -24,6 +25,11 @@ module I18nEnums
 
       define_singleton_method("#{attr}_labels") do
         I18n.t(i18n_prefix).except(NIL_KEY.to_sym)
+      end
+
+      possible_values.each do |value|
+        scope value.to_sym, -> { where(attr => value) }  if scopes
+        define_method("#{value}?") { self[attr] == value } if queries
       end
     end
   end

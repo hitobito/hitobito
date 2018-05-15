@@ -14,7 +14,6 @@ module MailRelay
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes]
-    EMAIL_REGEX = /([\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+)/i
     DOMAIN_NOT_FOUND_REGEX = /Domain not found/i
 
     def initialize(message, envelope_sender, delivery_report_to, recipients)
@@ -113,7 +112,7 @@ module MailRelay
     end
 
     def reject_failing(error, recipients)
-      failed_email = error.message[EMAIL_REGEX]
+      failed_email = recipients.find { |r| error.message.include?(r) }
       # if we cannot extract email from error message, raise
       unless failed_email.present? && recipients.include?(failed_email)
         raise error

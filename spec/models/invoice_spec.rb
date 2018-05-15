@@ -57,7 +57,7 @@ describe Invoice do
     expect(invoice.recipient_address).to eq "Top Leader\nSupertown"
   end
 
-  it '#save calcuates total for invoices at once' do
+  it '#save calculates total for invoices at once' do
     invoice = Invoice.new(title: 'invoice', group: group, recipient: person)
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
     invoice.invoice_items.build(name: 'pins', unit_cost: 0.5, count: 2)
@@ -106,14 +106,14 @@ describe Invoice do
 
   it '#to_s returns total amount' do
     invoice = invoices(:invoice)
-    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 2.0"
+    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.35"
   end
 
-  it '#calculated returns summed fields of invoice_items' do
+  it '#calculated returns summed fields of invoice_items, rounds to 0.05' do
     calculated = invoices(:invoice).calculated
-    expect(calculated[:total]).to eq 5.0036
+    expect(calculated[:total]).to eq 5.35
     expect(calculated[:cost]).to eq 5.0
-    expect(calculated[:vat]).to eq 0.0036
+    expect(calculated[:vat]).to eq 0.35
   end
 
   it '#create sets payment attributes from invoice_config' do
@@ -182,11 +182,11 @@ describe Invoice do
 
   it 'amount_open returns total amount minus payments' do
     invoice = invoices(:invoice)
-    expect(invoice.amount_open).to eq 2.0
+    expect(invoice.amount_open).to eq 5.35
+    invoice.payments.create!(amount: 4)
+    expect(invoice.amount_open).to eq 1.35
     invoice.payments.create!(amount: 1.5)
-    expect(invoice.amount_open).to eq 0.5
-    invoice.payments.create!(amount: 1)
-    expect(invoice.amount_open).to eq(-0.5)
+    expect(invoice.amount_open).to eq(-0.15)
   end
 
   it 'soft deleting group does not delete invoices' do
@@ -209,6 +209,16 @@ describe Invoice do
 
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.really_destroy! }.to change { other.invoices.count }
+  end
+
+  it '#recipient_name is read from recipient if present' do
+    expect(create_invoice.recipient_name).to eq 'Top'
+  end
+
+  it '#recipient_name is read from recipient_address if recipient is missing' do
+    invoice = create_invoice
+    invoice.update(recipient: nil)
+    expect(invoice.recipient_name).to eq 'Top Leader'
   end
 
   private

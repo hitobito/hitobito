@@ -41,7 +41,7 @@ module Export::Pdf
       end
 
       def sections
-        [Header, InvoiceInformation, ReceiverAddress, Articles, InvoiceText]
+        [Header, InvoiceInformation, ReceiverAddress, Articles]
       end
 
       def ocrb_path

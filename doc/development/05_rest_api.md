@@ -1,53 +1,50 @@
 ## REST API
 
-Das JSON Format folgt den Konventionen von [json:api](http://jsonapi.org).
+The JSON format follows the conventions of [json:api](http://jsonapi.org) (although in an older version according to this issue https://github.com/hitobito/hitobito/issues/207)
 
-### Authentisierung
+### Authentication
 
-Für die Verwendung der API ist ein Authentisierungstoken nötig. Jeder Benutzeraccount
-kann ein solches Token erstellen. Dieses Token ist danach mit dem Benutzeraccount
-verknüpft und hat die selben Zugriffsrechte wie der/die Benutzer/in.
+* To use the APi you need an authentication-token.
+* Every useraccount can create such a token.
+* There are no tokens independent of a user account. 
+* The token has the same permissions as the corresponding user.
+* Tokens have no expiration date.
 
-Ein Token ist für unbeschränkte Zeit gültig, es kann also z.B. in eine Webseite
-eingebunden werden, ohne dass das Passwort für den Benutzeraccount 
-verwendet werden muss.
+There are the following HTTP endpoints: 
 
-Für die Verwaltung des Tokens dienen die folgenden HTTP Endpunkte:
 
-| Methode | Pfad                | Funktion |
+| Method  | Path                | Function |
 | --- | --- | --- |
-| POST    | /users/sign_in.json | Token auslesen |
-| POST    | /users/token.json   | Token neu generieren |
-| DELETE  | /users/token.json   | Token löschen |
+| POST    | /users/sign_in.json | read/generate token |
+| POST    | /users/token.json   | generate a new token |
+| DELETE  | /users/token.json   | delete token |
 
-Als Parameter müssen immer `person[email]` und `person[password]` übergeben werden.
+You have to pass `person[email]` and `person[password]` as parameters.
 
-Mit `curl` geht das so:
+With `curl` it looks like this:
 
     curl -d "person[email]=mitglied@hitobito.ch" \
          -d "person[password]=demo" \
          http://demo.hitobito.ch/users/sign_in.json
 
-Um das Token bei der restlichen API zu verwenden, bestehen zwei Möglichkeiten:
+To use the rest of the API there are two possibilities:
 
-* **Parameter**: `user_email` und `user_token` werden als Pfadparameter angegeben, der Pfad muss 
-mit `.json` enden (Bsp: `/groups/1.json?user_email=zumkehr@puzzle.ch&user_token=abcdef`).
-* **Headers**: `X-User-Email`, `X-User-Token` und `Accept` (=`application/json`) Header 
-entsprechend setzen.
+* **Parameters**: You provide `user_email` and `user_token` as paramateres in the path, the path has to end with `.json` (Example: `/groups/1.json?user_email=zumkehr@puzzle.ch&user_token=abcdef`).
+* **Headers**: Set the header like this: `X-User-Email`, `X-User-Token` and `Accept` (=`application/json`) 
 
-### Endpunkte
+### Endpoints
 
-Folgende Endpunkte sind momentan definiert:
+Currently the following endpoints are provided:
 
-| Methode | Pfad                         | Funktion |
+| Method | Path                         | Function |
 | --- | --- | --- |
-| GET     | /groups                      | Hauptgruppe           |
-| GET     | /groups/:id                  | Gruppen Details       |
-| GET     | /groups/:id/people           | Personen einer Gruppe |
-| GET     | /groups/:group_id/people/:id | Personen Details      |
+| GET     | /groups                      | Root group           |
+| GET     | /groups/:id                  | Group Details        |
+| GET     | /groups/:id/people           | People of a certain group |
+| GET     | /groups/:group_id/people/:id | Person details      |
 
 
-### Beispielantwort auf den Sign In Request
+### Example Response of a Sign In Request
 
     {
       people: [ {

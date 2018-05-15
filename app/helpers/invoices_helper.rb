@@ -17,6 +17,14 @@ module InvoicesHelper
     badge(invoice_state_label(invoice), type)
   end
 
+  def format_invoice_recipient(invoice)
+    if invoice.recipient
+      link_to(invoice.recipient, invoice.recipient)
+    else
+      invoice.recipient_address.split("\n").first
+    end
+  end
+
   def invoice_state_label(invoice)
     text = invoice.state_label
     text << " (#{invoice.payment_reminders.list.last.title})" if invoice.reminded?

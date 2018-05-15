@@ -39,8 +39,8 @@ describe Export::Tabular::Invoices::List do
      its(['Status']) { should == 'Entwurf' }
      its(['Referenz Nummer']) { should == invoices(:invoice).esr_number }
      its(['Betrag']) { should == '5.00 CHF' }
-     its(['MWSt.']) { should == '0.00 CHF' }
-     its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
+     its(['MWSt.']) { should == '0.35 CHF' }
+     its(['Total inkl. MWSt.']) { should == '5.35 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
      its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }

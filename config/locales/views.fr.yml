@@ -1,15 +1,10 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-
 fr:
   global:
     'yes': "oui"
     'no': "non"
     unknown: Inconnu
     nobody: personne
+    all: Tous
     from: de
     until: à
     no_list_entries: Aucun résultat.
@@ -90,8 +85,6 @@ fr:
     available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   dropdown/event/group_filter:
     all_groups: 'Tous les groupes'
-  dropdown:
-    last_used: 'Dernière utilisée'
   dropdown/event/events_export:
     button: Exporter
     csv: CSV
@@ -112,7 +105,15 @@ fr:
     pdf: 'PDF'
     emails: 'Adresses électroniques'
     addresses: 'Liste d''adresses'
+    households: 'Liste des foyers'
     everything: 'Toutes les informations'
+    household_option: 'Rassembler les foyers'
+  dropdown/invoices:
+    download: 'Exporter'
+    print: 'Imprimer'
+    labels: 'Etiquettes'
+    csv: 'CSV'
+    pdf: 'PDF'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -194,6 +195,7 @@ fr:
         title: 'Cours disponibles'
         explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
         csv_export_button: 'Export CSV'
+        ical_export_button: 'Export du calendrier'
       events:
         title: 'Evénements prévus prochainement'
         explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
@@ -328,6 +330,7 @@ fr:
     preconditions: 'qualifications requises'
     tabs:
       participants: 'Participants'
+    export_enqueued: 'L''exportation a commencé. Il sera envoyé à %{email} une fois terminé.'
   event/applications:
     approved: 'L''inscription a été autorisée.'
     rejected: 'L''inscription a été refusée.'
@@ -346,6 +349,7 @@ fr:
     full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
     success: '%{full_entry_label} a été ajouté avec succès.'
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
+    export_enqueued: 'L''exportation a commencé. Il sera envoyé à %{email} une fois terminé.'
     show:
       link:
         delete: 'Effacer l''inscription'
@@ -392,8 +396,10 @@ fr:
     custom_filter: 'Filtre personnel'
     entire_layer: 'Tous les niveaux'
     entire_group: 'Tout le groupe'
-    new_role_filter: 'Nouveau filtre pour rôles...'
-    new_qualification_filter: 'Nouveau filtre pour qualifications...'
+    new_filter: 'Nouveau filtre…'
+  filter_navigation/events:
+    all: 'Tous'
+    layer: 'uniquement %{layer}'
   filter_navigation/event/participations:
     predefined_filters:
       all: Toutes les personnes
@@ -401,7 +407,7 @@ fr:
       participants: Participants
   full_text:
     index:
-      title: 'Personnes trouvées'
+      title: 'Résultats'
       incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
   group:
     merge:
@@ -503,16 +509,22 @@ fr:
       available_under_license: 'Disponible au numéro '
       developed_by: 'Développé par'
       source_code: 'Code source'
+    user_impersonation:
+      info: "Tu es maintenant enregistré en tant que %{user}"
+      end: "Terminer l'imitation"
   mailing_lists:
     global:
       link:
         add: Créer un abo
     form:
       help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
+      caption_main_email: 'Envoi uniquement à l''adresse e-mail principale'
+      caption_main_email_with_preferred_labels: 'Envoi également à l''adresse e-mail principale'
       caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes.'
       caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion.'
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
-      caption_delivery_report: 'Envoyer un mail de confirmation à l''expéditeur'
+      caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
+      help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
@@ -520,8 +532,8 @@ fr:
     subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
     anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
     anyone_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
-    delivery_report: 'Les expéditeurs reçoivent un email de confirmation'
-    no_delivery_report: 'Les expéditeurs ne reçoivent pas d'' e-mail de confirmation'
+    delivery_report: 'Les expéditeurs reçoivent un e-mail de confirmation d''envoi'
+    no_delivery_report: 'Les expéditeurs ne reçoivent pas d''e-mail de confirmation d''envoi'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
   navigation:
@@ -556,8 +568,8 @@ fr:
     add_requests:
       body_list:
         open_requests:
-          one: 1 requête ouverte
-          other: '%{count} requêtes ouvertes. '
+          one: "1 requête ouverte"
+          other: "%{count} requêtes ouvertes. "
         request_to: Requête à
         cancel: Retirer une demande d'autorisation
       creator:
@@ -587,12 +599,18 @@ fr:
         mailing_list:
           approved: "La demande d'accès pour %{person} a déjà été validée. "
           rejected: "La demande d'accès pour %{person} a déjà été refusée. "
+    households:
+      form:
+        address_updated: "Adresse actualisée"
+      fields:
+        lives_in_household_with: "Habite dans le foyer avec"
+        update_denied: "Pas de droits d'écriture pour %{other_person}"
     csv_imports:
       description:
         header: Fichiers CSV
         explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
         example: |
-          prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
+            prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
         explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
         explain_role: Le même rôle est attribué à toutes les personnes d'un même fichier. Tu peux également choisir ce rôle lors de la prochaine étape.
         special_fields: Valeurs de champs spéciales
@@ -683,6 +701,8 @@ fr:
         new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
         resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.
         reset: La personne possède déjà Login<br><br>. Cette action lui envoie un lien afin de créer un nouveau mot de passe.
+      impersonate_user: Imiter
+      impersonate_user_tooltip: Tu peux te servir d'hitobito comme si tu étais cette personne
     actions_index:
       add_person: Ajouter une personne
       import_list: Importer une liste
@@ -692,6 +712,8 @@ fr:
     attrs:
       additional_data: Indications supplémentaires
       events: Mes prochains événements
+    contact_data:
+      lives_in_household_with: Habite dans le foyer avec
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
@@ -712,11 +734,10 @@ fr:
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
     print:
-      heading: "Membres %{group}"
       name: "Nom"
       address: "Adresse"
-      email: "E-mail"
-      home_phone: "Fixe"
+      email: "Adresse e-mail"
+      home_phone: "Privé"
       mobile_phone: "Mobile"
     roles:
       title: Rôles actifs
@@ -726,6 +747,8 @@ fr:
     tags:
       add_tag: Ajouter un tag…
       no_entry: (aucun)
+    export_enqueued: 'L''exportation a commencé. Il sera envoyé à %{email} une fois terminé.'
+    export_email_needed: 'Pour l''export, une adresse e-mail est requise'
   participations:
     destroy:
       flash:
@@ -735,11 +758,31 @@ fr:
       save_search: Sauvegarder cette recherche
       save_filter: Sauvegarder ce filtre
       save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
-      prompt_role_selection: Quels rôles doivent être affichés?
+      range:
+        deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
+        layer: Dans le niveau actuel et tous les groupes
+        group: Uniquement dans le groupe actuel
+        group_deep: Dans le groupe actuel et tous les groupes sous-jacents
+      filters_qualification_validity:
+        active: Uniquement les qualifications valides
+        reactivateable: Les qualifications valides et renouvelables
+        all: Montrer toutes les qualifications non distribuées
+      filters_role_kind:
+        active: le rôle était actif.
+        created: le rôle a été établi.
+        deleted: le rôle a été effacé.
     new:
-      title: Filtrer les personnes par qualification
+      title: Filtrer les personnes
+    range:
+      prompt_range: Dans quel secteur faut-il chercher ?
+    role:
+      title: Rôles
+      prompt_role_selection: Quels rôles doivent être affichés?
+      prompt_role_duration: Sur la période (optionnel)
+      prompt_role_duration_selection: Quelle période doit être prise en compte?
+      prompt_role_duration_until: à
     qualification:
-      title: Filtrer les personnes par qualification
+      title: Qualifications
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
       prompt_year: Restreindre l'année de qualification
@@ -748,6 +791,7 @@ fr:
       start_at_year_infix: et
       finish_at_year_label: Périmé entre
       finish_at_year_infix: et
+      not_enough_permissions: Tu ne possèdes pas des droits suffisants pour rechercher des personnes à l'aide de ce filtre.
     simple_radio:
       match:
         one: La personne a au moins UNE de ces qualifications
@@ -836,6 +880,8 @@ fr:
         create: "La demande d'accès pour <i>%{label}</i> a été établie."
         update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
+    impersonate: "Le compte a été repris par %{user}."
+    impersonation_done: "Le compte n'est plus utilisé par %{user}."
   views:
     pagination:
       next: '>>'

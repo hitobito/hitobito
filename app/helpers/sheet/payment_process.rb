@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Pdf::Invoice
-  class InvoiceText < Section
+module Sheet
+  class PaymentProcess < Base
+    self.parent_sheet = Sheet::Invoice
 
-    def render
-      bounding_box([0, cursor - 20], width: bounds.width, height: 40) do
-        text invoice.description
-      end
+    def title
+      translate(:title)
     end
   end
+
 end

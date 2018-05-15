@@ -1,9 +1,3 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-
 en:
   global:
     'yes': "yes"
@@ -87,8 +81,6 @@ en:
   custom_content_decorator:
     available_placeholders: "Available placeholders: %{placeholders}"
     available_placeholders_empty: 'No placeholders available'
-  dropdown:
-    last_used: 'Used last'
   dropdown/event/group_filter:
     all_groups: 'All groups'
   dropdown/event/events_export:
@@ -106,9 +98,7 @@ en:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
-    vcard: 'vCard'
     labels: 'Labels'
-    pdf: 'PDF'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
@@ -137,7 +127,7 @@ en:
       updated: 'Your password has been changed. You''re now logged in.'
       updated_not_active: 'Your password has been changed.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."
-      no_token: 'You can only access this page by clicking the link provided in a password reset e-mail. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
+      no_token: 'You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
       new:
         reset_password_button: 'Reset password'
     confirmations:
@@ -354,8 +344,6 @@ en:
     custom_filter: 'Own filter'
     entire_layer: 'Whole level'
     entire_group: 'Whole group'
-    new_role_filter: 'New role filter...'
-    new_qualification_filter: 'New qualification filter...'
   filter_navigation/event/participations:
     predefined_filters:
       all: All people
@@ -363,7 +351,6 @@ en:
       participants: Participants
   full_text:
     index:
-      title: 'people found'
       incomplete_search_request: 'Please enter at least two characters.'
   group:
     merge:
@@ -471,7 +458,6 @@ en:
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
       caption_anyone_may_post: 'Anyone may write to the mailing list'
-      caption_delivery_report: 'Send delivery report to sender'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
@@ -479,8 +465,6 @@ en:
     subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
     anyone_may_post: 'Anyone may write to the mailing list'
     anyone_may_not_post: '<strong>Not</strong> anyone may write to the mailing list'
-    delivery_report: 'Sender receives delivery report'
-    no_delivery_report: 'Sender does not receive delivery report'
     subscribe: 'Log in'
     unsubscribe: 'Log off'
   navigation:
@@ -508,8 +492,8 @@ en:
     add_requests:
       body_list:
         open_requests:
-          one: 1 pending approval.
-          other: '%{count} pending approvals.'
+          one: "1 pending approval."
+          other: "%{count} pending approvals."
         request_to: Request to
         cancel: Cancel request for access
       creator:
@@ -544,9 +528,9 @@ en:
         header: CSV files
         explain_csv_format: 'A CSV file contains the details of a person on each line. The first line contains the field names. The fields are separated with a comma. If a field value itself contains commas, it must be complemented with quotation marks ("). Example:'
         example: |
-          First name,Last name,e-Mail,Place,gender
-          Hans,Muster,hans@beispiel.ch,Bern,m
-          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",f
+            First name,Last name,e-Mail,Place,gender
+            Hans,Muster,hans@beispiel.ch,Bern,m
+            Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",f
         explain_field_names: The fields in the CSV file can be assigned to the fields in the application in the next step.
         explain_role: All people in a file will be assigned to the same role, which can be selected in the next step.
         special_fields: Special field values
@@ -650,7 +634,7 @@ en:
           The main e-mail address of a person with multiple roles can only be changed
           by a superordinate user.
     fields:
-      format_birthday: (dd.mm.yyyy)
+      format_birthday: (dd.mm.yyy)
     list:
       number_of_people_shown:
         one: "%{count} person displayed."
@@ -662,13 +646,6 @@ en:
       no_changes: So far, no changes were recorded.
     pdf:
       cannot_fit: The addresses do not fit into the defined label format.
-    print:
-      heading: "Members %{group}"
-      name: "Name"
-      address: "Address"
-      email: "E-Mail"
-      home_phone: "Home"
-      mobile_phone: "Mobile"
     roles:
       title: Active roles
     roles_aside:
@@ -686,11 +663,7 @@ en:
       save_search: Save search
       save_filter: Save filter
       save_filter_placeholder: Enter a name to save this filter
-      prompt_role_selection: Which roles should be displayed?
-    new:
-      title: Filter people by roles
     qualification:
-      title: Filter people by qualifications
       prompt_qualification_selection: Which qualifications should be displayed?
       prompt_validity: Which validity should the shown qualifications have?
       prompt_kind: In which area should be searched?

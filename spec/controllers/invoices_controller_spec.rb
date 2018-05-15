@@ -101,7 +101,7 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount).to eq 5
+      expect(assigns(:payment).amount).to eq 5.35
     end
 
     it 'GET#show assigns payment with amount_open' do
@@ -110,7 +110,7 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount).to eq 4.5
+      expect(assigns(:payment).amount).to eq 4.85
     end
 
     it 'GET#show assigns payment with flash parameters' do

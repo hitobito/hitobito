@@ -7,8 +7,8 @@
 #  invoice_id  :integer          not null
 #  amount      :decimal(12, 2)   not null
 #  received_at :date             not null
+#  reference   :string(255)
 #
-
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -19,10 +19,14 @@ class Payment < ActiveRecord::Base
 
   belongs_to :invoice
 
+  validates :reference, uniqueness: { scope: :invoice_id, allow_nil: true }
+
   before_validation :set_received_at
   after_create :update_invoice
 
   scope :list, -> { order(received_at: :desc) }
+
+  attr_writer :esr_number
 
   validates_by_schema
 
@@ -30,10 +34,36 @@ class Payment < ActiveRecord::Base
     invoice.group
   end
 
+  def settles?
+    invoice && invoice.amount_open == amount
+  end
+
+  def exceeds?
+    invoice && amount > invoice.amount_open
+  end
+
+  def undercuts?
+    invoice && amount < invoice.amount_open
+  end
+
+  def difference
+    invoice && amount - invoice.amount_open
+  end
+
+  def esr_number
+    invoice ? invoice.esr_number : @esr_number
+  end
+
   private
 
+  def assert_invoice_state
+    unless invoice.payable?
+      errors.add(:invoice, :invalid)
+    end
+  end
+
   def update_invoice
-    if amount >= invoice.total
+    if amount >= invoice.amount_open(without: id)
       invoice.update(state: :payed)
     end
   end

@@ -15,7 +15,7 @@ pens:
   invoice: invoice
   name: pens
   unit_cost: 1.5
-  vat_rate: 0.08
+  vat_rate: 8
   count: 3
 
 pins:

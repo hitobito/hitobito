@@ -8,6 +8,10 @@
 module Sheet
   class Invoice < Base
 
+    def title
+      ::Invoice.model_name.human(count: 2)
+    end
+
     def self.parent_sheet
       nil
     end
@@ -17,7 +21,7 @@ module Sheet
     end
 
     def render_left_nav
-      view.render "invoices/nav_left"
+      view.render('invoices/nav_left')
     end
 
   end

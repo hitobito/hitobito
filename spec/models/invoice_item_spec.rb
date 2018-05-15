@@ -26,7 +26,6 @@ describe InvoiceItem do
     expect(item.vat).to eq 0.04
   end
 
-
   it 'calculates without vat if vat_rate is missing' do
     item = InvoiceItem.new(invoice: invoice,
                            name: :pens,

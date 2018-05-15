@@ -64,7 +64,7 @@ CustomContent.seed_once(:key,
 
   { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
     placeholders_required: 'invoice-items, invoice-total, payment-information',
-    placeholders_optional: 'recipient-name, group-name, invoice-number' },
+    placeholders_optional: 'recipient-name, group-name, group-address, invoice-number' },
 
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',
@@ -398,13 +398,13 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'de',
    label: 'Rechnung',
    subject: 'Rechnung {invoice-number} von {group-name}',
- body: "<p>Hallo {recipient-name}</p>" \
-         "<p>Rechnung von:</p>" \
-         "<p><b>Absender: Verband, Verbandstrasse 23, 3000 Verbandort</b></p>" \
-         "<br/><br/>" \
-         "{invoice-items}<br/><br/>" \
-         "{invoice-total}<br/><br/>" \
-         "{payment-information}<br/><br/>" },
+   body: "<p>Hallo {recipient-name}</p>" \
+   "<p>Rechnung von:</p>" \
+   "<p><b>Absender: {group-address}</b></p>" \
+   "<br/><br/>" \
+   "{invoice-items}<br/><br/>" \
+   "{invoice-total}<br/><br/>" \
+   "{payment-information}<br/><br/>" },
 
   {custom_content_id: invoice_notification_id,
    locale: 'en',

@@ -24,11 +24,11 @@
     &nbsp;
 
   .controls
-    = label_tag('match_one', class: 'radio inline') do
-      = radio_button_tag(:match, 'one', true)
+    = label_tag('filters_qualification_match_one', class: 'radio inline') do
+      = radio_button_tag('filters[qualification][match]', 'one', true)
       = t('people_filters.simple_radio.match.one')
-    = label_tag('match_all', class: 'radio inline') do
-      = radio_button_tag(:match, 'all', params[:match] == 'all')
+    = label_tag('filters_qualification_match_all', class: 'radio inline') do
+      = radio_button_tag('filters[qualification][match]', 'all', filter && filter.args[:match] == 'all')
       = t('people_filters.simple_radio.match.all')
 
 = field_set_tag(t('.prompt_validity')) do

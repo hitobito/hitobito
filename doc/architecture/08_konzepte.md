@@ -131,6 +131,10 @@ Ebenen). Inkl. Erstellen von Anlässen und Abos (Mailinglisten).
 
 **approve_applications**: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 
+**impersonation**: Darf andere Accounts temporär übernehmen, z. B. für Support Aufgaben oder für Tests.
+
+**finance**: Erlaubt auf der eigenen Ebene Rechnungen zu erstellen und einzusehen.
+
 
 Die Definition von Berchtigungen geschieht in sogenannten _Abilities_. Diese verknüpfen ein Modell 
 sowie die zugehörigen Aktionen mit den entsprechenden Permissions, wobei durch sogenannte 

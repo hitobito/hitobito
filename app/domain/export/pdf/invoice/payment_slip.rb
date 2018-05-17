@@ -15,7 +15,7 @@ module Export::Pdf::Invoice
       invoice.with_reference? ? esr_number : payment_purpose
       left_receiver_address
       right_receiver_address
-      code_line
+      code_line if invoice.with_reference?
     end
 
     private

@@ -12,7 +12,7 @@ class InvoiceMailer < ApplicationMailer
 
   def notification(invoice, sender)
     @sender  = sender
-    @invoice = InvoiceDecorator.decorate(invoice)
+    @invoice = invoice
 
     attachments[invoice.filename] = generate_pdf
 
@@ -50,7 +50,7 @@ class InvoiceMailer < ApplicationMailer
       [:total, :vat].map do |key|
         content_tag :tr do
           [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-           content_tag(:td, @invoice.send(key))].join
+           content_tag(:td, @invoice.decorate.send(key))].join
         end
       end.join
     end

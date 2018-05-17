@@ -12,7 +12,7 @@ describe Invoice do
   let(:group)          { groups(:top_layer) }
   let(:person)         { people(:top_leader) }
   let(:other_person)   { people(:bottom_member) }
-  let(:invoice_config) { group.invoice_config }
+  let(:invoice_config) { invoice_configs(:top_layer) }
 
   it 'sorts by sequence_number and it''s length' do
     invoices(:invoice).update_columns(sequence_number: '1-10')
@@ -55,6 +55,20 @@ describe Invoice do
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
     expect(invoice.recipient_address).to eq "Top Leader\nSupertown"
+  end
+
+  it '#save sets esr_number and participant_number for esr invoice_config' do
+    invoice = create_invoice
+    expect(invoice.participant_number).to eq invoice_config.participant_number
+    expect(invoice.esr_number).to be_present
+    expect(invoice).to be_with_reference
+  end
+
+  it '#save sets esr_number but not participant_number for non esr invoice_config' do
+    invoice = create_invoice(group: groups(:bottom_layer_one))
+    expect(invoice.participant_number).to be_nil
+    expect(invoice.esr_number).to be_present
+    expect(invoice).not_to be_with_reference
   end
 
   it '#save calculates total for invoices at once' do
@@ -126,6 +140,7 @@ describe Invoice do
     expect(invoice.beneficiary).to eq invoice_config.beneficiary
     expect(invoice.participant_number).to eq invoice_config.participant_number
   end
+
 
   context 'state changes' do
     include ActiveSupport::Testing::TimeHelpers
@@ -229,7 +244,7 @@ describe Invoice do
   end
 
   def create_invoice(attrs = {})
-    Invoice.create!(attrs.merge(title: 'invoice', group: group, recipient: person))
+    Invoice.create!(attrs.reverse_merge(title: 'invoice', group: group, recipient: person))
   end
 
 end

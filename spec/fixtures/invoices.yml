@@ -34,8 +34,9 @@ invoice:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  payment_slip: ch_esr
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
-  esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
+  esr_number: '00 00376 80338 90000 00000 00021'
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
   total: 5.35
@@ -45,8 +46,9 @@ sent:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  payment_slip: ch_esr
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
-  esr_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
+  esr_number: '00 00376 80338 90000 00000 00036'
   sent_at: <%= 10.days.ago.to_date %>
   due_at: <%= 20.days.from_now.to_date %>
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3

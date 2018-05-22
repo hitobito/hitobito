@@ -7,7 +7,7 @@
 
 - if @household.address_changed?
   = content_tag(:div, class: 'animated-highlight') do 
-    %div.alert.alert-warning
+    %div.alert.alert-warning.address-updated
       = t('.address_updated')
     = render 'contactable/address_fields', f: f
 - else

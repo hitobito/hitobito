@@ -108,6 +108,9 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
+    address_fields:
+      updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
+
   custom_content_decorator:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'

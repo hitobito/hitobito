@@ -34,7 +34,7 @@ class QualificationKind < ActiveRecord::Base
   validates_by_schema
   validates :label, presence: true, length: { maximum: 255, allow_nil: true }
   validates :description, length: { maximum: 1023, allow_nil: true }
-  validates :reactivateable, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
+  validates :reactivateable, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
 
   validate :assert_validity_when_reactivateable
 

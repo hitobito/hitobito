@@ -33,6 +33,14 @@ describe AdditionalEmail do
       a1.email = 'foo'
       expect(a1).not_to be_valid
     end
+
+    it 'should not contain a dot at the end of a label' do
+      a1 = Fabricate(:additional_email, label: 'Foo')
+      expect(a1).to be_valid
+
+      a1.label = 'Foo.'
+      expect(a1).not_to be_valid
+    end
   end
 
   context '#translated_label' do

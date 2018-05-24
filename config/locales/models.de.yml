@@ -506,7 +506,7 @@ de:
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
-              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_and_below_full: Alles Lesen und Schreiben auf %{layer} und allen darunter liegenden Ebenen (%{sub_layers}). Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
               layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.

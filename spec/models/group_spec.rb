@@ -269,6 +269,14 @@ describe Group do
     end
   end
 
+  context '.all_child_layer_types' do
+    let(:group) { groups(top_layer) }
+
+    it 'lists all possible layer types including their descendants' do
+      group.all_child_layer_types =~ [Group::BottomLayer]
+    end
+  end
+
   context '.order_by_type' do
     it 'has correct ordering without group' do
       expect(Group.order_by_type).to eq([groups(:top_layer),

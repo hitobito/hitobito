@@ -123,7 +123,7 @@ describe Person::Household do
       leader.household_people_ids = [member.id]
       expect do
         household(leader).save
-      end.to change { member.versions.count }.by(1)
+      end.to change { member.versions.count }.by(2)
 
       expect(leader.reload.household_key).to eq member.reload.household_key
       expect(leader.household_key).to be_present
@@ -182,6 +182,17 @@ describe Person::Household do
         household(member).save
       end.to raise_error 'invalid'
     end
+
+    it 'creates Papertrail entries on household creation' do
+      leader.household_people_ids = [member.id]
+      expect do
+        household(leader).save
+      end.to change { PaperTrail::Version.count }.by(2)
+    end
+
+    it 'create Papertrail entry if household address changes' do
+      
+    end
   end
 
   context '#remove' do
@@ -204,6 +215,15 @@ describe Person::Household do
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
       expect(member.reload.household_key).to eq '1'
+    end
+
+    it 'creates Papertrail entries at the household deletion' do
+      member.update(household_key: 1)
+      leader.update(household_key: 1)
+
+      expect do
+        household(leader).remove
+      end.to change { PaperTrail::Version.count }.by(2)
     end
   end
 

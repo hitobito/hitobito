@@ -43,20 +43,19 @@ werden soll, können einfach weitere Wagons erstellt werden.
 In einem Wagon können Tabellen um weitere Attribute ergänzt werden, Funktionalitäten, Berechtigungen
 und Darstellungen angepasst und hinzugefügt werden.
 
-### Gruppen- und Rollentypen
+### Group- and Roletypes
 
-Hitobito verfügt über ein mächtiges Metamodell um Gruppenstrukturen zu beschreiben. Gruppen sind 
-immer von einem spezifischen Typ und in einem Baum angeordnet. Jeder Gruppentyp kann verschiedene 
-Rollentypen definieren.
+Hitobito has a powerful Metagmodel to describe organizational structures. Groups always hava a specific `group tpye` and are organized in a tree. Every group type can a several defined `role types`.
 
-Der Core von hitobito beinhaltet keine konkreten Gruppen- oder Rollentypen. Diese müssen in 
-separaten Wagons definiert werden, entsprechend der spezifischen Verbandsstruktur. Ein Beispiel für 
-einen Gruppentyp könnte wie folgt aussehen:
+The core of hitobito does not contain any role_or_group_types. You have to define them in a wagon [example for a generic structure](https://github.com/hitobito/hitobito_generic). This describes the organizational structure.
+
+An example of a group type definition:
 
     class Group::Layer < Group
       self.layer = true
-      
+
       children Group::Layer, Group::Board, Group::Basic
+      self.default_children = [Group::Board]
 
       class Leader < Role
         self.permissions = [:layer_full, :contact_data]
@@ -72,29 +71,60 @@ einen Gruppentyp könnte wie folgt aussehen:
         self.kind = :external
       end
       
+      self.default_role = Member
       roles Leader, Member
     end
 
-Ein Gruppentyp erbt immer von der Klasse `Group`. Er kann eine Ebene sein (`self.layer = true`), 
-welche mehrere Gruppen zu einem gemeinsamen Berechtigungsbereich zusammenfasst. Alle Untergruppen 
-einer Ebene gehören zu diesem Bereich, ausser sie sind selbst wieder Ebenen.
+Line by Line explanation
 
-Danach sind alle möglichen Untergruppentypen des Gruppentyps definiert (`children Group::Layer, 
-Group::Board, Group::Basic`). Als Untergruppen sind nur diese Typen erlaubt. Wie im Beispiel 
-gezeigt, können Gruppentypen rekursiv organisiert sein.
+    class Group::Layer < Group
 
-Die Rollentypen können direkt in einem Gruppentyp definiert werden und erben von der Klasse `Role`. 
-Jeder Rollentyp hat eine Liste von Grundberechtigungen (`self.permissions = [:layer_full, 
-:contact_data]`). Alle spezifischen Möglichkeiten eines Benutzenden sind von den 
-Rollenberechtigungen abgeleitet, welche sie oder er in den verschiedenen Gruppen hat. Ausserdem ist 
-es möglich, eine Rolle vor dem Zugriff von übergeordneten Ebenen aus zu schützen 
-(`self.visible_from_above = false`). 
+A group type inherits from the class `Group`.
 
-Ein Rollentyp kann zusätzlich von einer spezifischen Art sein (`self.kind = :external`), welche bei 
-der Aufteilung der Personen einer Gruppe in verschiedene Bereiche heran gezogen wird. Im Core sind 
-die Bereiche Mitglieder, Passive und Externe vordefiniert. Die Art hat keinen Einfluss auf die 
-Berechtigungen.
+      self.layer = true
 
+It can be declared as a layer, which contains several subgroups that create a defined space for permissions. 
+This includes all subgroups of that group. Unless they are declared as layers themselfes.
+
+      children Group::Layer, Group::Board, Group::Basic
+
+This assigns all allowed subgroups (`Group::Layer, Group::Board, Group::Basic`). 
+You will only be able to create this type of group under the `Group::Layer`.
+As you can see in this example, group types can be organized recursively.
+
+      self.default_children = [Group::Board]
+
+Whenever a group of this type is created, it automatically creates groups from the list.
+
+      class Leader < Role
+        self.permissions = [:layer_full, :contact_data]
+      end
+
+Role types can be declared directly in the Group class. They belong to the class `Role`. 
+Every Role Type has a list of permissions (`self.permissions = [:layer_full, :contact_data]`).
+All the actions a User can do will be derived from these role permissions, depending on where a user is assigned in which role will give him the associated permissions.
+
+    class External < Role
+      self.permissions = []
+      self.visible_from_above = false
+      self.kind = :external
+    end
+
+Permission can also be empty, but a user will always be able to chnage his own contact details.
+
+You can reduce the visiblity of roles from layers above by using `self.visible_from_above = false`.
+This means that this role is not visible to peple from above layers, 
+even if they have the general permission to see people from layer below them.
+
+A Roletype can additional be of a specific kind `self.kind = :external` which is used in certain views to differentiate between different kinds of role. The core defines the following kinds: `[:member, :passive, :external]`. But this has no influence on permissions.
+
+      self.default_role = Member
+
+After the declaration of the Roles, you can select one to be automatically selecte when you try assign a role to someone in this kind of group. Useful for groups, where you usually add contacts of the same kind (such as active members, or contacts.)
+
+      roles Leader, Member
+
+Define which roles are actually available to be assigned.
 
 ### Berechtigungen
 

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,10 +10,11 @@
 #
 #  id               :integer          not null, primary key
 #  event_id         :integer
-#  question         :string
-#  choices          :string
+#  question         :string(255)
+#  choices          :string(255)
 #  multiple_choices :boolean          default(FALSE)
 #  required         :boolean
+#  admin            :boolean          default(FALSE), not null
 #
 
 class Event::Question < ActiveRecord::Base
@@ -28,6 +29,9 @@ class Event::Question < ActiveRecord::Base
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
+
+  scope :application, -> { where(admin: false) }
+  scope :admin, -> { where(admin: true) }
 
 
   def choice_items

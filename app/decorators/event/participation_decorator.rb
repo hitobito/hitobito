@@ -13,15 +13,15 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :application
 
   delegate :to_s, :email, :primary_email, :all_emails, :all_additional_emails,
-           :all_phone_numbers, :all_social_accounts, :complete_address, :town, to: :person
-  delegate :qualified?, to: :qualifier
+           :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
+           :layer_group, to: :person
 
   def person_additional_information
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
   end
 
   def person_location_information
-    [person.town, originating_group].reject(&:blank?).join(', ')
+    [layer_group, town_info].reject(&:blank?).join(' ')
   end
 
   def incomplete_label
@@ -37,46 +37,12 @@ class Event::ParticipationDecorator < ApplicationDecorator
     end
   end
 
-  def issue_action(group)
-    if qualified.nil? || !qualified?
-      qualify_action_link(group, :put, :ok)
-    else
-      h.icon(:ok)
-    end
-  end
-
-  def revoke_action(group)
-    if qualified.nil? || qualified?
-      qualify_action_link(group, :delete, :remove)
-    else
-      h.icon(:remove)
-    end
-  end
-
-  def qualify_action_link(group, method, icon)
-    h.link_to(h.group_event_qualification_path(group, event_id, model),
-              method: method, remote: true, title: tooltips[icon]) do
-      h.content_tag(:i, '', class: "icon icon-#{icon} disabled")
-    end
-  end
-
-  def qualifier
-    Event::Qualifier.for(model)
-  end
-
   def list_roles
     safe_join(roles, h.tag(:br)) { |role| role.to_s }
   end
 
-  def originating_group
-    person.primary_group
-  end
-
-  def tooltips
-    @tooltips ||= {
-      ok: translate('tooltips.ok'),
-      remove: translate('tooltips.remove')
-    }
+  def town_info
+    "(#{h.t('.town')}: #{person.town})" if person.town
   end
 
 end

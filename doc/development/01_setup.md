@@ -38,7 +38,7 @@ Dazu muss Git installiert sein.
 
     cp hitobito/Gemfile.lock hitobito_[wagon]/
     
-Siehe [Wagon erstellen](#wagon-erstellen), wenn du frisch startest und einen Wagon für eine neue 
+Siehe [Wagon erstellen](04_wagons.md#wagon-erstellen), wenn du frisch startest und einen Wagon für eine neue 
 Organisation erstellen willst.  
 
 
@@ -58,15 +58,12 @@ Initialisieren der Datenbank, laden der Seeds und Wagons:
 
 Starten des Entwicklungsservers:
 
+    rails server
+    
+oder gleich aller wichtigen Prozesse:
+    
     gem install foreman
     foreman start
-
-
-oder:
-
-    rails server
-
-
 
 ### Tests
 
@@ -136,6 +133,11 @@ Achtung: Der Index wird grundsätzlich nur über diesen Aufruf aktualisiert! Än
 werden für die Volltextsuche also erst sichtbar, wenn wieder neu indexiert wurde. Auf der Produktion 
 läuft dazu alle 10 Minuten ein Delayed Job.
 
+Hinweis: Falls beim Indexieren der Fehler ``ERROR: index 'group_core': sql_fetch_row: Out of sort memory, consider increasing server sort buffer size.`` auftritt, muss in der MySql-Konfiguration (je nach Distro im File ``/etc/mysql/mysql.conf.d/mysqld.cnf`` oder ``/etc/mysql/my.cnf``) folgende Buffergrösse erhöht werden:
+
+    [mysqld]
+    sort_buffer_size = 2M
+
 
 ### Delayed Job
 
@@ -172,64 +174,3 @@ und dann mittles Browser auf `http://localhost:1080` E-Mails liest.
 | `rake ci:nightly` | Führt die Tasks für einen Nightly Build aus. |
 | `rake ci:wagon` | Führt die Tasks für die Wagon Commit Builds aus. |
 | `rake ci:wagon:nightly` | Führt die Tasks für die Wagon Nightly Builds aus. |
-
-
-### Wagon erstellen
-
-Um für hitobito eine Gruppenstruktur zu defnieren, die Grundfunktionaliäten zu erweitern oder
-gewisse Features für mehrere Organisationen gemeinsam verfügbar zu machen, können Wagons verwendet
-werden. Siehe dazu auch die Wagon Guidelines. Die Grundstruktur eines neuen Wagons kann sehr 
-einfach im Hauptprojekt generiert werden (Die Templates dazu befinden sich in `lib/templates/wagon`):
-
-    rails generate wagon [name]
-    
-Danach müssen noch folgende spezifischen Anpassungen gemacht werden:
-
-* Dateien von `hitobito/vendor/wagons/[name]` nach `hitobito_[name]` verschieben.
-* Eigenes Git Repo für den Wagon erzeugen.
-* `Gemfile.lock` vom Core in den Wagon kopieren.
-* Organisation im Lizenz Generator (`lib/tasks/license.rake`) anpassen und überall Lizenzen 
-  hinzufügen: `rake app:license:insert`.
-* Organisation in `COPYING` ergänzen.
-* `AUTHORS` ergänzen.
-* In `hitobito_[name].gemspec` authors, email, summary und description anpassen.
-
-Falls der Wagon für eine neue Organisation ist, können noch diese Punkte angepasst werden:
-
-* In den Seeddaten Entwickler- und Kundenaccount hinzufügen: `db/seed/development/1_people.rb` unter `devs`.
-* Die gewünschte E-Mail des Root Users in `config/settings.yml` eintragen.
-* Falls die Applikation mehrsprachig sein soll: Transifex Projekt erstellen und vorbereiten. 
-  Siehe dazu auch die Mehrsprachigkeits Guidelines.
-
-Falls der Wagon nicht für eine spezifische Organisation ist und keine Gruppenstruktur definiert,
-sollten folgende generierten Dateien gelöscht werden:
-
-* Gruppen Models: `rm -rf app/models/group/root.rb app/models/[name]/group.rb`
-* Übersetzungen der Models in `config/locales/models.[name].de.yml`
-* Seeddaten: `rm -rf db/seeds`
-
-Damit entsprechende Testdaten für Tests sowie Tarantula vorhanden sind, müssen die Fixtures im Wagon entsprechend der generierten Organisationsstruktur angepasst werden.
-* Anpassen der Fixtures für people, groups, roles, events, usw. (`spec/fixtures`)
-* Anpassen der Tarantula Tests im Wagon (`test/tarantula/tarantula_test.rb`)
-
-### Gruppenstruktur erstellen
-
-Nachdem für eine Organisation ein neuer Wagon erstellt worden ist, muss oft auch eine 
-Gruppenstruktur definiert werden. Wie die entsprechenden Modelle aufgebaut sind, ist in der 
-Architekturdokumentation beschrieben. Hier die einzelnen Schritte, welche für das Aufsetzen der
-Entwicklungsumgebung noch vorgenommen werden müssen:
-
-* Am Anfang steht die alleroberste Gruppe. Die Klasse in `app/models/group/root.rb` entsprechend 
-  umbenennen (z.B. nach "Dachverband") und erste Rollen definieren. 
-* `app/models/[name]/group.rb#root_types` entsprechend anpassen.
-* In `config/locales/models.[name].de.yml` Übersetzungen für Gruppe und Rollen hinzufügen.
-* In `db/seed/development/1_people.rb` die Admin Rolle für die Entwickler anpassen.
-* In `db/seed/groups.rb` den Seed der Root Gruppe anpassen.
-* In `spec/fixtures/groups.yml` den Typ der Root Gruppe anpassen.
-* In `spec/fixtures/roles.yml` die Rollentypen anpassen.
-* Tests ausführen
-* Weitere Gruppen und Rollen inklusive Übersetzungen definieren.
-* In `db/seed/development/0_groups.rb` Seed Daten für die definierten Gruppentypen definieren.
-* In `spec/fixtures/groups.yml` Fixtures für die definierten Gruppentypen definieren. Es empfielt
-  sich, die selben Gruppen wie in den Development Seeds zu verwenden.
-* `README.md` mit Output von `rake app:hitobito:roles` ergänzen.

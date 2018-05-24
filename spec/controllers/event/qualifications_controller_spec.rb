@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -29,6 +29,12 @@ describe Event::QualificationsController do
 
   before { sign_in(people(:top_leader)) }
 
+  before do
+    participant_1
+    participant_2
+    leader_1
+  end
+
   it 'event kind has one qualification kind' do
     expect(event.kind.qualification_kinds('qualification', 'participant')).to eq [qualification_kinds(:sl)]
   end
@@ -38,10 +44,6 @@ describe Event::QualificationsController do
 
     context 'entries' do
       before do
-        participant_1
-        participant_2
-        leader_1
-
         get :index, group_id: group.id, event_id: event.id
       end
 
@@ -63,87 +65,82 @@ describe Event::QualificationsController do
   describe 'PUT update' do
     subject { obtained_qualifications }
 
-    context 'with one existing qualifications' do
-      before do
-        qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
-        participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
-                                                    start_at: start_at)
+    context 'adding' do
+      context 'with one existing qualifications' do
+        before do
+          qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
+          participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
+                                                      start_at: start_at)
+        end
+
+        context 'issued before qualification date' do
+          let(:start_at) { event.qualification_date - 1.day }
+
+          it 'issues qualification' do
+            expect do
+              put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s]
+            end.to change { Qualification.count }.by(1)
+            expect(subject.size).to eq(1)
+          end
+        end
+
+        context 'issued on qualification date' do
+          let(:start_at) { event.qualification_date }
+
+          it 'keeps existing qualification' do
+            expect do
+              put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id]
+            end.not_to change { Qualification.count }
+            expect(subject.size).to eq(1)
+          end
+        end
+
       end
 
-      context 'issued before qualification date' do
-        let(:start_at) { event.qualification_date - 1.day }
+      context 'without existing qualifications for participant' do
+        before { put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id] }
 
-        it 'issues qualification' do
-          expect do
-            put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
-          end.to change { Qualification.count }.by(1)
+        it 'has 1 item' do
           expect(subject.size).to eq(1)
-          is_expected.to render_template('qualification')
         end
       end
 
-      context 'issued on qualification date' do
-        let(:start_at) { event.qualification_date }
+      context 'without existing qualifications for leader' do
+        before { put :update, group_id: group.id, event_id: event.id, participation_ids: [leader_1.id] }
 
-        it 'keeps existing qualification' do
-          expect do
-            put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
-          end.not_to change { Qualification.count }
-          expect(subject.size).to eq(1)
-          is_expected.to render_template('qualification')
+        it 'should obtain a qualification' do
+          obtained = obtained_qualifications(leader_1)
+          expect(obtained.size).to eq(1)
         end
       end
 
     end
 
-    context 'without existing qualifications for participant' do
-      before { put :update, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js }
+    context 'removing' do
 
-      it 'has 1 item' do
-        expect(subject.size).to eq(1)
-      end
-      it { is_expected.to render_template('qualification') }
-    end
+      context 'without existing qualifications' do
+        before do
+          put :update, group_id: group.id, event_id: event.id
+        end
 
-    context 'without existing qualifications for leader' do
-      before { put :update, group_id: group.id, event_id: event.id, id: leader_1.id, format: :js }
-
-      it 'should obtain a qualification' do
-        obtained = obtained_qualifications(leader_1)
-        expect(obtained.size).to eq(1)
-        expect(obtained).to render_template('qualification')
-      end
-    end
-  end
-
-
-  describe 'DELETE destroy' do
-
-    subject { obtained_qualifications }
-
-    context 'without existing qualifications' do
-      before do
-        delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+        it 'has no items' do
+          expect(subject.size).to eq(0)
+        end
       end
 
-      it 'has no items' do
-        expect(subject.size).to eq(0)
-      end
-      it { is_expected.to render_template('qualification') }
-    end
+      context 'with one existing qualification' do
+        before do
+          qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
+          participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
+                                                      start_at: event.qualification_date)
+          put :update, group_id: group.id, event_id: event.id, participation_ids: []
+        end
 
-    context 'with one existing qualification' do
-      before do
-        qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
-        participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
-                                                    start_at: event.qualification_date)
-        delete :destroy, group_id: group.id, event_id: event.id, id: participant_1.id, format: :js
+        it 'has no items' do
+          expect(subject.size).to eq(0)
+        end
       end
 
-      it 'has no items' do
-        expect(subject.size).to eq(0)
-      end
-      it { is_expected.to render_template('qualification') }
     end
   end
 
@@ -151,4 +148,5 @@ describe Event::QualificationsController do
     q = Event::Qualifier.for(person)
     q.send(:obtained, q.send(:qualification_kinds))
   end
+
 end

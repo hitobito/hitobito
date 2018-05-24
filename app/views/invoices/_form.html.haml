@@ -1,0 +1,25 @@
+= entry_form(data: { group: group_path(parent) }) do |f|
+  = field_set_tag do
+    = f.labeled_input_fields :title, :description, rows: 3
+    = f.labeled_input_field :issued_at
+    = f.labeled_input_field :due_at
+
+  = field_set_tag do
+    = f.labeled_input_field :recipient_email
+    = f.labeled_input_field :recipient_address, rows: 4
+
+  = f.labeled_input_field :payment_information, rows: 2
+  = f.labeled_input_field :payment_purpose, rows: 2
+
+  = field_set_tag do
+    - if parent.invoice_articles.exists?
+      = f.labeled(:invoice_item_article) do
+        = select("temp", "invoice_article_id",
+          InvoiceArticle.all.pluck(:number, :id),
+          { include_blank: true },
+          { id: "invoice_item_article" })
+
+    = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
+
+
+  = render "invoice_lists/calculated", invoice: entry

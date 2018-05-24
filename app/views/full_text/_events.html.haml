@@ -1,0 +1,5 @@
+= table(@events, class: 'table table-striped table-hover') do |t|
+  - t.col(Event.human_attribute_name(:name)) do |e|
+    - content_tag(:strong, link_to(e, e))
+  - t.col(Event.human_attribute_name(:dates)) { |e| format_attr(e, :dates) }
+  - t.col(Group.model_name.human) { |e| format_attr(e, :groups) }

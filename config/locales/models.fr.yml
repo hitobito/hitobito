@@ -32,11 +32,18 @@ fr:
         greater_than: doit être plus grand que %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: Doivent exister
+        readonly: ne peut pas être modifié
       models:
         custom_content:
           attributes:
             body:
               placeholder_missing: 'doit contenir la variable %{placeholder}'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' est un champ obligatoire et ne peut pas être défini comme optionnel ou invisible"
+              contact_attr_invalid: "'%{attribute}'  n'est pas un attribut personnel valable"
+              contact_attr_hidden_required: "'%{attribute}' ne peut pas être défini comme optionnel ou invisible"
         event/date:
           attributes:
             finish_at:
@@ -46,7 +53,7 @@ fr:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
         event/participation:
-          emoji_suspected: 'Prière de ne pas utiliser de signes spéciaux (not. émoticônes)'
+          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
           attributes:
             person_id:
               taken: est déjà annoncé
@@ -56,7 +63,8 @@ fr:
               not_allowed: "'%{mail_name}' ne peut pas être utilisé"
         person:
           name_missing: 'Veuillez entrer votre nom'
-          emoji_suspected: 'Prière de ne pas utiliser de signes spéciaux (not. émoticônes)'
+          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
+          readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             email:
               taken: >
@@ -114,8 +122,8 @@ fr:
         one: Inscription
         other: Inscriptions
       event/attachment:
-        one: Annexe
-        other: Annexes
+        one: 'Annexe'
+        other: 'Annexes'
       event/kind:
         one: Type de cours
         other: Types de cours
@@ -128,6 +136,9 @@ fr:
       event/role/cook:
         one: Cuisine
         other: Cuisine
+      event/role/helper:
+        one: Assistant/e
+        other: Assistant(e)s
       event/role/participant:
         one: Participant/-e
         other: Participant/-es
@@ -149,15 +160,15 @@ fr:
       mailing_list:
         one: abonnement
         other: Abonnements
+      note:
+        one: Note
+        other: Notes
       person:
         one: Personne
         other: Personnes
       person/add_request:
         one: Question
         other: Questions
-      person/note:
-        one: Note
-        other: Notes
       people_filter:
         one: Filtre
         other: Filtres
@@ -221,6 +232,7 @@ fr:
         nickname: Surnom
         email: Adresse e-mail principale
         emails: E-mails
+        layer_group: Niveau
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
@@ -253,10 +265,9 @@ fr:
         created_at: Date
       person/add_request/event:
         label: "%{body} dans %{group}"
+        deleted_event: Évènement supprimé
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
-      person/note:
-        text: Texte
       group:
         name: Nom
         short_name: Abréviation
@@ -270,12 +281,15 @@ fr:
         phone_numbers: Numéros de téléphone
         social_accounts: Réseaux sociaux
         additional_emails: Adresses e-mail supplémentaires
+        layer_group: Niveau
         parent_id: Groupe de parents
         layer_group_id: Niveau
         type: Type de groupe
         type_name: Type de groupe
       event:
         group_ids: Groupes
+        groups: Groupes
+        state: Statut
         name: Nom
         number: Numéro
         motto: Devise
@@ -300,7 +314,12 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
-        applications_cancelable: Possibilité de se désinscrire
+        applications_cancelable: Désinscription possible
+        display_booking_info: Voir l'état des inscriptions
+      event/contact_attrs:
+        required: Obligatoire
+        optional: Optionnel
+        hidden: Ne pas afficher
       event/answer:
         answer: Réponse
       answers:
@@ -335,7 +354,7 @@ fr:
         preconditions: Conditions préalables
         prolongations: Prolongé
         qualification_kinds: Qualifié pour
-        general_information: description standard
+        general_information: Informations générales
         application_conditions: Conditions d'admission
         created_at: Créé
         updated_at: Modifié
@@ -352,7 +371,12 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: réponse obligatoire
-      questions:
+      admin_questions:
+        question: Question
+        choices: Réponses possibles
+        multiple_choices: Sélection multiple
+        required: réponse obligatoire
+      application_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
@@ -362,6 +386,8 @@ fr:
         person: Personne
         type: Rôle
         participation: Personne
+      note:
+        text: Texte
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -416,6 +442,7 @@ fr:
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
+              impersonation: Se servir de hitobito comme autre personne.
           kind:
             member:
               one: Membre
@@ -465,6 +492,8 @@ fr:
         mail_address: Liste de diffusion
         subscribers_may_post: les abonnés peuvent éditer la liste de diffusion
         additional_sender: Expéditeur supplémentaire
+        preferred_labels: Labels d'e-mail privilégiés
+        main_email: Envoi à l'adresse e-mail principale
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -485,8 +514,8 @@ fr:
         padding_top: Marge (en haut)
         padding_left: Marge (à gauche)
         dimensions: Nombre
-        nickname: nom scout sur l'étiquette
-        pp_post: ligne PP
+        nickname: Surnom sur l'étiquette
+        pp_post: Espace PP
   errors:
     messages:
       invalid_date: "n'est pas une date valable"

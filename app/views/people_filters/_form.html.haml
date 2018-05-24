@@ -1,31 +1,27 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(path_args(entry), noindent: true) do |f|
+= standard_form(path_args(entry), noindent: true, stacked: true) do |f|
 
   = render 'search_or_save_buttons', f: f
 
   = render_extensions :form, locals: { f: f }
   = f.error_messages
 
-  .label-columns
-    = field_set_tag(t('.prompt_role_selection')) do
-      - @role_types.each do |layer, groups|
-        %h4.filter-toggle= layer
-        - groups.each do |group, role_types|
-          .control-group
-            = label_tag(nil, group, class: 'filter-toggle control-label')
-            .controls
-              - role_types.each do |role_type|
-                = f.inline_check_box(:role_type_ids,
-                                    role_type.id,
-                                    role_type.label,
-                                    checked: entry.role_types.include?(role_type.sti_name))
+  = render 'range', f: f
+
+  .accordion
+    = render(layout: 'filter', locals: { type: :role }) do
+      = render 'role', f: f
+
+    - if @qualification_kinds.present?
+      = render(layout: 'filter', locals: { type: :qualification }) do
+        = render 'qualification', f: f
+
 
   - if can?(:create, entry)
-    = field_set_tag(t('.save_filter')) do
-      = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')
+    = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')
 
   = render 'search_or_save_buttons', f: f

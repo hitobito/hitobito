@@ -9,8 +9,10 @@ class Group::TopGroup < Group
 
   self.event_types = [Event, Event::Course]
 
+  children Group::TopGroup
+
   class Leader < ::Role
-    self.permissions = [:admin, :layer_and_below_full, :contact_data]
+    self.permissions = [:admin, :finance, :layer_and_below_full, :contact_data, :impersonation]
   end
 
   class LocalGuide < ::Role

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,18 +9,18 @@
 # Table name: events
 #
 #  id                          :integer          not null, primary key
-#  type                        :string
-#  name                        :string           not null
-#  number                      :string
-#  motto                       :string
-#  cost                        :string
+#  type                        :string(255)
+#  name                        :string(255)      not null
+#  number                      :string(255)
+#  motto                       :string(255)
+#  cost                        :string(255)
 #  maximum_participants        :integer
 #  contact_id                  :integer
-#  description                 :text
-#  location                    :text
+#  description                 :text(65535)
+#  location                    :text(65535)
 #  application_opening_at      :date
 #  application_closing_at      :date
-#  application_conditions      :text
+#  application_conditions      :text(65535)
 #  kind_id                     :integer
 #  state                       :string(60)
 #  priorization                :boolean          default(FALSE), not null
@@ -34,12 +34,16 @@
 #  teamer_count                :integer          default(0)
 #  signature                   :boolean
 #  signature_confirmation      :boolean
-#  signature_confirmation_text :string
+#  signature_confirmation_text :string(255)
 #  creator_id                  :integer
 #  updater_id                  :integer
+#  applications_cancelable     :boolean          default(FALSE), not null
+#  required_contact_attrs      :text(65535)
+#  hidden_contact_attrs        :text(65535)
+#  display_booking_info        :boolean          default(TRUE), not null
 #
 
-class Event < ActiveRecord::Base
+class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
@@ -64,12 +68,15 @@ class Event < ActiveRecord::Base
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
                           :description, :location, :application_opening_at,
                           :application_closing_at, :application_conditions,
-                          :external_applications, :applications_cancelable]
+                          :external_applications, :applications_cancelable,
+                          :signature, :signature_confirmation, :signature_confirmation_text,
+                          :required_contact_attrs, :hidden_contact_attrs]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
                      Event::Role::Cook,
+                     Event::Role::Helper,
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]
@@ -99,6 +106,9 @@ class Event < ActiveRecord::Base
   has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
   has_many :questions, dependent: :destroy, validate: true
 
+  has_many :application_questions, -> { where(admin: false) }, class_name: 'Event::Question'
+  has_many :admin_questions, -> { where(admin: true) }, class_name: 'Event::Question'
+
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
 
@@ -121,14 +131,20 @@ class Event < ActiveRecord::Base
             length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
-
+  validate :assert_required_contact_attrs_valid
+  validate :assert_hidden_contact_attrs_valid
 
   ### CALLBACKS
 
   before_validation :set_self_in_nested
+  before_validation :set_signature, if: :signature_confirmation?
 
+  accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
+                                allow_destroy: true
 
-  accepts_nested_attributes_for :dates, :questions, allow_destroy: true
+  ### SERIALIZED ATTRIBUTES
+  serialize :required_contact_attrs, Array
+  serialize :hidden_contact_attrs, Array
 
   ### CLASS METHODS
 
@@ -137,9 +153,9 @@ class Event < ActiveRecord::Base
     # Default scope for event lists
     def list
       order_by_date.
-      order(:name).
-      preload_all_dates.
-      uniq
+        order(:name).
+        preload_all_dates.
+        uniq
     end
 
     def preload_all_dates
@@ -172,15 +188,15 @@ class Event < ActiveRecord::Base
     def upcoming
       midnight = Time.zone.now.midnight
       joins(:dates).
-      where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
+        where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
       where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
-      where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-      where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
+        where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
+        where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
             'events.participant_count < events.maximum_participants')
     end
 
@@ -208,7 +224,7 @@ class Event < ActiveRecord::Base
     # Return the event type with the given sti_name or raise an exception if not found
     def find_event_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
       type
     end
 
@@ -219,13 +235,15 @@ class Event < ActiveRecord::Base
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
       type
     end
   end
 
 
   ### INSTANCE METHODS
+
+  delegate :participant_types, :find_role_type!, to: :singleton_class
 
   def to_s(_format = :default)
     name
@@ -247,7 +265,7 @@ class Event < ActiveRecord::Base
   def application_possible?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
     (!application_closing_at? || application_closing_at >= Time.zone.today) &&
-    (maximum_participants.to_i == 0 || participant_count < maximum_participants)
+    (maximum_participants.to_i.zero? || participant_count < maximum_participants)
   end
 
   def init_questions
@@ -258,16 +276,43 @@ class Event < ActiveRecord::Base
     kind_class == Event::Kind && kind.present?
   end
 
+  def duplicate # rubocop:disable Metrics/MethodLength splitting this up does not make it better
+    dup.tap do |event|
+      event.groups = groups
+      event.state = nil
+      event.application_opening_at = nil
+      event.application_closing_at = nil
+      event.participant_count = 0
+      event.applicant_count = 0
+      event.teamer_count = 0
+      application_questions.each do |q|
+        event.application_questions << q.dup
+      end
+      admin_questions.each do |q|
+        event.admin_questions << q.dup
+      end
+    end
+  end
+
+  # Overwrite to handle improper characters
+  def save(*args)
+    super
+  rescue ActiveRecord::StatementInvalid => e
+    raise e unless e.original_exception.message =~ /Incorrect string value/
+    errors.add(:base, :emoji_suspected)
+    false
+  end
+
   private
 
   def assert_type_is_allowed_for_groups
-    if groups.present?
-      master = groups.first
-      if groups.any? { |g| g.class != master.class }
-        errors.add(:group_ids, :must_have_same_type)
-      elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
-        errors.add(:type, :type_not_allowed)
-      end
+    master = groups.try(:first)
+    return unless master
+
+    if groups.any? { |g| g.class != master.class }
+      errors.add(:group_ids, :must_have_same_type)
+    elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
+      errors.add(:type, :type_not_allowed)
     end
   end
 
@@ -279,7 +324,43 @@ class Event < ActiveRecord::Base
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
-    (dates + questions).each { |e| e.event = self unless e.frozen? }
+    (dates + application_questions + admin_questions).each do |e|
+      e.event = self unless e.frozen?
+    end
+  end
+
+  def valid_contact_attr?(attr)
+    (ParticipationContactData.contact_attrs +
+      ParticipationContactData.contact_associations).
+      map(&:to_s).include?(attr.to_s)
+  end
+
+  def assert_required_contact_attrs_valid
+    required_contact_attrs.map(&:to_s).each do |a|
+      unless valid_contact_attr?(a) &&
+          ParticipationContactData.contact_associations.
+             map(&:to_s).exclude?(a)
+        errors.add(:base, :contact_attr_invalid, attribute: a)
+      end
+      if hidden_contact_attrs.include?(a)
+        errors.add(:base, :contact_attr_hidden_required, attribute: a)
+      end
+    end
+  end
+
+  def assert_hidden_contact_attrs_valid
+    hidden_contact_attrs.map(&:to_sym).each do |a|
+      unless valid_contact_attr?(a)
+        errors.add(:base, :contact_attr_invalid, attribute: a)
+      end
+      if ParticipationContactData.mandatory_contact_attrs.include?(a)
+        errors.add(:base, :contact_attr_mandatory, attribute: a)
+      end
+    end
+  end
+
+  def set_signature
+    self.signature = true
   end
 
 end

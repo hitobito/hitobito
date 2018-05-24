@@ -19,7 +19,7 @@ module Event::Participatable
                    where(event_roles: { type: role_types.map(&:sti_name) }).
                    includes(:person).
                    references(:person).
-                   order_by_role(self.class).
+                   order_by_role(self).
                    merge(Person.order_by_name).
                    uniq
   end
@@ -42,10 +42,6 @@ module Event::Participatable
                   where('event_roles.label <> ""').
                   uniq.order(:label).
                   pluck(:label)
-  end
-
-  def participant_types
-    self.class.participant_types
   end
 
   private

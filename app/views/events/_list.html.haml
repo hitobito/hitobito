@@ -1,14 +1,28 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
 - title @group.to_s
 
-= render 'shared/page_per_year'
+- content_for :filter do
+  - if parent.layer? && @group.has_sublayers?
+    = FilterNavigation::Events.new(self, @group).to_s
+  .pull-right
+    = render 'shared/page_per_year'
+
+= paginate @events
 
 = crud_table do |t|
-  -t.col(Event.human_attribute_name(:name)) do |e|
-    %strong= link_to e.name, group_event_path(@group, e)
-  -t.attrs(:dates_full, :booking_info)
+  - t.col(t.sort_header(:name)) do |e|
+    %strong= link_to e.name, group_event_path(e.groups.first, e)
+  - t.sortable_attr(:dates_full)
+  - t.attr(:description_short, t.attr_header(:description))
+  - t.attr(:booking_info)
+  - t.sortable_attr(:state)
+  - t.sortable_attr(:group_ids)
+
+  = render_extensions(:list_columns, locals: { t: t })
+
+  - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
 

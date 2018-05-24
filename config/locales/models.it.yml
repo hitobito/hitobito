@@ -32,11 +32,18 @@ it:
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
+        readonly: non può venir cambiato
       models:
         custom_content:
           attributes:
             body:
               placeholder_missing: 'deve contenere il carattere %{placeholder}'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' è un campo obbligatorio e non può essere impostato come facoltativo o 'non visualizzare'"
+              contact_attr_invalid: "'%{attribute}' non è un attributo valido in merito alla persona"
+              contact_attr_hidden_required: "'%{attribute}' non può essere impostato come obbligatorio e 'non visualizzare'"
         event/date:
           attributes:
             finish_at:
@@ -46,7 +53,7 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
-          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
+          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
           attributes:
             person_id:
               taken: è già iscritto
@@ -56,7 +63,8 @@ it:
               not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'Inserire un nome'
-          emoji_suspected: 'Non usare caratteri speciali (soprattutto emoji)'
+          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
+          readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             email:
               taken: >
@@ -113,8 +121,8 @@ it:
         one: iscrizione
         other: Iscrizioni
       event/attachment:
-        one: Allegato
-        other: Allegati
+        one: 'Allegato'
+        other: 'Allegati'
       event/kind:
         one: tipo di corso
         other: Tipi di corso
@@ -127,6 +135,9 @@ it:
       event/role/cook:
         one: Cucina
         other: Cucina
+      event/role/helper:
+        one: Aiutante
+        other: Aiutanti
       event/role/participant:
         one: Partecipante
         other: Partecipante
@@ -148,15 +159,15 @@ it:
       mailing_list:
         one: abbonamento
         other: Abbonamenti
+      note:
+        one: Nota
+        other: Note
       person:
         one: persona
         other: Persone
       person/add_request:
         one: Richiesta di accesso
         other: Richieste
-      person/note:
-        one: Nota
-        other: Note
       people_filter:
         one: filtro
         other: Filtri
@@ -214,12 +225,13 @@ it:
       person:
         first_name: Nome
         last_name: Cognome
-        name: Cognome
+        name: Nome
         company_name: Nome della ditta
         company: Ditta
         nickname: Soprannome
         email: Email principale
         emails: Email
+        layer_group: Livello principale
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
@@ -252,12 +264,11 @@ it:
         created_at: Data
       person/add_request/event:
         label: "%{body} in %{group}"
+        deleted_event: Evento cancellato
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
-      person/note:
-        text: Testo
       group:
-        name: Cognome
+        name: Nome
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
@@ -275,7 +286,7 @@ it:
         type_name: Tipo di gruppi
       event:
         group_ids: Gruppi
-        name: Cognome
+        name: Nome
         number: Numero
         motto: Motto
         cost: Costi
@@ -300,6 +311,11 @@ it:
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
         applications_cancelable: Disiscrizione possibile
+        display_booking_info: Visualizza stato iscrizioni
+      event/contact_attrs:
+        required: Obbligatorio
+        optional: Facoltativo
+        hidden: Non visualizzare
       event/answer:
         answer: Risposta
       answers:
@@ -334,7 +350,7 @@ it:
         preconditions: Requisiti per la partecipazione
         prolongations: Prolungato
         qualification_kinds: Qualificato per
-        general_information: Descrizione standard
+        general_information: Informazioni generali
         application_conditions: Condizioni di ammissione
         created_at: Salvato
         updated_at: Modificato
@@ -351,7 +367,12 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
-      questions:
+      admin_questions:
+        question: Domanda
+        choices: Possibili risposte
+        multiple_choices: Scelta multipla
+        required: Risposta obbligatoria
+      application_questions:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
@@ -361,6 +382,8 @@ it:
         person: Persona
         type: Ruolo
         participation: Persona
+      note:
+        text: Testo
       qualification:
         qualification_kind: Qualifiche
         qualification_kind_id: Qualifica
@@ -415,6 +438,7 @@ it:
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
+              impersonation: Utilizza Hitobito come altra persona.
           kind:
             member:
               one: Membro
@@ -464,10 +488,12 @@ it:
         mail_address: Mailing list
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
         additional_sender: Mittente supplementare
+        preferred_labels: Etichetta e-mail preferita
+        main_email: Spedizione all'e-mail principale
       subscription:
         related_role_types: Ruoli
       people_filter:
-        name: Cognome
+        name: Nome
       custom_content:
         label: Testo
         subject: Oggetto
@@ -484,8 +510,8 @@ it:
         padding_top: Margine superiore
         padding_left: Margine a sinistra
         dimensions: Numero
-        nickname: Nome scout sull'etichetta
-        pp_post: riga PP
+        nickname: Soprannome sull'etichetta
+        pp_post: Riga PP
   errors:
     messages:
       invalid_date: "non è una data valida"

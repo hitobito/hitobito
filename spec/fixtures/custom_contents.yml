@@ -7,9 +7,9 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
+#  key                   :string(255)      not null
+#  placeholders_required :string(255)
+#  placeholders_optional :string(255)
 #
 
 login:
@@ -23,4 +23,15 @@ login_info:
 notes:
   key: notes
 
+bulk_mail_success:
+  key: bulk_mail_success
+  placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients'
 
+bulk_mail_with_failed:
+  key: bulk_mail_with_failed
+  placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients'
+
+content_invoice_notification:
+  key: content_invoice_notification
+  placeholders_required: invoice-items, invoice-total, payment-information
+  placeholders_optional: recipient-name, group-name, group-address, invoice-number

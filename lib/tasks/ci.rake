@@ -6,12 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 desc "Runs the tasks for a commit build"
-task :ci => ['log:clear',
-             'rubocop',
-             'db:migrate',
-             'ci:setup:rspec',
-             'spec:features', # run feature specs first to get coverage from spec
-             'spec']
+task :ci do
+  tasks_to_skip = ENV['skip_tasks'].present? ? ENV['skip_tasks'].split(',') : []
+  tasks = ['log:clear',
+           'rubocop',
+           'db:migrate',
+           'ci:setup:env',
+           'ci:setup:rspec',
+           'spec:features', # run feature specs first to get coverage from spec
+           'spec'].delete_if { |task| tasks_to_skip.include?(task) }
+  
+  tasks.each { |task| Rake::Task[task].invoke }
+end
 
 namespace :ci do
   desc "Runs the tasks for a nightly build"
@@ -19,6 +25,7 @@ namespace :ci do
                     'db:migrate',
                     'erd',
                     'doc:all',
+                    'ci:setup:env',
                     'ci:setup:rspec',
                     'spec:features', # run feature specs first to get coverage from spec
                     'spec',
@@ -32,12 +39,19 @@ namespace :ci do
     wagon_exec('bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
   end
 
+  namespace :setup do
+    task :env do
+      ENV['CI'] = "true"
+    end
+  end
+
   namespace :wagon do
 
     desc "Run the tasks for a wagon nightly build"
     task :nightly do
       Rake::Task['log:clear'].invoke
-      wagon_exec('bundle exec rake app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
+      wagon_exec('bundle exec rake app:ci:setup:env ' \
+                 'app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
       Rake::Task['erd'].invoke
     end
 

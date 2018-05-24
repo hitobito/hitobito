@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,18 +9,23 @@
 # Table name: mailing_lists
 #
 #  id                   :integer          not null, primary key
-#  name                 :string           not null
+#  name                 :string(255)      not null
 #  group_id             :integer          not null
-#  description          :text
-#  publisher            :string
-#  mail_name            :string
-#  additional_sender    :string
+#  description          :text(65535)
+#  publisher            :string(255)
+#  mail_name            :string(255)
+#  additional_sender    :string(255)
 #  subscribable         :boolean          default(FALSE), not null
 #  subscribers_may_post :boolean          default(FALSE), not null
 #  anyone_may_post      :boolean          default(FALSE), not null
+#  delivery_report      :boolean          default(FALSE), not null
+#  preferred_labels     :string(255)
+#  main_email           :boolean          default(FALSE)
 #
 
 class MailingList < ActiveRecord::Base
+
+  serialize :preferred_labels, Array
 
   belongs_to :group
 
@@ -32,6 +37,8 @@ class MailingList < ActiveRecord::Base
            class_name: 'Person::AddRequest::MailingList',
            dependent: :destroy
 
+  has_many :mail_logs, dependent: :nullify
+
   validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
@@ -39,9 +46,18 @@ class MailingList < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
 
+  DEFAULT_LABEL = '_main'.freeze
 
   def to_s(_format = :default)
     name
+  end
+
+  def labels
+    main_email ? preferred_labels + [DEFAULT_LABEL]: preferred_labels
+  end
+
+  def preferred_labels=(labels)
+    self[:preferred_labels] = labels.reject(&:blank?).collect(&:strip).uniq.sort
   end
 
   def mail_address
@@ -60,7 +76,7 @@ class MailingList < ActiveRecord::Base
     subscriptions.where(subscriber_id: person.id,
                         subscriber_type: Person.sti_name,
                         excluded: false).
-                  destroy_all
+      destroy_all
 
     if subscribed?(person)
       sub = subscriptions.new
@@ -72,36 +88,38 @@ class MailingList < ActiveRecord::Base
 
   def people(people_scope = Person.only_public_data)
     people_scope.
-           joins(people_joins).
-           joins(subscription_joins).
-           where(subscriptions: { mailing_list_id: id }).
-           where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
-           where(suscriber_conditions).
-           uniq
+      joins(people_joins).
+      joins(subscription_joins).
+      where(subscriptions: { mailing_list_id: id }).
+      where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
+      where(suscriber_conditions).
+      uniq
   end
 
   private
 
   def people_joins
-    'LEFT JOIN roles ON people.id = roles.person_id ' \
-    'LEFT JOIN groups ON roles.group_id = groups.id ' \
-    'LEFT JOIN event_participations ON event_participations.person_id = people.id ' \
-    'LEFT JOIN taggings AS people_taggings ' \
-    "ON people_taggings.taggable_type = 'Person' " \
-    'AND people_taggings.taggable_id = people.id'
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      LEFT JOIN roles ON people.id = roles.person_id
+      LEFT JOIN groups ON roles.group_id = groups.id
+      LEFT JOIN event_participations ON event_participations.person_id = people.id
+      LEFT JOIN taggings AS people_taggings
+        ON people_taggings.taggable_type = 'Person'
+        AND people_taggings.taggable_id = people.id
+    SQL
   end
 
   def subscription_joins
-    ', subscriptions ' \
-    'LEFT JOIN groups sub_groups ' \
-    "ON subscriptions.subscriber_type = 'Group'" \
-    'AND subscriptions.subscriber_id = sub_groups.id ' \
-    'LEFT JOIN related_role_types ' \
-    "ON related_role_types.relation_type = 'Subscription' " \
-    'AND related_role_types.relation_id = subscriptions.id ' \
-    'LEFT JOIN taggings AS subscriptions_taggings ' \
-    "ON subscriptions_taggings.taggable_type = 'Subscription' " \
-    'AND subscriptions_taggings.taggable_id = subscriptions.id'
+    # the comma is needed because it is not a JOIN, but a second "FROM"
+    <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
+      , subscriptions
+      LEFT JOIN groups sub_groups
+        ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
+      LEFT JOIN related_role_types
+        ON related_role_types.relation_type = 'Subscription' AND related_role_types.relation_id = subscriptions.id
+      LEFT JOIN taggings AS subscriptions_taggings
+        ON subscriptions_taggings.taggable_type = 'Subscription' AND subscriptions_taggings.taggable_id = subscriptions.id
+    SQL
   end
 
   def suscriber_conditions
@@ -122,9 +140,9 @@ class MailingList < ActiveRecord::Base
 
   def excluded_person_subscribers
     Subscription.select(:subscriber_id).
-                 where(mailing_list_id: id,
-                       excluded: true,
-                       subscriber_type: Person.sti_name)
+      where(mailing_list_id: id,
+            excluded: true,
+            subscriber_type: Person.sti_name)
   end
 
   def group_subscribers(condition)
@@ -148,7 +166,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.downcase == application_retriever_name.split('@', 2).first.downcase
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

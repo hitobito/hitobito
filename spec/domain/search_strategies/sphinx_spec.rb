@@ -21,7 +21,7 @@ describe SearchStrategies::Sphinx, :mysql do
 
       @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym,
                              group: groups(:bottom_group_one_one),
-                             person: Fabricate(:person, last_name: 'Schurter', first_name: 'Franz')).person
+                             person: Fabricate(:person, last_name: 'Schurter', first_name: 'Franz', town: 'St-Luc')).person
       @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym,
                              group: groups(:bottom_group_one_one),
                              person: Fabricate(:person, last_name: 'Bindella', first_name: 'Yasmine')).person
@@ -67,6 +67,12 @@ describe SearchStrategies::Sphinx, :mysql do
           result = strategy('e').list_people
 
           expect(result).to eq([])
+        end
+
+        it 'finds values with dashes' do
+          result = strategy('st-l').list_people
+
+          expect(result.to_a).to eq([@bg_leader])
         end
 
         it 'finds people without any roles' do

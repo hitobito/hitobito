@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: Puzzle ITC
+  labels:
+    app: rails
+  name: rails
+status:
+  dockerImageRepository: ""
+---
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: Puzzle ITC
+  labels:
+    app: rails
+  name: rails
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: rails:latest
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  source:
+    git:
+      ref: master
+      uri: https://github.com/hitobito/ose_composition_generic.git
+    secrets:
+    - destinationDir: /opt/app-root/src
+      secret:
+        name: transifex-credentials
+    type: Git
+  strategy:
+    sourceStrategy:
+      env:
+      - name: RAILS_HOST_NAME
+        value: build.example.com
+      - name: PULL_TRANSIFEX
+        value: "0"
+      forcePull: true
+      from:
+        kind: ImageStreamTag
+        name: rails-sti-base:latest
+      incremental: true
+    type: Source
+  triggers:
+  - imageChange:
+      from:
+        kind: ImageStreamTag
+        name: 172.30.1.1:5000/hitobito-templateruby-22-centos7-base:latest
+    type: ImageChange
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    purpose: base-is-change
+  name: rails-sti-base
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: puzzle/ose3-rails-sphinx:ruby22
+    name: latest
+

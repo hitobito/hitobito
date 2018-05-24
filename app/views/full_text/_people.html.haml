@@ -1,0 +1,11 @@
+= crud_table do |t|
+  - t.col('') do |p|
+    .profil= image_tag(p.picture.thumb.url, size: '32x32')
+  - t.col(Person.human_attribute_name(:name))    do |p|
+    %strong
+      -# Any person listed can be shown
+      = link_to(p.to_s(:list), group_person_path(p.default_group_id, p))
+  - t.col(Role.model_name.human(count: 2))        { |p| p.decorate.roles_short(nil) }
+  - t.col(Person.human_attribute_name(:emails))   { |p| p.decorate.all_emails(true) }
+  - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.decorate.all_phone_numbers(true) }
+  - t.col(Person.human_attribute_name(:address))  { |p| p.decorate.complete_address }

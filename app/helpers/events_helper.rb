@@ -27,14 +27,24 @@ module EventsHelper
     end
   end
 
-  def button_action_event_apply(event, group = nil)
+  def event_user_application_possible?(event)
     participation = event.participations.new
     participation.person = current_user
 
-    if event.application_possible? && can?(:new, participation)
+    event.application_possible? && can?(:new, participation)
+  end
+
+  def button_action_event_apply(event, group = nil)
+    if event_user_application_possible?(event)
       group ||= event.groups.first
 
-      Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
+      if event.application_closing_at.present?
+        button += content_tag(:div,
+                              t('event.lists.apply_until',
+                                date: f(event.application_closing_at)))
+      end
+      button
     end
   end
 
@@ -55,6 +65,21 @@ module EventsHelper
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
     safe_join(texts.select(&:present?).map { |text| simple_format(text) })
+  end
+
+  def format_event_state(event)
+    event.state_translated
+  end
+
+  def format_event_group_ids(event)
+    groups = event.groups
+    linker = ->(group) { link_to_if(assoc_link?(group), group.with_layer.join(' / '), group) }
+
+    if groups.one?
+      linker[event.groups.first]
+    elsif groups.present?
+      simple_list(groups) { |group| linker[group] }
+    end
   end
 
   private

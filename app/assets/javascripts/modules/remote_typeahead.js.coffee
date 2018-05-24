@@ -12,7 +12,14 @@ app.setupQuicksearch = ->
 
 app.setupEntityTypeahead = (index, field) ->
   input = $(this)
-  setupRemoteTypeahead(input, 10, setEntityId)
+  updateFunction = setEntityId
+
+  if input.data('updater')
+    updateFunction = app
+    updateFunction = updateFunction[prop] for prop in input.data('updater').split('.')
+
+
+  setupRemoteTypeahead(input, 10, updateFunction)
   if input.data('id-field')
     input.keydown((event) ->
       if isModifyingKey(event.which)
@@ -53,8 +60,11 @@ setupRemoteTypeahead = (input, items, updater) ->
 
 queryForTypeahead = (query, process) ->
   return [] if query.length < 3
-  $.get(this.$element.data('url'), { q: query }, (data) ->
+  app.request.abort() if app.request
+  $('#quicksearch').addClass('input-loading')
+  app.request = $.get(this.$element.data('url'), { q: query }, (data) ->
     json = $.map(data, (item) -> JSON.stringify(item))
+    $('#quicksearch').removeClass('input-loading')
     return process(json)
   )
 

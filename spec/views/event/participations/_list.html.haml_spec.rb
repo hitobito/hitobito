@@ -11,7 +11,7 @@ describe 'event/participations/_list.html.haml' do
 
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
   let(:participation) { Fabricate(:event_participation, event: event) }
-  #let(:leader) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
+  let(:participations) { Kaminari.paginate_array([participation.decorate]).page(1) }
 
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
   let(:dropdowns) { dom.all('.dropdown-toggle') }
@@ -27,7 +27,7 @@ describe 'event/participations/_list.html.haml' do
     assign(:event, event)
     assign(:group, event.groups.first)
     allow(view).to receive_messages(parent: event)
-    allow(view).to receive_messages(entries: Event::ParticipationDecorator.decorate_collection([participation]))
+    allow(view).to receive_messages(entries: participations)
     allow(view).to receive_messages(params: params)
     Fabricate(event.participant_types.first.name, participation: participation)
     participation.reload

@@ -1,5 +1,44 @@
 # Hitobito Changelog
 
+## Version 1.18
+
+*   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.
+*   Personenfilter erlauben den Gültigzeitszeitraum einer Rolle einzuschränken.
+*   Berechtigte Personen können die Applikation als eine andere Personen verwenden.
+*   Mailinglisten können an spezifische E-Mail Adressen einer Person verschickt werden.
+*   Mehrere Personen können zu einem Haushalt zusammengefasst werden.
+*   ICAL Kalender Export für Anlässe.
+*   PDF-Export für Personen
+
+## Version 1.17
+
+*   Export der Abonnenten einer Mailingliste wird im Hintergrund erstellt und per mail versendet
+
+
+## Version 1.16
+
+*   Vorbedingungen von Kursarten können zusätzlich mit ODER verknüpft werden.
+*   Für alle Anlässe lassen sich beliebige Administrationsangaben zu den Teilnehmenden definieren.
+*   Anzeige der Hauptebene bei Personenexporten und Teilnehmerlisten.
+*   Anlässe können dupliziert werden.
+*   Personenfilter nach Qualifikationsdaten und mehreren Qualifikationen.
+*   Sichtbarkeit der Anmeldungen auf Kursliste für alle Personen ist pro Kurs konfigurierbar.
+*   Aktualisieren der Kontaktdaten bei der Eventanmeldung
+*   Festlegen von Pflichtangaben zur Person bei der Eventanmeldung
+*   Anmeldestand kann für alle sichtbar gemacht werden
+
+
+## Version 1.15
+
+*   Neue Rolle "Helfer/-in" für Anlässe.
+*   Unterschriften können nun bei allen Anlässen eingefordert werden.
+*   Anzeige des Geburtsdatums in Anlassteilnahmelisten.
+*   Notizen ebenfalls auf Gruppen möglich.
+*   Alle Personen derselben Firma sind unter Person > Mitarbeiter/-innen ersichtlich.
+*   Qualifikationen werden in Kursen erst auf Knopfdruck aktualisiert.
+*   Anmeldedatum wird bei Anmeldeknopf auf Anlassliste angezeigt.
+
+
 ## Version 1.14
 
 *   Automatisches Ausfüllen der Kurs Beschreibung wenn ein Kurstyp gewählt wird.

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -6,6 +6,9 @@
 - title @event.to_s
 
 - content_for(:filter, FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter]).to_s)
+
+.pagination-bar
+  = paginate entries
 
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
@@ -23,5 +26,10 @@
   - t.col(Person.human_attribute_name(:emails))                  { |p| p.all_emails(cannot?(:show_details, p)) }
   - t.col(PhoneNumber.model_name.human(count: 2))                { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
   - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
+  - t.col(t.sort_header(:birthday, Person.human_attribute_name(:birthday))) do |p|
+    = format_attr(p.person, :birthday)
+  - t.col(Person.human_attribute_name(:layer_group)) 		 { |p| p.layer_group_label }
 
   = render_extensions :list, locals: { table: t }
+
+= paginate entries

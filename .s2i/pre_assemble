@@ -10,27 +10,36 @@ source_dir=$(dirname $0)/..
 
 pushd $source_dir
 
+# update the composition-repo to newest versions of configured .gitmodules-branch
+# devel is our indicator for the integration-environment
+if [[ "x${OPENSHIFT_BUILD_REFERENCE}" = "xdevel" ]]; then
+  git submodule update --remote
+fi
+
 # move core
+rm -r hitobito/.git
 mv hitobito/* .
 
 # add wagon sources
 mkdir vendor/wagons
 for dir in hitobito_*; do
   if [[ ( -d $dir ) ]]; then
+    rm -r $dir/.git
     mv $dir vendor/wagons/
   fi
 done
-
-# place Wagonfile
-mv -f config/rpm/Wagonfile .
 
 # move hidden core dirs
 rm -f .s2i/pre_assemble
 cp -rf hitobito/.s2i .  # cannot be moved since it is in use during this script's execution
 mv hitobito/.tx .
 
+# place Wagonfile
+mv -f .s2i/Wagonfile .
+
 # finally remove core source directory
 rm -rf hitobito
+rm -r .git
 
 # TODO: Investigate. This seems ugly and is a hack to prevent assemble from failing with
 #

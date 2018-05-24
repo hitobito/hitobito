@@ -1,0 +1,11 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= crud_table do |t|
+  - t.col(t.sort_header(:name)) do |article|
+    %strong= link_to article.name, group_invoice_article_path(parent, article)
+  - t.sortable_attrs(:number, :description, :category)
+  - t.col(t.sort_header(:unit_cost)) { |a| number_to_currency(a.unit_cost) }
+  - t.sortable_attrs(:vat_rate, :cost_center, :account)

@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
-#  hitobito_pbs and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_pbs.
+#  https://github.com/hitobito/hitobito.
 
-# Commnon Base Class for fetching people.
+# Common Base Class for fetching people.
 class PersonFetchables
 
   include CanCan::Ability
@@ -101,9 +101,9 @@ class PersonFetchables
   end
 
   def groups_with_permissions(*permissions)
-    permissions.collect { |p| user.groups_with_permission(p) }.
-                flatten.
-                uniq
+    permissions.collect { |p| user.groups_with_permission(p) }
+               .flatten
+               .uniq
   end
 
 end

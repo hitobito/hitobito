@@ -27,7 +27,13 @@ describe Event::ParticipationMailer do
 
   it 'includes an html and a pdf part' do
     expect(mail.parts.first.content_type).to eq "text/html; charset=UTF-8"
-    expect(mail.parts.second.content_type).to eq "application/pdf; filename=\"Eventus_Top Leader.pdf\""
+    expect(mail.parts.second.content_type).to eq "application/pdf; filename=eventus-top_leader.pdf"
+  end
+
+  it 'deals with quotes in event name' do
+    event.update(name: %Q(Now "with" quotes))
+    expect(mail.parts.first.content_type).to eq "text/html; charset=UTF-8"
+    expect(mail.parts.second.content_type).to eq "application/pdf; filename=now_with_quotes-top_leader.pdf"
   end
 
   describe 'event data' do
@@ -60,12 +66,15 @@ describe Event::ParticipationMailer do
       is_expected.to match(%r{<strong>Top Leader</strong><p> Supertown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>})
     end
 
-    it 'renders questions if present' do
+    it 'renders application questions if present' do
       question = event_questions(:top_ov)
       event.questions << event_questions(:top_ov)
+      question2 = event.questions.create!(question: 'foo', admin: true)
       participation.answers.detect { |a| a.question_id == question.id }.update!(answer: 'GA')
+      participation.answers.detect { |a| a.question_id == question2.id }.update!(answer: 'Bar')
 
       is_expected.to match(%r{Fragen:.*GA})
+      is_expected.not_to match(%r{Fragen:.*Bar})
     end
   end
 
@@ -107,7 +116,7 @@ describe Event::ParticipationMailer do
       e2 = Fabricate(:additional_email, contactable: approvers[0], mailings: true)
       Fabricate(:additional_email, contactable: approvers[1], mailings: false)
 
-      expect(mail.to).to eq ['approver0@example.com', 'approver1@example.com', e1.email, e2.email]
+      expect(mail.to).to match_array(['approver0@example.com', 'approver1@example.com', e1.email, e2.email])
       expect(mail.subject).to eq 'Freigabe einer Kursanmeldung'
     end
 

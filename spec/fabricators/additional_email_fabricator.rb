@@ -10,11 +10,11 @@
 #
 #  id               :integer          not null, primary key
 #  contactable_id   :integer          not null
-#  contactable_type :string           not null
-#  email            :string           not null
-#  label            :string
+#  contactable_type :string(255)      not null
+#  email            :string(255)      not null
+#  label            :string(255)
 #  public           :boolean          default(TRUE), not null
-#  mailings         :boolean          default(TRUE), not null
+#  mailings         :boolean          default(FALSE), not null
 #
 
 Fabricator(:additional_email) do

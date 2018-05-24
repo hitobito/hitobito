@@ -41,7 +41,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).
-      may(:update, :reactivate, :index_person_add_requests, :index_person_notes,
+      may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
           :index_deleted_people).
       in_same_layer
@@ -55,7 +55,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:create).with_parent_in_same_layer_or_below
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full).
-      may(:update, :reactivate, :index_person_add_requests, :index_person_notes,
+      may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :index_deleted_people).
       in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
@@ -63,11 +63,17 @@ class GroupAbility < AbilityDsl::Base
       may(:activate_person_add_requests, :deactivate_person_add_requests).
       in_same_layer
 
+    permission(:finance).may(:index_invoices).in_layer_group
+
     general(:update).group_not_deleted
     general(:index_person_add_requests,
             :activate_person_add_requests,
             :deactivate_person_add_requests).
       if_layer_group
+  end
+
+  def in_layer_group
+    user.finance_groups.include?(subject)
   end
 
   def with_parent_in_same_layer

@@ -3,19 +3,47 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form do |f|
-  = f.labeled_input_fields(:name, :description, :publisher)
+= entry_form(data: { mailing_list_labels: true }, html: { class: 'form-striped'}) do |f|
+  %fieldset
+    = f.labeled_input_fields(:name, :description, :publisher)
 
-  = f.labeled(:mail_name) do
-    .input-append
-      = f.input_field(:mail_name, class: 'span3')
-      %span.add-on= "@#{entry.mail_domain}"
+    = f.labeled(:mail_name) do
+      .input-append
+        = f.input_field(:mail_name, class: 'span3')
+        %span.add-on= "@#{entry.mail_domain}"
 
-  = f.labeled_input_field(:additional_sender, help: t('.help_additional_sender'))
+    = f.labeled_input_field(:additional_sender, help: t('.help_additional_sender'))
 
-  = f.indented do
-    = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
-  = f.indented do
-    = f.boolean_field(:subscribers_may_post, caption: t('.caption_subscribers_may_post'))
-  = f.indented do
-    = f.boolean_field(:anyone_may_post, caption: t('.caption_anyone_may_post'))
+  %fieldset
+    = f.labeled(:preferred_labels) do
+      %div
+        = link_to '#', class: 'chip chip-add' do
+          = ti('associations.add')
+          = icon(:plus)
+        = text_field_tag(:label, nil, style: 'display: none', data: { provide: :typeahead, source: @labels })
+
+      = hidden_field_tag('mailing_list[preferred_labels][]')
+
+      - @preferred_labels.each do |label|
+        %span.chip
+          = label
+          = link_to(icon(:remove), '#')
+          = hidden_field_tag('mailing_list[preferred_labels][]', label)
+
+      %span.help-block= t('.help_preferred_labels')
+
+    = f.indented do
+      - if entry.preferred_labels.present?
+        = f.boolean_field(:main_email, caption: t('.caption_main_email_with_preferred_labels').html_safe)
+      - else
+        = f.boolean_field(:main_email, caption: t('.caption_main_email').html_safe)
+
+  %fieldset
+    = f.indented do
+      = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
+    = f.indented do
+      = f.boolean_field(:subscribers_may_post, caption: t('.caption_subscribers_may_post'))
+    = f.indented do
+      = f.boolean_field(:anyone_may_post, caption: t('.caption_anyone_may_post'))
+    = f.indented do
+      = f.boolean_field(:delivery_report, caption: t('.caption_delivery_report'))

@@ -322,27 +322,6 @@ describe Person do
     end
   end
 
-  context '.mailing_emails_for' do
-    it 'contains main and additional mailing emails' do
-      e1 = Fabricate(:additional_email, contactable: people(:top_leader), mailings: true)
-      Fabricate(:additional_email, contactable: people(:bottom_member), mailings: false)
-      expect(Person.mailing_emails_for(Person.all)).to match_array([
-        'bottom_member@example.com',
-        'hitobito@puzzle.ch',
-        'top_leader@example.com',
-        e1.email
-      ])
-    end
-
-    it 'does not contain blank emails' do
-      people(:bottom_member).update_attributes!(email: ' ')
-      expect(Person.mailing_emails_for(Person.all)).to match_array([
-        'hitobito@puzzle.ch',
-        'top_leader@example.com'
-      ])
-    end
-  end
-
   context '#years' do
     before { allow(Time.zone).to receive_messages(now: Time.zone.parse('2014-03-01 11:19:50')) }
 
@@ -502,6 +481,10 @@ describe Person do
       expect(list.second.location).to eq(l)
       expect(list.third.location).to be_nil
     end
+  end
+
+  it '#finance_groups returns list of group on which user may manage invoices' do
+    expect(people(:bottom_member).finance_groups).to eq [groups(:bottom_layer_one)]
   end
 
 end

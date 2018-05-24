@@ -1,0 +1,32 @@
+# == Schema Information
+#
+# Table name: payment_reminder_configs
+#
+#  id                :integer          not null, primary key
+#  invoice_config_id :integer          not null
+#  title             :string(255)      not null
+#  text              :string(255)      not null
+#  due_days          :integer          not null
+#  level             :integer          not null
+#
+
+bottom_layer_one_first:
+  invoice_config: bottom_layer_one
+  text: text
+  title: title
+  level: 1
+  due_days: 10
+
+bottom_layer_one_second:
+  invoice_config: bottom_layer_one
+  text: text
+  title: title
+  level: 2
+  due_days: 10
+
+bottom_layer_one_third:
+  invoice_config: bottom_layer_one
+  text: text
+  title: title
+  level: 3
+  due_days: 10

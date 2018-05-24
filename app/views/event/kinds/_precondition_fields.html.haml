@@ -1,0 +1,28 @@
+= f.labeled(Event::Kind.human_attribute_name(:preconditions)) do
+  - kinds = entry.qualification_kinds('precondition', 'participant').group_by(&:id)
+
+  #precondition_summary.inline{style: 'padding-bottom: 5px;',
+                               data: { and: t('event.kinds.qualifications.and'),
+                                       or: t('event.kinds.qualifications.or') } }
+    - entry.grouped_qualification_kind_ids('precondition', 'participant').each_with_index do |ids, index|
+      .precondition-grouping
+        - ids.each do |id|
+          = hidden_field_tag("event_kind[precondition_qualification_kinds][#{index}][qualification_kind_ids][]", id)
+
+        - if index > 0
+          %span.muted= t('event.kinds.qualifications.or')
+        = ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence
+        = link_to(icon(:trash), '#', class: 'remove-precondition-grouping')
+
+
+    = link_to(t('.add_precondition_grouping'), '#', id: 'add_precondition_grouping')
+
+  #precondition_fields.hide
+    = select_tag('event_kind_precondition_kind_ids',
+                 options_from_collection_for_select(@preconditions, :id, :to_s),
+                 multiple: true,
+                 class: 'span6')
+    .help-block
+      .btn-group
+        = button_tag(t('.add_precondition'), class: 'btn btn-default')
+      = link_to(t('global.button.cancel'), '#', class: 'link cancel')

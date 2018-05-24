@@ -20,6 +20,8 @@ describe ChangelogReader do
         '* change',
         '* change two',
         '', # invalid line
+        '## Version 1.X',
+        '* far future change',
         '## Version 2.3',
         '* change',
         '## Version 1.1',
@@ -36,7 +38,7 @@ describe ChangelogReader do
       subject.send(:parse_changelog_lines, changelog_lines)
 
       changelogs = subject.instance_variable_get(:@changelogs)
-      expect(changelogs.count).to eq(2)
+      expect(changelogs.count).to eq(3)
 
       version11 = changelogs[0]
       expect(version11.log_entries.count).to eq(3)
@@ -45,7 +47,12 @@ describe ChangelogReader do
       expect(version11.log_entries[1]).to eq('change two')
       expect(version11.log_entries[2]).to eq('another change')
 
-      version23 = changelogs[1]
+      version1x = changelogs[1]
+      expect(version1x.log_entries.count).to eq(1)
+      expect(version1x.version).to eq('1.X')
+      expect(version1x.log_entries[0]).to eq('far future change')
+
+      version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)
       expect(version23.version).to eq('2.3')
       expect(version23.log_entries[0]).to eq('change')
@@ -75,14 +82,18 @@ describe ChangelogReader do
     v2 = ChangelogVersion.new('2.3')
     v3 = ChangelogVersion.new('1.11')
     v4 = ChangelogVersion.new('2.15')
-    a = [v1, v2, v3, v4]
+    v5 = ChangelogVersion.new('1.X')
+    unsorted = [v1, v2, v3, v4, v5]
 
-    a = a.sort.reverse
+    sorted = unsorted.sort.reverse
 
-    expect(a.last).to eq(v1)
-    expect(a[1]).to eq(v2)
-    expect(a[2]).to eq(v3)
-    expect(a.first).to eq(v4)
+    expect(sorted[0]).to eq(v4)
+    expect(sorted[1]).to eq(v2)
+    expect(sorted[2]).to eq(v5)
+    expect(sorted[3]).to eq(v3)
+    expect(sorted[4]).to eq(v1)
+
+    expect(sorted.map(&:version)).to eq(%w( 2.15 2.3 1.X 1.11 1.1 ))
   end
 
   it 'reads existing changelog file' do

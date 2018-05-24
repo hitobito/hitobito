@@ -20,7 +20,7 @@
 #  padding_left     :float(24)        not null
 #  person_id        :integer
 #  nickname         :boolean          default(FALSE), not null
-#  pp_post          :string           limit: 23
+#  pp_post          :string(23)
 #
 
 class LabelFormat < ActiveRecord::Base

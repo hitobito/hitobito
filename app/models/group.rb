@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: groups
@@ -13,14 +12,14 @@
 #  parent_id                   :integer
 #  lft                         :integer
 #  rgt                         :integer
-#  name                        :string           not null
+#  name                        :string(255)      not null
 #  short_name                  :string(31)
-#  type                        :string           not null
-#  email                       :string
+#  type                        :string(255)      not null
+#  email                       :string(255)
 #  address                     :string(1024)
 #  zip_code                    :integer
-#  town                        :string
-#  country                     :string
+#  town                        :string(255)
+#  country                     :string(255)
 #  contact_id                  :integer
 #  created_at                  :datetime
 #  updated_at                  :datetime
@@ -62,6 +61,7 @@ class Group < ActiveRecord::Base
 
   before_save :reset_contact_info
 
+
   # Root group may not be destroyed
   protect_if :root?
   protect_if :children_without_deleted
@@ -82,11 +82,20 @@ class Group < ActiveRecord::Base
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
+  has_many :notes, as: :subject, dependent: :destroy
+
   has_many :person_add_requests,
            foreign_key: :body_id,
            inverse_of: :body,
            class_name: 'Person::AddRequest::Group',
            dependent: :destroy
+
+  has_one :invoice_config, dependent: :destroy
+  has_many :invoices
+  has_many :invoice_articles, dependent: :destroy
+  has_many :invoice_items, through: :invoices
+
+  after_create :create_invoice_config, if: :layer?
 
   ### VALIDATIONS
 
@@ -152,14 +161,19 @@ class Group < ActiveRecord::Base
   end
 
   # create alias to call it again
-  alias_method :hard_destroy, :really_destroy!
+  alias hard_destroy really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
     destroy_descendants_without_paranoia
+
     # load events to destroy orphaned later
-    list = events.to_a
+    event_list = events.to_a
+    invoice_list = invoices.to_a
+
     hard_destroy
-    list.each { |e| destroy_orphaned_event(e) }
+
+    event_list.each { |e| destroy_orphaned_event(e) }
+    invoice_list.each(&:destroy)
   end
 
   def decorator_class
@@ -189,5 +203,9 @@ class Group < ActiveRecord::Base
     # do not destroy descendants on soft delete
   end
   alias_method_chain :destroy_descendants, :paranoia
+
+  def create_invoice_config
+    create_invoice_config!
+  end
 
 end

@@ -11,12 +11,14 @@
 #  id               :integer          not null, primary key
 #  participation_id :integer          not null
 #  question_id      :integer          not null
-#  answer           :string
+#  answer           :string(255)
 #
 
 class Event::Answer < ActiveRecord::Base
 
   attr_writer :answer_required
+
+  delegate :admin?, to: :question
 
   belongs_to :participation
   belongs_to :question

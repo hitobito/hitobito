@@ -13,55 +13,6 @@ Violations sind unmittelbar zu korrigieren.
 Das selbe gilt für Warnungen, welche im Jenkins auftreten (Brakeman, ...).
 
 
-### Wagons
-
-Die Applikation ist aufgeteilt in Core (generischer Teil) und Wagon (Verbandsspezifische
-Erweiterungen). Im Development und Production Mode sind jeweils beide Teile geladen, in den Tests
-nur der Core bzw. in den Wagon Tests der Core und der spezifische Wagon. Dies wird über das Gemfile
-gesteuert. Zur Funktionsweise von Wagons allgemein siehe auch
-[wagons](http://github.com/codez/wagons).
-
-Einige grundlegende Dinge, welche in Zusammenhang mit Wagons zu beachten sind:
-
-* Der hitobito Core und alle Wagon Verzeichnisse müssen im gleichen Haupverzeichnis sein.
-* Zu Entwicklung kann die Datei `Wagonfile.ci` nach `Wagonfile` kopiert werden, um alle Wagons in
-benachbarten Verzeichnissen zu laden. Falls nur bestimmte Wagons aktiviert werden sollen, kann dies
-ebenfalls im `Wagonfile` konfiguriert werden.
-* Wagons verwenden die gleiche Datenbank wie der Core. Wenn im Core Migrationen erstellt werden,
-müssen alle Wagon Migrationen daraus entfernt werden, bevor das `schema.rb` generiert werden kann.
-Dies geht am einfachsten, indem die development Datenbank komplett gelöscht und wiederhergestellt
-wird.
-* Wenn neue Gems zum Core hinzugefügt werden, müssen alle `Gemfile.lock` Dateien in den Wagons
-aktualisert werden. Dies geschieht am einfachsten mit `rake wagon:bundle:update`, oder manuell mit
-`cp Gemfile.lock ../hitobito_[wagon]/`. Dasselbe gilt, wenn Gems beim Umstellen einer Wagon Version
-nicht mehr passen. Das `Gemfile.lock` eines Wagons wird NIE ins Git eingecheckt.
-* Ein neuer Wagon kann mit `rails g wagon [name]` erstellt werden. Danach sollte dieser von
-`vendor/wagons` in ein benachbartes Verzeichnis des Cores verschoben werden und die Datei
-`app_root.rb` des Wagons entsprechend angepasst werden.
-
-
-#### Entwickeln für mehrere Verbände/Instanzen
-
-Es kann immer nur ein 'Haupt'-Wagon aktiv sein, welcher die Verbandsstruktur definiert. Um zwischen
-verschiedenen aktiven Verbänden zu wechseln, empfiehlt sich das Speichern der einzelnen Development
-Datenbanken, damit die jeweiligen Seed Daten nicht immer neu geladen werden müssen (Diese Files
-nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguration auf die andere:
-
-1. Alle aktiven Prozesse (Server, Console, ...) stoppen.
-1. Im `Wagonfile` den [new wagon] aktivieren, andere auskommentieren.
-1. `cp db/development-[new_wagon].sqlite3 db/development.sqlite3`
-1. `rm -rf tmp/cache` (Falls customized CSS vorhanden).
-1. Prozesse (Server, ...) wieder starten.
-
-Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
-
-#### Stylesheets in allen Wagons überprüfen
-
-Wenn an den Core Stylesheets Anpassungen vorgenommen werden, müssen diese bei allen Wagons,
-insbesondere denjenigen mit customized Styles (z.B. Jubla) überprüft werden, damit die auch dort
-funktionieren.
-
-
 ### Spezifische Guidelines
 
 Allgemeine Konventionen und Erklärungen für spezifische Bereiche.
@@ -96,7 +47,14 @@ Action?
 * Sind in jedem Fall die richtigen Menu Items als aktiv markiert?
 * Sind in allen Texten Gendergerechte Bezeichnungen, falls nötig in der Form "/-in" verwendet?
 
-#### Checkliste für neue Attribute
+#### Stylesheets in allen Wagons überprüfen
+
+Wenn an den Core Stylesheets Anpassungen vorgenommen werden, müssen diese bei allen Wagons,
+insbesondere denjenigen mit customized Styles (z.B. Jubla) überprüft werden, damit die auch dort
+funktionieren.
+
+
+### Checkliste für neue Attribute
 
 Folgende Punkte sind zu berücksichtigen, wenn neue Attribute zu Hitobito Modellen hinzugefügt
 werden. Da hitobito über diverse Schnittstellen verfügt, gehen beim Definieren von Attributen rasch
@@ -116,13 +74,15 @@ sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wir
 und in der JSON Personen Liste angezeigt, wenn nicht, nur im Full CSV und im Einzelperson JSON,
 falls die Berechtigung dafür vorhanden ist.
 
-##### Personenattribute
+Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](04_wagons.md#attribute-hinzuf-gen).
+
+#### Personenattribute
 
 * CSV Import
 * CSV Export (Adressexport? Voller Export?)
 * Log (Papertrail)
 
-##### Rollen umbennen / entfernen
+#### Rollen umbennen / entfernen
 
 * Migration aller betroffenen `Role` Instanzen (`with_deleted`!).
 * Migration aller betroffenen `RelatedRoleType` Instanzen.
@@ -194,6 +154,8 @@ ihre Files anpassen. Siehe `hitobito_generic/lib/tasks/license.rake`.
 Changelogs werden in den Wagons und im Core geführt. Die Dateien dafür, müssen immer CHANGELOG.md genannt werden. Eine neue Version kann folgendermassen spezifiziert werden:
 
     ## Version 1.0
+    
+Wenn du nicht weisst, in welche Versionsnummer deine Contribution aufgenommen wird, dann erstellen einen Titel `## Version 1.X` (falls nicht schon vorhanden).
 
 Um einen Change hinzuzufügen, kann man unter der Version eine Linie wie gefolgt eintragen.
 

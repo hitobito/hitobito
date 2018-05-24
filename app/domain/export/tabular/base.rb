@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2016, insieme Schweiz. This file is part of
+#  Copyright (c) 2012-2017, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,7 +33,7 @@ module Export::Tabular
 
       def generator(format)
         case format
-        when :csv then Export::Csv::Generator
+        when :csv  then Export::Csv::Generator
         when :xlsx then Export::Xlsx::Generator
         else raise ArgumentError, "Invalid format #{format}"
         end

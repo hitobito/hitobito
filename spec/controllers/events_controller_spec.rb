@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,6 +16,28 @@ describe EventsController do
   context 'event_course' do
 
     before { group2 }
+
+    context 'GET index' do
+      let(:group) { groups(:bottom_layer) }
+
+
+      before do
+        sign_in(people(:top_leader))
+        @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
+        Fabricate(:event, groups: [@g1])
+        Fabricate(:event, groups: [groups(:bottom_group_one_one)])
+      end
+
+      it 'lists events of descendant groups by default' do
+        get :index, group_id: groups(:top_layer).id, year: 2012
+        expect(assigns(:events)).to have(3).entries
+      end
+
+      it 'limits list to events of all non layer descendants' do
+        get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012
+        expect(assigns(:events)).to have(2).entries
+      end
+    end
 
     context 'GET show' do
 
@@ -54,6 +76,29 @@ describe EventsController do
         get :new, group_id: group.id, event: { type: 'Event::Course' }
         expect(assigns(:kinds)).not_to include event_kinds(:old)
       end
+
+      it 'duplicates other course' do
+        sign_in(people(:top_leader))
+        source = events(:top_course)
+
+        get :new, group_id: source.groups.first.id, source_id: source.id
+
+        event = assigns(:event)
+        expect(event.state).to be_nil
+        expect(event.name).to eq(source.name)
+        expect(event.kind_id).to eq(source.kind_id)
+        expect(event.application_questions.map(&:question)).to match_array(
+          source.application_questions.map(&:question))
+        expect(event.application_questions.map(&:id).uniq).to eq([nil])
+      end
+
+      it 'raises not found if event is in other group' do
+        sign_in(people(:top_leader))
+
+        expect do
+          get :new, group_id: group.id, source_id: events(:top_course).id
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context 'POST create' do
@@ -67,7 +112,7 @@ describe EventsController do
                                 name: 'foo',
                                 kind_id: event_kinds(:slk).id,
                                 dates_attributes: [date],
-                                questions_attributes: [question],
+                                application_questions_attributes: [question],
                                 contact_id: people(:top_leader).id,
                                 type: 'Event::Course' },
                       group_id: group.id
@@ -138,28 +183,37 @@ describe EventsController do
       it 'creates, updates and destroys questions' do
         q1 = event.questions.create!(question: 'Who?')
         q2 = event.questions.create!(question: 'What?')
+        q3 = event.questions.create!(question: 'Payed?', admin: true)
 
         expect do
           put :update, group_id: group.id,
                        id: event.id,
                        event: { name: 'testevent',
-                                questions_attributes: {
-                                   q1.id.to_s => { id: q1.id,
-                                                   question: 'Whoo?' },
-                                   q2.id.to_s => { id: q2.id, _destroy: true },
-                                   '999' => { question: 'How much?',
-                                              choices: '1,2,3' } } }
+                                application_questions_attributes: {
+                                  q1.id.to_s => { id: q1.id,
+                                                  question: 'Whoo?' },
+                                  q2.id.to_s => { id: q2.id, _destroy: true },
+                                  '999' => { question: 'How much?',
+                                             choices: '1,2,3' } },
+                                admin_questions_attributes: {
+                                  q3.id.to_s => { id: q3.id, _destroy: true },
+                                  '999' => { question: 'Powned?',
+                                             choices: 'ja, nein' } } }
           expect(assigns(:event)).to be_valid
         end.not_to change { Event::Question.count }
 
         expect(event.reload.name).to eq 'testevent'
         questions = event.questions.order(:question)
-        expect(questions.size).to eq(2)
+        expect(questions.size).to eq(3)
         first = questions.first
         expect(first.question).to eq 'How much?'
         expect(first.choices).to eq '1,2,3'
         second = questions.second
-        expect(second.question).to eq 'Whoo?'
+        expect(second.question).to eq 'Powned?'
+        expect(second.admin).to eq true
+        third = questions.third
+        expect(third.question).to eq 'Whoo?'
+        expect(third.admin).to eq false
       end
     end
 
@@ -200,6 +254,38 @@ describe EventsController do
         get :edit, group_id: group.id, id: course.id
         expect(assigns(:groups)).to include(group3)
       end
+    end
+  end
+
+  context 'contact attributes' do
+
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+
+    before { sign_in(people(:top_leader)) }
+
+    it 'assigns required and hidden contact attributes' do
+
+      put :update, group_id: group.id, id: event.id,
+        event: { contact_attrs: { nickname: :required, address: :hidden, social_accounts: :hidden } }
+
+      expect(event.reload.required_contact_attrs).to include('nickname')
+      expect(event.reload.hidden_contact_attrs).to include('address')
+      expect(event.reload.hidden_contact_attrs).to include('social_accounts')
+
+    end
+
+    it 'removes contact attributes' do
+
+      event.update!({hidden_contact_attrs: ['social_accounts', 'address', 'nickname']})
+
+      put :update, group_id: group.id, id: event.id,
+        event: { contact_attrs: { nickname: :hidden } }
+
+      expect(event.reload.hidden_contact_attrs).to include('nickname')
+      expect(event.hidden_contact_attrs).not_to include('address')
+      expect(event.hidden_contact_attrs).not_to include('social_accounts')
+
     end
   end
 

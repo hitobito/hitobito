@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,6 +10,9 @@ Hitobito::Application.routes.draw do
   extend LanguageRouteScope
 
   root to: 'dashboard#index'
+
+  get '/healthz', to: 'healthz#show'
+  get '/healthz/mail', to: 'healthz/mail#show'
 
   language_scope do
 
@@ -27,11 +30,11 @@ Hitobito::Application.routes.draw do
     end
 
     get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 
     resources :groups do
-
       member do
         get :deleted_subgroups
         get :export_subgroups
@@ -43,26 +46,44 @@ Hitobito::Application.routes.draw do
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
 
-        get 'person_notes' => 'person/notes#index'
       end
 
+      resource :invoice_list, except: [:edit]
+      resource :invoice_config, only: [:edit, :show, :update]
+
+      resources :invoices do
+        resources :payments, only: :create
+      end
+      resources :invoice_articles
+
+      resource :payment_process, only: [:new, :show, :create]
+      resources :notes, only: [:index, :create, :destroy]
+
       resources :people, except: [:new, :create] do
+
         member do
           post :send_password_instructions
           put :primary_group
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
+          get 'colleagues' => 'person/colleagues#index'
+          get 'invoices' => 'person/invoices#index'
         end
 
+        resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :notes, only: [:create, :destroy]
-          resources :tags, param: :name, only: [:create, :destroy]
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'
+          post 'impersonate' => 'impersonation#create'
+          delete 'impersonate' => 'impersonation#destroy'
+          get 'households' => 'households#new'
         end
+
       end
 
       resources :roles, except: [:index, :show] do
@@ -74,11 +95,7 @@ Hitobito::Application.routes.draw do
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch
 
-      resources :people_filters, only: [:new, :create, :destroy] do
-        collection do
-          get 'qualification'
-        end
-      end
+      resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
 
@@ -125,15 +142,21 @@ Hitobito::Application.routes.draw do
           resources :attachments, only: [:create, :destroy]
 
           resources :participations do
-            get 'print', on: :member
+            collection do
+              get 'contact_data', controller: 'participation_contact_datas', action: 'edit'
+              post 'contact_data', controller: 'participation_contact_datas', action: 'update'
+            end
+            member do
+              get 'print'
+            end
           end
 
           resources :roles, except: [:index, :show]
           get 'roles' => 'roles#new' # route required for language switch
           get 'roles/:id' => 'roles#edit' # route required for language switch
 
-          resources :qualifications, only: [:index, :update, :destroy]
-
+          get 'qualifications' => 'qualifications#index'
+          put 'qualifications' => 'qualifications#update'
         end
 
       end

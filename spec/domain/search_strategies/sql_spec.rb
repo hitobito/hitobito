@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,6 +40,12 @@ describe SearchStrategies::Sql do
     role.update(created_at: Time.now - 1.year)
     role.destroy
     @deleted_bg_member = role.person
+
+    # make sure names are long enough
+    [@tg_member, @tg_extern, @bl_leader, @bl_extern, @bg_leader, @bg_member,
+     @bg_member_with_deleted, @no_role, @deleted_leader, @deleted_bg_member].each do |p|
+      p.update_columns(last_name: p.last_name * 3, first_name: p.first_name * 3)
+    end
   end
 
   describe '#list_people' do

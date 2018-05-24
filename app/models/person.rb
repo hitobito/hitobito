@@ -9,57 +9,63 @@
 # Table name: people
 #
 #  id                        :integer          not null, primary key
-#  first_name                :string
-#  last_name                 :string
-#  company_name              :string
-#  nickname                  :string
+#  first_name                :string(255)
+#  last_name                 :string(255)
+#  company_name              :string(255)
+#  nickname                  :string(255)
 #  company                   :boolean          default(FALSE), not null
-#  email                     :string
+#  email                     :string(255)
 #  address                   :string(1024)
-#  zip_code                  :string
-#  town                      :string
-#  country                   :string
+#  zip_code                  :string(255)
+#  town                      :string(255)
+#  country                   :string(255)
 #  gender                    :string(1)
 #  birthday                  :date
-#  additional_information    :text
+#  additional_information    :text(65535)
 #  contact_data_visible      :boolean          default(FALSE), not null
 #  created_at                :datetime
 #  updated_at                :datetime
-#  encrypted_password        :string
-#  reset_password_token      :string
+#  encrypted_password        :string(255)
+#  reset_password_token      :string(255)
 #  reset_password_sent_at    :datetime
 #  remember_created_at       :datetime
 #  sign_in_count             :integer          default(0)
 #  current_sign_in_at        :datetime
 #  last_sign_in_at           :datetime
-#  current_sign_in_ip        :string
-#  last_sign_in_ip           :string
-#  picture                   :string
+#  current_sign_in_ip        :string(255)
+#  last_sign_in_ip           :string(255)
+#  picture                   :string(255)
 #  last_label_format_id      :integer
 #  creator_id                :integer
 #  updater_id                :integer
 #  primary_group_id          :integer
 #  failed_attempts           :integer          default(0)
 #  locked_at                 :datetime
-#  authentication_token      :string
+#  authentication_token      :string(255)
 #  show_global_label_formats :boolean          default(TRUE), not null
+#  household_key             :string(255)
 #
 
 class Person < ActiveRecord::Base
 
-  PUBLIC_ATTRS = [:id, :first_name, :last_name, :nickname, :company_name, :company,
-                  :email, :address, :zip_code, :town, :country, :gender, :birthday,
-                  :picture, :primary_group_id]
+  PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
+    :id, :first_name, :last_name, :nickname, :company_name, :company,
+    :email, :address, :zip_code, :town, :country, :gender, :birthday,
+    :picture, :primary_group_id
+  ]
 
-  INTERNAL_ATTRS = [:authentication_token, :contact_data_visible, :created_at, :creator_id,
-                    :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
-                    :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
-                    :locked_at, :remember_created_at, :reset_password_token,
-                    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-                    :show_global_label_formats]
+  INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
+    :authentication_token, :contact_data_visible, :created_at, :creator_id,
+    :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
+    :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
+    :locked_at, :remember_created_at, :reset_password_token,
+    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
+    :show_global_label_formats, :household_key
+  ]
 
-  GENDERS = %w(m w)
+  GENDERS = %w(m w).freeze
 
+  ADDRESS_ATTRS = %w(address zip_code town country).freeze
 
   # define devise before other modules
   devise :database_authenticatable,
@@ -116,8 +122,7 @@ class Person < ActiveRecord::Base
 
   has_many :add_requests, dependent: :destroy
 
-  has_many :notes, class_name: 'Note',
-                   dependent: :destroy
+  has_many :notes, dependent: :destroy, as: :subject
 
   has_many :authored_notes, class_name: 'Note',
                             foreign_key: 'author_id',
@@ -129,6 +134,8 @@ class Person < ActiveRecord::Base
   has_many :label_formats, dependent: :destroy
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
+
+  attr_accessor :household_people_ids
 
   ### VALIDATIONS
 
@@ -147,6 +154,10 @@ class Person < ActiveRecord::Base
   before_validation :override_blank_email
   before_validation :remove_blank_relations
   before_destroy :destroy_roles
+
+  ### Scopes
+
+  scope :household, -> { where.not(household_key: nil) }
 
 
   ### CLASS METHODS
@@ -174,11 +185,8 @@ class Person < ActiveRecord::Base
       all.extending(Person::PreloadGroups)
     end
 
-    def mailing_emails_for(people)
-      people = Array(people)
-      emails = people.collect(&:email) +
-               AdditionalEmail.mailing_emails_for(people)
-      emails.select(&:present?).uniq
+    def mailing_emails_for(people, labels = [])
+      MailRelay::AddressList.new(people, labels).entries
     end
 
     private
@@ -202,15 +210,23 @@ class Person < ActiveRecord::Base
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if nickname?
+    name << " / #{nickname}" if nickname? && format != :print_list
     name
   end
 
   def full_name(format = :default)
     case format
-    when :list then "#{last_name} #{first_name}".strip
+    when :list, :print_list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip
     end
+  end
+
+  def household_people
+    Person.
+      includes(:groups).
+      where.not(id: id).
+      where('id IN (?) OR (household_key IS NOT NULL AND household_key = ?)',
+            household_people_ids, household_key)
   end
 
   def greeting_name
@@ -221,7 +237,7 @@ class Person < ActiveRecord::Base
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years
+  def years # rubocop:disable Metrics/AbcSize Age calculation is complex
     return unless birthday?
 
     now = Time.zone.now.to_date
@@ -256,6 +272,15 @@ class Person < ActiveRecord::Base
     raise e unless e.original_exception.message =~ /Incorrect string value/
     errors.add(:base, :emoji_suspected)
     false
+  end
+
+  def layer_group
+    primary_group.layer_group if primary_group
+  end
+
+  def finance_groups
+    groups_with_permission(:finance).
+      flat_map(&:layer_group)
   end
 
   private

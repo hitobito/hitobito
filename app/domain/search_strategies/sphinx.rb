@@ -8,33 +8,37 @@
 module SearchStrategies
   class Sphinx < Base
 
+    delegate :star_supported?, to: :class
+
     def query_people
-      return Person.none.page(1) unless @term.present?
+      return Person.none.page(1) if @term.blank?
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
-                      per_page: QUERY_PER_PAGE,
-                      star: true,
-                      with: { sphinx_internal_id: ids })
+                      default_search_options.merge(
+                        with: { sphinx_internal_id: ids }
+                      ))
       end
     end
 
     def query_groups
-      return Group.none.page(1) unless @term.present?
+      return Group.none.page(1) if @term.blank?
       Group.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: true,
-                   include: :parent)
+                   default_search_options)
     end
 
     def query_events
-      return Event.none.page(1) unless @term.present?
+      return Event.none.page(1) if @term.blank?
+      sql = { include: [:groups, :dates] }
       Event.search(Riddle::Query.escape(@term),
-                   per_page: QUERY_PER_PAGE,
-                   star: true,
-                   include: :groups)
+                   default_search_options.merge(sql: sql))
     end
 
     protected
+
+    def default_search_options
+      { per_page: QUERY_PER_PAGE,
+        star: star_supported? }
+    end
 
     def fetch_people(ids)
       Person.search(Riddle::Query.escape(@term),
@@ -42,8 +46,17 @@ module SearchStrategies
                     order: 'last_name asc, ' \
                            'first_name asc, ' \
                            "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
-                    star: true,
+                    star: star_supported?,
                     with: { sphinx_internal_id: ids })
+    end
+
+    class << self
+
+      def star_supported?
+        version = Rails.application.class.sphinx_version
+        version.nil? || version >= '2.1'
+      end
+
     end
 
   end

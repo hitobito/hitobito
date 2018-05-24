@@ -1,0 +1,72 @@
+#notes-list .note:first-child {
+  border-top: 0;
+}
+
+.notes-pagination {
+  margin: 0;
+}
+
+#notes-index .pagination {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+#notes-index .pagination:first-child {
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.note {
+  border-top: 1px solid $grayLight;
+  padding: 5px 0 10px;
+  position: relative;
+  display: flex;
+
+  .note-image {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    height: 40px;
+    width: 40px;
+  }
+
+  .note-body {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .note-subject {
+    font-size: 110%;
+  }
+
+  .note-author {
+    float: right;
+  }
+
+  .note-date {
+    display: inline-block;
+    padding-left: 0.2em;
+  }
+
+  &.is-current-subject .note-author {
+    width: 100%;
+  }
+
+  @include responsive(phone, $mediaTablet) {
+    .note-subject {
+      width: 100%;
+      clear: both;
+    }
+    .note-author {
+      float: left;
+      width: 100%;
+    }
+  }
+
+  i {
+    opacity: 0.7;
+  }
+
+  i:hover {
+    opacity: 1;
+  }
+}

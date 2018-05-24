@@ -113,6 +113,11 @@ module Hitobito
       end
     end
 
+    def self.sphinx_version
+      @sphinx_version ||= ThinkingSphinx::Configuration.instance.controller.sphinx_version.presence ||
+        ENV['RAILS_SPHINX_VERSION']
+    end
+
     def self.sphinx_present?
       port = ENV['RAILS_SPHINX_PORT']
       port.present? || ThinkingSphinx::Configuration.instance.controller.running?
@@ -122,6 +127,11 @@ module Hitobito
       host = ENV['RAILS_SPHINX_HOST']
       host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
+
+    def self.build_info
+      @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
+    end
+
   end
 end
 

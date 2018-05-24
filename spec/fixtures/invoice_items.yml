@@ -1,0 +1,25 @@
+# == Schema Information
+#
+# Table name: invoice_items
+#
+#  id          :integer          not null, primary key
+#  invoice_id  :integer          not null
+#  name        :string(255)      not null
+#  description :text(65535)
+#  vat_rate    :decimal(5, 2)
+#  unit_cost   :decimal(12, 2)   not null
+#  count       :integer          default(1), not null
+#
+
+pens:
+  invoice: invoice
+  name: pens
+  unit_cost: 1.5
+  vat_rate: 8
+  count: 3
+
+pins:
+  invoice: invoice
+  name: pins
+  unit_cost: 0.5
+  count: 1

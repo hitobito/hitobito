@@ -67,3 +67,13 @@ TAGS
 *.iml
 .generators
 .idea
+.tool-versions
+.pry_history
+
+# for experiments with webpack
+
+/public/packs
+/public/packs-test
+/node_modules
+yarn-debug.log*
+.yarn-integrity

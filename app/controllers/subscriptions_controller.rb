@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,19 +15,19 @@ class SubscriptionsController < CrudController
 
   prepend_before_action :parent
 
-  alias_method :mailing_list, :parent
+  alias mailing_list parent
 
-
-  def index
+  def index # rubocop:disable Metrics/MethodLength there are a lof of formats supported
     respond_to do |format|
       format.html do
         @person_add_requests = fetch_person_add_requests
         load_grouped_subscriptions
       end
-      format.pdf   { render_pdf(ordered_people) }
-      format.csv   { render_tabular(:csv, ordered_people) }
-      format.xlsx  { render_tabular(:xlsx, ordered_people) }
-      format.email { render_emails(ordered_people) }
+      format.pdf   { render_pdf(ordered_people, parents.first) }
+      format.csv   { render_tabular_in_background(:csv)  && redirect_to(action: :index) }
+      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.vcf   { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }
+      format.email { render_emails(ordered_people.includes(:additional_emails)) }
     end
   end
 
@@ -44,8 +44,27 @@ class SubscriptionsController < CrudController
     mailing_list.people.order_by_name
   end
 
+  # Override so we can pass preferred_labels from mailing_list
+  def render_emails(people)
+    emails = Person.mailing_emails_for(people, parent.labels)
+    render text: emails.join(',')
+  end
+
+  def render_tabular_in_background(format)
+    Export::SubscriptionsJob.new(format,
+                                 mailing_list.id,
+                                 current_person.id,
+                                 params[:household]).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
+  end
+
   def render_tabular(format, people)
-    data = Export::Tabular::People::PeopleAddress.export(format, prepare_tabular_entries(people))
+    if params[:household]
+      exporter = Export::Tabular::People::Households
+    else
+      exporter = Export::Tabular::People::PeopleAddress
+    end
+    data = exporter.export(format, prepare_tabular_entries(people))
     send_data data, type: format
   end
 

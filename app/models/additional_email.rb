@@ -10,11 +10,11 @@
 #
 #  id               :integer          not null, primary key
 #  contactable_id   :integer          not null
-#  contactable_type :string           not null
-#  email            :string           not null
-#  label            :string
+#  contactable_type :string(255)      not null
+#  email            :string(255)      not null
+#  label            :string(255)
 #  public           :boolean          default(TRUE), not null
-#  mailings         :boolean          default(TRUE), not null
+#  mailings         :boolean          default(FALSE), not null
 #
 
 class AdditionalEmail < ActiveRecord::Base
@@ -26,16 +26,12 @@ class AdditionalEmail < ActiveRecord::Base
   validates_by_schema
   validates :email, format: Devise.email_regexp
 
+  # A dot at the end is invalid due to translation purpose
+  validates :label, format: { without: /[.]$\z/ }
+
   class << self
     def predefined_labels
       Settings.additional_email.predefined_labels
-    end
-
-    def mailing_emails_for(people)
-      where(contactable_id: people.collect(&:id),
-            contactable_type: Person.sti_name,
-            mailings: true).
-      pluck(:email)
     end
   end
 

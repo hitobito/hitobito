@@ -43,7 +43,8 @@ module Export::Pdf
     end
 
     def self.filename(participation)
-      "#{[participation.event.name, participation.person.full_name].join('_')}.pdf"
+      parts = [participation.event.name, participation.person.full_name]
+      "#{parts.join('-').parameterize('_')}.pdf"
     end
   end
 end

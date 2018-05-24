@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,11 +21,13 @@ class Event::ParticipationsController < CrudController
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
-                                    Event::Participation.order_by_role_statement(event))
+                                    Event::Participation.order_by_role_statement(event)
+                                  )
                                 end,
                          nickname:   'people.nickname',
                          zip_code:   'people.zip_code',
-                         town:       'people.town' }
+                         town:       'people.town',
+                         birthday:   'people.birthday' }
 
 
   decorates :group, :event, :participation, :participations, :alternatives
@@ -37,6 +39,7 @@ class Event::ParticipationsController < CrudController
   before_action :check_preconditions, only: [:new]
 
   before_render_new :init_answers
+  before_render_edit :load_answers
   before_render_form :load_priorities
   before_render_show :load_answers
   before_render_show :load_precondition_warnings
@@ -64,9 +67,10 @@ class Event::ParticipationsController < CrudController
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf   { render_pdf(entries.collect(&:person)) }
-      format.csv   { render_tabular(:csv, entries) }
-      format.xlsx  { render_tabular(:xlsx, entries) }
+      format.pdf   { render_pdf(entries.collect(&:person), group) }
+      format.csv   { render_tabular_in_background(:csv) && redirect_to(action: :index) }
+      format.vcf   { render_vcf(entries.includes(person: :phone_numbers).collect(&:person)) }
+      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.email { render_emails(entries.collect(&:person)) }
     end
   end
@@ -88,6 +92,10 @@ class Event::ParticipationsController < CrudController
     super(location: location)
   end
 
+  def self.model_class
+    Event::Participation
+  end
+
   private
 
   def with_person_add_request(&block)
@@ -98,7 +106,7 @@ class Event::ParticipationsController < CrudController
 
   def list_entries
     filter = Event::ParticipationFilter.new(event, current_user, params)
-    records = filter.list_entries
+    records = filter.list_entries.page(params[:page])
     @counts = filter.counts
 
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
@@ -110,16 +118,9 @@ class Event::ParticipationsController < CrudController
     authorize!(:index_participations, event)
   end
 
-  def render_tabular(format, entries)
-    send_data(tabular_exporter.export(format, entries), type: format)
-  end
-
-  def tabular_exporter
-    if params[:details] && can?(:show_details, entries.first)
-      Export::Tabular::People::ParticipationsFull
-    else
-      Export::Tabular::People::ParticipationsAddress
-    end
+  def render_tabular_in_background(format)
+    Export::EventParticipationsExportJob.new(format, current_person.id, event.id, params).enqueue!
+    flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
   def check_preconditions
@@ -168,7 +169,7 @@ class Event::ParticipationsController < CrudController
 
     type = event.class.find_role_type!(role_type)
     unless type.participant?
-      fail ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
+      raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
     role_type
   end
@@ -185,17 +186,17 @@ class Event::ParticipationsController < CrudController
   end
 
   def init_answers
-    entry.init_answers
+    @answers = entry.init_answers
     entry.init_application
   end
 
   def load_priorities
     if entry.application && event.priorization && current_user
-      @alternatives = event.class.application_possible.
-                                        where(kind_id: event.kind_id).
-                                        in_hierarchy(current_user).
-                                        includes(:groups).
-                                        list
+      @alternatives = event.class.application_possible
+                           .where(kind_id: event.kind_id)
+                           .in_hierarchy(current_user)
+                           .includes(:groups)
+                           .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
@@ -243,12 +244,8 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def user_course_application?
-    entry.person == current_user && event.supports_applications
-  end
-
   def append_mailing_instructions?
-    user_course_application? && event.signature?
+    entry.person == current_user && event.signature?
   end
 
   def event
@@ -272,7 +269,4 @@ class Event::ParticipationsController < CrudController
     end
   end
 
-  def self.model_class
-    Event::Participation
-  end
 end

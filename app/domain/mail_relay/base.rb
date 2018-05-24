@@ -49,6 +49,9 @@ module MailRelay
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
             new(message).relay
+          rescue MailProcessedBeforeError => e
+            message.mark_for_delete = false
+            Airbrake.notify(e)
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)
@@ -99,39 +102,25 @@ module MailRelay
 
     def initialize(message)
       @message = message
+      @mail_log = init_mail_log(message)
     end
 
     # Process the given email.
     def relay
       if relay_address?
         if sender_allowed?
-          resend
+          @mail_log.update(status: :bulk_delivering)
+          bulk_deliver(message)
+          @mail_log.update(status: :completed)
         else
+          @mail_log.update(status: :sender_rejected)
           reject_not_allowed
         end
       else
+        @mail_log.update(status: :unkown_recipient)
         reject_not_existing
       end
-    end
-
-    # Send the same mail to all receivers, if any.
-    def resend
-      destinations = receivers
-      if destinations.present?
-        # set destinations
-        message.smtp_envelope_to = IdnSanitizer.sanitize(destinations)
-
-        # Set sender to actual server to satisfy SPF:
-        # http://www.openspf.org/Best_Practices/Webgenerated
-        message.sender = envelope_sender
-        message.smtp_envelope_from = envelope_sender
-
-        logger.info("Relaying email from #{sender_email} " \
-                    "for list #{envelope_receiver_name} " \
-                    "to #{message.smtp_envelope_to.size} people")
-
-        deliver(message)
-      end
+      nil
     end
 
     # If the email sender was not allowed to post messages, this method is called.
@@ -207,8 +196,47 @@ module MailRelay
       message.deliver
     end
 
+    def bulk_deliver(message)
+      bulk_mail.deliver do
+        logger.info("Relaying email from #{sender_email} " \
+                    "for list #{envelope_receiver_name} " \
+                    "to #{message.smtp_envelope_to.size} people")
+      end
+    end
+
+    def bulk_mail
+      bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
+      bulk_mail.headers['Precedence'] = 'list'
+      bulk_mail.headers['List-Id'] = list_id
+      bulk_mail
+    end
+
     def logger
       Delayed::Worker.logger || Rails.logger
+    end
+
+    # Sends a delivery_report to that address (e.g. sender_email) if set
+    def delivery_report_to
+      nil
+    end
+
+    def init_mail_log(message)
+      mail_log = MailLog.build(message)
+      if mail_log.exists?
+        processed_before_error(mail_log)
+        return
+      end
+      mail_log.mailing_list_name = envelope_receiver_name
+      mail_log.save
+      mail_log
+    end
+
+    def processed_before_error(mail_log)
+      msg = "Mail with subject '#{mail_log.mail_subject}' has already been " \
+            'processed before and is skipped. Please remove it manually ' \
+            "from catch-all inbox and check why it could not be processed.\n" \
+            "Mail Hash: #{mail_log.mail_hash}"
+      raise MailProcessedBeforeError, msg
     end
 
   end
@@ -222,5 +250,7 @@ module MailRelay
       @original = original
     end
   end
+
+  class MailProcessedBeforeError < StandardError; end
 
 end

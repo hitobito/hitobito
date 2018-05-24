@@ -28,6 +28,38 @@ describe MailingList do
   let(:person) { Fabricate(:person) }
   let(:event)  { Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
 
+  describe 'preferred_labels' do
+    it 'serializes to empty array if missing' do
+      expect(MailingList.new.preferred_labels).to eq []
+      expect(mailing_lists(:leaders).preferred_labels).to eq []
+    end
+
+    it 'sorts array and removes duplicates' do
+      list.update(preferred_labels: %w(foo bar bar baz))
+      expect(list.reload.preferred_labels).to eq %w(bar baz foo)
+    end
+
+    it 'ignores blank values' do
+      list.update(preferred_labels: [''])
+      expect(list.reload.preferred_labels).to eq []
+    end
+
+    it 'strips whitespaces blank values' do
+      list.update(preferred_labels: [' test '])
+      expect(list.reload.preferred_labels).to eq ['test']
+    end
+  end
+
+  describe 'labels' do
+    it 'includes main if set' do
+      expect(list.labels).to eq []
+      list.update(preferred_labels: %w(foo))
+      expect(list.reload.labels).to eq %w(foo)
+      list.update(main_email: true)
+      expect(list.reload.labels).to eq %w(foo _main)
+    end
+  end
+
   describe 'validations' do
     it 'succeed with mail_name' do
       list.mail_name = 'aa-b'
@@ -99,7 +131,7 @@ describe MailingList do
 
     context 'groups' do
       it 'is true if in group' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
@@ -107,7 +139,7 @@ describe MailingList do
       end
 
       it 'is false if different role in group' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
 
@@ -151,7 +183,7 @@ describe MailingList do
       end
 
       it 'is false if explicitly excluded' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
@@ -224,7 +256,7 @@ describe MailingList do
 
     context 'only groups' do
       it 'includes people with the given roles' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
@@ -245,10 +277,10 @@ describe MailingList do
       end
 
       it 'includes people with the given roles in multiple groups' do
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         p1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -297,7 +329,7 @@ describe MailingList do
 
     context 'groups with excluded' do
       it 'excludes person from groups' do
-        sub = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
@@ -329,7 +361,7 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
@@ -375,10 +407,10 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -415,10 +447,10 @@ describe MailingList do
 
 
         # groups
-        sub1 = create_subscription(groups(:bottom_layer_one), false,
+        create_subscription(groups(:bottom_layer_one), false,
                                    Group::BottomLayer::Leader.sti_name,
                                    Group::BottomGroup::Leader.sti_name)
-        sub2 = create_subscription(groups(:bottom_group_one_one), false,
+        create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person

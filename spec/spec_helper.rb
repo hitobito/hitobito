@@ -7,12 +7,14 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-require 'simplecov'
-require 'simplecov-rcov'
-SimpleCov.start 'rails'
-SimpleCov.coverage_dir 'spec/coverage'
-# use this formatter for jenkins compatibility
-SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+if ENV['CI']
+  require 'simplecov'
+  require 'simplecov-rcov'
+  SimpleCov.start 'rails'
+  SimpleCov.coverage_dir 'spec/coverage'
+  # use this formatter for jenkins compatibility
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+end
 
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
@@ -53,6 +55,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/]
+  config.example_status_persistence_file_path = Rails.root.join('tmp','examples.txt').to_s
 
   config.include(MailerMacros)
   config.include(EventMacros)
@@ -120,17 +123,20 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
   Capybara.default_max_wait_time = 10
 
+  require 'capybara-screenshot/rspec'
+  Capybara::Screenshot.prune_strategy = :keep_last_run
+  Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
+    CapybaraScreenshotPlainTextReporter
+
   if ENV['FIREFOX_PATH']
     Capybara.register_driver :selenium do |app|
       require 'selenium/webdriver'
       Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_PATH']
-      Capybara::Selenium::Driver.new(app, :browser => :firefox)
+      Capybara::Selenium::Driver.new(app, browser: :firefox)
     end
   end
 
-  if ENV['HEADLESS'] == 'false'
-    # use selenium-webkit driver
-  else
+  if ENV['HEADLESS'] != 'false'
     require 'headless'
 
     headless = Headless.new

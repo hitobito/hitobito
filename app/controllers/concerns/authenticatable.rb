@@ -10,7 +10,7 @@ module Concerns
     extend ActiveSupport::Concern
 
     included do
-      helper_method :current_user
+      helper_method :current_user, :origin_user
 
       before_action :authenticate_person!
       check_authorization unless: :devise_controller?
@@ -27,6 +27,11 @@ module Concerns
 
     def current_user
       current_person
+    end
+
+    def origin_user
+      return unless session[:origin_user]
+      Person.find(session[:origin_user])
     end
 
     # invoke this method where required with prepend_before_action

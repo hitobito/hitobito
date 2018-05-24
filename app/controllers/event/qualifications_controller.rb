@@ -7,46 +7,37 @@
 
 class Event::QualificationsController < ApplicationController
 
-  before_action :authorize
+  before_action :authorize_write, except: :index
+  before_action :authorize_read, only: :index
 
-  decorates :event, :leaders, :participants, :participation, :group
+  decorates :event, :leaders, :participants, :group
 
-  helper_method :event, :participation
+  helper_method :event
 
   def index
     entries
   end
 
   def update
-    qualifier.issue
-
-    @nothing_changed = qualifier.nothing_changed?
-
-    respond_to do |format|
-      format.html { redirect_to group_event_qualifications_path(group, event) }
-      format.js   { render 'qualification' }
+    Qualification.transaction do
+      entries
+      (@leaders + @participants).uniq.each do |participation|
+        qualifier = Event::Qualifier.for(participation)
+        qualified = Array(params[:participation_ids]).include?(participation.id.to_s)
+        qualified ? qualifier.issue : qualifier.revoke
+      end
     end
-  end
 
-  def destroy
-    qualifier.revoke
-
-    respond_to do |format|
-      format.html { redirect_to group_event_qualifications_path(group, event) }
-      format.js   { render 'qualification' }
-    end
+    redirect_to group_event_qualifications_path(group, event),
+                notice: t('event.qualifications.update.flash.success')
   end
 
   private
 
   def entries
-    types = event.class.role_types
+    types = event.role_types
     @leaders ||= participations(*types.select(&:leader?))
     @participants ||= participations(*types.select(&:participant?))
-  end
-
-  def qualifier
-    @qualifier ||= Event::Qualifier.for(participation)
   end
 
   def event
@@ -57,16 +48,22 @@ class Event::QualificationsController < ApplicationController
     @group ||= Group.find(params[:group_id])
   end
 
-  def participation
-    @participation ||= event.participations.find(params[:id])
-  end
-
   def participations(*role_types)
     event.participations_for(*role_types).includes(:roles, :event)
   end
 
-  def authorize
-    not_found unless event.course_kind? && event.qualifying?
+  def authorize_write
+    event_qualifying
     authorize!(:qualify, event)
   end
+
+  def authorize_read
+    event_qualifying
+    authorize!(:qualifications_read, event)
+  end
+
+  def event_qualifying
+    not_found unless event.course_kind? && event.qualifying?
+  end
+
 end

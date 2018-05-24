@@ -32,9 +32,15 @@ module PaperTrail
     def changes
       if item_type != main_type
         content_tag(:div, association_change)
+      elsif !item_class.paper_trail_options[:on].include?(event.to_sym)
+        custom_event_changes
       else
         changeset_lines
       end
+    end
+
+    def custom_event_changes
+      content_tag(:div, I18n.t("version.#{event}", user: whodunnit, object_changes: object_changes))
     end
 
     def changeset_lines
@@ -81,13 +87,20 @@ module PaperTrail
       if model.event == 'create'
         version = model.next
         if version
-          version.reify
+          reify(version)
         else
           model.item
         end
       else
-        model.reify
+        reify(model)
       end
+    end
+
+    def reify(version)
+      item_type = version.item_type.constantize
+      return version.reify unless item_type.column_names.include?('type')
+      model_type = YAML.load(version.object)['type']
+      Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 
     def attribute_change_key(from, to)
@@ -109,6 +122,16 @@ module PaperTrail
     def normalize(attr, value)
       col = item_class.columns_hash[attr.to_s]
       h.h(h.format_column(col.try(:type), value))
+    end
+
+    class Wrapped
+      def initialize(string)
+        @string = string
+      end
+
+      def to_s(_arg)
+        @string
+      end
     end
   end
 end

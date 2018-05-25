@@ -9,18 +9,21 @@
     .accordion-group
       .accordion-heading
         %a{class: 'accordion-toggle', 'data-toggle' => 'collapse', 'data-parent' => '#roles', href: "#layer_#{layer_index}"}
-          = "#{t('.layer')}: #{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
+          %h2= "#{t('.layer')}: #{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
       .accordion-body.collapse{id: "layer_#{layer_index}"}
         .accordion-inner
           - groups.each do|group, roles|
-            %h2= group
-            %ul
-              - roles.each do |role|
-                %li
-                  %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}= role.model_name.human
-                  %ul
-                    - role.permissions.each do |permission|
-                      %li
-                        %span{rel: 'tooltip', title: human_permission_description(permission)}
-                          = human_permission(permission)
+            %h3= group
+            - roles.each do |role|
+              %h4
+                %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}
+                  = icon(:user)
+                  = role.model_name.human
+              - if role.permissions.length == 0
+                %span Keine Berechtigungen
+              %ul
+                - role.permissions.each do |permission|
+                  %li
+                    %span{rel: 'tooltip', title: human_permission_description(permission)}
+                      = human_permission(permission)
     - layer_index += 1

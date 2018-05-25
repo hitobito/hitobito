@@ -544,6 +544,12 @@ de:
             approve_applications:
               short: Kursanmeldungen bestätigen
               description: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+            finance:
+              short: Rechnungen erstellen
+              description: Erstellen und Verwalten von Rechnungen
+            impersonation:
+              short: Benutzer impersonieren
+              description: Kann sich temporär als beliebigen Benutzer anmelden.
           kind:
             member:
               one: Mitglied

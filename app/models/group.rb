@@ -137,6 +137,9 @@ class Group < ActiveRecord::Base
       end
     end
 
+
+
+
   end
 
 
@@ -179,6 +182,23 @@ class Group < ActiveRecord::Base
   def decorator_class
     GroupDecorator
   end
+
+  def child_layer_types(type = self)
+    type.possible_children.select(&:layer?)
+  end
+
+  # returns recursivly all types of sublayers that are possible in its hierarchy
+  def all_child_layer_types(type = self, types = [])
+    return types if (child_layer_types(type) - types).empty? # to escape recursive structures
+    return types if child_layer_types.empty?
+    types += child_layer_types(type)
+    child_layer_types.each do |child_type| 
+      types += all_child_layer_types(child_type, types)
+    end
+    types.uniq
+  end
+
+
 
   private
 

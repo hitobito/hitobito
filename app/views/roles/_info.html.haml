@@ -6,14 +6,11 @@
 %div.well.help
   - if @type.description.present?
     %p= @type.description
-
   %p
     - if @type.permissions.present?
       = t('.role_has_permissions', role: @type.label, group: @group)
-      %br/
-      %ul
-        - @type.permissions.each do |perm|
-          %li= t("activerecord.attributes.role.class.permission.#{perm}.description")
+      = human_role_kind_permissions(@type)
+  
     - else
       = t('.role_only_public', role: @type.label, group: @group)
 

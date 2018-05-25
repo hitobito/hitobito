@@ -19,11 +19,6 @@
                 %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}
                   = icon(:user)
                   = role.model_name.human
-              - if role.permissions.length == 0
-                %span Keine Berechtigungen
-              %ul
-                - role.permissions.each do |permission|
-                  %li
-                    %span{rel: 'tooltip', title: human_permission_description(permission)}
-                      = human_permission(permission)
+
+              = human_role_kind_permissions(role)
     - layer_index += 1

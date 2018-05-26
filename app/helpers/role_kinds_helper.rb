@@ -17,7 +17,7 @@ module RoleKindsHelper
         permission_with_tooltip(permission, layer, group)
       end
     end
-    out.join().html_safe
+    content_tag(:ul, out.join().html_safe)
   end
 
   private

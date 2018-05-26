@@ -338,7 +338,9 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         class:
+          describes_layer: "%{group} bildet eine neue Ebene"
           provides_roles: "%{group} stellt folgende Rollen bereit:"
+          provides_groups: "%{group} stellt folgende Gruppenarten bereit:"
 
       event:
         group_ids: Gruppen

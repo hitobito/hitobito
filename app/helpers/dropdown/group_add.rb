@@ -22,10 +22,11 @@ module Dropdown
       group.possible_children.each do |type|
         if template.can?(:create, type.new(parent: group))
           link = template.new_group_path(group: { parent_id: group.id, type: type.sti_name })
-          add_item(type.label, link)
+          item = add_item(type.label, link)
+          content = template.human_group_kind_permissions(type, @group.layer_group.model_name.human)
+          item.options[:info] = content
         end
       end
     end
-
   end
 end

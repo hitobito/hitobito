@@ -337,6 +337,8 @@ de:
         layer_group_id: Ebene
         type: Gruppentyp
         type_name: Gruppentyp
+        class:
+          provides_roles: "%{group} stellt folgende Rollen bereit:"
 
       event:
         group_ids: Gruppen

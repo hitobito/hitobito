@@ -96,15 +96,21 @@ module Dropdown
       sub_items.present?
     end
 
+    def info?
+      options[:info].present?
+    end
+
     def render(template)
       template.content_tag(:li, class: css_class) do
-        template.safe_join([template.link_to(label, url, options),
-                            render_sub_items(template)].compact)
+        template.safe_join([template.link_to(label, url, options.except(:info)),
+                            render_sub_items(template),
+                            render_info(template)].compact)
       end
     end
 
     def css_class
-      'dropdown-submenu' if sub_items?
+      return 'dropdown-submenu' if sub_items?
+      return 'dropdown-submenu has-info' if info?
     end
 
     def render_sub_items(template)
@@ -114,6 +120,17 @@ module Dropdown
         end
       end
     end
+
+    def render_info(template)
+      if info?
+        template.content_tag(:ul, class: 'dropdown-menu') do
+          template.content_tag(:li) do 
+            template.link_to(options[:info], url)
+          end
+        end
+      end
+    end
+
 
   end
 

@@ -6,55 +6,20 @@
 #  https://github.com/hitobito/hitobito.
 
 module GroupKindsHelper
-  # def human_role_kind_permissions(role_kind)
-  #   text = ""
-  #   content_tag(:ul) do
-  #     out = role_kind.permissions.map do |permission|
-  #       content_tag(:li) do 
-  #         permission_with_tooltip(permission)
-  #       end
-  #     end
-  #     out.join().html_safe
-  #   end
-  # end
 
-  # private
-
-  # def sub_layers(type)
-  #   all_child_layer_types(type).join(", ")
-  # end
-  
+  def human_group_kind_permissions(group_kind, layer)
+    out = content_tag(:h4) do
+      t("activerecord.attributes.group.class.provides_roles", group: group_kind.model_name.human)
+    end
+    out << group_kind.roles.map do |role_kind|
+      content_tag(:div) do
+        out = content_tag(:h5 ) do 
+          [icon(:user, class: "icon-white"), role_kind.model_name.human].join(" ").html_safe
+        end
+        out << content_tag(:ul) do 
+          human_role_kind_permissions(role_kind, layer, group_kind.model_name.human)
+        end
+      end
+    end.join.html_safe
+  end
 end
-
-    
-
-
-# -#  Copyright (c) 2012-2016, Puzzle ITC GmbH. This file is part of
-# -#  hitobito and licensed under the Affero General Public License version 3
-# -#  or later. See the COPYING file at the top-level directory or at
-# -#  https://github.com/hitobito/hitobito.
-
-# .accordion#roles
-#   - layer_index = 0
-#   - Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-#     .accordion-group
-#       .accordion-heading
-#         %a{class: 'accordion-toggle', 'data-toggle' => 'collapse', 'data-parent' => '#roles', href: "#layer_#{layer_index}"}
-#           %h2= "#{t('.layer')}: #{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
-#       .accordion-body.collapse{id: "layer_#{layer_index}"}
-#         .accordion-inner
-#           - groups.each do|group, roles|
-#             %h3= group
-#             - roles.each do |role|
-#               %h4
-#                 %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}
-#                   = icon(:user)
-#                   = role.model_name.human
-#               - if role.permissions.length == 0
-#                 %span Keine Berechtigungen
-#               %ul
-#                 - role.permissions.each do |permission|
-#                   %li
-#                     %span{rel: 'tooltip', title: human_permission_description(permission)}
-#                       = human_permission(permission)
-#     - layer_index += 1

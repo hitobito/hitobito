@@ -9,16 +9,19 @@
     .accordion-group
       .accordion-heading
         %a{class: 'accordion-toggle', 'data-toggle' => 'collapse', 'data-parent' => '#roles', href: "#layer_#{layer_index}"}
-          %h2= "#{t('.layer')}: #{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
+          %h2= "#{layer} (#{groups.length} #{Group.model_name.human(count: groups.length)})"
       .accordion-body.collapse{id: "layer_#{layer_index}"}
-        .accordion-inner
+        .accordion-inner.span12
           - groups.each do|group, roles|
-            %h3= group
-            - roles.each do |role|
-              %h4
-                %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}
-                  = icon(:user)
-                  = role.model_name.human
-
-              = human_role_kind_permissions(role)
+            .row
+              %h3= group
+            .row
+              - roles.each do |role|
+                .span12
+                  %h4{style: "margin-top: 1rem"}
+                    %span{rel: 'tooltip', title: "#{Role.model_name.human} (#{role.model_name})"}
+                      = icon(:user)
+                      = role.model_name.human
+                  .span11.offset-1
+                    = human_role_kind_permissions(role, layer, group)
     - layer_index += 1

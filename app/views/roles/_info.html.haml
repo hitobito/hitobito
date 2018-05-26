@@ -9,7 +9,7 @@
   %p
     - if @type.permissions.present?
       = t('.role_has_permissions', role: @type.label, group: @group)
-      = human_role_kind_permissions(@type)
+      = human_role_kind_permissions(@type, @group.layer_group.model_name.human, @group)
   
     - else
       = t('.role_only_public', role: @type.label, group: @group)

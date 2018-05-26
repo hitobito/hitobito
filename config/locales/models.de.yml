@@ -512,29 +512,29 @@ de:
               short: Administration
               description: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
             layer_and_below_full:
-              short: Schreiben in Ebene oder darunter
-              description: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+              short: Schreiben in %{layer_with_sublayers}
+              description: Alles Lesen und Schreiben auf dieser Ebene (%{layer}) und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
             layer_and_below_read:
-              short: Lesen in Ebene oder darunter
-              description: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
+              short: Lesen in %{layer_with_sublayers}
+              description: Alles Lesen auf dieser Ebene (%{layer}) und allen darunter liegenden Ebenen.).
             layer_full:
-              short: Schreiben in Ebene
-              description: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
+              short: Schreiben in %{layer}
+              description: Alles Lesen und Schreiben auf dieser Ebene (%{layer}). Erstellen von Anlässen und Abos auf dieser Ebene.
             layer_read:
-              short: Lesen in Ebene
-              description: Alles Lesen auf dieser Ebene.
+              short: Lesen in %{layer}
+              description: Alles Lesen auf dieser Ebene %{layer}.
             group_and_below_full:
-              short: Schreiben in Gruppe oder darunter
-              description: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+              short: Schreiben in %{group} oder darunter
+              description: Lesen und Schreiben auf der Gruppe (%{group}) und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
             group_and_below_read:
-              short: Lesen in Gruppe oder darunter
-              description: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
+              short: Lesen in %{group} oder darunter
+              description: Lesen auf der Gruppe (%{group}) und allen darunter liegenden Gruppen (ohne Ebenen).
             group_full:
-              short: Schreiben in Gruppe
-              description: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
+              short: Schreiben in %{group}
+              description: Lesen und Schreiben auf der Gruppe (%{group}). Erstellen von Anlässen und Abos auf der Gruppe.
             group_read:
-              short: Lesen in Gruppe
-              description: Lesen auf der Gruppe.
+              short: Lesen in %{group}
+              description: Lesen auf der Gruppe (%{group}).
             contact_data:
               short: Lesen Kontaktdaten
               description: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.

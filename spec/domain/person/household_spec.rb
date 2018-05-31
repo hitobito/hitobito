@@ -183,15 +183,25 @@ describe Person::Household do
       end.to raise_error 'invalid'
     end
 
-    it 'creates Papertrail entries on household creation' do
+    it 'creates append_to_household version' do
       leader.household_people_ids = [member.id]
       expect do
         household(leader).save
       end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'append_to_household'
+      expect(member.versions.last.event).to eq 'append_to_household'
     end
 
-    it 'create Papertrail entry if household address changes' do
-      
+    it 'creates houshold_update version' do
+      leader.household_people_ids = [member.id]
+      household(leader).save
+
+      leader.town = 'Greattown'
+      expect do
+        household(leader).save
+      end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'household_updated'
+      expect(member.versions.last.event).to eq 'household_updated'
     end
   end
 
@@ -224,6 +234,8 @@ describe Person::Household do
       expect do
         household(leader).remove
       end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'remove_from_household'
+      expect(member.versions.last.event).to eq 'remove_from_household'
     end
   end
 

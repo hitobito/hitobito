@@ -19,7 +19,7 @@ module Person::AddRequest::Approver
       Person.transaction do
         success = entity.save
         if success
-          send_approval
+          send_approval if email.present?
           request.destroy
         end
         success
@@ -28,7 +28,9 @@ module Person::AddRequest::Approver
 
     def reject
       Person.transaction do
-        send_rejection unless user.id == request.requester_id
+        if email.present? && user.id != request.requester_id
+          send_rejection
+        end
         request.destroy
       end
     end
@@ -57,6 +59,10 @@ module Person::AddRequest::Approver
 
     def build_entity
       fail(NotImplementedError)
+    end
+
+    def email
+      request.person.email
     end
 
   end

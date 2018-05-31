@@ -13,9 +13,9 @@
 #
 
 login:
-  key: login
+  key: send_login
   placeholders_required: login-url
-  placeholders_optional: user
+  placeholders_optional: recipient-name, sender-name
 
 login_info:
   key: 'views/devise/sessions/info'

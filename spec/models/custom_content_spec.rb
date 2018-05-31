@@ -72,8 +72,8 @@ describe CustomContent do
 
   context '#body_with_values' do
     it 'replaces all placeholders' do
-      subject.body = 'Hello {user}, here is your site to login: {login-url}. Goodbye {user}'
-      output = subject.body_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      subject.body = 'Hello {recipient-name}, here is your site to login: {login-url}. Goodbye {recipient-name}'
+      output = subject.body_with_values('recipient-name' => 'Fred', 'login-url' => 'example.com/login')
       expect(output).to eq('Hello Fred, here is your site to login: example.com/login. Goodbye Fred')
     end
 
@@ -91,15 +91,15 @@ describe CustomContent do
 
     it 'does not care about unused placeholders' do
       subject.body = 'Hello You, here is your site to login: {login-url}'
-      output = subject.body_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      output = subject.body_with_values('recipient-name' => 'Fred', 'login-url' => 'example.com/login')
       expect(output).to eq('Hello You, here is your site to login: example.com/login')
     end
   end
 
   context '#subject_with_values' do
     it 'replaces all placeholders' do
-      subject.subject = 'New Login for {user} at {login-url}'
-      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      subject.subject = 'New Login for {recipient-name} at {login-url}'
+      output = subject.subject_with_values('recipient-name' => 'Fred', 'login-url' => 'example.com/login')
       expect(output).to eq('New Login for Fred at example.com/login')
     end
 
@@ -111,7 +111,7 @@ describe CustomContent do
 
     it 'raises an error if placeholder is missing' do
       subject.subject = 'Your new Login at {login-url}'
-      expect { subject.subject_with_values('user' => 'Fred') }.to raise_error(KeyError)
+      expect { subject.subject_with_values('recipient-name' => 'Fred') }.to raise_error(KeyError)
     end
 
     it 'raises an error if non-defined placeholder is given' do
@@ -121,7 +121,7 @@ describe CustomContent do
 
     it 'does not care about unused placeholders' do
       subject.subject = 'Your new Login at {login-url}'
-      output = subject.subject_with_values('user' => 'Fred', 'login-url' => 'example.com/login')
+      output = subject.subject_with_values('recipient-name' => 'Fred', 'login-url' => 'example.com/login')
       expect(output).to eq('Your new Login at example.com/login')
     end
   end

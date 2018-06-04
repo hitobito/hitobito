@@ -3,16 +3,19 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.labeled_text_area(:address, rows: 2)
-= f.labeled(:zip_code, t('contactable.fields.zip_town'), nil, class: 'controls-row') do
-  = f.string_field(:zip_code, class: 'span2', maxlength: 10)
-  = f.string_field(:town, class: 'span4')
-= f.labeled(:country) do
-  .span6{style: 'margin-left: 0px'}
-    = country_select(f.object.class.model_name.param_key,
-                     'country',
-                     { priority_countries: Settings.countries.prioritized,
-                       include_blank: true },
-                     { class: 'chosen-select',
-                       data: { placeholder: ' ',
-                               chosen_no_results: t('global.chosen_no_results') } })
+.address-input-fields
+  %div.alert.alert-warning.updates-household-address.hidden
+    = t('.updates_household_address')
+  = f.labeled_text_area(:address, rows: 2)
+  = f.labeled(:zip_code, t('contactable.fields.zip_town'), nil, class: 'controls-row') do
+    = f.string_field(:zip_code, class: 'span2', maxlength: 10)
+    = f.string_field(:town, class: 'span4')
+  = f.labeled(:country) do
+    .span6{style: 'margin-left: 0px'}
+      = country_select(f.object.class.model_name.param_key,
+                       'country',
+                       { priority_countries: Settings.countries.prioritized,
+                         include_blank: true },
+                       { class: 'chosen-select',
+                         data: { placeholder: ' ',
+                                 chosen_no_results: t('global.chosen_no_results') } })

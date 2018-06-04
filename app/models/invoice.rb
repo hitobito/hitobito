@@ -64,6 +64,7 @@ class Invoice < ActiveRecord::Base
 
   validates :state, inclusion: { in: STATES }
   validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validates :invoice_items, presence: true, if: :issued?
   validate :assert_sendable?, unless: :recipient_id?
   validates_associated :invoice_config
 

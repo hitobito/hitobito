@@ -9,11 +9,6 @@ require 'spec_helper'
 
 describe Person::LoginMailer do
 
-  before do
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
-  end
-
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
   let(:mail) { Person::LoginMailer.login(recipient, sender, 'abcdef') }

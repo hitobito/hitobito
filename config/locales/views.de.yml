@@ -108,6 +108,9 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
+    address_fields:
+      updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
+
   custom_content_decorator:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
@@ -1195,6 +1198,10 @@ de:
 
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
+
+    append_to_household: "%{user} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
+    remove_from_household: "%{user} wurde vom Haushalt (%{object_changes}) entfernt."
 
   views:
     pagination:

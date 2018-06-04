@@ -13,9 +13,9 @@
 #
 
 login:
-  key: login
+  key: send_login
   placeholders_required: login-url
-  placeholders_optional: user
+  placeholders_optional: recipient-name, sender-name
 
 login_info:
   key: 'views/devise/sessions/info'
@@ -35,3 +35,23 @@ content_invoice_notification:
   key: content_invoice_notification
   placeholders_required: invoice-items, invoice-total, payment-information
   placeholders_optional: recipient-name, group-name, group-address, invoice-number
+
+person_add_request_person:
+  key: person_add_request_person
+  placeholders_required: request-body, answer-request-url
+  placeholders_optional: recipient-name, requester-name, requester-roles
+
+person_add_request_responsibles:
+  key: person_add_request_responsibles
+  placeholders_required: person-name, request-body, answer-request-url
+  placeholders_optional: recipient-names, requester-name, requester-roles
+
+person_add_request_approved:
+  key: person_add_request_approved
+  placeholders_required: person-name, request-body
+  placeholders_optional: recipient-name, approver-name, approver-roles
+
+person_add_request_rejected:
+  key: person_add_request_rejected
+  placeholders_required: person-name, request-body
+  placeholders_optional: recipient-name, rejecter-name, rejecter-roles

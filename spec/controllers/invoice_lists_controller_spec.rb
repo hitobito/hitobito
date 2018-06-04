@@ -82,7 +82,9 @@ describe InvoiceListsController do
     end
 
     it 'PUT#update moves invoice to sent state' do
-      invoice = Invoice.create!(group: group, title: 'test', recipient: person)
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person,
+                                invoice_items_attributes:
+                                  { '1' => { name: 'item1', unit_cost: 1, count: 1}})
       travel(1.day) do
         expect do
           expect do
@@ -98,8 +100,13 @@ describe InvoiceListsController do
     end
 
     it 'PUT#update can move multiple invoices at once' do
-      invoice = Invoice.create!(group: group, title: 'test', recipient: person)
-      other = Invoice.create!(group: group, title: 'test', recipient: person)
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person,
+                                invoice_items_attributes:
+                                  { '1' => { name: 'item1', unit_cost: 1, count: 1}})
+
+      other = Invoice.create!(group: group, title: 'test', recipient: person,
+                              invoice_items_attributes:
+                                { '1' => { name: 'item1', unit_cost: 1, count: 1}})
       travel(1.day) do
         expect do
           post :update, { group_id: group.id, ids: [invoice.id, other.id].join(',') }

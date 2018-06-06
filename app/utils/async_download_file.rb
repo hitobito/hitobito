@@ -23,6 +23,7 @@ class AsyncDownloadFile
   end
 
   def write(data)
+    FileUtils.mkdir_p(DIRECTORY) unless File.directory?(DIRECTORY)
     File.write(full_path, data)
   end
 

@@ -71,6 +71,7 @@ RSpec.configure do |config|
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
+    FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join('*')))
   end
 
   config.before(:each) do

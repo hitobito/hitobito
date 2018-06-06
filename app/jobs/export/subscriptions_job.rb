@@ -12,17 +12,12 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
   def initialize(format, user_id, mailing_list_id, options)
     super(format, user_id, options)
     @mailing_list_id = mailing_list_id
-    @tempfile_name   = "subscriptions-#{mailing_list_id}-#{format}-zip"
   end
 
   private
 
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)
-  end
-
-  def send_mail(recipient, file, format)
-    Export::SubscriptionsMailer.completed(recipient, mailing_list, file, format).deliver_now
   end
 
   def entries

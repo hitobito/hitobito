@@ -9,12 +9,13 @@ require 'spec_helper'
 
 describe Export::EventsExportJob do
 
-  subject { Export::EventsExportJob.new(format, user.id, event_filter) }
+  subject { Export::EventsExportJob.new(format, user.id, event_filter, filename: 'event_export') }
 
   let(:user)         { people(:top_leader) }
   let(:group)        { groups(:top_layer) }
   let(:year)         { 2012 }
   let(:event_filter) { Event::Filter.new(nil, 'all', group, year, false) }
+  let(:filepath) { AsyncDownloadFile::DIRECTORY.join('event_export') }
 
   before do
     SeedFu.quiet = true
@@ -25,57 +26,23 @@ describe Export::EventsExportJob do
   context 'creates a CSV-Export' do
     let(:format) { :csv }
 
-    it 'and sends it via mail' do
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
+    it 'and saves it' do
+      subject.perform
 
-      expect(last_email.subject).to eq('Export der Anlässe')
-
-      lines = last_email.attachments.first.body.to_s.split("\n")
+      lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;Organisatoren;Beschreibung;.*/)
       expect(lines[0].split(';').count).to match(34)
-    end
-
-    it 'send exports zipped if larger than 512kb' do
-      export = subject.export_file
-      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
-
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
-
-      file = last_email.attachments.first
-      expect(file.content_type).to match(%r{application/zip})
-      expect(file.content_type).to match(/filename=events_export.zip/)
-    end
-
-    it 'zips exports larger than 512kb' do
-      export = subject.export_file
-      export_size = export.size
-      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
-
-      file, format = subject.export_file_and_format
-
-      expect(format).to eq :zip
-      expect(file.size).to be < export_size
     end
   end
 
   context 'creates an Excel-Export' do
     let(:format) { :xlsx }
 
-    it 'and sends it via mail' do
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
+    it 'and saves it' do
+      subject.perform
 
-      expect(last_email.subject).to eq('Export der Anlässe')
-
-      file = last_email.attachments.first
-      expect(file.content_type).to match(/officedocument.spreadsheetml.sheet/)
-      expect(file.content_type).to match(/filename=events_export.xlsx/)
+      expect(File.exist?("#{filepath}.#{format}"))
     end
   end
 

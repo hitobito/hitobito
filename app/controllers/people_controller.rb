@@ -175,14 +175,11 @@ class PeopleController < CrudController
   end
 
   def render_tabular_entries_in_background(format)
-    email = current_person.email
-    if email
-      full = params[:details].present? && index_full_ability?
-      render_tabular_in_background(format, full)
-      flash[:notice] = translate(:export_enqueued, email: email)
-    else
-      flash[:alert] = translate(:export_email_needed)
-    end
+    full = params[:details].present? && index_full_ability?
+    filename = AsyncDownloadFile.create_name('people_export', current_person.id)
+    AsyncDownloadCookie.new(cookies, filename, format).set
+    render_tabular_in_background(format, full, filename)
+    flash[:notice] = translate(:export_enqueued)
   end
 
   def prepare_tabular_entries(entries, full)
@@ -201,11 +198,11 @@ class PeopleController < CrudController
     render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end
 
-  def render_tabular_in_background(format, full)
+  def render_tabular_in_background(format, full, filename)
     Export::PeopleExportJob.new(format,
                                 current_person.id,
                                 person_filter,
-                                params.slice(:household).merge(full: full)).enqueue!
+                                params.slice(:household).merge(full: full, filename: filename)).enqueue!
   end
 
   def render_tabular(format, entries, full)

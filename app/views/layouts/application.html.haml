@@ -33,6 +33,7 @@
     = yield(:head)
 
   %body
+    = render 'layouts/file_download'
     - if origin_user
       = render 'layouts/user_impersonation'
 

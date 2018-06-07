@@ -58,7 +58,7 @@ class QualificationKind < ActiveRecord::Base
 
   def assert_validity_when_reactivateable
     if reactivateable.present? && (validity.nil? || validity.to_i < 0)
-      errors.add(:validity, :not_a_number)
+      errors.add(:validity, :not_a_valid_number)
     end
   end
 

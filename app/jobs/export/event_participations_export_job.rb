@@ -7,15 +7,16 @@
 
 class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:event_id, :controller_params]
+  self.parameters = PARAMETERS + [:event_id, :event_participation_filter, :details]
 
-  def initialize(format, user_id, event_id, controller_params)
+  def initialize(format, user_id, event_id, event_participation_filter, details)
     super()
     @format = format
     @user_id = user_id
     @tempfile_name = 'event-participations-export'
     @event_id = event_id
-    @controller_params = controller_params
+    @event_participation_filter = event_participation_filter
+    @details = details
   end
 
   private
@@ -25,9 +26,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   end
 
   def entries
-    @entries ||= Event::ParticipationFilter.new(Event.find(@event_id),
-                                                user,
-                                                @controller_params).list_entries
+    @event_participation_filter.list_entries
   end
 
   def exporter
@@ -40,7 +39,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   def full_export?
     # This condition has to be in the job because it loads all entries
-    @controller_params[:details] && Ability.new(user).can?(:show_details, entries.first)
+    @details && Ability.new(user).can?(:show_details, entries.first)
   end
 
   def user

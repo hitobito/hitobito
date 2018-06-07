@@ -9,12 +9,18 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, params) }
+  subject { Export::EventParticipationsExportJob.new(format,
+                                                     user.id,
+                                                     event.id,
+                                                     event_participation_filter,
+                                                     details) }
 
-  let(:participation) { event_participations(:top) }
-  let(:user)          { participation.person }
-  let(:event)         { participation.event }
-  let(:params)        { { filter: 'all' } }
+  let(:participation)              { event_participations(:top) }
+  let(:user)                       { participation.person }
+  let(:event)                      { participation.event }
+  let(:params)                     { { filter: 'all' } }
+  let(:details)                    { nil }
+  let(:event_participation_filter) { Event::ParticipationFilter.new(event, user, params) }
 
   before do
     SeedFu.quiet = true
@@ -70,7 +76,7 @@ describe Export::EventParticipationsExportJob do
 
   context 'creates a full CSV-Export' do
     let(:format) { :csv }
-    let(:params) { { details: true } }
+    let(:details) { true }
 
     it 'and sends it via mail' do
       expect do

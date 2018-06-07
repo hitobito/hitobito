@@ -105,9 +105,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def list_entries
-    filter = Event::ParticipationFilter.new(event, current_user, params)
-    records = filter.list_entries.page(params[:page])
-    @counts = filter.counts
+    records = event_participation_filter.list_entries.page(params[:page])
+    @counts = event_participation_filter.counts
 
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
@@ -119,7 +118,12 @@ class Event::ParticipationsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    Export::EventParticipationsExportJob.new(format, current_person.id, event.id, params).enqueue!
+    Export::EventParticipationsExportJob.new(format,
+                                             current_person.id,
+                                             event.id,
+                                             event_participation_filter,
+                                             params[:details]).enqueue!
+
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
@@ -267,6 +271,10 @@ class Event::ParticipationsController < CrudController
     if can?(:create, role)
       @event.person_add_requests.list.includes(person: :primary_group)
     end
+  end
+
+  def event_participation_filter
+    Event::ParticipationFilter.new(event, current_user, params)
   end
 
 end

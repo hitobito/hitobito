@@ -14,7 +14,7 @@ describe Export::EventsExportJob do
   let(:user)         { people(:top_leader) }
   let(:group)        { groups(:top_layer) }
   let(:year)         { 2012 }
-  let(:event_filter) { EventFilter.new(nil, 'all', group, year, false) }
+  let(:event_filter) { Event::Filter.new(nil, 'all', group, year, false) }
 
   before do
     SeedFu.quiet = true

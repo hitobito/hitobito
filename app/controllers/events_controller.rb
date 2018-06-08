@@ -172,7 +172,7 @@ class EventsController < CrudController
   end
 
   def event_filter
-    EventFilter.new(params[:type], params['filter'], group, year, sorting?)
+    Event::Filter.new(params[:type], params['filter'], group, year, sorting?)
   end
 
 end

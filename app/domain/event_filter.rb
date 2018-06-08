@@ -10,7 +10,7 @@ class EventFilter
   attr_reader :type, :filter, :group, :year, :sorting
 
   def initialize(type, filter, group, year, sorting)
-    @type =type
+    @type = type
     @filter = filter
     @group = group
     @year = year

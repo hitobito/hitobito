@@ -122,7 +122,7 @@ class Event::ParticipationsController < CrudController
                                              current_person.id,
                                              event.id,
                                              event_participation_filter,
-                                             params[:details]).enqueue!
+                                             params).enqueue!
 
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end

@@ -13,13 +13,12 @@ describe Export::EventParticipationsExportJob do
                                                      user.id,
                                                      event.id,
                                                      event_participation_filter,
-                                                     details) }
+                                                     params) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
   let(:event)                      { participation.event }
   let(:params)                     { { filter: 'all' } }
-  let(:details)                    { nil }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event, user, params) }
 
   before do
@@ -76,7 +75,7 @@ describe Export::EventParticipationsExportJob do
 
   context 'creates a full CSV-Export' do
     let(:format) { :csv }
-    let(:details) { true }
+    let(:params) { { details: true } }
 
     it 'and sends it via mail' do
       expect do

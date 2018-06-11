@@ -46,7 +46,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :account_number, presence: true, on: :update
   validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
-                             on: :update, allow_blank: true
+                             on: :update, allow_blank: true, if: :post?
+
   validates :participant_number, presence: true, on: :update, if: :with_reference?
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
@@ -67,7 +68,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def correct_check_digit
-    return if account_number.blank?
+    return if account_number.blank? || bank?
     payment_slip = Invoice::PaymentSlip.new
     splitted = account_number.delete('-').split('')
     check_digit = splitted.pop

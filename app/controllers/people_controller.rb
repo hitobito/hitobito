@@ -153,8 +153,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    @person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
-    entries = @person_filter.entries
+    entries = person_filter.entries
     entries = entries.reorder(sort_expression) if sorting?
     entries
   end
@@ -203,7 +202,6 @@ class PeopleController < CrudController
   end
 
   def render_tabular_in_background(format, full)
-    person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
     Export::PeopleExportJob.new(format,
                                 full,
                                 current_person.id,
@@ -255,6 +253,10 @@ class PeopleController < CrudController
 
   def household
     @household ||= Person::Household.new(entry, current_ability)
+  end
+
+  def person_filter
+    @person_filter ||= Person::Filter::List.new(@group, current_user, list_filter_args)
   end
 
 end

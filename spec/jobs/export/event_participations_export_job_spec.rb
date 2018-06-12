@@ -9,12 +9,17 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, params) }
+  subject { Export::EventParticipationsExportJob.new(format,
+                                                     user.id,
+                                                     event.id,
+                                                     event_participation_filter,
+                                                     params) }
 
-  let(:participation) { event_participations(:top) }
-  let(:user)          { participation.person }
-  let(:event)         { participation.event }
-  let(:params)        { { filter: 'all' } }
+  let(:participation)              { event_participations(:top) }
+  let(:user)                       { participation.person }
+  let(:event)                      { participation.event }
+  let(:params)                     { { filter: 'all' } }
+  let(:event_participation_filter) { Event::ParticipationFilter.new(event, user, params) }
 
   before do
     SeedFu.quiet = true

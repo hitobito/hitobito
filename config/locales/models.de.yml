@@ -99,7 +99,7 @@ de:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen'
+              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
         subscription:
           attributes:
             subscriber_id:

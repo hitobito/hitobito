@@ -7,17 +7,15 @@
 
 class Export::EventsExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:event_type, :year, :parent]
+  self.parameters = PARAMETERS + [:event_filter]
 
-  def initialize(format, user_id, event_type, year, parent)
+  def initialize(format, user_id, event_filter)
     super()
     @format = format
     @exporter = Export::Tabular::Events::List
     @user_id = user_id
     @tempfile_name = 'events-export'
-    @event_type = event_type
-    @year = year
-    @parent = parent
+    @event_filter = event_filter
   end
 
   private
@@ -27,11 +25,6 @@ class Export::EventsExportJob < Export::ExportBaseJob
   end
 
   def entries
-    @parent.events.
-      where(type: @event_type).
-      in_year(@year).
-      order_by_date.
-      preload_all_dates.
-      uniq
+    @event_filter.list_entries
   end
 end

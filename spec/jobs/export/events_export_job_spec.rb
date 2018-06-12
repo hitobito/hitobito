@@ -9,11 +9,12 @@ require 'spec_helper'
 
 describe Export::EventsExportJob do
 
-  subject { Export::EventsExportJob.new(format, user.id, nil, year, group) }
+  subject { Export::EventsExportJob.new(format, user.id, event_filter) }
 
-  let(:user)  { people(:top_leader) }
-  let(:group) { groups(:top_layer) }
-  let(:year)  { 2012 }
+  let(:user)         { people(:top_leader) }
+  let(:group)        { groups(:top_layer) }
+  let(:year)         { 2012 }
+  let(:event_filter) { Event::Filter.new(nil, 'all', group, year, false) }
 
   before do
     SeedFu.quiet = true

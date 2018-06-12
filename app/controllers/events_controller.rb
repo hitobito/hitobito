@@ -71,23 +71,7 @@ class EventsController < CrudController
 
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    scope = model_scope_without_nesting. # nesting restricts to parent, we want more
-      where(type: params[:type]).
-      includes(:groups).
-      with_group_id(relevant_group_ids).
-      in_year(year).
-      order_by_date.
-      preload_all_dates.
-      uniq
-
-    sorting? ? scope.reorder(sort_expression) : scope
-  end
-
-  def relevant_group_ids
-    case params[:filter]
-    when 'layer' then [parent.id] + descendants(layer: true).pluck(:id)
-    else [parent.id] + descendants.pluck(:id) # handles 'all' also
-    end
+    event_filter.list_entries
   end
 
   def build_entry
@@ -107,11 +91,6 @@ class EventsController < CrudController
     p.delete(:type)
     p.delete(:contact)
     p.permit(permitted_attrs)
-  end
-
-  def descendants(layer: false)
-    scope = group.descendants
-    layer ? scope.where(layer_group_id: group.layer_group_id) : scope
   end
 
   def group
@@ -143,7 +122,7 @@ class EventsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    Export::EventsExportJob.new(format, current_person.id, params[:type], year, parent).enqueue!
+    Export::EventsExportJob.new(format, current_person.id, event_filter).enqueue!
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
@@ -190,6 +169,10 @@ class EventsController < CrudController
   def reset_contact_attrs
     entry.required_contact_attrs = []
     entry.hidden_contact_attrs = []
+  end
+
+  def event_filter
+    Event::Filter.new(params[:type], params['filter'], group, year, sorting?)
   end
 
 end

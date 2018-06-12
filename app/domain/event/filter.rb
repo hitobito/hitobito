@@ -7,14 +7,14 @@
 
 class Event::Filter
 
-  attr_reader :type, :filter, :group, :year, :sorting
+  attr_reader :type, :filter, :group, :year, :sort_expression
 
-  def initialize(type, filter, group, year, sorting)
+  def initialize(type, filter, group, year, sort_expression)
     @type = type
     @filter = filter
     @group = group
     @year = year
-    @sorting = sorting
+    @sort_expression = sort_expression
   end
 
   def list_entries
@@ -27,7 +27,7 @@ class Event::Filter
       preload_all_dates.
       uniq
 
-    sorting ? scope.reorder(sort_expression) : scope
+    sort_expression ? scope.reorder(sort_expression) : scope
   end
 
   private

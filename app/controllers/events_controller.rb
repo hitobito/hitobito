@@ -172,7 +172,8 @@ class EventsController < CrudController
   end
 
   def event_filter
-    Event::Filter.new(params[:type], params['filter'], group, year, sorting?)
+    expression = sort_expression if sorting?
+    Event::Filter.new(params[:type], params['filter'], group, year, expression)
   end
 
 end

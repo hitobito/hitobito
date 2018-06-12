@@ -37,6 +37,11 @@ describe EventsController do
         get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012
         expect(assigns(:events)).to have(2).entries
       end
+
+      it 'orders according to sort expression' do
+        get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012, sort: :name, sort_dir: :desc
+        expect(assigns(:events).first.name).to eq 'Top Event'
+      end
     end
 
     context 'GET show' do

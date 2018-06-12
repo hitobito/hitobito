@@ -19,8 +19,8 @@ describe Event::Filter do
     Fabricate(:event, groups: [groups(:bottom_group_one_one)])
   end
 
-  def filter(filter = nil)
-    Event::Filter.new(type, filter, group, year, nil)
+  def filter(filter = nil, sort_expression = nil)
+    Event::Filter.new(type, filter, group, year, sort_expression)
   end
 
   it 'lists events of descendant groups by default' do
@@ -33,6 +33,11 @@ describe Event::Filter do
 
   it 'limits list to events of all non layer descendants' do
     expect(filter('layer').list_entries).to have(2).entries
+  end
+
+  it 'sorts according to sort_expression' do
+    expect(filter('layer', 'events.name').list_entries.first.name).to eq 'Eventus'
+    expect(filter('layer', 'events.name desc').list_entries.first.name).to eq 'Top Event'
   end
 
 end

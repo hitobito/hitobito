@@ -643,6 +643,7 @@ de:
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
       zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
       issued:
         one: "Rechnung %{number} wurde gestellt."
         other: "%{count} Rechnungen wurden gestellt."

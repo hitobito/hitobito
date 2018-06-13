@@ -48,7 +48,13 @@ describe Invoice::BatchUpdate do
     expect(results.notice).to have(1).item
   end
 
-  it 'tracks error if no reminder can be issued because config is misisng' do
+  it 'tracks error if invoice cannot be issued because no invoice_item is present' do
+    invoice = Fabricate(:invoice, group: draft.group, recipient_email: 'a@a.com')
+    expect { update([invoice]) }.not_to change { sent.state }
+    expect(results.alert).to have(1).item
+  end
+
+  it 'tracks error if no reminder can be issued because config is missing' do
     sent.group.invoice_config.payment_reminder_configs.destroy_all
     sent.update_columns(due_at: 31.days.ago)
     expect { update([sent]) }.not_to change { sent.state }

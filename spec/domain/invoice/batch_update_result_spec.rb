@@ -53,7 +53,15 @@ describe Invoice::BatchUpdateResult do
     expect(subject.notice).to eq ["2 Rechnungen konnten nicht " \
                                   "verschickt werden, da keine Empfänger E-Mails " \
                                   "hinterlegt sind."]
+  end
 
+  it 'tracks model_error on single invoice' do
+    invoice = Fabricate(:invoice, recipient_address: 'a@a.com', group: sent.group)
+    expect(invoice.update(state: :sent)).to be_falsey
+    subject.track_model_error(invoice)
+    expect(subject).to be_present
+    expect(subject.alert).to eq ["Rechnung #{invoice.sequence_number} ist ungültig - " \
+                                 "Rechnungsposten muss ausgefüllt werden."]
   end
 
 end

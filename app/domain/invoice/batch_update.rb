@@ -14,17 +14,20 @@ class Invoice::BatchUpdate
     @sender = sender
   end
 
-  def call
+  def call # rubocop:disable Metrics/MethodLength
     invoices.each do |invoice|
-      state = next_state(invoice)
-      next result.track_error("#{invoice.state}_invalid", invoice) unless state
+      next_state = compute_next_state(invoice)
+      next if invalid?(invoice, next_state)
 
-      if state == 'reminded' && payment_reminders_missing?(invoice)
-        next result.track_error('payment_reminders_missing', invoice)
+      Invoice.transaction do
+        if invoice.update(state: next_state)
+          track_state_change(invoice, next_state)
+          handle_email(invoice) if send_email?
+          create_reminder(invoice) if invoice.overdue?
+        else
+          result.track_model_error(invoice)
+        end
       end
-
-      success = update(invoice, state)
-      create_reminder(invoice) if success && invoice.overdue?
     end
 
     result
@@ -32,19 +35,32 @@ class Invoice::BatchUpdate
 
   private
 
-  def payment_reminders_missing?(invoice)
-    invoice.invoice_config.payment_reminder_configs.empty?
-  end
-
-  def update(invoice, state)
-    if send_email?
-      update_state_and_send(invoice, state)
-    else
-      update_state(invoice, state)
+  def invalid?(invoice, next_state)
+    if next_state == 'reminded' && invoice.invoice_config.payment_reminder_configs.empty?
+      result.track_error('payment_reminders_missing', invoice)
+    elsif send_email? && !invoice.recipient_email
+      result.track_error(:recipient_email_invalid, invoice)
+    elsif next_state.nil?
+      result.track_error("#{invoice.state}_invalid", invoice)
     end
   end
 
-  def next_state(invoice)
+  def track_state_change(invoice, next_state)
+    next_state = 'issued' if next_state == 'sent' # Always track sent as issued
+    result.track_update(next_state, invoice) unless changed_from_issued_to_sent?(invoice)
+  end
+
+  def handle_email(invoice)
+    enqueue_send_job(invoice)
+    result.track_update(:send_notification, invoice)
+  end
+
+  def create_reminder(invoice)
+    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config)
+    invoice.payment_reminders.create!(attributes)
+  end
+
+  def compute_next_state(invoice)
     if invoice.draft?
       send_email? ? 'sent' : 'issued'
     elsif invoice.issued? && send_email?
@@ -54,41 +70,14 @@ class Invoice::BatchUpdate
     end
   end
 
-  def next_due_at(invoice)
-    today = Time.zone.today
-    today + invoice.invoice_config.due_days.days if invoice.due_at < today
-  end
-
-  def create_reminder(invoice)
-    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config)
-    invoice.payment_reminders.create!(attributes)
-  end
-
   def payment_reminder_attrs(reminders, config)
     next_level = [3, reminders.size + 1].min
     config = config.payment_reminder_configs.find_by(level: next_level)
     config.slice('title', 'text', 'level').merge(due_at: Time.zone.today + config.due_days)
   end
 
-  def update_state(invoice, state)
-    if invoice.update(state: state)
-      state = 'issued' if state == 'sent' # Always track sent as issued
-      result.track_update(state, invoice) unless changed_from_issued_to_sent?(invoice)
-    end
-  end
-
   def changed_from_issued_to_sent?(invoice)
     invoice.previous_changes['state'] == %w(issued sent)
-  end
-
-  def update_state_and_send(invoice, state)
-    if invoice.recipient_email
-      update_state(invoice, state)
-      enqueue_send_job(invoice)
-      result.track_update(:send_notification, invoice)
-    else
-      result.track_error(:recipient_email_invalid, invoice)
-    end
   end
 
   def enqueue_send_job(invoice)

@@ -46,7 +46,7 @@ describe Invoice do
     expect(invoice.errors.full_messages).to include(/Rechnungseinstellung ist nicht gültig/)
   end
 
-  it 'validates that an invoice in state issued at least has one invoice_item' do
+  it 'validates that an invoice in state issued has at least has one invoice_item' do
       invoice = create_invoice
       invoice.update(state: :issued)
       expect(invoice).not_to be_valid

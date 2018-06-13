@@ -17,13 +17,14 @@ class Invoice::BatchUpdate
   def call
     invoices.each do |invoice|
       state = next_state(invoice)
-      next track_error("#{invoice.state}_invalid", invoice) unless state
+      next result.track_error("#{invoice.state}_invalid", invoice) unless state
 
       if state == 'reminded' && payment_reminders_missing?(invoice)
-        next track_error('payment_reminders_missing', invoice)
+        next result.track_error('payment_reminders_missing', invoice)
       end
 
-      update(invoice, state)
+      success = update(invoice, state)
+      create_reminder(invoice) if success && invoice.overdue?
     end
 
     result
@@ -35,18 +36,12 @@ class Invoice::BatchUpdate
     invoice.invoice_config.payment_reminder_configs.empty?
   end
 
-  def track_error(key, invoice)
-    result.track_error(key, invoice)
-  end
-
   def update(invoice, state)
     if send_email?
       update_state_and_send(invoice, state)
     else
       update_state(invoice, state)
     end
-
-    create_reminder(invoice) if invoice.overdue?
   end
 
   def next_state(invoice)
@@ -76,18 +71,14 @@ class Invoice::BatchUpdate
   end
 
   def update_state(invoice, state)
-    previous_state = invoice.state
-    invoice.update(state: state)
-    track_update(state, invoice) unless issued_to_sent?(previous_state, state)
+    if invoice.update(state: state)
+      state = 'issued' if state == 'sent' # Always track sent as issued
+      result.track_update(state, invoice) unless changed_from_issued_to_sent?(invoice)
+    end
   end
 
-  def track_update(state, invoice)
-    state = 'issued' if state == 'sent' # Always track sent as issued
-    result.track_update(state, invoice)
-  end
-
-  def issued_to_sent?(previous_state, current_state)
-    previous_state == 'issued' && current_state == 'sent'
+  def changed_from_issued_to_sent?(invoice)
+    invoice.previous_changes['state'] == %w(issued sent)
   end
 
   def update_state_and_send(invoice, state)

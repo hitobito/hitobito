@@ -203,10 +203,9 @@ class PeopleController < CrudController
 
   def render_tabular_in_background(format, full)
     Export::PeopleExportJob.new(format,
-                                full,
                                 current_person.id,
                                 person_filter,
-                                params[:household]).enqueue!
+                                params.slice(:household).merge(full: full)).enqueue!
   end
 
   def render_tabular(format, entries, full)

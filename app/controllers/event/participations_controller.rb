@@ -120,7 +120,6 @@ class Event::ParticipationsController < CrudController
   def render_tabular_in_background(format)
     Export::EventParticipationsExportJob.new(format,
                                              current_person.id,
-                                             event.id,
                                              event_participation_filter,
                                              params).enqueue!
 

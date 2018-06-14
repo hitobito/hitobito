@@ -11,7 +11,6 @@ describe Export::EventParticipationsExportJob do
 
   subject { Export::EventParticipationsExportJob.new(format,
                                                      user.id,
-                                                     event.id,
                                                      event_participation_filter,
                                                      params) }
 

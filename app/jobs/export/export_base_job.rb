@@ -42,6 +42,10 @@ class Export::ExportBaseJob < BaseJob
     # override in sub class
   end
 
+  def ability
+    @ability ||= Ability.new(recipient)
+  end
+
   def recipient
     @recipient ||= Person.find(@user_id)
   end

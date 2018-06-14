@@ -10,9 +10,16 @@ require 'zip'
 
 class Export::ExportBaseJob < BaseJob
 
-  PARAMETERS = [:locale, :format, :exporter, :user_id, :tempfile_name].freeze
+  PARAMETERS = [:locale, :format, :exporter, :user_id, :tempfile_name, :options].freeze
 
   attr_reader :exporter
+
+  def initialize(format, user_id, options = {})
+    super()
+    @format = format
+    @user_id = user_id
+    @options = options
+  end
 
   def perform
     set_locale

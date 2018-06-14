@@ -13,7 +13,7 @@ describe Export::ExportBaseJob do
     self.parameters = PARAMETERS
   end
 
-  let(:subject) { MyJob.new }
+  let(:subject) { MyJob.new(:csv, people(:top_leader).id) }
 
   it 'sets locale when reading job from database' do
     allow(I18n).to receive(:locale).and_return(:fr)

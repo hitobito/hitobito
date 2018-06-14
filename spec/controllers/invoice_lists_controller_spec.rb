@@ -117,7 +117,10 @@ describe InvoiceListsController do
     end
 
     it 'PUT#update enqueues job' do
-      invoice = Invoice.create!(group: group, title: 'test', recipient: person)
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person,
+                                invoice_items_attributes:
+                                  { '1' => { name: 'item1', unit_cost: 1, count: 1}})
+
       expect do
         post :update, { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
       end.to change { Delayed::Job.count }.by(1)

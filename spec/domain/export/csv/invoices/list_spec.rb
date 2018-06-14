@@ -60,9 +60,9 @@ describe Export::Tabular::Invoices::List do
      its(['Referenz Nummer']) { should == invoice.esr_number }
      its(['Verschickt am']) { should == I18n.l(invoice.sent_at) }
      its(['Fällig am']) { should == I18n.l(invoice.due_at) }
-     its(['Betrag']) { should == '0.00 CHF' }
+     its(['Betrag']) { should == '0.50 CHF' }
      its(['MWSt.']) { should == '0.00 CHF' }
-     its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
+     its(['Total inkl. MWSt.']) { should == '0.50 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
      its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }

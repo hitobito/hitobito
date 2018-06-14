@@ -7,15 +7,13 @@
 
 class Export::EventsExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:event_filter]
+  self.parameters = PARAMETERS + [:filter]
 
-  def initialize(format, user_id, event_filter)
-    super()
-    @format = format
+  def initialize(format, user_id, filter)
+    super(format, user_id, {})
     @exporter = Export::Tabular::Events::List
-    @user_id = user_id
     @tempfile_name = 'events-export'
-    @event_filter = event_filter
+    @filter = filter
   end
 
   private
@@ -25,6 +23,6 @@ class Export::EventsExportJob < Export::ExportBaseJob
   end
 
   def entries
-    @event_filter.list_entries
+    @filter.list_entries
   end
 end

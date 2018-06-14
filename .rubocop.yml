@@ -14,6 +14,9 @@ AllCops:
 Rails:
   Enabled: true
 
+Lint/RescueWithoutErrorClass:
+  Enabled: false
+
 # we have not yet introcued ApplicationRecord as a Pattern
 Rails/ApplicationRecord:
   Enabled: false

@@ -162,44 +162,48 @@ describe MailRelay::BulkMail do
     context 'domain not found error' do
 
       let(:invalid_domain_email) { recipients[3] }
-      let(:domain_not_found_error) { "450 4.1.2 #{invalid_domain_email}: Recipient address rejected: Domain not found" }
 
-      it 'skips recipients with invalid mail domain' do
-        expect(message)
-          .to receive(:deliver)
-          .and_raise(Net::SMTPServerBusy, domain_not_found_error)
+      described_class::INVALID_EMAIL_ERRORS.each do |error_message|
+        context error_message do
+          let(:error) { "#{error_message} #{invalid_domain_email}" }
 
-        expect(message)
-          .to receive(:deliver)
-          .twice
+          it 'skips recipients with invalid mail domain' do
+            expect(message)
+              .to receive(:deliver)
+              .and_raise(error)
 
-        failed_entry = [invalid_domain_email, domain_not_found_error]
+            expect(message)
+              .to receive(:deliver)
+              .twice
 
-        expect_any_instance_of(DeliveryReportMailer)
-          .to receive(:bulk_mail)
-          .with(delivery_report_to, message, 15, instance_of(DateTime), [failed_entry])
+            failed_entry = [invalid_domain_email, error]
 
-        expect(logger)
-          .to receive(:info)
-          .with("#{log_prefix} delivered to 15/16 recipients, 1 failed")
+            expect_any_instance_of(DeliveryReportMailer)
+              .to receive(:bulk_mail)
+              .with(delivery_report_to, message, 15, instance_of(DateTime), [failed_entry])
 
-        bulk_mail.deliver
-        expect(failed_recipients.size).to eq(1)
-        expect(failed_recipients.first).to eq(failed_entry)
+            expect(logger)
+              .to receive(:info)
+              .with("#{log_prefix} delivered to 15/16 recipients, 1 failed")
+
+            bulk_mail.deliver
+            expect(failed_recipients.size).to eq(1)
+            expect(failed_recipients.first).to eq(failed_entry)
+          end
+
+          it 'raises error if email cannot be extracted from smtp error message' do
+            invalid_domain_not_found_error = "450 4.1.2 no email here: #{error_message}"
+
+            expect(message)
+              .to receive(:deliver)
+              .and_raise(invalid_domain_not_found_error)
+
+            expect do
+              bulk_mail.deliver
+            end.to raise_error(invalid_domain_not_found_error)
+          end
+        end
       end
-
-      it 'raises error if email cannot be extracted from smtp error message' do
-        invalid_domain_not_found_error = "450 4.1.2 no email here: Recipient address rejected: Domain not found"
-
-        expect(message)
-          .to receive(:deliver)
-          .and_raise(Net::SMTPServerBusy, invalid_domain_not_found_error)
-
-        expect do
-          bulk_mail.deliver
-        end.to raise_error(Net::SMTPServerBusy, invalid_domain_not_found_error)
-      end
-
     end
 
     context 'only one recipient' do
@@ -211,7 +215,7 @@ describe MailRelay::BulkMail do
       it 'failing' do
         expect(message)
           .to receive(:deliver)
-          .and_raise(Net::SMTPServerBusy, domain_not_found_error)
+          .and_raise(StandardError, domain_not_found_error)
 
         expect(message)
           .to receive(:deliver)

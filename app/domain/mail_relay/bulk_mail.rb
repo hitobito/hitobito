@@ -13,8 +13,9 @@ module MailRelay
 
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
-    RETRY_AFTER_ERROR = [5.minutes, 10.minutes]
-    DOMAIN_NOT_FOUND_REGEX = /Domain not found/i
+    RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
+    INVALID_EMAIL_ERRORS = ['Domain not found',
+                            'Recipient address rejected'].freeze
 
     def initialize(message, envelope_sender, delivery_report_to, recipients)
       @message = message
@@ -82,7 +83,7 @@ module MailRelay
     end
 
     def retry_or_abort(error, recipients)
-      if domain_not_found_error?(error)
+      if invalid_email?(error)
         recipients = reject_failing(error, recipients)
       else
         # raise error if initial deliver fails.
@@ -117,13 +118,13 @@ module MailRelay
       unless failed_email.present? && recipients.include?(failed_email)
         raise error
       end
+      log_info "Rejected recipient #{failed_email} with #{error}"
       @failed_recipients << [failed_email, error.message]
       recipients.reject {|r| r =~ /#{failed_email}/ }
     end
 
-    def domain_not_found_error?(error)
-      error.is_a?(Net::SMTPServerBusy) &&
-        error.message =~ DOMAIN_NOT_FOUND_REGEX
+    def invalid_email?(error)
+      INVALID_EMAIL_ERRORS.any? { |msg| error.message =~ Regexp.new(msg) }
     end
 
     def abort_delivery(error_message)

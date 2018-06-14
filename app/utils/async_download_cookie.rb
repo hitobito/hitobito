@@ -9,44 +9,34 @@ class AsyncDownloadCookie
 
   NAME = :async_downloads
 
-  attr_accessor :cookies, :filename, :filetype
+  attr_accessor :cookies
 
-  def initialize(cookies, filename, filetype = :txt)
-    @cookies  = cookies
-    @filename = filename
-    @filetype = filetype
+  def initialize(cookies)
+    @cookies = cookies
   end
 
-  def set
-    cookie_value = if async_downloads_cookie.present?
-                     async_downloads_cookie << { name: filename, type: filetype }
-                   else
-                     [name: filename, type: filetype]
-                   end
-
-    cookies[NAME] = { value: cookie_value.to_json, expires: 1.day.from_now }
+  def set(name, type)
+    values << to_value(name, type)
+    cookies[NAME] = with_expiration(values)
   end
 
-  def remove
-    if async_downloads_cookie && async_downloads_cookie.one?
-      return cookies.delete NAME
-    end
-
-    active_downloads = async_downloads_cookie.collect do |download|
-      next if download['name'] == filename
-      download
-    end.compact
-
-    return unless active_downloads
-    cookies[NAME] = { value: active_downloads.to_json, expires: 1.day.from_now }
+  def remove(name, type)
+    values.delete(to_value(name, type))
+    cookies[NAME] = with_expiration(values)
+    cookies.delete(NAME) if values.empty?
   end
 
   private
 
-  def async_downloads_cookie
-    cookie_data = cookies[NAME]
-    return nil unless cookie_data
-    JSON.parse(cookie_data)
+  def values
+    @values ||= cookies.key?(NAME) ? JSON.parse(cookies[NAME]) : []
   end
 
+  def with_expiration(values)
+    { value: values.to_json, expires: 1.day.from_now }
+  end
+
+  def to_value(name, type)
+    { name: name, type: type }.stringify_keys
+  end
 end

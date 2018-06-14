@@ -48,7 +48,21 @@ describe Invoice::BatchUpdate do
     expect(results.notice).to have(1).item
   end
 
-  it 'tracks error if no reminder can be issued because config is misisng' do
+  it 'tracks error if invoice cannot be issued because no invoice_item is present' do
+    invoice = Fabricate(:invoice, group: draft.group, recipient_email: 'a@a.com')
+    expect { update([invoice]) }.not_to change { sent.state }
+    expect(results.alert).to have(1).item
+    expect(results.notice).to be_empty
+  end
+
+  it 'tracks error if invoice cannot be sent because no invoice_item is present' do
+    invoice = Fabricate(:invoice, group: draft.group, recipient_email: 'a@a.com')
+    expect { update([invoice], person) }.not_to change { sent.state }
+    expect(results.alert).to have(1).item
+    expect(results.notice).to be_empty
+  end
+
+  it 'tracks error if no reminder can be issued because config is missing' do
     sent.group.invoice_config.payment_reminder_configs.destroy_all
     sent.update_columns(due_at: 31.days.ago)
     expect { update([sent]) }.not_to change { sent.state }
@@ -65,7 +79,7 @@ describe Invoice::BatchUpdate do
     draft.update(recipient_email: nil)
 
     expect do
-      expect { update([draft], person) }.not_to change { draft.state }
+      expect { update([draft], person) }.not_to change { draft.reload.state }
     end.not_to change { Delayed::Job.count }
     expect(results.alert).to have(1).item
   end

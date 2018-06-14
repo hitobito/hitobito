@@ -28,8 +28,8 @@ module MailRelay
       @retry = 0
     end
 
-    def deliver(&block)
-      return unless @recipients.present?
+    def deliver # rubocop:disable Metrics/MethodLength
+      return if @recipients.blank?
 
       prepare_message
 
@@ -71,7 +71,7 @@ module MailRelay
     end
 
     def batch_deliver(recipients)
-      return unless recipients.present?
+      return if recipients.blank?
       @message.smtp_envelope_to = recipients
       begin
         @message.deliver
@@ -82,7 +82,7 @@ module MailRelay
       end
     end
 
-    def retry_or_abort(error, recipients)
+    def retry_or_abort(error, recipients) # rubocop:disable Metrics/MethodLength
       if invalid_email?(error)
         recipients = reject_failing(error, recipients)
       else
@@ -106,8 +106,8 @@ module MailRelay
 
     def retry_after_sleep(error)
       @retry += 1
-      retry_in = RETRY_AFTER_ERROR[@retry-1]
-      log_info("error at #{@current_slice}/#{@slices} send blocks, " +
+      retry_in = RETRY_AFTER_ERROR[@retry - 1]
+      log_info("error at #{@current_slice}/#{@slices} send blocks, " \
                "retrying in #{retry_in / 60}mins: #{error.message}")
       sleep retry_in
     end
@@ -120,7 +120,7 @@ module MailRelay
       end
       log_info "Rejected recipient #{failed_email} with #{error}"
       @failed_recipients << [failed_email, error.message]
-      recipients.reject {|r| r =~ /#{failed_email}/ }
+      recipients.reject { |r| r =~ /#{failed_email}/ }
     end
 
     def invalid_email?(error)
@@ -130,7 +130,7 @@ module MailRelay
     def abort_delivery(error_message)
       @abort = true
       failed = @recipients - @succeeded_recipients
-      log_info("aborting delivery for remaining #{failed.count} " +
+      log_info("aborting delivery for remaining #{failed.count} " \
                "recipients: #{error_message}")
       failed.each do |r|
         @failed_recipients << [r, error_message]
@@ -139,24 +139,20 @@ module MailRelay
 
     def delivery_report
       @success_count = @succeeded_recipients.count
-      log_info("delivered to #{@success_count}/#{@recipients.count} " +
+      log_info("delivered to #{@success_count}/#{@recipients.count} " \
                "recipients, #{@failed_recipients.count} failed")
       delivery_report_mail if @delivery_report_to
     end
 
     def delivery_report_mail
-      delivered_at = DateTime.now
-      begin
-        DeliveryReportMailer.
-          bulk_mail(@delivery_report_to, @message,
-                    @success_count, delivered_at,
-                    @failed_recipients).
-                    deliver_now
-      rescue => e
-        log_info("Delivery report for bulk mail to " +
-                 "#{@delivery_report_to} could not be delivered: #{e.message}")
-        raise e unless Rails.env.production?
-      end
+      DeliveryReportMailer.
+        bulk_mail(@delivery_report_to, @message,
+                  @success_count, Time.zone.now,
+                  @failed_recipients).deliver_now
+    rescue => e
+      log_info('Delivery report for bulk mail to ' \
+               "#{@delivery_report_to} could not be delivered: #{e.message}")
+      raise e unless Rails.env.production?
     end
 
     def log_info(info)

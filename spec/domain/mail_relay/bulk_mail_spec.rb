@@ -180,7 +180,7 @@ describe MailRelay::BulkMail do
 
             expect_any_instance_of(DeliveryReportMailer)
               .to receive(:bulk_mail)
-              .with(delivery_report_to, message, 15, instance_of(DateTime), [failed_entry])
+              .with(delivery_report_to, message, 15, instance_of(ActiveSupport::TimeWithZone), [failed_entry])
 
             expect(logger)
               .to receive(:info)
@@ -277,7 +277,7 @@ describe MailRelay::BulkMail do
 
         expect_any_instance_of(DeliveryReportMailer)
           .to receive(:bulk_mail)
-          .with(delivery_report_to, message, 42, instance_of(DateTime), [])
+          .with(delivery_report_to, message, 42, instance_of(ActiveSupport::TimeWithZone), [])
 
         bulk_mail.deliver
         expect(failed_recipients.size).to eq(0)

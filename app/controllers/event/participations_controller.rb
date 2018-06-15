@@ -119,7 +119,7 @@ class Event::ParticipationsController < CrudController
 
   def render_tabular_in_background(format)
     filename = AsyncDownloadFile.create_name('event_participation_export', current_person.id)
-    AsyncDownloadCookie.new(cookies, filename, format).set
+    AsyncDownloadCookie.new(cookies).set(filename, format)
 
     Export::EventParticipationsExportJob.new(format,
                                              event.id,

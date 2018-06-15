@@ -52,7 +52,7 @@ class SubscriptionsController < CrudController
 
   def render_tabular_in_background(format)
     filename = AsyncDownloadFile.create_name("subscriptions_#{mailing_list.id}", current_person.id)
-    AsyncDownloadCookie.new(cookies, filename, format).set
+    AsyncDownloadCookie.new(cookies).set(filename, format)
     Export::SubscriptionsJob.new(format,
                                  current_person.id,
                                  mailing_list.id,

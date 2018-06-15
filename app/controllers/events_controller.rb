@@ -123,7 +123,7 @@ class EventsController < CrudController
 
   def render_tabular_in_background(format)
     filename = AsyncDownloadFile.create_name('events_export', current_person.id)
-    AsyncDownloadCookie.new(cookies, filename, format).set
+    AsyncDownloadCookie.new(cookies).set(filename, format)
     Export::EventsExportJob.new(format, current_person.id, event_filter, filename: filename).enqueue!
     flash[:notice] = translate(:export_enqueued)
   end

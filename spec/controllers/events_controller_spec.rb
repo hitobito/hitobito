@@ -18,29 +18,39 @@ describe EventsController do
     before { group2 }
 
     context 'GET index' do
-      let(:group) { groups(:bottom_layer) }
+      let(:group) { groups(:top_layer) }
+      let(:top_leader) { people(:top_leader) }
 
 
       before do
-        sign_in(people(:top_leader))
+        sign_in(top_leader)
         @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
         Fabricate(:event, groups: [@g1])
         Fabricate(:event, groups: [groups(:bottom_group_one_one)])
       end
 
       it 'lists events of descendant groups by default' do
-        get :index, group_id: groups(:top_layer).id, year: 2012
+        get :index, group_id: group.id, year: 2012
         expect(assigns(:events)).to have(3).entries
       end
 
       it 'limits list to events of all non layer descendants' do
-        get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012
+        get :index, group_id: group.id, filter: 'layer', year: 2012
         expect(assigns(:events)).to have(2).entries
       end
 
       it 'orders according to sort expression' do
-        get :index, group_id: groups(:top_layer).id, filter: 'layer', year: 2012, sort: :name, sort_dir: :desc
+        get :index, group_id: group.id, filter: 'layer', year: 2012, sort: :name, sort_dir: :desc
         expect(assigns(:events).first.name).to eq 'Top Event'
+      end
+
+      it 'sets cookie on export' do
+        get :index, group_id: group.id, format: :csv
+
+        cookie = JSON.parse(cookies[AsyncDownloadCookie::NAME])
+
+        expect(cookie[0]['name']).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
+        expect(cookie[0]['type']).to match(/^csv$/)
       end
     end
 

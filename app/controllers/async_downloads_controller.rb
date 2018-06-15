@@ -12,7 +12,7 @@ class AsyncDownloadsController < ApplicationController
 
   def show
     if async_download_file.downloadable?(current_person)
-      AsyncDownloadCookie.new(cookies, params[:id]).remove
+      AsyncDownloadCookie.new(cookies).remove(params[:id], params[:file_type])
       send_file async_download_file.full_path, x_sendfile: true
     else
       render 'errors/404', status: 404

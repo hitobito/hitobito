@@ -12,13 +12,13 @@ describe AsyncDownloadsController do
   let(:person) { people(:bottom_member) }
 
   before do
-    sign_in(person) 
+    sign_in(person)
   end
 
   context 'show' do
     it 'sends file deletes cookies if current_person has access and last download' do
       filename = AsyncDownloadFile.create_name('test', person.id)
-      AsyncDownloadCookie.new(cookies, filename).set
+      AsyncDownloadCookie.new(cookies).set(filename, 'txt')
       generate_test_file(filename)
 
       get :show, id: filename, file_type: 'txt'
@@ -30,8 +30,8 @@ describe AsyncDownloadsController do
 
     it 'sends file removes cookie entry if current_person has access and not last download' do
       filename = AsyncDownloadFile.create_name('test', person.id)
-      AsyncDownloadCookie.new(cookies, filename).set
-      AsyncDownloadCookie.new(cookies, 'second_download').set
+      AsyncDownloadCookie.new(cookies).set(filename, 'txt')
+      AsyncDownloadCookie.new(cookies).set('second_download', 'txt')
       generate_test_file(filename)
 
       get :show, id: filename, file_type: 'txt'

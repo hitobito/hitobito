@@ -29,7 +29,11 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def ability
-    @ability ||= Ability.new(recipient)
+    @ability ||= Ability.new(user)
+  end
+
+  def user
+    @user ||= Person.find(@user_id)
   end
 
   def export_file
@@ -41,7 +45,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def filename
-    options.fetch(:filename)
+    @options.fetch(:filename)
   end
 
 end

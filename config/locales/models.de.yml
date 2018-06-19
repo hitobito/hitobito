@@ -649,6 +649,7 @@ de:
         iban: IBAN
         payment_slip: Einzahlungsschein
         participant_number: Teilnehmernummer
+        creator: Rechnungssteller
 
       invoice_article:
         number: Artikelnummer

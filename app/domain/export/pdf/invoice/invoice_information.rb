@@ -23,7 +23,9 @@ module Export::Pdf::Invoice
         [I18n.t('invoices.pdf.invoice_date') + ':',
          (I18n.l(invoice.sent_at) if invoice.sent_at)],
         [I18n.t('invoices.pdf.due_at') + ':',
-         (I18n.l(invoice.due_at) if invoice.due_at)]
+         (I18n.l(invoice.due_at) if invoice.due_at)],
+        [I18n.t('invoices.pdf.creator') + ':',
+         (invoice.creator.full_name if invoice.creator)]
       ]
     end
   end

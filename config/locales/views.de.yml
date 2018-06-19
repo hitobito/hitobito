@@ -615,6 +615,7 @@ de:
       invoice_number: Rechnungsnummer
       invoice_date: Rechnungsdatum
       due_at: Fällig bis
+      creator: Rechnungssteller
 
   invoice_configs:
     form_tabs:

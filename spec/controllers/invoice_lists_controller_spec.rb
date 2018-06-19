@@ -64,6 +64,14 @@ describe InvoiceListsController do
       expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde erstellt.'
     end
 
+    it 'POST#create sets creator_id to current_user' do
+      expect do
+        post :create, { group_id: group.id, invoice: invoice_attrs.merge(title: 'current_user') }
+      end.to change { group.invoices.count }.by(1)
+
+      expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
     it 'POST#create creates an invoice for each member of group' do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group, person: Fabricate(:person))
 

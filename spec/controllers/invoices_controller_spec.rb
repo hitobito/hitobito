@@ -145,4 +145,12 @@ describe InvoicesController do
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
   end
 
+  it 'POST#create sets creator_id to current_user' do
+    expect do
+      post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
+    end.to change { Invoice.count }.by(1)
+
+    expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+  end
+
 end

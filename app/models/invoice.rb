@@ -33,6 +33,7 @@
 #  beneficiary         :text(65535)
 #  payee               :text(65535)
 #  participant_number  :string(255)
+#  creator_id          :integer
 #
 
 class Invoice < ActiveRecord::Base
@@ -51,6 +52,9 @@ class Invoice < ActiveRecord::Base
 
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
+  belongs_to :creator, class_name: 'Person'
+
+
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy

@@ -12,7 +12,6 @@
 #  sequence_number     :integer          default(1), not null
 #  due_days            :integer          default(30), not null
 #  group_id            :integer          not null
-#  contact_id          :integer
 #  address             :text(65535)
 #  payment_information :text(65535)
 #  account_number      :string(255)
@@ -30,7 +29,6 @@ class InvoiceConfig < ActiveRecord::Base
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
 
   belongs_to :group, class_name: 'Group'
-  belongs_to :contact, class_name: 'Person'
 
   has_many :payment_reminder_configs, dependent: :destroy
 

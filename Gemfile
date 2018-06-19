@@ -12,7 +12,7 @@ gem 'rails', '4.2.8'
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
-gem 'axlsx', '2.0.1'
+gem 'axlsx', '>= 3.0.0.pre'
 gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0

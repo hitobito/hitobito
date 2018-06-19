@@ -27,6 +27,8 @@ module Export::Pdf::Invoice
       end
 
       total_box
+      pdf.move_down 4
+      font_size(8) { text invoice.payment_information }
     end
 
     private

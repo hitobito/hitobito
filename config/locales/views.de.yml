@@ -425,7 +425,7 @@ de:
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-    instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
+    instructions: 'Für die definitive Anmeldung musst du diese über den Button <i>Drucken</i> ausdrucken, unterzeichnen und innert 14 Tagen per Post oder per E-Mail an die entsprechende Adresse senden.'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
     show:

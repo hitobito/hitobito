@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_insieme
+  specs:
+    hitobito_insieme (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -535,6 +540,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_insieme!
   http_accept_language
   icalendar
   jquery-rails

@@ -9,7 +9,12 @@ module Group::Types
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :layer, :role_types, :possible_children, :default_children, :event_types, :default_role
+    class_attribute :layer, 
+                    :role_types,
+                    :possible_children,
+                    :default_children,
+                    :event_types,
+                    :default_role
 
     # Whether this group type builds a layer or is a regular group.
     # Layers influence some permissions.

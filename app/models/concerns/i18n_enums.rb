@@ -13,7 +13,7 @@ module I18nEnums
 
   module ClassMethods
 
-    def i18n_enum(attr, possible_values, scopes: false, queries: false, key: nil)
+    def i18n_enum(attr, possible_values, scopes: false, queries: false, key: nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       key ||= attr.to_s.pluralize
       i18n_prefix = "activerecord.attributes.#{name.underscore}.#{key}"
 

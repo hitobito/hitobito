@@ -13,8 +13,9 @@ module I18nEnums
 
   module ClassMethods
 
-    def i18n_enum(attr, possible_values, scopes: false, queries: false)
-      i18n_prefix = "activerecord.attributes.#{name.underscore}.#{attr.to_s.pluralize}"
+    def i18n_enum(attr, possible_values, scopes: false, queries: false, key: nil)
+      key ||= attr.to_s.pluralize
+      i18n_prefix = "activerecord.attributes.#{name.underscore}.#{key}"
 
       validates attr, inclusion: possible_values, allow_blank: true
 

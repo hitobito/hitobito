@@ -7,19 +7,20 @@
 
 namespace :fixtures do
   desc 'Export groups suitable for fixtures'
-  task :groups => [:environment] do
+  task groups: [:environment] do
     data = {}
 
     fixture_id = lambda { |group|
       [group.name.parameterize, group.id].join('-').tr('-', '_') if group
     }
 
-    fixture_data = %i[lft rgt name type email address zip_code town]
+    fixture_data = [:lft, :rgt, :name, :type, :email, :address, :zip_code, :town]
 
     Group.order(:lft).find_each do |group|
       entry = {
         'parent'         => fixture_id[group.parent],
-        'layer_group_id' => "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
+        'layer_group_id' =>
+          "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
       }
 
       fixture_data.each do |field|

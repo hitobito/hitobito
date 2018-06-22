@@ -29,6 +29,11 @@ class RolesController < CrudController
 
   hide_action :index, :show
 
+  def new
+    @type = @group.default_role
+    super
+  end
+
   def create
     assign_attributes
     with_person_add_request do
@@ -65,6 +70,7 @@ class RolesController < CrudController
   def role_types
     authorize!(:role_types, Role)
     @group = Group.find(params.fetch(:role, {})[:group_id])
+    @type ||= @group.default_role
   end
 
   private

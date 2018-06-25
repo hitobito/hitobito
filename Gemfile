@@ -93,6 +93,7 @@ group :development do
   gem 'quiet_assets'
   gem 'redcarpet'
   gem 'request_profiler'
+  gem 'xray-rails', '~> 0.3.1'
 end
 
 group :test do

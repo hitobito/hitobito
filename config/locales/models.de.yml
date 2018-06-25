@@ -337,6 +337,8 @@ de:
         layer_group_id: Ebene
         type: Gruppentyp
         type_name: Gruppentyp
+        mailchimp_api_key: 'MailChimp API-Schlüssel'
+        mailchimp_list_id: 'MailChimp Listen-ID'
 
       event:
         group_ids: Gruppen

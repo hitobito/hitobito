@@ -39,6 +39,8 @@ Hitobito::Application.routes.draw do
 
       end
 
+      resource :mailchimp_exports, only: [:new]
+
       resource :invoice_list, except: [:edit]
       resource :invoice_config, only: [:edit, :show, :update]
 

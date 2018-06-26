@@ -52,7 +52,7 @@ module Sheet
       def controller_sheet_class(controller)
         controller.class.name
                   .gsub(/Controller/, '')
-                  .singularize
+                  .underscore.singularize.camelize
                   .prepend('Sheet::').constantize
       rescue NameError
         Sheet::Base

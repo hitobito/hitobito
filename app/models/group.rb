@@ -155,7 +155,6 @@ class Group < ActiveRecord::Base
     display_name.downcase
   end
 
-
   def with_layer
     layer? ? [self] : [layer_group, self]
   end

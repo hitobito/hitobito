@@ -114,7 +114,7 @@ module Group::NestedSet
     if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1
       move_to_right_of(node)
     end
-  end  
+  end
 
   def move_to_most_left_if_change
     first = parent.children[0]

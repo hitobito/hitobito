@@ -8,6 +8,7 @@
 class PeopleController < CrudController
 
   include Concerns::RenderPeopleExports
+  include Concerns::AsyncDownload
 
   self.nesting = Group
 
@@ -176,10 +177,9 @@ class PeopleController < CrudController
 
   def render_tabular_entries_in_background(format)
     full = params[:details].present? && index_full_ability?
-    filename = AsyncDownloadFile.create_name('people_export', current_person.id)
-    AsyncDownloadCookie.new(cookies).set(filename, format)
-    render_tabular_in_background(format, full, filename)
-    flash[:notice] = translate(:export_enqueued)
+    with_async_download_cookie(format, :people_export) do |filename|
+      render_tabular_in_background(format, full, filename)
+    end
   end
 
   def prepare_tabular_entries(entries, full)

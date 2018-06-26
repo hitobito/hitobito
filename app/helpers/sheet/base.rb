@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -50,8 +50,10 @@ module Sheet
       end
 
       def controller_sheet_class(controller)
-        sheet_class_name = controller.class.name.gsub(/Controller/, '').singularize
-        "Sheet::#{sheet_class_name}".constantize
+        controller.class.name
+                  .gsub(/Controller/, '')
+                  .singularize
+                  .prepend('Sheet::').constantize
       rescue NameError
         Sheet::Base
       end

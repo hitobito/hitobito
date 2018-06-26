@@ -15,6 +15,7 @@ module PeopleHelper
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
                                                            emails: emails,
                                                            labels: labels,
+                                                           mailchimp_export_path: new_group_mailchimp_exports_path(@group),
                                                            households: households).to_s
   end
 

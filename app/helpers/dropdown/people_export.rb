@@ -19,6 +19,7 @@ module Dropdown
       @email_addresses = options[:emails]
       @labels = options[:labels]
       @households = options[:households]
+      @mailchimp_export_path = options[:mailchimp_export_path]
 
       init_items
     end
@@ -30,6 +31,7 @@ module Dropdown
       tabular_links(:xlsx)
       vcard_link
       pdf_link
+      mailchimp_link
       label_links
       email_addresses_link
     end
@@ -44,6 +46,10 @@ module Dropdown
 
     def vcard_link
       add_item(translate(:vcard), params.merge(format: :vcf), target: :new)
+    end
+
+    def mailchimp_link
+      add_item("MailChimp", @mailchimp_export_path, remote: true)
     end
 
     def email_addresses_link

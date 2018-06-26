@@ -170,7 +170,7 @@ module Sheet
     end
 
     def render_breadcrumbs
-      ''.html_safe
+      ''.html_safe # rubocop:disable Rails/OutputSafety
     end
 
     def css_class
@@ -202,8 +202,8 @@ module Sheet
     end
 
     def visible_tabs
-      @visible_tabs ||= tabs.collect { |tab| tab.renderer(view, path_args) }.
-                             select(&:show?)
+      @visible_tabs ||= tabs.collect { |tab| tab.renderer(view, path_args) }
+                            .select(&:show?)
     end
   end
 end

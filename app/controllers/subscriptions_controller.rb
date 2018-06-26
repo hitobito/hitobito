@@ -58,16 +58,6 @@ class SubscriptionsController < CrudController
     flash[:notice] = translate(:export_enqueued, email: current_person.email)
   end
 
-  def render_tabular(format, people)
-    if params[:household]
-      exporter = Export::Tabular::People::Households
-    else
-      exporter = Export::Tabular::People::PeopleAddress
-    end
-    data = exporter.export(format, prepare_tabular_entries(people))
-    send_data data, type: format
-  end
-
   def prepare_tabular_entries(people)
     people.preload_public_accounts.includes(roles: :group)
   end

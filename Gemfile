@@ -54,6 +54,7 @@ gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
 gem 'wagons'
+gem 'gibbon', '~> 3.2'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari', '< 1.0.0' # requires ruby 2.0

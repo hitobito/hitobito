@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702093715) do
-
+ActiveRecord::Schema.define(version: 20180625040108) do
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
     t.string  "contactable_type", limit: 255,                 null: false

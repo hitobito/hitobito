@@ -19,7 +19,7 @@ module Dropdown
       @email_addresses = options[:emails]
       @labels = options[:labels]
       @households = options[:households]
-      @mailchimp_export_path = options[:mailchimp_export_path]
+      @mailchimp_synchronization_path = options[:mailchimp_synchronization_path]
 
       init_items
     end
@@ -49,7 +49,7 @@ module Dropdown
     end
 
     def mailchimp_link
-      add_item("MailChimp", @mailchimp_export_path, remote: true)
+      add_item("MailChimp", @mailchimp_synchronization_path, remote: true)
     end
 
     def email_addresses_link

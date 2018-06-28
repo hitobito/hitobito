@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180625040108) do
+ActiveRecord::Schema.define(version: 20180508073718) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -228,8 +228,6 @@ ActiveRecord::Schema.define(version: 20180625040108) do
     t.integer  "updater_id",                  limit: 4
     t.integer  "deleter_id",                  limit: 4
     t.boolean  "require_person_add_requests",              default: false, null: false
-    t.string   "mailchimp_api_key"
-    t.string   "mailchimp_list_id"
   end
 
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id"
@@ -372,8 +370,8 @@ ActiveRecord::Schema.define(version: 20180625040108) do
     t.boolean "subscribers_may_post",               default: false, null: false
     t.boolean "anyone_may_post",                    default: false, null: false
     t.string  "preferred_labels",     limit: 255
-    t.boolean "main_email",                         default: false
     t.boolean "delivery_report",                    default: false, null: false
+    t.boolean "main_email",                         default: false
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id"
@@ -412,10 +410,10 @@ ActiveRecord::Schema.define(version: 20180625040108) do
   add_index "payment_reminders", ["invoice_id"], name: "index_payment_reminders_on_invoice_id"
 
   create_table "payments", force: :cascade do |t|
-    t.integer "invoice_id",  limit: 4,                            null: false
-    t.decimal "amount",                  precision: 12, scale: 2, null: false
-    t.date    "received_at",                                      null: false
-    t.string  "reference",   limit: 255
+    t.integer "invoice_id",  limit: 4,                          null: false
+    t.decimal "amount",                precision: 12, scale: 2, null: false
+    t.date    "received_at",                                    null: false
+    t.string  "reference"
   end
 
   add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id"
@@ -456,9 +454,13 @@ ActiveRecord::Schema.define(version: 20180625040108) do
     t.string   "authentication_token",      limit: 255
     t.boolean  "show_global_label_formats",               default: true,  null: false
     t.string   "household_key",             limit: 255
+    t.string   "authy_id"
+    t.datetime "last_sign_in_with_authy"
+    t.boolean  "authy_enabled",                           default: false
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token"
+  add_index "people", ["authy_id"], name: "index_people_on_authy_id"
   add_index "people", ["email"], name: "index_people_on_email", unique: true
   add_index "people", ["household_key"], name: "index_people_on_household_key"
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true

@@ -21,8 +21,6 @@
       - else
         %p.text= ta(:none_available)
 
-  = field_set_tag do
-    = f.labeled_input_fields(:mailchimp_api_key, :mailchimp_list_id)
 
   = render 'contactable/fields', f: f
 

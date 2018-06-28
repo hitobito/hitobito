@@ -38,6 +38,9 @@
       - else
         = f.boolean_field(:main_email, caption: t('.caption_main_email').html_safe)
 
+  = field_set_tag do
+    = f.labeled_input_fields(:mailchimp_api_key, :mailchimp_list_id)
+
   %fieldset
     = f.indented do
       = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))

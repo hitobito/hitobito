@@ -39,7 +39,6 @@ Hitobito::Application.routes.draw do
 
       end
 
-      resource :mailchimp_exports, only: [:new]
 
       resource :invoice_list, except: [:edit]
       resource :invoice_config, only: [:edit, :show, :update]
@@ -181,6 +180,8 @@ Hitobito::Application.routes.draw do
             resource :user, only: [:create, :destroy], controller: 'subscriber/user'
           end
         end
+
+        resource :mailchimp_synchronization, only: [:create]
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

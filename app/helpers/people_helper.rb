@@ -18,7 +18,7 @@ module PeopleHelper
                                details: details,
                                emails: emails,
                                labels: labels,
-                               mailchimp_export_path: new_group_mailchimp_exports_path(@group),
+                               mailchimp_export_path: group_mailing_list_mailchimp_synchronization_path(@group, @mailing_list),
                                households: households).to_s
   end
 

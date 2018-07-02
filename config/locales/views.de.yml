@@ -405,6 +405,9 @@ de:
       participants: 'Teilnehmende'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
+  mailchimp_synchronizations:
+    mailchimp_synchronization_enqueued: 'Mailchimp synchronization has started in the background. We will inform you via email at %{email}.'
+
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
     rejected: 'Die Anmeldung wurde abgelehnt.'

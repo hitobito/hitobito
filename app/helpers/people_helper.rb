@@ -12,14 +12,25 @@ module PeopleHelper
   end
 
   def dropdown_people_export(details = false, emails = true, labels = true, households = true)
-    Dropdown::PeopleExport.new(self,
-                               current_user,
-                               params,
-                               details: details,
-                               emails: emails,
-                               labels: labels,
-                               mailchimp_export_path: group_mailing_list_mailchimp_synchronization_path(@group, @mailing_list),
-                               households: households).to_s
+    #TODO
+    if @mailing_list
+      Dropdown::PeopleExport.new(self,
+                                 current_user,
+                                 params,
+                                 details: details,
+                                 emails: emails,
+                                 labels: labels,
+                                 mailchimp_synchronization_path: group_mailing_list_mailchimp_synchronizations_path(group_id: @group.id, mailing_list_id: @mailing_list.id),
+                                 households: households).to_s
+    else
+      Dropdown::PeopleExport.new(self,
+                                 current_user,
+                                 params,
+                                 details: details,
+                                 emails: emails,
+                                 labels: labels,
+                                 households: households).to_s
+    end
   end
 
   def invoice_button(people, *groups)

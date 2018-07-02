@@ -49,7 +49,7 @@ module Dropdown
     end
 
     def mailchimp_link
-      add_item("MailChimp", @mailchimp_synchronization_path, remote: true)
+      add_item("MailChimp", @mailchimp_synchronization_path, method: :post, remote: true)
     end
 
     def email_addresses_link

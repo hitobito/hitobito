@@ -63,8 +63,8 @@ CustomContent.seed_once(:key,
     placeholders_optional: 'recipient-name' },
 
   { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
-    placeholders_required: 'invoice-items, invoice-total, payment-information',
-    placeholders_optional: 'recipient-name, group-name, group-address, invoice-number' },
+    placeholders_required: '',
+    placeholders_optional: 'recipient-name, group-name, group-address, invoice-number, invoice-items, invoice-total, payment-information' },
 
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',

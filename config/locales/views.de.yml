@@ -406,7 +406,7 @@ de:
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
 
   mailchimp_synchronizations:
-    mailchimp_synchronization_enqueued: 'Mailchimp synchronization has started in the background. We will inform you via email at %{email}.'
+    mailchimp_synchronization_enqueued: "Mailchimp synchronization has started in the background. Once it's finished we will inform you via email at %{email}."
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

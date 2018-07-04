@@ -1,22 +1,14 @@
 class MailchimpSynchronizationsController < ApplicationController
-  #TODO
-  skip_authorization_check
-
   def create
-    respond_to do |format|
-      format.js do
-        MailchimpSynchronizationJob.new(permitted_params[:mailing_list_id]).enqueue!
-        flash[:notice] = translate(:mailchimp_synchronization_enqueued, email: current_person.email)
-        #TODO: Properly localize flash message's text
-        redirect_to(action: :index, controller: :subscriptions)
-      end
-    end
-  end
+    mailing_list = MailingList.find(params[:mailing_list_id])
 
-  private
+    authorize!(:update, mailing_list)
 
-  def permitted_params
-    #TODO
-    params
+    MailchimpSynchronizationJob.new(mailing_list.id).enqueue!
+    #TODO: Properly localize flash message's text
+    #TODO: Really send the email you promise to send in the flash message.
+    flash[:notice] = translate(:mailchimp_synchronization_enqueued, email: current_person.email)
+
+    redirect_to(action: :index, controller: :subscriptions)
   end
 end

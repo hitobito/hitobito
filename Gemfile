@@ -97,7 +97,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'webmock', '~> 3.4', '>= 3.4.2'
   gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'fabrication'

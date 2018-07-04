@@ -3,16 +3,14 @@ require 'digest/md5'
 module Synchronize
   module Mailchimp
 
-    def self.synchronize(mailing_list_id)
-      MailchimpSynchronizator.new(mailing_list_id).call
-    end
+    class Synchronizator
+      def initialize(mailing_list)
+        @mailing_list = mailing_list
 
-    class MailchimpSynchronizator
-      def initialize(mailing_list_id)
-        @mailing_list = MailingList.find(mailing_list_id)
-        @gibbon = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key)
-        @people_on_the_list = mailing_list.people
-        @people_on_the_mailchimp_list = @gibbon.lists(@list_id).members.retrieve.body["members"]
+        @gibbon = Gibbon::Request.new(api_key: @mailing_list.mailchimp_api_key)
+
+        @people_on_the_list = @mailing_list.people
+        @people_on_the_mailchimp_list = @gibbon.lists(@mailing_list.mailchimp_list_id).members.retrieve.body["members"]
       end
 
       def call
@@ -62,7 +60,7 @@ module Synchronize
 
       def people_to_be_subscribed
         @people_on_the_list.select do |person|
-          !existing_subscribers_email_addresses.include? person.email
+          !@people_on_the_mailchimp_list.include? person.email
         end
       end
 

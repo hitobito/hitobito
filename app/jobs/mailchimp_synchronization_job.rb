@@ -8,14 +8,10 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def perform
-    Synchronize::Mailchimp.synchronize(@mailing_list_id)
+    Synchronize::Mailchimp::Synchronizator.new(mailing_list).call
   end
 
   private
-
-  # def send_mail(recipient, file, format)
-  #   MailchimpSynchronizationsMailer.completed(recipient, list).deliver_now
-  # end
 
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)

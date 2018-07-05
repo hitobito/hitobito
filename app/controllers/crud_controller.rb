@@ -127,6 +127,7 @@ class CrudController < ListController
   def save_entry
     entry.save
   rescue Mysql2::Error => e
+    Airbrake.notify(e, parameters: params)
     logger.error e.message
     false
   end

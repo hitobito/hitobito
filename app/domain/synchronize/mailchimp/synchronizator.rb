@@ -15,7 +15,7 @@ module Synchronize
 
       def call
         subscribe_people_on_the_list
-        unsubscribe_people_not_on_the_list
+        delete_people_not_on_the_list
       end
 
       private
@@ -26,9 +26,9 @@ module Synchronize
         })
       end
 
-      def unsubscribe_people_not_on_the_list
+      def delete_people_not_on_the_list
         @gibbon.batches.create(body: {
-          operations: unsubscribing_operations
+          operations: deleting_operations
         })
       end
 
@@ -36,7 +36,7 @@ module Synchronize
         people_to_be_subscribed.map do |person|
           {
             method: "POST",
-            path: "lists/#{@list_id}/members",
+            path: "lists/#{@mailing_list.mailchimp_list_id}/members",
             body: {
               email_address: person.email,
               status: "subscribed",
@@ -49,11 +49,11 @@ module Synchronize
         end
       end
 
-      def unsubscribing_operations
-        people_to_be_unsubscribed.map do |person|
+      def deleting_operations
+        people_to_be_deleted.map do |person|
           {
             method: "DELETE",
-            path: "lists/#{@list_id}/members/#{subscriber_hash person["email_address"]}",
+            path: "lists/#{@mailing_list.mailchimp_list_id}/members/#{subscriber_hash person["email_address"]}",
           }
         end
       end
@@ -64,7 +64,7 @@ module Synchronize
         end
       end
 
-      def people_to_be_unsubscribed
+      def people_to_be_deleted
         @people_on_the_mailchimp_list.select do |subscriber|
           !@people_on_the_list.map(&:email).include? subscriber["email_address"]
         end

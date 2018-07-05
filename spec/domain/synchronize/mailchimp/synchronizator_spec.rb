@@ -144,11 +144,9 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
   end
 
-  it "subscribes people to the mailchimp list that are on the mailing list." do
-  end
+  it "subscribes people to the mailchimp list that are on the mailing list."
 
-  it "deletes people on the mailchimp list that are not on the mailing list." do
-  end
+  it "deletes people on the mailchimp list that are not on the mailing list."
 
   it "hashes an email address." do
     hashed_email = Digest::MD5.hexdigest(user.email)

@@ -16,12 +16,13 @@ module Export::Pdf::Invoice
 
     private
 
+    # rubocop:disable Metrics/AbcSize
     def information
       [
         [I18n.t('invoices.pdf.invoice_number') + ':',
          invoice.sequence_number],
         [I18n.t('invoices.pdf.invoice_date') + ':',
-         (I18n.l(invoice.sent_at) if invoice.sent_at)],
+         (I18n.l(invoice.issued_at) if invoice.issued_at)],
         [I18n.t('invoices.pdf.due_at') + ':',
          (I18n.l(invoice.due_at) if invoice.due_at)],
         [I18n.t('invoices.pdf.creator') + ':',

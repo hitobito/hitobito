@@ -33,7 +33,6 @@ class InvoiceConfig < ActiveRecord::Base
   has_many :payment_reminder_configs, dependent: :destroy
 
   validates :group_id, uniqueness: true
-  validates :address, presence: true, on: :update
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
 

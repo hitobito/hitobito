@@ -9,6 +9,7 @@ module Export::Pdf::Invoice
   class PaymentSlip < Section
 
     def render
+      pdf.start_new_page if cursor < 225
       invoice_address
       account_number
       amount if invoice_items.present?

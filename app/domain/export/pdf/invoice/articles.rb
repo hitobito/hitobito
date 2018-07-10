@@ -12,19 +12,18 @@ module Export::Pdf::Invoice
     def render # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       reminder = invoice.payment_reminders.last
 
-      bounding_box([0, 510], width: bounds.width) do
-        font_size(12) { text title(reminder) }
+      move_cursor_to 510
+      font_size(12) { text title(reminder) }
+      pdf.move_down 8
+      text invoice.description
+
+      if reminder
         pdf.move_down 8
-        text invoice.description
-
-        if reminder
-          pdf.move_down 8
-          font_size(10) { text reminder.text }
-        end
-
-        pdf.move_down 10
-        pdf.font_size(8) { articles_table }
+        font_size(10) { text reminder.text }
       end
+
+      pdf.move_down 10
+      pdf.font_size(8) { articles_table }
 
       total_box
       pdf.move_down 4

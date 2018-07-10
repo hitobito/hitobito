@@ -55,4 +55,11 @@ module RolesHelper
     end
     options
   end
+
+  def roles_type_select_options(group)
+    options = { include_blank: true }
+    options[:selected] = '@group.default_role' if group.default_role
+    options
+  end
+
 end

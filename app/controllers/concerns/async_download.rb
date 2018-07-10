@@ -1,6 +1,10 @@
+#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module Concerns
   module AsyncDownload
-
     def with_async_download_cookie(format, name)
       filename = AsyncDownloadFile.create_name(name, current_person.id)
       AsyncDownloadCookie.new(cookies).set(filename, format)

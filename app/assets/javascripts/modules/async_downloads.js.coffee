@@ -32,7 +32,6 @@ class app.AsyncDownloads
           download_file("/downloads/#{download['name']}?file_type=#{download['type']}")
       )
 
-
   download_file = (url) ->
     window.open(url)
 

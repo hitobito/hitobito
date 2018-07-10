@@ -11,15 +11,17 @@ class RemoveExportCustomContent < ActiveRecord::Migration
                           content_events_export
                           content_event_participations_export
                           content_people_export)
-  
-  def down
-    CONTENTS_TO_REMOVE.each do |key|
-      custom_content = CustomContent.find_by(key: key)
-      return unless custom_content
-      CustomContent::Translation.where(custom_content_id: custom_content.id)
-      custom_content.destroy
+
+  def up
+    say_with_time "Removing obsolete CustomContents" do
+      CONTENTS_TO_REMOVE.each do |key|
+        custom_content = CustomContent.find_by(key: key)
+        next unless custom_content
+        say custom_content.label, :subitem
+        custom_content.destroy!
+      end
     end
   end
 
-  def up; end
+  def down; end
 end

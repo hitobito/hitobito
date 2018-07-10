@@ -127,6 +127,10 @@ class CrudController < ListController
   # perform the save operation
   def save_entry
     entry.save
+  rescue Mysql2::Error => e
+    Airbrake.notify(e, parameters: params)
+    logger.error e.message
+    false
   end
 
   # A label for the current entry, including the model name.

@@ -11,15 +11,10 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def initialize(format, user_id, filter, options)
     super(format, user_id, options)
-    @tempfile_name = "people-#{format}-zip"
     @filter = filter
   end
 
   private
-
-  def send_mail(recipient, file, format)
-    Export::PeopleExportMailer.completed(recipient, file, format).deliver_now
-  end
 
   def entries
     entries = @filter.entries
@@ -39,12 +34,8 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def exporter
-    return Export::Tabular::People::Households if household?
+    return Export::Tabular::People::Households if  @options[:household]
     full? ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
-  end
-
-  def household?
-    @options[:household]
   end
 
   def full?

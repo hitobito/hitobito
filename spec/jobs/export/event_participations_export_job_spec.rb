@@ -9,16 +9,14 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format,
-                                                     user.id,
-                                                     event_participation_filter,
-                                                     params) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: 'event_participation_export')) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
   let(:event)                      { participation.event }
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event, user, params) }
+  let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
 
   before do
     SeedFu.quiet = true
@@ -28,47 +26,13 @@ describe Export::EventParticipationsExportJob do
   context 'creates a CSV-Export' do
     let(:format) { :csv }
 
-    it 'and sends it via mail' do
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
+    it 'and saves it' do
+      subject.perform
 
-      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
-
-      lines = last_email.attachments.first.body.to_s.split("\n")
+      lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0].split(';').count).to match(14)
-    end
-
-    it 'send exports zipped if larger than 512kb' do
-      export = subject.export_file
-      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
-
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
-
-      file = last_email.attachments.first
-      expect(file.content_type).to match(%r{application/zip})
-      expect(file.content_type).to match(/filename=event_participations_export.zip/)
-    end
-
-    it 'zips exports larger than 512kb' do
-      20.times { Fabricate(:event_participation) }
-      expect_any_instance_of(Export::EventParticipationsExportJob)
-        .to receive(:entries)
-        .at_least(1).times
-        .and_return(Event::Participation.all)
-
-      export = subject.export_file
-      export_size = export.size
-      expect(export).to receive(:size) { 1.megabyte } # trigger compression by faking the size
-
-      file, format = subject.export_file_and_format
-
-      expect(format).to eq :zip
-      expect(file.size).to be < export_size
     end
   end
 
@@ -76,14 +40,10 @@ describe Export::EventParticipationsExportJob do
     let(:format) { :csv }
     let(:params) { { details: true } }
 
-    it 'and sends it via mail' do
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
+    it 'and saves it' do
+      subject.perform
 
-      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
-
-      lines = last_email.attachments.first.body.to_s.split("\n")
+      lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen \(Allgemeines.*/)
@@ -94,16 +54,9 @@ describe Export::EventParticipationsExportJob do
   context 'creates an Excel-Export' do
     let(:format) { :xlsx }
 
-    it 'and sends it via mail' do
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by 1
-
-      expect(last_email.subject).to eq('Export der Event-Teilnehmer')
-
-      file = last_email.attachments.first
-      expect(file.content_type).to match(/officedocument.spreadsheetml.sheet/)
-      expect(file.content_type).to match(/filename=event_participations_export.xlsx/)
+    it 'and saves it' do
+      subject.perform
+      expect(File.exist?("#{filepath}.#{format}")).to be true
     end
   end
 

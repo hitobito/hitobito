@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -199,10 +199,10 @@ class PeopleController < CrudController
   end
 
   def render_tabular_in_background(format, full, filename)
-    Export::PeopleExportJob.new(format,
-                                current_person.id,
-                                person_filter,
-                                params.slice(:household).merge(full: full, filename: filename)).enqueue!
+    Export::PeopleExportJob.new(
+      format, current_person.id, person_filter,
+      params.slice(:household).merge(full: full, filename: filename)
+    ).enqueue!
   end
 
   def render_tabular(format, entries, full)

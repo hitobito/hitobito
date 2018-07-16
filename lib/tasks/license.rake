@@ -13,7 +13,7 @@ class Licenser
     haml: '-#  ',
     coffee: '#  ',
     scss: '//  '
-  }
+  }.freeze
 
   EXCLUDES = %w(
     db/schema.rb
@@ -26,10 +26,10 @@ class Licenser
     config/initializers/mime_types.rb
     config/initializers/session_store.rb
     config/initializers/wrap_parameters.rb
-  )
+  ).freeze
 
-  ENCODING_EXTENSIONS = [:rb, :rake]
-  ENCODING_STRING     = '# encoding: utf-8'
+  ENCODING_EXTENSIONS = [:rb, :rake].freeze
+  ENCODING_STRING     = '# encoding: utf-8'.freeze
   ENCODING_PATTERN    = /#\s*encoding: utf-8/i
 
 
@@ -40,12 +40,12 @@ class Licenser
   end
 
   def preamble_text
-    @preamble_text ||= <<-END.strip
-Copyright (c) 2012-#{Time.now.year}, #{@copyright_holder}. This file is part of
-#{@project_name} and licensed under the Affero General Public License version 3
-or later. See the COPYING file at the top-level directory or at
-#{@copyright_source}.
-END
+    @preamble_text ||= <<-COPYRIGHT.strip_heredoc
+      Copyright (c) 2012-#{Time.zone.now.year}, #{@copyright_holder}. This file is part of
+      #{@project_name} and licensed under the Affero General Public License version 3
+      or later. See the COPYING file at the top-level directory or at
+      #{@copyright_source}.
+    COPYRIGHT
   end
 
   def insert
@@ -84,7 +84,7 @@ END
 
   def remove_preamble(content, format)
     content.gsub!(/\A#{format.copyright_pattern}.*$/, '')
-    while (content.start_with?("\n#{format.comment}"))
+    while content.start_with?("\n#{format.comment}")
       content.gsub!(/\A\n#{format.comment}\s+.*$/, '')
     end
     content.gsub!(/\A\s*\n/, '')
@@ -100,13 +100,12 @@ END
       format = Format.new(extension, prefix, preamble_text)
 
       Dir.glob("**/*.#{extension}").each do |file|
-        unless EXCLUDES.include?(file)
-          content = yield File.read(file), format
-          if content
-            puts file
-            File.open(file, 'w') { |f| f.print content }
-          end
-        end
+        next if EXCLUDES.include?(file)
+        content = yield File.read(file), format
+        next unless content
+
+        puts file
+        File.open(file, 'w') { |f| f.print content }
       end
     end
   end
@@ -129,7 +128,7 @@ END
       ENCODING_EXTENSIONS.include?(extension)
     end
 
-    def has_preamble?(content)
+    def has_preamble?(content) # rubocop:disable Naming/PredicateName
       content.strip =~ /\A#{copyright_pattern}/
     end
 
@@ -149,17 +148,17 @@ namespace :license do
   end
 
   desc 'Insert the license preamble in all source files'
-  task :insert => :config do
+  task insert: :config do
     @licenser.insert
   end
 
   desc 'Update or insert the license preamble in all source files'
-  task :update => :config do
+  task update: :config do
     @licenser.update
   end
 
   desc 'Remove the license preamble from all source files'
-  task :remove => :config do
+  task remove: :config do
     @licenser.remove
   end
 end

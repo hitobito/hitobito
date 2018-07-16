@@ -23,13 +23,15 @@ namespace :csv do
   end
 
 
+  # rubocop:disable Rails/TimeZone
   def random_date
     from = Time.new(1970)
     to = Time.new(2000)
     Time.at(from + rand * (to.to_f - from.to_f)).to_date
   end
+  # rubocop:enable Rails/TimeZone
 
-  def person_attributes # rubocop:disable Metrics/MethodLength
+  def person_attributes # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     first_name = Faker::Name.first_name
     last_name = Faker::Name.last_name
     {
@@ -58,13 +60,13 @@ namespace :csv do
   end
 
   def enhance(person_attributes) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
-    person_attributes.inject({}) do |hash, (k, v)|
+    person_attributes.inject({}) do |hash, (k, v)| # rubocop:disable Style/EachWithObject
       hash[k] = v
       case rand(10)
       when 0 then hash[k] = "#{v} "
       when 1 then hash[k] = " #{v}"
       when 2 then hash[k] = " #{v} "
-      when 3 then hash[k] = (v[v.size / 2] = 'ä'; v)
+      when 3 then hash[k] = (v[v.size / 2] = 'ä'; v) # rubocop:disable Style/Semicolon
       when 4 then hash[k] = nil
       when 5 then hash[k] = nil
       end

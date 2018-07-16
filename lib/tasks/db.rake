@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-desc "Load the mysql database configuration for the following tasks"
+desc 'Load the mysql database configuration for the following tasks'
 task :mysql do
   ENV['RAILS_DB_ADAPTER']   = 'mysql2'
   ENV['RAILS_DB_NAME']      = 'hitobito_development'

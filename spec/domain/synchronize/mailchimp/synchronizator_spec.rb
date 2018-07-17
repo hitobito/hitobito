@@ -9,17 +9,71 @@ describe Synchronize::Mailchimp::Synchronizator do
   subject { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
 
   before :each do
-    stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/a7d7080b0f/members").
-      with(
-        headers: {
-          'Accept'=>'*/*',
-          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Authorization'=>'Basic YXBpa2V5OjA4MTY3NWEzYTZkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',
-          'Content-Type'=>'application/json',
-          'User-Agent'=>'Faraday v0.15.2'
-        }).
-        to_return(status: 200,
-                  body: %Q({
+    stub_requests
+  end
+
+  describe "initialization" do
+    it "assigns the mailing list to an instance variable." do
+      expect(subject.instance_variable_get(:@mailing_list)).to eq mailing_list
+    end
+
+    it "instantiates a new Gibbon instance." do
+      expect(subject.instance_variable_get(:@gibbon)).to_not eq nil
+    end
+
+    it "assigns people on the mailing list to an instance variable." do
+      expect(subject.instance_variable_get(:@people_on_the_list)).to eq mailing_list.people
+    end
+
+    it "assigns people on the mailchimp list to an instance variable." do
+      expect(subject.instance_variable_get(:@people_on_the_mailchimp_list).map{|person| person["email_address"]}).to eq(["janko@hrasko.com"])
+    end
+  end
+
+  it "subscribes people to the mailchimp list that are on the mailing list."
+  end
+
+  it "deletes people on the mailchimp list that are not on the mailing list."
+
+  it "hashes an email address." do
+    hashed_email = Digest::MD5.hexdigest(user.email)
+    expect(subject.send(:subscriber_hash, user.email)).to eq hashed_email
+  end
+
+  def stub_requests
+    stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
+      with(                                                                                                
+           body: "{\"operations\":[{\"method\":\"DELETE\",\"path\":\"lists/a7d7080b0f/members/5e50f1734ea8bea5c0427a45cce73057\"}]}",
+           headers: {                                                   
+             'Accept'=>'*/*',                                                          
+             'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',                                                       
+             'Authorization'=>'Basic YXBpa2V5OjA4MTY3NWEzYTZkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',                                     
+             'Content-Type'=>'application/json',                                                                                
+             'User-Agent'=>'Faraday v0.15.2'                                                                                 
+           }).                                                                                                                                   
+           to_return(status: 200, body: "", headers: {})
+           stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").                                                    
+             with(                                                           
+                  body: "{\"operations\":[]}",                                    
+                  headers: {
+                    'Accept'=>'*/*',                                   
+                    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                    'Authorization'=>'Basic YXBpa2V5OjA4MTY3NWEzYTZkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',
+                    'Content-Type'=>'application/json',
+                    'User-Agent'=>'Faraday v0.15.2'
+                  }).                                                                                                                                                                     
+                  to_return(status: 200, body: "", headers: {})
+                  stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/a7d7080b0f/members").
+                    with(
+                      headers: {
+                        'Accept'=>'*/*',
+                        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                        'Authorization'=>'Basic YXBpa2V5OjA4MTY3NWEzYTZkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',
+                        'Content-Type'=>'application/json',
+                        'User-Agent'=>'Faraday v0.15.2'
+                      }).
+                      to_return(status: 200,
+                                body: %Q({
                       "members": [{
                         "id": "5e50f1734ea8bea5c0427a45cce73057",
                         "email_address": "janko@hrasko.com",
@@ -124,32 +178,5 @@ describe Synchronize::Mailchimp::Synchronizator do
                         "schema": "https://us12.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/POST.json"
                       }]
                     }))
-  end
-
-  describe "initialization" do
-    it "assigns the mailing list to an instance variable." do
-      expect(subject.instance_variable_get(:@mailing_list)).to eq mailing_list
-    end
-
-    it "instantiates a new Gibbon instance." do
-      expect(subject.instance_variable_get(:@gibbon)).to_not eq nil
-    end
-
-    it "assigns people on the mailing list to an instance variable." do
-      expect(subject.instance_variable_get(:@people_on_the_list)).to eq mailing_list.people
-    end
-
-    it "assigns people on the mailchimp list to an instance variable." do
-      expect(subject.instance_variable_get(:@people_on_the_mailchimp_list).map{|person| person["email_address"]}).to eq(["janko@hrasko.com"])
-    end
-  end
-
-  it "subscribes people to the mailchimp list that are on the mailing list."
-
-  it "deletes people on the mailchimp list that are not on the mailing list."
-
-  it "hashes an email address." do
-    hashed_email = Digest::MD5.hexdigest(user.email)
-    expect(subject.send(:subscriber_hash, user.email)).to eq hashed_email
   end
 end

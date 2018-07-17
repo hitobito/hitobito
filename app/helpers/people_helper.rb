@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,24 +12,19 @@ module PeopleHelper
   end
 
   def dropdown_people_export(details = false, emails = true, labels = true, households = true)
-    if @mailing_list
-      Dropdown::PeopleExport.new(self,
-                                 current_user,
-                                 params,
-                                 details: details,
-                                 emails: emails,
-                                 labels: labels,
-                                 mailchimp_synchronization_path: group_mailing_list_mailchimp_synchronizations_path(group_id: @group.id, mailing_list_id: @mailing_list.id),
-                                 households: households).to_s
-    else
-      Dropdown::PeopleExport.new(self,
-                                 current_user,
-                                 params,
-                                 details: details,
-                                 emails: emails,
-                                 labels: labels,
-                                 households: households).to_s
-    end
+    mc_path = if @mailing_list
+                group_mailing_list_mailchimp_synchronizations_path(
+                  group_id: @group.id, mailing_list_id: @mailing_list.id
+                )
+              end
+    Dropdown::PeopleExport.new(self,
+                               current_user,
+                               params,
+                               details: details,
+                               emails: emails,
+                               labels: labels,
+                               mailchimp_synchronization_path: mc_path,
+                               households: households).to_s
   end
 
   def invoice_button(people, *groups)

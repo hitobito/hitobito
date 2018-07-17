@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180625040108) do
+ActiveRecord::Schema.define(version: 20180702093715) do
+
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",                   null: false
     t.string  "contactable_type",                 null: false
@@ -279,20 +280,20 @@ ActiveRecord::Schema.define(version: 20180625040108) do
   add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id"
 
   create_table "invoices", force: :cascade do |t|
-    t.string   "title",                                                          null: false
-    t.string   "sequence_number",                                                null: false
-    t.string   "state",                                        default: "draft", null: false
-    t.string   "esr_number",                                                     null: false
+    t.string   "title",                                                                        null: false
+    t.string   "sequence_number",                                                              null: false
+    t.string   "state",                                                      default: "draft", null: false
+    t.string   "esr_number",                                                                   null: false
     t.text     "description"
     t.string   "recipient_email"
     t.text     "recipient_address"
     t.date     "sent_at"
     t.date     "due_at"
-    t.integer  "group_id",                                                       null: false
+    t.integer  "group_id",                                                                     null: false
     t.integer  "recipient_id"
-    t.decimal  "total",               precision: 12, scale: 2
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.decimal  "total",                             precision: 12, scale: 2
+    t.datetime "created_at",                                                                   null: false
+    t.datetime "updated_at",                                                                   null: false
     t.string   "account_number"
     t.text     "address"
     t.date     "issued_at"

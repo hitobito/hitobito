@@ -59,14 +59,14 @@ module Synchronize
       end
 
       def people_to_be_subscribed
-        @people_on_the_list.select do |person|
-          !@people_on_the_mailchimp_list.include? person.email
+        @people_on_the_list.reject do |person|
+          @people_on_the_mailchimp_list.include? person.email
         end
       end
 
       def people_to_be_deleted
-        @people_on_the_mailchimp_list.select do |subscriber|
-          !@people_on_the_list.map(&:email).include? subscriber["email_address"]
+        @people_on_the_mailchimp_list.reject do |subscriber|
+          @people_on_the_list.map(&:email).include? subscriber["email_address"]
         end
       end
 

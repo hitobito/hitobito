@@ -11,6 +11,10 @@ class MailchimpSynchronizationJob < BaseJob
     Synchronize::Mailchimp::Synchronizator.new(mailing_list).call
   end
 
+  def success(job)
+    AsyncDownloadCookie.new(cookies).remove(job.id)
+  end
+
   private
 
   def mailing_list

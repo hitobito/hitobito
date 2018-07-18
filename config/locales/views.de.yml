@@ -758,6 +758,10 @@ de:
       wait_for_downloads: 'Die Downloads werden vorbereitet, bitte warten.'
       cancel_downloads: 'Downloads abbrechen'
 
+    synchronization:
+      wait_for_synchronization: 'Synchronisierung wird ausgeführt, bitte warten.'
+      cancel_synchronization: 'Synchronisierung abbrechen'
+
   mailing_lists:
     global:
       link:

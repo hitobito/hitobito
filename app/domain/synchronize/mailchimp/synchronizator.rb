@@ -6,9 +6,7 @@ module Synchronize
     class Synchronizator
       def initialize(mailing_list)
         @mailing_list = mailing_list
-
         @gibbon = Gibbon::Request.new(api_key: @mailing_list.mailchimp_api_key)
-
         @people_on_the_list = @mailing_list.people
         @people_on_the_mailchimp_list = @gibbon.lists(@mailing_list.mailchimp_list_id).members.retrieve.body["members"]
       end
@@ -53,7 +51,7 @@ module Synchronize
         people_to_be_deleted.map do |person|
           {
             method: "DELETE",
-            path: "lists/#{@mailing_list.mailchimp_list_id}/members/#{subscriber_hash person["email_address"]}",
+            path: "lists/#{@mailing_list.mailchimp_list_id}/members/#{subscriber_hash person["email_address"]}"
           }
         end
       end
@@ -68,10 +66,6 @@ module Synchronize
         @people_on_the_mailchimp_list.reject do |subscriber|
           @people_on_the_list.map(&:email).include? subscriber["email_address"]
         end
-      end
-
-      def existing_subscribers_email_addresses
-        @existing_subscribers.map{|subscriber| subscriber["email_address"]}
       end
 
       def subscriber_hash email

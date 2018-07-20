@@ -274,7 +274,7 @@ class Event::ParticipationsController < CrudController
   end
 
   def event_participation_filter
-    Event::ParticipationFilter.new(event, current_user, params)
+    Event::ParticipationFilter.new(event.id, current_user.id, params)
   end
 
 end

@@ -232,6 +232,8 @@ Hitobito::Application.routes.draw do
     get 'downloads/:id' => 'async_downloads#show'
     get 'downloads/:id/exists' => 'async_downloads#exists?'
 
+    get 'synchronizations/:id' => 'async_synchronizations#show'
+
   end # scope locale
 
   # The priority is based upon order of creation:

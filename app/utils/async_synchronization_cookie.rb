@@ -32,7 +32,7 @@ class AsyncSynchronizationCookie
   end
 
   def with_expiration(values)
-    { value: values.to_json, expires: 1.day.from_now }
+    { value: values.uniq.to_json, expires: 1.day.from_now }
   end
 
   def to_value(mailing_list_id)

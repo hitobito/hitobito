@@ -13,8 +13,7 @@ class MailchimpSynchronizationsController < ApplicationController
 
     authorize!(:update, mailing_list)
 
-    #TODO How to pass the job id to the cookie setter?
-    with_async_synchronization_cookie(job_id) do
+    with_async_synchronization_cookie(mailing_list.id) do
       MailchimpSynchronizationJob.new(mailing_list.id).enqueue!
     end
 

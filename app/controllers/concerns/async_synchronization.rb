@@ -9,8 +9,7 @@ module Concerns
   module AsyncSynchronization
     def with_async_synchronization_cookie(mailing_list_id)
       AsyncSynchronizationCookie.new(cookies).set(mailing_list_id)
-      #TODO: Properly localize flash message's text
-      flash[:notice] = translate(:mailchimp_synchronization_enqueued, email: current_person.email)
+      yield
     end
   end
 end

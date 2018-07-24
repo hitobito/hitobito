@@ -23,6 +23,13 @@ class app.AsyncSynchronizations
     return if $.cookie('async_synchronizations') == null
     $('#synchronization-spinner').removeClass('hidden')
 
+    $.each JSON.parse($.cookie('async_synchronizations')), (index, synchronization) ->
+      $.ajax(
+        url: "/synchronizations/#{synchronization['mailing_list_id']}",
+        success: (data) ->
+          return if data['status'] != 200
+      )
+
   bind = ->
     $(document).ready ->
       checkSynchronization()

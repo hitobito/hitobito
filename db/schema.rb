@@ -254,7 +254,6 @@ ActiveRecord::Schema.define(version: 20180702093715) do
     t.integer "sequence_number",     default: 1,       null: false
     t.integer "due_days",            default: 30,      null: false
     t.integer "group_id",                              null: false
-    t.integer "contact_id"
     t.text    "address"
     t.text    "payment_information"
     t.string  "account_number"
@@ -265,7 +264,6 @@ ActiveRecord::Schema.define(version: 20180702093715) do
     t.string  "participant_number"
   end
 
-  add_index "invoice_configs", ["contact_id"], name: "index_invoice_configs_on_contact_id"
   add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id"
 
   create_table "invoice_items", force: :cascade do |t|
@@ -280,31 +278,31 @@ ActiveRecord::Schema.define(version: 20180702093715) do
   add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id"
 
   create_table "invoices", force: :cascade do |t|
-    t.string   "title",                                                                        null: false
-    t.string   "sequence_number",                                                              null: false
-    t.string   "state",                                                      default: "draft", null: false
-    t.string   "esr_number",                                                                   null: false
+    t.string   "title",                                                          null: false
+    t.string   "sequence_number",                                                null: false
+    t.string   "state",                                        default: "draft", null: false
+    t.string   "esr_number",                                                     null: false
     t.text     "description"
     t.string   "recipient_email"
     t.text     "recipient_address"
     t.date     "sent_at"
     t.date     "due_at"
-    t.integer  "group_id",                                                                     null: false
+    t.integer  "group_id",                                                       null: false
     t.integer  "recipient_id"
-    t.decimal  "total",                             precision: 12, scale: 2
-    t.datetime "created_at",                                                                   null: false
-    t.datetime "updated_at",                                                                   null: false
+    t.decimal  "total",               precision: 12, scale: 2
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
     t.string   "account_number"
     t.text     "address"
     t.date     "issued_at"
-    t.string   "iban",                limit: 255
-    t.text     "payment_purpose",     limit: 65535
-    t.text     "payment_information", limit: 65535
-    t.string   "payment_slip",        limit: 255,                            default: "ch_es", null: false
-    t.text     "beneficiary",         limit: 65535
-    t.text     "payee",               limit: 65535
-    t.string   "participant_number",  limit: 255
-    t.integer  "creator_id",          limit: 4
+    t.string   "iban"
+    t.text     "payment_purpose"
+    t.text     "payment_information"
+    t.string   "payment_slip",                                 default: "ch_es", null: false
+    t.text     "beneficiary"
+    t.text     "payee"
+    t.string   "participant_number"
+    t.integer  "creator_id"
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number"
@@ -361,22 +359,23 @@ ActiveRecord::Schema.define(version: 20180702093715) do
   add_index "mail_logs", ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id"
 
   create_table "mailing_lists", force: :cascade do |t|
-    t.string  "name",                                         null: false
-    t.integer "group_id",                                     null: false
-    t.text    "description"
-    t.string  "publisher"
-    t.string  "mail_name"
-    t.string  "additional_sender"
-    t.boolean "subscribable",                 default: false, null: false
-    t.boolean "subscribers_may_post",         default: false, null: false
-    t.boolean "anyone_may_post",              default: false, null: false
-    t.string  "preferred_labels"
-    t.boolean "delivery_report",              default: false, null: false
-    t.boolean "main_email",                   default: false
-    t.string  "mailchimp_api_key"
-    t.string  "mailchimp_list_id"
-    t.boolean "syncing_mailchimp",            default: false
-    t.boolean "sync_mailchimp_automatically", default: false
+    t.string   "name",                                         null: false
+    t.integer  "group_id",                                     null: false
+    t.text     "description"
+    t.string   "publisher"
+    t.string   "mail_name"
+    t.string   "additional_sender"
+    t.boolean  "subscribable",                 default: false, null: false
+    t.boolean  "subscribers_may_post",         default: false, null: false
+    t.boolean  "anyone_may_post",              default: false, null: false
+    t.string   "preferred_labels"
+    t.boolean  "delivery_report",              default: false, null: false
+    t.boolean  "main_email",                   default: false
+    t.string   "mailchimp_api_key"
+    t.string   "mailchimp_list_id"
+    t.boolean  "syncing_mailchimp",            default: false
+    t.boolean  "sync_mailchimp_automatically", default: false
+    t.datetime "last_synced_mailchimp_at"
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id"

@@ -20,6 +20,7 @@ module Dropdown
       @labels = options[:labels]
       @households = options[:households]
       @mailchimp_synchronization_path = options[:mailchimp_synchronization_path]
+      @mailchimp_synchronization_enabled = options[:mailchimp_synchronization_enabled]
 
       init_items
     end
@@ -49,8 +50,10 @@ module Dropdown
     end
 
     def mailchimp_link
-      if @mailchimp_synchronization_path
+      if @mailchimp_synchronization_enabled
         add_item('MailChimp', @mailchimp_synchronization_path, method: :post, remote: true)
+      elsif @mailchimp_synchronization_path
+        add_item('MailChimp', @mailchimp_synchronization_path, {method: :post, remote: true, class: "disabled"})
       end
     end
 

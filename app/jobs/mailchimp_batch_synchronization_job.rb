@@ -5,23 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailchimpBatchSynchronizationJob < BaseJob
-  def initialize
-    super()
-  end
-
-  def enqueue(job)
-    mailing_lists.update_all(syncing_mailchimp: true)
-  end
+class MailchimpBatchSynchronizationJob < RecurringJob
 
   def perform
     mailing_lists.each do |mailing_list|
-      Synchronize::Mailchimp::Synchronizator.new(mailing_list).call
+      MailchimpSynchronizationJob.new(mailing_list.id).enqueue!
     end
-  end
-
-  def success(job)
-    mailing_lists.update_all(syncing_mailchimp: false, last_synced_mailchimp_at: DateTime.now)
   end
 
   private

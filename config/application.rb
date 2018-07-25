@@ -104,7 +104,8 @@ module Hitobito
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
-        Delayed::Job.enqueue(MailchimpBatchSynchronizationJob.new, cron: '0 2 * * 1')
+        # TODO: Just uncomment the below line after successfully installing delayed_cron_job gem.
+        # Delayed::Job.enqueue(MailchimpBatchSynchronizationJob.new, cron: '0 2 * * 1')
       end
     end
 

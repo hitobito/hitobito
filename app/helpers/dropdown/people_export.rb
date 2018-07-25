@@ -53,7 +53,7 @@ module Dropdown
       if @mailchimp_synchronization_enabled
         add_item('MailChimp', @mailchimp_synchronization_path, method: :post, remote: true)
       elsif @mailchimp_synchronization_path
-        add_item('MailChimp', @mailchimp_synchronization_path, {method: :post, remote: true, class: "disabled"})
+        add_item_with_tooltip('MailChimp', "#", {class: "disabled"})
       end
     end
 

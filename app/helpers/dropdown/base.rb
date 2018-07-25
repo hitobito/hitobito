@@ -41,6 +41,12 @@ module Dropdown
       item
     end
 
+    def add_item_with_tooltip(label, tooltip, options = {})
+      item = ItemWithTooltip.new(label, tooltip, options)
+      @items << item
+      item
+    end
+
     def add_title(label, options = {})
       item = Title.new(label, options)
       @items << item
@@ -115,6 +121,18 @@ module Dropdown
       end
     end
 
+  end
+
+  ItemWithTooltip = Struct.new(:label, :tooltip, :options) do
+    def initialize(label, tooltip, options = {})
+      super(label, tooltip, options)
+    end
+
+    def render(template)
+      template.content_tag(:li) do
+        template.content_tag(:a, label, options)
+      end
+    end
   end
 
   class Divider

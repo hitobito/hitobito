@@ -405,12 +405,6 @@ de:
       participants: 'Teilnehmende'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
-  mailchimp_synchronizations:
-    mailchimp_synchronization_enqueued: "Mailchimp synchronization has started in the background. Once it's finished we will inform you via email at %{email}."
-
-  mailchimp_synchronizations:
-    mailchimp_synchronization_enqueued: "Mailchimp synchronization has started in the background. Once it's finished we will inform you via email at %{email}."
-
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
     rejected: 'Die Anmeldung wurde abgelehnt.'
@@ -759,7 +753,7 @@ de:
       cancel_downloads: 'Downloads abbrechen'
 
     synchronization:
-      wait_for_synchronization: 'Synchronisierung wird ausgeführt, bitte warten.'
+      wait_for_synchronization: 'Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Sobald sie dort angekommen sind, wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert werden.'
       cancel_synchronization: 'Synchronisierung abbrechen'
 
   mailing_lists:

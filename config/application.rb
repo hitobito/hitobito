@@ -104,7 +104,7 @@ module Hitobito
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
-        Delayed::Job.enqueue(MailchimpBatchSynchronizationJob.new, cron: '0 2 * * 1')
+        # Delayed::Job.enqueue(MailchimpBatchSynchronizationJob.new, cron: '0 2 * * 1')
       end
     end
 

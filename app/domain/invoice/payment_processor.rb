@@ -6,7 +6,7 @@
 class Invoice::PaymentProcessor
   attr_reader :xml
 
-  ESR_FIELD = 'AcctSvcrRef'
+  ESR_FIELD = 'AcctSvcrRef'.freeze
 
   def initialize(xml)
     @xml = xml
@@ -64,9 +64,9 @@ class Invoice::PaymentProcessor
 
   def invoices
     @invoices ||= Invoice
-      .includes(:group, :recipient)
-      .where(esr_number: esr_numbers)
-      .index_by(&:esr_number)
+                  .includes(:group, :recipient)
+                  .where(esr_number: esr_numbers)
+                  .index_by(&:esr_number)
   end
 
   def esr_numbers
@@ -81,8 +81,8 @@ class Invoice::PaymentProcessor
 
   def transaction_details
     Array.wrap(fetch('Ntfctn', 'Ntry'))
-      .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
-      .flatten
+         .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
+         .flatten
   end
 
   def translate(state, count)

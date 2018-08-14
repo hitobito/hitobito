@@ -1,3 +1,8 @@
+#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 class Invoice::PaymentProcessor
   attr_reader :xml
 
@@ -75,7 +80,7 @@ class Invoice::PaymentProcessor
   end
 
   def transaction_details
-    fetch('Ntfctn', 'Ntry')
+    Array.wrap(fetch('Ntfctn', 'Ntry'))
       .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
       .flatten
   end

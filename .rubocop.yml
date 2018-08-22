@@ -48,6 +48,7 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+    - lib/tasks/*.rake
 
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:

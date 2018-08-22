@@ -64,7 +64,7 @@ module Export::Pdf::Invoice
           align_right(it.count.to_s),
           align_right(helper.number_to_currency(it.unit_cost, unit: '')),
           align_right(helper.number_to_currency(it.cost, unit: '')),
-          align_right(helper.number_to_percentage(it.vat_rate))
+          align_right(helper.number_to_percentage(it.vat_rate, precision: 1))
         ]
       end
     end

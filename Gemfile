@@ -75,6 +75,8 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
+# security updates, can be deleted if they get in the way of updates or so
+gem 'sprockets', '~> 3.7.2'
 
 group :development, :test do
   gem 'binding_of_caller'

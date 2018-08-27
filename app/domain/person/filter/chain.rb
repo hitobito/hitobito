@@ -9,7 +9,8 @@ class Person::Filter::Chain
 
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
-    Person::Filter::Qualification
+    Person::Filter::Qualification,
+    Person::Filter::Attributes
   ]
 
   # Used for `serialize` method in ActiveRecord

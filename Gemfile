@@ -105,7 +105,7 @@ group :test do
   gem 'pdf-inspector', require: 'pdf/inspector'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
-  gem 'selenium-webdriver', '2.51.0' # 3.2.2 fails with "Unable to find Mozilla geckodriver"
+  gem 'selenium-webdriver'
 end
 
 group :console do

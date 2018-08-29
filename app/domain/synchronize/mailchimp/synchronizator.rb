@@ -58,7 +58,7 @@ module Synchronize
 
       def people_to_be_subscribed
         @people_on_the_list.reject do |person|
-          @people_on_the_mailchimp_list.include? person.email
+          @people_on_the_mailchimp_list.map{|p| p["email_address"]}.include? person.email
         end
       end
 

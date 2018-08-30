@@ -611,7 +611,8 @@ de:
         success: Rechnung wurde storniert.
     pdf:
       total: Gesamtbetrag
-      total_vat: MWSt. gesamt
+      total_vat: MwSt.
+      cost: Zwischenbetrag
       invoice_number: Rechnungsnummer
       invoice_date: Rechnungsdatum
       due_at: Fällig bis

@@ -12,13 +12,15 @@ gem 'rails', '4.2.8'
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
-gem 'axlsx', '>= 3.0.0.pre'
 gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
+gem 'axlsx', '>= 3.0.0.pre'
 gem 'bcrypt-ruby'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
 gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'cmess'
+gem 'config', '< 1.1.0' # requires ruby 2
 gem 'country_select'
+gem 'customized_piwik_analytics', '~> 1.0.0'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
@@ -37,14 +39,12 @@ gem 'nested_form'
 gem 'oat'
 gem 'paper_trail'
 gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)
-gem 'customized_piwik_analytics', '~> 1.0.0'
 gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
 gem 'prawn-table'
 gem 'protective'
 gem 'rack'
-gem 'rails_autolink'
-gem 'config', '< 1.1.0' # requires ruby 2
 gem 'rails-i18n'
+gem 'rails_autolink'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'simpleidn'
@@ -67,22 +67,24 @@ gem 'compass'
 gem 'compass-rails'
 gem 'jquery-cookie-rails'
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
+gem 'jquery-ui-rails'
 gem 'remotipart'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
-gem 'parallel_tests', group: [:development, :test]
-
+# security updates, can be deleted if they get in the way of updates or so
+gem 'sprockets', '~> 3.7.2'
 
 group :development, :test do
   gem 'binding_of_caller'
-  gem 'rspec-rails'
   gem 'codez-tarantula', require: 'tarantula-rails3'
+  gem 'parallel_tests'
   gem 'pry-rails'
+  gem 'rspec-rails'
+
   gem 'pry-debugger', platforms: :ruby_19
   gem 'pry-doc'
   # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
@@ -102,10 +104,10 @@ group :test do
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
-  gem 'rspec-its'
-  gem 'rspec-collection_matchers'
-  gem 'selenium-webdriver', '2.51.0' # 3.2.2 fails with "Unable to find Mozilla geckodriver"
   gem 'pdf-inspector', require: 'pdf/inspector'
+  gem 'rspec-collection_matchers'
+  gem 'rspec-its'
+  gem 'selenium-webdriver'
 end
 
 group :console do

@@ -64,17 +64,25 @@ module Export::Pdf::Invoice
           align_right(it.count.to_s),
           align_right(helper.number_to_currency(it.unit_cost, unit: '')),
           align_right(helper.number_to_currency(it.cost, unit: '')),
-          align_right(helper.number_to_percentage(it.vat_rate))
+          align_right(helper.number_to_percentage(it.vat_rate, precision: 1))
         ]
       end
     end
 
-    def total_box
+    def total_box # rubocop:disable Metrics/MethodLength
       bounding_box([0, cursor], width: bounds.width) do
-        font_size(10) do
-          table total_data, position: :right, cell_style: { borders: [],
-                                                            border_width: 0.5 } do
-            style(row(1).column(0), size: 8)
+        font_size(8) do
+          pdf.table total_data, position: :right, cell_style: { borders: [],
+                                                                border_color: 'CCCCCC',
+                                                                border_width: 0.5 } do
+            rows(0..1).padding = [2, 0]
+
+            row(2).font_style = :bold
+            row(2).borders = [:bottom, :top]
+            row(2).padding = [5, 0]
+            row(2).column(0).padding = [5, 15, 5, 0]
+
+            column(1).align = :right
           end
         end
       end
@@ -82,6 +90,10 @@ module Export::Pdf::Invoice
 
     def total_data
       [
+        [I18n.t('invoices.pdf.cost'),
+         helper.number_to_currency(invoice.calculated[:cost], format: '%n %u')],
+        [I18n.t('invoices.pdf.total_vat'),
+         helper.number_to_currency(invoice.calculated[:vat], format: '%n %u')],
         [I18n.t('invoices.pdf.total'),
          helper.number_to_currency(invoice.calculated[:total], format: '%n %u')]
       ]

@@ -67,7 +67,7 @@ module Export::Pdf
         print_pp_post(pdf, [left, top])
         top -= 7.mm
       end
-      pdf.text_box(address, at: [left, top])
+      pdf.text_box(address, at: [left, top], overflow: :shrink_to_fit)
     end
 
     def address(contactable, name)

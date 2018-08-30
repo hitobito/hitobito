@@ -64,6 +64,14 @@ describe InvoiceListsController do
       expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde erstellt.'
     end
 
+    it 'POST#create sets creator_id to current_user' do
+      expect do
+        post :create, { group_id: group.id, invoice: invoice_attrs.merge(title: 'current_user') }
+      end.to change { group.invoices.count }.by(1)
+
+      expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
     it 'POST#create creates an invoice for each member of group' do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group, person: Fabricate(:person))
 
@@ -117,7 +125,10 @@ describe InvoiceListsController do
     end
 
     it 'PUT#update enqueues job' do
-      invoice = Invoice.create!(group: group, title: 'test', recipient: person)
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person,
+                                invoice_items_attributes:
+                                  { '1' => { name: 'item1', unit_cost: 1, count: 1}})
+
       expect do
         post :update, { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
       end.to change { Delayed::Job.count }.by(1)

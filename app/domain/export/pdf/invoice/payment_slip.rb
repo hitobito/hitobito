@@ -9,6 +9,7 @@ module Export::Pdf::Invoice
   class PaymentSlip < Section
 
     def render
+      pdf.start_new_page if cursor < 225
       invoice_address
       account_number
       amount if invoice_items.present?
@@ -93,7 +94,7 @@ module Export::Pdf::Invoice
           pdf.text_box(invoice.esr_number,
                        at: [0, cursor], width: 150, height: 10,
                        overflow: :shrink_to_fit)
-          pdf.move_down 10
+          pdf.move_down 7
         end
       end
     end
@@ -103,9 +104,9 @@ module Export::Pdf::Invoice
     end
 
     def receiver_address(width, height)
-      bounding_box([width, height], width: 150, height: 80) do
+      bounding_box([width, height], width: 150, height: 100) do
         yield if block_given?
-        table receiver_address_data.take(3), cell_style: { padding: [5.5, 0, 1, 0], borders: [] }
+        table receiver_address_data.take(3), cell_style: { padding: [3.5, 0, 1, 0], borders: [] }
       end
     end
 

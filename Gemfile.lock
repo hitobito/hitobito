@@ -44,7 +44,8 @@ GEM
       tzinfo (~> 1.1)
     acts-as-taggable-on (3.5.0)
       activerecord (>= 3.2, < 5)
-    addressable (2.4.0)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     afm (0.2.2)
     airbrake (4.3.4)
       builder
@@ -57,10 +58,11 @@ GEM
     awesome_nested_set (3.0.2)
       activerecord (>= 4.0.0, < 5)
     awesome_print (1.7.0)
-    axlsx (2.0.1)
-      htmlentities (~> 4.3.1)
-      nokogiri (>= 1.4.1)
-      rubyzip (~> 1.0.0)
+    axlsx (3.0.0.pre)
+      htmlentities (~> 4.3, >= 4.3.4)
+      mimemagic (~> 0.3)
+      nokogiri (~> 1.8, >= 1.8.2)
+      rubyzip (~> 1.2, >= 1.2.1)
     bcrypt (3.1.11)
     bcrypt-ruby (3.1.5)
       bcrypt (>= 3.1.3)
@@ -76,13 +78,13 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     cancancan (1.12.0)
-    capybara (2.12.1)
+    capybara (2.18.0)
       addressable
-      mime-types (>= 1.16)
+      mini_mime (>= 0.1.3)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
-      xpath (~> 2.0)
+      xpath (>= 2.0, < 4.0)
     capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
@@ -91,7 +93,7 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    childprocess (0.6.2)
+    childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
     chosen-rails (1.5.2)
@@ -146,6 +148,7 @@ GEM
     country_select (2.5.1)
       countries (~> 1.2.0)
       sort_alphabetical (~> 1.0)
+    crass (1.0.4)
     currencies (0.4.2)
     customized_piwik_analytics (1.0.4)
       actionpack
@@ -187,7 +190,7 @@ GEM
     fabrication (2.16.1)
     faker (1.6.3)
       i18n (~> 0.5)
-    ffi (1.9.18)
+    ffi (1.9.25)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     globalize (5.0.1)
@@ -208,6 +211,8 @@ GEM
     innertube (1.1.0)
     joiner (0.3.4)
       activerecord (>= 4.1.0)
+    jquery-cookie-rails (1.3.1.1)
+      railties (>= 3.2.0, < 5.0)
     jquery-rails (4.2.2)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -224,7 +229,8 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.17)
-    loofah (2.0.3)
+    loofah (2.2.2)
+      crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     magiclabs-userstamp (3.0)
       actionpack (>= 4.0)
@@ -242,13 +248,15 @@ GEM
     method_source (0.8.2)
     middleware (0.1.0)
     mime-types (2.6.2)
+    mimemagic (0.3.2)
     mini_magick (4.6.1)
+    mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
-    multi_json (1.12.1)
+    multi_json (1.13.1)
     mysql2 (0.4.9)
     nested_form (0.3.2)
-    nokogiri (1.8.1)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     nuggets (1.5.0)
     oat (0.5.0)
@@ -299,10 +307,11 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    public_suffix (3.0.3)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.5)
-    rack-protection (1.5.3)
+    rack (1.6.10)
+    rack-protection (1.5.5)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -328,8 +337,8 @@ GEM
       activesupport (>= 3.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.0.3)
-      loofah (~> 2.0)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
     rails-i18n (4.0.9)
       i18n (~> 0.7)
       railties (~> 4.0)
@@ -397,7 +406,7 @@ GEM
     ruby-prof (0.16.2)
     ruby-progressbar (1.9.0)
     ruby-rc4 (0.1.5)
-    rubyzip (1.0.0)
+    rubyzip (1.2.1)
     safe_yaml (1.0.4)
     sass (3.4.23)
     sass-rails (5.0.6)
@@ -411,11 +420,9 @@ GEM
       activesupport (>= 3.1)
     seed-fu-ndo (0.0.2)
       seed-fu (>= 2.2.0)
-    selenium-webdriver (2.51.0)
+    selenium-webdriver (3.14.0)
       childprocess (~> 0.5)
-      multi_json (~> 1.0)
-      rubyzip (~> 1.0)
-      websocket (~> 1.0)
+      rubyzip (~> 1.2)
     simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -438,7 +445,7 @@ GEM
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    sprockets (3.7.1)
+    sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.2.0)
@@ -486,10 +493,9 @@ GEM
       seed-fu-ndo (>= 0.0.2)
     warden (1.2.7)
       rack (>= 1.0)
-    websocket (1.2.4)
     wirble (0.1.3)
-    xpath (2.0.0)
-      nokogiri (~> 1.3)
+    xpath (3.1.0)
+      nokogiri (~> 1.8)
     yard (0.9.12)
 
 PLATFORMS
@@ -502,7 +508,7 @@ DEPENDENCIES
   annotate
   awesome_nested_set (< 3.1.0)
   awesome_print
-  axlsx (= 2.0.1)
+  axlsx (>= 3.0.0.pre)
   bcrypt-ruby
   binding_of_caller
   bootstrap-sass (~> 2.3)
@@ -537,6 +543,7 @@ DEPENDENCIES
   hirb
   http_accept_language
   icalendar
+  jquery-cookie-rails
   jquery-rails
   jquery-turbolinks
   jquery-ui-rails
@@ -580,10 +587,11 @@ DEPENDENCIES
   rubyzip
   sass-rails
   seed-fu
-  selenium-webdriver (= 2.51.0)
+  selenium-webdriver
   simplecov-rcov
   simpleidn
   spring-commands-rspec
+  sprockets (~> 3.7.2)
   sqlite3
   therubyracer
   thinking-sphinx

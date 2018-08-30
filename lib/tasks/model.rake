@@ -6,13 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 
-desc "Add column annotations to active records"
+desc 'Add column annotations to active records'
 task :annotate do
   sh 'annotate -p before -e tests'
 end
 
 namespace :erd do
-  task :options => :customize
+  task options: :customize
   task :customize do
     require Rails.root.join('lib', 'tasks', 'rails_erd_patch.rb')
     ENV['attributes']  ||= 'content,inheritance,foreign_keys,timestamps'

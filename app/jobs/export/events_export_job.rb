@@ -7,24 +7,17 @@
 
 class Export::EventsExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:event_filter]
+  self.parameters = PARAMETERS + [:filter]
 
-  def initialize(format, user_id, event_filter)
-    super()
-    @format = format
+  def initialize(format, user_id, filter, options)
+    super(format, user_id, options)
     @exporter = Export::Tabular::Events::List
-    @user_id = user_id
-    @tempfile_name = 'events-export'
-    @event_filter = event_filter
+    @filter = filter
   end
 
   private
 
-  def send_mail(recipient, file, format)
-    Export::EventsExportMailer.completed(recipient, file, format).deliver_now
-  end
-
   def entries
-    @event_filter.list_entries
+    @filter.list_entries
   end
 end

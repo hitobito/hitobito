@@ -1,3 +1,8 @@
+#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 
 
@@ -23,6 +28,13 @@ describe PaymentProcessesController do
     post :create, group_id: group.id, payment_process: { file: file(path: xmlfile('FI_camt_053_sample')) }
     expect(response).to redirect_to new_group_payment_process_path(group)
     expect(flash[:alert]).to be_present
+  end
+
+  it 'POST#create handles files with only one entry' do
+    post :create, group_id: group.id, payment_process: { file: file(path: xmlfile('FI_camt_single_entry')) }
+    expect(response).to be_success
+    expect(flash[:alert]).to be_blank
+    expect(flash[:notice]).to be_blank
   end
 
   it 'POST#create with file informs about valid and invalid payments' do

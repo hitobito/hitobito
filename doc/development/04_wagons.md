@@ -171,6 +171,23 @@ This command will create a new migration file in the path `db/migrate/YYYYMMDDHH
 
 In this example, the data types of the attributes are set to strings.
 
+#### Mark attributes as public
+
+Several queries to the database are optimized to only fetch the publically visible attributes. Therefore the model needs to know if the new attributes are public. The list of public attributes is an class-level array that you can extend from your Wagon like this:
+
+```
+module Pbs::Person
+  extend ActiveSupport::Concern
+  included do
+    ...
+    Person::PUBLIC_ATTRS << :title << :salutation
+    ...
+  end
+end
+```
+
+If attributes are not in this list but need to be, you might see an `ActiveModel::MissingAttributeError`-Exception in the rails-server log.
+         
 #### Permit attributes for editing
 
 The new attributes must be included in the application logic. To do so, a new controller has to be created in `app/controllers/<wagon_namespace>/people_controller.rb` which permits the two attributes to be updated:

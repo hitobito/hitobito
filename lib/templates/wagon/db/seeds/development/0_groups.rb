@@ -7,7 +7,7 @@ seeder = GroupSeeder.new
 root = Group.roots.first
 srand(42)
 
-unless root.address.present?
+if root.address.blank?
   root.update_attributes(seeder.group_attributes)
   root.default_children.each do |child_class|
     child_class.first.update_attributes(seeder.group_attributes)

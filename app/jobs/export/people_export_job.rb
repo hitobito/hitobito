@@ -7,28 +7,18 @@
 
 class Export::PeopleExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:full, :person_filter, :household]
+  self.parameters = PARAMETERS + [:filter]
 
-  def initialize(format, full, user_id, person_filter, household)
-    super()
-    @format = format
-    @full = full
-    @exporter = exporter
-    @user_id = user_id
-    @tempfile_name = "people-#{format}-zip"
-    @person_filter = person_filter
-    @household = household
+  def initialize(format, user_id, filter, options)
+    super(format, user_id, options)
+    @filter = filter
   end
 
   private
 
-  def send_mail(recipient, file, format)
-    Export::PeopleExportMailer.completed(recipient, file, format).deliver_now
-  end
-
   def entries
-    entries = @person_filter.entries
-    if @full
+    entries = @filter.entries
+    if full?
       full_entries(entries)
     else
       entries.preload_public_accounts.includes(:primary_group)
@@ -44,8 +34,11 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def exporter
-    return Export::Tabular::People::Households if @household
-    @full ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    return Export::Tabular::People::Households if  @options[:household]
+    full? ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
   end
 
+  def full?
+    @options[:full]
+  end
 end

@@ -9,6 +9,7 @@
 *   Mehrere Personen können zu einem Haushalt zusammengefasst werden.
 *   ICAL Kalender Export für Anlässe.
 *   PDF-Export für Personen
+*   Grosse Exports werden im Hintergrund heruntergeladen.
 *   Technical Information: Starting from Version 1.18.9 you need at least Ruby 2.2
 
 ## Version 1.17

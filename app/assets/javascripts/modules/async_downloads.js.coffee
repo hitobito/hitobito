@@ -33,7 +33,7 @@ class app.AsyncDownloads
       )
 
   download_file = (url) ->
-    window.open(url)
+    window.location.href = url
 
   bind = ->
     $(document).ready ->

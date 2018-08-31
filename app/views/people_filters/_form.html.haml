@@ -20,6 +20,9 @@
       = render(layout: 'filter', locals: { type: :qualification }) do
         = render 'qualification', f: f
 
+    = render(layout: 'filter', locals: { type: :attributes }) do
+      = render 'attributes', f: f
+
 
   - if can?(:create, entry)
     = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')

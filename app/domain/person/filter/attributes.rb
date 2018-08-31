@@ -38,12 +38,14 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, match)
-    escaped_value = Mysql2::Client.escape(value.to_s)
-    sql_value = match ? "%#{escaped_value}%" : escaped_value
+    sql_array = if match
+                  escaped_value = ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)
+                  ["people.#{key} LIKE ?", "%#{escaped_value}%"]
+                else
+                  ["people.#{key} = ?", value]
+                end
 
-    <<-SQL.strip_heredoc()
-      people.#{key} LIKE '#{sql_value.strip}'
-    SQL
+    ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
   end
 
   def unpersisted_attribute_condition_sql(key, value, match, scope)

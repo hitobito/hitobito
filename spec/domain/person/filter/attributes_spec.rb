@@ -66,16 +66,14 @@ describe Person::Filter::Attributes do
       end
     end
 
-    # TODO Escape for mysql and sqlite3
- 
-    #context 'escaped value' do
-    #  let(:key) { 'address' }
-    #  let(:value) { "'INJECTION" }
+    context 'escaped value' do
+      let(:key) { 'address' }
+      let(:value) { "'INJECTION" }
 
-    #  it 'does not cause sql injection' do
-    #    expect{ entries.size }.not_to raise_exception
-    #  end
-    #end
+      it 'does not cause sql injection' do
+        expect{ entries.size }.not_to raise_exception
+      end
+    end
 
     context 'persisted' do
       context 'string attributes' do

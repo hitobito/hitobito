@@ -61,8 +61,11 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def matching_attribute?(attribute, value, match)
-    (attribute.to_s == value && !match) ||
-      (attribute.to_s =~ /#{value}/ && match)
+    if match
+      attribute.to_s =~ /#{value}/
+    else
+      attribute.to_s == value
+    end
   end
 
 end

@@ -55,7 +55,7 @@ class Person::Filter::Attributes < Person::Filter::Base
 
     people_ids = -1 if people_ids.blank?
 
-    <<-SQL.strip_heredoc()
+    <<-SQL.strip_heredoc
       people.id IN (#{people_ids})
     SQL
   end

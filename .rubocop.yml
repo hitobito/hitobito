@@ -4,7 +4,6 @@ AllCops:
     - Rakefile
     - db/**/*
     - config/**/*
-    - lib/tasks/**/*
     - bin/**/*
     - spec/**/*
     - vendor/**/*
@@ -13,6 +12,9 @@ AllCops:
 
 Rails:
   Enabled: true
+
+Lint/RescueWithoutErrorClass:
+  Enabled: false
 
 # we have not yet introcued ApplicationRecord as a Pattern
 Rails/ApplicationRecord:
@@ -46,6 +48,7 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+    - lib/tasks/*.rake
 
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:

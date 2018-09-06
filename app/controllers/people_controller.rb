@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,6 +8,7 @@
 class PeopleController < CrudController
 
   include Concerns::RenderPeopleExports
+  include Concerns::AsyncDownload
 
   self.nesting = Group
 
@@ -153,8 +154,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    @person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
-    entries = @person_filter.entries
+    entries = person_filter.entries
     entries = entries.reorder(sort_expression) if sorting?
     entries
   end
@@ -176,13 +176,9 @@ class PeopleController < CrudController
   end
 
   def render_tabular_entries_in_background(format)
-    email = current_person.email
-    if email
-      full = params[:details].present? && index_full_ability?
-      render_tabular_in_background(format, full)
-      flash[:notice] = translate(:export_enqueued, email: email)
-    else
-      flash[:alert] = translate(:export_email_needed)
+    full = params[:details].present? && index_full_ability?
+    with_async_download_cookie(format, :people_export) do |filename|
+      render_tabular_in_background(format, full, filename)
     end
   end
 
@@ -202,13 +198,11 @@ class PeopleController < CrudController
     render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end
 
-  def render_tabular_in_background(format, full)
-    person_filter = Person::Filter::List.new(@group, current_user, list_filter_args)
-    Export::PeopleExportJob.new(format,
-                                full,
-                                current_person.id,
-                                person_filter,
-                                params[:household]).enqueue!
+  def render_tabular_in_background(format, full, filename)
+    Export::PeopleExportJob.new(
+      format, current_person.id, person_filter,
+      params.slice(:household).merge(full: full, filename: filename)
+    ).enqueue!
   end
 
   def render_tabular(format, entries, full)
@@ -255,6 +249,10 @@ class PeopleController < CrudController
 
   def household
     @household ||= Person::Household.new(entry, current_ability)
+  end
+
+  def person_filter
+    @person_filter ||= Person::Filter::List.new(@group, current_user, list_filter_args)
   end
 
 end

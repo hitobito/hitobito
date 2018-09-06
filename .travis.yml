@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 addons:
-  firefox: 45.0
+  firefox: 60.0
 branches:
   only:
     - master
@@ -11,10 +11,10 @@ env:
     - HEADLESS=true
     - RAILS_DB_ADAPTER=mysql2
 rvm:
-  - 2.1.7
   - 2.2.3
   - 2.3.1
   - 2.4.0
+  - 2.5.0
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install sphinxsearch
@@ -22,14 +22,12 @@ before_install:
   - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - sudo service mysql restart
 install:
-  - sed -i "s/^\(gem .mysql2.\),.*$/\1/" Gemfile
   - bundle install --path vendor/bundle
-  - bundle update mysql2
 script:
   - bundle exec rake db:create ci --trace skip_tasks=spec:features
 matrix:
   allow_failures:
 
-  - rvm: 2.1.7
   - rvm: 2.3.1
   - rvm: 2.4.0
+  - rvm: 2.5.0

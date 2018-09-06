@@ -32,6 +32,7 @@ en:
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
+        readonly: can't be changed
       models:
         custom_content:
           attributes:
@@ -118,8 +119,8 @@ en:
         one: Registration
         other: Registrations
       event/attachment:
-        one: attachment
-        other: attachments
+        one: 'attachment'
+        other: 'attachments'
       event/kind:
         one: Course type
         other: Course types

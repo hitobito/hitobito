@@ -10,7 +10,7 @@
 # If we'd return 401 the application would be treated as unhealthy.
 class HealthzController < ActionController::Base
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   def show
     render json: AppStatusSerializer.new(app_status), status: app_status.code
@@ -19,6 +19,6 @@ class HealthzController < ActionController::Base
   private
 
   def app_status
-    @app_status ||= AppStatus.new
+    @app_status ||= AppStatus::Store.new
   end
 end

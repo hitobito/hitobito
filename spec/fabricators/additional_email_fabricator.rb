@@ -14,7 +14,7 @@
 #  email            :string(255)      not null
 #  label            :string(255)
 #  public           :boolean          default(TRUE), not null
-#  mailings         :boolean          default(TRUE), not null
+#  mailings         :boolean          default(FALSE), not null
 #
 
 Fabricator(:additional_email) do

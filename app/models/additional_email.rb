@@ -14,7 +14,7 @@
 #  email            :string(255)      not null
 #  label            :string(255)
 #  public           :boolean          default(TRUE), not null
-#  mailings         :boolean          default(TRUE), not null
+#  mailings         :boolean          default(FALSE), not null
 #
 
 class AdditionalEmail < ActiveRecord::Base
@@ -25,6 +25,9 @@ class AdditionalEmail < ActiveRecord::Base
 
   validates_by_schema
   validates :email, format: Devise.email_regexp
+
+  # A dot at the end is invalid due to translation purpose
+  validates :label, format: { without: /[.]$\z/ }
 
   class << self
     def predefined_labels

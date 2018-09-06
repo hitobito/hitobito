@@ -17,16 +17,7 @@ class Invoice::SendNotificationJob < BaseJob
 
   def perform
     set_locale
-
-    pdf_options = { articles: true, esr: false }
-
-    InvoiceMailer.notification(
-      invoice.recipient_name,
-      invoice.recipient_email,
-      sender,
-      invoice,
-      Export::Pdf::Invoice.render(invoice, pdf_options)
-    ).deliver_now
+    InvoiceMailer.notification(invoice, sender).deliver_now
   end
 
   def invoice

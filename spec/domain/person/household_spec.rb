@@ -119,9 +119,11 @@ describe Person::Household do
   end
 
   context '#save' do
-    it 'persists new household' do
+    it 'persists new household', versioning: true do
       leader.household_people_ids = [member.id]
-      household(leader).save
+      expect do
+        household(leader).save
+      end.to change { member.versions.count }.by(2)
 
       expect(leader.reload.household_key).to eq member.reload.household_key
       expect(leader.household_key).to be_present
@@ -180,6 +182,27 @@ describe Person::Household do
         household(member).save
       end.to raise_error 'invalid'
     end
+
+    it 'creates append_to_household version' do
+      leader.household_people_ids = [member.id]
+      expect do
+        household(leader).save
+      end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'append_to_household'
+      expect(member.versions.last.event).to eq 'append_to_household'
+    end
+
+    it 'creates houshold_update version' do
+      leader.household_people_ids = [member.id]
+      household(leader).save
+
+      leader.town = 'Greattown'
+      expect do
+        household(leader).save
+      end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'household_updated'
+      expect(member.versions.last.event).to eq 'household_updated'
+    end
   end
 
   context '#remove' do
@@ -202,6 +225,17 @@ describe Person::Household do
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
       expect(member.reload.household_key).to eq '1'
+    end
+
+    it 'creates Papertrail entries at the household deletion' do
+      member.update(household_key: 1)
+      leader.update(household_key: 1)
+
+      expect do
+        household(leader).remove
+      end.to change { PaperTrail::Version.count }.by(2)
+      expect(leader.versions.last.event).to eq 'remove_from_household'
+      expect(member.versions.last.event).to eq 'remove_from_household'
     end
   end
 

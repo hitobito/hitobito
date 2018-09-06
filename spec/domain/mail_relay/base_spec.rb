@@ -85,7 +85,9 @@ describe MailRelay::Base do
 
         its(:smtp_envelope_to) { should == %w(a@xn--exmple-cua.com b@example.com) }
       end
+
     end
+
   end
 
   describe '.relay_current' do
@@ -106,6 +108,95 @@ describe MailRelay::Base do
       expect(MailRelay::Base).to receive(:new).exactly(8).times
 
       MailRelay::Base.relay_current
+    end
+
+    it 'creates log entry for mail with rejected sender' do
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect_any_instance_of(MailRelay::Base).to receive(:sender_allowed?).and_return(false)
+
+      expect do
+        MailRelay::Base.relay_current
+      end.to change { MailLog.count }.by(1)
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.mail_from).to eq(simple.from.first)
+      expect(mail_log.status).to eq('sender_rejected')
+    end
+
+    it 'creates log entry for mail with unknown recipient' do
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect_any_instance_of(MailRelay::Base).to receive(:relay_address?).and_return(false)
+
+      expect do
+        MailRelay::Base.relay_current
+      end.to change { MailLog.count }.by(1)
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.mail_from).to eq(simple.from.first)
+      expect(mail_log.status).to eq('unkown_recipient')
+    end
+
+    it 'skips already processed mail and sends airbrake notification' do
+      MailLog.build(simple).save!
+
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect(Airbrake).to receive(:notify) do |exception|
+        expect(exception.message).to match(
+          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
+        expect(exception.message).to match(
+          /1b498b5a776254310c3699688680b37a$/)
+      end
+
+      MailRelay::Base.relay_current
+    end
+
+    it 'creates mail log entry for sent bulk mail' do
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect do
+        MailRelay::Base.relay_current
+      end.to change { MailLog.count }.by(1)
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.mail_from).to eq(simple.from.first)
+      expect(mail_log.status).to eq('completed')
+    end
+
+    # our mysql instances to not support storeing emojis
+    it 'creates mail log entry for mail with emoji in subject' do
+      emoji_subject = "⛴ Unvergessliche Erlebnisse"
+      simple.subject = emoji_subject
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect do
+        MailRelay::Base.relay_current
+      end.to change { MailLog.count }.by(1)
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log.mail_subject).to eq("? Unvergessliche Erlebnisse")
+      expect(mail_log.mail_from).to eq(simple.from.first)
+      expect(mail_log.status).to eq('completed')
     end
 
     it 'fails after one batch' do

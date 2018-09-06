@@ -43,6 +43,7 @@
 #  locked_at                 :datetime
 #  authentication_token      :string(255)
 #  show_global_label_formats :boolean          default(TRUE), not null
+#  household_key             :string(255)
 #
 
 class Person < ActiveRecord::Base
@@ -60,6 +61,10 @@ class Person < ActiveRecord::Base
     :locked_at, :remember_created_at, :reset_password_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
     :show_global_label_formats, :household_key
+  ]
+
+  FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
+    :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country
   ]
 
   GENDERS = %w(m w).freeze
@@ -186,6 +191,12 @@ class Person < ActiveRecord::Base
 
     def mailing_emails_for(people, labels = [])
       MailRelay::AddressList.new(people, labels).entries
+    end
+
+    def filter_attrs_list
+      Person::FILTER_ATTRS.collect do |attr|
+        [Person.human_attribute_name(attr), attr]
+      end.sort
     end
 
     private

@@ -32,6 +32,7 @@ fr:
         greater_than: doit être plus grand que %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: Doivent exister
+        readonly: ne peut pas être modifié
       models:
         custom_content:
           attributes:
@@ -63,6 +64,7 @@ fr:
         person:
           name_missing: 'Veuillez entrer votre nom'
           emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
+          readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             email:
               taken: >
@@ -120,8 +122,8 @@ fr:
         one: Inscription
         other: Inscriptions
       event/attachment:
-        one: Annexe
-        other: Annexes
+        one: 'Annexe'
+        other: 'Annexes'
       event/kind:
         one: Type de cours
         other: Types de cours
@@ -279,12 +281,15 @@ fr:
         phone_numbers: Numéros de téléphone
         social_accounts: Réseaux sociaux
         additional_emails: Adresses e-mail supplémentaires
+        layer_group: Niveau
         parent_id: Groupe de parents
         layer_group_id: Niveau
         type: Type de groupe
         type_name: Type de groupe
       event:
         group_ids: Groupes
+        groups: Groupes
+        state: Statut
         name: Nom
         number: Numéro
         motto: Devise
@@ -437,6 +442,7 @@ fr:
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
+              impersonation: Se servir de hitobito comme autre personne.
           kind:
             member:
               one: Membre
@@ -486,6 +492,8 @@ fr:
         mail_address: Liste de diffusion
         subscribers_may_post: les abonnés peuvent éditer la liste de diffusion
         additional_sender: Expéditeur supplémentaire
+        preferred_labels: Labels d'e-mail privilégiés
+        main_email: Envoi à l'adresse e-mail principale
       subscription:
         related_role_types: Rôles
       people_filter:

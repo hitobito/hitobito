@@ -16,7 +16,7 @@ describe CustomContentDecorator, :draper_with_helpers  do
       let(:content)   { custom_contents(:login) }
 
       it 'lists available placeholders in string' do
-        is_expected.to eq 'Verfügbare Platzhalter: {login-url}, {user}'
+        is_expected.to eq 'Verfügbare Platzhalter: {login-url}, {recipient-name}, {sender-name}'
       end
     end
 

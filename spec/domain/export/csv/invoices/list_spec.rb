@@ -22,7 +22,7 @@ describe Export::Tabular::Invoices::List do
      should == [
        'Titel', 'Nummer', 'Status', 'Referenz Nummer', 'Beschreibung', 'Empfänger E-Mail',
        'Empfänger Adresse', 'Verschickt am', 'Fällig am', 'Betrag',
-       'MWSt.', 'Total inkl. MWSt.', 'Total bezahlt'
+       'MwSt.', 'Total inkl. MwSt.', 'Total bezahlt'
      ]
    end
 
@@ -39,8 +39,8 @@ describe Export::Tabular::Invoices::List do
      its(['Status']) { should == 'Entwurf' }
      its(['Referenz Nummer']) { should == invoices(:invoice).esr_number }
      its(['Betrag']) { should == '5.00 CHF' }
-     its(['MWSt.']) { should == '0.00 CHF' }
-     its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
+     its(['MwSt.']) { should == '0.35 CHF' }
+     its(['Total inkl. MwSt.']) { should == '5.35 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
      its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }
@@ -60,9 +60,9 @@ describe Export::Tabular::Invoices::List do
      its(['Referenz Nummer']) { should == invoice.esr_number }
      its(['Verschickt am']) { should == I18n.l(invoice.sent_at) }
      its(['Fällig am']) { should == I18n.l(invoice.due_at) }
-     its(['Betrag']) { should == '0.00 CHF' }
-     its(['MWSt.']) { should == '0.00 CHF' }
-     its(['Total inkl. MWSt.']) { should == '2.00 CHF' }
+     its(['Betrag']) { should == '0.50 CHF' }
+     its(['MwSt.']) { should == '0.00 CHF' }
+     its(['Total inkl. MwSt.']) { should == '0.50 CHF' }
      its(['Total bezahlt']) { should == '0.00 CHF' }
      its(['Empfänger E-Mail']) { should == 'top_leader@example.com' }
      its(['Beschreibung']) { should == nil }

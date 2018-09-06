@@ -8,6 +8,7 @@
 class Event::ParticipationsController < CrudController
 
   include Concerns::RenderPeopleExports
+  include Concerns::AsyncDownload
 
   self.nesting = Group, Event
 
@@ -105,9 +106,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def list_entries
-    filter = Event::ParticipationFilter.new(event, current_user, params)
-    records = filter.list_entries
-    @counts = filter.counts
+    records = event_participation_filter.list_entries.page(params[:page])
+    @counts = event_participation_filter.counts
 
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
@@ -119,8 +119,12 @@ class Event::ParticipationsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    Export::EventParticipationsExportJob.new(format, current_person.id, event.id, params).enqueue!
-    flash[:notice] = translate(:export_enqueued, email: current_person.email)
+    with_async_download_cookie(format, :event_participation_export) do |filename|
+      Export::EventParticipationsExportJob.new(format,
+                                               event.id,
+                                               current_person.id,
+                                               params.merge(filename: filename)).enqueue!
+    end
   end
 
   def check_preconditions
@@ -267,6 +271,10 @@ class Event::ParticipationsController < CrudController
     if can?(:create, role)
       @event.person_add_requests.list.includes(person: :primary_group)
     end
+  end
+
+  def event_participation_filter
+    Event::ParticipationFilter.new(event.id, current_user.id, params)
   end
 
 end

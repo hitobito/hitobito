@@ -45,41 +45,40 @@ nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguratio
 Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
 
 
-### Anleitung: Wagon erstellen
+### Instructions: create wagon
 
-Die Grundstruktur eines neuen Wagons kann sehr 
-einfach im Hauptprojekt generiert werden (Die Templates dazu befinden sich in `lib/templates/wagon`):
+
+The basic structure of a new wagon can be easily generated in the main project, the templates for it are in `lib/templates/wagon`):
 
     rails generate wagon [name]
-    
-Danach müssen noch folgende spezifischen Anpassungen gemacht werden:
 
-* Dateien von `hitobito/vendor/wagons/[name]` nach `hitobito_[name]` verschieben.
-* Eigenes Git Repo für den Wagon erzeugen.
-* `Gemfile.lock` vom Core in den Wagon kopieren.
-* Organisation im Lizenz Generator (`lib/tasks/license.rake`) anpassen und überall Lizenzen 
-  hinzufügen: `rake app:license:insert`.
-* Organisation in `COPYING` ergänzen.
-* `AUTHORS` ergänzen.
-* In `hitobito_[name].gemspec` authors, email, summary und description anpassen.
+Afterwards you need to make the following adjustments:
 
-Falls der Wagon für eine neue Organisation ist, können noch diese Punkte angepasst werden:
+* Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
+* Initiate a new Git Repo for the wagon
+* Copy `Gemfile.lock` from the core into the wagon.
+* Adjust Organisation in the license generator (`lib/tasks/license.rake`)  and add the licence everywhere with `rake app:license:insert`.
+* Add the customer organization in `COPYING`.
+* Put you name into `AUTHORS`
+* Edit authors, email, summary und description `hitobito_[name].gemspec`.
 
-* In den Seeddaten Entwickler- und Kundenaccount hinzufügen: `db/seed/development/1_people.rb` unter `devs`.
-* Die gewünschte E-Mail des Root Users in `config/settings.yml` eintragen.
-* Falls die Applikation mehrsprachig sein soll: Transifex Projekt erstellen und vorbereiten. 
-  Siehe dazu auch die Mehrsprachigkeits Guidelines.
+If the wagon is the main wagon for a new organization strutture, you can additionaly  do these steps:
 
-Falls der Wagon nicht für eine spezifische Organisation ist und keine Gruppenstruktur definiert,
-sollten folgende generierten Dateien gelöscht werden:
+* Add Developper and Client Accounts int the seed files: `db/seed/development/1_people.rb` under `devs`.
+* Configure e-mail-adress for the root account in `config/settings.yml`.
+* If the application is multilingual, we reccommend to create a project in [https://www.transifex.com/](Transifex)
+* Also see the guidelines for internationalization
 
-* Gruppen Models: `rm -rf app/models/group/root.rb app/models/[name]/group.rb`
-* Übersetzungen der Models in `config/locales/models.[name].de.yml`
-* Seeddaten: `rm -rf db/seeds`
+If the wagon is not for a specific organisation and does not define a group structure, you should delete the following files:
 
-Damit entsprechende Testdaten für Tests sowie Tarantula vorhanden sind, müssen die Fixtures im Wagon entsprechend der generierten Organisationsstruktur angepasst werden.
-* Anpassen der Fixtures für people, groups, roles, events, usw. (`spec/fixtures`)
-* Anpassen der Tarantula Tests im Wagon (`test/tarantula/tarantula_test.rb`)
+* group models: `rm -rf app/models/group/root.rb app/models/[name]/group.rb`
+* Translations of those models in `config/locales/models.[name].de.yml`
+* seed-data: `rm -rf db/seeds`
+
+In order to have useful Testdata and to use tarantula, adjust the fixtures in the wagon according to the generated organizational structure:
+
+* Fixtures for people, groups, roles, events, ... (`spec/fixtures`)
+* Adjusting the tarantula tests in the wagon (`test/tarantula/tarantula_test.rb`)
 
 ### Anleitung: Gruppenstruktur definieren
 
@@ -172,6 +171,23 @@ This command will create a new migration file in the path `db/migrate/YYYYMMDDHH
 
 In this example, the data types of the attributes are set to strings.
 
+#### Mark attributes as public
+
+Several queries to the database are optimized to only fetch the publically visible attributes. Therefore the model needs to know if the new attributes are public. The list of public attributes is an class-level array that you can extend from your Wagon like this:
+
+```
+module Pbs::Person
+  extend ActiveSupport::Concern
+  included do
+    ...
+    Person::PUBLIC_ATTRS << :title << :salutation
+    ...
+  end
+end
+```
+
+If attributes are not in this list but need to be, you might see an `ActiveModel::MissingAttributeError`-Exception in the rails-server log.
+         
 #### Permit attributes for editing
 
 The new attributes must be included in the application logic. To do so, a new controller has to be created in `app/controllers/<wagon_namespace>/people_controller.rb` which permits the two attributes to be updated:

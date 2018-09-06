@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.04">
+   <BkToCstmrDbtCdtNtfctn>
+      <GrpHdr>
+         <MsgId>MSG-C054-180720025452-01</MsgId>
+         <CreDtTm>2018-07-20T14:54:52.435+02:00</CreDtTm>
+         <MsgRcpt>
+            <Nm>Tester Tina</Nm>
+         </MsgRcpt>
+         <AddtlInf>RECONSTRUCTION</AddtlInf>
+      </GrpHdr>
+      <Ntfctn>
+         <Id>NTF-C054-180720025452-01</Id>
+         <ElctrncSeqNb>999999</ElctrncSeqNb>
+         <CreDtTm>2018-07-20T14:54:52.440+02:00</CreDtTm>
+         <CpyDplctInd>DUPL</CpyDplctInd>
+         <Acct>
+            <Id>
+               <IBAN>CH1111111111111111111</IBAN>
+            </Id>
+            <Svcr>
+               <FinInstnId>
+                  <Nm>Raiffeisenbank Zürich</Nm>
+               </FinInstnId>
+            </Svcr>
+         </Acct>
+         <Ntry>
+            <NtryRef>012345679</NtryRef>
+            <Amt Ccy="CHF">100</Amt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+            <RvslInd>false</RvslInd>
+            <Sts>BOOK</Sts>
+            <BookgDt>
+               <Dt>2018-07-16</Dt>
+            </BookgDt>
+            <ValDt>
+               <Dt>2018-07-16</Dt>
+            </ValDt>
+            <BkTxCd>
+               <Domn>
+                  <Cd>PMNT</Cd>
+                  <Fmly>
+                     <Cd>RCDT</Cd>
+                     <SubFmlyCd>VCOM</SubFmlyCd>
+                  </Fmly>
+               </Domn>
+               <Prtry>
+                  <Cd>1000</Cd>
+               </Prtry>
+            </BkTxCd>
+            <Chrgs>
+               <TtlChrgsAndTaxAmt Ccy="CHF">0</TtlChrgsAndTaxAmt>
+            </Chrgs>
+            <NtryDtls>
+               <TxDtls>
+                  <Refs>
+                     <AcctSvcrRef>45678901</AcctSvcrRef>
+                     <Prtry>
+                        <Tp>01</Tp>
+                        <Ref>0000  0000</Ref>
+                     </Prtry>
+                  </Refs>
+                  <Amt Ccy="CHF">100</Amt>
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+                  <BkTxCd>
+                     <Domn>
+                        <Cd>PMNT</Cd>
+                        <Fmly>
+                           <Cd>RCDT</Cd>
+                           <SubFmlyCd>VCOM</SubFmlyCd>
+                        </Fmly>
+                     </Domn>
+                     <Prtry>
+                        <Cd>1000</Cd>
+                     </Prtry>
+                  </BkTxCd>
+                  <Chrgs>
+                     <TtlChrgsAndTaxAmt Ccy="CHF">0</TtlChrgsAndTaxAmt>
+                  </Chrgs>
+                  <RltdPties>
+                     <Dbtr>
+                        <Nm>Umbrella Corporation, European Branch</Nm>
+                     </Dbtr>
+                  </RltdPties>
+                  <RmtInf>
+                     <Strd>
+                        <CdtrRefInf>
+                           <Tp>
+                              <CdOrPrtry>
+                                 <Prtry>ISR Reference</Prtry>
+                              </CdOrPrtry>
+                           </Tp>
+                           <Ref>222222222222222222222222222</Ref>
+                        </CdtrRefInf>
+                     </Strd>
+                  </RmtInf>
+                  <RltdDts>
+                     <AccptncDtTm>2018-07-13T00:00:00.000+02:00</AccptncDtTm>
+                  </RltdDts>
+               </TxDtls>
+            </NtryDtls>
+         </Ntry>
+      </Ntfctn>
+   </BkToCstmrDbtCdtNtfctn>
+</Document>

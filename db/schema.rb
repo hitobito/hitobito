@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228145957) do
+ActiveRecord::Schema.define(version: 20180702093715) do
 
   create_table "additional_emails", force: :cascade do |t|
-    t.integer "contactable_id",   limit: 4,                  null: false
-    t.string  "contactable_type", limit: 255,                null: false
-    t.string  "email",            limit: 255,                null: false
+    t.integer "contactable_id",   limit: 4,                   null: false
+    t.string  "contactable_type", limit: 255,                 null: false
+    t.string  "email",            limit: 255,                 null: false
     t.string  "label",            limit: 255
-    t.boolean "public",                       default: true, null: false
-    t.boolean "mailings",                     default: true, null: false
+    t.boolean "public",                       default: true,  null: false
+    t.boolean "mailings",                     default: false, null: false
   end
 
   add_index "additional_emails", ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type", using: :btree
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.boolean  "qualified"
   end
 
+  add_index "event_participations", ["application_id"], name: "index_event_participations_on_application_id", using: :btree
   add_index "event_participations", ["event_id", "person_id"], name: "index_event_participations_on_event_id_and_person_id", unique: true, using: :btree
   add_index "event_participations", ["event_id"], name: "index_event_participations_on_event_id", using: :btree
   add_index "event_participations", ["person_id"], name: "index_event_participations_on_person_id", using: :btree
@@ -253,7 +254,6 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.integer "sequence_number",     limit: 4,     default: 1,       null: false
     t.integer "due_days",            limit: 4,     default: 30,      null: false
     t.integer "group_id",            limit: 4,                       null: false
-    t.integer "contact_id",          limit: 4
     t.text    "address",             limit: 65535
     t.text    "payment_information", limit: 65535
     t.string  "account_number",      limit: 255
@@ -264,7 +264,6 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.string  "participant_number",  limit: 255
   end
 
-  add_index "invoice_configs", ["contact_id"], name: "index_invoice_configs_on_contact_id", using: :btree
   add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id", using: :btree
 
   create_table "invoice_items", force: :cascade do |t|
@@ -303,6 +302,7 @@ ActiveRecord::Schema.define(version: 20180228145957) do
     t.text     "beneficiary",         limit: 65535
     t.text     "payee",               limit: 65535
     t.string   "participant_number",  limit: 255
+    t.integer  "creator_id",          limit: 4
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number", using: :btree
@@ -343,6 +343,20 @@ ActiveRecord::Schema.define(version: 20180228145957) do
   end
 
   add_index "locations", ["zip_code", "canton", "name"], name: "index_locations_on_zip_code_and_canton_and_name", unique: true, using: :btree
+
+  create_table "mail_logs", force: :cascade do |t|
+    t.string   "mail_from",         limit: 255
+    t.string   "mail_subject",      limit: 255
+    t.string   "mail_hash",         limit: 255
+    t.integer  "status",            limit: 4,   default: 0
+    t.string   "mailing_list_name", limit: 255
+    t.integer  "mailing_list_id",   limit: 4
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  add_index "mail_logs", ["mail_hash"], name: "index_mail_logs_on_mail_hash", using: :btree
+  add_index "mail_logs", ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id", using: :btree
 
   create_table "mailing_lists", force: :cascade do |t|
     t.string  "name",                 limit: 255,                   null: false
@@ -395,9 +409,10 @@ ActiveRecord::Schema.define(version: 20180228145957) do
   add_index "payment_reminders", ["invoice_id"], name: "index_payment_reminders_on_invoice_id", using: :btree
 
   create_table "payments", force: :cascade do |t|
-    t.integer "invoice_id",  limit: 4,                          null: false
-    t.decimal "amount",                precision: 12, scale: 2, null: false
-    t.date    "received_at",                                    null: false
+    t.integer "invoice_id",  limit: 4,                            null: false
+    t.decimal "amount",                  precision: 12, scale: 2, null: false
+    t.date    "received_at",                                      null: false
+    t.string  "reference",   limit: 255
   end
 
   add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id", using: :btree

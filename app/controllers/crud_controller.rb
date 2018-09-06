@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,8 +35,9 @@ class CrudController < ListController
   hide_action :model_identifier, :run_callbacks
 
   # Simple helper object to give access to required view helper methods.
-  @@helper = Object.new.extend(ActionView::Helpers::TranslationHelper).
-                        extend(ActionView::Helpers::OutputSafetyHelper)
+  @@helper = Object.new
+                   .extend(ActionView::Helpers::TranslationHelper)
+                   .extend(ActionView::Helpers::OutputSafetyHelper)
 
 
   ##############  ACTIONS  ############################################
@@ -126,11 +127,15 @@ class CrudController < ListController
   # perform the save operation
   def save_entry
     entry.save
+  rescue Mysql2::Error => e
+    Airbrake.notify(e, parameters: params)
+    logger.error e.message
+    false
   end
 
   # A label for the current entry, including the model name.
   def full_entry_label
-    "#{models_label(false)} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe
+    "#{models_label(false)} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe # rubocop:disable Rails/OutputSafety
   end
 
   # Url of the index page to return to
@@ -146,8 +151,6 @@ class CrudController < ListController
   def model_params
     params[model_identifier]
   end
-
-  private
 
   # Set a success flash notice when we got a HTML request.
   def set_success_notice
@@ -172,7 +175,7 @@ class CrudController < ListController
 
   # Html safe error messages of the current entry.
   def error_messages
-    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
+    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe) # rubocop:disable Rails/OutputSafety
   end
 
   def return_path

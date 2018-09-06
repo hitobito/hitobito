@@ -29,5 +29,11 @@ app.HouseHolds = {
   setupTypeahead:  ->
     $(this).find('[data-provide=entity]').each(app.setupEntityTypeahead)
 
+  showHouseholdAddressChangeWarning: ->
+    if $('#household').is(':checked')
+      $('.address-updated').remove()
+      $('.updates-household-address').removeClass('hidden')
+
 }
 $(document).on('change', '[data-household] :checkbox[name=household]', app.HouseHolds.showPeopleTypeAhead)
+$(document).on('input', '.address-input-fields', app.HouseHolds.showHouseholdAddressChangeWarning)

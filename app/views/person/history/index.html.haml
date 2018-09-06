@@ -14,6 +14,8 @@
   - t.attr(:deleted_at, t('global.until'))
   - render_extensions :history_columns, locals: { t: t }
 
+= render_extensions :history_members_form
+
 %events
   = render(layout: 'shared/grouped_table',
            locals: { grouped_lists: @participations_by_event_type,

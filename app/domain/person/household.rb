@@ -48,12 +48,20 @@ class Person::Household
 
   def save
     fail 'invalid' unless valid?
+    household_log(person, people, person.household_key?)
     person.update(household_key: key)
-    people.update_all(address_attrs(person).merge(household_key: key))
+    people.each do |housemate|
+      update_housemate(housemate, people, person)
+    end
   end
 
   def remove
-    people.update_all(household_key: nil) if people.size == 1
+    household_log_entry(person, people, :remove_from_household)
+
+    if people.size == 1
+      household_log_entry(people.first, [person], :remove_from_household)
+      people.update_all(household_key: nil)
+    end
     person.update(household_key: nil)
   end
 
@@ -116,6 +124,34 @@ class Person::Household
       key = SecureRandom.uuid
       break key unless Person.where(household_key: key).exists?
     end
+  end
+
+  def update_housemate(housemate, people, person)
+    household = people << person
+    household.delete(housemate)
+    existing_household_key = housemate.household_key?
+    housemate.update(address_attrs(person).merge(household_key: key))
+    household_log(housemate, household, existing_household_key)
+  end
+
+  def household_log(housemate, household, existing_household_key)
+    if existing_household_key
+      household_log_entry(housemate, household, :household_updated)
+    else
+      household_log_entry(housemate, household, :append_to_household)
+    end
+  end
+
+  def household_log_entry(housemate, household, event)
+    PaperTrail::Version.create(main: housemate,
+                               item: housemate,
+                               whodunnit: housemate,
+                               event: event,
+                               object_changes: household_name(household))
+  end
+
+  def household_name(household)
+    household.map(&:full_name).join(', ')
   end
 
 end

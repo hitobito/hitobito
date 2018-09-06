@@ -21,11 +21,18 @@ describe InvoiceConfig do
     expect(invoice_config.errors.full_messages).to include('IBAN ist nicht gültig')
   end
 
-  it 'validates correct account_number format' do
+  it 'validates correct account_number format if post payment' do
     invoice_config.update(account_number: 'wrong format')
 
     expect(invoice_config).not_to be_valid
     expect(invoice_config.errors.full_messages).to include('Kontonummer ist nicht gültig')
+  end
+
+  it 'does not validate account_number if bank payment' do
+    invoice_config.update(payment_slip: 'ch_bes')
+
+    invoice_config.update(account_number: 'invalid-number')
+    expect(invoice_config).to be_valid
   end
 
   it 'validates presence of payee' do
@@ -42,7 +49,7 @@ describe InvoiceConfig do
       to include('Einzahlung für darf höchstens 2 Zeilen enthalten')
   end
 
-  it 'validates account_number check digit' do
+  it 'validates account_number check digit if post payment' do
     # incorrect check digit
     invoice_config.update(account_number: '12-123-1')
 

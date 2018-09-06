@@ -40,6 +40,12 @@ describe QualificationKind do
       it { is_expected.to have(1).error_on(:validity) }
     end
 
+    context '0 year validity' do
+      let(:validity) { 0 }
+      it{ is_expected.to be_valid }
+    end
+
+
     context 'nil validity' do
       let(:validity) { nil }
       it { is_expected.to have(1).error_on(:validity) }

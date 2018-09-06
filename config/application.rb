@@ -103,6 +103,7 @@ module Hitobito
       if Delayed::Job.table_exists?
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
+        DownloadCleanerJob.new.schedule
       end
     end
 

@@ -12,6 +12,7 @@ Hitobito::Application.routes.draw do
   root to: 'dashboard#index'
 
   get '/healthz', to: 'healthz#show'
+  get '/healthz/mail', to: 'healthz/mail#show'
 
   language_scope do
 
@@ -46,6 +47,7 @@ Hitobito::Application.routes.draw do
       end
       resources :invoice_articles
 
+      resource :payment_process, only: [:new, :show, :create]
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
@@ -223,6 +225,9 @@ Hitobito::Application.routes.draw do
     delete 'person_add_requests/:id' => 'person/add_requests#reject'
 
     get 'changelog' => 'changelog#index'
+
+    get 'downloads/:id' => 'async_downloads#show'
+    get 'downloads/:id/exists' => 'async_downloads#exists?'
 
   end # scope locale
 

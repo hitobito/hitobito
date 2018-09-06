@@ -20,7 +20,12 @@ describe Export::Pdf::Invoice do
     described_class.render(invoice, articles: true)
   end
 
-  it 'renders empty invoice payment slip if esr_number and participant_number are set' do
+  it 'renders empty invoice articles' do
+    described_class.render(invoice, articles: true)
+  end
+
+  it 'renders empty invoice payment slip if without codeline' do
+    expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
     described_class.render(Invoice.new(esr_number: 1, participant_number: 1),  payment_slip: true )
   end
 

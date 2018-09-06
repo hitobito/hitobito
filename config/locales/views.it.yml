@@ -1,9 +1,3 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-
 it:
   global:
     'yes': "Si"
@@ -88,8 +82,6 @@ it:
   custom_content_decorator:
     available_placeholders: "caratteri a disposizione: %{placeholders}"
     available_placeholders_empty: 'nessun carattere a disposizione'
-  dropdown:
-    last_used: Usato ultimo
   dropdown/event/group_filter:
     all_groups: 'tutti i gruppi'
   dropdown/event/events_export:
@@ -107,12 +99,12 @@ it:
     button: 'esportare'
     csv: 'CSV'
     xlsx: 'Excel'
-    vcard: 'vCard'
     labels: 'etichette'
-    pdf: 'PDF'
     emails: 'indirizzi email'
     addresses: 'lista di indirizzi'
+    households: 'Lista dei nuclei famigliari'
     everything: 'tutti i dati'
+    household_option: 'Riassumere i nuclei famigliari'
   devise:
     failure:
       already_authenticated: 'sei già iscritto.'
@@ -194,6 +186,7 @@ it:
         title: 'corsi disponibili'
         explanation: 'Qui vengono mostrati i corsi per il tuo gruppo così come per i gruppi superiori. Puoi trovare altri corsi tra i gruppi che li organizzano.'
         csv_export_button: 'esportazione CSV'
+        ical_export_button: 'Esportazione del calendario'
       events:
         title: 'eventi che si terranno prossimamente'
         explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
@@ -392,8 +385,8 @@ it:
     custom_filter: 'filtro personale'
     entire_layer: 'livello intero'
     entire_group: 'tutto il gruppo'
-    new_role_filter: 'Nuovo filtro per i ruoli...'
-    new_qualification_filter: 'Nuovo filtro per le qualifiche...'
+  filter_navigation/events:
+    layer: 'solo %{layer}'
   filter_navigation/event/participations:
     predefined_filters:
       all: tutte le persone
@@ -401,7 +394,7 @@ it:
       participants: partecipanti
   full_text:
     index:
-      title: 'persone trovate'
+      title: 'Risultati'
       incomplete_search_request: 'prego digitare almeno due caratteri'
   group:
     merge:
@@ -502,16 +495,22 @@ it:
       available_under_license: 'disponibile in'
       developed_by: 'sviluppato da'
       source_code: 'codice sorgente'
+    user_impersonation:
+      info: "Sei ora registrato come %{user}"
+      end: "Finire l'imitazione"
   mailing_lists:
     global:
       link:
         add: Creare un abbonamento
     form:
       help_additional_sender: 'accanto agli amministratori anche questo indirizzo email può inviare messaggi alla mailing list.'
+      caption_main_email: 'Spedizione solo all''indirizzo principale'
+      caption_main_email_with_preferred_labels: 'Spedizione anche all''indirizzo principale'
       caption_subscribable: 'abbonati possono iscriverei/disiscrivere sé stessi'
       caption_subscribers_may_post: 'abbonati posso scrivere alla mailing list'
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
-      caption_delivery_report: 'Invia mail di conferma al mittente'
+      caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
+      help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -519,8 +518,8 @@ it:
     subscribers_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
     anyone_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
-    delivery_report: 'I mittenti ricevono un'' e-mail di conferma'
-    no_delivery_report: 'I mittenti non ricevono un'' e-mail di conferma'
+    delivery_report: 'I mittenti ricevono un e-mail a conferma dell''invio.'
+    no_delivery_report: 'I mittenti non ricevono nessun e-mail a conferma dell''invio.'
     subscribe: 'collegarsi'
     unsubscribe: 'scollegarsi'
   navigation:
@@ -555,8 +554,8 @@ it:
     add_requests:
       body_list:
         open_requests:
-          one: 1 richiesta aperta.
-          other: '%{count} richieste aperte.'
+          one: "1 richiesta aperta."
+          other: "%{count} richieste aperte."
         request_to: Richiesta a
         cancel: Ritirare richiesta d'accesso
       creator:
@@ -586,14 +585,20 @@ it:
         mailing_list:
           approved: "La richiesta d'accesso per %{person} è già stata accettata."
           rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
+    households:
+      form:
+        address_updated: "Indirizzo aggiornato"
+      fields:
+        lives_in_household_with: "Vive nello stesso nucleo famigliare di"
+        update_denied: "Nessun diritto di scrittura per %{other_person}"
     csv_imports:
       description:
         header: Documenti CSV
         explain_csv_format: 'Ogni riga del documento CSV contiene i dati di una persona. La prima riga contiene i nomi dei campi. I campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere racchiuso tra virgolette ("). Esempio:'
         example: |+
-          nome,cognome,email,luogo,sesso
-          Hans,Muster,hans@beispiel.ch,Bern,m
-          Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+            nome,cognome,email,luogo,sesso
+            Hans,Muster,hans@beispiel.ch,Bern,m
+            Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
 
         explain_field_names: 'Si possono utilizzare quanti campi per i nomi sono necessari. I campi nel file CSV possono essere assegnati all''applicazione nel prossimo passo. '
         explain_role: A tutte le persone di un unico file viene assegnato lo stesso ruolo, che può essere altresì scelto nel prossimo passo.
@@ -685,6 +690,8 @@ it:
         new: La persona non ha ancora nessun accesso. <br><br> Questa operazione invierà un link dove potrete impostare la vostra password.
         resend: La persona ha ricevuto un link per impostare la password, ma non l'ha ancora fatto. <br><br> Questa operazione invierà nuovamente il link.
         reset: La persona ha un login. <br><br> Questa operazione vi invierà un link dove potrete impostare una nuova nuova password.
+      impersonate_user: Imitare
+      impersonate_user_tooltip: Puoi utilizzare Hitobito come se fossi lui
     actions_index:
       add_person: Aggiungere una persona
       import_list: Importare lista
@@ -694,6 +701,8 @@ it:
     attrs:
       additional_data: Informazioni supplementari
       events: I miei prossimi eventi
+    contact_data:
+      lives_in_household_with: Vive nello stesso nucleo famigliare di
     email_field:
       used_as_login: Sarà utilizzato come login
       only_changeable_by_superior: >
@@ -712,13 +721,6 @@ it:
       no_changes: Fino a ora non è stata registrata nessuna modifica.
     pdf:
       cannot_fit: Gli indirizzi non sono adatti al formato predefinito per le etichette.
-    print:
-      heading: "Membri %{group}"
-      name: "Nome"
-      address: "Indirizzo"
-      email: "E-Mail"
-      home_phone: "Telefono"
-      mobile_phone: "Telefonino"
     roles:
       title: Ruoli attivi
     roles_aside:
@@ -727,6 +729,7 @@ it:
     tags:
       add_tag: Aggiungere un tag
       no_entry: (nessuno)
+    export_email_needed: 'Per l''esportazione è necessario un indirizzo e-mail.'
   participations:
     destroy:
       flash:
@@ -736,11 +739,14 @@ it:
       save_search: Salvare la ricerca
       save_filter: Salvare il filtro
       save_filter_placeholder: Indicare un nome per salvare questo filtro
-      prompt_role_selection: Quali ruolo devono essere visualizzati?
-    new:
-      title: Filtrare le persone secondo le ruoli
+      filters_role_kind:
+        active: il ruolo era attivo.
+        created: il ruolo è stato creato.
+        deleted: il ruolo è stato cancellato.
+    role:
+      prompt_role_duration: Nel periodo (opzionale)
+      prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
     qualification:
-      title: Filtrare le persone secondo le qualifiche
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
       prompt_validity: Che validità devono avere le qualifiche mostrate?
       prompt_year: Limitare l'anno delle qualifiche
@@ -749,6 +755,7 @@ it:
       start_at_year_infix: e
       finish_at_year_label: Scaduto tra
       finish_at_year_infix: e
+      not_enough_permissions: Non hai abbastanza diritti per cercare persone con questo filtro.
     simple_radio:
       match:
         one: La persona ha almeno UNA di queste qualifiche
@@ -837,6 +844,8 @@ it:
         create: "La richiesta d'accesso per <i>%{label}</i> è stata inviata."
         update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
+    impersonate: "L'account è stato rilevato da %{user}"
+    impersonation_done: "L'account non è più utilizzato da %{user}"
   views:
     pagination:
       next: '>>'

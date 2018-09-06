@@ -355,15 +355,14 @@ body {
   width: 100%;
 }
 
-
 // New for off canvas layout
 
 body {
   display: flex;
 }
 
-// User Impersonation
-.user-impersonation{
+// Info Bar
+.info-bar{
   height: 30px;
   div {
     text-align: center;

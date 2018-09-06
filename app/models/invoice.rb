@@ -33,6 +33,7 @@
 #  beneficiary         :text(65535)
 #  payee               :text(65535)
 #  participant_number  :string(255)
+#  creator_id          :integer
 #
 
 class Invoice < ActiveRecord::Base
@@ -41,13 +42,19 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
+  ROUND_TO = BigDecimal.new('0.05')
+
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
+  STATES_PAYABLE = %w(issued sent reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
+  belongs_to :creator, class_name: 'Person'
+
+
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
@@ -61,6 +68,7 @@ class Invoice < ActiveRecord::Base
 
   validates :state, inclusion: { in: STATES }
   validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validates :invoice_items, presence: true, if: -> { issued? || sent? }
   validate :assert_sendable?, unless: :recipient_id?
   validates_associated :invoice_config
 
@@ -70,7 +78,7 @@ class Invoice < ActiveRecord::Base
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
-  i18n_enum :state, STATES
+  i18n_enum :state, STATES, scopes: true, queries: true
 
   validates_by_schema
 
@@ -80,13 +88,6 @@ class Invoice < ActiveRecord::Base
   scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
-
-  STATES.each do |state|
-    scope state.to_sym, -> { where(state: state) }
-    define_method "#{state}?" do
-      self.state == state
-    end
-  end
 
   def self.to_contactables(invoices)
     invoices.collect do |invoice|
@@ -106,7 +107,7 @@ class Invoice < ActiveRecord::Base
 
   def calculated
     [:total, :cost, :vat].collect do |field|
-      [field, invoice_items.reject(&:frozen?).sum(&field)]
+      [field, round(invoice_items.reject(&:frozen?).sum(&field))]
     end.to_h
   end
 
@@ -126,15 +127,19 @@ class Invoice < ActiveRecord::Base
     STATES_REMINDABLE.include?(state)
   end
 
+  def payable?
+    STATES_PAYABLE.include?(state)
+  end
+
   def recipients
     Person.where(id: recipient_ids.to_s.split(','))
   end
 
   def recipient_name
-    recipient.try(:greeting_name) || recipient_address.split("\n").first
+    recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end
 
-  def filename(extension)
+  def filename(extension = 'pdf')
     format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
   end
 
@@ -146,8 +151,8 @@ class Invoice < ActiveRecord::Base
     ActiveSupport::StringInquirer.new(self[:state])
   end
 
-  def amount_open
-    total - payments.sum(:amount)
+  def amount_open(without: nil)
+    total - payments.where.not(id: without).sum(:amount)
   end
 
   def amount_paid
@@ -214,9 +219,17 @@ class Invoice < ActiveRecord::Base
      recipient.country].compact.join("\n")
   end
 
+  def recipient_name_from_recipient_address
+    recipient_address.to_s.split("\n").first.presence
+  end
+
   def assert_sendable?
     if recipient_email.blank? && recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
     end
+  end
+
+  def round(decimal)
+    ((decimal / ROUND_TO).round) * ROUND_TO
   end
 end

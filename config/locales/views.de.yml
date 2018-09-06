@@ -108,6 +108,9 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
+    address_fields:
+      updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
+
   custom_content_decorator:
     available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
     available_placeholders_empty: 'Keine Platzhalter vorhanden'
@@ -400,7 +403,7 @@ de:
     preconditions: 'Erforderliche Qualifikationen'
     tabs:
       participants: 'Teilnehmende'
-    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
@@ -423,7 +426,7 @@ de:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
-    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
     show:
       link:
@@ -598,6 +601,7 @@ de:
         one_week: Einer Woche
         one_month: Einem Monat
     add: Externe Rechnung erstellen
+    add_payments: Zahlungen erfassen
     issued: Rechnung gestellt
     sent: Rechnung versendet
     reminder_sent: Mahnung versendet, fällig am %{date} (%{title})
@@ -607,10 +611,12 @@ de:
         success: Rechnung wurde storniert.
     pdf:
       total: Gesamtbetrag
-      total_vat: MWSt. gesamt
+      total_vat: MwSt.
+      cost: Zwischenbetrag
       invoice_number: Rechnungsnummer
       invoice_date: Rechnungsdatum
       due_at: Fällig bis
+      creator: Rechnungssteller
 
   invoice_configs:
     form_tabs:
@@ -639,6 +645,7 @@ de:
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
     update:
       zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
       issued:
         one: "Rechnung %{number} wurde gestellt."
         other: "%{count} Rechnungen wurden gestellt."
@@ -679,12 +686,39 @@ de:
     create:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
-  payment_reminders:
-    create:
-      success:
-        one: "Mahnung wurde erfolgreich erstellt."
-        other: "%{count} Mahnungen wurden erfolgreich erstellt."
-      failure: Es wurden keine gültigen Rechnungen ausgewählt.
+
+  payment_processes:
+    description:
+      header: camt.054 XML Datei
+      explain_xml_format: 'Eine camt.054 XML Datei ist die Sammelbuchungs-auflösung und Belastungs- und Gutschriftsanzeige.
+        Diese enthält eine Reihe verschiedene Buchungspositionen welche automatisiert auf Basis der ESR Nummer bestehenden
+        Rechnungen zugeordnet werden.'
+
+    invalid_file: Die hochgeladene Datei ist nicht gültig.
+    parsing_error: Die hochgeladene kann nicht verarbeitet werden (%{error}).
+    created: Es wurden %{count} Zahlungen erfasst.
+    payments:
+      valid:
+        one: Es wurde eine gültige Zahlung erkannt.
+        other: Es wurden %{count} gültige Zahlungen erkannt.
+      invalid:
+        one: Es wurde eine ungültige Zahlung erkannt.
+        other: Es wurden %{count} ungültige Zahlungen erkannt.
+    show:
+      payments_with_invoice: Zuordenbare Zahlungen vom %{from} bis %{to}.
+      payments_without_invoice: Nicht Zuordenbar
+      amount_open: Offen
+      create:
+        zero: Zahlung importieren
+        one: Zahlung importieren
+        other: '%{count} Zahlungen importieren'
+      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
+      icon_tooltip_settles: Begleicht die offene Rechnung
+      icon_tooltip_exceeds: Übersteigt die offene Rechnung um %{difference}
+      icon_tooltip_undercuts: Unterschreitet die offene Rechnung um %{difference}
+    new:
+      upload_button: 'Hochladen'
+      xml_file: 'XML Datei'
 
   label_formats:
     global_labels: "Globale Etikettenformate"
@@ -714,6 +748,10 @@ de:
     user_impersonation:
       info: "Du bist jetzt als %{user} angemeldet"
       end: "Imitation beenden"
+
+    file_download:
+      wait_for_downloads: 'Die Downloads werden vorbereitet, bitte warten.'
+      cancel_downloads: 'Downloads abbrechen'
 
   mailing_lists:
     global:
@@ -945,7 +983,7 @@ de:
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
 
       impersonate_user: Imitieren
-      impersonate_user_tooltip: Du kannst hitobito so bedienen als wärst du diese Person
+      impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.
 
     actions_index:
       add_person: Person hinzufügen
@@ -1003,8 +1041,8 @@ de:
     tags:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
-    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
-    export_email_needed: 'Für den export wird eine Email Adresse benötigt.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
 
   participations:
     destroy:
@@ -1029,6 +1067,11 @@ de:
         active: war die Rolle aktiv.
         created: wurde die Rolle erstellt.
         deleted: wurde die Rolle gelöscht.
+
+    attributes:
+      title: Felder
+      match: enthält
+      equal: ist genau
 
     new:
       title: Personen filtern
@@ -1133,6 +1176,9 @@ de:
     deleted: '(gelöscht)'
     layer_upwards: '< zu übergeordneter Ebene'
 
+  sheet/payment_process:
+    title: Zahlungen über XML importieren
+
   subscriptions:
     actions_index:
       add_person: Person hinzufügen
@@ -1144,7 +1190,7 @@ de:
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
     subscription:
       only_persons_with: 'Nur Personen mit:'
-    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung an %{email} versendet.'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
   version:
     attribute_change:
@@ -1164,6 +1210,10 @@ de:
 
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
+
+    append_to_household: "%{user} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
+    remove_from_household: "%{user} wurde vom Haushalt (%{object_changes}) entfernt."
 
   views:
     pagination:

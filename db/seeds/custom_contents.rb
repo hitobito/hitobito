@@ -46,25 +46,9 @@ CustomContent.seed_once(:key,
     placeholders_required: 'person-name, request-body',
     placeholders_optional: 'recipient-name, rejecter-name, rejecter-roles' },
 
-  { key: Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT,
-    placeholders_required: nil,
-    placeholders_optional: 'recipient-name, mailing-list-name' },
-
-  { key: Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT,
-    placeholders_required: nil,
-    placeholders_optional: 'recipient-name' },
-
-  { key: Export::EventsExportMailer::CONTENT_EVENTS_EXPORT,
-    placeholders_required: nil,
-    placeholders_optional: 'recipient-name' },
-
-  { key: Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT,
-    placeholders_required: nil,
-    placeholders_optional: 'recipient-name' },
-
   { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
-    placeholders_required: 'invoice-items, invoice-total, payment-information',
-    placeholders_optional: 'recipient-name, group-name, invoice-number' },
+    placeholders_required: '',
+    placeholders_optional: 'recipient-name, group-name, group-address, invoice-number, invoice-items, invoice-total, payment-information' },
 
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',
@@ -89,10 +73,6 @@ add_request_person_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_
 add_request_responsibles_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES).id
 add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED).id
 add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
-subscriptions_export_id = CustomContent.get(Export::SubscriptionsMailer::CONTENT_SUBSCRIPTIONS_EXPORT).id
-people_export_id = CustomContent.get(Export::PeopleExportMailer::CONTENT_PEOPLE_EXPORT).id
-events_export_id = CustomContent.get(Export::EventsExportMailer::CONTENT_EVENTS_EXPORT).id
-event_participations_export_id = CustomContent.get(Export::EventParticipationsExportMailer::CONTENT_EVENT_PARTICIPATIONS_EXPORT).id
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
@@ -318,93 +298,17 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'it',
    label: "Richiesta dei dati personali: Email abilitazione rifiutata"},
 
-  {custom_content_id: subscriptions_export_id,
-   locale: 'de',
-   label: 'Export der Abonnenten',
-   subject: 'Export der Abonnenten',
-   body: "Hallo {recipient-name}<br/><br/>" \
-         "Der Export der Abonnenten von {mailing-list-name} ist fertig und an dieser Mail angehängt.<br/><br/>" },
-
-  {custom_content_id: subscriptions_export_id,
-   locale: 'en',
-   label: 'Export of Mailinglist' },
-
-  {custom_content_id: subscriptions_export_id,
-   locale: 'fr',
-   label: 'Export der Abonnenten' },
-
-  {custom_content_id: subscriptions_export_id,
-   locale: 'it',
-   label: 'Export der Abonnenten' },
-
-  {custom_content_id: people_export_id,
-   locale: 'de',
-   label: 'Export der Personen',
-   subject: 'Export der Personen',
-   body: "Hallo {recipient-name}<br/><br/>" \
-         "Der Export der Personen ist fertig und an dieser Mail angehängt.<br/><br/>" },
-
-  {custom_content_id: people_export_id,
-   locale: 'en',
-   label: 'Export of People' },
-
-  {custom_content_id: people_export_id,
-   locale: 'fr',
-   label: 'Export der Personen' },
-
-  {custom_content_id: people_export_id,
-   locale: 'it',
-   label: 'Export der Personen' },
-
-  {custom_content_id: events_export_id,
-   locale: 'de',
-   label: 'Export der Anlässe',
-   subject: 'Export der Anlässe',
-   body: "Hallo {recipient-name}<br/><br/>" \
-         "Der Export der Anlässe ist fertig und an dieser Mail angehängt.<br/><br/>" },
-
-  {custom_content_id: events_export_id,
-   locale: 'en',
-   label: 'Export of Events' },
-
-  {custom_content_id: events_export_id,
-   locale: 'fr',
-   label: 'Export der Anlässe' },
-
-  {custom_content_id: events_export_id,
-   locale: 'it',
-   label: 'Export der Anlässe' },
-
-  {custom_content_id: event_participations_export_id,
-   locale: 'de',
-   label: 'Export der Event-Teilnehmer',
-   subject: 'Export der Event-Teilnehmer',
-   body: "Hallo {recipient-name}<br/><br/>" \
-         "Der Export der Event-Teilnehmer ist fertig und an dieser Mail angehängt.<br/><br/>" },
-
-  {custom_content_id: event_participations_export_id,
-   locale: 'en',
-   label: 'Export of Event Participants' },
-
-  {custom_content_id: event_participations_export_id,
-   locale: 'fr',
-   label: 'Export der Event-Teilnehmer' },
-
-  {custom_content_id: event_participations_export_id,
-   locale: 'it',
-   label: 'Export der Event-Teilnehmer' },
-
   {custom_content_id: invoice_notification_id,
    locale: 'de',
    label: 'Rechnung',
    subject: 'Rechnung {invoice-number} von {group-name}',
- body: "<p>Hallo {recipient-name}</p>" \
-         "<p>Rechnung von:</p>" \
-         "<p><b>Absender: Verband, Verbandstrasse 23, 3000 Verbandort</b></p>" \
-         "<br/><br/>" \
-         "{invoice-items}<br/><br/>" \
-         "{invoice-total}<br/><br/>" \
-         "{payment-information}<br/><br/>" },
+   body: "<p>Hallo {recipient-name}</p>" \
+   "<p>Rechnung von:</p>" \
+   "<p><b>Absender: {group-address}</b></p>" \
+   "<br/><br/>" \
+   "{invoice-items}<br/><br/>" \
+   "{invoice-total}<br/><br/>" \
+   "{payment-information}<br/><br/>" },
 
   {custom_content_id: invoice_notification_id,
    locale: 'en',

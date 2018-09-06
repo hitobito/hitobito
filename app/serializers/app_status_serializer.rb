@@ -7,7 +7,7 @@
 
 class AppStatusSerializer
 
-  delegate :code, :store_ok?, to: :app_status
+  delegate :code, :details, to: :app_status
 
   attr_reader :app_status
 
@@ -16,7 +16,7 @@ class AppStatusSerializer
   end
 
   def to_json(a)
-    {app_status: { code: code, store_ok?: store_ok? } }.to_json
+    {app_status: { code: code, details: details } }.to_json
   end
 
 end

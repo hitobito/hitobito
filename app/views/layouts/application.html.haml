@@ -35,8 +35,9 @@
 
   %body
     %main
-    - if origin_user
-      = render 'layouts/user_impersonation'
+      = render 'layouts/file_download' if current_user
+      - if origin_user
+        = render 'layouts/user_impersonation'
 
     %header#page-header
       .container-fluid

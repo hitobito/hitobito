@@ -18,47 +18,66 @@ class Invoice::PaymentSlip
   end
 
   def esr_number
-    esr_number = invoice.sequence_number.split('-').map { |nr| format('%013d', nr.to_i) }.join
-    esr_number = "#{esr_number}#{check_digit(esr_number)}"
-    esr_number.reverse.gsub(/(.{5})/, '\1 ').reverse
+    format_as_esr(number_string_with_check)
+  end
+
+  def check_digit(string)
+    number = string.each_char.inject(0) do |digit, char|
+      current_digit = digit + char.to_i
+      ESR9_TABLE[current_digit % 10]
+    end
+    (10 - number) % 10
   end
 
   def code_line
-    code_line = ''
-    code_line << first_code_line_block
-    code_line << "#{invoice.esr_number.delete(' ')}+ "
-    code_line << last_code_line_block
-  end
-
-  def check_digit(number)
-    digit = 0
-    number.each_char.each do |char|
-      current_digit = digit + char.to_i
-      digit = ESR9_TABLE[current_digit % 10]
-    end
-    (10 - digit) % 10
+    "#{code_line_prefix}>#{number_string_with_check}+ #{code_line_suffix}>"
   end
 
   private
 
-  def first_code_line_block
+  def code_line_prefix
     block = ''
     block << BCS[calculate_bc.to_sym]
-    block << format('%010d', invoice.total.to_s.delete('.').to_i) if calculate_bc == 'esr'
-    block << "#{check_digit(block)}>"
+    block << format('%011.2f', invoice.total).delete('.') if calculate_bc == 'esr'
+    block << check_digit(block).to_s
   end
 
-  def last_code_line_block
-    block = ''
-    invoice.participant_number.split('-').each_with_index do |nr, i|
-      next block << nr if i != 1
-      block << format('%06d', nr.to_i)
+  def code_line_suffix
+    participant_number_parts.each_with_index.inject('') do |block, (nr, i)|
+      block << (i != 1 ? nr : zero_padded(nr.to_i, 6))
     end
-    "#{block}>"
   end
 
   def calculate_bc
     invoice.invoice_items.present? ? 'esr' : 'esr_plus'
+  end
+
+  def number_string
+    [zero_padded(group_id, 13), zero_padded(index, 13)].join
+  end
+
+  def number_string_with_check
+    number_string + check_digit(number_string).to_s
+  end
+
+  def group_id
+    invoice.sequence_number.split('-')[0].to_i
+  end
+
+  def index
+    invoice.sequence_number.split('-')[1].to_i
+  end
+
+  def participant_number_parts
+    invoice.participant_number.split('-')
+  end
+
+  def zero_padded(number, zeros)
+    format("%0#{zeros}d", number)
+  end
+
+  def format_as_esr(string)
+    string.reverse.gsub(/(.{5})/, '\1 ').reverse
   end
 
 end

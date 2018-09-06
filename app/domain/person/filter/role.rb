@@ -21,7 +21,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def blank?
-    args[:role_type_ids].blank?
+    args[:role_type_ids].blank? && args[:kind].blank?
   end
 
   def to_hash
@@ -72,7 +72,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions
-    [[:roles, { type: args[:role_types] }]].to_h
+    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
   end
 
   def duration_conditions

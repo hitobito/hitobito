@@ -101,7 +101,7 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount).to eq 5
+      expect(assigns(:payment).amount).to eq 5.35
     end
 
     it 'GET#show assigns payment with amount_open' do
@@ -110,7 +110,7 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount).to eq 4.5
+      expect(assigns(:payment).amount).to eq 4.85
     end
 
     it 'GET#show assigns payment with flash parameters' do
@@ -143,6 +143,14 @@ describe InvoicesController do
     expect(invoice.reload.state).to eq 'cancelled'
     expect(response).to redirect_to group_invoices_path(group)
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+  end
+
+  it 'POST#create sets creator_id to current_user' do
+    expect do
+      post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
+    end.to change { Invoice.count }.by(1)
+
+    expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
   end
 
 end

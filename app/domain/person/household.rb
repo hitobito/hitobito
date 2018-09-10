@@ -40,7 +40,8 @@ class Person::Household
     end
   end
 
-  def persist!
+  def persist!(current_user)
+    @current_user = current_user
     Person.transaction do
       empty? ? remove : save
     end
@@ -48,15 +49,16 @@ class Person::Household
 
   def save
     fail 'invalid' unless valid?
-    household_log(person, people, person.household_key?)
+      
+    household_log(person, people, person.household_key?) if person.household_key? || key
     person.update(household_key: key)
     people.each do |housemate|
       update_housemate(housemate, people, person)
     end
   end
 
-  def remove
-    household_log_entry(person, people, :remove_from_household)
+  def remove    
+    household_log_entry(person, people, :remove_from_household) if person.household_key?
 
     if people.size == 1
       household_log_entry(people.first, [person], :remove_from_household)
@@ -131,7 +133,9 @@ class Person::Household
     household.delete(housemate)
     existing_household_key = housemate.household_key?
     housemate.update(address_attrs(person).merge(household_key: key))
-    household_log(housemate, household, existing_household_key)
+    if address_attrs(person) != address_attrs(housemate)
+      household_log(housemate, household, existing_household_key) 
+    end
   end
 
   def household_log(housemate, household, existing_household_key)
@@ -145,7 +149,7 @@ class Person::Household
   def household_log_entry(housemate, household, event)
     PaperTrail::Version.create(main: housemate,
                                item: housemate,
-                               whodunnit: housemate,
+                               whodunnit: @current_user.id,
                                event: event,
                                object_changes: household_name(household))
   end

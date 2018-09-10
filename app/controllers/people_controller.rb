@@ -244,7 +244,7 @@ class PeopleController < CrudController
   end
 
   def persist_household
-    household.persist!
+    household.persist!(origin_user || current_user)
   end
 
   def household

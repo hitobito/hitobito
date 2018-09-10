@@ -49,7 +49,6 @@ class Person::Household
 
   def save
     fail 'invalid' unless valid?
-      
     household_log(person, people, person.household_key?) if person.household_key? || key
     person.update(household_key: key)
     people.each do |housemate|
@@ -57,9 +56,8 @@ class Person::Household
     end
   end
 
-  def remove    
+  def remove
     household_log_entry(person, people, :remove_from_household) if person.household_key?
-
     if people.size == 1
       household_log_entry(people.first, [person], :remove_from_household)
       people.update_all(household_key: nil)

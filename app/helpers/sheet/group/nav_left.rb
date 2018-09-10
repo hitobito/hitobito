@@ -50,9 +50,7 @@ module Sheet
 
       def render_header
         active = layer == entry && view.request.path !~ /\/deleted_people$/
-        content_tag(:h3, class: "nav-left-title #{'active' if active}") do
-          link_to(layer, active_path(layer))
-        end
+        link_to(layer, active_path(layer), class: "nav-left-title #{'active' if active}")
       end
 
       def render_layer_groups

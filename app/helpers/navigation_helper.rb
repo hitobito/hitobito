@@ -28,6 +28,7 @@ module NavigationHelper
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
+      icon_name: 'money',
       if: ->(_) { current_user.finance_groups.any? },
       active_for: %w(invoices invoice_articles invoice_config) },
 
@@ -62,11 +63,14 @@ module NavigationHelper
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, icon_name = false, active_for = [], &block)
+  def nav(label, url, icon_name = false, active_for = [], inactive_for = [], &block)
     options = {}
-    active = current_page?(url) || active_for.any? { |p| request.path =~ %r{/?#{p}/?} }
+    active = current_page?(url) || 
+      Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
+      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
     if active
-      options[:class] = 'active'
+      options[:class] = 'active-section'
+      options[:class] += ' is-top-level'
     end
     content_tag(:li, options) do
       concat(link_to(icon(icon_name) + label, url))

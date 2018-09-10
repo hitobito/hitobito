@@ -68,11 +68,11 @@ class Event::ParticipationsController < CrudController
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf   { render_pdf(entries.collect(&:person), group) }
+      format.pdf   { render_pdf(filter_entries.collect(&:person), group) }
       format.csv   { render_tabular_in_background(:csv) && redirect_to(action: :index) }
-      format.vcf   { render_vcf(entries.includes(person: :phone_numbers).collect(&:person)) }
+      format.vcf   { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
-      format.email { render_emails(entries.collect(&:person)) }
+      format.email { render_emails(filter_entries.collect(&:person)) }
     end
   end
 
@@ -106,12 +106,17 @@ class Event::ParticipationsController < CrudController
   end
 
   def list_entries
-    records = event_participation_filter.list_entries.page(params[:page])
-    @counts = event_participation_filter.counts
+    filter = event_participation_filter
+    records = filter.list_entries.page(params[:page])
+    @counts = filter.counts
 
     records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
+  end
+
+  def filter_entries
+    event_participation_filter.list_entries
   end
 
   def authorize_class

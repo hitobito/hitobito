@@ -4,12 +4,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Household
-  attr_reader :person, :ability, :other
+  attr_reader :person, :ability, :other, :current_user
 
-  def initialize(person, ability, other = nil)
+  def initialize(person, ability, other = nil, user = nil)
     @person = person
     @ability = ability
     @other = other
+    @current_user = user
   end
 
   def valid?
@@ -30,7 +31,7 @@ class Person::Household
   end
 
   def assign
-    person.household_people_ids ||= people.collect(&:id)
+    person.household_people_ids ||= housemates.collect(&:id)
 
     if readonly_people.empty?
       update_address
@@ -40,8 +41,7 @@ class Person::Household
     end
   end
 
-  def persist!(current_user)
-    @current_user = current_user
+  def persist!
     Person.transaction do
       empty? ? remove : save
     end
@@ -49,18 +49,23 @@ class Person::Household
 
   def save
     fail 'invalid' unless valid?
-    household_log(person, people, person.household_key?) if person.household_key? || key
-    person.update(household_key: key)
-    people.each do |housemate|
-      update_housemate(housemate, people, person)
+    if any_change?
+      household_log(person, people, person.household_key?)
+      person.update(household_key: key)
+      housemates.each do |housemate|
+        update_housemate(housemate, people, person)
+      end
     end
   end
 
   def remove
     household_log_entry(person, people, :remove_from_household) if person.household_key?
-    if people.size == 1
-      household_log_entry(people.first, [person], :remove_from_household)
-      people.update_all(household_key: nil)
+    if people.size == 2
+      household_log_entry(person, people, :remove_from_household, item: housemates.first)
+      housemates.first.update(household_key: nil)
+    end
+    housemates.each do |housemate|
+      household_log_entry(housemate, people, :remove_from_household, {item: person})
     end
     person.update(household_key: nil)
   end
@@ -70,7 +75,7 @@ class Person::Household
   end
 
   def readonly_people
-    @readonly_people ||= people.select { |p| ability.cannot?(:update, p) }
+    @readonly_people ||= housemates.select { |p| ability.cannot?(:update, p) }
   end
 
   def key
@@ -78,14 +83,32 @@ class Person::Household
   end
 
   def address_changed?
+    # for address changed in the form
     @address_changed
   end
 
   def people_changed?
+    # for people changed in the form
     @people_changed
   end
 
+  def changed_address_or_people?
+    people.map { |p| [address_attrs(p), p.household_key] }.uniq.count > 1
+  end
+
+  def new_household?
+    people.all?{ |p| p.household_key.nil? }
+  end
+
+  def any_change?
+    changed_address_or_people? || new_household?
+  end
+
   def people
+    housemates << person
+  end
+
+  def housemates
     person.household_people
   end
 
@@ -127,27 +150,26 @@ class Person::Household
   end
 
   def update_housemate(housemate, people, person)
-    household = people << person
-    household.delete(housemate)
+    people.delete(housemate)
     existing_household_key = housemate.household_key?
     housemate.update(address_attrs(person).merge(household_key: key))
-    if address_attrs(person) != address_attrs(housemate)
-      household_log(housemate, household, existing_household_key) 
-    end
+    household_log(housemate, people, existing_household_key) 
   end
 
-  def household_log(housemate, household, existing_household_key)
+  def household_log(housemate, household, existing_household_key, options = {})
+    item = options[:item] ? options[:item] : housemate
     if existing_household_key
-      household_log_entry(housemate, household, :household_updated)
+      household_log_entry(housemate, people, :household_updated, item: item)
     else
-      household_log_entry(housemate, household, :append_to_household)
+      household_log_entry(housemate, people, :append_to_household, item: item)
     end
   end
 
-  def household_log_entry(housemate, household, event)
+  def household_log_entry(housemate, household, event, options = {})
+    item = options[:item] ? options[:item] : housemate
     PaperTrail::Version.create(main: housemate,
-                               item: housemate,
-                               whodunnit: @current_user.id,
+                               item: item,
+                               whodunnit: current_user.id,
                                event: event,
                                object_changes: household_name(household))
   end

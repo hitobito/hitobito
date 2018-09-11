@@ -244,11 +244,11 @@ class PeopleController < CrudController
   end
 
   def persist_household
-    household.persist!(origin_user || current_user)
+    household.persist!
   end
 
   def household
-    @household ||= Person::Household.new(entry, current_ability)
+    @household ||= Person::Household.new(entry, current_ability, nil, current_user)
   end
 
   def person_filter

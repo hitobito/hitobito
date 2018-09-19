@@ -93,7 +93,8 @@ module LayoutHelper
 
   def sign_out_path
     if session[:origin_user]
-      group_person_impersonate_path(current_user.primary_group_id, current_user)
+      group_id = current_user.primary_group_id || current_user.groups.first.id
+      group_person_impersonate_path(group_id, current_user)
     else
       destroy_person_session_path
     end

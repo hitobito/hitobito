@@ -46,7 +46,14 @@ module NavigationHelper
         url = options[:url]
         icon_name = options[:icon_name]
         url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{options[:label]}"), url, icon_name, options[:active_for]) do
+        nav(I18n.t("navigation.#{options[:label]}"), 
+            url, 
+            icon_name, 
+            options[:active_for], 
+            options[:inactive_for],
+            class: 'nav-left-section',
+            active_class: 'active'
+            ) do
           concat(sheet.render_left_nav) if sheet.left_nav?
         end
       end
@@ -63,16 +70,16 @@ module NavigationHelper
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, icon_name = false, active_for = [], inactive_for = [], &block)
-    options = {}
+  def nav(label, url, icon_name = false, active_for = [], inactive_for = [], options={}, &block)
+    classes = options[:class] || ''
+    active_class = options[:active_class] || 'is-active'
     active = current_page?(url) || 
       Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
       Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
     if active
-      options[:class] = 'active-section'
-      options[:class] += ' is-top-level'
+      classes += " #{active_class}"
     end
-    content_tag(:li, options) do
+    content_tag(:li, {class: classes}) do
       concat(link_to(icon(icon_name) + label, url))
       yield if block_given? && active
     end

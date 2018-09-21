@@ -7,62 +7,50 @@
 // -------------------------
 
 body {
-  padding: 0; // new
+  padding: 0;
   background: $bodyBackground;
 }
 
 /* Header */
-#page-header {
-  display: none;
-  @include clearfix;
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
   margin: 0;
-  padding: 10px 10px 0;
-  // background: $pageBackground;
-
-  @include responsive(mediaTablet) {
-    padding: 10px 20px 0;
-  }
-
-  .options > ul > li > a { // header links on the right side
-    color: lighten($pageBackground, 35%);
-    &:hover {
-      color: $white;
-    }
-  }
+  padding: 0.5rem;
 }
 
-.brand {
+.logo-image {
   display: block;
   position: relative;
-  background-color: white;
-  float: left;
   width: 230px;
   height: 30px;
-  padding: 10px 0;
-  margin-right: 40px;
 
   // Hide text
   text-indent: -9999px;
-  white-space: nowrap;
-  font-family: $headingFontFamily;
-  font-weight: bold;
-  font-size: 2.462em; // 32px
-  line-height: 1.250em; // 40px
-  @include single-text-shadow(white, 0, 1px, 0);
 
-  background: image-url("logo.png") transparent no-repeat 0px 10px;
+  background: image-url("logo.png") transparent no-repeat;
+  background-size: contain;
 
+  /* to set a logo in a wagon you have to:
+  
+  .logo-image {
+    width: [width of the image];
+    height: [width of the image];
+    height: [width of the image];
+    background-image: url("[name of the image]")
+    
+  }
 
-  // &::before {
-  //   content: '';
-  //   background-color: white;
-  //   position: absolute;
-  //   top: 0;
-  //   bottom: 0;
-  //   left: 0;
-  //   right: 0;
-  //   z-index: -1;
-  // }
+  for a white box around the logo, adjust the #page-header:
+  .logo {
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+  }
+    
+  */
+
 }
 
 .dropdown-menu {
@@ -81,7 +69,7 @@ body {
   padding: 20px 10px 90px;
   margin: 0;
   width: 100%;
-  // background: $pageBackground;
+  background: $pageBackground;
 
   @include responsive(mediaTablet) {
     margin: 0;
@@ -102,7 +90,7 @@ body {
     min-width: 20rem;
     max-width: 30rem;
     z-index: 1;
-    margin-top: 8rem;
+    margin-top: 4rem;
 
     @include responsive(phone, $mediaTablet) {
       display: none !important;
@@ -114,26 +102,11 @@ body {
     margin-left: -1.5rem;
     width: 100%;
     max-width: 100%;
-    overflow-y: scroll;
+    overflow-y: visible;
 
   }
 
 }
-
-// .nav-left {
-//   width: 25em;
-//   position: absolute;
-//   left: 2em;
-//   top: 8em;
-//   z-index: 1;
-// }
-
-// #page > .container-fluid {
-//   position: absolute;
-//   left: 25em;
-//   right: 2em;
-//   z-index: 2
-// }
 
 .sheet,
 #content {

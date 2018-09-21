@@ -5,7 +5,6 @@
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 	background-color: white;
 
-
 	$navLeftPadding: 1rem;
 	$navLeftIconWidth: 2rem;
 	$navLeftPaddingFull: $navLeftPadding + $navLeftIconWidth;
@@ -15,7 +14,6 @@
 	ul { 
 		margin: 0
 	}
-
 
 	a {
 		display: block;
@@ -32,7 +30,7 @@
 	}
 
 	a.is-active, li.is-active > a {
-		background-color: desaturate(lighten($linkColor, 60%), 20%);
+		background-color: desaturate(lighten($linkColor, 50%), 20%);
 		&:before {
 			content: '';
 			position: absolute;

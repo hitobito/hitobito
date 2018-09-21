@@ -48,7 +48,7 @@
 		background-color: $grayLighter;
 		& > a {
 			font-size: 1.2rem;
-			padding: 1.2rem;
+			padding: 0.9rem;
 			padding-left: $navLeftPadding;
 			i {
 				width: $navLeftIconWidth
@@ -60,14 +60,15 @@
 		}
 	}
 
-	.nav-left-title {
+	.nav-left-section .nav-left-title {
 		font-size: 1rem;
-		padding-top: 1rem;
-		padding-bottom: 1rem;
+		padding-top: 0.4rem;
+		padding-bottom: 0.4rem;
+		padding-left: $navLeftPaddingFull;
 		font-weight: bold;
 	}
 
-	.nav-left-back {
+	.nav-left-section .nav-left-back {
 		font-size: 0.8rem;
 	}
 
@@ -85,7 +86,24 @@
 		margin-top: 0;
 	}
 
+	.nav-left-section {
+		border-top: 1px solid $grayLight;
+	}
 
+	.options {
+		padding: 1rem 0;
+		.lang a {
+			display: inline;
+			padding: 0rem;
+		}
+		.lang {
+			padding-left: $navLeftPaddingFull;
+		}
+	  .lang .active {
+	  	color: $black;
+	    text-decoration: none;
+	  }
+	}
 
 	// typgraphical hierarchy
 

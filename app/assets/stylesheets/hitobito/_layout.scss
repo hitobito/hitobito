@@ -32,6 +32,8 @@ body {
 
 .brand {
   display: block;
+  position: relative;
+  background-color: white;
   float: left;
   width: 230px;
   height: 30px;
@@ -49,6 +51,18 @@ body {
 
   background: image-url("logo.png") transparent no-repeat 0px 10px;
 
+
+  // &::before {
+  //   content: '';
+  //   background-color: white;
+  //   position: absolute;
+  //   top: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   z-index: -1;
+  // }
+
   // Retina version
   @media
     only screen and (-webkit-min-device-pixel-ratio : 2),
@@ -56,44 +70,6 @@ body {
       background: image-url("logo@2x.png") transparent no-repeat 0px 10px;
       background-size: 230px 30px;
   }
-}
-
-.options {
-  float: right;
-  margin-top: 10px;
-  > ul {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-
-    > li {
-      list-style-image: none;
-      list-style-type: none;
-      margin-left: 0;
-      white-space: nowrap;
-      display: inline;
-      float: left;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-  }
-
-  .lang .active {
-    text-decoration: none;
-  }
-
-  a {
-    line-height: 30px;
-  }
-  form, input[type="search"] {
-    margin-bottom: 0 !important;
-  }
-
-}
-.options a, a.link {
-  text-decoration: underline;
-  &:hover { background: none; }
 }
 
 .dropdown-menu {
@@ -206,6 +182,7 @@ body {
 
 /* Footer */
 #page-footer {
+  display: none;
   padding-top: 0;
   clear: both;
 
@@ -230,6 +207,16 @@ body {
   //   @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
   //   background: $bodyBackground;
   // }
+}
+
+.form-inline .quicksearch {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  .quicksearch-input {
+    flex: 1 0 auto;
+  }
 }
 
 

@@ -6,9 +6,10 @@
 %nav#page-navigation
   = render_main_nav
 
-.options
-  %ul
-    = render 'layouts/languages'
-    %li= link_to current_user, person_home_path(current_user)
-    %li= link_to t('.sign_out'), sign_out_path, method: "delete"
-    %li= render 'layouts/quicksearch'
+  .nav-left-section.options
+    %ul.nav-left-list
+      %li.divider
+      %li= link_to current_user, person_home_path(current_user)
+      %li.divider
+      = render 'layouts/languages'
+      %li= link_to t('.sign_out'), sign_out_path, method: "delete"

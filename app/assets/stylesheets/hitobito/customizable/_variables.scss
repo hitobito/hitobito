@@ -58,7 +58,7 @@ $tableColorHover:       lighten($purple, 50%);
 @import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700');
 
 
-$sansFontFamily:        Helvetica, Arial, sans-serif !default;
+$sansFontFamily:        'Noto Sans', sans-serif;
 $headingFontFamily:     'Noto Sans', sans-serif; //'Quicksand', $sansFontFamily !default;
 $baseFontFamily:        'Noto Sans', sans-serif; //'Varela Round', $sansFontFamily !default;
 $headingsFontWeight:    normal !default; // instead of browser default, bold

@@ -79,7 +79,6 @@ body {
 /* Content */
 #page {
   padding: 20px 10px 90px;
-  min-height: 100vh;
   margin: 0;
   width: 100%;
   // background: $pageBackground;
@@ -115,7 +114,7 @@ body {
     margin-left: -1.5rem;
     width: 100%;
     max-width: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
 
   }
 
@@ -153,17 +152,6 @@ body {
     }
   }
   .level { color: $gray; }
-}
-
-.sheet.current {
-  background: image-url("shadow_left.png") transparent no-repeat bottom left;
-  padding-bottom: 28px;
-  margin-bottom:-58px !important;
-  .container-shadow {
-    background: image-url("shadow_right.png") transparent no-repeat bottom right;
-    padding-bottom: 28px;
-    margin-bottom:-28px;
-  }
 }
 
 #content {

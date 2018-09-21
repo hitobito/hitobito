@@ -13,6 +13,7 @@ body {
 
 /* Header */
 #page-header {
+  display: none;
   @include clearfix;
   margin: 0;
   padding: 10px 10px 0;
@@ -62,14 +63,6 @@ body {
   //   right: 0;
   //   z-index: -1;
   // }
-
-  // Retina version
-  @media
-    only screen and (-webkit-min-device-pixel-ratio : 2),
-    only screen and (min-device-pixel-ratio : 2) {
-      background: image-url("logo@2x.png") transparent no-repeat 0px 10px;
-      background-size: 230px 30px;
-  }
 }
 
 .dropdown-menu {
@@ -86,9 +79,9 @@ body {
 /* Content */
 #page {
   padding: 20px 10px 90px;
-  width: 100vw;
   min-height: 100vh;
   margin: 0;
+  width: 100%;
   // background: $pageBackground;
 
   @include responsive(mediaTablet) {
@@ -96,23 +89,52 @@ body {
     padding: 20px 20px 90px;
   }
 
-  & > .sheet { margin: 0 20px; }
+  // FLEXBOX VERSION
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  align-content: space-around;
+
+
+
+  .nav-left {
+    min-width: 20rem;
+    max-width: 30rem;
+    z-index: 1;
+    margin-top: 8rem;
+
+    @include responsive(phone, $mediaTablet) {
+      display: none !important;
+    }
+
+  }
+  .container-fluid {
+    z-index: 2;
+    margin-left: -1.5rem;
+    width: 100%;
+    max-width: 100%;
+    overflow: scroll;
+
+  }
+
 }
 
-.nav-left {
-  width: 25em;
-  position: absolute;
-  left: 2em;
-  top: 8em;
-  z-index: 1;
-}
+// .nav-left {
+//   width: 25em;
+//   position: absolute;
+//   left: 2em;
+//   top: 8em;
+//   z-index: 1;
+// }
 
-#page > .container-fluid {
-  position: absolute;
-  left: 25em;
-  right: 2em;
-  z-index: 2
-}
+// #page > .container-fluid {
+//   position: absolute;
+//   left: 25em;
+//   right: 2em;
+//   z-index: 2
+// }
 
 .sheet,
 #content {

@@ -18,6 +18,7 @@ body {
   left: 1rem;
   margin: 0;
   padding: 0.5rem;
+  z-index: 100;
 }
 
 .logo-image {
@@ -81,8 +82,6 @@ body {
   align-items: flex-start;
   align-content: space-around;
 
-
-
   .nav-left {
     min-width: 16rem;
     width: 30%;
@@ -100,6 +99,10 @@ body {
     overflow-y: visible;
     padding-bottom: 60px; // needs these paddings to accomodate further sheets
     padding-right: 20px;  // needs these paddings to accomodate further sheets
+  }
+
+  .is-logged-out & {
+    padding-top: 5rem;
   }
 }
 
@@ -126,10 +129,17 @@ body {
     margin: 0;
   }
 
-  & > a {
+  & > a{
     flex: 0 0 auto;
     color: $white;
     margin-left: 1rem;
+  }
+
+  .is-logged-out & {
+    justify-content: flex-end;
+    a {
+      color: white;
+    }
   }
 }
 
@@ -211,11 +221,6 @@ body {
       }
     }
   }
-
-  // & > .container-fluid {
-  //   @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
-  //   background: $bodyBackground;
-  // }
 }
 
 .form-inline .quicksearch {
@@ -229,9 +234,15 @@ body {
 }
 
 
+// Adaptions for phone size / Responsiveness
+
+
 @include responsive(phone, $mediaTablet) {
   .logo {
     display: none;
+    .is-logged-out & {
+      display: block;
+    }
   }
 
   #page {

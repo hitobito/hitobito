@@ -8,6 +8,7 @@
 
 body {
   padding: 0;
+  height: 100vh;
   background: $bodyBackground;
 }
 
@@ -72,9 +73,6 @@ body {
   width: 100%;
   background: $pageBackground;
   overflow-y: visible;
-  margin-bottom: 60px;
-
-  // FLEXBOX VERSION
 
   display: flex;
   flex-direction: row;
@@ -201,11 +199,10 @@ body {
 
 /* Footer */
 #page-footer {
-  display: none;
   padding-top: 0;
-  clear: both;
-
   color: $footerColor;
+  margin-top: -3rem;
+  background-color: $footerBackground;
 
   .footer_content {
     padding-top: 20px;
@@ -246,9 +243,6 @@ body {
   }
 
   #page {
-    display: block;
-    position: absolute;
-
     .nav-left {
       margin-top: 0;
       position: absolute;

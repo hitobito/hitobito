@@ -38,7 +38,7 @@ $borderColor:           $grayLight !default;
 $pageBackground:        lighten($green, 5%);
 $contentBackground:     $grayLight;
 $footerBackground:      $blue;
-$bodyBackground:        -webkit-linear-gradient(315deg, rgba(153,191,98,1) 0%,rgba(50,152,151,1) 100%);
+$bodyBackground:        $blue;
 
 $focusColor:            $purple;
 $shadowColor:           darken($pageBackground, 10%);

@@ -70,32 +70,32 @@
 
           = content_for?(:content) ? yield(:content) : yield
 
-      %footer#page-footer
-        .container-fluid
-          .row
-            - footer = Settings.application.footer
-            .span3
-              - if footer.logo_image.present?
-                = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
-            .footer_content.span9
-              %p
-                -footer.links.to_hash.each do |label, url|
-                  = link_to label, url, target: '_blank'
-                  %br/
-              %p
-                - if Wagons.app_version.to_s > '0.0'
-                  = link_to "Version #{Wagons.app_version}", changelog_path
-
-                  %br/
-
-                = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
-                = t('.available_under_license')
-                = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
+    %footer#page-footer
+      .container-fluid
+        .row
+          - footer = Settings.application.footer
+          .span3
+            - if footer.logo_image.present?
+              = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
+          .footer_content.span9
+            %p
+              -footer.links.to_hash.each do |label, url|
+                = link_to label, url, target: '_blank'
                 %br/
-                = t('.developed_by')
-                = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
-                2012 -
-                = Time.zone.now.year
+            %p
+              - if Wagons.app_version.to_s > '0.0'
+                = link_to "Version #{Wagons.app_version}", changelog_path
+
+                %br/
+
+              = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
+              = t('.available_under_license')
+              = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
+              %br/
+              = t('.developed_by')
+              = link_to 'Puzzle ITC', 'http://puzzle.ch', target: '_blank'
+              2012 -
+              = Time.zone.now.year
 
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)
   = piwik_tracking_tag

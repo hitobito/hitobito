@@ -276,10 +276,17 @@ body {
       }
     }
 
-
-
     .container-fluid {
       margin: 0rem;
+    }
+
+    .sheet.parent {
+      a.level {
+        margin-bottom: 0.5rem;
+      }
+      ul.nav.nav-sub {
+        display: none;
+      }
     }
   }
 

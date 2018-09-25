@@ -40,6 +40,7 @@ de:
     button:
       save: Speichern
       cancel: Abbrechen
+      close: Schliessen
       search: Suchen
       back: Zurück
       refresh: Aktualisieren
@@ -781,6 +782,7 @@ de:
     unsubscribe: 'Abmelden'
 
   navigation:
+    menu: 'Menü'
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'

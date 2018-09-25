@@ -42,8 +42,11 @@
 		}
 	}
 
+	
+
 	.nav-left-section {
 		background-color: $grayLighter;
+		border-top: 1px solid $grayLight;
 		& > a {
 			font-size: 1.2rem;
 			padding: 0.9rem;
@@ -55,6 +58,13 @@
 		&.active {
 			background-color: white;
 			margin-bottom: 1rem;
+		}
+
+		a.nav-left-close {
+			font-size: 1rem;
+			i {
+				width: auto;
+			}
 		}
 	}
 
@@ -82,10 +92,6 @@
 	.nav-left-section-link ~ .divider,
 	.nav-left-list > li.divider:first-child {
 		margin-top: 0;
-	}
-
-	.nav-left-section {
-		border-top: 1px solid $grayLight;
 	}
 
 	.options {

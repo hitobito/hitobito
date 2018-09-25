@@ -1,14 +1,19 @@
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2018, hitobito AG. This file is part of
 #  hitobito_dsj and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_dsj.
+#  https://github.com/hitobito/hitobito.
 
 app = window.App ||= {}
 
 app.NavOffCanvas = {
-  toggle: ->
-    $('.nav-off-canvas').toggle();
+  toggle: (e) ->
+    e.preventDefault();
+    $('.nav-left').toggleClass("is-visible");
 }
 
-$ ->
-  $('#page-header').on('click', app.NavOffCanvas.toggle)
+$(document).on('click', '.toggle-nav', app.NavOffCanvas.toggle)
+$(document).on('click', '.nav-left-overlay', app.NavOffCanvas.toggle)
+$(document).keyup (e) ->
+  if (e.key == 'Escape') && $('.nav-left').hasClass('is-visible')
+    e.preventDefault;
+    $('.nav-left').toggleClass("is-visible");

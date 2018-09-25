@@ -50,7 +50,8 @@
       .container-fluid
         #page-header
           - if current_user
-            =render 'layouts/quicksearch'
+            = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone')
+            = render 'layouts/quicksearch'
             = link_to current_user, person_home_path(current_user), class: 'hidden-phone'
             = link_to t('layouts.nav.sign_out'), sign_out_path, method: "delete", class: 'hidden-phone'
           - elsif current_user.nil? # nil without login, false on error

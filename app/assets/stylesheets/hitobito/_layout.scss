@@ -73,11 +73,6 @@ body {
   overflow-y: visible;
   margin-bottom: 60px;
 
-  @include responsive(mediaTablet) {
-    margin: 0;
-    padding: 20px 20px 90px;
-  }
-
   // FLEXBOX VERSION
 
   display: flex;
@@ -94,12 +89,8 @@ body {
     max-width: 25rem;
     z-index: 1;
     margin-top: 4rem;
-
-    @include responsive(phone, $mediaTablet) {
-      display: none !important;
-    }
-
   }
+
   .container-fluid {
     z-index: 2;
     margin-left: -1.5rem;
@@ -109,7 +100,23 @@ body {
     overflow-y: visible;
     padding-bottom: 60px;
   }
+}
 
+#page-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  .form-inline {
+    flex: 1 0 auto;
+    margin: 0;
+  }
+
+  a {
+    flex: 0 0 auto;
+    color: $white;
+    margin-left: 1rem;
+  }
 }
 
 .sheet,
@@ -167,6 +174,7 @@ body {
   clear: both;
 }
 
+
 /* Footer */
 #page-footer {
   display: none;
@@ -205,6 +213,18 @@ body {
     flex: 1 0 auto;
   }
 }
+
+
+@include responsive(phone, $mediaTablet) {
+  .logo {
+    display: none;
+  }
+
+  .nav-left {
+    display: none;
+  }
+}
+
 
 
 /* Shared */

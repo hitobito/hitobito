@@ -80,9 +80,9 @@ module NavigationHelper
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-def section_active?(url, active_for = [], inactive_for = [])
+  def section_active?(url, active_for = [], inactive_for = [])
     current_page?(url) ||
-          Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
-          Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
+      Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
+      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
   end
 end

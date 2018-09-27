@@ -62,11 +62,6 @@ module NavigationHelper
     group_invoices_path(current_user.finance_groups.first)
   end
 
-  # Create a list item for navigations.
-  # If alternative_paths are given, and they appear in the request url,
-  # the corresponding item is active.
-  # If not alternative paths are given, the item is only active if the
-  # link url equals the request url.
   def nav(label, url, icon_name = false, active = false, options = {}, &block)
     classes = options[:class] || ''
     active_class = options[:active_class] || 'is-active'
@@ -81,7 +76,11 @@ module NavigationHelper
 
   private
 
-  def section_active?(url, active_for = [], inactive_for = [])
+  # If alternative_paths are given, and they appear in the request url,
+  # the corresponding item is active.
+  # If not alternative paths are given, the item is only active if the
+  # link url equals the request url.
+def section_active?(url, active_for = [], inactive_for = [])
     current_page?(url) ||
           Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
           Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }

@@ -7,13 +7,12 @@ app = window.App ||= {}
 
 app.NavOffCanvas = {
   toggle: (e) ->
-    e.preventDefault();
-    $('.nav-left').toggleClass("is-visible");
+    e.preventDefault()
+    $('.nav-left').toggleClass("is-visible")
 }
 
 $(document).on('click', '.toggle-nav', app.NavOffCanvas.toggle)
 $(document).on('click', '.nav-left-overlay', app.NavOffCanvas.toggle)
 $(document).keyup (e) ->
   if (e.key == 'Escape') && $('.nav-left').hasClass('is-visible')
-    e.preventDefault;
-    $('.nav-left').toggleClass("is-visible");
+    app.NavOffCanvas.toggle

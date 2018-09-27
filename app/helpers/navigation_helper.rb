@@ -43,20 +43,17 @@ module NavigationHelper
   def render_main_nav
     content_tag_nested(:ul, MAIN, class: 'nav-left-list') do |options|
       if !options.key?(:if) || instance_eval(&options[:if])
-        url = options[:url]
-        icon_name = options[:icon_name]
-        url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{options[:label]}"), 
-            url, 
-            icon_name, 
-            options[:active_for], 
-            options[:inactive_for],
-            class: 'nav-left-section',
-            active_class: 'active'
-            ) do
-          concat(sheet.render_left_nav) if sheet.left_nav?
-        end
+        main_nav_section(options)
       end
+    end
+  end
+
+  def main_nav_section(options)
+    url = send(options[:url]) if options[:url].is_a?(Symbol)
+    active = section_active?(url, options[:active_for], options[:inactive_for])
+    nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
+        class: 'nav-left-section', active_class: 'active') do
+      concat(sheet.render_left_nav) if sheet.left_nav?
     end
   end
 
@@ -70,18 +67,23 @@ module NavigationHelper
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, icon_name = false, active_for = [], inactive_for = [], options={}, &block)
+  def nav(label, url, icon_name = false, active = false, options = {}, &block)
     classes = options[:class] || ''
     active_class = options[:active_class] || 'is-active'
-    active = current_page?(url) || 
-      Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
-      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
     if active
       classes += " #{active_class}"
     end
-    content_tag(:li, {class: classes}) do
+    content_tag(:li, class: classes) do
       concat(link_to(icon(icon_name) + label, url))
       yield if block_given? && active
     end
+  end
+
+  private
+
+  def section_active?(url, active_for = [], inactive_for = [])
+    current_page?(url) ||
+          Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
+          Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
   end
 end

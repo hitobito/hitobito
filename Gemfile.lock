@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_sbv
+  specs:
+    hitobito_sbv (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -541,6 +546,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_sbv!
   http_accept_language
   icalendar
   jquery-cookie-rails

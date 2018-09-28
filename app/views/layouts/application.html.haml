@@ -27,32 +27,33 @@
 
     = stylesheet_link_tag 'application.css', media: :screen, 'data-turbolinks-track' => true
     = stylesheet_link_tag 'print.css', media: :print
-
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
     = yield(:head)
 
-  %body
-    = render 'layouts/file_download' if current_user
-    - if origin_user
-      = render 'layouts/user_impersonation'
+  %body{class: ('is-logged-out' if current_user.nil?) }
+    %main
+      = render 'layouts/file_download' if current_user
+      - if origin_user
+        = render 'layouts/user_impersonation'
 
-    %header#page-header
-      .container-fluid
-        = link_to Settings.application.name, root_path, class: 'brand'
+    %header.logo
+      = link_to Settings.application.name, root_path, class: 'logo-image'
 
-        - if current_user
-          = render 'layouts/nav'
-        - elsif current_user.nil? # nil without login, false on error
-          = render 'layouts/unauthorized'
-
-    #page{class: ('with-left-nav' if sheet.left_nav?)}
-      - if sheet.left_nav?
+    #page
+      - if current_user
         %nav.nav-left
-          .inner
-            = sheet.render_left_nav
-
+          = render 'layouts/nav'
       .container-fluid
+        #page-header
+          - if current_user
+            = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone')
+            = render 'layouts/quicksearch'
+            = link_to current_user, person_home_path(current_user), class: 'hidden-phone'
+            = link_to t('layouts.nav.sign_out'), sign_out_path, method: "delete", class: 'hidden-phone'
+          - elsif current_user.nil? # nil without login, false on error
+            = render 'layouts/unauthorized'
+
         = render_sheets do
           .content-header
             %h1= title
@@ -81,8 +82,10 @@
                 = link_to label, url, target: '_blank'
                 %br/
             %p
-              = app_version_changelog_link
-              %br/
+              - if Wagons.app_version.to_s > '0.0'
+                = link_to "Version #{Wagons.app_version}", changelog_path
+
+                %br/
 
               = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
               = t('.available_under_license')

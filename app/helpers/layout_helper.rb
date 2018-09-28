@@ -41,7 +41,7 @@ module LayoutHelper
   end
 
   def icon(name, options = {})
-    add_css_class(options, "icon icon-#{name}")
+    add_css_class(options, "fa fa-#{name}")
     content_tag(:i, '', options)
   end
 

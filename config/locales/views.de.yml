@@ -1211,9 +1211,9 @@ de:
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
 
-    append_to_household: "%{user} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
-    remove_from_household: "%{user} wurde vom Haushalt (%{object_changes}) entfernt."
+    remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
 
   views:
     pagination:

@@ -248,7 +248,7 @@ class PeopleController < CrudController
   end
 
   def household
-    @household ||= Person::Household.new(entry, current_ability)
+    @household ||= Person::Household.new(entry, current_ability, nil, current_user)
   end
 
   def person_filter

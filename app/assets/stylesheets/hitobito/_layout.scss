@@ -282,7 +282,7 @@ body {
       a.level {
         margin-bottom: 0.5rem;
       }
-      ul.nav.nav-sub {
+      & > ul.nav.nav-sub {
         display: none;
       }
     }

@@ -20,39 +20,28 @@ body {
   margin: 0;
   padding: 0.5rem;
   z-index: 100;
+  // for a box around the logo, 
+  // if the Logo cannot be direclty on the page background:
+  @if ($logoBackgroundColor != none) {
+      padding: 10px;
+      background-color: $logoBackgroundColor;
+      border-radius: 6px;
+  }
+
 }
 
 .logo-image {
   display: block;
   position: relative;
-  width: 230px;
-  height: 30px;
 
   // Hide text
   text-indent: -9999px;
 
-  background: image-url("logo.png") transparent no-repeat;
+  background: image-url($logoUrl) transparent no-repeat;
+  width: $logoWidth;
+  height: $logoHeight;
   background-size: contain;
-
-  /* to set a logo in a wagon you have to:
-  
-  .logo-image {
-    width: [width of the image];
-    height: [width of the image];
-    height: [width of the image];
-    background-image: url("[name of the image]")
-    
-  }
-
-  for a white box around the logo, adjust the #page-header:
-  .logo {
-    padding: 10px;
-    background-color: white;
-    border-radius: 6px;
-  }
-    
-  */
-
+  background-position: center center;
 }
 
 .dropdown-menu {
@@ -81,7 +70,11 @@ body {
   align-content: space-around;
 
   .nav-left {
-    min-width: 16rem;
+    @if $logoWidth < 200px {
+      min-width: 280px;
+    } @else {
+      min-width: ($logoWidth+40px);
+    }
     width: 30%;
     max-width: 25rem;
     z-index: 1;

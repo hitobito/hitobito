@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Version 1.19
+
+*   Neue Navigation, mit Menü für Mobile
+
 ## Version 1.18
 
 *   Alle Personenfilter sind zusammengefasst und lassen sich abspeichern.

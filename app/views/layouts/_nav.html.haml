@@ -3,6 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+.nav-left-overlay
 %nav#page-navigation
   .nav-left-section.text-right.visible-phone
     %a.nav-left-close.toggle-nav
@@ -17,5 +18,3 @@
       %li.divider
       = render 'layouts/languages'
       %li= link_to t('.sign_out'), sign_out_path, method: "delete"
-
-  .nav-left-overlay

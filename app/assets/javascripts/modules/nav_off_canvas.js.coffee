@@ -15,4 +15,4 @@ $(document).on('click', '.toggle-nav', app.NavOffCanvas.toggle)
 $(document).on('click', '.nav-left-overlay', app.NavOffCanvas.toggle)
 $(document).keyup (e) ->
   if (e.key == 'Escape') && $('.nav-left').hasClass('is-visible')
-    app.NavOffCanvas.toggle
+    app.NavOffCanvas.toggle(e)

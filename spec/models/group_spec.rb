@@ -98,6 +98,26 @@ describe Group do
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'Toppers']
       end
+
+      context 'with short_name' do
+        it 'in the middle' do
+          parent = groups(:top_layer)
+          group = Group::TopGroup.new(name: 'Bottom A', short_name: 'Bottom X', parent_id: parent.id)
+          group.save!
+          expect = expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
+           'Bottom One', 'Bottom Two','Bottom A', 'TopGroup', 'Toppers']
+        end
+      end
+
+      context 'with lowercase' do
+        it 'in the middle' do
+          parent = groups(:top_layer)
+          group = Group::TopGroup.new(name: 'bottom x', parent_id: parent.id)
+          group.save!
+          expect = expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
+           'Bottom One', 'Bottom Two', 'bottom x', 'TopGroup', 'Toppers']
+        end
+      end
     end
 
     context 'on update' do
@@ -154,6 +174,23 @@ describe Group do
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'Toppers', 'Toppers']
       end
+
+      context 'with short_name' do
+        it 'at the end' do
+          groups(:bottom_layer_two).update_attributes!(short_name: 'XXX')
+          expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
+           'Bottom One', 'TopGroup', 'Toppers', "XXX"]
+        end
+      end
+
+      context 'with lowercase' do
+        it 'in the middle' do
+          groups(:bottom_layer_two).update_attributes!(name: 'topGroupX')
+          expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
+           'Bottom One', 'TopGroup', 'topGroupX', 'Toppers']
+        end
+      end
+
     end
   end
 

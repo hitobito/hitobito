@@ -124,10 +124,18 @@ module MailRelay
       message.smtp_envelope_from = env_sender
     end
 
+    def domain_is_valid?(domain)
+        domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
+    end
+
     def sender_is_additional_sender?
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      list.include?(sender_email)
+      sender_domain = sender_email.sub(/^[^@]*@/, "*@")
+      # check if the domain is valid, if the sender is in the senders
+      # list or if the domain is whitelisted
+      list.include?(sender_email) ||
+          (domain_is_valid?(sender_domain) && list.include?(sender_domain))
     end
 
     def sender_is_group_email?

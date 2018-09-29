@@ -550,11 +550,14 @@ DEPENDENCIES
   headless
   hirb
 <<<<<<< HEAD
+<<<<<<< HEAD
   hitobito_generic!
 =======
   hitobito_pbs!
   hitobito_youth!
 >>>>>>> link to persons address on openstreetmap
+=======
+>>>>>>> Revert "link to persons address on openstreetmap"
   http_accept_language
   icalendar
   jquery-cookie-rails
@@ -618,4 +621,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   1.16.2
+   1.16.0

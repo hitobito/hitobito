@@ -17,10 +17,13 @@ module MailRelay
     INVALID_EMAIL_ERRORS = ['Domain not found',
                             'Recipient address rejected'].freeze
 
+    # @param [Array<Recipient>] recipients
     def initialize(message, envelope_sender, delivery_report_to, recipients)
+      return if recipients.nil?
       @message = message
       @envelope_sender = envelope_sender
-      @recipients = IdnSanitizer.sanitize(recipients)
+      email_addresses = recipients.map {|recipient| recipient.email_addresses[0]}
+      @recipients = IdnSanitizer.sanitize(email_addresses)
       @delivery_report_to = delivery_report_to
       @headers = {}
       @failed_recipients = []
@@ -43,7 +46,6 @@ module MailRelay
 
       @slices = (@recipients.count / BULK_SIZE.to_f).ceil
       @current_slice = 0
-
       @recipients.each_slice(BULK_SIZE).with_index do |r, i|
         break if @abort
         @current_slice += 1
@@ -75,7 +77,7 @@ module MailRelay
       @message.smtp_envelope_to = recipients
       begin
         @message.deliver
-        @succeeded_recipients += recipients
+        @succeeded_recipients += recipients.map {|recipient| Recipient::new([recipient])}
         @retry = 0
       rescue => e
         retry_or_abort(e, recipients)
@@ -119,7 +121,7 @@ module MailRelay
         raise error
       end
       log_info "Rejected recipient #{failed_email} with #{error}"
-      @failed_recipients << [failed_email, error.message]
+      @failed_recipients << [Recipient::new([failed_email]), error.message]
       recipients.reject { |r| r =~ /#{failed_email}/ }
     end
 
@@ -129,11 +131,13 @@ module MailRelay
 
     def abort_delivery(error_message)
       @abort = true
-      failed = @recipients - @succeeded_recipients
+      failed = @recipients.reject do |email|
+        @succeeded_recipients.find {|recipient| recipient.email_addresses.include? email}
+      end
       log_info("aborting delivery for remaining #{failed.count} " \
                "recipients: #{error_message}")
       failed.each do |r|
-        @failed_recipients << [r, error_message]
+        @failed_recipients << [Recipient::new([r]), error_message]
       end
     end
 

@@ -155,6 +155,8 @@ describe MailRelay::BulkMail do
         bulk_mail.deliver
         expect(bulk_mail.instance_variable_get(:@abort)).to eql(true)
         expect(bulk_mail.instance_variable_get(:@retry)).to eql(2)
+        puts("#{failed_recipients}")
+        puts("#{recipients}")
         expect(failed_recipients.first).to eq([recipients.last, 'execution expired'])
       end
 
@@ -166,7 +168,7 @@ describe MailRelay::BulkMail do
 
       described_class::INVALID_EMAIL_ERRORS.each do |error_message|
         context error_message do
-          let(:error) { "#{error_message} #{invalid_domain_email}" }
+          let(:error) { "#{error_message} #{invalid_domain_email.email_addresses[0]}" }
 
           it 'skips recipients with invalid mail domain' do
             expect(message)
@@ -210,7 +212,7 @@ describe MailRelay::BulkMail do
     context 'only one recipient' do
 
       let(:recipients) { create_recipients(1) }
-      let(:domain_not_found_error) { "450 4.1.2 #{recipient}: Recipient address rejected: Domain not found" }
+      let(:domain_not_found_error) { "450 4.1.2 #{recipient.email_addresses[0]}: Recipient address rejected: Domain not found" }
       let(:recipient) { recipients[0] }
 
       it 'failing' do
@@ -320,5 +322,7 @@ describe MailRelay::BulkMail do
 end
 
 def create_recipients(count)
-  count.times.collect {Faker::Internet.email}
+  count.times.collect {Faker::Internet.email}.map do |email|
+    MailRelay::Recipient::new([email])
+  end
 end

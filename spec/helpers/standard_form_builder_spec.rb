@@ -57,12 +57,12 @@ describe 'StandardFormBuilder' do
   describe '#labeled_input_field' do
     context 'when required' do
       subject { form.labeled_input_field(:name) }
-      it { is_expected.to include(StandardFormBuilder::REQUIRED_MARK) }
+      it { is_expected.to include('class="control-group required"') }
     end
 
     context 'when not required' do
       subject { form.labeled_input_field(:remarks) }
-      it { is_expected.not_to include(StandardFormBuilder::REQUIRED_MARK) }
+      it { is_expected.not_to include('class="control-group required"') }
     end
 
     context 'with help text' do
@@ -219,20 +219,6 @@ describe 'StandardFormBuilder' do
 
       it { is_expected.to be_html_safe }
       it { is_expected.to match /label [^>]*for.+>Caption<\/label>.*<input/m }
-    end
-  end
-
-  describe '#required_mark' do
-    it 'is shown for required attrs' do
-      expect(form.required_mark(:name)).to eq(StandardFormBuilder::REQUIRED_MARK)
-    end
-
-    it 'is not shown for optional attrs' do
-      expect(form.required_mark(:rating)).to be_empty
-    end
-
-    it 'is not shown for non existing attrs' do
-      expect(form.required_mark(:not_existing)).to be_empty
     end
   end
 

@@ -116,7 +116,7 @@ fieldset {
   $content-padding: 20px;
   margin-bottom: 9px;
   padding-top: $content-padding / 2;
-  padding-bottom: $content-padding / 2; 
+  padding-bottom: $content-padding / 2;
   margin-left: - $content-padding;
   margin-right: - $content-padding;
   padding-left: $content-padding;
@@ -176,7 +176,7 @@ input[type="color"],
   line-height: 20px;
   color: $black;
 
-  &::placeholder, 
+  &::placeholder,
   &::-webkit-input-placeholder
   {
     color: $gray;
@@ -303,6 +303,17 @@ textarea {
 .fields-separation hr {
   margin: 7px 0 15px;
   border-top-color: $grayLight;
+}
+
+.control-group.required > label {
+  transform: translate(5pt);
+  &::after {
+    content: '*';
+    color: $orange;
+    font-size: 9pt;
+    vertical-align: super;
+    float: right;
+  }
 }
 
 .control-group .fields {

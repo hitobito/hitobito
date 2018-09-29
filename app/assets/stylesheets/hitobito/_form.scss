@@ -311,8 +311,10 @@ textarea {
     content: '*';
     color: $orange;
     font-size: 9pt;
-    vertical-align: super;
-    float: right;
+  }
+
+  @media all and (max-width: $mediaPhone) {
+    transform: none;
   }
 }
 

@@ -7,92 +7,41 @@
 // -------------------------
 
 body {
-  padding: 0; // new
+  padding: 0;
+  height: 100vh;
+  background: $bodyBackground;
 }
 
 /* Header */
-#page-header {
-  @include clearfix;
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
   margin: 0;
-  padding: 10px 10px 0;
-  background: $pageBackground;
-
-  @include responsive(mediaTablet) {
-    padding: 10px 20px 0;
+  padding: 0.5rem;
+  z-index: 100;
+  // for a box around the logo, 
+  // if the Logo cannot be direclty on the page background:
+  @if ($logoBackgroundColor != none) {
+      padding: 10px;
+      background-color: $logoBackgroundColor;
+      border-radius: 6px;
   }
 
-  .options > ul > li > a { // header links on the right side
-    color: lighten($pageBackground, 35%);
-    &:hover {
-      color: $white;
-    }
-  }
 }
 
-.brand {
+.logo-image {
   display: block;
-  float: left;
-  width: 230px;
-  height: 30px;
-  padding: 10px 0;
-  margin-right: 40px;
+  position: relative;
 
   // Hide text
   text-indent: -9999px;
-  white-space: nowrap;
-  font-family: $headingFontFamily;
-  font-weight: bold;
-  font-size: 2.462em; // 32px
-  line-height: 1.250em; // 40px
-  @include single-text-shadow(white, 0, 1px, 0);
 
-  background: image-url("logo.png") transparent no-repeat 0px 10px;
-
-  // Retina version
-  @media
-    only screen and (-webkit-min-device-pixel-ratio : 2),
-    only screen and (min-device-pixel-ratio : 2) {
-      background: image-url("logo@2x.png") transparent no-repeat 0px 10px;
-      background-size: 230px 30px;
-  }
-}
-
-.options {
-  float: right;
-  margin-top: 10px;
-  > ul {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-
-    > li {
-      list-style-image: none;
-      list-style-type: none;
-      margin-left: 0;
-      white-space: nowrap;
-      display: inline;
-      float: left;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-  }
-
-  .lang .active {
-    text-decoration: none;
-  }
-
-  a {
-    line-height: 30px;
-  }
-  form, input[type="search"] {
-    margin-bottom: 0 !important;
-  }
-
-}
-.options a, a.link {
-  text-decoration: underline;
-  &:hover { background: none; }
+  background: image-url($logoUrl) transparent no-repeat;
+  width: $logoWidth;
+  height: $logoHeight;
+  background-size: contain;
+  background-position: center center;
 }
 
 .dropdown-menu {
@@ -110,19 +59,85 @@ body {
 #page {
   padding: 20px 10px 90px;
   margin: 0;
+  width: 100%;
   background: $pageBackground;
+  overflow-y: visible;
 
-  @include responsive(mediaTablet) {
-    margin: 0;
-    padding: 20px 20px 90px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  align-content: space-around;
+
+  .nav-left {
+    @if $logoWidth < 200px {
+      min-width: 280px;
+    } @else {
+      min-width: ($logoWidth+40px);
+    }
+    width: 30%;
+    max-width: 25rem;
+    z-index: 1;
+    margin-top: 4rem;
   }
 
-  & > .sheet { margin: 0 20px; }
+  .container-fluid {
+    z-index: 2;
+    margin-left: -1.5rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    padding-bottom: 60px; // needs these paddings to accomodate further sheets
+    padding-right: 20px;  // needs these paddings to accomodate further sheets
+  }
+
+  .is-logged-out & {
+    padding-top: 5rem;
+  }
+}
+
+#page-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .toggle-nav {
+    margin: -0.5rem 1rem -0.5rem 0rem;
+    padding: 0.5rem;
+    text-transform: uppercase;
+    i {
+      margin-top: 0.2rem;
+      margin-right: 0.5rem; 
+    }
+    a:hover i {
+      text-decoration: none;
+    }
+  }
+  .form-inline {
+    flex: 1 0 auto;
+    margin: 0;
+  }
+
+  & > a{
+    flex: 0 0 auto;
+    color: $white;
+    margin-left: 1rem;
+  }
+
+  .is-logged-out & {
+    justify-content: flex-end;
+    a {
+      color: white;
+    }
+  }
 }
 
 .sheet,
 #content {
   @include border-radius($borderRadius);
+  color: $black;
 }
 
 .sheet.parent {
@@ -136,17 +151,6 @@ body {
     }
   }
   .level { color: $gray; }
-}
-
-.sheet.current {
-  background: image-url("shadow_left.png") transparent no-repeat bottom left;
-  padding-bottom: 28px;
-  margin-bottom:-58px !important;
-  .container-shadow {
-    background: image-url("shadow_right.png") transparent no-repeat bottom right;
-    padding-bottom: 28px;
-    margin-bottom:-28px;
-  }
 }
 
 #content {
@@ -185,12 +189,13 @@ body {
   clear: both;
 }
 
+
 /* Footer */
 #page-footer {
   padding-top: 0;
-  clear: both;
-
   color: $footerColor;
+  margin-top: -3rem;
+  background-color: $footerBackground;
 
   .footer_content {
     padding-top: 20px;
@@ -206,12 +211,92 @@ body {
       }
     }
   }
+}
 
-  & > .container-fluid {
-    @include single-box-shadow(darken($bodyBackground, 10%), 0, 12px, 8px, -8px, true);
-    background: $bodyBackground;
+.form-inline .quicksearch {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  .quicksearch-input {
+    flex: 1 0 auto;
   }
 }
+
+
+// Adaptions for phone size / Responsiveness
+
+
+@include responsive(phone, $mediaTablet) {
+  .logo {
+    display: none;
+    .is-logged-out & {
+      display: block;
+    }
+  }
+
+  #page {
+    .nav-left {
+      z-index: 100;
+      margin-top: 0;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      border-radius: 0;
+      left: -100%;
+      overflow-x: visible;
+      overflow-y: scroll;
+      transition: all 300ms ease-in-out;
+      &.is-visible {
+        left: 0;
+        width: 90%;
+      } 
+    }
+
+    .nav-left-overlay {
+      position: fixed;
+      content: '';
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      z-index: -999999;
+      transition: opacity 700ms ease-in-out;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .nav-left > nav {
+      z-index: 1;
+      background-color: $grayLighter;
+      width: 100%;
+      height: 100%;
+    }
+
+    .nav-left.is-visible .nav-left-overlay {
+      opacity: 1;
+      width: 1000rem;
+      z-index: -1;
+      background-color: rgba(0,0,0,0.3);
+    }
+
+
+    .container-fluid {
+      margin: 0rem;
+    }
+
+    .sheet.parent {
+      a.level {
+        margin-bottom: 0.5rem;
+      }
+      & > ul.nav.nav-sub {
+        display: none;
+      }
+    }
+  }
+
+}
+
 
 
 /* Shared */
@@ -334,18 +419,4 @@ body {
 }
 #person-notes-form textarea {
   width: 100%;
-}
-
-// Info Bar
-.info-bar{
-  height: 30px;
-  div {
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-
-    a { color: black; margin-left: 30px}
-  }
 }

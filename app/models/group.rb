@@ -147,6 +147,14 @@ class Group < ActiveRecord::Base
     name
   end
 
+  def display_name
+    short_name.present? ? short_name : name
+  end
+
+  def display_name_downcase
+    display_name.downcase
+  end
+
   def with_layer
     layer? ? [self] : [layer_group, self]
   end

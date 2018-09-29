@@ -11,7 +11,7 @@ module Group::NestedSet
   included do
     acts_as_nested_set dependent: :destroy
 
-    before_save :store_new_name
+    before_save :store_new_display_name
     after_save :move_to_alphabetic_position
   end
 
@@ -88,15 +88,15 @@ module Group::NestedSet
 
   private
 
-  def store_new_name
-    @move_to_new_name = name_changed? ? name : false
+  def store_new_display_name
+    @move_to_new_name = name_changed? || short_name_changed? ? display_name : false
     true # force callback to return true
   end
 
   def move_to_alphabetic_position
     return unless move_required?
 
-    left_neighbor = find_left_neighbor(parent, :name, true)
+    left_neighbor = find_left_neighbor(parent, :display_name_downcase, true)
     if left_neighbor
       move_to_right_of_if_change(left_neighbor)
     else
@@ -111,7 +111,7 @@ module Group::NestedSet
   end
 
   def move_to_right_of_if_change(node)
-    if node.name != name && node.rgt != lft - 1
+    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1
       move_to_right_of(node)
     end
   end
@@ -120,4 +120,5 @@ module Group::NestedSet
     first = parent.children[0]
     move_to_left_of(first) unless first == self
   end
+
 end

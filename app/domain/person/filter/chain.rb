@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017 - 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,13 +9,14 @@ class Person::Filter::Chain
 
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
-    Person::Filter::Qualification
+    Person::Filter::Qualification,
+    Person::Filter::Attributes
   ]
 
   # Used for `serialize` method in ActiveRecord
   class << self
     def load(yaml)
-      new(YAML.load(yaml || ''))
+      new(YAML.safe_load(yaml || ''))
     end
 
     def dump(obj)

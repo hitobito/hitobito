@@ -191,6 +191,8 @@ GEM
     faker (1.6.3)
       i18n (~> 0.5)
     ffi (1.9.25)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     globalize (5.0.1)
@@ -537,6 +539,7 @@ DEPENDENCIES
   draper
   fabrication
   faker (< 1.6.4)
+  font-awesome-rails (~> 4.7, >= 4.7.0.1)
   globalize
   haml
   headless

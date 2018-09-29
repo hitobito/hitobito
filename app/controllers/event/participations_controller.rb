@@ -121,8 +121,8 @@ class Event::ParticipationsController < CrudController
   def render_tabular_in_background(format)
     with_async_download_cookie(format, :event_participation_export) do |filename|
       Export::EventParticipationsExportJob.new(format,
-                                               event.id,
                                                current_person.id,
+                                               event_participation_filter,
                                                params.merge(filename: filename)).enqueue!
     end
   end

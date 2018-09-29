@@ -67,10 +67,10 @@ en:
           attributes:
             email:
               taken: >
-                  is already taken. This address must be unique for every person,
-                  because it is used when logging in. Under 'Further e-mail" you may
-                  specify addresses, which are assigned to other people as main e-mail
-                  (the main e-mail can be left blank).
+                is already taken. This address must be unique for every person, because
+                it is used when logging in. Under 'Further e-mail" you may specify
+                addresses, which are assigned to other people as main e-mail (the
+                main e-mail can be left blank).
         person/add_request:
           attributes:
             person_id:
@@ -190,6 +190,9 @@ en:
       subscription:
         one: Subscriber
         other: Subscribers
+      tag:
+        one: tag
+        other: tags
     attributes:
       acts_as_taggable_on/tag:
         name: name
@@ -507,6 +510,9 @@ en:
         dimensions: Number
         nickname: Nickname on label
         pp_post: PP-Line
+      tag:
+        name: name
+        taggable_id: taggable
   errors:
     messages:
       invalid_date: "is not a valid date"

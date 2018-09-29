@@ -50,9 +50,7 @@ module Sheet
 
       def render_header
         active = layer == entry && view.request.path !~ /\/deleted_people$/
-        content_tag(:h3, class: "nav-left-title #{'active' if active}") do
-          link_to(layer, active_path(layer))
-        end
+        link_to(layer, active_path(layer), class: "nav-left-title #{'is-active' if active}")
       end
 
       def render_layer_groups
@@ -91,16 +89,16 @@ module Sheet
       end
 
       def group_link(group)
-        cls = " class=\"active\"" if group == entry
+        cls = " class=\" is-active\"" if group == entry
         "<li#{cls}>".html_safe +
-        link_to(group.short_name.present? ? group.short_name : group.to_s,
+        link_to(group.display_name,
                 active_path(group), title: group.to_s)
       end
 
       def render_deleted_people_link
         if view.can?(:index_deleted_people, layer)
           active = view.current_page?(view.group_deleted_people_path(layer.id))
-          content_tag(:li, class: "#{'active' if active}") do
+          content_tag(:li, class: "#{'is-active' if active}") do
             link_to(view.t('groups.global.link.deleted_person'),
                     view.group_deleted_people_path(layer.id))
           end
@@ -112,7 +110,7 @@ module Sheet
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
-            content_tag(:li, link_to(l.short_name.present? ? l.short_name : l.to_s,
+            content_tag(:li, link_to(l.display_name,
                                      active_path(l), title: l.to_s))
           end
         end

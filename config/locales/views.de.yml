@@ -40,6 +40,7 @@ de:
     button:
       save: Speichern
       cancel: Abbrechen
+      close: Schliessen
       search: Suchen
       back: Zurück
       refresh: Aktualisieren
@@ -781,6 +782,7 @@ de:
     unsubscribe: 'Abmelden'
 
   navigation:
+    menu: 'Menü'
     groups: 'Gruppen'
     events: 'Anlässe'
     courses: 'Kurse'
@@ -1068,6 +1070,11 @@ de:
         created: wurde die Rolle erstellt.
         deleted: wurde die Rolle gelöscht.
 
+    attributes:
+      title: Felder
+      match: enthält
+      equal: ist genau
+
     new:
       title: Personen filtern
 
@@ -1206,9 +1213,9 @@ de:
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
 
-    append_to_household: "%{user} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
-    remove_from_household: "%{user} wurde vom Haushalt (%{object_changes}) entfernt."
+    remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
 
   views:
     pagination:

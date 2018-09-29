@@ -86,6 +86,23 @@ describe MailingList do
       list.mail_name = 'foo'
       expect(list).to have(1).error_on(:mail_name)
     end
+
+    it 'succeed with additional_sender' do
+      list.additional_sender = ''
+      expect(list).to be_valid
+    end
+    it 'succeed with additional_sender' do
+      list.additional_sender = 'abc@de.ft; *@df.dfd.ee,test@test.test'
+      expect(list).to be_valid
+    end
+    it 'succeed with additional_sender' do
+      list.additional_sender = 'abc*dv@test.ch'
+      expect(list).to have(1).error_on(:additional_sender)
+    end
+    it 'succeed with additional_sender' do
+      list.additional_sender = 'abc@de.ft;as*d@df.dfd.ee,test@test.test'
+      expect(list).to have(1).error_on(:additional_sender)
+    end
   end
 
   describe '#subscribed?' do

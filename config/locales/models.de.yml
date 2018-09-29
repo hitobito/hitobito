@@ -124,6 +124,10 @@ de:
               invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
+        mailing_list:
+            attributes:
+                additional_sender:
+                    invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
 
     models:
       acts_as_taggable_on/tag:

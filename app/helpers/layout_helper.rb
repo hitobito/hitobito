@@ -84,7 +84,7 @@ module LayoutHelper
   end
 
   def value_with_muted(value, mute)
-    safe_join([content_tag(:span, f(value), class: 'nowrap'), muted(mute)], ' ')
+    safe_join([content_tag(:span, f(value)), muted(mute)], ' ')
   end
 
   def element_visible(visible)

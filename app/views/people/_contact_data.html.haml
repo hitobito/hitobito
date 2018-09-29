@@ -6,7 +6,10 @@
 .contactable.well
   .profil-big.pull-right
     = image_tag(person.picture_url, size: '72x72')
-
+  
+  .contact-marker.pull-right
+    =  link_to(fa_icon("map-marker 2x"), "https://nominatim.openstreetmap.org/search.php?street="+person.address+"&postalcode="+person.zip_code+"&city="+person.town+"&polygon_geojson=1&viewbox=", target: '_blank')
+  
   = render 'contactable/contact_data',
            contactable: person,
            postal: true,

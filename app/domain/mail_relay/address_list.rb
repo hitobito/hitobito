@@ -21,6 +21,12 @@ module MailRelay
       end.reject(&:blank?).uniq
     end
 
+    def receivers
+      people.flat_map.uniq do |person|
+        MailRelay::Recipient::new(preferred_emails(person) || default_emails(person))
+      end.reject(&:blank?)
+    end
+
     private
 
     def preferred_emails(person)

@@ -7,10 +7,11 @@
 
 require 'spec_helper'
 
+
 describe MailRelay::BulkMail do
 
   let(:message)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
-  let(:recipients) { 16.times.collect { Faker::Internet.email } }
+  let(:recipients) { create_recipients(16) }
   let(:envelope_sender) { 'mailing_list@example.hitobito.com' }
   let(:delivery_report_to) { 'author@example.hitobito.com' }
   let(:bulk_mail) { MailRelay::BulkMail.new(message, envelope_sender, delivery_report_to, recipients) }
@@ -208,9 +209,9 @@ describe MailRelay::BulkMail do
 
     context 'only one recipient' do
 
-      let(:recipient) { Faker::Internet.email }
+      let(:recipients) { create_recipients(1) }
       let(:domain_not_found_error) { "450 4.1.2 #{recipient}: Recipient address rejected: Domain not found" }
-      let(:recipients) { [recipient] }
+      let(:recipient) { recipients[0] }
 
       it 'failing' do
         expect(message)
@@ -240,7 +241,7 @@ describe MailRelay::BulkMail do
 
     context 'bulk send' do
 
-      let(:recipients) { 42.times.collect { Faker::Internet.email } }
+      let(:recipients) {create_recipients(42)}
 
       it 'sends mail to recipients in blocks' do
 
@@ -316,4 +317,8 @@ describe MailRelay::BulkMail do
 
   end
 
+end
+
+def create_recipients(count)
+  count.times.collect {Faker::Internet.email}
 end

@@ -181,9 +181,10 @@ describe MailRelay::BulkMail do
 
             failed_entry = [invalid_domain_email, error]
 
+            successful_sendt = recipients - [invalid_domain_email]
             expect_any_instance_of(DeliveryReportMailer)
               .to receive(:bulk_mail)
-              .with(delivery_report_to, message, 15, instance_of(ActiveSupport::TimeWithZone), [failed_entry])
+              .with(delivery_report_to, message, successful_sendt, extract_email_addresses(successful_sendt), instance_of(ActiveSupport::TimeWithZone), [failed_entry])
 
             expect(logger)
               .to receive(:info)
@@ -280,7 +281,7 @@ describe MailRelay::BulkMail do
 
         expect_any_instance_of(DeliveryReportMailer)
           .to receive(:bulk_mail)
-          .with(delivery_report_to, message, 42, instance_of(ActiveSupport::TimeWithZone), [])
+          .with(delivery_report_to, message, recipients, extract_email_addresses(recipients), instance_of(ActiveSupport::TimeWithZone), [])
 
         bulk_mail.deliver
         expect(failed_recipients.size).to eq(0)
@@ -325,4 +326,8 @@ def create_recipients(count)
   count.times.collect {Faker::Internet.email}.map do |email|
     MailRelay::Recipient::new([email])
   end
+end
+
+def extract_email_addresses(recipients)
+  recipients.map {|recipient| recipient.email_addresses}.flat_map {|email| email}
 end

@@ -22,12 +22,13 @@ module MailRelay
       return if recipients.nil?
       @message = message
       @envelope_sender = envelope_sender
-      email_addresses = recipients.map {|recipient| recipient.email_addresses[0]}
-      @recipients = IdnSanitizer.sanitize(email_addresses)
+      # @type [Array<Recipient>]
+      @recipients = sanitize_recipients(recipients)
       @delivery_report_to = delivery_report_to
       @headers = {}
       @failed_recipients = []
       @succeeded_recipients = []
+      @sendt_to_emails = []
       @retry = 0
     end
 
@@ -46,18 +47,25 @@ module MailRelay
 
       @slices = (@recipients.count / BULK_SIZE.to_f).ceil
       @current_slice = 0
-      @recipients.each_slice(BULK_SIZE).with_index do |r, i|
+
+
+      loop do
         break if @abort
         @current_slice += 1
         log_info("sending #{@current_slice}/#{@slices} blocks with #{BULK_SIZE} recipients")
-        batch_deliver(r)
+        sendt_to_receipients_count = @succeeded_recipients.count + @failed_recipients.count
+        current_receipients = @recipients.drop(sendt_to_receipients_count).reduce([]) {|collector, newelement| count_email_addresses(collector) + newelement.email_addresses.count <= BULK_SIZE ? collector << newelement : collector}
+        log_info("current_recipients: #{current_receipients}")
+        batch_deliver(current_receipients)
         @previous_success = true
-        sleep BATCH_TIMEOUT.to_i unless last_slice?(i)
+        break if @succeeded_recipients.count + @failed_recipients.count >= @recipients.count
+        sleep BATCH_TIMEOUT.to_i
       end
       delivery_report
     end
 
     private
+
 
     def last_slice?(i)
       @recipients.size / BULK_SIZE == i
@@ -72,18 +80,25 @@ module MailRelay
       @message.smtp_envelope_from = @envelope_sender
     end
 
+    # @param [Array<Recipient>] recipients
     def batch_deliver(recipients)
       return if recipients.blank?
-      @message.smtp_envelope_to = recipients
+      email_addresses = recipients.map do |recipient|
+        recipient.email_addresses.select {|email_address| !@sendt_to_emails.include? email_address}
+      end
+      @message.smtp_envelope_to = email_addresses
       begin
         @message.deliver
-        @succeeded_recipients += recipients.map {|recipient| Recipient::new([recipient])}
+        @succeeded_recipients += recipients
+        email_addresses.each {|email| @sendt_to_emails += email}
         @retry = 0
       rescue => e
         retry_or_abort(e, recipients)
       end
     end
 
+    # @param [String] error
+    # @param [Array<Recipient>] recipients
     def retry_or_abort(error, recipients) # rubocop:disable Metrics/MethodLength
       if invalid_email?(error)
         recipients = reject_failing(error, recipients)
@@ -114,15 +129,17 @@ module MailRelay
       sleep retry_in
     end
 
+    # @param [Error] error
+    # @param [Array<Recipient>] recipients
     def reject_failing(error, recipients)
-      failed_email = recipients.find { |r| error.message.include?(r) }
+      error_email_arrays = recipients.map {|r| r.email_addresses.select {|email| error.message.include?(email)}}.reject(&:blank?)
       # if we cannot extract email from error message, raise
-      unless failed_email.present? && recipients.include?(failed_email)
+      if error_email_arrays.empty?
         raise error
       end
-      log_info "Rejected recipient #{failed_email} with #{error}"
-      @failed_recipients << [Recipient::new([failed_email]), error.message]
-      recipients.reject { |r| r =~ /#{failed_email}/ }
+      log_info "Rejected recipient #{error_email_arrays} with #{error}"
+      @failed_recipients += error_email_arrays.map {|email_array| [Recipient::new(email_array), error.message]}
+      recipients.reject { |r| r.email_addresses.all? {|email| error.message.include?(email)}}
     end
 
     def invalid_email?(error)
@@ -131,13 +148,11 @@ module MailRelay
 
     def abort_delivery(error_message)
       @abort = true
-      failed = @recipients.reject do |email|
-        @succeeded_recipients.find {|recipient| recipient.email_addresses.include? email}
-      end
+      failed = @recipients - @succeeded_recipients
       log_info("aborting delivery for remaining #{failed.count} " \
                "recipients: #{error_message}")
       failed.each do |r|
-        @failed_recipients << [Recipient::new([r]), error_message]
+        @failed_recipients << [r, error_message]
       end
     end
 
@@ -151,7 +166,7 @@ module MailRelay
     def delivery_report_mail
       DeliveryReportMailer.
         bulk_mail(@delivery_report_to, @message,
-                  @success_count, Time.zone.now,
+                  @succeeded_recipients, @sendt_to_emails, Time.zone.now,
                   @failed_recipients).deliver_now
     rescue => e
       log_info('Delivery report for bulk mail to ' \
@@ -175,6 +190,21 @@ module MailRelay
       headers.each do |k, v|
         @message[k] = v
       end
+    end
+
+    # @param [Array<Recipient>] recipients
+    # @return [Array<Recipient>]
+    def sanitize_recipients(recipients)
+      recipients.map do |recipient|
+        MailRelay::Recipient::new(IdnSanitizer.sanitize(recipient.email_addresses.reject(&:blank?)))
+      end
+    end
+
+    # @param [Array<Recipient>] recipients
+    # @return [Integer]
+    def count_email_addresses(recipients)
+      return 0 if recipients.empty?
+      recipients.map {|recipient| recipient.email_addresses.count}.reduce(0) {|counta, countb| counta + countb}
     end
 
   end

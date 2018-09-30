@@ -11,8 +11,11 @@ module PeopleHelper
     person.gender_label
   end
 
-  def dropdown_people_export(details = false, emails = true, labels = true)
-    Dropdown::PeopleExport.new(self, current_user, params, details, emails, labels).to_s
+  def dropdown_people_export(details = false, emails = true, labels = true, households = true)
+    Dropdown::PeopleExport.new(self, current_user, params, details: details,
+                                                           emails: emails,
+                                                           labels: labels,
+                                                           households: households).to_s
   end
 
   def invoice_button(people, *groups)
@@ -82,4 +85,20 @@ module PeopleHelper
     end, "\n")
   end
 
+  def may_impersonate?(user, group)
+    can?(:impersonate_user, user) &&
+      user != current_user &&
+      !origin_user &&
+      group.people.exists?(id: user.id)
+  end
+  
+  def link_to_address(person)
+    if !person.address.nil? && !person.zip_code.nil? && !person.town.nil?
+      link_to_address_url = 'https://nominatim.openstreetmap.org/search.php?polygon_geojson=1&viewbox='
+      link_to_address_url += '&street=' + person.address
+      link_to_address_url += '&postalcode=' + person.zip_code
+      link_to_address_url += '&city=' + person.town
+      link_to fa_icon('map-marker 2x'), link_to_address_url, target: '_blank'
+    end
+  end
 end

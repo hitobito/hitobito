@@ -1,0 +1,36 @@
+// shows a legend 
+
+.legend {
+  .legend-title {
+    font-weight: bold;
+    color: $grayDark;
+    margin-right: 0.5rem;
+    height: 100%;
+    padding-right: 2rem;
+  }
+
+  .legend-item {
+    position: relative;
+    margin-left: 0.8rem;
+    padding-left: 0.5rem;
+    padding-right: 2rem;
+  }
+
+  .legend-item::before {
+    content: '\25A0';      /* The unicode for • character */
+    position: absolute;
+    left: -0.8rem;
+    top: -0.1rem;          /* Adjust this value so that it appears where you want. */
+    font-size: 2rem;      /* Adjust this value so that it appears what size you want. */
+  }
+
+  &.is-inline {
+    display: flex;
+    flex-direction: row;
+    .legend-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}

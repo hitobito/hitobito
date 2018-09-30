@@ -205,10 +205,25 @@ module MailRelay
     end
 
     def bulk_mail
+      add_unsubscribe_link(message)
       bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
       bulk_mail.headers['Precedence'] = 'list'
       bulk_mail.headers['List-Id'] = list_id
       bulk_mail
+    end
+    
+    def add_unsubscribe_link(message)
+      if defined? mailing_list
+        if mailing_list.subscribable?
+          if message.multipart?
+            unsubscribe_link = link_to("Abmelden / Unsubscribe","http://" + ENV['RAILS_HOST_NAME'].to_s + "/" + "/groups/" + mailing_list.group_id.to_s + "/mailing_lists/" + mailing_list.id.to_s + "/subscriptions/user")
+            message.html_part = message.html_part + unsubscribe_link
+          else
+            unsubscribe_text = "Abmelden / Unsubscribe: http://" + ENV['RAILS_HOST_NAME'].to_s + "/" + "/groups/" + mailing_list.group_id.to_s + "/mailing_lists/" + mailing_list.id.to_s + "/subscriptions/user"
+            message.body = message.body.to_s + unsubscribe_text
+          end
+        end
+      end
     end
 
     def logger

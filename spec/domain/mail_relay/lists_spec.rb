@@ -210,6 +210,30 @@ describe MailRelay::Lists do
       expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
     end
   end
+  
+  context 'unsubscribe' do
+    let(:from) { people(:top_leader).email }
+    before { create_individual_subscribers }
+    
+    context 'subscribable' do
+      before { list.update_column(:subscribable, true) }
+  
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+        expect(last_email.body).to match(/Unsubscribe/)
+      end
+    end
+    
+    context 'not subscribable' do
+      before { list.update_column(:subscribable, false) }
+  
+      it 'relays' do
+        expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+        expect(last_email.body).not_to match(/Unsubscribe/)
+      end
+    end
+  end
+
 
   context 'list member' do
     before { create_individual_subscribers }

@@ -50,4 +50,8 @@ class DeliveryReportMailer < ApplicationMailer
     end.join('<br/>')
   end
 
+  def placeholder_total_emails_sendt
+    "#{@total_emails_sendt.count}"
+  end
+
 end

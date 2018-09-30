@@ -350,7 +350,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
          "Betreff: {mail-subject}<br/>" \
          "Zeit: {delivered-at}<br/>" \
-         "Empfänger: {total-recipients}<br/><br/>" },
+         "Empfänger: {total-recipients}<br/>" \
+         "Gesendet an Anzahl Email-Adressen: {total_emails_sendt}<br/>" \
+        "<br/>" },
 
   {custom_content_id: bulk_mail_success_id,
    locale: 'en',
@@ -371,8 +373,11 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "Deine Mail an {mail-to} wurde verschickt:<br/><br/>" \
          "Betreff: {mail-subject}<br/>" \
          "Zeit: {delivered-at}<br/>" \
-         "Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>" \
-         "Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>" \
+         "Empfänger: {total-succeeded-recipients}/{total-recipients}<br/>" \
+         "Gesendet an Anzahl Email-Adressen: {total_emails_sendt}<br/>" \
+         "<br/>" \
+         "Folgende Empfänger konnten nicht zugestellt werden:<br/>" \
+         "<br/>" \
          "{failed-recipients}<br/><br/>"},
 
   {custom_content_id: bulk_mail_with_failed_id,

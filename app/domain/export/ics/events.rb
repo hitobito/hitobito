@@ -21,13 +21,31 @@ module Export::Ics
       end
     end
 
+    def generate_additional_description_from_event(event)
+      con = event.contact
+      if con
+        con_phone_mail = "\n#{con.person_name}"
+        con.phone_numbers.each do |item|
+            con_phone_mail += "\n#{item.label}: #{item.number}" if item.public
+        end
+        con_phone_mail += "\n#{con.email}" if con.email?
+        # I did not get the following to work. By importing
+        # Rails.application.routes.url_helpers
+        # It would run the tests but failed in the development environment.
+        # It complained about missing default_url_options[:host] but I have
+        # not found a way to set it in a way the application would recognise it.
+        #con_phone_mail += event_url(id: event)
+        con_phone_mail
+      end
+    end
+
     def generate_ical_from_event_date(event_date, event)
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
         ical_event.dtend = datetime_to_ical(event_date.finish_at)
         ical_event.summary = "#{event.name}: #{event_date.label}"
         ical_event.location = event_date.location || event.location
-        ical_event.description = event.description
+        ical_event.description = "#{event.description} \n#{generate_additional_description_from_event(event)}"
         ical_event.contact = event.contact && event.contact.to_s
       end
     end

@@ -23,6 +23,8 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   def exporter
     if full_export?
       Export::Tabular::People::ParticipationsFull
+    elsif household?
+      Export::Tabular::People::ParticipationsHouseholds
     else
       Export::Tabular::People::ParticipationsAddress
     end
@@ -31,6 +33,10 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   def full_export?
     # This condition has to be in the job because it loads all entries
     @options[:details] && ability.can?(:show_details, entries.first)
+  end
+
+  def household?
+    @options[:household]
   end
 
 end

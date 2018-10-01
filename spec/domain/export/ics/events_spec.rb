@@ -24,8 +24,16 @@ describe Export::Ics::Events do
 
     it 'does not fail if contact is set' do
       event.update(contact: people(:top_leader))
+
+      people(:top_leader).phone_numbers.create!(label: 'showme', number: 'Bar', public: true)
+      people(:top_leader).phone_numbers.create!(label: 'notme', number: 'Bar', public: false)
+
       is_expected.to all(be_a(Icalendar::Event))
       expect(subject.first.contact.first.value).to eq 'Top Leader'
+      expect(subject.first.description.value).to include "Top Leader"
+      expect(subject.first.description.value).to include "top_leader@example.com"
+      expect(subject.first.description.value).to include "showme"
+      expect(subject.first.description.value).not_to include "notme"
     end
   end
 

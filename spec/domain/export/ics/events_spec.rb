@@ -14,6 +14,10 @@ describe Export::Ics::Events do
   let(:ical_date_klass) { Icalendar::Values::Date }
   let(:ical_datetime_klass) { Icalendar::Values::DateTime }
 
+  before do
+    allow(ENV).to receive(:[]).with("RAILS_HOST_NAME").and_return("hitobito.example.com")
+  end
+
   describe '#generate_ical_from_event_dates' do
     subject(:ical_events) { export.generate_ical_from_event_dates(event) }
 
@@ -34,6 +38,22 @@ describe Export::Ics::Events do
       expect(subject.first.description.value).to include "top_leader@example.com"
       expect(subject.first.description.value).to include "showme"
       expect(subject.first.description.value).not_to include "notme"
+    end
+  end
+
+  describe '#event_description' do
+    subject { export.event_description(event) }
+    let(:contact) { people(:top_leader) }
+
+    before do
+      allow(event).to receive(:contact).and_return(contact)
+    end
+
+    it do
+      is_expected.to include(event.description)
+      is_expected.to include(contact.person_name)
+      is_expected.to include(contact.email)
+      is_expected.to include(Rails.application.routes.url_helpers.event_url(event, host: ENV['RAILS_HOST_NAME']))
     end
   end
 

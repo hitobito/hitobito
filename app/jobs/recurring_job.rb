@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -45,8 +45,7 @@ class RecurringJob < BaseJob
 
   private
 
-  def perform_internal
-  end
+  def perform_internal; end
 
   def reschedule
     enqueue!(run_at: next_run, priority: 5) unless others_scheduled?

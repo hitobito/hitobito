@@ -76,9 +76,9 @@ body {
       min-width: ($logoWidth+40px);
     }
     width: 30%;
-    max-width: 25rem;
+    max-width: 20rem;
     z-index: 1;
-    margin-top: 4rem;
+    margin-top: $logoHeight + 40px;
   }
 
   .container-fluid {

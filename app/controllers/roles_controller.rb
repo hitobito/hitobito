@@ -29,11 +29,6 @@ class RolesController < CrudController
 
   hide_action :index, :show
 
-  def new
-    @type = @group.default_role
-    super
-  end
-
   def create
     assign_attributes
     with_person_add_request do

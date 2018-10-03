@@ -69,6 +69,10 @@ describe RolesController, type: :controller do
         expect(test_entry).to be_kind_of(Role)
       end
 
+      it 'chooses default role' do
+        expect(response.body).to have_select('role_type', :selected => group.default_role.label)
+      end
+
       context 'with invalid type' do
         let(:params) { { role: { type: 'foo' } } }
 
@@ -76,6 +80,12 @@ describe RolesController, type: :controller do
           expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
+    end
+  end
+
+  describe_action :get, :edit, id: true do
+    it 'shows current role type rather than default' do
+      expect(response.body).to have_select('role_type', :selected => "Member")
     end
   end
 

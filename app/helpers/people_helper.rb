@@ -18,8 +18,7 @@ module PeopleHelper
                                                            households: households).to_s
   end
 
-  def invoice_button(people, *groups)      
-    return false unless groups.collect(&:layer_group).all? { |g| can?(:index_full_people ,g)}
+  def invoice_button(people)      
     finance_groups = current_user.finance_groups
     if finance_groups.size == 1
       invoice_button_single(people, finance_groups.first)

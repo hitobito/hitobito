@@ -64,7 +64,7 @@ class GroupAbility < AbilityDsl::Base
       in_same_layer
 
     permission(:finance).may(:index_invoices).in_layer_group
-    permission(:finance).may(:create_invoices_from_list).if_index_full_ability
+    permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below
 
     general(:update).group_not_deleted
     general(:index_person_add_requests,
@@ -119,8 +119,8 @@ class GroupAbility < AbilityDsl::Base
     permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
   end
 
-  def if_index_full_ability
-    can?(:index_full_people, group)
+  def in_groups_with_index_full_ability
+    binding.pry
   end
 
   # Member is a general role kind. Return true if user has any member role anywhere.

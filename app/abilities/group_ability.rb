@@ -119,10 +119,6 @@ class GroupAbility < AbilityDsl::Base
     permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
   end
 
-  def in_groups_with_index_full_ability
-    binding.pry
-  end
-
   # Member is a general role kind. Return true if user has any member role anywhere.
   def if_member
     user.roles.any? { |r| r.class.member? }

@@ -19,4 +19,5 @@
       = labeled_attr(entry, :participant_number) if entry.with_reference?
       = labeled_attr(entry, :iban) if entry.iban.present?
       = labeled_attr(entry, :esr_number) if entry.with_reference?
+      = labeled_attr(entry, :creator)
 

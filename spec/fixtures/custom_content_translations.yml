@@ -6,9 +6,14 @@
 login_de:
   custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
   locale: de
-  label: Login E-Mail
-  subject: Deine Login Daten
-  body: "Hallo {user}, hier kannst du dich einloggen: {login-url}"
+  label: Login senden
+  subject: "Willkommen bei <%= Settings.application.name %>"
+  body: '
+  Hallo {recipient-name}<br/><br/>
+  Willkommen bei <%= Settings.application.name %>!
+  Unter dem folgenden Link kannst du
+  dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
+  Bis bald!<br/><br/>{sender-name}'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -17,7 +22,7 @@ login_fr:
   locale: fr
   label: Login E-Mail
   subject: Tes informations login
-  body: "Salut {user}, voici ta site login: {login-url}"
+  body: "Salut {recipient-name}, voici ta site login: {login-url}"
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -73,3 +78,61 @@ content_invoice_notification:
   '
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+person_add_request_person:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_person) %>
+  locale: de
+  label: 'Anfrage Personendaten: E-Mail Freigabe durch Person'
+  subject: Freigabe deiner Personendaten
+  body: 'Hallo {recipient-name}<br/><br/>
+    {requester-name} möchte dich hier hinzufügen: <br><br/>
+    {request-body}<br><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br><br/>
+    {requester-roles}<br><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
+    {answer-request-url}
+  '
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+person_add_request_responsibles:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_responsibles) %>
+  locale: de
+  label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche'
+  subject: Freigabe Personendaten
+  body: 'Hallo {recipient-names}<br/><br/>
+    {requester-name} möchte {person-name} hier hinzufügen: <br/><br/>
+    {request-body}<br/><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {requester-roles}<br/><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
+    {answer-request-url}'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+person_add_request_approved:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_approved) %>
+  locale: de
+  label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert'
+  subject: Freigabe der Personendaten akzeptiert
+  body: 'Hallo {recipient-name}<br/><br/>
+   {approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>
+   {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
+   {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+   {approver-roles}<br/><br/>'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+person_add_request_rejected:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_rejected) %>
+  locale: de
+  label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt'
+  subject: Freigabe der Personendaten abgelehnt
+  body: 'Hallo {recipient-name}<br/><br/>
+    {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>
+    {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
+    {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {rejecter-roles}<br/><br/>'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+

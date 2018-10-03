@@ -16,11 +16,11 @@ namespace :tx do
       gemspec = Dir.glob('*.gemspec').first
       project = gemspec ? gemspec[/^(.+)\.gemspec$/, 1] : 'hitobito'
 
-      sh %W(tx set --auto-local
-                   -r #{project}.#{slug}
-                   'config/locales/#{resource}.<lang>.yml'
-                   --source-lang de
-                   --execute).join(' ')
+      sh %W[tx set --auto-local
+            -r #{project}.#{slug}
+            'config/locales/#{resource}.<lang>.yml'
+            --source-lang de
+            --execute].join(' ')
     end
   end
 
@@ -32,7 +32,7 @@ namespace :tx do
 
   desc 'Push source files (=german locales) to transifex'
   task :push do
-    with_tx { sh "tx push -s" }
+    with_tx { sh 'tx push -s' }
   end
 
   desc 'Pull translations from transifex'
@@ -42,7 +42,7 @@ namespace :tx do
     with_tx { sh 'tx pull -f' }
   end
 
-  #desc 'Save transifex credentials from env into .transifexrc'
+  # desc 'Save transifex credentials from env into .transifexrc'
   task :auth do
     username = ENV['RAILS_TRANSIFEX_USERNAME']
     password = ENV['RAILS_TRANSIFEX_PASSWORD']
@@ -51,7 +51,7 @@ namespace :tx do
       rc = ["[#{host}]",
             "hostname = #{host}",
             "password = #{password}",
-            "token =",
+            'token =',
             "username = #{username}"].join("\n")
       File.open('.transifexrc', 'w') { |f| f.puts rc }
     else
@@ -69,7 +69,7 @@ namespace :tx do
 
   namespace :wagon do
     task :pull do
-      ENV['CMD'] = "if [ -f .tx/config ]; then tx pull -f; fi"
+      ENV['CMD'] = 'if [ -f .tx/config ]; then tx pull -f; fi'
       Rake::Task['wagon:exec'].invoke
     end
   end

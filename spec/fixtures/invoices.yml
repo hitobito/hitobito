@@ -54,4 +54,4 @@ sent:
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
   state: sent
-  total: 2
+  total: 0.50

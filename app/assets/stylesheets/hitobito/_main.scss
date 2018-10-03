@@ -4,19 +4,26 @@
 //  https://github.com/hitobito/hitobito.
 
 /* Imports Partials */
+@import "hitobito/base";
 @import "hitobito/typography";
 @import "hitobito/navigation";
 @import "hitobito/form";
 @import "hitobito/table";
 @import "hitobito/layout";
 @import "hitobito/fonts";
+@import "hitobito/utilities";
 
 /* Modules */
 @import "hitobito/modules/note";
 @import "hitobito/modules/person_tags";
+@import "hitobito/modules/nav_left";
 @import "hitobito/modules/chip";
 @import "hitobito/modules/step_wizard";
 @import "hitobito/modules/invoice";
+@import "hitobito/modules/turbolink_progress_bar";
+@import "hitobito/modules/info_bar";
+@import "hitobito/modules/legend";
+
 
 
 @import "hitobito/wagon";

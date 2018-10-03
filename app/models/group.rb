@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -60,7 +60,7 @@ class Group < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :reset_contact_info
-
+  after_create :create_invoice_config, if: :layer?
 
   # Root group may not be destroyed
   protect_if :root?
@@ -94,8 +94,6 @@ class Group < ActiveRecord::Base
   has_many :invoices
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
-
-  after_create :create_invoice_config, if: :layer?
 
   ### VALIDATIONS
 
@@ -145,6 +143,14 @@ class Group < ActiveRecord::Base
 
   def to_s(_format = :default)
     name
+  end
+
+  def display_name
+    short_name.present? ? short_name : name
+  end
+
+  def display_name_downcase
+    display_name.downcase
   end
 
   def with_layer

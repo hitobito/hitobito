@@ -10,41 +10,50 @@ module NavigationHelper
   MAIN = [
     { label: :groups,
       url: :groups_path,
+      icon_name: 'users',
       active_for: %w(groups people),
       inactive_for: %w(invoices invoice_articles invoice_config) },
 
     { label: :events,
       url: :list_events_path,
+      icon_name: 'calendar',
       active_for: %w(list_events),
       if: ->(_) { can?(:list_available, Event) } },
 
     { label: :courses,
       url: :list_courses_path,
+      icon_name: 'book',
       active_for: %w(list_courses),
       if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
+      icon_name: 'money',
       if: ->(_) { current_user.finance_groups.any? },
       active_for: %w(invoices invoice_articles invoice_config) },
 
     { label: :admin,
       url: :label_formats_path,
+      icon_name: 'cog',
       active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 
 
   def render_main_nav
-    content_tag_nested(:ul, MAIN, class: 'nav') do |options|
+    content_tag_nested(:ul, MAIN, class: 'nav-left-list') do |options|
       if !options.key?(:if) || instance_eval(&options[:if])
-        url = options[:url]
-        url = send(url) if url.is_a?(Symbol)
-        nav(I18n.t("navigation.#{options[:label]}"),
-            url,
-            options[:active_for],
-            options[:inactive_for])
+        main_nav_section(options)
       end
+    end
+  end
+
+  def main_nav_section(options)
+    url = send(options[:url]) if options[:url].is_a?(Symbol)
+    active = section_active?(url, options[:active_for], options[:inactive_for])
+    nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
+        class: 'nav-left-section', active_class: 'active') do
+      concat(sheet.render_left_nav) if sheet.left_nav?
     end
   end
 
@@ -53,20 +62,27 @@ module NavigationHelper
     group_invoices_path(current_user.finance_groups.first)
   end
 
-  # Create a list item for navigations.
+  def nav(label, url, icon_name = false, active = false, options = {}, &block)
+    classes = options[:class] || ''
+    active_class = options[:active_class] || 'is-active'
+    if active
+      classes += " #{active_class}"
+    end
+    content_tag(:li, class: classes) do
+      concat(link_to(icon(icon_name) + label, url))
+      yield if block_given? && active
+    end
+  end
+
+  private
+
   # If alternative_paths are given, and they appear in the request url,
   # the corresponding item is active.
   # If not alternative paths are given, the item is only active if the
   # link url equals the request url.
-  def nav(label, url, active_for = [], inactive_for = [])
-    options = {}
-    if current_page?(url) ||
-       Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
-        Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
-
-      options[:class] = 'active'
-    end
-    content_tag(:li, link_to(label, url), options)
+  def section_active?(url, active_for = [], inactive_for = [])
+    current_page?(url) ||
+      Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
+      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
   end
-
 end

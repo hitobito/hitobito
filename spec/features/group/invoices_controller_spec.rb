@@ -39,14 +39,14 @@ describe InvoicesController do
       click_link 'Rechnung erstellen'
       click_link 'Eintrag hinzufügen'
       fill_in 'Preis', with: 1
-      expect(page).to have_content 'Total inkl. MWSt. 1.00 CHF'
+      expect(page).to have_content 'Total inkl. MwSt. 1.00 CHF'
     end
 
     it 'adding articles fills new invoice item', js: true do
       visit group_people_path(group)
       click_link 'Rechnung erstellen'
       select 'BEI-JU', from: 'invoice_item_article'
-      expect(page).to have_content 'Total inkl. MWSt. 5.40 CHF'
+      expect(page).to have_content 'Total inkl. MwSt. 5.40 CHF'
 
       # TODO why does this part not execute success
       # expect(page).to have_content 'ermässiger Beitrage für Kinder und Jugendliche'

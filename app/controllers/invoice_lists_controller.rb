@@ -73,6 +73,10 @@ class InvoiceListsController < CrudController
     entry.multi_create if entry.valid?
   end
 
+  def permitted_params
+    super.merge(creator_id: current_user.id)
+  end
+
   def return_path
     if params[:singular]
       group_invoice_path(parent, invoices.first)

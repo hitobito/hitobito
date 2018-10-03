@@ -99,7 +99,7 @@ de:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'muss einen positive Zahl sein um die %{model} reaktivierbar zu machen'
+              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
         subscription:
           attributes:
             subscriber_id:
@@ -637,9 +637,9 @@ de:
         sent_at: Verschickt am
         cost: Betrag
         total: Total
-        total_inkl_vat: Total inkl. MWSt.
-        total: Total inkl. MWSt.
-        vat: MWSt.
+        total_inkl_vat: Total inkl. MwSt.
+        total: Total inkl. MwSt.
+        vat: MwSt.
         payment_information: Zahlungsinformation
         payment_purpose: Zahlungszweck
         address: Absender Adresse
@@ -649,6 +649,7 @@ de:
         iban: IBAN
         payment_slip: Einzahlungsschein
         participant_number: Teilnehmernummer
+        creator: Rechnungssteller
 
       invoice_article:
         number: Artikelnummer
@@ -656,7 +657,7 @@ de:
         description: Beschreibung
         category: Kategorie
         unit_cost: Preis
-        vat_rate: MWSt.
+        vat_rate: MwSt.
         cost_center: Kostenstelle
         account: Konto
 
@@ -682,7 +683,7 @@ de:
       invoice_item:
         name: Name
         description: Beschreibung
-        vat_rate: MWSt.
+        vat_rate: MwSt.
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
@@ -691,7 +692,7 @@ de:
       invoice_items:
         name: Name
         description: Beschreibung
-        vat_rate: MWSt.
+        vat_rate: MwSt.
         unit_cost: Preis
         count: Anzahl
         cost: Betrag

@@ -26,6 +26,9 @@ Hitobito::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  # Set to false for faster wagon tests once db is setup
+  config.active_record.maintain_test_schema = true
+
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false
 

@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-.user-impersonation
+.user-impersonation.info-bar
   .alert-danger
     = t('.info', user: current_user)
-    = link_to(group_person_impersonate_path(current_user.primary_group_id, current_user),
+    = link_to(sign_out_path,
               data: { method: :delete }) do
 
       = icon('remove-sign')

@@ -46,6 +46,16 @@ describe Invoice do
     expect(invoice.errors.full_messages).to include(/Rechnungseinstellung ist nicht gültig/)
   end
 
+  it 'validates that an invoice in state issued or sent has at least has one invoice_item' do
+    invoice = create_invoice
+    invoice.update(state: :issued)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages).to include(/Rechnungsposten muss ausgefüllt werden/)
+    invoice.reload.update(state: :sent)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages).to include(/Rechnungsposten muss ausgefüllt werden/)
+  end
+
   it 'computes sequence_number based of group_id and invoice_config.sequence_number' do
     expect(create_invoice.sequence_number).to eq "#{group.id}-1"
   end

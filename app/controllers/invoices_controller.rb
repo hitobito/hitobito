@@ -58,6 +58,10 @@ class InvoicesController < CrudController
     @payment_valid = payment_attrs ? @payment.valid? : true
   end
 
+  def permitted_params
+    super.merge(creator_id: current_user.id)
+  end
+
   def generate_pdf(invoices)
     if params[:label_format_id]
       render_labels(invoices)

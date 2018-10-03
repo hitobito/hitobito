@@ -12,7 +12,6 @@
 #  sequence_number     :integer          default(1), not null
 #  due_days            :integer          default(30), not null
 #  group_id            :integer          not null
-#  contact_id          :integer
 #  address             :text(65535)
 #  payment_information :text(65535)
 #  account_number      :string(255)
@@ -30,12 +29,10 @@ class InvoiceConfig < ActiveRecord::Base
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
 
   belongs_to :group, class_name: 'Group'
-  belongs_to :contact, class_name: 'Person'
 
   has_many :payment_reminder_configs, dependent: :destroy
 
   validates :group_id, uniqueness: true
-  validates :address, presence: true, on: :update
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
 
@@ -46,7 +43,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :account_number, presence: true, on: :update
   validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
-                             on: :update, allow_blank: true
+                             on: :update, allow_blank: true, if: :post?
+
   validates :participant_number, presence: true, on: :update, if: :with_reference?
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
@@ -67,7 +65,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def correct_check_digit
-    return if account_number.blank?
+    return if account_number.blank? || bank?
     payment_slip = Invoice::PaymentSlip.new
     splitted = account_number.delete('-').split('')
     check_digit = splitted.pop

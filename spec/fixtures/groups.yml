@@ -55,7 +55,6 @@ toppers:
 
 bottom_layer_one:
   name: Bottom One
-  short_name: One
   type: Group::BottomLayer
   parent: top_layer
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>

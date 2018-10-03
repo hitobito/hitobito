@@ -9,11 +9,6 @@ require 'spec_helper'
 
 describe Person::AddRequestMailer do
 
-  before do
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
-  end
-
   let(:person) do
     Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
   end

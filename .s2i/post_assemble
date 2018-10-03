@@ -7,7 +7,7 @@ set -ex
 pushd /opt/app-root/src
 
 # load development seeds when demo instance
-if [ $DEMO_INSTANCE -eq 1 ]; then
+if [[ $DEMO_INSTANCE -eq 1 ]]; then
   echo 'demo instance: creating symlink for loading development seeds'
   for wagon in vendor/wagons/*
   do
@@ -16,7 +16,7 @@ if [ $DEMO_INSTANCE -eq 1 ]; then
   done
 fi
 
-if [ $PULL_TRANSIFEX -eq 1 ]; then
+if [[ $PULL_TRANSIFEX -eq 1 ]]; then
   echo 'pulling transifex translations ...'
   RAILS_HOST_NAME='build.hitobito.ch' bundle exec rake tx:pull tx:wagon:pull -t
 fi

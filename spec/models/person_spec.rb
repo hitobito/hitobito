@@ -487,4 +487,18 @@ describe Person do
     expect(people(:bottom_member).finance_groups).to eq [groups(:bottom_layer_one)]
   end
 
+  it '#filter_attrs_list returns list of filterable attributes' do
+    expect(Person.filter_attrs_list).to include(['Vorname', :first_name])
+    expect(Person.filter_attrs_list).to include(['Nachname', :last_name])
+    expect(Person.filter_attrs_list).to include(['Übername', :nickname])
+    expect(Person.filter_attrs_list).to include(['Firmenname', :company_name])
+    expect(Person.filter_attrs_list).to include(['Haupt-E-Mail', :email])
+    expect(Person.filter_attrs_list).to include(['Adresse', :address])
+    expect(Person.filter_attrs_list).to include(['PLZ', :zip_code])
+    expect(Person.filter_attrs_list).to include(['Ort', :town])
+    expect(Person.filter_attrs_list).to include(['Land', :country])
+
+    expect(Person.filter_attrs_list.count).to eq(Person::FILTER_ATTRS.count)
+  end
+
 end

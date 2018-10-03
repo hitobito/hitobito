@@ -11,26 +11,26 @@
 }
 
 h1 {
-  font-size: 1.5em !important;
+  font-size: 1.5em;
   font-weight: 700;
   line-height: 1.25em;
 }
 
 h2 {
-  font-size: 1.4em !important;
-  font-weight: 700;
+  font-size: 1.4em;
+  font-weight: 300;
 }
 
 h3 {
-  font-size: 1.25em !important;
+  font-size: 1.25em;
 }
 
 h4 {
-  font-size: 1.2em !important;
+  font-size: 1.2em;
 }
 
 h5 {
-  font-size: 1.1em !important;
+  font-size: 1.1em;
   margin: 10px 0 0 0;
 }
 
@@ -162,6 +162,8 @@ td.center, th.center {
 
 td.right, th.right {
   text-align: right;
+  padding-right: 20px;
+  &:last-child { padding-right: 0; }
 }
 
 select[class*="span"] {

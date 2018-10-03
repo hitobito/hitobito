@@ -28,7 +28,7 @@
   = field_set_tag t('.choose_role') do
     = f.labeled :role_type, Role.model_name.human do
       = select_tag(:role_type,
-                   options_from_collection_for_select(@group.possible_roles, :sti_name, :label, params[:role_type]),
+                   options_from_collection_for_select(@group.possible_roles, :sti_name, :label, @role_type),
                    { class: 'span4', prompt: I18n.t('helpers.select.prompt') })
       = f.help_block t('.choose_role_help')
 

@@ -63,8 +63,7 @@ module Export::Pdf::Participation
     end
 
     def description_title
-      [human_event_name,
-       human_attribute_name(:description, event).downcase].join
+      human_attribute_name(:description, event)
     end
 
     def course?

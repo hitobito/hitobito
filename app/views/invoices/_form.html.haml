@@ -9,13 +9,14 @@
     = f.labeled_input_field :recipient_address, rows: 4
 
   = f.labeled_input_field :payment_information, rows: 2
-  = f.labeled_input_field :payment_purpose, rows: 2
+  - if parent.invoice_config.with_reference?
+    = f.labeled_input_field :payment_purpose, rows: 2
 
   = field_set_tag do
     - if parent.invoice_articles.exists?
       = f.labeled(:invoice_item_article) do
         = select("temp", "invoice_article_id",
-          InvoiceArticle.all.pluck(:number, :id),
+          InvoiceArticle.all.pluck(:number, :name, :id).map { |ia| ["#{ia[0]} - #{ia[1]}", ia[2]] },
           { include_blank: true },
           { id: "invoice_item_article" })
 

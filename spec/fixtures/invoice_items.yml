@@ -23,3 +23,9 @@ pins:
   name: pins
   unit_cost: 0.5
   count: 1
+
+needles:
+  name: needles
+  invoice: sent
+  unit_cost: 0.5
+  count: 1

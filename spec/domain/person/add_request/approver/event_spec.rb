@@ -44,10 +44,12 @@ describe Person::AddRequest::Approver::Event do
       # load before to get correct change counts
       before { subject }
 
-      it 'creates a new participation' do
-        expect do
-          subject.approve
-        end.to change { Event::Participation.count }.by(1)
+      it 'creates a new participation and sends email' do
+        expect_enqueued_mail_jobs(count: 1) do
+          expect do
+            subject.approve
+          end.to change { Event::Participation.count }.by(1)
+        end
 
         p = person.event_participations.first
         expect(p).to be_active
@@ -57,6 +59,23 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application).to be_nil
       end
 
+      it 'creates new participation and does not send email' do
+        person.update(email: nil)
+        expect_no_enqueued_mail_jobs do
+          expect { subject.approve }.to change { Event::Participation.count }.by(1)
+        end
+      end
+    end
+
+    context '#reject' do
+      it 'sends email if email is set' do
+        expect_enqueued_mail_jobs(count: 1) { subject.reject }
+      end
+
+      it 'does not send email if email is blank' do
+        person.update(email: nil)
+        expect_no_enqueued_mail_jobs { subject.reject }
+      end
     end
   end
 

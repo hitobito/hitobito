@@ -26,6 +26,7 @@ body {
       padding: 10px;
       background-color: $logoBackgroundColor;
       border-radius: 6px;
+      left: 1rem;
   }
 
 }
@@ -78,7 +79,7 @@ body {
     width: 30%;
     max-width: 25rem;
     z-index: 1;
-    margin-top: $logoHeight + 80px;
+    margin-top: $logoHeight + 40px;
   }
 
   .container-fluid {

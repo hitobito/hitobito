@@ -12,13 +12,13 @@
 //--------------------------
 
 
-$logoUrl:               "logo.png"; // put under app/assets/images
-$logoWidth:             230px;      // has to bet set as the logo is a background image
-$logoHeight:            30px;       // will also set the minimal width of the navigation
+$logoUrl:               "logo.png" !default; // put under app/assets/images
+$logoWidth:             230px !default;      // has to bet set as the logo is a background image
+$logoHeight:            30px !default;       // will also set the minimal width of the navigation
                                     // must be set in pixel
 
 // optional backgroundcolor, creates a box around the logo, if changed from 'none'
-$logoBackgroundColor:   none;    
+$logoBackgroundColor:   none !default;
 
 // Grays
 // -------------------------

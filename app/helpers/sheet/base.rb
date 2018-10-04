@@ -157,8 +157,8 @@ module Sheet
 
     # title in parent sheet
     def render_parent_title
-      if link_url
-        link_to(title, link_url, class: 'level active')
+      if parent_link_url
+        link_to(title, parent_link_url, class: 'level active')
       else
         content_tag(:div, title, class: 'level active')
       end
@@ -167,6 +167,11 @@ module Sheet
     # URL for the title link
     def link_url
       nil
+    end
+
+    def parent_link_url
+      @active_tab ||= find_active_tab
+      @active_tab ? @active_tab.path : link_url 
     end
 
     def render_breadcrumbs

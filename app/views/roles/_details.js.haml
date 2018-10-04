@@ -1,0 +1,5 @@
+- if @type
+  $('#role_info').html('#{escape_javascript(render('info'))}');
+  = render_extensions :details
+- else
+  $('#role_info').html('');

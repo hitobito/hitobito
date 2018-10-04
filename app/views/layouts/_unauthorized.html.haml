@@ -3,8 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-.options
-  %ul
-    = render 'layouts/languages'
-    %li= link_to t('devise.sessions.new.sign_in'), new_person_session_path
-    %li= link_to t('.forgot_password'), new_person_password_path
+= render 'layouts/languages'
+%a= link_to t('devise.sessions.new.sign_in'), new_person_session_path
+%a= link_to t('.forgot_password'), new_person_password_path

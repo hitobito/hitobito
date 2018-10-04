@@ -58,7 +58,7 @@ describe Event::ApplicationMarketController, type: :controller do
     it 'has add button' do
       button = dom.find('.btn-group a')
       expect(button.text).to eq ' Teilnehmer/-in hinzufügen'
-      expect(button).to have_css('i.icon-plus')
+      expect(button).to have_css('i.fa-plus')
       path_options = { for_someone_else: true,
                        event_role: { type: course.class.participant_types.first.sti_name } }
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)

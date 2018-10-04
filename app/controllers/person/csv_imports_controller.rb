@@ -22,6 +22,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def define_mapping
+    @role_type = params[:role_type] || group.default_role
     if valid_file_or_data?
       if parse_or_redirect
         flash.now[:notice] = parser.flash_notice

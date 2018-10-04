@@ -1,0 +1,15 @@
+// overrides for bootstrap
+
+.btn-group {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+  margin-right: 5px;
+
+  & + & {
+    margin-left: 0;
+  }
+  
+  &:last-child {
+    margin-right: 0;
+  }
+}

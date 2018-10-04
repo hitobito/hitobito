@@ -49,24 +49,24 @@
   .control-group
     = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label')
     .controls
-      = number_field_tag("filters[qualification][start_at_year_from]", filter && filter.args[:start_at_year_from], class: 'span2')
+      = number_field_tag("filters[qualification][start_at_year_from]", filter && filter.args[:start_at_year_from], class: 'span2', placeholder: 'YYYY' )
       %span.text
         &nbsp;
         = t('.start_at_year_infix')
         &nbsp;
-      = number_field_tag("filters[qualification][start_at_year_until]", filter && filter.args[:start_at_year_until], class: 'span2')
+      = number_field_tag("filters[qualification][start_at_year_until]", filter && filter.args[:start_at_year_until], class: 'span2', placeholder: 'YYYY')
       %span.text
         &nbsp;
         = t('.start_at_year_suffix')
   .control-group
     = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label')
     .controls
-      = number_field_tag("filters[qualification][finish_at_year_from]", filter && filter.args[:finish_at_year_from], class: 'span2')
+      = number_field_tag("filters[qualification][finish_at_year_from]", filter && filter.args[:finish_at_year_from], class: 'span2', placeholder: 'YYYY')
       %span.text
         &nbsp;
         = t('.finish_at_year_infix')
         &nbsp;
-      = number_field_tag("filters[qualification][finish_at_year_until]", filter && filter.args[:finish_at_year_until], class: 'span2')
+      = number_field_tag("filters[qualification][finish_at_year_until]", filter && filter.args[:finish_at_year_until], class: 'span2', placeholder: 'YYYY'  )
       %span.text
         &nbsp;
         = t('.finish_at_year_suffix')

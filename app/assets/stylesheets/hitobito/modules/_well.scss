@@ -1,0 +1,25 @@
+.well {
+  border: none;
+  background: $grayLighter;
+
+  > {
+    h1, h2, h3, h4, h5 {
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &.panel {
+    margin-top: 5px;
+    border: 2px solid $grayLighter;
+    background: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+
+    table:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

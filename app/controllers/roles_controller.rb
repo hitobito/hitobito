@@ -65,6 +65,7 @@ class RolesController < CrudController
   def role_types
     authorize!(:role_types, Role)
     @group = Group.find(params.fetch(:role, {})[:group_id])
+    @type ||= @group.default_role
   end
 
   private

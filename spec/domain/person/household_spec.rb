@@ -10,12 +10,14 @@ describe Person::Household do
   let(:leader) { people(:top_leader) }
   let(:member) { people(:bottom_member) }
 
+  let(:user) { Person.first }
+
   def create(role, group)
     Fabricate(role.name.to_s, group: group).person
   end
 
   def household(person)
-    Person::Household.new(person, Ability.new(person))
+    Person::Household.new(person, Ability.new(person), nil, user)
   end
 
   context '#assign' do
@@ -192,7 +194,7 @@ describe Person::Household do
       expect(member.versions.last.event).to eq 'append_to_household'
     end
 
-    it 'creates houshold_update version' do
+    it 'creates household_update version' do
       leader.household_people_ids = [member.id]
       household(leader).save
 
@@ -203,6 +205,17 @@ describe Person::Household do
       expect(leader.versions.last.event).to eq 'household_updated'
       expect(member.versions.last.event).to eq 'household_updated'
     end
+
+    it 'does not create household_updated version when addesss and people are unchanged' do
+      leader.household_people_ids = [member.id]
+      household(leader).save
+      
+      leader.nickname = 'Nik'
+      expect do
+        household(leader).save
+      end.to change { PaperTrail::Version.count }.by(0)
+    end
+
   end
 
   context '#remove' do
@@ -221,7 +234,9 @@ describe Person::Household do
       leader.update(household_key: 1)
       other.update(household_key: 1)
 
-      household(leader).remove
+      expect do
+        household(leader).remove
+      end.to change { PaperTrail::Version.count }.by(3)
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
       expect(member.reload.household_key).to eq '1'
@@ -236,6 +251,26 @@ describe Person::Household do
       end.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq 'remove_from_household'
       expect(member.versions.last.event).to eq 'remove_from_household'
+    end
+
+    it 'creates Papertrail entries for removal from 3 people household' do
+      other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
+      member.update(household_key: 1)
+      leader.update(household_key: 1)
+      other.update(household_key: 1)
+
+      expect do
+        household(leader).remove
+      end.to change { PaperTrail::Version.count }.by(3)
+    end
+
+
+    it 'does not create Papertrail for remove household, if person does not belong to a household' do
+      # test needed, because an unchecked checkbox triggers the remove method
+      leader.nickname = 'Nik'
+      expect do
+        household(leader).remove
+      end.to change { PaperTrail::Version.count }.by(0)
     end
   end
 

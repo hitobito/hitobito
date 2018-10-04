@@ -264,11 +264,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     template.render('shared/error_messages', errors: @object.errors, object: @object)
   end
 
-  # Renders a marker if the given attr has to be present.
-  def required_mark(attr)
-    required?(attr) ? REQUIRED_MARK : ''
-  end
-
   # Render a label for the given attribute with the passed field html section.
   # The following parameters may be specified:
   #   labeled(:attr) { #content }
@@ -284,8 +279,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     caption_or_content ||= captionize(attr, klass)
     add_css_class(html_options, 'controls')
+    css_classes = { 'control-group' => true, error: errors_on?(attr), required: required?(attr) }
 
-    content_tag(:div, class: "control-group#{' error' if errors_on?(attr)}") do
+    content_tag(:div, class: css_classes.select { |css, show| show }.keys.join(" ")) do
       label(attr, caption_or_content, class: 'control-label') +
       content_tag(:div, content, html_options)
     end
@@ -437,7 +433,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     labeled_args = [args.first]
     labeled_args << label if label.present?
 
-    text = send(field_method, *(args << options)) + required_mark(args.first)
+    text = send(field_method, *(args << options))
     text = with_addon(addon, text) if addon.present?
     text << help_inline(help_inline) if help_inline.present?
     text << help_block(help) if help.present?

@@ -4,13 +4,13 @@
 -#  https://github.com/hitobito/hitobito.
 
 = form_tag full_path, class: 'form-inline', method: :get do
-  .input-append
+  .input-append.quicksearch
     = search_field_tag :q, params[:q],
-                       class: 'span4',
+                       class: 'quicksearch-input',
                        id: 'quicksearch',
                        placeholder: t('global.search.placeholder'),
                        data: { url: query_path,
                                person_url: person_path(1).gsub(/\/1$/, ''),
                                group_url: groups_path,
                                event_url: event_path(1).gsub(/\/1$/, '') }
-    = button_tag icon(:search), class: 'btn'
+    = button_tag icon(:search), class: 'btn quicksearch-button'

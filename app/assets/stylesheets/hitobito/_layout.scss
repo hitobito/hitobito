@@ -87,7 +87,7 @@ body {
     margin-left: -1.5rem;
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: visible;
     overflow-y: visible;
     padding-bottom: 60px; // needs these paddings to accomodate further sheets
     padding-right: 20px;  // needs these paddings to accomodate further sheets
@@ -298,8 +298,6 @@ body {
 
 }
 
-
-
 /* Shared */
 // -------------------------
 
@@ -317,36 +315,11 @@ body {
   text-align: left;
 }
 
-// Profil
-.profil, .profil-big {
-  background: $white;
-  border: 1px solid $grayLight;
-  overflow: hidden;
-  @include border-radius(3px);
-}
-.profil {
-  width: 32px;
-  height: 32px;
-  padding: 1px;
-  .table-striped & {
-    margin-left: -8px;
-  }
-}
-.profil-big {
-  width: 72px;
-  height: 72px;
-  padding: 2px;
-}
-
-.icon-calendar {
-  cursor: pointer;
-}
 
 #content section.roles {
   overflow: visible;
 }
 
-.icon-muted { opacity: 0.7; }
 .contactable.well .contact {
   address { margin-left: 1em; }
   .social { margin-left: 1em; }
@@ -357,67 +330,4 @@ body {
   &:hover {
     opacity: 1;
   }
-}
-
-.well {
-  border: none;
-  background: $grayLighter;
-
-  > {
-    h1, h2, h3, h4, h5 {
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-  }
-
-  &.panel {
-    margin-top: 5px;
-    border: 2px solid $grayLighter;
-    background: none;
-    box-shadow: none;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-
-    table:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-// higher z-index than popover (1010)
-.ui-datepicker {
-  z-index: 1011 !important;
-}
-
-.ui-datepicker td .ui-state-default:hover {
-  background-color: $purple !important;
-}
-
-//  Logs
-.log-item {
-  margin-top: 2em;
-  &:first-child {
-    margin-top: 0;
-  }
-}
-.log-infos {
-  padding-top: 11px;
-}
-
-// Notes
-.person-note-item {
-  margin-top: 2em;
-  &:first-child {
-    margin-top: 0;
-  }
-}
-.person-note-text {
-  padding-top: 11px;
-}
-#person-notes-new-button {
-  margin-bottom: 20px;
-}
-#person-notes-form textarea {
-  width: 100%;
 }

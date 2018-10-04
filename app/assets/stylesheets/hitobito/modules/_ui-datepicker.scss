@@ -1,0 +1,9 @@
+// higher z-index than popover (1010)
+
+.ui-datepicker {
+  z-index: 1011 !important;
+}
+
+.ui-datepicker td .ui-state-default:hover {
+  background-color: $purple !important;
+}

@@ -93,7 +93,7 @@ module PeopleHelper
   end
 
   def link_to_address(person)
-    unless person.address.nil? || person.zip_code.nil? || person.town.nil?
+    unless person.address.nil? || person.zip_code.nil? || person.town.nil?/hitobito/app/helpers/people_helper.rb
       link_to(icon('map-marker', class: 'fa-2x'), openstreetmap_url(person), target: '_blank')
     end
   end
@@ -108,5 +108,4 @@ module PeopleHelper
     end
     osm_url
   end
-
 end

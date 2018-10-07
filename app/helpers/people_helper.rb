@@ -91,14 +91,22 @@ module PeopleHelper
       !origin_user &&
       group.people.exists?(id: user.id)
   end
-  
+
   def link_to_address(person)
-    if !person.address.nil? && !person.zip_code.nil? && !person.town.nil?
-      link_to_address_url = 'https://nominatim.openstreetmap.org/search.php?polygon_geojson=1&viewbox='
-      link_to_address_url += '&street=' + person.address
-      link_to_address_url += '&postalcode=' + person.zip_code
-      link_to_address_url += '&city=' + person.town
-      link_to fa_icon('map-marker 2x'), link_to_address_url, target: '_blank'
+    unless person.address.nil? || person.zip_code.nil? || person.town.nil?
+      link_to(icon('map-marker', class: 'fa-2x'), openstreetmap_url(person), target: '_blank')
     end
   end
+
+  def openstreetmap_url(person)
+    osm_url = 'https://nominatim.openstreetmap.org/search.php?polygon_geojson=1&viewbox='
+    osm_url += '&street=' + person.address
+    osm_url += '&postalcode=' + person.zip_code
+    osm_url += '&city=' + person.town
+    if person.country.present?
+      osm_url += '&countrycodes=' + person.country
+    end
+    osm_url
+  end
+
 end

@@ -37,9 +37,9 @@ module Dropdown
     def tabular_links(format)
       path = params.merge(format: format)
       item = add_item(translate(format), '#')
-      item.sub_items << Item.new(translate(:addresses), path)
-      item.sub_items << Item.new(translate(:households), path.merge(household: true)) if @households
-      item.sub_items << Item.new(translate(:everything), path.merge(details: true)) if @details
+      item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
+      item.sub_items << Item.new(translate(:households), path.merge(household: true), data: { checkable: true }) if @households
+      item.sub_items << Item.new(translate(:everything), path.merge(details: true), data: { checkable: true }) if @details
     end
 
     def vcard_link

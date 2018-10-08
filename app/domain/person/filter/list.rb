@@ -15,6 +15,7 @@ class Person::Filter::List
     @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
     @name = params[:name]
+    @ids = params[:ids].to_s.split(',')
   end
 
   def entries
@@ -22,7 +23,10 @@ class Person::Filter::List
   end
 
   def filtered_accessibles
-    filter.where(id: accessibles.unscope(:select).select(:id)).uniq
+    filter.where(id: accessibles.unscope(:select).pluck(:id).keep_if do |id|
+      next true if @ids.blank?
+      @ids.include? id.to_s
+    end).uniq
   end
 
   def all_count

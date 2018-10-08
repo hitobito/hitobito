@@ -20,6 +20,7 @@ de:
     confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden mit
+    selected: Ausgewählt
 
     gender:
       male: männlich
@@ -164,6 +165,10 @@ de:
     button: 'Rechnung stellen / mahnen'
     set_state: 'Status setzen (Gestellt/Gemahnt)'
     send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
+  dropdown/role_list:
+    add: Rolle hinzufügen
+    remove: Rollen löschen
+    move: Rollen verschieben
 
   devise:
     failure:
@@ -1146,6 +1151,26 @@ de:
         Die Rolle %{role} in der Gruppe %{group} kann nur öffentliche Daten
         (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
       only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
+
+  role_lists:
+    destroy:
+      success:
+        one: Eine Rolle wurde gelöscht
+        other: '%{count} Rollen wurden gelöscht'
+    create:
+      success:
+        one: Eine Rolle wurde erstellt
+        other: '%{count} Rollen wurden erstellt'
+    update: 
+      success:
+        one: Eine Rolle wurde verschoben
+        other: '%{count} Rollen wurden verschoben'
+      failure: Bitte geben Sie eine valide Rolle an
+    move:
+      title: Rollen mit dem Typ %{role} verschieben nach
+      submit:
+        one: Eine Rolle verschieben
+        other: '%{count} Rollen verschieben'
 
   subscriber:
     group:

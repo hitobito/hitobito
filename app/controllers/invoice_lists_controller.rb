@@ -30,6 +30,7 @@ class InvoiceListsController < CrudController
   def new
     assign_attributes
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
+    entry.recipient_ids = params[:ids] if params[:ids].present?
 
     session[:invoice_referer] = request.referer
   end

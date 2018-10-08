@@ -32,7 +32,7 @@ module PeopleHelper
   def invoice_button_single(people, finance_group)
     action_button(t('crud.new.title', model: Invoice.model_name.human),
                   new_invoices_for_people_path(finance_group, people),
-                  :plus)
+                  :plus, data: { checkable: true })
   end
 
   def format_birthday(person)

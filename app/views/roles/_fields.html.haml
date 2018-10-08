@@ -13,7 +13,7 @@
 
 = f.labeled(:type) do
   #role_type_select.span6
-    = render 'type_select'
+    = render 'roles/type_select'
 
 = f.labeled_input_field(:label,
                         data: { provide: :typeahead, source: entry.klass.available_labels },

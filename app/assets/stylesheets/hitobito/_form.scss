@@ -547,3 +547,13 @@ input.switcher {
   }
 }
 
+.modal {
+  form {
+    margin-bottom: 0;
+  }
+
+  .modal-body {
+    overflow-y: unset;
+  }
+}
+

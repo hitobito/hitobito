@@ -36,3 +36,11 @@ table.roles {
   td:first-child { padding-left: 10px; width: 100%; }
   td { min-width: 20px; }
 }
+
+table .multiselect {
+ white-space: nowrap; 
+
+  .count, span, .actions{
+    display: inline;
+  }
+}

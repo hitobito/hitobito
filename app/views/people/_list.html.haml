@@ -22,7 +22,9 @@
       = render 'person/add_requests/body_list'
 
 - if @people.total_count > 0
-  = crud_table do |t|
+  = crud_table(data: { checkable: true }) do |t|
+    - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
+      - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
     - t.col('') do |p|
       .profil= image_tag(p.picture.thumb.url, size: '32x32')
     - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
@@ -42,3 +44,4 @@
       = p.complete_address
 
 = paginate @people
+= render 'multiselect_actions'

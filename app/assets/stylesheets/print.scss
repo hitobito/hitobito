@@ -116,6 +116,7 @@ table {
 
 table th {
   text-align: left;
+  display: table-cell;
 }
 
 table td,
@@ -165,3 +166,23 @@ body.application {
     display: none;
   }
 }
+
+table tr td:first-of-type,
+table tr th:first-of-type {
+  input[type='checkbox'] {
+    & {
+      display: none !important;
+    }
+  }
+}
+
+table thead th:last-of-type, .multiselect {
+  & {
+    display: none;
+  }
+}
+
+table tr th[style] {
+  display: table-cell !important;
+}
+

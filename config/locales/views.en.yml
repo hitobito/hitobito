@@ -452,6 +452,7 @@ en:
 
     synchronization:
       wait_for_synchronization: 'Your data is currently being sent to MailChimp. This can take a moment. Then the selected list will be updated with the contacts from hitobito.'
+      synchronization_failed: 'An error occurred while sending data to MailChimp (%{error})'
       cancel_synchronization: 'Cancel export'
 
   mailing_lists:

@@ -9,9 +9,17 @@ class AsyncSynchronizationsController < ApplicationController
   skip_authorization_check
 
   def show
-    if MailingList.find(params[:id]).syncing_mailchimp
+    if mailing_list.syncing_mailchimp
       respond_to do |format|
-        format.json { render json: { status: 404 } }
+        if job.last_error.blank?
+          format.json { render json: { status: 404 } }
+        else
+          AsyncSynchronizationCookie.new(cookies).remove(params[:id].to_i)
+          flash[:alert] = I18n.t('layouts.synchronization.synchronization_failed',
+                                 error: job.last_error.lines.first.strip)
+          job.destroy
+          format.json { render json: { status: 422 } }
+        end
       end
     else
       AsyncSynchronizationCookie.new(cookies).remove(params[:id].to_i)
@@ -21,5 +29,12 @@ class AsyncSynchronizationsController < ApplicationController
     end
   end
 
+  def mailing_list
+    @mailing_list ||= MailingList.find(params[:id])
+  end
+
+  def job
+    @job ||= MailchimpSynchronizationJob.new(mailing_list.id).delayed_jobs.first
+  end
 
 end

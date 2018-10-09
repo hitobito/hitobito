@@ -12,7 +12,7 @@ class app.AsyncSynchronizations
   constructor: () ->
     bind.call()
     setInterval(( -> checkSynchronizationCookie()), 500)
-    setInterval(( -> checkSynchronization()), 1000)
+    setInterval(( -> checkSynchronization()), 3000)
 
   checkSynchronizationCookie = ->
     if $.cookie('async_synchronizations') == null
@@ -27,7 +27,8 @@ class app.AsyncSynchronizations
       $.ajax(
         url: "/synchronizations/#{synchronization['mailing_list_id']}",
         success: (data) ->
-          return if data['status'] != 200
+          return unless data['status'] == 422
+          window.location.reload() # error condition
       )
 
   bind = ->

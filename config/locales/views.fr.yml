@@ -515,6 +515,7 @@ fr:
 
     synchronization:
       wait_for_synchronization: 'Vos données sont actuellement envoyées à MailChimp. Cela peut prendre un moment. Ensuite, la liste sélectionnée sera mise à jour avec les contacts de hitobito.'
+      synchronization_failed: "Une erreur s'est produite lors de l'envoi de données à MailChimp (%{error})."
       cancel_synchronization: "Annuler l'exportation"
 
   mailing_lists:

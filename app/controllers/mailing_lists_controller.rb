@@ -11,7 +11,9 @@ class MailingListsController < CrudController
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
-                          :anyone_may_post, :main_email, :delivery_report, preferred_labels: []]
+                          :anyone_may_post, :main_email, :delivery_report,
+                          :mailchimp_list_id, :mailchimp_api_key,
+                          preferred_labels: []]
 
   decorates :group, :mailing_list
 

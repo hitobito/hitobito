@@ -7,6 +7,7 @@
   %article.span5
     = format_attr(entry, :description)
     = render_attrs(entry, :mail_address_link, :publisher)
+    = render_attrs(entry, :mailchimp_api_key, :mailchimp_list_id)
     - if can?(:edit, entry)
       = render_attrs(entry, :additional_sender)
     = render_attrs(entry, :main_email, :preferred_labels)

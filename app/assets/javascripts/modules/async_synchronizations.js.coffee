@@ -34,4 +34,7 @@ class app.AsyncSynchronizations
     $(document).ready ->
       checkSynchronization()
 
+    $(document).on 'click', '#cancel_async_synchronizations', (e) ->
+      $.removeCookie('async_synchronizations', { path: '/' })
+
   new AsyncSynchronizations

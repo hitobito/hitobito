@@ -374,6 +374,10 @@ ActiveRecord::Schema.define(version: 20181108131258) do
     t.string  "preferred_labels",     limit: 255
     t.boolean "main_email",                         default: false
     t.boolean "delivery_report",                    default: false, null: false
+    t.string   "mailchimp_api_key"
+    t.string   "mailchimp_list_id"
+    t.boolean  "syncing_mailchimp",            default: false
+    t.datetime "last_synced_mailchimp_at"
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree

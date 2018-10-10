@@ -75,7 +75,8 @@ describe RoleListsController do
       expect do
         post :create, group_id: group,
           ids: person1.id, 
-          role: { type: Group::TopGroup::Member }
+          role: { type: Group::TopGroup::Member,
+                  group_id: group }
       end.to change(Role, :count).by(1)
 
       expect(flash[:notice]).to include 'Eine Rolle wurde erstellt'
@@ -85,10 +86,24 @@ describe RoleListsController do
       expect do
         post :create, group_id: group,
           ids: [person2.id, person1.id].join(','), 
-          role: { type: Group::TopGroup::Member }
+          role: { type: Group::TopGroup::Member,
+                  group_id: group }
       end.to change(Role, :count).by(2)
 
       expect(flash[:notice]).to include '2 Rollen wurden erstellt'
+    end
+
+    it 'may create multiple roles in another group' do
+      expect do
+        post :create, group_id: group,
+          ids: [person2.id, person1.id].join(','),
+          role: { type: Group::TopLayer::TopAdmin,
+                  group_id: groups(:top_layer) }
+      end.to change(Group::TopLayer::TopAdmin, :count).by(2)
+
+      expect(flash[:notice]).to include '2 Rollen wurden erstellt'
+      expect(person1.roles.count).to eq(2)
+      expect(person2.roles.count).to eq(2)
     end
   end
 
@@ -99,7 +114,7 @@ describe RoleListsController do
           ids: ids,
           role: { type: Group::TopGroup::Member }
 
-      expect(assigns(:moving_people)).to eq(ids)
+      expect(assigns(:people_ids)).to eq(ids)
       expect(assigns(:moving_role_type)).to eq('Group::TopGroup::Member')
       expect(assigns(:moving_roles_count)).to eq(2)
     end

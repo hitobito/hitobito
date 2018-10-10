@@ -3,8 +3,13 @@
     .count
     = ti('selected')
     .actions
-      = Dropdown::RoleList.new(self, @group, :add, :plus)
+      = action_button(translate('.add'),
+        new_group_role_list_path(@group),
+        :plus,
+        data: { checkable: true, method: :get },
+        remote: true)
+
       = Dropdown::RoleList.new(self, @group, :move, 'arrow-right')
       = Dropdown::RoleList.new(self, @group, :remove, :trash)
 
-#move-modal
+#role-form

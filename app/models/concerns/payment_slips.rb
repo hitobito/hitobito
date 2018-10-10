@@ -30,5 +30,10 @@ module PaymentSlips
     def without_reference?
       !with_reference?
     end
+
+    def bank_with_reference?
+      bank? && with_reference?
+    end
+
   end
 end

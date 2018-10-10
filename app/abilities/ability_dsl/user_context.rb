@@ -9,9 +9,11 @@ module AbilityDsl
   class UserContext
 
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
-                         :group_and_below_full, :group_and_below_read, :group_full, :group_read]
+                         :group_and_below_full, :group_and_below_read, :group_full, :group_read,
+                         :finance ]
 
-    LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read]
+    LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read, 
+                         :finance]
 
     attr_reader :user, :admin
 

@@ -64,6 +64,7 @@ class GroupAbility < AbilityDsl::Base
       in_same_layer
 
     permission(:finance).may(:index_invoices).in_layer_group
+    permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below
 
     general(:update).group_not_deleted
     general(:index_person_add_requests,

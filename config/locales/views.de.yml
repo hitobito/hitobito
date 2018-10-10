@@ -560,6 +560,7 @@ de:
     subgroups: 'Untergruppen'
     tabs:
       deleted: 'Gelöscht'
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
   group/person_add_requests:
     deactivated: Manuelle Freigabe deaktiviert

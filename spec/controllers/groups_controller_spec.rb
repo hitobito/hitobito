@@ -143,14 +143,11 @@ describe GroupsController do
       let(:group) { groups(:top_layer) }
 
       it 'creates csv' do
-        get :export_subgroups, id: group.id
-
-        expect(@response.content_type).to eq('text/csv')
-        lines = @response.body.split("\n")
-        expect(lines.size).to eq(10)
-        expect(lines[0]).to match(/^Id;Elterngruppe;Name;.*/)
-        expect(lines[1]).to match(/^#{group.id};;Top;.*/)
-        expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
+        expect do
+          get :export_subgroups, id: group.id
+          expect(flash[:notice])
+            .to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+        end.to change(Delayed::Job, :count).by(1)
       end
     end
 

@@ -20,6 +20,7 @@
 #  beneficiary         :text(65535)
 #  payee               :text(65535)
 #  participant_number  :string(255)
+#  email               :string(255)
 #
 
 class InvoiceConfig < ActiveRecord::Base
@@ -35,6 +36,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
+  validates :email, format: Devise.email_regexp, allow_blank: true
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :without_reference?

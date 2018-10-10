@@ -25,6 +25,19 @@ describe InvoiceMailer do
     expect(html).to match('test@example.com')
   end
 
+  it 'uses sender email in mail headers' do
+    expect(mail.from).to eq %W[noreply@localhost]
+    expect(mail.sender).to eq 'noreply-bounces+bottom_member=example.com@localhost'
+    expect(mail.reply_to).to eq %W[bottom_member@example.com]
+  end
+
+  it 'uses invoice_config.email in mail headers' do
+    invoice.invoice_config.update(email: 'invoices@example.com')
+    expect(mail.from).to eq %W[invoices@example.com]
+    expect(mail.sender).to eq 'invoices@example.com'
+    expect(mail.reply_to).to eq %W[invoices@example.com]
+  end
+
   describe :html_body do
     it 'includes group address' do
       expect(html).to match(/Absender: Bottom One, 3000 Bern/)

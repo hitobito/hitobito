@@ -6,7 +6,6 @@
 #  sequence_number     :integer          default(1), not null
 #  due_days            :integer          default(30), not null
 #  group_id            :integer          not null
-#  contact_id          :integer
 #  address             :text(65535)
 #  payment_information :text(65535)
 #  account_number      :string(255)
@@ -15,6 +14,7 @@
 #  beneficiary         :text(65535)
 #  payee               :text(65535)
 #  participant_number  :string(255)
+#  email               :string(255)
 #
 
 top_layer:

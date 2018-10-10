@@ -28,7 +28,9 @@ describe RoleListsController do
           moving_role_type: Group::TopGroup::Member,
           role: { type: Group::TopGroup::Leader,
                   group_id: group }
-      end.to raise_error(CanCan::AccessDenied)
+      end.not_to change(Group::TopGroup::Leader, :count)
+
+      expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
 
     it 'DELETE destroy' do
@@ -36,15 +38,20 @@ describe RoleListsController do
         delete :destroy, group_id: group,
           ids: person1.id, 
           role: { type: Group::TopGroup::Member }
-      end.to raise_error(CanCan::AccessDenied)
+      end.not_to change(Role, :count)
+
+      expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
 
     it 'POST create' do
       expect do
         post :create, group_id: group,
           ids: person1.id, 
-          role: { type: Group::TopGroup::Member }
-      end.to raise_error(CanCan::AccessDenied)
+          role: { type: Group::TopGroup::Member,
+                  group_id: group }
+      end.not_to change(Role, :count)
+
+      expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
   end
 

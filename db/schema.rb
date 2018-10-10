@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702093715) do
+ActiveRecord::Schema.define(version: 20181010112741) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 20180702093715) do
     t.text    "beneficiary",         limit: 65535
     t.text    "payee",               limit: 65535
     t.string  "participant_number",  limit: 255
+    t.string  "email",               limit: 255
   end
 
   add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id", using: :btree

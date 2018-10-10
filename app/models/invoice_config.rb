@@ -20,6 +20,7 @@
 #  beneficiary         :text(65535)
 #  payee               :text(65535)
 #  participant_number  :string(255)
+#  email               :string(255)
 #
 
 class InvoiceConfig < ActiveRecord::Base

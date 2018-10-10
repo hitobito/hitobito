@@ -36,6 +36,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
+  validates :email, format: Devise.email_regexp, allow_blank: true
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :without_reference?

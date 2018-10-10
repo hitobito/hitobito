@@ -165,8 +165,8 @@ de:
     button: 'Rechnung stellen / mahnen'
     set_state: 'Status setzen (Gestellt/Gemahnt)'
     send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
+
   dropdown/role_list:
-    add: Rolle hinzufügen
     remove: Rollen löschen
     move: Rollen verschieben
 
@@ -1055,6 +1055,9 @@ de:
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
 
+    multiselect_actions:
+      add: Rolle hinzufügen
+
   participations:
     destroy:
       flash:
@@ -1161,6 +1164,7 @@ de:
       success:
         one: Eine Rolle wurde erstellt
         other: '%{count} Rollen wurden erstellt'
+      failure: Bitte geben Sie eine valide Rolle an
     update: 
       success:
         one: Eine Rolle wurde verschoben
@@ -1171,6 +1175,11 @@ de:
       submit:
         one: Eine Rolle verschieben
         other: '%{count} Rollen verschieben'
+    new:
+      title: Rollen Zuweisung
+      submit:
+        one: Eine Rolle zuweisen
+        other: '%{count} Rollen zuweisen'
 
   subscriber:
     group:

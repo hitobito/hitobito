@@ -37,7 +37,9 @@ describe RoleListsController, js: true do
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
     click_link('Rolle hinzufügen')
-    click_link('Leader')
+
+    select('Leader', from: 'role_type')
+    click_button('2 Rollen zuweisen')
 
     is_expected.to have_content('2 Rollen wurden erstellt')
     is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')

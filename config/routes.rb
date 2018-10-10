@@ -77,7 +77,7 @@ Hitobito::Application.routes.draw do
 
       end
 
-      resource :role_list, only: [:destroy, :create] do
+      resource :role_list, only: [:destroy, :create, :new] do
         get 'move' => 'role_lists#move'
         put 'move' => 'role_lists#update'
       end

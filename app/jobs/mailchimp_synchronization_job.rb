@@ -15,7 +15,7 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def enqueue(job)
-    mailing_list.update!(syncing_mailchimp: true)
+    mailing_list.update!(mailchimp_syncing: true)
   end
 
   def perform
@@ -23,7 +23,7 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def success(job)
-    mailing_list.update!(syncing_mailchimp: false, last_synced_mailchimp_at: DateTime.now)
+    mailing_list.update!(mailchimp_syncing: false, mailchimp_last_synced_at: DateTime.now)
   end
 
   private

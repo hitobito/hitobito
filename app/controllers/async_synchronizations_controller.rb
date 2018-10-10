@@ -9,7 +9,7 @@ class AsyncSynchronizationsController < ApplicationController
   skip_authorization_check
 
   def show
-    if mailing_list.syncing_mailchimp
+    if mailing_list.mailchimp_syncing
       respond_to do |format|
         if job.last_error.blank?
           format.json { render json: { status: 404 } }

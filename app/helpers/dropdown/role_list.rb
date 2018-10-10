@@ -26,11 +26,6 @@ module Dropdown
       end
     end
 
-    def role_item_add(type)
-      link = template.group_role_list_path(group, role: { type: type.sti_name })
-      add_item(type.label, link, data: { checkable: true, method: :post })
-    end
-
     def role_item_move(type)
       link = template.move_group_role_list_path(group, role: { type: type.sti_name })
       add_item(type.label, link, data: { checkable: true, method: :get }, remote: true)

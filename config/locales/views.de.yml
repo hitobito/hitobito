@@ -1158,21 +1158,25 @@ de:
     access_denied: Zugriff auf %{person} verweigert
     destroy:
       success:
+        zero: Es wurde keine rolle gelöscht
         one: Eine Rolle wurde gelöscht
         other: '%{count} Rollen wurden gelöscht'
     create:
       success:
+        zero: Es wurde keine Rolle erstellt
         one: Eine Rolle wurde erstellt
         other: '%{count} Rollen wurden erstellt'
       failure: Bitte geben Sie eine valide Rolle an
     update: 
       success:
+        zero: Es wurde keine Rolle verschoben
         one: Eine Rolle wurde verschoben
         other: '%{count} Rollen wurden verschoben'
       failure: Bitte geben Sie eine valide Rolle an
     move:
       title: Rollen mit dem Typ %{role} verschieben nach
       submit:
+        zero: Keine Rolle ausgewählt
         one: Eine Rolle verschieben
         other: '%{count} Rollen verschieben'
     new:

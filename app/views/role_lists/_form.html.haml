@@ -14,7 +14,7 @@
             = hidden_field_tag('ids', people_ids)
             = render 'roles/fields', f: f
         .modal-footer
-          = submit_button(f, submit_label)
+          = submit_button(f, submit_label, disabled: disabled_submit)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#role-form').html('')")

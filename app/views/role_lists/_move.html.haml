@@ -2,4 +2,5 @@
   method: :put,
   title: t('.title', role: @moving_role_type.constantize.label),
   people_ids: @people_ids,
-  submit_label: t('.submit', count: @moving_roles_count)
+  submit_label: t('.submit', count: @moving_roles_count),
+  disabled_submit: @moving_roles_count.zero?

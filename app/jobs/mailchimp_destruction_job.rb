@@ -16,7 +16,9 @@ class MailchimpDestructionJob < BaseJob
   end
 
   def perform
-    Synchronize::Mailchimp::Destroyer.new(@mailchimp_list_id, @mailchimp_api_key, @people_to_be_deleted).call
+    Synchronize::Mailchimp::Destroyer.new(@mailchimp_list_id,
+                                          @mailchimp_api_key,
+                                          @people_to_be_deleted).call
   end
 
 end

@@ -1155,6 +1155,7 @@ de:
       only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
 
   role_lists:
+    access_denied: Zugriff auf %{person} verweigert
     destroy:
       success:
         one: Eine Rolle wurde gelöscht

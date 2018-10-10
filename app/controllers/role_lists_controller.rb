@@ -6,6 +6,8 @@ class RoleListsController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
+  rescue_from CanCan::AccessDenied, with: :handle_access_denied
+
   before_action :validate_role_type, only: [:create, :update]
 
   helper_method :group
@@ -18,7 +20,7 @@ class RoleListsController < CrudController
 
   def destroy
     deletable_roles = roles.where(type: role_type).map do |r|
-      authorize!(:destroy, r)
+      authorize!(:destroy, r, message: access_denied_flash(r.person))
     end
 
     count = Role.delete(deletable_roles)
@@ -76,7 +78,7 @@ class RoleListsController < CrudController
   def build_new_roles_hash
     people.map do |person|
       role = build_role(person.id)
-      authorize!(:create, role)
+      authorize!(:create, role, message: access_denied_flash(person))
       role.attributes
     end
   end
@@ -84,8 +86,8 @@ class RoleListsController < CrudController
   def build_moving_roles_hash(moving_roles)
     moving_roles.map do |role|
       new_role = build_role(role.person_id)
-      authorize!(:destroy, role)
-      authorize!(:create, new_role)
+      authorize!(:destroy, role, message: access_denied_flash(role.person))
+      authorize!(:create, new_role, message: access_denied_flash(role.person))
       new_role.attributes
     end
   end
@@ -104,6 +106,14 @@ class RoleListsController < CrudController
 
   def permitted_params(role_type = entry.class)
     model_params.permit(role_type.used_attributes + permitted_attrs)
+  end
+
+  def handle_access_denied(e)
+    redirect_to(group_people_path(group), alert: e.message)
+  end
+
+  def access_denied_flash(person)
+    I18n.t("#{controller_name}.access_denied", person: person.full_name)
   end
 
   def flash_message(type, attrs = {})

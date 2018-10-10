@@ -14,7 +14,7 @@ class MailchimpSynchronizationJob < BaseJob
     @mailing_list_id = mailing_list_id
   end
 
-  def enqueue(job)
+  def enqueue(_job)
     mailing_list.update!(mailchimp_syncing: true)
   end
 
@@ -22,8 +22,13 @@ class MailchimpSynchronizationJob < BaseJob
     Synchronize::Mailchimp::Synchronizator.new(mailing_list).call
   end
 
-  def success(job)
-    mailing_list.update!(mailchimp_syncing: false, mailchimp_last_synced_at: DateTime.now)
+  def success(_job)
+    mailing_list.update!(mailchimp_syncing: false, mailchimp_last_synced_at: Time.zone.now)
+  end
+
+  def error(*args)
+    mailing_list.update!(mailchimp_syncing: false)
+    super
   end
 
   private

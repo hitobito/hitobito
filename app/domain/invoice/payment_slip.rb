@@ -33,7 +33,19 @@ class Invoice::PaymentSlip
     "#{code_line_prefix}>#{number_string_with_check}+ #{code_line_suffix}>"
   end
 
+  def padded_number
+    if invoice.participant_number_internal
+      [zero_padded(invoice.participant_number_internal, 6), zero_padded(group_id, 7)].join
+    else
+      zero_padded(group_id, 13)
+    end
+  end
+
   private
+
+  def number_string
+    [padded_number, zero_padded(index, 13)].join
+  end
 
   def code_line_prefix
     block = ''
@@ -44,7 +56,7 @@ class Invoice::PaymentSlip
 
   def code_line_suffix
     participant_number_parts.each_with_index.inject('') do |block, (nr, i)|
-      block << (i != 1 ? nr : zero_padded(nr.to_i, 6))
+      block << (i != 1 ? nr : zero_padded(nr, 6))
     end
   end
 
@@ -52,28 +64,24 @@ class Invoice::PaymentSlip
     invoice.invoice_items.present? ? 'esr' : 'esr_plus'
   end
 
-  def number_string
-    [zero_padded(group_id, 13), zero_padded(index, 13)].join
-  end
-
   def number_string_with_check
     number_string + check_digit(number_string).to_s
   end
 
   def group_id
-    invoice.sequence_number.split('-')[0].to_i
+    invoice.sequence_number.split('-')[0]
   end
 
   def index
-    invoice.sequence_number.split('-')[1].to_i
+    invoice.sequence_number.split('-')[1]
   end
 
   def participant_number_parts
     invoice.participant_number.split('-')
   end
 
-  def zero_padded(number, zeros)
-    format("%0#{zeros}d", number)
+  def zero_padded(string, length)
+    format("%0#{length}d", string[0..(length - 1)].to_i)
   end
 
   def format_as_esr(string)

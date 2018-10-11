@@ -35,6 +35,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   has_many :payment_reminder_configs, dependent: :destroy
 
+  before_validation :nullify_participant_number_internal, unless: :bank_with_reference?
+
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
   validates :beneficiary, presence: true, on: :update, if: :bank?
@@ -79,6 +81,10 @@ class InvoiceConfig < ActiveRecord::Base
     check_digit = splitted.pop
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
     errors.add(:account_number, :invalid_check_digit)
+  end
+
+  def nullify_participant_number_internal
+    self.participant_number_internal = nil
   end
 
 end

@@ -512,6 +512,13 @@ describe Event do
       end.to change { Event::Question.count }.by(-3)
     end
 
+    it 'nullifies contact on person destroy' do
+      event.update(contact: people(:top_leader))
+      event.contact.destroy
+
+      expect(event.reload.contact_id).to be_nil
+    end
+
     it 'keeps destroyed kind' do
       event.kind.destroy
       event.reload

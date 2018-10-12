@@ -13,7 +13,7 @@ module Export::Pdf
         pdf = Prawn::Document.new(page_size: 'A4',
                                   page_layout: :portrait,
                                   margin: 1.cm)
-        pdf.font_size 9
+        pdf.font_size Settings.pdf.font_size
         sections.each { |section| section.new(pdf, contactables, group).render }
         footer(pdf)
         pdf.render

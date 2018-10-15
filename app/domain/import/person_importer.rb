@@ -67,6 +67,7 @@ module Import
 
     def populate_person(attributes, index)
       person = doublette_finder.find(attributes) || ::Person.new
+      attributes.delete(:email) if illegal_email_update?(person)
 
       import_person = Import::Person.new(person, attributes, options)
       import_person.populate
@@ -74,6 +75,10 @@ module Import
 
       count_person(import_person, index)
       import_person
+    end
+
+    def illegal_email_update?(person)
+      person.persisted? && !user_ability.can?(:update_email, person)
     end
 
     def valid?(import_person)
@@ -102,7 +107,6 @@ module Import
       user_ability && import_person.persisted? && import_person.role &&
         ::Person::AddRequest::Creator::Group.new(import_person.role, user_ability)
     end
-
 
     def doublette_finder
       @doublette_finder ||= PersonDoubletteFinder.new

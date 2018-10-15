@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -208,8 +209,8 @@ module Sheet
 
     def visible_tabs
       @visible_tabs ||= Array(tabs)
-        .collect { |tab| tab.renderer(view, path_args) }
-        .select(&:show?)
+                        .collect { |tab| tab.renderer(view, path_args) }
+                        .select(&:show?)
     end
   end
 end

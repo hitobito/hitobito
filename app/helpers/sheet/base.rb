@@ -171,7 +171,7 @@ module Sheet
 
     def parent_link_url
       @active_tab ||= find_active_tab
-      @active_tab ? @active_tab.path : link_url 
+      @active_tab ? @active_tab.path : link_url
     end
 
     def render_breadcrumbs
@@ -207,8 +207,9 @@ module Sheet
     end
 
     def visible_tabs
-      @visible_tabs ||= tabs.collect { |tab| tab.renderer(view, path_args) }
-                            .select(&:show?)
+      @visible_tabs ||= Array(tabs)
+        .collect { |tab| tab.renderer(view, path_args) }
+        .select(&:show?)
     end
   end
 end

@@ -4,7 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  %h3=t('.payments_with_invoice', from: l(processor.from), to: l(processor.to))
+  - if processor.from && processor.to
+    %h3=t('.payments_with_invoice_and_dates', from: l(processor.from), to: l(processor.to))
+  - else
+    %h3=t('.payments_with_invoice')
+
   = standard_form(:payment_process, url: group_payment_process_path(group)) do |f|
     = table(processor.payments_with_invoice, class: 'table table-stripped') do |t|
       - t.col('') do |p|
@@ -38,7 +42,6 @@
       - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
       - t.attr :amount
       - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
-
 
     = hidden_field_tag :data, @data
     .btn-toolbar

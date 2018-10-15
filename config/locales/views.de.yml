@@ -708,7 +708,8 @@ de:
         one: Es wurde eine ungültige Zahlung erkannt.
         other: Es wurden %{count} ungültige Zahlungen erkannt.
     show:
-      payments_with_invoice: Zuordenbare Zahlungen vom %{from} bis %{to}.
+      payments_with_invoice: Zuordenbare Zahlungen
+      payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
       payments_without_invoice: Nicht Zuordenbar
       amount_open: Offen
       create:

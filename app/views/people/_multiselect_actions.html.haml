@@ -3,7 +3,7 @@
     .count
     = ti('selected')
     .actions
-      = action_button(translate('.add'),
+      = action_button(translate('.add_role'),
         new_group_role_list_path(@group),
         :plus,
         data: { checkable: true, method: :get },
@@ -12,4 +12,10 @@
       = Dropdown::RoleList.new(self, @group, :move, 'arrow-right')
       = Dropdown::RoleList.new(self, @group, :remove, :trash)
 
-#role-form
+      = action_button(translate('.add_participation'),
+        group_events_path(@group),
+        :plus,
+        data: { checkable: true, method: :get },
+        remote: true)
+
+#multiselect-modal

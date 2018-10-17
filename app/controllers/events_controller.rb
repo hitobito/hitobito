@@ -35,6 +35,8 @@ class EventsController < CrudController
                          dates_full: 'event_dates.start_at',
                          group_ids: 'groups.name' }
 
+  self.search_columns = [:name]
+
   decorates :event, :events, :group
 
   prepend_before_action :authenticate_person_from_onetime_token!
@@ -50,7 +52,9 @@ class EventsController < CrudController
       format.html { @events = entries.page(params[:page]) }
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
-      format.ics { render_ical(entries) }
+      format.ics  { render_ical(entries) }
+      format.js   { render_js }
+      format.json { render json: for_typeahead(entries.where(search_conditions)) }
     end
   end
 
@@ -133,6 +137,19 @@ class EventsController < CrudController
 
   def render_ical(entries)
     send_data ::Export::Ics::Events.new.generate(entries), type: :ics, disposition: :inline
+  end
+
+  def render_js
+    @people_ids = params[:ids]
+    @events = entries
+    render 'event/participation_lists/new'
+  end
+
+  def for_typeahead(entries)
+    entries.map do |entry|
+      role_types = entry.role_types.map { |type| { label: type.label, name: type.name } }
+      { id: entry.id, label: entry.name, types: role_types }
+    end
   end
 
   def typed_group_events_path(group, event_type, options = {})

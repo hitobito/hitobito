@@ -369,6 +369,17 @@ de:
         next: Weiter
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
 
+    participation_lists:
+      create:
+        success:
+          one: "Eine Person wurde erfolgreich zum Anlass '%{event}' hinzugefügt"
+          other: "%{count} Personen wurden erfolgreich zum Anlass '%{event}' hinzugefügt"
+      new:
+        title: Personen einem Anlass zuweisen
+        event_search: Anlass Suchen...
+        submit: Hinzufügen
+
+
   events:
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
@@ -1056,7 +1067,8 @@ de:
     export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
 
     multiselect_actions:
-      add: Rolle hinzufügen
+      add_role: Rolle hinzufügen
+      add_participation: Zu Anlass hinzufügen
 
   participations:
     destroy:

@@ -51,7 +51,7 @@ class RoleListsController < CrudController
   def move
     respond_to do |format|
       format.js do
-      @group_selection = group.groups_in_same_layer.to_a
+        @group_selection = group.groups_in_same_layer.to_a
         @people_ids = params[:ids]
         @moving_role_type = role_type
         @moving_roles_count = roles.where(type: role_type).count

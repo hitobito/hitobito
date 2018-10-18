@@ -156,7 +156,7 @@ class Person::Household
     household_log(housemate, people, existing_household_key)
   end
 
-  def household_log(housemate, household, existing_household_key, options = {})
+  def household_log(housemate, _household, existing_household_key, options = {})
     item = options[:item] ? options[:item] : housemate
     if existing_household_key
       household_log_entry(housemate, people, :household_updated, item: item)

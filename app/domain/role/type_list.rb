@@ -71,7 +71,7 @@ class Role
     end
 
     # groups appearing in the possible (sub) children of more than one layer
-    def find_global_group_types(group, layer, group_layers = {})
+    def find_global_group_types(group, layer, _group_layers = {})
       group_layers = {}
       find_group_layers(group, layer, group_layers)
       group_layers.select { |_, layers| layers.uniq.size > 1 }

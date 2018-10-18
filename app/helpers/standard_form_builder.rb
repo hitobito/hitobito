@@ -281,7 +281,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'controls')
     css_classes = { 'control-group' => true, error: errors_on?(attr), required: required?(attr) }
 
-    content_tag(:div, class: css_classes.select { |css, show| show }.keys.join(" ")) do
+    content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(attr, caption_or_content, class: 'control-label') +
       content_tag(:div, content, html_options)
     end

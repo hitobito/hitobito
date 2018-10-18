@@ -89,7 +89,7 @@ module Sheet
       end
 
       def group_link(group)
-        cls = " class=\" is-active\"" if group == entry
+        cls = ' class=" is-active"' if group == entry
         "<li#{cls}>".html_safe +
         link_to(group.display_name,
                 active_path(group), title: group.to_s)
@@ -98,7 +98,7 @@ module Sheet
       def render_deleted_people_link
         if view.can?(:index_deleted_people, layer)
           active = view.current_page?(view.group_deleted_people_path(layer.id))
-          content_tag(:li, class: "#{'is-active' if active}") do
+          content_tag(:li, class: ('is-active' if active).to_s) do
             link_to(view.t('groups.global.link.deleted_person'),
                     view.group_deleted_people_path(layer.id))
           end

@@ -40,7 +40,7 @@ class DeliveryReportMailer < ApplicationMailer
   end
 
   def placeholder_total_succeeded_recipients
-    "#{@total_recipients - @failed_recipients.count}"
+    (@total_recipients - @failed_recipients.count).to_s
   end
 
   def placeholder_failed_recipients

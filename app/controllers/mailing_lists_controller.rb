@@ -40,6 +40,6 @@ class MailingListsController < CrudController
     @preferred_labels = entry.preferred_labels.sort
   end
 
-  alias_method :group, :parent
+  alias group parent
 
 end

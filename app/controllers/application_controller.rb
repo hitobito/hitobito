@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   before_action :set_no_cache
   before_action :set_paper_trail_whodunnit
 
-  alias_method :decorate, :__decorator_for__
+  alias decorate __decorator_for__
 
   if Rails.env.production?
     rescue_from CanCan::AccessDenied do |_exception|

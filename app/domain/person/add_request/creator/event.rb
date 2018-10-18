@@ -8,7 +8,7 @@
 module Person::AddRequest::Creator
   class Event < Base
 
-    alias_method :role, :entity
+    alias role entity
 
     def required?
       new_or_restricted? && super()

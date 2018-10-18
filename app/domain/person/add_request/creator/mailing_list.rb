@@ -8,7 +8,7 @@
 module Person::AddRequest::Creator
   class MailingList < Base
 
-    alias_method :subscription, :entity
+    alias subscription entity
 
     def required?
       subscription.subscriber.is_a?(Person) &&

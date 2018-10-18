@@ -8,7 +8,7 @@
 module Person::AddRequest::Creator
   class Group < Base
 
-    alias_method :role, :entity
+    alias role entity
 
     def required?
       person.persisted? && super()

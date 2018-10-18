@@ -72,9 +72,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
-  alias_method :integer_field, :number_field
-  alias_method :float_field,   :number_field
-  alias_method :decimal_field, :number_field
+  alias integer_field number_field
+  alias float_field number_field
+  alias decimal_field number_field
 
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})

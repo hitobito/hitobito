@@ -24,7 +24,7 @@ class Person::AddRequest::Group < Person::AddRequest
   validates :role_type, presence: true
   validate :assert_type_is_allowed_for_group
 
-  alias_method :group, :body
+  alias group body
 
   private
 

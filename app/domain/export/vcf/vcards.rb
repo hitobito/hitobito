@@ -38,8 +38,8 @@ module Export::Vcf
     end
 
     def address_empty?(person)
-      !person.address.present? && !person.town.present? &&
-      !person.zip_code.present? && !person.country.present?
+      person.address.blank? && person.town.blank? &&
+      person.zip_code.blank? && person.country.blank?
     end
 
     def address(card, person)

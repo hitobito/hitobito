@@ -60,7 +60,7 @@ class Event::ListsController < ApplicationController
 
   def set_group_vars
     if can?(:list_all, Event::Course)
-      unless params[:year].present?
+      if params[:year].blank?
         params[:group_id] = default_user_course_group.try(:id)
       end
       @group_id = params[:group_id].to_i

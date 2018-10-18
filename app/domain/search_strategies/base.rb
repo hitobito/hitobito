@@ -17,7 +17,7 @@ module SearchStrategies
     end
 
     def list_people
-      return Person.none.page(1) unless @term.present?
+      return Person.none.page(1) if @term.blank?
       query_accessible_people do |ids|
         entries = fetch_people(ids)
         entries = Person::PreloadGroups.for(entries)

@@ -232,6 +232,6 @@ class Invoice < ActiveRecord::Base
   end
 
   def round(decimal)
-    ((decimal / ROUND_TO).round) * ROUND_TO
+    (decimal / ROUND_TO).round * ROUND_TO
   end
 end

@@ -65,7 +65,7 @@ class Person::Household
       housemates.first.update(household_key: nil)
     end
     housemates.each do |housemate|
-      household_log_entry(housemate, people, :remove_from_household, {item: person})
+      household_log_entry(housemate, people, :remove_from_household, item: person)
     end
     person.update(household_key: nil)
   end

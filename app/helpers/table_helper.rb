@@ -32,7 +32,7 @@ module TableHelper
     options = attrs.extract_options!
     add_css_class(options, 'table table-striped table-hover')
     # only use default attrs if no attrs and no block are given
-    attributes = (block_given? || attrs.present?) ? attrs : default_attrs
+    attributes = block_given? || attrs.present? ? attrs : default_attrs
     table(entries, options) do |t|
       t.sortable_attrs(*attributes)
       yield t if block_given?

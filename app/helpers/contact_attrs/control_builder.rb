@@ -64,7 +64,7 @@ module ContactAttrs
 
     def radio_button(attr, disabled, option, checked = false)
       f.label("#{for_label(attr)}_#{option}", class: 'radio inline') do
-        checked = checked ? checked : checked?(attr, option)
+        checked ||= checked?(attr, option)
         options = { disabled: disabled, checked: checked }
         f.radio_button(for_label(attr), option, options) +
           option_label(option)

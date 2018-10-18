@@ -117,8 +117,8 @@ module Sheet
       end
 
       def grouped_sub_layers
-        sub_layers.select   { |g| view.can?(:show, g) }.
-                   group_by { |g| g.class.label_plural }
+        sub_layers.select { |g| view.can?(:show, g) }.
+          group_by { |g| g.class.label_plural }
       end
 
       def sub_layers

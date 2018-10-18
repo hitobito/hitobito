@@ -14,6 +14,7 @@ module VersionHelper
   end
 
   private
+
   def app_version
     app_version = Wagons.app_version.to_s
     return unless app_version > '0.0'

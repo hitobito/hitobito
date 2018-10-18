@@ -34,7 +34,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def exporter
-    return Export::Tabular::People::Households if  @options[:household]
+    return Export::Tabular::People::Households if @options[:household]
     full? ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
   end
 

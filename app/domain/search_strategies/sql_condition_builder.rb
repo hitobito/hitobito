@@ -42,6 +42,6 @@ module SearchStrategies
         table[field].matches(Arel::Nodes::Quoted.new("%#{word}%"))
       end
     end
-    
+
   end
 end

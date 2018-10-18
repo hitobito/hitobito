@@ -108,7 +108,6 @@ class GroupsController < CrudController
     @sub_groups[sub_groups_label] = children if children
   end
 
-
   def sub_groups_label
     @sub_groups_label ||= translate(:subgroups)
   end

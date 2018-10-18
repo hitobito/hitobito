@@ -103,7 +103,6 @@ module Import
         ::Person::AddRequest::Creator::Group.new(import_person.role, user_ability)
     end
 
-
     def doublette_finder
       @doublette_finder ||= PersonDoubletteFinder.new
     end

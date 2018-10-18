@@ -140,7 +140,6 @@ class Event::Participation < ActiveRecord::Base
     true
   end
 
-
   def update_participant_count
     event.refresh_participant_counts!
   end

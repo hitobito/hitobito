@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: mail_logs
@@ -22,7 +23,7 @@
 
 class MailLog < ActiveRecord::Base
 
-  enum status: [ :retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient ]
+  enum status: [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient]
 
   belongs_to :mailing_list
 

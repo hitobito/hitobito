@@ -16,7 +16,7 @@ class AppStatusSerializer
   end
 
   def to_json(a)
-    {app_status: { code: code, details: details } }.to_json
+    { app_status: { code: code, details: details } }.to_json
   end
 
 end

@@ -26,7 +26,6 @@ module RolesHelper
     field_set_tag(title, class: 'person-fields', style: element_visible(visible)) { yield }
   end
 
-
   def format_role_created_at(role)
     f(role.created_at.to_date)
   end

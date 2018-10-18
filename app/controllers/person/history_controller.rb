@@ -22,7 +22,7 @@ class Person::HistoryController < ApplicationController
     Person::PreloadGroups.for([entry]).first.roles.
       with_deleted.
       includes(:group).
-      sort_by {|r| GroupDecorator.new(r.group).name_with_layer }
+      sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
   end
 
   def fetch_participations

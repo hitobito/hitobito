@@ -71,7 +71,8 @@ class Group::PersonAddRequestsController < ApplicationController
 
   def request_status
     Person::AddRequest::Status.for(
-      params[:person_id], params[:body_type], params[:body_id])
+      params[:person_id], params[:body_type], params[:body_id]
+    )
   end
 
   def person_in_layer?(status)

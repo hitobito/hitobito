@@ -46,7 +46,8 @@ module AbilityDsl::Constraints
 
     def non_restricted_in_same_group_or_below
       permission_in_groups?(
-        person.non_restricted_groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq)
+        person.non_restricted_groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq
+      )
     end
 
     def non_restricted_in_same_layer

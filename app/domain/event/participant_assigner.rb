@@ -97,7 +97,7 @@ class Event::ParticipantAssigner
   def update_answers
     current_answers = participation.answers.includes(:question)
     event.questions.each do |q|
-      exists = current_answers.any? do|a|
+      exists = current_answers.any? do |a|
         a.question.question == q.question &&
         a.question.choice_items == q.choice_items
       end

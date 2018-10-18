@@ -97,7 +97,7 @@ class Person::Household
   end
 
   def new_household?
-    people.all?{ |p| p.household_key.nil? }
+    people.all? { |p| p.household_key.nil? }
   end
 
   def any_change?
@@ -153,7 +153,7 @@ class Person::Household
     people.delete(housemate)
     existing_household_key = housemate.household_key?
     housemate.update(address_attrs(person).merge(household_key: key))
-    household_log(housemate, people, existing_household_key) 
+    household_log(housemate, people, existing_household_key)
   end
 
   def household_log(housemate, household, existing_household_key, options = {})

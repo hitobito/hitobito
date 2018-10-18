@@ -60,9 +60,7 @@ class GroupsController < CrudController
     send_data csv, type: :csv
   end
 
-  def person_notes
-
-  end
+  def person_notes; end
 
   private
 

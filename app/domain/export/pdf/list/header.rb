@@ -19,8 +19,7 @@ module Export::Pdf::List
 
     private
 
-    def render_image
-    end
+    def render_image; end
 
   end
 end

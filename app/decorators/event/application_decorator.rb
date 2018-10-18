@@ -32,11 +32,11 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def priority(event)
     prio = model.priority(event)
-    if prio
-      prio = "Prio #{prio}"
-    else
-      prio = waiting_list? ? 'Warteliste' : nil
-    end
+    prio = if prio
+             "Prio #{prio}"
+           else
+             waiting_list? ? 'Warteliste' : nil
+           end
     content_tag(:span, prio, class: 'badge badge-info') if prio
   end
 

@@ -27,7 +27,7 @@ module Export::Tabular::People
     end
 
     def names_hash
-      @names_hash ||= first_names.zip(last_names).inject({}) do |memo, (first, last)|
+      @names_hash ||= first_names.zip(last_names).each_with_object({}) do |(first, last), memo|
         last = first_present_last_name if last.blank?
         memo[last] ||= []
         memo[last] << first

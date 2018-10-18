@@ -55,9 +55,9 @@ module Export::Tabular::People
     end
 
     def build_memo(list)
-      list.inject(Hash.new { |h,k| h[k] = [] }) do |memo, person|
+      list.each_with_object(Hash.new { |h, k| h[k] = [] }) do |person, memo|
         memo[person.household_key] << person
-        memo
+
       end
     end
 

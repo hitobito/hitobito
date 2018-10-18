@@ -62,7 +62,7 @@ module NavigationHelper
     group_invoices_path(current_user.finance_groups.first)
   end
 
-  def nav(label, url, icon_name = false, active = false, options = {}, &block)
+  def nav(label, url, icon_name = false, active = false, options = {})
     classes = options[:class] || ''
     active_class = options[:active_class] || 'is-active'
     if active

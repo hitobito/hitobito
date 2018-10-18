@@ -38,7 +38,7 @@ module Group::Types
   private
 
   def create_default_children
-    # hack to have after_save ordering for this semantical after_create callback
+    # HACK: to have after_save ordering for this semantical after_create callback
     return if created_at < Time.zone.now - 10.seconds
 
     default_children.each do |group_type|

@@ -74,7 +74,7 @@ module Person::DeviseOverrides
       update_attributes(params, *options)
     else
       assign_attributes(params, *options)
-      self.valid?
+      valid?
       errors.add(:current_password, current_password.blank? ? :blank : :invalid)
       false
     end

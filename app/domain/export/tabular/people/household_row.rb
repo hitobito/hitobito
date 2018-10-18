@@ -31,7 +31,7 @@ module Export::Tabular::People
         last = first_present_last_name if last.blank?
         memo[last] ||= []
         memo[last] << first
-        memo
+
       end
     end
 

@@ -48,7 +48,7 @@ class Person::Household
   end
 
   def save
-    fail 'invalid' unless valid?
+    raise 'invalid' unless valid?
     if any_change?
       household_log(person, people, person.household_key?)
       person.update(household_key: key)

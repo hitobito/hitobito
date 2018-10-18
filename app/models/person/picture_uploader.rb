@@ -39,8 +39,8 @@ class Person::PictureUploader < Uploader::Base
   def validate_dimensions
     manipulate! do |img|
       if img.dimensions.any? { |i| i > MAX_DIMENSION }
-        fail CarrierWave::ProcessingError,
-             I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
+        raise CarrierWave::ProcessingError,
+              I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
       end
       img
     end

@@ -9,7 +9,7 @@ module Person::AddRequest::Status
 
   def self.for(person_id, body_type, body_id)
     type = "Person::AddRequest::Status::#{body_type}".constantize rescue nil
-    fail ActiveRecord::RecordNotFound, "No person add request for '#{body_type}' found" if type.nil?
+    raise ActiveRecord::RecordNotFound, "No person add request for '#{body_type}' found" if type.nil?
     type.new(person_id, body_id)
   end
 

@@ -71,7 +71,7 @@ class MailingListAbility < AbilityDsl::Base
     when :layer_full
       local_group_role_types(group.layer_group.class)
     else
-      fail('Unexpected permission')
+      raise('Unexpected permission')
     end
   end
 
@@ -105,7 +105,7 @@ class MailingListAbility < AbilityDsl::Base
     when :layer_full
       group.groups_in_same_layer
     else
-      fail('Unexpected permission')
+      raise('Unexpected permission')
     end
   end
 

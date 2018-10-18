@@ -38,7 +38,7 @@ module MailRelay
       def relay_current
         loop do
           mails, last_exception = relay_batch
-          fail(last_exception) if last_exception.present?
+          raise(last_exception) if last_exception.present?
           break if mails.size < retrieve_count
         end
       end
@@ -140,7 +140,7 @@ module MailRelay
     def envelope_receiver_name
       receiver_from_x_header ||
       receiver_from_received_header ||
-      fail("Could not determine original receiver for email:\n#{message.header}")
+      raise("Could not determine original receiver for email:\n#{message.header}")
     end
 
     def sender_email

@@ -123,14 +123,14 @@ module Group::Types
     # Return the group type with the given sti_name or raise an exception if not found
     def find_group_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
       type
     end
 
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
       type
     end
 

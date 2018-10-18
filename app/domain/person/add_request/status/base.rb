@@ -34,7 +34,7 @@ module Person::AddRequest::Status
     end
 
     def created?
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def approved_message

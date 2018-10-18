@@ -55,11 +55,11 @@ module Person::AddRequest::Creator
     end
 
     def body
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def person
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def success_message

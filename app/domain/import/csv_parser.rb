@@ -65,9 +65,9 @@ module Import
     end
 
     def encode_as_utf8(input)
-      fail translate(:contains_no_data) if input.nil?
+      raise translate(:contains_no_data) if input.nil?
       charset = CMess::GuessEncoding::Automatic.guess(input)
-      fail translate(:contains_no_data) if charset == 'UNKNOWN'
+      raise translate(:contains_no_data) if charset == 'UNKNOWN'
       charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
       input.force_encoding(charset).encode('UTF-8')
     end

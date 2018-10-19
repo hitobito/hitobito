@@ -167,7 +167,6 @@ de:
     send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
 
   dropdown/role_list:
-    remove: Rollen löschen
     move: Rollen verschieben
 
   devise:
@@ -1067,6 +1066,7 @@ de:
     export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
 
     multiselect_actions:
+      remove_role: Rollen entfernen
       add_role: Rolle hinzufügen
       add_participation: Zu Anlass hinzufügen
 
@@ -1192,6 +1192,9 @@ de:
         zero: Keine Rolle ausgewählt
         one: Eine Rolle verschieben
         other: '%{count} Rollen verschieben'
+    deletable:
+      title: Welche Rollen sollen gelöscht werden?
+      submit: Entfernen
     new:
       title: Rollen Zuweisung
       submit:

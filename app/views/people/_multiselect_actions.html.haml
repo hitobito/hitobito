@@ -10,7 +10,12 @@
         remote: true)
 
       = Dropdown::RoleList.new(self, @group, :move, 'arrow-right')
-      = Dropdown::RoleList.new(self, @group, :remove, :trash)
+
+      = action_button(translate('.remove_role'),
+        deletable_group_role_list_path(@group),
+        :trash,
+        data: { checkable: true, method: :get },
+        remote: true)
 
       = action_button(translate('.add_participation'),
         group_events_path(@group),

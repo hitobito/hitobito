@@ -13,7 +13,7 @@ describe RoleListsController do
   let(:person1) { role1.person }
   let(:person2) { role2.person }
   let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
-  let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let!(:role2)  { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
   context 'authorization' do
 
@@ -37,7 +37,7 @@ describe RoleListsController do
       expect do
         delete :destroy, group_id: group,
           ids: person1.id, 
-          role: { type: Group::TopGroup::Member }
+          role: { type: { Group::TopGroup::Member => 1 } }
       end.not_to change(Role, :count)
 
       expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
@@ -60,7 +60,7 @@ describe RoleListsController do
       expect do
         delete :destroy, group_id: group,
           ids: person1.id, 
-          role: { type: Group::TopGroup::Member }
+          role: { type: { Group::TopGroup::Member => 1 } }
       end.to change(Role, :count).by(-1)
       
       expect(flash[:notice]).to include 'Eine Rolle wurde gelöscht'
@@ -70,7 +70,8 @@ describe RoleListsController do
       expect do
         delete :destroy, group_id: group,
           ids: [person1.id, person2.id].join(','),
-          role: { type: Group::TopGroup::Member }
+          role: { type: { Group::TopGroup::Member => 1,
+                          Group::TopGroup::Leader => 1 } }
       end.to change(Role, :count).by(-2)
       
       expect(flash[:notice]).to include '2 Rollen wurden gelöscht'

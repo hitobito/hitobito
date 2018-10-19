@@ -12,24 +12,41 @@ require 'spec_helper'
 describe RoleListsController, js: true do
 
   subject { page }
-  let(:group) { groups(:top_group) }
+
+  let(:group)   { groups(:top_group) }
   let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
   before do
     sign_in
     visit group_people_path(group_id: group.id)
   end
 
-  it 'deletes multiple roles' do
+  it 'deletes all roles' do
     find(:css, "#ids_[value='#{role1.person.id}']").set(true)
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
-    click_link('Rollen löschen')
-    click_link('Member')
+    click_link('Rollen entfernen')
+    click_button('Entfernen')
 
     is_expected.not_to have_content(role1.person.first_name)
     is_expected.not_to have_content(role2.person.first_name)
+  end
+
+  it 'deletes selected roles' do
+    find(:css, "#ids_[value='#{role1.person.id}']").set(true)
+    find(:css, "#ids_[value='#{role2.person.id}']").set(true)
+    find(:css, "#ids_[value='#{leader.person.id}']").set(true)
+
+    click_link('Rollen entfernen')
+
+    find(:css,"input[name='role[type][Group::TopGroup::Member]']").set(false)
+    click_button('Entfernen')
+
+    is_expected.to     have_content(role1.person.first_name)
+    is_expected.to     have_content(role2.person.first_name)
+    is_expected.not_to have_content(leader.person.first_name)
   end
 
   it 'creates multiple roles' do

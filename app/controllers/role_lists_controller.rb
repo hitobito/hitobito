@@ -19,7 +19,7 @@ class RoleListsController < CrudController
   end
 
   def destroy
-    deletable_roles = roles.where(type: role_type).map do |r|
+    deletable_roles = roles.where(type: role_type.keys).map do |r|
       authorize!(:destroy, r, message: access_denied_flash(r.person))
     end
 
@@ -59,6 +59,16 @@ class RoleListsController < CrudController
     end
   end
 
+  def deletable
+    respond_to do |format|
+      format.js do
+        @available_roles = collect_roles
+        @people_ids = params[:ids]
+        @people_count = people.count
+      end
+    end
+  end
+
   def entry
     super.decorate
   end
@@ -68,6 +78,17 @@ class RoleListsController < CrudController
   end
 
   private
+
+  def collect_roles
+    roles.each_with_object({}) do |role, hash|
+      key = role.group.name
+      hash[key] = {} if hash[key].blank?
+
+      type = role.type
+      count = hash[key][type].blank? ? 1 : hash[key][type] + 1
+      hash[key][type] = count
+    end
+  end
 
   def validate_role_type
     if role_type.blank? || !Object.const_defined?(role_type.camelize)
@@ -121,7 +142,7 @@ class RoleListsController < CrudController
   end
 
   def role_type
-    model_params[:type]
+    model_params ? model_params[:type] : {}
   end
 
   def new_group
@@ -133,7 +154,7 @@ class RoleListsController < CrudController
   end
 
   def people
-    @people ||= group.people.where(id: people_ids).uniq
+    @people ||= Person.where(id: people_ids).uniq
   end
 
   def people_ids
@@ -141,6 +162,10 @@ class RoleListsController < CrudController
   end
 
   def roles
-    @roles ||= group.roles.where(person_id: people_ids)
+    @roles ||= Role.where(person_id: people_ids, group_id: layer_group_ids)
+  end
+
+  def layer_group_ids
+    group.groups_in_same_layer.pluck(:id)
   end
 end

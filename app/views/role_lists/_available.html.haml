@@ -10,8 +10,13 @@
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', people_ids)
+            = yield
+
             .checkboxes
-              = available_roles_checkboxes(available_roles)
+              - if role_types.present?
+                = available_role_types_checkboxes(role_types)
+              - else
+                = t('.no_entries')
         .modal-footer
           = submit_button(f, submit_label)
           = link_to(ti('button.cancel'), '#',

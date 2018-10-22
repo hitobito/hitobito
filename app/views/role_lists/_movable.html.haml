@@ -1,0 +1,9 @@
+= render layout: 'available', locals: { url: move_group_role_list_path(group),
+                              title: t('.title'),
+                              method: :put,
+                              people_ids: @people_ids,
+                              role_types: @role_types,
+                              submit_label: t('.submit') } do
+
+    = hidden_field_tag('role[group_id]', @new_group_id)
+    = hidden_field_tag('role[type]', @new_role_type)

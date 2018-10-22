@@ -12,6 +12,8 @@ class RoleListsController < CrudController
 
   helper_method :group
 
+  respond_to :js, only: [:move, :movable, :deletable]
+
   def create
     new_roles = build_new_roles_hash
     count = Role.create(new_roles).count
@@ -33,42 +35,26 @@ class RoleListsController < CrudController
   end
 
   def new
-    respond_to do |format|
-      format.js do
-        @group_selection = group.groups_in_same_layer.to_a
-        @people_ids = params[:ids]
-        @people_count = people.count
-      end
-    end
+    @group_selection = group.groups_in_same_layer.to_a
+    @people_ids = params[:ids]
+    @people_count = people.count
   end
 
   def move
-    respond_to do |format|
-      format.js do
-        @group_selection = group.groups_in_same_layer.to_a
-        @people_ids = params[:ids]
-      end
-    end
+    @group_selection = group.groups_in_same_layer.to_a
+    @people_ids = params[:ids]
   end
 
   def movable
-    respond_to do |format|
-      format.js do
-        @new_group_id = model_params[:group_id]
-        @new_role_type = model_params[:type]
-        @role_types = collect_available_role_types
-        @people_ids = params[:ids]
-      end
-    end
+    @new_group_id = model_params[:group_id]
+    @new_role_type = model_params[:type]
+    @role_types = collect_available_role_types
+    @people_ids = params[:ids]
   end
 
   def deletable
-    respond_to do |format|
-      format.js do
-        @role_types = collect_available_role_types
-        @people_ids = params[:ids]
-      end
-    end
+    @role_types = collect_available_role_types
+    @people_ids = params[:ids]
   end
 
   def entry

@@ -41,7 +41,7 @@ describe RoleListsController, js: true do
 
     click_link('Rollen entfernen')
 
-    find(:css,"input[name='role[type][Group::TopGroup::Member]']").set(false)
+    find(:css,"input[name='role[types][Group::TopGroup::Member]']").set(false)
     click_button('Entfernen')
 
     is_expected.to     have_content(role1.person.first_name)
@@ -56,7 +56,7 @@ describe RoleListsController, js: true do
     click_link('Rolle hinzufügen')
 
     select('Leader', from: 'role_type')
-    click_button('2 Rollen zuweisen')
+    click_button('2 Rollen erstellen')
 
     is_expected.to have_content('2 Rollen wurden erstellt')
     is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
@@ -66,19 +66,24 @@ describe RoleListsController, js: true do
   it 'moves multiple roles' do
     find(:css, "#ids_[value='#{role1.person.id}']").set(true)
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
+    find(:css, "#ids_[value='#{leader.person.id}']").set(true)
 
     click_link('Rollen verschieben')
-    click_link('Member')
 
-    select('Leader', from: 'role_type')
-    click_button('2 Rollen verschieben')
+    select('Secretary', from: 'role_type')
+    click_button('Weiter')
 
-    is_expected.to have_content('2 Rollen wurden verschoben')
-    is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
-    is_expected.to have_css("tr#person_#{role2.person.id} td p", text: 'Leader')
+    find(:css,"input[name='role[types][Group::TopGroup::Leader]']").set(false)
+    click_button('Rollen verschieben')
+
+    is_expected.to have_content('3 Rollen wurden verschoben')
+    is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Secretary')
+    is_expected.to have_css("tr#person_#{role2.person.id} td p", text: 'Secretary')
+    is_expected.to have_css("tr#person_#{leader.person.id} td p", text: 'Secretary')
 
     is_expected.not_to have_css("tr#person_#{role1.person.id} td p", text: 'Member')
     is_expected.not_to have_css("tr#person_#{role2.person.id} td p", text: 'Member')
+    is_expected.to     have_css("tr#person_#{leader.person.id} td p", text: 'Leader')
   end
 
 end

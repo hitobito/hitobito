@@ -1,6 +1,6 @@
-= render 'form', url: move_group_role_list_path(group),
-  method: :put,
-  title: t('.title', role: @moving_role_type.constantize.label),
+= render 'form', url: movable_group_role_list_path(group),
+  method: :get,
+  remote: true,
+  title: t('.title'),
   people_ids: @people_ids,
-  submit_label: t('.submit', count: @moving_roles_count),
-  disabled_submit: @moving_roles_count.zero?
+  submit_label: t('.submit')

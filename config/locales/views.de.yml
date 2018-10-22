@@ -166,9 +166,6 @@ de:
     set_state: 'Status setzen (Gestellt/Gemahnt)'
     send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
 
-  dropdown/role_list:
-    move: Rollen verschieben
-
   devise:
     failure:
       already_authenticated: 'Du bist bereits angemeldet.'
@@ -1067,6 +1064,7 @@ de:
 
     multiselect_actions:
       remove_role: Rollen entfernen
+      move_role: Rollen verschieben
       add_role: Rolle hinzufügen
       add_participation: Zu Anlass hinzufügen
 
@@ -1168,12 +1166,14 @@ de:
       only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
 
   role_lists:
+    available:
+      no_entries: Keine für Sie löschbare Rollen vorhanden
     access_denied: Zugriff auf %{person} verweigert
     destroy:
       success:
-        zero: Es wurde keine rolle gelöscht
-        one: Eine Rolle wurde gelöscht
-        other: '%{count} Rollen wurden gelöscht'
+        zero: Es wurde keine rolle entfernt
+        one: Eine Rolle wurde entfernt
+        other: '%{count} Rollen wurden entfernt'
     create:
       success:
         zero: Es wurde keine Rolle erstellt
@@ -1187,19 +1187,19 @@ de:
         other: '%{count} Rollen wurden verschoben'
       failure: Bitte geben Sie eine valide Rolle an
     move:
-      title: Rollen mit dem Typ %{role} verschieben nach
-      submit:
-        zero: Keine Rolle ausgewählt
-        one: Eine Rolle verschieben
-        other: '%{count} Rollen verschieben'
+      title: Wohin sollen die Personen verschoben werden?
+      submit: Weiter
+    movable:
+      title: Welche Rollen sollen gelöscht werden?
+      submit: Rollen verschieben
     deletable:
       title: Welche Rollen sollen gelöscht werden?
       submit: Entfernen
     new:
-      title: Rollen Zuweisung
+      title: Wo sollen die neuen Rollen erstellt werden?
       submit:
-        one: Eine Rolle zuweisen
-        other: '%{count} Rollen zuweisen'
+        one: Eine Rolle erstellen
+        other: '%{count} Rollen erstellen'
 
   subscriber:
     group:

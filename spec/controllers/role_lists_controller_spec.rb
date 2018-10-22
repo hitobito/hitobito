@@ -37,7 +37,7 @@ describe RoleListsController do
       expect do
         delete :destroy, group_id: group,
           ids: person1.id, 
-          role: { type: { Group::TopGroup::Member => 1 } }
+          role: { types: { Group::TopGroup::Member => 1 } }
       end.not_to change(Role, :count)
 
       expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
@@ -60,21 +60,21 @@ describe RoleListsController do
       expect do
         delete :destroy, group_id: group,
           ids: person1.id, 
-          role: { type: { Group::TopGroup::Member => 1 } }
+          role: { types: { Group::TopGroup::Member => 1 } }
       end.to change(Role, :count).by(-1)
       
-      expect(flash[:notice]).to include 'Eine Rolle wurde gelöscht'
+      expect(flash[:notice]).to include 'Eine Rolle wurde entfernt'
     end
 
     it 'may remove multiple roles' do
       expect do
         delete :destroy, group_id: group,
           ids: [person1.id, person2.id].join(','),
-          role: { type: { Group::TopGroup::Member => 1,
+          role: { types: { Group::TopGroup::Member => 1,
                           Group::TopGroup::Leader => 1 } }
       end.to change(Role, :count).by(-2)
       
-      expect(flash[:notice]).to include '2 Rollen wurden gelöscht'
+      expect(flash[:notice]).to include '2 Rollen wurden entfernt'
     end
   end
 
@@ -115,19 +115,6 @@ describe RoleListsController do
     end
   end
 
-  context 'GET move' do
-    it 'sets instance variables correctly' do
-      ids = [person2.id, person1.id].join(',')
-      xhr :get, :move, group_id: group,
-          ids: ids,
-          role: { type: Group::TopGroup::Member }
-
-      expect(assigns(:people_ids)).to eq(ids)
-      expect(assigns(:moving_role_type)).to eq('Group::TopGroup::Member')
-      expect(assigns(:moving_roles_count)).to eq(2)
-    end
-  end
-
   context 'PUT update' do
     it 'fails on invalid role type' do
       put :update, group_id: group,
@@ -142,8 +129,8 @@ describe RoleListsController do
     it 'change role type of one role' do
       put :update, group_id: group,
         ids: person1.id, 
-        moving_role_type: Group::TopGroup::Member,
-        role: { type: Group::TopGroup::Leader,
+        role: { types: { Group::TopGroup::Member => 1 },
+                type: Group::TopGroup::Leader,
                 group_id: group }
 
       role = person1.roles.first
@@ -154,8 +141,9 @@ describe RoleListsController do
     it 'may change multiple role types' do
       put :update, group_id: group,
         ids: [person1.id, person2.id].join(','), 
-        moving_role_type: Group::TopGroup::Member,
-        role: { type: Group::TopGroup::Leader,
+        role: { types: { Group::TopGroup::Member => 1,
+                         Group::TopGroup::Leader => 1 },
+                type: Group::TopGroup::Leader,
                 group_id: group }
 
       role1 = person1.roles.first
@@ -170,8 +158,9 @@ describe RoleListsController do
     it 'may move multiple roles into another group and changes type' do
       put :update, group_id: group,
         ids: [person1.id, person2.id].join(','), 
-        moving_role_type: Group::TopGroup::Member,
-        role: { type: Group::TopLayer::TopAdmin,
+        role: { types: { Group::TopGroup::Member => 1,
+                         Group::TopGroup::Leader => 1 },
+                type: Group::TopLayer::TopAdmin,
                 group_id: groups(:top_layer) }
 
       role1 = person1.roles.first
@@ -183,5 +172,47 @@ describe RoleListsController do
       end
     end
   end
-  
+
+  context 'available role types' do
+    before do
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: group)
+      Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers))
+    end
+
+    it 'builds correct hash for one group' do
+      allow(controller).to receive(:roles).and_return(group.roles)
+
+      available_role_types = controller.send(:collect_available_role_types)
+
+      group = available_role_types['TopGroup']
+      expect(group['Group::TopGroup::Leader']).to eq(1)
+      expect(group['Group::TopGroup::Member']).to eq(2)
+    end
+
+    it 'builds correct hash for multiple groups' do
+      allow(controller).to receive(:roles).
+        and_return(group.roles + groups(:toppers).roles)
+
+      available_role_types = controller.send(:collect_available_role_types)
+
+      group1 = available_role_types['TopGroup']
+      expect(group1['Group::TopGroup::Leader']).to eq(1)
+      expect(group1['Group::TopGroup::Member']).to eq(2)
+
+      group2 = available_role_types['Toppers']
+      expect(group2['Group::GlobalGroup::Member']).to eq(1)
+    end
+
+    it 'does not add role to hash if no access' do
+      allow(controller).to receive(:roles).and_return(group.roles)
+      allow(controller).to receive(:can?).and_call_original
+      allow(controller).to receive(:can?).with(:destroy, role2).and_return(false)
+
+      available_role_types = controller.send(:collect_available_role_types)
+
+      group = available_role_types['TopGroup']
+      expect(group['Group::TopGroup::Leader']).to be_nil
+      expect(group['Group::TopGroup::Member']).to eq(2)
+    end
+  end
 end

@@ -19,20 +19,14 @@ class RoleListsController < CrudController
   end
 
   def destroy
-    deletable_roles = roles.where(type: role_type.keys).map do |r|
-      authorize!(:destroy, r, message: access_denied_flash(r.person))
-    end
-
-    count = Role.delete(deletable_roles)
+    count = Role.destroy(deletable_role_ids).count
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def update
-    moving_roles = roles.where(type: params[:moving_role_type])
-
     count = Role.transaction do
-      Role.create(build_moving_roles_hash(moving_roles))
-      moving_roles.destroy_all.count
+      Role.destroy(deletable_role_ids)
+      Role.create(build_moving_roles_hash).count
     end
 
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
@@ -53,8 +47,17 @@ class RoleListsController < CrudController
       format.js do
         @group_selection = group.groups_in_same_layer.to_a
         @people_ids = params[:ids]
-        @moving_role_type = role_type
-        @moving_roles_count = roles.where(type: role_type).count
+      end
+    end
+  end
+
+  def movable
+    respond_to do |format|
+      format.js do
+        @new_group_id = model_params[:group_id]
+        @new_role_type = model_params[:type]
+        @role_types = collect_available_role_types
+        @people_ids = params[:ids]
       end
     end
   end
@@ -62,9 +65,8 @@ class RoleListsController < CrudController
   def deletable
     respond_to do |format|
       format.js do
-        @available_roles = collect_roles
+        @role_types = collect_available_role_types
         @people_ids = params[:ids]
-        @people_count = people.count
       end
     end
   end
@@ -79,8 +81,9 @@ class RoleListsController < CrudController
 
   private
 
-  def collect_roles
+  def collect_available_role_types
     roles.each_with_object({}) do |role, hash|
+      next unless can?(:destroy, role)
       key = role.group.name
       hash[key] = {} if hash[key].blank?
 
@@ -104,11 +107,10 @@ class RoleListsController < CrudController
     end
   end
 
-  def build_moving_roles_hash(moving_roles)
-    moving_roles.map do |role|
-      new_role = build_role(role.person_id)
-      authorize!(:destroy, role, message: access_denied_flash(role.person))
-      authorize!(:create, new_role, message: access_denied_flash(role.person))
+  def build_moving_roles_hash
+    people.map do |person|
+      new_role = build_role(person.id)
+      authorize!(:create, new_role, message: access_denied_flash(person))
       new_role.attributes
     end
   end
@@ -123,6 +125,12 @@ class RoleListsController < CrudController
   def build_role_type
     @type = new_group.class.find_role_type!(role_type)
     @type.new
+  end
+
+  def deletable_role_ids
+    roles.where(type: role_types.keys).map do |r|
+      authorize!(:destroy, r, message: access_denied_flash(r.person)).id
+    end
   end
 
   def permitted_params(role_type = entry.class)
@@ -142,7 +150,11 @@ class RoleListsController < CrudController
   end
 
   def role_type
-    model_params ? model_params[:type] : {}
+    model_params[:type]
+  end
+
+  def role_types
+    model_params && model_params[:types] ? model_params[:types] : {}
   end
 
   def new_group
@@ -162,10 +174,15 @@ class RoleListsController < CrudController
   end
 
   def roles
-    @roles ||= Role.where(person_id: people_ids, group_id: layer_group_ids)
+    group_ids = params[:range] == ('layer' || 'deep') ? layer_group_ids : group
+    @roles ||= Role.where(person_id: people_ids, group_id: group_ids)
   end
 
   def layer_group_ids
     group.groups_in_same_layer.pluck(:id)
+  end
+
+  def person_filter
+    @person_filter ||= Person::Filter::List.new(@group, current_user, list_filter_args)
   end
 end

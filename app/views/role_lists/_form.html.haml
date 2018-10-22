@@ -6,15 +6,15 @@
           %b= title
 
       = standard_form(path_args(entry),
-        url: url, method: method) do |f|
+        url: url, method: method, remote: remote) do |f|
         .modal-body
           .row-fluid
             = hidden_field_tag('return_url', params[:return_url])
-            = hidden_field_tag('moving_role_type', @moving_role_type) if @moving_role_type
+            = hidden_field_tag('range', params[:range])
             = hidden_field_tag('ids', people_ids)
             = render 'roles/fields', f: f
         .modal-footer
-          = submit_button(f, submit_label, disabled: disabled_submit)
+          = submit_button(f, submit_label)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#multiselect-modal').html('')")

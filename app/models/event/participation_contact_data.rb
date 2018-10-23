@@ -90,8 +90,8 @@ class Event::ParticipationContactData
     event.hidden_contact_attrs.collect(&:to_sym)
   end
 
-  def respond_to?(attr)
-    responds = super(attr)
+  def respond_to?(attr, include_all = false)
+    responds = super(attr, include_all)
     responds ? true : person.respond_to?(attr)
   end
 

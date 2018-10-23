@@ -329,8 +329,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Overriden to fullfill contract with method_missing 'labeled_' methods.
-  def respond_to?(name)
-    labeled_field_method?(name).present? || super(name)
+  def respond_to?(name, include_all = false)
+    labeled_field_method?(name).present? || super(name, include_all)
   end
 
   # Generates a help inline for fields

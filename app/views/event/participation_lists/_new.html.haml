@@ -18,7 +18,7 @@
 
             = select(:role, :type, [], {}, style: 'display: none')
         .modal-footer
-          = submit_button(f, t('.submit'))
+          = submit_button(f, t('.submit'), disabled: true)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#multiselect-modal').html('')")

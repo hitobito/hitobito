@@ -11,7 +11,8 @@ app.Multiselect = {
     checked_count = table.find('td input[type=checkbox]:checked').length
 
     if checked_count > 0
-      if table.find('th:hidden').length <= 1
+      unless table.hasClass('actions-enabled')
+        table.addClass('actions-enabled')
         table.find('thead th:not(:first)').hide()
 
         table.find('thead tr').append($('.multiselect').clone().fadeIn())
@@ -19,6 +20,8 @@ app.Multiselect = {
 
       table.find('.multiselect .count').html(checked_count)
     else
+      table.removeClass('actions-enabled')
+      table.find('thead th:first input').prop('checked', false)
       table.find('thead .multiselect').closest('th').remove()
       table.find('thead th:not(:first)').fadeIn()
 }

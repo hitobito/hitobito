@@ -37,10 +37,27 @@ table.roles {
   td { min-width: 20px; }
 }
 
-table .multiselect {
- white-space: nowrap; 
+table.actions-enabled {
+  .multiselect {
+   white-space: nowrap;
 
-  .count, span, .actions{
-    display: inline;
+    .count, span, .actions {
+      display: inline;
+    }
+
+    .actions {
+      margin-left: 10px;
+      font-weight: normal;
+    }
   }
+
+  th:first-child input[type='checkbox']{
+    margin-bottom: 12px;
+  }
+
+}
+
+table tr :first-child input[type='checkbox'] {
+  width: 20px;
+  margin-right: 5px;
 }
